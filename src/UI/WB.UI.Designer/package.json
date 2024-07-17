@@ -14,9 +14,7 @@
     "@babel/plugin-transform-runtime": "^7.19.6",
     "@babel/preset-env": "^7.20.2",
     "@babel/runtime": "^7.20.13",
-    "@rollup/plugin-commonjs": "^26.0.1",
     "@rollup/plugin-inject": "^5.0.5",
-    "@vitejs/plugin-legacy": "^5.4.1",
     "autoprefixer": "^10.2.5",
     "browser-sync": "^2.27.12",
     "filemanager-plugin": "^2.9.0",
@@ -35,7 +33,6 @@
     "vite-plugin-clean": "^1.0.0",
     "vite-plugin-commonjs": "^0.10.1",
     "vite-plugin-mpa-plus": "^0.6.0",
-    "vite-plugin-require": "^1.2.14",
     "vite-plugin-require-transform": "^1.0.21",
     "xmldoc": "^1.1.2"
   },
@@ -52,7 +49,6 @@
   "dependencies": {
     "@babel/node": "^7.20.7",
     "@mdi/font": "^5.2.45",
-    "@originjs/vite-plugin-commonjs": "^1.0.3",
     "axios": "^1.6.5",
     "bootstrap": "3.4.1",
     "bootstrap-select": "^1.13.18",
@@ -72,8 +68,7 @@
     "lodash": "4.17.21",
     "moment": "^2.29.4",
     "perfect-scrollbar": "^1.5.5",
-    "roboto-fontface": "^0.10.0",
-    "vite-plugin-env-compatible": "^2.0.1"
+    "roboto-fontface": "^0.10.0"
   },
   "overrides": {
     "@babel/traverse": ">=7.23.3",
