@@ -7,13 +7,9 @@
     <title>@(!string.IsNullOrEmpty(ViewBag.Title) ? ViewBag.Title : "Designer")</title>
     @Html.GenerateFavicon(Url.Content("~/favicon"))
 
-    <!-- logon:css -->
-    <link rel="stylesheet" href="~/css/logon.css">
-    <!-- endinject -->
+   
     @RenderSection("Styles", required: false)
-    <!-- simplepage:js -->
-    <script src="~/js/simplepage.js"></script>
-    <!-- endinject -->
+
 
     @RenderSection("Scripts", required: false)
 
@@ -25,6 +21,12 @@
 
 
 /**/</script>
+  <script type="module" crossorigin src="/js/modulepreload-polyfill.js"></script>
+  <script type="module" crossorigin src="/js/jquery.min.js"></script>
+  <script type="module" crossorigin src="/js/simplepage.js"></script>
+  <script type="module" crossorigin src="/js/logon2.js"></script>
+  <link rel="stylesheet" crossorigin href="/css/logon.css">
+  <link rel="stylesheet" crossorigin href="/css/simplepage.css">
 </head>
 <body onload="FrameCheck();">
     <header>
@@ -38,7 +40,7 @@
                     <div class="form-holder">
                         <div class="form-row">
                             <div class="form-left">
-                                <img src="~/i/designer-logo.png" />
+                                <img src="~/i/designer-logo.png" >
                                 <p>
                                     This is a tool for creating surveys for The&nbsp;World&nbsp;Bank’s CAPI platform with collaboration capabilities and export to PDF.
                                 </p>
@@ -57,7 +59,7 @@
     </section>
 
     <footer>
-        <partial name="_commonFooter"/>
+        <partial name="_commonFooter"></partial>
     </footer>
 </body>
 </html>
