@@ -2,65 +2,17 @@ import path from 'path';
 import { defineConfig } from 'vite';
 //import { sync } from 'rimraf';
 //import fs from 'fs';
-//import Vue from '@vitejs/plugin-vue';
-// import Components from 'unplugin-vue-components/vite';
-//import LocalizationPlugin from './questionnaire/tools/vite-plugin-localization';
-//import { VuetifyResolver } from 'unplugin-vue-components/resolvers'
-///import Vuetify from 'vite-plugin-vuetify';
-import legacy from '@vitejs/plugin-legacy';
-import vitePluginRequire from 'vite-plugin-require';
-import envCompatible from 'vite-plugin-env-compatible';
-//import { viteCommonjs } from '@originjs/vite-plugin-commonjs';
 import viteCommonjs from 'vite-plugin-commonjs';
 import mpaPlugin from 'vite-plugin-mpa-plus';
 import inject from '@rollup/plugin-inject';
-import commonjs from '@rollup/plugin-commonjs';
 import requireTransform from 'vite-plugin-require-transform';
-//import injectAssetsPlugin from './build/plugins/vite-inject-assets-plugin';
 
 import { ViteFilemanager } from 'filemanager-plugin';
-//const ViteFilemanager = require('filemanager-plugin').ViteFilemanager;
 
 const baseDir = path.resolve(__dirname, './');
-//console.log(baseDir);
 const join = path.join.bind(path, baseDir);
 
 const outDir = path.resolve(__dirname, './wwwroot');
-//const outDir = path.resolve(__dirname, './wwwroot/assets');
-//const outDir = path.resolve(__dirname, './dist');
-//console.log(outDir);
-
-const resxFiles = [
-    join('../Resources/QuestionnaireEditor.resx'),
-    join('../Resources/QuestionnaireEditor.*.resx'),
-];
-
-function logFilePaths() {
-    return {
-        name: 'log-file-paths',
-        configResolved(config) {
-            console.log('Resolved Vite Configuration:', config);
-        },
-        buildStart() {
-            console.log('Starting Vite build...');
-        },
-        generateBundle(outputOptions, bundle) {
-            console.log('Output Options:', outputOptions);
-            console.log('Generated Bundle:', bundle);
-        },
-        transformIndexHtml(html, { path }) {
-            console.log(`Processing HTML file: ${path}`);
-            return html;
-        },
-        writeBundle(outputOptions, bundle) {
-            console.log('Writing Bundle:');
-            console.log('Output Directory:', outputOptions.dir);
-            for (const [fileName, chunkInfo] of Object.entries(bundle)) {
-                console.log(`File: ${fileName}, Type: ${chunkInfo.type}`);
-            }
-        },
-    };
-}
 
 const pages = {
     logon: {
@@ -258,23 +210,13 @@ export default defineConfig(({ mode, command }) => {
     return {
         base,
         optimizeDeps: {
-            //exclude: ['**/*'],
             include: ['jquery'],
-            //exclude: ['jquery'],
         },
         plugins: [
-            //commonjs(),
-            //vitePluginRequire.default(),
-
             viteCommonjs(),
             requireTransform({
                 fileRegex: /.\js$/,
             }),
-            /*legacy({
-                targets: ['defaults', 'not IE 11'],
-            }),*/
-            //envCompatible(),
-            //injectAssetsPlugin(),
             ViteFilemanager({
                 customHooks: [
                     {
@@ -304,22 +246,9 @@ export default defineConfig(({ mode, command }) => {
                     log: 'error',
                 },
             }),
-            /*LocalizationPlugin({
-                noHash: true,
-                inline: true,
-                patterns: resxFiles,
-                destination: './src/locale',
-                locales: {
-                    '.': ['QuestionnaireEditor'],
-                },
-            }),*/
-            //logFilePaths(),
             /*{
                 name: 'CopyManifest',
             },*/
-            //Components({
-            //resolvers: [VuetifyResolver()],
-            //}),
             mpaPlugin({
                 pages: pages,
             }),
@@ -327,15 +256,6 @@ export default defineConfig(({ mode, command }) => {
                 jQuery: 'jquery',
                 $: 'jquery',
             }),
-            /*multiInput({ 
-                //relative: 'src/', 
-                transformOutputPath: (output, input) => { 
-                    console.log('in: ' + input)
-                    console.log('out: ' + output)
-                    if (input.endWith('.cshtml'))
-                        return `awesome/path/${path.basename(output)}` 
-                }, 
-            })*/
         ],
         css: {
             preprocessorOptions: {
@@ -357,8 +277,6 @@ export default defineConfig(({ mode, command }) => {
                     find: '~',
                     replacement: path.resolve(__dirname, './'),
                 },
-                //jquery: 'jquery/dist/jquery.min.js',
-                //'jquery-ui': 'jquery-ui-dist/jquery-ui.min.js',
                 {
                     find: 'jquery',
                     replacement: 'jquery/dist/jquery.min.js',
@@ -383,14 +301,7 @@ export default defineConfig(({ mode, command }) => {
                 ignored: ['**/src/locale/**'],
             },
         },
-        //assetsInclude: ['**/*.cshtml'],
         build: {
-            //target: 'es2018',
-            /*lib: {
-                entry: '/build/entries/list.js',
-                name: 'list',
-                formats: ['iife'],
-            },*/
             minify: isProdMode,
             outDir,
             //manifest: true,
@@ -398,7 +309,6 @@ export default defineConfig(({ mode, command }) => {
                 //external: ['jquery'],
                 //preserveEntrySignatures: true,
                 cache: false,
-                //input: 'build/entries/logon.js',
                 //maxParallelFileOps: 2,
                 plugins: [
                     inject({
