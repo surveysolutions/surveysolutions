@@ -1,3 +1,7 @@
+<script type="module" crossorigin src="/js/modulepreload-polyfill.js"></script>
+<script type="module" crossorigin src="/js/jquery.min.js"></script>
+<script type="module" crossorigin src="/js/folders2.js"></script>
+<link rel="stylesheet" crossorigin href="/css/folders.css">
 @using WB.UI.Designer.Resources
 
 @model WB.UI.Designer.Models.QuestionnaireListModel
@@ -8,16 +12,9 @@
 
     bool? isSupportAssignFolders = Model!.IsSupportAssignFolders;
 }
-@section Scripts {
+
     @if (isSupportAssignFolders == true)
     {
-        <!-- folders:css -->
-        <link rel="stylesheet" href="~/css/folders.css">
-        <!-- endinject -->
-
-        <!-- folders:js -->
-        <script src="~/js/folders.js"></script>
-        <!-- endinject -->
     }
 
     <script type="text/javascript">
@@ -32,7 +29,6 @@
             ajusteHeight();
         });
     </script>
-}
 
 <ol class="breadcrumb public-questionnaires-breadcrumb">
     @foreach (var folder in Model.Breadcrumbs)
@@ -43,7 +39,7 @@
         }
         else if (folder.FolderId == Guid.Empty)
         {
-            <li><a href="@Url.Action("Public", new {id = (Guid?) null})">@folder.Title</a></li>
+            <li><a href='@Url.Action("Public", new {id = (Guid?) null})'>@folder.Title</a></li>
         }
         else if (folder.FolderId.HasValue)
         {
@@ -52,27 +48,27 @@
     }
 </ol>
 
-<partial name="_QuestionnairesList" model="Model.Questionnaires"/>
+<partial name="_QuestionnairesList" model="Model.Questionnaires"></partial>
 
 @section Modal
 {
     <div>
-        <partial name="_IE11Modal" />
+        <partial name="_IE11Modal" ></partial>
     </div>
 
     <div>
-        <partial name="_DeleteModalDialog" />
+        <partial name="_DeleteModalDialog" ></partial>
     </div>
     <div>
-        <partial name="_ExportPdfModalDialog" />
+        <partial name="_ExportPdfModalDialog" ></partial>
     </div>
     <div>
-        <partial name="_ExportHtmlModalDialog" />
+        <partial name="_ExportHtmlModalDialog" ></partial>
     </div>
     @if (isSupportAssignFolders == true)
     {
     <div>
-        <partial name="_AssignFolderDialog" />
+        <partial name="_AssignFolderDialog" ></partial>
     </div>
     }
 }
