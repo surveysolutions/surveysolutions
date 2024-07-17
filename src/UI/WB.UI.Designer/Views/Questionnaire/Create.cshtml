@@ -33,7 +33,8 @@
         </div>
 
         <div class="form-actions">
-            <input type="submit" class="btn btn-success btn-lg" value="@QuestionnaireController.Create" id="inputSubmitQuestionnaire" />
+            <input type="submit" class="btn btn-success btn-lg" value="@QuestionnaireController.Create"
+                id="inputSubmitQuestionnaire" />
             <a asp-action="Index" asp-controller="QuestionnaireList" class="btn btn-link">
                 @QuestionnaireController.Cancel
             </a>
@@ -46,7 +47,7 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
     <script>
-        $(function () {
+        document.addEventListener('DOMContentLoaded', function () {
             $('#edit-form').submit(function () {
                 $('#inputSubmitQuestionnaire').attr("disabled", true);
                 return true;
