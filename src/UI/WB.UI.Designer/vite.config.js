@@ -1,7 +1,5 @@
 import path from 'path';
 import { defineConfig } from 'vite';
-//import { sync } from 'rimraf';
-//import fs from 'fs';
 import viteCommonjs from 'vite-plugin-commonjs';
 import mpaPlugin from 'vite-plugin-mpa-plus';
 import inject from '@rollup/plugin-inject';
@@ -201,11 +199,6 @@ export default defineConfig(({ mode, command }) => {
 
     //const base = command == 'serve' ? '/.vite/' : '/assets/';
     const base = command == 'serve' ? '/.vite/' : '/';
-
-    if (command == 'serve' && mode != 'test') {
-        sync(outDir);
-        fs.mkdirSync(outDir);
-    }
 
     return {
         base,
