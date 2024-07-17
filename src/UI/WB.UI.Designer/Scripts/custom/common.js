@@ -95,40 +95,9 @@
                 var dropButton = $('#dropdownMenuButtonHtml');
                 dropButton.text(dropButton[0].title);
 
-                var typeaheadCtrl = $('.languages-combobox-html');
-                typeaheadCtrl.empty();
-
-                for (var i = 0; i < result.length; i++) {
-                    var translationItem = result[i];
-                    typeaheadCtrl.append(
-                        '<li><a href="javascript:void(0)" value="' +
-                            translationItem.value +
-                            '">' +
-                            translationItem.name +
-                            '</a></li>'
-                    );
-                }
-
-                typeaheadCtrl.unbind('click');
-                typeaheadCtrl.click(function (evn) {
-                    var link = $(evn.target);
-                    self.selectedTransalationHtml = link.attr('value');
-                    $('#dropdownMenuButtonHtml').text(link.text());
-                    $('#htmlGenerateButton').prop('disabled', false);
-                });
-
-                $('#htmlGenerateButton').prop('disabled', true);
-                $('#htmlGenerateButton').unbind('click');
-                $('#htmlGenerateButton').click(function (evn) {
-                    window.open(
-                        self.htmlDownloadUrl +
-                            '?translation=' +
-                            self.selectedTransalationHtml,
-                        '_blank'
-                    );
-                    $('#mExportHtml').modal('hide');
-                });
-            } else {
+                self.initLanguageComboBoxHtml(result);
+            }
+            else {
                 window.open(self.htmlDownloadUrl, '_blank');
             }
         });
@@ -209,54 +178,82 @@
         $.ajax({
             url: languagesUrl,
             cache: false,
-            method: 'POST',
-            headers: { 'X-CSRF-TOKEN': getCsrfCookie() },
-        })
-            .done(function (result) {
-                if (result.length && result.length > 1) {
-                    self.initLanguageComboBox(result);
-                    $('#startPdf').show();
-                    $('#export-pdf-modal-status').hide();
-                    $('#pdfDownloadButton').hide();
-                } else {
-                    self.startExportProcess(null);
-                }
-            })
-            .fail(function (xhr, status, error) {
-                self.pdfStatusUrl = '';
-                self.setPdfMessage(
-                    'Unexpected error occurred.\r\nPlease contact support@mysurvey.solutions if problem persists.'
-                );
-            });
-    };
+            method: "POST",
+            headers: {'X-CSRF-TOKEN': getCsrfCookie()}
+            
+        }).done(function (result) {
+            if (result.length && result.length > 1) {
+				self.initLanguageComboBoxPdf(result);
+                $('#startPdf').show();
+                $('#export-pdf-modal-status').hide();
+                $('#pdfDownloadButton').hide();
+            } else {
+                self.startExportProcess(null);
+            }
+        }).fail(function (xhr, status, error) {
+            self.pdfStatusUrl = '';
+            self.setPdfMessage("Unexpected error occurred.\r\nPlease contact support@mysurvey.solutions if problem persists.");
+        });
+    }
 
-    self.initLanguageComboBox = function (translationList) {
-        var typeaheadCtrl = $('.languages-combobox');
+    self.initLanguageComboBoxPdf = function (translationList) {
+        const generatePdf = function(evn) {
+            self.startExportProcess(self.selectedTransalation);
+        };
+        
+        const selectTranslation = function(link) {
+            self.selectedTransalation = link.attr('value');
+            $('#dropdownMenuButton').text(link.text());
+            $('#pdfGenerateButton').prop('disabled', false);
+        }
+
+        self.initLanguageComboBox(translationList, ".languages-combobox", '#pdfGenerateButton', selectTranslation, generatePdf)
+    }
+
+    self.initLanguageComboBoxHtml = function (translationList) {
+        const generateHtml = function(evn) {
+            window.open(self.htmlDownloadUrl + '?translation=' + self.selectedTransalationHtml, '_blank');
+            $('#mExportHtml').modal("hide");
+        };
+
+        const selectTranslation = function(link) {
+            self.selectedTransalationHtml = link.attr('value');
+            $('#dropdownMenuButtonHtml').text(link.text());
+            $('#htmlGenerateButton').prop('disabled', false);
+        }
+
+        self.initLanguageComboBox(translationList, ".languages-combobox-html", '#htmlGenerateButton', selectTranslation, generateHtml)
+    }
+
+    self.initLanguageComboBox = function (translationList, ulClass, btnSelector, selectTranslationFunc, clickFunc) {
+
+        var typeaheadCtrl = $(ulClass);
         typeaheadCtrl.empty();
 
         for (var i = 0; i < translationList.length; i++) {
             var translationItem = translationList[i];
-            typeaheadCtrl.append(
-                '<li><a href="javascript:void(0)" value="' +
-                    translationItem.value +
-                    '">' +
-                    translationItem.name +
-                    '</a></li>'
-            );
+            
+            var li = document.createElement('li');
+            var a = document.createElement('a');
+
+            a.href = "javascript:void(0)";
+            a.setAttribute('value', translationItem.value);
+            a.textContent = translationItem.name;
+            
+            li.appendChild(a);
+            typeaheadCtrl[0].appendChild(li);
         }
 
         typeaheadCtrl.unbind('click');
         typeaheadCtrl.click(function (evn) {
             var link = $(evn.target);
-            self.selectedTransalation = link.attr('value');
-            $('#dropdownMenuButton').text(link.text());
-            $('#pdfGenerateButton').prop('disabled', false);
+            selectTranslationFunc(link);
         });
 
-        $('#pdfGenerateButton').prop('disabled', true);
-        $('#pdfGenerateButton').unbind('click');
-        $('#pdfGenerateButton').click(function (evn) {
-            self.startExportProcess(self.selectedTransalation);
+        $(btnSelector).prop('disabled', true);
+        $(btnSelector).unbind('click');
+        $(btnSelector).click(function(evn) {
+            clickFunc();
         });
     };
 

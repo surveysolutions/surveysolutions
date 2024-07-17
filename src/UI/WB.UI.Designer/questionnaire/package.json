@@ -82,6 +82,7 @@
     "@aashutoshrathi/word-wrap": ">=1.2.6",
     "async": "3.2.4",
     "ansi-regex": "^5.0.1",
+    "braces": ">=3.0.3",
     "chokidar": "^3.5.2",
     "css-what": "6.1.0",
     "dot-object": " >=2.1.3",

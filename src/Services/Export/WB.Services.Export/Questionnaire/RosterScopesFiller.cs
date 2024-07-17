@@ -124,8 +124,7 @@ namespace WB.Services.Export.Questionnaire
 
             if (questionsByPublicKeyDictionary.TryGetValue(questionId.Value, out var question))
             {
-                return new RosterTitleQuestionDescription(question.PublicKey,
-                   questionsByPublicKeyDictionary[questionId.Value].Answers.ToDictionary(a => a.AnswerValue, a => a.AnswerText));
+                return new RosterTitleQuestionDescription(question.PublicKey);
             }
 
             return null;

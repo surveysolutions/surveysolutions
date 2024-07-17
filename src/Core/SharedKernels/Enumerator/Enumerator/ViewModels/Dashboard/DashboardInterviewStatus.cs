@@ -2,7 +2,8 @@
 {
     public enum DashboardInterviewStatus
     {
-        Assignment,
+        Unknown = 0,
+        Assignment = 1,
         New,
         InProgress,
         Completed,

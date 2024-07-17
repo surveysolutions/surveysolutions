@@ -9,8 +9,10 @@
                             :value="$me.answer" v-blurOnEnterKey @blur="answerDoubleQuestion"
                             :disabled="isSpecialValueSelected || !$me.acceptAnswer"
                             :class="{ 'special-value-selected': isSpecialValueSelected }" v-numericFormatting="{
-                                minimumValue: '-99999999999999.99999999999999',
-                                maximumValue: '99999999999999.99999999999999',
+
+                                minimumValue: '-999999999999999.99999999999999',
+                                maximumValue: '999999999999999.99999999999999',
+
                                 digitGroupSeparator: groupSeparator,
                                 decimalCharacter: decimalSeparator,
                                 decimalPlaces: decimalPlacesCount,

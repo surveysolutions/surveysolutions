@@ -335,11 +335,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             isDisposed = true;
             
-            this.Name?.Dispose();
-            
-            CompleteGroups.Dispose();
-
-            this.InterviewState?.DisposeIfDisposable();
+            Name?.Dispose();
+            CompleteGroups?.Dispose();
+            InterviewState?.DisposeIfDisposable();
             
             base.Dispose();
         }
