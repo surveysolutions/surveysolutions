@@ -16,15 +16,15 @@
                             v-contextmenu="'chapter-context-menu-' + node.itemId">
                             <div class="holder" @click="editChapter(node)">
                                 <div class="inner">
-                                    <a class="handler" ui-tree-handle
+                                    <a class="handler" ui-tree-handle :id="'handle-' + node.itemId"
                                         v-if="!isReadOnlyForUser && !node.isCover"><span></span></a>
                                     <router-link class="chapter-panel-item-body" :id="node.itemId" :to="{
-                    name: 'group',
-                    params: {
-                        chapterId: node.itemId,
-                        entityId: node.itemId,
-                    }
-                }">
+                                        name: 'group',
+                                        params: {
+                                            chapterId: node.itemId,
+                                            entityId: node.itemId,
+                                        }
+                                    }">
                                         <span v-dompurify-html="node.title"></span>
                                         <span>&nbsp;</span>
                                         <help link="coverPage" v-if="node.isCover" />
@@ -46,12 +46,15 @@
                                     <li>
                                         <a @click.self="pasteAfterChapter(node)"
                                             :disabled="!readyToPaste ? 'disabled' : null"
-                                            v-if="!isReadOnlyForUser && !node.isReadOnly">{{
-                    $t('QuestionnaireEditor.PasteAfter') }}</a>
+                                            v-if="!isReadOnlyForUser && !node.isReadOnly">
+                                            {{ $t('QuestionnaireEditor.PasteAfter') }}
+                                        </a>
                                     </li>
                                     <li><a @click.self="deleteChapter(node, stat)"
-                                            v-if="!isReadOnlyForUser && !node.isCover">{{
-                    $t('QuestionnaireEditor.Delete') }}</a></li>
+                                            v-if="!isReadOnlyForUser && !node.isCover">
+                                            {{ $t('QuestionnaireEditor.Delete') }}
+                                        </a>
+                                    </li>
                                 </ul>
                             </div>
                         </li>

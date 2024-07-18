@@ -13,11 +13,11 @@
             </div>
 
             <ul>
-                <li class="macros-panel-item" style="padding:0px;" 
+                <li class="macros-panel-item" style="padding:0px;" aria-label="CriticalRule"
                     v-for="(criticalityCondition, index) in criticalityConditions">
-                    <CriticalityConditionItem  :criticalityCondition="criticalityCondition" :index="index" 
+                    <CriticalityConditionItem :criticalityCondition="criticalityCondition" :index="index"
                         :questionnaire-id="questionnaireId" />
-                </li>    
+                </li>
             </ul>
             <div class="button-holder">
                 <input type="button" class="btn lighter-hover" v-if="!isReadOnlyForUser"
