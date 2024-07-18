@@ -20,7 +20,8 @@ import PerfectScrollbar from 'perfect-scrollbar';
 
 window.jQuery = window.$ = $;
 
-import moment from 'moment';
+import moment from '/node_modules/moment/min/moment-with-locales';
+//import moment from 'moment';
 window.moment = moment;
 
 import '/node_modules/perfect-scrollbar/css/perfect-scrollbar.css';
