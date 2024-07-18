@@ -1,7 +1,7 @@
 <template>
     <Transition name="slide">
         <div v-if="isUnfoldedChapters" class="left-side-panel chapters" :class="{ unfolded: isFolded }"
-            id="ChaptersCtrl" data-empty-place-holder-enabled="false">
+            aria-label="ChaptersCtrl" data-empty-place-holder-enabled="false">
             <div class="foldback-region" @click.stop="foldback()"></div>
             <div class="left-side-panel-content chapter-panel" ui-tree="chaptersTree">
                 <div class="foldback-button" @click.stop="foldback()"></div>
@@ -13,7 +13,7 @@
     </Transition>
     <Transition name="slide">
         <div v-if="isUnfoldedScenarios" class="left-side-panel scenarios" :class="{ unfolded: isFolded }"
-            id="ScenariosCtrl">
+            aria-label="ScenariosCtrl">
             <div class="foldback-region" @click.stop="foldback()"></div>
             <div class="left-side-panel-content macros-panel">
                 <div class="foldback-button-region" @click.stop="foldback()">
@@ -24,7 +24,8 @@
         </div>
     </Transition>
     <Transition name="slide">
-        <div v-if="isUnfoldedMacros" class="left-side-panel macroses" :class="{ unfolded: isFolded }" id="MacrosCtrl">
+        <div v-if="isUnfoldedMacros" class="left-side-panel macroses" :class="{ unfolded: isFolded }"
+            aria-label="MacrosCtrl">
             <div class="foldback-region" @click.stop="foldback()"></div>
             <div class="left-side-panel-content macros-panel">
                 <div class="foldback-button-region" @click.stop="foldback()">
@@ -36,7 +37,7 @@
     </Transition>
     <Transition name="slide">
         <div v-if="isUnfoldedLookupTables" class="left-side-panel lookup-tables" :class="{ unfolded: isFolded }"
-            id="LookupTablesCtrl">
+            aria-label="LookupTablesCtrl">
             <div class="foldback-region" @click.stop="foldback()"></div>
             <div class="left-side-panel-content lookup-tables-panel">
                 <div class="foldback-button-region" @click.stop="foldback()">
@@ -48,7 +49,7 @@
     </Transition>
     <Transition name="slide">
         <div v-if="isUnfoldedAttachments" class="left-side-panel attachments" :class="{ unfolded: isFolded }"
-            id="AttachmentsCtrl">
+            aria-label="AttachmentsCtrl">
             <div class="foldback-region" @click.stop="foldback()"></div>
             <div class="left-side-panel-content attachments-panel">
                 <div class="foldback-button-region" @click.stop="foldback()">
@@ -60,7 +61,7 @@
     </Transition>
     <Transition name="slide">
         <div v-if="isUnfoldedTranslations" class="left-side-panel translations" :class="{ unfolded: isFolded }"
-            id="TranslationsCtrl">
+            aria-label="TranslationsCtrl">
             <div class="foldback-region" @click.stop="foldback()"></div>
             <div class="left-side-panel-content translations-panel">
                 <div class="foldback-button-region" @click.stop="foldback()">
@@ -72,7 +73,7 @@
     </Transition>
     <Transition name="slide">
         <div v-if="isUnfoldedCategories" class="left-side-panel categories" :class="{ unfolded: isFolded }"
-            id="CategoriesCtrl">
+            aria-label="CategoriesCtrl">
             <div class="foldback-region" @click.stop="foldback()"></div>
             <div class="left-side-panel-content categories-panel">
                 <div class="foldback-button-region" @click.stop="foldback()">
@@ -84,7 +85,7 @@
     </Transition>
     <Transition name="slide">
         <div v-if="isUnfoldedMetadata" class="left-side-panel metadata" :class="{ unfolded: isFolded }"
-            id="MetadataCtrl">
+            aria-label="MetadataCtrl">
             <div class="foldback-region" @click.stop="foldback()"></div>
             <div class="left-side-panel-content metadata-panel">
                 <div class="foldback-button-region" @click.stop="foldback()">
@@ -96,7 +97,7 @@
     </Transition>
     <Transition name="slide">
         <div v-if="isUnfoldedComments" class="left-side-panel comments" :class="{ unfolded: isFolded }"
-            id="CommentsCtrl" data-empty-place-holder-enabled="false">
+            aria-label="CommentsCtrl" data-empty-place-holder-enabled="false">
             <div class="foldback-region" @click.stop="foldback()"></div>
             <div class="left-side-panel-content comments-panel">
                 <div class="foldback-button-region" @click.stop="foldback()">
@@ -108,7 +109,7 @@
     </Transition>
     <Transition name="slide">
         <div v-if="isUnfoldedCriticalityConditions" class="left-side-panel criticality-conditions"
-            :class="{ unfolded: isFolded }" id="CriticalRulesCtrl">
+            :class="{ unfolded: isFolded }" aria-label="CriticalRulesCtrl">
             <div class="foldback-region" @click.stop="foldback()"></div>
             <div class="left-side-panel-content macros-panel">
                 <div class="foldback-button-region" @click.stop="foldback()">
@@ -118,7 +119,7 @@
             </div>
         </div>
     </Transition>
-    <div id="left-menu" id="LeftMenuCtrl">
+    <div id="left-menu" aria-label="LeftMenuCtrl">
         <ul>
             <li>
                 <a class="left-menu-chapters" :class="{ unfolded: isUnfoldedChapters }" @click="openPanel = 'chapters';"
