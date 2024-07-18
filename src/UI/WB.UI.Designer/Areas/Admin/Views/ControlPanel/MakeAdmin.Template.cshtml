@@ -1,0 +1,56 @@
+﻿@using WB.UI.Shared.Web.Extensions
+@model WB.UI.Designer.Models.ControlPanel.MakeAdminViewModel
+@{
+    Layout = "Layout.ControlPanel";
+    ViewBag.Title = "Control Panel: Make the user an administrator";
+}
+
+@section scripts
+{
+    <!-- editform:js -->
+    <script type="module" src="/build/entries/editform.js"></script>
+    <!-- endinject -->
+}
+
+<div class="page-header">
+    <h3>
+        Make the user an administrator
+    </h3>
+</div>
+
+@if (TempData.ContainsKey(Alerts.SUCCESS))
+{
+    <pre class="alert alert-success">@Html.Raw(@TempData[Alerts.SUCCESS])</pre>
+}
+@if (TempData.ContainsKey(Alerts.ERROR))
+{
+    <pre class="alert alert-danger">@Html.Raw(TempData[Alerts.ERROR])</pre>
+}
+<form method="post">
+    @Html.AntiForgeryToken()
+    <fieldset class="form-horizontal">
+        <div class="form-group">
+            @Html.LabelFor(x => x.Login, new { @class = "col-sm-2 control-label" })
+            <div class="col-sm-2">
+                @Html.TextBoxFor(x => x.Login, new { @class = "form-control", autocomplete = "off" })
+            </div>
+            <div class="col-sm-4">
+                @Html.ValidationMessageFor(x => x.Login, null, new { @class = "help-block" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(x => x.IsAdmin, new { @class = "col-sm-2 control-label" })
+            <div class="col-sm-2">
+                @Html.CheckBoxFor(x => x.IsAdmin)
+            </div>
+            <div class="col-sm-4">
+                @Html.ValidationMessageFor(x => x.IsAdmin, null, new { @class = "help-block" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2">
+                <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+        </div>
+    </fieldset>
+</form>
