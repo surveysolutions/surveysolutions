@@ -99,12 +99,12 @@ const pages = {
         ),
     },
     sharedLayout: {
-        entry: 'build/entries/validation.js',
+        entry: 'build/entries/simplepage.js',
         filename: path.join(baseDir, 'Views/Shared/Layout.cshtml'),
         template: path.join(baseDir, 'Views/Shared/Layout.Template.cshtml'),
     },
     errorLayout: {
-        entry: 'build/entries/validation.js',
+        entry: 'build/entries/simplepage.js',
         filename: path.join(baseDir, 'Views/Error/Layout.Error.cshtml'),
         template: path.join(
             baseDir,
@@ -112,7 +112,7 @@ const pages = {
         ),
     },
     controlPanel: {
-        entry: 'build/entries/validation.js',
+        entry: 'build/entries/admin.js',
         filename: path.join(
             baseDir,
             'Areas/Admin/Views/Shared/Layout.ControlPanel.cshtml'
