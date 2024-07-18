@@ -60,6 +60,25 @@ const pages = {
             'Index.Template.cshtml'
         ),
     },
+    editform: {
+        entry: path.join(baseDir, 'build/entries/editform.js'),
+        filename: path.join(
+            baseDir,
+            'Areas',
+            'Admin',
+            'Views',
+            'ControlPanel',
+            'MakeAdmin.cshtml'
+        ),
+        template: path.join(
+            baseDir,
+            'Areas',
+            'Admin',
+            'Views',
+            'ControlPanel',
+            'MakeAdmin.Template.cshtml'
+        ),
+    },
     questionnaireList: {
         entry: 'build/entries/questionnaireList.js',
         filename: path.join(baseDir, 'Views/QuestionnaireList/Public.cshtml'),
