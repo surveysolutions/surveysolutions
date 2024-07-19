@@ -2,7 +2,7 @@
 
 namespace WB.Core.BoundedContexts.Headquarters.ValueObjects
 {
-    public class EmailProviderSettings : AppSetting, IAmazonEmailSettings, ISendGridEmailSettings, ISenderInformation
+    public class EmailProviderSettings : AppSetting, IAmazonEmailSettings, ISendGridEmailSettings, ISmtpEmailSettings, ISenderInformation
     {
         public EmailProvider Provider{ get; set; }
         public string SenderAddress{ get; set; }
