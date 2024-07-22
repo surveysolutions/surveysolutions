@@ -259,16 +259,9 @@ export default defineConfig(({ mode, command }) => {
                     log: 'error',
                 },
             }),
-            /*{
-                name: 'CopyManifest',
-            },*/
             mpaPlugin({
                 pages: pages,
             }),
-            /*inject({
-                jQuery: 'jquery',
-                $: 'jquery',
-            }),*/
         ],
         css: {
             preprocessorOptions: {
@@ -301,10 +294,6 @@ export default defineConfig(({ mode, command }) => {
             ],
             extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.vue'],
         },
-        /*define: {
-            'window.jQuery': 'jquery',
-            'window.$': 'jquery',
-        },*/
         server: {
             host: 'localhost',
             strictPort: true,
