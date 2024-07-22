@@ -61,11 +61,14 @@ const pages = {
             'MakeAdmin.Template.cshtml'
         ),
     },
-    questionnaireList: {
-        filename: path.join(baseDir, 'Views/QuestionnaireList/Public.cshtml'),
+    foldersScript: {
+        filename: path.join(
+            baseDir,
+            'Views/QuestionnaireList/_FoldersScript.cshtml'
+        ),
         template: path.join(
             baseDir,
-            'Views/QuestionnaireList/Public.Template.cshtml'
+            'Views/QuestionnaireList/_FoldersScript.Template.cshtml'
         ),
     },
     sharedLayout: {

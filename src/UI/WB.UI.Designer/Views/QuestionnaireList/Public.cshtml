@@ -1,7 +1,3 @@
-<script type="module" crossorigin src="/js/modulepreload-polyfill.js"></script>
-<script type="module" crossorigin src="/js/jquery.min.js"></script>
-<script type="module" crossorigin src="/js/folders2.js"></script>
-<link rel="stylesheet" crossorigin href="/css/folders.css">
 @using WB.UI.Designer.Resources
 
 @model WB.UI.Designer.Models.QuestionnaireListModel
@@ -15,6 +11,7 @@
 
 @if (isSupportAssignFolders == true)
 {
+    <partial name="_FoldersScript" />
 }
 
 <script type="text/javascript">
@@ -69,7 +66,7 @@
     @if (isSupportAssignFolders == true)
     {
         <div>
-    <partial name="_AssignFolderDialog" />
-</div>
+            <partial name="_AssignFolderDialog" />
+        </div>
     }
-    }
+}
