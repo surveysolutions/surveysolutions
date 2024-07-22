@@ -10,7 +10,7 @@
     "devDependencies": {
         "@rollup/plugin-inject": "^5.0.5",
         "filemanager-plugin": "^2.9.0",
-        "glob": "^8.0.3",
+        "glob": "^10.0.0",
         "jshint": "^2.13.4",
         "less": "^4.2.0",
         "less-loader": "^12.2.0",
