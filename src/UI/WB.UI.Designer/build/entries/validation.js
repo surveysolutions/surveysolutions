@@ -1,4 +1,4 @@
-import 'jquery';
+//import 'jquery';
 //import $ from 'jquery';
 //window.jQuery = window.$ = $;
 //"node_modules",

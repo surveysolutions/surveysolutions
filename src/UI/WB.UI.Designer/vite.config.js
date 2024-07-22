@@ -222,13 +222,14 @@ export default defineConfig(({ mode, command }) => {
     return {
         base,
         optimizeDeps: {
+            //exclude: ['**/*'],
             include: ['jquery'],
         },
         plugins: [
-            viteCommonjs(),
-            requireTransform({
+            //viteCommonjs(),
+            /*requireTransform({
                 fileRegex: /.\js$/,
-            }),
+            }),*/
             ViteFilemanager({
                 customHooks: [
                     {
@@ -264,10 +265,10 @@ export default defineConfig(({ mode, command }) => {
             mpaPlugin({
                 pages: pages,
             }),
-            inject({
+            /*inject({
                 jQuery: 'jquery',
                 $: 'jquery',
-            }),
+            }),*/
         ],
         css: {
             preprocessorOptions: {
@@ -314,9 +315,11 @@ export default defineConfig(({ mode, command }) => {
             },
         },
         build: {
+            target: 'es2018',
             minify: isProdMode,
             outDir,
             //manifest: true,
+            format: 'es',
             rollupOptions: {
                 //external: ['jquery'],
                 //preserveEntrySignatures: true,
