@@ -41,6 +41,7 @@
         "jquery.fancytree": "^2.38.0",
         "jquery.ui.position": "^1.11.4",
         "lodash": "4.17.21",
+        "mande": "^2.0.9",
         "moment": "^2.29.4",
         "perfect-scrollbar": "^1.5.5",
         "roboto-fontface": "^0.10.0"
