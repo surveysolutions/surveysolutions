@@ -155,6 +155,8 @@ const fileTargets = [
     },
 ];
 
+let inputPages = {};
+
 var pagesSources = [];
 var pagesTargets = [];
 
@@ -188,6 +190,8 @@ for (var attr in pages) {
 
     pageObj.filename = filenameHtml;
     pageObj.template = templateHtmlPath;
+
+    inputPages[attr] = templateHtmlPath;
 }
 
 export default defineConfig(({ mode, command }) => {
@@ -237,9 +241,9 @@ export default defineConfig(({ mode, command }) => {
                     log: 'error',
                 },
             }),
-            mpaPlugin({
+            /*mpaPlugin({
                 pages: pages,
-            }),
+            }),*/
         ],
         css: {
             preprocessorOptions: {
@@ -296,6 +300,7 @@ export default defineConfig(({ mode, command }) => {
                         jQuery: 'jquery',
                     }),
                 ],
+                input: inputPages,
                 /*input: {
                     list: '/build/entries/list.js',
                     simplepage: '/build/entries/simplepage.js',
