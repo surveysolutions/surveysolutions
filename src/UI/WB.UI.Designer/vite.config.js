@@ -1,10 +1,6 @@
 import path from 'path';
 import { defineConfig } from 'vite';
-import viteCommonjs from 'vite-plugin-commonjs';
-import mpaPlugin from 'vite-plugin-mpa-plus';
 import inject from '@rollup/plugin-inject';
-import requireTransform from 'vite-plugin-require-transform';
-
 import { ViteFilemanager } from 'filemanager-plugin';
 
 const baseDir = path.resolve(__dirname, './');
