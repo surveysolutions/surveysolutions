@@ -17,38 +17,42 @@
             :contextMenuItems="contextMenuItems" :supportContextMenu="this.$config.model.canManage">
         </DataTables>
         <ModalFrame ref="createWorkspaceModal" :title="$t('Workspaces.CreateWorkspace')">
-            <Form onsubmit="return false;" data-suso="workspaces-create-dialog">
-                <div class="form-group" v-bind:class="{ 'has-error': errors.has('workspaceName') }">
+            <Form @submit="createWorkspace" data-suso="workspaces-create-dialog" v-slot="{ errors }">
+                <div class="form-group" v-bind:class="{ 'has-error': errors.workspaceName }">
                     <label class="control-label" for="newWorkspaceName">
                         {{ $t("Workspaces.Name") }}
                     </label>
                     <Field type="text" class="form-control" v-model.trim="newWorkspaceName" name="workspaceName"
-                        v-validate="nameValidations" :data-vv-as="$t('Workspaces.Name')" autocomplete="off"
+                        v-validate="validateWorkspaceName" :data-vv-as="$t('Workspaces.Name')" autocomplete="off"
                         @keyup.enter="createWorkspace" id="newWorkspaceName" />
 
-                    <p class="help-block" v-if="!errors.has('workspaceName')">
+                    <p class="help-block" v-if="!errors.workspaceName">
                         {{ $t('Workspaces.CanNotBeChanged') }}
                     </p>
-                    <span v-else class="text-danger">{{ errors.first('workspaceName') }}</span>
+                    <span v-else class="text-danger">{{ errors.workspaceName }}</span>
+                    <ErrorMessage name="workspaceName"></ErrorMessage>
+
                 </div>
 
-                <div class="form-group" v-bind:class="{ 'has-error': errors.has('workspaceDisplayName') }">
+                <div class="form-group" v-bind:class="{ 'has-error': errors.workspaceDisplayName }">
                     <label class="control-label" for="newDescription">
                         {{ $t("Workspaces.DisplayName") }}
                     </label>
                     <Field type="text" class="form-control" v-model.trim="editedDisplayName" name="workspaceDisplayName"
-                        v-validate="displayNameValidations" :data-vv-as="$t('Workspaces.DisplayName')"
-                        autocomplete="off" @keyup.enter="createWorkspace" id="newDescription" />
-                    <p class="help-block" v-if="!errors.has('workspaceDisplayName')">
+                        v-validate="validateWorkspaceDisplayName" maxlength="300"
+                        :data-vv-as="$t('Workspaces.DisplayName')" autocomplete="off" @keyup.enter="createWorkspace"
+                        id="newDescription" />
+                    <p class="help-block" v-if="!errors.workspaceDisplayName">
                         {{ $t('Workspaces.DisplayNameHelpText') }}
                     </p>
-                    <span v-else class="text-danger">{{ errors.first('workspaceDisplayName') }}</span>
+                    <span v-else class="text-danger">{{ errors.workspaceDisplayName }}</span>
+                    <ErrorMessage name="workspaceDisplayName"></ErrorMessage>
                 </div>
-            </form>
+            </Form>
             <template v-slot:actions>
                 <div>
-                    <button type="button" data-suso="workspace-create-save" v-bind:disabled="inProgress"
-                        class="btn btn-primary" @click="createWorkspace">
+                    <button data-suso="workspace-create-save" v-bind:disabled="inProgress" class="btn btn-primary"
+                        type="Submit">
                         {{ $t("Common.Save") }}
                     </button>
                     <button type="button" class="btn btn-link" data-dismiss="modal">
@@ -66,11 +70,11 @@
                         {{ $t("Workspaces.DisplayName") }}
                     </label>
                     <Field type="text" class="form-control" v-model.trim="editedDisplayName" name="workspaceDisplayName"
-                        :data-vv-as="$t('Workspaces.DisplayName')" rules="required" autocomplete="off"
-                        @keyup.enter="updateWorkspace" id="editDescription" maxlength="300" />
+                        :data-vv-as="$t('Workspaces.DisplayName')" v-validate="validateWorkspaceDisplayName"
+                        maxlength="300" autocomplete="off" @keyup.enter="updateWorkspace" id="editDescription" />
                     <ErrorMessage name="workspaceDisplayName" as="span" />
                 </div>
-            </form>
+            </Form>
             <template v-slot:actions>
                 <div>
                     <button type="button" data-suso="workspace-edit-save" class="btn btn-primary"
@@ -115,8 +119,10 @@ import { Form, Field, ErrorMessage } from 'vee-validate'
 
 export default {
     components: {
+        Form,
+        Field,
+        ErrorMessage,
         DeleteWorkspaceModal,
-        Form, Field, ErrorMessage
     },
 
     data() {
@@ -132,10 +138,28 @@ export default {
         this.loadData()
     },
     methods: {
+        validateWorkspaceName(value) {
+            return true;
+        },
+        validateWorkspaceDisplayName(value) {
+            if (!value) {
+                return 'this field is required';
+            }
+
+            //TODO: MIGRATION
+
+            // nameValidations() {
+            // return {
+            //     required: true,
+            //     max: 12,
+            //     regex: /^[0-9,a-z]+$/,
+            //     excluded: ["api", "apidocs", "graphql", "users", "administration"],
+            // }      
+        },
         createNewWorkspace() {
             this.editedDisplayName = null
             this.newWorkspaceName = null
-            this.$validator.reset()
+            //this.$validator.reset()
             this.$refs.createWorkspaceModal.modal('show')
         },
         loadData() {
@@ -176,11 +200,12 @@ export default {
             }
         },
         async createWorkspace() {
-            const validationResult = await this.$validator.validateAll()
+            //TODO: MIGRATION
+            // const validationResult = await this.$validator.validateAll()
 
-            if (validationResult == false) {
-                return false
-            }
+            // if (validationResult == false) {
+            //     return false
+            // }
 
             try {
                 this.inProgress = true
@@ -192,7 +217,7 @@ export default {
                 this.loadData()
                 this.editedDisplayName = null
                 this.newWorkspaceName = null
-                await this.$validator.reset()
+                //await this.$validator.reset()
             }
             catch (err) {
                 let errorMessage = ''
@@ -339,20 +364,6 @@ export default {
             return this.$config.model
         },
 
-        displayNameValidations() {
-            return {
-                required: true,
-                max: 300,
-            }
-        },
-        nameValidations() {
-            return {
-                required: true,
-                max: 12,
-                regex: /^[0-9,a-z]+$/,
-                excluded: ["api", "apidocs", "graphql", "users", "administration"],
-            }
-        },
         tableOptions() {
             var self = this
             return {
