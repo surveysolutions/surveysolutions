@@ -192,14 +192,9 @@ export default defineConfig(({ mode, command }) => {
     return {
         base,
         optimizeDeps: {
-            //exclude: ['**/*'],
             include: ['jquery'],
         },
         plugins: [
-            //viteCommonjs(),
-            /*requireTransform({
-                fileRegex: /.\js$/,
-            }),*/
             ViteFilemanager({
                 customHooks: [
                     {
@@ -229,9 +224,6 @@ export default defineConfig(({ mode, command }) => {
                     log: 'error',
                 },
             }),
-            /*mpaPlugin({
-                pages: pages,
-            }),*/
         ],
         css: {
             preprocessorOptions: {
@@ -289,18 +281,10 @@ export default defineConfig(({ mode, command }) => {
                     }),
                 ],
                 input: inputPages,
-                /*input: {
-                    list: '/build/entries/list.js',
-                    simplepage: '/build/entries/simplepage.js',
-                    utils: '/build/entries/utils.js',
-                },*/
                 output: {
                     //inlineDynamicImports: false,
                     //manualChunks: undefined,
                     //format: 'es',
-                    //globals: {
-                    //    jquery: '$', // global variable name for the external library
-                    //},
                     assetFileNames: (assetInfo) => {
                         if (assetInfo.name == 'pdf.css') {
                             return `css/[name][extname]`;
