@@ -24,6 +24,7 @@ RUN cd questionnaire && npm ci
 
 COPY src/UI/WB.UI.Designer/questionnaire questionnaire
 COPY src/UI/WB.UI.Designer/Resources Resources
+COPY src/UI/WB.UI.Designer/Styles Styles
 COPY src/UI/WB.UI.Designer/.editorconfig .editorconfig
 COPY src/UI/WB.UI.Designer/.prettierrc .prettierrc
 COPY src/UI/WB.UI.Designer/.jscsrc .jscsrc
