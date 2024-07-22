@@ -49,27 +49,27 @@
     }
 </ol>
 
-<partial name="_QuestionnairesList" model="Model.Questionnaires" ></partial>
+<partial name="_QuestionnairesList" model="Model.Questionnaires" />
 
 @section Modal
 {
     <div>
-        <partial name="_IE11Modal" ></partial>
+        <partial name="_IE11Modal" />
     </div>
 
     <div>
-        <partial name="_DeleteModalDialog" ></partial>
+        <partial name="_DeleteModalDialog" />
     </div>
     <div>
-        <partial name="_ExportPdfModalDialog" ></partial>
+        <partial name="_ExportPdfModalDialog" />
     </div>
     <div>
-        <partial name="_ExportHtmlModalDialog" ></partial>
+        <partial name="_ExportHtmlModalDialog" />
     </div>
     @if (isSupportAssignFolders == true)
     {
         <div>
-    <partial name="_AssignFolderDialog" ></partial>
+    <partial name="_AssignFolderDialog" />
 </div>
     }
     }
