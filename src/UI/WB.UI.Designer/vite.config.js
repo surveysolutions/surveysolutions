@@ -10,7 +10,6 @@ const outDir = path.resolve(__dirname, './wwwroot');
 
 const pages = {
     logon: {
-        entry: path.join(baseDir, 'build/entries/logon.js'),
         filename: path.join(
             baseDir,
             'Areas',
@@ -27,7 +26,6 @@ const pages = {
         ),
     },
     folders: {
-        entry: path.join(baseDir, 'build/entries/folders.js'),
         filename: path.join(
             baseDir,
             'Areas',
@@ -46,7 +44,6 @@ const pages = {
         ),
     },
     editform: {
-        entry: path.join(baseDir, 'build/entries/editform.js'),
         filename: path.join(
             baseDir,
             'Areas',
@@ -65,7 +62,6 @@ const pages = {
         ),
     },
     questionnaireList: {
-        entry: 'build/entries/questionnaireList.js',
         filename: path.join(baseDir, 'Views/QuestionnaireList/Public.cshtml'),
         template: path.join(
             baseDir,
@@ -73,12 +69,10 @@ const pages = {
         ),
     },
     sharedLayout: {
-        entry: 'build/entries/simplepage.js',
         filename: path.join(baseDir, 'Views/Shared/Layout.cshtml'),
         template: path.join(baseDir, 'Views/Shared/Layout.Template.cshtml'),
     },
     errorLayout: {
-        entry: 'build/entries/simplepage.js',
         filename: path.join(baseDir, 'Views/Error/Layout.Error.cshtml'),
         template: path.join(
             baseDir,
@@ -86,7 +80,6 @@ const pages = {
         ),
     },
     controlPanel: {
-        entry: 'build/entries/admin.js',
         filename: path.join(
             baseDir,
             'Areas/Admin/Views/Shared/Layout.ControlPanel.cshtml'
@@ -97,7 +90,6 @@ const pages = {
         ),
     },
     pdf: {
-        entry: 'build/entries/pdf.js',
         filename: path.join(baseDir, 'Areas/Pdf/Views/Pdf/Pdf.empty.cshtml'),
         template: path.join(baseDir, 'Areas/Pdf/Views/Pdf/Pdf.Template.cshtml'),
     },
