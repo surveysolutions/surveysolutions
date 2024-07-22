@@ -30,17 +30,6 @@ const pages = {
             'Layout.Account.Template.cshtml'
         ),
     },
-    validationIdentity: {
-        entry: path.join(baseDir, 'build/entries/validation.js'),
-        filename: path.join(
-            baseDir,
-            'Areas/Identity/Pages/_ValidationScriptsPartial.cshtml'
-        ),
-        template: path.join(
-            baseDir,
-            'Areas/Identity/Pages/_ValidationScriptsPartial.Template.cshtml'
-        ),
-    },
     folders: {
         entry: path.join(baseDir, 'build/entries/folders.js'),
         filename: path.join(
@@ -85,17 +74,6 @@ const pages = {
         template: path.join(
             baseDir,
             'Views/QuestionnaireList/Public.Template.cshtml'
-        ),
-    },
-    validationScriptsPartial: {
-        entry: 'build/entries/validation.js',
-        filename: path.join(
-            baseDir,
-            'Views/Shared/_ValidationScriptsPartial.cshtml'
-        ),
-        template: path.join(
-            baseDir,
-            'Views/Shared/_ValidationScriptsPartial.Template.cshtml'
         ),
     },
     sharedLayout: {
