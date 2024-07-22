@@ -315,11 +315,9 @@ export default defineConfig(({ mode, command }) => {
             },
         },
         build: {
-            target: 'es2018',
             minify: isProdMode,
             outDir,
             //manifest: true,
-            format: 'es',
             rollupOptions: {
                 //external: ['jquery'],
                 //preserveEntrySignatures: true,
