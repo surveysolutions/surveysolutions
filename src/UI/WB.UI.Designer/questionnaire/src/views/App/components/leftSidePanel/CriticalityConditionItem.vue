@@ -10,29 +10,30 @@
             <button type="button" class="btn delete-btn-sm delete-validation-condition" @click="remove()"
                 v-if="!isReadOnlyForUser" tabindex="-1"></button>
 
-            <ExpressionEditor v-model="criticalityCondition.edit.expression" mode="expression" focusable="true" />
+            <ExpressionEditor v-model="criticalityCondition.edit.expression" mode="expression" focusable="true"
+                aria-label="Expression" />
 
             <label class="validation-message">
                 {{ $t('QuestionnaireEditor.SideBarCriticalityConditionMessage') }}
                 <help link="criticalityConditionMessage" />
             </label>
-            <ExpressionEditor v-model="criticalityCondition.edit.message" />
+            <ExpressionEditor v-model="criticalityCondition.edit.message" aria-label="Message" />
         </div>
         <div v-if="isDescriptionVisible()">
             <label class="validation-message">
                 {{ $t('QuestionnaireEditor.SideBarCriticalityConditionDescription') }}
             </label>
             <textarea type="text" v-model="criticalityCondition.edit.description"
-                class="form-control macros-description" v-autosize>
+                class="form-control macros-description" v-autosize aria-label="Description">
                 </textarea>
             <hr style="margin-top:0px; margin-bottom:0px;">
         </div>
         <div class="actions" v-if="isDirty" style="padding-top: 10px;">
             <button v-if="!isReadOnlyForUser" class="btn lighter-hover" @click="save()">{{
-                    $t('QuestionnaireEditor.Save') }}
+                $t('QuestionnaireEditor.Save') }}
             </button>
             <button type="button" class="btn lighter-hover" @click="cancel()">{{
-                    $t('QuestionnaireEditor.Cancel') }}</button>
+                $t('QuestionnaireEditor.Cancel') }}</button>
             <button class="btn btn-default pull-right" v-if="isDescriptionEmpty()" type="button"
                 @click="toggleDescription()">
                 {{ isDescriptionVisible() ? $t('QuestionnaireEditor.SideBarHideDescription') :
