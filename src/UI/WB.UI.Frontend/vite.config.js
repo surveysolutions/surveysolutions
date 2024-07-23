@@ -8,16 +8,10 @@ import cleanPlugin from 'vite-plugin-clean';
 import LocalizationPlugin  from './tools/vite-plugin-localization'
 import inject from '@rollup/plugin-inject';
 import vitePluginRequire from "vite-plugin-require";
-//import eslintPlugin from 'vite-plugin-eslint';
-
-//import ViteFilemanager from 'filemanager-plugin'
 
 const ViteFilemanager = require('filemanager-plugin').ViteFilemanager;
 
-
-
 const baseDir = path.relative(__dirname, "./");
-//const baseDir = path.resolve(__dirname, "./");
 const join = path.join.bind(path, baseDir);
 const uiFolder = join("..");
 const hqFolder = path.join(uiFolder, "WB.UI.Headquarters.Core");
@@ -122,16 +116,21 @@ for (var attr in pages) {
   const filename = path.basename(pageObj.filename)
   const filenameHtml = attr + '.html'
   const origFolder = path.dirname(pageObj.filename)
-  const templateFilename = path.basename(pageObj.template)
+  //const templateFilename = path.basename(pageObj.template)
   const templateFilenameHtml = attr + '.html'
   var templatesFolderFull = path.join(baseDir, ".templates")
+  
   var destFileFolderFull = path.join(baseDir, "dist", ".templates")
   var templateHtmlPath = path.join(templatesFolderFull, templateFilenameHtml)
   var filenameHtmlPath = path.join(destFileFolderFull, filenameHtml)
-  var filenamePath = path.join(destFileFolderFull, filename)
+  var distFileName = path.join(baseDir, "dist", filenameHtml)
+
+  console.log("templateHtmlPath: " + templateHtmlPath, " distFileName: " + distFileName)
+  //console.log("filenameHtmlPath: " + filenameHtmlPath)
+
   pagesSources.push({ source: pageObj.template, destination: templatesFolderFull, name : templateFilenameHtml })
   pagesTargets.push({ source: filenameHtmlPath, destination: origFolder, name: filename })
-  pagesTargets.push({ source: path.join(baseDir, "dist", filenameHtml), destination: origFolder, name: filename })
+  pagesTargets.push({ source: distFileName, destination: origFolder, name: filename })
 
   pageObj.filename = filenameHtml
   pageObj.template = templateHtmlPath
