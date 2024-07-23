@@ -20,9 +20,8 @@ FROM node:${NODE} as questionnaire
 WORKDIR /app
 
 COPY src/UI/WB.UI.Designer/questionnaire/package*.json questionnaire/
-RUN cd questionnaire && npm ci
 COPY src/UI/WB.UI.Designer .
-RUN cd questionnaire && npm run build
+RUN cd questionnaire && npm ci && npm run build
 
 FROM mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION}${DOTNET_CA_PATCH} as builder
 ARG VERSION
