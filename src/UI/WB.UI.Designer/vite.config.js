@@ -125,7 +125,7 @@ const fileTargets = [
         isFlat: false,
     },
     {
-        source: join('node_modules/@mdi/font/fonts', '*.*'),
+        source: join('node_modules', '@mdi', 'font', 'fonts', '*.*'),
         destination: path.join(outDir, 'fonts'),
         isFlat: false,
     },
