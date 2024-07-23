@@ -11,17 +11,11 @@ COPY src/UI/WB.UI.Designer/package*.json .
 RUN npm ci
 COPY src/UI/WB.UI.Designer .
 RUN NODE_OPTIONS="--max-old-space-size=3072" npm run build
+RUN cd questionnaire && npm ci && npm run build
 RUN mkdir -p /dist/Areas && cp -r Areas /dist/
 RUN mkdir -p /dist/Views && cp -r Views /dist/
 RUN mkdir -p /dist/wwwroot && cp -r wwwroot /dist/
 RUN mkdir -p /dist/questionnaire
-
-FROM node:${NODE} as questionnaire
-WORKDIR /app
-
-COPY src/UI/WB.UI.Designer/questionnaire/package*.json questionnaire/
-COPY src/UI/WB.UI.Designer .
-RUN cd questionnaire && npm ci && npm run build
 
 FROM mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION}${DOTNET_CA_PATCH} as builder
 ARG VERSION
@@ -82,7 +76,7 @@ COPY [ "src/UI/WB.UI.Designer",\
 # DESIGNER_FOLDERS_END
 
 COPY --from=designer_js /dist src/UI/WB.UI.Designer
-COPY --from=questionnaire /app/wwwroot/assets src/UI/WB.UI.Designer/wwwroot/assets
+# COPY --from=questionnaire /app/wwwroot/assets src/UI/WB.UI.Designer/wwwroot/assets
 
 RUN dotnet publish src/UI/WB.UI.Designer --no-restore \
     -c Release -o /designer -p:SkipSpaBuild=True -p:Version="${VERSION}" -p:InformationalVersion="${INFO_VERSION}"
