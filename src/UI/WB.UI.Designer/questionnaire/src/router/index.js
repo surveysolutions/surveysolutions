@@ -11,7 +11,6 @@ const Tree = () => import('../views/App/components/Tree.vue');
 const Variable = () => import('../views/App/components/Variable.vue');
 const Question = () => import('../views/App/components/Question.vue');
 const StaticText = () => import('../views/App/components/StaticText.vue');
-const Chapter = () => import('../views/App/components/Chapter.vue');
 const Group = () => import('../views/App/components/Group.vue');
 const Roster = () => import('../views/App/components/Roster.vue');
 const QuestionnaireHeader = () => import('../views/App/components/Header.vue');
@@ -155,11 +154,6 @@ const routes = [
                                         route.params.questionnaireId,
                                     entityId: route.params.entityId
                                 })
-                            },
-                            {
-                                name: 'chapter',
-                                path: '',
-                                component: Chapter
                             }
                         ]
                     }
