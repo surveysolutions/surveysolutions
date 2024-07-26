@@ -1,7 +1,7 @@
 <template>
     <Transition name="slide">
         <div v-if="isUnfoldedChapters" class="left-side-panel chapters" :class="{ unfolded: isFolded }"
-            ng-controller="ChaptersCtrl" data-empty-place-holder-enabled="false">
+            aria-label="ChaptersCtrl" data-empty-place-holder-enabled="false">
             <div class="foldback-region" @click.stop="foldback()"></div>
             <div class="left-side-panel-content chapter-panel" ui-tree="chaptersTree">
                 <div class="foldback-button" @click.stop="foldback()"></div>
@@ -13,7 +13,7 @@
     </Transition>
     <Transition name="slide">
         <div v-if="isUnfoldedScenarios" class="left-side-panel scenarios" :class="{ unfolded: isFolded }"
-            ng-controller="ScenariosCtrl">
+            aria-label="ScenariosCtrl">
             <div class="foldback-region" @click.stop="foldback()"></div>
             <div class="left-side-panel-content macros-panel">
                 <div class="foldback-button-region" @click.stop="foldback()">
@@ -25,7 +25,7 @@
     </Transition>
     <Transition name="slide">
         <div v-if="isUnfoldedMacros" class="left-side-panel macroses" :class="{ unfolded: isFolded }"
-            ng-controller="MacrosCtrl">
+            aria-label="MacrosCtrl">
             <div class="foldback-region" @click.stop="foldback()"></div>
             <div class="left-side-panel-content macros-panel">
                 <div class="foldback-button-region" @click.stop="foldback()">
@@ -37,7 +37,7 @@
     </Transition>
     <Transition name="slide">
         <div v-if="isUnfoldedLookupTables" class="left-side-panel lookup-tables" :class="{ unfolded: isFolded }"
-            ng-controller="LookupTablesCtrl">
+            aria-label="LookupTablesCtrl">
             <div class="foldback-region" @click.stop="foldback()"></div>
             <div class="left-side-panel-content lookup-tables-panel">
                 <div class="foldback-button-region" @click.stop="foldback()">
@@ -49,7 +49,7 @@
     </Transition>
     <Transition name="slide">
         <div v-if="isUnfoldedAttachments" class="left-side-panel attachments" :class="{ unfolded: isFolded }"
-            ng-controller="AttachmentsCtrl">
+            aria-label="AttachmentsCtrl">
             <div class="foldback-region" @click.stop="foldback()"></div>
             <div class="left-side-panel-content attachments-panel">
                 <div class="foldback-button-region" @click.stop="foldback()">
@@ -61,7 +61,7 @@
     </Transition>
     <Transition name="slide">
         <div v-if="isUnfoldedTranslations" class="left-side-panel translations" :class="{ unfolded: isFolded }"
-            ng-controller="TranslationsCtrl">
+            aria-label="TranslationsCtrl">
             <div class="foldback-region" @click.stop="foldback()"></div>
             <div class="left-side-panel-content translations-panel">
                 <div class="foldback-button-region" @click.stop="foldback()">
@@ -73,7 +73,7 @@
     </Transition>
     <Transition name="slide">
         <div v-if="isUnfoldedCategories" class="left-side-panel categories" :class="{ unfolded: isFolded }"
-            ng-controller="CategoriesCtrl">
+            aria-label="CategoriesCtrl">
             <div class="foldback-region" @click.stop="foldback()"></div>
             <div class="left-side-panel-content categories-panel">
                 <div class="foldback-button-region" @click.stop="foldback()">
@@ -85,7 +85,7 @@
     </Transition>
     <Transition name="slide">
         <div v-if="isUnfoldedMetadata" class="left-side-panel metadata" :class="{ unfolded: isFolded }"
-            ng-controller="MetadataCtrl">
+            aria-label="MetadataCtrl">
             <div class="foldback-region" @click.stop="foldback()"></div>
             <div class="left-side-panel-content metadata-panel">
                 <div class="foldback-button-region" @click.stop="foldback()">
@@ -97,7 +97,7 @@
     </Transition>
     <Transition name="slide">
         <div v-if="isUnfoldedComments" class="left-side-panel comments" :class="{ unfolded: isFolded }"
-            ng-controller="CommentsCtrl" data-empty-place-holder-enabled="false">
+            aria-label="CommentsCtrl" data-empty-place-holder-enabled="false">
             <div class="foldback-region" @click.stop="foldback()"></div>
             <div class="left-side-panel-content comments-panel">
                 <div class="foldback-button-region" @click.stop="foldback()">
@@ -109,7 +109,7 @@
     </Transition>
     <Transition name="slide">
         <div v-if="isUnfoldedCriticalityConditions" class="left-side-panel criticality-conditions"
-            :class="{ unfolded: isFolded }">
+            :class="{ unfolded: isFolded }" aria-label="CriticalRulesCtrl">
             <div class="foldback-region" @click.stop="foldback()"></div>
             <div class="left-side-panel-content macros-panel">
                 <div class="foldback-button-region" @click.stop="foldback()">
@@ -119,7 +119,7 @@
             </div>
         </div>
     </Transition>
-    <div id="left-menu" ng-controller="LeftMenuCtrl">
+    <div id="left-menu" aria-label="LeftMenuCtrl">
         <ul>
             <li>
                 <a class="left-menu-chapters" :class="{ unfolded: isUnfoldedChapters }" @click="openPanel = 'chapters';"

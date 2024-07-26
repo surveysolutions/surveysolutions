@@ -243,7 +243,7 @@ task frontend {
 	}	
 	
     exec { 
-        Set-Location ./src/UI/WB.UI.Frontend
+        Set-Location $BuildRoot/src/UI/WB.UI.Frontend
         npm ci
         npm run build
     }
