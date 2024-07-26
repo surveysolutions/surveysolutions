@@ -6,8 +6,8 @@
             ">
         <template v-slot:subtitle>
             <ol class="list-unstyled">
-                <li>{{ this.$t('Dashboard.SurveySetupIntroMessage1') }}</li>
-                <li>{{ this.$t('Dashboard.SurveySetupIntroMessage2') }}</li>
+                <li>{{ $t('Dashboard.SurveySetupIntroMessage1') }}</li>
+                <li>{{ $t('Dashboard.SurveySetupIntroMessage2') }}</li>
             </ol>
         </template>
 
