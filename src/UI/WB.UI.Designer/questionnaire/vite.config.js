@@ -62,9 +62,9 @@ export default defineConfig(({ mode, command }) => {
             preprocessorOptions: {
                 less: {
                     additionalData: '@icon-font-path: "/fonts/";',
-                    relativeUrls: false,
+                    //relativeUrls: false,
                     //rootpath: '../../../'
-                    rootpath: '../../',
+                    //rootpath: '../../',
                     javascriptEnabled: true
                 }
             }
