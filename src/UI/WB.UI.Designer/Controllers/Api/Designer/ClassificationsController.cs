@@ -27,7 +27,12 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         [Route("user")]
         public IActionResult UserInfo(Guid groupId)
         {
-            return new JsonResult(new { userId = User.GetId(), isAdmin = User.IsAdmin() });
+            return new JsonResult(new
+            {
+                userId = User.GetId(), 
+                isAdmin = User.IsAdmin(), 
+                userName = User.GetUserName()
+            });
         }
         
         [HttpGet]

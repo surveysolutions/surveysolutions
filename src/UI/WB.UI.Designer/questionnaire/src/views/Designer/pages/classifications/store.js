@@ -55,6 +55,7 @@ const store = createStore({
             activeGroup: {},
             activeClassification: {},
             userId: null,
+            userName: null,
             isAdmin: false
         };
     },
@@ -133,6 +134,7 @@ const store = createStore({
         },
         updateUserInfo: function(state, info) {
             state.userId = info.userId;
+            state.userName = info.userName;
             state.isAdmin = info.isAdmin;
         }
     },

@@ -41,7 +41,10 @@
                         {{ $t('QuestionnaireController.ControlPanel') }}
                     </a>
                     <div class="btn-group">
-                        <a class="btn btn-default">{{ $t('QuestionnaireController.Hello', { '0': userName }) }}</a>
+                        <a class="btn btn-default">
+                            {{ $t('QuestionnaireEditor.HellowMessageBtn', {
+                        currentUserName: userName
+                    }) }}</a>
                         <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                             aria-expanded="false">
                             <span class="caret"></span>
@@ -60,7 +63,7 @@
                             </li>
                             <li>
                                 <a href="/identity/account/logout">{{
-                            $t('AccountResources.LogOut')
+                                    $t('AccountResources.LogOut')
                                     }}</a>
                             </li>
                         </ul>
@@ -95,7 +98,9 @@ export default {
     },
 
     computed: {
-
+        userName() {
+            return this.$store.state.userName;
+        }
     },
 
     mounted() {
