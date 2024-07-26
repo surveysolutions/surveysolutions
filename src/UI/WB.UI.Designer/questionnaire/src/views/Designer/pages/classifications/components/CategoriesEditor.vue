@@ -260,7 +260,7 @@ export default {
                         )
                         .then(function () {
                             self.$nextTick(() => {
-                                self.form.resetForm();
+                                self.form.resetForm({ values: self.form.values });
                             });
                         });
                 }
