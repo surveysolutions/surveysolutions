@@ -70,7 +70,6 @@
         "postcss-svgo": "5.1.0",
         "prettier": "1.19.1",
         "rimraf": "^5.0.5",
-        "sass": "~1.32.13",
         "ssri": "^8.0.1",
         "svgo": "2.8.0",
         "trim-newlines": "4.0.2",
