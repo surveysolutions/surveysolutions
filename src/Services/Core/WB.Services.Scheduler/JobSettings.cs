@@ -8,6 +8,8 @@ namespace WB.Services.Scheduler
 {
     public class JobSettings
     {
+        public const string MigrationsSchemaName = "es_migrations";
+        
         public string ConnectionName { get; set; } = "DefaultConnection";
         public int WorkerCount { get; set; } = 1;
         public string SchemaName { get; set; } = "scheduler";
