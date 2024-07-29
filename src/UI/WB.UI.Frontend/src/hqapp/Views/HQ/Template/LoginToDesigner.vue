@@ -4,10 +4,11 @@
             <div>
                 <ol class="breadcrumb">
                     <li>
-                        <a :href="this.$config.model.backLink" class="back-link">{{ this.$t("MainMenu.SurveySetup") }}</a>
+                        <a :href="$config.model.backLink" class="back-link">{{ $t("MainMenu.SurveySetup")
+                            }}</a>
                     </li>
                 </ol>
-                <h1>{{ this.$t('LoginToDesigner.PageHeader') }}</h1>
+                <h1>{{ $t('LoginToDesigner.PageHeader') }}</h1>
             </div>
         </template>
         <div class="row two-columns-form">
@@ -16,7 +17,7 @@
                     <div class="centered-box-table-cell">
                         <img src="/img/designer-logo.png" alt="Survey Solutions Designer" />
                         <p>
-                            {{ this.$t('LoginToDesigner.DesignerAppDescription') }}
+                            {{ $t('LoginToDesigner.DesignerAppDescription') }}
                             <a href="https://mysurvey.solutions" target="_blank">mysurvey.solutions</a>
                         </p>
                     </div>
@@ -29,10 +30,10 @@
                             novalidate>
                             <div class="alert alert-danger" v-if="invalidCredentials">
                                 <p>
-                                    {{ this.$t('LoginToDesigner.InvalidCredentials') }}
+                                    {{ $t('LoginToDesigner.InvalidCredentials') }}
                                 </p>
                                 <p>
-                                    {{ this.$t('LoginToDesigner.UserDesignerCredentials') }}</p>
+                                    {{ $t('LoginToDesigner.UserDesignerCredentials') }}</p>
                             </div>
                             <div class="alert alert-danger" v-if="errorMessage">
                                 <p v-html="errorMessage"></p>
@@ -56,7 +57,7 @@
                             </div>
                             <div class="form-actions">
                                 <button type="submit" :disabled="isSigningIn" class="btn btn-success btn-lg">
-                                    {{ this.$t('Common.SignIn') }}
+                                    {{ $t('Common.SignIn') }}
                                 </button>
                             </div>
                         </form>

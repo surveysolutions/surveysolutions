@@ -4,21 +4,21 @@
             <ol class="breadcrumb">
                 <li>
                     <a :href="this.$config.model.surveySetup">
-                        {{ this.$t('MainMenu.SurveySetup') }}
+                        {{ $t('MainMenu.SurveySetup') }}
                     </a>
                 </li>
                 <li>
                     <a :href="this.$config.model.import">
-                        {{ this.$t('QuestionnaireImport.ListOfMyQuestionnaires') }}
+                        {{ $t('QuestionnaireImport.ListOfMyQuestionnaires') }}
                     </a>
                 </li>
             </ol>
-            <h1>{{ this.$t('ImportQuestionnaire.PageHeader') }}</h1>
+            <h1>{{ $t('ImportQuestionnaire.PageHeader') }}</h1>
             <div class="signed-name">
-                {{ this.$t('ImportQuestionnaire.SignedInBlock', { user: this.$config.model.designerUserName }) }}
+                {{ $t('ImportQuestionnaire.SignedInBlock', { user: this.$config.model.designerUserName }) }}
 
                 <a :href="this.$config.model.logoutFromDesigner">
-                    {{ this.$t('ImportQuestionnaire.SignOut') }}
+                    {{ $t('ImportQuestionnaire.SignOut') }}
                 </a>
             </div>
         </template>
