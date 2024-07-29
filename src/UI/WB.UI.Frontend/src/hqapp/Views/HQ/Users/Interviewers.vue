@@ -22,15 +22,15 @@
 
                 <FilterBlock :title="$t('Users.InterviewerIssues')">
                     <Typeahead ref="facetControl" control-id="facet" no-clear data-vv-name="facet" data-vv-as="facet"
-                        :value="facet" :values="this.$config.model.interviewerIssues" :selectedKey="this.query.facet"
+                        :value="facet" :values="$config.model.interviewerIssues" :selectedKey="this.query.facet"
                         :selectFirst="true" v-on:selected="facetSelected" />
                 </FilterBlock>
 
                 <FilterBlock :title="$t('Pages.Interviewers_ArchiveStatusTitle')">
                     <Typeahead ref="archiveStatusControl" control-id="archiveStatus" no-clear :noPaging="false"
                         data-vv-name="archiveStatus" data-vv-as="archiveStatus" :value="archiveStatus"
-                        :values="this.$config.model.archiveStatuses" :selectedKey="this.query.archive"
-                        :selectFirst="true" v-on:selected="archiveStatusSelected" />
+                        :values="$config.model.archiveStatuses" :selectedKey="this.query.archive" :selectFirst="true"
+                        v-on:selected="archiveStatusSelected" />
                 </FilterBlock>
             </Filters>
         </template>
@@ -51,7 +51,7 @@
                         @click="unarchiveInterviewers">{{ $t("Pages.Interviewers_Unarchive") }}</button>
                     <button type="button" class="btn btn-default btn-warning last-btn"
                         v-if="selectedInterviewers.length" @click="moveToAnotherTeam">{{
-                            $t("Pages.Interviewers_MoveToAnotherTeam") }}</button>
+        $t("Pages.Interviewers_MoveToAnotherTeam") }}</button>
                 </div>
             </div>
         </DataTables>
