@@ -260,6 +260,8 @@ const emailShouldBeEmpty = {
     hasTarget: true,
 }
 
+//TODO: MIGRATION
+
 //Validator.extend('emailOrPasswordRequired', emailOrPasswordRequired)
 //Validator.extend('emailShouldBeEmpty', emailShouldBeEmpty)
 

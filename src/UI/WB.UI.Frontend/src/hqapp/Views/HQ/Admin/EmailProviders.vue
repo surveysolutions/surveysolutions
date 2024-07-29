@@ -2,7 +2,7 @@
     <HqLayout :fixedWidth="true" tag="email-providers-page" :title="$t('Pages.EmailProvidersTitle')">
         <div class="mb-30">
             <div class="col-md-12">
-                <form class="form-container" data-vv-scope="settings">
+                <Form class="form-container" data-vv-scope="settings">
                     <button type="submit" disabled style="display: none" aria-hidden="true"></button>
                     <h2>{{ $t('Settings.EmailProvider_SenderHeader') }}</h2>
                     <div class="form-inline">
@@ -11,8 +11,9 @@
                                 {{ $t('Settings.EmailProvider_SenderAddress') }}
                             </label>
                             <div class="field" :class="{ answered: senderAddress }">
-                                <input data-vv-as="email address" v-validate="'required_if:provider,amazon,sendgrid|email'
-                                    " name="senderAddress" id="senderAddress" v-model="senderAddress" type="text"
+                                <Field data-vv-as="email address"
+                                    v-validate="'required_if:provider,amazon,sendgrid|email'" name="senderAddress"
+                                    id="senderAddress" v-model="senderAddress" type="text"
                                     class="form-control with-clear-btn" maxlength="200" />
                                 <button type="button" @click="senderAddress = null" class="btn btn-link btn-clear">
                                     <span></span>
@@ -30,7 +31,7 @@
                                 {{ $t('Settings.EmailProvider_ReplyAddress') }}
                             </label>
                             <div class="field" :class="{ answered: replyAddress }">
-                                <input data-vv-as="reply email address" v-validate="'email'" name="replyAddress"
+                                <Field data-vv-as="reply email address" v-validate="'email'" name="replyAddress"
                                     id="replyAddress" v-model="replyAddress" type="text"
                                     class="form-control with-clear-btn" maxlength="200" />
                                 <button type="button" @click="replyAddress = null" class="btn btn-link btn-clear">
@@ -50,7 +51,7 @@
                             {{ $t('Settings.EmailProvider_SenderName') }}
                         </label>
                         <div class="field" :class="{ answered: senderName }">
-                            <input data-vv-as="sender name" v-validate="'required_if:provider,amazon,sendgrid'
+                            <Field data-vv-as="sender name" v-validate="'required_if:provider,amazon,sendgrid'
                                 " name="senderName" id="senderName" v-model="senderName" type="text"
                                 class="form-control with-clear-btn" maxlength="200" />
                             <button type="button" @click="senderName = null" class="btn btn-link btn-clear">
@@ -69,7 +70,7 @@
                             {{ $t('Settings.EmailProvider_Address') }}
                         </label>
                         <div class="field" :class="{ answered: address }">
-                            <input data-vv-as="address" v-validate="'required_if:provider,amazon,sendgrid'
+                            <Field data-vv-as="address" v-validate="'required_if:provider,amazon,sendgrid'
                                 " name="address" id="address" v-model="address" type="text"
                                 class="form-control with-clear-btn" maxlength="200" />
                             <button type="button" @click="address = null" class="btn btn-link btn-clear">
@@ -88,7 +89,7 @@
                     </h2>
                     <div class="radio-accordion mb-30">
                         <div class="radio mb-1">
-                            <input v-validate="'required'" name="provider" class="wb-radio" type="radio"
+                            <Field v-validate="'required'" name="provider" class="wb-radio" type="radio"
                                 v-model="provider" ref="provider" id="provider_none" value="none" />
                             <label for="provider_none">
                                 <span class="tick"></span>
@@ -103,7 +104,7 @@
                             </div>
                         </div>
                         <div class="radio mb-1">
-                            <input v-validate="'required'" class="wb-radio" name="provider" ref="provider" type="radio"
+                            <Field v-validate="'required'" class="wb-radio" name="provider" ref="provider" type="radio"
                                 v-model="provider" id="provider_amazon" value="amazon" />
                             <label for="provider_amazon">
                                 <span class="tick"></span>
@@ -124,7 +125,7 @@
                                             {{ $t('Settings.EmailProvider_AwsAccessKeyId') }}
                                         </label>
                                         <div class="field" :class="{ answered: awsAccessKeyId }">
-                                            <input data-vv-as="AWS access key id" v-validate="'required'"
+                                            <Field data-vv-as="AWS access key id" v-validate="'required'"
                                                 class="form-control with-clear-btn" name="awsAccessKeyId"
                                                 id="awsAccessKeyId" type="text" v-model="awsAccessKeyId"
                                                 maxlength="200" />
@@ -145,7 +146,7 @@
                                         <label class="h5">
                                             {{ $t('Settings.EmailProvider_AwsSecretAccessKey') }}</label>
                                         <div class="field" :class="{ answered: awsSecretAccessKey }">
-                                            <input v-validate="'required'" data-vv-as="AWS secret access key"
+                                            <Field v-validate="'required'" data-vv-as="AWS secret access key"
                                                 name="awsSecretAccessKey" id="awsSecretAccessKey"
                                                 v-model="awsSecretAccessKey" class="form-control with-clear-btn"
                                                 type="text" maxlength="200" />
@@ -205,7 +206,7 @@
                                             {{ $t('Settings.EmailProvider_SendGridApiKey') }}
                                         </label>
                                         <div class="field" :class="{ answered: sendGridApiKey }">
-                                            <input v-validate="'required'" data-vv-as="API key" name="sendGridApiKey"
+                                            <Field v-validate="'required'" data-vv-as="API key" name="sendGridApiKey"
                                                 class="form-control with-clear-btn" id="sendGridApiKey" type="text"
                                                 v-model="sendGridApiKey" maxlength="200" />
                                             <button @click="sendGridApiKey = null" type="button"
@@ -237,8 +238,8 @@
                     <p class="text-success" v-if="providerSettingsResult">
                         {{ providerSettingsResult }}
                     </p>
-                </form>
-                <form v-if="!isFormDirty && (sendGridIsSetUp || awsIsSetUp)" data-vv-scope="testEmail"
+                </Form>
+                <Form v-if="!isFormDirty && (sendGridIsSetUp || awsIsSetUp)" data-vv-scope="testEmail"
                     class="form-container">
                     <button type="submit" disabled style="display: none" aria-hidden="true"></button>
                     <h4>
@@ -250,7 +251,7 @@
                                 {{ $t('Settings.EmailProvider_TestEmailAddress') }}
                             </label>
                             <div class="field" :class="{ answered: testEmailAddress }">
-                                <input data-vv-as="email" v-validate="'required|email'" name="testEmailAddress"
+                                <Field data-vv-as="email" v-validate="'required|email'" name="testEmailAddress"
                                     class="form-control with-clear-btn" id="testEmailAddress" type="text"
                                     v-model="testEmailAddress" maxlength="200" />
                                 <button @click="testEmailAddress = null" type="button" class="btn btn-link btn-clear">
@@ -275,16 +276,23 @@
                             {{ error }}
                         </p>
                     </div>
-                </form>
+                </Form>
             </div>
         </div>
     </HqLayout>
 </template>
 
 <script>
+//TODO: MIGRATION
+import { Form, Field, ErrorMessage } from 'vee-validate'
 import { isEmpty } from 'lodash'
 
 export default {
+    components: {
+        Form,
+        Field,
+        ErrorMessage,
+    },
     data() {
         return {
             provider: null,

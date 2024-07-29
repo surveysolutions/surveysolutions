@@ -431,9 +431,16 @@
 </style>
 
 <script>
+//TODO: MIGRATION
+import { Form, Field, ErrorMessage } from 'vee-validate'
 import modal from '@/shared/modal'
 
 export default {
+    components: {
+        Form,
+        Field,
+        ErrorMessage,
+    },
     data() {
         return {
             encryptionEnabled: false,

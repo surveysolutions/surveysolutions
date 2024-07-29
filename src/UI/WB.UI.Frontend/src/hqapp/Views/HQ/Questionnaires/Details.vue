@@ -280,7 +280,7 @@ export default {
     },
     mounted() {
         this.audioAudit = this.$config.model.audioAudit
-        this.criticalityLevelDisplay = find(this.$config.model.criticalityLevels, { key: this.model.criticalityLevel }).value
+        this.criticalityLevelDisplay = find(this.$config.model.criticalityLevels, { key: this.model.criticalityLevel })?.value
     },
     methods: {
         assignSelected() { },

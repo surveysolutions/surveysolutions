@@ -6,23 +6,13 @@
                     <div class="panel-body clearfix">
                         <div class="about-questionnaire clearfix">
                             <h1 style="padding-top: 17px">
-                                {{
-                                    this.$t(
-                                        'WebInterviewSettings.WebInterviewSetupFor_Title',
-                                    )
-                                }}
+                                {{ this.$t('WebInterviewSettings.WebInterviewSetupFor_Title') }}
                                 <b>
                                     {{
-                                        $t(
-                                            'Pages.QuestionnaireNameVersionFirst',
-                                            {
-                                                name: this.$config.model
-                                                    .questionnaireTitle,
-                                                version:
-                                                    this.$config.model
-                                                        .questionnaireVersion,
-                                            },
-                                        )
+                                        $t('Pages.QuestionnaireNameVersionFirst', {
+                                            name: this.$config.model.questionnaireTitle,
+                                            version: this.$config.model.questionnaireVersion,
+                                        })
                                     }}
                                 </b>
                             </h1>
@@ -38,27 +28,17 @@
                                         <li>
                                             <a :href="config.downloadLinksUrl +
                                                 '/' +
-                                                config.questionnaireIdentity
-                                                    .id
+                                                config.questionnaireIdentity.id
                                                 ">
-                                                {{
-                                                    $t(
-                                                        'Dashboard.DownloadLinks',
-                                                    )
-                                                }}
+                                                {{ $t('Dashboard.DownloadLinks') }}
                                             </a>
                                         </li>
                                         <li>
                                             <a :href="config.sendInvitationsUrl +
                                                 '/' +
-                                                config.questionnaireIdentity
-                                                    .id
+                                                config.questionnaireIdentity.id
                                                 ">
-                                                {{
-                                                    $t(
-                                                        'Dashboard.SendInvitations',
-                                                    )
-                                                }}
+                                                {{ $t('Dashboard.SendInvitations') }}
                                             </a>
                                         </li>
                                     </ul>
@@ -77,72 +57,51 @@
                     <div class="welcome-page">
                         <ul class="nav nav-tabs" role="tablist" id="start-screen-example">
                             <li role="presentation" class="active">
-                                <a href="#welcome" @click="
-                                    setPageActive(
-                                        'welcomeTextTitle',
-                                        'welcomeTextDescription',
-                                    )
-                                    " aria-controls="welcome" role="tab" data-toggle="tab">{{
-                                        $t('WebInterviewSettings.WelcomePage')
-                                    }}</a>
+                                <a href="#welcome" @click="setPageActive('welcomeTextTitle', 'welcomeTextDescription')"
+                                    aria-controls="welcome" role="tab" data-toggle="tab">
+                                    {{ $t('WebInterviewSettings.WelcomePage') }}
+                                </a>
                             </li>
                             <li role="presentation">
-                                <a href="#resume" @click="
-                                    setPageActive(
-                                        'resumeWelcome',
-                                        'resumeInvitation',
-                                    )
-                                    " aria-controls="resume" role="tab" data-toggle="tab">{{
-                                        $t('WebInterviewSettings.ResumePage')
-                                    }}</a>
+                                <a href="#resume" @click="setPageActive('resumeWelcome', 'resumeInvitation')"
+                                    aria-controls="resume" role="tab" data-toggle="tab">
+                                    {{ $t('WebInterviewSettings.ResumePage') }}
+                                </a>
                             </li>
                             <li role="presentation">
-                                <a href="#complete" @click="
-                                    setPageActive(
-                                        'completeNoteToSupervisor',
-                                    )
-                                    " aria-controls="complete" role="tab" data-toggle="tab">{{
-                                        $t('WebInterviewSettings.CompletePage')
-                                    }}</a>
+                                <a href="#complete" @click="setPageActive('completeNoteToSupervisor')"
+                                    aria-controls="complete" role="tab" data-toggle="tab">
+                                    {{ $t('WebInterviewSettings.CompletePage') }}
+                                </a>
                             </li>
                             <li role="presentation">
-                                <a href="#finish" @click="
-                                    setPageActive(
-                                        'webSurveyHeader',
-                                        'finishInterview',
-                                    )
-                                    " aria-controls="finish" role="tab" data-toggle="tab">{{
-                                        $t('WebInterviewSettings.FinishPage')
-                                    }}</a>
+                                <a href="#finish" @click="setPageActive('webSurveyHeader', 'finishInterview')"
+                                    aria-controls="finish" role="tab" data-toggle="tab">
+                                    {{ $t('WebInterviewSettings.FinishPage') }}
+                                </a>
                             </li>
                             <li role="presentation">
-                                <a href="#link" @click="
-                                    setPageActive(
-                                        'linkWelcome',
-                                        'linkInvitation',
-                                    )
-                                    " aria-controls="link" role="tab" data-toggle="tab">{{
-                                        $t(
-                                            'WebInterviewSettings.LinkToInterviewPage',
-                                        )
-                                    }}</a>
+                                <a href="#link" @click="setPageActive('linkWelcome', 'linkInvitation')"
+                                    aria-controls="link" role="tab" data-toggle="tab">
+                                    {{ $t('WebInterviewSettings.LinkToInterviewPage') }}
+                                </a>
                             </li>
                         </ul>
                         <div class="tab-content">
-                            <Welcome :webInterviewPageMessages="webInterviewPageMessages
-                                " :hasLogo="hasLogo" :logoUrl="logoUrl" :questionnaireId="questionnaireId"
+                            <Welcome :webInterviewPageMessages="webInterviewPageMessages" :hasLogo="hasLogo"
+                                :logoUrl="logoUrl" :questionnaireId="questionnaireId"
                                 :questionnaireTitle="questionnaireTitle" />
-                            <Resume :webInterviewPageMessages="webInterviewPageMessages
-                                " :hasLogo="hasLogo" :logoUrl="logoUrl" :questionnaireId="questionnaireId"
+                            <Resume :webInterviewPageMessages="webInterviewPageMessages" :hasLogo="hasLogo"
+                                :logoUrl="logoUrl" :questionnaireId="questionnaireId"
                                 :questionnaireTitle="questionnaireTitle" />
-                            <Complete :webInterviewPageMessages="webInterviewPageMessages
-                                " :hasLogo="hasLogo" :logoUrl="logoUrl" :questionnaireId="questionnaireId"
+                            <Complete :webInterviewPageMessages="webInterviewPageMessages" :hasLogo="hasLogo"
+                                :logoUrl="logoUrl" :questionnaireId="questionnaireId"
                                 :questionnaireTitle="questionnaireTitle" />
-                            <Finish :webInterviewPageMessages="webInterviewPageMessages
-                                " :hasLogo="hasLogo" :logoUrl="logoUrl" :questionnaireId="questionnaireId"
+                            <Finish :webInterviewPageMessages="webInterviewPageMessages" :hasLogo="hasLogo"
+                                :logoUrl="logoUrl" :questionnaireId="questionnaireId"
                                 :questionnaireTitle="questionnaireTitle" />
-                            <LinkInterview :webInterviewPageMessages="webInterviewPageMessages
-                                " :hasLogo="hasLogo" :logoUrl="logoUrl" :questionnaireId="questionnaireId"
+                            <LinkInterview :webInterviewPageMessages="webInterviewPageMessages" :hasLogo="hasLogo"
+                                :logoUrl="logoUrl" :questionnaireId="questionnaireId"
                                 :questionnaireTitle="questionnaireTitle" />
                         </div>
                     </div>
@@ -158,9 +117,9 @@
                         <ul class="nav nav-tabs" role="tablist">
                             <li v-for="emailTemplate in emailTemplates" :key="emailTemplate.value"
                                 :class="{ active: emailTemplate.isActive }" role="presentation">
-                                <a href="javascript:void(0);" role="tab" data-toggle="tab" @click.stop.prevent="
-                                    setActive(emailTemplate)
-                                    ">{{ emailTemplate.buttonTitle }}</a>
+                                <a href="javascript:void(0);" role="tab" data-toggle="tab"
+                                    @click.stop.prevent="setActive(emailTemplate)">{{ emailTemplate.buttonTitle }}
+                                </a>
                             </li>
                         </ul>
 
@@ -168,286 +127,161 @@
                             <div v-for="emailTemplate in emailTemplates" :key="emailTemplate.type"
                                 :class="{ active: emailTemplate.isActive }" role="tabpanel"
                                 class="tab-pane email-section">
-                                <form v-on:submit.prevent="dummy" :data-vv-scope="'emailTemplateData' +
-                                    emailTemplate.value
-                                    ">
+                                <form v-on:submit.prevent="dummy"
+                                    :data-vv-scope="'emailTemplateData' + emailTemplate.value">
                                     <div class="email-block d-flex mb-30">
                                         <div class="costomization-block email-block-unit">
                                             <div class="">
                                                 <div class="row-element mb-30">
                                                     <p>
-                                                        {{
-                                                            $t(
-                                                                'WebInterviewSettings.EmailTemplateDescription',
-                                                            )
-                                                        }}
+                                                        {{ $t('WebInterviewSettings.EmailTemplateDescription') }}
                                                     </p>
                                                 </div>
                                                 <div class="row-element">
                                                     <div class="h5">
-                                                        {{
-                                                            $t(
-                                                                'WebInterviewSettings.EmailSubject',
-                                                            )
-                                                        }}
+                                                        {{ $t('WebInterviewSettings.EmailSubject') }}
                                                     </div>
-                                                    <div class="form-group mb-30" :class="{
-                                                        'has-error':
-                                                            errors.has(
-                                                                'emailTemplateData' +
-                                                                emailTemplate.value +
-                                                                '.subject',
-                                                            ),
-                                                    }">
-                                                        <div class="field" :class="{
-                                                            answered:
-                                                                emailTemplate.subject,
-                                                        }">
-                                                            <input type="text" v-model="emailTemplate.subject
-                                                                " data-vv-as="Please enter the subject" v-validate="'required'
-                                                                    " data-vv-name="subject" maxlength="200"
-                                                                class="form-control with-clear-btn"
+                                                    <div class="form-group mb-30"
+                                                        :class="{ 'has-error': errors.has('emailTemplateData' + emailTemplate.value + '.subject') }">
+                                                        <div class="field" :class="{ answered: emailTemplate.subject }">
+                                                            <input type="text" v-model="emailTemplate.subject"
+                                                                data-vv-as="Please enter the subject"
+                                                                v-validate="'required'" data-vv-name="subject"
+                                                                maxlength="200" class="form-control with-clear-btn"
                                                                 placeholder="Please enter the subject" />
-                                                            <button type="button" @click="
-                                                                clearField(
-                                                                    emailTemplate,
-                                                                    'subject',
-                                                                )
-                                                                " class="btn btn-link btn-clear">
+                                                            <button type="button"
+                                                                @click="clearField(emailTemplate, 'subject')"
+                                                                class="btn btn-link btn-clear">
                                                                 <span></span>
                                                             </button>
-                                                            <span class="help-block" v-if="
-                                                                errors.first(
-                                                                    'emailTemplateData' +
-                                                                    emailTemplate.value +
-                                                                    '.subject',
-                                                                )
-                                                            ">{{
-                                                                $t(
-                                                                    'WebInterviewSettings.FieldRequired',
-                                                                )
-                                                            }}</span>
+                                                            <span class="help-block"
+                                                                v-if="errors.first('emailTemplateData' + emailTemplate.value + '.subject')">
+                                                                {{ $t('WebInterviewSettings.FieldRequired') }}
+                                                            </span>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="row-element mb-30" v-if="
-                                                    isMessageSupportedInterviewData(
-                                                        emailTemplate,
-                                                    )
-                                                ">
+                                                <div class="row-element mb-30"
+                                                    v-if="isMessageSupportedInterviewData(emailTemplate)">
                                                     <p>
                                                         {{
-                                                            $t(
-                                                                'WebInterviewSettings.InterviewDataInsertInTextDescription',
-                                                            )
+                                                            $t('WebInterviewSettings.InterviewDataInsertInTextDescription')
                                                         }}
                                                     </p>
                                                     <p>
                                                         {{
-                                                            $t(
-                                                                'WebInterviewSettings.InterviewDataInsertBarcodeDescription',
-                                                            )
+                                                            $t('WebInterviewSettings.InterviewDataInsertBarcodeDescription')
                                                         }}
                                                     </p>
                                                     <p>
                                                         {{
-                                                            $t(
-                                                                'WebInterviewSettings.InterviewDataInsertQrCodeDescription',
-                                                            )
+                                                            $t('WebInterviewSettings.InterviewDataInsertQrCodeDescription')
                                                         }}
                                                     </p>
                                                 </div>
                                                 <div class="row-element">
                                                     <div class="h5">
-                                                        {{
-                                                            $t(
-                                                                'WebInterviewSettings.MainText',
-                                                            )
-                                                        }}
+                                                        {{ $t('WebInterviewSettings.MainText') }}
                                                     </div>
-                                                    <div class="form-group mb-30" :class="{
-                                                        'has-error':
-                                                            errors.has(
-                                                                'emailTemplateData' +
-                                                                emailTemplate.value +
-                                                                '.message',
-                                                            ),
-                                                    }">
-                                                        <div class="field" :class="{
-                                                            answered:
-                                                                emailTemplate.message,
-                                                        }">
-                                                            <textarea-autosize v-model="emailTemplate.message
-                                                                " data-vv-as="Please enter the main text" v-validate="'required'
-                                                                    " data-vv-name="message" :ref="'message' +
-                                                                        emailTemplate.value
-                                                                        " maxlength="3000" :min-height="79"
-                                                                class="form-control js-elasticArea"
+                                                    <div class="form-group mb-30"
+                                                        :class="{ 'has-error': errors.has('emailTemplateData' + emailTemplate.value + '.message') }">
+                                                        <div class="field" :class="{ answered: emailTemplate.message }">
+                                                            <textarea-autosize v-model="emailTemplate.message"
+                                                                data-vv-as="Please enter the main text"
+                                                                v-validate="'required'" data-vv-name="message"
+                                                                :ref="'message' + emailTemplate.value" maxlength="3000"
+                                                                :min-height="79" class="form-control js-elasticArea"
                                                                 placeholder="Please enter the main text">
                                                             </textarea-autosize>
-                                                            <button type="button" @click="
-                                                                emailTemplate.message =
-                                                                null
-                                                                " class="btn btn-link btn-clear">
+                                                            <button type="button" @click="emailTemplate.message = null"
+                                                                class="btn btn-link btn-clear">
                                                                 <span></span>
                                                             </button>
-                                                            <span class="help-block" v-if="
-                                                                errors.first(
-                                                                    'emailTemplateData' +
-                                                                    emailTemplate.value +
-                                                                    '.message',
-                                                                )
-                                                            ">{{
-                                                                $t(
-                                                                    'WebInterviewSettings.FieldRequired',
-                                                                )
-                                                            }}</span>
+                                                            <span class="help-block"
+                                                                v-if="errors.first('emailTemplateData' + emailTemplate.value + '.message')">
+                                                                {{ $t('WebInterviewSettings.FieldRequired') }}
+                                                            </span>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="row-element" v-if="
-                                                    isPasswordSupported(
-                                                        emailTemplate,
-                                                    )
-                                                ">
+                                                <div class="row-element" v-if="isPasswordSupported(emailTemplate)">
                                                     <div class="h5 mb-0">
                                                         {{
-                                                            $t(
-                                                                'WebInterviewSettings.DescriptionForPassword',
-                                                            )
+                                                            $t('WebInterviewSettings.DescriptionForPassword')
                                                         }}
                                                     </div>
                                                     <div class="gray-text mb-1">
                                                         {{
-                                                            $t(
-                                                                'WebInterviewSettings.ShownPasswordIsRequired',
-                                                            )
+                                                            $t('WebInterviewSettings.ShownPasswordIsRequired')
                                                         }}
                                                     </div>
                                                     <div class="form-group mb-30" :class="{
-                                                        'has-error':
-                                                            errors.has(
-                                                                'emailTemplateData' +
-                                                                emailTemplate.value +
-                                                                '.passwordDescription',
-                                                            ),
+                                                        'has-error': errors.has(
+                                                            'emailTemplateData' +
+                                                            emailTemplate.value +
+                                                            '.passwordDescription'
+                                                        ),
                                                     }">
-                                                        <div class="field" :class="{
-                                                            answered:
-                                                                emailTemplate.passwordDescription,
-                                                        }">
-                                                            <input type="text" v-model="emailTemplate.passwordDescription
-                                                                " data-vv-name="passwordDescription"
+                                                        <div class="field"
+                                                            :class="{ answered: emailTemplate.passwordDescription }">
+                                                            <input type="text"
+                                                                v-model="emailTemplate.passwordDescription"
+                                                                data-vv-name="passwordDescription"
                                                                 data-vv-as="Please enter password description"
-                                                                v-validate="'required'
-                                                                    " maxlength="500"
+                                                                v-validate="'required'" maxlength="500"
                                                                 class="form-control with-clear-btn"
                                                                 placeholder="Please enter password description" />
-                                                            <button type="button" @click="
-                                                                clearField(
-                                                                    emailTemplate,
-                                                                    'passwordDescription',
-                                                                )
-                                                                " class="btn btn-link btn-clear">
+                                                            <button type="button"
+                                                                @click="clearField(emailTemplate, 'passwordDescription')"
+                                                                class="btn btn-link btn-clear">
                                                                 <span></span>
                                                             </button>
-                                                            <span class="help-block" v-if="
-                                                                errors.first(
-                                                                    'emailTemplateData' +
-                                                                    emailTemplate.value +
-                                                                    '.passwordDescription',
-                                                                )
-                                                            ">{{
-                                                                $t(
-                                                                    'WebInterviewSettings.FieldRequired',
-                                                                )
-                                                            }}</span>
+                                                            <span class="help-block"
+                                                                v-if="errors.first('emailTemplateData' + emailTemplate.value + '.passwordDescription')">
+                                                                {{ $t('WebInterviewSettings.FieldRequired') }}
+                                                            </span>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="row-element" v-if="
-                                                    isButtonSupported(
-                                                        emailTemplate,
-                                                    )
-                                                ">
+                                                <div class="row-element" v-if="isButtonSupported(emailTemplate)">
                                                     <div class="h5">
-                                                        {{
-                                                            $t(
-                                                                'WebInterviewSettings.StartInterviewButton',
-                                                            )
-                                                        }}
+                                                        {{ $t('WebInterviewSettings.StartInterviewButton') }}
                                                     </div>
-                                                    <div class="form-group mb-30" :class="{
-                                                        'has-error':
-                                                            errors.has(
-                                                                'emailTemplateData' +
-                                                                emailTemplate.value +
-                                                                '.linkText',
-                                                            ),
-                                                    }">
-                                                        <div class="field" :class="{
-                                                            answered:
-                                                                emailTemplate.linkText,
-                                                        }">
+                                                    <div class="form-group mb-30"
+                                                        :class="{ 'has-error': errors.has('emailTemplateData' + emailTemplate.value + '.linkText') }">
+                                                        <div class="field"
+                                                            :class="{ answered: emailTemplate.linkText }">
                                                             <span class="wrapper-dynamic">
-                                                                <input type="text" v-model="emailTemplate.linkText
-                                                                    " v-validate="'required'
-                                                                        " data-vv-name="linkText" maxlength="200"
+                                                                <input type="text" v-model="emailTemplate.linkText"
+                                                                    v-validate="'required'" data-vv-name="linkText"
+                                                                    maxlength="200"
                                                                     class="form-control with-clear-btn width-dynamic"
                                                                     placeholder="Please enter the text" />
-                                                                <button type="button" @click="
-                                                                    clearField(
-                                                                        emailTemplate,
-                                                                        'linkText',
-                                                                    )
-                                                                    " class="btn btn-link btn-clear">
+                                                                <button type="button"
+                                                                    @click="clearField(emailTemplate, 'linkText')"
+                                                                    class="btn btn-link btn-clear">
                                                                     <span></span>
                                                                 </button>
-                                                                <span class="help-block" v-if="
-                                                                    errors.first(
-                                                                        'emailTemplateData' +
-                                                                        emailTemplate.value +
-                                                                        '.linkText',
-                                                                    )
-                                                                ">{{
-                                                                    $t(
-                                                                        'WebInterviewSettings.FieldRequired',
-                                                                    )
-                                                                }}</span>
+                                                                <span class="help-block"
+                                                                    v-if="errors.first('emailTemplateData' + emailTemplate.value + '.linkText')">
+                                                                    {{ $t('WebInterviewSettings.FieldRequired') }}
+                                                                </span>
                                                             </span>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="">
-                                                    <button type="submit" :disabled="!isDirty(
-                                                        '$emailTemplateData' +
-                                                        emailTemplate.value,
-                                                    )
-                                                        " @click="
-                                                            saveEmailTemplate(
-                                                                emailTemplate,
-                                                            )
-                                                            " class="btn btn-md btn-success">
-                                                        {{
-                                                            $t(
-                                                                'WebInterviewSettings.Save',
-                                                            )
-                                                        }}
+                                                    <button type="submit"
+                                                        :disabled="!isDirty('$emailTemplateData' + emailTemplate.value)"
+                                                        @click="saveEmailTemplate(emailTemplate)"
+                                                        class="btn btn-md btn-success">
+                                                        {{ $t('WebInterviewSettings.Save') }}
                                                     </button>
-                                                    <button type="button" :disabled="!isDirty(
-                                                        '$emailTemplateData' +
-                                                        emailTemplate.value,
-                                                    )
-                                                        " @click="
-                                                            cancelEditEmailTemplate(
-                                                                emailTemplate,
-                                                            )
-                                                            " class="btn btn-md btn-link">
-                                                        {{
-                                                            $t(
-                                                                'WebInterviewSettings.Cancel',
-                                                            )
-                                                        }}
+                                                    <button type="button"
+                                                        :disabled="!isDirty('$emailTemplateData' + emailTemplate.value)"
+                                                        @click="cancelEditEmailTemplate(emailTemplate)"
+                                                        class="btn btn-md btn-link">
+                                                        {{ $t('WebInterviewSettings.Cancel') }}
                                                     </button>
                                                 </div>
                                             </div>
@@ -459,24 +293,13 @@
                                                     <table class="em-table email-example-table" align="center"
                                                         border="0" cellspacing="0" cellpadding="0">
                                                         <tr>
-                                                            <td style="
-                                                                    border: 6px
-                                                                        solid
-                                                                        #e5e5e5;
-                                                                    padding: 50px
-                                                                        55px
-                                                                        115px;
-                                                                    box-sizing: border-box;
-                                                                ">
+                                                            <td
+                                                                style="border: 6px solid #e5e5e5;padding: 50px 55px 115px;box-sizing: border-box;">
                                                                 <table border="0" width="100%" cellpadding="0"
                                                                     cellspacing="0">
                                                                     <tr>
-                                                                        <td style="
-                                                                                padding-bottom: 80px;
-                                                                            ">
-                                                                            <div v-if="
-                                                                                !hasLogo
-                                                                            " class="default-icon">
+                                                                        <td style="padding-bottom: 80px">
+                                                                            <div v-if="!hasLogo" class="default-icon">
                                                                                 <svg width="178" height="83"
                                                                                     viewBox="0 0 178 83" fill="none"
                                                                                     xmlns="http://www.w3.org/2000/svg">
@@ -535,112 +358,79 @@
                                                                                         fill="#303030" />
                                                                                 </svg>
                                                                             </div>
-                                                                            <img :src="logoUrl
-                                                                                " v-if="
-                                                                                    hasLogo
-                                                                                " alt="Custom logo" style="
-                                                                                    display: block;
-                                                                                    max-height: 170px;
-                                                                                    width: auto;
-                                                                                " class="em-img" />
+                                                                            <img :src="logoUrl" v-if="hasLogo"
+                                                                                alt="Custom logo" style="
+                                          display: block;
+                                          max-height: 170px;
+                                          width: auto;
+                                        " class="em-img" />
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
                                                                         <td style="
-                                                                                font-size: 24px;
-                                                                                line-height: 30px;
-                                                                                color: #727272;
-                                                                                font-weight: bold;
-                                                                                white-space: pre-line;
-                                                                            ">
-                                                                            {{
-                                                                                previewText(
-                                                                                    emailTemplate.subject,
-                                                                                )
-                                                                            }}
+                                        font-size: 24px;
+                                        line-height: 30px;
+                                        color: #727272;
+                                        font-weight: bold;
+                                        white-space: pre-line;
+                                      ">
+                                                                            {{ previewText(emailTemplate.subject) }}
                                                                         </td>
                                                                     </tr>
                                                                     <tr>
                                                                         <td style="
-                                                                                padding: 40px
-                                                                                    0;
-                                                                                font-size: 16px;
-                                                                                line-height: 20px;
-                                                                                white-space: pre-line;
-                                                                            " v-html="previewMessage(
-                                                                                emailTemplate,
-                                                                            )
-                                                                                "></td>
+                                        padding: 40px 0;
+                                        font-size: 16px;
+                                        line-height: 20px;
+                                        white-space: pre-line;
+                                      " v-html="previewMessage(emailTemplate)"></td>
                                                                     </tr>
-                                                                    <tr v-if="
-                                                                        isPasswordSupported(
-                                                                            emailTemplate,
-                                                                        )
-                                                                    ">
+                                                                    <tr v-if="isPasswordSupported(emailTemplate)">
                                                                         <td style="
-                                                                                padding: 0px
-                                                                                    0
-                                                                                    5px;
-                                                                                font-size: 16px;
-                                                                                line-height: 20px;
-                                                                                white-space: pre-line;
-                                                                            ">
+                                        padding: 0px 0 5px;
+                                        font-size: 16px;
+                                        line-height: 20px;
+                                        white-space: pre-line;
+                                      ">
                                                                             {{
                                                                                 previewText(
-                                                                                    emailTemplate.passwordDescription,
+                                                                                    emailTemplate.passwordDescription
                                                                                 )
                                                                             }}
                                                                         </td>
                                                                     </tr>
-                                                                    <tr v-if="
-                                                                        isPasswordSupported(
-                                                                            emailTemplate,
-                                                                        )
-                                                                    ">
+                                                                    <tr v-if="isPasswordSupported(emailTemplate)">
                                                                         <td style="
-                                                                                padding: 0px
-                                                                                    0
-                                                                                    50px;
-                                                                                font-size: 24px;
-                                                                                line-height: 30px;
-                                                                                color: #727272;
-                                                                                font-weight: bold;
-                                                                            ">
+                                        padding: 0px 0 50px;
+                                        font-size: 24px;
+                                        line-height: 30px;
+                                        color: #727272;
+                                        font-weight: bold;
+                                      ">
                                                                             43845634
                                                                         </td>
                                                                     </tr>
-                                                                    <tr v-if="
-                                                                        isButtonSupported(
-                                                                            emailTemplate,
-                                                                        )
-                                                                    ">
-                                                                        <td style="padding-top:20px">
+                                                                    <tr v-if="isButtonSupported(emailTemplate)">
+                                                                        <td style="padding-top: 20px">
                                                                             <a href="javascript:void(0);"
                                                                                 class="btn-success" style="
-                                                                                    text-decoration: none;
-                                                                                    background: #368e19;
-                                                                                    padding: 10px
-                                                                                        12px;
-                                                                                    text-transform: uppercase;
-                                                                                    letter-spacing: 0.1em;
-                                                                                    border-radius: 4px;
-                                                                                    border: 2px
-                                                                                        solid
-                                                                                        #368e19;
-                                                                                    color: #fff;
-                                                                                    font-family: 'Trebuchet MS',
-                                                                                        'Lucida Sans Unicode',
-                                                                                        'Lucida Grande',
-                                                                                        'Lucida Sans',
-                                                                                        Arial,
-                                                                                        sans-serif;
-                                                                                    font-size: 14px;
-                                                                                    box-shadow: none;
-                                                                                ">
+                                          text-decoration: none;
+                                          background: #368e19;
+                                          padding: 10px 12px;
+                                          text-transform: uppercase;
+                                          letter-spacing: 0.1em;
+                                          border-radius: 4px;
+                                          border: 2px solid #368e19;
+                                          color: #fff;
+                                          font-family: 'Trebuchet MS',
+                                            'Lucida Sans Unicode',
+                                            'Lucida Grande', 'Lucida Sans',
+                                            Arial, sans-serif;
+                                          font-size: 14px;
+                                          box-shadow: none;
+                                        ">
                                                                                 {{
-                                                                                    previewText(
-                                                                                        emailTemplate.linkText,
-                                                                                    )
+                                                                                    previewText(emailTemplate.linkText)
                                                                                 }}
                                                                             </a>
                                                                         </td>
@@ -651,9 +441,7 @@
                                                         <tr>
                                                             <td width="100%" align="center">
                                                                 <table align="center" width="80%" cellpadding="0"
-                                                                    cellspacing="0" border="0" style="
-                                                                        color: #808080;
-                                                                    ">
+                                                                    cellspacing="0" border="0" style="color: #808080">
                                                                     <!-- <tr>
                                                                     <td align="center" style="padding: 15px 0;">
                                                                         <ul>
@@ -665,28 +453,12 @@
                                                                 </tr> -->
                                                                     <tr>
                                                                         <td align="center" style="
-                                                                                padding: 15px
-                                                                                    0;
-                                                                                white-space: pre-line;
-                                                                            ">
-                                                                            Here
-                                                                            the
-                                                                            address
-                                                                            of
-                                                                            your
-                                                                            organization
-                                                                            will
-                                                                            appear
-                                                                            as
-                                                                            specified
-                                                                            in
-                                                                            your
-                                                                            account
-                                                                            at
-                                                                            the
-                                                                            mass
-                                                                            mailing
-                                                                            server.
+                                        padding: 15px 0;
+                                        white-space: pre-line;
+                                      ">
+                                                                            Here the address of your organization will
+                                                                            appear as specified in your account at the
+                                                                            mass mailing server.
                                                                         </td>
                                                                     </tr>
                                                                     <!-- <tr>
@@ -722,18 +494,14 @@
                                 <input class="checkbox-filter" v-validate="''" data-vv-name="singleResponse"
                                     id="singleResponse" type="checkbox" v-model="singleResponseIsEnabled" />
                                 <label for="singleResponse">
-                                    <span class="tick"></span>{{
-                                        $t('WebInterviewSetup.SingleResponse')
-                                    }}
+                                    <span class="tick"></span>{{ $t('WebInterviewSetup.SingleResponse') }}
                                 </label>
                             </div>
                             <div class="form-group mb-20">
                                 <input class="checkbox-filter" v-validate="''" data-vv-name="emailOnComplete"
                                     id="emailOnComplete" type="checkbox" v-model="emailOnCompleteIsEnabled" />
                                 <label for="emailOnComplete">
-                                    <span class="tick"></span>{{
-                                        $t('WebInterviewSetup.EmailOnComplete')
-                                    }}
+                                    <span class="tick"></span>{{ $t('WebInterviewSetup.EmailOnComplete') }}
                                 </label>
                             </div>
                             <div class="form-group mb-20">
@@ -741,156 +509,76 @@
                                     id="attachAnswersInEmail" type="checkbox" :disabled="!emailOnCompleteIsEnabled"
                                     v-model="attachAnswersInEmailIsEnabled" />
                                 <label for="attachAnswersInEmail">
-                                    <span class="tick"></span>{{
-                                        $t(
-                                            'WebInterviewSetup.AttachAnswersToCompleteEmail',
-                                        )
-                                    }}
+                                    <span class="tick"></span>{{ $t('WebInterviewSetup.AttachAnswersToCompleteEmail') }}
                                 </label>
                             </div>
                             <div class="form-group mb-20">
                                 <input class="checkbox-filter" v-validate="''"
                                     data-vv-name="allowSwitchToCawiForInterviewer" id="allowSwitchToCawiForInterviewer"
-                                    type="checkbox" v-model="allowSwitchToCawiForInterviewerEnabled
-                                        " />
+                                    type="checkbox" v-model="allowSwitchToCawiForInterviewerEnabled" />
                                 <label for="allowSwitchToCawiForInterviewer">
-                                    <span class="tick"></span>{{
-                                        $t(
-                                            'WebInterviewSetup.AllowSwitchToCawiForInterviewer',
-                                        )
+                                    <span class="tick"></span>{{ $t('WebInterviewSetup.AllowSwitchToCawiForInterviewer')
                                     }}
                                 </label>
                             </div>
                             <div class="notification-block mb-20">
                                 <div class="mb-1">
-                                    {{
-                                        $t(
-                                            'WebInterviewSettings.SendWithNoResponse',
-                                        )
-                                    }}
+                                    {{ $t('WebInterviewSettings.SendWithNoResponse') }}
                                 </div>
                                 <select class="selectpicker" v-validate="'required'" tabindex="-98"
                                     ref="reminderAfterDaysIfNoResponse" data-vv-name="reminderAfterDaysIfNoResponse"
                                     v-model="reminderAfterDaysIfNoResponse">
                                     <option value="null">
-                                        {{
-                                            $t('WebInterviewSettings.DoNotSend')
-                                        }}
+                                        {{ $t('WebInterviewSettings.DoNotSend') }}
                                     </option>
                                     <option value="1">
-                                        {{
-                                            $t(
-                                                'WebInterviewSettings.AfterXDay',
-                                                { count: 1 },
-                                            )
-                                        }}
+                                        {{ $t('WebInterviewSettings.AfterXDay', { count: 1 }) }}
                                     </option>
                                     <option value="2">
-                                        {{
-                                            $t(
-                                                'WebInterviewSettings.AfterXDay',
-                                                { count: 2 },
-                                            )
-                                        }}
+                                        {{ $t('WebInterviewSettings.AfterXDay', { count: 2 }) }}
                                     </option>
                                     <option value="3">
-                                        {{
-                                            $t(
-                                                'WebInterviewSettings.AfterXDay',
-                                                { count: 3 },
-                                            )
-                                        }}
+                                        {{ $t('WebInterviewSettings.AfterXDay', { count: 3 }) }}
                                     </option>
                                     <option value="5">
-                                        {{
-                                            $t(
-                                                'WebInterviewSettings.AfterXDay',
-                                                { count: 5 },
-                                            )
-                                        }}
+                                        {{ $t('WebInterviewSettings.AfterXDay', { count: 5 }) }}
                                     </option>
                                     <option value="7">
-                                        {{
-                                            $t(
-                                                'WebInterviewSettings.AfterXWeek',
-                                                { count: 1 },
-                                            )
-                                        }}
+                                        {{ $t('WebInterviewSettings.AfterXWeek', { count: 1 }) }}
                                     </option>
                                     <option value="14">
-                                        {{
-                                            $t(
-                                                'WebInterviewSettings.AfterXWeek',
-                                                { count: 2 },
-                                            )
-                                        }}
+                                        {{ $t('WebInterviewSettings.AfterXWeek', { count: 2 }) }}
                                     </option>
                                 </select>
                             </div>
                             <div class="notification-block mb-30">
                                 <div class="mb-1">
-                                    {{
-                                        $t(
-                                            'WebInterviewSettings.SendWithPartialResponse',
-                                        )
-                                    }}
+                                    {{ $t('WebInterviewSettings.SendWithPartialResponse') }}
                                 </div>
                                 <select class="selectpicker" v-validate="'required'" tabindex="-98"
                                     ref="reminderAfterDaysIfPartialResponse"
                                     data-vv-name="reminderAfterDaysIfPartialResponse"
                                     v-model="reminderAfterDaysIfPartialResponse">
                                     <option value="null">
-                                        {{
-                                            $t('WebInterviewSettings.DoNotSend')
-                                        }}
+                                        {{ $t('WebInterviewSettings.DoNotSend') }}
                                     </option>
                                     <option value="1">
-                                        {{
-                                            $t(
-                                                'WebInterviewSettings.AfterXDay',
-                                                { count: 1 },
-                                            )
-                                        }}
+                                        {{ $t('WebInterviewSettings.AfterXDay', { count: 1 }) }}
                                     </option>
                                     <option value="2">
-                                        {{
-                                            $t(
-                                                'WebInterviewSettings.AfterXDay',
-                                                { count: 2 },
-                                            )
-                                        }}
+                                        {{ $t('WebInterviewSettings.AfterXDay', { count: 2 }) }}
                                     </option>
                                     <option value="3">
-                                        {{
-                                            $t(
-                                                'WebInterviewSettings.AfterXDay',
-                                                { count: 3 },
-                                            )
-                                        }}
+                                        {{ $t('WebInterviewSettings.AfterXDay', { count: 3 }) }}
                                     </option>
                                     <option value="5">
-                                        {{
-                                            $t(
-                                                'WebInterviewSettings.AfterXDay',
-                                                { count: 5 },
-                                            )
-                                        }}
+                                        {{ $t('WebInterviewSettings.AfterXDay', { count: 5 }) }}
                                     </option>
                                     <option value="7">
-                                        {{
-                                            $t(
-                                                'WebInterviewSettings.AfterXWeek',
-                                                { count: 1 },
-                                            )
-                                        }}
+                                        {{ $t('WebInterviewSettings.AfterXWeek', { count: 1 }) }}
                                     </option>
                                     <option value="14">
-                                        {{
-                                            $t(
-                                                'WebInterviewSettings.AfterXWeek',
-                                                { count: 2 },
-                                            )
-                                        }}
+                                        {{ $t('WebInterviewSettings.AfterXWeek', { count: 2 }) }}
                                     </option>
                                 </select>
                             </div>
@@ -970,8 +658,7 @@ export default {
         self.spamProtectionIsEnabled = this.$config.model.useCaptcha
         self.singleResponseIsEnabled = this.$config.model.singleResponse
         self.emailOnCompleteIsEnabled = this.$config.model.emailOnComplete
-        self.attachAnswersInEmailIsEnabled =
-            this.$config.model.attachAnswersInEmail
+        self.attachAnswersInEmailIsEnabled = this.$config.model.attachAnswersInEmail
         self.allowSwitchToCawiForInterviewerEnabled =
             this.$config.model.allowSwitchToCawiForInterviewer
         self.reminderAfterDaysIfNoResponse =
@@ -998,15 +685,11 @@ export default {
                 var defaultEmailTemplate = value
                 var custom = self.$config.model.emailTemplates[key]
                 var subject =
-                    custom == undefined ||
-                        isNil(custom.subject) ||
-                        custom.subject === ''
+                    custom == undefined || isNil(custom.subject) || custom.subject === ''
                         ? defaultEmailTemplate.subject
                         : custom.subject
                 var message =
-                    custom == undefined ||
-                        isNil(custom.message) ||
-                        custom.message === ''
+                    custom == undefined || isNil(custom.message) || custom.message === ''
                         ? defaultEmailTemplate.message
                         : custom.message
                 var passwordDescription =
@@ -1030,7 +713,7 @@ export default {
                     linkText: linkText,
                     isActive: key === 'invitationTemplate',
                 }
-            },
+            }
         )
 
         map(this.emailTemplates, (emailTemplate) => {
@@ -1043,9 +726,7 @@ export default {
                 var customText = self.$config.model.definedTexts[key]
                 var defaultText = value
                 var message =
-                    customText == undefined ||
-                        isNil(customText) ||
-                        customText === ''
+                    customText == undefined || isNil(customText) || customText === ''
                         ? defaultText
                         : customText
 
@@ -1056,7 +737,7 @@ export default {
                     defaultText: defaultText,
                     cancelText: message,
                 }
-            },
+            }
         ).reduce(function (maped, obj) {
             maped[obj.value] = obj
             return maped
@@ -1089,15 +770,11 @@ export default {
                 this.$config.model.defaultEmailTemplates[emailTemplate.value]
             var custom = this.$config.model.emailTemplates[emailTemplate.value]
             emailTemplate.message =
-                custom == undefined ||
-                    isNil(custom.message) ||
-                    custom.message === ''
+                custom == undefined || isNil(custom.message) || custom.message === ''
                     ? defaultEmailTemplate.message
                     : custom.message
             emailTemplate.subject =
-                custom == undefined ||
-                    isNil(custom.subject) ||
-                    custom.subject === ''
+                custom == undefined || isNil(custom.subject) || custom.subject === ''
                     ? defaultEmailTemplate.subject
                     : custom.subject
             emailTemplate.passwordDescription =
@@ -1107,9 +784,7 @@ export default {
                     ? defaultEmailTemplate.passwordDescription
                     : custom.passwordDescription
             emailTemplate.linkText =
-                custom == undefined ||
-                    isNil(custom.linkText) ||
-                    custom.linkText === ''
+                custom == undefined || isNil(custom.linkText) || custom.linkText === ''
                     ? defaultEmailTemplate.linkText
                     : custom.linkText
             this.$validator.reset('emailTemplateData' + emailTemplate.value)
@@ -1118,7 +793,7 @@ export default {
         async saveEmailTemplate(emailTemplate) {
             var self = this
             var validationResult = await this.$validator.validateAll(
-                'emailTemplateData' + emailTemplate.value,
+                'emailTemplateData' + emailTemplate.value
             )
             if (validationResult) {
                 self.$store.dispatch('showProgress')
@@ -1128,31 +803,20 @@ export default {
                     emailTemplate.subject,
                     emailTemplate.message,
                     emailTemplate.passwordDescription,
-                    emailTemplate.linkText,
+                    emailTemplate.linkText
                 )
                     .then(function (response) {
-                        if (
-                            !self.$config.model.emailTemplates[
-                            emailTemplate.value
-                            ]
-                        ) {
-                            self.$config.model.emailTemplates[
-                                emailTemplate.value
-                            ] = []
+                        if (!self.$config.model.emailTemplates[emailTemplate.value]) {
+                            self.$config.model.emailTemplates[emailTemplate.value] = []
                         }
                         var userTemplate =
-                            self.$config.model.emailTemplates[
-                            emailTemplate.value
-                            ]
+                            self.$config.model.emailTemplates[emailTemplate.value]
                         userTemplate.subject = emailTemplate.subject
                         userTemplate.message = emailTemplate.message
-                        userTemplate.passwordDescription =
-                            emailTemplate.passwordDescription
+                        userTemplate.passwordDescription = emailTemplate.passwordDescription
                         userTemplate.linkText = emailTemplate.linkText
 
-                        self.$validator.reset(
-                            'emailTemplateData' + emailTemplate.value,
-                        )
+                        self.$validator.reset('emailTemplateData' + emailTemplate.value)
                     })
                     .catch(function (error) {
                         self.$errorHandler(error, self)
@@ -1175,7 +839,7 @@ export default {
             var self = this
             self.$store.dispatch('showProgress')
             await this.$hq.WebInterviewSettings.startWebInterview(
-                this.questionnaireId,
+                this.questionnaireId
             )
                 .then(function (response) {
                     self.started = true
@@ -1190,9 +854,7 @@ export default {
         async stopWebInterview() {
             var self = this
             self.$store.dispatch('showProgress')
-            await this.$hq.WebInterviewSettings.stopWebInterview(
-                this.questionnaireId,
-            )
+            await this.$hq.WebInterviewSettings.stopWebInterview(this.questionnaireId)
                 .then(function (response) {
                     self.started = false
                 })
@@ -1218,19 +880,16 @@ export default {
                 this.singleResponseIsEnabled,
                 this.emailOnCompleteIsEnabled,
                 this.attachAnswersInEmailIsEnabled,
-                this.allowSwitchToCawiForInterviewerEnabled,
+                this.allowSwitchToCawiForInterviewerEnabled
             )
                 .then(function (response) {
-                    self.cancelSpamProtectionIsEnabled =
-                        self.spamProtectionIsEnabled
+                    self.cancelSpamProtectionIsEnabled = self.spamProtectionIsEnabled
                     self.cancelReminderAfterDaysIfNoResponse =
                         self.reminderAfterDaysIfNoResponse
                     self.cancelReminderAfterDaysIfPartialResponse =
                         self.reminderAfterDaysIfPartialResponse
-                    self.cancelSingleResponseIsEnabled =
-                        self.singleResponseIsEnabled
-                    self.cancelEmailOnCompleteIsEnabled =
-                        self.emailOnCompleteIsEnabled
+                    self.cancelSingleResponseIsEnabled = self.singleResponseIsEnabled
+                    self.cancelEmailOnCompleteIsEnabled = self.emailOnCompleteIsEnabled
                     self.cancelAttachAnswersInEmailIsEnabled =
                         self.attachAnswersInEmailIsEnabled
                     self.cancelAllowSwitchToCawiForInterviewerEnabled =
@@ -1273,23 +932,19 @@ export default {
             var text = this.previewText(emailTemplate.message)
             text = escape(text)
 
-            if (!this.isMessageSupportedInterviewData(emailTemplate))
-                return text
+            if (!this.isMessageSupportedInterviewData(emailTemplate)) return text
 
             return text
                 .replace(/%[A-Za-z0-9_]+%/g, (match) =>
                     this.$t('WebInterviewSettings.AnswerOn', {
                         variable: match.replace(/%/g, ''),
-                    }),
+                    })
                 )
                 .replace(
                     /%[A-Za-z0-9_]+:barcode%/g,
-                    '<img src="/img/barcode128.png" />',
+                    '<img src="/img/barcode128.png" />'
                 )
-                .replace(
-                    /%[A-Za-z0-9_]+:qrcode%/g,
-                    '<img src="/img/qrcode.png" />',
-                )
+                .replace(/%[A-Za-z0-9_]+:qrcode%/g, '<img src="/img/qrcode.png" />')
         },
         dummy() {
             return false
@@ -1303,7 +958,7 @@ export default {
             emailTemplate[fieldName] = null
             await this.$nextTick()
             await this.$validator.validate(
-                'emailTemplateData' + emailTemplate.value + '.' + fieldName,
+                'emailTemplateData' + emailTemplate.value + '.' + fieldName
             )
         },
         isPasswordSupported(emailTemplate) {
@@ -1320,17 +975,13 @@ export default {
         reminderAfterDaysIfNoResponse: function (val) {
             if (this.$refs.reminderAfterDaysIfNoResponse.value != val) {
                 this.$refs.reminderAfterDaysIfNoResponse.value = val
-                $(this.$refs.reminderAfterDaysIfNoResponse).selectpicker(
-                    'refresh',
-                )
+                $(this.$refs.reminderAfterDaysIfNoResponse).selectpicker('refresh')
             }
         },
         reminderAfterDaysIfPartialResponse: function (val) {
             if (this.$refs.reminderAfterDaysIfPartialResponse.value != val) {
                 this.$refs.reminderAfterDaysIfPartialResponse.value = val
-                $(this.$refs.reminderAfterDaysIfPartialResponse).selectpicker(
-                    'refresh',
-                )
+                $(this.$refs.reminderAfterDaysIfPartialResponse).selectpicker('refresh')
             }
         },
     },

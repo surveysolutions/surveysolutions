@@ -92,7 +92,9 @@ export default {
     },
     methods: {
         async trySignIn() {
-            var validationResult = await this.$validator.validateAll()
+            var validationResult = true
+            //TODO:MIGRATION
+            //await this.$validator.validateAll()
             if (validationResult) {
                 var passwordToSend = this.password;
                 this.password = '';
