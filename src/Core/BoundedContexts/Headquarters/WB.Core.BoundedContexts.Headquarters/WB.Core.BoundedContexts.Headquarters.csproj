@@ -58,13 +58,13 @@
     <PackageReference Include="DotSpatial.Projections" Version="4.0.656" />
     <PackageReference Include="GeoJSON.Net" Version="1.2.19" />
     <PackageReference Include="Iesi.Collections" Version="4.1.1" />
+    <PackageReference Include="MailKit" Version="4.7.1.1" />
     <PackageReference Include="MediatR" Version="12.2.0" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="8.0.6" />
     <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="8.0.6" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="8.0.0" />
-    <PackageReference Include="MimeKitLite" Version="4.6.0" />
     <PackageReference Include="NetTopologySuite.IO.Esri.Shapefile" Version="1.0.0" />
     <PackageReference Include="NetTopologySuite.IO.GeoJSON" Version="4.0.0" />
     <PackageReference Include="NewId" Version="4.0.1" />

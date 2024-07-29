@@ -399,7 +399,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="radio">
+                        <div class="radio mb-1">
                             <input
                                 v-validate="'required'"
                                 class="wb-radio"
@@ -489,6 +489,347 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="radio">
+                            <input
+                                v-validate="'required'"
+                                class="wb-radio"
+                                name="provider"
+                                ref="provider"
+                                type="radio"
+                                v-model="provider"
+                                id="provider_smtp"
+                                value="smtp"
+                            />
+                            <label for="provider_smtp">
+                                <span class="tick"></span>
+                                {{ $t('Settings.EmailProvider_Smtp') }}
+                            </label>
+                            <div
+                                class="extended-block"
+                                v-if="provider === 'smtp'"
+                            >
+                                <div class="wrapper">
+                                    <p>
+                                        {{
+                                            $t(
+                                                'Settings.EmailProvider_SmtpDescription',
+                                            )
+                                        }}
+                                        <a
+                                            href="https://support.mysurvey.solutions/headquarters/cawi/email-providers-amazon-ses"
+                                            target="_blank"
+                                            >{{
+                                                $t(
+                                                    'Settings.EmailProvider_HelpLinkText',
+                                                )
+                                            }}</a
+                                        >
+                                    </p>
+
+                                    <div
+                                        class="form-group"
+                                        :class="{
+                                            'has-error': errors.has(
+                                                'settings.smtpHost',
+                                            ),
+                                        }"
+                                    >
+                                        <label class="h5">{{
+                                            $t(
+                                                'Settings.EmailProvider_SmtpHost',
+                                            )
+                                        }}</label>
+                                        <div
+                                            class="field"
+                                            :class="{
+                                                answered: smtpHost,
+                                            }"
+                                        >
+                                            <input
+                                                data-vv-as="SMTP host"
+                                                v-validate="'required'"
+                                                class="form-control with-clear-btn"
+                                                name="smtpHost"
+                                                id="smtpHost"
+                                                type="text"
+                                                v-model="smtpHost"
+                                                maxlength="200"
+                                            />
+                                            <button
+                                                @click="smtpHost = null"
+                                                type="button"
+                                                class="btn btn-link btn-clear"
+                                            >
+                                                <span></span>
+                                            </button>
+                                            <span
+                                                class="gray-text help-block"
+                                                >{{
+                                                    $t(
+                                                        'Settings.EmailProvider_SmtpHostHelp',
+                                                    )
+                                                }}</span
+                                            >
+                                            <span class="help-block">{{
+                                                errors.first(
+                                                    'settings.smtpHost',
+                                                )
+                                            }}</span>
+                                        </div>
+                                    </div>
+
+                                    <div
+                                        class="form-group"
+                                        :class="{
+                                            'has-error': errors.has(
+                                                'settings.smtpPort',
+                                            ),
+                                        }"
+                                    >
+                                        <label class="h5">{{
+                                            $t(
+                                                'Settings.EmailProvider_SmtpPort',
+                                            )
+                                        }}</label>
+                                        <div
+                                            class="field"
+                                            :class="{
+                                                answered: smtpPort,
+                                            }"
+                                        >
+                                            <input
+                                                v-validate="'required'"
+                                                data-vv-as="SMTP port"
+                                                name="smtpPort"
+                                                id="smtpPort"
+                                                v-model="smtpPort"
+                                                class="form-control number with-clear-btn"
+                                                type="number"
+                                            />
+                                            <button
+                                                @click="
+                                                    smtpPort = null
+                                                "
+                                                type="button"
+                                                class="btn btn-link btn-clear"
+                                            >
+                                                <span></span>
+                                            </button>
+                                            <span
+                                                class="gray-text help-block"
+                                                >{{
+                                                    $t(
+                                                        'Settings.EmailProvider_SmtpPortHelp',
+                                                    )
+                                                }}</span
+                                            >
+                                            <span class="help-block">{{
+                                                errors.first(
+                                                    'settings.smtpPort',
+                                                )
+                                            }}</span>
+                                        </div>
+                                    </div>
+
+                                    <div
+                                        class="block-filter"
+                                        :class="{
+                                            'has-error': errors.has(
+                                                'settings.smtpTlsEncryption',
+                                            ),
+                                        }"
+                                    >
+                                        <div
+                                            class="field"
+                                            :class="{
+                                                answered: smtpTlsEncryption,
+                                            }"
+                                        >
+                                            <input 
+                                                type="checkbox"
+                                                style="margin-right:5px"
+                                                class="form-control checkbox-filter single-checkbox" 
+                                                data-vv-as="Use TLS encryption"
+                                                name="smtpTlsEncryption"
+                                                id="smtpTlsEncryption"
+                                                v-model="smtpTlsEncryption"
+                                                @change="dirty = true"
+                                            >
+                                            <label for="smtpTlsEncryption" style="font-weight: bold">
+                                                <span class="tick"></span>{{ $t('Settings.EmailProvider_SmtpTlsEncryption') }}
+                                            </label>
+                                            <span
+                                                class="gray-text help-block"
+                                                >{{
+                                                    $t(
+                                                        'Settings.EmailProvider_SmtpTlsEncryptionHelp',
+                                                    )
+                                                }}</span
+                                            >
+                                            <span class="help-block">{{
+                                                errors.first(
+                                                    'settings.smtpTlsEncryption',
+                                                )
+                                            }}</span>
+                                        </div>
+                                    </div>
+
+                                    <div
+                                        class="block-filter"
+                                        :class="{
+                                            'has-error': errors.has(
+                                                'settings.smtpAuthentication',
+                                            ),
+                                        }"
+                                    >
+                                        <div
+                                            class="field"
+                                            :class="{
+                                                answered: smtpAuthentication,
+                                            }"
+                                        >
+                                            <input 
+                                                type="checkbox"
+                                                style="margin-right:5px"
+                                                class="form-control checkbox-filter single-checkbox" 
+                                                data-vv-as="Use authentication"
+                                                name="smtpAuthentication"
+                                                id="smtpAuthentication"
+                                                v-model="smtpAuthentication"
+                                                @change="checkSmtpAuthentication"
+                                            >
+                                            <label for="smtpAuthentication" style="font-weight: bold">
+                                                <span class="tick"></span>{{ $t('Settings.EmailProvider_SmtpAuthentication') }}
+                                            </label>
+                                            <span
+                                                class="gray-text help-block"
+                                                >{{
+                                                    $t(
+                                                        'Settings.EmailProvider_SmtpAuthenticationHelp',
+                                                    )
+                                                }}</span
+                                            >
+                                            <span class="help-block">{{
+                                                errors.first(
+                                                    'settings.smtpAuthentication',
+                                                )
+                                            }}</span>
+                                        </div>
+                                    </div>
+
+                                    <div
+                                        class="form-group"
+                                        :class="{
+                                            'has-error': errors.has(
+                                                'settings.smtpUsername',
+                                            ),
+                                        }"
+                                    >
+                                        <label class="h5">{{
+                                            $t(
+                                                'Settings.EmailProvider_SmtpUsername',
+                                            )
+                                        }}</label>
+                                        <div
+                                            class="field"
+                                            :class="{
+                                                answered: smtpUsername,
+                                            }"
+                                        >
+                                            <input
+                                                data-vv-as="SMTP username"
+                                                name="smtpUsername"
+                                                id="smtpUsername"
+                                                v-model="smtpUsername"
+                                                class="form-control with-clear-btn"
+                                                type="text"
+                                                maxlength="200"
+                                                :disabled="authDisabled"
+                                                @input="dirty = true"
+                                            />
+                                            <button
+                                                @click="
+                                                    smtpUsername = null
+                                                "
+                                                type="button"
+                                                class="btn btn-link btn-clear"
+                                            >
+                                                <span></span>
+                                            </button>
+                                            <span
+                                                class="gray-text help-block"
+                                                >{{
+                                                    $t(
+                                                        'Settings.EmailProvider_SmtpUsernameHelp',
+                                                    )
+                                                }}</span
+                                            >
+                                            <span class="help-block">{{
+                                                errors.first(
+                                                    'settings.smtpUsername',
+                                                )
+                                            }}</span>
+                                        </div>
+                                    </div>
+
+                                    <div
+                                        class="form-group"
+                                        :class="{
+                                            'has-error': errors.has(
+                                                'settings.smtpPassword',
+                                            ),
+                                        }"
+                                    >
+                                        <label class="h5">{{
+                                            $t(
+                                                'Settings.EmailProvider_SmtpPassword',
+                                            )
+                                        }}</label>
+                                        <div
+                                            class="field"
+                                            :class="{
+                                                answered: smtpPassword,
+                                            }"
+                                        >
+                                            <input
+                                                data-vv-as="SMTP password"
+                                                name="smtpPassword"
+                                                id="smtpPassword"
+                                                v-model="smtpPassword"
+                                                class="form-control with-clear-btn"
+                                                type="password"
+                                                maxlength="200"
+                                                :disabled="authDisabled"
+                                                @input="dirty = true"
+                                            />
+                                            <button
+                                                @click="
+                                                    smtpPassword = null
+                                                "
+                                                type="button"
+                                                class="btn btn-link btn-clear"
+                                            >
+                                                <span></span>
+                                            </button>
+                                            <span
+                                                class="gray-text help-block"
+                                                >{{
+                                                    $t(
+                                                        'Settings.EmailProvider_SmtpPasswordHelp',
+                                                    )
+                                                }}</span
+                                            >
+                                            <span class="help-block">{{
+                                                errors.first(
+                                                    'settings.smtpPassword',
+                                                )
+                                            }}</span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <p class="text-info" v-if="isFormDirty">
                         Save current changes and send yourself a test email to
@@ -509,7 +850,7 @@
                     </p>
                 </form>
                 <form
-                    v-if="!isFormDirty && (sendGridIsSetUp || awsIsSetUp)"
+                    v-if="!isFormDirty && (sendGridIsSetUp || awsIsSetUp || smtpIsSetUp)"
                     data-vv-scope="testEmail"
                     class="form-container"
                 >
@@ -595,7 +936,7 @@
 
 <script>
 import Vue from 'vue'
-import { isEmpty } from 'lodash'
+import { isEmpty, isNumber } from 'lodash'
 
 export default {
     data() {
@@ -608,9 +949,17 @@ export default {
             awsAccessKeyId: null,
             awsSecretAccessKey: null,
             sendGridApiKey: null,
+            smtpHost: null,
+            smtpPort: null,
+            smtpTlsEncryption: false,
+            smtpAuthentication: false,
+            smtpUsername: null,
+            smtpPassword: null,
             testEmailAddress: null,
             providerSettingsResult: null,
             sendEmailResult: null,
+            authDisabled: true,
+            dirty: false,
             sendingErrors: [],
         }
     },
@@ -625,12 +974,19 @@ export default {
                 self.provider = (settings.provider || '').toLocaleLowerCase()
                 self.senderAddress = settings.senderAddress
                 self.awsAccessKeyId = settings.awsAccessKeyId
+                self.smtpHost = settings.smtpHost
+                self.smtpPort = settings.smtpPort
+                self.smtpTlsEncryption = settings.smtpTlsEncryption
+                self.smtpAuthentication = settings.smtpAuthentication
+                self.smtpUsername = settings.smtpUsername
+                self.smtpPassword = settings.smtpPassword
                 self.awsSecretAccessKey = settings.awsSecretAccessKey
                 self.awsRegion = settings.awsRegion
                 self.sendGridApiKey = settings.sendGridApiKey
                 self.senderName = settings.senderName
                 self.replyAddress = settings.replyAddress
                 self.address = settings.address
+                self.authDisabled = !self.smtpAuthentication
 
                 self.$validator.reset('settings')
             })
@@ -648,7 +1004,7 @@ export default {
                 (key) =>
                     this.fields.$settings[key].dirty ||
                     this.fields.$settings[key].changed,
-            )
+            ) || this.dirty
         },
         isEmailFormDirty() {
             const keys = Object.keys((this.fields || {}).$testEmail || {})
@@ -671,6 +1027,15 @@ export default {
                 !isEmpty(this.awsSecretAccessKey) &&
                 !isEmpty(this.awsAccessKeyId) &&
                 !isEmpty(this.senderAddress)
+            )
+        },
+        smtpIsSetUp() {
+            return (
+                this.provider == 'smtp' &&
+                !isEmpty(this.smtpHost) &&
+                isNumber(this.smtpPort) &&
+                !isEmpty(this.senderAddress) &&
+                (!this.smtpAuthentication || (!isEmpty(this.smtpUsername) && !isEmpty(this.smtpPassword)))
             )
         },
         isFetchInProgress() {
@@ -696,6 +1061,10 @@ export default {
         },
     },
     methods: {
+        checkSmtpAuthentication() {
+            this.authDisabled = !this.smtpAuthentication
+            this.dirty = true
+        },
         async sendTestEmail() {
             var self = this
             self.sendEmailResult = null
@@ -756,6 +1125,12 @@ export default {
                     awsSecretAccessKey: (self.awsSecretAccessKey || '').trim(),
                     awsRegion: self.awsRegion,
                     sendGridApiKey: (self.sendGridApiKey || '').trim(),
+                    smtpHost: (self.smtpHost || '').trim(),
+                    smtpPort: self.smtpPort,
+                    smtpTlsEncryption: self.smtpTlsEncryption,
+                    smtpAuthentication: self.smtpAuthentication,
+                    smtpUsername: (self.smtpUsername || '').trim(),
+                    smtpPassword: (self.smtpPassword || '').trim(),
                     senderName: (self.senderName || '').trim(),
                     replyAddress: (self.replyAddress || '').trim(),
                     address: (self.address || '').trim(),
@@ -780,6 +1155,7 @@ export default {
                                     'Settings.EmailProvider_SendTestEmailMessage',
                                 )
                         }
+                        self.dirty = false
                     })
                     .catch(function (error) {
                         Vue.config.errorHandler(error, self)
