@@ -1,4 +1,4 @@
-import Vue from 'vue'
+import { nextTick } from 'vue'
 import { debounce } from 'lodash'
 
 function forEachIfNeeded(data, each) {
@@ -15,7 +15,7 @@ export function batchedAction(callback, fetchAction = 'fetch', limit = null) {
     let queue = []
 
     // Vue.nextTick seems to be a bit too fast now. So adding debounce to add for app more room for action batching
-    const tick = debounce(Vue.nextTick, 100)
+    const tick = debounce(nextTick, 100)
 
     return (ctx, data) => {
         data = data || null

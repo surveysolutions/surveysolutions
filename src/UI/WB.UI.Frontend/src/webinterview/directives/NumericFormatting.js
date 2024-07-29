@@ -1,4 +1,4 @@
-import Vue from 'vue'
+//import Vue from 'vue'
 import AutoNumeric from 'autonumeric/src/main'
 import { assign } from 'lodash'
 
@@ -12,12 +12,14 @@ const defaults = {
     modifyValueOnWheel: false,
 }
 
-Vue.directive('numericFormatting', {
-    bind: (el, binding, vnode) => {
-        const settings = assign(defaults, binding.value)
-        vnode.context.autoNumericElement = new AutoNumeric(el, settings)
-        el.addEventListener('autoNumeric:rawValueModified', (e) => {
-            e.target.setAttribute('numeric-string', AutoNumeric.getNumericString(e.target))
-        })
-    },
-})
+export function registerNumericFormatting(vue) {
+    vue.directive('numericFormatting', {
+        beforeMount: (el, binding, vnode) => {
+            const settings = assign(defaults, binding.value)
+            vnode.context.autoNumericElement = new AutoNumeric(el, settings)
+            el.addEventListener('autoNumeric:rawValueModified', (e) => {
+                e.target.setAttribute('numeric-string', AutoNumeric.getNumericString(e.target))
+            })
+        },
+    })
+}

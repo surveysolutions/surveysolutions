@@ -8,7 +8,7 @@
                     {{ $t('PeriodicStatusReport.BackToTeams') }}
                 </a>
             </div>
-        </template>ß
+        </template>
         <DataTables ref="table" :tableOptions="tableOptions" exportable hasTotalRow></DataTables>
     </HqLayout>
 </template>

@@ -84,7 +84,6 @@
     </HqLayout>
 </template>
 <script>
-import Vue from 'vue'
 
 export default {
     data() {
@@ -115,7 +114,7 @@ export default {
                 self.emailProvider = ((invitationsInfo.emailProvider || '') + '').toLocaleLowerCase()
             })
             .catch(function (error) {
-                Vue.config.errorHandler(error, self)
+                self.$errorHandler(error, self)
             })
             .then(function () {
                 self.$store.dispatch('hideProgress')

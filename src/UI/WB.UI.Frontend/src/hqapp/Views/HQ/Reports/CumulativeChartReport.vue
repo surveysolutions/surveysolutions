@@ -37,12 +37,9 @@
                 </h2>
             </div>
         </div>
-        <LineChart ref="chart" id="interviewChart" :options="{
-            title: {
-                display: true,
-                text: this.chartTitle
-            }
-        }" @ready="chartUpdated" @mounted="refreshData"></LineChart>
+        <LineChart ref="chart" id="interviewChart" :options="{ title: { display: true, text: this.chartTitle } }"
+            @ready="chartUpdated" @mounted="refreshData">
+        </LineChart>
         <div v-if="base64Encoded != null && hasData">
             <a id="link" :download="$t('Reports.CumulativeInterviewChart') + ' (' + chartTitle + ').png'"
                 @click="downloadAsImage()">{{ $t("Reports.SaveAsImage") }}</a>

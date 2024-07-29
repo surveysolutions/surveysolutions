@@ -1,5 +1,5 @@
 import * as signalR from '@microsoft/signalr'
-import Vue from 'vue'
+//import Vue from 'vue'
 
 export default {
     name: 'wb-communicator',
@@ -17,7 +17,7 @@ export default {
 
     beforeMount() {
         const connection = new signalR.HubConnectionBuilder()
-            .withUrl(Vue.$config.basePath + `interview?interviewId=${this.interviewId}&mode=${this.mode}`)
+            .withUrl(this.$config.basePath + `interview?interviewId=${this.interviewId}&mode=${this.mode}`)
             .withAutomaticReconnect()
             .build()
 
@@ -30,13 +30,14 @@ export default {
             },
         }
 
-        if (!Object.prototype.hasOwnProperty.call(Vue, '$api')) {
-            Vue.$api = {}
-        }
+        // if (!Object.prototype.hasOwnProperty.call(Vue, '$api')) {
+        //     Vue.$api = {}
+        // }
 
-        Object.defineProperty(Vue.$api, 'hub', {
-            get() { return api },
-        })
+        // Object.defineProperty(Vue.$api, 'hub', {
+        //     get() { return api },
+        // })
+        //TODO: MIGRATION. move registration
 
         connection.on('refreshEntities', (questions) => {
             this.$store.dispatch('refreshEntities', questions)

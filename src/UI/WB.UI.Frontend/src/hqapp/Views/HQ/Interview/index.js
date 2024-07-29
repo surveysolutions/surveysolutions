@@ -1,5 +1,6 @@
 import localStore from './store'
-import Vue from 'vue'
+//import Vue from 'vue'
+//TODO: MIGRATION
 
 const Review = () => import('./Review')
 const Cover = () => import('~/webinterview/components/Cover')
@@ -9,7 +10,11 @@ const Overview = () => import('./Overview')
 export default class ReviewComponent {
     constructor(rootStore) {
         this.rootStore = rootStore
-        this.config = Vue.$config.model || {}
+        this.config =
+            //this.$config.model || {}
+            //TODO:MIGRATION
+            window.CONFIG.model || {}
+
     }
 
     get routes() {

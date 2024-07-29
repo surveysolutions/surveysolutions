@@ -1,7 +1,6 @@
 import { marked } from 'marked'
 import mdEditor from '@/hqapp/components/MdEditor'
 import Logo from './_Logo.vue'
-import Vue from 'vue'
 
 export default {
     props: {
@@ -70,7 +69,7 @@ export default {
                     self.$validator.reset(scope)
                 }
                 catch (error) {
-                    Vue.config.errorHandler(error, self)
+                    self.$errorHandler(error, self)
                 }
                 finally {
                     self.$store.dispatch('hideProgress')

@@ -9,7 +9,10 @@ import localStore from './store'
 
 import config from '~/shared/config'
 
-import Vue from 'vue'
+//TODO: MIGRATION. Remove after migration to mande
+import axios from 'axios'
+
+//import Vue from 'vue'
 export default class AssignmentsComponent {
     constructor(rootStore) {
         this.rootStore = rootStore
@@ -40,7 +43,7 @@ export default class AssignmentsComponent {
                                 component: Upload,
                                 name: 'assignments-upload',
                                 beforeEnter: (to, from, next) => {
-                                    Vue.$http
+                                    axios
                                         .get(config.model.api.importStatusUrl)
                                         .then(response => {
                                             if (response.data) {
@@ -55,7 +58,7 @@ export default class AssignmentsComponent {
                                                 else if (isImport)
                                                     next({ name: 'assignments-upload-progress', params: { questionnaireId: response.data.questionnaireIdentity.id } })
                                                 else if (to.params.questionnaireId != response.data.questionnaireIdentity.id && (isVerification || isImport))
-                                                    window.location.href = '/' + Vue.$config.workspace + '/Assignments/Upload/' + response.data.questionnaireIdentity.id
+                                                    window.location.href = '/' + self.$config.workspace + '/Assignments/Upload/' + response.data.questionnaireIdentity.id
                                                 else next()
                                             }
                                             else next()
@@ -78,7 +81,7 @@ export default class AssignmentsComponent {
                                 component: UploadVerification,
                                 name: 'assignments-upload-verification',
                                 beforeEnter: (to, from, next) => {
-                                    Vue.$http
+                                    axios
                                         .get(config.model.api.importStatusUrl)
                                         .then(response => {
                                             self.rootStore.dispatch('setUploadStatus', response.data)
@@ -99,7 +102,7 @@ export default class AssignmentsComponent {
                                 component: UploadProgress,
                                 name: 'assignments-upload-progress',
                                 beforeEnter: (to, from, next) => {
-                                    Vue.$http
+                                    axios
                                         .get(config.model.api.importStatusUrl)
                                         .then(response => {
                                             self.rootStore.dispatch('setUploadStatus', response.data)
@@ -122,10 +125,11 @@ export default class AssignmentsComponent {
             }]
     }
 
-    initialize() {
-        const VeeValidate = require('vee-validate')
-        Vue.use(VeeValidate)
-    }
+    // initialize() {
+    //     const VeeValidate = require('vee-validate')
+    //     Vue.use(VeeValidate)
+    // }
+    //TODO: MIGRATION
 
     get modules() {
         return localStore

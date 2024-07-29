@@ -40,7 +40,7 @@
                             <span class="data-label">{{ this.$t('Details.Duration') }}:</span>
                             <span class="data">{{
                                 this.$config.model.interviewDuration
-                            }}</span>
+                                }}</span>
                         </li>
                         <li id="detailsInfo_responsibleListItem">
                             <span class="data-label">{{ this.$t('Details.Responsible') }}:
@@ -51,24 +51,24 @@
                             </span>
                             <span v-else class="data supervisor">{{
                                 this.$config.model.responsible
-                            }}</span>
+                                }}</span>
                         </li>
                         <li id="detailsInfo_supervisorListItem">
                             <span class="data-label">{{ this.$t('Users.Supervisor') }}:
                             </span>
                             <span class="data supervisor">{{
                                 this.$config.model.supervisor
-                            }}</span>
+                                }}</span>
                         </li>
                     </ul>
                     <ul class="list-unstyled pull-left table-info">
                         <li id="detailsInfo_StatusListItem">
                             <span class="data-label">{{
                                 this.$t('Details.Status')
-                            }}</span>
+                                }}</span>
                             <span class="data">{{
                                 this.$config.model.statusName
-                            }}</span>
+                                }}</span>
                             <button type="button" class="btn btn-link gray-action-unit" @click="showStatusesHistory">
                                 {{ $t('Common.ShowStatusHistory') }}
                             </button>
@@ -203,10 +203,8 @@
             <form v-if="!showUnapproveButton" onsubmit="return false;">
                 <div class="form-group">
                     <Radio v-if="!interviewerShouldbeSelected" :label="$t('Interviews.RejectToOriginal')"
-                        :radioGroup="false" name="rejectToNewResponsible" :value="rejectToNewResponsible" @input="
-                            rejectToNewResponsible = false
-                        newResponsibleId = null
-                            " />
+                        :radioGroup="false" name="rejectToNewResponsible" :value="rejectToNewResponsible"
+                        @input="rejectToNewResponsible = false; newResponsibleId = null" />
                     <Radio v-if="!interviewerShouldbeSelected" :label="$t('Interviews.RejectToNewResponsible')"
                         :radioGroup="true" name="rejectToNewResponsible" :value="rejectToNewResponsible"
                         @input="rejectToNewResponsible = true" />
@@ -278,7 +276,7 @@
                 <div class="form-group">
                     <label class="control-label" for="newResponsibleId">{{
                         $t('Assignments.SelectResponsible')
-                    }}</label>
+                        }}</label>
                     <Typeahead control-id="newResponsibleId" :placeholder="$t('Common.Responsible')"
                         :value="newResponsibleId" :ajax-params="{}" @selected="newResponsibleSelected"
                         :fetch-url="config.api.responsible"></Typeahead>

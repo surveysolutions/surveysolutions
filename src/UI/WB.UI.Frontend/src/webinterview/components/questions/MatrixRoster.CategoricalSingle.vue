@@ -8,13 +8,13 @@
                     <h6 style="text-transform:uppercase;" v-if="question.validity.errorMessage">
                         {{ $t("WebInterviewUI.AnswerWasNotSaved") }}
                     </h6>
-                    <template v-for="message in question.validity.messages">
-                        <div v-dateTimeFormatting v-html="message" :key="message"></div>
+                    <template v-for="message in question.validity.messages" :key="message">
+                        <div v-dateTimeFormatting v-html="message"></div>
                     </template>
                 </div>
                 <div class="warning-tooltip" v-else-if="question.validity.warnings.length > 0">
-                    <template v-for="message in question.validity.warnings">
-                        <div v-dateTimeFormatting v-html="message" :key="message"></div>
+                    <template v-for="message in question.validity.warnings" :key="message">
+                        <div v-dateTimeFormatting v-html="message"></div>
                     </template>
                 </div>
             </template>
@@ -37,7 +37,6 @@
 </template>
 
 <script lang="js">
-import Vue from 'vue'
 import { entityDetails, tableCellEditor } from '../mixins'
 
 export default {

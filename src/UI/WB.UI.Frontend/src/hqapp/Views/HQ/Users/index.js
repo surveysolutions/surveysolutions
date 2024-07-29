@@ -1,4 +1,4 @@
-import Vue from 'vue'
+//import Vue from 'vue'
 
 import Headquarters from './Headquarters'
 import Manage from './Manage'
@@ -18,7 +18,8 @@ import ChangePassword from './ChangePassword'
 import ProfileLayout from './ProfileLayout'
 import ApiTokens from './ApiTokens'
 
-Vue.component('ProfileLayout', ProfileLayout)
+//TODO: MIGRATION. Register component globally
+//Vue.component('ProfileLayout', ProfileLayout)
 
 export default class UsersComponent {
     constructor(rootStore) {

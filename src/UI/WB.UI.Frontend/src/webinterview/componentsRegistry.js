@@ -1,12 +1,19 @@
-import './components'
-import './components/questions'
-import './components/questions/parts'
-import './directives'
+import { registerComponents } from './components'
+import { registerQuestionComponents } from './components/questions'
+import { registerPartsComponents } from './components/questions/parts'
+import { registerDerictives } from './directives'
 
 import 'jquery-mask-plugin'
 import './misc/htmlPoly.js'
 
-import Vue from 'vue'
 import Idle from './IdleTimeout'
 
-Vue.component('IdleTimeoutService', Idle)
+export function registerGlobalComponents(vue) {
+
+    registerComponents(vue)
+    registerQuestionComponents(vue)
+    registerPartsComponents(vue)
+    registerDerictives(vue)
+
+    vue.component('IdleTimeoutService', Idle)
+}

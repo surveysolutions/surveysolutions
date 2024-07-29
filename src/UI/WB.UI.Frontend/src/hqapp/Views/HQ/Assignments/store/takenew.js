@@ -1,9 +1,9 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+//import Vue from 'vue'
+//import Vuex from 'vuex'
 
-Vue.use(Vuex)
+//Vue.use(Vuex)
 
-export default {
+export default (app) => ({
     state: {
         interview: {},
         isLoaded: false,
@@ -11,17 +11,17 @@ export default {
 
     actions: {
         loadTakeNew({ commit }, { interviewId }) {
-            const details = Vue.$api.interview.get('getInterviewDetails', { interviewId })
+            const details = app.$api.interview.get('getInterviewDetails', { interviewId })
                 .then(interviewDetails => {
                     commit('SET_INTERVIEW_DETAILS', interviewDetails)
                 })
 
-            const question = Vue.$api.interview.get('getPrefilledQuestions', { interviewId }).then(data => {
+            const question = app.$api.interview.get('getPrefilledQuestions', { interviewId }).then(data => {
                 commit('SET_SECTION_DATA', data)
                 commit('SET_TAKENEW_RESPONSE', data)
             })
 
-            Vue.$api.hub.changeSection(null)
+            app.$api.hub.changeSection(null)
             return Promise.all([details, question])
         },
     },
@@ -41,3 +41,4 @@ export default {
         },
     },
 }
+)

@@ -1,12 +1,13 @@
-import Vue from 'vue'
+//import Vue from 'vue'
+//Todo: MIGRATION
 
-import webinterview from '~/webinterview/store'
+import webinterview from '~/webinterview/stores'
 import filters from './filters'
 import flags from './flags'
 import overview from './overview'
 
 const store = {
-    modules:{
+    modules: {
         filters,
         flags,
         overview,
@@ -15,12 +16,12 @@ const store = {
     actions: {
         approve(_, comment) {
             const interviewId = this.state.route.params.interviewId
-            return Vue.$api.interview.answer(null, 'approve', {interviewId, comment})
+            return this.$api.interview.answer(null, 'approve', { interviewId, comment })
         },
 
         reject(_, rejection) {
             const interviewId = this.state.route.params.interviewId
-            return Vue.$api.interview.answer(null, 'reject', {interviewId, comment:rejection.comment, assignTo:rejection.assignTo })
+            return this.$api.interview.answer(null, 'reject', { interviewId, comment: rejection.comment, assignTo: rejection.assignTo })
         },
     },
     getters: {

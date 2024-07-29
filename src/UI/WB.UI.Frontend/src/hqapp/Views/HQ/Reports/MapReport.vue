@@ -71,8 +71,8 @@
                 </div>
                 <div class="row-fluid" style="white-space:nowrap;">
                     <strong>{{ $t("MapReport.ViewInterviewContent") }}:</strong>&nbsp;
-                    <a v-bind:href="api.GetInterviewDetailsUrl(selectedTooltip.interviewId)"
-                        target="_blank">{{ $t("MapReport.details") }}</a>
+                    <a v-bind:href="api.GetInterviewDetailsUrl(selectedTooltip.interviewId)" target="_blank">{{
+                        $t("MapReport.details") }}</a>
                 </div>
             </div>
         </div>
@@ -118,7 +118,7 @@
 </style>
 <script>
 import * as toastr from 'toastr'
-import Vue from 'vue'
+import { nextTick } from 'vue'
 import gql from 'graphql-tag'
 import { isNull, chain, debounce, delay, forEach, find, flatten, toNumber, isEqual, isNumber } from 'lodash'
 import routeSync from '~/shared/routeSync'
@@ -564,7 +564,7 @@ export default {
 
                         self.selectedTooltip = data
 
-                        Vue.nextTick(function () {
+                        nextTick(function () {
                             self.infoWindow.setContent($(self.$refs.tooltip).html())
                             self.infoWindow.setPosition(event.latLng)
                             self.infoWindow.setOptions({

@@ -63,7 +63,6 @@
     </HqLayout>
 </template>
 <script>
-import Vue from 'vue'
 
 export default {
     data() {
@@ -114,7 +113,7 @@ export default {
                     self.status = status.status
                 })
                 .catch(function (error) {
-                    Vue.config.errorHandler(error, self)
+                    self.$errorHandler(error, self)
                 })
         },
         cancel() {

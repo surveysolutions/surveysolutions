@@ -5,10 +5,10 @@
                 <div class="page-header">
                     <ol class="breadcrumb">
                         <li>
-                            <a>{{$t('MainMenu.Users')}}</a>
+                            <a>{{ $t('MainMenu.Users') }}</a>
                         </li>
                     </ol>
-                    <h1>{{$t('UploadUsers.Title')}}</h1>
+                    <h1>{{ $t('UploadUsers.Title') }}</h1>
                 </div>
             </div>
             <div class="row">
@@ -23,10 +23,10 @@
 
 
 <script>
-import Vue from 'vue'
+import { nextTick } from 'vue'
 export default {
     mounted() {
-        Vue.nextTick(() => {
+        nextTick(() => {
             window.ajustNoticeHeight()
             window.ajustDetailsPanelHeight()
         })

@@ -1,10 +1,10 @@
-import webinterview from '~/webinterview/store'
+import webinterview from '~/webinterview/stores'
 import takeNew from './takenew'
 import upload from './upload'
 
-const store = {
+const store = (app) => ({
     modules: {
-        takeNew,
+        takeNew: takeNew(app),
     },
 
     actions: {
@@ -19,9 +19,10 @@ const store = {
         },
     },
 }
+)
 
-export default {
-    webinterview,
-    takeNew: store,
-    upload,
+export default (app) => {
+    webinterview: webinterview(app);
+    takeNew: store(app);
+    upload
 }

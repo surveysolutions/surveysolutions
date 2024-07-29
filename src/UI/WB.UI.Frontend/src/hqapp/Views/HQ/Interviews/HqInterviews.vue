@@ -120,7 +120,7 @@
                 <div class="form-group" v-if="getFilteredToAssign().length > 0">
                     <label class="control-label" for="newResponsibleId">{{
                         $t('Assignments.SelectResponsible')
-                    }}</label>
+                        }}</label>
                     <Typeahead control-id="newResponsibleId" :placeholder="$t('Common.Responsible')"
                         :value="newResponsibleId" :ajax-params="{}" @selected="newResponsibleSelected"
                         :fetch-url="config.api.responsible"></Typeahead>
@@ -244,7 +244,7 @@
                 <div>
                     <label for="txtStatusApproveComment">{{
                         $t('Pages.ApproveRejectPartialView_CommentLabel')
-                    }}:</label>
+                        }}:</label>
                     <textarea class="form-control" rows="10" maxlength="200" name="txtStatusChangeComment"
                         id="txtStatusApproveComment" v-model="statusChangeComment"></textarea>
                 </div>
@@ -281,10 +281,8 @@
                 <div>
                     <div class="options-group">
                         <Radio :label="$t('Interviews.RejectToOriginal')" :radioGroup="false"
-                            name="rejectToNewResponsible" :value="rejectToNewResponsible" @input="
-                                rejectToNewResponsible = false
-                            newResponsibleId = null
-                                " />
+                            name="rejectToNewResponsible" :value="rejectToNewResponsible"
+                            @input="rejectToNewResponsible = false; newResponsibleId = null" />
                         <Radio :label="$t('Interviews.RejectToNewResponsible')" :radioGroup="true"
                             name="rejectToNewResponsible" :value="rejectToNewResponsible"
                             @input="rejectToNewResponsible = true" />
@@ -299,7 +297,7 @@
                 <div>
                     <label for="txtStatusChangeComment">{{
                         $t('Pages.ApproveRejectPartialView_CommentLabel')
-                    }}
+                        }}
                         :</label>
                     <textarea class="form-control" rows="10" maxlength="200" id="txtStatusChangeComment"
                         v-model="statusChangeComment"></textarea>

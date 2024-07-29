@@ -1,37 +1,24 @@
 <template>
-    <wb-question :question="$me"
-        questionCssClassName="gps-question"
-        :no-comments="noComments">
+    <wb-question :question="$me" questionCssClassName="gps-question" :no-comments="noComments">
         <div class="question-unit">
             <div class="options-group">
-                <div class="field"
-                    :class="{answered: $me.isAnswered}"
-                    v-if="$me.isAnswered">
+                <div class="field" :class="{ answered: $me.isAnswered }" v-if="$me.isAnswered">
                     <div class="block-with-data">
-                        <a v-bind:href="goolgeMapUrl"
-                            :title="$t('WebInterviewUI.ShowOnMap')"
-                            target="_blank">
-                            {{$me.answer.latitude}}, {{$me.answer.longitude}}
+                        <a v-bind:href="goolgeMapUrl" :title="$t('WebInterviewUI.ShowOnMap')" target="_blank">
+                            {{ $me.answer.latitude }}, {{ $me.answer.longitude }}
                         </a>
                     </div>
-                    <button type="submit"
-                        v-if="$me.acceptAnswer"
-                        class="btn btn-link btn-clear"
-                        @click="removeAnswer">
+                    <button type="submit" v-if="$me.acceptAnswer" class="btn btn-link btn-clear" @click="removeAnswer">
                         <span></span>
                     </button>
                 </div>
                 <div class="action-btn-holder gps-question">
-                    <button type="button"
-                        :disabled="!$me.acceptAnswer"
-                        class="btn btn-default btn-lg btn-action-questionnaire"
-                        @click="answerGpsQuestion">
+                    <button type="button" :disabled="!$me.acceptAnswer"
+                        class="btn btn-default btn-lg btn-action-questionnaire" @click="answerGpsQuestion">
                         {{ $t('WebInterviewUI.GPSRecord') }}
                     </button>
 
-                    <button type="button"
-                        v-if="$store.getters.pickLocationAllowed"
-                        :disabled="!$me.acceptAnswer"
+                    <button type="button" v-if="$store.getters.pickLocationAllowed" :disabled="!$me.acceptAnswer"
                         class="btn btn-default btn-lg btn-action-questionnaire pick-location marl"
                         @click="pickLocation">
                         {{ $t('WebInterviewUI.PickLocation') }}
@@ -46,7 +33,6 @@
 <script lang="js">
 
 import { entityDetails } from '../mixins'
-import Vue from 'vue'
 import moment from 'moment'
 import box from 'bootbox'
 
@@ -74,7 +60,7 @@ export default {
         }
     },
     computed: {
-        goolgeMapUrl(){
+        goolgeMapUrl() {
             return `${this.$config.googleMapsBaseUrl}/maps?q=${this.$me.answer.latitude},${this.$me.answer.longitude}`
         },
     },
@@ -157,7 +143,7 @@ export default {
                     var mapOptions =
                     {
                         zoom: 14,
-                        center:latlng,
+                        center: latlng,
                         streetViewControl: false,
                     }
                     const map = new google.maps.Map(
@@ -173,7 +159,7 @@ export default {
                         })
                     }
                     var pushpin = null
-                    google.maps.event.addListener(map, 'click', function(event) {
+                    google.maps.event.addListener(map, 'click', function (event) {
                         placeMarker(event.latLng)
                         self.pickedLocation = {
                             latitude: pushpin.position.lat(),
@@ -185,8 +171,7 @@ export default {
                     })
 
                     function placeMarker(location) {
-                        if (pushpin == null)
-                        {
+                        if (pushpin == null) {
                             pushpin = new google.maps.Marker({
                                 position: location,
                                 map: map,
@@ -202,7 +187,7 @@ export default {
                         label: self.$t('Common.Ok'),
                         className: 'btn btn-primary',
                         callback: () => {
-                            if(self.pickedLocation) {
+                            if (self.pickedLocation) {
                                 self.onPositionDetermined({
                                     coords: {
                                         latitude: self.pickedLocation.latitude,

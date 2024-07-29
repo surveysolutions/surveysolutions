@@ -259,7 +259,7 @@ export default {
                     }
                 }
 
-                options.ajax.data = d => {
+                options.ajax.data = (d, s) => {
                     this.addParamsToRequest(d)
                     self.errorMessage = null
                     // reducing length of GET request URI
@@ -278,7 +278,7 @@ export default {
 
                     delete d.columns
 
-                    const requestUrl = this.table.ajax.url() + '?' + decodeURIComponent($.param(d))
+                    const requestUrl = s.ajax.url + '?' + decodeURIComponent($.param(d))
 
                     if (this.exportable) {
                         this.export.excel = requestUrl + '&exportType=excel'

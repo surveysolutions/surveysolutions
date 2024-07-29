@@ -23,7 +23,8 @@
                     <div class="block-filter">
                         <button type="submit" class="btn btn-success" style="margin-right:5px" id="btnReevaluate"
                             @click="reevaluateInterview"
-                            :disabled="interviewId == null || errorByInterviewId != undefined">{{ $t('Pages.Admin_Reevaluate') }}</button>
+                            :disabled="interviewId == null || errorByInterviewId != undefined">{{
+                                $t('Pages.Admin_Reevaluate') }}</button>
                         <a class="btn btn-default" href="/ControlPanel" id="lnkCancel">
                             {{ $t('Common.Cancel') }}
                         </a>
@@ -35,7 +36,6 @@
 </template>
 
 <script>
-import Vue from 'vue'
 import * as toastr from 'toastr'
 
 export default {

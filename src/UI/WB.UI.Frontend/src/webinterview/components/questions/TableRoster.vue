@@ -12,7 +12,7 @@
 
 import { entityDetails } from '../mixins'
 import { debounce, every, some, map } from 'lodash'
-import { AgGridVue } from 'ag-grid-vue'
+import { AgGridVue } from '@ag-grid-community/vue3'
 
 import TableRoster_QuestionEditor from './TableRoster.QuestionEditor'
 import TableRoster_ViewAnswer from './TableRoster.ViewAnswer'

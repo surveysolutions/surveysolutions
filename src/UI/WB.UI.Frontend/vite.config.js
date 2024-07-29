@@ -1,6 +1,6 @@
 import { defineConfig } from 'vite';
 import path  from 'path';
-import vue from '@vitejs/plugin-vue2'
+import vue from '@vitejs/plugin-vue'
 import envCompatible from 'vite-plugin-env-compatible';
 import mpaPlugin from 'vite-plugin-mpa-plus'
 import { viteCommonjs } from '@originjs/vite-plugin-commonjs';
@@ -148,6 +148,7 @@ return {
 	  },
 	  resolve: {
 		alias: [
+          
 		  {
 			find: '@',
 			replacement: path.resolve(__dirname, 'src')
@@ -159,7 +160,12 @@ return {
 		  {
 			find: '~',
 			replacement: path.resolve(__dirname, 'src')
-		  }
+		  },
+
+          {
+            find: 'vue',
+            replacement: 'vue/dist/vue.esm-bundler.js',
+          },
 		],
 		extensions: [
 		  '.mjs',
@@ -180,7 +186,17 @@ return {
 		include: ['jquery'],
 	  },
 	  plugins: [
-		vue({ jsx: true }),
+		vue(
+          {
+            jsx: true,
+            template: {
+              compilerOptions: {
+                compatConfig: {
+                  MODE: 2
+                }
+              }
+            }
+          }),
 		vitePluginRequire(),
 		viteCommonjs(),
 		envCompatible(),

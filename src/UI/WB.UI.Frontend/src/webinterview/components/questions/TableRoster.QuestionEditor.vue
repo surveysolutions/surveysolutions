@@ -1,16 +1,12 @@
 <template>
     <div class="ag-input-text-wrapper">
-        <component ref='editQuestionComponent'
-            :key="question.identity"
-            v-bind:is="'TableRoster_' + question.entityType"
-            v-bind:id="question.identity"
-            :editorParams="params">
+        <component ref='editQuestionComponent' :key="question.identity" v-bind:is="'TableRoster_' + question.entityType"
+            v-bind:id="question.identity" :editorParams="params">
         </component>
     </div>
 </template>
 
 <script lang="js">
-import Vue from 'vue'
 
 export default {
     name: 'TableRoster_QuestionEditor',
@@ -55,14 +51,3 @@ export default {
     },
 }
 </script>
-
-
-
-
-
-
-
-
-
-
-

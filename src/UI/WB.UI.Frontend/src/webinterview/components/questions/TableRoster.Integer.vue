@@ -1,21 +1,16 @@
 <template>
-    <input :ref="'input'"
-        type="text"
-        autocomplete="off"
-        inputmode="numeric"
-        class="ag-cell-edit-input"
-        :value="$me.answer"
-        v-numericFormatting="{
+    <input :ref="'input'" type="text" autocomplete="off" inputmode="numeric" class="ag-cell-edit-input"
+        :value="$me.answer" v-numericFormatting="{
             digitGroupSeparator: groupSeparator,
             decimalCharacter: decimalSeparator,
             decimalPlaces: 0,
             minimumValue: '-2147483648',
             maximumValue: '2147483647'
-        }"/>
+        }" />
 </template>
 
 <script lang="js">
-import Vue from 'vue'
+import { nextTick } from 'vue'
 import { entityDetails, tableCellEditor } from '../mixins'
 import { getGroupSeparator, getDecimalSeparator } from './question_helpers'
 import modal from '@/shared/modal'
@@ -53,9 +48,9 @@ export default {
             this.saveIntegerAnswer(answer)
         },
 
-        saveIntegerAnswer(answer){
+        saveIntegerAnswer(answer) {
             this.sendAnswer(() => {
-                if(this.handleEmptyAnswer(answer)) {
+                if (this.handleEmptyAnswer(answer)) {
                     return
                 }
 
@@ -93,10 +88,10 @@ export default {
                     return
                 }
 
-                const amountOfRostersToRemove = previousAnswer -  Math.max(answer, 0)
+                const amountOfRostersToRemove = previousAnswer - Math.max(answer, 0)
                 const confirmMessage = this.$t('WebInterviewUI.NumberRosterRemoveConfirm', { amountOfRostersToRemove })
 
-                if(amountOfRostersToRemove > 0){
+                if (amountOfRostersToRemove > 0) {
                     modal.confirm(confirmMessage, result => {
                         if (result) {
                             this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: answer })
@@ -107,8 +102,7 @@ export default {
                         }
                     })
                 }
-                else
-                {
+                else {
                     this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: answer })
                     return
                 }
@@ -130,14 +124,14 @@ export default {
         this.cancelBeforeStart = this.editorParams.charPress && ('1234567890'.indexOf(this.editorParams.charPress) < 0)
     },
     mounted() {
-        Vue.nextTick(() => {
+        nextTick(() => {
             if (this.$refs.input) {
                 this.$refs.input.focus()
                 this.$refs.input.select()
             }
         })
     },
-    beforeDestroy () {
+    beforeDestroy() {
         this.destroy()
     },
 }

@@ -1,27 +1,14 @@
 <template>
-    <div class="modal fade"
-        :id="id"
-        ref="modal"
-        tabindex="-1"
-        role="dialog"
-        :aria-labelledby="titleId">
-        <div class="modal-dialog"
-            role="document">
+    <div class="modal fade" :id="id" ref="modal" tabindex="-1" role="dialog" :aria-labelledby="titleId">
+        <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button v-if="canClose"
-                        type="button"
-                        class="close"
-                        data-dismiss="modal"
-                        aria-label="Close">
+                    <button v-if="canClose" type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true"></span>
                     </button>
                     <slot name="title">
-                        <h2 v-if="useHtmlInTitle"
-                            :id="titleId"
-                            v-html="title" />
-                        <h2 v-else
-                            :id="titleId">
+                        <h2 v-if="useHtmlInTitle" :id="titleId" v-html="title" />
+                        <h2 v-else :id="titleId">
                             {{ title }}
                         </h2>
                     </slot>
@@ -43,24 +30,21 @@ export default {
         id: String,
         title: String,
         useHtmlInTitle: { type: Boolean, required: false, default: false },
-        canClose: {
-            type: Boolean,
-            default() { return true },
-        },
+        canClose: { type: Boolean, default: true },
     },
 
     computed: {
-        titleId(){
+        titleId() {
             return this.id + 'lbl'
         },
     },
 
-    methods:{
+    methods: {
         hide() {
             $(this.$refs.modal).modal('hide')
         },
 
-        modal(params){
+        modal(params) {
             $(this.$refs.modal).appendTo('body').modal(params || {})
         },
     },

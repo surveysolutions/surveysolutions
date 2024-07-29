@@ -8,7 +8,7 @@ import SurveysAndStatuses from './SurveysAndStatuses'
 import SurveysAndStatusesForSv from './SurveysAndStatusesForSv'
 import SpeedAndQuantity from './SpeedAndQuantity'
 
-import Vue from 'vue'
+//import Vue from 'vue'
 
 export default class ReportComponent {
     constructor(rootStore) {
@@ -88,10 +88,11 @@ export default class ReportComponent {
         ]
     }
 
-    initialize() {
-        const VeeValidate = require('vee-validate')
-        Vue.use(VeeValidate)
-    }
+    // initialize() {
+    //     const VeeValidate = require('vee-validate')
+    //     Vue.use(VeeValidate)
+    // }
+    //TODO: MIGRATION
 
     get modules() {
         return {}

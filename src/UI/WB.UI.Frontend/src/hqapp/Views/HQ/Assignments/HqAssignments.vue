@@ -97,6 +97,7 @@
                         {{ $t('Assignments.WebModeReassignToNonInterviewer', { count: selectedRows.length }) }}
                     </span>
                 </div>
+
                 <div class="form-group">
                     <label class="control-label" for="commentsId">
                         {{ $t("Assignments.Comments") }}
@@ -154,17 +155,20 @@
             <p v-if="!canEditQuantity">
                 <b>{{ $t("Assignments.AssignmentExpectedInWebMode") }}</b>
             </p>
-            <form onsubmit="return false;">
-                <div class="form-group" v-bind:class="{ 'has-error': errors.has('editedQuantity') }">
+            <Form onsubmit="return false;" v-slot="{ meta }">
+
+                <div class="form-group" v-bind:class="{ 'has-error': meta.valid == false }">
                     <label class="control-label" for="newQuantity">
                         {{ $t("Assignments.Expected") }}
                     </label>
 
-                    <input type="text" class="form-control" v-model.trim="editedQuantity" name="editedQuantity"
-                        v-validate="quantityValidations" :data-vv-as="$t('Assignments.Expected')" maxlength="5"
+                    <Field type="text" class="form-control" v-model.trim="editedQuantity" name="editedQuantity"
+                        :rules="validateQuantity" :data-vv-as="$t('Assignments.Expected')" maxlength="5"
                         autocomplete="off" @keyup.enter="updateQuantity" id="newQuantity" placeholder="1"
                         :disabled="!canEditQuantity" />
-                    <span class="text-danger">{{ errors.first('editedQuantity') }}</span>
+                    <span class="text-danger">
+                        <ErrorMessage name="editedQuantity" />
+                    </span>
                 </div>
             </form>
             <template v-slot:actions>
@@ -216,8 +220,14 @@ import { RoleNames } from '~/shared/constants'
 import _sanitizeHtml from 'sanitize-html'
 const sanitizeHtml = text => _sanitizeHtml(text, { allowedTags: [], allowedAttributes: [] })
 
+import { Form, Field, ErrorMessage } from 'vee-validate'
 
 export default {
+    components: {
+        Field,
+        Form,
+        ErrorMessage,
+    },
     data() {
         return {
             responsibleId: null,
@@ -274,13 +284,7 @@ export default {
 
             return this.anyWebModeAssignmentSelected && this.newResponsibleId.iconClass !== RoleNames.INTERVIEWER.toLowerCase()
         },
-        quantityValidations() {
-            return {
-                regex: '^-?([0-9]+)$',
-                min_value: -1,
-                max_value: this.config.maxInterviewsByAssignment,
-            }
-        },
+
         ddlReceivedByTablet() {
             return [
                 { key: 'All', value: this.$t('Assignments.ReceivedByTablet_All') },
@@ -701,11 +705,13 @@ export default {
         },
 
         async updateQuantity() {
-            const validationResult = await this.$validator.validateAll()
+            //TODO: MIGRATION
+            //
+            //const validationResult = await this.$validator.validateAll()
 
-            if (validationResult == false) {
-                return false
-            }
+            //if (validationResult == false) {
+            //    return false
+            //}
 
             let targetQuantity = null
 
@@ -776,6 +782,25 @@ export default {
             var language =
                 (navigator.languages && navigator.languages[0]) || navigator.language || navigator.userLanguage
             return value.toLocaleString(language)
+        },
+
+        validateQuantity(value) {
+
+            //TODO: MIGRATION
+            const regex = /^-?([0-9]+)$/i;
+
+            if (!regex.test(value)) {
+                return 'This field must be a valid number';
+            }
+
+            if (value <= -2)
+                return 'This field must be greater or equal to -1';
+
+            if (value > this.config.maxInterviewsByAssignment)
+                return 'This field must be less than limit';
+
+            return true;
+
         },
 
     },
