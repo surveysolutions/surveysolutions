@@ -1,22 +1,7 @@
-//import '/node_modules/jquery/dist/jquery.js';
-//import $ from '/node_modules/jquery/dist/jquery.js';
 import $ from 'jquery';
 
 import '/node_modules/jquery-mousewheel/jquery.mousewheel.js';
-//import '/node_modules/perfect-scrollbar/dist/perfect-scrollbar.js';
 import PerfectScrollbar from 'perfect-scrollbar';
-//import perfectScrollbar from 'perfect-scrollbar';
-//import perfectScrollbar from '/node_modules/perfect-scrollbar/dist/perfect-scrollbar.js';
-//$.perfectScrollbar = perfectScrollbar();
-//const lists = $('#table-content-holder > .scroller-container');
-//lists.perfectScrollbar();
-//const container = document.querySelector('#container');
-
-/*if (lists.length > 0) {
-    perfectScrollbar.initialize(
-        $('#table-content-holder > .scroller-container')[0]
-    );
-}*/
 
 window.jQuery = window.$ = $;
 
