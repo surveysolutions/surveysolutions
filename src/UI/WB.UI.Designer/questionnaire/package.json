@@ -14,7 +14,7 @@
     },
     "dependencies": {
         "@aacassandra/vue3-progressbar": "^1.0.3",
-        "@braintree/sanitize-url": "^7.0.0",
+        "@braintree/sanitize-url": "^7.1.0",
         "@frsource/autoresize-textarea": "^2.0.48",
         "@he-tree/vue": "^2.8.2",
         "@kyvg/vue3-notification": "^3.1.3",
