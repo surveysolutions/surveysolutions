@@ -4,7 +4,7 @@
             <header>
 
                 <div class="questionnaire-logo">
-                    <a class="logo" href="https://mysurvey.solutions/" target="_blank">
+                    <a class="logo" href="https://mysurvey.solutions/" target="_blank" rel="noopener">
                         <img src="../../../content/i/logo.png" alt="Survey Solutions" class="pull-left">
                         <span class="pull-left">Survey<br>Solutions</span>
                     </a>
@@ -32,12 +32,12 @@
                         $t('QuestionnaireController.CreateNew') }}</a></li>
                 </ul>
                 <nav>
-                    <a class="btn btn-default" target="_blank" href="@UiConfig.Value.DesignerHelpUrl">{{
+                    <a class="btn btn-default" target="_blank" href="http://support.mysurvey.solutions/designer"
+                        rel="noopener">{{
                         $t('AccountResources.Help') }}</a>
-                    <a class="btn btn-default" href="@UiConfig.Value.ForumUrl" target="_blank">{{
+                    <a class="btn btn-default" href="https://forum.mysurvey.solutions" target="_blank" rel="noopener">{{
                         $t('AccountResources.Forum') }}</a>
-                    <a v-if="isAdmin" class="btn btn-default" asp-action="Index" asp-controller="ControlPanel"
-                        asp-area="Admin">
+                    <a v-if="isAdmin" class="btn btn-default" href="/admin/controlpanel">
                         {{ $t('QuestionnaireController.ControlPanel') }}
                     </a>
                     <div class="btn-group">
