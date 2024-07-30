@@ -3,11 +3,11 @@
         <template v-slot:headers>
             <div class="topic-with-button">
                 <h1 v-html="$t('Users.UsersTitle')"></h1>
-                <a class="btn btn-success" v-if="model.canAddUsers" :href="this.$config.model.createUrl">
+                <a class="btn btn-success" v-if="model.canAddUsers" :href="$config.model.createUrl">
                     {{ $t('Users.AddUser') }}
                 </a>
                 <a class="btn btn-success" style="margin-left:10px" v-if="model.canAddUsers"
-                    :href="this.$hq.basePath + 'Upload'">
+                    :href="$hq.basePath + 'Upload'">
                     {{ $t('Users.UploadUsers') }}
                 </a>
                 <div class="search-pusher"></div>
@@ -19,32 +19,32 @@
                 <FilterBlock :title="$t('Pages.UsersManage_WorkspacesFilterTitle')">
                     <Typeahead control-id="workspaceSelector"
                         :placeholder="$t('Pages.UsersManage_WorkspacesFilterPlaceholder')" :value="selectedWorkspace"
-                        :ajax-params="{ includeDisabled: true }" :fetch-url="this.$config.model.workspacesUrl"
+                        :ajax-params="{ includeDisabled: true }" :fetch-url="$config.model.workspacesUrl"
                         v-on:selected="onWorkspaceSelected" />
                 </FilterBlock>
 
-                <FilterBlock :title="$t('Pages.AccountManage_Role')" v-if="this.$config.model.roles.length > 0">
+                <FilterBlock :title="$t('Pages.AccountManage_Role')" v-if="$config.model.roles.length > 0">
                     <Typeahead no-search control-id="roleSelector"
                         :placeholder="$t('Pages.UsersManage_RoleFilterPlaceholder')" :value="selectedRole"
-                        :values="this.$config.model.roles" v-on:selected="onRoleSelected" />
+                        :values="$config.model.roles" v-on:selected="onRoleSelected" />
                 </FilterBlock>
 
-                <FilterBlock :title="$t('Pages.UsersManage_TeamFilter')" v-if="this.selectedWorkspace">
+                <FilterBlock :title="$t('Pages.UsersManage_TeamFilter')" v-if="selectedWorkspace">
                     <Typeahead control-id="teamSelector" :placeholder="$t('Pages.UsersManage_TeamFilterPlaceHolder')"
                         :value="selectedTeam" :fetch-url="supervisorsUri" v-on:selected="onTeamSelected" />
                 </FilterBlock>
 
-                <FilterBlock :title="$t('Pages.AccountManage_ShowUsers')" v-if="this.$config.model.filters.length > 0">
+                <FilterBlock :title="$t('Pages.AccountManage_ShowUsers')" v-if="$config.model.filters.length > 0">
                     <Typeahead no-search control-id="filterSelector"
                         :placeholder="$t('Pages.UsersManage_ShowUsersFilterPlaceholder')"
-                        :values="this.$config.model.filters" :value="selectedFilter" v-on:selected="onFilterSelected" />
+                        :values="$config.model.filters" :value="selectedFilter" v-on:selected="onFilterSelected" />
                 </FilterBlock>
 
                 <FilterBlock :title="$t('Pages.Interviewers_ArchiveStatusTitle')">
                     <Typeahead ref="archiveStatusControl" control-id="archiveStatus" no-clear :noPaging="false"
                         data-vv-name="archive" data-vv-as="archive" :value="selectedArchive"
-                        :values="this.$config.model.archiveStatuses" :selectedKey="this.query.archive"
-                        :selectFirst="true" v-on:selected="onArchiveStatusSelected" />
+                        :values="$config.model.archiveStatuses" :selectedKey="query.archive" :selectFirst="true"
+                        v-on:selected="onArchiveStatusSelected" />
                 </FilterBlock>
 
             </Filters>
@@ -63,18 +63,18 @@
                     </label>
                     <button class="btn btn-lg btn-success" :disabled="filteredToAdd.length == 0"
                         @click="addToWorkspace">{{
-                            $t("Pages.UserManagement_AddToWorkspace") }}</button>
+        $t("Pages.UserManagement_AddToWorkspace") }}</button>
                     <button class="btn btn-lg btn-success" :disabled="filteredToAdd.length == 0"
                         @click="removeFromWorkspace">{{
-                            $t("Pages.UserManagement_RemoveFromWorkspace") }}</button>
+        $t("Pages.UserManagement_RemoveFromWorkspace") }}</button>
                     <button type="button" v-if="isVisibleArchive" class="btn btn-default btn-danger"
                         @click="archiveUsers">{{
-                            $t("Pages.Interviewers_Archive") }}</button>
+        $t("Pages.Interviewers_Archive") }}</button>
                     <button type="button" v-if="isVisibleUnarchive" class="btn btn-default btn-success"
                         @click="unarchiveUsers">{{ $t("Pages.Interviewers_Unarchive") }}</button>
                     <button type="button" class="btn btn-default btn-warning last-btn"
                         v-if="isAnyInterviewerSelected && selectedWorkspace" @click="moveToAnotherTeam">{{
-                            $t("Pages.Interviewers_MoveToAnotherTeam") }}</button>
+        $t("Pages.Interviewers_MoveToAnotherTeam") }}</button>
                 </div>
             </div>
         </DataTables>
