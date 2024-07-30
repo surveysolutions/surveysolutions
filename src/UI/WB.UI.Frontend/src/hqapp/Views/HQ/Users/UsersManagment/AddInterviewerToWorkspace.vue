@@ -7,7 +7,7 @@
                 <FilterBlock :title="$t('Pages.UsersManage_WorkspacesFilterTitle')">
                     <Typeahead control-id="workspaceSelector"
                         :placeholder="$t('Pages.UsersManage_WorkspacesFilterPlaceholder')" :value="workspace"
-                        :ajax-params="{}" :fetch-url="this.$config.model.workspacesUrl"
+                        :ajax-params="{}" :fetch-url="$config.model.workspacesUrl"
                         v-on:selected="onWorkspaceSelected" />
                 </FilterBlock>
 
@@ -25,7 +25,7 @@
                     @click="add" role="confirm">{{ $t("Common.Add") }}</button>
                 <button type="button" class="btn btn-link" data-suso="btn-cancel-user" data-dismiss="modal"
                     role="cancel">{{
-                        $t("Common.Cancel") }}</button>
+        $t("Common.Cancel") }}</button>
             </div>
         </template>
     </ModalFrame>

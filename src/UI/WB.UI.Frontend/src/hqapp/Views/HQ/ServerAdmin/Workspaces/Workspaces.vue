@@ -4,7 +4,7 @@
             <div>
                 <div class="topic-with-button">
                     <h1 v-html="$t('MainMenu.Workspaces')"></h1>
-                    <button type="button" v-if="this.$config.model.canManage" class="btn btn-success"
+                    <button type="button" v-if="$config.model.canManage" class="btn btn-success"
                         data-suso="create-new-workspace" @click="createNewWorkspace">
                         {{ $t('Workspaces.AddNew') }}
                     </button>
@@ -14,7 +14,7 @@
             </div>
         </template>
         <DataTables ref="table" data-suso="workspaces-list" :tableOptions="tableOptions" noSelect :noPaging="false"
-            :contextMenuItems="contextMenuItems" :supportContextMenu="this.$config.model.canManage">
+            :contextMenuItems="contextMenuItems" :supportContextMenu="$config.model.canManage">
         </DataTables>
         <ModalFrame ref="createWorkspaceModal" :title="$t('Workspaces.CreateWorkspace')">
             <Form @submit="createWorkspace" data-suso="workspaces-create-dialog" v-slot="{ errors }">
