@@ -225,7 +225,7 @@ return {
 	  build: {
 		minify: isProdMode,
 		rollupOptions: {
-			maxParallelFileOps: 2,
+			maxParallelFileOps: 1,
 			cache: false,
 			plugins: [
 				inject({
