@@ -33,7 +33,7 @@
                 <FilterBlock :title="$t('PeriodicStatusReport.OverTheLast')">
                     <Typeahead ref="overTheLast" control-id="overTheLast" no-clear data-vv-name="overTheLast"
                         data-vv-as="overTheLast" :placeholder="$t('PeriodicStatusReport.OverTheLast')"
-                        :value="overTheLast" :values=$config.model.overTheLasts" v-on:selected="overTheLastSelected" />
+                        :value="overTheLast" :values="$config.model.overTheLasts" v-on:selected="overTheLastSelected" />
                 </FilterBlock>
 
                 <FilterBlock :title="$t('PeriodicStatusReport.PeriodUnit')">
