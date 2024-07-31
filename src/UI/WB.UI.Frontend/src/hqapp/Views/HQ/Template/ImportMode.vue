@@ -3,18 +3,18 @@
         <template v-slot:headers>
             <ol class="breadcrumb">
                 <li>
-                    <a :href="this.$config.model.surveySetupUrl">{{ this.$t('MainMenu.SurveySetup') }}</a>
+                    <a :href="$config.model.surveySetupUrl">{{ $t('MainMenu.SurveySetup') }}</a>
                 </li>
                 <li>
-                    <a :href="this.$config.model.listOfMyQuestionnaires">{{
-                        this.$t('QuestionnaireImport.ListOfMyQuestionnaires') }}</a>
+                    <a :href="$config.model.listOfMyQuestionnaires">{{
+        $t('QuestionnaireImport.ListOfMyQuestionnaires') }}</a>
                 </li>
             </ol>
-            <h1>{{ this.$t('QuestionnaireImport.ImportModePageTitle') }}</h1>
+            <h1>{{ $t('QuestionnaireImport.ImportModePageTitle') }}</h1>
         </template>
         <div class="row" v-if="hasQuestionnaireInfo">
             <div class="col-sm-8">
-                <h2>{{ this.$config.model.questionnaireInfo.name }}</h2>
+                <h2>{{ $config.model.questionnaireInfo.name }}</h2>
             </div>
         </div>
         <div class="row questionnaire-statistics" v-if="hasQuestionnaireInfo">
@@ -52,9 +52,9 @@
                         {{ $t('QuestionnaireImport.Questions') }}:
                         <span>{{ $config.model.questionnaireInfo.questionsCount }}</span>
                         ({{ $t('QuestionnaireImport.QuestionsWithConditions', {
-                            count:
-                                $config.model.questionnaireInfo.questionsWithConditionsCount
-                        }) }})
+        count:
+            $config.model.questionnaireInfo.questionsWithConditionsCount
+    }) }})
                     </li>
                 </ul>
             </div>
@@ -77,15 +77,15 @@
                                 <label for="imortAsNewVersion">
                                     <span class="tick"></span>
                                     {{ $t('QuestionnaireImport.ImportAsNewVersion',
-                                        {
-                                            version:
-                                    $config.model.newVersionNumber
-                                    }) }}
+        {
+            version:
+                $config.model.newVersionNumber
+        }) }}
                                 </label>
                             </div>
                         </div>
                     </div>
-                    <div v-if="this.$config.model.questionnairesToUpgradeFrom.length">
+                    <div v-if="$config.model.questionnairesToUpgradeFrom.length">
                         <div class="col-sm-8">
                             <div class="form-group">
                                 <input class="checkbox-filter single-checkbox" id="ckbUpgradeAssignments"
@@ -103,7 +103,7 @@
                             <div class="form-group">
                                 <Typeahead control-id="questionnaire" noSearch noClear
                                     :placeholder="$t('Common.Questionnaire')"
-                                    :values="this.$config.model.questionnairesToUpgradeFrom" :value="questionnaireId"
+                                    :values="$config.model.questionnairesToUpgradeFrom" :value="questionnaireId"
                                     @selected="selectQuestionnaire" />
                             </div>
                         </div>
@@ -112,14 +112,14 @@
             </div>
 
             <div class="row questionnaire-versioning"
-                v-if="this.$config.model.questionnaireInfo.hasCriticalityCheck === true">
+                v-if="$config.model.questionnaireInfo.hasCriticalityCheck === true">
                 <div class="col-sm-8">
                     <h3>{{ $t('Pages.Questionnaire_CriticalVerificationLevel') }}</h3>
 
                     <div class="form-group">
                         <input type="hidden" name="criticalityLevel" :value="(criticalityLevel || {}).key">
                         <Typeahead control-id="criticalityLevel" no-clear no-search @selected="criticalityLevelSelected"
-                            :value="criticalityLevel" :values="this.$config.model.criticalityLevels">
+                            :value="criticalityLevel" :values="$config.model.criticalityLevels">
                         </Typeahead>
                     </div>
                 </div>

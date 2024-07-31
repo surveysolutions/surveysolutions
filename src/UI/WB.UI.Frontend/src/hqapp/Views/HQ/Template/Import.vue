@@ -3,22 +3,22 @@
         <template v-slot:headers>
             <ol class="breadcrumb">
                 <li>
-                    <a :href="this.$config.model.surveySetup">
-                        {{ this.$t('MainMenu.SurveySetup') }}
+                    <a :href="$config.model.surveySetup">
+                        {{ $t('MainMenu.SurveySetup') }}
                     </a>
                 </li>
                 <li>
-                    <a :href="this.$config.model.import">
-                        {{ this.$t('QuestionnaireImport.ListOfMyQuestionnaires') }}
+                    <a :href="$config.model.import">
+                        {{ $t('QuestionnaireImport.ListOfMyQuestionnaires') }}
                     </a>
                 </li>
             </ol>
-            <h1>{{ this.$t('ImportQuestionnaire.PageHeader') }}</h1>
+            <h1>{{ $t('ImportQuestionnaire.PageHeader') }}</h1>
             <div class="signed-name">
-                {{ this.$t('ImportQuestionnaire.SignedInBlock', { user: this.$config.model.designerUserName }) }}
+                {{ $t('ImportQuestionnaire.SignedInBlock', { user: $config.model.designerUserName }) }}
 
-                <a :href="this.$config.model.logoutFromDesigner">
-                    {{ this.$t('ImportQuestionnaire.SignOut') }}
+                <a :href="$config.model.logoutFromDesigner">
+                    {{ $t('ImportQuestionnaire.SignOut') }}
                 </a>
             </div>
         </template>

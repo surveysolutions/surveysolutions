@@ -4,7 +4,7 @@
             <div>
                 <div class="topic-with-button">
                     <h1 v-html="$t('MainMenu.Workspaces')"></h1>
-                    <button type="button" v-if="this.$config.model.canManage" class="btn btn-success"
+                    <button type="button" v-if="$config.model.canManage" class="btn btn-success"
                         data-suso="create-new-workspace" @click="createNewWorkspace">
                         {{ $t('Workspaces.AddNew') }}
                     </button>
@@ -15,7 +15,7 @@
             </div>
         </template>
         <DataTables ref="table" data-suso="workspaces-list" :tableOptions="tableOptions" noSelect :noPaging="false"
-            :contextMenuItems="contextMenuItems" :supportContextMenu="this.$config.model.canManage">
+            :contextMenuItems="contextMenuItems" :supportContextMenu="$config.model.canManage">
         </DataTables>
         <ModalFrame ref="createWorkspaceModal" :title="$t('Workspaces.CreateWorkspace')">
             <form onsubmit="return false;" data-suso="workspaces-create-dialog">
@@ -77,7 +77,7 @@
                     <button type="button" data-suso="workspace-edit-save" class="btn btn-primary"
                         v-bind:disabled="inProgress" @click="updateWorkspace">{{ $t("Common.Save") }}</button>
                     <button type="button" class="btn btn-link" data-suso="workspace-cancel" data-dismiss="modal">{{
-                        $t("Common.Cancel") }}</button>
+        $t("Common.Cancel") }}</button>
                 </div>
             </template>
         </ModalFrame>
@@ -92,7 +92,7 @@
                     <button type="button" data-suso="workspace-disable-ok" class="btn btn-danger"
                         v-bind:disabled="inProgress" @click="disableWorkspace">{{ $t("Common.Ok") }}</button>
                     <button type="button" class="btn btn-link" data-suso="workspace-cancel" data-dismiss="modal">{{
-                        $t("Common.Cancel") }}</button>
+        $t("Common.Cancel") }}</button>
                 </div>
             </template>
         </ModalFrame>

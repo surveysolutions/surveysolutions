@@ -1,15 +1,16 @@
 <template>
     <HqLayout :title="$config.model.title" :hasFilter="false" :topicButton="$t('Dashboard.ImportTemplate')"
         :topicButtonRef="!$config.model.isObserver
-            ? $config.model.importQuestionnaireUrl
-            : ''
-            ">
+        ? $config.model.importQuestionnaireUrl
+        : ''
+        ">
         <template v-slot:subtitle>
             <ol class="list-unstyled">
                 <li>{{ $t('Dashboard.SurveySetupIntroMessage1') }}</li>
                 <li>{{ $t('Dashboard.SurveySetupIntroMessage2') }}</li>
             </ol>
         </template>
+
 
 
         <DataTables ref="table" multiorder :tableOptions="tableOptions" :contextMenuItems="contextMenuItems">
@@ -22,10 +23,10 @@
                 </p>
                 <p>
                     {{
-                        $t(
-                            'Pages.GlobalSettings_DeleteQuestionnaireConfirmation',
-                        )
-                    }}
+        $t(
+            'Pages.GlobalSettings_DeleteQuestionnaireConfirmation',
+        )
+    }}
                 </p>
                 <p class="text-danger" v-if="this.deletionWarnMsg">
                     {{ deletionWarnMsg }}
