@@ -16,7 +16,7 @@ namespace WB.Core.BoundedContexts.Headquarters.ValueObjects
         public string SmtpHost{ get; set; }
         public int SmtpPort{ get; set; }
         public bool SmtpTlsEncryption{ get; set; }
-        public bool SmtpAuthentication{ get; set; }
+        public bool SmtpAuthentication { get; set; } = true;
         public string SmtpUsername{ get; set; }
         public string SmtpPassword{ get; set; }
     }
