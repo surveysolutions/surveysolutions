@@ -61,15 +61,15 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
             {
                 SecureSocketOptions tls = settings.SmtpTlsEncryption ? SecureSocketOptions.Auto : SecureSocketOptions.None;
 
-                client.Connect(settings.SmtpHost, settings.SmtpPort, tls);
-
-                if (settings.SmtpAuthentication)
-                {
-                    client.Authenticate(settings.SmtpUsername, settings.SmtpPassword);
-                }
-
                 try
                 {
+                    await client.ConnectAsync(settings.SmtpHost, settings.SmtpPort, tls);
+
+                    if (settings.SmtpAuthentication)
+                    {
+                        await client.AuthenticateAsync(settings.SmtpUsername, settings.SmtpPassword);
+                    }
+
                     await client.SendAsync(message);
                     return message.MessageId;
                 }
