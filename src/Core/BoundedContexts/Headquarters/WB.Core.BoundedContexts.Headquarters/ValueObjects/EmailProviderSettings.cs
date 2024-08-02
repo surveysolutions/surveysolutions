@@ -2,7 +2,7 @@
 
 namespace WB.Core.BoundedContexts.Headquarters.ValueObjects
 {
-    public class EmailProviderSettings : AppSetting, IAmazonEmailSettings, ISendGridEmailSettings, ISenderInformation
+    public class EmailProviderSettings : AppSetting, IAmazonEmailSettings, ISendGridEmailSettings, ISmtpEmailSettings, ISenderInformation
     {
         public EmailProvider Provider{ get; set; }
         public string SenderAddress{ get; set; }
@@ -13,6 +13,12 @@ namespace WB.Core.BoundedContexts.Headquarters.ValueObjects
         public string SenderName{ get; set; }
         public string ReplyAddress{ get; set; }
         public string Address{ get; set; }
+        public string SmtpHost{ get; set; }
+        public int SmtpPort{ get; set; }
+        public bool SmtpTlsEncryption{ get; set; }
+        public bool SmtpAuthentication { get; set; } = true;
+        public string SmtpUsername{ get; set; }
+        public string SmtpPassword{ get; set; }
     }
 
     public interface ISendGridEmailSettings
@@ -31,6 +37,18 @@ namespace WB.Core.BoundedContexts.Headquarters.ValueObjects
         string ReplyAddress { get; set; }
     }
 
+    public interface ISmtpEmailSettings
+    {
+        string SenderAddress{ get; }
+        string SmtpHost{ get; }
+        int SmtpPort{ get; }
+        bool SmtpTlsEncryption{ get; }
+        bool SmtpAuthentication{ get; }
+        string SmtpUsername{ get; }
+        string SmtpPassword{ get; }
+        string ReplyAddress { get; set; }
+    }
+
     public interface ISenderInformation
     {
         string SenderAddress{ get; }
@@ -43,6 +61,7 @@ namespace WB.Core.BoundedContexts.Headquarters.ValueObjects
     {
         None = 0,
         Amazon = 1,
-        SendGrid = 2
+        SendGrid = 2,
+        Smtp = 3
     }
 }
