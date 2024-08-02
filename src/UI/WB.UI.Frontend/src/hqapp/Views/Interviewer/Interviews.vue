@@ -5,7 +5,7 @@
                 <FilterBlock :title="$t('Common.Questionnaire')">
                     <Typeahead control-id="questionnaireId" data-vv-name="questionnaireId" data-vv-as="questionnaire"
                         :placeholder="$t('Common.AllQuestionnaires')" :value="questionnaireId"
-                        :values="this.$config.model.questionnaires" v-on:selected="questionnaireSelected" />
+                        :values="$config.model.questionnaires" v-on:selected="questionnaireSelected" />
                 </FilterBlock>
 
                 <FilterBlock :title="$t('Common.QuestionnaireVersion')">
@@ -93,34 +93,48 @@ import _sanitizeHtml from 'sanitize-html'
 const sanitizeHtml = text => _sanitizeHtml(text, { allowedTags: [], allowedAttributes: [] })
 
 
-const query = gql`query interviews($workspace: String!, $order: [InterviewSort!], $skip: Int, $take: Int, $where: InterviewsFilter) {
-  interviews(workspace: $workspace, order: $order, skip: $skip, take: $take, where: $where) {
-    totalCount
-    filteredCount
-    nodes {
-      id
-      key
-      assignmentId
-      updateDateUtc
-      status
-      receivedByInterviewerAtUtc
-      actionFlags
-      calendarEvent {
-          publicKey
-          comment
-          startUtc
-          startTimezone
-      }
-      identifyingData {
-        entity {
-          questionText
-          label
+const query = gql`
+    query interviews(
+        $workspace: String!
+        $order: [InterviewSort!]
+        $skip: Int
+        $take: Int
+        $where: InterviewsFilter
+    ) {
+        interviews(
+            workspace: $workspace
+            order: $order
+            skip: $skip
+            take: $take
+            where: $where
+        ) {
+            totalCount
+            filteredCount
+            nodes {
+                id
+                key
+                assignmentId
+                updateDateUtc
+                status
+                receivedByInterviewerAtUtc
+                actionFlags
+                calendarEvent {
+                    publicKey
+                    comment
+                    startUtc
+                    startTimezone
+                }
+                identifyingData {
+                    entity {
+                        questionText
+                        label
+                    }
+                    value
+                }
+            }
         }
-        value
-      }
     }
-  }
-}`
+`
 
 export default {
     data() {
