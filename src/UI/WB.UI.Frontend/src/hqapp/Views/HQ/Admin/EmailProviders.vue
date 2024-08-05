@@ -412,7 +412,7 @@
                                             <input data-vv-as="SMTP username" name="smtpUsername" id="smtpUsername"
                                                 v-model="smtpUsername" class="form-control with-clear-btn" type="text"
                                                 maxlength="200" :disabled="!smtpAuthentication"
-                                                v-validate="'required'" />
+                                                v-validate="{ required: smtpAuthentication }" />
                                             <button @click="smtpUsername = null" type="button" v-if="smtpAuthentication"
                                                 class="btn btn-link btn-clear">
                                                 <span></span>
@@ -431,7 +431,7 @@
                                             <input data-vv-as="SMTP password" name="smtpPassword" id="smtpPassword"
                                                 v-model="smtpPassword" class="form-control with-clear-btn"
                                                 type="password" maxlength="200" :disabled="!smtpAuthentication"
-                                                v-validate="'required'" />
+                                                v-validate="{ required: smtpAuthentication }" />
                                             <button @click="smtpPassword = null;" type="button"
                                                 v-if="smtpAuthentication" class="btn btn-link btn-clear">
                                                 <span></span>
@@ -460,9 +460,7 @@
                         {{ providerSettingsResult }}
                     </p>
                 </form>
-                <form v-if="!isFormDirty &&
-        (sendGridIsSetUp || awsIsSetUp || smtpIsSetUp)
-        " data-vv-scope="testEmail" class="form-container">
+                <form v-if="showSendTestEmail" data-vv-scope="testEmail" class="form-container">
                     <button type="submit" disabled style="display: none" aria-hidden="true"></button>
                     <h4>
                         {{ $t('Settings.EmailProvider_SendTestEmailHeader') }}
@@ -515,7 +513,7 @@
 
 <script>
 import Vue from 'vue'
-import { isEmpty, isInteger } from 'lodash'
+import { isEmpty } from 'lodash'
 
 export default {
     components: {
@@ -552,7 +550,7 @@ export default {
         this.$http
             .get(this.$config.model.api.getSettings)
             .then(function (response) {
-                const settings = response.data || {}
+                const settings = response.data || { smtpAuthentication: true }
                 self.provider = (settings.provider || '').toLocaleLowerCase()
                 self.senderAddress = settings.senderAddress
                 self.awsAccessKeyId = settings.awsAccessKeyId
@@ -581,13 +579,14 @@ export default {
     computed: {
         isFormDirty() {
             const keys = Object.keys((this.fields || {}).$settings || {})
-            return (
+            const isDirty = (
                 keys.some(
                     (key) =>
                         this.fields.$settings[key].dirty ||
                         this.fields.$settings[key].changed,
                 )
             )
+            return isDirty
         },
         isEmailFormDirty() {
             const keys = Object.keys((this.fields || {}).$testEmail || {})
@@ -616,14 +615,17 @@ export default {
             return (
                 this.provider == 'smtp' &&
                 !isEmpty(this.smtpHost) &&
-                isInteger(this.smtpPort) &&
                 !isEmpty(this.senderAddress) &&
+                this.isNumeric(this.smtpPort) &&
                 (!this.smtpAuthentication || ((!isEmpty(this.smtpUsername) && !isEmpty(this.smtpPassword))))
             )
         },
         isFetchInProgress() {
             return this.$store.state.progress.pendingProgress
         },
+        showSendTestEmail() {
+            return !this.isFormDirty && (this.sendGridIsSetUp || this.awsIsSetUp || this.smtpIsSetUp)
+        }
     },
     watch: {
         isFormDirty: function (val) {
@@ -748,6 +750,9 @@ export default {
                 $firstFieldWithError.focus()
             }
         },
+        isNumeric(num) {
+            return (typeof (num) === 'number' || typeof (num) === "string" && num.trim() !== '') && !isNaN(num);
+        }
     },
 }
 </script>
