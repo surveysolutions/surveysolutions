@@ -1,6 +1,8 @@
+<template>
+    <Line :data="chartData" />
+</template>
+
 <script>
-import { Line } from 'vue-chartjs'
-import { assign } from 'lodash'
 
 const chartOptions = {
     chartId: 'interviewChart',
@@ -67,40 +69,35 @@ const chartOptions = {
     },
 }
 
+import { Line } from 'vue-chartjs'
+import { Chart, LineController, LineElement, PointElement, LinearScale, Title, CategoryScale } from 'chart.js'
+
+Chart.register(LineController, LineElement, PointElement, LinearScale, Title, CategoryScale);
+
+
 export default {
-    extends: Line,
+    name: 'ComulativeLineChart',
+    components: { Line },
     props: {
-        options: { required: false },
-        height: { default: 600 },
-    },
-
-    mounted() {
-        this.$emit('mounted')
-    },
-
-    methods: {
-        render(chartData) {
-            this.renderChart(
-                chartData,
-                assign(
-                    chartOptions,
-                    {
-                        animation: {
-                            onComplete: () => {
-                                this.$emit('ready')
-                            },
-                        },
-                    },
-                    this.options
-                )
-            )
+        chartData: {
+            type: Object,
+            required: true
         },
-
+        chartOptions: {
+            type: Object,
+            default: () => chartOptions
+        },
+        options: {
+            type: Object,
+            required: false
+        }
+    },
+    methods: {
         getImage() {
             if (this.$data._chart == null) return null
 
             return this.$data._chart.canvas.toDataURL('image/png')
-        },
-    },
+        }
+    }
 }
 </script>
