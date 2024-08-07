@@ -24,7 +24,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
             this.providers = new Dictionary<EmailProvider, IEmailService>()
             {
                 {EmailProvider.Amazon, new AmazonEmailService(emailProviderSettingsStorage)},
-                {EmailProvider.SendGrid, new SendGridEmailService(emailProviderSettingsStorage, serializer)}
+                {EmailProvider.SendGrid, new SendGridEmailService(emailProviderSettingsStorage, serializer)},
+                {EmailProvider.Smtp, new SmtpEmailService(emailProviderSettingsStorage)}
             };
         }
 

@@ -3,8 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Npgsql;
 using WB.Services.Scheduler.Services;
 using WB.Services.Scheduler.Services.Implementation;
 using WB.Services.Scheduler.Services.Implementation.HostedServices;
@@ -46,8 +48,12 @@ namespace WB.Services.Scheduler
             services.AddTransient<IJobExecutor, JobExecutor>();
             services.AddProgressReporter();
             services.AddTransient<IJobContextMigrator, JobContextMigrator>();
+            
             services.AddDbContext<JobContext>(ops =>
-                ops.UseNpgsql(connectionString));
+                ops.UseNpgsql(connectionString, o =>
+                {
+                    o.MigrationsHistoryTable(HistoryRepository.DefaultTableName, JobSettings.MigrationsSchemaName);
+                }));
 
             services.Configure<JobSettings>(jobSettingsSection);
 
