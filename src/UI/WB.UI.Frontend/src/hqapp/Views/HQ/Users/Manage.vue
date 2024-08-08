@@ -1,5 +1,5 @@
 <template>
-    <ProfileLayout ref="profile" :role="userInfo.role" :isOwnProfile="userInfo.isOwnProfile"
+    <ProfileLayout ref="profileView" :role="userInfo.role" :isOwnProfile="userInfo.isOwnProfile"
         :forceChangePassword="userInfo.forceChangePassword" :canChangePassword="userInfo.canChangePassword"
         :userName="userInfo.userName" :userId="userInfo.userId" :currentTab="currentTab"
         :canGenerateToken="userInfo.canGetApiToken" :isRestricted="userInfo.isRestricted">
@@ -182,7 +182,7 @@ export default {
                 },
             }).then(
                 response => {
-                    self.$refs.profile.successMessage = self.$t('Strings.HQ_AccountController_AccountUpdatedSuccessfully')
+                    self.$refs.profileView._.props.successMessage = self.$t('Strings.HQ_AccountController_AccountUpdatedSuccessfully')
                 },
                 error => {
                     self.processModelState(error.response.data, self)
