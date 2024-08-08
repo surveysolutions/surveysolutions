@@ -54,10 +54,10 @@
     <PackageReference Include="AWSSDK.SimpleEmail" Version="3.7.200.41" />
     <PackageReference Include="BitMiracle.LibTiff.NET" Version="2.4.649" />
     <PackageReference Include="CsvHelper" Version="30.0.1" />
-    <PackageReference Include="Dapper" Version="2.0.151" />
+    <PackageReference Include="Dapper" Version="2.1.35" />
     <PackageReference Include="DotSpatial.Projections" Version="4.0.656" />
     <PackageReference Include="GeoJSON.Net" Version="1.2.19" />
-    <PackageReference Include="Iesi.Collections" Version="4.0.5" />
+    <PackageReference Include="Iesi.Collections" Version="4.1.1" />
     <PackageReference Include="MediatR" Version="12.2.0" />
     <PackageReference Include="MailKit" Version="4.7.1.1" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
@@ -72,7 +72,7 @@
     <PackageReference Include="NHibernate" Version="5.5.2" />
     <PackageReference Include="NodaTime" Version="3.1.9" />
     <PackageReference Include="PasswordGenerator" Version="2.1.0" />
-    <PackageReference Include="Polly" Version="8.3.1" />
+    <PackageReference Include="Polly" Version="8.4.1" />
     <PackageReference Include="Quartz" Version="3.8.1" />
     <PackageReference Include="refit" Version="7.0.0" />
     <PackageReference Include="Sendgrid" Version="9.28.1" />
