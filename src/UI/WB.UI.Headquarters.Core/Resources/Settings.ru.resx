@@ -396,4 +396,46 @@
   <data name="EsriApiKeyDescription" xml:space="preserve">
       <value>Позволит использовать карты из Интернета</value>
   </data>
+  <data name="EmailProvider_Smtp" xml:space="preserve">
+      <value>SMTP сервер</value>
+  </data>
+  <data name="EmailProvider_SmtpAuthentication" xml:space="preserve">
+      <value>Использовать аутентификацию</value>
+  </data>
+  <data name="EmailProvider_SmtpAuthenticationHelp" xml:space="preserve">
+      <value>Аутентификация SMTP проверяет подлинность почтового клиента или сервера, прежде чем разрешить ему отправлять электронную почту через SMTP сервер.</value>
+  </data>
+  <data name="EmailProvider_SmtpDescription" xml:space="preserve">
+      <value>Настройте параметры для доступа к SMTP серверу. Более подробная информация об использовании SMTP сервера доступна на Survey Solutions</value>
+  </data>
+  <data name="EmailProvider_SmtpHost" xml:space="preserve">
+      <value>Хост</value>
+  </data>
+  <data name="EmailProvider_SmtpHostHelp" xml:space="preserve">
+      <value>Адрес SMTP хост-сервера</value>
+  </data>
+  <data name="EmailProvider_SmtpPassword" xml:space="preserve">
+      <value>Пароль</value>
+  </data>
+  <data name="EmailProvider_SmtpPasswordHelp" xml:space="preserve">
+      <value>Пароль учетных данных, используемые в процессе аутентификации SMTP для проверки личности</value>
+  </data>
+  <data name="EmailProvider_SmtpPort" xml:space="preserve">
+      <value>Порт</value>
+  </data>
+  <data name="EmailProvider_SmtpPortHelp" xml:space="preserve">
+      <value>Порт исползуемый для связи с SMTP сервером</value>
+  </data>
+  <data name="EmailProvider_SmtpTlsEncryption" xml:space="preserve">
+      <value>Использовать TLS шифрование</value>
+  </data>
+  <data name="EmailProvider_SmtpTlsEncryptionHelp" xml:space="preserve">
+      <value>TLS (Transport Layer Security) шифрование безопасной связи. Он шифрует данные, передаваемые между клиентами и серверами</value>
+  </data>
+  <data name="EmailProvider_SmtpUsername" xml:space="preserve">
+      <value>Имя пользователя</value>
+  </data>
+  <data name="EmailProvider_SmtpUsernameHelp" xml:space="preserve">
+      <value>Имя учетных данных, используемые в процессе аутентификации SMTP для проверки личности</value>
+  </data>
 </root>

@@ -384,4 +384,46 @@ Possible reasons:
   <data name="EsriApiKeyDescription" xml:space="preserve">
       <value>This key will allow to use online maps on devices. Be advised that usage of this service could cost you extra money. Please consult with service provider</value>
   </data>
+  <data name="EmailProvider_Smtp" xml:space="preserve">
+    <value>SMTP Server</value>
+  </data>
+  <data name="EmailProvider_SmtpDescription" xml:space="preserve">
+    <value>Configure the parameters to access SMTP server below. More information on usage of SMTP server with Survey Solutions is available </value>
+  </data>
+  <data name="EmailProvider_SmtpHost" xml:space="preserve">
+    <value>Host</value>
+  </data>
+  <data name="EmailProvider_SmtpHostHelp" xml:space="preserve">
+    <value>SMTP server address</value>
+  </data>
+  <data name="EmailProvider_SmtpPort" xml:space="preserve">
+    <value>Port</value>
+  </data>
+  <data name="EmailProvider_SmtpPortHelp" xml:space="preserve">
+    <value>SMTP port</value>
+  </data>
+  <data name="EmailProvider_SmtpTlsEncryption" xml:space="preserve">
+    <value>Use TLS encryption</value>
+  </data>
+  <data name="EmailProvider_SmtpTlsEncryptionHelp" xml:space="preserve">
+    <value>TLS (Transport Layer Security) encryption secure communication. It encrypts data transmitted between clients and servers.</value>
+  </data>
+  <data name="EmailProvider_SmtpAuthentication" xml:space="preserve">
+    <value>Use authentication</value>
+  </data>
+  <data name="EmailProvider_SmtpAuthenticationHelp" xml:space="preserve">
+    <value>SMTP authentication verifies the identity of an email client or server before allowing it to send email through an SMTP server.</value>
+  </data>
+  <data name="EmailProvider_SmtpUsername" xml:space="preserve">
+    <value>Username</value>
+  </data>
+  <data name="EmailProvider_SmtpUsernameHelp" xml:space="preserve">
+    <value>Credential used during the SMTP authentication process to verify the identity.</value>
+  </data>
+  <data name="EmailProvider_SmtpPassword" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="EmailProvider_SmtpPasswordHelp" xml:space="preserve">
+    <value>Credential used during the SMTP authentication process to verify the identity.</value>
+  </data>
 </root>

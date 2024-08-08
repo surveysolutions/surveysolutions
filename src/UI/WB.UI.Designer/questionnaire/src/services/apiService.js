@@ -59,6 +59,19 @@ function getImpl(url, queryParams, silent = false, responseAs = 'json') {
                 blockUI.stop();
                 progressStore.stop();
             }
+
+            if (!response) {
+                try {
+                    var errorDetails = {
+                        message: 'Get request return null: ' + url,
+                        additionalData: {}
+                    };
+                    post('/error/report', errorDetails);
+                } catch (err) {
+                    // catch all errors
+                }
+            }
+
             return response;
         })
         .catch(error => {
