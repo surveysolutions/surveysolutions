@@ -10,7 +10,7 @@
                     <div class="field answered"
                         v-bind:class="{ 'unavailable-option locked-option': isProtected(row.value) }">
                         <div class="field-to-fill">
-                            {{row.title}}
+                            {{ row.title }}
                         </div>
                         <button type="submit"
                             class="btn btn-link btn-clear"
@@ -25,13 +25,10 @@
                         v-if="row.attachmentName" />
                 </div>
 
-                <div class="form-group" v-if="!allAnswersGiven">
-                    <div class="field"
-                        :class="{answered: $me.isAnswered}">
-                        <wb-typeahead :questionId="$me.id"
-                            @input="appendCompboboxItem"                            
-                            :optionsSource="optionsSource"
-                            :watermark="!$me.acceptAnswer && !$me.isAnswered ? $t('Details.NoAnswer') : null"/>
+                <div class="form-group" v-if="$me.acceptAnswer && !allAnswersGiven">
+                    <div class="field" :class="{ answered: $me.isAnswered }">
+                        <wb-typeahead :questionId="$me.id" @input="appendCompboboxItem" :optionsSource="optionsSource"
+                            :watermark="!$me.acceptAnswer && !$me.isAnswered ? $t('Details.NoAnswer') : null" />
                     </div>
                 </div>
                 <wb-lock />
@@ -48,7 +45,7 @@
 import { entityDetails } from '../mixins'
 import Vue from 'vue'
 import modal from '@/shared/modal'
-import {find, map, includes, without, filter as loFilter} from 'lodash'
+import { find, map, includes, without, filter as loFilter } from 'lodash'
 
 export default {
     name: 'MultiComboboxQuestion',
@@ -76,11 +73,11 @@ export default {
         },
     },
     methods: {
-        isProtected(val){
+        isProtected(val) {
             return includes(this.$me.protectedAnswer, val)
         },
         appendCompboboxItem(newValue) {
-            if(includes(this.$me.answer, newValue)) return
+            if (includes(this.$me.answer, newValue)) return
 
             let newAnswer = this.$me.answer.slice()
             newAnswer.push(newValue)
@@ -90,7 +87,7 @@ export default {
             const self = this
             const interviewId = this.$route.params.interviewId
             const excludedOptionIds = self.$me.answer
-            const optionsPromise = Vue.$api.interview.get('getTopFilteredOptionsForQuestionWithExclude', {interviewId, id:this.$me.id, filter, count:20, excludedOptionIds})
+            const optionsPromise = Vue.$api.interview.get('getTopFilteredOptionsForQuestionWithExclude', { interviewId, id: this.$me.id, filter, count: 20, excludedOptionIds })
             return optionsPromise
                 .then(options => {
                     return loFilter(options, (o) => {
@@ -98,8 +95,8 @@ export default {
                     })
                 })
         },
-        confirmAndRemoveRow(valueToRemove){
-            if(!includes(this.$me.answer, valueToRemove)) return
+        confirmAndRemoveRow(valueToRemove) {
+            if (!includes(this.$me.answer, valueToRemove)) return
 
             const newAnswer = without(this.$me.answer, valueToRemove)
 
