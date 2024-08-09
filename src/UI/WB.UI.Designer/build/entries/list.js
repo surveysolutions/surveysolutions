@@ -11,7 +11,7 @@ window.moment = moment;
 
 import '/node_modules/perfect-scrollbar/css/perfect-scrollbar.css';
 import '/questionnaire/content/designer-start/bootstrap-custom.less';
-import '/Styles/designer-list.less';
+import '/questionnaire/content/designer-start/designer-list.less';
 import '/Scripts/custom/common.js';
 
 import './simplepage';
