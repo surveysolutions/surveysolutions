@@ -23,10 +23,10 @@
                                 </button>
                                 <span class="gray-text help-block">{{
                                     $t('Settings.EmailProvider_SenderHelp')
-                                }}</span>
+                                    }}</span>
                                 <span class="help-block">{{
                                     errors.first('settings.senderAddress')
-                                }}</span>
+                                    }}</span>
                             </div>
                         </div>
                         <div class="form-group" :class="{
@@ -51,7 +51,7 @@
                                 }}</span>
                                 <span class="help-block">{{
                                     errors.first('settings.replyAddress')
-                                }}</span>
+                                    }}</span>
                             </div>
                         </div>
                     </div>
@@ -70,10 +70,10 @@
                             </button>
                             <span class="gray-text help-block">{{
                                 $t('Settings.EmailProvider_SenderNameHelp')
-                            }}</span>
+                                }}</span>
                             <span class="help-block">{{
                                 errors.first('settings.senderName')
-                            }}</span>
+                                }}</span>
                         </div>
                     </div>
                     <div class="form-group mb-30" :class="{ 'has-error': errors.has('settings.address') }">
@@ -89,10 +89,10 @@
                             </button>
                             <span class="gray-text help-block">{{
                                 $t('Settings.EmailProvider_AddressHelp')
-                            }}</span>
+                                }}</span>
                             <span class="help-block">{{
                                 errors.first('settings.address')
-                            }}</span>
+                                }}</span>
                         </div>
                     </div>
                     <h2>
@@ -487,7 +487,7 @@
                                 </button>
                                 <span class="help-block">{{
                                     errors.first('testEmail.testEmailAddress')
-                                    }}</span>
+                                }}</span>
                             </div>
                         </div>
                     </div>
@@ -514,6 +514,7 @@
 <script>
 //TODO: MIGRATION
 //import Vue from 'vue'
+import { Form, Field, ErrorMessage } from 'vee-validate'
 import { isEmpty } from 'lodash'
 
 export default {
