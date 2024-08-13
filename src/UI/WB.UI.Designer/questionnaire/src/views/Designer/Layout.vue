@@ -63,7 +63,7 @@
                             </li>
                             <li>
                                 <a href="/identity/account/logout">{{
-                                    $t('AccountResources.LogOut')
+                            $t('AccountResources.LogOut')
                                     }}</a>
                             </li>
                         </ul>
@@ -82,7 +82,7 @@
 <script>
 
 import '../../../content/designer-start/bootstrap-custom.less';
-import '../../../../Styles/designer-list.less'
+import '../../../content/designer-start/designer-list.less'
 
 export default {
     name: 'DesignerLayout',
