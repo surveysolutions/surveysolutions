@@ -41,6 +41,9 @@ function getImpl(url, queryParams, silent = false, responseAs = 'json') {
                     blockUI.stop();
                     progressStore.stop();
                 }
+
+                checkResponseAndLogItIfneed(response)
+                
                 return response;
             })
             .catch(error => {
@@ -60,17 +63,7 @@ function getImpl(url, queryParams, silent = false, responseAs = 'json') {
                 progressStore.stop();
             }
 
-            if (!response) {
-                try {
-                    var errorDetails = {
-                        message: 'Get request return null: ' + url,
-                        additionalData: {}
-                    };
-                    post('/error/report', errorDetails);
-                } catch (err) {
-                    // catch all errors
-                }
-            }
+            checkResponseAndLogItIfneed(response)
 
             return response;
         })
@@ -81,6 +74,22 @@ function getImpl(url, queryParams, silent = false, responseAs = 'json') {
             }
             processResponseErrorOrThrow(error);
         });
+}
+
+function checkResponseAndLogItIfneed(response) {
+    if (!response) {
+        try {
+            var errorDetails = {
+                message: 'Get request return null: ' + url,
+                additionalData: {
+                    response: response
+                }
+            };
+            post('/error/report', errorDetails);
+        } catch (err) {
+            // catch all errors
+        }
+    }
 }
 
 export function post(url, params) {
