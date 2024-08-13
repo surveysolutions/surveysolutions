@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.ExceptionServices;
 
-namespace WB.UI.Designer.Exceptions;
+namespace WB.UI.Shared.Web.Exceptions;
 
 public class ClientException : Exception
 {
@@ -23,7 +23,7 @@ public class ClientException : Exception
             ExceptionDispatchInfo.SetRemoteStackTrace(this, fullInfo);
     }
 
-    public ClientException(string error, string? json) : base(error)
+    public ClientException(string error, string json) : base(error)
     {
         if (json != null)
             ExceptionDispatchInfo.SetRemoteStackTrace(this, json);

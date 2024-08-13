@@ -13,6 +13,9 @@ import App from './App.vue';
 const vue = createApp(App)
 //vue.use(pinia)
 
+import { setupErrorHandler } from '../shared/errorHandler.js'
+setupErrorHandler(vue);
+
 import Vuei18n from '~/shared/plugins/locale'
 import { browserLanguage } from '~/shared/helpers'
 const i18n = Vuei18n.initialize(browserLanguage, vue)

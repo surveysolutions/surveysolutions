@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 
-namespace WB.UI.Designer.Exceptions;
+namespace WB.UI.Shared.Web.Exceptions;
 
 public class ClientErrorModel
 {
-    public string? Message { get; set; }
+    public string Message { get; set; }
     public Dictionary<string, string> AdditionalData { get; set; } = new();
 }
