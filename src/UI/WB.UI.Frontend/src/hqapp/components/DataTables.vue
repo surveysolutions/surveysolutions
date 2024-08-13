@@ -34,8 +34,13 @@
 </template>
 
 <script>
-import 'datatables.net'
+//import 'datatables.net'
+
+import DataTable from 'datatables.net-vue3'
+import DataTablesLib from 'datatables.net'
 import 'datatables.net-select'
+DataTable.use(DataTablesLib)
+
 import 'jquery-contextmenu'
 import 'jquery-contextmenu/dist/jquery.contextMenu.css'
 import 'jquery-highlight'

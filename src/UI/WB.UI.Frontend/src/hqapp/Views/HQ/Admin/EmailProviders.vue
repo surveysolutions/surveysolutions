@@ -2,15 +2,12 @@
     <HqLayout :fixedWidth="true" tag="email-providers-page" :title="$t('Pages.EmailProvidersTitle')">
         <div class="mb-30">
             <div class="col-md-12">
-                <form class="form-container" data-vv-scope="settings">
+                <Form class="form-container" data-vv-scope="settings">
                     <button type="submit" disabled style="display: none" aria-hidden="true"></button>
                     <h2>{{ $t('Settings.EmailProvider_SenderHeader') }}</h2>
                     <div class="form-inline">
-                        <div class="form-group" :class="{
-                            'has-error': errors.has(
-                                'settings.senderAddress',
-                            ),
-                        }">
+                        <div class="form-group"
+                            :class="{ 'has-error': errors.has('settings.senderAddress') }">
                             <label class="h5">
                                 {{ $t('Settings.EmailProvider_SenderAddress') }}
                             </label>
@@ -23,10 +20,10 @@
                                 </button>
                                 <span class="gray-text help-block">{{
                                     $t('Settings.EmailProvider_SenderHelp')
-                                    }}</span>
+                                }}</span>
                                 <span class="help-block">{{
                                     errors.first('settings.senderAddress')
-                                    }}</span>
+                                }}</span>
                             </div>
                         </div>
                         <div class="form-group" :class="{
@@ -51,7 +48,7 @@
                                 }}</span>
                                 <span class="help-block">{{
                                     errors.first('settings.replyAddress')
-                                    }}</span>
+                                }}</span>
                             </div>
                         </div>
                     </div>
@@ -70,10 +67,10 @@
                             </button>
                             <span class="gray-text help-block">{{
                                 $t('Settings.EmailProvider_SenderNameHelp')
-                                }}</span>
+                            }}</span>
                             <span class="help-block">{{
                                 errors.first('settings.senderName')
-                                }}</span>
+                            }}</span>
                         </div>
                     </div>
                     <div class="form-group mb-30" :class="{ 'has-error': errors.has('settings.address') }">
@@ -89,10 +86,10 @@
                             </button>
                             <span class="gray-text help-block">{{
                                 $t('Settings.EmailProvider_AddressHelp')
-                                }}</span>
+                            }}</span>
                             <span class="help-block">{{
                                 errors.first('settings.address')
-                                }}</span>
+                            }}</span>
                         </div>
                     </div>
                     <h2>
@@ -459,24 +456,16 @@
                     <p class="text-success" v-if="providerSettingsResult">
                         {{ providerSettingsResult }}
                     </p>
-                </form>
-                <form v-if="showSendTestEmail" data-vv-scope="testEmail" class="form-container">
+                </Form>
+                <Form v-if="showSendTestEmail" data-vv-scope="testEmail" class="form-container">
                     <button type="submit" disabled style="display: none" aria-hidden="true"></button>
                     <h4>
                         {{ $t('Settings.EmailProvider_SendTestEmailHeader') }}
                     </h4>
                     <div class="form-inline">
-                        <div class="form-group" :class="{
-                            'has-error': errors.has(
-                                'testEmail.testEmailAddress',
-                            ),
-                        }">
+                        <div class="form-group" :class="{ 'has-error': errors.has('testEmail.testEmailAddress') }">
                             <label class="h5">
-                                {{
-                                    $t(
-                                        'Settings.EmailProvider_TestEmailAddress',
-                                    )
-                                }}
+                                {{ $t('Settings.EmailProvider_TestEmailAddress') }}
                             </label>
                             <div class="field" :class="{ answered: testEmailAddress }">
                                 <input data-vv-as="email" v-validate="'required|email'" name="testEmailAddress"
@@ -487,7 +476,7 @@
                                 </button>
                                 <span class="help-block">{{
                                     errors.first('testEmail.testEmailAddress')
-                                }}</span>
+                                    }}</span>
                             </div>
                         </div>
                     </div>
