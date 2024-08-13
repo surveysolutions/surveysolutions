@@ -15,7 +15,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Users
             descriptor.Field(x => x.FullName);
             descriptor.Field(x => x.Email);
             descriptor.Field(x => x.PhoneNumber);
-            descriptor.Field(x => x.IsLocked);
+            descriptor.Field(x => x.IsLockedByHeadquaters).Name("isLocked");
             descriptor.Field(x => x.IsArchived);
         }
     }
