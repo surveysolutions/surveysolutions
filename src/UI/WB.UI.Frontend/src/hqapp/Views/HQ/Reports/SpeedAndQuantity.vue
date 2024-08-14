@@ -1,12 +1,7 @@
 <template>
-    <HqLayout :title="title"
-        :subtitle="reportDescription"
-        :hasFilter="true">
+    <HqLayout :title="title" :subtitle="reportDescription" :hasFilter="true">
         <div slot="subtitle">
-            <a
-                v-if="this.model.canNavigateToQuantityBySupervisors"
-                :href="getSupervisorsUrl"
-                class="btn btn-default">
+            <a v-if="this.model.canNavigateToQuantityBySupervisors" :href="getSupervisorsUrl" class="btn btn-default">
                 <span class="glyphicon glyphicon-arrow-left"></span>
                 {{ $t('PeriodicStatusReport.BackToSupervisors') }}
             </a>
@@ -14,71 +9,38 @@
 
         <Filters slot="filters">
             <FilterBlock :title="$t('PeriodicStatusReport.InterviewActions')">
-                <Typeahead
-                    ref="reportTypeControl"
-                    control-id="reportTypeId"
-                    no-clear
-                    data-vv-name="reportTypeId"
-                    data-vv-as="reportType"
-                    :placeholder="$t('PeriodicStatusReport.InterviewActions')"
-                    :value="reportTypeId"
-                    :values="this.$config.model.reportTypes"
-                    v-on:selected="reportTypeSelected"/>
+                <Typeahead ref="reportTypeControl" control-id="reportTypeId" no-clear data-vv-name="reportTypeId"
+                    data-vv-as="reportType" :placeholder="$t('PeriodicStatusReport.InterviewActions')"
+                    :value="reportTypeId" :values="this.$config.model.reportTypes" v-on:selected="reportTypeSelected" />
             </FilterBlock>
 
             <FilterBlock :title="$t('Common.Questionnaire')">
-                <Typeahead
-                    ref="questionnaireIdControl"
-                    control-id="questionnaireId"
-                    data-vv-name="questionnaireId"
-                    data-vv-as="questionnaire"
-                    :placeholder="$t('Common.AllQuestionnaires')"
-                    :value="questionnaireId"
-                    :values="this.$config.model.questionnaires"
-                    v-on:selected="questionnaireSelected"/>
+                <Typeahead ref="questionnaireIdControl" control-id="questionnaireId" data-vv-name="questionnaireId"
+                    data-vv-as="questionnaire" :placeholder="$t('Common.AllQuestionnaires')" :value="questionnaireId"
+                    :values="this.$config.model.questionnaires" v-on:selected="questionnaireSelected" />
             </FilterBlock>
 
             <FilterBlock :title="$t('Common.QuestionnaireVersion')">
-                <Typeahead
-                    ref="questionnaireVersionControl"
-                    control-id="questionnaireVersion"
-                    data-vv-name="questionnaireVersion"
-                    data-vv-as="questionnaireVersion"
-                    :placeholder="$t('Common.AllVersions')"
-                    :disabled="questionnaireId == null "
-                    :value="questionnaireVersion"
-                    :values="questionnaireId == null ? [] : questionnaireId.versions"
-                    v-on:selected="questionnaireVersionSelected"/>
+                <Typeahead ref="questionnaireVersionControl" control-id="questionnaireVersion"
+                    data-vv-name="questionnaireVersion" data-vv-as="questionnaireVersion"
+                    :placeholder="$t('Common.AllVersions')" :disabled="questionnaireId == null"
+                    :value="questionnaireVersion" :values="questionnaireId == null ? [] : questionnaireId.versions"
+                    v-on:selected="questionnaireVersionSelected" />
             </FilterBlock>
             <FilterBlock :title="$t('PeriodicStatusReport.OverTheLast')">
-                <Typeahead
-                    ref="overTheLast"
-                    control-id="overTheLast"
-                    no-clear
-                    data-vv-name="overTheLast"
-                    data-vv-as="overTheLast"
-                    :placeholder="$t('PeriodicStatusReport.OverTheLast')"
-                    :value="overTheLast"
-                    :values="this.$config.model.overTheLasts"
-                    v-on:selected="overTheLastSelected"/>
+                <Typeahead ref="overTheLast" control-id="overTheLast" no-clear data-vv-name="overTheLast"
+                    data-vv-as="overTheLast" :placeholder="$t('PeriodicStatusReport.OverTheLast')" :value="overTheLast"
+                    :values="this.$config.model.overTheLasts" v-on:selected="overTheLastSelected" />
             </FilterBlock>
 
             <FilterBlock :title="$t('PeriodicStatusReport.PeriodUnit')">
-                <Typeahead
-                    ref="period"
-                    control-id="period"
-                    no-clear
-                    :placeholder="$t('PeriodicStatusReport.Period')"
-                    data-vv-name="period"
-                    data-vv-as="period"
-                    v-on:selected="periodSelected"
-                    :value="period"
+                <Typeahead ref="period" control-id="period" no-clear :placeholder="$t('PeriodicStatusReport.Period')"
+                    data-vv-name="period" data-vv-as="period" v-on:selected="periodSelected" :value="period"
                     :values="this.$config.model.periods"></Typeahead>
             </FilterBlock>
 
             <FilterBlock :title="$t('PeriodicStatusReport.LastDateToShowLabel')">
-                <DatePicker :config="datePickerConfig"
-                    :value="selectedDate"></DatePicker>
+                <DatePicker :config="datePickerConfig" :value="selectedDate"></DatePicker>
             </FilterBlock>
         </Filters>
 
@@ -88,17 +50,8 @@
             </div>
         </div>
 
-        <DataTables
-            ref="table"
-            v-if="mounted"
-            :tableOptions="tableOptions"
-            :addParamsToRequest="addParamsToRequest"
-            @ajaxComplete="onTableReload"
-            noPaging
-            noSearch
-            exportable
-            hasTotalRow
-            noSelect></DataTables>
+        <DataTables ref="table" v-if="mounted" :tableOptions="tableOptions" :addParamsToRequest="addParamsToRequest"
+            @ajaxComplete="onTableReload" noPaging noSearch exportable hasTotalRow noSelect></DataTables>
     </HqLayout>
 </template>
 
@@ -123,6 +76,7 @@ export default {
             dateFormat: 'YYYY-MM-DD',
             dateTimeRanges: [],
             columns: [],
+            supervisorId: null,
             loading: {
                 report: false,
             },
@@ -130,16 +84,16 @@ export default {
     },
     mounted() {
         if (this.query.questionnaireId) {
-            this.questionnaireId = find(this.$config.model.questionnaires, {key: this.query.questionnaireId})
+            this.questionnaireId = find(this.$config.model.questionnaires, { key: this.query.questionnaireId })
         }
 
         if (this.questionnaireId && this.query.questionnaireVersion) {
-            this.questionnaireVersion = find(this.questionnaireId.versions, {key: this.query.questionnaireVersion})
+            this.questionnaireVersion = find(this.questionnaireId.versions, { key: this.query.questionnaireVersion })
         }
 
         if (this.query.reportType) {
-            this.reportTypeId = find(this.model.reportTypes, {key: this.query.reportType})
-            if(this.reportTypeId == null) {
+            this.reportTypeId = find(this.model.reportTypes, { key: this.query.reportType })
+            if (this.reportTypeId == null) {
                 this.reportTypeId = this.model.reportTypes[0]
             }
         } else if (this.reportTypeId == null && this.model.reportTypes.length > 0) {
@@ -147,15 +101,14 @@ export default {
             this.reportTypeId = this.model.reportTypes[0]
         }
 
-
         if (this.query.columnCount) {
-            this.overTheLast = find(this.model.overTheLasts, {key: this.query.columnCount})
+            this.overTheLast = find(this.model.overTheLasts, { key: this.query.columnCount })
         } else if (this.overTheLast == null && this.model.overTheLasts.length > 6) {
             this.overTheLast = this.model.overTheLasts[6]
         }
 
         if (this.query.period) {
-            this.period = find(this.model.periods, {key: this.query.period})
+            this.period = find(this.model.periods, { key: this.query.period })
         } else if (this.period == null && this.model.periods.length > 0) {
             this.period = this.model.periods[0]
         }
@@ -166,13 +119,15 @@ export default {
             this.from = moment().format(this.dateFormat)
         }
 
+        this.supervisorId = this.query.supervisorId
+
         this.loadReportData()
         this.mounted = true
     },
 
     methods: {
         loadReportData(reloadPage = false) {
-            if(reloadPage) return // reload will happen when route change
+            if (reloadPage) return // reload will happen when route change
             if (this.$refs.table) {
                 this.$refs.table.reload()
             }
@@ -191,9 +146,9 @@ export default {
                 name: 'Responsible',
                 title: self.model.responsibleColumnName,
                 orderable: false,
-                render: function(data, type, row) {
+                render: function (data, type, row) {
                     if (data == undefined || row.DT_RowClass == 'total-row') {
-                        if (self.model.supervisorId) {
+                        if (self.supervisorId) {
                             return self.$t('Strings.AllInterviewers')
                         } else {
                             return self.$t('Strings.AllTeams')
@@ -219,7 +174,7 @@ export default {
                     name: `date_${index}`,
                     orderable: false,
 
-                    render: function(data, type, row) {
+                    render: function (data, type, row) {
                         if (row.quantityByPeriod) {
                             var quantity = row.quantityByPeriod[index]
                             return self.renderQuantityValue(quantity)
@@ -238,7 +193,7 @@ export default {
                 name: 'Average',
                 title: this.$t('PeriodicStatusReport.Average'),
                 orderable: true,
-                render: function(data, type, row) {
+                render: function (data, type, row) {
                     if (row.quantityByPeriod) {
                         return self.renderQuantityValue(data)
                     }
@@ -253,7 +208,7 @@ export default {
                 name: 'Total',
                 title: this.$t('PeriodicStatusReport.Total'),
                 orderable: false,
-                render: function(data, type, row) {
+                render: function (data, type, row) {
                     if (row.quantityByPeriod) {
                         return self.renderQuantityValue(data)
                     }
@@ -275,7 +230,7 @@ export default {
                 const column = table.column(`date_${i}:name`)
 
                 const dateRange = (i >= this.dateTimeRanges.length) ? null : this.dateTimeRanges[i]
-                if(dateRange) {
+                if (dateRange) {
                     column.visible(true)
                     const header = column.header()
                     const date = moment(dateRange.to).format(this.dateFormat)
@@ -357,7 +312,7 @@ export default {
             requestData.columnCount = this.overTheLast.key
             requestData.period = this.period.key
             requestData.from = this.from
-            requestData.supervisorId = this.model.supervisorId
+            requestData.supervisorId = this.supervisorId
             requestData.timezoneOffsetMinutes = new Date().getTimezoneOffset()
             requestData.pageIndex = 1
             requestData.pageSize = 50000
@@ -408,7 +363,7 @@ export default {
             var title = this.model.reportName == 'Speed' ? this.$t('MainMenu.Speed') : this.$t('MainMenu.Quantity')
             title = `<span>${title}: </span><span>${(this.reportTypeId || {}).value}</span>`
 
-            if (this.model.supervisorId) {
+            if (this.supervisorId) {
                 title +=
                     '<br />' +
                     this.$t('PeriodicStatusReport.InTheSupervisorTeamFormat').replace('{0}', this.model.supervisorName)
@@ -444,13 +399,11 @@ export default {
                 columnCount: this.overTheLast.key,
                 period: this.period.key,
                 from: this.from,
+                supervisorId: this.supervisorId
             }
         },
         columnsCount() {
             return (this.overTheLast || {}).key || 7
-        },
-        supervisorId() {
-            return this.$route.params.supervisorId
         },
         selectedDate() {
             return this.from || moment().format(this.dateFormat)
@@ -477,7 +430,7 @@ export default {
 
         selectedQuestionnaireTitle() {
             const name = this.questionnaireId == null ? this.$t('Common.AllQuestionnaires') : this.questionnaireId.value
-            const version = this.questionnaireVersion == null? this.$t('Common.AllVersions') : this.questionnaireVersion.value
+            const version = this.questionnaireVersion == null ? this.$t('Common.AllVersions') : this.questionnaireVersion.value
             return `${name}, ${version}`
         },
 
