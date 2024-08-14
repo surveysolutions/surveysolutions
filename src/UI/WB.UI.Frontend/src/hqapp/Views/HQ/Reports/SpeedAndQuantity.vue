@@ -79,6 +79,7 @@ export default {
             dateFormat: 'YYYY-MM-DD',
             dateTimeRanges: [],
             columns: [],
+            supervisorId: null,
             loading: {
                 report: false,
             },
@@ -103,7 +104,6 @@ export default {
             this.reportTypeId = this.model.reportTypes[0]
         }
 
-
         if (this.query.columnCount) {
             this.overTheLast = find(this.model.overTheLasts, { key: this.query.columnCount })
         } else if (this.overTheLast == null && this.model.overTheLasts.length > 6) {
@@ -121,6 +121,8 @@ export default {
         } else if (this.from == null) {
             this.from = moment().format(this.dateFormat)
         }
+
+        this.supervisorId = this.query.supervisorId
 
         this.loadReportData()
         this.mounted = true
@@ -149,7 +151,7 @@ export default {
                 orderable: false,
                 render: function (data, type, row) {
                     if (data == undefined || row.DT_RowClass == 'total-row') {
-                        if (self.model.supervisorId) {
+                        if (self.supervisorId) {
                             return self.$t('Strings.AllInterviewers')
                         } else {
                             return self.$t('Strings.AllTeams')
@@ -313,7 +315,7 @@ export default {
             requestData.columnCount = this.overTheLast.key
             requestData.period = this.period.key
             requestData.from = this.from
-            requestData.supervisorId = this.model.supervisorId
+            requestData.supervisorId = this.supervisorId
             requestData.timezoneOffsetMinutes = new Date().getTimezoneOffset()
             requestData.pageIndex = 1
             requestData.pageSize = 50000
@@ -364,7 +366,7 @@ export default {
             var title = this.model.reportName == 'Speed' ? this.$t('MainMenu.Speed') : this.$t('MainMenu.Quantity')
             title = `<span>${title}: </span><span>${(this.reportTypeId || {}).value}</span>`
 
-            if (this.model.supervisorId) {
+            if (this.supervisorId) {
                 title +=
                     '<br />' +
                     this.$t('PeriodicStatusReport.InTheSupervisorTeamFormat').replace('{0}', this.model.supervisorName)
@@ -400,13 +402,11 @@ export default {
                 columnCount: this.overTheLast.key,
                 period: this.period.key,
                 from: this.from,
+                supervisorId: this.supervisorId
             }
         },
         columnsCount() {
             return (this.overTheLast || {}).key || 7
-        },
-        supervisorId() {
-            return this.$route.params.supervisorId
         },
         selectedDate() {
             return this.from || moment().format(this.dateFormat)

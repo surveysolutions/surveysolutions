@@ -605,7 +605,6 @@ input UsersSortInput {
   userName: SortEnumType
   creationDate: SortEnumType
   fullName: SortEnumType
-  role: SortEnumType
   email: SortEnumType
   phoneNumber: SortEnumType
   isLocked: SortEnumType
