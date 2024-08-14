@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { getCurrentVersion } from './headquartersService';
 
 const errorUrl = '/error/report';
 
