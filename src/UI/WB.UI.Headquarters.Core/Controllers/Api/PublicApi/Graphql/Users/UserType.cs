@@ -36,7 +36,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Users
             descriptor.Field(x => x.IsLocked).Type<BooleanType>();
             descriptor.Field(x => x.IsArchived).Type<BooleanType>();
             descriptor.Field("isRelinkAllowed").Type<BooleanType>()
-                .Resolve(ctx => ctx.Parent<HqUser>().Profile?.AllowRelinkDate.HasValue);
+                .Resolve(ctx => ctx.Parent<HqUser>().Profile?.AllowRelinkDate.HasValue ?? false);
         }
     }
 }
