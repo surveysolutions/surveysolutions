@@ -1,33 +1,28 @@
 <template>
-    <wb-question :question="$me"
-        questionCssClassName="multiselect-question"
-        :no-comments="noComments">
+    <wb-question :question="$me" questionCssClassName="multiselect-question" :no-comments="noComments">
         <div class="question-unit">
             <div class="options-group">
-                <div class="form-group"
-                    v-for="(row) in this.selectedOptions"
-                    :key="row.value">
+                <div class="form-group" v-for="(row) in this.selectedOptions" :key="row.value">
                     <div class="field answered"
                         v-bind:class="{ 'unavailable-option locked-option': isProtected(row.value) }">
                         <div class="field-to-fill">
                             {{ row.title }}
                         </div>
-                        <button type="submit"
-                            class="btn btn-link btn-clear"
-                            v-if="$me.acceptAnswer && !isProtected(row.value)"
-                            tabindex="-1"
+                        <button type="submit" class="btn btn-link btn-clear"
+                            v-if="$me.acceptAnswer && !isProtected(row.value)" tabindex="-1"
                             @click="confirmAndRemoveRow(row.value)"><span></span>
                         </button>
                         <div class="lock"></div>
                     </div>
-                    <wb-attachment :attachmentName="row.attachmentName"
-                        :interviewId="interviewId"
+                    <wb-attachment :attachmentName="row.attachmentName" :interviewId="interviewId"
                         v-if="row.attachmentName" />
                 </div>
 
-                <div class="form-group" v-if="$me.acceptAnswer && !allAnswersGiven">
+                <div class="form-group"
+                    v-if="($me.acceptAnswer && !allAnswersGiven) || (!$me.acceptAnswer && !$me.isAnswered)">
                     <div class="field" :class="{ answered: $me.isAnswered }">
                         <wb-typeahead :questionId="$me.id" @input="appendCompboboxItem" :optionsSource="optionsSource"
+                            :disabled="!$me.acceptAnswer"
                             :watermark="!$me.acceptAnswer && !$me.isAnswered ? $t('Details.NoAnswer') : null" />
                     </div>
                 </div>
@@ -70,7 +65,7 @@ export default {
         },
         allAnswersGiven() {
             return this.$me.maxSelectedAnswersCount && this.$me.answer.length >= this.$me.maxSelectedAnswersCount
-        },
+        }
     },
     methods: {
         isProtected(val) {
