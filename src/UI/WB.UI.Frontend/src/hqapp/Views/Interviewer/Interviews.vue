@@ -5,7 +5,7 @@
                 <FilterBlock :title="$t('Common.Questionnaire')">
                     <Typeahead control-id="questionnaireId" data-vv-name="questionnaireId" data-vv-as="questionnaire"
                         :placeholder="$t('Common.AllQuestionnaires')" :value="questionnaireId"
-                        :values="this.$config.model.questionnaires" v-on:selected="questionnaireSelected" />
+                        :values="$config.model.questionnaires" v-on:selected="questionnaireSelected" />
                 </FilterBlock>
 
                 <FilterBlock :title="$t('Common.QuestionnaireVersion')">
