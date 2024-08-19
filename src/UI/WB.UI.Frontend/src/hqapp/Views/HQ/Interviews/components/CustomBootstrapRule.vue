@@ -81,8 +81,8 @@
             </select>
 
             <!-- Remove rule button -->
-            <button type="button" class="close ml-auto" @click="ruleCtrl.remove" v-html="labels.removeRule">
-            </button>
+            <!--button type="button" class="close ml-auto" @click="ruleCtrl.remove" v-html="labels.removeRule">
+            </button-->
         </div>
     </div>
 </template>
@@ -111,6 +111,11 @@ export default {
                 //this.ruleCtrl.updateRuleData("newVal");
             },
             deep: true
+        }
+    },
+    mounted() {
+        if (!this.query.operator && this.ruleCtrl.operators && this.ruleCtrl.operators.lengh > 0) {
+            this.selectedRule = this.ruleCtrl.operators[0].operator
         }
     },
     computed: {

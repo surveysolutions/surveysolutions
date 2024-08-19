@@ -51,8 +51,6 @@
 </template>
 
 <script>
-//import QueryBuilderGroup from 'vue-query-builder/dist/group/QueryBuilderGroup.umd.js'
-import QueryBuilderRule from './CustomBootstrapRule.vue'
 
 export default {
     name: 'QueryBuilderGroup',
@@ -65,14 +63,15 @@ export default {
             required: true,
         }
     },
-    components: {
-        // eslint-disable-next-line vue/no-unused-components
-        'QueryBuilderRule': QueryBuilderRule,
-    },
     data() {
         return {
             selectedRule: "",
         };
+    },
+    mounted() {
+        if (this.selectedRule == "" && this.groupCtrl.rules && this.groupCtrl.rules.lengh > 0) {
+            this.selectedRule = this.groupCtrl.rules[0].identifier
+        }
     },
     computed: {
 
@@ -81,12 +80,12 @@ export default {
 }
 </script>
 
-<style scoped>
-.query-builder-group .vqb-group .rule-actions {
+<style>
+.query-builder-group__group-children .query-builder-group .rule-actions {
     margin-bottom: 20px;
 }
 
-.query-builder-group .vqb-rule {
+.query-builder-group__group-children .vqb-rule {
     margin-top: 15px;
     margin-bottom: 15px;
     background-color: #f5f5f5;
@@ -94,28 +93,28 @@ export default {
     padding: 15px;
 }
 
-.query-builder-group .vqb-group.depth-1 .vqb-rule,
-.query-builder-group .vqb-group.depth-2 {
+.query-builder-group__group-children.query-builder-group__group-children--depth-1 .vqb-rule,
+.query-builder-group__group-children.query-builder-group__group-children--depth-2 {
     border-left: 2px solid #8bc34a;
 }
 
-.query-builder-group .vqb-group.depth-2 .vqb-rule,
-.query-builder-group .vqb-group.depth-3 {
+.query-builder-group__group-children.query-builder-group__group-children--depth-2 .vqb-rule,
+.query-builder-group__group-children.query-builder-group__group-children--depth-3 {
     border-left: 2px solid #00bcd4;
 }
 
-.query-builder-group .vqb-group.depth-3 .vqb-rule,
-.query-builder-group .vqb-group.depth-4 {
+.query-builder-group__group-children.query-builder-group__group-children--depth-3 .vqb-rule,
+.query-builder-group__group-children.query-builder-group__group-children--depth-4 {
     border-left: 2px solid #ff5722;
 }
 
-.query-builder-group .close {
+.query-builder-group__group-children.query-builder-child__delete-child {
     opacity: 1;
     color: rgb(150, 150, 150);
 }
 
 @media (min-width: 768px) {
-    .query-builder-group .vqb-rule.form-inline .form-group {
+    .query-builder-group__group-children .vqb-rule.form-inline .form-group {
         display: block;
     }
 }

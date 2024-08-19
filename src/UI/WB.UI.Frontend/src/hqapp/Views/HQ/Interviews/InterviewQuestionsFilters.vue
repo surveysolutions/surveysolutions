@@ -33,9 +33,9 @@
             </template>
         </ModalFrame>
 
-        <ModalFrame ref="questionsExposedSelector" id="modalQuestionsExposedSelector"
+        <ModalFrame ref="questionsExposedSelector" id="modalQuestionsExposedSelector" class="vue-query-builder"
             :title="$t('Interviews.DynamicFilter')">
-            <query-builder :config="config" v-model="queryExposedVariables" class="vue-query-builder">
+            <query-builder :config="config" v-model="queryExposedVariables">
 
                 <template #groupOperator="props">
                     <query-builder-group-operator :groupCtrl="props" :labels="labels"
@@ -80,7 +80,6 @@
 
 import QueryBuilder from 'query-builder-vue-3'
 import RuleSlot from "./components/CustomBootstrapRule.vue";
-//import 'vue-query-builder/dist/VueQueryBuilder.css'
 import QueryBuilderGroup from './components/CustomBootstrapGroup.vue'
 import QueryBuilderGroupOperator from './components/CustomBootstrapGroupOperator.vue'
 import moment from 'moment'
@@ -228,7 +227,7 @@ export default {
                     conditions.push(this.handleRule(element))
                 //else if (element.type == 'query-builder-group') {
                 else if (element.children) {
-                    var group = this.handleGroup(element.value)
+                    var group = this.handleGroup(element)
                     if (group != null)
                         conditions.push(group)
                 }
@@ -476,30 +475,11 @@ export default {
                     },*/
                     // ...
                 ],
-                /*operators: [
-                    {
-                        name: "AND",
-                        identifier: "AND"
-                    },
-                    {
-                        name: "OR",
-                        identifier: "OR"
-                    }
+                colors: [
+                    'hsl(88, 50%, 55%)',
+                    'hsl(187, 100%, 45%)',
+                    'hsl(15, 100%, 55%)',
                 ],
-                rules: [
-                    {
-                        identifier: "txt",
-                        name: "Text Selection",
-                        component: Input,
-                        initialValue: ""
-                    },
-                    {
-                        identifier: "num",
-                        name: "Number Selection",
-                        component: Number,
-                        initialValue: 10
-                    }
-                ],*/
             }
         },
         questionnaireItemsList() {

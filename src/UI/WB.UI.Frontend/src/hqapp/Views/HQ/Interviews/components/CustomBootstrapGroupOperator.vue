@@ -28,8 +28,6 @@
 </template>
 
 <script>
-//import QueryBuilderGroup from 'vue-query-builder/dist/group/QueryBuilderGroup.umd.js'
-import QueryBuilderRule from './CustomBootstrapRule.vue'
 
 export default {
     name: 'QueryBuilderGroupOperator',
@@ -41,10 +39,6 @@ export default {
         labels: {
             required: true,
         }
-    },
-    components: {
-        // eslint-disable-next-line vue/no-unused-components
-        'QueryBuilderRule': QueryBuilderRule,
     },
     data() {
         return {
