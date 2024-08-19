@@ -1,11 +1,11 @@
 import { defineConfig } from 'vite';
-import path  from 'path';
+import path from 'path';
 import vue from '@vitejs/plugin-vue'
 import envCompatible from 'vite-plugin-env-compatible';
 import mpaPlugin from 'vite-plugin-mpa-plus'
 import { viteCommonjs } from '@originjs/vite-plugin-commonjs';
 import cleanPlugin from 'vite-plugin-clean';
-import LocalizationPlugin  from './tools/vite-plugin-localization'
+import LocalizationPlugin from './tools/vite-plugin-localization'
 import inject from '@rollup/plugin-inject';
 import vitePluginRequire from "vite-plugin-require";
 
@@ -85,7 +85,7 @@ const pages = {
 };
 
 const fileTargets = [
-    { source: join(".resources", "**", "*.js"), destination: join("dist", "locale"), isFlat: false  },
+    { source: join(".resources", "**", "*.js"), destination: join("dist", "locale"), isFlat: false },
 
     { source: join("dist", "img", "**", "*.*"), destination: path.join(hqDist, "wwwroot", "img"), isFlat: false },
     { source: join("dist", "fonts", "**", "*.*"), destination: path.join(hqDist, "wwwroot", "fonts") },
@@ -105,186 +105,186 @@ const fileTargets = [
 const resxFiles = [
     "../WB.UI.Headquarters.Core/**/*.resx",
     "../../Core/SharedKernels/Enumerator/WB.Enumerator.Native/Resources/*.resx",
-    "../../Core/BoundedContexts/Headquarters/WB.Core.BoundedContexts.Headquarters/Resources/*.resx"     
+    "../../Core/BoundedContexts/Headquarters/WB.Core.BoundedContexts.Headquarters/Resources/*.resx"
 ]
 
 var pagesSources = [];
 var pagesTargets = [];
 
 for (var attr in pages) {
-  const pageObj = pages[attr]
-  const filename = path.basename(pageObj.filename)
-  const filenameHtml = attr + '.html'
-  const origFolder = path.dirname(pageObj.filename)
-  //const templateFilename = path.basename(pageObj.template)
-  const templateFilenameHtml = attr + '.html'
-  var templatesFolderFull = path.join(baseDir, ".templates")
-  
-  var destFileFolderFull = path.join(baseDir, "dist", ".templates")
-  var templateHtmlPath = path.join(templatesFolderFull, templateFilenameHtml)
-  var filenameHtmlPath = path.join(destFileFolderFull, filenameHtml)
-  var distFileName = path.join(baseDir, "dist", filenameHtml)
+    const pageObj = pages[attr]
+    const filename = path.basename(pageObj.filename)
+    const filenameHtml = attr + '.html'
+    const origFolder = path.dirname(pageObj.filename)
+    //const templateFilename = path.basename(pageObj.template)
+    const templateFilenameHtml = attr + '.html'
+    var templatesFolderFull = path.join(baseDir, ".templates")
 
-  console.log("templateHtmlPath: " + templateHtmlPath, " distFileName: " + distFileName)
-  //console.log("filenameHtmlPath: " + filenameHtmlPath)
+    var destFileFolderFull = path.join(baseDir, "dist", ".templates")
+    var templateHtmlPath = path.join(templatesFolderFull, templateFilenameHtml)
+    var filenameHtmlPath = path.join(destFileFolderFull, filenameHtml)
+    var distFileName = path.join(baseDir, "dist", filenameHtml)
 
-  pagesSources.push({ source: pageObj.template, destination: templatesFolderFull, name : templateFilenameHtml })
-  pagesTargets.push({ source: filenameHtmlPath, destination: origFolder, name: filename })
-  pagesTargets.push({ source: distFileName, destination: origFolder, name: filename })
+    //console.log("templateHtmlPath: " + templateHtmlPath, " distFileName: " + distFileName)
+    //console.log("filenameHtmlPath: " + filenameHtmlPath)
 
-  pageObj.filename = filenameHtml
-  pageObj.template = templateHtmlPath
+    pagesSources.push({ source: pageObj.template, destination: templatesFolderFull, name: templateFilenameHtml })
+    pagesTargets.push({ source: filenameHtmlPath, destination: origFolder, name: filename })
+    pagesTargets.push({ source: distFileName, destination: origFolder, name: filename })
+
+    pageObj.filename = filenameHtml
+    pageObj.template = templateHtmlPath
 }
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
 
-const isDevMode = mode === 'development';
-const isProdMode = !isDevMode
+    const isDevMode = mode === 'development';
+    const isProdMode = !isDevMode
 
-return {
-	  css: {
-		devSourcemap: isDevMode,
-	  },
-	  resolve: {
-		alias: [
-          
-		  {
-			find: '@',
-			replacement: path.resolve(__dirname, 'src')
-		  },
-		  {
-			find: 'moment$',
-			replacement: path.resolve(__dirname, 'moment/moment.js')
-		  },
-		  {
-			find: '~',
-			replacement: path.resolve(__dirname, 'src')
-		  },
+    return {
+        css: {
+            devSourcemap: isDevMode,
+        },
+        resolve: {
+            alias: [
 
-          {
-            find: 'vue',
-            replacement: 'vue/dist/vue.esm-bundler.js',
-          },
-		],
-		extensions: [
-		  '.mjs',
-		  '.js',
-		  '.ts',
-		  '.jsx',
-		  '.tsx',
-		  '.json',
-		  '.vue'
-		]
-	  },
-	  transpile: [
-			'autonumeric',
-			'vue-page-title',
-			'@googlemaps/markerclusterer'
-	  ],
-	  optimizeDeps: {
-		include: ['jquery'],
-	  },
-	  plugins: [
-		vue(
-          {
-            jsx: true,
-            template: {
-              compilerOptions: {
-                compatConfig: {
-                  MODE: 2
+                {
+                    find: '@',
+                    replacement: path.resolve(__dirname, 'src')
+                },
+                {
+                    find: 'moment$',
+                    replacement: path.resolve(__dirname, 'moment/moment.js')
+                },
+                {
+                    find: '~',
+                    replacement: path.resolve(__dirname, 'src')
+                },
+
+                {
+                    find: 'vue',
+                    replacement: 'vue/dist/vue.esm-bundler.js',
+                },
+            ],
+            extensions: [
+                '.mjs',
+                '.js',
+                '.ts',
+                '.jsx',
+                '.tsx',
+                '.json',
+                '.vue'
+            ]
+        },
+        transpile: [
+            'autonumeric',
+            'vue-page-title',
+            '@googlemaps/markerclusterer'
+        ],
+        optimizeDeps: {
+            include: ['jquery'],
+        },
+        plugins: [
+            vue(
+                {
+                    jsx: true,
+                    template: {
+                        compilerOptions: {
+                            compatConfig: {
+                                MODE: 2
+                            }
+                        }
+                    }
+                }),
+            vitePluginRequire(),
+            viteCommonjs(),
+            envCompatible(),
+            cleanPlugin({
+                targetFiles: fileTargets.map(target => target.destination)
+            }),
+            ViteFilemanager({
+                customHooks: [
+                    {
+                        hookName: 'options',
+                        commands: {
+                            del: {
+                                items: ['./dist']
+                            },
+                            copy: { items: pagesSources },
+                        }
+                    },
+                    {
+                        hookName: 'closeBundle',
+                        commands: {
+                            copy: { items: pagesTargets.concat(fileTargets) },
+                        }
+                    }
+                ],
+
+                options: {
+                    parallel: 1,
+                    //log: 'all'
+                    log: 'error'
                 }
-              }
-            }
-          }),
-		vitePluginRequire(),
-		viteCommonjs(),
-		envCompatible(),
-		cleanPlugin({
-		  targetFiles: fileTargets.map(target => target.destination)
-		}),
-	    ViteFilemanager({
-		  customHooks: [
-			{
-			  hookName: 'options',
-			  commands: {
-				del: {
-				   items: ['./dist']
-				},
-				copy: { items: pagesSources },
-			  }
-			},
-			{
-			  hookName: 'closeBundle',
-			  commands: {
-				copy: { items: pagesTargets.concat(fileTargets) },
-			  }
-			}
-		  ],
-		
-		  options: {
-			parallel: 1,
-			//log: 'all'
-			log: 'error'
-		  }
-		}),
-		LocalizationPlugin({
-		  patterns: resxFiles,
-		  destination: "./.resources",
-		  locales: locales
-		}),
-		mpaPlugin({
-			pages: pages
-		})
-		//eslintPlugin()
-	  ],
-	  build: {
-		minify: isProdMode,
-		rollupOptions: {
-			maxParallelFileOps: 1,
-			cache: false,
-			plugins: [
-				inject({
-					$: 'jquery',
-					jQuery: 'jquery',
-				})
-			],
-		    output: {
-			  assetFileNames: (assetInfo) => {
-				  let extType = assetInfo.name.split('.').at(1);
-				  if (/png|jpe?g|svg|gif|tiff|bmp|ico/i.test(extType)) {
-					extType = 'img';
-				  }
-				  if (/ttf|woff|woff2|eot/i.test(extType)) {
-					extType = 'fonts';
-				  }
-                  if (isDevMode) 
-					  return `${extType}/[name][extname]` 
-				  return `${extType}/[name]-[hash][extname]`;
-			  },
-			  chunkFileNames: (chunkInfo) => { 
-				  if (isDevMode) 
-				    return chunkInfo.name.endsWith('.js') ? 'js/[name]' : 'js/[name].js' 
-				  return 'js/[name]-[hash].js' 
-			  },
-			  entryFileNames: (chunkInfo) => { 
-				  if (isDevMode) 
-					  return 'js/[name].js' 
-				  return 'js/[name]-[hash].js' 
-			  },
-			  manualChunks: (id) => {
-				if (id.includes('node_modules')) {
-					return 'vendor';
-				}
+            }),
+            LocalizationPlugin({
+                patterns: resxFiles,
+                destination: "./.resources",
+                locales: locales
+            }),
+            mpaPlugin({
+                pages: pages
+            })
+            //eslintPlugin()
+        ],
+        build: {
+            minify: isProdMode,
+            rollupOptions: {
+                maxParallelFileOps: 1,
+                cache: false,
+                plugins: [
+                    inject({
+                        $: 'jquery',
+                        jQuery: 'jquery',
+                    })
+                ],
+                output: {
+                    assetFileNames: (assetInfo) => {
+                        let extType = assetInfo.name.split('.').at(1);
+                        if (/png|jpe?g|svg|gif|tiff|bmp|ico/i.test(extType)) {
+                            extType = 'img';
+                        }
+                        if (/ttf|woff|woff2|eot/i.test(extType)) {
+                            extType = 'fonts';
+                        }
+                        if (isDevMode)
+                            return `${extType}/[name][extname]`
+                        return `${extType}/[name]-[hash][extname]`;
+                    },
+                    chunkFileNames: (chunkInfo) => {
+                        if (isDevMode)
+                            return chunkInfo.name.endsWith('.js') ? 'js/[name]' : 'js/[name].js'
+                        return 'js/[name]-[hash].js'
+                    },
+                    entryFileNames: (chunkInfo) => {
+                        if (isDevMode)
+                            return 'js/[name].js'
+                        return 'js/[name]-[hash].js'
+                    },
+                    manualChunks: (id) => {
+                        if (id.includes('node_modules')) {
+                            return 'vendor';
+                        }
 
-				/*if (isDevMode) {
-					var filename = id.replace(/^.*[\\\/]/, '')
-					if (!filename.endsWith('.css'))
-					  return filename;
-				}*/
-			  },
-		    },
-		},
-	  },
-	}
+                        /*if (isDevMode) {
+                            var filename = id.replace(/^.*[\\\/]/, '')
+                            if (!filename.endsWith('.css'))
+                              return filename;
+                        }*/
+                    },
+                },
+            },
+        },
+    }
 })

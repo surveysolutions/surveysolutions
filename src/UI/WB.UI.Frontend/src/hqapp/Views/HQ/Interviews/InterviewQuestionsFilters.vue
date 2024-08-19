@@ -93,7 +93,7 @@ const sanitizeHtml = text => _sanitizeHtml(text, { allowedTags: [], allowedAttri
 export default {
     data() {
         return {
-            queryExposedVariables: { operatorIdentifier: "all", /*logicalOperator: 'all',*/ children: [] },
+            queryExposedVariables: { operatorIdentifier: "all", children: [] },
             conditions: [], /** { } */
             questionnaireItems: [],
             selectedQuestion: null,
@@ -215,7 +215,6 @@ export default {
 
         handleGroup(group) {
 
-            console.log("group: ", group)
             if (group.children === undefined || group.children.length == 0) {
                 return null
             }
@@ -571,7 +570,6 @@ export default {
             }
         },
         saveDisabled() {
-            console.log("transformQuery: ", this.transformQuery)
             return this.transformQuery === this.lastSavedQuery
         },
     },

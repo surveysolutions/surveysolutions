@@ -7,12 +7,6 @@
                     {{ labels.matchType }}
                 </label>
 
-                <!--select id="vqb-match-type" v-model="query.logicalOperator" class="form-control">
-                    <option v-for="label in labels.matchTypes" :key="label.id" :value="label.id">
-                        {{ label.label }}
-                    </option>
-                </select-->
-
                 <select :value="groupCtrl.currentOperator" class="form-control"
                     @input="groupCtrl.updateCurrentOperator($event.target.value)">
                     <option v-for="operator in groupCtrl.operators" :key="operator.identifier"

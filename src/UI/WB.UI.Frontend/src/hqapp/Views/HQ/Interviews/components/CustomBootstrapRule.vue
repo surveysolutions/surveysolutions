@@ -79,10 +79,6 @@
                     </option>
                 </optgroup>
             </select>
-
-            <!-- Remove rule button -->
-            <!--button type="button" class="close ml-auto" @click="ruleCtrl.remove" v-html="labels.removeRule">
-            </button-->
         </div>
     </div>
 </template>
@@ -106,30 +102,28 @@ export default {
     watch: {
         query: {
             handler(newVal, oldVal) {
-                console.log(newVal)
                 this.ruleCtrl.updateRuleData(newVal);
-                //this.ruleCtrl.updateRuleData("newVal");
             },
             deep: true
-        }
+        },
+        /*"rule": {
+            handler(newVal, oldVal) {
+                if (!this.query.operator && this.rule.operators && this.rule.operators.length > 0) {
+                    this.selectedRule = this.rule.operators[0]
+                }
+            },
+            deep: false
+        },*/
     },
     mounted() {
-        if (!this.query.operator && this.ruleCtrl.operators && this.ruleCtrl.operators.lengh > 0) {
-            this.selectedRule = this.ruleCtrl.operators[0].operator
+        if (!this.query.operator && this.rule.operators && this.rule.operators.length > 0) {
+            this.query.operator = this.rule.operators[0]
         }
     },
     computed: {
         unaryOperatorSelected() {
             return this.rule.unaryOperators ? this.rule.unaryOperators.indexOf(this.query.operator) > -1 : false
         },
-        /*query: {
-            get() {
-                return this.ruleCtrl.ruleData || {};
-            },
-            set(newData) {
-                this.ruleCtrl.updateRuleData(newData);
-            },
-        },*/
     },
 }
 </script>

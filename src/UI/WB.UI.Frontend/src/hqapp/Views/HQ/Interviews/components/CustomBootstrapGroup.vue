@@ -1,24 +1,5 @@
 <template>
-    <!-- eslint-disable vue/no-v-html -->
     <div class="vqb-group" :class="'depth-' + groupCtrl.depth">
-        <!--div class="vqb-group-heading card-header">
-            <div class="match-type-container form-inline">
-                <label class="mr-2" for="vqb-match-type">
-                    {{ labels.matchType }}
-                </label>
-
-                <select id="vqb-match-type" v-model="query.logicalOperator" class="form-control">
-                    <option v-for="label in labels.matchTypes" :key="label.id" :value="label.id">
-                        {{ label.label }}
-                    </option>
-                </select>
-
-                <button v-if="groupCtrl.depth > 1" type="button" class="close ml-auto" @click="remove"
-                    v-html="labels.removeGroup">
-                </button>
-            </div>
-        </div-->
-
         <div class="vqb-group-body card-body">
             <div class="rule-actions form-inline">
                 <div class="form-group">
@@ -28,11 +9,6 @@
                         <option v-for="rule in groupCtrl.rules" :key="rule.identifier" :value="rule.identifier"
                             v-text="rule.name" />
                     </select>
-                    <!--select v-model="selectedRule" class="form-control mr-2 mb-5">
-                        <option v-for="rule in groupCtrl.rules" :key="rule.id" :value="rule">
-                            {{ rule.label }}
-                        </option>
-                    </select-->
 
                     <button type="button" class="btn btn-secondary mr-2 mb-5" @click="groupCtrl.addRule(selectedRule)">
                         {{ labels.addRule }}
@@ -44,8 +20,6 @@
                     </button>
                 </div>
             </div>
-
-            <!--query-builder-children v-bind="$props" /-->
         </div>
     </div>
 </template>
@@ -65,16 +39,26 @@ export default {
     },
     data() {
         return {
-            selectedRule: "",
+            selectedRule: null,
         };
     },
     mounted() {
-        if (this.selectedRule == "" && this.groupCtrl.rules && this.groupCtrl.rules.lengh > 0) {
-            this.selectedRule = this.groupCtrl.rules[0].identifier
-        }
+        this.setDefaultOptionIfNeed()
     },
-    computed: {
-
+    watch: {
+        "groupCtrl": {
+            handler(newVal, oldVal) {
+                this.setDefaultOptionIfNeed()
+            },
+            deep: false
+        },
+    },
+    methods: {
+        setDefaultOptionIfNeed() {
+            if (!this.selectedRule && this.groupCtrl.rules && this.groupCtrl.rules.length > 0) {
+                this.selectedRule = this.groupCtrl.rules[0].identifier
+            }
+        }
     }
 
 }
