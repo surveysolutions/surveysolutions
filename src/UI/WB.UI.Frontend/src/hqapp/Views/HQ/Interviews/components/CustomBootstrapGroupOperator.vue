@@ -1,6 +1,6 @@
 <template>
     <!-- eslint-disable vue/no-v-html -->
-    <div class="vqb-group card" :class="'depth-' + groupCtrl.depth">
+    <div class="vqb-group" :class="'depth-' + groupCtrl.depth">
         <div class="vqb-group-heading card-header">
             <div class="match-type-container form-inline">
                 <label class="mr-2" for="vqb-match-type">

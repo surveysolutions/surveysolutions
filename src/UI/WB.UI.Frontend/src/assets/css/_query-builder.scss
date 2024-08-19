@@ -24,6 +24,9 @@
     min-height: 1px;
     padding: 1rem;
   }
+  .query-builder-child {
+    position: relative;
+  }
   .query-builder-group__group-children--depth-4{
     .vqb-rule{
         border-left:2px solid #ffff00 !important;
@@ -75,4 +78,29 @@
            }
        }
    }
+
+   .query-builder-group__group-children .query-builder-child .query-builder-child__delete-child {
+        opacity: 1;
+        color: rgb(150, 150, 150);
+        position: absolute !important;
+        top: 0;
+        right: 0;
+        margin-top: 3px;
+        margin-right: 5px;
+
+        padding: 0;
+        cursor: pointer;
+        background: transparent;
+        border: 0;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+
+        float: right;
+        font-size: 21px;
+        font-weight: 700;
+        line-height: 1;
+        text-shadow: 0 1px 0 #fff;
+        filter: alpha(opacity = 20);
+    }
 }  
