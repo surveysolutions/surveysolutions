@@ -1,82 +1,53 @@
 <template>
-    <div class="vqb-rule card">
+    <!--div class="rule-slot">
+        <span class="slot-text">SLOT #rule</span>
+        <component :is="rule.ruleComponent" :value="rule.ruleData" @input="rule.updateRuleData" />
+    </div-->
+    Rule: {{ rule.type }} {{ rule.component }}
+    <div class="rule-slot vqb-rule card">
         <div class="form-inline">
             <label class="mr-5">
-                {{ rule.label }}
+                {{ rule.name }}
             </label>
 
             <!-- List of operands (optional) -->
-            <select
-                v-if="typeof rule.operands !== 'undefined'"
-                v-model="query.operand"
-                class="form-control mr-2 mb-5">
-                <option
-                    v-for="operand in rule.operands"
-                    :key="operand">
+            <select v-if="typeof rule.operands !== 'undefined'" v-model="query.operand" class="form-control mr-2 mb-5">
+                <option v-for="operand in rule.operands" :key="operand">
                     {{ operand }}
                 </option>
             </select>
 
             <!-- List of operators (e.g. =, !=, >, <) -->
-            <select
-                v-if="typeof rule.operators !== 'undefined' && rule.operators.length > 1"
-                v-model="query.operator"
+            <select v-if="typeof rule.operators !== 'undefined' && rule.operators.length > 1" v-model="query.operator"
                 class="form-control mr-2 mb-5">
-                <option
-                    v-for="operator in rule.operators"
-                    :key="operator"
-                    :value="operator">
+                <option v-for="operator in rule.operators" :key="operator" :value="operator">
                     {{ operator }}
                 </option>
             </select>
 
             <!-- Basic text input -->
-            <input
-                v-if="rule.inputType === 'text' && !unaryOperatorSelected"
-                v-model="query.value"
-                class="form-control mb-5"
-                type="text"
-                :placeholder="labels.textInputPlaceholder">
+            <input v-if="rule.type === 'text' && !unaryOperatorSelected" v-model="query.value" class="form-control mb-5"
+                type="text" :placeholder="labels.textInputPlaceholder">
 
             <!-- Basic number input -->
-            <input
-                v-if="rule.inputType === 'number' && !unaryOperatorSelected"
-                v-model="query.value"
-                class="form-control mb-5"
-                type="number">
+            <input v-if="rule.type === 'numeric' && !unaryOperatorSelected" v-model="query.value"
+                class="form-control mb-5" type="number">
 
             <!-- Datepicker -->
-            <input
-                v-if="rule.inputType === 'date' && !unaryOperatorSelected"
-                v-model="query.value"
-                class="form-control mb-5"
+            <input v-if="rule.type === 'date' && !unaryOperatorSelected" v-model="query.value" class="form-control mb-5"
                 type="date">
 
             <!-- Custom component input -->
-            <div
-                v-if="isCustomComponent"
-                class="vqb-custom-component-wrap">
-                <component
-                    :is="rule.component"
-                    :value="query.value"
-                    @input="updateQuery"/>
+            <div v-if="isCustomComponent" class="vqb-custom-component-wrap">
+                <component :is="rule.component" :value="query.value" @input="updateQuery" />
             </div>
 
             <!-- Checkbox input -->
-            <template
-                v-if="rule.inputType === 'checkbox' && !unaryOperatorSelected">
-                <div
-                    v-for="choice in rule.choices"
-                    :key="choice.value"
-                    class="form-check form-check-inline">
-                    <input
-                        :id="'depth' + depth + '-' + rule.id + '-' + index + '-' + choice.value"
-                        v-model="query.value"
-                        type="checkbox"
-                        :value="choice.value"
-                        class="form-check-input">
-                    <label
-                        class="form-check-label"
+            <template v-if="rule.type === 'checkbox' && !unaryOperatorSelected">
+                <div v-for="choice in rule.choices" :key="choice.value" class="form-check form-check-inline">
+                    <input :id="'depth' + depth + '-' + rule.id + '-' + index + '-' + choice.value"
+                        v-model="query.value" type="checkbox" :value="choice.value" class="form-check-input">
+                    <label class="form-check-label"
                         :for="'depth' + depth + '-' + rule.id + '-' + index + '-' + choice.value">
                         {{ choice.label }}
                     </label>
@@ -84,21 +55,12 @@
             </template>
 
             <!-- Radio input -->
-            <template
-                v-if="rule.inputType === 'radio' && !unaryOperatorSelected">
-                <div
-                    v-for="choice in rule.choices"
-                    :key="choice.value"
-                    class="form-check form-check-inline">
-                    <input
-                        :id="'depth' + depth + '-' + rule.id + '-' + index + '-' + choice.value"
-                        v-model="query.value"
-                        :name="'depth' + depth + '-' + rule.id + '-' + index"
-                        type="radio"
-                        :value="choice.value"
-                        class="form-check-input">
-                    <label
-                        class="form-check-label"
+            <template v-if="rule.type === 'radio' && !unaryOperatorSelected">
+                <div v-for="choice in rule.choices" :key="choice.value" class="form-check form-check-inline">
+                    <input :id="'depth' + depth + '-' + rule.id + '-' + index + '-' + choice.value"
+                        v-model="query.value" :name="'depth' + depth + '-' + rule.id + '-' + index" type="radio"
+                        :value="choice.value" class="form-check-input">
+                    <label class="form-check-label"
                         :for="'depth' + depth + '-' + rule.id + '-' + index + '-' + choice.value">
                         {{ choice.label }}
                     </label>
@@ -106,60 +68,68 @@
             </template>
 
             <!-- Select without groups -->
-            <select
-                v-if="rule.inputType === 'select' && !hasOptionGroups && !unaryOperatorSelected"
-                v-model="query.value"
-                class="form-control mb-5"
-                :multiple="rule.type === 'multi-select'">
-                <option
-                    v-for="option in selectOptions"
-                    :key="option.value"
-                    :value="option.value">
+            <select v-if="rule.type === 'select' && !hasOptionGroups && !unaryOperatorSelected" v-model="query.value"
+                class="form-control mb-5" :multiple="rule.type === 'multi-select'">
+                <option v-for="option in rule.choices" :key="option.value" :value="option.value">
                     {{ option.label }}
                 </option>
             </select>
 
             <!-- Select with groups -->
-            <select
-                v-if="rule.inputType === 'select' && hasOptionGroups && !unaryOperatorSelected"
-                v-model="query.value"
-                class="form-control mb-5"
-                :multiple="rule.type === 'multi-select'">
-                <optgroup
-                    v-for="(option, option_key) in selectOptions"
-                    :key="option_key"
-                    :label="option_key">
-                    <option
-                        v-for="sub_option in option"
-                        :key="sub_option.value"
-                        :value="sub_option.value">
+            <select v-if="rule.type === 'select' && hasOptionGroups && !unaryOperatorSelected" v-model="query.value"
+                class="form-control mb-5" :multiple="rule.type === 'multi-select'">
+                <optgroup v-for="(option, option_key) in rule.selectOptions" :key="option_key" :label="option_key">
+                    <option v-for="sub_option in option" :key="sub_option.value" :value="sub_option.value">
                         {{ sub_option.label }}
                     </option>
                 </optgroup>
             </select>
 
             <!-- Remove rule button -->
-            <button
-                type="button"
-                class="close ml-auto"
-                @click="remove"
-                v-html="labels.removeRule">
+            <button type="button" class="close ml-auto" @click="remove" v-html="labels.removeRule">
             </button>
         </div>
     </div>
 </template>
 
 <script>
-import QueryBuilderRule from 'vue-query-builder/dist/rule/QueryBuilderRule.umd.js'
 
 export default {
-    extends: QueryBuilderRule,
 
-    computed:{
-        unaryOperatorSelected(){
+    props: ["ruleCtrl", "rule", "labels"],
+
+    data() {
+        return {
+            query: {
+                value: null,
+                operand: null,
+                operator: null,
+            },
+            hasOptionGroups: false,
+        }
+    },
+    watch: {
+        query: {
+            handler(newVal, oldVal) {
+                console.log(newVal)
+                this.ruleCtrl.updateRuleData(newVal);
+                //this.ruleCtrl.updateRuleData("newVal");
+            },
+            deep: true
+        }
+    },
+    computed: {
+        unaryOperatorSelected() {
             return this.rule.unaryOperators ? this.rule.unaryOperators.indexOf(this.query.operator) > -1 : false
         },
-
+        /*query: {
+            get() {
+                return this.ruleCtrl.ruleData || {};
+            },
+            set(newData) {
+                this.ruleCtrl.updateRuleData(newData);
+            },
+        },*/
     },
 }
 </script>

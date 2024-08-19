@@ -1,51 +1,28 @@
 <template>
     <!-- eslint-disable vue/no-v-html -->
     <div class="vqb-group card" :class="'depth-' + groupCtrl.depth">
-        <!--div class="vqb-group-heading card-header">
+        <div class="vqb-group-heading card-header">
             <div class="match-type-container form-inline">
                 <label class="mr-2" for="vqb-match-type">
                     {{ labels.matchType }}
                 </label>
 
-                <select id="vqb-match-type" v-model="query.logicalOperator" class="form-control">
+                <!--select id="vqb-match-type" v-model="query.logicalOperator" class="form-control">
                     <option v-for="label in labels.matchTypes" :key="label.id" :value="label.id">
                         {{ label.label }}
                     </option>
+                </select-->
+
+                <select :value="groupCtrl.currentOperator" class="form-control"
+                    @input="groupCtrl.updateCurrentOperator($event.target.value)">
+                    <option v-for="operator in groupCtrl.operators" :key="operator.identifier"
+                        :value="operator.identifier" v-text="operator.name" />
                 </select>
 
                 <button v-if="groupCtrl.depth > 1" type="button" class="close ml-auto" @click="remove"
                     v-html="labels.removeGroup">
                 </button>
             </div>
-        </div-->
-
-        <div class="vqb-group-body card-body">
-            <div class="rule-actions form-inline">
-                <div class="form-group">
-
-                    <select v-model="selectedRule"
-                        class="form-control mr-2 mb-5 query-builder-group-slot__rule-selection">
-                        <option v-for="rule in groupCtrl.rules" :key="rule.identifier" :value="rule.identifier"
-                            v-text="rule.name" />
-                    </select>
-                    <!--select v-model="selectedRule" class="form-control mr-2 mb-5">
-                        <option v-for="rule in groupCtrl.rules" :key="rule.id" :value="rule">
-                            {{ rule.label }}
-                        </option>
-                    </select-->
-
-                    <button type="button" class="btn btn-secondary mr-2 mb-5" @click="groupCtrl.addRule(selectedRule)">
-                        {{ labels.addRule }}
-                    </button>
-
-                    <button v-if="!groupCtrl.maxDepthExeeded" type="button" class="btn btn-secondary mb-5"
-                        @click="groupCtrl.newGroup">
-                        {{ labels.addGroup }}
-                    </button>
-                </div>
-            </div>
-
-            <!--query-builder-children v-bind="$props" /-->
         </div>
     </div>
 </template>
@@ -55,7 +32,7 @@
 import QueryBuilderRule from './CustomBootstrapRule.vue'
 
 export default {
-    name: 'QueryBuilderGroup',
+    name: 'QueryBuilderGroupOperator',
 
     props: {
         groupCtrl: {

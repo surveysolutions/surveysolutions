@@ -35,11 +35,35 @@
 
         <ModalFrame ref="questionsExposedSelector" id="modalQuestionsExposedSelector"
             :title="$t('Interviews.DynamicFilter')">
-            <vue-query-builder :rules="rules" :maxDepth="6" :labels="labels" v-model="queryExposedVariables">
-                <template v-slot:default="slotProps">
-                    <query-builder-group v-bind="slotProps" :query.sync="queryExposedVariables" />
+            <query-builder :config="config" v-model="queryExposedVariables">
+
+                <template #groupOperator="props">
+                    <query-builder-group-operator :groupCtrl="props" :labels="labels"
+                        :query.sync="queryExposedVariables" />
                 </template>
-            </vue-query-builder>
+
+                <template #groupControl="props">
+                    <query-builder-group :groupCtrl="props" :labels="labels" :query.sync="queryExposedVariables" />
+                </template>
+
+
+                <!--template #groupOperator="props">
+                    <div class="query-builder-group-slot__group-selection">
+                        Custom #groupOperator slot
+                        <select :value="props.currentOperator"
+                            @input="props.updateCurrentOperator($event.target.value)">
+                            <option disabled value>Select an operator</option>
+                            <option v-for="operator in props.operators" :key="operator.identifier"
+                                :value="operator.identifier" v-text="operator.name" />
+                        </select>
+                    </div>
+                </template-->
+
+                <template #rule="props">
+                    <rule-slot :ruleCtrl="props" :rule="getRuleById(props.ruleIdentifier)" :labels="labels" />
+                </template>
+
+            </query-builder>
             <!-- <div>{{queryExposedVariables}}</div> -->
             <template v-slot:actions>
                 <div>
@@ -67,9 +91,11 @@
 </template>
 <script>
 
-import VueQueryBuilder from 'vue-query-builder'
-import 'vue-query-builder/dist/VueQueryBuilder.css'
+import QueryBuilder from 'query-builder-vue-3'
+import RuleSlot from "./components/CustomBootstrapRule.vue";
+//import 'vue-query-builder/dist/VueQueryBuilder.css'
 import QueryBuilderGroup from './components/CustomBootstrapGroup.vue'
+import QueryBuilderGroupOperator from './components/CustomBootstrapGroupOperator.vue'
 import moment from 'moment'
 import { DateFormats } from '~/shared/helpers'
 import gql from 'graphql-tag'
@@ -81,13 +107,14 @@ const sanitizeHtml = text => _sanitizeHtml(text, { allowedTags: [], allowedAttri
 export default {
     data() {
         return {
-            queryExposedVariables: { logicalOperator: 'all', children: [] },
+            queryExposedVariables: { operatorIdentifier: "all", /*logicalOperator: 'all',*/ children: [] },
             conditions: [], /** { } */
             questionnaireItems: [],
             selectedQuestion: null,
             checked: {},
 
             lastSavedQuery: null,
+
         }
     },
 
@@ -137,13 +164,13 @@ export default {
 
         questionnaireId() {
             this.conditions = this.value
-            this.queryExposedVariables = { logicalOperator: 'all', children: [] }
+            this.queryExposedVariables = { operatorIdentifier: "all", children: [] }
             this.saveExposedVariablesFilter()
         },
 
         questionnaireVersion() {
             this.conditions = this.value
-            this.queryExposedVariables = { logicalOperator: 'all', children: [] }
+            this.queryExposedVariables = { operatorIdentifier: "all", children: [] }
             this.saveExposedVariablesFilter()
         },
     },
@@ -202,16 +229,19 @@ export default {
 
         handleGroup(group) {
 
+            console.log("group: ", group)
             if (group.children === undefined || group.children.length == 0) {
                 return null
             }
 
             var conditions = []
             group.children.forEach(element => {
-                if (element.type == 'query-builder-rule')
-                    conditions.push(this.handleRule(element.query))
-                else if (element.type == 'query-builder-group') {
-                    var group = this.handleGroup(element.query)
+                //if (element.type == 'query-builder-rule')
+                if (element.identifier)
+                    conditions.push(this.handleRule(element))
+                //else if (element.type == 'query-builder-group') {
+                else if (element.children) {
+                    var group = this.handleGroup(element.value)
                     if (group != null)
                         conditions.push(group)
                 }
@@ -221,10 +251,10 @@ export default {
                 return null
 
             var result = {}
-            if (group.logicalOperator == 'any') {
+            if (group.operatorIdentifier == 'any') {
                 result.or = conditions
             }
-            else if (group.logicalOperator == 'all') {
+            else if (group.operatorIdentifier == 'all') {
                 result.and = conditions
             }
 
@@ -233,20 +263,23 @@ export default {
         },
         handleRule(query) {
 
+            if (!query.value)
+                return
+
             var some = {
-                entity: { variable: { eq: query.rule } },
+                entity: { variable: { eq: query.identifier } },
                 isEnabled: { eq: true },
             }
 
-            var entity = find(this.questionnaireItems, { variable: query.rule })
+            var entity = find(this.questionnaireItems, { variable: query.identifier })
             var ruleMap = this.getRuleMap(entity)
-            var operator = this.getOperatorMap(query.operator)
+            var operator = this.getOperatorMap(query.value.operator)
 
             if (operator === 'notanswered') {
                 some.value = { eq: '' }
                 var notAnsweredResult = {}
                 notAnsweredResult.or =
-                    [{ identifyingData: { none: { entity: { variable: { eq: query.rule } } } } },
+                    [{ identifyingData: { none: { entity: { variable: { eq: query.identifier } } } } },
                     { identifyingData: { some: some } }]
                 return notAnsweredResult
             }
@@ -256,22 +289,22 @@ export default {
                 singleCondition['neq'] = ruleMap.ruleType == 'text' ? '' : null
             }
             else if (ruleMap.ruleType === 'select' && entity.variableType === 'BOOLEAN') {
-                singleCondition[operator] = query.value == '1' ? true : false
+                singleCondition[operator] = query.value.value == '1' ? true : false
             }
             else if (ruleMap.ruleType == 'numeric') {
-                singleCondition[operator] = query.value ? Number(query.value) : null
+                singleCondition[operator] = query.value.value ? Number(query.value.value) : null
             }
             else if (ruleMap.ruleType == 'date') {
-                if (!query.value) {
+                if (!query.value.value) {
                     singleCondition['eq'] = null
                 }
                 else
                     switch (operator) {
                         case 'on': {
                             var leftOn = { ...some }
-                            leftOn[ruleMap.valueName] = { gte: moment(query.value).format(DateFormats.date) + 'T00:00:00Z' }
+                            leftOn[ruleMap.valueName] = { gte: moment(query.value.value).format(DateFormats.date) + 'T00:00:00Z' }
                             var rightOn = { ...some }
-                            rightOn[ruleMap.valueName] = { lte: moment(query.value).format(DateFormats.date) + 'T23:59:59Z' }
+                            rightOn[ruleMap.valueName] = { lte: moment(query.value.value).format(DateFormats.date) + 'T23:59:59Z' }
 
                             var dateOnResult = {
                                 and: [
@@ -284,9 +317,9 @@ export default {
                         case 'noton': {
 
                             var leftNotOn = { ...some }
-                            leftNotOn[ruleMap.valueName] = { lt: moment(query.value).format(DateFormats.date) + 'T00:00:00Z' }
+                            leftNotOn[ruleMap.valueName] = { lt: moment(query.value.value).format(DateFormats.date) + 'T00:00:00Z' }
                             var rightNotOn = { ...some }
-                            rightNotOn[ruleMap.valueName] = { gt: moment(query.value).format(DateFormats.date) + 'T23:59:59Z' }
+                            rightNotOn[ruleMap.valueName] = { gt: moment(query.value.value).format(DateFormats.date) + 'T23:59:59Z' }
 
                             var dateNotOnResult = {
                                 or: [
@@ -297,25 +330,25 @@ export default {
                             return dateNotOnResult
                         }
                         case 'before': {
-                            singleCondition['lt'] = moment(query.value).format(DateFormats.date) + 'T00:00:00Z'
+                            singleCondition['lt'] = moment(query.value.value).format(DateFormats.date) + 'T00:00:00Z'
                             break
                         }
                         case 'notlaterthan': {
-                            singleCondition['lte'] = moment(query.value).format(DateFormats.date) + 'T23:59:59Z'
+                            singleCondition['lte'] = moment(query.value.value).format(DateFormats.date) + 'T23:59:59Z'
                             break
                         }
                         case 'after': {
-                            singleCondition['gt'] = moment(query.value).format(DateFormats.date) + 'T23:59:59Z'
+                            singleCondition['gt'] = moment(query.value.value).format(DateFormats.date) + 'T23:59:59Z'
                             break
                         }
                         case 'onorafter': {
-                            singleCondition['gte'] = moment(query.value).format(DateFormats.date) + 'T00:00:00Z'
+                            singleCondition['gte'] = moment(query.value.value).format(DateFormats.date) + 'T00:00:00Z'
                             break
                         }
                     }
             }
             else {
-                singleCondition[operator] = query.value
+                singleCondition[operator] = query.value.value
             }
 
             some[ruleMap.valueName] = singleCondition
@@ -392,9 +425,96 @@ export default {
             var transformedTitle = sanitizeHtml(title).replace(/%[\w_]+%/g, '[..]')
             return transformedTitle.length >= 57 ? transformedTitle.substring(0, 54) + '...' : transformedTitle
         },
+
+        getRuleById(identifier) {
+            const entity = this.questionnaireAllItemsList.find(ent => ent.variable == identifier)
+            return this.getRuleByEntity(entity)
+        },
+
+        getRuleByEntity(entity) {
+            var map = this.getRuleMap(entity)
+            var type = map.ruleType
+
+            var rule = {
+                type: type,
+                identifier: entity.variable,
+                name: entity.label
+                    ? this.getDisplayTitle(entity.label)
+                    : (entity.title ? this.getDisplayTitle(entity.title) : entity.variable),
+            }
+
+            if (type === 'select') {
+                if (entity.entityType == 'VARIABLE' && entity.variableType === 'BOOLEAN') {
+                    rule.choices = [{ label: 'True', value: '1' }, { label: 'False', value: '0' }]
+                }
+                else
+                    rule.choices = entity.options.map(o => ({ label: this.getDisplayTitle(o.title), value: o.value }))
+            }
+            else if (type === 'date') {
+                rule.inputType = 'date'
+            }
+
+            if (map.operators !== undefined)
+                rule.operators = map.operators
+
+            if (map.unaryOperators !== undefined)
+                rule.unaryOperators = map.unaryOperators
+
+            return rule
+        }
     },
 
     computed: {
+        config() {
+            return {
+                rules: this.rules,
+                maxDepth: 6,
+                labels: this.labels,
+                operators: [
+                    {
+                        name: 'AND',
+                        identifier: 'all',
+                    },
+                    {
+                        name: 'OR',
+                        identifier: 'any',
+                    },
+                    /*{
+                        name: 'OR NOT',
+                        identifier: 'OR_NOT',
+                    },
+                    {
+                        name: 'AND NOT',
+                        identifier: 'AND_NOT',
+                    },*/
+                    // ...
+                ],
+                /*operators: [
+                    {
+                        name: "AND",
+                        identifier: "AND"
+                    },
+                    {
+                        name: "OR",
+                        identifier: "OR"
+                    }
+                ],
+                rules: [
+                    {
+                        identifier: "txt",
+                        name: "Text Selection",
+                        component: Input,
+                        initialValue: ""
+                    },
+                    {
+                        identifier: "num",
+                        name: "Number Selection",
+                        component: Number,
+                        initialValue: 10
+                    }
+                ],*/
+            }
+        },
         questionnaireItemsList() {
             const array = filter([...(this.questionnaireItems || [])], q => {
                 return (q.type == 'SINGLEOPTION'
@@ -439,8 +559,8 @@ export default {
 
                 var rule = {
                     type: type,
-                    id: entity.variable,
-                    label: entity.label
+                    identifier: entity.variable,
+                    name: entity.label
                         ? this.getDisplayTitle(entity.label)
                         : (entity.title ? this.getDisplayTitle(entity.title) : entity.variable),
                 }
@@ -484,14 +604,17 @@ export default {
             }
         },
         saveDisabled() {
+            console.log("transformQuery: ", this.transformQuery)
             return this.transformQuery === this.lastSavedQuery
         },
     },
 
     components: {
         InterviewFilter,
-        VueQueryBuilder,
+        QueryBuilder,
         QueryBuilderGroup,
+        QueryBuilderGroupOperator,
+        RuleSlot
     },
 }
 </script>
