@@ -35,7 +35,7 @@
 
         <ModalFrame ref="questionsExposedSelector" id="modalQuestionsExposedSelector"
             :title="$t('Interviews.DynamicFilter')">
-            <query-builder :config="config" v-model="queryExposedVariables">
+            <query-builder :config="config" v-model="queryExposedVariables" class="vue-query-builder">
 
                 <template #groupOperator="props">
                     <query-builder-group-operator :groupCtrl="props" :labels="labels"
@@ -45,19 +45,6 @@
                 <template #groupControl="props">
                     <query-builder-group :groupCtrl="props" :labels="labels" :query.sync="queryExposedVariables" />
                 </template>
-
-
-                <!--template #groupOperator="props">
-                    <div class="query-builder-group-slot__group-selection">
-                        Custom #groupOperator slot
-                        <select :value="props.currentOperator"
-                            @input="props.updateCurrentOperator($event.target.value)">
-                            <option disabled value>Select an operator</option>
-                            <option v-for="operator in props.operators" :key="operator.identifier"
-                                :value="operator.identifier" v-text="operator.name" />
-                        </select>
-                    </div>
-                </template-->
 
                 <template #rule="props">
                     <rule-slot :ruleCtrl="props" :rule="getRuleById(props.ruleIdentifier)" :labels="labels" />

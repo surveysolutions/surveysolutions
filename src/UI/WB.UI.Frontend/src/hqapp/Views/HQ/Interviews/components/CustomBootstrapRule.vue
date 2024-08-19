@@ -1,9 +1,4 @@
 <template>
-    <!--div class="rule-slot">
-        <span class="slot-text">SLOT #rule</span>
-        <component :is="rule.ruleComponent" :value="rule.ruleData" @input="rule.updateRuleData" />
-    </div-->
-    Rule: {{ rule.type }} {{ rule.component }}
     <div class="rule-slot vqb-rule card">
         <div class="form-inline">
             <label class="mr-5">
@@ -86,7 +81,7 @@
             </select>
 
             <!-- Remove rule button -->
-            <button type="button" class="close ml-auto" @click="remove" v-html="labels.removeRule">
+            <button type="button" class="close ml-auto" @click="ruleCtrl.remove" v-html="labels.removeRule">
             </button>
         </div>
     </div>
