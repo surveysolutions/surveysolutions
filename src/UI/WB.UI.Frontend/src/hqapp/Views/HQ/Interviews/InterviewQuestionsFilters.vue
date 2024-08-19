@@ -464,20 +464,15 @@ export default {
                         name: 'OR',
                         identifier: 'any',
                     },
-                    /*{
-                        name: 'OR NOT',
-                        identifier: 'OR_NOT',
-                    },
-                    {
-                        name: 'AND NOT',
-                        identifier: 'AND_NOT',
-                    },*/
-                    // ...
                 ],
                 colors: [
                     '8bc34a',
                     '00bcd4',
                     'ff5722',
+                    'ffff00',
+                    'ff00ff',
+                    '9900ff',
+                    '999900'
                 ],
             }
         },

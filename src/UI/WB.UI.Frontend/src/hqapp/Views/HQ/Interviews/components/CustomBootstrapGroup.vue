@@ -77,21 +77,6 @@ export default {
     padding: 15px;
 }
 
-.query-builder-group__group-children.query-builder-group__group-children--depth-1 .vqb-rule,
-.query-builder-group__group-children.query-builder-group__group-children--depth-1 .query-builder-group {
-    border-left: 2px solid #8bc34a;
-}
-
-.query-builder-group__group-children.query-builder-group__group-children--depth-2 .vqb-rule,
-.query-builder-group__group-children.query-builder-group__group-children--depth-2 .query-builder-group {
-    border-left: 2px solid #00bcd4;
-}
-
-.query-builder-group__group-children.query-builder-group__group-children--depth-3 .vqb-rule,
-.query-builder-group__group-children.query-builder-group__group-children--depth-3 .query-builder-group {
-    border-left: 2px solid #ff5722;
-}
-
 .query-builder-group__group-children .query-builder-child .query-builder-child__delete-child {
     opacity: 1;
     color: rgb(150, 150, 150);
