@@ -28,6 +28,8 @@ namespace WB.Infrastructure.Native.Workspaces
             "api",
             "apidocs",
             "graphql",
+            ".vite",
+            "@vite",
         };
         
         public static bool IsNotAllowedName(string name)

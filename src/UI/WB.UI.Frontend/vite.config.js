@@ -8,6 +8,8 @@ import cleanPlugin from 'vite-plugin-clean';
 import LocalizationPlugin from './tools/vite-plugin-localization'
 import inject from '@rollup/plugin-inject';
 import vitePluginRequire from "vite-plugin-require";
+import { sync } from 'rimraf';
+import fs from 'fs';
 
 const ViteFilemanager = require('filemanager-plugin').ViteFilemanager;
 
@@ -99,6 +101,8 @@ const fileTargets = [
     { source: join("dist", "css", "*.*"), destination: path.join(webTesterDist, "wwwroot", "css") },
     { source: join("dist", "js", "*.*"), destination: path.join(webTesterDist, "wwwroot", "js") },
     { source: join("dist", "locale", "webtester", "*.*"), destination: path.join(webTesterDist, "wwwroot", "locale", "webtester") },
+
+    { source: join("dist", ".vite"), destination: path.join(hqDist, "wwwroot") },
 ]
 
 
@@ -137,18 +141,31 @@ for (var attr in pages) {
 }
 
 // https://vitejs.dev/config/
-export default defineConfig(({ mode }) => {
+export default defineConfig(({ mode, command }) => {
 
     const isDevMode = mode === 'development';
     const isProdMode = !isDevMode
 
+    const base = command == 'serve' ? '/.vite/' : '/';
+
+    //const outDir = path.join(hqDist, "wwwroot");
+    //const outDir = path.join(hqDist, "dist");
+    const outDir = join("dist");
+    //const outDir = "dist";
+    /*const outDir = path.join(hqDist, "wwwroot");
+
+    if (command == 'serve' && mode != 'test') {
+        sync(outDir);
+        fs.mkdirSync(outDir);
+    }*/
+
     return {
+        base,
         css: {
             devSourcemap: isDevMode,
         },
         resolve: {
             alias: [
-
                 {
                     find: '@',
                     replacement: path.resolve(__dirname, 'src')
@@ -161,7 +178,6 @@ export default defineConfig(({ mode }) => {
                     find: '~',
                     replacement: path.resolve(__dirname, 'src')
                 },
-
                 {
                     find: 'vue',
                     replacement: 'vue/dist/vue.esm-bundler.js',
@@ -235,11 +251,22 @@ export default defineConfig(({ mode }) => {
             }),
             mpaPlugin({
                 pages: pages
-            })
+            }),
             //eslintPlugin()
         ],
+        server: {
+            host: 'localhost',
+            strictPort: true,
+            base: base,
+            port: 3001,
+            watch: {
+                //ignored: ['**/src/locale/**']
+            }
+        },
         build: {
             minify: isProdMode,
+            outDir,
+            manifest: isDevMode,
             rollupOptions: {
                 maxParallelFileOps: 1,
                 cache: false,
