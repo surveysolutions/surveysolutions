@@ -1016,7 +1016,7 @@ namespace WB.UI.Headquarters.Controllers
                 SubmitUrl = Url.Action("Start", "WebInterview"),
                 UseCaptcha = webInterviewConfig.UseCaptcha,
                 RecaptchaSiteKey = webInterviewConfig.UseCaptcha && captchaConfig.Value.CaptchaType == CaptchaProviderType.Recaptcha ? recaptchaSettings.Value.SiteKey : null,
-                HostedCaptchaHtml = webInterviewConfig.UseCaptcha && captchaConfig.Value.CaptchaType == CaptchaProviderType.Hosted ? serviceLocator.GetInstance<IHostedCaptcha>().Render<string>(null).Value : null,
+                HostedCaptchaHtml = webInterviewConfig.UseCaptcha && captchaConfig.Value.CaptchaType == CaptchaProviderType.Hosted ? serviceLocator.GetInstance<IHostedCaptcha>().Render().Value : null,
             };
 
             if (assignment == null)

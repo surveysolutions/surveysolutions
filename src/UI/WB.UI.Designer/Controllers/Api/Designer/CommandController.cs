@@ -164,7 +164,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             var commandType = "UpdateLookupTable";
             const string fileParameterName = "name=\"file\"";
 
-            if (!MultipartRequestHelper.IsMultipartContentType(Request.ContentType))
+            if (Request.ContentType == null || !MultipartRequestHelper.IsMultipartContentType(Request.ContentType))
             {
                 return this.Error((int)HttpStatusCode.UnsupportedMediaType, string.Empty);
             }

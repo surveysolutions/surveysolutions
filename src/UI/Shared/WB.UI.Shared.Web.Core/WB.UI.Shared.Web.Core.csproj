@@ -4,6 +4,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <RootNamespace>WB.UI.Shared.Web</RootNamespace>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
@@ -24,7 +25,8 @@
     <PackageReference Include="StackExchange.Exceptional.AspNetCore" Version="2.2.32" />
     <PackageReference Include="StackExchange.Exceptional.PostgreSql" Version="2.2.32" />
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
-      <PackageReference Include="Serilog.AspNetCore" Version="8.0.1" />      <PackageReference Include="System.Text.Json" Version="8.0.4" />
+      <PackageReference Include="Serilog.AspNetCore" Version="8.0.1" />
+      <PackageReference Include="System.Text.Json" Version="8.0.4" />
   </ItemGroup>
 
   <ItemGroup>

@@ -33,8 +33,8 @@ namespace WB.UI.Shared.Web.Services
             this.serviceProvider = serviceProvider;
         }
 
-        public async Task<string> RenderToStringAsync(string viewName, object model, string webRoot = null, 
-            string webAppRoot = null, RouteData routeData = null)
+        public async Task<string> RenderToStringAsync(string viewName, object model, string? webRoot = null, 
+            string? webAppRoot = null, RouteData? routeData = null)
         {
             using var scope = serviceProvider.CreateWorkspaceScope();
             var httpContext = new DefaultHttpContext
