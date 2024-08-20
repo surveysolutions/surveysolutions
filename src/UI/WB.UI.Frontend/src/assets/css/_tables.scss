@@ -572,6 +572,8 @@
     .dt-paging-button {
         padding: 6px 12px;
         cursor: pointer;
+        border: 1px solid transparent;
+        background-color: transparent;
 
         &.disabled,
         &.disabled:hover,
@@ -591,6 +593,8 @@
     &>.dt-paging-button {
         float: left;
         padding: 5px 12px;
+        border: 1px solid transparent;
+        background-color: transparent;
     }
 }
 
