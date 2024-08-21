@@ -1,10 +1,10 @@
 import { defineConfig } from 'vite';
 import path from 'path';
 import vue from '@vitejs/plugin-vue'
-//import envCompatible from 'vite-plugin-env-compatible';
-//import mpaPlugin from 'vite-plugin-mpa-plus'
+import envCompatible from 'vite-plugin-env-compatible';
+import mpaPlugin from 'vite-plugin-mpa-plus'
 //import { createHtmlPlugin } from 'vite-plugin-html';
-//import { viteCommonjs } from '@originjs/vite-plugin-commonjs';
+import { viteCommonjs } from '@originjs/vite-plugin-commonjs';
 //import cleanPlugin from 'vite-plugin-clean';
 import LocalizationPlugin from './tools/vite-plugin-localization'
 import inject from '@rollup/plugin-inject';
@@ -164,10 +164,10 @@ export default defineConfig(({ mode, command }) => {
     //const outDir = "dist";
     //const outDir = path.join(hqDist, "wwwroot");
 
-    if (command == 'serve' && mode != 'test') {
-        rimrafSync(outDir);
-        fs.mkdirSync(outDir);
-    }
+    /*if (command == 'serve' && mode != 'test') {
+         rimrafSync(outDir);
+         fs.mkdirSync(outDir);
+     }*/
 
     return {
         base,
@@ -192,14 +192,14 @@ export default defineConfig(({ mode, command }) => {
                     find: 'vue',
                     replacement: 'vue/dist/vue.esm-bundler.js',
                 },
-                {
+                /*{
                     find: 'jquery',
                     replacement: 'jquery/dist/jquery.min.js',
                 },
                 {
                     find: 'jquery-ui',
                     replacement: 'jquery-ui-dist/jquery-ui.js',
-                },
+                },*/
             ],
             extensions: [
                 '.mjs',
@@ -282,9 +282,9 @@ export default defineConfig(({ mode, command }) => {
             })*/
             //eslintPlugin()
         ],
-        define: {
+        /*define: {
             global: {},
-        },
+        },*/
         server: {
             host: 'localhost',
             strictPort: true,
@@ -330,17 +330,6 @@ export default defineConfig(({ mode, command }) => {
                         if (isDevMode)
                             return 'js/[name].js'
                         return 'js/[name]-[hash].js'
-                    },
-                    manualChunks: (id) => {
-                        if (id.includes('node_modules')) {
-                            return 'vendor';
-                        }
-
-                        /*if (isDevMode) {
-                            var filename = id.replace(/^.*[\\\/]/, '')
-                            if (!filename.endsWith('.css'))
-                              return filename;
-                        }*/
                     },
                 },
             },
