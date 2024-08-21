@@ -12,7 +12,6 @@ import config from '~/shared/config'
 //TODO: MIGRATION. Remove after migration to mande
 import axios from 'axios'
 
-//import Vue from 'vue'
 export default class AssignmentsComponent {
     constructor(rootStore) {
         this.rootStore = rootStore
@@ -124,12 +123,6 @@ export default class AssignmentsComponent {
                 ],
             }]
     }
-
-    // initialize() {
-    //     const VeeValidate = require('vee-validate')
-    //     Vue.use(VeeValidate)
-    // }
-    //TODO: MIGRATION
 
     get modules() {
         return localStore

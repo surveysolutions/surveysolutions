@@ -26,8 +26,7 @@
             <div class="col-md-6 col-sm-6 col-xs-12 right-column">
                 <div class="centered-box-table">
                     <div class="centered-box-table-cell">
-                        <Form id="import-log-in" class="log-in" autocomplete="off" @submit.prevent="trySignIn"
-                            novalidate>
+                        <Form id="import-log-in" class="log-in" autocomplete="off" @submit="trySignIn">
                             <div class="alert alert-danger" v-if="invalidCredentials">
                                 <p>
                                     {{ $t('LoginToDesigner.InvalidCredentials') }}
@@ -44,6 +43,7 @@
                                 <Field type="text" name="UserName" class="form-control" autofocus="autofocus"
                                     v-model="userName" rules="required"
                                     :placeholder="this.$t('LoginToDesigner.LoginWatermark')" />
+                                <ErrorMessage name="UserName"></ErrorMessage>
                             </div>
                             <!--TODO:MIGRATION-->
                             <!-- :class="{ 'has-error': errors.has('Password') }" -->
@@ -51,6 +51,7 @@
                                 <Field type="password" id="Password" name="Password" class="form-control"
                                     v-model="password" rules="required"
                                     :placeholder="this.$t('FieldsAndValidations.PasswordFieldName')" />
+                                <ErrorMessage name="Password"></ErrorMessage>
                             </div>
                             <div class="form-group">
                                 <input id="ShowPassword" type="checkbox"

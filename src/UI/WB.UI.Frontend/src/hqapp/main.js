@@ -55,6 +55,21 @@ vue.use(PortalVue)
 import { Popover } from 'uiv'
 vue.component('popover', Popover)
 
+//register validations globaly
+//add more rules if required 
+//https://vee-validate.logaretm.com/v4/guide/global-validators
+import { defineRule } from 'vee-validate'
+import { required, email, min } from '@vee-validate/rules'
+defineRule('required', required)
+defineRule('email', email)
+defineRule('integer', integer)
+defineRule('max_value', max_value)
+defineRule('min', min)
+defineRule('min_value', min_value)
+defineRule('max', max)
+defineRule('numeric', numeric)
+
+
 import box from '@/shared/modal'
 import 'flatpickr/dist/flatpickr.css'
 import 'toastr/build/toastr.css'

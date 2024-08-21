@@ -21,8 +21,8 @@
                 </FilterBlock>
                 <FilterBlock :title="$t('Pages.Filters_Assignment')">
                     <div class="input-group">
-                        <input class="form-control with-clear-btn number" :placeholder="$t('Common.AllAssignments')"
-                            type="number" v-model.number="assignmentId" v-validate="{ numeric: true }" />
+                        <Field class="form-control with-clear-btn number" :placeholder="$t('Common.AllAssignments')"
+                            type="number" v-model.number="assignmentId" :rules="{ numeric: true }" />
                         <div class="input-group-btn" @click="clearAssignmentFilter">
                             <div class="btn btn-default">
                                 <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
@@ -198,7 +198,7 @@
                 <div class="form-group">
                     <label class="control-label" for="newResponsibleId">{{
                         $t('Assignments.SelectResponsible')
-                        }}</label>
+                    }}</label>
                     <Typeahead control-id="newResponsibleId" :placeholder="$t('Common.Responsible')"
                         :value="newResponsibleId" :ajax-params="{}" @selected="newResponsibleSelected"
                         :fetch-url="model.responsible"></Typeahead>

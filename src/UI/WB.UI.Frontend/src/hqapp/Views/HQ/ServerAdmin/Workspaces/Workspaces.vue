@@ -23,7 +23,7 @@
                         {{ $t("Workspaces.Name") }}
                     </label>
                     <Field type="text" class="form-control" v-model.trim="newWorkspaceName" name="workspaceName"
-                        v-validate="validateWorkspaceName" :data-vv-as="$t('Workspaces.Name')" autocomplete="off"
+                        :rules="validateWorkspaceName" :data-vv-as="$t('Workspaces.Name')" autocomplete="off"
                         @keyup.enter="createWorkspace" id="newWorkspaceName" />
 
                     <p class="help-block" v-if="!errors.workspaceName">
@@ -39,9 +39,8 @@
                         {{ $t("Workspaces.DisplayName") }}
                     </label>
                     <Field type="text" class="form-control" v-model.trim="editedDisplayName" name="workspaceDisplayName"
-                        v-validate="validateWorkspaceDisplayName" maxlength="300"
-                        :data-vv-as="$t('Workspaces.DisplayName')" autocomplete="off" @keyup.enter="createWorkspace"
-                        id="newDescription" />
+                        :rules="validateWorkspaceDisplayName" maxlength="300" :data-vv-as="$t('Workspaces.DisplayName')"
+                        autocomplete="off" @keyup.enter="createWorkspace" id="newDescription" />
                     <p class="help-block" v-if="!errors.workspaceDisplayName">
                         {{ $t('Workspaces.DisplayNameHelpText') }}
                     </p>
@@ -70,8 +69,8 @@
                         {{ $t("Workspaces.DisplayName") }}
                     </label>
                     <Field type="text" class="form-control" v-model.trim="editedDisplayName" name="workspaceDisplayName"
-                        :data-vv-as="$t('Workspaces.DisplayName')" v-validate="validateWorkspaceDisplayName"
-                        maxlength="300" autocomplete="off" @keyup.enter="updateWorkspace" id="editDescription" />
+                        :data-vv-as="$t('Workspaces.DisplayName')" :rules="validateWorkspaceDisplayName" maxlength="300"
+                        autocomplete="off" @keyup.enter="updateWorkspace" id="editDescription" />
                     <ErrorMessage name="workspaceDisplayName" as="span" />
                 </div>
             </Form>

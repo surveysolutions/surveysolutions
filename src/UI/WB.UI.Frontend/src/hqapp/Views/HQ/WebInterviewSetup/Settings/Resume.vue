@@ -1,6 +1,6 @@
 <template>
     <div role="tabpanel" class="tab-pane page-preview-block" id="resume">
-        <form class="" :data-vv-scope="'resumePage'" v-on:submit.prevent="dummy">
+        <Form class="" :data-vv-scope="'resumePage'" @submit="dummy">
             <div class="d-flex f-row">
                 <div class="costomization-block">
                     <div class="row-element mb-30">
@@ -10,16 +10,16 @@
                         <div class="form-group" :class="{ 'has-error': errors.has('resumePage.resumeWelcome') }">
                             <div class="field" :class="{ 'answered': webInterviewPageMessages['resumeWelcome'].text }">
                                 <textarea-autosize v-model="webInterviewPageMessages['resumeWelcome'].text"
-                                    v-validate="'required'" data-vv-name="resumeWelcome" ref="resumeWelcome"
-                                    :min-height="77" maxlength="200" class="form-control js-elasticArea font-bold"
+                                    :rules="required" data-vv-name="resumeWelcome" ref="resumeWelcome" :min-height="77"
+                                    maxlength="200" class="form-control js-elasticArea font-bold"
                                     placeholder="Please enter the main text">
                                 </textarea-autosize>
                                 <button type="button" @click="webInterviewPageMessages['resumeWelcome'].text = ''"
                                     class="btn btn-link btn-clear">
                                     <span></span>
                                 </button>
-                                <span class="help-block"
-                                    v-if="errors.first('resumePage.resumeWelcome')">{{ $t('WebInterviewSettings.FieldRequired') }}</span>
+                                <span class="help-block" v-if="errors.first('resumePage.resumeWelcome')">{{
+                                    $t('WebInterviewSettings.FieldRequired') }}</span>
                             </div>
                         </div>
                     </div>
@@ -27,7 +27,7 @@
                         <div class="h5">
                             {{ $t('WebInterviewSettings.Description') }}
                         </div>
-                        <md-editor ref="resumeInvitation" v-validate="" data-vv-name="resumeInvitation"
+                        <md-editor ref="resumeInvitation" data-vv-name="resumeInvitation"
                             v-model="webInterviewPageMessages['resumeInvitation'].text">
                         </md-editor>
 
@@ -39,15 +39,15 @@
                         </div>
                         <div class="form-group" :class="{ 'has-error': errors.has('resumePage.resumeButton') }">
                             <div class="field" :class="{ 'answered': webInterviewPageMessages['resumeButton'].text }">
-                                <input type="text" v-model="webInterviewPageMessages['resumeButton'].text"
-                                    v-validate="'required'" data-vv-name="resumeButton" ref="resumeButton" maxlength="200"
+                                <Field type="text" v-model="webInterviewPageMessages['resumeButton'].text"
+                                    :rules="required" data-vv-name="resumeButton" ref="resumeButton" maxlength="200"
                                     class="form-control" />
                                 <button type="button" @click="webInterviewPageMessages['resumeButton'].text = ''"
                                     class="btn btn-link btn-clear">
                                     <span></span>
                                 </button>
-                                <span class="help-block"
-                                    v-if="errors.first('resumePage.resumeButton')">{{ $t('WebInterviewSettings.FieldRequired') }}</span>
+                                <span class="help-block" v-if="errors.first('resumePage.resumeButton')">{{
+                                    $t('WebInterviewSettings.FieldRequired') }}</span>
                             </div>
                         </div>
                     </div>
@@ -92,14 +92,20 @@
                     </div>
                 </div>
             </div>
-        </form>
+        </Form>
     </div>
 </template>
 
 <script>
 import settings from './settingsMixin'
+import { Form, Field, ErrorMessage } from 'vee-validate'
 
 export default {
+    components: {
+        Form,
+        Field,
+        ErrorMessage,
+    },
     mixins: [settings],
     mounted() {
         this.$validator.reset('resumePage')

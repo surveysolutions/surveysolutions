@@ -62,6 +62,8 @@ const store = createStore({
 
 const router = createRouter(store)
 
+vue.use(store)
+
 //sync(store, router)
 //TODO: MIGRATION
 

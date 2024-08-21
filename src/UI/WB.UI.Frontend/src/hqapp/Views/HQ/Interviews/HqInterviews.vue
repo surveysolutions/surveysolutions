@@ -108,7 +108,7 @@
                         {{ $t('Common.ChangeToCAWI') }}
                     </button>
                     <button class="btn btn-link error-text" v-if="selectedRows.length && !config.isSupervisor"
-                        :disabled="itemsToDelete.length == 0" @click="deleteInterview">
+                        :disabled="getFilteredToDelete.length == 0" @click="deleteInterview">
                         {{ $t('Common.Delete') }}
                     </button>
                 </div>
@@ -179,7 +179,7 @@
         <ModalFrame ref="deleteModal" :title="$t('Common.Delete')">
             <div class="action-container">
                 <p v-html="$t('Interviews.DeleteConfirmMessageHQ', {
-                    count: this.itemsToDelete.length,
+                    count: this.getFilteredToDelete().length,
                     status1: 'Supervisor assigned',
                     status2: 'Interviewer assigned',
                 })
@@ -188,7 +188,7 @@
             <template v-slot:actions>
                 <div>
                     <button type="button" class="btn btn-danger" role="confirm" @click="deleteInterviews"
-                        :disabled="itemsToDelete.length == 0">
+                        :disabled="getFilteredToDelete().length == 0">
                         {{ $t('Common.Delete') }}
                     </button>
                     <button type="button" class="btn btn-link" data-dismiss="modal" role="cancel">
@@ -244,7 +244,7 @@
                 <div>
                     <label for="txtStatusApproveComment">{{
                         $t('Pages.ApproveRejectPartialView_CommentLabel')
-                        }}:</label>
+                    }}:</label>
                     <textarea class="form-control" rows="10" maxlength="200" name="txtStatusChangeComment"
                         id="txtStatusApproveComment" v-model="statusChangeComment"></textarea>
                 </div>
@@ -297,7 +297,7 @@
                 <div>
                     <label for="txtStatusChangeComment">{{
                         $t('Pages.ApproveRejectPartialView_CommentLabel')
-                        }}
+                    }}
                         :</label>
                     <textarea class="form-control" rows="10" maxlength="200" id="txtStatusChangeComment"
                         v-model="statusChangeComment"></textarea>
@@ -412,8 +412,6 @@ import InterviewFilter from './InterviewQuestionsFilters'
 import gql from 'graphql-tag'
 import * as toastr from 'toastr'
 import ChangeToCapi from './ChangeModeModal.vue'
-
-import { ref } from 'vue'
 
 import _sanitizeHtml from 'sanitize-html'
 const sanitizeHtml = (text) =>
@@ -1078,10 +1076,6 @@ export default {
 
             return query
         },
-        itemsToDelete() {
-            var items = ref(this.getFilteredToDelete())
-            return items
-        },
     },
 
     methods: {
@@ -1645,7 +1639,7 @@ export default {
             )
 
             if (statusHistoryList.data.length != 0) {
-                $('#statustable').dataTable({
+                $('#statustable').DataTable({
                     paging: false,
                     ordering: false,
                     info: false,
@@ -1690,11 +1684,11 @@ export default {
                     ],
                 })
 
-                var table = $('#statustable').dataTable()
+                var table = $('#statustable').DataTable()
 
-                table.fnClearTable()
-                table.fnAddData(statusHistoryList.data)
-                table.fnDraw()
+                table.clear()
+                table.rows.add(statusHistoryList.data)
+                table.draw()
 
                 self.$refs.statusHistory.modal({ keyboard: false })
             }

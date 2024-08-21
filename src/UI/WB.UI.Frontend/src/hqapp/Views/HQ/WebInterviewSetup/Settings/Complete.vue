@@ -1,6 +1,6 @@
 <template>
     <div role="tabpanel" class="tab-pane page-preview-block" id="complete">
-        <form class="" :data-vv-scope="'completePage'" v-on:submit.prevent="dummy">
+        <Form class="" :data-vv-scope="'completePage'" @submit="dummy">
             <div class="d-flex f-row">
                 <div class="costomization-block">
                     <div class="row-element mb-30">
@@ -11,7 +11,7 @@
                             <div class="field"
                                 :class="{ 'answered': webInterviewPageMessages['completeNoteToSupervisor'].text }">
                                 <textarea-autosize v-model="webInterviewPageMessages['completeNoteToSupervisor'].text"
-                                    v-validate="'required'" data-vv-name="completeNoteToSupervisor"
+                                    :rules="required" data-vv-name="completeNoteToSupervisor"
                                     ref="completeNoteToSupervisor" :min-height="77" maxlength="200"
                                     class="form-control js-elasticArea font-bold">
                                 </textarea-autosize>
@@ -31,9 +31,9 @@
                         </div>
                         <div class="form-group" :class="{ 'has-error': errors.has('completePage.completeButton') }">
                             <div class="field" :class="{ 'answered': webInterviewPageMessages['completeButton'].text }">
-                                <input type="text" v-model="webInterviewPageMessages['completeButton'].text"
-                                    v-validate="'required'" data-vv-name="completeButton" ref="completeButton"
-                                    maxlength="200" class="form-control" />
+                                <Field type="text" v-model="webInterviewPageMessages['completeButton'].text"
+                                    :rules="required" data-vv-name="completeButton" ref="completeButton" maxlength="200"
+                                    class="form-control" />
                                 <button type="button" @click="webInterviewPageMessages['completeButton'].text = ''"
                                     class="btn btn-link btn-clear">
                                     <span></span>
@@ -69,7 +69,8 @@
                                     <div class="h2 info-block gray-uppercase">
                                         {{ previewText(webInterviewPageMessages['completeNoteToSupervisor'].text) }}
                                     </div>
-                                    <input type="text" :placeholder="$t('WebInterviewUI.TextEnter')" class="form-control" />
+                                    <input type="text" :placeholder="$t('WebInterviewUI.TextEnter')"
+                                        class="form-control" />
                                 </div>
                                 <div class="row-element mb-40">
                                     <a href="javascript:void(0);" class="btn btn-success btn-lg">
@@ -83,14 +84,20 @@
                     </div>
                 </div>
             </div>
-        </form>
+        </Form>
     </div>
 </template>
 
 <script>
 import settings from './settingsMixin'
+import { Form, Field, ErrorMessage } from 'vee-validate'
 
 export default {
+    components: {
+        Form,
+        Field,
+        ErrorMessage,
+    },
     mixins: [settings],
     mounted() {
         this.$validator.reset('completePage')

@@ -27,7 +27,7 @@
                             <div class="options-group">
                                 <div class="form-group">
                                     <div class="field" :class="{ answered: newResponsibleId != null }">
-                                        <Typeahead v-validate="responsibleValidations" control-id="newResponsibleId"
+                                        <Typeahead :rules="responsibleValidations" control-id="newResponsibleId"
                                             :placeholder="$t('Common.Responsible')" :value="newResponsibleId"
                                             :ajax-params="{}" @selected="newResponsibleSelected"
                                             :fetch-url="config.responsiblesUrl"></Typeahead>
@@ -52,10 +52,10 @@
                             <div class="options-group">
                                 <div class="form-group">
                                     <div class="field answered">
-                                        <input v-model="sizeQuestion.answer"
-                                            :title="this.$t('Assignments.ExpectedExplanation')"
-                                            v-validate="sizeValidations" name="size" maxlength="5" type="text"
-                                            autocomplete="off" inputmode="numeric" class="field-to-fill">
+                                        <Field v-model="sizeQuestion.answer"
+                                            :title="this.$t('Assignments.ExpectedExplanation')" :rules="sizeValidations"
+                                            name="size" maxlength="5" type="text" autocomplete="off" inputmode="numeric"
+                                            class="field-to-fill" />
                                     </div>
                                 </div>
                             </div>
@@ -96,10 +96,10 @@
                             <div class="options-group">
                                 <div class="form-group">
                                     <div class="field answered">
-                                        <input v-model="emailQuestion.answer"
+                                        <Field v-model="emailQuestion.answer"
                                             :title="this.$t('Assignments.EmailExplanation')"
-                                            :placeholder="$t('Assignments.EnterEmail')" v-validate="'email'"
-                                            name="email" type="text" autocomplete="off" class="field-to-fill">
+                                            :placeholder="$t('Assignments.EnterEmail')" :rules="email" name="email"
+                                            type="text" autocomplete="off" class="field-to-fill" />
                                     </div>
                                 </div>
                             </div>
@@ -121,11 +121,11 @@
                             <div class="options-group">
                                 <div class="form-group">
                                     <div class="field answered">
-                                        <input v-model="passwordQuestion.answer"
+                                        <Field v-model="passwordQuestion.answer"
                                             :placeholder="$t('Assignments.EnterPassword')"
                                             :title="this.$t('Assignments.PasswordExplanation')"
-                                            v-validate="passwordValidations" name="password" type="text"
-                                            autocomplete="off" class="field-to-fill">
+                                            :rules="passwordValidations" name="password" type="text" autocomplete="off"
+                                            class="field-to-fill" />
                                     </div>
                                 </div>
                             </div>

@@ -34,7 +34,7 @@
                                                 :placeholder="$t('Common.AllQuestionnaires')"
                                                 :fetch-url="questionnaireFetchUrl" :selectedKey="pageState.id"
                                                 data-vv-name="questionnaireId" data-vv-as="questionnaire"
-                                                v-validate="'required'" v-on:selected="questionnaireSelected" />
+                                                :rules="required" v-on:selected="questionnaireSelected" />
                                             <span class="help-block">
                                                 {{ errors.first('questionnaireId') }}</span>
                                         </div>
@@ -47,7 +47,7 @@
                                             <Typeahead noClear control-id="questionnaireVersion"
                                                 ref="questionnaireVersionControl" data-vv-name="questionnaireVersion"
                                                 data-vv-as="questionnaire version" :selectedKey="pageState.version"
-                                                v-validate="'required'" :value="questionnaireVersion"
+                                                :rules="required" :value="questionnaireVersion"
                                                 :fetch-url="questionnaireVersionFetchUrl"
                                                 v-on:selected="questionnaireVersionSelected"
                                                 :disabled="questionnaireVersionFetchUrl == null" :selectFirst="true" />

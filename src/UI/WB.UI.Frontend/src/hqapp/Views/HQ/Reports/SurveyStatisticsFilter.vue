@@ -42,7 +42,7 @@
                         <label for="min">
                             {{ $t("Reports.Min") }}
                         </label>
-                        <input type="number" class="form-control input-sm" name="min" :placeholder="$t('Reports.Min')"
+                        <Filed type="number" class="form-control input-sm" name="min" :placeholder="$t('Reports.Min')"
                             @input="inputChange" v-validate.initial="{ max_value: max || Number.MAX_VALUE }"
                             :value="min" />
                     </div>

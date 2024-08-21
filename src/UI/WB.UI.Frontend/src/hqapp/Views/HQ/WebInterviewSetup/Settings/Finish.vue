@@ -1,6 +1,6 @@
 <template>
     <div role="tabpanel" class="tab-pane page-preview-block" id="finish">
-        <form class="" :data-vv-scope="'finishPage'" v-on:submit.prevent="dummy">
+        <Form class="" :data-vv-scope="'finishPage'" @submit="dummy">
             <div class="d-flex f-row">
                 <div class="costomization-block">
                     <div class="row-element mb-30">
@@ -8,9 +8,10 @@
                             {{ $t('WebInterviewSettings.Title') }}
                         </div>
                         <div class="form-group" :class="{ 'has-error': errors.has('finishPage.webSurveyHeader') }">
-                            <div class="field" :class="{ 'answered': webInterviewPageMessages['webSurveyHeader'].text }">
+                            <div class="field"
+                                :class="{ 'answered': webInterviewPageMessages['webSurveyHeader'].text }">
                                 <textarea-autosize v-model="webInterviewPageMessages['webSurveyHeader'].text"
-                                    v-validate="'required'" data-vv-name="webSurveyHeader" ref="webSurveyHeader"
+                                    :rules="required" data-vv-name="webSurveyHeader" ref="webSurveyHeader"
                                     :min-height="77" maxlength="200" class="form-control js-elasticArea font-bold"
                                     placeholder="Please enter the main text">
                                 </textarea-autosize>
@@ -18,8 +19,8 @@
                                     class="btn btn-link btn-clear">
                                     <span></span>
                                 </button>
-                                <span class="help-block"
-                                    v-if="errors.first('finishPage.webSurveyHeader')">{{ $t('WebInterviewSettings.FieldRequired') }}</span>
+                                <span class="help-block" v-if="errors.first('finishPage.webSurveyHeader')">{{
+                                    $t('WebInterviewSettings.FieldRequired') }}</span>
                             </div>
                         </div>
                     </div>
@@ -27,7 +28,7 @@
                         <div class="h5">
                             {{ $t('WebInterviewSettings.Description') }}
                         </div>
-                        <md-editor ref="finishInterview" v-validate="" data-vv-name="finishInterview"
+                        <md-editor ref="finishInterview" data-vv-name="finishInterview"
                             v-model="webInterviewPageMessages['finishInterview'].text">
                         </md-editor>
 
@@ -66,14 +67,20 @@
                     </div>
                 </div>
             </div>
-        </form>
+        </Form>
     </div>
 </template>
 <script>
 
 import settings from './settingsMixin'
+import { Form, Field, ErrorMessage } from 'vee-validate'
 
 export default {
+    components: {
+        Form,
+        Field,
+        ErrorMessage,
+    },
     mixins: [settings],
     mounted() {
         this.$validator.reset('finishPage')

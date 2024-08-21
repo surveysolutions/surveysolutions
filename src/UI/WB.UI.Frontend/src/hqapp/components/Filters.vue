@@ -6,7 +6,7 @@
             <span class="glyphicon glyphicon-tasks" aria-hidden="true"></span>
         </div>
         <div class="filters-container">
-            <h4>{{ title }}</h4>
+            <h4>{{ titleText }}</h4>
             <slot></slot>
         </div>
         <slot name="additional">
@@ -17,9 +17,12 @@
 <script>
 export default {
     props: {
-        //title: { type: String, default: () => this.$t('Pages.FilterTitle') },
-        //TODO:MIGRATION
-        title: { type: String, default: () => 'Pages.FilterTitle' },
+        title: { type: String, default: null },
     },
+    computed: {
+        titleText() {
+            return this.title || this.$t('Pages.FilterTitle')
+        }
+    }
 }
 </script>
