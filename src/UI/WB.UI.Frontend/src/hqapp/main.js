@@ -59,7 +59,7 @@ vue.component('popover', Popover)
 //add more rules if required 
 //https://vee-validate.logaretm.com/v4/guide/global-validators
 import { defineRule } from 'vee-validate'
-import { required, email, min } from '@vee-validate/rules'
+import { required, email, integer, max_value, min, min_value, max, numeric } from '@vee-validate/rules'
 defineRule('required', required)
 defineRule('email', email)
 defineRule('integer', integer)
