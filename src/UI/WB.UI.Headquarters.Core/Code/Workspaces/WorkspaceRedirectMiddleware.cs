@@ -127,6 +127,8 @@ namespace WB.UI.Headquarters.Code.Workspaces
             "/js",
             "/css",
             "/fonts",
+            "/locale",
+            "/img",
         };
     }
 }

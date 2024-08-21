@@ -33,6 +33,8 @@ namespace WB.Infrastructure.Native.Workspaces
             "js",
             "css",
             "fonts",
+            "locale",
+            "img",
         };
         
         public static bool IsNotAllowedName(string name)

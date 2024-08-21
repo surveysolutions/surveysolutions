@@ -89,21 +89,27 @@ const pages = {
     }
 };
 
-const fileTargets = [
+const resourcesTargets = [
     { source: join(".resources", "**", "*.js"), destination: join("dist", "locale"), isFlat: false },
+    { source: join("dist", "locale", "webinterview", "*.*"), destination: path.join(hqDist, "wwwroot", "locale", "webinterview") },
+    { source: join("dist", "locale", "webtester", "*.*"), destination: path.join(webTesterDist, "wwwroot", "locale", "webtester") },
+]
+
+const fileTargets = [
+    //{ source: join(".resources", "**", "*.js"), destination: join("dist", "locale"), isFlat: false },
 
     { source: join("dist", "img", "**", "*.*"), destination: path.join(hqDist, "wwwroot", "img"), isFlat: false },
     { source: join("dist", "fonts", "**", "*.*"), destination: path.join(hqDist, "wwwroot", "fonts") },
     { source: join("dist", "css", "*.*"), destination: path.join(hqDist, "wwwroot", "css") },
     { source: join("dist", "js", "*.*"), destination: path.join(hqDist, "wwwroot", "js") },
     { source: join("dist", "locale", "hq", "*.*"), destination: path.join(hqDist, "wwwroot", "locale", "hq") },
-    { source: join("dist", "locale", "webinterview", "*.*"), destination: path.join(hqDist, "wwwroot", "locale", "webinterview") },
+    //{ source: join("dist", "locale", "webinterview", "*.*"), destination: path.join(hqDist, "wwwroot", "locale", "webinterview") },
 
     { source: join("dist", "img", "**", "*.*"), destination: path.join(webTesterDist, "wwwroot", "img"), isFlat: false },
     { source: join("dist", "fonts", "*.*"), destination: path.join(webTesterDist, "wwwroot", "fonts") },
     { source: join("dist", "css", "*.*"), destination: path.join(webTesterDist, "wwwroot", "css") },
     { source: join("dist", "js", "*.*"), destination: path.join(webTesterDist, "wwwroot", "js") },
-    { source: join("dist", "locale", "webtester", "*.*"), destination: path.join(webTesterDist, "wwwroot", "locale", "webtester") },
+    //{ source: join("dist", "locale", "webtester", "*.*"), destination: path.join(webTesterDist, "wwwroot", "locale", "webtester") },
 
     //{ source: join("dist", ".vite"), destination: path.join(hqDist, "wwwroot") },
 ]
@@ -253,13 +259,13 @@ export default defineConfig(({ mode, command }) => {
                             del: {
                                 items: ['./dist']
                             },
-                            copy: { items: pagesSources.concat({ source: join(".resources", "**", "*.js"), destination: join("dist", "locale"), isFlat: false }) },
+                            copy: { items: pagesSources },
                         }
                     },
                     {
-                        hookName: 'writeBundle',
+                        hookName: 'closeBundle',
                         commands: {
-                            copy: { items: pagesTargets },
+                            copy: { items: pagesTargets.concat(resourcesTargets) },
                         }
                     },
                     /*{
