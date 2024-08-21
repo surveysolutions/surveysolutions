@@ -1,17 +1,18 @@
 import { defineConfig } from 'vite';
 import path from 'path';
 import vue from '@vitejs/plugin-vue'
-import envCompatible from 'vite-plugin-env-compatible';
-import mpaPlugin from 'vite-plugin-mpa-plus'
-import { viteCommonjs } from '@originjs/vite-plugin-commonjs';
-import cleanPlugin from 'vite-plugin-clean';
+//import envCompatible from 'vite-plugin-env-compatible';
+//import mpaPlugin from 'vite-plugin-mpa-plus'
+//import { createHtmlPlugin } from 'vite-plugin-html';
+//import { viteCommonjs } from '@originjs/vite-plugin-commonjs';
+//import cleanPlugin from 'vite-plugin-clean';
 import LocalizationPlugin from './tools/vite-plugin-localization'
 import inject from '@rollup/plugin-inject';
-import vitePluginRequire from "vite-plugin-require";
-import { sync } from 'rimraf';
+//import vitePluginRequire from "vite-plugin-require";
+import { rimrafSync } from 'rimraf';
 import fs from 'fs';
 
-const ViteFilemanager = require('filemanager-plugin').ViteFilemanager;
+import { ViteFilemanager } from 'filemanager-plugin';
 
 const baseDir = path.relative(__dirname, "./");
 const join = path.join.bind(path, baseDir);
@@ -81,6 +82,7 @@ const pages = {
 
     empty_layout: {
         entry: "src/hqapp/main.js",
+        //entry: path.join("src", "hqapp", "main.js"),
         filename: path.join(hqDist, "Views", "Shared", "_EmptyLayout.cshtml"),
         template: path.join(hqFolder, "Views", "Shared", "_EmptyLayout.Template.cshtml")
     }
@@ -160,12 +162,12 @@ export default defineConfig(({ mode, command }) => {
     //const outDir = path.join(hqDist, "dist");
     const outDir = join("dist");
     //const outDir = "dist";
-    /*const outDir = path.join(hqDist, "wwwroot");
+    //const outDir = path.join(hqDist, "wwwroot");
 
     if (command == 'serve' && mode != 'test') {
-        sync(outDir);
+        rimrafSync(outDir);
         fs.mkdirSync(outDir);
-    }*/
+    }
 
     return {
         base,
@@ -189,6 +191,14 @@ export default defineConfig(({ mode, command }) => {
                 {
                     find: 'vue',
                     replacement: 'vue/dist/vue.esm-bundler.js',
+                },
+                {
+                    find: 'jquery',
+                    replacement: 'jquery/dist/jquery.min.js',
+                },
+                {
+                    find: 'jquery-ui',
+                    replacement: 'jquery-ui-dist/jquery-ui.js',
                 },
             ],
             extensions: [
@@ -221,12 +231,12 @@ export default defineConfig(({ mode, command }) => {
                         }
                     }
                 }),
-            vitePluginRequire(),
-            viteCommonjs(),
-            envCompatible(),
-            cleanPlugin({
-                targetFiles: fileTargets.map(target => target.destination)
-            }),
+            //vitePluginRequire(),
+            //viteCommonjs(),
+            //envCompatible(),
+            //cleanPlugin({
+            //    targetFiles: fileTargets.map(target => target.destination)
+            //}),
             ViteFilemanager({
                 customHooks: [
                     {
@@ -243,7 +253,13 @@ export default defineConfig(({ mode, command }) => {
                         commands: {
                             copy: { items: pagesTargets.concat(fileTargets) },
                         }
-                    }
+                    },
+                    /*{
+                        hookName: 'handleHotUpdate',
+                        commands: {
+                            copy: { items: pagesTargets.concat(fileTargets) },
+                        }
+                    }*/
                 ],
 
                 options: {
