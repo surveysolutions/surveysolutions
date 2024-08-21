@@ -5,7 +5,7 @@ namespace WB.UI.Shared.Web.Extensions
 {
     public static class NameValueCollectionExtensions
     {
-        public static string GetString(this NameValueCollection collection, string key, string @default = null)
+        public static string? GetString(this NameValueCollection collection, string key, string? @default = null)
         {
             return collection[key] ?? @default;
         }
@@ -17,7 +17,7 @@ namespace WB.UI.Shared.Web.Extensions
 
         public static int GetInt(this NameValueCollection collection, string key, int @default)
         {
-            return collection.GetString(key).ToIntOrDefault(@default);
+            return collection.GetString(key)?.ToIntOrDefault(@default) ?? @default;
         }
     }
 

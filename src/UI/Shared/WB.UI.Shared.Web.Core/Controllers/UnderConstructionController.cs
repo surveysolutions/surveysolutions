@@ -19,9 +19,9 @@ namespace WB.UI.Shared.Web.Controllers
 
         public class UnderConstructionModel
         {
-            public string Title { get; set; }
-            public string MainMessage { get; set; }
-            public string SubMessage { get; set; }
+            public string? Title { get; set; }
+            public string? MainMessage { get; set; }
+            public string? SubMessage { get; set; }
         }
         
         [AllowAnonymous]

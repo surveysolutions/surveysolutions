@@ -124,7 +124,7 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
                             Input.RememberMe,
                             lockoutOnFailure: false);
 
-                        if (result.Succeeded)
+                        if (result.Succeeded && !string.IsNullOrEmpty(Input.Email))
                         {
                             this.captchaService.ResetFailedLogin(Input.Email);
                         }
@@ -147,7 +147,9 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
                             return LocalRedirect(returnUrl);
                         }
 
-                        this.captchaService.RegisterFailedLogin(Input.Email);
+                        if (!string.IsNullOrEmpty(Input.Email))
+                            this.captchaService.RegisterFailedLogin(Input.Email);
+                        
                         this.ErrorMessage = AccountResources.InvalidPassword;
                     }
                     else

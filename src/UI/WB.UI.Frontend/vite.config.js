@@ -3,13 +3,17 @@ import path from 'path';
 import vue from '@vitejs/plugin-vue'
 import envCompatible from 'vite-plugin-env-compatible';
 import mpaPlugin from 'vite-plugin-mpa-plus'
+//import { createHtmlPlugin } from 'vite-plugin-html';
 import { viteCommonjs } from '@originjs/vite-plugin-commonjs';
-import cleanPlugin from 'vite-plugin-clean';
+//import cleanPlugin from 'vite-plugin-clean';
 import LocalizationPlugin from './tools/vite-plugin-localization'
 import inject from '@rollup/plugin-inject';
-import vitePluginRequire from "vite-plugin-require";
+//import vitePluginRequire from "vite-plugin-require";
+import { rimrafSync } from 'rimraf';
+import fs from 'fs';
+import { viteStaticCopy } from 'vite-plugin-static-copy';
 
-const ViteFilemanager = require('filemanager-plugin').ViteFilemanager;
+import { ViteFilemanager } from 'filemanager-plugin';
 
 const baseDir = path.relative(__dirname, "./");
 const join = path.join.bind(path, baseDir);
@@ -79,26 +83,36 @@ const pages = {
 
     empty_layout: {
         entry: "src/hqapp/main.js",
+        //entry: path.join("src", "hqapp", "main.js"),
         filename: path.join(hqDist, "Views", "Shared", "_EmptyLayout.cshtml"),
         template: path.join(hqFolder, "Views", "Shared", "_EmptyLayout.Template.cshtml")
     }
 };
 
-const fileTargets = [
+const resourcesTargets = [
     { source: join(".resources", "**", "*.js"), destination: join("dist", "locale"), isFlat: false },
+    { source: join("dist", "locale", "hq", "*.*"), destination: path.join(hqDist, "wwwroot", "locale", "hq") },
+    { source: join("dist", "locale", "webinterview", "*.*"), destination: path.join(hqDist, "wwwroot", "locale", "webinterview") },
+    { source: join("dist", "locale", "webtester", "*.*"), destination: path.join(webTesterDist, "wwwroot", "locale", "webtester") },
+]
+
+const fileTargets = [
+    //{ source: join(".resources", "**", "*.js"), destination: join("dist", "locale"), isFlat: false },
 
     { source: join("dist", "img", "**", "*.*"), destination: path.join(hqDist, "wwwroot", "img"), isFlat: false },
     { source: join("dist", "fonts", "**", "*.*"), destination: path.join(hqDist, "wwwroot", "fonts") },
     { source: join("dist", "css", "*.*"), destination: path.join(hqDist, "wwwroot", "css") },
     { source: join("dist", "js", "*.*"), destination: path.join(hqDist, "wwwroot", "js") },
-    { source: join("dist", "locale", "hq", "*.*"), destination: path.join(hqDist, "wwwroot", "locale", "hq") },
-    { source: join("dist", "locale", "webinterview", "*.*"), destination: path.join(hqDist, "wwwroot", "locale", "webinterview") },
+    //{ source: join("dist", "locale", "hq", "*.*"), destination: path.join(hqDist, "wwwroot", "locale", "hq") },
+    //{ source: join("dist", "locale", "webinterview", "*.*"), destination: path.join(hqDist, "wwwroot", "locale", "webinterview") },
 
     { source: join("dist", "img", "**", "*.*"), destination: path.join(webTesterDist, "wwwroot", "img"), isFlat: false },
     { source: join("dist", "fonts", "*.*"), destination: path.join(webTesterDist, "wwwroot", "fonts") },
     { source: join("dist", "css", "*.*"), destination: path.join(webTesterDist, "wwwroot", "css") },
     { source: join("dist", "js", "*.*"), destination: path.join(webTesterDist, "wwwroot", "js") },
-    { source: join("dist", "locale", "webtester", "*.*"), destination: path.join(webTesterDist, "wwwroot", "locale", "webtester") },
+    //{ source: join("dist", "locale", "webtester", "*.*"), destination: path.join(webTesterDist, "wwwroot", "locale", "webtester") },
+
+    //{ source: join("dist", ".vite"), destination: path.join(hqDist, "wwwroot") },
 ]
 
 
@@ -107,6 +121,8 @@ const resxFiles = [
     "../../Core/SharedKernels/Enumerator/WB.Enumerator.Native/Resources/*.resx",
     "../../Core/BoundedContexts/Headquarters/WB.Core.BoundedContexts.Headquarters/Resources/*.resx"
 ]
+
+let inputPages = {};
 
 var pagesSources = [];
 var pagesTargets = [];
@@ -134,21 +150,44 @@ for (var attr in pages) {
 
     pageObj.filename = filenameHtml
     pageObj.template = templateHtmlPath
+
+    inputPages[attr] = templateHtmlPath;
+    //pageObj.entry = join(pageObj.entry)
+    //inputPages[attr] = join(pageObj.entry);
 }
 
+//const allTargets = pagesTargets.concat(fileTargets).map(i => { return { src: i.source, dest: i.destination } })
+const allTargets = fileTargets.map(i => { return { src: i.source, dest: path.resolve(__dirname, i.destination) } })
+console.log(allTargets[1].src)
+console.log(allTargets[1].dest)
+
 // https://vitejs.dev/config/
-export default defineConfig(({ mode }) => {
+export default defineConfig(({ mode, command }) => {
 
     const isDevMode = mode === 'development';
     const isProdMode = !isDevMode
+    const isServe = command === 'serve'
+
+    const base = command == 'serve' ? '/.vite/' : '/';
+
+    //const outDir = path.join(hqDist, "wwwroot");
+    //const outDir = path.join(hqDist, "dist");
+    //const outDir = join("dist");
+    const outDir = "dist";
+    //const outDir = path.join(hqDist, "wwwroot");
+
+    if (isServe && mode != 'test') {
+        rimrafSync(outDir);
+        fs.mkdirSync(outDir);
+    }
 
     return {
+        base,
         css: {
             devSourcemap: isDevMode,
         },
         resolve: {
             alias: [
-
                 {
                     find: '@',
                     replacement: path.resolve(__dirname, 'src')
@@ -161,11 +200,18 @@ export default defineConfig(({ mode }) => {
                     find: '~',
                     replacement: path.resolve(__dirname, 'src')
                 },
-
                 {
                     find: 'vue',
                     replacement: 'vue/dist/vue.esm-bundler.js',
                 },
+                /*{
+                    find: 'jquery',
+                    replacement: 'jquery/dist/jquery.min.js',
+                },
+                {
+                    find: 'jquery-ui',
+                    replacement: 'jquery-ui-dist/jquery-ui.js',
+                },*/
             ],
             extensions: [
                 '.mjs',
@@ -197,11 +243,14 @@ export default defineConfig(({ mode }) => {
                         }
                     }
                 }),
-            vitePluginRequire(),
-            viteCommonjs(),
-            envCompatible(),
-            cleanPlugin({
-                targetFiles: fileTargets.map(target => target.destination)
+            //vitePluginRequire(),
+            //viteCommonjs(),
+            //envCompatible(),
+            //cleanPlugin({
+            //    targetFiles: fileTargets.map(target => target.destination)
+            //}),
+            viteStaticCopy({
+                targets: allTargets
             }),
             ViteFilemanager({
                 customHooks: [
@@ -217,15 +266,27 @@ export default defineConfig(({ mode }) => {
                     {
                         hookName: 'closeBundle',
                         commands: {
+                            copy: { items: pagesTargets.concat(resourcesTargets) },
+                        }
+                    },
+                    /*{
+                        hookName: 'buildEnd',
+                        commands: {
+                            copy: { items: allTargets },
+                        }
+                    }*/
+                    /*{
+                        hookName: 'handleHotUpdate',
+                        commands: {
                             copy: { items: pagesTargets.concat(fileTargets) },
                         }
-                    }
+                    }*/
                 ],
 
                 options: {
                     parallel: 1,
-                    //log: 'all'
-                    log: 'error'
+                    log: 'all'
+                    //log: 'error'
                 }
             }),
             LocalizationPlugin({
@@ -233,14 +294,37 @@ export default defineConfig(({ mode }) => {
                 destination: "./.resources",
                 locales: locales
             }),
-            mpaPlugin({
+            /*mpaPlugin({
                 pages: pages
-            })
+            }),*/
+            /*createHtmlPlugin({
+                minify: false,
+                pages: pagesArray
+            })*/
             //eslintPlugin()
         ],
+        /*define: {
+            global: {},
+        },*/
+        server: {
+            host: 'localhost',
+            strictPort: true,
+            base: base,
+            port: 3001,
+            watch: {
+                paths: ['src/**/*'],
+                ignored: ['**/.resources/**']
+            },
+            fs: {
+                allow: ['..', '../WB.UI.Headquarters.Core/wwwroot'],
+            },
+        },
         build: {
             minify: isProdMode,
+            outDir,
+            manifest: isDevMode,
             rollupOptions: {
+                input: inputPages,
                 maxParallelFileOps: 1,
                 cache: false,
                 plugins: [
@@ -271,17 +355,6 @@ export default defineConfig(({ mode }) => {
                         if (isDevMode)
                             return 'js/[name].js'
                         return 'js/[name]-[hash].js'
-                    },
-                    manualChunks: (id) => {
-                        if (id.includes('node_modules')) {
-                            return 'vendor';
-                        }
-
-                        /*if (isDevMode) {
-                            var filename = id.replace(/^.*[\\\/]/, '')
-                            if (!filename.endsWith('.css'))
-                              return filename;
-                        }*/
                     },
                 },
             },

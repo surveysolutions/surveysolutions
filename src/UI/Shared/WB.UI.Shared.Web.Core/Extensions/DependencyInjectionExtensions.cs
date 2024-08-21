@@ -10,7 +10,7 @@ namespace WB.UI.Shared.Web.Extensions
             where TImplementation : class, IHostedService, TService
         {
             services.AddSingleton<TService, TImplementation>();
-            services.AddHostedService(c => c.GetRequiredService<TService>() as TImplementation);
+            services.AddHostedService(c => (TImplementation)c.GetRequiredService<TService>());
         }
     }
 }

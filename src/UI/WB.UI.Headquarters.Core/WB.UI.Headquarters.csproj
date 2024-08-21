@@ -68,7 +68,6 @@
     <PackageReference Include="SkiaSharp" Version="2.88.8" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="8.0.6" />
   </ItemGroup>
-
   <ItemGroup>
     <Content Include="appsettings.ini" CopyToPublishDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
     <Content Include="appsettings.*.ini" CopyToPublishDirectory="Never" ExcludeFromSingleFile="true">

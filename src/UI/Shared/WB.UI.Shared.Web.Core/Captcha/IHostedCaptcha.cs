@@ -5,6 +5,6 @@ namespace WB.UI.Shared.Web.Captcha
 {
     public interface IHostedCaptcha
     {
-        HtmlString Render<T>(IHtmlHelper<T> helper);
+        HtmlString Render();
     }
 }
