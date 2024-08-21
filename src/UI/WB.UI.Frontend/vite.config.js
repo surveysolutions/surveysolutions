@@ -11,6 +11,7 @@ import inject from '@rollup/plugin-inject';
 //import vitePluginRequire from "vite-plugin-require";
 import { rimrafSync } from 'rimraf';
 import fs from 'fs';
+import { viteStaticCopy } from 'vite-plugin-static-copy';
 
 import { ViteFilemanager } from 'filemanager-plugin';
 
@@ -104,7 +105,7 @@ const fileTargets = [
     { source: join("dist", "js", "*.*"), destination: path.join(webTesterDist, "wwwroot", "js") },
     { source: join("dist", "locale", "webtester", "*.*"), destination: path.join(webTesterDist, "wwwroot", "locale", "webtester") },
 
-    { source: join("dist", ".vite"), destination: path.join(hqDist, "wwwroot") },
+    //{ source: join("dist", ".vite"), destination: path.join(hqDist, "wwwroot") },
 ]
 
 
@@ -148,26 +149,30 @@ for (var attr in pages) {
     //inputPages[attr] = join(pageObj.entry);
 }
 
-
+//const allTargets = pagesTargets.concat(fileTargets).map(i => { return { src: i.source, dest: i.destination } })
+const allTargets = fileTargets.map(i => { return { src: i.source, dest: path.resolve(__dirname, i.destination) } })
+console.log(allTargets[1].src)
+console.log(allTargets[1].dest)
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode, command }) => {
 
     const isDevMode = mode === 'development';
     const isProdMode = !isDevMode
+    const isServe = command === 'serve'
 
     const base = command == 'serve' ? '/.vite/' : '/';
 
     //const outDir = path.join(hqDist, "wwwroot");
     //const outDir = path.join(hqDist, "dist");
-    const outDir = join("dist");
-    //const outDir = "dist";
+    //const outDir = join("dist");
+    const outDir = "dist";
     //const outDir = path.join(hqDist, "wwwroot");
 
-    /*if (command == 'serve' && mode != 'test') {
-         rimrafSync(outDir);
-         fs.mkdirSync(outDir);
-     }*/
+    if (isServe && mode != 'test') {
+        rimrafSync(outDir);
+        fs.mkdirSync(outDir);
+    }
 
     return {
         base,
@@ -237,6 +242,9 @@ export default defineConfig(({ mode, command }) => {
             //cleanPlugin({
             //    targetFiles: fileTargets.map(target => target.destination)
             //}),
+            viteStaticCopy({
+                targets: allTargets
+            }),
             ViteFilemanager({
                 customHooks: [
                     {
@@ -245,15 +253,21 @@ export default defineConfig(({ mode, command }) => {
                             del: {
                                 items: ['./dist']
                             },
-                            copy: { items: pagesSources },
+                            copy: { items: pagesSources.concat({ source: join(".resources", "**", "*.js"), destination: join("dist", "locale"), isFlat: false }) },
                         }
                     },
                     {
-                        hookName: 'closeBundle',
+                        hookName: 'writeBundle',
                         commands: {
-                            copy: { items: pagesTargets.concat(fileTargets) },
+                            copy: { items: pagesTargets },
                         }
                     },
+                    /*{
+                        hookName: 'buildEnd',
+                        commands: {
+                            copy: { items: allTargets },
+                        }
+                    }*/
                     /*{
                         hookName: 'handleHotUpdate',
                         commands: {
@@ -264,8 +278,8 @@ export default defineConfig(({ mode, command }) => {
 
                 options: {
                     parallel: 1,
-                    //log: 'all'
-                    log: 'error'
+                    log: 'all'
+                    //log: 'error'
                 }
             }),
             LocalizationPlugin({
@@ -291,8 +305,12 @@ export default defineConfig(({ mode, command }) => {
             base: base,
             port: 3001,
             watch: {
-                //ignored: ['**/src/locale/**']
-            }
+                paths: ['src/**/*'],
+                ignored: ['**/.resources/**']
+            },
+            fs: {
+                allow: ['..', '../WB.UI.Headquarters.Core/wwwroot'],
+            },
         },
         build: {
             minify: isProdMode,

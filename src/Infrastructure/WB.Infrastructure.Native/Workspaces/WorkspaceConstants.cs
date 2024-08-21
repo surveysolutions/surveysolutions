@@ -30,6 +30,9 @@ namespace WB.Infrastructure.Native.Workspaces
             "graphql",
             ".vite",
             "@vite",
+            "js",
+            "css",
+            "fonts",
         };
         
         public static bool IsNotAllowedName(string name)
