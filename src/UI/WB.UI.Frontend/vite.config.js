@@ -112,6 +112,8 @@ const resxFiles = [
     "../../Core/BoundedContexts/Headquarters/WB.Core.BoundedContexts.Headquarters/Resources/*.resx"
 ]
 
+let inputPages = {};
+
 var pagesSources = [];
 var pagesTargets = [];
 
@@ -138,7 +140,13 @@ for (var attr in pages) {
 
     pageObj.filename = filenameHtml
     pageObj.template = templateHtmlPath
+
+    inputPages[attr] = templateHtmlPath;
+    //pageObj.entry = join(pageObj.entry)
+    //inputPages[attr] = join(pageObj.entry);
 }
+
+
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode, command }) => {
@@ -249,11 +257,18 @@ export default defineConfig(({ mode, command }) => {
                 destination: "./.resources",
                 locales: locales
             }),
-            mpaPlugin({
+            /*mpaPlugin({
                 pages: pages
-            }),
+            }),*/
+            /*createHtmlPlugin({
+                minify: false,
+                pages: pagesArray
+            })*/
             //eslintPlugin()
         ],
+        define: {
+            global: {},
+        },
         server: {
             host: 'localhost',
             strictPort: true,
@@ -268,6 +283,7 @@ export default defineConfig(({ mode, command }) => {
             outDir,
             manifest: isDevMode,
             rollupOptions: {
+                input: inputPages,
                 maxParallelFileOps: 1,
                 cache: false,
                 plugins: [
