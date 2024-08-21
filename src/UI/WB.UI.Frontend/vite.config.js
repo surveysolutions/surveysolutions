@@ -158,8 +158,6 @@ for (var attr in pages) {
 
 //const allTargets = pagesTargets.concat(fileTargets).map(i => { return { src: i.source, dest: i.destination } })
 const allTargets = fileTargets.map(i => { return { src: i.source, dest: path.resolve(__dirname, i.destination) } })
-console.log(allTargets[1].src)
-console.log(allTargets[1].dest)
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode, command }) => {
@@ -285,8 +283,8 @@ export default defineConfig(({ mode, command }) => {
 
                 options: {
                     parallel: 1,
-                    log: 'all'
-                    //log: 'error'
+                    //log: 'all'
+                    log: 'error'
                 }
             }),
             LocalizationPlugin({
