@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Amazon;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
@@ -321,6 +322,15 @@ namespace WB.UI.Headquarters.Controllers.Api
                     Success = false,
                     Errors = e.Errors,
                     Email = e.Email
+                });
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, "Error when send test email to {Email}", model.Email);
+                return StatusCode(StatusCodes.Status400BadRequest, new
+                {
+                    Success = false,
+                    Error = $"Error when send test email to {model.Email}",
                 });
             }
         }
