@@ -121,7 +121,12 @@ namespace WB.UI.Headquarters.Code.Workspaces
             "/.hc", 
             "/metrics", 
             "/" + WorkspaceConstants.WorkspaceNames.AdminWorkspaceName,
-            "/" + WorkspaceConstants.WorkspaceNames.UsersWorkspaceName
+            "/" + WorkspaceConstants.WorkspaceNames.UsersWorkspaceName,
+            "/.vite",
+            "/@vite",
+            "/js",
+            "/css",
+            "/fonts",
         };
     }
 }
