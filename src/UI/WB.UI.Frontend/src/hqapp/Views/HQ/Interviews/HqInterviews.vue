@@ -49,8 +49,9 @@
             </FilterBlock>
 
             <FilterBlock :title="$t('Pages.Filters_InterviewMode')">
-                <Typeahead no-search control-id="responsibleId" :placeholder="$t('Pages.Filters_InterviewModePlaceHolder')"
-                    :value="interviewMode" :values="interviewModes" v-on:selected="inteviewModeSelected"></Typeahead>
+                <Typeahead no-search control-id="responsibleId"
+                    :placeholder="$t('Pages.Filters_InterviewModePlaceHolder')" :value="interviewMode"
+                    :values="interviewModes" v-on:selected="inteviewModeSelected"></Typeahead>
             </FilterBlock>
 
             <InterviewFilter slot="additional" :questionnaireId="where.questionnaireId"
@@ -60,8 +61,8 @@
         </Filters>
 
         <DataTables ref="table" :tableOptions="tableOptions" :contextMenuItems="contextMenuItems"
-            @selectedRowsChanged="(rows) => (selectedRows = rows)" @page="resetSelection" @ajaxComplete="isLoading = false"
-            :selectable="showSelectors" :selectableId="'id'">
+            @selectedRowsChanged="(rows) => (selectedRows = rows)" @page="resetSelection"
+            @ajaxComplete="isLoading = false" :selectable="showSelectors" :selectableId="'id'">
             <div class="panel panel-table" v-if="selectedRows.length" id="pnlInterviewContextActions">
                 <div class="panel-body">
                     <input class="double-checkbox-white" id="q1az" type="checkbox" checked disabled="disabled" />
@@ -231,8 +232,9 @@
                     <label for="txtStatusApproveComment">{{
                         $t('Pages.ApproveRejectPartialView_CommentLabel')
                     }}:</label>
-                    <textarea class="form-control" rows="10" maxlength="200" name="txtStatusChangeComment"
+                    <textarea class="form-control" rows="10" :maxlength="maxCommentLength" name="txtStatusChangeComment"
                         id="txtStatusApproveComment" v-model="statusChangeComment"></textarea>
+                    <span class="countDown">{{ statusChangeCommentCharsLeft }}</span>
                 </div>
             </form>
             <div slot="actions">
@@ -264,8 +266,8 @@
 
                 <div>
                     <div class="options-group">
-                        <Radio :label="$t('Interviews.RejectToOriginal')" :radioGroup="false" name="rejectToNewResponsible"
-                            :value="rejectToNewResponsible" @input="
+                        <Radio :label="$t('Interviews.RejectToOriginal')" :radioGroup="false"
+                            name="rejectToNewResponsible" :value="rejectToNewResponsible" @input="
                                 rejectToNewResponsible = false
                             newResponsibleId = null
                                 " />
@@ -287,11 +289,12 @@
                         :</label>
                     <textarea class="form-control" rows="10" maxlength="200" id="txtStatusChangeComment"
                         v-model="statusChangeComment"></textarea>
+                    <span class="countDown">{{ statusChangeCommentCharsLeft }}</span>
                 </div>
             </form>
             <div slot="actions">
-                <button id="rejectOk" type="button" class="btn btn-lg btn-danger" role="confirm" @click="rejectInterviews"
-                    :disabled="getFilteredToReject().length == 0 ||
+                <button id="rejectOk" type="button" class="btn btn-lg btn-danger" role="confirm"
+                    @click="rejectInterviews" :disabled="getFilteredToReject().length == 0 ||
                         (rejectToNewResponsible == true &&
                             newResponsibleId == null)
                         ">
@@ -326,13 +329,14 @@
             <div class="action-container">
                 <p>
                     <a class="interview-id title-row" @click="viewInterview" href="javascript:void(0)">{{ interviewKey
-                    }}</a>
+                        }}</a>
                     by
                     <span :class="responsibleClass" v-html="responsibleLink"></span>
                 </p>
             </div>
             <div class="table-with-scroll">
-                <table class="table table-striped table-condensed table-hover table-break-words history" id="statustable">
+                <table class="table table-striped table-condensed table-hover table-break-words history"
+                    id="statustable">
                     <thead>
                         <tr>
                             <td>{{ $t('Pages.HistoryOfStatuses_State') }}</td>
@@ -495,7 +499,7 @@ export default {
             responsibleParams: { showArchived: true, showLocked: true },
             newResponsibleId: null,
             rejectToNewResponsible: false,
-            statusChangeComment: null,
+            statusChangeComment: '',
             status: null,
             selectedStatus: null,
             unactiveDateStart: null,
@@ -504,7 +508,7 @@ export default {
             isApproveReceivedByInterviewer: false,
             isReassignReceivedByInterviewer: false,
             isVisiblePrefilledColumns: true,
-
+            commentMaxLength: 1500,
             conditions: [],
 
             interviewModes: [
@@ -1055,6 +1059,9 @@ export default {
 
             return query
         },
+        statusChangeCommentCharsLeft() {
+            return `${this.statusChangeComment.length} / ${this.commentMaxLength}`
+        },
     },
 
     methods: {
@@ -1300,7 +1307,7 @@ export default {
             )
         },
         approveInterview() {
-            this.statusChangeComment = null
+            this.statusChangeComment = ''
             this.$refs.approveModal.modal()
         },
 
@@ -1428,7 +1435,7 @@ export default {
         },
 
         rejectInterview() {
-            this.statusChangeComment = null
+            this.statusChangeComment = ''
             this.newResponsibleId = null
             this.rejectToNewResponsible = false
 
