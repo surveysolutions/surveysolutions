@@ -7,7 +7,9 @@
                         <div class="h5">
                             {{ $t('WebInterviewSettings.Title') }}
                         </div>
-                        <div class="form-group" :class="{ 'has-error': errors.has('linkPage.linkWelcome') }">
+                        <!-- TODO: Migration -->
+                        <!-- :class="{ 'has-error': errors.has('linkPage.linkWelcome') }" -->
+                        <div class="form-group">
                             <div class="field" :class="{ 'answered': webInterviewPageMessages['linkWelcome'].text }">
                                 <textarea-autosize v-model="webInterviewPageMessages['linkWelcome'].text"
                                     :rules="required" data-vv-name="linkWelcome" ref="linkWelcome" :min-height="77"

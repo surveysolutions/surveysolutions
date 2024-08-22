@@ -85,7 +85,7 @@
                     </button>
                     <span class="text-success" v-if="globalNoticeUpdated">{{
                         $t('Settings.GlobalNoteSaved')
-                        }}</span>
+                    }}</span>
                 </div>
             </form>
         </div>
@@ -145,11 +145,7 @@
                             <span class="tick"></span>
                             {{ $t('Settings.DeviceNotifications') }}
                             <p style="font-weight: normal">
-                                {{
-                                    $t(
-                                        'Settings.DeviceNotificationsDescription',
-                                    )
-                                }}
+                                {{ $t('Settings.DeviceNotificationsDescription') }}
                             </p>
                         </label>
                     </div>
@@ -206,7 +202,7 @@
                             {{ $t('Common.Cancel') }}
                         </button>
                     </div>
-                    <div class="error" v-show="errors.has('accuracy')">
+                    <div class="error" v-if="errors.has('accuracy')">
                         {{ errors.first('accuracy') }}
                     </div>
                 </div>
@@ -216,30 +212,20 @@
                     <div class="form-group">
                         <label for="interviewerGeographyQuestionPeriodInSeconds" style="font-weight: bold">
                             <span class="tick"></span>
-                            {{
-                                $t(
-                                    'Settings.InterviewerGeographyQuestionPeriodInSeconds',
-                                )
-                            }}
+                            {{ $t('Settings.InterviewerGeographyQuestionPeriodInSeconds') }}
                             <p style="font-weight: normal">
-                                {{
-                                    $t(
-                                        'Settings.GeographyQuestionPeriodInSecondsDescription',
-                                    )
-                                }}
+                                {{ $t('Settings.GeographyQuestionPeriodInSecondsDescription') }}
                             </p>
                         </label>
                     </div>
                     <div class="form-group">
                         <div class="input-group input-group-save">
-                            <Field class="form-control number"
-                                v-model.number="geographyQuestionPeriodInSeconds"
-                                :rules="{
-                                    integer: true,
-                                    required: true,
-                                    min_value: 5,
-                                    max_value: 1000,
-                                }" id="interviewerGeographyQuestionPeriodInSeconds" name="period" type="number" />
+                            <Field class="form-control number" v-model.number="geographyQuestionPeriodInSeconds" :rules="{
+                                integer: true,
+                                required: true,
+                                min_value: 5,
+                                max_value: 1000,
+                            }" id="interviewerGeographyQuestionPeriodInSeconds" name="period" type="number" />
                         </div>
                         <button type="button" class="btn btn-success" :disabled="geographyQuestionPeriodInSeconds ==
                             geographyQuestionPeriodInSecondsCancel ||
@@ -266,17 +252,9 @@
                     <div class="form-group">
                         <label for="esriApiKey" style="font-weight: bold">
                             <span class="tick"></span>
-                            {{
-                                $t(
-                                    'Settings.EsriApiKey',
-                                )
-                            }}
+                            {{ $t('Settings.EsriApiKey') }}
                             <p class="error" style="font-weight: normal">
-                                {{
-                                    $t(
-                                        'Settings.EsriApiKeyDescription',
-                                    )
-                                }}
+                                {{ $t('Settings.EsriApiKeyDescription') }}
                             </p>
                         </label>
                     </div>

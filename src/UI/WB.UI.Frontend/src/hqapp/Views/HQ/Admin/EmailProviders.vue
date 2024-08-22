@@ -6,7 +6,9 @@
                     <button type="submit" disabled style="display: none" aria-hidden="true"></button>
                     <h2>{{ $t('Settings.EmailProvider_SenderHeader') }}</h2>
                     <div class="form-inline">
-                        <div class="form-group" :class="{ 'has-error': errors.has('settings.senderAddress') }">
+                        <!-- TODO: Migration -->
+                        <!-- :class="{ 'has-error': errors.has('settings.senderAddress') }" -->
+                        <div class="form-group">
                             <label class="h5">
                                 {{ $t('Settings.EmailProvider_SenderAddress') }}
                             </label>
@@ -17,12 +19,12 @@
                                 <button type="button" @click="senderAddress = null" class="btn btn-link btn-clear">
                                     <span></span>
                                 </button>
-                                <span class="gray-text help-block">{{
-                                    $t('Settings.EmailProvider_SenderHelp')
-                                    }}</span>
-                                <span class="help-block">{{
-                                    errors.first('settings.senderAddress')
-                                    }}</span>
+                                <span class="gray-text help-block">
+                                    {{ $t('Settings.EmailProvider_SenderHelp') }}
+                                </span>
+                                <span class="help-block">
+                                    {{ errors.first('settings.senderAddress') }}
+                                </span>
                             </div>
                         </div>
                         <div class="form-group" :class="{
@@ -49,9 +51,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group" :class="{
-                        'has-error': errors.has('settings.senderName'),
-                    }">
+                    <!-- TODO: Migration -->
+                    <!-- :class="{ 'has-error': errors.has('settings.senderName') }" -->
+                    <div class="form-group">
                         <label class="h5">
                             {{ $t('Settings.EmailProvider_SenderName') }}
                         </label>
@@ -64,13 +66,14 @@
                             </button>
                             <span class="gray-text help-block">{{
                                 $t('Settings.EmailProvider_SenderNameHelp')
-                                }}</span>
+                            }}</span>
                             <span class="help-block">{{
                                 errors.first('settings.senderName')
-                                }}</span>
+                            }}</span>
                         </div>
                     </div>
-                    <div class="form-group mb-30" :class="{ 'has-error': errors.has('settings.address') }">
+                    <!-- :class="{ 'has-error': errors.has('settings.address') }" -->
+                    <div class="form-group mb-30">
                         <label class="h5">
                             {{ $t('Settings.EmailProvider_Address') }}
                         </label>
@@ -306,7 +309,8 @@
                                             target="_blank">{{ $t('Settings.EmailProvider_HelpLinkText',) }}</a>
                                     </p>
 
-                                    <div class="form-group" :class="{ 'has-error': errors.has('settings.smtpHost'), }">
+                                    <!-- :class="{ 'has-error': errors.has('settings.smtpHost'), }" -->
+                                    <div class="form-group">
                                         <label class="h5">{{ $t('Settings.EmailProvider_SmtpHost',) }}</label>
                                         <div class="field" :class="{ answered: smtpHost, }">
                                             <Field data-vv-as="SMTP host" :rules="required"
@@ -327,8 +331,9 @@
                                             <span class="help-block">{{ errors.first('settings.smtpHost',) }}</span>
                                         </div>
                                     </div>
+                                    <!-- :class="{ 'has-error': errors.has('settings.smtpPort'), }" -->
 
-                                    <div class="form-group" :class="{ 'has-error': errors.has('settings.smtpPort'), }">
+                                    <div class="form-group">
                                         <label class="h5">{{ $t('Settings.EmailProvider_SmtpPort',) }}</label>
                                         <div class="field" :class="{ answered: smtpPort, }">
                                             <Field :rules="{
@@ -349,8 +354,8 @@
                                         </div>
                                     </div>
 
-                                    <div class="block-filter"
-                                        :class="{ 'has-error': errors.has('settings.smtpTlsEncryption',), }">
+                                    <!-- :class="{ 'has-error': errors.has('settings.smtpTlsEncryption',), }" -->
+                                    <div class="block-filter">
                                         <div class="field" :class="{ answered: smtpTlsEncryption, }">
                                             <input type="checkbox" style="margin-right: 5px"
                                                 class="form-control checkbox-filter single-checkbox"
@@ -399,8 +404,8 @@
                                         </div>
                                     </div>
 
-                                    <div class="form-group"
-                                        :class="{ 'has-error': smtpAuthentication && errors.has('settings.smtpUsername',), }">
+                                    <!-- :class="{ 'has-error': smtpAuthentication && errors.has('settings.smtpUsername') }" -->
+                                    <div class="form-group">
                                         <label class="h5">{{ $t('Settings.EmailProvider_SmtpUsername',) }}</label>
                                         <div class="field" :class="{ answered: smtpUsername, }">
                                             <input data-vv-as="SMTP username" name="smtpUsername" id="smtpUsername"
@@ -418,8 +423,8 @@
                                         </div>
                                     </div>
 
-                                    <div class="form-group"
-                                        :class="{ 'has-error': smtpAuthentication && errors.has('settings.smtpPassword',), }">
+                                    <!-- :class="{ 'has-error': smtpAuthentication && errors.has('settings.smtpPassword') }" -->
+                                    <div class="form-group">
                                         <label class="h5">{{ $t('Settings.EmailProvider_SmtpPassword',) }}</label>
                                         <div class="field" :class="{ answered: smtpPassword, }">
                                             <input data-vv-as="SMTP password" name="smtpPassword" id="smtpPassword"
@@ -460,7 +465,8 @@
                         {{ $t('Settings.EmailProvider_SendTestEmailHeader') }}
                     </h4>
                     <div class="form-inline">
-                        <div class="form-group" :class="{ 'has-error': errors.has('testEmail.testEmailAddress') }">
+                        <!-- :class="{ 'has-error': errors.has('testEmail.testEmailAddress') }" -->
+                        <div class="form-group">
                             <label class="h5">
                                 {{ $t('Settings.EmailProvider_TestEmailAddress') }}
                             </label>
@@ -473,7 +479,7 @@
                                 </button>
                                 <span class="help-block">{{
                                     errors.first('testEmail.testEmailAddress')
-                                }}</span>
+                                    }}</span>
                             </div>
                         </div>
                     </div>

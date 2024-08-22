@@ -29,7 +29,9 @@
                                             {{ $t('DataExport.SurveyQuestionnaire') }}
                                             <span class="text-danger">*</span>
                                         </h5>
-                                        <div class="form-group" :class="{ 'has-error': errors.has('questionnaireId') }">
+                                        <!-- TODO:Migration -->
+                                        <!-- :class="{ 'has-error': errors.has('questionnaireId') }" -->
+                                        <div class="form-group">
                                             <Typeahead control-id="questionnaireId" :value="questionnaireId"
                                                 :placeholder="$t('Common.AllQuestionnaires')"
                                                 :fetch-url="questionnaireFetchUrl" :selectedKey="pageState.id"
@@ -42,8 +44,8 @@
                                             {{ $t('DataExport.SurveyQuestionnaireVersion') }}
                                             <span class="text-danger">*</span>
                                         </h5>
-                                        <div class="form-group"
-                                            :class="{ 'has-error': errors.has('questionnaireVersion') }">
+                                        <!-- :class="{ 'has-error': errors.has('questionnaireVersion') }" -->
+                                        <div class="form-group">
                                             <Typeahead noClear control-id="questionnaireVersion"
                                                 ref="questionnaireVersionControl" data-vv-name="questionnaireVersion"
                                                 data-vv-as="questionnaire version" :selectedKey="pageState.version"

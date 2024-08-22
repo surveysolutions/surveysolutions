@@ -40,10 +40,10 @@
                             <!--TODO:MIGRATION-->
                             <!-- :class="{ 'has-error': errors.has('UserName') }" -->
                             <div class="form-group">
-                                <Field type="text" name="UserName" class="form-control" autofocus="autofocus"
+                                <Field type="text" name="Login" class="form-control" autofocus="autofocus"
                                     v-model="userName" rules="required"
                                     :placeholder="this.$t('LoginToDesigner.LoginWatermark')" />
-                                <ErrorMessage name="UserName"></ErrorMessage>
+                                <ErrorMessage name="Login"></ErrorMessage>
                             </div>
                             <!--TODO:MIGRATION-->
                             <!-- :class="{ 'has-error': errors.has('Password') }" -->

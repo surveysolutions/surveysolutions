@@ -7,7 +7,9 @@
                         <div class="h5">
                             {{ $t('WebInterviewSettings.Title') }}
                         </div>
-                        <div class="form-group" :class="{ 'has-error': errors.has('welcomePage.welcomeTextTitle') }">
+                        <!-- TODO:Migration -->
+                        <!-- :class="{ 'has-error': errors.has('welcomePage.welcomeTextTitle') }" -->
+                        <div class="form-group">
                             <div class="field" :class="{ 'answered': webInterviewPageMessages['welcomeText'].text }">
                                 <textarea-autosize v-model="webInterviewPageMessages['welcomeText'].text"
                                     :rules="required" data-vv-name="welcomeTextTitle" ref="welcomeTextTitle"
@@ -18,8 +20,9 @@
                                     class="btn btn-link btn-clear">
                                     <span></span>
                                 </button>
-                                <span class="help-block" v-if="errors.first('welcomePage.welcomeTextTitle')">{{
-                                    $t('WebInterviewSettings.FieldRequired') }}</span>
+                                <span class="help-block" v-if="errors.first('welcomePage.welcomeTextTitle')">
+                                    {{ $t('WebInterviewSettings.FieldRequired') }}
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -36,7 +39,8 @@
                         <div class="h5">
                             {{ $t('WebInterviewSettings.StartNew') }}
                         </div>
-                        <div class="form-group" :class="{ 'has-error': errors.has('welcomePage.startNewButton') }">
+                        <!-- :class="{ 'has-error': errors.has('welcomePage.startNewButton') }" -->
+                        <div class="form-group">
                             <div class="field" :class="{ 'answered': webInterviewPageMessages['startNewButton'].text }">
                                 <Field type="text" v-model="webInterviewPageMessages['startNewButton'].text"
                                     :rules="required" data-vv-name="startNewButton" ref="startNewButton" maxlength="200"

@@ -37,8 +37,9 @@
         <FilterBlock :title="$t('Reports.ByAnswerValue')" v-if="question && question.Type == 'Numeric'">
             <div class="row">
                 <div class="col-xs-6">
-                    <div class="form-group" v-bind:class="{ 'has-error': errors.has('min') }"
-                        :title="errors.first('min')">
+
+                    <!-- v-bind:class="{ 'has-error': errors.has('min') }" -->
+                    <div class="form-group" :title="errors.first('min')">
                         <label for="min">
                             {{ $t("Reports.Min") }}
                         </label>
@@ -48,8 +49,9 @@
                     </div>
                 </div>
                 <div class="col-xs-6">
-                    <div class="form-group" v-bind:class="{ 'has-error': errors.has('max') }"
-                        :title="errors.first('max')">
+                    <!-- TODO:Migration -->
+                    <!-- v-bind:class="{ 'has-error': errors.has('max') }" -->
+                    <div class="form-group" :title="errors.first('max')">
                         <label for="max">
                             {{ $t("Reports.Max") }}
                         </label>

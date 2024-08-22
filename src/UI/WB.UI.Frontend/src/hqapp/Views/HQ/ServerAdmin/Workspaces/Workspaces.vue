@@ -22,16 +22,18 @@
                     <label class="control-label" for="newWorkspaceName">
                         {{ $t("Workspaces.Name") }}
                     </label>
-                    <Field type="text" class="form-control" v-model.trim="newWorkspaceName" name="workspaceName"
-                        :rules="validateWorkspaceName" :data-vv-as="$t('Workspaces.Name')" autocomplete="off"
-                        @keyup.enter="createWorkspace" id="newWorkspaceName" />
+                    <Field type="text" class="form-control" v-model.trim="newWorkspaceName" name="workspaceName" :rules="{
+                        required: true,
+                        max: 12,
+                        regex: /^[0-9,a-z]+$/,
+                        not_one_of: ['api', 'apidocs', 'graphql', 'users', 'administration']
+                    }" :data-vv-as="$t('Workspaces.Name')" autocomplete="off" @keyup.enter="createWorkspace"
+                        id="newWorkspaceName" />
 
                     <p class="help-block" v-if="!errors.workspaceName">
                         {{ $t('Workspaces.CanNotBeChanged') }}
                     </p>
                     <span v-else class="text-danger">{{ errors.workspaceName }}</span>
-                    <ErrorMessage name="workspaceName"></ErrorMessage>
-
                 </div>
 
                 <div class="form-group" v-bind:class="{ 'has-error': errors.workspaceDisplayName }">
@@ -39,13 +41,12 @@
                         {{ $t("Workspaces.DisplayName") }}
                     </label>
                     <Field type="text" class="form-control" v-model.trim="editedDisplayName" name="workspaceDisplayName"
-                        :rules="validateWorkspaceDisplayName" maxlength="300" :data-vv-as="$t('Workspaces.DisplayName')"
+                        :rules="{ required: true, max: 300 }" maxlength="300" :data-vv-as="$t('Workspaces.DisplayName')"
                         autocomplete="off" @keyup.enter="createWorkspace" id="newDescription" />
                     <p class="help-block" v-if="!errors.workspaceDisplayName">
                         {{ $t('Workspaces.DisplayNameHelpText') }}
                     </p>
                     <span v-else class="text-danger">{{ errors.workspaceDisplayName }}</span>
-                    <ErrorMessage name="workspaceDisplayName"></ErrorMessage>
                 </div>
             </Form>
             <template v-slot:actions>
@@ -69,7 +70,7 @@
                         {{ $t("Workspaces.DisplayName") }}
                     </label>
                     <Field type="text" class="form-control" v-model.trim="editedDisplayName" name="workspaceDisplayName"
-                        :data-vv-as="$t('Workspaces.DisplayName')" :rules="validateWorkspaceDisplayName" maxlength="300"
+                        :data-vv-as="$t('Workspaces.DisplayName')" :rules="{ required: true, max: 300 }" maxlength="300"
                         autocomplete="off" @keyup.enter="updateWorkspace" id="editDescription" />
                     <ErrorMessage name="workspaceDisplayName" as="span" />
                 </div>
@@ -137,28 +138,10 @@ export default {
         this.loadData()
     },
     methods: {
-        validateWorkspaceName(value) {
-            return true;
-        },
-        validateWorkspaceDisplayName(value) {
-            if (!value) {
-                return 'this field is required';
-            }
-
-            //TODO: MIGRATION
-
-            // nameValidations() {
-            // return {
-            //     required: true,
-            //     max: 12,
-            //     regex: /^[0-9,a-z]+$/,
-            //     excluded: ["api", "apidocs", "graphql", "users", "administration"],
-            // }      
-        },
         createNewWorkspace() {
             this.editedDisplayName = null
             this.newWorkspaceName = null
-            //this.$validator.reset()
+
             this.$refs.createWorkspaceModal.modal('show')
         },
         loadData() {
