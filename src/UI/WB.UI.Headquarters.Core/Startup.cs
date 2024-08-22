@@ -236,10 +236,10 @@ namespace WB.UI.Headquarters
             //hot reload on global level brakes other pars of application
             services.AddViteHelper(options =>
             {
-                options.Entry = "src/hqapp/main.js";
+                options.Entry = "src/webinterview/main.js";
                 options.VitePort = 3001;
             });
-            services.AddTransient<ITagHelperComponent, ViteTagHelperComponent>();
+            //services.AddTransient<ITagHelperComponent, ViteTagHelperComponent>();
 #endif
             
             services.AddUnderConstruction();
