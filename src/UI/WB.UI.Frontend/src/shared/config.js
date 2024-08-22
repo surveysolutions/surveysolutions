@@ -1,4 +1,5 @@
-const config = window.CONFIG
+
+export const config = window.CONFIG
 
 /*  the Plugin */
 export default Object.assign(window.CONFIG || {}, {

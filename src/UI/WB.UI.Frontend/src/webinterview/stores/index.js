@@ -5,9 +5,9 @@ import { fetch } from './store.fetch.js'
 import mutations from './store.mutations'
 import sidebar from './store.sidebar'
 
-const store = (app) =>
+const store =
     safeStore({
-        modules: { fetch, sidebar: sidebar(app), connection },
+        modules: { fetch, sidebar: sidebar, connection },
         state: {
             lastActivityTimestamp: new Date(),
             hasCoverPage: false,
@@ -27,7 +27,7 @@ const store = (app) =>
             interviewCannotBeChanged: false,
             showVariables: false,
         },
-        actions: { actions: actions(app) },
+        actions,
         mutations,
         getters: {
             loadingProgress(state) {

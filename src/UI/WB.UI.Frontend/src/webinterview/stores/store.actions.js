@@ -1,7 +1,7 @@
 import { map, debounce, uniq, forEach } from 'lodash'
-//import { Vue } from 'vue'
 
 import { batchedAction } from '../helpers'
+import { api } from '../api/http'
 
 import modal from '@/shared/modal'
 
@@ -11,23 +11,23 @@ function getAnswer(state, identity) {
     return question.answer
 }
 
-export default (app) => ({
+export default {
     async loadInterview({ commit, state, rootState, $router }) {
-        const details = await app.$api.interview.get('getInterviewDetails')
+        const details = await api.interview.get('getInterviewDetails')
         commit('SET_INTERVIEW_INFO', details)
-        const hasCover = await app.$api.interview.get('hasCoverPage')
+        const hasCover = await api.interview.get('hasCoverPage')
         commit('SET_HAS_COVER_PAGE', hasCover)
     },
 
     async getLanguageInfo({ commit }) {
-        const languageInfo = await app.$api.interview.get('getLanguageInfo')
+        const languageInfo = await api.interview.get('getLanguageInfo')
         commit('SET_LANGUAGE_INFO', languageInfo)
     },
 
     fetchEntity: batchedAction(async ({ commit, dispatch, rootState }, ids) => {
         const sectionId = rootState.route.params.sectionId || null
         const elementIds = uniq(map(ids, 'id'))
-        const details = await app.$api.interview.get('getEntitiesDetails', { sectionId: sectionId, ids: elementIds })
+        const details = await api.interview.get('getEntitiesDetails', { sectionId: sectionId, ids: elementIds })
         dispatch('fetch', { ids, done: true })
 
         commit('SET_ENTITIES_DETAILS', {
@@ -40,69 +40,69 @@ export default (app) => ({
         const storedAnswer = getAnswer(state, identity)
         if (storedAnswer != null && storedAnswer.value == answer) return // skip same answer on same question
 
-        app.$api.interview.answer(identity, 'answerSingleOptionQuestion', { answer })
+        api.interview.answer(identity, 'answerSingleOptionQuestion', { answer })
     },
     answerTextQuestion({ state, commit }, { identity, text }) {
         if (getAnswer(state, identity) == text) return // skip same answer on same question
 
         commit('SET_ANSWER', { identity, answer: text }) // to prevent answer blinking in TableRoster
-        app.$api.interview.answer(identity, 'answerTextQuestion', { answer: text })
+        api.interview.answer(identity, 'answerTextQuestion', { answer: text })
     },
     answerMultiOptionQuestion(_, { answer, identity }) {
-        app.$api.interview.answer(identity, 'answerMultiOptionQuestion', { answer })
+        api.interview.answer(identity, 'answerMultiOptionQuestion', { answer })
     },
     answerYesNoQuestion(_, { identity, answer }) {
-        app.$api.interview.answer(identity, 'answerYesNoQuestion', { answer })
+        api.interview.answer(identity, 'answerYesNoQuestion', { answer })
     },
     answerIntegerQuestion({ commit }, { identity, answer }) {
         commit('SET_ANSWER', { identity, answer: answer }) // to prevent answer blinking in TableRoster
-        app.$api.interview.answer(identity, 'answerIntegerQuestion', { answer })
+        api.interview.answer(identity, 'answerIntegerQuestion', { answer })
     },
     answerDoubleQuestion({ commit }, { identity, answer }) {
         commit('SET_ANSWER', { identity, answer: answer }) // to prevent answer blinking in TableRoster
-        return app.$api.interview.answer(identity, 'answerDoubleQuestion', { answer })
+        return api.interview.answer(identity, 'answerDoubleQuestion', { answer })
     },
     answerGpsQuestion(_, { identity, answer }) {
-        return app.$api.interview.answer(identity, 'answerGpsQuestion', { answer })
+        return api.interview.answer(identity, 'answerGpsQuestion', { answer })
     },
     answerDateQuestion({ state }, { identity, date }) {
         if (getAnswer(state, identity) == date) return // skip answer on same question
-        return app.$api.interview.answer(identity, 'answerDateQuestion', { answer: date })
+        return api.interview.answer(identity, 'answerDateQuestion', { answer: date })
     },
     answerTextListQuestion(_, { identity, rows }) {
-        return app.$api.interview.answer(identity, 'answerTextListQuestion', { answer: rows })
+        return api.interview.answer(identity, 'answerTextListQuestion', { answer: rows })
     },
     answerLinkedSingleOptionQuestion(_, { identity, answer }) {
-        return app.$api.interview.answer(identity, 'answerLinkedSingleOptionQuestion', { answer })
+        return api.interview.answer(identity, 'answerLinkedSingleOptionQuestion', { answer })
     },
     answerLinkedMultiOptionQuestion(_, { identity, answer }) {
-        return app.$api.interview.answer(identity, 'answerLinkedMultiOptionQuestion', { answer })
+        return api.interview.answer(identity, 'answerLinkedMultiOptionQuestion', { answer })
     },
 
     // TODO: there is no usages, check
     answerLinkedToListMultiQuestion(_, { identity, answer }) {
-        return app.$api.interview.answer(identity, 'answerLinkedToListMultiQuestion', { answer })
+        return api.interview.answer(identity, 'answerLinkedToListMultiQuestion', { answer })
     },
 
     // TODO: there is no usages, check
     answerLinkedToListSingleQuestion(_, { identity, answer }) {
-        return app.$api.interview.answer(identity, 'answerLinkedToListSingleQuestion', { answer })
+        return api.interview.answer(identity, 'answerLinkedToListSingleQuestion', { answer })
     },
 
     answerMultimediaQuestion(_, { identity, file }) {
-        return app.$api.interview.upload(app.$config.imageUploadUri, identity, file)
+        return api.interview.upload(app.$config.imageUploadUri, identity, file)
     },
 
     answerAudioQuestion(_, { identity, file, duration }) {
-        return app.$api.interview.upload(app.$config.audioUploadUri, identity, file, duration)
+        return api.interview.upload(app.$config.audioUploadUri, identity, file, duration)
     },
 
     answerQRBarcodeQuestion(_, { identity, text }) {
-        return app.$api.interview.answer(identity, 'answerQRBarcodeQuestion', { answer: text })
+        return api.interview.answer(identity, 'answerQRBarcodeQuestion', { answer: text })
     },
 
     async removeAnswer({ dispatch }, identity) {
-        await app.$api.interview.answer(identity, 'removeAnswer')
+        await api.interview.answer(identity, 'removeAnswer')
         dispatch('tryResolveFetch', identity)
     },
 
@@ -120,11 +120,11 @@ export default (app) => ({
 
     sendNewComment({ commit }, { identity, comment }) {
         commit('POSTING_COMMENT', { identity: identity })
-        return app.$api.interview.answer(identity, 'sendNewComment', { comment })
+        return api.interview.answer(identity, 'sendNewComment', { comment })
     },
 
     resolveComment(_, { identity }) {
-        return app.$api.interview.answer(identity, 'resolveComment')
+        return api.interview.answer(identity, 'resolveComment')
     },
 
     setAnswerAsNotSaved({ commit }, { id, message }) {
@@ -219,7 +219,7 @@ export default (app) => ({
         const isPrefilledSection = id === undefined
 
         if (isPrefilledSection) {
-            const prefilledPageData = await app.$api.interview.get('getPrefilledEntities')
+            const prefilledPageData = await api.interview.get('getPrefilledEntities')
             if (!prefilledPageData.hasAnyQuestions) {
                 const loc = {
                     name: 'section',
@@ -242,7 +242,7 @@ export default (app) => ({
                 commit('SET_LOADING_PROGRESS', true)
 
                 const showVariables = rootState.webinterview.showVariables || false
-                const section = await app.$api.interview.get('getFullSectionInfo', { sectionId: id, includeVariables: showVariables })
+                const section = await api.interview.get('getFullSectionInfo', { sectionId: id, includeVariables: showVariables })
 
                 const isCover = id === undefined || id == app.$config.coverPageId
                 if (isCover) {
@@ -269,7 +269,7 @@ export default (app) => ({
         const isPrefilledSection = sectionId === undefined
 
         if (!isPrefilledSection) {
-            const isEnabled = await app.$api.interview.get('isEnabled', { id: sectionId })
+            const isEnabled = await api.interview.get('isEnabled', { id: sectionId })
             if (!isEnabled) {
                 const firstSectionId = state.firstSectionId
                 const firstSectionLocation = {
@@ -287,13 +287,13 @@ export default (app) => ({
 
     fetchBreadcrumbs: debounce(async ({ commit, rootState }) => {
         const sectionId = rootState.route.params.sectionId
-        const crumps = await app.$api.interview.get('getBreadcrumbs', { sectionId })
+        const crumps = await api.interview.get('getBreadcrumbs', { sectionId })
         commit('SET_BREADCRUMPS', crumps)
     }, 200),
 
     fetchCompleteInfo: debounce(async ({ commit, dispatch }) => {
         commit('SET_LOADING_PROGRESS', true)
-        const completeInfo = await app.$api.interview.get('getCompleteInfo')
+        const completeInfo = await api.interview.get('getCompleteInfo')
         commit('SET_COMPLETE_INFO', completeInfo)
 
         dispatch('_fetchCriticalityInfo')
@@ -301,7 +301,7 @@ export default (app) => ({
 
     _fetchCriticalityInfo: debounce(async ({ commit }) => {
         try {
-            const result = await app.$api.interview.get('getCriticalityChecks')
+            const result = await api.interview.get('getCriticalityChecks')
             commit('SET_CRITICALITY_INFO', result)
         }
         finally {
@@ -310,12 +310,12 @@ export default (app) => ({
     }, 200),
 
     fetchInterviewStatus: debounce(async ({ commit }) => {
-        const interviewState = await app.$api.interview.get('getInterviewStatus')
+        const interviewState = await api.interview.get('getInterviewStatus')
         commit('SET_INTERVIEW_STATUS', interviewState)
     }, 200),
 
     fetchCoverInfo: debounce(async ({ commit }) => {
-        const coverInfo = await app.$api.interview.get('getCoverInfo')
+        const coverInfo = await api.interview.get('getCoverInfo')
         commit('SET_COVER_INFO', coverInfo)
     }, 200),
 
@@ -327,7 +327,7 @@ export default (app) => ({
         const interviewId = rootState.route.params.interviewId
         commit('CURRENT_SECTION', { interviewId: interviewId, section: null })
 
-        app.$api.interview.answer(null, 'completeInterview', { comment })
+        api.interview.answer(null, 'completeInterview', { comment })
     },
 
     requestWebInterview({ state, commit, rootState }, comment) {
@@ -335,7 +335,7 @@ export default (app) => ({
         const interviewId = rootState.route.params.interviewId
         commit('CURRENT_SECTION', { interviewId: interviewId, section: null })
 
-        app.$api.interview.answer(null, 'requestWebInterview', { comment })
+        api.interview.answer(null, 'requestWebInterview', { comment })
     },
 
     cleanUpEntity: batchedAction(({ commit }, ids) => {
@@ -343,20 +343,20 @@ export default (app) => ({
     }, null, /* limit */ 100),
 
     changeLanguage(_, language) {
-        return app.$api.interview.answer(null, 'changeLanguage', { language: language.language })
+        return api.interview.answer(null, 'changeLanguage', { language: language.language })
     },
 
     stop() {
-        app.$api.hub.stop()
+        api.hub.stop()
     },
 
     changeSection({ commit, rootState }, { to, from }) {
         const interviewId = rootState.route.params.interviewId
         commit('CURRENT_SECTION', { interviewId: interviewId, sectionId: to })
-        return app.$api.hub.changeSection(to, from)
+        return api.hub.changeSection(to, from)
     },
 
     setShowVariables({ commit, rootState }, { value }) {
         commit('SHOW_VARIABLES', { value: value })
     },
-})
+}

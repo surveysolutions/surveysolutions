@@ -8,12 +8,32 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+    <script type="text/javascript">
+        document.cookie = "_tz=" + new Date().getTimezoneOffset() + "; path=/";
+        
+        window.CONFIG = {"verboseMode":false,"googleApiKey":"","googleMapsApiBaseUrl":"https://maps.googleapis.com","googleMapsBaseUrl":"https://www.google.com","basePath":"/primary/","workspace":"primary","imageGetBase":"/primary/api/WebInterviewResources","audioGet":"/primary/Resource/AudioRecord","appVersion":"1.0.0","supportedTransports":["webSockets","longPolling"]};
+    
+        if (typeof moment !== 'undefined') {
+            moment.locale('en');
+        }
+    </script>
+    
+    <!-- Locale hq -->
+    <script>
+        window.CONFIG.locale = {
+            locale: 'en',
+            locales: '{}'
+        };
+        // JSONP callback to load localization from '@localePath'
+        window.__setLocaleData__ = function(data) { window.CONFIG.locale.data = data; }
+    </script>
   </head>
   <body id="app" class="block-ui">
     <noscript>
       <strong>We're sorry but this app doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
     <!--div ></div-->    
-    <script type="module" src="/src/hqapp/main.js"></script>
+    <script type="module" src="/src/webinterview/main.js"></script>
   </body>
 </html>

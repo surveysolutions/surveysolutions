@@ -1,9 +1,9 @@
 import { forEach, groupBy } from 'lodash'
-//import Vue from 'vue'
 
 import { batchedAction } from '../helpers'
+import { api } from '../api/http'
 
-export default (app) => ({
+export default {
     state: {
         panels: {
             // organized by parentId, that way it easier to search and request data
@@ -18,7 +18,7 @@ export default (app) => ({
 
     actions: {
         fetchSidebar: batchedAction(({ commit, rootState }, ids) => {
-            return Vue.$api.interview.get('getSidebarChildSectionsOf',
+            return api.interview.get('getSidebarChildSectionsOf',
                 {
                     interviewId: rootState.route.params.interviewId,
                     sectionId: rootState.route.params.sectionId || null,
@@ -130,4 +130,3 @@ export default (app) => ({
         },
     },
 }
-)

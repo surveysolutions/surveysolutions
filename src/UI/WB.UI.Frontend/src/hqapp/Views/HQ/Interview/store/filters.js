@@ -1,6 +1,7 @@
 //import Vue from 'vue'
 //TODO: MIGRATION
 import { capitalize, sum, unionBy, find } from 'lodash'
+import { api } from '../../../../../webinterview/api/http'
 
 function getSelectedFlags(state) {
     const flags = Object.keys(state.filter)
@@ -47,7 +48,7 @@ export default {
             const flags = getSelectedFlags(state)
             const skip = state.search.needToClear ? 0 : state.search.skip
             const limit = state.search.pageSize
-            const res = await this.$api.interview.get('search', { flags, skip, limit })
+            const res = await api.get('search', { flags, skip, limit })
             commit('LOG_LAST_ACTIVITY')
             commit('SET_SEARCH_RESULT', res)
         },
@@ -69,7 +70,7 @@ export default {
         },
 
         getStatusesHistory() {
-            return this.$api.interview('getStatusesHistory')
+            return api.interview('getStatusesHistory')
         },
 
         resetAllFilters({ commit, state, dispatch }) {

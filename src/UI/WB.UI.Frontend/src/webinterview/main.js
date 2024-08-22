@@ -3,6 +3,7 @@
 
 import { createApp } from 'vue';
 //import { createPinia } from 'pinia';
+
 import App from './App.vue';
 import { setupErrorHandler } from './errors';
 
@@ -56,9 +57,12 @@ import webinterviewStore from './stores'
 import { createStore } from 'vuex';
 const store = createStore({
     modules: {
-        webinterview: webinterviewStore(app),
+        webinterview: webinterviewStore,
     },
 })
+
+import http from './api/http'
+vue.use(http, { store })
 
 const router = createRouter(store)
 

@@ -1,13 +1,11 @@
-//import Vue from 'vue'
 import { createRouter, createWebHistory } from 'vue-router'
-
-//Vue.use(VueRouter)
 
 import Complete from '../components/Complete'
 import Cover from '../components/Cover'
 import Section from '../components/Section'
 import SideBar from '../components/Sidebar'
 import Splash from '../components/Splash'
+import { config } from '../../shared/config'
 
 const Interview = () => import('~/webinterview/components/Interview.vue')
 
@@ -15,7 +13,7 @@ function NewRouter(store) {
 
     const router = createRouter({
 
-        history: createWebHistory(this.$config.virtualPath),
+        history: createWebHistory(config.virtualPath),
         routes: [
             {
                 name: 'finish',
@@ -42,7 +40,7 @@ function NewRouter(store) {
                         path: 'Cover',
                         component: Cover,
                         beforeEnter: (to, from, next) => {
-                            if (Vue.$config.coverPageId)
+                            if (config.coverPageId)
                                 next({ name: 'cover', params: { interviewId: to.params.interviewId } })
                             else
                                 next()
@@ -50,11 +48,11 @@ function NewRouter(store) {
                     },
                     {
                         name: 'cover',
-                        path: 'Section/' + (Vue.$config.coverPageId || 'newcover'),
+                        path: 'Section/' + (config.coverPageId || 'newcover'),
                         component: Cover,
                         beforeEnter: (to, from, next) => {
-                            if (Vue.$config.coverPageId)
-                                to.params.sectionId = Vue.$config.coverPageId
+                            if (config.coverPageId)
+                                to.params.sectionId = config.coverPageId
                             next()
                         },
                     },
@@ -63,7 +61,7 @@ function NewRouter(store) {
                         path: 'Section/:sectionId',
                         component: Section,
                         beforeEnter: (to, from, next) => {
-                            if (Vue.$config.coverPageId && to.params.sectionId == Vue.$config.coverPageId)
+                            if (config.coverPageId && to.params.sectionId == config.coverPageId)
                                 next({ name: 'cover' })
                             else
                                 next()
@@ -88,7 +86,7 @@ function NewRouter(store) {
 
     // tslint:disable:no-string-literal
     router.beforeEach(async (to, from, next) => {
-        if (Vue.$config.splashScreen) { next(); return }
+        if (config.splashScreen) { next(); return }
         next()
     })
 
