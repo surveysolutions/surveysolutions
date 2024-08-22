@@ -129,7 +129,7 @@ namespace WB.UI.Headquarters.Code.Workspaces
             "/fonts",
             "/locale",
             "/img",
-            "/error",
+            "/error/report",
         };
     }
 }
