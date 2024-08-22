@@ -85,7 +85,7 @@
                     </button>
                     <span class="text-success" v-if="globalNoticeUpdated">{{
                         $t('Settings.GlobalNoteSaved')
-                    }}</span>
+                        }}</span>
                 </div>
             </form>
         </div>
@@ -168,83 +168,89 @@
                 </div>
             </div>
             <div class="col-sm-7">
-                <div class="block-filter" style="padding-left: 30px">
-                    <div class="form-group">
-                        <label for="interviewerGeographyQuestionAccuracyInMeters" style="font-weight: bold">
-                            <span class="tick"></span>
-                            {{ $t('Settings.InterviewerGeographyQuestionAccuracyInMeters') }}
-                            <p style="font-weight: normal">
-                                {{ $t('Settings.GeographyQuestionAccuracyInMetersDescription') }}
-                            </p>
-                        </label>
-                    </div>
-                    <div class="form-group">
-                        <div class="input-group input-group-save">
-                            <Field class="form-control number" v-model.number="geographyQuestionAccuracyInMeters"
-                                :rules="{
-                                    integer: true,
-                                    required: true,
-                                    min_value: 1,
-                                    max_value: 1000,
-                                }" name="accuracy" id="interviewerGeographyQuestionAccuracyInMeters" type="number" />
+                <Form v-slot="{ meta }" @submit="noAction">
+                    <div class="block-filter" style="padding-left: 30px">
+                        <div class="form-group">
+                            <label for="interviewerGeographyQuestionAccuracyInMeters" style="font-weight: bold">
+                                <span class="tick"></span>
+                                {{ $t('Settings.InterviewerGeographyQuestionAccuracyInMeters') }}
+                                <p style="font-weight: normal">
+                                    {{ $t('Settings.GeographyQuestionAccuracyInMetersDescription') }}
+                                </p>
+                            </label>
                         </div>
-                        <button type="button" class="btn btn-success" :disabled="geographyQuestionAccuracyInMeters ==
-                            geographyQuestionAccuracyInMetersCancel ||
-                            geographyQuestionAccuracyInMeters < 1 ||
-                            geographyQuestionAccuracyInMeters > 1000 ||
-                            errors.has('accuracy')
-                            " @click="updateGeographyQuestionAccuracyInMeters">
-                            {{ $t('Common.Save') }}
-                        </button>
-                        <button type="button" class="btn btn-link" :disabled="geographyQuestionAccuracyInMeters ==
-                            geographyQuestionAccuracyInMetersCancel
-                            " @click="cancelGeographyQuestionAccuracyInMeters">
-                            {{ $t('Common.Cancel') }}
-                        </button>
+                        <div class="form-group">
+                            <div class="input-group input-group-save">
+                                <Field class="form-control number" v-model.number="geographyQuestionAccuracyInMeters"
+                                    :rules="{
+                                        integer: true,
+                                        required: true,
+                                        min_value: 1,
+                                        max_value: 1000,
+                                    }" name="accuracy" id="interviewerGeographyQuestionAccuracyInMeters"
+                                    type="number" />
+                            </div>
+                            <button type="button" class="btn btn-success" :disabled="geographyQuestionAccuracyInMeters ==
+                                geographyQuestionAccuracyInMetersCancel ||
+                                geographyQuestionAccuracyInMeters < 1 ||
+                                geographyQuestionAccuracyInMeters > 1000 ||
+                                meta.valid == false
+                                " @click="updateGeographyQuestionAccuracyInMeters">
+                                {{ $t('Common.Save') }}
+                            </button>
+                            <button type="button" class="btn btn-link"
+                                :disabled="geographyQuestionAccuracyInMeters == geographyQuestionAccuracyInMetersCancel"
+                                @click="cancelGeographyQuestionAccuracyInMeters">
+                                {{ $t('Common.Cancel') }}
+                            </button>
+                        </div>
+                        <div class="error">
+                            <ErrorMessage name="accuracy"></ErrorMessage>
+                        </div>
                     </div>
-                    <div class="error" v-if="errors.has('accuracy')">
-                        {{ errors.first('accuracy') }}
-                    </div>
-                </div>
+                </Form>
             </div>
             <div class="col-sm-7">
-                <div class="block-filter" style="padding-left: 30px">
-                    <div class="form-group">
-                        <label for="interviewerGeographyQuestionPeriodInSeconds" style="font-weight: bold">
-                            <span class="tick"></span>
-                            {{ $t('Settings.InterviewerGeographyQuestionPeriodInSeconds') }}
-                            <p style="font-weight: normal">
-                                {{ $t('Settings.GeographyQuestionPeriodInSecondsDescription') }}
-                            </p>
-                        </label>
-                    </div>
-                    <div class="form-group">
-                        <div class="input-group input-group-save">
-                            <Field class="form-control number" v-model.number="geographyQuestionPeriodInSeconds" :rules="{
-                                integer: true,
-                                required: true,
-                                min_value: 5,
-                                max_value: 1000,
-                            }" id="interviewerGeographyQuestionPeriodInSeconds" name="period" type="number" />
+                <Form v-slot="{ meta }" @submit="noAction">
+                    <div class="block-filter" style="padding-left: 30px">
+                        <div class="form-group">
+                            <label for="interviewerGeographyQuestionPeriodInSeconds" style="font-weight: bold">
+                                <span class="tick"></span>
+                                {{ $t('Settings.InterviewerGeographyQuestionPeriodInSeconds') }}
+                                <p style="font-weight: normal">
+                                    {{ $t('Settings.GeographyQuestionPeriodInSecondsDescription') }}
+                                </p>
+                            </label>
                         </div>
-                        <button type="button" class="btn btn-success" :disabled="geographyQuestionPeriodInSeconds ==
-                            geographyQuestionPeriodInSecondsCancel ||
-                            geographyQuestionPeriodInSeconds < 5 ||
-                            geographyQuestionPeriodInSeconds > 1000 ||
-                            errors.has('period')
-                            " @click="updateGeographyQuestionPeriodInSeconds">
-                            {{ $t('Common.Save') }}
-                        </button>
-                        <button type="button" class="btn btn-link" :disabled="geographyQuestionPeriodInSeconds ==
-                            geographyQuestionPeriodInSecondsCancel
-                            " @click="cancelGeographyQuestionPeriodInSeconds">
-                            {{ $t('Common.Cancel') }}
-                        </button>
+                        <div class="form-group">
+                            <div class="input-group input-group-save">
+                                <Field class="form-control number" v-model.number="geographyQuestionPeriodInSeconds"
+                                    :rules="{
+                                        integer: true,
+                                        required: true,
+                                        min_value: 5,
+                                        max_value: 1000,
+                                    }" id="interviewerGeographyQuestionPeriodInSeconds" name="period" type="number" />
+                            </div>
+                            <button type="button" class="btn btn-success" :disabled="geographyQuestionPeriodInSeconds ==
+                                geographyQuestionPeriodInSecondsCancel ||
+                                geographyQuestionPeriodInSeconds < 5 ||
+                                geographyQuestionPeriodInSeconds > 1000 ||
+                                meta.valid == false"
+                                @click="updateGeographyQuestionPeriodInSeconds">
+                                {{ $t('Common.Save') }}
+                            </button>
+                            <button type="button" class="btn btn-link"
+                                :disabled="geographyQuestionPeriodInSeconds == geographyQuestionPeriodInSecondsCancel"
+                                @click="cancelGeographyQuestionPeriodInSeconds">
+                                {{ $t('Common.Cancel') }}
+                            </button>
+                        </div>
+                        <div class="error">
+                            <ErrorMessage name="period"></ErrorMessage>
+                        </div>
                     </div>
-                    <div class="error" v-show="errors.has('period')">
-                        {{ errors.first('period') }}
-                    </div>
-                </div>
+                </Form>
             </div>
 
             <div class="col-sm-7">
@@ -424,6 +430,7 @@ export default {
         this.getFormData()
     },
     methods: {
+        noAction() { },
         async getFormData() {
 
             const workspaceSettings = await this.$hq.AdminSettings.getWorkspaceSettings()

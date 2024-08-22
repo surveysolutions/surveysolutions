@@ -330,10 +330,13 @@
         position: relative;
         cursor: pointer;
 
-        &.sorting_disabled {
+        &.sorting_disabled,
+        &.dt-orderable-none {
 
+            &.sorting_asc,
             &.sorting_desc,
-            &.sorting_asc {
+            &.dt-ordering-asc,
+            &.dt-ordering-desc {
                 color: $gray_light;
             }
 
@@ -359,7 +362,8 @@
             @include absolute(17px, 10px);
         }
 
-        &.sorting.sorting_asc {
+        &.sorting.sorting_asc,
+        &.dt-orderable-asc.dt-ordering-asc {
             color: $blue;
 
             &:after {
@@ -368,7 +372,8 @@
             }
         }
 
-        &.sorting.sorting_desc {
+        &.sorting.sorting_desc,
+        &.dt-orderable-desc.dt-ordering-desc {
             color: $blue;
 
             &:after {
@@ -643,11 +648,14 @@
     .table-ordered {
         thead {
             tr th {
-                &.sorting.sorting_desc:after {
+
+                &.sorting.sorting_desc:after,
+                &.dt-orderable-desc.dt-ordering-desc:after {
                     border-top: 8px solid $blue;
                 }
 
-                &.sorting.sorting_asc:after {
+                &.sorting.sorting_asc:after,
+                &.dt-orderable-asc.dt-ordering-asc:after {
                     border-bottom-width: 8px;
                     border-top: none;
                 }
@@ -940,11 +948,13 @@
                 border-top: 6px solid $gray_form;
             }
 
-            &.sorting_desc:after {
+            &.sorting_desc:after,
+            &.dt-ordering-desc:after {
                 border-top: 6px solid $blue;
             }
 
-            &.sorting_asc:after {
+            &.sorting_asc:after,
+            &.dt-ordering-asc:after {
                 border-bottom-width: 6px;
             }
         }
@@ -1026,7 +1036,9 @@
             }
 
             &.sorting_asc,
-            &.sorting_desc {
+            &.sorting_desc,
+            &.dt-ordering-asc,
+            &.dt-ordering-desc {
                 color: #fff;
 
                 &:after {
