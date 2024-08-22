@@ -20,7 +20,7 @@
             <div class="row">
                 <div class="export d-flex" ref="list">
                     <div class="col-md-12">
-                        <Form v-if="!exportServiceIsUnavailable">
+                        <Form v-if="!exportServiceIsUnavailable" v-slot="{ meta }">
                             <div class="mb-30">
                                 <h3>{{ $t('DataExport.FilterTitle') }}</h3>
                                 <div class="d-flex mb-20 filter-wrapper">
@@ -31,14 +31,17 @@
                                         </h5>
                                         <!-- TODO:Migration -->
                                         <!-- :class="{ 'has-error': errors.has('questionnaireId') }" -->
-                                        <div class="form-group">
+                                        <div class="form-group" :class="{ 'has-error': meta.valid == false }">
                                             <Typeahead control-id="questionnaireId" :value="questionnaireId"
                                                 :placeholder="$t('Common.AllQuestionnaires')"
                                                 :fetch-url="questionnaireFetchUrl" :selectedKey="pageState.id"
-                                                data-vv-name="questionnaireId" data-vv-as="questionnaire"
-                                                :rules="required" v-on:selected="questionnaireSelected" />
+                                                data-vv-name="questionnaireId" name="questionnaireId"
+                                                data-vv-as="questionnaire" :rules="required"
+                                                v-on:selected="questionnaireSelected" />
                                             <span class="help-block">
-                                                {{ errors.first('questionnaireId') }}</span>
+                                                <ErrorMessage name="questionnaireId"></ErrorMessage>
+                                                <!-- {{ errors.first('questionnaireId') }} -->
+                                            </span>
                                         </div>
                                         <h5>
                                             {{ $t('DataExport.SurveyQuestionnaireVersion') }}
@@ -48,13 +51,15 @@
                                         <div class="form-group">
                                             <Typeahead noClear control-id="questionnaireVersion"
                                                 ref="questionnaireVersionControl" data-vv-name="questionnaireVersion"
-                                                data-vv-as="questionnaire version" :selectedKey="pageState.version"
-                                                :rules="required" :value="questionnaireVersion"
-                                                :fetch-url="questionnaireVersionFetchUrl"
+                                                name="questionnaireVersion" data-vv-as="questionnaire version"
+                                                :selectedKey="pageState.version" :rules="required"
+                                                :value="questionnaireVersion" :fetch-url="questionnaireVersionFetchUrl"
                                                 v-on:selected="questionnaireVersionSelected"
                                                 :disabled="questionnaireVersionFetchUrl == null" :selectFirst="true" />
                                             <span class="help-block">
-                                                {{ errors.first('questionnaireVersion') }}</span>
+                                                <ErrorMessage name="questionnaireVersion"></ErrorMessage>
+                                                <!-- {{ errors.first('questionnaireVersion') }} -->
+                                            </span>
                                         </div>
                                         <h5 v-if="translations.length > 0">
                                             {{ $t('DataExport.SurveyQuestionnaireTranslation') }}

@@ -141,8 +141,9 @@
                                                     <div class="h5">
                                                         {{ $t('WebInterviewSettings.EmailSubject') }}
                                                     </div>
-                                                    <div class="form-group mb-30"
-                                                        :class="{ 'has-error': errors.has('emailTemplateData' + emailTemplate.value + '.subject') }">
+                                                    <!-- TODO:Migration -->
+                                                    <!-- :class="{ 'has-error': errors.has('emailTemplateData' + emailTemplate.value + '.subject') }" -->
+                                                    <div class="form-group mb-30">
                                                         <div class="field" :class="{ answered: emailTemplate.subject }">
                                                             <Field type="text" v-model="emailTemplate.subject"
                                                                 data-vv-as="Please enter the subject" :rules="required"
@@ -183,8 +184,8 @@
                                                     <div class="h5">
                                                         {{ $t('WebInterviewSettings.MainText') }}
                                                     </div>
-                                                    <div class="form-group mb-30"
-                                                        :class="{ 'has-error': errors.has('emailTemplateData' + emailTemplate.value + '.message') }">
+                                                    <!-- :class="{ 'has-error': errors.has('emailTemplateData' + emailTemplate.value + '.message') }" -->
+                                                    <div class="form-group mb-30">
                                                         <div class="field" :class="{ answered: emailTemplate.message }">
                                                             <textarea-autosize v-model="emailTemplate.message"
                                                                 data-vv-as="Please enter the main text"
@@ -215,13 +216,9 @@
                                                             $t('WebInterviewSettings.ShownPasswordIsRequired')
                                                         }}
                                                     </div>
-                                                    <div class="form-group mb-30" :class="{
-                                                        'has-error': errors.has(
-                                                            'emailTemplateData' +
-                                                            emailTemplate.value +
-                                                            '.passwordDescription'
-                                                        ),
-                                                    }">
+                                                    <!-- TODO: Migrations -->
+                                                    <!-- :class="{ 'has-error': errors.has('emailTemplateData' + emailTemplate.value + '.passwordDescription') }" -->
+                                                    <div class="form-group mb-30">
                                                         <div class="field"
                                                             :class="{ answered: emailTemplate.passwordDescription }">
                                                             <Field type="text"
@@ -247,8 +244,8 @@
                                                     <div class="h5">
                                                         {{ $t('WebInterviewSettings.StartInterviewButton') }}
                                                     </div>
-                                                    <div class="form-group mb-30"
-                                                        :class="{ 'has-error': errors.has('emailTemplateData' + emailTemplate.value + '.linkText') }">
+                                                    <!-- :class="{ 'has-error': errors.has('emailTemplateData' + emailTemplate.value + '.linkText') }" -->
+                                                    <div class="form-group mb-30">
                                                         <div class="field"
                                                             :class="{ answered: emailTemplate.linkText }">
                                                             <span class="wrapper-dynamic">

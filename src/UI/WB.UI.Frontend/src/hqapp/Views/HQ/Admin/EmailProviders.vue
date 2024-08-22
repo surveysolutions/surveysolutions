@@ -13,8 +13,9 @@
                                 {{ $t('Settings.EmailProvider_SenderAddress') }}
                             </label>
                             <div class="field" :class="{ answered: senderAddress }">
-                                <Field data-vv-as="email address" :rules="'required_if:provider,amazon,sendgrid,smtp|email'
-                                    " name="senderAddress" id="senderAddress" v-model="senderAddress" type="text"
+                                <Field data-vv-as="email address"
+                                    :rules="'required_if:provider,amazon,sendgrid,smtp|email'" name="senderAddress"
+                                    id="senderAddress" v-model="senderAddress" type="text"
                                     class="form-control with-clear-btn" maxlength="200" />
                                 <button type="button" @click="senderAddress = null" class="btn btn-link btn-clear">
                                     <span></span>
@@ -23,15 +24,13 @@
                                     {{ $t('Settings.EmailProvider_SenderHelp') }}
                                 </span>
                                 <span class="help-block">
-                                    {{ errors.first('settings.senderAddress') }}
+                                    <ErrorMessage name="senderAddress"></ErrorMessage>
+                                    <!-- {{ errors.first('settings.senderAddress') }} -->
                                 </span>
                             </div>
                         </div>
-                        <div class="form-group" :class="{
-                            'has-error': errors.has(
-                                'settings.replyAddress',
-                            ),
-                        }">
+                        <!-- :class="{ 'has-error': errors.has('settings.replyAddress') }" -->
+                        <div class="form-group">
                             <label class="h5">
                                 {{ $t('Settings.EmailProvider_ReplyAddress') }}
                             </label>
@@ -46,7 +45,8 @@
                                     {{ $t('Settings.EmailProvider_ReplyAddressHelp') }}
                                 </span>
                                 <span class="help-block">
-                                    {{ errors.first('settings.replyAddress') }}
+                                    <ErrorMessage name="replyAddress"></ErrorMessage>
+                                    <!-- {{ errors.first('settings.replyAddress') }} -->
                                 </span>
                             </div>
                         </div>
@@ -64,12 +64,12 @@
                             <button type="button" @click="senderName = null" class="btn btn-link btn-clear">
                                 <span></span>
                             </button>
-                            <span class="gray-text help-block">{{
-                                $t('Settings.EmailProvider_SenderNameHelp')
-                            }}</span>
-                            <span class="help-block">{{
-                                errors.first('settings.senderName')
-                            }}</span>
+                            <span class="gray-text help-block">
+                                {{ $t('Settings.EmailProvider_SenderNameHelp') }}</span>
+                            <span class="help-block">
+                                <ErrorMessage name="senderName"></ErrorMessage>
+                                <!-- {{ errors.first('settings.senderName') }} -->
+                            </span>
                         </div>
                     </div>
                     <!-- :class="{ 'has-error': errors.has('settings.address') }" -->
@@ -88,7 +88,8 @@
                                 {{ $t('Settings.EmailProvider_AddressHelp') }}
                             </span>
                             <span class="help-block">
-                                {{ errors.first('settings.address') }}
+                                <ErrorMessage name="address"></ErrorMessage>
+                                <!-- {{ errors.first('settings.address') }} -->
                             </span>
                         </div>
                     </div>
@@ -106,11 +107,7 @@
                             <div class="extended-block" v-if="provider === 'none'">
                                 <div class="wrapper">
                                     <p>
-                                        {{
-                                            $t(
-                                                'Settings.EmailProvider_NoneDescription',
-                                            )
-                                        }}
+                                        {{ $t('Settings.EmailProvider_NoneDescription') }}
                                     </p>
                                 </div>
                             </div>
@@ -125,31 +122,20 @@
                             <div class="extended-block" v-if="provider === 'amazon'">
                                 <div class="wrapper">
                                     <p>
-                                        {{
-                                            $t(
-                                                'Settings.EmailProvider_AmazonDescription',
-                                            )
-                                        }}
+                                        {{ $t('Settings.EmailProvider_AmazonDescription') }}
                                         <a href="https://support.mysurvey.solutions/headquarters/cawi/email-providers-amazon-ses"
-                                            target="_blank">{{
-                                                $t(
-                                                    'Settings.EmailProvider_HelpLinkText',
-                                                )
-                                            }}</a>
+                                            target="_blank">
+                                            {{ $t('Settings.EmailProvider_HelpLinkText') }}
+                                        </a>
                                     </p>
-                                    <div class="form-group" :class="{
-                                        'has-error': errors.has(
-                                            'settings.awsAccessKeyId',
-                                        ),
-                                    }">
+                                    <!-- :class="{ 'has-error': errors.has('settings.awsAccessKeyId') }" -->
+                                    <div class="form-group">
                                         <label class="h5">{{
                                             $t(
                                                 'Settings.EmailProvider_AwsAccessKeyId',
                                             )
                                         }}</label>
-                                        <div class="field" :class="{
-                                            answered: awsAccessKeyId,
-                                        }">
+                                        <div class="field" :class="{ answered: awsAccessKeyId }">
                                             <Field data-vv-as="AWS access key id" :rules="required"
                                                 class="form-control with-clear-btn" name="awsAccessKeyId"
                                                 id="awsAccessKeyId" type="text" v-model="awsAccessKeyId"
@@ -163,18 +149,14 @@
                                                     'Settings.EmailProvider_AwsAccessKeyIdHelp',
                                                 )
                                             }}</span>
-                                            <span class="help-block">{{
-                                                errors.first(
-                                                    'settings.awsAccessKeyId',
-                                                )
-                                            }}</span>
+                                            <span class="help-block">
+                                                <ErrorMessage name="awsAccessKeyId"></ErrorMessage>
+                                                <!-- {{ errors.first('settings.awsAccessKeyId') }} -->
+                                            </span>
                                         </div>
                                     </div>
-                                    <div class="form-group" :class="{
-                                        'has-error': errors.has(
-                                            'settings.awsSecretAccessKey',
-                                        ),
-                                    }">
+                                    <!-- :class="{ 'has-error': errors.has('settings.awsSecretAccessKey') }" -->
+                                    <div class="form-group">
                                         <label class="h5">{{
                                             $t(
                                                 'Settings.EmailProvider_AwsSecretAccessKey',
@@ -197,41 +179,30 @@
                                                     'Settings.EmailProvider_AwsSecretAccessKeyHelp',
                                                 )
                                             }}</span>
-                                            <span class="help-block">{{
-                                                errors.first(
-                                                    'settings.awsSecretAccessKey',
-                                                )
-                                            }}</span>
+                                            <span class="help-block">
+                                                <ErrorMessage name="awsSecretAccessKey"></ErrorMessage>
+                                                <!-- {{ errors.first('settings.awsSecretAccessKey') }} -->
+                                            </span>
                                         </div>
                                     </div>
-
-                                    <div class="form-group" :class="{
-                                        'has-error':
-                                            errors.has(
-                                                'settings.awsRegion',
-                                            ),
-                                    }">
-                                        <label class="h5">{{
-                                            $t(
-                                                'Settings.EmailProvider_AwsRegion',
-                                            )
-                                        }}</label>
+                                    <!-- :class="{ 'has-error': errors.has('settings.awsRegion') }" -->
+                                    <div class="form-group">
+                                        <label class="h5">
+                                            {{ $t('Settings.EmailProvider_AwsRegion') }}
+                                        </label>
                                         <div class="field" :class="{ answered: awsRegion }">
                                             <select :rules="required" data-vv-as="AWS region" name="awsRegion"
                                                 id="awsRegion" v-model="awsRegion" class="form-control">
                                                 <option :key="awsRegion.key" :value="awsRegion.key" v-for="awsRegion in $config
                                                     .model.awsRegions" v-html="awsRegion.value" />
                                             </select>
-                                            <span class="gray-text help-block">{{
-                                                $t(
-                                                    'Settings.EmailProvider_AwsRegionHelp',
-                                                )
-                                            }}</span>
-                                            <span class="help-block">{{
-                                                errors.first(
-                                                    'settings.awsRegion',
-                                                )
-                                            }}</span>
+                                            <span class="gray-text help-block">
+                                                {{ $t('Settings.EmailProvider_AwsRegionHelp') }}
+                                            </span>
+                                            <span class="help-block">
+                                                <ErrorMessage name="awsRegion"></ErrorMessage>
+                                                <!-- {{ errors.first('settings.awsRegion') }} -->
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
@@ -247,31 +218,18 @@
                             <div class="extended-block" v-if="provider === 'sendgrid'">
                                 <div class="wrapper">
                                     <p>
-                                        {{
-                                            $t(
-                                                'Settings.EmailProvider_SendgridDescription',
-                                            )
-                                        }}
+                                        {{ $t('Settings.EmailProvider_SendgridDescription') }}
                                         <a href="https://support.mysurvey.solutions/headquarters/cawi/email-providers-sendgrid"
-                                            target="_blank">{{
-                                                $t(
-                                                    'Settings.EmailProvider_HelpLinkText',
-                                                )
-                                            }}</a>
+                                            target="_blank">
+                                            {{ $t('Settings.EmailProvider_HelpLinkText') }}
+                                        </a>
                                     </p>
-                                    <div class="form-group" :class="{
-                                        'has-error': errors.has(
-                                            'settings.sendGridApiKey',
-                                        ),
-                                    }">
-                                        <label class="h5">{{
-                                            $t(
-                                                'Settings.EmailProvider_SendGridApiKey',
-                                            )
-                                        }}</label>
-                                        <div class="field" :class="{
-                                            answered: sendGridApiKey,
-                                        }">
+                                    <!-- :class="{ 'has-error': errors.has('settings.sendGridApiKey') }" -->
+                                    <div class="form-group">
+                                        <label class="h5">
+                                            {{ $t('Settings.EmailProvider_SendGridApiKey') }}
+                                        </label>
+                                        <div class="field" :class="{ answered: sendGridApiKey }">
                                             <Field :rules="required" data-vv-as="API key" name="sendGridApiKey"
                                                 class="form-control with-clear-btn" id="sendGridApiKey" type="text"
                                                 v-model="sendGridApiKey" maxlength="200" />
@@ -279,16 +237,13 @@
                                                 class="btn btn-link btn-clear">
                                                 <span></span>
                                             </button>
-                                            <span class="gray-text help-block">{{
-                                                $t(
-                                                    'Settings.EmailProvider_SendGridApiKeyHelp',
-                                                )
-                                            }}</span>
-                                            <span class="help-block">{{
-                                                errors.first(
-                                                    'settings.sendGridApiKey',
-                                                )
-                                            }}</span>
+                                            <span class="gray-text help-block">
+                                                {{ $t('Settings.EmailProvider_SendGridApiKeyHelp') }}
+                                            </span>
+                                            <span class="help-block">
+                                                <ErrorMessage name="sendGridApiKey"></ErrorMessage>
+                                                <!-- {{ errors.first('settings.sendGridApiKey') }} -->
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
@@ -328,11 +283,13 @@
                                                     )
                                                 }}</span
                                         -->
-                                            <span class="help-block">{{ errors.first('settings.smtpHost',) }}</span>
+                                            <span class="help-block">
+                                                <ErrorMessage name="smtpHost"></ErrorMessage>
+                                                <!-- {{ errors.first('settings.smtpHost',) }} -->
+                                            </span>
                                         </div>
                                     </div>
                                     <!-- :class="{ 'has-error': errors.has('settings.smtpPort'), }" -->
-
                                     <div class="form-group">
                                         <label class="h5">{{ $t('Settings.EmailProvider_SmtpPort',) }}</label>
                                         <div class="field" :class="{ answered: smtpPort, }">
@@ -350,7 +307,10 @@
                                             <!--span
                                                 class="gray-text help-block">{{ $t('Settings.EmailProvider_SmtpPortHelp',)
                                                 }}</span-->
-                                            <span class="help-block">{{ errors.first('settings.smtpPort',) }}</span>
+                                            <span class="help-block">
+                                                <ErrorMessage name="smtpPort"></ErrorMessage>
+                                                <!-- {{ errors.first('settings.smtpPort',) }} -->
+                                            </span>
                                         </div>
                                     </div>
 
@@ -373,22 +333,15 @@
                                                     'Settings.EmailProvider_SmtpTlsEncryptionHelp',
                                                 )
                                             }}</span>
-                                            <span class="help-block">{{
-                                                errors.first(
-                                                    'settings.smtpTlsEncryption',
-                                                )
-                                            }}</span>
+                                            <span class="help-block">
+                                                <ErrorMessage name="smtpTlsEncryption"></ErrorMessage>
+                                                <!-- {{ errors.first('settings.smtpTlsEncryption') }} -->
+                                            </span>
                                         </div>
                                     </div>
-
-                                    <div class="block-filter" :class="{
-                                        'has-error': errors.has(
-                                            'settings.smtpAuthentication',
-                                        ),
-                                    }">
-                                        <div class="field" :class="{
-                                            answered: smtpAuthentication,
-                                        }">
+                                    <!-- :class="{ 'has-error': errors.has('settings.smtpAuthentication') }" -->
+                                    <div class="block-filter">
+                                        <div class="field" :class="{ answered: smtpAuthentication }">
                                             <input type="checkbox" style="margin-right: 5px"
                                                 class="form-control checkbox-filter single-checkbox"
                                                 data-vv-as="Use authentication" name="smtpAuthentication"
@@ -399,8 +352,10 @@
                                             </label>
                                             <span class="gray-text help-block">{{
                                                 $t('Settings.EmailProvider_SmtpAuthenticationHelp',) }}</span>
-                                            <span class="help-block">{{ errors.first('settings.smtpAuthentication',)
-                                                }}</span>
+                                            <span class="help-block">
+                                                <ErrorMessage name="smtpAuthentication"></ErrorMessage>
+                                                <!-- {{ errors.first('settings.smtpAuthentication') }} -->
+                                            </span>
                                         </div>
                                     </div>
 
@@ -418,8 +373,10 @@
                                             </button>
                                             <span class="gray-text help-block">{{
                                                 $t('Settings.EmailProvider_SmtpUsernameHelp',) }}</span>
-                                            <span v-if="smtpAuthentication" class="help-block">{{
-                                                errors.first('settings.smtpUsername',) }}</span>
+                                            <span v-if="smtpAuthentication" class="help-block">
+                                                <ErrorMessage name="smtpUsername"></ErrorMessage>
+                                                <!-- {{ errors.first('settings.smtpUsername') }} -->
+                                            </span>
                                         </div>
                                     </div>
 
@@ -437,8 +394,10 @@
                                             </button>
                                             <span class="gray-text help-block">{{
                                                 $t('Settings.EmailProvider_SmtpPasswordHelp',) }}</span>
-                                            <span v-if="smtpAuthentication" class="help-block">{{
-                                                errors.first('settings.smtpPassword',) }}</span>
+                                            <span v-if="smtpAuthentication" class="help-block">
+                                                <ErrorMessage name="smtpPassword"></ErrorMessage>
+                                                <!-- {{ errors.first('settings.smtpPassword') }} -->
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
@@ -452,14 +411,14 @@
                     <div class="form-group">
                         <button class="btn btn-success" type="button" :disabled="!isFormDirty || isFetchInProgress"
                             @click="save">
-                            Save
+                            {{ $t('Common.Save') }}
                         </button>
                     </div>
                     <p class="text-success" v-if="providerSettingsResult">
                         {{ providerSettingsResult }}
                     </p>
                 </Form>
-                <Form v-if="showSendTestEmail" data-vv-scope="testEmail" class="form-container">
+                <Form v-if="showSendTestEmail" data-vv-scope="testEmail" class="form-container" @submit="noAction">
                     <button type="submit" disabled style="display: none" aria-hidden="true"></button>
                     <h4>
                         {{ $t('Settings.EmailProvider_SendTestEmailHeader') }}
@@ -477,9 +436,10 @@
                                 <button @click="testEmailAddress = null" type="button" class="btn btn-link btn-clear">
                                     <span></span>
                                 </button>
-                                <span class="help-block">{{
-                                    errors.first('testEmail.testEmailAddress')
-                                    }}</span>
+                                <span class="help-block">
+                                    <ErrorMessage name="testEmailAddress"></ErrorMessage>
+                                    <!-- {{ errors.first('testEmail.testEmailAddress') }} -->
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -640,6 +600,9 @@ export default {
         },
     },
     methods: {
+        noAction() {
+            return false
+        },
         async sendTestEmail() {
             var self = this
             self.sendEmailResult = null

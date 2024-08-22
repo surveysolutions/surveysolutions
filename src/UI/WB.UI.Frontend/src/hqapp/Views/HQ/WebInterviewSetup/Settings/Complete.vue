@@ -7,7 +7,8 @@
                         <div class="h5">
                             {{ $t('WebInterviewSettings.NoteToSupervisor') }}
                         </div>
-                        <div class="form-group" :class="{ 'has-error': errors.has('completePage.noteToSupervisor') }">
+                        <!-- :class="{ 'has-error': errors.has('completePage.noteToSupervisor') }" -->
+                        <div class="form-group">
                             <div class="field"
                                 :class="{ 'answered': webInterviewPageMessages['completeNoteToSupervisor'].text }">
                                 <textarea-autosize v-model="webInterviewPageMessages['completeNoteToSupervisor'].text"

@@ -7,7 +7,8 @@
                         <div class="h5">
                             {{ $t('WebInterviewSettings.Title') }}
                         </div>
-                        <div class="form-group" :class="{ 'has-error': errors.has('finishPage.webSurveyHeader') }">
+                        <!-- :class="{ 'has-error': errors.has('finishPage.webSurveyHeader') }" -->
+                        <div class="form-group">
                             <div class="field"
                                 :class="{ 'answered': webInterviewPageMessages['webSurveyHeader'].text }">
                                 <textarea-autosize v-model="webInterviewPageMessages['webSurveyHeader'].text"
