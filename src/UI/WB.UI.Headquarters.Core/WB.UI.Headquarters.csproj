@@ -64,9 +64,9 @@
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="8.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.5.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="6.5.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.7.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.7.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="6.7.1" />
     <PackageReference Include="UAParser" Version="3.1.47" />
     <PackageReference Include="SkiaSharp.QrCode" Version="0.6.0" />
     <PackageReference Include="SkiaSharp" Version="2.88.6" />
