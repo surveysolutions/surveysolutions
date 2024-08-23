@@ -12,8 +12,8 @@ import inject from '@rollup/plugin-inject';
 import { rimrafSync } from 'rimraf';
 import fs from 'fs';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
-
 import { ViteFilemanager } from 'filemanager-plugin';
+//import saveSelectedFilesPlugin from './tools/saveSelectedFilesPlugin.cjs';
 
 const baseDir = path.relative(__dirname, "./");
 const join = path.join.bind(path, baseDir);
@@ -140,6 +140,8 @@ for (var attr in pages) {
     var templateHtmlPath = path.join(templatesFolderFull, templateFilenameHtml)
     var filenameHtmlPath = path.join(destFileFolderFull, filenameHtml)
     var distFileName = path.join(baseDir, "dist", filenameHtml)
+    var filenameHtmlPathVite = path.join(destFileFolderFull, ".vite", filenameHtml)
+    var distFileNameVite = path.join(baseDir, "dist", ".vite", filenameHtml)
 
     //console.log("templateHtmlPath: " + templateHtmlPath, " distFileName: " + distFileName)
     //console.log("filenameHtmlPath: " + filenameHtmlPath)
@@ -147,6 +149,8 @@ for (var attr in pages) {
     pagesSources.push({ source: pageObj.template, destination: templatesFolderFull, name: templateFilenameHtml })
     pagesTargets.push({ source: filenameHtmlPath, destination: origFolder, name: filename })
     pagesTargets.push({ source: distFileName, destination: origFolder, name: filename })
+    pagesTargets.push({ source: filenameHtmlPathVite, destination: origFolder, name: filename })
+    pagesTargets.push({ source: distFileNameVite, destination: origFolder, name: filename })
 
     pageObj.filename = filenameHtml
     pageObj.template = templateHtmlPath
@@ -159,6 +163,12 @@ for (var attr in pages) {
 //const allTargets = pagesTargets.concat(fileTargets).map(i => { return { src: i.source, dest: i.destination } })
 const allTargets = fileTargets.map(i => { return { src: i.source, dest: path.resolve(__dirname, i.destination) } })
 
+const clearBeforeBuild = fileTargets.map(i => path.resolve(__dirname, i.destination))
+//const clearBeforeBuild = []
+//clearBeforeBuild.concat(fileTargets.map(i => path.resolve(__dirname, i.destination)))
+//clearBeforeBuild.concat(resourcesTargets.map(i => path.resolve(__dirname, i.destination)))
+clearBeforeBuild.push('./dist')
+
 // https://vitejs.dev/config/
 export default defineConfig(({ mode, command }) => {
 
@@ -167,11 +177,12 @@ export default defineConfig(({ mode, command }) => {
     const isServe = command === 'serve'
 
     const base = command == 'serve' ? '/.vite/' : '/';
+    //const base = '/.vite/';
 
     //const outDir = path.join(hqDist, "wwwroot");
-    //const outDir = path.join(hqDist, "dist");
+    const outDir = path.join(hqDist, "dist");
     //const outDir = join("dist");
-    const outDir = "dist";
+    //const outDir = "dist";
     //const outDir = path.join(hqDist, "wwwroot");
 
     if (isServe && mode != 'test') {
@@ -247,32 +258,41 @@ export default defineConfig(({ mode, command }) => {
             //cleanPlugin({
             //    targetFiles: fileTargets.map(target => target.destination)
             //}),
-            viteStaticCopy({
+            /*saveSelectedFilesPlugin({
+                filesToSave: pagesTargets
+            }),*/
+            /*viteStaticCopy({
                 targets: allTargets
-            }),
+            }),*/
             ViteFilemanager({
                 customHooks: [
                     {
                         hookName: 'options',
                         commands: {
                             del: {
-                                items: ['./dist']
+                                items: clearBeforeBuild
                             },
-                            copy: { items: pagesSources },
-                        }
-                    },
-                    {
-                        hookName: 'closeBundle',
-                        commands: {
-                            copy: { items: pagesTargets.concat(resourcesTargets) },
+                            copy: { items: pagesSources.concat(resourcesTargets) },
                         }
                     },
                     /*{
                         hookName: 'buildEnd',
                         commands: {
-                            copy: { items: allTargets },
+                            copy: { items: resourcesTargets },
                         }
-                    }*/
+                    },*/
+                    /*{
+                        hookName: 'writeBundle',
+                        commands: {
+                            copy: { items: resourcesTargets },
+                        }
+                    },*/
+                    {
+                        hookName: 'closeBundle',
+                        commands: {
+                            copy: { items: pagesTargets.concat(fileTargets) },
+                        }
+                    },
                     /*{
                         hookName: 'handleHotUpdate',
                         commands: {
@@ -283,14 +303,15 @@ export default defineConfig(({ mode, command }) => {
 
                 options: {
                     parallel: 1,
-                    //log: 'all'
-                    log: 'error'
+                    log: 'all'
+                    //log: 'error'
                 }
             }),
             LocalizationPlugin({
                 patterns: resxFiles,
                 destination: "./.resources",
-                locales: locales
+                locales: locales,
+                noHash: isDevMode
             }),
             /*mpaPlugin({
                 pages: pages
@@ -314,7 +335,7 @@ export default defineConfig(({ mode, command }) => {
                 ignored: ['**/.resources/**']
             },
             fs: {
-                allow: ['..', '../WB.UI.Headquarters.Core/wwwroot'],
+                allow: ['..'],
             },
         },
         build: {
