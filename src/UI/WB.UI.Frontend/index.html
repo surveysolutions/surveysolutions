@@ -19,17 +19,16 @@
         }
     </script>
     
-    <!-- Locale hq -->
+    <!-- Locale -->
     <script>
-        window.CONFIG.locale = {
-            locale: 'en',
-            locales: '{}'
-        };
-        // JSONP callback to load localization from '@localePath'
+window.CONFIG.locale = {
+    locale: 'en',
+    locales: '{"zh":"/locale/hq/zh.js","vi":"/locale/hq/vi.js","uk":"/locale/hq/uk.js","th":"/locale/hq/th.js","sq":"/locale/hq/sq.js","ru":"/locale/hq/ru.js","ro":"/locale/hq/ro.js","pt":"/locale/hq/pt.js","km":"/locale/hq/km.js","ka":"/locale/hq/ka.js","id":"/locale/hq/id.js","fr":"/locale/hq/fr.js","es":"/locale/hq/es.js","en":"/locale/hq/en.js","cs":"/locale/hq/cs.js","ar":"/locale/hq/ar.js"}'
+};        // JSONP callback to load localization from '@localePath'
         window.__setLocaleData__ = function(data) { window.CONFIG.locale.data = data; }
     </script>
   </head>
-  <body id="app" class="block-ui">
+  <body id="vueApp" class="block-ui">
     <noscript>
       <strong>We're sorry but this app doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>

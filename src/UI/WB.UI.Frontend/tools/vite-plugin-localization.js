@@ -5,7 +5,7 @@ export default (userOptions = {}) => {
         name: "vite-plugin-localization",
         enforce: "pre",
         userOptions: userOptions,
-        buildStart(options){
+        options(options) {
             this.localization = new LocalizationBuilder(userOptions);
             this.localization.prepareLocalizationFiles();
         }

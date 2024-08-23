@@ -13,7 +13,7 @@ import { rimrafSync } from 'rimraf';
 import fs from 'fs';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 import { ViteFilemanager } from 'filemanager-plugin';
-//import saveSelectedFilesPlugin from './tools/saveSelectedFilesPlugin.cjs';
+import saveSelectedFilesPlugin from './tools/saveSelectedFilesPlugin.cjs';
 
 const baseDir = path.relative(__dirname, "./");
 const join = path.join.bind(path, baseDir);
@@ -180,9 +180,9 @@ export default defineConfig(({ mode, command }) => {
     //const base = '/.vite/';
 
     //const outDir = path.join(hqDist, "wwwroot");
-    const outDir = path.join(hqDist, "dist");
+    //const outDir = path.join(hqDist, "dist");
     //const outDir = join("dist");
-    //const outDir = "dist";
+    const outDir = "dist";
     //const outDir = path.join(hqDist, "wwwroot");
 
     if (isServe && mode != 'test') {
@@ -258,9 +258,9 @@ export default defineConfig(({ mode, command }) => {
             //cleanPlugin({
             //    targetFiles: fileTargets.map(target => target.destination)
             //}),
-            /*saveSelectedFilesPlugin({
+            saveSelectedFilesPlugin({
                 filesToSave: pagesTargets
-            }),*/
+            }),
             /*viteStaticCopy({
                 targets: allTargets
             }),*/
@@ -290,7 +290,7 @@ export default defineConfig(({ mode, command }) => {
                     {
                         hookName: 'closeBundle',
                         commands: {
-                            copy: { items: pagesTargets.concat(fileTargets) },
+                            copy: { items: isServe ? [] : pagesTargets.concat(fileTargets) },
                         }
                     },
                     /*{
@@ -303,8 +303,8 @@ export default defineConfig(({ mode, command }) => {
 
                 options: {
                     parallel: 1,
-                    log: 'all'
-                    //log: 'error'
+                    //log: 'all'
+                    log: 'error'
                 }
             }),
             LocalizationPlugin({
