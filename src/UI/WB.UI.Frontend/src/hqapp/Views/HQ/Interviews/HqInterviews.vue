@@ -24,8 +24,8 @@
                     <Typeahead ref="questionnaireVersionControl" control-id="questionnaireVersion"
                         data-vv-name="questionnaireVersion" data-vv-as="questionnaireVersion"
                         :placeholder="$t('Common.AllVersions')" :disabled="questionnaireId == null"
-                        :value="questionnaireVersion" :values="questionnaireId == null ? [] : questionnaireId.versions
-                            " v-on:selected="questionnaireVersionSelected" />
+                        :value="questionnaireVersion" :values="questionnaireId == null ? [] : questionnaireId.versions"
+                        v-on:selected="questionnaireVersionSelected" />
                 </FilterBlock>
 
                 <FilterBlock :title="$t('Common.Status')">
@@ -77,11 +77,7 @@
                     <input class="double-checkbox-white" id="q1az" type="checkbox" checked disabled="disabled" />
                     <label for="q1az">
                         <span class="tick"></span>
-                        {{
-                            selectedRows.length +
-                            ' ' +
-                            $t('Pages.Interviews_Selected')
-                        }}
+                        {{ selectedRows.length + ' ' + $t('Pages.Interviews_Selected') }}
                     </label>
                     <button class="btn btn-lg btn-primary" v-if="selectedRows.length"
                         :disabled="getFilteredToAssign().length == 0" @click="assignInterview">
@@ -151,12 +147,7 @@
                         class="checkbox-filter" />
                     <label for="reassignReceivedByInterviewer" style="font-weight: normal">
                         <span class="tick"></span>
-                        {{
-                            $t(
-                                'Interviews.AssignReceivedConfirm',
-                                CountReceivedByInterviewerItems(),
-                            )
-                        }}
+                        {{ $t('Interviews.AssignReceivedConfirm', CountReceivedByInterviewerItems()) }}
                     </label>
                     <br />
                     <span v-if="isReassignReceivedByInterviewer" class="text-danger">
@@ -201,11 +192,7 @@
             <form onsubmit="return false;">
                 <div class="action-container" v-if="this.config.isSupervisor">
                     <h3>
-                        {{
-                            $t('Interviews.ApproveConfirmMessage', {
-                                count: this.getFilteredToApprove().length,
-                            })
-                        }}
+                        {{ $t('Interviews.ApproveConfirmMessage', { count: this.getFilteredToApprove().length }) }}
                     </h3>
                     <p>
                         <strong>{{ $t('Interviews.Note') }}</strong>
@@ -218,8 +205,7 @@
                         status1: 'Completed',
                         status2: 'Approved by Supervisor',
                         status3: 'Rejected by Supervisor',
-                    })
-                        "></p>
+                    })"></p>
                 </div>
 
                 <div class="form-group" v-if="CountReceivedByInterviewerItems() > 0">
@@ -228,12 +214,7 @@
                         class="checkbox-filter" />
                     <label for="approveReceivedByInterviewer" style="font-weight: normal">
                         <span class="tick"></span>
-                        {{
-                            $t(
-                                'Interviews.AssignReceivedConfirm',
-                                CountReceivedByInterviewerItems(),
-                            )
-                        }}
+                        {{ $t('Interviews.AssignReceivedConfirm', CountReceivedByInterviewerItems()) }}
                     </label>
                     <br />
                     <span v-if="isApproveReceivedByInterviewer" class="text-danger">
@@ -242,9 +223,9 @@
                 </div>
 
                 <div>
-                    <label for="txtStatusApproveComment">{{
-                        $t('Pages.ApproveRejectPartialView_CommentLabel')
-                    }}:</label>
+                    <label for="txtStatusApproveComment">
+                        {{ $t('Pages.ApproveRejectPartialView_CommentLabel') }}:
+                    </label>
                     <textarea class="form-control" rows="10" maxlength="200" name="txtStatusChangeComment"
                         id="txtStatusApproveComment" v-model="statusChangeComment"></textarea>
                 </div>
@@ -268,14 +249,12 @@
                         count: this.getFilteredToReject().length,
                         status1: 'Completed',
                         status2: 'Approved by Supervisor',
-                    })
-                        "></p>
+                    })"></p>
                     <p v-if="config.isSupervisor" v-html="$t('Interviews.RejectConfirmMessage', {
                         count: this.getFilteredToReject().length,
                         status1: 'Completed',
                         status2: 'Rejected by Headquarters',
-                    })
-                        "></p>
+                    })"></p>
                 </div>
 
                 <div>
@@ -295,10 +274,9 @@
                 </div>
 
                 <div>
-                    <label for="txtStatusChangeComment">{{
-                        $t('Pages.ApproveRejectPartialView_CommentLabel')
-                    }}
-                        :</label>
+                    <label for="txtStatusChangeComment">
+                        {{ $t('Pages.ApproveRejectPartialView_CommentLabel') }} :
+                    </label>
                     <textarea class="form-control" rows="10" maxlength="200" id="txtStatusChangeComment"
                         v-model="statusChangeComment"></textarea>
                 </div>
@@ -306,10 +284,8 @@
             <template v-slot:actions>
                 <div>
                     <button id="rejectOk" type="button" class="btn btn-lg btn-danger" role="confirm"
-                        @click="rejectInterviews" :disabled="getFilteredToReject().length == 0 ||
-                            (rejectToNewResponsible == true &&
-                                newResponsibleId == null)
-                            ">
+                        @click="rejectInterviews"
+                        :disabled="getFilteredToReject().length == 0 || (rejectToNewResponsible == true && newResponsibleId == null)">
                         {{ $t('Common.Reject') }}
                     </button>
                     <button id="rejectCancel" type="button" class="btn btn-link" data-dismiss="modal" role="cancel">
@@ -324,8 +300,7 @@
                     <p v-html="$t('Interviews.UnapproveConfirmMessageHQ', {
                         count: this.getFilteredToUnApprove().length,
                         status1: 'Approved by Headquarters',
-                    })
-                        "></p>
+                    })"></p>
                 </div>
             </form>
             <template v-slot:actions>
@@ -343,8 +318,9 @@
         <ModalFrame ref="statusHistory" :title="$t('Pages.HistoryOfStatuses_Title')">
             <div class="action-container">
                 <p>
-                    <a class="interview-id title-row" @click="viewInterview" href="javascript:void(0)">{{ interviewKey
-                        }}</a>
+                    <a class="interview-id title-row" @click="viewInterview" href="javascript:void(0)">
+                        {{ interviewKey }}
+                    </a>
                     by
                     <span :class="responsibleClass" v-html="responsibleLink"></span>
                 </p>
@@ -357,9 +333,7 @@
                             <td>{{ $t('Pages.HistoryOfStatuses_State') }}</td>
                             <td>{{ $t('Pages.HistoryOfStatuses_On') }}</td>
                             <td>{{ $t('Pages.HistoryOfStatuses_By') }}</td>
-                            <td>
-                                {{ $t('Pages.HistoryOfStatuses_AssignedTo') }}
-                            </td>
+                            <td> {{ $t('Pages.HistoryOfStatuses_AssignedTo') }} </td>
                             <td>{{ $t('Pages.HistoryOfStatuses_Comment') }}</td>
                         </tr>
                     </thead>
@@ -376,19 +350,68 @@
                 </div>
             </template>
         </ModalFrame>
-        <ChangeToCapi ref="modalChangeToCAWI" :modalId="'switchToCawi_id'" :title="$t('Common.ChangeToCAWI')"
-            :confirmMessage="$t('Common.ChangeToCAWIConfirmHQ', {
-                count: getFilteredToCawi().length,
-            })
-                " :filteredCount="getFilteredToCawi().length"
-            :receivedByInterviewerItemsCount="CountReceivedByInterviewerItems()" @confirm="changeInterviewModeToCawi" />
-
-        <ChangeToCapi ref="modalChangeToCAPI" :modalId="'switchToCapi_id'" :title="$t('Common.ChangeToCAPI')"
-            :confirmMessage="$t('Common.ChangeToCAPIConfirmHQ', {
-                count: getFilteredToCapi().length,
-            })
-                " :filteredCount="getFilteredToCapi().length"
-            :receivedByInterviewerItemsCount="CountReceivedByInterviewerItems()" @confirm="changeInterviewModeToCapi" />
+        <ModalFrame ref="modalChangeToCAWI" data-suso="change-interview-mode-modal" :title="$t('Common.ChangeToCAWI')">
+            <div class="action-container">
+                <p v-html="$t('Common.ChangeToCAWIConfirmHQ', { count: getFilteredToCawi().length })"></p>
+            </div>
+            <div class="form-group" :id="'group__switchToCawi_id_' + filteredCount"
+                v-if="CountReceivedByInterviewerItems() > 0">
+                <br />
+                <input type="checkbox" id="switchModeReceivedByInterviewer_switchToCawi_id"
+                    v-model="internalConfirmReceivedByInterviewer" class="checkbox-filter" />
+                <label for="switchModeReceivedByInterviewer_switchToCawi_id" style="font-weight: normal">
+                    <span class="tick"></span>
+                    {{ $t("Interviews.AssignReceivedConfirm", CountReceivedByInterviewerItems()) }}
+                </label>
+                <br />
+                <span v-if="internalConfirmReceivedByInterviewer" class="text-danger">
+                    {{ $t("Interviews.SwitchToCawiReceivedWarning") }}
+                </span>
+            </div>
+            <template v-slot:actions>
+                <div>
+                    <button type="button" class="btn btn-primary" role="confirm" data-suso="change-interview-mode-modal"
+                        @click="changeInterviewModeToCawi(internalConfirmReceivedByInterviewer)"
+                        :disabled="getFilteredToCawi().length == 0">
+                        {{ $t('Common.ChangeToCAWI') }}
+                    </button>
+                    <button type="button" class="btn btn-link" data-dismiss="modal" role="cancel">
+                        {{ $t("Common.Cancel") }}
+                    </button>
+                </div>
+            </template>
+        </ModalFrame>
+        <ModalFrame ref="modalChangeToCAPI" data-suso="change-interview-mode-modal" :title="$t('Common.ChangeToCAPI')">
+            <div class="action-container">
+                <p v-html="$t('Common.ChangeToCAPIConfirmHQ', { count: getFilteredToCapi().length })"></p>
+            </div>
+            <div class="form-group" :id="'group__switchToCapi_id_' + filteredCount"
+                v-if="CountReceivedByInterviewerItems() > 0">
+                <br />
+                <input type="checkbox" id="switchModeReceivedByInterviewer_switchToCapi_id"
+                    v-model="internalConfirmReceivedByInterviewer" class="checkbox-filter" />
+                <label for="switchModeReceivedByInterviewer_switchToCapi_id" style="font-weight: normal">
+                    <span class="tick"></span>
+                    {{ $t("Interviews.AssignReceivedConfirm", CountReceivedByInterviewerItems()) }}
+                </label>
+                <br />
+                <span v-if="internalConfirmReceivedByInterviewer" class="text-danger">
+                    {{ $t("Interviews.SwitchToCawiReceivedWarning") }}
+                </span>
+            </div>
+            <template v-slot:actions>
+                <div>
+                    <button type="button" class="btn btn-primary" role="confirm" data-suso="change-interview-mode-modal"
+                        @click="changeInterviewModeToCapi(internalConfirmReceivedByInterviewer)"
+                        :disabled="getFilteredToCapi().length == 0">
+                        {{ $t('Common.ChangeToCAPI') }}
+                    </button>
+                    <button type="button" class="btn btn-link" data-dismiss="modal" role="cancel">
+                        {{ $t("Common.Cancel") }}
+                    </button>
+                </div>
+            </template>
+        </ModalFrame>
     </HqLayout>
 </template>
 
@@ -411,7 +434,6 @@ import {
 import InterviewFilter from './InterviewQuestionsFilters'
 import gql from 'graphql-tag'
 import * as toastr from 'toastr'
-import ChangeToCapi from './ChangeModeModal.vue'
 
 import _sanitizeHtml from 'sanitize-html'
 const sanitizeHtml = (text) =>
@@ -496,7 +518,6 @@ function queryStringToCondition(queryStringArray) {
 export default {
     components: {
         InterviewFilter,
-        ChangeToCapi,
     },
 
     data() {
@@ -525,6 +546,7 @@ export default {
             isApproveReceivedByInterviewer: false,
             isReassignReceivedByInterviewer: false,
             isVisiblePrefilledColumns: true,
+            internalConfirmReceivedByInterviewer: false,
 
             conditions: [],
 
@@ -1566,10 +1588,12 @@ export default {
         },
 
         changeToCAWI() {
+            this.internalConfirmReceivedByInterviewer = false
             this.$refs.modalChangeToCAWI.modal({ keyboard: false })
         },
 
         changeToCAPI() {
+            this.internalConfirmReceivedByInterviewer = false
             this.$refs.modalChangeToCAPI.modal({ keyboard: false })
         },
 
@@ -1577,8 +1601,9 @@ export default {
             this.changeInterviewMode(
                 this.getFilteredToCawi(),
                 'CAWI',
-                confirmReceivedByInterviewer,
+                confirmReceivedByInterviewer
             )
+            this.$refs.modalChangeToCAWI.hide()
         },
         changeInterviewModeToCapi(confirmReceivedByInterviewer) {
             this.changeInterviewMode(
@@ -1586,6 +1611,7 @@ export default {
                 'CAPI',
                 confirmReceivedByInterviewer,
             )
+            this.$refs.modalChangeToCAPI.hide()
         },
 
         changeInterviewMode(filteredItems, mode, confirmReceivedByInterviewer) {

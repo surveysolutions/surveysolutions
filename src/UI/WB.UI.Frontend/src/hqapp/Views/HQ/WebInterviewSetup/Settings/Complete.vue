@@ -7,6 +7,7 @@
                         <div class="h5">
                             {{ $t('WebInterviewSettings.NoteToSupervisor') }}
                         </div>
+                        <!-- TODO: Migration -->
                         <!-- :class="{ 'has-error': errors.has('completePage.noteToSupervisor') }" -->
                         <div class="form-group">
                             <div class="field"
