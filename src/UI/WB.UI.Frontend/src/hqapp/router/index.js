@@ -18,11 +18,8 @@ export default class HqRouter {
             //TODO: MIGRATION
         })
 
-        console.log('routes init')
-
         // tslint:disable:no-string-literal
         router.beforeEach(async (to, from, next) => {
-            console.log(to)
             this.store.commit('SET_ROUTE_PARAMS', to.params);
             next()
         })

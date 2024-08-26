@@ -7,8 +7,6 @@ const httpPlugin = {
 
     install(app, { store }) {
 
-        console.log('install http')
-
         const http = axios.create({
             baseURL: config.basePath,
         })
@@ -75,7 +73,6 @@ const httpPlugin = {
             }
         }
 
-        console.log('inint api')
         api = {
             get(actionName, args) {
                 return query(null, args, async params => {

@@ -9,7 +9,6 @@ export default {
 
     mutations: {
         SET_ROUTE_PARAMS(state, params) {
-            console.log('set', params)
             state.params = params;
         },
     },
