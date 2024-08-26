@@ -45,8 +45,8 @@ async function query(id, params, action) {
         params.identity = id
     }
 
-    const route = useRoute()
-    params.interviewId = params.interviewId || route.params.interviewId // store.state.route.params.interviewId
+    params.interviewId = params.interviewId || store.state.route.params.interviewId
+    params.interviewId = params.interviewId || window._api.route.params.interviewId
 
     try {
         const result = await action(params)
@@ -126,6 +126,7 @@ const httpPlugin = {
 
     install(app, { store }) {
 
+        app.$api = {}
         app.$api.interview = api
 
         // Object.defineProperty(app.$api, 'interview', {

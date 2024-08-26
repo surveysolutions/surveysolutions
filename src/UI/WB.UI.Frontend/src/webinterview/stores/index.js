@@ -4,10 +4,11 @@ import connection from './store.connection'
 import { fetch } from './store.fetch.js'
 import mutations from './store.mutations'
 import sidebar from './store.sidebar'
+import routeParams from '../../shared/stores/store.routeParams.js'
 
 const store =
     safeStore({
-        modules: { fetch, sidebar: sidebar, connection },
+        modules: { fetch, sidebar: sidebar, connection, route: routeParams },
         state: {
             lastActivityTimestamp: new Date(),
             hasCoverPage: false,

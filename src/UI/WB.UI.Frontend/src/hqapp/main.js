@@ -99,7 +99,8 @@ import Router from './router'
 const views = viewsProvider(store)
 
 const router = new Router({
-    routes: views.routes
+    routes: views.routes,
+    store: store
 }).router
 
 

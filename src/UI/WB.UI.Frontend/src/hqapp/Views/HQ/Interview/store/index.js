@@ -5,12 +5,14 @@ import webinterview from '~/webinterview/stores'
 import filters from './filters'
 import flags from './flags'
 import overview from './overview'
+import storeRouteParams from '../../../../../shared/stores/store.routeParams'
 
 const store = {
     modules: {
         filters,
         flags,
         overview,
+        route: storeRouteParams
     },
 
     actions: {

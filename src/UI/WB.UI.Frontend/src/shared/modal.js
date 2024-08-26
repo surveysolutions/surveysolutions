@@ -1,4 +1,5 @@
 import box from 'bootbox'
+//import 'bootstrap/js/dist/modal'
 import 'bootstrap/js/modal'
 
 export default {
@@ -19,7 +20,7 @@ export default {
     dialog(options) {
         box.dialog(options)
     },
-    prompt(options){
+    prompt(options) {
         return box.prompt(options)
     },
 }
