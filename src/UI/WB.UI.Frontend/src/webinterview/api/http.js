@@ -6,6 +6,8 @@ let api = {};
 const httpPlugin = {
 
     install(app, { store }) {
+        if (app._hasHttpPlugin)
+            return
 
         const http = axios.create({
             baseURL: config.basePath,
@@ -131,6 +133,7 @@ const httpPlugin = {
         // Object.defineProperty(app.$api, 'interview', {
         //     get() { return api },
         // })
+        app._hasHttpPlugin = true
     },
 }
 

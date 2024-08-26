@@ -24,9 +24,10 @@ import SearchResults from './SearchResults'
 import Sidebar from '~/webinterview/components/Sidebar'
 import DetailsInfo from './DetailsInfo.vue'
 import { nextTick } from 'vue'
-//TODO: MIGRATION
-
 import http from '~/webinterview/api/http'
+//const Interview = () => import('~/webinterview/components/Interview.vue')
+//import Interview from '~/webinterview/components/Interview.vue'
+import { defineAsyncComponent } from 'vue';
 
 import '@/assets/css/markup-web-interview.scss'
 import '@/assets/css/markup-interview-review.scss'
@@ -68,6 +69,7 @@ export default {
         },
 
         connected() {
+            console.log('connected')
             this.$store.dispatch('getLanguageInfo')
             this.$store.dispatch('loadInterview')
             this.$store.dispatch('fetchFlags')
@@ -76,11 +78,7 @@ export default {
 
     beforeMount() {
         const app = this.$root;
-
-        if (!app._hasHttpPlugin) {
-            http.install(app, { store: this.$store });
-            app._hasHttpPlugin = true;
-        }
+        http.install(app, { store: this.$store });
     },
 
     mounted() {
@@ -104,7 +102,7 @@ export default {
         SearchResults,
         Sidebar,
         DetailsInfo,
-        Interview: () => import('~/webinterview/components/Interview.vue'),
+        Interview: defineAsyncComponent(() => import('~/webinterview/components/Interview.vue')),
     },
 
     beforeDestroy() {

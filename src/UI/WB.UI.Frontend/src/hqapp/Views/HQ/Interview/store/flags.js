@@ -4,6 +4,8 @@
 //Vue.use(Vuex)
 //Todo: MIGRATION
 
+import { api } from '~/webinterview/api/http'
+
 export default {
     state: {
         flagged: {},
@@ -11,7 +13,7 @@ export default {
 
     actions: {
         setFlag({ commit, dispatch }, { questionId, hasFlag }) {
-            return this.$api.interview.answer(questionId, 'setFlag', { hasFlag })
+            return api.answer(questionId, 'setFlag', { hasFlag })
                 .then(() => {
                     commit('SET_FLAG', { questionId, hasFlag })
                     dispatch('refreshSearchResults')
@@ -19,7 +21,7 @@ export default {
                 })
         },
         async fetchFlags({ commit }) {
-            const flags = await this.$api.interview.get('getFlags')
+            const flags = await api.get('getFlags')
             commit('SET_FLAGS', { flags })
         },
     },

@@ -13,8 +13,8 @@
                             <h2>
                                 {{ $t('Assignments.CreatingNewAssignment', { questionnaire: questionnaireTitle }) }}
                                 <span :title="$t('Reports.Version')">({{ this.$t('Assignments.QuestionnaireVersion', {
-                                    version: this.questionnaireVersion
-                                }) }})</span>
+                    version: this.questionnaireVersion
+                }) }})</span>
                             </h2>
                         </div>
                     </div>
@@ -229,6 +229,7 @@ import http from '~/webinterview/api/http'
 import { RoleNames } from '~/shared/constants'
 import { filter } from 'lodash'
 import '@/assets/css/markup-web-interview.scss'
+import { defineAsyncComponent } from 'vue';
 
 const validationTranslations = {
     custom: {
@@ -494,7 +495,7 @@ export default {
     },
 
     components: {
-        signalr: () => import('~/webinterview/components/signalr/core.signalr'),
+        signalr: defineAsyncComponent(() => import('~/webinterview/components/signalr/core.signalr')),
     },
 
     // beforeMount() {

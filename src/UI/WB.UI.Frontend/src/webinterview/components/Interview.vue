@@ -8,9 +8,8 @@
 <script lang="js">
 
 import http from '~/webinterview/api/http'
-//import Vue from 'vue'
-//TODO: MIGRATION
 import localStorage from '~/shared/localStorage'
+import { defineAsyncComponent } from 'vue';
 
 export default {
     name: 'WebInterviwew',
@@ -23,12 +22,13 @@ export default {
     },
 
     components: {
-        signalr: () => import('./signalr/core.signalr'),
+        signalr: defineAsyncComponent(() => import('./signalr/core.signalr')),
     },
 
-    // beforeMount() {
-    //     Vue.use(http, { store: this.$store })
-    // },
+    beforeMount() {
+        const app = this.$root;
+        http.install(app, { store: this.$store });
+    },
     beforeRouteUpdate(to, from, next) {
         return this.changeSection(to.params.sectionId, from.params.sectionId)
             .then(() => next())
