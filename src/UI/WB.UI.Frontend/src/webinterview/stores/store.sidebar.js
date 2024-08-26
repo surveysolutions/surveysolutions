@@ -18,7 +18,7 @@ export default {
 
     actions: {
         fetchSidebar: batchedAction(({ commit, rootState }, ids) => {
-            return api.interview.get('getSidebarChildSectionsOf',
+            return api.get('getSidebarChildSectionsOf',
                 {
                     interviewId: rootState.route.params.interviewId,
                     sectionId: rootState.route.params.sectionId || null,

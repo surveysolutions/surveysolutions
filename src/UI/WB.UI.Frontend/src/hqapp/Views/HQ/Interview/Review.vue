@@ -74,10 +74,14 @@ export default {
         },
     },
 
-    // beforeMount() {
-    //     Vue.use(http, { store: this.$store })
-    // },
-    //TODO: MIGRATION
+    beforeMount() {
+        const app = this.$root;
+
+        if (!app._hasHttpPlugin) {
+            http.install(app, { store: this.$store });
+            app._hasHttpPlugin = true;
+        }
+    },
 
     mounted() {
         const self = this

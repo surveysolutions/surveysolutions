@@ -55,9 +55,12 @@ import createRouter from './router'
 import webinterviewStore from './stores'
 
 import { createStore } from 'vuex';
+import routeParams from '../shared/stores/store.routeParams.js'
+
 const store = createStore({
     modules: {
         webinterview: webinterviewStore,
+        route: routeParams
     },
 })
 
