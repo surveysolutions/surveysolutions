@@ -55,6 +55,10 @@ $.fn.dataTable.ext.errMode = function (a, b, c, d) {
     }
 }
 
+//limit sorting to asc and desc
+$.fn.dataTable.defaults.column.orderSequence = ['asc', 'desc']
+
+
 var checkBox = template(
     '<input class="checkbox-filter" type="checkbox" value="<%= id %>"' +
     ' id="<%= checkboxId %>"><label for="<%= checkboxId %>">' +
