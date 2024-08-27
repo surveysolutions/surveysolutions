@@ -4,7 +4,7 @@ import { getLocationHash } from '~/shared/helpers'
 export const entityPartial = {
     computed: {
         $me() {
-            const id = this.id || this.$parent.id
+            const id = this.id || this.$parent.$parent.id
 
             return this.$store.state.webinterview.entityDetails[id] || {
                 isAnswered: false,

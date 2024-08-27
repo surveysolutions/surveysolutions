@@ -11,8 +11,9 @@
 import SectionProgress from './SectionLoadProgress'
 import Breadcrumbs from './Breadcrumbs.vue'
 
-// import Vue from 'vue'
 import { GroupStatus } from './questions'
+
+// import Vue from 'vue'
 
 // async function checkSectionPermission(to) {
 //       if (to.name === "section") {
