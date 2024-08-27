@@ -21,7 +21,7 @@
         "ag-grid-vue": "^28.2.1",
         "append-query": "^2.1.1",
         "autonumeric": "^4.5.3",
-        "axios": "^1.6.7",
+        "axios": "^1.7.5",
         "bootbox": "^5.5.3",
         "bootstrap": "^3.4.1",
         "bootstrap-sass": "^3.4.3",
