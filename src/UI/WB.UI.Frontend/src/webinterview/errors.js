@@ -1,12 +1,12 @@
 import * as toastr from 'toastr'
 
 /* eslint:disable:no-console */
-export function setupErrorHandler(app){
+export function setupErrorHandler(app) {
 
     app.config.errorHandler = (error, vm) => {
         if (error.response && error.response.data != null) {
             var data = error.response.data
-    
+
             // handling asp net core validation errors
             if (data.Type == 'https://tools.ietf.org/html/rfc7231#section-6.5.1') {
                 let message = ''
@@ -14,21 +14,21 @@ export function setupErrorHandler(app){
                     message += k + ':\r\n'
                     data.Errors[k].forEach(errMessage => message += '  ' + errMessage + '\r\n')
                 })
-    
+
                 console.error(data)
                 toastr.error(message, data.Title)
                 return
             }
-    
+
             if (data.errors && data.errors.length > 0) {
                 let message = ''
                 data.errors.forEach(errMessage => message += '  ' + errMessage + '\r\n')
-    
+
                 console.error(data)
                 toastr.error(message)
                 return
             }
-    
+
             const errorMessage = data.error || data.errorMessage
             if (errorMessage) {
                 console.error(data)
@@ -37,7 +37,7 @@ export function setupErrorHandler(app){
             }
         }
         console.error(error, vm)
-        toastr.error(error)
+        //toastr.error(error)
     }
 
     app.config.globalProperties.errorHandler = app.config.errorHandler
