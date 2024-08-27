@@ -71,7 +71,7 @@ export default {
     props: ['noComments'],
     watch: {
         '$me.answer'(to) {
-            Vue.set(this, 'answer', to)
+            this.answer = to
         },
     },
     computed: {
