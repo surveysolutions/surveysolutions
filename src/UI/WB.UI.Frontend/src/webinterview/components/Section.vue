@@ -1,19 +1,16 @@
 <template>
-    <div id="questionsList"
-        class="unit-section section"
-        :class="sectionClass">
+    <div id="questionsList" class="unit-section section" :class="sectionClass">
         <SectionLoadingProgress />
         <Breadcrumbs :showHumburger="showHumburger" />
-        <component
-            v-for="entity in entities"
-            :key="entity.identity"
-            :is="entity.entityType"
-            :id="entity.identity"></component>
+        <component v-for="entity in entities" :key="entity.identity" :is="entity.entityType" :id="entity.identity">
+        </component>
     </div>
 </template>
 
 <script lang="js">
 import SectionProgress from './SectionLoadProgress'
+import Breadcrumbs from './Breadcrumbs.vue'
+
 // import Vue from 'vue'
 import { GroupStatus } from './questions'
 
@@ -28,11 +25,16 @@ import { GroupStatus } from './questions'
 export default {
     name: 'section-view',
 
-    props:{
+    props: {
         showHumburger: {
             type: Boolean,
             default: true,
         },
+    },
+
+    components: {
+        Breadcrumbs,
+        SectionLoadingProgress: SectionProgress,
     },
 
     beforeMount() {
@@ -40,7 +42,7 @@ export default {
     },
 
     mounted() {
-        if(this.$route.hash){
+        if (this.$route.hash) {
             this.$store.dispatch('sectionRequireScroll', { id: this.$route.hash })
         }
     },
@@ -80,9 +82,6 @@ export default {
         loadSection() {
             this.$store.dispatch('fetchSectionEntities')
         },
-    },
-    components: {
-        SectionLoadingProgress: SectionProgress,
     },
 }
 </script>

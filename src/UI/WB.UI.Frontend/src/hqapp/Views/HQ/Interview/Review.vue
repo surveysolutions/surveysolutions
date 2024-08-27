@@ -69,7 +69,6 @@ export default {
         },
 
         connected() {
-            console.log('connected')
             this.$store.dispatch('getLanguageInfo')
             this.$store.dispatch('loadInterview')
             this.$store.dispatch('fetchFlags')

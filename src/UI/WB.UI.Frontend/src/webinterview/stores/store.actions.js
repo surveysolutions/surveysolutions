@@ -2,6 +2,8 @@ import { map, debounce, uniq, forEach } from 'lodash'
 
 import { batchedAction } from '../helpers'
 import { api } from '../api/http'
+import { hubApi } from '../components/signalr/core.signalr'
+import { config } from '~/shared/config'
 
 import modal from '@/shared/modal'
 
@@ -244,7 +246,7 @@ export default {
                 const showVariables = rootState.webinterview.showVariables || false
                 const section = await api.get('getFullSectionInfo', { sectionId: id, includeVariables: showVariables })
 
-                const isCover = id === undefined || id == app.$config.coverPageId
+                const isCover = id === undefined || id == config.coverPageId
                 if (isCover) {
                     forEach(section.entities, entity => {
                         entity.isCover = true
@@ -353,7 +355,7 @@ export default {
     changeSection({ commit, rootState }, { to, from }) {
         const interviewId = rootState.route.params.interviewId
         commit('CURRENT_SECTION', { interviewId: interviewId, sectionId: to })
-        return api.hub.changeSection(to, from)
+        return hubApi.changeSection(to, from)
     },
 
     setShowVariables({ commit, rootState }, { value }) {

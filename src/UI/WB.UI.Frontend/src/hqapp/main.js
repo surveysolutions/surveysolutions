@@ -44,7 +44,10 @@ import ProfileLayout from './Views/HQ/Users/ProfileLayout.vue'
 vue.component('ProfileLayout', ProfileLayout)
 
 import './compatibility.js'
-import '~/webinterview/componentsRegistry'
+
+import { registerGlobalComponents } from '~/webinterview/componentsRegistry'
+registerGlobalComponents(vue)
+
 
 import VueTextareaAutosize from 'vue-textarea-autosize'
 vue.use(VueTextareaAutosize)
