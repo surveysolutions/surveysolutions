@@ -1,10 +1,6 @@
 <template>
-    <div class="action-container"
-        v-if="$me && visible">
-        <a class="btn btn-lg"
-            :class="css"
-            :disabled="shouldDisable"
-            @click="navigate">
+    <div class="action-container" v-if="$me && visible">
+        <a class="btn btn-lg" :class="css" :disabled="shouldDisable ? true : null" @click="navigate">
             <span v-html="buttonTitle"></span>
         </a>
     </div>
@@ -16,20 +12,20 @@ import { GroupStatus, ButtonType } from '../questions'
 export default {
     mixins: [entityDetails],
     name: 'NavigationButton',
-    data: function() {
+    data: function () {
         return {
-            clicked : false,
+            clicked: false,
         }
     },
     computed: {
-        visible(){
+        visible() {
             return !(this.$store.getters.isReviewMode === true) || this.$me.type != ButtonType.Complete
         },
         shouldDisable() {
             return this.clicked == true && this.$store.getters.loadingProgress === true
         },
         css() {
-            const status =  this.$me.status
+            const status = this.$me.status
             const isValid = this.$me.validity.isValid
 
             return [{
@@ -53,18 +49,18 @@ export default {
             return this.$me.type == ButtonType.Parent
         },
         buttonTitle() {
-            if(this.$me == null || this.$me.title == null)
+            if (this.$me == null || this.$me.title == null)
                 return ''
 
-            if (this.$me.type == ButtonType.Complete){
-                if(this.$config.customTexts.completeButton)
+            if (this.$me.type == ButtonType.Complete) {
+                if (this.$config.customTexts.completeButton)
                     return this.$config.customTexts.completeButton
             }
 
             var title = this.$me.title
 
-            if(this.$me.rosterTitle != null)
-                title +=' - <i>' +  this.$me.rosterTitle + '</i>'
+            if (this.$me.rosterTitle != null)
+                title += ' - <i>' + this.$me.rosterTitle + '</i>'
 
             return title
         },
