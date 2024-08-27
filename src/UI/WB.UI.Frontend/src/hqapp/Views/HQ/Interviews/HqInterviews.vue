@@ -243,10 +243,11 @@
 
                 <div>
                     <label for="txtStatusApproveComment">{{
-        $t('Pages.ApproveRejectPartialView_CommentLabel')
-    }}:</label>
-                    <textarea class="form-control" rows="10" maxlength="200" name="txtStatusChangeComment"
+                        $t('Pages.ApproveRejectPartialView_CommentLabel')
+                    }}:</label>
+                    <textarea class="form-control" rows="10" :maxlength="commentMaxLength" name="txtStatusChangeComment"
                         id="txtStatusApproveComment" v-model="statusChangeComment"></textarea>
+                    <span class="countDown">{{ statusChangeCommentCharsLeft }}</span>
                 </div>
             </form>
             <template v-slot:actions>
@@ -282,9 +283,9 @@
                     <div class="options-group">
                         <Radio :label="$t('Interviews.RejectToOriginal')" :radioGroup="false"
                             name="rejectToNewResponsible" :value="rejectToNewResponsible" @input="
-        rejectToNewResponsible = false
-    newResponsibleId = null
-        " />
+                                rejectToNewResponsible = false
+                            newResponsibleId = null
+                                " />
                         <Radio :label="$t('Interviews.RejectToNewResponsible')" :radioGroup="true"
                             name="rejectToNewResponsible" :value="rejectToNewResponsible"
                             @input="rejectToNewResponsible = true" />
@@ -301,8 +302,9 @@
         $t('Pages.ApproveRejectPartialView_CommentLabel')
     }}
                         :</label>
-                    <textarea class="form-control" rows="10" maxlength="200" id="txtStatusChangeComment"
+                    <textarea class="form-control" rows="10" :maxlength="commentMaxLength" id="txtStatusChangeComment"
                         v-model="statusChangeComment"></textarea>
+                    <span class="countDown">{{ statusChangeCommentCharsLeft }}</span>
                 </div>
             </form>
             <template v-slot:actions>
@@ -518,7 +520,7 @@ export default {
             responsibleParams: { showArchived: true, showLocked: true },
             newResponsibleId: null,
             rejectToNewResponsible: false,
-            statusChangeComment: null,
+            statusChangeComment: '',
             status: null,
             selectedStatus: null,
             unactiveDateStart: null,
@@ -527,7 +529,7 @@ export default {
             isApproveReceivedByInterviewer: false,
             isReassignReceivedByInterviewer: false,
             isVisiblePrefilledColumns: true,
-
+            commentMaxLength: 1500,
             conditions: [],
 
             interviewModes: [
@@ -1078,6 +1080,9 @@ export default {
 
             return query
         },
+        statusChangeCommentCharsLeft() {
+            return `${this.statusChangeComment.length} / ${this.commentMaxLength}`
+        },
     },
 
     methods: {
@@ -1323,7 +1328,7 @@ export default {
             )
         },
         approveInterview() {
-            this.statusChangeComment = null
+            this.statusChangeComment = ''
             this.$refs.approveModal.modal()
         },
 
@@ -1451,7 +1456,7 @@ export default {
         },
 
         rejectInterview() {
-            this.statusChangeComment = null
+            this.statusChangeComment = ''
             this.newResponsibleId = null
             this.rejectToNewResponsible = false
 
