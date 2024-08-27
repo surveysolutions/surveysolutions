@@ -66,6 +66,7 @@ vue.use(http, { store })
 const router = createRouter(store)
 
 vue.use(store)
+vue.use(router)
 
 //sync(store, router)
 //TODO: MIGRATION
@@ -80,5 +81,5 @@ window._api = {
 
 // Run!
 router.isReady().then(() => {
-    vue.mount('#vueApp');
+    vue.mount('#app');
 });
