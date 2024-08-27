@@ -232,7 +232,7 @@
                     <label for="txtStatusApproveComment">{{
                         $t('Pages.ApproveRejectPartialView_CommentLabel')
                     }}:</label>
-                    <textarea class="form-control" rows="10" :maxlength="maxCommentLength" name="txtStatusChangeComment"
+                    <textarea class="form-control" rows="10" :maxlength="commentMaxLength" name="txtStatusChangeComment"
                         id="txtStatusApproveComment" v-model="statusChangeComment"></textarea>
                     <span class="countDown">{{ statusChangeCommentCharsLeft }}</span>
                 </div>
@@ -287,7 +287,7 @@
                         $t('Pages.ApproveRejectPartialView_CommentLabel')
                     }}
                         :</label>
-                    <textarea class="form-control" rows="10" maxlength="200" id="txtStatusChangeComment"
+                    <textarea class="form-control" rows="10" :maxlength="commentMaxLength" id="txtStatusChangeComment"
                         v-model="statusChangeComment"></textarea>
                     <span class="countDown">{{ statusChangeCommentCharsLeft }}</span>
                 </div>
