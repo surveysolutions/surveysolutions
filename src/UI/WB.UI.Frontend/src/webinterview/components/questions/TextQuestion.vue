@@ -48,8 +48,8 @@ export default {
     methods: {
         answerTextQuestion() {
             this.sendAnswer(() => {
-                const target = $(this.$refs.input || this.$refs.inputTextArea.$el)
-                const answer = target.val()
+                const target = this.$refs.input || this.$refs.inputTextArea;
+                const answer = target.value
 
                 if (this.handleEmptyAnswer(answer)) {
                     return
