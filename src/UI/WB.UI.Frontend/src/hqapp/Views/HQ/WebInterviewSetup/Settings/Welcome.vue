@@ -11,11 +11,11 @@
                         <!-- :class="{ 'has-error': errors.has('welcomePage.welcomeTextTitle') }" -->
                         <div class="form-group">
                             <div class="field" :class="{ 'answered': webInterviewPageMessages['welcomeText'].text }">
-                                <textarea-autosize v-model="webInterviewPageMessages['welcomeText'].text"
+                                <textarea v-autosize v-model="webInterviewPageMessages['welcomeText'].text"
                                     :rules="required" data-vv-name="welcomeTextTitle" ref="welcomeTextTitle"
                                     :min-height="77" maxlength="200" class="form-control js-elasticArea font-bold"
                                     placeholder="Please enter the main text">
-                                </textarea-autosize>
+                                </textarea>
                                 <button type="button" @click="webInterviewPageMessages['welcomeText'].text = ''"
                                     class="btn btn-link btn-clear">
                                     <span></span>
@@ -50,7 +50,7 @@
                                     <span></span>
                                 </button>
                                 <span class="help-block" v-if="errors.first('welcomePage.startNewButton')">{{
-                                    $t('WebInterviewSettings.FieldRequired') }}</span>
+            $t('WebInterviewSettings.FieldRequired') }}</span>
                             </div>
                         </div>
                     </div>

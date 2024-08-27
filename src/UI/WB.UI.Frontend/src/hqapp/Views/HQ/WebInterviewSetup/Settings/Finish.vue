@@ -11,17 +11,17 @@
                         <div class="form-group">
                             <div class="field"
                                 :class="{ 'answered': webInterviewPageMessages['webSurveyHeader'].text }">
-                                <textarea-autosize v-model="webInterviewPageMessages['webSurveyHeader'].text"
+                                <textarea v-autosize v-model="webInterviewPageMessages['webSurveyHeader'].text"
                                     :rules="required" data-vv-name="webSurveyHeader" ref="webSurveyHeader"
                                     :min-height="77" maxlength="200" class="form-control js-elasticArea font-bold"
                                     placeholder="Please enter the main text">
-                                </textarea-autosize>
+                                </textarea>
                                 <button type="button" @click="webInterviewPageMessages['webSurveyHeader'].text = ''"
                                     class="btn btn-link btn-clear">
                                     <span></span>
                                 </button>
                                 <span class="help-block" v-if="errors.first('finishPage.webSurveyHeader')">{{
-                                    $t('WebInterviewSettings.FieldRequired') }}</span>
+            $t('WebInterviewSettings.FieldRequired') }}</span>
                             </div>
                         </div>
                     </div>

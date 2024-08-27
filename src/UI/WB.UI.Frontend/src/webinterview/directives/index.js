@@ -5,6 +5,7 @@ import { registerMultiSelectDirectives } from './MultiSelectDirectives'
 import { registerNumericFormatting } from './NumericFormatting'
 import { registerMaskedText } from './MaskedText'
 import { registerLinkToRoute } from './LinkToRoute'
+import autosize from './autosize'
 
 export function registerDerictives(vue) {
 
@@ -14,4 +15,5 @@ export function registerDerictives(vue) {
     registerNumericFormatting(vue)
     registerMaskedText(vue)
     registerLinkToRoute(vue)
+    autosize(vue)
 }

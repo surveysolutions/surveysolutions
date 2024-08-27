@@ -9,11 +9,11 @@
                                 {{ this.$t('WebInterviewSettings.WebInterviewSetupFor_Title') }}
                                 <b>
                                     {{
-                                        $t('Pages.QuestionnaireNameVersionFirst', {
-                                            name: this.$config.model.questionnaireTitle,
-                                            version: this.$config.model.questionnaireVersion,
-                                        })
-                                    }}
+                                    $t('Pages.QuestionnaireNameVersionFirst', {
+                                        name: this.$config.model.questionnaireTitle,
+                                        version: this.$config.model.questionnaireVersion,
+                                    })
+                                }}
                                 </b>
                             </h1>
                         </div>
@@ -27,17 +27,17 @@
                                     <ul class="dropdown-menu">
                                         <li>
                                             <a :href="config.downloadLinksUrl +
-                                                '/' +
-                                                config.questionnaireIdentity.id
-                                                ">
+                                    '/' +
+                                    config.questionnaireIdentity.id
+                                    ">
                                                 {{ $t('Dashboard.DownloadLinks') }}
                                             </a>
                                         </li>
                                         <li>
                                             <a :href="config.sendInvitationsUrl +
-                                                '/' +
-                                                config.questionnaireIdentity.id
-                                                ">
+                                    '/' +
+                                    config.questionnaireIdentity.id
+                                    ">
                                                 {{ $t('Dashboard.SendInvitations') }}
                                             </a>
                                         </li>
@@ -166,18 +166,18 @@
                                                     v-if="isMessageSupportedInterviewData(emailTemplate)">
                                                     <p>
                                                         {{
-                                                            $t('WebInterviewSettings.InterviewDataInsertInTextDescription')
-                                                        }}
+                                    $t('WebInterviewSettings.InterviewDataInsertInTextDescription')
+                                }}
                                                     </p>
                                                     <p>
                                                         {{
-                                                            $t('WebInterviewSettings.InterviewDataInsertBarcodeDescription')
-                                                        }}
+                                        $t('WebInterviewSettings.InterviewDataInsertBarcodeDescription')
+                                    }}
                                                     </p>
                                                     <p>
                                                         {{
-                                                            $t('WebInterviewSettings.InterviewDataInsertQrCodeDescription')
-                                                        }}
+                                        $t('WebInterviewSettings.InterviewDataInsertQrCodeDescription')
+                                    }}
                                                     </p>
                                                 </div>
                                                 <div class="row-element">
@@ -187,13 +187,13 @@
                                                     <!-- :class="{ 'has-error': errors.has('emailTemplateData' + emailTemplate.value + '.message') }" -->
                                                     <div class="form-group mb-30">
                                                         <div class="field" :class="{ answered: emailTemplate.message }">
-                                                            <textarea-autosize v-model="emailTemplate.message"
+                                                            <textarea v-autosize v-model="emailTemplate.message"
                                                                 data-vv-as="Please enter the main text"
                                                                 :rules="required" data-vv-name="message"
                                                                 :ref="'message' + emailTemplate.value" maxlength="3000"
                                                                 :min-height="79" class="form-control js-elasticArea"
                                                                 placeholder="Please enter the main text">
-                                                            </textarea-autosize>
+                                                            </textarea>
                                                             <button type="button" @click="emailTemplate.message = null"
                                                                 class="btn btn-link btn-clear">
                                                                 <span></span>
@@ -208,13 +208,13 @@
                                                 <div class="row-element" v-if="isPasswordSupported(emailTemplate)">
                                                     <div class="h5 mb-0">
                                                         {{
-                                                            $t('WebInterviewSettings.DescriptionForPassword')
-                                                        }}
+                                    $t('WebInterviewSettings.DescriptionForPassword')
+                                }}
                                                     </div>
                                                     <div class="gray-text mb-1">
                                                         {{
-                                                            $t('WebInterviewSettings.ShownPasswordIsRequired')
-                                                        }}
+                                        $t('WebInterviewSettings.ShownPasswordIsRequired')
+                                    }}
                                                     </div>
                                                     <!-- TODO: Migrations -->
                                                     <!-- :class="{ 'has-error': errors.has('emailTemplateData' + emailTemplate.value + '.passwordDescription') }" -->
@@ -390,10 +390,10 @@
                                         white-space: pre-line;
                                       ">
                                                                             {{
-                                                                                previewText(
-                                                                                    emailTemplate.passwordDescription
-                                                                                )
-                                                                            }}
+                                    previewText(
+                                        emailTemplate.passwordDescription
+                                    )
+                                }}
                                                                         </td>
                                                                     </tr>
                                                                     <tr v-if="isPasswordSupported(emailTemplate)">
@@ -427,8 +427,8 @@
                                           box-shadow: none;
                                         ">
                                                                                 {{
-                                                                                    previewText(emailTemplate.linkText)
-                                                                                }}
+                                    previewText(emailTemplate.linkText)
+                                }}
                                                                             </a>
                                                                         </td>
                                                                     </tr>

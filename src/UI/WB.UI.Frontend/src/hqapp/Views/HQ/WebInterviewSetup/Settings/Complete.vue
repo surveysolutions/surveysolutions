@@ -12,18 +12,18 @@
                         <div class="form-group">
                             <div class="field"
                                 :class="{ 'answered': webInterviewPageMessages['completeNoteToSupervisor'].text }">
-                                <textarea-autosize v-model="webInterviewPageMessages['completeNoteToSupervisor'].text"
+                                <textarea v-autosize v-model="webInterviewPageMessages['completeNoteToSupervisor'].text"
                                     :rules="required" data-vv-name="completeNoteToSupervisor"
                                     ref="completeNoteToSupervisor" :min-height="77" maxlength="200"
                                     class="form-control js-elasticArea font-bold">
-                                </textarea-autosize>
+                                </textarea>
                                 <button type="button"
                                     @click="webInterviewPageMessages['completeNoteToSupervisor'].text = ''"
                                     class="btn btn-link btn-clear">
                                     <span></span>
                                 </button>
                                 <span class="help-block" v-if="errors.first('completePage.noteToSupervisor')">{{
-                                    $t('WebInterviewSettings.FieldRequired') }}</span>
+            $t('WebInterviewSettings.FieldRequired') }}</span>
                             </div>
                         </div>
                     </div>
@@ -41,7 +41,7 @@
                                     <span></span>
                                 </button>
                                 <span class="help-block" v-if="errors.first('completePage.completeButton')">{{
-                                    $t('WebInterviewSettings.FieldRequired') }}</span>
+            $t('WebInterviewSettings.FieldRequired') }}</span>
                             </div>
                         </div>
                     </div>

@@ -11,17 +11,17 @@
                         <!-- :class="{ 'has-error': errors.has('linkPage.linkWelcome') }" -->
                         <div class="form-group">
                             <div class="field" :class="{ 'answered': webInterviewPageMessages['linkWelcome'].text }">
-                                <textarea-autosize v-model="webInterviewPageMessages['linkWelcome'].text"
+                                <textarea v-autosize v-model="webInterviewPageMessages['linkWelcome'].text"
                                     :rules="required" data-vv-name="linkWelcome" ref="linkWelcome" :min-height="77"
                                     maxlength="200" class="form-control js-elasticArea font-bold"
                                     placeholder="Please enter the main text">
-                                </textarea-autosize>
+                                </textarea>
                                 <button type="button" @click="webInterviewPageMessages['linkWelcome'].text = ''"
                                     class="btn btn-link btn-clear">
                                     <span></span>
                                 </button>
                                 <span class="help-block" v-if="errors.first('linkPage.linkWelcome')">{{
-                                    $t('WebInterviewSettings.FieldRequired') }}</span>
+            $t('WebInterviewSettings.FieldRequired') }}</span>
                             </div>
                         </div>
                     </div>

@@ -34,7 +34,7 @@
                         <label>{{ $t("WebInterviewUI.CommentYours") }}</label>
                         <div class="form-group">
                             <div class="input-group comment-field">
-                                <textarea-autosize autocomplete="off" rows="1" v-on:keyup.enter="postComment"
+                                <textarea v-autosize autocomplete="off" rows="1" v-on:keyup.enter="postComment"
                                     v-model="comment" :placeholder='$t("WebInterviewUI.CommentEnter")'
                                     :disabled="!addCommentsAllowed" class="form-control" :title="inputTitle" />
                                 <div class="input-group-btn">

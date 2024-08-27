@@ -29,10 +29,6 @@ setupErrorHandler(vue)
 import config from '~/shared/config'
 vue.use(config)
 
-
-import VueTextareaAutosize from 'vue-textarea-autosize'
-vue.use(VueTextareaAutosize)
-
 import PortalVue from 'portal-vue'
 vue.use(PortalVue)
 

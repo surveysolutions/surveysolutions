@@ -9,17 +9,17 @@
                         </div>
                         <div class="form-group" :class="{ 'has-error': errors.has('resumePage.resumeWelcome') }">
                             <div class="field" :class="{ 'answered': webInterviewPageMessages['resumeWelcome'].text }">
-                                <textarea-autosize v-model="webInterviewPageMessages['resumeWelcome'].text"
+                                <textarea v-autosize v-model="webInterviewPageMessages['resumeWelcome'].text"
                                     :rules="required" data-vv-name="resumeWelcome" ref="resumeWelcome" :min-height="77"
                                     maxlength="200" class="form-control js-elasticArea font-bold"
                                     placeholder="Please enter the main text">
-                                </textarea-autosize>
+                                </textarea>
                                 <button type="button" @click="webInterviewPageMessages['resumeWelcome'].text = ''"
                                     class="btn btn-link btn-clear">
                                     <span></span>
                                 </button>
                                 <span class="help-block" v-if="errors.first('resumePage.resumeWelcome')">{{
-                                    $t('WebInterviewSettings.FieldRequired') }}</span>
+            $t('WebInterviewSettings.FieldRequired') }}</span>
                             </div>
                         </div>
                     </div>
@@ -47,7 +47,7 @@
                                     <span></span>
                                 </button>
                                 <span class="help-block" v-if="errors.first('resumePage.resumeButton')">{{
-                                    $t('WebInterviewSettings.FieldRequired') }}</span>
+            $t('WebInterviewSettings.FieldRequired') }}</span>
                             </div>
                         </div>
                     </div>

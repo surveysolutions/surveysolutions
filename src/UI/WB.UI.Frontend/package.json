@@ -17,6 +17,7 @@
         "@ag-grid-community/core": "^31.3.2",
         "@ag-grid-community/vue3": "^31.3.2",
         "@apollo/client": "3.10.4",
+        "@frsource/autoresize-textarea": "^2.0.92",
         "@googlemaps/markerclusterer": "^2.0.15",
         "@microsoft/signalr": "^8.0.7",
         "@toast-ui/editor": "^3.2.2",
@@ -66,7 +67,6 @@
         "vue-page-title": "^2.2.2",
         "vue-recaptcha": "^2.0.3",
         "vue-router": "^4.4.0",
-        "vue-textarea-autosize": "^1.1.1",
         "vuex": "^4.1.0"
     },
     "devDependencies": {

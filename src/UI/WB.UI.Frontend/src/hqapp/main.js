@@ -48,10 +48,6 @@ import './compatibility.js'
 import { registerGlobalComponents } from '~/webinterview/componentsRegistry'
 registerGlobalComponents(vue)
 
-
-import VueTextareaAutosize from 'vue-textarea-autosize'
-vue.use(VueTextareaAutosize)
-
 import PortalVue from 'portal-vue'
 vue.use(PortalVue)
 
