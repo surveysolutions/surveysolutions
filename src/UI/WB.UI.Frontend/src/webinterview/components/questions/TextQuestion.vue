@@ -55,7 +55,7 @@ export default {
                     return
                 }
 
-                if (this.$me.mask && !target.data('maskCompleted')) {
+                if (this.$me.mask && !$(target).data('maskCompleted')) {
                     this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.TextRequired'))
                 }
                 else {
