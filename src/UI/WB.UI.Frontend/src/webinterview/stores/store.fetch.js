@@ -62,9 +62,10 @@ const fetch = {
 
     mutations: {
         SET_UPLOAD_PROGRESS(state, { entity, now, total }) {
-            set(entity, 'fetchState', {})
-            set(entity.fetchState, 'uploaded', now)
-            set(entity.fetchState, 'total', total)
+            entity.fetchState = {
+                uploaded: now,
+                total: total
+            }
         },
         SET_FETCH(state, { id, ids, done }) {
             if (id) {
