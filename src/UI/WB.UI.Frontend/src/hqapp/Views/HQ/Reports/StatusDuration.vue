@@ -32,18 +32,17 @@
         <DataTables ref="table" :tableOptions="tableOptions" :addParamsToRequest="addFilteringParams" noPaging noSearch
             exportable>
             <template v-slot:header>
-                <th rowspan="2" class="vertical-align-middle text-center">
-                    {{ $t("Strings.Days") }}
+
+                <th rowspan="1" class="vertical-align-middle text-center">
+                    <!-- {{ $t("Strings.Days") }} -->
                 </th>
-                <th colspan="2" class="type-numeric sorting_disabled text-center">{{ $t("Strings.Assignments") }}</th>
-                <th colspan="5" class="type-numeric sorting_disabled text-center">{{ $t("Strings.Interviews") }}</th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
+                <th colspan="2" class="type-numeric sorting_disabled text-center">
+                    {{ $t("Strings.Assignments") }}
+                </th>
+                <th colspan="5" class="type-numeric sorting_disabled text-center">
+                    {{ $t("Strings.Interviews") }}
+                </th>
+
             </template>
         </DataTables>
     </HqLayout>

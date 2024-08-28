@@ -528,4 +528,7 @@
   <data name="Value" xml:space="preserve">
       <value>Значение</value>
   </data>
+  <data name="Action_QuantityChanged" xml:space="preserve">
+      <value>Ожидаемое количество изменёно</value>
+  </data>
 </root>

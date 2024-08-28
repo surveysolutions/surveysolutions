@@ -535,4 +535,7 @@
   <data name="Value" xml:space="preserve">
       <value>Value</value>
   </data>
+  <data name="Action_QuantityChanged" xml:space="preserve">
+      <value>Expected value changed</value>
+  </data>
 </root>
