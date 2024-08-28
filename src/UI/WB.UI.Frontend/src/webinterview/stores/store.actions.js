@@ -92,7 +92,7 @@ export default {
     },
 
     answerMultimediaQuestion(_, { identity, file }) {
-        return api.upload(app.$config.imageUploadUri, identity, file)
+        return api.upload(config.imageUploadUri, identity, file)
     },
 
     answerAudioQuestion(_, { identity, file, duration }) {
