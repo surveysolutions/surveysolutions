@@ -5,6 +5,8 @@ import { concat } from 'lodash'
 //Vue.use(Vuex)
 //Todo: MIGRATION
 
+import { api } from '~/webinterview/api/http'
+
 
 export default {
     state: {
@@ -21,7 +23,7 @@ export default {
 
     actions: {
         async loadAdditionalInfo({ commit }, { id }) {
-            const data = await this.$api.interview.get('overviewItemAdditionalInfo', { id })
+            const data = await api.get('overviewItemAdditionalInfo', { id })
             commit('SET_ADDITIONAL_INFO', {
                 id,
                 data,
@@ -34,7 +36,7 @@ export default {
         },
 
         async loadOverview({ commit, dispatch, state }, { skip }) {
-            const data = await this.$api.interview.get('overview', { skip, take: state.pageSize })
+            const data = await api.get('overview', { skip, take: state.pageSize })
 
             commit('SET_OVERVIEW_RESPONSE', data)
 

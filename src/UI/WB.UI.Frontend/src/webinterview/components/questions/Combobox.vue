@@ -21,7 +21,7 @@
 <script lang="js">
 
 import { entityDetails } from '../mixins'
-//import Vue from 'vue'
+import { api } from '../../api/http'
 
 export default {
     name: 'ComboboxQuestion',
@@ -48,7 +48,7 @@ export default {
 
         optionsSource(filter) {
             const interviewId = this.$route.params.interviewId
-            return this.$api.interview.get('getTopFilteredOptionsForQuestion', { interviewId, id: this.$me.id, filter, count: 50 })
+            return api.get('getTopFilteredOptionsForQuestion', { interviewId, id: this.$me.id, filter, count: 50 })
         },
     },
 }
