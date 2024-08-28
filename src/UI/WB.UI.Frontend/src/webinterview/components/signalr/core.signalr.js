@@ -33,7 +33,7 @@ export default {
 
 
 
-        this.$api.hub = hubApi;
+        //this.$api.hub = hubApi;
 
         /*const app = this.$root
         if (!Object.prototype.hasOwnProperty.call(app.config.globalProperties, '$api')) {

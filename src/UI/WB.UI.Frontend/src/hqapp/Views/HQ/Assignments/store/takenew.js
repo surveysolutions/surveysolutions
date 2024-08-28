@@ -2,6 +2,7 @@
 //import Vuex from 'vuex'
 
 //Vue.use(Vuex)
+import { hubApi } from '~/webinterview/components/signalr/core.signalr'
 
 export default (app) => ({
     state: {
@@ -21,7 +22,7 @@ export default (app) => ({
                 commit('SET_TAKENEW_RESPONSE', data)
             })
 
-            app.$api.hub.changeSection(null)
+            hubApi.changeSection(null)
             return Promise.all([details, question])
         },
     },

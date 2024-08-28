@@ -252,7 +252,7 @@ export default defineConfig(({ mode, command }) => {
                         }
                     }
                 }),
-            //vitePluginRequire(),
+            //vitePluginRequire.default(),
             //viteCommonjs(),
             //envCompatible(),
             //cleanPlugin({
@@ -348,8 +348,10 @@ export default defineConfig(({ mode, command }) => {
                 cache: false,
                 plugins: [
                     inject({
-                        $: 'jquery',
-                        jQuery: 'jquery',
+                        jQuery: "jquery",
+                        //"window.jQuery": "jquery",
+                        //"window.$": "jquery",
+                        $: "jquery"
                     })
                 ],
                 output: {
