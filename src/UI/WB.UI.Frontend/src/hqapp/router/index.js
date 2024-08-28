@@ -20,7 +20,7 @@ export default class HqRouter {
 
         // tslint:disable:no-string-literal
         router.beforeEach(async (to, from, next) => {
-            this.store.commit('SET_ROUTE_PARAMS', to.params);
+            this.store.commit('SET_ROUTE', to);
             next()
         })
 

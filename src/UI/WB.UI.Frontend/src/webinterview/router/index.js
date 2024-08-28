@@ -86,7 +86,7 @@ function NewRouter(store) {
 
     // tslint:disable:no-string-literal
     router.beforeEach(async (to, from, next) => {
-        store.commit('SET_ROUTE_PARAMS', to.params);
+        store.commit('SET_ROUTE', to);
 
         if (config.splashScreen) { next(); return }
         next()
