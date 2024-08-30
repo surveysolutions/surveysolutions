@@ -591,6 +591,7 @@
         &.current,
         &.current:hover {
             color: $gray_light !important;
+            border: 1px solid $blue;
         }
     }
 
