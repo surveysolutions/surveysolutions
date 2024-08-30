@@ -157,8 +157,8 @@
             </form>
             <template v-slot:actions>
                 <div>
-                    <button type="button" class="btn btn-primary" role="confirm" @click="assign" :disabled="!newResponsibleId || getFilteredToAssign().length == 0
-                        ">
+                    <button type="button" class="btn btn-primary" role="confirm" @click="assign"
+                        :disabled="!newResponsibleId || getFilteredToAssign().length == 0">
                         {{ $t('Common.Assign') }}
                     </button>
                     <button type="button" class="btn btn-link" data-dismiss="modal" role="cancel">

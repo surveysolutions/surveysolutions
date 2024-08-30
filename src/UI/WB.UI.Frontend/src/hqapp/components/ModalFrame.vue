@@ -15,10 +15,11 @@
                             </h2>
                         </slot>
                     </div>
-                    <div class="modal-body">
+                    <slot name="form" />
+                    <div class="modal-body" v-if="!$slots.form">
                         <slot />
                     </div>
-                    <div class="modal-footer">
+                    <div class="modal-footer" v-if="!$slots.form">
                         <slot name="actions" />
                     </div>
                 </div>

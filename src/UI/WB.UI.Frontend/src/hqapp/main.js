@@ -70,6 +70,14 @@ defineRule('numeric', numeric)
 defineRule('not_one_of', not_one_of)
 defineRule('regex', regex)
 
+//import once it's impenemted
+defineRule("required_if", (value, [target, targetValue], ctx) => {
+    if (targetValue === ctx.form[target]) {
+        return required(value);
+    }
+    return true;
+});
+
 
 import box from '@/shared/modal'
 import 'flatpickr/dist/flatpickr.css'
