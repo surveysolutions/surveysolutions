@@ -194,7 +194,7 @@ jobs:
       - name: Download mobile artifacts
         if: ${{ matrix.task == 'DockerHq' }}
         id: download
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4.1.7
         with:
           name: Mobile Apps
           path: artifacts
@@ -238,7 +238,7 @@ jobs:
 
       - name: Download mobile artifacts
         id: download
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4.1.7
         with:
           name: Mobile Apps
           path: installer/artifacts

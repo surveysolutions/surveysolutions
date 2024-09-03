@@ -141,7 +141,7 @@ jobs:
       - name: setup sonar scanner
         run: dotnet tool install --global dotnet-sonarscanner
 
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v4.1.7
         id: test-results
         with:
           name: test-coverage
