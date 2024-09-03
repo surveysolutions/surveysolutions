@@ -1,7 +1,7 @@
 <template>
     <div class="field" :class="{ 'answered': hasValue === true }">
         <input class="form-control with-clear-btn" :class="{ 'input-validation-error': haserror === true }"
-            @input="$emit('update:modelValue', $event.target.value)" :value="modelValue" ref="input"
+            v-bind="$attrs" @input="$emit('update:modelValue', $event.target.value)" :value="modelValue" ref="input"
             autocomplete="new-password" />
         <button type="button" class="btn btn-link btn-clear" v-if="hasValue" @click="clearFilter" tabindex="-1">
             <span></span>
