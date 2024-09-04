@@ -14,8 +14,10 @@
         "format": "prettier .  --write"
     },
     "dependencies": {
-        "@ag-grid-community/core": "^31.3.2",
-        "@ag-grid-community/vue3": "^31.3.2",
+        "@ag-grid-community/client-side-row-model": "^32.1.0",
+        "@ag-grid-community/core": "^32.1.0",
+        "@ag-grid-community/styles": "^32.1.0",
+        "@ag-grid-community/vue3": "^32.1.0",
         "@apollo/client": "3.10.4",
         "@frsource/autoresize-textarea": "^2.0.92",
         "@googlemaps/markerclusterer": "^2.5.3",
