@@ -80,6 +80,11 @@
             display: flex;
             align-items: center;
 
+            &.ag-cell-not-inline-editing {
+                padding-left: 0px;
+                padding-right: 0px;
+            }
+
             &.ag-cell-inline-editing {
                 .ag-input-text-wrapper {
                     width: 100%;
@@ -272,6 +277,7 @@
                 }
             }
         }
+
         &.roster-table {
             .ag-header-cell-label {
                 justify-content: center;
