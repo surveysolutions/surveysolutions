@@ -4,6 +4,7 @@
 import { find, findIndex, chunk } from 'lodash'
 import moment from 'moment'
 import { DateFormats } from '~/shared/helpers'
+import axios from 'axios'
 
 function formatDate(data) {
     return moment.utc(data).local().format(DateFormats.dateTimeInList)
@@ -24,11 +25,11 @@ export default {
             if (state._exportStatusUpdateInProgres) return
             commit('SET_UPDATE_IN_PROGRESS', true)
 
-            const api = this.$config.model.api
+            const api = window.CONFIG.model.api
             const jobsToUpdate = []
 
             try {
-                const response = await this.$http.get(api.statusUrl)
+                const response = await axios.get(api.statusUrl)
 
                 if (response.data == null) {
                     commit('SET_SERVICE_STATE', false)
@@ -71,12 +72,12 @@ export default {
         },
 
         async getJobsUpdate({ commit }, ids) {
-            const api = Vue.$config.model.api
+            const api = window.CONFIG.model.api
 
             const chunks = chunk(ids, 20)
 
             for (let i = 0; i < chunks.length; i++) {
-                const response = await Vue.$http.post(api.exportStatusUrl, chunks[i])
+                const response = await axios.post(api.exportStatusUrl, chunks[i])
 
                 if (response.data == null) {
                     return
@@ -126,12 +127,12 @@ export default {
             job.fileDestination = job.dataDestination
             job.error = (job.error || {}).message
             job.timeEstimation = moment.duration(job.timeEstimation).humanize(true)
-            Vue.set(state.jobs, index, job)
+            state.jobs[index] = job
         },
 
         REMOVE_JOB(state, { id }) {
             const index = findIndex(state.jobs, { id })
-            Vue.delete(state.jobs, index)
+            delete state.jobs[index]
         },
 
         SET_UPDATE_IN_PROGRESS(state, value) {

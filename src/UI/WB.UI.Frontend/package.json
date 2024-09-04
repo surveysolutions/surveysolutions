@@ -53,7 +53,6 @@
         "moment": "^2.29.4",
         "moment-duration-format": "^2.3.2",
         "moment-timezone": "^0.5.33",
-        "pinia": "^2.1.7",
         "pnotify": "^3.2.1",
         "portal-vue": "^3.0.0",
         "qrcode": "^1.4.4",
