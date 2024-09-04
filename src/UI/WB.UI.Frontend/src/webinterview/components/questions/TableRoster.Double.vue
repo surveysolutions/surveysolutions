@@ -22,11 +22,14 @@ export default {
 
     data() {
         return {
-            autoNumericElement: null,
+            //autoNumericElement: null,
             cancelBeforeStart: true,
         }
     },
     computed: {
+        autoNumericElement() {
+            return this.$refs.inputDouble.autoNumericElement
+        },
         noAnswerWatermark() {
             return !this.$me.acceptAnswer && !this.$me.isAnswered ? this.$t('Details.NoAnswer') : this.$t('WebInterviewUI.DecimalEnter')
         },

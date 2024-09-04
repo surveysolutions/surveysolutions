@@ -1,12 +1,12 @@
 <template>
     <input :ref="'input'" type="text" autocomplete="off" inputmode="numeric" class="ag-cell-edit-input"
         :value="$me.answer" v-numericFormatting="{
-            digitGroupSeparator: groupSeparator,
-            decimalCharacter: decimalSeparator,
-            decimalPlaces: 0,
-            minimumValue: '-2147483648',
-            maximumValue: '2147483647'
-        }" />
+        digitGroupSeparator: groupSeparator,
+        decimalCharacter: decimalSeparator,
+        decimalPlaces: 0,
+        minimumValue: '-2147483648',
+        maximumValue: '2147483647'
+    }" />
 </template>
 
 <script lang="js">
@@ -21,11 +21,14 @@ export default {
 
     data() {
         return {
-            autoNumericElement: null,
+            //autoNumericElement: null,
             cancelBeforeStart: true,
         }
     },
     computed: {
+        autoNumericElement() {
+            return this.$refs.input.autoNumericElement
+        },
         groupSeparator() {
             return getGroupSeparator(this.$me)
         },
