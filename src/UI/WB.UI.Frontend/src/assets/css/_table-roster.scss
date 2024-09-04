@@ -9,6 +9,8 @@
 
         .ag-header-cell {
 
+            padding-left: 0px;
+            padding-right: 0px;
             border-top: 1px solid #E5E5E5;
             border-bottom: 1px solid rgba(0, 0, 0, 0.3);
 
@@ -92,6 +94,10 @@
 
                 padding: 0;
 
+            }
+
+            .ag-cell-wrapper {
+                width: 100%;
             }
 
             input.ag-cell-edit-input {
