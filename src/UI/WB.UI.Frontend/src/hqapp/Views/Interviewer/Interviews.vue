@@ -503,7 +503,7 @@ export default {
                     render: function (data) {
                         if (data != null && data.startUtc != null) {
                             var hasComment = !(data.comment == null || data.comment == '')
-                            return '<span data-toggle="tooltip" title="'
+                            return '<span data-bs-toggle="tooltip" title="'
                                 + (hasComment ? escape(data.comment) : self.$t('Assignments.NoComment'))
                                 + '">'
                                 + convertToLocal(data.startUtc, data.startTimezone)

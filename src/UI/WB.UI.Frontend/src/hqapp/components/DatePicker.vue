@@ -6,7 +6,7 @@
         <button type="submit" class="btn btn-link btn-clear">
             <span></span>
         </button>
-        <span class="input-group-addon" data-toggle>
+        <span class="input-group-addon" data-bs-toggle>
             <span class="calendar"></span>
         </span>
     </div>

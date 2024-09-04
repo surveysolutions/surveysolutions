@@ -80,7 +80,7 @@
                 <button type="button" class="btn btn-primary" @click="reprocessSelected">{{
         $t('Pages.Admin_InterviewPackages_Reprocess') }}</button>
                 <button type="button" class="btn btn-primary" @click="showReasonModal">{{
-                    $t('Pages.Admin_InterviewPackages_PutReason') }}</button>
+        $t('Pages.Admin_InterviewPackages_PutReason') }}</button>
             </div>
         </div>
     </HqLayout>
@@ -254,7 +254,7 @@ export default {
                         render: function (data, type, row) {
                             return '<div class="accordion-group accordion-caret">' +
                                 '<div class="accordion-heading">' +
-                                `<a class="accordion-toggle collapsed" data-toggle="collapse" href= "#show${row.id}">` +
+                                `<a class="accordion-toggle collapsed" data-bs-toggle="collapse" href= "#show${row.id}">` +
                                 `<strong>${data}</strong>` +
                                 '</a>' +
                                 '</div>' +

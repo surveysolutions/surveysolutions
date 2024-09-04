@@ -1,4 +1,5 @@
 import 'bootstrap'
+//import * as bootstrap from 'bootstrap'
 import 'bootstrap-select'
 
 import '../assets/css/markup.scss'

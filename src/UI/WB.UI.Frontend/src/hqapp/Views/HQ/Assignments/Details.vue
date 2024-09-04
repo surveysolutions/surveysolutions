@@ -54,7 +54,7 @@
                                         <span class="data-label">{{
                                                 $t('Common.CalendarEvent')
                                             }}:</span>
-                                        <span class="data" data-toggle="tooltip" v-if="calendarEventComment != null"
+                                        <span class="data" data-bs-toggle="tooltip" v-if="calendarEventComment != null"
                                             :title="calendarEventComment == null ||
                                             calendarEventComment == ''
                                             ? this.$t(
@@ -71,7 +71,7 @@
                         <div class="questionnaire-details-actions clearfix">
                             <div class="buttons-container">
                                 <div class="dropdown aside-menu" :disabled="config.isObserving" v-if="showMoreButton">
-                                    <button type="button" data-toggle="dropdown" aria-haspopup="true"
+                                    <button type="button" data-bs-toggle="dropdown" aria-haspopup="true"
                                         aria-expanded="false" class="btn btn-link" :disabled="config.isObserving">
                                         <span></span>
                                     </button>

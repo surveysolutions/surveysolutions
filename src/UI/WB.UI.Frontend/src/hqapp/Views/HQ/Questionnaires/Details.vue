@@ -9,10 +9,10 @@
                                 {{ this.$t('Pages.Questionnaire_Info') }}:
                                 <b>
                                     {{ $t('Pages.QuestionnaireNameVersionFirst',
-                                        {
-                                            name: model.title,
-                                            version: model.version,
-                                        }) }}
+                                    {
+                                        name: model.title,
+                                        version: model.version,
+                                    }) }}
                                     <a :href="model.designerUrl" target="_blank" v-if="model.designerUrl != null">
                                         <span :title="$t('Dashboard.ShowOnDesigner')" class="glyphicon glyphicon-link">
                                         </span>
@@ -23,7 +23,7 @@
                         <div class="questionnaire-details-actions clearfix">
                             <div class="buttons-container">
                                 <div class="dropdown aside-menu" :disabled="model.isObserving">
-                                    <button type="button" data-toggle="dropdown" aria-haspopup="true"
+                                    <button type="button" data-bs-toggle="dropdown" aria-haspopup="true"
                                         aria-expanded="false" class="btn btn-link" :disabled="model.isObserving">
                                         <span></span>
                                     </button>
@@ -93,11 +93,11 @@
                                 <td>{{ $t('Dashboard.ImportedBy') }}</td>
                                 <td>
                                     {{ model.importedBy != null
-                                        ? $t('Dashboard.ImportedByText', {
-                                            role: $t('Roles.' + model.importedBy.role),
-                                            name: model.importedBy.name
-                                        })
-                                        : ''
+                                    ? $t('Dashboard.ImportedByText', {
+                                        role: $t('Roles.' + model.importedBy.role),
+                                        name: model.importedBy.name
+                                    })
+                                    : ''
                                     }}
                                 </td>
                             </tr>

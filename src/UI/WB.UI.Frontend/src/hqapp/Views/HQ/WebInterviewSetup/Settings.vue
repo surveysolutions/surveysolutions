@@ -20,7 +20,7 @@
                         <div class="questionnaire-details-actions clearfix">
                             <div class="buttons-container">
                                 <div class="dropdown aside-menu">
-                                    <button type="button" data-toggle="dropdown" aria-haspopup="true"
+                                    <button type="button" data-bs-toggle="dropdown" aria-haspopup="true"
                                         aria-expanded="false" class="btn btn-link">
                                         <span></span>
                                     </button>
@@ -58,31 +58,31 @@
                         <ul class="nav nav-tabs" role="tablist" id="start-screen-example">
                             <li role="presentation" class="active">
                                 <a href="#welcome" @click="setPageActive('welcomeTextTitle', 'welcomeTextDescription')"
-                                    aria-controls="welcome" role="tab" data-toggle="tab">
+                                    aria-controls="welcome" role="tab" data-bs-toggle="tab">
                                     {{ $t('WebInterviewSettings.WelcomePage') }}
                                 </a>
                             </li>
                             <li role="presentation">
                                 <a href="#resume" @click="setPageActive('resumeWelcome', 'resumeInvitation')"
-                                    aria-controls="resume" role="tab" data-toggle="tab">
+                                    aria-controls="resume" role="tab" data-bs-toggle="tab">
                                     {{ $t('WebInterviewSettings.ResumePage') }}
                                 </a>
                             </li>
                             <li role="presentation">
                                 <a href="#complete" @click="setPageActive('completeNoteToSupervisor')"
-                                    aria-controls="complete" role="tab" data-toggle="tab">
+                                    aria-controls="complete" role="tab" data-bs-toggle="tab">
                                     {{ $t('WebInterviewSettings.CompletePage') }}
                                 </a>
                             </li>
                             <li role="presentation">
                                 <a href="#finish" @click="setPageActive('webSurveyHeader', 'finishInterview')"
-                                    aria-controls="finish" role="tab" data-toggle="tab">
+                                    aria-controls="finish" role="tab" data-bs-toggle="tab">
                                     {{ $t('WebInterviewSettings.FinishPage') }}
                                 </a>
                             </li>
                             <li role="presentation">
                                 <a href="#link" @click="setPageActive('linkWelcome', 'linkInvitation')"
-                                    aria-controls="link" role="tab" data-toggle="tab">
+                                    aria-controls="link" role="tab" data-bs-toggle="tab">
                                     {{ $t('WebInterviewSettings.LinkToInterviewPage') }}
                                 </a>
                             </li>
@@ -117,7 +117,7 @@
                         <ul class="nav nav-tabs" role="tablist">
                             <li v-for="emailTemplate in emailTemplates" :key="emailTemplate.value"
                                 :class="{ active: emailTemplate.isActive }" role="presentation">
-                                <a href="javascript:void(0);" role="tab" data-toggle="tab"
+                                <a href="javascript:void(0);" role="tab" data-bs-toggle="tab"
                                     @click.stop.prevent="setActive(emailTemplate)">{{ emailTemplate.buttonTitle }}
                                 </a>
                             </li>

@@ -11,15 +11,15 @@
                 </div>
                 <div class="h3 mb-05" v-if="data.questionnaireIdentity != null">
                     {{ $t('DataExport.DataExport_QuestionnaireWithVersion',
-                        { title: data.title, version: data.questionnaireIdentity.version }) }}
+                { title: data.title, version: data.questionnaireIdentity.version }) }}
                 </div>
                 <p class="mb-0 font-regular">
                     <u class="font-bold">{{ data.format }}</u> format.
                     <span v-if="data.format != 'DDI' && data.interviewStatus != null" class="font-bold">
                         {{ $t('DataExport.DataExport_InterviewsStatus', {
-                            status: $t('DataExport.' + data.interviewStatus),
-                            interpolation: { escapeValue: false }
-                        }) }}
+                status: $t('DataExport.' + data.interviewStatus),
+                interpolation: { escapeValue: false }
+            }) }}
                     </span>
                     <span>
                         {{ translation }}
@@ -32,10 +32,10 @@
                 <p>
                     <span v-if="data.dataDestination != null">
                         {{
-                            $t('DataExport.DataExport_Destination', {
-                                dest: $t(`DataExport.DataExport_Destination_${data.dataDestination}`)
-                            })
-                        }}
+                $t('DataExport.DataExport_Destination', {
+                    dest: $t(`DataExport.DataExport_Destination_${data.dataDestination}`)
+                })
+            }}
                     </span>
                 </p>
 
@@ -70,12 +70,12 @@
                         {{ $t('DataExport.DataExport_FileSize', { size: data.fileSize }) }}
                     </div>
                     <div v-if="!data.hasFile && !isFailed" class="file-info">{{
-                        $t('DataExport.DataExport_FileWasRegenerated') }}</div>
+                $t('DataExport.DataExport_FileWasRegenerated') }}</div>
                 </div>
             </div>
         </div>
         <div class="dropdown aside-menu" v-if="!data.isRunning && canRegenerate">
-            <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+            <button type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
                 class="btn btn-link">
                 <span></span>
             </button>

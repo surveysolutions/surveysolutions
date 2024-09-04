@@ -1,34 +1,20 @@
 <template>
-    <div class="question"
-        v-if="isVisible"
-        :class="questionClass"
-        :id="hash">
-        <button class="section-blocker"
-            disabled="disabled"
-            v-if="isFetchInProgress"></button>
-        <div class="dropdown aside-menu"
-            v-if="showSideMenu">
-            <button type="button"
-                data-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
-                class="btn btn-link"
-                :id="`btn_${this.question.id}_ContextMenuToggle`">
+    <div class="question" v-if="isVisible" :class="questionClass" :id="hash">
+        <button class="section-blocker" disabled="disabled" v-if="isFetchInProgress"></button>
+        <div class="dropdown aside-menu" v-if="showSideMenu">
+            <button type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                class="btn btn-link" :id="`btn_${this.question.id}_ContextMenuToggle`">
                 <span></span>
             </button>
             <ul class="dropdown-menu">
                 <li v-if="!isShowingAddCommentDialog">
-                    <a href="javascript:void(0)"
-                        @click="showAddComment"
-                        :disabled="!$store.getters.addCommentsAllowed"
+                    <a href="javascript:void(0)" @click="showAddComment" :disabled="!$store.getters.addCommentsAllowed"
                         :id="`btn_${this.question.id}_ShowAddComment`">
                         {{ $t("WebInterviewUI.CommentAdd") }}
                     </a>
                 </li>
                 <li v-else>
-                    <a href="javascript:void(0)"
-                        @click="hideAddComment"
-                        :disabled="!$store.getters.addCommentsAllowed"
+                    <a href="javascript:void(0)" @click="hideAddComment" :disabled="!$store.getters.addCommentsAllowed"
                         :id="`btn_${this.question.id}_HideAddComment`">
                         {{ $t("WebInterviewUI.CommentHide") }}
                     </a>
@@ -37,18 +23,16 @@
             </ul>
         </div>
 
-        <div class="question-editor"
-            :class="questionEditorClass">
+        <div class="question-editor" :class="questionEditorClass">
             <wb-flag v-if="$store.getters.isReviewMode === true && !noFlag" />
             <wb-title v-if="!noTitle" />
             <wb-instructions v-if="!noInstructions" />
             <slot />
-            <wb-validation v-if="!noValidation"/>
+            <wb-validation v-if="!noValidation" />
             <wb-warnings v-if="!noValidation" />
-            <wb-comments v-if="!noComments"
-                :isShowingAddCommentDialog="isShowingAddCommentDialog" />
+            <wb-comments v-if="!noComments" :isShowingAddCommentDialog="isShowingAddCommentDialog" />
         </div>
-        <wb-progress :visible="isFetchInProgress"  />
+        <wb-progress :visible="isFetchInProgress" />
     </div>
 </template>
 
@@ -85,7 +69,7 @@ export default {
         },
 
         highlight() {
-            if(!this.$store.getters.isReviewMode) return false
+            if (!this.$store.getters.isReviewMode) return false
 
             return !this.$store.state.webinterview.sidebar.searchResultsHidden && this.$store.state.route.hash === '#' + this.id
         },
@@ -110,13 +94,13 @@ export default {
         },
         isVisible() {
             return !this.question.isLoading &&
-                    !(this.question.isDisabled && this.question.hideIfDisabled && !this.$store.getters.isReviewMode)
+                !(this.question.isDisabled && this.question.hideIfDisabled && !this.$store.getters.isReviewMode)
         },
         disabled() {
             return this.isDisabled || this.question.isDisabled
         },
-        hasFlag(){
-            if(this.$store.getters.isReviewMode === true)
+        hasFlag() {
+            if (this.$store.getters.isReviewMode === true)
                 return this.$store.getters.flags[this.id]
 
             return false
@@ -146,16 +130,16 @@ export default {
             return !this.disabled && !this.noComments
         },
     },
-    methods : {
-        doScroll: debounce(function() {
-            if(this.$store.getters.scrollState ==  '#' + this.id){
+    methods: {
+        doScroll: debounce(function () {
+            if (this.$store.getters.scrollState == '#' + this.id) {
                 window.scroll({ top: this.$el.offsetTop, behavior: 'smooth' })
                 this.$store.dispatch('resetScroll')
             }
         }, 200),
 
         scroll() {
-            if(this.$store && this.$store.state.route.hash === '#' + this.id) {
+            if (this.$store && this.$store.state.route.hash === '#' + this.id) {
                 this.doScroll()
             }
         },
@@ -164,7 +148,7 @@ export default {
             if (this.$store.getters.addCommentsAllowed)
                 this.isShowingAddCommentDialogFlag = true
         },
-        hideAddComment(){
+        hideAddComment() {
             this.isShowingAddCommentDialogFlag = false
         },
     },

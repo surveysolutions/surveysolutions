@@ -39,8 +39,8 @@
                         <li id="detailsInfo_interviewDurationListItem" v-if="this.$config.model.interviewDuration">
                             <span class="data-label">{{ $t('Details.Duration') }}:</span>
                             <span class="data">{{
-                                this.$config.model.interviewDuration
-                                }}</span>
+        this.$config.model.interviewDuration
+    }}</span>
                         </li>
                         <li id="detailsInfo_responsibleListItem">
                             <span class="data-label">{{ $t('Details.Responsible') }}:
@@ -50,25 +50,25 @@
         ">{{ this.$config.model.responsible }}</a>
                             </span>
                             <span v-else class="data supervisor">{{
-                                this.$config.model.responsible
-                                }}</span>
+        this.$config.model.responsible
+    }}</span>
                         </li>
                         <li id="detailsInfo_supervisorListItem">
                             <span class="data-label">{{ $t('Users.Supervisor') }}:
                             </span>
                             <span class="data supervisor">{{
-                                this.$config.model.supervisor
-                                }}</span>
+        this.$config.model.supervisor
+    }}</span>
                         </li>
                     </ul>
                     <ul class="list-unstyled pull-left table-info">
                         <li id="detailsInfo_StatusListItem">
                             <span class="data-label">{{
-                                this.$t('Details.Status')
-                                }}</span>
+            this.$t('Details.Status')
+        }}</span>
                             <span class="data">{{
-                                this.$config.model.statusName
-                                }}</span>
+            this.$config.model.statusName
+        }}</span>
                             <button type="button" class="btn btn-link gray-action-unit" @click="showStatusesHistory">
                                 {{ $t('Common.ShowStatusHistory') }}
                             </button>
@@ -83,7 +83,7 @@
                         </li>
                         <li>
                             <span class="data-label">{{ $t('Common.CalendarEvent') }}:</span>
-                            <span class="data" data-toggle="tooltip" v-if="calendarEvent != null" :title="calendarEvent.comment == null ||
+                            <span class="data" data-bs-toggle="tooltip" v-if="calendarEvent != null" :title="calendarEvent.comment == null ||
         calendarEvent.comment == ''
         ? this.$t('Assignments.NoComment')
         : calendarEvent.comment
@@ -119,7 +119,7 @@
                     </button>
 
                     <div class="dropdown aside-menu" :disabled="config.isObserving" v-if="showMoreButton">
-                        <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                        <button type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
                             class="btn btn-link" :disabled="config.isObserving">
                             <span></span>
                         </button>
@@ -273,8 +273,8 @@
             <form onsubmit="return false;">
                 <div class="form-group">
                     <label class="control-label" for="newResponsibleId">{{
-                        $t('Assignments.SelectResponsible')
-                        }}</label>
+        $t('Assignments.SelectResponsible')
+    }}</label>
                     <Typeahead control-id="newResponsibleId" :placeholder="$t('Common.Responsible')"
                         :value="newResponsibleId" :ajax-params="{}" @selected="newResponsibleSelected"
                         :fetch-url="config.api.responsible"></Typeahead>

@@ -5,7 +5,7 @@
             <div class="navbar-header">
                 <router-link class="interview-ID" active-class :to="toFirstSection"
                     v-if="$store.state.webinterview.firstSectionId">{{ interviewKey }}</router-link>
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                <button type="button" class="navbar-toggle collapsed" data-bs-toggle="collapse" data-target="#navbar"
                     aria-expanded="false">
                     <span class="sr-only">{{ $t('WebInterviewUI.ToggleNavigation') }}</span>
                     <span class="icon-bar top-menu"></span>
@@ -36,7 +36,7 @@
                             :title="$t('WebInterviewUI.Help')">{{ $t('WebInterviewUI.Help') }}</a>
                     </li>
                     <li class="dropdown language">
-                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                        <a href="javascript:void(0);" class="dropdown-toggle" data-bs-toggle="dropdown" role="button"
                             aria-haspopup="true" aria-expanded="false" :title="currentLanguage">
                             {{ currentLanguage }}
                             <span class="caret" v-if="canChangeLanguage"></span>
@@ -44,7 +44,7 @@
                         <ul class="dropdown-menu" v-if="canChangeLanguage">
                             <li v-if="currentLanguage != $store.state.webinterview.originalLanguageName">
                                 <a href="javascript:void(0)" @click="changeLanguage()">{{
-                                    $store.state.webinterview.originalLanguageName }}</a>
+                        $store.state.webinterview.originalLanguageName }}</a>
                             </li>
                             <li :key="language.OriginalLanguageName" v-for="language in languages">
                                 <a href="javascript:void(0)" @click="changeLanguage(language)">{{ language }}</a>
@@ -54,7 +54,7 @@
                     <li v-if="showEmailPersonalLink">
                         <a href="#" @click="emailPersonalLink"
                             :title="$t('WebInterviewUI.EmailLink_EmailResumeLink')">{{
-                                $t('WebInterviewUI.EmailLink_EmailResumeLink') }}</a>
+                        $t('WebInterviewUI.EmailLink_EmailResumeLink') }}</a>
                     </li>
                     <li v-if="this.$config.inWebTesterMode">
                         <button v-if="includeVariables" type="button" class="btn btn-default btn-link btn-icon"
@@ -102,7 +102,7 @@
                                                 <div class="panel-body" v-if="selectedSaveOption === 'saveNew'">
                                                     <div class="form-group" v-if="selectedSaveOption === 'saveNew'">
                                                         <label for="txtScenarioName" class="control-label">{{
-                                                            this.$t('WebInterviewUI.SaveScenarioName') }}</label>
+                        this.$t('WebInterviewUI.SaveScenarioName') }}</label>
                                                         <input maxlength="32" id="txtScenarioName" class="form-control"
                                                             v-model="newScenarioName" />
                                                     </div>
@@ -118,15 +118,15 @@
                                                         <label for="rbScenarioUpdateExisting">
                                                             <span class="tick"></span>
                                                             {{
-                                                                this.$t('WebInterviewUI.SaveScenarioOptions_ReplaceExisting')
-                                                            }}
+                        this.$t('WebInterviewUI.SaveScenarioOptions_ReplaceExisting')
+                    }}
                                                         </label>
                                                     </div>
                                                 </div>
                                                 <div class="panel-body" v-if="selectedSaveOption === 'updateExisting'">
                                                     <div class="form-group">
                                                         <label for="slScenarioSaveOption" class="control-label">{{
-                                                            this.$t('WebInterviewUI.SaveScenarioOptions') }}</label>
+                        this.$t('WebInterviewUI.SaveScenarioOptions') }}</label>
                                                         <select id="slScenarioSaveOption" class="form-control"
                                                             v-model="selectedScenarioOption">
                                                             <option v-for="s in designerScenarios" :value="s.id"
@@ -139,13 +139,13 @@
                                         <div v-else>
                                             <p>{{ this.$t('WebInterviewUI.SaveScenarioDesignerLogin') }}</p>
                                             <a :href="this.$config.designerUrl" target="_blank">{{
-                                                this.$t('WebInterviewUI.SaveScenarioGoToDesigner') }}</a>
+                        this.$t('WebInterviewUI.SaveScenarioGoToDesigner') }}</a>
                                         </div>
                                     </div>
                                     <div class="modal-footer" v-if="!this.designerCredentialsExpired">
                                         <button type="button" class="btn btn-primary"
                                             :disabled="scenarioSaving || !scenarioValid" @click="saveScenario">{{
-                                                $t("Common.Save") }}</button>
+                                            $t("Common.Save") }}</button>
                                         <button type="button" class="btn btn-link" @click="hideScenarioSave">{{
                                             $t("Common.Cancel") }}</button>
                                     </div>
