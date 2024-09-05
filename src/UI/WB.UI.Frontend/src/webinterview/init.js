@@ -1,5 +1,8 @@
 import { browserLanguage } from '~/shared/helpers'
+
 import 'bootstrap'
+import * as bootstrap from 'bootstrap'
+
 import 'flatpickr/dist/flatpickr.css'
 import 'toastr/build/toastr.css'
 

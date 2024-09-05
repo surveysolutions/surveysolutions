@@ -5,7 +5,7 @@
             <div class="navbar-header">
                 <router-link class="interview-ID" active-class :to="toFirstSection"
                     v-if="$store.state.webinterview.firstSectionId">{{ interviewKey }}</router-link>
-                <button type="button" class="navbar-toggle collapsed" data-bs-toggle="collapse" data-target="#navbar"
+                <button type="button" class="navbar-toggle collapsed" data-bs-toggle="collapse" data-bs-target="#navbar"
                     aria-expanded="false">
                     <span class="sr-only">{{ $t('WebInterviewUI.ToggleNavigation') }}</span>
                     <span class="icon-bar top-menu"></span>
@@ -183,7 +183,7 @@ export default {
     mounted() {
         $(window).on('resize', function () {
             if ($(window).width() > 880) {
-                if ($('.navbar-collapse.collapse.in').length > 0) {
+                if ($('.navbar-collapse.collapse.show').length > 0) {
                     $('main').addClass('display-block')
                 }
             } else {
@@ -197,7 +197,7 @@ export default {
             $('.mid-menu').toggleClass('mid-animate')
             $('.bottom-menu').toggleClass('bottom-animate')
             if ($(window).width() < 880) {
-                if ($('.navbar-collapse.collapse.in').length > 0) {
+                if ($('.navbar-collapse.collapse.show').length > 0) {
                     $('main').removeClass('display-block')
                     $('main').removeClass('hidden')
                 } else {

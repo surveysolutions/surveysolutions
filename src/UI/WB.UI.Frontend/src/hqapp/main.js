@@ -1,5 +1,11 @@
+
 import 'bootstrap'
 //import * as bootstrap from 'bootstrap'
+//import "bootstrap/scss/bootstrap";
+
+// Import all of Bootstrap's JS
+import * as bootstrap from 'bootstrap'
+
 import 'bootstrap-select'
 
 import '../assets/css/markup.scss'
