@@ -1,7 +1,6 @@
 <template>
     <teleport to="body">
-        <div v-if="isOpen" class="modal fade" :id="id" ref="modal" tabindex="-1" role="dialog"
-            :aria-labelledby="titleId">
+        <div v-if="isOpen" class="modal" :id="id" ref="modal" tabindex="-1" role="dialog" :aria-labelledby="titleId">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -30,6 +29,8 @@
 
 <script>
 import { nextTick } from 'vue'
+import { Modal } from 'bootstrap'
+
 export default {
     props: {
         id: String,
@@ -40,6 +41,7 @@ export default {
 
     data() {
         return {
+            modalInstance: null,
             isOpen: false,
         }
     },
@@ -49,17 +51,20 @@ export default {
             return this.id + 'lbl'
         },
     },
+    expose: ['hide', 'modal'],
     methods: {
         hide() {
             nextTick(() => {
-                $(this.$refs.modal).modal('hide')
+                this.modalInstance.hide()
+                this.modalInstance.dispose()
             })
             this.isOpen = false
         },
         modal(params) {
             this.isOpen = true
             nextTick(() => {
-                $(this.$refs.modal).modal(params || {})
+                this.modalInstance = new Modal(this.$refs.modal, params || {})
+                this.modalInstance.show()
             })
         }
     }
