@@ -159,12 +159,10 @@
                 <b>{{ $t("Assignments.AssignmentExpectedInWebMode") }}</b>
             </p>
             <Form onsubmit="return false;" v-slot="{ meta }">
-
                 <div class="form-group" v-bind:class="{ 'has-error': meta.valid == false }">
                     <label class="control-label" for="newQuantity">
                         {{ $t("Assignments.Expected") }}
                     </label>
-
                     <Field type="text" class="form-control" v-model.trim="editedQuantity" name="editedQuantity"
                         :rules="validateQuantity" :data-vv-as="$t('Assignments.Expected')" maxlength="5"
                         autocomplete="off" @keyup.enter="updateQuantity" id="newQuantity" placeholder="1"

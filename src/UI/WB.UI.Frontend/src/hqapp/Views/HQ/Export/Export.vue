@@ -19,8 +19,9 @@
 
             <div class="row">
                 <div class="export d-flex" ref="list">
-                    <div class="col-md-12">
-                        <Form v-if="!exportServiceIsUnavailable" v-slot="{ meta }">
+                    <div class="col-md-12" v-if="!exportServiceIsUnavailable">
+                        <!-- v-slot="{ errors }" -->
+                        <Form id="exportForm" @submit="queueExport">
                             <div class="mb-30">
                                 <h3>{{ $t('DataExport.FilterTitle') }}</h3>
                                 <div class="d-flex mb-20 filter-wrapper">
@@ -30,8 +31,8 @@
                                             <span class="text-danger">*</span>
                                         </h5>
                                         <!-- TODO:Migration -->
-                                        <!-- :class="{ 'has-error': errors.has('questionnaireId') }" -->
-                                        <div class="form-group" :class="{ 'has-error': meta.valid == false }">
+                                        <!-- :class="{ 'has-error': errors.questionnaireId }" -->
+                                        <div class="form-group">
                                             <Typeahead control-id="questionnaireId" :value="questionnaireId"
                                                 :placeholder="$t('Common.AllQuestionnaires')"
                                                 :fetch-url="questionnaireFetchUrl" :selectedKey="pageState.id"
@@ -47,7 +48,7 @@
                                             {{ $t('DataExport.SurveyQuestionnaireVersion') }}
                                             <span class="text-danger">*</span>
                                         </h5>
-                                        <!-- :class="{ 'has-error': errors.has('questionnaireVersion') }" -->
+                                        <!-- :class="{ 'has-error': errors.questionnaireVersion }" -->
                                         <div class="form-group">
                                             <Typeahead noClear control-id="questionnaireVersion"
                                                 ref="questionnaireVersionControl" data-vv-name="questionnaireVersion"
@@ -224,7 +225,7 @@
                             </div>
                             <div class="mb-30">
                                 <div class="structure-block">
-                                    <button type="button" class="btn btn-success" @click="queueExport">
+                                    <button type="submit" class="btn btn-success">
                                         {{ $t('DataExport.AddToQueue') }}
                                     </button>
                                     <button type="button" class="btn btn-lg btn-link" @click="resetForm">
@@ -288,9 +289,9 @@ const ExternalStorageType = { dropbox: 1, oneDrive: 2, googleDrive: 3 }
 
 export default {
     components: {
-        Form,
         Field,
-        ErrorMessage,
+        Form,
+        ErrorMessage
     },
     data() {
         return {
@@ -303,12 +304,12 @@ export default {
             questionnaireTranslation: null,
             translations: [],
             status: null,
-            statuses: this.$config.model.statuses,
+            statuses: window.CONFIG.model.statuses,
             isUpdatingDataAvailability: false,
             hasInterviews: false,
             hasBinaryData: false,
             externalStoragesSettings:
-                (this.$config.model.externalStoragesSettings || {}).oAuth2 || {},
+                (window.CONFIG.model.externalStoragesSettings || {}).oAuth2 || {},
             pageState: {},
             updateInProgress: false,
             jobsLoadingBatchCount: 18,
@@ -338,14 +339,14 @@ export default {
             return settings != null
         },
         canExportExternally() {
-            return this.$config.model.externalStoragesSettings != null
+            return window.CONFIG.model.externalStoragesSettings != null
         },
         questionnaireFetchUrl() {
-            return this.$config.model.api.questionnairesUrl
+            return window.CONFIG.model.api.questionnairesUrl
         },
         questionnaireVersionFetchUrl() {
             if (this.questionnaireId && this.questionnaireId.key)
-                return `${this.$config.model.api.questionnairesUrl}/${this.questionnaireId.key}`
+                return `${window.CONFIG.model.api.questionnairesUrl}/${this.questionnaireId.key}`
             return null
         },
     },
@@ -378,7 +379,8 @@ export default {
             }
 
             var self = this
-            var validationResult = await this.$validator.validateAll()
+            //TODO:Migration
+            var validationResult = true//await this.$validator.validateAll()
             if (validationResult) {
                 const exportParams = self.getExportParams(
                     self.questionnaireId.key,
@@ -393,22 +395,44 @@ export default {
 
                 self.$store.dispatch('showProgress')
 
-                this.$http
-                    .post(this.$config.model.api.updateSurveyDataUrl, null, {
-                        params: exportParams,
-                    })
-                    .then(function () {
-                        self.$validator.reset()
-                        self.updateExportStatus()
-                    })
-                    .catch(function (error) {
-                        self.$errorHandler(error, self)
-                    })
-                    .then(function () {
-                        self.$store.dispatch('hideProgress')
-                    })
+                this.$http({
+                    method: 'post',
+                    url: window.CONFIG.model.api.updateSurveyDataUrl,
+                    data: {
+                        exportParams
+                    },
+                    headers: {
+                        'X-CSRF-TOKEN': this.$hq.Util.getCsrfCookie(),
+                    },
+                })
+                    .then(
+                        (loginResponse) => {
+                            if (loginResponse.status == 200) {
+                                self.updateExportStatus()
+                            }
+                            self.$store.dispatch('hideProgress')
+                        },
+                        (error) => {
+                            self.$errorHandler(error, self)
+                        })
+
+                // this.$http
+                //     .post(window.CONFIG.model.api.updateSurveyDataUrl, null, {
+                //         params: exportParams,
+                //     })
+                // .then(function () {
+                //     //self.$validator.reset()
+                //     self.updateExportStatus()
+                // })
+                // .catch(function (error) {
+                //     self.$errorHandler(error, self)
+                // })
+                // .then(function () {
+                //     self.$store.dispatch('hideProgress')
+                // })
+
             } else {
-                var fieldName = this.errors.items[0].field
+                //var fieldName = this.errors.items[0].field
                 const $firstFieldWithError = $('#' + fieldName)
                 $firstFieldWithError.focus()
             }
@@ -450,7 +474,7 @@ export default {
                 state: window.btoa(
                     window.location.href +
                     ';' +
-                    this.$config.model.api.exportToExternalStorageUrl +
+                    window.CONFIG.model.api.exportToExternalStorageUrl +
                     ';' +
                     jsonState
                 ),
@@ -582,7 +606,7 @@ export default {
             this.isUpdatingDataAvailability = true
 
             this.$http
-                .get(this.$config.model.api.dataAvailabilityUrl, {
+                .get(window.CONFIG.model.api.dataAvailabilityUrl, {
                     params: {
                         id: this.questionnaireId.key,
                         version: this.questionnaireVersion.key,

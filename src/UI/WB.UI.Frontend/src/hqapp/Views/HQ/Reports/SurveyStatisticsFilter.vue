@@ -39,7 +39,8 @@
                 <div class="col-xs-6">
 
                     <!-- v-bind:class="{ 'has-error': errors.has('min') }" -->
-                    <div class="form-group" :title="errors.first('min')">
+                    <!-- :title="errors.first('min')" -->
+                    <div class="form-group">
                         <label for="min">
                             {{ $t("Reports.Min") }}
                         </label>
@@ -51,7 +52,8 @@
                 <div class="col-xs-6">
                     <!-- TODO:Migration -->
                     <!-- v-bind:class="{ 'has-error': errors.has('max') }" -->
-                    <div class="form-group" :title="errors.first('max')">
+                    <!-- :title="errors.first('max')" -->
+                    <div class="form-group">
                         <label for="max">
                             {{ $t("Reports.Max") }}
                         </label>

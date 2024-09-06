@@ -37,22 +37,28 @@
 
 <script>
 import { assign, chain, find, filter, escape, escapeRegExp } from 'lodash'
+import { useField } from 'vee-validate';
 
 export default {
     name: 'Typeahead',
 
+    //TODO: MIGRATION
+
     // http://vee-validate.logaretm.com/v2/concepts/components.html#component-constructor-options
-    $_veeValidate: {
-        name: function () { return this.controlId },
-    },
+    //$_veeValidate: {
+    //    name: function () { return this.controlId },
+    //},
+
+    //value: useField(() => props.name),
 
     props: {
         fetchUrl: String,
+        name: String,
         controlId: {
             type: String,
             required: true,
         },
-        value: Object,
+        value: useField(() => props.name),
         placeholder: String,
         ajaxParams: Object,
         forceLoadingState: {

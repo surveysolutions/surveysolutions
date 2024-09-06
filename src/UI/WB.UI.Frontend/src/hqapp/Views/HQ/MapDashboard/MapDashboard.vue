@@ -190,8 +190,8 @@
             <form onsubmit="return false;">
                 <div class="form-group">
                     <label class="control-label" for="newResponsibleId">{{
-        $t('Assignments.SelectResponsible')
-    }}</label>
+                        $t('Assignments.SelectResponsible')
+                    }}</label>
                     <Typeahead control-id="newResponsibleId" :placeholder="$t('Common.Responsible')"
                         :value="newResponsibleId" :ajax-params="{}" @selected="newResponsibleSelected"
                         :fetch-url="model.responsible"></Typeahead>
@@ -954,7 +954,7 @@ export default {
                 }
             })
 
-            google.maps.event.addEventListener(mapDiv, 'click', (event) => {
+            google.maps.event.addDomListener(mapDiv, 'click', (event) => {
                 if (event.srcElement.nodeName == 'BUTTON') {
                     var methodName = event.srcElement.getAttribute('click')
                     if (methodName) self[methodName].call(self)

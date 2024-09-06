@@ -502,7 +502,7 @@ export default {
         self.$store.dispatch('showProgress')
 
         this.$http
-            .get(this.$config.model.api.getSettings)
+            .get(window.CONFIG.model.api.getSettings)
             .then(function (response) {
                 const settings = response.data || { smtpAuthentication: true }
                 self.provider = (settings.provider || '').toLocaleLowerCase()

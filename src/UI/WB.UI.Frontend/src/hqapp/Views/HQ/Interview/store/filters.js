@@ -135,7 +135,7 @@ export default {
             Object.keys(state.filter).forEach(key => {
                 if (state.filter[key].value != false)
                     state.search.needToClear = true
-                Vue.set(state.filter[key], 'value', false)
+                state.filter[key]['value'] = false
             })
         },
     },
