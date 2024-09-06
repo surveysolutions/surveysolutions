@@ -46,7 +46,7 @@ $(function () {
     $(window).on('resize',
         function () {
             if ($(window).width() > 880) {
-                if ($('.navbar-collapse.collapse.in').length > 0) {
+                if ($('.navbar-collapse.collapse.show').length > 0) {
                     $('main').addClass('display-block')
                 }
             } else {
@@ -61,7 +61,7 @@ $(function () {
         $('.mid-menu').toggleClass('mid-animate')
         $('.bottom-menu').toggleClass('bottom-animate')
         if ($(window).width() < 880) {
-            if ($('.navbar-collapse.collapse.in').length > 0) {
+            if ($('.navbar-collapse.collapse.show').length > 0) {
                 $('main').removeClass('display-block')
                 $('main').removeClass('hidden')
             } else {
