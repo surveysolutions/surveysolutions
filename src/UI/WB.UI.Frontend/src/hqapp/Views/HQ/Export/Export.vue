@@ -19,9 +19,9 @@
 
             <div class="row">
                 <div class="export d-flex" ref="list">
-                    <div class="col-md-12">
+                    <div class="col-md-12" v-if="!exportServiceIsUnavailable">
                         <!-- v-slot="{ errors }" -->
-                        <Form v-if="!exportServiceIsUnavailable">
+                        <Form id="exportForm" @submit="queueExport">
                             <div class="mb-30">
                                 <h3>{{ $t('DataExport.FilterTitle') }}</h3>
                                 <div class="d-flex mb-20 filter-wrapper">
@@ -225,7 +225,7 @@
                             </div>
                             <div class="mb-30">
                                 <div class="structure-block">
-                                    <button type="button" class="btn btn-success" @click="queueExport">
+                                    <button type="submit" class="btn btn-success">
                                         {{ $t('DataExport.AddToQueue') }}
                                     </button>
                                     <button type="button" class="btn btn-lg btn-link" @click="resetForm">
@@ -276,7 +276,6 @@ import { Form, Field, ErrorMessage } from 'vee-validate'
 import ExportProcessCard from './ExportProcessCard'
 import gql from 'graphql-tag'
 import { filter, toNumber, map } from 'lodash'
-import axios from 'axios'
 
 const dataFormatNum = {
     Tabular: 1,
@@ -290,8 +289,8 @@ const ExternalStorageType = { dropbox: 1, oneDrive: 2, googleDrive: 3 }
 
 export default {
     components: {
-        Form,
         Field,
+        Form,
         ErrorMessage
     },
     data() {
@@ -381,7 +380,7 @@ export default {
 
             var self = this
             //TODO:Migration
-            //var validationResult = await this.$validator.validateAll()
+            var validationResult = true//await this.$validator.validateAll()
             if (validationResult) {
                 const exportParams = self.getExportParams(
                     self.questionnaireId.key,
@@ -396,22 +395,44 @@ export default {
 
                 self.$store.dispatch('showProgress')
 
-                axios
-                    .post(window.CONFIG.model.api.updateSurveyDataUrl, null, {
-                        params: exportParams,
-                    })
-                    .then(function () {
-                        self.$validator.reset()
-                        self.updateExportStatus()
-                    })
-                    .catch(function (error) {
-                        self.$errorHandler(error, self)
-                    })
-                    .then(function () {
-                        self.$store.dispatch('hideProgress')
-                    })
+                this.$http({
+                    method: 'post',
+                    url: window.CONFIG.model.api.updateSurveyDataUrl,
+                    data: {
+                        exportParams
+                    },
+                    headers: {
+                        'X-CSRF-TOKEN': this.$hq.Util.getCsrfCookie(),
+                    },
+                })
+                    .then(
+                        (loginResponse) => {
+                            if (loginResponse.status == 200) {
+                                self.updateExportStatus()
+                            }
+                            self.$store.dispatch('hideProgress')
+                        },
+                        (error) => {
+                            self.$errorHandler(error, self)
+                        })
+
+                // this.$http
+                //     .post(window.CONFIG.model.api.updateSurveyDataUrl, null, {
+                //         params: exportParams,
+                //     })
+                // .then(function () {
+                //     //self.$validator.reset()
+                //     self.updateExportStatus()
+                // })
+                // .catch(function (error) {
+                //     self.$errorHandler(error, self)
+                // })
+                // .then(function () {
+                //     self.$store.dispatch('hideProgress')
+                // })
+
             } else {
-                var fieldName = this.errors.items[0].field
+                //var fieldName = this.errors.items[0].field
                 const $firstFieldWithError = $('#' + fieldName)
                 $firstFieldWithError.focus()
             }
@@ -584,7 +605,7 @@ export default {
         updateDataAvalability() {
             this.isUpdatingDataAvailability = true
 
-            axios
+            this.$http
                 .get(window.CONFIG.model.api.dataAvailabilityUrl, {
                     params: {
                         id: this.questionnaireId.key,

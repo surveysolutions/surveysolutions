@@ -26,7 +26,8 @@
             <div class="col-md-6 col-sm-6 col-xs-12 right-column">
                 <div class="centered-box-table">
                     <div class="centered-box-table-cell">
-                        <Form id="import-log-in" class="log-in" autocomplete="off" @submit="trySignIn">
+                        <Form id="import-log-in" class="log-in" autocomplete="off" @submit="trySignIn"
+                            v-slot="{ errors }">
                             <div class="alert alert-danger" v-if="invalidCredentials">
                                 <p>
                                     {{ $t('LoginToDesigner.InvalidCredentials') }}
@@ -37,21 +38,17 @@
                             <div class="alert alert-danger" v-if="errorMessage">
                                 <p v-html="errorMessage"></p>
                             </div>
-                            <!--TODO:MIGRATION-->
-                            <!-- :class="{ 'has-error': errors.has('UserName') }" -->
-                            <div class="form-group">
+                            <div class="form-group" :class="{ 'has-error': errors.Login }">
                                 <Field type="text" name="Login" class="form-control" autofocus="autofocus"
                                     v-model="userName" rules="required"
                                     :placeholder="this.$t('LoginToDesigner.LoginWatermark')" />
-                                <ErrorMessage name="Login"></ErrorMessage>
+                                <ErrorMessage name="Login" class="field-validation-error"></ErrorMessage>
                             </div>
-                            <!--TODO:MIGRATION-->
-                            <!-- :class="{ 'has-error': errors.has('Password') }" -->
-                            <div class="form-group">
+                            <div class="form-group" :class="{ 'has-error': errors.Password }">
                                 <Field type="password" id="Password" name="Password" class="form-control"
                                     v-model="password" rules="required"
                                     :placeholder="this.$t('FieldsAndValidations.PasswordFieldName')" />
-                                <ErrorMessage name="Password"></ErrorMessage>
+                                <ErrorMessage name="Password" class="field-validation-error"></ErrorMessage>
                             </div>
                             <div class="form-group">
                                 <input id="ShowPassword" type="checkbox"
@@ -65,7 +62,7 @@
                                     {{ $t('Common.SignIn') }}
                                 </button>
                             </div>
-                        </form>
+                        </Form>
                     </div>
                 </div>
             </div>

@@ -193,7 +193,7 @@ export default {
                 data: 'average',
                 name: 'Average',
                 title: this.$t('PeriodicStatusReport.Average'),
-                orderable: true,
+                orderable: false,
                 render: function (data, type, row) {
                     if (row.quantityByPeriod) {
                         return self.renderQuantityValue(data)
