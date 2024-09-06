@@ -30,7 +30,7 @@
         "append-query": "^2.1.1",
         "autonumeric": "^4.10.5",
         "axios": "^1.7.2",
-        "bootbox": "^5.5.3",
+        "bootbox": "^6.0.0",
         "bootstrap": "^5.3.3",
         "bootstrap-sass": "^3.4.3",
         "bootstrap-select": "^1.13.18",
