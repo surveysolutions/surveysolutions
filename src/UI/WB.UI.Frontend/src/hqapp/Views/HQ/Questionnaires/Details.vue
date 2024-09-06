@@ -9,10 +9,10 @@
                                 {{ this.$t('Pages.Questionnaire_Info') }}:
                                 <b>
                                     {{ $t('Pages.QuestionnaireNameVersionFirst',
-                                    {
-                                        name: model.title,
-                                        version: model.version,
-                                    }) }}
+                                        {
+                                            name: model.title,
+                                            version: model.version,
+                                        }) }}
                                     <a :href="model.designerUrl" target="_blank" v-if="model.designerUrl != null">
                                         <span :title="$t('Dashboard.ShowOnDesigner')" class="glyphicon glyphicon-link">
                                         </span>
@@ -93,11 +93,11 @@
                                 <td>{{ $t('Dashboard.ImportedBy') }}</td>
                                 <td>
                                     {{ model.importedBy != null
-                                    ? $t('Dashboard.ImportedByText', {
-                                        role: $t('Roles.' + model.importedBy.role),
-                                        name: model.importedBy.name
-                                    })
-                                    : ''
+                                        ? $t('Dashboard.ImportedByText', {
+                                            role: $t('Roles.' + model.importedBy.role),
+                                            name: model.importedBy.name
+                                        })
+                                        : ''
                                     }}
                                 </td>
                             </tr>
@@ -312,7 +312,7 @@ export default {
             if (response.status === 204) {
                 this.model.criticalityLevel = this.criticalityLevel.key;
                 this.criticalityLevelDisplay = find(this.$config.model.criticalityLevels, { key: this.model.criticalityLevel }).value
-                this.$refs.criticalityLevelModal.modal('hide');
+                this.$refs.criticalityLevelModal.hide();
             }
         },
         async recordAudioSend() {
@@ -320,7 +320,7 @@ export default {
                 .Questionnaire(this.model.questionnaireId, this.model.version)
                 .AudioAudit(this.audioAudit)
             if (response.status !== 204) this.audioAudit = !this.audioAudit
-            this.$refs.audioAuditModal.modal('hide')
+            this.$refs.audioAuditModal.hide()
         },
         cancelSetAudio() {
             this.audioAudit = false

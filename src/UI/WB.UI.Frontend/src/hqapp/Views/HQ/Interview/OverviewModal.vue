@@ -103,7 +103,7 @@ export default {
     methods: {
         hide() {
             document.removeEventListener('scroll', this.handleScroll)
-            $(this.$refs.modal).modal('hide')
+            this.$refs.modal.hide()
             $('body').removeClass('overviewOpenned')
         },
 

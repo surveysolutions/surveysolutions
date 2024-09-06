@@ -1,9 +1,9 @@
 <template>
     <HqLayout :title="$config.model.title" :hasFilter="false" :topicButton="$t('Dashboard.ImportTemplate')"
         :topicButtonRef="!$config.model.isObserver
-        ? $config.model.importQuestionnaireUrl
-        : ''
-        ">
+            ? $config.model.importQuestionnaireUrl
+            : ''
+            ">
         <template v-slot:subtitle>
             <ol class="list-unstyled">
                 <li>{{ $t('Dashboard.SurveySetupIntroMessage1') }}</li>
@@ -23,10 +23,10 @@
                 </p>
                 <p>
                     {{
-        $t(
-            'Pages.GlobalSettings_DeleteQuestionnaireConfirmation',
-        )
-    }}
+                        $t(
+                            'Pages.GlobalSettings_DeleteQuestionnaireConfirmation',
+                    )
+                    }}
                 </p>
                 <p class="text-danger" v-if="this.deletionWarnMsg">
                     {{ deletionWarnMsg }}
@@ -328,7 +328,7 @@ export default {
                     )
                     .Delete()
                 if (response.status == 200) {
-                    this.$refs.deleteQuestionnaireModal.modal('hide')
+                    this.$refs.deleteQuestionnaireModal.hide()
                 }
                 this.reloadTable()
             }

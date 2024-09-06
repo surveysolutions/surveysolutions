@@ -26,11 +26,11 @@
                                 {{ $t("Workspaces.Name") }}
                             </label>
                             <Field type="text" class="form-control" v-model.trim="newWorkspaceName" name="Name" :rules="{
-        required: true,
-        max: 12,
-        regex: /^[0-9,a-z]+$/,
-        not_one_of: ['api', 'apidocs', 'graphql', 'users', 'administration']
-    }" :data-vv-as="$t('Workspaces.Name')" autocomplete="off" @keyup.enter="createWorkspace"
+                                required: true,
+                                max: 12,
+                                regex: /^[0-9,a-z]+$/,
+                                not_one_of: ['api', 'apidocs', 'graphql', 'users', 'administration']
+                            }" :data-vv-as="$t('Workspaces.Name')" autocomplete="off" @keyup.enter="createWorkspace"
                                 id="newWorkspaceName" />
 
                             <p class="help-block" v-if="!errors.Name">
@@ -171,7 +171,7 @@ export default {
                 await this.$http.patch(`${this.$config.model.dataUrl}/${this.editedRowId}`, {
                     displayName: this.editedDisplayName,
                 })
-                this.$refs.editWorkspaceModal.modal('hide')
+                this.$refs.editWorkspaceModal.hide()
                 this.loadData()
             }
             finally {
@@ -182,7 +182,7 @@ export default {
             try {
                 this.inProgress = true
                 await this.$http.post(`${this.$config.model.dataUrl}/${this.editedRowId}/disable`)
-                this.$refs.disableWorkspaceModal.modal('hide')
+                this.$refs.disableWorkspaceModal.hide()
 
                 this.loadData()
             }
@@ -206,7 +206,7 @@ export default {
                     displayName: this.editedDisplayName,
                     name: this.newWorkspaceName,
                 })
-                this.$refs.createWorkspaceModal.modal('hide')
+                this.$refs.createWorkspaceModal.hide()
                 this.loadData()
                 this.editedDisplayName = null
                 this.newWorkspaceName = null

@@ -14,8 +14,8 @@
                         <li id="detailsInfo_interviewKeyListItem">
                             {{ $t('Common.InterviewKey') }}:
                             {{ $config.model.key }}({{
-        $t('Common.Assignment')
-    }}
+                                $t('Common.Assignment')
+                            }}
                             <a :href="this.$config.model.assignmentDetailsUrl">#{{ this.$config.model.assignmentId
                                 }}</a>)
                         </li>
@@ -39,36 +39,36 @@
                         <li id="detailsInfo_interviewDurationListItem" v-if="this.$config.model.interviewDuration">
                             <span class="data-label">{{ $t('Details.Duration') }}:</span>
                             <span class="data">{{
-        this.$config.model.interviewDuration
-    }}</span>
+                                this.$config.model.interviewDuration
+                                }}</span>
                         </li>
                         <li id="detailsInfo_responsibleListItem">
                             <span class="data-label">{{ $t('Details.Responsible') }}:
                             </span>
                             <span v-if="isInterviewerResponsible" class="data">
                                 <a :class="responsibleRole" :href="this.$config.model.responsibleProfileUrl
-        ">{{ this.$config.model.responsible }}</a>
+                                    ">{{ this.$config.model.responsible }}</a>
                             </span>
                             <span v-else class="data supervisor">{{
-        this.$config.model.responsible
-    }}</span>
+                                this.$config.model.responsible
+                                }}</span>
                         </li>
                         <li id="detailsInfo_supervisorListItem">
                             <span class="data-label">{{ $t('Users.Supervisor') }}:
                             </span>
                             <span class="data supervisor">{{
-        this.$config.model.supervisor
-    }}</span>
+                                this.$config.model.supervisor
+                                }}</span>
                         </li>
                     </ul>
                     <ul class="list-unstyled pull-left table-info">
                         <li id="detailsInfo_StatusListItem">
                             <span class="data-label">{{
-            this.$t('Details.Status')
-        }}</span>
+                                this.$t('Details.Status')
+                                }}</span>
                             <span class="data">{{
-            this.$config.model.statusName
-        }}</span>
+                                this.$config.model.statusName
+                                }}</span>
                             <button type="button" class="btn btn-link gray-action-unit" @click="showStatusesHistory">
                                 {{ $t('Common.ShowStatusHistory') }}
                             </button>
@@ -84,10 +84,10 @@
                         <li>
                             <span class="data-label">{{ $t('Common.CalendarEvent') }}:</span>
                             <span class="data" data-bs-toggle="tooltip" v-if="calendarEvent != null" :title="calendarEvent.comment == null ||
-        calendarEvent.comment == ''
-        ? this.$t('Assignments.NoComment')
-        : calendarEvent.comment
-        ">
+                                calendarEvent.comment == ''
+                                ? this.$t('Assignments.NoComment')
+                                : calendarEvent.comment
+                                ">
                                 {{ calendarEventTime }}
                             </span>
 
@@ -95,7 +95,7 @@
                             <a id="btn_Print" class="btn btn-link gray-action-unit"
                                 v-bind:href="this.$config.model.pdfUrl" target="_blank"
                                 :title="$t('WebInterview.DownloadAnswersHint')" download>{{
-        $t('WebInterview.DownloadAnswers') }}</a>
+                                    $t('WebInterview.DownloadAnswers') }}</a>
                         </li>
                     </ul>
                 </div>
@@ -114,8 +114,8 @@
                     <button id="btn_unapprove" type="button" class="btn btn-default btn-lg reject marl"
                         v-if="showUnapproveButton" @click="reject">
                         {{
-        $t('Pages.ApproveRejectPartialView_UnapproveAction')
-    }}
+                            $t('Pages.ApproveRejectPartialView_UnapproveAction')
+                        }}
                     </button>
 
                     <div class="dropdown aside-menu" :disabled="config.isObserving" v-if="showMoreButton">
@@ -141,12 +141,12 @@
                                 </a>
                             </li>
                             <li v-if="canBeReassigned ||
-        canChangeToCawi ||
-        canChangeToCapi
-        " class="context-menu-separator context-menu-not-selectable"></li>
+                                canChangeToCawi ||
+                                canChangeToCapi
+                            " class="context-menu-separator context-menu-not-selectable"></li>
                             <li :class="canBeDeleted ? '' : 'disabled'">
                                 <a href="#" :class="canBeDeleted ? 'error-text' : 'disabled'
-        " @click="deleteSelected">
+                                    " @click="deleteSelected">
                                     {{ $t('Common.Delete') }}
                                 </a>
                             </li>
@@ -159,25 +159,25 @@
         <StatusesHistory ref="statusesHistory" id="statusesHistory" slot="modals" class="statusHistoryModal" />
         <Confirm ref="confirmApprove" id="confirmApprove" slot="modals"
             :title="$t('Pages.ApproveRejectPartialView_ApproveLabel')" :okTitle="$t('Common.Approve')" :disableOk="receivedByInterviewer && !doApproveReceivedByInterviewer
-        ">
+                ">
             <div class="form-group" v-if="receivedByInterviewer">
                 <input type="checkbox" id="approveReceivedByInterviewer" v-model="doApproveReceivedByInterviewer"
                     class="checkbox-filter" />
                 <label for="approveReceivedByInterviewer" style="font-weight: normal">
                     <span class="tick"></span>
                     {{
-        $t(
-            'Pages.ApproveRejectPartialView_ApproveReceivedConfirm',
-        )
-    }}
+                        $t(
+                            'Pages.ApproveRejectPartialView_ApproveReceivedConfirm',
+                    )
+                    }}
                 </label>
                 <br />
                 <span v-if="doApproveReceivedByInterviewer" class="text-danger">
                     {{
-        $t(
-            'Pages.ApproveRejectPartialView_ApproveReceivedWarning',
-        )
-    }}
+                        $t(
+                            'Pages.ApproveRejectPartialView_ApproveReceivedWarning',
+                    )
+                    }}
                 </span>
                 <br />
             </div>
@@ -191,14 +191,14 @@
         </Confirm>
 
         <Confirm ref="rejectConfirm" id="rejectConfirm" slot="modals" :title="showUnapproveButton
-        ? $t('Pages.ApproveRejectPartialView_UnapproveLabel')
-        : $t('Pages.ApproveRejectPartialView_RejectLAbel')
-        " :disableOk="(interviewerShouldbeSelected || rejectToNewResponsible) &&
-        newResponsibleId == null
-        " :okTitle="showUnapproveButton
-        ? $t('Common.Unapprove')
-        : $t('Common.Reject')
-        " :okClass="btn - danger">
+            ? $t('Pages.ApproveRejectPartialView_UnapproveLabel')
+            : $t('Pages.ApproveRejectPartialView_RejectLAbel')
+            " :disableOk="(interviewerShouldbeSelected || rejectToNewResponsible) &&
+            newResponsibleId == null
+            " :okTitle="showUnapproveButton
+            ? $t('Common.Unapprove')
+            : $t('Common.Reject')
+            " :okClass="btn - danger">
             <form v-if="!showUnapproveButton" onsubmit="return false;">
                 <div class="form-group">
                     <Radio v-if="!interviewerShouldbeSelected" :label="$t('Interviews.RejectToOriginal')"
@@ -209,11 +209,11 @@
                         @input="rejectToNewResponsible = true" />
                     <p>
                         <Typeahead v-if="rejectToNewResponsible == true ||
-        interviewerShouldbeSelected
-        " control-id="rejectResponsibleId" :placeholder="$t('Common.Responsible')" :value="newResponsibleId"
+                            interviewerShouldbeSelected
+                        " control-id="rejectResponsibleId" :placeholder="$t('Common.Responsible')" :value="newResponsibleId"
                             @selected="newResponsibleSelected" :fetch-url="this.$config.model.approveReject
-        .interviewersListUrl
-        ">
+                                .interviewersListUrl
+                                ">
                         </Typeahead>
                     </p>
                 </div>
@@ -231,10 +231,10 @@
             <h3>
                 {{ $t('Details.InterviewMode') }}:
                 {{
-        interviewinCawiMode
-            ? $t('Common.Cawi')
-            : $t('Common.Capi')
-    }}
+                    interviewinCawiMode
+                        ? $t('Common.Cawi')
+                        : $t('Common.Capi')
+                }}
             </h3>
             <div>
                 <p>{{ webLink }}</p>
@@ -251,11 +251,11 @@
         <ModalFrame ref="deleteModal" :title="$t('Common.Delete')">
             <div class="action-container">
                 <p v-html="$t('Interviews.DeleteConfirmMessageHQ', {
-        count: 1,
-        status1: 'Supervisor assigned',
-        status2: 'Interviewer assigned',
-    })
-        "></p>
+                    count: 1,
+                    status1: 'Supervisor assigned',
+                    status2: 'Interviewer assigned',
+                })
+                    "></p>
             </div>
             <template v-slot:actions>
                 <div>
@@ -273,29 +273,29 @@
             <form onsubmit="return false;">
                 <div class="form-group">
                     <label class="control-label" for="newResponsibleId">{{
-        $t('Assignments.SelectResponsible')
-    }}</label>
+                        $t('Assignments.SelectResponsible')
+                        }}</label>
                     <Typeahead control-id="newResponsibleId" :placeholder="$t('Common.Responsible')"
                         :value="newResponsibleId" :ajax-params="{}" @selected="newResponsibleSelected"
                         :fetch-url="config.api.responsible"></Typeahead>
                 </div>
                 <div id="pnlAssignToOtherTeamConfirmMessage">
                     <p v-html="this.config.isSupervisor
-        ? $t('Interviews.AssignConfirmMessage', {
-            count: 1,
-            status1: 'Supervisor assigned',
-            status2: 'Interviewer assigned',
-            status3: 'Rejected by Supervisor',
-        })
-        : $t(
-            'Interviews.AssignToOtherTeamConfirmMessage',
-            {
-                count: 1,
-                status1: 'Approved by Supervisor',
-                status2: 'Approved by Headquarters',
-            },
-        )
-        "></p>
+                        ? $t('Interviews.AssignConfirmMessage', {
+                            count: 1,
+                            status1: 'Supervisor assigned',
+                            status2: 'Interviewer assigned',
+                            status3: 'Rejected by Supervisor',
+                        })
+                        : $t(
+                            'Interviews.AssignToOtherTeamConfirmMessage',
+                            {
+                                count: 1,
+                                status1: 'Approved by Supervisor',
+                                status2: 'Approved by Headquarters',
+                            },
+                        )
+                        "></p>
                 </div>
 
                 <div v-if="isReceivedByInterviewerAtUtc">
@@ -328,14 +328,14 @@
         <ChangeToCapi ref="modalChangeToCAWI" :modalId="'switchToCawi_id'" :title="$t('Common.ChangeToCAWI')"
             :confirmMessage="$t('Common.ChangeToCAWIConfirmHQ', { count: 1 })" :filteredCount="1"
             :receivedByInterviewerItemsCount="isReceivedByInterviewerAtUtc ? 1 : 0
-        " @confirm="changeInterviewModeToCawi" />
+                " @confirm="changeInterviewModeToCawi" />
 
         <ChangeToCapi ref="modalChangeToCAPI" :modalId="'switchToCapi_id'" :title="$t('Common.ChangeToCAPI')"
             :confirmMessage="$t('Common.ChangeToCAPIConfirmHQ', {
-        count: 1,
-    })
-        " :filteredCount="1" :receivedByInterviewerItemsCount="isReceivedByInterviewerAtUtc ? 1 : 0
-        " @confirm="changeInterviewModeToCapi" />
+                count: 1,
+            })
+                " :filteredCount="1" :receivedByInterviewerItemsCount="isReceivedByInterviewerAtUtc ? 1 : 0
+            " @confirm="changeInterviewModeToCapi" />
     </div>
 </template>
 
@@ -532,10 +532,10 @@ export default {
             this.$refs.overview.show()
         },
         showModeDetails() {
-            this.$refs.modeDetails.modal('show')
+            this.$refs.modeDetails.modal()
         },
         hideModeDetails() {
-            $(this.$refs.modeDetails).modal('hide')
+            this.$refs.modeDetails.hide()
         },
 
         changeInterviewModeToCawi(confirmReceivedByInterviewer) {

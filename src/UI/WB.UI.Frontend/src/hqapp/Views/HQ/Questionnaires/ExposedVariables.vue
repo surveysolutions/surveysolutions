@@ -239,7 +239,7 @@ export default {
             const response = await this.$hq.Questionnaire(this.model.questionnaireId, this.model.version)
                 .ChangeVariableExposeStatus(this.$config.model.questionnaireIdentity, this.exposedVariables.map(s => s.id))
             this.initialSet = [...this.exposedVariables]
-            this.$refs.exposedChangeModal.modal('hide')
+            this.$refs.exposedChangeModal.hide()
         },
 
         cellAllClicked(columnName, rowId, cellData) {
@@ -276,7 +276,7 @@ export default {
             var row = this.$refs.table.table.row('#' + this.idToRemove)
             if (row != null)
                 row.nodes().to$().removeClass('disabled')
-            this.$refs.exposedRemoveModal.modal('hide')
+            this.$refs.exposedRemoveModal.hide()
         },
         getVariableLabel(variable) {
             return variable.label ? this.getDisplayTitle(variable.label)

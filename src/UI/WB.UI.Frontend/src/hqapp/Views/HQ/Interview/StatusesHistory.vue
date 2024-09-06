@@ -6,7 +6,7 @@
                 <p>
                     {{ $t('Details.Responsible') }}: <span
                         v-bind:class="[$config.model.responsibleRole.toLowerCase()]">{{
-                    $config.model.responsible }}</span>
+                            $config.model.responsible }}</span>
                 </p>
             </div>
         </template>
@@ -69,7 +69,7 @@ export default {
             return moment.utc(d).local().format(DateFormats.dateTimeInList)
         },
         hide() {
-            $(this.$refs.modal).modal('hide')
+            this.$refs.modal.hide()
         },
         async show() {
             if (this.items == null) {
