@@ -1,7 +1,5 @@
 import Assignments from './Assignments'
 import Interviews from './Interviews'
-//import Vue from 'vue'
-//TODO: MIGRATION
 import PNotify from 'pnotify'
 
 
@@ -15,7 +13,7 @@ const store = {
 
             $.post(
                 {
-                    url: this.$config.model.interviewerHqEndpoint + '/StartNewInterview/' + assignmentId,
+                    url: window.CONFIG.model.interviewerHqEndpoint + '/StartNewInterview/' + assignmentId,
                     headers: {
                         'X-CSRF-TOKEN': this.$hq.Util.getCsrfCookie(),
                     },
@@ -45,12 +43,12 @@ const store = {
         },
         openInterview(context, interviewId) {
             context.dispatch('showProgress', true)
-            window.location = this.$config.model.interviewerHqEndpoint + '/OpenInterview/' + interviewId
+            window.location = window.CONFIG.model.interviewerHqEndpoint + '/OpenInterview/' + interviewId
         },
 
         discardInterview(context, { callback, interviewId }) {
             $.ajax({
-                url: this.$config.model.interviewerHqEndpoint + '/DiscardInterview/' + interviewId,
+                url: window.CONFIG.model.interviewerHqEndpoint + '/DiscardInterview/' + interviewId,
                 type: 'DELETE',
                 success: callback,
                 headers: {

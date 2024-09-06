@@ -5,8 +5,7 @@ import Upload from './Upload/Index'
 import UploadErrors from './Upload/Errors'
 import UploadVerification from './Upload/Verification'
 import UploadProgress from './Upload/Progress'
-import localStore from './store'
-
+import assignmentsStore from './store'
 import config from '~/shared/config'
 
 //TODO: MIGRATION. Remove after migration to mande
@@ -124,7 +123,5 @@ export default class AssignmentsComponent {
             }]
     }
 
-    get modules() {
-        return localStore
-    }
+    get modules() { return assignmentsStore }
 }

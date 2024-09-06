@@ -2,14 +2,9 @@ import webinterview from '~/webinterview/stores'
 import takeNew from './takenew'
 import upload from './upload'
 
-const store = (app) => ({
-    modules: {
-        takeNew: takeNew(app),
-    },
-
-    actions: {
-
-    },
+const store = {
+    modules: {},
+    actions: {},
     getters: {
         isReviewMode() {
             return false
@@ -19,10 +14,11 @@ const store = (app) => ({
         },
     },
 }
-)
 
-export default (app) => {
-    webinterview: webinterview(app);
-    takeNew: store(app);
-    upload
-}
+export default
+    {
+        webinterview,
+        takeNew,
+        takeNewExtra: store,
+        upload
+    }

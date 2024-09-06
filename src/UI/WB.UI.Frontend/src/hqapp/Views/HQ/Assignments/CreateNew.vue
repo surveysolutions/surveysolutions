@@ -13,8 +13,8 @@
                             <h2>
                                 {{ $t('Assignments.CreatingNewAssignment', { questionnaire: questionnaireTitle }) }}
                                 <span :title="$t('Reports.Version')">({{ this.$t('Assignments.QuestionnaireVersion', {
-                    version: this.questionnaireVersion
-                }) }})</span>
+                                    version: this.questionnaireVersion
+                                    }) }})</span>
                             </h2>
                         </div>
                     </div>
@@ -381,13 +381,13 @@ export default {
             return filteredSectionData
         },
         isLoaded() {
-            return this.$store.state.takeNew.takeNew.isLoaded
+            return this.$store.state.takeNew.isLoaded
         },
         questionnaireTitle() {
-            return this.$store.state.takeNew.takeNew.interview.questionnaireTitle
+            return this.$store.state.takeNew.interview.questionnaireTitle
         },
         questionnaireVersion() {
-            return this.$store.state.takeNew.takeNew.interview.questionnaireVersion
+            return this.$store.state.takeNew.interview.questionnaireVersion
         },
         config() {
             return this.$config.model

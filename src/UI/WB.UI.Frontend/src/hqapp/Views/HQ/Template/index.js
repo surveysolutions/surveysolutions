@@ -1,7 +1,6 @@
 import LoginToDesigner from './LoginToDesigner'
 import Import from './Import'
 import ImportMode from './ImportMode'
-//import Vue from 'vue'
 
 export default class Template {
     get routes() {
@@ -19,10 +18,4 @@ export default class Template {
         },
         ]
     }
-
-    // initialize() {
-    //     const VeeValidate = require('vee-validate')
-    //     Vue.use(VeeValidate)
-    // }
-    //TODO: MIGRATION
 }

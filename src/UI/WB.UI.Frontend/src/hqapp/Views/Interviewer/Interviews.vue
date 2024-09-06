@@ -5,7 +5,7 @@
                 <FilterBlock :title="$t('Common.Questionnaire')">
                     <Typeahead control-id="questionnaireId" data-vv-name="questionnaireId" data-vv-as="questionnaire"
                         :placeholder="$t('Common.AllQuestionnaires')" :value="questionnaireId"
-                        :values="this.$config.model.questionnaires" v-on:selected="questionnaireSelected" />
+                        :values="window.CONFIG.model.questionnaires" v-on:selected="questionnaireSelected" />
                 </FilterBlock>
 
                 <FilterBlock :title="$t('Common.QuestionnaireVersion')">
@@ -179,7 +179,7 @@ export default {
                 and.push({ assignmentId: { eq: this.where.assignmentId } })
             }
 
-            and.push({ status: { in: this.$config.model.statuses } })
+            and.push({ status: { in: window.CONFIG.model.statuses } })
 
             return and
         },
@@ -401,7 +401,7 @@ export default {
             self.$refs.confirmRestart.promt(ok => {
                 if (ok) {
                     $.post({
-                        url: this.$config.model.interviewerHqEndpoint + '/RestartInterview/' + interviewId,
+                        url: window.CONFIG.model.interviewerHqEndpoint + '/RestartInterview/' + interviewId,
                         data: { comment: self.restart_comment },
                         headers: {
                             'X-CSRF-TOKEN': self.$hq.Util.getCsrfCookie(),
@@ -419,7 +419,7 @@ export default {
         },
 
         addFilteringParams(data) {
-            data.statuses = this.$config.model.statuses
+            data.statuses = window.CONFIG.model.statuses
 
             data.questionnaireId = (this.questionnaireId || {}).key
             data.questionnaireVersion = (this.questionnaireVersion || {}).key

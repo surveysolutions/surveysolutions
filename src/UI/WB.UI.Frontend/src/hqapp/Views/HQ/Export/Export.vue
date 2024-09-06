@@ -20,8 +20,7 @@
             <div class="row">
                 <div class="export d-flex" ref="list">
                     <div class="col-md-12" v-if="!exportServiceIsUnavailable">
-                        <!-- v-slot="{ errors }" -->
-                        <Form id="exportForm" @submit="queueExport">
+                        <Form id="exportForm" @submit="queueExport" v-slot="{ errors }">
                             <div class="mb-30">
                                 <h3>{{ $t('DataExport.FilterTitle') }}</h3>
                                 <div class="d-flex mb-20 filter-wrapper">
@@ -32,7 +31,7 @@
                                         </h5>
                                         <!-- TODO:Migration -->
                                         <!-- :class="{ 'has-error': errors.questionnaireId }" -->
-                                        <div class="form-group">
+                                        <div class="form-group" :class="{ 'has-error': errors.questionnaireId }">
                                             <Typeahead control-id="questionnaireId" :value="questionnaireId"
                                                 :placeholder="$t('Common.AllQuestionnaires')"
                                                 :fetch-url="questionnaireFetchUrl" :selectedKey="pageState.id"
@@ -49,7 +48,7 @@
                                             <span class="text-danger">*</span>
                                         </h5>
                                         <!-- :class="{ 'has-error': errors.questionnaireVersion }" -->
-                                        <div class="form-group">
+                                        <div class="form-group" :class="{ 'has-error': errors.questionnaireVersion }">
                                             <Typeahead noClear control-id="questionnaireVersion"
                                                 ref="questionnaireVersionControl" data-vv-name="questionnaireVersion"
                                                 name="questionnaireVersion" data-vv-as="questionnaire version"
@@ -291,7 +290,8 @@ export default {
     components: {
         Field,
         Form,
-        ErrorMessage
+        ErrorMessage,
+        ExportProcessCard
     },
     data() {
         return {
@@ -626,8 +626,6 @@ export default {
                     this.isUpdatingDataAvailability = false
                 })
         },
-    },
-
-    components: { ExportProcessCard },
+    }
 }
 </script>
