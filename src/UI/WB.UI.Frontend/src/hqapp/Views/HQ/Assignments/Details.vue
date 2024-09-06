@@ -248,7 +248,7 @@
                             <button type="button" class="btn btn-primary" @click="assign" :disabled="!newResponsibleId">
                                 {{ $t('Common.Assign') }}
                             </button>
-                            <button type="button" class="btn btn-link" data-dismiss="modal">
+                            <button type="button" class="btn btn-link" data-bs-dismiss="modal">
                                 {{ $t('Common.Cancel') }}
                             </button>
                         </div>
@@ -264,7 +264,7 @@
                                 @click="close">
                                 {{ $t('Assignments.Close') }}
                             </button>
-                            <button type="button" class="btn btn-link" data-dismiss="modal">
+                            <button type="button" class="btn btn-link" data-bs-dismiss="modal">
                                 {{ $t('Common.Cancel') }}
                             </button>
                         </div>
@@ -286,7 +286,7 @@
                                 :disabled="!showSelectors">
                                 {{ $t('Common.Save') }}
                             </button>
-                            <button type="button" class="btn btn-link" data-dismiss="modal">
+                            <button type="button" class="btn btn-link" data-bs-dismiss="modal">
                                 {{ $t('Common.Cancel') }}
                             </button>
                         </div>

@@ -8,8 +8,9 @@
                 <div class="field answered" v-if="$me.isAnswered">
                     <ul class="block-with-data list-unstyled">
                         <li :id="answerHolderId">{{ $t("WebInterviewUI.AudioRecordingDuration", {
-                            humanizedLength:
-                            humanizedLength, formattedLength }) }}</li>
+        humanizedLength:
+            humanizedLength, formattedLength
+    }) }}</li>
                     </ul>
                     <wb-remove-answer />
                 </div>
@@ -24,7 +25,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content" :id="modalId">
                     <div class="modal-header">
-                        <button type="button" v-on:click="cancelRecording" class="close" data-dismiss="modal"
+                        <button type="button" v-on:click="cancelRecording" class="close" data-bs-dismiss="modal"
                             aria-label="Close">
                             <span aria-hidden="true"></span>
                         </button>
@@ -43,7 +44,8 @@
                         <button type="button" v-on:click="stopRecording" class="btn btn-primary" v-if="isRecording">
                             {{ $t("WebInterviewUI.Done") }}
                         </button>
-                        <button type="button" v-on:click="cancelRecording" class="btn btn-link " data-dismiss="modal">
+                        <button type="button" v-on:click="cancelRecording" class="btn btn-link "
+                            data-bs-dismiss="modal">
                             {{ $t("WebInterviewUI.Cancel") }}
                         </button>
                     </div>

@@ -23,7 +23,7 @@
             <div>
                 <button :disabled="!supervisor" type="button" data-suso="btn-add-user" class="btn btn-primary "
                     @click="add" role="confirm">{{ $t("Common.Add") }}</button>
-                <button type="button" class="btn btn-link" data-suso="btn-cancel-user" data-dismiss="modal"
+                <button type="button" class="btn btn-link" data-suso="btn-cancel-user" data-bs-dismiss="modal"
                     role="cancel">{{
         $t("Common.Cancel") }}</button>
             </div>

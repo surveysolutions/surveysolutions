@@ -1,24 +1,19 @@
 <template>
-    <main :class="mainClass"
-        :data-suso="tag">
-        <div :class="{ 'container' : fixedWidth, 'container-fluid': !fixedWidth }" >
-            <div :class="{ 'row' : hasRow }">
+    <main :class="mainClass" :data-suso="tag">
+        <div :class="{ 'container': fixedWidth, 'container-fluid': !fixedWidth }">
+            <div :class="{ 'row': hasRow }">
                 <slot name="filters" />
                 <div :class="information">
-                    <div class="page-header clearfix"
-                        v-if="hasHeader">
-                        <div :class="{'neighbor-block-to-search': hasSearch}">
+                    <div class="page-header clearfix" v-if="hasHeader">
+                        <div :class="{ 'neighbor-block-to-search': hasSearch }">
                             <slot name="headers">
-                                <div :class="{'topic-with-button': topicButtonRef}">
+                                <div :class="{ 'topic-with-button': topicButtonRef }">
                                     <h1 v-html='title'></h1>
-                                    <a v-if="topicButtonRef"
-                                        class="btn btn-success"
-                                        :href="topicButtonRef">
+                                    <a v-if="topicButtonRef" class="btn btn-success" :href="topicButtonRef">
                                         {{ topicButton }}
                                     </a>
                                 </div>
-                                <i v-if="subtitle"
-                                    v-html="subtitle">
+                                <i v-if="subtitle" v-html="subtitle">
                                 </i>
                             </slot>
                             <slot name="subtitle" />
@@ -28,14 +23,9 @@
                 </div>
             </div>
             <slot name="modals" />
-            <ModalFrame id="pendingProgress"
-                ref="pending"
-                :title="$t('Common.Loading')"
-                :canClose="false">
-                <div class="progress progress-striped active"
-                    style="margin-bottom:0;">
-                    <div class="progress-bar"
-                        style="width: 100%"></div>
+            <ModalFrame id="pendingProgress" ref="pending" :title="$t('Common.Loading')" :canClose="false">
+                <div class="progress progress-striped active" style="margin-bottom:0;">
+                    <div class="progress-bar" style="width: 100%"></div>
                 </div>
             </ModalFrame>
         </div>
@@ -43,6 +33,9 @@
 </template>
 
 <script>
+
+import { Modal } from 'bootstrap';
+
 export default {
     props: {
         title: String,
@@ -72,16 +65,22 @@ export default {
         topicButtonRef: String,
         mainClass: String,
     },
+    data() {
+        return {
+            modal: null
+        }
+    },
     watch: {
         showProgress: function (value) {
             if (value) {
-                $(this.$refs.pending.$el).modal({
+                this.modal = new Modal(this.$refs.pending, {
                     backdrop: 'static',
                     keyboard: false,
                 })
             }
             else {
-                $(this.$refs.pending.$el).modal('hide')
+                this.modal.hide();
+                this.modal = null;
             }
         },
     },

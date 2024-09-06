@@ -262,7 +262,7 @@
                     <button type="button" class="btn btn-danger" role="confirm" @click="deleteInterviews">
                         {{ $t('Common.Delete') }}
                     </button>
-                    <button type="button" class="btn btn-link" data-dismiss="modal" role="cancel">
+                    <button type="button" class="btn btn-link" data-bs-dismiss="modal" role="cancel">
                         {{ $t('Common.Cancel') }}
                     </button>
                 </div>
@@ -318,7 +318,7 @@
                         :disabled="!newResponsibleId">
                         {{ $t('Common.Assign') }}
                     </button>
-                    <button type="button" class="btn btn-link" data-dismiss="modal" role="cancel">
+                    <button type="button" class="btn btn-link" data-bs-dismiss="modal" role="cancel">
                         {{ $t('Common.Cancel') }}
                     </button>
                 </div>

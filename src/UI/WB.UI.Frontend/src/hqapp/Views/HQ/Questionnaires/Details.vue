@@ -212,7 +212,7 @@
                             @click="recordAudioSend">
                             {{ $t('Common.Ok') }}
                         </button>
-                        <button type="button" class="btn btn-link" data-dismiss="modal" @click="cancelSetAudio">
+                        <button type="button" class="btn btn-link" data-bs-dismiss="modal" @click="cancelSetAudio">
                             {{ $t('Common.Cancel') }}
                         </button>
                     </div>
@@ -244,7 +244,7 @@
                             :disabled="!showSelectors">
                             {{ $t('Common.Save') }}
                         </button>
-                        <button type="button" class="btn btn-link" data-dismiss="modal">
+                        <button type="button" class="btn btn-link" data-bs-dismiss="modal">
                             {{ $t('Common.Cancel') }}
                         </button>
                     </div>

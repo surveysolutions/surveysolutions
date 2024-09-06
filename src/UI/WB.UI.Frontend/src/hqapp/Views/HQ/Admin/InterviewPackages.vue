@@ -65,7 +65,8 @@
                 <div>
                     <button type="button" class="btn btn-primary" @click="putReasonAsync" :disabled="!reason">{{
         $t("Common.Ok") }}</button>
-                    <button type="button" class="btn btn-link" data-dismiss="modal">{{ $t("Common.Cancel") }}</button>
+                    <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
+                        }}</button>
                 </div>
             </template>
         </ModalFrame>
@@ -80,7 +81,7 @@
                 <button type="button" class="btn btn-primary" @click="reprocessSelected">{{
         $t('Pages.Admin_InterviewPackages_Reprocess') }}</button>
                 <button type="button" class="btn btn-primary" @click="showReasonModal">{{
-        $t('Pages.Admin_InterviewPackages_PutReason') }}</button>
+                    $t('Pages.Admin_InterviewPackages_PutReason') }}</button>
             </div>
         </div>
     </HqLayout>

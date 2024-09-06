@@ -67,19 +67,19 @@
 
                     <button class="btn btn-lg btn-primary" id="btnUnarchiveSelected"
                         v-if="showArchive.key && config.isHeadquarter" @click="unarchiveSelected">{{
-                            $t("Assignments.Unarchive") }}</button>
+        $t("Assignments.Unarchive") }}</button>
 
                     <button class="btn btn-lg btn-primary" id="btnAssignSelected" v-if="!showArchive.key"
                         @click="assignSelected">{{ $t("Common.Assign") }}</button>
 
                     <button class="btn btn-lg btn-warning" id="btnCloseSelected"
                         v-if="config.isHeadquarter && !showArchive.key" @click="closeSelected">{{
-                            $t("Assignments.Close")
-                        }}</button>
+        $t("Assignments.Close")
+    }}</button>
 
                     <button class="btn btn-lg btn-danger" id="btnArchiveSelected"
                         v-if="!showArchive.key && config.isHeadquarter" @click="archiveSelected">{{
-                            $t("Assignments.Archive") }}</button>
+        $t("Assignments.Archive") }}</button>
                 </div>
             </div>
         </DataTables>
@@ -110,8 +110,9 @@
             <template v-slot:actions>
                 <div>
                     <button type="button" class="btn btn-primary" @click="assign" :disabled="!newResponsibleId">{{
-                        $t("Common.Assign") }}</button>
-                    <button type="button" class="btn btn-link" data-dismiss="modal">{{ $t("Common.Cancel") }}</button>
+        $t("Common.Assign") }}</button>
+                    <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
+                        }}</button>
                 </div>
             </template>
         </ModalFrame>
@@ -124,8 +125,9 @@
                 <div>
                     <button type="button" class="btn btn-primary" :disabled="isWebModeAssignmentSelected"
                         @click="close">{{
-                            $t("Assignments.Close") }}</button>
-                    <button type="button" class="btn btn-link" data-dismiss="modal">{{ $t("Common.Cancel") }}</button>
+        $t("Assignments.Close") }}</button>
+                    <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
+                        }}</button>
                 </div>
             </template>
         </ModalFrame>
@@ -143,8 +145,9 @@
                 <div>
                     <button type="button" class="btn btn-primary" @click="upateAudioRecording"
                         :disabled="!showSelectors">{{
-                            $t("Common.Save") }}</button>
-                    <button type="button" class="btn btn-link" data-dismiss="modal">{{ $t("Common.Cancel") }}</button>
+        $t("Common.Save") }}</button>
+                    <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
+                        }}</button>
                 </div>
             </template>
         </ModalFrame>
@@ -175,7 +178,8 @@
                 <div>
                     <button type="button" class="btn btn-primary" :disabled="!showSelectors || !canEditQuantity"
                         @click="updateQuantity">{{ $t("Common.Save") }}</button>
-                    <button type="button" class="btn btn-link" data-dismiss="modal">{{ $t("Common.Cancel") }}</button>
+                    <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
+                        }}</button>
                 </div>
             </template>
         </ModalFrame>
@@ -203,7 +207,7 @@
                 <button
                     type="button"
                     class="btn btn-link"
-                    data-dismiss="modal">{{$t("Common.Cancel")}}</button>
+                    data-bs-dismiss="modal">{{$t("Common.Cancel")}}</button>
             </div>
             </template>
         </ModalFrame> -->

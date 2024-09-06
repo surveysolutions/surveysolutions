@@ -27,8 +27,9 @@
                     <button type="button" class="btn btn-primary" role="confirm" @disable="saveDisabled"
                         @click="updateCalendarEvent">
                         {{ $t("Common.Save") }}</button>
-                    <button type="button" class="btn btn-link" data-dismiss="modal" role="cancel">{{ $t("Common.Cancel")
-                        }}</button>
+                    <button type="button" class="btn btn-link" data-bs-dismiss="modal" role="cancel">{{
+        $t("Common.Cancel")
+    }}</button>
                     <button type="button" class="btn btn-danger pull-right" role="delete" v-if="calendarEventId != null"
                         @click="deleteCalendarEvent">
                         {{ $t("Common.Delete") }}</button>

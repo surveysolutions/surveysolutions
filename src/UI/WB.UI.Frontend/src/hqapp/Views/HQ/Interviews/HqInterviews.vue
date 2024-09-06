@@ -123,22 +123,22 @@
                 </div>
                 <div id="pnlAssignToOtherTeamConfirmMessage">
                     <p v-html="this.config.isSupervisor
-                        ? $t('Interviews.AssignConfirmMessage', {
-                            count: this.getFilteredToAssign().length,
-                            status1: 'Supervisor assigned',
-                            status2: 'Interviewer assigned',
-                            status3: 'Rejected by Supervisor',
-                        })
-                        : $t(
-                            'Interviews.AssignToOtherTeamConfirmMessage',
-                            {
-                                count: this.getFilteredToAssign()
-                                    .length,
-                                status1: 'Approved by Supervisor',
-                                status2: 'Approved by Headquarters',
-                            },
-                        )
-                        "></p>
+        ? $t('Interviews.AssignConfirmMessage', {
+            count: this.getFilteredToAssign().length,
+            status1: 'Supervisor assigned',
+            status2: 'Interviewer assigned',
+            status3: 'Rejected by Supervisor',
+        })
+        : $t(
+            'Interviews.AssignToOtherTeamConfirmMessage',
+            {
+                count: this.getFilteredToAssign()
+                    .length,
+                status1: 'Approved by Supervisor',
+                status2: 'Approved by Headquarters',
+            },
+        )
+        "></p>
                 </div>
 
                 <div v-if="CountReceivedByInterviewerItems() > 0">
@@ -161,7 +161,7 @@
                         :disabled="!newResponsibleId || getFilteredToAssign().length == 0">
                         {{ $t('Common.Assign') }}
                     </button>
-                    <button type="button" class="btn btn-link" data-dismiss="modal" role="cancel">
+                    <button type="button" class="btn btn-link" data-bs-dismiss="modal" role="cancel">
                         {{ $t('Common.Cancel') }}
                     </button>
                 </div>
@@ -170,11 +170,11 @@
         <ModalFrame ref="deleteModal" :title="$t('Common.Delete')">
             <div class="action-container">
                 <p v-html="$t('Interviews.DeleteConfirmMessageHQ', {
-                    count: this.getFilteredToDelete().length,
-                    status1: 'Supervisor assigned',
-                    status2: 'Interviewer assigned',
-                })
-                    "></p>
+        count: this.getFilteredToDelete().length,
+        status1: 'Supervisor assigned',
+        status2: 'Interviewer assigned',
+    })
+        "></p>
             </div>
             <template v-slot:actions>
                 <div>
@@ -182,7 +182,7 @@
                         :disabled="getFilteredToDelete().length == 0">
                         {{ $t('Common.Delete') }}
                     </button>
-                    <button type="button" class="btn btn-link" data-dismiss="modal" role="cancel">
+                    <button type="button" class="btn btn-link" data-bs-dismiss="modal" role="cancel">
                         {{ $t('Common.Cancel') }}
                     </button>
                 </div>
@@ -201,11 +201,11 @@
                 </div>
                 <div class="action-container" v-else>
                     <p v-html="$t('Interviews.ApproveConfirmMessageHQ', {
-                        count: this.getFilteredToApprove().length,
-                        status1: 'Completed',
-                        status2: 'Approved by Supervisor',
-                        status3: 'Rejected by Supervisor',
-                    })"></p>
+        count: this.getFilteredToApprove().length,
+        status1: 'Completed',
+        status2: 'Approved by Supervisor',
+        status3: 'Rejected by Supervisor',
+    })"></p>
                 </div>
 
                 <div class="form-group" v-if="CountReceivedByInterviewerItems() > 0">
@@ -236,7 +236,7 @@
                         :disabled="getFilteredToApprove().length == 0">
                         {{ $t('Common.Approve') }}
                     </button>
-                    <button type="button" class="btn btn-link" data-dismiss="modal" role="cancel">
+                    <button type="button" class="btn btn-link" data-bs-dismiss="modal" role="cancel">
                         {{ $t('Common.Cancel') }}
                     </button>
                 </div>
@@ -246,15 +246,15 @@
             <form onsubmit="return false;">
                 <div class="action-container">
                     <p v-if="!config.isSupervisor" v-html="$t('Interviews.RejectConfirmMessageHQ', {
-                        count: this.getFilteredToReject().length,
-                        status1: 'Completed',
-                        status2: 'Approved by Supervisor',
-                    })"></p>
+        count: this.getFilteredToReject().length,
+        status1: 'Completed',
+        status2: 'Approved by Supervisor',
+    })"></p>
                     <p v-if="config.isSupervisor" v-html="$t('Interviews.RejectConfirmMessage', {
-                        count: this.getFilteredToReject().length,
-                        status1: 'Completed',
-                        status2: 'Rejected by Headquarters',
-                    })"></p>
+        count: this.getFilteredToReject().length,
+        status1: 'Completed',
+        status2: 'Rejected by Headquarters',
+    })"></p>
                 </div>
 
                 <div>
@@ -288,7 +288,7 @@
                         :disabled="getFilteredToReject().length == 0 || (rejectToNewResponsible == true && newResponsibleId == null)">
                         {{ $t('Common.Reject') }}
                     </button>
-                    <button id="rejectCancel" type="button" class="btn btn-link" data-dismiss="modal" role="cancel">
+                    <button id="rejectCancel" type="button" class="btn btn-link" data-bs-dismiss="modal" role="cancel">
                         {{ $t('Common.Cancel') }}
                     </button>
                 </div>
@@ -298,9 +298,9 @@
             <form onsubmit="return false;">
                 <div class="action-container">
                     <p v-html="$t('Interviews.UnapproveConfirmMessageHQ', {
-                        count: this.getFilteredToUnApprove().length,
-                        status1: 'Approved by Headquarters',
-                    })"></p>
+        count: this.getFilteredToUnApprove().length,
+        status1: 'Approved by Headquarters',
+    })"></p>
                 </div>
             </form>
             <template v-slot:actions>
@@ -309,7 +309,7 @@
                         :disabled="getFilteredToUnApprove().length == 0">
                         {{ $t('Common.Unapprove') }}
                     </button>
-                    <button type="button" class="btn btn-link" data-dismiss="modal" role="cancel">
+                    <button type="button" class="btn btn-link" data-bs-dismiss="modal" role="cancel">
                         {{ $t('Common.Cancel') }}
                     </button>
                 </div>
@@ -344,7 +344,7 @@
                     <button type="button" class="btn btn-link" role="confirm" @click="viewInterview">
                         {{ $t('Pages.HistoryOfStatuses_ViewInterview') }}
                     </button>
-                    <button type="button" class="btn btn-link" data-dismiss="modal" role="cancel">
+                    <button type="button" class="btn btn-link" data-bs-dismiss="modal" role="cancel">
                         {{ $t('Common.Cancel') }}
                     </button>
                 </div>
@@ -375,7 +375,7 @@
                         :disabled="getFilteredToCawi().length == 0">
                         {{ $t('Common.ChangeToCAWI') }}
                     </button>
-                    <button type="button" class="btn btn-link" data-dismiss="modal" role="cancel">
+                    <button type="button" class="btn btn-link" data-bs-dismiss="modal" role="cancel">
                         {{ $t("Common.Cancel") }}
                     </button>
                 </div>
@@ -406,7 +406,7 @@
                         :disabled="getFilteredToCapi().length == 0">
                         {{ $t('Common.ChangeToCAPI') }}
                     </button>
-                    <button type="button" class="btn btn-link" data-dismiss="modal" role="cancel">
+                    <button type="button" class="btn btn-link" data-bs-dismiss="modal" role="cancel">
                         {{ $t("Common.Cancel") }}
                     </button>
                 </div>

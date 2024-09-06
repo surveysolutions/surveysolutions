@@ -26,11 +26,11 @@
                                 {{ $t("Workspaces.Name") }}
                             </label>
                             <Field type="text" class="form-control" v-model.trim="newWorkspaceName" name="Name" :rules="{
-                                required: true,
-                                max: 12,
-                                regex: /^[0-9,a-z]+$/,
-                                not_one_of: ['api', 'apidocs', 'graphql', 'users', 'administration']
-                            }" :data-vv-as="$t('Workspaces.Name')" autocomplete="off" @keyup.enter="createWorkspace"
+        required: true,
+        max: 12,
+        regex: /^[0-9,a-z]+$/,
+        not_one_of: ['api', 'apidocs', 'graphql', 'users', 'administration']
+    }" :data-vv-as="$t('Workspaces.Name')" autocomplete="off" @keyup.enter="createWorkspace"
                                 id="newWorkspaceName" />
 
                             <p class="help-block" v-if="!errors.Name">
@@ -61,7 +61,7 @@
                                 class="btn btn-primary" type="submit">
                                 {{ $t("Common.Create") }}
                             </button>
-                            <button type="button" class="btn btn-link" data-dismiss="modal">
+                            <button type="button" class="btn btn-link" data-bs-dismiss="modal">
                                 {{ $t("Common.Cancel") }}
                             </button>
                         </div>
@@ -93,7 +93,7 @@
                                 {{ $t("Common.Save") }}
                             </button>
                             <button type="button" class="btn btn-link" data-suso="workspace-cancel"
-                                data-dismiss="modal">
+                                data-bs-dismiss="modal">
                                 {{ $t("Common.Cancel") }}
                             </button>
                         </div>
@@ -113,7 +113,7 @@
                         v-bind:disabled="inProgress" @click="disableWorkspace">
                         {{ $t("Common.Ok") }}
                     </button>
-                    <button type="button" class="btn btn-link" data-suso="workspace-cancel" data-dismiss="modal">
+                    <button type="button" class="btn btn-link" data-suso="workspace-cancel" data-bs-dismiss="modal">
                         {{ $t("Common.Cancel") }}
                     </button>
                 </div>

@@ -27,7 +27,7 @@
             </form>
             <template v-slot:actions>
                 <div>
-                    <button id="btnQuestionsSelectorOk" type="button" class="btn btn-primary" data-dismiss="modal"
+                    <button id="btnQuestionsSelectorOk" type="button" class="btn btn-primary" data-bs-dismiss="modal"
                         role="cancel">{{ $t("Common.Ok") }}</button>
                 </div>
             </template>

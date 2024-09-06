@@ -89,7 +89,8 @@
                 <div>
                     <button type="button" class="btn btn-success" v-bind:disabled="model.isObserving"
                         @click="changeExposedStatusSend">{{ $t("Common.Save") }}</button>
-                    <button type="button" class="btn btn-link" data-dismiss="modal">{{ $t("Common.Cancel") }}</button>
+                    <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
+                        }}</button>
                 </div>
             </template>
         </ModalFrame>
@@ -101,7 +102,8 @@
                 <div>
                     <button type="button" class="btn btn-danger" v-bind:disabled="model.isObserving"
                         @click="removeExposedVariable">{{ $t("Common.Remove") }}</button>
-                    <button type="button" class="btn btn-link" data-dismiss="modal">{{ $t("Common.Cancel") }}</button>
+                    <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
+                        }}</button>
                 </div>
             </template>
         </ModalFrame>

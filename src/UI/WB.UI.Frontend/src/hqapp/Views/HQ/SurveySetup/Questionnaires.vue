@@ -49,7 +49,7 @@
                         @click="deleteQuestionnaire">
                         {{ $t('Common.Delete') }}
                     </button>
-                    <button type="button" class="btn btn-link" data-dismiss="modal">
+                    <button type="button" class="btn btn-link" data-bs-dismiss="modal">
                         {{ $t('Common.Cancel') }}
                     </button>
                 </div>
