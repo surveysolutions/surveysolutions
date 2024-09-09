@@ -39,7 +39,7 @@ jobs:
             --collect:"XPlat Code Coverage" \
             -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
       - name: Test coverage artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: test-coverage
           retention-days: 1
@@ -105,7 +105,7 @@ jobs:
             -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
 
       - name: Test coverage artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: test-coverage
           retention-days: 1
@@ -141,7 +141,7 @@ jobs:
       - name: setup sonar scanner
         run: dotnet tool install --global dotnet-sonarscanner
 
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v4
         id: test-results
         with:
           name: test-coverage
