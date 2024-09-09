@@ -36,10 +36,6 @@ window.ajustDetailsPanelHeight = function () {
 }
 
 $(function () {
-    $('#hide-filters').click(function () {
-        $('.filters').toggleClass('hidden-filters')
-        $(this).parents('.row').toggleClass('fullscreen-hidden-filters')
-    })
     $('main').removeClass('hold-transition')
     $('footer').removeClass('hold-transition')
 
