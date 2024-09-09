@@ -60,6 +60,8 @@ module.exports = class LocalizationBuilder {
 
             fs.writeFileSync(resultPath, fileBody);
 
+            console.log('Localization: generated: ', resultPath)
+
             response[language] = path
                 .join(folder, filename)
                 .replace(/\\/g, '/');
