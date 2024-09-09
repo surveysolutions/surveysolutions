@@ -20,7 +20,7 @@
             <div class="row">
                 <div class="export d-flex" ref="list">
                     <div class="col-md-12" v-if="!exportServiceIsUnavailable">
-                        <Form id="exportForm" @submit="queueExport" v-slot="{ errors }">
+                        <Form id="exportForm" @submit="queueExport" v-slot="{ errors }" ref="exportForm">
                             <div class="mb-30">
                                 <h3>{{ $t('DataExport.FilterTitle') }}</h3>
                                 <div class="d-flex mb-20 filter-wrapper">
@@ -380,7 +380,7 @@ export default {
 
             var self = this
             //TODO:Migration
-            var validationResult = true//await this.$validator.validateAll()
+            var validationResult = await this.$refs.exportForm.validate()
             if (validationResult) {
                 const exportParams = self.getExportParams(
                     self.questionnaireId.key,
@@ -395,41 +395,27 @@ export default {
 
                 self.$store.dispatch('showProgress')
 
-                this.$http({
-                    method: 'post',
-                    url: window.CONFIG.model.api.updateSurveyDataUrl,
-                    data: {
-                        exportParams
-                    },
-                    headers: {
-                        'X-CSRF-TOKEN': this.$hq.Util.getCsrfCookie(),
-                    },
-                })
-                    .then(
-                        (loginResponse) => {
-                            if (loginResponse.status == 200) {
-                                self.updateExportStatus()
-                            }
-                            self.$store.dispatch('hideProgress')
-                        },
-                        (error) => {
-                            self.$errorHandler(error, self)
-                        })
-
-                // this.$http
-                //     .post(window.CONFIG.model.api.updateSurveyDataUrl, null, {
-                //         params: exportParams,
-                //     })
-                // .then(function () {
-                //     //self.$validator.reset()
-                //     self.updateExportStatus()
-                // })
-                // .catch(function (error) {
-                //     self.$errorHandler(error, self)
-                // })
-                // .then(function () {
-                //     self.$store.dispatch('hideProgress')
-                // })
+                this.$http
+                    .post(
+                        window.CONFIG.model.api.updateSurveyDataUrl,
+                        null,
+                        {
+                            params: exportParams,
+                            headers: {
+                                'X-CSRF-TOKEN': this.$hq.Util.getCsrfCookie(),
+                            },
+                        }
+                    )
+                    .then(function () {
+                        //self.$validator.reset()
+                        self.updateExportStatus()
+                    })
+                    .catch(function (error) {
+                        self.$errorHandler(error, self)
+                    })
+                    .then(function () {
+                        self.$store.dispatch('hideProgress')
+                    })
 
             } else {
                 //var fieldName = this.errors.items[0].field

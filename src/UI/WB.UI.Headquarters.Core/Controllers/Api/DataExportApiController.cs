@@ -196,14 +196,7 @@ namespace WB.UI.Headquarters.Controllers.Api
 
         [HttpPost]
         [ObservingNotAllowed]
-        public async Task<ActionResult<long>> RequestUpdate(RequestUpdateExportModel model)
-        {
-            return await RequestUpdate(model.Id, model.Version, model.Format, model.Status, model.From, 
-                model.To, model.TranslationId, model.IncludeMeta);
-        }
-
-        [HttpPost]
-        [ObservingNotAllowed]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult<long>> RequestUpdate(Guid id, long version,
             DataExportFormat format,
             InterviewStatus? status = null,
