@@ -158,7 +158,7 @@ jobs:
     - name: Publish
       uses: actions/upload-artifact@v4
       with:
-        name: Mobile Apps
+        name: Mobile Apps Upload
         path: ${{ github.workspace }}/artifacts
 
   docker:
@@ -196,7 +196,7 @@ jobs:
         id: download
         uses: actions/download-artifact@v4
         with:
-          name: Mobile Apps
+          name: Mobile Apps Download for Docker
           path: artifacts
 
       - name: Build and push
@@ -240,7 +240,7 @@ jobs:
         id: download
         uses: actions/download-artifact@v4
         with:
-          name: Mobile Apps
+          name: Mobile Apps Download for Installer
           path: installer/artifacts
 
       - name: Save Code Signing Certificate
