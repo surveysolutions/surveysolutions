@@ -158,7 +158,7 @@ jobs:
     - name: Publish
       uses: actions/upload-artifact@v4
       with:
-        name: Mobile Apps Upload
+        name: Mobile Apps
         path: ${{ github.workspace }}/artifacts
         overwrite: true
 
@@ -197,7 +197,7 @@ jobs:
         id: download
         uses: actions/download-artifact@v4
         with:
-          name: Mobile Apps Download for Docker
+          name: Mobile Apps
           path: artifacts
 
       - name: Build and push
@@ -241,7 +241,7 @@ jobs:
         id: download
         uses: actions/download-artifact@v4
         with:
-          name: Mobile Apps Download for Installer
+          name: Mobile Apps
           path: installer/artifacts
 
       - name: Save Code Signing Certificate
