@@ -31,7 +31,7 @@
     <EmbeddedResource Include="$(NugetPackageRoot)\system.threading\4.3.0\ref\netstandard1.3\System.Threading.dll" Visible="false" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="12.0.1" />
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
     <PackageReference Include="CsvHelper" Version="30.0.1" />
     <PackageReference Include="ClosedXML" Version="0.102.1" />
     <PackageReference Include="Dapper" Version="2.0.151" />
