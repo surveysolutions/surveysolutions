@@ -160,6 +160,7 @@ jobs:
       with:
         name: Mobile Apps Upload
         path: ${{ github.workspace }}/artifacts
+        overwrite: true
 
   docker:
     needs: [prepare, mobile]
@@ -313,3 +314,4 @@ jobs:
           name: Windows Installer
           path: ${{ steps.build-installer.outputs.filename }}
             #artifacts/WB.UI.Headquarters.Offline.zip
+          overwrite: true
