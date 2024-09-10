@@ -141,26 +141,12 @@ COPY --from=frontend /src/UI/WB.UI.Frontend/dist/package/hq src/UI/WB.UI.Headqua
 RUN dotnet publish src/UI/WB.UI.Headquarters.Core \
     -c Release -o /hq -p:Version="${VERSION}" -p:InformationalVersion="${INFO_VERSION}"
 
-# Copy APK files if any
-FROM --platform=amd64 mcr.microsoft.com/dotnet/aspnet:${DOTNET_VERSION}-alpine as apks
-ARG APK_FILES
-COPY ${APK_FILES}/*.apk /apk/
-
-# include noto font into image
-FROM mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION}-alpine as fonts
-RUN apk add --no-cache unzip -y 
-
-ARG FONTS
-ENV FONTS_LIST=$FONTS
-RUN [ "/bin/bash" ,"-c", "export IFS=\";\"; for FONT in $FONTS_LIST; \
-    do wget -P /raw_fonts https://noto-website-2.storage.googleapis.com/pkgs/$FONT \
-    && cd /raw_fonts && unzip -o $FONT ; done"]
-
 # Building runtime 
 FROM mcr.microsoft.com/dotnet/aspnet:${DOTNET_VERSION}-alpine
 
 RUN apk add --no-cache --virtual \
     #geos \
+    bash \
     gdal \
     ffmpeg \
     curl \
@@ -168,6 +154,21 @@ RUN apk add --no-cache --virtual \
     libgdiplus \
     binutils \
     && rm -rf /var/lib/apk/lists/*
+
+# Copy APK files if any
+FROM --platform=amd64 mcr.microsoft.com/dotnet/aspnet:${DOTNET_VERSION}-alpine as apks
+ARG APK_FILES
+COPY ${APK_FILES}/*.apk /apk/
+
+# include noto font into image
+FROM mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION}-alpine as fonts
+RUN apk add --no-cache unzip 
+
+ARG FONTS
+ENV FONTS_LIST=$FONTS
+RUN [ "/bin/bash" ,"-c", "export IFS=\";\"; for FONT in $FONTS_LIST; \
+    do wget -P /raw_fonts https://noto-website-2.storage.googleapis.com/pkgs/$FONT \
+    && cd /raw_fonts && unzip -o $FONT ; done"]
 
 COPY --from=fonts /raw_fonts /usr/share/fonts
 
