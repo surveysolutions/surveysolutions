@@ -303,8 +303,8 @@ export default defineConfig(({ mode, command }) => {
 
                 options: {
                     parallel: 1,
-                    log: 'all'
-                    //log: 'error'
+                    //log: 'all'
+                    log: 'error'
                 }
             }),
             LocalizationPlugin({
