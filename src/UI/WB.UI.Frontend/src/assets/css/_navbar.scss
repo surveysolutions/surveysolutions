@@ -650,7 +650,7 @@ $width-right-menu-small: 380px;
             height: 100% !important;
         }
 
-        .navbar-nav .open .dropdown-menu {
+        .navbar-nav .show.dropdown-menu {
             position: static;
             float: none;
             width: auto;
@@ -660,8 +660,8 @@ $width-right-menu-small: 380px;
             box-shadow: none;
         }
 
-        .navbar-inverse .navbar-nav .open .dropdown-menu>li>a:hover,
-        .navbar-inverse .navbar-nav .open .dropdown-menu>li>a:focus {
+        .navbar-inverse .navbar-nav .show.dropdown-menu>li>a:hover,
+        .navbar-inverse .navbar-nav .show.dropdown-menu>li>a:focus {
             color: #fff;
             background-color: transparent;
         }

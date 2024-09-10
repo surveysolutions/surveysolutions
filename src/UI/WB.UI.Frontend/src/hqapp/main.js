@@ -1,10 +1,14 @@
-
-import 'bootstrap'
+//import 'bootstrap'
 //import * as bootstrap from 'bootstrap'
-//import "bootstrap/scss/bootstrap";
+//import "bootstrap/scss/_functions.scss";
+//import "bootstrap/scss/_mixins.scss";
+//import "bootstrap/scss/_variables.scss";
+//import "bootstrap/scss/_nav.scss";
+//import "bootstrap/scss/_navbar.scss";
+//import "bootstrap/scss/bootstrap.scss";
 
 // Import all of Bootstrap's JS
-import * as bootstrap from 'bootstrap'
+//import * as bootstrap from 'bootstrap'
 
 import 'bootstrap-select'
 
