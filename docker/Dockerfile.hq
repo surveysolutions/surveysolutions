@@ -159,12 +159,13 @@ RUN [ "/bin/bash" ,"-c", "export IFS=\";\"; for FONT in $FONTS_LIST; \
 # Building runtime 
 FROM mcr.microsoft.com/dotnet/aspnet:${DOTNET_VERSION}-alpine
 
-RUN apk add --no-cache \
-    gdal-bin \
+RUN apk add --no-cache --virtual --upgrade \
+    gdal \
     ffmpeg \
     curl \
-    libfontconfig1 \
-    libgdiplus \    
+    libfontconfig \
+    libgdiplus \
+    binutils \
     && rm -rf /var/lib/apk/lists/*
 
 COPY --from=fonts /raw_fonts /usr/share/fonts
