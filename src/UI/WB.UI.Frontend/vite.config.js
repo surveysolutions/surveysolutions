@@ -281,12 +281,12 @@ export default defineConfig(({ mode, command }) => {
                             copy: { items: resourcesTargets },
                         }
                     },*/
-                    /*{
+                    {
                         hookName: 'writeBundle',
                         commands: {
                             copy: { items: resourcesTargets },
                         }
-                    },*/
+                    },
                     {
                         hookName: 'closeBundle',
                         commands: {
