@@ -159,7 +159,7 @@ RUN [ "/bin/bash" ,"-c", "export IFS=\";\"; for FONT in $FONTS_LIST; \
 # Building runtime 
 FROM mcr.microsoft.com/dotnet/aspnet:${DOTNET_VERSION}-alpine
 
-RUN apk add --no-cache --virtual --upgrade \
+RUN apk add --no-cache --virtual \
     gdal \
     ffmpeg \
     curl \
