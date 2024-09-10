@@ -148,7 +148,7 @@ COPY ${APK_FILES}/*.apk /apk/
 
 # include noto font into image
 FROM mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION}-alpine as fonts
-RUN apt-get update && apt-get install unzip -y --no-install-recommends
+RUN apk update && apk install unzip -y --no-install-recommends
 
 ARG FONTS
 ENV FONTS_LIST=$FONTS
@@ -159,15 +159,15 @@ RUN [ "/bin/bash" ,"-c", "export IFS=\";\"; for FONT in $FONTS_LIST; \
 # Building runtime 
 FROM mcr.microsoft.com/dotnet/aspnet:${DOTNET_VERSION}-alpine
 
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends \
+RUN apk update \
+    && ap install -y --no-install-recommends \
     gdal-bin \
     ffmpeg \
     curl \
     libfontconfig1 \
     libgdiplus \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+    && apk clean \
+    && rm -rf /var/lib/apk/lists/*
 
 COPY --from=fonts /raw_fonts /usr/share/fonts
 
