@@ -15,7 +15,8 @@
                 <h2>
                     {{ $t('Pages.QuestionnaireNameFormat', {
                         name: questionnaire.title, version:
-                    questionnaire.version})}}
+                            questionnaire.version
+                    }) }}
                     <router-link :to="{ name: 'questionnairedetails', params: { questionnaireId: questionnaire.id } }"
                         target='_blank'>
                         <span :title="$t('Details.ShowQuestionnaireDetails')" class="glyphicon glyphicon-link" />
@@ -36,12 +37,13 @@
             v-if="questionnaire.identifyingQuestions.length > 0 || questionnaire.hiddenQuestions > 0 || questionnaire.rosterSizeQuestions > 0">
             <div v-if="!showQuestions"
                 class="col-sm-6 col-xs-10 prefilled-data-info info-block short-prefilled-data-info">
-                <a class="list-required-prefilled-data" href="javascript:void(0);"
-                    @click="showQuestions = true">{{ $t('BatchUpload.ViewListPreloadedData') }}</a>
+                <a class="list-required-prefilled-data" href="javascript:void(0);" @click="showQuestions = true">{{
+                    $t('BatchUpload.ViewListPreloadedData') }}</a>
             </div>
             <div v-if="showQuestions"
                 class="col-sm-6 col-xs-10 prefilled-data-info info-block full-prefilled-data-info">
-                <h3 v-if="questionnaire.identifyingQuestions.length > 0">{{ $t('BatchUpload.IdentifyingQuestions') }}</h3>
+                <h3 v-if="questionnaire.identifyingQuestions.length > 0">{{ $t('BatchUpload.IdentifyingQuestions') }}
+                </h3>
 
                 <ul v-if="questionnaire.identifyingQuestions.length > 0" class="list-unstyled prefilled-data">
                     <li v-for="item in questionnaire.identifyingQuestions" :key="item.caption">{{ item.caption }}</li>
@@ -99,7 +101,7 @@
                             </div>
                             <span>{{ $t('UploadUsers.EstimatedTime', {
                                 estimatedTime: estimatedTimeToFinishCurrentProcess
-                                })}}</span>
+                            }) }}</span>
                         </div>
                         <input v-if="!hasUploadProcess" name="file" ref="uploader" v-show="false"
                             accept=".tab, .txt, .zip" type="file" @change="onSimpleFileSelected"

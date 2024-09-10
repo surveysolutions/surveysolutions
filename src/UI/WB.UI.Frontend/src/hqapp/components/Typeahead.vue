@@ -47,9 +47,7 @@ export default {
     // http://vee-validate.logaretm.com/v2/concepts/components.html#component-constructor-options
     //$_veeValidate: {
     //    name: function () { return this.controlId },
-    //},
-
-    //value: useField(() => props.name),
+    //},    
 
     props: {
         fetchUrl: String,
