@@ -160,10 +160,11 @@ RUN [ "/bin/bash" ,"-c", "export IFS=\";\"; for FONT in $FONTS_LIST; \
 FROM mcr.microsoft.com/dotnet/aspnet:${DOTNET_VERSION}-alpine
 
 RUN apk add --no-cache --virtual \
+    geos \
     gdal \
     ffmpeg \
     curl \
-    libfontconfig \
+    fontconfig \
     libgdiplus \
     binutils \
     && rm -rf /var/lib/apk/lists/*
