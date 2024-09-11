@@ -2,7 +2,7 @@
     <HqLayout :fixedWidth="true" tag="email-providers-page" :title="$t('Pages.EmailProvidersTitle')">
         <div class="mb-30">
             <div class="col-md-12">
-                <Form class="form-container" data-vv-scope="settings">
+                <Form ref="settigsForm" class="form-container" data-vv-scope="settings">
                     <button type="submit" disabled style="display: none" aria-hidden="true"></button>
                     <h2>{{ $t('Settings.EmailProvider_SenderHeader') }}</h2>
                     <div class="form-inline">
@@ -418,7 +418,8 @@
                         {{ providerSettingsResult }}
                     </p>
                 </Form>
-                <Form v-if="showSendTestEmail" data-vv-scope="testEmail" class="form-container" @submit="noAction">
+                <Form ref="testEmailForm" v-if="showSendTestEmail" data-vv-scope="testEmail" class="form-container"
+                    @submit="noAction">
                     <button type="submit" disabled style="display: none" aria-hidden="true"></button>
                     <h4>
                         {{ $t('Settings.EmailProvider_SendTestEmailHeader') }}
@@ -521,7 +522,8 @@ export default {
                 self.replyAddress = settings.replyAddress
                 self.address = settings.address
 
-                self.$validator.reset('settings')
+                self.$refs.settigsForm.resetForm({ values: self.$refs.settigsForm.values })
+                //self.$validator.reset('settings')
             })
             .catch(function (error) {
                 self.$errorHandler(error, self)
@@ -624,7 +626,8 @@ export default {
                         },
                     )
                     .then(function (response) {
-                        self.$validator.reset('testEmail')
+                        self.$refs.testEmailForm.resetForm({ values: self.$refs.testEmailForm.values })
+                        //self.$validator.reset('testEmail')
 
                         if (response.data.success) {
                             self.sendEmailResult = true
@@ -645,7 +648,7 @@ export default {
                                         'Settings.EmailProvider_GeneralError',
                                     ),
                                 ]
-                        Vue.config.errorHandler(error, self)
+                        self.$errorHandler(error, self)
                     })
                     .then(function () {
                         self.$store.dispatch('hideProgress')
@@ -682,7 +685,8 @@ export default {
                         },
                     })
                     .then(function (response) {
-                        self.$validator.reset('settings')
+                        self.$refs.settigsForm.resetForm({ values: self.$refs.settigsForm.values })
+                        //self.$validator.reset('settings')
                         self.providerSettingsResult = self.$t(
                             'Settings.EmailProvider_SettingsSavedSuccessfully',
                         )
