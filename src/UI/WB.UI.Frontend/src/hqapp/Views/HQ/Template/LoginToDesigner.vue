@@ -26,7 +26,7 @@
             <div class="col-md-6 col-sm-6 col-xs-12 right-column">
                 <div class="centered-box-table">
                     <div class="centered-box-table-cell">
-                        <Form id="import-log-in" class="log-in" autocomplete="off" @submit="trySignIn"
+                        <Form ref="loginForm" id="import-log-in" class="log-in" autocomplete="off" @submit="trySignIn"
                             v-slot="{ errors }">
                             <div class="alert alert-danger" v-if="invalidCredentials">
                                 <p>
@@ -46,7 +46,7 @@
                             </div>
                             <div class="form-group" :class="{ 'has-error': errors.Password }">
                                 <Field type="password" id="Password" name="Password" class="form-control"
-                                    v-model="password" rules="required"
+                                    v-model="password" :rules="{ required: !isSigningIn }"
                                     :placeholder="this.$t('FieldsAndValidations.PasswordFieldName')" />
                                 <ErrorMessage name="Password" class="field-validation-error"></ErrorMessage>
                             </div>
@@ -91,12 +91,13 @@ export default {
     methods: {
         async trySignIn() {
             var validationResult = true
-            //TODO:MIGRATION
-            //await this.$validator.validateAll()
+
+            await this.$refs.loginForm.validate()
+
             if (validationResult) {
                 var passwordToSend = this.password;
-                this.password = '';
                 this.isSigningIn = true;
+                this.password = '';
                 this.$http({
                     method: 'post',
                     url: this.$config.model.loginAction,
