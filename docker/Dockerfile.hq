@@ -156,9 +156,9 @@ RUN apk add --no-cache --virtual \
     && rm -rf /var/lib/apk/lists/*
 
 # Copy APK files if any
-FROM --platform=amd64 mcr.microsoft.com/dotnet/aspnet:${DOTNET_VERSION}-alpine as apks
-ARG APK_FILES
-COPY ${APK_FILES}/*.apk /apk/
+# FROM --platform=amd64 mcr.microsoft.com/dotnet/aspnet:${DOTNET_VERSION}-alpine as apks
+# ARG APK_FILES
+# COPY ${APK_FILES}/*.apk /apk/
 
 # include noto font into image
 # FROM mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION}-alpine as fonts
@@ -177,7 +177,7 @@ LABEL org.opencontainers.image.description="Survey Solutions Headquarters with E
 
 COPY --from=builder hq /app
 COPY --from=export_builder export /app/Export.Service
-COPY --from=apks /apk /app/Client
+# COPY --from=apks /apk /app/Client
 
 ENV HQ_Headquarters__BaseUrl=http://localhost
 ENV HQ_Headquarters__TenantName=survey
