@@ -1,7 +1,8 @@
 import Assignments from './Assignments'
 import Interviews from './Interviews'
 import PNotify from 'pnotify'
-
+import { getCsrfCookie } from '../../api/index'
+import { config } from '~/shared/config'
 
 const store = {
     state: {
@@ -15,14 +16,14 @@ const store = {
                 {
                     url: window.CONFIG.model.interviewerHqEndpoint + '/StartNewInterview/' + assignmentId,
                     headers: {
-                        'X-CSRF-TOKEN': this.$hq.Util.getCsrfCookie(),
+                        'X-CSRF-TOKEN': getCsrfCookie(),
                     },
                 }
             )
                 .done(function (data, textStatus) {
                     dispatch('showProgress', true)
                     const interviewId = data.interviewId
-                    const workspace = this.$config.workspace
+                    const workspace = config.workspace
                     const url = `/${workspace}/WebInterview/${interviewId}/Cover`
                     window.location = url
                 })
@@ -52,7 +53,7 @@ const store = {
                 type: 'DELETE',
                 success: callback,
                 headers: {
-                    'X-CSRF-TOKEN': this.$hq.Util.getCsrfCookie(),
+                    'X-CSRF-TOKEN': getCsrfCookie(),
                 },
             })
         },

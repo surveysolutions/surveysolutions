@@ -469,6 +469,7 @@
 //import Vue from 'vue'
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import { isEmpty } from 'lodash'
+import { getCsrfCookie } from '../../../api/index'
 
 export default {
     components: {
@@ -621,7 +622,7 @@ export default {
                         { email: this.testEmailAddress },
                         {
                             headers: {
-                                'X-CSRF-TOKEN': this.$hq.Util.getCsrfCookie(),
+                                'X-CSRF-TOKEN': getCsrfCookie(),
                             },
                         },
                     )
@@ -681,7 +682,7 @@ export default {
                 this.$http
                     .post(this.$config.model.api.updateSettings, settings, {
                         headers: {
-                            'X-CSRF-TOKEN': this.$hq.Util.getCsrfCookie(),
+                            'X-CSRF-TOKEN': getCsrfCookie(),
                         },
                     })
                     .then(function (response) {
