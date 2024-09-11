@@ -10,27 +10,27 @@
             <h1>
                 <span v-if="this.$config.model.fullModel.isArchived" class="badge">{{ $t('Common.Archived') }}</span>
                 {{ $t('Pages.InterviewerProfile_AssignedToFormat', {
-        interviewer:
-            this.$config.model.fullModel.interviewerName, supervisor: this.$config.model.fullModel.supervisorName
-    })
+                    interviewer:
+                        this.$config.model.fullModel.interviewerName, supervisor: this.$config.model.fullModel.supervisorName
+                })
                 }}
             </h1>
 
             <ul class="list-unstyled">
                 <li v-if="this.$config.model.fullModel.email">{{ $t('Pages.InterviewerProfile_EmailFormat', {
-        email:
-            this.$config.model.fullModel.email
-    }) }}</li>
+                    email:
+                        this.$config.model.fullModel.email
+                }) }}</li>
                 <li v-if="this.$config.model.fullModel.fullName">{{ $t('Pages.InterviewerProfile_FullNameFormat',
-        { fullName: this.$config.model.fullModel.fullName }) }}</li>
+                    { fullName: this.$config.model.fullModel.fullName }) }}</li>
                 <li v-if="this.$config.model.fullModel.phone">{{ $t('Pages.InterviewerProfile_PhoneFormat', {
-        phone:
-            this.$config.model.fullModel.phone
-    }) }}</li>
+                    phone:
+                        this.$config.model.fullModel.phone
+                }) }}</li>
 
                 <li v-if="this.$config.model.fullModel.isModifiable">
                     <a v-if="!this.$config.model.fullModel.isArchived" :href="this.$config.model.api.manageUrl">{{
-        $t('Pages.InterviewerProfile_Info') }}</a>
+                        $t('Pages.InterviewerProfile_Info') }}</a>
                     <form v-if="this.$config.model.fullModel.isArchived && $config.model.authorizedUser.isHeadquarters"
                         method="post">
                         <input class="btn btn-success" type="button" :value="$t('Pages.Unarchive')"
@@ -262,7 +262,7 @@
                             {{ $t('Pages.InterviewerProfile_InterviewerAppVersion') }}:
                             {{ this.fullModel.interviewerAppVersion }} —
                             <span v-if="!this.fullModel.hasUpdateForInterviewerApp" class="success-text">{{
-        $t('Pages.InterviewerProfile_InterviewerUpToDate') }}</span>
+                                $t('Pages.InterviewerProfile_InterviewerUpToDate') }}</span>
                             <span v-else class="error-text">{{ $t('Pages.InterviewerProfile_InterviewerCanBeUpdated')
                                 }}</span>
                         </b>
@@ -272,7 +272,7 @@
                             {{ $t('Pages.InterviewerProfile_DeviceAssignmentDate') }}:
                             {{ formatDate(this.fullModel.deviceAssignmentDate, true) }} (UTC)
                             <span v-if="this.fullModel.registredDevicesCount > 1" style="color: red;">({{
-        $t('Pages.InterviewerProfile_Relinked') }})</span>
+                                $t('Pages.InterviewerProfile_Relinked') }})</span>
                         </b>
                     </li>
                 </ul>
@@ -364,15 +364,15 @@
                             <td>{{ $t('Pages.InterviewerProfile_BatteryStatus') }}</td>
                             <td>
                                 {{
-        $t('Pages.InterviewerProfile_BatteryStatusFormat',
-            {
-                percent: this.fullModel.batteryStatus,
-                power: this.fullModel.batteryPowerSource,
-                powerSaver: this.fullModel.isPowerSaveMode ?
-                    $t('Pages.InterviewerProfile_BatteryStatus_SaverIsOn') :
-                    $t('Pages.InterviewerProfile_BatteryStatus_SaverIsOff')
-            })
-    }}
+                                    $t('Pages.InterviewerProfile_BatteryStatusFormat',
+                                        {
+                                            percent: this.fullModel.batteryStatus,
+                                            power: this.fullModel.batteryPowerSource,
+                                            powerSaver: this.fullModel.isPowerSaveMode ?
+                                                $t('Pages.InterviewerProfile_BatteryStatus_SaverIsOn') :
+                                                $t('Pages.InterviewerProfile_BatteryStatus_SaverIsOff')
+                                        })
+                                }}
                             </td>
                         </tr>
                         <tr :class="{ 'text-danger': this.fullModel.storageFreeInBytes < 1024 * 1024 * 100 }">
@@ -438,6 +438,7 @@
 <script>
 import { MarkerClusterer, Cluster, SuperClusterAlgorithm } from '@googlemaps/markerclusterer'
 import { nextTick } from 'vue'
+import { Tooltip } from 'bootstrap'
 import * as toastr from 'toastr'
 import { DateFormats, humanFileSize } from '~/shared/helpers'
 import moment from 'moment'
@@ -463,6 +464,7 @@ export default {
             trafficUsage: [],
             maxDailyUsage: 0,
             markerExist: false,
+            tooltip: null,
         }
     },
     mounted() {
@@ -504,8 +506,11 @@ export default {
                 this.totalTrafficUsed = trafficUsage.totalTrafficUsed || 0
                 this.trafficUsage = trafficUsage.trafficUsages || []
                 this.maxDailyUsage = trafficUsage.maxDailyUsage || 0
-                nextTick(function () {
-                    $('[data-bs-toggle="tooltip"]').tooltip({ html: true })
+                nextTick(() => {
+                    this.tooltip?.dispose()
+
+                    const tooltipEl = document.querySelector('[data-bs-toggle="tooltip"]')
+                    this.tooltip = new Tooltip(tooltipEl, { html: true })
                 })
             })
         },
