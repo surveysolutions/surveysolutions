@@ -105,4 +105,6 @@ export function setupErrorHandler(app) {
         }
         return errorDetails;
     }
+
+    app.config.globalProperties.$errorHandler = app.config.errorHandler;
 }
