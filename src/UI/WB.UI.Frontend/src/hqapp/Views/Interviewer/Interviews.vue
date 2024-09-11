@@ -4,8 +4,8 @@
             <Filters>
                 <FilterBlock :title="$t('Common.Questionnaire')">
                     <Typeahead control-id="questionnaireId" data-vv-name="questionnaireId" data-vv-as="questionnaire"
-                        :placeholder="$t('Common.AllQuestionnaires')" :value="questionnaireId"
-                        :values="window.CONFIG.model.questionnaires" v-on:selected="questionnaireSelected" />
+                        :placeholder="$t('Common.AllQuestionnaires')" :value="questionnaireId" :values="questionnaires"
+                        v-on:selected="questionnaireSelected" />
                 </FilterBlock>
 
                 <FilterBlock :title="$t('Common.QuestionnaireVersion')">
@@ -73,8 +73,8 @@
                     <button type="button" class="btn btn-primary" role="confirm" @click="updateCalendarEvent">
                         {{ $t("Common.Save") }}</button>
                     <button type="button" class="btn btn-link" data-bs-dismiss="modal" role="cancel">{{
-        $t("Common.Cancel")
-    }}</button>
+                        $t("Common.Cancel")
+                        }}</button>
                     <button type="button" class="btn btn-danger pull-right" role="delete" v-if="calendarEventId != null"
                         @click="deleteCalendarEvent">
                         {{ $t("Common.Delete") }}</button>
@@ -90,6 +90,7 @@ import moment from 'moment-timezone'
 import { updateCalendarEvent, addInterviewCalendarEvent, deleteCalendarEvent } from './calendarEventsHelper'
 import { map, join, toNumber, filter, escape } from 'lodash'
 import gql from 'graphql-tag'
+import { config } from '~/shared/config'
 import _sanitizeHtml from 'sanitize-html'
 const sanitizeHtml = text => _sanitizeHtml(text, { allowedTags: [], allowedAttributes: [] })
 
@@ -180,7 +181,7 @@ export default {
                 and.push({ assignmentId: { eq: this.where.assignmentId } })
             }
 
-            and.push({ status: { in: window.CONFIG.model.statuses } })
+            and.push({ status: { in: config.model.statuses } })
 
             return and
         },
@@ -282,6 +283,9 @@ export default {
         saveDisabled() {
             return !this.newCalendarStart
         },
+        questionnaires() {
+            return config.model.questionnaires
+        }
     },
 
     methods: {
@@ -402,7 +406,7 @@ export default {
             self.$refs.confirmRestart.promt(ok => {
                 if (ok) {
                     $.post({
-                        url: window.CONFIG.model.interviewerHqEndpoint + '/RestartInterview/' + interviewId,
+                        url: config.model.interviewerHqEndpoint + '/RestartInterview/' + interviewId,
                         data: { comment: self.restart_comment },
                         headers: {
                             'X-CSRF-TOKEN': self.$hq.Util.getCsrfCookie(),
@@ -420,7 +424,7 @@ export default {
         },
 
         addFilteringParams(data) {
-            data.statuses = window.CONFIG.model.statuses
+            data.statuses = config.model.statuses
 
             data.questionnaireId = (this.questionnaireId || {}).key
             data.questionnaireVersion = (this.questionnaireVersion || {}).key
