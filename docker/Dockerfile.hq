@@ -143,9 +143,9 @@ RUN dotnet publish src/UI/WB.UI.Headquarters.Core \
     -c Release -o /hq -p:Version="${VERSION}" -p:InformationalVersion="${INFO_VERSION}"
 
 # Copy APK files if any
-# FROM --platform=${PLATFORM} mcr.microsoft.com/dotnet/aspnet:${DOTNET_VERSION}-alpine AS apks
-# ARG APK_FILES
-# COPY ${APK_FILES}/*.apk /apk/
+FROM --platform=${PLATFORM} mcr.microsoft.com/dotnet/aspnet:${DOTNET_VERSION}-alpine AS apks
+ARG APK_FILES
+COPY ${APK_FILES}/*.apk /apk/
 
 # include noto font into image
 FROM --platform=${PLATFORM} mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION}-alpine AS fonts_source
