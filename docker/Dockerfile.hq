@@ -168,7 +168,7 @@ RUN apk add --no-cache \
     libintl \
     libssl3 \
     libstdc++ \
-    zlib
+    zlib \
     \
     gdal \
     ffmpeg \
