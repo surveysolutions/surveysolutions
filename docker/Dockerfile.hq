@@ -161,14 +161,15 @@ RUN [ "/bin/ash" ,"-c", "export IFS=\";\"; for FONT in $FONTS_LIST; \
 # Building runtime 
 FROM mcr.microsoft.com/dotnet/aspnet:${DOTNET_VERSION}-alpine
 RUN apk add --no-cache \ 
-    # -- .NET dependencies
+    \
+    # .NET dependencies
     krb5-libs \
     libgcc \
     libintl \
     libssl3 \
     libstdc++ \
     zlib
-    # --
+    \
     gdal \
     ffmpeg \
     curl \
