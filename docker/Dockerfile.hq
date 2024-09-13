@@ -179,6 +179,7 @@ RUN apk add --no-cache \
     icu-data-full \
     \    
     gdal \
+    gdal-tools \
     ffmpeg \
     curl \
     fontconfig \
