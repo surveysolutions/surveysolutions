@@ -1,6 +1,7 @@
 import { marked } from 'marked'
 import mdEditor from '@/hqapp/components/MdEditor'
 import Logo from './_Logo.vue'
+import emitter from '~/shared/emitter';
 
 export default {
     props: {
@@ -15,7 +16,7 @@ export default {
 
     mounted() {
         var self = this
-        this.$eventHub.$on('settings:page:active', ({ titleType, messageType }) => {
+        emitter.on('settings:page:active', ({ titleType, messageType }) => {
             if (titleType && self.$refs[titleType]) {
                 self.$refs[titleType].resize()
             }
