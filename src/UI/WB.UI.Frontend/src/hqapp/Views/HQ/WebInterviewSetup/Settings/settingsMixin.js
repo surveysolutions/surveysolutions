@@ -18,7 +18,7 @@ export default {
         var self = this
         emitter.on('settings:page:active', ({ titleType, messageType }) => {
             if (titleType && self.$refs[titleType]) {
-                self.$refs[titleType].resize()
+                self.$refs[titleType].$el.resize()
             }
 
             if (messageType && self.$refs[messageType]) {

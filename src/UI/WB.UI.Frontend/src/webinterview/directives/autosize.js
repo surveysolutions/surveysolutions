@@ -8,8 +8,9 @@ const autosize = app => {
             el.style.boxSizing = 'border-box';
             el.rows = 1;
 
-            const { detach } = attach(el);
+            const { detach, update } = attach(el);
             el.detachAutosize = detach;
+            el.resize = update
         },
         unmounted(el) {
             el.detachAutosize();

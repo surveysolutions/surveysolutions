@@ -1,25 +1,15 @@
 <template>
-    <!--editor ref="mdEditor" v-bind:initialValue="initialValue" v-on:change="onEditorChange" v-bind="$attrs"
-        initialEditType="markdown" previewStyle="global" :options="editorOptions" v-on="$listeners">
-    </editor-->
-
     <div ref="editor"></div>
 </template>
 <script>
 
 import '@toast-ui/editor/dist/toastui-editor.css'
+
 import Editor from '@toast-ui/editor';
 import { escape, unescape } from 'lodash'
-import _sanitizeHtml from 'sanitize-html'
-
-const sanitizeHtml = text => _sanitizeHtml(text, { allowedTags: [], allowedAttributes: [] })
 
 
 export default {
-    components: {
-        //editor: Editor,
-    },
-
     props: {
         value: { type: String, required: true },
         supportHtml: { type: Boolean, required: false, default: false },
@@ -93,6 +83,7 @@ export default {
             }
         },
     },
+    expose: ['refresh'],
     methods: {
         onEditorChange() {
             let markDown = this.editor.getMarkdown()
@@ -106,7 +97,6 @@ export default {
             }
         },
         refresh() {
-            var self = this
             setTimeout(() => {
                 this.editor.moveCursorToStart()
             }, 100)
