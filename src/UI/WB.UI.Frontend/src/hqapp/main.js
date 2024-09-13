@@ -1,14 +1,11 @@
-//import 'bootstrap'
-//import * as bootstrap from 'bootstrap'
+import 'bootstrap'
+import * as bootstrap from 'bootstrap'
 //import "bootstrap/scss/_functions.scss";
 //import "bootstrap/scss/_mixins.scss";
 //import "bootstrap/scss/_variables.scss";
 //import "bootstrap/scss/_nav.scss";
 //import "bootstrap/scss/_navbar.scss";
 //import "bootstrap/scss/bootstrap.scss";
-
-// Import all of Bootstrap's JS
-//import * as bootstrap from 'bootstrap'
 
 import 'bootstrap-select'
 
@@ -135,6 +132,11 @@ vue.use(pageTitle)
 //box.init(i18n, browserLanguage)
 
 vue.config.globalProperties.$eventHub = vue
+
+
+import emitter from '~/shared/emitter';
+vue.config.globalProperties.$emitter = emitter;
+
 //TODO: MIGRATION. 
 
 // export default new Vue({
