@@ -129,6 +129,7 @@
                                 class="tab-pane email-section">
                                 <Form :ref="el => { emailTemplateData[emailTemplate.value] = el }"
                                     v-slot="{ errors, meta }" v-on:submit.prevent="dummy"
+                                    :name="'emailTemplateData' + emailTemplate.value"
                                     :data-vv-scope="'emailTemplateData' + emailTemplate.value">
                                     <div class="email-block d-flex mb-30">
                                         <div class="costomization-block email-block-unit">
@@ -728,7 +729,7 @@ export default {
 
         map(this.emailTemplates, (emailTemplate) => {
             //self.$validator.reset('emailTemplateData' + emailTemplate.value)
-            const form = self.emailTemplateData[emailTemplate.value]
+            const form = this.emailTemplateData[emailTemplate.value]
             form?.resetForm({ values: form.values })
         })
 
@@ -765,7 +766,7 @@ export default {
 
             var self = this
             this.$nextTick(function () {
-                self.$refs['message' + emailTemplate.value][0].resize()
+                self.$refs['message' + emailTemplate.value][0].$el.resize()
             })
         },
         setPageActive(titleType, messageType) {
@@ -801,15 +802,14 @@ export default {
                     : custom.linkText
 
             //this.$validator.reset('emailTemplateData' + emailTemplate.value)
-            const form = self.emailTemplateData[emailTemplate.value]
+            const form = this.emailTemplateData[emailTemplate.value]
             form.resetForm({ values: form.values })
         },
 
         async saveEmailTemplate(emailTemplate) {
             var self = this
-            var validationResult = await this.$validator.validateAll(
-                'emailTemplateData' + emailTemplate.value
-            )
+            const form = self.emailTemplateData[emailTemplate.value]
+            var validationResult = await form.validate()
             if (validationResult) {
                 self.$store.dispatch('showProgress')
                 await this.$hq.WebInterviewSettings.updateEmailTemplate(
@@ -978,9 +978,8 @@ export default {
         async clearField(emailTemplate, fieldName) {
             emailTemplate[fieldName] = null
             await this.$nextTick()
-            await this.$validator.validate(
-                'emailTemplateData' + emailTemplate.value + '.' + fieldName
-            )
+            const form = this.emailTemplateData[emailTemplate.value]
+            await form.validateField(fieldName)
         },
         isPasswordSupported(emailTemplate) {
             return emailTemplate.value != 'completeInterviewEmail'
