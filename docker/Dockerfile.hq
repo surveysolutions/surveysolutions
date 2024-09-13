@@ -4,7 +4,8 @@ ARG INFO_VERSION=21.01
 ARG NODE=18
 ARG APK_FILES=build
 ARG FONTS="NotoSans-hinted.zip;NotoSansMyanmar-hinted.zip"
-ARG PLATFORM=amd64 #linux/arm64
+ARG PLATFORM=amd64
+#amd64 #linux/arm64
 
 # Building WB.UI.Frontend application
 FROM --platform=${PLATFORM} node:$NODE AS frontend
@@ -139,6 +140,7 @@ COPY [ "src/UI/WB.UI.Headquarters.Core",\
 
 COPY --from=frontend /src/UI/WB.UI.Frontend/dist/package/hq src/UI/WB.UI.Headquarters.Core
 
+#-r linux-x64 --self-contained
 RUN dotnet publish src/UI/WB.UI.Headquarters.Core \
     -c Release -o /hq -p:Version="${VERSION}" -p:InformationalVersion="${INFO_VERSION}"
 
@@ -160,6 +162,9 @@ RUN [ "/bin/ash" ,"-c", "export IFS=\";\"; for FONT in $FONTS_LIST; \
 
 # Building runtime 
 FROM mcr.microsoft.com/dotnet/aspnet:${DOTNET_VERSION}-alpine
+ENV DOTNET_RUNNING_IN_CONTAINER=true
+ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
+
 RUN apk add --no-cache \ 
     \
     # .NET dependencies
@@ -170,6 +175,9 @@ RUN apk add --no-cache \
     libstdc++ \
     zlib \
     \
+    icu-libs \ 
+    icu-data-full \
+    \    
     gdal \
     ffmpeg \
     curl \
