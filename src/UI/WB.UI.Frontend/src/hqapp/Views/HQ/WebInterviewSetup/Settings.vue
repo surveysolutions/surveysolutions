@@ -934,8 +934,8 @@ export default {
                 this.cancelAttachAnswersInEmailIsEnabled
             this.allowSwitchToCawiForInterviewerEnabled =
                 this.cancelAllowSwitchToCawiForInterviewerEnabled
-            //this.$validator.reset('additionalSettings')
-            const form = self.$refs.additionalSettings
+
+            const form = this.$refs.additionalSettings
             form.resetForm({ values: form.values })
         },
         previewHtml(text) {
