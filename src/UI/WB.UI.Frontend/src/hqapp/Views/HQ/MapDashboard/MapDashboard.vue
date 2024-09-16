@@ -10,9 +10,9 @@
                 <FilterBlock :title="$t('Common.QuestionnaireVersion')">
                     <Typeahead control-id="questionnaireVersion" :placeholder="$t('Common.AllVersions')"
                         :value="selectedVersion" :values="selectedQuestionnaireId == null
-        ? null
-        : selectedQuestionnaireId.versions
-        " v-on:selected="selectQuestionnaireVersion" :disabled="selectedQuestionnaireId == null" />
+                            ? null
+                            : selectedQuestionnaireId.versions
+                            " v-on:selected="selectQuestionnaireVersion" :disabled="selectedQuestionnaireId == null" />
                 </FilterBlock>
                 <FilterBlock :title="$t('Common.Responsible')" v-if="model.userRole != 'Interviewer'">
                     <Typeahead control-id="responsibleId" :placeholder="$t('Common.AllResponsible')"
@@ -80,52 +80,52 @@
                 <div class="row-fluid" v-if="model.userRole != 'Interviewer'" style="white-space: nowrap">
                     <strong>{{ $t('MapReport.ViewInterviewContent') }}:</strong>&nbsp;
                     <a v-bind:href="api.GetInterviewDetailsUrl(
-        selectedTooltip.interviewId
-    )
-        " target="_blank">{{ $t('MapReport.details') }}</a>
+                        selectedTooltip.interviewId
+                    )
+                        " target="_blank">{{ $t('MapReport.details') }}</a>
                 </div>
                 <div class="row-fluid tooltip-buttons" style="white-space: nowrap" v-if="!model.isObserving">
                     <button class="btn btn-sm btn-primary" v-if="model.userRole == 'Interviewer' &&
-        (selectedTooltip.status == 'InterviewerAssigned' ||
-            selectedTooltip.status ==
-            'RejectedBySupervisor')
-        " click="openInterview">
+                        (selectedTooltip.status == 'InterviewerAssigned' ||
+                            selectedTooltip.status ==
+                            'RejectedBySupervisor')
+                    " click-method="openInterview">
                         {{ $t('Common.Open') }}
                     </button>
-                    <button class="btn btn-sm btn-primary" v-if="canAssign" click="assignInterview">
+                    <button class="btn btn-sm btn-primary" v-if="canAssign" click-method="assignInterview">
                         {{ $t('Common.Assign') }}
                     </button>
                     <button class="btn btn-sm btn-primary" v-if="model.userRole == 'Supervisor' &&
-        (selectedTooltip.status == 'Completed' ||
-            selectedTooltip.status ==
-            'RejectedByHeadquarters')
-        " click="approveSvInterview">
+                        (selectedTooltip.status == 'Completed' ||
+                            selectedTooltip.status ==
+                            'RejectedByHeadquarters')
+                    " click-method="approveSvInterview">
                         {{ $t('Common.Approve') }}
                     </button>
                     <button class="btn btn-sm reject" v-if="model.userRole == 'Supervisor' &&
-        (selectedTooltip.status == 'Completed' ||
-            selectedTooltip.status ==
-            'RejectedByHeadquarters')
-        " click="rejectSvInterview">
+                        (selectedTooltip.status == 'Completed' ||
+                            selectedTooltip.status ==
+                            'RejectedByHeadquarters')
+                    " click-method="rejectSvInterview">
                         {{ $t('Common.Reject') }}
                     </button>
                     <button class="btn btn-sm btn-primary" v-if="model.userRole == 'Headquarter' &&
-        (selectedTooltip.status == 'Completed' ||
-            selectedTooltip.status ==
-            'ApprovedBySupervisor')
-        " click="approveHqInterview">
+                        (selectedTooltip.status == 'Completed' ||
+                            selectedTooltip.status ==
+                            'ApprovedBySupervisor')
+                    " click-method="approveHqInterview">
                         {{ $t('Common.Approve') }}
                     </button>
                     <button class="btn btn-sm reject" v-if="model.userRole == 'Headquarter' &&
-        (selectedTooltip.status == 'Completed' ||
-            selectedTooltip.status ==
-            'ApprovedBySupervisor')
-        " click="rejectHqInterview">
+                        (selectedTooltip.status == 'Completed' ||
+                            selectedTooltip.status ==
+                            'ApprovedBySupervisor')
+                    " click-method="rejectHqInterview">
                         {{ $t('Common.Reject') }}
                     </button>
                     <button class="btn btn-sm btn-primary" v-if="model.userRole == 'Headquarter' &&
-        selectedTooltip.status == 'ApprovedByHeadquarters'
-        " click="unapproveInterview">
+                        selectedTooltip.status == 'ApprovedByHeadquarters'
+                    " click-method="unapproveInterview">
                         {{ $t('Common.Unapprove') }}
                     </button>
                 </div>
@@ -152,19 +152,19 @@
                 <div class="row-fluid" v-if="model.userRole != 'Interviewer'" style="white-space: nowrap">
                     <strong>{{ $t('Common.ViewAssignmentDetails') }}:</strong>&nbsp;
                     <a v-bind:href="api.GetAssignmentDetailsUrl(
-        selectedTooltip.assignmentId
-    )
-        " target="_blank">{{ $t('MapReport.details') }}</a>
+                        selectedTooltip.assignmentId
+                    )
+                        " target="_blank">{{ $t('MapReport.details') }}</a>
                 </div>
                 <div class="row-fluid tooltip-buttons" style="white-space: nowrap" v-if="!model.isObserving">
                     <button class="btn btn-sm btn-primary" v-if="model.userRole == 'Supervisor' ||
-        model.userRole == 'Headquarter'
-        " click="assignAssignment">
+                        model.userRole == 'Headquarter'
+                    " click-method="assignAssignment">
                         {{ $t('Common.Assign') }}
                     </button>
 
                     <button class="btn btn-sm btn-assignment" v-if="model.userRole == 'Interviewer'"
-                        click="createInterview">
+                        click-method="createInterview">
                         {{ $t('Common.Create') }}
                     </button>
                 </div>
@@ -956,7 +956,7 @@ export default {
 
             google.maps.event.addDomListener(mapDiv, 'click', (event) => {
                 if (event.srcElement.nodeName == 'BUTTON') {
-                    var methodName = event.srcElement.getAttribute('click')
+                    var methodName = event.srcElement.getAttribute('click-method')
                     if (methodName) self[methodName].call(self)
                 }
             })
