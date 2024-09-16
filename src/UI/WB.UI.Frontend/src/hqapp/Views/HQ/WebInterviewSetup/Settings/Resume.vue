@@ -28,10 +28,13 @@
                         <div class="h5">
                             {{ $t('WebInterviewSettings.Description') }}
                         </div>
-                        <md-editor ref="resumeInvitation" data-vv-name="resumeInvitation"
-                            v-model="webInterviewPageMessages['resumeInvitation'].text">
-                        </md-editor>
+                        <Field v-slot="{ field }" name="resumeInvitationDescription"
+                            :value="webInterviewPageMessages['resumeInvitation'].text">
 
+                            <md-editor ref="resumeInvitation" v-bind="field" data-vv-name="resumeInvitation"
+                                v-model="webInterviewPageMessages['resumeInvitation'].text">
+                            </md-editor>
+                        </Field>
                     </div>
 
                     <div class="row-element mb-30">

@@ -30,9 +30,13 @@
                         <div class="h5">
                             {{ $t('WebInterviewSettings.Description') }}
                         </div>
-                        <md-editor ref="welcomeTextDescription" data-vv-name="invitation"
-                            v-model="webInterviewPageMessages['invitation'].text">
-                        </md-editor>
+                        <Field v-slot="{ field }" name="welcomeTextDescription"
+                            :value="webInterviewPageMessages['invitation'].text">
+
+                            <md-editor ref="welcomeTextDescription" v-bind="field" data-vv-name="invitation"
+                                v-model="webInterviewPageMessages['invitation'].text">
+                            </md-editor>
+                        </Field>
                     </div>
 
                     <div class="row-element mb-30">

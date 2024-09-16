@@ -27,9 +27,14 @@
                         <div class="h5">
                             {{ $t('WebInterviewSettings.Description') }}
                         </div>
-                        <md-editor ref="linkInvitation" data-vv-name="linkInvitation"
-                            v-model="webInterviewPageMessages['linkInvitation'].text">
-                        </md-editor>
+                        <Field v-slot="{ field }" name="linkInvitationDescription"
+                            :value="webInterviewPageMessages['linkInvitation'].text">
+
+                            <md-editor ref="linkInvitation" v-bind="field" data-vv-name="linkInvitation"
+                                v-model="webInterviewPageMessages['linkInvitation'].text">
+                            </md-editor>
+
+                        </Field>
 
                     </div>
 

@@ -29,9 +29,15 @@
                         <div class="h5">
                             {{ $t('WebInterviewSettings.Description') }}
                         </div>
-                        <md-editor ref="finishInterview" data-vv-name="finishInterview"
-                            v-model="webInterviewPageMessages['finishInterview'].text">
-                        </md-editor>
+
+                        <Field v-slot="{ field }" name="finishInterviewDescription"
+                            :value="webInterviewPageMessages['finishInterview'].text">
+
+                            <md-editor ref="finishInterview" data-vv-name="finishInterview"
+                                v-model="webInterviewPageMessages['finishInterview'].text">
+                            </md-editor>
+
+                        </Field>
 
                     </div>
                     <div class="">
