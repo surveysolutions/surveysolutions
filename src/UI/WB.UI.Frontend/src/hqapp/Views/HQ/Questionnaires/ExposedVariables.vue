@@ -261,7 +261,7 @@ export default {
                     variable: rowData.variable,
                     entityType: rowData.entityType,
                 })
-                row.nodes().to$().addClass('disabled')
+                row.node().classList.add('disabled');
             }
         },
         removeExposedClicked(id) {
@@ -275,7 +275,7 @@ export default {
 
             var row = this.$refs.table.table.row('#' + this.idToRemove)
             if (row != null)
-                row.nodes().to$().removeClass('disabled')
+                row.node().classList.remove('disabled');
             this.$refs.exposedRemoveModal.hide()
         },
         getVariableLabel(variable) {
