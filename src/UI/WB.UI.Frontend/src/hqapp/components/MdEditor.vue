@@ -79,7 +79,7 @@ export default {
                     val = unescape(val)
                 }
 
-                this.$refs.mdEditor.setMarkdown(val)
+                this.editor.setMarkdown(val)
             }
         },
     },
