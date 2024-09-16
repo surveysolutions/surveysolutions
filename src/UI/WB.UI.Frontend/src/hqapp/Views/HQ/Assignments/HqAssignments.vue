@@ -158,7 +158,7 @@
             <p v-if="!canEditQuantity">
                 <b>{{ $t("Assignments.AssignmentExpectedInWebMode") }}</b>
             </p>
-            <Form onsubmit="return false;" v-slot="{ meta }">
+            <Form ref="quantityForm" onsubmit="return false;" v-slot="{ meta }">
                 <div class="form-group" v-bind:class="{ 'has-error': meta.valid == false }">
                     <label class="control-label" for="newQuantity">
                         {{ $t("Assignments.Expected") }}
@@ -171,7 +171,7 @@
                         <ErrorMessage name="editedQuantity" />
                     </span>
                 </div>
-            </form>
+            </Form>
             <template v-slot:actions>
                 <div>
                     <button type="button" class="btn btn-primary" :disabled="!showSelectors || !canEditQuantity"
@@ -707,13 +707,11 @@ export default {
         },
 
         async updateQuantity() {
-            //TODO: MIGRATION
-            //
-            //const validationResult = await this.$validator.validateAll()
+            const validationResult = await this.$refs.quantityForm.validate()
 
-            //if (validationResult == false) {
-            //    return false
-            //}
+            if (validationResult.valid != true) {
+                return false
+            }
 
             let targetQuantity = null
 
