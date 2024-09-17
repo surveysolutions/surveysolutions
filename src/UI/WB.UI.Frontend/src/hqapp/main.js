@@ -88,6 +88,8 @@ defineRule("required_if", (value, [target, targetValue], ctx) => {
 
 
 import box from '@/shared/modal'
+box.init(i18n, browserLanguage)
+
 import 'flatpickr/dist/flatpickr.css'
 import 'toastr/build/toastr.css'
 import * as toastr from 'toastr'
@@ -127,9 +129,6 @@ vue.use(router)
 
 import { pageTitle } from 'vue-page-title'
 vue.use(pageTitle)
-
-
-//box.init(i18n, browserLanguage)
 
 vue.config.globalProperties.$eventHub = vue
 
