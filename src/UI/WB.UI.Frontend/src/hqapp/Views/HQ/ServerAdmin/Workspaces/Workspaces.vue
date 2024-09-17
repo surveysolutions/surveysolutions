@@ -16,9 +16,10 @@
         <DataTables ref="table" data-suso="workspaces-list" :tableOptions="tableOptions" noSelect :noPaging="false"
             :contextMenuItems="contextMenuItems" :supportContextMenu="$config.model.canManage">
         </DataTables>
+
         <ModalFrame ref="createWorkspaceModal" :title="$t('Workspaces.CreateWorkspace')">
             <template v-slot:form>
-                <Form @submit="createWorkspace" ref="creatWorkspaceForm" data-suso="workspaces-create-dialog"
+                <Form @submit="createWorkspace" ref="createWorkspaceForm" data-suso="workspaces-create-dialog"
                     v-slot="{ errors }">
                     <div class="modal-body">
                         <div class="form-group" v-bind:class="{ 'has-error': errors.Name }">
@@ -73,7 +74,7 @@
         <ModalFrame ref="editWorkspaceModal" data-suso="workspaces-edit-dialog"
             :title="$t('Workspaces.EditWorkspace', { name: editedRowId })">
             <template v-slot:form>
-                <Form @submit="updateWorkspace" :initial-errors="emptyErrors" v-slot="{ meta, errors }">
+                <Form @submit="updateWorkspace" ref="editWorkspaceForm" v-slot="{ meta, errors }">
                     <div class="modal-body">
                         <div class="form-group" v-bind:class="{ 'has-error': meta.valid == false }">
                             <label class="control-label" for="editDescription">
@@ -128,10 +129,8 @@ import * as toastr from 'toastr'
 import DeleteWorkspaceModal from './DeleteWorkspaceModal'
 import moment from 'moment'
 import { DateFormats } from '~/shared/helpers'
-
 import { Form, Field, ErrorMessage } from 'vee-validate'
-
-const emptyErrors = {}
+import { ref, nextTick } from 'vue'
 
 export default {
     components: {
@@ -147,6 +146,8 @@ export default {
             editedDisplayName: null,
             newWorkspaceName: null,
             inProgress: false,
+            createWorkspaceForm: ref(),
+            editWorkspaceForm: ref(),
         }
     },
 
@@ -159,6 +160,9 @@ export default {
             this.newWorkspaceName = null
 
             this.$refs.createWorkspaceModal.modal('show')
+            nextTick(() => {
+                this.$refs.createWorkspaceForm.resetForm()
+            })
         },
         loadData() {
             if (this.$refs.table) {
@@ -279,6 +283,9 @@ export default {
                             this.editedDisplayName = rowData.DisplayName
 
                             this.$refs.editWorkspaceModal.modal('show')
+                            nextTick(() => {
+                                this.$refs.editWorkspaceForm.resetForm()
+                            })
                         },
                     },
                     {
