@@ -1,6 +1,7 @@
 <template>
     <teleport to="body">
-        <div v-if="isOpen" class="modal" :id="id" ref="modal" tabindex="-1" role="dialog" :aria-labelledby="titleId">
+        <div v-if="isOpen" class="modal" :class="class" :id="id" ref="modal" tabindex="-1" role="dialog"
+            :aria-labelledby="titleId">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -37,6 +38,7 @@ export default {
         title: String,
         useHtmlInTitle: { type: Boolean, required: false, default: false },
         canClose: { type: Boolean, default: true },
+        class: String
     },
 
     data() {
