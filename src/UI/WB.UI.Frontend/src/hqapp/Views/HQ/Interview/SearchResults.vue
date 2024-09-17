@@ -16,26 +16,23 @@
                 :search="search">
             </search-section-result>
 
-            <!-- <infinite-loading ref="loader"
-                v-if="searchResultsAreVisible"
-                @infinite="infiniteHandler"
-                :distance="250">
+            <infinite-loading ref="loader" v-if="searchResultsAreVisible" @infinite="infiniteHandler" :distance="250">
                 <span slot="no-more"></span>
                 <span slot="no-results"></span>
-            </infinite-loading> -->
+            </infinite-loading>
         </div>
     </aside>
 </template>
 
 <script>
-//TODO: MIGRATION. Change to other component like vue-ethernal-loading
-//import InfiniteLoading from 'vue-infinite-loading'
+import InfiniteLoading from "v3-infinite-loading";
+import "v3-infinite-loading/lib/style.css";
 import SearchSectionResult from './components/SearchSectionResult'
 
 export default {
     components: {
         SearchSectionResult,
-        //    InfiniteLoading
+        InfiniteLoading
     },
 
     methods: {
@@ -70,8 +67,9 @@ export default {
 
     watch: {
         'searchResult.count'() {
-            if (this.$refs.loader != null)
-                this.$refs.loader.$emit('$InfiniteLoading:reset')
+            if (this.$refs.loader != null) {
+                //this.$refs.loader.$emit('$InfiniteLoading:reset')
+            }
         },
     },
 

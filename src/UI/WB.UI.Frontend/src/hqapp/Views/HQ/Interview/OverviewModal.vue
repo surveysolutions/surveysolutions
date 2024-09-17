@@ -8,11 +8,11 @@
 
         <OverviewItem v-for="item in items" :key="item.id" :item="item" @showAdditionalInfo="onShowAdditionalInfo" />
 
-        <!-- <infinite-loading ref="loader" v-if="overview.total > 0 && items.length > 0" @infinite="infiniteHandler"
+        <infinite-loading ref="loader" v-if="overview.total > 0 && items.length > 0" @infinite="infiniteHandler"
             :distance="1000">
             <span slot="no-more"></span>
             <span slot="no-results"></span>
-        </infinite-loading> -->
+        </infinite-loading>
 
         <template v-slot:actions>
             <div>
@@ -65,14 +65,15 @@
 </style>
 
 <script>
-//TODO: MIGRATION. Change to other component like vue-ethernal-loading
-//import InfiniteLoading from 'vue-infinite-loading'
+import InfiniteLoading from "v3-infinite-loading";
+import "v3-infinite-loading/lib/style.css";
+
 import OverviewItem from './components/OverviewItem'
 import { slice } from 'lodash'
 
 export default {
     components: {
-        //    InfiniteLoading, 
+        InfiniteLoading,
         OverviewItem
     },
     data: function () {
