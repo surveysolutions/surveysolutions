@@ -55,8 +55,8 @@ export default {
     methods: {
         hide() {
             nextTick(() => {
-                this.modalInstance.hide()
-                this.modalInstance.dispose()
+                this.modalInstance?.hide()
+                this.modalInstance?.dispose()
             })
             this.isOpen = false
         },
