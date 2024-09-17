@@ -478,110 +478,132 @@
                         <Form v-slot="{ errors, meta }" ref="additionalSettings" v-on:submit.prevent="dummy"
                             :data-vv-scope="'additionalSettings'">
                             <div class="form-group mb-20">
-                                <Field v-slot="{ field }" name="spamProtectionIsEnabled" type="checkbox" :value="true"
-                                    :unchecked-value="false">
-                                    <input class="checkbox-filter" v-bind="field" v-validate="''" :value="true"
-                                        name="spamProtectionIsEnabled" data-vv-name="spamProtectionIsEnabled"
-                                        id="Captcha" type="checkbox" />
+                                <Field v-slot="{ field }" name="spamProtectionIsEnabled"
+                                    :value="spamProtectionIsEnabled">
+                                    <input class="checkbox-filter" v-bind="field" v-validate="''"
+                                        v-model="spamProtectionIsEnabled" name="spamProtectionIsEnabled"
+                                        data-vv-name="spamProtectionIsEnabled" id="Captcha" type="checkbox" />
                                     <label for="Captcha">
                                         <span class="tick"></span>{{ $t('WebInterviewSetup.UseCaptcha') }}
                                     </label>
                                 </Field>
                             </div>
                             <div class="form-group mb-20">
-                                <input class="checkbox-filter" v-validate="''" name="singleResponse"
-                                    data-vv-name="singleResponse" id="singleResponse" type="checkbox"
-                                    v-model="singleResponseIsEnabled" />
-                                <label for="singleResponse">
-                                    <span class="tick"></span>{{ $t('WebInterviewSetup.SingleResponse') }}
-                                </label>
+                                <Field v-slot="{ field }" name="singleResponse" :value="singleResponseIsEnabled">
+                                    <input class="checkbox-filter" v-bind="field" v-validate="''" name="singleResponse"
+                                        data-vv-name="singleResponse" id="singleResponse" type="checkbox"
+                                        v-model="singleResponseIsEnabled" />
+                                    <label for="singleResponse">
+                                        <span class="tick"></span>{{ $t('WebInterviewSetup.SingleResponse') }}
+                                    </label>
+                                </Field>
                             </div>
                             <div class="form-group mb-20">
-                                <input class="checkbox-filter" v-validate="''" name="emailOnComplete"
-                                    data-vv-name="emailOnComplete" id="emailOnComplete" type="checkbox"
-                                    v-model="emailOnCompleteIsEnabled" />
-                                <label for="emailOnComplete">
-                                    <span class="tick"></span>{{ $t('WebInterviewSetup.EmailOnComplete') }}
-                                </label>
+                                <Field v-slot="{ field }" name="emailOnComplete" :value="emailOnCompleteIsEnabled">
+                                    <input class="checkbox-filter" v-bind="field" v-validate="''" name="emailOnComplete"
+                                        data-vv-name="emailOnComplete" id="emailOnComplete" type="checkbox"
+                                        v-model="emailOnCompleteIsEnabled" />
+                                    <label for="emailOnComplete">
+                                        <span class="tick"></span>{{ $t('WebInterviewSetup.EmailOnComplete') }}
+                                    </label>
+                                </Field>
                             </div>
                             <div class="form-group mb-20">
-                                <input class="checkbox-filter" v-validate="''" name="attachAnswersInEmail"
-                                    data-vv-name="attachAnswersInEmail" id="attachAnswersInEmail" type="checkbox"
-                                    :disabled="!emailOnCompleteIsEnabled" v-model="attachAnswersInEmailIsEnabled" />
-                                <label for="attachAnswersInEmail">
-                                    <span class="tick"></span>{{ $t('WebInterviewSetup.AttachAnswersToCompleteEmail') }}
-                                </label>
+                                <Field v-slot="{ field }" name="attachAnswersInEmail"
+                                    :value="attachAnswersInEmailIsEnabled">
+                                    <input class="checkbox-filter" v-bind="field" v-validate="''"
+                                        name="attachAnswersInEmail" data-vv-name="attachAnswersInEmail"
+                                        id="attachAnswersInEmail" type="checkbox" :disabled="!emailOnCompleteIsEnabled"
+                                        v-model="attachAnswersInEmailIsEnabled" />
+                                    <label for="attachAnswersInEmail">
+                                        <span class="tick"></span>{{
+                                            $t('WebInterviewSetup.AttachAnswersToCompleteEmail') }}
+                                    </label>
+                                </Field>
                             </div>
                             <div class="form-group mb-20">
-                                <input class="checkbox-filter" v-validate="''" name="allowSwitchToCawiForInterviewer"
-                                    data-vv-name="allowSwitchToCawiForInterviewer" id="allowSwitchToCawiForInterviewer"
-                                    type="checkbox" v-model="allowSwitchToCawiForInterviewerEnabled" />
-                                <label for="allowSwitchToCawiForInterviewer">
-                                    <span class="tick"></span>{{ $t('WebInterviewSetup.AllowSwitchToCawiForInterviewer')
-                                    }}
-                                </label>
+                                <Field v-slot="{ field }" name="allowSwitchToCawiForInterviewer"
+                                    :value="allowSwitchToCawiForInterviewerEnabled">
+                                    <input class="checkbox-filter" v-bind="field" v-validate="''"
+                                        name="allowSwitchToCawiForInterviewer"
+                                        data-vv-name="allowSwitchToCawiForInterviewer"
+                                        id="allowSwitchToCawiForInterviewer" type="checkbox"
+                                        v-model="allowSwitchToCawiForInterviewerEnabled" />
+                                    <label for="allowSwitchToCawiForInterviewer">
+                                        <span class="tick"></span>{{
+                                            $t('WebInterviewSetup.AllowSwitchToCawiForInterviewer')
+                                        }}
+                                    </label>
+                                </Field>
                             </div>
                             <div class="notification-block mb-20">
-                                <div class="mb-1">
-                                    {{ $t('WebInterviewSettings.SendWithNoResponse') }}
-                                </div>
-                                <select class="selectpicker" :rules="required" tabindex="-98"
-                                    ref="reminderAfterDaysIfNoResponse" name="reminderAfterDaysIfNoResponse"
-                                    data-vv-name="reminderAfterDaysIfNoResponse"
-                                    v-model="reminderAfterDaysIfNoResponse">
-                                    <option value="null">
-                                        {{ $t('WebInterviewSettings.DoNotSend') }}
-                                    </option>
-                                    <option value="1">
-                                        {{ $t('WebInterviewSettings.AfterXDay', { count: 1 }) }}
-                                    </option>
-                                    <option value="2">
-                                        {{ $t('WebInterviewSettings.AfterXDay', { count: 2 }) }}
-                                    </option>
-                                    <option value="3">
-                                        {{ $t('WebInterviewSettings.AfterXDay', { count: 3 }) }}
-                                    </option>
-                                    <option value="5">
-                                        {{ $t('WebInterviewSettings.AfterXDay', { count: 5 }) }}
-                                    </option>
-                                    <option value="7">
-                                        {{ $t('WebInterviewSettings.AfterXWeek', { count: 1 }) }}
-                                    </option>
-                                    <option value="14">
-                                        {{ $t('WebInterviewSettings.AfterXWeek', { count: 2 }) }}
-                                    </option>
-                                </select>
+                                <Field v-slot="{ field }" name="reminderAfterDaysIfNoResponse"
+                                    :value="reminderAfterDaysIfNoResponse">
+                                    <div class="mb-1">
+                                        {{ $t('WebInterviewSettings.SendWithNoResponse') }}
+                                    </div>
+                                    <select class="selectpicker" v-bind="field" :rules="required" tabindex="-98"
+                                        ref="reminderAfterDaysIfNoResponse" name="reminderAfterDaysIfNoResponse"
+                                        data-vv-name="reminderAfterDaysIfNoResponse"
+                                        v-model="reminderAfterDaysIfNoResponse">
+                                        <option value="null">
+                                            {{ $t('WebInterviewSettings.DoNotSend') }}
+                                        </option>
+                                        <option value="1">
+                                            {{ $t('WebInterviewSettings.AfterXDay', { count: 1 }) }}
+                                        </option>
+                                        <option value="2">
+                                            {{ $t('WebInterviewSettings.AfterXDay', { count: 2 }) }}
+                                        </option>
+                                        <option value="3">
+                                            {{ $t('WebInterviewSettings.AfterXDay', { count: 3 }) }}
+                                        </option>
+                                        <option value="5">
+                                            {{ $t('WebInterviewSettings.AfterXDay', { count: 5 }) }}
+                                        </option>
+                                        <option value="7">
+                                            {{ $t('WebInterviewSettings.AfterXWeek', { count: 1 }) }}
+                                        </option>
+                                        <option value="14">
+                                            {{ $t('WebInterviewSettings.AfterXWeek', { count: 2 }) }}
+                                        </option>
+                                    </select>
+                                </Field>
                             </div>
                             <div class="notification-block mb-30">
-                                <div class="mb-1">
-                                    {{ $t('WebInterviewSettings.SendWithPartialResponse') }}
-                                </div>
-                                <select class="selectpicker" :rules="required" tabindex="-98"
-                                    ref="reminderAfterDaysIfPartialResponse" name="reminderAfterDaysIfPartialResponse"
-                                    data-vv-name="reminderAfterDaysIfPartialResponse"
-                                    v-model="reminderAfterDaysIfPartialResponse">
-                                    <option value="null">
-                                        {{ $t('WebInterviewSettings.DoNotSend') }}
-                                    </option>
-                                    <option value="1">
-                                        {{ $t('WebInterviewSettings.AfterXDay', { count: 1 }) }}
-                                    </option>
-                                    <option value="2">
-                                        {{ $t('WebInterviewSettings.AfterXDay', { count: 2 }) }}
-                                    </option>
-                                    <option value="3">
-                                        {{ $t('WebInterviewSettings.AfterXDay', { count: 3 }) }}
-                                    </option>
-                                    <option value="5">
-                                        {{ $t('WebInterviewSettings.AfterXDay', { count: 5 }) }}
-                                    </option>
-                                    <option value="7">
-                                        {{ $t('WebInterviewSettings.AfterXWeek', { count: 1 }) }}
-                                    </option>
-                                    <option value="14">
-                                        {{ $t('WebInterviewSettings.AfterXWeek', { count: 2 }) }}
-                                    </option>
-                                </select>
+                                <Field v-slot="{ field }" name="reminderAfterDaysIfPartialResponse"
+                                    :value="reminderAfterDaysIfPartialResponse">
+                                    <div class="mb-1">
+                                        {{ $t('WebInterviewSettings.SendWithPartialResponse') }}
+                                    </div>
+                                    <select class="selectpicker" v-bind="field" :rules="required" tabindex="-98"
+                                        ref="reminderAfterDaysIfPartialResponse"
+                                        name="reminderAfterDaysIfPartialResponse"
+                                        data-vv-name="reminderAfterDaysIfPartialResponse"
+                                        v-model="reminderAfterDaysIfPartialResponse">
+                                        <option value="null">
+                                            {{ $t('WebInterviewSettings.DoNotSend') }}
+                                        </option>
+                                        <option value="1">
+                                            {{ $t('WebInterviewSettings.AfterXDay', { count: 1 }) }}
+                                        </option>
+                                        <option value="2">
+                                            {{ $t('WebInterviewSettings.AfterXDay', { count: 2 }) }}
+                                        </option>
+                                        <option value="3">
+                                            {{ $t('WebInterviewSettings.AfterXDay', { count: 3 }) }}
+                                        </option>
+                                        <option value="5">
+                                            {{ $t('WebInterviewSettings.AfterXDay', { count: 5 }) }}
+                                        </option>
+                                        <option value="7">
+                                            {{ $t('WebInterviewSettings.AfterXWeek', { count: 1 }) }}
+                                        </option>
+                                        <option value="14">
+                                            {{ $t('WebInterviewSettings.AfterXWeek', { count: 2 }) }}
+                                        </option>
+                                    </select>
+                                </Field>
                             </div>
                             <div class="">
                                 <button type="submit" :disabled="!meta.dirty ? 'disabled' : null"
@@ -806,7 +828,7 @@ export default {
 
             //this.$validator.reset('emailTemplateData' + emailTemplate.value)
             const form = this.emailTemplateData[emailTemplate.value]
-            form.resetForm({ values: form.values })
+            form.resetForm()
         },
 
         async saveEmailTemplate(emailTemplate) {
@@ -939,7 +961,7 @@ export default {
                 this.cancelAllowSwitchToCawiForInterviewerEnabled
 
             const form = this.$refs.additionalSettings
-            form.resetForm({ values: form.values })
+            form.resetForm()
         },
         previewHtml(text) {
             var html = marked(this.previewText(text))
