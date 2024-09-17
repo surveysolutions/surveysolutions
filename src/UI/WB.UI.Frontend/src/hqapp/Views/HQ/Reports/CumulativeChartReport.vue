@@ -481,7 +481,7 @@ export default {
     },
 
     mounted() {
-        //     this.refreshData();
+        this.refreshData();
     },
 }
 </script>
