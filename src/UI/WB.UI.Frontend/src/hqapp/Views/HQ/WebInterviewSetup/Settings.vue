@@ -478,15 +478,6 @@
                         <Form v-slot="{ errors, meta }" ref="additionalSettings" v-on:submit.prevent="dummy"
                             :data-vv-scope="'additionalSettings'">
                             <div class="form-group mb-20">
-                                <Field v-slot="{ field }" name="terms" type="checkbox" :value="true"
-                                    :unchecked-value="false">
-                                    <label>
-                                        <input type="checkbox" name="terms" v-bind="field" :value="true" />
-                                        I agree
-                                    </label>
-                                </Field>
-                            </div>
-                            <div class="form-group mb-20">
                                 <Field v-slot="{ field }" name="spamProtectionIsEnabled" type="checkbox" :value="true"
                                     :unchecked-value="false">
                                     <input class="checkbox-filter" v-bind="field" v-validate="''" :value="true"
