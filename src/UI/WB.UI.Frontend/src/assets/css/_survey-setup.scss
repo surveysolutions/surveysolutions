@@ -70,7 +70,8 @@
 				border-left: none;
 			}
 		}
-		li.active > a{
+
+        li>a.active {
 			border: 2px solid #E5E5E5;
 			border-bottom-color: transparent;
 			border-radius: 0;
