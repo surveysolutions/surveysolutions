@@ -1,6 +1,11 @@
 <template>
     <div ref="editor"></div>
 </template>
+<style>
+.toastui-editor-tabs {
+    display: none;
+}
+</style>
 <script>
 
 import '@toast-ui/editor/dist/toastui-editor.css'
