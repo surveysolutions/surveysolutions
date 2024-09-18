@@ -128,7 +128,7 @@
                                 :class="{ active: emailTemplate.isActive }" role="tabpanel"
                                 class="tab-pane email-section">
                                 <Form :ref="el => { emailTemplateData[emailTemplate.value] = el }"
-                                    v-slot="{ errors, meta }" v-on:submit.prevent="dummy"
+                                    v-slot="{ errors, meta }" v-on:submit="dummy"
                                     :name="'emailTemplateData' + emailTemplate.value"
                                     :data-vv-scope="'emailTemplateData' + emailTemplate.value">
                                     <div class="email-block d-flex mb-30">
@@ -475,7 +475,7 @@
                 <div class="col-md-12">
                     <h3>{{ $t('WebInterviewSettings.AdditionalSettings') }}</h3>
                     <div style="padding-bottom: 20px">
-                        <Form v-slot="{ errors, meta }" ref="additionalSettings" v-on:submit.prevent="dummy"
+                        <Form v-slot="{ errors, meta }" ref="additionalSettings" v-on:submit="dummy"
                             :data-vv-scope="'additionalSettings'">
                             <div class="form-group mb-20">
                                 <Field v-slot="{ field }" name="spamProtectionIsEnabled"

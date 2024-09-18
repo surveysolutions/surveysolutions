@@ -98,7 +98,7 @@ export default {
         },
         refresh() {
             setTimeout(() => {
-                this.editor.moveCursorToStart()
+                //this.editor.moveCursorToStart(false)
             }, 100)
         },
     },
