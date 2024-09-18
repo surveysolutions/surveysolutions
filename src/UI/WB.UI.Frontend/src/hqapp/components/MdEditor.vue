@@ -16,7 +16,7 @@ import { escape, unescape } from 'lodash'
 
 export default {
     props: {
-        value: { type: String, required: true },
+        modelValue: { type: String, required: true },
         supportHtml: { type: Boolean, required: false, default: false },
     },
     data() {
@@ -27,7 +27,7 @@ export default {
         }
     },
     mounted() {
-        let val = this.value
+        let val = this.modelValue
         this.initialValue = val
         if (this.supportHtml != true) {
             val = unescape(val)
@@ -46,7 +46,7 @@ export default {
 
         this.editor = new Editor(options);
     },
-    destroyed() {
+    unmounted() {
         this.editor.off('change');
         this.editor.destroy();
     },
@@ -75,18 +75,17 @@ export default {
             }
         },
     },
-
     watch: {
-        value(newValue, oldValue) {
-            let val = newValue
-            if (val != this.value || val == this.initialValue) {
-                if (this.supportHtml != true) {
-                    val = unescape(val)
+        modelValue(newValue) {
+            if (newValue !== this.editor.getMarkdown()) {
+                try {
+                    this.editor.reset();
+                    this.editor.setMarkdown(newValue);
+                } catch (error) {
+                    console.error('Error applying markdown:', error);
                 }
-
-                this.editor.setMarkdown(val)
             }
-        },
+        }
     },
     expose: ['refresh'],
     methods: {
@@ -97,8 +96,9 @@ export default {
                 markDown = escape(markDown)
             }
 
-            if (this.value != markDown) {
-                this.$emit('input', markDown)
+            if (this.modelValue != markDown) {
+                //this.$emit('input', markDown)
+                this.$emit('update:modelValue', markDown);
             }
         },
         refresh() {
