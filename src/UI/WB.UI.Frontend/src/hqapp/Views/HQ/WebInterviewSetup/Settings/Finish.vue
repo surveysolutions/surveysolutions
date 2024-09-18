@@ -33,7 +33,7 @@
                         <Field v-slot="{ field }" name="finishInterviewDescription"
                             :value="webInterviewPageMessages['finishInterview'].text">
 
-                            <md-editor ref="finishInterview" data-vv-name="finishInterview"
+                            <md-editor ref="finishInterview" v-bind="field" data-vv-name="finishInterview"
                                 v-model="webInterviewPageMessages['finishInterview'].text">
                             </md-editor>
 
@@ -42,12 +42,12 @@
                     </div>
                     <div class="">
                         <button type="submit" :disabled="!meta.dirty ? 'disabled' : null"
-                            @click="savePageTextEditMode('finishPage', 'webSurveyHeader', 'finishInterview')"
+                            @click="savePageTextEditMode($refs.finishPage, 'webSurveyHeader', 'finishInterview')"
                             class="btn btn-md btn-success">
                             {{ $t('WebInterviewSettings.Save') }}
                         </button>
                         <button type="submit" :disabled="!meta.dirty ? 'disabled' : null"
-                            @click="cancelPageTextEditMode('finishPage', 'webSurveyHeader', 'finishInterview')"
+                            @click="cancelPageTextEditMode($refs.finishPage, 'webSurveyHeader', 'finishInterview')"
                             class="btn btn-md btn-link">
                             {{ $t('WebInterviewSettings.Cancel') }}
                         </button>

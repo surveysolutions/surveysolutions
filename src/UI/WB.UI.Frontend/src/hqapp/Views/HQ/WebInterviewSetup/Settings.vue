@@ -118,7 +118,7 @@
                             <li v-for="emailTemplate in emailTemplates" :key="emailTemplate.value"
                                 :class="{ active: emailTemplate.isActive }" role="presentation">
                                 <a href="javascript:void(0);" role="tab" data-bs-toggle="tab"
-                                    @click.stop.prevent="setActive(emailTemplate)">{{ emailTemplate.buttonTitle }}
+                                    @click.stop="setActive(emailTemplate)">{{ emailTemplate.buttonTitle }}
                                 </a>
                             </li>
                         </ul>

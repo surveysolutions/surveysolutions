@@ -40,12 +40,12 @@
 
                     <div class="">
                         <button type="submit" :disabled="!meta.dirty ? 'disabled' : null"
-                            @click="savePageTextEditMode('linkPage', 'linkWelcome', 'linkInvitation')"
+                            @click="savePageTextEditMode($refs.linkPage, 'linkWelcome', 'linkInvitation')"
                             class="btn btn-md btn-success">
                             {{ $t('WebInterviewSettings.Save') }}
                         </button>
                         <button type="submit" :disabled="!meta.dirty ? 'disabled' : null"
-                            @click="cancelPageTextEditMode('linkPage', 'linkWelcome', 'linkInvitation')"
+                            @click="cancelPageTextEditMode($refs.linkPage, 'linkWelcome', 'linkInvitation')"
                             class="btn btn-md btn-link">
                             {{ $t('WebInterviewSettings.Cancel') }}
                         </button>

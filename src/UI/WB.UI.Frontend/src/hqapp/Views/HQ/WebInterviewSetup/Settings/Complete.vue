@@ -46,12 +46,12 @@
                     </div>
                     <div class="">
                         <button type="submit" :disabled="!meta.dirty ? 'disabled' : null"
-                            @click="savePageTextEditMode('completePage', 'completeButton', 'completeNoteToSupervisor')"
+                            @click="savePageTextEditMode($refs.completePage, 'completeButton', 'completeNoteToSupervisor')"
                             class="btn btn-md btn-success">
                             {{ $t('WebInterviewSettings.Save') }}
                         </button>
                         <button type="submit" :disabled="!meta.dirty ? 'disabled' : null"
-                            @click="cancelPageTextEditMode('completePage', 'completeButton', 'completeNoteToSupervisor')"
+                            @click="cancelPageTextEditMode($refs.completePage, 'completeButton', 'completeNoteToSupervisor')"
                             class="btn btn-md btn-link">
                             {{ $t('WebInterviewSettings.Cancel') }}
                         </button>

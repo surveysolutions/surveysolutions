@@ -58,12 +58,12 @@
 
                     <div class="">
                         <button type="submit" :disabled="!meta.dirty ? 'disabled' : null"
-                            @click="savePageTextEditMode('resumePage', 'resumeWelcome', 'resumeInvitation', 'resumeButton')"
+                            @click="savePageTextEditMode($refs.resumePage, 'resumeWelcome', 'resumeInvitation', 'resumeButton')"
                             class="btn btn-md btn-success">
                             {{ $t('WebInterviewSettings.Save') }}
                         </button>
                         <button type="submit" :disabled="!meta.dirty ? 'disabled' : null"
-                            @click="cancelPageTextEditMode('resumePage', 'resumeWelcome', 'resumeInvitation', 'resumeButton')"
+                            @click="cancelPageTextEditMode($refs.resumePage, 'resumeWelcome', 'resumeInvitation', 'resumeButton')"
                             class="btn btn-md btn-link">
                             {{ $t('WebInterviewSettings.Cancel') }}
                         </button>

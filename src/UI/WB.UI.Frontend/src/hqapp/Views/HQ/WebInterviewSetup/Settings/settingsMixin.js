@@ -49,9 +49,9 @@ export default {
                 .replace(/%QUESTIONNAIRE%/g, this.questionnaireTitle)
         },
 
-        async savePageTextEditMode(scope, titleType, messageType, buttonText) {
+        async savePageTextEditMode(form, titleType, messageType, buttonText) {
             var self = this
-            var validationResult = await this.$validator.validateAll(scope)
+            var validationResult = await form.validate()
             if (validationResult) {
                 var editTitleText = this.webInterviewPageMessages[titleType]
                 var editDescriptionText = this.webInterviewPageMessages[messageType]
@@ -67,7 +67,7 @@ export default {
 
                     if (buttonText !== undefined)
                         self.webInterviewPageMessages[buttonText].cancelText = self.webInterviewPageMessages[buttonText].text
-                    self.$validator.reset(scope)
+                    form.resetForm({ values: form.values })
                 }
                 catch (error) {
                     self.$errorHandler(error, self)
@@ -77,7 +77,7 @@ export default {
                 }
             }
         },
-        cancelPageTextEditMode(scope, titleType, messageType, buttonText) {
+        cancelPageTextEditMode(form, titleType, messageType, buttonText) {
             var editTitleText = this.webInterviewPageMessages[titleType]
             var editDescriptionText = this.webInterviewPageMessages[messageType]
             editTitleText.text = editTitleText.cancelText
@@ -87,7 +87,7 @@ export default {
                 var editButtonText = this.webInterviewPageMessages[buttonText]
                 editButtonText.text = editButtonText.cancelText
             }
-            this.$validator.reset(scope)
+            form.resetForm()
         },
     },
 }

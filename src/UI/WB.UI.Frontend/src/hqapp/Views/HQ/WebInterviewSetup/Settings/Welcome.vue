@@ -1,7 +1,6 @@
 <template>
     <div role="tabpanel" class="tab-pane active page-preview-block" id="welcome">
-        <Form v-slot="{ errors, meta }" ref="welcomePage" class="" :data-vv-scope="'welcomePage'"
-            v-on:submit.prevent="dummy">
+        <Form v-slot="{ errors, meta }" ref="welcomePage" class="" :data-vv-scope="'welcomePage'" v-on:submit="dummy">
             <div class="d-flex f-row">
                 <div class="costomization-block">
                     <div class="row-element mb-30">
@@ -60,12 +59,12 @@
 
                     <div class="">
                         <button type="submit" :disabled="!meta.dirty ? 'disabled' : null"
-                            @click="savePageTextEditMode('welcomePage', 'welcomeText', 'invitation', 'startNewButton')"
+                            @click="savePageTextEditMode($refs.welcomePage, 'welcomeText', 'invitation', 'startNewButton')"
                             class="btn btn-md btn-success">
                             {{ $t('WebInterviewSettings.Save') }}
                         </button>
                         <button type="submit" :disabled="!meta.dirty ? 'disabled' : null"
-                            @click="cancelPageTextEditMode('welcomePage', 'welcomeText', 'invitation', 'startNewButton')"
+                            @click="cancelPageTextEditMode($refs.welcomePage, 'welcomeText', 'invitation', 'startNewButton')"
                             class="btn btn-md btn-link">
                             {{ $t('WebInterviewSettings.Cancel') }}
                         </button>
