@@ -166,7 +166,8 @@
                     <Field type="text" class="form-control" v-model.trim="editedQuantity" name="editedQuantity"
                         :rules="validateQuantity" :data-vv-as="$t('Assignments.Expected')" maxlength="5"
                         autocomplete="off" @keyup.enter="updateQuantity" id="newQuantity" placeholder="1"
-                        :disabled="!canEditQuantity" />
+                        :disabled="!canEditQuantity" :validateOnBlur="true" :validateOnChange="true"
+                        :validateOnInput="true" />
                     <span class="text-danger">
                         <ErrorMessage name="editedQuantity" />
                     </span>
