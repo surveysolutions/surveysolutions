@@ -3,7 +3,16 @@
 </template>
 
 <script>
+import { onMounted } from 'vue';
+
 export default {
-    name: 'App'
+    name: 'App',
+    setup() {
+        //TODO: Migration
+        //fix layout instead of recalculation
+        onMounted(() => {
+            window.ajustDetailsPanelHeight()
+        });
+    },
 };
 </script>
