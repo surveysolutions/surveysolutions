@@ -56,9 +56,9 @@
                     </h3>
                     <div class="welcome-page">
                         <ul class="nav nav-tabs" role="tablist" id="start-screen-example">
-                            <li role="presentation" class="active">
+                            <li role="presentation">
                                 <a href="#welcome" @click="setPageActive('welcomeTextTitle', 'welcomeTextDescription')"
-                                    aria-controls="welcome" role="tab" data-bs-toggle="tab">
+                                    aria-controls="welcome" role="tab" data-bs-toggle="tab" class="active">
                                     {{ $t('WebInterviewSettings.WelcomePage') }}
                                 </a>
                             </li>
