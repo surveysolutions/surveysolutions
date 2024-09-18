@@ -17,8 +17,7 @@
     <PackageReference Include="Anemonis.AspNetCore.RequestDecompression" Version="1.14.0" />
     <PackageReference Include="AntiXSS.NetStandard" Version="0.1.125" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
-    <PackageReference Include="AutoMapper" Version="12.0.1" />
-    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
     <PackageReference Include="HotChocolate.AspNetCore" Version="13.5.1" />
     <PackageReference Include="HotChocolate.AspNetCore.Authorization" Version="13.5.1" />
     <PackageReference Include="HotChocolate.Data" Version="13.5.1" />

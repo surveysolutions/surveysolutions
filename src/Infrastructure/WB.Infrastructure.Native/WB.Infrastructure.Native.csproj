@@ -35,11 +35,13 @@
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
     <PackageReference Include="Microsoft.Identity.Client" Version="4.63.0" />
+    <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.0.2" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="NHibernate" Version="5.5.2" />
     <PackageReference Include="Npgsql" Version="8.0.3" />
     <PackageReference Include="prometheus-net" Version="8.0.1" />
     <PackageReference Include="SixLabors.Fonts" Version="2.0.4" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.0.2" />
     <PackageReference Include="System.IO.Packaging" Version="8.0.0" />
   </ItemGroup>
 </Project>

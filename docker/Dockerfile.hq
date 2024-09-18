@@ -4,9 +4,11 @@ ARG INFO_VERSION=21.01
 ARG NODE=18
 ARG APK_FILES=build
 ARG FONTS="NotoSans-hinted.zip;NotoSansMyanmar-hinted.zip"
+ARG PLATFORM=amd64
+#amd64 #linux/arm64
 
 # Building WB.UI.Frontend application
-FROM --platform=amd64 node:$NODE as frontend
+FROM --platform=${PLATFORM} node:$NODE AS frontend
 
 WORKDIR /src/UI/WB.UI.Frontend
 COPY src/UI/WB.UI.Frontend/package*.json /src/UI/WB.UI.Frontend
@@ -28,7 +30,7 @@ COPY [ "src/Core/BoundedContexts/Headquarters/WB.Core.BoundedContexts.Headquarte
 RUN NODE_OPTIONS="--max-old-space-size=3072" npm run build -- -- --package
 
 # Building export
-FROM --platform=amd64 mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION} as export_builder
+FROM --platform=${PLATFORM} mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION}-alpine AS export_builder
 ARG VERSION
 ARG INFO_VERSION
 
@@ -74,7 +76,7 @@ RUN dotnet publish src/Services/Export/WB.Services.Export.Host \
     -c Release -o /export -p:Version="${VERSION}" -p:InformationalVersion="${INFO_VERSION}"
 
 # Building HQ 
-FROM --platform=amd64 mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION} as builder
+FROM --platform=${PLATFORM} mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION}-alpine AS builder
 ARG VERSION
 ARG INFO_VERSION
 
@@ -138,38 +140,54 @@ COPY [ "src/UI/WB.UI.Headquarters.Core",\
 
 COPY --from=frontend /src/UI/WB.UI.Frontend/dist/package/hq src/UI/WB.UI.Headquarters.Core
 
+#-r linux-x64 --self-contained
 RUN dotnet publish src/UI/WB.UI.Headquarters.Core \
     -c Release -o /hq -p:Version="${VERSION}" -p:InformationalVersion="${INFO_VERSION}"
 
 # Copy APK files if any
-FROM --platform=amd64 mcr.microsoft.com/dotnet/aspnet:${DOTNET_VERSION} as apks
+FROM --platform=${PLATFORM} mcr.microsoft.com/dotnet/aspnet:${DOTNET_VERSION}-alpine AS apks
 ARG APK_FILES
 COPY ${APK_FILES}/*.apk /apk/
 
 # include noto font into image
-FROM mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION} as fonts
-RUN apt-get update && apt-get install unzip -y --no-install-recommends
+FROM --platform=${PLATFORM} mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION}-alpine AS fonts_source
+RUN apk add --no-cache --virtual unzip
 
 ARG FONTS
 ENV FONTS_LIST=$FONTS
-RUN [ "/bin/bash" ,"-c", "export IFS=\";\"; for FONT in $FONTS_LIST; \
-    do wget -P /raw_fonts https://noto-website-2.storage.googleapis.com/pkgs/$FONT \
-    && cd /raw_fonts && unzip -o $FONT ; done"]
+RUN mkdir -p /raw_fonts
+RUN [ "/bin/ash" ,"-c", "export IFS=\";\"; for FONT in $FONTS_LIST; \
+   do wget -P /raw_fonts https://noto-website-2.storage.googleapis.com/pkgs/$FONT \
+   && cd /raw_fonts && unzip -o $FONT ; done"]
 
 # Building runtime 
-FROM mcr.microsoft.com/dotnet/aspnet:${DOTNET_VERSION}
+FROM mcr.microsoft.com/dotnet/aspnet:${DOTNET_VERSION}-alpine
+ENV DOTNET_RUNNING_IN_CONTAINER=true
+ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
 
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends \
-    gdal-bin \
+RUN apk add --no-cache \ 
+    \
+    # .NET dependencies
+    krb5-libs \
+    libgcc \
+    libintl \
+    libssl3 \
+    libstdc++ \
+    zlib \
+    \
+    icu-libs \ 
+    icu-data-full \
+    \    
+    gdal \
+    gdal-tools \
     ffmpeg \
     curl \
-    libfontconfig1 \
+    fontconfig \
     libgdiplus \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+    binutils \
+    && rm -rf /var/cache/apk/*
 
-COPY --from=fonts /raw_fonts /usr/share/fonts
+COPY --from=fonts_source /raw_fonts /usr/share/fonts
 
 LABEL org.opencontainers.image.title="Headquaters All in One"
 LABEL org.opencontainers.image.description="Survey Solutions Headquarters with Export Service"
