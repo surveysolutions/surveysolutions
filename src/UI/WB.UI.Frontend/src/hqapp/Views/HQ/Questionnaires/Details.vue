@@ -209,7 +209,7 @@
                 <template v-slot:actions>
                     <div>
                         <button type="button" class="btn btn-danger" v-bind:disabled="model.isObserving"
-                            @click="recordAudioSend">
+                            @click="recordAudioSend(true)">
                             {{ $t('Common.Ok') }}
                         </button>
                         <button type="button" class="btn btn-link" data-bs-dismiss="modal" @click="cancelSetAudio">
@@ -297,7 +297,8 @@ export default {
                     backdrop: 'static',
                     keyboard: false,
                 })
-            else return this.recordAudioSend()
+            else
+                return this.recordAudioSend(false)
         },
         criticalityLevelChange() {
             this.criticalityLevel = find(this.$config.model.criticalityLevels, { key: this.model.criticalityLevel })
@@ -315,12 +316,15 @@ export default {
                 this.$refs.criticalityLevelModal.hide();
             }
         },
-        async recordAudioSend() {
+        async recordAudioSend(needToCloseModal) {
             const response = await this.$hq
                 .Questionnaire(this.model.questionnaireId, this.model.version)
                 .AudioAudit(this.audioAudit)
-            if (response.status !== 204) this.audioAudit = !this.audioAudit
-            this.$refs.audioAuditModal.hide()
+            if (response.status !== 204)
+                this.audioAudit = !this.audioAudit
+
+            if (needToCloseModal)
+                this.$refs.audioAuditModal.hide()
         },
         cancelSetAudio() {
             this.audioAudit = false
