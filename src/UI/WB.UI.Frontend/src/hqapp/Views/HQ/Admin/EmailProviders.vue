@@ -35,7 +35,7 @@
                                 {{ $t('Settings.EmailProvider_ReplyAddress') }}
                             </label>
                             <div class="field" :class="{ answered: replyAddress }">
-                                <Field data-vv-as="reply email address" :rules="email" name="replyAddress"
+                                <Field data-vv-as="reply email address" rules="email" name="replyAddress"
                                     id="replyAddress" v-model="replyAddress" type="text"
                                     class="form-control with-clear-btn" maxlength="200" />
                                 <button type="button" @click="replyAddress = null" class="btn btn-link btn-clear">

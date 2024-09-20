@@ -14,7 +14,7 @@
                                 {{ $t('Assignments.CreatingNewAssignment', { questionnaire: questionnaireTitle }) }}
                                 <span :title="$t('Reports.Version')">({{ this.$t('Assignments.QuestionnaireVersion', {
                                     version: this.questionnaireVersion
-                                    }) }})</span>
+                                }) }})</span>
                             </h2>
                         </div>
                     </div>
@@ -98,7 +98,7 @@
                                     <div class="field answered">
                                         <Field v-model="emailQuestion.answer"
                                             :title="this.$t('Assignments.EmailExplanation')"
-                                            :placeholder="$t('Assignments.EnterEmail')" :rules="email" name="email"
+                                            :placeholder="$t('Assignments.EnterEmail')" rules="email" name="email"
                                             type="text" autocomplete="off" class="field-to-fill" />
                                     </div>
                                 </div>
