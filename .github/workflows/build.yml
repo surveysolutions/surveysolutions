@@ -156,7 +156,7 @@ jobs:
         -ArcGisApiKey "${{ secrets.ARCGIS_API_KEY }}"
        
     - name: Publish
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: Mobile Apps
         path: ${{ github.workspace }}/artifacts
@@ -194,7 +194,7 @@ jobs:
       - name: Download mobile artifacts
         if: ${{ matrix.task == 'DockerHq' }}
         id: download
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: Mobile Apps
           path: artifacts
@@ -238,7 +238,7 @@ jobs:
 
       - name: Download mobile artifacts
         id: download
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: Mobile Apps
           path: installer/artifacts
@@ -308,7 +308,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Publish
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: Windows Installer
           path: ${{ steps.build-installer.outputs.filename }}
