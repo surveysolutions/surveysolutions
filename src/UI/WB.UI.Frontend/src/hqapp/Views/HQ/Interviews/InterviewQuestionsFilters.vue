@@ -21,7 +21,7 @@
                         <Checkbox v-for="questionnaireItem in questionnaireItemsList"
                             :key="'cb_' + questionnaireItem.variable"
                             :label="`${sanitizeHtml(questionnaireItem.title)}`" :value="isChecked(questionnaireItem)"
-                            :name="'check_' + questionnaireItem.variable" @input="check(questionnaireItem)" />
+                            :name="'check_' + questionnaireItem.variable" @input.self="check(questionnaireItem)" />
                     </div>
                 </div>
             </form>
