@@ -11,10 +11,10 @@
                             <div class="field"
                                 :class="{ 'answered': webInterviewPageMessages['completeNoteToSupervisor'].text }">
                                 <Field as="textarea" v-autosize
-                                    v-model="webInterviewPageMessages['completeNoteToSupervisor'].text"
-                                    :rules="required" name="completeNoteToSupervisor"
-                                    data-vv-name="completeNoteToSupervisor" ref="completeNoteToSupervisor"
-                                    :min-height="77" maxlength="200" class="form-control js-elasticArea font-bold">
+                                    v-model="webInterviewPageMessages['completeNoteToSupervisor'].text" rules="required"
+                                    name="completeNoteToSupervisor" data-vv-name="completeNoteToSupervisor"
+                                    ref="completeNoteToSupervisor" :min-height="77" maxlength="200"
+                                    class="form-control js-elasticArea font-bold">
                                 </Field>
                                 <button type="button"
                                     @click="webInterviewPageMessages['completeNoteToSupervisor'].text = ''"
@@ -33,7 +33,7 @@
                         <div class="form-group" :class="{ 'has-error': errors.completeButton }">
                             <div class="field" :class="{ 'answered': webInterviewPageMessages['completeButton'].text }">
                                 <Field type="text" v-model="webInterviewPageMessages['completeButton'].text"
-                                    :rules="required" name="completeButton" data-vv-name="completeButton"
+                                    rules="required" name="completeButton" data-vv-name="completeButton"
                                     ref="completeButton" maxlength="200" class="form-control" />
                                 <button type="button" @click="webInterviewPageMessages['completeButton'].text = ''"
                                     class="btn btn-link btn-clear">

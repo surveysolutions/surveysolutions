@@ -98,7 +98,7 @@
                     </h2>
                     <div class="radio-accordion mb-30">
                         <div class="radio mb-1">
-                            <Field :rules="required" name="provider" class="wb-radio" type="radio" v-model="provider"
+                            <Field rules="required" name="provider" class="wb-radio" type="radio" v-model="provider"
                                 ref="provider" id="provider_none" value="none" />
                             <label for="provider_none">
                                 <span class="tick"></span>
@@ -113,7 +113,7 @@
                             </div>
                         </div>
                         <div class="radio mb-1">
-                            <Field :rules="required" class="wb-radio" name="provider" ref="provider" type="radio"
+                            <Field rules="required" class="wb-radio" name="provider" ref="provider" type="radio"
                                 v-model="provider" id="provider_amazon" value="amazon" />
                             <label for="provider_amazon">
                                 <span class="tick"></span>
@@ -136,7 +136,7 @@
                                             )
                                         }}</label>
                                         <div class="field" :class="{ answered: awsAccessKeyId }">
-                                            <Field data-vv-as="AWS access key id" :rules="required"
+                                            <Field data-vv-as="AWS access key id" rules="required"
                                                 class="form-control with-clear-btn" name="awsAccessKeyId"
                                                 id="awsAccessKeyId" type="text" v-model="awsAccessKeyId"
                                                 maxlength="200" />
@@ -165,7 +165,7 @@
                                         <div class="field" :class="{
                                             answered: awsSecretAccessKey,
                                         }">
-                                            <Field :rules="required" data-vv-as="AWS secret access key"
+                                            <Field rules="required" data-vv-as="AWS secret access key"
                                                 name="awsSecretAccessKey" id="awsSecretAccessKey"
                                                 v-model="awsSecretAccessKey" class="form-control with-clear-btn"
                                                 type="text" maxlength="200" />
@@ -191,7 +191,7 @@
                                             {{ $t('Settings.EmailProvider_AwsRegion') }}
                                         </label>
                                         <div class="field" :class="{ answered: awsRegion }">
-                                            <select :rules="required" data-vv-as="AWS region" name="awsRegion"
+                                            <select rules="required" data-vv-as="AWS region" name="awsRegion"
                                                 id="awsRegion" v-model="awsRegion" class="form-control">
                                                 <option :key="awsRegion.key" :value="awsRegion.key" v-for="awsRegion in $config
                                                     .model.awsRegions" v-html="awsRegion.value" />
@@ -209,7 +209,7 @@
                             </div>
                         </div>
                         <div class="radio mb-1">
-                            <Field :rules="required" class="wb-radio" name="provider" ref="provider" type="radio"
+                            <Field rules="required" class="wb-radio" name="provider" ref="provider" type="radio"
                                 v-model="provider" id="provider_sendgrid" value="sendgrid" />
                             <label for="provider_sendgrid">
                                 <span class="tick"></span>
@@ -230,7 +230,7 @@
                                             {{ $t('Settings.EmailProvider_SendGridApiKey') }}
                                         </label>
                                         <div class="field" :class="{ answered: sendGridApiKey }">
-                                            <Field :rules="required" data-vv-as="API key" name="sendGridApiKey"
+                                            <Field rules="required" data-vv-as="API key" name="sendGridApiKey"
                                                 class="form-control with-clear-btn" id="sendGridApiKey" type="text"
                                                 v-model="sendGridApiKey" maxlength="200" />
                                             <button @click="sendGridApiKey = null" type="button"
@@ -250,7 +250,7 @@
                             </div>
                         </div>
                         <div class="radio">
-                            <Field :rules="required" class="wb-radio" name="provider" ref="provider" type="radio"
+                            <Field rules="required" class="wb-radio" name="provider" ref="provider" type="radio"
                                 v-model="provider" id="provider_smtp" value="smtp" />
                             <label for="provider_smtp">
                                 <span class="tick"></span>
@@ -268,7 +268,7 @@
                                     <div class="form-group">
                                         <label class="h5">{{ $t('Settings.EmailProvider_SmtpHost',) }}</label>
                                         <div class="field" :class="{ answered: smtpHost, }">
-                                            <Field data-vv-as="SMTP host" :rules="required"
+                                            <Field data-vv-as="SMTP host" rules="required"
                                                 class="form-control with-clear-btn" name="smtpHost" id="smtpHost"
                                                 type="text" v-model="smtpHost" maxlength="200" />
                                             <button @click="smtpHost = null" type="button"

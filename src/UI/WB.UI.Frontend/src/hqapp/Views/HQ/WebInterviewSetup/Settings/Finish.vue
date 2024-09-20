@@ -11,7 +11,7 @@
                             <div class="field"
                                 :class="{ 'answered': webInterviewPageMessages['webSurveyHeader'].text }">
                                 <Field as="textarea" v-autosize
-                                    v-model="webInterviewPageMessages['webSurveyHeader'].text" :rules="required"
+                                    v-model="webInterviewPageMessages['webSurveyHeader'].text" rules="required"
                                     name="webSurveyHeader" data-vv-name="webSurveyHeader" ref="webSurveyHeader"
                                     :min-height="77" maxlength="200" class="form-control js-elasticArea font-bold"
                                     placeholder="Please enter the main text">

@@ -147,7 +147,7 @@
                                                         :class="{ 'has-error': errors.subject }">
                                                         <div class="field" :class="{ answered: emailTemplate.subject }">
                                                             <Field type="text" v-model="emailTemplate.subject"
-                                                                data-vv-as="Please enter the subject" :rules="required"
+                                                                data-vv-as="Please enter the subject" rules="required"
                                                                 name="subject" data-vv-name="subject" maxlength="200"
                                                                 class="form-control with-clear-btn"
                                                                 placeholder="Please enter the subject" />
@@ -189,8 +189,8 @@
                                                         <div class="field" :class="{ answered: emailTemplate.message }">
                                                             <Field as="textarea" v-autosize
                                                                 v-model="emailTemplate.message"
-                                                                data-vv-as="Please enter the main text"
-                                                                :rules="required" name="message" data-vv-name="message"
+                                                                data-vv-as="Please enter the main text" rules="required"
+                                                                name="message" data-vv-name="message"
                                                                 :ref="'message' + emailTemplate.value" maxlength="3000"
                                                                 :min-height="79" class="form-control js-elasticArea"
                                                                 placeholder="Please enter the main text">
@@ -225,7 +225,7 @@
                                                                 name="passwordDescription"
                                                                 data-vv-name="passwordDescription"
                                                                 data-vv-as="Please enter password description"
-                                                                :rules="required" maxlength="500"
+                                                                rules="required" maxlength="500"
                                                                 class="form-control with-clear-btn"
                                                                 placeholder="Please enter password description" />
                                                             <button type="button"
@@ -249,7 +249,7 @@
                                                             :class="{ answered: emailTemplate.linkText }">
                                                             <span class="wrapper-dynamic">
                                                                 <Field type="text" v-model="emailTemplate.linkText"
-                                                                    :rules="required" name="linkText"
+                                                                    rules="required" name="linkText"
                                                                     data-vv-name="linkText" maxlength="200"
                                                                     class="form-control with-clear-btn width-dynamic"
                                                                     placeholder="Please enter the text" />
@@ -542,7 +542,7 @@
                                     <div class="mb-1">
                                         {{ $t('WebInterviewSettings.SendWithNoResponse') }}
                                     </div>
-                                    <select class="selectpicker" v-bind="field" :rules="required" tabindex="-98"
+                                    <select class="selectpicker" v-bind="field" rules="required" tabindex="-98"
                                         ref="reminderAfterDaysIfNoResponse" name="reminderAfterDaysIfNoResponse"
                                         data-vv-name="reminderAfterDaysIfNoResponse"
                                         v-model="reminderAfterDaysIfNoResponse">
@@ -576,7 +576,7 @@
                                     <div class="mb-1">
                                         {{ $t('WebInterviewSettings.SendWithPartialResponse') }}
                                     </div>
-                                    <select class="selectpicker" v-bind="field" :rules="required" tabindex="-98"
+                                    <select class="selectpicker" v-bind="field" rules="required" tabindex="-98"
                                         ref="reminderAfterDaysIfPartialResponse"
                                         name="reminderAfterDaysIfPartialResponse"
                                         data-vv-name="reminderAfterDaysIfPartialResponse"

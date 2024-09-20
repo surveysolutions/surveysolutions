@@ -10,7 +10,7 @@
                         <div class="form-group" :class="{ 'has-error': errors.welcomeTextTitle }">
                             <div class="field" :class="{ 'answered': webInterviewPageMessages['welcomeText'].text }">
                                 <Field as="textarea" v-autosize name="welcomeTextTitle"
-                                    v-model="webInterviewPageMessages['welcomeText'].text" :rules="required"
+                                    v-model="webInterviewPageMessages['welcomeText'].text" rules="required"
                                     data-vv-name="welcomeTextTitle" ref="welcomeTextTitle" :min-height="77"
                                     maxlength="200" class="form-control js-elasticArea font-bold"
                                     placeholder="Please enter the main text">
@@ -45,7 +45,7 @@
                         <div class="form-group" :class="{ 'has-error': errors.startNewButton }">
                             <div class="field" :class="{ 'answered': webInterviewPageMessages['startNewButton'].text }">
                                 <Field type="text" v-model="webInterviewPageMessages['startNewButton'].text"
-                                    name="startNewButton" :rules="required" data-vv-name="startNewButton"
+                                    name="startNewButton" rules="required" data-vv-name="startNewButton"
                                     ref="startNewButton" maxlength="200" class="form-control" />
                                 <button type="button" @click="webInterviewPageMessages['startNewButton'].text = ''"
                                     class="btn btn-link btn-clear">
