@@ -39,6 +39,8 @@ export default {
         }
     },
 
+    emits: ['change'],
+
     methods: {
         getTypeaheadValues(options) {
             return options.map(o => {

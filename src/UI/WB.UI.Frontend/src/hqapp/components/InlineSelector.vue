@@ -17,7 +17,7 @@ export default {
             type: Array,
             required: true,
         },
-        value: {
+        modelValue: {
             required: true,
         },
         keySelector: {
@@ -31,22 +31,25 @@ export default {
         },
     },
 
+    emits: ['update:modelValue'],
+
     methods: {
         select(item) {
-            this.$emit('input', item)
+            //this.$emit('input', item)
+            this.$emit('update:modelValue', item);
         },
     },
 
     computed: {
         text() {
-            if (this.value == null) {
+            if (this.modelValue == null) {
                 if (this.noEmpty && this.options.length > 0) {
                     this.select(this.options[0])
                     return ''
                 }
                 return this.$t('Common.SelectOption')
             }
-            return this.value[this.valueSelector]
+            return this.modelValue[this.valueSelector]
         },
     },
 

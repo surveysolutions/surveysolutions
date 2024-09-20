@@ -18,7 +18,10 @@ export default {
         },
 
         modelValue: {
-            required: true,
+            required: false,
+        },
+        value: {
+            required: false,
         },
 
         label: String,
@@ -28,15 +31,15 @@ export default {
         classes: String,
     },
 
-    emits: ['update:modelValue'],
+    emits: ['input', 'update:modelValue'],
 
     methods: {
         checkedChange(ev) {
-            /*this.$emit('input', ev.target.checked, {
+            this.$emit('input', ev.target.checked, {
                 checked: ev.target.checked,
                 selected: this.radioGroup,
                 name: this.name,
-            })*/
+            })
             this.$emit('update:modelValue', ev.target.checked);
         },
     },
@@ -44,7 +47,7 @@ export default {
     computed: {
         checked() {
             if (this.inputType == 'checkbox') {
-                return this.modelValue
+                return this.modelValue !== undefined ? this.modelValue : this.value;
             }
 
             return this.modelValue == this.radioGroup

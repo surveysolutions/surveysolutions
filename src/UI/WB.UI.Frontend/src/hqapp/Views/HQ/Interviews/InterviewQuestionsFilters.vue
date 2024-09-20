@@ -116,6 +116,8 @@ export default {
         exposedValuesFilter: { type: Object },
     },
 
+    emits: ['change', 'changeFilter'],
+
     apollo: {
         questionnaireItems: {
             query: gql`query questionnaireItems($workspace: String!, $id: UUID!, $version: Long!) {
