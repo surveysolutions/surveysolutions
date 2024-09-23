@@ -1,5 +1,7 @@
 import { browserLanguage } from '~/shared/helpers'
 
+import jquery from '~/shared/jquery'
+
 import 'bootstrap'
 import * as bootstrap from 'bootstrap'
 
@@ -10,8 +12,8 @@ import 'toastr/build/toastr.css'
 //import '@ag-grid-community/styles/ag-grid.css'
 //import '@ag-grid-community/styles/ag-theme-bootstrap.css'
 
-import $ from 'jquery';
-window.jQuery = $;
+//import $ from 'jquery';
+//window.jQuery = $;
 
 import moment from 'moment'
 moment.locale(browserLanguage)

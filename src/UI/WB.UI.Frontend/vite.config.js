@@ -237,9 +237,9 @@ export default defineConfig(({ mode, command }) => {
             'vue-page-title',
             '@googlemaps/markerclusterer'
         ],
-        optimizeDeps: {
-            include: ['jquery'],
-        },
+        //optimizeDeps: {
+        //include: ['jquery'],
+        //},
         plugins: [
             vue(
                 {
@@ -347,12 +347,12 @@ export default defineConfig(({ mode, command }) => {
                 maxParallelFileOps: 1,
                 cache: false,
                 plugins: [
-                    inject({
+                    /*inject({
                         jQuery: "jquery",
                         //"window.jQuery": "jquery",
                         //"window.$": "jquery",
                         $: "jquery"
-                    })
+                    })*/
                 ],
                 output: {
                     assetFileNames: (assetInfo) => {

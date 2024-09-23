@@ -1,5 +1,4 @@
-import $ from 'jquery';
-window.jQuery = $;
+import $ from '~/shared/jquery'
 
 $.fn.preventDoubleSubmission = function () {
     $(this).on('submit', function (e) {

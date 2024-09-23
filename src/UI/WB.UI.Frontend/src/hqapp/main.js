@@ -1,3 +1,4 @@
+import jquery from '~/shared/jquery'
 import 'bootstrap'
 import * as bootstrap from 'bootstrap'
 //import "bootstrap/scss/_functions.scss";
