@@ -11,6 +11,7 @@ export default {
         //TODO: Migration
         //fix layout instead of recalculation
         onMounted(() => {
+            window.ajustNoticeHeight()
             window.ajustDetailsPanelHeight()
         });
     },
