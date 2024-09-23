@@ -17,8 +17,9 @@ $.fn.preventDoubleSubmission = function () {
 }
 
 window.ajustNoticeHeight = function () {
-    var height = $('.view-mode').outerHeight()
-    $('.view-mode + main .container-fluid .panel-details').css('padding-top', height)
+    const height = $('.view-mode').outerHeight()
+    const el = $('.view-mode + div main .container-fluid .panel-details')
+    el.css('padding-top', height)
 }
 window.ajustDetailsPanelHeight = function () {
     var height = $('.view-mode').outerHeight()
