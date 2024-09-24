@@ -187,8 +187,8 @@
                                         required: true,
                                         min_value: 1,
                                         max_value: 1000,
-                                    }" name="accuracy" id="interviewerGeographyQuestionAccuracyInMeters"
-                                    type="number" />
+                                    }" :validateOnChange="true" :validateOnInput="true" name="accuracy"
+                                    id="interviewerGeographyQuestionAccuracyInMeters" type="number" />
                             </div>
                             <button type="button" class="btn btn-success" :disabled="geographyQuestionAccuracyInMeters ==
                                 geographyQuestionAccuracyInMetersCancel ||
@@ -230,14 +230,14 @@
                                         required: true,
                                         min_value: 5,
                                         max_value: 1000,
-                                    }" id="interviewerGeographyQuestionPeriodInSeconds" name="period" type="number" />
+                                    }" :validateOnChange="true" :validateOnInput="true"
+                                    id="interviewerGeographyQuestionPeriodInSeconds" name="period" type="number" />
                             </div>
                             <button type="button" class="btn btn-success" :disabled="geographyQuestionPeriodInSeconds ==
                                 geographyQuestionPeriodInSecondsCancel ||
                                 geographyQuestionPeriodInSeconds < 5 ||
                                 geographyQuestionPeriodInSeconds > 1000 ||
-                                meta.valid == false"
-                                @click="updateGeographyQuestionPeriodInSeconds">
+                                meta.valid == false" @click="updateGeographyQuestionPeriodInSeconds">
                                 {{ $t('Common.Save') }}
                             </button>
                             <button type="button" class="btn btn-link"
