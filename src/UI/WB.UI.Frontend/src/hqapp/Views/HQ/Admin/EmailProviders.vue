@@ -11,8 +11,10 @@
                                 {{ $t('Settings.EmailProvider_SenderAddress') }}
                             </label>
                             <div class="field" :class="{ answered: senderAddress }">
-                                <Field label="email address" :rules="'required_if:provider,amazon,sendgrid,smtp|email'"
-                                    name="senderAddress" id="senderAddress" v-model="senderAddress" type="text"
+                                <Field label="email address" :rules="{
+                                    required: provider == 'amazon' || provider == 'sendgrid' || provider == 'smtp',
+                                    email: true
+                                }" name="senderAddress" id="senderAddress" v-model="senderAddress" type="text"
                                     class="form-control with-clear-btn" maxlength="200" />
                                 <button type="button" @click="senderAddress = null" class="btn btn-link btn-clear">
                                     <span></span>
@@ -52,8 +54,9 @@
                             {{ $t('Settings.EmailProvider_SenderName') }}
                         </label>
                         <div class="field" :class="{ answered: senderName }">
-                            <Field label="sender name" :rules="'required_if:provider,amazon,sendgrid,smtp'
-                                " name="senderName" id="senderName" v-model="senderName" type="text"
+                            <Field label="sender name"
+                                :rules="{ required: provider == 'amazon' || provider == 'sendgrid' || provider == 'smtp' }"
+                                name="senderName" id="senderName" v-model="senderName" type="text"
                                 class="form-control with-clear-btn" maxlength="200" />
                             <button type="button" @click="senderName = null" class="btn btn-link btn-clear">
                                 <span></span>
@@ -71,8 +74,9 @@
                             {{ $t('Settings.EmailProvider_Address') }}
                         </label>
                         <div class="field" :class="{ answered: address }">
-                            <Field label="address" :rules="'required_if:provider,amazon,sendgrid,smtp'
-                                " name="address" id="address" v-model="address" type="text"
+                            <Field label="address"
+                                :rules="{ required: provider == 'amazon' || provider == 'sendgrid' || provider == 'smtp' }"
+                                name="address" id="address" v-model="address" type="text"
                                 class="form-control with-clear-btn" maxlength="200" />
                             <button type="button" @click="address = null" class="btn btn-link btn-clear">
                                 <span></span>
