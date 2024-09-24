@@ -1,4 +1,5 @@
-﻿using WB.Core.BoundedContexts.Headquarters.Views;
+﻿using System.ComponentModel;
+using WB.Core.BoundedContexts.Headquarters.Views;
 
 namespace WB.Core.BoundedContexts.Headquarters.ValueObjects
 {
@@ -8,6 +9,8 @@ namespace WB.Core.BoundedContexts.Headquarters.ValueObjects
         public string SenderAddress{ get; set; }
         public string AwsAccessKeyId{ get; set; }
         public string AwsSecretAccessKey{ get; set; }
+        
+        [DefaultValue("us-east-1")]
         public string AwsRegion{ get; set; } = "us-east-1";
         public string SendGridApiKey{ get; set; }
         public string SenderName{ get; set; }
@@ -16,6 +19,8 @@ namespace WB.Core.BoundedContexts.Headquarters.ValueObjects
         public string SmtpHost{ get; set; }
         public int SmtpPort{ get; set; }
         public bool SmtpTlsEncryption{ get; set; }
+
+        [DefaultValue(true)]
         public bool SmtpAuthentication { get; set; } = true;
         public string SmtpUsername{ get; set; }
         public string SmtpPassword{ get; set; }

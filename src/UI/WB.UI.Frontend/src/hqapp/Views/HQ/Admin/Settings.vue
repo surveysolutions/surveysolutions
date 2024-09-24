@@ -84,8 +84,8 @@
                         {{ $t('Common.Delete') }}
                     </button>
                     <span class="text-success" v-if="globalNoticeUpdated">{{
-                        $t('Settings.GlobalNoteSaved')
-                        }}</span>
+        $t('Settings.GlobalNoteSaved')
+    }}</span>
                 </div>
             </form>
         </div>
@@ -105,10 +105,10 @@
                             {{ $t('Settings.AllowInterviewerUpdateProfile') }}
                             <p style="font-weight: normal">
                                 {{
-                                    $t(
-                                        'Settings.AllowInterviewerUpdateProfileDesc',
-                                    )
-                                }}
+        $t(
+            'Settings.AllowInterviewerUpdateProfileDesc',
+        )
+    }}
                             </p>
                         </label>
                     </div>
@@ -270,11 +270,11 @@
                                 name="esriKey" />
                         </div>
                         <button type="button" class="btn btn-success" :disabled="esriApiKey ==
-                            esriApiKeyInitial" @click="updateEsriKApiKey">
+        esriApiKeyInitial" @click="updateEsriKApiKey">
                             {{ $t('Common.Save') }}
                         </button>
                         <button type="button" class="btn btn-link" :disabled="esriApiKey ==
-                            esriApiKeyInitial" @click="cancelEsriKApiKey">
+        esriApiKeyInitial" @click="cancelEsriKApiKey">
                             {{ $t('Common.Cancel') }}
                         </button>
                     </div>

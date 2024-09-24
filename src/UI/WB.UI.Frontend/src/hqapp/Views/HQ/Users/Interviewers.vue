@@ -16,7 +16,7 @@
                 <FilterBlock v-if="model.showSupervisorColumn" :title="$t('Pages.Interviewers_SupervisorTitle')">
                     <Typeahead ref="supervisorControl" control-id="supervisor" data-vv-name="supervisor"
                         data-vv-as="supervisor" :placeholder="$t('Common.AllSupervisors')" :value="supervisor"
-                        :fetch-url="$config.model.supervisorsUrl" :selectedValue="this.query.supervisor"
+                        :fetch-url="$config.model.supervisorsUrl" :selectedValue="query.supervisor"
                         v-on:selected="supervisorSelected" />
                 </FilterBlock>
 

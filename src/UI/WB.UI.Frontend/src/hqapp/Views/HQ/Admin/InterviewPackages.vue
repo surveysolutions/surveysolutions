@@ -65,8 +65,7 @@
                 <div>
                     <button type="button" class="btn btn-primary" @click="putReasonAsync" :disabled="!reason">{{
         $t("Common.Ok") }}</button>
-                    <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
-                        }}</button>
+                    <button type="button" class="btn btn-link" data-dismiss="modal">{{ $t("Common.Cancel") }}</button>
                 </div>
             </template>
         </ModalFrame>

@@ -1,9 +1,9 @@
 <template>
     <HqLayout :title="$config.model.title" :hasFilter="false" :topicButton="$t('Dashboard.ImportTemplate')"
         :topicButtonRef="!$config.model.isObserver
-            ? $config.model.importQuestionnaireUrl
-            : ''
-            ">
+        ? $config.model.importQuestionnaireUrl
+        : ''
+        ">
         <template v-slot:subtitle>
             <ol class="list-unstyled">
                 <li>{{ $t('Dashboard.SurveySetupIntroMessage1') }}</li>

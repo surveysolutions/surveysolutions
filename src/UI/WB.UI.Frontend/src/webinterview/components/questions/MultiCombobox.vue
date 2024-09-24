@@ -18,10 +18,8 @@
                         v-if="row.attachmentName" />
                 </div>
 
-                <div class="form-group" v-if="!allAnswersGiven">
-                    <div class="field" :class="{ answered: $me.isAnswered }">
-                        <wb-typeahead :questionId="$me.id" @input="appendCompboboxItem" :optionsSource="optionsSource"
-                            :watermark="!$me.acceptAnswer && !$me.isAnswered ? $t('Details.NoAnswer') : null" />
+                <div class="form-group" v-if="($me.acceptAnswer && !allAnswersGiven) || (!$me.acceptAnswer && !$me.isAnswered)">                    <div class="field" :class="{ answered: $me.isAnswered }">
+                        <wb-typeahead :disabled="!$me.acceptAnswer" :questionId="$me.id" @input="appendCompboboxItem" :optionsSource="optionsSource"                            :watermark="!$me.acceptAnswer && !$me.isAnswered ? $t('Details.NoAnswer') : null" />
                     </div>
                 </div>
                 <wb-lock />
@@ -64,7 +62,7 @@ export default {
         },
         allAnswersGiven() {
             return this.$me.maxSelectedAnswersCount && this.$me.answer.length >= this.$me.maxSelectedAnswersCount
-        },
+        }
     },
     methods: {
         isProtected(val) {

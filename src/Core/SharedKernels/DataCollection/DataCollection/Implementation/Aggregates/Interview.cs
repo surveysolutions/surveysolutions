@@ -694,6 +694,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .RequireAnswerCanBeChanged();
 
             var questionIdentity = new Identity(questionId, rosterVector);
+            new InterviewPermissionsInvariants(this.properties, questionIdentity, this.Tree)
+                .RequireCanAnswer();
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
@@ -716,6 +718,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .RequireAnswerCanBeChanged();
 
             var questionIdentity = new Identity(questionId, rosterVector);
+            new InterviewPermissionsInvariants(this.properties, questionIdentity, this.Tree)
+                .RequireCanAnswer();
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
@@ -740,6 +744,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .RequireAnswerCanBeChanged();
 
             var questionIdentity = new Identity(questionId, rosterVector);
+            new InterviewPermissionsInvariants(this.properties, questionIdentity, this.Tree)
+                .RequireCanAnswer();
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
@@ -761,6 +767,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .RequireAnswerCanBeChanged();
 
             var questionIdentity = new Identity(questionId, rosterVector);
+            new InterviewPermissionsInvariants(this.properties, questionIdentity, this.Tree)
+                .RequireCanAnswer();
+            
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
             new InterviewQuestionInvariants(questionIdentity, questionnaire, this.Tree, questionOptionsRepository)
@@ -781,6 +790,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .RequireAnswerCanBeChanged();
 
             var questionIdentity = new Identity(questionId, rosterVector);
+            new InterviewPermissionsInvariants(this.properties, questionIdentity, this.Tree)
+                .RequireCanAnswer();
+
+            new InterviewPermissionsInvariants(this.properties, questionIdentity, this.Tree)
+                .RequireCanAnswer();
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
@@ -833,6 +847,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .RequireAnswerCanBeChanged();
 
             var questionIdentity = new Identity(questionId, rosterVector);
+            new InterviewPermissionsInvariants(this.properties, questionIdentity, this.Tree)
+                .RequireCanAnswer();
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
@@ -853,6 +869,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             new InterviewPropertiesInvariants(this.properties).RequireAnswerCanBeChanged();
             var questionIdentity = new Identity(questionId, rosterVector);
+            new InterviewPermissionsInvariants(this.properties, questionIdentity, this.Tree)
+                .RequireCanAnswer();
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
@@ -895,6 +913,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .RequireAnswerCanBeChanged();
 
             var questionIdentity = new Identity(questionId, rosterVector);
+            new InterviewPermissionsInvariants(this.properties, questionIdentity, this.Tree)
+                .RequireCanAnswer();
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
@@ -918,6 +938,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .RequireAnswerCanBeChanged();
 
             var questionIdentity = new Identity(command.QuestionId, command.RosterVector);
+            new InterviewPermissionsInvariants(this.properties, questionIdentity, this.Tree)
+                .RequireCanAnswer();
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
@@ -943,6 +965,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .RequireAnswerCanBeChanged();
 
             var questionIdentity = new Identity(questionId, rosterVector);
+            new InterviewPermissionsInvariants(this.properties, questionIdentity, this.Tree)
+                .RequireCanAnswer();
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
@@ -969,9 +993,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             new InterviewPropertiesInvariants(this.properties)
                 .RequireAnswerCanBeChanged();
 
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
             var questionIdentity = new Identity(questionId, rosterVector);
+            new InterviewPermissionsInvariants(this.properties, questionIdentity, this.Tree)
+                .RequireCanAnswer();
 
+            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
             new InterviewQuestionInvariants(questionIdentity, questionnaire, this.Tree, questionOptionsRepository)
                 .RequireGpsCoordinatesAnswerAllowed();
 
@@ -992,6 +1018,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .RequireAnswerCanBeChanged();
 
             var questionIdentity = new Identity(questionId, rosterVector);
+            new InterviewPermissionsInvariants(this.properties, questionIdentity, this.Tree)
+                .RequireCanAnswer();
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
@@ -1012,6 +1040,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             new InterviewPropertiesInvariants(this.properties).RequireAnswerCanBeChanged();
 
             var questionIdentity = new Identity(command.QuestionId, command.RosterVector);
+            new InterviewPermissionsInvariants(this.properties, questionIdentity, this.Tree)
+                .RequireCanAnswer();
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
@@ -1037,6 +1067,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .RequireAnswerCanBeChanged();
 
             var questionIdentity = new Identity(questionId, rosterVector);
+            new InterviewPermissionsInvariants(this.properties, questionIdentity, this.Tree)
+                .RequireCanAnswer();
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
@@ -1059,6 +1091,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .RequireAnswerCanBeChanged();
 
             var questionIdentity = new Identity(questionId, rosterVector);
+            new InterviewPermissionsInvariants(this.properties, questionIdentity, this.Tree)
+                .RequireCanAnswer();
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
@@ -1087,6 +1121,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .RequireAnswerCanBeChanged();
 
             var questionIdentity = new Identity(questionId, rosterVector);
+            new InterviewPermissionsInvariants(this.properties, questionIdentity, this.Tree)
+                .RequireCanAnswer();
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 

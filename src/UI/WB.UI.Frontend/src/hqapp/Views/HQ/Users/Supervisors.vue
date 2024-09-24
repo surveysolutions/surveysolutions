@@ -4,7 +4,7 @@
             <div>
                 <div class="neighbor-block-to-search">
                     <div class="topic-with-button">
-                        <h1>{{ $t('Users.SupervisorsCountDescription', { count: this.usersCount }) }}</h1>
+                        <h1>{{ $t('Users.SupervisorsCountDescription', { count: usersCount }) }}</h1>
                     </div>
                     <ol v-if="!user.isObserver && !user.isObserving" class="list-unstyled">
                         <li>{{ $t('Pages.Users_Supervisors_Instruction2') }}</li>

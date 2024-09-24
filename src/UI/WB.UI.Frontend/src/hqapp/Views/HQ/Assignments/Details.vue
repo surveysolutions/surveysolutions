@@ -34,7 +34,7 @@
                                         </span>
                                         <span v-if="isInterviewerResponsible" class="data">
                                             <a v-bind:href="interviewerProfileUrl
-                                                " class="interviewer">{{ model.responsible.name }}</a>
+                                            " class="interviewer">{{ model.responsible.name }}</a>
                                         </span>
                                         <span v-else class="data supervisor">{{
                                             model.responsible.name
@@ -56,12 +56,12 @@
                                         }}:</span>
                                         <span class="data" data-bs-toggle="tooltip" v-if="calendarEventComment != null"
                                             :title="calendarEventComment == null ||
-                                                calendarEventComment == ''
-                                                ? this.$t(
-                                                    'Assignments.NoComment',
-                                                )
-                                                : calendarEventComment
-                                                ">
+                                            calendarEventComment == ''
+                                            ? this.$t(
+                                                'Assignments.NoComment',
+                                            )
+                                            : calendarEventComment
+                                            ">
                                             {{ calendarEventTime }}
                                         </span>
                                     </li>
@@ -94,8 +94,8 @@
                                         <li v-if="isHeadquarters && isArchived">
                                             <a href="#" @click="unarchiveSelected">
                                                 {{
-                                                    $t('Assignments.Unarchive')
-                                                }}
+                                            $t('Assignments.Unarchive')
+                                        }}
                                             </a>
                                         </li>
                                     </ul>
@@ -222,8 +222,8 @@
                 <ModalFrame ref="assignModal" :title="$t('Common.Assign')">
                     <form onsubmit="return false;">
                         <div class="form-group" :class="{
-                            'has-warning': showWebModeReassignWarning,
-                        }">
+                                            'has-warning': showWebModeReassignWarning,
+                                        }">
                             <label class="control-label" for="newResponsibleId">
                                 {{ $t('Assignments.SelectResponsible') }}
                             </label>

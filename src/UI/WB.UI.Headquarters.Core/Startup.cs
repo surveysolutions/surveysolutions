@@ -468,6 +468,7 @@ namespace WB.UI.Headquarters
                     new CultureInfo("pt"),
                     new CultureInfo("zh"),
                     new CultureInfo("ro"),
+                    new CultureInfo("cs"),
                     new CultureInfo("uk"),
                 };
             });

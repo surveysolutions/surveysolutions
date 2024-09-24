@@ -82,7 +82,7 @@
 <script>
 
 import '../../../content/designer-start/bootstrap-custom.less';
-import '../../../../Styles/designer-list.less'
+import '../../../content/designer-start/designer-list.less'
 
 export default {
     name: 'DesignerLayout',

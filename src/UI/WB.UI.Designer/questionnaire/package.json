@@ -22,7 +22,7 @@
         "@vee-validate/rules": "^4.13.2",
         "@vueuse/core": "^10.8.0",
         "@vueuse/math": "^10.8.0",
-        "axios": "^1.7.2",
+        "axios": "1.7.7",
         "bootstrap": "5.3.3",
         "core-js": "^3.27.1",
         "i18next-browser-languagedetector": "^7.2.0",
@@ -48,7 +48,7 @@
         "xss": "^1.0.13"
     },
     "devDependencies": {
-        "@vitejs/plugin-vue": "^5.0.4",
+        "@vitejs/plugin-vue": "5.1.4",
         "babel-eslint": "^10.1.0",
         "css-select": "4.3.0",
         "css-what": "6.1.0",
@@ -73,7 +73,7 @@
         "ssri": "^8.0.1",
         "svgo": "2.8.0",
         "trim-newlines": "4.0.2",
-        "vite": "^5.1.7",
+        "vite": "5.4.7",
         "vite-plugin-vuetify": "^2.0.2",
         "xmldoc": "1.2.0"
     },

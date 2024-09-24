@@ -228,6 +228,7 @@
                     </label>
                     <textarea class="form-control" rows="10" maxlength="200" name="txtStatusChangeComment"
                         id="txtStatusApproveComment" v-model="statusChangeComment"></textarea>
+                    <span class="countDown">{{ statusChangeCommentCharsLeft }}</span>
                 </div>
             </form>
             <template v-slot:actions>
@@ -279,6 +280,7 @@
                     </label>
                     <textarea class="form-control" rows="10" maxlength="200" id="txtStatusChangeComment"
                         v-model="statusChangeComment"></textarea>
+                    <span class="countDown">{{ statusChangeCommentCharsLeft }}</span>
                 </div>
             </form>
             <template v-slot:actions>
@@ -537,7 +539,7 @@ export default {
             responsibleParams: { showArchived: true, showLocked: true },
             newResponsibleId: null,
             rejectToNewResponsible: false,
-            statusChangeComment: null,
+            statusChangeComment: '',
             status: null,
             selectedStatus: null,
             unactiveDateStart: null,
@@ -548,6 +550,7 @@ export default {
             isVisiblePrefilledColumns: true,
             internalConfirmReceivedByInterviewer: false,
 
+            commentMaxLength: 1500,
             conditions: [],
 
             interviewModes: [
@@ -1098,6 +1101,9 @@ export default {
 
             return query
         },
+        statusChangeCommentCharsLeft() {
+            return `${this.statusChangeComment.length} / ${this.commentMaxLength}`
+        },
     },
 
     methods: {
@@ -1343,7 +1349,7 @@ export default {
             )
         },
         approveInterview() {
-            this.statusChangeComment = null
+            this.statusChangeComment = ''
             this.$refs.approveModal.modal()
         },
 
@@ -1471,7 +1477,7 @@ export default {
         },
 
         rejectInterview() {
-            this.statusChangeComment = null
+            this.statusChangeComment = ''
             this.newResponsibleId = null
             this.rejectToNewResponsible = false
 
