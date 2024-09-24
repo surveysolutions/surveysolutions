@@ -307,10 +307,15 @@
 
                                     <div class="block-filter" :class="{ 'has-error': errors.smtpTlsEncryption }">
                                         <div class="field" :class="{ answered: smtpTlsEncryption, }">
-                                            <input type="checkbox" style="margin-right: 5px"
-                                                class="form-control checkbox-filter single-checkbox"
-                                                label="Use TLS encryption" name="smtpTlsEncryption"
-                                                id="smtpTlsEncryption" v-model="smtpTlsEncryption" v-validate="''" />
+                                            <Field v-slot="{ field }" name="smtpTlsEncryption"
+                                                :value="smtpTlsEncryption">
+
+                                                <input v-bind="field" type="checkbox" style="margin-right: 5px"
+                                                    class="form-control checkbox-filter single-checkbox"
+                                                    label="Use TLS encryption" name="smtpTlsEncryption"
+                                                    id="smtpTlsEncryption" v-model="smtpTlsEncryption"
+                                                    v-validate="''" />
+                                            </Field>
                                             <label for="smtpTlsEncryption" style="font-weight: bold">
                                                 <span class="tick"></span>{{
                                                     $t(
@@ -331,10 +336,15 @@
                                     </div>
                                     <div class="block-filter" :class="{ 'has-error': errors.smtpAuthentication }">
                                         <div class="field" :class="{ answered: smtpAuthentication }">
-                                            <input type="checkbox" style="margin-right: 5px"
-                                                class="form-control checkbox-filter single-checkbox"
-                                                label="Use authentication" name="smtpAuthentication"
-                                                id="smtpAuthentication" v-model="smtpAuthentication" v-validate="''" />
+                                            <Field v-slot="{ field }" name="smtpAuthentication"
+                                                :value="smtpAuthentication">
+
+                                                <input v-bind="field" type="checkbox" style="margin-right: 5px"
+                                                    class="form-control checkbox-filter single-checkbox"
+                                                    label="Use authentication" name="smtpAuthentication"
+                                                    id="smtpAuthentication" v-model="smtpAuthentication"
+                                                    v-validate="''" />
+                                            </Field>
                                             <label for="smtpAuthentication" style="font-weight: bold">
                                                 <span class="tick"></span>{{
                                                     $t('Settings.EmailProvider_SmtpAuthentication',) }}
@@ -511,9 +521,9 @@ export default {
                 self.replyAddress = settings.replyAddress
                 self.address = settings.address
 
-                self.$refs.settigsForm.resetForm({ values: self.$refs.settigsForm.values })
-                //self.$refs.settigsForm.resetForm()
-                //self.$validator.reset('settings')
+                self.$nextTick(() => {
+                    self.$refs.settigsForm.resetForm({ values: self.$refs.settigsForm.values })
+                })
             })
             .catch(function (error) {
                 self.$errorHandler(error, self)
@@ -590,7 +600,7 @@ export default {
 
             var validationResult = await this.$refs.testEmailForm.validate()
 
-            if (validationResult) {
+            if (validationResult.valid) {
                 self.$store.dispatch('showProgress')
 
                 this.$http
@@ -638,7 +648,7 @@ export default {
             var self = this
             var validationResult = await this.$refs.settigsForm.validate()
 
-            if (validationResult) {
+            if (validationResult.valid) {
                 const settings = {
                     provider: self.provider,
                     senderAddress: (self.senderAddress || '').trim(),
@@ -666,16 +676,12 @@ export default {
                     })
                     .then(function (response) {
                         self.$refs.settigsForm.resetForm({ values: self.$refs.settigsForm.values })
-                        //self.$validator.reset('settings')
+
                         self.providerSettingsResult = self.$t(
                             'Settings.EmailProvider_SettingsSavedSuccessfully',
                         )
                         if (settings.provider != 'none') {
-                            self.providerSettingsResult +=
-                                ' ' +
-                                self.$t(
-                                    'Settings.EmailProvider_SendTestEmailMessage',
-                                )
+                            self.providerSettingsResult += ' ' + self.$t('Settings.EmailProvider_SendTestEmailMessage',)
                         }
                     })
                     .catch(function (error) {
