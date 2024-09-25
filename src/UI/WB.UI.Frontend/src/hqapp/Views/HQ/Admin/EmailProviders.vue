@@ -463,8 +463,7 @@
 </template>
 
 <script>
-//TODO: MIGRATION
-//import Vue from 'vue'
+
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import { isEmpty } from 'lodash'
 import { getCsrfCookie } from '../../../api/index'
@@ -535,7 +534,6 @@ export default {
     computed: {
         isFormDirty() {
             const dirty = this.$refs.settigsForm?.meta?.dirty || false
-            console.log(this.$refs.settigsForm)
             return dirty
         },
         isEmailFormDirty() {
