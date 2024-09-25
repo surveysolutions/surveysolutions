@@ -94,7 +94,7 @@ export default {
 
             await this.$refs.loginForm.validate()
 
-            if (validationResult) {
+            if (validationResult.valid == true) {
                 var passwordToSend = this.password;
                 this.isSigningIn = true;
                 this.password = '';

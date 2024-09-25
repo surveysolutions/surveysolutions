@@ -26,6 +26,7 @@ export default {
     //fix layout instead of recalculation
     setup() {
         onMounted(() => {
+            window.ajustNoticeHeight()
             window.ajustDetailsPanelHeight()
         });
     },

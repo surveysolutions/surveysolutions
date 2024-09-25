@@ -834,8 +834,8 @@ export default {
         async saveEmailTemplate(emailTemplate) {
             var self = this
             const form = self.emailTemplateData[emailTemplate.value]
-            var validationResult = await form.validate()
-            if (validationResult) {
+            const validationResult = await form.validate()
+            if (validationResult.valid == true) {
                 self.$store.dispatch('showProgress')
                 await this.$hq.WebInterviewSettings.updateEmailTemplate(
                     this.questionnaireId,

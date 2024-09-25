@@ -52,7 +52,7 @@ export default {
         async savePageTextEditMode(form, titleType, messageType, buttonText) {
             var self = this
             var validationResult = await form.validate()
-            if (validationResult) {
+            if (validationResult.valid == true) {
                 var editTitleText = this.webInterviewPageMessages[titleType]
                 var editDescriptionText = this.webInterviewPageMessages[messageType]
                 self.$store.dispatch('showProgress')

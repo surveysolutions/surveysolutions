@@ -381,7 +381,7 @@ export default {
             var self = this
             //TODO:Migration
             var validationResult = await this.$refs.exportForm.validate()
-            if (validationResult) {
+            if (validationResult.valid == true) {
                 const exportParams = self.getExportParams(
                     self.questionnaireId.key,
                     self.questionnaireVersion.key,

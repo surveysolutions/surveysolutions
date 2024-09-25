@@ -533,11 +533,12 @@ export default {
     },
     computed: {
         isFormDirty() {
-            const dirty = this.$refs.settigsForm?.meta?.dirty || false
-            return dirty
+            const settigsForm = this.$refs.settigsForm
+            return settigsForm ? settigsForm.meta.dirty : false;
         },
         isEmailFormDirty() {
-            return this.$refs.testEmailForm?.meta?.dirty || false
+            const testEmailForm = this.$refs.testEmailForm
+            return testEmailForm ? testEmailForm.meta.dirty : false;
         },
         sendGridIsSetUp() {
             return (
@@ -598,7 +599,7 @@ export default {
 
             var validationResult = await this.$refs.testEmailForm.validate()
 
-            if (validationResult.valid) {
+            if (validationResult.valid == true) {
                 self.$store.dispatch('showProgress')
 
                 this.$http
@@ -646,7 +647,7 @@ export default {
             var self = this
             var validationResult = await this.$refs.settigsForm.validate()
 
-            if (validationResult.valid) {
+            if (validationResult.valid == true) {
                 const settings = {
                     provider: self.provider,
                     senderAddress: (self.senderAddress || '').trim(),
