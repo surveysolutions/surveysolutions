@@ -84,8 +84,8 @@
                         {{ $t('Common.Delete') }}
                     </button>
                     <span class="text-success" v-if="globalNoticeUpdated">{{
-        $t('Settings.GlobalNoteSaved')
-    }}</span>
+                        $t('Settings.GlobalNoteSaved')
+                        }}</span>
                 </div>
             </form>
         </div>
@@ -105,10 +105,10 @@
                             {{ $t('Settings.AllowInterviewerUpdateProfile') }}
                             <p style="font-weight: normal">
                                 {{
-        $t(
-            'Settings.AllowInterviewerUpdateProfileDesc',
-        )
-    }}
+                                    $t(
+                                        'Settings.AllowInterviewerUpdateProfileDesc',
+                                    )
+                                }}
                             </p>
                         </label>
                     </div>
@@ -188,7 +188,7 @@
                                         min_value: 1,
                                         max_value: 1000,
                                     }" :validateOnChange="true" :validateOnInput="true" name="accuracy"
-                                    id="interviewerGeographyQuestionAccuracyInMeters" type="number" />
+                                    label="Accuracy" id="interviewerGeographyQuestionAccuracyInMeters" type="number" />
                             </div>
                             <button type="button" class="btn btn-success" :disabled="geographyQuestionAccuracyInMeters ==
                                 geographyQuestionAccuracyInMetersCancel ||
@@ -230,7 +230,7 @@
                                         required: true,
                                         min_value: 5,
                                         max_value: 1000,
-                                    }" :validateOnChange="true" :validateOnInput="true"
+                                    }" :validateOnChange="true" :validateOnInput="true" label="Period"
                                     id="interviewerGeographyQuestionPeriodInSeconds" name="period" type="number" />
                             </div>
                             <button type="button" class="btn btn-success" :disabled="geographyQuestionPeriodInSeconds ==
@@ -270,11 +270,11 @@
                                 name="esriKey" />
                         </div>
                         <button type="button" class="btn btn-success" :disabled="esriApiKey ==
-        esriApiKeyInitial" @click="updateEsriKApiKey">
+                            esriApiKeyInitial" @click="updateEsriKApiKey">
                             {{ $t('Common.Save') }}
                         </button>
                         <button type="button" class="btn btn-link" :disabled="esriApiKey ==
-        esriApiKeyInitial" @click="cancelEsriKApiKey">
+                            esriApiKeyInitial" @click="cancelEsriKApiKey">
                             {{ $t('Common.Cancel') }}
                         </button>
                     </div>
