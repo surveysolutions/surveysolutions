@@ -510,7 +510,8 @@ export default {
                     this.tooltip?.dispose()
 
                     const tooltipEl = document.querySelector('[data-bs-toggle="tooltip"]')
-                    this.tooltip = new Tooltip(tooltipEl, { html: true })
+                    if (tooltipEl)
+                        this.tooltip = new Tooltip(tooltipEl, { html: true })
                 })
             })
         },
