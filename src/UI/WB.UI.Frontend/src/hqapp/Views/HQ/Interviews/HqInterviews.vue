@@ -123,22 +123,22 @@
                 </div>
                 <div id="pnlAssignToOtherTeamConfirmMessage">
                     <p v-html="this.config.isSupervisor
-        ? $t('Interviews.AssignConfirmMessage', {
-            count: this.getFilteredToAssign().length,
-            status1: 'Supervisor assigned',
-            status2: 'Interviewer assigned',
-            status3: 'Rejected by Supervisor',
-        })
-        : $t(
-            'Interviews.AssignToOtherTeamConfirmMessage',
-            {
-                count: this.getFilteredToAssign()
-                    .length,
-                status1: 'Approved by Supervisor',
-                status2: 'Approved by Headquarters',
-            },
-        )
-        "></p>
+                        ? $t('Interviews.AssignConfirmMessage', {
+                            count: this.getFilteredToAssign().length,
+                            status1: 'Supervisor assigned',
+                            status2: 'Interviewer assigned',
+                            status3: 'Rejected by Supervisor',
+                        })
+                        : $t(
+                            'Interviews.AssignToOtherTeamConfirmMessage',
+                            {
+                                count: this.getFilteredToAssign()
+                                    .length,
+                                status1: 'Approved by Supervisor',
+                                status2: 'Approved by Headquarters',
+                            },
+                        )
+                        "></p>
                 </div>
 
                 <div v-if="CountReceivedByInterviewerItems() > 0">
@@ -170,11 +170,11 @@
         <ModalFrame ref="deleteModal" :title="$t('Common.Delete')">
             <div class="action-container">
                 <p v-html="$t('Interviews.DeleteConfirmMessageHQ', {
-        count: this.getFilteredToDelete().length,
-        status1: 'Supervisor assigned',
-        status2: 'Interviewer assigned',
-    })
-        "></p>
+                    count: this.getFilteredToDelete().length,
+                    status1: 'Supervisor assigned',
+                    status2: 'Interviewer assigned',
+                })
+                    "></p>
             </div>
             <template v-slot:actions>
                 <div>
@@ -201,11 +201,11 @@
                 </div>
                 <div class="action-container" v-else>
                     <p v-html="$t('Interviews.ApproveConfirmMessageHQ', {
-        count: this.getFilteredToApprove().length,
-        status1: 'Completed',
-        status2: 'Approved by Supervisor',
-        status3: 'Rejected by Supervisor',
-    })"></p>
+                        count: this.getFilteredToApprove().length,
+                        status1: 'Completed',
+                        status2: 'Approved by Supervisor',
+                        status3: 'Rejected by Supervisor',
+                    })"></p>
                 </div>
 
                 <div class="form-group" v-if="CountReceivedByInterviewerItems() > 0">
@@ -247,15 +247,15 @@
             <form onsubmit="return false;">
                 <div class="action-container">
                     <p v-if="!config.isSupervisor" v-html="$t('Interviews.RejectConfirmMessageHQ', {
-        count: this.getFilteredToReject().length,
-        status1: 'Completed',
-        status2: 'Approved by Supervisor',
-    })"></p>
+                        count: this.getFilteredToReject().length,
+                        status1: 'Completed',
+                        status2: 'Approved by Supervisor',
+                    })"></p>
                     <p v-if="config.isSupervisor" v-html="$t('Interviews.RejectConfirmMessage', {
-        count: this.getFilteredToReject().length,
-        status1: 'Completed',
-        status2: 'Rejected by Headquarters',
-    })"></p>
+                        count: this.getFilteredToReject().length,
+                        status1: 'Completed',
+                        status2: 'Rejected by Headquarters',
+                    })"></p>
                 </div>
 
                 <div>
@@ -300,9 +300,9 @@
             <form onsubmit="return false;">
                 <div class="action-container">
                     <p v-html="$t('Interviews.UnapproveConfirmMessageHQ', {
-        count: this.getFilteredToUnApprove().length,
-        status1: 'Approved by Headquarters',
-    })"></p>
+                        count: this.getFilteredToUnApprove().length,
+                        status1: 'Approved by Headquarters',
+                    })"></p>
                 </div>
             </form>
             <template v-slot:actions>
@@ -1662,7 +1662,14 @@ export default {
         },
 
         async showStatusHistory() {
+
+            let table = $('#statustable').DataTable()
+            table?.clear()
+            table?.draw()
+
             var self = this
+            self.$refs.statusHistory.modal({ keyboard: false })
+
             const statusHistoryList = await this.$http.post(
                 this.config.api.interviewStatuses,
                 {
@@ -1671,6 +1678,7 @@ export default {
             )
 
             if (statusHistoryList.data.length != 0) {
+
                 $('#statustable').DataTable({
                     paging: false,
                     ordering: false,
@@ -1716,13 +1724,9 @@ export default {
                     ],
                 })
 
-                var table = $('#statustable').DataTable()
-
-                table.clear()
+                let table = $('#statustable').DataTable()
                 table.rows.add(statusHistoryList.data)
                 table.draw()
-
-                self.$refs.statusHistory.modal({ keyboard: false })
             }
         },
 
