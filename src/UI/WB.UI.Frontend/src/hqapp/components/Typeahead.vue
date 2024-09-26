@@ -37,10 +37,12 @@
 
 <script>
 import { assign, chain, find, filter, escape, escapeRegExp } from 'lodash'
-import { useField } from 'vee-validate';
+
 
 export default {
     name: 'Typeahead',
+
+    emits: ['selected', 'update:modelValue'],
 
     //TODO: MIGRATION
 
@@ -56,7 +58,7 @@ export default {
             type: String,
             required: true,
         },
-        value: useField(() => props.name),
+        value: Object,
         placeholder: String,
         ajaxParams: Object,
         forceLoadingState: {
@@ -226,10 +228,12 @@ export default {
 
         clear() {
             this.$emit('selected', null, this.controlId)
+            this.$emit('update:modelValue', null);
             this.searchTerm = ''
         },
         selectOption(value) {
             this.$emit('selected', value, this.controlId)
+            this.$emit('update:modelValue', value);
         },
         selectByKey(key) {
             const itemToSelect = find(this.options, o => o.item.key == key)

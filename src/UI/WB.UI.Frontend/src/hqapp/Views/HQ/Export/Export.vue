@@ -37,7 +37,7 @@
                                                     :value="questionnaireId"
                                                     :placeholder="$t('Common.AllQuestionnaires')"
                                                     :fetch-url="questionnaireFetchUrl" :selectedKey="pageState.id"
-                                                    name="questionnaireId" v-on:selected="questionnaireSelected" />
+                                                    name="questionnaireId" @selected="questionnaireSelected" />
                                                 <span class="help-block">
                                                     <ErrorMessage name="questionnaireId"></ErrorMessage>
                                                     <!-- {{ errors.first('questionnaireId') }} -->
@@ -56,7 +56,7 @@
                                                     ref="questionnaireVersionControl" name="questionnaireVersion"
                                                     :selectedKey="pageState.version" :value="questionnaireVersion"
                                                     :fetch-url="questionnaireVersionFetchUrl"
-                                                    v-on:selected="questionnaireVersionSelected"
+                                                    @selected="questionnaireVersionSelected"
                                                     :disabled="questionnaireVersionFetchUrl == null"
                                                     :selectFirst="true" />
                                                 <span class="help-block">
