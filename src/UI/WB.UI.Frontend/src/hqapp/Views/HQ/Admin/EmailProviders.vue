@@ -54,7 +54,7 @@
                             {{ $t('Settings.EmailProvider_SenderName') }}
                         </label>
                         <div class="field" :class="{ answered: senderName }">
-                            <Field label="sender name"
+                            <Field label="Sender name"
                                 :rules="{ required: provider == 'amazon' || provider == 'sendgrid' || provider == 'smtp' }"
                                 name="senderName" id="senderName" v-model="senderName" type="text"
                                 class="form-control with-clear-btn" maxlength="200" />
@@ -74,7 +74,7 @@
                             {{ $t('Settings.EmailProvider_Address') }}
                         </label>
                         <div class="field" :class="{ answered: address }">
-                            <Field label="address"
+                            <Field label="Address"
                                 :rules="{ required: provider == 'amazon' || provider == 'sendgrid' || provider == 'smtp' }"
                                 name="address" id="address" v-model="address" type="text"
                                 class="form-control with-clear-btn" maxlength="200" />

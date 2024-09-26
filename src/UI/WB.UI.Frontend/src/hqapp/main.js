@@ -68,29 +68,7 @@ vue.use(PortalVue)
 import { Popover } from 'uiv'
 vue.component('popover', Popover)
 
-//register validations globaly
-//add more rules if required 
-//https://vee-validate.logaretm.com/v4/guide/global-validators
-import { defineRule } from 'vee-validate'
-import { required, email, integer, max_value, min, min_value, max, numeric, not_one_of, regex } from '@vee-validate/rules'
-defineRule('required', required)
-defineRule('email', email)
-defineRule('integer', integer)
-defineRule('max_value', max_value)
-defineRule('min', min)
-defineRule('min_value', min_value)
-defineRule('max', max)
-defineRule('numeric', numeric)
-defineRule('not_one_of', not_one_of)
-defineRule('regex', regex)
-
-//import once it's impenemted
-defineRule("required_if", (value, [target, targetValue], ctx) => {
-    if (targetValue === ctx.form[target]) {
-        return required(value);
-    }
-    return true;
-});
+import './validate.js'
 
 
 import box from '@/shared/modal'
