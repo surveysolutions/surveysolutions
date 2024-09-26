@@ -10,9 +10,9 @@
                 <FilterBlock :title="$t('Common.QuestionnaireVersion')">
                     <Typeahead control-id="questionnaireVersion" :placeholder="$t('Common.AllVersions')"
                         :value="selectedVersion" :values="selectedQuestionnaireId == null
-        ? null
-        : selectedQuestionnaireId.versions
-        " v-on:selected="selectQuestionnaireVersion" :disabled="selectedQuestionnaireId == null" />
+                            ? null
+                            : selectedQuestionnaireId.versions
+                            " v-on:selected="selectQuestionnaireVersion" :disabled="selectedQuestionnaireId == null" />
                 </FilterBlock>
                 <FilterBlock :title="$t('Common.Responsible')" v-if="model.userRole != 'Interviewer'">
                     <Typeahead control-id="responsibleId" :placeholder="$t('Common.AllResponsible')"
@@ -80,9 +80,9 @@
                 <div class="row-fluid" v-if="model.userRole != 'Interviewer'" style="white-space: nowrap">
                     <strong>{{ $t('MapReport.ViewInterviewContent') }}:</strong>&nbsp;
                     <a v-bind:href="api.GetInterviewDetailsUrl(
-        selectedTooltip.interviewId
-    )
-        " target="_blank">{{ $t('MapReport.details') }}</a>
+                        selectedTooltip.interviewId
+                    )
+                        " target="_blank">{{ $t('MapReport.details') }}</a>
                 </div>
                 <div class="row-fluid tooltip-buttons" style="white-space: nowrap" v-if="!model.isObserving">
                     <button class="btn btn-sm btn-primary" v-if="model.userRole == 'Interviewer' &&
@@ -152,9 +152,9 @@
                 <div class="row-fluid" v-if="model.userRole != 'Interviewer'" style="white-space: nowrap">
                     <strong>{{ $t('Common.ViewAssignmentDetails') }}:</strong>&nbsp;
                     <a v-bind:href="api.GetAssignmentDetailsUrl(
-        selectedTooltip.assignmentId
-    )
-        " target="_blank">{{ $t('MapReport.details') }}</a>
+                        selectedTooltip.assignmentId
+                    )
+                        " target="_blank">{{ $t('MapReport.details') }}</a>
                 </div>
                 <div class="row-fluid tooltip-buttons" style="white-space: nowrap" v-if="!model.isObserving">
                     <button class="btn btn-sm btn-primary" v-if="model.userRole == 'Supervisor' ||
@@ -279,9 +279,12 @@
 import { nextTick } from 'vue'
 import { debounce, delay, forEach, find } from 'lodash'
 import routeSync from '~/shared/routeSync'
+import { Field } from 'vee-validate'
 
 export default {
     mixins: [routeSync],
+
+    components: { Field },
 
     data() {
         return {
