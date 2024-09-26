@@ -29,37 +29,41 @@
                                             {{ $t('DataExport.SurveyQuestionnaire') }}
                                             <span class="text-danger">*</span>
                                         </h5>
-                                        <!-- TODO:Migration -->
-                                        <!-- :class="{ 'has-error': errors.questionnaireId }" -->
                                         <div class="form-group" :class="{ 'has-error': errors.questionnaireId }">
-                                            <Typeahead control-id="questionnaireId" :value="questionnaireId"
-                                                :placeholder="$t('Common.AllQuestionnaires')"
-                                                :fetch-url="questionnaireFetchUrl" :selectedKey="pageState.id"
-                                                data-vv-name="questionnaireId" name="questionnaireId"
-                                                data-vv-as="questionnaire" rules="required"
-                                                v-on:selected="questionnaireSelected" />
-                                            <span class="help-block">
-                                                <ErrorMessage name="questionnaireId"></ErrorMessage>
-                                                <!-- {{ errors.first('questionnaireId') }} -->
-                                            </span>
+                                            <Field v-slot="{ field }" name="questionnaireId" :value="questionnaireId"
+                                                rules="required" label="questionnaire">
+
+                                                <Typeahead control-id="questionnaireId" v-bind="field"
+                                                    :value="questionnaireId"
+                                                    :placeholder="$t('Common.AllQuestionnaires')"
+                                                    :fetch-url="questionnaireFetchUrl" :selectedKey="pageState.id"
+                                                    name="questionnaireId" v-on:selected="questionnaireSelected" />
+                                                <span class="help-block">
+                                                    <ErrorMessage name="questionnaireId"></ErrorMessage>
+                                                    <!-- {{ errors.first('questionnaireId') }} -->
+                                                </span>
+                                            </Field>
                                         </div>
                                         <h5>
                                             {{ $t('DataExport.SurveyQuestionnaireVersion') }}
                                             <span class="text-danger">*</span>
                                         </h5>
-                                        <!-- :class="{ 'has-error': errors.questionnaireVersion }" -->
                                         <div class="form-group" :class="{ 'has-error': errors.questionnaireVersion }">
-                                            <Typeahead noClear control-id="questionnaireVersion"
-                                                ref="questionnaireVersionControl" data-vv-name="questionnaireVersion"
-                                                name="questionnaireVersion" data-vv-as="questionnaire version"
-                                                :selectedKey="pageState.version" rules="required"
-                                                :value="questionnaireVersion" :fetch-url="questionnaireVersionFetchUrl"
-                                                v-on:selected="questionnaireVersionSelected"
-                                                :disabled="questionnaireVersionFetchUrl == null" :selectFirst="true" />
-                                            <span class="help-block">
-                                                <ErrorMessage name="questionnaireVersion"></ErrorMessage>
-                                                <!-- {{ errors.first('questionnaireVersion') }} -->
-                                            </span>
+                                            <Field v-slot="{ field }" name="questionnaireVersion"
+                                                label="questionnaire version" :value="questionnaireVersion"
+                                                rules="required">
+                                                <Typeahead v-bind="field" noClear control-id="questionnaireVersion"
+                                                    ref="questionnaireVersionControl" name="questionnaireVersion"
+                                                    :selectedKey="pageState.version" :value="questionnaireVersion"
+                                                    :fetch-url="questionnaireVersionFetchUrl"
+                                                    v-on:selected="questionnaireVersionSelected"
+                                                    :disabled="questionnaireVersionFetchUrl == null"
+                                                    :selectFirst="true" />
+                                                <span class="help-block">
+                                                    <ErrorMessage name="questionnaireVersion"></ErrorMessage>
+                                                    <!-- {{ errors.first('questionnaireVersion') }} -->
+                                                </span>
+                                            </Field>
                                         </div>
                                         <h5 v-if="translations.length > 0">
                                             {{ $t('DataExport.SurveyQuestionnaireTranslation') }}
