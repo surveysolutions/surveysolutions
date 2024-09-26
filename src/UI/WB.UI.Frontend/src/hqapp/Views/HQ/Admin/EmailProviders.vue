@@ -11,7 +11,7 @@
                                 {{ $t('Settings.EmailProvider_SenderAddress') }}
                             </label>
                             <div class="field" :class="{ answered: senderAddress }">
-                                <Field label="email address" :rules="{
+                                <Field label="Email address" :rules="{
                                     required: provider == 'amazon' || provider == 'sendgrid' || provider == 'smtp',
                                     email: true
                                 }" name="senderAddress" id="senderAddress" v-model="senderAddress" type="text"
@@ -33,7 +33,7 @@
                                 {{ $t('Settings.EmailProvider_ReplyAddress') }}
                             </label>
                             <div class="field" :class="{ answered: replyAddress }">
-                                <Field label="reply email address" rules="email" name="replyAddress" id="replyAddress"
+                                <Field label="Reply email address" rules="email" name="replyAddress" id="replyAddress"
                                     v-model="replyAddress" type="text" class="form-control with-clear-btn"
                                     maxlength="200" />
                                 <button type="button" @click="replyAddress = null" class="btn btn-link btn-clear">
