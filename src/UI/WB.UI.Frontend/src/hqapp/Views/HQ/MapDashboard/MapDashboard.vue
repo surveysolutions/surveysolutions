@@ -20,15 +20,16 @@
                         v-on:selected="selectResponsible" :fetch-url="model.responsible"></Typeahead>
                 </FilterBlock>
                 <FilterBlock :title="$t('Pages.Filters_Assignment')">
-                    <div class="input-group">
+                    <Form as="div" class="input-group">
                         <Field class="form-control with-clear-btn number" :placeholder="$t('Common.AllAssignments')"
-                            type="number" v-model.number="assignmentId" :rules="{ numeric: true }" />
+                            name="assignmentId" type="number" v-model.number="assignmentId"
+                            :rules="{ numeric: true }" />
                         <div class="input-group-btn" @click="clearAssignmentFilter">
                             <div class="btn btn-default">
                                 <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                             </div>
                         </div>
-                    </div>
+                    </Form>
                 </FilterBlock>
                 <FilterBlock :title="$t('Pages.Filters_Shapefiles')">
                     <Typeahead control-id="shapefileName" :placeholder="$t('Pages.Filters_None')" :ajax-params="{}"
@@ -191,7 +192,7 @@
                 <div class="form-group">
                     <label class="control-label" for="newResponsibleId">{{
                         $t('Assignments.SelectResponsible')
-                    }}</label>
+                        }}</label>
                     <Typeahead control-id="newResponsibleId" :placeholder="$t('Common.Responsible')"
                         :value="newResponsibleId" :ajax-params="{}" @selected="newResponsibleSelected"
                         :fetch-url="model.responsible"></Typeahead>
@@ -279,12 +280,12 @@
 import { nextTick } from 'vue'
 import { debounce, delay, forEach, find } from 'lodash'
 import routeSync from '~/shared/routeSync'
-import { Field } from 'vee-validate'
+import { Form, Field } from 'vee-validate'
 
 export default {
     mixins: [routeSync],
 
-    components: { Field },
+    components: { Form, Field },
 
     data() {
         return {
