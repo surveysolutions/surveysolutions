@@ -123,6 +123,7 @@ import gql from 'graphql-tag'
 import { isNull, chain, debounce, delay, forEach, find, flatten, toNumber, isEqual, isNumber } from 'lodash'
 import routeSync from '~/shared/routeSync'
 import InterviewFilter from '../Interviews/InterviewQuestionsFilters'
+import { cloneWithWritableProperties } from '~/shared/clone'
 
 const mapStyles = [
     {
@@ -670,7 +671,7 @@ export default {
                 fetchPolicy: 'network-only',
             })
 
-            var mapReport = report.data.mapReport.report
+            var mapReport = cloneWithWritableProperties(report.data.mapReport.report)
             forEach(mapReport.featureCollection.features, feature => {
                 if (!Array.isArray(feature.geometry.coordinates)) {
                     var coordinates = feature.geometry.coordinates
