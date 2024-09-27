@@ -2,7 +2,8 @@
     <HqLayout :fixedWidth="true" tag="email-providers-page" :title="$t('Pages.EmailProvidersTitle')">
         <div class="mb-30">
             <div class="col-md-12">
-                <Form v-slot="{ errors, meta }" ref="settigsForm" class="form-container" data-vv-scope="settings">
+                <Form v-slot="{ errors, meta }" ref="settigsForm" class="form-container" data-vv-scope="settings"
+                    @change="clearResultMessages">
                     <button type="submit" disabled style="display: none" aria-hidden="true"></button>
                     <h2>{{ $t('Settings.EmailProvider_SenderHeader') }}</h2>
                     <div class="form-inline">
@@ -418,7 +419,7 @@
                     </p>
                 </Form>
                 <Form v-slot="{ errors, meta }" ref="testEmailForm" v-if="showSendTestEmail" data-vv-scope="testEmail"
-                    class="form-container" @submit="noAction">
+                    @change="clearResultMessages" class="form-container" @submit="noAction">
                     <button type="submit" disabled style="display: none" aria-hidden="true"></button>
                     <h4>
                         {{ $t('Settings.EmailProvider_SendTestEmailHeader') }}
@@ -568,11 +569,12 @@ export default {
             return this.$store.state.progress.pendingProgress
         },
         showSendTestEmail() {
-            return !this.isFormDirty && (this.sendGridIsSetUp || this.awsIsSetUp || this.smtpIsSetUp)
+            return (this.sendGridIsSetUp || this.awsIsSetUp || this.smtpIsSetUp) && !this.isFormDirty
         }
     },
     watch: {
-        isFormDirty: function (val) {
+        /*isFormDirty(val) {
+            console.log(val)
             if (val) {
                 this.providerSettingsResult = null
                 this.sendEmailResult = null
@@ -582,7 +584,7 @@ export default {
             if (val) {
                 this.sendEmailResult = null
             }
-        },
+        },*/
         provider: function (val) {
             if (val === 'none') {
                 this.$refs.settigsForm.validate()
@@ -698,6 +700,10 @@ export default {
         },
         isNumeric(num) {
             return (typeof (num) === 'number' || typeof (num) === "string" && num.trim() !== '') && !isNaN(num);
+        },
+        clearResultMessages() {
+            this.providerSettingsResult = null;
+            this.sendEmailResult = null
         }
     },
 }
