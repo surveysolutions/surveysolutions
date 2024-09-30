@@ -1,6 +1,6 @@
 <template>
     <!-- eslint-disable vue/no-v-html -->
-    <div class="vqb-group" :class="'depth-' + groupCtrl.depth">
+    <div class="vqb-group">
         <div class="vqb-group-heading card-header">
             <div class="match-type-container form-inline">
                 <label class="mr-2" for="vqb-match-type">
@@ -12,10 +12,6 @@
                     <option v-for="operator in groupCtrl.operators" :key="operator.identifier"
                         :value="operator.identifier" v-text="operator.name" />
                 </select>
-
-                <button v-if="groupCtrl.depth > 1" type="button" class="close ml-auto" @click="remove"
-                    v-html="labels.removeGroup">
-                </button>
             </div>
         </div>
     </div>

@@ -116,7 +116,11 @@ export default {
         },*/
     },
     mounted() {
-        if (!this.query.operator && this.rule.operators && this.rule.operators.length > 0) {
+        const ruleData = this.ruleCtrl.ruleData
+        if (ruleData) {
+            this.query = ruleData
+        }
+        else if (!this.query.operator && this.rule.operators && this.rule.operators.length > 0) {
             this.query.operator = this.rule.operators[0]
         }
     },

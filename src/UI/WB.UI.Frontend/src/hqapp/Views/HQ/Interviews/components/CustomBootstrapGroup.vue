@@ -1,5 +1,5 @@
 <template>
-    <div class="vqb-group" :class="'depth-' + groupCtrl.depth">
+    <div class="vqb-group">
         <div class="vqb-group-body card-body">
             <div class="rule-actions form-inline">
                 <div class="form-group">
