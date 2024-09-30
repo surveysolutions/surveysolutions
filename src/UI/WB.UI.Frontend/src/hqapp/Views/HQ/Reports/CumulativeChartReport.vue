@@ -82,7 +82,6 @@ export default {
 
     computed: {
         chartDataForRender() {
-            //TODO: MIGRATION
             return this.chartData || {
                 labels: [],
                 datasets: []
@@ -297,6 +296,8 @@ export default {
                             assign(info, {
                                 data: set.data,
                                 index: infoIndex,
+                                borderColor: info.backgroundColor,
+                                fill: true,
                             })
                         )
                     })

@@ -35,7 +35,7 @@
         "bootstrap": "^5.3.3",
         "bootstrap-sass": "^3.4.3",
         "bootstrap-select": "^1.13.18",
-        "chart.js": "^4.4.3",
+        "chart.js": "^4.4.4",
         "chartjs-adapter-moment": "^1.0.1",
         "datatables.net": "2.1.6",
         "datatables.net-select": "2.1.0",
