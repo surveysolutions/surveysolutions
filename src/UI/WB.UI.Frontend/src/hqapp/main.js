@@ -12,7 +12,7 @@ window.bootstrap = bootstrap
 window.Dropdown = bootstrap.Dropdown
 
 //import 'bootstrap-select'
-import '../../vendor/bootstrap-select.js'
+//import '../../vendor/bootstrap-select.js'
 //$.fn.selectpicker.Constructor.BootstrapVersion = '5';
 
 import '../assets/css/markup.scss'
