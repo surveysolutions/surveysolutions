@@ -230,6 +230,7 @@ import { RoleNames } from '~/shared/constants'
 import { filter } from 'lodash'
 import '@/assets/css/markup-web-interview.scss'
 import { defineAsyncComponent } from 'vue';
+import { Form, Field, ErrorMessage } from 'vee-validate'
 
 const validationTranslations = {
     custom: {
@@ -278,6 +279,12 @@ const emailShouldBeEmpty = {
 // })
 
 export default {
+    components: {
+        Form,
+        Field,
+        ErrorMessage,
+        signalr: defineAsyncComponent(() => import('~/webinterview/components/signalr/core.signalr')),
+    },
     data() {
         return {
             buttonAnimated: false,
@@ -492,10 +499,6 @@ export default {
             window.ajustNoticeHeight()
             window.ajustDetailsPanelHeight()
         })
-    },
-
-    components: {
-        signalr: defineAsyncComponent(() => import('~/webinterview/components/signalr/core.signalr')),
     },
 
     // beforeMount() {
