@@ -7,7 +7,7 @@
                         {{ $t("WebInterviewUI.LoadingWait") }}
                     </div>
                 </div>
-                <div class="unit-section complete-section" v-else>
+                <Form as="div" v-slot="{ errors, meta }" ref="createForm" class="unit-section complete-section" v-else>
                     <div class="wrapper-info error">
                         <div class="container-info">
                             <h2>
@@ -27,16 +27,19 @@
                             <div class="options-group">
                                 <div class="form-group">
                                     <div class="field" :class="{ answered: newResponsibleId != null }">
-                                        <Typeahead :rules="responsibleValidations" control-id="newResponsibleId"
-                                            :placeholder="$t('Common.Responsible')" :value="newResponsibleId"
-                                            :ajax-params="{}" @selected="newResponsibleSelected"
-                                            :fetch-url="config.responsiblesUrl"></Typeahead>
+                                        <Field v-slot="{ field }" label="Responsible" name="newResponsibleId"
+                                            :value="newResponsibleId" :rules="responsibleValidations">
+                                            <Typeahead v-bind="field" control-id="newResponsibleId"
+                                                :placeholder="$t('Common.Responsible')" :value="newResponsibleId"
+                                                :ajax-params="{}" @selected="newResponsibleSelected"
+                                                :fetch-url="config.responsiblesUrl"></Typeahead>
+                                        </Field>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="information-block text-danger" v-if="!assignToQuestion.validity.isValid">
-                            <p v-for="error in errors.collect('newResponsibleId')">{{ error }}</p>
+                            <p>{{ errors.newResponsibleId }}</p>
                         </div>
                     </wb-question>
 
@@ -62,7 +65,7 @@
                         </div>
                         <div class="information-block text-danger" v-if="!sizeQuestion.validity.isValid">
                             <p>{{ this.$t("Assignments.InvalidExpected") }}</p>
-                            <p>{{ errors.first('size') }}</p>
+                            <!--p>{{ errors.size }}</p-->
                         </div>
                     </wb-question>
 
@@ -178,7 +181,7 @@
                         <button :class="{ 'shake': buttonAnimated }" type="button" @click="create($event)"
                             class="btn btn-success btn-lg">{{ $t('Common.Create') }}</button>
                     </div>
-                </div>
+                </Form>
             </div>
         </div>
         <portal-target name="body" multiple>
@@ -239,25 +242,6 @@ const validationTranslations = {
 
 //Validator.localize('en', validationTranslations)
 
-const emailOrPasswordRequired = {
-    getMessage() {
-        return $t('Assignments.ExpectedForWebMode')
-    },
-    validate(value, [email, password]) {
-        return (email !== null && email !== '') || (password !== null && password !== '')
-    },
-    hasTarget: true,
-}
-
-const emailShouldBeEmpty = {
-    getMessage() {
-        return $t('Assignments.InvalidExpectedWithEmail')
-    },
-    validate(value, [email]) {
-        return email === null || email === ''
-    },
-    hasTarget: true,
-}
 
 //TODO: MIGRATION
 
@@ -354,16 +338,26 @@ export default {
     computed: {
         sizeValidations() {
             let validations = {
-                regex: '^-?([0-9]+)$',
-                min_value: -1,
-                max_value: this.config.maxInterviewsByAssignment,
-            }
+                regex: {
+                    regex: /^-?([0-9]+)$/
+                },
+                min_value: {
+                    min: -1
+                },
+                max_value: {
+                    max: this.config.maxInterviewsByAssignment
+                }
+            };
 
             if (this.webMode.answer) {
                 if (this.sizeQuestion.answer === '1') {
-                    validations.emailOrPasswordRequired = [this.emailQuestion.answer, this.passwordQuestion.answer]
+                    validations.custom = {
+                        validate: this.emailOrPasswordRequired
+                    }
                 } else {
-                    validations.emailShouldBeEmpty = [this.emailQuestion.answer]
+                    validations.custom = {
+                        validate: this.emailShouldBeEmpty
+                    }
                 }
             }
 
@@ -417,14 +411,14 @@ export default {
         },
         async create(evnt) {
             evnt.target.disabled = true
-            var validationResult = await this.$validator.validateAll()
+            const validationResult = await this.$refs.createForm.validate()
             const self = this
-            this.sizeQuestion.validity.isValid = !this.errors.has('size')
-            this.emailQuestion.validity.isValid = !this.errors.has('email')
-            this.passwordQuestion.validity.isValid = !this.errors.has('password')
-            this.assignToQuestion.validity.isValid = !this.errors.has('newResponsibleId')
+            this.sizeQuestion.validity.isValid = !validationResult.errors.size
+            this.emailQuestion.validity.isValid = !validationResult.errors.email
+            this.passwordQuestion.validity.isValid = !validationResult.errors.password
+            this.assignToQuestion.validity.isValid = !validationResult.errors.newResponsibleId
 
-            const submitAllowed = validationResult
+            const submitAllowed = validationResult.valid
             if (submitAllowed) {
                 this.$http
                     .post(this.config.createNewAssignmentUrl, {
@@ -453,7 +447,7 @@ export default {
                 setTimeout(() => {
                     self.buttonAnimated = false
 
-                    const firstField = Object.keys(self.errors.collect())[0]
+                    const firstField = Object.keys(validationResult.errors)[0]
 
                     self.$nextTick(() => {
                         var elToScroll = self.$refs[`ref_${firstField}`]
@@ -480,6 +474,28 @@ export default {
         connected() {
             this.$store.dispatch('loadTakeNew', { interviewId: this.interviewId })
         },
+
+        emailOrPasswordRequired() {
+            const email = this.emailQuestion.answer;
+            const password = this.passwordQuestion.answer;
+            const isValid = (email !== null && email !== '') || (password !== null && password !== '')
+
+            if (isValid)
+                return true;
+
+            return $t('Assignments.ExpectedForWebMode')
+        },
+
+        emailShouldBeEmpty() {
+            const email = this.emailQuestion.answer;
+            const isValid = email === null || email === ''
+
+            if (isValid)
+                return true;
+
+            return $t('Assignments.InvalidExpectedWithEmail')
+        },
+
     },
 
     mounted() {
