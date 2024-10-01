@@ -47,9 +47,6 @@ import config from '~/shared/config'
 import { registerStore } from './store'
 const store = registerStore(vue)
 
-import interviewHttp from '~/webinterview/api/http'
-vue.use(interviewHttp, { store })
-
 import moment from 'moment'
 moment.locale(browserLanguage)
 

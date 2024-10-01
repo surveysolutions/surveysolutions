@@ -221,9 +221,6 @@
 
 <script>
 import { nextTick } from 'vue'
-//import { Validator } from 'vee-validate'
-//TODO: MIGRATION
-
 import * as toastr from 'toastr'
 import http from '~/webinterview/api/http'
 import { RoleNames } from '~/shared/constants'
@@ -501,10 +498,10 @@ export default {
         })
     },
 
-    // beforeMount() {
-    //     Vue.use(http, { store: this.$store })
-    // },
-    //TODO: MIGRATION
+    beforeMount() {
+        http.install(this, { store: this.$store })
+        //Vue.use(http, { store: this.$store })
+    },
 
     beforeDestroy() {
         window.removeEventListener('resize', this.onResize)
