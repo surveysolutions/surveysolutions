@@ -17,12 +17,19 @@
             </search-section-result>
 
             <infinite-loading ref="loader" v-if="searchResultsAreVisible" @infinite="infiniteHandler" :distance="250">
-                <span slot="no-more"></span>
-                <span slot="no-results"></span>
+                <template #complete>
+                    <span slot="no-more"></span>
+                </template>
             </infinite-loading>
         </div>
     </aside>
 </template>
+
+<style lang="css">
+.v3-infinite-loading div {
+    text-align: center;
+}
+</style>
 
 <script>
 import InfiniteLoading from "v3-infinite-loading";
@@ -41,17 +48,18 @@ export default {
             this.$store.dispatch('hideSearchResults')
         },
 
-        infiniteHandler($state) {
+        async infiniteHandler($state) {
+            debugger
             const self = this
 
-            this.$store.dispatch('fetchSearchResults')
-                .then(() => {
-                    $state.loaded()
+            await this.$store.dispatch('fetchSearchResults')
 
-                    if (self.searchResult.skip >= self.searchResult.count) {
-                        $state.complete()
-                    }
-                })
+            if (self.searchResult.skip >= self.searchResult.count) {
+                $state.complete()
+            }
+            else {
+                $state.loaded()
+            }
         },
     },
 
