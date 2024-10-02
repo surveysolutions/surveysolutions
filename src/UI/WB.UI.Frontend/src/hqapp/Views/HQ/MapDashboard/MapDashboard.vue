@@ -192,7 +192,7 @@
                 <div class="form-group">
                     <label class="control-label" for="newResponsibleId">{{
                         $t('Assignments.SelectResponsible')
-                        }}</label>
+                    }}</label>
                     <Typeahead control-id="newResponsibleId" :placeholder="$t('Common.Responsible')"
                         :value="newResponsibleId" :ajax-params="{}" @selected="newResponsibleSelected"
                         :fetch-url="model.responsible"></Typeahead>
@@ -391,9 +391,9 @@ export default {
         },
     },
 
-    mounted() {
+    async mounted() {
         this.setMapCanvasStyle()
-        this.initializeMap()
+        await this.initializeMap()
 
         this.assignmentId = this.query.assignmentId
 
@@ -663,11 +663,13 @@ export default {
             }
         },
 
-        initializeMap() {
+        async initializeMap() {
             const self = this
 
+            const { Map } = await google.maps.importLibrary("maps");
+
             const mapDiv = document.getElementById('map-canvas')
-            this.map = new google.maps.Map(mapDiv, this.getMapOptions())
+            this.map = new Map(mapDiv, this.getMapOptions())
 
             this.infoWindow = new google.maps.InfoWindow()
 
