@@ -40,6 +40,19 @@ defineRule("required_if", (value, [target, targetValue], ctx) => {
     return true;
 });
 
+
+defineRule('callLocalMethod', (value, { method }) => {
+    if (typeof method !== 'function') {
+        return 'Method to call is missing';
+    }
+
+    const result = method(value);
+    if (typeof result === 'string') {
+        return result;
+    }
+    return result ? true : 'Validation error';
+});
+
 configure({
     generateMessage: localize({
         en,

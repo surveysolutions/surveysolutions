@@ -351,13 +351,13 @@ export default {
 
             if (this.webMode.answer) {
                 if (this.sizeQuestion.answer === '1') {
-                    validations.custom = {
-                        validate: this.emailOrPasswordRequired
-                    }
+                    validations.callLocalMethod = {
+                        method: this.emailOrPasswordRequired
+                    };
                 } else {
-                    validations.custom = {
-                        validate: this.emailShouldBeEmpty
-                    }
+                    validations.callLocalMethod = {
+                        method: this.emailShouldBeEmpty
+                    };
                 }
             }
 
@@ -366,7 +366,7 @@ export default {
         responsibleValidations() {
             return {
                 required: true,
-                responsibleShouldBeInterviewer: [this.webMode.answer],
+                callLocalMethod: { method: this.responsibleShouldBeInterviewer },
             }
         },
         passwordValidations() {
@@ -483,7 +483,7 @@ export default {
             if (isValid)
                 return true;
 
-            return $t('Assignments.ExpectedForWebMode')
+            return this.$t('Assignments.ExpectedForWebMode')
         },
 
         emailShouldBeEmpty() {
@@ -493,9 +493,19 @@ export default {
             if (isValid)
                 return true;
 
-            return $t('Assignments.InvalidExpectedWithEmail')
+            return this.$t('Assignments.InvalidExpectedWithEmail')
         },
 
+        responsibleShouldBeInterviewer() {
+            if (!this.webMode.answer)
+                return true
+
+            const value = this.newResponsibleId
+            const isValid = value.iconClass.toLowerCase() == RoleNames.INTERVIEWER.toLowerCase()
+            if (isValid)
+                return true;
+            return this.$t('Assignments.WebModeNonInterviewer')
+        },
     },
 
     mounted() {
@@ -516,10 +526,9 @@ export default {
 
     beforeMount() {
         http.install(this, { store: this.$store })
-        //Vue.use(http, { store: this.$store })
     },
 
-    beforeDestroy() {
+    unmounted() {
         window.removeEventListener('resize', this.onResize)
     },
 }
