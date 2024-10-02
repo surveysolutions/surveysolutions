@@ -64,8 +64,8 @@
                             </div>
                         </div>
                         <div class="information-block text-danger" v-if="!sizeQuestion.validity.isValid">
-                            <p>{{ this.$t("Assignments.InvalidExpected") }}</p>
-                            <!--p>{{ errors.size }}</p-->
+                            <!--p>{{ this.$t("Assignments.InvalidExpected") }}</p-->
+                            <p>{{ errors.size }}</p>
                         </div>
                     </wb-question>
 
