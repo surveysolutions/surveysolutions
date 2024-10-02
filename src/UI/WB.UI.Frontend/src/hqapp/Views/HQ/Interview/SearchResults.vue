@@ -49,7 +49,6 @@ export default {
         },
 
         async infiniteHandler($state) {
-            debugger
             const self = this
 
             await this.$store.dispatch('fetchSearchResults')
