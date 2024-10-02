@@ -383,7 +383,7 @@ export default {
             }
 
             var self = this
-            //TODO:Migration
+
             var validationResult = await this.$refs.exportForm.validate()
             if (validationResult.valid == true) {
                 const exportParams = self.getExportParams(
@@ -422,7 +422,7 @@ export default {
                     })
 
             } else {
-                //var fieldName = this.errors.items[0].field
+                var fieldName = Object.keys(validationResult.errors)[0]
                 const $firstFieldWithError = $('#' + fieldName)
                 $firstFieldWithError.focus()
             }

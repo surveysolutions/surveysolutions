@@ -693,7 +693,7 @@ export default {
                     })
             } else {
                 self.providerSettingsResult = null
-                var fieldName = this.errors.items[0].field
+                var fieldName = Object.keys(validationResult.errors)[0]
                 const $firstFieldWithError = $('#' + fieldName)
                 $firstFieldWithError.focus()
             }
