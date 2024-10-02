@@ -90,10 +90,7 @@ export default {
     },
     methods: {
         async trySignIn() {
-            var validationResult = true
-
-            await this.$refs.loginForm.validate()
-
+            const validationResult = await this.$refs.loginForm.validate()
             if (validationResult.valid == true) {
                 var passwordToSend = this.password;
                 this.isSigningIn = true;
