@@ -104,7 +104,7 @@
                         {{ $t('Common.ChangeToCAWI') }}
                     </button>
                     <button class="btn btn-link error-text" v-if="selectedRows.length && !config.isSupervisor"
-                        :disabled="getFilteredToDelete.length == 0" @click="deleteInterview">
+                        :disabled="getFilteredToDelete().length == 0" @click="deleteInterview">
                         {{ $t('Common.Delete') }}
                     </button>
                 </div>
