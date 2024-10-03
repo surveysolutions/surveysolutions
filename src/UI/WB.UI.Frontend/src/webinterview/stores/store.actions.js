@@ -349,7 +349,7 @@ export default {
     },
 
     stop() {
-        api.hub.stop()
+        hubApi.stop()
     },
 
     changeSection({ commit, rootState }, { to, from }) {
