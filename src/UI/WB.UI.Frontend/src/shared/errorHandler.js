@@ -1,10 +1,11 @@
 import axios from 'axios';
 import { getCurrentVersion } from './headquartersService';
+import * as toastr from 'toastr'
 
 const errorUrl = '/error/report';
 
 export function setupErrorHandler(app) {
-    const ignoreStatusCodes = [401, 400, 403, 404, 406];
+    const ignoreStatusCodes = [];
 
     const ignoredMessages = [
         'NetworkError when attempting to fetch resource.',
@@ -13,6 +14,9 @@ export function setupErrorHandler(app) {
     ];
 
     app.config.errorHandler = (err, vm, info) => {
+
+        tryToShowErrorTooltip(err, vm, info)
+
         const status = err.response?.status;
 
         if (status && ignoreStatusCodes.includes(status)) return false;
@@ -105,6 +109,46 @@ export function setupErrorHandler(app) {
         }
         return errorDetails;
     }
+
+
+
+    function tryToShowErrorTooltip(error, vm) {
+        if (error.response && error.response.data != null) {
+            var data = error.response.data
+
+            // handling asp net core validation errors
+            if (data.Type == 'https://tools.ietf.org/html/rfc7231#section-6.5.1'
+                || data.Type == 'https://tools.ietf.org/html/rfc9110#section-15.5.1'
+            ) {
+                let message = ''
+                Object.keys(data.Errors).forEach(k => {
+                    //message += k + ':\r\n'
+                    data.Errors[k].forEach(errMessage => message += '  ' + errMessage + '\r\n')
+                })
+
+                //console.error(data)
+                toastr.error(message, data.Title)
+                return
+            }
+
+            if (data.errors && data.errors.length > 0) {
+                let message = ''
+                data.errors.forEach(errMessage => message += '  ' + errMessage + '\r\n')
+
+                //console.error(data)
+                toastr.error(message)
+                return
+            }
+
+            const errorMessage = data.error || data.errorMessage
+            if (errorMessage) {
+                //console.error(data)
+                toastr.error(errorMessage)
+                return
+            }
+        }
+    }
+
 
     app.config.globalProperties.$errorHandler = app.config.errorHandler;
 }

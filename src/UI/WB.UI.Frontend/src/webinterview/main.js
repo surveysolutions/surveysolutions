@@ -5,7 +5,7 @@ import { createApp } from 'vue';
 //import { createPinia } from 'pinia';
 
 import App from './App.vue';
-import { setupErrorHandler } from './errors';
+import { setupErrorHandler } from '../shared/errorHandler.js'
 
 //import { sync } from 'vuex-router-sync'
 //TODO: MIGRATION, fix old usage of vuex-router-sync
@@ -40,7 +40,6 @@ import { browserLanguage } from '~/shared/helpers'
 const i18n = Vuei18n.initialize(browserLanguage, vue)
 
 import './init'
-import './errors'
 import box from '@/shared/modal'
 
 import { registerGlobalComponents } from './componentsRegistry'
