@@ -408,8 +408,8 @@ export default {
             const self = this
             const clearSearchButton = $('<button type="button" class="btn btn-link btn-clear"><span></span></button>')
             const searchInput = $(this.$refs.table)
-                .parents('.dataTables_wrapper')
-                .find('.dataTables_filter label input')
+                .parents('.dt-container')
+                .find('.dt-search input')
 
             searchInput.after(clearSearchButton)
 

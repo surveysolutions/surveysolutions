@@ -694,8 +694,7 @@
 @media (max-width: $screen-md-min) {
 
     .dataTables_wrapper .dataTables_filter,
-    .dt-container,
-    .dt-search {
+    .dt-container .dt-search {
         right: 0;
 
         label.active input {
@@ -832,8 +831,7 @@
     }
 
     .dataTables_wrapper .dataTables_filter,
-    .dt-container,
-    .dt-search {
+    .dt-container .dt-search {
         text-align: right;
         position: relative;
         top: -5px;
@@ -895,8 +893,7 @@
     }
 
     .dataTables_wrapper .dataTables_filter,
-    .dt-container,
-    .dt-search {
+    .dt-container .dt-search {
         label {
             &.active {
                 width: 100%;
