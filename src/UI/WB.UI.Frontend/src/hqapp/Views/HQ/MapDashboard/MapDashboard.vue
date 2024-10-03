@@ -667,6 +667,8 @@ export default {
             const self = this
 
             const { Map } = await google.maps.importLibrary("maps");
+            //const { Marker } = await google.maps.importLibrary("marker");
+            //const { AdvancedMarkerElement } = await google.maps.importLibrary("marker")
 
             const mapDiv = document.getElementById('map-canvas')
             this.map = new Map(mapDiv, this.getMapOptions())
