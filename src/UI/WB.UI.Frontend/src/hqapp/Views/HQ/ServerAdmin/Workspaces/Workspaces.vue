@@ -159,10 +159,8 @@ export default {
             this.editedDisplayName = null
             this.newWorkspaceName = null
 
+            this.$refs.createWorkspaceForm?.resetForm()
             this.$refs.createWorkspaceModal.modal('show')
-            nextTick(() => {
-                this.$refs.createWorkspaceForm.resetForm()
-            })
         },
         loadData() {
             if (this.$refs.table) {
