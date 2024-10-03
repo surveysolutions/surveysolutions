@@ -502,7 +502,8 @@
                                 <Field v-slot="{ field }" name="emailOnComplete" :value="emailOnCompleteIsEnabled">
                                     <input class="checkbox-filter" v-bind="field" v-validate="''" name="emailOnComplete"
                                         data-vv-name="emailOnComplete" id="emailOnComplete" type="checkbox"
-                                        v-model="emailOnCompleteIsEnabled" />
+                                        v-model="emailOnCompleteIsEnabled"
+                                        @change="attachAnswersInEmailIsEnabled = attachAnswersInEmailIsEnabled && emailOnCompleteIsEnabled" />
                                     <label for="emailOnComplete">
                                         <span class="tick"></span>{{ $t('WebInterviewSetup.EmailOnComplete') }}
                                     </label>
