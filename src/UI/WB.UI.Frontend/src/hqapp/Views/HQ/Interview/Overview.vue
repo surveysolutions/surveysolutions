@@ -4,8 +4,9 @@
 
         <infinite-loading ref="loader" v-if="overview.total > 0 && items.length > 0" @infinite="infiniteHandler"
             :distance="1000">
-            <span slot="no-more"></span>
-            <span slot="no-results"></span>
+            <template #complete>
+                <span slot="no-more"></span>
+            </template>
         </infinite-loading>
     </div>
 </template>
@@ -82,9 +83,11 @@ export default {
 
             self.loaded += 500
 
-            $state.loaded()
             if (self.overview.isLoaded && self.loaded >= self.overview.total) {
                 $state.complete()
+            }
+            else {
+                $state.loaded()
             }
         },
 
