@@ -3,7 +3,7 @@
         <div class="top-row">
             <div class="format-data" :class="data.format">
                 <div class="gray-text-row">
-                    <b>#{{ data.id }} </b>
+                    <b>#{{ data.id }}&nbsp;</b>
                     <span v-if="!isCompleted">
                         {{ $t('DataExport.DataExport_QueuedOn', { date: data.beginDate }) }}</span>
                     <span v-else>
