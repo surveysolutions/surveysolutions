@@ -43,6 +43,7 @@ export default {
     name: 'Typeahead',
 
     emits: ['selected', 'update:modelValue'],
+    expose: ['isLoading'],
 
     //TODO: MIGRATION
 

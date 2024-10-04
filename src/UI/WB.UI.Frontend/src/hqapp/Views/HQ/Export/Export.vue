@@ -51,7 +51,7 @@
                                         <div class="form-group" :class="{ 'has-error': errors.questionnaireVersion }">
                                             <Field v-slot="{ field }" name="questionnaireVersion"
                                                 label="questionnaire version" :value="questionnaireVersion"
-                                                :rules="{ required: questionnaireId != null }">
+                                                :rules="{ required: questionnaireId != null && !$refs.questionnaireVersionControl.isLoading }">
                                                 <Typeahead v-bind="field" noClear control-id="questionnaireVersion"
                                                     ref="questionnaireVersionControl" name="questionnaireVersion"
                                                     :selectedKey="pageState.version" :value="questionnaireVersion"
@@ -374,6 +374,8 @@ export default {
             this.status = null
             this.hasInterviews = false
             this.hasBinaryData = false
+
+            this.$refs.exportForm.resetForm()
         },
 
         async queueExport() {
