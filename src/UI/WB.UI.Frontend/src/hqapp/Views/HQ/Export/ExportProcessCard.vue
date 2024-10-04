@@ -11,19 +11,17 @@
                 </div>
                 <div class="h3 mb-05" v-if="data.questionnaireIdentity != null">
                     {{ $t('DataExport.DataExport_QuestionnaireWithVersion',
-                { title: data.title, version: data.questionnaireIdentity.version }) }}
+                        { title: data.title, version: data.questionnaireIdentity.version }) }}
                 </div>
                 <p class="mb-0 font-regular">
                     <u class="font-bold">{{ data.format }}</u> format.
                     <span v-if="data.format != 'DDI' && data.interviewStatus != null" class="font-bold">
                         {{ $t('DataExport.DataExport_InterviewsStatus', {
-                status: $t('DataExport.' + data.interviewStatus),
-                interpolation: { escapeValue: false }
-            }) }}
+                            status: $t('DataExport.' + data.interviewStatus),
+                            interpolation: { escapeValue: false }
+                        }) }}
                     </span>
-                    <span>
-                        {{ translation }}
-                    </span>
+                    <span>&nbsp;{{ translation }}</span>
                 </p>
             </div>
         </div>
@@ -32,10 +30,10 @@
                 <p>
                     <span v-if="data.dataDestination != null">
                         {{
-                $t('DataExport.DataExport_Destination', {
-                    dest: $t(`DataExport.DataExport_Destination_${data.dataDestination}`)
-                })
-            }}
+                            $t('DataExport.DataExport_Destination', {
+                                dest: $t(`DataExport.DataExport_Destination_${data.dataDestination}`)
+                            })
+                        }}
                     </span>
                 </p>
 
@@ -44,11 +42,11 @@
                 </p>
 
                 <p class="font-regular" v-if="data.jobStatus == 'Completed'">
-                    <span class="font-bold"> {{ $t('DataExport.DataExport_InQueue') }} </span>
-                    <span>{{ getInQueueTime(data) }} </span>
+                    <span class="font-bold"> {{ $t('DataExport.DataExport_InQueue') }}&nbsp;</span>
+                    <span>{{ getInQueueTime(data) }}&nbsp;</span>
 
-                    <span class="font-bold"> {{ $t('DataExport.DataExport_ProducedIn') }} </span>
-                    <span> {{ getProducedTime(data) }} </span>
+                    <span class="font-bold"> {{ $t('DataExport.DataExport_ProducedIn') }}&nbsp;</span>
+                    <span> {{ getProducedTime(data) }}&nbsp;</span>
                 </p>
 
                 <div class="d-flex ai-center" v-if="data.isRunning">
@@ -70,7 +68,7 @@
                         {{ $t('DataExport.DataExport_FileSize', { size: data.fileSize }) }}
                     </div>
                     <div v-if="!data.hasFile && !isFailed" class="file-info">{{
-                $t('DataExport.DataExport_FileWasRegenerated') }}</div>
+                        $t('DataExport.DataExport_FileWasRegenerated') }}</div>
                 </div>
             </div>
         </div>
