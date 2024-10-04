@@ -173,7 +173,7 @@ export default {
                 {
                     data: 'identifyingQuestions',
                     title: this.$t('Assignments.IdentifyingQuestions'),
-                    class: 'prefield-column first-identifying last-identifying sorting_disabled visible',
+                    className: 'prefield-column first-identifying last-identifying sorting_disabled visible',
                     orderable: false,
                     searchable: false,
                     render(data) {
