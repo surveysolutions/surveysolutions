@@ -12,9 +12,10 @@ import '@toast-ui/editor/dist/toastui-editor.css'
 
 import Editor from '@toast-ui/editor';
 import { escape, unescape } from 'lodash'
-
+import { markRaw } from 'vue';
 
 export default {
+    emits: ['input', 'update:modelValue'],
     props: {
         modelValue: { type: String, required: true },
         supportHtml: { type: Boolean, required: false, default: false },
@@ -35,7 +36,7 @@ export default {
 
         const options = {
             ...this.editorOptions,
-            el: this.$refs.editor,
+            el: this.getRootElement(),
             initialValue: val,
             height: this.height,
             events: {
@@ -44,11 +45,12 @@ export default {
             }
         };
 
-        this.editor = new Editor(options);
+        this.editor = markRaw(new Editor(options));
     },
     unmounted() {
         this.editor.off('change');
         this.editor.destroy();
+        this.editor = null
     },
     computed: {
         editorOptions() {
@@ -77,13 +79,15 @@ export default {
     },
     watch: {
         modelValue(newValue) {
-            if (newValue !== this.editor.getMarkdown()) {
-                try {
-                    this.editor.reset();
-                    this.editor.setMarkdown(newValue);
-                } catch (error) {
-                    console.error('Error applying markdown:', error);
-                }
+            let val = newValue
+
+            if (this.supportHtml != true) {
+                val = unescape(val)
+            }
+
+            const edVal = this.editor.getMarkdown()
+            if (val !== edVal) {
+                this.editor.setMarkdown(val);
             }
         }
     },
@@ -97,14 +101,17 @@ export default {
             }
 
             if (this.modelValue != markDown) {
-                //this.$emit('input', markDown)
+                this.$emit('input', markDown)
                 this.$emit('update:modelValue', markDown);
             }
         },
         refresh() {
             setTimeout(() => {
-                //this.editor.moveCursorToStart(false)
+                this.editor.moveCursorToStart(false)
             }, 100)
+        },
+        getRootElement() {
+            return this.$refs.editor
         },
     },
 }
