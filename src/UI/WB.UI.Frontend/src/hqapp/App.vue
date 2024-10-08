@@ -8,7 +8,7 @@ import { onMounted } from 'vue';
 export default {
     name: 'App',
     setup() {
-        //TODO: Migration
+        //TODO
         //fix layout instead of recalculation
         onMounted(() => {
             window.ajustNoticeHeight()

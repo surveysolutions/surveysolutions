@@ -200,8 +200,6 @@ export default {
             }
         },
         async createWorkspace() {
-            //TODO: MIGRATION            
-
             try {
                 this.inProgress = true
                 await this.$http.post(this.$config.model.dataUrl, {

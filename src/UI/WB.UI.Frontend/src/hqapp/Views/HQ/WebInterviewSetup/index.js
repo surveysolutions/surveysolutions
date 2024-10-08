@@ -20,10 +20,4 @@ export default class WebInterviewSetupComponent {
             },
         ]
     }
-
-    // initialize() {
-    //     const VeeValidate = require('vee-validate')
-    //     Vue.use(VeeValidate)
-    // }
-    //TODO: MIGRATION
 }

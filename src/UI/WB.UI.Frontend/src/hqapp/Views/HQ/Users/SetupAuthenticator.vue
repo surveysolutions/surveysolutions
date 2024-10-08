@@ -53,10 +53,6 @@
 </template>
 
 <script>
-//import Vue from 'vue'
-//TODO: MIGRATION
-
-
 import { each } from 'lodash'
 import QRCode from 'qrcode'
 

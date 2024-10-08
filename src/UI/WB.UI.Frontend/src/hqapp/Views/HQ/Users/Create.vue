@@ -101,11 +101,6 @@
 </template>
 
 <script>
-//import Vue from 'vue'
-//import VuePageTitle from 'vue-page-title'
-//Vue.use(VuePageTitle, {})
-//TODO: MIGRATION
-
 import { each } from 'lodash'
 import { RoleNames } from '~/shared/constants'
 

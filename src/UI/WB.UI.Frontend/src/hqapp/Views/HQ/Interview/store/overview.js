@@ -1,12 +1,5 @@
-//import Vue from 'vue'
-//import Vuex from 'vuex'
 import { concat } from 'lodash'
-
-//Vue.use(Vuex)
-//Todo: MIGRATION
-
 import { api } from '~/webinterview/api/http'
-
 
 export default {
     state: {
@@ -69,8 +62,5 @@ export default {
             state.additionalInfo[additionalInfo.id] = additionalInfo.data
         },
     },
-
-    getters: {
-
-    },
+    getters: {}
 }

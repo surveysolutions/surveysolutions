@@ -1,9 +1,3 @@
-//import Vue from 'vue'
-//import Vuex from 'vuex'
-
-//Vue.use(Vuex)
-//Todo: MIGRATION
-
 import { api } from '~/webinterview/api/http'
 
 export default {

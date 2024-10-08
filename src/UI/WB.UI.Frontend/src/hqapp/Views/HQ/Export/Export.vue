@@ -273,8 +273,6 @@
 </template>
 
 <script>
-
-//TODO: MIGRATION
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import ExportProcessCard from './ExportProcessCard'
 import gql from 'graphql-tag'

@@ -240,25 +240,6 @@ const validationTranslations = {
     },
 }
 
-//Validator.localize('en', validationTranslations)
-
-
-//TODO: MIGRATION
-
-//Validator.extend('emailOrPasswordRequired', emailOrPasswordRequired)
-//Validator.extend('emailShouldBeEmpty', emailShouldBeEmpty)
-
-// Validator.extend('responsibleShouldBeInterviewer', {
-//     getMessage() {
-//         return $t('Assignments.WebModeNonInterviewer')
-//     },
-//     validate(value, [webMode]) {
-//         if (!webMode) return true
-
-//         return value.iconClass.toLowerCase() == RoleNames.INTERVIEWER.toLowerCase()
-//     },
-// })
-
 export default {
     components: {
         Form,

@@ -85,7 +85,7 @@
                     </button>
                     <span class="text-success" v-if="globalNoticeUpdated">{{
                         $t('Settings.GlobalNoteSaved')
-                        }}</span>
+                    }}</span>
                 </div>
             </form>
         </div>
@@ -392,7 +392,6 @@
 </style>
 
 <script>
-//TODO: MIGRATION
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import modal from '@/shared/modal'
 

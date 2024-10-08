@@ -41,17 +41,8 @@ import { assign, chain, find, filter, escape, escapeRegExp } from 'lodash'
 
 export default {
     name: 'Typeahead',
-
     emits: ['selected', 'update:modelValue'],
     expose: ['isLoading'],
-
-    //TODO: MIGRATION
-
-    // http://vee-validate.logaretm.com/v2/concepts/components.html#component-constructor-options
-    //$_veeValidate: {
-    //    name: function () { return this.controlId },
-    //},    
-
     props: {
         fetchUrl: String,
         name: String,

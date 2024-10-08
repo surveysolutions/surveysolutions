@@ -786,8 +786,6 @@ export default {
         },
 
         validateQuantity(value) {
-
-            //TODO: MIGRATION
             const regex = /^-?([0-9]+)$/i;
 
             if (!regex.test(value)) {

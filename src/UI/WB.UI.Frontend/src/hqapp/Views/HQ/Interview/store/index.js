@@ -1,6 +1,3 @@
-//import Vue from 'vue'
-//Todo: MIGRATION
-
 import webinterview from '~/webinterview/stores'
 import filters from './filters'
 import flags from './flags'

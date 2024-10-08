@@ -22,7 +22,7 @@ import { onMounted } from 'vue';
 
 export default {
     name: 'app',
-    //TODO: Migration
+    //TODO
     //fix layout instead of recalculation
     setup() {
         onMounted(() => {

@@ -1,5 +1,3 @@
-// //TODO: MIGRATION
-// import Vue from 'vue'
 import i18next from 'i18next'
 
 export default {
@@ -29,14 +27,6 @@ export default {
         vue.config.globalProperties.$t = function () {
             return i18next.t.apply(i18next, arguments)
         }
-
-        // Vue.$t = function () {
-        //     return i18next.t.apply(i18next, arguments)
-        // }
-
-        // Vue.prototype.$t = function () {
-        //     return i18next.t.apply(i18next, arguments)
-        // }
 
         return i18next
     },

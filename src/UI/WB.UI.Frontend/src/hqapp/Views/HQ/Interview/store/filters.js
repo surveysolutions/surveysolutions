@@ -1,5 +1,3 @@
-//import Vue from 'vue'
-//TODO: MIGRATION
 import { capitalize, sum, unionBy, find } from 'lodash'
 import { api } from '../../../../../webinterview/api/http'
 

@@ -1,6 +1,3 @@
-//import Vue from 'vue'
-//TODO: MIGRATION
-
 import { find, findIndex, chunk } from 'lodash'
 import moment from 'moment'
 import { DateFormats } from '~/shared/helpers'

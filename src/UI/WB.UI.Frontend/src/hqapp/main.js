@@ -1,31 +1,16 @@
 import jquery from '~/shared/jquery'
 import 'bootstrap'
 import * as bootstrap from 'bootstrap'
-//import "bootstrap/scss/_functions.scss";
-//import "bootstrap/scss/_mixins.scss";
-//import "bootstrap/scss/_variables.scss";
-//import "bootstrap/scss/_nav.scss";
-//import "bootstrap/scss/_navbar.scss";
-//import "bootstrap/scss/bootstrap.scss";
-
 window.bootstrap = bootstrap
 window.Dropdown = bootstrap.Dropdown
-
-//import 'bootstrap-select'
-//import '../../vendor/bootstrap-select.js'
-//$.fn.selectpicker.Constructor.BootstrapVersion = '5';
 
 import '../assets/css/markup.scss'
 import '../assets/css/markup-specific.scss'
 
 import { createApp } from 'vue'
-//import { createPinia } from 'pinia'
-
 import App from './App.vue';
 
-//const pinia = createPinia()
 const vue = createApp(App)
-//vue.use(pinia)
 
 import { setupErrorHandler } from '../shared/errorHandler.js'
 setupErrorHandler(vue);
@@ -33,12 +18,6 @@ setupErrorHandler(vue);
 import Vuei18n from '~/shared/plugins/locale'
 import { browserLanguage } from '~/shared/helpers'
 const i18n = Vuei18n.initialize(browserLanguage, vue)
-
-//import VueApollo from 'vue-apollo'
-//vue.use(VueApollo)
-
-//import { sync } from 'vuex-router-sync'
-//TODO: MIGRATION, fix old usage of vuex-router-sync 
 
 //plugin registration in Vue
 import http from '~/shared/plugins/http'
@@ -53,7 +32,6 @@ moment.locale(browserLanguage)
 import { registerComponents } from './components'
 registerComponents(vue)
 
-//TODO: MIGRATION. move it
 import ProfileLayout from './Views/HQ/Users/ProfileLayout.vue'
 vue.component('ProfileLayout', ProfileLayout)
 
@@ -104,12 +82,7 @@ const router = new Router({
     store: store
 }).router
 
-
-//import router from './router';
 vue.use(router)
-
-//sync(store, router)
-//TODO: MIGRATION
 
 import { pageTitle } from 'vue-page-title'
 vue.use(pageTitle)
@@ -117,23 +90,9 @@ vue.use(pageTitle)
 vue.config.globalProperties.$eventHub = vue
 
 
-import emitter from '~/shared/emitter';
-vue.config.globalProperties.$emitter = emitter;
+import emitter from '~/shared/emitter'
+vue.config.globalProperties.$emitter = emitter
 
-//TODO: MIGRATION. 
-
-// export default new Vue({
-//     el: '#vueApp',
-//     render: h => h('router-view'),
-//     store,
-//     router,
-//     // apolloProvider: new VueApollo({
-//     //     defaultClient: apolloClient,
-//     // }),
-// })
-
-
-// Run!
 router.isReady().then(() => {
     vue.mount('#vueApp');
 });

@@ -1,14 +1,9 @@
-//import Vue from 'vue'
-//TODO: MIGRATION
-
 import Layout from './Layout'
 import Upload from './Upload'
 import UploadVerification from './UploadVerification'
 import UploadProgress from './UploadProgress'
 import UploadComplete from './UploadComplete'
 import upload from './store'
-
-//TODO: MIGRATION. Remove after migration to mande
 import axios from 'axios'
 
 import config from '~/shared/config'

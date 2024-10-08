@@ -54,8 +54,6 @@
 <script>
 import { DateFormats } from '~/shared/helpers'
 import { api } from '~/webinterview/api/http'
-//import Vue from 'vue'
-//TODO: MIGRATION
 import moment from 'moment'
 
 export default {

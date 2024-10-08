@@ -7,8 +7,6 @@ import UploadVerification from './Upload/Verification'
 import UploadProgress from './Upload/Progress'
 import assignmentsStore from './store'
 import config from '~/shared/config'
-
-//TODO: MIGRATION. Remove after migration to mande
 import axios from 'axios'
 
 export default class AssignmentsComponent {
