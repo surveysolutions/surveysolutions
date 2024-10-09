@@ -112,7 +112,7 @@ export function setupErrorHandler(app) {
 
 
 
-    function tryToShowErrorTooltip(error, vm) {
+    function tryToShowErrorTooltip(error, vm, info) {
         if (error.response && error.response.data != null) {
             var data = error.response.data
 
