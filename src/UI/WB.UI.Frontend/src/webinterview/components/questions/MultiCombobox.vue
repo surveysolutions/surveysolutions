@@ -18,8 +18,12 @@
                         v-if="row.attachmentName" />
                 </div>
 
-                <div class="form-group" v-if="($me.acceptAnswer && !allAnswersGiven) || (!$me.acceptAnswer && !$me.isAnswered)">                    <div class="field" :class="{ answered: $me.isAnswered }">
-                        <wb-typeahead :disabled="!$me.acceptAnswer" :questionId="$me.id" @input="appendCompboboxItem" :optionsSource="optionsSource"                            :watermark="!$me.acceptAnswer && !$me.isAnswered ? $t('Details.NoAnswer') : null" />
+                <div class="form-group"
+                    v-if="($me.acceptAnswer && !allAnswersGiven) || (!$me.acceptAnswer && !$me.isAnswered)">
+                    <div class="field" :class="{ answered: $me.isAnswered }">
+                        <wb-typeahead :disabled="!$me.acceptAnswer" :questionId="$me.id" @input="appendCompboboxItem"
+                            :optionsSource="optionsSource"
+                            :watermark="!$me.acceptAnswer && !$me.isAnswered ? $t('Details.NoAnswer') : null" />
                     </div>
                 </div>
                 <wb-lock />
@@ -79,7 +83,9 @@ export default {
             const self = this
             const interviewId = this.$route.params.interviewId
             const excludedOptionIds = self.$me.answer
-            const optionsPromise = api.get('getTopFilteredOptionsForQuestionWithExclude', { interviewId, id: this.$me.id, filter, count: 20, excludedOptionIds })
+            const optionsPromise = api.get('getTopFilteredOptionsForQuestionWithExclude', {
+                interviewId, id: this.$me.id, filter, count: 20, excludedOptionIds
+            })
             return optionsPromise
                 .then(options => {
                     return loFilter(options, (o) => {
