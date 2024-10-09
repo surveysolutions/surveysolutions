@@ -6,6 +6,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Dto
 {
     public class AssignmentToImport
     {
+        public AssignmentToImport()
+        {
+        }
+
         public virtual int Id { get; set; }
         public virtual Guid? Interviewer { get; set; }
         public virtual Guid? Supervisor { get; set; }

@@ -38,6 +38,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 var preloadingWebMode = preloadingValues.FirstOrDefault(x => x.VariableOrCodeOrPropertyName == ServiceColumns.WebModeColumnName);
                 var preloadingRecordAudio = preloadingValues.FirstOrDefault(x => x.VariableOrCodeOrPropertyName == ServiceColumns.RecordAudioColumnName);
                 var preloadingComments = preloadingValues.FirstOrDefault(x => x.VariableOrCodeOrPropertyName == ServiceColumns.CommentsColumnName);
+                var preloadingTargetArea = preloadingValues.FirstOrDefault(x => x.VariableOrCodeOrPropertyName == ServiceColumns.TargetAreaColumnName);
 
                 yield return new PreloadingAssignmentRow
                 {
@@ -53,7 +54,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                     Password = preloadingPassword?.ToAssignmentPassword(),
                     WebMode = preloadingWebMode?.ToAssignmentWebMode(),
                     RecordAudio = preloadingRecordAudio?.ToAssignmentRecordAudio(),
-                    Comments = preloadingComments?.ToAssignmentComments()
+                    Comments = preloadingComments?.ToAssignmentComments(),
+                    TargetArea = preloadingTargetArea?.ToAssignmentTargetArea(),
                 };
             }
         }

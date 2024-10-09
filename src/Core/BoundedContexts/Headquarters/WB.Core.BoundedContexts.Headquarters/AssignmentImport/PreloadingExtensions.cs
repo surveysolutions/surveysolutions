@@ -221,6 +221,13 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 Value = answer.Value
             };
 
+        public static AssignmentTargetArea ToAssignmentTargetArea(this PreloadingValue answer) =>
+            new AssignmentTargetArea()
+            {
+                Column = answer.Column,
+                Value = answer.Value
+            };
+
         public static AssignmentRecordAudio ToAssignmentRecordAudio(this PreloadingValue preloadingWebMode)
         {
             var recordAudio = new AssignmentRecordAudio
