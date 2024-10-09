@@ -1,104 +1,68 @@
 <template>
     <HqLayout :hasFilter="false">
-        <div slot="headers">
-            <ol class="breadcrumb">
-                <li>
-                    <a v-bind:href="referrerUrl">{{referrerTitle}}</a>
-                </li>
-            </ol>
-            <h1>{{title}}</h1>
-        </div>
+        <template v-slot:headers>
+            <div>
+                <ol class="breadcrumb">
+                    <li>
+                        <a v-bind:href="referrerUrl">{{ referrerTitle }}</a>
+                    </li>
+                </ol>
+                <h1>{{ title }}</h1>
+            </div>
+        </template>
         <div class="extra-margin-bottom">
             <div class="profile">
                 <div class="col-sm-7">
                     <p>
                         <span v-html="$t('Pages.User_CreateText1')"></span>
                         <br />
-                        <span v-html="$t('Pages.User_CreateText2', {link: uploadUri})"></span>
+                        <span v-html="$t('Pages.User_CreateText2', { link: uploadUri })"></span>
                     </p>
                 </div>
                 <div class="col-sm-12">
-                    <form-group
-                        :label="$t('Pages.UsersManage_WorkspacesFilterPlaceholder')"
-                        :error="modelState['Workspace']"
-                        :mandatory="true">
-                        <div class="field form-control"
-                            :class="{answered: workspace != null}"
-                            style="padding:0 10px">
-                            <Typeahead
-                                control-id="workspace"
-                                :value="workspace"
-                                :ajax-params="{ }"
-                                :fetch-url="model.api.workspacesUrl"
-                                @selected="workspaceSelected"></Typeahead>
+                    <form-group :label="$t('Pages.UsersManage_WorkspacesFilterPlaceholder')"
+                        :error="modelState['Workspace']" :mandatory="true">
+                        <div class="field form-control" :class="{ answered: workspace != null }" style="padding:0 10px">
+                            <Typeahead control-id="workspace" :value="workspace" :ajax-params="{}"
+                                :fetch-url="model.api.workspacesUrl" @selected="workspaceSelected"></Typeahead>
                         </div>
                     </form-group>
-                    <form-group
-                        :label="$t('Pages.UsersManage_RoleFilterPlaceholder')"
-                        :error="modelState['Role']"
+                    <form-group :label="$t('Pages.UsersManage_RoleFilterPlaceholder')" :error="modelState['Role']"
                         :mandatory="true">
-                        <div class="field form-control"
-                            :class="{answered: role != null}"
-                            style="padding:0 10px">
-                            <Typeahead
-                                control-id="role"
-                                :value="role"
-                                :values="model.roles"
-                                @selected="roleSelected"></Typeahead>
+                        <div class="field form-control" :class="{ answered: role != null }" style="padding:0 10px">
+                            <Typeahead control-id="role" :value="role" :values="model.roles" @selected="roleSelected">
+                            </Typeahead>
                         </div>
                     </form-group>
-                    <form-group
-                        :label="$t('FieldsAndValidations.UserNameFieldName')"
-                        :error="modelState['UserName']"
+                    <form-group :label="$t('FieldsAndValidations.UserNameFieldName')" :error="modelState['UserName']"
                         :mandatory="true">
-                        <TextInput
-                            v-model.trim="userName"
-                            :haserror="modelState['UserName'] !== undefined"
-                            id="UserName"/>
+                        <TextInput v-model.trim="userName" :haserror="modelState['UserName'] !== undefined"
+                            id="UserName" />
                     </form-group>
-                    <form-group
-                        v-if="isInterviewer"
-                        :label="$t('Pages.Interviewers_SupervisorTitle')"
-                        :error="modelState['SupervisorId']"
-                        :mandatory="true">
-                        <div class="field"
-                            :class="{answered: supervisor != null}">
-                            <Typeahead
-                                control-id="supervisor"
-                                :value="supervisor"
+                    <form-group v-if="isInterviewer" :label="$t('Pages.Interviewers_SupervisorTitle')"
+                        :error="modelState['SupervisorId']" :mandatory="true">
+                        <div class="field" :class="{ answered: supervisor != null }">
+                            <Typeahead control-id="supervisor" :value="supervisor"
                                 :ajax-params="{ workspace: (this.workspace || {}).key }"
-                                :fetch-url="$config.model.api.supervisorWorkspaceUrl"
-                                @selected="supervisorSelected"></Typeahead>
+                                :fetch-url="$config.model.api.supervisorWorkspaceUrl" @selected="supervisorSelected">
+                            </Typeahead>
                         </div>
                     </form-group>
-                    <form-group
-                        :label="$t('FieldsAndValidations.NewPasswordFieldName')"
-                        :error="modelState['Password']"
+                    <form-group :label="$t('FieldsAndValidations.NewPasswordFieldName')" :error="modelState['Password']"
                         :mandatory="true">
-                        <TextInput
-                            type="password"
-                            v-model.trim="password"
-                            :haserror="modelState['Password'] !== undefined"
-                            id="Password"/>
+                        <TextInput type="password" v-model.trim="password"
+                            :haserror="modelState['Password'] !== undefined" id="Password" />
                     </form-group>
-                    <form-group
-                        :label="$t('FieldsAndValidations.ConfirmPasswordFieldName')"
-                        :error="modelState['ConfirmPassword']"
-                        :mandatory="true">
-                        <TextInput
-                            type="password"
-                            v-model.trim="confirmPassword"
-                            :haserror="modelState['ConfirmPassword'] !== undefined"
-                            id="ConfirmPassword"/>
+                    <form-group :label="$t('FieldsAndValidations.ConfirmPasswordFieldName')"
+                        :error="modelState['ConfirmPassword']" :mandatory="true">
+                        <TextInput type="password" v-model.trim="confirmPassword"
+                            :haserror="modelState['ConfirmPassword'] !== undefined" id="ConfirmPassword" />
                     </form-group>
                     <div class="block-filter">
-                        <input
-                            id="ShowPassword"
-                            type="checkbox"
-                            style="margin-right:5px"
+                        <input id="ShowPassword" type="checkbox" style="margin-right:5px"
                             onclick="var pass = document.getElementById('Password');pass.type = (pass.type === 'text' ? 'password' : 'text');var confirm = document.getElementById('ConfirmPassword');confirm.type = (confirm.type === 'text' ? 'password' : 'text');">
-                        <label for="ShowPassword"                    >
-                            <span></span>{{$t('Pages.ShowPassword')}}
+                        <label for="ShowPassword">
+                            <span></span>{{ $t('Pages.ShowPassword') }}
                         </label>
                     </div>
                 </div>
@@ -106,46 +70,28 @@
                     <div class="separate-line"></div>
                 </div>
                 <div class="col-sm-12">
-                    <h5 class="extra-margin-bottom"
-                        v-html="$t('Pages.PublicSection')"></h5>
-                    <form-group
-                        :label="$t('FieldsAndValidations.PersonNameFieldName')"
+                    <h5 class="extra-margin-bottom" v-html="$t('Pages.PublicSection')"></h5>
+                    <form-group :label="$t('FieldsAndValidations.PersonNameFieldName')"
                         :error="modelState['PersonName']">
-                        <TextInput
-                            v-model.trim="personName"
-                            :haserror="modelState['PersonName'] !== undefined"
-                            id="PersonName"/>
+                        <TextInput v-model.trim="personName" :haserror="modelState['PersonName'] !== undefined"
+                            id="PersonName" />
                     </form-group>
-                    <form-group
-                        :label="$t('FieldsAndValidations.EmailFieldName')"
-                        :error="modelState['Email']">
-                        <TextInput
-                            v-model.trim="email"
-                            :haserror="modelState['Email'] !== undefined"
-                            id="Email"/>
+                    <form-group :label="$t('FieldsAndValidations.EmailFieldName')" :error="modelState['Email']">
+                        <TextInput v-model.trim="email" :haserror="modelState['Email'] !== undefined" id="Email" />
                     </form-group>
-                    <form-group
-                        :label="$t('FieldsAndValidations.PhoneNumberFieldName')"
+                    <form-group :label="$t('FieldsAndValidations.PhoneNumberFieldName')"
                         :error="modelState['PhoneNumber']">
-                        <TextInput
-                            v-model.trim="phoneNumber"
-                            :haserror="modelState['PhoneNumber'] !== undefined"
-                            id="PhoneNumber"/>
+                        <TextInput v-model.trim="phoneNumber" :haserror="modelState['PhoneNumber'] !== undefined"
+                            id="PhoneNumber" />
                     </form-group>
                 </div>
 
                 <div class="col-sm-12">
                     <div class="block-filter">
-                        <button
-                            type="submit"
-                            class="btn btn-success"
-                            style="margin-right:5px"
-                            id="btnCreate"
-                            @click="createAccount">{{$t('Pages.Create')}}</button>
-                        <a class="btn btn-default"
-                            v-bind:href="referrerUrl"
-                            id="lnkCancel">
-                            {{$t('Common.Cancel')}}
+                        <button type="submit" class="btn btn-success" style="margin-right:5px" id="btnCreate"
+                            @click="createAccount">{{ $t('Pages.Create') }}</button>
+                        <a class="btn btn-default" v-bind:href="referrerUrl" id="lnkCancel">
+                            {{ $t('Common.Cancel') }}
                         </a>
                     </div>
                 </div>
@@ -155,12 +101,8 @@
 </template>
 
 <script>
-import Vue from 'vue'
-import {each} from 'lodash'
-import VuePageTitle from 'vue-page-title'
-import {RoleNames} from '~/shared/constants'
-
-Vue.use(VuePageTitle, {})
+import { each } from 'lodash'
+import { RoleNames } from '~/shared/constants'
 
 export default {
     title: (context) => context.title,
@@ -221,41 +163,41 @@ export default {
         referrerUrl() {
             return '/users/UsersManagement'
         },
-        title(){
+        title() {
             if (this.role)
                 return `${this.$t('Pages.Create')} ${this.$t(`Roles.${this.role.key}`)}`
             return this.$t('Pages.Create')
         },
     },
     watch: {
-        userName: function(val) {
+        userName: function (val) {
             delete this.modelState['UserName']
         },
-        personName: function(val) {
+        personName: function (val) {
             delete this.modelState['PersonName']
         },
-        email: function(val) {
+        email: function (val) {
             delete this.modelState['Email']
         },
-        phoneNumber: function(val) {
+        phoneNumber: function (val) {
             delete this.modelState['PhoneNumber']
         },
-        password: function(val) {
+        password: function (val) {
             delete this.modelState['Password']
         },
-        confirmPassword: function(val) {
+        confirmPassword: function (val) {
             delete this.modelState['ConfirmPassword']
         },
-        supervisor: function(val) {
+        supervisor: function (val) {
             delete this.modelState['SupervisorId']
         },
-        workspace: function(val) {
+        workspace: function (val) {
             delete this.modelState['Workspace']
         },
-        role: function(val) {
+        role: function (val) {
             delete this.modelState['Role']
         },
-        title : function(val) {
+        title: function (val) {
             this.$title = val
         },
     },
@@ -269,7 +211,7 @@ export default {
         roleSelected(newValue) {
             this.role = newValue
         },
-        createAccount: function(event) {
+        createAccount: function (event) {
             this.successMessage = null
             for (var error in this.modelState) {
                 delete this.modelState[error]
@@ -304,19 +246,19 @@ export default {
                 }
             )
         },
-        processModelState: function(response, vm) {
+        processModelState: function (response, vm) {
             if (response) {
-                each(response, function(state) {
+                each(response, function (state) {
                     var message = ''
                     var stateErrors = state.value
                     if (stateErrors) {
-                        each(stateErrors, function(stateError, j) {
+                        each(stateErrors, function (stateError, j) {
                             if (j > 0) {
                                 message += '; '
                             }
                             message += stateError
                         })
-                        vm.$set(vm.modelState, state.key, message)
+                        vm.modelState[state.key] = message
                     }
                 })
             }

@@ -18,7 +18,17 @@
 import '@/assets/css/markup.scss'
 import '@/assets/css/markup-web-interview.scss'
 
+import { onMounted } from 'vue';
+
 export default {
     name: 'app',
+    //TODO
+    //fix layout instead of recalculation
+    setup() {
+        onMounted(() => {
+            window.ajustNoticeHeight()
+            window.ajustDetailsPanelHeight()
+        });
+    },
 }
 </script>

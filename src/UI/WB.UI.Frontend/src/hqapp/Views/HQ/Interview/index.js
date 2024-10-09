@@ -1,5 +1,4 @@
 import localStore from './store'
-import Vue from 'vue'
 
 const Review = () => import('./Review')
 const Cover = () => import('~/webinterview/components/Cover')
@@ -9,7 +8,7 @@ const Overview = () => import('./Overview')
 export default class ReviewComponent {
     constructor(rootStore) {
         this.rootStore = rootStore
-        this.config = Vue.$config.model || {}
+        this.config = window.CONFIG.model || {}
     }
 
     get routes() {

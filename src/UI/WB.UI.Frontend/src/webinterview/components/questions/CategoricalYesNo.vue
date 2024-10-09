@@ -54,7 +54,7 @@
 </template>
 <script lang="js">
 import { entityDetails } from '../mixins'
-import Vue from 'vue'
+import { nextTick } from 'vue'
 import * as $ from 'jquery'
 import modal from '@/shared/modal'
 import { find, findIndex, filter } from 'lodash'
@@ -71,7 +71,7 @@ export default {
     props: ['noComments'],
     watch: {
         '$me.answer'(to) {
-            Vue.set(this, 'answer', to)
+            this.answer = to
         },
     },
     computed: {
@@ -172,10 +172,10 @@ export default {
                     return
                 } else {
                     // trigger update for checkboxes to override some vue optimizations
-                    Vue.nextTick(() => {
+                    nextTick(() => {
                         const opt = find(this.$me.answer, { 'value': optionValue })
                         opt.yes = answerValue
-                        Vue.nextTick(() => {
+                        nextTick(() => {
                             opt.yes = !answerValue
                         })
                     })

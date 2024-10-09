@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Survey Solutions</title>
+
+    <script type="text/javascript">
+        document.cookie = "_tz=" + new Date().getTimezoneOffset() + "; path=/";
+
+        window.CONFIG = { "verboseMode": false, "googleApiKey": "", "googleMapsApiBaseUrl": "https://maps.googleapis.com", "googleMapsBaseUrl": "https://www.google.com", "basePath": "/primary/", "workspace": "primary", "imageGetBase": "/primary/api/WebInterviewResources", "audioGet": "/primary/Resource/AudioRecord", "appVersion": "1.0.0", "supportedTransports": ["webSockets", "longPolling"] };
+
+        if (typeof moment !== 'undefined') {
+            moment.locale('en');
+        }
+    </script>
+
+    <!-- Locale -->
+    <script>
+        window.CONFIG.locale = {
+            locale: 'en',
+            locales: '{"zh":"/locale/hq/zh.js","vi":"/locale/hq/vi.js","uk":"/locale/hq/uk.js","th":"/locale/hq/th.js","sq":"/locale/hq/sq.js","ru":"/locale/hq/ru.js","ro":"/locale/hq/ro.js","pt":"/locale/hq/pt.js","km":"/locale/hq/km.js","ka":"/locale/hq/ka.js","id":"/locale/hq/id.js","fr":"/locale/hq/fr.js","es":"/locale/hq/es.js","en":"/locale/hq/en.js","cs":"/locale/hq/cs.js","ar":"/locale/hq/ar.js"}'
+        };        // JSONP callback to load localization from '@localePath'
+        window.__setLocaleData__ = function (data) { window.CONFIG.locale.data = data; }
+    </script>
+</head>
+
+<body id="vueApp" class="block-ui">
+    <noscript>
+        <strong>We're sorry but this app doesn't work properly without JavaScript enabled. Please enable it to
+            continue.</strong>
+    </noscript>
+    <!--div ></div-->
+    <script type="module" src="/src/webinterview/main.js"></script>
+</body>
+
+</html>

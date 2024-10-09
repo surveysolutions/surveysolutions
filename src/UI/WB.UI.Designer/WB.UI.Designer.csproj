@@ -51,8 +51,8 @@
     <PackageReference Include="Shark.PdfConvert" Version="1.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="8.0.6" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
-    <PackageReference Include="System.Drawing.Common" Version="8.0.7" />
-    <PackageReference Include="System.Text.Json" Version="8.0.4" />
+    <PackageReference Include="System.Drawing.Common" Version="8.0.6" />
+    <PackageReference Include="System.Text.Json" Version="8.0.5" />
     <PackageReference Include="VueCliMiddleware" Version="6.0.0" />
   </ItemGroup>
   <ItemGroup Condition=" '$(Configuration)' == 'Debug' ">

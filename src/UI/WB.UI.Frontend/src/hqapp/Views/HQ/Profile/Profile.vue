@@ -1,61 +1,52 @@
 /* eslint-disable vue/require-v-for-key */
 <template>
-    <HqLayout :hasFilter="false"
-        :hasRow="false"
-        :mainClass="'enumerators'">
-        <template slot="headers">
-            <ol class="breadcrumb"
-                v-if="!this.$config.model.authorizedUser.isInterviewer">
+    <HqLayout :hasFilter="false" :hasRow="false" :mainClass="'enumerators'">
+        <template v-slot:headers>
+            <ol class="breadcrumb" v-if="!this.$config.model.authorizedUser.isInterviewer">
                 <li>
-                    <a
-                        :href="this.$config.model.api.listUrl">{{$t('Pages.InterviewerProfile_Interviewers')}}</a>
+                    <a :href="this.$config.model.api.listUrl">{{ $t('Pages.InterviewerProfile_Interviewers') }}</a>
                 </li>
             </ol>
             <h1>
-                <span v-if="this.$config.model.fullModel.isArchived"
-                    class="badge">{{$t('Common.Archived')}}</span>
-                {{$t('Pages.InterviewerProfile_AssignedToFormat', { interviewer: this.$config.model.fullModel.interviewerName, supervisor: this.$config.model.fullModel.supervisorName}) }}
+                <span v-if="this.$config.model.fullModel.isArchived" class="badge">{{ $t('Common.Archived') }}</span>
+                {{ $t('Pages.InterviewerProfile_AssignedToFormat', {
+                    interviewer:
+                        this.$config.model.fullModel.interviewerName, supervisor: this.$config.model.fullModel.supervisorName
+                })
+                }}
             </h1>
 
             <ul class="list-unstyled">
-                <li
-                    v-if="this.$config.model.fullModel.email">{{$t('Pages.InterviewerProfile_EmailFormat', {email: this.$config.model.fullModel.email})}}</li>
-                <li
-                    v-if="this.$config.model.fullModel.fullName">{{$t('Pages.InterviewerProfile_FullNameFormat', {fullName: this.$config.model.fullModel.fullName})}}</li>
-                <li
-                    v-if="this.$config.model.fullModel.phone">{{$t('Pages.InterviewerProfile_PhoneFormat', {phone: this.$config.model.fullModel.phone})}}</li>
+                <li v-if="this.$config.model.fullModel.email">{{ $t('Pages.InterviewerProfile_EmailFormat', {
+                    email:
+                        this.$config.model.fullModel.email
+                }) }}</li>
+                <li v-if="this.$config.model.fullModel.fullName">{{ $t('Pages.InterviewerProfile_FullNameFormat',
+                    { fullName: this.$config.model.fullModel.fullName }) }}</li>
+                <li v-if="this.$config.model.fullModel.phone">{{ $t('Pages.InterviewerProfile_PhoneFormat', {
+                    phone:
+                        this.$config.model.fullModel.phone
+                }) }}</li>
 
                 <li v-if="this.$config.model.fullModel.isModifiable">
-                    <a
-                        v-if="!this.$config.model.fullModel.isArchived"
-                        :href="this.$config.model.api.manageUrl">{{$t('Pages.InterviewerProfile_Info')}}</a>
-                    <form
-                        v-if="this.$config.model.fullModel.isArchived && $config.model.authorizedUser.isHeadquarters"
+                    <a v-if="!this.$config.model.fullModel.isArchived" :href="this.$config.model.api.manageUrl">{{
+                        $t('Pages.InterviewerProfile_Info') }}</a>
+                    <form v-if="this.$config.model.fullModel.isArchived && $config.model.authorizedUser.isHeadquarters"
                         method="post">
-                        <input class="btn btn-success"
-                            type="button"
-                            :value="$t('Pages.Unarchive')"
-                            @click="unArchive"/>
+                        <input class="btn btn-success" type="button" :value="$t('Pages.Unarchive')"
+                            @click="unArchive" />
                     </form>
                 </li>
                 <li v-if="!this.$config.model.authorizedUser.isInterviewer">
-                    <a
-                        :href="this.$config.model.api.audioAuditLogUrl">{{$t('Pages.InterviewerProfile_ShowAuditLog')}}</a>
+                    <a :href="this.$config.model.api.audioAuditLogUrl">{{ $t('Pages.InterviewerProfile_ShowAuditLog')
+                        }}</a>
                 </li>
             </ul>
-            <figure
-                class="qrcode-wrapper"
-                v-if="this.$config.model.fullModel.supportQRCodeGeneration">
-                <a
-                    target="_blank"
-                    :title="$t('Pages.InterviewerProfile_QrCodeAlt')"
+            <figure class="qrcode-wrapper" v-if="this.$config.model.fullModel.supportQRCodeGeneration">
+                <a target="_blank" :title="$t('Pages.InterviewerProfile_QrCodeAlt')"
                     href="https://support.mysurvey.solutions/interviewer/config/set-up-an-interviewer-tablet-by-scanning-a-barcode/">
-                    <img
-                        id="download-qr"
-                        :alt="$t('Pages.InterviewerProfile_QrCodeAlt')"
-                        width="250"
-                        height="250"
-                        :src="this.$config.model.fullModel.qrCodeAsBase64String"/>
+                    <img id="download-qr" :alt="$t('Pages.InterviewerProfile_QrCodeAlt')" width="250" height="250"
+                        :src="this.$config.model.fullModel.qrCodeAsBase64String" />
                 </a>
             </figure>
         </template>
@@ -63,117 +54,94 @@
             <div class="col-sm-12">
                 <div class="interviews-information clearfix">
                     <div class="number-information">
-                        <div
-                            class="amount-of-questionnaires">{{this.$config.model.fullModel.newInterviewsOnDevice}}</div>
+                        <div class="amount-of-questionnaires">{{ this.$config.model.fullModel.newInterviewsOnDevice }}
+                        </div>
                         <div class="description">
-                            {{$t('Pages.InterviewerProfile_NewOnDevice')}}
+                            {{ $t('Pages.InterviewerProfile_NewOnDevice') }}
                         </div>
                     </div>
                     <div class="number-information">
-                        <div
-                            class="amount-of-questionnaires">{{this.$config.model.fullModel.rejectedInterviewsOnDevice}}</div>
+                        <div class="amount-of-questionnaires">
+                            {{ this.$config.model.fullModel.rejectedInterviewsOnDevice }}</div>
                         <div class="description">
-                            {{$t('Pages.InterviewerProfile_Rejected')}}
+                            {{ $t('Pages.InterviewerProfile_Rejected') }}
                         </div>
                     </div>
                     <div class="number-information">
-                        <div
-                            class="amount-of-questionnaires">{{this.$config.model.fullModel.waitingInterviewsForApprovalCount}}</div>
-                        <div
-                            class="description">{{$t('Pages.InterviewerProfile_WaitingForApproval')}}</div>
+                        <div class="amount-of-questionnaires">
+                            {{ this.$config.model.fullModel.waitingInterviewsForApprovalCount }}
+                        </div>
+                        <div class="description">{{ $t('Pages.InterviewerProfile_WaitingForApproval') }}</div>
                     </div>
                     <div class="number-information">
-                        <div
-                            class="amount-of-questionnaires">{{this.$config.model.fullModel.approvedInterviewsByHqCount}}</div>
+                        <div class="amount-of-questionnaires">
+                            {{ this.$config.model.fullModel.approvedInterviewsByHqCount }}</div>
                         <div class="description">
-                            {{$t('Pages.InterviewerProfile_Approved')}}
+                            {{ $t('Pages.InterviewerProfile_Approved') }}
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="row"
-            v-if="showMap">
-            <div class="col-sm-9 map"
-                v-if="markerExist">
-                <div
-                    ref="map"
-                    id="map-canvas"
-                    class="extra-margin-bottom"
-                    style="width:100%; height: 400px"></div>
+        <div class="row" v-if="showMap">
+            <div class="col-sm-9 map" v-if="markerExist">
+                <div ref="map" id="map-canvas" class="extra-margin-bottom" style="width:100%; height: 400px"></div>
                 <div style="display: none;">
                     <div ref="tooltip">
-                        <div
-                            class="map-tooltip-info"
-                            v-for="selectedTooltip in selectedTooltips"
+                        <div class="map-tooltip-info" v-for="selectedTooltip in selectedTooltips"
                             :key="selectedTooltip.interviewKey">
                             <p>
-                                <span>#{{selectedTooltip.interviewKey}}</span>
-                                <span>({{$t("MapReport.Assignment")}} {{selectedTooltip.assignmentId}})</span>
+                                <span>#{{ selectedTooltip.interviewKey }}</span>
+                                <span>({{ $t("MapReport.Assignment") }} {{ selectedTooltip.assignmentId }})</span>
                             </p>
                             <p>
-                                <strong>{{$t("Users.Interviewer")}} :</strong>
-                                &nbsp;{{selectedTooltip.interviewerName}}
+                                <strong>{{ $t("Users.Interviewer") }} :</strong>
+                                &nbsp;{{ selectedTooltip.interviewerName }}
                             </p>
                             <p>
-                                <strong>{{$t("Users.Supervisor")}} :</strong>
-                                &nbsp;{{selectedTooltip.supervisorName}}
+                                <strong>{{ $t("Users.Supervisor") }} :</strong>
+                                &nbsp;{{ selectedTooltip.supervisorName }}
                             </p>
                             <p>
-                                <strong>{{$t("Common.Status")}} :</strong>
-                                &nbsp;{{selectedTooltip.lastStatus}}
+                                <strong>{{ $t("Common.Status") }} :</strong>
+                                &nbsp;{{ selectedTooltip.lastStatus }}
                             </p>
                             <p>
-                                <strong>{{$t("Reports.LastUpdatedDate")}} :</strong>
-                                &nbsp;{{selectedTooltip.lastUpdatedDate}}
+                                <strong>{{ $t("Reports.LastUpdatedDate") }} :</strong>
+                                &nbsp;{{ selectedTooltip.lastUpdatedDate }}
                             </p>
                             <p>
-                                <a
-                                    v-bind:href="model.api.interviewDetailsUrl + '/' + selectedTooltip.interviewId"
-                                    target="_blank">{{$t("MapReport.ViewInterviewContent")}}</a>
+                                <a v-bind:href="model.api.interviewDetailsUrl + '/' + selectedTooltip.interviewId"
+                                    target="_blank">{{ $t("MapReport.ViewInterviewContent") }}</a>
                             </p>
                         </div>
                     </div>
                 </div>
             </div>
-            <div
-                class="col-sm-9 map"
-                v-if="!markerExist">{{$t("Pages.InterviewerProfile_NoMarkers")}}</div>
+            <div class="col-sm-9 map" v-if="!markerExist">{{ $t("Pages.InterviewerProfile_NoMarkers") }}</div>
         </div>
-        <div class="row"
-            v-if="totalTrafficUsed > 0">
+        <div class="row" v-if="totalTrafficUsed > 0">
             <div class="col-sm-12 clearfix">
-                <h3>{{$t("Pages.InterviewerProfile_TrafficUsageHeader")}}</h3>
+                <h3>{{ $t("Pages.InterviewerProfile_TrafficUsageHeader") }}</h3>
                 <div class="graphic-wrapper traffic-usage">
-                    <div
-                        class="t-monthly-usage"
-                        v-for="monthlyUsage in trafficUsage"
-                        :key="monthlyUsage.month">
+                    <div class="t-monthly-usage" v-for="monthlyUsage in trafficUsage" :key="monthlyUsage.month">
                         <div class="t-month">
-                            {{monthlyUsage.month}}
+                            {{ monthlyUsage.month }}
                         </div>
-                        <div
-                            class="t-daily-usage"
-                            v-for="dailyUsage in monthlyUsage.dailyUsage"
+                        <div class="t-daily-usage" v-for="dailyUsage in monthlyUsage.dailyUsage"
                             :key="dailyUsage.timestamp">
                             <div class="t-unit-wrapper">
-                                <div
-                                    class="t-up"
-                                    data-toggle="tooltip"
-                                    data-placement="right"
-                                    :title="formatKb(dailyUsage.up)"
-                                    :style="{ height: dailyUsage.upInPer + '%' }"></div>
-                                <div
-                                    class="t-down"
-                                    data-toggle="tooltip"
-                                    data-placement="right"
-                                    :title="formatKb(dailyUsage.down)"
-                                    :style="{ height: dailyUsage.downInPer + '%' }"></div>
+                                <div class="t-up" data-bs-toggle="tooltip" data-placement="right"
+                                    :title="formatKb(dailyUsage.up)" :style="{ height: dailyUsage.upInPer + '%' }">
+                                </div>
+                                <div class="t-down" data-bs-toggle="tooltip" data-placement="right"
+                                    :title="formatKb(dailyUsage.down)" :style="{ height: dailyUsage.downInPer + '%' }">
+                                </div>
                             </div>
-                            <div
-                                class="t-day"
-                                :class="{'t-no-sync': dailyUsage.up + dailyUsage.down === 0 }">{{dailyUsage.day}}</div>
+                            <div class="t-day" :class="{ 't-no-sync': dailyUsage.up + dailyUsage.down === 0 }">
+                                {{ dailyUsage.day }}
+                            </div>
                         </div>
                     </div>
                     <div class="graphic-explanation">
@@ -181,78 +149,60 @@
                             <div class="legend">
                                 <div class="legend-unit down-unit">
                                     <span></span>
-                                    {{$t("Pages.InterviewerProfile_IncomingTraffic")}}
+                                    {{ $t("Pages.InterviewerProfile_IncomingTraffic") }}
                                 </div>
                                 <div class="legend-unit up-unit">
                                     <span></span>
-                                    {{$t("Pages.InterviewerProfile_OutgoingTraffic")}}
+                                    {{ $t("Pages.InterviewerProfile_OutgoingTraffic") }}
                                 </div>
                             </div>
                         </div>
                         <div class="total">
                             <p class="primary-text">
-                                {{$t("Pages.InterviewerProfile_TotalTrafficUsed")}}:
-                                <span
-                                    v-html="formatKb(totalTrafficUsed)"></span>
+                                {{ $t("Pages.InterviewerProfile_TotalTrafficUsed") }}:
+                                <span v-html="formatKb(totalTrafficUsed)"></span>
                             </p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="row"
-            v-if="this.$config.model.fullModel.hasDeviceInfo">
+        <div class="row" v-if="this.$config.model.fullModel.hasDeviceInfo">
             <div class="col-sm-12 clearfix">
-                <h3>{{$t('Pages.InterviewerProfile_Sync_Activity_Title')}}</h3>
+                <h3>{{ $t('Pages.InterviewerProfile_Sync_Activity_Title') }}</h3>
                 <div class="graphic-wrapper clearfix">
                     <div class="graphic">
-                        <div
-                            class="day-unit"
+                        <div class="day-unit"
                             v-for="syncDay in this.$config.model.fullModel.synchronizationActivity.days"
                             :key="syncDay.day">
                             <div class="day">
-                                {{syncDay.day}}
+                                {{ syncDay.day }}
                             </div>
-                            <div
-                                class="quarter-of-day"
-                                v-for="(syncDayQuarter, idx) in syncDay.quarters"
-                                :key="idx">
-                                <div class="recent-activity"
-                                    v-if="!syncDayQuarter.HasAnyActivity">
-                                    <div
-                                        v-if="syncDayQuarter.failedSynchronizationsCount > 0"
+                            <div class="quarter-of-day" v-for="(syncDayQuarter, idx) in syncDay.quarters" :key="idx">
+                                <div class="recent-activity" v-if="!syncDayQuarter.HasAnyActivity">
+                                    <div v-if="syncDayQuarter.failedSynchronizationsCount > 0"
                                         class="failed-connection"></div>
-                                    <div
-                                        v-else-if="syncDayQuarter.synchronizationsWithoutChangesCount > 0"
+                                    <div v-else-if="syncDayQuarter.synchronizationsWithoutChangesCount > 0"
                                         class="successful-connection"></div>
                                 </div>
-                                <div class="recent-activity"
-                                    v-else>
-                                    <div
-                                        v-repeat="syncDayQuarter.downloadedAssignmentsInProportionCount"
-                                        class="downloaded"></div>
-                                    <div
-                                        v-for="item in syncDayQuarter.uploadedInterviewsInProportionCount"
-                                        :key="item"
+                                <div class="recent-activity" v-else>
+                                    <div v-repeat="syncDayQuarter.downloadedAssignmentsInProportionCount"
+                                        class="downloaded">
+                                    </div>
+                                    <div v-for="item in syncDayQuarter.uploadedInterviewsInProportionCount" :key="item"
                                         class="uploaded"></div>
-                                    <div
-                                        v-if="syncDayQuarter.hasMoreThanMaxActionsCount"
-                                        class="over-limit">
+                                    <div v-if="syncDayQuarter.hasMoreThanMaxActionsCount" class="over-limit">
                                         <span></span>
                                     </div>
                                 </div>
 
                                 <div class="unfinished-assignments">
                                     <div class="half-of-quarter">
-                                        <div
-                                            v-for="item in syncDayQuarter.allAssignmentsOnDeviceCount"
-                                            :key="item"
+                                        <div v-for="item in syncDayQuarter.allAssignmentsOnDeviceCount" :key="item"
                                             class="unfinished-unit"></div>
                                     </div>
                                     <div class="half-of-quarter">
-                                        <div
-                                            v-for="item in syncDayQuarter.allAssignmentsOnDeviceCount"
-                                            :key="item"
+                                        <div v-for="item in syncDayQuarter.allAssignmentsOnDeviceCount" :key="item"
                                             class="unfinished-unit"></div>
                                     </div>
                                 </div>
@@ -274,85 +224,81 @@
                             <ul class="list-unstyled">
                                 <li>
                                     <span class="downloaded"></span>
-                                    {{$t('Pages.InterviewerProfile_Sync_Activity_Downloaded_Assignments_Desc')}}
+                                    {{ $t('Pages.InterviewerProfile_Sync_Activity_Downloaded_Assignments_Desc') }}
                                 </li>
                                 <li>
                                     <span class="uploaded"></span>
-                                    {{$t('Pages.InterviewerProfile_Sync_Activity_Uploaded_Interview_Desc')}}
+                                    {{ $t('Pages.InterviewerProfile_Sync_Activity_Uploaded_Interview_Desc') }}
                                 </li>
                                 <li>
                                     <span class="successful-connection"></span>
-                                    {{$t('Pages.InterviewerProfile_Sync_Activity_Nothing_To_Sync')}}
+                                    {{ $t('Pages.InterviewerProfile_Sync_Activity_Nothing_To_Sync') }}
                                 </li>
                                 <li>
                                     <span class="failed-connection"></span>
-                                    {{$t('Pages.InterviewerProfile_Sync_Activity_Failed_Sync')}}
+                                    {{ $t('Pages.InterviewerProfile_Sync_Activity_Failed_Sync') }}
                                 </li>
                             </ul>
                         </div>
                         <div class="unfinished-assignments">
-                            <p
-                                class="primary-text">{{$t('Pages.InterviewerProfile_Sync_Activity_All_Assignments_Desc')}}</p>
+                            <p class="primary-text">
+                                {{ $t('Pages.InterviewerProfile_Sync_Activity_All_Assignments_Desc') }}</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="row"
-            v-if="this.$config.model.fullModel.hasDeviceInfo">
+        <div class="row" v-if="this.$config.model.fullModel.hasDeviceInfo">
             <div class="col-sm-6 connection-statistics">
-                <h3>{{$t('Pages.InterviewerProfile_DeviceAndConnectionStatistics')}}</h3>
+                <h3>{{ $t('Pages.InterviewerProfile_DeviceAndConnectionStatistics') }}</h3>
                 <ul class="list-unstyled">
                     <li>
-                        <b>{{$t('Pages.InterviewerProfile_DeviceModel')}}: {{this.fullModel.deviceType}} {{this.fullModel.deviceManufacturer}} {{this.fullModel.deviceModel}} ({{this.fullModel.deviceBuildNumber}})</b>
+                        <b>{{ $t('Pages.InterviewerProfile_DeviceModel') }}: {{ this.fullModel.deviceType }}
+                            {{ this.fullModel.deviceManufacturer }} {{ this.fullModel.deviceModel }}
+                            ({{ this.fullModel.deviceBuildNumber }})</b>
                     </li>
                     <li>
                         <b>
-                            {{$t('Pages.InterviewerProfile_InterviewerAppVersion')}}: {{this.fullModel.interviewerAppVersion}} —
-                            <span
-                                v-if="!this.fullModel.hasUpdateForInterviewerApp"
-                                class="success-text">{{$t('Pages.InterviewerProfile_InterviewerUpToDate')}}</span>
-                            <span
-                                v-else
-                                class="error-text">{{$t('Pages.InterviewerProfile_InterviewerCanBeUpdated')}}</span>
+                            {{ $t('Pages.InterviewerProfile_InterviewerAppVersion') }}:
+                            {{ this.fullModel.interviewerAppVersion }} —
+                            <span v-if="!this.fullModel.hasUpdateForInterviewerApp" class="success-text">{{
+                                $t('Pages.InterviewerProfile_InterviewerUpToDate') }}</span>
+                            <span v-else class="error-text">{{ $t('Pages.InterviewerProfile_InterviewerCanBeUpdated')
+                                }}</span>
                         </b>
                     </li>
                     <li v-if="this.fullModel.deviceAssignmentDate">
                         <b>
-                            {{$t('Pages.InterviewerProfile_DeviceAssignmentDate')}}:
-                            {{formatDate(this.fullModel.deviceAssignmentDate, true)}} (UTC)
-                            <span
-                                v-if="this.fullModel.registredDevicesCount > 1"
-                                style="color: red;">({{$t('Pages.InterviewerProfile_Relinked')}})</span>
+                            {{ $t('Pages.InterviewerProfile_DeviceAssignmentDate') }}:
+                            {{ formatDate(this.fullModel.deviceAssignmentDate, true) }} (UTC)
+                            <span v-if="this.fullModel.registredDevicesCount > 1" style="color: red;">({{
+                                $t('Pages.InterviewerProfile_Relinked') }})</span>
                         </b>
                     </li>
                 </ul>
                 <ul class="list-unstyled">
-                    <li>{{$t('Pages.InterviewerProfile_NumberOfSuccessSynchronizations')}}: {{this.fullModel.totalNumberOfSuccessSynchronizations}}</li>
-                    <li>{{$t('Pages.InterviewerProfile_NumberOfFailedSynchronizations')}}: {{this.fullModel.totalNumberOfFailedSynchronizations}}</li>
+                    <li>{{ $t('Pages.InterviewerProfile_NumberOfSuccessSynchronizations') }}:
+                        {{ this.fullModel.totalNumberOfSuccessSynchronizations }}</li>
+                    <li>{{ $t('Pages.InterviewerProfile_NumberOfFailedSynchronizations') }}:
+                        {{ this.fullModel.totalNumberOfFailedSynchronizations }}</li>
                     <li v-if="this.fullModel.averageSyncSpeedBytesPerSecond">
-                        {{$t('Pages.InterviewerProfile_AverageSyncSpeed')}}:
-                        <span
-                            v-html="formatKb(this.fullModel.averageSyncSpeedBytesPerSecond)"></span>/s
+                        {{ $t('Pages.InterviewerProfile_AverageSyncSpeed') }}:
+                        <span v-html="formatKb(this.fullModel.averageSyncSpeedBytesPerSecond)"></span>/s
                     </li>
                     <li>
-                        {{$t('Pages.InterviewerProfile_TotalTrafficUsed')}}:
-                        <span
-                            v-html="formatKb(this.fullModel.trafficUsed)"></span>
+                        {{ $t('Pages.InterviewerProfile_TotalTrafficUsed') }}:
+                        <span v-html="formatKb(this.fullModel.trafficUsed)"></span>
                     </li>
                 </ul>
-                <ConnectionStats
-                    :prefix="$t('Pages.InterviewerProfile_LastSuccessSync')"
+                <ConnectionStats :prefix="$t('Pages.InterviewerProfile_LastSuccessSync')"
                     :syncInfo="this.fullModel.lastSuccessfulSync"></ConnectionStats>
-                <ConnectionStats
-                    :prefix="$t('Pages.InterviewerProfile_LastFailedSync')"
+                <ConnectionStats :prefix="$t('Pages.InterviewerProfile_LastFailedSync')"
                     :syncInfo="this.fullModel.lastFailedSync"></ConnectionStats>
 
-                <ul v-if="this.fullModel.lastCommunicationDate"
-                    class="list-unstyled">
+                <ul v-if="this.fullModel.lastCommunicationDate" class="list-unstyled">
                     <li>
-                        {{$t('Pages.InterviewerProfile_LastSyncronizationDate')}}:
-                        {{formatDate(this.fullModel.lastCommunicationDate)}} ({{formatLastCommunication()}})
+                        {{ $t('Pages.InterviewerProfile_LastSyncronizationDate') }}:
+                        {{ formatDate(this.fullModel.lastCommunicationDate) }} ({{ formatLastCommunication() }})
                         <b>
                             <span
                                 v-if="this.fullModel.lastSuccessfulSync != undefined && this.fullModel.lastCommunicationDate == this.fullModel.lastSuccessfulSync.syncDate"
@@ -365,122 +311,122 @@
                 </ul>
             </div>
         </div>
-        <div class="row"
-            v-if="this.$config.model.fullModel.hasDeviceInfo">
+        <div class="row" v-if="this.$config.model.fullModel.hasDeviceInfo">
             <div class="col-sm-8 detailed-statistics-block">
-                <h3>{{$t('Pages.InterviewerProfile_DeviceInfo')}}</h3>
+                <h3>{{ $t('Pages.InterviewerProfile_DeviceInfo') }}</h3>
                 <table class="table table-striped table-bordered">
                     <tbody>
                         <tr>
-                            <td>{{$t('Pages.InterviewerProfile_DeviceId')}}</td>
-                            <td>{{this.fullModel.deviceId}}</td>
+                            <td>{{ $t('Pages.InterviewerProfile_DeviceId') }}</td>
+                            <td>{{ this.fullModel.deviceId }}</td>
                         </tr>
                         <tr>
-                            <td>{{$t('Pages.InterviewerProfile_DeviceSerial')}}</td>
-                            <td>{{this.fullModel.deviceSerialNumber}}</td>
+                            <td>{{ $t('Pages.InterviewerProfile_DeviceSerial') }}</td>
+                            <td>{{ this.fullModel.deviceSerialNumber }}</td>
                         </tr>
                         <tr>
-                            <td>{{$t('Pages.InterviewerProfile_DeviceModel')}}</td>
+                            <td>{{ $t('Pages.InterviewerProfile_DeviceModel') }}</td>
                             <td>
-                                {{this.fullModel.deviceType}} {{this.fullModel.deviceManufacturer}}
-                                {{this.fullModel.deviceModel}} ({{this.fullModel.deviceBuildNumber}})
+                                {{ this.fullModel.deviceType }} {{ this.fullModel.deviceManufacturer }}
+                                {{ this.fullModel.deviceModel }} ({{ this.fullModel.deviceBuildNumber }})
                             </td>
                         </tr>
                         <tr>
-                            <td>{{$t('Pages.InterviewerProfile_DeviceLanguage')}}</td>
-                            <td>{{this.fullModel.deviceLanguage}}</td>
+                            <td>{{ $t('Pages.InterviewerProfile_DeviceLanguage') }}</td>
+                            <td>{{ this.fullModel.deviceLanguage }}</td>
                         </tr>
                         <tr>
-                            <td>{{$t('Pages.InterviewerProfile_AndroidVersion')}}</td>
-                            <td>{{this.fullModel.androidVersion}}</td>
+                            <td>{{ $t('Pages.InterviewerProfile_AndroidVersion') }}</td>
+                            <td>{{ this.fullModel.androidVersion }}</td>
                         </tr>
                         <tr>
-                            <td>{{$t('Pages.InterviewerProfile_InterviewerVersion')}}</td>
-                            <td>{{this.fullModel.surveySolutionsVersion}}</td>
+                            <td>{{ $t('Pages.InterviewerProfile_InterviewerVersion') }}</td>
+                            <td>{{ this.fullModel.surveySolutionsVersion }}</td>
                         </tr>
                         <tr>
-                            <td>{{$t('Pages.InterviewerProfile_InterviewerUpdatedDate')}}</td>
-                            <td>{{formatDate(this.fullModel.lastSurveySolutionsUpdatedDate)}} (UTC)</td>
+                            <td>{{ $t('Pages.InterviewerProfile_InterviewerUpdatedDate') }}</td>
+                            <td>{{ formatDate(this.fullModel.lastSurveySolutionsUpdatedDate) }} (UTC)</td>
                         </tr>
                         <tr>
-                            <td>{{$t('Pages.InterviewerProfile_DeviceLocation')}}</td>
+                            <td>{{ $t('Pages.InterviewerProfile_DeviceLocation') }}</td>
                             <td id="device-address">
-                                <a v-bind:href="goolgeMapUrl"
-                                    v-if="hasLastKnownLocation"
-                                    :title="$t('WebInterviewUI.ShowOnMap')"
-                                    target="_blank">
-                                    {{fullModel.deviceLocationOrLastKnownLocationLat}}, {{fullModel.deviceLocationOrLastKnownLocationLon}}</a>
+                                <a v-bind:href="goolgeMapUrl" v-if="hasLastKnownLocation"
+                                    :title="$t('WebInterviewUI.ShowOnMap')" target="_blank">
+                                    {{ fullModel.deviceLocationOrLastKnownLocationLat }},
+                                    {{ fullModel.deviceLocationOrLastKnownLocationLon }}</a>
                             </td>
                         </tr>
                         <tr>
-                            <td>{{$t('Pages.InterviewerProfile_DeviceOrientation')}}</td>
-                            <td>{{this.fullModel.deviceOrientation}}</td>
+                            <td>{{ $t('Pages.InterviewerProfile_DeviceOrientation') }}</td>
+                            <td>{{ this.fullModel.deviceOrientation }}</td>
                         </tr>
                         <tr>
-                            <td>{{$t('Pages.InterviewerProfile_BatteryStatus')}}</td>
+                            <td>{{ $t('Pages.InterviewerProfile_BatteryStatus') }}</td>
                             <td>
                                 {{
                                     $t('Pages.InterviewerProfile_BatteryStatusFormat',
-                                       {
-                                           percent: this.fullModel.batteryStatus,
-                                           power: this.fullModel.batteryPowerSource,
-                                           powerSaver: this.fullModel.isPowerSaveMode ? $t('Pages.InterviewerProfile_BatteryStatus_SaverIsOn') : $t('Pages.InterviewerProfile_BatteryStatus_SaverIsOff')
-                                       })
+                                        {
+                                            percent: this.fullModel.batteryStatus,
+                                            power: this.fullModel.batteryPowerSource,
+                                            powerSaver: this.fullModel.isPowerSaveMode ?
+                                                $t('Pages.InterviewerProfile_BatteryStatus_SaverIsOn') :
+                                                $t('Pages.InterviewerProfile_BatteryStatus_SaverIsOff')
+                                        })
                                 }}
                             </td>
                         </tr>
-                        <tr
-                            :class="{'text-danger': this.fullModel.storageFreeInBytes < 1024 * 1024 * 100}">
-                            <td>{{$t('Pages.InterviewerProfile_StorageInfo')}}</td>
+                        <tr :class="{ 'text-danger': this.fullModel.storageFreeInBytes < 1024 * 1024 * 100 }">
+                            <td>{{ $t('Pages.InterviewerProfile_StorageInfo') }}</td>
                             <td
-                                v-html="`${ouputBytes(this.fullModel.storageFreeInBytes)} / ${ouputBytes(this.fullModel.storageTotalInBytes)}`"></td>
+                                v-html="`${ouputBytes(this.fullModel.storageFreeInBytes)} / ${ouputBytes(this.fullModel.storageTotalInBytes)}`">
+                            </td>
                         </tr>
                         <tr>
-                            <td>{{$t('Pages.InterviewerProfile_MemoryInfo')}}</td>
+                            <td>{{ $t('Pages.InterviewerProfile_MemoryInfo') }}</td>
                             <td
-                                v-html="`${ouputBytes(this.fullModel.ramFreeInBytes)} / ${ouputBytes(this.fullModel.ramTotalInBytes)}`"></td>
+                                v-html="`${ouputBytes(this.fullModel.ramFreeInBytes)} / ${ouputBytes(this.fullModel.ramTotalInBytes)}`">
+                            </td>
                         </tr>
                         <tr>
-                            <td>{{$t('Pages.InterviewerProfile_StorageSizeInfo')}}</td>
-                            <td>{{ouputBytes(this.fullModel.databaseSizeInBytes)}}</td>
+                            <td>{{ $t('Pages.InterviewerProfile_StorageSizeInfo') }}</td>
+                            <td>{{ ouputBytes(this.fullModel.databaseSizeInBytes) }}</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
-        <div class="row"
-            v-if="this.$config.model.fullModel.hasDeviceInfo">
+        <div class="row" v-if="this.$config.model.fullModel.hasDeviceInfo">
             <div class="col-sm-8 detailed-statistics-block">
-                <h3>{{$t('Pages.InterviewerProfile_LastConnectionStatistics')}}</h3>
+                <h3>{{ $t('Pages.InterviewerProfile_LastConnectionStatistics') }}</h3>
                 <table class="table table-striped table-bordered">
                     <tbody>
                         <tr>
-                            <td>{{$t('Pages.InterviewerProfile_ServerDate')}}</td>
-                            <td>{{formatDate(this.fullModel.serverTimeAtTheBeginningOfSync)}} (UTC)</td>
+                            <td>{{ $t('Pages.InterviewerProfile_ServerDate') }}</td>
+                            <td>{{ formatDate(this.fullModel.serverTimeAtTheBeginningOfSync) }} (UTC)</td>
                         </tr>
-                        <tr :class="{'text-danger': this.fullModel.deviceHasWrongTime}">
-                            <td>{{$t('Pages.InterviewerProfile_DeviceDate')}}</td>
-                            <td>{{formatDate(this.fullModel.tabletTimeAtTeBeginningOfSync)}} (UTC)</td>
-                        </tr>
-                        <tr>
-                            <td>{{$t('Pages.InterviewerProfile_ConnectionType')}}</td>
-                            <td>{{this.fullModel.connectionType}} {{this.fullModel.connectionSubType}}</td>
+                        <tr :class="{ 'text-danger': this.fullModel.deviceHasWrongTime }">
+                            <td>{{ $t('Pages.InterviewerProfile_DeviceDate') }}</td>
+                            <td>{{ formatDate(this.fullModel.tabletTimeAtTeBeginningOfSync) }} (UTC)</td>
                         </tr>
                         <tr>
-                            <td>{{$t('Pages.InterviewerProfile_DownloadedQuestionnairesCount')}}</td>
-                            <td>{{this.fullModel.questionnairesReceived}}</td>
+                            <td>{{ $t('Pages.InterviewerProfile_ConnectionType') }}</td>
+                            <td>{{ this.fullModel.connectionType }} {{ this.fullModel.connectionSubType }}</td>
                         </tr>
                         <tr>
-                            <td>{{$t('Pages.InterviewerProfile_DownloadedAssignmentsCount')}}</td>
-                            <td>{{this.fullModel.assignmentsReceived}}</td>
+                            <td>{{ $t('Pages.InterviewerProfile_DownloadedQuestionnairesCount') }}</td>
+                            <td>{{ this.fullModel.questionnairesReceived }}</td>
                         </tr>
                         <tr>
-                            <td>{{$t('Pages.InterviewerProfile_UploadedInterviewsCount')}}</td>
-                            <td>{{this.fullModel.completedInterviewsReceivedFromInterviewer}}</td>
+                            <td>{{ $t('Pages.InterviewerProfile_DownloadedAssignmentsCount') }}</td>
+                            <td>{{ this.fullModel.assignmentsReceived }}</td>
                         </tr>
                         <tr>
-                            <td>{{$t('Pages.InterviewerProfile_StartedAssignments')}}</td>
-                            <td>{{this.fullModel.assignmentsThatHaveBeenStarted}}</td>
+                            <td>{{ $t('Pages.InterviewerProfile_UploadedInterviewsCount') }}</td>
+                            <td>{{ this.fullModel.completedInterviewsReceivedFromInterviewer }}</td>
+                        </tr>
+                        <tr>
+                            <td>{{ $t('Pages.InterviewerProfile_StartedAssignments') }}</td>
+                            <td>{{ this.fullModel.assignmentsThatHaveBeenStarted }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -490,15 +436,16 @@
 </template>
 
 <script>
-import {MarkerClusterer, Cluster, SuperClusterAlgorithm} from '@googlemaps/markerclusterer'
-import Vue from 'vue'
+import { MarkerClusterer, Cluster, SuperClusterAlgorithm } from '@googlemaps/markerclusterer'
+import { nextTick } from 'vue'
+import { Tooltip } from 'bootstrap'
 import * as toastr from 'toastr'
-import {DateFormats, humanFileSize} from '~/shared/helpers'
+import { DateFormats, humanFileSize } from '~/shared/helpers'
 import moment from 'moment'
 import ConnectionStats from './ConnectionStats'
 
 export default {
-    data: function() {
+    data: function () {
         return {
             map: null,
             markerCluster: null,
@@ -517,6 +464,7 @@ export default {
             trafficUsage: [],
             maxDailyUsage: 0,
             markerExist: false,
+            tooltip: null,
         }
     },
     mounted() {
@@ -543,7 +491,7 @@ export default {
             if (value == null || value == undefined) return value
             var language =
                 (navigator.languages && navigator.languages[0]) || navigator.language || navigator.userLanguage
-            return value.toLocaleString(language, {style: 'decimal', maximumFractionDigits : 0}) + '&nbsp;' + this.$t('Pages.Kb')
+            return value.toLocaleString(language, { style: 'decimal', maximumFractionDigits: 0 }) + '&nbsp;' + this.$t('Pages.Kb')
         },
         ouputBytes(val) {
             return humanFileSize(val, false)
@@ -558,8 +506,12 @@ export default {
                 this.totalTrafficUsed = trafficUsage.totalTrafficUsed || 0
                 this.trafficUsage = trafficUsage.trafficUsages || []
                 this.maxDailyUsage = trafficUsage.maxDailyUsage || 0
-                Vue.nextTick(function() {
-                    $('[data-toggle="tooltip"]').tooltip({html: true})
+                nextTick(() => {
+                    this.tooltip?.dispose()
+
+                    const tooltipEl = document.querySelector('[data-bs-toggle="tooltip"]')
+                    if (tooltipEl)
+                        this.tooltip = new Tooltip(tooltipEl, { html: true })
                 })
             })
         },
@@ -595,7 +547,7 @@ export default {
 
                 var marker = new google.maps.Marker({
                     position: new google.maps.LatLng(point.latitude, point.longitude),
-                    label: {text: point.index === -1 ? '' : point.index + '', color: 'white'},
+                    label: { text: point.index === -1 ? '' : point.index + '', color: 'white' },
                     map: self.map,
                     opacity: 1,
                     zIndex: point.Index === -1 ? 1000 : 1000 + point.index,
@@ -639,18 +591,18 @@ export default {
                 bounds.extend(marker.getPosition())
             })
 
-            MarkerClusterer.prototype.getClusters = function(){
+            MarkerClusterer.prototype.getClusters = function () {
                 return this.clusters
             }
 
-            Cluster.prototype.getMarkers = function(){
+            Cluster.prototype.getMarkers = function () {
                 return this.markers
             }
 
             this.markerCluster = new MarkerClusterer({
                 map: this.map,
                 markers: markers,
-                algorithm: new SuperClusterAlgorithm( { minPoints: this.minimumClusterSize}),
+                algorithm: new SuperClusterAlgorithm({ minPoints: this.minimumClusterSize }),
             })
 
             google.maps.event.addListener(this.markerCluster, 'clusteringend', () => {
@@ -659,13 +611,13 @@ export default {
 
             this.map.fitBounds(bounds)
         },
-        addDetailsOnClick: function(marker, point) {
+        addDetailsOnClick: function (marker, point) {
             const self = this
             google.maps.event.addListener(
                 marker,
                 'click',
-                (function(marker, point) {
-                    return function() {
+                (function (marker, point) {
+                    return function () {
                         self.loadPointDetails(point.interviewIds, marker)
                     }
                 })(marker, point)
@@ -698,7 +650,7 @@ export default {
                     let markerId = marker.get('id')
 
                     let point = this.points.get(markerId)
-                    if(point != null)
+                    if (point != null)
                         point.cluster = i
                 })
             }
@@ -707,8 +659,8 @@ export default {
                 let left = this.points.get(i)
                 let right = this.points.get(i + 1)
 
-                let leftCluster = clustersMap.get(left.cluster) || {size: -1}
-                let rightCluster = clustersMap.get(right.cluster) || {size: -1}
+                let leftCluster = clustersMap.get(left.cluster) || { size: -1 }
+                let rightCluster = clustersMap.get(right.cluster) || { size: -1 }
 
                 let leftPointsAreGroupedInCluster = leftCluster.size >= this.minimumClusterSize
                 let rightPointsAreGroupedInCluster = rightCluster.size >= this.minimumClusterSize
@@ -754,7 +706,7 @@ export default {
 
                     self.selectedTooltips = data
 
-                    Vue.nextTick(function() {
+                    nextTick(function () {
                         self.infoWindow.setContent($(self.$refs.tooltip).html())
                         self.infoWindow.open(self.map, marker)
                     })
@@ -764,7 +716,7 @@ export default {
             if (!this.model.showMap) return
 
             const response = await this.$http.get(this.model.api.interviewerPoints + '/' + this.interviewerId)
-            var data = response.data || {checkInPoints: [], targetLocations: []}
+            var data = response.data || { checkInPoints: [], targetLocations: [] }
             var points = data.checkInPoints || []
             var locations = data.targetLocations || []
 
@@ -797,7 +749,7 @@ export default {
                 }
 
                 const self = this
-                Vue.nextTick(function(){
+                nextTick(function () {
                     self.map = new google.maps.Map(self.$refs.map, mapOptions)
                     self.showPointsOnMap(points, locations)
                 })
@@ -814,10 +766,10 @@ export default {
         showMap() {
             return this.$config.model.showMap
         },
-        hasLastKnownLocation(){
+        hasLastKnownLocation() {
             return this.fullModel.deviceLocationOrLastKnownLocationLat != null && this.fullModel.deviceLocationOrLastKnownLocationLon != null
         },
-        goolgeMapUrl(){
+        goolgeMapUrl() {
             return `${this.$config.googleMapsBaseUrl}/maps?q=${this.fullModel.deviceLocationOrLastKnownLocationLat},${this.fullModel.deviceLocationOrLastKnownLocationLon}`
         },
     },

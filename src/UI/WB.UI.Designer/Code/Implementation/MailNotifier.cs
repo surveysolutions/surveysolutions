@@ -114,6 +114,7 @@ namespace WB.UI.Designer.Code.Implementation
                 case ShareChangeType.StopShare: email = "Emails/TargetPersonStopShareNotification"; break;
                 case ShareChangeType.TransferOwnership: email = "Emails/TranfserOwnershipNotification"; break;
             }
+            ArgumentNullException.ThrowIfNull(email);
 
             var view = await this.renderingService.RenderToStringAsync(email, model);
             return view;

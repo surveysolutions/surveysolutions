@@ -24,10 +24,12 @@
         <div>
             <div class="block-filter">
                 <button v-if="tokenWasIssued" type="submit" class="btn btn-danger" id="btnDelete"
-                    v-bind:disabled="userInfo.isObserving || !canGenerate || userInfo.isRestricted" @click="deleteToken">{{
+                    v-bind:disabled="userInfo.isObserving || !canGenerate || userInfo.isRestricted"
+                    @click="deleteToken">{{
                         $t('Common.Disable') }}</button>
                 <button v-if="!tokenWasIssued" type="submit" class="btn btn-success" style="margin-right:5px"
-                    id="btnCreateToken" v-bind:disabled="(userInfo.isObserving || userInfo.isRestricted) && !canGenerate"
+                    id="btnCreateToken"
+                    v-bind:disabled="(userInfo.isObserving || userInfo.isRestricted) && !canGenerate"
                     @click="generateApiKey">{{ $t('Common.Enable') }}</button>
             </div>
         </div>
@@ -133,7 +135,7 @@ export default {
                             }
                             message += stateError
                         })
-                        vm.$set(vm.modelState, state.key, message)
+                        vm.modelState[state.key] = message
                     }
                 })
             }

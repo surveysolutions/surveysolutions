@@ -1,13 +1,12 @@
 <template>
     <ModalFrame ref="modal" id="statusesHistoryModal">
         <template v-slot:title>
-
             <div>
                 <h3>{{ $t("Pages.HistoryOfStatuses_Interview") }} {{ $config.model.key }}</h3>
                 <p>
                     {{ $t('Details.Responsible') }}: <span
                         v-bind:class="[$config.model.responsibleRole.toLowerCase()]">{{
-                    $config.model.responsible }}</span>
+                            $config.model.responsible }}</span>
                 </p>
             </div>
         </template>
@@ -54,7 +53,7 @@
 
 <script>
 import { DateFormats } from '~/shared/helpers'
-import Vue from 'vue'
+import { api } from '~/webinterview/api/http'
 import moment from 'moment'
 
 export default {
@@ -68,11 +67,11 @@ export default {
             return moment.utc(d).local().format(DateFormats.dateTimeInList)
         },
         hide() {
-            $(this.$refs.modal).modal('hide')
+            this.$refs.modal.hide()
         },
         async show() {
             if (this.items == null) {
-                this.items = await Vue.$api.interview.get('getStatusesHistory')
+                this.items = await api.get('getStatusesHistory')
             }
 
             this.$refs.modal.modal()

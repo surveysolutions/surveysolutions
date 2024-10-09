@@ -14,8 +14,8 @@
                         <li id="detailsInfo_interviewKeyListItem">
                             {{ $t('Common.InterviewKey') }}:
                             {{ $config.model.key }}({{
-        $t('Common.Assignment')
-    }}
+                                $t('Common.Assignment')
+                            }}
                             <a :href="this.$config.model.assignmentDetailsUrl">#{{ this.$config.model.assignmentId
                                 }}</a>)
                         </li>
@@ -39,8 +39,8 @@
                         <li id="detailsInfo_interviewDurationListItem" v-if="this.$config.model.interviewDuration">
                             <span class="data-label">{{ $t('Details.Duration') }}:</span>
                             <span class="data">{{
-        this.$config.model.interviewDuration
-    }}</span>
+                                this.$config.model.interviewDuration
+                                }}</span>
                         </li>
                         <li id="detailsInfo_responsibleListItem">
                             <span class="data-label">{{ $t('Details.Responsible') }}:
@@ -50,25 +50,25 @@
         ">{{ this.$config.model.responsible }}</a>
                             </span>
                             <span v-else class="data supervisor">{{
-        this.$config.model.responsible
-    }}</span>
+                                this.$config.model.responsible
+                                }}</span>
                         </li>
                         <li id="detailsInfo_supervisorListItem">
                             <span class="data-label">{{ $t('Users.Supervisor') }}:
                             </span>
                             <span class="data supervisor">{{
-        this.$config.model.supervisor
-    }}</span>
+                                this.$config.model.supervisor
+                                }}</span>
                         </li>
                     </ul>
                     <ul class="list-unstyled pull-left table-info">
                         <li id="detailsInfo_StatusListItem">
                             <span class="data-label">{{
-            $t('Details.Status')
-        }}</span>
+                                this.$t('Details.Status')
+                                }}</span>
                             <span class="data">{{
-            this.$config.model.statusName
-        }}</span>
+                                this.$config.model.statusName
+                                }}</span>
                             <button type="button" class="btn btn-link gray-action-unit" @click="showStatusesHistory">
                                 {{ $t('Common.ShowStatusHistory') }}
                             </button>
@@ -83,11 +83,11 @@
                         </li>
                         <li>
                             <span class="data-label">{{ $t('Common.CalendarEvent') }}:</span>
-                            <span class="data" data-toggle="tooltip" v-if="calendarEvent != null" :title="calendarEvent.comment == null ||
-        calendarEvent.comment == ''
-        ? this.$t('Assignments.NoComment')
-        : calendarEvent.comment
-        ">
+                            <span class="data" data-bs-toggle="tooltip" v-if="calendarEvent != null" :title="calendarEvent.comment == null ||
+                                calendarEvent.comment == ''
+                                ? this.$t('Assignments.NoComment')
+                                : calendarEvent.comment
+                                ">
                                 {{ calendarEventTime }}
                             </span>
 
@@ -119,7 +119,7 @@
                     </button>
 
                     <div class="dropdown aside-menu" :disabled="config.isObserving" v-if="showMoreButton">
-                        <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                        <button type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
                             class="btn btn-link" :disabled="config.isObserving">
                             <span></span>
                         </button>
@@ -141,9 +141,9 @@
                                 </a>
                             </li>
                             <li v-if="canBeReassigned ||
-        canChangeToCawi ||
-        canChangeToCapi
-        " class="context-menu-separator context-menu-not-selectable"></li>
+                                canChangeToCawi ||
+                                canChangeToCapi
+                            " class="context-menu-separator context-menu-not-selectable"></li>
                             <li :class="canBeDeleted ? '' : 'disabled'">
                                 <a href="#" :class="canBeDeleted ? 'error-text' : 'disabled'
         " @click="deleteSelected">
@@ -166,18 +166,18 @@
                 <label for="approveReceivedByInterviewer" style="font-weight: normal">
                     <span class="tick"></span>
                     {{
-        $t(
-            'Pages.ApproveRejectPartialView_ApproveReceivedConfirm',
-        )
-    }}
+                        $t(
+                            'Pages.ApproveRejectPartialView_ApproveReceivedConfirm',
+                    )
+                    }}
                 </label>
                 <br />
                 <span v-if="doApproveReceivedByInterviewer" class="text-danger">
                     {{
-        $t(
-            'Pages.ApproveRejectPartialView_ApproveReceivedWarning',
-        )
-    }}
+                        $t(
+                            'Pages.ApproveRejectPartialView_ApproveReceivedWarning',
+                    )
+                    }}
                 </span>
                 <br />
             </div>
@@ -191,31 +191,29 @@
         </Confirm>
 
         <Confirm ref="rejectConfirm" id="rejectConfirm" slot="modals" :title="showUnapproveButton
-        ? $t('Pages.ApproveRejectPartialView_UnapproveLabel')
-        : $t('Pages.ApproveRejectPartialView_RejectLAbel')
-        " :disableOk="(interviewerShouldbeSelected || rejectToNewResponsible) &&
-        newResponsibleId == null
-        " :okTitle="showUnapproveButton
-        ? $t('Common.Unapprove')
-        : $t('Common.Reject')
-        " :okClass="btn - danger">
+            ? $t('Pages.ApproveRejectPartialView_UnapproveLabel')
+            : $t('Pages.ApproveRejectPartialView_RejectLAbel')
+            " :disableOk="(interviewerShouldbeSelected || rejectToNewResponsible) &&
+            newResponsibleId == null
+            " :okTitle="showUnapproveButton
+            ? $t('Common.Unapprove')
+            : $t('Common.Reject')
+            " :okClass="btn - danger">
             <form v-if="!showUnapproveButton" onsubmit="return false;">
                 <div class="form-group">
                     <Radio v-if="!interviewerShouldbeSelected" :label="$t('Interviews.RejectToOriginal')"
-                        :radioGroup="false" name="rejectToNewResponsible" :value="rejectToNewResponsible" @input="
-        rejectToNewResponsible = false
-    newResponsibleId = null
-        " />
+                        :radioGroup="false" name="rejectToNewResponsible" :value="rejectToNewResponsible"
+                        @input="rejectToNewResponsible = false; newResponsibleId = null" />
                     <Radio v-if="!interviewerShouldbeSelected" :label="$t('Interviews.RejectToNewResponsible')"
                         :radioGroup="true" name="rejectToNewResponsible" :value="rejectToNewResponsible"
                         @input="rejectToNewResponsible = true" />
                     <p>
                         <Typeahead v-if="rejectToNewResponsible == true ||
-        interviewerShouldbeSelected
-        " control-id="rejectResponsibleId" :placeholder="$t('Common.Responsible')" :value="newResponsibleId"
+                            interviewerShouldbeSelected
+                        " control-id="rejectResponsibleId" :placeholder="$t('Common.Responsible')" :value="newResponsibleId"
                             @selected="newResponsibleSelected" :fetch-url="this.$config.model.approveReject
-        .interviewersListUrl
-        ">
+                                .interviewersListUrl
+                                ">
                         </Typeahead>
                     </p>
                 </div>
@@ -233,10 +231,10 @@
             <h3>
                 {{ $t('Details.InterviewMode') }}:
                 {{
-        interviewinCawiMode
-            ? $t('Common.Cawi')
-            : $t('Common.Capi')
-    }}
+                    interviewinCawiMode
+                        ? $t('Common.Cawi')
+                        : $t('Common.Capi')
+                }}
             </h3>
             <div>
                 <p>{{ webLink }}</p>
@@ -264,7 +262,7 @@
                     <button type="button" class="btn btn-danger" role="confirm" @click="deleteInterviews">
                         {{ $t('Common.Delete') }}
                     </button>
-                    <button type="button" class="btn btn-link" data-dismiss="modal" role="cancel">
+                    <button type="button" class="btn btn-link" data-bs-dismiss="modal" role="cancel">
                         {{ $t('Common.Cancel') }}
                     </button>
                 </div>
@@ -275,8 +273,8 @@
             <form onsubmit="return false;">
                 <div class="form-group">
                     <label class="control-label" for="newResponsibleId">{{
-        $t('Assignments.SelectResponsible')
-    }}</label>
+                        $t('Assignments.SelectResponsible')
+                        }}</label>
                     <Typeahead control-id="newResponsibleId" :placeholder="$t('Common.Responsible')"
                         :value="newResponsibleId" :ajax-params="{}" @selected="newResponsibleSelected"
                         :fetch-url="config.api.responsible"></Typeahead>
@@ -320,7 +318,7 @@
                         :disabled="!newResponsibleId">
                         {{ $t('Common.Assign') }}
                     </button>
-                    <button type="button" class="btn btn-link" data-dismiss="modal" role="cancel">
+                    <button type="button" class="btn btn-link" data-bs-dismiss="modal" role="cancel">
                         {{ $t('Common.Cancel') }}
                     </button>
                 </div>
@@ -334,10 +332,10 @@
 
         <ChangeToCapi ref="modalChangeToCAPI" :modalId="'switchToCapi_id'" :title="$t('Common.ChangeToCAPI')"
             :confirmMessage="$t('Common.ChangeToCAPIConfirmHQ', {
-        count: 1,
-    })
-        " :filteredCount="1" :receivedByInterviewerItemsCount="isReceivedByInterviewerAtUtc ? 1 : 0
-        " @confirm="changeInterviewModeToCapi" />
+                count: 1,
+            })
+                " :filteredCount="1" :receivedByInterviewerItemsCount="isReceivedByInterviewerAtUtc ? 1 : 0
+            " @confirm="changeInterviewModeToCapi" />
     </div>
 </template>
 
@@ -534,10 +532,10 @@ export default {
             this.$refs.overview.show()
         },
         showModeDetails() {
-            this.$refs.modeDetails.modal('show')
+            this.$refs.modeDetails.modal()
         },
         hideModeDetails() {
-            $(this.$refs.modeDetails).modal('hide')
+            this.$refs.modeDetails.hide()
         },
 
         changeInterviewModeToCawi(confirmReceivedByInterviewer) {

@@ -1,6 +1,6 @@
 <template>
     <HqLayout :hasFilter="false">
-        <template slot="headers">
+        <template v-slot:headers>
             <ol class="breadcrumb">
                 <li>
                     <a href="/SurveySetup">{{ $t('MainMenu.SurveySetup') }}</a>
@@ -89,7 +89,8 @@
                 <div>
                     <button type="button" class="btn btn-success" v-bind:disabled="model.isObserving"
                         @click="changeExposedStatusSend">{{ $t("Common.Save") }}</button>
-                    <button type="button" class="btn btn-link" data-dismiss="modal">{{ $t("Common.Cancel") }}</button>
+                    <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
+                        }}</button>
                 </div>
             </template>
         </ModalFrame>
@@ -101,7 +102,8 @@
                 <div>
                     <button type="button" class="btn btn-danger" v-bind:disabled="model.isObserving"
                         @click="removeExposedVariable">{{ $t("Common.Remove") }}</button>
-                    <button type="button" class="btn btn-link" data-dismiss="modal">{{ $t("Common.Cancel") }}</button>
+                    <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
+                        }}</button>
                 </div>
             </template>
         </ModalFrame>
@@ -237,7 +239,7 @@ export default {
             const response = await this.$hq.Questionnaire(this.model.questionnaireId, this.model.version)
                 .ChangeVariableExposeStatus(this.$config.model.questionnaireIdentity, this.exposedVariables.map(s => s.id))
             this.initialSet = [...this.exposedVariables]
-            this.$refs.exposedChangeModal.modal('hide')
+            this.$refs.exposedChangeModal.hide()
         },
 
         cellAllClicked(columnName, rowId, cellData) {
@@ -259,7 +261,7 @@ export default {
                     variable: rowData.variable,
                     entityType: rowData.entityType,
                 })
-                row.nodes().to$().addClass('disabled')
+                row.node().classList.add('disabled');
             }
         },
         removeExposedClicked(id) {
@@ -273,8 +275,8 @@ export default {
 
             var row = this.$refs.table.table.row('#' + this.idToRemove)
             if (row != null)
-                row.nodes().to$().removeClass('disabled')
-            this.$refs.exposedRemoveModal.modal('hide')
+                row.node().classList.remove('disabled');
+            this.$refs.exposedRemoveModal.hide()
         },
         getVariableLabel(variable) {
             return variable.label ? this.getDisplayTitle(variable.label)

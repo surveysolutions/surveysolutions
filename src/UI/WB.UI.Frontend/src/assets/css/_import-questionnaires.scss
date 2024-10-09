@@ -1,153 +1,201 @@
 .questionnaire-statistics {
     margin-bottom: 30px;
-    ul{
+
+    ul {
         font: 14px/16px $trebuchet;
         list-style: none;
         padding: 0;
         overflow: hidden;
-        li{
+
+        li {
             margin-bottom: 6px;
-            a{
+
+            a {
                 font-style: italic;
                 text-decoration: underline;
-                &:hover, &:focus{
+
+                &:hover,
+                &:focus {
                     text-decoration: none;
                 }
             }
         }
     }
 }
-.import-questionnaire-form{
-    .form-group{
+
+.import-questionnaire-form {
+    .form-group {
         margin-bottom: 0;
     }
-    .questionnaire-versioning{
+
+    .questionnaire-versioning {
         margin-bottom: 50px;
         margin-top: 15px;
     }
 }
-.flex-block{
+
+.flex-block {
     height: 100%;
     display: flex;
     flex-direction: column;
-    .block{
+
+    .block {
         display: flex;
-        flex-grow:1;
-        flex-direction:column;
+        flex-grow: 1;
+        flex-direction: column;
     }
 }
-.signed-name{
+
+.signed-name {
 
     font-size: 13px;
     line-height: 15px;
-    span{
+
+    span {
         @extend %uppercase-font;
         color: $blue;
     }
-    a{
+
+    a {
         color: $gray_light;
         text-decoration: underline;
-        &:hover, &:focus{
+
+        &:hover,
+        &:focus {
             text-decoration: none;
         }
     }
 }
-.import-interview{
-    tr{
-        td, th{
-            width: 10%; 
+
+.import-interview {
+    tr {
+
+        td,
+        th {
+            width: 10%;
         }
-        .size{
+
+        .size {
             width: 6%;
         }
     }
-    thead{
-        tr{
+
+    thead {
+        tr {
             border-bottom: 2px solid #ddd;
-           th{
-                .search{
+
+            th {
+                .search {
                     top: -5px;
                 }
-                padding: 8px 10px; 
-                &:after, &.sorting::after{
+
+                padding: 8px 10px;
+
+                &:after,
+                &.sorting::after {
                     top: 10px;
                 }
-            } 
+            }
         }
-        th.column-questionnaire-title{
+
+        th.column-questionnaire-title {
             width: 44%;
         }
     }
-    tbody{
+
+    tbody {
         border-bottom: 2px solid #ddd;
         font: 13px/15px Georgia, Times, "Times New Roman", serif;
         font-style: italic;
-        tr{
+
+        tr {
             border-bottom: 1px solid #ddd;
             border-bottom: 1px solid #ddd;
-            &:hover, &:focus{
+
+            &:hover,
+            &:focus {
                 td {
-                    &:first-child a{
+                    &:first-child a {
                         color: #000;
                     }
-                    &.shared-with{
+
+                    &.shared-with {
                         color: $gray_text;
                     }
-                    span{
+
+                    span {
                         color: $gray_text;
                     }
                 }
-                .parameters span{
+
+                .parameters span {
                     color: $gray_light;
                 }
             }
-            td{
+
+            td {
                 padding: 8px 10px;
-                &.shared-with{
+
+                &.shared-with {
                     color: $gray_form;
-                    &>span{
+
+                    &>span {
                         color: $gray_text;
-                        span{
+
+                        span {
                             color: $gray_light;
                         }
                     }
                 }
-                &:first-child{
-                    width: 44%; 
+
+                &:first-child {
+                    width: 44%;
                     font: 18px/20px "RobotoRegular";
                 }
             }
         }
-        .current-user,  .changed-recently{
+
+        .current-user,
+        .changed-recently {
             color: $green-light;
         }
-        .parameters{
+
+        .parameters {
             font-style: normal;
-        }  
+        }
     }
 }
-@media (max-width: $screen-md-min){
-    .import-interview{
-        tr{
+
+@media (max-width: $screen-md-min) {
+    .import-interview {
+        tr {
             @include transition(all, 0.1s);
             height: 35px;
-            td, th{
-                width: 13%;  
+
+            td,
+            th {
+                width: 13%;
             }
         }
     }
 }
-@media (max-width: $screen-sm-min){
-    .import-wrapper{
-        .dataTables_wrapper{
-            .dataTables_filter{
+
+@media (max-width: $screen-sm-min) {
+    .import-wrapper {
+
+        .dataTables_wrapper,
+        .dt-container {
+
+            .dataTables_filter,
+            .dt-search {
                 text-align: left;
                 left: 0;
                 position: relative;
                 top: -5px;
-                label{
+
+                label {
                     &.active {
-                        input{
+                        input {
                             margin-right: 0;
                         }
                     }
@@ -155,26 +203,33 @@
             }
         }
     }
-    .signed-name{
+
+    .signed-name {
         margin-bottom: 10px;
         padding: 0 3%;
     }
-    .import-interview tbody tr td:first-child{
+
+    .import-interview tbody tr td:first-child {
         font-size: 12px;
         line-height: 14px;
         width: 70%;
     }
-    .import-wrapper  .table{
-        tr{
-            td, th{
-                width: 30%;  
+
+    .import-wrapper .table {
+        tr {
+
+            td,
+            th {
+                width: 30%;
             }
         }
     }
+
     .import-questionnaire-form {
-        .questionnaire-versioning, .flex-row{
+
+        .questionnaire-versioning,
+        .flex-row {
             margin-bottom: 0;
         }
     }
 }
-

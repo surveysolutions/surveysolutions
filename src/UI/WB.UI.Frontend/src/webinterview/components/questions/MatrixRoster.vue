@@ -8,16 +8,20 @@
         </div>
         <ag-grid-vue ref="matrixRoster" class="ag-theme-customStyles roster-matrix" domLayout="autoHeight"
             rowHeight="40" headerHeight="50" :defaultColDef="defaultColDef" :columnDefs="columnDefs" :rowData="rowData"
-            :grid-options="gridOptions" @grid-ready="onGridReady" @column-resized="autosizeHeaders"></ag-grid-vue>
+            :grid-options="gridOptions" :modules="gridModules" @grid-ready="onGridReady"
+            @column-resized="autosizeHeaders"></ag-grid-vue>
     </div>
 </template>
 
 <script lang="js">
 /* eslint-disable vue/no-unused-components */
-import Vue from 'vue'
+import "@ag-grid-community/styles/ag-grid.css";
+import "@ag-grid-community/styles/ag-theme-quartz.css";
+
 import { entityDetails } from '../mixins'
 import { debounce, map } from 'lodash'
-import { AgGridVue } from 'ag-grid-vue'
+import { AgGridVue } from '@ag-grid-community/vue3'
+import { ClientSideRowModelModule } from "@ag-grid-community/client-side-row-model";
 
 import MatrixRoster_QuestionEditor from './MatrixRoster.QuestionEditor'
 import MatrixRoster_RosterTitle from './MatrixRoster.RosterTitle'
@@ -109,6 +113,9 @@ export default {
                 },
             }
         },
+        gridModules() {
+            return [ClientSideRowModelModule]
+        }
     },
     methods: {
         initQuestionAsColumns() {
@@ -199,7 +206,7 @@ export default {
             ) {
                 const self = this
                 const MIN_HEIGHT = 16
-                this.gridApi.setHeaderHeight(MIN_HEIGHT)
+                this.gridApi.setGridOption('headerHeight', MIN_HEIGHT)
                 const headerCells = $(this.$refs.matrixRoster.$el).find(
                     '.ag-header-cell-label',
                 )
@@ -210,7 +217,7 @@ export default {
                 }
 
                 // set header height to calculated height + padding (top: 8px, bottom: 8px)
-                this.gridApi.setHeaderHeight(minHeight)
+                this.gridApi.setGridOption('headerHeight', minHeight)
 
                 // set all rows height to auto
                 this.gridApi.resetRowHeights()
@@ -220,10 +227,10 @@ export default {
         setTableRosterHeight() {
             if (this.$refs.tableRoster != undefined) {
                 if (this.$me.instances.length > 30) {
-                    this.gridApi.setDomLayout('normal')
+                    this.gridApi.setGridOption('domLayout', 'normal')
                     this.$refs.matrixRoster.$el.style.height = '1536px'
                 } else {
-                    this.gridApi.setDomLayout('autoHeight')
+                    this.gridApi.setGridOption('domLayout', 'autoHeight')
                     this.$refs.matrixRoster.$el.style.height = ''
                 }
             }

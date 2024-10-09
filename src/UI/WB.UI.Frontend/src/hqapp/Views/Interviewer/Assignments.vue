@@ -27,8 +27,9 @@
                     <button type="button" class="btn btn-primary" role="confirm" @disable="saveDisabled"
                         @click="updateCalendarEvent">
                         {{ $t("Common.Save") }}</button>
-                    <button type="button" class="btn btn-link" data-dismiss="modal" role="cancel">{{ $t("Common.Cancel")
-                        }}</button>
+                    <button type="button" class="btn btn-link" data-bs-dismiss="modal" role="cancel">{{
+        $t("Common.Cancel")
+    }}</button>
                     <button type="button" class="btn btn-danger pull-right" role="delete" v-if="calendarEventId != null"
                         @click="deleteCalendarEvent">
                         {{ $t("Common.Delete") }}</button>
@@ -172,7 +173,7 @@ export default {
                 {
                     data: 'identifyingQuestions',
                     title: this.$t('Assignments.IdentifyingQuestions'),
-                    class: 'prefield-column first-identifying last-identifying sorting_disabled visible',
+                    className: 'prefield-column first-identifying last-identifying sorting_disabled visible',
                     orderable: false,
                     searchable: false,
                     render(data) {
@@ -218,7 +219,7 @@ export default {
                     render: function (data) {
                         if (data != null && data.startUtc != null) {
                             var hasComment = !(data.comment == null || data.comment == '')
-                            return '<span data-toggle="tooltip" title="'
+                            return '<span data-bs-toggle="tooltip" title="'
                                 + (hasComment ? escape(data.comment) : self.$t('Assignments.NoComment'))
                                 + '">'
                                 + convertToLocal(data.startUtc, data.startTimezone)

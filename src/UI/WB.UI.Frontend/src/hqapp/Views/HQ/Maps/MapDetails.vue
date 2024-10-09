@@ -64,13 +64,12 @@
             </Filters>
         </template>
 
-        <template v-slot:modals>
-            <Confirm ref="confirmDiscard" id="discardConfirm" :okTitle="$t('Pages.MapDetails_Unlink')"
-                okClass="btn-danger">
-                <p>{{ $t("Pages.MapUserLink_DiscardConfirm") }} </p>
-                <p class="text-danger">{{ $t("Pages.MapUserLink_DiscardConfirm1") }} </p>
-            </Confirm>
-        </template>
+
+        <Confirm ref="confirmDiscard" id="discardConfirm" :okTitle="$t('Pages.MapDetails_Unlink')" okClass="btn-danger">
+            <p>{{ $t("Pages.MapUserLink_DiscardConfirm") }} </p>
+            <p class="text-danger">{{ $t("Pages.MapUserLink_DiscardConfirm1") }} </p>
+        </Confirm>
+
         <template v-slot:headers>
             <div>
                 <ol class="breadcrumb">
@@ -142,9 +141,6 @@ export default {
                     }).then(response => {
                         self.$refs.table.reload();
                     }).catch(err => {
-
-
-
                         console.error(err);
                         toastr.error(err.message.toString());
                     });

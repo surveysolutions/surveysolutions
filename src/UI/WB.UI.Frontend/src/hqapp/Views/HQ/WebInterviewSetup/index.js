@@ -1,7 +1,7 @@
 import Settings from './Settings'
 import SendInvitations from './SendInvitations'
 import SendInvitationsProgress from './SendInvitationsProgress'
-import Vue from 'vue'
+//import Vue from 'vue'
 
 export default class WebInterviewSetupComponent {
     get routes() {
@@ -19,10 +19,5 @@ export default class WebInterviewSetupComponent {
                 component: SendInvitationsProgress,
             },
         ]
-    }
-
-    initialize() {
-        const VeeValidate = require('vee-validate')
-        Vue.use(VeeValidate)
     }
 }

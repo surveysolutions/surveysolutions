@@ -1,5 +1,4 @@
-window.jQuery = require('jquery')
-const $ = window.jQuery
+import $ from '~/shared/jquery'
 
 $.fn.preventDoubleSubmission = function () {
     $(this).on('submit', function (e) {
@@ -18,8 +17,9 @@ $.fn.preventDoubleSubmission = function () {
 }
 
 window.ajustNoticeHeight = function () {
-    var height = $('.view-mode').outerHeight()
-    $('.view-mode + main .container-fluid .panel-details').css('padding-top', height)
+    const height = $('.view-mode').outerHeight()
+    const el = $('.view-mode + div main .container-fluid .panel-details')
+    el.css('padding-top', height)
 }
 window.ajustDetailsPanelHeight = function () {
     var height = $('.view-mode').outerHeight()
@@ -36,17 +36,13 @@ window.ajustDetailsPanelHeight = function () {
 }
 
 $(function () {
-    $('#hide-filters').click(function () {
-        $('.filters').toggleClass('hidden-filters')
-        $(this).parents('.row').toggleClass('fullscreen-hidden-filters')
-    })
     $('main').removeClass('hold-transition')
     $('footer').removeClass('hold-transition')
 
     $(window).on('resize',
         function () {
             if ($(window).width() > 880) {
-                if ($('.navbar-collapse.collapse.in').length > 0) {
+                if ($('.navbar-collapse.collapse.show').length > 0) {
                     $('main').addClass('display-block')
                 }
             } else {
@@ -55,20 +51,20 @@ $(function () {
         })
 
     $('.navbar-toggle').click(function () {
-        $('.navbar-collapse').fadeToggle()
+        //$('.navbar-collapse').fadeToggle()
         $('.navbar-collapse').animate({ height: '100%' }, 0)
         $('.top-menu').toggleClass('top-animate')
         $('.mid-menu').toggleClass('mid-animate')
         $('.bottom-menu').toggleClass('bottom-animate')
-        if ($(window).width() < 880) {
-            if ($('.navbar-collapse.collapse.in').length > 0) {
+        /*if ($(window).width() < 880) {
+            if ($('.navbar-collapse.collapse.show').length > 0) {
                 $('main').removeClass('display-block')
                 $('main').removeClass('hidden')
             } else {
 
                 $('main').addClass('hidden')
             }
-        }
+        }*/
     })
 
     $('form').preventDoubleSubmission()

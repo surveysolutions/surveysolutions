@@ -1,42 +1,46 @@
 <template>
-    <aside class="filters-results"
-        :class="{'active' : searchResultsAreVisible}">
+    <aside class="filters-results" :class="{ 'active': searchResultsAreVisible }">
         <div>
-            <button class="btn btn-link close-btn"
-                type="button"
-                @click="hideSearchResults">
+            <button class="btn btn-link close-btn" type="button" @click="hideSearchResults">
                 <span class="cancel"></span>
             </button>
 
             <h2 v-if="searchResult.count > 0">
-                {{ $t("Details.SearchResult_Count", { count: searchResult.count })}}
+                {{ $t("Details.SearchResult_Count", { count: searchResult.count }) }}
             </h2>
             <h2 v-else>
-                {{ $t("Details.NoSearchResults")}}
+                {{ $t("Details.NoSearchResults") }}
             </h2>
 
-            <search-section-result
-                v-for="(search, index) in searchResult.results"
-                :key="search.sectionId + index"
+            <search-section-result v-for="(search, index) in searchResult.results" :key="search.sectionId + index"
                 :search="search">
             </search-section-result>
 
-            <infinite-loading ref="loader"
-                v-if="searchResultsAreVisible"
-                @infinite="infiniteHandler"
-                :distance="250">
-                <span slot="no-more"></span>
-                <span slot="no-results"></span>
+            <infinite-loading ref="loader" v-if="searchResultsAreVisible" @infinite="infiniteHandler" :distance="250">
+                <template #complete>
+                    <span slot="no-more"></span>
+                </template>
             </infinite-loading>
         </div>
     </aside>
 </template>
 
+<style lang="css">
+.v3-infinite-loading div {
+    text-align: center;
+}
+</style>
+
 <script>
-import InfiniteLoading from 'vue-infinite-loading'
+import InfiniteLoading from "v3-infinite-loading";
+import "v3-infinite-loading/lib/style.css";
 import SearchSectionResult from './components/SearchSectionResult'
 
 export default {
+    components: {
+        SearchSectionResult,
+        InfiniteLoading
+    },
 
     methods: {
         hideSearchResults() {
@@ -44,17 +48,17 @@ export default {
             this.$store.dispatch('hideSearchResults')
         },
 
-        infiniteHandler($state) {
+        async infiniteHandler($state) {
             const self = this
 
-            this.$store.dispatch('fetchSearchResults')
-                .then(() => {
-                    $state.loaded()
+            await this.$store.dispatch('fetchSearchResults')
 
-                    if(self.searchResult.skip >= self.searchResult.count) {
-                        $state.complete()
-                    }
-                })
+            if (self.searchResult.skip >= self.searchResult.count) {
+                $state.complete()
+            }
+            else {
+                $state.loaded()
+            }
         },
     },
 
@@ -68,10 +72,11 @@ export default {
         },
     },
 
-    watch:{
+    watch: {
         'searchResult.count'() {
-            if(this.$refs.loader != null)
-                this.$refs.loader.$emit('$InfiniteLoading:reset')
+            if (this.$refs.loader != null) {
+                //this.$refs.loader.$emit('$InfiniteLoading:reset')
+            }
         },
     },
 
@@ -80,8 +85,5 @@ export default {
             this.$store.dispatch('fetchSearchResults')
         })
     },
-
-    components: { SearchSectionResult,InfiniteLoading},
 }
 </script>
-

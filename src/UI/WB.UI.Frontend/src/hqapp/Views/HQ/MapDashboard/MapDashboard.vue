@@ -10,9 +10,9 @@
                 <FilterBlock :title="$t('Common.QuestionnaireVersion')">
                     <Typeahead control-id="questionnaireVersion" :placeholder="$t('Common.AllVersions')"
                         :value="selectedVersion" :values="selectedQuestionnaireId == null
-        ? null
-        : selectedQuestionnaireId.versions
-        " v-on:selected="selectQuestionnaireVersion" :disabled="selectedQuestionnaireId == null" />
+                            ? null
+                            : selectedQuestionnaireId.versions
+                            " v-on:selected="selectQuestionnaireVersion" :disabled="selectedQuestionnaireId == null" />
                 </FilterBlock>
                 <FilterBlock :title="$t('Common.Responsible')" v-if="model.userRole != 'Interviewer'">
                     <Typeahead control-id="responsibleId" :placeholder="$t('Common.AllResponsible')"
@@ -20,15 +20,16 @@
                         v-on:selected="selectResponsible" :fetch-url="model.responsible"></Typeahead>
                 </FilterBlock>
                 <FilterBlock :title="$t('Pages.Filters_Assignment')">
-                    <div class="input-group">
-                        <input class="form-control with-clear-btn number" :placeholder="$t('Common.AllAssignments')"
-                            type="number" v-model.number="assignmentId" v-validate="{ numeric: true }" />
+                    <Form as="div" class="input-group">
+                        <Field class="form-control with-clear-btn number" :placeholder="$t('Common.AllAssignments')"
+                            name="assignmentId" type="number" v-model.number="assignmentId"
+                            :rules="{ numeric: true }" />
                         <div class="input-group-btn" @click="clearAssignmentFilter">
                             <div class="btn btn-default">
                                 <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                             </div>
                         </div>
-                    </div>
+                    </Form>
                 </FilterBlock>
                 <FilterBlock :title="$t('Pages.Filters_Shapefiles')">
                     <Typeahead control-id="shapefileName" :placeholder="$t('Pages.Filters_None')" :ajax-params="{}"
@@ -80,52 +81,52 @@
                 <div class="row-fluid" v-if="model.userRole != 'Interviewer'" style="white-space: nowrap">
                     <strong>{{ $t('MapReport.ViewInterviewContent') }}:</strong>&nbsp;
                     <a v-bind:href="api.GetInterviewDetailsUrl(
-        selectedTooltip.interviewId
-    )
-        " target="_blank">{{ $t('MapReport.details') }}</a>
+                        selectedTooltip.interviewId
+                    )
+                        " target="_blank">{{ $t('MapReport.details') }}</a>
                 </div>
                 <div class="row-fluid tooltip-buttons" style="white-space: nowrap" v-if="!model.isObserving">
                     <button class="btn btn-sm btn-primary" v-if="model.userRole == 'Interviewer' &&
-        (selectedTooltip.status == 'InterviewerAssigned' ||
-            selectedTooltip.status ==
-            'RejectedBySupervisor')
-        " click="openInterview">
+                        (selectedTooltip.status == 'InterviewerAssigned' ||
+                            selectedTooltip.status ==
+                            'RejectedBySupervisor')
+                    " click-method="openInterview">
                         {{ $t('Common.Open') }}
                     </button>
-                    <button class="btn btn-sm btn-primary" v-if="canAssign" click="assignInterview">
+                    <button class="btn btn-sm btn-primary" v-if="canAssign" click-method="assignInterview">
                         {{ $t('Common.Assign') }}
                     </button>
                     <button class="btn btn-sm btn-primary" v-if="model.userRole == 'Supervisor' &&
-        (selectedTooltip.status == 'Completed' ||
-            selectedTooltip.status ==
-            'RejectedByHeadquarters')
-        " click="approveSvInterview">
+                        (selectedTooltip.status == 'Completed' ||
+                            selectedTooltip.status ==
+                            'RejectedByHeadquarters')
+                    " click-method="approveSvInterview">
                         {{ $t('Common.Approve') }}
                     </button>
                     <button class="btn btn-sm reject" v-if="model.userRole == 'Supervisor' &&
-        (selectedTooltip.status == 'Completed' ||
-            selectedTooltip.status ==
-            'RejectedByHeadquarters')
-        " click="rejectSvInterview">
+                        (selectedTooltip.status == 'Completed' ||
+                            selectedTooltip.status ==
+                            'RejectedByHeadquarters')
+                    " click-method="rejectSvInterview">
                         {{ $t('Common.Reject') }}
                     </button>
                     <button class="btn btn-sm btn-primary" v-if="model.userRole == 'Headquarter' &&
-        (selectedTooltip.status == 'Completed' ||
-            selectedTooltip.status ==
-            'ApprovedBySupervisor')
-        " click="approveHqInterview">
+                        (selectedTooltip.status == 'Completed' ||
+                            selectedTooltip.status ==
+                            'ApprovedBySupervisor')
+                    " click-method="approveHqInterview">
                         {{ $t('Common.Approve') }}
                     </button>
                     <button class="btn btn-sm reject" v-if="model.userRole == 'Headquarter' &&
-        (selectedTooltip.status == 'Completed' ||
-            selectedTooltip.status ==
-            'ApprovedBySupervisor')
-        " click="rejectHqInterview">
+                        (selectedTooltip.status == 'Completed' ||
+                            selectedTooltip.status ==
+                            'ApprovedBySupervisor')
+                    " click-method="rejectHqInterview">
                         {{ $t('Common.Reject') }}
                     </button>
                     <button class="btn btn-sm btn-primary" v-if="model.userRole == 'Headquarter' &&
-        selectedTooltip.status == 'ApprovedByHeadquarters'
-        " click="unapproveInterview">
+                        selectedTooltip.status == 'ApprovedByHeadquarters'
+                    " click-method="unapproveInterview">
                         {{ $t('Common.Unapprove') }}
                     </button>
                 </div>
@@ -152,19 +153,19 @@
                 <div class="row-fluid" v-if="model.userRole != 'Interviewer'" style="white-space: nowrap">
                     <strong>{{ $t('Common.ViewAssignmentDetails') }}:</strong>&nbsp;
                     <a v-bind:href="api.GetAssignmentDetailsUrl(
-        selectedTooltip.assignmentId
-    )
-        " target="_blank">{{ $t('MapReport.details') }}</a>
+                        selectedTooltip.assignmentId
+                    )
+                        " target="_blank">{{ $t('MapReport.details') }}</a>
                 </div>
                 <div class="row-fluid tooltip-buttons" style="white-space: nowrap" v-if="!model.isObserving">
                     <button class="btn btn-sm btn-primary" v-if="model.userRole == 'Supervisor' ||
-        model.userRole == 'Headquarter'
-        " click="assignAssignment">
+                        model.userRole == 'Headquarter'
+                    " click-method="assignAssignment">
                         {{ $t('Common.Assign') }}
                     </button>
 
                     <button class="btn btn-sm btn-assignment" v-if="model.userRole == 'Interviewer'"
-                        click="createInterview">
+                        click-method="createInterview">
                         {{ $t('Common.Create') }}
                     </button>
                 </div>
@@ -190,8 +191,8 @@
             <form onsubmit="return false;">
                 <div class="form-group">
                     <label class="control-label" for="newResponsibleId">{{
-        $t('Assignments.SelectResponsible')
-    }}</label>
+                        $t('Assignments.SelectResponsible')
+                    }}</label>
                     <Typeahead control-id="newResponsibleId" :placeholder="$t('Common.Responsible')"
                         :value="newResponsibleId" :ajax-params="{}" @selected="newResponsibleSelected"
                         :fetch-url="model.responsible"></Typeahead>
@@ -216,7 +217,7 @@
                         :disabled="!canClickAssign">
                         {{ $t('Common.Assign') }}
                     </button>
-                    <button type="button" class="btn btn-link" data-dismiss="modal" role="cancel">
+                    <button type="button" class="btn btn-link" data-bs-dismiss="modal" role="cancel">
                         {{ $t('Common.Cancel') }}
                     </button>
                 </div>
@@ -276,12 +277,15 @@
 </style>
 
 <script>
-import Vue from 'vue'
+import { nextTick } from 'vue'
 import { debounce, delay, forEach, find } from 'lodash'
 import routeSync from '~/shared/routeSync'
+import { Form, Field } from 'vee-validate'
 
 export default {
     mixins: [routeSync],
+
+    components: { Form, Field },
 
     data() {
         return {
@@ -387,9 +391,9 @@ export default {
         },
     },
 
-    mounted() {
+    async mounted() {
         this.setMapCanvasStyle()
-        this.initializeMap()
+        await this.initializeMap()
 
         this.assignmentId = this.query.assignmentId
 
@@ -413,7 +417,7 @@ export default {
                 {
                     url: 'InterviewerHq/StartNewInterview/' + assignmentId,
                     headers: {
-                        'X-CSRF-TOKEN': Vue.$hq.Util.getCsrfCookie(),
+                        'X-CSRF-TOKEN': self.$hq.Util.getCsrfCookie(),
                     },
                 },
                 (response) => {
@@ -523,7 +527,7 @@ export default {
                 data['marker'] = marker
                 self.selectedTooltip = data
 
-                Vue.nextTick(function () {
+                nextTick(function () {
                     self.infoWindow.setContent(
                         $(self.$refs.interviewTooltip).html()
                     )
@@ -545,7 +549,7 @@ export default {
                 data['marker'] = marker
                 self.selectedTooltip = data
 
-                Vue.nextTick(function () {
+                nextTick(function () {
                     self.infoWindow.setContent(
                         $(self.$refs.assignmentTooltip).html()
                     )
@@ -659,11 +663,15 @@ export default {
             }
         },
 
-        initializeMap() {
+        async initializeMap() {
             const self = this
 
+            const { MapLayer } = await google.maps.importLibrary("maps");
+            //const { Marker } = await google.maps.importLibrary("marker");
+            //const { AdvancedMarkerElement } = await google.maps.importLibrary("marker")
+
             const mapDiv = document.getElementById('map-canvas')
-            this.map = new google.maps.Map(mapDiv, this.getMapOptions())
+            this.map = new MapLayer(mapDiv, this.getMapOptions())
 
             this.infoWindow = new google.maps.InfoWindow()
 
@@ -877,7 +885,7 @@ export default {
 
                                 self.selectedTooltip = data
 
-                                Vue.nextTick(function () {
+                                nextTick(function () {
                                     self.infoWindow.setContent(
                                         $(self.$refs.clusterTooltip).html()
                                     )
@@ -910,7 +918,7 @@ export default {
 
                         self.selectedTooltip = data
 
-                        Vue.nextTick(function () {
+                        nextTick(function () {
                             self.infoWindow.setContent(
                                 $(self.$refs.interviewTooltip).html()
                             )
@@ -932,7 +940,7 @@ export default {
 
                     self.selectedTooltip = data
 
-                    Vue.nextTick(function () {
+                    nextTick(function () {
                         self.infoWindow.setContent(
                             $(self.$refs.assignmentTooltip).html()
                         )
@@ -946,7 +954,7 @@ export default {
 
                 const label = event.feature.getProperty('label')
                 if (label) {
-                    Vue.nextTick(function () {
+                    nextTick(function () {
                         self.infoWindow.setContent(label)
                         self.infoWindow.setPosition(event.latLng)
                         self.infoWindow.open(self.map)
@@ -956,7 +964,7 @@ export default {
 
             google.maps.event.addDomListener(mapDiv, 'click', (event) => {
                 if (event.srcElement.nodeName == 'BUTTON') {
-                    var methodName = event.srcElement.getAttribute('click')
+                    var methodName = event.srcElement.getAttribute('click-method')
                     if (methodName) self[methodName].call(self)
                 }
             })

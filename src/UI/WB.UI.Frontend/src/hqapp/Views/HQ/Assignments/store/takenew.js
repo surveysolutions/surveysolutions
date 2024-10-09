@@ -1,7 +1,5 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-
-Vue.use(Vuex)
+import { hubApi } from '~/webinterview/components/signalr/core.signalr'
+import { api } from '~/webinterview/api/http'
 
 export default {
     state: {
@@ -11,17 +9,17 @@ export default {
 
     actions: {
         loadTakeNew({ commit }, { interviewId }) {
-            const details = Vue.$api.interview.get('getInterviewDetails', { interviewId })
+            const details = api.get('getInterviewDetails', { interviewId })
                 .then(interviewDetails => {
                     commit('SET_INTERVIEW_DETAILS', interviewDetails)
                 })
 
-            const question = Vue.$api.interview.get('getPrefilledQuestions', { interviewId }).then(data => {
+            const question = api.get('getPrefilledQuestions', { interviewId }).then(data => {
                 commit('SET_SECTION_DATA', data)
                 commit('SET_TAKENEW_RESPONSE', data)
             })
 
-            Vue.$api.hub.changeSection(null)
+            hubApi.changeSection(null)
             return Promise.all([details, question])
         },
     },

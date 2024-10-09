@@ -35,30 +35,27 @@
         </FilterBlock>
 
         <FilterBlock :title="$t('Reports.ByAnswerValue')" v-if="question && question.Type == 'Numeric'">
-            <div class="row">
+            <Form as="div" v-slot="{ errors, meta }" class="row">
                 <div class="col-xs-6">
-                    <div class="form-group" v-bind:class="{ 'has-error': errors.has('min') }"
-                        :title="errors.first('min')">
+                    <div class="form-group" v-bind:class="{ 'has-error': errors.min }" :title="errors.min">
                         <label for="min">
                             {{ $t("Reports.Min") }}
                         </label>
-                        <input type="number" class="form-control input-sm" name="min" :placeholder="$t('Reports.Min')"
-                            @input="inputChange" v-validate.initial="{ max_value: max || Number.MAX_VALUE }"
-                            :value="min" />
+                        <Field type="number" class="form-control input-sm" name="min" :placeholder="$t('Reports.Min')"
+                            @input="inputChange" :rules.initial="{ max_value: max || Number.MAX_VALUE }" :value="min" />
                     </div>
                 </div>
                 <div class="col-xs-6">
-                    <div class="form-group" v-bind:class="{ 'has-error': errors.has('max') }"
-                        :title="errors.first('max')">
+                    <div class="form-group" :class="{ 'has-error': errors.max }" :title="errors.max">
                         <label for="max">
                             {{ $t("Reports.Max") }}
                         </label>
-                        <input type="number" class="form-control input-sm" :placeholder="$t('Reports.Max')"
-                            v-validate.initial="{ min_value: min || Number.MIN_VALUE }" name="max" @input="inputChange"
+                        <Field type="number" class="form-control input-sm" :placeholder="$t('Reports.Max')"
+                            :rules.initial="{ min_value: min || Number.MIN_VALUE }" name="max" @input="inputChange"
                             :value="max" />
                     </div>
                 </div>
-            </div>
+            </Form>
         </FilterBlock>
 
         <template v-if="question != null && question.SupportConditions">
@@ -82,12 +79,18 @@
 <script>
 import routeSync from '~/shared/routeSync'
 import { xor, find, assign, isEqual, chain, filter } from 'lodash'
+import { Form, Field, ErrorMessage } from 'vee-validate'
 
 export default {
     mixins: [
         routeSync,
     ],
 
+    components: {
+        Form,
+        Field,
+        ErrorMessage
+    },
     data() {
         return {
             selectedQuestionnaire: null,

@@ -21,7 +21,9 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Azure.Identity" Version="1.12.0" />
-    <PackageReference Include="ClosedXML" Version="0.102.2" />    <PackageReference Include="Dapper" Version="2.1.35" />    <PackageReference Include="DotNetZip" Version="1.16.0" />
+    <PackageReference Include="ClosedXML" Version="0.102.2" />
+    <PackageReference Include="Dapper" Version="2.1.35" />
+    <PackageReference Include="DotNetZip" Version="1.16.0" />
     <PackageReference Include="FluentMigrator" Version="5.2.0" />
     <PackageReference Include="FluentMigrator.Runner" Version="5.2.0" />
     <PackageReference Include="FluentMigrator.Runner.Core" Version="5.2.0" />
@@ -41,6 +43,6 @@
     <PackageReference Include="SixLabors.Fonts" Version="2.0.4" />
     <PackageReference Include="SkiaSharp" Version="2.88.8" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.0.2" />
-    <PackageReference Include="System.IO.Packaging" Version="8.0.0" />
+    <PackageReference Include="System.IO.Packaging" Version="8.0.1" />
   </ItemGroup>
 </Project>

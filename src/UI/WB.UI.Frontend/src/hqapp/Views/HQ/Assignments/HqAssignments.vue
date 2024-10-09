@@ -97,6 +97,7 @@
                         {{ $t('Assignments.WebModeReassignToNonInterviewer', { count: selectedRows.length }) }}
                     </span>
                 </div>
+
                 <div class="form-group">
                     <label class="control-label" for="commentsId">
                         {{ $t("Assignments.Comments") }}
@@ -110,7 +111,8 @@
                 <div>
                     <button type="button" class="btn btn-primary" @click="assign" :disabled="!newResponsibleId">{{
                         $t("Common.Assign") }}</button>
-                    <button type="button" class="btn btn-link" data-dismiss="modal">{{ $t("Common.Cancel") }}</button>
+                    <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
+                        }}</button>
                 </div>
             </template>
         </ModalFrame>
@@ -124,7 +126,8 @@
                     <button type="button" class="btn btn-primary" :disabled="isWebModeAssignmentSelected"
                         @click="close">{{
                             $t("Assignments.Close") }}</button>
-                    <button type="button" class="btn btn-link" data-dismiss="modal">{{ $t("Common.Cancel") }}</button>
+                    <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
+                        }}</button>
                 </div>
             </template>
         </ModalFrame>
@@ -143,7 +146,8 @@
                     <button type="button" class="btn btn-primary" @click="upateAudioRecording"
                         :disabled="!showSelectors">{{
                             $t("Common.Save") }}</button>
-                    <button type="button" class="btn btn-link" data-dismiss="modal">{{ $t("Common.Cancel") }}</button>
+                    <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
+                        }}</button>
                 </div>
             </template>
         </ModalFrame>
@@ -154,24 +158,27 @@
             <p v-if="!canEditQuantity">
                 <b>{{ $t("Assignments.AssignmentExpectedInWebMode") }}</b>
             </p>
-            <form onsubmit="return false;">
-                <div class="form-group" v-bind:class="{ 'has-error': errors.has('editedQuantity') }">
+            <Form ref="quantityForm" onsubmit="return false;" v-slot="{ meta }">
+                <div class="form-group" v-bind:class="{ 'has-error': meta.valid == false }">
                     <label class="control-label" for="newQuantity">
                         {{ $t("Assignments.Expected") }}
                     </label>
-
-                    <input type="text" class="form-control" v-model.trim="editedQuantity" name="editedQuantity"
-                        v-validate="quantityValidations" :data-vv-as="$t('Assignments.Expected')" maxlength="5"
+                    <Field type="text" class="form-control" v-model.trim="editedQuantity" name="editedQuantity"
+                        :rules="validateQuantity" :data-vv-as="$t('Assignments.Expected')" maxlength="5"
                         autocomplete="off" @keyup.enter="updateQuantity" id="newQuantity" placeholder="1"
-                        :disabled="!canEditQuantity" />
-                    <span class="text-danger">{{ errors.first('editedQuantity') }}</span>
+                        :disabled="!canEditQuantity" :validateOnBlur="true" :validateOnChange="true"
+                        :validateOnInput="true" />
+                    <span class="text-danger">
+                        <ErrorMessage name="editedQuantity" />
+                    </span>
                 </div>
-            </form>
+            </Form>
             <template v-slot:actions>
                 <div>
                     <button type="button" class="btn btn-primary" :disabled="!showSelectors || !canEditQuantity"
                         @click="updateQuantity">{{ $t("Common.Save") }}</button>
-                    <button type="button" class="btn btn-link" data-dismiss="modal">{{ $t("Common.Cancel") }}</button>
+                    <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
+                        }}</button>
                 </div>
             </template>
         </ModalFrame>
@@ -199,7 +206,7 @@
                 <button
                     type="button"
                     class="btn btn-link"
-                    data-dismiss="modal">{{$t("Common.Cancel")}}</button>
+                    data-bs-dismiss="modal">{{$t("Common.Cancel")}}</button>
             </div>
             </template>
         </ModalFrame> -->
@@ -216,8 +223,14 @@ import { RoleNames } from '~/shared/constants'
 import _sanitizeHtml from 'sanitize-html'
 const sanitizeHtml = text => _sanitizeHtml(text, { allowedTags: [], allowedAttributes: [] })
 
+import { Form, Field, ErrorMessage } from 'vee-validate'
 
 export default {
+    components: {
+        Field,
+        Form,
+        ErrorMessage,
+    },
     data() {
         return {
             responsibleId: null,
@@ -274,13 +287,7 @@ export default {
 
             return this.anyWebModeAssignmentSelected && this.newResponsibleId.iconClass !== RoleNames.INTERVIEWER.toLowerCase()
         },
-        quantityValidations() {
-            return {
-                regex: '^-?([0-9]+)$',
-                min_value: -1,
-                max_value: this.config.maxInterviewsByAssignment,
-            }
-        },
+
         ddlReceivedByTablet() {
             return [
                 { key: 'All', value: this.$t('Assignments.ReceivedByTablet_All') },
@@ -398,7 +405,7 @@ export default {
                     data: 'identifyingQuestions',
                     title: this.$t('Assignments.IdentifyingQuestions'),
                     tooltip: this.$t('Assignments.Tooltip_Table_IdentifyingQuestions'),
-                    class: 'prefield-column first-identifying last-identifying sorting_disabled visible',
+                    className: 'prefield-column first-identifying last-identifying sorting_disabled visible',
                     orderable: false,
                     searchable: false,
                     render(data) {
@@ -682,7 +689,7 @@ export default {
 
                 this.$hq.Assignments.quantitySettings(this.editedRowId).then(data => {
                     this.canEditQuantity = data.CanChangeQuantity
-                    this.$refs.editQuantityModal.modal('show')
+                    this.$refs.editQuantityModal.modal()
                 })
             }
             else if (columnName === 'AudioRecording' && this.config.isHeadquarter && !this.showArchive.key) {
@@ -690,7 +697,7 @@ export default {
                 this.editedAudioRecordingEnabled = null
                 this.$hq.Assignments.audioSettings(this.editedRowId).then(data => {
                     this.editedAudioRecordingEnabled = data.Enabled
-                    this.$refs.editAudioEnabledModal.modal('show')
+                    this.$refs.editAudioEnabledModal.modal()
                 })
             }
             // else if (columnName === 'WebMode' && this.config.isHeadquarter && !this.showArchive.key) {
@@ -701,9 +708,9 @@ export default {
         },
 
         async updateQuantity() {
-            const validationResult = await this.$validator.validateAll()
+            const validationResult = await this.$refs.quantityForm.validate()
 
-            if (validationResult == false) {
+            if (validationResult.valid != true) {
                 return false
             }
 
@@ -776,6 +783,23 @@ export default {
             var language =
                 (navigator.languages && navigator.languages[0]) || navigator.language || navigator.userLanguage
             return value.toLocaleString(language)
+        },
+
+        validateQuantity(value) {
+            const regex = /^-?([0-9]+)$/i;
+
+            if (!regex.test(value)) {
+                return 'This field must be a valid number';
+            }
+
+            if (value <= -2)
+                return 'This field must be greater or equal to -1';
+
+            if (value > this.config.maxInterviewsByAssignment)
+                return 'This field must be less than limit';
+
+            return true;
+
         },
 
     },

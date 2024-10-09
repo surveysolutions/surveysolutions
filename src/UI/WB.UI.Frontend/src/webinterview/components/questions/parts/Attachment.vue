@@ -30,7 +30,7 @@
             </div>
             <div>
                 <video controls preload="auto" style="width:300px" :src="contentUrl">{{
-                    $t('WebInterviewUI.MultimediaNotSupported') }}</video>
+            $t('WebInterviewUI.MultimediaNotSupported') }}</video>
             </div>
         </div>
         <div v-if="localContentType === 'pdf'">
@@ -44,14 +44,14 @@
 </template>
 <script lang="js">
 import axios from 'axios'
-import appendquery from 'append-query'
+import appendQuery from 'append-query'
 import { startsWith } from 'lodash'
 
 function appendSearchParam(uri, name, value) {
     const args = {
         [name]: value,
     } // keep in separate line to make IE happy 
-    return appendquery(uri, args)
+    return appendQuery(uri, args)
 }
 
 export default {
@@ -60,6 +60,7 @@ export default {
         return {
             modal: false,
             contentType: '',
+            onEscape: null,
         }
     },
     props: {
@@ -98,20 +99,19 @@ export default {
             default: false,
         },
     },
-    created() {
+    mounted() {
         const self = this
-        const onEscape = (e) => {
+        this.onEscape = (e) => {
             if (self.modal && e.keyCode === 27) {
                 self.showModal(false)
             }
         }
-        document.addEventListener('keydown', onEscape)
-        this.$once('hook:destroyed', () => {
-            document.removeEventListener('keydown', onEscape)
-        })
-    },
-    mounted() {
+        document.addEventListener('keydown', this.onEscape)
+
         return this.fetchContentType()
+    },
+    beforeUnmount() {
+        document.removeEventListener('keydown', this.onEscape)
     },
     watch: {
         contentId() {

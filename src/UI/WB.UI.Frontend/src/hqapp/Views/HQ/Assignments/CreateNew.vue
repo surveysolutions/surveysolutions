@@ -7,7 +7,7 @@
                         {{ $t("WebInterviewUI.LoadingWait") }}
                     </div>
                 </div>
-                <div class="unit-section complete-section" v-else>
+                <Form as="div" v-slot="{ errors, meta }" ref="createForm" class="unit-section complete-section" v-else>
                     <div class="wrapper-info error">
                         <div class="container-info">
                             <h2>
@@ -27,16 +27,19 @@
                             <div class="options-group">
                                 <div class="form-group">
                                     <div class="field" :class="{ answered: newResponsibleId != null }">
-                                        <Typeahead v-validate="responsibleValidations" control-id="newResponsibleId"
-                                            :placeholder="$t('Common.Responsible')" :value="newResponsibleId"
-                                            :ajax-params="{}" @selected="newResponsibleSelected"
-                                            :fetch-url="config.responsiblesUrl"></Typeahead>
+                                        <Field v-slot="{ field }" label="Responsible" name="newResponsibleId"
+                                            :value="newResponsibleId" :rules="responsibleValidations">
+                                            <Typeahead v-bind="field" control-id="newResponsibleId"
+                                                :placeholder="$t('Common.Responsible')" :value="newResponsibleId"
+                                                :ajax-params="{}" @selected="newResponsibleSelected"
+                                                :fetch-url="config.responsiblesUrl"></Typeahead>
+                                        </Field>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="information-block text-danger" v-if="!assignToQuestion.validity.isValid">
-                            <p v-for="error in errors.collect('newResponsibleId')">{{ error }}</p>
+                            <p>{{ errors.newResponsibleId }}</p>
                         </div>
                     </wb-question>
 
@@ -52,17 +55,17 @@
                             <div class="options-group">
                                 <div class="form-group">
                                     <div class="field answered">
-                                        <input v-model="sizeQuestion.answer"
-                                            :title="this.$t('Assignments.ExpectedExplanation')" v-validate="sizeValidations"
+                                        <Field v-model="sizeQuestion.answer"
+                                            :title="this.$t('Assignments.ExpectedExplanation')" :rules="sizeValidations"
                                             name="size" maxlength="5" type="text" autocomplete="off" inputmode="numeric"
-                                            class="field-to-fill">
+                                            class="field-to-fill" />
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="information-block text-danger" v-if="!sizeQuestion.validity.isValid">
-                            <p>{{ this.$t("Assignments.InvalidExpected") }}</p>
-                            <p>{{ errors.first('size') }}</p>
+                            <!--p>{{ this.$t("Assignments.InvalidExpected") }}</p-->
+                            <p>{{ errors.size }}</p>
                         </div>
                     </wb-question>
 
@@ -77,7 +80,8 @@
                                 <div class="form-group">
                                     <div class="field answered">
                                         <input id="webModeId" @change="webModeChange" checked="checked"
-                                            v-model="webMode.answer" data-val="true" type="checkbox" class="wb-checkbox">
+                                            v-model="webMode.answer" data-val="true" type="checkbox"
+                                            class="wb-checkbox">
                                         <label for="webModeId">
                                             <span class="tick"></span>
                                             {{ $t("Assignments.CawiActivated") }}
@@ -95,10 +99,10 @@
                             <div class="options-group">
                                 <div class="form-group">
                                     <div class="field answered">
-                                        <input v-model="emailQuestion.answer"
+                                        <Field v-model="emailQuestion.answer"
                                             :title="this.$t('Assignments.EmailExplanation')"
-                                            :placeholder="$t('Assignments.EnterEmail')" v-validate="'email'" name="email"
-                                            type="text" autocomplete="off" class="field-to-fill">
+                                            :placeholder="$t('Assignments.EnterEmail')" rules="email" name="email"
+                                            type="text" autocomplete="off" class="field-to-fill" />
                                     </div>
                                 </div>
                             </div>
@@ -120,11 +124,11 @@
                             <div class="options-group">
                                 <div class="form-group">
                                     <div class="field answered">
-                                        <input v-model="passwordQuestion.answer"
+                                        <Field v-model="passwordQuestion.answer"
                                             :placeholder="$t('Assignments.EnterPassword')"
                                             :title="this.$t('Assignments.PasswordExplanation')"
-                                            v-validate="passwordValidations" name="password" type="text" autocomplete="off"
-                                            class="field-to-fill">
+                                            :rules="passwordValidations" name="password" type="text" autocomplete="off"
+                                            class="field-to-fill" />
                                     </div>
                                 </div>
                             </div>
@@ -177,7 +181,7 @@
                         <button :class="{ 'shake': buttonAnimated }" type="button" @click="create($event)"
                             class="btn btn-success btn-lg">{{ $t('Common.Create') }}</button>
                     </div>
-                </div>
+                </Form>
             </div>
         </div>
         <portal-target name="body" multiple>
@@ -219,61 +223,30 @@
 </style>
 
 <script>
-import Vue from 'vue'
-import { Validator } from 'vee-validate'
+import { nextTick } from 'vue'
 import * as toastr from 'toastr'
 import http from '~/webinterview/api/http'
 import { RoleNames } from '~/shared/constants'
 import { filter } from 'lodash'
 import '@/assets/css/markup-web-interview.scss'
+import { defineAsyncComponent } from 'vue';
+import { Form, Field, ErrorMessage } from 'vee-validate'
 
 const validationTranslations = {
     custom: {
         newResponsibleId: {
-            required: () => Vue.$t('Assignments.ResponsibleRequired'),
+            required: () => $t('Assignments.ResponsibleRequired'),
         },
     },
 }
 
-Validator.localize('en', validationTranslations)
-
-const emailOrPasswordRequired = {
-    getMessage() {
-        return Vue.$t('Assignments.ExpectedForWebMode')
-    },
-    validate(value, [email, password]) {
-        return (email !== null && email !== '') || (password !== null && password !== '')
-    },
-    hasTarget: true,
-}
-
-const emailShouldBeEmpty = {
-    getMessage() {
-        return Vue.$t('Assignments.InvalidExpectedWithEmail')
-    },
-    validate(value, [email]) {
-        return email === null || email === ''
-    },
-    hasTarget: true,
-}
-
-Validator.extend('emailOrPasswordRequired', emailOrPasswordRequired)
-Validator.extend('emailShouldBeEmpty', emailShouldBeEmpty)
-
-Validator.extend('responsibleShouldBeInterviewer', {
-    getMessage() {
-        return Vue.$t('Assignments.WebModeNonInterviewer')
-    },
-    validate(value, [webMode]) {
-        if (!webMode) return true
-
-        return value.iconClass.toLowerCase() == RoleNames.INTERVIEWER.toLowerCase()
-    },
-})
-
-
-
 export default {
+    components: {
+        Form,
+        Field,
+        ErrorMessage,
+        signalr: defineAsyncComponent(() => import('~/webinterview/components/signalr/core.signalr')),
+    },
     data() {
         return {
             buttonAnimated: false,
@@ -346,16 +319,26 @@ export default {
     computed: {
         sizeValidations() {
             let validations = {
-                regex: '^-?([0-9]+)$',
-                min_value: -1,
-                max_value: this.config.maxInterviewsByAssignment,
-            }
+                regex: {
+                    regex: /^-?([0-9]+)$/
+                },
+                min_value: {
+                    min: -1
+                },
+                max_value: {
+                    max: this.config.maxInterviewsByAssignment
+                }
+            };
 
             if (this.webMode.answer) {
                 if (this.sizeQuestion.answer === '1') {
-                    validations.emailOrPasswordRequired = [this.emailQuestion.answer, this.passwordQuestion.answer]
+                    validations.callLocalMethod = {
+                        method: this.emailOrPasswordRequired
+                    };
                 } else {
-                    validations.emailShouldBeEmpty = [this.emailQuestion.answer]
+                    validations.callLocalMethod = {
+                        method: this.emailShouldBeEmpty
+                    };
                 }
             }
 
@@ -364,7 +347,7 @@ export default {
         responsibleValidations() {
             return {
                 required: true,
-                responsibleShouldBeInterviewer: [this.webMode.answer],
+                callLocalMethod: { method: this.responsibleShouldBeInterviewer },
             }
         },
         passwordValidations() {
@@ -377,13 +360,13 @@ export default {
             return filteredSectionData
         },
         isLoaded() {
-            return this.$store.state.takeNew.takeNew.isLoaded
+            return this.$store.state.takeNew.isLoaded
         },
         questionnaireTitle() {
-            return this.$store.state.takeNew.takeNew.interview.questionnaireTitle
+            return this.$store.state.takeNew.interview.questionnaireTitle
         },
         questionnaireVersion() {
-            return this.$store.state.takeNew.takeNew.interview.questionnaireVersion
+            return this.$store.state.takeNew.interview.questionnaireVersion
         },
         config() {
             return this.$config.model
@@ -409,14 +392,14 @@ export default {
         },
         async create(evnt) {
             evnt.target.disabled = true
-            var validationResult = await this.$validator.validateAll()
+            const validationResult = await this.$refs.createForm.validate()
             const self = this
-            this.sizeQuestion.validity.isValid = !this.errors.has('size')
-            this.emailQuestion.validity.isValid = !this.errors.has('email')
-            this.passwordQuestion.validity.isValid = !this.errors.has('password')
-            this.assignToQuestion.validity.isValid = !this.errors.has('newResponsibleId')
+            this.sizeQuestion.validity.isValid = !validationResult.errors.size
+            this.emailQuestion.validity.isValid = !validationResult.errors.email
+            this.passwordQuestion.validity.isValid = !validationResult.errors.password
+            this.assignToQuestion.validity.isValid = !validationResult.errors.newResponsibleId
 
-            const submitAllowed = validationResult
+            const submitAllowed = validationResult.valid
             if (submitAllowed) {
                 this.$http
                     .post(this.config.createNewAssignmentUrl, {
@@ -445,7 +428,7 @@ export default {
                 setTimeout(() => {
                     self.buttonAnimated = false
 
-                    const firstField = Object.keys(self.errors.collect())[0]
+                    const firstField = Object.keys(validationResult.errors)[0]
 
                     self.$nextTick(() => {
                         var elToScroll = self.$refs[`ref_${firstField}`]
@@ -472,6 +455,38 @@ export default {
         connected() {
             this.$store.dispatch('loadTakeNew', { interviewId: this.interviewId })
         },
+
+        emailOrPasswordRequired() {
+            const email = this.emailQuestion.answer;
+            const password = this.passwordQuestion.answer;
+            const isValid = (email !== null && email !== '') || (password !== null && password !== '')
+
+            if (isValid)
+                return true;
+
+            return this.$t('Assignments.ExpectedForWebMode')
+        },
+
+        emailShouldBeEmpty() {
+            const email = this.emailQuestion.answer;
+            const isValid = email === null || email === ''
+
+            if (isValid)
+                return true;
+
+            return this.$t('Assignments.InvalidExpectedWithEmail')
+        },
+
+        responsibleShouldBeInterviewer() {
+            if (!this.webMode.answer)
+                return true
+
+            const value = this.newResponsibleId
+            const isValid = value.iconClass.toLowerCase() == RoleNames.INTERVIEWER.toLowerCase()
+            if (isValid)
+                return true;
+            return this.$t('Assignments.WebModeNonInterviewer')
+        },
     },
 
     mounted() {
@@ -484,21 +499,17 @@ export default {
     },
 
     updated() {
-        Vue.nextTick(() => {
+        nextTick(() => {
             window.ajustNoticeHeight()
             window.ajustDetailsPanelHeight()
         })
     },
 
-    components: {
-        signalr: () => import('~/webinterview/components/signalr/core.signalr'),
-    },
-
     beforeMount() {
-        Vue.use(http, { store: this.$store })
+        http.install(this, { store: this.$store })
     },
 
-    beforeDestroy() {
+    unmounted() {
         window.removeEventListener('resize', this.onResize)
     },
 }

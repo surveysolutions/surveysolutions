@@ -6,7 +6,7 @@
         @if (TempData.ContainsKey(Alerts.ATTENTION))
         {
             <div class="alert alert-warning">
-                <button class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <button class="close" data-bs-dismiss="alert" aria-hidden="true">&times;</button>
                 <strong>@Pages.Attention</strong>
                 @Html.Raw(TempData[Alerts.ATTENTION].ToString().RemoveHtmlTags())
             </div>
@@ -16,7 +16,7 @@
             if (TempData.ContainsKey(key))
             {
                 <div class="alert alert-@key">
-                    <button class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <button class="close" data-bs-dismiss="alert" aria-hidden="true">&times;</button>
                     @Html.Raw(TempData[key].ToString().RemoveHtmlTags())
                 </div>
             }

@@ -10,8 +10,9 @@
 
         <infinite-loading ref="loader" v-if="overview.total > 0 && items.length > 0" @infinite="infiniteHandler"
             :distance="1000">
-            <span slot="no-more"></span>
-            <span slot="no-results"></span>
+            <template #complete>
+                <span slot="no-more"></span>
+            </template>
         </infinite-loading>
 
         <template v-slot:actions>
@@ -65,12 +66,17 @@
 </style>
 
 <script>
-import InfiniteLoading from 'vue-infinite-loading'
+import InfiniteLoading from "v3-infinite-loading";
+import "v3-infinite-loading/lib/style.css";
+
 import OverviewItem from './components/OverviewItem'
 import { slice } from 'lodash'
 
 export default {
-    components: { InfiniteLoading, OverviewItem },
+    components: {
+        InfiniteLoading,
+        OverviewItem
+    },
     data: function () {
         return {
             loaded: 100,
@@ -99,7 +105,7 @@ export default {
     methods: {
         hide() {
             document.removeEventListener('scroll', this.handleScroll)
-            $(this.$refs.modal).modal('hide')
+            this.$refs.modal.hide()
             $('body').removeClass('overviewOpenned')
         },
 
@@ -120,9 +126,11 @@ export default {
 
             self.loaded += 500
 
-            $state.loaded()
             if (self.overview.isLoaded && self.loaded >= self.overview.total) {
                 $state.complete()
+            }
+            else {
+                $state.loaded()
             }
         },
 

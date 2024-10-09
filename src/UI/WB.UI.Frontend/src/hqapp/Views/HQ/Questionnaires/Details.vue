@@ -23,7 +23,7 @@
                         <div class="questionnaire-details-actions clearfix">
                             <div class="buttons-container">
                                 <div class="dropdown aside-menu" :disabled="model.isObserving">
-                                    <button type="button" data-toggle="dropdown" aria-haspopup="true"
+                                    <button type="button" data-bs-toggle="dropdown" aria-haspopup="true"
                                         aria-expanded="false" class="btn btn-link" :disabled="model.isObserving">
                                         <span></span>
                                     </button>
@@ -209,10 +209,10 @@
                 <template v-slot:actions>
                     <div>
                         <button type="button" class="btn btn-danger" v-bind:disabled="model.isObserving"
-                            @click="recordAudioSend">
+                            @click="recordAudioSend(true)">
                             {{ $t('Common.Ok') }}
                         </button>
-                        <button type="button" class="btn btn-link" data-dismiss="modal" @click="cancelSetAudio">
+                        <button type="button" class="btn btn-link" data-bs-dismiss="modal" @click="cancelSetAudio">
                             {{ $t('Common.Cancel') }}
                         </button>
                     </div>
@@ -244,7 +244,7 @@
                             :disabled="!showSelectors">
                             {{ $t('Common.Save') }}
                         </button>
-                        <button type="button" class="btn btn-link" data-dismiss="modal">
+                        <button type="button" class="btn btn-link" data-bs-dismiss="modal">
                             {{ $t('Common.Cancel') }}
                         </button>
                     </div>
@@ -280,7 +280,7 @@ export default {
     },
     mounted() {
         this.audioAudit = this.$config.model.audioAudit
-        this.criticalityLevelDisplay = find(this.$config.model.criticalityLevels, { key: this.model.criticalityLevel }).value
+        this.criticalityLevelDisplay = find(this.$config.model.criticalityLevels, { key: this.model.criticalityLevel })?.value
     },
     methods: {
         assignSelected() { },
@@ -297,7 +297,8 @@ export default {
                     backdrop: 'static',
                     keyboard: false,
                 })
-            else return this.recordAudioSend()
+            else
+                return this.recordAudioSend(false)
         },
         criticalityLevelChange() {
             this.criticalityLevel = find(this.$config.model.criticalityLevels, { key: this.model.criticalityLevel })
@@ -312,15 +313,18 @@ export default {
             if (response.status === 204) {
                 this.model.criticalityLevel = this.criticalityLevel.key;
                 this.criticalityLevelDisplay = find(this.$config.model.criticalityLevels, { key: this.model.criticalityLevel }).value
-                this.$refs.criticalityLevelModal.modal('hide');
+                this.$refs.criticalityLevelModal.hide();
             }
         },
-        async recordAudioSend() {
+        async recordAudioSend(needToCloseModal) {
             const response = await this.$hq
                 .Questionnaire(this.model.questionnaireId, this.model.version)
                 .AudioAudit(this.audioAudit)
-            if (response.status !== 204) this.audioAudit = !this.audioAudit
-            this.$refs.audioAuditModal.modal('hide')
+            if (response.status !== 204)
+                this.audioAudit = !this.audioAudit
+
+            if (needToCloseModal)
+                this.$refs.audioAuditModal.hide()
         },
         cancelSetAudio() {
             this.audioAudit = false

@@ -63,7 +63,7 @@
                             </li>
                             <li>
                                 <a href="/identity/account/logout">{{
-                            $t('AccountResources.LogOut')
+                                    $t('AccountResources.LogOut')
                                     }}</a>
                             </li>
                         </ul>

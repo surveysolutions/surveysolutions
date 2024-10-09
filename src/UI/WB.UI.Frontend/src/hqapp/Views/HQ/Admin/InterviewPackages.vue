@@ -87,7 +87,6 @@
 </template>
 
 <script>
-import Vue from 'vue'
 import moment from 'moment'
 import { DateFormats, humanFileSize } from '~/shared/helpers'
 export default {
@@ -255,7 +254,7 @@ export default {
                         render: function (data, type, row) {
                             return '<div class="accordion-group accordion-caret">' +
                                 '<div class="accordion-heading">' +
-                                `<a class="accordion-toggle collapsed" data-toggle="collapse" href= "#show${row.id}">` +
+                                `<a class="accordion-toggle collapsed" data-bs-toggle="collapse" href= "#show${row.id}">` +
                                 `<strong>${data}</strong>` +
                                 '</a>' +
                                 '</div>' +

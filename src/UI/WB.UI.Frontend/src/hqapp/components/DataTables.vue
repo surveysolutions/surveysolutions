@@ -34,8 +34,13 @@
 </template>
 
 <script>
-import 'datatables.net'
+//import 'datatables.net'
+
+import DataTable from 'datatables.net-vue3'
+import DataTablesLib from 'datatables.net'
 import 'datatables.net-select'
+DataTable.use(DataTablesLib)
+
 import 'jquery-contextmenu'
 import 'jquery-contextmenu/dist/jquery.contextMenu.css'
 import 'jquery-highlight'
@@ -49,6 +54,10 @@ $.fn.dataTable.ext.errMode = function (a, b, c, d) {
         else throw { a, b, c, d }
     }
 }
+
+//limit sorting to asc and desc
+$.fn.dataTable.defaults.column.orderSequence = ['asc', 'desc']
+
 
 var checkBox = template(
     '<input class="checkbox-filter" type="checkbox" value="<%= id %>"' +
@@ -259,7 +268,7 @@ export default {
                     }
                 }
 
-                options.ajax.data = d => {
+                options.ajax.data = (d, s) => {
                     this.addParamsToRequest(d)
                     self.errorMessage = null
                     // reducing length of GET request URI
@@ -278,7 +287,7 @@ export default {
 
                     delete d.columns
 
-                    const requestUrl = this.table.ajax.url() + '?' + decodeURIComponent($.param(d))
+                    const requestUrl = s.ajax.url + '?' + decodeURIComponent($.param(d))
 
                     if (this.exportable) {
                         this.export.excel = requestUrl + '&exportType=excel'
@@ -399,8 +408,8 @@ export default {
             const self = this
             const clearSearchButton = $('<button type="button" class="btn btn-link btn-clear"><span></span></button>')
             const searchInput = $(this.$refs.table)
-                .parents('.dataTables_wrapper')
-                .find('.dataTables_filter label input')
+                .parents('.dt-container')
+                .find('.dt-search input')
 
             searchInput.after(clearSearchButton)
 
