@@ -10,7 +10,7 @@ namespace WB.Persistence.Headquarters.Migrations.Workspace
     {
         public override void Up()
         {
-            Create.Column("targetArea")
+            Create.Column("targetarea")
                 .OnTable("assignmenttoimport")
                 .AsString()
                 .Nullable();
