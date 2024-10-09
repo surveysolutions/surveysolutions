@@ -112,6 +112,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 command.Answers.ToArray(),
                 command.ProtectedVariables.ToArray(),
                 command.Comment,
+                command.TargetArea,
                 command.UpgradedFromId));
         }
 

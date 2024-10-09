@@ -20,5 +20,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Dto
         public virtual bool? IsAudioRecordingEnabled { set; get; }
         public virtual Guid? Headquarters { get; set; }
         public virtual string Comments { get; set; }
+        public virtual string TargetArea { get; set; }
     }
 }

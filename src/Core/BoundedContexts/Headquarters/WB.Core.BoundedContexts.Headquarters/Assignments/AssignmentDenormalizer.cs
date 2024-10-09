@@ -48,6 +48,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 @event.Payload.Password,
                 @event.Payload.WebMode,
                 @event.Payload.Comment,
+                @event.Payload.TargetArea,
                 @event.Payload.UpgradedFromId);
 
             state.Answers = @event.Payload.Answers;

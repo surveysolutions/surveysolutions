@@ -270,7 +270,8 @@ namespace WB.UI.Headquarters.Controllers.Api
                 isAudioRecordingEnabled,
                 answers,
                 null,
-                request.Comments);
+                request.Comments,
+                request.TargetArea);
                 
                 this.invitationService.CreateInvitationForWebInterview(assignment);
                 
@@ -292,6 +293,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             public bool? WebMode { get; set; }
             public bool? IsAudioRecordingEnabled { get; set; }
             public string Comments { get; set; }
+            public string TargetArea { get; set; }
         }
 
         public class UpdateAssignmentRequest

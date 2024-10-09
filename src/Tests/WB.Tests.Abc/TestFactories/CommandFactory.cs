@@ -380,7 +380,8 @@ namespace WB.Tests.Abc.TestFactories
             bool? webMode = null,
             List<InterviewAnswer> answers = null,
             List<string> protectedVariables = null,
-            string comment = null)
+            string comment = null,
+            string targetArea = null)
         {
             return new CreateAssignment(
                 assignmentId ?? Guid.NewGuid(), 
@@ -395,7 +396,8 @@ namespace WB.Tests.Abc.TestFactories
                 webMode,
                 answers,
                 protectedVariables,
-                comment);
+                comment,
+                targetArea);
         }
 
         public ArchiveAssignment ArchiveAssignment(Guid? assignmentId = null, Guid? userId = null, QuestionnaireIdentity questionnaireIdentity = null)
