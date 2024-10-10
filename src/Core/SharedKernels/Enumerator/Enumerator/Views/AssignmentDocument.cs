@@ -43,6 +43,7 @@ namespace WB.Core.SharedKernels.Enumerator.Views
 
         public DateTime? LastUpdated { get; set; }
         public string Comments { get; set; }
+        public string TargetArea { get; set; }
         
         
         public Guid? CalendarEventId { get; set; }
