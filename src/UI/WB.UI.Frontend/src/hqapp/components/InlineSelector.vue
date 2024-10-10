@@ -25,6 +25,7 @@
 </template>
 <script>
 
+
 export default {
     props: {
         options: {
@@ -50,14 +51,14 @@ export default {
     methods: {
         select(item) {
             const value = item[this.keySelector]
-            this.$emit('update:modelValue', value);
+            this.$emit('update:modelValue', item);
             this.$emit('change', value);
         },
     },
 
     computed: {
         text() {
-            const selOption = this.options.find(o => o[this.keySelector] == this.modelValue)
+            const selOption = !this.modelValue ? null : this.options.find(o => o[this.keySelector] == this.modelValue[this.keySelector])
             if (selOption == null) {
                 if (this.noEmpty && this.options.length > 0) {
                     this.select(this.options[0])
