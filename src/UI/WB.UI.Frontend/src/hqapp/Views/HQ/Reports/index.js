@@ -8,8 +8,6 @@ import SurveysAndStatuses from './SurveysAndStatuses'
 import SurveysAndStatusesForSv from './SurveysAndStatusesForSv'
 import SpeedAndQuantity from './SpeedAndQuantity'
 
-import Vue from 'vue'
-
 export default class ReportComponent {
     constructor(rootStore) {
         this.rootStore = rootStore
@@ -86,11 +84,6 @@ export default class ReportComponent {
                 }),
             },
         ]
-    }
-
-    initialize() {
-        const VeeValidate = require('vee-validate')
-        Vue.use(VeeValidate)
     }
 
     get modules() {

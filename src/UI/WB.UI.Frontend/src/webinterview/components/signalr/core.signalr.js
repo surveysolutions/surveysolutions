@@ -1,5 +1,15 @@
 import * as signalR from '@microsoft/signalr'
-import Vue from 'vue'
+
+let connection = null
+
+export const hubApi = {
+    changeSection(to, from) {
+        return connection.send('changeSection', to, from)
+    },
+    stop() {
+        return connection.stop()
+    },
+}
 
 export default {
     name: 'wb-communicator',
@@ -16,27 +26,23 @@ export default {
     },
 
     beforeMount() {
-        const connection = new signalR.HubConnectionBuilder()
-            .withUrl(Vue.$config.basePath + `interview?interviewId=${this.interviewId}&mode=${this.mode}`)
+        connection = new signalR.HubConnectionBuilder()
+            .withUrl(this.$config.basePath + `interview?interviewId=${this.interviewId}&mode=${this.mode}`)
             .withAutomaticReconnect()
             .build()
 
-        const api = {
-            changeSection(to, from) {
-                return connection.send('changeSection', to, from)
-            },
-            stop() {
-                return connection.stop()
-            },
+
+
+        //this.$api.hub = hubApi;
+
+        /*const app = this.$root
+        if (!Object.prototype.hasOwnProperty.call(app.config.globalProperties, '$api')) {
+            app.config.globalProperties.$api = {}
         }
 
-        if (!Object.prototype.hasOwnProperty.call(Vue, '$api')) {
-            Vue.$api = {}
-        }
-
-        Object.defineProperty(Vue.$api, 'hub', {
+        Object.defineProperty(app.config.globalProperties.$api, 'hub', {
             get() { return api },
-        })
+        })*/
 
         connection.on('refreshEntities', (questions) => {
             this.$store.dispatch('refreshEntities', questions)

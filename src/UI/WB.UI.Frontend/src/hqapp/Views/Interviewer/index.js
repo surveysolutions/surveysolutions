@@ -1,8 +1,8 @@
 import Assignments from './Assignments'
 import Interviews from './Interviews'
-import Vue from 'vue'
 import PNotify from 'pnotify'
-
+import { getCsrfCookie } from '../../api/index'
+import { config } from '~/shared/config'
 
 const store = {
     state: {
@@ -14,16 +14,16 @@ const store = {
 
             $.post(
                 {
-                    url: Vue.$config.model.interviewerHqEndpoint + '/StartNewInterview/' + assignmentId,
+                    url: window.CONFIG.model.interviewerHqEndpoint + '/StartNewInterview/' + assignmentId,
                     headers: {
-                        'X-CSRF-TOKEN': Vue.$hq.Util.getCsrfCookie(),
+                        'X-CSRF-TOKEN': getCsrfCookie(),
                     },
                 }
             )
-                .done(function( data, textStatus ) {
+                .done(function (data, textStatus) {
                     dispatch('showProgress', true)
                     const interviewId = data.interviewId
-                    const workspace = Vue.$config.workspace
+                    const workspace = config.workspace
                     const url = `/${workspace}/WebInterview/${interviewId}/Cover`
                     window.location = url
                 })
@@ -44,16 +44,16 @@ const store = {
         },
         openInterview(context, interviewId) {
             context.dispatch('showProgress', true)
-            window.location = Vue.$config.model.interviewerHqEndpoint + '/OpenInterview/' + interviewId
+            window.location = window.CONFIG.model.interviewerHqEndpoint + '/OpenInterview/' + interviewId
         },
 
         discardInterview(context, { callback, interviewId }) {
             $.ajax({
-                url: Vue.$config.model.interviewerHqEndpoint + '/DiscardInterview/' + interviewId,
+                url: window.CONFIG.model.interviewerHqEndpoint + '/DiscardInterview/' + interviewId,
                 type: 'DELETE',
                 success: callback,
                 headers: {
-                    'X-CSRF-TOKEN': Vue.$hq.Util.getCsrfCookie(),
+                    'X-CSRF-TOKEN': getCsrfCookie(),
                 },
             })
         },

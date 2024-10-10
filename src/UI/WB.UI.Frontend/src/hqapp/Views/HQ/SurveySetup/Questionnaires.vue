@@ -23,10 +23,10 @@
                 </p>
                 <p>
                     {{
-        $t(
-            'Pages.GlobalSettings_DeleteQuestionnaireConfirmation',
-        )
-    }}
+                        $t(
+                            'Pages.GlobalSettings_DeleteQuestionnaireConfirmation',
+                    )
+                    }}
                 </p>
                 <p class="text-danger" v-if="this.deletionWarnMsg">
                     {{ deletionWarnMsg }}
@@ -49,7 +49,7 @@
                         @click="deleteQuestionnaire">
                         {{ $t('Common.Delete') }}
                     </button>
-                    <button type="button" class="btn btn-link" data-dismiss="modal">
+                    <button type="button" class="btn btn-link" data-bs-dismiss="modal">
                         {{ $t('Common.Cancel') }}
                     </button>
                 </div>
@@ -328,7 +328,7 @@ export default {
                     )
                     .Delete()
                 if (response.status == 200) {
-                    this.$refs.deleteQuestionnaireModal.modal('hide')
+                    this.$refs.deleteQuestionnaireModal.hide()
                 }
                 this.reloadTable()
             }

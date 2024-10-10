@@ -17,7 +17,7 @@
 }
 <ul class="nav navbar-nav" role="menu">
     <li class="dropdown @(page == MenuItem.SurveyAndStatuses || page == MenuItem.Summary || page == MenuItem.Statuses ? "active" : "")">
-        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" title="@MainMenu.Reports">
+        <a href="javascript:void(0);" class="dropdown-toggle" data-bs-toggle="dropdown" title="@MainMenu.Reports">
             @MainMenu.Reports <span class="caret"></span>
         </a>
         <ul class="dropdown-menu">
@@ -35,7 +35,7 @@
     @Html.MainMenuItem(workspace, "Interviewers", "Users", MainMenu.TeamAndRoles, MenuItem.Interviewers)
     
     <li class="dropdown  @(page == MenuItem.Assignments || page == MenuItem.Maps ? "active" : "")">
-            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" title="@MainMenu.SurveySetup">
+            <a href="javascript:void(0);" class="dropdown-toggle" data-bs-toggle="dropdown" title="@MainMenu.SurveySetup">
                 @MainMenu.SurveySetup <span class="caret"></span>
             </a>
             <ul class="dropdown-menu">
@@ -55,7 +55,7 @@
         </a>
     </li>
     <li class="dropdown @(page == MenuItem.ManageAccount ? "active" : "")">
-        <a href="javascript:void(0);" class="dropdown-toggle toggle-sized" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
+        <a href="javascript:void(0);" class="dropdown-toggle toggle-sized" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
            title="@User.Identity.Name">
             @User.Identity.Name<span class="caret"></span>
         </a>

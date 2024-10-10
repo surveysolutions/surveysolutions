@@ -1,48 +1,23 @@
 <template>
-    <wb-question :question="$me"
-        questionCssClassName="single-select-question">
+    <wb-question :question="$me" questionCssClassName="single-select-question">
         <div class="question-unit">
             <div class="options-group">
-                <div class="form-group"
-                    v-for="(row, index) in $me.rows"
-                    :key="row.value">
-                    <div class="field answered"
-                        v-bind:class="{ 'unavailable-option locked-option': row.isProtected }">
-                        <textarea-autosize
-                            autocomplete="off"
-                            type="text"
-                            class="field-to-fill"
-                            rows="1"                            
-                            :maxlength="$me.maxLength"
-                            :important="true"
-                            :value="row.text"
-                            :disabled="!$me.acceptAnswer || row.isProtected"
-                            v-blurOnEnterKey
-                            @blur.native="updateRow($event, row)"
-                            @blur="updateRow($event, row)"/>
-                        <button type="submit"
-                            class="btn btn-link btn-clear"
-                            v-if="$me.acceptAnswer && !row.isProtected"
-                            tabindex="-1"
-                            @click="confirmAndRemoveRow(index)"><span></span></button>
+                <div class="form-group" v-for="(row, index) in $me.rows" :key="row.value">
+                    <div class="field answered" v-bind:class="{ 'unavailable-option locked-option': row.isProtected }">
+                        <textarea v-autosize autocomplete="off" type="text" class="field-to-fill" rows="1"
+                            :maxlength="$me.maxLength" :important="true" :value="row.text"
+                            :disabled="!$me.acceptAnswer || row.isProtected" v-blurOnEnterKey
+                            @blur.native="updateRow($event, row)" @blur="updateRow($event, row)" />
+                        <button type="submit" class="btn btn-link btn-clear" v-if="$me.acceptAnswer && !row.isProtected"
+                            tabindex="-1" @click="confirmAndRemoveRow(index)"><span></span></button>
                         <div class="lock"></div>
                     </div>
                 </div>
-                <div class="form-group"
-                    v-if="canAddNewItem">
+                <div class="form-group" v-if="canAddNewItem">
                     <div class="field answered">
-                        <textarea-autosize
-                            ref="inputTextArea"
-                            autocomplete="off"
-                            type="text"
-                            rows="1"
-                            class="field-to-fill"
-                            :disabled="!canAnswer"
-                            :placeholder="noAnswerWatermark"
-                            v-blurOnEnterKey
-                            :maxlength="$me.maxLength"
-                            @blur.native="addRow"
-                            @blur="addRow"/>
+                        <textarea v-autosize ref="inputTextArea" autocomplete="off" type="text" rows="1"
+                            class="field-to-fill" :disabled="!canAnswer" :placeholder="noAnswerWatermark"
+                            v-blurOnEnterKey :maxlength="$me.maxLength" @blur.native="addRow" @blur="addRow" />
                     </div>
                 </div>
                 <wb-lock />
@@ -64,9 +39,9 @@ class TextListAnswerRow {
 export default {
     name: 'TextList',
     mixins: [entityDetails],
-    computed:{
+    computed: {
         canAddNewItem() {
-            if(this.$store.getters.isReviewMode) {
+            if (this.$store.getters.isReviewMode) {
                 return !this.$me.isAnswered
             }
 
@@ -81,7 +56,7 @@ export default {
     },
     methods: {
         confirmAndRemoveRow(index) {
-            if(!this.canAnswer) return
+            if (!this.canAnswer) return
 
             if (!this.$me.isRosterSize) {
                 this.removeRow(index)
@@ -102,7 +77,7 @@ export default {
         },
 
         removeRow(index) {
-            if(!this.canAnswer) return
+            if (!this.canAnswer) return
 
             this.$me.rows.splice(index, 1)
             if (this.$me.rows.length == 0)
@@ -112,7 +87,7 @@ export default {
         },
 
         updateRow(evnt, item) {
-            if(!this.canAnswer) return
+            if (!this.canAnswer) return
 
             const target = $(evnt.target)
             let text = target.val()
@@ -127,7 +102,7 @@ export default {
             this.$store.dispatch('answerTextListQuestion', { identity: this.id, rows: this.$me.rows })
         },
         addRow(evnt) {
-            if(!this.canAnswer) return
+            if (!this.canAnswer) return
 
             const target = $(evnt.target)
             let text = target.val()

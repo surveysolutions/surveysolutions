@@ -1,50 +1,49 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-
-import { sync } from 'vuex-router-sync'
-
+import { createApp } from 'vue'
+import App from './App.vue'
+import { setupErrorHandler } from '../shared/errorHandler.js'
 import * as toastr from 'toastr'
 toastr.options.escapeHtml = true
 
-Vue.use(Vuex)
+const vue = createApp(App)
+setupErrorHandler(vue)
 
 import config from '~/shared/config'
-Vue.use(config)
-
-import VueTextareaAutosize from 'vue-textarea-autosize'
-Vue.use(VueTextareaAutosize)
+vue.use(config)
 
 import PortalVue from 'portal-vue'
-Vue.use(PortalVue)
+vue.use(PortalVue)
 
 import { Popover } from 'uiv'
-Vue.component('popover', Popover)
+vue.component('popover', Popover)
 
 import Vuei18n from '~/shared/plugins/locale'
 import { browserLanguage } from '~/shared/helpers'
-const i18n = Vuei18n.initialize(browserLanguage)
+const i18n = Vuei18n.initialize(browserLanguage, vue)
 
 import './init'
-import './errors'
 import box from '@/shared/modal'
-
-import './componentsRegistry'
+import { registerGlobalComponents } from './componentsRegistry'
+registerGlobalComponents(vue)
 
 import createRouter from './router'
+import webinterviewStore from './stores'
+import { createStore } from 'vuex';
+import routeParams from '../shared/stores/store.routeParams.js'
 
-import webinterviewStore from './store'
-
-const store = new Vuex.Store({
+const store = createStore({
     modules: {
         webinterview: webinterviewStore,
+        route: routeParams
     },
 })
 
+import http from './api/http'
+vue.use(http, { store })
+
 const router = createRouter(store)
 
-sync(store, router)
-
-import App from './App'
+vue.use(store)
+vue.use(router)
 
 box.init(i18n, browserLanguage)
 
@@ -53,12 +52,6 @@ window._api = {
     router,
 }
 
-export default new Vue({
-    el: '#app',
-    render: h => h(App),
-    components: {
-        App,
-    },
-    store,
-    router,
-})
+router.isReady().then(() => {
+    vue.mount('#app');
+});

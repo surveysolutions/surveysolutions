@@ -40,9 +40,8 @@
                     {{ noteToSupervisor }}
                 </label>
                 <div class="field">
-                    <textarea-autosize class="field-to-fill" id="comment-for-supervisor"
-                        :placeholder="$t('WebInterviewUI.TextEnter')" v-model="comment"
-                        maxlength="750"></textarea-autosize>
+                    <textarea class="field-to-fill" id="comment-for-supervisor" v-autosize
+                        :placeholder="$t('WebInterviewUI.TextEnter')" v-model="comment" maxlength="750"></textarea>
                     <button type="submit" class="btn btn-link btn-clear">
                         <span></span>
                     </button>
@@ -70,11 +69,11 @@
         <div class="wrapper-info">
             <div class="container-info">
                 <a href="javascript:void(0);" id="btnComplete" class="btn btn-lg" v-bind:class="{
-                    'btn-success': isAllAnswered,
-                    'btn-primary': hasUnansweredQuestions,
-                    'btn-danger': hasErrors,
-                    'disabled': !isCompletionPermitted,
-                }" @click="completeInterview">{{ competeButtonTitle }}</a>
+        'btn-success': isAllAnswered,
+        'btn-primary': hasUnansweredQuestions,
+        'btn-danger': hasErrors,
+        'disabled': !isCompletionPermitted,
+    }" @click="completeInterview">{{ competeButtonTitle }}</a>
                 <div class="info-block gray-uppercase" v-if="doesShowCompleteComment" style="margin-top:10px;">{{
                     completeButtionComment }}
                 </div>

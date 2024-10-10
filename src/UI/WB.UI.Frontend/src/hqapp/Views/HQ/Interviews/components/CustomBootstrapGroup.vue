@@ -1,126 +1,90 @@
 <template>
-    <!-- eslint-disable vue/no-v-html -->
-    <div
-        class="vqb-group card"
-        :class="'depth-' + depth.toString()">
-        <div class="vqb-group-heading card-header">
-            <div class="match-type-container form-inline">
-                <label
-                    class="mr-2"
-                    for="vqb-match-type">
-                    {{ labels.matchType }}
-                </label>
-
-                <select
-                    id="vqb-match-type"
-                    v-model="query.logicalOperator"
-                    class="form-control">
-                    <option
-                        v-for="label in labels.matchTypes"
-                        :key="label.id"
-                        :value="label.id">
-                        {{ label.label }}
-                    </option>
-                </select>
-
-                <button
-                    v-if="depth > 1"
-                    type="button"
-                    class="close ml-auto"
-                    @click="remove"
-                    v-html="labels.removeGroup">
-                </button>
-            </div>
-        </div>
-
+    <div class="vqb-group">
         <div class="vqb-group-body card-body">
             <div class="rule-actions form-inline">
                 <div class="form-group">
-                    <select
-                        v-model="selectedRule"
-                        class="form-control mr-2 mb-5">
-                        <option
-                            v-for="rule in rules"
-                            :key="rule.id"
-                            :value="rule">
-                            {{ rule.label }}
-                        </option>
+
+                    <select v-model="selectedRule"
+                        class="form-control mr-2 mb-5 query-builder-group-slot__rule-selection">
+                        <option v-for="rule in groupCtrl.rules" :key="rule.identifier" :value="rule.identifier"
+                            v-text="rule.name" />
                     </select>
 
-                    <button
-                        type="button"
-                        class="btn btn-secondary mr-2 mb-5"
-                        @click="addRule">
+                    <button type="button" class="btn btn-secondary mr-2 mb-5" @click="groupCtrl.addRule(selectedRule)">
                         {{ labels.addRule }}
                     </button>
 
-                    <button
-                        v-if="depth < maxDepth"
-                        type="button"
-                        class="btn btn-secondary mb-5"
-                        @click="addGroup">
+                    <button v-if="!groupCtrl.maxDepthExeeded" type="button" class="btn btn-secondary mb-5"
+                        @click="groupCtrl.newGroup">
                         {{ labels.addGroup }}
                     </button>
                 </div>
             </div>
-
-            <query-builder-children v-bind="$props" />
         </div>
     </div>
 </template>
 
 <script>
-import QueryBuilderGroup from 'vue-query-builder/dist/group/QueryBuilderGroup.umd.js'
-import QueryBuilderRule from './CustomBootstrapRule.vue'
 
 export default {
     name: 'QueryBuilderGroup',
 
-    components: {
-    // eslint-disable-next-line vue/no-unused-components
-        'QueryBuilderRule': QueryBuilderRule,
+    props: {
+        groupCtrl: {
+            required: true,
+        },
+        labels: {
+            required: true,
+        }
     },
+    data() {
+        return {
+            selectedRule: null,
+        };
+    },
+    mounted() {
+        this.setDefaultOptionIfNeed()
+    },
+    watch: {
+        "groupCtrl": {
+            handler(newVal, oldVal) {
+                this.setDefaultOptionIfNeed()
+            },
+            deep: false
+        },
+    },
+    methods: {
+        setDefaultOptionIfNeed() {
+            if (!this.selectedRule && this.groupCtrl.rules && this.groupCtrl.rules.length > 0) {
+                this.selectedRule = this.groupCtrl.rules[0].identifier
+            }
+        }
+    }
 
-    extends: QueryBuilderGroup,
 }
 </script>
 
-<style scoped>
-  .vue-query-builder .vqb-group .rule-actions {
+<style>
+.query-builder-group__group-children .query-builder-group .rule-actions {
     margin-bottom: 20px;
-  }
+}
 
-  .vue-query-builder .vqb-rule {
+.query-builder-group__group-children .vqb-rule {
     margin-top: 15px;
     margin-bottom: 15px;
     background-color: #f5f5f5;
     border-color: #ddd;
     padding: 15px;
-  }
+}
 
-  .vue-query-builder .vqb-group.depth-1 .vqb-rule,
-  .vue-query-builder .vqb-group.depth-2 {
-    border-left: 2px solid #8bc34a;
-  }
-
-  .vue-query-builder .vqb-group.depth-2 .vqb-rule,
-  .vue-query-builder .vqb-group.depth-3 {
-    border-left: 2px solid #00bcd4;
-  }
-
-  .vue-query-builder .vqb-group.depth-3 .vqb-rule,
-  .vue-query-builder .vqb-group.depth-4 {
-    border-left: 2px solid #ff5722;
-  }
-
-  .vue-query-builder .close {
+.query-builder-group__group-children .query-builder-child .query-builder-child__delete-child {
     opacity: 1;
-    color: rgb(150,150,150);
-  }
+    color: rgb(150, 150, 150);
+}
 
-  @media (min-width: 768px) {
-    .vue-query-builder .vqb-rule.form-inline .form-group {
-      display: block;
+@media (min-width: 768px) {
+    .query-builder-group__group-children .vqb-rule.form-inline .form-group {
+        display: block;
     }
-  }
+}
 </style>

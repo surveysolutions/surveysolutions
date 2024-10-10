@@ -3,7 +3,7 @@ import fs from 'fs'
 import path from 'path'
 import crypto from 'crypto'
 import xmldoc from 'xmldoc'
-import rimraf from 'rimraf'
+import { rimrafSync } from 'rimraf'
 
 module.exports = class LocalizationBuilder {
     constructor(options) {
@@ -34,7 +34,7 @@ module.exports = class LocalizationBuilder {
     writeFiles(destination, folder, namespaces) {
         const response = {};
         const destinationFolder = path.join(destination, folder);
-        rimraf.sync(destinationFolder);
+        rimrafSync(destinationFolder);
 
         Object.keys(this.localeInfo).forEach(language => {
             const locale = this.localeInfo[language];
@@ -58,7 +58,9 @@ module.exports = class LocalizationBuilder {
 
             this.ensureDirectoryExistence(resultPath);
 
-            require('fs').writeFileSync(resultPath, fileBody);
+            fs.writeFileSync(resultPath, fileBody);
+
+            //console.log('Localization: generated: ', resultPath)
 
             response[language] = path
                 .join(folder, filename)
@@ -71,7 +73,7 @@ module.exports = class LocalizationBuilder {
     getFiles() {
         const { patterns } = this.options;
         let files = fg.sync(patterns, { onlyFiles: true });
-        if(files.length === 0)
+        if (files.length === 0)
             throw 'None of resource files (.resx) were found.';
 
         return files;
@@ -161,7 +163,7 @@ module.exports = class LocalizationBuilder {
 
         var resourceObject = {};
         var valueNodes = doc.childrenNamed('data');
-        valueNodes.forEach(function(element) {
+        valueNodes.forEach(function (element) {
             var name = element.attr.name;
             var values = element.childrenNamed('value');
 
@@ -208,8 +210,6 @@ module.exports = class LocalizationBuilder {
 
     ensureDirectoryExistence(filePath) {
         var dirname = path.dirname(filePath);
-
-        const fs = require('fs');
 
         if (fs.existsSync(dirname)) {
             return true;

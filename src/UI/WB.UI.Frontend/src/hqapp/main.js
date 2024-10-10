@@ -1,38 +1,57 @@
+import jquery from '~/shared/jquery'
 import 'bootstrap'
-import 'bootstrap-select'
+import * as bootstrap from 'bootstrap'
+window.bootstrap = bootstrap
+window.Dropdown = bootstrap.Dropdown
 
 import '../assets/css/markup.scss'
 import '../assets/css/markup-specific.scss'
 
-import Vue from 'vue'
+import { createApp } from 'vue'
+import App from './App.vue';
+
+const vue = createApp(App)
+
+import { setupErrorHandler } from '../shared/errorHandler.js'
+setupErrorHandler(vue);
+
 import Vuei18n from '~/shared/plugins/locale'
 import { browserLanguage } from '~/shared/helpers'
-const i18n = Vuei18n.initialize(browserLanguage)
+const i18n = Vuei18n.initialize(browserLanguage, vue)
 
-import VueApollo from 'vue-apollo'
-Vue.use(VueApollo)
-import { sync } from 'vuex-router-sync'
-
+//plugin registration in Vue
 import http from '~/shared/plugins/http'
 import config from '~/shared/config'
-import store from './store'
+
+import { registerStore } from './store'
+const store = registerStore(vue)
+
 import moment from 'moment'
 moment.locale(browserLanguage)
 
-import './components'
-import './compatibility.js'
-import '~/webinterview/componentsRegistry'
+import { registerComponents } from './components'
+registerComponents(vue)
 
-import VueTextareaAutosize from 'vue-textarea-autosize'
-Vue.use(VueTextareaAutosize)
+import ProfileLayout from './Views/HQ/Users/ProfileLayout.vue'
+vue.component('ProfileLayout', ProfileLayout)
+
+import './compatibility.js'
+
+import { registerGlobalComponents } from '~/webinterview/componentsRegistry'
+registerGlobalComponents(vue)
 
 import PortalVue from 'portal-vue'
-Vue.use(PortalVue)
+vue.use(PortalVue)
 
 import { Popover } from 'uiv'
-Vue.component('popover', Popover)
+vue.component('popover', Popover)
+
+import './validate.js'
+
 
 import box from '@/shared/modal'
+box.init(i18n, browserLanguage)
+
 import 'flatpickr/dist/flatpickr.css'
 import 'toastr/build/toastr.css'
 import * as toastr from 'toastr'
@@ -43,12 +62,15 @@ poly.polyfill()
 
 import hqApi from './api'
 import apolloClient from './api/graphql'
+import { createApolloProvider } from '@vue/apollo-option'
+const apolloProvider = createApolloProvider({
+    defaultClient: apolloClient,
+})
+vue.use(apolloProvider)
 
-
-
-Vue.use(config)
-Vue.use(http)
-Vue.use(hqApi)
+vue.use(config)
+vue.use(http)
+vue.use(hqApi)
 
 import viewsProvider from './Views'
 import Router from './router'
@@ -57,20 +79,20 @@ const views = viewsProvider(store)
 
 const router = new Router({
     routes: views.routes,
+    store: store
 }).router
 
-sync(store, router)
+vue.use(router)
 
-box.init(i18n, browserLanguage)
+import { pageTitle } from 'vue-page-title'
+vue.use(pageTitle)
 
-Vue.prototype.$eventHub = new Vue()
+vue.config.globalProperties.$eventHub = vue
 
-export default new Vue({
-    el: '#vueApp',
-    render: h => h('router-view'),
-    store,
-    router,
-    apolloProvider: new VueApollo({
-        defaultClient: apolloClient,
-    }),
-})
+
+import emitter from '~/shared/emitter'
+vue.config.globalProperties.$emitter = emitter
+
+router.isReady().then(() => {
+    vue.mount('#vueApp');
+});

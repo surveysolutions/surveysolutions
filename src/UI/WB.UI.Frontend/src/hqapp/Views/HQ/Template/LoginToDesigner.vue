@@ -26,8 +26,8 @@
             <div class="col-md-6 col-sm-6 col-xs-12 right-column">
                 <div class="centered-box-table">
                     <div class="centered-box-table-cell">
-                        <form id="import-log-in" class="log-in" autocomplete="off" @submit.prevent="trySignIn"
-                            novalidate>
+                        <Form ref="loginForm" id="import-log-in" class="log-in" autocomplete="off" @submit="trySignIn"
+                            v-slot="{ errors }">
                             <div class="alert alert-danger" v-if="invalidCredentials">
                                 <p>
                                     {{ $t('LoginToDesigner.InvalidCredentials') }}
@@ -38,15 +38,17 @@
                             <div class="alert alert-danger" v-if="errorMessage">
                                 <p v-html="errorMessage"></p>
                             </div>
-                            <div class="form-group" :class="{ 'has-error': errors.has('UserName') }">
-                                <input type="text" name="UserName" class="form-control" autofocus="autofocus"
-                                    v-model="userName" v-validate="'required'"
+                            <div class="form-group" :class="{ 'has-error': errors.Login }">
+                                <Field type="text" name="Login" class="form-control" autofocus="autofocus"
+                                    v-model="userName" rules="required"
                                     :placeholder="this.$t('LoginToDesigner.LoginWatermark')" />
+                                <ErrorMessage name="Login" class="field-validation-error"></ErrorMessage>
                             </div>
-                            <div class="form-group" :class="{ 'has-error': errors.has('Password') }">
-                                <input type="password" id="Password" name="Password" class="form-control"
-                                    v-model="password" v-validate="'required'"
+                            <div class="form-group" :class="{ 'has-error': errors.Password }">
+                                <Field type="password" id="Password" name="Password" class="form-control"
+                                    v-model="password" :rules="{ required: !isSigningIn }"
                                     :placeholder="this.$t('FieldsAndValidations.PasswordFieldName')" />
+                                <ErrorMessage name="Password" class="field-validation-error"></ErrorMessage>
                             </div>
                             <div class="form-group">
                                 <input id="ShowPassword" type="checkbox"
@@ -60,7 +62,7 @@
                                     {{ $t('Common.SignIn') }}
                                 </button>
                             </div>
-                        </form>
+                        </Form>
                     </div>
                 </div>
             </div>
@@ -69,7 +71,14 @@
 </template>
 
 <script>
+import { Form, Field, ErrorMessage } from 'vee-validate'
+
 export default {
+    components: {
+        Field,
+        Form,
+        ErrorMessage,
+    },
     data() {
         return {
             userName: null,
@@ -81,11 +90,11 @@ export default {
     },
     methods: {
         async trySignIn() {
-            var validationResult = await this.$validator.validateAll()
-            if (validationResult) {
+            const validationResult = await this.$refs.loginForm.validate()
+            if (validationResult.valid == true) {
                 var passwordToSend = this.password;
-                this.password = '';
                 this.isSigningIn = true;
+                this.password = '';
                 this.$http({
                     method: 'post',
                     url: this.$config.model.loginAction,

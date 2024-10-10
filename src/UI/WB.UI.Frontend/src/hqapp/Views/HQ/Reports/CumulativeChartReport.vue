@@ -37,12 +37,9 @@
                 </h2>
             </div>
         </div>
-        <LineChart ref="chart" id="interviewChart" :options="{
-            title: {
-                display: true,
-                text: this.chartTitle
-            }
-        }" @ready="chartUpdated" @mounted="refreshData"></LineChart>
+        <CumulativeLineChart ref="chartView" id="interviewChart" :chartData="chartDataForRender"
+            :options="{ title: { display: true, text: this.chartTitle } }" @ready="chartUpdated" @mounted="refreshData">
+        </CumulativeLineChart>
         <div v-if="base64Encoded != null && hasData">
             <a id="link" :download="$t('Reports.CumulativeInterviewChart') + ' (' + chartTitle + ').png'"
                 @click="downloadAsImage()">{{ $t("Reports.SaveAsImage") }}</a>
@@ -55,18 +52,21 @@ import routeSync from '~/shared/routeSync'
 import moment from 'moment'
 import { forEach, findIndex, assign, sortBy, find } from 'lodash'
 
-const LineChart = () => import('./CumulativeChart')
+//const LineChart = () => import('./CumulativeChart')
+
+import CumulativeLineChart from './CumulativeChart'
+import { data } from 'jquery';
 
 export default {
     mixins: [routeSync],
-    components: { LineChart },
+    components: { CumulativeLineChart },
 
     data() {
         return {
             isLoading: false,
             startDate: null,
             chartData: null,
-            hasData: false,
+            hasData: true,
             base64Encoded: null,
             chart: null,
             relativeToData: false,
@@ -81,6 +81,12 @@ export default {
     },
 
     computed: {
+        chartDataForRender() {
+            return this.chartData || {
+                labels: [],
+                datasets: []
+            }
+        },
         model() {
             return this.$config.model
         },
@@ -271,7 +277,7 @@ export default {
         },
 
         chartUpdated() {
-            this.base64Encoded = this.$refs.chart.getImage()
+            this.base64Encoded = this.$refs.chartView.getImage()
         },
 
         queryChartData(queryString) {
@@ -290,6 +296,8 @@ export default {
                             assign(info, {
                                 data: set.data,
                                 index: infoIndex,
+                                borderColor: info.backgroundColor,
+                                fill: true,
                             })
                         )
                     })
@@ -304,12 +312,7 @@ export default {
 
                     self.hasData = datasets.length > 0
 
-                    self.chartData = {
-                        min: chartData.min,
-                        from: chartData.from,
-                        max: chartData.max,
-                        to: chartData.to,
-                    }
+                    self.chartData = chartData
 
                     if (self.queryString.from == null || self.queryString.to == null) {
                         self.onChange(q => {
@@ -318,7 +321,7 @@ export default {
                         })
                     }
 
-                    self.$refs.chart.render(chartData)
+                    //self.$refs.chartView.render(chartData)
                 })
                 .finally(() => self.$store.dispatch('hideProgress'))
         },
@@ -479,7 +482,7 @@ export default {
     },
 
     mounted() {
-        //     this.refreshData();
+        this.refreshData();
     },
 }
 </script>

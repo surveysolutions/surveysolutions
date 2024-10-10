@@ -10,14 +10,14 @@
                             :disabled="isSpecialValueSelected || !$me.acceptAnswer"
                             :class="{ 'special-value-selected': isSpecialValueSelected }" v-numericFormatting="{
 
-                                minimumValue: '-999999999999999.99999999999999',
-                                maximumValue: '999999999999999.99999999999999',
+        minimumValue: '-999999999999999.99999999999999',
+        maximumValue: '999999999999999.99999999999999',
 
-                                digitGroupSeparator: groupSeparator,
-                                decimalCharacter: decimalSeparator,
-                                decimalPlaces: decimalPlacesCount,
-                                allowDecimalPadding: false
-                            }" />
+        digitGroupSeparator: groupSeparator,
+        decimalCharacter: decimalSeparator,
+        decimalPlaces: decimalPlacesCount,
+        allowDecimalPadding: false
+    }" />
                         <wb-remove-answer v-if="!isSpecialValueSelected" :on-remove="removeAnswer" />
                     </div>
                 </div>
@@ -48,13 +48,16 @@ import { getGroupSeparator, getDecimalSeparator, getDecimalPlacesCount } from '.
 export default {
     data() {
         return {
-            autoNumericElement: null
+            //autoNumericElement: null
         }
     },
     name: 'Double',
     props: ['noComments'],
     mixins: [entityDetails],
     computed: {
+        autoNumericElement() {
+            return this.$refs.inputDouble.autoNumericElement
+        },
         isSpecialValueSelected() {
             if (this.$me.answer == null || this.$me.answer == undefined)
                 return undefined

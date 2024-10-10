@@ -84,8 +84,8 @@
                         {{ $t('Common.Delete') }}
                     </button>
                     <span class="text-success" v-if="globalNoticeUpdated">{{
-        $t('Settings.GlobalNoteSaved')
-    }}</span>
+                        $t('Settings.GlobalNoteSaved')
+                    }}</span>
                 </div>
             </form>
         </div>
@@ -105,10 +105,10 @@
                             {{ $t('Settings.AllowInterviewerUpdateProfile') }}
                             <p style="font-weight: normal">
                                 {{
-        $t(
-            'Settings.AllowInterviewerUpdateProfileDesc',
-        )
-    }}
+                                    $t(
+                                        'Settings.AllowInterviewerUpdateProfileDesc',
+                                    )
+                                }}
                             </p>
                         </label>
                     </div>
@@ -145,11 +145,7 @@
                             <span class="tick"></span>
                             {{ $t('Settings.DeviceNotifications') }}
                             <p style="font-weight: normal">
-                                {{
-        $t(
-            'Settings.DeviceNotificationsDescription',
-        )
-    }}
+                                {{ $t('Settings.DeviceNotificationsDescription') }}
                             </p>
                         </label>
                     </div>
@@ -163,115 +159,98 @@
                             type="checkbox" />
                         <label for="interviewerPartialSynchronizationEnabled" style="font-weight: bold">
                             <span class="tick"></span>
-                            {{
-        $t('Settings.InterviewerPartialSynchronization')
-    }}
+                            {{ $t('Settings.InterviewerPartialSynchronization') }}
                             <p style="font-weight: normal">
-                                {{
-            $t(
-                'Settings.PartialSynchronizationDescription',
-            )
-        }}
+                                {{ $t('Settings.PartialSynchronizationDescription') }}
                             </p>
                         </label>
                     </div>
                 </div>
             </div>
             <div class="col-sm-7">
-                <div class="block-filter" style="padding-left: 30px">
-                    <div class="form-group">
-                        <label for="interviewerGeographyQuestionAccuracyInMeters" style="font-weight: bold">
-                            <span class="tick"></span>
-                            {{
-            $t(
-                'Settings.InterviewerGeographyQuestionAccuracyInMeters',
-            )
-        }}
-                            <p style="font-weight: normal">
-                                {{
-            $t(
-                'Settings.GeographyQuestionAccuracyInMetersDescription',
-            )
-        }}
-                            </p>
-                        </label>
-                    </div>
-                    <div class="form-group">
-                        <div class="input-group input-group-save">
-                            <input class="form-control number" v-model.number="geographyQuestionAccuracyInMeters
-        " v-validate="{
-        integer: true,
-        required: true,
-        min_value: 1,
-        max_value: 1000,
-    }" name="accuracy" id="interviewerGeographyQuestionAccuracyInMeters" type="number" />
+                <Form v-slot="{ meta }" @submit="noAction">
+                    <div class="block-filter" style="padding-left: 30px">
+                        <div class="form-group">
+                            <label for="interviewerGeographyQuestionAccuracyInMeters" style="font-weight: bold">
+                                <span class="tick"></span>
+                                {{ $t('Settings.InterviewerGeographyQuestionAccuracyInMeters') }}
+                                <p style="font-weight: normal">
+                                    {{ $t('Settings.GeographyQuestionAccuracyInMetersDescription') }}
+                                </p>
+                            </label>
                         </div>
-                        <button type="button" class="btn btn-success" :disabled="geographyQuestionAccuracyInMeters ==
-        geographyQuestionAccuracyInMetersCancel ||
-        geographyQuestionAccuracyInMeters < 1 ||
-        geographyQuestionAccuracyInMeters > 1000 ||
-        errors.has('accuracy')
-        " @click="updateGeographyQuestionAccuracyInMeters">
-                            {{ $t('Common.Save') }}
-                        </button>
-                        <button type="button" class="btn btn-link" :disabled="geographyQuestionAccuracyInMeters ==
-        geographyQuestionAccuracyInMetersCancel
-        " @click="cancelGeographyQuestionAccuracyInMeters">
-                            {{ $t('Common.Cancel') }}
-                        </button>
+                        <div class="form-group">
+                            <div class="input-group input-group-save">
+                                <Field class="form-control number" v-model.number="geographyQuestionAccuracyInMeters"
+                                    :rules="{
+                                        integer: true,
+                                        required: true,
+                                        min_value: 1,
+                                        max_value: 1000,
+                                    }" :validateOnChange="true" :validateOnInput="true" name="accuracy"
+                                    label="Accuracy" id="interviewerGeographyQuestionAccuracyInMeters" type="number" />
+                            </div>
+                            <button type="button" class="btn btn-success" :disabled="geographyQuestionAccuracyInMeters ==
+                                geographyQuestionAccuracyInMetersCancel ||
+                                geographyQuestionAccuracyInMeters < 1 ||
+                                geographyQuestionAccuracyInMeters > 1000 ||
+                                meta.valid == false
+                                " @click="updateGeographyQuestionAccuracyInMeters">
+                                {{ $t('Common.Save') }}
+                            </button>
+                            <button type="button" class="btn btn-link"
+                                :disabled="geographyQuestionAccuracyInMeters == geographyQuestionAccuracyInMetersCancel"
+                                @click="cancelGeographyQuestionAccuracyInMeters">
+                                {{ $t('Common.Cancel') }}
+                            </button>
+                        </div>
+                        <div class="error">
+                            <ErrorMessage name="accuracy"></ErrorMessage>
+                        </div>
                     </div>
-                    <div class="error" v-show="errors.has('accuracy')">
-                        {{ errors.first('accuracy') }}
-                    </div>
-                </div>
+                </Form>
             </div>
             <div class="col-sm-7">
-                <div class="block-filter" style="padding-left: 30px">
-                    <div class="form-group">
-                        <label for="interviewerGeographyQuestionPeriodInSeconds" style="font-weight: bold">
-                            <span class="tick"></span>
-                            {{
-        $t(
-            'Settings.InterviewerGeographyQuestionPeriodInSeconds',
-        )
-    }}
-                            <p style="font-weight: normal">
-                                {{
-            $t(
-                'Settings.GeographyQuestionPeriodInSecondsDescription',
-            )
-        }}
-                            </p>
-                        </label>
-                    </div>
-                    <div class="form-group">
-                        <div class="input-group input-group-save">
-                            <input class="form-control number" v-model.number="geographyQuestionPeriodInSeconds
-        " v-validate="{
-        integer: true,
-        required: true,
-        min_value: 5,
-        max_value: 1000,
-    }" id="interviewerGeographyQuestionPeriodInSeconds" name="period" type="number" />
+                <Form v-slot="{ meta }" @submit="noAction">
+                    <div class="block-filter" style="padding-left: 30px">
+                        <div class="form-group">
+                            <label for="interviewerGeographyQuestionPeriodInSeconds" style="font-weight: bold">
+                                <span class="tick"></span>
+                                {{ $t('Settings.InterviewerGeographyQuestionPeriodInSeconds') }}
+                                <p style="font-weight: normal">
+                                    {{ $t('Settings.GeographyQuestionPeriodInSecondsDescription') }}
+                                </p>
+                            </label>
                         </div>
-                        <button type="button" class="btn btn-success" :disabled="geographyQuestionPeriodInSeconds ==
-        geographyQuestionPeriodInSecondsCancel ||
-        geographyQuestionPeriodInSeconds < 5 ||
-        geographyQuestionPeriodInSeconds > 1000 ||
-        errors.has('period')
-        " @click="updateGeographyQuestionPeriodInSeconds">
-                            {{ $t('Common.Save') }}
-                        </button>
-                        <button type="button" class="btn btn-link" :disabled="geographyQuestionPeriodInSeconds ==
-        geographyQuestionPeriodInSecondsCancel
-        " @click="cancelGeographyQuestionPeriodInSeconds">
-                            {{ $t('Common.Cancel') }}
-                        </button>
+                        <div class="form-group">
+                            <div class="input-group input-group-save">
+                                <Field class="form-control number" v-model.number="geographyQuestionPeriodInSeconds"
+                                    :rules="{
+                                        integer: true,
+                                        required: true,
+                                        min_value: 5,
+                                        max_value: 1000,
+                                    }" :validateOnChange="true" :validateOnInput="true" label="Period"
+                                    id="interviewerGeographyQuestionPeriodInSeconds" name="period" type="number" />
+                            </div>
+                            <button type="button" class="btn btn-success" :disabled="geographyQuestionPeriodInSeconds ==
+                                geographyQuestionPeriodInSecondsCancel ||
+                                geographyQuestionPeriodInSeconds < 5 ||
+                                geographyQuestionPeriodInSeconds > 1000 ||
+                                meta.valid == false" @click="updateGeographyQuestionPeriodInSeconds">
+                                {{ $t('Common.Save') }}
+                            </button>
+                            <button type="button" class="btn btn-link"
+                                :disabled="geographyQuestionPeriodInSeconds == geographyQuestionPeriodInSecondsCancel"
+                                @click="cancelGeographyQuestionPeriodInSeconds">
+                                {{ $t('Common.Cancel') }}
+                            </button>
+                        </div>
+                        <div class="error">
+                            <ErrorMessage name="period"></ErrorMessage>
+                        </div>
                     </div>
-                    <div class="error" v-show="errors.has('period')">
-                        {{ errors.first('period') }}
-                    </div>
-                </div>
+                </Form>
             </div>
 
             <div class="col-sm-7">
@@ -279,17 +258,9 @@
                     <div class="form-group">
                         <label for="esriApiKey" style="font-weight: bold">
                             <span class="tick"></span>
-                            {{
-        $t(
-            'Settings.EsriApiKey',
-        )
-    }}
+                            {{ $t('Settings.EsriApiKey') }}
                             <p class="error" style="font-weight: normal">
-                                {{
-            $t(
-                'Settings.EsriApiKeyDescription',
-            )
-        }}
+                                {{ $t('Settings.EsriApiKeyDescription') }}
                             </p>
                         </label>
                     </div>
@@ -299,11 +270,11 @@
                                 name="esriKey" />
                         </div>
                         <button type="button" class="btn btn-success" :disabled="esriApiKey ==
-        esriApiKeyInitial" @click="updateEsriKApiKey">
+                            esriApiKeyInitial" @click="updateEsriKApiKey">
                             {{ $t('Common.Save') }}
                         </button>
                         <button type="button" class="btn btn-link" :disabled="esriApiKey ==
-        esriApiKeyInitial" @click="cancelEsriKApiKey">
+                            esriApiKeyInitial" @click="cancelEsriKApiKey">
                             {{ $t('Common.Cancel') }}
                         </button>
                     </div>
@@ -332,17 +303,9 @@
                             type="checkbox" />
                         <label for="allowWebInterviewEmailNotifications" style="font-weight: bold">
                             <span class="tick"></span>
-                            {{
-        $t(
-            'Settings.AllowWebInterviewEmailNotifications',
-                            )
-                            }}
+                            {{ $t('Settings.AllowWebInterviewEmailNotifications') }}
                             <p style="font-weight: normal">
-                                {{
-                                $t(
-                                'Settings.AllowWebInterviewEmailNotificationsDesc',
-                                )
-                                }}
+                                {{ $t('Settings.AllowWebInterviewEmailNotificationsDesc') }}
                             </p>
                         </label>
                     </div>
@@ -360,9 +323,7 @@
                 @submit="onLogoSubmit">
                 <input name="__RequestVerificationToken" type="hidden" :value="this.$hq.Util.getCsrfCookie()" />
                 <div class="block-filter">
-                    <div class="form-group" :class="{
-        'has-error': this.$config.model.invalidImage,
-    }">
+                    <div class="form-group" :class="{ 'has-error': this.$config.model.invalidImage }">
                         <label for="companyLogo">
                             {{ $t('Settings.Logo') }}
                         </label>
@@ -431,10 +392,15 @@
 </style>
 
 <script>
-import Vue from 'vue'
+import { Form, Field, ErrorMessage } from 'vee-validate'
 import modal from '@/shared/modal'
 
 export default {
+    components: {
+        Form,
+        Field,
+        ErrorMessage,
+    },
     data() {
         return {
             encryptionEnabled: false,
@@ -463,6 +429,7 @@ export default {
         this.getFormData()
     },
     methods: {
+        noAction() { },
         async getFormData() {
 
             const workspaceSettings = await this.$hq.AdminSettings.getWorkspaceSettings()

@@ -196,6 +196,7 @@ namespace WB.UI.Headquarters.Controllers.Api
 
         [HttpPost]
         [ObservingNotAllowed]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult<long>> RequestUpdate(Guid id, long version,
             DataExportFormat format,
             InterviewStatus? status = null,
@@ -389,5 +390,17 @@ namespace WB.UI.Headquarters.Controllers.Api
             public DataExportFormat? Format { get; set; }
             public Guid? TranslationId { get; set; }
         }
+    }
+
+    public class RequestUpdateExportModel
+    {
+        public Guid Id { get; set; }
+        public long Version { get; set; }
+        public DataExportFormat Format { get; set; }
+        public InterviewStatus? Status { get; set; }
+        public DateTime? From { get; set; }
+        public DateTime? To { get; set; }
+        public Guid? TranslationId { get; set; }
+        public bool? IncludeMeta { get; set; }
     }
 }

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace WB.UI.Designer.Exceptions;
+namespace WB.UI.Shared.Web.Exceptions;
 
 public class ClientErrorModel
 {

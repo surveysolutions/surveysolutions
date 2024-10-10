@@ -11,7 +11,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  NODE_VERSION: 18
+  NODE_VERSION: 22
   DOTNET_VERSION: '8.0.x'
 
 jobs:
@@ -160,6 +160,7 @@ jobs:
       with:
         name: Mobile Apps
         path: ${{ github.workspace }}/artifacts
+        overwrite: true
 
   docker:
     needs: [prepare, mobile]
@@ -313,3 +314,4 @@ jobs:
           name: Windows Installer
           path: ${{ steps.build-installer.outputs.filename }}
             #artifacts/WB.UI.Headquarters.Offline.zip
+          overwrite: true

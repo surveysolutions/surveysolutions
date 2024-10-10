@@ -1,5 +1,5 @@
 <template>
-    <ModalFrame ref="modal" data-suso="change-interview-mode-modal" :title="title">
+    <ModalFrame ref="modalDialog" data-suso="change-interview-mode-modal" :title="title">
         <div class="action-container">
             <p v-html="confirmMessage"></p>
         </div>
@@ -20,9 +20,12 @@
         <template v-slot:actions>
             <div>
                 <button type="button" class="btn btn-primary" role="confirm" data-suso="change-interview-mode-modal"
-                    @click="confirm" :disabled="filteredCount == 0">{{ title }}</button>
-                <button type="button" class="btn btn-link" data-dismiss="modal" role="cancel">{{ $t("Common.Cancel")
-                    }}</button>
+                    @click="confirm" :disabled="filteredCount == 0">
+                    {{ title }}
+                </button>
+                <button type="button" class="btn btn-link" data-bs-dismiss="modal" role="cancel">
+                    {{ $t("Common.Cancel") }}
+                </button>
             </div>
         </template>
     </ModalFrame>
@@ -36,40 +39,21 @@ export default {
         }
     },
     props: {
-        filteredCount: {
-            type: Number,
-            require: true,
-        },
-
-        title: {
-            type: String,
-            require: true,
-        },
-
+        filteredCount: { type: Number, require: true },
+        title: { type: String, require: true },
         confirmMessage: { type: String, require: true },
-
-        receivedByInterviewerItemsCount: {
-            type: Number,
-            require: true,
-        },
-        confirmReceivedByInterviewer: {
-            type: Boolean,
-            default() { return false },
-        },
-        modalId: {
-            type: String,
-            require: true,
-        },
+        receivedByInterviewerItemsCount: { type: Number, require: true },
+        confirmReceivedByInterviewer: { type: Boolean, default() { return false } },
+        modalId: { type: String, require: true },
     },
     methods: {
-        modal() {
-            this.$refs.modal.modal()
+        modal(params) {
+            this.$refs.modalDialog.modal(params)
         },
-
         confirm() {
-            this.$refs.modal.hide()
+            this.$refs.modalDialog.hide()
             this.$emit('confirm', this.internalConfirmReceivedByInterviewer)
-        },
-    },
+        }
+    }
 }
 </script>

@@ -8,7 +8,7 @@
 }
 <ul class="nav navbar-nav">
     <li class="dropdown @(page == MenuItem.MapReport || page == MenuItem.Surveys || page == MenuItem.SurveyAndStatuses || page == MenuItem.Summary || page == MenuItem.Statuses || page == MenuItem.DevicesInterviewers || page == MenuItem.StatusDuration || page == MenuItem.InterviewsChart ? "active" : "")">
-        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" title="@MainMenu.Reports">
+        <a href="javascript:void(0);" class="dropdown-toggle" data-bs-toggle="dropdown" title="@MainMenu.Reports">
             @MainMenu.Reports <span class="caret"></span>
         </a>
         <ul class="dropdown-menu">
@@ -25,7 +25,7 @@
     </li>
     @Html.MainMenuItem("Index", "Interviews", @MainMenu.Interviews, MenuItem.Interviews)
     <li class="dropdown  @(page == MenuItem.Questionnaires || page == MenuItem.Assignments || page == MenuItem.Maps ? "active" : "")">
-        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" title="@MainMenu.SurveySetup">
+        <a href="javascript:void(0);" class="dropdown-toggle" data-bs-toggle="dropdown" title="@MainMenu.SurveySetup">
             @MainMenu.SurveySetup <span class="caret"></span>
         </a>
         <ul class="dropdown-menu">
@@ -38,7 +38,7 @@
     
     <li class="dropdown  @(page == MenuItem.Settings || page == MenuItem.EmailProviders || page == MenuItem.TabletLogs 
                            || page == MenuItem.AuditLog || page == MenuItem.Administration_InterviewPackages ? "active" : "")">
-            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" title="@MainMenu.Settings">
+            <a href="javascript:void(0);" class="dropdown-toggle" data-bs-toggle="dropdown" title="@MainMenu.Settings">
                 @MainMenu.Settings <span class="caret"></span>
             </a>
         <ul class="dropdown-menu">
@@ -54,7 +54,7 @@
     @if (ViewContext.RouteData.Values["controller"].ToString() == "ControlPanel")
     {
         <li class="dropdown  @(new[] { MenuItem.Administration_AppUpdates, MenuItem.Administration_Config, MenuItem.Administration_InterviewPackages, MenuItem.Administration_Exceptions, MenuItem.Administration_ChangePassword, MenuItem.Administration_ReevaluateInterview }.Contains((MenuItem)page) ? "active" : "")">
-            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" title="@MainMenu.Administration">
+            <a href="javascript:void(0);" class="dropdown-toggle" data-bs-toggle="dropdown" title="@MainMenu.Administration">
                 @MainMenu.Administration <span class="caret"></span>
             </a>
             <ul class="dropdown-menu">
@@ -93,7 +93,7 @@
         </a>
     </li>
     <li class="dropdown @(page == MenuItem.ManageAccount ? "active" : "")">
-        <a href="javascript:void(0);" class="dropdown-toggle toggle-sized" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" title="@User.Identity.Name">
+        <a href="javascript:void(0);" class="dropdown-toggle toggle-sized" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" title="@User.Identity.Name">
             @User.Identity.Name<span class="caret"></span>
         </a>
         <ul class="dropdown-menu">

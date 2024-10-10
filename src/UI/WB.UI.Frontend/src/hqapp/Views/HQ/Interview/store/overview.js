@@ -1,8 +1,5 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
 import { concat } from 'lodash'
-
-Vue.use(Vuex)
+import { api } from '~/webinterview/api/http'
 
 export default {
     state: {
@@ -19,7 +16,7 @@ export default {
 
     actions: {
         async loadAdditionalInfo({ commit }, { id }) {
-            const data = await Vue.$api.interview.get('overviewItemAdditionalInfo', { id })
+            const data = await api.get('overviewItemAdditionalInfo', { id })
             commit('SET_ADDITIONAL_INFO', {
                 id,
                 data,
@@ -32,7 +29,7 @@ export default {
         },
 
         async loadOverview({ commit, dispatch, state }, { skip }) {
-            const data = await Vue.$api.interview.get('overview', { skip, take: state.pageSize })
+            const data = await api.get('overview', { skip, take: state.pageSize })
 
             commit('SET_OVERVIEW_RESPONSE', data)
 
@@ -62,11 +59,8 @@ export default {
         },
 
         SET_ADDITIONAL_INFO(state, additionalInfo) {
-            Vue.set(state.additionalInfo, additionalInfo.id, additionalInfo.data)
+            state.additionalInfo[additionalInfo.id] = additionalInfo.data
         },
     },
-
-    getters: {
-
-    },
+    getters: {}
 }

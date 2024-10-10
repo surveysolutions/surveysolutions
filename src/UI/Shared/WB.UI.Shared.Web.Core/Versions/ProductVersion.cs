@@ -11,18 +11,18 @@ namespace WB.UI.Shared.Web.Versions
         public ProductVersion(Assembly assembly)
         {
             FileVersionInfo fileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
-            this.version = fileVersionInfo.ProductVersion;
+            this.version = fileVersionInfo.ProductVersion ?? string.Empty;
             this.getVersion = Version.TryParse(this.version.Split(' ')[0], out var ver) ? ver : null;
             this.buildNumber = fileVersionInfo.FilePrivatePart;
         }
 
         private readonly string version;
         private readonly int buildNumber;
-        private readonly Version getVersion;
+        private readonly Version? getVersion;
 
         public override string ToString() => version;
 
-        public Version GetVersion() => getVersion;
+        public Version? GetVersion() => getVersion;
 
         public int GetBuildNumber() => buildNumber;
 

@@ -24,13 +24,13 @@
                                             )
                                         }}:</span>
                                         <span class="data">{{
-                                                createdDate
-                                            }}</span>
+                                            createdDate
+                                        }}</span>
                                     </li>
                                     <li id="detailsInfo_responsibleListItem">
                                         <span class="data-label">{{
-                                                $t('Details.Responsible')
-                                            }}:
+                                            $t('Details.Responsible')
+                                        }}:
                                         </span>
                                         <span v-if="isInterviewerResponsible" class="data">
                                             <a v-bind:href="interviewerProfileUrl
@@ -38,23 +38,23 @@
                                         </span>
                                         <span v-else class="data supervisor">{{
                                             model.responsible.name
-                                        }}</span>
+                                            }}</span>
                                     </li>
                                 </ul>
                                 <ul class="list-unstyled pull-left table-info">
                                     <li id="detailsInfo_lastUpdatedListItem">
                                         <span class="data-label">{{
-                                                this.$t('Details.LastUpdated')
-                                            }}:</span>
+                                            this.$t('Details.LastUpdated')
+                                        }}:</span>
                                         <span class="data">{{
-                                                updatedDate
-                                            }}</span>
+                                            updatedDate
+                                        }}</span>
                                     </li>
                                     <li>
                                         <span class="data-label">{{
-                                                $t('Common.CalendarEvent')
-                                            }}:</span>
-                                        <span class="data" data-toggle="tooltip" v-if="calendarEventComment != null"
+                                            $t('Common.CalendarEvent')
+                                        }}:</span>
+                                        <span class="data" data-bs-toggle="tooltip" v-if="calendarEventComment != null"
                                             :title="calendarEventComment == null ||
                                             calendarEventComment == ''
                                             ? this.$t(
@@ -71,7 +71,7 @@
                         <div class="questionnaire-details-actions clearfix">
                             <div class="buttons-container">
                                 <div class="dropdown aside-menu" :disabled="config.isObserving" v-if="showMoreButton">
-                                    <button type="button" data-toggle="dropdown" aria-haspopup="true"
+                                    <button type="button" data-bs-toggle="dropdown" aria-haspopup="true"
                                         aria-expanded="false" class="btn btn-link" :disabled="config.isObserving">
                                         <span></span>
                                     </button>
@@ -161,8 +161,8 @@
                                         <div class="item-content">
                                             <h4>
                                                 <span>{{
-                                            question.title
-                                        }}</span>
+                                                    question.title
+                                                    }}</span>
                                             </h4>
                                             <div class="answer">
                                                 <div v-html="question.answer"></div>
@@ -248,7 +248,7 @@
                             <button type="button" class="btn btn-primary" @click="assign" :disabled="!newResponsibleId">
                                 {{ $t('Common.Assign') }}
                             </button>
-                            <button type="button" class="btn btn-link" data-dismiss="modal">
+                            <button type="button" class="btn btn-link" data-bs-dismiss="modal">
                                 {{ $t('Common.Cancel') }}
                             </button>
                         </div>
@@ -264,7 +264,7 @@
                                 @click="close">
                                 {{ $t('Assignments.Close') }}
                             </button>
-                            <button type="button" class="btn btn-link" data-dismiss="modal">
+                            <button type="button" class="btn btn-link" data-bs-dismiss="modal">
                                 {{ $t('Common.Cancel') }}
                             </button>
                         </div>
@@ -286,7 +286,7 @@
                                 :disabled="!showSelectors">
                                 {{ $t('Common.Save') }}
                             </button>
-                            <button type="button" class="btn btn-link" data-dismiss="modal">
+                            <button type="button" class="btn btn-link" data-bs-dismiss="modal">
                                 {{ $t('Common.Cancel') }}
                             </button>
                         </div>
@@ -298,7 +298,7 @@
 </template>
 
 <script>
-import Vue from 'vue'
+import { nextTick } from 'vue'
 import { DateFormats, convertToLocal } from '~/shared/helpers'
 import { RoleNames } from '~/shared/constants'
 
@@ -324,7 +324,7 @@ export default {
                 this.$hq.Assignments.audioSettings(this.model.id).then(
                     (data) => {
                         this.editedAudioRecordingEnabled = data.Enabled
-                        this.$refs.editAudioEnabledModal.modal('show')
+                        this.$refs.editAudioEnabledModal.modal()
                     },
                 )
             }
@@ -669,7 +669,7 @@ export default {
         },
     },
     mounted() {
-        Vue.nextTick(() => {
+        nextTick(() => {
             window.ajustNoticeHeight()
             window.ajustDetailsPanelHeight()
         })

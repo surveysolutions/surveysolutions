@@ -21,8 +21,8 @@
                 <div class="form-group"
                     v-if="($me.acceptAnswer && !allAnswersGiven) || (!$me.acceptAnswer && !$me.isAnswered)">
                     <div class="field" :class="{ answered: $me.isAnswered }">
-                        <wb-typeahead :questionId="$me.id" @input="appendCompboboxItem" :optionsSource="optionsSource"
-                            :disabled="!$me.acceptAnswer"
+                        <wb-typeahead :disabled="!$me.acceptAnswer" :questionId="$me.id" @input="appendCompboboxItem"
+                            :optionsSource="optionsSource"
                             :watermark="!$me.acceptAnswer && !$me.isAnswered ? $t('Details.NoAnswer') : null" />
                     </div>
                 </div>
@@ -38,9 +38,10 @@
 <script lang="js">
 
 import { entityDetails } from '../mixins'
-import Vue from 'vue'
+//import Vue from 'vue'
 import modal from '@/shared/modal'
 import { find, map, includes, without, filter as loFilter } from 'lodash'
+import { api } from '../../api/http'
 
 export default {
     name: 'MultiComboboxQuestion',
@@ -82,7 +83,9 @@ export default {
             const self = this
             const interviewId = this.$route.params.interviewId
             const excludedOptionIds = self.$me.answer
-            const optionsPromise = Vue.$api.interview.get('getTopFilteredOptionsForQuestionWithExclude', { interviewId, id: this.$me.id, filter, count: 20, excludedOptionIds })
+            const optionsPromise = api.get('getTopFilteredOptionsForQuestionWithExclude', {
+                interviewId, id: this.$me.id, filter, count: 20, excludedOptionIds
+            })
             return optionsPromise
                 .then(options => {
                     return loFilter(options, (o) => {

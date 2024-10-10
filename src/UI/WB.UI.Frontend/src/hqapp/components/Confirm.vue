@@ -1,5 +1,5 @@
 <template>
-    <ModalFrame :id="id" :title="confirm_title">
+    <ModalFrame :id="id" :title="confirm_title" ref="confirmModal">
         <slot />
         <template v-slot:actions>
             <div>
@@ -59,16 +59,19 @@ export default {
         cancel() {
             this.callback(false)
             this.$emit('cancel')
-            $(this.$el).modal('hide')
+            this.$refs.confirmModal.hide()
+            //$(this.$el).modal('hide')
         },
         confirm() {
             this.callback(true)
             this.$emit('confirm')
-            $(this.$el).modal('hide')
+            this.$refs.confirmModal.hide()
+            //$(this.$el).modal('hide')
         },
         promt(callback) {
             this.callback = callback
-            $(this.$el).appendTo('body').modal()
+            this.$refs.confirmModal.modal({ keyboard: false })
+            //$(this.$el).appendTo('body').modal()
         },
     },
 }

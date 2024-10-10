@@ -1,26 +1,27 @@
-import Vue from 'vue'
-
-import webinterview from '~/webinterview/store'
+import webinterview from '~/webinterview/stores'
 import filters from './filters'
 import flags from './flags'
 import overview from './overview'
+import storeRouteParams from '../../../../../shared/stores/store.routeParams'
+import { api } from '~/webinterview/api/http'
 
 const store = {
-    modules:{
+    modules: {
         filters,
         flags,
         overview,
+        route: storeRouteParams
     },
 
     actions: {
         approve(_, comment) {
             const interviewId = this.state.route.params.interviewId
-            return Vue.$api.interview.answer(null, 'approve', {interviewId, comment})
+            return api.answer(null, 'approve', { interviewId, comment })
         },
 
         reject(_, rejection) {
             const interviewId = this.state.route.params.interviewId
-            return Vue.$api.interview.answer(null, 'reject', {interviewId, comment:rejection.comment, assignTo:rejection.assignTo })
+            return api.answer(null, 'reject', { interviewId, comment: rejection.comment, assignTo: rejection.assignTo })
         },
     },
     getters: {

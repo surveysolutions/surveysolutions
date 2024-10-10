@@ -22,14 +22,14 @@
 
                 <FilterBlock :title="$t('Users.InterviewerIssues')">
                     <Typeahead ref="facetControl" control-id="facet" no-clear data-vv-name="facet" data-vv-as="facet"
-                        :value="facet" :values="$config.model.interviewerIssues" :selectedKey="query.facet"
+                        :value="facet" :values="$config.model.interviewerIssues" :selectedKey="this.query.facet"
                         :selectFirst="true" v-on:selected="facetSelected" />
                 </FilterBlock>
 
                 <FilterBlock :title="$t('Pages.Interviewers_ArchiveStatusTitle')">
                     <Typeahead ref="archiveStatusControl" control-id="archiveStatus" no-clear :noPaging="false"
                         data-vv-name="archiveStatus" data-vv-as="archiveStatus" :value="archiveStatus"
-                        :values="$config.model.archiveStatuses" :selectedKey="query.archive" :selectFirst="true"
+                        :values="$config.model.archiveStatuses" :selectedKey="this.query.archive" :selectFirst="true"
                         v-on:selected="archiveStatusSelected" />
                 </FilterBlock>
             </Filters>

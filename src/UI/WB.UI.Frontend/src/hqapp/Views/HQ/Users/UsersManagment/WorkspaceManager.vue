@@ -25,8 +25,9 @@
                     role="confirm">{{ $t("Common.Add") }}</button>
                 <button v-else type="button" class="btn btn-primary" data-suso="btn-remove" @click="remove"
                     role="confirm">{{ $t("Common.Remove") }}</button>
-                <button type="button" class="btn btn-link" data-suso="btn-cancel" data-dismiss="modal" role="cancel">{{
-                    $t("Common.Cancel") }}</button>
+                <button type="button" class="btn btn-link" data-suso="btn-cancel" data-bs-dismiss="modal"
+                    role="cancel">{{
+        $t("Common.Cancel") }}</button>
             </div>
         </template>
     </ModalFrame>

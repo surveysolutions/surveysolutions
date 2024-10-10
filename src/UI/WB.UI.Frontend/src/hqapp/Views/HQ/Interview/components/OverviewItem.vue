@@ -1,77 +1,56 @@
 <template>
-    <div :class="itemClass"
-        class="overview-item">
+    <div :class="itemClass" class="overview-item">
         <div class="date">
             <div v-if="hasDate">
-                {{answerDate}}
+                {{ answerDate }}
             </div>
             <div v-if="hasDate">
-                {{answerTime}}
+                {{ answerTime }}
             </div>
         </div>
-        <div ref="itemContent"
-            class="item-content"
-            @click="showAdditionalDetails">
+        <div ref="itemContent" class="item-content" @click="showAdditionalDetails">
             <h4>
                 <span v-html="item.title"></span>
                 <template v-if="item.rosterTitle != null"><span> - </span>
-                    <i v-if="item.rosterTitle != null"
-                        v-html="item.rosterTitle"></i>
+                    <i v-if="item.rosterTitle != null" v-html="item.rosterTitle"></i>
                 </template>
             </h4>
-            <div class="answer"
-                v-if="hasAttachment">
-                <wb-attachment :contentId="attachmentContentId"
-                    :interviewId="interviewId"
-                    :previewOnly="true"
+            <div class="answer" v-if="hasAttachment">
+                <wb-attachment :contentId="attachmentContentId" :interviewId="interviewId" :previewOnly="true"
                     customCssClass="static-text-image"></wb-attachment>
             </div>
-            <div class="answer"
-                v-if="item.state != 'Unanswered'">
+            <div class="answer" v-if="item.state != 'Unanswered'">
                 <div v-if="item.controlType === 'image'">
-                    <wb-attachment :filename="item.answer"
-                        :previewOnly="true"></wb-attachment>
+                    <wb-attachment :filename="item.answer" :previewOnly="true"></wb-attachment>
                 </div>
                 <div v-else-if="item.controlType === 'audio'">
-                    <audio controls
-                        preload="auto"
-                        style="width:300px"
-                        :src="audioRecordPath">
+                    <audio controls preload="auto" style="width:300px" :src="audioRecordPath">
                     </audio>
                 </div>
                 <div v-else-if="item.controlType === 'area'">
-                    <iframe width="100%"
-                        height="250px"
-                        frameBorder="0"
-                        :src="areaAnswerUrl"></iframe>
+                    <iframe width="100%" height="250px" frameBorder="0" :src="areaAnswerUrl"></iframe>
                 </div>
                 <div v-else-if="item.controlType === 'map'">
-                    <a v-bind:href="goolgeMapUrl"
-                        :title="$t('WebInterviewUI.ShowOnMap')"
-                        target="_blank">
-                        {{gpsAnswer.latitude}}, {{gpsAnswer.longitude}}
+                    <a v-bind:href="goolgeMapUrl" :title="$t('WebInterviewUI.ShowOnMap')" target="_blank">
+                        {{ gpsAnswer.latitude }}, {{ gpsAnswer.longitude }}
                     </a>
                 </div>
                 <div v-else-if="item.controlType === 'variable'">
-                    {{item.value}}
+                    {{ item.value }}
                 </div>
                 <div v-else>
-                    {{item.answer}}
+                    {{ item.answer }}
                 </div>
             </div>
-            <div class="btn-link"
-                v-if="item.state == 'Unanswered' && item.controlType !== 'variable'">
-                {{$t("WebInterviewUI.Interview_Overview_NotAnswered")}}
+            <div class="btn-link" v-if="item.state == 'Unanswered' && item.controlType !== 'variable'">
+                {{ $t("WebInterviewUI.Interview_Overview_NotAnswered") }}
             </div>
-            <div class="btn-link"
-                v-if="item.state == 'Unanswered' && item.controlType === 'variable'">
-                {{$t("WebInterviewUI.Interview_Overview_NoValue")}}
+            <div class="btn-link" v-if="item.state == 'Unanswered' && item.controlType === 'variable'">
+                {{ $t("WebInterviewUI.Interview_Overview_NoValue") }}
             </div>
         </div>
 
-        <AdditionalInfo ref="additionalInfo"
-            :item="item"
-            :addCommentsAllowed="$store.getters.addCommentsAllowed" />
+        <AdditionalInfo ref="additionalInfo" :item="item" :addCommentsAllowed="$store.getters.addCommentsAllowed" />
     </div>
 </template>
 
@@ -82,7 +61,6 @@ const State = {
     Invalid: 'Invalid',
     Unanswered: 'Unanswered',
 }
-import Vue from 'vue'
 import AdditionalInfo from './OverviewItemAdditionalInfo'
 import api from '~/shared/api'
 import moment from 'moment'
@@ -116,7 +94,7 @@ export default {
         }
     },
     methods: {
-        showAdditionalDetails(){
+        showAdditionalDetails() {
             if (this.item.isGroup || this.item.isSection)
                 return
 
@@ -130,26 +108,25 @@ export default {
             this.$emit('showAdditionalInfo', this)
             this.$refs.additionalInfo.show()
         },
-        hideAdditionalDetails(){
+        hideAdditionalDetails() {
             if (this.$refs.additionalInfo)
                 this.$refs.additionalInfo.close()
         },
-        parseGps(str)
-        {
+        parseGps(str) {
             return JSON.parse(str || '{ latitude: 0, longitude: 0 }')
         },
     },
     computed: {
-        interviewId(){
+        interviewId() {
             return this.$route.params.interviewId
         },
         areaAnswerUrl() {
             return `${this.$store.getters.basePath}Interview/InterviewAreaFrame/${this.interviewId}?questionId=${this.item.id}`
         },
-        gpsAnswer(){
+        gpsAnswer() {
             return this.parseGps(this.item.answer)
         },
-        goolgeMapUrl(){
+        goolgeMapUrl() {
             return `${this.$config.googleMapsBaseUrl}/maps?q=${this.gpsAnswer.latitude},${this.gpsAnswer.longitude}`
         },
         audioRecordPath() {
@@ -164,27 +141,27 @@ export default {
                 hasComment: this.item.hasComment,
             }
         },
-        hasDate(){
+        hasDate() {
             if (!this.item.answerTimeUtc)
                 return false
-            if  (this.item.isGroup || this.item.isSection)
+            if (this.item.isGroup || this.item.isSection)
                 return false
             return true
         },
-        answerDate(){
+        answerDate() {
             if (!this.hasDate) return
             let local = moment.utc(this.item.answerTimeUtc).local()
             return local.format('MMM DD')
         },
-        answerTime(){
+        answerTime() {
             if (!this.hasDate) return
             let local = moment.utc(this.item.answerTimeUtc).local()
             return local.format('HH:mm')
         },
-        attachmentContentId(){
+        attachmentContentId() {
             return this.item.attachmentContentId
         },
-        hasAttachment(){
+        hasAttachment() {
             return this.attachmentContentId != null
         },
     },

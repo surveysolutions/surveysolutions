@@ -1,7 +1,7 @@
 import { marked } from 'marked'
 import mdEditor from '@/hqapp/components/MdEditor'
 import Logo from './_Logo.vue'
-import Vue from 'vue'
+import emitter from '~/shared/emitter';
 
 export default {
     props: {
@@ -16,9 +16,9 @@ export default {
 
     mounted() {
         var self = this
-        this.$eventHub.$on('settings:page:active', ({ titleType, messageType }) => {
+        emitter.on('settings:page:active', ({ titleType, messageType }) => {
             if (titleType && self.$refs[titleType]) {
-                self.$refs[titleType].resize()
+                self.$refs[titleType].$el.resize()
             }
 
             if (messageType && self.$refs[messageType]) {
@@ -49,10 +49,10 @@ export default {
                 .replace(/%QUESTIONNAIRE%/g, this.questionnaireTitle)
         },
 
-        async savePageTextEditMode(scope, titleType, messageType, buttonText) {
+        async savePageTextEditMode(form, titleType, messageType, buttonText) {
             var self = this
-            var validationResult = await this.$validator.validateAll(scope)
-            if (validationResult) {
+            var validationResult = await form.validate()
+            if (validationResult.valid == true) {
                 var editTitleText = this.webInterviewPageMessages[titleType]
                 var editDescriptionText = this.webInterviewPageMessages[messageType]
                 self.$store.dispatch('showProgress')
@@ -67,17 +67,17 @@ export default {
 
                     if (buttonText !== undefined)
                         self.webInterviewPageMessages[buttonText].cancelText = self.webInterviewPageMessages[buttonText].text
-                    self.$validator.reset(scope)
+                    form.resetForm({ values: form.values })
                 }
                 catch (error) {
-                    Vue.config.errorHandler(error, self)
+                    self.$errorHandler(error, self)
                 }
                 finally {
                     self.$store.dispatch('hideProgress')
                 }
             }
         },
-        cancelPageTextEditMode(scope, titleType, messageType, buttonText) {
+        cancelPageTextEditMode(form, titleType, messageType, buttonText) {
             var editTitleText = this.webInterviewPageMessages[titleType]
             var editDescriptionText = this.webInterviewPageMessages[messageType]
             editTitleText.text = editTitleText.cancelText
@@ -87,7 +87,7 @@ export default {
                 var editButtonText = this.webInterviewPageMessages[buttonText]
                 editButtonText.text = editButtonText.cancelText
             }
-            this.$validator.reset(scope)
+            form.resetForm()
         },
     },
 }
