@@ -181,6 +181,7 @@ namespace WB.UI.Headquarters.Controllers
                 WebMode = assignment.WebMode,
                 IsHeadquarters = this.currentUser.IsAdministrator || this.currentUser.IsHeadquarter,
                 Comments = assignment.Comments,
+                TargetArea = assignment.TargetArea,
                 IsArchived = assignment.Archived,
                 InvitationToken = this.invitationService.GetInvitationByAssignmentId(assignment.Id)?.Token,
                 CalendarEvent = calendarEvent != null

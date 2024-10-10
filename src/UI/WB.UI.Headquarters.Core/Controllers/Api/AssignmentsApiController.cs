@@ -259,7 +259,6 @@ namespace WB.UI.Headquarters.Controllers.Api
 
             try
             {
-
                 var assignment = assignmentFactory.CreateAssignment(authorizedUser.Id,
                 interview.QuestionnaireIdentity,
                 request.ResponsibleId,
@@ -271,7 +270,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                 answers,
                 null,
                 request.Comments,
-                request.TargetArea);
+                string.IsNullOrWhiteSpace(request.TargetArea) ? null : request.TargetArea.Trim());
                 
                 this.invitationService.CreateInvitationForWebInterview(assignment);
                 
