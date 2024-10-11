@@ -45,7 +45,7 @@
                     <div class="input-group">
                         <input class="form-control with-clear-btn" :placeholder="$t('Common.AllAssignments')"
                             type="number" inputmode="numeric" min="1" max="2147483647" maxlength="10"
-                            @input="() => { if (assignmentId > 2147483647) { assignmentId = 2147483647 } }"
+                            @input="() => { if (assignmentId > 2147483647) { assignmentId = 2147483647 } else if (assignmentId < 1) { assignmentId = 1 } }"
                             v-model.number="assignmentId" />
                         <div class="input-group-btn" @click="clearAssignmentFilter">
                             <div class="btn btn-default">
