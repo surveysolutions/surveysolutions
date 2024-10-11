@@ -15,6 +15,7 @@ import FormGroup from './FormGroup'
 import FilterInput from './FilterInput'
 import InlineSelector from './InlineSelector'
 import ExpandableList from './ExpandableList.vue'
+import Select from './Select.vue'
 
 export function registerComponents(vue) {
 
@@ -33,4 +34,5 @@ export function registerComponents(vue) {
     vue.component('FilterInput', FilterInput)
     vue.component('InlineSelector', InlineSelector)
     vue.component('ExpandableList', ExpandableList)
+    vue.component('Select', Select)
 }
