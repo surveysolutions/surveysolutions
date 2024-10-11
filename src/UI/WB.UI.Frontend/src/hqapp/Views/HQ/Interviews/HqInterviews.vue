@@ -3,7 +3,7 @@
         <template v-slot:headers>
             <div class="topic-with-button">
                 <h1>{{ title }}</h1>
-                <a href="MapDashboard" class="btn" style="margin-right: 30px; padding: 0">
+                <a href="../MapDashboard" class="btn" style="margin-right: 30px; padding: 0">
                     <img style="padding-top: 2px" height="26px;" src="/img/google-maps-markers/map.png"
                         :title="$t('Common.MapDashboard')" />
                 </a>
@@ -1879,10 +1879,10 @@ export default {
         },
 
         addParamsToQueryString() {
-            const query = Object.assign({}, this.queryString)
+            const queryString = Object.assign({}, this.queryString)
 
-            if (!isEqual(this.$route.query, query)) {
-                this.$router.push({ query }).catch(() => { })
+            if (!isEqual(this.$route.query, queryString)) {
+                this.$router.push({ query: queryString }).catch(() => { })
             }
         },
 
