@@ -1,12 +1,12 @@
 <template>
-    <InlineSelector v-model="currentLanguage" :options="languages" />
+    <Select v-model="currentLanguage" :options="languages" />
 </template>
 <script>
 
-import InlineSelector from '../../../components/InlineSelector.vue';
+import Select from '../../../components/Select.vue';
 
 export default {
-    components: { InlineSelector },
+    components: { Select },
     data: function () {
         return { currentLanguage: null }
     },
