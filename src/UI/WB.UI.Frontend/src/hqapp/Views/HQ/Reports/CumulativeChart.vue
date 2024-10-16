@@ -5,7 +5,6 @@
 </template>
 
 <script>
-
 const chartOptions = {
     elements: {
         point: { radius: 0 },
@@ -13,6 +12,9 @@ const chartOptions = {
     },
     responsive: true,
     maintainAspectRatio: false,
+    layout: {
+        padding: 5
+    },
     plugins: {
         legend: {
             display: true,
@@ -32,16 +34,25 @@ const chartOptions = {
                 display: true,
                 tickMarkLength: 10,
             },
-
+            time: {
+                bounds: 'ticks',
+                minUnit: 'day',
+                displayFormats: {
+                    week: 'll',
+                    day: 'MMM D YYYY',
+                },
+            },
             ticks: {
                 source: 'data',
                 autoSkipPadding: 10,
                 maxRotation: 45,
                 autoSkip: true,
+                // callback: function (value, index, values) {
+                //     const label = this.getLabelForValue(value);
+                //     return label;                    
+                // }
             },
-
         },
-
         y:
         {
             afterDataLimits: function (axis) {
@@ -52,7 +63,7 @@ const chartOptions = {
             stacked: true,
             beginAtZero: true,
             ticks: {
-
+                beginAtZero: true,
                 callback: function (label, index, labels) {
                     // when the floored value is the same as the value we have a whole number
                     if (Math.floor(label) === label) {
@@ -87,7 +98,7 @@ export default {
     computed: {
         chartOptions() {
             return Object.assign(chartOptions, this.options)
-        },
+        }
     },
     expose: ['getImage'],
     methods: {
