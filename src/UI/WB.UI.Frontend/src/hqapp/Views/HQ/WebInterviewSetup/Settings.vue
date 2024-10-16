@@ -543,7 +543,7 @@
                                     <div class="mb-1">
                                         {{ $t('WebInterviewSettings.SendWithNoResponse') }}
                                     </div>
-                                    <InlineSelector v-bind="field" v-model="reminderAfterDaysIfNoResponse" :options="[
+                                    <Select v-bind="field" v-model="reminderAfterDaysIfNoResponse" :options="[
                                         { id: null, value: $t('WebInterviewSettings.DoNotSend') },
                                         { id: 1, value: $t('WebInterviewSettings.AfterXDay', { count: 1 }) },
                                         { id: 2, value: $t('WebInterviewSettings.AfterXDay', { count: 2 }) },
@@ -560,16 +560,15 @@
                                     <div class="mb-1">
                                         {{ $t('WebInterviewSettings.SendWithPartialResponse') }}
                                     </div>
-                                    <InlineSelector v-bind="field" v-model="reminderAfterDaysIfPartialResponse"
-                                        :options="[
-                                            { id: null, value: $t('WebInterviewSettings.DoNotSend') },
-                                            { id: 1, value: $t('WebInterviewSettings.AfterXDay', { count: 1 }) },
-                                            { id: 2, value: $t('WebInterviewSettings.AfterXDay', { count: 2 }) },
-                                            { id: 3, value: $t('WebInterviewSettings.AfterXDay', { count: 3 }) },
-                                            { id: 5, value: $t('WebInterviewSettings.AfterXDay', { count: 5 }) },
-                                            { id: 7, value: $t('WebInterviewSettings.AfterXWeek', { count: 1 }) },
-                                            { id: 14, value: $t('WebInterviewSettings.AfterXWeek', { count: 2 }) },
-                                        ]" />
+                                    <Select v-bind="field" v-model="reminderAfterDaysIfPartialResponse" :options="[
+                                        { id: null, value: $t('WebInterviewSettings.DoNotSend') },
+                                        { id: 1, value: $t('WebInterviewSettings.AfterXDay', { count: 1 }) },
+                                        { id: 2, value: $t('WebInterviewSettings.AfterXDay', { count: 2 }) },
+                                        { id: 3, value: $t('WebInterviewSettings.AfterXDay', { count: 3 }) },
+                                        { id: 5, value: $t('WebInterviewSettings.AfterXDay', { count: 5 }) },
+                                        { id: 7, value: $t('WebInterviewSettings.AfterXWeek', { count: 1 }) },
+                                        { id: 14, value: $t('WebInterviewSettings.AfterXWeek', { count: 2 }) },
+                                    ]" />
                                 </Field>
                             </div>
                             <div class="">
