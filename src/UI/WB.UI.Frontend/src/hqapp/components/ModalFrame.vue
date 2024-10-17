@@ -5,7 +5,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button v-if="canClose" type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <button v-if="canClose" type="button" class="close" @click="hide" aria-label="Close">
                             <span aria-hidden="true"></span>
                         </button>
                         <slot name="title">
