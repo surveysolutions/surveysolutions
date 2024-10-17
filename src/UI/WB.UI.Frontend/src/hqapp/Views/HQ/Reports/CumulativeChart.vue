@@ -15,6 +15,10 @@ const chartOptions = {
     layout: {
         padding: 5
     },
+    interaction: {
+        intersect: false,
+        mode: 'index',
+    },
     plugins: {
         legend: {
             display: true,
@@ -23,14 +27,9 @@ const chartOptions = {
         tooltip: {
             mode: 'x',
             intersect: false,
-            position: 'nearest',
+            position: 'average',
         }
     },
-    // animation: {
-    //     onComplete: (thisArg, args) => {
-    //         thisArg.$emit('ready')
-    //     },
-    // },
     scales: {
         x:
         {
@@ -52,10 +51,6 @@ const chartOptions = {
                 autoSkipPadding: 10,
                 maxRotation: 45,
                 autoSkip: true,
-                // callback: function (value, index, values) {
-                //     const label = this.getLabelForValue(value);
-                //     return label;                    
-                // }
             },
         },
         y:
@@ -116,9 +111,6 @@ export default {
     methods: {
         getImage() {
             if (this.$refs.chart.chart == null) return null
-
-            //if (this.$data._chart == null) return null
-
             return this.$refs.chart.chart.canvas.toDataURL('image/png')
         }
     }
