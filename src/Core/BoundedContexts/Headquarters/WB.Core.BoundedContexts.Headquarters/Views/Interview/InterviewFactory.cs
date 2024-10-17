@@ -149,7 +149,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                             x.Answer.Latitude >= south &&
                             (east >= west
                                 ? x.Answer.Longitude <= east && x.Answer.Longitude >= west
-                                : (x.Answer.Longitude <= east && x.Answer.Longitude <= -180||
+                                : (x.Answer.Longitude <= east && x.Answer.Longitude >= -180||
                                    x.Answer.Longitude <= 180 && x.Answer.Longitude >= west)));
 
             if (questionnaireId.HasValue)

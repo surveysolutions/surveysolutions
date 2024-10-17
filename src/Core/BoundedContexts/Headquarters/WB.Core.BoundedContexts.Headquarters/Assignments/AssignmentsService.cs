@@ -133,7 +133,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                     && a.Answer.Latitude >= south
                     && ( east >= west 
                         ? a.Answer.Longitude <= east && a.Answer.Longitude >= west
-                        : (a.Answer.Longitude <= east && a.Answer.Longitude <= -180 
+                        : (a.Answer.Longitude <= east && a.Answer.Longitude >= -180 
                            ||  a.Answer.Longitude <= 180 && a.Answer.Longitude >= west ))
                      
                 );
