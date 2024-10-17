@@ -1,6 +1,6 @@
 <template>
     <div class="interviewChart">
-        <Line :data="chartData" :options="chartOptions" />
+        <Line :data="chartData" ref="chart" :options="chartOptions" />
     </div>
 </template>
 
@@ -26,6 +26,11 @@ const chartOptions = {
             position: 'nearest',
         }
     },
+    // animation: {
+    //     onComplete: (thisArg, args) => {
+    //         thisArg.$emit('ready')
+    //     },
+    // },
     scales: {
         x:
         {
@@ -97,16 +102,26 @@ export default {
     },
     computed: {
         chartOptions() {
+            var self = this
+            this.options.animation = {
+                onComplete: () => {
+                    self.$emit('ready')
+                }
+            }
+
             return Object.assign(chartOptions, this.options)
         }
     },
     expose: ['getImage'],
     methods: {
         getImage() {
-            if (this.$data._chart == null) return null
+            if (this.$refs.chart.chart == null) return null
 
-            return this.$data._chart.canvas.toDataURL('image/png')
+            //if (this.$data._chart == null) return null
+
+            return this.$refs.chart.chart.canvas.toDataURL('image/png')
         }
     }
+
 }
 </script>
