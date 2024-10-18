@@ -58,7 +58,7 @@ export default {
 
     computed: {
         text() {
-            const selOption = !this.modelValue ? null : this.options.find(o => o[this.keySelector] == this.modelValue[this.keySelector])
+            const selOption = !this.modelValue ? null : this.options.find(o => o[this.keySelector] == this.modelValue)
             if (selOption == null) {
                 if (this.noEmpty && this.options.length > 0) {
                     this.select(this.options[0])
