@@ -54,7 +54,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
                     x.Use<WorkspaceGraphQlMiddleware>();
                 })
                 .AddAuthorization()
-                .SetPagingOptions(new PagingOptions(){MaxPageSize = 200})
+                .ModifyPagingOptions(o => { o.MaxPageSize = 200; })
+                .ModifyCostOptions(o => { o.EnforceCostLimits = false; })
                 .AddQueryType(x => x.Name("HeadquartersQuery"))
                 .AddType<AssignmentsQueryExtension>()
                 .AddType<InterviewsQueryExtension>()
