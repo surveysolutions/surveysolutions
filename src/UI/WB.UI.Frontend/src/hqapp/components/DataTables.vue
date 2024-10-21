@@ -211,6 +211,7 @@ export default {
                 conditionalPaging: true,
                 paging: !this.noPaging,
                 searching: !this.noSearch,
+                autoWidth: false
             }
 
             if (this.mutliRowSelect) {
