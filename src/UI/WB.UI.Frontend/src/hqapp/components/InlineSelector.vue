@@ -1,26 +1,12 @@
 <template>
-    <span class="dropdown  bootstrap-select">
-        <button type="button" tabindex="-1" class="btn dropdown-toggle bs-placeholder btn-default"
-            data-bs-toggle="dropdown" role="combobox" aria-owns="bs-select-1" aria-haspopup="listbox"
-            aria-expanded="false" :title="text">
-            <div class="filter-option">
-                <div class="filter-option-inner">
-                    <div class="filter-option-inner-inner">{{ text }}</div>
-                </div>
-            </div><span class="bs-caret"><span class="caret"></span></span>
-        </button>
-        <div class="dropdown-menu">
-            <div class="inner" role="listbox" id="bs-select-1" tabindex="-1" aria-activedescendant="bs-select-1-0">
-                <ul class="dropdown-menu inner show" role="presentation">
-                    <li v-for="item in options" :key="item[keySelector]" @click="select(item)"
-                        :class="{ selected: item[keySelector] == modelValue, active: item[keySelector] == modelValue }">
-                        <a role="option" class="dropdown-item" id="bs-select-1-1" tabindex="0">
-                            <span class="text">{{ item[valueSelector] }}</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
+    <span class="dropdown">
+        <span role="button" style="border-bottom: 1px dashed" data-bs-toggle="dropdown" aria-haspopup="true"
+            aria-expanded="true">{{ text }}</span>
+        <ul class="dropdown-menu" style="width:auto">
+            <li v-for="item in options" :key="item[keySelector]" @click="select(item)">
+                <a href="javascript:void(0)" v-html="item[valueSelector]" />
+            </li>
+        </ul>
     </span>
 </template>
 <script>
@@ -45,34 +31,32 @@ export default {
         },
     },
 
-    emits: ['update:modelValue', 'change'],
+    emits: ['update:modelValue', 'input'],
 
     methods: {
         select(item) {
-            const value = item[this.keySelector]
-            this.$emit('update:modelValue', value);
-            this.$emit('change', value);
+            //this.$emit('input', item)
+            this.$emit('update:modelValue', item);
         },
     },
 
     computed: {
         text() {
-            const selOption = this.options.find(o => o[this.keySelector] == this.modelValue)
-            if (selOption == null) {
+            if (this.modelValue == null) {
                 if (this.noEmpty && this.options.length > 0) {
                     this.select(this.options[0])
                     return ''
                 }
                 return this.$t('Common.SelectOption')
             }
-            return selOption[this.valueSelector]
+            return this.modelValue[this.valueSelector]
         },
     },
 
     watch: {
         options(to) {
-            if (to[this.keySelector] == null) {
-                //this.select(to[0])
+            if (to[this.valueSelector] == null) {
+                this.select(to[0])
             }
         },
     },

@@ -64,7 +64,7 @@
     <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="8.0.1" />
     <PackageReference Include="NetTopologySuite.IO.Esri.Shapefile" Version="1.0.0" />
     <PackageReference Include="NetTopologySuite.IO.GeoJSON" Version="4.0.0" />
     <PackageReference Include="NewId" Version="4.0.1" />

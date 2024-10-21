@@ -1,6 +1,6 @@
 <template>
     <div class="input-group">
-        <input class="form-control with-clear-btn" :placeholder="placeholder" :type="type" :value="modelValue"
+        <input class="form-control with-clear-btn" :placeholder="placeholder" :type="type" :value="modelValue || value"
             @input.self="input" />
         <div class="input-group-btn" @click="remove">
             <div class="btn btn-default">
@@ -16,6 +16,7 @@ export default {
     props: {
         placeholder: { type: String },
         modelValue: { type: String },
+        value: { type: String },
         type: { type: String, default: 'text' },
     },
 
