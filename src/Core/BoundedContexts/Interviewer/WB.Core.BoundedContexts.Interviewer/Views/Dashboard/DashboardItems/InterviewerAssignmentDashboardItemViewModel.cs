@@ -4,6 +4,7 @@ using WB.Core.BoundedContexts.Interviewer.Views.CreateInterview;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
@@ -11,12 +12,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
     public class InterviewerAssignmentDashboardItemViewModel : AssignmentDashboardItemViewModel, IDashboardViewItem
     {
         private readonly IViewModelNavigationService viewModelNavigationService;
+        private readonly IMapInteractionService mapInteractionService;
 
         public InterviewerAssignmentDashboardItemViewModel(IServiceLocator serviceLocator,
-            IViewModelNavigationService viewModelNavigationService) 
+            IViewModelNavigationService viewModelNavigationService,
+            IMapInteractionService mapInteractionService) 
             : base(serviceLocator)
         {
             this.viewModelNavigationService = viewModelNavigationService;
+            this.mapInteractionService = mapInteractionService;
         }
 
         protected override void BindActions()
@@ -58,6 +62,23 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
                 ActionType = ActionType.Context,
                 Command = new MvxCommand(this.RemoveCalendarEvent, () => Assignment.CalendarEvent.HasValue),
                 Label = EnumeratorUIResources.Dashboard_RemoveCalendarEvent
+            });
+
+            BindLocationAction(Assignment.Id, Assignment.TargetArea);
+        }
+        
+        protected void BindLocationAction(int assignmentId, string targetArea)
+        {
+            if (string.IsNullOrWhiteSpace(targetArea)) return;
+
+            Actions.Add(new ActionDefinition
+            {
+                Command = new MvxAsyncCommand(
+                    () => mapInteractionService.OpenInterviewerGeofacingAsync(assignmentId)),
+
+                ActionType = ActionType.Secondary,
+
+                Label = EnumeratorUIResources.Dashboard_ShowLocation
             });
         }
     }

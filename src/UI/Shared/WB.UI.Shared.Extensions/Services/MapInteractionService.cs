@@ -56,6 +56,14 @@ namespace WB.UI.Shared.Extensions.Services
                 new MapDashboardViewModelArgs(), finishActivityOnSuccess: true).ConfigureAwait(false);
         }
 
+        public async Task OpenInterviewerGeofacingAsync(int assignmentId)
+        {
+            await this.permissions.AssureHasPermissionOrThrow<Permissions.LocationAlways>().ConfigureAwait(false);
+
+            await this.viewModelNavigationService.NavigateToAsync<GeofencingViewModel, GeofencingViewModelArgs>(
+                new GeofencingViewModelArgs() { AssignmentId = assignmentId }, finishActivityOnSuccess: true).ConfigureAwait(false);
+        }
+
         public async Task OpenSupervisorMapDashboardAsync()
         {
             await this.permissions.AssureHasExternalStoragePermissionOrThrow().ConfigureAwait(false);

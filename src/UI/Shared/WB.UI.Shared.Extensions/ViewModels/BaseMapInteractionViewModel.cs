@@ -35,7 +35,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
         private readonly IEnumeratorSettings enumeratorSettings;
         private readonly IMapUtilityService mapUtilityService;
         protected readonly IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher;
-        private readonly IPermissionsService permissionsService;
+        protected readonly IPermissionsService permissionsService;
         private readonly IEnumeratorSettings settings;
 
         protected BaseMapInteractionViewModel(IPrincipal principal,

@@ -209,7 +209,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         public IMvxAsyncCommand NavigateToMapDashboardCommand =>
             new MvxAsyncCommand(async () => await NavigateToMapDashboard(), 
                 () => !string.IsNullOrEmpty(CurrentWorkspace));
-
+        
         private async Task NavigateToMapDashboard()
         {
             try

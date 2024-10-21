@@ -27,7 +27,7 @@ public class GeolocationBackgroundService : Service, ILocationListener
 {
     private ServiceBinder<GeolocationBackgroundService> binder;
 
-    public event EventHandler<EventArgs> LocationReceived;
+    public event EventHandler<LocationReceivedEventArgs> LocationReceived;
 
     LocationManager locationManager;
 
@@ -70,8 +70,9 @@ public class GeolocationBackgroundService : Service, ILocationListener
             PowerRequirement = Power.Medium
         };
 
-        var bestProvider = locationManager.GetBestProvider(locationCriteria, true);
-        locationManager.RequestLocationUpdates(bestProvider, 5000, 1, this);
+        locationManager.RequestLocationUpdates(LocationManager.GpsProvider, 5000, 1, this);
+        //var bestProvider = locationManager.GetBestProvider(locationCriteria, true);
+        //locationManager.RequestLocationUpdates(bestProvider, 5000, 1, this);
 
         return StartCommandResult.Sticky;
     }

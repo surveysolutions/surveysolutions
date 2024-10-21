@@ -6,6 +6,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
     {
         Task<AreaEditResult> EditAreaAsync(EditAreaArgs args, bool supportOfflineMaps);
         Task OpenInterviewerMapDashboardAsync();
+        Task OpenInterviewerGeofacingAsync(int assignmentId);
         Task OpenSupervisorMapDashboardAsync();
 
         public void SetLicenseKey(string key);
