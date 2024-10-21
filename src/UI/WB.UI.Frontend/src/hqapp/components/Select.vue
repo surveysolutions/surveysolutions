@@ -45,9 +45,7 @@ export default {
             type: Boolean, required: false, default: false,
         },
     },
-
     emits: ['update:modelValue', 'change'],
-
     methods: {
         select(item) {
             const value = item[this.keySelector]
@@ -55,10 +53,9 @@ export default {
             this.$emit('change', value);
         },
     },
-
     computed: {
         text() {
-            const selOption = !this.modelValue ? null : this.options.find(o => o[this.keySelector] == this.modelValue)
+            const selOption = this.options.find(o => o[this.keySelector] == this.modelValue)
             if (selOption == null) {
                 if (this.noEmpty && this.options.length > 0) {
                     this.select(this.options[0])
@@ -68,15 +65,6 @@ export default {
             }
             return selOption[this.valueSelector]
         },
-    },
-
-    watch: {
-        options(to) {
-            if (to[this.keySelector] == null) {
-                //this.select(to[0])
-            }
-        },
-    },
-
+    }
 }
 </script>
