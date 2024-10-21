@@ -345,7 +345,7 @@ export default {
     }, null, /* limit */ 100),
 
     changeLanguage(_, language) {
-        return api.answer(null, 'changeLanguage', { language: language.language })
+        return api.answer(null, 'changeLanguage', { language: language.language.id })
     },
 
     stop() {
