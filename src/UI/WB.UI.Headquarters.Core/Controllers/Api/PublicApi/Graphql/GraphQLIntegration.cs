@@ -49,6 +49,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
 
             return services
                 .AddGraphQLServer()
+                .InitializeOnStartup()
                 .ConfigureSchema(x=>
                 {
                     x.Use<WorkspaceGraphQlMiddleware>();
