@@ -21,13 +21,9 @@ const chartOptions = {
         tooltip: {
             mode: 'x',
             intersect: false,
+            position: 'nearest',
         }
     },
-    hover: {
-        mode: 'index',
-        intersect: false,
-    },
-
     scales: {
         x:
         {
