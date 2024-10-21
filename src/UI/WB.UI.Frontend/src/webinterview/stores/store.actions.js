@@ -96,7 +96,7 @@ export default {
     },
 
     answerAudioQuestion(_, { identity, file, duration }) {
-        return api.upload(app.$config.audioUploadUri, identity, file, duration)
+        return api.upload(config.audioUploadUri, identity, file, duration)
     },
 
     answerQRBarcodeQuestion(_, { identity, text }) {
