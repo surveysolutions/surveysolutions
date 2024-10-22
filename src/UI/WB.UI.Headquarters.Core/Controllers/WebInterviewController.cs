@@ -315,33 +315,7 @@ namespace WB.UI.Headquarters.Controllers
 
             if (assignment.Quantity == 1)
             {
-                // personal link
-                if (!webInterviewConfig.UseCaptcha && string.IsNullOrWhiteSpace(assignment.Password))
-                {
-                    if (invitation.InterviewId != null)
-                    {
-                        if (DoesInterviewExist(invitation.InterviewId))
-                        {
-                            var interviewProperties = invitation.Interview.GetInterviewProperties();
-                            if (!interviewProperties.AcceptsCAWIAnswers)
-                                throw new InterviewAccessException(InterviewAccessExceptionReason.NoActionsNeeded,
-                                    Enumerator.Native.Resources.WebInterview.Error_NoActionsNeeded);
-                            
-                            HttpContext.Session.SaveWebInterviewAccessForCurrentUser(invitation.InterviewId);
-                            return this.Redirect(GenerateUrl("Cover", invitation.InterviewId));
-                        }
-                    }
-
-                    var interviewId = this.CreateInterview(assignment);
-                    invitationService.InterviewWasCreated(invitation.Id, interviewId);
-                    HttpContext.Session.SaveWebInterviewAccessForCurrentUser(interviewId);
-
-                    return this.Redirect(GenerateUrl("Cover", interviewId));
-                }
-                else
-                {
-                    // page should be shown
-                }
+                //showing page to start interview
             }
             else
             {
@@ -370,23 +344,26 @@ namespace WB.UI.Headquarters.Controllers
                     });
                 }
 
-                if (!webInterviewConfig.UseCaptcha && string.IsNullOrWhiteSpace(assignment.Password) &&
-                    webInterviewConfig.SingleResponse)
-                {
-                    var interviewId = this.CreateInterview(assignment);
-
-                    if (DoesInterviewExist(invitation.InterviewId))
-                    {
-                        Response.Cookies.Append($"InterviewId-{assignment.Id}", interviewId, new CookieOptions
-                        {
-                            HttpOnly = true,
-                            Expires = DateTime.Now.AddYears(1)
-                        });
-
-                        HttpContext.Session.SaveWebInterviewAccessForCurrentUser(interviewId);
-                        return this.Redirect(GenerateUrl("Cover", interviewId));
-                    }
-                }
+                //explicit start is needed
+                //no interview creation in get request
+                
+                // if (!webInterviewConfig.UseCaptcha && string.IsNullOrWhiteSpace(assignment.Password) &&
+                //     webInterviewConfig.SingleResponse)
+                // {
+                //     var interviewId = this.CreateInterview(assignment);
+                //
+                //     if (DoesInterviewExist(invitation.InterviewId))
+                //     {
+                //         Response.Cookies.Append($"InterviewId-{assignment.Id}", interviewId, new CookieOptions
+                //         {
+                //             HttpOnly = true,
+                //             Expires = DateTime.Now.AddYears(1)
+                //         });
+                //
+                //         HttpContext.Session.SaveWebInterviewAccessForCurrentUser(interviewId);
+                //         return this.Redirect(GenerateUrl("Cover", interviewId));
+                //     }
+                // }
             }
 
             var model = this.GetStartModel(assignment.QuestionnaireId, webInterviewConfig, assignment);
