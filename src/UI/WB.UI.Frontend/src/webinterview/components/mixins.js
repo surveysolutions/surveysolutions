@@ -36,7 +36,6 @@ export const entityDetails = {
                 isLoading: true,
             }
         },
-
         hash() {
             return getLocationHash(this.id)
         },
@@ -89,12 +88,11 @@ export const entityDetails = {
                 this.$store.dispatch('tryResolveFetch', this.id)
             }
         },
-
         cleanValidity() {
             this.$store.dispatch('clearAnswerValidity', { id: this.id })
         },
-        markAnswerAsNotSavedWithMessage(message) {
-            this.$store.dispatch('setAnswerAsNotSaved', { id: this.id, message })
+        markAnswerAsNotValidWithMessage(message, newAnswer) {
+            this.$store.dispatch('setAnswerAsNotValid', { id: this.id, message, newAnswer })
         },
         removeAnswer() {
             this.$store.dispatch('removeAnswer', this.$me.id)

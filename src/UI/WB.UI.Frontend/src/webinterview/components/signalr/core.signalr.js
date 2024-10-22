@@ -59,7 +59,7 @@ export default {
 
         connection.on('markAnswerAsNotSaved', (id, message) => {
             this.$store.dispatch('fetch', { id, done: true })
-            this.$store.dispatch('setAnswerAsNotSaved', { id, message })
+            this.$store.dispatch('setAnswerAsNotValid', { id, message })
         })
 
         connection.on('reloadInterview', () => {

@@ -1,27 +1,15 @@
 <template>
-    <wb-question :question="$me"
-        questionCssClassName=" multimedia-question">
+    <wb-question :question="$me" questionCssClassName=" multimedia-question">
         <div class="question-unit">
             <div class="options-group">
-                <div class="field"
-                    :class="{ answered: $me.isAnswered}"
-                    v-if="answerVisible">
-                    <wb-attachment :filename="$me.answer"
-                        :thumb="uploadingImage"
-                        :cache="cache"></wb-attachment>
+                <div class="field" :class="{ answered: $me.isAnswered }" v-if="answerVisible">
+                    <wb-attachment :filename="$me.answer" :thumb="uploadingImage" :cache="cache"></wb-attachment>
                     <wb-remove-answer @answerRemoved="answerRemoved" />
                 </div>
-                <input name="file"
-                    ref="uploader"
-                    v-show="false"
-                    accept="image/*"
-                    type="file"
-                    @change="onFileChange"
+                <input name="file" ref="uploader" v-show="false" accept="image/*" type="file" @change="onFileChange"
                     class="btn btn-default btn-lg btn-action-questionnaire" />
-                <button type="button"
-                    class="btn btn-default btn-lg btn-action-questionnaire"
-                    :disabled="!$me.acceptAnswer"
-                    v-if="!$me.isAnswered && !inFetchState"
+                <button type="button" class="btn btn-default btn-lg btn-action-questionnaire"
+                    :disabled="!$me.acceptAnswer" v-if="!$me.isAnswered && !inFetchState"
                     @click="$refs.uploader.click()">{{ $t("WebInterviewUI.PhotoUpload") }}</button>
                 <wb-lock />
             </div>
@@ -46,17 +34,17 @@ export default {
             return this.$me.answerTimeUtc == null ? null : new Date(this.$me.answerTimeUtc).getTime()
         },
         answerVisible() {
-            if(this.$me.answer){
+            if (this.$me.answer) {
                 return true
             }
 
-            if(this.$me.validity.isValid) return this.uploadingImage != null
+            if (this.$me.validity.isValid) return this.uploadingImage != null
 
             return false
         },
     },
 
-    watch:{
+    watch: {
         '$me.answer'() {
             this.uploadingImage = null
         },
@@ -81,7 +69,7 @@ export default {
         createImage(file) {
             if (file.size > imageFileSizeLimit) {
                 // Image is too big to upload. Please, choose an image less than 30 Mb
-                this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.PhotoTooBig'))
+                this.markAnswerAsNotValidWithMessage(this.$t('WebInterviewUI.PhotoTooBig'))
                 return
             }
 
@@ -89,7 +77,7 @@ export default {
             const self = this
 
             image.onerror = () => {
-                self.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.PhotoIsNotImage') )
+                self.markAnswerAsNotValidWithMessage(this.$t('WebInterviewUI.PhotoIsNotImage'))
             }
 
             image.onload = () => {
@@ -97,11 +85,11 @@ export default {
 
                 if ('naturalHeight' in this) {
                     if (this.naturalHeight + this.naturalWidth === 0) {
-                        self.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.PhotoIsNotImage') )
+                        self.markAnswerAsNotValidWithMessage(this.$t('WebInterviewUI.PhotoIsNotImage'))
                         return;
                     }
                 } else if (this.width + this.height == 0) {
-                    self.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.PhotoIsNotImage') )
+                    self.markAnswerAsNotValidWithMessage(this.$t('WebInterviewUI.PhotoIsNotImage'))
                     return;
                 } else {
                     self.$store.dispatch('answerMultimediaQuestion', {
@@ -111,12 +99,12 @@ export default {
 
                     const reader = new FileReader()
                     reader.onload = (e) => {
-                        const imageUri = (e.target ).result
+                        const imageUri = (e.target).result
                         self.uploadingImage = imageUri
                     }
 
                     reader.readAsDataURL(file)
-                } 
+                }
             }
 
             image.src = URL.createObjectURL(file)

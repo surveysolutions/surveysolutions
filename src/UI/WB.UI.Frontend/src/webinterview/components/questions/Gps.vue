@@ -71,7 +71,7 @@ export default {
         answerGpsQuestion() {
             this.sendAnswer(() => {
                 if (!('geolocation' in navigator)) {
-                    this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.GPSNotAvailable'))
+                    this.markAnswerAsNotValidWithMessage(this.$t('WebInterviewUI.GPSNotAvailable'))
                     return
                 }
 
@@ -125,7 +125,7 @@ export default {
                 message = this.$t('WebInterviewUI.GPSError', { strErrorCode })  //"The position could not be determined due to an unknown error (Code: " + strErrorCode + ")."
             }
 
-            this.markAnswerAsNotSavedWithMessage(message)
+            this.markAnswerAsNotValidWithMessage(message)
             this.$store.dispatch('fetchProgress', -1)
             this.isInProgress = false
         },

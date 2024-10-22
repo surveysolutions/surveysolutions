@@ -58,7 +58,7 @@ const httpPlugin = {
                 return result
             } catch (err) {
                 if (id) {
-                    store.dispatch('setAnswerAsNotSaved', { id, message: err.statusText })
+                    store.dispatch('setAnswerAsNotValid', { id, message: err.statusText })
                     store.dispatch('fetch', { id, done: true })
                 }
                 else {

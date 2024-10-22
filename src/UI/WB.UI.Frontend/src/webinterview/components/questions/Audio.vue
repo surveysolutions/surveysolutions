@@ -8,9 +8,9 @@
                 <div class="field answered" v-if="$me.isAnswered">
                     <ul class="block-with-data list-unstyled">
                         <li :id="answerHolderId">{{ $t("WebInterviewUI.AudioRecordingDuration", {
-        humanizedLength:
-            humanizedLength, formattedLength
-    }) }}</li>
+                            humanizedLength:
+                            humanizedLength, formattedLength
+                            }) }}</li>
                     </ul>
                     <wb-remove-answer />
                 </div>
@@ -157,7 +157,7 @@ export default {
                         self.maxDurationInterval = setInterval(self.stopRecording, self.maxDuration)
                     },
                     errorCallback: (e) => {
-                        self.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.AudioInitializationFailed'))
+                        self.markAnswerAsNotValidWithMessage(this.$t('WebInterviewUI.AudioInitializationFailed'))
                         this.closeModal()
                     },
                     doneCallback: (blob, duration) => {

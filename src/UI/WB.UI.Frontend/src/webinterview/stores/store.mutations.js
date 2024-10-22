@@ -37,11 +37,14 @@ export default {
             delete state.entityDetails[id]
         })
     },
-    SET_ANSWER_NOT_SAVED(state, { id, message }) {
-        let validity = state.entityDetails[id].validity
-        validity.errorMessage = true
-        validity.messages = [message]
-        validity.isValid = false
+    SET_ANSWER_NOT_VALID(state, { id, message, newAnswer }) {
+        let entity = state.entityDetails[id]
+        entity.validity.errorMessage = true
+        entity.validity.messages = [message]
+        entity.validity.isValid = false
+
+        if (newAnswer)
+            entity.answer = newAnswer
     },
     CLEAR_ANSWER_VALIDITY(state, { id }) {
         const validity = state.entityDetails[id].validity
