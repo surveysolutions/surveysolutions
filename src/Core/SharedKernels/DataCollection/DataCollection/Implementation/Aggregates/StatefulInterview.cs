@@ -1112,7 +1112,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public IEnumerable<Identity> GetAllUnansweredQuestions()
         {
             return this.Tree.FindQuestions()
-                .Where(question => !question.IsDisabled() && !question.IsAnswered() && !question.IsReadonly)
+                .Where(question => !question.IsDisabled() 
+                                   && !question.IsAnswered() 
+                                   && !question.IsReadonly
+                                   && question.IsInterviewer
+                                   && !question.IsHidden)
                 .Select(q => q.Identity);
         }
 
