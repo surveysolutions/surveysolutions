@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         }
 
         private void BecauseOf() =>
-            unansweredQuestionsInInterview = interview.GetAllUnansweredQuestions();
+            unansweredQuestionsInInterview = interview.GetAllUnansweredQuestions(false);
 
         [NUnit.Framework.Test] public void shouldreturn_1_unanswered_questions () =>
             unansweredQuestionsInInterview.Count().Should().Be(2);

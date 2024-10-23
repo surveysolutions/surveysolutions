@@ -28,7 +28,7 @@ public class TesterCompleteInterviewViewModel : CompleteInterviewViewModel
 
     public override void Configure(string interviewUid, NavigationState navigationState)
     {
-        base.Configure(interviewUid, navigationState);
+        RunConfiguration(interviewUid, navigationState);
         
         if (!this.HasCriticalFeature(interviewUid))
         {
