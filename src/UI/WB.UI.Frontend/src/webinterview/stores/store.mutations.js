@@ -41,7 +41,7 @@ export default {
         let validity = state.entityDetails[id].validity
         validity.errorMessage = true
         validity.messages = [message]
-        validity.isValid = false
+        //validity.isValid = false
     },
     CLEAR_ANSWER_VALIDITY(state, { id }) {
         const validity = state.entityDetails[id].validity
