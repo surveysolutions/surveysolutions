@@ -46,6 +46,7 @@ export default {
     CLEAR_ANSWER_VALIDITY(state, { id }) {
         const validity = state.entityDetails[id].validity
         validity.isValid = true
+        validity.errorMessage = false
         validity.messages = []
     },
     SET_BREADCRUMPS(state, crumbs) {
