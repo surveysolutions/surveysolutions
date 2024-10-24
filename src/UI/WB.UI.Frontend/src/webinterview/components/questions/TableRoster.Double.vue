@@ -51,7 +51,7 @@ export default {
         answerDoubleQuestion(evnt) {
             const answerString = this.autoNumericElement.getNumericString()
             if (answerString.replace(/[^0-9]/g, '').length > 15) {
-                this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.DecimalTooBig'))
+                this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.DecimalTooBig') + " '" + answerString + "'")
                 return
             }
 
@@ -68,7 +68,7 @@ export default {
                 }
 
                 if (answer > 999999999999999 || answer < -999999999999999) {
-                    this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.DecimalCannotParse'))
+                    this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.DecimalCannotParse') + " '" + answer + "'")
                     return
                 }
 

@@ -42,7 +42,8 @@ import { debounce } from 'lodash'
 
 export default {
     name: 'wb-question',
-    props: ['question', 'questionDivCssClassName', 'questionCssClassName', 'noTitle', 'noInstructions', 'noValidation', 'noAnswer', 'noComments', 'isDisabled', 'noFlag'],
+    props: ['question', 'questionDivCssClassName', 'questionCssClassName', 'noTitle', 'noInstructions',
+        'noValidation', 'noAnswer', 'noComments', 'isDisabled', 'noFlag'],
     data() {
         return {
             isShowingAddCommentDialogFlag: undefined,

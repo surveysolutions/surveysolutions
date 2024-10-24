@@ -1,12 +1,12 @@
 <template>
     <input :ref="'input'" type="text" autocomplete="off" inputmode="numeric" class="ag-cell-edit-input"
         :value="$me.answer" v-numericFormatting="{
-        digitGroupSeparator: groupSeparator,
-        decimalCharacter: decimalSeparator,
-        decimalPlaces: 0,
-        minimumValue: '-2147483648',
-        maximumValue: '2147483647'
-    }" />
+            digitGroupSeparator: groupSeparator,
+            decimalCharacter: decimalSeparator,
+            decimalPlaces: 0,
+            minimumValue: '-2147483648',
+            maximumValue: '2147483647'
+        }" />
 </template>
 
 <script lang="js">
@@ -60,12 +60,12 @@ export default {
                 const previousAnswer = this.$me.answer
 
                 if (answer > 2147483647 || answer < -2147483648 || answer % 1 !== 0) {
-                    this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.NumberCannotParse'))
+                    this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.NumberCannotParse') + " '" + answer + "'")
                     return
                 }
 
                 if (this.$me.isProtected && this.$me.protectedAnswer > answer) {
-                    this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.NumberCannotBeLessThanProtected'))
+                    this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.NumberCannotBeLessThanProtected') + " '" + answer + "'")
                     return
                 }
 
