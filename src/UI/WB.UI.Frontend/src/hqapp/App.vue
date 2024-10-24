@@ -11,8 +11,12 @@ export default {
         //TODO
         //fix layout instead of recalculation
         onMounted(() => {
-            window.ajustNoticeHeight()
-            window.ajustDetailsPanelHeight()
+            if (typeof window.ajustNoticeHeight === 'function') {
+                window.ajustNoticeHeight()
+            }
+            if (typeof window.ajustDetailsPanelHeight === 'function') {
+                window.ajustDetailsPanelHeight()
+            }
         });
     },
 };

@@ -26,8 +26,12 @@ export default {
     //fix layout instead of recalculation
     setup() {
         onMounted(() => {
-            window.ajustNoticeHeight()
-            window.ajustDetailsPanelHeight()
+            if (typeof window.ajustNoticeHeight === 'function') {
+                window.ajustNoticeHeight()
+            }
+            if (typeof window.ajustDetailsPanelHeight === 'function') {
+                window.ajustDetailsPanelHeight()
+            }
         });
     },
 }

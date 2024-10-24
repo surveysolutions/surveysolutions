@@ -4,7 +4,7 @@
         <template v-slot:headers>
             <ol class="breadcrumb">
                 <li>
-                    <a href="/SurveySetup">{{ $t('MainMenu.SurveySetup') }}</a>
+                    <a href="SurveySetup">{{ $t('MainMenu.SurveySetup') }}</a>
                 </li>
             </ol>
             <h1>{{ $t('BatchUpload.CreatingMultipleAssignments') }}</h1>

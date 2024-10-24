@@ -1,7 +1,4 @@
-//import Vue from 'vue'
-
 export function registerMaskedText(vue) {
-
     vue.directive('maskedText', {
         beforeMount: (el, binding) => {
             if (binding.value) {

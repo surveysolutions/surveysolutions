@@ -9,7 +9,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
     public class CompositeFormatter : DefaultHttpResponseFormatter
     {
         protected override HttpStatusCode OnDetermineStatusCode(
-            IQueryResult result, FormatInfo format,
+            IOperationResult result, FormatInfo format,
             HttpStatusCode? proposedStatusCode)
         {
             if (result.Errors?.Count > 0)

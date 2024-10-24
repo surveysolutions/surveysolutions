@@ -3,7 +3,7 @@
         <template v-slot:headers>
             <div class="topic-with-button">
                 <h1>{{ title }}</h1>
-                <a href="MapDashboard" class="btn" style="margin-right: 30px; padding: 0">
+                <a href="../MapDashboard" class="btn" style="margin-right: 30px; padding: 0">
                     <img style="padding-top: 2px" height="26px;" src="/img/google-maps-markers/map.png"
                         :title="$t('Common.MapDashboard')" />
                 </a>
@@ -45,7 +45,7 @@
                     <div class="input-group">
                         <input class="form-control with-clear-btn" :placeholder="$t('Common.AllAssignments')"
                             type="number" inputmode="numeric" min="1" max="2147483647" maxlength="10"
-                            @input="() => { if (assignmentId > 2147483647) { assignmentId = 2147483647 } }"
+                            @input="() => { if (assignmentId > 2147483647) { assignmentId = 2147483647 } else if (assignmentId < 1) { assignmentId = 1 } }"
                             v-model.number="assignmentId" />
                         <div class="input-group-btn" @click="clearAssignmentFilter">
                             <div class="btn btn-default">
@@ -1879,10 +1879,10 @@ export default {
         },
 
         addParamsToQueryString() {
-            const query = Object.assign({}, this.queryString)
+            const queryString = Object.assign({}, this.queryString)
 
-            if (!isEqual(this.$route.query, query)) {
-                this.$router.push({ query }).catch(() => { })
+            if (!isEqual(this.$route.query, queryString)) {
+                this.$router.push({ query: queryString }).catch(() => { })
             }
         },
 
