@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.MaskTextTests
             maskedText.AddString("a", 0, ref selection);
 
         [NUnit.Framework.Test] public void should_be_accept_char () =>
-            maskedText.MakeMaskedText().Should().Be("a--__");
+            maskedText.MakeMaskedText().Should().Be("a--ˍˍ");
 
         [NUnit.Framework.Test] public void should_set_selection_to_3 () =>
             selection.Should().Be(3);
