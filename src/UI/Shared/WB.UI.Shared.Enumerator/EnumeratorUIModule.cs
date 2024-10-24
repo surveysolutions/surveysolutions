@@ -56,7 +56,7 @@ namespace WB.UI.Shared.Enumerator
             registry.Bind<IExternalAppLauncher, ExternalAppLauncher>();
             registry.Bind<IPermissionsService, PermissionsService>();
             registry.Bind<IImageHelper, BitmapHelper>();
-            registry.Bind<IVirbationService, VibrationService>();
+            registry.Bind<IVibrationService, VibrationService>();
             registry.Bind<IMvxViewModelTypeFinder, MvxViewModelViewTypeFinder>();
             registry.Bind<MvxViewModelViewTypeFinder>();
             registry.Bind<IMvxViewModelByNameLookup, MvxViewModelByNameLookup>();

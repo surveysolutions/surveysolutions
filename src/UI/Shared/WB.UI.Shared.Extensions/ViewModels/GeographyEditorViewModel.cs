@@ -40,7 +40,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             IMapService mapService, IUserInteractionService userInteractionService, ILogger logger,
             IEnumeratorSettings enumeratorSettings, IMapUtilityService mapUtilityService,
             IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher,
-            IVirbationService vibrationService,
+            IVibrationService vibrationService,
             IPermissionsService permissionsService,
             IEnumeratorSettings settings
             )
@@ -57,7 +57,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
         private Geometry Geometry { set; get; }
         private GeometryType RequestedGeometryType { get; set; }
 
-        private IVirbationService VibrationService { get; set; }
+        private IVibrationService VibrationService { get; set; }
 
         public string MapName { set; get; }
         public string Title { set; get; }

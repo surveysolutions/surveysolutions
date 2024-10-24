@@ -73,7 +73,7 @@ public class GeofencingViewModel: BaseMapInteractionViewModel<GeofencingViewMode
     protected readonly IAssignmentDocumentsStorage AssignmentsRepository;
     protected readonly IPlainStorage<InterviewView> InterviewViewRepository;
     private readonly IDashboardViewModelFactory dashboardViewModelFactory;
-    private readonly IVirbationService virbationService;
+    private readonly IVibrationService vibrationService;
 
     public GeofencingViewModel(IPrincipal principal, 
         IViewModelNavigationService viewModelNavigationService,
@@ -88,7 +88,7 @@ public class GeofencingViewModel: BaseMapInteractionViewModel<GeofencingViewMode
         IDashboardViewModelFactory dashboardViewModelFactory, 
         IPermissionsService permissionsService,
         IEnumeratorSettings settings,
-        IVirbationService virbationService) 
+        IVibrationService vibrationService) 
         : base(principal, viewModelNavigationService, mapService, userInteractionService, logger, 
                enumeratorSettings, mapUtilityService, mainThreadAsyncDispatcher, permissionsService, 
                settings)
@@ -96,7 +96,7 @@ public class GeofencingViewModel: BaseMapInteractionViewModel<GeofencingViewMode
         this.AssignmentsRepository = assignmentsRepository;
         this.InterviewViewRepository = interviewViewRepository;
         this.dashboardViewModelFactory = dashboardViewModelFactory;
-        this.virbationService = virbationService;
+        this.vibrationService = vibrationService;
     }
 
     private GraphicsOverlayCollection graphicsOverlays = new GraphicsOverlayCollection();
@@ -305,13 +305,13 @@ public class GeofencingViewModel: BaseMapInteractionViewModel<GeofencingViewMode
                 Warning = UIResources.AreaMap_ItemsOutsideDedicatedArea;
                 IsWarningVisible = true;
                 
-                virbationService.Enable();
-                virbationService.Vibrate();
+                vibrationService.Enable();
+                vibrationService.Vibrate();
                 return true;
             }
             else
             {
-                virbationService.Disable();
+                vibrationService.Disable();
             }
         }
  

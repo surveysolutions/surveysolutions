@@ -94,7 +94,7 @@ namespace WB.Tests.Abc.TestFactories
             IUserInterfaceStateService userInterfaceStateService = null,
             IMvxMainThreadAsyncDispatcher mvxMainThreadDispatcher = null,
             ICompositeCollectionInflationService compositeCollectionInflationService = null,
-            IVirbationService virbationService = null)
+            IVibrationService vibrationService = null)
             => new EnumerationStageViewModel(
                 interviewViewModelFactory ?? Mock.Of<IInterviewViewModelFactory>(),
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
@@ -489,11 +489,11 @@ namespace WB.Tests.Abc.TestFactories
         }
 
         public VibrationViewModel VibrationViewModel(IViewModelEventRegistry eventRegistry = null,
-            IEnumeratorSettings enumeratorSettings = null, IVirbationService vibrationService = null)
+            IEnumeratorSettings enumeratorSettings = null, IVibrationService vibrationService = null)
             => new VibrationViewModel(
                 eventRegistry ?? Mock.Of<IViewModelEventRegistry>(),
                 enumeratorSettings ?? Mock.Of<IEnumeratorSettings>(), 
-                vibrationService ?? Mock.Of<IVirbationService>());
+                vibrationService ?? Mock.Of<IVibrationService>());
 
         public SingleOptionQuestionOptionViewModel SingleOptionQuestionOptionViewModel(int? value = null)
         {
