@@ -903,4 +903,7 @@
   <data name="InterviewStatus_SupervisorAssigned" xml:space="preserve">
     <value>Супервизор назначен</value>
   </data>
+  <data name="MenuItem_Title_Geofencing" xml:space="preserve">
+      <value>Геозонирование</value>
+  </data>
 </root>

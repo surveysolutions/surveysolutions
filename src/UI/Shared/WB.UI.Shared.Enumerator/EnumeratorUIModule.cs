@@ -98,6 +98,7 @@ namespace WB.UI.Shared.Enumerator
             registry.BindAsSingleton<IConnectionsApiLimits, ConnectionsApiLimits>();
             registry.BindAsSingleton<IGoogleApiClientFactory, GoogleApiClientFactory>();
             registry.BindAsSingleton<INearbyConnectionClient, NearbyConnectionClient>();
+            registry.BindAsSingleton<IGeolocationBackgroundServiceManager, GeolocationBackgroundServiceManager>();
 
             // SecureStorage is singleton because very very long getting secret keys
             registry.BindAsSingleton<ISecureStorage, SecureStorage>();

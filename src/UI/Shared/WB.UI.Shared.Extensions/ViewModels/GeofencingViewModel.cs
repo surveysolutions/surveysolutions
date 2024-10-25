@@ -74,6 +74,9 @@ public class GeofencingViewModel: BaseMapInteractionViewModel<GeofencingViewMode
     protected readonly IPlainStorage<InterviewView> InterviewViewRepository;
     private readonly IDashboardViewModelFactory dashboardViewModelFactory;
     private readonly IVibrationService vibrationService;
+    private readonly IGeolocationBackgroundServiceManager backgroundServiceManager;
+    
+    private IGeolocationListener geofencingListener;
 
     public GeofencingViewModel(IPrincipal principal, 
         IViewModelNavigationService viewModelNavigationService,
@@ -88,7 +91,8 @@ public class GeofencingViewModel: BaseMapInteractionViewModel<GeofencingViewMode
         IDashboardViewModelFactory dashboardViewModelFactory, 
         IPermissionsService permissionsService,
         IEnumeratorSettings settings,
-        IVibrationService vibrationService) 
+        IVibrationService vibrationService,
+        IGeolocationBackgroundServiceManager backgroundServiceManager) 
         : base(principal, viewModelNavigationService, mapService, userInteractionService, logger, 
                enumeratorSettings, mapUtilityService, mainThreadAsyncDispatcher, permissionsService, 
                settings)
@@ -97,6 +101,7 @@ public class GeofencingViewModel: BaseMapInteractionViewModel<GeofencingViewMode
         this.InterviewViewRepository = interviewViewRepository;
         this.dashboardViewModelFactory = dashboardViewModelFactory;
         this.vibrationService = vibrationService;
+        this.backgroundServiceManager = backgroundServiceManager;
     }
 
     private GraphicsOverlayCollection graphicsOverlays = new GraphicsOverlayCollection();
@@ -272,7 +277,22 @@ public class GeofencingViewModel: BaseMapInteractionViewModel<GeofencingViewMode
     
     public IMvxAsyncCommand NavigateToDashboardCommand => 
         new MvxAsyncCommand(async () => await this.ViewModelNavigationService.NavigateToDashboardAsync());
-    
+
+    public IMvxCommand StartGeofencingCommand => 
+        new MvxCommand(() =>
+        {
+            if (geofencingListener != null)
+            {
+                this.geofencingListener ??= new GeofencingListener(LoadedShapefile, vibrationService);
+                this.backgroundServiceManager.StartListen(geofencingListener);
+            }
+            else
+            {
+                this.backgroundServiceManager.StopListen(geofencingListener);
+            }
+        }, 
+        () => LoadedShapefile != null);
+
     public override void Dispose()
     {
         base.Dispose();

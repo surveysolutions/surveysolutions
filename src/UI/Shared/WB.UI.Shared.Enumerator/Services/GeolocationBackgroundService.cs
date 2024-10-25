@@ -22,11 +22,27 @@ public class LocationReceivedEventArgs : EventArgs
     public GpsLocation Location { get; }
 }
 
+public interface INotificationManager
+{
+    void Notify(string message);
+}
+
 [Service(ForegroundServiceType = global::Android.Content.PM.ForegroundService.TypeLocation)]
-public class GeolocationBackgroundService : Service, ILocationListener
+public class GeolocationBackgroundService : Service, ILocationListener, INotificationManager
 {
     private ServiceBinder<GeolocationBackgroundService> binder;
 
+    private const int NotificationId = 1;
+    readonly string locationNotificationChannelId = "location_channel_id";
+    private Notification.Builder notificationsBuilder = null;
+    private NotificationManager notificationManager = null;
+    
+    public void Notify(string message)
+    {
+        notificationsBuilder.SetContentText(message);
+        notificationManager.Notify(NotificationId, notificationsBuilder.Build());
+    }
+    
     public event EventHandler<LocationReceivedEventArgs> LocationReceived;
 
     LocationManager locationManager;
@@ -41,38 +57,38 @@ public class GeolocationBackgroundService : Service, ILocationListener
     {
         if (Build.VERSION.SdkInt >= BuildVersionCodes.O)
         {
-            var channel = new NotificationChannel("location_channel_id", "Location Service", NotificationImportance.Default)
+            var channel = new NotificationChannel(locationNotificationChannelId, "Location Service", NotificationImportance.Default)
             {
                 Description = "Channel for location tracking"
             };
-            var notificationManager = (NotificationManager)GetSystemService(NotificationService);
+            NotificationManager notificationManager = (NotificationManager)GetSystemService(NotificationService);
             notificationManager.CreateNotificationChannel(channel);
         }
-        
-        
-        var notification = new Notification.Builder(this, "location_channel_id")
+
+
+        notificationsBuilder = new Notification.Builder(this, locationNotificationChannelId)
             .SetContentTitle("Location Service")
             .SetContentText("Tracking your location in background")
             .SetSmallIcon(Resource.Drawable.dashboard_sync_icon)
-            .SetOngoing(true)
-            .Build();
+            .SetOngoing(true);
+        var notification = notificationsBuilder.Build();
         
         
         if (Build.VERSION.SdkInt < Android.OS.BuildVersionCodes.UpsideDownCake) {
-            StartForeground(1, notification);
+            StartForeground(NotificationId, notification);
         } else {
-            StartForeground(1, notification, ForegroundService.TypeLocation);
+            StartForeground(NotificationId, notification, ForegroundService.TypeLocation);
         }
         
-        var locationCriteria = new Criteria
+        /*var locationCriteria = new Criteria
         {
             Accuracy = Accuracy.Fine, 
             PowerRequirement = Power.Medium
-        };
-
-        locationManager.RequestLocationUpdates(LocationManager.GpsProvider, 5000, 1, this);
+        };*/
         //var bestProvider = locationManager.GetBestProvider(locationCriteria, true);
         //locationManager.RequestLocationUpdates(bestProvider, 5000, 1, this);
+
+        locationManager.RequestLocationUpdates(LocationManager.GpsProvider, 5000, 1, this);
 
         return StartCommandResult.Sticky;
     }
@@ -89,28 +105,34 @@ public class GeolocationBackgroundService : Service, ILocationListener
         return this.binder;
     }
 
-    public void OnLocationChanged(Location location)
+    public virtual void OnLocationChanged(Location location)
     {
-        if (this.LocationReceived == null)
-            return;
-        
         var dateTimeOffset = GetTimestamp(location).ToUniversalTime();
         var gpsLocation = new GpsLocation(location.Accuracy, location.Altitude, location.Latitude, location.Longitude,
             dateTimeOffset);
+
+        OnGpsLocationChanged(gpsLocation);
+    }
+
+    protected virtual void OnGpsLocationChanged(GpsLocation gpsLocation)
+    {
+        if (this.LocationReceived == null)
+            return;
+
         this.LocationReceived?.Invoke(this, new LocationReceivedEventArgs(gpsLocation));
     }
 
-    public void OnProviderDisabled(string provider)
+    public virtual void OnProviderDisabled(string provider)
     {
         //throw new NotImplementedException();
     }
 
-    public void OnProviderEnabled(string provider)
+    public virtual void OnProviderEnabled(string provider)
     {
         //throw new NotImplementedException();
     }
 
-    public void OnStatusChanged(string provider, Availability status, Bundle extras)
+    public virtual void OnStatusChanged(string provider, Availability status, Bundle extras)
     {
         //throw new NotImplementedException();
     }

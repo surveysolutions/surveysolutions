@@ -14,7 +14,7 @@
 					   android:resource="@xml/file_paths" />
 		</provider>
         <service
-                android:name="WB.UI.Shared.Enumerator.Services.GeolocationBackgroundService"
+                android:name="WB.UI.Shared.Enumerator.Services.GeolocationBackgroundServiceManager"
                 android:enabled="true"
                 android:exported="false"
                 android:foregroundServiceType="location" />

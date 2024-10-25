@@ -4,6 +4,7 @@ using Android.OS;
 using Android.Views;
 using AndroidX.AppCompat.Widget;
 using Esri.ArcGISRuntime.UI.Controls;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Shared.Extensions.ViewModels;
@@ -19,15 +20,6 @@ public class GeofencingActivity : BaseActivity<GeofencingViewModel>
 {
     protected override int ViewResourceId => Resource.Layout.geofencing;
     
-    GeolocationBackgroundService locationService;
-    bool isBound = false;
-
-    private ServiceConnection serviceConnection = null;
-
-    public GeofencingActivity()
-    {
-        serviceConnection = new ServiceConnection(this);
-    }
 
     protected override void OnCreate(Bundle savedInstanceState)
     {
@@ -38,52 +30,27 @@ public class GeofencingActivity : BaseActivity<GeofencingViewModel>
         var toolbar = this.FindViewById<Toolbar>(Resource.Id.toolbar);
         toolbar.Title = "";
         this.SetSupportActionBar(toolbar);
-
-        
-        var intent = new Intent(this, typeof(GeolocationBackgroundService));
-        StartService(intent);
-        BindService(intent, serviceConnection, Bind.AutoCreate);
-    }
-
-    private class ServiceConnection : Java.Lang.Object, IServiceConnection
-    {
-        private GeofencingActivity activity;
-
-        public ServiceConnection(GeofencingActivity activity)
-        {
-            this.activity = activity;
-        }
-
-        public void OnServiceConnected(ComponentName name, IBinder service)
-        {
-            var binder = (ServiceBinder<GeolocationBackgroundService>)service;
-            activity.locationService = binder.GetService(); 
-            activity.isBound = true;
-
-            activity.locationService.LocationReceived += activity.LocationServiceOnLocationReceived;
-        }
-
-
-        public void OnServiceDisconnected(ComponentName name)
-        {
-            activity.isBound = false;
-        }
     }
     
-    private async void LocationServiceOnLocationReceived(object sender, LocationReceivedEventArgs args)
+    protected override bool BackButtonCustomAction => true;
+    protected override void BackButtonPressed()
     {
-        var result = await ViewModel.CheckIfInsideOfShapefile(args.Location);
+        this.Finish();
     }
 
-    
-    protected override void OnDestroy()
+    public override bool OnCreateOptionsMenu(IMenu menu)
     {
-        base.OnDestroy();
-        if (isBound)
-        {
-            locationService.LocationReceived -= LocationServiceOnLocationReceived;
-            UnbindService(serviceConnection);
-            isBound = false;
-        }
+        this.MenuInflater.Inflate(Resource.Menu.area_editor, menu);
+
+        menu.LocalizeMenuItem(Resource.Id.menu_geofencing, UIResources.MenuItem_Title_AreaCancelEdit);
+
+        return base.OnCreateOptionsMenu(menu);
+    }
+    public override bool OnOptionsItemSelected(IMenuItem item)
+    {
+        if(item.ItemId == Resource.Id.menu_geofencing)
+            this.ViewModel.StartGeofencingCommand.Execute();
+            
+        return base.OnOptionsItemSelected(item);
     }
 }
