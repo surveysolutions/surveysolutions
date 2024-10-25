@@ -33,16 +33,17 @@ public class GeofencingListener : IGeolocationListener
         
         if (shapefile?.SpatialReference == null)
             return geofencingResult.SetCheckResult(false);
-
-        var queryParameters = new QueryParameters();
-
+        
         var mapLocation = new MapPoint(location.Longitude, location.Latitude, SpatialReferences.Wgs84);
 
         var projectedPoint = mapLocation.Project(shapefile.SpatialReference);
         if (projectedPoint is MapPoint mapPoint)
         {
-            queryParameters.Geometry = mapPoint;
-            queryParameters.SpatialRelationship = SpatialRelationship.Intersects;
+            var queryParameters = new QueryParameters
+            {
+                Geometry = mapPoint,
+                SpatialRelationship = SpatialRelationship.Intersects
+            };
 
             var queryResult = await shapefile.QueryFeaturesAsync(queryParameters);
             if (!queryResult.Any())

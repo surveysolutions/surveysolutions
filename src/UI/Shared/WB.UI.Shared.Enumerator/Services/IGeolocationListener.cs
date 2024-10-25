@@ -15,7 +15,7 @@ public class GeolocationListenerResult
 
     public GeolocationListenerResult SetCheckResult(bool isShapefile)
     {
-        InShapefile = InShapefile;
+        InShapefile = isShapefile;
         return this;
     }
 }

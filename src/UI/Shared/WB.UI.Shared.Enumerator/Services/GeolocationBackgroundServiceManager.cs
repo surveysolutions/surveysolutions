@@ -7,8 +7,8 @@ namespace WB.UI.Shared.Enumerator.Services;
 [Service(ForegroundServiceType = global::Android.Content.PM.ForegroundService.TypeLocation)]
 public class GeolocationBackgroundServiceManager : GeolocationBackgroundService, IGeolocationBackgroundServiceManager
 {
-    private HashSet<IGeolocationListener> listeners = new HashSet<IGeolocationListener>();
-    private bool serviceIsRunning = false;
+    private static HashSet<IGeolocationListener> listeners = new HashSet<IGeolocationListener>();
+    private static bool serviceIsRunning = false;
 
     //readonly Intent geolocationServiceIntent = new Intent(this, typeof(GeolocationBackgroundServiceManager));
 

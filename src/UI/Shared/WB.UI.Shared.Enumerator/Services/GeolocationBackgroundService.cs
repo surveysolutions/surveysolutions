@@ -61,7 +61,7 @@ public class GeolocationBackgroundService : Service, ILocationListener, INotific
             {
                 Description = "Channel for location tracking"
             };
-            NotificationManager notificationManager = (NotificationManager)GetSystemService(NotificationService);
+            notificationManager = (NotificationManager)GetSystemService(NotificationService);
             notificationManager.CreateNotificationChannel(channel);
         }
 

@@ -281,20 +281,22 @@ public class GeofencingViewModel: BaseMapInteractionViewModel<GeofencingViewMode
         new MvxAsyncCommand(async () => await this.ViewModelNavigationService.NavigateToDashboardAsync());
 
     public IMvxCommand StartGeofencingCommand => 
-        new MvxCommand(() =>
-        {
-            if (geofencingListener == null)
+        new MvxAsyncCommand(async () =>
             {
-                this.geofencingListener ??= new GeofencingListener(LoadedShapefile, vibrationService);
-                this.backgroundServiceManager.StartListen(geofencingListener);
-            }
-            else
-            {
-                this.backgroundServiceManager.StopListen(geofencingListener);
-                this.geofencingListener = null;
-            }
-        }, 
-        () => LoadedShapefile != null);
+                await permissionsService.AssureHasPermissionOrThrow<Permissions.LocationAlways>();
+            
+                if (geofencingListener == null)
+                {
+                    this.geofencingListener ??= new GeofencingListener(LoadedShapefile, vibrationService);
+                    this.backgroundServiceManager.StartListen(geofencingListener);
+                }
+                else
+                {
+                    this.backgroundServiceManager.StopListen(geofencingListener);
+                    this.geofencingListener = null;
+                }
+            }, 
+            () => LoadedShapefile != null);
 
     public override void Dispose()
     {
