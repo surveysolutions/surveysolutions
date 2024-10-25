@@ -38,6 +38,7 @@ public class GeofencingViewModelArgs
 }
 
 
+
 public class GeofencingViewModel: BaseMapInteractionViewModel<GeofencingViewModelArgs>
 {
     private AssignmentDocument assignment;
@@ -77,7 +78,8 @@ public class GeofencingViewModel: BaseMapInteractionViewModel<GeofencingViewMode
     private readonly IVibrationService vibrationService;
     private readonly IGeolocationBackgroundServiceManager backgroundServiceManager;
     
-    private IGeolocationListener geofencingListener;
+    private GeofencingListener geofencingListener;
+    private TestingListener testingListener;
 
     public GeofencingViewModel(IPrincipal principal, 
         IViewModelNavigationService viewModelNavigationService,
@@ -289,14 +291,40 @@ public class GeofencingViewModel: BaseMapInteractionViewModel<GeofencingViewMode
                 {
                     this.geofencingListener ??= new GeofencingListener(LoadedShapefile, vibrationService);
                     this.backgroundServiceManager.StartListen(geofencingListener);
+                    this.testingListener ??= new TestingListener(this);
+                    this.backgroundServiceManager.StartListen(testingListener);
                 }
                 else
                 {
+                    this.backgroundServiceManager.StopListen(testingListener);
                     this.backgroundServiceManager.StopListen(geofencingListener);
                     this.geofencingListener = null;
                 }
             }, 
             () => LoadedShapefile != null);
+    
+    public class TestingListener : IGeolocationListener
+    {
+        private readonly GeofencingViewModel geofencingViewModel;
+
+        public TestingListener(GeofencingViewModel geofencingViewModel)
+        {
+            this.geofencingViewModel = geofencingViewModel;
+        }
+
+        public Task OnGpsLocationChanged(GpsLocation location, INotificationManager notifications)
+        {
+            var loc = $"\r\n{location.Latitude}  {location.Longitude}";
+            geofencingViewModel.Locations = loc + geofencingViewModel.Locations;
+
+            if (geofencingViewModel.geofencingListener.LastResult?.InShapefile ?? false)
+            {
+                geofencingViewModel.Locations = "(Out of shapefile) " + geofencingViewModel.Locations;
+            }
+            
+            return Task.CompletedTask;
+        }
+    }
 
     public override void Dispose()
     {

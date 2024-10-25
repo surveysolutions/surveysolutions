@@ -68,5 +68,9 @@ public class GeofencingListener : IGeolocationListener
         {
             notifications.Notify("Out of borders");
         }
+
+        LastResult = result;
     }
+    
+    public GeolocationListenerResult LastResult { get; set; }
 }
