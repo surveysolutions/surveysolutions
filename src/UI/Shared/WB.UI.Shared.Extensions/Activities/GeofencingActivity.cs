@@ -40,9 +40,9 @@ public class GeofencingActivity : BaseActivity<GeofencingViewModel>
 
     public override bool OnCreateOptionsMenu(IMenu menu)
     {
-        this.MenuInflater.Inflate(Resource.Menu.area_editor, menu);
+        this.MenuInflater.Inflate(Resource.Menu.geofencing, menu);
 
-        menu.LocalizeMenuItem(Resource.Id.menu_geofencing, UIResources.MenuItem_Title_AreaCancelEdit);
+        menu.LocalizeMenuItem(Resource.Id.menu_geofencing, UIResources.MenuItem_Title_Geofencing);
 
         return base.OnCreateOptionsMenu(menu);
     }

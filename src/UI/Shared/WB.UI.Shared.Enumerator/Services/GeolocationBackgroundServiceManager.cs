@@ -24,8 +24,8 @@ public class GeolocationBackgroundServiceManager : GeolocationBackgroundService,
         {
             serviceIsRunning = true;
 
-            Intent geolocationServiceIntent = new Intent(this, typeof(GeolocationBackgroundServiceManager));
-            StartService(geolocationServiceIntent);
+            Intent geolocationServiceIntent = new Intent(Application.Context, typeof(GeolocationBackgroundServiceManager));
+            Application.Context.StartService(geolocationServiceIntent);
         }
     }
     
@@ -37,8 +37,8 @@ public class GeolocationBackgroundServiceManager : GeolocationBackgroundService,
         {
             serviceIsRunning = false;
 
-            Intent geolocationServiceIntent = new Intent(this, typeof(GeolocationBackgroundServiceManager));
-            StopService(geolocationServiceIntent);
+            Intent geolocationServiceIntent = new Intent(Application.Context, typeof(GeolocationBackgroundServiceManager));
+            Application.Context.StopService(geolocationServiceIntent);
         }
     }
     
@@ -48,11 +48,6 @@ public class GeolocationBackgroundServiceManager : GeolocationBackgroundService,
         {
             await geolocationListener.OnGpsLocationChanged(gpsLocation, this);
         }
-    }
-    
-    public override IBinder OnBind(Intent intent)
-    {
-        return null;
     }
 
     

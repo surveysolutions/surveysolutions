@@ -40,6 +40,7 @@ public class GeofencingViewModelArgs
 
 public class GeofencingViewModel: BaseMapInteractionViewModel<GeofencingViewModelArgs>
 {
+    private AssignmentDocument assignment;
     private string locations = "Locations: ";
 
     public string Locations
@@ -135,12 +136,7 @@ public class GeofencingViewModel: BaseMapInteractionViewModel<GeofencingViewMode
     {
         var assignmentId = parameter.AssignmentId;
 
-        var assignment = AssignmentsRepository.GetById(assignmentId);
-        var targetArea = assignment.TargetArea;
-        if (!string.IsNullOrWhiteSpace(targetArea))
-        {
-            //ShapeFileLoaded()
-        }
+        assignment = AssignmentsRepository.GetById(assignmentId);
     }
         
     public override async Task Initialize()
@@ -150,9 +146,15 @@ public class GeofencingViewModel: BaseMapInteractionViewModel<GeofencingViewMode
         this.GraphicsOverlays.Add(graphicsOverlay);
     }
 
-    public override Task OnMapLoaded()
+    public override async Task OnMapLoaded()
     {
-        return Task.CompletedTask;
+        var targetArea = assignment.TargetArea;
+        if (!string.IsNullOrWhiteSpace(targetArea))
+        {
+            var fullPathToShapefile = AvailableShapefiles.FirstOrDefault(sf => sf.ShapefileFileName == targetArea)?.FullPath;
+            if (!string.IsNullOrWhiteSpace(fullPathToShapefile))
+                await LoadShapefileByPath(fullPathToShapefile);
+        }
     }
 
     public override void ViewAppeared()
@@ -233,7 +235,7 @@ public class GeofencingViewModel: BaseMapInteractionViewModel<GeofencingViewMode
             IsWarningVisible = true;
         }*/
     }
-
+    
     protected override async Task SetViewToValues()
     {
         Envelope graphicExtent = null;
@@ -281,7 +283,7 @@ public class GeofencingViewModel: BaseMapInteractionViewModel<GeofencingViewMode
     public IMvxCommand StartGeofencingCommand => 
         new MvxCommand(() =>
         {
-            if (geofencingListener != null)
+            if (geofencingListener == null)
             {
                 this.geofencingListener ??= new GeofencingListener(LoadedShapefile, vibrationService);
                 this.backgroundServiceManager.StartListen(geofencingListener);
@@ -289,6 +291,7 @@ public class GeofencingViewModel: BaseMapInteractionViewModel<GeofencingViewMode
             else
             {
                 this.backgroundServiceManager.StopListen(geofencingListener);
+                this.geofencingListener = null;
             }
         }, 
         () => LoadedShapefile != null);
@@ -296,45 +299,5 @@ public class GeofencingViewModel: BaseMapInteractionViewModel<GeofencingViewMode
     public override void Dispose()
     {
         base.Dispose();
-    }
-
-
-    public async Task<bool> CheckIfInsideOfShapefile(GpsLocation location)
-    {
-        var loc = $"\r\n{location.Latitude}  {location.Longitude}";
-        Locations = loc + Locations;
-
-        if (!ShapeFileLoaded || LoadedShapefile?.SpatialReference == null) 
-            return false;
-        
-        var queryParameters = new QueryParameters();
-
-        var mapLocation = new MapPoint(location.Longitude, location.Latitude, SpatialReferences.Wgs84);
-
-        var projectedPoint = mapLocation.Project(LoadedShapefile.SpatialReference);
-        if (projectedPoint is MapPoint mapPoint)
-        {
-            queryParameters.Geometry = mapPoint;
-            queryParameters.SpatialRelationship = SpatialRelationship.Intersects;
-
-            var queryResult = await LoadedShapefile.QueryFeaturesAsync(queryParameters);
-            if (!queryResult.Any())
-            {
-                Locations = "(Out of shapefile) " + Locations;
-
-                Warning = UIResources.AreaMap_ItemsOutsideDedicatedArea;
-                IsWarningVisible = true;
-                
-                vibrationService.Enable();
-                vibrationService.Vibrate();
-                return true;
-            }
-            else
-            {
-                vibrationService.Disable();
-            }
-        }
- 
-        return false;
     }
 }

@@ -371,6 +371,11 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     return;
             }
 
+            await LoadShapefileByPath(fullPathToShapefile);
+        });
+
+        protected async Task LoadShapefileByPath(string fullPathToShapefile)
+        {
             try 
             {
                 LoadedShapefile = await ShapefileFeatureTable.OpenAsync(fullPathToShapefile);
@@ -396,7 +401,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 logger.Error("Error on shapefile loading", e);
                 UserInteractionService.ShowToast(UIResources.AreaMap_ErrorOnShapefileLoading);
             }
-        });
+        }
 
         protected virtual Task AfterShapefileLoadedHandler()
         {
