@@ -109,12 +109,12 @@ export default {
                 }
 
                 if (answer > 2147483647 || answer < -2147483648 || answer % 1 !== 0) {
-                    this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.NumberCannotParse') + " '" + answer + "'")
+                    this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.NumberCannotParse'), answer)
                     return
                 }
 
                 if (this.$me.isProtected && this.$me.protectedAnswer > answer) {
-                    this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.NumberCannotBeLessThanProtected' + " '" + answer + "'"))
+                    this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.NumberCannotBeLessThanProtected'), answer)
                     return
                 }
 
@@ -124,12 +124,12 @@ export default {
                 }
 
                 if (!isSpecialValue && answer < 0) {
-                    this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.NumberRosterError', { answer }))
+                    this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.NumberRosterError', { answer }), answer)
                     return
                 }
 
                 if (answer > this.$me.answerMaxValue) {
-                    this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.NumberRosterUpperBound', { answer, answerMaxValue: this.$me.answerMaxValue }))
+                    this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.NumberRosterUpperBound', { answer, answerMaxValue: this.$me.answerMaxValue }), answer)
                     return
                 }
 

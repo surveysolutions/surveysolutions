@@ -48,7 +48,7 @@ export default {
                 }
 
                 if (this.$me.mask && !target.data('maskCompleted')) {
-                    this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.TextRequired') + " '" + answer + "'")
+                    this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.TextRequired'), answer)
                 }
                 else {
                     this.$store.dispatch('answerTextQuestion', { identity: this.id, text: answer })
