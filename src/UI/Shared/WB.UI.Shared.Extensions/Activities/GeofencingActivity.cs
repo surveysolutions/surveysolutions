@@ -16,10 +16,16 @@ namespace WB.UI.Shared.Extensions.Activities;
     Theme = "@style/AppTheme",
     ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize,
     Exported = false)]
-public class GeofencingActivity : BaseActivity<GeofencingViewModel>
+public class GeofencingActivity : MarkersMapActivity<GeofencingViewModel, GeofencingViewModelArgs>
 {
     protected override int ViewResourceId => Resource.Layout.geofencing;
     
+    protected override bool BackButtonCustomAction => true;
+    protected override void BackButtonPressed()
+    {
+        this.ViewModel.NavigateToDashboardCommand.Execute();
+        this.Finish();
+    }
 
     protected override void OnCreate(Bundle savedInstanceState)
     {
@@ -32,11 +38,6 @@ public class GeofencingActivity : BaseActivity<GeofencingViewModel>
         this.SetSupportActionBar(toolbar);
     }
     
-    protected override bool BackButtonCustomAction => true;
-    protected override void BackButtonPressed()
-    {
-        this.Finish();
-    }
 
     public override bool OnCreateOptionsMenu(IMenu menu)
     {
@@ -46,6 +47,7 @@ public class GeofencingActivity : BaseActivity<GeofencingViewModel>
 
         return base.OnCreateOptionsMenu(menu);
     }
+    
     public override bool OnOptionsItemSelected(IMenuItem item)
     {
         if(item.ItemId == Resource.Id.menu_geofencing)

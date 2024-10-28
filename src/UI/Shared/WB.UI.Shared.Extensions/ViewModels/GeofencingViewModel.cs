@@ -39,7 +39,7 @@ public class GeofencingViewModelArgs
 
 
 
-public class GeofencingViewModel: BaseMapInteractionViewModel<GeofencingViewModelArgs>
+public class GeofencingViewModel: MarkersMapInteractionViewModel<GeofencingViewModelArgs>
 {
     private AssignmentDocument assignment;
     private string locations = "Locations: ";
@@ -85,26 +85,28 @@ public class GeofencingViewModel: BaseMapInteractionViewModel<GeofencingViewMode
         IViewModelNavigationService viewModelNavigationService,
         IUserInteractionService userInteractionService,
         IMapService mapService,
-        IAssignmentDocumentsStorage assignmentsRepository,
-        IPlainStorage<InterviewView> interviewViewRepository,
         IEnumeratorSettings enumeratorSettings,
         ILogger logger,
         IMapUtilityService mapUtilityService,
         IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher,
-        IDashboardViewModelFactory dashboardViewModelFactory, 
         IPermissionsService permissionsService,
         IEnumeratorSettings settings,
         IVibrationService vibrationService,
-        IGeolocationBackgroundServiceManager backgroundServiceManager) 
+        IGeolocationBackgroundServiceManager backgroundServiceManager,
+        IDashboardViewModelFactory dashboardViewModelFactory,
+        IAssignmentDocumentsStorage assignmentsRepository,
+        IPlainStorage<InterviewView> interviewViewRepository) 
         : base(principal, viewModelNavigationService, mapService, userInteractionService, logger, 
                enumeratorSettings, mapUtilityService, mainThreadAsyncDispatcher, permissionsService, 
-               settings)
+               settings, dashboardViewModelFactory, assignmentsRepository, interviewViewRepository)
     {
         this.AssignmentsRepository = assignmentsRepository;
         this.InterviewViewRepository = interviewViewRepository;
         this.dashboardViewModelFactory = dashboardViewModelFactory;
         this.vibrationService = vibrationService;
         this.backgroundServiceManager = backgroundServiceManager;
+
+        this.ShowInterviews = true;
     }
 
     private GraphicsOverlayCollection graphicsOverlays = new GraphicsOverlayCollection();
@@ -122,16 +124,21 @@ public class GeofencingViewModel: BaseMapInteractionViewModel<GeofencingViewMode
     }
 
     private bool showInterviews = true;
-    public bool ShowInterviews
+    public override bool ShowInterviews
     {
         get => this.showInterviews;
         set => this.RaiseAndSetIfChanged(ref this.showInterviews, value);
     }
-    private bool showAssignments = true;
-    public bool ShowAssignments
+    private bool showAssignments = false;
+    public override bool ShowAssignments
     {
         get => this.showAssignments;
         set => this.RaiseAndSetIfChanged(ref this.showAssignments, value);
+    }
+
+    protected override List<AssignmentDocument> FilteredAssignments()
+    {
+        throw new NotImplementedException();
     }
 
     public override void Prepare(GeofencingViewModelArgs parameter)
@@ -145,6 +152,8 @@ public class GeofencingViewModel: BaseMapInteractionViewModel<GeofencingViewMode
     {
         await base.Initialize();
         
+        ReloadEntities();
+            
         this.GraphicsOverlays.Add(graphicsOverlay);
     }
 
@@ -157,6 +166,8 @@ public class GeofencingViewModel: BaseMapInteractionViewModel<GeofencingViewMode
             if (!string.IsNullOrWhiteSpace(fullPathToShapefile))
                 await LoadShapefileByPath(fullPathToShapefile);
         }
+        
+        await RefreshMarkers(setViewToMarkers: true);
     }
 
     public override void ViewAppeared()
@@ -178,8 +189,6 @@ public class GeofencingViewModel: BaseMapInteractionViewModel<GeofencingViewMode
             
         return mapToLoad ?? mapsToSelectFrom.First();
     }
-
-    private readonly GraphicsOverlay graphicsOverlay = new GraphicsOverlay();
     
     protected override async Task AfterShapefileLoadedHandler()
     {
@@ -191,53 +200,11 @@ public class GeofencingViewModel: BaseMapInteractionViewModel<GeofencingViewMode
         base.ShowedFullMap();
     }
 
-    protected async Task CheckMarkersAgainstShapefile()
+    protected override List<InterviewView> FilteredInterviews()
     {
-        IsWarningVisible = false;
-
-        if (!ShapeFileLoaded 
-            || graphicsOverlay.Graphics.Count <= 0 
-            || LoadedShapefile?.SpatialReference == null) return;
-        
-        var queryParameters = new QueryParameters();
-
-        //List<MapPoint> pointsToCheck = new List<MapPoint>();
-        foreach (var graphic in graphicsOverlay.Graphics)
-        {
-            if (graphic.Geometry != null && graphic.Geometry.GeometryType == GeometryType.Point)
-            { 
-                var projectedPoint = graphic.Geometry.Project(LoadedShapefile.SpatialReference);
-                if (projectedPoint is MapPoint mapPoint)
-                {
-                    //pointsToCheck.Add(mapPoint);
-                    queryParameters.Geometry = mapPoint;
-                    queryParameters.SpatialRelationship = SpatialRelationship.Intersects;
-                    //queryParameters.ReturnGeometry = true;
-
-                    var queryResult = await LoadedShapefile.QueryFeaturesAsync(queryParameters);
-                    if (!queryResult.Any())
-                    {
-                        Warning = UIResources.AreaMap_ItemsOutsideDedicatedArea;
-                        IsWarningVisible = true;
-                        return;
-                    }
-                }
-            }
-        }
-        
-        /*Multipoint pointsMultipoint = new Multipoint(pointsToCheck, LoadedShapefile.SpatialReference);
-        queryParameters.Geometry = pointsMultipoint;
-        queryParameters.SpatialRelationship = SpatialRelationship.Intersects;
-        queryParameters.ReturnGeometry = false;
-
-        var queryResult = await LoadedShapefile.QueryFeaturesAsync(queryParameters);
-        if (queryResult.Count() != pointsToCheck.Count())
-        {
-            Warning = UIResources.AreaMap_ItemsOutsideDedicatedArea;
-            IsWarningVisible = true;
-        }*/
+        return Interviews.Where(i => i.Assignment == assignment.Id).ToList();
     }
-    
+
     protected override async Task SetViewToValues()
     {
         Envelope graphicExtent = null;
