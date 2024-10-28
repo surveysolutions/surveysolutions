@@ -186,7 +186,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             await this.UpdateValidStateAsync();
         }
 
-        public virtual async Task MarkAnswerAsNotSavedWithMessage(string errorMessageText, string notAcceptedValue = null)
+        public virtual async Task MarkAnswerAsNotSavedWithMessage(string errorMessageText, string notAcceptedValue)
         {
             this.exceptionErrorMessageFromViewModel = errorMessageText;
             this.notAcceptedAnswerValue = notAcceptedValue;
@@ -194,6 +194,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             await this.UpdateValidStateAsync();
         }
 
+        public virtual async Task MarkAnswerAsNotSavedWithMessage(string errorMessageText)
+        {
+            this.exceptionErrorMessageFromViewModel = errorMessageText;
+            this.notAcceptedAnswerValue = null;
+
+            await this.UpdateValidStateAsync();
+        }
+        
         public void Dispose()
         {
             this.liteEventRegistry.Unsubscribe(this);
