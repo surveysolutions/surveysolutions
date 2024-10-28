@@ -58,6 +58,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
         private string exceptionErrorMessageFromViewModel;
+        private string notAcceptedAnswerValue = null;
 
         private bool isInvalid;
         private NavigationState navigationState;
@@ -90,6 +91,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 else if (wasError)
                 {
                     this.Error.Caption = UIResources.Validity_NotAnswered_InterviewException_ErrorCaption;
+                    if(notAcceptedAnswerValue != null)
+                        this.Error.Caption = this.Error.Caption + ": \"" + notAcceptedAnswerValue + "\"";
+                    
                     this.Error.ChangeValidationErrors(this.exceptionErrorMessageFromViewModel.ToEnumerable(), this.interviewId, this.Identity, this.navigationState);
                 }
 
@@ -178,12 +182,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public virtual async Task ExecutedWithoutExceptions()
         {
             this.exceptionErrorMessageFromViewModel = null;
+            this.notAcceptedAnswerValue = null;
             await this.UpdateValidStateAsync();
         }
 
-        public virtual async Task MarkAnswerAsNotSavedWithMessage(string errorMessageText)
+        public virtual async Task MarkAnswerAsNotSavedWithMessage(string errorMessageText, string notAcceptedValue = null)
         {
             this.exceptionErrorMessageFromViewModel = errorMessageText;
+            this.notAcceptedAnswerValue = notAcceptedValue;
 
             await this.UpdateValidStateAsync();
         }
