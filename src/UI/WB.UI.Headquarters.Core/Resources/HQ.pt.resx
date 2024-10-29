@@ -117,28 +117,40 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+    <data name="UserWasCreatedFormat" xml:space="preserve">
+    <value>Usuário da Sede {0} foi criado com sucesso.</value>
+  </data>
+  <data name="UserNotExists" xml:space="preserve">
+    <value>Não foi possível atualizar as informações do usuário porque o usuário não existe</value>
+  </data>
+  <data name="SupervisorNotFound" xml:space="preserve">
+    <value>Não foi possível criar o entrevistador. O supervisor selecionado não existe, está bloqueado ou arquivado</value>
+  </data>
+  <data name="NoPermission" xml:space="preserve">
+    <value>Não foi possível atualizar as informações do usuário porque você não tem permissão para realizar esta operação.</value>
+  </data>
+  <data name="UserWasUpdatedFormat" xml:space="preserve">
+    <value>Informações sobre &lt;b&gt;{0}&lt;/b&gt; atualizadas com sucesso</value>
+  </data>
+  <data name="InterviewWasCreated" xml:space="preserve">
+    <value>Entrevista foi criada com sucesso.</value>
+  </data>
   <data name="CreateOneMore" xml:space="preserve">
     <value>Criar mais um?</value>
   </data>
-  <data name="InterviewWasCreated" xml:space="preserve">
-    <value>Entrevista foi criada com êxito.</value>
-  </data>
-  <data name="NoPermission" xml:space="preserve">
-    <value>Não foi possível atualizar informações de usuário porque você não tem permissão para executar esta operação.</value>
-  </data>
-  <data name="QuestionnaireClonedAndRenamedFormat" xml:space="preserve">
-    <value>Questionário '{0}' foi clonado com sucesso com um novo título '{1}'.</value>
+  <data name="QuestionnaireNotFoundFormat" xml:space="preserve">
+    <value>Questionário com id {0} e versão {1} não pode ser encontrado.</value>
   </data>
   <data name="QuestionnaireClonedFormat" xml:space="preserve">
-    <value>Questionário '{0}' foi clonado com sucesso.</value>
+    <value>Questionário '{0}' foi copiado com sucesso.</value>
   </data>
-  <data name="QuestionnaireNotFoundFormat" xml:space="preserve">
-    <value>Questionário com id {0} e versão {1} Não foi encontrado.</value>
+  <data name="QuestionnaireClonedAndRenamedFormat" xml:space="preserve">
+    <value>Questionário '{0}' foi copiado com sucesso com um novo título '{1}'.</value>
   </data>
-  <data name="UserNotExists" xml:space="preserve">
-    <value>Não foi possível atualizar informações do usuário porque o usuário não existir</value>
+  <data name="ObserverCreatedFormat" xml:space="preserve">
+    <value>Usuário observador &lt;b&gt;{0}&lt;/b&gt; foi criado com sucesso.</value>
   </data>
-  <data name="UserWasUpdatedFormat" xml:space="preserve">
-    <value>Informações sobre &lt;b&gt;{0}&lt;/b&gt; atualizado com sucesso</value>
+  <data name="SuccessfullyCreatedFormat" xml:space="preserve">
+    <value>Supervisor &lt;b&gt;{0}&lt;/b&gt; foi criado com sucesso.</value>
   </data>
 </root>

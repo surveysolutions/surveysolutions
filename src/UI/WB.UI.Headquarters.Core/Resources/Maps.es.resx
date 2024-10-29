@@ -144,28 +144,52 @@
   <data name="UpdateDate" xml:space="preserve">
     <value>Importado en</value>
   </data>
+  <data name="UploadMapsSummaryFormat" xml:space="preserve">
+    <value>{0} mapas se procesaron con {1} archivos de mapas no válidos</value>
+  </data>
+  <data name="MapEngineIsNotInitialized" xml:space="preserve">
+    <value>El componente de mapas no se inicializó. Por favor, contacte al administrador del sistema.</value>
+  </data>
+  <data name="UploadMappingsSummaryFormat" xml:space="preserve">
+    <value>los enlaces para {0} mapas se procesaron con {1} inválidos</value>
+  </data>
   <data name="FileLoadingNotTsvError" xml:space="preserve">
     <value>Se produjo un error. El archivo no es una pestaña.</value>
   </data>
-  <data name="MapEngineIsNotInitialized" xml:space="preserve">
-    <value>Maps component was not initialized. Please contact system administrator.</value>
+  <data name="MappingsLoadingError" xml:space="preserve">
+    <value>Se produjo un error al cargar los enlaces del mapa.</value>
   </data>
-  <data name="MapLoadingInvalidFile" xml:space="preserve">
-    <value>El archivo '{0}' contiene datos que el sistema no puede procesar. Error: {1}</value>
+  <data name="MapOverlapsWith" xml:space="preserve">
+    <value>Se superpone con:</value>
+  </data>
+  <data name="MapOverlapsWithOther" xml:space="preserve">
+    <value>y {0} otro(s).</value>
   </data>
   <data name="MapLoadingNoMapsInArchive" xml:space="preserve">
     <value>Se produjo un error. El archivo no contiene archivos de mapas</value>
   </data>
   <data name="MapLoadingUnsupportedFilesInArchive" xml:space="preserve">
-    <value>Se produjo un error. El archivo no contiene archivos de mapas</value>
+    <value>Se produjo un error. El archivo contiene archivos no cartográficos</value>
   </data>
-  <data name="MappingsLoadingError" xml:space="preserve">
-    <value>Se produjo un error al cargar los enlaces del mapa.</value>
+  <data name="MapLoadingInvalidFile" xml:space="preserve">
+    <value>El archivo '{0}' contiene datos que el sistema no puede procesar. Error: {1}</value>
   </data>
-  <data name="UploadMappingsSummaryFormat" xml:space="preserve">
-    <value>los enlaces para {0} mapas se procesaron con {1} inválidos</value>
+  <data name="ShpIsMissingInArchive" xml:space="preserve">
+    <value>El archivo {0}.shp falta para {0}</value>
   </data>
-  <data name="UploadMapsSummaryFormat" xml:space="preserve">
-    <value>{0} mapas se procesaron con {1} archivos de mapas no válidos</value>
+  <data name="ShxIsMissingInArchive" xml:space="preserve">
+    <value>El archivo {0}.shx falta para {0}.shp</value>
+  </data>
+  <data name="DbfIsMissingInArchive" xml:space="preserve">
+    <value>El archivo {0}.dbf falta para {0}.shp</value>
+  </data>
+  <data name="MapFileSizeLimit" xml:space="preserve">
+    <value>El tamaño del archivo {0} es mayor que el límite aplicable {1}</value>
+  </data>
+  <data name="MapFileNameHasNonUtf8Chars" xml:space="preserve">
+    <value>El nombre del archivo {0} incluye caracteres no UTF-8.</value>
+  </data>
+  <data name="MapFileNameHasInvalidChars" xml:space="preserve">
+    <value>El nombre del archivo {0} incluye caracteres no válidos.</value>
   </data>
 </root>

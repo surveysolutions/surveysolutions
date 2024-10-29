@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -117,100 +117,79 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-    <data name="WaitForHealthcheck" xml:space="preserve">
-    <value>Esperando los resultados de la verificación de estado</value>
+  <data name="Levels" xml:space="preserve">
+    <value>Níveis</value>
   </data>
-  <data name="HealthCheckStatus" xml:space="preserve">
-    <value>Estado de salud: {{status}}</value>
+  <data name="MapLoadingInvalidFilesError" xml:space="preserve">
+    <value>Ocorreu um erro. Os seguintes arquivos foram ignorados:</value>
   </data>
-  <data name="ServerMetrics" xml:space="preserve">
-    <value>Métricas del servidor</value>
+  <data name="MapLoadingNotZipError" xml:space="preserve">
+    <value>Ocorreu um erro. O arquivo não é um arquivo .zip</value>
   </data>
-  <data name="WaitingForMetrics" xml:space="preserve">
-    <value>Calculando métricas</value>
+  <data name="MapsLoadingError" xml:space="preserve">
+    <value>Ocorreu um erro ao carregar o mapa.</value>
   </data>
-  <data name="hq_baseurl_check" xml:space="preserve">
-    <value>Comprobación de la configuración de BaseUrl</value>
+  <data name="MaxScale" xml:space="preserve">
+    <value>Escala Máxima</value>
   </data>
-  <data name="export_service_check" xml:space="preserve">
-    <value>Verificación del servicio de exportación</value>
+  <data name="MinScale" xml:space="preserve">
+    <value>Escala Mínima</value>
   </data>
-  <data name="export_service_connectivity_check" xml:space="preserve">
-    <value>Verificación de conectividad del servicio de exportación</value>
+  <data name="Name" xml:space="preserve">
+    <value>Nome</value>
   </data>
-  <data name="broken_packages_check" xml:space="preserve">
-    <value>Comprobación de paquetes rotos</value>
+  <data name="Size" xml:space="preserve">
+    <value>Tamanho (MB)</value>
   </data>
-  <data name="database_connection_check" xml:space="preserve">
-    <value>Comprobación de la conexión de la base de datos</value>
+  <data name="UpdateDate" xml:space="preserve">
+    <value>Importado em</value>
   </data>
-  <data name="designer_check" xml:space="preserve">
-    <value>Comprobación de la conexión al Designer</value>
+  <data name="UploadMapsSummaryFormat" xml:space="preserve">
+    <value>{0} mapas foram processados com {1} arquivos de mapa inválidos</value>
   </data>
-  <data name="temp_folder_permissions" xml:space="preserve">
-    <value>Comprobación de permisos de la carpeta temporal</value>
+  <data name="MapEngineIsNotInitialized" xml:space="preserve">
+    <value>O componente de mapas não foi inicializado. Por favor, contate o administrador do sistema.</value>
   </data>
-  <data name="temp_folder_permissions_Healthy" xml:space="preserve">
-    <value>Acceso exitoso a la carpeta temporal</value>
+  <data name="UploadMappingsSummaryFormat" xml:space="preserve">
+    <value>links para {0} mapas foram processados com {1} inválidos</value>
   </data>
-  <data name="temp_folder_permissions_Unhealty_without_permissions" xml:space="preserve">
-    <value>La aplicación no puede escribir archivos temporales en: {0}</value>
+  <data name="FileLoadingNotTsvError" xml:space="preserve">
+    <value>Ocorreu um erro. O arquivo não é um .tab</value>
   </data>
-  <data name="temp_folder_permissions_Unhealty_can_not_check" xml:space="preserve">
-    <value>No se pueden verificar los permisos de la carpeta temporal {0}. Error: {1}</value>
+  <data name="MappingsLoadingError" xml:space="preserve">
+    <value>Ocorreu um erro ao carregar os links do mapa.</value>
   </data>
-  <data name="temp_folder_permissions_Degraded_without_permissions" xml:space="preserve">
-    <value>La aplicación no tiene privilegios para verificar los permisos de la carpeta temporal {0}</value>
+  <data name="MapOverlapsWith" xml:space="preserve">
+    <value>Sobrepõe-se com:</value>
   </data>
-  <data name="temp_folder_permissions_Windows_check" xml:space="preserve">
-    <value>El sistema no es Windows</value>
+  <data name="MapOverlapsWithOther" xml:space="preserve">
+    <value>e {0} outro(s).</value>
   </data>
-  <data name="UnexpectedBrokenPackages" xml:space="preserve">
-    <value>Se han detectado {0} paquetes rotos inesperados.</value>
+  <data name="MapLoadingNoMapsInArchive" xml:space="preserve">
+    <value>Ocorreu um erro. O arquivo não contém arquivos de mapa</value>
   </data>
-  <data name="database_connection_check_Healthy" xml:space="preserve">
-    <value>Conexión exitosa a la base de datos</value>
+  <data name="MapLoadingUnsupportedFilesInArchive" xml:space="preserve">
+    <value>Ocorreu um erro. O arquivo contém arquivos que não são de mapa</value>
   </data>
-  <data name="database_connection_check_Unhealty" xml:space="preserve">
-    <value>Error de conexión con la base de datos: {0}</value>
+  <data name="MapLoadingInvalidFile" xml:space="preserve">
+    <value>O arquivo '{0}' contém dados que o sistema não pode processar. Erro: {1}</value>
   </data>
-  <data name="export_service_connectivity_check_Healthy" xml:space="preserve">
-    <value>El servicio de exportación en {0} respondió con estado {1}</value>
+  <data name="ShpIsMissingInArchive" xml:space="preserve">
+    <value>O arquivo {0}.shp está faltando para {0}</value>
   </data>
-  <data name="export_service_connectivity_check_Degraded" xml:space="preserve">
-    <value>Sin conexión con el servicio de exportación en {0}</value>
+  <data name="ShxIsMissingInArchive" xml:space="preserve">
+    <value>O arquivo {0}.shx está faltando para {0}.shp</value>
   </data>
-  <data name="designer_connectivity_check_Degraded" xml:space="preserve">
-    <value>Sin conexión con el Designer en {0}</value>
+  <data name="DbfIsMissingInArchive" xml:space="preserve">
+    <value>O arquivo {0}.dbf está faltando para {0}.shp</value>
   </data>
-  <data name="export_service_connectivity_check_Unhealthy" xml:space="preserve">
-    <value>El servicio de exportación en {0} respondió con estado {1}</value>
+  <data name="MapFileSizeLimit" xml:space="preserve">
+    <value>O tamanho do arquivo {0} é maior que o limite aplicável {1}</value>
+  </data>  
+  <data name="MapFileNameHasNonUtf8Chars" xml:space="preserve">
+    <value>O nome do arquivo {0} inclui caracteres não UTF-8.</value>
   </data>
-  <data name="export_service_check_Healthy" xml:space="preserve">
-    <value>El servicio de exportación en {0} respondió con la versión: v{1}</value>
-  </data>
-  <data name="designer_service_check_Healthy" xml:space="preserve">
-    <value>El Designer en {0} respondió con la versión: v{1}</value>
-  </data>    
-  <data name="hq_baseurl_check_Healthy" xml:space="preserve">
-    <value>La sede configurada con Headquarters:BaseUrl: {0} es la misma que la URL actual en la barra de direcciones del navegador.</value>
-  </data>
-  <data name="hq_baseurl_check_Degraded" xml:space="preserve">
-    <value>La sede configurada con Headquarters:BaseUrl: {0} es diferente de la URL actual en la barra de direcciones del navegador. Esto puede causar problemas con los enlaces de correo electrónico y la funcionalidad del servicio de exportación.</value>
-  </data>
-  <data name="embedded_export_service_check" xml:space="preserve">
-    <value>Anfitrión de servicio de exportación integrado</value>
-  </data>
-  <data name="embedded_export_service_check_Healty" xml:space="preserve">
-    <value>El servicio de exportación se está ejecutando</value>
-  </data>
-  <data name="embedded_export_service_check_Degraded" xml:space="preserve">
-    <value>El servicio de exportación no se está ejecutando</value>
-  </data>
-  <data name="Connectivity" xml:space="preserve">
-    <value>Conectividad de WebSocket</value>
-  </data>
-  <data name="ServerStatuses" xml:space="preserve">
-    <value>Estados de respuesta</value>
+  <data name="MapFileNameHasInvalidChars" xml:space="preserve">
+    <value>O nome do arquivo {0} inclui caracteres inválidos.</value>
   </data>
 </root>

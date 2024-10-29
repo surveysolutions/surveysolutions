@@ -120,10 +120,22 @@
   <data name="Empty" xml:space="preserve">
     <value>Le journal est vide</value>
   </data>
+  <data name="EventType" xml:space="preserve">
+    <value>Type d'événement</value>
+  </data>
+  <data name="Log" xml:space="preserve">
+    <value>Journal</value>
+  </data>
+  <data name="LogDate" xml:space="preserve">
+    <value>Date du journal</value>
+  </data>
   <data name="PageTitle" xml:space="preserve">
     <value>Journal d'audit</value>
   </data>
   <data name="ServerFilePath" xml:space="preserve">
     <value>Emplacement du fichier sur le serveur:</value>
+  </data>
+  <data name="User" xml:space="preserve">
+    <value>Utilisateur</value>
   </data>
 </root>

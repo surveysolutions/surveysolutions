@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -117,100 +117,100 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-    <data name="WaitForHealthcheck" xml:space="preserve">
-    <value>Esperando los resultados de la verificación de estado</value>
+  <data name="WaitForHealthcheck" xml:space="preserve">
+    <value>En attente des résultats du contrôle de santé</value>
   </data>
   <data name="HealthCheckStatus" xml:space="preserve">
-    <value>Estado de salud: {{status}}</value>
+    <value>Statut de santé : {{status}}</value>
   </data>
   <data name="ServerMetrics" xml:space="preserve">
-    <value>Métricas del servidor</value>
+    <value>Métriques du serveur</value>
   </data>
   <data name="WaitingForMetrics" xml:space="preserve">
-    <value>Calculando métricas</value>
+    <value>Calcul des métriques</value>
   </data>
   <data name="hq_baseurl_check" xml:space="preserve">
-    <value>Comprobación de la configuración de BaseUrl</value>
+    <value>Vérification de la configuration de BaseUrl</value>
   </data>
   <data name="export_service_check" xml:space="preserve">
-    <value>Verificación del servicio de exportación</value>
+    <value>Vérification du service d'exportation</value>
   </data>
   <data name="export_service_connectivity_check" xml:space="preserve">
-    <value>Verificación de conectividad del servicio de exportación</value>
+    <value>Vérification de la connectivité du service d'exportation</value>
   </data>
   <data name="broken_packages_check" xml:space="preserve">
-    <value>Comprobación de paquetes rotos</value>
+    <value>Vérification des paquets cassés</value>
   </data>
   <data name="database_connection_check" xml:space="preserve">
-    <value>Comprobación de la conexión de la base de datos</value>
+    <value>Vérification de la connexion à la base de données</value>
   </data>
   <data name="designer_check" xml:space="preserve">
-    <value>Comprobación de la conexión al Designer</value>
+    <value>Vérification de la connexion au Designer</value>
   </data>
   <data name="temp_folder_permissions" xml:space="preserve">
-    <value>Comprobación de permisos de la carpeta temporal</value>
+    <value>Vérification des permissions du dossier temporaire</value>
   </data>
   <data name="temp_folder_permissions_Healthy" xml:space="preserve">
-    <value>Acceso exitoso a la carpeta temporal</value>
+    <value>Accès réussi au dossier temporaire</value>
   </data>
   <data name="temp_folder_permissions_Unhealty_without_permissions" xml:space="preserve">
-    <value>La aplicación no puede escribir archivos temporales en: {0}</value>
+    <value>L'application ne peut pas écrire de fichiers temporaires dans : {0}</value>
   </data>
   <data name="temp_folder_permissions_Unhealty_can_not_check" xml:space="preserve">
-    <value>No se pueden verificar los permisos de la carpeta temporal {0}. Error: {1}</value>
+    <value>Impossible de vérifier les permissions du dossier temporaire {0}. Erreur : {1}</value>
   </data>
   <data name="temp_folder_permissions_Degraded_without_permissions" xml:space="preserve">
-    <value>La aplicación no tiene privilegios para verificar los permisos de la carpeta temporal {0}</value>
+    <value>L'application n'a pas le privilège de vérifier les permissions du dossier temporaire {0}</value>
   </data>
   <data name="temp_folder_permissions_Windows_check" xml:space="preserve">
-    <value>El sistema no es Windows</value>
+    <value>Le système n'est pas Windows</value>
   </data>
   <data name="UnexpectedBrokenPackages" xml:space="preserve">
-    <value>Se han detectado {0} paquetes rotos inesperados.</value>
+    <value>Il y a {0} paquets cassés inattendus détectés</value>
   </data>
   <data name="database_connection_check_Healthy" xml:space="preserve">
-    <value>Conexión exitosa a la base de datos</value>
+    <value>Connexion réussie à la base de données</value>
   </data>
   <data name="database_connection_check_Unhealty" xml:space="preserve">
-    <value>Error de conexión con la base de datos: {0}</value>
+    <value>Erreur de connexion à la base de données : {0}</value>
   </data>
   <data name="export_service_connectivity_check_Healthy" xml:space="preserve">
-    <value>El servicio de exportación en {0} respondió con estado {1}</value>
+    <value>Le service d'exportation à {0} a répondu avec le statut {1}</value>
   </data>
   <data name="export_service_connectivity_check_Degraded" xml:space="preserve">
-    <value>Sin conexión con el servicio de exportación en {0}</value>
+    <value>Aucune connexion au service d'exportation à {0}</value>
   </data>
   <data name="designer_connectivity_check_Degraded" xml:space="preserve">
-    <value>Sin conexión con el Designer en {0}</value>
+    <value>Aucune connexion au Designer à {0}</value>
   </data>
   <data name="export_service_connectivity_check_Unhealthy" xml:space="preserve">
-    <value>El servicio de exportación en {0} respondió con estado {1}</value>
+    <value>Le service d'exportation à {0} a répondu avec le statut {1}</value>
   </data>
   <data name="export_service_check_Healthy" xml:space="preserve">
-    <value>El servicio de exportación en {0} respondió con la versión: v{1}</value>
+    <value>Le service d'exportation à {0} a répondu avec la version : v{1}</value>
   </data>
   <data name="designer_service_check_Healthy" xml:space="preserve">
-    <value>El Designer en {0} respondió con la versión: v{1}</value>
+    <value>Le Designer à {0} a répondu avec la version : v{1}</value>
   </data>    
   <data name="hq_baseurl_check_Healthy" xml:space="preserve">
-    <value>La sede configurada con Headquarters:BaseUrl: {0} es la misma que la URL actual en la barra de direcciones del navegador.</value>
+    <value>Le siège configuré avec Headquarters:BaseUrl: {0} est le même que l'URL actuelle dans la barre d'adresse du navigateur.</value>
   </data>
   <data name="hq_baseurl_check_Degraded" xml:space="preserve">
-    <value>La sede configurada con Headquarters:BaseUrl: {0} es diferente de la URL actual en la barra de direcciones del navegador. Esto puede causar problemas con los enlaces de correo electrónico y la funcionalidad del servicio de exportación.</value>
+    <value>Le siège configuré avec Headquarters:BaseUrl: {0} est différent de l'URL actuelle dans la barre d'adresse du navigateur. Cela peut causer des problèmes avec les liens de courriel et la fonctionnalité du service d'exportation</value>
   </data>
   <data name="embedded_export_service_check" xml:space="preserve">
-    <value>Anfitrión de servicio de exportación integrado</value>
+    <value>Hôte du service d'exportation intégré</value>
   </data>
   <data name="embedded_export_service_check_Healty" xml:space="preserve">
-    <value>El servicio de exportación se está ejecutando</value>
+    <value>Le service d'exportation est en cours d'exécution</value>
   </data>
   <data name="embedded_export_service_check_Degraded" xml:space="preserve">
-    <value>El servicio de exportación no se está ejecutando</value>
+    <value>Le service d'exportation n'est pas en cours d'exécution</value>
   </data>
   <data name="Connectivity" xml:space="preserve">
-    <value>Conectividad de WebSocket</value>
+    <value>Connectivité WebSocket</value>
   </data>
   <data name="ServerStatuses" xml:space="preserve">
-    <value>Estados de respuesta</value>
+    <value>Statuts de réponse</value>
   </data>
 </root>

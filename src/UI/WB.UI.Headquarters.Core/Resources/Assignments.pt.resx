@@ -117,7 +117,424 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Active" xml:space="preserve">
+    <value>Ativo</value>
+  </data>
+  <data name="Archive" xml:space="preserve">
+    <value>Arquivar</value>
+  </data>
+  <data name="Archived" xml:space="preserve">
+    <value>Arquivado</value>
+  </data>
+  <data name="AssignmentsHeader" xml:space="preserve">
+    <value>Atribuições</value>
+  </data>
+  <data name="AssignmentsSelected" xml:space="preserve">
+    <value>{{count}} Atribuição selecionada</value>
+  </data>
+  <data name="AssignmentsSelected_other" xml:space="preserve">
+    <value>{{count}} Atribuições selecionadas</value>
+  </data>
+  <data name="ExpectedExplanation" xml:space="preserve">
+    <value>Especifique o número máximo de entrevistas a serem geradas para essa atribuição. Valores permitidos: -1 é para atribuição ilimitada, 0 é para atribuição vazia, números para valor esperado da atribuição</value>
+  </data>
+  <data name="ChangeExpectedModalTitle" xml:space="preserve">
+    <value>Editar valor esperado para a atribuição {{assignmentId}}</value>
+  </data>
+  <data name="ChangeModeModalTitle" xml:space="preserve">
+    <value>Alterar modo para a atribuição {{assignmentId}}</value>
+  </data>
+  <data name="ModeExplanation" xml:space="preserve">
+    <value>O modo CAWI permite coletar dados diretamente dos respondentes</value>
+  </data>
+  <data name="CreatedAt" xml:space="preserve">
+    <value>Criado em</value>
+  </data>
+  <data name="IdentifyingQuestions" xml:space="preserve">
+    <value>Perguntas de Identificação</value>
+  </data>
+  <data name="Count" xml:space="preserve">
+    <value>Coletado</value>
+  </data>
+  <data name="NumberOfAssignmentsAffected" xml:space="preserve">
+    <value>{{count}} Atribuição será alterada</value>
+  </data>
+  <data name="NumberOfAssignmentsAffected_other" xml:space="preserve">
+    <value>{{count}} Atribuições serão alteradas</value>
+  </data>
+  <data name="Expected" xml:space="preserve">
+    <value>Esperado</value>
+  </data>
+  <data name="SelectResponsible" xml:space="preserve">
+    <value>Selecionar responsável</value>
+  </data>
+  <data name="ResponsibleRequired" xml:space="preserve">
+    <value>Responsável é obrigatório</value>
+  </data>
+  <data name="WebModeNonInterviewer" xml:space="preserve">
+    <value>Todas as atribuições para entrevistas web devem ser feitas para um entrevistador</value>
+  </data>
+  <data name="WebModeReassignToNonInterviewer" xml:space="preserve">
+    <value>Você está reatribuindo uma atribuição web para um usuário que não é um ENTREVISTADOR. Se você já enviou o link para esta atribuição, os respondentes não poderão responder à sua pesquisa até que a atribuição seja devolvida a um usuário com o papel de ENTREVISTADOR.</value>
+  </data>
+  <data name="WebModeReassignToNonInterviewer_other" xml:space="preserve">
+    <value>Você está reatribuindo atribuições web para um usuário que não é um ENTREVISTADOR. Se você já enviou os links para essas atribuições, os respondentes não poderão responder à sua pesquisa até que as atribuições sejam devolvidas a um usuário com o papel de ENTREVISTADOR.</value>
+  </data>
+  <data name="ShowArchived" xml:space="preserve">
+    <value>Status arquivado</value>
+  </data>
+  <data name="Unarchive" xml:space="preserve">
+    <value>Desarquivar</value>
+  </data>
+  <data name="Unlimited" xml:space="preserve">
+    <value>Ilimitado</value>
+  </data>
+  <data name="InterviewsNeeded" xml:space="preserve">
+    <value>Entrevistas necessárias</value>
+  </data>
+  <data name="CreateInterview" xml:space="preserve">
+    <value>Iniciar nova entrevista</value>
+  </data>
+  <data name="UpdatedAt" xml:space="preserve">
+    <value>Atualizado em</value>
+  </data>
+  <data name="CreateAssignment_AnswersInstruction" xml:space="preserve">
+    <value>Preencha todos ou alguns dos campos de identificação</value>
+  </data>
+  <data name="CreateAssignment_ResponsibleInstruction" xml:space="preserve">
+    <value>Selecione o responsável (Sede, Supervisor ou Entrevistador) para esta atribuição</value>
+  </data>
   <data name="Questionnaire" xml:space="preserve">
     <value>Questionário</value>
+  </data>
+  <data name="AllAssignments" xml:space="preserve">
+    <value>Todas as atribuições</value>
+  </data>
+  <data name="Tooltip_Filter_ArchivedStatus" xml:space="preserve">
+    <value>Indicador de se a atribuição está ativa ou foi arquivada.</value>
+  </data>
+  <data name="Tooltip_Filter_Questionnaire" xml:space="preserve">
+    <value>Selecione um questionário para ver suas atribuições associadas. Selecione “Todos os questionários” para ver atribuições associadas a qualquer questionário.</value>
+  </data>
+  <data name="Tooltip_Filter_Responsible" xml:space="preserve">
+    <value>Usuário responsável. Clique no campo para escolher um nome de usuário, selecionando-o diretamente ou digitando para filtrar ainda mais a lista de nomes de usuários.</value>
+  </data>
+  <data name="Tooltip_Table_Count" xml:space="preserve">
+    <value>Número de entrevistas atualmente enviadas para esta atribuição. Mais entrevistas podem ter sido criadas, mas não sincronizadas. Clique em qualquer célula para visualizar as entrevistas associadas. Clique no ícone de classificação para classificar por contagem.</value>
+  </data>
+  <data name="Tooltip_Table_CreatedAt" xml:space="preserve">
+    <value>Quando a atribuição foi inicialmente criada. Clique no ícone de classificação para classificar por tempo.</value>
+  </data>
+  <data name="Tooltip_Table_IdentifyingQuestions" xml:space="preserve">
+    <value>Informações que identificam cada atribuição. Estas são as respostas às perguntas marcadas como identificadoras no Designer.</value>
+  </data>
+  <data name="Tooltip_Table_InterviewsNeeded" xml:space="preserve">
+    <value>Número de entrevistas necessárias para concluir esta atribuição.</value>
+  </data>
+  <data name="Tooltip_Table_Responsible" xml:space="preserve">
+    <value>Usuário atualmente responsável pela atribuição. Clique no ícone de classificação para classificar o nome do usuário.</value>
+  </data>
+  <data name="Tooltip_Table_ExpectedValue" xml:space="preserve">
+    <value>Número máximo de entrevistas que podem ser realizadas para esta atribuição. Clique em qualquer célula para alterar esse número. Clique no ícone de classificação para classificar por valor esperado.</value>
+  </data>
+  <data name="Tooltip_Table_UpdatedAt" xml:space="preserve">
+    <value>Quando a atribuição foi atualizada pela última vez. Clique no ícone de classificação para classificar por tempo.</value>
+  </data>
+  <data name="Tooltip_Table_ReceivedByTablet" xml:space="preserve">
+    <value>Indicador de se a atribuição foi baixada no tablet. Clique no ícone de classificação para classificar por tempo de recebimento.</value>
+  </data>
+  <data name="InvalidExpected" xml:space="preserve">
+    <value>O campo Esperado deve ser -1 ou mais.</value>
+  </data>
+  <data name="AssignmentExpectedInWebMode" xml:space="preserve">
+    <value>O valor esperado não pode ser alterado para a atribuição no modo Web.</value>
+  </data>
+  <data name="SelectQuestionnaire" xml:space="preserve">
+    <value>Selecione um questionário existente para atualizar as atribuições</value>
+  </data>
+  <data name="UpgradeDescription" xml:space="preserve">
+    <value>Quando as atribuições são atualizadas, todas as atribuições pendentes serão atualizadas.</value>
+  </data>
+  <data name="SelectQuestionnaireToUpgradeFrom" xml:space="preserve">
+    <value>Selecione o questionário para atualizar</value>
+  </data>
+  <data name="UpgradeBtn" xml:space="preserve">
+    <value>Atualizar</value>
+  </data>
+  <data name="UpgradeProgressTitle" xml:space="preserve">
+    <value>Atualizando atribuições de {{from}} para {{to}}</value>
+  </data>
+  <data name="UpgradeProgressNumbers" xml:space="preserve">
+    <value>Atualizando {{processed}} de {{totalCount}}</value>
+  </data>
+  <data name="UpgradeProgressErrors" xml:space="preserve">
+    <value>Com erros {{errorCount}}</value>
+  </data>
+  <data name="Stop" xml:space="preserve">
+    <value>Parar</value>
+  </data>
+  <data name="UpgradePreparation" xml:space="preserve">
+    <value>Aguardando outras atualizações terminarem</value>
+  </data>
+  <data name="UpgradeCancelled" xml:space="preserve">
+    <value>Atualização parada</value>
+  </data>
+  <data name="UpgradeError" xml:space="preserve">
+    <value>Ocorreu um erro. Tente novamente mais tarde.</value>
+  </data>
+  <data name="UpgradeProgressDone" xml:space="preserve">
+    <value>Concluído</value>
+  </data>
+  <data name="UpgradeProgressDoneCount" xml:space="preserve">
+    <value>Atualizado com sucesso: {{processed}}</value>
+  </data>
+  <data name="UpgradeProgressErrorCount" xml:space="preserve">
+    <value>Não atualizado: {{count}}</value>
+  </data>
+  <data name="UpgradeDownloadFailed" xml:space="preserve">
+    <value>Baixar lista</value>
+  </data>
+  <data name="UpgradeProgressDoneTitle" xml:space="preserve">
+    <value>A atualização de {{from}} para {{to}} está concluída</value>
+  </data>
+  <data name="ReceivedByTablet_All" xml:space="preserve">
+    <value>Mostrar tudo</value>
+  </data>
+  <data name="ReceivedByTablet_Received" xml:space="preserve">
+    <value>Recebido pelo tablet</value>
+  </data>
+  <data name="ReceivedByTablet_NotReceived" xml:space="preserve">
+    <value>Não recebido pelo tablet</value>
+  </data>
+  <data name="Tooltip_Filter_Received" xml:space="preserve">
+    <value>Indicador de se a atribuição foi recebida ou não</value>
+  </data>
+  <data name="ReceivedByTablet" xml:space="preserve">
+    <value>Recebido pelo tablet</value>
+  </data>
+  <data name="CreatingNewAssignment" xml:space="preserve">
+    <value>Criar nova atribuição para o questionário {{questionnaire}}</value>
+  </data>
+  <data name="AssignTo" xml:space="preserve">
+    <value>Atribuir a</value>
+  </data>
+  <data name="Tooltip_Filter_QuestionnaireVersion" xml:space="preserve">
+    <value>Selecione uma versão do questionário para ver suas atribuições associadas. Selecione “Todas as versões” para ver atribuições associadas a qualquer versão do questionário selecionado.</value>
+  </data>
+  <data name="ErrorToCreateAssignment" xml:space="preserve">
+    <value>A atribuição não pode ser criada.</value>
+  </data>
+  <data name="IsAudioRecordingEnabled" xml:space="preserve">
+    <value>Gravação de áudio</value>
+  </data>
+  <data name="Tooltip_Table_IsAudioRecordingEnabled" xml:space="preserve">
+    <value>Gravar processo de entrevista</value>
+  </data>
+  <data name="ChangeAudioRecordingModalTitle" xml:space="preserve">
+    <value>Configurações de gravação de áudio para a atribuição {{id}}</value>
+  </data>
+  <data name="AudioRecordingEnable" xml:space="preserve">
+    <value>Ativar gravação de áudio</value>
+  </data>
+  <data name="CawiModeEnable" xml:space="preserve">
+    <value>Ativar modo CAWI</value>
+  </data>
+  <data name="AudioRecordingExplanation" xml:space="preserve">
+    <value>O aplicativo do entrevistador gravará o áudio da entrevista quando a auditoria de áudio estiver ativada. Observe que a quantidade de dados de sincronização será significativamente maior.</value>
+  </data>
+  <data name="NewAssignment" xml:space="preserve">
+    <value>Nova Atribuição</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="EmailExplanation" xml:space="preserve">
+    <value>O email será usado na comunicação com o destinatário da atribuição</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Senha</value>
+  </data>
+  <data name="PasswordExplanation" xml:space="preserve">
+    <value>A senha será usada para proteger a atribuição</value>
+  </data>
+  <data name="WebMode" xml:space="preserve">
+    <value>Modo</value>
+  </data>
+  <data name="CreateAssignmentWebModeExplanation" xml:space="preserve">
+    <value>Esta atribuição será usada com o modo Web</value>
+  </data>
+  <data name="Activated" xml:space="preserve">
+    <value>Ativado</value>
+  </data>
+  <data name="CawiActivated" xml:space="preserve">
+    <value>CAWI Ativado</value>
+  </data>
+  <data name="Tooltip_Table_WebMode" xml:space="preserve">
+    <value>Modo de atribuição</value>
+  </data>
+  <data name="Tooltip_Table_Email" xml:space="preserve">
+    <value>Email para notificações</value>
+  </data>
+  <data name="Tooltip_Table_Password" xml:space="preserve">
+    <value>Senha para restringir o acesso</value>
+  </data>
+  <data name="PasswordInstructions" xml:space="preserve">
+    <value>Pelo menos 6 números e letras maiúsculas ou símbolo único '?' para gerar senha</value>
+  </data>
+  <data name="EnterPassword" xml:space="preserve">
+    <value>Digite a senha</value>
+  </data>
+  <data name="EnterEmail" xml:space="preserve">
+    <value>Digite o Email</value>
+  </data>
+  <data name="ExpectedInstructions" xml:space="preserve">
+    <value>Deve ser um número, -1 para ilimitado, 1 se o email for especificado</value>
+  </data>
+  <data name="InvalidEmail" xml:space="preserve">
+    <value>Email inválido</value>
+  </data>
+  <data name="InvalidPassword" xml:space="preserve">
+    <value>Senha inválida</value>
+  </data>
+  <data name="InvalidExpectedMessage" xml:space="preserve">
+    <value>Valor esperado é inválido</value>
+  </data>
+  <data name="InvalidExpectedWithEmail" xml:space="preserve">
+    <value>Para atribuições com email fornecido, o valor esperado permitido é 1</value>
+  </data>
+  <data name="ExpectedForWebMode" xml:space="preserve">
+    <value>Atribuição com valor esperado 1 para o modo web deve ter email ou senha fornecidos</value>
+  </data>
+  <data name="DuplicatePasswordByWebModeWithQuantity1" xml:space="preserve">
+    <value>A senha por atribuição para o modo web com quantidade 1 deve ser única</value>
+  </data>
+  <data name="QuestionnaireVersion" xml:space="preserve">
+    <value>ver. {{version}}</value>
+  </data>
+  <data name="AssignmentId" xml:space="preserve">
+    <value>ID da atribuição</value>
+  </data>
+  <data name="MultipleAssignmentsClose" xml:space="preserve">
+    <value>{{count}} atribuições selecionadas serão fechadas. O valor esperado será definido para o número de entrevistas atualmente coletadas.</value>
+  </data>
+    <data name="SingleAssignmentCloseConfirm" xml:space="preserve">
+    <value>O valor esperado da atribuição selecionada {{id}} será alterado de {{quantity}} para {{collected}} (número de entrevistas atualmente coletadas)</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Fechar</value>
+  </data>
+  <data name="AssignmentCloseWebMode" xml:space="preserve">
+    <value>Atribuição {{id}} não pode ser fechada, pois tem o modo web ativado</value>
+  </data>
+  <data name="AssignmentInfo" xml:space="preserve">
+    <value>Informações detalhadas da atribuição</value>
+  </data>
+  <data name="Action_Archived" xml:space="preserve">
+    <value>Arquivado</value>
+  </data>
+  <data name="DetailsComments" xml:space="preserve">
+    <value>Comentário</value>
+  </data>
+  <data name="Comments" xml:space="preserve">
+    <value>Comentário</value>
+  </data>
+  <data name="Action_AudioRecordingChanged" xml:space="preserve">
+    <value>Gravação de áudio alterada</value>
+  </data>
+  <data name="EnterComments" xml:space="preserve">
+    <value>Digite seu comentário aqui</value>
+  </data>
+  <data name="DateFromPast" xml:space="preserve">
+    <value>A data selecionada está no passado</value>
+  </data>
+  <data name="Action_Created" xml:space="preserve">
+    <value>Criado</value>
+  </data>
+  <data name="Action_Deleted" xml:space="preserve">
+    <value>Excluído</value>
+  </data>
+  <data name="Action_ExpectedValueChanged" xml:space="preserve">
+    <value>Valor esperado alterado</value>
+  </data>
+  <data name="Action_ReceivedByTablet" xml:space="preserve">
+    <value>Recebido pelo tablet</value>
+  </data>
+  <data name="Action_UnArchived" xml:space="preserve">
+    <value>Desarquivado</value>
+  </data>
+  <data name="Action_Reassigned" xml:space="preserve">
+    <value>Reatribuído</value>
+  </data>
+  <data name="Action_WebModeChanged" xml:space="preserve">
+    <value>Modo web alterado</value>
+  </data>
+  <data name="Action" xml:space="preserve">
+    <value>Ação</value>
+  </data>
+  <data name="Actor" xml:space="preserve">
+    <value>Por</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>Data</value>
+  </data>
+  <data name="Action_AudioRecordingChanged_False" xml:space="preserve">
+    <value>Gravação de áudio desativada</value>
+  </data>
+  <data name="Action_AudioRecordingChanged_True" xml:space="preserve">
+    <value>Gravação de áudio ativada</value>
+  </data>
+  <data name="Action_WebModeChanged_False" xml:space="preserve">
+    <value>Modo web desativado</value>
+  </data>
+  <data name="Action_WebModeChanged_True" xml:space="preserve">
+    <value>Modo web ativado</value>
+  </data>
+  <data name="Action_ExpectedValueChanged_To" xml:space="preserve">
+    <value>Valor esperado alterado para {{quantity}}</value>
+  </data>
+  <data name="Action_ExpectedValueChanged_To_Unlimited" xml:space="preserve">
+    <value>Valor esperado alterado para Ilimitado</value>
+  </data>
+  <data name="Action_Reassigned_To" xml:space="preserve">
+    <value>Reatribuído para {{newResponsible}}</value>
+  </data>
+  <data name="Action_Reassigned_To_Comment" xml:space="preserve">
+    <value>Comentário: {{comment}}</value>
+  </data>
+  <data name="AssignmentHistory" xml:space="preserve">
+    <value>Histórico</value>
+  </data>
+  <data name="Details_Column" xml:space="preserve">
+    <value>Detalhes</value>
+  </data>
+  <data name="Action_Created_Comment" xml:space="preserve">
+    <value>Comentário: {{comment}}</value>
+  </data>
+  <data name="Action_Created_Responsible" xml:space="preserve">
+    <value>Atribuído a {{responsible}}</value>
+  </data>
+  <data name="StartWebInterview" xml:space="preserve">
+    <value>Iniciar entrevista web</value>
+  </data>
+  <data name="WebModeEnabledWarning" xml:space="preserve">
+    <value>A atribuição não pode ser concluída. Está no modo web ativado, enquanto o questionário tem o modo de coleta web desativado</value>
+  </data>
+  <data name="NoComment" xml:space="preserve">
+    <value>(sem comentário)</value>
+  </data>
+  <data name="LinkToWebInterviewExample" xml:space="preserve">
+    <value>Exemplo de link para entrevista web</value>
+  </data>
+  <data name="Action_UpgradedFrom" xml:space="preserve">
+    <value>Atualizado da atribuição {{id}}</value>
+  </data>
+  <data name="Property" xml:space="preserve">
+    <value>Propriedade</value>
+  </data>
+  <data name="Value" xml:space="preserve">
+    <value>Valor</value>
+  </data>
+  <data name="MultipleAssignmentsClose" xml:space="preserve">
+    <value>{{count}} atribuições selecionadas serão fechadas. O valor esperado será definido para o número de entrevistas atualmente coletadas.</value>
   </data>
 </root>

@@ -117,10 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Actions" xml:space="preserve">
-    <value>Acciones</value>
-  </data>
-  <data name="AllData" xml:space="preserve">
+    <data name="AllData" xml:space="preserve">
     <value>Toda la información</value>
   </data>
   <data name="AllDataSpss" xml:space="preserve">
@@ -147,20 +144,8 @@
   <data name="CreationDate" xml:space="preserve">
     <value>Cuenta creada</value>
   </data>
-  <data name="DeleteMap" xml:space="preserve">
-    <value>Eliminar mapa</value>
-  </data>
-  <data name="DeleteMapUser" xml:space="preserve">
-    <value>Eliminar mapa de usuario</value>
-  </data>
-  <data name="DeleteQuestionnaire" xml:space="preserve">
-    <value>Eliminar cuestionario</value>
-  </data>
   <data name="History" xml:space="preserve">
     <value>Historial</value>
-  </data>
-  <data name="ImportDate" xml:space="preserve">
-    <value>Importado en</value>
   </data>
   <data name="ImportTemplate" xml:space="preserve">
     <value>Importar cuestionario</value>
@@ -168,17 +153,41 @@
   <data name="LastEntryDate" xml:space="preserve">
     <value>Modificado en</value>
   </data>
-  <data name="Maps" xml:space="preserve">
-    <value>Mapas</value>
-  </data>
   <data name="NewAssignment" xml:space="preserve">
     <value>Nueva asignación</value>
   </data>
-  <data name="Questionnaire" xml:space="preserve">
-    <value>Cuestionario</value>
-  </data>
   <data name="Questionnaires" xml:space="preserve">
     <value>Cuestionarios</value>
+  </data>
+  <data name="Maps" xml:space="preserve">
+    <value>Mapas</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Título</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>Versión</value>
+  </data>
+  <data name="MapDashboard" xml:space="preserve">
+    <value>Panel de mapas</value>
+  </data>
+  <data name="ImportDate" xml:space="preserve">
+    <value>Importado en</value>
+  </data>
+  <data name="Actions" xml:space="preserve">
+    <value>Acciones</value>
+  </data>
+  <data name="DeleteQuestionnaire" xml:space="preserve">
+    <value>Eliminar cuestionario</value>
+  </data>
+  <data name="ExportQuestionnaire" xml:space="preserve">
+    <value>Exportar cuestionario</value>
+  </data>
+  <data name="SaveQuestionnaire" xml:space="preserve">
+    <value>Guardar documento del cuestionario</value>
+  </data>
+  <data name="Questionnaire" xml:space="preserve">
+    <value>Cuestionario</value>
   </data>
   <data name="SurveySetupIntroMessage1" xml:space="preserve">
     <value>Haga clic en el botón "Importar cuestionario" para cargar un cuestionario del diseñador</value>
@@ -186,26 +195,45 @@
   <data name="SurveySetupIntroMessage2" xml:space="preserve">
     <value>Haga clic en un cuestionario de la lista para crear asignaciones de entrevistas</value>
   </data>
-  <data name="Title" xml:space="preserve">
-    <value>Title:</value>
-  </data>
-  <data name="UploadAssignments" xml:space="preserve">
-    <value>Cargar asignaciones</value>
-  </data>
-  <data name="Version" xml:space="preserve">
-    <value>Versión</value>
-  </data>
   <data name="WebInterviewSetup" xml:space="preserve">
     <value>Configuración de entrevista web</value>
   </data>
-  <data name="Details" xml:space="preserve">
-    <value>Detalles</value>
+  <data name="RecordAudio" xml:space="preserve">
+    <value>Grabar audio</value>
+  </data>
+  <data name="QuestionnairePreview" xml:space="preserve">
+    <value>Vista previa del cuestionario</value>
+  </data>    
+  <data name="UploadAssignments" xml:space="preserve">
+    <value>Cargar asignaciones</value>
+  </data>
+  <data name="DeleteMap" xml:space="preserve">
+    <value>Eliminar mapa</value>
+  </data>
+  <data name="DeleteMapUser" xml:space="preserve">
+    <value>Eliminar mapa de usuario</value>
+  </data>
+  <data name="UpgradeAssignments" xml:space="preserve">
+    <value>Actualizar asignaciones</value>
+  </data>
+  <data name="RecordAudioTitle" xml:space="preserve">
+    <value>La aplicación Interviewer grabará el audio de la entrevista cuando la auditoría de audio esté habilitada. Tenga en cuenta que la cantidad de datos de sincronización sería significativamente mayor.</value>
+  </data>
+  <data name="SendInvitations" xml:space="preserve">
+    <value>Enviar invitaciones</value>
   </data>
   <data name="DownloadLinks" xml:space="preserve">
     <value>Descargar enlaces web</value>
   </data>
-  <data name="ExportQuestionnaire" xml:space="preserve">
-    <value>Exportar cuestionario</value>
+  <data name="WebMode" xml:space="preserve">
+    <value>Modo</value>
+  </data>
+  <data name="Details" xml:space="preserve">
+    <value>Detalles</value>
+    <comment>Detalles del cuestionario</comment>
+  </data>
+  <data name="ShowOnDesigner" xml:space="preserve">
+    <value>Mostrar en Designer</value>
   </data>
   <data name="ImportedBy" xml:space="preserve">
     <value>Importado por</value>
@@ -216,25 +244,19 @@
   <data name="QuestionnaireDeleteWarn" xml:space="preserve">
     <value>{{receivedInterviews}} entrevistas y {{receivedAssignments}} asignaciones para nuevas entrevistas fueron recibidas por el entrevistador/supervisor quienes trabajan en modo offline. Después de confirmar la eliminación de la encuesta, el servidor ya no aceptará la información basada en estas entrevistas / asignaciones, y desaparecerán en la próxima sincronización sin posibilidad de recuperación, aun si éstas contienen información recién ingresada / editada. Es su responsabilidad advertir / notificar a los entrevistadores que dejen de completar esas entrevistas / asignaciones, ya que no serán notificados automáticamente. ¿Desea continuar?</value>
   </data>
-  <data name="RecordAudio" xml:space="preserve">
-    <value>Grabar audio</value>
-  </data>
-  <data name="RecordAudioTitle" xml:space="preserve">
-    <value>La aplicación Interviewer grabará el audio de la entrevista cuando la auditoría de audio esté habilitada. Tenga en cuenta que la cantidad de datos de sincronización sería significativamente mayor.</value>
-  </data>
-  <data name="SendInvitations" xml:space="preserve">
-    <value>Enviar invitaciones</value>
-  </data>
-  <data name="ShowOnDesigner" xml:space="preserve">
-    <value>Mostrar en Designer</value>
-  </data>
   <data name="TypeQuestionnaireName" xml:space="preserve">
     <value>Escriba "{{questionnaireTitle}}" para confirmar</value>
   </data>
-  <data name="UpgradeAssignments" xml:space="preserve">
-    <value>Actualizar asignaciones</value>
+  <data name="UsersManagement" xml:space="preserve">
+    <value>Gestión de usuarios</value>
   </data>
-  <data name="WebMode" xml:space="preserve">
-    <value>Modo</value>
+  <data name="CreateUser" xml:space="preserve">
+    <value>Crear usuario</value>
+  </data>
+  <data name="ExposedVariables" xml:space="preserve">
+    <value>Variables expuestas</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Editar</value>
   </data>
 </root>
