@@ -129,8 +129,8 @@ export default {
         return api.answer(identity, 'resolveComment')
     },
 
-    setAnswerAsNotSaved({ commit }, { id, message }) {
-        commit('SET_ANSWER_NOT_SAVED', { id, message })
+    setAnswerAsNotSaved({ commit }, { id, message, notSavedAnswerValue }) {
+        commit('SET_ANSWER_NOT_SAVED', { id, message, notSavedAnswerValue })
     },
 
     clearAnswerValidity({ commit }, { id }) {
