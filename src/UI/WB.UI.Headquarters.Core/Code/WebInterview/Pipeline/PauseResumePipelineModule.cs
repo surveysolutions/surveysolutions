@@ -29,7 +29,13 @@ namespace WB.UI.Headquarters.Code.WebInterview.Pipeline
         {
             var interviewId = hub.GetInterviewId();
             
-            if (authorizedUser.IsInterviewer)
+            if (!authorizedUser.IsAuthenticated)
+            {
+                var interview = statefulInterviewRepository.Get(interviewId.FormatGuid());
+                commandService.Execute(new ResumeInterviewCommand(interviewId, interview.CurrentResponsibleId,
+                    AgentDeviceType.Web));
+            }
+            else if (authorizedUser.IsInterviewer)
             {
                 commandService.Execute(new ResumeInterviewCommand(interviewId, this.authorizedUser.Id,
                     AgentDeviceType.Web));
@@ -39,12 +45,7 @@ namespace WB.UI.Headquarters.Code.WebInterview.Pipeline
                 commandService.Execute(new OpenInterviewBySupervisorCommand(interviewId, this.authorizedUser.Id,
                     AgentDeviceType.Web));
             }
-            else
-            {
-                var interview = statefulInterviewRepository.Get(interviewId.FormatGuid());
-                commandService.Execute(new ResumeInterviewCommand(interviewId, interview.CurrentResponsibleId,
-                    AgentDeviceType.Web));
-            }
+            //do nothing for other roles
 
             return Task.CompletedTask;
         }
