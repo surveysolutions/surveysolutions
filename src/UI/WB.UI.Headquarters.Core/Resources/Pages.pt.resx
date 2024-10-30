@@ -412,7 +412,7 @@
     <value>Entrevistador: {0}</value>
   </data>
   <data name="InterviewerProfile_AssignedToFormat" xml:space="preserve">
-    <value>{{entrevistador}} (supervisor: {{supervisor}})</value>
+    <value>{{interviewer}} (supervisor: {{supervisor}})</value>
   </data>
   <data name="InterviewerProfile_EmailFormat" xml:space="preserve">
     <value>E-mail: {{email}}</value>

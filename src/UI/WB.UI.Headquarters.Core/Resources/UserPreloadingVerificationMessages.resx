@@ -308,11 +308,9 @@
   </data>
   <data name="PLU0022" xml:space="preserve">
     <value>Workspace not found</value>
-
   </data>
   <data name="PLU0022Description" xml:space="preserve">
     <value>Workspace must exist and be enabled</value>
-
   </data>
   <data name="PLU0022Recomendation" xml:space="preserve">
     <value>Check workspace name</value>

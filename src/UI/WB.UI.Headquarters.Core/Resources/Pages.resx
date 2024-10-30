@@ -120,7 +120,7 @@
   <data name="LogOn_Title" xml:space="preserve">
     <value>Log On</value>
   </data>
-  <data name="AccountManage_Title" xml:space="preserve">
+  <data name="AccountManage_Title" xml:space="preserve"> 
     <value>Edit {0} profile</value>
   </data>
   <data name="AccountManage_EditPublicInformation" xml:space="preserve">
@@ -838,7 +838,7 @@
   <data name="RejectedBySupervisor" xml:space="preserve">
     <value>Rejected by supervisor</value>
   </data>
-  <data name="ApprovedByupervisor" xml:space="preserve">
+  <data name="ApprovedBySupervisor" xml:space="preserve">
     <value>Approved by supervisor</value>
   </data>
   <data name="RejectedByHeadquarters" xml:space="preserve">
