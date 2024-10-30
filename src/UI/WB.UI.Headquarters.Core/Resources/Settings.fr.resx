@@ -392,7 +392,8 @@ Raisons possibles :
   </data>
   <data name="EmailProvider_SmtpHost" xml:space="preserve">
     <value>Hôte</value>
-    <data name="EmailProvider_SmtpHostHelp" xml:space="preserve">
+  </data>
+  <data name="EmailProvider_SmtpHostHelp" xml:space="preserve">
     <value>Adresse du serveur SMTP</value>
   </data>
   <data name="EmailProvider_SmtpPort" xml:space="preserve">
