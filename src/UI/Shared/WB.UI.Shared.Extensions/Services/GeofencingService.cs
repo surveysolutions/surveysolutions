@@ -10,8 +10,12 @@ using WB.UI.Shared.Enumerator.Services;
 
 namespace WB.UI.Shared.Extensions.Services;
 
+public interface IGeofencingListener : IGeolocationListener
+{
+    
+}
 
-public class GeofencingListener : IGeolocationListener
+public class GeofencingListener : IGeofencingListener
 {
     private IVibrationService vibrationService;
     

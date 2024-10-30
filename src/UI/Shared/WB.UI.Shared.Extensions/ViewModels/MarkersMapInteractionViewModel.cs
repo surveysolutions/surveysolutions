@@ -28,8 +28,8 @@ public abstract class MarkersMapInteractionViewModel<TParam> : BaseMapInteractio
     protected readonly GraphicsOverlay graphicsOverlay = new GraphicsOverlay();
 
     private readonly IDashboardViewModelFactory dashboardViewModelFactory;
-    private readonly IAssignmentDocumentsStorage assignmentsRepository;
-    private readonly IPlainStorage<InterviewView> interviewViewRepository;
+    protected readonly IAssignmentDocumentsStorage assignmentsRepository;
+    protected readonly IPlainStorage<InterviewView> interviewViewRepository;
 
     protected List<AssignmentDocument> Assignments { get; private set; } = new List<AssignmentDocument>();
     protected List<InterviewView> Interviews  { get; private set; } = new List<InterviewView>();

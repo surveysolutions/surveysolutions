@@ -134,10 +134,12 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
         protected virtual void ShowedFullMap() { }
 
-        public IMvxAsyncCommand SwitchLocatorCommand => new MvxAsyncCommand(async () =>
+        public IMvxAsyncCommand SwitchLocatorCommand => new MvxAsyncCommand(async () => { await SwitchLocator(); });
+
+        protected async Task<bool> SwitchLocator()
         {
             if (!IsLocationServiceSwitchEnabled)
-                return;
+                return false;
 
             //try to workaround Esri crash with location service
             //Esri case 02209395
@@ -162,17 +164,20 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
                 this.MapView.LocationDisplay.IsEnabled = true;
                 this.MapView.LocationDisplay.LocationChanged += LocationDisplayOnLocationChanged;
+                return true;
             }
             catch (MissingPermissionsException mp) when (mp.PermissionType == typeof(Permissions.LocationWhenInUse))
             {
                 this.UserInteractionService.ShowToast(UIResources.MissingPermissions_MapsLocation);
-                return;
+                return false;
             }
             catch (Exception exc)
             {
                 logger.Error("Error occurred on map location start.", exc);
             }
-        });
+            
+            return false; 
+        }
 
         private void DataSourceOnStatusChanged(object sender, LocationDataSourceStatus e)
         {
