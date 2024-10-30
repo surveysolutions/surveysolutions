@@ -533,8 +533,5 @@
   </data>
   <data name="Value" xml:space="preserve">
     <value>Valor</value>
-  </data>
-  <data name="MultipleAssignmentsClose" xml:space="preserve">
-    <value>{{count}} atribuições selecionadas serão fechadas. O valor esperado será definido para o número de entrevistas atualmente coletadas.</value>
-  </data>
+  </data>  
 </root>
