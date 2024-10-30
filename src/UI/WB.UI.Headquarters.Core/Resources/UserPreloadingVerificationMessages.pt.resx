@@ -117,58 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="PLU0017Description" xml:space="preserve">
-    <value>A senha '{0}' não contém dígito</value>
-  </data>
-  <data name="PLU0017Recomendation" xml:space="preserve">
-    <value>Adicione pelo menos um dígito ('0'-'9').</value>
-  </data>
-  <data name="PLU0018" xml:space="preserve">
-    <value>Senha simples</value>
-  </data>
-  <data name="PLU0018Description" xml:space="preserve">
-    <value>A senha '{0}' não contém caractere minúsculo</value>
-  </data>
-  <data name="PLU0018Recomendation" xml:space="preserve">
-    <value>Adicione pelo menos um caractere minúsculo ('a'-'z').</value>
-  </data>
-  <data name="PLU0019" xml:space="preserve">
-    <value>Senha simples</value>
-  </data>
-  <data name="PLU0019Description" xml:space="preserve">
-    <value>A senha '{0}' não contém caractere maiúsculo</value>
-  </data>
-  <data name="PLU0019Recomendation" xml:space="preserve">
-    <value>Adicione pelo menos um caractere maiúsculo ('A'-'Z').</value>
-  </data>
-  <data name="PLU0020" xml:space="preserve">
-    <value>Senha simples</value>
-  </data>
-  <data name="PLU0020Description" xml:space="preserve">
-    <value>A senha '{0}' não contém caracteres únicos suficientes</value>
-  </data>
-  <data name="PLU0020Recomendation" xml:space="preserve">
-    <value>Adicione caracteres diferentes.</value>
-  </data>
-  <data name="PLU0021" xml:space="preserve">
-    <value>Senha necessária</value>
-  </data>
-  <data name="PLU0021Description" xml:space="preserve">
-    <value>A senha é necessária</value>
-  </data>
-  <data name="PLU0021Recomendation" xml:space="preserve">
-    <value>Adicione senha</value>
-  </data>
-  <data name="PLU0022" xml:space="preserve">
-    <value>Espaço de trabalho não encontrado</value>
-  </data>
-  <data name="PLU0022Description" xml:space="preserve">
-    <value>O espaço de trabalho deve existir e estar habilitado</value>
-  </data>
-  <data name="PLU0022Recomendation" xml:space="preserve">
-    <value>Verifique o nome do espaço de trabalho</value>
-  </data>
-  <data name="PLU0001Description" xml:space="preserve">
+    <data name="PLU0001Description" xml:space="preserve">
     <value>O usuário '{0}' já existe</value>
   </data>
   <data name="PLU0002Description" xml:space="preserve">
@@ -315,17 +264,47 @@
   <data name="PLU0017" xml:space="preserve">
     <value>Senha simples</value>
   </data>
+  <data name="PLU0017Description" xml:space="preserve">
+    <value>A senha '{0}' não contém dígito</value>
+  </data>
+  <data name="PLU0017Recomendation" xml:space="preserve">
+    <value>Adicione pelo menos um dígito ('0'-'9').</value>
+  </data>
   <data name="PLU0018" xml:space="preserve">
     <value>Senha simples</value>
+  </data>
+  <data name="PLU0018Description" xml:space="preserve">
+    <value>A senha '{0}' não contém caractere minúsculo</value>
+  </data>
+  <data name="PLU0018Recomendation" xml:space="preserve">
+    <value>Adicione pelo menos um caractere minúsculo ('a'-'z').</value>
   </data>
   <data name="PLU0019" xml:space="preserve">
     <value>Senha simples</value>
   </data>
+  <data name="PLU0019Description" xml:space="preserve">
+    <value>A senha '{0}' não contém caractere maiúsculo</value>
+  </data>
+  <data name="PLU0019Recomendation" xml:space="preserve">
+    <value>Adicione pelo menos um caractere maiúsculo ('A'-'Z').</value>
+  </data>
   <data name="PLU0020" xml:space="preserve">
     <value>Senha simples</value>
   </data>
+  <data name="PLU0020Description" xml:space="preserve">
+    <value>A senha '{0}' não contém caracteres únicos suficientes</value>
+  </data>
+  <data name="PLU0020Recomendation" xml:space="preserve">
+    <value>Adicione caracteres diferentes.</value>
+  </data>
   <data name="PLU0021" xml:space="preserve">
     <value>Senha necessária</value>
+  </data>
+  <data name="PLU0021Description" xml:space="preserve">
+    <value>A senha é necessária</value>
+  </data>
+  <data name="PLU0021Recomendation" xml:space="preserve">
+    <value>Adicione senha</value>
   </data>
   <data name="PLU0022" xml:space="preserve">
     <value>Espaço de trabalho não encontrado</value>
