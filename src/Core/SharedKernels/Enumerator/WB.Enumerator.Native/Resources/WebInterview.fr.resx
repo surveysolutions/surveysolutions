@@ -160,35 +160,27 @@
     <value>Actualiser la page</value>
   </data>
   <data name="InvitationSmallText" xml:space="preserve">
-ires an internet connection. No additional software is needed.</value>
     <value>Le processus d'entrevue nécessite une connexion Internet. Aucun logiciel supplémentaire n'est nécessaire.</value>
   </data>
   <data name="InvitationText" xml:space="preserve">
-
     <value>Vous avez été invité à participer à l'enquête suivante: "%QUESTIONNAIRE%"</value>
   </data>
   <data name="WelcomeText" xml:space="preserve">
-
     <value>Bonjour et bienvenue dans l'enquête Web Survey Solutions</value>
   </data>
   <data name="WebSurvey" xml:space="preserve">
-
     <value>Enquête Web Survey Solutions</value>
   </data>
   <data name="CompletionText" xml:space="preserve">
-
     <value>Cet entretien a été achevé</value>
   </data>
   <data name="InProgressText" xml:space="preserve">
-
     <value>En cours</value>
   </data>
   <data name="NotStartedText" xml:space="preserve">
-
     <value>Pas commencé</value>
   </data>
   <data name="FinishInterviewText" xml:space="preserve">
-
     <value>Cet entretien a été achevé</value>
   </data>
   <data name="StartedInterviewText" xml:space="preserve">
@@ -196,7 +188,6 @@ ires an internet connection. No additional software is needed.</value>
     <value>Cet entretien n'a pas été achevé</value>
   </data>
   <data name="SurveyFormatText" xml:space="preserve">
-
     <value>Enquête: "%QUESTIONNAIRE%"</value>
   </data>
   <data name="InterviewIdFormatText" xml:space="preserve">

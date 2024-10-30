@@ -117,7 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-<data name="ErrorMessage_AccountIsLockedOnServer" xml:space="preserve">
+  <data name="ErrorMessage_AccountIsLockedOnServer" xml:space="preserve">
     <value>Votre compte utilisateur est verrouillé. Veuillez contacter l'équipe de support.</value>
   </data>
   <data name="Dashboard_MyQuestionnairesLinkText" xml:space="preserve">
