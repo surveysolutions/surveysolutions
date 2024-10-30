@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -117,139 +117,163 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AdditionalSettings" xml:space="preserve">
-    <value>Ajustes adicionales</value>
-  </data>
-  <data name="AfterXDay" xml:space="preserve">
-    <value>Después de {{count}} día</value>
-  </data>
-  <data name="AfterXDay_other" xml:space="preserve">
-    <value>Después de {{count}} días</value>
-  </data>
-  <data name="AfterXWeek" xml:space="preserve">
-    <value>Después de {{count}} semana</value>
-  </data>
-  <data name="AfterXWeek_other" xml:space="preserve">
-    <value>Después de {{count}} semanas</value>
-  </data>
-  <data name="Cancel" xml:space="preserve">
-    <value>Cancelar</value>
-  </data>
-  <data name="Complete" xml:space="preserve">
-    <value>Completar</value>
-  </data>
-  <data name="CompletePage" xml:space="preserve">
-    <value>Complete</value>
-  </data>
-  <data name="CustomizeDisplayedText" xml:space="preserve">
-    <value>Personaliza el texto mostrado para los encuestados</value>
-  </data>
-  <data name="CustomizeEmailsText" xml:space="preserve">
-    <value>Personalizar el texto de los correos electrónicos</value>
-  </data>
-  <data name="Description" xml:space="preserve">
-    <value>Descripción:</value>
-  </data>
-  <data name="DescriptionForPassword" xml:space="preserve">
-    <value>Descripción de la contraseña:</value>
-  </data>
-  <data name="DoNotSend" xml:space="preserve">
-    <value>No envisar</value>
-  </data>
-  <data name="EmailMessage" xml:space="preserve">
-    <value>Mensaje:</value>
-  </data>
-  <data name="EmailSubject" xml:space="preserve">
-    <value>Asunto:</value>
-  </data>
-  <data name="EmailTemplateDescription" xml:space="preserve">
-    <value>Puede utilizar el marcador de posición% SURVEYNAME% en el texto como nombre de la encuesta</value>
-  </data>
-  <data name="ExampleFinishPage" xml:space="preserve">
-    <value>Ejemplo de la página de finalización</value>
-  </data>
-  <data name="ExampleInvitationEmailMessage" xml:space="preserve">
-    <value>Ejemplo de mensaje de correo electrónico de invitación</value>
-  </data>
-  <data name="ExampleRejectEmailMessage" xml:space="preserve">
-    <value>Ejemplo de mensaje de correo electrónico de rechazo</value>
-  </data>
-  <data name="ExampleReminderEmailMessage" xml:space="preserve">
-    <value>Ejemplo de mensaje de recordatorio por correo electrónico</value>
-  </data>
-  <data name="ExampleResumePage" xml:space="preserve">
-    <value>Ejemplo de la página de currículum</value>
-  </data>
-  <data name="ExampleWelcomePage" xml:space="preserve">
-    <value>Ejemplo de la página de bienvenida</value>
-  </data>
-  <data name="FieldRequired" xml:space="preserve">
-    <value>El campo es obligatorio.</value>
-  </data>
-  <data name="FinishPage" xml:space="preserve">
-    <value>Página final</value>
-  </data>
-  <data name="Invitation" xml:space="preserve">
-    <value>Invitación</value>
-  </data>
-  <data name="InvitationEmailMessage" xml:space="preserve">
-    <value>Invitación</value>
-  </data>
-  <data name="MainText" xml:space="preserve">
-    <value>Texto principal</value>
-  </data>
-  <data name="NoteToSupervisor" xml:space="preserve">
-    <value>Nota para el supervisor</value>
-  </data>
-  <data name="Reject" xml:space="preserve">
-    <value>Rechazar</value>
-  </data>
-  <data name="RejectEmailMessage" xml:space="preserve">
-    <value>Rechazar</value>
-  </data>
-  <data name="Reminder" xml:space="preserve">
-    <value>Recordatorio</value>
-  </data>
-  <data name="ReminderNoResponseEmailMessage" xml:space="preserve">
-    <value>Ninguna respuesta</value>
-  </data>
-  <data name="ReminderPartialResponseEmailMessage" xml:space="preserve">
-    <value>Respuesta parcial</value>
-  </data>
-  <data name="ReminderSetting" xml:space="preserve">
-    <value>Configuración de recordatorio</value>
-  </data>
-  <data name="Resume" xml:space="preserve">
-    <value>Resumen</value>
-  </data>
-  <data name="ResumeEmailMessage" xml:space="preserve">
-    <value>Resumen</value>
-  </data>
-  <data name="ResumePage" xml:space="preserve">
-    <value>Página de resumen</value>
-  </data>
-  <data name="Save" xml:space="preserve">
-    <value>grabar</value>
-  </data>
-  <data name="SendWithNoResponse" xml:space="preserve">
-    <value>Envía recordatorios a personas sin respuesta</value>
-  </data>
-  <data name="ShownPasswordIsRequired" xml:space="preserve">
-    <value>Se muestra solo si se requiere contraseña y se establece</value>
-  </data>
-  <data name="StartInterviewButton" xml:space="preserve">
-    <value>Botón para iniciar entrevista</value>
-  </data>
-  <data name="StartNew" xml:space="preserve">
-    <value>Iniciar nueva entrevista</value>
-  </data>
-  <data name="Title" xml:space="preserve">
-    <value>Título:</value>
+    <data name="CustomizeDisplayedText" xml:space="preserve">
+    <value>Personnaliser le texte affiché pour les répondants</value>
   </data>
   <data name="WebInterviewSetupFor_Title" xml:space="preserve">
-      <value>Configuración de la entrevista web: </value>
+    <value>Configuration de l'entretien web: </value>
+  </data>
+  <data name="ExampleWelcomePage" xml:space="preserve">
+    <value>Exemple de la page de bienvenue</value>
+  </data>
+  <data name="ExampleResumePage" xml:space="preserve">
+    <value>Exemple de la page de reprise</value>
+  </data>
+  <data name="ExampleFinishPage" xml:space="preserve">
+    <value>Exemple de la page de fin</value>
+  </data>
+  <data name="CustomizeEmailsText" xml:space="preserve">
+    <value>Personnaliser le texte des e-mails</value>
+  </data>
+  <data name="Invitation" xml:space="preserve">
+    <value>Invitation</value>
+  </data>
+  <data name="Reminder" xml:space="preserve">
+    <value>Rappel</value>
+  </data>
+  <data name="Reject" xml:space="preserve">
+    <value>Rejeter</value>
+  </data>
+  <data name="ExampleInvitationEmailMessage" xml:space="preserve">
+    <value>Exemple de message d'invitation par e-mail</value>
+  </data>
+  <data name="EmailMessage" xml:space="preserve">
+    <value>Message:</value>
+  </data>
+  <data name="EmailSubject" xml:space="preserve">
+    <value>Objet:</value>
+  </data>
+  <data name="MainText" xml:space="preserve">
+    <value>Texte principal:</value>
+  </data>
+  <data name="DescriptionForPassword" xml:space="preserve">
+    <value>Description du mot de passe:</value>
+  </data>
+  <data name="StartInterviewButton" xml:space="preserve">
+    <value>Bouton pour démarrer l'entretien</value>
+  </data>
+  <data name="ShownPasswordIsRequired" xml:space="preserve">
+    <value>Affiché uniquement si le mot de passe est requis et défini</value>
+  </data>
+  <data name="ExampleReminderEmailMessage" xml:space="preserve">
+    <value>Exemple de message de rappel par e-mail</value>
+  </data>
+  <data name="ExampleRejectEmailMessage" xml:space="preserve">
+    <value>Exemple de message de rejet par e-mail</value>
+  </data>
+  <data name="ReminderSetting" xml:space="preserve">
+    <value>Paramètre de rappel</value>
   </data>
   <data name="WelcomePage" xml:space="preserve">
-    <value>Pagina de bienvenida</value>
+    <value>Page de bienvenue</value>
+  </data>
+  <data name="ResumePage" xml:space="preserve">
+    <value>Page de reprise</value>
+  </data>
+  <data name="FinishPage" xml:space="preserve">
+    <value>Page de fin</value>
+  </data>
+  <data name="LinkToInterviewPage" xml:space="preserve">
+    <value>Page de destination de l'entretien web</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Sauvegarder</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Annuler</value>
+  </data>
+  <data name="RejectEmailMessage" xml:space="preserve">
+    <value>Rejeter</value>
+  </data>
+  <data name="CompleteEmailMessage" xml:space="preserve">
+    <value>Compléter</value>
+  </data>
+  <data name="InvitationEmailMessage" xml:space="preserve">
+    <value>Invitation</value>
+  </data>
+  <data name="ResumeEmailMessage" xml:space="preserve">
+    <value>Reprendre</value>
+  </data>
+  <data name="ReminderNoResponseEmailMessage" xml:space="preserve">
+    <value>Pas de réponse</value>
+  </data>
+  <data name="ReminderPartialResponseEmailMessage" xml:space="preserve">
+    <value>Réponse partielle</value>
+  </data>
+  <data name="AdditionalSettings" xml:space="preserve">
+    <value>Paramètres supplémentaires</value>
+  </data>
+  <data name="SendWithNoResponse" xml:space="preserve">
+    <value>Envoyer un rappel aux personnes sans réponse</value>
+  </data>
+  <data name="SendWithPartialResponse" xml:space="preserve">
+    <value>Envoyer un rappel aux personnes avec une réponse partielle</value>
+  </data>
+  <data name="DoNotSend" xml:space="preserve">
+    <value>Ne pas envoyer</value>
+  </data>
+  <data name="AfterXDay" xml:space="preserve">
+    <value>Après {{count}} jour</value>
+  </data>
+  <data name="AfterXDay_other" xml:space="preserve">
+    <value>Après {{count}} jours</value>
+  </data>
+  <data name="AfterXWeek" xml:space="preserve">
+    <value>Après {{count}} semaine</value>
+  </data>
+  <data name="AfterXWeek_other" xml:space="preserve">
+    <value>Après {{count}} semaines</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Description:</value>
+  </data>
+  <data name="FieldRequired" xml:space="preserve">
+    <value>Le champ est requis.</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Titre:</value>
+  </data>
+  <data name="EmailTemplateDescription" xml:space="preserve">
+    <value>Vous pouvez utiliser l'espace réservé %SURVEYNAME% dans le texte comme nom de l'enquête</value>
+  </data>
+  <data name="InterviewDataInsertInTextDescription" xml:space="preserve">
+    <value>Dans ce modèle d'e-mail, vous pouvez utiliser l'espace réservé %question_variable% dans le texte comme réponse à la question de l'entretien. La question doit provenir du niveau supérieur du questionnaire (pas à l'intérieur des rosters).</value>
+  </data>
+  <data name="InterviewDataInsertBarcodeDescription" xml:space="preserve">
+    <value>%question_variable:barcode% - afficher la réponse sous forme de code-barres Code 128</value>
+  </data>
+  <data name="InterviewDataInsertQrCodeDescription" xml:space="preserve">
+    <value>%question_variable:qrcode% - afficher la réponse sous forme de code QR</value>
+  </data>
+  <data name="AnswerOn" xml:space="preserve">
+    <value>réponse sur {{variable}}</value>
+  </data>
+  <data name="CompletePage" xml:space="preserve">
+    <value>Compléter</value>
+  </data>
+  <data name="Complete" xml:space="preserve">
+    <value>Compléter</value>
+    <comment>Complete button title</comment>
+  </data>
+  <data name="NoteToSupervisor" xml:space="preserve">
+    <value>Note pour le superviseur</value>
+  </data>
+  <data name="Resume" xml:space="preserve">
+    <value>Reprendre</value>
+    <comment>Resume button title</comment>
+  </data>
+  <data name="StartNew" xml:space="preserve">
+    <value>Commencer un nouvel entretien</value>
+    <comment>Start new interview button title</comment>
   </data>
 </root>

@@ -117,7 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-    <data name="PLU0001Description" xml:space="preserve">
+  <data name="PLU0001Description" xml:space="preserve">
     <value>Un utilisateur '{0}' existe déjà</value>
   </data>
   <data name="PLU0002Description" xml:space="preserve">
@@ -202,10 +202,10 @@
     <value>Mauvais format pour le nom complet.</value>
   </data>
   <data name="PLU0001Recomendation" xml:space="preserve">
-    <value />
+    <value>L'utilisateur doit être unique</value>
   </data>
   <data name="PLU0002Recomendation" xml:space="preserve">
-    <value />
+    <value>Résoudre les doublons</value>
   </data>
   <data name="PLU0003Recomendation" xml:space="preserve">
     <value>L'utilisateur archivé ne peut pas être réutilisé car il appartient à une autre équipe</value>
@@ -220,19 +220,19 @@
     <value>Il doit comporter au moins un chiffre, une lettre en majuscule, et une lettre en miniscule. La longeur doit être entre 10 et 100 caractères.</value>
   </data>
   <data name="PLU0007Recomendation" xml:space="preserve">
-    <value />
+    <value>Corriger l'adresse courriel</value>
   </data>
   <data name="PLU0008Recomendation" xml:space="preserve">
-    <value />
+    <value>Corriger le numéro de téléphone</value>
   </data>
   <data name="PLU0009Recomendation" xml:space="preserve">
     <value>Seuls les rôles "chef d'équipe" ou "enquêteur" sont permis.</value>
   </data>
   <data name="PLU0010Recomendation" xml:space="preserve">
-    <value />
+    <value>Vérifier la valeur pour le chef d'équipe</value>
   </data>
   <data name="PLU0011Recomendation" xml:space="preserve">
-    <value />
+    <value>Fournir une valeur pour le chef d'équipe</value>
   </data>
   <data name="PLU0012Recomendation" xml:space="preserve">
     <value>Il ne devrait pas dépasser 100 caractères.</value>

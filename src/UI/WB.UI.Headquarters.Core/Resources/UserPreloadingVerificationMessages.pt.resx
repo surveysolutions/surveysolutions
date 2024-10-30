@@ -117,7 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-    <data name="PLU0001Description" xml:space="preserve">
+  <data name="PLU0001Description" xml:space="preserve">
     <value>O usuário '{0}' já existe</value>
   </data>
   <data name="PLU0002Description" xml:space="preserve">
@@ -202,10 +202,10 @@
     <value>Formato de nome completo errado</value>
   </data>
   <data name="PLU0001Recomendation" xml:space="preserve">
-    <value />
+    <value>O usuário deve ser único</value>
   </data>
   <data name="PLU0002Recomendation" xml:space="preserve">
-    <value />
+    <value>Resolver duplicatas</value>
   </data>
   <data name="PLU0003Recomendation" xml:space="preserve">
     <value>O usuário arquivado não pode ser reutilizado porque pertence a outra equipe</value>
@@ -220,19 +220,19 @@
     <value>Deve conter pelo menos um número, um caractere maiúsculo e um caractere minúsculo. O comprimento deve ser entre 10 e 100 caracteres</value>
   </data>
   <data name="PLU0007Recomendation" xml:space="preserve">
-    <value />
+    <value>Corrigir e-mail</value>
   </data>
   <data name="PLU0008Recomendation" xml:space="preserve">
-    <value />
+    <value>Corrigir número de telefone</value>
   </data>
   <data name="PLU0009Recomendation" xml:space="preserve">
     <value>Somente "supervisor" ou "entrevistador" são permitidos</value>
   </data>
   <data name="PLU0010Recomendation" xml:space="preserve">
-    <value />
+    <value>Corrigir supervisor</value>
   </data>
   <data name="PLU0011Recomendation" xml:space="preserve">
-    <value />
+    <value>Fornecer valor para supervisor</value>
   </data>
   <data name="PLU0012Recomendation" xml:space="preserve">
     <value>Não deve conter mais de 100 caracteres</value>
