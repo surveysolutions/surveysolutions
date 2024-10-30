@@ -18,6 +18,8 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
     [Route("api/supervisor/v1/assignments")]
     public class AssignmentsApiV1Controller : AssignmentsControllerBase
     {
+        protected override string ProductName => "org.worldbank.solutions.supervisor";
+        
         private readonly IAssignmentsService assignmentsService;
 
         public AssignmentsApiV1Controller(IAuthorizedUser authorizedUser, IAssignmentsService assignmentsService,

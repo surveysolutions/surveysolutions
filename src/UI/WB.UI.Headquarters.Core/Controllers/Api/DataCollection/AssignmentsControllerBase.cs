@@ -1,14 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Assignment;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.WebApi;
+using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.Controllers.Api.DataCollection
 {
@@ -40,6 +45,10 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             {
                 return Forbid();
             }
+            
+            var isNeedUpdateApp = IsNeedUpdateApp(assignment);
+            if (isNeedUpdateApp)
+                return StatusCode(StatusCodes.Status426UpgradeRequired);
 
             AssignmentApiDocument assignmentApiDocument = this.assignmentsService.MapAssignment(assignment);
 
@@ -95,5 +104,20 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
 
         protected abstract IEnumerable<Assignment> GetAssignmentsForResponsible(Guid responsibleId);
 
+        protected abstract string ProductName { get; }
+
+        private bool IsNeedUpdateApp(Assignment assignment)
+        {
+            var productVersion = this.Request.GetProductVersionFromUserAgent(ProductName);
+
+            if (!string.IsNullOrWhiteSpace(assignment.TargetArea) 
+                && productVersion != null 
+                && productVersion < new Version(24, 10))
+            {
+                return true;
+            }
+            
+            return false;
+        }
     }
 }
