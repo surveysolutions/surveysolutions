@@ -228,8 +228,10 @@ namespace WB.UI.Headquarters.Controllers.Api
 
         private static void IncreaseBound(MapDashboardRequest input, double boundCoefficient)
         {
-            input.East = Math.Min(input.East + ((input.East - input.West) * boundCoefficient), 180);
-            input.West = Math.Max(input.West - ((input.East - input.West) * boundCoefficient), -180);
+            //map is a cylinder, so we need to handle special cases when the day line is on the map
+            input.East = Math.Min(input.East + (10 * boundCoefficient), 180);
+            input.West = Math.Max(input.West - (10 * boundCoefficient), -180);
+            
             input.North = Math.Min(input.North + ((input.North - input.South) * boundCoefficient), 180);
             input.South = Math.Max(input.South - ((input.North - input.South) * boundCoefficient), -180);
         }

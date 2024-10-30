@@ -4,9 +4,10 @@
             :enable="!question.isDisabled && (question.validity.messages.length > 0 || question.validity.warnings.length > 0)">
             <a class="has-tooltip" type="primary" data-role="trigger"></a>
             <template v-slot:popover>
-                <div class="error-tooltip" v-if="!question.validity.isValid">
+                <div class="error-tooltip" v-if="!question.validity.isValid || question.validity.errorMessage">
                     <h6 style="text-transform:uppercase;" v-if="question.validity.errorMessage">
-                        {{ $t("WebInterviewUI.AnswerWasNotSaved") }}
+                        {{ $t("WebInterviewUI.AnswerWasNotSaved") + (question.validity.notSavedAnswerValue ? ': "' +
+                            question.validity.notSavedAnswerValue + '"' : '') }}
                     </h6>
                     <template v-for="message in question.validity.messages" :key="message">
                         <div v-dateTimeFormatting v-html="message"></div>

@@ -23,7 +23,7 @@
             </ul>
         </div>
 
-        <div class="question-editor" :class="questionEditorClass">
+        <div class="question-editor" :class="questionEditorClass" :messages="validityMessages">
             <wb-flag v-if="$store.getters.isReviewMode === true && !noFlag" />
             <wb-title v-if="!noTitle" />
             <wb-instructions v-if="!noInstructions" />
@@ -42,7 +42,8 @@ import { debounce } from 'lodash'
 
 export default {
     name: 'wb-question',
-    props: ['question', 'questionDivCssClassName', 'questionCssClassName', 'noTitle', 'noInstructions', 'noValidation', 'noAnswer', 'noComments', 'isDisabled', 'noFlag'],
+    props: ['question', 'questionDivCssClassName', 'questionCssClassName', 'noTitle', 'noInstructions',
+        'noValidation', 'noAnswer', 'noComments', 'isDisabled', 'noFlag'],
     data() {
         return {
             isShowingAddCommentDialogFlag: undefined,
@@ -119,6 +120,9 @@ export default {
                 'has-error': !this.question.validity.isValid,
                 'for-supervisor': this.question.isForSupervisor,
             }, this.questionCssClassName]
+        },
+        validityMessages() {
+            return this.question.validity.messages
         },
         isShowingAddCommentDialog() {
             if (this.isShowingAddCommentDialogFlag == undefined)

@@ -1,11 +1,10 @@
 <template>
     <div class="interviewChart">
-        <Line :data="chartData" :options="chartOptions" />
+        <Line :data="chartData" ref="chart" :options="chartOptions" />
     </div>
 </template>
 
 <script>
-
 const chartOptions = {
     elements: {
         point: { radius: 0 },
@@ -13,6 +12,13 @@ const chartOptions = {
     },
     responsive: true,
     maintainAspectRatio: false,
+    layout: {
+        padding: 5
+    },
+    interaction: {
+        intersect: false,
+        mode: 'index',
+    },
     plugins: {
         legend: {
             display: true,
@@ -21,7 +27,7 @@ const chartOptions = {
         tooltip: {
             mode: 'x',
             intersect: false,
-            position: 'nearest',
+            position: 'average',
         }
     },
     scales: {
@@ -32,16 +38,21 @@ const chartOptions = {
                 display: true,
                 tickMarkLength: 10,
             },
-
+            time: {
+                bounds: 'ticks',
+                minUnit: 'day',
+                displayFormats: {
+                    week: 'll',
+                    day: 'MMM D YYYY',
+                },
+            },
             ticks: {
                 source: 'data',
                 autoSkipPadding: 10,
                 maxRotation: 45,
                 autoSkip: true,
             },
-
         },
-
         y:
         {
             afterDataLimits: function (axis) {
@@ -52,7 +63,7 @@ const chartOptions = {
             stacked: true,
             beginAtZero: true,
             ticks: {
-
+                beginAtZero: true,
                 callback: function (label, index, labels) {
                     // when the floored value is the same as the value we have a whole number
                     if (Math.floor(label) === label) {
@@ -86,16 +97,23 @@ export default {
     },
     computed: {
         chartOptions() {
+            var self = this
+            this.options.animation = {
+                onComplete: () => {
+                    self.$emit('ready')
+                }
+            }
+
             return Object.assign(chartOptions, this.options)
-        },
+        }
     },
     expose: ['getImage'],
     methods: {
         getImage() {
-            if (this.$data._chart == null) return null
-
-            return this.$data._chart.canvas.toDataURL('image/png')
+            if (this.$refs.chart.chart == null) return null
+            return this.$refs.chart.chart.canvas.toDataURL('image/png')
         }
     }
+
 }
 </script>

@@ -13,9 +13,9 @@
             v-on:selected="optionSelected" />
 
         <filter-input v-if="item.type == 'TEXT' || item.entityType == 'VARIABLE'" :value="condition.value"
-            @input.self="input" :id="'filter_input_' + condition.variable" />
+            @input="input" :id="'filter_input_' + condition.variable" />
 
-        <filter-input v-if="item.type == 'NUMERIC'" :value="condition.value" type="number" @input.self="input"
+        <filter-input v-if="item.type == 'NUMERIC'" :value="condition.value" type="number" @input="input"
             :id="'filter_input_' + condition.variable" />
 
     </div>

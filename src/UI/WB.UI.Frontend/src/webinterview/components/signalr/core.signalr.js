@@ -57,9 +57,9 @@ export default {
             this.$store.dispatch('refreshSectionState')           // fetching breadcrumbs/sidebar/buttons
         })
 
-        connection.on('markAnswerAsNotSaved', (id, message) => {
+        connection.on('markAnswerAsNotSaved', (id, message, notSavedAnswerValue) => {
             this.$store.dispatch('fetch', { id, done: true })
-            this.$store.dispatch('setAnswerAsNotSaved', { id, message })
+            this.$store.dispatch('setAnswerAsNotSaved', { id, message, notSavedAnswerValue })
         })
 
         connection.on('reloadInterview', () => {
