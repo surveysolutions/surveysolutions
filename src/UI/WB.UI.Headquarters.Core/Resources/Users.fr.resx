@@ -117,35 +117,17 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AddAPIUser" xml:space="preserve">
+   <data name="AddAPIUser" xml:space="preserve">
     <value>Ajouter un utilisateur API</value>
   </data>
   <data name="AddHeadquarters" xml:space="preserve">
     <value>Ajouter un membre du Quartier Général</value>
   </data>
-  <data name="AddObserver" xml:space="preserve">
-    <value>Ajouter un observateur</value>
-  </data>
   <data name="AddSupervisor" xml:space="preserve">
     <value>Ajouter un Chef d'équipe</value>
   </data>
-  <data name="Admin" xml:space="preserve">
-    <value>Admin</value>
-  </data>
   <data name="APIUsers" xml:space="preserve">
     <value>Utilisateurs API</value>
-  </data>
-  <data name="ArchivedSupervisors" xml:space="preserve">
-    <value>Chefs d'équipe archivés</value>
-  </data>
-  <data name="ClickToReturn" xml:space="preserve">
-    <value>Cliquez pour retourner à votre compte.</value>
-  </data>
-  <data name="CreateAdmin" xml:space="preserve">
-    <value>Pour terminer l'installation, veuillez créer un nouvel utilisateur administrateur</value>
-  </data>
-  <data name="CreateAndTryLogin" xml:space="preserve">
-    <value>Créez et essayez de vous connecter</value>
   </data>
   <data name="CreateAPIUser" xml:space="preserve">
     <value>Créer un utilisateur API</value>
@@ -159,6 +141,72 @@
   <data name="CreateSupervisor" xml:space="preserve">
     <value>Créer un superviseur</value>
   </data>
+  <data name="CreateAdministrator" xml:space="preserve">
+    <value>Créer un administrateur</value>
+  </data>
+  <data name="ArchivedSupervisors" xml:space="preserve">
+    <value>Chefs d'équipe archivés</value>
+  </data>
+  <data name="ClickToReturn" xml:space="preserve">
+    <value>Cliquez pour retourner à votre compte.</value>
+  </data>
+  <data name="CreateAdmin" xml:space="preserve">
+    <value>Pour terminer l'installation, veuillez créer un nouvel utilisateur administrateur</value>
+  </data>
+  <data name="FinishInstallation" xml:space="preserve">
+    <value>Terminer l'installation</value>
+  </data>
+  <data name="Headquarters" xml:space="preserve">
+    <value>Quartier Général</value>
+  </data>
+  <data name="ImpersonateAsUser" xml:space="preserve">
+    <value>Usurper l'identité de cet utilisateur en mode lecture seule</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Supprimer</value>
+  </data>
+  <data name="Observer" xml:space="preserve">
+    <value>Observateur</value>
+  </data>
+  <data name="ObserverDisclaimerFormat" xml:space="preserve">
+    <value>C'est le contenu que &lt;b&gt;{0}&lt;/b&gt; voit.</value>
+  </data>
+  <data name="Observers" xml:space="preserve">
+    <value>Observateurs</value>
+  </data>
+  <data name="Supervisor" xml:space="preserve">
+    <value>Chef d'Equipe</value>
+  </data>
+  <data name="Supervisors" xml:space="preserve">
+    <value>Chefs d'Equipe</value>
+  </data>
+  <data name="SupervisorsCountDescription" xml:space="preserve">
+    <value>Chefs d'Equipe ({{count}})</value>
+  </data>
+  <data name="InterviewersCountDescription" xml:space="preserve">
+    <value>Enquêteurs ({{count}})</value>
+  </data>
+  <data name="ApiUsersCountDescription" xml:space="preserve">
+    <value>Utilisateurs API ({{count}})</value>
+  </data>
+  <data name="HeadquartersCountDescription" xml:space="preserve">
+    <value>Quartier Général ({{count}})</value>
+  </data>
+  <data name="ObserversCountDescription" xml:space="preserve">
+    <value>Observateurs ({{count}})</value>
+  </data>
+  <data name="Supervisors_Edit" xml:space="preserve">
+    <value>Modifier le Chef d'Equipe</value>
+  </data>
+  <data name="SupervisorsInTeam" xml:space="preserve">
+    <value>Chef d'Equipe dans votre équipe</value>
+  </data>
+  <data name="Admin" xml:space="preserve">
+    <value>Admin</value>
+  </data>
+  <data name="CreateAndTryLogin" xml:space="preserve">
+    <value>Créez et essayez de vous connecter</value>
+  </data>
   <data name="CreationDate" xml:space="preserve">
     <value>Compte créé sur</value>
   </data>
@@ -170,15 +218,6 @@
   </data>
   <data name="Email" xml:space="preserve">
     <value>Email</value>
-  </data>
-  <data name="FinishInstallation" xml:space="preserve">
-    <value>Terminer l'installation</value>
-  </data>
-  <data name="Headquarters" xml:space="preserve">
-    <value>Quartier Général</value>
-  </data>
-  <data name="ImpersonateAsUser" xml:space="preserve">
-    <value>Usurper l'identité de cet utilisateur en mode lecture seule</value>
   </data>
   <data name="Interviewer" xml:space="preserve">
     <value>Enquêteur</value>
@@ -192,53 +231,23 @@
   <data name="NotLinkedToDevice" xml:space="preserve">
     <value>Non lié à l'appareil</value>
   </data>
-  <data name="Observer" xml:space="preserve">
-    <value>Observateur</value>
-  </data>
-  <data name="ObserverDisclaimerFormat" xml:space="preserve">
-    <value>C'est le contenu que &lt;b&gt; {0} &lt;/ b&gt; voit.</value>
-  </data>
-  <data name="Observers" xml:space="preserve">
-    <value>Observateurs</value>
-  </data>
-  <data name="Supervisor" xml:space="preserve">
-    <value>Chef d'Equipe</value>
-  </data>
-  <data name="Supervisors" xml:space="preserve">
-    <value>Chefs d'Equipe</value>
-  </data>
   <data name="TotalInterviewers" xml:space="preserve">
     <value>Total des enquêteurs</value>
   </data>
   <data name="UserName" xml:space="preserve">
     <value>Nom d'utilisateur</value>
   </data>
-  <data name="AccountCreationDateTooltip" xml:space="preserve">
-    <value>Date de création du compte</value>
+  <data name="AddObserver" xml:space="preserve">
+    <value>Ajouter un observateur</value>
   </data>
-  <data name="AddInterviewer" xml:space="preserve">
-    <value>Ajouter un Enquêteur</value>
-  </data>
-  <data name="ApiUsersCountDescription" xml:space="preserve">
-      <value>Utilisateurs API ({{count}})</value>
-  </data>
-  <data name="ArchivingStatusTitle" xml:space="preserve">
-    <value>Statut d'archivage</value>
+  <data name="TryLater" xml:space="preserve">
+    <value>Veuillez réessayer plus tard</value>
   </data>
   <data name="HeadquarterAccountCreationDate" xml:space="preserve">
     <value>Date de création du compte Quartier Général</value>
   </data>
-  <data name="HeadquartersCountDescription" xml:space="preserve">
-      <value>Quartier Général ({{count}})</value>
-  </data>
-  <data name="HeadquartersEmail" xml:space="preserve">
-    <value>E-mail du Quartier Général</value>
-  </data>
-  <data name="InterviewerIssues" xml:space="preserve">
-    <value>Problèmes de L'Enquêteur</value>
-  </data>
-  <data name="InterviewersCountDescription" xml:space="preserve">
-      <value>Enquêteurs ({{count}})</value>
+  <data name="SupervisorAccountCreationDate" xml:space="preserve">
+    <value>Date de création du compte Chef d'Equipe</value>
   </data>
   <data name="NotLinkedToDeviceTitle" xml:space="preserve">
     <value>Nombre d'enquêteurs n'ayant pas encore synchronisé leurs tablettes avec le serveur</value>
@@ -246,31 +255,64 @@
   <data name="NumberOfInterviewersInTeam" xml:space="preserve">
     <value>Nombre d'enquêteurs dans l'équipe</value>
   </data>
-  <data name="ObserversCountDescription" xml:space="preserve">
-      <value>Observateurs ({{count}})</value>
+  <data name="AccountCreationDateTooltip" xml:space="preserve">
+    <value>Date de création du compte</value>
   </data>
   <data name="ObserversEmail" xml:space="preserve">
     <value>E-mail de l'observateur</value>
   </data>
-  <data name="Remove" xml:space="preserve">
-    <value>Supprimer</value>
-  </data>
-  <data name="SupervisorAccountCreationDate" xml:space="preserve">
-    <value>Date de création du compte Chef d'Equipe</value>
-  </data>
   <data name="SupervisorEmail" xml:space="preserve">
     <value>Email du Chef d'Equipe</value>
   </data>
-  <data name="Supervisors_Edit" xml:space="preserve">
-    <value>Modifier le Chef d'Equipe</value>
+  <data name="HeadquartersEmail" xml:space="preserve">
+    <value>E-mail du Quartier Général</value>
   </data>
-  <data name="SupervisorsCountDescription" xml:space="preserve">
-      <value>Chefs d'Equipe ({{count}})</value>
+  <data name="AddInterviewer" xml:space="preserve">
+    <value>Ajouter un Enquêteur</value>
   </data>
-  <data name="SupervisorsInTeam" xml:space="preserve">
-    <value>Chef d'Equipe dans votre équipe</value>
+  <data name="ArchivingStatusTitle" xml:space="preserve">
+    <value>Statut d'archivage</value>
   </data>
-  <data name="TryLater" xml:space="preserve">
-    <value>Veuillez réessayer plus tard</value>
+  <data name="InterviewerIssues" xml:space="preserve">
+    <value>Problèmes de L'Enquêteur</value>
+  </data>
+  <data name="ResetPassword" xml:space="preserve">
+    <value>Réinitialiser le mot de passe</value>
+  </data>
+  <data name="ResetPasswordTitle" xml:space="preserve">
+    <value>Réinitialiser le mot de passe de l'utilisateur</value>
+  </data>
+  <data name="UserNotFound" xml:space="preserve">
+    <value>Utilisateur non trouvé</value>
+  </data>
+  <data name="PasswordChanged" xml:space="preserve">
+    <value>Mot de passe pour l'utilisateur {0} changé</value>
+  </data>
+  <data name="Filter_AllUsers" xml:space="preserve">
+    <value>Tous les utilisateurs</value>
+  </data>
+  <data name="Filter_WithMissingWorkspace" xml:space="preserve">
+    <value>Espaces de travail manquants</value>
+  </data>
+  <data name="Filter_WithDisabledWorkspaces" xml:space="preserve">
+    <value>Avec espaces de travail désactivés uniquement</value>
+  </data>
+  <data name="Filter_Locked" xml:space="preserve">
+    <value>Utilisateurs verrouillés</value>
+  </data>
+  <data name="Filter_Archived" xml:space="preserve">
+    <value>Utilisateurs archivés</value>
+  </data>
+  <data name="UsersTitle" xml:space="preserve">
+    <value>Utilisateurs</value>
+  </data>
+  <data name="AddUser" xml:space="preserve">
+    <value>Ajouter un utilisateur</value>
+  </data>
+  <data name="UploadUsers" xml:space="preserve">
+    <value>Télécharger les utilisateurs</value>
+  </data>
+  <data name="ApiTokenTitle" xml:space="preserve">
+    <value>Jeton API utilisateur</value>
   </data>
 </root>

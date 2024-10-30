@@ -264,7 +264,7 @@
   <data name="ApprovedByHeadquarters" xml:space="preserve">
     <value>Затверджено штаб-квартирою</value>
   </data>
-  <data name="ApprovedByupervisor" xml:space="preserve">
+  <data name="ApprovedBySupervisor" xml:space="preserve">
     <value>Затверджено супервізором</value>
   </data>
   <data name="ApproveRejectPartialView_ApproveAction" xml:space="preserve">

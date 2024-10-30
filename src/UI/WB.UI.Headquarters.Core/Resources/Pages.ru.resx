@@ -594,7 +594,7 @@
   <data name="ApprovedByHeadquarters" xml:space="preserve">
     <value>Утверждено хедквотером</value>
   </data>
-  <data name="ApprovedByupervisor" xml:space="preserve">
+  <data name="ApprovedBySupervisor" xml:space="preserve">
     <value>Утверждена супервизором</value>
   </data>
   <data name="Attention" xml:space="preserve">
