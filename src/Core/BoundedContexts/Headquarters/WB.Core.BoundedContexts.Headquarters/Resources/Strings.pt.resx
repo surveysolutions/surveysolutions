@@ -117,20 +117,71 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Cancel" xml:space="preserve">
+<data name="Cancel" xml:space="preserve">
     <value>Cancelar</value>
   </data>
-  <data name="CommandTransformator_ParseQuestionError" xml:space="preserve">
-    <value>Erro quando analisar pergunta resposta</value>
+  <data name="Total" xml:space="preserve">
+    <value>Total</value>
   </data>
-  <data name="ControlPanelController_RepeatLastInterviewStatus" xml:space="preserve">
-    <value>Status definido pela equipe de suporte de soluções de pesquisa</value>
+  <data name="WithErrors" xml:space="preserve">
+    <value>Com erros</value>
+  </data>
+  <data name="Average" xml:space="preserve">
+    <value>Média</value>
   </data>
   <data name="HQ_AccountController_AccountUpdatedSuccessfully" xml:space="preserve">
     <value>Informação da conta atualizada com sucesso</value>
   </data>
+  <data name="HQ_AccountController_AccountUpdatedSuccessfullyFormat" xml:space="preserve">
+    <value>Informações sobre &lt;b&gt;{0}&lt;/b&gt; atualizadas com sucesso</value>
+  </data>
+  <data name="HQ_AccountController_AccountPasswordChangedSuccessfully" xml:space="preserve">
+    <value>Senha da conta atualizada com sucesso</value>
+  </data>
+  <data name="HQ_AccountController_AccountPasswordChangedSuccessfullyFormat" xml:space="preserve">
+    <value>Senha para a conta &lt;b&gt;{0}&lt;/b&gt; atualizada com sucesso</value>
+  </data>
   <data name="HQ_Views_Manage_Title" xml:space="preserve">
     <value>Gerenciar conta</value>
+  </data>
+  <data name="HQ_Views_TwoFactorAuthentication_Title" xml:space="preserve">
+    <value>Autenticação de dois fatores</value>
+  </data>
+  <data name="HQ_Views_TwoFactorAuthentication_Description" xml:space="preserve">
+    <value>A autenticação de dois fatores é um recurso de segurança avançado que dificulta a entrada de um hacker na sua conta apenas com uma senha roubada.</value>
+  </data>
+  <data name="HQ_Views_TwoFactorAuthentication_Enabled" xml:space="preserve">
+    <value>ativado</value>
+  </data>
+  <data name="HQ_Views_TwoFactorAuthentication_Disabled" xml:space="preserve">
+    <value>desativado</value>
+  </data>
+  <data name="HQ_Views_TwoFactorAuthentication_SetupAuthenticator_Description" xml:space="preserve">
+    <value>Configure um novo dispositivo para autenticação de dois fatores. Você pode configurar vários dispositivos simultaneamente.</value>
+  </data>
+  <data name="HQ_Views_TwoFactorAuthentication_ResetAuthenticator_Description" xml:space="preserve">
+    <value>Redefina para um novo código secreto se algum dos seus dispositivos usados para a autenticação de dois fatores for perdido ou roubado.</value>
+  </data>
+  <data name="HQ_Views_TwoFactorAuthentication_ResetRecoveryCodes_Description" xml:space="preserve">
+    <value>Invalide quaisquer códigos de recuperação não utilizados e gere 10 novos.</value>
+  </data>
+  <data name="HQ_Views_TwoFactorAuthentication_Disable2fa_Description" xml:space="preserve">
+    <value>Desative a autenticação de dois fatores deixando a conta protegida apenas pela senha.</value>
+  </data>
+  <data name="HQ_Views_EnableAuthenticator_Title" xml:space="preserve">
+    <value>Configurar aplicativo autenticador</value>
+  </data>
+  <data name="HQ_Views_ResetAuthenticator_Title" xml:space="preserve">
+    <value>Redefinir chave do autenticador</value>
+  </data>
+  <data name="HQ_Views_ShowRecoveryCodes_Title" xml:space="preserve">
+    <value>Códigos de recuperação</value>
+  </data>
+  <data name="HQ_Views_DisableTwoFactorAuth_Title" xml:space="preserve">
+    <value>Desativar autenticação de dois fatores</value>
+  </data>
+  <data name="HQ_Views_ResetRecoveryCodes_Title" xml:space="preserve">
+    <value>Redefinir códigos de recuperação</value>
   </data>
   <data name="InterviewStatus_ApprovedByHeadquarters" xml:space="preserve">
     <value>Aprovado pela sede</value>
@@ -171,16 +222,79 @@
   <data name="InterviewStatus_SupervisorAssigned" xml:space="preserve">
     <value>Supervisor atribuído</value>
   </data>
-  <data name="ObserverNotAllowed" xml:space="preserve">
-    <value>Observador não tem permissão para executar esta ação</value>
-  </data>
   <data name="SurverManagement_MainMenu_ManageAccount" xml:space="preserve">
     <value>Gerenciar conta</value>
+  </data>
+  <data name="SurverManagement_MainMenu_ChangePassword" xml:space="preserve">
+    <value>Alterar senha</value>
+  </data>
+  <data name="ViewHelpers_Invalid_property" xml:space="preserve">
+    <value>Propriedade inválida</value>
+  </data>
+  <data name="CommandTransformator_ParseQuestionError" xml:space="preserve">
+    <value>Erro ao analisar a resposta da pergunta</value>
+  </data>
+  <data name="ControlPanelController_RepeatLastInterviewStatus" xml:space="preserve">
+    <value>Status definido pela equipe de suporte de soluções de pesquisa</value>
+  </data>
+  <data name="ObserverNotAllowed" xml:space="preserve">
+    <value>Observador não tem permissão para executar esta ação</value>
   </data>
   <data name="UnexpectedErrorOccurred" xml:space="preserve">
     <value>Ocorreu um erro inesperado</value>
   </data>
-  <data name="ViewHelpers_Invalid_property" xml:space="preserve">
-    <value>Propriedade inválido.</value>
+  <data name="Error" xml:space="preserve">
+    <value>Erro</value>
+  </data>
+  <data name="AnyHeadquarters" xml:space="preserve">
+    <value>qualquer sede</value>
+  </data>
+  <data name="Days" xml:space="preserve">
+    <value>Dias</value>
+  </data>
+  <data name="Assignments" xml:space="preserve">
+    <value>Atribuições</value>
+  </data>
+  <data name="Interviews" xml:space="preserve">
+    <value>Entrevistas</value>
+  </data>
+  <data name="AllTeams" xml:space="preserve">
+    <value>Todas as equipes</value>
+  </data>
+  <data name="Teams" xml:space="preserve">
+    <value>Equipes</value>
+  </data>
+  <data name="AllPeriods" xml:space="preserve">
+    <value>Todos os períodos</value>
+  </data>
+  <data name="AllQuestionnaires" xml:space="preserve">
+    <value>Todos os questionários</value>
+  </data>
+  <data name="AllInterviewers" xml:space="preserve">
+    <value>Todos os entrevistadores</value>
+  </data>
+  <data name="AllInterviewersExceptApprovedByHeadquarters" xml:space="preserve">
+    <value>Não aprovado pela sede</value>
+  </data>
+  <data name="AllInterviewersExceptAssignedToInterviewer" xml:space="preserve">
+    <value>Não atribuído ao entrevistador</value>
+  </data>
+  <data name="NoPermissionsToExecute" xml:space="preserve">
+    <value>O usuário não está autorizado a executar a ação fornecida</value>
+  </data>
+  <data name="HQ_Views_ApiTokens_Title" xml:space="preserve">
+    <value>Acesso à API</value>
+  </data>
+  <data name="HQ_Views_Api_Token_Description" xml:space="preserve">
+    <value>O token da API é usado para realizar chamadas de API para o sistema</value>
+  </data>
+  <data name="HQ_Views_Api_Token_Issued" xml:space="preserve">
+    <value>ativado</value>
+  </data>
+  <data name="HQ_Views_Api_Token_Not_Issued" xml:space="preserve">
+    <value>desativado</value>
+  </data>
+  <data name="HQ_Views_Api_Token_Generate_Description" xml:space="preserve">
+    <value>Por favor, salve o token agora. Você só poderá vê-lo uma vez!</value>
   </data>
 </root>

@@ -567,7 +567,7 @@ Você pode criar ou editar seus questionários no Survey Solutions Designer</val
     <value>O aplicativo não tem permissões suficientes para executar a ação solicitada</value>
   </data>
   <data name="Ok" xml:space="preserve">
-    <value>Ok</value>
+      <value>OK</value>
   </data>
   <data name="Multimedia_PickFromGallery" xml:space="preserve">
     <value>Escolher da galeria</value>

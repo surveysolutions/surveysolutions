@@ -120,17 +120,68 @@
   <data name="Cancel" xml:space="preserve">
     <value>Annuler</value>
   </data>
-  <data name="CommandTransformator_ParseQuestionError" xml:space="preserve">
-    <value>Erreur lors de l'analyse de la réponse à la question</value>
+  <data name="Total" xml:space="preserve">
+    <value>Total</value>
   </data>
-  <data name="ControlPanelController_RepeatLastInterviewStatus" xml:space="preserve">
-    <value>Statut défini par l'équipe de support de Survey Solutions</value>
+  <data name="WithErrors" xml:space="preserve">
+    <value>Avec erreur</value>
+  </data>
+  <data name="Average" xml:space="preserve">
+    <value>Moyenne</value>
   </data>
   <data name="HQ_AccountController_AccountUpdatedSuccessfully" xml:space="preserve">
     <value>Informations du compte mises à jour avec succès</value>
   </data>
+  <data name="HQ_AccountController_AccountUpdatedSuccessfullyFormat" xml:space="preserve">
+    <value>Informations sur &lt;b&gt; {0} &lt;/ b&gt; mises à jour avec succès</value>
+  </data>
+  <data name="HQ_AccountController_AccountPasswordChangedSuccessfully" xml:space="preserve">
+    <value>Mot de passe du compte mis à jour avec succès</value>
+  </data>
+  <data name="HQ_AccountController_AccountPasswordChangedSuccessfullyFormat" xml:space="preserve">
+    <value>Le mot de passe du compte &lt;b&gt; {0} &lt;/ b&gt; a été bien mis à jour</value>
+  </data>
   <data name="HQ_Views_Manage_Title" xml:space="preserve">
     <value>Gérer son compte</value>
+  </data>
+  <data name="HQ_Views_TwoFactorAuthentication_Title" xml:space="preserve">
+    <value>Authentification à deux facteurs</value>
+  </data>
+  <data name="HQ_Views_TwoFactorAuthentication_Description" xml:space="preserve">
+    <value>L'authentification à deux facteurs est une fonctionnalité de sécurité avancée qui rend plus difficile pour un pirate de se connecter à votre compte avec juste un mot de passe volé.</value>
+  </data>
+  <data name="HQ_Views_TwoFactorAuthentication_Enabled" xml:space="preserve">
+    <value>activé</value>
+  </data>
+  <data name="HQ_Views_TwoFactorAuthentication_Disabled" xml:space="preserve">
+    <value>désactivé</value>
+  </data>
+  <data name="HQ_Views_TwoFactorAuthentication_SetupAuthenticator_Description" xml:space="preserve">
+    <value>Configurez un nouvel appareil pour l'authentification à deux facteurs. Vous pouvez configurer plusieurs appareils simultanément.</value>
+  </data>
+  <data name="HQ_Views_TwoFactorAuthentication_ResetAuthenticator_Description" xml:space="preserve">
+    <value>Réinitialisez à un nouveau code secret si l'un de vos appareils utilisés pour l'authentification à deux facteurs est perdu ou volé.</value>
+  </data>
+  <data name="HQ_Views_TwoFactorAuthentication_ResetRecoveryCodes_Description" xml:space="preserve">
+    <value>Invalidez tous les codes de récupération non utilisés et générez-en 10 nouveaux.</value>
+  </data>
+  <data name="HQ_Views_TwoFactorAuthentication_Disable2fa_Description" xml:space="preserve">
+    <value>Désactivez l'authentification à deux facteurs en laissant le compte protégé uniquement par le mot de passe.</value>
+  </data>
+  <data name="HQ_Views_EnableAuthenticator_Title" xml:space="preserve">
+    <value>Configurer l'application d'authentification</value>
+  </data>
+  <data name="HQ_Views_ResetAuthenticator_Title" xml:space="preserve">
+    <value>Réinitialiser la clé d'authentification</value>
+  </data>
+  <data name="HQ_Views_ShowRecoveryCodes_Title" xml:space="preserve">
+    <value>Codes de récupération</value>
+  </data>
+  <data name="HQ_Views_DisableTwoFactorAuth_Title" xml:space="preserve">
+    <value>Désactiver l'authentification à deux facteurs</value>
+  </data>
+  <data name="HQ_Views_ResetRecoveryCodes_Title" xml:space="preserve">
+    <value>Réinitialiser les codes de récupération</value>
   </data>
   <data name="InterviewStatus_ApprovedByHeadquarters" xml:space="preserve">
     <value>Approuvé par le Quartier Général</value>
@@ -171,20 +222,47 @@
   <data name="InterviewStatus_SupervisorAssigned" xml:space="preserve">
     <value>Affecté au Chef d'Equipe</value>
   </data>
-  <data name="ObserverNotAllowed" xml:space="preserve">
-    <value>L'Observateur n'est pas autorisé à effectuer cette action</value>
-  </data>
   <data name="SurverManagement_MainMenu_ManageAccount" xml:space="preserve">
     <value>Gérer son compte</value>
   </data>
-  <data name="UnexpectedErrorOccurred" xml:space="preserve">
-    <value>Une erreur inattendue s'est produite</value>
+  <data name="SurverManagement_MainMenu_ChangePassword" xml:space="preserve">
+    <value>Changer le mot de passe</value>
   </data>
   <data name="ViewHelpers_Invalid_property" xml:space="preserve">
     <value>Propriété invalide</value>
   </data>
-  <data name="AllInterviewers" xml:space="preserve">
-    <value>Tous les Enquêteurs</value>
+  <data name="CommandTransformator_ParseQuestionError" xml:space="preserve">
+    <value>Erreur lors de l'analyse de la réponse à la question</value>
+  </data>
+  <data name="ControlPanelController_RepeatLastInterviewStatus" xml:space="preserve">
+    <value>Statut défini par l'équipe de support de Survey Solutions</value>
+  </data>
+  <data name="ObserverNotAllowed" xml:space="preserve">
+    <value>L'Observateur n'est pas autorisé à effectuer cette action</value>
+  </data>
+  <data name="UnexpectedErrorOccurred" xml:space="preserve">
+    <value>Une erreur inattendue s'est produite</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Erreur</value>
+  </data>
+  <data name="AnyHeadquarters" xml:space="preserve">
+    <value>n'importe quel membre du Quartier Général</value>
+  </data>
+  <data name="Days" xml:space="preserve">
+    <value>Jours</value>
+  </data>
+  <data name="Assignments" xml:space="preserve">
+    <value>Affectations</value>
+  </data>
+  <data name="Interviews" xml:space="preserve">
+    <value>Entretiens</value>
+  </data>
+  <data name="AllTeams" xml:space="preserve">
+    <value>Toutes les équipes</value>
+  </data>
+  <data name="Teams" xml:space="preserve">
+    <value>Équipes</value>
   </data>
   <data name="AllPeriods" xml:space="preserve">
     <value>Toutes les périodes</value>
@@ -192,40 +270,31 @@
   <data name="AllQuestionnaires" xml:space="preserve">
     <value>Tous les questionnaires</value>
   </data>
-  <data name="AllTeams" xml:space="preserve">
-    <value>Toutes les équipes</value>
+  <data name="AllInterviewers" xml:space="preserve">
+    <value>Tous les Enquêteurs</value>
   </data>
-  <data name="AnyHeadquarters" xml:space="preserve">
-    <value>n'importe quel membre du Quartier Général</value>
+  <data name="AllInterviewersExceptApprovedByHeadquarters" xml:space="preserve">
+    <value>Non approuvé par le Quartier Général</value>
   </data>
-  <data name="Assignments" xml:space="preserve">
-    <value>Affectations</value>
+  <data name="AllInterviewersExceptAssignedToInterviewer" xml:space="preserve">
+    <value>Non affecté à l'Enquêteur</value>
   </data>
-  <data name="Average" xml:space="preserve">
-    <value>Moyenne</value>
+  <data name="NoPermissionsToExecute" xml:space="preserve">
+    <value>L'utilisateur n'est pas autorisé à exécuter l'action fournie</value>
   </data>
-  <data name="Days" xml:space="preserve">
-    <value>Jours</value>
+  <data name="HQ_Views_ApiTokens_Title" xml:space="preserve">
+    <value>Accès à l'API</value>
   </data>
-  <data name="Error" xml:space="preserve">
-    <value>Erreur</value>
+  <data name="HQ_Views_Api_Token_Description" xml:space="preserve">
+    <value>Le jeton API est utilisé pour effectuer des appels API au système</value>
   </data>
-  <data name="HQ_AccountController_AccountPasswordChangedSuccessfully" xml:space="preserve">
-    <value>Mot de passe du compte mis à jour avec succès</value>
+  <data name="HQ_Views_Api_Token_Issued" xml:space="preserve">
+    <value>activé</value>
   </data>
-  <data name="HQ_AccountController_AccountPasswordChangedSuccessfullyFormat" xml:space="preserve">
-    <value>Le mot de passe du compte &lt;b&gt; {0} &lt;/ b&gt; a été bien mis à jour</value>
+  <data name="HQ_Views_Api_Token_Not_Issued" xml:space="preserve">
+    <value>désactivé</value>
   </data>
-  <data name="HQ_AccountController_AccountUpdatedSuccessfullyFormat" xml:space="preserve">
-    <value>Informations sur &lt;b&gt; {0} &lt;/ b&gt; mises à jour avec succès</value>
-  </data>
-  <data name="Interviews" xml:space="preserve">
-    <value>Entretiens</value>
-  </data>
-  <data name="Total" xml:space="preserve">
-    <value>Total</value>
-  </data>
-  <data name="WithErrors" xml:space="preserve">
-    <value>Avec erreur</value>
+  <data name="HQ_Views_Api_Token_Generate_Description" xml:space="preserve">
+    <value>Veuillez enregistrer le jeton maintenant. Vous ne pourrez le voir qu'une seule fois!</value>
   </data>
 </root>

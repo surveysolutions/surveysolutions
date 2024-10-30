@@ -567,7 +567,7 @@ Vous pouvez créer ou modifier vos questionnaires dans Survey Solutions Designer
     <value>L'application n'a pas suffisamment d'autorisations pour exécuter l'action demandée</value>
   </data>
   <data name="Ok" xml:space="preserve">
-    <value>Ok</value>
+      <value>OK</value>
   </data>
   <data name="Multimedia_PickFromGallery" xml:space="preserve">
     <value>Choisir dans la galerie</value>
