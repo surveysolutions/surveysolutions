@@ -117,50 +117,50 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Average" xml:space="preserve">
+ <data name="Average" xml:space="preserve">
     <value>Média</value>
   </data>
   <data name="AverageCaseAssignmentDuration" xml:space="preserve">
-    <value>Atribuição de caso média duração</value>
+    <value>Duração média da atribuição de caso</value>
   </data>
   <data name="AverageCaseAssignmentDurationDescription" xml:space="preserve">
-    <value>Uma diferença de tempo entre o momento em uma entrevista é atribuída a um entrevistador e o momento quando o botão completo é pressionado em um tablet.</value>
+    <value>Tempo médio desde o momento em que uma entrevista é atribuída a um entrevistador até o momento em que o botão de conclusão é pressionado em um tablet.</value>
   </data>
   <data name="AverageHQProcessingTime" xml:space="preserve">
-    <value>Tempo médio de processamento de HQ</value>
+    <value>Tempo médio de processamento no HQ</value>
   </data>
   <data name="AverageHQProcessingTimeDescription" xml:space="preserve">
-    <value>Uma diferença de tempo entre o momento em que um supervisor aprova um questionário e esse questionário é aprovada ou rejeitada na HQ.</value>
+    <value>Tempo médio desde o momento em que um supervisor aprova uma entrevista até o momento em que essa entrevista é aprovada ou rejeitada no HQ.</value>
   </data>
   <data name="AverageInterviewDuration" xml:space="preserve">
-    <value>Entrevista de média duração</value>
+    <value>Duração média da entrevista</value>
+  </data>
+  <data name="AverageInterviewDurationDescription" xml:space="preserve">
+    <value>Tempo médio que a entrevista foi apresentada na tela do entrevistador antes da conclusão por entrevistador.</value>
+  </data>
+  <data name="AverageInterviewDurationForSupervisors" xml:space="preserve">
+    <value>Tempo médio que a entrevista foi apresentada na tela do entrevistador antes da conclusão por supervisor.</value>
   </data>
   <data name="AverageOverallCaseProcessingTime" xml:space="preserve">
-    <value>Tempo médio de processamento geral caso</value>
+    <value>Tempo médio de processamento geral do caso</value>
   </data>
   <data name="AverageOverallCaseProcessingTimeDescription" xml:space="preserve">
-    <value>Uma diferença de tempo entre a primeira tarefa e o momento quando a entrevista é aprovada pela HQ.</value>
+    <value>Tempo médio desde a primeira atribuição até o momento em que a entrevista é aprovada pelo HQ.</value>
   </data>
   <data name="AverageSupervisorProcessingTime" xml:space="preserve">
-    <value>Tempo de processamento médio supervisor</value>
+    <value>Tempo médio de processamento do supervisor</value>
   </data>
   <data name="AverageSupervisorProcessingTimeDescription" xml:space="preserve">
-    <value>Uma diferença de tempo entre a completa botão sendo pressionado e o supervisor aceita ou rejeita esse questionário.</value>
+    <value>Tempo médio desde o momento em que o botão de conclusão é pressionado até o momento em que o supervisor aceita ou rejeita essa entrevista.</value>
   </data>
   <data name="BackToSupervisors" xml:space="preserve">
-    <value> Volta para supervisores</value>
+    <value>Voltar para supervisores</value>
   </data>
-  <data name="By" xml:space="preserve">
-    <value>Por</value>
+  <data name="BackToTeams" xml:space="preserve">
+    <value>Voltar para equipes</value>
   </data>
   <data name="Day" xml:space="preserve">
     <value>Dia</value>
-  </data>
-  <data name="From" xml:space="preserve">
-    <value>De</value>
-  </data>
-  <data name="InThe" xml:space="preserve">
-    <value>na</value>
   </data>
   <data name="Month" xml:space="preserve">
     <value>Mês</value>
@@ -168,23 +168,32 @@
   <data name="NumberOfCompletedInterviews" xml:space="preserve">
     <value>Número de entrevistas concluídas</value>
   </data>
+  <data name="NumberOfCompletedInterviewsDescriptionPerTeam" xml:space="preserve">
+    <value>Número de entrevistas concluídas por equipe. Entrevistas rejeitadas e depois concluídas são contadas como eventos de conclusão separados.</value>
+  </data>
+  <data name="NumberOfCompletedInterviewsDescriptionPerInterviewer" xml:space="preserve">
+    <value>Número de entrevistas concluídas por entrevistador. Entrevistas rejeitadas e depois concluídas são contadas como eventos de conclusão separados.</value>
+  </data>
   <data name="NumberOfInterviewsApprovedByHQ" xml:space="preserve">
-    <value>Número de entrevistas aprovado pela HQ</value>
+    <value>Número de entrevistas aprovadas pelo HQ</value>
   </data>
   <data name="NumberOfInterviewsApprovedByHQDescription" xml:space="preserve">
-    <value>Número de entrevistas coletadas por um {0} que foram aprovados pelo HQ.</value>
+    <value>Número de entrevistas coletadas por {0} aprovadas pelo HQ.</value>
   </data>
   <data name="NumberOfInterviewTransactionsByHQ" xml:space="preserve">
-    <value>Número de transações de entrevista por HQ</value>
+    <value>Número de transações de entrevista pelo HQ</value>
   </data>
   <data name="NumberOfInterviewTransactionsByHQDescription" xml:space="preserve">
-    <value>Número de aprovações e rejeições, interpretadas por uma HQ em questionários coletados por um {0}.</value>
+    <value>Número de aprovações e rejeições pelo HQ em entrevistas coletadas por {0}.</value>
   </data>
   <data name="NumberOfInterviewTransactionsBySupervisor" xml:space="preserve">
     <value>Número de transações de entrevista pelo Supervisor</value>
   </data>
   <data name="NumberOfInterviewTransactionsBySupervisorDescriptionPerTeam" xml:space="preserve">
-    <value>Número de aprovações e rejeições, realizadas por um supervisor em questionários coletados por um {0}.</value>
+    <value>Número de aprovações e rejeições por um supervisor em entrevistas coletadas por {0}.</value>
+  </data>
+  <data name="NumberOfInterviewTransactionsBySupervisorDescriptionPerInterviewer" xml:space="preserve">
+    <value>Número de aprovações e rejeições por um supervisor em entrevistas coletadas por entrevistador</value>
   </data>
   <data name="Period" xml:space="preserve">
     <value>Período</value>
@@ -215,5 +224,29 @@
   </data>
   <data name="Week" xml:space="preserve">
     <value>Semana</value>
+  </data>
+  <data name="By" xml:space="preserve">
+    <value>Por</value>
+  </data>
+  <data name="InThe" xml:space="preserve">
+    <value>na</value>
+  </data>
+  <data name="From" xml:space="preserve">
+    <value>De</value>
+  </data>
+  <data name="InTheSupervisorTeamFormat" xml:space="preserve">
+    <value>na equipe {0}</value>
+  </data>
+  <data name="LastDateToShowLabel" xml:space="preserve">
+    <value>A partir de</value>
+  </data>
+  <data name="OverTheLast" xml:space="preserve">
+    <value>Nos últimos</value>
+  </data>
+  <data name="PeriodUnit" xml:space="preserve">
+    <value>Unidade de período</value>
+  </data>
+  <data name="InterviewActions" xml:space="preserve">
+    <value>Ações de entrevista</value>
   </data>
 </root>

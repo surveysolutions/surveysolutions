@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -117,127 +117,112 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Generated" xml:space="preserve">
-    <value>Generado</value>
-  </data>  
-  <data name="PageOf" xml:space="preserve">
-    <value> de </value>
-  </data>  
-  <data name="Comments" xml:space="preserve">
-    <value>Comentarios</value>
+ <data name="CloseInterview" xml:space="preserve">
+    <value>Entretien {0} fermé</value>
   </data>
-  <data name="YesNo" xml:space="preserve">
-    <value>Sí / No</value>
+  <data name="CompleteInterview" xml:space="preserve">
+    <value>Entretien {0} terminé</value>
   </data>
-  <data name="TableOfContent" xml:space="preserve">
-    <value>Tabla de contenido</value>
+  <data name="RestartInterview" xml:space="preserve">
+    <value>Entretien {0} redémarré</value>
   </data>
-  <data name="Error" xml:space="preserve">
-    <value>Error</value>
+  <data name="ApproveInterview" xml:space="preserve">
+    <value>Entretien {0} approuvé</value>
   </data>
-  <data name="Warning" xml:space="preserve">
-    <value>Advertencia</value>
+  <data name="RejectInterview" xml:space="preserve">
+    <value>Entretien {0} rejeté</value>
   </data>
-  <data name="Version" xml:space="preserve">
-    <value>versión {0}</value>
+  <data name="RejectInterviewToInterviewer" xml:space="preserve">
+    <value>Entretien {0} rejeté à l'enquêteur {1}</value>
   </data>
-  <data name="Started" xml:space="preserve">
-    <value>Entrevista iniciada</value>
+  <data name="CreateInterviewFromAssignment" xml:space="preserve">
+    <value>Entretien {0} créé à partir de l'affectation {1}</value>
   </data>
-  <data name="Completed" xml:space="preserve">
-    <value>Entrevista completada</value>
+  <data name="DeleteInterview" xml:space="preserve">
+    <value>Entretien {0} supprimé</value>
   </data>
-  <data name="InterviewVolume" xml:space="preserve">
-    <value>Volumen de la entrevista</value>
+  <data name="DetailedActionLog" xml:space="preserve">
+    <value>Journal d'actions détaillé</value>
   </data>
-  <data name="InterviewStatisticsSections" xml:space="preserve">
-    <value>{0} secciones</value>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Journal d'actions</value>
   </data>
-  <data name="InterviewStatisticsAnswered" xml:space="preserve">
-    <value>{0} preguntas respondidas</value>
+  <data name="DownloadTabLog" xml:space="preserve">
+    <value>Télécharger le journal complet au format Tab</value>
   </data>
-  <data name="InterviewStatisticsUnanswered" xml:space="preserve">
-    <value>{0} preguntas sin respuesta</value>
+  <data name="RecordsMissing" xml:space="preserve">
+    <value>Aucun enregistrement pour le moment</value>
   </data>
-  <data name="InterviewStatisticsErrors" xml:space="preserve">
-    <value>{0} errores</value>
+  <data name="Login" xml:space="preserve">
+    <value>Utilisateur {0} connecté à l'application</value>
   </data>
-  <data name="InterviewStatisticsWarnings" xml:space="preserve">
-    <value>{0} advertencias</value>
+  <data name="Logout" xml:space="preserve">
+    <value>Utilisateur {0} déconnecté de l'application</value>
   </data>
-  <data name="InterviewStatisticsCommented" xml:space="preserve">
-    <value>{0} preguntas con comentarios</value>
+  <data name="OpenApplication" xml:space="preserve">
+    <value>Application ouverte</value>
   </data>
-  <data name="GeneratedBy" xml:space="preserve">
-    <value>Generado por {0}</value>
+  <data name="AssignResponsibleToInterview" xml:space="preserve">
+    <value>Affecter le responsable {0} à l'entretien {1}</value>
   </data>
-  <data name="GeneratedAt" xml:space="preserve">
-    <value>en {0}</value>
+  <data name="AssignResponsibleToAssignment" xml:space="preserve">
+    <value>Affecter le responsable {0} à l'affectation #{1}</value>
   </data>
-  <data name="SurveySolutions" xml:space="preserve">
-    <value>Soluciones para encuestas</value>
+  <data name="FinishInstallation" xml:space="preserve">
+    <value>Installation terminée</value>
   </data>
-  <data name="InterviewTranscript" xml:space="preserve">
-    <value>Transcripción de la entrevista</value>
+  <data name="OpenInterview" xml:space="preserve">
+    <value>Entretien {0} ouvert</value>
   </data>
-  <data name="Cover" xml:space="preserve">
-    <value>Portada</value>
+  <data name="Relink" xml:space="preserve">
+    <value>Utilisateur relié à une nouvelle tablette</value>
   </data>
-  <data name="Questionnaire" xml:space="preserve">
-    <value>Cuestionario</value>
+  <data name="ShowPrevious7Days" xml:space="preserve">
+    <value>Afficher les 7 jours actifs précédents</value>
   </data>
-  <data name="Yes" xml:space="preserve">
-    <value>Sí</value>
+  <data name="SynchronizationCanceled" xml:space="preserve">
+    <value>Synchronisation annulée</value>
   </data>
-  <data name="No" xml:space="preserve">
-    <value>No</value>
+  <data name="SynchronizationCompleted" xml:space="preserve">
+    <value>Synchronisation terminée :</value>
   </data>
-  <data name="NotAnswered" xml:space="preserve">
-    <value>No respondido</value>
+  <data name="SynchronizationCompleted_InterviewsUploaded" xml:space="preserve">
+    <value>{0} entretien(s) téléchargé(s)</value>
   </data>
-  <data name="NotCalculated" xml:space="preserve">
-    <value>Sin valor</value>
+  <data name="SynchronizationCompleted_InterviewsRemoved" xml:space="preserve">
+    <value>{0} entretien(s) supprimé(s)</value>
   </data>
-  <data name="InterviewKey" xml:space="preserve">
-    <value>Llave de la entrevista</value>
+  <data name="SynchronizationCompleted_InterviewsPartialDownloaded" xml:space="preserve">
+    <value>{0} entretien(s) mis à jour depuis le Quartier Général</value>
   </data>
-  <data name="UserRoles_Administrator" xml:space="preserve">
-    <value>Administrador</value>
+  <data name="SynchronizationCompleted_InterviewsPartialUploaded" xml:space="preserve">
+    <value>{0} entretien(s) partiellement téléchargé(s)</value>
   </data>
-  <data name="UserRoles_Headquarter" xml:space="preserve">
-    <value>Sede</value>
+  <data name="SynchronizationCompleted_ReopenedInterviewsAfterComments" xml:space="preserve">
+    <value>{0} entretien(s) rouvert(s) après réception de commentaires</value>
   </data>
-  <data name="UserRoles_Supervisor" xml:space="preserve">
-    <value>Supervisor</value>
+  <data name="SynchronizationCompleted_InterviewsRejected" xml:space="preserve">
+    <value>{0} entretien(s) rejeté(s)</value>
   </data>
-  <data name="UserRoles_Interviewer" xml:space="preserve">
-    <value>Entrevistador</value>
+  <data name="SynchronizationCompleted_InterviewsDownloaded" xml:space="preserve">
+    <value>{0} nouvel(s) entretien(s) téléchargé(s)</value>
   </data>
-  <data name="UserRoles_Observer" xml:space="preserve">
-    <value>Observador</value>
+  <data name="SynchronizationCompleted_AssignmentsDownloaded" xml:space="preserve">
+    <value>{0} nouvelle(s) affectation(s) téléchargée(s)</value>
   </data>
-  <data name="UserRoles_ApiUser" xml:space="preserve">
-    <value>Usuario API</value>
+  <data name="SynchronizationCompleted_AssignmentsRemoved" xml:space="preserve">
+    <value>{0} affectation(s) supprimée(s)</value>
   </data>
-  <data name="AreaQestion_Area" xml:space="preserve">
-    <value>Área</value>
+  <data name="SynchronizationCompleted_NothingToSync" xml:space="preserve">
+    <value>rien à synchroniser</value>
   </data>
-  <data name="AreaQestion_Length" xml:space="preserve">
-    <value>Longitud</value>
+  <data name="SynchronizationFailed" xml:space="preserve">
+    <value>Échec de la synchronisation</value>
   </data>
-  <data name="AreaQestion_Points" xml:space="preserve">
-    <value>Puntos</value>
+  <data name="SynchronizationStarted" xml:space="preserve">
+    <value>Synchronisation commencée ({0})</value>
   </data>
-  <data name="AreaQestion_RequestedAccuracy" xml:space="preserve">
-    <value>Precisión</value>
-  </data>
-  <data name="AreaQestion_RequestedFrequency" xml:space="preserve">
-    <value>Frecuencia</value>
-  </data>
-  <data name="AreaQestion_AreaUnitMeter" xml:space="preserve">
-    <value>metros cuadrados</value>
-  </data>
-  <data name="AreaQestion_AreaMeter" xml:space="preserve">
-    <value>metros</value>
+  <data name="SwitchInterviewMode" xml:space="preserve">
+    <value>Entretien {0} changé en mode {1}</value>
   </data>
 </root>

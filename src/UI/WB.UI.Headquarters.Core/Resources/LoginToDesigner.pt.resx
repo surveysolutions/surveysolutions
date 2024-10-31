@@ -117,7 +117,31 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AccessForbidden" xml:space="preserve">
+    <value>O servidor não está registrado no Questionnaire Designer. Por favor, envie uma solicitação para registrar um servidor auto-hospedado no portal Survey Solutions https://mysurvey.solutions/NewServerRequest</value>
+  </data>
+  <data name="DesignerAppDescription" xml:space="preserve">
+    <value>Esta é uma ferramenta gratuita para criar questionários para a plataforma CAPI do Banco Mundial. Pode ser encontrada em</value>
+  </data>
+  <data name="InvalidCredentials" xml:space="preserve">
+    <value>Usuário não autorizado. Por favor, verifique seu login e senha e se sua conta não está bloqueada.</value>
+  </data>
+  <data name="LoginWatermark" xml:space="preserve">
+    <value>Login ou email</value>
+  </data>
+  <data name="PageHeader" xml:space="preserve">
+    <value>Use suas credenciais do Survey Solutions Designer para acessar seus questionários.</value>
+  </data>
   <data name="Questionnaire" xml:space="preserve">
     <value>Questionário</value>
+  </data>
+  <data name="SessionExpired" xml:space="preserve">
+    <value>A sessão expirou, por favor, faça login novamente</value>
+  </data>
+  <data name="UnableToImportNewQuestionnaire" xml:space="preserve">
+    <value>Não foi possível importar o novo questionário:</value>
+  </data>
+  <data name="UserDesignerCredentials" xml:space="preserve">
+    <value>Por favor, faça login com as credenciais que você normalmente usa para acessar seus questionários no site do Designer e no aplicativo Tester</value>
   </data>
 </root>

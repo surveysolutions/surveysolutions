@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -117,127 +117,44 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Generated" xml:space="preserve">
-    <value>Generado</value>
-  </data>  
-  <data name="PageOf" xml:space="preserve">
-    <value> de </value>
-  </data>  
-  <data name="Comments" xml:space="preserve">
-    <value>Comentarios</value>
+  <data name="Synchronization_UploadBrokenInterviewPackages" xml:space="preserve">
+    <value>Carregando pacotes de entrevistas corrompidos</value>
   </data>
-  <data name="YesNo" xml:space="preserve">
-    <value>Sí / No</value>
+  <data name="Synchronization_UploadExceptions" xml:space="preserve">
+    <value>Carregando mensagens de erro do entrevistador</value>
   </data>
-  <data name="TableOfContent" xml:space="preserve">
-    <value>Tabla de contenido</value>
+  <data name="OfflineSync_ReceivingInterviewsFromDevices" xml:space="preserve">
+    <value>Recebendo entrevistas do dispositivo do entrevistador</value>
   </data>
-  <data name="Error" xml:space="preserve">
-    <value>Error</value>
+  <data name="OfflineSync_ReceivingInterviews" xml:space="preserve">
+    <value>Recebendo entrevistas</value>
   </data>
-  <data name="Warning" xml:space="preserve">
-    <value>Advertencia</value>
+  <data name="OfflineSync_NoDevicesDetectedFormat" xml:space="preserve">
+    <value>Nenhum dispositivo de envio detectado.
+Seu ID de dispositivo é '{0}'</value>
   </data>
-  <data name="Version" xml:space="preserve">
-    <value>versión {0}</value>
+  <data name="OfflineSync_WaitingInterviewers" xml:space="preserve">
+    <value>Aguardando ação dos dispositivos dos entrevistadores</value>
   </data>
-  <data name="Started" xml:space="preserve">
-    <value>Entrevista iniciada</value>
+  <data name="Synchronization_UploadStatistics" xml:space="preserve">
+    <value>Carregando estatísticas de sincronização dos entrevistadores</value>
   </data>
-  <data name="Completed" xml:space="preserve">
-    <value>Entrevista completada</value>
+  <data name="Synchronization_UploadStatisticsStats" xml:space="preserve">
+    <value>Carregado {0} de {1}</value>
   </data>
-  <data name="InterviewVolume" xml:space="preserve">
-    <value>Volumen de la entrevista</value>
+  <data name="Synchronization_Synchronize_HQ" xml:space="preserve">
+    <value>Sincronizar com a Sede</value>
   </data>
-  <data name="InterviewStatisticsSections" xml:space="preserve">
-    <value>{0} secciones</value>
+  <data name="Synchronization_Download_Interviewer_Apps" xml:space="preserve">
+    <value>Baixando atualizações para o aplicativo do entrevistador</value>
   </data>
-  <data name="InterviewStatisticsAnswered" xml:space="preserve">
-    <value>{0} preguntas respondidas</value>
+  <data name="Synchronization_Download_Interviewer_Apps_Format" xml:space="preserve">
+    <value>Baixando atualizações. {0} de {1} baixados</value>
   </data>
-  <data name="InterviewStatisticsUnanswered" xml:space="preserve">
-    <value>{0} preguntas sin respuesta</value>
+  <data name="Synchronization_Synchronize_Offline" xml:space="preserve">
+    <value>Sincronizar com Entrevistadores</value>
   </data>
-  <data name="InterviewStatisticsErrors" xml:space="preserve">
-    <value>{0} errores</value>
-  </data>
-  <data name="InterviewStatisticsWarnings" xml:space="preserve">
-    <value>{0} advertencias</value>
-  </data>
-  <data name="InterviewStatisticsCommented" xml:space="preserve">
-    <value>{0} preguntas con comentarios</value>
-  </data>
-  <data name="GeneratedBy" xml:space="preserve">
-    <value>Generado por {0}</value>
-  </data>
-  <data name="GeneratedAt" xml:space="preserve">
-    <value>en {0}</value>
-  </data>
-  <data name="SurveySolutions" xml:space="preserve">
-    <value>Soluciones para encuestas</value>
-  </data>
-  <data name="InterviewTranscript" xml:space="preserve">
-    <value>Transcripción de la entrevista</value>
-  </data>
-  <data name="Cover" xml:space="preserve">
-    <value>Portada</value>
-  </data>
-  <data name="Questionnaire" xml:space="preserve">
-    <value>Cuestionario</value>
-  </data>
-  <data name="Yes" xml:space="preserve">
-    <value>Sí</value>
-  </data>
-  <data name="No" xml:space="preserve">
-    <value>No</value>
-  </data>
-  <data name="NotAnswered" xml:space="preserve">
-    <value>No respondido</value>
-  </data>
-  <data name="NotCalculated" xml:space="preserve">
-    <value>Sin valor</value>
-  </data>
-  <data name="InterviewKey" xml:space="preserve">
-    <value>Llave de la entrevista</value>
-  </data>
-  <data name="UserRoles_Administrator" xml:space="preserve">
-    <value>Administrador</value>
-  </data>
-  <data name="UserRoles_Headquarter" xml:space="preserve">
-    <value>Sede</value>
-  </data>
-  <data name="UserRoles_Supervisor" xml:space="preserve">
-    <value>Supervisor</value>
-  </data>
-  <data name="UserRoles_Interviewer" xml:space="preserve">
-    <value>Entrevistador</value>
-  </data>
-  <data name="UserRoles_Observer" xml:space="preserve">
-    <value>Observador</value>
-  </data>
-  <data name="UserRoles_ApiUser" xml:space="preserve">
-    <value>Usuario API</value>
-  </data>
-  <data name="AreaQestion_Area" xml:space="preserve">
-    <value>Área</value>
-  </data>
-  <data name="AreaQestion_Length" xml:space="preserve">
-    <value>Longitud</value>
-  </data>
-  <data name="AreaQestion_Points" xml:space="preserve">
-    <value>Puntos</value>
-  </data>
-  <data name="AreaQestion_RequestedAccuracy" xml:space="preserve">
-    <value>Precisión</value>
-  </data>
-  <data name="AreaQestion_RequestedFrequency" xml:space="preserve">
-    <value>Frecuencia</value>
-  </data>
-  <data name="AreaQestion_AreaUnitMeter" xml:space="preserve">
-    <value>metros cuadrados</value>
-  </data>
-  <data name="AreaQestion_AreaMeter" xml:space="preserve">
-    <value>metros</value>
+  <data name="Confirm_Approve_Synchronized_Interview_Message" xml:space="preserve">
+    <value>O entrevistador responsável atual não será notificado sobre a aprovação da entrevista até a próxima sincronização. Se o entrevistador já começou a trabalhar na entrevista, todos os dados que o entrevistador inseriu antes da próxima sincronização serão DESCARTADOS!</value>
   </data>
 </root>

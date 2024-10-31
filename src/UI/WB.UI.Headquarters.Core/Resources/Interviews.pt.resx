@@ -120,8 +120,11 @@
     <data name="ApproveConfirmMessage" xml:space="preserve">
       <value>{{count}} entrevista será aprovada.</value>
   </data>
+<data name="ApproveConfirmMessage" xml:space="preserve">
+    <value>{{count}} entrevista será aprovada.</value>
+  </data>
   <data name="ApproveConfirmMessageHQ" xml:space="preserve">
-      <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; entrevista(s) será aprovada.&lt;/h3&gt;
+    <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; entrevista(s) será aprovada.&lt;/h3&gt;
 &lt;b&gt;Nota!&lt;/b&gt; Você pode aprovar entrevistas com os seguintes status apenas: &lt;i&gt;{{status1}}&lt;/i&gt;, &lt;i&gt;{{status2}}&lt;/i&gt; e &lt;i&gt;{{status3}}&lt;/i&gt;.</value>
   </data>
   <data name="AssignConfirmMessage" xml:space="preserve">
@@ -260,13 +263,13 @@
     <value>Sem dados disponíveis</value>
   </data>
   <data name="ApproveConfirmMessage_other" xml:space="preserve">
-      <value>{{count}} entrevistas serão aprovadas.</value>
+    <value>{{count}} entrevistas serão aprovadas.</value>
   </data>
   <data name="Note" xml:space="preserve">
-      <value>Nota!</value>
+    <value>Nota!</value>
   </data>
   <data name="ApproveConfirmMessage_Statuses" xml:space="preserve">
-      <value>Você pode aprovar entrevistas com os seguintes status apenas: {{status1}},  {{status2}} e {{status3}}.</value>
+    <value>Você pode aprovar entrevistas com os seguintes status apenas: {{status1}},  {{status2}} e {{status3}}.</value>
   </data>
   <data name="DynamicFilter_MatchType" xml:space="preserve">
     <value>Tipo de correspondência</value>
@@ -287,6 +290,6 @@
     <value>valor</value>
   </data>
   <data name="WebInterviewResponsibleWarning" xml:space="preserve">
-      <value>O responsável não é o Entrevistador. O link não funcionará.</value>
+    <value>O responsável não é o Entrevistador. O link não funcionará.</value>
   </data>
 </root>
