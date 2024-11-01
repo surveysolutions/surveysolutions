@@ -29,6 +29,7 @@ using WB.UI.Shared.Enumerator.CustomServices;
 using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Shared.Extensions.Entities;
 using WB.UI.Shared.Extensions.Services;
+using WB.UI.Shared.Extensions.Views;
 using Xamarin.Essentials;
 
 namespace WB.UI.Shared.Extensions.ViewModels;
@@ -56,11 +57,12 @@ public class GeofencingViewModel: MarkersMapInteractionViewModel<GeofencingViewM
         }
     }
 
-    private readonly IVibrationService vibrationService;
     private readonly IGeolocationBackgroundServiceManager backgroundServiceManager;
+    private readonly IPlainStorage<GeoTrackingRecord, int?> geoTrackingRecordsStorage;
+    private readonly IPlainStorage<GeoTrackingPoint, int?> geoTrackingPointsStorage;
     
-    private GeofencingListener geofencingListener;
-    private TestingListener testingListener;
+    private readonly IGeoTrackingListener geoTrackingListener;
+    private readonly IGeofencingListener geofencingListener;
 
     public GeofencingViewModel(IPrincipal principal, 
         IViewModelNavigationService viewModelNavigationService,
@@ -72,19 +74,27 @@ public class GeofencingViewModel: MarkersMapInteractionViewModel<GeofencingViewM
         IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher,
         IPermissionsService permissionsService,
         IEnumeratorSettings settings,
-        IVibrationService vibrationService,
         IGeolocationBackgroundServiceManager backgroundServiceManager,
         IDashboardViewModelFactory dashboardViewModelFactory,
         IAssignmentDocumentsStorage assignmentsRepository,
-        IPlainStorage<InterviewView> interviewViewRepository) 
+        IPlainStorage<InterviewView> interviewViewRepository,
+        IGeoTrackingListener geoTrackingListener,
+        IGeofencingListener geofencingListener, 
+        IPlainStorage<GeoTrackingPoint, int?> geoTrackingPointsStorage, 
+        IPlainStorage<GeoTrackingRecord, int?> geoTrackingRecordsStorage) 
         : base(principal, viewModelNavigationService, mapService, userInteractionService, logger, 
                enumeratorSettings, mapUtilityService, mainThreadAsyncDispatcher, permissionsService, 
                settings, dashboardViewModelFactory, assignmentsRepository, interviewViewRepository)
     {
-        this.vibrationService = vibrationService;
         this.backgroundServiceManager = backgroundServiceManager;
+        this.geoTrackingListener = geoTrackingListener;
+        this.geofencingListener = geofencingListener;
+        this.geoTrackingPointsStorage = geoTrackingPointsStorage;
+        this.geoTrackingRecordsStorage = geoTrackingRecordsStorage;
 
         this.ShowInterviews = true;
+        
+        backgroundServiceManager.LocationReceived += BackgroundServiceManagerOnLocationReceived;
     }
 
     private GraphicsOverlayCollection graphicsOverlays = new GraphicsOverlayCollection();
@@ -217,26 +227,66 @@ public class GeofencingViewModel: MarkersMapInteractionViewModel<GeofencingViewM
         new MvxAsyncCommand(async () => { await ToggleGeofencingService(); }, 
             () => LoadedShapefile != null);
 
+    private bool isGeofencingEnabled = false;
+    
     private async Task ToggleGeofencingService()
     {
         try
         {
             await permissionsService.AssureHasPermissionOrThrow<Permissions.LocationAlways>();
 
-            if (geofencingListener == null)
+            if (!isGeofencingEnabled)
             {
-                this.geofencingListener ??= new GeofencingListener(LoadedShapefile, vibrationService);
+                this.geofencingListener.Start(LoadedShapefile);
                 this.backgroundServiceManager.StartListen(geofencingListener);
-                this.testingListener ??= new TestingListener(this);
-                this.backgroundServiceManager.StartListen(testingListener);
+                
                 await SwitchLocator();
             }
             else
             {
-                this.backgroundServiceManager.StopListen(testingListener);
                 this.backgroundServiceManager.StopListen(geofencingListener);
-                this.geofencingListener = null;
             }
+
+            isGeofencingEnabled = !isGeofencingEnabled;
+        }
+        catch (MissingPermissionsException mp) when (mp.PermissionType == typeof(Permissions.LocationAlways))
+        {
+            this.UserInteractionService.ShowToast(UIResources.MissingPermissions_MapsLocation);
+            return;
+        }
+        catch (Exception exc)
+        {
+            logger.Error("Error occurred on map location start.", exc);
+        }        
+    }
+    
+    public IMvxCommand StartGeoTrackingCommand => 
+        new MvxAsyncCommand(async () => { await ToggleGeoTrackingService(); }, 
+            () => LoadedShapefile != null);
+
+    private bool isGeoTrackingEnabled = false;
+    
+    private async Task ToggleGeoTrackingService()
+    {
+        try
+        {
+            await permissionsService.AssureHasPermissionOrThrow<Permissions.LocationAlways>();
+
+            if (!isGeoTrackingEnabled)
+            {
+                await DrawGeoTrackingAsync();
+                await SwitchLocator();
+
+                this.geoTrackingListener.Start(assignment.Id);
+                this.backgroundServiceManager.StartListen(geoTrackingListener);
+            }
+            else
+            {
+                this.geoTrackingListener.Stop();
+                this.backgroundServiceManager.StopListen(geoTrackingListener);
+            }
+
+            isGeoTrackingEnabled = !isGeoTrackingEnabled;
         }
         catch (MissingPermissionsException mp) when (mp.PermissionType == typeof(Permissions.LocationAlways))
         {
@@ -249,35 +299,156 @@ public class GeofencingViewModel: MarkersMapInteractionViewModel<GeofencingViewM
         }        
     }
 
-    public class TestingListener : IGeolocationListener
+    private void BackgroundServiceManagerOnLocationReceived(object sender, LocationReceivedEventArgs e)
     {
-        private readonly GeofencingViewModel geofencingViewModel;
+        LogTestRecords(e);
 
-        public TestingListener(GeofencingViewModel geofencingViewModel)
+        UpdateGeoTrackingPointsAsync(e.Location);
+    }
+
+    private List<RecordWithPoints> GeoTrackingRecords { get; set; }
+    
+    public const string GeoTrackingLayerName = "GeoTrackingLayer";
+
+    private Feature lastGeoTrackingFeature;
+
+    private class RecordWithPoints
+    {
+        public int RecordId { get; set; }
+        public List<GeoTrackingPoint> Points { get; set; }
+    }
+    
+    private async Task DrawGeoTrackingAsync()
+    {
+        GeoTrackingRecords = geoTrackingRecordsStorage
+                .WhereSelect(where => where.AssignmentId == assignment.Id,
+                    r =>
+                    new RecordWithPoints()
+                    {
+                        RecordId = r.Id.Value,
+                        Points = geoTrackingPointsStorage.Where(p => p.GeoTrackingRecordId == r.Id.Value).ToList()
+                    }
+        ).ToList();
+
+        if (GeoTrackingRecords == null || GeoTrackingRecords.Count == 0)
+            return;
+        
+        if(this.MapView?.Map?.SpatialReference == null)
+            return;
+        
+        var gType = GeometryType.Multipoint;
+        var esriGeometryType = GeometryType.Multipoint;
+
+        IEnumerable<Field> fields = new Field[]
         {
-            this.geofencingViewModel = geofencingViewModel;
-        }
+            new Field(FieldType.Text, "name", "Name", 50)
+        };
+        var mapViewSpatialReference = this.MapView.Map.SpatialReference;
+        var geoTrackingFeatureCollectionTable = new FeatureCollectionTable(fields, esriGeometryType, mapViewSpatialReference)
+            {
+                Renderer = CreateRenderer(gType, Color.Blue)
+            };
 
-        public Task OnGpsLocationChanged(GpsLocation location, INotificationManager notifications)
+        for (int i = 0; i < GeoTrackingRecords.Count; i++)
         {
-            var loc = $"\r\n{location.Latitude}  {location.Longitude}";
-            //geofencingViewModel.Locations = loc + geofencingViewModel.Locations;
+            var record = GeoTrackingRecords[i];
 
-            if (geofencingViewModel.geofencingListener.LastResult?.InShapefile ?? false)
+            var mapPoints = new List<MapPoint>();
+            foreach (var point in record.Points)
             {
-                geofencingViewModel.Locations = loc + " (OUT)";
-            }
-            else
-            {
-                geofencingViewModel.Locations = loc + " (In)";
+                var mapPoint = new MapPoint(point.Latitude, point.Longitude, SpatialReferences.Wgs84);
+                mapPoints.Add(mapPoint);
             }
             
-            return Task.CompletedTask;
+            var feature = geoTrackingFeatureCollectionTable.CreateFeature();
+            var multipoint = new Multipoint(mapPoints);
+            feature.Geometry = multipoint;
+            await geoTrackingFeatureCollectionTable.AddFeatureAsync(feature);
+
+            this.lastGeoTrackingFeature = feature;
+        }
+
+        FeatureCollection featuresCollection = new FeatureCollection();
+        featuresCollection.Tables.Add(geoTrackingFeatureCollectionTable);
+        FeatureCollectionLayer featureCollectionLayer = new FeatureCollectionLayer(featuresCollection)
+        {
+            Name = GeoTrackingLayerName
+        };
+
+        var existedLayer = this.MapView.Map.OperationalLayers.FirstOrDefault(l => l.Name == featureCollectionLayer.Name);
+        if (existedLayer != null)
+            this.MapView.Map.OperationalLayers.Remove(existedLayer);
+        
+        this.MapView.Map.OperationalLayers.Add(featureCollectionLayer);
+    }
+    
+    private void UpdateGeoTrackingPointsAsync(GpsLocation location)
+    {
+        var mapPoint = new MapPoint(location.Latitude, location.Longitude, SpatialReferences.Wgs84);
+
+        if (GeoTrackingRecords.Count == 0)
+            return;
+
+        var existedLayer = this.MapView.Map.OperationalLayers.FirstOrDefault(l => l.Name == GeoTrackingLayerName);
+        if (existedLayer == null)
+            return;
+        
+        var featureCollectionLayer = (FeatureCollectionLayer)existedLayer;
+        var featureCollectionTables = featureCollectionLayer.FeatureCollection.Tables;
+        var geoTrackingFeatureCollectionTable = featureCollectionTables[0];
+        var lastRecord = GeoTrackingRecords.Last();
+        lastRecord.Points.Add(new GeoTrackingPoint()
+        {
+            GeoTrackingRecordId = lastRecord.RecordId,
+            Longitude = location.Longitude,
+            Latitude = location.Latitude,
+        });
+
+        var multipoint = (Multipoint)lastGeoTrackingFeature.Geometry;
+        List<MapPoint> points = new List<MapPoint>(multipoint.Points);
+        points.Add(mapPoint);
+        lastGeoTrackingFeature.Geometry = new Multipoint(points);
+    }
+
+    private Renderer CreateRenderer(GeometryType rendererType, Color color)
+    {
+        Symbol sym = rendererType switch
+        {
+            GeometryType.Point => new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, color, 18),
+            GeometryType.Multipoint => new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, color, 18),
+            GeometryType.Polyline => new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, color, 2),
+            GeometryType.Polygon => new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, color, 2),
+            _ => null
+        };
+
+        return new SimpleRenderer(sym);
+    }
+
+    private void LogTestRecords(LocationReceivedEventArgs e)
+    {
+        var loc = $"\r\n{e.Location.Latitude}  {e.Location.Longitude}";
+        //geofencingViewModel.Locations = loc + geofencingViewModel.Locations;
+
+        if (geofencingListener.LastResult?.InShapefile ?? false)
+        {
+            Locations = loc + " (OUT)";
+        }
+        else
+        {
+            Locations = loc + " (In)";
         }
     }
 
+
     public override void Dispose()
     {
+        backgroundServiceManager.LocationReceived -= BackgroundServiceManagerOnLocationReceived;
+        
+        if (geoTrackingListener != null)
+            this.backgroundServiceManager.StopListen(geoTrackingListener);
+        if (geofencingListener != null)
+            this.backgroundServiceManager.StopListen(geofencingListener);
+
         base.Dispose();
     }
 }

@@ -1245,6 +1245,12 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
             }
         }
         
+        public static string MenuItem_Title_GeoTracking {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_GeoTracking", resourceCulture);
+            }
+        }
+        
         public static string MenuItem_Title_Dashboard {
             get {
                 return ResourceManager.GetString("MenuItem_Title_Dashboard", resourceCulture);

@@ -116,9 +116,6 @@ public class GeolocationBackgroundService : Service, ILocationListener, INotific
 
     protected virtual void OnGpsLocationChanged(GpsLocation gpsLocation)
     {
-        if (this.LocationReceived == null)
-            return;
-
         this.LocationReceived?.Invoke(this, new LocationReceivedEventArgs(gpsLocation));
     }
 

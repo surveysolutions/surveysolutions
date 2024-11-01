@@ -4,4 +4,5 @@ public interface IGeolocationBackgroundServiceManager
 {
     void StartListen(IGeolocationListener geolocationListener);
     void StopListen(IGeolocationListener geolocationListener);
+    event EventHandler<LocationReceivedEventArgs> LocationReceived;
 }

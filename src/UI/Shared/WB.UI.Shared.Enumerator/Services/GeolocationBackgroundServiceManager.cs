@@ -48,6 +48,8 @@ public class GeolocationBackgroundServiceManager : GeolocationBackgroundService,
         {
             await geolocationListener.OnGpsLocationChanged(gpsLocation, this);
         }
+
+        base.OnGpsLocationChanged(gpsLocation);
     }
 
     

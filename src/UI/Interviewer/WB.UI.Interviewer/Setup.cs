@@ -139,6 +139,9 @@ namespace WB.UI.Interviewer
                 new EnumeratorSharedKernelModule(),
                 new InterviewerBoundedContextModule(),
                 new InterviewerUIModule(),
+#if !EXCLUDEEXTENSIONS                
+                new WB.UI.Shared.Extensions.MapExtensionsModule(),
+#endif                
             };
 
             ContainerBuilder builder = new ContainerBuilder();

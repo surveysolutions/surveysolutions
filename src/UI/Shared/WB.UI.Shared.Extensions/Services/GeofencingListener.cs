@@ -1,10 +1,6 @@
-using Android.Provider;
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Geometry;
-using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
-using WB.Core.SharedKernels.Enumerator.Services.MapService;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.UI.Shared.Enumerator.Services;
 
@@ -12,7 +8,9 @@ namespace WB.UI.Shared.Extensions.Services;
 
 public interface IGeofencingListener : IGeolocationListener
 {
-    
+    void Start(ShapefileFeatureTable shapefile);
+
+    GeolocationListenerResult LastResult { get; }
 }
 
 public class GeofencingListener : IGeofencingListener
@@ -21,10 +19,9 @@ public class GeofencingListener : IGeofencingListener
     
     private ShapefileFeatureTable shapefile;
 
-    public GeofencingListener(ShapefileFeatureTable shapefile, 
+    public GeofencingListener(
         IVibrationService vibrationService)
     {
-        this.shapefile = shapefile;
         this.vibrationService = vibrationService;
     }
 
@@ -75,6 +72,11 @@ public class GeofencingListener : IGeofencingListener
 
         LastResult = result;
     }
-    
+
+    public void Start(ShapefileFeatureTable shapefile)
+    {
+        this.shapefile = shapefile;
+    }
+
     public GeolocationListenerResult LastResult { get; set; }
 }

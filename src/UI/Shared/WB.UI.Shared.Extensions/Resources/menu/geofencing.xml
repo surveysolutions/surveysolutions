@@ -6,4 +6,7 @@
  <item
       android:id="@+id/menu_geofencing"
       local:showAsAction="never" />
+<item
+      android:id="@+id/menu_geo_tracking"
+      local:showAsAction="never" />
 </menu>

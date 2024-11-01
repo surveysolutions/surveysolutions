@@ -719,6 +719,9 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="MenuItem_Title_Geofencing" xml:space="preserve">
     <value>Geofencing</value>
   </data>
+  <data name="MenuItem_Title_GeoTracking" xml:space="preserve">
+    <value>GeoTracking</value>
+  </data>
   <data name="MenuItem_Title_Dashboard" xml:space="preserve">
     <value>Dashboard</value>
   </data>

@@ -44,6 +44,7 @@ public class GeofencingActivity : MarkersMapActivity<GeofencingViewModel, Geofen
         this.MenuInflater.Inflate(Resource.Menu.geofencing, menu);
 
         menu.LocalizeMenuItem(Resource.Id.menu_geofencing, UIResources.MenuItem_Title_Geofencing);
+        menu.LocalizeMenuItem(Resource.Id.menu_geo_tracking, UIResources.MenuItem_Title_GeoTracking);
 
         return base.OnCreateOptionsMenu(menu);
     }
@@ -52,6 +53,8 @@ public class GeofencingActivity : MarkersMapActivity<GeofencingViewModel, Geofen
     {
         if(item.ItemId == Resource.Id.menu_geofencing)
             this.ViewModel.StartGeofencingCommand.Execute();
+        if(item.ItemId == Resource.Id.menu_geo_tracking)
+            this.ViewModel.StartGeoTrackingCommand.Execute();
             
         return base.OnOptionsItemSelected(item);
     }

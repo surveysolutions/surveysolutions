@@ -906,4 +906,7 @@
   <data name="MenuItem_Title_Geofencing" xml:space="preserve">
       <value>Геозонирование</value>
   </data>
+  <data name="MenuItem_Title_GeoTracking" xml:space="preserve">
+    <value>Гео-отслеживание</value>
+  </data>
 </root>
