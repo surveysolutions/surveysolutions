@@ -278,7 +278,7 @@ public class GeofencingViewModel: MarkersMapInteractionViewModel<GeofencingViewM
                 await SwitchLocator();
 
                 this.geoTrackingListener.Start(assignment.Id);
-                this.backgroundServiceManager.StartListen(geoTrackingListener);
+                await this.backgroundServiceManager.StartListen(geoTrackingListener);
             }
             else
             {

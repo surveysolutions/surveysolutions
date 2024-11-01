@@ -5,58 +5,63 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 namespace WB.UI.Shared.Enumerator.Services;
 
 [Service(ForegroundServiceType = global::Android.Content.PM.ForegroundService.TypeLocation)]
-public class GeolocationBackgroundServiceManager : GeolocationBackgroundService, IGeolocationBackgroundServiceManager
+public class GeolocationBackgroundServiceManager : IGeolocationBackgroundServiceManager, IDisposable
 {
-    private static HashSet<IGeolocationListener> listeners = new HashSet<IGeolocationListener>();
-    private static bool serviceIsRunning = false;
+    private HashSet<IGeolocationListener> listeners = new HashSet<IGeolocationListener>();
+    private ServiceConnection<GeolocationBackgroundService> serviceConnection;
 
-    //readonly Intent geolocationServiceIntent = new Intent(this, typeof(GeolocationBackgroundServiceManager));
-
+    readonly Intent geolocationServiceIntent = new Intent(Application.Context, typeof(GeolocationBackgroundService));
+    public event EventHandler<LocationReceivedEventArgs> LocationReceived;
+    
     public GeolocationBackgroundServiceManager()
     {
     }
 
-    public void StartListen(IGeolocationListener geolocationListener)
+    public async Task StartListen(IGeolocationListener geolocationListener)
     {
         listeners.Add(geolocationListener);
 
-        if (listeners.Count > 0 && !serviceIsRunning)
+        if (listeners.Count > 0 && serviceConnection == null)
         {
-            serviceIsRunning = true;
-
-            Intent geolocationServiceIntent = new Intent(Application.Context, typeof(GeolocationBackgroundServiceManager));
             Application.Context.StartService(geolocationServiceIntent);
+            
+            serviceConnection = new ServiceConnection<GeolocationBackgroundService>();
+            Application.Context.BindService(geolocationServiceIntent, serviceConnection, Bind.AutoCreate);
+
+            await serviceConnection.WaitOnServiceConnected();
+            serviceConnection.Service.LocationReceived += ServiceOnLocationReceived;
         }
     }
-    
+
+    private async void ServiceOnLocationReceived(object sender, LocationReceivedEventArgs e)
+    {
+        foreach (var geolocationListener in listeners)
+        {
+            await geolocationListener.OnGpsLocationChanged(e.Location, serviceConnection.Service);
+        }
+        
+        LocationReceived?.Invoke(sender, e);
+    }
+
     public void StopListen(IGeolocationListener geolocationListener)
     {
         listeners.Remove(geolocationListener);
 
-        if (listeners.Count == 0 && serviceIsRunning)
+        if (listeners.Count == 0 && serviceConnection != null)
         {
-            serviceIsRunning = false;
-
-            Intent geolocationServiceIntent = new Intent(Application.Context, typeof(GeolocationBackgroundServiceManager));
+            serviceConnection.Service.LocationReceived -= ServiceOnLocationReceived;
+            
+            Application.Context.UnbindService(serviceConnection);
+            serviceConnection = null;
+            
             Application.Context.StopService(geolocationServiceIntent);
         }
     }
     
-    protected override async void OnGpsLocationChanged(GpsLocation gpsLocation)
+    public void Dispose()
     {
-        foreach (var geolocationListener in listeners)
-        {
-            await geolocationListener.OnGpsLocationChanged(gpsLocation, this);
-        }
-
-        base.OnGpsLocationChanged(gpsLocation);
-    }
-
-    
-    public override void OnDestroy()
-    {
-        base.OnDestroy();
-
         listeners = new HashSet<IGeolocationListener>();
-    } 
+        serviceConnection?.Dispose();
+        geolocationServiceIntent?.Dispose();
+    }
 }
