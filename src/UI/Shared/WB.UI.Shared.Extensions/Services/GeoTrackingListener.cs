@@ -61,7 +61,7 @@ public class GeoTrackingListener : IGeoTrackingListener
             {
                 GeoTrackingRecordId = lastRecordId.Value,
                 Latitude = location.Latitude,
-                Longitude = location.Latitude,
+                Longitude = location.Longitude,
                 Time = location.Timestamp,
             };
             geoTrackingPointsStorage.Store(point);

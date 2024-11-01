@@ -299,11 +299,11 @@ public class GeofencingViewModel: MarkersMapInteractionViewModel<GeofencingViewM
         }        
     }
 
-    private void BackgroundServiceManagerOnLocationReceived(object sender, LocationReceivedEventArgs e)
+    private async void BackgroundServiceManagerOnLocationReceived(object sender, LocationReceivedEventArgs e)
     {
         LogTestRecords(e);
 
-        UpdateGeoTrackingPointsAsync(e.Location);
+        await UpdateGeoTrackingPointsAsync(e.Location);
     }
 
     private List<RecordWithPoints> GeoTrackingRecords { get; set; }
@@ -320,6 +320,8 @@ public class GeofencingViewModel: MarkersMapInteractionViewModel<GeofencingViewM
     
     private async Task DrawGeoTrackingAsync()
     {
+        //GeoTrackingRecords = new List<RecordWithPoints>();
+        
         GeoTrackingRecords = geoTrackingRecordsStorage
                 .WhereSelect(where => where.AssignmentId == assignment.Id,
                     r =>
@@ -329,9 +331,8 @@ public class GeofencingViewModel: MarkersMapInteractionViewModel<GeofencingViewM
                         Points = geoTrackingPointsStorage.Where(p => p.GeoTrackingRecordId == r.Id.Value).ToList()
                     }
         ).ToList();
-
-        if (GeoTrackingRecords == null || GeoTrackingRecords.Count == 0)
-            return;
+        
+        GeoTrackingRecords.Add(new RecordWithPoints() { Points = new List<GeoTrackingPoint>()});
         
         if(this.MapView?.Map?.SpatialReference == null)
             return;
@@ -356,12 +357,15 @@ public class GeofencingViewModel: MarkersMapInteractionViewModel<GeofencingViewM
             var mapPoints = new List<MapPoint>();
             foreach (var point in record.Points)
             {
-                var mapPoint = new MapPoint(point.Latitude, point.Longitude, SpatialReferences.Wgs84);
+                var mapPoint = new MapPoint(point.Longitude, point.Latitude, SpatialReferences.Wgs84);
                 mapPoints.Add(mapPoint);
             }
             
             var feature = geoTrackingFeatureCollectionTable.CreateFeature();
-            var multipoint = new Multipoint(mapPoints);
+            Geometry multipoint = new Multipoint(mapPoints, SpatialReferences.Wgs84);
+            if (multipoint.SpatialReference != Map.SpatialReference)
+                multipoint = multipoint.Project(Map.SpatialReference);
+            
             feature.Geometry = multipoint;
             await geoTrackingFeatureCollectionTable.AddFeatureAsync(feature);
 
@@ -382,10 +386,8 @@ public class GeofencingViewModel: MarkersMapInteractionViewModel<GeofencingViewM
         this.MapView.Map.OperationalLayers.Add(featureCollectionLayer);
     }
     
-    private void UpdateGeoTrackingPointsAsync(GpsLocation location)
+    private async Task UpdateGeoTrackingPointsAsync(GpsLocation location)
     {
-        var mapPoint = new MapPoint(location.Latitude, location.Longitude, SpatialReferences.Wgs84);
-
         if (GeoTrackingRecords.Count == 0)
             return;
 
@@ -406,8 +408,16 @@ public class GeofencingViewModel: MarkersMapInteractionViewModel<GeofencingViewM
 
         var multipoint = (Multipoint)lastGeoTrackingFeature.Geometry;
         List<MapPoint> points = new List<MapPoint>(multipoint.Points);
+        MapPoint mapPoint = new MapPoint(location.Longitude, location.Latitude, SpatialReferences.Wgs84);
+        if (mapPoint.SpatialReference != Map.SpatialReference)
+            mapPoint = (MapPoint)mapPoint.Project(Map.SpatialReference);
         points.Add(mapPoint);
-        lastGeoTrackingFeature.Geometry = new Multipoint(points);
+        Geometry newGeometry = new Multipoint(points);
+        var feature = geoTrackingFeatureCollectionTable.CreateFeature();
+        feature.Geometry = newGeometry;
+        await geoTrackingFeatureCollectionTable.AddFeatureAsync(feature);
+        await geoTrackingFeatureCollectionTable.DeleteFeatureAsync(lastGeoTrackingFeature);
+        lastGeoTrackingFeature = feature;
     }
 
     private Renderer CreateRenderer(GeometryType rendererType, Color color)
