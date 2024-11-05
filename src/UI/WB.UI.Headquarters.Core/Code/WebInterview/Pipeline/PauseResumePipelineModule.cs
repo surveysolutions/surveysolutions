@@ -2,9 +2,11 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Enumerator.Native.WebInterview.Pipeline;
 
 namespace WB.UI.Headquarters.Code.WebInterview.Pipeline
@@ -13,28 +15,37 @@ namespace WB.UI.Headquarters.Code.WebInterview.Pipeline
     {
         private readonly ICommandService commandService;
         private readonly IAuthorizedUser authorizedUser;
+        private readonly IStatefulInterviewRepository statefulInterviewRepository;
 
-        public PauseResumePipelineModule(ICommandService commandService, IAuthorizedUser authorizedUser)
+        public PauseResumePipelineModule(ICommandService commandService, IAuthorizedUser authorizedUser, 
+            IStatefulInterviewRepository statefulInterviewRepository)
         {
             this.commandService = commandService;
             this.authorizedUser = authorizedUser;
+            this.statefulInterviewRepository = statefulInterviewRepository;
         }
 
         public Task OnConnected(Hub hub)
         {
             var interviewId = hub.GetInterviewId();
-
-            if (authorizedUser.IsInterviewer)
+            
+            if (!authorizedUser.IsAuthenticated)
+            {
+                var interview = statefulInterviewRepository.Get(interviewId.FormatGuid());
+                commandService.Execute(new ResumeInterviewCommand(interviewId, interview.CurrentResponsibleId,
+                    AgentDeviceType.Web));
+            }
+            else if (authorizedUser.IsInterviewer)
             {
                 commandService.Execute(new ResumeInterviewCommand(interviewId, this.authorizedUser.Id,
                     AgentDeviceType.Web));
-
             }
             else if (authorizedUser.IsSupervisor)
             {
                 commandService.Execute(new OpenInterviewBySupervisorCommand(interviewId, this.authorizedUser.Id,
                     AgentDeviceType.Web));
             }
+            //do nothing for other roles
 
             return Task.CompletedTask;
         }
@@ -50,6 +61,11 @@ namespace WB.UI.Headquarters.Code.WebInterview.Pipeline
             else if (authorizedUser.IsSupervisor)
             {
                 commandService.Execute(new CloseInterviewBySupervisorCommand(interviewId, this.authorizedUser.Id));
+            }
+            else
+            {
+                var interview = statefulInterviewRepository.Get(interviewId.FormatGuid());
+                commandService.Execute(new PauseInterviewCommand(interviewId, interview.CurrentResponsibleId));
             }
 
             return Task.CompletedTask;

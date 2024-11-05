@@ -120,38 +120,8 @@
   <data name="CanSynchronize" xml:space="preserve">
     <value>Iniciar sincronización</value>
   </data>
-  <data name="CensusQuestionnaire" xml:space="preserve">
-    <value>&lt;li&gt;&lt;b&gt;{0}&lt;/b&gt; [{1}]&lt;/li&gt;</value>
-  </data>
-  <data name="DeleteInterviewPackage" xml:space="preserve">
-    <value>&lt;li&gt;Borrar entrevista: &lt;a he="{3}"&gt;{0}&lt;/a&gt;, Paquete: {1}, índice de ordenamiento: {2}&lt;/li&gt;</value>
-  </data>
-  <data name="DeviceCanBeAssignedToInterviewer" xml:space="preserve">
-    <value>El dispositivo puede ser asignado a un entrevistador</value>
-  </data>
-  <data name="DeviceRelinkRequired" xml:space="preserve">
-    <value>&lt;font color="orange"&gt;Se requiere un reenlace&lt;/font&gt;</value>
-  </data>
-  <data name="DeviceUpdateRequired" xml:space="preserve">
-    <value>&lt;font color="red"&gt;Se requiere actualizar. Versión del motor del Interviewer - &lt;b&gt;{0}&lt;/b&gt;&lt;/font&gt;</value>
-  </data>
-  <data name="EmptyDevice" xml:space="preserve">
-    <value>&lt;b&gt;[DISPOSITIVO VACIO]&lt;/b&gt;</value>
-  </data>
-  <data name="GetAssignmentFormat" xml:space="preserve">
-    <value>Descargar asignación ({0})&lt;/br&gt;</value>
-  </data>
-  <data name="GetAssignmentsFormat" xml:space="preserve">
-    <value>Descargar lista de asignaciones  ({0}). &lt;/br&gt; &lt;ul&gt; {1} &lt;/ul&gt;</value>
-  </data>
-  <data name="GetAttachmentContent" xml:space="preserve">
-    <value>Descargar contenido adjunto: {0}</value>
-  </data>
   <data name="GetCensusQuestionnaires" xml:space="preserve">
     <value>Descargar la lista de cuestionarios tipo censo: &lt;br/&gt; &lt;ul&gt;{0}&lt;/ul&gt;</value>
-  </data>
-  <data name="GetInterview" xml:space="preserve">
-    <value>Descargar entrevista: &lt;b&gt;{0}&lt;/b&gt;</value>
   </data>
   <data name="GetInterviewer" xml:space="preserve">
     <value>Descargar información del entrevistador. &lt;br/&gt;Supervisor: &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
@@ -160,10 +130,7 @@
     <value>Descargar paquete de entrevista: &lt;b&gt;{0}&lt;/b&gt;</value>
   </data>
   <data name="GetInterviewPackages" xml:space="preserve">
-    <value>Descargar lista de paquetes de entrevista. &lt;/bar&gt; &lt;ul&gt; {1} &lt;/ul&gt;Última sincronización de paquetes: &lt;b&gt;{0}&lt;/b&gt;</value>
-  </data>
-  <data name="GetInterviews" xml:space="preserve">
-    <value>Descargar lista de entrevistas.  &lt;/bar&gt; &lt;ul&gt; {0} &lt;/ul&gt;</value>
+    <value>Descargar lista de paquetes de entrevista. &lt;/br&gt; &lt;ul&gt; {1} &lt;/ul&gt;Última sincronización de paquetes: &lt;b&gt;{0}&lt;/b&gt;</value>
   </data>
   <data name="GetQuestionnaire" xml:space="preserve">
     <value>Descargar cuestionario: &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
@@ -171,91 +138,140 @@
   <data name="GetQuestionnaireAssembly" xml:space="preserve">
     <value>Descargar ensamble de cuestionarios: &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
   </data>
-  <data name="GetQuestionnaireAttachments" xml:space="preserve">
-    <value>Descargar adjuntos del cuestionario: &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
-  </data>
-  <data name="GetTranslations" xml:space="preserve">
-    <value>Descargar traducción de cuestionarios &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
-  </data>
-  <data name="InterviewerFailedToLogin" xml:space="preserve">
-    <value>Entrevistador no ha podido hacer login</value>
-  </data>
-  <data name="InterviewerHasDevice" xml:space="preserve">
-    <value>Entrevistador ya cuenta con un dispositivo</value>
-  </data>
-  <data name="InterviewerLoggedIn" xml:space="preserve">
-    <value>Entrevistador ya se cuenta de alta en el sistema y adquirió un AuthToken</value>
+  <data name="DeviceCanBeAssignedToInterviewer" xml:space="preserve">
+    <value>El dispositivo puede ser asignado a un entrevistador</value>
   </data>
   <data name="InterviewPackageProcessed" xml:space="preserve">
-      <value>&lt;font color="green"&gt;Paquete de entrevista &lt;b&gt;{0}&lt;/b&gt; satisfactoriamente procesado&lt;/Font&gt;</value>
-  </data>
-  <data name="InterviewProcessed" xml:space="preserve">
-      <value>&lt;font color="green"&gt;Entrevista &lt;b&gt;{0}&lt;/b&gt; satisfactoriamente procesada&lt;/font&gt;</value>
+    <value>&lt;font color="green"&gt;Paquete de entrevista &lt;b&gt;{0}&lt;/b&gt; satisfactoriamente procesado&lt;/font&gt;</value>
   </data>
   <data name="LinkToDevice" xml:space="preserve">
     <value>Asocie un entrevistador al dispositivo</value>
   </data>
-  <data name="NoNewInterviewPackagesToDownload" xml:space="preserve">
-    <value>No hay más paquetes de entrevistas por descargar</value>
-  </data>
-  <data name="PostPackage" xml:space="preserve">
-    <value>Cargar entrevista: {0}</value>
-  </data>
   <data name="QuestionnaireAssemblyProcessed" xml:space="preserve">
-      <value>&lt;font color="green"&gt;Ensamblaje del cuestionario &lt;b&gt;{0}&lt;/b&gt; [{1}] correctamente procesado&lt;/font&gt;</value>
+    <value>&lt;font color="green"&gt;Ensamblaje del cuestionario &lt;b&gt;{0}&lt;/b&gt; [{1}] correctamente procesado&lt;/font&gt;</value>
   </data>
   <data name="QuestionnaireProcessed" xml:space="preserve">
-      <value>&lt;font color="green"&gt;Cuestionario &lt;b&gt;{0}&lt;/b&gt; [{1}] procesado correctamente&lt;/font&gt;</value>
+    <value>&lt;font color="green"&gt;Cuestionario &lt;b&gt;{0}&lt;/b&gt; [{1}] procesado correctamente&lt;/font&gt;</value>
   </data>
-  <data name="UpdateInterviewPackage" xml:space="preserve">
-    <value>&lt;li&gt;Actualizar entrevista: &lt;a href="{3}"&gt;{0}&lt;/a&gt;, paquete: {1}, índice de ordenamiento: {2}&lt;/li&gt;</value>
+  <data name="CensusQuestionnaire" xml:space="preserve">
+    <value>&lt;li&gt;&lt;b&gt;{0}&lt;/b&gt; [{1}]&lt;/li&gt;</value>
   </data>
-  <data name="ApkRequested" xml:space="preserve">
-    <value>New application file requested</value>
+  <data name="DeleteInterviewPackage" xml:space="preserve">
+    <value>&lt;li&gt;Borrar entrevista: &lt;a href="{3}"&gt;{0}&lt;/a&gt;, Paquete: {1}, índice de ordenamiento: {2}&lt;/li&gt;</value>
   </data>
-  <data name="AssignmentReceivedByTablet" xml:space="preserve">
-    <value>Asignación &lt;b&gt; {0} &lt;/b&gt; recibida y almacenada por dispositivo</value>
+  <data name="DeviceRelinkRequired" xml:space="preserve">
+    <value>&lt;font color="orange"&gt;Se requiere un reenlace&lt;/font&gt;</value>
   </data>
-  <data name="CheckIsPackageDuplicatedFormat" xml:space="preserve">
-    <value>Compruebe si hay entrevistas duplicadas. Entrevista: &lt;pre&gt; {0} &lt;/pre&gt;</value>
+  <data name="DeviceUpdateRequired" xml:space="preserve">
+    <value>&lt;font color="red"&gt;Se requiere actualizar. Versión del motor del Interviewer - &lt;b&gt;{0}&lt;/b&gt;&lt;/font&gt;</value>
   </data>
-  <data name="CheckObsoleteInterviews" xml:space="preserve">
-    <value>Compruebe si hay entrevistas obsoletas. Solicitud: &lt;pre&gt; {0} &lt;/pre&gt;</value>
-  </data>
-  <data name="DownloadReusableCategories" xml:space="preserve">
-    <value>Descarga de categoría {0} reutilizable</value>
-  </data>
-  <data name="ExtendedApkRequested" xml:space="preserve">
-    <value>Nuevo archivo de aplicación ampliado solicitado</value>
-  </data>
-  <data name="ExtendedPatchRequestedFormat" xml:space="preserve">
-    <value>Archivo de revisión solicitado para la versión extendida {0}</value>
-  </data>
-  <data name="GetInterviewPackageV3" xml:space="preserve">
-    <value>&lt;b&gt;V3&lt;/b&gt; Download interview package: {0}</value>
-  </data>
-  <data name="GetInterviewPatch" xml:space="preserve">
-    <value>Descargar cambios de entrevistas desde la sede: {0}</value>
-  </data>
-  <data name="GetMap" xml:space="preserve">
-    <value>Descargar mapa: {0}</value>
-  </data>
-  <data name="GetMaps" xml:space="preserve">
-    <value>Descargar lista de mapas. &lt;/br&gt; &lt;ul&gt; {0} &lt;/ul&gt;</value>
+  <data name="NoNewInterviewPackagesToDownload" xml:space="preserve">
+    <value>No hay más paquetes de entrevistas por descargar</value>
   </data>
   <data name="NoMapsForUser" xml:space="preserve">
     <value>No hay mapas para descargar</value>
   </data>
+  <data name="UpdateInterviewPackage" xml:space="preserve">
+    <value>&lt;li&gt;Actualizar entrevista: &lt;a href="{3}"&gt;{0}&lt;/a&gt;, paquete: {1}, índice de ordenamiento: {2}&lt;/li&gt;</value>
+  </data>
+  <data name="InterviewerHasDevice" xml:space="preserve">
+    <value>Entrevistador ya cuenta con un dispositivo</value>
+  </data>
+  <data name="EmptyDevice" xml:space="preserve">
+    <value>&lt;b&gt;[DISPOSITIVO VACIO]&lt;/b&gt;</value>
+  </data>
+  <data name="GetInterview" xml:space="preserve">
+    <value>Descargar entrevista: &lt;b&gt;{0}&lt;/b&gt;</value>
+  </data>
+  <data name="GetInterviews" xml:space="preserve">
+    <value>Descargar lista de entrevistas. &lt;/br&gt; &lt;ul&gt; {0} &lt;/ul&gt;</value>
+  </data>
+  <data name="GetMaps" xml:space="preserve">
+    <value>Descargar lista de mapas. &lt;/br&gt; &lt;ul&gt; {0} &lt;/ul&gt;</value>
+  </data>
+  <data name="GetAssignmentsFormat" xml:space="preserve">
+    <value>Descargar lista de asignaciones ({0}). &lt;/br&gt; &lt;ul&gt; {1} &lt;/ul&gt;</value>
+  </data>
+  <data name="GetAssignmentFormat" xml:space="preserve">
+    <value>Descargar asignación ({0})&lt;/br&gt;</value>
+  </data>
+  <data name="InterviewProcessed" xml:space="preserve">
+    <value>&lt;font color="green"&gt;Entrevista &lt;b&gt;{0}&lt;/b&gt; satisfactoriamente procesada&lt;/font&gt;</value>
+  </data>
+  <data name="GetAttachmentContent" xml:space="preserve">
+    <value>Descargar contenido adjunto: {0}</value>
+  </data>
+  <data name="GetMap" xml:space="preserve">
+    <value>Descargar mapa: {0}</value>
+  </data>
+  <data name="GetQuestionnaireAttachments" xml:space="preserve">
+    <value>Descargar adjuntos del cuestionario: &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
+  </data>
+  <data name="PostPackage" xml:space="preserve">
+    <value>Cargar entrevista: {0}</value>
+  </data>
+  <data name="GetTranslations" xml:space="preserve">
+    <value>Descargar traducción de cuestionarios &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
+  </data>
+  <data name="InterviewerLoggedIn" xml:space="preserve">
+    <value>Entrevistador ya se cuenta de alta en el sistema y adquirió un AuthToken</value>
+  </data>
+  <data name="InterviewerFailedToLogin" xml:space="preserve">
+    <value>Entrevistador no ha podido hacer login</value>
+  </data>
+  <data name="PasswordChanged" xml:space="preserve">
+    <value>Contraseña cambiada y AuthToken adquirido</value>
+  </data>
+  <data name="FailToChangePassword" xml:space="preserve">
+    <value>El usuario no pudo cambiar la contraseña</value>
+  </data>
+  <data name="ApkRequested" xml:space="preserve">
+    <value>Nuevo archivo de aplicación solicitado</value>
+  </data>
+  <data name="SupervisorApkRequested" xml:space="preserve">
+    <value>Nuevo archivo de aplicación de Supervisor solicitado</value>
+  </data>
+  <data name="ExtendedApkRequested" xml:space="preserve">
+    <value>Nuevo archivo de aplicación extendido solicitado</value>
+  </data>
+  <data name="ExtendedPatchRequestedFormat" xml:space="preserve">
+    <value>Archivo de revisión solicitado para la versión extendida {0}</value>
+  </data>
   <data name="PatchRequestedFormat" xml:space="preserve">
     <value>Archivo de revisión solicitado para la versión {0}</value>
   </data>
-  <data name="PostPackageV3" xml:space="preserve">
-    <value>&lt;b&gt; V3 &lt;/b&gt; Subir entrevista: {0}</value>
-  </data>
-  <data name="SupervisorApkRequested" xml:space="preserve">
-    <value>New Supervisor application file requested</value>
-  </data>
   <data name="SupervisorPatchRequestedFormat" xml:space="preserve">
-    <value>Supervisor patch file requested for version {0}</value>
+    <value>Archivo de revisión solicitado para la versión de Supervisor {0}</value>
+  </data>
+  <data name="GetInterviewPackageV3" xml:space="preserve">
+    <value>&lt;b&gt;V3&lt;/b&gt; Descargar paquete de entrevista: {0}</value>
+  </data>
+  <data name="GetInterviewPatch" xml:space="preserve">
+    <value>Descargar cambios de entrevistas desde la sede: {0}</value>
+    <comment>{0} - cantidad de entrevistas afectadas</comment>
+  </data>
+  <data name="PostPackageV3" xml:space="preserve">
+    <value>&lt;b&gt;V3&lt;/b&gt; Subir entrevista: {0}</value>
+  </data>
+  <data name="CheckObsoleteInterviews" xml:space="preserve">
+    <value>Compruebe si hay entrevistas obsoletas. Solicitud: &lt;pre&gt;{0}&lt;/pre&gt;</value>
+  </data>
+  <data name="CheckIsPackageDuplicatedFormat" xml:space="preserve">
+    <value>Compruebe si hay entrevistas duplicadas. Entrevista: &lt;pre&gt;{0}&lt;/pre&gt;</value>
+  </data>
+  <data name="AssignmentReceivedByTablet" xml:space="preserve">
+    <value>Asignación &lt;b&gt;{0}&lt;/b&gt; recibida y almacenada por dispositivo</value>
+  </data>
+  <data name="DownloadReusableCategories" xml:space="preserve">
+    <value>Descarga de categoría {0} reutilizable</value>
+  </data>
+  <data name="PostCalendarEventPackage" xml:space="preserve">
+    <value>Subir evento de calendario: {0}</value>
+  </data>
+  <data name="GetCalendarEventPackage" xml:space="preserve">
+    <value>Descargar paquete de evento de calendario: {0}</value>
+  </data>
+  <data name="CalendarEventsListFormat" xml:space="preserve">
+    <value>Descargar lista de eventos de calendario ({0}). &lt;/br&gt; &lt;ul&gt; {1} &lt;/ul&gt;</value>
   </data>
 </root>

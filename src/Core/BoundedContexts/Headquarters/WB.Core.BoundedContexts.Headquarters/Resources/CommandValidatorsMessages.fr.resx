@@ -117,7 +117,25 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="QuestionnaireNameUniqueFormat" xml:space="preserve">
+    <value>Le questionnaire '{0}' existe déjà. Veuillez choisir un autre nom.</value>
+  </data>
+  <data name="QuestionnaireVariableUniqueFormat" xml:space="preserve">
+    <value>Vous avez déjà importé un autre questionnaire avec la variable '{0}' du Designer. Si vous souhaitez toujours importer celui-ci, veuillez lui donner une variable différente dans le Designer.</value>
+  </data>
   <data name="UserDontHavePermissionsToAnswer" xml:space="preserve">
     <value>Seul le Chef d'équipe responsable de cette affectation peut répondre aux questions de Chef d'Equipe</value>
+  </data>
+  <data name="WebModeAssignmentShouldBeOnInterviewer" xml:space="preserve">
+    <value>Une affectation pour une interview web doit avoir un intervieweur comme responsable</value>
+  </data>
+  <data name="AssignmentResponsibleNotFound" xml:space="preserve">
+    <value>Responsable non trouvé</value>
+  </data>
+  <data name="QuestionnaireWasDeleted" xml:space="preserve">
+    <value>Le questionnaire a été supprimé</value>
+  </data>
+  <data name="AssignmentLimitReached" xml:space="preserve">
+    <value>La limite d'affectations a été atteinte</value>
   </data>
 </root>

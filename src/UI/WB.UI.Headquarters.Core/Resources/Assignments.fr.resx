@@ -117,14 +117,8 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Questionnaire" xml:space="preserve">
-    <value>Questionnaire</value>
-  </data>
-  <data name="Active" xml:space="preserve">
-    <value>actif</value>
-  </data>
-  <data name="AllAssignments" xml:space="preserve">
-    <value>Toutes les affectations</value>
+   <data name="Active" xml:space="preserve">
+    <value>Actif</value>
   </data>
   <data name="Archive" xml:space="preserve">
     <value>Archiver</value>
@@ -138,53 +132,95 @@
   <data name="AssignmentsSelected" xml:space="preserve">
     <value>{{count}} Affectation sélectionnée</value>
   </data>
+  <data name="AssignmentsSelected_other" xml:space="preserve">
+    <value>{{count}} Affectations sélectionnées</value>
+  </data>
+  <data name="ExpectedExplanation" xml:space="preserve">
+    <value>Indiquez le nombre maximum d'entretiens à générer pour cette affectation. Valeurs autorisées : -1 pour une affectation illimitée, 0 pour une affectation vide, des nombres pour la taille d'affectation</value>
+  </data>
   <data name="ChangeExpectedModalTitle" xml:space="preserve">
     <value>Modifier la taille pour l'affectation {{assignmentId}}</value>
   </data>
-  <data name="Count" xml:space="preserve">
-    <value>Compter</value>
+  <data name="ChangeModeModalTitle" xml:space="preserve">
+    <value>Changer le mode pour l'affectation {{assignmentId}}</value>
   </data>
-  <data name="CreateAssignment_AnswersInstruction" xml:space="preserve">
-    <value>Remplissez tout ou en partie des champs d'identification</value>
+  <data name="ModeExplanation" xml:space="preserve">
+    <value>Le mode CAWI permet de collecter des données directement auprès des répondants</value>
   </data>
   <data name="CreatedAt" xml:space="preserve">
-    <value>Créé sur</value>
-  </data>
-  <data name="CreateInterview" xml:space="preserve">
-    <value>Démarrer un nouvel entretien</value>
+    <value>Créé le</value>
   </data>
   <data name="IdentifyingQuestions" xml:space="preserve">
-    <value>Identifier des questions</value>
+    <value>Questions d'identification</value>
   </data>
-  <data name="InterviewsNeeded" xml:space="preserve">
-    <value>Entretiens nécessaires</value>
-  </data>
-  <data name="InvalidExpected" xml:space="preserve">
-    <value>Le champ Taille doit être égal à -1 ou plus.</value>
+  <data name="Count" xml:space="preserve">
+    <value>Collecté</value>
   </data>
   <data name="NumberOfAssignmentsAffected" xml:space="preserve">
     <value>{{count}} Affectation va être modifiée</value>
   </data>
-  <data name="SelectResponsible" xml:space="preserve">
-    <value>Sélectionnez le responsable</value>
-  </data>
-  <data name="ShowArchived" xml:space="preserve">
-    <value>Statut archivé</value>
+  <data name="NumberOfAssignmentsAffected_other" xml:space="preserve">
+    <value>{{count}} Affectations vont être modifiées</value>
   </data>
   <data name="Expected" xml:space="preserve">
     <value>Taille</value>
   </data>
-  <data name="ExpectedExplanation" xml:space="preserve">
-    <value>Indiquez le nombre maximum d'entretiens à générer pour cette affectation. Valeurs autorisées: -1 pour l'affectation illimitée, 0 pour l'affectation vide, les nombres pour la taille d'affectation</value>
+  <data name="SelectResponsible" xml:space="preserve">
+    <value>Sélectionnez le responsable</value>
+  </data>
+  <data name="ResponsibleRequired" xml:space="preserve">
+    <value>Le responsable est requis</value>
+  </data>
+  <data name="WebModeNonInterviewer" xml:space="preserve">
+    <value>Toutes les affectations pour les entretiens web doivent être faites à un enquêteur</value>
+  </data>
+  <data name="WebModeReassignToNonInterviewer" xml:space="preserve">
+    <value>Vous réaffectez une affectation web à un utilisateur qui n'est pas un ENQUÊTEUR. Si vous avez déjà envoyé le lien pour cette affectation, les répondants ne pourront pas répondre à votre enquête tant que l'affectation n'est pas retournée à un utilisateur ayant le rôle d'ENQUÊTEUR.</value>
+  </data>
+  <data name="WebModeReassignToNonInterviewer_other" xml:space="preserve">
+    <value>Vous réaffectez des affectations web à un utilisateur qui n'est pas un ENQUÊTEUR. Si vous avez déjà envoyé les liens pour ces affectations, les répondants ne pourront pas répondre à votre enquête tant que les affectations ne sont pas retournées à un utilisateur ayant le rôle d'ENQUÊTEUR.</value>
+  </data>
+  <data name="ShowArchived" xml:space="preserve">
+    <value>Statut archivé</value>
+  </data>
+  <data name="Unarchive" xml:space="preserve">
+    <value>Désarchiver</value>
+  </data>
+  <data name="Unlimited" xml:space="preserve">
+    <value>Illimité</value>
+  </data>
+  <data name="InterviewsNeeded" xml:space="preserve">
+    <value>Entretiens nécessaires</value>
+  </data>
+  <data name="CreateInterview" xml:space="preserve">
+    <value>Démarrer un nouvel entretien</value>
+  </data>
+  <data name="UpdatedAt" xml:space="preserve">
+    <value>Mis à jour le</value>
+  </data>
+  <data name="CreateAssignment_AnswersInstruction" xml:space="preserve">
+    <value>Remplissez tout ou en partie des champs d'identification</value>
+  </data>
+  <data name="CreateAssignment_ResponsibleInstruction" xml:space="preserve">
+    <value>Sélectionnez le responsable (Siège, Superviseur ou Enquêteur) pour cette affectation</value>
+  </data>
+  <data name="Questionnaire" xml:space="preserve">
+    <value>Questionnaire</value>
+  </data>
+  <data name="AllAssignments" xml:space="preserve">
+    <value>Toutes les affectations</value>
   </data>
   <data name="Tooltip_Filter_ArchivedStatus" xml:space="preserve">
-    <value>Indique si l'affectation est active ou archivée.</value>
+    <value>Indicateur de l'état actif ou archivé de l'affectation.</value>
+  </data>
+  <data name="Tooltip_Filter_Questionnaire" xml:space="preserve">
+    <value>Sélectionnez un questionnaire pour voir ses affectations associées. Sélectionnez "Tous les questionnaires" pour voir les affectations associées à n'importe quel questionnaire.</value>
   </data>
   <data name="Tooltip_Filter_Responsible" xml:space="preserve">
     <value>Utilisateur responsable. Cliquez dans le champ pour choisir un nom d'utilisateur en le sélectionnant directement ou en tapant pour filtrer la liste des noms d'utilisateur plus loin.</value>
   </data>
   <data name="Tooltip_Table_Count" xml:space="preserve">
-    <value>Nombre d'entretiens actuellement soumis pour cette affectation. D'autres entretiens peuvent avoir été créés mais pas synchronisés. Cliquez sur n'importe quelle cellule pour voir les entretiens associées. Cliquez sur l'icône de tri pour trier par nombre.</value>
+    <value>Nombre d'entretiens actuellement soumis pour cette affectation. D'autres entretiens peuvent avoir été créés mais pas synchronisés. Cliquez sur n'importe quelle cellule pour voir les entretiens associés. Cliquez sur l'icône de tri pour trier par nombre.</value>
   </data>
   <data name="Tooltip_Table_CreatedAt" xml:space="preserve">
     <value>Lorsque l'affectation a été créée initialement. Cliquez sur l'icône de tri pour trier par heure.</value>
@@ -202,21 +238,300 @@
     <value>Nombre maximum d'entretiens pouvant être menés pour cette affectation. Cliquez sur n'importe quelle cellule pour changer ce nombre. Cliquez sur l'icône de tri pour trier par taille.</value>
   </data>
   <data name="Tooltip_Table_UpdatedAt" xml:space="preserve">
-    <value>Lorsque l'affectation a été mise à jour pour la dernière fois Cliquez sur l'icône de tri pour trier par heure.</value>
+    <value>Lorsque l'affectation a été mise à jour pour la dernière fois. Cliquez sur l'icône de tri pour trier par heure.</value>
   </data>
-  <data name="Unarchive" xml:space="preserve">
-    <value>Désarchiver</value>
+  <data name="Tooltip_Table_ReceivedByTablet" xml:space="preserve">
+    <value>Indicateur de réception de l'affectation sur la tablette. Cliquez sur l'icône de tri pour trier par heure de réception.</value>
   </data>
-  <data name="Unlimited" xml:space="preserve">
-    <value>Illimité</value>
+  <data name="InvalidExpected" xml:space="preserve">
+    <value>Le champ Taille doit être égal à -1 ou plus.</value>
   </data>
-  <data name="UpdatedAt" xml:space="preserve">
-    <value>Mis à jour le</value>
+  <data name="AssignmentExpectedInWebMode" xml:space="preserve">
+    <value>La valeur attendue ne peut pas être modifiée pour une affectation en mode Web.</value>
   </data>
-  <data name="AssignmentsSelected_other" xml:space="preserve">
-    <value>{{count}} Affectations sélectionnées</value>
+  <data name="SelectQuestionnaire" xml:space="preserve">
+    <value>Sélectionnez un questionnaire existant pour mettre à niveau les affectations</value>
   </data>
-  <data name="NumberOfAssignmentsAffected_other" xml:space="preserve">
-    <value>{{count}} Affectations vont être modifiées</value>
+  <data name="UpgradeDescription" xml:space="preserve">
+    <value>Lorsque les affectations sont mises à niveau, toutes les affectations en cours seront mises à niveau.</value>
+  </data>
+  <data name="SelectQuestionnaireToUpgradeFrom" xml:space="preserve">
+    <value>Sélectionnez le questionnaire à partir duquel mettre à niveau</value>
+  </data>
+  <data name="UpgradeBtn" xml:space="preserve">
+    <value>Mettre à niveau</value>
+  </data>
+  <data name="UpgradeProgressTitle" xml:space="preserve">
+    <value>Mise à niveau des affectations de {{from}} à {{to}}</value>
+  </data>
+  <data name="UpgradeProgressNumbers" xml:space="preserve">
+    <value>Mise à niveau de {{processed}} sur {{totalCount}}</value>
+  </data>
+  <data name="UpgradeProgressErrors" xml:space="preserve">
+    <value>Avec erreurs {{errorCount}}</value>
+  </data>
+  <data name="Stop" xml:space="preserve">
+    <value>Arrêter</value>
+  </data>
+  <data name="UpgradePreparation" xml:space="preserve">
+    <value>En attente de la fin des autres mises à niveau</value>
+  </data>
+  <data name="UpgradeCancelled" xml:space="preserve">
+    <value>Mise à niveau arrêtée</value>
+  </data>
+  <data name="UpgradeError" xml:space="preserve">
+    <value>Une erreur s'est produite. Réessayez plus tard.</value>
+  </data>
+  <data name="UpgradeProgressDone" xml:space="preserve">
+    <value>Terminé</value>
+  </data>
+  <data name="UpgradeProgressDoneCount" xml:space="preserve">
+    <value>Mise à niveau réussie : {{processed}}</value>
+  </data>
+  <data name="UpgradeProgressErrorCount" xml:space="preserve">
+    <value>Non mis à niveau : {{count}}</value>
+  </data>
+  <data name="UpgradeDownloadFailed" xml:space="preserve">
+    <value>Télécharger la liste</value>
+  </data>
+  <data name="UpgradeProgressDoneTitle" xml:space="preserve">
+    <value>La mise à niveau de {{from}} à {{to}} est terminée</value>
+  </data>
+  <data name="ReceivedByTablet_All" xml:space="preserve">
+    <value>Afficher tout</value>
+  </data>
+  <data name="ReceivedByTablet_Received" xml:space="preserve">
+    <value>Reçu par la tablette</value>
+  </data>
+  <data name="ReceivedByTablet_NotReceived" xml:space="preserve">
+    <value>Non reçu par la tablette</value>
+  </data>
+  <data name="Tooltip_Filter_Received" xml:space="preserve">
+    <value>Indicateur de réception ou non de l'affectation</value>
+  </data>
+  <data name="ReceivedByTablet" xml:space="preserve">
+    <value>Reçu par la tablette</value>
+  </data>
+  <data name="CreatingNewAssignment" xml:space="preserve">
+    <value>Créer une nouvelle affectation pour le questionnaire {{questionnaire}}</value>
+  </data>
+  <data name="AssignTo" xml:space="preserve">
+    <value>Attribuer à</value>
+  </data>
+  <data name="Tooltip_Filter_QuestionnaireVersion" xml:space="preserve">
+    <value>Sélectionnez une version de questionnaire pour voir ses affectations associées. Sélectionnez "Toutes les versions" pour voir les affectations associées à n'importe quelle version du questionnaire sélectionné.</value>
+  </data>
+  <data name="ErrorToCreateAssignment" xml:space="preserve">
+    <value>L'affectation ne peut pas être créée.</value>
+  </data>
+  <data name="IsAudioRecordingEnabled" xml:space="preserve">
+    <value>Enregistrement audio</value>
+  </data>
+  <data name="Tooltip_Table_IsAudioRecordingEnabled" xml:space="preserve">
+    <value>Enregistrer le processus d'entretien</value>
+  </data>
+  <data name="ChangeAudioRecordingModalTitle" xml:space="preserve">
+    <value>Paramètres d'enregistrement audio pour l'affectation {{id}}</value>
+  </data>
+  <data name="AudioRecordingEnable" xml:space="preserve">
+    <value>Activer l'enregistrement audio</value>
+  </data>
+  <data name="CawiModeEnable" xml:space="preserve">
+    <value>Activer le mode CAWI</value>
+  </data>
+  <data name="AudioRecordingExplanation" xml:space="preserve">
+    <value>L'application Interviewer enregistrera l'audio de l'entretien lorsque l'audit audio est activé. Notez que la quantité de données de synchronisation sera significativement plus grande.</value>
+  </data>
+  <data name="NewAssignment" xml:space="preserve">
+    <value>Nouvelle affectation</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="EmailExplanation" xml:space="preserve">
+    <value>L'email sera utilisé dans la communication avec le destinataire de l'affectation</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Mot de passe</value>
+  </data>
+  <data name="PasswordExplanation" xml:space="preserve">
+    <value>Le mot de passe sera utilisé pour protéger l'affectation</value>
+  </data>
+  <data name="WebMode" xml:space="preserve">
+    <value>Mode</value>
+  </data>
+  <data name="CreateAssignmentWebModeExplanation" xml:space="preserve">
+    <value>Cette affectation sera utilisée avec le mode Web</value>
+  </data>
+  <data name="Activated" xml:space="preserve">
+    <value>Activé</value>
+  </data>
+  <data name="CawiActivated" xml:space="preserve">
+    <value>CAWI Activé</value>
+  </data>
+  <data name="Tooltip_Table_WebMode" xml:space="preserve">
+    <value>Mode d'affectation</value>
+  </data>
+  <data name="Tooltip_Table_Email" xml:space="preserve">
+    <value>Email pour les notifications</value>
+  </data>
+  <data name="Tooltip_Table_Password" xml:space="preserve">
+    <value>Mot de passe pour restreindre l'accès</value>
+  </data>
+  <data name="PasswordInstructions" xml:space="preserve">
+    <value>Au moins 6 chiffres et lettres majuscules ou un seul symbole '?' pour générer un mot de passe</value>
+  </data>
+  <data name="EnterPassword" xml:space="preserve">
+    <value>Entrez le mot de passe</value>
+  </data>
+  <data name="EnterEmail" xml:space="preserve">
+    <value>Entrez l'email</value>
+  </data>
+  <data name="ExpectedInstructions" xml:space="preserve">
+    <value>Doit être un nombre, -1 pour illimité, 1 si l'email est spécifié</value>
+  </data>
+  <data name="InvalidEmail" xml:space="preserve">
+    <value>Email invalide</value>
+  </data>
+  <data name="InvalidPassword" xml:space="preserve">
+    <value>Mot de passe invalide</value>
+  </data>
+  <data name="InvalidExpectedMessage" xml:space="preserve">
+    <value>Valeur attendue invalide</value>
+  </data>
+  <data name="InvalidExpectedWithEmail" xml:space="preserve">
+    <value>Pour les affectations avec email fourni, la valeur attendue autorisée est 1</value>
+  </data>
+  <data name="ExpectedForWebMode" xml:space="preserve">
+    <value>L'affectation avec une valeur attendue de 1 pour le mode web doit avoir un email ou un mot de passe fourni</value>
+  </data>
+  <data name="DuplicatePasswordByWebModeWithQuantity1" xml:space="preserve">
+    <value>Le mot de passe par affectation pour le mode web avec une quantité de 1 doit être unique</value>
+  </data>
+    <data name="QuestionnaireVersion" xml:space="preserve">
+    <value>ver. {{version}}</value>
+  </data>
+  <data name="AssignmentId" xml:space="preserve">
+    <value>ID d'affectation</value>
+  </data>
+  <data name="MultipleAssignmentsClose" xml:space="preserve">
+    <value>{{count}} affectations sélectionnées vont être fermées. La valeur attendue sera définie sur le nombre d'entretiens actuellement collectés.</value>
+  </data>
+  <data name="SingleAssignmentCloseConfirm" xml:space="preserve">
+    <value>La valeur attendue de l'affectation sélectionnée {{id}} sera changée de {{quantity}} à {{collected}} (nombre d'entretiens actuellement collectés)</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Fermer</value>
+  </data>
+  <data name="AssignmentCloseWebMode" xml:space="preserve">
+    <value>L'affectation {{id}} ne peut pas être fermée car elle a le mode web activé</value>
+  </data>
+  <data name="AssignmentInfo" xml:space="preserve">
+    <value>Informations détaillées sur l'affectation</value>
+  </data>
+  <data name="Action_Archived" xml:space="preserve">
+    <value>Archivé</value>
+  </data>
+  <data name="DetailsComments" xml:space="preserve">
+    <value>Commentaire</value>
+  </data>
+  <data name="Comments" xml:space="preserve">
+    <value>Commentaire</value>
+  </data>
+  <data name="Action_AudioRecordingChanged" xml:space="preserve">
+    <value>Enregistrement audio modifié</value>
+  </data>
+  <data name="EnterComments" xml:space="preserve">
+    <value>Entrez votre commentaire ici</value>
+  </data>
+  <data name="DateFromPast" xml:space="preserve">
+    <value>La date sélectionnée est dans le passé</value>
+  </data>
+  <data name="Action_Created" xml:space="preserve">
+    <value>Créé</value>
+  </data>
+  <data name="Action_Deleted" xml:space="preserve">
+    <value>Supprimé</value>
+  </data>
+  <data name="Action_ExpectedValueChanged" xml:space="preserve">
+    <value>Valeur attendue modifiée</value>
+  </data>
+  <data name="Action_ReceivedByTablet" xml:space="preserve">
+    <value>Reçu par la tablette</value>
+  </data>
+  <data name="Action_UnArchived" xml:space="preserve">
+    <value>Désarchivé</value>
+  </data>
+  <data name="Action_Reassigned" xml:space="preserve">
+    <value>Réaffecté</value>
+  </data>
+  <data name="Action_WebModeChanged" xml:space="preserve">
+    <value>Mode web modifié</value>
+  </data>
+  <data name="Action" xml:space="preserve">
+    <value>Action</value>
+  </data>
+  <data name="Actor" xml:space="preserve">
+    <value>Par</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>Date</value>
+  </data>
+  <data name="Action_AudioRecordingChanged_False" xml:space="preserve">
+    <value>Enregistrement audio désactivé</value>
+  </data>
+  <data name="Action_AudioRecordingChanged_True" xml:space="preserve">
+    <value>Enregistrement audio activé</value>
+  </data>
+  <data name="Action_WebModeChanged_False" xml:space="preserve">
+    <value>Mode web désactivé</value>
+  </data>
+  <data name="Action_WebModeChanged_True" xml:space="preserve">
+    <value>Mode web activé</value>
+  </data>
+  <data name="Action_ExpectedValueChanged_To" xml:space="preserve">
+    <value>Valeur attendue modifiée à {{quantity}}</value>
+  </data>
+  <data name="Action_ExpectedValueChanged_To_Unlimited" xml:space="preserve">
+    <value>Valeur attendue modifiée à Illimité</value>
+  </data>
+  <data name="Action_Reassigned_To" xml:space="preserve">
+    <value>Réaffecté à {{newResponsible}}</value>
+  </data>
+  <data name="Action_Reassigned_To_Comment" xml:space="preserve">
+    <value>Commentaire: {{comment}}</value>
+  </data>
+  <data name="AssignmentHistory" xml:space="preserve">
+    <value>Historique</value>
+  </data>
+  <data name="Details_Column" xml:space="preserve">
+    <value>Détails</value>
+  </data>
+  <data name="Action_Created_Comment" xml:space="preserve">
+    <value>Commentaire: {{comment}}</value>
+  </data>
+  <data name="Action_Created_Responsible" xml:space="preserve">
+    <value>Attribué à {{responsible}}</value>
+  </data>
+  <data name="StartWebInterview" xml:space="preserve">
+    <value>Démarrer l'entretien web</value>
+  </data>
+  <data name="WebModeEnabledWarning" xml:space="preserve">
+    <value>L'affectation ne peut pas être terminée. Elle a le mode web activé, tandis que le questionnaire a le mode de collecte web désactivé</value>
+  </data>
+  <data name="NoComment" xml:space="preserve">
+    <value>(aucun commentaire)</value>
+  </data>
+  <data name="LinkToWebInterviewExample" xml:space="preserve">
+    <value>Exemple de lien vers l'entretien web</value>
+  </data>
+  <data name="Action_UpgradedFrom" xml:space="preserve">
+    <value>Mise à niveau de l'affectation {{id}}</value>
+  </data>
+  <data name="Property" xml:space="preserve">
+    <value>Propriété</value>
+  </data>
+  <data name="Value" xml:space="preserve">
+    <value>Valeur</value>
   </data>
 </root>

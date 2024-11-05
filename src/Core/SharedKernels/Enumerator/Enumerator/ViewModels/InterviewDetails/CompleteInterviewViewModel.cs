@@ -75,6 +75,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public virtual void Configure(string interviewId, NavigationState navigationState)
         {
+            RunConfiguration(interviewId, navigationState);
+        }
+
+        protected void RunConfiguration(string interviewId, NavigationState navigationState, bool forSupervisor = false)
+        {
             if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
             this.InterviewId = Guid.Parse(interviewId);
             
@@ -88,7 +93,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.AnsweredCount = InterviewState.AnsweredQuestionsCount;
 
             this.UnansweredCount = questionsCount - this.AnsweredCount;
-            var unansweredQuestions = this.entitiesListViewModelFactory.GetTopUnansweredQuestions(interviewId, navigationState).ToList();
+            var unansweredQuestions = 
+                this.entitiesListViewModelFactory.GetTopUnansweredQuestions(interviewId, navigationState, forSupervisor).ToList();
             var unansweredGroup = new CompleteGroup(unansweredQuestions)
             {
                 AllCount = this.UnansweredCount,

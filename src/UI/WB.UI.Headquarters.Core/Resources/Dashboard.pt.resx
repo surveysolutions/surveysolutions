@@ -117,9 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Actions" xml:space="preserve">
-    <value>Ações</value>
-  </data>
   <data name="AllData" xml:space="preserve">
     <value>Todos os dados</value>
   </data>
@@ -156,8 +153,14 @@
   <data name="LastEntryDate" xml:space="preserve">
     <value>Data da última entrada</value>
   </data>
+  <data name="NewAssignment" xml:space="preserve">
+    <value>Nova atribuição</value>
+  </data>
   <data name="Questionnaires" xml:space="preserve">
     <value>Questionários</value>
+  </data>
+  <data name="Maps" xml:space="preserve">
+    <value>Mapas</value>
   </data>
   <data name="Title" xml:space="preserve">
     <value>Título</value>
@@ -165,7 +168,94 @@
   <data name="Version" xml:space="preserve">
     <value>Versão</value>
   </data>
+  <data name="MapDashboard" xml:space="preserve">
+    <value>Relatório de mapa</value>
+  </data>
+  <data name="ImportDate" xml:space="preserve">
+    <value>Importado em</value>
+  </data>
+  <data name="Actions" xml:space="preserve">
+    <value>Ações</value>
+  </data>
+  <data name="DeleteQuestionnaire" xml:space="preserve">
+    <value>Excluir questionário</value>
+  </data>
+  <data name="ExportQuestionnaire" xml:space="preserve">
+    <value>Exportar questionário</value>
+  </data>
+  <data name="SaveQuestionnaire" xml:space="preserve">
+    <value>Salvar documento do questionário</value>
+  </data>
   <data name="Questionnaire" xml:space="preserve">
     <value>Questionário</value>
+  </data>
+  <data name="SurveySetupIntroMessage1" xml:space="preserve">
+    <value>Clique no botão Importar Questionário para carregar um questionário do Designer</value>
+  </data>
+  <data name="SurveySetupIntroMessage2" xml:space="preserve">
+    <value>Clique em um questionário da lista para criar atribuições de entrevista</value>
+  </data>
+  <data name="WebInterviewSetup" xml:space="preserve">
+    <value>Configuração de entrevista na web</value>
+  </data>
+  <data name="RecordAudio" xml:space="preserve">
+    <value>Gravar áudio</value>
+  </data>
+  <data name="QuestionnairePreview" xml:space="preserve">
+    <value>Pré-visualização do questionário</value>
+  </data>
+  <data name="UploadAssignments" xml:space="preserve">
+    <value>Carregar atribuições</value>
+  </data>
+  <data name="DeleteMap" xml:space="preserve">
+    <value>Excluir mapa</value>
+  </data>
+  <data name="DeleteMapUser" xml:space="preserve">
+    <value>Excluir usuário do mapa</value>
+  </data>
+  <data name="UpgradeAssignments" xml:space="preserve">
+    <value>Atualizar atribuições</value>
+  </data>
+  <data name="RecordAudioTitle" xml:space="preserve">
+    <value>O aplicativo Entrevistador gravará o áudio da entrevista quando a auditoria de áudio estiver ativada. Observe que a quantidade de dados de sincronização será significativamente maior.</value>
+  </data>
+  <data name="SendInvitations" xml:space="preserve">
+    <value>Enviar convites</value>
+  </data>
+  <data name="DownloadLinks" xml:space="preserve">
+    <value>Baixar links da web</value>
+  </data>
+  <data name="WebMode" xml:space="preserve">
+    <value>Modo</value>
+  </data>
+  <data name="Details" xml:space="preserve">
+    <value>Detalhes</value>
+  </data>
+  <data name="ShowOnDesigner" xml:space="preserve">
+    <value>Mostrar no Designer</value>
+  </data>
+  <data name="ImportedBy" xml:space="preserve">
+    <value>Importado por</value>
+  </data>
+  <data name="ImportedByText" xml:space="preserve">
+    <value>Usuário {{role}} {{name}}</value>
+  </data>
+  <data name="QuestionnaireDeleteWarn" xml:space="preserve">
+    <value>{{receivedInterviews}} entrevistas e {{receivedAssignments}} atribuições para novas entrevistas foram recebidas pelos entrevistadores/supervisores que trabalham desconectados. Após confirmar a exclusão da pesquisa, o servidor não aceitará mais as informações baseadas nessas entrevistas/atribuições, e elas desaparecerão na próxima sincronização sem possibilidade de recuperação, mesmo que contenham informações recém-inseridas/editadas. É sua responsabilidade avisar/notificar os entrevistadores para não preencher mais essas entrevistas/atribuições, pois eles não serão notificados automaticamente. Deseja continuar?</value>
+  </data>
+  <data name="TypeQuestionnaireName" xml:space="preserve">
+    <value>Por favor, digite '{{questionnaireTitle}}' para confirmar</value>
+  </data>
+  <data name="UsersManagement" xml:space="preserve">
+    <value>Gestão de usuários</value>
+  </data>
+  <data name="CreateUser" xml:space="preserve">
+    <value>Criar usuário</value>
+  </data>
+  <data name="ExposedVariables" xml:space="preserve">
+    <value>Variáveis expostas</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Editar</value>
   </data>
 </root>

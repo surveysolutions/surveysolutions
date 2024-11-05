@@ -915,4 +915,7 @@
   <data name="UpdatingQuestionnaires" xml:space="preserve">
     <value>Actualización de cuestionarios</value>
   </data>
+  <data name="BluetoothPermissionRequired" xml:space="preserve">
+      <value>Se requiere permiso de Bluetooth para la sincronización sin conexión</value>
+  </data>
 </root>

@@ -117,14 +117,26 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ApiUsers" xml:space="preserve">
+    <data name="ApiUsers" xml:space="preserve">
     <value>Utilisateurs de l'API</value>
+  </data>
+  <data name="Assignments" xml:space="preserve">
+    <value>Affectations</value>
+  </data>
+  <data name="AuditLog" xml:space="preserve">
+    <value>Journal d'audit</value>
   </data>
   <data name="CumulativeChart" xml:space="preserve">
     <value>Graphique d'entretiens cumulatifs</value>
   </data>
   <data name="DataExport" xml:space="preserve">
     <value>Exportation de données</value>
+  </data>
+  <data name="DeviceLogs" xml:space="preserve">
+    <value>Journaux des appareils</value>
+  </data>    
+  <data name="Diagnostics" xml:space="preserve">
+    <value>Diagnostics</value>
   </data>
   <data name="Headquarters" xml:space="preserve">
     <value>Quartier Général</value>
@@ -135,6 +147,9 @@
   <data name="Interviewers" xml:space="preserve">
     <value>Enquêteurs</value>
   </data>
+  <data name="InterviewPackages" xml:space="preserve">
+    <value>Paquets d'entretiens</value>
+  </data>    
   <data name="Interviews" xml:space="preserve">
     <value>Entretiens</value>
   </data>
@@ -144,14 +159,26 @@
   <data name="Observers" xml:space="preserve">
     <value>Observateurs</value>
   </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Paramètres</value>
+  </data>
+  <data name="WorkspaceSettings" xml:space="preserve">
+    <value>Paramètres de l'espace de travail</value>
+  </data>
+  <data name="EmailProviders" xml:space="preserve">
+    <value>Fournisseurs de messagerie</value>
+  </data>    
   <data name="Quantity" xml:space="preserve">
     <value>Quantité</value>
   </data>
   <data name="SurveySetup" xml:space="preserve">
     <value>Configuration de l'enquête</value>
   </data>
+  <data name="Maps" xml:space="preserve">
+    <value>Cartes</value>
+  </data>
   <data name="QueueSizeTitle" xml:space="preserve">
-    <value>Nombre d'entretiens synchronisées mais pas encore traitées</value>
+    <value>Nombre d'entretiens synchronisés mais non encore traités</value>
   </data>
   <data name="Reports" xml:space="preserve">
     <value>Rapports</value>
@@ -159,11 +186,35 @@
   <data name="Speed" xml:space="preserve">
     <value>Vitesse</value>
   </data>
+  <data name="SurveyStatistics" xml:space="preserve">
+    <value>Statistiques de l'enquête</value>
+  </data>
+  <data name="StatusDuration" xml:space="preserve">
+    <value>Durée du statut</value>
+  </data>
   <data name="Supervisors" xml:space="preserve">
     <value>Superviseurs</value>
   </data>
+  <data name="CreateNew" xml:space="preserve">
+    <value>Créer un nouveau</value>
+  </data>
+  <data name="Started" xml:space="preserve">
+    <value>Commencé</value>
+  </data>
+  <data name="Completed" xml:space="preserve">
+    <value>Achevé</value>
+  </data>
+  <data name="Rejected" xml:space="preserve">
+    <value>Rejeté</value>
+  </data>
+  <data name="MapDashboard" xml:space="preserve">
+    <value>Tableau de bord de la carte</value>
+  </data>
   <data name="SurveysAndStatuses" xml:space="preserve">
     <value>Enquêtes et statuts</value>
+  </data>
+  <data name="TabletInfos" xml:space="preserve">
+    <value>Infos sur les tablettes</value>
   </data>
   <data name="TeamAndRoles" xml:space="preserve">
     <value>Équipe et rôles</value>
@@ -177,40 +228,28 @@
   <data name="TeamsAndStatuses" xml:space="preserve">
     <value>Équipes et statuts</value>
   </data>
+  <data name="DevicesInterviewers" xml:space="preserve">
+    <value>Appareils / enquêteurs</value>
+  </data>
+  <data name="Troubleshooting" xml:space="preserve">
+    <value>Dépannage</value>
+  </data>
   <data name="UserBatchUpload" xml:space="preserve">
     <value>Téléchargement d'utilisateurs par lots</value>
   </data>
   <data name="Users" xml:space="preserve">
     <value>Utilisateurs</value>
   </data>
-  <data name="Assignments" xml:space="preserve">
-    <value>Affectations</value>
-  </data>
-  <data name="Completed" xml:space="preserve">
-    <value>Achevé</value>
-  </data>
-  <data name="CreateNew" xml:space="preserve">
-    <value>Créer un nouveau</value>
-  </data>
-  <data name="DevicesInterviewers" xml:space="preserve">
-    <value>Appareils / enquêteurs</value>
-  </data>
-  <data name="Maps" xml:space="preserve">
-    <value>Cartes</value>
-  </data>
   <data name="Questionnaires" xml:space="preserve">
     <value>Questionnaires</value>
   </data>
-  <data name="Rejected" xml:space="preserve">
-    <value>Rejeté</value>
+  <data name="Administration" xml:space="preserve">
+    <value>Administration</value>
   </data>
-  <data name="Started" xml:space="preserve">
-    <value>Commencé</value>
+  <data name="Workspaces" xml:space="preserve">
+      <value>Espaces de travail</value>
   </data>
-  <data name="StatusDuration" xml:space="preserve">
-    <value>Durée du statut</value>
-  </data>
-  <data name="Troubleshooting" xml:space="preserve">
-    <value>Dépannage</value>
+  <data name="ServerAdministration">
+    <value>Administration</value>
   </data>
 </root>

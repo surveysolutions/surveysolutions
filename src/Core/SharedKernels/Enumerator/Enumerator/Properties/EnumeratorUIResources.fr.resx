@@ -126,11 +126,44 @@
   <data name="AccountIsNotApprovedOnServer" xml:space="preserve">
     <value>Votre compte n'est pas approuvé. Adressez-vous à votre chef d'équipe.</value>
   </data>
-  <data name="ApplicationIncompatibleWithServer" xml:space="preserve">
-    <value>Votre application n'est pas compatible avec le serveur. Mettez à jour votre application Interviewer.</value>
+  <data name="DashboardItem_CensusModeComment" xml:space="preserve">
+    <value>Mode recensement, Interviews créées : {0}</value>
+  </data>
+  <data name="DashboardItem_CompletedOn" xml:space="preserve">
+    <value>Terminé : {0}</value>
+  </data>
+  <data name="DashboardItem_CreatedOn" xml:space="preserve">
+    <value>Créé : {0}</value>
+  </data>
+  <data name="DashboardItem_NotStarted" xml:space="preserve">
+    <value>Non commencé</value>
+  </data>
+  <data name="DashboardItem_StartedOn" xml:space="preserve">
+    <value>Commencé : {0}</value>
+  </data>
+  <data name="DashboardItem_Title" xml:space="preserve">
+    <value>{0} (v{1})</value>
+  </data>
+  <data name="DashboardItem_AssignmentLeftComment" xml:space="preserve">
+    <value>{0} interview(s)</value>
+  </data>
+  <data name="DashboardItem_AssignmentCreatedComment" xml:space="preserve">
+    <value>Interviews créées : {0}</value>
   </data>
   <data name="Dashboard_CompletedLinkText" xml:space="preserve">
-    <value>Achevé(s) ({0})</value>
+    <value>Terminé ({0})</value>
+  </data>
+  <data name="Dashboard_WebInterviewsLinkText" xml:space="preserve">
+    <value>Interviews Web ({0})</value>
+  </data>
+  <data name="Dashboard_Start" xml:space="preserve">
+    <value>Démarrer</value>
+  </data>
+  <data name="Dashboard_AssignmentsTabTitle" xml:space="preserve">
+    <value>Créer Nouveau</value>
+  </data>
+  <data name="Dashboard_StartNewInterview" xml:space="preserve">
+    <value>Démarrer une nouvelle interview</value>
   </data>
   <data name="Dashboard_NewItemsLinkText" xml:space="preserve">
     <value>Nouveau ({0})</value>
@@ -139,58 +172,71 @@
     <value>Synchroniser</value>
   </data>
   <data name="Dashboard_NoInterviewsText" xml:space="preserve">
-    <value>Synchroniser afin d'obtenir de nouvelles affectations, ou contacter votre superviseur pour des informations complémentaires</value>
+    <value>Synchronisez pour obtenir de nouvelles tâches
+ou contactez votre superviseur
+pour plus d'instructions</value>
+  </data>
+  <data name="Maps_NoMapsText" xml:space="preserve">
+    <value>Synchronisez pour obtenir des cartes
+ou contactez votre superviseur
+pour plus d'instructions</value>
   </data>
   <data name="Dashboard_NoInterviewsTitle" xml:space="preserve">
-    <value>Vous n'avez aucune nouvelle affectation</value>
+    <value>Vous n'avez pas de nouvelles affectations</value>
   </data>
   <data name="Dashboard_NoNewItemsLinkText" xml:space="preserve">
-    <value>Aucun nouveau entretien</value>
+    <value>Pas de Nouveau</value>
   </data>
   <data name="Dashboard_Reinitialize_Interview_Message" xml:space="preserve">
-    <value>Cet entretien est terminé. Vous voulez le réinitialiser afin d'y apporter des changements ?</value>
+    <value>Cette interview est terminée. Voulez-vous rouvrir l'interview ?</value>
   </data>
   <data name="Dashboard_RejectedLinkText" xml:space="preserve">
-    <value>Rejeté(s) ({0})</value>
+    <value>Rejeté ({0})</value>
   </data>
   <data name="Dashboard_RemoveInterviewQuestion" xml:space="preserve">
-    <value>Êtes-vous sûr de vouloir supprimer cet entretien {0}?</value>
+    <value>Êtes-vous sûr de vouloir supprimer cette interview {0} ?</value>
   </data>
   <data name="Dashboard_StartedLinkText" xml:space="preserve">
-    <value>Entamé(s) ({0})</value>
+    <value>Commencé ({0})</value>
   </data>
-  <data name="DashboardItem_CensusModeComment" xml:space="preserve">
-    <value>Mode recensement, Entretiens entamés : {0}</value>
+  <data name="Dashboard_Title" xml:space="preserve">
+    <value>{0} interviews pour {1}</value>
   </data>
-  <data name="DashboardItem_CompletedOn" xml:space="preserve">
-    <value>Achevé le {0}</value>
+  <data name="Dashboard_RefreshWorkspaces" xml:space="preserve">
+    <value>Actualisation des espaces de travail</value>
   </data>
-  <data name="DashboardItem_CreatedOn" xml:space="preserve">
-    <value>Créé le {0}</value>
+  <data name="Dashboard_RefreshWorkspacesFinished" xml:space="preserve">
+    <value>Liste des espaces de travail mise à jour</value>
   </data>
-  <data name="DashboardItem_NotStarted" xml:space="preserve">
-    <value>Pas encore commencé</value>
+  <data name="Dashboard_RefreshWorkspacesError" xml:space="preserve">
+    <value>Erreur lors de l'obtention de la liste des espaces de travail. Veuillez contacter votre administrateur système.</value>
   </data>
-  <data name="DashboardItem_RejectedOn" xml:space="preserve">
-    <value>Rejeté le {0}</value>
-  </data>
-  <data name="DashboardItem_StartedOn" xml:space="preserve">
-    <value>Entamé le {0}</value>
-  </data>
-  <data name="DashboardItem_Title" xml:space="preserve">
-    <value>{0} (v{1})</value>
+  <data name="Maps_Title" xml:space="preserve">
+    <value>Cartes</value>
   </data>
   <data name="HostUnreachable" xml:space="preserve">
-    <value>Aucune connexion au serveur. Vérifier l'adresse du serveur et (ou) la connexion.</value>
+    <value>Pas d'accès internet à votre serveur. Vérifiez l'adresse du serveur et/ou les paramètres réseau</value>
   </data>
   <data name="InternalServerError" xml:space="preserve">
     <value>Erreur de serveur. Veuillez contacter votre administrateur de serveur.</value>
   </data>
+  <data name="ApplicationIncompatibleWithServer" xml:space="preserve">
+    <value>Votre application n'est pas compatible avec le serveur. Mettez à jour votre application Interviewer.</value>
+  </data>
   <data name="InvalidEndpoint" xml:space="preserve">
     <value>L'adresse web de l'application Supervisor n'est pas valide. Assurez-vous d'avoir composé la bonne adresse.</value>
   </data>
-  <data name="Login_FinishInstallation_Message" xml:space="preserve">
-    <value>Ceci est le premier démarrage de cet appareil. L'identité de l'enquêteur et l'adresse du serveur n'ont pas encore été renseigné. &lt;br&gt;Vous avez besoin de connexion internet pour procéder</value>
+  <data name="InvalidEndpointShort" xml:space="preserve">
+    <value>Adresse invalide</value>
+  </data>
+  <data name="BluetoothPermissionRequired" xml:space="preserve">
+    <value>L'autorisation Bluetooth est requise pour la synchronisation hors ligne</value>
+  </data>
+  <data name="NearbyPermissionRequired" xml:space="preserve">
+    <value>L'autorisation des appareils Wi-Fi à proximité est requise pour la synchronisation hors ligne</value>
+  </data>
+  <data name="LocationPermissionRequired" xml:space="preserve">
+    <value>L'autorisation de localisation est requise pour la synchronisation hors ligne</value>
   </data>
   <data name="Login_Online_Signin_Explanation_message" xml:space="preserve">
     <value>Vous pourriez essayer de vous connecter en ligne si vous avez oublié votre mot de passe ou s'il a été réinitialisé</value>
@@ -203,18 +249,6 @@
   </data>
   <data name="Maintenance" xml:space="preserve">
     <value>Le site web de l'application Supervisor est en cours de maintenantance. Désolé pour le désagrément</value>
-  </data>
-  <data name="MenuItem_Title_Dashboard" xml:space="preserve">
-    <value>Tableau de bord</value>
-  </data>
-  <data name="MenuItem_Title_Login" xml:space="preserve">
-    <value>Login</value>
-  </data>
-  <data name="MenuItem_Title_Settings" xml:space="preserve">
-    <value>Paramètres</value>
-  </data>
-  <data name="MenuItem_Title_SignOut" xml:space="preserve">
-    <value>Se déconnecter</value>
   </data>
   <data name="NoNetwork" xml:space="preserve">
     <value>Aucune connexion. Vérifiez vos paramètres de connexion</value>
@@ -270,29 +304,32 @@
   <data name="Synchronization_Cancel" xml:space="preserve">
     <value>Annuler</value>
   </data>
+  <data name="Synchronization_Done" xml:space="preserve">
+    <value>Terminé</value>
+  </data>
   <data name="Synchronization_Download_Description_Format" xml:space="preserve">
     <value>{0} sur {1} {2} reçus</value>
   </data>
   <data name="Synchronization_Download_Title" xml:space="preserve">
     <value>Mise à jour des affectations en cours</value>
   </data>
-  <data name="Synchronization_Fail_State_DeletedInterviews_Format" xml:space="preserve">
-    <value>{0} sur {1} entretiens supprimés</value>
+  <data name="Synchronization_Download_CalendarEvents_Title" xml:space="preserve">
+    <value>Mise à jour des événements du calendrier</value>
+  </data>
+  <data name="Synchronization_Update_Interviews_Title" xml:space="preserve">
+    <value>Mise à jour des entretiens locaux avec les modifications du serveur</value>
   </data>
   <data name="Synchronization_Fail_State_NewInterviews_Format" xml:space="preserve">
     <value>{0} sur {1} nouveaux entretiens reçus</value>
   </data>
+  <data name="Synchronization_Fail_State_InterviewsPartialDownloaded_Format" xml:space="preserve">
+    <value>{0} sur {1} entretiens partiels reçus</value>
+  </data>
   <data name="Synchronization_Fail_State_RejectedInterviews_Format" xml:space="preserve">
     <value>{0} sur {1} entretiens rejetés reçus</value>
   </data>
-  <data name="Synchronization_Fail_State_UploadedInterviews_Format" xml:space="preserve">
-    <value>{0} sur {1} entretiens achevés envoyés</value>
-  </data>
   <data name="Synchronization_Fail_Title" xml:space="preserve">
     <value>La synchronisation a été interrompue. Veuillez réessayer</value>
-  </data>
-  <data name="Synchronization_Fail_UnexpectedException" xml:space="preserve">
-    <value>Erreur inattendue</value>
   </data>
   <data name="Synchronization_Interviews" xml:space="preserve">
     <value>entretiens</value>
@@ -303,14 +340,23 @@
   <data name="Synchronization_Questionnaires" xml:space="preserve">
     <value>Masques</value>
   </data>
+  <data name="UpdatingQuestionnaires" xml:space="preserve">
+    <value>Mise à jour des masques</value>
+  </data>
+  <data name="TransferringCalendarEvents" xml:space="preserve">
+    <value>Transfert des événements du calendrier</value>
+  </data>
   <data name="Synchronization_Success_Description" xml:space="preserve">
     <value>Toutes les affectations ont été mises à jour</value>
   </data>
-  <data name="Synchronization_Success_State_DeletedInterviews_Format" xml:space="preserve">
-    <value>{0} entretiens supprimés</value>
+  <data name="Maps_Synchronization_Success_Description" xml:space="preserve">
+    <value>Toutes les cartes ont été synchronisées</value>
   </data>
   <data name="Synchronization_Success_State_NewInterviews_Format" xml:space="preserve">
     <value>{0} nouveaux entretiens reçus</value>
+  </data>
+  <data name="Synchronization_Success_State_InterviewsPartialDownloaded_Format" xml:space="preserve">
+    <value>{0} entretiens ont été mis à jour</value>
   </data>
   <data name="Synchronization_Success_State_RejectedInterviews_Format" xml:space="preserve">
     <value>{0} entretiens rejetés reçus</value>
@@ -318,11 +364,20 @@
   <data name="Synchronization_Success_State_UploadedInterviews_Format" xml:space="preserve">
     <value>{0} entretiens achevés envoyés</value>
   </data>
+  <data name="Synchronization_Success_State_PartialUploadInterviews_Format" xml:space="preserve">
+    <value>{0} entretiens partiellement envoyés</value>
+  </data>
   <data name="Synchronization_Success_Title" xml:space="preserve">
     <value>Synchronisation terminée avec succès</value>
   </data>
+  <data name="Synchronization_DoneWithErrors_Title" xml:space="preserve">
+    <value>Synchronisation terminée avec des erreurs</value>
+  </data>
   <data name="Synchronization_Upload_CompletedAssignments_Text" xml:space="preserve">
     <value>affectations achevées</value>
+  </data>
+  <data name="Synchronization_Upload_CalendarEvents_Text" xml:space="preserve">
+    <value>événements du calendrier</value>
   </data>
   <data name="Synchronization_Upload_Description_Format" xml:space="preserve">
     <value>{0} sur {1} {2} envoyés</value>
@@ -333,22 +388,70 @@
   <data name="Synchronization_Upload_Title_Format" xml:space="preserve">
     <value>Envoi de {0} en cours</value>
   </data>
+  <data name="Synchronization_Receiving_Title_Format" xml:space="preserve">
+    <value>Réception de {0} en cours</value>
+  </data>
   <data name="Synchronization_UserAuthentication_Description" xml:space="preserve">
     <value>Préparation de synchronisation en cours</value>
   </data>
   <data name="Synchronization_UserAuthentication_Title" xml:space="preserve">
     <value>Authentification de l'utilisateur</value>
   </data>
-  <data name="Synchronization_UserLinkedToAnotherDevice_Status" xml:space="preserve">
-    <value>Erreur lors de l'authentification de l'utilisateur</value>
-  </data>
-  <data name="Synchronization_UserLinkedToAnotherDevice_Title" xml:space="preserve">
-    <value>Votre compte a été reliée à une autre tablette</value>
-  </data>
   <data name="Synchronization_UserPassword_Update_Format" xml:space="preserve">
     <value>Problème d'authentification. Nous n'avons pas pu confirmer votre compte enquêteur ('{0}'). 
 Votre compte peut avoir l'un des problèmes suivants : il a un mot de passe différent de celui que vous avez composé, il est été verrouillé par le quartier général, ou il a été supprimé par le quartier général. 
 Veuillez composer votre mot de passe à nouveau. Si cela ne résout pas le problème, veuillez contacter votre chef d'équipe ou le quartier général.</value>
+  </data>
+  <data name="Synchronization_PasswordChangeRequired" xml:space="preserve">
+    <value>Votre mot de passe a été réinitialisé. Vous devez le changer pour accéder au site.</value>
+  </data>
+  <data name="Synchronization_UserDoNotBelongToTeam" xml:space="preserve">
+    <value>L'utilisateur n'appartient plus à cette équipe de superviseurs. Veuillez contacter votre quartier général pour plus de détails.</value>
+  </data>
+  <data name="YouChangeYouPasswordTryToLoginAgainWithNewPassword" xml:space="preserve">
+    <value>Vous avez changé votre mot de passe actuel. Essayez de vous connecter à nouveau avec le nouveau mot de passe.</value>
+  </data>
+  <data name="Unauthorized" xml:space="preserve">
+    <value>Votre login ou mot de passe n'est pas correct</value>
+  </data>
+  <data name="UnexpectedException" xml:space="preserve">
+    <value>Erreur inattendue</value>
+  </data>
+  <data name="UpgradeRequired" xml:space="preserve">
+    <value>Une nouvelle version de l'application Interviewer existe. Veuillez mettre à jour votre application</value>
+  </data>
+  <data name="HeadquartersVersion" xml:space="preserve">
+    <value>Version supportée par le quartier général : {0}</value>
+  </data>
+  <data name="SupervisorVersion" xml:space="preserve">
+    <value>Version du superviseur : {0}</value>
+  </data>
+  <data name="InterviewerVersion" xml:space="preserve">
+    <value>Version de l'enquêteur : {0}</value>
+  </data>
+  <data name="Synchronization_UserLinkedToAnotherDevice_Status" xml:space="preserve">
+    <value>Erreur lors de l'authentification de l'utilisateur</value>
+  </data>
+  <data name="Synchronization_SupervisorShouldDoOnlineSync_Title" xml:space="preserve">
+    <value>L'application du superviseur doit être synchronisée.</value>
+  </data>
+  <data name="Synchronization_SupervisorShouldDoOnlineSync" xml:space="preserve">
+    <value>Le superviseur doit toujours avoir les dernières modifications du quartier général, il doit donc être synchronisé en dernier dans l'équipe avant que la synchronisation hors ligne ne soit disponible</value>
+  </data>
+  <data name="Synchronization_UserLinkedToAnotherDevice_Title" xml:space="preserve">
+    <value>Votre compte a été reliée à une autre tablette</value>
+  </data>
+  <data name="DashboardItem_RejectedOn" xml:space="preserve">
+    <value>Rejeté le {0}</value>
+  </data>
+  <data name="Synchronization_Fail_State_DeletedInterviews_Format" xml:space="preserve">
+    <value>{0} sur {1} entretiens supprimés</value>
+  </data>
+  <data name="Synchronization_Success_State_DeletedInterviews_Format" xml:space="preserve">
+    <value>{0} entretiens supprimés</value>
+  </data>
+  <data name="Login_FinishInstallation_Message" xml:space="preserve">
+    <value>Ceci est le premier démarrage de cet appareil. L'identité de l'enquêteur et l'adresse du serveur n'ont pas encore été renseigné. &lt;br&gt;Vous avez besoin de connexion internet pour procéder</value>
   </data>
   <data name="Troubleshooting_Backup" xml:space="preserve">
     <value>Créer un backup</value>
@@ -374,30 +477,6 @@ Veuillez composer votre mot de passe à nouveau. Si cela ne résout pas le probl
   <data name="Troubleshooting_NoNewVersion" xml:space="preserve">
     <value>Vous avez la dernière courrante de l'application</value>
   </data>
-  <data name="Troubleshooting_Old_AreYouSureYouWantToRestore" xml:space="preserve">
-    <value>Toutes les données actuelles seront supprimées. Êtes-vous sûr de vouloir continuer à restaurer? Si oui, assurez-vous que les données à restaurer sont disponibles à {0}</value>
-  </data>
-  <data name="Troubleshooting_Old_CreatingInformationPackage" xml:space="preserve">
-    <value>Création du paquet d'information en cours</value>
-  </data>
-  <data name="Troubleshooting_Old_InformationPackage" xml:space="preserve">
-    <value>Paquet d'information</value>
-  </data>
-  <data name="Troubleshooting_Old_InformationPackageIsSuccessfullySent" xml:space="preserve">
-    <value>Paquet d'information envoyé avec succès.</value>
-  </data>
-  <data name="Troubleshooting_Old_InformationPackageSizeWarningFormat" xml:space="preserve">
-    <value>Un packet d'information de taille {0} sera envoyé via le réseau. Êtes-vous sûr de vouloir l'envoyer?</value>
-  </data>
-  <data name="Troubleshooting_Old_SendingInformationPackage" xml:space="preserve">
-    <value>Envoi de paquets d'information en cours</value>
-  </data>
-  <data name="Troubleshooting_Old_SendingOfInformationPackageIsCanceled" xml:space="preserve">
-    <value>Envoi de paquet de données annulé. Motif : {0}</value>
-  </data>
-  <data name="Troubleshooting_Old_SendingOfInformationPackageIsCanceling" xml:space="preserve">
-    <value>Annulation en cours</value>
-  </data>
   <data name="Troubleshooting_RestorationErrorMessage" xml:space="preserve">
     <value>Un problème est survenu. La tentative de restaurer la tablette a échoué</value>
   </data>
@@ -413,146 +492,149 @@ Veuillez composer votre mot de passe à nouveau. Si cela ne résout pas le probl
   <data name="Troubleshooting_SendingOfInformationPackageErrorMessage" xml:space="preserve">
     <value>Envoi de paquet de données a échoué</value>
   </data>
-  <data name="Troubleshooting_SendTabletInformation" xml:space="preserve">
-    <value>Envoyer les données du système</value>
+    <data name="Troubleshooting_SendTabletInformation" xml:space="preserve">
+    <value>Envoyer les informations de la tablette</value>
   </data>
   <data name="Troubleshooting_Title" xml:space="preserve">
     <value>Dépannage</value>
   </data>
   <data name="Troubleshooting_Unknown_ErrorMessage" xml:space="preserve">
-    <value>Erreur survenue lors du contrôle de version du logiciel. Veuillez vérifiez les paramètres ou réessayer plus tard.</value>
+    <value>Une erreur s'est produite lors de la vérification de la version. Veuillez vérifier les paramètres ou réessayer plus tard</value>
   </data>
-  <data name="Unauthorized" xml:space="preserve">
-    <value>Votre login ou mot de passe n'est pas correct</value>
+  <data name="MenuItem_Title_Dashboard" xml:space="preserve">
+    <value>Tableau de bord</value>
   </data>
-  <data name="UnexpectedException" xml:space="preserve">
-    <value>Erreur inattendue</value>
+  <data name="MenuItem_Title_Map_Dashboard" xml:space="preserve">
+    <value>Tableau de bord des cartes</value>
   </data>
-  <data name="UpgradeRequired" xml:space="preserve">
-    <value>Une nouvelle version de l'application Interviewer existe. Veuillez mettre à jour votre application</value>
+  <data name="MenuItem_Title_Language" xml:space="preserve">
+    <value>Langue</value>
+  </data>
+  <data name="MenuItem_Title_Language_Original" xml:space="preserve">
+    <value>Original</value>
+  </data>
+  <data name="MenuItem_Title_Login" xml:space="preserve">
+    <value>Connexion</value>
+  </data>
+  <data name="MenuItem_Title_Settings" xml:space="preserve">
+    <value>Paramètres</value>
+  </data>
+  <data name="MenuItem_Title_SignOut" xml:space="preserve">
+    <value>Déconnexion</value>
+  </data>
+  <data name="MenuItem_Title_Search" xml:space="preserve">
+    <value>Recherche</value>
+  </data>
+  <data name="MenuItem_Title_Workspaces" xml:space="preserve">
+    <value>Espaces de travail</value>
+  </data>
+  <data name="MenuItem_Title_RefreshWorkspaces" xml:space="preserve">
+    <value>Actualiser les espaces de travail</value>
+  </data>
+  <data name="Troubleshooting_Old_AreYouSureYouWantToRestore" xml:space="preserve">
+    <value>Toutes les données actuelles seront effacées. Êtes-vous sûr de vouloir continuer la restauration ? Si oui, assurez-vous que les données de restauration sont présentes à {0}</value>
+  </data>
+  <data name="Troubleshooting_Old_CreatingInformationPackage" xml:space="preserve">
+    <value>Création du paquet d'informations</value>
+  </data>
+  <data name="Troubleshooting_Old_InformationPackage" xml:space="preserve">
+    <value>Paquet d'informations</value>
+  </data>
+  <data name="Troubleshooting_Old_InformationPackageIsSuccessfullySent" xml:space="preserve">
+    <value>Le paquet d'informations a été envoyé avec succès</value>
+  </data>
+  <data name="Troubleshooting_Old_InformationPackageSizeWarningFormat" xml:space="preserve">
+    <value>Un paquet d'informations de taille {0} sera envoyé via le réseau. Êtes-vous sûr de vouloir l'envoyer ?</value>
+  </data>
+  <data name="Troubleshooting_Old_SendingInformationPackage" xml:space="preserve">
+    <value>Envoi du paquet d'informations</value>
+  </data>
+  <data name="Troubleshooting_Old_SendingOfInformationPackageIsCanceled" xml:space="preserve">
+    <value>L'envoi du paquet d'informations a été annulé. Raison : {0}</value>
+  </data>
+  <data name="Troubleshooting_Old_SendingOfInformationPackageIsCanceling" xml:space="preserve">
+    <value>Annulation</value>
   </data>
   <data name="Warning" xml:space="preserve">
-    <value>Mise en garde</value>
+    <value>Avertissement</value>
   </data>
   <data name="DashboardItem_AssignedOn" xml:space="preserve">
-    <value>Affecté le {0}</value>
+    <value>Assigné : {0}</value>
   </data>
-  <data name="Dashboard_AssignmentCard_SubTitleCountdown_UnlimitedFormat" xml:space="preserve">
-    <value>A collecter : illimité</value>
+  <data name="Diagnostics_Backup_Description" xml:space="preserve">
+    <value>Enregistrer toutes les informations pertinentes dans le fichier sur cet appareil.</value>
   </data>
-  <data name="Dashboard_AssignmentCard_SubTitleCountdownFormat" xml:space="preserve">
-    <value>Reste à collecter : {0} entretiens</value>
-  </data>
-  <data name="Dashboard_AssignmentCard_SubTitleSingleInterivew" xml:space="preserve">
-    <value>Un seul entretien à collecter</value>
-  </data>
-  <data name="Dashboard_AssignmentsTabTitle" xml:space="preserve">
-    <value>Affectations</value>
-  </data>
-  <data name="Dashboard_CensusAssignment" xml:space="preserve">
-    <value>Mode recensement</value>
-  </data>
-  <data name="Dashboard_CompletedTabText" xml:space="preserve">
-    <value>Les entretiens marqués comme achevés seront envoyés lors de votre prochaine synchronisation.</value>
-  </data>
-  <data name="Dashboard_CreateNewTabText" xml:space="preserve">
-    <value>Démarrer un nouvel entretien à partir de ces masques</value>
-  </data>
-  <data name="Dashboard_Discard" xml:space="preserve">
-    <value>Supprimer</value>
-  </data>
-  <data name="Dashboard_Interview_AssignmentLabelFormat" xml:space="preserve">
-    <value>Affectation #{0}</value>
-  </data>
-  <data name="Dashboard_Interview_QuestionsAnsweredFormat" xml:space="preserve">
-    <value>{0} question(s) renseignée(s)</value>
-  </data>
-  <data name="Dashboard_No_InterviewKey" xml:space="preserve">
-    <value>Aucun numéro d'entretien</value>
-  </data>
-  <data name="Dashboard_Open" xml:space="preserve">
-    <value>Ouvrir</value>
-  </data>
-  <data name="Dashboard_QuestionnairesTabText" xml:space="preserve">
-    <value>Vous pouvez démarrer un nouveaux entretiens à partir des affectations</value>
-  </data>
-  <data name="Dashboard_RejectedTabText" xml:space="preserve">
-    <value>Entretiens rejetés par le chef d'équipe. Vous devez résoudre les problèmes indiques sur la page de garde de l'entretien</value>
-  </data>
-  <data name="Dashboard_Reopen" xml:space="preserve">
-    <value>Rouvrir</value>
-  </data>
-  <data name="Dashboard_ShowLocation" xml:space="preserve">
-    <value>Montrer la localisation</value>
-  </data>
-  <data name="Dashboard_Start" xml:space="preserve">
-    <value>Démarrer</value>
-  </data>
-  <data name="Dashboard_StartedTabText" xml:space="preserve">
-    <value>Entretiens entamés mais pas achevés. Vous devez les achever afin de pouvoir les syncrhoniser</value>
-  </data>
-  <data name="Dashboard_StartNewInterview" xml:space="preserve">
-    <value>Entamer un nouveau entretien</value>
-  </data>
-  <data name="Dashboard_Title" xml:space="preserve">
-    <value>{0} entretiens pour {1}</value>
-  </data>
-  <data name="Dashboard_ViewIssues" xml:space="preserve">
-    <value>Voir problèmes</value>
-  </data>
-  <data name="DashboardItem_AssignmentCreatedComment" xml:space="preserve">
-    <value>Entretiens entamés : {0}</value>
-  </data>
-  <data name="DashboardItem_AssignmentLeftComment" xml:space="preserve">
-    <value>{0} entertien(s)</value>
-  </data>
-  <data name="Diagnostics_BackupDate_Title" xml:space="preserve">
-    <value>Date :</value>
-  </data>
-  <data name="Diagnostics_BackupFileLocation_Title" xml:space="preserve">
-    <value>Répertoire :</value>
-  </data>
-  <data name="Diagnostics_BackupReady_Title" xml:space="preserve">
-    <value>Fichier de sauvegarde créé</value>
-  </data>
-  <data name="Diagnostics_BackupScope_Title" xml:space="preserve">
-    <value>Taille :</value>
-  </data>
-  <data name="Diagnostics_BandwidthTestConnectionAbsent_Title" xml:space="preserve">
-    <value>&lt;font color="red"&gt;Aucune connexion internet&lt;/font&gt;</value>
-  </data>
-  <data name="Diagnostics_BandwidthTestConnectionNotOK_Title" xml:space="preserve">
-    <value>Connexion est &lt;font color="red"&gt;pas bien&lt;/font&gt;</value>
-  </data>
-  <data name="Diagnostics_BandwidthTestConnectionOK_Title" xml:space="preserve">
-    <value>Connexion est OK</value>
-  </data>
-  <data name="Diagnostics_BandwidthTestConnectionToTheServerAbsent_Title" xml:space="preserve">
-    <value>&lt;font color="red"&gt;Aucune connexion avec le serveur&lt;/font&gt;</value>
-  </data>
-  <data name="Diagnostics_BandwidthTestConnectionType_Title" xml:space="preserve">
-    <value>Type de connexion :</value>
-  </data>
-  <data name="Diagnostics_BandwidthTestNetworkName_Title" xml:space="preserve">
-    <value>Nom du réseau :</value>
-  </data>
-  <data name="Diagnostics_BandwidthTestPing_Title" xml:space="preserve">
-    <value>Ping :</value>
+  <data name="Diagnostics_Backup_Title" xml:space="preserve">
+    <value>Générer un paquet de support</value>
   </data>
   <data name="Diagnostics_CheckVersion_Description" xml:space="preserve">
-    <value>Nous allons voir si une version plus récente de l'appli Interviewer existe sur le serveur Headquarters</value>
+    <value>Nous vérifierons s'il existe une version plus récente de l'application Interviewer sur le serveur</value>
   </data>
   <data name="Diagnostics_CheckVersion_Title" xml:space="preserve">
-    <value>Version: {0}. Chercher une nouvelle version de l'appli Interviewer</value>
+    <value>Version : {0}. Vérifier une nouvelle version</value>
+  </data>
+  <data name="Diagnostics_Restore_Description" xml:space="preserve">
+    <value>En restaurant les données sauvegardées, vous remplacerez toutes les affectations actuelles sur cet appareil</value>
+  </data>
+  <data name="Diagnostics_Restore_Title" xml:space="preserve">
+    <value>RESTAURER</value>
+  </data>
+  <data name="Diagnostics_Send_Description" xml:space="preserve">
+    <value>Toutes les données de l'application et des entretiens seront collectées dans un seul fichier. Cela peut prendre jusqu'à 10 minutes.</value>
+  </data>
+  <data name="Diagnostics_Send_Title" xml:space="preserve">
+    <value>Envoyer toutes les informations de la tablette au siège pour dépannage.</value>
+  </data>
+  <data name="Diagnostics_Share_Description" xml:space="preserve">
+    <value>Toutes les informations ci-dessous seront partagées en texte clair. Elles peuvent être envoyées par e-mail, Google Hangouts ou toute autre application de messagerie</value>
+  </data>
+  <data name="Diagnostics_Share_Title" xml:space="preserve">
+    <value>Partager toutes les informations techniques</value>
+  </data>
+  <data name="Diagnostics_Title" xml:space="preserve">
+    <value>Diagnostics</value>
+  </data>
+  <data name="Diagnostics_ServerUrl" xml:space="preserve">
+    <value>URL du serveur : </value>
+  </data>
+  <data name="MenuItem_Title_Diagnostics" xml:space="preserve">
+    <value>Diagnostics</value>
+  </data>
+  <data name="MenuItem_Title_MapsSynchronization" xml:space="preserve">
+    <value>Synchronisation des cartes</value>
+  </data>
+  <data name="MenuItem_Title_Maps" xml:space="preserve">
+    <value>Cartes</value>
+  </data>
+  <data name="Share_to_Title" xml:space="preserve">
+    <value>Partager les informations avec...</value>
+  </data>
+  <data name="Diagnostics_TestConnection_Description" xml:space="preserve">
+    <value>Tester la qualité et la vitesse de la connexion avec le serveur.</value>
+  </data>
+  <data name="Diagnostics_TestConnection_Title" xml:space="preserve">
+    <value>Tester la bande passante vers le serveur</value>
   </data>
   <data name="Diagnostics_Delete" xml:space="preserve">
     <value>Supprimer</value>
   </data>
+  <data name="Diagnostics_Send" xml:space="preserve">
+    <value>Envoyer</value>
+  </data>
+  <data name="Diagnostics_TabletInformationReady_Title" xml:space="preserve">
+    <value>L'archive des données est prête</value>
+  </data>
+  <data name="Diagnostics_TabletInformationScope_Title" xml:space="preserve">
+    <value>Portée :</value>
+  </data>
+  <data name="Diagnostics_TabletInformationWhenGenerated_Title" xml:space="preserve">
+    <value>Quand généré :</value>
+  </data>
   <data name="Diagnostics_DownloadingPleaseWait" xml:space="preserve">
-    <value>Téléchargement en cours. Veuillez patienter ...</value>
+    <value>Téléchargement en cours, veuillez patienter...</value>
   </data>
   <data name="Diagnostics_NewVersionAvaliable_Title" xml:space="preserve">
-    <value>Une nouvelle version existe. Voulez-vous la télécharger et mettre à jour l'appli Interviewer sur cet appareil ?</value>
+    <value>Une nouvelle version existe. Voulez-vous télécharger et mettre à jour l'application ?</value>
   </data>
   <data name="Diagnostics_NewVersionNumber_Title" xml:space="preserve">
     <value>Numéro de version :</value>
@@ -560,172 +642,367 @@ Veuillez composer votre mot de passe à nouveau. Si cela ne résout pas le probl
   <data name="Diagnostics_No" xml:space="preserve">
     <value>Non</value>
   </data>
-  <data name="Diagnostics_Restore_Description" xml:space="preserve">
-    <value>Restaurer depuis un fichier de sauvegarde aura comme conséquence de remplacer toute les affectations actuellement sur cet appareil.</value>
-  </data>
-  <data name="Diagnostics_Restore_Title" xml:space="preserve">
-    <value>Restaurer</value>
-  </data>
-  <data name="Diagnostics_RestoreReady_Title" xml:space="preserve">
-    <value>Fichier de sauvegarde retrouvé</value>
-  </data>
-  <data name="Diagnostics_Send" xml:space="preserve">
-    <value>Envoyer</value>
-  </data>
-  <data name="Diagnostics_Send_Description" xml:space="preserve">
-    <value>Toutes les données sur cet appareil--les données de l'appli comme les données entretiens--seront stockées dans un seul fichier d'achive. Ce processus peut prendre jusqu'à 10 minutes.</value>
-  </data>
-  <data name="Diagnostics_Send_Title" xml:space="preserve">
-    <value>Compiler et envoyer vers Headquarters toutes les données sur cet appareil</value>
-  </data>
-  <data name="Diagnostics_ServerUrl" xml:space="preserve">
-    <value>L'URL du serveur :</value>
-  </data>
-  <data name="Diagnostics_Share_Description" xml:space="preserve">
-    <value>Toutes les informations techniques seront mis dans un fichier texte simple qui pourrait être envoyée par courriel, Google Hangouts, ou tout autre appli de messagerie</value>
-  </data>
-  <data name="Diagnostics_Share_Title" xml:space="preserve">
-    <value>Partager toutes les informations techniques</value>
-  </data>
-  <data name="Diagnostics_TabletInformationReady_Title" xml:space="preserve">
-    <value>Fichier d'archive disponible</value>
-  </data>
-  <data name="Diagnostics_TabletInformationScope_Title" xml:space="preserve">
-    <value>Taille :</value>
-  </data>
-  <data name="Diagnostics_TabletInformationWhenGenerated_Title" xml:space="preserve">
-    <value>Fichier crée :</value>
-  </data>
-  <data name="Diagnostics_TestConnection_Description" xml:space="preserve">
-    <value>Mesure la vitesse de connexion à partir de la communication entre l'appareil et le serveur</value>
-  </data>
-  <data name="Diagnostics_TestConnection_Title" xml:space="preserve">
-    <value>Mesurer la vitesse de la connexion au serveur</value>
-  </data>
-  <data name="Diagnostics_Title" xml:space="preserve">
-    <value>Diagnostiques</value>
-  </data>
   <data name="Diagnostics_Update" xml:space="preserve">
     <value>Mettre à jour</value>
   </data>
   <data name="Diagnostics_YouHaveTheLatestVersionOfApplication" xml:space="preserve">
-    <value>Vous detenez la plus récente version de l'appli Interviewer</value>
+    <value>Vous avez la dernière version de l'application.</value>
   </data>
-  <data name="FailedToCreateInterview" xml:space="preserve">
-    <value>Echec de création d'entretien. Raison : {0}</value>
+  <data name="Diagnostics_BackupDate_Title" xml:space="preserve">
+    <value>Quand sauvegardé :</value>
   </data>
-  <data name="FailedToLoadInterview" xml:space="preserve">
-    <value>Echec d'ouverture d'entretien.</value>
+  <data name="Diagnostics_BackupFileLocation_Title" xml:space="preserve">
+    <value>Emplacement du fichier de sauvegarde :</value>
+  </data>
+  <data name="Diagnostics_BackupReady_Title" xml:space="preserve">
+    <value>Données sauvegardées</value>
+  </data>
+  <data name="Diagnostics_BackupScope_Title" xml:space="preserve">
+    <value>Portée :</value>
+  </data>
+  <data name="Diagnostics_RestoreReady_Title" xml:space="preserve">
+    <value>Données sauvegardées trouvées :</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestConnectionOK_Title" xml:space="preserve">
+    <value>La connexion est OK</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestConnectionType_Title" xml:space="preserve">
+    <value>Type de connexion :</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestPing_Title" xml:space="preserve">
+    <value>Ping :</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestNetworkName_Title" xml:space="preserve">
+    <value>Nom du réseau :</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestConnectionAbsent_Title" xml:space="preserve">
+    <value>&lt;font color="red"&gt;Pas de connexion Internet&lt;/font&gt;</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestConnectionNotOK_Title" xml:space="preserve">
+    <value>La connexion est &lt;font color="red"&gt;pas bonne&lt;/font&gt;</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestConnectionToTheServerAbsent_Title" xml:space="preserve">
+    <value>&lt;font color="red"&gt;Pas de connexion avec le serveur&lt;/font&gt;</value>
+  </data>
+  <data name="Troubleshooting_RestoreFolderIsEmpty" xml:space="preserve">
+    <value>Le dossier '{0}' est vide. Veuillez mettre la sauvegarde que vous souhaitez restaurer dans le dossier.</value>
   </data>
   <data name="FinishInstallation_EndpointDiffers" xml:space="preserve">
-    <value>L'adresse du serveur '{0}' diffère de celle fournise dans Paramètrage ('{1}'). Utiliser celle indiquée dans Paramètrage ?</value>
-  </data>
-  <data name="Interview_Loading" xml:space="preserve">
-    <value>Chargement en cours</value>
-  </data>
-  <data name="Interview_Loading_With_Percents" xml:space="preserve">
-    <value>Chargement en cours ... {0}%</value>
-  </data>
-  <data name="MenuItem_Title_Diagnostics" xml:space="preserve">
-    <value>Diagnostiques</value>
-  </data>
-  <data name="MenuItem_Title_Language" xml:space="preserve">
-    <value>Langue</value>
-  </data>
-  <data name="MenuItem_Title_Language_Original" xml:space="preserve">
-    <value>Version originale</value>
-  </data>
-  <data name="NotSupportedServerSyncProtocolVersion" xml:space="preserve">
-    <value>Vous avez une mauvaise version de l'appli Interviewer. Veuillez installer la bonne version en : désinstallant la version actuelle; téléchargeant la bonne version du serveur, et installant cette nouvelle version</value>
+    <value>Le point de synchronisation '{0}' est différent de celui fourni dans les paramètres ('{1}'). Charger l'URL des paramètres ?</value>
   </data>
   <data name="Prefs_EventChunkSizeSummary" xml:space="preserve">
-    <value>Nombre d'évènements lisible pendant une requête</value>
+    <value>Combien d'événements peuvent être lus avec une seule requête</value>
   </data>
   <data name="Prefs_EventChunkSizeTitle" xml:space="preserve">
-    <value>Taille de segment d'événement</value>
-  </data>
-  <data name="Synchronization_Check_Obsolete_Questionnaires" xml:space="preserve">
-    <value>Recherche de masques obsolètes</value>
-  </data>
-  <data name="Synchronization_Check_Obsolete_Questionnaires_Description" xml:space="preserve">
-    <value>Suppression de {0} questionnaire(s) sur {1}</value>
-  </data>
-  <data name="Synchronization_Done" xml:space="preserve">
-    <value>Terminé</value>
-  </data>
-  <data name="Synchronization_DoneWithErrors_Title" xml:space="preserve">
-    <value>Synchronisation terminée avec des erreurs</value>
+    <value>Taille du bloc d'événements</value>
   </data>
   <data name="Synchronization_Download_AttachmentsCleanup" xml:space="preserve">
-    <value>Supression de fichiers joints obsolètes</value>
+    <value>Suppression des pièces jointes obsolètes</value>
   </data>
-  <data name="Synchronization_DownloadingLogo" xml:space="preserve">
-    <value>Téléchargement du logo</value>
-  </data>
-  <data name="Synchronization_Fail_State_FailedToProcess_Format" xml:space="preserve">
-    <value>{0} entretien(s) pas synchronisé(s)</value>
+  <data name="Synchronization_Check_Obsolete_Questionnaires" xml:space="preserve">
+    <value>Vérifier les questionnaires obsolètes</value>
   </data>
   <data name="Synchronization_Of_AssignmentsFormat" xml:space="preserve">
     <value>Synchronisation de {0} sur {1} affectation(s)</value>
   </data>
-  <data name="Troubleshooting_RestoreFolderIsEmpty" xml:space="preserve">
-    <value>Le répertoire '{0}' est vide. Veuillez mettre la sauvegarde à restaurer dans ce répertoire</value>
+  <data name="AssignmentsSynchronization" xml:space="preserve">
+    <value>Synchronisation des affectations</value>
+  </data>
+  <data name="Synchronization_Check_Obsolete_Questionnaires_Description" xml:space="preserve">
+    <value>Suppression de {0} questionnaire sur {1}</value>
+  </data>
+  <data name="Synchronization_DownloadApplication" xml:space="preserve">
+    <value>Téléchargement des mises à jour de l'application</value>
+  </data>
+  <data name="Synchronization_UploadingApplication" xml:space="preserve">
+    <value>Envoi des mises à jour de l'application</value>
+  </data>
+  <data name="Synchronization_DownloadApplication_Description" xml:space="preserve">
+    <value>Reçu {0} sur {1} à {2} ({3}%)</value>
+  </data>
+  <data name="Synchronization_SendingApplication_Description" xml:space="preserve">
+    <value>Envoyé {0} sur {1} à {2} ({3}%)</value>
+  </data>
+  <data name="Synchronization_CheckNewVersionOfApplication" xml:space="preserve">
+    <value>Vérification des mises à jour de l'application</value>
+  </data>
+  <data name="NotSupportedServerSyncProtocolVersion" xml:space="preserve">
+    <value>Vous avez une version incompatible de l'application Interviewer. Veuillez la désinstaller et la réinstaller depuis le site de votre quartier général Survey Solutions</value>
+  </data>
+  <data name="Interview_Loading" xml:space="preserve">
+    <value>Chargement des données de l'entretien</value>
+  </data>
+  <data name="Interview_Loading_Description" xml:space="preserve">
+    <value>L'entretien commencera sous peu</value>
+  </data>
+  <data name="Interview_Creating" xml:space="preserve">
+    <value>Création de l'entretien</value>
+  </data>
+  <data name="Interview_Creating_Description" xml:space="preserve">
+    <value>Cela peut prendre quelques minutes, 
+ne quittez pas cette application</value>
+  </data>
+  <data name="Interview_Loading_With_Percents" xml:space="preserve">
+    <value>Chargement des données de l'entretien {0}%</value>
+  </data>
+  <data name="Synchronization_Fail_State_FailedToProcess_Format" xml:space="preserve">
+    <value>{0} entretien(s) n'ont pas pu être synchronisés</value>
+  </data>
+  <data name="FailedToLoadInterview" xml:space="preserve">
+    <value>Échec de l'ouverture de l'entretien</value>
+  </data>
+  <data name="FailedToLoadInterviewDescription" xml:space="preserve">
+    <value>Le cas de l'entretien est invalide et ne peut pas être ouvert. Veuillez contacter le support ou essayer de synchroniser pour actualiser les cas.</value>
   </data>
   <data name="UnacceptableSSLCertificate" xml:space="preserve">
-    <value>Echec de vérification de l'URL ou du certificat de sécurité. Veuillez vérifiquer que l'adresse du serveur est valide, et que la date et heure sur la tablette sonte correctes.</value>
+    <value>Échec de la vérification du certificat pour l'URL cible. Veuillez vérifier si l'adresse du site du quartier général est valide et si votre appareil a la date et l'heure actuelles correctes</value>
   </data>
-  <data name="Dashboard_NeedTextForSearch" xml:space="preserve">
-    <value>Exécuter la recherche pour afficher les résultats</value>
+  <data name="InterviewerFromDifferentTeam" xml:space="preserve">
+    <value>L'enquêteur fait partie d'une autre équipe. Veuillez synchroniser avec le quartier général.</value>
   </data>
-  <data name="Dashboard_NotFoundSearchResult" xml:space="preserve">
-    <value>Aucun element trouvé</value>
+  <data name="Synchronization_DownloadingLogo" xml:space="preserve">
+    <value>Téléchargement du logo</value>
   </data>
-  <data name="Dashboard_Search_ExitSearch" xml:space="preserve">
-    <value>Annuler la recherche</value>
+  <data name="Synchronization_UploadingLogo" xml:space="preserve">
+    <value>Envoi du logo</value>
   </data>
-  <data name="Dashboard_SearchResult" xml:space="preserve">
-    <value>{0} élément trouvé</value>
+  <data name="Synchronization_UploadAuditLog" xml:space="preserve">
+    <value>Envoyer les informations d'audit</value>
   </data>
-  <data name="Dashboard_SearchWatermark" xml:space="preserve">
-    <value>Saisir le text a rechercher</value>
+  <data name="Synchronization_ReceivingAuditLog" xml:space="preserve">
+    <value>Réception des informations d'audit</value>
   </data>
-  <data name="Maps_NoMapsText" xml:space="preserve">
-    <value>Synchroniser pou avoir le resume des cartes. Contacter votre chef d'equipe pour plus d'instruction</value>
+  <data name="Dashboard_CreateNewTabText" xml:space="preserve">
+    <value>Créer un nouvel entretien en utilisant des modèles</value>
   </data>
-  <data name="Maps_Synchronization_Success_Description" xml:space="preserve">
-    <value>Toutes les cartes sont synchronisees</value>
+  <data name="Dashboard_StartedTabText" xml:space="preserve">
+    <value>Entretiens qui ont été commencés mais non terminés
+Vous devez les terminer pour qu'ils soient synchronisés</value>
   </data>
-  <data name="Maps_Title" xml:space="preserve">
-    <value>Cartes</value>
+  <data name="Dashboard_RejectedTabText" xml:space="preserve">
+    <value>Entretiens rejetés par le superviseur
+Veuillez résoudre les problèmes notés sur la page de couverture et les renvoyer au superviseur.</value>
+  </data>
+  <data name="Dashboard_CompletedTabText" xml:space="preserve">
+    <value>Entretiens terminés, seront téléchargés lors de 
+votre prochaine synchronisation</value>
+  </data>
+  <data name="Dashboard_WebInterviewTabText" xml:space="preserve">
+    <value>Entretiens en mode d'entretien Web. Seront supprimés lors de la synchronisation lorsque l'entretien Web sera terminé par le répondant</value>
+  </data>
+  <data name="Dashboard_QuestionnairesTabText" xml:space="preserve">
+    <value>Vous pouvez créer de nouveaux entretiens en utilisant des affectations</value>
+  </data>
+  <data name="Dashboard_AssignmentCard_SubTitleCountdownFormat" xml:space="preserve">
+    <value>À collecter : {0} entretien(s)</value>
+  </data>
+  <data name="FailedToCreateInterview" xml:space="preserve">
+    <value>Échec de la création de l'entretien. Raison : {0}</value>
+  </data>  
+  <data name="Dashboard_AssignmentCard_SubTitleSingleInterivew" xml:space="preserve">
+    <value>Affectation d'entretien unique</value>
+  </data>
+  <data name="Dashboard_AssignmentCard_SubTitleCountdown_UnlimitedFormat" xml:space="preserve">
+    <value>À collecter : illimité</value>
+  </data>
+  <data name="Dashboard_Open" xml:space="preserve">
+    <value>Ouvrir</value>
+  </data>
+  <data name="Dashboard_ViewIssues" xml:space="preserve">
+    <value>Voir les problèmes</value>
+  </data>
+  <data name="Dashboard_Reopen" xml:space="preserve">
+    <value>Rouvrir</value>
+  </data>
+  <data name="Dashboard_ShowLocation" xml:space="preserve">
+    <value>Afficher l'emplacement</value>
+  </data>
+  <data name="Dashboard_Discard" xml:space="preserve">
+    <value>Jeter</value>
+  </data>
+  <data name="Dashboard_AddCalendarEvent" xml:space="preserve">
+    <value>Ajouter un événement au calendrier</value>
+  </data>
+  <data name="Dashboard_EditCalendarEvent" xml:space="preserve">
+    <value>Modifier l'événement du calendrier</value>
+  </data>
+  <data name="Dashboard_RemoveCalendarEvent" xml:space="preserve">
+    <value>Supprimer l'événement du calendrier</value>
+  </data>
+  <data name="Dashboard_ShowCalendarEvent" xml:space="preserve">
+    <value>Prochain contact : {0}</value>
+  </data>
+  <data name="Dashboard_PastDateCalendarEvent" xml:space="preserve">
+    <value>La date sélectionnée est passée</value>
+  </data>
+  <data name="Dashboard_PastTimeCalendarEvent" xml:space="preserve">
+    <value>L'heure sélectionnée est passée</value>
+  </data>
+  <data name="Dashboard_Interview_QuestionsAnsweredFormat" xml:space="preserve">
+    <value>{0} question(s) répondue(s)</value>
+  </data>
+  <data name="Dashboard_Interview_AssignmentLabelFormat" xml:space="preserve">
+    <value>Affectation #{0}</value>
+  </data>
+  <data name="Dashboard_No_InterviewKey" xml:space="preserve">
+    <value>Pas de clé d'entretien</value>
+  </data>
+  <data name="Dashboard_CensusAssignment" xml:space="preserve">
+    <value>Recensement</value>
+  </data>
+  <data name="Dashboard_CantOpenCawi" xml:space="preserve">
+    <value>Vous ne pouvez pas ouvrir l'entretien en mode CAWI. Il sera envoyé au siège après la synchronisation.</value>
+  </data>
+  <data name="Dashboard_CawiLabel" xml:space="preserve">
+    <value>{0} (CAWI)</value>
   </data>
   <data name="MapSyncProvider_SyncronizeMapsAsync_Checking_maps_on_server" xml:space="preserve">
-    <value>Control des cartes sur le serveur</value>
+    <value>Vérification des cartes sur le serveur</value>
+  </data>
+  <data name="MapSyncProvider_SyncronizeMapsAsync_Progress_Report_Format" xml:space="preserve">
+    <value>Traitement de la carte {0}, {1} sur {2}.
+Téléchargé {3}%</value>
+  </data>
+  <data name="MapSyncProvider_SyncronizeMapsAsync_Map_synchronization_succesfuly_finished" xml:space="preserve">
+    <value>Synchronisation des cartes terminée avec succès</value>
   </data>
   <data name="MapSyncProvider_SyncronizeMapsAsync_Map_sync_error" xml:space="preserve">
     <value>Erreur de synchronisation des cartes</value>
   </data>
-  <data name="MapSyncProvider_SyncronizeMapsAsync_Map_synchronization_succesfuly_finished" xml:space="preserve">
-    <value>Synchronisation des cartes reussie</value>
+  <data name="Dashboard_SearchResult" xml:space="preserve">
+    <value>{0} éléments trouvés</value>
   </data>
-  <data name="MapSyncProvider_SyncronizeMapsAsync_Progress_Report_Format" xml:space="preserve">
-    <value>Manipulation de cartes {0}, {1} sur {2}. Telechargement {3}%</value>
+  <data name="Dashboard_NotFoundSearchResult" xml:space="preserve">
+    <value>Rien trouvé</value>
   </data>
-  <data name="MenuItem_Title_Maps" xml:space="preserve">
-    <value>Cartes</value>
+  <data name="Dashboard_NeedTextForSearch" xml:space="preserve">
+    <value>Effectuez une recherche pour afficher les résultats</value>
   </data>
-  <data name="MenuItem_Title_Search" xml:space="preserve">
-    <value>Recherche</value>
+  <data name="Dashboard_Searching" xml:space="preserve">
+    <value>Recherche...</value>
   </data>
-  <data name="Share_to_Title" xml:space="preserve">
-    <value>Partager l'information avec…</value>
+  <data name="Dashboard_SearchWatermark" xml:space="preserve">
+    <value>Entrez le texte pour la recherche</value>
   </data>
-  <data name="Synchronization_CheckNewVersionOfApplication" xml:space="preserve">
-    <value>Vérifier les mises à jour des logiciels </value>
+  <data name="Dashboard_Search_ExitSearch" xml:space="preserve">
+    <value>Quitter la recherche</value>
   </data>
-  <data name="Synchronization_DownloadApplication" xml:space="preserve">
-    <value>Téléchargement des mise à jour des applications</value>
+  <data name="Synchronization_CheckForObsolete_Interviews" xml:space="preserve">
+    <value>Vérifier les entretiens obsolètes</value>
   </data>
-  <data name="Synchronization_DownloadApplication_Description" xml:space="preserve">
-    <value>Reçu {0} sur {1} a {2} ({3}%)</value>
+  <data name="Dashboard_Assign" xml:space="preserve">
+    <value>Affecter</value>
+  </data>
+  <data name="Synchronization_Of_Interviewers" xml:space="preserve">
+    <value>Synchronisation des enquêteurs</value>
+  </data>
+  <data name="Synchronization_Of_Supervisor_details" xml:space="preserve">
+    <value>Synchronisation des détails du superviseur</value>
+  </data>
+  <data name="Synchronization_Of_InterviewersFormat" xml:space="preserve">
+    <value>Synchronisation de {0} sur {1} enquêteur(s)</value>
+  </data>
+  <data name="Prefs_AllowSyncWithHq" xml:space="preserve">
+    <value>Autoriser la synchronisation avec le siège</value>
+  </data>
+  <data name="Prefs_AllowSyncWithHq_Summary" xml:space="preserve">
+    <value>Désactivez ce paramètre si vous souhaitez synchroniser uniquement avec l'application mobile du superviseur. Après la première synchronisation réussie avec l'application du superviseur, il ne sera plus possible de réactiver ce paramètre</value>
+  </data>
+  <data name="Prefs_AllowSyncWithHq_Summary_Disabled" xml:space="preserve">
+    <value>Il n'est pas possible de synchroniser avec le siège une fois qu'il y a eu au moins une synchronisation réussie avec l'application du superviseur</value>
+  </data>
+  <data name="DashboardItem_Responsible" xml:space="preserve">
+    <value>Responsable : {0}</value>
+  </data>
+  <data name="DashboardItem_RejectedByHqOn" xml:space="preserve">
+    <value>Rejeté par le siège : {0}</value>
+  </data>
+  <data name="DashboardItem_ApprovedBySupervisor" xml:space="preserve">
+    <value>Approuvé par le superviseur : {0}</value>
+  </data>
+  <data name="FinishInstallation_QrBarcodeReaderErrorMessage" xml:space="preserve">
+    <value>Une erreur s'est produite lors de la numérisation</value>
+  </data>
+  <data name="SelectResponsible_Reassign" xml:space="preserve">
+    <value>Réaffecter</value>
+  </data>
+  <data name="SelectResponsible_ReassignDescription" xml:space="preserve">
+    <value>Sélectionnez le nouveau responsable de l'entretien.
+Il apparaîtra sur l'appareil de l'enquêteur après la prochaine synchronisation</value>
+  </data>
+  <data name="SelectResponsible_ReassignButtonText" xml:space="preserve">
+    <value>Réaffecter</value>
+  </data>
+  <data name="SelectResponsible_CancelButtonText" xml:space="preserve">
+    <value>Annuler</value>
+  </data>
+  <data name="Notifications_InterviewsTitle" xml:space="preserve">
+    <value>Entretiens</value>
+  </data>
+  <data name="Notifications_CompletedInterviewsText" xml:space="preserve">
+    <value>Vous avez {0} entretien(s) terminé(s) qui doivent être synchronisés</value>
+  </data>
+  <data name="Notifications_RejectedInterviewsText" xml:space="preserve">
+    <value>Vous avez {0} entretien(s) rejeté(s) qui n'ont pas été traités</value>
+  </data>
+  <data name="Notifications_SyncTitle" xml:space="preserve">
+    <value>Synchronisation</value>
+  </data>
+  <data name="Notifications_SyncTooLongAgoText" xml:space="preserve">
+    <value>La synchronisation n'a pas été effectuée récemment. Veuillez synchroniser</value>
+  </data>
+  <data name="Notifications_SyncNoRetryTitle" xml:space="preserve">
+    <value>Il n'y a pas eu de nouvelle tentative après l'échec de la synchronisation. Veuillez réessayer</value>
+  </data>
+  <data name="Notifications_ManyStartedInterviews" xml:space="preserve">
+    <value>Vous avez commencé trop d'entretiens. Veuillez les terminer.</value>
+  </data>
+  <data name="Notifications_ManyCompletedInterviews" xml:space="preserve">
+    <value>Il y a beaucoup d'entretiens terminés. Veuillez synchroniser.</value>
+  </data>
+  <data name="Notifications_StaleAssignments" xml:space="preserve">
+    <value>Certaines affectations n'ont pas été mises à jour depuis 3 jours.</value>
+  </data>
+  <data name="Synchronization_UserLinkedToAnotherServer_Description" xml:space="preserve">
+    <value>L'utilisateur actuel a été créé sur une autre instance de l'application du siège. Changez l'URL du point de synchronisation vers le serveur d'origine</value>
+  </data>
+  <data name="Synchronization_UserLinkedToAnotherServer_Status" xml:space="preserve">
+    <value>Utilisateur lié à un autre serveur</value>
+  </data>
+  <data name="Diagnostics_SendLogs" xml:space="preserve">
+    <value>Envoyer les journaux de trace</value>
+  </data>
+  <data name="Diagnostics_SendLogs_Description" xml:space="preserve">
+    <value>Envoyer des journaux détaillés au site du siège pour l'investigation des problèmes</value>
+  </data>
+  <data name="Diagnostics_SendLogs_Success" xml:space="preserve">
+    <value>Les journaux ont été envoyés au siège</value>
+  </data>
+  <data name="Synchronization_WorkspaceDisabled" xml:space="preserve">
+    <value>Votre compte n'est plus actif sur ce serveur, car l'espace de travail dans lequel il est défini a été désactivé par l'administrateur. Veuillez contacter votre superviseur.</value>
+  </data>
+  <data name="DashboardItem_QRCode" xml:space="preserve">
+    <value>Afficher le code QR</value>
+  </data>
+  <data name="Synchronization_WorkspaceAccessDisabledReason" xml:space="preserve">
+    <value>Votre compte n'est plus actif dans l'espace de travail. Veuillez contacter votre administrateur système.</value>
+  </data>
+  <data name="Interview_Progress_Format" xml:space="preserve">
+    <value>Progression : {0}/{1}</value>
+  </data>
+  <data name="Synchronization_Fail_State_UploadedInterviews_Format" xml:space="preserve">
+      <value>{0} des {1} entretiens complétés téléchargés</value>
+  </data>
+  <data name="Synchronization_Fail_UnexpectedException" xml:space="preserve">
+      <value>Exception inattendue</value>
+  </data>
+  <data name="Synchronization_LinkToErrors" xml:space="preserve">
+      <value>Plus d'informations sur les erreurs de synchronisation peuvent être trouvées sur le &lt;a href="https://support.mysurvey.solutions/interviewer/troubleshooting/synchronization-problems\"&gt;site de support&lt;/a&gt;</value>
+  </data>
+  <data name="Synchronization_PartialInterviews" xml:space="preserve">
+      <value>modifications de l'entretien</value>
+  </data>
+  <data name="TransferringAssignments" xml:space="preserve">
+      <value>Transfert des affectations</value>
   </data>
 </root>

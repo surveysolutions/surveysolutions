@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.MaskTextTests
             result = maskedText.MakeMaskedText();
 
         [NUnit.Framework.Test] public void should_be_make_mask_with_correct_char_indexes () =>
-            result.Should().Be("_-__--__[]");
+            result.Should().Be("ˍ-ˍˍ--ˍˍ[]");
 
         static string result;
         static MaskedText maskedText;

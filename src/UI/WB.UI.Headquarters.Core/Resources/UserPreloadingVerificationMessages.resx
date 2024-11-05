@@ -202,10 +202,10 @@
     <value>Wrong full name format</value>
   </data>
   <data name="PLU0001Recomendation" xml:space="preserve">
-    <value />
+      <value>User must be unique </value>
   </data>
   <data name="PLU0002Recomendation" xml:space="preserve">
-    <value />
+      <value>Resolve duplicates</value>
   </data>
   <data name="PLU0003Recomendation" xml:space="preserve">
     <value>Archived user cannot be re-used because it belongs to another team</value>
@@ -220,19 +220,19 @@
     <value>It must contain at least one number, one upper case character, and one lower case character. Length should be between 10 and 100 characters</value>
   </data>
   <data name="PLU0007Recomendation" xml:space="preserve">
-    <value />
+      <value>Fix email</value>
   </data>
   <data name="PLU0008Recomendation" xml:space="preserve">
-    <value />
+      <value>Fix phone number</value>
   </data>
   <data name="PLU0009Recomendation" xml:space="preserve">
     <value>Only "supervisor" or "interviewer" are allowed</value>
   </data>
   <data name="PLU0010Recomendation" xml:space="preserve">
-    <value />
+      <value>Verify value for supervisor</value>
   </data>
   <data name="PLU0011Recomendation" xml:space="preserve">
-    <value />
+      <value>Provide value fro supervisor</value>
   </data>
   <data name="PLU0012Recomendation" xml:space="preserve">
     <value>It should not contain more than 100 characters</value>
@@ -308,11 +308,9 @@
   </data>
   <data name="PLU0022" xml:space="preserve">
     <value>Workspace not found</value>
-
   </data>
   <data name="PLU0022Description" xml:space="preserve">
     <value>Workspace must exist and be enabled</value>
-
   </data>
   <data name="PLU0022Recomendation" xml:space="preserve">
     <value>Check workspace name</value>

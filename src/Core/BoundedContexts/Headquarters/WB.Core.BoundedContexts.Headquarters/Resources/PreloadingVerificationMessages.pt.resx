@@ -118,69 +118,141 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="PL0002_MoreThenOneLevel" xml:space="preserve">
-    <value>[PL0002] N/A</value>
+    <value>[PL0002] N/A. Entre em contato com o suporte do servidor.</value>
   </data>
   <data name="PL0003_ColumnWasntMappedOnQuestion" xml:space="preserve">
-    <value>Coluna não pode ser mapeada para qualquer pergunta no questionário.</value>
+    <value>A coluna não pode ser mapeada para nenhuma pergunta no questionário.</value>
   </data>
   <data name="PL0004_FileWasntMappedRoster" xml:space="preserve">
-    <value>Arquivo não pode ser mapeado para qualquer lista no questionário.</value>
+    <value>O arquivo não pode ser mapeado para nenhuma lista no questionário.</value>
   </data>
-    <data name="PL0006_IdDublication" xml:space="preserve">
-    <value>Valores de Id duplicados encontrados.</value>
+  <data name="PL0006_IdDublication" xml:space="preserve">
+    <value>Valores de ID duplicados encontrados.</value>
   </data>
   <data name="PL0007_ServiceColumnIsAbsent" xml:space="preserve">
-    <value>Está em falta uma ou mais colunas contendo a ID principal</value>
+    <value>Uma ou mais colunas de ID principal estão ausentes.</value>
   </data>
   <data name="PL0008_OrphanRosterRecord" xml:space="preserve">
-    <value>Registro de lista não tem ID principal.</value>
+    <value>O registro da lista não tem um pai.</value>
   </data>
   <data name="PL0009_RosterIdIsInconsistantWithRosterSizeQuestion" xml:space="preserve">
-    <value>Lista Id é inconsistant com o tamanho de lista.</value>
+    <value>O ID da lista é inconsistente com o tamanho da lista.</value>
   </data>
-    <data name="PL0014_ParsedValueIsNotAllowed" xml:space="preserve">
-    <value>[PL0014] Valor da pergunta fornecido não é permitido.</value>
+  <data name="PL0014_ParsedValueIsNotAllowed" xml:space="preserve">
+    <value>O valor da pergunta fornecida não é permitido.</value>
   </data>
-    <data name="PL0016_ExpectedDateTimeNotParsed" xml:space="preserve">
-    <value>Valor da data ou Hora é inválido</value>
+  <data name="PL0016_ExpectedDateTimeNotParsed" xml:space="preserve">
+    <value>Data ou hora inválida inserida na pergunta de data.</value>
   </data>
   <data name="PL0017_ExpectedGpsNotParsed" xml:space="preserve">
-    <value>Valor inválido de GPS.</value>
+    <value>Valor de GPS inválido.</value>
   </data>
   <data name="PL0018_ExpectedIntNotParsed" xml:space="preserve">
-    <value>São permitidos apenas valores inteiros.</value>
+    <value>Somente valores inteiros são permitidos.</value>
   </data>
   <data name="PL0019_ExpectedDecimalNotParsed" xml:space="preserve">
-    <value>São permitidos apenas valores reais.</value>
+    <value>Somente valores reais são permitidos.</value>
   </data>
   <data name="PL0022_AnswerIsIncorrectBecauseIsRosterSizeAndNegative" xml:space="preserve">
-    <value>Questão de tamanho do lista não pode ter valores negativos.</value>
+    <value>A pergunta sobre o tamanho da lista não pode ter valores negativos.</value>
   </data>
-    <data name="PL0024_DataWasNotFound" xml:space="preserve">
-    <value>O pré-carregamento de dados não foi encontrado.</value>
+  <data name="PL0024_DataWasNotFound" xml:space="preserve">
+    <value>Os dados de pré-carregamento não foram encontrados.</value>
   </data>
-    <data name="PL0026_ResponsibleWasNotFound" xml:space="preserve">
-    <value>O Responsável fornecido não foi encontrado.</value>
+  <data name="PL0026_ResponsibleWasNotFound" xml:space="preserve">
+    <value>O responsável não existe para 1 ou mais observações.</value>
   </data>
   <data name="PL0027_ResponsibleIsLocked" xml:space="preserve">
-    <value>Responsável está bloqueado.</value>
+    <value>O responsável é um usuário bloqueado para 1 ou mais observações.</value>
+  </data>
+  <data name="PL0028_UserIsNotHQOrSupervisorOrInterviewer" xml:space="preserve">
+    <value>O usuário não é Sede, Supervisor ou Entrevistador para 1 ou mais observações.</value>
   </data>
   <data name="PL0029_AnswerIsIncorrectBecauseIsRosterSizeAndMoreThan40" xml:space="preserve">
-    <value>Resposta na pergunta de tamanho do lista não pode ser superior a {0}.</value>
+    <value>A resposta à pergunta sobre o tamanho da lista não pode ser maior que {0}.</value>
   </data>
   <data name="PL0030_GpsFieldsRequired" xml:space="preserve">
-    <value>GPS pergunta necessário colunas de Latitude e Longitude</value>
+    <value>As perguntas de GPS exigem colunas separadas para Latitude e Longitude.</value>
+  </data>
+  <data name="PL0030_GpsMandatoryFilds" xml:space="preserve">
+    <value>A pergunta de GPS requer que a Latitude e a Longitude sejam definidas.</value>
   </data>
   <data name="PL0031_ColumnNameDuplicatesFound" xml:space="preserve">
-    <value>Encontrado duplicado de nomes de colunas</value>
+    <value>Duas ou mais colunas têm o mesmo nome.</value>
   </data>
   <data name="PL0032_LatitudeMustBeGeaterThenN90AndLessThen90" xml:space="preserve">
-    <value>Latitude deve ser superior a-90 ° e menor que 90 °.</value>
+    <value>A latitude deve ser maior que -90° e menor que 90°.</value>
   </data>
   <data name="PL0033_LongitudeMustBeGeaterThenN180AndLessThen180" xml:space="preserve">
-    <value>Longitude deve ser superior a-180 ° e menos de 180 °.</value>
+    <value>A longitude deve ser maior que -180° e menor que 180°.</value>
   </data>
   <data name="PL0034_CommaSymbolIsNotAllowedInNumericAnswer" xml:space="preserve">
-    <value>"," símbolo não é permitido em respostas numéricas. Por favor, use "." como separador decimal.</value>
+    <value>Separador decimal inválido. O símbolo "," não é permitido em respostas numéricas. Por favor, use "." em vez disso.</value>
+  </data>
+  <data name="PL0035_QuantityNotParsed" xml:space="preserve">
+    <value>Somente valores inteiros são permitidos.</value>
+  </data>
+  <data name="PL0036_QuantityShouldBeGreaterThanMinus1" xml:space="preserve">
+    <value>A quantidade deve ser maior ou igual a -1.</value>
+  </data>
+  <data name="PL0040_QuestionnaireDataIsNotFound" xml:space="preserve">
+    <value>Arquivo com dados de nível de questionário está ausente.</value>
+  </data>
+  <data name="PL0041_AnswerExceedsMaxAnswersCount" xml:space="preserve">
+    <value>O número de opções respondidas na pergunta de múltipla escolha não pode ser maior que o número máximo de respostas permitidas.</value>
+  </data>
+  <data name="PL0050_CategoricalMulti_AnswerMustBeGreaterOrEqualThen1" xml:space="preserve">
+    <value>Valor negativo não é permitido para a pergunta de seleção múltipla categórica.</value>
+  </data>
+  <data name="PL0042_IdIsEmpty" xml:space="preserve">
+    <value>A coluna de ID não tem nenhum valor.</value>
+  </data>
+  <data name="ArchiveWithPasswordNotSupported" xml:space="preserve">
+    <value>Arquivos protegidos por senha não são suportados.</value>
+  </data>
+  <data name="PL0052_ColumnByTextListRosterSizeAnswerNotFound" xml:space="preserve">
+    <value>A lista deve ter uma coluna para respostas da lista de texto.</value>
+  </data>
+  <data name="PL0047_ProtectedVariables_MissingColumn" xml:space="preserve">
+    <value>A coluna obrigatória {0} está ausente.</value>
+  </data>
+  <data name="PL0048_ProtectedVariables_VariableNotFoundInQuestionnaire" xml:space="preserve">
+    <value>A variável protegida não foi encontrada no questionário fornecido.</value>
+  </data>
+  <data name="PL0049_ProtectedVariables_VariableNotSupportsProtection" xml:space="preserve">
+    <value>O tipo de variável não pode ser protegido.</value>
+  </data>
+  <data name="PL0053_InconsistentNumericRosterInstanceCodes" xml:space="preserve">
+    <value>Código de lista inconsistente para lista numérica. A sequência de códigos de lista deve ser 0, 1, ... até o número de instâncias da lista.</value>
+  </data>
+  <data name="PL0054_MaxInterviewsCountByAssignmentExeeded" xml:space="preserve">
+    <value>A quantidade máxima não deve ser superior a {0}.</value>
+  </data>
+  <data name="PL0055_InvalidEmail" xml:space="preserve">
+    <value>Email inválido.</value>
+  </data>
+  <data name="PL0056_InvalidPassword" xml:space="preserve">
+    <value>Senha inválida. Pelo menos 6 números e letras maiúsculas ou um único símbolo '?' para gerar senha.</value>
+  </data>
+  <data name="PL0057_IncosistentQuantityAndEmail" xml:space="preserve">
+    <value>Para atribuições com email fornecido, a quantidade permitida é 1.</value>
+  </data>
+  <data name="PL0058_IncosistentWebmodeAndEmail" xml:space="preserve">
+    <value>O modo Web deve ser ativado para atribuições com email.</value>
+  </data>
+  <data name="PL0059_IncosistentWebmodeAndPassword" xml:space="preserve">
+    <value>O modo Web deve ser ativado para atribuições com senha.</value>
+  </data>
+  <data name="PL0060_WebmodeSizeOneHasNoEmailOrPassword" xml:space="preserve">
+    <value>A atribuição com tamanho 1 para o modo Web deve ter um email ou senha fornecidos.</value>
+  </data>
+  <data name="PL0061_DuplicatePasswordWithQuantity1" xml:space="preserve">
+    <value>A senha não é única. A senha por atribuição para o modo Web com quantidade 1 deve ser única.</value>
+  </data>
+  <data name="PL0062_WebModeOnlyForInterviewer" xml:space="preserve">
+    <value>Todas as atribuições para entrevistas na web devem ser feitas a um entrevistador.</value>
+  </data>
+  <data name="PL0063_NoPermittedQuestion" xml:space="preserve">
+    <value>A resposta à pergunta com o nome da variável {0} não pode ser pré-carregada, pois é de um tipo não suportado. Consulte o seguinte artigo de suporte https://support.mysurvey.solutions/questionnaire-designer/limits/design-limitations-by-question-type para obter detalhes sobre o que pode ser pré-carregado na versão atual.</value>
   </data>
 </root>

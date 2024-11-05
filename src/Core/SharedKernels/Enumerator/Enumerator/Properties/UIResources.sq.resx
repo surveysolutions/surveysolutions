@@ -595,7 +595,7 @@
     <value>Sinkronizimi i detyrave dhe intervistave </value>
   </data>
   <data name="Ok" xml:space="preserve">
-    <value>Ok</value>
+      <value>OK</value>
   </data>
   <data name="PasswordHint" xml:space="preserve">
     <value>Fjalëkalimi</value>

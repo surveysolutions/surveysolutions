@@ -117,11 +117,8 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="BeforeSignInToDesigner" xml:space="preserve">
+    <data name="BeforeSignInToDesigner" xml:space="preserve">
     <value>Antes de entrar, por favor, certifique-se que o site 'Designer' está disponível e não é no modo de manutenção</value>
-  </data>
-  <data name="DesignerQuestionnaires" xml:space="preserve">
-    <value>Questionários de desenhador</value>
   </data>
   <data name="LoginToDesignerError" xml:space="preserve">
     <value>Não foi possível conectar ao designer. Por favor, verifique esse designer está disponível e tente &lt;a href='{0}'&gt;novamente&lt;/a&gt;</value>
@@ -131,5 +128,62 @@
   </data>
   <data name="SignInToDesignerTitle" xml:space="preserve">
     <value>Cadastre-se designer</value>
+  </data>
+  <data name="DesignerQuestionnaires" xml:space="preserve">
+    <value>Questionários de desenhador</value>
+  </data>
+  <data name="ImportModeTitle" xml:space="preserve">
+    <value>Modo de importação de questionário</value>
+  </data>
+  <data name="ImportModePageTitle" xml:space="preserve">
+    <value>Importar Questionário:</value>
+  </data>
+  <data name="ListOfMyQuestionnaires" xml:space="preserve">
+    <value>lista dos meus questionários</value>
+  </data>
+  <data name="Chapters" xml:space="preserve">
+    <value>Seções</value>
+  </data>
+  <data name="CreatedAt" xml:space="preserve">
+    <value>Criado em</value>
+  </data>
+  <data name="Gropus" xml:space="preserve">
+    <value>Sub-seções</value>
+  </data>
+  <data name="LastModifiedAt" xml:space="preserve">
+    <value>Última modificação em</value>
+  </data>
+  <data name="Questions" xml:space="preserve">
+    <value>Perguntas</value>
+  </data>
+  <data name="QuestionsWithConditions" xml:space="preserve">
+    <value>{{count}} delas com condições</value>
+  </data>
+  <data name="Rosters" xml:space="preserve">
+    <value>Listas</value>
+  </data>
+  <data name="QuestionnaireExists" xml:space="preserve">
+    <value>Você já importou este questionário</value>
+  </data>
+  <data name="ImportAsNewVersion" xml:space="preserve">
+    <value>Criar uma nova versão (#{{version}})</value>
+  </data>
+  <data name="RegularImportTitle" xml:space="preserve">
+    <value>Importar</value>
+  </data>
+  <data name="RegularImportSubTitle" xml:space="preserve">
+    <value>Isso permitirá que você crie atribuições individuais que podem conter dados de identificação. Apenas essas atribuições aparecerão nos dispositivos dos entrevistadores.</value>
+  </data>
+  <data name="MyQuestionnairesTitle" xml:space="preserve">
+    <value>Designer: Meus Questionários</value>
+  </data>
+  <data name="UpgradeAssignments" xml:space="preserve">
+    <value>Atualizar atribuições</value>
+  </data>
+  <data name="Importing" xml:space="preserve">
+    <value>Importando {{percent}}%</value>
+  </data>
+  <data name="Prepare" xml:space="preserve">
+    <value>Recebendo dados do questionário</value>
   </data>
 </root>

@@ -76,7 +76,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 
         public override void Configure(string interviewId, NavigationState navigationState)
         {
-            base.Configure(interviewId, navigationState);
+            RunConfiguration(interviewId, navigationState, true);
 
             this.Name.InitAsStatic(InterviewDetails.Resolve);
 

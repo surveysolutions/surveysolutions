@@ -123,12 +123,6 @@
   <data name="Done" xml:space="preserve">
     <value>Hecho</value>
   </data>
-  <data name="DownloadTitle" xml:space="preserve">
-    <value>Descargar ({{count}})</value>
-  </data>
-  <data name="ExportAssignmentsTitle" xml:space="preserve">
-    <value>Puede descargar la lista de las asignaciones creadas que son asignadas al entrevistador para entregar los enlaces web a los encuestados</value>
-  </data>
   <data name="SelectInterviwer" xml:space="preserve">
     <value>Seleccione entrevistador</value>
   </data>
@@ -141,9 +135,6 @@
   <data name="StartInfo" xml:space="preserve">
     <value>Inicio de la entrevista Web para {{name}}</value>
   </data>
-  <data name="StopWebInterview" xml:space="preserve">
-    <value>Detener Entrevista Web</value>
-  </data>
   <data name="WebInterviewSetup_PageHeader" xml:space="preserve">
     <value>Configuración de la entrevista Web</value>
   </data>
@@ -153,14 +144,80 @@
   <data name="WebInterviewStarted" xml:space="preserve">
     <value>Se inició la entrevista Web para {{name}}</value>
   </data>
-  <data name="CustomMessageTooLong" xml:space="preserve">
-    <value>El mensaje personalizado no debe contener más de {0} caracteres (incluido html)</value>
+  <data name="UseCaptcha" xml:space="preserve">
+    <value>Utilice CAPTCHA antes del inicio de la entrevista</value>
+  </data>
+  <data name="DownloadTitle" xml:space="preserve">
+    <value>Descargar ({{count}})</value>
+  </data>
+  <data name="ExportAssignmentsTitle" xml:space="preserve">
+    <value>Puede descargar la lista de las asignaciones creadas que son asignadas al entrevistador para entregar los enlaces web a los encuestados</value>
+  </data>
+  <data name="StopWebInterview" xml:space="preserve">
+    <value>Detener Entrevista Web</value>
+  </data>
+  <data name="WebInterviewUserMessages_FinishInterview_Descr" xml:space="preserve">
+    <value>Texto que se muestra en la página final cuando se completa la entrevista</value>
+  </data>
+  <data name="WebInterviewUserMessages_Invitation_Descr" xml:space="preserve">
+    <value>Texto de invitación presentado al usuario en la página inicial. %QUESTIONNAIRE% se sustituye por el nombre del cuestionario</value>
+  </data>
+  <data name="WebInterviewUserMessages_ResumeInvitation_Descr" xml:space="preserve">
+    <value>Texto que se muestra al usuario que regresa cuando se reanuda la entrevista. %QUESTIONNAIRE% se sustituye por el nombre del cuestionario</value>
+  </data>
+  <data name="WebInterviewUserMessages_ResumeWelcome_Descr" xml:space="preserve">
+    <value>El texto del encabezado se muestra al usuario que regresa antes de reanudar una entrevista</value>
+  </data>
+  <data name="WebInterviewUserMessages_SurveyName_Descr" xml:space="preserve">
+    <value>Nombre de la encuesta realizada. %QUESTIONNAIRE% se sustituye por el nombre del cuestionario</value>
+  </data>
+  <data name="WebInterviewUserMessages_WebSurveyHeader_Descr" xml:space="preserve">
+    <value>El texto del encabezado se muestra después de completar la entrevista</value>
+  </data>
+  <data name="WebInterviewUserMessages_WelcomeText_Descr" xml:space="preserve">
+    <value>Texto de bienvenida del encabezado en la página inicial</value>
   </data>
   <data name="CustomText" xml:space="preserve">
     <value>Usar texto personalizado</value>
   </data>
+  <data name="TextsUpdated" xml:space="preserve">
+    <value>Textos actualizados</value>
+  </data>
+  <data name="SaveAll" xml:space="preserve">
+    <value>Grabar todas</value>
+  </data>
+  <data name="TextCustomize" xml:space="preserve">
+    <value>El texto que se muestra a los encuestados se puede personalizar</value>
+  </data>
+  <data name="CustomMessageTooLong" xml:space="preserve">
+    <value>El mensaje personalizado no debe contener más de {0} caracteres (incluido html)</value>
+  </data>
+  <data name="WebInterviewSetup_SendInvitationsTitle" xml:space="preserve">
+    <value>Enviar invitaciones</value>
+  </data>
   <data name="Invitations" xml:space="preserve">
     <value>Invitaciones</value>
+  </data>
+  <data name="Invitations_TotalInvitations" xml:space="preserve">
+    <value>{{count}} invitaciones totales.</value>
+  </data>
+  <data name="Invitations_Sent" xml:space="preserve">
+    <value>Ya se han enviado {{count}} invitaciones.</value>
+  </data>
+  <data name="Invitations_NothingSent" xml:space="preserve">
+    <value>Aún no se han enviado invitaciones.</value>
+  </data>
+  <data name="Invitations_ToSend" xml:space="preserve">
+    <value>{{count}} invitación para enviar.</value>
+  </data>
+  <data name="Invitations_NothingToSend" xml:space="preserve">
+    <value>No hay invitaciones para enviar a partir de ahora.</value>
+  </data>
+  <data name="Invitations_SetupError" xml:space="preserve">
+    <value>No se pueden enviar invitaciones.</value>
+  </data>
+  <data name="Invitations_EmailIsNotSetUp" xml:space="preserve">
+    <value>El proveedor de correo electrónico no está configurado.</value>
   </data>
   <data name="Invitations_ChangeEmailSettingsAdmin" xml:space="preserve">
     <value>Puede cambiar esta configuración en la página &lt;a href="{{url}}"&gt; 'Proveedores de correo electrónico' &lt;/a&gt;.</value>
@@ -168,53 +225,14 @@
   <data name="Invitations_ChangeEmailSettingsNotAdmin" xml:space="preserve">
     <value>Solicite a su administrador que cambie esta configuración en la página 'Proveedores de correo electrónico'.</value>
   </data>
-  <data name="Invitations_EmailIsNotSetUp" xml:space="preserve">
-    <value>El proveedor de correo electrónico no está configurado.</value>
-  </data>
-  <data name="Invitations_NothingSent" xml:space="preserve">
-    <value>Aún no se han enviado invitaciones.</value>
-  </data>
-  <data name="Invitations_NothingToSend" xml:space="preserve">
-    <value>No hay invitaciones para enviar a partir de ahora.</value>
-  </data>
-  <data name="Invitations_SendAction" xml:space="preserve">
-    <value>Envía {{count}} invitaciones</value>
-  </data>
-  <data name="Invitations_Sent" xml:space="preserve">
-    <value>Ya se han enviado {{count}} invitaciones.</value>
-  </data>
-  <data name="Invitations_SetupError" xml:space="preserve">
-    <value>No se pueden enviar invitaciones.</value>
+  <data name="Invitations_SurveyIsNotStarted" xml:space="preserve">
+    <value>La encuesta web no se inicia. Configure y &lt;a href="{{url}}"&gt; inicie la encuesta web &lt;/a&gt; antes de enviar las invitaciones.</value>
   </data>
   <data name="Invitations_SuccessfulSetup" xml:space="preserve">
     <value>Se inició la encuesta web y el proveedor de correo electrónico se configuró correctamente. El sistema está listo para enviar invitaciones.</value>
   </data>
-  <data name="Invitations_SurveyIsNotStarted" xml:space="preserve">
-    <value>La encuesta web no se inicia. Configure y &lt;a href="{{url}}"&gt; inicie la encuesta web &lt;/a&gt; antes de enviar las invitaciones.</value>
-  </data>
-  <data name="Invitations_ToSend" xml:space="preserve">
-    <value>{{count}} invitación para enviar.</value>
-  </data>
-  <data name="Invitations_TotalInvitations" xml:space="preserve">
-    <value>{{count}} invitaciones totales.</value>
-  </data>
-  <data name="SaveAll" xml:space="preserve">
-    <value>Grabar todas</value>
-  </data>
-  <data name="SingleResponse" xml:space="preserve">
-    <value>límite a una entrevista por encuestado</value>
-  </data>
-  <data name="TextCustomize" xml:space="preserve">
-    <value>El texto que se muestra a los encuestados se puede personalizar</value>
-  </data>
-  <data name="TextsUpdated" xml:space="preserve">
-    <value>Textos actualizados</value>
-  </data>
-  <data name="UseCaptcha" xml:space="preserve">
-    <value>Utilice CAPTCHA antes del inicio de la entrevista</value>
-  </data>
-  <data name="WebInterviewSetup_SendInvitationsTitle" xml:space="preserve">
-    <value>Send invitations</value>
+  <data name="Invitations_SendAction" xml:space="preserve">
+    <value>Envía {{count}} invitaciones</value>
   </data>
   <data name="WebInterviewUserMessages_CompleteButton_Descr" xml:space="preserve">
     <value>Completar</value>
@@ -222,31 +240,28 @@
   <data name="WebInterviewUserMessages_CompleteNoteToSupervisor_Descr" xml:space="preserve">
     <value>Nota para el supervisor</value>
   </data>
-  <data name="WebInterviewUserMessages_FinishInterview_Descr" xml:space="preserve">
-    <value>Texto que se muestra en la página final cuando se completa la entrevista</value>
-  </data>
-  <data name="WebInterviewUserMessages_Invitation_Descr" xml:space="preserve">
-    <value>Texto de invitación presentado al usuario en la página inicial. % QUESTIONNAIRE% se sustituye por el nombre del cuestionario</value>
-  </data>
-  <data name="WebInterviewUserMessages_ResumeButton_Descr" xml:space="preserve">
-    <value>Currículum</value>
-  </data>
-  <data name="WebInterviewUserMessages_ResumeInvitation_Descr" xml:space="preserve">
-    <value>Texto que se muestra al usuario que regresa cuando se reanuda la entrevista. % QUESTIONNAIRE% se sustituye por el nombre del cuestionario</value>
-  </data>
-  <data name="WebInterviewUserMessages_ResumeWelcome_Descr" xml:space="preserve">
-    <value>El texto del encabezado se muestra al usuario que regresa antes de reanudar una entrevista</value>
+  <data name="SingleResponse" xml:space="preserve">
+    <value>límite a una entrevista por encuestado</value>
   </data>
   <data name="WebInterviewUserMessages_StartNewButton_Descr" xml:space="preserve">
     <value>Iniciar nueva entrevista</value>
   </data>
-  <data name="WebInterviewUserMessages_SurveyName_Descr" xml:space="preserve">
-    <value>Nombre de la encuesta realizada. % QUESTIONNAIRE% se sustituye por el nombre del cuestionario</value>
+  <data name="WebInterviewUserMessages_ResumeButton_Descr" xml:space="preserve">
+    <value>Currículum</value>
   </data>
-  <data name="WebInterviewUserMessages_WebSurveyHeader_Descr" xml:space="preserve">
-    <value>El texto del encabezado se muestra después de completar la entrevista</value>
+  <data name="EmailOnComplete" xml:space="preserve">
+    <value>Enviar correo electrónico después de completar la entrevista web</value>
   </data>
-  <data name="WebInterviewUserMessages_WelcomeText_Descr" xml:space="preserve">
-    <value>Texto de bienvenida del encabezado en la página inicial</value>
+  <data name="AttachAnswersToCompleteEmail" xml:space="preserve">
+    <value>Adjuntar transcripción en Pdf</value>
+  </data>
+  <data name="AllowSwitchToCawiForInterviewer" xml:space="preserve">
+    <value>Permitir al entrevistador cambiar al modo CAWI</value>
+  </data>
+  <data name="WebInterviewUserMessages_LinkInvitation_Descr" xml:space="preserve">
+    <value>Texto que se muestra al usuario cuando navega al enlace de la entrevista que aún no se ha sincronizado con el servidor</value>
+  </data>
+  <data name="WebInterviewUserMessages_LinkWelcome_Descr" xml:space="preserve">
+    <value>Texto de bienvenida del encabezado en la página de destino del enlace de la entrevista web</value>
   </data>
 </root>

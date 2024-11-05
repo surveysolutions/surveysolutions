@@ -117,7 +117,22 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="FileColumnsMissingFormat" xml:space="preserve">
+    <value>O arquivo '{0}' não contém as colunas necessárias: {1}</value>
+  </data>
   <data name="FileColumnsCantBeMappedFormat" xml:space="preserve">
-    <value>arquivo '{0}' contém colunas que não podem ser mapeadas na Propriedade do usuário qualquer existente na sequência: {1}</value>
+    <value>O arquivo '{0}' contém as seguintes colunas que não podem ser mapeadas para qualquer propriedade do usuário (por exemplo, nome completo, número de telefone, etc.): {1}</value>
+  </data>
+  <data name="TheDatasetMaxRecordNumberReachedFormat" xml:space="preserve">
+    <value>O número máximo permitido de registros é {0}</value>
+  </data>
+  <data name="HasUsersToImport" xml:space="preserve">
+    <value>Por favor, aguarde até que a importação anterior de usuários seja concluída</value>
+  </data>
+  <data name="CannotParseIncomingFile" xml:space="preserve">
+    <value>O arquivo fornecido contém um erro na linha {0} e não pode ser analisado</value>
+  </data>
+  <data name="FileDoesNotContainAnyData" xml:space="preserve">
+    <value>O arquivo '{0}' não contém nenhum dado de usuário</value>
   </data>
 </root>

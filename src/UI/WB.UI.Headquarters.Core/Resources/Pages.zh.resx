@@ -129,7 +129,7 @@
   <data name="ApprovedByHeadquarters" xml:space="preserve">
     <value>总部已审核通过</value>
   </data>
-  <data name="ApprovedByupervisor" xml:space="preserve">
+  <data name="ApprovedBySupervisor" xml:space="preserve">
     <value>督导员已审核通过</value>
   </data>
   <data name="ApproveRejectPartialView_ApproveAction" xml:space="preserve">

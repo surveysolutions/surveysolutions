@@ -117,14 +117,26 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ApiUsers" xml:space="preserve">
+    <data name="ApiUsers" xml:space="preserve">
     <value>Usuários do API</value>
   </data>
+  <data name="Assignments" xml:space="preserve">
+    <value>Atribuições</value>
+  </data>
+  <data name="AuditLog" xml:space="preserve">
+    <value>Registro de Auditoria</value>
+  </data>
   <data name="CumulativeChart" xml:space="preserve">
-    <value>Entrevista cumulativa gráfico</value>
+    <value>Gráfico de Entrevistas Cumulativas</value>
   </data>
   <data name="DataExport" xml:space="preserve">
-    <value>Exportação de dados</value>
+    <value>Exportação de Dados</value>
+  </data>
+  <data name="DeviceLogs" xml:space="preserve">
+    <value>Registros de Dispositivos</value>
+  </data>    
+  <data name="Diagnostics" xml:space="preserve">
+    <value>Diagnósticos</value>
   </data>
   <data name="Headquarters" xml:space="preserve">
     <value>Sede</value>
@@ -135,23 +147,38 @@
   <data name="Interviewers" xml:space="preserve">
     <value>Entrevistadores</value>
   </data>
+  <data name="InterviewPackages" xml:space="preserve">
+    <value>Pacotes de Entrevistas</value>
+  </data>    
   <data name="Interviews" xml:space="preserve">
     <value>Entrevistas</value>
   </data>
   <data name="MapReport" xml:space="preserve">
-    <value>Relatório de mapa</value>
+    <value>Relatório de Mapa</value>
   </data>
   <data name="Observers" xml:space="preserve">
     <value>Observadores</value>
   </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Configurações</value>
+  </data>
+  <data name="WorkspaceSettings" xml:space="preserve">
+    <value>Configurações do Espaço de Trabalho</value>
+  </data>
+  <data name="EmailProviders" xml:space="preserve">
+    <value>Provedores de Email</value>
+  </data>    
   <data name="Quantity" xml:space="preserve">
     <value>Quantidade</value>
   </data>
   <data name="SurveySetup" xml:space="preserve">
-    <value>Instalação de pesquisa</value>
+    <value>Configuração da Pesquisa</value>
+  </data>
+  <data name="Maps" xml:space="preserve">
+    <value>Mapas</value>
   </data>
   <data name="QueueSizeTitle" xml:space="preserve">
-    <value>Número de entrevistas sincronizados, mas não transformadas ainda</value>
+    <value>Número de entrevistas sincronizadas, mas ainda não processadas</value>
   </data>
   <data name="Reports" xml:space="preserve">
     <value>Relatórios</value>
@@ -159,28 +186,70 @@
   <data name="Speed" xml:space="preserve">
     <value>Velocidade</value>
   </data>
+  <data name="SurveyStatistics" xml:space="preserve">
+    <value>Estatísticas da Pesquisa</value>
+  </data>
+  <data name="StatusDuration" xml:space="preserve">
+    <value>Duração do Status</value>
+  </data>
   <data name="Supervisors" xml:space="preserve">
     <value>Supervisores</value>
   </data>
+  <data name="CreateNew" xml:space="preserve">
+    <value>Criar Novo</value>
+  </data>
+  <data name="Started" xml:space="preserve">
+    <value>Iniciado</value>
+  </data>
+  <data name="Completed" xml:space="preserve">
+    <value>Concluído</value>
+  </data>
+  <data name="Rejected" xml:space="preserve">
+    <value>Rejeitado</value>
+  </data>
+  <data name="MapDashboard" xml:space="preserve">
+    <value>Painel de Controle do Mapa</value>
+  </data>
   <data name="SurveysAndStatuses" xml:space="preserve">
-    <value>Inquéritos e status</value>
+    <value>Pesquisas e Status</value>
+  </data>
+  <data name="TabletInfos" xml:space="preserve">
+    <value>Informações do Tablet</value>
   </data>
   <data name="TeamAndRoles" xml:space="preserve">
-    <value>Equipe e funções</value>
+    <value>Equipe e Funções</value>
   </data>
   <data name="TeamMembersAndStatuses" xml:space="preserve">
-    <value>Membros da equipe e status</value>
+    <value>Membros da Equipe e Status</value>
   </data>
   <data name="TeamsAndRoles" xml:space="preserve">
-    <value>Equipes e funções</value>
+    <value>Equipes e Funções</value>
   </data>
   <data name="TeamsAndStatuses" xml:space="preserve">
-    <value>Equipes e status</value>
+    <value>Equipes e Status</value>
+  </data>
+  <data name="DevicesInterviewers" xml:space="preserve">
+    <value>Dispositivos/Entrevistadores</value>
+  </data>
+  <data name="Troubleshooting" xml:space="preserve">
+    <value>Solução de Problemas</value>
   </data>
   <data name="UserBatchUpload" xml:space="preserve">
-    <value>Lote de Upload de usuário</value>
+    <value>Upload de Usuários em Lote</value>
   </data>
   <data name="Users" xml:space="preserve">
     <value>Usuários</value>
+  </data>
+  <data name="Questionnaires" xml:space="preserve">
+    <value>Questionários</value>
+  </data>
+  <data name="Administration" xml:space="preserve">
+    <value>Administração</value>
+  </data>
+  <data name="Workspaces" xml:space="preserve">
+      <value>Espaços de Trabalho</value>
+  </data>
+  <data name="ServerAdministration">
+    <value>Administração</value>
   </data>
 </root>

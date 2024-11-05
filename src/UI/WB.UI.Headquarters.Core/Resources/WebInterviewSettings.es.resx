@@ -234,9 +234,6 @@
   <data name="SendWithNoResponse" xml:space="preserve">
     <value>Envía recordatorios a personas sin respuesta</value>
   </data>
-  <data name="SendWithPartialResponse" xml:space="preserve">
-    <value>Send reminder to people with a partial response</value>
-  </data>
   <data name="ShownPasswordIsRequired" xml:space="preserve">
     <value>Se muestra solo si se requiere contraseña y se establece</value>
   </data>

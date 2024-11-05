@@ -218,7 +218,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         IEnumerable<Guid> CollectInvalidCriticalRules();
         
         IEnumerable<Identity> GetAllUnansweredCriticalQuestions();
-        IEnumerable<Identity> GetAllUnansweredQuestions();
+        IEnumerable<Identity> GetAllUnansweredQuestions(bool forSupervisor);
         
         string GetCriticalRuleMessage(Guid criticalityConditionId);
 

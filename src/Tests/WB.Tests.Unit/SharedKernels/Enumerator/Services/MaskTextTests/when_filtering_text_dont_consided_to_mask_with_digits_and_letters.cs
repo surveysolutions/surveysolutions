@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.MaskTextTests
             filterResult = maskedText.FilterOnlyMaskedChars("---2-Z3.", 0);
 
         [NUnit.Framework.Test] public void should_be_accept_only_AnyChars () =>
-            filterResult.Should().Be("-_2Z__");
+            filterResult.Should().Be("-ˍ2Zˍˍ");
 
         static string filterResult;
         static MaskedText maskedText;
