@@ -238,7 +238,7 @@ public class GeofencingViewModel: MarkersMapInteractionViewModel<GeofencingViewM
             if (!isGeofencingEnabled)
             {
                 this.geofencingListener.Start(LoadedShapefile);
-                this.backgroundServiceManager.StartListen(geofencingListener);
+                await this.backgroundServiceManager.StartListen(geofencingListener);
                 
                 await SwitchLocator();
             }
@@ -388,7 +388,7 @@ public class GeofencingViewModel: MarkersMapInteractionViewModel<GeofencingViewM
     
     private async Task UpdateGeoTrackingPointsAsync(GpsLocation location)
     {
-        if (GeoTrackingRecords.Count == 0)
+        if (GeoTrackingRecords == null || GeoTrackingRecords.Count == 0)
             return;
 
         var existedLayer = this.MapView.Map.OperationalLayers.FirstOrDefault(l => l.Name == GeoTrackingLayerName);

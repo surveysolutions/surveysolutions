@@ -782,6 +782,9 @@ do not exit this application</value>
   <data name="Synchronization_UploadAuditLog" xml:space="preserve">
     <value>Upload audit information</value>
   </data>
+  <data name="Synchronization_UploadGeoTracking" xml:space="preserve">
+    <value>Upload geo-tracking information</value>
+  </data>
   <data name="Synchronization_ReceivingAuditLog" xml:space="preserve">
     <value>Receiving audit information</value>
   </data>

@@ -834,6 +834,9 @@
     <value>Загрузка аудит информации</value>
     <comment>Загрузка аудит информации</comment>
   </data>
+  <data name="Synchronization_UploadGeoTracking" xml:space="preserve">
+    <value>Загрузка гео-маршрутов информации</value>
+  </data>
   <data name="Synchronization_ReceivingAuditLog" xml:space="preserve">
     <value>Получение аудит информации</value>
   </data>

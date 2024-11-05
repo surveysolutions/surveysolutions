@@ -31,6 +31,7 @@
         UpdatingInterviews,
         UpdatingInterviewsChanges,
         UploadingCalendarEvents,
-        DownloadingCalendarEvents
+        DownloadingCalendarEvents,
+        UploadingGeoTracking,
     }
 }

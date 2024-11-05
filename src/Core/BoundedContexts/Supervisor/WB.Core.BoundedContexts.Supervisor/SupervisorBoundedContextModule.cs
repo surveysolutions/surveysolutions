@@ -23,6 +23,7 @@ namespace WB.Core.BoundedContexts.Supervisor
             registry.BindWithConstructorArgument<ISynchronizationStep, DownloadCalendarEvents>("sortOrder", 73);
             registry.BindWithConstructorArgument<ISynchronizationStep, SynchronizeTechnicalInformation>("sortOrder", 80);
             registry.BindWithConstructorArgument<ISynchronizationStep, SynchronizeLogo>("sortOrder", 90);
+            registry.BindWithConstructorArgument<ISynchronizationStep, SynchronizeGeoTracking>("sortOrder", 95);
             registry.BindWithConstructorArgument<ISynchronizationStep, SynchronizeAuditLog>("sortOrder", 100);
             registry.BindWithConstructorArgument<ISynchronizationStep, IUpdateApplicationSynchronizationStep, SupervisorUpdateApplication>("sortOrder", 110);
             registry.BindWithConstructorArgument<ISynchronizationStep, SupervisorUpdateAppSettings>("sortOrder", 115);

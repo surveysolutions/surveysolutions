@@ -1,6 +1,8 @@
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Modularity;
+using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.UI.Shared.Extensions.Services;
+using WB.UI.Shared.Extensions.Synchronization;
 
 namespace WB.UI.Shared.Extensions;
 
@@ -11,6 +13,7 @@ public class MapExtensionsModule : IModule, IInitModule
     {
         registry.Bind<IGeofencingListener, GeofencingListener>();
         registry.Bind<IGeoTrackingListener, GeoTrackingListener>();
+        registry.Bind<IGeoTrackingSynchronizer, GeoTrackingSynchronizer>();
     }
 
     public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
