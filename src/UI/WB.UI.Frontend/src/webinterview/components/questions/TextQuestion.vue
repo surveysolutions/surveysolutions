@@ -38,7 +38,7 @@ export default {
         },
         userFriendlyMask() {
             if (this.$me.mask) {
-                const resultMask = this.$me.mask.replace(/\*/g, '_').replace(/#/g, '_').replace(/~/g, '_')
+                const resultMask = this.$me.mask.replace(/\*/g, 'ˍ').replace(/#/g, 'ˍ').replace(/~/g, 'ˍ')
                 return ` (${resultMask})`
             }
 

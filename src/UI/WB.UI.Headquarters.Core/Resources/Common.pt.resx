@@ -117,74 +117,26 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Admin" xml:space="preserve">
-    <value>Admin</value>
-  </data>
-  <data name="AlRightsReserved" xml:space="preserve">
-    <value>Todos os direitos reservados</value>
-  </data>
-  <data name="Any" xml:space="preserve">
-    <value>Qualquer</value>
-  </data>
-  <data name="Approve" xml:space="preserve">
-    <value>Aprovar</value>
-  </data>
-  <data name="Assignment" xml:space="preserve">
-    <value>Atribuição</value>
-  </data>
-  <data name="Cancel" xml:space="preserve">
-    <value>Cancelar</value>
+    <data name="Search" xml:space="preserve">
+    <value>Pesquisa</value>
   </data>
   <data name="Create" xml:space="preserve">
     <value>Criar</value>
   </data>
-  <data name="CreatedOnClient" xml:space="preserve">
-    <value>Criado no cliente</value>
+  <data name="ViewAssignmentDetails" xml:space="preserve">
+    <value>Exibir detalhes da atribuição</value>
   </data>
-  <data name="Delete" xml:space="preserve">
-    <value>Apagar</value>
+  <data name="SaveChanges" xml:space="preserve">
+    <value>Salvar as alterações</value>
   </data>
-  <data name="ErrorsLog" xml:space="preserve">
-    <value>Log de erros</value>
+  <data name="Template" xml:space="preserve">
+    <value>Modelo</value>
   </data>
-  <data name="GetInterviewerApp" xml:space="preserve">
-    <value>Se o entrevistador App</value>
+  <data name="Status" xml:space="preserve">
+    <value>Estatuto</value>
   </data>
-  <data name="Interviews" xml:space="preserve">
-    <value>Entrevistas</value>
-  </data>
-  <data name="LastUpdate" xml:space="preserve">
-    <value>Última atualização</value>
-  </data>
-  <data name="Legal" xml:space="preserve">
-    <value>Legal</value>
-  </data>
-  <data name="Loading" xml:space="preserve">
-    <value>Carregando, aguarde</value>
-  </data>
-  <data name="Logoff" xml:space="preserve">
-    <value>Logoff</value>
-  </data>
-  <data name="Name" xml:space="preserve">
-    <value>Nome</value>
-  </data>
-  <data name="NoResultsFound" xml:space="preserve">
-    <value>Nenhum resultado encontrado</value>
-  </data>
-  <data name="PrefilledQuestions" xml:space="preserve">
-    <value>Perguntas pre-enchidas</value>
-  </data>
-  <data name="Questionnaires" xml:space="preserve">
-    <value>Questionários</value>
-  </data>
-  <data name="ReceivedByInterviewer" xml:space="preserve">
-    <value>Recebidos pelo entrevistador</value>
-  </data>
-  <data name="Refresh" xml:space="preserve">
-    <value>Atualização</value>
-  </data>
-  <data name="Reject" xml:space="preserve">
-    <value>Rejeitar</value>
+  <data name="Assignment" xml:space="preserve">
+    <value>Atribuição</value>
   </data>
   <data name="Responsible" xml:space="preserve">
     <value>Responsável</value>
@@ -192,44 +144,29 @@
   <data name="Save" xml:space="preserve">
     <value>Salvar</value>
   </data>
-  <data name="SaveChanges" xml:space="preserve">
-    <value>Salvar as alterações</value>
+  <data name="Apply" xml:space="preserve">
+    <value>Aplicar</value>
   </data>
-  <data name="Search" xml:space="preserve">
-    <value>Pesquisa</value>
+  <data name="ErrorsLog" xml:space="preserve">
+    <value>Log de erros</value>
   </data>
-  <data name="Settings" xml:space="preserve">
-    <value>Configurações</value>
-  </data>
-  <data name="SignIn" xml:space="preserve">
-    <value>Entrar</value>
-  </data>
-  <data name="Status" xml:space="preserve">
-    <value>Estatuto</value>
-  </data>
-  <data name="Template" xml:space="preserve">
-    <value>Modelo</value>
-  </data>
-  <data name="TheWorldBankGroup" xml:space="preserve">
-    <value>O Grupo Banco Mundial</value>
-  </data>
-  <data name="Title" xml:space="preserve">
-    <value>Título</value>
-  </data>
-  <data name="Total" xml:space="preserve">
-    <value>Total</value>
-  </data>
-  <data name="Unapprove" xml:space="preserve">
-    <value>Reprovar</value>
-  </data>
-  <data name="НasErrors" xml:space="preserve">
-    <value>Erros de Нas</value>
+  <data name="Questionnaires" xml:space="preserve">
+    <value>Questionários</value>
   </data>
   <data name="Questionnaire" xml:space="preserve">
     <value>Questionário</value>
   </data>
   <data name="Assignments" xml:space="preserve">
-    <value>Atribuição</value>
+    <value>Atribuições</value>
+  </data>
+  <data name="Interviews" xml:space="preserve">
+    <value>Entrevistas</value>
+  </data>
+  <data name="PrefilledQuestions" xml:space="preserve">
+    <value>Perguntas pre-enchidas</value>
+  </data>
+  <data name="ShowIdentifying" xml:space="preserve">
+    <value>Mostrar identificação</value>
   </data>
   <data name="HideIdentifying" xml:space="preserve">
     <value>Ocultar</value>
@@ -237,10 +174,232 @@
   <data name="InterviewKey" xml:space="preserve">
     <value>Chave da Entrevista</value>
   </data>
-  <data name="ViewAssignmentDetails" xml:space="preserve">
-    <value>Exibir detalhes da atribuição</value>
+  <data name="LastUpdate" xml:space="preserve">
+    <value>Última atualização</value>
   </data>
-  <data name="ShowIdentifying" xml:space="preserve">
-    <value>Mostrar identificação</value>
+  <data name="НasErrors" xml:space="preserve">
+    <value>Erros de Нas</value>
+  </data>
+  <data name="ReceivedByInterviewer" xml:space="preserve">
+    <value>Recebidos pelo entrevistador</value>
+  </data>
+  <data name="CreatedOnClient" xml:space="preserve">
+    <value>Criado no cliente</value>
+  </data>
+  <data name="Any" xml:space="preserve">
+    <value>Qualquer</value>
+  </data>
+  <data name="AllAssignments" xml:space="preserve">
+    <value>Todas as atribuições</value>
+  </data>
+  <data name="NoResultsFound" xml:space="preserve">
+    <value>Nenhum resultado encontrado</value>
+  </data>
+  <data name="Processing" xml:space="preserve">
+    <value>Em processamento…</value>
+  </data>
+  <data name="Refresh" xml:space="preserve">
+    <value>Atualização</value>
+  </data>
+  <data name="Total" xml:space="preserve">
+    <value>Total</value>
+  </data>
+  <data name="CreateNewAssignment" xml:space="preserve">
+    <value>Criar nova atribuição</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Nome</value>
+  </data>
+  <data name="GetInterviewerApp" xml:space="preserve">
+    <value>Se o entrevistador App</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Carregando, aguarde</value>
+  </data>
+  <data name="Admin" xml:space="preserve">
+    <value>Admin</value>
+  </data>
+  <data name="Approve" xml:space="preserve">
+    <value>Aprovar</value>
+  </data>
+  <data name="Assign" xml:space="preserve">
+    <value>Atribuir</value>
+  </data>
+  <data name="Reject" xml:space="preserve">
+    <value>Rejeitar</value>
+  </data>
+  <data name="Unapprove" xml:space="preserve">
+    <value>Reprovar</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Apagar</value>
+  </data>
+  <data name="SignIn" xml:space="preserve">
+    <value>Entrar</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Título</value>
+  </data>
+  <data name="AlRightsReserved" xml:space="preserve">
+    <value>Todos os direitos reservados</value>
+  </data>
+  <data name="Legal" xml:space="preserve">
+    <value>Legal</value>
+  </data>
+  <data name="TheWorldBankGroup" xml:space="preserve">
+    <value>O Grupo Banco Mundial</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Configurações</value>
+  </data>
+  <data name="EmailProviders" xml:space="preserve">
+    <value>Provedores de e-mail</value>
+  </data>
+  <data name="AuditLog" xml:space="preserve">
+    <value>Log de auditoria</value>
+  </data>
+  <data name="Logoff" xml:space="preserve">
+    <value>Logoff</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancelar</value>
+  </data>
+  <data name="Clear" xml:space="preserve">
+    <value>Limpar</value>
+  </data>
+  <data name="NewVersionAvailable" xml:space="preserve">
+    <value>Nova versão disponível:</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>Não</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Sim</value>
+  </data>
+  <data name="Ok" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="Download" xml:space="preserve">
+    <value>Baixar</value>
+  </data>
+  <data name="DownloadSupervisor" xml:space="preserve">
+    <value>Baixar aplicativo Supervisor</value>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>Abrir</value>
+  </data>
+  <data name="ShowStatusHistory" xml:space="preserve">
+    <value>Mostrar histórico de status</value>
+  </data>
+  <data name="AllStatuses" xml:space="preserve">
+    <value>Todos os status</value>
+  </data>
+  <data name="AllSupervisors" xml:space="preserve">
+    <value>Todos os supervisores</value>
+  </data>
+  <data name="AllResponsible" xml:space="preserve">
+    <value>Todos os responsáveis</value>
+  </data>
+  <data name="AllQuestionnaires" xml:space="preserve">
+    <value>Todos os questionários</value>
+  </data>
+  <data name="AllGpsQuestions" xml:space="preserve">
+    <value>Todas as perguntas GPS</value>
+  </data>
+  <data name="OpenResponsiblesProfile" xml:space="preserve">
+    <value>Abrir perfil do responsável</value>
+  </data>
+  <data name="MapDashboard" xml:space="preserve">
+    <value>Painel de Mapa</value>
+  </data>
+  <data name="OpenAssignment" xml:space="preserve">
+    <value>Abrir atribuição</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Confirmar</value>
+  </data>
+  <data name="Archived" xml:space="preserve">
+    <value>Arquivado</value>
+  </data>
+  <data name="NothingSelected" xml:space="preserve">
+    <value>Nada selecionado</value>
+  </data>
+  <data name="QuestionnaireVersion" xml:space="preserve">
+    <value>Versão do questionário</value>
+  </data>
+  <data name="AllVersions" xml:space="preserve">
+    <value>Todas as versões</value>
+  </data>
+  <data name="SelectQuestionnaire" xml:space="preserve">
+    <value>Selecionar questionário</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>Redefinir</value>
+  </data>
+  <data name="EqualValues" xml:space="preserve">
+    <value>Igual</value>
+  </data>
+  <data name="NotEquals" xml:space="preserve">
+    <value>Não igual</value>
+  </data>
+  <data name="SelectOption" xml:space="preserve">
+    <value>Selecionar opção</value>
+  </data>
+  <data name="StartsWith" xml:space="preserve">
+    <value>Começa com</value>
+  </data>
+  <data name="Unknown" xml:space="preserve">
+    <value>Desconhecido</value>
+  </data>
+  <data name="EditCalendarEvent" xml:space="preserve">
+    <value>Editar evento de calendário</value>
+  </data>
+  <data name="CalendarEvent" xml:space="preserve">
+    <value>Evento de calendário</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Adicionar</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Remover</value>
+  </data>
+  <data name="Return" xml:space="preserve">
+    <value>Retornar</value>
+  </data>
+  <data name="ChangeToCAPI" xml:space="preserve">
+    <value>Mudar para CAPI</value>
+  </data>
+  <data name="ChangeToCAPIConfirmHQ" xml:space="preserve">
+    <value>O modo das {{count}} entrevistas selecionadas será alterado para CAPI</value>
+  </data>
+  <data name="ChangeToCAWI" xml:space="preserve">
+    <value>Mudar para CAWI</value>
+  </data>
+  <data name="ChangeToCAWIConfirmHQ" xml:space="preserve">
+    <value>O modo das {{count}} entrevistas selecionadas será alterado para CAWI</value>
+  </data>
+  <data name="InterviewMode" xml:space="preserve">
+    <value>Modo de entrevista</value>
+  </data>
+  <data name="Capi" xml:space="preserve">
+    <value>CAPI</value>
+  </data>
+  <data name="Cawi" xml:space="preserve">
+    <value>CAWI</value>
+  </data>
+  <data name="Enable" xml:space="preserve">
+    <value>Ativar</value>
+  </data>
+  <data name="Disable" xml:space="preserve">
+    <value>Desativar</value>
+  </data>
+  <data name="Properties" xml:space="preserve">
+    <value>Propriedades</value>
+  </data>
+  <data name="LinkedUsers" xml:space="preserve">
+    <value>Usuários vinculados</value>
+  </data>
+  <data name="LinkUser" xml:space="preserve">
+    <value>Usuário</value>
   </data>
 </root>

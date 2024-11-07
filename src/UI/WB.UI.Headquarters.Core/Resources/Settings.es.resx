@@ -117,131 +117,203 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ChangeStateConfirm" xml:space="preserve">
-    <value>Está seguro de que desea cambiar el estado de protección? Tendrá que regenerar los datos exportados para abrirlo.</value>
+  <data name="ExportEncryption_Title" xml:space="preserve">
+    <value>Exportar cifrado</value>
   </data>
-  <data name="CurrentLogo" xml:space="preserve">
-    <value>Logo actual</value>
+  <data name="ClearExportCache_Title" xml:space="preserve">
+    <value>Limpiar caché de exportación</value>
+  </data>
+  <data name="ClearExportCache_Description" xml:space="preserve">
+    <value>Esta operación limpiará todos los datos de caché de exportación. La próxima exportación tomará más tiempo.</value>
+  </data>
+  <data name="RemoveExportCache" xml:space="preserve">
+    <value>Limpiar caché</value>
+  </data>
+  <data name="RemoveExportCacheConfirm" xml:space="preserve">
+    <value>¿Está seguro de que desea limpiar la caché de exportación? Todos los archivos de exportación generados se eliminarán del servidor y NO estarán disponibles para su descarga.</value>
+  </data>
+  <data name="RemoveExportCacheSuccess" xml:space="preserve">
+    <value>La caché de exportación se limpió correctamente</value>
+  </data>
+  <data name="RemovingExportCache" xml:space="preserve">
+    <value>Limpiando la caché de exportación</value>
+  </data>
+  <data name="RemoveExportCacheFail" xml:space="preserve">
+    <value>La caché de exportación no se puede limpiar en este momento. Por favor, inténtelo de nuevo más tarde.
+
+Posibles razones:
+* Se está generando un archivo de exportación.
+* Se está descargando un archivo de exportación generado.
+* La eliminación del archivo de exportación generado está bloqueada por otro programa.
+* etc.</value>
+  </data>
+  <data name="RemoveExportCacheGeneratingFail" xml:space="preserve">
+    <value>La caché de exportación no se puede limpiar en este momento. Se está generando un archivo de exportación.</value>
+  </data>
+  <data name="RemoveExportCache_Warning" xml:space="preserve">
+    <value>¡Advertencia! Esta es una acción irreversible</value>
+  </data>
+  <data name="RegeneratePasswordConfirm" xml:space="preserve">
+    <value>¿Está seguro de que desea crear una nueva contraseña? La nueva contraseña se aplicará a todos los archivos de datos exportados producidos a partir de ahora.</value>
+  </data>
+  <data name="Settings_Title" xml:space="preserve">
+    <value>Configuración</value>
+  </data>
+  <data name="ExportEncryptionSettings" xml:space="preserve">
+    <value>Configuración de cifrado de exportación</value>
   </data>
   <data name="EnableEncryption" xml:space="preserve">
     <value>Habilitar cifrado</value>
   </data>
-  <data name="ExportEncryption_Description" xml:space="preserve">
-    <value>Marque la casilla habilitar cifrado para cifrar los archivos de datos de exportación y protegerlos con la contraseña proporcionada. Cambie la contraseña presionando el botón de error circular. Después del cifrado, solo las personas que conocen la contraseña pueden abrir los datos exportados.</value>
-  </data>
-  <data name="ExportEncryption_Title" xml:space="preserve">
-    <value>Exportar cifrado</value>
-  </data>
-  <data name="ExportEncryptionSettings" xml:space="preserve">
-    <value>Exportar configuración de cifrado</value>
-  </data>
-  <data name="GlobalNoteClearingConfirm" xml:space="preserve">
-    <value>Esta seguro de eliminar nota global ?</value>
-  </data>
-  <data name="GlobalNoteSaved" xml:space="preserve">
-    <value>Nota grabada</value>
-  </data>
-  <data name="GlobalNoteSettings" xml:space="preserve">
-    <value>Nota global</value>
-  </data>
-  <data name="GlobalNoteSettings_Description" xml:space="preserve">
-    <value>Especifique texto en el campo nota global que será mostrado en la parte superior de cada pantalla en el servidor.</value>
+  <data name="Password" xml:space="preserve">
+    <value>Contraseña</value>
   </data>
   <data name="GlobalNotice" xml:space="preserve">
     <value>Nota global</value>
   </data>
   <data name="Logo" xml:space="preserve">
-    <value>Logo de compañía</value>
-  </data>
-  <data name="LogoNotUpdated" xml:space="preserve">
-    <value>El logo de la compañía no fue actualizado. Favor provea una imagen</value>
-  </data>
-  <data name="LogoSettings" xml:space="preserve">
-    <value>Logo de compañía</value>
+    <value>Logo de la compañía</value>
   </data>
   <data name="LogoUpdated" xml:space="preserve">
-    <value>Logo de compañía actualizado</value>
+    <value>Logo de la compañía actualizado</value>
   </data>
-  <data name="Password" xml:space="preserve">
-    <value>Password</value>
+  <data name="UserProfileSettings_Title" xml:space="preserve">
+    <value>Configuración del perfil de usuario</value>
   </data>
-  <data name="RegeneratePasswordConfirm" xml:space="preserve">
-    <value>Seguro que desea crear una nueva contraseña? Deberá regenerar los datos exportados para abrirlos.</value>
+  <data name="WebInterviewEmailNotifications_Title" xml:space="preserve">
+    <value>Configuración de la entrevista web</value>
   </data>
-  <data name="RemoveLogo" xml:space="preserve">
-    <value>Eliminar logo</value>
+  <data name="MobileAppSettings_Title" xml:space="preserve">
+    <value>Configuración de la aplicación del entrevistador/supervisor</value>
   </data>
-  <data name="Settings_Title" xml:space="preserve">
-    <value>Configuración</value>
+  <data name="MobileAppSettings_Description" xml:space="preserve">
+    <value>Algunas configuraciones específicas por versión de Android de la aplicación del entrevistador/supervisor</value>
   </data>
   <data name="AllowInterviewerUpdateProfile" xml:space="preserve">
     <value>Edición del perfil del enumerador</value>
   </data>
-  <data name="AllowInterviewerUpdateProfileDesc" xml:space="preserve">
-    <value>Permitir que los enumeradores actualicen su información de contacto en el perfil</value>
-  </data>
   <data name="AllowWebInterviewEmailNotifications" xml:space="preserve">
     <value>Notificaciones por correo electrónico de entrevistas web</value>
   </data>
+  <data name="AllowInterviewerUpdateProfileDesc" xml:space="preserve">
+    <value>Permitir que los enumeradores actualicen su información de contacto en su perfil de cuenta</value>
+  </data>
   <data name="AllowWebInterviewEmailNotificationsDesc" xml:space="preserve">
-    <value>Permitir al encuestado de Web Interview enviar correos electrónicos (efectivo si se configuró el proveedor de correo)</value>
+    <value>Permitir a los encuestados de entrevistas web solicitar correos electrónicos con enlaces para reanudar entrevistas iniciadas (efectivo si se configura el proveedor de servicios de correo electrónico masivo)</value>
+  </data>
+  <data name="InterviewerAutoUpdate" xml:space="preserve">
+    <value>Habilitar actualizaciones automáticas</value>
+  </data>
+  <data name="InterviewerAutoUpdateEnabled" xml:space="preserve">
+    <value>Actualizaciones automáticas de aplicaciones de Android habilitadas</value>
+  </data>
+  <data name="InterviewerAutoUpdateDisabled" xml:space="preserve">
+    <value>Actualizaciones automáticas de aplicaciones de Android deshabilitadas</value>
+  </data>
+  <data name="LogoNotUpdated" xml:space="preserve">
+    <value>El logo de la compañía no se actualizó. Por favor, proporcione una imagen válida</value>
+  </data>
+  <data name="ChangeStateConfirm" xml:space="preserve">
+    <value>¿Está seguro de que desea cambiar la configuración de seguridad del archivo de exportación? Todos los archivos de datos exportados estarán protegidos por una contraseña.</value>
+  </data>
+  <data name="ChangeStateDisabledConfirm" xml:space="preserve">
+    <value>¿Está seguro de que desea cambiar la configuración de seguridad del archivo de exportación? Los archivos de datos exportados ya no estarán protegidos por una contraseña.</value>
+  </data>
+  <data name="GlobalNoteSettings" xml:space="preserve">
+    <value>Nota global</value>
+  </data>
+  <data name="LogoSettings" xml:space="preserve">
+    <value>Logo de la compañía</value>
+  </data>
+  <data name="RemoveLogo" xml:space="preserve">
+    <value>Eliminar logo</value>
+  </data>
+  <data name="GlobalNoteSaved" xml:space="preserve">
+    <value>Nota guardada</value>
+  </data>
+  <data name="ExportEncryption_Description" xml:space="preserve">
+    <value>Marque la casilla 'Habilitar cifrado' para proteger los archivos de datos de exportación cifrándolos con la contraseña proporcionada. Cambie la contraseña presionando el botón de flecha circular. Después del cifrado, solo las personas que conocen la contraseña pueden abrir los datos exportados.</value>
+  </data>
+  <data name="GlobalNoteSettings_Description" xml:space="preserve">
+    <value>Especifique el texto en el campo 'Nota global' que se mostrará en la parte superior de cada pantalla en el servidor.</value>
+  </data>
+  <data name="LogoSettings_Description" xml:space="preserve">
+    <value>El logo de la compañía es una imagen que aparece en la página de inicio de sesión del servidor y en la página de inicio de sesión de la aplicación del entrevistador.</value>
+  </data>
+  <data name="LogoSettings_Description1" xml:space="preserve">
+    <value>Haga clic en el botón 'Elegir archivo' para cargar una imagen desde su computadora al servidor para usarla como imagen de logo. Luego haga clic en el botón 'Guardar'.</value>
+  </data>
+  <data name="CurrentLogo" xml:space="preserve">
+    <value>Logo actual</value>
+  </data>
+  <data name="GlobalNoteClearingConfirm" xml:space="preserve">
+    <value>¿Está seguro de que desea eliminar la nota global?</value>
   </data>
   <data name="AutoUpdateDescription" xml:space="preserve">
-    <value>Si se marca, solo la última versión de la aplicación Entrevistador / Supervisor puede sincronizarse con la sede</value>
+    <value>Si está marcado, solo la última versión de la aplicación del entrevistador/supervisor puede sincronizarse con la sede</value>
   </data>
-  <data name="DeviceNotifications" xml:space="preserve">
-    <value>Habilitar notificaciones en el dispositivo</value>
+  <data name="InterviewerPartialSynchronization" xml:space="preserve">
+    <value>Habilitar sincronización parcial</value>
   </data>
-  <data name="DeviceNotificationsDescription" xml:space="preserve">
-    <value>Cuando los dispositivos habilitados notificarán a los propietarios sobre los cambios y las acciones que se deben tomar</value>
+  <data name="PartialSynchronizationDescription" xml:space="preserve">
+    <value>Cuando está habilitada, las tabletas del entrevistador enviarán respuestas en entrevistas no completadas a la sede</value>
   </data>
-  <data name="EmailProvider_Address" xml:space="preserve">
-    <value>Dirección postal del remitente</value>
+  <data name="InterviewerGeographyQuestionAccuracyInMeters" xml:space="preserve">
+    <value>Precisión de la pregunta de geografía</value>
   </data>
-  <data name="EmailProvider_AddressHelp" xml:space="preserve">
-    <value>Dirección postal actual del remitente.</value>
+  <data name="GeographyQuestionAccuracyInMetersDescription" xml:space="preserve">
+    <value>Establecer precisión en metros para la pregunta de geografía</value>
+  </data>
+  <data name="InterviewerGeographyQuestionPeriodInSeconds" xml:space="preserve">
+    <value>Período de la pregunta de geografía</value>
+  </data>
+  <data name="GeographyQuestionPeriodInSecondsDescription" xml:space="preserve">
+    <value>Establecer período en segundos para la pregunta de geografía</value>
   </data>
   <data name="EmailProvider_Amazon" xml:space="preserve">
     <value>Servicio de correo electrónico simple de Amazon (SES)</value>
   </data>
-  <data name="EmailProvider_AmazonDescription" xml:space="preserve">
-    <value>Configure los parámetros para acceder a Amazon SES a continuación. Hay más información disponible sobre el uso de Amazon SES con Survey Solutions</value>
-  </data>
-  <data name="EmailProvider_AwsAccessKeyId" xml:space="preserve">
-    <value>ID de clave de acceso</value>
-  </data>
-  <data name="EmailProvider_AwsAccessKeyIdHelp" xml:space="preserve">
-    <value>Puede encontrar el ID de la cuenta de AWS en la Consola de administración de AWS</value>
-  </data>
-  <data name="EmailProvider_AwsSecretAccessKey" xml:space="preserve">
-    <value>Clave de acceso secreta</value>
-  </data>
-  <data name="EmailProvider_AwsSecretAccessKeyHelp" xml:space="preserve">
-    <value>Encontrado en Credenciales de seguridad en la Consola de administración de AWS</value>
-  </data>
-  <data name="EmailProvider_GeneralError" xml:space="preserve">
-    <value>Ocurrió un error general</value>
-  </data>
-  <data name="EmailProvider_HelpLinkText" xml:space="preserve">
-    <value>aquí</value>
-  </data>
   <data name="EmailProvider_None" xml:space="preserve">
-    <value>Ninguna</value>
+    <value>Ninguno</value>
+  </data>
+  <data name="EmailProvider_Sendgrid" xml:space="preserve">
+    <value>Servicio de entrega de correo electrónico SendGrid</value>
   </data>
   <data name="EmailProvider_NoneDescription" xml:space="preserve">
     <value>Survey Solutions no envía mensajes de invitación para entrevistas web a los encuestados.</value>
   </data>
-  <data name="EmailProvider_PageDesc" xml:space="preserve">
-    <value>Configure el proveedor de servicios de correo electrónico masivo. Configura cómo se enviarán las invitaciones para entrevistas web.</value>
+  <data name="EmailProvider_AmazonDescription" xml:space="preserve">
+    <value>Configure los parámetros para acceder a Amazon SES a continuación. Más información sobre el uso de Amazon SES con Survey Solutions está disponible </value>
   </data>
-  <data name="EmailProvider_ReplyAddress" xml:space="preserve">
-    <value>Dirección de respuesta</value>
-  </data>
-  <data name="EmailProvider_ReplyAddressHelp" xml:space="preserve">
-    <value>Dirección de correo electrónico a la que se pueden enviar las respuestas de los invitados (la dirección predeterminada es la dirección de correo electrónico del remitente).</value>
+  <data name="EmailProvider_SendgridDescription" xml:space="preserve">
+    <value>Configure los parámetros para acceder a SendGrid a continuación. Más información sobre el uso de SendGrid con Survey Solutions está disponible </value>
   </data>
   <data name="EmailProvider_SenderAddress" xml:space="preserve">
     <value>Dirección de correo electrónico del remitente</value>
+  </data>
+  <data name="EmailProvider_SendGridApiKey" xml:space="preserve">
+    <value>Clave API</value>
+  </data>
+  <data name="EmailProvider_AwsAccessKeyId" xml:space="preserve">
+    <value>ID de clave de acceso</value>
+  </data>
+  <data name="EmailProvider_AwsSecretAccessKey" xml:space="preserve">
+    <value>Clave de acceso secreta</value>
+  </data>
+  <data name="EmailProvider_TestEmailAddress" xml:space="preserve">
+    <value>Dirección de correo electrónico</value>
+  </data>
+  <data name="EmailProvider_SendTestEmail" xml:space="preserve">
+    <value>Enviar correo electrónico</value>
+  </data>
+  <data name="EmailProvider_SendTestEmailResult" xml:space="preserve">
+    <value>Un ejemplo de correo electrónico de invitación se envió correctamente</value>
+  </data>
+  <data name="EmailProvider_SendTestEmailHeader" xml:space="preserve">
+    <value>Enviar correo electrónico de prueba</value>
+  </data>
+  <data name="EmailProvider_PageDesc" xml:space="preserve">
+    <value>Configure el proveedor de servicios de correo electrónico masivo. Configura cómo se enviarán las invitaciones para entrevistas web.</value>
   </data>
   <data name="EmailProvider_SenderHeader" xml:space="preserve">
     <value>Información del remitente</value>
@@ -249,70 +321,109 @@
   <data name="EmailProvider_SenderHelp" xml:space="preserve">
     <value>Dirección de correo electrónico del remitente que aparecerá en el campo DE de los mensajes entrantes.</value>
   </data>
+  <data name="EmailProvider_ReplyAddressHelp" xml:space="preserve">
+    <value>Dirección de correo electrónico a la que se pueden enviar las respuestas de los invitados (la dirección predeterminada es la dirección de correo electrónico del remitente).</value>
+  </data>
   <data name="EmailProvider_SenderName" xml:space="preserve">
     <value>Nombre del remitente</value>
+  </data>
+  <data name="EmailProvider_ReplyAddress" xml:space="preserve">
+    <value>Dirección de respuesta</value>
   </data>
   <data name="EmailProvider_SenderNameHelp" xml:space="preserve">
     <value>Nombre del remitente que aparecerá en el campo DE de los mensajes entrantes.</value>
   </data>
-  <data name="EmailProvider_Sendgrid" xml:space="preserve">
-    <value>Servicio de entrega de correo electrónico SendGrid</value>
+  <data name="EmailProvider_Address" xml:space="preserve">
+    <value>Dirección postal del remitente</value>
   </data>
-  <data name="EmailProvider_SendGridApiKey" xml:space="preserve">
-    <value>Clave API</value>
+  <data name="EmailProvider_AddressHelp" xml:space="preserve">
+    <value>Dirección postal actual del remitente.</value>
+  </data>
+  <data name="EmailProvider_ServiceProvideHeader" xml:space="preserve">
+    <value>Especificar proveedor de servicios de correo electrónico masivo</value>
+  </data>
+  <data name="EmailProvider_AwsAccessKeyIdHelp" xml:space="preserve">
+    <value>Puede encontrar el ID de la cuenta de AWS en la Consola de administración de AWS</value>
+  </data>
+  <data name="EmailProvider_AwsSecretAccessKeyHelp" xml:space="preserve">
+    <value>Encontrado en Credenciales de seguridad en la Consola de administración de AWS</value>
+  </data>
+  <data name="EmailProvider_AwsRegion" xml:space="preserve">
+    <value>Región</value>
+  </data>
+  <data name="EmailProvider_AwsRegionHelp" xml:space="preserve">
+    <value>Región para la Consola de administración de AWS</value>
+  </data>
+  <data name="EmailProvider_AwsRegion_Unknown" xml:space="preserve">
+    <value>Se seleccionó una región desconocida. Por favor, verifíquelo.</value>
   </data>
   <data name="EmailProvider_SendGridApiKeyHelp" xml:space="preserve">
     <value>Puede encontrarlo en la página de claves API en el elemento del menú de configuración de SendGrid</value>
   </data>
-  <data name="EmailProvider_SendgridDescription" xml:space="preserve">
-    <value>Configure los parámetros para acceder a SendGrid a continuación. Hay más información disponible sobre el uso de SendGrid con Survey Solutions</value>
+  <data name="EmailProvider_GeneralError" xml:space="preserve">
+    <value>Ocurrió un error general</value>
   </data>
-  <data name="EmailProvider_SendTestEmail" xml:space="preserve">
-    <value>Enviar correo electrónico</value>
-  </data>
-  <data name="EmailProvider_SendTestEmailHeader" xml:space="preserve">
-    <value>Enviar correo electrónico de prueba</value>
+  <data name="EmailProvider_HelpLinkText" xml:space="preserve">
+    <value>aquí</value>
   </data>
   <data name="EmailProvider_SendTestEmailMessage" xml:space="preserve">
     <value>Envíese un mensaje de correo electrónico de prueba para verificar que el servicio de correo electrónico masivo sea funcional y para obtener una vista previa de lo que recibirán los encuestados.</value>
   </data>
-  <data name="EmailProvider_SendTestEmailResult" xml:space="preserve">
-    <value>Un ejemplo de correo electrónico de invitación se envió correctamente.</value>
-  </data>
-  <data name="EmailProvider_ServiceProvideHeader" xml:space="preserve">
-    <value>Specify bulk email service provider</value>
-  </data>
   <data name="EmailProvider_SettingsSavedSuccessfully" xml:space="preserve">
     <value>La configuración del servicio de correo electrónico se guardó correctamente.</value>
   </data>
-  <data name="EmailProvider_TestEmailAddress" xml:space="preserve">
-    <value>Dirección de correo electrónico</value>
+  <data name="DeviceNotifications" xml:space="preserve">
+    <value>Habilitar notificaciones en el dispositivo</value>
   </data>
-  <data name="InterviewerAutoUpdate" xml:space="preserve">
-    <value>Habilitar actualizaciones automáticas</value>
+  <data name="DeviceNotificationsDescription" xml:space="preserve">
+    <value>Cuando está habilitado, los dispositivos notificarán a los propietarios sobre cambios y acciones a tomar</value>
   </data>
-  <data name="InterviewerAutoUpdateDisabled" xml:space="preserve">
-    <value>Actualizaciones automáticas de aplicaciones de Android deshabilitadas</value>
+  <data name="EsriApiKey" xml:space="preserve">
+    <value>Clave API ESRI</value>
   </data>
-  <data name="InterviewerAutoUpdateEnabled" xml:space="preserve">
-    <value>Actualizaciones automáticas de aplicaciones de Android habilitadas</value>
+  <data name="EsriApiKeyDescription" xml:space="preserve">
+    <value>Esta clave permitirá el uso de mapas en línea en los dispositivos. Tenga en cuenta que el uso de este servicio puede costar dinero extra. Por favor, consulte al proveedor de servicios</value>
   </data>
-  <data name="InterviewerPartialSynchronization" xml:space="preserve">
-    <value>Habilitar la sincronización parcial</value>
+  <data name="EmailProvider_Smtp" xml:space="preserve">
+    <value>Servidor SMTP</value>
   </data>
-  <data name="MobileAppSettings_Description" xml:space="preserve">
-    <value>Algunas configuraciones específicas por versión de Android de la aplicación Interviewer / Supervisor</value>
+  <data name="EmailProvider_SmtpDescription" xml:space="preserve">
+    <value>Configure los parámetros para acceder al servidor SMTP a continuación. Más información sobre el uso del servidor SMTP con Survey Solutions está disponible </value>
   </data>
-  <data name="MobileAppSettings_Title" xml:space="preserve">
-    <value>Configuración de la aplicación del entrevistador / supervisor</value>
+  <data name="EmailProvider_SmtpHost" xml:space="preserve">
+    <value>Host</value>
   </data>
-  <data name="PartialSynchronizationDescription" xml:space="preserve">
-    <value>Cuando está habilitada, la tableta del entrevistador enviará las respuestas de las entrevistas no completadas a la sede</value>
+  <data name="EmailProvider_SmtpHostHelp" xml:space="preserve">
+    <value>Dirección del servidor SMTP</value>
   </data>
-  <data name="UserProfileSettings_Title" xml:space="preserve">
-    <value>Configuración del perfil de usuario</value>
+  <data name="EmailProvider_SmtpPort" xml:space="preserve">
+    <value>Puerto</value>
   </data>
-  <data name="WebInterviewEmailNotifications_Title" xml:space="preserve">
-    <value>Configuración de la entrevista web</value>
+    <data name="EmailProvider_SmtpPortHelp" xml:space="preserve">
+    <value>Puerto SMTP</value>
+  </data>
+  <data name="EmailProvider_SmtpTlsEncryption" xml:space="preserve">
+    <value>Usar cifrado TLS</value>
+  </data>
+  <data name="EmailProvider_SmtpTlsEncryptionHelp" xml:space="preserve">
+    <value>El cifrado TLS (Transport Layer Security) protege la comunicación. Cifra los datos transmitidos entre clientes y servidores.</value>
+  </data>
+  <data name="EmailProvider_SmtpAuthentication" xml:space="preserve">
+    <value>Usar autenticación</value>
+  </data>
+  <data name="EmailProvider_SmtpAuthenticationHelp" xml:space="preserve">
+    <value>La autenticación SMTP verifica la identidad de un cliente o servidor de correo electrónico antes de permitirle enviar correos electrónicos a través de un servidor SMTP.</value>
+  </data>
+  <data name="EmailProvider_SmtpUsername" xml:space="preserve">
+    <value>Nombre de usuario</value>
+  </data>
+  <data name="EmailProvider_SmtpUsernameHelp" xml:space="preserve">
+    <value>Credencial utilizada durante el proceso de autenticación SMTP para verificar la identidad.</value>
+  </data>
+  <data name="EmailProvider_SmtpPassword" xml:space="preserve">
+    <value>Contraseña</value>
+  </data>
+  <data name="EmailProvider_SmtpPasswordHelp" xml:space="preserve">
+    <value>Credencial utilizada durante el proceso de autenticación SMTP para verificar la identidad.</value>
   </data>
 </root>

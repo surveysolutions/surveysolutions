@@ -150,7 +150,7 @@
   <data name="ApprovedByHeadquarters" xml:space="preserve">
     <value>موافق عليه من قبل المقر الرئيسي</value>
   </data>
-  <data name="ApprovedByupervisor" xml:space="preserve">
+  <data name="ApprovedBySupervisor" xml:space="preserve">
     <value>موافق عليه من قبل المشرف</value>
   </data>
   <data name="ApproveRejectPartialView_ApproveAction" xml:space="preserve">

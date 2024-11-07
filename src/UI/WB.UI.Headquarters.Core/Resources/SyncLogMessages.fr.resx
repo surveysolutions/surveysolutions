@@ -117,35 +117,11 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CanSynchronize" xml:space="preserve">
+    <data name="CanSynchronize" xml:space="preserve">
     <value>Démarrer la synchronisation</value>
-  </data>
-  <data name="CensusQuestionnaire" xml:space="preserve">
-    <value>&lt;li&gt; &lt;b&gt; {0} &lt;/ b&gt; [{1}] &lt;/ li&gt;</value>
-  </data>
-  <data name="DeleteInterviewPackage" xml:space="preserve">
-    <value>&lt;li&gt;Supprimer l’entretien : &lt;a href="{3}"&gt;{0}&lt;/a&gt;, Paquet : {1}, Indice de tri : {2}&lt;/li&gt;</value>
-  </data>
-  <data name="DeviceCanBeAssignedToInterviewer" xml:space="preserve">
-    <value>Appareil peut être affecté à un enquêteur</value>
-  </data>
-  <data name="DeviceRelinkRequired" xml:space="preserve">
-    <value>&lt;font color="orange"&gt;Réaffectation et synchronisation requises&lt;/font&gt;</value>
-  </data>
-  <data name="DeviceUpdateRequired" xml:space="preserve">
-    <value>&lt;font color="red"&gt;Mise à jour nécessaire. Version d'application Interviewer - &lt;b&gt;{0}&lt;/b&gt;&lt;/font&gt;</value>
-  </data>
-  <data name="EmptyDevice" xml:space="preserve">
-    <value>&lt;b&gt;[APPAREIL VIDE]&lt;/b&gt;</value>
-  </data>
-  <data name="GetAttachmentContent" xml:space="preserve">
-    <value>Télécharger le contenu des pièces jointes : {0}</value>
   </data>
   <data name="GetCensusQuestionnaires" xml:space="preserve">
     <value>Télécharger la liste des questionnaires en mode recensement :&lt;br&gt;&lt;ul&gt;{0}&lt;/ul&gt;</value>
-  </data>
-  <data name="GetInterview" xml:space="preserve">
-    <value>Télécharger entretien(s) : &lt;b&gt;{0}&lt;/b&gt;</value>
   </data>
   <data name="GetInterviewer" xml:space="preserve">
     <value>Télécharger de l’information sur l’enquêteur.&lt;br&gt;chef d'équipe : &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
@@ -156,62 +132,104 @@
   <data name="GetInterviewPackages" xml:space="preserve">
     <value>Télécharger la liste des paquets de l’entretien.&lt;br&gt;&lt;ul&gt; {1} &lt;/ul&gt; Dernier package de synchronisation : &lt;b&gt;{0}&lt;/b&gt;</value>
   </data>
-  <data name="GetInterviews" xml:space="preserve">
-    <value>Télécharger la liste des entretiens.&lt;br&gt;&lt;ul&gt; {0} &lt;/ul&gt;</value>
-  </data>
   <data name="GetQuestionnaire" xml:space="preserve">
     <value>Télécharger le questionnaire : &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
   </data>
   <data name="GetQuestionnaireAssembly" xml:space="preserve">
     <value>Télécharger l'assemblage du questionnaire : &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
   </data>
-  <data name="GetQuestionnaireAttachments" xml:space="preserve">
-    <value>Télécharger les pièces jointes du questionnaire : &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
-  </data>
-  <data name="InterviewerHasDevice" xml:space="preserve">
-    <value>L’enquêteur a un appareil déjà</value>
+  <data name="DeviceCanBeAssignedToInterviewer" xml:space="preserve">
+    <value>Appareil peut être affecté à un enquêteur</value>
   </data>
   <data name="InterviewPackageProcessed" xml:space="preserve">
-      <value>&lt;font color="green"&gt;Paquet de l'entretien&lt;b&gt;{0}&lt;/b&gt; traité avec succès&lt;/font&gt;</value>
-  </data>
-  <data name="InterviewProcessed" xml:space="preserve">
-      <value>&lt;font color="green"&gt;Entretien de &lt;b&gt;{0}&lt;/b&gt; traités avec succès&lt;/font&gt;</value>
+    <value>&lt;font color="green"&gt;Paquet de l'entretien&lt;b&gt;{0}&lt;/b&gt; traité avec succès&lt;/font&gt;</value>
   </data>
   <data name="LinkToDevice" xml:space="preserve">
     <value>Lier l'enquêteur à l'appareil</value>
   </data>
+  <data name="QuestionnaireAssemblyProcessed" xml:space="preserve">
+    <value>&lt;font color="green"&gt;L'assemblage du questionnaire &lt;b&gt;{0}&lt;/b&gt; [{1}] a bien été traité&lt;/font&gt;</value>
+  </data>
+  <data name="QuestionnaireProcessed" xml:space="preserve">
+    <value>&lt;font color="green"&gt;Questionnaire &lt;b&gt;{0}&lt;/b&gt; [{1}] traité avec succès&lt;/font&gt;</value>
+  </data>
+  <data name="CensusQuestionnaire" xml:space="preserve">
+    <value>&lt;li&gt;&lt;b&gt;{0}&lt;/b&gt; [{1}]&lt;/li&gt;</value>
+  </data>
+  <data name="DeleteInterviewPackage" xml:space="preserve">
+    <value>&lt;li&gt;Supprimer l’entretien : &lt;a href="{3}"&gt;{0}&lt;/a&gt;, Paquet : {1}, Indice de tri : {2}&lt;/li&gt;</value>
+  </data>
+  <data name="DeviceRelinkRequired" xml:space="preserve">
+    <value>&lt;font color="orange"&gt;Réaffectation et synchronisation requises&lt;/font&gt;</value>
+  </data>
+  <data name="DeviceUpdateRequired" xml:space="preserve">
+    <value>&lt;font color="red"&gt;Mise à jour nécessaire. Version d'application Interviewer - &lt;b&gt;{0}&lt;/b&gt;&lt;/font&gt;</value>
+  </data>
   <data name="NoNewInterviewPackagesToDownload" xml:space="preserve">
     <value>Pas de nouveaux paquets d'entretiens à télécharger</value>
   </data>
-  <data name="QuestionnaireAssemblyProcessed" xml:space="preserve">
-      <value>&lt;font color = "green"&gt; L'assemblage du questionnaire &lt;b&gt; {0} &lt;/ b&gt; [{1}] a bien été traité &lt;/ font&gt;</value>
-  </data>
-  <data name="QuestionnaireProcessed" xml:space="preserve">
-      <value>&lt;font color = "green"&gt; Questionnaire &lt;b&gt; {0} &lt;/ b&gt; [{1}] traité avec succès &lt;/ font&gt;</value>
+  <data name="NoMapsForUser" xml:space="preserve">
+    <value>Aucune carte à télécharger</value>
   </data>
   <data name="UpdateInterviewPackage" xml:space="preserve">
     <value>&lt;li&gt; Mettre à jour l'entretien: &lt;a href="{3}"&gt; {0} &lt;/a&gt;, package: {1}, index de tri: {2} &lt;/ li&gt;</value>
   </data>
-  <data name="PostPackage" xml:space="preserve">
-    <value>Télécharger l'entretien: {0}</value>
+  <data name="InterviewerHasDevice" xml:space="preserve">
+    <value>L’enquêteur a un appareil déjà</value>
   </data>
-  <data name="GetAssignmentFormat" xml:space="preserve">
-    <value>Télécharger l'affectation ({0}) &lt;/ br&gt;</value>
+  <data name="EmptyDevice" xml:space="preserve">
+    <value>&lt;b&gt;[APPAREIL VIDE]&lt;/b&gt;</value>
+  </data>
+  <data name="GetInterview" xml:space="preserve">
+    <value>Télécharger entretien(s) : &lt;b&gt;{0}&lt;/b&gt;</value>
+  </data>
+  <data name="GetInterviews" xml:space="preserve">
+    <value>Télécharger la liste des entretiens.&lt;br&gt;&lt;ul&gt; {0} &lt;/ul&gt;</value>
+  </data>
+  <data name="GetMaps" xml:space="preserve">
+    <value>Télécharger la liste des cartes. &lt;/ br&gt; &lt;ul&gt; {0} &lt;/ ul&gt;</value>
   </data>
   <data name="GetAssignmentsFormat" xml:space="preserve">
     <value>Télécharger la liste des affectations ({0}). &lt;/ br&gt; &lt;ul&gt; {1} &lt;/ ul&gt;</value>
   </data>
+  <data name="GetAssignmentFormat" xml:space="preserve">
+    <value>Télécharger l'affectation ({0}) &lt;/ br&gt;</value>
+  </data>
+  <data name="InterviewProcessed" xml:space="preserve">
+    <value>&lt;font color="green"&gt;Entretien de &lt;b&gt;{0}&lt;/b&gt; traités avec succès&lt;/font&gt;</value>
+  </data>
+  <data name="GetAttachmentContent" xml:space="preserve">
+    <value>Télécharger le contenu des pièces jointes : {0}</value>
+  </data>
+  <data name="GetMap" xml:space="preserve">
+    <value>Télécharger la carte: {0}</value>
+  </data>
+  <data name="GetQuestionnaireAttachments" xml:space="preserve">
+    <value>Télécharger les pièces jointes du questionnaire : &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
+  </data>
+  <data name="PostPackage" xml:space="preserve">
+    <value>Télécharger l'entretien: {0}</value>
+  </data>
   <data name="GetTranslations" xml:space="preserve">
     <value>Télécharger les traductions du questionnaire &lt;b&gt; {0} &lt;/ b&gt; [{1}]</value>
-  </data>
-  <data name="InterviewerFailedToLogin" xml:space="preserve">
-    <value>L'enquêteur n'a pas réussi à se connecter</value>
   </data>
   <data name="InterviewerLoggedIn" xml:space="preserve">
     <value>Enquêteur connecté et a besoin d'un AuthToken</value>
   </data>
+  <data name="InterviewerFailedToLogin" xml:space="preserve">
+    <value>L'enquêteur n'a pas réussi à se connecter</value>
+  </data>
+  <data name="PasswordChanged" xml:space="preserve">
+    <value>Mot de passe changé et AuthToken acquis</value>
+  </data>
+  <data name="FailToChangePassword" xml:space="preserve">
+    <value>L'utilisateur n'a pas pu changer le mot de passe</value>
+  </data>
   <data name="ApkRequested" xml:space="preserve">
     <value>Nouveau fichier d'application demandé</value>
+  </data>
+  <data name="SupervisorApkRequested" xml:space="preserve">
+    <value>Nouveau fichier d'application de superviseur demandé</value>
   </data>
   <data name="ExtendedApkRequested" xml:space="preserve">
     <value>Nouveau fichier d'application étendue demandé</value>
@@ -219,16 +237,41 @@
   <data name="ExtendedPatchRequestedFormat" xml:space="preserve">
     <value>Fichier de correctif requis pour la version étendue {0}</value>
   </data>
-  <data name="GetMap" xml:space="preserve">
-    <value>Télécharger la carte: {0}</value>
-  </data>
-  <data name="GetMaps" xml:space="preserve">
-    <value>Télécharger la liste des cartes. &lt;/ br&gt; &lt;ul&gt; {0} &lt;/ ul&gt;</value>
-  </data>
-  <data name="NoMapsForUser" xml:space="preserve">
-    <value>Aucune carte à télécharger</value>
-  </data>
   <data name="PatchRequestedFormat" xml:space="preserve">
     <value>Fichier de correctif requis pour la version {0}</value>
+  </data>
+  <data name="SupervisorPatchRequestedFormat" xml:space="preserve">
+    <value>Fichier de correctif requis pour la version de superviseur {0}</value>
+  </data>
+  <data name="GetInterviewPackageV3" xml:space="preserve">
+    <value>&lt;b&gt;V3&lt;/b&gt; Télécharger le paquet de l'entretien : {0}</value>
+  </data>
+  <data name="GetInterviewPatch" xml:space="preserve">
+    <value>Télécharger les modifications de l'entretien du QG : {0}</value>
+    <comment>{0} - nombre d'entretiens affectés</comment>
+  </data>
+  <data name="PostPackageV3" xml:space="preserve">
+    <value>&lt;b&gt;V3&lt;/b&gt; Télécharger l'entretien : {0}</value>
+  </data>
+  <data name="CheckObsoleteInterviews" xml:space="preserve">
+    <value>Vérifiez les entretiens obsolètes. Demande : &lt;pre&gt;{0}&lt;/pre&gt;</value>
+  </data>
+  <data name="CheckIsPackageDuplicatedFormat" xml:space="preserve">
+    <value>Vérifiez les entretiens en double. Entretien : &lt;pre&gt;{0}&lt;/pre&gt;</value>
+  </data>
+  <data name="AssignmentReceivedByTablet" xml:space="preserve">
+    <value>Affectation &lt;b&gt;{0}&lt;/b&gt; reçue et stockée par l'appareil</value>
+  </data>
+  <data name="DownloadReusableCategories" xml:space="preserve">
+    <value>Téléchargement de la catégorie réutilisable {0}</value>
+  </data>
+  <data name="PostCalendarEventPackage" xml:space="preserve">
+    <value>Télécharger l'événement du calendrier : {0}</value>
+  </data>
+  <data name="GetCalendarEventPackage" xml:space="preserve">
+    <value>Télécharger le paquet d'événements du calendrier : {0}</value>
+  </data>
+  <data name="CalendarEventsListFormat" xml:space="preserve">
+    <value>Télécharger la liste des événements du calendrier ({0}). &lt;/br&gt; &lt;ul&gt; {1} &lt;/ul&gt;</value>
   </data>
 </root>

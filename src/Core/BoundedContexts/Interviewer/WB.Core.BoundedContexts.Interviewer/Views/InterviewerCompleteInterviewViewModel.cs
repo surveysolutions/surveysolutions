@@ -67,7 +67,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             var interview = this.interviewRepository.GetOrThrow(interviewUid);
             this.CriticalityLevel = questionnaireSettings.GetCriticalityLevel(interview.QuestionnaireIdentity);
 
-            base.Configure(interviewUid, navigationState);
+            RunConfiguration(interviewUid, navigationState);
             
             var interviewKey = interview.GetInterviewKey()?.ToString();
             this.CompleteScreenTitle = string.IsNullOrEmpty(interviewKey)

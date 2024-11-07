@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.MaskTextTests
             maskedText.RemoveRange(16, 1, 0, ref selection);
 
         [NUnit.Framework.Test] public void should_be_remove_last_char () =>
-            maskedText.MakeMaskedText().Should().Be("(111) (111 111 1_)");
+            maskedText.MakeMaskedText().Should().Be("(111) (111 111 1ˍ)");
 
         [NUnit.Framework.Test] public void should_set_selection_to_16 () =>
             selection.Should().Be(16);

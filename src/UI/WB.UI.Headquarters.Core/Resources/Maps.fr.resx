@@ -118,13 +118,22 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Levels" xml:space="preserve">
-    <value>Les niveaux</value>
+    <value>Niveaux</value>
+  </data>
+  <data name="MapLoadingInvalidFilesError" xml:space="preserve">
+    <value>Une erreur est survenue. Les fichiers suivants ont été ignorés :</value>
+  </data>
+  <data name="MapLoadingNotZipError" xml:space="preserve">
+    <value>Une erreur est survenue. Le fichier n'est pas une archive .zip</value>
+  </data>
+  <data name="MapsLoadingError" xml:space="preserve">
+    <value>Une erreur est survenue lors du chargement de la carte.</value>
   </data>
   <data name="MaxScale" xml:space="preserve">
-    <value>Echelle Max</value>
+    <value>Échelle Max</value>
   </data>
   <data name="MinScale" xml:space="preserve">
-    <value>Echelle Min</value>
+    <value>Échelle Min</value>
   </data>
   <data name="Name" xml:space="preserve">
     <value>Nom</value>
@@ -133,39 +142,54 @@
     <value>Taille (MB)</value>
   </data>
   <data name="UpdateDate" xml:space="preserve">
-    <value>Importé sur</value>
-  </data>
-  <data name="FileLoadingNotTsvError" xml:space="preserve">
-    <value>Erreur est survenue. Le fichier n'est pas un fichier .tab</value>
-  </data>
-  <data name="MapEngineIsNotInitialized" xml:space="preserve">
-    <value>composante des cartes n'a pas été initialisé. Veuillez contacter l'administrateur du système</value>
-  </data>
-  <data name="MapLoadingInvalidFile" xml:space="preserve">
-    <value>Fichier non valide {0}. Erreur: {1}</value>
-  </data>
-  <data name="MapLoadingInvalidFilesError" xml:space="preserve">
-    <value>Une erreur est survenue. Les fichiers suivants ont été ignorés:</value>
-  </data>
-  <data name="MapLoadingNoMapsInArchive" xml:space="preserve">
-    <value>Une erreur est survenue. Archive ne contient pas de fichiers de cartes</value>
-  </data>
-  <data name="MapLoadingNotZipError" xml:space="preserve">
-    <value>Une erreur est survenue. Le fichier n'est pas une archive .zip</value>
-  </data>
-  <data name="MapLoadingUnsupportedFilesInArchive" xml:space="preserve">
-    <value>Une erreur est survenue. Archive ne contient pas de fichiers de cartes</value>
-  </data>
-  <data name="MappingsLoadingError" xml:space="preserve">
-    <value>Une erreur s'est produite lors du chargement des liens de cartes.</value>
-  </data>
-  <data name="MapsLoadingError" xml:space="preserve">
-    <value>Une erreur s'est produite lors du chargement de la carte.</value>
-  </data>
-  <data name="UploadMappingsSummaryFormat" xml:space="preserve">
-    <value>es liens pour {0} cartes ont été traités avec {1} invalide</value>
+    <value>Importé le</value>
   </data>
   <data name="UploadMapsSummaryFormat" xml:space="preserve">
-    <value>{0} cartes ont été traitées avec {1} fichiers de carte non valide</value>
+    <value>{0} cartes ont été traitées avec {1} fichiers de carte non valides</value>
+  </data>
+  <data name="MapEngineIsNotInitialized" xml:space="preserve">
+    <value>Le composant de cartes n'a pas été initialisé. Veuillez contacter l'administrateur du système.</value>
+  </data>
+  <data name="UploadMappingsSummaryFormat" xml:space="preserve">
+    <value>les liens pour {0} cartes ont été traités avec {1} non valides</value>
+  </data>
+  <data name="FileLoadingNotTsvError" xml:space="preserve">
+    <value>Une erreur est survenue. Le fichier n'est pas un .tab</value>
+  </data>
+  <data name="MappingsLoadingError" xml:space="preserve">
+    <value>Une erreur est survenue lors du chargement des liens de cartes.</value>
+  </data>
+  <data name="MapOverlapsWith" xml:space="preserve">
+    <value>Se chevauche avec :</value>
+  </data>
+  <data name="MapOverlapsWithOther" xml:space="preserve">
+    <value>et {0} autre(s).</value>
+  </data>
+  <data name="MapLoadingNoMapsInArchive" xml:space="preserve">
+    <value>Une erreur est survenue. L'archive ne contient pas de fichiers de carte</value>
+  </data>
+  <data name="MapLoadingUnsupportedFilesInArchive" xml:space="preserve">
+    <value>Une erreur est survenue. L'archive contient des fichiers non cartographiques</value>
+  </data>
+  <data name="MapLoadingInvalidFile" xml:space="preserve">
+    <value>Le fichier '{0}' contient des données que le système ne peut pas traiter. Erreur : {1}</value>
+  </data>
+  <data name="ShpIsMissingInArchive" xml:space="preserve">
+    <value>Le fichier {0}.shp est manquant pour {0}</value>
+  </data>
+  <data name="ShxIsMissingInArchive" xml:space="preserve">
+    <value>Le fichier {0}.shx est manquant pour {0}.shp</value>
+  </data>
+  <data name="DbfIsMissingInArchive" xml:space="preserve">
+    <value>Le fichier {0}.dbf est manquant pour {0}.shp</value>
+  </data>
+  <data name="MapFileSizeLimit" xml:space="preserve">
+    <value>La taille du fichier {0} est supérieure à la limite applicable {1}</value>
+  </data>  
+  <data name="MapFileNameHasNonUtf8Chars" xml:space="preserve">
+    <value>Le nom du fichier {0} inclut des caractères non UTF-8.</value>
+  </data>
+  <data name="MapFileNameHasInvalidChars" xml:space="preserve">
+    <value>Le nom du fichier {0} inclut des caractères non valides.</value>
   </data>
 </root>

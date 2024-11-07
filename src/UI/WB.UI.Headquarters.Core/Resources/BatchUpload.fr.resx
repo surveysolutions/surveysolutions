@@ -117,7 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AdvancedMode" xml:space="preserve">
+    <data name="AdvancedMode" xml:space="preserve">
     <value>Mode avancé de transfert de données</value>
   </data>
   <data name="AdvancedModeDescription" xml:space="preserve">
@@ -126,23 +126,11 @@
   <data name="All" xml:space="preserve">
     <value>Tout</value>
   </data>
-  <data name="AreYouSureYouWantToDeleteFormat" xml:space="preserve">
-    <value>Êtes-vous sûr de vouloir supprimer ce fichier?</value>
-  </data>
-  <data name="BatchUpload_Title" xml:space="preserve">
-    <value>Téléchargement par lots</value>
-  </data>
   <data name="BrowseTeams" xml:space="preserve">
     <value>Parcourir les équipes</value>
   </data>
   <data name="Code" xml:space="preserve">
     <value>Code</value>
-  </data>
-  <data name="Column" xml:space="preserve">
-    <value>Colonne</value>
-  </data>
-  <data name="CreateSample" xml:space="preserve">
-    <value>Créer des entretiens à partir de ces données</value>
   </data>
   <data name="CreateUsers" xml:space="preserve">
     <value>Créer des utilisateurs</value>
@@ -159,50 +147,23 @@
   <data name="Details" xml:space="preserve">
     <value>Détails</value>
   </data>
-  <data name="DownloadInvalidInterviews" xml:space="preserve">
-    <value>Télécharger des entretiens invalides</value>
-  </data>
-  <data name="EstimatedTime" xml:space="preserve">
-    <value>Temps estimé</value>
+  <data name="DownloadTemplateArchive" xml:space="preserve">
+    <value>Téléchargez le modèle ".zip" pour ce questionnaire</value>
   </data>
   <data name="FileName" xml:space="preserve">
     <value>Nom de fichier</value>
   </data>
-  <data name="FileNotParsed" xml:space="preserve">
-    <value>Le fichier n'a pas été analysé. Seuls les fichiers de format ".tab" avec délimiteur sont autorisés.</value>
-  </data>
   <data name="FileSize" xml:space="preserve">
     <value>Taille du fichier</value>
-  </data>
-  <data name="FileSizeLimit" xml:space="preserve">
-    <value>La taille du fichier ne peut pas dépasser 300 Mo.</value>
   </data>
   <data name="Finished" xml:space="preserve">
     <value>Terminé</value>
   </data>
   <data name="FinishedWithError" xml:space="preserve">
-    <value>Terminé avec erreur (s)</value>
+    <value>Terminé avec erreur(s)</value>
   </data>
   <data name="FinishedWithErrorMessage" xml:space="preserve">
-    <value>Terminé avec erreur (s). Raison:</value>
-  </data>
-  <data name="FormatNotSupported" xml:space="preserve">
-    <value>Le format de fichier n'est pas pris en charge. Les données à l'intérieur du fichier seront ignorées</value>
-  </data>
-  <data name="ImportInProgress" xml:space="preserve">
-    <value>L'autre processus d'importation d'affectations est en cours d'exécution. Un seul processus d'importation d'affectations à la fois est autorisé. Attendez la fin du processus en cours, puis téléchargez un nouveau fichier exemplaire. Suivez le lien si vous souhaitez obtenir des informations de progression plus détaillées sur l'autre processus d'importation.</value>
-  </data>
-  <data name="ImportInterviews_ChooseFile" xml:space="preserve">
-    <value>Choisissez un fichier à importer</value>
-  </data>
-  <data name="ImportInterviews_SelectButtonText" xml:space="preserve">
-    <value>Sélectionner</value>
-  </data>
-  <data name="ImportSample" xml:space="preserve">
-    <value>Importer un échantillon</value>
-  </data>
-  <data name="ImportStatus" xml:space="preserve">
-    <value>Statut de l'importation</value>
+    <value>Terminé avec erreur(s). Raison:</value>
   </data>
   <data name="InVerificationProcess" xml:space="preserve">
     <value>est en cours de vérification, vérifié</value>
@@ -216,20 +177,11 @@
   <data name="Message" xml:space="preserve">
     <value>Message</value>
   </data>
-  <data name="NumberInterviewCreated" xml:space="preserve">
-    <value>entretien (s) créé (s)</value>
-  </data>
   <data name="OutOf" xml:space="preserve">
     <value>sur</value>
   </data>
   <data name="PleaseWait" xml:space="preserve">
     <value>Veuillez patienter, le fichier</value>
-  </data>
-  <data name="PrefilledQuestionsRequired" xml:space="preserve">
-    <value>Le fichier ne contient pas de colonne (s) pour les questions d'identification requises: &lt;br/&gt; &lt;br/&gt; &lt;b&gt; {0} &lt;/ b&gt;</value>
-  </data>
-  <data name="Processing" xml:space="preserve">
-    <value>En cours de traitement...</value>
   </data>
   <data name="ReadyForUserCreation" xml:space="preserve">
     <value>Prêt pour la création d'utilisateur</value>
@@ -239,27 +191,6 @@
   </data>
   <data name="RecordsCount" xml:space="preserve">
     <value>Nombre d'enregistrements</value>
-  </data>
-  <data name="RefreshActionOnUserUpload" xml:space="preserve">
-    <value>Actualiser</value>
-  </data>
-  <data name="ResponsibleSupervisorWillBeAssigned" xml:space="preserve">
-    <value>L'utilisateur responsable sera affecté automatiquement</value>
-  </data>
-  <data name="Row" xml:space="preserve">
-    <value>Ligne</value>
-  </data>
-  <data name="SampleCreationCompleted" xml:space="preserve">
-    <value>La création de L'entretien s'est terminée avec succès.</value>
-  </data>
-  <data name="SampleCreationResult" xml:space="preserve">
-    <value>Résultat de la création d'entretien</value>
-  </data>
-  <data name="SampleImportWithErrors" xml:space="preserve">
-    <value>Importation d'un entretien terminée avec des erreurs</value>
-  </data>
-  <data name="SampleSuccess" xml:space="preserve">
-    <value>Importation d'un entretien réussie</value>
   </data>
   <data name="Status" xml:space="preserve">
     <value>Statut</value>
@@ -273,9 +204,6 @@
   <data name="Uploaded" xml:space="preserve">
     <value>Importé</value>
   </data>
-  <data name="UploadNewData" xml:space="preserve">
-    <value>Importer de nouvelles données</value>
-  </data>
   <data name="UploadNewFile" xml:space="preserve">
     <value>Importer un nouveau fichier</value>
   </data>
@@ -283,13 +211,10 @@
     <value>Importer un échantillon</value>
   </data>
   <data name="UploadSampleDescription" xml:space="preserve">
-    <value>Pour importer l'échantillon à enquêter, veuillez préparer un fichier (taille jusqu'à 300 Mo) avec des valeurs séparées par des tabulations (fichier de format  ".tab") correspondant au modèle ci-dessous, contenant les valeurs des variables de votre questionnaire marquées comme variables d'identification.</value>
+    <value>Pour importer l'échantillon à enquêter, veuillez préparer un fichier (taille jusqu'à 300 Mo) avec des valeurs séparées par des tabulations (fichier de format ".tab") correspondant au modèle ci-dessous, contenant les valeurs des variables de votre questionnaire marquées comme variables d'identification.</value>
   </data>
   <data name="UploadUsers" xml:space="preserve">
     <value>Importation d'utilisateurs par lots</value>
-  </data>
-  <data name="UploadUsers_Title" xml:space="preserve">
-    <value>Liste des fichiers avec des utilisateurs préchargés</value>
   </data>
   <data name="UploadUsersDescription" xml:space="preserve">
     <value>Préparez un fichier avec des valeurs séparées par des tabulations (fichier .tab) correspondant à un modèle ci-dessous. Les colonnes marquées d'un (*) sont obligatoires. Seuls les termes «supervisor» ou «interviewer» sont autorisés dans la colonne «rôle».</value>
@@ -297,11 +222,8 @@
   <data name="UserBatchUploads" xml:space="preserve">
     <value>Importation d'utilisateurs par lots</value>
   </data>
-  <data name="UserPreloadingProcessIsMissing" xml:space="preserve">
-    <value>Le processus de préchargement de l'utilisateur est manquant</value>
-  </data>
   <data name="UsersHaveBeenCreated" xml:space="preserve">
-    <value>utilisateur (s) ont été créés</value>
+    <value>utilisateur(s) ont été créés</value>
   </data>
   <data name="Validated" xml:space="preserve">
     <value>Validé</value>
@@ -315,20 +237,220 @@
   <data name="Verify" xml:space="preserve">
     <value>Vérifier</value>
   </data>
-  <data name="VerifyPanelData" xml:space="preserve">
-    <value>Vérifier les données de panel</value>
+  <data name="AreYouSureYouWantToDeleteFormat" xml:space="preserve">
+    <value>Êtes-vous sûr de vouloir supprimer ce fichier?</value>
+  </data>
+  <data name="UserPreloadingProcessIsMissing" xml:space="preserve">
+    <value>Le processus de préchargement de l'utilisateur est manquant</value>
+  </data>
+  <data name="UploadUsers_Title" xml:space="preserve">
+    <value>Liste des fichiers avec des utilisateurs préchargés</value>
+  </data>
+  <data name="RefreshActionOnUserUpload" xml:space="preserve">
+    <value>Actualiser</value>
+  </data>
+  <data name="BatchUpload_Title" xml:space="preserve">
+    <value>Téléchargement par lots</value>
+  </data>
+  <data name="PrefilledQuestionsRequired" xml:space="preserve">
+    <value>Le fichier ne contient pas de colonne(s) pour les questions d'identification requises: &lt;br/&gt; &lt;br/&gt; &lt;b&gt;{0}&lt;/b&gt;</value>
+  </data>
+  <data name="ImportInterviews_ChooseFile" xml:space="preserve">
+    <value>Choisissez un fichier à importer</value>
+  </data>
+  <data name="ImportInterviews_SelectResponsible" xml:space="preserve">
+    <value>Sélectionnez le responsable</value>
+  </data>
+  <data name="ImportInterviews_SelectButtonText" xml:space="preserve">
+    <value>Sélectionner</value>
+  </data>
+  <data name="FileSizeLimit" xml:space="preserve">
+    <value>La taille du fichier ne peut pas dépasser 300 Mo.</value>
+  </data>
+  <data name="ImportSample" xml:space="preserve">
+    <value>Importer un échantillon</value>
+  </data>
+  <data name="FileNotParsed" xml:space="preserve">
+    <value>Le fichier n'a pas été analysé. Seuls les fichiers de format ".tab" avec délimiteur sont autorisés.</value>
+  </data>
+  <data name="FormatNotSupported" xml:space="preserve">
+    <value>Le format de fichier n'est pas pris en charge. Les données à l'intérieur du fichier seront ignorées</value>
+  </data>
+  <data name="SampleCreationResult" xml:space="preserve">
+    <value>Résultat de la création d'entretien</value>
+  </data>
+  <data name="Processing" xml:space="preserve">
+    <value>En cours de traitement...</value>
+  </data>
+  <data name="SampleCreationCompleted" xml:space="preserve">
+    <value>La création de L'entretien s'est terminée avec succès.</value>
+  </data>
+  <data name="UploadNewData" xml:space="preserve">
+    <value>Importer de nouvelles données</value>
+  </data>
+  <data name="Column" xml:space="preserve">
+    <value>Colonne</value>
+  </data>
+  <data name="Row" xml:space="preserve">
+    <value>Ligne</value>
   </data>
   <data name="VerifySampleData" xml:space="preserve">
     <value>Vérifiez les données</value>
   </data>
-  <data name="DownloadTemplateArchive" xml:space="preserve">
-    <value>Téléchargez le modèle ".zip" pour ce questionnaire</value>
+  <data name="ImportInProgress" xml:space="preserve">
+    <value>L'autre processus d'importation d'affectations est en cours d'exécution. Un seul processus d'importation d'affectations à la fois est autorisé. Attendez la fin du processus en cours, puis téléchargez un nouveau fichier exemplaire. Suivez le lien si vous souhaitez obtenir des informations de progression plus détaillées sur l'autre processus d'importation.</value>
+  </data>
+  <data name="CreateSample" xml:space="preserve">
+    <value>Créer des entretiens à partir de ces données</value>
+  </data>
+  <data name="SampleSuccess" xml:space="preserve">
+    <value>Importation d'un entretien réussie</value>
+  </data>
+  <data name="SampleImportWithErrors" xml:space="preserve">
+    <value>Importation d'un entretien terminée avec des erreurs</value>
+  </data>
+  <data name="ImportStatus" xml:space="preserve">
+    <value>Statut de l'importation</value>
+  </data>
+  <data name="NumberInterviewCreated" xml:space="preserve">
+    <value>entretien(s) créé(s)</value>
+  </data>
+  <data name="EstimatedTime" xml:space="preserve">
+    <value>Temps estimé</value>
+  </data>
+  <data name="DownloadInvalidInterviews" xml:space="preserve">
+    <value>Télécharger des entretiens invalides</value>
+  </data>
+  <data name="DownloadInvalidAssignments" xml:space="preserve">
+    <value>Télécharger les affectations invalides</value>
+  </data>
+  <data name="ResponsibleSupervisorWillBeAssigned" xml:space="preserve">
+    <value>L'utilisateur responsable sera affecté automatiquement</value>
+  </data>
+  <data name="VerifyPanelData" xml:space="preserve">
+    <value>Vérifier les données de panel</value>
+  </data>
+  <data name="RunningInterviewImportProcess" xml:space="preserve">
+    <value>Aller au processus d'importation des affectations en cours</value>
+  </data>
+  <data name="BatchDescription" xml:space="preserve">
+    <value>Téléchargez une archive zip contenant un ou plusieurs fichiers séparés par des tabulations correspondant au niveau principal de l'entretien et aux listes subordonnées. Permet le préchargement des variables à n'importe quel niveau de l'entretien.&lt;br/&gt;
+Tous les fichiers de données doivent contenir la variable interview__id avec un identifiant unique de l'entretien sous forme de chaîne ou de nombre. Les liens au sein des listes et des listes imbriquées sont établis de la même manière que dans les données exportées.&lt;br/&gt;
+</value>
+    <comment>Do not translate _responsible, _quantity, _email, _webmode, _record_audio. Keep english names</comment>
+  </data>
+  <data name="BatchTitle" xml:space="preserve">
+    <value>Identifier et collecter des données (archive)</value>
+  </data>
+  <data name="BatchColumnsTitle" xml:space="preserve">
+    <value>Vous pouvez éventuellement spécifier les colonnes suivantes dans le fichier de niveau principal de l'entretien:</value>
+  </data>
+  <data name="CreatingMultipleInterviews" xml:space="preserve">
+    <value>Créer plusieurs entretiens</value>
+  </data>
+  <data name="CreatingMultipleAssignments" xml:space="preserve">
+    <value>Créer plusieurs affectations</value>
+  </data>
+  <data name="EmptySupervisorDescription" xml:space="preserve">
+    <value>Si les noms d'utilisateur ne sont pas spécifiés dans la colonne "_responsible", vous devrez affecter un superviseur à toutes les affectations dans une étape ultérieure.</value>
+  </data>
+  <data name="ManualModeDescription" xml:space="preserve">
+    <value>Vous pouvez créer des affectations individuelles en entrant toutes les données requises dans {{url}}</value>
+  </data>
+  <data name="ManualModeLinkTitle" xml:space="preserve">
+    <value>mode manuel</value>
+  </data>
+  <data name="SimpleDescription" xml:space="preserve">
+    <value>Téléchargez un fichier séparé par des tabulations avec des valeurs pour les questions uniquement au niveau de l'entretien. Incluez les valeurs des questions d'identification et d'autres questions au niveau principal de l'entretien. Ne permet pas le préchargement des valeurs à l'intérieur des listes.</value>
+  </data>
+  <data name="SimpleTitle" xml:space="preserve">
+    <value>Identification des données uniquement</value>
+  </data>
+  <data name="SimpleColumnsTitle" xml:space="preserve">
+    <value>Vous pouvez éventuellement spécifier les colonnes suivantes:</value>
+  </data>
+  <data name="ColumnsDescription" xml:space="preserve">
+    <value>&lt;b&gt;_responsible&lt;/b&gt; - nom d'utilisateur d'un siège, superviseur ou enquêteur qui sera responsable de l'affectation;&lt;br/&gt;
+&lt;b&gt;_quantity&lt;/b&gt; - capacité de l'affectation;&lt;br/&gt;
+&lt;b&gt;_email&lt;/b&gt; - email du répondant (uniquement pour les entretiens web);&lt;br/&gt;
+&lt;b&gt;_password&lt;/b&gt; - mot de passe pour démarrer un entretien (uniquement pour les entretiens web);&lt;br/&gt;
+&lt;b&gt;_webmode&lt;/b&gt; - mode pour l'affectation (1 pour CAWI, 0 ou vide pour CAPI);&lt;br/&gt;
+&lt;b&gt;_record_audio&lt;/b&gt; - l'enregistrement audio est activé pour les entretiens (1 - activé, 0 - désactivé, vide - obtenir cette valeur du questionnaire);&lt;br/&gt;
+&lt;b&gt;_comment&lt;/b&gt; - commentaires pour l'affectation</value>
+    <comment>Do not translate _responsible, _quantity, _email, _webmode, _record_audio. Keep english names</comment>
+  </data>
+  <data name="UploadDescription" xml:space="preserve">
+    <value>Téléchargez un fichier avec des données d'identification pour créer de nouvelles affectations.
+Spécifiez les noms d'utilisateur pour les sièges, les superviseurs ou les enquêteurs pour effectuer des affectations en lot.</value>
+  </data>
+  <data name="FileTypeDescription" xml:space="preserve">
+    <value>Enregistrez le fichier en encodage UTF8 pour prendre en charge les textes spécifiques à la langue.</value>
+  </data>
+  <data name="UploadTabFile" xml:space="preserve">
+    <value>Importer le fichier .tab</value>
+  </data>
+  <data name="UploadZipFile" xml:space="preserve">
+    <value>Importer le fichier .zip</value>
+  </data>
+  <data name="ViewListPrefilledData" xml:space="preserve">
+    <value>Afficher la liste des données d'identification requises</value>
+  </data>
+  <data name="ViewListPreloadedData" xml:space="preserve">
+    <value>Afficher la liste des valeurs préchargées</value>
+  </data>
+  <data name="DownloadTabTemplate" xml:space="preserve">
+    <value>Télécharger le modèle ".tab" pour ce questionnaire</value>
+  </data>
+    <data name="DownloadDescListRequiredPreffiledData" xml:space="preserve">
+    <value>Variables marquées comme Identifiantes dans Designer. Téléchargez un</value>
+  </data>
+  <data name="DownloadLinkTitleListRequiredPreffiledData" xml:space="preserve">
+    <value>modèle .tab.</value>
+  </data>
+  <data name="HideListPrefilledData" xml:space="preserve">
+    <value>Masquer la liste des données d'identification requises</value>
+  </data>
+  <data name="PrefilledRequiredData" xml:space="preserve">
+    <value>Données d'identification requises</value>
+  </data>
+  <data name="IdentifyingQuestions" xml:space="preserve">
+    <value>Questions d'identification</value>
+  </data>
+  <data name="BatchFileVerificationFailed" xml:space="preserve">
+    <value>La vérification du fichier téléchargé a échoué</value>
+  </data>
+  <data name="BreadCrumbs_CreatingMultipleInterviews" xml:space="preserve">
+    <value>création de plusieurs affectations</value>
+  </data>
+  <data name="ImportFrom" xml:space="preserve">
+    <value>Importation des informations de {{fileName}} pour {{title}}</value>
+  </data>
+  <data name="ImportInterviews_PageTitle" xml:space="preserve">
+    <value>Création de plusieurs entretiens avec téléchargement en lot</value>
+  </data>
+  <data name="ImportAssignments_PageTitle" xml:space="preserve">
+    <value>Création de plusieurs affectations avec téléchargement en lot</value>
+  </data>
+  <data name="InterviewsAreNotCreated" xml:space="preserve">
+    <value>Aucun entretien n'a été créé</value>
+  </data>
+  <data name="MultipleErrorsWereFound" xml:space="preserve">
+    <value>{{count}} erreurs trouvées</value>
+    <comment>{0} - nombre d'erreurs trouvées</comment>
+  </data>
+  <data name="SingleErrorFound" xml:space="preserve">
+    <value>1 erreur trouvée</value>
+  </data>
+  <data name="BackToImport" xml:space="preserve">
+    <value>Retour à l'importation</value>
   </data>
   <data name="AssignedToMultipleEnumerators" xml:space="preserve">
-    <value>Affecté aux {0} enquêteurs</value>
+    <value>Affecté à {0} enquêteurs</value>
+    <comment>{0} - nombre d'enquêteurs (toujours &gt; 1)</comment>
   </data>
   <data name="AssignedToMultipleSupervisors" xml:space="preserve">
-    <value>Affecté aux {0} superviseurs</value>
+    <value>Affecté à {0} superviseurs</value>
+    <comment>{0} - nombre de superviseurs (toujours &gt; 1)</comment>
   </data>
   <data name="AssignedToSingleEnumerator" xml:space="preserve">
     <value>Affecté à 1 enquêteur</value>
@@ -336,158 +458,94 @@
   <data name="AssignedToSingleSupervisor" xml:space="preserve">
     <value>Affecté à 1 superviseur</value>
   </data>
-  <data name="AssignmentsAreNotCreated" xml:space="preserve">
-    <value>Aucune affectation n'a été créée</value>
-  </data>
-  <data name="BackToImport" xml:space="preserve">
-    <value>Retour à l'importation</value>
-  </data>
-  <data name="BatchFileVerificationFailed" xml:space="preserve">
-    <value>La vérification du fichier téléchargé a échoué</value>
-  </data>
-  <data name="BatchTitle" xml:space="preserve">
-    <value>Identifier et collecter des données (archive)</value>
-  </data>
-  <data name="BreadCrumbs_CreatingMultipleInterviews" xml:space="preserve">
-    <value>créer plusieurs affectations</value>
-  </data>
-  <data name="Cell" xml:space="preserve">
-    <value>Cellule</value>
+  <data name="CreateInterviews" xml:space="preserve">
+    <value>Créer des entretiens</value>
   </data>
   <data name="CreateAssignments" xml:space="preserve">
     <value>Créer des affectations</value>
   </data>
-  <data name="CreateInterviews" xml:space="preserve">
-    <value>Créer des entretiens</value>
-  </data>
-  <data name="CreatingMultipleAssignments" xml:space="preserve">
-    <value>Créer plusieurs affectations</value>
-  </data>
-  <data name="CreatingMultipleInterviews" xml:space="preserve">
-    <value>Créer plusieurs entretiens</value>
+  <data name="DataForMultipleInterviewsFound" xml:space="preserve">
+    <value>Données pour {0} entretiens trouvées</value>
+    <comment>{0} - nombre d'entretiens (toujours &gt; 1)</comment>
   </data>
   <data name="DataForMultipleAssignmentsFound" xml:space="preserve">
     <value>Données pour {0} affectations trouvées</value>
-  </data>
-  <data name="DataForMultipleInterviewsFound" xml:space="preserve">
-    <value>Données pour {0} entretiens trouvés</value>
-  </data>
-  <data name="DataForSingleAssignmentFound" xml:space="preserve">
-    <value>Données pour 1 affectation trouvée</value>
+    <comment>{0} - nombre d'affectations (toujours &gt; 1)</comment>
   </data>
   <data name="DataForSingleInterviewFound" xml:space="preserve">
-    <value>Données pour 1 entretien trouvé</value>
+    <value>Données pour 1 entretien trouvées</value>
   </data>
-  <data name="DownloadDescListRequiredPreffiledData" xml:space="preserve">
-    <value>Variables marquées comme identifiant dans le Designer. Télécharger un</value>
-  </data>
-  <data name="DownloadInvalidAssignments" xml:space="preserve">
-    <value>Télécharger les affectations invalides</value>
-  </data>
-  <data name="DownloadLinkTitleListRequiredPreffiledData" xml:space="preserve">
-    <value>Modèle ".tab".</value>
-  </data>
-  <data name="DownloadTabTemplate" xml:space="preserve">
-    <value>Télécharger le modèle ".tab" pour ce questionnaire</value>
-  </data>
-  <data name="EmptySupervisorDescription" xml:space="preserve">
-    <value>Si les noms d'utilisateur ne sont pas spécifiés, vous devrez affecter un superviseur à toutes les affectations dans une étape ultérieure.</value>
-  </data>
-  <data name="File" xml:space="preserve">
-    <value>Fichier</value>
-  </data>
-  <data name="HideListPrefilledData" xml:space="preserve">
-    <value>Masquer la liste des données d'identification requises</value>
-  </data>
-  <data name="Import_Verification_1_AssignmentVerified" xml:space="preserve">
-    <value>1 affectation vérifiée avec succès</value>
-  </data>
-  <data name="Import_Verification_1_Error" xml:space="preserve">
-    <value>1 erreur</value>
-  </data>
-  <data name="Import_Verification_AssignmentsVerified" xml:space="preserve">
-      <value>{{count}} affectations vérifiées avec succès</value>
-  </data>
-  <data name="Import_Verification_Errors" xml:space="preserve">
-      <value>Erreurs {{count}}</value>
-  </data>
-  <data name="Import_VerificationOfAssignmentData" xml:space="preserve">
-    <value>Vérification des données d'affectation</value>
-  </data>
-  <data name="Import_VerificationOfAssignments_ForQuestionnaire" xml:space="preserve">
-      <value>Vérification des affectations pour le questionnaire {{title}}</value>
-  </data>
-  <data name="Import_VerificationOfDataFile" xml:space="preserve">
-    <value>Vérification du fichier de données</value>
-  </data>
-  <data name="Import_VerificationOfDataFile_Progress" xml:space="preserve">
-      <value>étape {{verifiedCount}} de {{totalCount}}</value>
-  </data>
-  <data name="Import_VerificationOfDataFile_Succeeded" xml:space="preserve">
-    <value>Vérification du fichier de données réussie</value>
-  </data>
-  <data name="ImportAssignments_PageTitle" xml:space="preserve">
-    <value>Création de plusieurs affectations avec téléchargement groupé</value>
-  </data>
-  <data name="ImportAssignmentsFor" xml:space="preserve">
-      <value>Importation d'affectations pour {{title}}</value>
-  </data>
-  <data name="ImportFrom" xml:space="preserve">
-      <value>Importation d'informations de {{fileName}} pour {{title}}</value>
+  <data name="DataForSingleAssignmentFound" xml:space="preserve">
+    <value>Données pour 1 affectation trouvées</value>
   </data>
   <data name="Importing" xml:space="preserve">
     <value>Importation</value>
+  </data>
+  <data name="ImportInterviewsFor" xml:space="preserve">
+    <value>Importation des entretiens pour {0}</value>
+    <comment>{0} - nom et version du questionnaire</comment>
+  </data>
+  <data name="ImportAssignmentsFor" xml:space="preserve">
+    <value>Importation des affectations pour {{title}}</value>
   </data>
   <data name="ImportInterviews_Done" xml:space="preserve">
     <value>Terminé:</value>
   </data>
   <data name="ImportInterviews_NoneFailed" xml:space="preserve">
-    <value>Aucun n'a échoué</value>
-  </data>
-  <data name="ImportInterviews_PageTitle" xml:space="preserve">
-    <value>Création de plusieurs entretiens avec le téléchargement par lot</value>
-  </data>
-  <data name="ImportInterviews_SelectResponsible" xml:space="preserve">
-    <value>Sélectionnez le responsable</value>
-  </data>
-  <data name="ImportInterviewsFor" xml:space="preserve">
-    <value>Importation d'entretiens pour {0}</value>
+    <value>Aucun échec</value>
   </data>
   <data name="ImportProgressFormat" xml:space="preserve">
-      <value>{{createdCount}} sur {{totalCount}}</value>
+    <value>{{createdCount}} sur {{totalCount}}</value>
   </data>
-  <data name="InterviewsAreNotCreated" xml:space="preserve">
-    <value>Aucun entretien n'a été créé</value>
-  </data>
-  <data name="ManualModeDescription" xml:space="preserve">
-      <value>Vous pouvez créer des affectations individuelles en entrant toutes les données requises dans {{url}}</value>
-  </data>
-  <data name="ManualModeLinkTitle" xml:space="preserve">
-    <value>mode manuel</value>
-  </data>
-  <data name="MultipleAssignmentFailedToBeCreated" xml:space="preserve">
-      <value>Les affectations {{count}} n'ont pas pu être créées</value>
-  </data>
-  <data name="MultipleAssignmentsCreated" xml:space="preserve">
-      <value>{{count}} affectations créées</value>
-  </data>
-  <data name="MultipleErrorsWereFound" xml:space="preserve">
-      <value>{{count}} erreurs trouvées</value>
+  <data name="InterviewsImport_ImportingProgressPageTitle" xml:space="preserve">
+    <value>Importation des affectations</value>
   </data>
   <data name="MultipleInterviewFailedToBeCreated" xml:space="preserve">
-    <value>{0} les entretiens n'ont pas pu être créés</value>
+    <value>{0} entretiens n'ont pas pu être créés</value>
+    <comment>{0} - nombre d'entretiens créés (toujours &gt; 1)</comment>
+  </data>
+  <data name="MultipleAssignmentFailedToBeCreated" xml:space="preserve">
+    <value>{{count}} affectations n'ont pas pu être créées</value>
   </data>
   <data name="MultipleInterviewsCreated" xml:space="preserve">
     <value>{0} entretiens créés</value>
+    <comment>{0} - nombre d'entretiens créés (toujours &gt; 1)</comment>
   </data>
-  <data name="PrefilledRequiredData" xml:space="preserve">
-    <value>Données d'identification requises</value>
+  <data name="MultipleAssignmentsCreated" xml:space="preserve">
+    <value>{{count}} affectations créées</value>
+  </data>
+  <data name="SelectResponsibleToAssign" xml:space="preserve">
+    <value>Sélectionnez le responsable pour ce lot</value>
+  </data>
+  <data name="SingleInterviewCreated" xml:space="preserve">
+    <value>1 entretien créé</value>
+  </data>
+  <data name="SingleAssignmentCreated" xml:space="preserve">
+    <value>1 affectation créée</value>
+  </data>
+  <data name="SingleInterviewFailedToBeCreated" xml:space="preserve">
+    <value>1 entretien n'a pas pu être créé</value>
+  </data>
+  <data name="SingleAssignmentFailedToBeCreated" xml:space="preserve">
+    <value>1 affectation n'a pas pu être créée</value>
+  </data>
+  <data name="VerificationCompleted" xml:space="preserve">
+    <value>Vérification terminée</value>
+  </data>
+  <data name="SupervisorMustBeSelected" xml:space="preserve">
+    <value>Un superviseur ou un enquêteur doit être sélectionné</value>
+  </data>
+  <data name="Cell" xml:space="preserve">
+    <value>Cellule</value>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>Fichier</value>
+  </data>
+  <data name="UploadUsers_NotAllowedExtension" xml:space="preserve">
+    <value>Seuls les fichiers avec les extensions {0} et {1} sont autorisés pour le téléchargement.</value>
   </data>
   <data name="Prerequisite_FileOpen" xml:space="preserve">
-    <value>Le fichier téléchargé ne peut pas être ouvert. Veuillez vérifier que le format est correct.</value>
-  </data>
-  <data name="Prerequisite_Questionnaire" xml:space="preserve">
-    <value>Le questionnaire ne peut pas être utilisé pour le préchargement</value>
+    <value>Le fichier téléchargé ne peut pas être ouvert. Veuillez vérifier qu'il est au format correct.</value>
   </data>
   <data name="Prerequisite_TabOrTxtFile" xml:space="preserve">
     <value>Seuls les fichiers .tab et .txt sont autorisés pour le téléchargement.</value>
@@ -498,49 +556,52 @@
   <data name="Prerequisite_ZipFile" xml:space="preserve">
     <value>Seuls les fichiers .zip sont autorisés pour le téléchargement.</value>
   </data>
-  <data name="RunningInterviewImportProcess" xml:space="preserve">
-    <value>Aller au processus d'importation des affectations en cours</value>
+  <data name="AssignmentsAreNotCreated" xml:space="preserve">
+    <value>Aucune affectation n'a été créée</value>
   </data>
-  <data name="SelectResponsibleToAssign" xml:space="preserve">
-    <value>Sélectionnez le responsable de ce lot</value>
+  <data name="Import_VerificationOfAssignmentData" xml:space="preserve">
+    <value>Vérification des données de l'affectation</value>
   </data>
-  <data name="SimpleTitle" xml:space="preserve">
-    <value>Identification des données uniquement</value>
+  <data name="Import_VerificationOfAssignments_ForQuestionnaire" xml:space="preserve">
+    <value>Vérification des affectations pour le questionnaire {{title}}</value>
   </data>
-  <data name="SingleAssignmentCreated" xml:space="preserve">
-    <value>1 affectation créée</value>
+  <data name="Import_VerificationOfDataFile" xml:space="preserve">
+    <value>Vérification du fichier de données</value>
   </data>
-  <data name="SingleAssignmentFailedToBeCreated" xml:space="preserve">
-    <value>1 affectation n'a pu être créée</value>
+  <data name="Import_VerificationOfDataFile_Progress" xml:space="preserve">
+    <value>étape {{verifiedCount}} sur {{totalCount}}</value>
   </data>
-  <data name="SingleErrorFound" xml:space="preserve">
-    <value>1 erreur trouvée</value>
+  <data name="Import_VerificationOfDataFile_Succeeded" xml:space="preserve">
+    <value>Vérification du fichier de données réussie</value>
   </data>
-  <data name="SingleInterviewCreated" xml:space="preserve">
-    <value>1 entretien créé</value>
+  <data name="Import_Verification_1_AssignmentVerified" xml:space="preserve">
+    <value>1 affectation vérifiée avec succès</value>
   </data>
-  <data name="SingleInterviewFailedToBeCreated" xml:space="preserve">
-    <value>Un entretien n'a pu être créé</value>
+  <data name="Import_Verification_1_Error" xml:space="preserve">
+    <value>1 erreur</value>
   </data>
-  <data name="SupervisorMustBeSelected" xml:space="preserve">
-    <value>Le superviseur ou L'Enquêteur doit être sélectionné</value>
+  <data name="Import_Verification_AssignmentsVerified" xml:space="preserve">
+    <value>{{count}} affectations vérifiées avec succès</value>
   </data>
-  <data name="UploadTabFile" xml:space="preserve">
-    <value>Importer le fichier .tab</value>
+  <data name="Import_Verification_Errors" xml:space="preserve">
+    <value>{{count}} erreurs</value>
   </data>
-  <data name="UploadUsers_NotAllowedExtension" xml:space="preserve">
-    <value>Seuls les fichiers avec les extensions {0} et {1} sont autorisés pour l'importation.</value>
+  <data name="Prerequisite_Questionnaire" xml:space="preserve">
+    <value>Le questionnaire ne peut pas être utilisé pour le préchargement</value>
   </data>
-  <data name="UploadZipFile" xml:space="preserve">
-    <value>Importer le fichier .zip</value>
+  <data name="HiddenQuestions" xml:space="preserve">
+    <value>Questions cachées</value>
   </data>
-  <data name="VerificationCompleted" xml:space="preserve">
-    <value>Vérification terminée</value>
+  <data name="RosterSizeQuestions" xml:space="preserve">
+    <value>Questions source de la liste</value>
   </data>
-  <data name="ViewListPrefilledData" xml:space="preserve">
-    <value>Afficher la liste des données d'identification requises</value>
+  <data name="Select_Responsible" xml:space="preserve">
+    <value>Sélectionnez le responsable par défaut (obligatoire)</value>
   </data>
-  <data name="InterviewsImport_ImportingProgressPageTitle" xml:space="preserve">
-    <value>Importation d'entretiens</value>
+  <data name="Select_Responsible_Description" xml:space="preserve">
+    <value>Si aucun responsable n'est attribué dans le fichier de lot, utilisez ce compte de siège/superviseur/enquêteur:</value>
+  </data>
+  <data name="RequiredField" xml:space="preserve">
+    <value>Ce champ est obligatoire</value>
   </data>
 </root>

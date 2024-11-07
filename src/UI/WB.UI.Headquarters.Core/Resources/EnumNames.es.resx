@@ -117,10 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="InterviewerFacet_None" xml:space="preserve">
-    <value>Ninguna</value>
-  </data>
-  <data name="InterviewStatus_ApprovedByHeadquarters" xml:space="preserve">
+    <data name="InterviewStatus_ApprovedByHeadquarters" xml:space="preserve">
     <value>Aprobado por sede</value>
   </data>
   <data name="InterviewStatus_ApprovedBySupervisor" xml:space="preserve">
@@ -132,67 +129,76 @@
   <data name="InterviewStatus_InterviewerAssigned" xml:space="preserve">
     <value>Entrevistador asignado</value>
   </data>
-  <data name="MenuItem_Completed" xml:space="preserve">
-    <value>Completada</value>
-  </data>
-  <data name="MenuItem_Profile" xml:space="preserve">
-    <value>Perfil</value>
-  </data>
-  <data name="MenuItem_Rejected" xml:space="preserve">
-    <value>Rechazada</value>
-  </data>
-  <data name="MenuItem_Started" xml:space="preserve">
-    <value>Iniciada</value>
-  </data>
   <data name="UserRoles_Administrator" xml:space="preserve">
     <value>Administrador</value>
-  </data>
-  <data name="UserRoles_ApiUser" xml:space="preserve">
-    <value>API de usuario</value>
-  </data>
-  <data name="UserRoles_Headquarter" xml:space="preserve">
-    <value>Sede</value>
-  </data>
-  <data name="UserRoles_Interviewer" xml:space="preserve">
-    <value>Entrevistador</value>
-  </data>
-  <data name="UserRoles_Observer" xml:space="preserve">
-    <value>Observador</value>
   </data>
   <data name="UserRoles_Supervisor" xml:space="preserve">
     <value>Supervisor</value>
   </data>
-  <data name="WebInterviewUserMessages_CompleteButton" xml:space="preserve">
-    <value>Completar</value>
+  <data name="UserRoles_Interviewer" xml:space="preserve">
+    <value>Entrevistador</value>
   </data>
-  <data name="WebInterviewUserMessages_CompleteNoteToSupervisor" xml:space="preserve">
-    <value>Nota para el supervisor</value>
+  <data name="UserRoles_Headquarter" xml:space="preserve">
+    <value>Sede</value>
+  </data>
+  <data name="UserRoles_Observer" xml:space="preserve">
+    <value>Observador</value>
+  </data>
+  <data name="UserRoles_ApiUser" xml:space="preserve">
+    <value>Usuario de API</value>
+  </data>
+  <data name="MenuItem_Completed" xml:space="preserve">
+    <value>Completado</value>
+  </data>
+  <data name="MenuItem_Rejected" xml:space="preserve">
+    <value>Rechazado</value>
+  </data>
+  <data name="MenuItem_Started" xml:space="preserve">
+    <value>Iniciado</value>
+  </data>
+  <data name="MenuItem_Profile" xml:space="preserve">
+    <value>Perfil</value>
+  </data>
+  <data name="InterviewerFacet_None" xml:space="preserve">
+    <value>Ninguno</value>
   </data>
   <data name="WebInterviewUserMessages_FinishInterview" xml:space="preserve">
-    <value>Finalizar texto</value>
+    <value>Texto de finalización</value>
   </data>
   <data name="WebInterviewUserMessages_Invitation" xml:space="preserve">
     <value>Invitación de bienvenida</value>
   </data>
-  <data name="WebInterviewUserMessages_ResumeButton" xml:space="preserve">
-    <value>Resume</value>
-  </data>
   <data name="WebInterviewUserMessages_ResumeInvitation" xml:space="preserve">
-    <value>Resume Invitation</value>
+    <value>Invitación para reanudar</value>
   </data>
   <data name="WebInterviewUserMessages_ResumeWelcome" xml:space="preserve">
-    <value>Reanudar encabezado</value>
-  </data>
-  <data name="WebInterviewUserMessages_StartNewButton" xml:space="preserve">
-    <value>Iniciar nueva entrevista</value>
+    <value>Encabezado de reanudación</value>
   </data>
   <data name="WebInterviewUserMessages_SurveyName" xml:space="preserve">
     <value>Nombre de la encuesta</value>
   </data>
   <data name="WebInterviewUserMessages_WebSurveyHeader" xml:space="preserve">
-    <value>Terminar encabezado</value>
+    <value>Encabezado de finalización</value>
   </data>
   <data name="WebInterviewUserMessages_WelcomeText" xml:space="preserve">
+    <value>Encabezado de bienvenida</value>
+  </data>
+  <data name="WebInterviewUserMessages_CompleteNoteToSupervisor" xml:space="preserve">
+    <value>Nota para el supervisor</value>
+  </data>
+  <data name="WebInterviewUserMessages_CompleteButton" xml:space="preserve">
+    <value>Completar</value>
+  </data>
+  <data name="WebInterviewUserMessages_StartNewButton" xml:space="preserve">
+    <value>Iniciar nueva entrevista</value>
+  </data>
+  <data name="WebInterviewUserMessages_ResumeButton" xml:space="preserve">
+    <value>Reanudar</value>
+  </data>
+  <data name="WebInterviewUserMessages_LinkInvitation" xml:space="preserve">
+    <value>Invitación</value>
+  </data>
+  <data name="WebInterviewUserMessages_LinkWelcome" xml:space="preserve">
     <value>Encabezado de bienvenida</value>
   </data>
 </root>

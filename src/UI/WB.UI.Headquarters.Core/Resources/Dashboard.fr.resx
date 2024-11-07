@@ -117,10 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Actions" xml:space="preserve">
-    <value>actes</value>
-  </data>
-  <data name="AllData" xml:space="preserve">
+    <data name="AllData" xml:space="preserve">
     <value>Toutes les données</value>
   </data>
   <data name="AllDataSpss" xml:space="preserve">
@@ -156,8 +153,14 @@
   <data name="LastEntryDate" xml:space="preserve">
     <value>Modifié le</value>
   </data>
+  <data name="NewAssignment" xml:space="preserve">
+    <value>Nouvelle affectation</value>
+  </data>
   <data name="Questionnaires" xml:space="preserve">
     <value>Questionnaires</value>
+  </data>
+  <data name="Maps" xml:space="preserve">
+    <value>Cartes</value>
   </data>
   <data name="Title" xml:space="preserve">
     <value>Titre</value>
@@ -165,20 +168,26 @@
   <data name="Version" xml:space="preserve">
     <value>Version</value>
   </data>
-  <data name="Questionnaire" xml:space="preserve">
-    <value>Questionnaire</value>
-  </data>
-  <data name="DeleteQuestionnaire" xml:space="preserve">
-    <value>Supprimer le questionnaire</value>
+  <data name="MapDashboard" xml:space="preserve">
+    <value>Tableau de bord des cartes</value>
   </data>
   <data name="ImportDate" xml:space="preserve">
     <value>Importé sur</value>
   </data>
-  <data name="Maps" xml:space="preserve">
-    <value>Cartes</value>
+  <data name="Actions" xml:space="preserve">
+    <value>Actes</value>
   </data>
-  <data name="NewAssignment" xml:space="preserve">
-    <value>Nouvelle affectation</value>
+  <data name="DeleteQuestionnaire" xml:space="preserve">
+    <value>Supprimer le questionnaire</value>
+  </data>
+  <data name="ExportQuestionnaire" xml:space="preserve">
+    <value>Exporter le questionnaire</value>
+  </data>
+  <data name="SaveQuestionnaire" xml:space="preserve">
+    <value>Enregistrer le document du questionnaire</value>
+  </data>
+  <data name="Questionnaire" xml:space="preserve">
+    <value>Questionnaire</value>
   </data>
   <data name="SurveySetupIntroMessage1" xml:space="preserve">
     <value>Cliquez sur le bouton Importer le questionnaire pour charger un questionnaire à partir du Designer</value>
@@ -186,11 +195,17 @@
   <data name="SurveySetupIntroMessage2" xml:space="preserve">
     <value>Cliquez sur un questionnaire dans la liste pour créer des affectations d'entretien</value>
   </data>
-  <data name="UploadAssignments" xml:space="preserve">
-    <value>Importer des affectations</value>
-  </data>
   <data name="WebInterviewSetup" xml:space="preserve">
     <value>Configuration de L'entretien Web</value>
+  </data>
+  <data name="RecordAudio" xml:space="preserve">
+    <value>Enregistrer l'audio</value>
+  </data>
+  <data name="QuestionnairePreview" xml:space="preserve">
+    <value>Aperçu du questionnaire</value>
+  </data>
+  <data name="UploadAssignments" xml:space="preserve">
+    <value>Importer des affectations</value>
   </data>
   <data name="DeleteMap" xml:space="preserve">
     <value>Supprimer la carte</value>
@@ -198,7 +213,49 @@
   <data name="DeleteMapUser" xml:space="preserve">
     <value>Supprimer l'utilisateur de la carte</value>
   </data>
-  <data name="ExportQuestionnaire" xml:space="preserve">
-    <value>Exporter le questionnaire</value>
+  <data name="UpgradeAssignments" xml:space="preserve">
+    <value>Mettre à jour les affectations</value>
+  </data>
+  <data name="RecordAudioTitle" xml:space="preserve">
+    <value>L'application Interviewer enregistrera l'audio de l'entretien lorsque l'audit audio est activé. Notez que la quantité de données de synchronisation sera considérablement plus grande.</value>
+  </data>
+  <data name="SendInvitations" xml:space="preserve">
+    <value>Envoyer des invitations</value>
+  </data>
+  <data name="DownloadLinks" xml:space="preserve">
+    <value>Télécharger les liens web</value>
+  </data>
+  <data name="WebMode" xml:space="preserve">
+    <value>Mode</value>
+  </data>
+  <data name="Details" xml:space="preserve">
+    <value>Détails</value>
+  </data>
+  <data name="ShowOnDesigner" xml:space="preserve">
+    <value>Afficher sur le Designer</value>
+  </data>
+  <data name="ImportedBy" xml:space="preserve">
+    <value>Importé par</value>
+  </data>
+  <data name="ImportedByText" xml:space="preserve">
+    <value>Utilisateur {{role}} {{name}}</value>
+  </data>
+  <data name="QuestionnaireDeleteWarn" xml:space="preserve">
+    <value>{{receivedInterviews}} entretiens et {{receivedAssignments}} affectations pour de nouveaux entretiens ont été reçus par les enquêteurs/superviseurs travaillant déconnectés. Après avoir confirmé la suppression de l'enquête, le serveur n'acceptera plus les informations basées sur ces entretiens/affectations, et elles disparaîtront lors de la prochaine synchronisation sans possibilité de récupération, même si elles contiennent des informations nouvellement saisies/modifiées. Il est de votre responsabilité d'avertir/informer les enquêteurs de ne plus remplir ces entretiens/affectations, car ils ne seront pas automatiquement notifiés. Voulez-vous continuer ?</value>
+  </data>
+  <data name="TypeQuestionnaireName" xml:space="preserve">
+    <value>Veuillez taper '{{questionnaireTitle}}' pour confirmer</value>
+  </data>
+  <data name="UsersManagement" xml:space="preserve">
+    <value>Gestion des utilisateurs</value>
+  </data>
+  <data name="CreateUser" xml:space="preserve">
+    <value>Créer un utilisateur</value>
+  </data>
+  <data name="ExposedVariables" xml:space="preserve">
+    <value>Variables exposées</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Modifier</value>
   </data>
 </root>

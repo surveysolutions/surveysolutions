@@ -104,7 +104,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 if (this.Mask.IsNullOrEmpty()) 
                     return UIResources.TextQuestion_Hint;
 
-                string maskHint = this.Mask.Replace('*', '_').Replace('#', '_').Replace('~', '_');
+                string maskHint = this.Mask.Replace('*', 'ˍ').Replace('#', 'ˍ').Replace('~', 'ˍ');
                 return UIResources.TextQuestion_MaskHint.FormatString(maskHint);
             }
         }

@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="PL0002_MoreThenOneLevel" xml:space="preserve">
-    <value>[PL0002] N / A</value>
+    <value>[PL0002] N/A. Contactez votre support serveur.</value>
   </data>
   <data name="PL0003_ColumnWasntMappedOnQuestion" xml:space="preserve">
     <value>La colonne ne peut être représentée par aucune question du questionnaire.</value>
@@ -126,7 +126,7 @@
   <data name="PL0004_FileWasntMappedRoster" xml:space="preserve">
     <value>Le fichier ne peut être représenté par aucun tableau dans le questionnaire.</value>
   </data>
-    <data name="PL0006_IdDublication" xml:space="preserve">
+  <data name="PL0006_IdDublication" xml:space="preserve">
     <value>Valeurs ID en doublon trouvées.</value>
   </data>
   <data name="PL0007_ServiceColumnIsAbsent" xml:space="preserve">
@@ -138,10 +138,10 @@
   <data name="PL0009_RosterIdIsInconsistantWithRosterSizeQuestion" xml:space="preserve">
     <value>L'ID du tableau ne correspond pas à la taille du tableau.</value>
   </data>
-    <data name="PL0014_ParsedValueIsNotAllowed" xml:space="preserve">
+  <data name="PL0014_ParsedValueIsNotAllowed" xml:space="preserve">
     <value>La valeur de la question fournie n'est pas autorisée.</value>
   </data>
-    <data name="PL0016_ExpectedDateTimeNotParsed" xml:space="preserve">
+  <data name="PL0016_ExpectedDateTimeNotParsed" xml:space="preserve">
     <value>Date ou heure saisie est non valide dans la question de type date.</value>
   </data>
   <data name="PL0017_ExpectedGpsNotParsed" xml:space="preserve">
@@ -156,29 +156,35 @@
   <data name="PL0022_AnswerIsIncorrectBecauseIsRosterSizeAndNegative" xml:space="preserve">
     <value>La question sur la taille du tableau ne peut de valeurs négatives.</value>
   </data>
-    <data name="PL0024_DataWasNotFound" xml:space="preserve">
-    <value>Les données de préchargement n'ont pas été trouvées</value>
+  <data name="PL0024_DataWasNotFound" xml:space="preserve">
+    <value>Les données de préchargement n'ont pas été trouvées.</value>
   </data>
-    <data name="PL0026_ResponsibleWasNotFound" xml:space="preserve">
+  <data name="PL0026_ResponsibleWasNotFound" xml:space="preserve">
     <value>Le responsable n'existe pas pour 1 ou plusieurs observations.</value>
   </data>
   <data name="PL0027_ResponsibleIsLocked" xml:space="preserve">
     <value>Le Responsable est un utilisateur verrouillé pour 1 ou plusieurs observations.</value>
   </data>
+  <data name="PL0028_UserIsNotHQOrSupervisorOrInterviewer" xml:space="preserve">
+    <value>L'utilisateur n'est ni Quartier Général, ni Superviseur, ni Enquêteur pour 1 ou plusieurs observations.</value>
+  </data>
   <data name="PL0029_AnswerIsIncorrectBecauseIsRosterSizeAndMoreThan40" xml:space="preserve">
     <value>La réponse à la question sur la taille du tableau ne peut pas être supérieure à {0}.</value>
   </data>
   <data name="PL0030_GpsFieldsRequired" xml:space="preserve">
-    <value>Les questions GPS nécessitent des colonnes séparées pour la latitude et la longitude</value>
+    <value>Les questions GPS nécessitent des colonnes séparées pour la latitude et la longitude.</value>
+  </data>
+  <data name="PL0030_GpsMandatoryFilds" xml:space="preserve">
+    <value>L'identification de la question GPS nécessite que la latitude et la longitude soient définies.</value>
   </data>
   <data name="PL0031_ColumnNameDuplicatesFound" xml:space="preserve">
     <value>Deux ou plusieurs colonnes ont le même nom.</value>
   </data>
   <data name="PL0032_LatitudeMustBeGeaterThenN90AndLessThen90" xml:space="preserve">
-    <value>La latitude doit être supérieure à -90 ° et inférieure à 90 °.</value>
+    <value>La latitude doit être supérieure à -90° et inférieure à 90°.</value>
   </data>
   <data name="PL0033_LongitudeMustBeGeaterThenN180AndLessThen180" xml:space="preserve">
-    <value>La longitude doit être supérieure à -180 ° et inférieure à 180 °.</value>
+    <value>La longitude doit être supérieure à -180° et inférieure à 180°.</value>
   </data>
   <data name="PL0034_CommaSymbolIsNotAllowedInNumericAnswer" xml:space="preserve">
     <value>Séparateur décimal non valide. Le symbole "," n'est pas autorisé dans les réponses numériques. Veuillez utiliser "." au lieu de ",".</value>
@@ -189,16 +195,64 @@
   <data name="PL0036_QuantityShouldBeGreaterThanMinus1" xml:space="preserve">
     <value>La quantité doit être supérieure ou égale à -1.</value>
   </data>
-    <data name="PL0040_QuestionnaireDataIsNotFound" xml:space="preserve">
+  <data name="PL0040_QuestionnaireDataIsNotFound" xml:space="preserve">
     <value>Aucun fichier de préchargement trouvé avec des données du questionnaire.</value>
   </data>
-  <data name="PL0030_GpsMandatoryFilds" xml:space="preserve">
-    <value>L'identification de la question GPS nécessite que la latitude et la longitude soient définies.</value>
-  </data>
   <data name="PL0041_AnswerExceedsMaxAnswersCount" xml:space="preserve">
-    <value>La question à choix multiple ne peut pas avoir plus de max réponses.</value>
+    <value>La question à choix multiple ne peut pas avoir plus de réponses que le nombre maximum autorisé.</value>
+  </data>
+  <data name="PL0050_CategoricalMulti_AnswerMustBeGreaterOrEqualThen1" xml:space="preserve">
+    <value>La valeur négative n'est pas autorisée pour la question à sélection multiple catégorielle.</value>
   </data>
   <data name="PL0042_IdIsEmpty" xml:space="preserve">
     <value>La colonne Id est vide.</value>
+  </data>
+  <data name="ArchiveWithPasswordNotSupported" xml:space="preserve">
+    <value>Les archives protégées par mot de passe ne sont pas prises en charge.</value>
+  </data>
+  <data name="PL0052_ColumnByTextListRosterSizeAnswerNotFound" xml:space="preserve">
+    <value>Le tableau de liste doit avoir une colonne pour les réponses de la liste de texte.</value>
+  </data>
+  <data name="PL0047_ProtectedVariables_MissingColumn" xml:space="preserve">
+    <value>La colonne requise {0} est manquante.</value>
+  </data>
+  <data name="PL0048_ProtectedVariables_VariableNotFoundInQuestionnaire" xml:space="preserve">
+    <value>La variable protégée n'est pas trouvée dans le questionnaire fourni.</value>
+  </data>
+  <data name="PL0049_ProtectedVariables_VariableNotSupportsProtection" xml:space="preserve">
+    <value>Le type de variable ne peut pas être protégé.</value>
+  </data>
+  <data name="PL0053_InconsistentNumericRosterInstanceCodes" xml:space="preserve">
+    <value>Code de tableau incohérent pour le tableau numérique. La séquence des codes de tableau doit être 0, 1, ... jusqu'au nombre d'instances de tableau.</value>
+  </data>
+  <data name="PL0054_MaxInterviewsCountByAssignmentExeeded" xml:space="preserve">
+    <value>La quantité maximale ne doit pas dépasser {0}.</value>
+  </data>
+  <data name="PL0055_InvalidEmail" xml:space="preserve">
+    <value>Email non valide.</value>
+  </data>
+  <data name="PL0056_InvalidPassword" xml:space="preserve">
+    <value>Mot de passe non valide. Au moins 6 chiffres et lettres majuscules ou un seul symbole '?' pour générer un mot de passe.</value>
+  </data>
+  <data name="PL0057_IncosistentQuantityAndEmail" xml:space="preserve">
+    <value>Pour les affectations avec email fourni, la quantité autorisée est 1.</value>
+  </data>
+  <data name="PL0058_IncosistentWebmodeAndEmail" xml:space="preserve">
+    <value>Le mode Web doit être activé pour les affectations ayant un email.</value>
+  </data>
+  <data name="PL0059_IncosistentWebmodeAndPassword" xml:space="preserve">
+    <value>Le mode Web doit être activé pour les affectations ayant un mot de passe.</value>
+  </data>
+  <data name="PL0060_WebmodeSizeOneHasNoEmailOrPassword" xml:space="preserve">
+    <value>L'affectation avec taille 1 pour le mode Web doit avoir soit un email, soit un mot de passe fourni.</value>
+  </data>
+  <data name="PL0061_DuplicatePasswordWithQuantity1" xml:space="preserve">
+    <value>Le mot de passe n'est pas unique. Le mot de passe par affectation pour le mode Web avec quantité 1 doit être unique.</value>
+  </data>
+  <data name="PL0062_WebModeOnlyForInterviewer" xml:space="preserve">
+    <value>Toutes les affectations pour les entretiens Web doivent être faites à un enquêteur.</value>
+  </data>
+  <data name="PL0063_NoPermittedQuestion" xml:space="preserve">
+    <value>La réponse à la question avec le nom de variable {0} ne peut pas être préchargée, car elle est de type non pris en charge. Reportez-vous à l'article de support suivant https://support.mysurvey.solutions/questionnaire-designer/limits/design-limitations-by-question-type pour plus de détails sur ce qui peut être préchargé dans la version actuelle.</value>
   </data>
 </root>

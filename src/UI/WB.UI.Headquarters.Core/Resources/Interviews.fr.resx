@@ -117,15 +117,41 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ApproveConfirmMessage" xml:space="preserve">
-      <value>{{count}} entrevue seront approuvées. </value>
+    <data name="ApproveConfirmMessage" xml:space="preserve">
+      <value>{{count}} entrevue seront approuvées.</value>
+  </data>
+  <data name="ApproveConfirmMessageHQ" xml:space="preserve">
+      <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; entrevue(s) seront approuvées.&lt;/h3&gt;
+&lt;b&gt;Remarque!&lt;/b&gt; Vous pouvez approuver des entrevues avec les statuts suivants uniquement: &lt;i&gt;{{status1}}&lt;/i&gt;, &lt;i&gt;{{status2}}&lt;/i&gt; et &lt;i&gt;{{status3}}&lt;/i&gt;.</value>
   </data>
   <data name="AssignConfirmMessage" xml:space="preserve">
-    <value>&lt;h3&gt; &lt;b&gt; {{count}} &lt;/b&gt; entretien (s) sélectionnés pour la réaffectation. &lt;/h3&gt;
-&lt;b&gt; Attention! &lt;/b&gt; Vous pouvez affecter des entretiens avec les états suivants uniquement: &lt;i&gt; {{status1}} &lt;/i&gt;, &lt;i&gt; {{status2}} (seulement à un autre enuêteur de la même équipe) &lt;/i&gt; et &lt;i&gt; {{status3}} &lt;/i&gt;.</value>
+    <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; entrevue(s) sélectionnées pour réaffectation.&lt;/h3&gt;
+&lt;b&gt;Remarque!&lt;/b&gt; Vous pouvez affecter des entrevues avec les statuts suivants uniquement: &lt;i&gt;{{status1}}&lt;/i&gt;, &lt;i&gt;{{status2}} (seulement à un autre enquêteur)&lt;/i&gt; et &lt;i&gt;{{status3}}&lt;/i&gt;.</value>
   </data>
   <data name="AssignReceivedConfirm" xml:space="preserve">
-    <value>Faire appliquer sur {{count}} entretiens déjà reçus par l'enquêteur</value>
+    <value>Appliquer sur {{count}} entrevue(s) déjà reçue(s) par l'enquêteur</value>
+  </data>
+  <data name="AssignReceivedWarning" xml:space="preserve">
+    <value>Les enquêteurs responsables actuels ne seront pas informés de la réaffectation avant la prochaine synchronisation. S'ils ont déjà commencé à travailler sur l'entrevue, toutes les données qu'ils ont saisies avant la prochaine synchronisation seront SUPPRIMÉES!</value>
+  </data>
+  <data name="ApproveReceivedWarning" xml:space="preserve">
+    <value>Les enquêteurs responsables actuels ne seront pas informés de l'approbation de l'entrevue avant la prochaine synchronisation. S'ils ont déjà commencé à travailler sur l'entrevue, toutes les données qu'ils ont saisies avant la prochaine synchronisation seront SUPPRIMÉES!</value>
+  </data>
+  <data name="SwitchToCawiReceivedWarning" xml:space="preserve">
+    <value>Les enquêteurs responsables actuels ne seront pas informés du changement de mode d'entrevue avant la prochaine synchronisation. S'ils ont déjà commencé à travailler sur l'entrevue, toutes les données qu'ils ont saisies avant la prochaine synchronisation seront SUPPRIMÉES!</value>
+  </data>
+  <data name="AssignToOtherTeamConfirmMessage" xml:space="preserve">
+    <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; entrevue(s) seront assignées.&lt;/h3&gt;
+&lt;b&gt;Remarque!&lt;/b&gt; Seules les entrevues qui ne sont pas dans les statuts &lt;i&gt;{{status1}}&lt;/i&gt; et &lt;i&gt;{{status2}}&lt;/i&gt; peuvent être réaffectées.</value>
+  </data>
+  <data name="ChooseResponsibleInterviewer" xml:space="preserve">
+    <value>Veuillez choisir un enquêteur.</value>
+  </data>
+  <data name="ChooseResponsibleSupervisor" xml:space="preserve">
+    <value>Veuillez choisir un superviseur.</value>
+  </data>
+  <data name="ChooseResponsible" xml:space="preserve">
+    <value>Veuillez choisir un superviseur ou un enquêteur.</value>
   </data>
   <data name="ContinueConfirmMessage" xml:space="preserve">
     <value>Voulez-vous continuer?</value>
@@ -134,83 +160,104 @@
     <value>Voulez-vous continuer?</value>
   </data>
   <data name="DeleteConfirmMessageHQ" xml:space="preserve">
-    <value>&lt;h3&gt; &lt;b&gt; {{count}} &lt;/b&gt; entretien (s) seront supprimés. &lt;/h3&gt;
-&lt;b&gt; Attention! &lt;/b&gt; Vous pouvez supprimer les interviews non reçues par Interviewer uniquement avec les statuts suivants: &lt;i&gt; {{status1}} &lt;/i&gt; et &lt;i&gt; {{status2}} &lt;/i&gt;. </value>
+    <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; entrevue(s) seront supprimées.&lt;/h3&gt;
+&lt;b&gt;Remarque!&lt;/b&gt; Vous pouvez supprimer des entrevues non reçues par l'enquêteur avec les statuts suivants uniquement: &lt;i&gt;{{status1}}&lt;/i&gt; et &lt;i&gt;{{status2}}&lt;/i&gt;.</value>
   </data>
   <data name="RejectConfirmMessage" xml:space="preserve">
-    <value>&lt;h3&gt; &lt;b&gt; {{count}} &lt;/b&gt; entretien (s) seront rejetés. &lt;/h3&gt;
-&lt;b&gt; Attention! &lt;/b&gt; Vous ne pouvez rejeter les entretiens qu'avec les états suivants uniquement: &lt;i&gt; {{status1}} &lt;/i&gt; et &lt;i&gt; {{status2}} &lt;/i&gt;.
-</value>
+    <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; entrevue(s) seront rejetées.&lt;/h3&gt;
+&lt;b&gt;Remarque!&lt;/b&gt; Vous pouvez rejeter des entrevues avec les statuts suivants uniquement: &lt;i&gt;{{status1}}&lt;/i&gt; et &lt;i&gt;{{status2}}&lt;/i&gt;.</value>
   </data>
   <data name="RejectConfirmMessageHQ" xml:space="preserve">
-    <value>&lt;h3&gt; &lt;b&gt; {{count}} &lt;/b&gt; entretien (s) seront rejetés. &lt;/h3&gt;
-&lt;b&gt; Attention! &lt;/b&gt; Vous ne pouvez rejeter les entretiens qu'avec l'état suivant uniquement: &lt;i&gt; {{status1}} &lt;/i&gt; et &lt;i&gt; {{status2}} &lt;/i&gt;.
-</value>
+    <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; entrevue(s) seront rejetées.&lt;/h3&gt;
+&lt;b&gt;Remarque!&lt;/b&gt; Vous pouvez rejeter des entrevues avec les statuts suivants uniquement: &lt;i&gt;{{status1}}&lt;/i&gt; et &lt;i&gt;{{status2}}&lt;/i&gt;.</value>
+  </data>
+  <data name="RejectToOriginal" xml:space="preserve">
+    <value>Rejeter au responsable original</value>
+  </data>
+  <data name="RejectToNewResponsible" xml:space="preserve">
+    <value>Rejeter et choisir un nouveau responsable</value>
   </data>
   <data name="UnapproveConfirmMessageHQ" xml:space="preserve">
-    <value>&lt;h3&gt; &lt;b&gt; {{count}} &lt;/b&gt; entretien (s) ne seront pas approuvés. &lt;/h3&gt;
-&lt;b&gt; Attention! &lt;/b&gt; Vous ne pouvez désapprouver que les entretiens qui ont l'état suivant uniquement: &lt;i&gt; {{status1}} &lt;/i&gt;.
-</value>
-  </data>
-  <data name="ApproveConfirmMessageHQ" xml:space="preserve">
-      <value>&lt;h3&gt; &lt;b&gt; {{count}} &lt;/b&gt; entretien (s) seront approuvées. &lt;/h3&gt;  
-&lt;b&gt; Remarque! &lt;/b&gt; Vous pouvez approuver des entretiens avec les états suivants uniquement: &lt;i&gt; {{status1}} &lt;/i&gt;, &lt;i&gt; {{status2}} &lt;/i&gt;, &lt;i&gt;{{status3}}&lt;/i&gt;.</value>
+    <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; entrevue(s) seront désapprouvées.&lt;/h3&gt;
+&lt;b&gt;Remarque!&lt;/b&gt; Vous pouvez désapprouver des entrevues avec le statut suivant uniquement: &lt;i&gt;{{status1}}&lt;/i&gt;.</value>
   </data>
   <data name="Assignment" xml:space="preserve">
-    <value>Affectation</value>
-  </data>
-  <data name="AssignToOtherTeamConfirmMessage" xml:space="preserve">
-    <value>&lt;h3&gt; &lt;b&gt; {{count}} &lt;/b&gt; entretien (s) seront assignés. &lt;/h3&gt;
-&lt;b&gt; Note! &lt;/b&gt; Seuls les entretiens qui ne sont pas dans l'état &lt;i&gt; {{status1}} &lt;/i&gt; et &lt;i&gt; {{status2}} &lt;/i&gt; peuvent être réaffectés.
-</value>
-  </data>
-  <data name="ChooseResponsible" xml:space="preserve">
-    <value>Aucun responsable n'est choisi pour des entretiens. Veuillez choisir un chef d'équipe responsable ou un enquêteur responsable.</value>
-  </data>
-  <data name="ChooseResponsibleInterviewer" xml:space="preserve">
-    <value>Aucun responsable n'est choisi pour des entretiens. S'il vous plaît choisir un chef d'équipe responsable.</value>
-  </data>
-  <data name="ChooseResponsibleSupervisor" xml:space="preserve">
-    <value>Aucun responsable n'est choisi pour des entretiens. S'il vous plaît choisir un chef d'équipe responsable.</value>
+    <value>ID d'affectation</value>
   </data>
   <data name="ClientKeyTitle" xml:space="preserve">
-    <value>Le code qui a été généré sur l'appareil a été modifié en raison de sa coincidence avec celui d'un entretien existant sur le serveur.</value>
+    <value>Clé qui a été générée sur l'appareil, mais qui a été modifiée en raison de la collision avec une entrevue existante sur le serveur</value>
   </data>
   <data name="Tooltip_Filter_Assignment" xml:space="preserve">
     <value>ID d'affectation. Cliquez dans le champ pour taper le numéro complet d'identification.</value>
   </data>
+  <data name="Tooltip_Filter_Questionnaire" xml:space="preserve">
+    <value>Sélectionnez un questionnaire pour voir ses entrevues associées dans la liste. Sélectionnez "Tous les questionnaires" pour voir les entrevues associées à n'importe quel questionnaire.</value>
+  </data>
   <data name="Tooltip_Filter_Responsible" xml:space="preserve">
-    <value>Utilisateur responsable Cliquez dans le champ pour choisir un nom d'utilisateur en le sélectionnant directement ou en tapant pour filtrer la liste des noms d'utilisateur plus loin.</value>
+    <value>Utilisateur responsable. Cliquez dans le champ pour choisir un nom d'utilisateur en le sélectionnant directement ou en tapant pour filtrer la liste des noms d'utilisateur.</value>
   </data>
   <data name="Tooltip_Filter_Status" xml:space="preserve">
-    <value>Statut de l'entretien. Sélectionnez un étant pour voir tous les entretiens avec cet état. Sélectionnez "Tous états" pour voir les entretiens avec n'importe quel étant.</value>
+    <value>Statut de l'entrevue. Sélectionnez un statut pour voir toutes les entrevues avec ce statut. Sélectionnez "Tous les statuts" pour voir les entrevues avec n'importe quel statut.</value>
   </data>
   <data name="Tooltip_Table_Assignment" xml:space="preserve">
-    <value>Identifiant de l'affectation à laquelle appartient cet entretien. Cliquez sur l'icône de tri pour ordonner par numéro d'affectation.</value>
+    <value>Identifiant de l'affectation à laquelle cette entrevue appartient. Cliquez sur l'icône de tri pour trier par numéro d'affectation.</value>
   </data>
   <data name="Tooltip_Table_HideShowIdentifying" xml:space="preserve">
-    <value>Cliquez ici pour cacher ou montrer les questions d'identification. Masquer les questions d'identification peut fournir plus d'espace pour d'autres informations. La présentation de questions d'identification peut fournir des détails pour différencier les entretiens.</value>
+    <value>Cliquez ici pour masquer ou afficher les questions d'identification. Masquer les questions d'identification peut fournir plus d'espace pour d'autres informations. Afficher les questions d'identification peut fournir des détails pour différencier les entrevues.</value>
   </data>
   <data name="Tooltip_Table_IdentifyingQuestions" xml:space="preserve">
     <value>Informations qui identifient chaque affectation. Ce sont les réponses aux questions marquées comme identifiant dans le Designer.</value>
   </data>
   <data name="Tooltip_Table_InterviewKey" xml:space="preserve">
-    <value>Identificateur abrégé qui apparaît dans tout le système - au Headquarter, au Supervisor et à l'Interviewer. Envisagez d'utiliser cet ID lors de la communication avec l'équipe de terrain  plutôt que dans un grand nombre de questions d'identification.</value>
+    <value>Identificateur abrégé qui apparaît dans tout le système - au Quartier Général, au Superviseur et à l'Enquêteur. Envisagez d'utiliser cet ID lors de la communication avec l'équipe de terrain plutôt que dans un grand nombre de questions d'identification.</value>
   </data>
   <data name="Tooltip_Table_LastUpdate" xml:space="preserve">
-    <value>Quand les modifications apportées à l'entretien ont été publiées pour la dernière fois sur le serveur. Cliquez sur l'icône de tri pour ordonner par heure.</value>
+    <value>Quand les modifications apportées à l'entrevue ont été publiées pour la dernière fois sur le serveur. Cliquez sur l'icône de tri pour trier par heure.</value>
   </data>
   <data name="Tooltip_Table_ReceivedByInterviewer" xml:space="preserve">
-    <value>Indicateur qui indique si l'entretien a été téléchargé sur la tablette de l'enquêteur. Cliquez sur l'icône de tri pour ordonner par le temps de réception par l'enquêteur.</value>
+    <value>Indicateur qui indique si l'entrevue a été téléchargée sur la tablette de l'enquêteur. Cliquez sur l'icône de tri pour trier par le temps de réception par l'enquêteur.</value>
   </data>
   <data name="Tooltip_Table_Responsible" xml:space="preserve">
-    <value>L'utilisateur actuellement responsable de l'affectation. Cliquez sur l'icône de tri pour ordonner par le nom d'utilisateur.</value>
+    <value>L'utilisateur actuellement responsable de l'affectation. Cliquez sur l'icône de tri pour trier par le nom d'utilisateur.</value>
   </data>
   <data name="Tooltip_Table_Status" xml:space="preserve">
-    <value>Etat de l'entretien dans le flux de travail d'enquête. Cliquez sur l'icône de tri pour ordonner par état.</value>
+    <value>Statut de l'entrevue dans le flux de travail d'enquête. Cliquez sur l'icône de tri pour trier par statut.</value>
+  </data>
+  <data name="Tooltip_Table_ErrorsCount" xml:space="preserve">
+    <value>Montre le nombre total de questions et de textes statiques invalides dans l'entrevue. Plusieurs conditions de validation échouées sur la même entité sont comptées comme 1.</value>
   </data>
   <data name="Errors" xml:space="preserve">
     <value>Erreurs</value>
+  </data>
+  <data name="Tooltip_Table_NotAnsweredCount" xml:space="preserve">
+    <value>Nombre de questions sans réponse. Inclut les questions du superviseur, d'identification et de l'enquêteur. Peut contenir des valeurs nulles pour les entrevues qui ont été complétées avant la version 20.09.</value>
+  </data>
+  <data name="Tooltip_Table_InterviewMode" xml:space="preserve">
+    <value>Afficher le statut actuel (CAPI ou CAWI) de chaque entrevue</value>
+  </data>
+  <data name="NotAnsweredCount" xml:space="preserve">
+    <value>Non répondu</value>
+  </data>
+  <data name="ChooseQuestionsTitle" xml:space="preserve">
+    <value>Choisissez les questions d'identification à utiliser dans le filtre</value>
+  </data>
+  <data name="DynamicFilter" xml:space="preserve">
+    <value>Filtre dynamique</value>
+  </data>
+  <data name="FiltersByQuestions" xml:space="preserve">
+    <value>Filtres par questions</value>
+  </data>
+  <data name="QuestionsSelector" xml:space="preserve">
+    <value>Sélecteur de questions</value>
+  </data>
+  <data name="AdvancedFilterSelector" xml:space="preserve">
+    <value>Filtre dynamique</value>
+  </data>
+  <data name="QuestionsFilterNotAvailable" xml:space="preserve">
+    <value>Les filtres par questions ne sont disponibles que lorsque la version spécifique du questionnaire est sélectionnée</value>
+  </data>
+  <data name="DynamicFilterNotAvailable" xml:space="preserve">
+    <value>Aucune donnée disponible</value>
   </data>
   <data name="ApproveConfirmMessage_other" xml:space="preserve">
       <value>{{count}} entrevues seront approuvées.</value>
@@ -219,6 +266,27 @@
       <value>Remarque!</value>
   </data>
   <data name="ApproveConfirmMessage_Statuses" xml:space="preserve">
-      <value>Vous pouvez approuver des entretiens avec les statuts suivants uniquement: {{status1}}, {{status2}}, {{status3}}</value>
+      <value>Vous pouvez approuver des entrevues avec les statuts suivants uniquement: {{status1}}, {{status2}} et {{status3}}.</value>
+  </data>
+  <data name="DynamicFilter_MatchType" xml:space="preserve">
+    <value>Type de correspondance</value>
+  </data>
+  <data name="DynamicFilter_MatchTypes_And" xml:space="preserve">
+    <value>ET</value>
+  </data>
+  <data name="DynamicFilter_MatchTypes_Or" xml:space="preserve">
+    <value>OU</value>
+  </data>
+  <data name="DynamicFilter_MatchTypes_AddRule" xml:space="preserve">
+    <value>Ajouter une règle</value>
+  </data>
+  <data name="DynamicFilter_MatchTypes_AddGroup" xml:space="preserve">
+    <value>Ajouter un groupe</value>
+  </data>
+  <data name="DynamicFilter_MatchTypes_ValuePlaceholder" xml:space="preserve">
+    <value>valeur</value>
+  </data>
+  <data name="WebInterviewResponsibleWarning" xml:space="preserve">
+      <value>Le responsable n'est pas l'enquêteur. Le lien ne fonctionnera pas.</value>
   </data>
 </root>

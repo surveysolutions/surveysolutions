@@ -42,33 +42,26 @@
         <PackageReference Include="Google.Apis.Auth" Version="1.68.0" />
         <PackageReference Include="Google.Apis.Core" Version="1.68.0" />
         <PackageReference Include="Google.Apis.Drive.v3" Version="1.68.0.3428" />
-        <PackageReference Include="HtmlSanitizer" Version="8.0.865" />
-        <PackageReference Include="Humanizer.Core" Version="2.14.1" />
-        <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="8.0.6" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.6" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.6">
-            <PrivateAssets>all</PrivateAssets>
+        <PackageReference Include="HtmlSanitizer" Version="8.1.870" />        <PackageReference Include="Humanizer.Core" Version="2.14.1" />
+        <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="8.0.10" />        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.10" />        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.10">            <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="8.0.0" />
-        <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions" Version="8.0.6" />
+        <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="8.0.1" />        <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions" Version="8.0.6" />
         <PackageReference Include="Microsoft.Extensions.FileProviders.Abstractions" Version="8.0.0" />
-        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.1" />
-        <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.2" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.2" />        <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.2" />
         <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
         <PackageReference Include="Microsoft.Graph" Version="5.57.0" />
         <PackageReference Include="Microsoft.Graph.Core" Version="3.1.21" />
-        <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.0.2" />
+        <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.1.2" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-        <PackageReference Include="Npgsql" Version="8.0.3" />
-        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.4" />
-        <PackageReference Include="Refit" Version="7.0.0" />
-        <PackageReference Include="prometheus-net" Version="8.2.1" />
-        <PackageReference Include="Scrutor" Version="4.2.2" />
+        <PackageReference Include="Npgsql" Version="8.0.5" />
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.10" />
+        <PackageReference Include="Refit" Version="7.2.1" />
+        <PackageReference Include="prometheus-net" Version="8.2.1" />        <PackageReference Include="Scrutor" Version="4.2.2" />
         <PackageReference Include="System.Diagnostics.Tracing" Version="4.3.0" />
-        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.0.2" />
-        <PackageReference Include="System.Reactive" Version="6.0.1" />        <PackageReference Include="System.Runtime.Caching" Version="8.0.0" />
-        <PackageReference Include="System.Threading.Tasks.Dataflow" Version="8.0.0" />
+        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.1.2" />
+        <PackageReference Include="System.Reactive" Version="6.0.1" />        <PackageReference Include="System.Runtime.Caching" Version="8.0.1" />
+        <PackageReference Include="System.Threading.Tasks.Dataflow" Version="8.0.1" />
         <PackageReference Include="Unidecode.NET" Version="2.1.0" />
     </ItemGroup>
 

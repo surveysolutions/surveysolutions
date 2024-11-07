@@ -117,41 +117,34 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CompletionText" xml:space="preserve">
-    <value>Cet entretien a été achevé</value>
-  </data>
-  <data name="DiscardAndStart" xml:space="preserve">
-    <value>Redémarrer</value>
-  </data>
-  <data name="Error_Forbidden" xml:space="preserve">
-    <value>Interdit</value>
-  </data>
-  <data name="Error_InterviewExpired" xml:space="preserve">
-    <value>Le lien a expiré</value>
-  </data>
-  <data name="Error_NoActionsNeeded" xml:space="preserve">
-    <value>L'information sur cet entretien a été enregistrée. Aucune autre action n'est requise</value>
-  </data>
-  <data name="Error_NotFound" xml:space="preserve">
-    <value>Entretien introuvable</value>
-  </data>
-  <data name="Error_UserNotAuthorised" xml:space="preserve">
-    <value>Utilisateur non autorisé</value>
-  </data>
-  <data name="FinishInterviewText" xml:space="preserve">
-    <value>Cet entretien a été achevé</value>
-  </data>
-  <data name="HasPreviousStartedInterview" xml:space="preserve">
-    <value>Vous avez commencé un entretien</value>
-  </data>
-  <data name="InProgressText" xml:space="preserve">
-    <value>En cours</value>
+  <data name="Interview_Group_Status_CompletedFormat" xml:space="preserve">    
+    <value>Section achevée: {{value}}</value>
   </data>
   <data name="Interview_Group_AnsweredQuestions_Many" xml:space="preserve">
     <value>{{value}} réponses</value>
   </data>
+  <data name="Interview_Group_Subgroups_ManyFormat" xml:space="preserve">
+
+    <value>{{value}} sous-sections</value>
+  </data>
+  <data name="Interview_Group_Subgroups_Zero" xml:space="preserve">
+
+    <value>aucune sous-section</value>
+  </data>
+  <data name="Interview_Group_Status_NotStarted" xml:space="preserve">
+
+    <value>Section non commencée</value>
+  </data>
   <data name="Interview_Group_AnsweredQuestions_One" xml:space="preserve">
+
     <value>une réponse</value>
+  </data>
+  <data name="Interview_Group_Subgroups_One" xml:space="preserve">
+
+    <value>une sous-section</value>
+  </data>
+  <data name="Interview_Group_Status_StartedIncompleteFormat" xml:space="preserve">
+    <value>Section entamée: {{value}}</value>
   </data>
   <data name="Interview_Group_InvalidAnswers_ManyFormat" xml:space="preserve">
     <value>{{value}} erreurs</value>
@@ -159,32 +152,12 @@
   <data name="Interview_Group_InvalidAnswers_One" xml:space="preserve">
     <value>une erreur</value>
   </data>
-  <data name="Interview_Group_Status_CompletedFormat" xml:space="preserve">
-    <value>Section achevée: {{value}}</value>
+  <data name="ServerUnderLoad" xml:space="preserve">
+    <value>Nos excuses. Trop de personnes accèdent à ce site en même temps. Nous travaillons pour réparer ce problème. Veuillez réessayer plus tard.</value>
   </data>
-  <data name="Interview_Group_Status_NotStarted" xml:space="preserve">
-    <value>Section non commencée</value>
-  </data>
-  <data name="Interview_Group_Status_StartedIncompleteFormat" xml:space="preserve">
-    <value>Section entamée: {{value}}</value>
-  </data>
-  <data name="Interview_Group_Subgroups_ManyFormat" xml:space="preserve">
-    <value>{{value}} sous-sections</value>
-  </data>
-  <data name="Interview_Group_Subgroups_One" xml:space="preserve">
-    <value>une sous-section</value>
-  </data>
-  <data name="Interview_Group_Subgroups_Zero" xml:space="preserve">
-    <value>aucune sous-section</value>
-  </data>
-  <data name="InterviewCompletionDateFormatText" xml:space="preserve">
-    <value>Date d'achèvement de l'entrevue:</value>
-  </data>
-  <data name="InterviewIdFormatText" xml:space="preserve">
-    <value>ID de L'entretien: {0}</value>
-  </data>
-  <data name="InterviewStartDateFormatText" xml:space="preserve">
-    <value>Date du début de l'entrevue:</value>
+  <data name="RefreshPage" xml:space="preserve">
+
+    <value>Actualiser la page</value>
   </data>
   <data name="InvitationSmallText" xml:space="preserve">
     <value>Le processus d'entrevue nécessite une connexion Internet. Aucun logiciel supplémentaire n'est nécessaire.</value>
@@ -192,64 +165,269 @@
   <data name="InvitationText" xml:space="preserve">
     <value>Vous avez été invité à participer à l'enquête suivante: "%QUESTIONNAIRE%"</value>
   </data>
-  <data name="NotStartedText" xml:space="preserve">
-    <value>Pas commencé</value>
-  </data>
-  <data name="Original_Language" xml:space="preserve">
-    <value>Original</value>
-  </data>
-  <data name="OrStartInterview" xml:space="preserve">
-    <value>Ou vous pouvez commencer une nouvelle entretien</value>
-  </data>
-  <data name="PictureQuestionNotAPicture" xml:space="preserve">
-    <value>Seuls les fichiers image sont acceptés</value>
-  </data>
-  <data name="PleaseFillCaptcha" xml:space="preserve">
-    <value>Veuillez remplir le champ captcha</value>
-  </data>
-  <data name="RefreshPage" xml:space="preserve">
-    <value>Actualiser la page</value>
-  </data>
-  <data name="Resume_InvitationSmallText" xml:space="preserve">
-    <value>Le processus d'entrevue nécessite une connexion Internet, aucun logiciel supplémentaire n'est nécessaire</value>
-  </data>
-  <data name="Resume_InvitationText" xml:space="preserve">
-    <value>Vous pouvez accéder à L'entretien dans l'enquête suivante: "%QUESTIONNAIRE%"</value>
-  </data>
-  <data name="Resume_WelcomeText" xml:space="preserve">
+  <data name="WelcomeText" xml:space="preserve">
     <value>Bonjour et bienvenue dans l'enquête Web Survey Solutions</value>
-  </data>
-  <data name="ServerUnderLoad" xml:space="preserve">
-    <value>Nos excuses. Trop de personnes accèdent à ce site en même temps. Nous travaillons pour réparer ce problème. Veuillez réessayer plus tard.</value>
-  </data>
-  <data name="StartedInterviewText" xml:space="preserve">
-    <value>Cet entretien n'a pas été achevé</value>
-  </data>
-  <data name="StartPageTitle" xml:space="preserve">
-    <value>Enquête Web</value>
-  </data>
-  <data name="SurveyFormatText" xml:space="preserve">
-    <value>Enquête: "%QUESTIONNAIRE%"</value>
-  </data>
-  <data name="ToInterview" xml:space="preserve">
-    <value>Aller à l'entretien</value>
   </data>
   <data name="WebSurvey" xml:space="preserve">
     <value>Enquête Web Survey Solutions</value>
   </data>
-  <data name="WelcomeText" xml:space="preserve">
+  <data name="CompletionText" xml:space="preserve">
+    <value>Cet entretien a été achevé</value>
+  </data>
+  <data name="InProgressText" xml:space="preserve">
+    <value>En cours</value>
+  </data>
+  <data name="NotStartedText" xml:space="preserve">
+    <value>Pas commencé</value>
+  </data>
+  <data name="FinishInterviewText" xml:space="preserve">
+    <value>Cet entretien a été achevé</value>
+  </data>
+  <data name="StartedInterviewText" xml:space="preserve">
+
+    <value>Cet entretien n'a pas été achevé</value>
+  </data>
+  <data name="SurveyFormatText" xml:space="preserve">
+    <value>Enquête: "%QUESTIONNAIRE%"</value>
+  </data>
+  <data name="InterviewIdFormatText" xml:space="preserve">
+
+    <value>ID de L'entretien: {0}</value>
+    <comment>{0} - human interview id</comment>
+  </data>
+  <data name="InterviewStartDateFormatText" xml:space="preserve">
+
+    <value>Date du début de l'entrevue:</value>
+  </data>
+  <data name="InterviewCompletionDateFormatText" xml:space="preserve">
+
+    <value>Date d'achèvement de l'entrevue:</value>
+  </data>
+  <data name="DownloadAnswers" xml:space="preserve">
+
+    <value>Télécharger la transcription de l'entretien</value>
+  </data>
+  <data name="DownloadAnswersHint" xml:space="preserve">
+
+    <value>Télécharger les réponses de l'entretien au format pdf</value>
+  </data>
+  <data name="Start" xml:space="preserve">
+
+    <value>Commencer un nouvel entretien</value>
+  </data>
+  <data name="StartPageTitle" xml:space="preserve">
+
+    <value>Enquête Web</value>
+  </data>
+  <data name="PleaseFillCaptcha" xml:space="preserve">
+
+    <value>Veuillez remplir le champ captcha</value>
+  </data>
+  <data name="InvalidPassword" xml:space="preserve">
+
+    <value>Mauvais mot de passe</value>
+  </data>
+  <data name="Original_Language" xml:space="preserve">
+    <value>Original</value>
+  </data>
+  <data name="ToInterview" xml:space="preserve">
+
+    <value>Aller à l'entretien</value>
+  </data>
+  <data name="ResumeInterview" xml:space="preserve">
+
+    <value>Reprendre l'entretien</value>
+  </data>
+  <data name="DiscardAndStart" xml:space="preserve">
+
+    <value>Redémarrer</value>
+  </data>
+  <data name="OrStartInterview" xml:space="preserve">
+
+    <value>Ou vous pouvez commencer une nouvelle entretien</value>
+  </data>
+  <data name="HasPreviousStartedInterview" xml:space="preserve">
+
+    <value>Vous avez commencé un entretien</value>
+  </data>
+  <data name="Resume_InvitationSmallText" xml:space="preserve">
+
+    <value>Le processus d'entrevue nécessite une connexion Internet, aucun logiciel supplémentaire n'est nécessaire</value>
+  </data>
+  <data name="Resume_InvitationText" xml:space="preserve">
+
+    <value>Vous pouvez accéder à L'entretien dans l'enquête suivante: "%QUESTIONNAIRE%"</value>
+  </data>
+  <data name="Resume_WelcomeText" xml:space="preserve">
+
     <value>Bonjour et bienvenue dans l'enquête Web Survey Solutions</value>
   </data>
-  <data name="CompleteInterview" xml:space="preserve">
-    <value>Achever l'entretien</value>
+  <data name="Error_InterviewExpired" xml:space="preserve">
+
+    <value>Le lien a expiré</value>
   </data>
-  <data name="PoweredBy" xml:space="preserve">
-    <value>Alimenté par</value>
-  </data>
-  <data name="Error_CookiesTurnedOff" xml:space="preserve">
-    <value>Les cookies ne sont pas activés dans votre navigateur web. Veuillez les activer dans les préférences de votre navigateur pour continuer</value>
+  <data name="Error_NoActionsNeeded" xml:space="preserve">
+
+    <value>L'information sur cet entretien a été enregistrée. Aucune autre action n'est requise</value>
   </data>
   <data name="InterviewReceivedByInterviewer" xml:space="preserve">
+
     <value>Impossible de modifier L'entretien reçue sur l'appareil</value>
+  </data>
+  <data name="Error_NotFound" xml:space="preserve">
+
+    <value>Entretien introuvable</value>
+  </data>
+  <data name="EnterPasswordText" xml:space="preserve">
+
+    <value>Ce lien est protégé par un mot de passe, qui a été distribué avec le lien. Veuillez le saisir ici</value>
+  </data>
+  <data name="PictureQuestionNotAPicture" xml:space="preserve">
+
+    <value>Seuls les fichiers image sont acceptés</value>
+  </data>
+  <data name="Error_CookiesTurnedOff" xml:space="preserve">
+
+    <value>Les cookies ne sont pas activés dans votre navigateur web. Veuillez les activer dans les préférences de votre navigateur pour continuer</value>
+  </data>
+  <data name="Error_Forbidden" xml:space="preserve">
+
+      <value>Interdit</value>
+  </data>
+  <data name="Error_UserNotAuthorised" xml:space="preserve">
+
+    <value>Utilisateur non autorisé</value>
+  </data>
+  <data name="CompleteInterview" xml:space="preserve">
+
+    <value>Achever l'entretien</value>
+  </data>
+  <data name="Filters_Title" xml:space="preserve">
+
+    <value>Filtrer les questions</value>
+  </data>
+  <data name="Filters_Flagged" xml:space="preserve">
+
+    <value>Marqué</value>
+  </data>
+  <data name="Filters_WithComments" xml:space="preserve">
+
+    <value>Avec commentaires</value>
+  </data>
+  <data name="Filters_Invalid" xml:space="preserve">
+
+    <value>Invalide</value>
+  </data>
+  <data name="Filters_Valid" xml:space="preserve">
+
+    <value>Valide</value>
+  </data>
+  <data name="Filters_Answered" xml:space="preserve">
+
+    <value>Répondu</value>
+  </data>
+  <data name="Filters_NotAnswered" xml:space="preserve">
+
+    <value>Non répondu</value>
+  </data>
+  <data name="Filters_ForSupervisor" xml:space="preserve">
+
+    <value>Pour le superviseur</value>
+  </data>
+  <data name="Filters_ForInterviewer" xml:space="preserve">
+
+    <value>Pour l'enquêteur</value>
+  </data>
+  <data name="Filters_NotFlagged" xml:space="preserve">
+
+    <value>Pas de marque</value>
+  </data>
+  <data name="Filters_CriticalQuestions" xml:space="preserve">
+
+    <value>Questions critiques</value>
+  </data>
+  <data name="Filters_CriticalRules" xml:space="preserve">
+
+    <value>Règles critiques</value>
+  </data>
+  <data name="PoweredBy" xml:space="preserve">
+
+    <value>Alimenté par</value>
+  </data>
+  <data name="Filters_ClearSelection" xml:space="preserve">
+
+    <value>Réinitialiser tous les filtres</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+
+    <value>Erreur</value>
+  </data>
+  <data name="Warning" xml:space="preserve">
+
+    <value>Avertissement</value>
+  </data>
+  <data name="QuestionnaireNameFormat" xml:space="preserve">
+    <value>{0} (ver. {1})</value>
+  </data>
+  <data name="InterviewSizeLimitReached" xml:space="preserve">
+
+    <value>L'entretien contient un nombre total d'instances de roster et de questions dépassant les limites du système.</value>
+  </data>
+  <data name="AssignmentLimitReached" xml:space="preserve">
+
+    <value>Nous collectons toutes les entrevues dans cette enquête.</value>
+  </data>
+  <data name="InterviewNotFound" xml:space="preserve">
+
+    <value>Entretien introuvable.</value>
+  </data>
+  <data name="Email_InvitationTemplate_Subject" xml:space="preserve">
+
+    <value>Invitation à participer à %SURVEYNAME%</value>
+  </data>
+  <data name="Email_InvitationTemplate_Message" xml:space="preserve">    
+    <value>Bienvenue à %SURVEYNAME%!
+Pour participer à l'enquête, cliquez sur le lien suivant: %SURVEYLINK% et entrez votre mot de passe: %PASSWORD%
+Merci pour votre coopération!</value>
+  </data>
+  <data name="Email_NoResponse_Subject" xml:space="preserve">
+    <value>Rappel, n'oubliez pas de participer à %SURVEYNAME%</value>
+  </data>
+  <data name="Email_NoResponse_Message" xml:space="preserve">    
+    <value>Vous recevez ce rappel car vous n'avez pas commencé à répondre à %SURVEYNAME%!
+Pour participer à l'enquête, cliquez sur le lien suivant: %SURVEYLINK% et entrez votre mot de passe: %PASSWORD%
+Merci pour votre coopération!</value>
+  </data>
+  <data name="Email_PartialResponse_Subject" xml:space="preserve">
+    <value>Rappel, veuillez compléter votre réponse à %SURVEYNAME%</value>
+  </data>
+  <data name="Email_PartialResponse_Message" xml:space="preserve">
+    <value>Vous recevez ce rappel car vous avez commencé à répondre à %SURVEYNAME%, mais n'avez pas terminé le processus.
+Pour continuer l'enquête, cliquez sur le lien suivant: %SURVEYLINK% et entrez votre mot de passe: %PASSWORD%.
+Veuillez répondre à toutes les questions applicables et cliquer sur le bouton 'COMPLETER' pour soumettre vos réponses.
+Merci pour votre coopération!</value>
+  </data>
+  <data name="Email_RejectEmail_Subject" xml:space="preserve">
+    <value>Votre action est requise dans %SURVEYNAME%</value>
+  </data>
+  <data name="Email_RejectEmail_Message" xml:space="preserve">    
+    <value>Merci de participer à %SURVEYNAME%!
+Lors du traitement de votre réponse, notre personnel a trouvé quelques problèmes que vous êtes prié de revoir.
+Pour continuer l'enquête, cliquez sur le lien suivant: %SURVEYLINK% et entrez votre mot de passe: %PASSWORD%.
+Nous apprécierions que vous essayiez de résoudre tous les problèmes marqués dans votre réponse et que vous cliquiez sur le bouton 'COMPLETER' pour soumettre vos réponses.
+Merci pour votre coopération!</value>
+  </data>
+  <data name="NoteForSupervisor" xml:space="preserve">
+
+    <value>Commentaire</value>
+  </data>
+  <data name="Complete" xml:space="preserve">
+
+    <value>Compléter</value>
+    <comment>Complete interview button text</comment>
+  </data>
+  <data name="LinkToWebInterviewExample" xml:space="preserve">
+
+    <value>Lien vers l'exemple de page de destination de l'entretien web</value>
   </data>
 </root>
