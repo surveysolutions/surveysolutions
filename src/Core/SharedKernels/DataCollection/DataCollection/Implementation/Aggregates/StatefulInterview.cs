@@ -1109,10 +1109,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return questions.Select(q => q.Identity);
         }
         
-        public IEnumerable<Identity> GetAllUnansweredQuestions()
+        public IEnumerable<Identity> GetAllUnansweredQuestions(bool forSupervisor)
         {
             return this.Tree.FindQuestions()
-                .Where(question => !question.IsDisabled() && !question.IsAnswered() && !question.IsReadonly)
+                .Where(question => !question.IsDisabled() 
+                                   && !question.IsAnswered() 
+                                   && !question.IsReadonly
+                                   && (!forSupervisor ? question.IsInterviewer : true)
+                                   && !question.IsHidden)
                 .Select(q => q.Identity);
         }
 

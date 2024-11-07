@@ -96,7 +96,7 @@ export default {
     },
 
     answerAudioQuestion(_, { identity, file, duration }) {
-        return api.upload(app.$config.audioUploadUri, identity, file, duration)
+        return api.upload(config.audioUploadUri, identity, file, duration)
     },
 
     answerQRBarcodeQuestion(_, { identity, text }) {
@@ -129,8 +129,8 @@ export default {
         return api.answer(identity, 'resolveComment')
     },
 
-    setAnswerAsNotSaved({ commit }, { id, message }) {
-        commit('SET_ANSWER_NOT_SAVED', { id, message })
+    setAnswerAsNotSaved({ commit }, { id, message, notSavedAnswerValue }) {
+        commit('SET_ANSWER_NOT_SAVED', { id, message, notSavedAnswerValue })
     },
 
     clearAnswerValidity({ commit }, { id }) {
@@ -345,7 +345,7 @@ export default {
     }, null, /* limit */ 100),
 
     changeLanguage(_, language) {
-        return api.answer(null, 'changeLanguage', { language: language.language })
+        return api.answer(null, 'changeLanguage', { language: language.language.id })
     },
 
     stop() {

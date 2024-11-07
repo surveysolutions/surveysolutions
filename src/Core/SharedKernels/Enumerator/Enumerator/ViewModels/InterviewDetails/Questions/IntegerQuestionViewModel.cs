@@ -207,7 +207,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (this.Answer > int.MaxValue || this.Answer < int.MinValue)
             {
                 await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources
-                    .Interview_Question_Integer_ParsingError);
+                    .Interview_Question_Integer_ParsingError, this.Answer.ToString());
                 return;
             }
 
@@ -235,7 +235,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 var message = string.Format(UIResources.Interview_Questions_Integer_ProtectedValue,
                     ProtectedAnswer);
-                await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(message);
+                await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(message, answeredOrSelectedValue.ToString());
                 return;
             }
 

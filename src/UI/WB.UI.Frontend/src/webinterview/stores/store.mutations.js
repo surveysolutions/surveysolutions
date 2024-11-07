@@ -37,16 +37,19 @@ export default {
             delete state.entityDetails[id]
         })
     },
-    SET_ANSWER_NOT_SAVED(state, { id, message }) {
+    SET_ANSWER_NOT_SAVED(state, { id, message, notSavedAnswerValue }) {
         let validity = state.entityDetails[id].validity
         validity.errorMessage = true
         validity.messages = [message]
-        validity.isValid = false
+        validity.notSavedAnswerValue = notSavedAnswerValue
+        //validity.isValid = false
     },
     CLEAR_ANSWER_VALIDITY(state, { id }) {
         const validity = state.entityDetails[id].validity
         validity.isValid = true
+        validity.errorMessage = false
         validity.messages = []
+        validity.notSavedAnswerValue = null
     },
     SET_BREADCRUMPS(state, crumbs) {
         state['breadcrumbs'] = crumbs

@@ -1,5 +1,3 @@
-//import Vue from 'vue'
-
 export function registerLinkToRoute(vue) {
 
     vue.directive('linkToRoute', {

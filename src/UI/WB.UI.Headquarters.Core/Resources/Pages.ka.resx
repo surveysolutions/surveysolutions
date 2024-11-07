@@ -147,7 +147,7 @@
   <data name="ApprovedByHeadquarters" xml:space="preserve">
     <value>დამტკიცებულია სათაო ოფისის მიერ</value>
   </data>
-  <data name="ApprovedByupervisor" xml:space="preserve">
+  <data name="ApprovedBySupervisor" xml:space="preserve">
     <value>დამტკიცებულია ზედამხედველის მიერ</value>
   </data>
   <data name="ApproveRejectPartialView_ApproveAction" xml:space="preserve">

@@ -93,8 +93,8 @@ export const entityDetails = {
         cleanValidity() {
             this.$store.dispatch('clearAnswerValidity', { id: this.id })
         },
-        markAnswerAsNotSavedWithMessage(message) {
-            this.$store.dispatch('setAnswerAsNotSaved', { id: this.id, message })
+        markAnswerAsNotSavedWithMessage(message, notSavedAnswerValue) {
+            this.$store.dispatch('setAnswerAsNotSaved', { id: this.id, message, notSavedAnswerValue })
         },
         removeAnswer() {
             this.$store.dispatch('removeAnswer', this.$me.id)

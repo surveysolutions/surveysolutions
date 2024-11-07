@@ -6,7 +6,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services.MaskText
 {
     public class MaskedText
     {
-        private char maskFill = '_';
+        private char maskFill = 'ˍ';
 
         private const char DigitKey = '#';
         private const char CharacterKey = '~';

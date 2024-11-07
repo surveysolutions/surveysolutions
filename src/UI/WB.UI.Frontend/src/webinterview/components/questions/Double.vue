@@ -10,14 +10,14 @@
                             :disabled="isSpecialValueSelected || !$me.acceptAnswer"
                             :class="{ 'special-value-selected': isSpecialValueSelected }" v-numericFormatting="{
 
-        minimumValue: '-999999999999999.99999999999999',
-        maximumValue: '999999999999999.99999999999999',
+                                minimumValue: '-999999999999999.99999999999999',
+                                maximumValue: '999999999999999.99999999999999',
 
-        digitGroupSeparator: groupSeparator,
-        decimalCharacter: decimalSeparator,
-        decimalPlaces: decimalPlacesCount,
-        allowDecimalPadding: false
-    }" />
+                                digitGroupSeparator: groupSeparator,
+                                decimalCharacter: decimalSeparator,
+                                decimalPlaces: decimalPlacesCount,
+                                allowDecimalPadding: false
+                            }" />
                         <wb-remove-answer v-if="!isSpecialValueSelected" :on-remove="removeAnswer" />
                     </div>
                 </div>
@@ -88,7 +88,7 @@ export default {
         answerDoubleQuestion(evnt) {
             const answerString = this.autoNumericElement.getNumericString()
             if (answerString.replace(/[^0-9]/g, '').length > 15) {
-                this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.DecimalTooBig'))
+                this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.DecimalTooBig'), answerString)
                 return
             }
 
@@ -105,7 +105,7 @@ export default {
                     return
                 }
                 if (answer > 999999999999999 || answer < -999999999999999) {
-                    this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.DecimalCannotParse'))
+                    this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.DecimalCannotParse'), answer)
                     return
                 }
 

@@ -344,7 +344,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             try
             {
                 this.VerifyAssigneeInRoles(responsibleUser, assigneeRequest?.Responsible, UserRoles.Interviewer,
-                    UserRoles.Supervisor);
+                    UserRoles.Supervisor, UserRoles.Headquarter);
             }
             catch (HttpException e)
             {

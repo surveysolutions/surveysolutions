@@ -27,7 +27,7 @@ export default {
         },
         userFriendlyMask() {
             if (this.$me.mask) {
-                const resultMask = this.$me.mask.replace(/\*/g, '_').replace(/#/g, '_').replace(/~/g, '_')
+                const resultMask = this.$me.mask.replace(/\*/g, 'ˍ').replace(/#/g, 'ˍ').replace(/~/g, 'ˍ')
                 return ` (${resultMask})`
             }
 
@@ -48,7 +48,7 @@ export default {
                 }
 
                 if (this.$me.mask && !target.data('maskCompleted')) {
-                    this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.TextRequired'))
+                    this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.TextRequired'), answer)
                 }
                 else {
                     this.$store.dispatch('answerTextQuestion', { identity: this.id, text: answer })

@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
         }
 
         [TestCase(UserRoles.Administrator)]
-        [TestCase(UserRoles.Headquarter)]
+        //[TestCase(UserRoles.Headquarter)]
         [TestCase(UserRoles.Observer)]
         [TestCase(UserRoles.ApiUser)]
         public async Task should_return_406_for_non_interviewer_supervisor_assignee(UserRoles role )

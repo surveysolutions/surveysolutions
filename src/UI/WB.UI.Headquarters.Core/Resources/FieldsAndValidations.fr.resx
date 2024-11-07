@@ -117,20 +117,11 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="BatchUploadModel_FileName" xml:space="preserve">
-    <value>Fichier CSV</value>
+  <data name="CannotUpdate_CurrentUserDoesNotExists" xml:space="preserve">
+    <value>Impossible de mettre à jour les informations utilisateur car l'utilisateur actuel n'existe pas</value>
   </data>
-  <data name="BatchUploadModel_Required" xml:space="preserve">
-    <value>Vous devez choisir un fichier à importer</value>
-  </data>
-  <data name="BatchUploadModel_ValidationErrorMessage" xml:space="preserve">
-    <value>Veuillez sélectionner un fichier</value>
-  </data>
-  <data name="CloneQuestionnaireModel_NewTitle_Error_Required" xml:space="preserve">
-    <value>Le titre du questionnaire est requis</value>
-  </data>
-  <data name="CloneQuestionnaireModel_NewTitle_Label" xml:space="preserve">
-    <value>Titre</value>
+  <data name="CannotUpdate_CurrentUserIsArchived" xml:space="preserve">
+    <value>Impossible de mettre à jour les informations utilisateur car l'utilisateur actuel est archivé</value>
   </data>
   <data name="ConfirmPasswordErrorMassage" xml:space="preserve">
     <value>Le mot de passe et le mot de passe de confirmation ne sont pas conformes</value>
@@ -144,20 +135,11 @@
   <data name="EmailFieldName" xml:space="preserve">
     <value>Adresse e-mail</value>
   </data>
-  <data name="InvalidUser" xml:space="preserve">
-    <value>Utilisateur invalide</value>
-  </data>
-  <data name="IsLockedBySupervisorFieldName" xml:space="preserve">
-    <value>Est verrouillé par le Chef d'équipe</value>
+  <data name="AllowRelinkTablet" xml:space="preserve">
+    <value>Autoriser le relink à un appareil différent avec perte de données sur l'appareil d'origine.</value>
   </data>
   <data name="IsLockedFieldName" xml:space="preserve">
     <value>Est verrouillé par l'Administrateur ou le Quartier Général</value>
-  </data>
-  <data name="LogOnModel_Password" xml:space="preserve">
-    <value>Mot de passe</value>
-  </data>
-  <data name="LogOnModel_UserName" xml:space="preserve">
-    <value>Nom d'utilisateur</value>
   </data>
   <data name="PasswordErrorMessage" xml:space="preserve">
     <value>Le mot de passe doit contenir au moins un chiffre, un caractère majuscule et un caractère minuscule</value>
@@ -168,41 +150,14 @@
   <data name="PasswordLengthMessage" xml:space="preserve">
     <value>Le mot de passe doit contenir au moins {2} caractères</value>
   </data>
-  <data name="PersonNameFieldName" xml:space="preserve">
-    <value>Nom complet</value>
-  </data>
-  <data name="PhoneErrorMessage" xml:space="preserve">
-    <value>Numéro de téléphone invalide</value>
-  </data>
-  <data name="PhoneNumberFieldName" xml:space="preserve">
-    <value>Numéro de téléphone</value>
-  </data>
   <data name="RequiredEmailErrorMessage" xml:space="preserve">
     <value>Le mail est requis</value>
   </data>
   <data name="RequiredPasswordErrorMessage" xml:space="preserve">
     <value>Mot de passe requis</value>
   </data>
-  <data name="RequiredSupervisorErrorMessage" xml:space="preserve">
-    <value>Le Chef d'équipe est requis</value>
-  </data>
   <data name="RequiredUserNameErrorMessage" xml:space="preserve">
     <value>Nom d'utilisateur est nécessaire</value>
-  </data>
-  <data name="SupervisorFieldName" xml:space="preserve">
-    <value>Chef d'Equipe</value>
-  </data>
-  <data name="TroubleshootModel_InterviewId_ErrorMessage" xml:space="preserve">
-    <value>Veuillez entrer un GUID valide au format suivant xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</value>
-  </data>
-  <data name="UserBatchUploadModel_File_CSV_File" xml:space="preserve">
-    <value>Fichier CSV</value>
-  </data>
-  <data name="UserBatchUploadModel_Required_ErrorMessage" xml:space="preserve">
-    <value>Vous devez choisir un fichier à télécharger</value>
-  </data>
-  <data name="UserBatchUploadModel_Validation_ErrorMessage" xml:space="preserve">
-    <value>Veuillez sélectionner le fichier</value>
   </data>
   <data name="UserNameErrorMessage" xml:space="preserve">
     <value>Le nom doit comporter entre 3 et 15 caractères et peut contenir uniquement des lettres, des chiffres et le symbole de soulignement.</value>
@@ -210,29 +165,65 @@
   <data name="UserNameFieldName" xml:space="preserve">
     <value>Nom d'utilisateur</value>
   </data>
+  <data name="InvalidUser" xml:space="preserve">
+    <value>Utilisateur invalide</value>
+  </data>
+  <data name="PersonNameFieldName" xml:space="preserve">
+    <value>Nom complet</value>
+  </data>
+  <data name="PhoneNumberFieldName" xml:space="preserve">
+    <value>Numéro de téléphone</value>
+  </data>
+  <data name="VerificationCodeFieldName" xml:space="preserve">
+    <value>Code de vérification</value>
+  </data>
+  <data name="PhoneErrorMessage" xml:space="preserve">
+    <value>Numéro de téléphone invalide</value>
+  </data>
   <data name="PersonNameErrorMessage" xml:space="preserve">
     <value>Le nom de la personne ne peut pas contenir plus de {1} caractères</value>
   </data>
-  <data name="CannotUpdate_CurrentUserDoesNotExists" xml:space="preserve">
-    <value>Impossible de mettre à jour les informations utilisateur car l'utilisateur actuel n'existe pas</value>
+  <data name="IsLockedBySupervisorFieldName" xml:space="preserve">
+    <value>Est verrouillé par le Chef d'équipe</value>
   </data>
-  <data name="CannotUpdate_CurrentUserIsArchived" xml:space="preserve">
-    <value>Impossible de mettre à jour les informations utilisateur car l'utilisateur actuel est archivé</value>
+  <data name="RequiredSupervisorErrorMessage" xml:space="preserve">
+    <value>Le Chef d'équipe est requis</value>
   </data>
-  <data name="ConfirmNewPasswordFieldName" xml:space="preserve">
-    <value>Confirmer le nouveau mot de passe</value>
+  <data name="SupervisorFieldName" xml:space="preserve">
+    <value>Chef d'Equipe</value>
   </data>
-  <data name="ConfirmPasswordRequired" xml:space="preserve">
-    <value>Confirmer le mot de passe est requis</value>
+  <data name="LogOnModel_UserName" xml:space="preserve">
+    <value>Nom d'utilisateur</value>
   </data>
-  <data name="NewPasswordFieldName" xml:space="preserve">
-    <value>Nouveau mot de passe</value>
+  <data name="LogOnModel_Password" xml:space="preserve">
+    <value>Mot de passe</value>
   </data>
-  <data name="OldPasswordErrorMessage" xml:space="preserve">
-    <value>Pour changer le mot de passe, fournir un mot de passe existant valide</value>
+  <data name="TroubleshootModel_InterviewId_ErrorMessage" xml:space="preserve">
+    <value>Veuillez entrer un GUID valide au format suivant xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</value>
   </data>
-  <data name="OldPasswordFieldName" xml:space="preserve">
-    <value>Ancien mot de passe</value>
+  <data name="UserBatchUploadModel_Required_ErrorMessage" xml:space="preserve">
+    <value>Vous devez choisir un fichier à télécharger</value>
+  </data>
+  <data name="UserBatchUploadModel_Validation_ErrorMessage" xml:space="preserve">
+    <value>Veuillez sélectionner le fichier</value>
+  </data>
+  <data name="UserBatchUploadModel_File_CSV_File" xml:space="preserve">
+    <value>Fichier CSV</value>
+  </data>
+  <data name="BatchUploadModel_Required" xml:space="preserve">
+    <value>Vous devez choisir un fichier à importer</value>
+  </data>
+  <data name="BatchUploadModel_ValidationErrorMessage" xml:space="preserve">
+    <value>Veuillez sélectionner un fichier</value>
+  </data>
+  <data name="BatchUploadModel_FileName" xml:space="preserve">
+    <value>Fichier CSV</value>
+  </data>
+  <data name="CloneQuestionnaireModel_NewTitle_Error_Required" xml:space="preserve">
+    <value>Le titre du questionnaire est requis</value>
+  </data>
+  <data name="CloneQuestionnaireModel_NewTitle_Label" xml:space="preserve">
+    <value>Titre</value>
   </data>
   <data name="PersonNameAllowedCharactersErrorMessage" xml:space="preserve">
     <value>Le nom de la personne a des caractères invalides. Seules les lettres, les points, les espaces et les apostrophes sont autorisés</value>
@@ -240,10 +231,64 @@
   <data name="PhoneErrorLength" xml:space="preserve">
     <value>Le numéro de téléphone ne peut pas contenir plus de {1} caractères</value>
   </data>
+  <data name="OldPasswordErrorMessage" xml:space="preserve">
+    <value>Pour changer le mot de passe, fournir un mot de passe existant valide</value>
+  </data>
+  <data name="OldPasswordFieldName" xml:space="preserve">
+    <value>Ancien mot de passe</value>
+  </data>
+  <data name="RestrictedAccountMessage" xml:space="preserve">
+    <value>Ce compte est restreint pour effectuer cette action</value>
+  </data>
+  <data name="RestrictedAccount" xml:space="preserve">
+    <value>Ce compte est restreint</value>
+  </data>   
   <data name="UserName_Taken" xml:space="preserve">
     <value>Veuillez choisir un autre nom d'utilisateur</value>
   </data>
+  <data name="ConfirmNewPasswordFieldName" xml:space="preserve">
+    <value>Confirmer le nouveau mot de passe</value>
+  </data>
+  <data name="NewPasswordFieldName" xml:space="preserve">
+    <value>Nouveau mot de passe</value>
+  </data>
+  <data name="ConfirmPasswordRequired" xml:space="preserve">
+    <value>Confirmer le mot de passe est requis</value>
+  </data>
+  <data name="WorkspaceRequired" xml:space="preserve">
+    <value>L'espace de travail est requis</value>
+  </data>
+  <data name="WorkspaceMissing" xml:space="preserve">
+    <value>Espace de travail non trouvé</value>
+  </data>
+  <data name="UserRoleRequired" xml:space="preserve">
+    <value>Le rôle de l'utilisateur est requis</value>
+  </data>
   <data name="UserIsLockedByHq" xml:space="preserve">
     <value>L'utilisateur est verrouillé par le Siège</value>
+  </data>
+  <data name="MandatoryField" xml:space="preserve">
+    <value>Ce champ est obligatoire</value>
+  </data>
+  <data name="PasswordRequiresDigit" xml:space="preserve">
+      <value>Les mots de passe doivent contenir au moins un chiffre ('0'-'9').</value>
+  </data>
+  <data name="PasswordRequiresLower" xml:space="preserve">
+      <value>Les mots de passe doivent contenir au moins une lettre minuscule ('a'-'z').</value>
+  </data>
+  <data name="PasswordRequiresNonAlphanumeric" xml:space="preserve">
+      <value>Les mots de passe doivent contenir au moins un caractère non alphanumérique.</value>
+  </data>
+  <data name="PasswordRequiresUniqueChars" xml:space="preserve">
+      <value>Les mots de passe doivent utiliser au moins {0} caractères différents.</value>
+  </data>
+  <data name="PasswordRequiresUpper" xml:space="preserve">
+      <value>Les mots de passe doivent contenir au moins une lettre majuscule ('A'-'Z').</value>
+  </data>
+  <data name="PasswordTooShort" xml:space="preserve">
+      <value>Les mots de passe doivent contenir au moins {0} caractères.</value>
+  </data>
+  <data name="PasswordChangeRequired" xml:space="preserve">
+    <value>Votre mot de passe a été réinitialisé. Vous devez le changer pour accéder au site.</value>
   </data>
 </root>
