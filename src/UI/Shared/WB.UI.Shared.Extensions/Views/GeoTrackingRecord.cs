@@ -8,10 +8,12 @@ public class GeoTrackingRecord : IPlainStorageEntity<int?>
     [PrimaryKey, Unique, AutoIncrement]
     public virtual int? Id { get; set; }
 
+    public Guid InterviewerId { get; set; }
     public int AssignmentId { get; set; }
     
     public DateTimeOffset Start { get; set; }
     public DateTimeOffset? End { get; set; }
+    public bool IsSynchronized { get; set; }
 }
 
 

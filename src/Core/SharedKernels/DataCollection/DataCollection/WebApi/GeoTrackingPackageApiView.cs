@@ -10,6 +10,7 @@ public class GeoTrackingPackageApiView
 
 public class GeoTrackingRecordApiView
 {
+    public Guid InterviewerId { get; set; }
     public int AssignmentId { get; set; }
     
     public DateTimeOffset Start { get; set; }

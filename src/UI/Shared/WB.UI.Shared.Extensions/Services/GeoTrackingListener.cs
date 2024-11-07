@@ -1,6 +1,7 @@
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Geometry;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.UI.Shared.Enumerator.Services;
@@ -18,20 +19,24 @@ public class GeoTrackingListener : IGeoTrackingListener
 {
     private readonly IPlainStorage<GeoTrackingRecord, int?> geoTrackingRecordsStorage;
     private readonly IPlainStorage<GeoTrackingPoint, int?> geoTrackingPointsStorage;
+    private readonly IPrincipal principal;
 
     private int? lastRecordId;
 
     public GeoTrackingListener(IPlainStorage<GeoTrackingRecord, int?> geoTrackingRecordsStorage, 
-        IPlainStorage<GeoTrackingPoint, int?> geoTrackingPointsStorage)
+        IPlainStorage<GeoTrackingPoint, int?> geoTrackingPointsStorage,
+        IPrincipal principal)
     {
         this.geoTrackingRecordsStorage = geoTrackingRecordsStorage;
         this.geoTrackingPointsStorage = geoTrackingPointsStorage;
+        this.principal = principal;
     }
 
     public void Start(int assignmentId)
     {
         var record = new GeoTrackingRecord()
         {
+            InterviewerId = principal.CurrentUserIdentity.UserId,
             AssignmentId = assignmentId,
             Start = DateTimeOffset.Now
         };

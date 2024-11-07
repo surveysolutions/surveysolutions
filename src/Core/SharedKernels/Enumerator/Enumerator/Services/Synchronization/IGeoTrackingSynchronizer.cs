@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.SharedKernels.Enumerator.Services.Synchronization;
@@ -8,6 +9,8 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 public interface IGeoTrackingSynchronizer
 {
     Task SynchronizeGeoTrackingAsync(IProgress<SyncProgressInfo> progress, SynchronizationStatistics statistics, CancellationToken cancellationToken);
+
+    void SavePackage(GeoTrackingPackageApiView package);
 }
 
 public class DummyGeoTrackingSynchronizer : IGeoTrackingSynchronizer
@@ -16,5 +19,10 @@ public class DummyGeoTrackingSynchronizer : IGeoTrackingSynchronizer
         CancellationToken cancellationToken)
     {
         return Task.CompletedTask;
+    }
+
+    public void SavePackage(GeoTrackingPackageApiView package)
+    {
+        
     }
 }

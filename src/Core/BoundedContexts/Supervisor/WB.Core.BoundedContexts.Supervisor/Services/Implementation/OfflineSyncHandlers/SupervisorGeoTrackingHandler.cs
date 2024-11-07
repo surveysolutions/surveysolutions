@@ -10,15 +10,20 @@ using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSyncHandlers
 {
     public class SupervisorGeoTrackingHandler : IHandleCommunicationMessage
     {
+        private readonly IGeoTrackingSynchronizer geoTrackingSynchronizer;
+
         public SupervisorGeoTrackingHandler(
+            IGeoTrackingSynchronizer geoTrackingSynchronizer
             )
         {
+            this.geoTrackingSynchronizer = geoTrackingSynchronizer;
         }
 
         public void Register(IRequestHandler requestHandler)
@@ -28,7 +33,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
 
         public Task<OkResponse> UploadGeoTracking(UploadGeoTrackingPackageRequest request)
         {
-            
+            geoTrackingSynchronizer.SavePackage(request.Package);
 
             return OkResponse.Task;
         }
