@@ -117,7 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="WB0001_NoQuestions" xml:space="preserve">
+<data name="WB0001_NoQuestions" xml:space="preserve">
     <value>Le questionnaire doit contenir au moins une question.</value>
   </data>
   <data name="WB0002_CustomValidationExpressionHasIncorrectSyntax" xml:space="preserve">
@@ -309,6 +309,9 @@
   <data name="WB0066_QuestionTypeIsNotAllowed" xml:space="preserve">
     <value>Une question de ce type n'est pas pris en charge.</value>
   </data>
+  <data name="WB0067_VariableNameIsEmpty" xml:space="preserve">
+    <value>Le nom de la variable ou l'ID du roster ne doit pas être vide.</value>
+  </data>
   <data name="WB0070_RosterHasVariableNameEqualToQuestionnaireTitle" xml:space="preserve">
     <value>Le roster a un ID de roster égal au titre du questionnaire.</value>
   </data>
@@ -349,82 +352,190 @@
     <value>Dans une série de questionss en cascade (combo box), les modalités des questions enfant doivent réferencer uniquement des modalités valides de la question parent.</value>
   </data>
   <data name="WB0085_CascadingQuestionWrongParentLevel" xml:space="preserve">
-    <value>La question devrait avoir plus ou moins le même niveau que la question parente.</value>
+    <value>La question doit avoir un niveau égal ou inférieur à celui de la question parent.</value>
   </data>
   <data name="WB0086_ParentCascadingQuestionShouldExist" xml:space="preserve">
-    <value>La question de la zone de liste déroulante en cascade fait référence à une question de type manquante ou non prise en charge.</value>
+    <value>La question en cascade fait référence à une question manquante ou de type non pris en charge.</value>
   </data>
   <data name="WB0087_CascadingQuestionHasCicularReference" xml:space="preserve">
-    <value>Les références circulaires dans les questions de liste déroulante en cascade ne sont pas autorisées.</value>
+    <value>Les références circulaires dans les questions en cascade ne sont pas autorisées.</value>
   </data>
   <data name="WB0088_CascadingQuestionShouldHaveAllowedAmountOfAnswers" xml:space="preserve">
-    <value>La question de la zone de liste déroulante en cascade doit comporter moins de {0} options.</value>
+    <value>La question en cascade doit avoir moins de {0} catégories.</value>
   </data>
   <data name="WB0089_CascadingQuestionOptionWithParentShouldBeUnique" xml:space="preserve">
-    <value>La question de la zone de liste déroulante en cascade doit avoir une valeur unique et une liste d'options de valeur parente.</value>
+    <value>La question en cascade doit avoir une liste de valeurs et de valeurs parent uniques.</value>
   </data>
   <data name="WB0090_LinkedQuestionIsInterviewersOnly" xml:space="preserve">
-    <value>Les questions liées ne peuvent être adressées qu'aux enquêteurs.</value>
+    <value>La question liée ne peut être adressée qu'aux enquêteurs.</value>
   </data>
   <data name="WB0091_CascadingChildQuestionShouldNotContainCondition" xml:space="preserve">
-    <value>La question de la zone de liste déroulante en cascade enfant ne doit pas contenir de condition d'activation.</value>
+    <value>La question enfant en cascade ne doit pas contenir de condition d'activation.</value>
   </data>
   <data name="WB0092_CascadingChildQuesionShouldNotContainValidation" xml:space="preserve">
-    <value>La question de la zone de liste modifiable en cascade enfant ne doit pas contenir de condition de validation.</value>
+    <value>La question enfant en cascade ne doit pas contenir de condition de validation.</value>
   </data>
   <data name="WB0093_RosterSizeListOptionQuestionShouldBeLimit" xml:space="preserve">
-    <value>La question de type liste qui définie la taille du roster devrait avoir une limite indiquant le plus grand nombre d'éléments admissibles.</value>
+    <value>La question source de la liste du roster doit avoir un nombre maximum d'éléments défini.</value>
   </data>
   <data name="WB0094_ConditionExpresssionHasLengthMoreThan10000Characters" xml:space="preserve">
     <value>La condition d'activation a une longueur supérieure à {0} caractères.</value>
-  </data>
-  <data name="WB0095_StaticTextRefersAbsentAttachment" xml:space="preserve">
-    <value>Le texte statique fait référence à une pièce jointe absente</value>
   </data>
   <data name="WB0096_GeneralCompilationError" xml:space="preserve">
     <value>Une erreur s'est produite lors de la compilation du questionnaire.</value>
   </data>
   <data name="WB0097_QuestionnaireTitleHasInvalidCharacters" xml:space="preserve">
-    <value>Le titre du questionnaire contient des caractères qui ne sont pas autorisés. Seules les lettres, chiffres,  espaces et _ sont autorisés.</value>
+    <value>Seuls les caractères suivants peuvent être utilisés dans le titre du questionnaire : A..Z a..z 0..9 ( ) \ / _ - et espace.</value>
   </data>
   <data name="WB0098_QuestionnaireHasSizeMoreThan5MB" xml:space="preserve">
-    <value>La taille du questionnaire est d'environ {0:0.##}Mo et est trop grande pour fonctionner correctement avec Survey Solutions. Essayez de réduire la quantité de données jusqu'à ce qu'elle soit au moins inférieure à {1} Mo.</value>
+    <value>La taille du questionnaire est d'environ {0:0.##}MB et est trop grande pour fonctionner correctement avec Survey Solutions. Essayez de réduire la quantité de données jusqu'à ce qu'elle soit inférieure à {1}MB.</value>
+  </data>
+  <data name="WB0041_GroupWhereRosterSizeSourceIsFixedTitlesHaveDuplicateValues" xml:space="preserve">
+    <value>Les valeurs d'un ensemble d'éléments fixes du roster doivent être uniques.</value>
   </data>
   <data name="WB0100_MaxNumberOfAnswersForRosterSizeQuestionCannotBeGreaterThen200" xml:space="preserve">
-    <value>Le nombre maximum de réponses pour la question qui définie la taille du roster ne peut pas être supérieur à {0}.</value>
+    <value>Le nombre maximum de réponses pour la question de taille du roster ne peut pas être supérieur à {0}.</value>
   </data>
   <data name="WB0101_GroupHasLevelDepthMoreThan10" xml:space="preserve">
-    <value>La sous-section ne peut pas contenir plus de {0} sous-sections parent.</value>
+    <value>La sous-section ne peut pas avoir plus de {0} sous-sections parentes.</value>
+  </data>
+  <data name="WB0006_OnlyOneGpsQuestionCouldBeMarkedAsPrefilled" xml:space="preserve">
+    <value>Une seule question GPS peut être marquée comme question d'identification.</value>
+  </data>
+  <data name="WB0007_MultiOptionQuestionYesNoQuestionCantBeLinked" xml:space="preserve">
+    <value>La question à réponse multiple oui / non ne peut pas être liée.</value>
+  </data>
+  <data name="WB0008_SubstitutionsInVariableLableAreProhibited" xml:space="preserve">
+    <value>Il n'est pas autorisé d'utiliser des substitutions dans l'étiquette de la variable.</value>
   </data>
   <data name="WB0102_QuestionnaireEntitiesShareSameInternalId" xml:space="preserve">
-    <value>Les éléments suivants du questionnaire (question / groupe / texte statique / etc.) utilisent le même identifiant interne. Veuillez en supprimer un.</value>
+    <value>Les éléments suivants du questionnaire (question/groupe/texte statique/etc.) utilisent le même ID interne. Veuillez en supprimer un.</value>
+  </data>
+  <data name="WB0010_MacroHasInvalidName" xml:space="preserve">
+    <value>La macro a un nom invalide.</value>
+  </data>
+  <data name="WB0020_NameForMacrosIsNotUnique" xml:space="preserve">
+    <value>Une autre macro portant le même nom existe déjà.</value>
+  </data>
+  <data name="WB0014_MacroHasEmptyName" xml:space="preserve">
+    <value>La macro ne peut pas avoir de nom vide.</value>
+  </data>
+  <data name="WB0271_MacroHasEmptyContent" xml:space="preserve">
+    <value>La macro ne peut pas être vide.</value>
+  </data>
+  <data name="WB0200_LargeNumberOfRostersIsCreated" xml:space="preserve">
+    <value>Un grand nombre de rosters est créé. L'exportation de ces structures dans des fichiers de données pourrait être problématique. Envisagez de réduire le nombre de rosters.</value>
+  </data>
+  <data name="WB0029_QuestionWithOptionsFilterCannotBePrefilled" xml:space="preserve">
+    <value>Les questions avec expression de filtre de catégories ne peuvent pas être identifiées.</value>
+  </data>
+  <data name="WB0026_ItemsWithTheSameNamesFound" xml:space="preserve">
+    <value>Éléments avec le même nom trouvés.</value>
+  </data>
+  <data name="WB0024_LookupHasInvalidName" xml:space="preserve">
+    <value>La table de référence a un nom invalide.</value>
+  </data>
+  <data name="WB0025_LookupHasEmptyName" xml:space="preserve">
+    <value>La table de référence ne peut pas avoir de nom vide.</value>
+  </data>
+  <data name="WB0031_LookupTableHasInvalidHeaders" xml:space="preserve">
+    <value>La table de référence a des en-têtes de colonne non valides.</value>
+  </data>
+  <data name="WB0043_LookupTableMoreThan11Columns" xml:space="preserve">
+    <value>La table de référence comporte trop de colonnes.</value>
+  </data>
+  <data name="WB0044_LookupTableMoreThan15000Rows" xml:space="preserve">
+    <value>La table de référence comporte trop de lignes.</value>
+  </data>
+  <data name="WB0047_LookupTableNotUniqueRowcodeValues" xml:space="preserve">
+    <value>La table de référence n'a pas de valeurs de code de ligne uniques.</value>
+  </data>
+  <data name="WB0048_LookupHasEmptyContent" xml:space="preserve">
+    <value>La table de référence ne peut pas être vide.</value>
+  </data>
+  <data name="WB0052_LookupNameIsKeyword" xml:space="preserve">
+    <value>Le nom de la table de référence ne peut pas être un mot réservé.</value>
+  </data>
+  <data name="WB0053_LinkedQuestionReferencesNotExistingRoster" xml:space="preserve">
+    <value>Le roster qui est la source du lien devrait exister.</value>
   </data>
   <data name="WB0103_LinkedQuestionReferencesGroupWhichIsNotARoster" xml:space="preserve">
-    <value>Roster qui est la source du lien est un roster, pas une sous-section.</value>
-  </data>
-  <data name="WB0104_ValidationConditionIsTooLong" xml:space="preserve">
-    <value>La condition de validation # {0} est trop longue. Il ne devrait pas dépasser {1} caractères.</value>
+    <value>Le roster qui est la source du lien est un roster, pas une sous-section.</value>
   </data>
   <data name="WB0105_ValidationMessageIsTooLong" xml:space="preserve">
-    <value>Le message d'erreur de validation # {0} est trop long. Il ne devrait pas dépasser {1} caractères.</value>
+    <value>Le message d'erreur de validation #{0} est trop long. Il ne doit pas dépasser {1} caractères.</value>
+  </data>
+  <data name="WB0104_ValidationConditionIsTooLong" xml:space="preserve">
+    <value>La condition de validation #{0} est trop longue. Elle ne doit pas dépasser {1} caractères.</value>
   </data>
   <data name="WB0106_ValidationConditionIsEmpty" xml:space="preserve">
-    <value>La condition de validation # {0} est vide.</value>
+    <value>La condition de validation #{0} est vide.</value>
   </data>
   <data name="WB0107_ValidationMessageIsEmpty" xml:space="preserve">
-    <value>Le message d'erreur de validation # {0} est vide.</value>
+    <value>Le message d'erreur de validation #{0} est vide.</value>
+  </data>
+  <data name="WB0201_LargeNumberOfQuestionsInGroup" xml:space="preserve">
+    <value>La section ou le roster contient plus de {0} questions, envisagez de les diviser en sous-sections.</value>
+  </data>
+  <data name="WB0202_GroupWithoutQuestions" xml:space="preserve">
+    <value>La section ne contient aucune question. Envisagez de supprimer la section vide.</value>
+  </data>
+  <data name="WB0203_RosterHasSingleQuestion" xml:space="preserve">
+    <value>Le groupe de roster contient une seule question. Envisagez de le regrouper avec d'autres rosters. Pour un roster fixe, envisagez de le présenter comme un ensemble de questions indépendantes.</value>
+  </data>
+  <data name="WB0204_EmptyRoster" xml:space="preserve">
+    <value>Le roster est vide. Supprimez-le s'il n'est pas nécessaire.</value>
+  </data>
+  <data name="WB0205_TooManyQuestions" xml:space="preserve">
+    <value>Le questionnaire contient plus de {0} questions. Il pourrait être difficile de l'administrer.</value>
+  </data>
+  <data name="WB0209_LongEnablementCondition" xml:space="preserve">
+    <value>La condition d'activation est longue. Il pourrait être possible d'avoir des conditions plus courtes et plus lisibles avec des fonctions intégrées (par exemple, InList()).</value>
+  </data>
+  <data name="WB0210_CategoricalQuestionHasManyOptions" xml:space="preserve">
+    <value>La question à choix unique a trop de catégories, envisagez de passer à une boîte combo.</value>
+  </data>
+  <data name="WB0211_QuestionnaireHasNoGpsQuestion" xml:space="preserve">
+    <value>Le questionnaire ne contient aucune question GPS. Envisagez d'ajouter une question GPS.</value>
+  </data>
+  <data name="WB0206_FewSectionsManyQuestions" xml:space="preserve">
+    <value>Le questionnaire contient plus de {0} questions mais seulement une ou deux sections. Regroupez les questions en sections pour simplifier la navigation et améliorer les performances.</value>
+  </data>
+  <data name="WB0212_LongValidationCondition" xml:space="preserve">
+    <value>La condition de validation #{0} est longue. Il pourrait être possible d'avoir des conditions plus courtes et plus lisibles avec des fonctions intégrées (par exemple, InList()).</value>
+  </data>
+  <data name="WB0207_FixedRosterContains3OrLessItems" xml:space="preserve">
+    <value>Le roster fixe contient {0} éléments ou moins. Envisagez d'utiliser des sous-sections et une série de questions. Les rosters compliquent la structure des données exportées.</value>
+  </data>
+  <data name="WB0208_MoreThan50PercentsQuestionsWithoutValidationConditions" xml:space="preserve">
+    <value>Plus de {0}% des questions ne contiennent pas de conditions de validation. Ajoutez des conditions de validation pour améliorer la qualité des données.</value>
   </data>
   <data name="WB0108_LinkedQuestionFilterExpresssionHasLengthMoreThan10000Characters" xml:space="preserve">
-    <value>L'expression du filtre de questions liées a une longueur supérieure à {0} caractères.</value>
+    <value>L'expression du filtre de la question liée est plus longue que {0} caractères.</value>
   </data>
   <data name="WB0109_CategoricalLinkedQuestionUsedInLinkedQuestionFilterExpresssion" xml:space="preserve">
     <value>La question ne peut pas être utilisée dans sa propre expression de filtre.</value>
   </data>
   <data name="WB0110_LinkedQuestionFilterExpresssionHasIncorrectSyntax" xml:space="preserve">
-    <value>L'expression de filtre a une erreur de syntaxe.</value>
+    <value>L'expression du filtre a une erreur de syntaxe.</value>
+  </data>
+  <data name="WB0065_NameForAttachmentIsNotUnique" xml:space="preserve">
+    <value>Une autre pièce jointe portant le même nom existe déjà.</value>
+  </data>
+  <data name="WB0095_StaticTextRefersAbsentAttachment" xml:space="preserve">
+    <value>Le texte statique fait référence à une pièce jointe absente.</value>
   </data>
   <data name="WB0111_AttachmentHasEmptyContent" xml:space="preserve">
-    <value>La pièce jointe ne peut pas être vide</value>
+    <value>La pièce jointe ne peut pas être vide.</value>
+  </data>
+  <data name="WB0213_AttachmentSizeIsMoreThan5Mb" xml:space="preserve">
+    <value>La taille de la pièce jointe est supérieure à {0}Mb.</value>
+  </data>
+  <data name="WB0214_TotalAttachmentsSizeIsMoreThan50Mb" xml:space="preserve">
+    <value>La taille totale des pièces jointes est supérieure à {0}Mb.</value>
+  </data>
+  <data name="WB0215_UnusedAttachments" xml:space="preserve">
+    <value>Le questionnaire contient des pièces jointes non utilisées.</value>
   </data>
   <data name="WB0112_VariableHasInvalidName" xml:space="preserve">
     <value>La variable a un nom invalide.</value>
@@ -432,257 +543,188 @@
   <data name="WB0113_VariableHasEmptyVariableName" xml:space="preserve">
     <value>La variable ne peut pas avoir de nom vide.</value>
   </data>
+  <data name="WB0250_ValidationConditionRefersToAFutureQuestion" xml:space="preserve">
+    <value>La condition de validation #{0} fait référence à une question future. Envisagez d'inverser l'ordre.</value>
+  </data>
+  <data name="WB0251_EnablementConditionRefersToAFutureQuestion" xml:space="preserve">
+    <value>La condition d'activation fait référence à une question future. Envisagez d'inverser l'ordre.</value>
+  </data>
+  <data name="WB0253_TooFewVariableLabelsAreDefined" xml:space="preserve">
+    <value>Trop peu d'étiquettes de variables sont définies. Ajoutez des étiquettes de variables pour améliorer l'utilisabilité des données exportées et fournir des informations dans le format de la Documentation des Données d'Enquête (DDI).</value>
+  </data>
+  <data name="WB0254_UseFunctionIsValidEmailToValidateEmailAddress" xml:space="preserve">
+    <value>Utilisez la fonction IsValidEmail() pour valider l'adresse e-mail.</value>
+  </data>
+  <data name="WB0255_QuestionIsTooShort" xml:space="preserve">
+    <value>La question est trop courte. Cela pourrait être une question incomplète.</value>
+  </data>
   <data name="WB0114_CategoricalQuestionSupportsOnlyIntegerPositiveValues" xml:space="preserve">
-    <value>Une question catégorielle ne prend en charge que les valeurs entières comprises entre {0} et {1}</value>
+    <value>La question catégorielle ne prend en charge que les valeurs entières dans la plage de {0} à {1}.</value>
   </data>
   <data name="WB0115_FixRosterSupportsOnlyIntegerTitleValues" xml:space="preserve">
-    <value>Un roster fixe ne prend en charge que les valeurs entières pour les les éléments du roster</value>
+    <value>Les rosters fixes ne prennent en charge que les valeurs entières.</value>
   </data>
-  <data name="WB0116_LinkedQuestionReferenceTextListQuestionFromWrongScope" xml:space="preserve">
-    <value>La question liée fait référence à une question de type liste du mauvais niveau.</value>
+  <data name="WB0256_TranslationNameIsInvalid" xml:space="preserve">
+    <value>Le nom de la traduction est invalide.</value>
   </data>
-  <data name="WB0117_LinkedToTextListQuestionDoesNotSupportFilters" xml:space="preserve">
-    <value>Une question liée ne supporte pas les options de filtre</value>
+  <data name="WB0257_TranslationHasEmptyContent" xml:space="preserve">
+    <value>La traduction a un contenu vide.</value>
   </data>
-  <data name="WB0118_ExpressionReferencingForbiddenDateTimeProperies" xml:space="preserve">
-    <value>Expression se référant à des propriétés DateTime interdites: {0}, {1}, {2}. Envisagez plutôt d'utiliser la question de temps courant.</value>
+  <data name="WB0258_TranslationsHaveDuplicatedNames" xml:space="preserve">
+    <value>Les traductions ont des noms en double.</value>
   </data>
-  <data name="WB0119_QuestionnaireTitleTooLong" xml:space="preserve">
-    <value>Le titre du questionnaire ne peut pas contenir plus de {0} symboles.</value>
+  <data name="WB0259_QuestionTitleIsTooLong" xml:space="preserve">
+    <value>Le texte de la question est trop long. Il ne doit pas dépasser {0} caractères.</value>
   </data>
-  <data name="WB0120_GroupTitleIsEmpty" xml:space="preserve">
-    <value>Les titres des sections et des sous-sections ne peuvent pas être vides ou contenir uniquement des espaces.</value>
+    <data name="WB0260_GroupTitleIsTooLong" xml:space="preserve">
+    <value>Le titre est trop long. Il ne doit pas dépasser {0} caractères.</value>
   </data>
-  <data name="WB0121_VariableNameTooLong" xml:space="preserve">
-    <value>Le nom ou l'ID de cet élément ne doit pas dépasser les {0} caractères.</value>
+  <data name="WB0082_RosterSizeMultiOptionQuestionShouldBeLimited" xml:space="preserve">
+    <value>La question source du roster à réponses multiples doit avoir un nombre maximum de réponses défini.</value>
   </data>
-  <data name="WB0122_VariableNameHasSpecialCharacters" xml:space="preserve">
-    <value>Une variable valide ou un nom d'ID de la liste ne doit contenir que des lettres, des chiffres et un symbole de tiret de huit</value>
+  <data name="WB0261_RosterStructureTooExplosive" xml:space="preserve">
+    <value>Le questionnaire contient des rosters avec un nombre total d'instances de roster {0} dépassant les limites du système {1}</value>
   </data>
-  <data name="WB0123_VariableNameStartWithDigitOrUnderscore" xml:space="preserve">
-    <value>Le nom de la variable ou l'ID du roter ne doit pas commencer par un chiffre ou un tiret du huit</value>
+  <data name="WB0262_RosterHasTooBigPropagation" xml:space="preserve">
+    <value>Le roster a atteint la limite de taille. Réduisez la taille du roster ou diminuez l'imbrication.</value>
   </data>
-  <data name="WB0124_VariableNameEndWithUnderscore" xml:space="preserve">
-    <value>Le nom de la variable ou l'ID du roster ne doit pas se terminer par un tiret du huit</value>
+  <data name="WB0264_GpsQuestion" xml:space="preserve">
+    <value>Vous avez une question GPS. Les tablettes doivent prendre en charge la géolocalisation pour être utilisées avec ce questionnaire.</value>
   </data>
-  <data name="WB0125_VariableNameHasConsecutiveUnderscores" xml:space="preserve">
-    <value>Le nom de la variable ou l'ID du roster ne doit pas comporter deux symbole de tiret du huit consécutifs ou plus.</value>
+  <data name="WB0265_MoreThan30PercentQuestionsAreText" xml:space="preserve">
+    <value>Plus de {0}% des questions sont des questions textuelles. Les questions textuelles sont difficiles à répondre sur les tablettes. Envisagez d'utiliser des questions à choix unique ou multiple à la place.</value>
   </data>
-  <data name="WB0126_VarialbeNameNotUnique" xml:space="preserve">
-    <value>Le nom de la variable ou l'identifiant du roster doit être unique dans l'ensemble du questionnaire.</value>
+  <data name="WB0266_SameTitle" xml:space="preserve">
+    <value>Questions en double. (Les questions ont le même titre.)</value>
   </data>
-  <data name="WB0127_CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair" xml:space="preserve">
-    <value>Il y a au moins un doublon de Titre + Parent Value. La liste ne doit pas contenir de doublons de ce type.</value>
-  </data>
-  <data name="WB0128_CountOfDecimalPlacesIsNotInRange" xml:space="preserve">
-    <value>Le nombre de décimales n'est pas compris entre {0} et {1}.</value>
-  </data>
-  <data name="WB0129_AnswerTitleIsTooLong" xml:space="preserve">
-    <value>Le titre de la réponse est trop long. Il devrait être compris entre {0} et {1}</value>
-  </data>
-  <data name="WB0200_LargeNumberOfRostersIsCreated" xml:space="preserve">
-    <value>Un grand nombre de roster est créé. L'exportation de ces structures dans des fichiers de données peut être problématique. Envisager de réduire le nombre de rosters.</value>
-  </data>
-  <data name="WB0201_LargeNumberOfQuestionsInGroup" xml:space="preserve">
-    <value>Section ou Roster contient plus de {0} questions, pensez à diviser en sous-sections.</value>
-  </data>
-  <data name="WB0202_GroupWithoutQuestions" xml:space="preserve">
-    <value>La section ne contient pas de questions. Envisagez de supprimer la section vide.</value>
-  </data>
-  <data name="WB0203_RosterHasSingleQuestion" xml:space="preserve">
-    <value>Le groupe de roster contient une seule question. Envisager de regrouper avec d'autres rosters. Pour le roster fixe, envisager de présenter comme un ensemble de questions indépendantes.</value>
-  </data>
-  <data name="WB0204_EmptyRoster" xml:space="preserve">
-    <value>Le roster est vide. Retirez-le si ce n'est pas nécessaire.</value>
-  </data>
-  <data name="WB0205_TooManyQuestions" xml:space="preserve">
-    <value>Le questionnaire a plus de {0} questions. Il pourrait être difficile de l'administrer.</value>
-  </data>
-  <data name="WB0206_FewSectionsManyQuestions" xml:space="preserve">
-    <value>Le questionnaire contient plus de {0} questions mais seulement une ou deux sections. Regroupez les questions en sections pour simplifier la navigation et améliorer les performances.</value>
-  </data>
-  <data name="WB0207_FixedRosterContains3OrLessItems" xml:space="preserve">
-    <value>Le roster fixe contient {0} ou moins d'éléments. Pensez à utiliser des sous-sections et une série de questions. Les rosters compliquent la structure des données exportées.</value>
-  </data>
-  <data name="WB0208_MoreThan50PercentsQuestionsWithoutValidationConditions" xml:space="preserve">
-    <value>Plus de {0}% des questions ne contiennent aucune condition de validation. Ajoutez des conditions de validation pour améliorer la qualité des données.</value>
-  </data>
-  <data name="WB0209_LongEnablementCondition" xml:space="preserve">
-    <value>La condition de validation est longue. Il peut être possible d'avoir des conditions plus courtes et plus lisibles avec des fonctions intégrées (c'est-à-dire InList ()).</value>
-  </data>
-  <data name="WB0210_CategoricalQuestionHasManyOptions" xml:space="preserve">
-    <value>Question à réponse unique a trop de catégories, envisager de changer en liste déroulante.</value>
-  </data>
-  <data name="WB0211_QuestionnaireHasNoGpsQuestion" xml:space="preserve">
-    <value>Le questionnaire ne contient aucune question GPS. Envisagez d'ajouter une question GPS.</value>
-  </data>
-  <data name="WB0212_LongValidationCondition" xml:space="preserve">
-    <value>La condition de validation # {0} est longue. Il peut être possible d'avoir des conditions plus courtes et plus lisibles avec des fonctions intégrées (c'est-à-dire InList ()).</value>
-  </data>
-  <data name="WB0213_AttachmentSizeIsMoreThan5Mb" xml:space="preserve">
-    <value>La taille de la pièce jointe est supérieure à {0} Mo.</value>
-  </data>
-  <data name="WB0214_TotalAttachmentsSizeIsMoreThan50Mb" xml:space="preserve">
-    <value>La taille totale des pièces jointes est supérieure à {0} Mo</value>
-  </data>
-  <data name="WB0215_UnusedAttachments" xml:space="preserve">
-    <value>Le questionnaire contient les pièces jointes inutilisées</value>
+  <data name="WB0267_QRBarcodeQuestion" xml:space="preserve">
+    <value>Vous avez une question de code-barres. Les tablettes doivent prendre en charge l'autofocus pour être utilisées avec ce questionnaire.</value>
   </data>
   <data name="WB0216_NoPrefilledQuestions" xml:space="preserve">
-    <value>Aucune question d'identification n'est définie. Définir au moins une question d'identification</value>
+    <value>Aucune question d'identification n'est définie. Définissez au moins une question d'identification.</value>
   </data>
   <data name="WB0217_VariableLableMoreThan120Characters" xml:space="preserve">
-    <value>Le libellé de la variable est trop long (plus de {0} caractères) et sera tronqué dans l'exportation du fichier SPSS.</value>
+    <value>L'étiquette de la variable est trop longue (plus de {0} caractères) et sera tronquée dans l'exportation du fichier SPSS.</value>
   </data>
   <data name="WB0218_ConsecutiveQuestionsWithIdenticalEnablementConditions" xml:space="preserve">
-    <value>Les questions consécutives contiennent des conditions d'activation identiques. Pensez à placer dans une sous-section et affecter une condition à la sous-section.</value>
+    <value>Des questions consécutives contiennent des conditions d'activation identiques. Envisagez de les placer dans une sous-section et d'appliquer la condition à la sous-section.</value>
   </data>
   <data name="WB0219_ConsecutiveUnconditionalSingleChoiceQuestionsWith2Options" xml:space="preserve">
-    <value>Emploi de plusieurs questions consécurtives avec des modalités {0}. Considérez utiliser plutôt une question à réponses multiples.</value>
+    <value>Plusieurs questions consécutives à choix unique inconditionnelles avec {0} catégories. Envisagez une question à choix multiple.</value>
   </data>
   <data name="WB0220_RowIndexInMultiOptionBasedRoster" xml:space="preserve">
-    <value>L'utilisation de @ {0} avec un roster à réponse multiple peut être instable. Envisagez d'utiliser @ {1} à la place.</value>
+    <value>L'utilisation de @{0} avec un roster à choix multiple peut être instable. Envisagez d'utiliser @{1} à la place.</value>
   </data>
   <data name="WB0221_NoCurrentTimeQuestions" xml:space="preserve">
-    <value>Aucune question sur le temps courant n'a été trouvée. Pensez à enregistrer la date de l'interview dans votre questionnaire.</value>
+    <value>Aucune question sur l'heure actuelle n'a été trouvée. Envisagez d'enregistrer la date de l'entretien dans votre questionnaire.</value>
   </data>
   <data name="WB0222_SingleOptionPrefilled" xml:space="preserve">
-    <value>La question à réponse unique est marquée comme question d'identification. Pensez à utiliser une question de type texte.</value>
+    <value>La question à choix unique est marquée comme question d'identification. Envisagez d'utiliser une question textuelle.</value>
   </data>
   <data name="WB0223_SectionWithLessThan5Questions" xml:space="preserve">
-    <value>La section contient moins de cinq questions. Envisagez de le joindre à d'autres sections.</value>
+    <value>La section contient moins de cinq questions. Envisagez de la fusionner avec d'autres sections.</value>
   </data>
   <data name="WB0224_TooManySubsectionsAtOneLevel" xml:space="preserve">
-    <value>Trop de sous-sections dans un niveau. Considérez plutôt une disposition hiérarchique.</value>
+    <value>Trop de sous-sections à un niveau. Envisagez une disposition hiérarchique.</value>
   </data>
   <data name="WB0225_ComboBoxWithLessThan10Elements" xml:space="preserve">
-    <value>Le menu déroulant (zone de liste déroulante) contient moins de 10 éléments. Envisager de passer à une représentation standard à réponse unique.</value>
+    <value>Le menu déroulant (boîte combo) contient moins de 10 éléments. Envisagez de passer à une représentation standard à choix unique.</value>
+  </data>
+  <data name="WB0116_LinkedQuestionReferenceTextListQuestionFromWrongScope" xml:space="preserve">
+    <value>La question liée fait référence à une question de liste textuelle d'un niveau incorrect.</value>
   </data>
   <data name="WB0226_SameCascadingParentQuestion" xml:space="preserve">
-    <value>Les questions de liste déroulante en cascade ont la même question parent.</value>
+    <value>Les questions de boîte combo en cascade ont la même question parent.</value>
   </data>
   <data name="WB0227_NotShared" xml:space="preserve">
     <value>Le questionnaire n'a pas été examiné. Envisagez de le partager avec un autre utilisateur pour obtenir des commentaires.</value>
   </data>
   <data name="WB0228_OmittedOptions" xml:space="preserve">
-    <value>La question catégorielle comporte des codes d'option non consécutifs. Vérifiez les options omises.</value>
+    <value>La question catégorielle a des codes de catégories non consécutifs. Vérifiez les catégories omises.</value>
   </data>
   <data name="WB0229_SupervisorQuestionInValidation" xml:space="preserve">
-    <value>La question adressé au superviseurest utilisée dans la validation. Vérifiez les comptes de condition pour la non-réponse du superviseur ou demandez auxsuperviseursde toujours répondre.</value>
+    <value>La question du superviseur est utilisée dans la validation. Vérifiez que la condition prend en compte la non-réponse du superviseur ou instruisez les superviseurs à toujours répondre.</value>
   </data>
   <data name="WB0230_NonconsecutiveCascadings" xml:space="preserve">
-    <value>Questions en cascade non consécutives. Pensez à poser les questions en cascade les unes après les autres.</value>
+    <value>Questions en cascade non consécutives. Envisagez de disposer les questions en cascade les unes après les autres.</value>
+  </data>
+  <data name="WB0117_LinkedToTextListQuestionDoesNotSupportFilters" xml:space="preserve">
+    <value>La question liée à une liste ne prend pas en charge le filtre de catégories.</value>
   </data>
   <data name="WB0231_MultiOptionWithMoreThan20Options" xml:space="preserve">
-    <value>La question à réponse multiple contient trop de catégories (&gt; {0}). Il sera difficile de naviguer sur les tablettes. Envisager de diviser en deux questions à réponse multiple si possible.</value>
+    <value>La question à choix multiple contient trop de catégories (&gt;{0}). Il sera difficile de naviguer sur les tablettes. Envisagez de diviser en deux questions à choix multiple si possible.</value>
   </data>
   <data name="WB0232_FiveOrMoreQuestionsWithSameEnabling" xml:space="preserve">
-    <value>Cinq questions ou plus ont la même condition d'activation. Placer les questions dans un groupe et appliquer une condition d'activation unique à un groupe pour améliorer l'efficacité du questionnaire.</value>
+    <value>Cinq questions ou plus ont la même condition d'activation. Placez les questions dans un groupe et appliquez une seule condition d'activation au groupe pour améliorer l'efficacité du questionnaire.</value>
   </data>
   <data name="WB0233_NestedRosterDegree3OrMore" xml:space="preserve">
-    <value>Roster imbriqué avec trois degrés ou plus d'imbrication. Essayez d'éviter des structures aussi complexes qui pourraient entraîner des problèmes dans la collecte de données.</value>
+    <value>Roster imbriqué avec trois degrés d'imbrication ou plus. Essayez d'éviter des structures aussi complexes qui pourraient entraîner des problèmes dans la collecte de données.</value>
   </data>
   <data name="WB0234_RosterInRosterWithSameSourceQuestion" xml:space="preserve">
     <value>Les niveaux subordonnés dans un roster imbriqué sont basés sur la même question parent. Essayez de réviser, ces rosters pourraient entraîner des problèmes dans la collecte de données.</value>
   </data>
   <data name="WB0235_FewQuestionsWithSameLongEnablement" xml:space="preserve">
-    <value>La même longue condition d'activation est utilisée dans plusieurs questions. Vous pouvez créer une variable booléenne pour simplifier la gestion du code.</value>
+    <value>La même condition d'activation longue est utilisée dans plusieurs questions. Vous pourriez vouloir créer une variable booléenne pour simplifier la gestion du code.</value>
   </data>
   <data name="WB0236_FewQuestionsWithSameLongValidation" xml:space="preserve">
-    <value>La même longue condition de validation est utilisée dans plusieurs questions. Vous pouvez créer une variable booléenne pour simplifier la gestion du code.</value>
+    <value>La même condition de validation longue est utilisée dans plusieurs questions. Vous pourriez vouloir créer une variable booléenne pour simplifier la gestion du code.</value>
   </data>
   <data name="WB0237_BitwiseAnd" xml:space="preserve">
-    <value>&amp; est utilisé dans l'expression. Assurez-vous de bien comprendre la différence entre les opérateurs &amp; et &amp;&amp;. Dans la plupart des cas, utilisez &amp;&amp; .</value>
+    <value>&amp; est utilisé dans l'expression. Assurez-vous de comprendre la différence entre les opérateurs &amp; et &amp;&amp;. Dans la plupart des cas, utilisez &amp;&amp;.</value>
   </data>
   <data name="WB0238_BitwiseOr" xml:space="preserve">
-    <value>| est utilisé dans l'expression. Assurez-vous de comprendre la différence entre | et || les opérateurs. Dans la plupart des cas, utilisez ||.</value>
+    <value>| est utilisé dans l'expression. Assurez-vous de comprendre la différence entre les opérateurs | et ||. Dans la plupart des cas, utilisez ||.</value>
   </data>
-  <data name="WB0250_ValidationConditionRefersToAFutureQuestion" xml:space="preserve">
-    <value>La condition de validation # {0} fait référence à une question future. Envisager d'inverser la commande.</value>
-  </data>
-  <data name="WB0251_EnablementConditionRefersToAFutureQuestion" xml:space="preserve">
-    <value>La condition d'activation fait référence à une question future. Envisager d'inverser la commande.</value>
-  </data>
-  <data name="WB0253_TooFewVariableLabelsAreDefined" xml:space="preserve">
-    <value>Trop peu de libéllé de variables sont définies. Ajoutez des libéllé de variables pour améliorer la convivialité des données exportées et fournir des données dans les métadonnées pour le format DDI (Data Documentation Initiative).</value>
-  </data>
-  <data name="WB0254_UseFunctionIsValidEmailToValidateEmailAddress" xml:space="preserve">
-    <value>Utilisez la fonction IsValide-mail () pour valider l'adresse e-mail.</value>
-  </data>
-  <data name="WB0255_QuestionIsTooShort" xml:space="preserve">
-    <value>La question est trop courte. Cela pourrait être une question incomplète.</value>
-  </data>
-  <data name="WB0256_TranslationNameIsInvalid" xml:space="preserve">
-    <value>Le nom de la traduction est invalide</value>
-  </data>
-  <data name="WB0257_TranslationHasEmptyContent" xml:space="preserve">
-    <value>La traduction a un contenu vide</value>
-  </data>
-  <data name="WB0258_TranslationsHaveDuplicatedNames" xml:space="preserve">
-    <value>Les traductions ont des noms en double</value>
-  </data>
-  <data name="WB0259_QuestionTitleIsTooLong" xml:space="preserve">
-    <value>Le titre de la question est trop long. Il ne devrait pas dépasser les caractères {0}.</value>
-  </data>
-  <data name="WB0260_GroupTitleIsTooLong" xml:space="preserve">
-    <value>Le titre est trop long. Il ne devrait pas dépasser les caractères {0}.</value>
-  </data>
-  <data name="WB0262_RosterHasTooBigPropagation" xml:space="preserve">
-    <value>Le roster a atteint la taille limite. Réduire la taille du roster ou réduire l'imbrication.</value>
-  </data>
-  <data name="WB0264_GpsQuestion" xml:space="preserve">
-    <value>Vous avez une question GPS. Les tablettes doivent prendre en charge la géolocalisation afin d'utiliser ce type de question.</value>
-  </data>
-  <data name="WB0265_MoreThan30PercentQuestionsAreText" xml:space="preserve">
-    <value>Plus de {0}% des questions sont des questions de type texte. Les questions de type texte sont difficiles à répondre sur les tablettes. Envisagez plutôt d'utiliser des questions à réponse unique ou multiple.</value>
-  </data>
-  <data name="WB0266_SameTitle" xml:space="preserve">
-    <value>Doublons de questions (Les questions ont le même titre.)</value>
-  </data>
-  <data name="WB0267_QRBarcodeQuestion" xml:space="preserve">
-    <value>Vous avez une question de type barre code. Les tablettes doivent prendre en charge l'autofocus pour être utilisés avec ce questionnaire.</value>
+  <data name="WB0118_ExpressionReferencingForbiddenDateTimeProperies" xml:space="preserve">
+    <value>L'expression fait référence à des propriétés DateTime interdites : {0}, {1}, {2}. Envisagez d'utiliser une question sur l'heure actuelle à la place.</value>
   </data>
   <data name="WB0268_DoesNotSupportSubstitution" xml:space="preserve">
-    <value>Vous essayez d'utiliser la substitution pour l'entité non prise en charge.</value>
+    <value>Vous essayez d'utiliser une substitution pour un élément non pris en charge.</value>
+  </data>
+  <data name="WB0269_QuestionTitleIsEmpty" xml:space="preserve">
+    <value>La question ne peut pas avoir de titre vide.</value>
   </data>
   <data name="WB0270_SectionContainsTooManyQuestions" xml:space="preserve">
     <value>La section ne doit pas contenir plus de {0} questions.</value>
   </data>
-  <data name="WB0067_VariableNameIsEmpty" xml:space="preserve">
-    <value>la variable concernée ou le nom de l'ID du roster ne devra pas etre vide</value>
+  <data name="WB0119_QuestionnaireTitleTooLong" xml:space="preserve">
+    <value>Le titre du questionnaire ne peut pas comporter plus de {0} symboles.</value>
+  </data>
+  <data name="WB0120_GroupTitleIsEmpty" xml:space="preserve">
+    <value>Les titres des sections et sous-sections ne peuvent pas être vides ou contenir uniquement des espaces.</value>
+  </data>
+  <data name="WB0121_VariableNameTooLong" xml:space="preserve">
+    <value>Le nom ou l'ID de cet élément ne doit pas dépasser {0} caractères.</value>
+  </data>
+  <data name="WB0122_VariableNameHasSpecialCharacters" xml:space="preserve">
+    <value>Le nom de la variable ou l'ID du roster doit contenir uniquement des lettres, des chiffres et des caractères de soulignement.</value>
+  </data>
+  <data name="WB0123_VariableNameStartWithDigitOrUnderscore" xml:space="preserve">
+    <value>Le nom de la variable ou l'ID du roster ne doit pas commencer par un chiffre ou un caractère de soulignement.</value>
+  </data>
+  <data name="WB0124_VariableNameEndWithUnderscore" xml:space="preserve">
+    <value>Le nom de la variable ou l'ID du roster ne doit pas se terminer par un caractère de soulignement.</value>
+  </data>
+  <data name="WB0125_VariableNameHasConsecutiveUnderscores" xml:space="preserve">
+    <value>Le nom de la variable ou l'ID du roster ne doit pas contenir deux caractères de soulignement consécutifs ou plus.</value>
+  </data>
+  <data name="WB0126_VarialbeNameNotUnique" xml:space="preserve">
+    <value>Le nom de la variable ou l'ID du roster doit être unique dans le cadre du questionnaire.</value>
+  </data>
+  <data name="WB0127_CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair" xml:space="preserve">
+    <value>Il y a au moins un doublon de paires "Titre" et "Valeur parent". La liste ne doit contenir aucun doublon.</value>
+  </data>
+  <data name="WB0128_CountOfDecimalPlacesIsNotInRange" xml:space="preserve">
+    <value>Le nombre de décimales n'est pas compris entre {0} et {1}.</value>
+  </data>
+  <data name="WB0129_AnswerTitleIsTooLong" xml:space="preserve">
+    <value>Le titre de la catégorie est vide ou trop long. La longueur du titre doit être comprise entre {0} et {1} caractères.</value>
   </data>
   <data name="WB0130_SubsectionOrRosterReferenceChildrendInCondition" xml:space="preserve">
-    <value>Vous ne pouvez pas utiliser des entités fils dans des conditions d'activation pour les sections, sous-sections et listes.</value>
-  </data>
-  <data name="WB0131_SpecialValuesHasNonIntegerOptionsValues" xml:space="preserve">
-    <value>Les valeurs spéciales ne prennent en charge que les valeurs entières comprises entre {0} et {1}.</value>
-  </data>
-  <data name="WB0132_SpecialValuesHasOptionsWithLongTexts" xml:space="preserve">
-    <value>Le titre de valeur spéciale est vide ou trop long. La longueur du titre doit être comprise entre {0} et {1} caractères.</value>
-  </data>
-  <data name="WB0133_SpecialValuesMustBeUniqueForNumericlQuestion" xml:space="preserve">
-    <value>Les valeurs spéciales doivent être uniques.</value>
-  </data>
-  <data name="WB0134_SpecialValuesCountMoreThanMaxOptionCount" xml:space="preserve">
-    <value>Contient plus de {0} valeurs spéciales.</value>
-  </data>
-  <data name="WB0135_SpecialValuesForRosterSizeQuestionsCantBeMoreThanRosterLimit" xml:space="preserve">
-    <value>La question contient une valeur spéciale, qui est trop grande et ne peut pas être utilisée dans cette question car elle détermine la taille d'un tableau</value>
-  </data>
-  <data name="WB0136_SpecialValuesHaveOptionsWithEmptyValue" xml:space="preserve">
-    <value>La question a une valeur spéciale avec une valeur vide.</value>
-  </data>
-  <data name="WB0137_SpecialValuesTitlesMustBeUnique" xml:space="preserve">
-    <value>Les titres de valeur spéciale doivent être uniques.</value>
-  </data>
-  <data name="WB0269_QuestionTitleIsEmpty" xml:space="preserve">
-    <value>La question ne peut pas avoir de texte vide.</value>
-  </data>
-  <data name="WB0271_MacroHasEmptyContent" xml:space="preserve">
-    <value>La macro ne peut pas être vide.</value>
+    <value>Vous ne pouvez pas utiliser des entités enfants dans la condition d'activation pour les sections, sous-sections et rosters.</value>
   </data>
   <data name="WB0272_ConditionUsingForbiddenClasses" xml:space="preserve">
-    <value>La condition d’activation utilise un type interdit.</value>
+    <value>La condition d'activation utilise un type interdit.</value>
   </data>
   <data name="WB0273_ValidationConditionUsingForbiddenClasses" xml:space="preserve">
     <value>La condition de validation utilise un type interdit.</value>
@@ -691,12 +733,177 @@
     <value>La variable utilise un type interdit.</value>
   </data>
   <data name="WB0275_FilterExpressionIsUsingForbiddenClasses" xml:space="preserve">
-    <value>L'expression de filtre utilise un type interdit.</value>
+    <value>L'expression du filtre utilise un type interdit.</value>
+  </data>
+  <data name="WB0131_SpecialValuesHasNonIntegerOptionsValues" xml:space="preserve">
+    <value>Les valeurs spéciales ne prennent en charge que les valeurs entières comprises entre {0} et {1}.</value>
   </data>
   <data name="WB0276_RownameIsNotSupported" xml:space="preserve">
     <value>La variable @rowname n'est plus prise en charge.</value>
   </data>
+  <data name="WB0132_SpecialValuesHasOptionsWithLongTexts" xml:space="preserve">
+    <value>Le titre de la valeur spéciale est vide ou trop long. La longueur du titre doit être comprise entre {0} et {1} caractères.</value>
+  </data>
+  <data name="WB0133_SpecialValuesMustBeUniqueForNumericlQuestion" xml:space="preserve">
+    <value>Les valeurs spéciales doivent être uniques.</value>
+  </data>
+  <data name="WB0134_SpecialValuesCountMoreThanMaxOptionCount" xml:space="preserve">
+    <value>Contient plus de {0} valeurs spéciales.</value>
+  </data>
+  <data name="WB0135_SpecialValuesForRosterSizeQuestionsCantBeMoreThanRosterLimit" xml:space="preserve">
+    <value>La question contient une valeur spéciale, qui est trop grande et ne peut pas être utilisée dans cette question car elle détermine la taille d'un roster.</value>
+  </data>
+  <data name="WB0136_SpecialValuesHaveOptionsWithEmptyValue" xml:space="preserve">
+    <value>La question a des valeurs spéciales avec une valeur vide.</value>
+  </data>
+  <data name="WB0137_SpecialValuesTitlesMustBeUnique" xml:space="preserve">
+    <value>Les titres des valeurs spéciales doivent être uniques.</value>
+  </data>
+  <data name="WB0138_SpecialValuesAttachmentsMustBeUniqueForNumericQuestion" xml:space="preserve">
+    <value>Le nom de la pièce jointe des valeurs spéciales doit être unique.</value>
+  </data>
+  <data name="WB0139_SpecialValuesAttachmentsReferAbsentAttachment" xml:space="preserve">
+    <value>La pièce jointe des valeurs spéciales fait référence à une pièce jointe inexistante.</value>
+  </data>
   <data name="WB0277_QuestionnaireTitleCannotHaveConsecutiveUnderscore" xml:space="preserve">
-    <value>Le titre du questionnaire ne doit pas comporter deux caractères de soulignement consécutifs ou plus.</value>
+    <value>Le titre du questionnaire ne doit pas contenir deux caractères de soulignement consécutifs ou plus.</value>
+  </data>
+  <data name="WB0278_PlainModeAllowedOnlyForGroupWithNoMoreThanElements" xml:space="preserve">
+    <value>Le mode simple est autorisé uniquement pour les rosters avec au maximum {0} questions ou textes statiques.</value>
+  </data>
+  <data name="WB0279_PlainModeGroupContainsNestedGroup" xml:space="preserve">
+    <value>Le mode simple ne permet pas l'utilisation de rosters imbriqués.</value>
+  </data>
+  <data name="WB0280_TextContainsLinkToUnknownQuestionOrGroup" xml:space="preserve">
+    <value>Le texte contient un lien vers une question, une sous-section, un roster ou une pièce jointe PDF inconnue.</value>
+  </data>
+  <data name="WB0057_LinksAreProhibitedOnNavigationElements" xml:space="preserve">
+    <value>Les liens sont interdits sur les éléments de navigation : sections, sous-sections, rosters</value>
+  </data>
+  <data name="WB0281_QuestionnaireExceededEntitiesLimit" xml:space="preserve">
+    <value>Le nombre total d'éléments ({0}) a dépassé la limite du système ({1}). Envisagez de réduire le nombre de questions, de textes statiques, de variables ou d'éléments dans les rosters fixes.</value>
+  </data>
+  <data name="WB0282_IdentifyingQuestionInSectionWithCondition" xml:space="preserve">
+    <value>La question d'identification ne peut pas être placée dans une section avec une condition d'activation.</value>
+  </data>
+  <data name="WB0282_TableRosterContainsNestedGroup" xml:space="preserve">
+    <value>Le mode tableau ne permet pas d'utiliser des groupes et des rosters imbriqués.</value>
+  </data>
+  <data name="WB0283_TableRosterAllowedOnlyForGroupWithNoMoreThanElements" xml:space="preserve">
+    <value>Le mode tableau est autorisé uniquement pour les rosters avec au maximum {0} questions.</value>
+  </data>
+  <data name="WB0284_TableRosterCantContainsSupervisorQuestions" xml:space="preserve">
+    <value>Le mode tableau ne permet pas d'utiliser des questions de superviseur.</value>
+  </data>
+  <data name="WB0285_TableRosterContainsOnlyAllowedQuestionTypes" xml:space="preserve">
+    <value>Le mode tableau permet d'utiliser uniquement des questions textuelles et numériques.</value>
+  </data>
+  <data name="WB0286_TableAndMatixRosterWorksOnlyInWebMode" xml:space="preserve">
+    <value>Le mode tableau ou matrice fonctionne uniquement dans les enquêtes web, sur les tablettes il sera en mode 'sous-section'.</value>
+  </data>
+  <data name="WB0309_IdentityQuestionsMustHaveVariableLabel" xml:space="preserve">
+    <value>Les questions dans la section de couverture doivent avoir une étiquette de variable.</value>
+  </data>
+  <data name="WB0308_IdentifyingQuestionsHaveOnlyAllowedTypes" xml:space="preserve">
+    <value>Les questions d'identification peuvent avoir uniquement les types autorisés (Texte, Numérique, Date/Heure, Coordonnées GPS, Option unique)</value>
+  </data>
+  <data name="WB0288_ValueAndTitleNumbersIsNotEquals" xml:space="preserve">
+    <value>L'étiquette {1} pour le code {0} est un nombre différent de la valeur étiquetée.</value>
+  </data>
+  <data name="WB0289" xml:space="preserve">
+    <value>Le nom des catégories ne doit pas dépasser {0} caractères.</value>
+  </data>
+  <data name="WB0290" xml:space="preserve">
+    <value>Le nom des catégories ne doit pas se terminer par un caractère de soulignement.</value>
+  </data>
+  <data name="WB0291" xml:space="preserve">
+    <value>Le nom des catégories ne doit pas contenir deux caractères de soulignement consécutifs ou plus.</value>
+  </data>
+  <data name="WB0292" xml:space="preserve">
+    <value>Le nom des catégories ne doit pas être vide.</value>
+  </data>
+  <data name="WB0293" xml:space="preserve">
+    <value>Le nom des catégories ne peut pas être un mot réservé.</value>
+  </data>
+  <data name="WB0294" xml:space="preserve">
+    <value>Le nom des catégories doit contenir uniquement des lettres, des chiffres et des caractères de soulignement.</value>
+  </data>
+  <data name="WB0295" xml:space="preserve">
+    <value>Le nom des catégories ne doit pas commencer par un chiffre ou un caractère de soulignement.</value>
+  </data>
+  <data name="WB0296" xml:space="preserve">
+    <value>Les questions ont les mêmes catégories. Utilisez des catégories réutilisables à la place.</value>
+  </data>
+  <data name="WB0297_MatrixRosterContainsOnlyAllowedQuestionTypes" xml:space="preserve">
+    <value>Le mode matrice permet d'utiliser uniquement des questions catégorielles simples : les modes boîte combo, en cascade ou oui/non ne sont pas autorisés.</value>
+  </data>
+  <data name="WB0298_MatrixRosterAllowedOnlyForGroupWithNoMoreThanElements" xml:space="preserve">
+    <value>Le mode matrice est autorisé uniquement pour les rosters avec au maximum {0} question(s).</value>
+  </data>
+  <data name="WB0299_MatrixRosterHasToContainNoSupervisorOrIdentifyingQuestions" xml:space="preserve">
+    <value>Le mode matrice ne doit contenir aucune question de superviseur ou d'identification.</value>
+  </data>
+  <data name="WB0301_MatrixRosterHasToContainNoLinkedQuestions" xml:space="preserve">
+    <value>Le mode matrice ne doit contenir aucune question liée.</value>
+  </data>
+  <data name="WB0302" xml:space="preserve">
+    <value>La substitution ne peut pas référencer des éléments du même niveau de roster.</value>
+  </data>
+  <data name="WB0305_DuplicatedCategoryIdParentIdPair" xml:space="preserve">
+    <value>La catégorie réutilisable ne peut pas avoir de ligne avec les mêmes valeurs Id et ParentId.</value>
+  </data>
+  <data name="WB0306_DuplicatedCategoryParentIdText" xml:space="preserve">
+    <value>La catégorie réutilisable ne peut pas avoir de ligne avec les mêmes valeurs ParentId et Texte.</value>
+  </data>
+  <data name="WB0307_QuestionReferancedToIncorrectCategories" xml:space="preserve">
+    <value>La question fait référence à une catégorie réutilisable inexistante.</value>
+  </data>
+  <data name="WB0390_OnlyStringVariableAllowedAsAttachmentName" xml:space="preserve">
+    <value>Seul le type de variable chaîne peut être utilisé comme source du nom de la pièce jointe.</value>
+  </data>
+  <data name="WB0391" xml:space="preserve">
+    <value>Le texte statique ne peut pas référencer une variable ayant une portée de roster plus profonde que lui-même.</value>
+  </data>
+  <data name="WB3010_LinkToHiddenQuestionNotAllowed" xml:space="preserve">
+    <value>Le lien vers une question cachée n'est pas autorisé.</value>
+  </data>
+  <data name="WB0311_IdentityVariablesMustHaveLabel" xml:space="preserve">
+    <value>Les variables dans la section de couverture doivent avoir une étiquette.</value>
+  </data>
+  <data name="WB0312" xml:space="preserve">
+    <value>Les catégories doivent avoir au moins deux options.</value>
+  </data>
+  <data name="WB0313_QuestionOptionReferenceToNonExistentAttachment" xml:space="preserve">
+    <value>L'option de la question fait référence à une pièce jointe inexistante.</value>
+  </data>
+  <data name="WB0314_NonUniqueAttachment" xml:space="preserve">
+    <value>La question contient plusieurs options qui font référence à la même pièce jointe.</value>
+  </data>
+  <data name="WB0315_AttachmentHasInvalidName" xml:space="preserve">
+    <value>Le nom de la pièce jointe doit contenir uniquement des lettres, des chiffres et des caractères de soulignement. Il doit commencer par une lettre, ne pas contenir de soulignements consécutifs, ne pas se terminer par un soulignement et ne pas être un mot réservé. Il ne doit pas être vide et doit comporter moins de 32 caractères.</value>
+  </data>
+  <data name="WB0316_QuestionnaireWithOldCoverPage" xml:space="preserve">
+    <value>Questionnaire au format ancien. Veuillez utiliser le lien "Générer une couverture" sur la section de couverture.</value>
+  </data>
+  <data name="WB0317_CriticalityIsNotAllowed" xml:space="preserve">
+    <value>La portée de la question critique ne peut pas être l'une des suivantes : cachée, superviseur.</value>
+  </data>
+  <data name="WB0318_CriticalityConditionExpressionHasIncorrectSyntax" xml:space="preserve">
+    <value>La condition critique a une erreur de syntaxe dans l'expression.</value>
+  </data>
+  <data name="WB0319_CriticalityConditionExpressionIsEmpty" xml:space="preserve">
+    <value>La condition critique est vide.</value>
+  </data>
+  <data name="WB0320_CriticalityConditionExpressionIsEmpty" xml:space="preserve">
+    <value>Le message dans la règle critique est vide.</value>
+  </data>
+  <data name="WB0321_CriticalityConditionUsingForbiddenClasses" xml:space="preserve">
+    <value>La condition critique utilise un type interdit.</value>
+  </data>
+  <data name="WB0322_CriticalRuleExpressionIsTooLong" xml:space="preserve">
+    <value>L'expression de la règle critique comporte plus de {0} caractères.</value>
+  </data>
+  <data name="WB0323_CriticalRuleMessageIsTooLong" xml:space="preserve">
+    <value>Le message de la condition critique comporte plus de {0} caractères.</value>
   </data>
 </root>
