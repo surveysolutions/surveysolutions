@@ -20,7 +20,7 @@ public class GeoTrackingRecord : IPlainStorageEntity<int?>
 public class GeoTrackingPoint : IPlainStorageEntity<int?>
 {
     [PrimaryKey, Unique, AutoIncrement]
-    public virtual int? Id { get; }
+    public virtual int? Id { get; set; }
     public int GeoTrackingRecordId { get; set; }
     public double Latitude { get; set; }
     public double Longitude { get; set; }
