@@ -117,23 +117,41 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AccountBlocked" xml:space="preserve">
-    <value>Votre compte est bloqué Contactez l'administrateur pour débloquer votre compte.</value>
+<data name="ClientVersionIsNotSupported" xml:space="preserve">
+    <value>Échec de l'ouverture du questionnaire. Votre version est {0}. Veuillez mettre à jour.</value>
+  </data>
+  <data name="TemplateNotFound" xml:space="preserve">
+    <value>Questionnaire avec id={0} introuvable. Veuillez vérifier la liste des questionnaires disponibles, ou contacter le collègue qui a partagé le lien du questionnaire avec vous.</value>
+  </data>
+  <data name="Questionnaire_verification_failed" xml:space="preserve">
+    <value>Votre questionnaire contient des erreurs. Veuillez vérifier le questionnaire sur Designer.</value>
+  </data>
+  <data name="User_Not_authorized" xml:space="preserve">
+    <value>Utilisateur non autorisé. Veuillez vérifier votre identifiant et votre mot de passe.</value>
+  </data>
+  <data name="OldClientPleaseUpdate" xml:space="preserve">
+    <value>Vous avez une version obsolète de l'application Headquarters. Veuillez contacter votre administrateur serveur pour demander une mise à jour.</value>
+  </data>
+  <data name="VersionParameterIsIncorrect" xml:space="preserve">
+    <value>Il y a un problème avec la version de votre questionnaire. Veuillez contacter support@mysurvey.solutions.</value>
+  </data>
+  <data name="NotSupportedQuestionnaireVersion" xml:space="preserve">
+    <value>Impossible d'importer le questionnaire. Votre questionnaire "{0}" a la version {1}. L'application Headquarters ne prend en charge que la version {2}.</value>
+  </data>
+  <data name="UserLockedOut" xml:space="preserve">
+    <value>Ton compte est bloqué. Veuillez contacter support@mysurvey.solutions pour le débloquer.</value>
   </data>
   <data name="ApplicationUpdateRequired" xml:space="preserve">
     <value>Mise à jour de l'application requise.</value>
   </data>
-  <data name="ClientVersionIsNotSupported" xml:space="preserve">
-    <value>Échec de l'ouverture du questionnaire Votre version est {0}. Veuillez mettre à jour.</value>
+  <data name="ServerError" xml:space="preserve">
+    <value>Une erreur de serveur s'est produite. Veuillez contacter support@mysurvey.solutions.</value>
   </data>
-  <data name="ConfirmAccount" xml:space="preserve">
-    <value>Veuillez confirmer votre compte d'abord. Nous avons envoyé un lien de confirmation à {0}. L'avez-vous reçu?</value>
+  <data name="The_user_name_or_password_provided_is_incorrect" xml:space="preserve">
+    <value>Le nom d'utilisateur ou le mot de passe fourni est incorrect. Veuillez saisir à nouveau.</value>
   </data>
-  <data name="Email_required" xml:space="preserve">
-    <value>Un e-mail est requis</value>
-  </data>
-  <data name="EmptyTranslationFile" xml:space="preserve">
-    <value>Le fichier de traduction sélectionné est vide</value>
+  <data name="You_did_not_type_the_verification_word_correctly" xml:space="preserve">
+    <value>Le mot de vérification est incorrect. Veuillez réessayer.</value>
   </data>
   <data name="EmptyUserNameOrPassword" xml:space="preserve">
     <value>Le nom d'utilisateur ou le mot de passe est vide.</value>
@@ -141,23 +159,41 @@
   <data name="IncorrectUserNameOrPassword" xml:space="preserve">
     <value>Le nom d'utilisateur ou le mot de passe est incorrect. Veuillez réessayer.</value>
   </data>
-  <data name="InvalidEmailAddress" xml:space="preserve">
-    <value>Adresse mail invalide</value>
+  <data name="AccountBlocked" xml:space="preserve">
+    <value>Votre compte est bloqué. Contactez l'administrateur pour débloquer votre compte.</value>
   </data>
-  <data name="Maintenance" xml:space="preserve">
-    <value>Le serveur est en mode maintenance présentement. Désolé pour le dérangement. Veuillez réessayer plus tard.</value>
+  <data name="PasswordResetNotAllowed" xml:space="preserve">
+    <value>La réinitialisation du mot de passe n'est pas autorisée</value>
   </data>
-  <data name="NoAccessToQuestionnaire" xml:space="preserve">
-    <value>L'utilisateur n'a pas les autorisations pour accéder au questionnaire demandé</value>
+  <data name="ConfirmAccount" xml:space="preserve">
+    <value>Veuillez confirmer votre compte d'abord. Nous avons envoyé un lien de confirmation à {0}. L'avez-vous reçu?</value>
   </data>
-  <data name="NotSupportedQuestionnaireVersion" xml:space="preserve">
-    <value>Impossible d'importer le questionnaire. Votre questionnaire "{0}" a la version {1}. L'application Headquarters ne prend en charge que la version {2}.</value>
+  <data name="RequestAnotherEmail" xml:space="preserve">
+    <value>Demander un autre.</value>
   </data>
-  <data name="OldClientPleaseUpdate" xml:space="preserve">
-    <value>Vous avez une version obsolète de l'application Headquarters. Veuillez contacter support@mysurvey.solutions pour demander une mise à jour.</value>
+  <data name="Your_email_is_verified" xml:space="preserve">
+    <value>Designer a vérifié avec succès votre e-mail.</value>
   </data>
-  <data name="OldPassword_required" xml:space="preserve">
-    <value>Le mot de passe actuel est requis</value>
+  <data name="Unexpected_error_occurred_Please_try_again_later" xml:space="preserve">
+    <value>Une erreur inattendue est apparue. Veuillez réessayer d'utiliser Designer plus tard.</value>
+  </data>
+  <data name="User_does_not_exist" xml:space="preserve">
+    <value>L'utilisateur {0} n'existe pas. Veuillez saisir un nom d'utilisateur ou un e-mail valide.</value>
+  </data>
+  <data name="The_current_password_is_incorrect_or_the_new_password_is_invalid" xml:space="preserve">
+    <value>La combinaison actuel / nouveau mot de passe est invalide, veuillez le ressaisir.</value>
+  </data>
+  <data name="User_already_confirmed_in_system" xml:space="preserve">
+    <value>Utilisateur {0} déjà confirmé dans le système. Veuillez saisir votre identifiant et votre mot de passe pour commencer à utiliser Designer.</value>
+  </data>
+  <data name="User_does_not_exist_Please_enter_a_valid_user_name" xml:space="preserve">
+    <value>L'utilisateur {0} n'existe pas. Veuillez saisir un nom d'utilisateur ou un courriel valide.</value>
+  </data>
+  <data name="Your_password_successfully_changed" xml:space="preserve">
+    <value>Vous avez changé votre mot de passe avec succès.</value>
+  </data>
+  <data name="The_password_and_confirmation_password_do_not_match" xml:space="preserve">
+    <value>Le mot de passe et le mot de passe de confirmation ne correspondent pas.</value>
   </data>
   <data name="Password_must_be_at_least_characters_long" xml:space="preserve">
     <value>Le mot de passe doit contenir au moins {2} caractères.</value>
@@ -165,85 +201,73 @@
   <data name="Password_must_contain_at_least_one_number_one_upper_case_character_and_one_lower_case_character" xml:space="preserve">
     <value>Le mot de passe doit contenir au moins un chiffre, une lettre majuscule et une lettre minuscule.</value>
   </data>
-  <data name="Password_required" xml:space="preserve">
-    <value>Mot de passe requis</value>
-  </data>
-  <data name="PasswordResetNotAllowed" xml:space="preserve">
-    <value>La réinitialisation du mot de passe n'est pas autorisée</value>
-  </data>
-  <data name="Questionnaire_verification_failed" xml:space="preserve">
-    <value>Votre questionnaire contient des erreurs Veuillez vérifier le questionnaire sur Designer.</value>
-  </data>
-  <data name="QuestionnaireTitle_required" xml:space="preserve">
-    <value>Le titre du questionnaire est requis</value>
-  </data>
-  <data name="RequestAnotherEmail" xml:space="preserve">
-    <value>Demander un autre.</value>
-  </data>
-  <data name="RestorePassword_EmailSentInstructions" xml:space="preserve">
-    <value>Un message a été envoyé à votre adresse e-mail. Veuillez suivre les instructions dans l'e-mail pour restaurer le mot de passe.</value>
-  </data>
-  <data name="ServerError" xml:space="preserve">
-    <value>Une erreur de serveur s'est produite. Veuillez contacter support@mysurvey.solutions.</value>
-  </data>
-  <data name="TemplateNotFound" xml:space="preserve">
-    <value>Questionnaire avec id = {0} introuvable. Veuillez vérifier la liste des questionnaires disponibles, ou contacter le collègue qui a partagé le lien du questionnaire avec vous.</value>
-  </data>
-  <data name="The_current_password_is_incorrect_or_the_new_password_is_invalid" xml:space="preserve">
-    <value>La combinaison actuel / nouveau mot de passe est invalide, veuillez le ressaisir.</value>
-  </data>
-  <data name="The_password_and_confirmation_password_do_not_match" xml:space="preserve">
-    <value>Le mot de passe et le mot de passe de confirmation ne correspondent pas.</value>
-  </data>
-  <data name="The_user_name_or_password_provided_is_incorrect" xml:space="preserve">
-    <value>Le nom d'utilisateur ou le mot de passe fourni est incorrect. Veuillez saisir à nouveau.</value>
-  </data>
-  <data name="Unexpected_error_occurred_Please_try_again_later" xml:space="preserve">
-    <value>Une erreur inattendue est apparue. Veuillez réessayer d'utiliser Designer plus tard.</value>
-  </data>
-  <data name="User_already_confirmed_in_system" xml:space="preserve">
-    <value>Utilisateur {0} déjà confirmé dans le système. Veuillez saisir votre identifiant et votre mot de passe pour commencer à utiliser Designer.</value>
-  </data>
-  <data name="User_does_not_exist" xml:space="preserve">
-    <value>L'utilisateur {0} n'existe pas. Veuillez saisir un nom d'utilisateur ou un e-mail valide.</value>
-  </data>
-  <data name="User_does_not_exist_Please_enter_a_valid_user_name" xml:space="preserve">
-    <value>L'utilisateur {0} n'existe pas. Veuillez saisir un nom d'utilisateur ou un courriel valide.</value>
-  </data>
   <data name="User_name_needs_to_be_between_3_and_15_characters" xml:space="preserve">
     <value>Le nom d'utilisateur doit comporter entre 3 et 15 caractères et ne doit contenir que des lettres, des chiffres et un symbole de tiret de huit.</value>
   </data>
-  <data name="User_Not_authorized" xml:space="preserve">
-    <value>Utilisateur non autorisé. Veuillez vérifier votre identifiant et votre mot de passe.</value>
-  </data>
-  <data name="UserLockedOut" xml:space="preserve">
-    <value>Ton compte est bloqué. Veuillez contacter support@mysurvey.solutions pour le débloquer.</value>
-  </data>
-  <data name="UserName_required" xml:space="preserve">
-    <value>Nom d'utilisateur est requis</value>
-  </data>
-  <data name="UserNeedToContactSupportFormat" xml:space="preserve">
-    <value>Vous n'êtes pas autorisé à effectuer cette action. Veuillez contacter l'équipe d'appui. IP: {0}</value>
-  </data>
-  <data name="UserNotApproved" xml:space="preserve">
-    <value>Votre compte n'est pas approuvé. Veuillez confirmer votre compte en premier. Nous avons envoyé un lien de confirmation à {0}.</value>
-  </data>
-  <data name="VersionParameterIsIncorrect" xml:space="preserve">
-    <value>Il y a un problème avec la version de votre questionnaire. Veuillez contacter support@mysurvey.solutions.</value>
-  </data>
-  <data name="You_did_not_type_the_verification_word_correctly" xml:space="preserve">
-    <value>Le mot de vérification est incorrect. Veuillez réessayer.</value>
-  </data>
-  <data name="Your_email_is_verified" xml:space="preserve">
-    <value>Designer a vérifié avec succès votre e-mail.</value>
-  </data>
-  <data name="Your_password_successfully_changed" xml:space="preserve">
-    <value>Vous avez changé votre mot de passe avec succès.</value>
+  <data name="Maintenance" xml:space="preserve">
+    <value>Le serveur est en mode maintenance présentement. Désolé pour le dérangement. Veuillez réessayer plus tard.</value>
   </data>
   <data name="YourQuestionnaire_0_ContainsNewFunctionalityWhichIsNotSupportedByYourInstallationPleaseUpdate" xml:space="preserve">
     <value>Votre questionnaire "{0}" contient une nouvelle fonctionnalité: {1}. Les nouvelles fonctionnalités ne sont pas supportées par votre installation. Veuillez mettre à jour.</value>
   </data>
+  <data name="UserNotApproved" xml:space="preserve">
+    <value>Votre compte n'est pas approuvé. Veuillez confirmer votre compte en premier. Nous avons envoyé un lien de confirmation à {0}.</value>
+  </data>
+  <data name="RestorePassword_EmailSentInstructions" xml:space="preserve">
+    <value>Un message a été envoyé à votre adresse e-mail. Veuillez suivre les instructions dans l'e-mail pour restaurer le mot de passe.</value>
+  </data>
+  <data name="EmptyTranslationFile" xml:space="preserve">
+    <value>Le fichier de traduction sélectionné est vide</value>
+  </data>
+  <data name="NoAccessToQuestionnaire" xml:space="preserve">
+    <value>L'utilisateur n'a pas les autorisations pour accéder au questionnaire demandé.</value>
+  </data>
+  <data name="UserNeedToContactSupportFormat" xml:space="preserve">
+    <value>Vous n'êtes pas autorisé à effectuer cette action. Veuillez contacter l'équipe d'appui. IP: {0}</value>
+  </data>
+  <data name="Email_required" xml:space="preserve">
+    <value>Un e-mail est requis</value>
+  </data>
+  <data name="EmailOrLogin_required" xml:space="preserve">
+    <value>Nom d'utilisateur ou e-mail est requis</value>
+  </data>
+  <data name="InvalidEmailAddress" xml:space="preserve">
+    <value>Adresse mail invalide</value>
+  </data>
+  <data name="OldPassword_required" xml:space="preserve">
+    <value>Le mot de passe actuel est requis</value>
+  </data>
+  <data name="Password_required" xml:space="preserve">
+    <value>Mot de passe requis</value>
+  </data>
+  <data name="UserName_required" xml:space="preserve">
+    <value>Nom d'utilisateur est requis</value>
+  </data>
+  <data name="QuestionnaireTitle_required" xml:space="preserve">
+    <value>Le titre du questionnaire est requis</value>
+  </data>
   <data name="NoQuestionnaireIdToValidatePremissions" xml:space="preserve">
     <value>L'identifiant du questionnaire n'était pas fournit pour valider le questionnaire</value>
+  </data>
+  <data name="UnhandledExceptionDuringUpdateUserInfo" xml:space="preserve">
+    <value>Impossible de mettre à jour les informations de l'utilisateur. Veuillez réessayer plus tard.</value>
+  </data>
+  <data name="FullNameMaxLengthError" xml:space="preserve">
+    <value>Le nom complet ne peut pas contenir plus de {1} caractères</value>
+  </data>
+  <data name="QuestionnaireVariable_required" xml:space="preserve">
+    <value>La variable du questionnaire est requise</value>
+  </data>
+  <data name="QuestionnaireVariable_rules" xml:space="preserve">
+    <value>La variable du questionnaire est utilisée comme préfixe pour former les noms des fichiers d'exportation. Les noms de variables et les identifiants de roster doivent contenir uniquement les caractères suivants : a-z, A-Z, _, ou 0-9. Le premier caractère ne peut pas être 0-9 ou _ et le dernier ne peut pas être _.</value>
+  </data>
+  <data name="QuestionnaireVariable_MaxLength" xml:space="preserve">
+    <value>Les noms de variables et les identifiants de roster peuvent comporter de 1 à {1} caractères</value>
+  </data>
+  <data name="QuestionnaireTitle_rules" xml:space="preserve">
+    <value>Seuls les caractères suivants peuvent être utilisés dans le titre du questionnaire : A..Z a..z 0..9 ( ) \ / _ - et espace, et ne doivent pas avoir deux caractères de soulignement consécutifs ou plus.</value>
+  </data>
+  <data name="QuestionnaireTitle_MaxLength" xml:space="preserve">
+    <value>Le titre du questionnaire ne peut pas contenir plus de {1} caractères.</value>
   </data>
 </root>
