@@ -88,6 +88,7 @@ public class GeoTrackingSynchronizer : IGeoTrackingSynchronizer
                 .Where(p => p.GeoTrackingRecordId == record.Id.Value);
             geoTrackingPointsStorage.Remove(points);
         }
+        geoTrackingRecordsStorage.Remove(geoTrackingRecordsToRemove);
     }
 
     public void SavePackage(GeoTrackingPackageApiView package)
