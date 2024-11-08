@@ -12,8 +12,10 @@ namespace WB.Persistence.Headquarters.Migrations.Workspace
     {
         public override void Up()
         {
-            Delete.Table("geo_tracking_points");
-            Delete.Table("geo_tracking_records");
+            if (Schema.Table("geo_tracking_points").Exists())
+                Delete.Table("geo_tracking_points");
+            if (Schema.Table("geo_tracking_records").Exists())
+                Delete.Table("geo_tracking_records");
             
             Create.Table("geo_tracking_records")
                 .WithColumn("id").AsInt64().Identity().PrimaryKey()
