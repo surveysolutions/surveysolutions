@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
+using WB.Core.BoundedContexts.Headquarters.GeoTracking;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
@@ -40,6 +41,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         private readonly IAssignmentPasswordGenerator passwordGenerator;
         private readonly ICommandService commandService;
         private readonly IAssignmentFactory assignmentFactory;
+        private readonly IPlainStorageAccessor<GeoTrackingRecord> geoTrackingStorage;
 
         public AssignmentsApiController(IAssignmentViewFactory assignmentViewFactory,
             IAuthorizedUser authorizedUser,
@@ -51,7 +53,8 @@ namespace WB.UI.Headquarters.Controllers.Api
             IStatefulInterviewRepository interviews, 
             IAssignmentPasswordGenerator passwordGenerator,
             ICommandService commandService,
-            IAssignmentFactory assignmentFactory)
+            IAssignmentFactory assignmentFactory,
+            IPlainStorageAccessor<GeoTrackingRecord> geoTrackingStorage)
         {
             this.assignmentViewFactory = assignmentViewFactory;
             this.authorizedUser = authorizedUser;
@@ -64,6 +67,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             this.passwordGenerator = passwordGenerator;
             this.commandService = commandService;
             this.assignmentFactory = assignmentFactory;
+            this.geoTrackingStorage = geoTrackingStorage;
         }
         
         [HttpGet]
@@ -377,6 +381,46 @@ namespace WB.UI.Headquarters.Controllers.Api
             public string LastUpdatedDate { get; set; }
             public int AssignmentId { get; set; }
             public List<AnswerView> IdentifyingData { get; set; }
+        }
+        
+        public class GeoTrackingViewModel
+        {
+            public long Id { get; set; }
+            public Guid InterviewerId { get; set; }
+            public int AssignmentId { get; set; }
+            public DateTimeOffset Start { get; set; }
+            public DateTimeOffset? End { get; set; }
+            public GeoTrackingPointViewModel[] Points { get; set; }
+        }
+        
+        public class GeoTrackingPointViewModel
+        {
+            public double Lat { get; set; }
+            public double Lng { get; set; }
+            public DateTimeOffset Time { get; set; }
+        }
+
+        [HttpGet]
+        [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor)]
+        public GeoTrackingViewModel[] GeoTrackingHistory(int assignmentId)
+        {
+            var records = geoTrackingStorage
+                .Query(r => r.Where(x => x.AssignmentId == assignmentId))
+                .ToArray();
+            return records.Select(r => new GeoTrackingViewModel()
+            {
+                Id = r.Id,
+                AssignmentId = r.AssignmentId,
+                InterviewerId = r.InterviewerId,
+                Start = r.Start,
+                End = r.End,
+                Points = r.Points.Select(p => new GeoTrackingPointViewModel()
+                {
+                    Lat = p.Latitude,
+                    Lng = p.Longitude,
+                    Time = p.Time,
+                }).ToArray()
+            }).ToArray();
         }
     }
 }

@@ -30,6 +30,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Enumerator.Native.WebInterview;
+using WB.UI.Headquarters.Controllers.Api;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models;
 using WB.UI.Headquarters.Resources;
@@ -95,6 +96,43 @@ namespace WB.UI.Headquarters.Controllers
             this.calendarEventService = calendarEventService;
             this.webInterviewLinkProvider = webInterviewLinkProvider;
         }
+        
+        
+        [HttpGet]
+        [Route("assignments/{id:int}/geotracking")]
+        public IActionResult GeoTrackingHistory(int id)
+        {
+            var assignment = this.assignments.GetAssignment(id);
+            if (assignment == null) 
+                return NotFound();
+
+            ViewBag.Title = string.Format(Pages.AssignmentDetails_PageTitle, assignment.Id);
+
+            var model = new
+            {
+                AssignmentId = assignment.Id,
+                InterviewsProvided = assignment.InterviewSummaries.Count,
+                Responsible = new 
+                {
+                    Id = assignment.ResponsibleId,
+                    Name = assignment.Responsible.Name,
+                    Role = Enum.GetName(typeof(UserRoles), assignment.Responsible.RoleIds.FirstOrDefault().ToUserRole())
+                        ?.ToLower()
+                },
+                TargetArea = assignment.TargetArea,
+                Api = new
+                {
+                    ShapefileJson = Url.Action("ShapefileInfo", "MapDashboardApi"),
+                    GeoTrackingHistory = Url.Action("GeoTrackingHistory", "AssignmentsApi", new { assignmentId = assignment.Id }),
+                    Responsible = this.currentUser.IsSupervisor
+                        ? Url.Action("InterviewersCombobox", "Teams")
+                        : Url.Action("ResponsiblesCombobox", "Teams"),
+                    Assignments = Url.Action("Get", "AssignmentsApi"),
+                    AssignmentsApi = Url.Content("~/api/v1/assignments")
+                }
+            };
+            return View("GeoTracking", model);
+        }
 
         [ActivePage(MenuItem.Assignments)]
         [HttpGet]
@@ -102,7 +140,14 @@ namespace WB.UI.Headquarters.Controllers
         [Route("{controller}/{action=Index}")]
         public IActionResult Index(int? id = null)
         {
-            if (id.HasValue) return GetAssignmentDetails(id.Value);
+            if (id.HasValue)
+            {
+                var assignment = this.assignments.GetAssignment(id.Value);
+                if (assignment == null) 
+                    return NotFound();
+
+                return View("Details", GetAssignmentDetails(assignment));
+            }
 
             var questionnaires = this.allUsersAndQuestionnairesFactory.GetQuestionnaireComboboxViewItems();
 
@@ -129,13 +174,9 @@ namespace WB.UI.Headquarters.Controllers
             });
         }
 
-        private IActionResult GetAssignmentDetails(int assignmentId)
+        private object GetAssignmentDetails(Assignment assignment)
         {
-            var assignment = this.assignments.GetAssignment(assignmentId);
-            if (assignment == null) 
-                return NotFound();
-
-            ViewBag.SpecificPageCaption = assignmentId;
+            ViewBag.SpecificPageCaption = assignment.Id;
             
             var calendarEvent = calendarEventService.GetActiveCalendarEventForAssignmentId(assignment.Id);
             
@@ -206,7 +247,7 @@ namespace WB.UI.Headquarters.Controllers
                     AssignmentsApi = Url.Content("~/api/v1/assignments")
                 }
             };
-            return View("Details", model);
+            return model;
         }
 
         [HttpGet]
