@@ -143,10 +143,7 @@
   </data>
   <data name="WB0013_LinkedQuestionReferencesQuestionNotUnderRosterGroup" xml:space="preserve">
     <value>La question liée fait référence à une question qui ne figure pas dans un roster.</value>
-  </data>
-  <data name="WB0014_MacroHasEmptyName" xml:space="preserve">
-    <value>La macro ne peut pas avoir de nom vide.</value>
-  </data>
+  </data>  
   <data name="WB0015_QuestionWithTitleSubstitutionCantBePrefilled" xml:space="preserve">
     <value>Une question avec substitution de titre ne peut pas être marquée comme question d'identification.</value>
   </data>
