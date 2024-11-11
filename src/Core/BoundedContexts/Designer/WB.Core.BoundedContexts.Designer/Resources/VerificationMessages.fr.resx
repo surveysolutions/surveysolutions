@@ -155,10 +155,7 @@
   </data>
   <data name="WB0019_SubstitutionCantReferenceItemWithDeeperRosterLevel" xml:space="preserve">
     <value>La substitution ne peut pas référencer les éléments d'un niveau hierarchique inférieur.</value>
-  </data>
-  <data name="WB0020_NameForMacrosIsNotUnique" xml:space="preserve">
-    <value>Une autre macro portant le même nom existe déjà.</value>
-  </data>
+  </data>  
   <data name="WB0021_CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount" xml:space="preserve">
     <value>Le nombre maximum de réponses est supérieur au nombre de catégories de questions.</value>
   </data>
