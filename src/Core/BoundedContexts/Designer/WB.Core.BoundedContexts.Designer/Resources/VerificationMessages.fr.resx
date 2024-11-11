@@ -134,10 +134,7 @@
   </data>
   <data name="WB0009_RosterSizeQuestionIsMissing" xml:space="preserve">
     <value>La question source du roster, qui définit sa taille et ses éléments, est manquante.</value>
-  </data>
-  <data name="WB0010_MacroHasInvalidName" xml:space="preserve">
-    <value>La macro a un nom invalide.</value>
-  </data>
+  </data>  
   <data name="WB0011_LinkedQuestionReferencesNotExistingQuestion" xml:space="preserve">
     <value>La question liée fait référence à une question inexistante.</value>
   </data>
