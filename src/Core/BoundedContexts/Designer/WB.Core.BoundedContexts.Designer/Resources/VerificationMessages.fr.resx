@@ -521,10 +521,7 @@
   </data>
     <data name="WB0260_GroupTitleIsTooLong" xml:space="preserve">
     <value>Le titre est trop long. Il ne doit pas dépasser {0} caractères.</value>
-  </data>
-  <data name="WB0082_RosterSizeMultiOptionQuestionShouldBeLimited" xml:space="preserve">
-    <value>La question source du roster à réponses multiples doit avoir un nombre maximum de réponses défini.</value>
-  </data>
+  </data>  
   <data name="WB0261_RosterStructureTooExplosive" xml:space="preserve">
     <value>Le questionnaire contient des rosters avec un nombre total d'instances de roster {0} dépassant les limites du système {1}</value>
   </data>
