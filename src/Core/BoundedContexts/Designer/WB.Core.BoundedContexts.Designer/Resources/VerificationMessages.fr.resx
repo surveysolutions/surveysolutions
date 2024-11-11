@@ -132,15 +132,6 @@
   <data name="WB0005_VariableExpressionHasLengthMoreThan10000Characters" xml:space="preserve">
     <value>L'expression de variable a une longueur supérieure à {0} caractères.</value>
   </data>
-  <data name="WB0006_OnlyOneGpsQuestionCouldBeMarkedAsPrefilled" xml:space="preserve">
-    <value>Une seule question GPS peut être marquée comme question d'identification</value>
-  </data>
-  <data name="WB0007_MultiOptionQuestionYesNoQuestionCantBeLinked" xml:space="preserve">
-    <value>Question à réponse multiple oui / non ne peut pas être liée</value>
-  </data>
-  <data name="WB0008_SubstitutionsInVariableLableAreProhibited" xml:space="preserve">
-    <value>Il n'est pas autorisé d'utiliser des substitutions dans la label de variable</value>
-  </data>
   <data name="WB0009_RosterSizeQuestionIsMissing" xml:space="preserve">
     <value>La question source du roster, qui définit sa taille et ses éléments, est manquante.</value>
   </data>
