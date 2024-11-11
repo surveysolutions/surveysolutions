@@ -531,4 +531,10 @@
   <data name="Action_QuantityChanged" xml:space="preserve">
       <value>Ожидаемое количество изменёно</value>
   </data>
+  <data name="DetailsTargetAreaa" xml:space="preserve">
+      <value>Целевая область</value>
+  </data>
+  <data name="DetailsGeoTracking" xml:space="preserve">
+      <value>Гео-отслеживание</value>
+  </data>
 </root>

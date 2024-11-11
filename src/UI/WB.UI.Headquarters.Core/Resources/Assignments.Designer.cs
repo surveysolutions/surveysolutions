@@ -884,5 +884,17 @@ namespace WB.UI.Headquarters.Resources {
                 return ResourceManager.GetString("Action_QuantityChanged", resourceCulture);
             }
         }
+        
+        public static string DetailsTargetAreaa {
+            get {
+                return ResourceManager.GetString("DetailsTargetAreaa", resourceCulture);
+            }
+        }
+        
+        public static string DetailsGeoTracking {
+            get {
+                return ResourceManager.GetString("DetailsGeoTracking", resourceCulture);
+            }
+        }
     }
 }

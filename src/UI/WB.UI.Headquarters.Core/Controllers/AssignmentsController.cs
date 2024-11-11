@@ -225,6 +225,7 @@ namespace WB.UI.Headquarters.Controllers
                 TargetArea = assignment.TargetArea,
                 IsArchived = assignment.Archived,
                 InvitationToken = this.invitationService.GetInvitationByAssignmentId(assignment.Id)?.Token,
+                HasTargetArea = !string.IsNullOrWhiteSpace(assignment.TargetArea),
                 CalendarEvent = calendarEvent != null
                     ? new
                     {
@@ -244,7 +245,8 @@ namespace WB.UI.Headquarters.Controllers
                         ? Url.Action("InterviewersCombobox", "Teams")
                         : Url.Action("ResponsiblesCombobox", "Teams"),
                     Assignments = Url.Action("Get", "AssignmentsApi"),
-                    AssignmentsApi = Url.Content("~/api/v1/assignments")
+                    AssignmentsApi = Url.Content("~/api/v1/assignments"),
+                    GeoTarckingUrl = Url.Action("GeoTrackingHistory", new { id = assignment.Id })
                 }
             };
             return model;
