@@ -2,14 +2,18 @@
     <HqLayout :hasFilter="true" :hasHeader="false">
         <template v-slot:filters>
             <Filters>
-                <FilterBlock :title="$t('Common.GeoTrackNumbet')">
+                <FilterBlock :title="$t('Common.GeoTrackNumber')">
                     <Typeahead control-id="questionnaireId" :placeholder="$t('Common.AllGeoTracks')" noSearch
                         :values="ddlGeoTracks" :value="selectedGeoTrackingId" v-on:selected="selectedGeoTracking" />
                 </FilterBlock>
-                <FilterBlock :title="$t('Common.Responsible')" v-if="model.userRole != 'Interviewer'">
+                <FilterBlock :title="$t('Common.Responsible')">
                     <Typeahead control-id="responsibleId" :placeholder="$t('Common.AllResponsible')"
                         :value="responsibleId" :ajax-params="responsibleParams" :selectedValue="query.responsible"
                         v-on:selected="selectResponsible" :fetch-url="model.responsible"></Typeahead>
+                </FilterBlock>
+                <FilterBlock :title="$t('Common.DateRange')">
+                    <DatePicker :config="datePickerConfig" :value="selectedDateRange" :withClear="true"
+                        v-on:clear="clearDateRange"></DatePicker>
                 </FilterBlock>
                 <FilterBlock v-if="isLoading" :title="$t('Reports.MapDataLoading')">
                     <div class="progress">
@@ -168,7 +172,7 @@
                 <div class="form-group">
                     <label class="control-label" for="newResponsibleId">{{
                         $t('Assignments.SelectResponsible')
-                    }}</label>
+                        }}</label>
                     <Typeahead control-id="newResponsibleId" :placeholder="$t('Common.Responsible')"
                         :value="newResponsibleId" :ajax-params="{}" @selected="newResponsibleSelected"
                         :fetch-url="model.responsible"></Typeahead>
@@ -257,6 +261,8 @@ import { nextTick } from 'vue'
 import { debounce, delay, forEach, find } from 'lodash'
 import routeSync from '~/shared/routeSync'
 import { Form, Field } from 'vee-validate'
+import moment from 'moment'
+import { DateFormats } from '~/shared/helpers'
 
 export default {
     mixins: [routeSync],
@@ -280,7 +286,32 @@ export default {
             newResponsibleId: null,
             isReassignReceivedByTablet: false,
             geoJsonFeatures: null,
+            dateRange: null,
         }
+    },
+
+    async mounted() {
+
+        this.setMapCanvasStyle()
+        await this.initializeMap()
+        this.displayShapefileName();
+        await this.getGeoTrackingHistory();
+
+        if (this.$route.query.track)
+            this.selectedGeoTrackingId = this.tracks.find(t => t.id == this.$route.query.track)
+        this.responsibleId = this.$route.query.responsible
+        const startDate = this.$route.query.start
+        const endDate = this.$route.query.end
+        if (endDate && startDate) {
+            this.dateRange = {
+                startDate: startDate,
+                endDate: endDate,
+            }
+        }
+
+        this.displayGeoTrackingHistory();
+
+        this.showPointsOnMap(180, 180, -180, -180, true)
     },
 
     computed: {
@@ -341,8 +372,10 @@ export default {
 
         queryString() {
             return {
-                trackId: this.query.trackId,
+                track: this.query.track,
                 responsible: this.query.responsible,
+                start: this.query.start,
+                end: this.query.end,
             }
         },
 
@@ -353,16 +386,37 @@ export default {
         ddlGeoTracks() {
             return this.tracks.map(i => { return { key: i.id, value: "#" + i.id } })
         },
-    },
 
-    async mounted() {
-        this.setMapCanvasStyle()
-        await this.initializeMap()
-        this.displayShapefileName();
-        await this.getGeoTrackingHistory();
-        this.displayGeoTrackingHistory();
+        selectedDateRange() {
+            if (this.dateRange == null) return null
+            return `${moment(this.dateRange.startDate).format(DateFormats.date)} to ${moment(this.dateRange.endDate).format(DateFormats.date)}`
+        },
 
-        this.showPointsOnMap(180, 180, -180, -180, true)
+        datePickerConfig() {
+            var self = this
+            return {
+                mode: 'range',
+                maxDate: 'today',
+                wrap: true,
+                onChange: (selectedDates, dateStr, instance) => {
+                    const start = selectedDates.length > 0 ? selectedDates[0] : null
+                    const end = selectedDates.length > 1 ? selectedDates[1] : null
+                    if (start != null && end != null) {
+                        self.dateRange = {
+                            startDate: start,
+                            endDate: end,
+                        }
+                    }
+
+                    self.onChange((q) => {
+                        q.start = self.dateRange == null ? null : moment(self.dateRange.startDate).format(DateFormats.date);
+                        q.end = self.dateRange == null ? null : moment(self.dateRange.endDate).format(DateFormats.date);
+                    })
+
+                    self.displayGeoTrackingHistory()
+                },
+            }
+        },
     },
 
     methods: {
@@ -532,17 +586,11 @@ export default {
             )
         },
 
-        selectQuestionnaireVersion(value) {
-            this.questionnaireVersion = value
-            this.onChange((s) => (s.version = value == null ? null : value.key))
-            this.reloadMarkersInBounds()
-        },
-
         selectedGeoTracking(value) {
             this.selectedGeoTrackingId = value
 
             this.onChange((q) => {
-                q.trackId = value == null ? null : value.key
+                q.track = value == null ? null : value.key
             })
 
             this.displayGeoTrackingHistory()
@@ -1100,6 +1148,10 @@ export default {
                     this.map.fitBounds(latlngBounds)
                 }
             }
+        },
+
+        clearDateRange() {
+            this.dateRange = null
         },
     },
 }
