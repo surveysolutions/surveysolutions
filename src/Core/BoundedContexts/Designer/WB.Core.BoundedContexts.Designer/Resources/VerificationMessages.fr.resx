@@ -164,16 +164,7 @@
   </data>
   <data name="WB0023_RosterSizeSourceQuestionTypeIsIncorrect" xml:space="preserve">
     <value>La question source du roster définissant la taille est invalide. Seules les questions numériques, catégorielle à réponse multiples ou de type liste peuvent être utilisés.</value>
-  </data>
-  <data name="WB0024_LookupHasInvalidName" xml:space="preserve">
-    <value>La table de référence a un nom invalide.</value>
-  </data>
-  <data name="WB0025_LookupHasEmptyName" xml:space="preserve">
-    <value>La table de référence ne peut pas avoir de nom vide.</value>
-  </data>
-  <data name="WB0026_ItemsWithTheSameNamesFound" xml:space="preserve">
-    <value>Eléments avec le même nom trouvés.</value>
-  </data>
+  </data>   
   <data name="WB0027_VariableExpresssionHasIncorrectSyntax" xml:space="preserve">
     <value>L'expression a une erreur de syntaxe.</value>
   </data>
@@ -215,10 +206,7 @@
   </data>
   <data name="WB0040_TextListQuestionCannotBeFilledBySupervisor" xml:space="preserve">
     <value>La question de type liste ne peut pas être remplie par le chef d'équipe</value>
-  </data>
-  <data name="WB0041_GroupWhereRosterSizeSourceIsFixedTitlesHaveDuplicateValues" xml:space="preserve">
-    <value>Les valeurs d'un ensemble d'éléments fixes du roster fixe doivent être uniques.</value>
-  </data>
+  </data>  
   <data name="WB0042_TextListQuestionMaxAnswerInRange1And200" xml:space="preserve">
     <value>Le nombre maximum d'éléments de liste doit être compris dans la plage [{1}, {0}].</value>
   </data>
@@ -407,10 +395,7 @@
   </data>
   <data name="WB0200_LargeNumberOfRostersIsCreated" xml:space="preserve">
     <value>Un grand nombre de rosters est créé. L'exportation de ces structures dans des fichiers de données pourrait être problématique. Envisagez de réduire le nombre de rosters.</value>
-  </data>
-  <data name="WB0029_QuestionWithOptionsFilterCannotBePrefilled" xml:space="preserve">
-    <value>Les questions avec expression de filtre de catégories ne peuvent pas être identifiées.</value>
-  </data>
+  </data>  
   <data name="WB0026_ItemsWithTheSameNamesFound" xml:space="preserve">
     <value>Éléments avec le même nom trouvés.</value>
   </data>
@@ -419,28 +404,7 @@
   </data>
   <data name="WB0025_LookupHasEmptyName" xml:space="preserve">
     <value>La table de référence ne peut pas avoir de nom vide.</value>
-  </data>
-  <data name="WB0031_LookupTableHasInvalidHeaders" xml:space="preserve">
-    <value>La table de référence a des en-têtes de colonne non valides.</value>
-  </data>
-  <data name="WB0043_LookupTableMoreThan11Columns" xml:space="preserve">
-    <value>La table de référence comporte trop de colonnes.</value>
-  </data>
-  <data name="WB0044_LookupTableMoreThan15000Rows" xml:space="preserve">
-    <value>La table de référence comporte trop de lignes.</value>
-  </data>
-  <data name="WB0047_LookupTableNotUniqueRowcodeValues" xml:space="preserve">
-    <value>La table de référence n'a pas de valeurs de code de ligne uniques.</value>
-  </data>
-  <data name="WB0048_LookupHasEmptyContent" xml:space="preserve">
-    <value>La table de référence ne peut pas être vide.</value>
-  </data>
-  <data name="WB0052_LookupNameIsKeyword" xml:space="preserve">
-    <value>Le nom de la table de référence ne peut pas être un mot réservé.</value>
-  </data>
-  <data name="WB0053_LinkedQuestionReferencesNotExistingRoster" xml:space="preserve">
-    <value>Le roster qui est la source du lien devrait exister.</value>
-  </data>
+  </data> 
   <data name="WB0103_LinkedQuestionReferencesGroupWhichIsNotARoster" xml:space="preserve">
     <value>Le roster qui est la source du lien est un roster, pas une sous-section.</value>
   </data>
@@ -500,10 +464,7 @@
   </data>
   <data name="WB0110_LinkedQuestionFilterExpresssionHasIncorrectSyntax" xml:space="preserve">
     <value>L'expression du filtre a une erreur de syntaxe.</value>
-  </data>
-  <data name="WB0065_NameForAttachmentIsNotUnique" xml:space="preserve">
-    <value>Une autre pièce jointe portant le même nom existe déjà.</value>
-  </data>
+  </data>  
   <data name="WB0095_StaticTextRefersAbsentAttachment" xml:space="preserve">
     <value>Le texte statique fait référence à une pièce jointe absente.</value>
   </data>
