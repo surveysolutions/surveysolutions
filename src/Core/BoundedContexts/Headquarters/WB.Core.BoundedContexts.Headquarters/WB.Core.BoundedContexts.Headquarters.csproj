@@ -74,7 +74,7 @@
     <PackageReference Include="PasswordGenerator" Version="2.1.0" />
     <PackageReference Include="Polly" Version="8.3.1" />
     <PackageReference Include="Quartz" Version="3.8.1" />
-    <PackageReference Include="refit" Version="7.2.1" />
+    <PackageReference Include="refit" Version="8.0.0" />
     <PackageReference Include="Sendgrid" Version="9.28.1" />
     <PackageReference Include="SharpZipLib" Version="1.4.2" />
     <PackageReference Include="SixLabors.ImageSharp" Version="3.1.5" />

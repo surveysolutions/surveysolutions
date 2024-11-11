@@ -120,6 +120,9 @@
   <data name="NewSection" xml:space="preserve">
     <value>Nouvelle section</value>
   </data>
+  <data name="CoverPageSection" xml:space="preserve">
+    <value>Couverture</value>
+  </data>
   <data name="QuestionScopeHidden" xml:space="preserve">
     <value>Caché</value>
   </data>
@@ -134,6 +137,9 @@
   </data>
   <data name="QuestionTypeArea" xml:space="preserve">
     <value>Superficie</value>
+  </data>
+  <data name="QuestionTypeGeography" xml:space="preserve">
+    <value>Géographie</value>
   </data>
   <data name="QuestionTypeAudio" xml:space="preserve">
     <value>Audio</value>
@@ -164,5 +170,17 @@
   </data>
   <data name="QuestionTypeText" xml:space="preserve">
     <value>Texte</value>
+  </data>
+  <data name="GeometryTypePolygon" xml:space="preserve">
+    <value>Polygone</value>
+  </data>
+  <data name="GeometryTypePolyline" xml:space="preserve">
+    <value>Polyligne</value>
+  </data>
+  <data name="GeometryTypePoint" xml:space="preserve">
+    <value>Point</value>
+  </data>
+  <data name="GeometryTypeMultipoint" xml:space="preserve">
+    <value>Multipoint</value>
   </data>
 </root>
