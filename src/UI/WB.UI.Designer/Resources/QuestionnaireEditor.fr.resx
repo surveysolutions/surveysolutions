@@ -761,7 +761,7 @@
     <value>Régénérer le lien</value>
   </data>
   <data name="AnonymousQuestionnaireGeneratedDate" xml:space="preserve">
-    <value>Date de génération du questionnaire anonyme</value>
+    <value>lien généré : {{datetime}}</value>
   </data>
   <data name="SettingsQuestionnaireName" xml:space="preserve">
     <value>Titre du questionnaire</value>
@@ -1394,7 +1394,7 @@ Les vues Table et Matrice sont uniquement prises en charge dans l'enquête Web, 
   <data name="PublicAccessSettingsOff" xml:space="preserve">
     <value>Désactiver l'accès public.</value>
   </data>
-  <data name="FV" xml:space="preserve">
+  <data name="AnonymousQuestionnaireSettings" xml:space="preserve">
     <value>Partage de lien</value>
   </data>  
   <data name="AnonymousLink" xml:space="preserve">
