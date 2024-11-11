@@ -1394,21 +1394,9 @@ Les vues Table et Matrice sont uniquement prises en charge dans l'enquête Web, 
   <data name="PublicAccessSettingsOff" xml:space="preserve">
     <value>Désactiver l'accès public.</value>
   </data>
-  <data name="AnonymousQuestionnaireSettings" xml:space="preserve">
+  <data name="FV" xml:space="preserve">
     <value>Partage de lien</value>
   </data>  
-  <data name="AnonymousLink" xml:space="preserve">
-    <value>Lien anonyme :</value>
-  </data>  
-  <data name="CopyLink" xml:space="preserve">
-    <value>Copier le lien</value>
-  </data>
-  <data name="AnonymousQuestionnaireDescriptionSettings" xml:space="preserve">
-    <value>Les utilisateurs ayant ce lien pourront ouvrir ce questionnaire</value>
-  </data>
-  <data name="QuestionnaireSettings" xml:space="preserve">
-    <value>Paramètres du questionnaire</value>
-  </data>
   <data name="AnonymousLink" xml:space="preserve">
     <value>Lien anonyme :</value>
   </data>  
