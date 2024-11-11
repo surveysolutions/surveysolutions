@@ -294,7 +294,7 @@ export default {
 
         this.setMapCanvasStyle()
         await this.initializeMap()
-        this.displayShapefileName();
+        await this.displayShapefileName();
         await this.getGeoTrackingHistory();
 
         if (this.$route.query.track)
@@ -311,7 +311,7 @@ export default {
 
         this.displayGeoTrackingHistory();
 
-        this.showPointsOnMap(180, 180, -180, -180, true)
+        this.showPointsOnMap(180, 180, -180, -180, false)
     },
 
     computed: {
@@ -604,7 +604,7 @@ export default {
             this.reloadMarkersInBounds()
         },
 
-        displayShapefileName() {
+        async displayShapefileName() {
             if (this.geoJsonFeatures) {
                 for (let i = 0; i < this.geoJsonFeatures.length; i++)
                     this.map.data.remove(this.geoJsonFeatures[i])
@@ -619,20 +619,18 @@ export default {
 
                 this.isLoading = true
 
-                const self = this
-                $.getJSON(geoJsonUrl, function (data) {
-                    const json = JSON.parse(data.geoJson)
-                    self.geoJsonFeatures = self.map.data.addGeoJson(json)
+                const data = await $.getJSON(geoJsonUrl)
+                const json = JSON.parse(data.geoJson)
+                this.geoJsonFeatures = this.map.data.addGeoJson(json)
 
-                    const sw = new google.maps.LatLng(data.yMax, data.xMin)
-                    const ne = new google.maps.LatLng(data.yMin, data.xMax)
-                    const latlngBounds = new google.maps.LatLngBounds(sw, ne)
-                    self.map.fitBounds(latlngBounds)
+                const sw = new google.maps.LatLng(data.yMax, data.xMin)
+                const ne = new google.maps.LatLng(data.yMin, data.xMax)
+                const latlngBounds = new google.maps.LatLngBounds(sw, ne)
+                this.map.fitBounds(latlngBounds)
 
-                    self.isLoading = false
+                this.isLoading = false
 
-                    self.reloadMarkersInBounds()
-                })
+                this.reloadMarkersInBounds()
             }
         },
 
@@ -664,17 +662,20 @@ export default {
             const tracks = this.selectedGeoTrackingId == null
                 ? this.tracks
                 : this.tracks.filter(t => t.id == this.selectedGeoTrackingId.key);
+
+            const latlngBounds = new google.maps.LatLngBounds();
+
             tracks.forEach(t => {
-                const routePath = new google.maps.Polyline({
+                const polyline = new google.maps.Polyline({
                     path: t.points,
                     geodesic: true,
-                    strokeColor: "#FF0000",
+                    strokeColor: "#0000FF",
                     strokeOpacity: 0.8,
                     strokeWeight: 4,
                 });
 
-                routePath.setMap(this.map);
-                this.tracksPath.push(routePath);
+                polyline.setMap(this.map);
+                this.tracksPath.push(polyline);
 
                 /*t.points.forEach((point) => {
                     new google.maps.Marker({
@@ -682,7 +683,14 @@ export default {
                         map: this.map,
                     });
                 });*/
+
+                const path = polyline.getPath();
+                path.forEach((latLng) => {
+                    latlngBounds.extend(latLng);
+                });
             })
+
+            this.map.fitBounds(latlngBounds)
         },
 
         getMapOptions() {
