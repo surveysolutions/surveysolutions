@@ -1247,7 +1247,7 @@
     <value>Excluir suporte ao mapa ESRI</value>
   </data>
   <data name="GetEsriExtraDescription" xml:space="preserve">
-    <value>O suporte ao mapa ESRI é um recurso experimental. Use-o apenas se precisar da funcionalidade GIS ESRI avançada. Incluir essa funcionalidade aumentará significativamente o tamanho do aplicativo e o tempo de download.</value>
+      <value>A funcionalidade SIG aumentará significativamente o tamanho da aplicação e o tempo de download. Siga as instruções do seu supervisor sobre qual a versão da aplicação Entrevistador (com ou sem mapas) necessária para a sua tarefa.</value>
   </data>
   <data name="Filters_Assignment" xml:space="preserve">
     <value>Atribuição</value>
