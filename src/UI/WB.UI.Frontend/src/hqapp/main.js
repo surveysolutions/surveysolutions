@@ -29,6 +29,9 @@ const store = registerStore(vue)
 import moment from 'moment'
 moment.locale(browserLanguage)
 
+import { setLocale } from '@vee-validate/i18n'
+setLocale(browserLanguage)
+
 import { registerComponents } from './components'
 registerComponents(vue)
 
@@ -91,6 +94,7 @@ vue.config.globalProperties.$eventHub = vue
 
 
 import emitter from '~/shared/emitter'
+import { set } from 'lodash'
 vue.config.globalProperties.$emitter = emitter
 
 router.isReady().then(() => {
