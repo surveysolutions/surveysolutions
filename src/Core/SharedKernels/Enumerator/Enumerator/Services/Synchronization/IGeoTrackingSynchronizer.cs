@@ -8,21 +8,26 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 
 public interface IGeoTrackingSynchronizer
 {
-    Task SynchronizeGeoTrackingAsync(IProgress<SyncProgressInfo> progress, SynchronizationStatistics statistics, CancellationToken cancellationToken);
+    Task UploadGeoTrackingAsync(IProgress<SyncProgressInfo> progress, SynchronizationStatistics statistics, CancellationToken cancellationToken);
+    void RemoveObsoleteGeoTracking(IProgress<SyncProgressInfo> progress, SynchronizationStatistics statistics, CancellationToken cancellationToken);
 
     void SavePackage(GeoTrackingPackageApiView package);
 }
 
 public class DummyGeoTrackingSynchronizer : IGeoTrackingSynchronizer
 {
-    public Task SynchronizeGeoTrackingAsync(IProgress<SyncProgressInfo> progress, SynchronizationStatistics statistics,
+    public Task UploadGeoTrackingAsync(IProgress<SyncProgressInfo> progress, SynchronizationStatistics statistics,
         CancellationToken cancellationToken)
     {
         return Task.CompletedTask;
     }
 
+    public void RemoveObsoleteGeoTracking(IProgress<SyncProgressInfo> progress, SynchronizationStatistics statistics,
+        CancellationToken cancellationToken)
+    {
+    }
+
     public void SavePackage(GeoTrackingPackageApiView package)
     {
-        
     }
 }

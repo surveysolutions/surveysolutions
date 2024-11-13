@@ -837,6 +837,9 @@
   <data name="Synchronization_UploadGeoTracking" xml:space="preserve">
     <value>Загрузка гео-маршрутов информации</value>
   </data>
+  <data name="Synchronization_RemoveObsoleteGeoTracking" xml:space="preserve">
+    <value>Удаление устаревших гео-маршрутов</value>
+  </data>
   <data name="Synchronization_ReceivingAuditLog" xml:space="preserve">
     <value>Получение аудит информации</value>
   </data>

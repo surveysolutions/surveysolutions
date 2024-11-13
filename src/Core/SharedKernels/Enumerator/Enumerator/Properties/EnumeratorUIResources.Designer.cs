@@ -1371,6 +1371,12 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
             }
         }
         
+        public static string Synchronization_RemoveObsoleteGeoTracking {
+            get {
+                return ResourceManager.GetString("Synchronization_RemoveObsoleteGeoTracking", resourceCulture);
+            }
+        }
+        
         public static string Synchronization_ReceivingAuditLog {
             get {
                 return ResourceManager.GetString("Synchronization_ReceivingAuditLog", resourceCulture);

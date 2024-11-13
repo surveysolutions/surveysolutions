@@ -5,11 +5,11 @@ using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization.Steps;
 
-public class SynchronizeGeoTracking : SynchronizationStep
+public class UploadGeoTrackingSynchronizationStep : SynchronizationStep
 {
     private readonly IGeoTrackingSynchronizer geoTrackingSynchronizer;
 
-    public SynchronizeGeoTracking(int sortOrder, 
+    public UploadGeoTrackingSynchronizationStep(int sortOrder, 
         ISynchronizationService synchronizationService, 
         ILogger logger,
         IGeoTrackingSynchronizer geoTrackingSynchronizer) 
@@ -20,7 +20,7 @@ public class SynchronizeGeoTracking : SynchronizationStep
 
     public override Task ExecuteAsync()
     {
-        return this.geoTrackingSynchronizer.SynchronizeGeoTrackingAsync(Context.Progress, Context.Statistics,
+        return this.geoTrackingSynchronizer.UploadGeoTrackingAsync(Context.Progress, Context.Statistics,
             Context.CancellationToken);
     }
 }

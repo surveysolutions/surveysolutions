@@ -28,7 +28,7 @@ public class GeoTrackingSynchronizer : IGeoTrackingSynchronizer
         this.assignmentsRepository = assignmentsRepository;
     }
     
-    public async Task SynchronizeGeoTrackingAsync(IProgress<SyncProgressInfo> progress, SynchronizationStatistics statistics,
+    public Task UploadGeoTrackingAsync(IProgress<SyncProgressInfo> progress, SynchronizationStatistics statistics,
         CancellationToken cancellationToken)
     {
         progress.Report(new SyncProgressInfo
@@ -36,9 +36,41 @@ public class GeoTrackingSynchronizer : IGeoTrackingSynchronizer
             Title = EnumeratorUIResources.Synchronization_UploadGeoTracking,
             Stage = SyncStage.UploadingGeoTracking
         });
+        
+        return UploadNotSynchronizedGeoTracking(cancellationToken);
+    }
 
+    public void RemoveObsoleteGeoTracking(IProgress<SyncProgressInfo> progress, SynchronizationStatistics statistics,
+        CancellationToken cancellationToken)
+    {
+        progress.Report(new SyncProgressInfo
+        {
+            Title = EnumeratorUIResources.Synchronization_RemoveObsoleteGeoTracking,
+            Stage = SyncStage.RemoveObsoleteGeoTracking
+        });
+        
+        RemoveGeoTracksWithoutAssignments();
+    }
+
+    private void RemoveGeoTracksWithoutAssignments()
+    {
         var assignmentIds = assignmentsRepository.LoadAll().Select(a => a.Id).ToHashSet();
 
+        var geoTrackingRecordsToRemove = geoTrackingRecordsStorage
+            .Where(r => !assignmentIds.Contains(r.AssignmentId) && r.IsSynchronized == true);
+
+        // clear geo tracking records without assignments
+        foreach (var record in geoTrackingRecordsToRemove)
+        {
+            var points = geoTrackingPointsStorage
+                .Where(p => p.GeoTrackingRecordId == record.Id.Value);
+            geoTrackingPointsStorage.Remove(points);
+        }
+        geoTrackingRecordsStorage.Remove(geoTrackingRecordsToRemove);
+    }
+
+    private async Task UploadNotSynchronizedGeoTracking(CancellationToken cancellationToken)
+    {
         var geoTrackingRecordsToUpload = geoTrackingRecordsStorage
             .Where(r => r.IsSynchronized == false)
             .OrderBy(r => r.Id)
@@ -77,19 +109,8 @@ public class GeoTrackingSynchronizer : IGeoTrackingSynchronizer
         
         geoTrackingRecordsToUpload.ForEach(r => r.IsSynchronized = true);
         geoTrackingRecordsStorage.Store(geoTrackingRecordsToUpload);
-
-        var geoTrackingRecordsToRemove = geoTrackingRecordsStorage
-            .Where(r => !assignmentIds.Contains(r.AssignmentId));
-
-        // clear geo tracking records without assignments
-        foreach (var record in geoTrackingRecordsToRemove)
-        {
-            var points = geoTrackingPointsStorage
-                .Where(p => p.GeoTrackingRecordId == record.Id.Value);
-            geoTrackingPointsStorage.Remove(points);
-        }
-        geoTrackingRecordsStorage.Remove(geoTrackingRecordsToRemove);
     }
+
 
     public void SavePackage(GeoTrackingPackageApiView package)
     {

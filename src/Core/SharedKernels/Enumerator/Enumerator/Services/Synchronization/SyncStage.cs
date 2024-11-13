@@ -33,5 +33,6 @@
         UploadingCalendarEvents,
         DownloadingCalendarEvents,
         UploadingGeoTracking,
+        RemoveObsoleteGeoTracking,
     }
 }
