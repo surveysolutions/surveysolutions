@@ -88,7 +88,9 @@ public class GeolocationBackgroundService : Service, ILocationListener, INotific
         //var bestProvider = locationManager.GetBestProvider(locationCriteria, true);
         //locationManager.RequestLocationUpdates(bestProvider, 5000, 1, this);
 
-        locationManager.RequestLocationUpdates(LocationManager.GpsProvider, 5000, 1, this);
+        long minTimeMs = 5000;
+        float minDistanceM = 1;
+        locationManager.RequestLocationUpdates(LocationManager.GpsProvider, minTimeMs, minDistanceM, this);
 
         return StartCommandResult.Sticky;
     }
