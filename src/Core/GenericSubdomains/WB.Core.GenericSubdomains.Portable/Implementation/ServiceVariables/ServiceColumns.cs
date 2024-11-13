@@ -40,7 +40,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables
         public const string PasswordColumnName = "_password";
         public const string RecordAudioColumnName = "_record_audio";
         public const string CommentsColumnName = "_comment";
-        public const string TargetAreaColumnName = "target__area";
+        public const string TargetAreaColumnName = "_target_area";
 
         //system generated
         public static readonly SortedDictionary<ServiceVariableType, ServiceVariable> SystemVariables = new SortedDictionary<ServiceVariableType, ServiceVariable>
