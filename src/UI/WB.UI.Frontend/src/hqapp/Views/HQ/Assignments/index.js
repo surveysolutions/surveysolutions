@@ -1,7 +1,7 @@
 import Layout from './Layout'
 import Assignments from './HqAssignments'
 import Details from './Details'
-import TrackingHistory from './TrackingHistory.vue'
+import AssigmentMap from './AssigmentMap.vue'
 import Upload from './Upload/Index'
 import UploadErrors from './Upload/Errors'
 import UploadVerification from './Upload/Verification'
@@ -29,7 +29,7 @@ export default class AssignmentsComponent {
                         path: '', component: Assignments,
                     },
                     {
-                        path: ':assignmentId/geotracking', component: TrackingHistory,
+                        path: ':assignmentId/geotracking', component: AssigmentMap,
                     },
                     {
                         path: ':assignmentId', component: Details,
