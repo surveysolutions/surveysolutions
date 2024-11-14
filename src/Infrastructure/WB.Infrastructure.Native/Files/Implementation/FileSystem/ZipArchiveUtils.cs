@@ -254,11 +254,10 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
                 using var zip = new ZipArchive(zipStream, ZipArchiveMode.Read);
                 return true;
             }
-            catch (InvalidDataException e)
+            catch (InvalidDataException)
             {
                 return false;
             }
-            
         }
 
         public Dictionary<string, long> GetArchivedFileNamesAndSize(byte[] archivedFileAsArray)
