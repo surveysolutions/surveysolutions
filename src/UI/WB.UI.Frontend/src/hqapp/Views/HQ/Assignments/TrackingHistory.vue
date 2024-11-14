@@ -165,7 +165,7 @@
                 </div>
             </div>
         </div>
-        <div id="map-canvas"></div>
+    <div id="map-canvas"></div>
 
         <ModalFrame ref="assignModal" :title="$t('Common.Assign')">
             <form onsubmit="return false;">
@@ -659,9 +659,24 @@ export default {
                 t.setMap(null);
             })
 
-            const tracks = this.selectedGeoTrackingId == null
+            let tracks = this.selectedGeoTrackingId == null
                 ? this.tracks
                 : this.tracks.filter(t => t.id == this.selectedGeoTrackingId.key);
+
+            if (this.dateRange) {
+                /*const start = new Date(this.dateRange.startDate)
+                const end = new Date(this.dateRange.endDate)
+                end.setDate(end.getDate() + 1)
+
+                tracks.forEach(t => {
+                    t.points = t.points.filter(p => {
+                        const pointDate = new Date(item.date);
+                        return pointDate < end && pointDate > start
+                    })
+                });
+
+                tracks = tracks.filter(t => t.points.length > 0)*/
+            }
 
             const latlngBounds = new google.maps.LatLngBounds();
 
