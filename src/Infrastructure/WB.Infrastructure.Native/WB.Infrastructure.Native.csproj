@@ -24,9 +24,9 @@
     <PackageReference Include="ClosedXML" Version="0.102.2" />
     <PackageReference Include="Dapper" Version="2.1.35" />
     <PackageReference Include="DotNetZip" Version="1.16.0" />
-    <PackageReference Include="FluentMigrator" Version="5.2.0" />
-    <PackageReference Include="FluentMigrator.Runner" Version="5.2.0" />
-    <PackageReference Include="FluentMigrator.Runner.Core" Version="5.2.0" />
+    <PackageReference Include="FluentMigrator" Version="6.2.0" />
+    <PackageReference Include="FluentMigrator.Runner" Version="6.2.0" />
+    <PackageReference Include="FluentMigrator.Runner.Core" Version="6.2.0" />
     <PackageReference Include="HtmlSanitizer" Version="8.1.870" />
     <PackageReference Include="Humanizer.Core" Version="2.14.1" />
     <PackageReference Include="Iesi.Collections" Version="4.1.1" />
