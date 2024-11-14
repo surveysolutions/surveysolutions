@@ -1,207 +1,215 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime.InteropServices.ComTypes;
+using System.IO.Compression;
 using System.Text;
-using Ionic.Zip;
-using Ionic.Zlib;
 using WB.Core.Infrastructure.FileSystem;
 
 namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
 {
-    public class ZipArchiveUtils : IArchiveUtils, IProtectedArchiveUtils
+    public class ZipArchiveUtils : IArchiveUtils
     {
-        public IZipArchive CreateArchive(Stream outputStream, string password)
+        public byte[] CompressContentToEntity(byte[] uncompressedData, string entityName)
         {
-            return new IonicZipArchive(outputStream, password);
-        }
-
-        public byte[] ZipFiles(Stream uncompressedDataStream, string entryName)
-        {
-            byte[] compressedBytes;
-            using (MemoryStream memoryStream = new MemoryStream())
+            using MemoryStream memoryStream = new MemoryStream();
+            using (var archive = new ZipArchive(memoryStream, ZipArchiveMode.Create, true))
             {
-                using (ZipFile zip = new ZipFile())
+                var entry = archive.CreateEntry(entityName, CompressionLevel.Optimal);
+                using (var entryStream = entry.Open())
                 {
-                    zip.AddEntry(entryName, uncompressedDataStream);
-                    zip.Save(memoryStream);
+                    entryStream.Write(uncompressedData, 0, uncompressedData.Length);
                 }
-
-                compressedBytes = memoryStream.ToArray();
             }
+            
+            var compressedBytes = memoryStream.ToArray();
             return compressedBytes;
         }
 
-        public void ZipDirectory(string directory, string archiveFile, string password, IProgress<int> progress = null)
+        public void ZipDirectory(string directory, string archiveFile)
         {
-            using (var zipFile = new ZipFile
-            {
-                ParallelDeflateThreshold = -1,
-                AlternateEncoding = Encoding.UTF8,
-                AlternateEncodingUsage = ZipOption.Always,
-                UseZip64WhenSaving = Zip64Option.AsNecessary
-            })
-            {
-                if (password != null)
-                    zipFile.Password = password;
-
-                zipFile.AddDirectory(directory, "");
-
-                if (progress != null)
-                {
-                    zipFile.SaveProgress += (o, e) =>
-                    {
-                        if (e.EventType == ZipProgressEventType.Saving_AfterWriteEntry)
-                            progress.Report(e.EntriesSaved * 100 / e.EntriesTotal);
-                    };
-                }
-
-                zipFile.Save(archiveFile);
-            }
-        }
-
-        public void ZipDirectoryToFile(string sourceDirectory, string archiveFilePath)
-            => this.ZipDirectory(sourceDirectory, archiveFilePath, null);
-
-        public void ZipFiles(IEnumerable<string> files, string archiveFilePath, string password)
-        {
-            using (var zip = new ZipFile
-            {
-                CompressionLevel = CompressionLevel.Default,
-                UseZip64WhenSaving = Zip64Option.AsNecessary,
-                AlternateEncoding = Encoding.UTF8,
-                AlternateEncodingUsage = ZipOption.AsNecessary,
-            })
-            {
-                if (password != null)
-                    zip.Password = password;
-
-                zip.AddFiles(files, "");
-                zip.Save(archiveFilePath);
-            }
+            ZipFile.CreateFromDirectory(directory, archiveFile, CompressionLevel.Optimal, false, Encoding.UTF8);
+            
+            // using (var zipFile = new ZipFile
+            // {
+            //     ParallelDeflateThreshold = -1,
+            //     AlternateEncoding = Encoding.UTF8,
+            //     AlternateEncodingUsage = ZipOption.Always,
+            //     UseZip64WhenSaving = Zip64Option.AsNecessary
+            // })
+            // {
+            //     zipFile.AddDirectory(directory, "");
+            //     zipFile.Save(archiveFile);
+            // }
         }
 
         public void ZipFiles(IEnumerable<string> files, string archiveFilePath)
         {
-            ZipFiles(files, archiveFilePath, password: null);
+            using (var archive = new ZipArchive(File.Create(archiveFilePath), ZipArchiveMode.Create, true))
+            {
+                foreach (var file in files)
+                {
+                    var entry = archive.CreateEntry(Path.GetFileName(file), CompressionLevel.Optimal);
+                    using (var entryStream = entry.Open())
+                    {
+                        using (var fileStream = File.OpenRead(file))
+                        {
+                            fileStream.CopyTo(entryStream);
+                        }
+                    }
+                }
+            }
+            
+            // using (var zip = new ZipFile
+            // {
+            //     CompressionLevel = CompressionLevel.Default,
+            //     UseZip64WhenSaving = Zip64Option.AsNecessary,
+            //     AlternateEncoding = Encoding.UTF8,
+            //     AlternateEncodingUsage = ZipOption.AsNecessary,
+            // })
+            // {
+            //     zip.AddFiles(files, "");
+            //     zip.Save(archiveFilePath);
+            // }
         }
-
+        
         public void Unzip(string archivedFile, string extractToFolder, bool ignoreRootDirectory = false)
         {
-            using (ZipFile decompress = ZipFile.Read(archivedFile))
+            if (archivedFile == null) throw new ArgumentNullException(nameof(archivedFile));
+
+            if (!ignoreRootDirectory)
             {
-                decompress.ExtractAll(extractToFolder, ExtractExistingFileAction.OverwriteSilently);
+                extractToFolder = Path.Combine(extractToFolder, Path.GetFileNameWithoutExtension(archivedFile));
+                if (!Directory.Exists(extractToFolder))
+                {
+                    Directory.CreateDirectory(extractToFolder);
+                }
             }
+
+            ZipFile.ExtractToDirectory(archivedFile, extractToFolder);
         }
 
         public void Unzip(Stream fileStream, string extractToFolder, bool ignoreRootDirectory = false)
         {
             fileStream.Seek(0, SeekOrigin.Begin);
-            using (ZipFile decompress = ZipFile.Read(fileStream))
-            {
-                decompress.ExtractAll(extractToFolder, ExtractExistingFileAction.OverwriteSilently);
-            }
+            
+            ZipFile.ExtractToDirectory(fileStream, extractToFolder);
         }
 
         public IEnumerable<ExtractedFile> GetFilesFromArchive(Stream inputStream)
         {
             inputStream.Seek(0, SeekOrigin.Begin);
             
-            using (ZipFile zip = ZipFile.Read(inputStream))
+            using var zip = new ZipArchive(inputStream, ZipArchiveMode.Read);
+            foreach (var zipEntry in zip.Entries)
             {
-                foreach (var zipEntry in zip.Entries)
+                if (zipEntry.FullName.EndsWith("/")) continue;
+                
+                using (var memoryStream = new MemoryStream())
                 {
-                    using (var memoryStream = new MemoryStream())
+                    zipEntry.Open().CopyTo(memoryStream);
+                    yield return new ExtractedFile
                     {
-                        try
-                        {
-                            zipEntry.Extract(memoryStream);
-                        }
-                        catch (BadPasswordException ex)
-                        {
-                            throw new Core.Infrastructure.FileSystem.ZipException("Password required", ex);
-                        }
-
-                        yield return new ExtractedFile
-                        {
-                            Name = zipEntry.FileName,
-                            Size = zipEntry.UncompressedSize,
-                            Bytes = memoryStream.ToArray()
-                        };
-                    }
+                        Name = zipEntry.FullName,
+                        Size = zipEntry.Length,
+                        Bytes = memoryStream.ToArray()
+                    };
                 }
             }
-        }
-
-        public IEnumerable<ExtractedFile> GetFilesFromArchive(byte[] archivedFileAsArray)
-        {
-            using (MemoryStream archivestream = new MemoryStream(archivedFileAsArray))
-            using (ZipFile zip = ZipFile.Read(archivestream))
-            {
-                foreach (var zipEntry in zip.Entries)
-                {
-                    using (var memoryStream = new MemoryStream())
-                    {
-                        zipEntry.Extract(memoryStream);
-
-                        yield return new ExtractedFile
-                        {
-                            Name = zipEntry.FileName,
-                            Size = zipEntry.UncompressedSize,
-                            Bytes = memoryStream.ToArray()
-                        };
-                    }
-                }
-            }
+            
+            // using (ZipFile zip = ZipFile.Read(inputStream))
+            // {
+            //     foreach (var zipEntry in zip.Entries)
+            //     {
+            //         using (var memoryStream = new MemoryStream())
+            //         {
+            //             try
+            //             {
+            //                 zipEntry.Extract(memoryStream);
+            //             }
+            //             catch (BadPasswordException ex)
+            //             {
+            //                 throw new Core.Infrastructure.FileSystem.ZipException("Password required", ex);
+            //             }
+            //
+            //             yield return new ExtractedFile
+            //             {
+            //                 Name = zipEntry.FileName,
+            //                 Size = zipEntry.UncompressedSize,
+            //                 Bytes = memoryStream.ToArray()
+            //             };
+            //         }
+            //     }
+            // }
         }
 
         public ExtractedFile GetFileFromArchive(string archiveFilePath, string fileName)
         {
             if (string.IsNullOrEmpty(fileName)) throw new ArgumentNullException(nameof(fileName));
             
-            using (var zips = ZipFile.Read(archiveFilePath))
+            using (var archive = ZipFile.OpenRead(archiveFilePath))
             {
-                foreach (var zip in zips)
+                foreach (var entry in archive.Entries)
                 {
-                    if (zip.IsDirectory) continue;
-                    if (!zip.FileName.Contains(fileName)) continue;
-
-                    using (var memoryStream = new MemoryStream())
+                    // if entry is a Directory  continue iteration
+                    if (entry.FullName.EndsWith("/")) continue;
+                    
+                    if (entry.FullName.Contains(fileName))
                     {
-                        zip.Extract(memoryStream);
-
-                        return new ExtractedFile
+                        using (var memoryStream = new MemoryStream())
                         {
-                            Name = zip.FileName,
-                            Size = zip.UncompressedSize,
-                            Bytes = memoryStream.ToArray()
-                        };
+                            entry.Open().CopyTo(memoryStream);
+                            return new ExtractedFile
+                            {
+                                Name = entry.FullName,
+                                Size = entry.Length,
+                                Bytes = memoryStream.ToArray()
+                            };
+                        }
                     }
                 }
             }
-
+            
+            // using (var zips = ZipFile.Read(archiveFilePath))
+            // {
+            //     foreach (var zip in zips)
+            //     {
+            //         if (zip.IsDirectory) continue;
+            //         if (!zip.FileName.Contains(fileName)) continue;
+            //
+            //         using (var memoryStream = new MemoryStream())
+            //         {
+            //             zip.Extract(memoryStream);
+            //
+            //             return new ExtractedFile
+            //             {
+            //                 Name = zip.FileName,
+            //                 Size = zip.UncompressedSize,
+            //                 Bytes = memoryStream.ToArray()
+            //             };
+            //         }
+            //     }
+            // }
+            
             return null;
         }
         
         public ExtractedFile GetFileFromArchive(byte[] archivedFileAsArray, string fileName)
         {
             using (var archiveStream = new MemoryStream(archivedFileAsArray))
+            using (var zip = new ZipArchive(archiveStream, ZipArchiveMode.Read))
             {
-                using (var zips = ZipFile.Read(archiveStream))
+                foreach (var zipEntry in zip.Entries)
                 {
-                    foreach (var zip in zips)
+                    if (zipEntry.FullName.EndsWith("/")) continue;
+                    if (zipEntry.FullName.Contains(fileName))
                     {
-                        if (zip.IsDirectory) continue;
-                        if (!zip.FileName.Contains(fileName)) continue;
-
                         using (var memoryStream = new MemoryStream())
                         {
-                            zip.Extract(memoryStream);
-
+                            zipEntry.Open().CopyTo(memoryStream);
                             return new ExtractedFile
                             {
-                                Name = zip.FileName,
-                                Size = zip.UncompressedSize,
+                                Name = zipEntry.FullName,
+                                Size = zipEntry.Length,
                                 Bytes = memoryStream.ToArray()
                             };
                         }
@@ -209,80 +217,79 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
                 }
             }
 
+            // using (var archiveStream = new MemoryStream(archivedFileAsArray))
+            // {
+            //     using (var zips = ZipFile.Read(archiveStream))
+            //     {
+            //         foreach (var zip in zips)
+            //         {
+            //             if (zip.IsDirectory) continue;
+            //             if (!zip.FileName.Contains(fileName)) continue;
+            //
+            //             using (var memoryStream = new MemoryStream())
+            //             {
+            //                 zip.Extract(memoryStream);
+            //
+            //                 return new ExtractedFile
+            //                 {
+            //                     Name = zip.FileName,
+            //                     Size = zip.UncompressedSize,
+            //                     Bytes = memoryStream.ToArray()
+            //                 };
+            //             }
+            //         }
+            //     }
+            // }
+            //
+            
             return null;
-        }
-
-        public bool IsZipFile(string filePath)
-        {
-            return ZipFile.IsZipFile(filePath);
         }
 
         public bool IsZipStream(Stream zipStream)
         {
             zipStream.Seek(0, SeekOrigin.Begin);
-            return ZipFile.IsZipFile(zipStream, false);
-        }
 
-        public Dictionary<string, long> GetArchivedFileNamesAndSize(string filePath)
-        {
-            var result = new Dictionary<string, long>();
-            using (var zips = ZipFile.Read(filePath))
+            try
             {
-                foreach (var zip in zips)
-                {
-                    if (zip.IsDirectory)
-                        continue;
-                    result.Add(zip.FileName, zip.UncompressedSize);
-                }
+                using var zip = new ZipArchive(zipStream, ZipArchiveMode.Read);
+                return true;
             }
-            return result;
+            catch (InvalidDataException e)
+            {
+                return false;
+            }
+            
         }
 
         public Dictionary<string, long> GetArchivedFileNamesAndSize(byte[] archivedFileAsArray)
         {
-            var result = new Dictionary<string, long>();
-            using (MemoryStream archivestream = new MemoryStream(archivedFileAsArray))
-            using (ZipFile zips = ZipFile.Read(archivestream))
-            {
-                foreach (var zip in zips)
-                {
-                    if (zip.IsDirectory)
-                        continue;
-                    result.Add(zip.FileName, zip.UncompressedSize);
-                }
-            }
-            return result;
+            using var archiveStream = new MemoryStream(archivedFileAsArray);
+            return GetArchivedFileNamesAndSize(archiveStream);
         }
 
         public Dictionary<string, long> GetArchivedFileNamesAndSize(Stream inputStream)
         {
-            inputStream.Seek(0, SeekOrigin.Begin);
-
             var result = new Dictionary<string, long>();
-            using (ZipFile zips = ZipFile.Read(inputStream))
+
+            using var zip = new ZipArchive(inputStream, ZipArchiveMode.Read);
+            foreach (var zipEntry in zip.Entries)
             {
-                foreach (var zip in zips)
-                {
-                    if (zip.IsDirectory)
-                        continue;
-                    result.Add(zip.FileName, zip.UncompressedSize);
-                }
+                if (zipEntry.FullName.EndsWith("/")) continue;
+                result.Add(zipEntry.FullName, zipEntry.Length);
             }
+
+            // using (MemoryStream archivestream = new MemoryStream(archivedFileAsArray))
+            // using (ZipFile zips = ZipFile.Read(archivestream))
+            // {
+            //     foreach (var zip in zips)
+            //     {
+            //         if (zip.IsDirectory)
+            //             continue;
+            //         result.Add(zip.FileName, zip.UncompressedSize);
+            //     }
+            // }
+            
             return result;
-        }
-
-        public byte[] CompressStringToByteArray(string fileName, string fileContentAsString)
-        {
-            using (MemoryStream memoryStream = new MemoryStream())
-            {
-                using (ZipFile zip = new ZipFile())
-                {
-                    zip.AddEntry(fileName, Encoding.Unicode.GetBytes(fileContentAsString));
-                    zip.Save(memoryStream);
-                }
-
-                return memoryStream.ToArray();
-            }
         }
 
         public string CompressString(string stringToCompress)
@@ -311,20 +318,6 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
                 }
                 return Encoding.Unicode.GetString(mso.ToArray());
             }
-        }
-
-        public void ProtectZipWithPassword(Stream inputZipStream, Stream protectedZipStream, string password)
-        {
-            using (var zipFile = ZipFile.Read(inputZipStream))
-            {
-                zipFile.Password = password;
-                foreach (ZipEntry zipEntry in zipFile)
-                {
-                    zipEntry.Password = password;
-                }
-                zipFile.Save(protectedZipStream);
-            }
-            protectedZipStream.Position = 0;
         }
     }
 }

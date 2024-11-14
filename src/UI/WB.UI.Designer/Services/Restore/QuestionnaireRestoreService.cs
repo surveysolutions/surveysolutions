@@ -1,22 +1,19 @@
 ﻿using System;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Text;
-using Ionic.Zip;
 using Main.Core.Documents;
 using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.ImportExport;
-using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Questionnaire.Translations;
-using WB.UI.Designer.Code.ImportExport;
-using WB.UI.Designer.Extensions;
 
 namespace WB.UI.Designer.Services.Restore
 {
@@ -49,14 +46,12 @@ namespace WB.UI.Designer.Services.Restore
 
         public Guid RestoreQuestionnaire(Stream archive, Guid responsibleId, RestoreState state, bool createNew)
         {
-            using var zipStream = new ZipInputStream(archive);
+            using var zipStream = new ZipArchive(archive);
 
             var questionnaire = RestoreQuestionnaireFromZipFileOrThrow(zipStream, responsibleId, state, createNew);
 
-            zipStream.Seek(0, SeekOrigin.Begin);
-            ZipEntry zipEntry;
-            while ((zipEntry = zipStream.GetNextEntry()) != null)
-            {
+            foreach (var zipEntry in zipStream.Entries)
+            {            
                 this.RestoreDataFromZipFileEntry(zipEntry, zipStream, responsibleId, state, questionnaire);
             }
 
@@ -72,22 +67,31 @@ namespace WB.UI.Designer.Services.Restore
             return questionnaire.PublicKey;
         }
 
-        public QuestionnaireDocument RestoreQuestionnaireFromZipFileOrThrow(ZipInputStream zipStream, Guid responsibleId,
+        public QuestionnaireDocument RestoreQuestionnaireFromZipFileOrThrow(ZipArchive zipStream, Guid responsibleId,
             RestoreState state, bool createNew)
         {
-            ZipEntry zipEntry;
-            while ((zipEntry = zipStream.GetNextEntry()) != null)
+            foreach (var zipEntry in zipStream.Entries)
             {
-                if (zipEntry.IsDirectory) continue;
+                if (zipEntry.FullName.EndsWith("/")) continue;
+                
                 try
                 {
-                    string[] zipEntryPathChunks = zipEntry.FileName.Split(
+                    string[] zipEntryPathChunks = zipEntry.FullName.Split(
                         new[] { Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar },
                         StringSplitOptions.RemoveEmptyEntries);
 
                     if (zipEntryPathChunks.Length == 1 && zipEntryPathChunks[0].ToLower().Equals("document.json"))
                     {
-                        string textContent = new StreamReader(zipStream, Encoding.UTF8).ReadToEnd();
+                        byte[] binaryContent;
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            zipEntry.Open().CopyTo(memoryStream);
+                            binaryContent = memoryStream.ToArray();
+                        }
+                        
+                        string textContent = Encoding.UTF8.GetString(binaryContent);
+                        //string textContent = new StreamReader(zipStream, Encoding.UTF8).ReadToEnd();
+                        
                         var questionnaireDocument = this.serializer.Deserialize<QuestionnaireDocument>(textContent);
 
                         if (createNew)
@@ -96,7 +100,7 @@ namespace WB.UI.Designer.Services.Restore
                         this.translationsService.DeleteAllByQuestionnaireId(questionnaireDocument.PublicKey);
                         this.reusableCategoriesService.DeleteAllByQuestionnaireId(questionnaireDocument.PublicKey);
 
-                        state.Success.AppendLine($"[{zipEntry.FileName}]");
+                        state.Success.AppendLine($"[{zipEntry.FullName}]");
                         state.Success.AppendLine($"    Restored questionnaire document '{questionnaireDocument.Title}' with id '{questionnaireDocument.PublicKey.FormatGuid()}'.");
                         state.RestoredEntitiesCount++;
 
@@ -110,8 +114,8 @@ namespace WB.UI.Designer.Services.Restore
                 }
                 catch (Exception exception)
                 {
-                        this.logger.LogWarning(exception, $"Error processing zip file entry '{zipEntry.FileName}' during questionnaire restore from backup.");
-                        state.Error = $"Error processing zip file entry '{zipEntry.FileName}'.{Environment.NewLine}{exception}";
+                        this.logger.LogWarning(exception, $"Error processing zip file entry '{zipEntry.FullName}' during questionnaire restore from backup.");
+                        state.Error = $"Error processing zip file entry '{zipEntry.FullName}'.{Environment.NewLine}{exception}";
                         logger.LogError(state.Error);
                 }
             }
@@ -120,12 +124,12 @@ namespace WB.UI.Designer.Services.Restore
             throw new Exception("Questionnaire document was not found.");
         }
 
-        public void RestoreDataFromZipFileEntry(ZipEntry zipEntry, ZipInputStream zipStream, Guid responsibleId, RestoreState state, QuestionnaireDocument questionnaire)
+        public void RestoreDataFromZipFileEntry(ZipArchiveEntry zipEntry, ZipArchive zipStream, Guid responsibleId, RestoreState state, QuestionnaireDocument questionnaire)
         {
             var questionnaireId = questionnaire.PublicKey;
             try
             {
-                string[] zipEntryPathChunks = zipEntry.FileName.Split(
+                string[] zipEntryPathChunks = zipEntry.FullName.Split(
                     new[] { Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar },
                     StringSplitOptions.RemoveEmptyEntries);
 
@@ -157,17 +161,32 @@ namespace WB.UI.Designer.Services.Restore
 
                     if (string.Equals(fileName, "content-type.txt", StringComparison.CurrentCultureIgnoreCase))
                     {
-                        string textContent = new StreamReader(zipStream, Encoding.UTF8).ReadToEnd();
+                        byte[] binaryContent;
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            zipEntry.Open().CopyTo(memoryStream);
+                            binaryContent = memoryStream.ToArray();
+                        }
+                        
+                        string textContent = Encoding.UTF8.GetString(binaryContent);
+                        //string textContent = new StreamReader(zipStream, Encoding.UTF8).ReadToEnd();
 
                         state.StoreAttachmentContentType(attachmentId, textContent);
-                        state.Success.AppendLine($"[{zipEntry.FileName}]");
+                        state.Success.AppendLine($"[{zipEntry.FullName}]");
                         state.Success.AppendLine($"    Found content-type '{textContent}' for attachment '{attachmentId.FormatGuid()}'.");
                     }
                     else
                     {
-                        byte[] binaryContent = zipStream.ReadToEnd();
+                        byte[] binaryContent;
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            zipEntry.Open().CopyTo(memoryStream);
+                            binaryContent = memoryStream.ToArray();
+                        }
+                        
+                        //byte[] binaryContent = zipStream.ReadToEnd();
                         state.StoreAttachmentFile(attachmentId, fileName, binaryContent);
-                        state.Success.AppendLine($"[{zipEntry.FileName}]");
+                        state.Success.AppendLine($"[{zipEntry.FullName}]");
                         state.Success.AppendLine($"    Found file data '{fileName}' for attachment '{attachmentId.FormatGuid()}'.");
                     }
 
@@ -193,11 +212,20 @@ namespace WB.UI.Designer.Services.Restore
                 {
                     var lookupTableId = Guid.Parse(Path.GetFileNameWithoutExtension(zipEntryPathChunks[1]));
 
-                    string textContent = new StreamReader(zipStream, Encoding.UTF8).ReadToEnd();
+                    byte[] binaryContent;
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        zipEntry.Open().CopyTo(memoryStream);
+                        binaryContent = memoryStream.ToArray();
+                    }
+                        
+                    string textContent = Encoding.UTF8.GetString(binaryContent);
+                    
+                    //string textContent = new StreamReader(zipStream, Encoding.UTF8).ReadToEnd();
 
                     this.lookupTableService.SaveLookupTableContent(questionnaireId, lookupTableId, textContent);
 
-                    state.Success.AppendLine($"[{zipEntry.FileName}].");
+                    state.Success.AppendLine($"[{zipEntry.FullName}].");
                     state.Success.AppendLine($"    Restored lookup table '{lookupTableId.FormatGuid()}' for questionnaire '{questionnaireId.FormatGuid()}'.");
                     state.RestoredEntitiesCount++;
                 }
@@ -205,17 +233,18 @@ namespace WB.UI.Designer.Services.Restore
                 {
                     var translationIdString = Path.GetFileNameWithoutExtension(zipEntryPathChunks[1]);
                     byte[]? excelContent;
-
+                    
                     using (var memoryStream = new MemoryStream())
                     {
-                        zipStream.CopyTo(memoryStream);
+                        //zipStream.CopyTo(memoryStream);
+                        zipEntry.Open().CopyTo(memoryStream);
                         excelContent = memoryStream.ToArray();
                     }
 
                     var translationId = Guid.Parse(translationIdString);
                     this.translationsService.Store(questionnaireId, translationId, excelContent);
 
-                    state.Success.AppendLine($"[{zipEntry.FileName}].");
+                    state.Success.AppendLine($"[{zipEntry.FullName}].");
                     state.Success.AppendLine($"    Restored translation '{translationId}' for questionnaire '{questionnaireId.FormatGuid()}'.");
                     state.RestoredEntitiesCount++;
                 }
@@ -224,9 +253,12 @@ namespace WB.UI.Designer.Services.Restore
                     var collectionsIdString = Path.GetFileNameWithoutExtension(zipEntryPathChunks[1]);
                     var collectionsId = Guid.Parse(collectionsIdString);
 
-                    this.reusableCategoriesService.Store(questionnaireId, collectionsId, zipStream, CategoriesFileType.Excel);
+                    using var memoryStream = new MemoryStream();
+                    zipEntry.Open().CopyTo(memoryStream);
+                    
+                    this.reusableCategoriesService.Store(questionnaireId, collectionsId, memoryStream, CategoriesFileType.Excel);
 
-                    state.Success.AppendLine($"[{zipEntry.FileName}].");
+                    state.Success.AppendLine($"[{zipEntry.FullName}].");
                     state.Success.AppendLine($"    Restored categories '{collectionsId}' for questionnaire '{questionnaireId.FormatGuid()}'.");
                     state.RestoredEntitiesCount++;
                 }
@@ -238,8 +270,8 @@ namespace WB.UI.Designer.Services.Restore
             }
             catch (Exception exception)
             {
-                this.logger.LogWarning(exception, $"Error processing zip file entry '{zipEntry.FileName}' during questionnaire restore from backup.");
-                state.Error = $"Error processing zip file entry '{zipEntry.FileName}'.{Environment.NewLine}{exception}";
+                this.logger.LogWarning(exception, $"Error processing zip file entry '{zipEntry.FullName}' during questionnaire restore from backup.");
+                state.Error = $"Error processing zip file entry '{zipEntry.FullName}'.{Environment.NewLine}{exception}";
                 logger.LogError(state.Error);
             }
         }

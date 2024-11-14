@@ -79,7 +79,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.TabletInf
             }
             finally
             {
-                this.archiveUtils.ZipDirectoryToFile(extractToFolder, tableInfoFile);
+                this.archiveUtils.ZipDirectory(extractToFolder, tableInfoFile);
                 this.fileSystemAccessor.DeleteDirectory(extractToFolder);
             }
             

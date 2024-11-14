@@ -63,7 +63,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.FileBasedTab
             mockOfArchiveUtils.Verify(x => x.Unzip(It.IsAny<string>(), It.IsAny<string>(), true), Times.Once);
             mockOfEncryptionService.Verify(x => x.Decrypt(It.IsAny<string>()), Times.Once);
             mockOfFileSystemAccessor.Verify(x => x.WriteAllText(It.Is<string>(s => s.EndsWith("keystore.info")), It.IsAny<string>()), Times.Once);
-            mockOfArchiveUtils.Verify(x => x.ZipDirectoryToFile(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+            mockOfArchiveUtils.Verify(x => x.ZipDirectory(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
             mockOfFileSystemAccessor.Verify(x => x.DeleteDirectory(It.IsAny<string>()), Times.Once);
         }
 

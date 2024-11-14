@@ -390,7 +390,7 @@ namespace WB.UI.Headquarters.Controllers
 
             var invalidAssignmentsFileName = @"invalid-assignments";
 
-            return File(this.archiver.CompressStringToByteArray($"{invalidAssignmentsFileName}.tab", sb.ToString()),
+            return File(this.archiver.CompressContentToEntity( Encoding.Unicode.GetBytes(sb.ToString()), $"{invalidAssignmentsFileName}.tab"),
                 "application/zip", $"{invalidAssignmentsFileName}.zip");
         }
 

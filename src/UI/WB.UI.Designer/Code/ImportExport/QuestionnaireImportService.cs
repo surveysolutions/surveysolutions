@@ -1,30 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Text;
-using Ionic.Zip;
 using Main.Core.Documents;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
-using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ImportExport;
 using WB.Core.BoundedContexts.Designer.ImportExport.Models;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Questionnaire.Translations;
-using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Services.Restore;
-using Group = WB.Core.BoundedContexts.Designer.ImportExport.Models.Group;
 
 namespace WB.UI.Designer.Code.ImportExport
 {
@@ -78,7 +73,7 @@ namespace WB.UI.Designer.Code.ImportExport
 
         public Guid RestoreQuestionnaire(Stream archive, Guid responsibleId, RestoreState state, bool createNew)
         {
-            using var zipStream = new ZipInputStream(archive);
+            using var zipStream = new ZipArchive(archive);
 
             var questionnaire = RestoreQuestionnaireFromZipFileOrThrow(zipStream, state);
             var questionnaireDocument = importExportQuestionnaireMapper.Map(questionnaire);
@@ -125,7 +120,7 @@ namespace WB.UI.Designer.Code.ImportExport
             return result;
         }
 
-        private ImportStructure GetStructure(ZipInputStream zipStream, Questionnaire questionnaire,
+        private ImportStructure GetStructure(ZipArchive zipStream, Questionnaire questionnaire,
             QuestionnaireDocument questionnaireDocument, RestoreState state)
         {
             ImportStructure importStructure = new ImportStructure();
@@ -136,7 +131,14 @@ namespace WB.UI.Designer.Code.ImportExport
                     s.Name == attachmentInfo.Name);
                 var attachmentId = attachment.AttachmentId;
                 var zipEntity = GetZipEntity(zipStream, "attachments", attachmentInfo.FileName, state);
-                byte[] binaryContent = zipStream.ReadToEnd();
+                
+                byte[] binaryContent;
+                using (var memoryStream = new MemoryStream())
+                {
+                    zipEntity.Open().CopyTo(memoryStream);
+                    binaryContent = memoryStream.ToArray();
+                }
+
                 importStructure.Attachments.Add(attachmentId, binaryContent);
             }
 
@@ -146,7 +148,15 @@ namespace WB.UI.Designer.Code.ImportExport
                     s.Value.TableName == lookupTableInfo.TableName);
                 var lookupTableId = lookupTable.Key;
                 var zipEntity = GetZipEntity(zipStream, "lookup tables", lookupTableInfo.FileName, state);
-                string fileContent = new StreamReader(zipStream, Encoding.UTF8).ReadToEnd();
+                
+                byte[] binaryContent;
+                using (var memoryStream = new MemoryStream())
+                {
+                    zipEntity.Open().CopyTo(memoryStream);
+                    binaryContent = memoryStream.ToArray();
+                }
+
+                string fileContent = Encoding.UTF8.GetString(binaryContent);
                 importStructure.LookupTables.Add(lookupTableId, fileContent);
             }
 
@@ -156,7 +166,15 @@ namespace WB.UI.Designer.Code.ImportExport
                     s.Name == translationInfo.Name);
                 var translationId = translation.Id;
                 var zipEntity = GetZipEntity(zipStream, "translations", translationInfo.FileName, state);
-                string fileContent = new StreamReader(zipStream, Encoding.UTF8).ReadToEnd();
+                
+                byte[] binaryContent;
+                using (var memoryStream = new MemoryStream())
+                {
+                    zipEntity.Open().CopyTo(memoryStream);
+                    binaryContent = memoryStream.ToArray();
+                }
+
+                string fileContent = Encoding.UTF8.GetString(binaryContent);
                 importStructure.Translations.Add(translationId, fileContent);
             }
 
@@ -166,24 +184,27 @@ namespace WB.UI.Designer.Code.ImportExport
                     s.Name == categoriesInfo.Name);
                 var categoriesId = categories.Id;
                 var zipEntity = GetZipEntity(zipStream, "categories", categoriesInfo.FileName, state);
-                string fileContent = new StreamReader(zipStream, Encoding.UTF8).ReadToEnd();
+                byte[] binaryContent;
+                using (var memoryStream = new MemoryStream())
+                {
+                    zipEntity.Open().CopyTo(memoryStream);
+                    binaryContent = memoryStream.ToArray();
+                }
+
+                string fileContent = Encoding.UTF8.GetString(binaryContent);
                 importStructure.Categories.Add(categoriesId, fileContent);
             }
 
             return importStructure;
         }
 
-        private ZipEntry GetZipEntity(ZipInputStream zipStream, string folder, string fileName, RestoreState state)
+        private ZipArchiveEntry GetZipEntity(ZipArchive zipStream, string folder, string fileName, RestoreState state)
         {
-            zipStream.Seek(0, SeekOrigin.Begin);
-
-            ZipEntry zipEntry;
-            while ((zipEntry = zipStream.GetNextEntry()) != null)
+            foreach (var zipEntry in zipStream.Entries)
             {
-                if (zipEntry.IsDirectory) 
-                    continue;
+                if (zipEntry.FullName.EndsWith("/")) continue;
                 
-                string[] zipEntryPathChunks = zipEntry.FileName.Split(
+                string[] zipEntryPathChunks = zipEntry.FullName.Split(
                     new[] { Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar },
                     StringSplitOptions.RemoveEmptyEntries);
 
@@ -196,7 +217,7 @@ namespace WB.UI.Designer.Code.ImportExport
                     return zipEntry;
             }
 
-            var message = $"File {fileName} in folder {folder} don't found";
+            var message = $"File {fileName} in folder {folder} was not found";
             state.Error = message;
             throw new ArgumentException(message);
         }
@@ -220,29 +241,35 @@ namespace WB.UI.Designer.Code.ImportExport
             return isValid;
         }
 
-        private Questionnaire RestoreQuestionnaireFromZipFileOrThrow(ZipInputStream zipStream, RestoreState state)
+        private Questionnaire RestoreQuestionnaireFromZipFileOrThrow(ZipArchive zipStream, RestoreState state)
         {
             string? textContent = null;
-            ZipEntry zipEntry;
-            while ((zipEntry = zipStream.GetNextEntry()) != null)
+
+            foreach (var zipEntry in zipStream.Entries)
             {
-                if (zipEntry.IsDirectory) 
-                    continue;
+                if (zipEntry.FullName.EndsWith("/")) continue;
                 
                 try
                 {
-                    string[] zipEntryPathChunks = zipEntry.FileName.Split(
+                    string[] zipEntryPathChunks = zipEntry.FullName.Split(
                         new[] { Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar },
                         StringSplitOptions.RemoveEmptyEntries);
 
                     if (zipEntryPathChunks.Length == 1 && zipEntryPathChunks[0].ToLower().Equals("document.json"))
                     {
-                        textContent = new StreamReader(zipStream, Encoding.UTF8).ReadToEnd();
+                        byte[] binaryContent;
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            zipEntry.Open().CopyTo(memoryStream);
+                            binaryContent = memoryStream.ToArray();
+                        }
+                        
+                        textContent = Encoding.UTF8.GetString(binaryContent);
                     }
                 }
                 catch (Exception exception)
                 {
-                    var message = $"Error processing questionnaire document file entry '{zipEntry.FileName}' during questionnaire restore from backup.";
+                    var message = $"Error processing questionnaire document file entry '{zipEntry.FullName}' during questionnaire restore from backup.";
                     state.Error = message;
                     logger.LogError(exception, message);
                 }
