@@ -165,14 +165,14 @@
                 </div>
             </div>
         </div>
-    <div id="map-canvas"></div>
+        <div id="map-canvas"></div>
 
         <ModalFrame ref="assignModal" :title="$t('Common.Assign')">
             <form onsubmit="return false;">
                 <div class="form-group">
                     <label class="control-label" for="newResponsibleId">{{
                         $t('Assignments.SelectResponsible')
-                        }}</label>
+                    }}</label>
                     <Typeahead control-id="newResponsibleId" :placeholder="$t('Common.Responsible')"
                         :value="newResponsibleId" :ajax-params="{}" @selected="newResponsibleSelected"
                         :fetch-url="model.responsible"></Typeahead>
