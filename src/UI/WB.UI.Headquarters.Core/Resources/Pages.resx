@@ -1247,7 +1247,7 @@
     <value>Exclude ESRI Map support</value>
   </data>
   <data name="GetEsriExtraDescription" xml:space="preserve">
-    <value>ESRI Map support is an experimental feature. Use it only if you need the advanced ESRI GIS functionality. Including this functionality will significantly increase application size and download time. </value>
+      <value>GIS functionality will significantly increase application size and download time. Follow the instruction of your supervisor as to which version of the Interviewer application (with or without maps) is needed for your task.</value>
   </data>
   <data name="Filters_Assignment" xml:space="preserve">
     <value>Assignment</value>
