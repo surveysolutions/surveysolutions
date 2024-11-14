@@ -208,7 +208,8 @@
                                     {{ this.$t('Assignments.DetailsTargetAreaa') }}
                                 </td>
                                 <td>
-                                    <a v-if="model.targetArea" :href="'../../Maps/Details?mapname=' + model.targetArea">
+                                    <a v-if="model.targetArea"
+                                        :href="$hq.basePath + 'Maps/Details?mapname=' + encodeURIComponent(model.targetArea)">
                                         {{ model.targetArea }}
                                     </a>
                                     <span v-if="model.api.geoTarckingUrl">
