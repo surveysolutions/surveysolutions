@@ -23,17 +23,17 @@
 
             <div v-if="!search.open" class="chapter-name">
                 <router-link :id="'group-' + chapterId" class="chapter-title-text" :to="{
-            name: 'group',
-            params: { entityId: chapterId, chapterId: chapterId }
-        }">
+                    name: 'group',
+                    params: { entityId: chapterId, chapterId: chapterId }
+                }">
                     <span v-text="currentChapterData.title"></span>
                     <span v-if="currentChapter.isCover && currentChapter.isReadOnly
-            " class="warning-message">
+                    " class="warning-message">
                         {{ $t('QuestionnaireEditor.VirtualCoverPage') }}&nbsp;</span>
                     <help v-if="currentChapter.isCover && currentChapter.isReadOnly" link="virtualCoverPage" />
                     &nbsp;<a v-if="!questionnaire.isReadOnlyForUser &&
-            currentChapter.isCover &&
-            currentChapter.isReadOnly" href="javascript:void(0);" @click.stop="migrateToNewVersion()">
+                        currentChapter.isCover &&
+                        currentChapter.isReadOnly" href="javascript:void(0);" @click.stop="migrateToNewVersion()">
                         {{ $t('QuestionnaireEditor.MigrateToNewCover') }}</a>
                 </router-link>
                 <div class="qname-block chapter-condition-block">
@@ -52,7 +52,7 @@
                 </ul>
             </div>
         </div>
-        <perfect-scrollbar class="scroller">
+        <perfect-scrollbar class="scroller" ref="scroller">
             <div class="question-list" ui-tree="groupsTree" data-bs-empty-placeholder-enabled="false">
                 <div ui-tree-nodes vmodel="items" class="ui-tree-nodes angular-ui-tree-nodes">
                     <Draggable ref="tree" v-model="filteredTreeData" textKey="title" childrenKey="items"
@@ -207,6 +207,11 @@ export default {
         ctrl_h: function (value) {
             if (value)
                 this.showFindReplaceDialog();
+        },
+        filteredTreeData: function (val) {
+            this.$nextTick(() => {
+                this.$refs.scroller.$el.scrollTop = 0
+            });
         }
     },
     setup() {
@@ -327,6 +332,7 @@ export default {
             return this.$t('QuestionnaireEditor.EmptySectionLine3', { panel: panel });
         }
     },
+
     methods: {
         async fetch() {
             await this.treeStore.fetchTree(
