@@ -101,7 +101,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     var entities = mapFiles.Files.Select(f =>
                         fileSystemAccessor.CombinePath(mapsDirectory, f.Name)
                     );
-                    archiveUtils.ZipFiles(entities, tempFile);
+                    archiveUtils.CreateArchiveFromFileList(entities, tempFile);
                 }
                 else
                 {

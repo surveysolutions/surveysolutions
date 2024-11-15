@@ -19,6 +19,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Questionnaire.Translations;
+using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.UI.Designer.Services.Restore;
 
 namespace WB.UI.Designer.Code.ImportExport
@@ -132,14 +133,7 @@ namespace WB.UI.Designer.Code.ImportExport
                 var attachmentId = attachment.AttachmentId;
                 var zipEntity = GetZipEntity(zipStream, "attachments", attachmentInfo.FileName, state);
                 
-                byte[] binaryContent;
-                using (var memoryStream = new MemoryStream())
-                {
-                    zipEntity.Open().CopyTo(memoryStream);
-                    binaryContent = memoryStream.ToArray();
-                }
-
-                importStructure.Attachments.Add(attachmentId, binaryContent);
+                importStructure.Attachments.Add(attachmentId, zipEntity.GetContent());
             }
 
             foreach (var lookupTableInfo in questionnaire.LookupTables)
@@ -149,14 +143,7 @@ namespace WB.UI.Designer.Code.ImportExport
                 var lookupTableId = lookupTable.Key;
                 var zipEntity = GetZipEntity(zipStream, "lookup tables", lookupTableInfo.FileName, state);
                 
-                byte[] binaryContent;
-                using (var memoryStream = new MemoryStream())
-                {
-                    zipEntity.Open().CopyTo(memoryStream);
-                    binaryContent = memoryStream.ToArray();
-                }
-
-                string fileContent = Encoding.UTF8.GetString(binaryContent);
+                string fileContent = Encoding.UTF8.GetString(zipEntity.GetContent());
                 importStructure.LookupTables.Add(lookupTableId, fileContent);
             }
 
@@ -167,14 +154,7 @@ namespace WB.UI.Designer.Code.ImportExport
                 var translationId = translation.Id;
                 var zipEntity = GetZipEntity(zipStream, "translations", translationInfo.FileName, state);
                 
-                byte[] binaryContent;
-                using (var memoryStream = new MemoryStream())
-                {
-                    zipEntity.Open().CopyTo(memoryStream);
-                    binaryContent = memoryStream.ToArray();
-                }
-
-                string fileContent = Encoding.UTF8.GetString(binaryContent);
+                string fileContent = Encoding.UTF8.GetString(zipEntity.GetContent());
                 importStructure.Translations.Add(translationId, fileContent);
             }
 
@@ -184,14 +164,8 @@ namespace WB.UI.Designer.Code.ImportExport
                     s.Name == categoriesInfo.Name);
                 var categoriesId = categories.Id;
                 var zipEntity = GetZipEntity(zipStream, "categories", categoriesInfo.FileName, state);
-                byte[] binaryContent;
-                using (var memoryStream = new MemoryStream())
-                {
-                    zipEntity.Open().CopyTo(memoryStream);
-                    binaryContent = memoryStream.ToArray();
-                }
-
-                string fileContent = Encoding.UTF8.GetString(binaryContent);
+                
+                string fileContent = Encoding.UTF8.GetString(zipEntity.GetContent());
                 importStructure.Categories.Add(categoriesId, fileContent);
             }
 
@@ -202,7 +176,7 @@ namespace WB.UI.Designer.Code.ImportExport
         {
             foreach (var zipEntry in zipStream.Entries)
             {
-                if (zipEntry.FullName.EndsWith("/")) continue;
+                if (zipEntry.IsDirectory()) continue;
                 
                 string[] zipEntryPathChunks = zipEntry.FullName.Split(
                     new[] { Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar },
@@ -247,7 +221,7 @@ namespace WB.UI.Designer.Code.ImportExport
 
             foreach (var zipEntry in zipStream.Entries)
             {
-                if (zipEntry.FullName.EndsWith("/")) continue;
+                if (zipEntry.IsDirectory()) continue;
                 
                 try
                 {
@@ -257,14 +231,7 @@ namespace WB.UI.Designer.Code.ImportExport
 
                     if (zipEntryPathChunks.Length == 1 && zipEntryPathChunks[0].ToLower().Equals("document.json"))
                     {
-                        byte[] binaryContent;
-                        using (var memoryStream = new MemoryStream())
-                        {
-                            zipEntry.Open().CopyTo(memoryStream);
-                            binaryContent = memoryStream.ToArray();
-                        }
-                        
-                        textContent = Encoding.UTF8.GetString(binaryContent);
+                        textContent = Encoding.UTF8.GetString(zipEntry.GetContent());
                     }
                 }
                 catch (Exception exception)

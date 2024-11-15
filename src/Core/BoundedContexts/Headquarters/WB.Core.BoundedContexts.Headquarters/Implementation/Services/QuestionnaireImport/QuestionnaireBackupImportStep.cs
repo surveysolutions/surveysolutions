@@ -74,7 +74,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
         private void ProcessDependingObjects()
         {
-            filesInBackup = archiveUtils.GetArchivedFileNamesAndSize(backupFile.Content);
+            filesInBackup = archiveUtils.GetFileNamesAndSizesFromArchive(backupFile.Content);
 
             ProcessAttachments();
             ProcessTranslations();

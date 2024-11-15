@@ -14,6 +14,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Questionnaire.Translations;
+using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 
 namespace WB.UI.Designer.Services.Restore
 {
@@ -72,7 +73,7 @@ namespace WB.UI.Designer.Services.Restore
         {
             foreach (var zipEntry in zipStream.Entries)
             {
-                if (zipEntry.FullName.EndsWith("/")) continue;
+                if (zipEntry.IsDirectory()) continue;
                 
                 try
                 {
@@ -161,14 +162,7 @@ namespace WB.UI.Designer.Services.Restore
 
                     if (string.Equals(fileName, "content-type.txt", StringComparison.CurrentCultureIgnoreCase))
                     {
-                        byte[] binaryContent;
-                        using (var memoryStream = new MemoryStream())
-                        {
-                            zipEntry.Open().CopyTo(memoryStream);
-                            binaryContent = memoryStream.ToArray();
-                        }
-                        
-                        string textContent = Encoding.UTF8.GetString(binaryContent);
+                        string textContent = Encoding.UTF8.GetString(zipEntry.GetContent());
                         //string textContent = new StreamReader(zipStream, Encoding.UTF8).ReadToEnd();
 
                         state.StoreAttachmentContentType(attachmentId, textContent);
@@ -177,15 +171,7 @@ namespace WB.UI.Designer.Services.Restore
                     }
                     else
                     {
-                        byte[] binaryContent;
-                        using (var memoryStream = new MemoryStream())
-                        {
-                            zipEntry.Open().CopyTo(memoryStream);
-                            binaryContent = memoryStream.ToArray();
-                        }
-                        
-                        //byte[] binaryContent = zipStream.ReadToEnd();
-                        state.StoreAttachmentFile(attachmentId, fileName, binaryContent);
+                        state.StoreAttachmentFile(attachmentId, fileName, zipEntry.GetContent());
                         state.Success.AppendLine($"[{zipEntry.FullName}]");
                         state.Success.AppendLine($"    Found file data '{fileName}' for attachment '{attachmentId.FormatGuid()}'.");
                     }
@@ -212,15 +198,7 @@ namespace WB.UI.Designer.Services.Restore
                 {
                     var lookupTableId = Guid.Parse(Path.GetFileNameWithoutExtension(zipEntryPathChunks[1]));
 
-                    byte[] binaryContent;
-                    using (var memoryStream = new MemoryStream())
-                    {
-                        zipEntry.Open().CopyTo(memoryStream);
-                        binaryContent = memoryStream.ToArray();
-                    }
-                        
-                    string textContent = Encoding.UTF8.GetString(binaryContent);
-                    
+                    string textContent = Encoding.UTF8.GetString(zipEntry.GetContent());
                     //string textContent = new StreamReader(zipStream, Encoding.UTF8).ReadToEnd();
 
                     this.lookupTableService.SaveLookupTableContent(questionnaireId, lookupTableId, textContent);
@@ -232,17 +210,9 @@ namespace WB.UI.Designer.Services.Restore
                 else if (isTranslationEntry)
                 {
                     var translationIdString = Path.GetFileNameWithoutExtension(zipEntryPathChunks[1]);
-                    byte[]? excelContent;
-                    
-                    using (var memoryStream = new MemoryStream())
-                    {
-                        //zipStream.CopyTo(memoryStream);
-                        zipEntry.Open().CopyTo(memoryStream);
-                        excelContent = memoryStream.ToArray();
-                    }
-
                     var translationId = Guid.Parse(translationIdString);
-                    this.translationsService.Store(questionnaireId, translationId, excelContent);
+                    
+                    this.translationsService.Store(questionnaireId, translationId, zipEntry.GetContent());
 
                     state.Success.AppendLine($"[{zipEntry.FullName}].");
                     state.Success.AppendLine($"    Restored translation '{translationId}' for questionnaire '{questionnaireId.FormatGuid()}'.");

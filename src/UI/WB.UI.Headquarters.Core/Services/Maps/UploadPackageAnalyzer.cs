@@ -56,7 +56,7 @@ Other files
     {
         var result = new AnalyzeResult();
         
-        var filesInArchive = archiveUtils.GetArchivedFileNamesAndSize(file);
+        var filesInArchive = archiveUtils.GetFileNamesAndSizesFromArchive(file);
 
         foreach (var fileInArchive in filesInArchive)
         {

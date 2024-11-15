@@ -49,7 +49,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.TabletInf
             this.fileSystemAccessor.WriteAllBytes(tableInfoFile, content);
 
             var keystoreInfoFileName = "keystore.info";
-            var zippedFiles = this.archiveUtils.GetArchivedFileNamesAndSize(content);
+            var zippedFiles = this.archiveUtils.GetFileNamesAndSizesFromArchive(content);
 
             if (zippedFiles.ContainsKey(keystoreInfoFileName))
                 this.DecryptEnumeratorKeysInZip(tableInfoFile);
@@ -60,7 +60,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.TabletInf
             var extractToFolder = this.fileSystemAccessor.CombinePath(this.basePath,
                 this.fileSystemAccessor.GetFileNameWithoutExtension(tableInfoFile));
 
-            this.archiveUtils.Unzip(tableInfoFile, extractToFolder, true);
+            this.archiveUtils.ExtractToDirectory(tableInfoFile, extractToFolder, true);
 
             var keyStoreInfoFile = this.fileSystemAccessor.CombinePath(extractToFolder, "keystore.info");
 
@@ -79,7 +79,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.TabletInf
             }
             finally
             {
-                this.archiveUtils.ZipDirectory(extractToFolder, tableInfoFile);
+                this.archiveUtils.CreateArchiveFromDirectory(extractToFolder, tableInfoFile);
                 this.fileSystemAccessor.DeleteDirectory(extractToFolder);
             }
             

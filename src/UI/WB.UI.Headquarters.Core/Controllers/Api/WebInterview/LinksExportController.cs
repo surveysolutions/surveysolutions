@@ -39,7 +39,7 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
             byte[] uncompressedData = this.sampleWebInterviewService.Generate(questionnaireIdentity,
                 pathService.GetAbsolutePath($"~/WebInterview"));
 
-            var compressedBytes = archiveUtils.CompressContentToEntity(uncompressedData, "interviews.tab");
+            var compressedBytes = archiveUtils.CompressContentToSingleFile(uncompressedData, "interviews.tab");
 
             var fileContentResult = File(compressedBytes, "application/octet-stream");
             fileContentResult.FileDownloadName = this.GetOutputFileName(questionnaireIdentity);
