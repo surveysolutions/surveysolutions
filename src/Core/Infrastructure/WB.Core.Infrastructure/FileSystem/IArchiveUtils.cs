@@ -10,7 +10,7 @@ namespace WB.Core.Infrastructure.FileSystem
         void ExtractToDirectory(Stream archivedFile, string extractToFolder, bool ignoreRootDirectory = false);
         ExtractedFile GetFileFromArchive(string archiveFilePath, string fileName);
         ExtractedFile GetFileFromArchive(byte[] archivedFileAsArray, string fileName);
-        IEnumerable<ExtractedFile> GetFilesFromArchive(Stream inputStream);
+        IList<ExtractedFile> GetFilesFromArchive(Stream inputStream);
         bool IsZipStream(Stream zipStream);
 
         // File information methods

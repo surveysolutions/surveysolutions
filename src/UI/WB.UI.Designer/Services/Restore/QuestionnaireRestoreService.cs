@@ -223,10 +223,15 @@ namespace WB.UI.Designer.Services.Restore
                     var collectionsIdString = Path.GetFileNameWithoutExtension(zipEntryPathChunks[1]);
                     var collectionsId = Guid.Parse(collectionsIdString);
 
-                    using var memoryStream = new MemoryStream();
-                    zipEntry.Open().CopyTo(memoryStream);
-                    
-                    this.reusableCategoriesService.Store(questionnaireId, collectionsId, memoryStream, CategoriesFileType.Excel);
+                    using var entryStream = zipEntry.Open();
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        entryStream.CopyTo(memoryStream);
+                        memoryStream.Seek(0, SeekOrigin.Begin);
+
+                        this.reusableCategoriesService.Store(questionnaireId, collectionsId, memoryStream,
+                            CategoriesFileType.Excel);
+                    }
 
                     state.Success.AppendLine($"[{zipEntry.FullName}].");
                     state.Success.AppendLine($"    Restored categories '{collectionsId}' for questionnaire '{questionnaireId.FormatGuid()}'.");

@@ -247,5 +247,56 @@ namespace WB.Tests.Integration.UtilsTest
                 File.Delete(testFile);
             }
         }
+        
+        [Test]
+        public void GetFilesFromArchive_ShouldReturnFiles_WhenArchiveContainsSeveralFiles()
+        {
+            // Arrange
+            var zipArchiveUtils = new ZipArchiveUtils();
+            var testFile = $"test_{Guid.NewGuid()}.zip";
+            var files = new Dictionary<string, string>
+            {
+                { "file1.txt", "Content of file 1" },
+                { "file2.txt", "Content of file 2" },
+                { "file3.txt", "Content of file 3" }
+            };
+
+            try
+            {
+                using (var fileStream = new FileStream(testFile, FileMode.Create))
+                using (var archive = new ZipArchive(fileStream, ZipArchiveMode.Create, true))
+                {
+                    foreach (var file in files)
+                    {
+                        var entry = archive.CreateEntry(file.Key);
+                        using (var entryStream = entry.Open())
+                        using (var writer = new StreamWriter(entryStream))
+                        {
+                            writer.Write(file.Value);
+                        }
+                    }
+                }
+
+                using (var fileStream = new FileStream(testFile, FileMode.Open, FileAccess.Read))
+                {
+                    // Act
+                    var result = zipArchiveUtils.GetFilesFromArchive(fileStream);
+
+                    // Assert
+                    Assert.That(result, Is.Not.Null);
+                    Assert.That(result.Count, Is.EqualTo(files.Count));
+                    foreach (var file in files)
+                    {
+                        var extractedFile = result.SingleOrDefault(f => f.Name == file.Key);
+                        Assert.That(extractedFile, Is.Not.Null);
+                        Assert.That(extractedFile.Bytes, Is.EqualTo(System.Text.Encoding.UTF8.GetBytes(file.Value)));
+                    }
+                }
+            }
+            finally
+            {
+                File.Delete(testFile);
+            }
+        }
     }
 }

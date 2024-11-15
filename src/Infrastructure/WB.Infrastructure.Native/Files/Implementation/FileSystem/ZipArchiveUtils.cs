@@ -70,22 +70,28 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
             ZipFile.ExtractToDirectory(fileStream, extractToFolder);
         }
 
-        public IEnumerable<ExtractedFile> GetFilesFromArchive(Stream inputStream)
+        public IList<ExtractedFile> GetFilesFromArchive(Stream inputStream)
         {
             inputStream.Seek(0, SeekOrigin.Begin);
-            
-            using var zip = new ZipArchive(inputStream, ZipArchiveMode.Read);
-            foreach (var zipEntry in zip.Entries)
+
+            List<ExtractedFile> result = new List<ExtractedFile>();
+
+            using (var zip = new ZipArchive(inputStream, ZipArchiveMode.Read, true))
             {
-                if (zipEntry.IsDirectory()) continue;
-                
-                yield return new ExtractedFile
+                foreach (var zipEntry in zip.Entries)
                 {
-                    Name = zipEntry.FullName,
-                    Size = zipEntry.Length,
-                    Bytes = zipEntry.GetContent()
-                };                
+                    if (zipEntry.IsDirectory()) continue;
+
+                    result.Add(new ExtractedFile
+                    {
+                        Name = zipEntry.FullName,
+                        Size = zipEntry.Length,
+                        Bytes = zipEntry.GetContent()
+                    });
+                }
             }
+
+            return result;
         }
 
         public ExtractedFile GetFileFromArchive(string archiveFilePath, string fileName)
@@ -116,7 +122,7 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
         public ExtractedFile GetFileFromArchive(byte[] archivedFileAsArray, string fileName)
         {
             using (var archiveStream = new MemoryStream(archivedFileAsArray))
-            using (var zip = new ZipArchive(archiveStream, ZipArchiveMode.Read))
+            using (var zip = new ZipArchive(archiveStream, ZipArchiveMode.Read, true))
             {
                 foreach (var zipEntry in zip.Entries)
                 {
@@ -143,7 +149,7 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
 
             try
             {
-                using var zip = new ZipArchive(zipStream, ZipArchiveMode.Read);
+                using var zip = new ZipArchive(zipStream, ZipArchiveMode.Read, true);
                 return true;
             }
             catch (InvalidDataException)
@@ -162,7 +168,7 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
         {
             var result = new Dictionary<string, long>();
 
-            using var zip = new ZipArchive(inputStream, ZipArchiveMode.Read);
+            using var zip = new ZipArchive(inputStream, ZipArchiveMode.Read, true);
             foreach (var zipEntry in zip.Entries)
             {
                 if (zipEntry.IsDirectory()) continue;
