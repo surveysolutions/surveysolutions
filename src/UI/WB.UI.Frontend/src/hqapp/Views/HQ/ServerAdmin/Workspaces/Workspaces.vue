@@ -32,8 +32,7 @@
                                     max: 12,
                                     regex: /^[0-9,a-z]+$/,
                                     not_one_of: ['api', 'apidocs', 'graphql', 'users', 'administration']
-                                }" :data-vv-as="$t('Workspaces.Name')" autocomplete="off"
-                                @keyup.enter="createWorkspace" id="newWorkspaceName" />
+                                }" autocomplete="off" @keyup.enter="createWorkspace" id="newWorkspaceName" />
 
                             <p class="help-block" v-if="!errors.Name">
                                 {{ $t('Workspaces.CanNotBeChanged') }}
@@ -49,8 +48,8 @@
                             </label>
                             <Field type="text" class="form-control" v-model.trim="editedDisplayName" name="DisplayName"
                                 :rules="{ required: true, max: 300 }" maxlength="300"
-                                :label="$t('Workspaces.DisplayName')" :data-vv-as="$t('Workspaces.DisplayName')"
-                                autocomplete="off" @keyup.enter="createWorkspace" id="newDescription" />
+                                :label="$t('Workspaces.DisplayName')" autocomplete="off" @keyup.enter="createWorkspace"
+                                id="newDescription" />
                             <p class="help-block" v-if="!errors.workspaceDisplayName">
                                 {{ $t('Workspaces.DisplayNameHelpText') }}
                             </p>

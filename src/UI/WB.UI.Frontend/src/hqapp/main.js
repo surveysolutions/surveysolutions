@@ -1,4 +1,3 @@
-import jquery from '~/shared/jquery'
 import 'bootstrap'
 import * as bootstrap from 'bootstrap'
 window.bootstrap = bootstrap
@@ -29,9 +28,6 @@ const store = registerStore(vue)
 import moment from 'moment'
 moment.locale(browserLanguage)
 
-import { setLocale } from '@vee-validate/i18n'
-setLocale(browserLanguage)
-
 import { registerComponents } from './components'
 registerComponents(vue)
 
@@ -50,7 +46,6 @@ import { Popover } from 'uiv'
 vue.component('popover', Popover)
 
 import './validate.js'
-
 
 import box from '@/shared/modal'
 box.init(i18n, browserLanguage)
@@ -92,9 +87,7 @@ vue.use(pageTitle)
 
 vue.config.globalProperties.$eventHub = vue
 
-
 import emitter from '~/shared/emitter'
-import { set } from 'lodash'
 vue.config.globalProperties.$emitter = emitter
 
 router.isReady().then(() => {
