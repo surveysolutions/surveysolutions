@@ -27,6 +27,9 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
 
         public void CreateArchiveFromDirectory(string directory, string archiveFile)
         {
+            if(File.Exists(archiveFile))
+                File.Delete(archiveFile);
+            
             ZipFile.CreateFromDirectory(directory, archiveFile, CompressionLevel.Optimal, false, Encoding.UTF8);
         }
 
