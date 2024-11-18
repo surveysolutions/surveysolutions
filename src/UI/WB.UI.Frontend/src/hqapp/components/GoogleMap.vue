@@ -206,7 +206,7 @@ export default {
         shapefile: { type: String, default: null },
         getMarkersParams: { type: Object, default: {} },
     },
-    expose: ['isLoading', 'map'],
+    expose: ['init', 'isLoading', 'map', 'reloadMarkersInBounds'],
 
     data() {
         return {
@@ -217,8 +217,6 @@ export default {
             map: null,
             isLoading: false,
             totalMarkers: 0,
-            tracks: [],
-            tracksPath: [],
             responsibleId: null,
             responsibleParams: { showArchived: true, showLocked: true },
             newResponsibleId: null,
@@ -228,15 +226,7 @@ export default {
     },
 
     async mounted() {
-
-        this.setMapCanvasStyle()
-        await this.initializeMap()
-        await this.displayShapefileName();
-        await this.getGeoTrackingHistory();
-
-        this.displayGeoTrackingHistory();
-
-        this.showPointsOnMap(180, 180, -180, -180, false)
+        await this.init()
     },
 
     computed: {
@@ -291,6 +281,17 @@ export default {
     },
 
     methods: {
+
+        async init() {
+            this.setMapCanvasStyle()
+            await this.initializeMap()
+            await this.displayShapefileName();
+
+            this.showPointsOnMap(180, 180, -180, -180, false)
+
+            this.$emit('initialized');
+        },
+
         openInterview() {
             window.open(
                 this.$hq.basePath +
@@ -481,80 +482,6 @@ export default {
 
                 this.reloadMarkersInBounds()
             }
-        },
-
-        getGeoTrackingHistory() {
-            const trackingJsonUrl = this.model.api.geoTrackingHistory
-
-            this.isLoading = true
-
-            const self = this
-
-            return this.$http
-                .get(trackingJsonUrl)
-                .then(response => {
-                    if (response != null && response.data != null) {
-                        self.tracks = response.data
-                    }
-
-                    self.isLoading = false
-                })
-                .catch(() => (self.isLoading = false))
-        },
-
-        displayGeoTrackingHistory() {
-
-            this.tracksPath.forEach(t => {
-                t.setMap(null);
-            })
-
-            let tracks = this.selectedGeoTrackingId == null
-                ? this.tracks
-                : this.tracks.filter(t => t.id == this.selectedGeoTrackingId.key);
-
-            if (this.dateRange) {
-                /*const start = new Date(this.dateRange.startDate)
-                const end = new Date(this.dateRange.endDate)
-                end.setDate(end.getDate() + 1)
-
-                tracks.forEach(t => {
-                    t.points = t.points.filter(p => {
-                        const pointDate = new Date(item.date);
-                        return pointDate < end && pointDate > start
-                    })
-                });
-
-                tracks = tracks.filter(t => t.points.length > 0)*/
-            }
-
-            const latlngBounds = new google.maps.LatLngBounds();
-
-            tracks.forEach(t => {
-                const polyline = new google.maps.Polyline({
-                    path: t.points,
-                    geodesic: true,
-                    strokeColor: "#0000FF",
-                    strokeOpacity: 0.8,
-                    strokeWeight: 4,
-                });
-
-                polyline.setMap(this.map);
-                this.tracksPath.push(polyline);
-
-                /*t.points.forEach((point) => {
-                    new google.maps.Marker({
-                        position: point,
-                        map: this.map,
-                    });
-                });*/
-
-                const path = polyline.getPath();
-                path.forEach((latLng) => {
-                    latlngBounds.extend(latLng);
-                });
-            })
-
-            this.map.fitBounds(latlngBounds)
         },
 
         getMapOptions() {

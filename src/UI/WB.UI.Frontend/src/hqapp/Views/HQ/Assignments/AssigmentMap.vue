@@ -33,7 +33,8 @@
         </template>
 
 
-        <google-map ref="mapWithMarkers" :shapefile="shapefileName" :getMarkersParams="getMarkersParams"></google-map>
+        <google-map ref="mapWithMarkers" :shapefile="shapefileName" :getMarkersParams="getMarkersParams"
+            @initialized="mapInitialized"></google-map>
 
     </HqLayout>
 </template>
@@ -91,23 +92,16 @@ export default {
 
     data() {
         return {
-            isLoading: false,
-            totalMarkers: 0,
             selectedGeoTrackingId: null,
             tracks: [],
             tracksPath: [],
             responsibleId: null,
             responsibleParams: { showArchived: true, showLocked: true },
-            newResponsibleId: null,
-            isReassignReceivedByTablet: false,
-            geoJsonFeatures: null,
             dateRange: null,
         }
     },
 
     async mounted() {
-        await this.getGeoTrackingHistory();
-
         if (this.$route.query.track)
             this.selectedGeoTrackingId = this.tracks.find(t => t.id == this.$route.query.track)
         this.responsibleId = this.$route.query.responsible
@@ -119,8 +113,6 @@ export default {
                 endDate: endDate,
             }
         }
-
-        this.displayGeoTrackingHistory();
     },
 
     computed: {
@@ -210,8 +202,9 @@ export default {
 
     methods: {
 
-        newResponsibleSelected(newValue) {
-            this.newResponsibleId = newValue
+        async mapInitialized() {
+            await this.getGeoTrackingHistory();
+            this.displayGeoTrackingHistory();
         },
 
         selectedGeoTracking(value) {
