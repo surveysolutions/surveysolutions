@@ -43,7 +43,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.FileBasedTab
         {
             // arrange
             var mockOfArchiveUtils = new Mock<IArchiveUtils>();
-            mockOfArchiveUtils.Setup(x => x.GetArchivedFileNamesAndSize(It.IsAny<byte[]>()))
+            mockOfArchiveUtils.Setup(x => x.GetFileNamesAndSizesFromArchive(It.IsAny<byte[]>()))
                 .Returns(new Dictionary<string, long> {{"keystore.info", 1}});
             var mockOfEncryptionService = new Mock<IEncryptionService>();
             var mockOfFileSystemAccessor = new Mock<IFileSystemAccessor>();
@@ -60,10 +60,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.FileBasedTab
 
             // assert
             mockOfFileSystemAccessor.Verify(x => x.WriteAllBytes(It.IsAny<string>(), It.IsAny<byte[]>()), Times.Once);
-            mockOfArchiveUtils.Verify(x => x.Unzip(It.IsAny<string>(), It.IsAny<string>(), true), Times.Once);
+            mockOfArchiveUtils.Verify(x => x.ExtractToDirectory(It.IsAny<string>(), It.IsAny<string>(), true), Times.Once);
             mockOfEncryptionService.Verify(x => x.Decrypt(It.IsAny<string>()), Times.Once);
             mockOfFileSystemAccessor.Verify(x => x.WriteAllText(It.Is<string>(s => s.EndsWith("keystore.info")), It.IsAny<string>()), Times.Once);
-            mockOfArchiveUtils.Verify(x => x.ZipDirectoryToFile(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+            mockOfArchiveUtils.Verify(x => x.CreateArchiveFromDirectory(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
             mockOfFileSystemAccessor.Verify(x => x.DeleteDirectory(It.IsAny<string>()), Times.Once);
         }
 

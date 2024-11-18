@@ -1,9 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Text;
-using Ionic.Zip;
-using Ionic.Zlib;
 using NUnit.Framework;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 
@@ -13,81 +13,290 @@ namespace WB.Tests.Integration.UtilsTest
     [TestFixture]
     internal class ZipArchiveUtilsTests
     {
+        private ZipArchiveUtils zipArchiveUtils;
+
         [OneTimeSetUp]
-        public void SetUp() => Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-
-        [Test]
-        public void When_ProtectZipWithPassword_Then_each_file_in_zip_should_not_be_extracted_without_password()
+        public void SetUp()
         {
-            //given
-            string password = "password";
-            MemoryStream inputZipStream = new MemoryStream();
-            ZipFile zipFile = new ZipFile();
-            zipFile.AddEntry("password_protected_file_1", "content of password protected file 1");
-            zipFile.AddEntry("password_protected_file_2", "content of password protected file 2");
-            zipFile.Save(inputZipStream);
-            inputZipStream.Position = 0;
-
-            var zipArchiveUtils = CreateZipArchiveUtils();
-            MemoryStream protectedZipStream = new MemoryStream();
-            //when
-            zipArchiveUtils.ProtectZipWithPassword(inputZipStream, protectedZipStream, password);
-            //then
-            var protectedZipFile = ZipFile.Read(protectedZipStream);
-            var unZippedStream = new MemoryStream();
-            foreach (var zipEntry in protectedZipFile)
-                Assert.Throws<BadPasswordException>(() => zipEntry.Extract(unZippedStream));
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            zipArchiveUtils = new ZipArchiveUtils();
         }
 
-        [TestCase("")]
-        [TestCase("with password")]
-        public void should_preserve_zero_length_files_in_archive(string password)
+        [Test]
+        public void should_preserve_zero_length_files_in_archive()
         {
-            const string file_path = "test.zip";
+            var filePath = $"test_{Guid.NewGuid()}.zip";
 
             try
             {
-                using (var fs = File.Create(file_path))
+                using (var fs = File.Create(filePath))
                 {
-                    using (var arch = new IonicZipArchive(fs, password, CompressionLevel.BestCompression))
+                    using (var arch = new CompressionZipArchive(fs))
                     {
                         arch.CreateEntry("non_empty.file", Encoding.UTF8.GetBytes("test"));
                         arch.CreateEntry("empty.file", Array.Empty<byte>());
                     }
                 }
 
-                using (var file = File.OpenRead(file_path))
+                using (var zip = ZipFile.OpenRead(filePath))
                 {
-                    using (var zip = ZipFile.Read(file))
+                    var nonEmpty = zip.Entries.SingleOrDefault(e => e.Name == "non_empty.file");
+                    Assert.That(nonEmpty, Is.Not.Null);
+
+                    var emptyFile = zip.Entries.SingleOrDefault(e => e.Name == "empty.file");
+                    Assert.That(emptyFile, Is.Not.Null);
+
+                    using var streamEmpty = emptyFile.Open();
+                    using (var ms = new MemoryStream())
                     {
-                        var nonEmpty = zip.Entries.SingleOrDefault(e => e.FileName == "non_empty.file");
-                        Assert.That(nonEmpty, Is.Not.Null);
+                        streamEmpty.CopyTo(ms);
+                        Assert.That(ms.ToArray(), Has.Length.EqualTo(0));
+                    }
 
-                        var emptyFile = zip.Entries.SingleOrDefault(e => e.FileName == "empty.file");
-                        Assert.That(nonEmpty, Is.Not.Null);
-
-                        using (var ms = new MemoryStream())
-                        {
-                            if (string.IsNullOrWhiteSpace(password))
-                            {
-                                emptyFile.ExtractWithPassword(ms, password);
-                            }
-                            else
-                            {
-                                emptyFile.Extract(ms);
-                            }
-
-                            Assert.That(ms.ToArray(), Has.Length.EqualTo(0));
-                        }
+                    using var stream = nonEmpty.Open();
+                    using (var ms = new MemoryStream())
+                    {
+                        stream.CopyTo(ms);
+                        Assert.That(ms.ToArray(), Has.Length.EqualTo(4));
                     }
                 }
             }
             finally
             {
-                File.Delete("test.zip");
+                File.Delete(filePath);
             }
         }
 
-        private static ZipArchiveUtils CreateZipArchiveUtils() => new ZipArchiveUtils();
+        [Test]
+        public void should_compress_and_decompress_string()
+        {
+            const string originalString = "This is a test string to compress and decompress.";
+            var compressedString = zipArchiveUtils.CompressString(originalString);
+            var decompressedString = zipArchiveUtils.DecompressString(compressedString);
+
+            Assert.That(decompressedString, Is.EqualTo(originalString));
+        }
+
+        [Test]
+        public void should_create_archive_from_directory()
+        {
+            var testDirectory = $"test_directory_{Guid.NewGuid()}";
+            var testFile = Path.Combine(testDirectory, "test_file.txt");
+            var archiveFile = $"test_archive_{Guid.NewGuid()}.zip";
+
+            Directory.CreateDirectory(testDirectory);
+            File.WriteAllText(testFile, "Test content");
+
+            try
+            {
+                zipArchiveUtils.CreateArchiveFromDirectory(testDirectory, archiveFile);
+
+                Assert.That(File.Exists(archiveFile), Is.True);
+            }
+            finally
+            {
+                Directory.Delete(testDirectory, true);
+                File.Delete(archiveFile);
+            }
+        }
+
+        [Test]
+        public void should_create_archive_from_file_list()
+        {
+            var testFiles = new List<string>
+            {
+                $"file1_{Guid.NewGuid()}.txt",
+                $"file2_{Guid.NewGuid()}.txt"
+            };
+            var archiveFile = $"test_archive_{Guid.NewGuid()}.zip";
+
+            foreach (var file in testFiles)
+            {
+                File.WriteAllText(file, "Test content");
+            }
+
+            try
+            {
+                zipArchiveUtils.CreateArchiveFromFileList(testFiles, archiveFile);
+
+                Assert.That(File.Exists(archiveFile), Is.True);
+            }
+            finally
+            {
+                foreach (var file in testFiles)
+                {
+                    File.Delete(file);
+                }
+                File.Delete(archiveFile);
+            }
+        }
+
+        [Test]
+        public void should_extract_to_directory()
+        {
+            var testDirectory = $"test_directory_{Guid.NewGuid()}";
+            var testFile = Path.Combine(testDirectory, "test_file.txt");
+            var archiveFile = $"test_archive_{Guid.NewGuid()}.zip";
+            var extractDirectory = $"extracted_directory_{Guid.NewGuid()}";
+
+            Directory.CreateDirectory(testDirectory);
+            File.WriteAllText(testFile, "Test content");
+
+            try
+            {
+                zipArchiveUtils.CreateArchiveFromDirectory(testDirectory, archiveFile);
+                zipArchiveUtils.ExtractToDirectory(archiveFile, extractDirectory, true);
+
+                Assert.That(Directory.Exists(extractDirectory), Is.True);
+                Assert.That(File.Exists(Path.Combine(extractDirectory, "test_file.txt")), Is.True);
+            }
+            finally
+            {
+                Directory.Delete(testDirectory, true);
+                Directory.Delete(extractDirectory, true);
+                File.Delete(archiveFile);
+            }
+        }
+
+        [Test]
+        public void should_get_file_names_and_sizes_from_archive()
+        {
+            var testFiles = new List<string>
+            {
+                $"file1_{Guid.NewGuid()}.txt",
+                $"file2_{Guid.NewGuid()}.txt"
+            };
+            var archiveFile = $"test_archive_{Guid.NewGuid()}.zip";
+
+            foreach (var file in testFiles)
+            {
+                File.WriteAllText(file, "Test content");
+            }
+
+            try
+            {
+                zipArchiveUtils.CreateArchiveFromFileList(testFiles, archiveFile);
+                
+                var fileNamesAndSizes = zipArchiveUtils.GetFileNamesAndSizesFromArchive(File.ReadAllBytes(archiveFile));
+
+                Assert.That(fileNamesAndSizes.Count, Is.EqualTo(testFiles.Count));
+                foreach (var file in testFiles)
+                {
+                    Assert.That(fileNamesAndSizes.ContainsKey(Path.GetFileName(file)), Is.True);
+                }
+            }
+            finally
+            {
+                foreach (var file in testFiles)
+                {
+                    File.Delete(file);
+                }
+                File.Delete(archiveFile);
+            }
+        }
+        
+        [Test]
+        public void should_return_true_for_valid_zip_stream()
+        {
+            var zipArchiveUtils = new ZipArchiveUtils();
+            var testFile = $"test_{Guid.NewGuid()}.zip";
+
+            try
+            {
+                using (var fileStream = new FileStream(testFile, FileMode.Create))
+                using (var archive = new ZipArchive(fileStream, ZipArchiveMode.Create, true))
+                {
+                    var entry = archive.CreateEntry("test_file.txt");
+                    using (var entryStream = entry.Open())
+                    using (var writer = new StreamWriter(entryStream))
+                    {
+                        writer.Write("Test content");
+                    }
+                }
+
+                using (var fileStream = new FileStream(testFile, FileMode.Open, FileAccess.Read))
+                {
+                    var result = zipArchiveUtils.IsZipStream(fileStream);
+                    Assert.That(result, Is.True);
+                }
+            }
+            finally
+            {
+                File.Delete(testFile);
+            }
+        }
+
+        [Test]
+        public void should_return_false_for_invalid_zip_stream()
+        {
+            var zipArchiveUtils = new ZipArchiveUtils();
+            var testFile = $"test_{Guid.NewGuid()}.txt";
+
+            try
+            {
+                File.WriteAllText(testFile, "This is not a zip file.");
+
+                using (var fileStream = new FileStream(testFile, FileMode.Open, FileAccess.Read))
+                {
+                    var result = zipArchiveUtils.IsZipStream(fileStream);
+                    Assert.That(result, Is.False);
+                }
+            }
+            finally
+            {
+                File.Delete(testFile);
+            }
+        }
+        
+        [Test]
+        public void GetFilesFromArchive_ShouldReturnFiles_WhenArchiveContainsSeveralFiles()
+        {
+            // Arrange
+            var zipArchiveUtils = new ZipArchiveUtils();
+            var testFile = $"test_{Guid.NewGuid()}.zip";
+            var files = new Dictionary<string, string>
+            {
+                { "file1.txt", "Content of file 1" },
+                { "file2.txt", "Content of file 2" },
+                { "file3.txt", "Content of file 3" }
+            };
+
+            try
+            {
+                using (var fileStream = new FileStream(testFile, FileMode.Create))
+                using (var archive = new ZipArchive(fileStream, ZipArchiveMode.Create, true))
+                {
+                    foreach (var file in files)
+                    {
+                        var entry = archive.CreateEntry(file.Key);
+                        using (var entryStream = entry.Open())
+                        using (var writer = new StreamWriter(entryStream))
+                        {
+                            writer.Write(file.Value);
+                        }
+                    }
+                }
+
+                using (var fileStream = new FileStream(testFile, FileMode.Open, FileAccess.Read))
+                {
+                    // Act
+                    var result = zipArchiveUtils.GetFilesFromArchive(fileStream);
+
+                    // Assert
+                    Assert.That(result, Is.Not.Null);
+                    Assert.That(result.Count, Is.EqualTo(files.Count));
+                    foreach (var file in files)
+                    {
+                        var extractedFile = result.SingleOrDefault(f => f.Name == file.Key);
+                        Assert.That(extractedFile, Is.Not.Null);
+                        Assert.That(extractedFile.Bytes, Is.EqualTo(System.Text.Encoding.UTF8.GetBytes(file.Value)));
+                    }
+                }
+            }
+            finally
+            {
+                File.Delete(testFile);
+            }
+        }
     }
 }
