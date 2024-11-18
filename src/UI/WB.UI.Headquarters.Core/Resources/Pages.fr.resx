@@ -1247,7 +1247,7 @@
     <value>Exclure le support de la carte ESRI</value>
   </data>
   <data name="GetEsriExtraDescription" xml:space="preserve">
-    <value>Le support de la carte ESRI est une fonctionnalité expérimentale. Utilisez-le uniquement si vous avez besoin des fonctionnalités avancées d'ESRI GIS. Inclure cette fonctionnalité augmentera considérablement la taille de l'application et le temps de téléchargement.</value>
+      <value>La fonctionnalité SIG augmentera considérablement la taille de l'application et le temps de téléchargement. Suivez les instructions de votre superviseur pour savoir quelle version de l'application Interviewer (avec ou sans cartes) est nécessaire pour votre tâche.</value>
   </data>
   <data name="Filters_Assignment" xml:space="preserve">
     <value>Affectation</value>

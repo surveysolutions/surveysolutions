@@ -204,7 +204,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<ITranslationImporter, TranslationImporter>();
             registry.Bind<ICategoriesImporter, CategoriesImporter>();
             registry.Bind<IAssemblyService, AssemblyService>();
-            registry.Bind<IArchiveUtils, IProtectedArchiveUtils, ZipArchiveUtils>();
+            registry.Bind<IArchiveUtils, ZipArchiveUtils>();
             registry.Bind<IReusableCategoriesStorage, ReusableCategoriesStorage>();
             registry.Bind<IReusableCategoriesFillerIntoQuestionnaire, ReusableCategoriesFillerIntoQuestionnaire>();
 

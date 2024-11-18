@@ -1,6 +1,4 @@
-﻿using System.IO;
-using Ionic.Zip;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
@@ -18,16 +16,19 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
         private readonly IFileSystemAccessor fileNameService;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseView;
         private readonly IVirtualPathService pathService;
+        private readonly IArchiveUtils archiveUtils;
 
         public LinksExportController(ISampleWebInterviewService sampleWebInterviewService,
             IFileSystemAccessor fileNameService,
             IQuestionnaireBrowseViewFactory questionnaireBrowseView,
-            IVirtualPathService pathService)
+            IVirtualPathService pathService,
+            IArchiveUtils archiveUtils)
         {
             this.sampleWebInterviewService = sampleWebInterviewService;
             this.fileNameService = fileNameService;
             this.questionnaireBrowseView = questionnaireBrowseView;
             this.pathService = pathService;
+            this.archiveUtils = archiveUtils;
         }
 
         [HttpGet]
@@ -35,10 +36,10 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
         {
             var questionnaireIdentity = QuestionnaireIdentity.Parse(id);
             
-            byte[] uncompressedDataStream = this.sampleWebInterviewService.Generate(questionnaireIdentity,
+            byte[] uncompressedData = this.sampleWebInterviewService.Generate(questionnaireIdentity,
                 pathService.GetAbsolutePath($"~/WebInterview"));
 
-            var compressedBytes = Compress(uncompressedDataStream);
+            var compressedBytes = archiveUtils.CompressContentToSingleFile(uncompressedData, "interviews.tab");
 
             var fileContentResult = File(compressedBytes, "application/octet-stream");
             fileContentResult.FileDownloadName = this.GetOutputFileName(questionnaireIdentity);
@@ -52,19 +53,6 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
             var fileName = this.fileNameService.MakeValidFileName(
                 $"Web {questionnaireBrowseItem.Title} (ver. {questionnaireBrowseItem.Version}).zip");
             return fileName;
-        }
-
-        private static byte[] Compress(byte[] uncompressedDataStream)
-        {
-            using MemoryStream memoryStream = new MemoryStream();
-            using (ZipFile zip = new ZipFile())
-            {
-                zip.AddEntry("interviews.tab", uncompressedDataStream);
-                zip.Save(memoryStream);
-            }
-
-            var compressedBytes = memoryStream.ToArray();
-            return compressedBytes;
-        }
+        }        
     }
 }

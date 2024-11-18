@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.FileBasedTab
                 fileSystemAccessorMock.Setup(x => x.GetFilesInDirectory(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>())).Returns(() => fileNamesInDirectory);
 
             var archiveUtils = Mock.Of<IArchiveUtils>(x =>
-                x.GetArchivedFileNamesAndSize(It.IsAny<byte[]>()) == new Dictionary<string, long>());
+                x.GetFileNamesAndSizesFromArchive(It.IsAny<byte[]>()) == new Dictionary<string, long>());
 
             return new FileBasedTabletInformationService(Options.Create(new FileStorageConfig()), fileSystemAccessorMock.Object,
                 archiveUtils, Create.Service.WorkspaceContextAccessor(), Mock.Of<IEncryptionService>());
