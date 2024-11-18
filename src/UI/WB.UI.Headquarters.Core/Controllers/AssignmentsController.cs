@@ -98,8 +98,11 @@ namespace WB.UI.Headquarters.Controllers
         }
         
         
+        [ExtraHeaderPermissions(HeaderPermissionType.Google)]
         [HttpGet]
         [Route("assignments/{id:int}/geotracking")]
+        [Route("assignments/{id:int}/geo")]
+        [Route("assignments/geo")]
         public IActionResult GeoTrackingHistory(int id)
         {
             var assignment = this.assignments.GetAssignment(id);

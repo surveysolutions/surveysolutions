@@ -29,7 +29,13 @@ export default class AssignmentsComponent {
                         path: '', component: Assignments,
                     },
                     {
+                        path: 'geo', component: AssigmentMap,
+                    },
+                    {
                         path: ':assignmentId/geotracking', component: AssigmentMap,
+                    },
+                    {
+                        path: ':assignmentId/geo', component: AssigmentMap,
                     },
                     {
                         path: ':assignmentId', component: Details,
