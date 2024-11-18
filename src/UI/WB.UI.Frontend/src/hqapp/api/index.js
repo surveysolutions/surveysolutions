@@ -230,6 +230,17 @@ class MapDashboard {
     }
 }
 
+
+class GeoTracking {
+    constructor(http) {
+        this.http = http
+    }
+
+    async GetTracks(request) {
+        return await this.http.get('api/AssignmentsApi/GeoTrackingHistory', { params: request })
+    }
+}
+
 class InterviewsPublicApi {
     constructor(http) {
         this.http = http
@@ -714,6 +725,10 @@ class HqApiClient {
 
     get MapDashboard() {
         return new MapDashboard(this.http)
+    }
+
+    get GeoTracking() {
+        return new GeoTracking(this.http)
     }
 
     get WebInterviewSettings() {

@@ -402,10 +402,32 @@ namespace WB.UI.Headquarters.Controllers.Api
 
         [HttpGet]
         [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor)]
-        public GeoTrackingViewModel[] GeoTrackingHistory(int assignmentId)
+        public GeoTrackingViewModel[] GeoTrackingHistory(int assignmentId, long? trackId, Guid? responsibleId, 
+            DateTimeOffset? start, DateTimeOffset? end)
         {
             var records = geoTrackingStorage
-                .Query(r => r.Where(x => x.AssignmentId == assignmentId))
+                .Query(r =>
+                {
+                    r = r.Where(x => x.AssignmentId == assignmentId);
+                    
+                    if (trackId.HasValue)
+                    {
+                        r = r.Where(t => t.Id == trackId.Value);
+                    }
+                    if (responsibleId.HasValue)
+                    {
+                        r = r.Where(t => t.InterviewerId == responsibleId.Value);
+                    }
+                    /*if (start.HasValue)
+                    {
+                        r = r.Where(t => t.End.HasValue && t.End.Value.UtcDateTime >= start.Value.UtcDateTime);
+                    }
+                    if (end.HasValue)
+                    {
+                        r = r.Where(t => t.Start.UtcDateTime <= end.Value.UtcDateTime);
+                    }*/
+                    return r;
+                })
                 .ToArray();
             return records.Select(r => new GeoTrackingViewModel()
             {

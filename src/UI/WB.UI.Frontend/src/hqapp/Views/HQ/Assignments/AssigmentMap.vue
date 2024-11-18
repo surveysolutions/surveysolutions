@@ -23,9 +23,9 @@
                 </FilterBlock>
                 <div class="preset-filters-container">
                     <div class="center-block" style="margin-left: 0">
-                        <button class="btn btn-default btn-lg" id="reloadMarkersInBounds" v-if="readyToUpdate"
-                            @click="reloadMarkersInBounds">
-                            {{ $t('MapReport.ReloadMarkers') }}
+                        <button class="btn btn-default btn-lg" id="refreshGeoTrackingHistory" v-if="readyToUpdate"
+                            @click="refreshGeoTrackingHistory">
+                            {{ $t('MapReport.ReloadGeoTacking') }}
                         </button>
                     </div>
                 </div>
@@ -98,6 +98,7 @@ export default {
             responsibleId: null,
             responsibleParams: { showArchived: true, showLocked: true },
             dateRange: null,
+            isLoadingGeoTracking: false,
         }
     },
 
@@ -142,7 +143,7 @@ export default {
         },
 
         isLoading() {
-            return this.$refs.mapWithMarkers?.isLoading || false
+            return this.$refs.mapWithMarkers?.isLoading || this.isLoadingGeoTracking || false
         },
 
         selectedVersionValue() {
@@ -161,7 +162,7 @@ export default {
         },
 
         api() {
-            return this.$hq.MapDashboard
+            return this.$hq.GeoTracking
         },
 
         ddlGeoTracks() {
@@ -194,7 +195,7 @@ export default {
                         q.end = self.dateRange == null ? null : moment(self.dateRange.endDate).format(DateFormats.date);
                     })
 
-                    self.displayGeoTrackingHistory()
+                    self.refreshGeoTrackingHistory()
                 },
             }
         },
@@ -203,8 +204,7 @@ export default {
     methods: {
 
         async mapInitialized() {
-            await this.getGeoTrackingHistory();
-            this.displayGeoTrackingHistory();
+            await this.refreshGeoTrackingHistory();
         },
 
         selectedGeoTracking(value) {
@@ -214,7 +214,7 @@ export default {
                 q.track = value == null ? null : value.key
             })
 
-            this.displayGeoTrackingHistory()
+            this.refreshGeoTrackingHistory()
         },
 
         selectResponsible(newValue) {
@@ -222,27 +222,34 @@ export default {
             this.onChange((q) => {
                 q.responsible = newValue == null ? null : newValue.value
             })
-            this.reloadMarkersInBounds()
+            this.refreshGeoTrackingHistory()
         },
 
+        async refreshGeoTrackingHistory() {
+            await this.getGeoTrackingHistory()
+            this.displayGeoTrackingHistory()
+        },
 
-        getGeoTrackingHistory() {
-            const trackingJsonUrl = this.model.api.geoTrackingHistory
+        async getGeoTrackingHistory() {
 
-            this.isLoading = true
+            let request = {
+                responsibleId: (this.responsibleId || {}).key || null,
+                assignmentId: this.assignmentId,
+                start: this.dateRange?.startDate,
+                end: this.dateRange?.endDate,
+            }
+
+            this.isLoadingGeoTracking = true
 
             const self = this
 
-            return this.$http
-                .get(trackingJsonUrl)
-                .then(response => {
-                    if (response != null && response.data != null) {
-                        self.tracks = response.data
-                    }
-
-                    self.isLoading = false
-                })
-                .catch(() => (self.isLoading = false))
+            try {
+                const result = await this.api.GetTracks(request)
+                self.tracks = result.data
+            }
+            finally {
+                self.isLoadingGeoTracking = false
+            }
         },
 
         displayGeoTrackingHistory() {
@@ -250,25 +257,6 @@ export default {
             this.tracksPath.forEach(t => {
                 t.setMap(null);
             })
-
-            let tracks = this.selectedGeoTrackingId == null
-                ? this.tracks
-                : this.tracks.filter(t => t.id == this.selectedGeoTrackingId.key);
-
-            if (this.dateRange) {
-                /*const start = new Date(this.dateRange.startDate)
-                const end = new Date(this.dateRange.endDate)
-                end.setDate(end.getDate() + 1)
-
-                tracks.forEach(t => {
-                    t.points = t.points.filter(p => {
-                        const pointDate = new Date(item.date);
-                        return pointDate < end && pointDate > start
-                    })
-                });
-
-                tracks = tracks.filter(t => t.points.length > 0)*/
-            }
 
             const latlngBounds = new google.maps.LatLngBounds();
 
