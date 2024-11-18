@@ -199,7 +199,12 @@ namespace WB.Core.BoundedContexts.Designer.Translations
         {
             var worksheet = translationWithHeaderMap.Worksheet;
             var worksheetName = mappedName.ToLower();
-            var end = worksheet.LastRowUsed().RowNumber();
+            
+            var lastRow = worksheet.LastRowUsed();
+            if(lastRow == null)
+                throw new InvalidFileException(ExceptionMessages.TranlationExcelFileHasErrors);
+            
+            var end = lastRow.RowNumber();
 
             var isCategoriesWorksheet = worksheetName.StartsWith(TranslationExcelOptions.CategoriesWorksheetPreffix);
             var categoriesWorksheetName = isCategoriesWorksheet
@@ -373,7 +378,12 @@ namespace WB.Core.BoundedContexts.Designer.Translations
         private IEnumerable<ImportValidationError> Verify(TranslationsWithHeaderMap worksheetWithHeadersMap)
         {
             var worksheet = worksheetWithHeadersMap.Worksheet;
-            var end = worksheet.LastRowUsed().RowNumber();
+            
+            var lastRow = worksheet.LastRowUsed();
+            if(lastRow == null)
+                throw new InvalidFileException(ExceptionMessages.TranlationExcelFileHasErrors);
+            
+            var end = lastRow.RowNumber();
 
             if (worksheetWithHeadersMap.EntityIdIndex == null)
                 yield return new ImportValidationError
@@ -447,7 +457,12 @@ namespace WB.Core.BoundedContexts.Designer.Translations
         private IEnumerable<ImportValidationError> VerifyCategories(TranslationsWithHeaderMap worksheetWithHeadersMap)
         {
             var worksheet = worksheetWithHeadersMap.Worksheet;
-            var end = worksheet.LastRowUsed().RowNumber();
+            
+            var lastRow = worksheet.LastRowUsed();
+            if(lastRow == null)
+                throw new InvalidFileException(ExceptionMessages.TranlationExcelFileHasErrors);
+            
+            var end = lastRow.RowNumber();
             
             if (worksheetWithHeadersMap.OptionValueOrValidationIndexOrFixedRosterIdIndex == null)
                 yield return new ImportValidationError
