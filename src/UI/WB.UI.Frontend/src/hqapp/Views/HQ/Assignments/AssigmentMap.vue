@@ -9,7 +9,7 @@
                 <FilterBlock :title="$t('Common.Responsible')">
                     <Typeahead control-id="responsibleId" :placeholder="$t('Common.AllResponsible')"
                         :value="responsibleId" :ajax-params="responsibleParams" :selectedValue="query.responsible"
-                        v-on:selected="selectResponsible" :fetch-url="model.responsible"></Typeahead>
+                        v-on:selected="selectResponsible" :fetch-url="model.api.interviewers"></Typeahead>
                 </FilterBlock>
                 <FilterBlock :title="$t('Common.DateRange')">
                     <DatePicker :config="datePickerConfig" :value="selectedDateRange" :withClear="true"
@@ -235,6 +235,7 @@ export default {
             let request = {
                 responsibleId: (this.responsibleId || {}).key || null,
                 assignmentId: this.assignmentId,
+                trackId: this.selectedGeoTrackingId?.key,
                 start: this.dateRange?.startDate,
                 end: this.dateRange?.endDate,
             }
@@ -257,10 +258,11 @@ export default {
             this.tracksPath.forEach(t => {
                 t.setMap(null);
             })
+            this.tracksPath = []
 
             const latlngBounds = new google.maps.LatLngBounds();
 
-            tracks.forEach(t => {
+            this.tracks.forEach(t => {
                 const polyline = new google.maps.Polyline({
                     path: t.points,
                     geodesic: true,

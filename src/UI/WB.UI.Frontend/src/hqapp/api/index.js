@@ -237,7 +237,7 @@ class GeoTracking {
     }
 
     async GetTracks(request) {
-        return await this.http.get('api/AssignmentsApi/GeoTrackingHistory', { params: request })
+        return await this.http.get('api/AssignmentGeoApi/GeoTrackingHistory', { params: request })
     }
 }
 

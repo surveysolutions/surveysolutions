@@ -100,9 +100,7 @@ namespace WB.UI.Headquarters.Controllers
         
         [ExtraHeaderPermissions(HeaderPermissionType.Google)]
         [HttpGet]
-        [Route("assignments/{id:int}/geotracking")]
-        [Route("assignments/{id:int}/geo")]
-        [Route("assignments/geo")]
+        [Route("assignments/{id:int}/map")]
         public IActionResult GeoTrackingHistory(int id)
         {
             var assignment = this.assignments.GetAssignment(id);
@@ -126,7 +124,8 @@ namespace WB.UI.Headquarters.Controllers
                 Api = new
                 {
                     ShapefileJson = Url.Action("ShapefileInfo", "MapDashboardApi"),
-                    GeoTrackingHistory = Url.Action("GeoTrackingHistory", "AssignmentsApi", new { assignmentId = assignment.Id }),
+                    GeoTrackingHistory = Url.Action("GeoTrackingHistory", "AssignmentGeoApi", new { assignmentId = assignment.Id }),
+                    Interviewers = Url.Action("GetInterviewers", "AssignmentGeoApi", new { assignmentId = assignment.Id }),
                     Responsible = this.currentUser.IsSupervisor
                         ? Url.Action("InterviewersCombobox", "Teams")
                         : Url.Action("ResponsiblesCombobox", "Teams"),
