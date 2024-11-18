@@ -128,7 +128,7 @@ class UploadMapsService : IUploadMapsService
         if (!this.fileSystemAccessor.IsDirectoryExists(pathToSave))
             this.fileSystemAccessor.CreateDirectory(pathToSave);
 
-        archiveUtils.Unzip(content, pathToSave);
+        archiveUtils.ExtractToDirectory(content, pathToSave);
         return pathToSave;
     }
 }

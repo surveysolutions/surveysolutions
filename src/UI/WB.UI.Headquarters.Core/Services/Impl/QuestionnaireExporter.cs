@@ -3,7 +3,6 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
-using Ionic.Zlib;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.ReusableCategories;
@@ -16,7 +15,6 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Questionnaire.ReusableCategories;
 using WB.Core.SharedKernels.Questionnaire.Translations;
-using WB.Core.SharedKernels.SurveySolutions.ReusableCategories;
 using WB.Enumerator.Native.Questionnaire;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Infrastructure.Native.Questionnaire;
@@ -80,7 +78,7 @@ namespace WB.UI.Headquarters.Services.Impl
 
             var output = new MemoryStream();
 
-            using (IZipArchive zipArchive = new IonicZipArchive(output, String.Empty, CompressionLevel.BestCompression, true))
+            using (IZipArchive zipArchive = new CompressionZipArchive(output))
             {
                 string questionnaireFolderName = $"{variable} ({questionnaireIdentity.QuestionnaireId.FormatGuid()})";
 
