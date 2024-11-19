@@ -42,7 +42,8 @@
                             {{ $t("Reports.Min") }}
                         </label>
                         <Field type="number" class="form-control input-sm" name="min" :placeholder="$t('Reports.Min')"
-                            @input="inputChange" :rules.initial="{ max_value: max || Number.MAX_VALUE }" :value="min" />
+                            v-number="/^([-]?\d*)$/" @input="inputChange" :rules="{ max_value: max || 2147483647 }"
+                            :value="min" />
                     </div>
                 </div>
                 <div class="col-xs-6">
@@ -51,8 +52,8 @@
                             {{ $t("Reports.Max") }}
                         </label>
                         <Field type="number" class="form-control input-sm" :placeholder="$t('Reports.Max')"
-                            :rules.initial="{ min_value: min || Number.MIN_VALUE }" name="max" @input="inputChange"
-                            :value="max" />
+                            v-number="/^([-]?\d*)$/" :rules="{ min_value: min == 0 ? Number(0) : (min || -2147483648) }"
+                            name="max" @input="inputChange" :value="max" />
                     </div>
                 </div>
             </Form>
@@ -297,7 +298,8 @@ export default {
 
         max() {
             const result = parseInt(this.query.max)
-            return isNaN(result) ? null : result
+            const returnVal = isNaN(result) ? null : result
+            return returnVal
         },
 
         expandTeams() {
@@ -306,7 +308,8 @@ export default {
 
         min() {
             const result = parseInt(this.query.min)
-            return isNaN(result) ? null : result
+            const returnVal = isNaN(result) ? null : result
+            return returnVal
         },
 
         questionnaireList() {
