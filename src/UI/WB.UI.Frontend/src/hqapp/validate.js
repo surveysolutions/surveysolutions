@@ -4,6 +4,7 @@
 import { configure, defineRule } from 'vee-validate'
 import { required, email, integer, max_value, min, min_value, max, numeric, not_one_of, regex } from '@vee-validate/rules'
 
+import { browserLanguage } from '~/shared/helpers'
 import { localize, setLocale } from '@vee-validate/i18n';
 import es from '@vee-validate/i18n/dist/locale/es.json';
 import vi from '@vee-validate/i18n/dist/locale/vi.json';
@@ -20,6 +21,7 @@ import en from '@vee-validate/i18n/dist/locale/en.json';
 import cs from '@vee-validate/i18n/dist/locale/cs.json';
 import ar from '@vee-validate/i18n/dist/locale/ar.json';
 
+setLocale(browserLanguage)
 
 defineRule('required', required)
 defineRule('email', email)

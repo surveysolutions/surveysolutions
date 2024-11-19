@@ -312,7 +312,7 @@ export default {
         },
         changeLanguage(language) {
 
-            this.$store.dispatch('changeLanguage', { language: language })
+            this.$store.dispatch('changeLanguage', language)
 
             modal.dialog({
                 message: '<p>' + this.$t('WebInterviewUI.SwitchingLanguage') + '</p>',
