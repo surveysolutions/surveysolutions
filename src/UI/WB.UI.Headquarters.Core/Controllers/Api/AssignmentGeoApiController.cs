@@ -125,4 +125,35 @@ public class AssignmentGeoApiController: ControllerBase
         return result;
     }
     
+    [HttpGet]
+    [AuthorizeByRole(UserRoles.Administrator, UserRoles.Headquarter, UserRoles.Supervisor)]
+    public ResponsibleComboboxModel GetTracks(int assignmentId, string query = "", int pageSize = 12)
+    {
+        var filtered = geoTrackingStorage.Query(r =>
+        {
+            var tracks = r.Where(x => x.AssignmentId == assignmentId);
+
+            if (!string.IsNullOrWhiteSpace(query))
+            {
+                var searchByToLower = query.ToLower();
+            
+                tracks = tracks.Where(x =>
+                    x.Id.ToString().Contains(searchByToLower));
+            }
+            
+            return tracks;
+        });
+        
+        var total = filtered.Count();
+
+        var items = filtered
+            .OrderBy(x => x.Id)
+            .Take(pageSize)
+            .ToList()
+            .Select(x => new ResponsibleComboboxOptionModel(x.Id.ToString(), x.Id.ToString(),  null))
+            .ToArray();
+
+        var result = new ResponsibleComboboxModel(items, total);
+        return result;
+    }
 }

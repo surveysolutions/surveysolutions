@@ -3,8 +3,9 @@
         <template v-slot:filters>
             <Filters>
                 <FilterBlock :title="$t('Common.GeoTrackNumber')">
-                    <Typeahead control-id="questionnaireId" :placeholder="$t('Common.AllGeoTracks')" noSearch
-                        :values="ddlGeoTracks" :value="selectedGeoTrackingId" v-on:selected="selectedGeoTracking" />
+                    <Typeahead control-id="trackId" :placeholder="$t('Common.AllGeoTracks')"
+                        :value="selectedGeoTrackingId" :ajax-params="trackParams" :selectedValue="query.track"
+                        v-on:selected="selectedGeoTracking" :fetch-url="model.api.getTracks"></Typeahead>
                 </FilterBlock>
                 <FilterBlock :title="$t('Common.Responsible')">
                     <Typeahead control-id="responsibleId" :placeholder="$t('Common.AllResponsible')"
@@ -97,6 +98,7 @@ export default {
             tracksPath: [],
             responsibleId: null,
             responsibleParams: { showArchived: true, showLocked: true },
+            trackParams: {},
             dateRange: null,
             isLoadingGeoTracking: false,
         }
@@ -163,10 +165,6 @@ export default {
 
         api() {
             return this.$hq.GeoTracking
-        },
-
-        ddlGeoTracks() {
-            return this.tracks.map(i => { return { key: i.id, value: "#" + i.id } })
         },
 
         selectedDateRange() {

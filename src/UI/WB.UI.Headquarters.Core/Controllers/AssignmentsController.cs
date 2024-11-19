@@ -125,6 +125,7 @@ namespace WB.UI.Headquarters.Controllers
                 {
                     ShapefileJson = Url.Action("ShapefileInfo", "MapDashboardApi"),
                     GeoTrackingHistory = Url.Action("GeoTrackingHistory", "AssignmentGeoApi", new { assignmentId = assignment.Id }),
+                    GetTracks = Url.Action("GetTracks", "AssignmentGeoApi", new { assignmentId = assignment.Id }),
                     Interviewers = Url.Action("GetInterviewers", "AssignmentGeoApi", new { assignmentId = assignment.Id }),
                     Responsible = this.currentUser.IsSupervisor
                         ? Url.Action("InterviewersCombobox", "Teams")
