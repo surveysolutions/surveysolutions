@@ -28,6 +28,9 @@ namespace WB.Infrastructure.Native.Workspaces
 
         public static WorkspaceContext Default = new (WorkspaceConstants.DefaultWorkspaceName,
             WorkspaceConstants.DefaultWorkspaceName, null);
+        
+        public static WorkspaceContext Users = new (WorkspaceConstants.WorkspaceNames.UsersWorkspaceName,
+            WorkspaceConstants.WorkspaceNames.UsersWorkspaceName, null);
 
         protected bool Equals(WorkspaceContext other)
         {

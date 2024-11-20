@@ -39,7 +39,7 @@ namespace WB.UI.Headquarters.Controllers
             WorkspacesUrl = Url.Action("Workspaces", "WorkspaceTypeahead"),
             SupervisorWorkspaceUrl = Url.Action("WorkspaceSupervisors", "UsersTypeahead"),
             ArchiveUsersUrl = Url.Action("ArchiveUsers", "UsersApi"),
-            MoveUserToAnotherTeamUrl = Url.Action("MoveUserToAnotherTeam", "UsersApi"),
+            MoveUserToAnotherTeamUrl = Url.ActionAtWorkspace(WorkspaceContext.Users, "MoveUserToAnotherTeam", "UsersApi"),
             
             CanAddUsers = authorizedUser.IsAdministrator || authorizedUser.IsHeadquarter,
             CanArchiveUnarchive = authorizedUser.IsAdministrator,
