@@ -60,11 +60,12 @@ namespace WB.UI.Interviewer.ViewModel
             ILogger logger,
             IPlainStorage<InterviewView> interviewViewRepository,
             IJsonAllTypesSerializer serializer,
-            IMvxMainThreadAsyncDispatcher asyncDispatcher)
+            IMvxMainThreadAsyncDispatcher asyncDispatcher,
+            IMapInteractionService mapInteractionService)
             : base(questionnaireRepository, interviewRepository, sectionsViewModel,
                 breadCrumbsViewModel, navigationState, answerNotifier, groupState, interviewState, coverState,
                 principal, viewModelNavigationService,
-                interviewViewModelFactory, commandService, vibrationViewModel, enumeratorSettings)
+                interviewViewModelFactory, commandService, vibrationViewModel, enumeratorSettings, mapInteractionService)
         {
             this.auditLogService = auditLogService;
             this.audioAuditService = audioAuditService;
@@ -77,7 +78,8 @@ namespace WB.UI.Interviewer.ViewModel
 
         public override IMvxCommand ReloadCommand => new MvxAsyncCommand(async () =>
             await this.ViewModelNavigationService.NavigateToInterviewAsync(this.InterviewId,
-                this.NavigationState.CurrentNavigationIdentity));
+                this.NavigationState.CurrentNavigationIdentity,
+                this.SourceScreen));
 
         public IMvxCommand NavigateToMapsCommand =>
             new MvxAsyncCommand(this.ViewModelNavigationService.NavigateToAsync<MapsViewModel>);

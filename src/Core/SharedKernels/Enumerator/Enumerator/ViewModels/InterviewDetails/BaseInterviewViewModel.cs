@@ -33,6 +33,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private readonly GroupStateViewModel groupState;
         private readonly CoverStateViewModel coverState;
         protected readonly IInterviewViewModelFactory interviewViewModelFactory;
+        private readonly IMapInteractionService mapInteractionService;
 
         public InterviewStateViewModel InterviewState { get; private set; }
 
@@ -51,7 +52,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             IInterviewViewModelFactory interviewViewModelFactory,
             ICommandService commandService,
             VibrationViewModel vibrationViewModel,
-            IEnumeratorSettings enumeratorSettings)
+            IEnumeratorSettings enumeratorSettings,
+            IMapInteractionService mapInteractionService)
             : base(principal, viewModelNavigationService, commandService, enumeratorSettings, vibrationViewModel)
         {
             this.questionnaireRepository = questionnaireRepository;
@@ -62,6 +64,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.InterviewState = interviewState;
             this.coverState = coverState;
             this.interviewViewModelFactory = interviewViewModelFactory;
+            this.mapInteractionService = mapInteractionService;
 
             this.BreadCrumbs = breadCrumbsViewModel;
             this.Sections = sectionsViewModel;
@@ -363,6 +366,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public IMvxAsyncCommand NavigateToDashboardCommand => new MvxAsyncCommand(async () =>
         {
             await this.ViewModelNavigationService.NavigateToDashboardAsync(this.InterviewId);
+            this.Dispose();
+        });
+
+        public IMvxAsyncCommand NavigateToMapDashboardCommand => new MvxAsyncCommand(async () =>
+        {
+            await this.mapInteractionService.OpenInterviewerMapDashboardAsync();
+            this.Dispose();
+        });
+
+        public IMvxAsyncCommand NavigateToAssigmentMapCommand => new MvxAsyncCommand(async () =>
+        {
+            if (assignmentId.HasValue)
+                await this.mapInteractionService.OpenInterviewerGeofacingAsync(this.assignmentId.Value);
             this.Dispose();
         });
 

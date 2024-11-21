@@ -76,24 +76,27 @@ namespace WB.UI.Interviewer.Implementations.Services
             return this.NavigateToAsync<MapsViewModel>();
         }
 
-        public override async Task<bool> NavigateToInterviewAsync(string interviewId, NavigationIdentity navigationIdentity)
+        public override async Task<bool> NavigateToInterviewAsync(string interviewId, NavigationIdentity navigationIdentity, 
+            SourceScreen sourceScreen)
         {
             this.log.Trace($"Navigating to interview {interviewId}:{navigationIdentity}");
             return await NavigateToAsync<InterviewViewModel, InterviewViewModelArgs>(
                 new InterviewViewModelArgs
                 {
                     InterviewId = interviewId,
-                    NavigationIdentity = navigationIdentity
+                    NavigationIdentity = navigationIdentity,
+                    SourceScreen = sourceScreen,
                 });
         }
 
-        public override Task NavigateToCreateAndLoadInterview(int assignmentId)
+        public override Task NavigateToCreateAndLoadInterview(int assignmentId, SourceScreen sourceScreen)
         {
             return this.NavigateToAsync<CreateAndLoadInterviewViewModel, CreateInterviewViewModelArg>(
                 new CreateInterviewViewModelArg()
                 {
                     AssignmentId = assignmentId,
-                    InterviewId = Guid.NewGuid()
+                    InterviewId = Guid.NewGuid(),
+                    SourceScreen = sourceScreen,
                 }, true);
         }
 

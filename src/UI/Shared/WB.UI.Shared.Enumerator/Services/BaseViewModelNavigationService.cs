@@ -88,14 +88,15 @@ namespace WB.UI.Shared.Enumerator.Services
         }
 
         public void CloseApplication() => JavaSystem.Exit(0);
-        public abstract Task NavigateToCreateAndLoadInterview(int assignmentId);
+        public abstract Task NavigateToCreateAndLoadInterview(int assignmentId, SourceScreen sourceScreen);
 
         public abstract Task NavigateToLoginAsync();
         public abstract Task NavigateToFinishInstallationAsync();
 
         public abstract Task NavigateToMapsAsync();
 
-        public abstract Task<bool> NavigateToInterviewAsync(string interviewId, NavigationIdentity navigationIdentity);
+        public abstract Task<bool> NavigateToInterviewAsync(string interviewId, NavigationIdentity navigationIdentity,
+            SourceScreen sourceScreen);
         public abstract Task<bool> NavigateToPrefilledQuestionsAsync(string interviewId);
         public abstract void NavigateToSplashScreen();
 

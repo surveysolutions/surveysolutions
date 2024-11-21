@@ -90,7 +90,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(questionnaireIdentity, null);
             if (questionnaire.GetPrefilledEntities().Count == 0)
             {
-                await this.viewModelNavigationService.NavigateToInterviewAsync(interviewId.FormatGuid(), null)
+                await this.viewModelNavigationService.NavigateToInterviewAsync(interviewId.FormatGuid(), null, SourceScreen.Dashboard)
                     .ConfigureAwait(false);
             }
             else
@@ -127,7 +127,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                         await this.commandService.ExecuteAsync(existingInterviewCommand, cancellationToken: cancellationToken);
                     }
 
-                    return await this.viewModelNavigationService.NavigateToInterviewAsync(interviewId.FormatGuid(), targetGroup);
+                    return await this.viewModelNavigationService.NavigateToInterviewAsync(interviewId.FormatGuid(), targetGroup, SourceScreen.Dashboard);
                 }
                 catch (Exception e)
                 {

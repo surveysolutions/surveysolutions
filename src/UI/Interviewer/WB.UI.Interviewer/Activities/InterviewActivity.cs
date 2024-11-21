@@ -3,6 +3,7 @@ using Android.Views;
 using Java.Interop;
 using MvvmCross.Commands;
 using WB.Core.SharedKernels.Enumerator.Properties;
+using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.UI.Interviewer.ViewModel;
 using WB.UI.Shared.Enumerator.Activities;
 
@@ -26,9 +27,22 @@ namespace WB.UI.Interviewer.Activities
             {
                 Resource.Id.menu_dashboard,
                 EnumeratorUIResources.MenuItem_Title_Dashboard,
-                new MvxAsyncCommand(async () =>  
+                new MvxAsyncCommand(async () =>
                 {
-                    await this.ViewModel.NavigateToDashboardCommand.ExecuteAsync();
+                    var screen = this.ViewModel.SourceScreen;
+                    switch (screen)
+                    {
+                        case SourceScreen.AssignmentMap:
+                            await this.ViewModel.NavigateToAssigmentMapCommand.ExecuteAsync();
+                            break;
+                        case SourceScreen.MapDashboard:
+                            await this.ViewModel.NavigateToMapDashboardCommand.ExecuteAsync();
+                            break;
+                        default:
+                            await this.ViewModel.NavigateToDashboardCommand.ExecuteAsync();
+                            break;
+                    }
+                    
                     this.ReleaseActivity();
                 })
             },

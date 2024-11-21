@@ -56,12 +56,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
 
         protected Guid InterviewId { get; set; }
         private bool ShouldReopen { get; set; }
+        protected SourceScreen SourceScreen { get; set; }
 
 
         public void Prepare(LoadingViewModelArg arg)
         {
             this.InterviewId = arg.InterviewId;
             this.ShouldReopen = arg.ShouldReopen;
+            this.SourceScreen = arg.SourceScreen;
 
             this.IsIndeterminate = false;
         }
@@ -129,7 +131,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
                     {
                         TargetScreen = interviewView.LastVisitedScreenType.GetValueOrDefault(ScreenType.Group),
                         TargetGroup = targetIdentity
-                    }).ConfigureAwait(false);
+                    }, SourceScreen).ConfigureAwait(false);
                 return;
             }
              
@@ -139,7 +141,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
             }
             else
             {
-                await this.ViewModelNavigationService.NavigateToInterviewAsync(interviewId.FormatGuid(), navigationIdentity: null);
+                await this.ViewModelNavigationService.NavigateToInterviewAsync(interviewId.FormatGuid(), 
+                    navigationIdentity: null, sourceScreen: SourceScreen);
             }
         }
 

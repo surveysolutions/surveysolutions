@@ -7,5 +7,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
         public Guid InterviewId { get; set; }
 
         public bool ShouldReopen { get; set; }
+        public SourceScreen SourceScreen { get; set; }
     }
 }

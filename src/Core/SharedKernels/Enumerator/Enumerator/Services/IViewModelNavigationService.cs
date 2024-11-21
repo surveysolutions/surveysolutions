@@ -14,7 +14,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services
         Task NavigateToLoginAsync();
         Task NavigateToFinishInstallationAsync();
         Task NavigateToMapsAsync();
-        Task<bool> NavigateToInterviewAsync(string interviewId, NavigationIdentity navigationIdentity);
+        Task<bool> NavigateToInterviewAsync(string interviewId, NavigationIdentity navigationIdentity, SourceScreen sourceScreen);
         Task<bool> NavigateToPrefilledQuestionsAsync(string interviewId);
         void NavigateToSplashScreen();
         void ShowWaitMessage();
@@ -23,7 +23,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services
         void InstallNewApp(string pathToApk);
         void CloseApplication();
 
-        Task NavigateToCreateAndLoadInterview(int assignmentId);
+        Task NavigateToCreateAndLoadInterview(int assignmentId, SourceScreen sourceScreen);
         void NavigateToSystemDateSettings();
     }
 }

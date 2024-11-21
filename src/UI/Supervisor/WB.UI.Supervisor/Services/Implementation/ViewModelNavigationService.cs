@@ -60,10 +60,9 @@ namespace WB.UI.Supervisor.Services.Implementation
             });
         }
 
-        public override Task NavigateToCreateAndLoadInterview(int assignmentId)
+        public override Task NavigateToCreateAndLoadInterview(int assignmentId, SourceScreen sourceScreen)
         {
             return Task.CompletedTask;
-            //throw new NotImplementedException();
         }
 
         public override Task NavigateToLoginAsync()
@@ -83,14 +82,16 @@ namespace WB.UI.Supervisor.Services.Implementation
             throw new System.NotImplementedException();
         }
 
-        public override async Task<bool> NavigateToInterviewAsync(string interviewId, NavigationIdentity navigationIdentity)
+        public override async Task<bool> NavigateToInterviewAsync(string interviewId, NavigationIdentity navigationIdentity,
+            SourceScreen sourceScreen)
         {
             this.log.Trace("Navigating to SupervisorInterviewViewModel");
             return await NavigateToAsync<SupervisorInterviewViewModel, InterviewViewModelArgs>(
                 new InterviewViewModelArgs
                 {
                     InterviewId = interviewId,
-                    NavigationIdentity = navigationIdentity
+                    NavigationIdentity = navigationIdentity,
+                    SourceScreen = sourceScreen,
                 });
         }
 

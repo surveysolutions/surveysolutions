@@ -16,6 +16,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Infrastructure.Native.Storage;
@@ -59,7 +60,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoadingViewModelT
 
             await loadingViewModel.LoadAndNavigateToInterviewAsync(Guid.NewGuid());
 
-            await navigationServiceMock.ReceivedWithAnyArgs().NavigateToInterviewAsync(null, null);
+            await navigationServiceMock.ReceivedWithAnyArgs().NavigateToInterviewAsync(null, null, SourceScreen.Unknown);
         }
 
         [Test]
@@ -83,7 +84,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoadingViewModelT
 
             await loadingViewModel.LoadAndNavigateToInterviewAsync(Guid.NewGuid());
 
-            await navigationServiceMock.ReceivedWithAnyArgs().NavigateToInterviewAsync(null, null);
+            await navigationServiceMock.ReceivedWithAnyArgs().NavigateToInterviewAsync(null, null, SourceScreen.Unknown);
             await commandService.ReceivedWithAnyArgs().ExecuteAsync(It.IsAny<RestartInterviewCommand>());
         }
 
