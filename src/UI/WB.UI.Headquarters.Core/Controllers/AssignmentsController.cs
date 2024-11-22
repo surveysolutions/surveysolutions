@@ -59,6 +59,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IInvitationService invitationService;
         private readonly ICalendarEventService calendarEventService;
         private readonly IWebInterviewLinkProvider webInterviewLinkProvider;
+        private readonly IAuthorizedUser authorizedUser;
 
         public AssignmentsController(IAuthorizedUser currentUser, 
             IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory, 
@@ -76,7 +77,8 @@ namespace WB.UI.Headquarters.Controllers
             IArchiveUtils archiver,
             IInvitationService invitationService, 
             ICalendarEventService calendarEventService, 
-            IWebInterviewLinkProvider webInterviewLinkProvider)
+            IWebInterviewLinkProvider webInterviewLinkProvider,
+            IAuthorizedUser authorizedUser)
         {
             this.currentUser = currentUser;
             this.allUsersAndQuestionnairesFactory = allUsersAndQuestionnairesFactory;
@@ -95,6 +97,7 @@ namespace WB.UI.Headquarters.Controllers
             this.invitationService = invitationService;
             this.calendarEventService = calendarEventService;
             this.webInterviewLinkProvider = webInterviewLinkProvider;
+            this.authorizedUser = authorizedUser;
         }
         
         
@@ -108,11 +111,18 @@ namespace WB.UI.Headquarters.Controllers
                 return NotFound();
 
             ViewBag.Title = string.Format(Pages.AssignmentDetails_PageTitle, assignment.Id);
+            
+            var userRole = authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator
+                ? UserRoles.Headquarter
+                : authorizedUser.IsSupervisor
+                    ? UserRoles.Supervisor
+                    : UserRoles.Interviewer;
 
             var model = new
             {
                 AssignmentId = assignment.Id,
                 InterviewsProvided = assignment.InterviewSummaries.Count,
+                UserRole = userRole.ToString(),
                 Responsible = new 
                 {
                     Id = assignment.ResponsibleId,
