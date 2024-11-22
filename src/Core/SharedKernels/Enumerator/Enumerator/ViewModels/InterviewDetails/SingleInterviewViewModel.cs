@@ -32,7 +32,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public override void Prepare(InterviewViewModelArgs parameter)
         {
             this.InterviewId = parameter.InterviewId;
-            this.SourceScreen = parameter.SourceScreen;
         }
 
         public override async Task Initialize()
@@ -56,7 +55,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public abstract IMvxCommand ReloadCommand { get; }
 
         protected string InterviewId;
-        public SourceScreen SourceScreen { get; set; }
 
         protected override void ReloadFromBundle(IMvxBundle state)
         {

@@ -7,6 +7,5 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
     {
         public int AssignmentId { get; set; }
         public Guid InterviewId { get; set; }
-        public SourceScreen SourceScreen { get; set; }
     }
 }

@@ -12,6 +12,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.Enumerator.Attributes;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -27,6 +28,7 @@ using Color = System.Drawing.Color;
 
 namespace WB.UI.Shared.Extensions.ViewModels
 {
+    [InterviewEntryPoint]
     public abstract class MapDashboardViewModel: MarkersMapInteractionViewModel<MapDashboardViewModelArgs>
     {
         protected MapDashboardViewModel(IPrincipal principal, 

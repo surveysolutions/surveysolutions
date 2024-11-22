@@ -95,7 +95,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             
             this.startButton = this.interviewViewModelFactory.GetNew<StartInterviewViewModel>();
             startButton.InterviewStarted += (sender, args) => this.Dispose();
-            startButton.Init(InterviewId, SourceScreen);
+            startButton.Init(InterviewId);
 
             visibleSectionItems.Add(startButton);
 

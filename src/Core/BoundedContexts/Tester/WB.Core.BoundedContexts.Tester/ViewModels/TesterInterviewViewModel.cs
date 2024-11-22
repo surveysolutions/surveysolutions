@@ -51,8 +51,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         
         public override IMvxCommand ReloadCommand => new MvxAsyncCommand(async () => 
             await this.ViewModelNavigationService.NavigateToInterviewAsync(this.InterviewId, 
-                this.NavigationState.CurrentNavigationIdentity,
-                SourceScreen.Dashboard));
+                this.NavigationState.CurrentNavigationIdentity));
 
         public IMvxAsyncCommand ReloadQuestionnaireCommand => new MvxAsyncCommand(this.ReloadQuestionnaire, () => !this.IsInProgress);
 

@@ -7,6 +7,7 @@ using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.UI;
 using Esri.ArcGISRuntime.UI.Controls;
+using Kotlin.Reflect;
 using MvvmCross;
 using MvvmCross.Base;
 using MvvmCross.Commands;
@@ -15,6 +16,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.Enumerator.Attributes;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -40,7 +42,7 @@ public class GeofencingViewModelArgs
 }
 
 
-
+[InterviewEntryPoint]
 public class GeofencingViewModel: MarkersMapInteractionViewModel<GeofencingViewModelArgs>
 {
     private AssignmentDocument assignment;
@@ -385,6 +387,8 @@ public class GeofencingViewModel: MarkersMapInteractionViewModel<GeofencingViewM
         
         this.MapView.Map.OperationalLayers.Add(featureCollectionLayer);
     }
+
+    private object geoTrackingLayerLock = new object();
     
     private async Task UpdateGeoTrackingPointsAsync(GpsLocation location)
     {
@@ -406,18 +410,32 @@ public class GeofencingViewModel: MarkersMapInteractionViewModel<GeofencingViewM
             Latitude = location.Latitude,
         });
 
-        var multipoint = (Multipoint)lastGeoTrackingFeature.Geometry;
-        List<MapPoint> points = new List<MapPoint>(multipoint.Points);
-        MapPoint mapPoint = new MapPoint(location.Longitude, location.Latitude, SpatialReferences.Wgs84);
-        if (mapPoint.SpatialReference != Map.SpatialReference)
-            mapPoint = (MapPoint)mapPoint.Project(Map.SpatialReference);
-        points.Add(mapPoint);
-        Geometry newGeometry = new Multipoint(points);
-        var feature = geoTrackingFeatureCollectionTable.CreateFeature();
-        feature.Geometry = newGeometry;
-        await geoTrackingFeatureCollectionTable.AddFeatureAsync(feature);
-        await geoTrackingFeatureCollectionTable.DeleteFeatureAsync(lastGeoTrackingFeature);
-        lastGeoTrackingFeature = feature;
+        try
+        {
+            Monitor.Enter(geoTrackingLayerLock);
+
+            var multipoint = (Multipoint)lastGeoTrackingFeature.Geometry;
+            List<MapPoint> points = new List<MapPoint>(multipoint.Points);
+            MapPoint mapPoint = new MapPoint(location.Longitude, location.Latitude, SpatialReferences.Wgs84);
+            if (mapPoint.SpatialReference != Map.SpatialReference)
+                mapPoint = (MapPoint)mapPoint.Project(Map.SpatialReference);
+            points.Add(mapPoint);
+            Geometry newGeometry = new Multipoint(points);
+
+            var feature = geoTrackingFeatureCollectionTable.CreateFeature();
+            feature.Geometry = newGeometry;
+            await geoTrackingFeatureCollectionTable.AddFeatureAsync(feature);
+            await geoTrackingFeatureCollectionTable.DeleteFeatureAsync(lastGeoTrackingFeature);
+            lastGeoTrackingFeature = feature;
+        }
+        catch(Exception)
+        {
+            // ignore
+        }
+        finally
+        {
+            Monitor.Exit(geoTrackingLayerLock);
+        }
     }
 
     private Renderer CreateRenderer(GeometryType rendererType, Color color)

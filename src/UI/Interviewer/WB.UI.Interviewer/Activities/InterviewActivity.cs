@@ -29,20 +29,7 @@ namespace WB.UI.Interviewer.Activities
                 EnumeratorUIResources.MenuItem_Title_Dashboard,
                 new MvxAsyncCommand(async () =>
                 {
-                    var screen = this.ViewModel.SourceScreen;
-                    switch (screen)
-                    {
-                        case SourceScreen.AssignmentMap:
-                            await this.ViewModel.NavigateToAssigmentMapCommand.ExecuteAsync();
-                            break;
-                        case SourceScreen.MapDashboard:
-                            await this.ViewModel.NavigateToMapDashboardCommand.ExecuteAsync();
-                            break;
-                        default:
-                            await this.ViewModel.NavigateToDashboardCommand.ExecuteAsync();
-                            break;
-                    }
-                    
+                    await this.ViewModel.NavigateFromInterviewAsync.ExecuteAsync();
                     this.ReleaseActivity();
                 })
             },

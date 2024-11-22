@@ -13,6 +13,7 @@ using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services;
 using WB.Core.BoundedContexts.Supervisor.Views;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.Enumerator.Attributes;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -32,6 +33,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
         public Guid? InterviewId { get; set; }
     }
 
+    [InterviewEntryPoint]
     public class DashboardViewModel : BaseViewModel<DashboardViewModelArgs>
     {
         private readonly IMvxNavigationService mvxNavigationService;

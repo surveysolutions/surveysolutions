@@ -57,16 +57,14 @@ namespace WB.UI.Tester.Implementation.Services
         public override Task NavigateToMapsAsync()
         => throw new NotImplementedException();
 
-        public override async Task<bool> NavigateToInterviewAsync(string interviewId, NavigationIdentity navigationIdentity, 
-            SourceScreen sourceScreen)
+        public override async Task<bool> NavigateToInterviewAsync(string interviewId, NavigationIdentity navigationIdentity)
             => await NavigateToAsync<TesterInterviewViewModel, InterviewViewModelArgs>(new InterviewViewModelArgs
             {
                 InterviewId = interviewId,
                 NavigationIdentity = navigationIdentity,
-                SourceScreen = sourceScreen,
             });
 
-        public override Task NavigateToCreateAndLoadInterview(int assignmentId, SourceScreen sourceScreen)
+        public override Task NavigateToCreateAndLoadInterview(int assignmentId)
         {
             throw new NotImplementedException();
         }

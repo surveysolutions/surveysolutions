@@ -76,7 +76,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
         {
             AssignmentId = parameter.AssignmentId;
             InterviewId = parameter.InterviewId;
-            SourceScreen = parameter.SourceScreen;
         }
         
         public override Task Initialize()

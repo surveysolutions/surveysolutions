@@ -1,14 +1,17 @@
-﻿using Android.Content;
+﻿using System.Reflection;
+using Android.Content;
 using Android.OS;
 using AndroidX.Core.App;
 using AndroidX.Core.Content;
 using Java.Lang;
 using MvvmCross;
+using MvvmCross.Base;
 using MvvmCross.Navigation;
 using MvvmCross.Platforms.Android;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.Enumerator.Attributes;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -88,15 +91,14 @@ namespace WB.UI.Shared.Enumerator.Services
         }
 
         public void CloseApplication() => JavaSystem.Exit(0);
-        public abstract Task NavigateToCreateAndLoadInterview(int assignmentId, SourceScreen sourceScreen);
+        public abstract Task NavigateToCreateAndLoadInterview(int assignmentId);
 
         public abstract Task NavigateToLoginAsync();
         public abstract Task NavigateToFinishInstallationAsync();
 
         public abstract Task NavigateToMapsAsync();
 
-        public abstract Task<bool> NavigateToInterviewAsync(string interviewId, NavigationIdentity navigationIdentity,
-            SourceScreen sourceScreen);
+        public abstract Task<bool> NavigateToInterviewAsync(string interviewId, NavigationIdentity navigationIdentity);
         public abstract Task<bool> NavigateToPrefilledQuestionsAsync(string interviewId);
         public abstract void NavigateToSplashScreen();
 
@@ -114,6 +116,7 @@ namespace WB.UI.Shared.Enumerator.Services
 
             this.logger.Trace($"Navigate to new {typeof(TViewModel)} with {typeof(TParam)}");
             var previousActivity = TopActivity.Activity;
+            SaveInterviewExitPoint(typeof(TViewModel), param);
             var result = await this.NavigationService.Navigate<TViewModel, TParam>(param);
             if(result && finishActivityOnSuccess)
                 previousActivity.Finish();
@@ -123,13 +126,17 @@ namespace WB.UI.Shared.Enumerator.Services
 
         public Task<bool> NavigateToAsync<TViewModel>() where TViewModel : IMvxViewModel
         {
-            if (!this.HasPendingOperations) return this.NavigationService.Navigate<TViewModel>();
+            if (!this.HasPendingOperations)
+            {
+                SaveInterviewExitPoint(typeof(TViewModel), null);
+                return this.NavigationService.Navigate<TViewModel>();
+            }
             
             this.ShowWaitMessage();
             return Task.FromResult(false);
 
         }
-
+        
         public abstract Task<bool> NavigateToDashboardAsync(string interviewId = null);
 
         public async Task SignOutAndNavigateToLoginAsync()
@@ -170,6 +177,36 @@ namespace WB.UI.Shared.Enumerator.Services
             var currentActivity = TopActivity.Activity;
             var intent = new Intent(Android.Provider.Settings.ActionDateSettings);
             currentActivity.StartActivity(intent);
+        }
+
+        private static Tuple<Type, object> sourceOfInterview = null;
+        
+        public Task<bool> NavigateFromInterviewAsync(string interviewId = null)
+        {
+            if (sourceOfInterview != null)
+            {
+                var viewModelType = sourceOfInterview.Item1;
+                var param = sourceOfInterview.Item2;
+                MethodInfo method = typeof(BaseViewModelNavigationService)
+                    .GetMethod(nameof(NavigateToAsyncImpl), BindingFlags.NonPublic | BindingFlags.Instance);
+                MethodInfo genericMethod = method.MakeGenericMethod(viewModelType, param.GetType());
+                return (Task<bool>)genericMethod.Invoke(this, [param]);
+            }
+            else
+                return this.NavigateToDashboardAsync(interviewId);
+        }
+        
+        private void SaveInterviewExitPoint(Type viewModelType, object param)
+        {
+            var attributes = viewModelType.GetCustomAttributes<InterviewEntryPointAttribute>();
+            if (attributes.Any())
+                sourceOfInterview = new Tuple<Type, object>(viewModelType, param);
+        }
+        
+        private Task<bool> NavigateToAsyncImpl<TViewModel, TParam>(TParam param)
+            where TViewModel : IMvxViewModel<TParam>
+        {
+            return NavigateToAsync<TViewModel, TParam>(param);
         }
     }
 }

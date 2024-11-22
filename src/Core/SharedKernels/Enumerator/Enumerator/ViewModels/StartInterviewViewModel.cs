@@ -18,12 +18,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         }
 
         protected string interviewId;
-        protected SourceScreen sourceScreen;
 
-        public void Init(string interviewId, SourceScreen sourceScreen)
+        public void Init(string interviewId)
         {
             this.interviewId = interviewId;
-            this.sourceScreen = sourceScreen;
         }
 
         public IMvxAsyncCommand StartInterviewCommand => new MvxAsyncCommand(this.StartInterviewAsync);
@@ -34,8 +32,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                 this.viewModelNavigationService.ShowWaitMessage();
             else
             {
-                await this.viewModelNavigationService.NavigateToInterviewAsync(interviewId, navigationIdentity: null,
-                    sourceScreen: sourceScreen);
+                await this.viewModelNavigationService.NavigateToInterviewAsync(interviewId, navigationIdentity: null);
                 this.InterviewStarted?.Invoke(this, EventArgs.Empty);
             }
         }

@@ -60,7 +60,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoadingViewModelT
 
             await loadingViewModel.LoadAndNavigateToInterviewAsync(Guid.NewGuid());
 
-            await navigationServiceMock.ReceivedWithAnyArgs().NavigateToInterviewAsync(null, null, SourceScreen.Unknown);
+            await navigationServiceMock.ReceivedWithAnyArgs().NavigateToInterviewAsync(null, null);
         }
 
         [Test]
@@ -84,7 +84,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoadingViewModelT
 
             await loadingViewModel.LoadAndNavigateToInterviewAsync(Guid.NewGuid());
 
-            await navigationServiceMock.ReceivedWithAnyArgs().NavigateToInterviewAsync(null, null, SourceScreen.Unknown);
+            await navigationServiceMock.ReceivedWithAnyArgs().NavigateToInterviewAsync(null, null);
             await commandService.ReceivedWithAnyArgs().ExecuteAsync(It.IsAny<RestartInterviewCommand>());
         }
 
