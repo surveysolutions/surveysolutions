@@ -16,9 +16,9 @@ namespace WB.UI.Shared.Extensions.Activities;
     Theme = "@style/AppTheme",
     ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize,
     Exported = false)]
-public class GeofencingActivity : MarkersMapActivity<GeofencingViewModel, GeofencingViewModelArgs>
+public class AssignmentMapActivity : MarkersMapActivity<AssignmentMapViewModel, AssignmentMapViewModelArgs>
 {
-    protected override int ViewResourceId => Resource.Layout.geofencing;
+    protected override int ViewResourceId => Resource.Layout.assignment_map;
     
     protected override bool BackButtonCustomAction => true;
     protected override void BackButtonPressed()

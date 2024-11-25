@@ -36,14 +36,14 @@ using Xamarin.Essentials;
 
 namespace WB.UI.Shared.Extensions.ViewModels;
 
-public class GeofencingViewModelArgs
+public class AssignmentMapViewModelArgs
 {
     public int AssignmentId { get; set; }
 }
 
 
 [InterviewEntryPoint]
-public class GeofencingViewModel: MarkersMapInteractionViewModel<GeofencingViewModelArgs>
+public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMapViewModelArgs>
 {
     private AssignmentDocument assignment;
     private string locations = "";
@@ -66,7 +66,7 @@ public class GeofencingViewModel: MarkersMapInteractionViewModel<GeofencingViewM
     private readonly IGeoTrackingListener geoTrackingListener;
     private readonly IGeofencingListener geofencingListener;
 
-    public GeofencingViewModel(IPrincipal principal, 
+    public AssignmentMapViewModel(IPrincipal principal, 
         IViewModelNavigationService viewModelNavigationService,
         IUserInteractionService userInteractionService,
         IMapService mapService,
@@ -124,7 +124,7 @@ public class GeofencingViewModel: MarkersMapInteractionViewModel<GeofencingViewM
         throw new NotImplementedException();
     }
 
-    public override void Prepare(GeofencingViewModelArgs parameter)
+    public override void Prepare(AssignmentMapViewModelArgs parameter)
     {
         var assignmentId = parameter.AssignmentId;
 

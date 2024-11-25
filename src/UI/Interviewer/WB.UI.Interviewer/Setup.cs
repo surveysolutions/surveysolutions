@@ -71,7 +71,7 @@ namespace WB.UI.Interviewer
 #if !EXCLUDEEXTENSIONS
                 ,{typeof (Shared.Extensions.ViewModels.GeographyEditorViewModel), typeof (Shared.Extensions.Activities.GeographyEditorActivity)}
                 ,{typeof (Shared.Extensions.ViewModels.InterviewerMapDashboardViewModel), typeof (Shared.Extensions.Activities.InterviewerMapDashboardActivity)}
-                ,{typeof (Shared.Extensions.ViewModels.GeofencingViewModel), typeof (Shared.Extensions.Activities.GeofencingActivity)}
+                ,{typeof (Shared.Extensions.ViewModels.AssignmentMapViewModel), typeof (Shared.Extensions.Activities.AssignmentMapActivity)}
 #endif
             });
 

@@ -60,8 +60,8 @@ namespace WB.UI.Shared.Extensions.Services
         {
             await this.permissions.AssureHasPermissionOrThrow<Permissions.LocationAlways>().ConfigureAwait(false);
 
-            await this.viewModelNavigationService.NavigateToAsync<GeofencingViewModel, GeofencingViewModelArgs>(
-                new GeofencingViewModelArgs() { AssignmentId = assignmentId }, finishActivityOnSuccess: true).ConfigureAwait(false);
+            await this.viewModelNavigationService.NavigateToAsync<AssignmentMapViewModel, AssignmentMapViewModelArgs>(
+                new AssignmentMapViewModelArgs() { AssignmentId = assignmentId }, finishActivityOnSuccess: true).ConfigureAwait(false);
         }
 
         public async Task OpenSupervisorMapDashboardAsync()
