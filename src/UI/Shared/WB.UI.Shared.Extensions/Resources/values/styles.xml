@@ -54,12 +54,33 @@
       <item name="android:enabled">false</item>
   </style>
 
-    <style name="Area_CompassButton">
-        <item name="android:layout_width">42dp</item>
-        <item name="android:layout_height">42dp</item>
-        <item name="android:layout_gravity">right</item>
+    <style name="Area_DefaultButton">
+        <item name="android:background">@drawable/icon_button</item>
+        <item name="android:layout_width">48dp</item>
+        <item name="android:layout_height">48dp</item>
         <item name="android:scaleType">fitCenter</item>
-        <item name="android:background">@drawable/compass_icon</item>
+    </style>
+
+    <style name="Area_CompassButton" parent="Area_DefaultButton">
+        <item name="android:src">@drawable/icon_compass</item>
+    </style>
+    <style name="Area_BackButton" parent="Area_DefaultButton">
+        <item name="android:src">@drawable/icon_back</item>
+    </style>
+    <style name="Area_EyeButton" parent="Area_DefaultButton">
+        <item name="android:src">@drawable/icon_eye</item>
+    </style>
+    <style name="Area_GeofencingButton" parent="Area_DefaultButton">
+        <item name="android:src">@drawable/icon_geofencing</item>
+    </style>
+    <style name="Area_GeoTrackingButton" parent="Area_DefaultButton">
+        <item name="android:src">@drawable/icon_geotracking</item>
+    </style>
+    <style name="Area_NavigateButton" parent="Area_DefaultButton">
+        <item name="android:src">@drawable/icon_navigate</item>
+    </style>
+    <style name="Area_MenuButton" parent="Area_DefaultButton">
+        <item name="android:src">@drawable/icon_three_dots</item>
     </style>
 
     <style name="Area_ZoomMapInButton">
