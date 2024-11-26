@@ -46,18 +46,6 @@ public class AssignmentMapViewModelArgs
 public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMapViewModelArgs>
 {
     private AssignmentDocument assignment;
-    private string locations = "";
-
-    public string Locations
-    {
-        get => locations;
-        set
-        {
-            if (value == locations) return;
-            locations = value;
-            RaisePropertyChanged(() => Locations);
-        }
-    }
 
     private readonly IGeolocationBackgroundServiceManager backgroundServiceManager;
     private readonly IPlainStorage<GeoTrackingRecord, int?> geoTrackingRecordsStorage;
@@ -95,6 +83,9 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
         this.geoTrackingRecordsStorage = geoTrackingRecordsStorage;
 
         this.ShowInterviews = true;
+
+        this.Warning = "This is warning";
+        this.IsWarningVisible = true;
         
         backgroundServiceManager.LocationReceived += BackgroundServiceManagerOnLocationReceived;
     }
@@ -459,12 +450,14 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
 
         if (geofencingListener.LastResult?.InShapefile ?? false)
         {
-            Locations = loc + " (OUT)";
+            Warning = loc + " (OUT)";
         }
         else
         {
-            Locations = loc + " (In)";
+            Warning = loc + " (In)";
         }
+
+        IsWarningVisible = true;
     }
 
 

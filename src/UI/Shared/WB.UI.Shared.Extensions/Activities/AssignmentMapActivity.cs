@@ -32,10 +32,6 @@ public class AssignmentMapActivity : MarkersMapActivity<AssignmentMapViewModel, 
         base.OnCreate(savedInstanceState);
 
         this.ViewModel.MapView = this.FindViewById<MapView>(Resource.Id.map_view);
-
-        var toolbar = this.FindViewById<Toolbar>(Resource.Id.toolbar);
-        toolbar.Title = "";
-        this.SetSupportActionBar(toolbar);
     }
     
 

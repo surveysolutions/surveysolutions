@@ -3,9 +3,6 @@
         android:height="48dp"
         android:viewportWidth="48"
         android:viewportHeight="48">
-    <path
-            android:fillColor="#BF000000"
-            android:pathData="M0 24c0-13.25 10.75-24 24-24h0c13.25 0 24 10.75 24 24v0c0 13.25-10.75 24-24 24h0c-13.25 0-24-10.75-24-24z"/>
     <group>
         <path
                 android:fillColor="#FFFFFFFF"

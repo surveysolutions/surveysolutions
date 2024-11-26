@@ -13,11 +13,15 @@
     <dimen name="area_editor_zoom_out_margin_bottom">280dp</dimen>
     <dimen name="area_editor_zoom_in_margin_bottom">220dp</dimen>
     <dimen name="area_editor_compass_margin_bottom">160dp</dimen>
+    <dimen name="area_editor_buttons_margin_top">53dp</dimen>
+    <dimen name="area_editor_buttons_margin_space">10dp</dimen>
+    <dimen name="area_editor_warning_margin">12dp</dimen>
     
     <dimen name="button_corners_radius">6dp</dimen>
 
     <dimen name="area_editor_text_size_regular">16dp</dimen>
     <dimen name="area_editor_text_size_large">18dp</dimen>
+    <dimen name="area_editor_warning_text">14dp</dimen>
 
     <dimen name="area_editor_padding_regular">18dp</dimen>
 
