@@ -84,9 +84,6 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
 
         this.ShowInterviews = true;
 
-        this.Warning = "This is warning";
-        this.IsWarningVisible = true;
-        
         backgroundServiceManager.LocationReceived += BackgroundServiceManagerOnLocationReceived;
     }
 
@@ -445,7 +442,7 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
 
     private void LogTestRecords(LocationReceivedEventArgs e)
     {
-        var loc = $"\r\n{e.Location.Latitude}  {e.Location.Longitude}";
+        var loc = $"{e.Location.Latitude}  {e.Location.Longitude}";
         //geofencingViewModel.Locations = loc + geofencingViewModel.Locations;
 
         if (geofencingListener.LastResult?.InShapefile ?? false)
