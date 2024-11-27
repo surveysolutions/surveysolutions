@@ -235,6 +235,7 @@ namespace WB.UI.Shared.Enumerator
             registry.RegisterCustomBindingFactory<MapView>("SetGpsLocation", view => new ViewSetGpsLocationBinding(view));
             registry.RegisterCustomBindingFactory<ViewPager2>("CurrentItem", view => new ViewPager2CurrentItemBinding(view));
             registry.RegisterCustomBindingFactory<ImageButton>("SelectedSupportClick", view => new ImageButtonSelectedSupportClickBinding(view));
+            registry.RegisterCustomBindingFactory<ImageButton>("SelectedState", view => new ImageButtonSelectedStateBinding(view));
             
             //MvxAppCompatSetupHelper.FillTargetFactories(registry);
 

@@ -213,20 +213,26 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
     public IMvxAsyncCommand NavigateToDashboardCommand => 
         new MvxAsyncCommand(async () => await this.ViewModelNavigationService.NavigateToDashboardAsync());
 
-    public IMvxCommand StartGeofencingCommand => 
-        new MvxAsyncCommand(async () => { await ToggleGeofencingService(); }, 
-            () => LoadedShapefile != null);
+    private bool isEnabledGeofencing;
+    public bool IsEnabledGeofencing
+    {
+        get => this.isEnabledGeofencing;
+        set => this.RaiseAndSetIfChanged(ref this.isEnabledGeofencing, value);
+    }
 
-    private bool isGeofencingEnabled = false;
+    public IMvxAsyncCommand StartGeofencingCommand => new MvxAsyncCommand(ToggleGeofencingService);
     
     private async Task ToggleGeofencingService()
     {
+        if (LoadedShapefile == null)
+            return;
+        
         try
         {
-            await permissionsService.AssureHasPermissionOrThrow<Permissions.LocationAlways>();
-
-            if (!isGeofencingEnabled)
+            if (!IsEnabledGeofencing)
             {
+                await permissionsService.AssureHasPermissionOrThrow<Permissions.LocationAlways>();
+
                 this.geofencingListener.Start(LoadedShapefile);
                 await this.backgroundServiceManager.StartListen(geofencingListener);
                 
@@ -237,7 +243,7 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
                 this.backgroundServiceManager.StopListen(geofencingListener);
             }
 
-            isGeofencingEnabled = !isGeofencingEnabled;
+            IsEnabledGeofencing = !IsEnabledGeofencing;
         }
         catch (MissingPermissionsException mp) when (mp.PermissionType == typeof(Permissions.LocationAlways))
         {
@@ -250,20 +256,27 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
         }        
     }
     
-    public IMvxCommand StartGeoTrackingCommand => 
-        new MvxAsyncCommand(async () => { await ToggleGeoTrackingService(); }, 
-            () => LoadedShapefile != null);
-
-    private bool isGeoTrackingEnabled = false;
+    
+    private bool isEnabledGeoTracking;
+    public bool IsEnabledGeoTracking
+    {
+        get => this.isEnabledGeoTracking;
+        set => this.RaiseAndSetIfChanged(ref this.isEnabledGeoTracking, value);
+    }
+    
+    public IMvxAsyncCommand StartGeoTrackingCommand => new MvxAsyncCommand(ToggleGeoTrackingService);
     
     private async Task ToggleGeoTrackingService()
     {
+        if (LoadedShapefile == null)
+            return;
+        
         try
         {
-            await permissionsService.AssureHasPermissionOrThrow<Permissions.LocationAlways>();
-
-            if (!isGeoTrackingEnabled)
+            if (!IsEnabledGeoTracking)
             {
+                await permissionsService.AssureHasPermissionOrThrow<Permissions.LocationAlways>();
+
                 await DrawGeoTrackingAsync();
                 await SwitchLocator();
 
@@ -276,7 +289,7 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
                 this.backgroundServiceManager.StopListen(geoTrackingListener);
             }
 
-            isGeoTrackingEnabled = !isGeoTrackingEnabled;
+            IsEnabledGeoTracking = !IsEnabledGeoTracking;
         }
         catch (MissingPermissionsException mp) when (mp.PermissionType == typeof(Permissions.LocationAlways))
         {

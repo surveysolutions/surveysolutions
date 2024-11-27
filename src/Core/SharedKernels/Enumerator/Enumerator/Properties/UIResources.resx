@@ -716,11 +716,35 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="MenuItem_Title_AreaCancelEdit" xml:space="preserve">
     <value>Clear all</value>
   </data>
-  <data name="MenuItem_Title_Geofencing" xml:space="preserve">
-    <value>Geofencing</value>
+  <data name="MenuItem_Title_StartGeofencing" xml:space="preserve">
+    <value>Start geofencing</value>
   </data>
-  <data name="MenuItem_Title_GeoTracking" xml:space="preserve">
-    <value>GeoTracking</value>
+  <data name="MenuItem_Title_StopGeofencing" xml:space="preserve">
+    <value>Stop geofencing</value>
+  </data>
+  <data name="MenuItem_Title_StartGeoTracking" xml:space="preserve">
+    <value>Start tracking recording</value>
+  </data>
+  <data name="MenuItem_Title_StopGeoTracking" xml:space="preserve">
+    <value>Stop tracking recording</value>
+  </data>
+  <data name="MenuItem_Title_ExitToDashboard" xml:space="preserve">
+    <value>Exit to dashboard</value>
+  </data>
+  <data name="MenuItem_Title_ChangeMap" xml:space="preserve">
+    <value>Change map</value>
+  </data>
+  <data name="MenuItem_Title_ChangeShapefile" xml:space="preserve">
+    <value>Change boundaries</value>
+  </data>
+  <data name="MenuItem_Title_ZoomMap" xml:space="preserve">
+    <value>Zoom all map</value>
+  </data>
+  <data name="MenuItem_Title_ZoomCollectedData" xml:space="preserve">
+    <value>Zoom all collected data</value>
+  </data>
+  <data name="MenuItem_Title_ZoomEverything" xml:space="preserve">
+    <value>Zoom everything</value>
   </data>
   <data name="MenuItem_Title_Dashboard" xml:space="preserve">
     <value>Dashboard</value>

@@ -1239,15 +1239,63 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
             }
         }
         
-        public static string MenuItem_Title_Geofencing {
+        public static string MenuItem_Title_StartGeofencing {
             get {
-                return ResourceManager.GetString("MenuItem_Title_Geofencing", resourceCulture);
+                return ResourceManager.GetString("MenuItem_Title_StartGeofencing", resourceCulture);
             }
         }
         
-        public static string MenuItem_Title_GeoTracking {
+        public static string MenuItem_Title_StopGeofencing {
             get {
-                return ResourceManager.GetString("MenuItem_Title_GeoTracking", resourceCulture);
+                return ResourceManager.GetString("MenuItem_Title_StopGeofencing", resourceCulture);
+            }
+        }
+        
+        public static string MenuItem_Title_StartGeoTracking {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_StartGeoTracking", resourceCulture);
+            }
+        }
+        
+        public static string MenuItem_Title_StopGeoTracking {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_StopGeoTracking", resourceCulture);
+            }
+        }
+        
+        public static string MenuItem_Title_ExitToDashboard {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_ExitToDashboard", resourceCulture);
+            }
+        }
+        
+        public static string MenuItem_Title_ChangeMap {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_ChangeMap", resourceCulture);
+            }
+        }
+        
+        public static string MenuItem_Title_ChangeShapefile {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_ChangeShapefile", resourceCulture);
+            }
+        }
+        
+        public static string MenuItem_Title_ZoomMap {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_ZoomMap", resourceCulture);
+            }
+        }
+        
+        public static string MenuItem_Title_ZoomCollectedData {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_ZoomCollectedData", resourceCulture);
+            }
+        }
+        
+        public static string MenuItem_Title_ZoomEverything {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_ZoomEverything", resourceCulture);
             }
         }
         

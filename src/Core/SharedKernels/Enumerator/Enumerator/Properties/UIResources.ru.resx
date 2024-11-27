@@ -903,10 +903,34 @@
   <data name="InterviewStatus_SupervisorAssigned" xml:space="preserve">
     <value>Супервизор назначен</value>
   </data>
-  <data name="MenuItem_Title_Geofencing" xml:space="preserve">
-      <value>Геозонирование</value>
+  <data name="MenuItem_Title_StartGeofencing" xml:space="preserve">
+    <value>Начать геозонирование</value>
   </data>
-  <data name="MenuItem_Title_GeoTracking" xml:space="preserve">
-    <value>Гео-отслеживание</value>
+  <data name="MenuItem_Title_StopGeofencing" xml:space="preserve">
+    <value>Остановить геозонирование</value>
+  </data>
+  <data name="MenuItem_Title_StartGeoTracking" xml:space="preserve">
+    <value>Начать запись геоданных</value>
+  </data>
+  <data name="MenuItem_Title_StopGeoTracking" xml:space="preserve">
+    <value>Остановить запись геоданных</value>
+  </data>
+  <data name="MenuItem_Title_ExitToDashboard" xml:space="preserve">
+    <value>Выйти на дешбоард</value>
+  </data>
+  <data name="MenuItem_Title_ChangeMap" xml:space="preserve">
+    <value>Сменить карту</value>
+  </data>
+  <data name="MenuItem_Title_ChangeShapefile" xml:space="preserve">
+    <value>Сменить файл границы</value>
+  </data>
+  <data name="MenuItem_Title_ZoomMap" xml:space="preserve">
+    <value>Показать всю карту</value>
+  </data>
+  <data name="MenuItem_Title_ZoomCollectedData" xml:space="preserve">
+    <value>Показать все собранные данные</value>
+  </data>
+  <data name="MenuItem_Title_ZoomEverything" xml:space="preserve">
+    <value>Показать все</value>
   </data>
 </root>
