@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:installLocation="preferExternal" package="org.worldbank.solutions.interviewer" android:versionCode="31025" android:versionName="22.09.1 (build 31025)">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:installLocation="preferExternal" 
+          package="org.worldbank.solutions.interviewer" android:versionCode="31025" android:versionName="22.09.1 (build 31025)">
 	<application android:label="Interviewer" 
                  android:icon="@drawable/icon" 
                  android:theme="@android:style/Theme.DeviceDefault.Light" 
@@ -14,6 +15,7 @@
 					   android:resource="@xml/file_paths" />
 		</provider>
 		<meta-data android:name="com.google.android.geo.API_KEY" android:value="@string/google_maps_api_key" />
+        <meta-data android:name="firebase_crashlytics_collection_enabled" android:value="@bool/com_crashlytics_android_active" />
 	</application>
 	
 	<uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30" />

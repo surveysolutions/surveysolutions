@@ -119,6 +119,7 @@ namespace WB.UI.Interviewer.Activities
                 }
 
                 this.UpdateSettings();
+                this.SetupVersionPreference();
             }
 
             private void UpdateSettings()
@@ -200,6 +201,20 @@ namespace WB.UI.Interviewer.Activities
                 {
                     checkBoxPreference.Checked = defaultValue;
                 }
+            }
+            
+            private void SetupVersionPreference()
+            {
+                Preference versionPreference = this.FindPreference("version");
+                versionPreference.PreferenceClick += (sender, args) =>
+                {
+                    Interlocked.Increment(ref tapTimes);
+                    if (tapTimes > 7)
+                    {
+                        throw new InvalidOperationException("Test Exception" + " Should not have clicked this!");
+                        tapTimes = 0;
+                    }
+                };
             }
         }
     }
