@@ -215,7 +215,7 @@ namespace WB.UI.Interviewer.Activities
                     {
                         throw new InvalidOperationException("Test Exception" + " Should not have clicked this!");
                     }
-                }
+                };
             }
         }
     }

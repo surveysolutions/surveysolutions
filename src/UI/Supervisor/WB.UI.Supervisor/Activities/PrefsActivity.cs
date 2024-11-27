@@ -181,7 +181,7 @@ namespace WB.UI.Supervisor.Activities
                     {
                         throw new InvalidOperationException("Test Exception" + " Should not have clicked this!");
                     }
-                }
+                };
             }
         }
     }
