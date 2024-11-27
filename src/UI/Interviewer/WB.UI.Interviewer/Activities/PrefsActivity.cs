@@ -31,6 +31,8 @@ namespace WB.UI.Interviewer.Activities
 
         public class PrefsFragment : PreferenceFragmentCompat
         {
+            private static int tapTimes;
+            
             public override void OnCreatePreferences(Bundle savedInstanceState, string rootKey)
             {
                 this.AddPreferencesFromResource(Resource.Xml.preferences);
