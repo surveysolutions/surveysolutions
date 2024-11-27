@@ -51,7 +51,7 @@ export default {
 
             // clean up uri from default values
             Object.keys(newQuery).forEach(key => {
-                if (newQuery[key] && !isNaN(newQuery[key])) {
+                if (newQuery[key] == 0 || (newQuery[key] && !isNaN(newQuery[key]))) {
                     query[key] = newQuery[key]
                 }
             })

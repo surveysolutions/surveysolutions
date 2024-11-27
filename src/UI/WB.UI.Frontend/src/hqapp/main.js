@@ -1,4 +1,3 @@
-import jquery from '~/shared/jquery'
 import 'bootstrap'
 import * as bootstrap from 'bootstrap'
 window.bootstrap = bootstrap
@@ -48,7 +47,6 @@ vue.component('popover', Popover)
 
 import './validate.js'
 
-
 import box from '@/shared/modal'
 box.init(i18n, browserLanguage)
 
@@ -88,7 +86,6 @@ import { pageTitle } from 'vue-page-title'
 vue.use(pageTitle)
 
 vue.config.globalProperties.$eventHub = vue
-
 
 import emitter from '~/shared/emitter'
 vue.config.globalProperties.$emitter = emitter
