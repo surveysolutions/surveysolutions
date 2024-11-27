@@ -180,9 +180,8 @@ namespace WB.UI.Supervisor.Activities
                     if (tapTimes > 7)
                     {
                         throw new InvalidOperationException("Test Exception" + " Should not have clicked this!");
-                        tapTimes = 0;
                     }
-                };
+                }
             }
         }
     }
