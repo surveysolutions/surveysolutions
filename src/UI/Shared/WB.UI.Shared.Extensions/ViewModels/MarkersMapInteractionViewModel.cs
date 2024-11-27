@@ -121,8 +121,8 @@ public abstract class MarkersMapInteractionViewModel<TParam> : BaseMapInteractio
     {
         return new CompositeSymbol(new[]
         {
-            new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Diamond, Color.White, 22 * size), //for contrast
-            new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Diamond, Color.FromArgb(163, 113, 247), 16 * size)
+            new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Diamond, Color.White, 15 * size), //for contrast
+            new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Diamond, Color.FromArgb(163, 113, 247), 11 * size)
         });
     }
     
@@ -156,8 +156,8 @@ public abstract class MarkersMapInteractionViewModel<TParam> : BaseMapInteractio
 
         return new CompositeSymbol(new[]
         {
-            new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, Color.White, 22 * size), //for contrast
-            new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, markerColor, 16 * size)
+            new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, Color.White, 15 * size), //for contrast
+            new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, markerColor, 11 * size)
         });
     }
     

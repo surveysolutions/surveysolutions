@@ -139,6 +139,8 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
         }
         
         await RefreshMarkers(setViewToMarkers: true);
+        
+        await DrawGeoTrackingAsync();
     }
 
     public override void ViewAppeared()
@@ -188,6 +190,32 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
         if (graphicExtent != null)
         {
             await MapView.SetViewpointAsync(new Viewpoint(graphicExtent), TimeSpan.FromSeconds(4));
+        }
+    }
+
+    public IMvxCommand ShowTrackingDataCommand => new MvxAsyncCommand(SetViewToTrackingValues);
+    
+    protected async Task SetViewToTrackingValues()
+    {
+        var existedLayer = this.MapView.Map.OperationalLayers.FirstOrDefault(l => l.Name == GeoTrackingLayerName);
+        if (existedLayer == null)
+            return;
+        
+        var featureCollectionLayer = (FeatureCollectionLayer)existedLayer;
+        var featureCollectionTables = featureCollectionLayer.FeatureCollection.Tables;
+        var geoTrackingFeatureCollectionTable = featureCollectionTables[0];
+        
+        var points = geoTrackingFeatureCollectionTable
+            .Where(f => (f.Geometry as Polyline)?.Parts.Count > 0)
+            .SelectMany(f => (f.Geometry as Polyline)?.Parts.SelectMany(p => p.Points))
+            .ToList();
+
+        if (points.Count > 0)
+        {
+            EnvelopeBuilder eb = new EnvelopeBuilder(GeometryEngine.CombineExtents(points));
+            eb.Expand(1.2);
+
+            await MapView.SetViewpointAsync(new Viewpoint(eb.Extent), TimeSpan.FromSeconds(4));
         }
     }
     
@@ -268,16 +296,12 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
     
     private async Task ToggleGeoTrackingService()
     {
-        if (LoadedShapefile == null)
-            return;
-        
         try
         {
             if (!IsEnabledGeoTracking)
             {
                 await permissionsService.AssureHasPermissionOrThrow<Permissions.LocationAlways>();
 
-                await DrawGeoTrackingAsync();
                 await SwitchLocator();
 
                 this.geoTrackingListener.Start(assignment.Id);
@@ -340,8 +364,7 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
         if(this.MapView?.Map?.SpatialReference == null)
             return;
         
-        var gType = GeometryType.Multipoint;
-        var esriGeometryType = GeometryType.Multipoint;
+        var esriGeometryType = GeometryType.Polyline;
 
         IEnumerable<Field> fields = new Field[]
         {
@@ -350,7 +373,7 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
         var mapViewSpatialReference = this.MapView.Map.SpatialReference;
         var geoTrackingFeatureCollectionTable = new FeatureCollectionTable(fields, esriGeometryType, mapViewSpatialReference)
             {
-                Renderer = CreateRenderer(gType, Color.Blue)
+                Renderer = CreateRenderer()
             };
 
         for (int i = 0; i < GeoTrackingRecords.Count; i++)
@@ -365,7 +388,7 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
             }
             
             var feature = geoTrackingFeatureCollectionTable.CreateFeature();
-            Geometry multipoint = new Multipoint(mapPoints, SpatialReferences.Wgs84);
+            Geometry multipoint = new Polyline(mapPoints, SpatialReferences.Wgs84);
             if (multipoint.SpatialReference != Map.SpatialReference)
                 multipoint = multipoint.Project(Map.SpatialReference);
             
@@ -415,13 +438,13 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
         {
             Monitor.Enter(geoTrackingLayerLock);
 
-            var multipoint = (Multipoint)lastGeoTrackingFeature.Geometry;
-            List<MapPoint> points = new List<MapPoint>(multipoint.Points);
+            var polyline = (Polyline)lastGeoTrackingFeature.Geometry;
+            List<MapPoint> points = new List<MapPoint>(polyline.Parts.SelectMany(l => l.Points));
             MapPoint mapPoint = new MapPoint(location.Longitude, location.Latitude, SpatialReferences.Wgs84);
             if (mapPoint.SpatialReference != Map.SpatialReference)
                 mapPoint = (MapPoint)mapPoint.Project(Map.SpatialReference);
             points.Add(mapPoint);
-            Geometry newGeometry = new Multipoint(points);
+            Geometry newGeometry = new Polyline(points);
 
             var feature = geoTrackingFeatureCollectionTable.CreateFeature();
             feature.Geometry = newGeometry;
@@ -439,17 +462,14 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
         }
     }
 
-    private Renderer CreateRenderer(GeometryType rendererType, Color color)
+    private Renderer CreateRenderer()
     {
-        Symbol sym = rendererType switch
-        {
-            GeometryType.Point => new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, color, 18),
-            GeometryType.Multipoint => new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, color, 18),
-            GeometryType.Polyline => new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, color, 2),
-            GeometryType.Polygon => new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, color, 2),
-            _ => null
-        };
-
+        var outerLineSymbol = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, Color.White, 5);
+        var innerLineSymbol = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, Color.FromArgb(140, 89, 222), 2);
+        //var innerLineSymbol = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, Color.Red, 2);
+        var sym = new CompositeSymbol(new List<Symbol> { outerLineSymbol, innerLineSymbol });
+        //GeometryType.Multipoint => new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, color, 18),
+        //GeometryType.Polyline => new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, color, 2),
         return new SimpleRenderer(sym);
     }
 

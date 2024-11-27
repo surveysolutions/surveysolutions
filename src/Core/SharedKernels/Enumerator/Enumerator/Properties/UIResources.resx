@@ -746,6 +746,9 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="MenuItem_Title_ZoomEverything" xml:space="preserve">
     <value>Zoom everything</value>
   </data>
+  <data name="MenuItem_Title_ZoomGeoTracking" xml:space="preserve">
+    <value>Zoom tracking records</value>
+  </data>
   <data name="MenuItem_Title_Dashboard" xml:space="preserve">
     <value>Dashboard</value>
   </data>

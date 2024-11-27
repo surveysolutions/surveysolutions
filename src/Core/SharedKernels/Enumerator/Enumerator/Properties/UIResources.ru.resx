@@ -933,4 +933,7 @@
   <data name="MenuItem_Title_ZoomEverything" xml:space="preserve">
     <value>Показать все</value>
   </data>
+  <data name="MenuItem_Title_ZoomGeoTracking" xml:space="preserve">
+    <value>Показать все геоданные</value>
+  </data>
 </root>
