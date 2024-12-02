@@ -484,10 +484,29 @@ function Set-AndroidXmlResourceValue {
     Log-Message "Updating app resource key $keyName in $filePath"
 
     [xml] $resourceFile = Get-Content -Path $filePath
-    $appCenterKey = Select-Xml -xml $resourceFile `
+    $resourceStringKey = Select-Xml -xml $resourceFile `
         -Xpath "/resources/string[@name='$keyName']"
+    
+    if ($resourceStringKey -ne $null) {
+        $resourceStringKey.Node.InnerText = $keyValue
+    }
+    else
+    {
+        $resourceBoolKey = Select-Xml -xml $resourceFile `
+        -Xpath "/resources/bool[@name='$keyName']"
 
-    $appCenterKey.Node.InnerText = $keyValue
+        if ($resourceBoolKey -ne $null) {
+        $resourceStringKey.Node.InnerText = $keyValue
+    }
+    else
+    {
+        $resourceIntKey = Select-Xml -xml $resourceFile `
+        -Xpath "/resources/integer[@name='$keyName']"
+
+        if ($resourceIntKey -ne $null) {
+            $resourceStringKey.Node.InnerText = $keyValue
+        }
+    }   
 
     $resourceFile.Save($filePath)
 }
