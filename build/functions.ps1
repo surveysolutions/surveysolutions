@@ -493,20 +493,21 @@ function Set-AndroidXmlResourceValue {
     else
     {
         $resourceBoolKey = Select-Xml -xml $resourceFile `
-        -Xpath "/resources/bool[@name='$keyName']"
+            -Xpath "/resources/bool[@name='$keyName']"
 
         if ($resourceBoolKey -ne $null) {
-        $resourceStringKey.Node.InnerText = $keyValue
-    }
-    else
-    {
-        $resourceIntKey = Select-Xml -xml $resourceFile `
-        -Xpath "/resources/integer[@name='$keyName']"
+            $resourceBoolKey.Node.InnerText = $keyValue
+        }    
+        else
+        {
+            $resourceIntKey = Select-Xml -xml $resourceFile `
+                -Xpath "/resources/integer[@name='$keyName']"
 
-        if ($resourceIntKey -ne $null) {
-            $resourceStringKey.Node.InnerText = $keyValue
-        }
-    }   
+            if ($resourceIntKey -ne $null) {
+                $resourceIntKey.Node.InnerText = $keyValue
+            }
+        }   
+    }
 
     $resourceFile.Save($filePath)
 }
