@@ -185,7 +185,7 @@ function Get-DockerTags($name, $registry = $dockerRegistry) {
 function Invoke-Android($CapiProject, $apk, $withMaps, $appCenterKey) {
     # Set-Alias MSBuild (Resolve-MSBuild)
        
-    Set-AndroidXmlResourceValue $CapiProject "com_crashlytics_android_active" true
+    Set-AndroidXmlResourceValue $CapiProject "com_crashlytics_android_active" 'true'
     Set-AndroidXmlResourceValue $CapiProject "google_maps_api_key" $GoogleMapKey
     Set-AndroidXmlResourceValue $CapiProject "arcgisruntime_key" $ArcGisKey
     Set-AndroidXmlResourceValue $CapiProject "arcgisruntime_api_key" $ArcGisApiKey

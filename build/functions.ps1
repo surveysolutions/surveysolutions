@@ -481,7 +481,7 @@ function Set-AndroidXmlResourceValue {
     )    
 
     $filePath = "$([System.IO.Path]::GetDirectoryName($project))/Resources/Values/settings.xml"
-    Log-Message "Updating app resource key in $filePath"
+    Log-Message "Updating app resource key $keyName in $filePath"
 
     [xml] $resourceFile = Get-Content -Path $filePath
     $appCenterKey = Select-Xml -xml $resourceFile `
