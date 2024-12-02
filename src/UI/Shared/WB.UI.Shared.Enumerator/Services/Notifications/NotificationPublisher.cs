@@ -86,15 +86,6 @@ namespace WB.UI.Shared.Enumerator.Services.Notifications
 
         public void CreateNotificationChannel(Context context)
         {
-            if (Build.VERSION.SdkInt < BuildVersionCodes.O)
-            {
-                // Notification channels are new in API 26 (and not a part of the
-                // support library). There is no need to create a notification
-                // channel on older versions of Android.
-                // Channels are visible in application settings
-                return;
-            }
-
 #pragma warning disable CA1416 // Validate platform compatibility
             var channel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationImportance.Default)
             {

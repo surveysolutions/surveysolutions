@@ -62,11 +62,7 @@ namespace WB.UI.Shared.Enumerator.Services
 
         public async Task<string> GetRootDirectoryAsync()
         {
-            if (Build.VERSION.SdkInt >= BuildVersionCodes.N)
-                return GetPathToInternalDirectory();
-
-            await permissionsService.AssureHasExternalStoragePermissionOrThrow().ConfigureAwait(false);
-            return GetPathToExternalDirectory();
+            return GetPathToInternalDirectory();
         }
     }
 }
