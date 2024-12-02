@@ -77,7 +77,7 @@ namespace WB.UI.Shared.Enumerator.Activities
 
         protected override void Dispose(bool disposing)
         {
-            if(ViewModel != null)
+            if(ViewModel != null && ViewModel.CompleteGroups != null)
                 ViewModel.CompleteGroups.CollectionChanged -= AdjustRecyclerViewHeight;
             
             base.Dispose(disposing);
