@@ -21,7 +21,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             "System.Runtime.Extensions",
             "System.Runtime.Numerics",
             "System.Text.RegularExpressions",
-            "System.Threading"
+            "System.Threading",
+            "netstandard"
         };
 
         private List<MetadataReference>? cachedReferences = null;

@@ -16,20 +16,24 @@
     <WarningsAsErrors />
   </PropertyGroup>
   <ItemGroup>
-    <!--Assemblies that are referenced during conditions assembly compilation-->
-    <EmbeddedResource Include="$(NuGetPackageRoot)\system.collections\4.3.0\ref\netstandard1.3\System.Collections.dll" Visible="false" />
-    <EmbeddedResource Include="$(NugetPackageRoot)\system.linq\4.3.0\ref\netstandard1.0\System.Linq.dll" Visible="false" />
-    <EmbeddedResource Include="$(NugetPackageRoot)\system.linq.expressions\4.3.0\ref\netstandard1.3\System.Linq.Expressions.dll" Visible="false" />
-    <EmbeddedResource Include="$(NugetPackageRoot)\system.runtime\4.3.0\ref\netstandard1.5\System.Runtime.dll" Visible="false" />
-    <EmbeddedResource Include="$(NugetPackageRoot)\system.runtime.extensions\4.3.0\ref\netstandard1.5\System.Runtime.Extensions.dll" Visible="false" />
-    <EmbeddedResource Include="$(NugetPackageRoot)\system.runtime.numerics\4.3.0\ref\netstandard1.1\System.Runtime.Numerics.dll" Visible="false" />
-    <EmbeddedResource Include="$(NugetPackageRoot)\system.text.encoding.extensions\4.3.0\ref\netstandard1.3\System.Text.Encoding.Extensions.dll" Visible="false" />
-    <EmbeddedResource Include="$(NugetPackageRoot)\system.reflection\4.3.0\ref\netstandard1.5\System.Reflection.dll" Visible="false" />
-    <EmbeddedResource Include="$(NugetPackageRoot)\system.io\4.3.0\ref\netstandard1.5\System.IO.dll" Visible="false" WithCulture="false" />
-    <EmbeddedResource Include="$(NugetPackageRoot)\system.text.regularexpressions\4.3.0\ref\netstandard1.3\System.Text.RegularExpressions.dll" Visible="false" />
-    <EmbeddedResource Include="$(NugetPackageRoot)\system.globalization\4.3.0\ref\netstandard1.3\System.Globalization.dll" Visible="false" />
-    <EmbeddedResource Include="$(NugetPackageRoot)\system.threading\4.3.0\ref\netstandard1.3\System.Threading.dll" Visible="false" />
+    <EmbeddedResource Include="$(NuGetPackageRoot)\netstandard.library\2.0.3\build\netstandard2.0\ref\System.Collections.dll" Visible="false" />
+    <EmbeddedResource Include="$(NugetPackageRoot)\netstandard.library\2.0.3\build\netstandard2.0\ref\System.Linq.dll" Visible="false" />
+    <EmbeddedResource Include="$(NugetPackageRoot)\netstandard.library\2.0.3\build\netstandard2.0\ref\System.Linq.Expressions.dll" Visible="false" />
+    <EmbeddedResource Include="$(NugetPackageRoot)\netstandard.library\2.0.3\build\netstandard2.0\ref\System.Runtime.dll" Visible="false" />
+    <EmbeddedResource Include="$(NugetPackageRoot)\netstandard.library\2.0.3\build\netstandard2.0\ref\System.Runtime.Extensions.dll" Visible="false" />
+    <EmbeddedResource Include="$(NugetPackageRoot)\netstandard.library\2.0.3\build\netstandard2.0\ref\System.Runtime.Numerics.dll" Visible="false" />
+    <EmbeddedResource Include="$(NugetPackageRoot)\netstandard.library\2.0.3\build\netstandard2.0\ref\System.Text.Encoding.Extensions.dll" Visible="false" />
+    <EmbeddedResource Include="$(NugetPackageRoot)\netstandard.library\2.0.3\build\netstandard2.0\ref\System.Reflection.dll" Visible="false" />
+    <EmbeddedResource Include="$(NugetPackageRoot)\netstandard.library\2.0.3\build\netstandard2.0\ref\System.IO.dll" Visible="false" WithCulture="false" />
+    <EmbeddedResource Include="$(NugetPackageRoot)\netstandard.library\2.0.3\build\netstandard2.0\ref\System.Text.RegularExpressions.dll" Visible="false" />
+    <EmbeddedResource Include="$(NugetPackageRoot)\netstandard.library\2.0.3\build\netstandard2.0\ref\System.Globalization.dll" Visible="false" />
+    <EmbeddedResource Include="$(NugetPackageRoot)\netstandard.library\2.0.3\build\netstandard2.0\ref\System.Threading.dll" Visible="false" />
+
+      <EmbeddedResource Include="$(NugetPackageRoot)\netstandard.library\2.0.3\build\netstandard2.0\ref\netstandard.dll" Visible="false" />
   </ItemGroup>
+  <ItemGroup>
+    <Reference Include="netstandard" />
+  </ItemGroup>    
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="13.0.1" />
     <PackageReference Include="CsvHelper" Version="33.0.1" />
@@ -42,6 +46,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.10" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.9.2" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="8.0.1" />
+    <PackageReference Include="NETStandard.Library" Version="2.0.3" />
     <PackageReference Include="NJsonSchema" Version="10.9.0" />
     <PackageReference Include="SixLabors.ImageSharp" Version="3.1.5" />
     <PackageReference Include="System.CodeDom" Version="8.0.0" />
