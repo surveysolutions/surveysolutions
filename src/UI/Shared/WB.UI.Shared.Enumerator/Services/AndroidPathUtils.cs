@@ -62,7 +62,7 @@ namespace WB.UI.Shared.Enumerator.Services
 
         public async Task<string> GetRootDirectoryAsync()
         {
-            return GetPathToInternalDirectory();
+            return await GetPathToInternalDirectory();
         }
     }
 }
