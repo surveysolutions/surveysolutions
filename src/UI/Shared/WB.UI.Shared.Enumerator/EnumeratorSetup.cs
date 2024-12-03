@@ -92,6 +92,7 @@ namespace WB.UI.Shared.Enumerator
         protected override IMvxViewsContainer InitializeViewLookup(IDictionary<Type, Type> viewModelViewLookup, IMvxIoCProvider iocProvider)
         {
             var lookup = base.InitializeViewLookup(viewModelViewLookup, iocProvider);
+            lookup.Add<BottomSheetOptionsSelectorViewModel, OptionsSelectorBottomSheetFragment>();
             lookup.Add<EnumerationStageViewModel, InterviewEntitiesListFragment>();
             lookup.Add<CoverInterviewViewModel, CoverInterviewFragment>();
             lookup.Add<OverviewViewModel, OverviewFragment>();

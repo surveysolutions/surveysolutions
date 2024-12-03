@@ -23,6 +23,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Services.MapService;
 using WB.Core.SharedKernels.Enumerator.Utils;
+using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Markers;
@@ -220,10 +221,31 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
     }
     
 
-    public IMvxAsyncCommand<MapDescription> SwitchMapCommand => new MvxAsyncCommand<MapDescription>(async (mapDescription) =>
+    public IMvxAsyncCommand SwitchMapCommand => new MvxAsyncCommand(async () =>
     {
-        IsPanelVisible = false;
-        await this.UpdateBaseMap(mapDescription.MapName);
+        var options = AvailableMaps.Select(m => new BottomSheetOption()
+        {
+            Name = m.MapName,
+            Value = m.MapName,
+            IsSelected = m.MapName == SelectedMap
+        }).ToArray();
+        var args = new BottomSheetOptionsSelectorViewModelArgs()
+        {
+            Title = UIResources.SelectMapTitle,
+            Options = options,
+            Callback = async (option) =>
+            {
+                if (SelectedMap != option.Value)
+                {
+                    await UpdateBaseMap(option.Value);
+                    
+                    await this.ShowFullMapCommand.ExecuteAsync(null);
+                }
+            }
+        };
+        await NavigationService.Navigate<BottomSheetOptionsSelectorViewModel, BottomSheetOptionsSelectorViewModelArgs>(args);
+        
+        //await this.UpdateBaseMap(mapDescription.MapName);
     });
 
     public IMvxCommand SwitchPanelCommand => new MvxCommand(() =>
@@ -240,6 +262,9 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
     
     public IMvxAsyncCommand NavigateToDashboardCommand => 
         new MvxAsyncCommand(async () => await this.ViewModelNavigationService.NavigateToDashboardAsync());
+
+    public IMvxAsyncCommand CreateInterviewCommand => 
+        new MvxAsyncCommand(async () => await this.ViewModelNavigationService.NavigateToCreateAndLoadInterview(assignment.Id));
 
     private bool isEnabledGeofencing;
     public bool IsEnabledGeofencing
@@ -476,18 +501,16 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
     private void LogTestRecords(LocationReceivedEventArgs e)
     {
         var loc = $"{e.Location.Latitude}  {e.Location.Longitude}";
-        //geofencingViewModel.Locations = loc + geofencingViewModel.Locations;
 
-        if (geofencingListener.LastResult?.InShapefile ?? false)
+        if (geofencingListener.LastResult?.OutShapefile ?? false)
         {
-            Warning = loc + " (OUT)";
+            IsWarningVisible = true;
+            Warning = UIResources.Geofencing_Warning_Message;
         }
         else
         {
-            Warning = loc + " (In)";
+            IsWarningVisible = false;
         }
-
-        IsWarningVisible = true;
     }
 
 

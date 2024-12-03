@@ -1281,6 +1281,12 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
             }
         }
         
+        public static string MenuItem_Title_CreateInterview {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_CreateInterview", resourceCulture);
+            }
+        }
+        
         public static string MenuItem_Title_ZoomMap {
             get {
                 return ResourceManager.GetString("MenuItem_Title_ZoomMap", resourceCulture);
@@ -1668,6 +1674,24 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string InterviewStatus_SupervisorAssigned {
             get {
                 return ResourceManager.GetString("InterviewStatus_SupervisorAssigned", resourceCulture);
+            }
+        }
+        
+        public static string SelectMapTitle {
+            get {
+                return ResourceManager.GetString("SelectMapTitle", resourceCulture);
+            }
+        }
+        
+        public static string Geofencing_Warning_Message {
+            get {
+                return ResourceManager.GetString("Geofencing_Warning_Message", resourceCulture);
+            }
+        }
+        
+        public static string SelectShapefileTitle {
+            get {
+                return ResourceManager.GetString("SelectShapefileTitle", resourceCulture);
             }
         }
     }

@@ -65,7 +65,7 @@ public class GeofencingListener : IGeofencingListener
     public async Task OnGpsLocationChanged(GpsLocation location, INotificationManager notifications)
     {
         var result = await CheckIfInsideOfShapefile(location);
-        if (result.InShapefile)
+        if (result.OutShapefile)
         {
             notifications.Notify("Out of borders");
         }

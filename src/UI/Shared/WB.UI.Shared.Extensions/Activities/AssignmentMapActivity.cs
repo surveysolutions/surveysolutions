@@ -81,14 +81,15 @@ public class AssignmentMapActivity : MarkersMapActivity<AssignmentMapViewModel, 
     private void ClickedMenuButton(object sender, EventArgs e)
     {
         ShowPopupMenu((ImageButton)sender, [
-            new CustomMenuItem(UIResources.MenuItem_Title_ChangeMap, () => this.ViewModel.LoadShapefile.Execute(), Resource.Drawable.icon_change_map),
+            new CustomMenuItem(UIResources.MenuItem_Title_CreateInterview, () => this.ViewModel.CreateInterviewCommand.Execute(), null),
+            new CustomMenuItem(UIResources.MenuItem_Title_ChangeMap, () => this.ViewModel.SwitchMapCommand.Execute(), Resource.Drawable.icon_change_map),
             //new CustomMenuItem("Change Boundaries", () => this.ViewModel.LoadShapefile.Execute(), Resource.Drawable.icon_change_map),
             this.ViewModel.IsEnabledGeoTracking
                 ? new CustomMenuItem(UIResources.MenuItem_Title_StopGeoTracking, () => this.ViewModel.StartGeoTrackingCommand.Execute(), Resource.Drawable.icon_geotracking_passed)
-                : new CustomMenuItem(UIResources.MenuItem_Title_StartGeoTracking, () => this.ViewModel.StartGeoTrackingCommand.Execute(), Resource.Drawable.icon_geotracking),
+                : new CustomMenuItem(UIResources.MenuItem_Title_StartGeoTracking, () => this.ViewModel.StartGeoTrackingCommand.Execute(), Resource.Drawable.icon_geotracking_default),
             this.ViewModel.IsEnabledGeofencing
                 ? new CustomMenuItem(UIResources.MenuItem_Title_StopGeofencing, () => this.ViewModel.StartGeofencingCommand.Execute(), Resource.Drawable.icon_geofencing_passed)
-                : new CustomMenuItem(UIResources.MenuItem_Title_StartGeofencing, () => this.ViewModel.StartGeofencingCommand.Execute(), Resource.Drawable.icon_geofencing),
+                : new CustomMenuItem(UIResources.MenuItem_Title_StartGeofencing, () => this.ViewModel.StartGeofencingCommand.Execute(), Resource.Drawable.icon_geofencing_default),
             new CustomMenuItem(UIResources.MenuItem_Title_ExitToDashboard, () => this.ViewModel.NavigateToDashboardCommand.Execute(), Resource.Drawable.icon_exit),
         ]);
     }

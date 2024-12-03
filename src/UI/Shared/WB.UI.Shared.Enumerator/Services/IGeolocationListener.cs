@@ -11,11 +11,11 @@ public interface IGeolocationListener
 public class GeolocationListenerResult
 {
     public GpsLocation Location { get; set; }
-    public bool InShapefile { get; set; }
+    public bool OutShapefile { get; set; }
 
-    public GeolocationListenerResult SetCheckResult(bool isShapefile)
+    public GeolocationListenerResult SetCheckResult(bool outShapefile)
     {
-        InShapefile = isShapefile;
+        OutShapefile = outShapefile;
         return this;
     }
 }

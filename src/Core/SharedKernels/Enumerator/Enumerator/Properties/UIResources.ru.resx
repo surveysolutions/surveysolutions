@@ -924,6 +924,9 @@
   <data name="MenuItem_Title_ChangeShapefile" xml:space="preserve">
     <value>Сменить файл границы</value>
   </data>
+  <data name="MenuItem_Title_CreateInterview" xml:space="preserve">
+    <value>Создать новое интервью</value>
+  </data>
   <data name="MenuItem_Title_ZoomMap" xml:space="preserve">
     <value>Показать всю карту</value>
   </data>

@@ -737,6 +737,9 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="MenuItem_Title_ChangeShapefile" xml:space="preserve">
     <value>Change boundaries</value>
   </data>
+  <data name="MenuItem_Title_CreateInterview" xml:space="preserve">
+    <value>Create New Interview</value>
+  </data>
   <data name="MenuItem_Title_ZoomMap" xml:space="preserve">
     <value>Zoom all map</value>
   </data>
@@ -932,5 +935,14 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   </data>
   <data name="InterviewStatus_SupervisorAssigned" xml:space="preserve">
     <value>Supervisor assigned</value>
+  </data>
+  <data name="SelectMapTitle" xml:space="preserve">
+    <value>Select Map:</value>
+  </data>
+  <data name="Geofencing_Warning_Message" xml:space="preserve">
+    <value>You are outside of designated area</value>
+  </data>
+  <data name="SelectShapefileTitle" xml:space="preserve">
+    <value>Select Boundaries:</value>
   </data>
 </root>

@@ -174,8 +174,34 @@ namespace WB.UI.Shared.Extensions.Services
 
             // Make sure labeling is enabled for the layer
             newFeatureLayer.LabelsEnabled = true;
+            
+            var lineColor = Color.FromArgb(140, 89, 222);
+            /*var solidLineLayer = new SolidStrokeSymbolLayer
+            {
+                Width = 2,
+                Color = lineColor,
+                CapStyle = StrokeSymbolLayerCapStyle.Round,
+            };
+            
+            var transparentLineLayer = new SolidStrokeSymbolLayer
+            {
+                Width = 2,
+                Color = Color.Transparent,
+                CapStyle = StrokeSymbolLayerCapStyle.Round,
+            };
 
-            var symbolForRenderer = CreateSymbolForRenderer(myShapefile.GeometryType, Color.Red);
+            var dashedLineLayer = new SolidStrokeSymbolLayer
+            {
+                Width = 2,
+                Color = lineColor,
+                GeometricEffects = { new DashGeometricEffect(2, 2) },
+                CapStyle = StrokeSymbolLayerCapStyle.Round,
+            };
+            
+            var symbolForRenderer = new MultilayerPolylineSymbol([dashedLineLayer, transparentLineLayer, dashedLineLayer]);
+            */
+            
+            var symbolForRenderer = CreateSymbolForRenderer(myShapefile.GeometryType, lineColor);
             var alternateRenderer = new SimpleRenderer(symbolForRenderer);
 
             RendererSceneProperties myRendererSceneProperties = alternateRenderer.SceneProperties;
