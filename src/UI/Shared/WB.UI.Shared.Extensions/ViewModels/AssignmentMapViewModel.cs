@@ -50,6 +50,7 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
 
     private readonly IGeolocationBackgroundServiceManager backgroundServiceManager;
     private readonly IPlainStorage<GeoTrackingRecord, int?> geoTrackingRecordsStorage;
+    private readonly IAssignmentMapSettings assignmentMapSettings;
     private readonly IPlainStorage<GeoTrackingPoint, int?> geoTrackingPointsStorage;
     
     private readonly IGeoTrackingListener geoTrackingListener;
@@ -72,7 +73,8 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
         IGeoTrackingListener geoTrackingListener,
         IGeofencingListener geofencingListener, 
         IPlainStorage<GeoTrackingPoint, int?> geoTrackingPointsStorage, 
-        IPlainStorage<GeoTrackingRecord, int?> geoTrackingRecordsStorage) 
+        IPlainStorage<GeoTrackingRecord, int?> geoTrackingRecordsStorage,
+        IAssignmentMapSettings assignmentMapSettings) 
         : base(principal, viewModelNavigationService, mapService, userInteractionService, logger, 
                enumeratorSettings, mapUtilityService, mainThreadAsyncDispatcher, permissionsService, 
                settings, dashboardViewModelFactory, assignmentsRepository, interviewViewRepository)
@@ -82,11 +84,15 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
         this.geofencingListener = geofencingListener;
         this.geoTrackingPointsStorage = geoTrackingPointsStorage;
         this.geoTrackingRecordsStorage = geoTrackingRecordsStorage;
+        this.assignmentMapSettings = assignmentMapSettings;
 
         this.ShowInterviews = true;
 
         backgroundServiceManager.LocationReceived += BackgroundServiceManagerOnLocationReceived;
     }
+
+    public bool AllowGeoTracking => assignmentMapSettings.AllowGeoTracking;
+    public bool AllowGeofencing => assignmentMapSettings.AllowGeofencing;
 
     private GraphicsOverlayCollection graphicsOverlays = new GraphicsOverlayCollection();
     public GraphicsOverlayCollection GraphicsOverlays

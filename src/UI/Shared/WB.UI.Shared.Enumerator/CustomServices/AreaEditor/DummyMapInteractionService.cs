@@ -16,7 +16,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
             return Task.CompletedTask;
         }
 
-        public Task OpenInterviewerGeofacingAsync(int assignmentId)
+        public Task OpenAssignmentMapAsync(int assignmentId)
         {
             return Task.CompletedTask;
         }

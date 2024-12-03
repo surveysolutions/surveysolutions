@@ -74,7 +74,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             Actions.Add(new ActionDefinition
             {
                 Command = new MvxAsyncCommand(
-                    () => mapInteractionService.OpenInterviewerGeofacingAsync(assignmentId)),
+                    () => mapInteractionService.OpenAssignmentMapAsync(assignmentId)),
 
                 ActionType = ActionType.Secondary,
 

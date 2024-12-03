@@ -141,6 +141,7 @@ namespace WB.UI.Interviewer
                 new InterviewerUIModule(),
 #if !EXCLUDEEXTENSIONS                
                 new WB.UI.Shared.Extensions.MapExtensionsModule(),
+                new WB.UI.Shared.Extensions.InterviewerMapExtensionsModule(),
 #endif                
             };
 

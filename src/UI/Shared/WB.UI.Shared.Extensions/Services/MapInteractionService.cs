@@ -56,7 +56,7 @@ namespace WB.UI.Shared.Extensions.Services
                 new MapDashboardViewModelArgs(), finishActivityOnSuccess: true).ConfigureAwait(false);
         }
 
-        public async Task OpenInterviewerGeofacingAsync(int assignmentId)
+        public async Task OpenAssignmentMapAsync(int assignmentId)
         {
             await this.permissions.AssureHasPermissionOrThrow<Permissions.LocationAlways>().ConfigureAwait(false);
 

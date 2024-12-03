@@ -48,7 +48,7 @@
                 android:layout_below="@id/butMenu"
                 android:layout_alignEnd="@id/butMenu"
                 android:layout_marginTop="@dimen/area_editor_buttons_margin_space"
-                local:MvxBind="Click StartGeoTrackingCommand; SelectedState IsEnabledGeoTracking; Visible Not(IsPanelVisible);"
+                local:MvxBind="Click StartGeoTrackingCommand; SelectedState IsEnabledGeoTracking; Visible AllowGeoTracking;"
                 />
         <ImageButton
                 android:id="@+id/butGeofencing"
@@ -56,7 +56,7 @@
                 android:layout_below="@id/butGeoTracking"
                 android:layout_alignEnd="@id/butGeoTracking"
                 android:layout_marginTop="@dimen/area_editor_buttons_margin_space"
-                local:MvxBind="Click StartGeofencingCommand; SelectedState IsEnabledGeofencing; Visible Not(IsPanelVisible);"
+                local:MvxBind="Click StartGeofencingCommand; SelectedState IsEnabledGeofencing; Visible AllowGeofencing;"
                  />
         
         

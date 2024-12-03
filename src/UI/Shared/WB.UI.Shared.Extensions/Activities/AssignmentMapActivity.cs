@@ -80,26 +80,32 @@ public class AssignmentMapActivity : MarkersMapActivity<AssignmentMapViewModel, 
 
     private void ClickedMenuButton(object sender, EventArgs e)
     {
-        ShowPopupMenu((ImageButton)sender, [
-            new CustomMenuItem(UIResources.MenuItem_Title_CreateInterview, () => this.ViewModel.CreateInterviewCommand.Execute(), null),
-            new CustomMenuItem(UIResources.MenuItem_Title_ChangeMap, () => this.ViewModel.SwitchMapCommand.Execute(), Resource.Drawable.icon_change_map),
+        List<CustomMenuItem> customMenuItems = new();
+        customMenuItems.Add(new CustomMenuItem(UIResources.MenuItem_Title_CreateInterview, () => this.ViewModel.CreateInterviewCommand.Execute(), null));
+        customMenuItems.Add(new CustomMenuItem(UIResources.MenuItem_Title_ChangeMap, () => this.ViewModel.SwitchMapCommand.Execute(), Resource.Drawable.icon_change_map));
             //new CustomMenuItem("Change Boundaries", () => this.ViewModel.LoadShapefile.Execute(), Resource.Drawable.icon_change_map),
-            this.ViewModel.IsEnabledGeoTracking
+            
+        if (ViewModel.AllowGeoTracking)            
+            customMenuItems.Add(this.ViewModel.IsEnabledGeoTracking
                 ? new CustomMenuItem(UIResources.MenuItem_Title_StopGeoTracking, () => this.ViewModel.StartGeoTrackingCommand.Execute(), Resource.Drawable.icon_geotracking_passed)
-                : new CustomMenuItem(UIResources.MenuItem_Title_StartGeoTracking, () => this.ViewModel.StartGeoTrackingCommand.Execute(), Resource.Drawable.icon_geotracking_default),
-            this.ViewModel.IsEnabledGeofencing
+                : new CustomMenuItem(UIResources.MenuItem_Title_StartGeoTracking, () => this.ViewModel.StartGeoTrackingCommand.Execute(), Resource.Drawable.icon_geotracking_default));
+
+        if (ViewModel.AllowGeofencing)
+            customMenuItems.Add(this.ViewModel.IsEnabledGeofencing
                 ? new CustomMenuItem(UIResources.MenuItem_Title_StopGeofencing, () => this.ViewModel.StartGeofencingCommand.Execute(), Resource.Drawable.icon_geofencing_passed)
-                : new CustomMenuItem(UIResources.MenuItem_Title_StartGeofencing, () => this.ViewModel.StartGeofencingCommand.Execute(), Resource.Drawable.icon_geofencing_default),
-            new CustomMenuItem(UIResources.MenuItem_Title_ExitToDashboard, () => this.ViewModel.NavigateToDashboardCommand.Execute(), Resource.Drawable.icon_exit),
-        ]);
+                : new CustomMenuItem(UIResources.MenuItem_Title_StartGeofencing, () => this.ViewModel.StartGeofencingCommand.Execute(), Resource.Drawable.icon_geofencing_default));
+
+        customMenuItems.Add(new CustomMenuItem(UIResources.MenuItem_Title_ExitToDashboard, () => this.ViewModel.NavigateToDashboardCommand.Execute(), Resource.Drawable.icon_exit));
+
+        ShowPopupMenu((ImageButton)sender, customMenuItems);
     }
 
-    private void ShowPopupMenu(View anchorView, CustomMenuItem[] menuActions)
+    private void ShowPopupMenu(View anchorView, List<CustomMenuItem> menuActions)
     {
         var context = new ContextThemeWrapper(this, Resource.Style.CustomPopupMenu);
         PopupMenu popupMenu = new PopupMenu(context, anchorView);
         
-        for (int i = 0; i < menuActions.Length; i++)
+        for (int i = 0; i < menuActions.Count; i++)
         {
             var customMenuItem = menuActions[i];
             var menuItem = popupMenu.Menu.Add(0, i, i, customMenuItem.Title);
