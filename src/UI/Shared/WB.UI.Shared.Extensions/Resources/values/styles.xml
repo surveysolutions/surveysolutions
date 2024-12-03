@@ -58,7 +58,7 @@
         <item name="android:background">@drawable/icon_button</item>
         <item name="android:layout_width">48dp</item>
         <item name="android:layout_height">48dp</item>
-        <item name="android:scaleType">fitCenter</item>
+        <item name="android:scaleType">center</item>
     </style>
 
     <style name="Area_CompassButton" parent="Area_DefaultButton">
