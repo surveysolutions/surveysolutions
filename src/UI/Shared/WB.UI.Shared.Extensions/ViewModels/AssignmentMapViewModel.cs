@@ -300,6 +300,7 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
             else
             {
                 this.backgroundServiceManager.StopListen(geofencingListener);
+                this.IsWarningVisible = false;
             }
 
             IsEnabledGeofencing = !IsEnabledGeofencing;
