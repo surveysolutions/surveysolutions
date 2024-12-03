@@ -111,20 +111,22 @@ function Set-AndroidXmlResourceValue {
     param (  
         $project,
         [string] $keyName,
-        [string] $keyValue
+        [string] $keyValue,
+        [string] $keyType = "string"
     )    
 
     $filePath = "$([System.IO.Path]::GetDirectoryName((Resolve-Path $project)))/Resources/Values/settings.xml"
-    "Updating app resource key in $filePath" | Out-Host
+    "Updating app resource key $keyName in $filePath" | Out-Host
 
     $doc = [System.Xml.Linq.XDocument]::Load($filePath);
     $resources = $doc.Element("resources");    
-    $keyNode = $resources.Elements("string") | Where-Object { $_.Attribute("name").Value -eq $keyName}
+    $keyNode = $resources.Elements($keyType) | Where-Object { $_.Attribute("name").Value -eq $keyName}
 
     if($null -eq $keyNode) {
         $nameAttr = New-Object System.Xml.Linq.XAttribute ([System.Xml.Linq.XName] "name",  $keyName)
-        $keyNode = New-OBject System.Xml.Linq.XElement ([System.Xml.Linq.XName]"string", $nameAttr)
+        $keyNode = New-OBject System.Xml.Linq.XElement ([System.Xml.Linq.XName] $keyType, $nameAttr)
         $resources.Add($keyNode)
+        "Key $keyName was created in $filePath" | Out-Host
     }
     $keyNode.Value = $keyValue
     $doc.Save($filePath)
@@ -185,7 +187,8 @@ function Get-DockerTags($name, $registry = $dockerRegistry) {
 function Invoke-Android($CapiProject, $apk, $withMaps, $appCenterKey) {
     # Set-Alias MSBuild (Resolve-MSBuild)
        
-    Set-AndroidXmlResourceValue $CapiProject "com_crashlytics_android_active" 'true'
+    Set-AndroidXmlResourceValue $CapiProject "com_crashlytics_android_active" "true" "bool"
+
     Set-AndroidXmlResourceValue $CapiProject "google_maps_api_key" $GoogleMapKey
     Set-AndroidXmlResourceValue $CapiProject "arcgisruntime_key" $ArcGisKey
     Set-AndroidXmlResourceValue $CapiProject "arcgisruntime_api_key" $ArcGisApiKey
