@@ -939,4 +939,13 @@
   <data name="MenuItem_Title_ZoomGeoTracking" xml:space="preserve">
     <value>Показать все геоданные</value>
   </data>
+  <data name="SelectMapTitle" xml:space="preserve">
+    <value>Выберите карту:</value>
+  </data>
+  <data name="SelectShapefileTitle" xml:space="preserve">
+    <value>Выберите файл границ:</value>
+  </data>
+  <data name="Geofencing_Warning_Message" xml:space="preserve">
+    <value>Вы находитесь за пределами установленной зоны</value>
+  </data>
 </root>
