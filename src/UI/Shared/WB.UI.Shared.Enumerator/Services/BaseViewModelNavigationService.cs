@@ -58,31 +58,21 @@ namespace WB.UI.Shared.Enumerator.Services
         {
             this.logger.Info($"Installing new app {pathToApk} android build version code {Build.VERSION.SdkInt}");
             Intent promptInstall;
+            
+            var topActivity = TopActivity;
+            
+            var uriForFile = FileProvider.GetUriForFile(topActivity.Activity.BaseContext,
+                topActivity.Activity.ApplicationContext.PackageName + ".fileprovider",
+                new Java.IO.File(pathToApk));
 
-            if (Build.VERSION.SdkInt < BuildVersionCodes.N)
-            {
-                promptInstall =
-                    new Intent(Intent.ActionView)
-                        .SetDataAndType(Android.Net.Uri.FromFile(new Java.IO.File(pathToApk)), "application/vnd.android.package-archive")
-                        .AddFlags(ActivityFlags.NewTask)
-                        .AddFlags(ActivityFlags.GrantReadUriPermission);
-            }
-            else
-            {
-                var topActivity = TopActivity;
-                
-                var uriForFile = FileProvider.GetUriForFile(topActivity.Activity.BaseContext,
-                    topActivity.Activity.ApplicationContext.PackageName + ".fileprovider",
-                    new Java.IO.File(pathToApk));
-
-                promptInstall = ShareCompat.IntentBuilder.From(topActivity.Activity)
-                    .SetStream(uriForFile)
-                    .Intent
-                    .SetAction(Intent.ActionView)
-                    .SetDataAndType(uriForFile, "application/vnd.android.package-archive")
-                    .AddFlags(ActivityFlags.GrantReadUriPermission)
-                    .AddFlags(ActivityFlags.NewTask);
-            }
+            promptInstall = ShareCompat.IntentBuilder.From(topActivity.Activity)
+                .SetStream(uriForFile)
+                .Intent
+                .SetAction(Intent.ActionView)
+                .SetDataAndType(uriForFile, "application/vnd.android.package-archive")
+                .AddFlags(ActivityFlags.GrantReadUriPermission)
+                .AddFlags(ActivityFlags.NewTask);
+            
 
             Application.Context.StartActivity(promptInstall);
         }
