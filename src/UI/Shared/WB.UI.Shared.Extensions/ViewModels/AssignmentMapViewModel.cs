@@ -170,11 +170,16 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
         return mapToLoad ?? mapsToSelectFrom.First();
     }
     
-    protected override async Task AfterShapefileLoadedHandler()
+    protected override Task AfterShapefileLoadedHandler()
     {
-        await CheckMarkersAgainstShapefile();
+        return Task.CompletedTask;
     }
-    
+
+    protected override Task CheckMarkersAgainstShapefile()
+    {
+        return Task.CompletedTask;
+    }
+
     protected override List<InterviewView> FilteredInterviews()
     {
         return Interviews.Where(i => i.Assignment == assignment.Id).ToList();
@@ -405,7 +410,7 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
         var mapViewSpatialReference = this.MapView.Map.SpatialReference;
         var geoTrackingFeatureCollectionTable = new FeatureCollectionTable(fields, esriGeometryType, mapViewSpatialReference)
             {
-                Renderer = CreateRenderer()
+                Renderer = CreateGeoTrackingRenderer()
             };
 
         for (int i = 0; i < GeoTrackingRecords.Count; i++)
@@ -494,10 +499,10 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
         }
     }
 
-    private Renderer CreateRenderer()
+    private Renderer CreateGeoTrackingRenderer()
     {
         var outerLineSymbol = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, Color.White, 5);
-        var innerLineSymbol = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, Color.FromArgb(140, 89, 222), 2);
+        var innerLineSymbol = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, Color.FromArgb(40, 120, 190), 2);
         //var innerLineSymbol = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, Color.Red, 2);
         var sym = new CompositeSymbol(new List<Symbol> { outerLineSymbol, innerLineSymbol });
         //GeometryType.Multipoint => new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, color, 18),

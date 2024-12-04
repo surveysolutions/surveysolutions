@@ -74,7 +74,7 @@ public class AssignmentMapActivity : MarkersMapActivity<AssignmentMapViewModel, 
         ShowPopupMenu((ImageButton)sender, [
             new CustomMenuItem(UIResources.MenuItem_Title_ZoomMap, () => this.ViewModel.ShowFullMapCommand.Execute(), Resource.Drawable.icon_zoom_map),
             new CustomMenuItem(UIResources.MenuItem_Title_ZoomCollectedData, () => this.ViewModel.ShowAllItemsCommand.Execute(), Resource.Drawable.icon_zoom_collected_data),
-            new CustomMenuItem(UIResources.MenuItem_Title_ZoomGeoTracking, () => this.ViewModel.ShowTrackingDataCommand.Execute(), Resource.Drawable.icon_zoom_everything)
+            new CustomMenuItem(UIResources.MenuItem_Title_ZoomGeoTracking, () => this.ViewModel.ShowTrackingDataCommand.Execute(), Resource.Drawable.icon_zoom_geotracking_data)
         ]);
     }
 
@@ -85,14 +85,14 @@ public class AssignmentMapActivity : MarkersMapActivity<AssignmentMapViewModel, 
         customMenuItems.Add(new CustomMenuItem(UIResources.MenuItem_Title_ChangeMap, () => this.ViewModel.SwitchMapCommand.Execute(), Resource.Drawable.icon_change_map));
             //new CustomMenuItem("Change Boundaries", () => this.ViewModel.LoadShapefile.Execute(), Resource.Drawable.icon_change_map),
             
-        if (ViewModel.AllowGeoTracking)            
+        if (ViewModel.AllowGeoTracking)
             customMenuItems.Add(this.ViewModel.IsEnabledGeoTracking
-                ? new CustomMenuItem(UIResources.MenuItem_Title_StopGeoTracking, () => this.ViewModel.StartGeoTrackingCommand.Execute(), Resource.Drawable.icon_geotracking_passed)
+                ? new CustomMenuItem(UIResources.MenuItem_Title_StopGeoTracking, () => this.ViewModel.StartGeoTrackingCommand.Execute(), Resource.Drawable.icon_geotracking_default)
                 : new CustomMenuItem(UIResources.MenuItem_Title_StartGeoTracking, () => this.ViewModel.StartGeoTrackingCommand.Execute(), Resource.Drawable.icon_geotracking_default));
 
         if (ViewModel.AllowGeofencing)
             customMenuItems.Add(this.ViewModel.IsEnabledGeofencing
-                ? new CustomMenuItem(UIResources.MenuItem_Title_StopGeofencing, () => this.ViewModel.StartGeofencingCommand.Execute(), Resource.Drawable.icon_geofencing_passed)
+                ? new CustomMenuItem(UIResources.MenuItem_Title_StopGeofencing, () => this.ViewModel.StartGeofencingCommand.Execute(), Resource.Drawable.icon_geofencing_default)
                 : new CustomMenuItem(UIResources.MenuItem_Title_StartGeofencing, () => this.ViewModel.StartGeofencingCommand.Execute(), Resource.Drawable.icon_geofencing_default));
 
         customMenuItems.Add(new CustomMenuItem(UIResources.MenuItem_Title_ExitToDashboard, () => this.ViewModel.NavigateToDashboardCommand.Execute(), Resource.Drawable.icon_exit));
@@ -118,12 +118,13 @@ public class AssignmentMapActivity : MarkersMapActivity<AssignmentMapViewModel, 
                 //menuItem.SetIcon(customMenuItem.IconResId.Value);
             }
             
+            
+            
             /*var menuItem = popupMenu.Menu.GetItem(i);
             
             var layoutInflater = LayoutInflater.From(this);
             var customView = layoutInflater.Inflate(Resource.Layout.menu_item_custom, null);
-
-
+            
             var textView = customView.FindViewById<TextView>(Resource.Id.menu_item_text);
             var imageView = customView.FindViewById<ImageView>(Resource.Id.menu_item_icon);
             

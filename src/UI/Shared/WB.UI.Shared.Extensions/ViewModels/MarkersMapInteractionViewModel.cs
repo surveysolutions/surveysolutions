@@ -339,7 +339,7 @@ public abstract class MarkersMapInteractionViewModel<TParam> : BaseMapInteractio
         ActiveMarkerIndex = null;
     }
     
-    protected async Task CheckMarkersAgainstShapefile()
+    protected virtual async Task CheckMarkersAgainstShapefile()
     {
         IsWarningVisible = false;
 
