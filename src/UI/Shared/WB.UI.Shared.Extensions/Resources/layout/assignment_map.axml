@@ -77,18 +77,19 @@
         <ImageButton
                 android:id="@+id/butEye"
                 style="@style/Area_EyeButton"
-                android:layout_above="@id/area_warning"
-                android:layout_alignStart="@id/area_warning"
+                android:layout_alignParentBottom="true"
                 local:MvxBind="Visible Not(IsPanelVisible);"
-                android:layout_marginBottom="@dimen/area_editor_buttons_margin_space" />
+                android:layout_marginLeft="@dimen/area_editor_buttons_margin_space"
+                android:layout_marginBottom="@dimen/area_editor_lower_panel_margin_bottom"
+                 />
         <!--local:MvxBind="Click ShowAllItemsCommand; Visible Not(IsPanelVisible);"-->
 
         
 
         <LinearLayout
                 android:id="@+id/area_warning"
-                android:layout_alignParentBottom="true"
-                android:layout_marginBottom="@dimen/area_editor_lower_panel_margin_bottom"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="@dimen/area_editor_buttons_margin_space"
                 android:layout_marginLeft="@dimen/area_editor_warning_margin"
                 android:layout_marginRight="@dimen/area_editor_warning_margin"
                 android:layout_width="match_parent"
@@ -107,7 +108,8 @@
                 <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/area_editor_common_margin_left"
+                        android:layout_marginLeft="@dimen/area_editor_buttons_margin_space"
+                        android:layout_marginRight="@dimen/area_editor_buttons_margin_space"
                         android:textSize="@dimen/area_editor_warning_text"
                         android:textColor="@color/map_warning_text_color"
                         android:gravity="left"

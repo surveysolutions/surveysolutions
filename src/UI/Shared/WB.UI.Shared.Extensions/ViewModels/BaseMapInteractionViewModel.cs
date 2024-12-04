@@ -317,8 +317,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
                         if (projectedArea != null &&
                             !GeometryEngine.Intersects(this.Map.Basemap.BaseLayers[0].FullExtent, projectedArea))
-                            this.UserInteractionService.ShowToast(UIResources
-                                .AreaMap_MapIsOutOfVisibleBoundaries);
+                            this.UserInteractionService.ShowToast(UIResources.AreaMap_MapIsOutOfVisibleBoundaries, isTop: true);
                     });
                 }
             }
