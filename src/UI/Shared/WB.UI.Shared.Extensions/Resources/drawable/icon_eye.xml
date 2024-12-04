@@ -1,17 +1,26 @@
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-        android:width="42dp"
-        android:height="42dp"
-        android:viewportWidth="42"
-        android:viewportHeight="42">
-    <group>
-        <clip-path
-                android:pathData="M6.95 21.92c-.35-.57-.35-1.27 0-1.84C9.9 15.23 15.25 12 21.36 12c6.1 0 11.45 3.23 14.41 8.08.35.57.35 1.27 0 1.84-2.96 4.85-8.3 8.08-14.4 8.08-6.11 0-11.46-3.23-14.42-8.08Z"/>
-        <path
-                android:fillColor="#FFFFFFFF"
-                android:pathData="M35.77 20.08l1.71-1.04-1.7 1.04Zm0 1.84l-1.7-1.04 1.7 1.04Zm-28.82 0l-1.7 1.04 1.7-1.04Zm1.7-0.8C11.27 16.84 15.98 14 21.36 14v-4c-6.83 0-12.8 3.62-16.12 9.04l3.41 2.09ZM21.36 14c5.38 0 10.09 2.84 12.7 7.13l3.42-2.1C34.17 13.63 28.18 10 21.36 10v4Zm12.7 6.88C31.46 25.16 26.75 28 21.37 28v4c6.83 0 12.8-3.63 16.12-9.05l-3.41-2.08ZM21.37 28c-5.38 0-10.09-2.85-12.7-7.13l-3.42 2.08c3.32 5.42 9.3 9.05 16.12 9.05v-4Zm12.7-6.89c-0.04-0.07-0.04-0.17 0-0.24l3.42 2.08c0.74-1.2 0.74-2.72 0-3.92l-3.41 2.09ZM5.25 19.05c-0.74 1.2-0.74 2.72 0 3.92l3.41-2.08c0.05 0.07 0.05 0.17 0 0.25l-3.4-2.1Z"/>
-    </group>
+        android:width="48dp"
+        android:height="48dp"
+        android:viewportWidth="48"
+        android:viewportHeight="48">
     <path
             android:strokeColor="#FFFFFFFF"
             android:strokeWidth="2"
-            android:pathData="M21 17A4 4 0 1 0 21 25 4 4 0 1 0 21 17z"/>
+            android:strokeLineCap="round"
+            android:pathData="M16 16h7"/>
+    <path
+            android:strokeColor="#FFFFFFFF"
+            android:strokeWidth="2"
+            android:strokeLineCap="round"
+            android:pathData="M32 32h-7"/>
+    <path
+            android:strokeColor="#FFFFFFFF"
+            android:strokeWidth="2"
+            android:strokeLineCap="round"
+            android:pathData="M16 23v-7"/>
+    <path
+            android:strokeColor="#FFFFFFFF"
+            android:strokeWidth="2"
+            android:strokeLineCap="round"
+            android:pathData="M32 25v7"/>
 </vector>

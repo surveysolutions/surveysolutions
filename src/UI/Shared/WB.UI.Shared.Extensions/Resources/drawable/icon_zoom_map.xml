@@ -1,27 +1,27 @@
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-        android:width="42dp"
-        android:height="42dp"
-        android:viewportWidth="42"
-        android:viewportHeight="42">
+        android:width="48dp"
+        android:height="48dp"
+        android:viewportWidth="48"
+        android:viewportHeight="48">
     <path
             android:strokeColor="#FFFFFFFF"
             android:strokeWidth="2"
             android:strokeLineCap="round"
             android:strokeLineJoin="round"
-            android:pathData="M6 12c0-3.31 2.69-6 6-6h18c3.31 0 6 2.69 6 6v18c0 3.31-2.69 6-6 6h-18c-3.31 0-6-2.69-6-6z"/>
+            android:pathData="M9 15c0-3.31 2.69-6 6-6h18c3.31 0 6 2.69 6 6v18c0 3.31-2.69 6-6 6h-18c-3.31 0-6-2.69-6-6z"/>
     <path
             android:strokeColor="#FFFFFFFF"
             android:strokeWidth="2"
             android:strokeLineJoin="round"
-            android:pathData="M12 16.12L18 14v9.88L12 26v-9.88Z"/>
+            android:pathData="M15 19.12L21 17v9.88L15 29v-9.88Z"/>
     <path
             android:strokeColor="#FFFFFFFF"
             android:strokeWidth="2"
             android:strokeLineJoin="round"
-            android:pathData="M24 18.12L30 16v9.88L24 28v-9.88Z"/>
+            android:pathData="M27 21.12L33 19v9.88L27 31v-9.88Z"/>
     <path
             android:strokeColor="#FFFFFFFF"
             android:strokeWidth="2"
             android:strokeLineJoin="round"
-            android:pathData="M18 14l6 4.2V28l-6-4.2V14Z"/>
+            android:pathData="M21 17l6 4.2V31l-6-4.2V17Z"/>
 </vector>
