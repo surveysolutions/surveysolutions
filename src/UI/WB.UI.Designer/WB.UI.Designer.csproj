@@ -25,7 +25,6 @@
   <ItemGroup>
     <Content Update="**\*.json" CopyToPublishDirectory="Never" />
     <Content Update="wwwroot\**\*" CopyToPublishDirectory="PreserveNewest" />
-    <Content Include="wwwroot\assets\.vite\manifest.json" CopyToPublishDirectory="PreserveNewest" />
   </ItemGroup>
 
   <ItemGroup>
