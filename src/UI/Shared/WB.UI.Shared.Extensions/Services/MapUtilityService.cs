@@ -207,34 +207,8 @@ namespace WB.UI.Shared.Extensions.Services
                 case GeometryType.Polyline:
                 default:
                 {
-                    /*var solidLineLayer = new SolidStrokeSymbolLayer
-                   {
-                       Width = 2,
-                       Color = lineColor,
-                       CapStyle = StrokeSymbolLayerCapStyle.Round,
-                   };
-
-                   var transparentLineLayer = new SolidStrokeSymbolLayer
-                   {
-                       Width = 2,
-                       Color = Color.Transparent,
-                       CapStyle = StrokeSymbolLayerCapStyle.Round,
-                   };
-
-                   var dashedLineLayer = new SolidStrokeSymbolLayer
-                   {
-                       Width = 2,
-                       Color = lineColor,
-                       GeometricEffects = { new DashGeometricEffect(2, 2) },
-                       CapStyle = StrokeSymbolLayerCapStyle.Round,
-                   };
-
-                   var symbolForRenderer = new MultilayerPolylineSymbol([dashedLineLayer, transparentLineLayer, dashedLineLayer]);
-                   */
-                    
-                    //var dashedBorderSymbol = new SimpleLineSymbol(SimpleLineSymbolStyle.Dash, color, 6);
-                    var dashedBorderSymbol = new SimpleLineSymbol(SimpleLineSymbolStyle.ShortDot, color, 3);
-                    var solidInnerSymbol = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, Color.White, 3);
+                    var dashedBorderSymbol = new SimpleLineSymbol(SimpleLineSymbolStyle.Dot, Color.White, 3);
+                    var solidInnerSymbol = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, color, 3);
                     var compositeSymbol = new CompositeSymbol
                     {
                         Symbols = { solidInnerSymbol, dashedBorderSymbol }
@@ -242,8 +216,6 @@ namespace WB.UI.Shared.Extensions.Services
 
                     return compositeSymbol;
                 }
-                    //SimpleLineSymbol lineSymbol = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, color, 2.0);
-                    //return new SimpleFillSymbol(SimpleFillSymbolStyle.Null, Color.White, lineSymbol);
             }
         }
     }
