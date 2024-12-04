@@ -84,7 +84,17 @@
                  />
         <!--local:MvxBind="Click ShowAllItemsCommand; Visible Not(IsPanelVisible);"-->
 
-        
+        <Button
+                android:id="@+id/butCreateInterview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:drawableLeft="@drawable/icon_create_interview"
+                local:MvxBind="Text Localization('AssignmentMap_Title_CreateInterview'); Click CreateInterviewCommand; Visible Not(IsPanelVisible);"
+                android:layout_marginRight="@dimen/area_editor_buttons_margin_space"
+                android:layout_marginBottom="@dimen/area_editor_lower_panel_margin_bottom"
+        />
 
         <LinearLayout
                 android:id="@+id/area_warning"

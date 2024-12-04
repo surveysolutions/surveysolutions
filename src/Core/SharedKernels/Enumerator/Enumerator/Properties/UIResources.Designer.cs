@@ -1287,6 +1287,12 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
             }
         }
         
+        public static string AssignmentMap_Title_CreateInterview {
+            get {
+                return ResourceManager.GetString("AssignmentMap_Title_CreateInterview", resourceCulture);
+            }
+        }
+        
         public static string MenuItem_Title_ZoomMap {
             get {
                 return ResourceManager.GetString("MenuItem_Title_ZoomMap", resourceCulture);

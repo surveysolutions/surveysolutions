@@ -740,6 +740,9 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="MenuItem_Title_CreateInterview" xml:space="preserve">
     <value>Create New Interview</value>
   </data>
+  <data name="AssignmentMap_Title_CreateInterview" xml:space="preserve">
+    <value>Start</value>
+  </data>
   <data name="MenuItem_Title_ZoomMap" xml:space="preserve">
     <value>Zoom all map</value>
   </data>

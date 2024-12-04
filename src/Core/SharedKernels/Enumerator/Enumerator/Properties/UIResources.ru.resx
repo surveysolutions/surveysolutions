@@ -927,6 +927,9 @@
   <data name="MenuItem_Title_CreateInterview" xml:space="preserve">
     <value>Создать новое интервью</value>
   </data>
+  <data name="AssignmentMap_Title_CreateInterview" xml:space="preserve">
+    <value>Старт</value>
+  </data>
   <data name="MenuItem_Title_ZoomMap" xml:space="preserve">
     <value>Показать всю карту</value>
   </data>
