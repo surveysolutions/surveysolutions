@@ -2,6 +2,7 @@
 using System.Globalization;
 using Android.Content;
 using Android.Graphics;
+using AndroidX.AppCompat.Content.Res;
 using AndroidX.AppCompat.Widget;
 using MvvmCross;
 using MvvmCross.Converters;
@@ -31,7 +32,7 @@ namespace WB.UI.Shared.Enumerator.Converters
         {
             if (fallbackBitmap == null)
             {
-                var drawable = AppCompatDrawableManager.Get().GetDrawable(context, drawableId);
+                var drawable = AppCompatResources.GetDrawable(context, drawableId);
                 Bitmap bitmap = Bitmap.CreateBitmap(drawable.IntrinsicWidth,
                     drawable.IntrinsicHeight, Bitmap.Config.Argb8888);
                 Canvas canvas = new Canvas(bitmap);

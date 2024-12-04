@@ -103,12 +103,6 @@ namespace WB.UI.Supervisor
         protected override void InitializeApp(IMvxApplication app)
         {
             base.InitializeApp(app);
-
-            string appcenterKey = ApplicationContext.Resources.GetString(Resource.String.appcenter_key);
-            if (!string.IsNullOrEmpty(appcenterKey))
-            {
-                CrashReporting.Init(appcenterKey);
-            }
             
             string arcgisruntimeKey = ApplicationContext.Resources.GetString(Resource.String.arcgisruntime_key);
             if (!string.IsNullOrEmpty(arcgisruntimeKey))

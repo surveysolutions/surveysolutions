@@ -43,7 +43,7 @@ namespace WB.UI.Supervisor.Activities
             base.OnCreate(bundle);
             var toolbar = this.FindViewById<Toolbar>(Resource.Id.toolbar);
             this.SetSupportActionBar(toolbar);
-            SupportActionBar.SetDefaultDisplayHomeAsUpEnabled(false);
+            SupportActionBar.SetDisplayHomeAsUpEnabled(false);
             
             this.DrawerLayout = this.FindViewById<DrawerLayout>(Resource.Id.drawer_layout);
             this.drawerToggle = new ActionBarDrawerToggle(this, DrawerLayout, toolbar, 0, 0);
