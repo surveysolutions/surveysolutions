@@ -60,9 +60,9 @@ namespace WB.UI.Shared.Enumerator.Services
             return Path.Combine(GetPathToExternalDirectory(), "Supervisor", subFolderName);
         }
 
-        public async Task<string> GetRootDirectoryAsync()
+        public Task<string> GetRootDirectoryAsync()
         {
-            return await Task.FromResult(GetPathToInternalDirectory());
+            return Task.FromResult(GetPathToInternalDirectory());
         }
     }
 }
