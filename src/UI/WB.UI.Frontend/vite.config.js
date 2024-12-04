@@ -5,7 +5,6 @@ import envCompatible from 'vite-plugin-env-compatible';
 import mpaPlugin from 'vite-plugin-mpa-plus'
 //import { createHtmlPlugin } from 'vite-plugin-html';
 import { viteCommonjs } from '@originjs/vite-plugin-commonjs';
-//import cleanPlugin from 'vite-plugin-clean';
 import LocalizationPlugin from './tools/vite-plugin-localization'
 import inject from '@rollup/plugin-inject';
 //import vitePluginRequire from "vite-plugin-require";
