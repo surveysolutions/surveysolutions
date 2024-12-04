@@ -25,7 +25,6 @@
   <ItemGroup>
     <Content Update="**\*.json" CopyToPublishDirectory="Never" />
     <Content Update="wwwroot\**\*" CopyToPublishDirectory="PreserveNewest" />
-    <Content Include="wwwroot\assets\.vite\manifest.json" CopyToPublishDirectory="PreserveNewest" />
   </ItemGroup>
 
   <ItemGroup>
@@ -57,7 +56,7 @@
     <PackageReference Include="VueCliMiddleware" Version="6.0.0" />
   </ItemGroup>
   <ItemGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <PackageReference Include="Yarp.ReverseProxy" Version="2.1.0" />
+    <PackageReference Include="Yarp.ReverseProxy" Version="2.2.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\WB.Core.BoundedContexts.Designer.csproj" />
