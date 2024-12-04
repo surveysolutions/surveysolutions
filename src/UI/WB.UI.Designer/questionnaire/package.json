@@ -48,12 +48,12 @@
         "xss": "^1.0.13"
     },
     "devDependencies": {
-        "@vitejs/plugin-vue": "5.1.4",
+        "@vitejs/plugin-vue": "^5.2.1",
         "babel-eslint": "^10.1.0",
         "css-select": "4.3.0",
         "css-what": "6.1.0",
         "cssnano-preset-default": "5.2.13",
-        "eslint": "^8.32.0",
+        "eslint": "8.57.1",
         "eslint-plugin-import": "2.27.5",
         "eslint-plugin-node": "11.1.0",
         "eslint-plugin-prettier": "3.4.1",
@@ -73,7 +73,7 @@
         "ssri": "^8.0.1",
         "svgo": "2.8.0",
         "trim-newlines": "4.0.2",
-        "vite": "5.4.7",
+        "vite": "^6.0.2",
         "vite-plugin-vuetify": "^2.0.2",
         "xmldoc": "1.2.0"
     },
