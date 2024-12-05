@@ -29,7 +29,9 @@ public class QController : QControllerBase
         IQuestionnaireViewFactory questionnaireViewFactory)
         : base(dbContext, questionnaireViewFactory)
     {
+#if DEBUG       
         tagHelperComponentManager.Components.Add(new ViteTagHelperComponent(webHost, options, memoryCache));
+#endif        
     }
     
     [QuestionnairePermissions]

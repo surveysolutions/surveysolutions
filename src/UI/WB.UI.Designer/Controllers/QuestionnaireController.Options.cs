@@ -111,7 +111,9 @@ namespace WB.UI.Designer.Controllers
         [HttpGet]
         public IActionResult EditOptions()
         {
+#if DEBUG            
             tagHelperComponentManager.Components.Add(new ViteTagHelperComponent(webHost, options, memoryCache));
+#endif            
             return View("Vue");
         }
 
@@ -190,7 +192,9 @@ namespace WB.UI.Designer.Controllers
         [HttpGet]
         public IActionResult EditCategories()
         {
+#if DEBUG            
             tagHelperComponentManager.Components.Add(new ViteTagHelperComponent(webHost, options, memoryCache));
+#endif            
             return View("Vue");
         }
         
