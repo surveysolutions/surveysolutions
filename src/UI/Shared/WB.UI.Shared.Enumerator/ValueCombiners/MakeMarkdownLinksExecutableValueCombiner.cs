@@ -29,9 +29,7 @@ namespace WB.UI.Shared.Enumerator.ValueCombiners
             if (interviewEntity == null) return new SpannableString(htmlText);
 
 #pragma warning disable CA1416 // Validate platform compatibility
-            ICharSequence sequence = Build.VERSION.SdkInt >= BuildVersionCodes.N
-                ? Html.FromHtml(htmlText, FromHtmlOptions.ModeLegacy)
-                : Html.FromHtml(htmlText);
+            ICharSequence sequence = Html.FromHtml(htmlText, FromHtmlOptions.ModeLegacy);
 #pragma warning restore CA1416 // Validate platform compatibility
 
             if (interviewEntity.InterviewId == null) 

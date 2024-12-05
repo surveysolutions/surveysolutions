@@ -26,11 +26,11 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="13.0.1" />
     <PackageReference Include="Dapper" Version="2.1.35" />
-    <PackageReference Include="HtmlAgilityPack" Version="1.11.61" />
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.71" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="StackExchange.Exceptional.AspNetCore" Version="2.2.32" />
+    <PackageReference Include="StackExchange.Exceptional.AspNetCore" Version="3.0.1" />
   </ItemGroup>
 
   <ItemGroup>
