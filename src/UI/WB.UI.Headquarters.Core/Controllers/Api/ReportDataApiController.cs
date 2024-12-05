@@ -94,7 +94,7 @@ namespace WB.UI.Headquarters.Controllers.Api
 
                 var report = this.teamsAndStatusesReport.GetReport(input);
 
-                return this.CreateReportResponse(exportType, report, Reports.Report_Number_of_Completed_Interviews);
+                return this.CreateReportResponse(exportType, report, Reports.Report_Team_Members_and_Statuses);
             }
             
             var view = this.teamsAndStatusesReport.GetBySupervisorAndDependentInterviewers(input);
