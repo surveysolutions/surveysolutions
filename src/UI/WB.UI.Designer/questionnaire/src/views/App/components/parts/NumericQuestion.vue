@@ -11,9 +11,9 @@
             <div class="form-group checkbox-in-column" v-show="!activeQuestion.isInteger"
                 :class="{ 'has-error': !isValidCountOfDecimalPlaces }">
                 <label for="edit-question-count-decimal">{{ $t('QuestionnaireEditor.QuestionDecimalPlaces') }}</label>
-                <input id="edit-question-count-decimal" type="text" inputmode="numeric" maxlength="15"
-                    name="countOfDecimalPlaces" v-number v-model="activeQuestion.countOfDecimalPlaces"
-                    class="form-control small-numeric-input">
+                <input id="edit-question-count-decimal" type="number" inputmode="numeric" maxlength="9" min="1"
+                    max="2147483647" v-number="/^(\d*)$/" name="countOfDecimalPlaces"
+                    v-model.number="activeQuestion.countOfDecimalPlaces" class="form-control small-numeric-input">
                 <p class="help-block ng-cloak" v-show="!isValidCountOfDecimalPlaces">
                     {{ $t('QuestionnaireEditor.QuestionOnlyInts') }}
                 </p>
@@ -24,7 +24,8 @@
     <div class="row">
         <div class="col-md-6 inline-inputs">
             <div class="checkbox checkbox-in-column">
-                <input id="cb-use-formatting" type="checkbox" class="wb-checkbox" v-model="activeQuestion.useFormatting" />
+                <input id="cb-use-formatting" type="checkbox" class="wb-checkbox"
+                    v-model="activeQuestion.useFormatting" />
                 <label for="cb-use-formatting"><span></span>{{ $t('QuestionnaireEditor.QuestionUseSeparator') }}</label>
                 <help link="useFormatting"></help>
             </div>
