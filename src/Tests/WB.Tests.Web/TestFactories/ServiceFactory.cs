@@ -137,7 +137,9 @@ namespace WB.Tests.Web.TestFactories
                 Mock.Of<ILookupNormalizer>(),
                 new LocalizedIdentityErrorDescriber(),
                 Mock.Of<IServiceProvider>(),
-                Mock.Of<ILogger<HqUserManager>>());
+                Mock.Of<ILogger<HqUserManager>>(),
+                Mock.Of<ISystemLog>(),
+                Mock.Of<IAuthorizedUser>());
         }
 
         public IWorkspacesCache WorkspacesCache(ICollection<string> workspaces = null, ICollection<string> disabledWorkspaces = null)
