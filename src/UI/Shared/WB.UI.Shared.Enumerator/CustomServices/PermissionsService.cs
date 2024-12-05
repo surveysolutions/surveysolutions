@@ -31,7 +31,6 @@ namespace WB.UI.Shared.Enumerator.CustomServices
 
         public async Task AssureHasPermissionOrThrow<T>() where T : Permissions.BasePermission, new()
         {
-            if (Build.VERSION.SdkInt < BuildVersionCodes.M) return;
             if (await Permissions.CheckStatusAsync<T>().ConfigureAwait(false) == PermissionStatus.Granted) return;
 
             if (asyncDispatcher.IsOnMainThread)
@@ -68,7 +67,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         {
             // Check if application has permission to do package installations
 #pragma warning disable CA1416 // Validate platform compatibility
-            if (Build.VERSION.SdkInt >= BuildVersionCodes.O && !Application.Context.PackageManager.CanRequestPackageInstalls())
+            if (!Application.Context.PackageManager.CanRequestPackageInstalls())
             {
                 // if not - open settings menu for current application
                 var addFlags = ShareCompat.IntentBuilder.From(this.currentTopActivity.Activity)
@@ -117,7 +116,6 @@ namespace WB.UI.Shared.Enumerator.CustomServices
 
         public async Task<PermissionStatus> CheckPermissionStatusAsync<T>() where T : Permissions.BasePermission, new()
         {
-            if (Build.VERSION.SdkInt < BuildVersionCodes.M) return PermissionStatus.Unknown;
             return await Permissions.CheckStatusAsync<T>().ConfigureAwait(false);
         }
 

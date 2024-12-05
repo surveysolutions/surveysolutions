@@ -1,16 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:installLocation="preferExternal" package="org.worldbank.solutions.supervisor" android:versionCode="31025" android:versionName="23.06 (build 31025) debug">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:installLocation="preferExternal" 
+          package="org.worldbank.solutions.supervisor" android:versionCode="31025" android:versionName="23.06 (build 31025) debug">
 	<application android:label="Supervisor" 
                  android:icon="@drawable/icon" 
                  android:theme="@android:style/Theme.DeviceDefault.Light" 
                  android:largeHeap="true" 
                  android:allowBackup="false" 
                  android:requestLegacyExternalStorage="true">
-		<provider android:name="androidx.core.content.FileProvider" android:authorities="org.worldbank.solutions.supervisor.fileprovider" android:exported="false" android:grantUriPermissions="true">
-			<meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/file_paths"></meta-data>
+		<provider android:name="androidx.core.content.FileProvider" 
+                  android:authorities="org.worldbank.solutions.supervisor.fileprovider" 
+                  android:exported="false" android:grantUriPermissions="true">
+			<meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/file_paths"/>
 		</provider>
-		<meta-data android:name="net.hockeyapp.android.appIdentifier" android:value="80bf6bc07188459192130d4895a5e041" />
+		
 		<meta-data android:name="com.google.android.geo.API_KEY" android:value="@string/google_maps_api_key" />
+        <meta-data android:name="firebase_crashlytics_collection_enabled" android:value="@bool/com_crashlytics_android_active" />
 	</application>
 	
 	<uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30" />
@@ -40,7 +44,7 @@
 	<uses-feature android:name="android.hardware.bluetooth" android:required="false"/>
 	<uses-feature android:name="android.hardware.bluetooth_le" android:required="false"/>
 	
-	<uses-sdk android:minSdkVersion="23" android:targetSdkVersion="34" />
+	<uses-sdk android:minSdkVersion="26" android:targetSdkVersion="34" />
 
 	<queries>
 		<intent>

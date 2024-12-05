@@ -3,7 +3,7 @@
           android:installLocation="preferExternal" 
           package="org.worldbank.solutions.Vtester" 
           android:versionCode="101" 
-          android:versionName="1.0.1">
+          android:versionName="1.0.1114">
 	<application android:label="Tester" 
                  android:icon="@drawable/icon" 
                  android:largeHeap="true" 
@@ -15,12 +15,10 @@
                   android:exported="false" 
                   android:grantUriPermissions="true">
 			<meta-data android:name="android.support.FILE_PROVIDER_PATHS"
-                       android:resource="@xml/file_paths"></meta-data>
-		</provider>
-		<meta-data android:name="net.hockeyapp.android.appIdentifier" 
-                   android:value="e77a488dd76b43009a378716f5b2faa7" />
-		<meta-data android:name="com.google.android.geo.API_KEY" 
-                   android:value="@string/google_maps_api_key" />
+                       android:resource="@xml/file_paths"/>
+		</provider>		
+		<meta-data android:name="com.google.android.geo.API_KEY" android:value="@string/google_maps_api_key" />
+        <meta-data android:name="firebase_crashlytics_collection_enabled" android:value="@bool/com_crashlytics_android_active" />
 	</application>
 	
 	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -44,7 +42,7 @@
 	<uses-feature android:name="android.hardware.location.network" android:required="false" />
 	<uses-feature android:name="android.hardware.screen.portrait" android:required="false" />
 
-	<uses-sdk android:minSdkVersion="23" android:targetSdkVersion="34" />
+	<uses-sdk android:minSdkVersion="26" android:targetSdkVersion="34" />
 
 	<queries>
 		<intent>

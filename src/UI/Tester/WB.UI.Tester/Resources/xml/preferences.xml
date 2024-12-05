@@ -16,6 +16,7 @@
   <PreferenceCategory android:key="dev_settings_category">
     <EditTextPreference android:key="DesignerEndpointGen1" android:defaultValue="@string/DesignerEndpoint"/>
     <CheckBoxPreference android:key="AcceptUnsignedSslCertificate" android:defaultValue="@bool/AcceptUnsignedSslCertificate" />
+    <SwitchPreference android:key="TestApplicationCrash" android:defaultValue="false" />  
   </PreferenceCategory>
   
 </androidx.preference.PreferenceScreen>

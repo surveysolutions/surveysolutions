@@ -15,17 +15,17 @@
 
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Autofac" Version="8.0.0" />
+    <PackageReference Include="Autofac" Version="8.1.1" />
     <PackageReference Include="Castle.Core" Version="5.1.1" />
     <PackageReference Include="Iesi.Collections" Version="4.1.1" />
     <PackageReference Include="NHibernate" Version="5.5.2" />
     <PackageReference Include="Refit" Version="8.0.0" />
     <PackageReference Include="reCAPTCHA.AspNetCore" Version="2.2.5" />
-    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.5" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.6" />
     <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="2.1.4" />
-    <PackageReference Include="StackExchange.Exceptional.AspNetCore" Version="2.2.32" />
-    <PackageReference Include="StackExchange.Exceptional.PostgreSql" Version="2.2.32" />
-    <PackageReference Include="Serilog.AspNetCore" Version="8.0.1" />
+    <PackageReference Include="StackExchange.Exceptional.AspNetCore" Version="3.0.1" />
+    <PackageReference Include="StackExchange.Exceptional.PostgreSql" Version="3.0.1" />
+    <PackageReference Include="Serilog.AspNetCore" Version="8.0.3" />
     <PackageReference Include="System.Security.Cryptography.Xml" Version="9.0.0" />
     <PackageReference Include="System.Text.Json" Version="8.0.5" />
   </ItemGroup>

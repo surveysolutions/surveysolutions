@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string name="vertical_ellipsis">&#8942;</string>
+  <string name="com.crashlytics.android.build_id">1.0.888</string>
 </resources>

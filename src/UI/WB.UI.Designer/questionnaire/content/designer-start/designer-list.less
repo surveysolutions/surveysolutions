@@ -7,7 +7,8 @@
 @header-height: 80px;
 @nav-tab-height: 36px;
 
-html, body {
+html,
+body {
     height: 100%;
     min-width: 1280px;
     position: relative;
@@ -35,7 +36,8 @@ html, body {
         display: table-cell;
     }
 
-    a:hover, a:focus {
+    a:hover,
+    a:focus {
         text-decoration: none;
     }
 
@@ -54,6 +56,7 @@ html, body {
         line-height: 25px;
     }
 }
+
 .container-wb-list {
     position: absolute;
     left: 0;
@@ -88,14 +91,14 @@ html, body {
                 border: none;
                 border-left: 13px solid #bcc3c8;
 
-                & > li {
+                &>li {
                     margin-top: @header-height - @nav-tab-height;
 
                     &:first-child {
                         margin-left: 280px;
                     }
 
-                    & > a {
+                    &>a {
                         padding-top: 0;
                         padding-bottom: 0;
                         line-height: @nav-tab-height;
@@ -131,7 +134,7 @@ html, body {
             border-top-width: 0;
             border-top-style: none;
 
-            & > .scroller-container {
+            &>.scroller-container {
                 height: 100%;
                 position: relative;
                 overflow: hidden;
@@ -148,7 +151,8 @@ html, body {
                         }
                     }
 
-                    &.active, &.disabled {
+                    &.active,
+                    &.disabled {
                         a {
                             &:hover {
                                 text-decoration: none;
@@ -176,7 +180,7 @@ html, body {
 }
 
 
-div#table-message {    
+div#table-message {
     background: #edeff0;
     position: relative;
     border-bottom: 1px solid #dddddd;
@@ -196,7 +200,7 @@ div#table-message {
         position: absolute;
         top: 10px;
         right: 10px;
-        background: url("../questionnaire/content/i/cross.png");
+        background: url("../i/cross.png");
         height: 40px;
         width: 40px;
 
@@ -236,7 +240,9 @@ table.table-header {
 
             &.ordered {
                 padding-right: 8px;
-                a, span.glyphicon {
+
+                a,
+                span.glyphicon {
                     color: @btn-default-color;
                 }
             }
@@ -306,7 +312,9 @@ table.table-content {
 table#questionnaire-table-header,
 table#questionnaire-table-content {
     tr {
-        td, th {
+
+        td,
+        th {
             &:nth-child(1) {
                 width: 45%;
             }
@@ -331,9 +339,10 @@ table#questionnaire-table-content {
 table#user-table-header,
 table#user-table-content {
     tr {
-        td, th {
-            &:first-child {
-            }
+
+        td,
+        th {
+            &:first-child {}
 
             &:nth-child(2) {
                 width: 20%;
@@ -421,7 +430,9 @@ table#questionnaire-table-content {
 table.table-header,
 table.table-content {
     tr {
-        td, th {
+
+        td,
+        th {
             &:first-child {
                 padding-left: 20px;
             }
@@ -458,7 +469,7 @@ table.table-content {
         border: none;
         padding: 0;
         display: inline-block;
-        background: transparent url(../questionnaire/content/i/cross.png) -5px -5px;
+        background: transparent url(../i/cross.png) -5px -5px;
 
         &:hover {
             background-position: -5px -45px;
@@ -470,14 +481,14 @@ table.table-content {
     margin-left: 20px;
 }
 
-.nav.nav-tabs > li > a {
+.nav.nav-tabs>li>a {
     padding-top: 8px;
     padding-bottom: 8px;
 }
 
 #edit-form {
-  padding: 3px 3px 0;
-  border-top: 1px solid #ddd;
+    padding: 3px 15px 0;
+    border-top: 1px solid #ddd;
     margin: 0;
     border-left: 13px solid #dbdfe2;
     position: absolute;
@@ -485,7 +496,7 @@ table.table-content {
     left: 0;
     right: 0;
     bottom: 0;
-    overflow: auto;    
+    overflow: auto;
 
     .header.alert.alert-success {
         .robotoL24();
@@ -514,11 +525,13 @@ table.table-content {
         font-style: italic;
     }
 
-    :-moz-placeholder { /* Firefox 18- */
+    :-moz-placeholder {
+        /* Firefox 18- */
         font-style: italic;
     }
 
-    ::-moz-placeholder { /* Firefox 19+ */
+    ::-moz-placeholder {
+        /* Firefox 19+ */
         font-style: italic;
     }
 
@@ -541,11 +554,13 @@ table.table-content {
             color: @brand-danger;
         }
 
-        :-moz-placeholder { /* Firefox 18- */
+        :-moz-placeholder {
+            /* Firefox 18- */
             color: @brand-danger;
         }
 
-        ::-moz-placeholder { /* Firefox 19+ */
+        ::-moz-placeholder {
+            /* Firefox 19+ */
             color: @brand-danger;
         }
 
@@ -559,10 +574,13 @@ table.table-content {
     }
 
     .form-actions {
-        button, a {
+
+        button,
+        a {
             letter-spacing: 1px;
 
-            &:nth-child(2), &:nth-child(3) {
+            &:nth-child(2),
+            &:nth-child(3) {
                 padding-left: 23px;
                 padding-right: 0;
             }
@@ -576,7 +594,7 @@ table.table-content {
     position: relative;
     float: left;
     text-align: left;
-    font: 14px/16px Arial,Helvetica,sans-serif;
+    font: 14px/16px Arial, Helvetica, sans-serif;
     border: 1px solid #dbdfe2;
     text-transform: none;
     color: #555;
@@ -612,7 +630,7 @@ table.table-content {
     width: 300px;
 }
 
-.start-pdf-generation .dropdown .dropdown-menu > li > a {
+.start-pdf-generation .dropdown .dropdown-menu>li>a {
     display: block;
     padding: 7px 20px;
     color: #6b6b6b;
@@ -626,15 +644,15 @@ table.table-content {
     transition: all 0.3s;
 }
 
-.start-pdf-generation .dropdown .dropdown-menu > li > a:hover,
-.start-pdf-generation .dropdown .dropdown-menu > li > a:focus {
+.start-pdf-generation .dropdown .dropdown-menu>li>a:hover,
+.start-pdf-generation .dropdown .dropdown-menu>li>a:focus {
     color: #000;
 }
 
 .start-pdf-generation .dropdown .dropdown-toggle:hover,
 .start-pdf-generation .dropdown .dropdown-toggle:focus,
 .start-pdf-generation .dropdown .dropdown-toggle:active {
-    box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102,175,233,.6);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6);
 }
 
 .start-pdf-generation .btn-default {
@@ -687,7 +705,7 @@ table.table-content {
 .breadcrumb.public-questionnaires-breadcrumb:before,
 .folder-tree .tree-icon,
 .tree-icon {
-    background: url("../Content/images/DR-2017-folders-icons-G2-color.png") no-repeat;
+    background: url("../../../Content/images/DR-2017-folders-icons-G2-color.png") no-repeat;
     background-size: 32px 96px;
     vertical-align: top;
     background-position: 0 -66px;
@@ -794,7 +812,7 @@ table.table-header.page-with-breadcrumbs {
     left: 30px;
 }
 
-.folder-tree .fancytree-checkbox ~ .fancytree-title {
+.folder-tree .fancytree-checkbox~.fancytree-title {
     width: calc(100% - 65px);
 }
 
@@ -803,7 +821,7 @@ table.table-header.page-with-breadcrumbs {
     cursor: pointer;
     width: 24px;
     height: 18px;
-    background: transparent url("../Content/images/chekboxes2k.png") no-repeat;
+    background: transparent url("../../../Content/images/chekboxes2k.png") no-repeat;
     background-size: 68px 350px;
     background-position: 0 0px;
 }
@@ -832,6 +850,7 @@ table.table-header.page-with-breadcrumbs {
     width: 100%;
     height: 100%;
 }
+
 #designer-list #edit-form .form-group .field-validation-error {
     color: @error-text;
 }
