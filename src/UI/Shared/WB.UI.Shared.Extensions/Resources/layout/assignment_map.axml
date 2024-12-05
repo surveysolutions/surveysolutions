@@ -135,7 +135,8 @@
                 android:layout_height="wrap_content"
                 android:elevation="1dp"
                 android:translationZ="1dp"
-                android:layout_above="@+id/area_warning"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="@dimen/area_editor_lower_panel_margin_bottom"
                 android:orientation="horizontal"
                 local:MvxBind="Visible And(IsNullableHavingValue(ActiveMarkerIndex), Not(IsPanelVisible)); CurrentItem ActiveMarkerIndex;"
         />
