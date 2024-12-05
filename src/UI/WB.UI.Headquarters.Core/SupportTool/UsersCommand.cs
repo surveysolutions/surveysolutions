@@ -152,7 +152,7 @@ namespace WB.UI.Headquarters.SupportTool
                 {
                     var loggerProvider = locator.GetInstance<ILoggerProvider>();
                     var logger = loggerProvider.CreateLogger(nameof(UsersCreateCommand));
-                    var userManager = locator.GetInstance<UserManager<HqUser>>();
+                    var userManager = locator.GetInstance<HqUserManager>();
                     var user = await userManager.FindByNameAsync(username);
                     if (user == null)
                     {
@@ -205,7 +205,7 @@ namespace WB.UI.Headquarters.SupportTool
                 {
                     var loggerProvider = locator.GetInstance<ILoggerProvider>();
                     var logger = loggerProvider.CreateLogger(nameof(Disable2faCommand));
-                    var userManager = locator.GetInstance<UserManager<HqUser>>();
+                    var userManager = locator.GetInstance<HqUserManager>();
                     var user = await userManager.FindByNameAsync(username);
                     if (user == null)
                     {
@@ -253,7 +253,7 @@ namespace WB.UI.Headquarters.SupportTool
                 {
                     var loggerProvider = locator.GetInstance<ILoggerProvider>();
                     var logger = loggerProvider.CreateLogger(nameof(ReleaseAutoLockCommand));
-                    var userManager = locator.GetInstance<UserManager<HqUser>>();
+                    var userManager = locator.GetInstance<HqUserManager>();
                     var user = await userManager.FindByNameAsync(username);
                     if (user == null)
                     {

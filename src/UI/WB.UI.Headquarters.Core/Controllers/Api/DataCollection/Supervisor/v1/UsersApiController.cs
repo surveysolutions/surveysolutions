@@ -24,14 +24,14 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
         protected readonly IUserRepository userViewFactory;
         private readonly SignInManager<HqUser> signInManager;
         private readonly IApiTokenProvider apiAuthTokenProvider;
-        private readonly UserManager<HqUser> userManager;
+        private readonly HqUserManager userManager;
 
         public UserControllerBase(
             IAuthorizedUser authorizedUser,
             IUserRepository userViewFactory,
             SignInManager<HqUser> signInManager, 
             IApiTokenProvider apiAuthTokenProvider,
-            UserManager<HqUser> userManager)
+            HqUserManager userManager)
             :base(userManager, signInManager, apiAuthTokenProvider)
         {
             this.authorizedUser = authorizedUser;
