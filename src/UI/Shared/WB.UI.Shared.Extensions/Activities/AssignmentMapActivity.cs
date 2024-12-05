@@ -32,7 +32,7 @@ public class AssignmentMapActivity : MarkersMapActivity<AssignmentMapViewModel, 
     }
     
     private MvxWeakEventSubscription<ImageButton> clickedMenuButton;
-    private MvxWeakEventSubscription<ImageButton> clickedEyeButton;
+    private MvxWeakEventSubscription<ImageButton> clickedZoomMenuButton;
 
     protected override void OnCreate(Bundle savedInstanceState)
     {
@@ -43,8 +43,8 @@ public class AssignmentMapActivity : MarkersMapActivity<AssignmentMapViewModel, 
         var buttonMenu = this.FindViewById<ImageButton>(Resource.Id.butMenu);
         clickedMenuButton = buttonMenu.WeakSubscribe(nameof(buttonMenu.Click), this.ClickedMenuButton);
         
-        var buttonEye = this.FindViewById<ImageButton>(Resource.Id.butEye);
-        clickedEyeButton = buttonEye.WeakSubscribe(nameof(buttonEye.Click), this.ClickedEyeButton);
+        var buttonEye = this.FindViewById<ImageButton>(Resource.Id.butZoomMenu);
+        clickedZoomMenuButton = buttonEye.WeakSubscribe(nameof(buttonEye.Click), this.ClickedEyeButton);
     }
     
     public class CustomMenuItem
@@ -174,8 +174,8 @@ public class AssignmentMapActivity : MarkersMapActivity<AssignmentMapViewModel, 
             clickedMenuButton?.Dispose();
             clickedMenuButton = null;
             
-            clickedEyeButton?.Dispose();
-            clickedEyeButton = null;
+            clickedZoomMenuButton?.Dispose();
+            clickedZoomMenuButton = null;
         }
         
         base.Dispose(disposing);

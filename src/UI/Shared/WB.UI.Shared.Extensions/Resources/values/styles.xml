@@ -67,8 +67,8 @@
     <style name="Area_BackButton" parent="Area_DefaultButton">
         <item name="android:src">@drawable/icon_back</item>
     </style>
-    <style name="Area_EyeButton" parent="Area_DefaultButton">
-        <item name="android:src">@drawable/icon_eye</item>
+    <style name="Area_ZoomMenuButton" parent="Area_DefaultButton">
+        <item name="android:src">@drawable/icon_zoom_menu</item>
     </style>
     <style name="Area_GeofencingButton" parent="Area_DefaultButton">
         <item name="android:src">@drawable/icon_geofencing</item>
@@ -210,6 +210,20 @@
         <item name="android:textColor">@color/map_menu_text</item>
         <item name="android:textSize">14sp</item>
         <item name="android:iconTint">@color/map_menu_text</item>
+    </style>
+
+    <style name="AssigmentMap_CreateInterview">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/textsize_12</item>
+        <item name="android:letterSpacing">0.05</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:fontFamily">Roboto</item>
+        <item name="android:textStyle">bold</item>
+    
+        <item name="android:background">@drawable/create_interview_button</item>
+        <item name="android:backgroundTint">@null</item>
+        <item name="android:drawableLeft">@drawable/create_interview_button_icon</item>
     </style>
 
 </resources>
