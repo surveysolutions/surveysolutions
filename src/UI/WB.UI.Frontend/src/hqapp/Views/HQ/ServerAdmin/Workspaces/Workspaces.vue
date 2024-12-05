@@ -31,7 +31,7 @@
                                     required: true,
                                     max: 12,
                                     regex: /^[0-9,a-z]+$/,
-                                    not_one_of: ['api', 'apidocs', 'graphql', 'users', 'administration']
+                                    not_one_of: ['users', 'administration', 'api', 'apidocs', 'graphql', 'css', 'js', 'img', 'locale', 'fonts', '.vite', '@vite']
                                 }" autocomplete="off" @keyup.enter="createWorkspace" id="newWorkspaceName" />
 
                             <p class="help-block" v-if="!errors.Name">
