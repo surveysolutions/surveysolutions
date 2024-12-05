@@ -221,8 +221,8 @@
         <item name="android:fontFamily">Roboto</item>
         <item name="android:textStyle">bold</item>
     
-        <item name="android:background">@drawable/create_interview_button</item>
-        <item name="android:backgroundTint">@null</item>
+        <!--item name="android:background">@drawable/create_interview_button</item-->
+        <item name="android:backgroundTint">@color/dashboard_assignment_create</item>
         <item name="android:drawableLeft">@drawable/create_interview_button_icon</item>
     </style>
 
