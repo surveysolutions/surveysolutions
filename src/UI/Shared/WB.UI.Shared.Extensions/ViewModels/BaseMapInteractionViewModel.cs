@@ -122,6 +122,13 @@ namespace WB.UI.Shared.Extensions.ViewModels
             set => this.RaiseAndSetIfChanged(ref this.isLocationServiceSwitchEnabled, value);
         }
         
+        private bool isLocationEnabled = false;
+        public bool IsLocationEnabled
+        {
+            get => this.isLocationEnabled;
+            set => this.RaiseAndSetIfChanged(ref this.isLocationEnabled, value);
+        }
+        
         public IMvxAsyncCommand ShowFullMapCommand => new MvxAsyncCommand(async () =>
         {
             if (this.Map?.Basemap?.BaseLayers.Count > 0 && this.Map?.Basemap?.BaseLayers[0]?.FullExtent != null)
@@ -163,6 +170,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 }
 
                 this.MapView.LocationDisplay.IsEnabled = true;
+                this.IsLocationEnabled = true;
                 this.MapView.LocationDisplay.LocationChanged += LocationDisplayOnLocationChanged;
                 return true;
             }
@@ -180,14 +188,12 @@ namespace WB.UI.Shared.Extensions.ViewModels
         }
         
         public IMvxAsyncCommand ShowLocationSignCommand => 
-            new MvxAsyncCommand(async () => { await ShowLocationSign(); },
-                () => this.MapView?.LocationDisplay?.IsEnabled ?? false);
+            new MvxAsyncCommand(async () => { await ShowLocationSign(); });
 
         protected async Task<bool> ShowLocationSign()
         {
             if (!this.MapView.LocationDisplay.IsEnabled)
                 return false;
-
 
             var location = this.MapView?.LocationDisplay.Location;
             if (location != null)
