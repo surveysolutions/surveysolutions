@@ -72,7 +72,7 @@
                 style="@style/Area_NavigateButton"
                 android:layout_above="@id/butZoomMenu"
                 android:layout_alignStart="@id/butZoomMenu"
-                local:MvxBind="Click SwitchLocatorCommand; Visible Not(IsPanelVisible);"
+                local:MvxBind="Click ShowLocationSignCommand; Visible Not(IsPanelVisible);"
                 android:layout_marginBottom="@dimen/area_editor_buttons_margin_space" />
         <ImageButton
                 android:id="@+id/butZoomMenu"
@@ -82,18 +82,18 @@
                 android:layout_marginLeft="@dimen/area_editor_buttons_margin_space"
                 android:layout_marginBottom="@dimen/area_editor_lower_panel_margin_bottom"
                  />
-        <!--local:MvxBind="Click ShowAllItemsCommand; Visible Not(IsPanelVisible);"-->
 
-        <Button
+        <ImageButton
                 android:id="@+id/butCreateInterview"
                 style="@style/AssigmentMap_CreateInterview"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
-                local:MvxBind="Text Localization('AssignmentMap_Title_CreateInterview'); Click CreateInterviewCommand; Visible Not(IsPanelVisible);"
+                local:MvxBind="Click CreateInterviewCommand; Visible Not(IsPanelVisible);"
                 android:layout_marginRight="@dimen/area_editor_buttons_margin_space"
                 android:layout_marginBottom="@dimen/area_editor_lower_panel_margin_bottom"
         />
-
+        
+        
         <LinearLayout
                 android:id="@+id/area_warning"
                 android:layout_alignParentTop="true"

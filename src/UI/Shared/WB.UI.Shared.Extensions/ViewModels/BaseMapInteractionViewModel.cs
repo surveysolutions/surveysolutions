@@ -178,6 +178,25 @@ namespace WB.UI.Shared.Extensions.ViewModels
             
             return false; 
         }
+        
+        public IMvxAsyncCommand ShowLocationSignCommand => 
+            new MvxAsyncCommand(async () => { await ShowLocationSign(); },
+                () => this.MapView?.LocationDisplay?.IsEnabled ?? false);
+
+        protected async Task<bool> ShowLocationSign()
+        {
+            if (!this.MapView.LocationDisplay.IsEnabled)
+                return false;
+
+
+            var location = this.MapView?.LocationDisplay.Location;
+            if (location != null)
+            {
+                await MapView.SetViewpointCenterAsync(location.Position);
+            }
+            
+            return true;
+        }
 
         private void DataSourceOnStatusChanged(object sender, LocationDataSourceStatus e)
         {

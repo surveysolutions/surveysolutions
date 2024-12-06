@@ -207,14 +207,15 @@ namespace WB.UI.Shared.Extensions.Services
                 case GeometryType.Polyline:
                 default:
                 {
-                    var dashedBorderSymbol = new SimpleLineSymbol(SimpleLineSymbolStyle.Dot, Color.White, 3);
-                    var solidInnerSymbol = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, color, 3);
+                    var solidInnerSymbol = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, color, 4);
+                    var dashedBorderSymbol = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, Color.White, 2);
                     var compositeSymbol = new CompositeSymbol
                     {
                         Symbols = { solidInnerSymbol, dashedBorderSymbol }
                     };
 
                     return compositeSymbol;
+                    //return solidInnerSymbol;
                 }
             }
         }

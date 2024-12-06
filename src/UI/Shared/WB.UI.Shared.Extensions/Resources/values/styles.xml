@@ -82,6 +82,13 @@
     <style name="Area_MenuButton" parent="Area_DefaultButton">
         <item name="android:src">@drawable/icon_three_dots</item>
     </style>
+    <style name="AssigmentMap_CreateInterview">
+        <item name="android:layout_width">60dp</item>
+        <item name="android:layout_height">60dp</item>
+        <item name="android:scaleType">center</item>
+        <item name="android:background">@drawable/icon_create_interview_button</item>
+        <item name="android:src">@drawable/icon_create_interview</item>
+    </style>
 
     <style name="Area_ZoomMapInButton">
         <item name="android:layout_width">42dp</item>
@@ -212,18 +219,5 @@
         <item name="android:iconTint">@color/map_menu_text</item>
     </style>
 
-    <style name="AssigmentMap_CreateInterview">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">@dimen/textsize_12</item>
-        <item name="android:letterSpacing">0.05</item>
-        <item name="android:textAllCaps">true</item>
-        <item name="android:fontFamily">Roboto</item>
-        <item name="android:textStyle">bold</item>
-    
-        <!--item name="android:background">@drawable/create_interview_button</item-->
-        <item name="android:backgroundTint">@color/dashboard_assignment_create</item>
-        <item name="android:drawableLeft">@drawable/create_interview_button_icon</item>
-    </style>
 
 </resources>
