@@ -71,9 +71,11 @@
         <item name="android:src">@drawable/icon_zoom_menu</item>
     </style>
     <style name="Area_GeofencingButton" parent="Area_DefaultButton">
-        <item name="android:src">@drawable/icon_geofencing</item>
+        <item name="android:background">@drawable/icon_geofencing_button</item>
+        <item name="android:src">@drawable/icon_geofencing_default</item>
     </style>
     <style name="Area_GeoTrackingButton" parent="Area_DefaultButton">
+        <item name="android:background">@drawable/icon_geotracking_button</item>
         <item name="android:src">@drawable/icon_geotracking</item>
     </style>
     <style name="Area_NavigateButton" parent="Area_DefaultButton">

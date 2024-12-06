@@ -4,10 +4,14 @@
         android:height="52dp"
         android:viewportWidth="50"
         android:viewportHeight="52">
-
+    <clip-path
+            android:pathData="M24 0C37.2548 0 48 10.7452 48 24C48 37.2548 37.2548 48 24 48C10.7452 48 0 37.2548 0 24C0 10.7452 10.7452 0 24 0Z"
+    />
     <path
+            android:pathData="M0 0V48H48V0"
             android:fillColor="#8C59DE"
-            android:pathData="M 24 0 L 24 0 Q 48 0 48 24 L 48 24 Q 48 48 24 48 L 24 48 Q 0 48 0 24 L 0 24 Q 0 0 24 0 Z" />
+    />
+
     <path
             android:fillColor="#000000"
             android:strokeColor="#ffffff"
