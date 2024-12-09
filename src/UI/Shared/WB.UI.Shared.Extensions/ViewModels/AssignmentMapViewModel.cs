@@ -201,7 +201,7 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
 
         if (graphicExtent != null)
         {
-            await MapView.SetViewpointAsync(new Viewpoint(graphicExtent), TimeSpan.FromSeconds(4));
+            await MapView.SetViewpointAsync(new Viewpoint(graphicExtent), TimeSpan.FromSeconds(1));
         }
     }
 
@@ -227,7 +227,7 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
             EnvelopeBuilder eb = new EnvelopeBuilder(GeometryEngine.CombineExtents(points));
             eb.Expand(1.2);
 
-            await MapView.SetViewpointAsync(new Viewpoint(eb.Extent), TimeSpan.FromSeconds(4));
+            await MapView.SetViewpointAsync(new Viewpoint(eb.Extent), TimeSpan.FromSeconds(1));
         }
     }
     

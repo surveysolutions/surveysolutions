@@ -311,7 +311,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             if (graphicExtent != null)
             {
                 ActiveMarkerIndex = null;
-                await MapView.SetViewpointAsync(new Viewpoint(graphicExtent), TimeSpan.FromSeconds(4));
+                await MapView.SetViewpointAsync(new Viewpoint(graphicExtent), TimeSpan.FromSeconds(1));
             }
         }
 
