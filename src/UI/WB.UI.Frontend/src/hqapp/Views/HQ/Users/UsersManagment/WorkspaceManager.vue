@@ -27,7 +27,7 @@
                     role="confirm">{{ $t("Common.Remove") }}</button>
                 <button type="button" class="btn btn-link" data-suso="btn-cancel" data-bs-dismiss="modal"
                     role="cancel">{{
-        $t("Common.Cancel") }}</button>
+                        $t("Common.Cancel") }}</button>
             </div>
         </template>
     </ModalFrame>
@@ -53,7 +53,7 @@ export default {
     computed: {
         workspacesList() {
             if (this.search == null || this.search == '') return this.workspaces
-            return filter(this.workspaces, w => (w.key + w.value).indexOf(this.search) >= 0)
+            return filter(this.workspaces, w => (w.key + w.value).toLowerCase().indexOf(this.search.toLowerCase()) >= 0)
         },
 
         selectedWorkspaces() {
