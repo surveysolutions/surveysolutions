@@ -25,7 +25,7 @@
 
                 <div class="form-group input-variable-name col-xs-5 pull-right">
                     <label for="edit-group-variableName" class="wb-label">{{
-        $t('QuestionnaireEditor.RosterVariableName') }}
+                        $t('QuestionnaireEditor.RosterVariableName') }}
                         <help link="variableName" placement="left" />
                     </label><br>
                     <input id="edit-group-variableName" type="text" class="wb-input bg-white width-auto"
@@ -218,8 +218,8 @@
                                     <p class="help-block ng-cloak"
                                         v-if="!stringifiedRosterTitlesValidity.valid && stringifiedRosterTitlesValidity.$error.maxOptionsCount">
                                         {{ $t('QuestionnaireEditor.EnteredMoreThanAllowed', {
-        max: fixedRosterLimit
-    }) }}
+                                        max: fixedRosterLimit
+                                        }) }}
                                     </p>
                                 </div>
                             </div>
@@ -231,13 +231,13 @@
                             <button class="btn dropdown-toggle" uib-dropdown-toggle type="button"
                                 data-bs-toggle="dropdown" aria-expanded="false">
                                 <span class="select-placeholder" v-if="selectedMultiQuestion == null">{{
-        $t('QuestionnaireEditor.SelectQuestion') }}</span>
+                                    $t('QuestionnaireEditor.SelectQuestion') }}</span>
                                 <span class="selected-item" v-if="selectedMultiQuestion !== null">
                                     <span class="path">{{ selectedMultiQuestion.breadcrumbs }}</span>
                                     <span class="chosen-item"><i class="dropdown-icon"
                                             :class="['icon-' + selectedMultiQuestion.type]"></i>{{
-        selectedMultiQuestion.title
-    }}
+                                        selectedMultiQuestion.title
+                                        }}
                                         (<span class="var-name-line">{{ selectedMultiQuestion.varName }}</span>)
                                     </span>
                                 </span>
@@ -339,16 +339,16 @@
                 <button type="button" v-if="!questionnaire.isReadOnlyForUser" id="add-comment-button"
                     class="btn btn-lg btn-link" @click="toggleComments(activeQuestion)" unsaved-warning-clear>
                     <span v-if="!isCommentsBlockVisible && commentsCount == 0">{{
-        $t('QuestionnaireEditor.EditorAddComment') }}</span>
+                        $t('QuestionnaireEditor.EditorAddComment') }}</span>
                     <span v-if="!isCommentsBlockVisible && commentsCount > 0">
                         {{ $t('QuestionnaireEditor.EditorShowComments', {
-        count: commentsCount
-    }) }}</span>
+                            count: commentsCount
+                        }) }}</span>
                     <span v-if="isCommentsBlockVisible">{{ $t('QuestionnaireEditor.EditorHideComment') }}</span>
                 </button>
                 <button type="button" v-if="!questionnaire.isReadOnlyForUser" id="edit-chapter-delete-button"
-                    class="btn btn-lg btn-link" unsaved-warning-clear @click="deleteRoster()">{{
-                    $t('QuestionnaireEditor.Delete') }}</button>
+                    class="btn btn-lg btn-link error" unsaved-warning-clear @click="deleteRoster()">{{
+                        $t('QuestionnaireEditor.Delete') }}</button>
                 <MoveToChapterSnippet :item-id="rosterId" :item-type="'Group'"
                     v-if="!questionnaire.isReadOnlyForUser && !currentChapter.isReadOnly">
                 </MoveToChapterSnippet>
