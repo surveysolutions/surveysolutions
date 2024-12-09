@@ -14,11 +14,11 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
 {
     public abstract class UsersApiControllerBase: ControllerBase
     {
-        private readonly UserManager<HqUser> userManager;
+        private readonly HqUserManager userManager;
         private readonly SignInManager<HqUser> signInManager;
         private readonly IApiTokenProvider apiAuthTokenProvider;
 
-        public UsersApiControllerBase(UserManager<HqUser> userManager,
+        public UsersApiControllerBase(HqUserManager userManager,
             SignInManager<HqUser> signInManager,
             IApiTokenProvider apiAuthTokenProvider)
         {

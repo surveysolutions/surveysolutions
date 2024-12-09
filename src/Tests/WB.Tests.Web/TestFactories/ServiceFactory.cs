@@ -118,7 +118,7 @@ namespace WB.Tests.Web.TestFactories
                 Mock.Of<IUserConfirmation<HqUser>>());
         }
 
-        public UserManager<HqUser> UserManager()
+        public HqUserManager UserManager()
         {
             var session = new Mock<ISession>();
             session.Setup(s => s.Query<HqUser>())
@@ -129,7 +129,7 @@ namespace WB.Tests.Web.TestFactories
             
             var hqUserStore = new HqUserStore(unitOfWork.Object, new LocalizedIdentityErrorDescriber());
             
-            return new UserManager<HqUser>(hqUserStore,
+            return new HqUserManager(hqUserStore,
                 Mock.Of<IOptions<IdentityOptions>>(),
                 Mock.Of<IPasswordHasher<HqUser>>(),
                 new List<IUserValidator<HqUser>>(),
@@ -137,7 +137,9 @@ namespace WB.Tests.Web.TestFactories
                 Mock.Of<ILookupNormalizer>(),
                 new LocalizedIdentityErrorDescriber(),
                 Mock.Of<IServiceProvider>(),
-                Mock.Of<ILogger<UserManager<HqUser>>>());
+                Mock.Of<ILogger<HqUserManager>>(),
+                Mock.Of<ISystemLog>(),
+                Mock.Of<IAuthorizedUser>());
         }
 
         public IWorkspacesCache WorkspacesCache(ICollection<string> workspaces = null, ICollection<string> disabledWorkspaces = null)
