@@ -33,7 +33,7 @@
 
                 <div class="form-group input-variable-name col-xs-5 pull-right">
                     <label for="edit-question-variable-name" class="wb-label">{{
-            $t('QuestionnaireEditor.QuestionVariableName') }}
+                        $t('QuestionnaireEditor.QuestionVariableName') }}
                         <help link="variableName" placement="left" />
                     </label><br />
                     <input id="edit-question-variable-name" type="text" v-model="activeQuestion.variableName"
@@ -61,9 +61,9 @@
                 <ExpressionEditor id="edit-question-title-highlight" v-model="activeQuestion.title"></ExpressionEditor>
 
                 <div class="question-type-specific-block" v-if="activeQuestion.type != undefined
-            && (activeQuestion.type != 'GpsCoordinates'
-                && activeQuestion.type != 'QRBarcode'
-                && activeQuestion.type != 'Audio')">
+                    && (activeQuestion.type != 'GpsCoordinates'
+                        && activeQuestion.type != 'QRBarcode'
+                        && activeQuestion.type != 'Audio')">
 
                     <component ref="questionSpecific" :key="activeQuestion.id"
                         :is="questionTemplate(activeQuestion.type)" :activeQuestion="activeQuestion"
@@ -76,7 +76,7 @@
             <div class="form-group"
                 v-show="!((showInstruction === null && activeQuestion.instructions) || showInstruction)">
                 <button type="button" class="btn btn-lg btn-link" @click="showInstruction = true">{{
-            $t('QuestionnaireEditor.QuestionAddInstruction') }}</button>
+                    $t('QuestionnaireEditor.QuestionAddInstruction') }}</button>
             </div>
 
             <div class="row" v-show="(showInstruction === null && activeQuestion.instructions) || showInstruction">
@@ -104,7 +104,7 @@
             <div class="form-group"
                 v-show="(doesQuestionSupportEnablementConditions() && !((showEnablingConditions === null && activeQuestion.enablementCondition) || showEnablingConditions))">
                 <button type="button" class="btn btn-lg btn-link" @click="showEnablingConditions = true">{{
-            $t('QuestionnaireEditor.AddEnablingCondition') }}</button>
+                    $t('QuestionnaireEditor.AddEnablingCondition') }}</button>
             </div>
 
             <div class="row"
@@ -123,7 +123,7 @@
                         v-model="activeQuestion.hideIfDisabled" v-if="!questionnaire.hideIfDisabled" />
                     <label for="cb-hideIfDisabled"><span
                             :title="questionnaire.hideIfDisabled ? $t('QuestionnaireEditor.HideIfDisabledNested') : ''"></span>{{
-            $t('QuestionnaireEditor.HideIfDisabled') }}
+                                $t('QuestionnaireEditor.HideIfDisabled') }}
                         <help link="hideIfDisabled" />
                     </label>
 
@@ -161,7 +161,7 @@
             <div class="form-group"
                 v-if="doesQuestionSupportValidations() && activeQuestion.validationConditions && activeQuestion.validationConditions.length < 10">
                 <button type="button" class="btn btn-lg btn-link" @click="addValidationCondition()">{{
-            $t('QuestionnaireEditor.AddValidationRule') }}</button>
+                    $t('QuestionnaireEditor.AddValidationRule') }}</button>
             </div>
 
             <div class="form-group">
@@ -201,15 +201,15 @@
                 <button type="button" v-show="!questionnaire.isReadOnlyForUser && !currentChapter.isReadOnly"
                     id="edit-chapter-save-button" class="btn btn-lg " :class="{ 'btn-primary': isDirty }"
                     unsaved-warning-clear @click="saveQuestion()" :disabled="!isDirty || !isValid">{{
-            $t('QuestionnaireEditor.Save') }}</button>
+                        $t('QuestionnaireEditor.Save') }}</button>
                 <button type="button" v-show="currentChapter.isReadOnly && currentChapter.isCover" id="jump-to-button"
                     class="btn btn-lg btn-link" unsaved-warning-clear @click.stop="$router.push({
-            name: 'question',
-            params: {
-                chapterId: activeQuestion.chapterId,
-                entityId: activeQuestion.itemId,
-            }
-        })">{{ $t('QuestionnaireEditor.JumpToEdit') }}</button>
+                        name: 'question',
+                        params: {
+                            chapterId: activeQuestion.chapterId,
+                            entityId: activeQuestion.itemId,
+                        }
+                    })">{{ $t('QuestionnaireEditor.JumpToEdit') }}</button>
                 <button type="button" id="edit-chapter-cancel-button" class="btn btn-lg btn-link" unsaved-warning-clear
                     @click="cancel()">{{ $t('QuestionnaireEditor.Cancel') }}</button>
             </div>
@@ -218,18 +218,18 @@
                     id="add-comment-button" class="btn btn-lg btn-link" @click="toggleComments(activeQuestion)"
                     unsaved-warning-clear>
                     <span v-show="!isCommentsBlockVisible && commentsCount == 0">{{
-            $t('QuestionnaireEditor.EditorAddComment') }}</span>
+                        $t('QuestionnaireEditor.EditorAddComment') }}</span>
                     <span v-show="!isCommentsBlockVisible && commentsCount > 0">{{
-            $t('QuestionnaireEditor.EditorShowComments',
-                {
-                    count: commentsCount
-                }) }}</span>
+                        $t('QuestionnaireEditor.EditorShowComments',
+                            {
+                                count: commentsCount
+                        }) }}</span>
                     <span v-show="isCommentsBlockVisible">{{ $t('QuestionnaireEditor.EditorHideComment') }}</span>
                 </button>
                 <button type="button" v-show="!questionnaire.isReadOnlyForUser && !currentChapter.isReadOnly"
-                    id="edit-chapter-delete-button" class="btn btn-lg btn-link" @click="deleteQuestion()"
+                    id="edit-chapter-delete-button" class="btn btn-lg btn-link error" @click="deleteQuestion()"
                     unsaved-warning-clear>{{
-            $t('QuestionnaireEditor.Delete') }}</button>
+                        $t('QuestionnaireEditor.Delete') }}</button>
                 <MoveToChapterSnippet :item-id="questionId" :item-type="'Question'"
                     v-show="!questionnaire.isReadOnlyForUser && !currentChapter.isReadOnly" />
 

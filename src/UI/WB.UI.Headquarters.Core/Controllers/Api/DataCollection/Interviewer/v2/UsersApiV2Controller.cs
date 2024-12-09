@@ -24,13 +24,13 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2
     [Route("api/interviewer/v2/users")]
     public class UsersApiV2Controller : UsersControllerBase
     {
-        private readonly UserManager<HqUser> userManager;
+        private readonly HqUserManager userManager;
         private readonly SignInManager<HqUser> signInManager;
         private readonly IApiTokenProvider apiAuthTokenProvider;
 
         public UsersApiV2Controller(
             IAuthorizedUser authorizedUser,
-            UserManager<HqUser> userManager,
+            HqUserManager userManager,
             SignInManager<HqUser> signInManager,
             IUserRepository userViewFactory,
             IApiTokenProvider apiAuthTokenProvider,

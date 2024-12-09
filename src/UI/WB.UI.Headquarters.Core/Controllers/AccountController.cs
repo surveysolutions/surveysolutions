@@ -25,7 +25,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly ICaptchaService captchaService;
         private readonly ICaptchaProvider captchaProvider;
         private readonly SignInManager<HqUser> signInManager;
-        private readonly UserManager<HqUser> userManager;
+        private readonly HqUserManager userManager;
         protected readonly IAuthorizedUser authorizedUser;
         private readonly ILogger<AccountController> logger;
 
@@ -33,7 +33,7 @@ namespace WB.UI.Headquarters.Controllers
             ICaptchaService captchaService,
             ICaptchaProvider captchaProvider,
             SignInManager<HqUser> signInManager,
-            UserManager<HqUser> userManager,
+            HqUserManager userManager,
             IAuthorizedUser authorizedUser,
             ILogger<AccountController> logger)
         {
