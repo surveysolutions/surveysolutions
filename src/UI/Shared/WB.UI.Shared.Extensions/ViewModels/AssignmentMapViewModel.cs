@@ -133,6 +133,18 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
         ReloadEntities();
             
         this.GraphicsOverlays.Add(graphicsOverlay);
+
+        CheckExistingOfGpsProvider();
+    }
+
+    private void CheckExistingOfGpsProvider()
+    {
+        var hasGpsProvider = backgroundServiceManager.HasGpsProvider();
+        if (!hasGpsProvider)
+        {
+            Warning = EnumeratorUIResources.Error_NoGpsProvider;
+            IsWarningVisible = true;
+        }
     }
 
     public override async Task OnMapLoaded()
@@ -143,6 +155,12 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
             var fullPathToShapefile = AvailableShapefiles.FirstOrDefault(sf => sf.ShapefileFileName == targetArea)?.FullPath;
             if (!string.IsNullOrWhiteSpace(fullPathToShapefile))
                 await LoadShapefileByPath(fullPathToShapefile);
+
+            if (LoadedShapefile == null)
+            {
+                Warning = EnumeratorUIResources.Error_NoTargetAreaShapefile;
+                IsWarningVisible = true;
+            }
         }
         
         await RefreshMarkers(setViewToMarkers: true);
@@ -288,7 +306,7 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
     
     private async Task ToggleGeofencingService()
     {
-        if (LoadedShapefile == null)
+        if (LoadedShapefile == null || !backgroundServiceManager.HasGpsProvider())
             return;
         
         try
@@ -333,6 +351,9 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
     
     private async Task ToggleGeoTrackingService()
     {
+        if (!backgroundServiceManager.HasGpsProvider())
+            return;
+
         try
         {
             if (!IsEnabledGeoTracking)

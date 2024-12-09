@@ -1016,4 +1016,10 @@ It will appear on interviewer device after next synchronization</value>
   <data name="Interview_Progress_Format" xml:space="preserve">
     <value>Progress: {0}/{1}</value>
   </data>
+  <data name="Error_NoGpsProvider" xml:space="preserve">
+    <value>There is no GPS provider in this device.</value>
+  </data>
+  <data name="Error_NoTargetAreaShapefile" xml:space="preserve">
+    <value>There is no boundaries for target area.</value>
+  </data>
 </root>

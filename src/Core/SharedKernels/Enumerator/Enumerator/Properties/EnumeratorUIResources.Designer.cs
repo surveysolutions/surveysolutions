@@ -1814,5 +1814,17 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
                 return ResourceManager.GetString("Interview_Progress_Format", resourceCulture);
             }
         }
+        
+        public static string Error_NoGpsProvider {
+            get {
+                return ResourceManager.GetString("Error_NoGpsProvider", resourceCulture);
+            }
+        }
+        
+        public static string Error_NoTargetAreaShapefile {
+            get {
+                return ResourceManager.GetString("Error_NoTargetAreaShapefile", resourceCulture);
+            }
+        }
     }
 }

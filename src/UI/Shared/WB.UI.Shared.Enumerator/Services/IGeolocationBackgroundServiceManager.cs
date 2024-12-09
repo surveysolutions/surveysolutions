@@ -2,7 +2,8 @@ namespace WB.UI.Shared.Enumerator.Services;
 
 public interface IGeolocationBackgroundServiceManager
 {
-    Task StartListen(IGeolocationListener geolocationListener);
+    bool HasGpsProvider();
+    Task<bool> StartListen(IGeolocationListener geolocationListener);
     void StopListen(IGeolocationListener geolocationListener);
     event EventHandler<LocationReceivedEventArgs> LocationReceived;
 }

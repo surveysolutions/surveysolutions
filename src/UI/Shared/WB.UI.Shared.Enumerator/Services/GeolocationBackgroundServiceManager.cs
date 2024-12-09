@@ -1,4 +1,5 @@
 using Android.Content;
+using Android.Locations;
 using Android.OS;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 
@@ -17,8 +18,17 @@ public class GeolocationBackgroundServiceManager : IGeolocationBackgroundService
     {
     }
 
-    public async Task StartListen(IGeolocationListener geolocationListener)
+    public bool HasGpsProvider()
     {
+        var locationManager = (LocationManager)Application.Context.GetSystemService(Context.LocationService);
+        return locationManager.IsProviderEnabled(LocationManager.GpsProvider);
+    }
+
+    public async Task<bool> StartListen(IGeolocationListener geolocationListener)
+    {
+        if (!HasGpsProvider())
+            return false;
+        
         listeners.Add(geolocationListener);
 
         if (listeners.Count > 0 && serviceConnection == null)
@@ -31,6 +41,8 @@ public class GeolocationBackgroundServiceManager : IGeolocationBackgroundService
             await serviceConnection.WaitOnServiceConnected();
             serviceConnection.Service.LocationReceived += ServiceOnLocationReceived;
         }
+
+        return true;
     }
 
     private async void ServiceOnLocationReceived(object sender, LocationReceivedEventArgs e)
