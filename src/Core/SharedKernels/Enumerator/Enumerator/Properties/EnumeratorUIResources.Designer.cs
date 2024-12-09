@@ -1467,6 +1467,12 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
             }
         }
         
+        public static string Dashboard_ShowAssignmentMap {
+            get {
+                return ResourceManager.GetString("Dashboard_ShowAssignmentMap", resourceCulture);
+            }
+        }
+        
         public static string Dashboard_Discard {
             get {
                 return ResourceManager.GetString("Dashboard_Discard", resourceCulture);

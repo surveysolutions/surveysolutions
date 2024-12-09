@@ -839,6 +839,9 @@ your next synchronization</value>
   <data name="Dashboard_ShowLocation" xml:space="preserve">
     <value>Show location</value>
   </data>
+  <data name="Dashboard_ShowAssignmentMap" xml:space="preserve">
+    <value>Show target area</value>
+  </data>
   <data name="Dashboard_Discard" xml:space="preserve">
     <value>Discard</value>
   </data>

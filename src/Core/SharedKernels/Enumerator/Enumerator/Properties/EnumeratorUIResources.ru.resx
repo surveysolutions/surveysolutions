@@ -709,6 +709,9 @@
   <data name="Dashboard_ShowLocation" xml:space="preserve">
     <value>Показать на карте</value>
   </data>
+  <data name="Dashboard_ShowAssignmentMap" xml:space="preserve">
+    <value>Показать зону назначения</value>
+  </data>
   <data name="DashboardItem_AssignmentLeftComment" xml:space="preserve">
     <value>{0} интервью</value>
     <comment>осталось создать {0} интервью</comment>

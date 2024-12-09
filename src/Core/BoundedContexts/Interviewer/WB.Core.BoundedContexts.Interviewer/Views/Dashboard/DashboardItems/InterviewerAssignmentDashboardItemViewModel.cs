@@ -27,7 +27,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         {
             Actions.Clear();
             
-            //BindLocationAction(Assignment.LocationQuestionId, Assignment.LocationLatitude, Assignment.LocationLongitude);
+            BindLocationAction(Assignment.LocationQuestionId, Assignment.LocationLatitude, Assignment.LocationLongitude);
             
             Actions.Add(new ActionDefinition
             {
@@ -76,9 +76,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
                 Command = new MvxAsyncCommand(
                     () => mapInteractionService.OpenAssignmentMapAsync(assignmentId)),
 
-                ActionType = ActionType.Secondary,
+                ActionType = ActionType.Extra,
 
-                Label = EnumeratorUIResources.Dashboard_ShowLocation
+                Label = EnumeratorUIResources.Dashboard_ShowAssignmentMap
             });
         }
     }
