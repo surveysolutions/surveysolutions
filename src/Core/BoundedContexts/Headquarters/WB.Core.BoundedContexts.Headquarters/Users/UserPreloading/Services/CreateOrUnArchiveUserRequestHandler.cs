@@ -16,13 +16,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services
     public class CreateOrUnArchiveUserRequestHandler : IRequestHandler<CreateOrUnArchiveUserRequest, UserToImport?>
     {
         private readonly IUserRepository userRepository;
-        private readonly UserManager<HqUser> userManager;
+        private readonly HqUserManager userManager;
         private readonly IUserImportService userImportService;
         private readonly ISystemLog systemLog;
         private readonly IWorkspacesService workspacesService;
 
         public CreateOrUnArchiveUserRequestHandler(IUserRepository userRepository,
-            UserManager<HqUser> userManager,
+            HqUserManager userManager,
             IUserImportService importService, 
             ISystemLog systemLog,
             IWorkspacesService workspacesService)

@@ -137,7 +137,7 @@ namespace WB.Tests.Web.TestFactories
 
         public InstallController InstallController(ISupportedVersionProvider supportedVersionProvider = null,
             SignInManager<HqUser> identityManager = null,
-            UserManager<HqUser> userManager = null,
+            HqUserManager userManager = null,
             IUserRepository userRepository = null)
         {
             var result = new InstallController(

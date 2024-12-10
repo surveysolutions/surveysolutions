@@ -14,10 +14,10 @@ namespace WB.UI.Headquarters.Controllers
     [Authorize]
     public class HomeController : Controller
     {
-        private readonly UserManager<HqUser> userManager;
+        private readonly HqUserManager userManager;
         private readonly SignInManager<HqUser> signInManager;
         
-        public HomeController(UserManager<HqUser> userManager, 
+        public HomeController(HqUserManager userManager, 
             SignInManager<HqUser> signInManager)
         {
             this.userManager = userManager;

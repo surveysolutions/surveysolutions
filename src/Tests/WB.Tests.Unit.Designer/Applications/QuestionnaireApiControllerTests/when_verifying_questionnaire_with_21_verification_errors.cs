@@ -52,7 +52,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
             result = (VerificationResult) (controller.Verify(questionnaireId) as OkObjectResult)?.Value;
 
         [NUnit.Framework.Test] public void should_returned_errors_contains_specified_errors_count () =>
-            result.Errors.Sum(error => error.Errors.SelectMany(e => e.References).Count()).Should().Be(QuestionnaireApiController.MaxVerificationErrors);
+            result.Errors.Sum(error => error.Errors.SelectMany(e => e.References).Count()).Should().Be(QuestionnaireApiController.MaxVerificationErrorsOrWarnings);
 
         private static QuestionnaireDocument questionnaireDocument;
         private static QuestionnaireView questionnaireView;
