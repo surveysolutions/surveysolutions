@@ -240,4 +240,7 @@
   <data name="ReloadInterviewErrorMessage" xml:space="preserve">
     <value>Дані інтерв'ю не можуть бути застосовані до нової версії анкети. Ми відкриємо порожнє інтерв'ю</value>
   </data>
+  <data name="MenuItem_Title_Return" xml:space="preserve">
+      <value>Повернутися</value>
+  </data>
 </root>

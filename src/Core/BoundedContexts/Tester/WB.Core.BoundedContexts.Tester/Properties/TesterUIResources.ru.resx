@@ -130,7 +130,7 @@
     <value>Опросники</value>
   </data>
   <data name="MenuItem_Title_Return" xml:space="preserve">
-    <value>Выйти</value>
+      <value>Вернуться</value>
   </data>
   <data name="MenuItem_Title_Language" xml:space="preserve">
     <value>Язык</value>
