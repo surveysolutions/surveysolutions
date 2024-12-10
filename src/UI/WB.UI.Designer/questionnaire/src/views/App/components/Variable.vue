@@ -6,7 +6,7 @@
                 <div class="form-group col-xs-6">
                     <label class="wb-label">{{
                         $t('QuestionnaireEditor.VariableType')
-                    }}</label><br />
+                        }}</label><br />
                     <div class="btn-group type-container-dropdown">
                         <button id="variableTypeBtn" class="btn btn-default form-control dropdown-toggle"
                             data-bs-toggle="dropdown" aria-expanded="false" type="button">
@@ -15,7 +15,8 @@
                         </button>
 
                         <ul class="dropdown-menu" role="menu">
-                            <li class="dropdown-item" role="presentation" v-for="typeOption in activeVariable.typeOptions">
+                            <li class="dropdown-item" role="presentation"
+                                v-for="typeOption in activeVariable.typeOptions">
                                 <a role="menuitem" tabindex="-1" @click="activeVariable.type = typeOption.value">
                                     {{ typeOption.text }}
                                 </a>
@@ -29,12 +30,13 @@
                         <help link="variableName" placement="left" />
                     </label>
                     <br />
-                    <input id="edit-question-variable-name" type="text" v-model="activeVariable.variable" spellcheck="false"
-                        autocomplete="false" class="form-control" maxlength="32" />
+                    <input id="edit-question-variable-name" type="text" v-model="activeVariable.variable"
+                        spellcheck="false" autocomplete="false" class="form-control" maxlength="32" />
                 </div>
             </div>
             <div class="form-group">
-                <label for="edit-variable-title-highlight" class="wb-label">{{ $t('QuestionnaireEditor.VariableLabel') }}
+                <label for="edit-variable-title-highlight" class="wb-label">{{ $t('QuestionnaireEditor.VariableLabel')
+                    }}
                     <help link="variableDescription" />
                 </label>
                 <ExpressionEditor id="edit-variable-title-highlight" v-model="activeVariable.label" />
@@ -42,15 +44,17 @@
             <div class="form-group">
                 <label for="edit-group-condition">{{ $t('QuestionnaireEditor.VariableExpression') }}
                     <help link="expression" />
-                </label>                
+                </label>
                 <ExpressionEditor id="edit-group-condition" v-model="activeVariable.expression" mode="expression" />
             </div>
 
             <div class="row">
                 <div class="col-md-6">
                     <div class="checkbox-in-column">
-                        <input id="cb-do-not-export" type="checkbox" class="wb-checkbox" v-model="activeVariable.doNotExport" />
-                        <label for="cb-do-not-export"><span></span>{{ $t('QuestionnaireEditor.VariableNoExport') }}</label>
+                        <input id="cb-do-not-export" type="checkbox" class="wb-checkbox"
+                            v-model="activeVariable.doNotExport" />
+                        <label for="cb-do-not-export"><span></span>{{ $t('QuestionnaireEditor.VariableNoExport')
+                            }}</label>
                         <help link="doNotExport"></help>
                     </div>
                 </div>
@@ -78,10 +82,10 @@
                     }}</span>
                     <span v-if="isCommentsBlockVisible">{{
                         $t('QuestionnaireEditor.EditorHideComment')
-                    }}</span>
+                        }}</span>
                 </button>
                 <button type="button" v-if="!questionnaire.isReadOnlyForUser" id="edit-chapter-delete-button"
-                    class="btn btn-lg btn-link" @click="deleteVariable()" unsaved-warning-clear>
+                    class="btn btn-lg btn-link error" @click="deleteVariable()" unsaved-warning-clear>
                     {{ $t('QuestionnaireEditor.Delete') }}
                 </button>
                 <MoveToChapterSnippet :item-id="variableId" :item-type="'Variable'"

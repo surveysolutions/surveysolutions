@@ -18,9 +18,9 @@
             <div class="ui-pnotify ui-pnotify-fade-normal ui-pnotify-mobile-able ui-pnotify-in ui-pnotify-fade-in ui-pnotify-move"
                 aria-live="assertive" aria-role="alertdialog" style="position: inherit;">
                 <div class="alert ui-pnotify-container ui-pnotify-shadow" :class="{
-        'alert-warning': props.item.type != 'error',
-        'alert-danger': props.item.type == 'error'
-    }" role="alert" style="min-height: 16px;">
+                    'alert-warning': props.item.type != 'error',
+                    'alert-danger': props.item.type == 'error'
+                }" role="alert" style="min-height: 16px;">
                     <div class="ui-pnotify-closer" aria-role="button" tabindex="0" title="Close" @click="props.close"
                         style="cursor: pointer;">
                         <span class="glyphicon glyphicon-remove"></span>
@@ -247,7 +247,8 @@ export default {
                             chapterId: chapter.itemId,
                             entityId: chapter.itemId
                         },
-                        force: true
+                        force: true,
+                        replace: true
                     });
                 }
             }

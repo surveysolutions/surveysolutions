@@ -20,7 +20,7 @@
                     googleApiKey = googleMapsConfig.Value.ApiKey,
                     googleMapsApiBaseUrl = googleMapsConfig.Value.ApiBaseUrl,
                     googleMapsBaseUrl = googleMapsConfig.Value.BaseUrl,
-                    basePath = "/" + name + "/" ,
+                    basePath = String.IsNullOrEmpty(name)? "/" : "/" + name + "/",
                     workspace = name,
                     imageGetBase = Url.Content("~/api/WebInterviewResources"),
                     audioGet = Url.Content("~/Resource/AudioRecord"),

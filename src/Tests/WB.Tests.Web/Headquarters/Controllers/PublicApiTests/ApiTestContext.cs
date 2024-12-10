@@ -43,7 +43,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
         protected static UsersController CreateUsersController(
             ILogger logger = null,
             IUserViewFactory userViewViewFactory = null,
-            UserManager<HqUser> userManager = null,
+            HqUserManager userManager = null,
             IWorkspaceContextAccessor workspaceContextAccessor = null)
         {
             return new UsersController(

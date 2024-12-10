@@ -106,11 +106,16 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         
         public async Task<string> ChangePasswordAsync(ChangePasswordInfo info, CancellationToken token = default)
         {
+            //to send request to users workspace
+            //temporary provide workspace to 'users'
+            var credentials = new RestCredentials();
+            credentials.Workspace = "users";
             try
             {
                 var authToken = await this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync<string>(
                     url: string.Concat(this.UsersController, "/changePassword"),
                     request: info,
+                    credentials: credentials,
                     token: token)).ConfigureAwait(false);
 
                 return authToken;

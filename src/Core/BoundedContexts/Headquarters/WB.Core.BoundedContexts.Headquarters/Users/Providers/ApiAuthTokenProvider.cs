@@ -15,9 +15,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.Providers
     public class ApiAuthTokenProvider: IApiTokenProvider
     {
         private readonly IPasswordHasher passwordHasher;
-        private readonly UserManager<HqUser> manager;
+        private readonly HqUserManager manager;
         public ApiAuthTokenProvider(IPasswordHasher passwordHasher,
-            UserManager<HqUser> userManager)
+            HqUserManager userManager)
         {
             this.passwordHasher = passwordHasher;
             this.manager = userManager;
