@@ -517,6 +517,9 @@ for further instructions</value>
   <data name="MenuItem_Title_Dashboard" xml:space="preserve">
     <value>Dashboard</value>
   </data>
+  <data name="MenuItem_Title_Return" xml:space="preserve">
+    <value>Return</value>
+  </data>
   <data name="MenuItem_Title_Map_Dashboard" xml:space="preserve">
     <value>Map dashboard</value>
   </data>

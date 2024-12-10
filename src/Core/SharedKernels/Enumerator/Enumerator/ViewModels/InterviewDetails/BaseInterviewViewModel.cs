@@ -366,6 +366,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.Dispose();
         });
 
+        public IMvxAsyncCommand NavigateToDashboardInterviewAsync => new MvxAsyncCommand(async () =>
+        {
+            await this.ViewModelNavigationService.NavigateToDashboardAsync(this.InterviewId);
+            this.Dispose();
+        });
+
         public IMvxCommand NavigateToLoginCommand => new MvxAsyncCommand(async () =>
         {
             await this.ViewModelNavigationService.NavigateToLoginAsync();

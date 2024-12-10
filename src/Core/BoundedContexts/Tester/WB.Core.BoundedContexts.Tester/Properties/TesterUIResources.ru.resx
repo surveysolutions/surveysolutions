@@ -129,6 +129,9 @@
   <data name="MenuItem_Title_Dashboard" xml:space="preserve">
     <value>Опросники</value>
   </data>
+  <data name="MenuItem_Title_Return" xml:space="preserve">
+    <value>Выйти</value>
+  </data>
   <data name="MenuItem_Title_Language" xml:space="preserve">
     <value>Язык</value>
   </data>

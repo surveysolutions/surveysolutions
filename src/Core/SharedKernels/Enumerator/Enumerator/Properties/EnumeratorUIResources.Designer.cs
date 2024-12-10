@@ -837,6 +837,12 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
             }
         }
         
+        public static string MenuItem_Title_Return {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_Return", resourceCulture);
+            }
+        }
+        
         public static string MenuItem_Title_Map_Dashboard {
             get {
                 return ResourceManager.GetString("MenuItem_Title_Map_Dashboard", resourceCulture);

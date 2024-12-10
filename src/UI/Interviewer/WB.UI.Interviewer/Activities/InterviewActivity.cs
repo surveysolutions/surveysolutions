@@ -25,11 +25,20 @@ namespace WB.UI.Interviewer.Activities
         protected override MenuDescription MenuDescriptor => new MenuDescription
         {
             {
+                Resource.Id.menu_return,
+                EnumeratorUIResources.MenuItem_Title_Return,
+                new MvxAsyncCommand(async () =>
+                {
+                    await this.ViewModel.NavigateFromInterviewAsync.ExecuteAsync();
+                    this.ReleaseActivity();
+                })
+            },
+            {
                 Resource.Id.menu_dashboard,
                 EnumeratorUIResources.MenuItem_Title_Dashboard,
                 new MvxAsyncCommand(async () =>
                 {
-                    await this.ViewModel.NavigateFromInterviewAsync.ExecuteAsync();
+                    await this.ViewModel.NavigateToDashboardInterviewAsync.ExecuteAsync();
                     this.ReleaseActivity();
                 })
             },
