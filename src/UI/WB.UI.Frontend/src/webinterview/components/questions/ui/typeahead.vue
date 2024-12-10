@@ -11,7 +11,7 @@
             </li>
             <li v-for="option in options" :key="option.value">
                 <a href="javascript:void(0);" @click="selectOption(option.value)"
-                    v-html="highlight(option.title, searchTerm)" @keydown.up="onOptionUpKey"></a>
+                    v-dompurify-html="highlight(option.title, searchTerm)" @keydown.up="onOptionUpKey"></a>
             </li>
             <li v-if="isLoading" id="th_LoadingOptions">
                 <a>{{ $t("WebInterviewUI.Loading") }}</a>

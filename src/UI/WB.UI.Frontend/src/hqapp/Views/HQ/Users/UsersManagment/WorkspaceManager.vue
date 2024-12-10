@@ -2,8 +2,8 @@
     <ModalFrame ref="manageWorkspaces" :title="$t('Pages.UserManagement_ManageWorkspacesTitle')">
         <form onsubmit="return false;">
             <div class="action-container">
-                <p v-if="isAdding" data-suso="title-add" v-html="$t('Pages.UserManagement_SubtitleAdd')"></p>
-                <p v-else data-suso="title-remove" v-html="$t('Pages.UserManagement_SubtitleRemove')"></p>
+                <p v-if="isAdding" data-suso="title-add" v-dompurify-html="$t('Pages.UserManagement_SubtitleAdd')"></p>
+                <p v-else data-suso="title-remove" v-dompurify-html="$t('Pages.UserManagement_SubtitleRemove')"></p>
 
                 <FilterInput v-model="search" :placeholder="$t('Common.Search')"></FilterInput>
 

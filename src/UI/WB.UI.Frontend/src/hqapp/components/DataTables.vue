@@ -20,9 +20,9 @@
         </table>
         <div class="download-report-as" v-if="exportable">
             {{ $t("Pages.DownloadReport") }}
-            <a target="_blank" v-bind:href="this.export.excel" v-html="'XLSX'">
+            <a target="_blank" v-bind:href="this.export.excel" v-dompurify-html="'XLSX'">
             </a>,
-            <a target="_blank" v-bind:href="this.export.csv" v-html="'CSV'">
+            <a target="_blank" v-bind:href="this.export.csv" v-dompurify-html="'CSV'">
             </a>
             {{ $t("Pages.Or") }}
             <a target="_blank" v-bind:href="this.export.tab">

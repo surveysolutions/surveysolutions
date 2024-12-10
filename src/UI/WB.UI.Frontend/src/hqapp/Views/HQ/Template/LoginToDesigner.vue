@@ -36,7 +36,7 @@
                                     {{ $t('LoginToDesigner.UserDesignerCredentials') }}</p>
                             </div>
                             <div class="alert alert-danger" v-if="errorMessage">
-                                <p v-html="errorMessage"></p>
+                                <p v-dompurify-html="errorMessage"></p>
                             </div>
                             <div class="form-group" :class="{ 'has-error': errors.Login }">
                                 <Field type="text" name="Login" class="form-control" autofocus="autofocus"

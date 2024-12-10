@@ -1,41 +1,24 @@
 <template>
-    <div class="panel panel-default"
-        :data-id="this.panel.id">
-        <div class="panel-heading"
-            role="tab">
-            <h3 class="panel-title"
-                :class="titleCss"
-                :disabled="isDisabled">
-                <button class="btn btn-link btn-plus"
-                    v-if="hasChild"
-                    :class="{collapsed: isCollapsed}"
-                    :disabled="isDisabled"
-                    type="button"
-                    @click="toggle">
+    <div class="panel panel-default" :data-id="this.panel.id">
+        <div class="panel-heading" role="tab">
+            <h3 class="panel-title" :class="titleCss" :disabled="isDisabled">
+                <button class="btn btn-link btn-plus" v-if="hasChild" :class="{ collapsed: isCollapsed }"
+                    :disabled="isDisabled" type="button" @click="toggle">
                     <span></span>
                 </button>
-                <router-link :to="to"
-                    :disabled="isDisabled"
-                    :class="{'disabled':isDisabled}"
-                    v-if="this.panel">
-                    <span v-html="title"/>
+                <router-link :to="to" :disabled="isDisabled" :class="{ 'disabled': isDisabled }" v-if="this.panel">
+                    <span v-dompurify-html="title" />
                 </router-link>
             </h3>
         </div>
-        <div class="panel-collapse collapse"
-            :class="{in: !isCollapsed}"
-            role="tabpanel"
+        <div class="panel-collapse collapse" :class="{ in: !isCollapsed }" role="tabpanel"
             v-if="hasChild && !isCollapsed">
             <div class="panel-body">
-                <div class="panel-group"
-                    role="tablist">
-                    <sidebar-panel v-for="childPanel in childPanels"
-                        :key="childPanel.id"
-                        :panel="childPanel"
+                <div class="panel-group" role="tablist">
+                    <sidebar-panel v-for="childPanel in childPanels" :key="childPanel.id" :panel="childPanel"
                         :currentPanel="currentPanel">
                     </sidebar-panel>
-                    <sidebar-panel :panel="loading"
-                        :currentPanel="currentPanel"
+                    <sidebar-panel :panel="loading" :currentPanel="currentPanel"
                         v-if="childPanels.length === 0"></sidebar-panel>
                 </div>
             </div>
@@ -103,10 +86,10 @@ export default {
         },
         titleCss() {
             return [{
-                disabled:this.panel.isDisabled,
+                disabled: this.panel.isDisabled,
                 current: this.panel.current,
                 active: this.isActive,
-                complete: this.panel.status === GroupStatus.Completed && !this.hasError ,
+                complete: this.panel.status === GroupStatus.Completed && !this.hasError,
                 'has-error': this.hasError,
             }]
         },
@@ -126,7 +109,7 @@ export default {
     },
     mounted() {
         this.update()
-        if(this.isActive)
+        if (this.isActive)
             this.$el.scrollIntoView({ behavior: 'smooth' })
     },
     methods: {

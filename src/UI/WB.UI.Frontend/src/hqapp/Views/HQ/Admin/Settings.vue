@@ -54,7 +54,8 @@
                     </span>
                     <div v-if="statusDropExportCache == 'Error'">
                         <br />
-                        <span style="color:red" v-html="$t('Settings.RemoveExportCacheFail').replaceAll('\n', '<br/>')">
+                        <span style="color:red"
+                            v-dompurify-html="$t('Settings.RemoveExportCacheFail').replaceAll('\n', '<br/>')">
                         </span>
                     </div>
                 </div>
@@ -85,7 +86,7 @@
                     </button>
                     <span class="text-success" v-if="globalNoticeUpdated">{{
                         $t('Settings.GlobalNoteSaved')
-                    }}</span>
+                        }}</span>
                 </div>
             </form>
         </div>

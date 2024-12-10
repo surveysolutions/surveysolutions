@@ -20,7 +20,7 @@
                     :loadRecaptchaScript="true"></vue-recaptcha>
             </div>
             <div v-if="model.useCaptcha && model.hostedCaptchaHtml && !model.serverUnderLoad"
-                v-html="model.hostedCaptchaHtml" class="form-group">
+                v-dompurify-html="model.hostedCaptchaHtml" class="form-group">
             </div>
 
             <div v-if="model.hasPassword" class="form-group" :class="{ 'has-error': model.isPasswordInvalid }">

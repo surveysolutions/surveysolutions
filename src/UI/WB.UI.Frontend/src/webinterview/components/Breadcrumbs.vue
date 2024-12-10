@@ -1,16 +1,15 @@
 <template>
-    <div class="unit-title break-line"
-        v-if="showBreadcrumbs">
+    <div class="unit-title break-line" v-if="showBreadcrumbs">
         <ol class="breadcrumb">
-            <li v-for="breadcrumb in entities"
-                :key="breadcrumb.target">
-                <a href="javascript:void(0)"
-                    @click="navigate(breadcrumb)">
-                    <span v-html="breadcrumb.title"></span><span v-if="breadcrumb.isRoster && !breadcrumb.hasCustomRosterTitle"> - <i>{{getRosterTitle(breadcrumb.rosterTitle)}}</i></span>
+            <li v-for="breadcrumb in entities" :key="breadcrumb.target">
+                <a href="javascript:void(0)" @click="navigate(breadcrumb)">
+                    <span v-dompurify-html="breadcrumb.title"></span><span
+                        v-if="breadcrumb.isRoster && !breadcrumb.hasCustomRosterTitle"> -
+                        <i>{{ getRosterTitle(breadcrumb.rosterTitle) }}</i></span>
                 </a>
             </li>
         </ol>
-        <h3 v-html="title"></h3>
+        <h3 v-dompurify-html="title"></h3>
     </div>
 </template>
 <script lang="js">
@@ -44,10 +43,10 @@ export default {
             if (!this.info) return {}
             return this.info.breadcrumbs
         },
-        title(){
+        title() {
             var title = this.info.title
 
-            if(this.info.isRoster && !this.info.hasCustomRosterTitle)
+            if (this.info.isRoster && !this.info.hasCustomRosterTitle)
                 title += '<span> - <i>' + this.getRosterTitle(this.info.rosterTitle) + '</i></span>'
 
             return title

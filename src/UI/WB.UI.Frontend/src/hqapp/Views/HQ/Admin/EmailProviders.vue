@@ -189,7 +189,7 @@
                                             <select rules="required" label="AWS region" name="awsRegion" id="awsRegion"
                                                 v-model="awsRegion" class="form-control">
                                                 <option :key="awsRegion.key" :value="awsRegion.key" v-for="awsRegion in $config
-                                                    .model.awsRegions" v-html="awsRegion.value" />
+                                                    .model.awsRegions" v-dompurify-html="awsRegion.value" />
                                             </select>
                                             <span class="gray-text help-block">
                                                 {{ $t('Settings.EmailProvider_AwsRegionHelp') }}

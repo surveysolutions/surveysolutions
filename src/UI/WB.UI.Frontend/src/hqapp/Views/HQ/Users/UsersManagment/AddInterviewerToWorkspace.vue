@@ -2,7 +2,7 @@
     <ModalFrame ref="manageWorkspaces" :title="$t('Pages.UserManagement_ManageWorkspacesTitle')">
         <form onsubmit="return false;">
             <div class="action-container">
-                <p data-suso="title-add" v-html="$t('Pages.UserManagement_SubtitleAddInterviewer')"></p>
+                <p data-suso="title-add" v-dompurify-html="$t('Pages.UserManagement_SubtitleAddInterviewer')"></p>
 
                 <FilterBlock :title="$t('Pages.UsersManage_WorkspacesFilterTitle')">
                     <Typeahead control-id="workspaceSelector"
@@ -25,7 +25,7 @@
                     @click="add" role="confirm">{{ $t("Common.Add") }}</button>
                 <button type="button" class="btn btn-link" data-suso="btn-cancel-user" data-bs-dismiss="modal"
                     role="cancel">{{
-        $t("Common.Cancel") }}</button>
+                        $t("Common.Cancel") }}</button>
             </div>
         </template>
     </ModalFrame>
