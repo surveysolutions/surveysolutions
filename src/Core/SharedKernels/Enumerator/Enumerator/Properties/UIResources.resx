@@ -744,19 +744,19 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
     <value>Start</value>
   </data>
   <data name="MenuItem_Title_ZoomMap" xml:space="preserve">
-    <value>Zoom all map</value>
+    <value>Zoom to map</value>
   </data>
   <data name="MenuItem_Title_ZoomShapefile" xml:space="preserve">
-    <value>Zoom boundaries</value>
+    <value>Zoom to boundaries</value>
   </data>
   <data name="MenuItem_Title_ZoomCollectedData" xml:space="preserve">
-    <value>Zoom collected data</value>
+    <value>Zoom to collected data</value>
   </data>
   <data name="MenuItem_Title_ZoomEverything" xml:space="preserve">
     <value>Zoom everything</value>
   </data>
   <data name="MenuItem_Title_ZoomGeoTracking" xml:space="preserve">
-    <value>Zoom tracking records</value>
+    <value>Zoom to tracking records</value>
   </data>
   <data name="MenuItem_Title_Dashboard" xml:space="preserve">
     <value>Dashboard</value>
