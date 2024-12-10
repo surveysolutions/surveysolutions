@@ -1045,4 +1045,7 @@
   <data name="Error_NoTargetAreaShapefile" xml:space="preserve">
     <value>Не найден файл границ для целейвой области.</value>
   </data>
+  <data name="MenuItem_Title_Return" xml:space="preserve">
+      <value>Вернуться</value>
+  </data>
 </root>

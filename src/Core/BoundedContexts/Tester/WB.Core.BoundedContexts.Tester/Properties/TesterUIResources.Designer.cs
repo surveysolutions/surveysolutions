@@ -290,11 +290,5 @@ namespace WB.Core.BoundedContexts.Tester.Properties {
                 return ResourceManager.GetString("ReloadInterviewErrorMessage", resourceCulture);
             }
         }
-        
-        public static string MenuItem_Title_Return {
-            get {
-                return ResourceManager.GetString("MenuItem_Title_Return", resourceCulture);
-            }
-        }
     }
 }

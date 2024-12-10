@@ -1002,4 +1002,7 @@
   <data name="YouChangeYouPasswordTryToLoginAgainWithNewPassword" xml:space="preserve">
     <value>Ви змінили поточний пароль. Спробуйте увійти ще раз з новим паролем.</value>
   </data>
+  <data name="MenuItem_Title_Return" xml:space="preserve">
+      <value>Повернутися</value>
+  </data>
 </root>

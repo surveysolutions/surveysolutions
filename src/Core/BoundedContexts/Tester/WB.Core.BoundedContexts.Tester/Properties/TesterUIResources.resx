@@ -241,7 +241,4 @@
   <data name="ReloadInterviewErrorMessage" xml:space="preserve">
     <value>Interview data can't be applied to a new version of the questionnaire. We will open a empty interview</value>
   </data>
-  <data name="MenuItem_Title_Return" xml:space="preserve">
-      <value>Return</value>
-  </data>
 </root>
