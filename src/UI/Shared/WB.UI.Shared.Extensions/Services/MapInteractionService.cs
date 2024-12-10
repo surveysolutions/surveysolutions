@@ -50,24 +50,18 @@ namespace WB.UI.Shared.Extensions.Services
 
         public async Task OpenInterviewerMapDashboardAsync()
         {
-            await this.permissions.AssureHasExternalStoragePermissionOrThrow().ConfigureAwait(false);
-
             await this.viewModelNavigationService.NavigateToAsync<InterviewerMapDashboardViewModel, MapDashboardViewModelArgs>(
                 new MapDashboardViewModelArgs(), finishActivityOnSuccess: true).ConfigureAwait(false);
         }
 
         public async Task OpenAssignmentMapAsync(int assignmentId)
         {
-            await this.permissions.AssureHasPermissionOrThrow<Permissions.LocationAlways>().ConfigureAwait(false);
-
             await this.viewModelNavigationService.NavigateToAsync<AssignmentMapViewModel, AssignmentMapViewModelArgs>(
                 new AssignmentMapViewModelArgs() { AssignmentId = assignmentId }, finishActivityOnSuccess: true).ConfigureAwait(false);
         }
 
         public async Task OpenSupervisorMapDashboardAsync()
         {
-            await this.permissions.AssureHasExternalStoragePermissionOrThrow().ConfigureAwait(false);
-
             await this.viewModelNavigationService.NavigateToAsync<SupervisorMapDashboardViewModel, MapDashboardViewModelArgs>(
                 new MapDashboardViewModelArgs(), finishActivityOnSuccess: true).ConfigureAwait(false);
         }
