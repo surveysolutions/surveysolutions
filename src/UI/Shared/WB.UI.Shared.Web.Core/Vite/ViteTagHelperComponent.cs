@@ -37,7 +37,7 @@ public class ViteTagHelperComponent : ITagHelperComponent
     {
     }
 
-    public ViteTagHelperComponent(IWebHostEnvironment webHost,
+    private ViteTagHelperComponent(IWebHostEnvironment webHost,
         IOptions<ViteTagOptions> options,
         IMemoryCache memoryCache)
     {
