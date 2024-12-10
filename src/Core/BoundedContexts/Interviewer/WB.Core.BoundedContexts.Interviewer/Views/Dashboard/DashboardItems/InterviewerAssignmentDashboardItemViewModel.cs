@@ -64,10 +64,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
                 Label = EnumeratorUIResources.Dashboard_RemoveCalendarEvent
             });
 
-            BindLocationAction(Assignment.Id, Assignment.TargetArea);
+            BindTargetAreaAction(Assignment.Id, Assignment.TargetArea);
         }
         
-        protected void BindLocationAction(int assignmentId, string targetArea)
+        protected void BindTargetAreaAction(int assignmentId, string targetArea)
         {
             if (string.IsNullOrWhiteSpace(targetArea)) return;
 
@@ -76,7 +76,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
                 Command = new MvxAsyncCommand(
                     () => mapInteractionService.OpenAssignmentMapAsync(assignmentId)),
 
-                ActionType = ActionType.Extra,
+                ActionType = ActionType.TargetArea,
 
                 Label = EnumeratorUIResources.Dashboard_ShowAssignmentMap
             });

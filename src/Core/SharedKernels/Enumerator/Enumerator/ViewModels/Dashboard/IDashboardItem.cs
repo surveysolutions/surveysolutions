@@ -31,6 +31,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
         MvxObservableCollection<ActionDefinition> Actions { get; }
         ActionDefinition PrimaryAction {get;}
         ActionDefinition SecondaryAction {get;}
+        ActionDefinition TargetAreaAction {get;}
         IEnumerable<ActionDefinition> ContextMenu { get; }
         DashboardInterviewStatus Status { get; }
     }
@@ -40,7 +41,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
         Primary,
         Secondary,
         Extra,
-        Context
+        Context,
+        TargetArea,
     }
 
     public class ActionDefinition : INotifyPropertyChanged

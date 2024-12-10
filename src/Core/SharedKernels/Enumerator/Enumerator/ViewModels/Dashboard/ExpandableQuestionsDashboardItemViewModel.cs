@@ -55,6 +55,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             RaisePropertyChanged(nameof(HasSecondaryAction));
             RaisePropertyChanged(nameof(ExtraAction));
             RaisePropertyChanged(nameof(HasExtraAction));
+            RaisePropertyChanged(nameof(TargetAreaAction));
+            RaisePropertyChanged(nameof(HasTargetAreaAction));
         }
 
         private IExternalAppLauncher ExternalAppLauncher =>
@@ -93,12 +95,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
         public ActionDefinition PrimaryAction => Actions.SingleOrDefault(a => a.ActionType == ActionType.Primary);
         public ActionDefinition SecondaryAction => Actions.SingleOrDefault(a => a.ActionType == ActionType.Secondary);
         public ActionDefinition ExtraAction => Actions.SingleOrDefault(a => a.ActionType == ActionType.Extra);
+        public ActionDefinition TargetAreaAction => Actions.SingleOrDefault(a => a.ActionType == ActionType.TargetArea);
         public IEnumerable<ActionDefinition> ContextMenu => Actions.Where(a => a.ActionType == ActionType.Context);
 
         public bool HasContextMenu => ContextMenu.Any(cm => cm.IsEnabled);
 
         public bool HasSecondaryAction => SecondaryAction != null;
         public bool HasExtraAction => ExtraAction != null;
+        public bool HasTargetAreaAction => TargetAreaAction != null;
 
         public MvxObservableCollection<ActionDefinition> Actions { get; }
 

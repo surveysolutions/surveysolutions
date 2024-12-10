@@ -163,7 +163,7 @@
     <item name="android:textStyle">normal</item>
   </style>
 
-  <style name="Dashboard_Location">
+  <style name="Dashboard_SecondaryAction">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:layout_gravity">center_vertical</item>
@@ -175,7 +175,14 @@
     <item name="android:textStyle">normal</item>
     <item name="android:padding">@dimen/Interview_Group_button_padding</item>
     <item name="android:layout_marginTop">@dimen/Dashboard_InterviewItem_RemoveInterviewButton_paddingTop</item>
+  </style>
+
+  <style name="Dashboard_Location" parent="Dashboard_SecondaryAction">
     <item name="android:drawableLeft">@drawable/navigation_icon</item>
+  </style>
+
+  <style name="Dashboard_TargetArea" parent="Dashboard_SecondaryAction">
+    <item name="android:drawableLeft">@drawable/target_area_icon</item>
   </style>
 
   <style name="Dashboard_ExtraButton">
