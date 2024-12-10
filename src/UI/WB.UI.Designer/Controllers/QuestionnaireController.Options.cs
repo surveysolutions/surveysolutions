@@ -111,9 +111,7 @@ namespace WB.UI.Designer.Controllers
         [HttpGet]
         public IActionResult EditOptions()
         {
-#if DEBUG            
-            tagHelperComponentManager.Components.Add(new ViteTagHelperComponent(webHost, options, memoryCache));
-#endif            
+            ViteTagHelperComponent.RegisterIfRequired(tagHelperComponentManager, webHost, options, memoryCache);           
             return View("Vue");
         }
 
