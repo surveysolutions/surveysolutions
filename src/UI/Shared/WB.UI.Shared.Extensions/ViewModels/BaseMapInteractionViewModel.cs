@@ -139,6 +139,15 @@ namespace WB.UI.Shared.Extensions.ViewModels
             }
         });
 
+        public IMvxAsyncCommand ShowShapefileCommand => new MvxAsyncCommand(async () =>
+        {
+            var existedLayer = this.MapView.Map?.OperationalLayers.FirstOrDefault(l => l.Name == ShapefileLayerName);
+            if (existedLayer?.FullExtent != null)
+            {
+                await MapView.SetViewpointGeometryAsync(existedLayer.FullExtent);
+            }
+        });
+
         protected virtual void ShowedFullMap() { }
 
         public IMvxAsyncCommand SwitchLocatorCommand => new MvxAsyncCommand(async () => { await SwitchLocator(); });

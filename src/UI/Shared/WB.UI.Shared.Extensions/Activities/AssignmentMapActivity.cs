@@ -73,6 +73,7 @@ public class AssignmentMapActivity : MarkersMapActivity<AssignmentMapViewModel, 
     {
         ShowPopupMenu((ImageButton)sender, [
             new CustomMenuItem(UIResources.MenuItem_Title_ZoomMap, () => this.ViewModel.ShowFullMapCommand.Execute(), Resource.Drawable.icon_zoom_map),
+            new CustomMenuItem(UIResources.MenuItem_Title_ZoomShapefile, () => this.ViewModel.ShowShapefileCommand.Execute(), Resource.Drawable.icon_zoom_everything),
             new CustomMenuItem(UIResources.MenuItem_Title_ZoomCollectedData, () => this.ViewModel.ShowAllItemsCommand.Execute(), Resource.Drawable.icon_zoom_collected_data),
             new CustomMenuItem(UIResources.MenuItem_Title_ZoomGeoTracking, () => this.ViewModel.ShowTrackingDataCommand.Execute(), Resource.Drawable.icon_zoom_geotracking_data)
         ]);

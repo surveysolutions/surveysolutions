@@ -746,8 +746,11 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="MenuItem_Title_ZoomMap" xml:space="preserve">
     <value>Zoom all map</value>
   </data>
+  <data name="MenuItem_Title_ZoomShapefile" xml:space="preserve">
+    <value>Zoom boundaries</value>
+  </data>
   <data name="MenuItem_Title_ZoomCollectedData" xml:space="preserve">
-    <value>Zoom all collected data</value>
+    <value>Zoom collected data</value>
   </data>
   <data name="MenuItem_Title_ZoomEverything" xml:space="preserve">
     <value>Zoom everything</value>

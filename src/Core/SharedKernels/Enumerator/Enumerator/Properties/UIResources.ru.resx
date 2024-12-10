@@ -933,8 +933,11 @@
   <data name="MenuItem_Title_ZoomMap" xml:space="preserve">
     <value>Показать всю карту</value>
   </data>
+  <data name="MenuItem_Title_ZoomShapefile" xml:space="preserve">
+    <value>Показать границы</value>
+  </data>
   <data name="MenuItem_Title_ZoomCollectedData" xml:space="preserve">
-    <value>Показать все собранные данные</value>
+    <value>Показать собранные данные</value>
   </data>
   <data name="MenuItem_Title_ZoomEverything" xml:space="preserve">
     <value>Показать все</value>
