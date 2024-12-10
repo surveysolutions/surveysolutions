@@ -16,9 +16,7 @@ namespace WB.UI.Designer.Controllers
             IOptions<ViteTagOptions> options,
             IMemoryCache memoryCache)
         {
-#if DEBUG            
-            tagHelperComponentManager.Components.Add(new ViteTagHelperComponent(webHost, options, memoryCache));
-#endif            
+            ViteTagHelperComponent.RegisterIfRequired(tagHelperComponentManager, webHost, options, memoryCache);
         }
         
         public IActionResult Index() => this.View("Vue");
