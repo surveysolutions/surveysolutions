@@ -64,10 +64,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
         private async Task CreateInterviewAsync()
         {
-            var confirmResult = await userInteractionService.ConfirmAsync(
-                EnumeratorUIResources.Dashboard_CreateInterview_TargetArea_Warning);
-            if (!confirmResult)
-                return;
+            if (!string.IsNullOrWhiteSpace(Assignment.TargetArea))
+            {
+                var confirmResult = await userInteractionService.ConfirmAsync(
+                    EnumeratorUIResources.Dashboard_CreateInterview_TargetArea_Warning);
+                if (!confirmResult)
+                    return;
+            }
             
             await viewModelNavigationService
                 .NavigateToAsync<CreateAndLoadInterviewViewModel, CreateInterviewViewModelArg>(
