@@ -100,13 +100,14 @@
 
                 for (var i = 0; i < result.length; i++) {
                     var translationItem = result[i];
-                    typeaheadCtrl.append(
-                        '<li><a href="javascript:void(0)" value="' +
+                
+                    var itemToAppend = '<li><a href="javascript:void(0)" value="' +
                             translationItem.value +
                             '">' +
                             translationItem.name +
-                            '</a></li>'
-                    );
+                            '</a></li>';
+
+                    typeaheadCtrl.append(DOMPurify.sanitize(itemToAppend));
                 }
 
                 typeaheadCtrl.unbind('click');
@@ -236,13 +237,14 @@
 
         for (var i = 0; i < translationList.length; i++) {
             var translationItem = translationList[i];
-            typeaheadCtrl.append(
-                '<li><a href="javascript:void(0)" value="' +
+
+            var itemToAppend = '<li><a href="javascript:void(0)" value="' +
                     translationItem.value +
                     '">' +
                     translationItem.name +
-                    '</a></li>'
-            );
+                    '</a></li>';
+
+            typeaheadCtrl.append(DOMPurify.sanitize(itemToAppend));            
         }
 
         typeaheadCtrl.unbind('click');
