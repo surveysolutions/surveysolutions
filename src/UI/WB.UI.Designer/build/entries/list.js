@@ -3,6 +3,8 @@ import $ from 'jquery';
 import '/node_modules/jquery-mousewheel/jquery.mousewheel.js';
 import PerfectScrollbar from 'perfect-scrollbar';
 
+import '/node_modules/dompurify/dist/purify.js';
+
 window.jQuery = window.$ = $;
 
 import moment from '/node_modules/moment/min/moment-with-locales';
