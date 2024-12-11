@@ -5,7 +5,7 @@
         <form onsubmit="return false;" v-if="!loading">
             <div v-if="canDelete">
                 <p data-suso="delete-explanation"
-                    v-html="$t('Workspaces.DeleteExplanation', { name: workspaceTitle })">
+                    v-dompurify-html="$t('Workspaces.DeleteExplanation', { name: workspaceTitle })">
                 </p>
                 <Checkbox v-for="c in consentsList" :key="c.name + '_' + draw" :enabled="canDelete" :label="c.label"
                     :name="c.name" v-model="consent[c.name]" />
@@ -14,10 +14,10 @@
         </form>
         <div class="modal-footer">
             <button type="button" data-suso="workspace-delete-ok" class="btn btn-danger"
-                v-bind:disabled="!(canDelete && agree && !inProgress)"
-                @click="deleteWorkspace">{{ $t("Common.Delete") }}</button>
-            <button type="button" class="btn btn-link" data-suso="workspace-cancel"
-                data-bs-dismiss="modal">{{ $t("Common.Cancel") }}</button>
+                v-bind:disabled="!(canDelete && agree && !inProgress)" @click="deleteWorkspace">{{ $t("Common.Delete")
+                }}</button>
+            <button type="button" class="btn btn-link" data-suso="workspace-cancel" data-bs-dismiss="modal">{{
+                $t("Common.Cancel") }}</button>
         </div>
     </ModalFrame>
 </template>

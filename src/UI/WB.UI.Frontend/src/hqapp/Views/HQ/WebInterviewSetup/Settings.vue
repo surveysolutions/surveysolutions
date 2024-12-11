@@ -376,7 +376,7 @@
                                         font-size: 16px;
                                         line-height: 20px;
                                         white-space: pre-line;
-                                      " v-html="previewMessage(emailTemplate)"></td>
+                                      " v-dompurify-html="previewMessage(emailTemplate)"></td>
                                                                     </tr>
                                                                     <tr v-if="isPasswordSupported(emailTemplate)">
                                                                         <td style="

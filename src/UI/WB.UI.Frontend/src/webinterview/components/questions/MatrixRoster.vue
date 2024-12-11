@@ -1,9 +1,9 @@
 <template>
     <div class="question table-view scroller" :id="hash" v-if="rowData.length > 0">
         <div class="question-editor">
-            <h5 v-dateTimeFormatting v-html="title"></h5>
+            <h5 v-dateTimeFormatting v-dompurify-html="title"></h5>
             <div class="information-block instruction" v-if="instructions">
-                <p v-dateTimeFormatting v-html="instructions"></p>
+                <p v-dateTimeFormatting v-dompurify-html="instructions"></p>
             </div>
         </div>
         <ag-grid-vue ref="matrixRoster" class="ag-theme-customStyles roster-matrix" domLayout="autoHeight"

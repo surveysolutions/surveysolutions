@@ -45,12 +45,12 @@
                             <li v-if="emailProviderIsNotSetUp">SI001:
                                 {{ $t('WebInterviewSetup.Invitations_EmailIsNotSetUp') }}
                                 <span v-if="$config.model.isAdmin"
-                                    v-html="$t('WebInterviewSetup.Invitations_ChangeEmailSettingsAdmin', { url: emailProviderUrl })"></span>
+                                    v-dompurify-html="$t('WebInterviewSetup.Invitations_ChangeEmailSettingsAdmin', { url: emailProviderUrl })"></span>
                                 <span v-else>{{ $t('WebInterviewSetup.Invitations_ChangeEmailSettingsNotAdmin')
                                     }}</span>
                             </li>
                             <li v-if="!started">SI002: <span
-                                    v-html="$t('WebInterviewSetup.Invitations_SurveyIsNotStarted', { url: webSettingsUrl })"></span>
+                                    v-dompurify-html="$t('WebInterviewSetup.Invitations_SurveyIsNotStarted', { url: webSettingsUrl })"></span>
                             </li>
                         </ul>
                     </div>

@@ -4,7 +4,8 @@
         <div class="options-group">
             <a class="btn btn-roster-section" :class="btnStatusClass" :disabled="shouldDisable ? true : null"
                 @click="navigate">
-                <span v-html="$me.title"></span><span v-if="this.$me.isRoster && !this.$me.hasCustomRosterTitle"> -
+                <span v-dompurify-html="$me.title"></span><span
+                    v-if="this.$me.isRoster && !this.$me.hasCustomRosterTitle"> -
                     <i>{{ rosterTitle }}</i></span>
             </a>
         </div>

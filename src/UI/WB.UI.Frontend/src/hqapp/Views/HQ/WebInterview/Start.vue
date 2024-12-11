@@ -2,8 +2,7 @@
     <div>
         <div class="row-element mb-20">
             <h2>{{ $config.model.welcomeText }}</h2>
-            <p v-if="$config.model.description"
-                v-html="description">
+            <p v-if="$config.model.description" v-dompurify-html="description">
             </p>
         </div>
         <StartOrResumeForm :buttonTitle="$config.model.startNewButton"
@@ -20,7 +19,7 @@ export default {
     components: {
         StartOrResumeForm,
     },
-    computed:{
+    computed: {
         description() {
             return marked(this.$config.model.description)
         },

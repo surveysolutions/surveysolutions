@@ -66,7 +66,8 @@
                                     </div>
                                 </div>
                                 <div class="row-element mb-40">
-                                    <p v-html="previewHtml(webInterviewPageMessages['linkInvitation'].text)"></p>
+                                    <p v-dompurify-html="previewHtml(webInterviewPageMessages['linkInvitation'].text)">
+                                    </p>
                                 </div>
                             </div>
                         </div>

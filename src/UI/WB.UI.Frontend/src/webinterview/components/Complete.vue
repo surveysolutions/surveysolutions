@@ -27,8 +27,8 @@
                 <ul class="list-unstyled marked-questions">
                     <li v-for="item in group.items" :key="item.id">
                         <a v-if="item.parentId || item.isPrefilled" href="javascript:void(0);" @click="navigateTo(item)"
-                            v-html="item.title"></a>
-                        <span v-else v-html="item.title"></span>
+                            v-dompurify-html="item.title"></a>
+                        <span v-else v-dompurify-html="item.title"></span>
                     </li>
                 </ul>
             </ExpandableList>
@@ -69,11 +69,11 @@
         <div class="wrapper-info">
             <div class="container-info">
                 <a href="javascript:void(0);" id="btnComplete" class="btn btn-lg" v-bind:class="{
-        'btn-success': isAllAnswered,
-        'btn-primary': hasUnansweredQuestions,
-        'btn-danger': hasErrors,
-        'disabled': !isCompletionPermitted,
-    }" @click="completeInterview">{{ competeButtonTitle }}</a>
+                    'btn-success': isAllAnswered,
+                    'btn-primary': hasUnansweredQuestions,
+                    'btn-danger': hasErrors,
+                    'disabled': !isCompletionPermitted,
+                }" @click="completeInterview">{{ competeButtonTitle }}</a>
                 <div class="info-block gray-uppercase" v-if="doesShowCompleteComment" style="margin-top:10px;">{{
                     completeButtionComment }}
                 </div>

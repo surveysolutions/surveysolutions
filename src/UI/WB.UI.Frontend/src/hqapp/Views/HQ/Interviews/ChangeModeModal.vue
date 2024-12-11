@@ -1,7 +1,7 @@
 <template>
     <ModalFrame ref="modalDialog" data-suso="change-interview-mode-modal" :title="title">
         <div class="action-container">
-            <p v-html="confirmMessage"></p>
+            <p v-dompurify-html="confirmMessage"></p>
         </div>
         <div class="form-group" :id="'group__' + modalId + '_' + filteredCount"
             v-if="receivedByInterviewerItemsCount > 0">

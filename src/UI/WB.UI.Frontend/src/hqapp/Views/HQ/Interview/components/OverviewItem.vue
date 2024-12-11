@@ -10,9 +10,9 @@
         </div>
         <div ref="itemContent" class="item-content" @click="showAdditionalDetails">
             <h4>
-                <span v-html="item.title"></span>
+                <span v-dompurify-html="item.title"></span>
                 <template v-if="item.rosterTitle != null"><span> - </span>
-                    <i v-if="item.rosterTitle != null" v-html="item.rosterTitle"></i>
+                    <i v-if="item.rosterTitle != null" v-dompurify-html="item.rosterTitle"></i>
                 </template>
             </h4>
             <div class="answer" v-if="hasAttachment">

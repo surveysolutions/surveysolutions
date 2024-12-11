@@ -11,14 +11,16 @@
             <div v-if="additionalInfo.errors && additionalInfo.errors.length > 0">
                 <div class="information-block text-danger">
                     <h6>{{ $t("WebInterviewUI.AnswerIsInvalid") }}</h6>
-                    <p v-for="(error, index) in additionalInfo.errors" :key="index"><span v-html="error"></span></p>
+                    <p v-for="(error, index) in additionalInfo.errors" :key="index"><span
+                            v-dompurify-html="error"></span></p>
                 </div>
                 <hr />
             </div>
             <div v-if="additionalInfo.warnings && additionalInfo.warnings.length > 0">
                 <div class="information-block text-warning">
                     <h6>{{ $t("WebInterviewUI.WarningsHeader") }}</h6>
-                    <p v-for="(warning, index) in additionalInfo.warnings" :key="index"><span v-html="warning"></span>
+                    <p v-for="(warning, index) in additionalInfo.warnings" :key="index"><span
+                            v-dompurify-html="warning"></span>
                     </p>
                 </div>
                 <hr />

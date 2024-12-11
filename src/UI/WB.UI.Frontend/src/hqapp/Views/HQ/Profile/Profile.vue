@@ -160,7 +160,7 @@
                         <div class="total">
                             <p class="primary-text">
                                 {{ $t("Pages.InterviewerProfile_TotalTrafficUsed") }}:
-                                <span v-html="formatKb(totalTrafficUsed)"></span>
+                                <span v-dompurify-html="formatKb(totalTrafficUsed)"></span>
                             </p>
                         </div>
                     </div>
@@ -283,11 +283,11 @@
                         {{ this.fullModel.totalNumberOfFailedSynchronizations }}</li>
                     <li v-if="this.fullModel.averageSyncSpeedBytesPerSecond">
                         {{ $t('Pages.InterviewerProfile_AverageSyncSpeed') }}:
-                        <span v-html="formatKb(this.fullModel.averageSyncSpeedBytesPerSecond)"></span>/s
+                        <span v-dompurify-html="formatKb(this.fullModel.averageSyncSpeedBytesPerSecond)"></span>/s
                     </li>
                     <li>
                         {{ $t('Pages.InterviewerProfile_TotalTrafficUsed') }}:
-                        <span v-html="formatKb(this.fullModel.trafficUsed)"></span>
+                        <span v-dompurify-html="formatKb(this.fullModel.trafficUsed)"></span>
                     </li>
                 </ul>
                 <ConnectionStats :prefix="$t('Pages.InterviewerProfile_LastSuccessSync')"
@@ -378,13 +378,13 @@
                         <tr :class="{ 'text-danger': this.fullModel.storageFreeInBytes < 1024 * 1024 * 100 }">
                             <td>{{ $t('Pages.InterviewerProfile_StorageInfo') }}</td>
                             <td
-                                v-html="`${ouputBytes(this.fullModel.storageFreeInBytes)} / ${ouputBytes(this.fullModel.storageTotalInBytes)}`">
+                                v-dompurify-html="`${ouputBytes(this.fullModel.storageFreeInBytes)} / ${ouputBytes(this.fullModel.storageTotalInBytes)}`">
                             </td>
                         </tr>
                         <tr>
                             <td>{{ $t('Pages.InterviewerProfile_MemoryInfo') }}</td>
                             <td
-                                v-html="`${ouputBytes(this.fullModel.ramFreeInBytes)} / ${ouputBytes(this.fullModel.ramTotalInBytes)}`">
+                                v-dompurify-html="`${ouputBytes(this.fullModel.ramFreeInBytes)} / ${ouputBytes(this.fullModel.ramTotalInBytes)}`">
                             </td>
                         </tr>
                         <tr>

@@ -3,7 +3,7 @@
         :topicButtonRef="config.isSupervisor ? null : config.api.surveySetup">
         <template v-slot:headers>
             <div class="topic-with-button">
-                <h1 v-html='title'></h1>
+                <h1 v-dompurify-html='title'></h1>
                 <a href="MapDashboard" class="btn" style="margin-right:30px;padding:0;">
                     <img style="padding-top:2px;" height="26px;" src="/img/google-maps-markers/map.png"
                         alt="Map Dashboard" :title="$t('Common.MapDashboard')" />

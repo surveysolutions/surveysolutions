@@ -1,73 +1,52 @@
 <template>
     <div>
-        <Confirm
-            id="move-interviewer-confirmation"
-            ref="move"
-            :title="$t('Pages.Interviewers_MoveInterviewerPopupTitle', {names: this.formatNames(this.interviewers)})"
-            slot="modals"
-            :disableOk="!whatToDoWithAssignments || !supervisor">
+        <Confirm id="move-interviewer-confirmation" ref="move"
+            :title="$t('Pages.Interviewers_MoveInterviewerPopupTitle', { names: this.formatNames(this.interviewers) })"
+            slot="modals" :disableOk="!whatToDoWithAssignments || !supervisor">
             <div class="alert">
-                <Typeahead
-                    ref="supervisorControl"
-                    control-id="supervisorToAssign"
-                    data-vv-name="supervisor"
-                    data-vv-as="supervisor"
-                    :placeholder="$t('Common.AllSupervisors')"
-                    :value="supervisor"
-                    :fetch-url="$config.model.supervisorsUrl"
-                    v-on:selected="supervisorSelected"/>
+                <Typeahead ref="supervisorControl" control-id="supervisorToAssign" data-vv-name="supervisor"
+                    data-vv-as="supervisor" :placeholder="$t('Common.AllSupervisors')" :value="supervisor"
+                    :fetch-url="$config.model.supervisorsUrl" v-on:selected="supervisorSelected" />
 
                 <br />
                 <br />
                 <div v-if="supervisor && interviewersToStay.length > 0">
                     <p
-                        v-html="$t('Pages.Interviewers_InterviewersToStay', { interviewers: `<b>${interviewersToStayNamesOnly}</b>`, supervisor: `<b>${selectedSupervisor}</b>` })"></p>
+                        v-dompurify-html="$t('Pages.Interviewers_InterviewersToStay', { interviewers: `<b>${interviewersToStayNamesOnly}</b>`, supervisor: `<b>${selectedSupervisor}</b>` })">
+                    </p>
                 </div>
                 <div v-if="supervisor && interviewersToMove.length > 0">
                     <p
-                        v-html="$t('Pages.Interviewers_InterviewersToMove', { interviewers: `<b>${interviewersToMoveNamesOnly}</b>`, supervisor: `<b>${selectedSupervisor}</b>`})"></p>
+                        v-dompurify-html="$t('Pages.Interviewers_InterviewersToMove', { interviewers: `<b>${interviewersToMoveNamesOnly}</b>`, supervisor: `<b>${selectedSupervisor}</b>` })">
+                    </p>
                 </div>
 
-                <div class="radio"
-                    v-if="supervisor && interviewersToMove.length > 0">
-                    <input
-                        id="reassignToOriginalSupervisor"
-                        v-model="whatToDoWithAssignments"
-                        name="whatToDoWithAssignments"
-                        value="ReassignToOriginalSupervisor"
-                        type="radio"
-                        class="wb-radio"/>
+                <div class="radio" v-if="supervisor && interviewersToMove.length > 0">
+                    <input id="reassignToOriginalSupervisor" v-model="whatToDoWithAssignments"
+                        name="whatToDoWithAssignments" value="ReassignToOriginalSupervisor" type="radio"
+                        class="wb-radio" />
                     <label for="reassignToOriginalSupervisor">
                         <span class="tick"></span>
                         {{ $t('Pages.Interviewers_ReassignToOriginalSupervisor') }}
                     </label>
                 </div>
-                <div class="radio"
-                    v-if="supervisor && interviewersToMove.length > 0">
-                    <input
-                        id="moveAllToNewTeam"
-                        type="radio"
-                        v-model="whatToDoWithAssignments"
-                        name="whatToDoWithAssignments"
-                        value="MoveAllToNewTeam"
-                        class="wb-radio"/>
+                <div class="radio" v-if="supervisor && interviewersToMove.length > 0">
+                    <input id="moveAllToNewTeam" type="radio" v-model="whatToDoWithAssignments"
+                        name="whatToDoWithAssignments" value="MoveAllToNewTeam" class="wb-radio" />
                     <label for="moveAllToNewTeam">
                         <span class="tick"></span>
                         <span
-                            v-html="$t('Pages.Interviewers_MoveAllToNewTeam', { supervisor: `<b>${selectedSupervisor}</b>`})"></span>
+                            v-dompurify-html="$t('Pages.Interviewers_MoveAllToNewTeam', { supervisor: `<b>${selectedSupervisor}</b>` })"></span>
                     </label>
                 </div>
 
-                <span class="text-warning"
-                    v-if="showWebModeReassignWarning">
-                    {{$t('Pages.Interviewers_MoveWebAssigment')}}
+                <span class="text-warning" v-if="showWebModeReassignWarning">
+                    {{ $t('Pages.Interviewers_MoveWebAssigment') }}
                 </span>
             </div>
         </Confirm>
 
-        <ModalFrame ref="progress"
-            id="move-interviewer-progress-template"
-            :title="movingDialogTitle">
+        <ModalFrame ref="progress" id="move-interviewer-progress-template" :title="movingDialogTitle">
             <div class="max-height-in-popup">
                 <table class="table table-striped table-bordered table-hover">
                     <thead>
@@ -77,17 +56,14 @@
                             <th>{{ $t('MainMenu.Assignments') }}</th>
                         </tr>
                     </thead>
-                    <tbody
-                        v-for="interviewer in progressInterviewers"
-                        v-bind:key="interviewer.userId">
+                    <tbody v-for="interviewer in progressInterviewers" v-bind:key="interviewer.userId">
                         <tr>
                             <td>
                                 <span class="interviewer">
-                                    <a
-                                        target="_blank"
+                                    <a target="_blank"
                                         :href="$config.model.interviewerProfile + '/' + interviewer.userId"
                                         :v-text="interviewer.userName"
-                                        :class="{'text-danger' : interviewer.inProgress }">{{interviewer.userName}}</a>
+                                        :class="{ 'text-danger': interviewer.inProgress }">{{ interviewer.userName }}</a>
                                 </span>
                             </td>
                             <td v-text="interviewer.interviewsProcessed"></td>
@@ -96,9 +72,8 @@
                         <tr v-if="interviewer.errors.length > 0">
                             <td colspan="5">
                                 <p>{{ $t('Pages.Interviewers_FinishedWithErrors') }}</p>
-                                <ul v-for="error in interviewer.errors"
-                                    v-bind:key="error">
-                                    <li :v-text="error">{{error}}</li>
+                                <ul v-for="error in interviewer.errors" v-bind:key="error">
+                                    <li :v-text="error">{{ error }}</li>
                                 </ul>
                             </td>
                         </tr>
@@ -110,7 +85,7 @@
 </template>
 
 <script>
-import {map, isUndefined, isEmpty, filter} from 'lodash'
+import { map, isUndefined, isEmpty, filter } from 'lodash'
 import gql from 'graphql-tag'
 
 const query = gql`query assignments($workspace: String!, $where: AssignmentsFilter) {
@@ -139,7 +114,7 @@ export default {
             default: () => [],
         },
     },
-    mounted() {},
+    mounted() { },
     methods: {
         supervisorSelected(option) {
             this.supervisor = option
@@ -147,7 +122,7 @@ export default {
         formatNames(interviewers, limit) {
             limit = limit || 3
 
-            var names = map(interviewers, function(interviewer) {
+            var names = map(interviewers, function (interviewer) {
                 return interviewer.userName
             })
 
@@ -191,7 +166,7 @@ export default {
 
             this.movingDialogTitle = this.$t('Pages.Interviewers_MovingIsInProgress')
 
-            this.progressInterviewers = map(this.interviewers, function(interviewer) {
+            this.progressInterviewers = map(this.interviewers, function (interviewer) {
                 var progressItem = {}
                 progressItem.userId = interviewer.userId
                 progressItem.userName = interviewer.userName
@@ -254,12 +229,12 @@ export default {
         },
         interviewersToMove() {
             var self = this
-            return filter(this.interviewers, function(interviewer) {
+            return filter(this.interviewers, function (interviewer) {
                 return interviewer.supervisorName != self.selectedSupervisor
             })
         },
         interviewersToStay() {
-            return filter(this.interviewers, {supervisorName: this.selectedSupervisor})
+            return filter(this.interviewers, { supervisorName: this.selectedSupervisor })
         },
         interviewersToMoveNamesOnly() {
             return this.formatNames(this.interviewersToMove)
@@ -274,13 +249,15 @@ export default {
     watch: {
         async whatToDoWithAssignments(newValue) {
             const self = this
-            if(newValue === 'ReassignToOriginalSupervisor'){
-                const interviewersArray = map(self.interviewersToMove, (i) => i.userId.replaceAll('-',''))
+            if (newValue === 'ReassignToOriginalSupervisor') {
+                const interviewersArray = map(self.interviewersToMove, (i) => i.userId.replaceAll('-', ''))
 
-                const where = {and :[
-                    {webMode: {eq: true}},
-                    {archived: {eq: false}},
-                    {responsibleId: {in: interviewersArray}}]}
+                const where = {
+                    and: [
+                        { webMode: { eq: true } },
+                        { archived: { eq: false } },
+                        { responsibleId: { in: interviewersArray } }]
+                }
 
                 const response = await self.$apollo.query({
                     query,

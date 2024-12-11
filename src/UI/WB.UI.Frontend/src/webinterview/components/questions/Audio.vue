@@ -8,9 +8,9 @@
                 <div class="field answered" v-if="$me.isAnswered">
                     <ul class="block-with-data list-unstyled">
                         <li :id="answerHolderId">{{ $t("WebInterviewUI.AudioRecordingDuration", {
-        humanizedLength:
-            humanizedLength, formattedLength
-    }) }}</li>
+                            humanizedLength:
+                            humanizedLength, formattedLength
+                            }) }}</li>
                     </ul>
                     <wb-remove-answer />
                 </div>
@@ -32,7 +32,7 @@
                         <h4 class="modal-title">
                             {{ $t("WebInterviewUI.AudioRecording") }}
                         </h4>
-                        <h5 v-dateTimeFormatting v-html="$me.title"></h5>
+                        <h5 v-dateTimeFormatting v-dompurify-html="$me.title"></h5>
                     </div>
                     <div class="modal-body">
                         <canvas class="analyser" width="100" height="100"></canvas>
