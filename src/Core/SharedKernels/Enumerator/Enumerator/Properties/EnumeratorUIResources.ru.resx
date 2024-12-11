@@ -1048,4 +1048,13 @@
   <data name="MenuItem_Title_Return" xml:space="preserve">
       <value>Вернуться</value>
   </data>
+  <data name="Dashboard_CreateInterview_TargetArea_Warning" xml:space="preserve">
+    <value>Для выполнения этого задания необходимо создать его с карты. Рекомендуется создать интервью с карты. Хотите продолжить?</value>
+  </data>
+  <data name="AssigmentMap_CreateInterview_OutTargetArea_Warning" xml:space="preserve">
+    <value>Вы создаете интервью за пределами целевой области. Хотите продолжить?</value>
+  </data>
+  <data name="AssigmentMap_CreateInterview_DisabledTargetArea_Warning" xml:space="preserve">
+    <value>Рекомендуется включить геофенсинг для проверки целевой зоны. Хотите продолжить?</value>
+  </data>
 </root>

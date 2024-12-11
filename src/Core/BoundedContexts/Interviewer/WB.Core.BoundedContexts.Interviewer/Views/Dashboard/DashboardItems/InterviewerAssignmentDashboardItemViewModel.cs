@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using MvvmCross.Commands;
 using WB.Core.BoundedContexts.Interviewer.Views.CreateInterview;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
@@ -13,14 +14,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
     {
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly IMapInteractionService mapInteractionService;
+        private readonly IUserInteractionService userInteractionService;
 
         public InterviewerAssignmentDashboardItemViewModel(IServiceLocator serviceLocator,
             IViewModelNavigationService viewModelNavigationService,
-            IMapInteractionService mapInteractionService) 
+            IMapInteractionService mapInteractionService,
+            IUserInteractionService userInteractionService) 
             : base(serviceLocator)
         {
             this.viewModelNavigationService = viewModelNavigationService;
             this.mapInteractionService = mapInteractionService;
+            this.userInteractionService = userInteractionService;
         }
 
         protected override void BindActions()
@@ -32,16 +36,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             Actions.Add(new ActionDefinition
             {
                 Command = new MvxAsyncCommand(
-                    async () =>
-                    {
-                        await viewModelNavigationService
-                            .NavigateToAsync<CreateAndLoadInterviewViewModel, CreateInterviewViewModelArg>(
-                                new CreateInterviewViewModelArg()
-                                {
-                                    AssignmentId = Assignment.Id,
-                                    InterviewId = Guid.NewGuid()
-                                }, true);
-                    },
+                    async () => { await CreateInterviewAsync(); },
                     () => !Assignment.Quantity.HasValue ||
                           Math.Max(val1: 0, val2: InterviewsLeftByAssignmentCount) > 0),
 
@@ -66,7 +61,23 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
             BindTargetAreaAction(Assignment.Id, Assignment.TargetArea);
         }
-        
+
+        private async Task CreateInterviewAsync()
+        {
+            var confirmResult = await userInteractionService.ConfirmAsync(
+                EnumeratorUIResources.Dashboard_CreateInterview_TargetArea_Warning);
+            if (!confirmResult)
+                return;
+            
+            await viewModelNavigationService
+                .NavigateToAsync<CreateAndLoadInterviewViewModel, CreateInterviewViewModelArg>(
+                    new CreateInterviewViewModelArg()
+                    {
+                        AssignmentId = Assignment.Id,
+                        InterviewId = Guid.NewGuid()
+                    }, true);
+        }
+
         protected void BindTargetAreaAction(int assignmentId, string targetArea)
         {
             if (string.IsNullOrWhiteSpace(targetArea)) return;

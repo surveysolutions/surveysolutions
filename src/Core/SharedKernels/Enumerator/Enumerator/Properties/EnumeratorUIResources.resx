@@ -1025,4 +1025,13 @@ It will appear on interviewer device after next synchronization</value>
   <data name="Error_NoTargetAreaShapefile" xml:space="preserve">
     <value>There is no boundaries for target area.</value>
   </data>
+  <data name="Dashboard_CreateInterview_TargetArea_Warning" xml:space="preserve">
+    <value>This task requires you to create it directly from the map. It is recommended to create the interview using the map. Would you like to continue?</value>
+  </data>
+  <data name="AssigmentMap_CreateInterview_OutTargetArea_Warning" xml:space="preserve">
+    <value>You are creating an interview outside the target area. Do you want to proceed?</value>
+  </data>
+  <data name="AssigmentMap_CreateInterview_DisabledTargetArea_Warning" xml:space="preserve">
+    <value>It is recommended to enable geofencing to check the target area. Do you want to proceed?</value>
+  </data>
 </root>

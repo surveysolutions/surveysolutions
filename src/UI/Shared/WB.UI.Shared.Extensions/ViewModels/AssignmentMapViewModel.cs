@@ -293,7 +293,28 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
         new MvxAsyncCommand(async () => await this.ViewModelNavigationService.NavigateToDashboardAsync());
 
     public IMvxAsyncCommand CreateInterviewCommand => 
-        new MvxAsyncCommand(async () => await this.ViewModelNavigationService.NavigateToCreateAndLoadInterview(assignment.Id));
+        new MvxAsyncCommand(async () =>
+        {
+            if (IsEnabledGeofencing)
+            {
+                if (geofencingListener.LastResult.OutShapefile)
+                {
+                    var confirmResult = await UserInteractionService.ConfirmAsync(
+                        EnumeratorUIResources.AssigmentMap_CreateInterview_OutTargetArea_Warning);
+                    if (!confirmResult)
+                        return;
+                }
+            }
+            else
+            {
+                var confirmResult = await UserInteractionService.ConfirmAsync(
+                    EnumeratorUIResources.AssigmentMap_CreateInterview_DisabledTargetArea_Warning);
+                if (!confirmResult)
+                    return;
+            }
+
+            await this.ViewModelNavigationService.NavigateToCreateAndLoadInterview(assignment.Id);
+        });
 
     private bool isEnabledGeofencing;
     public bool IsEnabledGeofencing

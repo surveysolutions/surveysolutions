@@ -1832,5 +1832,23 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
                 return ResourceManager.GetString("Error_NoTargetAreaShapefile", resourceCulture);
             }
         }
+        
+        public static string Dashboard_CreateInterview_TargetArea_Warning {
+            get {
+                return ResourceManager.GetString("Dashboard_CreateInterview_TargetArea_Warning", resourceCulture);
+            }
+        }
+        
+        public static string AssigmentMap_CreateInterview_OutTargetArea_Warning {
+            get {
+                return ResourceManager.GetString("AssigmentMap_CreateInterview_OutTargetArea_Warning", resourceCulture);
+            }
+        }
+        
+        public static string AssigmentMap_CreateInterview_DisabledTargetArea_Warning {
+            get {
+                return ResourceManager.GetString("AssigmentMap_CreateInterview_DisabledTargetArea_Warning", resourceCulture);
+            }
+        }
     }
 }
