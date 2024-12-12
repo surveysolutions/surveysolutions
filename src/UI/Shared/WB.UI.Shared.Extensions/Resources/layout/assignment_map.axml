@@ -24,6 +24,42 @@
                     local:MvxBind="Map Map; GraphicsOverlays GraphicsOverlays;"/>
         </LinearLayout>
 
+        <LinearLayout
+                android:id="@+id/area_warning"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="@dimen/area_editor_buttons_margin_space"
+                android:layout_marginLeft="@dimen/area_editor_warning_margin"
+                android:layout_marginRight="@dimen/area_editor_warning_margin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                local:MvxBind="Visible Not(IsPanelVisible);">
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.75"
+                    android:gravity="center_vertical|left"
+                    android:orientation="vertical"
+                    android:layout_marginBottom="1dp"
+                    android:background="@drawable/warning"
+                    local:MvxBind="Visible IsWarningVisible;">
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/area_editor_buttons_margin_space"
+                        android:layout_marginRight="@dimen/area_editor_buttons_margin_space"
+                        android:textSize="@dimen/area_editor_warning_text"
+                        android:textColor="@color/map_warning_text_color"
+                        android:gravity="left"
+                        android:duplicateParentState="true"
+                        android:singleLine="false"
+                        android:maxLines="2"
+                        android:id="@+id/areaEditor_Warnings"
+                        local:MvxBind="Text Warning;"/>
+            </LinearLayout>
+        </LinearLayout>
+        
+        
         <ImageButton
                 android:id="@+id/butBack"
                 style="@style/Area_BackButton"
@@ -32,7 +68,6 @@
                 local:MvxBind="Click NavigateToDashboardCommand; Visible Not(IsPanelVisible);"
                 android:layout_marginTop="@dimen/area_editor_buttons_margin_space"
                 android:layout_marginLeft="@dimen/area_editor_buttons_margin_space" />
-
 
         <ImageButton
                 android:id="@+id/butMenu"
@@ -94,41 +129,6 @@
         />
         
         
-        <LinearLayout
-                android:id="@+id/area_warning"
-                android:layout_alignParentTop="true"
-                android:layout_marginTop="@dimen/area_editor_buttons_margin_space"
-                android:layout_marginLeft="@dimen/area_editor_warning_margin"
-                android:layout_marginRight="@dimen/area_editor_warning_margin"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                local:MvxBind="Visible Not(IsPanelVisible);">
-            <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.75"
-                    android:gravity="center_vertical|left"
-                    android:orientation="vertical"
-                    android:layout_marginBottom="1dp"
-                    android:background="@drawable/warning"
-                    local:MvxBind="Visible IsWarningVisible;">
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/area_editor_buttons_margin_space"
-                        android:layout_marginRight="@dimen/area_editor_buttons_margin_space"
-                        android:textSize="@dimen/area_editor_warning_text"
-                        android:textColor="@color/map_warning_text_color"
-                        android:gravity="left"
-                        android:duplicateParentState="true"
-                        android:singleLine="false"
-                        android:maxLines="2"
-                        android:id="@+id/areaEditor_Warnings"
-                        local:MvxBind="Text Warning;"/>
-            </LinearLayout>
-        </LinearLayout>
-
         <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/carousel_view_pager"
                 android:layout_width="match_parent"

@@ -533,8 +533,6 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 }
             };
             await NavigationService.Navigate<BottomSheetOptionsSelectorViewModel, BottomSheetOptionsSelectorViewModelArgs>(args);
-        
-            //await this.UpdateBaseMap(mapDescription.MapName);
         });
         
         public IMvxAsyncCommand SwitchShapefileCommand => new MvxAsyncCommand(async () =>
@@ -566,8 +564,6 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 }
             };
             await NavigationService.Navigate<BottomSheetOptionsSelectorViewModel, BottomSheetOptionsSelectorViewModelArgs>(args);
-        
-            //await this.UpdateBaseMap(mapDescription.MapName);
         });
     }
 }

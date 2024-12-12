@@ -73,6 +73,10 @@
     <style name="Area_LocButton" parent="Area_DefaultButton">
         <item name="android:src">@drawable/icon_location</item>
     </style>
+    <style name="Area_UndoButton" parent="Area_DefaultButton">
+        <item name="android:background">@null</item>
+        <item name="android:src">@drawable/icon_undo</item>
+    </style>
     <style name="Area_ZoomMenuButton" parent="Area_DefaultButton">
         <item name="android:src">@drawable/icon_zoom_menu</item>
     </style>

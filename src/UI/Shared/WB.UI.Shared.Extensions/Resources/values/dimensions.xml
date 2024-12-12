@@ -2,6 +2,7 @@
 
 <resources>
     <dimen name="area_editor_list_item_margin_top">15dp</dimen>
+    <dimen name="area_editor_cancel_space">5dp</dimen>
     <dimen name="area_editor_cancel_margin_right">15dp</dimen>
     <dimen name="area_editor_toolbar_margin_left">20dp</dimen>
     <dimen name="area_editor_common_margin_top">30dp</dimen>
