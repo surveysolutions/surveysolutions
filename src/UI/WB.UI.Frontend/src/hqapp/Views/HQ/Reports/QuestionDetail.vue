@@ -2,18 +2,15 @@
     <div v-if="question != null">
         <p>{{ title }}</p>
         <ol class="breadcrumb">
-            <li v-for="breadcrumb in question.Breadcrumbs"
-                :key="breadcrumb"
-                class="btn-link">{{ breadcrumb }} </li>
+            <li v-for="breadcrumb in question.Breadcrumbs" :key="breadcrumb" class="btn-link">{{ breadcrumb }} </li>
         </ol>
         <dl v-if="question">
             <dt v-if="question.Label">
                 {{ $t("Reports.QuestionLabel") }}:
             </dt>
-            <dd v-if="question.Label"
-                v-html="question.Label" />
+            <dd v-if="question.Label" v-dompurify-html="question.Label" />
             <dt>{{ $t("Reports.QuestionText") }}:</dt>
-            <dd>{{question.QuestionText}}</dd>
+            <dd>{{ question.QuestionText }}</dd>
         </dl>
     </div>
 </template>

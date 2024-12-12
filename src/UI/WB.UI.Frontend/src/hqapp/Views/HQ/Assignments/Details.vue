@@ -165,7 +165,7 @@
                                                 }}</span>
                                             </h4>
                                             <div class="answer">
-                                                <div v-html="question.answer"></div>
+                                                <div v-dompurify-html="question.answer"></div>
                                             </div>
                                         </div>
                                     </div>

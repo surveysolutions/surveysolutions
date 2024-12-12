@@ -17,12 +17,12 @@
                             question.validity.notSavedAnswerValue + '"' : '') }}
                     </h6>
                     <template v-for="message in question.validity.messages" :key="message">
-                        <div v-dateTimeFormatting v-html="message"></div>
+                        <div v-dateTimeFormatting v-dompurify-html="message"></div>
                     </template>
                 </div>
                 <div class="warning-tooltip" v-else-if="question.validity.warnings.length > 0">
                     <template v-for="message in question.validity.warnings" :key="message">
-                        <div v-dateTimeFormatting v-html="message"></div>
+                        <div v-dateTimeFormatting v-dompurify-html="message"></div>
                     </template>
                 </div>
             </template>

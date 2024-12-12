@@ -8,12 +8,12 @@
                         <div :class="{ 'neighbor-block-to-search': hasSearch }">
                             <slot name="headers">
                                 <div :class="{ 'topic-with-button': topicButtonRef }">
-                                    <h1 v-html='title'></h1>
+                                    <h1 v-dompurify-html='title'></h1>
                                     <a v-if="topicButtonRef" class="btn btn-success" :href="topicButtonRef">
                                         {{ topicButton }}
                                     </a>
                                 </div>
-                                <i v-if="subtitle" v-html="subtitle">
+                                <i v-if="subtitle" v-dompurify-html="subtitle">
                                 </i>
                             </slot>
                             <slot name="subtitle" />

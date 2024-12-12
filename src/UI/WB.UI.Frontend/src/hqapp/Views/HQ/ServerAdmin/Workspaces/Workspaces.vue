@@ -3,13 +3,13 @@
         <template v-slot:headers>
             <div>
                 <div class="topic-with-button">
-                    <h1 v-html="$t('MainMenu.Workspaces')"></h1>
+                    <h1 v-dompurify-html="$t('MainMenu.Workspaces')"></h1>
                     <button type="button" v-if="$config.model.canManage" class="btn btn-success"
                         data-suso="create-new-workspace" @click="createNewWorkspace">
                         {{ $t('Workspaces.AddNew') }}
                     </button>
                 </div>
-                <i v-html="$t('Workspaces.WorkspacesSubtitle')"></i>
+                <i v-dompurify-html="$t('Workspaces.WorkspacesSubtitle')"></i>
                 <div class="search-pusher"></div>
             </div>
         </template>

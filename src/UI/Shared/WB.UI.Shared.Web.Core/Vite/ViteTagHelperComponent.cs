@@ -28,9 +28,9 @@ public class ViteTagHelperComponent : ITagHelperComponent
     public static void RegisterIfRequired(ITagHelperComponentManager tagHelperComponentManager, 
         IWebHostEnvironment webHost, IOptions<ViteTagOptions> options, IMemoryCache memoryCache)
     {
-#if DEBUG
+//#if DEBUG
         tagHelperComponentManager.Components.Add(new ViteTagHelperComponent(webHost, options, memoryCache));
-#endif
+//#endif
     }
 
     public void Init(TagHelperContext context)

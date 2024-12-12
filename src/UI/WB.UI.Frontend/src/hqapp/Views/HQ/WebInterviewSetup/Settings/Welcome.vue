@@ -85,7 +85,7 @@
                                     </div>
                                 </div>
                                 <div class="row-element mb-40">
-                                    <p v-html="previewHtml(webInterviewPageMessages['invitation'].text)"></p>
+                                    <p v-dompurify-html="previewHtml(webInterviewPageMessages['invitation'].text)"></p>
                                 </div>
                                 <div class="row-element mb-40">
                                     <a href="javascript:void(0);" class="btn btn-success btn-lg">

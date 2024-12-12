@@ -1,13 +1,8 @@
 <template>
-    <div class="question static-text variable"
-        :class="variableClass"
-        v-if="!$me.isLoading"
-        :id="hash">
+    <div class="question static-text variable" :class="variableClass" v-if="!$me.isLoading" :id="hash">
         <div class="question-editor">
             <div>
-                <h5 v-dateTimeFormatting
-                    v-linkToRoute
-                    v-html="title"></h5>
+                <h5 v-dateTimeFormatting v-linkToRoute v-dompurify-html="title"></h5>
             </div>
         </div>
     </div>
@@ -27,7 +22,7 @@ export default {
     },
     data() {
         return {
-            text: '',            
+            text: '',
         }
     },
     mounted() {
@@ -47,21 +42,21 @@ export default {
             const entity = find(this.$store.state.webinterview.entities, d => d.identity == this.id)
             return [
                 {
-                    'section-variable': !entity.isCover 
+                    'section-variable': !entity.isCover
                 },
             ]
         },
     },
-    methods : {
-        doScroll: debounce(function() {
-            if(this.$store.getters.scrollState == '#' + this.id){
+    methods: {
+        doScroll: debounce(function () {
+            if (this.$store.getters.scrollState == '#' + this.id) {
                 window.scroll({ top: this.$el.offsetTop, behavior: 'smooth' })
                 this.$store.dispatch('resetScroll')
             }
         }, 200),
 
         scroll() {
-            if(this.$store && this.$store.state.route.hash === '#' + this.id) {
+            if (this.$store && this.$store.state.route.hash === '#' + this.id) {
                 this.doScroll()
             }
         },

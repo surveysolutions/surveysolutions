@@ -2,7 +2,7 @@
     <HqLayout :hasFilter="true">
         <template v-slot:headers>
             <div class="topic-with-button">
-                <h1 v-html="$t('Users.UsersTitle')"></h1>
+                <h1 v-dompurify-html="$t('Users.UsersTitle')"></h1>
                 <a class="btn btn-success" v-if="model.canAddUsers" :href="$config.model.createUrl">
                     {{ $t('Users.AddUser') }}
                 </a>
@@ -63,18 +63,18 @@
                     </label>
                     <button class="btn btn-lg btn-success" :disabled="filteredToAdd.length == 0"
                         @click="addToWorkspace">{{
-        $t("Pages.UserManagement_AddToWorkspace") }}</button>
+                            $t("Pages.UserManagement_AddToWorkspace") }}</button>
                     <button class="btn btn-lg btn-success" :disabled="filteredToAdd.length == 0"
                         @click="removeFromWorkspace">{{
-        $t("Pages.UserManagement_RemoveFromWorkspace") }}</button>
+                            $t("Pages.UserManagement_RemoveFromWorkspace") }}</button>
                     <button type="button" v-if="isVisibleArchive" class="btn btn-default btn-danger"
                         @click="archiveUsers">{{
-        $t("Pages.Interviewers_Archive") }}</button>
+                            $t("Pages.Interviewers_Archive") }}</button>
                     <button type="button" v-if="isVisibleUnarchive" class="btn btn-default btn-success"
                         @click="unarchiveUsers">{{ $t("Pages.Interviewers_Unarchive") }}</button>
                     <button type="button" class="btn btn-default btn-warning last-btn"
                         v-if="isAnyInterviewerSelected && selectedWorkspace" @click="moveToAnotherTeam">{{
-        $t("Pages.Interviewers_MoveToAnotherTeam") }}</button>
+                            $t("Pages.Interviewers_MoveToAnotherTeam") }}</button>
                 </div>
             </div>
         </DataTables>

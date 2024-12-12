@@ -9,7 +9,7 @@
                             <span aria-hidden="true"></span>
                         </button>
                         <slot name="title">
-                            <h2 v-if="useHtmlInTitle" :id="titleId" v-html="title" />
+                            <h2 v-if="useHtmlInTitle" :id="titleId" v-dompurify-html="title" />
                             <h2 v-else :id="titleId">
                                 {{ title }}
                             </h2>

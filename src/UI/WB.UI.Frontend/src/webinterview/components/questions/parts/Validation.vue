@@ -6,7 +6,7 @@
                 $me.validity.notSavedAnswerValue + '"' : '') }}
         </h6>
         <template v-for="message in $me.validity.messages" :key="message">
-            <p v-dateTimeFormatting v-html="message"></p>
+            <p v-dateTimeFormatting v-dompurify-html="message"></p>
         </template>
     </div>
 </template>
