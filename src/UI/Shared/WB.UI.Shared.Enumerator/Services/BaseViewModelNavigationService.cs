@@ -177,13 +177,17 @@ namespace WB.UI.Shared.Enumerator.Services
             {
                 var viewModelType = sourceOfInterview.Item1;
                 var param = sourceOfInterview.Item2;
-                MethodInfo method = typeof(BaseViewModelNavigationService)
-                    .GetMethod(nameof(NavigateToAsyncImpl), BindingFlags.NonPublic | BindingFlags.Instance);
-                MethodInfo genericMethod = method.MakeGenericMethod(viewModelType, param.GetType());
-                return (Task<bool>)genericMethod.Invoke(this, [param]);
+                var paramType = param?.GetType();
+                if (paramType != null)
+                {
+                    MethodInfo method = typeof(BaseViewModelNavigationService)
+                        .GetMethod(nameof(NavigateToAsyncImpl), BindingFlags.NonPublic | BindingFlags.Instance);
+                    MethodInfo genericMethod = method.MakeGenericMethod(viewModelType, paramType);
+                    return (Task<bool>)genericMethod.Invoke(this, [param]);
+                }
             }
-            else
-                return this.NavigateToDashboardAsync(interviewId);
+            
+            return this.NavigateToDashboardAsync(interviewId);
         }
         
         private void SaveInterviewExitPoint(Type viewModelType, object param)
