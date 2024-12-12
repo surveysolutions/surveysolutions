@@ -473,7 +473,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             set => this.RaiseAndSetIfChanged(ref this.warning, value);
         }
         
-        public IMvxCommand HideShapefile => new MvxAsyncCommand(async() =>
+        public IMvxAsyncCommand HideShapefile => new MvxAsyncCommand(async() =>
         {
             if (!ShapeFileLoaded)
                 return;
@@ -509,5 +509,65 @@ namespace WB.UI.Shared.Extensions.ViewModels
            
             this.MapView?.Dispose();
         }
+        
+        public IMvxAsyncCommand SwitchMapCommand => new MvxAsyncCommand(async () =>
+        {
+            var options = AvailableMaps.Select(m => new BottomSheetOption()
+            {
+                Name = m.MapName,
+                Value = m.MapName,
+                IsSelected = m.MapName == SelectedMap
+            }).ToArray();
+            var args = new BottomSheetOptionsSelectorViewModelArgs()
+            {
+                Title = UIResources.SelectMapTitle,
+                Options = options,
+                Callback = async (option) =>
+                {
+                    if (SelectedMap != option.Value)
+                    {
+                        await UpdateBaseMap(option.Value);
+                    
+                        await this.ShowFullMapCommand.ExecuteAsync(null);
+                    }
+                }
+            };
+            await NavigationService.Navigate<BottomSheetOptionsSelectorViewModel, BottomSheetOptionsSelectorViewModelArgs>(args);
+        
+            //await this.UpdateBaseMap(mapDescription.MapName);
+        });
+        
+        public IMvxAsyncCommand SwitchShapefileCommand => new MvxAsyncCommand(async () =>
+        {
+            var options = AvailableShapefiles.Select(m => new BottomSheetOption()
+            {
+                Name = m.ShapefileName,
+                Value = m.FullPath,
+                IsSelected = m.FullPath == LoadedShapefile?.Path
+            }).ToArray();
+            var args = new BottomSheetOptionsSelectorViewModelArgs()
+            {
+                Title = UIResources.AreaMap_SelectShapefile,
+                Options = options,
+                SelectionRequired = false,
+                Callback = async (option) =>
+                {
+                    if (option == null)
+                    {
+                        if (ShapeFileLoaded)
+                            await HideShapefile.ExecuteAsync();
+                    }
+                    else if (!ShapeFileLoaded || LoadedShapefile?.Path != option.Value)
+                    {
+                        await LoadShapefileByPath(option.Value);
+
+                        await this.ShowShapefileCommand.ExecuteAsync();
+                    }
+                }
+            };
+            await NavigationService.Navigate<BottomSheetOptionsSelectorViewModel, BottomSheetOptionsSelectorViewModelArgs>(args);
+        
+            //await this.UpdateBaseMap(mapDescription.MapName);
+        });
     }
 }

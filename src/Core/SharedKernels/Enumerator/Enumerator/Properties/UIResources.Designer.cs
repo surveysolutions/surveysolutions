@@ -1263,6 +1263,18 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
             }
         }
         
+        public static string MenuItem_Title_ShowLocation {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_ShowLocation", resourceCulture);
+            }
+        }
+        
+        public static string MenuItem_Title_HideLocation {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_HideLocation", resourceCulture);
+            }
+        }
+        
         public static string MenuItem_Title_ExitToDashboard {
             get {
                 return ResourceManager.GetString("MenuItem_Title_ExitToDashboard", resourceCulture);

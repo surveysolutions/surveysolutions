@@ -926,7 +926,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             IsPanelVisible = !IsPanelVisible;
         });
         
-        public IMvxAsyncCommand<MapDescription> SwitchMapCommand => new MvxAsyncCommand<MapDescription>(async (mapDescription) =>
+        /*public IMvxAsyncCommand<MapDescription> SwitchMapCommand => new MvxAsyncCommand<MapDescription>(async (mapDescription) =>
         {
             IsPanelVisible = false;
 
@@ -949,7 +949,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
                 await DrawNeighborsAsync(geometry).ConfigureAwait(false);
             }
-        });
+        });*/
 
         public override void ViewDisappearing()
         {

@@ -19,7 +19,7 @@ using Toolbar=AndroidX.AppCompat.Widget.Toolbar;
 
 namespace WB.UI.Shared.Extensions.Activities
 {
-    public abstract class MarkersMapActivity<T, TParam> : BaseActivity<T> where T : MarkersMapInteractionViewModel<TParam>
+    public abstract class MarkersMapActivity<T, TParam> : MapsBaseActivity<T> where T : MarkersMapInteractionViewModel<TParam>
     {
         private IDisposable onMapViewMapTappedSubscription;
         private ViewPager2.OnPageChangeCallback onPageChangeCallback;

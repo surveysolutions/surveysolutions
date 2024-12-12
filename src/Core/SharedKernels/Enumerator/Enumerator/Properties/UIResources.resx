@@ -728,6 +728,12 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="MenuItem_Title_StopGeoTracking" xml:space="preserve">
     <value>Stop tracking recording</value>
   </data>
+  <data name="MenuItem_Title_ShowLocation" xml:space="preserve">
+    <value>Show location</value>
+  </data>
+  <data name="MenuItem_Title_HideLocation" xml:space="preserve">
+    <value>Hide location</value>
+  </data>
   <data name="MenuItem_Title_ExitToDashboard" xml:space="preserve">
     <value>Exit to dashboard</value>
   </data>

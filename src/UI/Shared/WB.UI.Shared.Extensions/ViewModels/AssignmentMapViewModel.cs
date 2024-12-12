@@ -250,33 +250,6 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
     }
     
 
-    public IMvxAsyncCommand SwitchMapCommand => new MvxAsyncCommand(async () =>
-    {
-        var options = AvailableMaps.Select(m => new BottomSheetOption()
-        {
-            Name = m.MapName,
-            Value = m.MapName,
-            IsSelected = m.MapName == SelectedMap
-        }).ToArray();
-        var args = new BottomSheetOptionsSelectorViewModelArgs()
-        {
-            Title = UIResources.SelectMapTitle,
-            Options = options,
-            Callback = async (option) =>
-            {
-                if (SelectedMap != option.Value)
-                {
-                    await UpdateBaseMap(option.Value);
-                    
-                    await this.ShowFullMapCommand.ExecuteAsync(null);
-                }
-            }
-        };
-        await NavigationService.Navigate<BottomSheetOptionsSelectorViewModel, BottomSheetOptionsSelectorViewModelArgs>(args);
-        
-        //await this.UpdateBaseMap(mapDescription.MapName);
-    });
-
     public IMvxCommand SwitchPanelCommand => new MvxCommand(() =>
     {
         IsPanelVisible = !IsPanelVisible;

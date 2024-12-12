@@ -20,7 +20,7 @@ namespace WB.UI.Shared.Extensions.Activities
         Theme = "@style/AppTheme", 
         ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize,
         Exported = false)]
-    public class GeographyEditorActivity : BaseActivity<GeographyEditorViewModel>
+    public class GeographyEditorActivity : MapsBaseActivity<GeographyEditorViewModel>
     {
         protected override int ViewResourceId => Resource.Layout.interview_area_editor;
 

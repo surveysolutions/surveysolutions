@@ -954,4 +954,10 @@
   <data name="Geofencing_Warning_Message" xml:space="preserve">
     <value>Вы находитесь за пределами установленной зоны</value>
   </data>
+  <data name="MenuItem_Title_ShowLocation" xml:space="preserve">
+    <value>Показать позицию</value>
+  </data>
+  <data name="MenuItem_Title_HideLocation" xml:space="preserve">
+    <value>Спрятать позицию</value>
+  </data>
 </root>

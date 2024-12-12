@@ -10,6 +10,7 @@ using MvvmCross.DroidX.RecyclerView;
 using MvvmCross.DroidX.RecyclerView.ItemTemplates;
 using MvvmCross.Platforms.Android.Binding.BindingContext;
 using MvvmCross.WeakSubscription;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Extensions.Activities.Carousel;
@@ -24,11 +25,11 @@ namespace WB.UI.Shared.Extensions.Activities
         protected override int ViewResourceId => Resource.Layout.map_dashboard;
 
         private DrawerLayout drawerLayout;
-        private ActionBarDrawerToggle drawerToggle;
 
         private IDisposable onDrawerOpenedSubscription;
-
-        public Toolbar Toolbar { get; private set; }
+        private IDisposable onImageButtonDrawerOpenSubscription;
+        private MvxWeakEventSubscription<ImageButton> clickedMenuButton;
+        private MvxWeakEventSubscription<ImageButton> clickedZoomMenuButton;
 
         private void Cancel()
         {
@@ -38,25 +39,58 @@ namespace WB.UI.Shared.Extensions.Activities
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
-
-            this.Toolbar = this.FindViewById<Toolbar>(Resource.Id.toolbar);
-            this.Toolbar.Title = "";
-            this.SetSupportActionBar(this.Toolbar);
-
+            
             this.drawerLayout = this.FindViewById<DrawerLayout>(Resource.Id.rootLayout);
-            this.drawerToggle = new ActionBarDrawerToggle(this, this.drawerLayout, this.Toolbar, 0, 0);
-            this.drawerLayout.AddDrawerListener(this.drawerToggle);
+            ImageButton openDrawerButton = this.FindViewById<ImageButton>(Resource.Id.butBurger);
 
-            this.drawerToggle.DrawerSlideAnimationEnabled = true;
-            this.drawerToggle.DrawerIndicatorEnabled = true;
-            this.drawerToggle.SyncState();
+            onImageButtonDrawerOpenSubscription =
+                openDrawerButton.WeakSubscribe<ImageButton>(
+                    nameof(openDrawerButton.Click),
+                    OnClickImageButtonDrawerClick);
 
             onDrawerOpenedSubscription =
                 this.drawerLayout.WeakSubscribe<DrawerLayout, DrawerLayout.DrawerOpenedEventArgs>(
                     nameof(this.drawerLayout.DrawerOpened),
                     OnDrawerLayoutOnDrawerOpened);
+            
+            var buttonMenu = this.FindViewById<ImageButton>(Resource.Id.butMenu);
+            clickedMenuButton = buttonMenu.WeakSubscribe(nameof(buttonMenu.Click), this.ClickedMenuButton);
+        
+            var buttonEye = this.FindViewById<ImageButton>(Resource.Id.butZoomMenu);
+            clickedZoomMenuButton = buttonEye.WeakSubscribe(nameof(buttonEye.Click), this.ClickedZoomButton);
         }
         
+        private void ClickedZoomButton(object sender, EventArgs e)
+        {
+            ShowPopupMenu((ImageButton)sender, [
+                new CustomMenuItem(UIResources.MenuItem_Title_ZoomMap, () => this.ViewModel.ShowFullMapCommand.Execute(), Resource.Drawable.icon_zoom_map),
+                new CustomMenuItem(UIResources.MenuItem_Title_ZoomShapefile, () => this.ViewModel.ShowShapefileCommand.Execute(), Resource.Drawable.icon_zoom_everything),
+                new CustomMenuItem(UIResources.MenuItem_Title_ZoomCollectedData, () => this.ViewModel.ShowAllItemsCommand.Execute(), Resource.Drawable.icon_zoom_collected_data),
+            ]);
+        }
+
+        private void ClickedMenuButton(object sender, EventArgs e)
+        {
+            List<CustomMenuItem> customMenuItems = new();
+            customMenuItems.Add(new CustomMenuItem(UIResources.MenuItem_Title_ChangeMap, () => this.ViewModel.SwitchMapCommand.Execute(), Resource.Drawable.icon_change_map));
+            customMenuItems.Add(new CustomMenuItem(UIResources.MenuItem_Title_ChangeShapefile, () => this.ViewModel.SwitchShapefileCommand.Execute(), Resource.Drawable.icon_change_shapefile));
+                
+            customMenuItems.Add(this.ViewModel.IsLocationEnabled
+                ? new CustomMenuItem(UIResources.MenuItem_Title_HideLocation, () => this.ViewModel.SwitchLocatorCommand.Execute(), Resource.Drawable.icon_location)
+                : new CustomMenuItem(UIResources.MenuItem_Title_ShowLocation, () => this.ViewModel.SwitchLocatorCommand.Execute(), Resource.Drawable.icon_location));
+            
+            customMenuItems.Add(new CustomMenuItem(UIResources.MenuItem_Title_ExitToDashboard, () => this.ViewModel.NavigateToDashboardCommand.Execute(), Resource.Drawable.icon_exit));
+
+            ShowPopupMenu((ImageButton)sender, customMenuItems);
+        }
+
+        private void OnClickImageButtonDrawerClick(object sender, EventArgs e)
+        {
+            if (!drawerLayout.IsDrawerOpen((int)GravityFlags.Start)) {
+                drawerLayout.OpenDrawer((int)GravityFlags.Start);
+            }
+        }
+
         protected override bool BackButtonCustomAction => true;
         protected override void BackButtonPressed()
         {
@@ -74,10 +108,10 @@ namespace WB.UI.Shared.Extensions.Activities
         {
             if (disposing)
             {
-                if (drawerLayout != null)
-                    drawerLayout.DrawerOpened -= OnDrawerLayoutOnDrawerOpened;
-
                 onDrawerOpenedSubscription?.Dispose();
+                onImageButtonDrawerOpenSubscription?.Dispose();
+                clickedMenuButton?.Dispose();
+                clickedZoomMenuButton?.Dispose();
             }
 
             base.Dispose(disposing);

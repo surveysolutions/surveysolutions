@@ -355,23 +355,6 @@ namespace WB.UI.Shared.Extensions.ViewModels
             return filteredAssignments;
         }
 
-        
-
-        
-
-        
-        
-        public IMvxAsyncCommand<MapDescription> SwitchMapCommand => new MvxAsyncCommand<MapDescription>(async (mapDescription) =>
-        {
-            IsPanelVisible = false;
-            await this.UpdateBaseMap(mapDescription.MapName);
-        });
-
-        public IMvxCommand SwitchPanelCommand => new MvxCommand(() =>
-        {
-            IsPanelVisible = !IsPanelVisible;
-        });
-
         private bool isPanelVisible;
         public bool IsPanelVisible
         {
