@@ -1,4 +1,7 @@
-﻿function ItemViewModel() {
+﻿import DOMPurify from 'dompurify';
+
+function ItemViewModel() {
+    
     var self = this;
     self.itemId = '';
     self.itemName = '';
@@ -99,9 +102,9 @@
                 typeaheadCtrl.empty();
 
                 for (var i = 0; i < result.length; i++) {
-                    var translationItem = result[i];
+                    let translationItem = result[i];
                 
-                    var itemToAppend = '<li><a href="javascript:void(0)" value="' +
+                    let itemToAppend = '<li><a href="javascript:void(0)" value="' +
                             translationItem.value +
                             '">' +
                             translationItem.name +
@@ -236,9 +239,9 @@
         typeaheadCtrl.empty();
 
         for (var i = 0; i < translationList.length; i++) {
-            var translationItem = translationList[i];
+            let translationItem = translationList[i];
 
-            var itemToAppend = '<li><a href="javascript:void(0)" value="' +
+            let itemToAppend = '<li><a href="javascript:void(0)" value="' +
                     translationItem.value +
                     '">' +
                     translationItem.name +
