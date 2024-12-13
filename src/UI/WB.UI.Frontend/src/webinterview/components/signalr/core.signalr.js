@@ -31,8 +31,6 @@ export default {
             .withAutomaticReconnect()
             .build()
 
-
-
         //this.$api.hub = hubApi;
 
         /*const app = this.$root
@@ -83,7 +81,7 @@ export default {
 
         connection.start()
             .then(() => this.$emit('connected'))
-            .catch(err => document.write(err))
+            .catch(err => console.log(err))
     },
 
     render() { return null },
