@@ -643,7 +643,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 
                 var collectedPoints = geometryBuilder.PointCount;
                 this.CanSave = CalculateCanSave(collectedPoints);
-                
+                this.CanUndo = collectedPoints > 0;
+
                 await UpdateDrawNeighborsAsync(geometryBuilder.ToGeometry(), this.GeographyNeighbors);
             }
         }
@@ -656,7 +657,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             }
         }
 
-        public IMvxAsyncCommand UndoCommand => new MvxAsyncCommand(this.BtnUndo);
+        public IMvxAsyncCommand UndoCommand => new MvxAsyncCommand(this.BtnUndo, () => CanUndo);
         public IMvxCommand CancelEditCommand => new MvxCommand(this.BtnCancelCommand);
 
         private bool isCollecting = false;
@@ -913,18 +914,6 @@ namespace WB.UI.Shared.Extensions.ViewModels
             get => this.startButtonVisible;
             set => this.RaiseAndSetIfChanged(ref this.startButtonVisible, value);
         }        
-
-        private bool isPanelVisible;
-        public bool IsPanelVisible
-        {
-            get => this.isPanelVisible;
-            set => this.RaiseAndSetIfChanged(ref this.isPanelVisible, value);
-        }
-
-        public IMvxCommand SwitchPanelCommand => new MvxCommand(() =>
-        {
-            IsPanelVisible = !IsPanelVisible;
-        });
         
         /*public IMvxAsyncCommand<MapDescription> SwitchMapCommand => new MvxAsyncCommand<MapDescription>(async (mapDescription) =>
         {
