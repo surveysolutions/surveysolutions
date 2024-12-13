@@ -132,10 +132,10 @@
                 android:gravity="center_vertical|right"
                 android:clickable="true"
                 android:orientation="horizontal"
-                android:paddingLeft="15dp"
-                android:paddingTop="15dp"
-                android:paddingRight="15dp"
-                android:paddingBottom="15dp"
+                android:paddingLeft="5dp"
+                android:paddingTop="5dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="5dp"
         >
             <LinearLayout
                     android:layout_gravity="left"
