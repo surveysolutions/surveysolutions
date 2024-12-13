@@ -442,6 +442,35 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 
             return GetUpdatedAssignment(id);
         }
+        
+        /// <summary>
+        /// Change assignment target area
+        /// </summary>
+        /// <param name="id">Assignment id</param>
+        /// <param name="targetAreaName">Tha name of the targer area</param>
+        /// <response code="200">Assignment details with updated target area name</response>
+        /// <response code="404">Assignment not found</response>
+        /// <response code="406">Target area name cannot be changed</response>
+        [HttpPost]
+        [Route("{id:int}/changeTargetArea")]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [Produces(MediaTypeNames.Application.Json)]
+        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Headquarter, UserRoles.Administrator)]
+        [ObservingNotAllowed]
+        public ActionResult<AssignmentDetails> ChangeQuantity(int id, [FromBody] string targetAreaName)
+        {
+            var assignment = assignmentsStorage.GetAssignment(id);
+            if (assignment == null)
+            {
+                return NotFound();
+            }
+
+            commandService.Execute(
+                new UpdateAssignmentTargetArea(assignment.PublicKey, authorizedUser.Id, targetAreaName, assignment.QuestionnaireId));
+            this.auditLog.AssignmentTargetAreaChanged(id, targetAreaName);
+
+            return GetUpdatedAssignment(id);
+        }
 
         /// <summary>
         /// Archive assignment

@@ -72,7 +72,8 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
                     QuestionnaireId = assignment.QuestionnaireId,
                     ResponsibleId = assignment.ResponsibleId,
                     ResponsibleName = assignment.Responsible.Name,
-                    IsAudioRecordingEnabled = assignment.AudioRecording
+                    IsAudioRecordingEnabled = assignment.AudioRecording,
+                    TargetArea = assignment.TargetArea
                 });
             }
 

@@ -17,6 +17,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
         void UserPasswordChanged(string currentUser, string userName);
         void UserPasswordChangeFailed(string currentUser, string userName);
         void AssignmentSizeChanged(int id, int? quantity);
+        void AssignmentTargetAreaChanged(int id, string targetAreaName);
         void ExportEncryptionChanged(bool enabled);
         void UserMovedToAnotherTeam(string interviewerName, string newSupervisorName, string previousSupervisorName);
         void AssignmentsUpgradeStarted(string title, long fromVersion, long toVersion, Guid userId, string userName);

@@ -60,6 +60,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.properties.UpdatedAt = @event.OriginDate;
         }
 
+        protected void Apply(AssignmentTargetAreaChanged @event)
+        {
+            this.properties.TargetArea = @event.TargetAreaName;
+            this.properties.UpdatedAt = @event.OriginDate;
+        }
+        
         protected void Apply(AssignmentReassigned @event)
         {
             this.properties.ResponsibleId = @event.ResponsibleId;
@@ -169,7 +175,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var actualQuantity = command.Quantity == -1 ? null : command.Quantity;
             ApplyEvent(new AssignmentQuantityChanged(command.UserId, command.OriginDate, actualQuantity));
         }
+        
+        public void UpdateAssignmentTargetArea(UpdateAssignmentTargetArea command)
+        {
+            AssignmentPropertiesInvariants invariants = new AssignmentPropertiesInvariants(this.properties);
+            invariants.ThrowIfAssignmentDeleted();
 
+            ApplyEvent(new AssignmentTargetAreaChanged(command.UserId, command.OriginDate, command.TargetAreaName));
+        }
+        
         public void UpdateAssignmentWebMode(UpdateAssignmentWebMode command)
         {
             AssignmentPropertiesInvariants invariants = new AssignmentPropertiesInvariants(this.properties);
