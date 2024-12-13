@@ -33,7 +33,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                local:MvxBind="Visible Not(IsPanelVisible);">
+                >
             <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -65,7 +65,7 @@
                 style="@style/Area_BackButton"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentLeft="true"
-                local:MvxBind="Click NavigateToDashboardCommand; Visible Not(IsPanelVisible);"
+                local:MvxBind="Click NavigateToDashboardCommand;"
                 android:layout_marginTop="@dimen/area_editor_buttons_margin_space"
                 android:layout_marginLeft="@dimen/area_editor_buttons_margin_space" />
 
@@ -74,7 +74,7 @@
                 style="@style/Area_MenuButton"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentRight="true"
-                local:MvxBind="Click RotateMapToNorth; Visible Not(IsPanelVisible);"
+                local:MvxBind="Click RotateMapToNorth;"
                 android:layout_marginTop="@dimen/area_editor_buttons_margin_space"
                 android:layout_marginRight="@dimen/area_editor_buttons_margin_space" />
         <ImageButton
@@ -100,20 +100,19 @@
                 style="@style/Area_CompassButton"
                 android:layout_above="@id/butNavigation"
                 android:layout_alignStart="@id/butNavigation"
-                local:MvxBind="Click RotateMapToNorth; Visible Not(IsPanelVisible);"
+                local:MvxBind="Click RotateMapToNorth;"
                 android:layout_marginBottom="@dimen/area_editor_buttons_margin_space" />
         <ImageButton
                 android:id="@+id/butNavigation"
                 style="@style/Area_NavigateButton"
                 android:layout_above="@id/butZoomMenu"
                 android:layout_alignStart="@id/butZoomMenu"
-                local:MvxBind="Enabled IsLocationEnabled; Click ShowLocationSignCommand; Visible Not(IsPanelVisible);"
+                local:MvxBind="Enabled IsLocationEnabled; Click ShowLocationSignCommand;"
                 android:layout_marginBottom="@dimen/area_editor_buttons_margin_space" />
         <ImageButton
                 android:id="@+id/butZoomMenu"
                 style="@style/Area_ZoomMenuButton"
                 android:layout_alignParentBottom="true"
-                local:MvxBind="Visible Not(IsPanelVisible);"
                 android:layout_marginLeft="@dimen/area_editor_buttons_margin_space"
                 android:layout_marginBottom="@dimen/area_editor_lower_panel_margin_bottom"
                  />
@@ -123,7 +122,7 @@
                 style="@style/AssigmentMap_CreateInterview"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
-                local:MvxBind="Click CreateInterviewCommand; Visible Not(IsPanelVisible);"
+                local:MvxBind="Click CreateInterviewCommand;"
                 android:layout_marginRight="@dimen/area_editor_buttons_margin_space"
                 android:layout_marginBottom="@dimen/area_editor_lower_panel_margin_bottom"
         />
@@ -138,7 +137,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_marginBottom="@dimen/area_editor_lower_panel_margin_bottom"
                 android:orientation="horizontal"
-                local:MvxBind="Visible And(IsNullableHavingValue(ActiveMarkerIndex), Not(IsPanelVisible)); CurrentItem ActiveMarkerIndex;"
+                local:MvxBind="Visible IsNullableHavingValue(ActiveMarkerIndex); CurrentItem ActiveMarkerIndex;"
         />
     </RelativeLayout>
 </androidx.drawerlayout.widget.DrawerLayout>

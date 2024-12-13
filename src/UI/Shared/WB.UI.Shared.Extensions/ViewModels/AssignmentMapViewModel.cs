@@ -249,19 +249,6 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
         }
     }
     
-
-    public IMvxCommand SwitchPanelCommand => new MvxCommand(() =>
-    {
-        IsPanelVisible = !IsPanelVisible;
-    });
-
-    private bool isPanelVisible;
-    public bool IsPanelVisible
-    {
-        get => this.isPanelVisible;
-        set => this.RaiseAndSetIfChanged(ref this.isPanelVisible, value);
-    }
-    
     public IMvxAsyncCommand NavigateToDashboardCommand => 
         new MvxAsyncCommand(async () => await this.ViewModelNavigationService.NavigateToDashboardAsync());
 

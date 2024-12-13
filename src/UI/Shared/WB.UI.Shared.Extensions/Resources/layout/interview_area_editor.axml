@@ -31,7 +31,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            local:MvxBind="Visible Not(IsPanelVisible);">
+            >
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -60,7 +60,7 @@
     <ImageButton
             android:id="@+id/butBack"
             style="@style/Area_BackButton"
-            local:MvxBind="Click CancelCommand; Visible Not(IsPanelVisible);"
+            local:MvxBind="Click CancelCommand;"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
             android:layout_marginTop="@dimen/area_editor_buttons_margin_space"
@@ -73,7 +73,7 @@
             style="@style/Area_MenuButton"
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
-            local:MvxBind="Click RotateMapToNorth; Visible Not(IsPanelVisible);"
+            local:MvxBind="Click RotateMapToNorth;"
             android:layout_marginTop="@dimen/area_editor_buttons_margin_space"
             android:layout_marginRight="@dimen/area_editor_buttons_margin_space" />
     <ImageButton
@@ -91,19 +91,18 @@
             style="@style/Area_CompassButton"
             android:layout_above="@id/butNavigation"
             android:layout_alignStart="@id/butNavigation"
-            local:MvxBind="Click RotateMapToNorth; Visible Not(IsPanelVisible);"
+            local:MvxBind="Click RotateMapToNorth;"
             android:layout_marginBottom="@dimen/area_editor_buttons_margin_space" />
     <ImageButton
             android:id="@+id/butNavigation"
             style="@style/Area_NavigateButton"
             android:layout_above="@id/butZoomMenu"
             android:layout_alignStart="@id/butZoomMenu"
-            local:MvxBind="Enabled IsLocationEnabled; Click ShowLocationSignCommand; Visible Not(IsPanelVisible);"
+            local:MvxBind="Enabled IsLocationEnabled; Click ShowLocationSignCommand;"
             android:layout_marginBottom="@dimen/area_editor_buttons_margin_space" />
     <ImageButton
             android:id="@+id/butZoomMenu"
             style="@style/Area_ZoomMenuButton"
-            local:MvxBind="Visible Not(IsPanelVisible);"
             android:layout_above="@id/controlPanel"
             android:layout_alignStart="@id/controlPanel"
             android:layout_marginBottom="@dimen/area_editor_buttons_margin_space"
@@ -118,7 +117,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:background="@drawable/area_editor_control_panel"
-        local:MvxBind="Visible Not(IsPanelVisible);"
         android:layout_alignParentBottom="true"
         android:layout_marginLeft="@dimen/area_editor_buttons_margin_space"
         android:layout_marginRight="@dimen/area_editor_buttons_margin_space"
@@ -147,7 +145,7 @@
                 <ImageButton
                         style="@style/Area_UndoButton"
                         android:id="@+id/areaEditor_Undo"
-                        local:MvxBind="Click UndoCommand;Text Localization('AreaMap_Undo'); Enabled CanUndo; Visible Not(IsPanelVisible);"
+                        local:MvxBind="Click UndoCommand; Text Localization('AreaMap_Undo'); Enabled CanUndo;"
                         android:layout_marginRight="@dimen/area_editor_cancel_space"
                 />
                 

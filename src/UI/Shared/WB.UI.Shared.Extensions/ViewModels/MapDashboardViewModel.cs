@@ -355,13 +355,6 @@ namespace WB.UI.Shared.Extensions.ViewModels
             return filteredAssignments;
         }
 
-        private bool isPanelVisible;
-        public bool IsPanelVisible
-        {
-            get => this.isPanelVisible;
-            set => this.RaiseAndSetIfChanged(ref this.isPanelVisible, value);
-        }
-        
         private MvxObservableCollection<MapDescription> availableMaps = new MvxObservableCollection<MapDescription>();
         
         public IMvxAsyncCommand NavigateToDashboardCommand => 
