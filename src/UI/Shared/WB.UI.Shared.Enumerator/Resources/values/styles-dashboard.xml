@@ -175,7 +175,7 @@
     <item name="android:fontFamily">sans-serif-medium</item>
     <item name="android:textStyle">normal</item>
     <item name="android:layout_marginLeft">10dp</item>
-    <item name="android:paddingLeft">5dp</item>
+    <item name="android:paddingLeft">6dp</item>
     <item name="android:background">@drawable/dashboard_card_secondary_button</item>
   </style>
 
