@@ -1,12 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-        android:width="@dimen/IconSize"
-        android:height="@dimen/IconSize"
-        android:viewportWidth="24"
-        android:viewportHeight="24">
+        android:width="26dp"
+        android:height="20dp"
+        android:viewportWidth="26"
+        android:viewportHeight="20">
 
-    <path android:fillColor="#2a81cb"
-		  android:fillType="evenOdd"	
-		  android:pathData="M20.5,3l-0.16,0.03L15,5.1 9,3 3.36,4.9c-0.21,0.07 -0.36,0.25 -0.36,0.48V20.5c0,0.28 0.22,0.5 0.5,0.5l0.16,-0.03L9,18.9l6,2.1 5.64,-1.9c0.21,-0.07 0.36,-0.25 0.36,-0.48V3.5c0,-0.28 -0.22,-0.5 -0.5,-0.5zM15,19l-6,-2.11V5l6,2.11V19z"/>
-
+    <path
+            android:strokeColor="#8C59DE"
+            android:strokeWidth="2"
+            android:strokeLineJoin="round"
+            android:pathData="M1 3.7L9.30769 1V13.6L1 16.3V3.7Z" />
+    <path
+            android:strokeColor="#8C59DE"
+            android:strokeWidth="2"
+            android:strokeLineJoin="round"
+            android:pathData="M9.30769 1L16.6923 6.4V19L9.30769 13.6V1Z" />
+    <path
+            android:strokeColor="#8C59DE"
+            android:strokeWidth="2"
+            android:strokeLineJoin="round"
+            android:pathData="M16.6923 6.39995L25 3.69995V16.3L16.6923 19V6.39995Z" />
 </vector>

@@ -190,25 +190,26 @@
                 Text ExtraAction.Label;                               
                 Click ExtraAction.Command;"
         app:layout_constraintBaseline_toBaselineOf="@+id/main_action"
-        app:layout_constraintLeft_toRightOf="@+id/main_action" />
+        app:layout_constraintLeft_toRightOf="@+id/main_action" 
+    />
 
       <TextView
               android:id="@+id/show_location"
               style="@style/Dashboard_Location"
               app:MvxBind="Visible HasSecondaryAction;
                 Click SecondaryAction.Command;"
-              app:layout_constraintTop_toBottomOf="@+id/ExpandHandle"
-              app:layout_constraintEnd_toStartOf="@+id/show_targetArea"
-               />
+              app:layout_constraintBaseline_toBaselineOf="@+id/main_action"
+              app:layout_constraintLeft_toRightOf="@+id/main_action"
+      />
       
       <TextView
           android:id="@+id/show_targetArea"
           style="@style/Dashboard_TargetArea"
           app:MvxBind="Visible HasTargetAreaAction;
                 Click TargetAreaAction.Command;"
-          app:layout_constraintTop_toBottomOf="@+id/ExpandHandle"
-          app:layout_constraintRight_toRightOf="parent"
-           />
+          app:layout_constraintBaseline_toBaselineOf="@+id/main_action"
+          app:layout_constraintLeft_toRightOf="@+id/show_location"
+      />
 
       <View
           android:id="@+id/footer"
