@@ -197,7 +197,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
         }
         
         public IMvxAsyncCommand ShowLocationSignCommand => 
-            new MvxAsyncCommand(async () => { await ShowLocationSign(); });
+            new MvxAsyncCommand(async () => { await ShowLocationSign(); }, () => IsLocationEnabled);
 
         protected async Task<bool> ShowLocationSign()
         {
@@ -378,7 +378,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
         {
             if (this.MapView != null && this.MapView.MapScale != Double.NaN)
                 await this.MapView.SetViewpointRotationAsync(0);
-        });
+        }, () => true);
 
         public IMvxAsyncCommand ZoomMapIn => new MvxAsyncCommand(async () =>
         {

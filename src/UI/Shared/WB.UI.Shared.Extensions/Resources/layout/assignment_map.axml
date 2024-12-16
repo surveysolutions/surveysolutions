@@ -107,7 +107,7 @@
                 style="@style/Area_NavigateButton"
                 android:layout_above="@id/butZoomMenu"
                 android:layout_alignStart="@id/butZoomMenu"
-                local:MvxBind="Enabled IsLocationEnabled; Click ShowLocationSignCommand;"
+                local:MvxBind="Click ShowLocationSignCommand; Enabled IsLocationEnabled;"
                 android:layout_marginBottom="@dimen/area_editor_buttons_margin_space" />
         <ImageButton
                 android:id="@+id/butZoomMenu"
