@@ -79,7 +79,7 @@
         <item name="android:src">@drawable/icon_burger</item>
     </style>
     <style name="Area_LocButton" parent="Area_DefaultButton">
-        <item name="android:src">@drawable/icon_location</item>
+        <item name="android:src">@drawable/icon_location_default</item>
     </style>
     <style name="Area_UndoButton" parent="Area_DefaultButton">
         <item name="android:background">@null</item>
