@@ -274,7 +274,17 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
             }
 
             await this.ViewModelNavigationService.NavigateToCreateAndLoadInterview(assignment.Id);
-        });
+        }, CanCreateInterview
+    );
+
+    private bool CanCreateInterview()
+    {
+        return !assignment.Quantity.HasValue ||
+               Math.Max(val1: 0, val2: InterviewsLeftByAssignmentCount) > 0;
+    }
+
+    private int InterviewsLeftByAssignmentCount =>
+        assignment.Quantity.GetValueOrDefault() - (assignment.CreatedInterviewsCount ?? 0);
 
     private bool isEnabledGeofencing;
     public bool IsEnabledGeofencing
