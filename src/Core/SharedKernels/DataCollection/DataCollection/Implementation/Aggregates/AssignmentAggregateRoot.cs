@@ -62,7 +62,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         protected void Apply(AssignmentTargetAreaChanged @event)
         {
-            this.properties.TargetArea = @event.TargetAreaName;
+            this.properties.TargetArea = @event.TargetArea;
             this.properties.UpdatedAt = @event.OriginDate;
         }
         
@@ -181,7 +181,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             AssignmentPropertiesInvariants invariants = new AssignmentPropertiesInvariants(this.properties);
             invariants.ThrowIfAssignmentDeleted();
 
-            ApplyEvent(new AssignmentTargetAreaChanged(command.UserId, command.OriginDate, command.TargetAreaName));
+            ApplyEvent(new AssignmentTargetAreaChanged(command.UserId, command.OriginDate, command.TargetArea));
         }
         
         public void UpdateAssignmentWebMode(UpdateAssignmentWebMode command)
