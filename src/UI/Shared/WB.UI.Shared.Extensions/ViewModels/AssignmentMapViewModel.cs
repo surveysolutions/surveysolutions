@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using System.Drawing;
 using Android.Content;
+using AndroidX.Annotations;
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
@@ -287,6 +288,13 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
 
     private int InterviewsLeftByAssignmentCount =>
         assignment.Quantity.GetValueOrDefault() - (assignment.CreatedInterviewsCount ?? 0);
+
+    protected override void ReloadEntities()
+    {
+        base.ReloadEntities();
+
+        this.assignment = assignmentsRepository.GetById(assignment.Id);
+    }
 
     private bool isEnabledGeofencing;
     public bool IsEnabledGeofencing

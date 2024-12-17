@@ -494,7 +494,7 @@ public abstract class MarkersMapInteractionViewModel<TParam> : BaseMapInteractio
         return markersGraphics;
     }
     
-    protected void ReloadEntities()
+    protected virtual void ReloadEntities()
     {
         Assignments = this.assignmentsRepository
             .LoadAll()
