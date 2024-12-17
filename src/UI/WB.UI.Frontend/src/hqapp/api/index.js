@@ -400,12 +400,12 @@ class AssignmentsApi {
         })
     }
 
-    changeTargetArea(assignmentId, targetAreaName) {
+    changeTargetArea(assignmentId, targetArea) {
         var url = `${this.base}/${assignmentId}/changeTargetArea`
         return this.http({
             method: 'post',
             url: url,
-            data: targetAreaName,
+            data: targetArea,
             headers: {
                 accept: 'text/plain',
                 'content-type': 'application/json',

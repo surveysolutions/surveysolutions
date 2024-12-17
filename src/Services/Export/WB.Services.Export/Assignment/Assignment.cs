@@ -14,5 +14,7 @@ namespace WB.Services.Export.Assignment
         public string? QuestionnaireId { get; set; }
         
         public int? UpgradedFromId { get; set;}
+
+        public string? TargetArea { get; set; }
     }
 }
