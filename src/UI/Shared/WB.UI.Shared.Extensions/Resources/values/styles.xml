@@ -6,6 +6,9 @@
     <style name="Area_Screen_Button" parent="Button_Success">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">wrap_content</item>
+        <item name="android:backgroundTint">@color/button_save_selector</item>
+        <item name="android:paddingLeft">5dp</item>
+        <item name="android:paddingRight">5dp</item>
     </style>
 
     <style name="Area_Screen_Button_Bordered" parent="Button_Primary">
@@ -59,6 +62,11 @@
         <item name="android:layout_width">48dp</item>
         <item name="android:layout_height">48dp</item>
         <item name="android:scaleType">center</item>
+        <item name="android:tint">@color/icon_button_tint_selector</item>
+        <item name="android:tintMode">src_in</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">false</item>
+        <item name="android:focusableInTouchMode">false</item>
     </style>
 
     <style name="Area_CompassButton" parent="Area_DefaultButton">
@@ -71,11 +79,12 @@
         <item name="android:src">@drawable/icon_burger</item>
     </style>
     <style name="Area_LocButton" parent="Area_DefaultButton">
-        <item name="android:src">@drawable/icon_location</item>
+        <item name="android:src">@drawable/icon_location_default</item>
     </style>
     <style name="Area_UndoButton" parent="Area_DefaultButton">
         <item name="android:background">@null</item>
         <item name="android:src">@drawable/icon_undo</item>
+        <item name="android:tint">@color/icon_edit_panel_tint_selector</item>
     </style>
     <style name="Area_ZoomMenuButton" parent="Area_DefaultButton">
         <item name="android:src">@drawable/icon_zoom_menu</item>
@@ -86,10 +95,10 @@
     </style>
     <style name="Area_GeoTrackingButton" parent="Area_DefaultButton">
         <item name="android:background">@drawable/icon_geotracking_button</item>
-        <item name="android:src">@drawable/icon_geotracking</item>
+        <item name="android:src">@drawable/icon_geotracking_default</item>
     </style>
     <style name="Area_NavigateButton" parent="Area_DefaultButton">
-        <item name="android:src">@drawable/icon_navigate</item>
+        <item name="android:src">@drawable/icon_navigate_default</item>
     </style>
     <style name="Area_MenuButton" parent="Area_DefaultButton">
         <item name="android:src">@drawable/icon_three_dots</item>

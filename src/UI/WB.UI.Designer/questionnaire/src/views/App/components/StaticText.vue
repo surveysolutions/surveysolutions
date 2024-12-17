@@ -13,7 +13,8 @@
             <div class="form-group">
                 <label class="wb-label">
                     {{ $t('QuestionnaireEditor.StaticText') }}</label><br />
-                <ExpressionEditor id="edit-static-text-highlight" mode="substitutions" v-model="activeStaticText.text" />
+                <ExpressionEditor id="edit-static-text-highlight" mode="substitutions"
+                    v-model="activeStaticText.text" />
             </div>
             <div class="form-group">
                 <label for="edit-static-attachment-name" class="wb-label">
@@ -31,7 +32,7 @@
                         activeStaticText.enablementCondition) ||
                     showEnablingConditions
                 )
-                ">
+            ">
                 <button type="button" class="btn btn-lg btn-link" @click="showEnablingConditions = true">
                     {{ $t('QuestionnaireEditor.AddEnablingCondition') }}
                 </button>
@@ -41,7 +42,7 @@
                 ((showEnablingConditions === undefined &&
                     activeStaticText.enablementCondition) ||
                     showEnablingConditions)
-                ">
+            ">
                 <div class="form-group col-xs-11">
                     <div class="enabling-group-marker" :class="{
                         'hide-if-disabled': activeStaticText.hideIfDisabled
@@ -53,8 +54,8 @@
                     <input type="checkbox" class="wb-checkbox" disabled="disabled" checked="checked"
                         v-if="questionnaire.hideIfDisabled" :title="$t('QuestionnaireEditor.HideIfDisabledNested')" />
 
-                    <input v-if="!questionnaire.hideIfDisabled" id="cb-hideIfDisabled" type="checkbox" class="wb-checkbox"
-                        v-model="activeStaticText.hideIfDisabled" />
+                    <input v-if="!questionnaire.hideIfDisabled" id="cb-hideIfDisabled" type="checkbox"
+                        class="wb-checkbox" v-model="activeStaticText.hideIfDisabled" />
 
                     <label for="cb-hideIfDisabled"><span :title="questionnaire.hideIfDisabled
                         ? $t(
@@ -65,8 +66,8 @@
                         {{ $t('QuestionnaireEditor.HideIfDisabled') }}
                         <help link="hideIfDisabled" />
                     </label>
-                    <ExpressionEditor id="edit-question-enablement-condition" v-model="activeStaticText.enablementCondition"
-                        mode="expression" />
+                    <ExpressionEditor id="edit-question-enablement-condition"
+                        v-model="activeStaticText.enablementCondition" mode="expression" />
 
                 </div>
                 <div class="form-group col-xs-1">
@@ -75,7 +76,8 @@
                 </div>
             </div>
 
-            <div class="form-group validation-group" v-for="(validation, index) in activeStaticText.validationConditions"
+            <div class="form-group validation-group"
+                v-for="(validation, index) in activeStaticText.validationConditions"
                 :id="'validationCondition' + index">
                 <div class="validation-group-marker"></div>
                 <label>{{ $t('QuestionnaireEditor.ValidationCondition') }}
@@ -95,7 +97,8 @@
                     $t('QuestionnaireEditor.ErrorMessage') }}
                     <help link="validationMessage" />
                 </label>
-                <ExpressionEditor :id="'validation-message-' + index" v-model="validation.message" mode="substitutions" />
+                <ExpressionEditor :id="'validation-message-' + index" v-model="validation.message"
+                    mode="substitutions" />
             </div>
             <div class="form-group"
                 v-if="activeStaticText.validationConditions && activeStaticText.validationConditions.length < 10">
@@ -111,8 +114,8 @@
                     @click="saveStaticText()">
                     {{ $t('QuestionnaireEditor.Save') }}
                 </button>
-                <button type="button" id="edit-static-text-cancel-button" class="btn btn-lg btn-link" unsaved-warning-clear
-                    @click="cancel()">
+                <button type="button" id="edit-static-text-cancel-button" class="btn btn-lg btn-link"
+                    unsaved-warning-clear @click="cancel()">
                     {{ $t('QuestionnaireEditor.Cancel') }}
                 </button>
             </div>
@@ -133,7 +136,7 @@
                     </span>
                 </button>
                 <button type="button" id="edit-static-text-delete-button" v-if="!questionnaire.isReadOnlyForUser"
-                    class="btn btn-lg btn-link" @click="deleteStaticText()" unsaved-warning-clear>
+                    class="btn btn-lg btn-link error" @click="deleteStaticText()" unsaved-warning-clear>
                     {{ $t('QuestionnaireEditor.Delete') }}
                 </button>
                 <MoveToChapterSnippet :item-id="statictextId" :item-type="'StaticText'"

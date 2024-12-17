@@ -36,7 +36,6 @@ namespace WB.UI.Shared.Extensions.ViewModels
         private readonly IMapUtilityService mapUtilityService;
         protected readonly IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher;
         protected readonly IPermissionsService permissionsService;
-        private readonly IEnumeratorSettings settings;
 
         protected BaseMapInteractionViewModel(IPrincipal principal,
             IViewModelNavigationService viewModelNavigationService,
@@ -46,8 +45,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             IEnumeratorSettings enumeratorSettings,
             IMapUtilityService mapUtilityService,
             IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher,
-            IPermissionsService permissionsService,
-            IEnumeratorSettings settings) 
+            IPermissionsService permissionsService) 
             : base(principal, viewModelNavigationService)
         {
             this.UserInteractionService = userInteractionService;
@@ -58,7 +56,6 @@ namespace WB.UI.Shared.Extensions.ViewModels
             this.mapUtilityService = mapUtilityService;
             this.mainThreadAsyncDispatcher = mainThreadAsyncDispatcher;
             this.permissionsService = permissionsService;
-            this.settings = settings;
         }
 
         public abstract Task OnMapLoaded();
@@ -75,8 +72,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 this.AvailableShapefiles =
                     new MvxObservableCollection<ShapefileDescription>(this.mapService.GetAvailableShapefiles());
 
-                var includeOnlineMaps = !string.IsNullOrEmpty(settings.EsriApiKey);
-                ArcGISRuntimeEnvironment.ApiKey = includeOnlineMaps ? settings.EsriApiKey : String.Empty;
+                var includeOnlineMaps = !string.IsNullOrEmpty(enumeratorSettings.EsriApiKey);
+                ArcGISRuntimeEnvironment.ApiKey = includeOnlineMaps ? enumeratorSettings.EsriApiKey : String.Empty;
                 
                 var localMaps = this.mapService.GetAvailableMaps(includeOnlineMaps);
                 var defaultMap = this.mapService.PrepareAndGetDefaultMapOrNull();
@@ -197,7 +194,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
         }
         
         public IMvxAsyncCommand ShowLocationSignCommand => 
-            new MvxAsyncCommand(async () => { await ShowLocationSign(); });
+            new MvxAsyncCommand(async () => { await ShowLocationSign(); }, () => IsLocationEnabled);
 
         protected async Task<bool> ShowLocationSign()
         {
@@ -378,7 +375,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
         {
             if (this.MapView != null && this.MapView.MapScale != Double.NaN)
                 await this.MapView.SetViewpointRotationAsync(0);
-        });
+        }, () => true);
 
         public IMvxAsyncCommand ZoomMapIn => new MvxAsyncCommand(async () =>
         {

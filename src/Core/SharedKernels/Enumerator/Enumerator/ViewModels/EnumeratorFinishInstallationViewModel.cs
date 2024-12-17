@@ -110,7 +110,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private IMvxAsyncCommand signInCommand;
         public IMvxAsyncCommand SignInCommand => this.signInCommand ??= new MvxAsyncCommand(() => this.SignInAsync(this.Password), () => !IsInProgress);
 
-        public IMvxAsyncCommand NavigateToDiagnosticsPageCommand => new MvxAsyncCommand(this.ViewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>);
+        public IMvxAsyncCommand NavigateToDiagnosticsPageCommand => 
+            new MvxAsyncCommand(() => this.ViewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>());
 
         public override void Prepare(FinishInstallationViewModelArg parameter)
         {

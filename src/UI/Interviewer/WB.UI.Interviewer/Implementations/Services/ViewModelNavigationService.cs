@@ -39,13 +39,13 @@ namespace WB.UI.Interviewer.Implementations.Services
             this.log.Trace($"Navigating to dashboard interviewId: {interviewId ?? "'null'"}");
             if (interviewId == null)
             {
-               return await NavigateToAsync<DashboardViewModel>().ConfigureAwait(false);
+               return await NavigateToAsync<DashboardViewModel>(true).ConfigureAwait(false);
             }
 
             return await NavigateToAsync<DashboardViewModel, DashboardViewModelArgs>(new DashboardViewModelArgs
             {
                 InterviewId = Guid.Parse(interviewId)
-            }).ConfigureAwait(false);
+            }, true).ConfigureAwait(false);
         }
 
         public override async Task<bool> NavigateToPrefilledQuestionsAsync(string interviewId)
@@ -84,7 +84,7 @@ namespace WB.UI.Interviewer.Implementations.Services
                 {
                     InterviewId = interviewId,
                     NavigationIdentity = navigationIdentity,
-                });
+                }, true).ConfigureAwait(false);
         }
 
         public override Task NavigateToCreateAndLoadInterview(int assignmentId)

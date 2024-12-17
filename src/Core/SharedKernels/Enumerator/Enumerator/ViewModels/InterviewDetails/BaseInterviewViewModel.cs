@@ -385,7 +385,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         });
         
         public IMvxCommand NavigateToSettingsCommand => new MvxCommand(this.ViewModelNavigationService.NavigateToSettings);
-        public IMvxCommand NavigateToDiagnosticsPageCommand => new MvxAsyncCommand(this.ViewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>);
+        public IMvxCommand NavigateToDiagnosticsPageCommand => 
+            new MvxAsyncCommand(() => this.ViewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>());
 
         public void NavigateToPreviousViewModel(Action navigateToIfHistoryIsEmpty)
             => this.NavigationState.NavigateBack(navigateToIfHistoryIsEmpty);

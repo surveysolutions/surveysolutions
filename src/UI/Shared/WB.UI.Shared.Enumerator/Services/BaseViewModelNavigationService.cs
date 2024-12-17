@@ -114,17 +114,21 @@ namespace WB.UI.Shared.Enumerator.Services
             return result;
         }
 
-        public Task<bool> NavigateToAsync<TViewModel>() where TViewModel : IMvxViewModel
+        public async Task<bool> NavigateToAsync<TViewModel>(bool finishActivityOnSuccess = false) where TViewModel : IMvxViewModel
         {
-            if (!this.HasPendingOperations)
+            if (this.HasPendingOperations)
             {
-                SaveInterviewExitPoint(typeof(TViewModel), null);
-                return this.NavigationService.Navigate<TViewModel>();
+                this.ShowWaitMessage();
+                return false;
             }
-            
-            this.ShowWaitMessage();
-            return Task.FromResult(false);
 
+            var previousActivity = TopActivity.Activity;
+            SaveInterviewExitPoint(typeof(TViewModel), null);
+            var result = await this.NavigationService.Navigate<TViewModel>();
+            if (result && finishActivityOnSuccess)
+                previousActivity.Finish();
+
+            return result;
         }
         
         public abstract Task<bool> NavigateToDashboardAsync(string interviewId = null);

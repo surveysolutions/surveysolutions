@@ -44,13 +44,12 @@ public abstract class MarkersMapInteractionViewModel<TParam> : BaseMapInteractio
         IMapUtilityService mapUtilityService, 
         IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher, 
         IPermissionsService permissionsService, 
-        IEnumeratorSettings settings,
         IDashboardViewModelFactory dashboardViewModelFactory,
         IAssignmentDocumentsStorage assignmentsRepository,
         IPlainStorage<InterviewView> interviewViewRepository
         ) 
         : base(principal, viewModelNavigationService, mapService, userInteractionService, logger, enumeratorSettings,
-            mapUtilityService, mainThreadAsyncDispatcher, permissionsService, settings)
+            mapUtilityService, mainThreadAsyncDispatcher, permissionsService)
     {
         this.dashboardViewModelFactory = dashboardViewModelFactory;
         this.assignmentsRepository = assignmentsRepository;
@@ -494,7 +493,7 @@ public abstract class MarkersMapInteractionViewModel<TParam> : BaseMapInteractio
         return markersGraphics;
     }
     
-    protected void ReloadEntities()
+    protected virtual void ReloadEntities()
     {
         Assignments = this.assignmentsRepository
             .LoadAll()

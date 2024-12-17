@@ -95,7 +95,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
             
             // Assert
             commandService.Verify(x => x.ExecuteAsync(It.Is<ApproveInterviewCommand>(c => c.InterviewId == InterviewId), null, CancellationToken.None));
-            navigationService.Verify(x => x.NavigateToDashboardAsync(InterviewId.FormatGuid()));
+            navigationService.Verify(x => x.NavigateFromInterviewAsync(InterviewId.FormatGuid()));
             auditLogService.Verify(x => x.Write(It.Is<ApproveInterviewAuditLogEntity>(c => c.InterviewKey == interviewKey.ToString())));
         }
 
@@ -123,7 +123,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
             
             // Assert
             commandService.Verify(x => x.ExecuteAsync(It.Is<RejectInterviewCommand>(c => c.InterviewId == InterviewId), null, CancellationToken.None));
-            navigationService.Verify(x => x.NavigateToDashboardAsync(InterviewId.FormatGuid()));
+            navigationService.Verify(x => x.NavigateFromInterviewAsync(InterviewId.FormatGuid()));
             auditLogService.Verify(x => x.Write(It.Is<RejectInterviewAuditLogEntity>(c => c.InterviewKey == interviewKey.ToString())));
         }
 

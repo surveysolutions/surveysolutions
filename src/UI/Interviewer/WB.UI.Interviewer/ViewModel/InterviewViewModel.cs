@@ -80,7 +80,7 @@ namespace WB.UI.Interviewer.ViewModel
                 this.NavigationState.CurrentNavigationIdentity));
 
         public IMvxCommand NavigateToMapsCommand =>
-            new MvxAsyncCommand(this.ViewModelNavigationService.NavigateToAsync<MapsViewModel>);
+            new MvxAsyncCommand(() => this.ViewModelNavigationService.NavigateToAsync<MapsViewModel>());
 
         public override async Task NavigateBack()
         {

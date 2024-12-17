@@ -41,12 +41,11 @@ public class SupervisorMapDashboardViewModel : MapDashboardViewModel
         IPlainStorage<InterviewerDocument> usersRepository,
         IDashboardViewModelFactory dashboardViewModelFactory,
         IMvxMessenger messenger,
-        IPermissionsService permissionsService,
-        IEnumeratorSettings settings) 
+        IPermissionsService permissionsService) 
         : base(principal, viewModelNavigationService, userInteractionService, 
             mapService, assignmentsRepository, interviewViewRepository, enumeratorSettings, 
             logger, mapUtilityService, mainThreadAsyncDispatcher, dashboardViewModelFactory, 
-            permissionsService, settings)
+            permissionsService)
     {
         this.usersRepository = usersRepository;
         this.messenger = messenger;

@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using System.Drawing;
 using Android.Content;
+using AndroidX.Annotations;
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
@@ -65,7 +66,6 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
         IMapUtilityService mapUtilityService,
         IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher,
         IPermissionsService permissionsService,
-        IEnumeratorSettings settings,
         IGeolocationBackgroundServiceManager backgroundServiceManager,
         IDashboardViewModelFactory dashboardViewModelFactory,
         IAssignmentDocumentsStorage assignmentsRepository,
@@ -77,7 +77,7 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
         IAssignmentMapSettings assignmentMapSettings) 
         : base(principal, viewModelNavigationService, mapService, userInteractionService, logger, 
                enumeratorSettings, mapUtilityService, mainThreadAsyncDispatcher, permissionsService, 
-               settings, dashboardViewModelFactory, assignmentsRepository, interviewViewRepository)
+               dashboardViewModelFactory, assignmentsRepository, interviewViewRepository)
     {
         this.backgroundServiceManager = backgroundServiceManager;
         this.geoTrackingListener = geoTrackingListener;
@@ -249,19 +249,6 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
         }
     }
     
-
-    public IMvxCommand SwitchPanelCommand => new MvxCommand(() =>
-    {
-        IsPanelVisible = !IsPanelVisible;
-    });
-
-    private bool isPanelVisible;
-    public bool IsPanelVisible
-    {
-        get => this.isPanelVisible;
-        set => this.RaiseAndSetIfChanged(ref this.isPanelVisible, value);
-    }
-    
     public IMvxAsyncCommand NavigateToDashboardCommand => 
         new MvxAsyncCommand(async () => await this.ViewModelNavigationService.NavigateToDashboardAsync());
 
@@ -270,7 +257,7 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
         {
             if (IsEnabledGeofencing)
             {
-                if (geofencingListener.LastResult.OutShapefile)
+                if (geofencingListener.LastResult?.OutShapefile ?? true)
                 {
                     var confirmResult = await UserInteractionService.ConfirmAsync(
                         EnumeratorUIResources.AssigmentMap_CreateInterview_OutTargetArea_Warning);
@@ -287,7 +274,26 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
             }
 
             await this.ViewModelNavigationService.NavigateToCreateAndLoadInterview(assignment.Id);
-        });
+        }, CanCreateInterview
+    );
+
+    private bool CanCreateInterview()
+    {
+        return AllowCreateInterview && 
+               (!assignment.Quantity.HasValue || Math.Max(val1: 0, val2: InterviewsLeftByAssignmentCount) > 0);
+    }
+    
+    public bool AllowCreateInterview => assignmentMapSettings.AllowCreateInterview;
+
+    private int InterviewsLeftByAssignmentCount =>
+        assignment.Quantity.GetValueOrDefault() - (assignment.CreatedInterviewsCount ?? 0);
+
+    protected override void ReloadEntities()
+    {
+        base.ReloadEntities();
+
+        this.assignment = assignmentsRepository.GetById(assignment.Id);
+    }
 
     private bool isEnabledGeofencing;
     public bool IsEnabledGeofencing
@@ -543,13 +549,19 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
 
     public override void Dispose()
     {
-        backgroundServiceManager.LocationReceived -= BackgroundServiceManagerOnLocationReceived;
+        StopGeoServices();
         
-        if (geoTrackingListener != null)
-            this.backgroundServiceManager.StopListen(geoTrackingListener);
-        if (geofencingListener != null)
-            this.backgroundServiceManager.StopListen(geofencingListener);
-
         base.Dispose();
+    }
+
+    private void StopGeoServices()
+    {
+        backgroundServiceManager.LocationReceived -= BackgroundServiceManagerOnLocationReceived;
+
+        if (geoTrackingListener != null)
+            backgroundServiceManager.StopListen(geoTrackingListener);
+
+        if (geofencingListener != null)
+            backgroundServiceManager.StopListen(geofencingListener);
     }
 }

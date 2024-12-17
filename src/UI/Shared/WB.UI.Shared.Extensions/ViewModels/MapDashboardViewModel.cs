@@ -42,11 +42,10 @@ namespace WB.UI.Shared.Extensions.ViewModels
             IMapUtilityService mapUtilityService,
             IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher,
             IDashboardViewModelFactory dashboardViewModelFactory,
-            IPermissionsService permissionsService,
-            IEnumeratorSettings settings) 
+            IPermissionsService permissionsService) 
             : base(principal, viewModelNavigationService, mapService, userInteractionService, logger, 
                    enumeratorSettings, mapUtilityService, mainThreadAsyncDispatcher, permissionsService, 
-                   settings, dashboardViewModelFactory, assignmentsRepository, interviewViewRepository)
+                   dashboardViewModelFactory, assignmentsRepository, interviewViewRepository)
         {
         }
         
@@ -355,13 +354,6 @@ namespace WB.UI.Shared.Extensions.ViewModels
             return filteredAssignments;
         }
 
-        private bool isPanelVisible;
-        public bool IsPanelVisible
-        {
-            get => this.isPanelVisible;
-            set => this.RaiseAndSetIfChanged(ref this.isPanelVisible, value);
-        }
-        
         private MvxObservableCollection<MapDescription> availableMaps = new MvxObservableCollection<MapDescription>();
         
         public IMvxAsyncCommand NavigateToDashboardCommand => 

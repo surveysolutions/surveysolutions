@@ -22,6 +22,7 @@ public class GeoTrackingListener : IGeoTrackingListener
     private readonly IPrincipal principal;
 
     private int? lastRecordId;
+    private int? assignmentId;
 
     public GeoTrackingListener(IPlainStorage<GeoTrackingRecord, int?> geoTrackingRecordsStorage, 
         IPlainStorage<GeoTrackingPoint, int?> geoTrackingPointsStorage,
@@ -34,6 +35,12 @@ public class GeoTrackingListener : IGeoTrackingListener
 
     public void Start(int assignmentId)
     {
+        this.assignmentId = assignmentId;
+        this.lastRecordId = null;
+    }
+
+    private void StartNewTrack(int assignmentId)
+    {
         var record = new GeoTrackingRecord()
         {
             InterviewerId = principal.CurrentUserIdentity.UserId,
@@ -44,7 +51,7 @@ public class GeoTrackingListener : IGeoTrackingListener
         
         lastRecordId = record.Id;
     }
-    
+
     public void Stop()
     {
         if (!lastRecordId.HasValue)
@@ -60,20 +67,23 @@ public class GeoTrackingListener : IGeoTrackingListener
 
     public Task OnGpsLocationChanged(GpsLocation location, INotificationManager notifications)
     {
-        if (lastRecordId.HasValue)
+        if (!lastRecordId.HasValue)
         {
-            var point = new GeoTrackingPoint()
-            {
-                GeoTrackingRecordId = lastRecordId.Value,
-                Latitude = location.Latitude,
-                Longitude = location.Longitude,
-                Time = location.Timestamp,
-            };
-            geoTrackingPointsStorage.Store(point);
+            if (!assignmentId.HasValue)
+                return Task.CompletedTask;
+            
+            StartNewTrack(assignmentId.Value);
         }
+        
+        var point = new GeoTrackingPoint()
+        {
+            GeoTrackingRecordId = lastRecordId.Value,
+            Latitude = location.Latitude,
+            Longitude = location.Longitude,
+            Time = location.Timestamp,
+        };
+        geoTrackingPointsStorage.Store(point);
 
         return Task.CompletedTask;
     }
-    
-    public GeolocationListenerResult LastResult { get; set; }
 }
