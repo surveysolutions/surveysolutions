@@ -262,7 +262,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                         historyItem.Action = AssignmentHistoryAction.TargetAreaChanged;
                         historyItem.AdditionalData = new
                         {
-                            t.TargetAreaName
+                            t.TargetArea
                         };
                         break;
                     case AssignmentReassigned r:

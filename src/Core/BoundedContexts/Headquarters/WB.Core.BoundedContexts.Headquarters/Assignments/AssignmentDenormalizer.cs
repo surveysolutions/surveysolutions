@@ -164,7 +164,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             return UpdateAssignment(state, @event.Payload.OriginDate.UtcDateTime,
                 assignment =>
                 {
-                    assignment.TargetArea = @event.Payload.TargetAreaName;
+                    assignment.TargetArea = @event.Payload.TargetArea;
                 });
         }
         

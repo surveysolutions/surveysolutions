@@ -229,7 +229,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.AssignmentAggregateRootTests
 
                 //assert
                 Assert.That(assignment.properties.TargetArea, Is.EqualTo(areaName));
-                context.ShouldContainEvent<AssignmentTargetAreaChanged>(e => e.TargetAreaName == areaName);
+                context.ShouldContainEvent<AssignmentTargetAreaChanged>(e => e.TargetArea == areaName);
             }
         }
 
