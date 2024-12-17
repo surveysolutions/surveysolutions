@@ -550,14 +550,19 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
 
     public override void Dispose()
     {
+        StopGeoServices();
+        
+        base.Dispose();
+    }
+
+    private void StopGeoServices()
+    {
         backgroundServiceManager.LocationReceived -= BackgroundServiceManagerOnLocationReceived;
 
         if (geoTrackingListener != null)
             backgroundServiceManager.StopListen(geoTrackingListener);
-        
+
         if (geofencingListener != null)
             backgroundServiceManager.StopListen(geofencingListener);
-
-        base.Dispose();
     }
 }
