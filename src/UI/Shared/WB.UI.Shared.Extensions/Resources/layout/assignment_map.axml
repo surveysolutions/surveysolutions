@@ -122,7 +122,7 @@
                 style="@style/AssigmentMap_CreateInterview"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
-                local:MvxBind="Click CreateInterviewCommand;"
+                local:MvxBind="Click CreateInterviewCommand; Visible AllowCreateInterview;"
                 android:layout_marginRight="@dimen/area_editor_buttons_margin_space"
                 android:layout_marginBottom="@dimen/area_editor_lower_panel_margin_bottom"
         />

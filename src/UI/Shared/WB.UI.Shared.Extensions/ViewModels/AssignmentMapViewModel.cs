@@ -257,7 +257,7 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
         {
             if (IsEnabledGeofencing)
             {
-                if (geofencingListener.LastResult.OutShapefile)
+                if (geofencingListener.LastResult?.OutShapefile ?? true)
                 {
                     var confirmResult = await UserInteractionService.ConfirmAsync(
                         EnumeratorUIResources.AssigmentMap_CreateInterview_OutTargetArea_Warning);
@@ -279,9 +279,11 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
 
     private bool CanCreateInterview()
     {
-        return !assignment.Quantity.HasValue ||
-               Math.Max(val1: 0, val2: InterviewsLeftByAssignmentCount) > 0;
+        return AllowCreateInterview && 
+               (!assignment.Quantity.HasValue || Math.Max(val1: 0, val2: InterviewsLeftByAssignmentCount) > 0);
     }
+    
+    public bool AllowCreateInterview => assignmentMapSettings.AllowCreateInterview;
 
     private int InterviewsLeftByAssignmentCount =>
         assignment.Quantity.GetValueOrDefault() - (assignment.CreatedInterviewsCount ?? 0);
@@ -541,11 +543,12 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
     public override void Dispose()
     {
         backgroundServiceManager.LocationReceived -= BackgroundServiceManagerOnLocationReceived;
-        
+
         if (geoTrackingListener != null)
-            this.backgroundServiceManager.StopListen(geoTrackingListener);
+            backgroundServiceManager.StopListen(geoTrackingListener);
+        
         if (geofencingListener != null)
-            this.backgroundServiceManager.StopListen(geofencingListener);
+            backgroundServiceManager.StopListen(geofencingListener);
 
         base.Dispose();
     }
