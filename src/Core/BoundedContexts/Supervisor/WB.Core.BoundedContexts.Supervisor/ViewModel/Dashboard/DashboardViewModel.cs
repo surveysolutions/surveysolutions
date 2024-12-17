@@ -157,7 +157,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
             return this.ViewModelNavigationService.NavigateToAsync<MapsViewModel>();
         });
 
-        public IMvxAsyncCommand ShowSearchCommand => new MvxAsyncCommand(this.ViewModelNavigationService.NavigateToAsync<SearchViewModel>);
+        public IMvxAsyncCommand ShowSearchCommand => 
+            new MvxAsyncCommand(() => this.ViewModelNavigationService.NavigateToAsync<SearchViewModel>());
 
         public override void ViewAppeared()
         {

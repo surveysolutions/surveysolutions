@@ -66,7 +66,6 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
         IMapUtilityService mapUtilityService,
         IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher,
         IPermissionsService permissionsService,
-        IEnumeratorSettings settings,
         IGeolocationBackgroundServiceManager backgroundServiceManager,
         IDashboardViewModelFactory dashboardViewModelFactory,
         IAssignmentDocumentsStorage assignmentsRepository,
@@ -78,7 +77,7 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
         IAssignmentMapSettings assignmentMapSettings) 
         : base(principal, viewModelNavigationService, mapService, userInteractionService, logger, 
                enumeratorSettings, mapUtilityService, mainThreadAsyncDispatcher, permissionsService, 
-               settings, dashboardViewModelFactory, assignmentsRepository, interviewViewRepository)
+               dashboardViewModelFactory, assignmentsRepository, interviewViewRepository)
     {
         this.backgroundServiceManager = backgroundServiceManager;
         this.geoTrackingListener = geoTrackingListener;
