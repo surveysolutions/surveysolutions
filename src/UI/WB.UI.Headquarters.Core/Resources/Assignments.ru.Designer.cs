@@ -896,5 +896,11 @@ namespace WB.UI.Headquarters.Resources {
                 return ResourceManager.GetString("Action_TargetAreaChanged", resourceCulture);
             }
         }
+        
+        public static string TargetArea {
+            get {
+                return ResourceManager.GetString("TargetArea", resourceCulture);
+            }
+        }
     }
 }

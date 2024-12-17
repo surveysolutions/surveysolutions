@@ -236,8 +236,7 @@
 
                 <ModalFrame ref="assignModal" :title="$t('Common.Assign')">
                     <form onsubmit="return false;">
-                        <div class="form-group"
-                            :class="{ 'has-warning': showWebModeReassignWarning }">
+                        <div class="form-group" :class="{ 'has-warning': showWebModeReassignWarning }">
                             <label class="control-label" for="newResponsibleId">
                                 {{ $t('Assignments.SelectResponsible') }}
                             </label>
@@ -326,6 +325,7 @@
                             <span class="text-danger">
                                 <ErrorMessage name="editedQuantity" />
                             </span>
+
                         </div>
                     </Form>
                     <template v-slot:actions>
@@ -345,7 +345,7 @@
                     <Form ref="quantityForm" onsubmit="return false;" v-slot="{ meta }">
                         <div class="form-group" v-bind:class="{ 'has-error': meta.valid == false }">
                             <label class="control-label" for="newTargetArea">
-                                {{ $t("Assignments.Expected") }}
+                                {{ $t("Assignments.TargetArea") }}
                             </label>
                             <Field type="text" class="form-control" v-model.trim="editedTargetAreaName"
                                 name="editedTargetAreaName" :data-vv-as="$t('Assignments.TargetArea')"
@@ -417,12 +417,13 @@ export default {
         quantityChange() {
             if (this.model.isHeadquarters && !this.model.isArchived) {
 
-                this.$hq.Assignments.quantitySettings(this.model.id).then(data => {
-                    this.canEditQuantity = data.CanChangeQuantity
-                    this.$refs.editQuantityModal.modal()
-                })
+                this.editedQuantity = this.model.quantity == null ? -1 : this.model.quantity
+                this.$hq.Assignments.quantitySettings(this.model.id)
+                    .then(data => {
 
-                this.editedQuantity = this.model.quantity
+                        this.canEditQuantity = data.CanChangeQuantity
+                        this.$refs.editQuantityModal.modal()
+                    })
             }
         },
         targetAreaChange() {
@@ -530,7 +531,7 @@ export default {
                 return false
             }
 
-            if (!this.showSelectors())
+            if (!this.showSelectors)
                 return false
 
             let targetQuantity = null
@@ -546,7 +547,7 @@ export default {
             const self = this
             this.$hq.Assignments.changeQuantity(this.model.id, targetQuantity)
                 .then(() => {
-                    this.$refs.editedQuantityModal.hide()
+
                     window.location.reload(true)
                 })
                 .catch(error => {
@@ -565,7 +566,7 @@ export default {
 
             this.$hq.Assignments.changeTargetArea(this.model.id, this.editedTargetAreaName)
                 .then(() => {
-                    this.$refs.editTargetAreaModal.hide()
+
                     window.location.reload(true)
                 })
                 .catch(error => {

@@ -553,4 +553,7 @@
   <data name="Action_TargetAreaChanged" xml:space="preserve">
       <value>Target Area changed</value>
   </data>
+  <data name="TargetArea" xml:space="preserve">
+      <value>Edit Target area</value>
+  </data>
 </root>
