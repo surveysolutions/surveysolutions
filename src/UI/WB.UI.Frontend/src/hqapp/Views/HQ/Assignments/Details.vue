@@ -175,7 +175,7 @@
                                 <td class="text-nowrap">
                                     {{ $t('Assignments.IsAudioRecordingEnabled') }}
                                 </td>
-                                <td class="pointer editable" @click="audioRecordingChange">
+                                <td :class="{ 'pointer editable': model.isHeadquarters }" @click="audioRecordingChange">
                                     {{ isAudioRecordingEnabled }}
                                 </td>
                             </tr>
@@ -211,7 +211,7 @@
                                             this.$t('Assignments.DetailsGeoTracking') }}</a>)
                                     </span>
                                 </td>
-                                <td class="pointer editable" @click="targetAreaChange">
+                                <td :class="{ 'pointer editable': model.isHeadquarters }" @click="targetAreaChange">
                                     <a v-if="model.targetArea"
                                         :href="$hq.basePath + 'Maps/Details?mapname=' + encodeURIComponent(model.targetArea)">
                                         {{ model.targetArea }}
