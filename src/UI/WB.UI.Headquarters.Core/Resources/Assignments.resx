@@ -544,4 +544,7 @@
   <data name="DetailsGeoTracking" xml:space="preserve">
       <value>Geo Tracking</value>
   </data>
+  <data name="EnterTargetArea" xml:space="preserve">
+      <value>Enter Target area</value>
+  </data>
 </root>

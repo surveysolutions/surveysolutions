@@ -47,6 +47,9 @@ public class AssignmentMapViewModelArgs
 [InterviewEntryPoint]
 public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMapViewModelArgs>
 {
+    private static bool lastGeoFencingStateOnInterviewCreation = false;
+    private static bool lastGeoTrackingStateOnInterviewCreation = false;
+    
     private AssignmentDocument assignment;
 
     private readonly IGeolocationBackgroundServiceManager backgroundServiceManager;
@@ -168,10 +171,21 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
         await DrawGeoTrackingAsync();
     }
 
-    public override void ViewAppeared()
+    private bool reminderWasShown = false; 
+    
+    public override async void ViewAppeared()
     {
         base.ViewAppeared();
         this.MapView?.RefreshDrawableState();
+        
+        if (!reminderWasShown && (lastGeoFencingStateOnInterviewCreation || lastGeoTrackingStateOnInterviewCreation))
+        {
+            var wasConfirmed = await this.UserInteractionService.ConfirmAsync(
+                EnumeratorUIResources.AssigmentMap_GeoTrackingReminder,
+                okButton: UIResources.Ok);
+            
+            reminderWasShown = true;
+        }
     }
 
     public override MapDescription GetSelectedMap(MvxObservableCollection<MapDescription> mapsToSelectFrom)
@@ -272,6 +286,9 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
                 if (!confirmResult)
                     return;
             }
+            
+            lastGeoFencingStateOnInterviewCreation = isEnabledGeofencing;
+            lastGeoTrackingStateOnInterviewCreation = isEnabledGeoTracking;
 
             await this.ViewModelNavigationService.NavigateToCreateAndLoadInterview(assignment.Id);
         }, CanCreateInterview
