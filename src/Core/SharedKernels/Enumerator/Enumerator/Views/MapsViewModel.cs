@@ -140,7 +140,7 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         });
 
         public IMvxCommand NavigateToDiagnosticsPageCommand =>
-            new MvxAsyncCommand(this.ViewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>);
+            new MvxAsyncCommand(() => this.ViewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>());
 
         public override async Task Initialize()
         {
