@@ -544,4 +544,16 @@
   <data name="DetailsGeoTracking" xml:space="preserve">
       <value>Geo Tracking</value>
   </data>
+  <data name="ChangeTargetAreaModalTitle" xml:space="preserve">
+      <value>Change Target Area for assignment {{assignmentId}}</value>
+  </data>
+  <data name="TargetAreaExplanation" xml:space="preserve">
+      <value>Specify Target Area map name for assignment</value>
+  </data>
+  <data name="Action_TargetAreaChanged" xml:space="preserve">
+      <value>Target Area changed</value>
+  </data>
+  <data name="TargetArea" xml:space="preserve">
+      <value>Edit Target area</value>
+  </data>
 </root>

@@ -40,14 +40,15 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
 
             var result = new GetAssignmentsResponse
             {
-                Assignments = assignments.Select(ass => new AssignmentApiView
+                Assignments = assignments.Select(assignmentDocument => new AssignmentApiView
                 {
-                    Id = ass.Id,
-                    ResponsibleId = ass.ResponsibleId,
-                    ResponsibleName = ass.ResponsibleName,
-                    Quantity = ass.Quantity.HasValue ? ass.Quantity - ass.CreatedInterviewsCount : ass.Quantity,
-                    QuestionnaireId = QuestionnaireIdentity.Parse(ass.QuestionnaireId),
-                    IsAudioRecordingEnabled = ass.IsAudioRecordingEnabled
+                    Id = assignmentDocument.Id,
+                    ResponsibleId = assignmentDocument.ResponsibleId,
+                    ResponsibleName = assignmentDocument.ResponsibleName,
+                    Quantity = assignmentDocument.Quantity.HasValue ? assignmentDocument.Quantity - assignmentDocument.CreatedInterviewsCount : assignmentDocument.Quantity,
+                    QuestionnaireId = QuestionnaireIdentity.Parse(assignmentDocument.QuestionnaireId),
+                    IsAudioRecordingEnabled = assignmentDocument.IsAudioRecordingEnabled,
+                    TargetArea = assignmentDocument.TargetArea
                 }).ToList()
             };
             return Task.FromResult(result);

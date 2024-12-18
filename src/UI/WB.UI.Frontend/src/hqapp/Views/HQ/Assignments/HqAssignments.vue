@@ -713,6 +713,9 @@ export default {
                 return false
             }
 
+            if (!this.showSelectors())
+                return false
+
             let targetQuantity = null
 
             if (this.editedQuantity == null || this.editedQuantity === '') {

@@ -400,6 +400,19 @@ class AssignmentsApi {
         })
     }
 
+    changeTargetArea(assignmentId, targetArea) {
+        var url = `${this.base}/${assignmentId}/changeTargetArea`
+        return this.http({
+            method: 'post',
+            url: url,
+            data: targetArea,
+            headers: {
+                accept: 'text/plain',
+                'content-type': 'application/json',
+            },
+        })
+    }
+
     changeMode(assignmentId, isEnabled) {
         var url = `${this.base}/${assignmentId}/changeMode`
 

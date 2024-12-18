@@ -58,5 +58,8 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
 
         [JsonProperty("audio")]
         public bool IsAudioRecordingEnabled { get; set; }
+        
+        [JsonProperty("area")]
+        public string TargetArea { get; set; }
     }
 }

@@ -133,7 +133,7 @@
                                 <td class="text-nowrap">
                                     {{ $t('Assignments.Expected') }}
                                 </td>
-                                <td>{{ quantity }}</td>
+                                <td class="pointer editable" @click="quantityChange">{{ quantity }}</td>
                             </tr>
                             <tr v-if="model.isHeadquarters">
                                 <td class="text-nowrap">
@@ -175,7 +175,7 @@
                                 <td class="text-nowrap">
                                     {{ $t('Assignments.IsAudioRecordingEnabled') }}
                                 </td>
-                                <td class="pointer editable" @click="audioRecordingChange">
+                                <td :class="{ 'pointer editable': model.isHeadquarters }" @click="audioRecordingChange">
                                     {{ isAudioRecordingEnabled }}
                                 </td>
                             </tr>
@@ -206,16 +206,16 @@
                             <tr>
                                 <td class="text-nowrap">
                                     {{ this.$t('Assignments.DetailsTargetAreaa') }}
+                                    <span v-if="model.api.geoTarckingUrl">
+                                        (<a :href="model.api.geoTarckingUrl" style="text-decoration: underline;">{{
+                                            this.$t('Assignments.DetailsGeoTracking') }}</a>)
+                                    </span>
                                 </td>
-                                <td>
+                                <td :class="{ 'pointer editable': model.isHeadquarters }" @click="targetAreaChange">
                                     <a v-if="model.targetArea"
                                         :href="$hq.basePath + 'Maps/Details?mapname=' + encodeURIComponent(model.targetArea)">
                                         {{ model.targetArea }}
                                     </a>
-                                    <span v-if="model.api.geoTarckingUrl">
-                                        (<a :href="model.api.geoTarckingUrl">{{
-                                            this.$t('Assignments.DetailsGeoTracking') }}</a>)
-                                    </span>
                                 </td>
                             </tr>
                             <tr>
@@ -236,9 +236,7 @@
 
                 <ModalFrame ref="assignModal" :title="$t('Common.Assign')">
                     <form onsubmit="return false;">
-                        <div class="form-group" :class="{
-                            'has-warning': showWebModeReassignWarning,
-                        }">
+                        <div class="form-group" :class="{ 'has-warning': showWebModeReassignWarning }">
                             <label class="control-label" for="newResponsibleId">
                                 {{ $t('Assignments.SelectResponsible') }}
                             </label>
@@ -307,12 +305,74 @@
                         </div>
                     </template>
                 </ModalFrame>
+
+                <ModalFrame ref="editQuantityModal"
+                    :title="$t('Assignments.ChangeExpectedModalTitle', { assignmentId: model.id })">
+                    <p>{{ $t("Assignments.ExpectedExplanation") }}</p>
+                    <p v-if="!canEditQuantity">
+                        <b>{{ $t("Assignments.AssignmentExpectedInWebMode") }}</b>
+                    </p>
+                    <Form ref="quantityForm" onsubmit="return false;" v-slot="{ meta }">
+                        <div class="form-group" v-bind:class="{ 'has-error': meta.valid == false }">
+                            <label class="control-label" for="newQuantity">
+                                {{ $t("Assignments.Expected") }}
+                            </label>
+                            <Field type="text" class="form-control" v-model.trim="editedQuantity" name="editedQuantity"
+                                :rules="validateQuantity" :data-vv-as="$t('Assignments.Expected')" maxlength="5"
+                                autocomplete="off" @keyup.enter="updateQuantity" id="newQuantity"
+                                :disabled="!canEditQuantity" :validateOnBlur="true" :validateOnChange="true"
+                                :validateOnInput="true" />
+                            <span class="text-danger">
+                                <ErrorMessage name="editedQuantity" />
+                            </span>
+
+                        </div>
+                    </Form>
+                    <template v-slot:actions>
+                        <div>
+                            <button type="button" class="btn btn-primary" :disabled="!showSelectors || !canEditQuantity"
+                                @click="updateQuantity">{{ $t("Common.Save") }}</button>
+                            <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
+                                }}</button>
+                        </div>
+                    </template>
+                </ModalFrame>
+
+                <ModalFrame ref="editTargetAreaModal"
+                    :title="$t('Assignments.ChangeTargetAreaModalTitle', { assignmentId: model.id })">
+                    <p>{{ $t("Assignments.TargetAreaExplanation") }}</p>
+
+                    <Form ref="quantityForm" onsubmit="return false;" v-slot="{ meta }">
+                        <div class="form-group" v-bind:class="{ 'has-error': meta.valid == false }">
+                            <label class="control-label" for="newTargetArea">
+                                {{ $t("Assignments.TargetArea") }}
+                            </label>
+                            <Field type="text" class="form-control" v-model.trim="editedTargetAreaName"
+                                name="editedTargetAreaName" :data-vv-as="$t('Assignments.TargetArea')"
+                                autocomplete="off" @keyup.enter="updateTargetArea" id="newTargetArea" />
+                            <span class="text-danger">
+                                <ErrorMessage name="editedTargetAreaName" />
+                            </span>
+                        </div>
+                    </Form>
+                    <template v-slot:actions>
+                        <div>
+                            <button type="button" class="btn btn-primary" :disabled="!showSelectors"
+                                @click="updateTargetArea">{{ $t("Common.Save") }}</button>
+                            <button type="button" class="btn btn-link" data-bs-dismiss="modal">
+                                {{ $t("Common.Cancel") }}
+                            </button>
+                        </div>
+                    </template>
+                </ModalFrame>
+
             </div>
         </div>
     </main>
 </template>
 
 <script>
+import { Form, Field, ErrorMessage } from 'vee-validate'
 import { nextTick } from 'vue'
 import { DateFormats, convertToLocal } from '~/shared/helpers'
 import { RoleNames } from '~/shared/constants'
@@ -324,12 +384,21 @@ import '@/assets/css/markup-web-interview.scss'
 import '@/assets/css/markup-interview-review.scss'
 
 export default {
+    components: {
+        Field,
+        Form,
+        ErrorMessage,
+    },
     data() {
         return {
             newResponsibleId: null,
             reassignComment: null,
+            editedQuantity: null,
+            editedTargetAreaName: null,
 
-            editedAudioRecordingEnabled: null,
+            canEditQuantity: true,
+
+            editedAudioRecordingEnabled: null
         }
     },
     methods: {
@@ -342,6 +411,25 @@ export default {
                         this.$refs.editAudioEnabledModal.modal()
                     },
                 )
+            }
+        },
+
+        quantityChange() {
+            if (this.model.isHeadquarters && !this.model.isArchived) {
+
+                this.editedQuantity = this.model.quantity == null ? -1 : this.model.quantity
+                this.$hq.Assignments.quantitySettings(this.model.id)
+                    .then(data => {
+
+                        this.canEditQuantity = data.CanChangeQuantity
+                        this.$refs.editQuantityModal.modal()
+                    })
+            }
+        },
+        targetAreaChange() {
+            if (this.model.isHeadquarters && !this.model.isArchived) {
+                this.editedTargetAreaName = this.model.targetArea
+                this.$refs.editTargetAreaModal.modal()
             }
         },
 
@@ -419,6 +507,79 @@ export default {
         newResponsibleSelected(newValue) {
             this.newResponsibleId = newValue
         },
+
+        validateQuantity(value) {
+            const regex = /^-?([0-9]+)$/i;
+
+            if (!regex.test(value)) {
+                return 'This field must be a valid number';
+            }
+
+            if (value <= -2)
+                return 'This field must be greater or equal to -1';
+
+            if (value > this.config.maxInterviewsByAssignment)
+                return 'This field must be less than limit';
+
+            return true;
+
+        },
+        async updateQuantity() {
+            const validationResult = await this.$refs.quantityForm.validate()
+
+            if (validationResult.valid != true) {
+                return false
+            }
+
+            if (!this.showSelectors)
+                return false
+
+            let targetQuantity = null
+
+            if (this.editedQuantity == null || this.editedQuantity === '') {
+                targetQuantity = 1
+            } else if (this.editedQuantity == -1) {
+                targetQuantity = -1
+            } else {
+                targetQuantity = this.editedQuantity
+            }
+
+            const self = this
+            this.$hq.Assignments.changeQuantity(this.model.id, targetQuantity)
+                .then(() => {
+
+                    window.location.reload(true)
+                })
+                .catch(error => {
+                    self.errors.clear()
+                    self.errors.add({
+                        field: 'editedTargetAreaName',
+                        msg: error.response.data.message,
+                        id: error.toString(),
+                    })
+                })
+
+            return false
+        },
+        async updateTargetArea() {
+            const self = this
+
+            this.$hq.Assignments.changeTargetArea(this.model.id, this.editedTargetAreaName)
+                .then(() => {
+
+                    window.location.reload(true)
+                })
+                .catch(error => {
+                    self.errors.clear()
+                    self.errors.add({
+                        field: 'editedQuantity',
+                        msg: error.response.data.message,
+                        id: error.toString(),
+                    })
+                })
+
+            return false
+        }
     },
 
     computed: {

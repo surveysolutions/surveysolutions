@@ -436,6 +436,11 @@ namespace WB.Tests.Abc.TestFactories
         {
             return new UpdateAssignmentQuantity(assignmentId ?? Guid.NewGuid(), userId ?? Guid.NewGuid(), quantity, questionnaireIdentity ?? new QuestionnaireIdentity());
         }
+        
+        public UpdateAssignmentTargetArea UpdateAssignmentTargetArea(Guid? assignmentId = null, Guid? userId = null, string targetAreaName = null, QuestionnaireIdentity questionnaireIdentity = null)
+        {
+            return new UpdateAssignmentTargetArea(assignmentId ?? Guid.NewGuid(), userId ?? Guid.NewGuid(), targetAreaName, questionnaireIdentity ?? new QuestionnaireIdentity());
+        }
 
         public UpgradeAssignmentCommand UpgradeAssignment()
         {

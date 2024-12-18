@@ -1,7 +1,7 @@
 import Layout from './Layout'
 import Assignments from './HqAssignments'
 import Details from './Details'
-import AssigmentMap from './AssigmentMap.vue'
+import AssignmentMap from './AssignmentMap.vue'
 import Upload from './Upload/Index'
 import UploadErrors from './Upload/Errors'
 import UploadVerification from './Upload/Verification'
@@ -29,7 +29,7 @@ export default class AssignmentsComponent {
                         path: '', component: Assignments,
                     },
                     {
-                        path: ':assignmentId/map', component: AssigmentMap,
+                        path: ':assignmentId/map', component: AssignmentMap,
                     },
                     {
                         path: ':assignmentId', component: Details,
