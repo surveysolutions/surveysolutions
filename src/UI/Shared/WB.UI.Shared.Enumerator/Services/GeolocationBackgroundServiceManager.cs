@@ -1,6 +1,7 @@
 using Android.Content;
 using Android.Locations;
 using Android.OS;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 
 namespace WB.UI.Shared.Enumerator.Services;
@@ -8,14 +9,16 @@ namespace WB.UI.Shared.Enumerator.Services;
 [Service(ForegroundServiceType = global::Android.Content.PM.ForegroundService.TypeLocation)]
 public class GeolocationBackgroundServiceManager : IGeolocationBackgroundServiceManager, IDisposable
 {
+    private readonly IEnumeratorSettings settings;
     private Dictionary<string, IGeolocationListener> listeners = new();
     private ServiceConnection<GeolocationBackgroundService> serviceConnection;
 
     readonly Intent geolocationServiceIntent = new Intent(Application.Context, typeof(GeolocationBackgroundService));
     public event EventHandler<LocationReceivedEventArgs> LocationReceived;
     
-    public GeolocationBackgroundServiceManager()
+    public GeolocationBackgroundServiceManager(IEnumeratorSettings settings)
     {
+        this.settings = settings;
     }
 
     public bool HasGpsProvider()
@@ -52,6 +55,10 @@ public class GeolocationBackgroundServiceManager : IGeolocationBackgroundService
 
     private async void ServiceOnLocationReceived(object sender, LocationReceivedEventArgs e)
     {
+        var accuracyInMeters = settings.GeographyQuestionAccuracyInMeters;
+        if (e.Location.Accuracy > accuracyInMeters)
+            return;
+
         foreach (var geolocationListener in listeners.Values)
         {
             await geolocationListener.OnGpsLocationChanged(e.Location, serviceConnection.Service);
