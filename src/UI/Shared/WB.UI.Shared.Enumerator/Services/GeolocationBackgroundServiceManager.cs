@@ -8,7 +8,7 @@ namespace WB.UI.Shared.Enumerator.Services;
 [Service(ForegroundServiceType = global::Android.Content.PM.ForegroundService.TypeLocation)]
 public class GeolocationBackgroundServiceManager : IGeolocationBackgroundServiceManager, IDisposable
 {
-    private HashSet<IGeolocationListener> listeners = new HashSet<IGeolocationListener>();
+    private Dictionary<string, IGeolocationListener> listeners = new();
     private ServiceConnection<GeolocationBackgroundService> serviceConnection;
 
     readonly Intent geolocationServiceIntent = new Intent(Application.Context, typeof(GeolocationBackgroundService));
@@ -24,12 +24,17 @@ public class GeolocationBackgroundServiceManager : IGeolocationBackgroundService
         return locationManager.IsProviderEnabled(LocationManager.GpsProvider);
     }
 
+    public IGeolocationListener GetListen(IGeolocationListener geolocationListener)
+    {
+        return listeners.GetValueOrDefault(geolocationListener.GetType().Name);
+    }
+
     public async Task<bool> StartListen(IGeolocationListener geolocationListener)
     {
         if (!HasGpsProvider())
             return false;
         
-        listeners.Add(geolocationListener);
+        listeners[geolocationListener.GetType().Name] = geolocationListener;
 
         if (listeners.Count > 0 && serviceConnection == null)
         {
@@ -47,7 +52,7 @@ public class GeolocationBackgroundServiceManager : IGeolocationBackgroundService
 
     private async void ServiceOnLocationReceived(object sender, LocationReceivedEventArgs e)
     {
-        foreach (var geolocationListener in listeners)
+        foreach (var geolocationListener in listeners.Values)
         {
             await geolocationListener.OnGpsLocationChanged(e.Location, serviceConnection.Service);
         }
@@ -57,7 +62,7 @@ public class GeolocationBackgroundServiceManager : IGeolocationBackgroundService
 
     public void StopListen(IGeolocationListener geolocationListener)
     {
-        listeners.Remove(geolocationListener);
+        listeners.Remove(geolocationListener.GetType().Name);
 
         if (listeners.Count == 0 && serviceConnection != null)
         {
@@ -72,7 +77,7 @@ public class GeolocationBackgroundServiceManager : IGeolocationBackgroundService
     
     public void Dispose()
     {
-        listeners = new HashSet<IGeolocationListener>();
+        listeners = new();
         serviceConnection?.Dispose();
         geolocationServiceIntent?.Dispose();
     }

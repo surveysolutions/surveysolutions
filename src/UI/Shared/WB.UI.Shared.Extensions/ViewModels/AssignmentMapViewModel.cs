@@ -12,6 +12,7 @@ using Kotlin.Reflect;
 using MvvmCross;
 using MvvmCross.Base;
 using MvvmCross.Commands;
+using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -47,6 +48,8 @@ public class AssignmentMapViewModelArgs
 [InterviewEntryPoint]
 public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMapViewModelArgs>
 {
+    private readonly Guid vmId = Guid.NewGuid();
+    
     private AssignmentDocument assignment;
 
     private readonly IGeolocationBackgroundServiceManager backgroundServiceManager;
@@ -124,6 +127,48 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
         var assignmentId = parameter.AssignmentId;
 
         assignment = assignmentsRepository.GetById(assignmentId);
+    }
+
+    protected override void SaveStateToBundle(IMvxBundle bundle)
+    {
+        isBackground = true;
+        
+        base.SaveStateToBundle(bundle);
+        
+        bundle.Data["IsEnabledGeofencing"] = IsEnabledGeofencing.ToString();
+        bundle.Data["IsEnabledGeoTracking"] = IsEnabledGeoTracking.ToString();
+        bundle.Data["assignmentId"] = assignment.Id.ToString();
+        
+        backgroundServiceManager.LocationReceived -= BackgroundServiceManagerOnLocationReceived;
+    }
+
+    protected override async void ReloadFromBundle(IMvxBundle state)
+    {
+        isBackground = false;
+        
+        base.ReloadFromBundle(state);
+        
+        if (state.Data.TryGetValue("assignmentId", out var assignmentIdStr) && int.TryParse(assignmentIdStr, out var assignmentId))
+        {
+            assignment = assignmentsRepository.GetById(assignmentId);
+        }
+        if (state.Data.TryGetValue("IsEnabledGeofencing", out var isEnabledGeofencingStr) && bool.TryParse(isEnabledGeofencingStr, out var isEnabledGeofencing))
+        {
+            var geolocationListener = (IGeofencingListener)backgroundServiceManager.GetListen(geofencingListener);
+            this.geofencingListener.Start(geolocationListener.Shapefile);
+            await this.backgroundServiceManager.StartListen(geofencingListener);
+
+            IsEnabledGeofencing = isEnabledGeofencing;
+        }
+        if (state.Data.TryGetValue("IsEnabledGeoTracking", out var isEnabledGeoTrackingStr) && bool.TryParse(isEnabledGeoTrackingStr, out var isEnabledGeoTracking))
+        {
+            this.geoTrackingListener.Start(assignment.Id);
+            await this.backgroundServiceManager.StartListen(geoTrackingListener);
+            
+            IsEnabledGeoTracking = isEnabledGeoTracking;
+        }
+        
+        backgroundServiceManager.LocationReceived += BackgroundServiceManagerOnLocationReceived;
     }
         
     public override async Task Initialize()
@@ -546,6 +591,7 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
         }
     }
 
+    private bool isBackground = false;
 
     public override void Dispose()
     {
@@ -556,6 +602,9 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
 
     private void StopGeoServices()
     {
+        if (isBackground)
+            return;
+        
         backgroundServiceManager.LocationReceived -= BackgroundServiceManagerOnLocationReceived;
 
         if (geoTrackingListener != null)
