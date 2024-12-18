@@ -556,4 +556,7 @@
   <data name="TargetArea" xml:space="preserve">
       <value>Edit Target area</value>
   </data>
+  <data name="EnterTargetArea" xml:space="preserve">
+      <value>Enter Target area</value>
+  </data>
 </root>

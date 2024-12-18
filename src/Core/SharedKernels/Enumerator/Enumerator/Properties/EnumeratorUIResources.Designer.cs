@@ -1850,5 +1850,11 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
                 return ResourceManager.GetString("AssigmentMap_CreateInterview_DisabledTargetArea_Warning", resourceCulture);
             }
         }
+        
+        public static string AssigmentMap_GeoTrackingReminder {
+            get {
+                return ResourceManager.GetString("AssigmentMap_GeoTrackingReminder", resourceCulture);
+            }
+        }
     }
 }

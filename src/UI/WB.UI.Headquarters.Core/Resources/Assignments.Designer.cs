@@ -920,5 +920,11 @@ namespace WB.UI.Headquarters.Resources {
                 return ResourceManager.GetString("TargetArea", resourceCulture);
             }
         }
+
+        public static string EnterTargetArea {
+            get {
+                return ResourceManager.GetString("EnterTargetArea", resourceCulture);
+            }
+        }
     }
 }
