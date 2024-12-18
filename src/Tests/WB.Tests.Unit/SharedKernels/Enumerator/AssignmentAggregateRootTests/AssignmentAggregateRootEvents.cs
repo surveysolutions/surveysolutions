@@ -214,6 +214,24 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.AssignmentAggregateRootTests
                 context.ShouldContainEvent<AssignmentQuantityChanged>(e => e.Quantity == null);
             }
         }
+        
+        [Test]
+        public void when_assignment_target_area_updated_should_publish_new_name()
+        {
+            var areaName = "area1.shp";
+            var command = Create.Command.UpdateAssignmentTargetArea(targetAreaName: areaName);
+            var assignment = Create.AggregateRoot.AssignmentAggregateRoot();
+
+            //act
+            using (var context = new EventContext())
+            {
+                assignment.UpdateAssignmentTargetArea(command);
+
+                //assert
+                Assert.That(assignment.properties.TargetArea, Is.EqualTo(areaName));
+                context.ShouldContainEvent<AssignmentTargetAreaChanged>(e => e.TargetArea == areaName);
+            }
+        }
 
         [Test]
         public void when_update_web_mode_assignment()

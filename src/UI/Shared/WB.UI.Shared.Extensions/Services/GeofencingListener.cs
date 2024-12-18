@@ -9,7 +9,7 @@ namespace WB.UI.Shared.Extensions.Services;
 public interface IGeofencingListener : IGeolocationListener
 {
     void Start(ShapefileFeatureTable shapefile);
-
+    ShapefileFeatureTable Shapefile { get; }
     GeolocationListenerResult LastResult { get; }
 }
 
@@ -17,7 +17,7 @@ public class GeofencingListener : IGeofencingListener
 {
     private IVibrationService vibrationService;
     
-    private ShapefileFeatureTable shapefile;
+    public ShapefileFeatureTable Shapefile { get; private set; }
 
     public GeofencingListener(
         IVibrationService vibrationService)
@@ -32,12 +32,12 @@ public class GeofencingListener : IGeofencingListener
             Location = location,
         };
         
-        if (shapefile?.SpatialReference == null)
+        if (Shapefile?.SpatialReference == null)
             return geofencingResult.SetCheckResult(false);
         
         var mapLocation = new MapPoint(location.Longitude, location.Latitude, SpatialReferences.Wgs84);
 
-        var projectedPoint = mapLocation.Project(shapefile.SpatialReference);
+        var projectedPoint = mapLocation.Project(Shapefile.SpatialReference);
         if (projectedPoint is MapPoint mapPoint)
         {
             var queryParameters = new QueryParameters
@@ -46,7 +46,7 @@ public class GeofencingListener : IGeofencingListener
                 SpatialRelationship = SpatialRelationship.Intersects
             };
 
-            var queryResult = await shapefile.QueryFeaturesAsync(queryParameters);
+            var queryResult = await Shapefile.QueryFeaturesAsync(queryParameters);
             if (!queryResult.Any())
             {
                 vibrationService.Enable();
@@ -75,7 +75,7 @@ public class GeofencingListener : IGeofencingListener
 
     public void Start(ShapefileFeatureTable shapefile)
     {
-        this.shapefile = shapefile;
+        this.Shapefile = shapefile;
     }
 
     public GeolocationListenerResult LastResult { get; set; }

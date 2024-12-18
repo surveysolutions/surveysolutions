@@ -78,8 +78,6 @@
 </style>
 
 <script>
-import { nextTick } from 'vue'
-import { debounce, delay, forEach, find } from 'lodash'
 import routeSync from '~/shared/routeSync'
 import { Form, Field } from 'vee-validate'
 import moment from 'moment'

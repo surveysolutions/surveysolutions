@@ -537,7 +537,17 @@
   <data name="DetailsGeoTracking" xml:space="preserve">
       <value>Гео-отслеживание</value>
   </data>
-  <data name="EnterTargetArea" xml:space="preserve">
-      <value>Введите область</value>
+  <data name="ChangeTargetAreaModalTitle" xml:space="preserve">
+      <value>Изменить целевую область назначения {{assignmentId}}</value>
   </data>
-</root>
+  <data name="TargetAreaExplanation" xml:space="preserve">
+      <value>Задайте имя карты области назначения</value>
+  </data>
+  <data name="Action_TargetAreaChanged" xml:space="preserve">
+      <value>Целевая область изменена</value>
+  </data>
+  <data name="TargetArea" xml:space="preserve">
+      <value>Область назначения</value>
+  </data>  <data name="EnterTargetArea" xml:space="preserve">
+      <value>Введите область</value>
+  </data></root>
