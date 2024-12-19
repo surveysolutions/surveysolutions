@@ -199,7 +199,7 @@
               app:MvxBind="Visible HasSecondaryAction;
                 Click SecondaryAction.Command;"
               app:layout_constraintBaseline_toBaselineOf="@+id/main_action"
-              app:layout_constraintLeft_toRightOf="@+id/main_action"
+              app:layout_constraintLeft_toRightOf="@+id/show_qr_code"
       />
       
       <TextView
