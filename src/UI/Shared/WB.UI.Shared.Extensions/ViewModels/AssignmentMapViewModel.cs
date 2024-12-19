@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using Android.Content;
 using AndroidX.Annotations;
@@ -137,8 +138,6 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
         
         base.SaveStateToBundle(bundle);
         
-        bundle.Data["IsEnabledGeofencing"] = IsEnabledGeofencing.ToString();
-        bundle.Data["IsEnabledGeoTracking"] = IsEnabledGeoTracking.ToString();
         bundle.Data["assignmentId"] = assignment.Id.ToString();
         
         backgroundServiceManager.LocationReceived -= BackgroundServiceManagerOnLocationReceived;
@@ -154,15 +153,25 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
         {
             assignment = assignmentsRepository.GetById(assignmentId);
         }
-        if (state.Data.TryGetValue("IsEnabledGeofencing", out var isEnabledGeofencingStr) && bool.TryParse(isEnabledGeofencingStr, out var isEnabledGf) && isEnabledGf)
+
+        var geofencing = backgroundServiceManager.GetListen(geofencingListener);
+        var geotracking = backgroundServiceManager.GetListen(geoTrackingListener);
+
+        if (geofencing != null || geotracking != null)
         {
-            var geolocationListener = (IGeofencingListener)backgroundServiceManager.GetListen(geofencingListener);
+            await SwitchLocator();
+        }
+
+        if (geofencing != null)
+        {
+            var geolocationListener = (IGeofencingListener)geofencing;
             this.geofencingListener.Start(geolocationListener.Shapefile);
             await this.backgroundServiceManager.StartListen(geofencingListener);
 
             IsEnabledGeofencing = true;
         }
-        if (state.Data.TryGetValue("IsEnabledGeoTracking", out var isEnabledGeoTrackingStr) && bool.TryParse(isEnabledGeoTrackingStr, out var isEnabledGt) && isEnabledGt)
+        
+        if (geotracking != null)
         {
             this.geoTrackingListener.Start(assignment.Id);
             await this.backgroundServiceManager.StartListen(geoTrackingListener);
@@ -376,10 +385,10 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
             {
                 await permissionsService.AssureHasPermissionOrThrow<Permissions.LocationAlways>();
 
+                await SwitchLocator();
+
                 this.geofencingListener.Start(LoadedShapefile);
                 await this.backgroundServiceManager.StartListen(geofencingListener);
-                
-                await SwitchLocator();
             }
             else
             {
@@ -507,11 +516,11 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
             }
             
             var feature = geoTrackingFeatureCollectionTable.CreateFeature();
-            Geometry multipoint = new Polyline(mapPoints, SpatialReferences.Wgs84);
-            if (multipoint.SpatialReference != Map.SpatialReference)
-                multipoint = multipoint.Project(Map.SpatialReference);
+            Geometry polyline = new Polyline(mapPoints, SpatialReferences.Wgs84);
+            if (polyline.SpatialReference != Map.SpatialReference)
+                polyline = polyline.Project(Map.SpatialReference);
             
-            feature.Geometry = multipoint;
+            feature.Geometry = polyline;
             await geoTrackingFeatureCollectionTable.AddFeatureAsync(feature);
 
             this.lastGeoTrackingFeature = feature;
@@ -558,21 +567,24 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
             Monitor.Enter(geoTrackingLayerLock);
 
             var polyline = (Polyline)lastGeoTrackingFeature.Geometry;
-            List<MapPoint> points = new List<MapPoint>(polyline.Parts.SelectMany(l => l.Points));
+            List<MapPoint> points = new List<MapPoint>(polyline.Parts.SelectMany(p => p.Points));
             MapPoint mapPoint = new MapPoint(location.Longitude, location.Latitude, SpatialReferences.Wgs84);
             if (mapPoint.SpatialReference != Map.SpatialReference)
                 mapPoint = (MapPoint)mapPoint.Project(Map.SpatialReference);
             points.Add(mapPoint);
-            Geometry newGeometry = new Polyline(points);
+            Geometry newGeometry = new Polyline(points, Map.SpatialReference);
 
-            var feature = geoTrackingFeatureCollectionTable.CreateFeature();
-            feature.Geometry = newGeometry;
-            await geoTrackingFeatureCollectionTable.AddFeatureAsync(feature);
+            var newFeature = geoTrackingFeatureCollectionTable.CreateFeature();
+            newFeature.Geometry = newGeometry;
+            await geoTrackingFeatureCollectionTable.AddFeatureAsync(newFeature);
+            newFeature.Geometry = newGeometry;
             await geoTrackingFeatureCollectionTable.DeleteFeatureAsync(lastGeoTrackingFeature);
-            lastGeoTrackingFeature = feature;
+            lastGeoTrackingFeature = newFeature;
         }
-        catch(Exception)
+        catch(Exception e)
         {
+            await Task.Delay(1000);
+            Debug.WriteLine(e);
             // ignore
         }
         finally
@@ -585,10 +597,7 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
     {
         var outerLineSymbol = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, Color.White, 5);
         var innerLineSymbol = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, Color.FromArgb(40, 120, 190), 2);
-        //var innerLineSymbol = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, Color.Red, 2);
         var sym = new CompositeSymbol(new List<Symbol> { outerLineSymbol, innerLineSymbol });
-        //GeometryType.Multipoint => new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, color, 18),
-        //GeometryType.Polyline => new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, color, 2),
         return new SimpleRenderer(sym);
     }
 
