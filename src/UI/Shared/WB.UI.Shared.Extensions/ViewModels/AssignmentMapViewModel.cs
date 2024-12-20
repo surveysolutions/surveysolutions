@@ -603,8 +603,9 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
 
     private void LogTestRecords(LocationReceivedEventArgs e)
     {
-        var loc = $"{e.Location.Latitude}  {e.Location.Longitude}";
-
+        if (!IsEnabledGeofencing)
+            return;
+        
         if (geofencingListener.LastResult?.OutShapefile ?? false)
         {
             IsWarningVisible = true;
