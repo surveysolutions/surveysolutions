@@ -432,13 +432,14 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
 
                 await SwitchLocator();
 
+                lastRecordWithPoints = new RecordWithPoints() { Points = new List<GeoTrackingPoint>()};
                 this.geoTrackingListener.Start(assignment.Id);
                 await this.backgroundServiceManager.StartListen(geoTrackingListener);
             }
             else
             {
-                this.geoTrackingListener.Stop();
                 this.backgroundServiceManager.StopListen(geoTrackingListener);
+                this.geoTrackingListener.Stop();
             }
 
             IsEnabledGeoTracking = !IsEnabledGeoTracking;
@@ -461,52 +462,50 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
         await UpdateGeoTrackingPointsAsync(e.Location);
     }
 
-    private List<RecordWithPoints> GeoTrackingRecords { get; set; }
-    
     public const string GeoTrackingLayerName = "GeoTrackingLayer";
 
     private Feature lastGeoTrackingFeature;
 
+    RecordWithPoints lastRecordWithPoints = new RecordWithPoints() { Points = new List<GeoTrackingPoint>()};
+
     private class RecordWithPoints
     {
-        public int RecordId { get; set; }
         public List<GeoTrackingPoint> Points { get; set; }
     }
     
     private async Task DrawGeoTrackingAsync()
     {
-        //GeoTrackingRecords = new List<RecordWithPoints>();
+        //var geoTrackingRecords = new List<RecordWithPoints>();
         
-        GeoTrackingRecords = geoTrackingRecordsStorage
+        var geoTrackingRecords = geoTrackingRecordsStorage
                 .WhereSelect(where => where.AssignmentId == assignment.Id,
                     r =>
                     new RecordWithPoints()
                     {
-                        RecordId = r.Id.Value,
                         Points = geoTrackingPointsStorage.Where(p => p.GeoTrackingRecordId == r.Id.Value).ToList()
                     }
         ).ToList();
         
-        GeoTrackingRecords.Add(new RecordWithPoints() { Points = new List<GeoTrackingPoint>()});
-        
         if(this.MapView?.Map?.SpatialReference == null)
             return;
         
-        var esriGeometryType = GeometryType.Polyline;
-
         IEnumerable<Field> fields = new Field[]
         {
             new Field(FieldType.Text, "name", "Name", 50)
         };
         var mapViewSpatialReference = this.MapView.Map.SpatialReference;
-        var geoTrackingFeatureCollectionTable = new FeatureCollectionTable(fields, esriGeometryType, mapViewSpatialReference)
+        var geoTrackingPolylineFeatureCollectionTable = new FeatureCollectionTable(fields, GeometryType.Polyline, mapViewSpatialReference)
             {
-                Renderer = CreateGeoTrackingRenderer()
+                Renderer = CreateGeoTrackingRenderer(GeometryType.Polyline)
+            };
+        var geoTrackingPointFeatureCollectionTable = new FeatureCollectionTable(fields, GeometryType.Point, mapViewSpatialReference)
+            {
+                Renderer = CreateGeoTrackingRenderer(GeometryType.Point)
             };
 
-        for (int i = 0; i < GeoTrackingRecords.Count; i++)
+        for (int i = 0; i < geoTrackingRecords.Count; i++)
         {
-            var record = GeoTrackingRecords[i];
+            var record = geoTrackingRecords[i];
 
             var mapPoints = new List<MapPoint>();
             foreach (var point in record.Points)
@@ -514,20 +513,32 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
                 var mapPoint = new MapPoint(point.Longitude, point.Latitude, SpatialReferences.Wgs84);
                 mapPoints.Add(mapPoint);
             }
-            
-            var feature = geoTrackingFeatureCollectionTable.CreateFeature();
-            Geometry polyline = new Polyline(mapPoints, SpatialReferences.Wgs84);
-            if (polyline.SpatialReference != Map.SpatialReference)
-                polyline = polyline.Project(Map.SpatialReference);
-            
-            feature.Geometry = polyline;
-            await geoTrackingFeatureCollectionTable.AddFeatureAsync(feature);
 
-            this.lastGeoTrackingFeature = feature;
+            if (mapPoints.Count == 1)
+            {
+                var feature = geoTrackingPointFeatureCollectionTable.CreateFeature();
+                Geometry point = new MapPoint(mapPoints[0].X, mapPoints[0].Y, SpatialReferences.Wgs84);
+                if (point.SpatialReference != Map.SpatialReference)
+                    point = point.Project(Map.SpatialReference);
+
+                feature.Geometry = point;
+                await geoTrackingPointFeatureCollectionTable.AddFeatureAsync(feature);
+            }
+            else if (mapPoints.Count > 1)
+            {
+                var feature = geoTrackingPolylineFeatureCollectionTable.CreateFeature();
+                Geometry polyline = new Polyline(mapPoints, SpatialReferences.Wgs84);
+                if (polyline.SpatialReference != Map.SpatialReference)
+                    polyline = polyline.Project(Map.SpatialReference);
+
+                feature.Geometry = polyline;
+                await geoTrackingPolylineFeatureCollectionTable.AddFeatureAsync(feature);
+            }
         }
 
         FeatureCollection featuresCollection = new FeatureCollection();
-        featuresCollection.Tables.Add(geoTrackingFeatureCollectionTable);
+        featuresCollection.Tables.Add(geoTrackingPolylineFeatureCollectionTable);
+        featuresCollection.Tables.Add(geoTrackingPointFeatureCollectionTable);
         FeatureCollectionLayer featureCollectionLayer = new FeatureCollectionLayer(featuresCollection)
         {
             Name = GeoTrackingLayerName
@@ -544,20 +555,15 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
     
     private async Task UpdateGeoTrackingPointsAsync(GpsLocation location)
     {
-        if (GeoTrackingRecords == null || GeoTrackingRecords.Count == 0)
+        if (lastRecordWithPoints?.Points == null)
             return;
 
         var existedLayer = this.MapView.Map.OperationalLayers.FirstOrDefault(l => l.Name == GeoTrackingLayerName);
         if (existedLayer == null)
             return;
         
-        var featureCollectionLayer = (FeatureCollectionLayer)existedLayer;
-        var featureCollectionTables = featureCollectionLayer.FeatureCollection.Tables;
-        var geoTrackingFeatureCollectionTable = featureCollectionTables[0];
-        var lastRecord = GeoTrackingRecords.Last();
-        lastRecord.Points.Add(new GeoTrackingPoint()
+        lastRecordWithPoints.Points.Add(new GeoTrackingPoint()
         {
-            GeoTrackingRecordId = lastRecord.RecordId,
             Longitude = location.Longitude,
             Latitude = location.Latitude,
         });
@@ -565,21 +571,44 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
         try
         {
             Monitor.Enter(geoTrackingLayerLock);
+            
+            var featureCollectionLayer = (FeatureCollectionLayer)existedLayer;
+            var featureCollectionTables = featureCollectionLayer.FeatureCollection.Tables;
 
-            var polyline = (Polyline)lastGeoTrackingFeature.Geometry;
-            List<MapPoint> points = new List<MapPoint>(polyline.Parts.SelectMany(p => p.Points));
-            MapPoint mapPoint = new MapPoint(location.Longitude, location.Latitude, SpatialReferences.Wgs84);
-            if (mapPoint.SpatialReference != Map.SpatialReference)
-                mapPoint = (MapPoint)mapPoint.Project(Map.SpatialReference);
-            points.Add(mapPoint);
-            Geometry newGeometry = new Polyline(points, Map.SpatialReference);
+            if (lastRecordWithPoints.Points.Count == 1)
+            {
+                var geoTrackingPointFeatureCollectionTable = featureCollectionTables[1];
+                var feature = geoTrackingPointFeatureCollectionTable.CreateFeature();
+                Geometry point = new MapPoint(location.Longitude, location.Latitude, SpatialReferences.Wgs84);
+                if (point.SpatialReference != Map.SpatialReference)
+                    point = point.Project(Map.SpatialReference);
 
-            var newFeature = geoTrackingFeatureCollectionTable.CreateFeature();
-            newFeature.Geometry = newGeometry;
-            await geoTrackingFeatureCollectionTable.AddFeatureAsync(newFeature);
-            newFeature.Geometry = newGeometry;
-            await geoTrackingFeatureCollectionTable.DeleteFeatureAsync(lastGeoTrackingFeature);
-            lastGeoTrackingFeature = newFeature;
+                feature.Geometry = point;
+                await geoTrackingPointFeatureCollectionTable.AddFeatureAsync(feature);
+                this.lastGeoTrackingFeature = feature;
+            }
+            else if (lastRecordWithPoints.Points.Count > 1)
+            {
+                var mapPoints = lastRecordWithPoints.Points.Select(point =>
+                    new MapPoint(point.Longitude, point.Latitude, SpatialReferences.Wgs84))
+                    .ToList();
+                
+                var geoTrackingPolylineFeatureCollectionTable = featureCollectionTables[0];
+                var feature = geoTrackingPolylineFeatureCollectionTable.CreateFeature();
+                Geometry polyline = new Polyline(mapPoints, SpatialReferences.Wgs84);
+                if (polyline.SpatialReference != Map.SpatialReference)
+                    polyline = polyline.Project(Map.SpatialReference);
+
+                feature.Geometry = polyline;
+                await geoTrackingPolylineFeatureCollectionTable.AddFeatureAsync(feature);
+                
+                if (lastGeoTrackingFeature.FeatureTable?.GeometryType == GeometryType.Point)
+                    await featureCollectionTables[1].DeleteFeatureAsync(lastGeoTrackingFeature);
+                else
+                    await featureCollectionTables[0].DeleteFeatureAsync(lastGeoTrackingFeature);
+                    
+                lastGeoTrackingFeature = feature;
+            }
         }
         catch(Exception e)
         {
@@ -593,12 +622,23 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
         }
     }
 
-    private Renderer CreateGeoTrackingRenderer()
+    private Renderer CreateGeoTrackingRenderer(GeometryType geometryType)
     {
-        var outerLineSymbol = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, Color.White, 5);
-        var innerLineSymbol = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, Color.FromArgb(40, 120, 190), 2);
-        var sym = new CompositeSymbol(new List<Symbol> { outerLineSymbol, innerLineSymbol });
-        return new SimpleRenderer(sym);
+        if (geometryType == GeometryType.Polyline)
+        {
+            var outerLineSymbol = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, Color.White, 5);
+            var innerLineSymbol = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, Color.FromArgb(40, 120, 190), 2);
+            var sym = new CompositeSymbol(new List<Symbol> { outerLineSymbol, innerLineSymbol });
+            return new SimpleRenderer(sym);
+        }
+        if (geometryType == GeometryType.Point)
+        {
+            var outerMarkerSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, Color.White, 10);
+            var innerMarkerSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, Color.FromArgb(40, 120, 190), 6);
+            var compositeSymbol = new CompositeSymbol(new List<Symbol> { outerMarkerSymbol, innerMarkerSymbol });
+            return new SimpleRenderer(compositeSymbol);
+        }
+        throw new Exception("Unknown geometry type " + geometryType);
     }
 
     private void LogTestRecords(LocationReceivedEventArgs e)
