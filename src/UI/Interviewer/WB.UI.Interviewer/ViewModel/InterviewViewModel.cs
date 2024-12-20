@@ -84,7 +84,7 @@ namespace WB.UI.Interviewer.ViewModel
 
         public override async Task NavigateBack()
         {
-            await this.ViewModelNavigationService.NavigateToDashboardAsync(this.InterviewId);
+            await this.ViewModelNavigationService.NavigateFromInterviewAsync(this.InterviewId);
             this.Dispose();
         }
 
