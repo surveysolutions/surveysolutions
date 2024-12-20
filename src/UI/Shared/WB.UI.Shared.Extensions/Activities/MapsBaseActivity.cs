@@ -1,3 +1,6 @@
+using Android.Graphics;
+using Android.Text;
+using Android.Text.Style;
 using Android.Views;
 using AndroidX.Core.Content;
 using AndroidX.Core.Graphics.Drawable;
@@ -19,6 +22,14 @@ public abstract class MapsBaseActivity<T> : BaseActivity<T>
         {
             var customMenuItem = menuActions[i];
             var menuItem = popupMenu.Menu.Add(0, i, i, customMenuItem.Title);
+            menuItem.SetEnabled(customMenuItem.IsEnabled);
+            if (!customMenuItem.IsEnabled)
+            {
+                SpannableString s = new SpannableString(customMenuItem.Title);
+                s.SetSpan(new ForegroundColorSpan(Color.Gray), 0, s.Length(), 0);
+                menuItem.SetTitle(s);
+            }
+           
             if (customMenuItem.IconResId.HasValue)
             {
                 var icon = ContextCompat.GetDrawable(this, customMenuItem.IconResId.Value);
@@ -27,8 +38,6 @@ public abstract class MapsBaseActivity<T> : BaseActivity<T>
                 menuItem.SetIcon(tintedIcon);
                 //menuItem.SetIcon(customMenuItem.IconResId.Value);
             }
-            
-            
             
             /*var menuItem = popupMenu.Menu.GetItem(i);
             
@@ -91,12 +100,15 @@ public class CustomMenuItem
         Action = action;
     }
 
-    public CustomMenuItem(string title, Action action, int? iconResId) : this(title, action)
+    public CustomMenuItem(string title, Action action, int? iconResId, bool isEnabled = true) : this(title, action)
     {
         IconResId = iconResId;
+        IsEnabled = isEnabled;
     }
 
     public string Title { get; set; }
     public Action Action { get; set; }
     public int? IconResId { get; set; }
+    
+    public bool IsEnabled { get; set; } = true;
 }

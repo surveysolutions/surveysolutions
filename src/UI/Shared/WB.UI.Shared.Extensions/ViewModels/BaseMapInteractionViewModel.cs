@@ -126,6 +126,13 @@ namespace WB.UI.Shared.Extensions.ViewModels
             set => this.RaiseAndSetIfChanged(ref this.isLocationEnabled, value);
         }
         
+        private bool isCompassVisible = false;
+        public bool IsCompassVisible
+        {
+            get => this.isCompassVisible;
+            set => this.RaiseAndSetIfChanged(ref this.isCompassVisible, value);
+        }
+        
         public IMvxAsyncCommand ShowFullMapCommand => new MvxAsyncCommand(async () =>
         {
             if (this.Map?.Basemap?.BaseLayers.Count > 0 && this.Map?.Basemap?.BaseLayers[0]?.FullExtent != null)
@@ -194,7 +201,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
         }
         
         public IMvxAsyncCommand ShowLocationSignCommand => 
-            new MvxAsyncCommand(async () => { await ShowLocationSign(); }, () => IsLocationEnabled);
+            new MvxAsyncCommand(async () => await ShowLocationSign());
 
         protected async Task<bool> ShowLocationSign()
         {
@@ -214,6 +221,14 @@ namespace WB.UI.Shared.Extensions.ViewModels
         {
             if(e == LocationDataSourceStatus.FailedToStart)
                 this.UserInteractionService.ShowToast(UIResources.AreaMap_LocationDataSourceFailed);
+        }
+        
+        private void MapViewPointChanged(object sender, EventArgs e)
+        {
+            if (((MapView)sender).MapRotation != 0)
+                this.IsCompassVisible = true;
+            else
+                this.IsCompassVisible = false;
         }
 
         protected async void LocationDisplayOnLocationChanged(object sender, Location e)
@@ -336,6 +351,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 {
                     FirstLoad = false;
                     await MapView.SetViewpointGeometryAsync(this.Map.Basemap.BaseLayers[0].FullExtent);
+                    
+                    MapView.ViewpointChanged += MapViewPointChanged;
                 }
                 
                 if (this.MapView?.VisibleArea != null)
@@ -502,8 +519,12 @@ namespace WB.UI.Shared.Extensions.ViewModels
             
             if (this.MapView?.LocationDisplay?.DataSource != null)
                 this.MapView.LocationDisplay.DataSource.StatusChanged -= DataSourceOnStatusChanged;
+
+            if (this.MapView != null)
+            {
+                this.MapView.ViewpointChanged -= MapViewPointChanged;
+            }
             
-           
             this.MapView?.Dispose();
         }
         
