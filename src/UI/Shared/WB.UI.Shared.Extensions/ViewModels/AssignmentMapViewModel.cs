@@ -233,7 +233,7 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
         
         if (!reminderWasShown && (lastGeoFencingStateOnInterviewCreation || lastGeoTrackingStateOnInterviewCreation))
         {
-            var wasConfirmed = await this.UserInteractionService.ConfirmAsync(
+            await this.UserInteractionService.AlertAsync(
                 EnumeratorUIResources.AssigmentMap_GeoTrackingReminder,
                 okButton: UIResources.Ok);
             
