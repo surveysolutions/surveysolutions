@@ -107,6 +107,8 @@
         <item name="android:layout_width">60dp</item>
         <item name="android:layout_height">60dp</item>
         <item name="android:scaleType">center</item>
+        <item name="android:tint">@color/icon_button_tint_selector</item>
+        <item name="android:tintMode">src_in</item>
         <item name="android:background">@drawable/icon_create_interview_button</item>
         <item name="android:src">@drawable/icon_create_interview</item>
     </style>
