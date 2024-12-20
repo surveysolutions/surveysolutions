@@ -175,15 +175,16 @@
     <item name="android:fontFamily">sans-serif-medium</item>
     <item name="android:textStyle">normal</item>
     <item name="android:layout_marginLeft">10dp</item>
-    <item name="android:paddingLeft">6dp</item>
     <item name="android:background">@drawable/dashboard_card_secondary_button</item>
   </style>
 
   <style name="Dashboard_Location" parent="Dashboard_SecondaryAction">
+    <item name="android:paddingLeft">6dp</item>
     <item name="android:drawableLeft">@drawable/navigation_icon</item>
   </style>
 
   <style name="Dashboard_TargetArea" parent="Dashboard_SecondaryAction">
+    <item name="android:paddingLeft">5dp</item>
     <item name="android:drawableLeft">@drawable/target_area_icon</item>
   </style>
 
