@@ -199,7 +199,8 @@
               app:MvxBind="Visible HasSecondaryAction;
                 Click SecondaryAction.Command;"
               app:layout_constraintBaseline_toBaselineOf="@+id/main_action"
-              app:layout_constraintLeft_toRightOf="@+id/main_action"
+              app:layout_constraintLeft_toRightOf="@+id/show_qr_code"
+              app:layout_constraintTop_toBottomOf="@+id/ExpandHandle"
       />
       
       <TextView
@@ -209,6 +210,7 @@
                 Click TargetAreaAction.Command;"
           app:layout_constraintBaseline_toBaselineOf="@+id/main_action"
           app:layout_constraintLeft_toRightOf="@+id/show_location"
+          app:layout_constraintTop_toBottomOf="@+id/ExpandHandle"
       />
 
       <View

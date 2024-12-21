@@ -548,5 +548,6 @@
   </data>
   <data name="TargetArea" xml:space="preserve">
       <value>Область назначения</value>
-  </data>
-</root>
+  </data>  <data name="EnterTargetArea" xml:space="preserve">
+      <value>Введите область</value>
+  </data></root>

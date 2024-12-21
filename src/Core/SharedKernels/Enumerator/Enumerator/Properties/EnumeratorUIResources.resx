@@ -1034,4 +1034,7 @@ It will appear on interviewer device after next synchronization</value>
   <data name="AssigmentMap_CreateInterview_DisabledTargetArea_Warning" xml:space="preserve">
     <value>It is recommended to enable geofencing to check the target area. Do you want to proceed?</value>
   </data>
+  <data name="AssigmentMap_GeoTrackingReminder" xml:space="preserve">
+      <value>You have used Geo Tracking or Geo Fencing when creating an interview. Please enabled it again if you want to use it.</value>
+  </data>
 </root>

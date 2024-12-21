@@ -73,7 +73,7 @@ namespace WB.UI.Interviewer.ViewModel
 
         public async Task NavigateBack()
         {
-            await this.ViewModelNavigationService.NavigateToDashboardAsync(this.InterviewId);
+            await this.ViewModelNavigationService.NavigateFromInterviewAsync(this.InterviewId);
         }
 
         public override void ViewAppeared()
