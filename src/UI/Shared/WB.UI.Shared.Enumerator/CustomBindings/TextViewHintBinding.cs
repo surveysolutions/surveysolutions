@@ -1,6 +1,7 @@
 using Android.Content.Res;
 using Android.Graphics;
 using Android.Graphics.Drawables;
+using Android.Util;
 using AndroidX.Core.Content;
 using MvvmCross.Binding;
 
@@ -28,7 +29,10 @@ public class TextViewHintBinding : BaseBinding<TextView, int?>
 
         if (control.Background is GradientDrawable drawable)
         {
-            drawable.SetStroke(6, color); 
+            float dpValue = 2f;  // 2dp
+            float pxValue = TypedValue.ApplyDimension(ComplexUnitType.Dip, dpValue, control.Context.Resources.DisplayMetrics);
+            
+            drawable.SetStroke((int)pxValue, color); 
             drawable.SetAlpha(80);
             //drawable.SetColor(color);
         }        
