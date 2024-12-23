@@ -29,6 +29,7 @@ public class TextViewHintBinding : BaseBinding<TextView, int?>
         if (control.Background is GradientDrawable drawable)
         {
             drawable.SetStroke(6, color); 
+            drawable.SetAlpha(80);
             //drawable.SetColor(color);
         }        
          
