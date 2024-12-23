@@ -92,9 +92,16 @@ public class GeolocationBackgroundService : Service, ILocationListener, INotific
         float minDistanceM = 1;
         locationManager.RequestLocationUpdates(LocationManager.GpsProvider, minTimeMs, minDistanceM, this);
 
-        return StartCommandResult.Sticky;
+        return StartCommandResult.NotSticky;
     }
-    
+
+    public override void OnTaskRemoved(Intent rootIntent)
+    {
+        StopSelf();
+        
+        base.OnTaskRemoved(rootIntent);
+    }
+
     public override void OnDestroy()
     {
         base.OnDestroy();
