@@ -45,7 +45,6 @@ public class AssignmentMapViewModelArgs
     public int AssignmentId { get; set; }
 }
 
-
 [InterviewEntryPoint]
 public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMapViewModelArgs>
 {
@@ -97,8 +96,22 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
         backgroundServiceManager.LocationReceived += BackgroundServiceManagerOnLocationReceived;
     }
 
-    public bool AllowGeoTracking => assignmentMapSettings.AllowGeoTracking;
-    public bool AllowGeofencing => assignmentMapSettings.AllowGeofencing;
+    public bool IsGeoTrackingPemitted => assignmentMapSettings.AllowGeoTracking;
+    public bool IsGeofencingPermitted => assignmentMapSettings.AllowGeofencing;
+    
+    private bool isGeofencingAvailable = true;
+    public bool IsGeofencingAvailable
+    {
+        get => this.isGeofencingAvailable;
+        set => this.RaiseAndSetIfChanged(ref this.isGeofencingAvailable, value);
+    }
+    
+    private bool isGeoTrackingAvailable = true;
+    public bool IsGeoTrackingAvailable
+    {
+        get => this.isGeoTrackingAvailable;
+        set => this.RaiseAndSetIfChanged(ref this.isGeoTrackingAvailable, value);
+    }
 
     private GraphicsOverlayCollection graphicsOverlays = new GraphicsOverlayCollection();
     public GraphicsOverlayCollection GraphicsOverlays
@@ -191,6 +204,9 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
         this.GraphicsOverlays.Add(graphicsOverlay);
 
         CheckExistingOfGpsProvider();
+
+        IsGeofencingAvailable = CanStartGeofencing();
+        IsGeoTrackingAvailable = backgroundServiceManager.HasGpsProvider();
     }
 
     private void CheckExistingOfGpsProvider()
@@ -372,11 +388,13 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
         set => this.RaiseAndSetIfChanged(ref this.isEnabledGeofencing, value);
     }
 
+    private bool CanStartGeofencing() => LoadedShapefile != null && backgroundServiceManager.HasGpsProvider();
+
     public IMvxAsyncCommand StartGeofencingCommand => new MvxAsyncCommand(ToggleGeofencingService);
     
     private async Task ToggleGeofencingService()
     {
-        if (LoadedShapefile == null || !backgroundServiceManager.HasGpsProvider())
+        if (!CanStartGeofencing())
             return;
         
         try
@@ -408,7 +426,6 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
             logger.Error("Error occurred on map location start.", exc);
         }        
     }
-    
     
     private bool isEnabledGeoTracking;
     public bool IsEnabledGeoTracking

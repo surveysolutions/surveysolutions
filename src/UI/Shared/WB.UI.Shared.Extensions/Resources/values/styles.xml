@@ -62,11 +62,15 @@
         <item name="android:layout_width">48dp</item>
         <item name="android:layout_height">48dp</item>
         <item name="android:scaleType">center</item>
-        <item name="android:tint">@color/icon_button_tint_selector</item>
-        <item name="android:tintMode">src_in</item>
         <item name="android:clickable">true</item>
         <item name="android:focusable">false</item>
         <item name="android:focusableInTouchMode">false</item>
+    </style>  
+    
+    <!-- Is not properly working as of now -->
+    <style name="Area_ButtonWithState" parent="Area_DefaultButton">
+        <item name="android:tint">@color/icon_button_tint_selector</item>
+        <item name="android:tintMode">src_in</item>
     </style>
 
     <style name="Area_CompassButton" parent="Area_DefaultButton">
@@ -94,8 +98,16 @@
         <item name="android:src">@drawable/icon_geofencing_default</item>
     </style>
     <style name="Area_GeoTrackingButton" parent="Area_DefaultButton">
-        <item name="android:background">@drawable/icon_geotracking_button</item>
+        <item name="android:background">@drawable/icon_geotracking_button_background</item>
         <item name="android:src">@drawable/icon_geotracking_default</item>
+    </style>
+    <style name="Area_GeofencingButton_disabled" parent="Area_DefaultButton">
+        <item name="android:background">@drawable/icon_button_default</item>
+        <item name="android:src">@drawable/icon_geofencing_disabled</item>
+    </style>
+    <style name="Area_GeoTrackingButton_disabled" parent="Area_DefaultButton">
+        <item name="android:background">@drawable/icon_button_default</item>
+        <item name="android:src">@drawable/icon_geotracking_disabled</item>
     </style>
     <style name="Area_NavigateButton" parent="Area_DefaultButton">
         <item name="android:src">@drawable/icon_navigate_default</item>

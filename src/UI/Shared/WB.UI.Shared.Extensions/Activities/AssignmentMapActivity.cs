@@ -64,15 +64,15 @@ public class AssignmentMapActivity : MarkersMapActivity<AssignmentMapViewModel, 
         customMenuItems.Add(new CustomMenuItem(UIResources.MenuItem_Title_ChangeMap, () => this.ViewModel.SwitchMapCommand.Execute(), Resource.Drawable.icon_change_map));
             //new CustomMenuItem("Change Boundaries", () => this.ViewModel.LoadShapefile.Execute(), Resource.Drawable.icon_change_map),
             
-        if (ViewModel.AllowGeoTracking)
+        if (ViewModel.IsGeoTrackingPemitted)
             customMenuItems.Add(this.ViewModel.IsEnabledGeoTracking
-                ? new CustomMenuItem(UIResources.MenuItem_Title_StopGeoTracking, () => this.ViewModel.StartGeoTrackingCommand.Execute(), Resource.Drawable.icon_geotracking_default)
-                : new CustomMenuItem(UIResources.MenuItem_Title_StartGeoTracking, () => this.ViewModel.StartGeoTrackingCommand.Execute(), Resource.Drawable.icon_geotracking_default));
+                ? new CustomMenuItem(UIResources.MenuItem_Title_StopGeoTracking, () => this.ViewModel.StartGeoTrackingCommand.Execute(), Resource.Drawable.icon_geotracking_default, ViewModel.IsGeoTrackingAvailable)
+                : new CustomMenuItem(UIResources.MenuItem_Title_StartGeoTracking, () => this.ViewModel.StartGeoTrackingCommand.Execute(), Resource.Drawable.icon_geotracking_default, ViewModel.IsGeoTrackingAvailable));
 
-        if (ViewModel.AllowGeofencing)
+        if (ViewModel.IsGeofencingPermitted)
             customMenuItems.Add(this.ViewModel.IsEnabledGeofencing
-                ? new CustomMenuItem(UIResources.MenuItem_Title_StopGeofencing, () => this.ViewModel.StartGeofencingCommand.Execute(), Resource.Drawable.icon_geofencing_default)
-                : new CustomMenuItem(UIResources.MenuItem_Title_StartGeofencing, () => this.ViewModel.StartGeofencingCommand.Execute(), Resource.Drawable.icon_geofencing_default));
+                ? new CustomMenuItem(UIResources.MenuItem_Title_StopGeofencing, () => this.ViewModel.StartGeofencingCommand.Execute(), Resource.Drawable.icon_geofencing_default, ViewModel.IsGeofencingAvailable)
+                : new CustomMenuItem(UIResources.MenuItem_Title_StartGeofencing, () => this.ViewModel.StartGeofencingCommand.Execute(), Resource.Drawable.icon_geofencing_default, ViewModel.IsGeofencingAvailable));
 
         customMenuItems.Add(new CustomMenuItem(UIResources.MenuItem_Title_ExitToDashboard, () => this.ViewModel.NavigateToDashboardCommand.Execute(), Resource.Drawable.icon_exit));
 

@@ -71,7 +71,6 @@
             style="@style/Area_MenuButton"
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
-            local:MvxBind="Click RotateMapToNorth;"
             android:layout_marginTop="@dimen/area_editor_buttons_margin_space"
             android:layout_marginRight="@dimen/area_editor_buttons_margin_space" />
     <ImageButton
@@ -80,7 +79,8 @@
             android:layout_below="@id/butMenu"
             android:layout_alignEnd="@id/butMenu"
             android:layout_marginTop="@dimen/area_editor_buttons_margin_space"
-            local:MvxBind="Click StartGeoTrackingCommand; SelectedState IsEnabledGeoTracking; Visible AllowGeoTracking;"
+            local:MvxBind="Click StartGeoTrackingCommand; SelectedState IsEnabledGeoTracking; 
+              Visible And(IsGeoTrackingAvailable, IsGeoTrackingPemitted);"
             />
     <ImageButton
             android:id="@+id/butGeofencing"
@@ -88,23 +88,37 @@
             android:layout_below="@id/butGeoTracking"
             android:layout_alignEnd="@id/butGeoTracking"
             android:layout_marginTop="@dimen/area_editor_buttons_margin_space"
-            local:MvxBind="Click StartGeofencingCommand; SelectedState IsEnabledGeofencing; Visible AllowGeofencing;"
+            local:MvxBind="Click StartGeofencingCommand; SelectedState IsEnabledGeofencing; 
+              Visible And(IsGeofencingAvailable, IsGeofencingPermitted);"
              />
-    
+       <ImageButton
+                android:id="@+id/butGeoTracking_disabled"
+                style="@style/Area_GeoTrackingButton_disabled"
+                android:layout_below="@id/butMenu"
+                android:layout_alignEnd="@id/butMenu"
+                android:layout_marginTop="@dimen/area_editor_buttons_margin_space"
+                local:MvxBind="Visible And(Not(IsGeoTrackingAvailable), IsGeoTrackingPemitted);"/>
+        <ImageButton
+                android:id="@+id/butGeofencing_disabled"
+                style="@style/Area_GeofencingButton_disabled"
+                android:layout_below="@id/butGeoTracking"
+                android:layout_alignEnd="@id/butGeoTracking"
+                android:layout_marginTop="@dimen/area_editor_buttons_margin_space"
+                local:MvxBind="Visible And(Not(IsGeofencingAvailable), IsGeofencingPermitted);"/>    
     
     <ImageButton
             android:id="@+id/butCompass"
             style="@style/Area_CompassButton"
             android:layout_above="@id/butNavigation"
             android:layout_alignStart="@id/butNavigation"
-            local:MvxBind="Click RotateMapToNorth;"
+            local:MvxBind="Click RotateMapToNorth; Visible IsCompassVisible;"
             android:layout_marginBottom="@dimen/area_editor_buttons_margin_space" />
     <ImageButton
             android:id="@+id/butNavigation"
             style="@style/Area_NavigateButton"
             android:layout_above="@id/butZoomMenu"
             android:layout_alignStart="@id/butZoomMenu"
-            local:MvxBind="Click ShowLocationSignCommand; Enabled IsLocationEnabled;"
+            local:MvxBind="Click ShowLocationSignCommand; Visible IsLocationEnabled;"
             android:layout_marginBottom="@dimen/area_editor_buttons_margin_space" />
     <ImageButton
             android:id="@+id/butZoomMenu"
