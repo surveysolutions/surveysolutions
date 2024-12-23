@@ -273,6 +273,7 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
     
     protected override Task AfterShapefileLoadedHandler()
     {
+        IsGeofencingAvailable = CanStartGeofencing();
         return Task.CompletedTask;
     }
 
