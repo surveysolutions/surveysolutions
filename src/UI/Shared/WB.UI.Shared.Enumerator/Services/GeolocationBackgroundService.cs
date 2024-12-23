@@ -3,6 +3,7 @@ using Android.Content.PM;
 using Android.Locations;
 using Android.OS;
 using MvvmCross;
+using MvvmCross.Base;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
@@ -65,7 +66,6 @@ public class GeolocationBackgroundService : Service, ILocationListener, INotific
             notificationManager.CreateNotificationChannel(channel);
         }
 
-
         notificationsBuilder = new Notification.Builder(this, locationNotificationChannelId)
             .SetContentTitle("Location Service")
             .SetContentText("Tracking your location in background")
@@ -97,15 +97,18 @@ public class GeolocationBackgroundService : Service, ILocationListener, INotific
 
     public override void OnTaskRemoved(Intent rootIntent)
     {
+        Mvx.IoCProvider.GetSingleton<IGeolocationBackgroundServiceManager>()?.DisposeIfDisposable();
+        StopForeground(true);
         StopSelf();
-        
+
         base.OnTaskRemoved(rootIntent);
     }
 
     public override void OnDestroy()
     {
-        base.OnDestroy();
         locationManager.RemoveUpdates(this);
+        
+        base.OnDestroy();
     }
     
     public override IBinder OnBind(Intent intent)

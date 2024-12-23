@@ -73,19 +73,28 @@ public class GeolocationBackgroundServiceManager : IGeolocationBackgroundService
     {
         listeners.Remove(geolocationListener.GetType().Name);
 
-        if (listeners.Count == 0 && serviceConnection != null)
+        if (listeners.Count == 0)
+            UnbindService();
+        
+    }
+
+    private void UnbindService()
+    {
+        if (serviceConnection != null)
         {
             serviceConnection.Service.LocationReceived -= ServiceOnLocationReceived;
-            
+                
             ServiceContext.UnbindService(serviceConnection);
             serviceConnection = null;
-            
+                
             ServiceContext.StopService(geolocationServiceIntent);
         }
     }
-    
+
     public void Dispose()
     {
+        UnbindService();
+        
         listeners = new();
         serviceConnection?.Dispose();
         geolocationServiceIntent?.Dispose();
