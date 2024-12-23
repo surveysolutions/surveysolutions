@@ -197,7 +197,8 @@
               android:id="@+id/show_location"
               style="@style/Dashboard_Location"
               app:MvxBind="Visible HasSecondaryAction;
-                Click SecondaryAction.Command;"
+                Click SecondaryAction.Command;
+                Hint InterviewStatusToButton(Status);"
               app:layout_constraintBaseline_toBaselineOf="@+id/main_action"
               app:layout_constraintLeft_toRightOf="@+id/show_qr_code"
               app:layout_constraintTop_toBottomOf="@+id/ExpandHandle"
@@ -207,7 +208,8 @@
           android:id="@+id/show_targetArea"
           style="@style/Dashboard_TargetArea"
           app:MvxBind="Visible HasTargetAreaAction;
-                Click TargetAreaAction.Command;"
+                Click TargetAreaAction.Command;
+                Hint InterviewStatusToButton(Status);"
           app:layout_constraintBaseline_toBaselineOf="@+id/main_action"
           app:layout_constraintLeft_toRightOf="@+id/show_location"
           app:layout_constraintTop_toBottomOf="@+id/ExpandHandle"

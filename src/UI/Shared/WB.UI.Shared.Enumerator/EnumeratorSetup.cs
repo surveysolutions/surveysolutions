@@ -185,6 +185,7 @@ namespace WB.UI.Shared.Enumerator
             registry.RegisterCustomBindingFactory<TextInputLayout>("EndIconClick", (view) => new TextInputLayoutEndIconClickBinding(view));
             registry.RegisterCustomBindingFactory<TextView>("Html", (view) => new TextViewHtmlBinding(view));
             registry.RegisterCustomBindingFactory<TextView>("Color", (view) => new TextViewColorBinding(view));
+            registry.RegisterCustomBindingFactory<TextView>("Hint", (view) => new TextViewHintBinding(view));
             registry.RegisterCustomBindingFactory<TextView>("TextFormatted", (view) => new TextViewTextFormattedBinding(view));
             registry.RegisterCustomBindingFactory<TextView>("IsSelectedYesNoOptionColor", (view) => new TextViewIsSelectedYesNoOptionColorBinding(view));
             registry.RegisterCustomBindingFactory<MaskedEditText>("IsMaskedQuestionAnswered", (editText) => new MaskedEditTextIsMaskedQuestionAnsweredBinding(editText));
