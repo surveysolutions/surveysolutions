@@ -1049,7 +1049,7 @@
       <value>Вернуться</value>
   </data>
   <data name="Dashboard_CreateInterview_TargetArea_Warning" xml:space="preserve">
-    <value>Для выполнения этого задания необходимо создать его с карты. Рекомендуется создать интервью с карты. Хотите продолжить?</value>
+    <value>Для выполнения этого задания необходимо создать его с карты задания. Рекомендуется создать интервью с карты. Хотите продолжить?</value>
   </data>
   <data name="AssigmentMap_CreateInterview_OutTargetArea_Warning" xml:space="preserve">
     <value>Вы создаете интервью за пределами целевой области. Хотите продолжить?</value>
