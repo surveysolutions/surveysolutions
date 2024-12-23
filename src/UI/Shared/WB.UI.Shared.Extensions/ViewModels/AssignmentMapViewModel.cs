@@ -572,7 +572,7 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
     
     private async Task UpdateGeoTrackingPointsAsync(GpsLocation location)
     {
-        if (lastRecordWithPoints?.Points == null)
+        if (!IsEnabledGeoTracking || lastRecordWithPoints?.Points == null)
             return;
 
         var existedLayer = this.MapView.Map.OperationalLayers.FirstOrDefault(l => l.Name == GeoTrackingLayerName);
