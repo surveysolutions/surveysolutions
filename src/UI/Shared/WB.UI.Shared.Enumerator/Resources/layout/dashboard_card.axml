@@ -200,8 +200,8 @@
                 Click SecondaryAction.Command;
                 Hint InterviewStatusToButton(Status);"
               app:layout_constraintBaseline_toBaselineOf="@+id/main_action"
-              app:layout_constraintLeft_toRightOf="@+id/show_qr_code"
               app:layout_constraintTop_toBottomOf="@+id/ExpandHandle"
+              app:layout_constraintEnd_toStartOf="@+id/show_targetArea"
       />
       
       <TextView
@@ -211,8 +211,8 @@
                 Click TargetAreaAction.Command;
                 Hint InterviewStatusToButton(Status);"
           app:layout_constraintBaseline_toBaselineOf="@+id/main_action"
-          app:layout_constraintLeft_toRightOf="@+id/show_location"
           app:layout_constraintTop_toBottomOf="@+id/ExpandHandle"
+          app:layout_constraintRight_toRightOf="parent"
       />
 
       <View
