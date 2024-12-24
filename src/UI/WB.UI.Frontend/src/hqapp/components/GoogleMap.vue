@@ -140,7 +140,7 @@
             <div class="form-group">
                 <label class="control-label" for="newResponsibleId">{{
                     $t('Assignments.SelectResponsible')
-                }}</label>
+                    }}</label>
                 <Typeahead control-id="newResponsibleId" :placeholder="$t('Common.Responsible')"
                     :value="newResponsibleId" :ajax-params="{}" @selected="newResponsibleSelected"
                     :fetch-url="model.responsible"></Typeahead>
@@ -839,7 +839,7 @@ export default {
         },
 
         reloadMarkersInBounds() {
-            var bounds = this.map.getBounds()
+            var bounds = this.map?.getBounds()
 
             if (bounds == null) {
                 this.showPointsOnMap(180, 180, -180, -180, true)
