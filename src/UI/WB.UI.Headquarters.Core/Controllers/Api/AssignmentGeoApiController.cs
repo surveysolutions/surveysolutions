@@ -66,11 +66,11 @@ public class AssignmentGeoApiController: ControllerBase
                 }
                 if (start.HasValue)
                 {
-                    r = r.Where(t => t.End.HasValue && t.End.Value.UtcDateTime >= start.Value.UtcDateTime);
+                    r = r.Where(t => t.End.HasValue && t.End.Value >= start.Value.UtcDateTime);
                 }
                 if (end.HasValue)
                 {
-                    r = r.Where(t => t.Start.UtcDateTime <= end.Value.UtcDateTime);
+                    r = r.Where(t => t.Start <= end.Value.UtcDateTime);
                 }
                 return r;
             })

@@ -232,8 +232,8 @@ export default {
                 responsibleId: (this.responsibleId || {}).key || null,
                 assignmentId: this.assignmentId,
                 trackId: this.selectedGeoTrackingId?.key,
-                start: this.dateRange?.startDate,
-                end: this.dateRange?.endDate,
+                start: this.dateRange?.startDate ? moment(this.dateRange?.startDate).utc().toISOString() : null,
+                end: this.dateRange?.endDate ? moment(this.dateRange?.endDate).utc().toISOString() : null,
             }
 
             this.isLoadingGeoTracking = true

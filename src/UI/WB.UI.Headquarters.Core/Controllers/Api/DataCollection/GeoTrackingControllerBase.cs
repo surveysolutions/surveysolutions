@@ -31,14 +31,14 @@ public abstract class GeoTrackingControllerBase : ControllerBase
             {
                 Latitude = p.Latitude,
                 Longitude = p.Longitude,
-                Time = p.Time,
+                Time = p.Time.UtcDateTime,
             }).ToList();
             var geoTrackingRecord = new GeoTrackingRecord()
             {
                 AssignmentId = record.AssignmentId,
                 InterviewerId = record.InterviewerId,
-                Start = record.Start,
-                End = record.End,
+                Start = record.Start.UtcDateTime,
+                End = record.End?.UtcDateTime,
                 Points = points
             };
             geoTrackingStorage.Store(geoTrackingRecord, null);

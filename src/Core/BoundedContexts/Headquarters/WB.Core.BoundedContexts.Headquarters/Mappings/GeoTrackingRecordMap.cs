@@ -1,7 +1,15 @@
+using System;
+using System.Collections.Generic;
+using System.Data.Common;
+using Newtonsoft.Json;
+using NHibernate.Engine;
 using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
+using NHibernate.Type;
+using NHibernate.UserTypes;
 using WB.Core.BoundedContexts.Headquarters.GeoTracking;
 using WB.Infrastructure.Native.Storage.Postgre.NhExtensions;
+using Cascade = NHibernate.Mapping.ByCode.Cascade;
 
 namespace WB.Core.BoundedContexts.Headquarters.Mappings;
 
@@ -25,15 +33,21 @@ public class GeoTrackingRecordMap : ClassMapping<GeoTrackingRecord>
         Property(x => x.Start, ptp =>
         {
             ptp.Column("start_date");
-            ptp.Type<DateTimeOffsetType>();
+            ptp.Type<UtcDateTimeType>();
             ptp.NotNullable(true);
         });
         Property(x => x.End, ptp =>
         {
             ptp.Column("end_date");
-            ptp.Type<DateTimeOffsetType>();
+            ptp.Type<UtcDateTimeType>();
             ptp.NotNullable(false);
-        });
+        });        
+        /*Property(x => x.Points, ptp =>
+        {
+            ptp.Column("points");
+            ptp.Type<PostgresJson<List<GeoTrackingPoint>>>();
+            ptp.NotNullable(false);
+        });*/
         
         List(x => x.Points, listMap =>
             {
@@ -68,7 +82,7 @@ public class GeoTrackingRecordMap : ClassMapping<GeoTrackingRecord>
                     cmp.Property(x => x.Time, ptp =>
                     {
                         ptp.Column("time");
-                        ptp.Type<DateTimeOffsetType>();
+                        ptp.Type<UtcDateTimeType>();
                         ptp.NotNullable(true);
                     });
                 });
