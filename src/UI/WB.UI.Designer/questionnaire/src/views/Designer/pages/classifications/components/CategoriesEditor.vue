@@ -1,6 +1,6 @@
 ﻿<template>
     <vee-form ref="form" v-slot="{ errors, meta }">
-        <div class="scroller">
+        <perfect-scrollbar class="scroller" ref="classificationScroller">
             <ul class="breadcrumb">
                 <li>{{ activeGroup.title }}</li>
                 <li class="active">{{ activeClassification.title }}</li>
@@ -51,14 +51,14 @@
                 </div>
                 <div v-if="isEditMode" class="categories-holder-footer clearfix">
                     <button v-if="optionsMode" type="button" class="btn btn-link pull-left" @click="addCategory">{{
-        $t('QuestionnaireEditor.QuestionAddOption') }}</button>
+                        $t('QuestionnaireEditor.QuestionAddOption') }}</button>
                     <button v-if="optionsMode" type="button" class="btn btn-link pull-right show-strings"
                         @click="showStrings">{{ $t('QuestionnaireEditor.StringsView') }}</button>
                     <button v-else type="button" class="btn btn-link pull-left" @click="showList">{{
-        $t('QuestionnaireEditor.TableView') }}</button>
+                        $t('QuestionnaireEditor.TableView') }}</button>
                 </div>
             </div>
-        </div>
+        </perfect-scrollbar>
         <div class="form-buttons-holder">
             <vee-field type="hidden" name="collectionSizeTracker" v-validate />
             <button type="button" class="btn btn-lg" :class="{ 'btn-success': meta.dirty }"
@@ -110,6 +110,9 @@ export default {
     watch: {
         activeClassification: function (val) {
             this.optionsMode = true;
+            this.$nextTick(() => {
+                this.$refs.classificationScroller.$el.scrollTop = 0
+            });
         }
     },
     methods: {

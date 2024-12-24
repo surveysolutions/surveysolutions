@@ -26,7 +26,7 @@ const store = {
                 })
                 .catch(data => {
                     if (data.responseJSON && data.responseJSON.redirectUrl) {
-                        window.location = data.responseJSON.redirectUrl
+                        window.location.href = data.responseJSON.redirectUrl
                         return
                     }
 

@@ -18,13 +18,13 @@
                             </li>
                         </ul>
                         <button type="button" class="btn lighter-hover" @click="addGroup()" v-if="isAdmin">{{
-        $t('QuestionnaireEditor.ClassificationAddGroup') }}</button>
+                            $t('QuestionnaireEditor.ClassificationAddGroup') }}</button>
                     </perfect-scrollbar>
                 </div>
             </div>
             <div class="col-xs-4 column classifications">
                 <div class="classification-list-wrapper">
-                    <perfect-scrollbar class="scroller">
+                    <perfect-scrollbar class="scroller" ref="groupScroller">
                         <ul class="breadcrumb">
                             <li class="active">{{ activeGroup.title }}</li>
                         </ul>
@@ -76,6 +76,13 @@ export default {
     created() {
         this.$store.dispatch('getUserInfo');
         this.$store.dispatch('loadGroups');
+    },
+    watch: {
+        activeGroup: function (val) {
+            this.$nextTick(() => {
+                this.$refs.groupScroller.$el.scrollTop = 0
+            });
+        }
     },
     computed: {
         isAdmin() {
