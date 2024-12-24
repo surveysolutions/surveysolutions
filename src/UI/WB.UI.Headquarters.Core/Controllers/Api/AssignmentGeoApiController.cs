@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Linq;
 using GreenDonut.Predicates;
 using Main.Core.Entities.SubEntities;
@@ -150,7 +151,10 @@ public class AssignmentGeoApiController: ControllerBase
             .OrderBy(x => x.Id)
             .Take(pageSize)
             .ToList()
-            .Select(x => new ResponsibleComboboxOptionModel(x.Id.ToString(), x.Id.ToString(),  null))
+            .Select(x => new ResponsibleComboboxOptionModel(
+                x.Id.ToString(),  
+                x.Id.ToString() + ". " + x.Start, 
+                null))
             .ToArray();
 
         var result = new ResponsibleComboboxModel(items, total);
