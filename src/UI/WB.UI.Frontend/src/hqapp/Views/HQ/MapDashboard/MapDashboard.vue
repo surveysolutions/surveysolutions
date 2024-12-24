@@ -137,7 +137,7 @@ export default {
         },
 
         map() {
-            return this.$refs.mapWithMarkers.map
+            return this.$refs.mapWithMarkers
         },
 
         getMarkersParams() {
