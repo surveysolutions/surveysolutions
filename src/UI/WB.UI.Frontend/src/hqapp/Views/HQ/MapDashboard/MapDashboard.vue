@@ -123,7 +123,10 @@ export default {
             this.onChange((q) => {
                 q.assignmentId = to
             })
-            this.map?.reloadMarkersInBounds()
+
+            nextTick(() => {
+                this.map?.reloadMarkersInBounds()
+            })
         },
     },
 
