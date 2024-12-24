@@ -283,7 +283,8 @@ export default {
                 });
             })
 
-            this.map.fitBounds(latlngBounds)
+            if (this.tracksPath.length > 0)
+                this.map.fitBounds(latlngBounds)
         },
 
         clearDateRange() {
