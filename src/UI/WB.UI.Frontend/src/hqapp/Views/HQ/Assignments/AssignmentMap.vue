@@ -84,6 +84,8 @@ import moment from 'moment'
 import { DateFormats } from '~/shared/helpers'
 import GoogleMap from '../../../components/GoogleMap.vue'
 
+let tracksPath = []
+
 export default {
     mixins: [routeSync],
 
@@ -93,7 +95,7 @@ export default {
         return {
             selectedGeoTrackingId: null,
             tracks: [],
-            tracksPath: [],
+
             responsibleId: null,
             responsibleParams: { showArchived: true, showLocked: true },
             trackParams: {},
@@ -251,10 +253,10 @@ export default {
 
         displayGeoTrackingHistory() {
 
-            this.tracksPath.forEach(t => {
-                t.setMap(null);
+            tracksPath.forEach(track => {
+                track.setMap(null);
             })
-            this.tracksPath = []
+            tracksPath = []
 
             const latlngBounds = new google.maps.LatLngBounds();
 
@@ -268,7 +270,7 @@ export default {
                 });
 
                 polyline.setMap(this.map);
-                this.tracksPath.push(polyline);
+                tracksPath.push(polyline);
 
                 /*t.points.forEach((point) => {
                     new google.maps.Marker({
