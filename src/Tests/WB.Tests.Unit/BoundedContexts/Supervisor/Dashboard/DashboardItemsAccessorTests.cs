@@ -191,7 +191,8 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Dashboard
                     Mock.Of<IViewModelNavigationService>(),
                     Create.Other.SupervisorPrincipal(),
                     interviewers ?? Mock.Of<IPlainStorage<InterviewerDocument>>(x => x.GetById(It.IsAny<string>()) == new InterviewerDocument()),
-                    Mock.Of<IUserInteractionService>()));
+                    Mock.Of<IUserInteractionService>(),
+                    Mock.Of<IMapInteractionService>()));
 
             return new DashboardItemsAccessor(
 

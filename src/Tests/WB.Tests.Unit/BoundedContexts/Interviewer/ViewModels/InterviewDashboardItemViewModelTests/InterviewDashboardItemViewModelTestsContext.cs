@@ -39,7 +39,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.InterviewDashboar
                 .Object;
 
 
-            return new InterviewDashboardItemViewModel(serviceLocator, Mock.Of<IAuditLogService>());
+            return new InterviewDashboardItemViewModel(serviceLocator, Mock.Of<IAuditLogService>(),
+                Mock.Of<IMapInteractionService>());
         }
     }
 }

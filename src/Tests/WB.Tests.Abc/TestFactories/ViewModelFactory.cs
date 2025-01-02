@@ -543,7 +543,8 @@ namespace WB.Tests.Abc.TestFactories
                 Mock.Of<IViewModelNavigationService>(),
                 principal ?? Mock.Of<IPrincipal>(x => x.CurrentUserIdentity == Create.Other.SupervisorIdentity(null, null, null, null)),
                 interviewers ?? new InMemoryPlainStorage<InterviewerDocument>(Mock.Of<ILogger>()),
-                Mock.Of<IUserInteractionService>());
+                Mock.Of<IUserInteractionService>(),
+                Mock.Of<IMapInteractionService>());
 
             if (interviewId.HasValue)
             {
