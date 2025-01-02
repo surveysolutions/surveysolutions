@@ -98,6 +98,7 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
 
     public bool IsGeoTrackingPemitted => assignmentMapSettings.AllowGeoTracking;
     public bool IsGeofencingPermitted => assignmentMapSettings.AllowGeofencing;
+    public bool IsCreateInterviewPermitted => assignmentMapSettings.AllowCreateInterview;
     
     private bool isGeofencingAvailable = true;
     public bool IsGeofencingAvailable

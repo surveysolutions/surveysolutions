@@ -11,7 +11,7 @@ public class SupervisorMapExtensionsModule : IModule, IInitModule
 {
     public void Load(IIocRegistry registry)
     {
-        registry.Bind<IAssignmentMapSettings, InterviewerAssignmentMapSettings>();
+        registry.Bind<IAssignmentMapSettings, SupervisorAssignmentMapSettings>();
     }
 
     public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)

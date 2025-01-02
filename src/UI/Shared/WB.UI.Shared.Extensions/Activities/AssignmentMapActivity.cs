@@ -60,7 +60,9 @@ public class AssignmentMapActivity : MarkersMapActivity<AssignmentMapViewModel, 
     private void ClickedMenuButton(object sender, EventArgs e)
     {
         List<CustomMenuItem> customMenuItems = new();
-        customMenuItems.Add(new CustomMenuItem(UIResources.MenuItem_Title_CreateInterview, () => this.ViewModel.CreateInterviewCommand.Execute(), Resource.Drawable.icon_create_interview_menu));
+        if(ViewModel.IsCreateInterviewPermitted)
+            customMenuItems.Add(new CustomMenuItem(UIResources.MenuItem_Title_CreateInterview, () => this.ViewModel.CreateInterviewCommand.Execute(), Resource.Drawable.icon_create_interview_menu));
+        
         customMenuItems.Add(new CustomMenuItem(UIResources.MenuItem_Title_ChangeMap, () => this.ViewModel.SwitchMapCommand.Execute(), Resource.Drawable.icon_change_map));
             //new CustomMenuItem("Change Boundaries", () => this.ViewModel.LoadShapefile.Execute(), Resource.Drawable.icon_change_map),
             

@@ -11,6 +11,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.Views.Dashboard;
 
@@ -19,6 +20,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
     public abstract class ExpandableQuestionsDashboardItemViewModel : MvxNotifyPropertyChanged, IDashboardItemWithEvents, IDisposable
     {
         private readonly IServiceLocator serviceLocator;
+        private readonly IMapInteractionService mapInteractionService;
         private string idLabel;
         private string subTitle;
         private ZonedDateTime? calendarEventStart;
@@ -39,9 +41,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
 
         protected void RaiseOnItemUpdated() => OnItemUpdated?.Invoke(this, EventArgs.Empty);
 
-        public ExpandableQuestionsDashboardItemViewModel(IServiceLocator serviceLocator)
+        public ExpandableQuestionsDashboardItemViewModel(IServiceLocator serviceLocator, IMapInteractionService mapInteractionService)
         {
             this.serviceLocator = serviceLocator;
+            this.mapInteractionService = mapInteractionService;
             Actions = new MvxObservableCollection<ActionDefinition>();
             Actions.CollectionChanged += CollectionChanged;
         }
@@ -223,6 +226,21 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
                 ActionType = ActionType.Secondary,
 
                 Label = EnumeratorUIResources.Dashboard_ShowLocation
+            });
+        }
+        
+        protected void BindTargetAreaAction(int assignmentId, string targetArea)
+        {
+            if (string.IsNullOrWhiteSpace(targetArea)) return;
+
+            Actions.Add(new ActionDefinition
+            {
+                Command = new MvxAsyncCommand(
+                    () => mapInteractionService.OpenAssignmentMapAsync(assignmentId)),
+
+                ActionType = ActionType.TargetArea,
+
+                Label = EnumeratorUIResources.Dashboard_ShowAssignmentMap
             });
         }
         public void Dispose()

@@ -13,17 +13,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
     public class InterviewerAssignmentDashboardItemViewModel : AssignmentDashboardItemViewModel, IDashboardViewItem
     {
         private readonly IViewModelNavigationService viewModelNavigationService;
-        private readonly IMapInteractionService mapInteractionService;
         private readonly IUserInteractionService userInteractionService;
 
         public InterviewerAssignmentDashboardItemViewModel(IServiceLocator serviceLocator,
             IViewModelNavigationService viewModelNavigationService,
             IMapInteractionService mapInteractionService,
             IUserInteractionService userInteractionService) 
-            : base(serviceLocator)
+            : base(serviceLocator, mapInteractionService)
         {
             this.viewModelNavigationService = viewModelNavigationService;
-            this.mapInteractionService = mapInteractionService;
             this.userInteractionService = userInteractionService;
         }
 
@@ -79,21 +77,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
                         AssignmentId = Assignment.Id,
                         InterviewId = Guid.NewGuid()
                     }, true);
-        }
-
-        protected void BindTargetAreaAction(int assignmentId, string targetArea)
-        {
-            if (string.IsNullOrWhiteSpace(targetArea)) return;
-
-            Actions.Add(new ActionDefinition
-            {
-                Command = new MvxAsyncCommand(
-                    () => mapInteractionService.OpenAssignmentMapAsync(assignmentId)),
-
-                ActionType = ActionType.TargetArea,
-
-                Label = EnumeratorUIResources.Dashboard_ShowAssignmentMap
-            });
         }
     }
 }

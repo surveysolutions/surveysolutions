@@ -30,7 +30,9 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
             IViewModelNavigationService viewModelNavigationService,
             IPrincipal principal,
             IPlainStorage<InterviewerDocument> interviewers,
-            IUserInteractionService userInteractionService) : base(serviceLocator, auditLogService)
+            IUserInteractionService userInteractionService, 
+            IMapInteractionService mapInteractionService) 
+            : base(serviceLocator, auditLogService, mapInteractionService)
         {
             this.viewModelNavigationService = viewModelNavigationService;
             this.principal = principal;
