@@ -839,7 +839,9 @@ export default {
         },
 
         reloadMarkersInBounds() {
-            var bounds = this.map?.getBounds()
+            if (this.map == null) return
+
+            var bounds = this.map.getBounds()
 
             if (bounds == null) {
                 this.showPointsOnMap(180, 180, -180, -180, true)
