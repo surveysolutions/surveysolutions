@@ -140,7 +140,7 @@
             <div class="form-group">
                 <label class="control-label" for="newResponsibleId">{{
                     $t('Assignments.SelectResponsible')
-                }}</label>
+                    }}</label>
                 <Typeahead control-id="newResponsibleId" :placeholder="$t('Common.Responsible')"
                     :value="newResponsibleId" :ajax-params="{}" @selected="newResponsibleSelected"
                     :fetch-url="model.responsible"></Typeahead>
@@ -206,7 +206,7 @@ export default {
         shapefile: { type: String, default: null },
         getMarkersParams: { type: Object, default: {} },
     },
-    expose: ['init', 'isLoading', 'map', 'reloadMarkersInBounds', 'displayShapefileName'],
+    expose: ['init', 'isLoading', 'map', 'reloadMarkersInBounds'],
     emits: ['initialized'],
 
     data() {
@@ -228,6 +228,13 @@ export default {
 
     async mounted() {
         await this.init()
+    },
+    watch: {
+        shapefileName(to) {
+            nextTick(() => {
+                displayShapefileName()
+            })
+        },
     },
 
     computed: {

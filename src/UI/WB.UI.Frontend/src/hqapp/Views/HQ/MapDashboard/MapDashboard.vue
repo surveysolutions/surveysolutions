@@ -244,8 +244,6 @@ export default {
             this.shapefileName = newValue
 
             this.map.shapefile = newValue?.key
-
-            await this.map.displayShapefileName()
         },
     },
 }
