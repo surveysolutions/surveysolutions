@@ -35,6 +35,7 @@
                     <Typeahead control-id="shapefileName" :placeholder="$t('Pages.Filters_None')" :ajax-params="{}"
                         :fetch-url="model.shapefiles" :value="shapefileName" v-on:selected="selectedShapefileName" />
                 </FilterBlock>
+
                 <FilterBlock v-if="isLoading" :title="$t('Reports.MapDataLoading')">
                     <div class="progress">
                         <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100"
@@ -236,6 +237,14 @@ export default {
 
         clearAssignmentFilter() {
             this.assignmentId = null
+            this.map.reloadMarkersInBounds()
+        },
+
+        selectedShapefileName(newValue) {
+            this.shapefileName = newValue
+
+            this.map.shapefile = newValue?.key
+
             this.map.reloadMarkersInBounds()
         },
     },
