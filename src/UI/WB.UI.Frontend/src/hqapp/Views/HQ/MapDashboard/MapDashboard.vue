@@ -245,7 +245,7 @@ export default {
 
             this.map.shapefile = newValue?.key
 
-            this.map.reloadMarkersInBounds()
+            this.map.displayShapefileName()
         },
     },
 }
