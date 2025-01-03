@@ -240,7 +240,7 @@ export default {
             this.map.reloadMarkersInBounds()
         },
 
-        async selectedShapefileName(newValue) {
+        selectedShapefileName(newValue) {
             this.shapefileName = newValue
 
             this.map.shapefile = newValue?.key
