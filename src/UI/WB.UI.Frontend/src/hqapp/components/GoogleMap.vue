@@ -140,7 +140,7 @@
             <div class="form-group">
                 <label class="control-label" for="newResponsibleId">{{
                     $t('Assignments.SelectResponsible')
-                    }}</label>
+                }}</label>
                 <Typeahead control-id="newResponsibleId" :placeholder="$t('Common.Responsible')"
                     :value="newResponsibleId" :ajax-params="{}" @selected="newResponsibleSelected"
                     :fetch-url="model.responsible"></Typeahead>
@@ -464,7 +464,7 @@ export default {
 
             if (this.shapefileName) {
                 const geoJsonUrl =
-                    this.model.api.shapefileJson +
+                    this.model.shapefileJson +
                     '?mapName=' +
                     encodeURIComponent(this.shapefileName)
 
