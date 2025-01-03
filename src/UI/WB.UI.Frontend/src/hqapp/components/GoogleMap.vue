@@ -206,7 +206,7 @@ export default {
         shapefile: { type: String, default: null },
         getMarkersParams: { type: Object, default: {} },
     },
-    expose: ['init', 'isLoading', 'map', 'reloadMarkersInBounds'],
+    expose: ['init', 'isLoading', 'map', 'reloadMarkersInBounds', 'displayShapefileName'],
     emits: ['initialized'],
 
     data() {
