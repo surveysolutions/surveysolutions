@@ -128,6 +128,15 @@ export default {
                 this.map?.reloadMarkersInBounds()
             })
         },
+        responsibleId(to) {
+            this.onChange((q) => {
+                q.responsibleId = to
+            })
+
+            nextTick(() => {
+                this.map?.reloadMarkersInBounds()
+            })
+        },
     },
 
     computed: {
@@ -186,6 +195,7 @@ export default {
 
     async mounted() {
         this.assignmentId = this.query.assignmentId
+        this.responsibleId = this.query.responsibleId
     },
 
     methods: {
