@@ -285,7 +285,7 @@ export default {
                 });
             })
 
-            if (this.tracksPath.length > 0)
+            if (tracksPath.length > 0)
                 this.map.fitBounds(latlngBounds)
         },
 
