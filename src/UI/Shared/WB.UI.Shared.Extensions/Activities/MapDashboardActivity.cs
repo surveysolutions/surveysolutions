@@ -74,10 +74,13 @@ namespace WB.UI.Shared.Extensions.Activities
             List<CustomMenuItem> customMenuItems = new();
             customMenuItems.Add(new CustomMenuItem(UIResources.MenuItem_Title_ChangeMap, () => this.ViewModel.SwitchMapCommand.Execute(), Resource.Drawable.icon_change_map));
             customMenuItems.Add(new CustomMenuItem(UIResources.MenuItem_Title_ChangeShapefile, () => this.ViewModel.SwitchShapefileCommand.Execute(), Resource.Drawable.icon_change_shapefile));
-                
-            customMenuItems.Add(this.ViewModel.IsLocationEnabled
-                ? new CustomMenuItem(UIResources.MenuItem_Title_HideLocation, () => this.ViewModel.SwitchLocatorCommand.Execute(), Resource.Drawable.icon_location)
-                : new CustomMenuItem(UIResources.MenuItem_Title_ShowLocation, () => this.ViewModel.SwitchLocatorCommand.Execute(), Resource.Drawable.icon_location));
+
+            if (!this.ViewModel.IsLocationEnabled)
+                customMenuItems.Add(new CustomMenuItem(UIResources.MenuItem_Title_ShowLocation,
+                    () => this.ViewModel.SwitchLocatorCommand.Execute(), Resource.Drawable.icon_location));
+            // else
+            //     customMenuItems.Add(new CustomMenuItem(UIResources.MenuItem_Title_HideLocation,
+            //         () => this.ViewModel.SwitchLocatorCommand.Execute(), Resource.Drawable.icon_location));
             
             customMenuItems.Add(new CustomMenuItem(UIResources.MenuItem_Title_ExitToDashboard, () => this.ViewModel.NavigateToDashboardCommand.Execute(), Resource.Drawable.icon_exit));
 
