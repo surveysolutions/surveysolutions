@@ -131,9 +131,9 @@ namespace WB.UI.Headquarters.Controllers
                         ?.ToLower()
                 },
                 TargetArea = assignment.TargetArea,
+                ShapefileJson = Url.Action("ShapefileInfo", "MapDashboardApi"),
                 Api = new
                 {
-                    ShapefileJson = Url.Action("ShapefileInfo", "MapDashboardApi"),
                     GeoTrackingHistory = Url.Action("GeoTrackingHistory", "AssignmentGeoApi", new { assignmentId = assignment.Id }),
                     GetTracks = Url.Action("GetTracks", "AssignmentGeoApi", new { assignmentId = assignment.Id }),
                     Interviewers = Url.Action("GetInterviewers", "AssignmentGeoApi", new { assignmentId = assignment.Id }),
