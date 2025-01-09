@@ -7,4 +7,6 @@ public interface IGeolocationBackgroundServiceManager
     Task<bool> StartListen(IGeolocationListener geolocationListener);
     void StopListen(IGeolocationListener geolocationListener);
     event EventHandler<LocationReceivedEventArgs> LocationReceived;
+
+    bool StopAll();
 }

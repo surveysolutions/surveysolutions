@@ -8,7 +8,7 @@ namespace WB.UI.Shared.Extensions.Services;
 
 public interface IGeofencingListener : IGeolocationListener
 {
-    void Start(ShapefileFeatureTable shapefile);
+    void Init(ShapefileFeatureTable shapefile);
     ShapefileFeatureTable Shapefile { get; }
     GeolocationListenerResult LastResult { get; }
 }
@@ -73,7 +73,7 @@ public class GeofencingListener : IGeofencingListener
         LastResult = result;
     }
 
-    public void Start(ShapefileFeatureTable shapefile)
+    public void Init(ShapefileFeatureTable shapefile)
     {
         this.Shapefile = shapefile;
     }

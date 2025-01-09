@@ -91,7 +91,7 @@ public class AssignInterviewDialogViewModel: ActionDialogViewModel<AssignIntervi
             this.auditLogService.Write(new AssignResponsibleToInterviewAuditLogEntity(interviewId,
                 interview.GetInterviewKey().ToString(), responsible.Id, responsible.Login));
 
-            this.messenger.Publish(new DashboardChangedMsg(this) { InterviewId = interviewId });
+            this.messenger.Publish(new DashboardChangedMessage(this) { InterviewId = interviewId });
         }
         finally
         {

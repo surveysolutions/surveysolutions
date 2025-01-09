@@ -11,7 +11,7 @@ namespace WB.UI.Shared.Extensions.Services;
 
 public interface IGeoTrackingListener : IGeolocationListener
 {
-    void Start(int assignmentId);
+    void Init(int assignmentId);
     void Stop();
 }
 
@@ -33,7 +33,7 @@ public class GeoTrackingListener : IGeoTrackingListener
         this.principal = principal;
     }
 
-    public void Start(int assignmentId)
+    public void Init(int assignmentId)
     {
         this.assignmentId = assignmentId;
         this.lastRecordId = null;

@@ -90,7 +90,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
             this.mvxNavigationService.DidNavigate += OnAfterNavigate;
             this.Synchronization.OnProgressChanged += SynchronizationOnProgressChanged;
 
-            messengerSubscription = messenger.Subscribe<RequestSynchronizationMsg>(msg => SynchronizationCommand.Execute());
+            messengerSubscription = messenger.Subscribe<RequestSynchronizationMessage>(msg => SynchronizationCommand.Execute());
         }
 
         public DashboardNotificationsViewModel DashboardNotifications { get; set; }
