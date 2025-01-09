@@ -28,7 +28,8 @@
                     </audio>
                 </div>
                 <div v-else-if="item.controlType === 'area'">
-                    <iframe width="100%" height="250px" frameBorder="0" :src="areaAnswerUrl"></iframe>
+                    <iframe title="Area preview" width="100%" height="250px" frameBorder="0"
+                        :src="areaAnswerUrl"></iframe>
                 </div>
                 <div v-else-if="item.controlType === 'map'">
                     <a v-bind:href="goolgeMapUrl" :title="$t('WebInterviewUI.ShowOnMap')" target="_blank">
