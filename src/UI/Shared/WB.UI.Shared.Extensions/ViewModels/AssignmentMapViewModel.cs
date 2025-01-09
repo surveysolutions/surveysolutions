@@ -63,9 +63,6 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
     
     private readonly IGeoTrackingListener geoTrackingListener;
     private readonly IGeofencingListener geofencingListener;
-    
-    //private MvxSubscriptionToken geoFencingmessengerSubscription;
-    //private MvxSubscriptionToken geoTrackingmessengerSubscription;
 
     public AssignmentMapViewModel(IPrincipal principal, 
         IViewModelNavigationService viewModelNavigationService,
@@ -99,6 +96,7 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
         this.ShowInterviews = true;
         
         //check backgroundServiceManager and stop any collection if it is running
+        //when a new instance of AssignmentMapViewModel is created
         backgroundServiceManager.StopAll();
     }
 
@@ -152,6 +150,8 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
         assignment = assignmentsRepository.GetById(assignmentId);
     }
 
+    //do not restart services if the activity was killed
+    
     // protected override void SaveStateToBundle(IMvxBundle bundle)
     // {
     //     isBackground = true;
@@ -219,9 +219,6 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
     public override async void ViewAppeared()
     {
         base.ViewAppeared();
-        
-        //consider registering to receive messages from geofencing and geotracking services
-        //geoFencingmessengerSubscription = Messenger.Subscribe<GeofencingMessage>(async msg => await this.OnGeofencingMessageReceived(msg), MvxReference.Strong);
         
         backgroundServiceManager.LocationReceived += BackgroundServiceManagerOnLocationReceived;
         
