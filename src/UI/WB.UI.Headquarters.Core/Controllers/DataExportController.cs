@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Enumerator.Native.WebInterview;
+using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models.DataExport;
 using WB.UI.Headquarters.Services.Impl;
 using WB.UI.Shared.Web.Services;
@@ -30,6 +31,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [ObservingNotAllowed]
+        [AntiForgeryFilter]
         public ActionResult New()
         {
             this.ViewBag.ActivePage = MenuItem.DataExport;

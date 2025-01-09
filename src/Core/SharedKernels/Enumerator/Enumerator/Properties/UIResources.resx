@@ -716,6 +716,54 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="MenuItem_Title_AreaCancelEdit" xml:space="preserve">
     <value>Clear all</value>
   </data>
+  <data name="MenuItem_Title_StartGeofencing" xml:space="preserve">
+    <value>Start geofencing</value>
+  </data>
+  <data name="MenuItem_Title_StopGeofencing" xml:space="preserve">
+    <value>Stop geofencing</value>
+  </data>
+  <data name="MenuItem_Title_StartGeoTracking" xml:space="preserve">
+    <value>Start tracking recording</value>
+  </data>
+  <data name="MenuItem_Title_StopGeoTracking" xml:space="preserve">
+    <value>Stop tracking recording</value>
+  </data>
+  <data name="MenuItem_Title_ShowLocation" xml:space="preserve">
+    <value>Show location</value>
+  </data>
+  <data name="MenuItem_Title_HideLocation" xml:space="preserve">
+    <value>Hide location</value>
+  </data>
+  <data name="MenuItem_Title_ExitToDashboard" xml:space="preserve">
+    <value>Exit to dashboard</value>
+  </data>
+  <data name="MenuItem_Title_ChangeMap" xml:space="preserve">
+    <value>Change map</value>
+  </data>
+  <data name="MenuItem_Title_ChangeShapefile" xml:space="preserve">
+    <value>Change boundaries</value>
+  </data>
+  <data name="MenuItem_Title_CreateInterview" xml:space="preserve">
+    <value>Create New Interview</value>
+  </data>
+  <data name="AssignmentMap_Title_CreateInterview" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="MenuItem_Title_ZoomMap" xml:space="preserve">
+    <value>Zoom to map</value>
+  </data>
+  <data name="MenuItem_Title_ZoomShapefile" xml:space="preserve">
+    <value>Zoom to boundaries</value>
+  </data>
+  <data name="MenuItem_Title_ZoomCollectedData" xml:space="preserve">
+    <value>Zoom to collected data</value>
+  </data>
+  <data name="MenuItem_Title_ZoomEverything" xml:space="preserve">
+    <value>Zoom everything</value>
+  </data>
+  <data name="MenuItem_Title_ZoomGeoTracking" xml:space="preserve">
+    <value>Zoom to tracking records</value>
+  </data>
   <data name="MenuItem_Title_Dashboard" xml:space="preserve">
     <value>Dashboard</value>
   </data>
@@ -899,5 +947,14 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   </data>
   <data name="InterviewStatus_SupervisorAssigned" xml:space="preserve">
     <value>Supervisor assigned</value>
+  </data>
+  <data name="SelectMapTitle" xml:space="preserve">
+    <value>Select Map:</value>
+  </data>
+  <data name="Geofencing_Warning_Message" xml:space="preserve">
+    <value>You are outside of designated area</value>
+  </data>
+  <data name="SelectShapefileTitle" xml:space="preserve">
+    <value>Select Boundaries:</value>
   </data>
 </root>

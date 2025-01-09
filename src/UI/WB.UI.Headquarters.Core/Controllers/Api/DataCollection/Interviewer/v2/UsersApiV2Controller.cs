@@ -80,6 +80,9 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2
             if (user == null)
                 return Unauthorized();
 
+            if (String.IsNullOrEmpty(userLogin.Password))
+                return Unauthorized();
+            
             var signInResult = await this.signInManager.CheckPasswordSignInAsync(user, userLogin.Password, true);
             if (signInResult.IsLockedOut)
             {

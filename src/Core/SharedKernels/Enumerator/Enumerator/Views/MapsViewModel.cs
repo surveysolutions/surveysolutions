@@ -49,7 +49,7 @@ namespace WB.Core.SharedKernels.Enumerator.Views
             await this.ViewModelNavigationService.SignOutAndNavigateToLoginAsync();
         }
 
-        public IMvxCommand NavigateToDashboardCommand => new MvxAsyncCommand(async () => 
+        public IMvxAsyncCommand NavigateToDashboardCommand => new MvxAsyncCommand(async () => 
             await this.ViewModelNavigationService.NavigateToDashboardAsync());
 
         private MvxObservableCollection<MapItem> uiItems = new MvxObservableCollection<MapItem>();
@@ -140,7 +140,7 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         });
 
         public IMvxCommand NavigateToDiagnosticsPageCommand =>
-            new MvxAsyncCommand(this.ViewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>);
+            new MvxAsyncCommand(() => this.ViewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>());
 
         public override async Task Initialize()
         {

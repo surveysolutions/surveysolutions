@@ -367,7 +367,8 @@
 &lt;b&gt;_password&lt;/b&gt; - пароль для начала интервью (только для web-интервью);&lt;br/&gt;
 &lt;b&gt;_webmode&lt;/b&gt; - режим для занадния (значение 1 для CAWI, 0 или не указано для CAPI);&lt;br/&gt;
 &lt;b&gt;_record_audio&lt;/b&gt; - включена аудио запись для интервью (1 - включена, 0 - отключена, не указано - будет браться значение из опросника);&lt;br/&gt;
-&lt;b&gt;_comment&lt;/b&gt; - комментарии к заданию</value>
+&lt;b&gt;_comment&lt;/b&gt; - комментарии к заданию;&lt;br/&gt;
+&lt;b&gt;_target_area&lt;/b&gt; - целевая область для задания</value>
     <comment>Do not translate _responsible, _quantity, _email, _webmode, _record_audio. Keep english names</comment>
   </data>
   <data name="UploadDescription" xml:space="preserve">

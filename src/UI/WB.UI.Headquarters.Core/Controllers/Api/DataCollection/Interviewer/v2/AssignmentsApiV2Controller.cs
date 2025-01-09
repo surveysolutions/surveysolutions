@@ -18,6 +18,8 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2
     [Route("api/interviewer/v2/assignments")]
     public class AssignmentsApiV2Controller : AssignmentsControllerBase
     {
+        protected override string ProductName => "org.worldbank.solutions.interviewer";
+        
         private readonly IAssignmentsService assignmentsService;
 
         public AssignmentsApiV2Controller(IAuthorizedUser authorizedUser, IAssignmentsService assignmentsService,

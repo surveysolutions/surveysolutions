@@ -4,6 +4,7 @@ using NUnit.Framework;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 using WB.Tests.Abc;
 
@@ -40,7 +41,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.AssignmentDashboardI
         AssignmentDashboardItemViewModel CreateViewModel()
         {
             return new SupervisorAssignmentDashboardItemViewModel(Mock.Of<IServiceLocator>(),
-                Mock.Of<IViewModelNavigationService>());
+                Mock.Of<IMapInteractionService>(),
+                Mock.Of<IViewModelNavigationService>()
+                );
         }
     }
 }

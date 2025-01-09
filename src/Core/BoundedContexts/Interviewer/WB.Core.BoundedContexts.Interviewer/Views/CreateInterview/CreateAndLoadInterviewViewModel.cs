@@ -20,6 +20,7 @@ using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading;
 using WB.Core.SharedKernels.Enumerator.Views;
 
@@ -76,7 +77,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
             AssignmentId = parameter.AssignmentId;
             InterviewId = parameter.InterviewId;
         }
-
+        
         public override Task Initialize()
         {
             if (AssignmentId == 0) throw new ArgumentException(nameof(AssignmentId));

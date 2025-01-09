@@ -163,19 +163,29 @@
     <item name="android:textStyle">normal</item>
   </style>
 
-  <style name="Dashboard_Location">
-    <item name="android:layout_width">wrap_content</item>
-    <item name="android:layout_height">wrap_content</item>
-    <item name="android:layout_gravity">center_vertical</item>
+  <style name="Dashboard_SecondaryAction">
+    <item name="android:layout_width">36dp</item>
+    <item name="android:layout_height">36dp</item>
+    <item name="android:layout_gravity">center</item>
+    <item name="android:gravity">center</item>
     <item name="android:textColor">@color/btn_default</item>
     <item name="android:textAllCaps">true</item>
     <item name="android:textSize">@dimen/textsize_12</item>
     <item name="android:letterSpacing">0.05</item>
     <item name="android:fontFamily">sans-serif-medium</item>
     <item name="android:textStyle">normal</item>
-    <item name="android:padding">@dimen/Interview_Group_button_padding</item>
-    <item name="android:layout_marginTop">@dimen/Dashboard_InterviewItem_RemoveInterviewButton_paddingTop</item>
+    <item name="android:layout_marginTop">@dimen/dashboard_card_extra_margin</item>
+    <item name="android:layout_marginBottom">@dimen/dashboard_card_duo_margin</item>
+    <item name="android:layout_marginRight">10dp</item>
+    <item name="android:background">@drawable/dashboard_card_secondary_button</item>
+  </style>
+
+  <style name="Dashboard_Location" parent="Dashboard_SecondaryAction">
     <item name="android:drawableLeft">@drawable/navigation_icon</item>
+  </style>
+
+  <style name="Dashboard_TargetArea" parent="Dashboard_SecondaryAction">
+    <item name="android:drawableLeft">@drawable/target_area_icon</item>
   </style>
 
   <style name="Dashboard_ExtraButton">
@@ -188,8 +198,10 @@
         <item name="android:letterSpacing">0.05</item>
         <item name="android:fontFamily">sans-serif-medium</item>
         <item name="android:textStyle">normal</item>
-        <item name="android:padding">@dimen/Interview_Group_button_padding</item>        
+        <item name="android:paddingLeft">@dimen/Interview_Group_button_padding</item>
+        <item name="android:paddingTop">@dimen/Interview_Group_button_padding_extra</item>
   </style>
+    
 
   <style name="Dashboard_InterviewItem_CreateButton">
     <item name="android:layout_width">0dp</item>

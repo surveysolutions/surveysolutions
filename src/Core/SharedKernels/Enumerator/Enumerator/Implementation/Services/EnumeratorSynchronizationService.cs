@@ -37,6 +37,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         protected virtual string InterviewsController => string.Concat(ApplicationUrl, "/interviews");
         protected virtual string EnumeratorInterviewsController => string.Concat(EnumeratorApiUrl, "v3", "/interviews");
         protected virtual string CalendarEventsController => string.Concat(ApplicationUrl, "/calendarevents");
+        protected virtual string GeoTrackingController => string.Concat(ApplicationUrl, "/geotracking");
         protected string QuestionnairesController => string.Concat(ApplicationUrl, "/questionnaires");
         protected string AssignmentsController => string.Concat(ApplicationUrl, "/assignments");
         protected string TranslationsController => string.Concat(ApplicationUrl, "/translations");
@@ -458,6 +459,15 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                     credentials: this.restCredentials, 
                     token: cancellationToken,
                     request: interviewSyncInfoPackage));
+        }
+
+        public Task UploadGeoTrackingAsync(GeoTrackingPackageApiView package, CancellationToken cancellationToken)
+        {
+            return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
+                url: $"{this.GeoTrackingController}",
+                request: package,
+                credentials: this.restCredentials,
+                token: cancellationToken));
         }
 
         public Task<InterviewUploadResult> UploadInterviewAsync(Guid interviewId, InterviewPackageApiView completedInterview, IProgress<TransferProgress> transferProgress, CancellationToken token = default)

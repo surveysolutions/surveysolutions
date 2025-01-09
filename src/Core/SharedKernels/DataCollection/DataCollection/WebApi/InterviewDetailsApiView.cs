@@ -5,7 +5,6 @@ using Main.Core.Events;
 using Ncqrs.Eventing;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
-using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog;
 
 namespace WB.Core.SharedKernels.DataCollection.WebApi
 {
@@ -104,28 +103,5 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
 
         public string JsonAnswer { get; set; }
         public string LastSupervisorOrInterviewerComment { get; set; }
-    }
-
-    public class AuditLogEntitiesApiView
-    {
-        public bool IsWorkspaceSupported { get; set; } 
-        public AuditLogEntityApiView[] Entities { get; set; }
-    }
-
-    public class AuditLogEntityApiView
-    {
-        public int Id { get; set; }
-
-        public AuditLogEntityType Type { get; set; }
-
-        public DateTimeOffset Time { get; set; }
-        public DateTimeOffset TimeUtc { get; set; }
-
-        public Guid? ResponsibleId { get; set; }
-        public string ResponsibleName { get; set; }
-
-        public string PayloadType { get; set; }
-        public string Payload { get; set; }
-        public string Workspace { get; set; }
     }
 }

@@ -88,6 +88,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return response.SyncInfoPackageResponse;
         }
 
+        public Task UploadGeoTrackingAsync(GeoTrackingPackageApiView package, CancellationToken cancellationToken)
+        {
+            return this.syncClient.SendAsync(new UploadGeoTrackingPackageRequest
+            {
+                Package = package
+            }, cancellationToken);
+        }
+
         public Task UploadInterviewImageAsync(Guid interviewId, string fileName, byte[] fileData,
             IProgress<TransferProgress> transferProgress,
             CancellationToken token = default)

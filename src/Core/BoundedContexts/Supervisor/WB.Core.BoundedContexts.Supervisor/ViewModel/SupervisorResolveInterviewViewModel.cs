@@ -158,7 +158,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
                 Logger.Warn($"Error on Interview Approve. Interview: {InterviewId}", e);
             }
 
-            await viewModelNavigationService.NavigateToDashboardAsync(InterviewId.FormatGuid());
+            await viewModelNavigationService.NavigateFromInterviewAsync(InterviewId.FormatGuid());
         }, () => this.status == InterviewStatus.Completed || 
                  this.status == InterviewStatus.RejectedByHeadquarters ||
                  this.status == InterviewStatus.RejectedBySupervisor);
@@ -183,7 +183,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
                 Logger.Warn($"Error on Interview Reject. Interview: {InterviewId}", e);
             }
 
-            await viewModelNavigationService.NavigateToDashboardAsync(InterviewId.FormatGuid());
+            await viewModelNavigationService.NavigateFromInterviewAsync(InterviewId.FormatGuid());
         }, () => this.status == InterviewStatus.Completed || 
                  this.status == InterviewStatus.RejectedByHeadquarters);
 

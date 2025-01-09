@@ -230,6 +230,17 @@ class MapDashboard {
     }
 }
 
+
+class GeoTracking {
+    constructor(http) {
+        this.http = http
+    }
+
+    async GetTracks(request) {
+        return await this.http.get('api/AssignmentGeoApi/GeoTrackingHistory', { params: request })
+    }
+}
+
 class InterviewsPublicApi {
     constructor(http) {
         this.http = http
@@ -382,6 +393,19 @@ class AssignmentsApi {
             method: 'patch',
             url: url,
             data: targetQuantity,
+            headers: {
+                accept: 'text/plain',
+                'content-type': 'application/json',
+            },
+        })
+    }
+
+    changeTargetArea(assignmentId, targetArea) {
+        var url = `${this.base}/${assignmentId}/changeTargetArea`
+        return this.http({
+            method: 'post',
+            url: url,
+            data: targetArea,
             headers: {
                 accept: 'text/plain',
                 'content-type': 'application/json',
@@ -714,6 +738,10 @@ class HqApiClient {
 
     get MapDashboard() {
         return new MapDashboard(this.http)
+    }
+
+    get GeoTracking() {
+        return new GeoTracking(this.http)
     }
 
     get WebInterviewSettings() {

@@ -16,6 +16,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Assignments
             descriptor.Field(x => x.ResponsibleId);
             descriptor.Field(x => x.WebMode);
             descriptor.Field(x => x.ReceivedByTabletAtUtc);
+            descriptor.Field(x => x.TargetArea);
         }
     }
 }

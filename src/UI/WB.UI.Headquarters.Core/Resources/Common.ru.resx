@@ -410,4 +410,13 @@
   <data name="LinkUser" xml:space="preserve">
       <value>Пользователь</value>
   </data>
+  <data name="GeoTrackNumber" xml:space="preserve">
+      <value>Номер гео-отслеживания</value>
+  </data>
+  <data name="DateRange" xml:space="preserve">
+      <value>Диапозон дат</value>
+  </data>
+  <data name="AllGeoTracks" xml:space="preserve">
+      <value>Все гео записи</value>
+  </data>
 </root>

@@ -58,6 +58,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
                         oldAssignment.Answers.ToList(),
                         oldAssignment.ProtectedVariables,
                         oldAssignment.Comments,
+                        oldAssignment.TargetArea,
                         assignmentId);
 
                     invitationService.MigrateInvitationToNewAssignment(assignmentId, newAssignment.Id);

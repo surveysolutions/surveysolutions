@@ -6,6 +6,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Dto
 {
     public class AssignmentToImport
     {
+        public AssignmentToImport()
+        {
+        }
+
         public virtual int Id { get; set; }
         public virtual Guid? Interviewer { get; set; }
         public virtual Guid? Supervisor { get; set; }
@@ -20,5 +24,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Dto
         public virtual bool? IsAudioRecordingEnabled { set; get; }
         public virtual Guid? Headquarters { get; set; }
         public virtual string Comments { get; set; }
+        public virtual string TargetArea { get; set; }
     }
 }

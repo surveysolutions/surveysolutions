@@ -104,6 +104,9 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
         public string Password { get; set; }
 
         [DataMember]
+        public string TargetArea { get; set; }
+
+        [DataMember]
         public bool? WebMode { get; set; }
         
         /// <summary>

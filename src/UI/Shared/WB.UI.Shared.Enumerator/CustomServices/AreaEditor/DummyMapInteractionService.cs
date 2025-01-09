@@ -16,6 +16,11 @@ namespace WB.UI.Shared.Enumerator.CustomServices.AreaEditor
             return Task.CompletedTask;
         }
 
+        public Task OpenAssignmentMapAsync(int assignmentId)
+        {
+            return Task.CompletedTask;
+        }
+
         public Task OpenSupervisorMapDashboardAsync()
         {
             return Task.CompletedTask;
