@@ -152,7 +152,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 return this.Error((int)HttpStatusCode.NotAcceptable, e.Message);
             }
 
-            var updateAttachment = this.ProcessCommand(command, commandType).Response;
+            var updateAttachment = this.ProcessCommand(command).Response;
             await dbContext.SaveChangesAsync();
             return updateAttachment;
         }
@@ -231,7 +231,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 return this.Error((int)HttpStatusCode.NotAcceptable, e.Message);
             }
 
-            var updateLookupTable = this.ProcessCommand(updateLookupTableCommand, commandType).Response;
+            var updateLookupTable = this.ProcessCommand(updateLookupTableCommand).Response;
 
             await dbContext.SaveChangesAsync();
 
@@ -249,7 +249,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 using (var transaction = await dbContext.Database.BeginTransactionAsync())
                 {
                     var concreteCommand = this.Deserialize(model.Type, model.Command);
-                    var commandProcessResult = this.ProcessCommand(concreteCommand, model.Type);
+                    var commandProcessResult = this.ProcessCommand(concreteCommand);
 
                     IActionResult actionResult = commandProcessResult.Response;
 
@@ -268,12 +268,12 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             }
             catch (InvalidOperationException exc)
             {
-                this.logger.LogError(exc, $"Error on command of type ({model.Type}) handling ");
+                this.logger.LogError(exc, $"Error on command of type ({model.Type.Replace('\n', '_').Replace('\r', '_')}) handling ");
                 return this.Error((int)HttpStatusCode.NotAcceptable, $"{exc.Message} Please reload page.");
             }
             catch (Exception e)
             {
-                this.logger.LogError(e, $"Error on command of type ({model.Type}) handling ");
+                this.logger.LogError(e, $"Error on command of type ({model.Type.Replace('\n', '_').Replace('\r', '_')}) handling ");
                 throw;
             }
         }
@@ -331,7 +331,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 return this.Error((int)HttpStatusCode.NotAcceptable, sb.ToString());
             }
 
-            var commandResponse = this.ProcessCommand(command, commandType);
+            var commandResponse = this.ProcessCommand(command);
 
             if (commandResponse.HasErrors || model.File == null)
             {
@@ -399,7 +399,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 return this.Error((int)HttpStatusCode.NotAcceptable, sb.ToString());
             }
 
-            var commandResponse = this.ProcessCommand(command, commandType);
+            var commandResponse = this.ProcessCommand(command);
 
             if (commandResponse.HasErrors || model.File == null)
                 return commandResponse.Response;
@@ -508,7 +508,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             return KnownCommandTypes[commandType];
         }
 
-        private CommandProcessResult ProcessCommand(ICommand concreteCommand, string commandType)
+        private CommandProcessResult ProcessCommand(ICommand concreteCommand)
         {
             try
             {
@@ -535,7 +535,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 var domainEx = e.GetSelfOrInnerAs<QuestionnaireException>();
                 if (domainEx == null)
                 {
-                    this.logger.LogError(e, string.Format("Error on command of type ({0}) handling ", commandType));
+                    this.logger.LogError(e, string.Format("Error on command of type ({0}) handling ", concreteCommand.GetType().Name));
                     throw;
                 }
 
