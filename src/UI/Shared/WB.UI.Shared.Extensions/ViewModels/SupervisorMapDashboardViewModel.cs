@@ -86,7 +86,7 @@ public class SupervisorMapDashboardViewModel : MapDashboardViewModel
     public override void ViewAppeared()
     {
         base.ViewAppeared();
-        messengerSubscription = messenger.Subscribe<DashboardChangedMsg>(async msg =>
+        messengerSubscription = messenger.Subscribe<DashboardChangedMessage>(async msg =>
         {
             ActiveMarkerIndex = null;
             

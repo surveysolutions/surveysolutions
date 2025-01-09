@@ -59,7 +59,7 @@ public class ApproveInterviewDialogViewModel : ActionDialogViewModel<ApproveInte
             this.auditLogService.Write(new ApproveInterviewAuditLogEntity(interviewId,
                 interview.GetInterviewKey().ToString()));
 
-            this.messenger.Publish(new DashboardChangedMsg(this) { InterviewId = interviewId });
+            this.messenger.Publish(new DashboardChangedMessage(this) { InterviewId = interviewId });
         }
         finally
         {

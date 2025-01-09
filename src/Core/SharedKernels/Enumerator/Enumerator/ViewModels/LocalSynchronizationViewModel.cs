@@ -120,7 +120,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         protected override void OnSyncCompleted()
         {
-            this.messenger.Publish(new DashboardChangedMsg(this));
+            this.messenger.Publish(new DashboardChangedMessage(this));
             synchronizationCompleteSource.NotifyOnCompletedSynchronization(true);
         }
     }

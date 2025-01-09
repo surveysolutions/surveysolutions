@@ -13,7 +13,7 @@ public class GeolocationBackgroundServiceManager : IGeolocationBackgroundService
     private Dictionary<string, IGeolocationListener> listeners = new();
     private ServiceConnection<GeolocationBackgroundService> serviceConnection;
 
-    readonly Intent geolocationServiceIntent = new Intent(ServiceContext, typeof(GeolocationBackgroundService));
+    private Intent GetGeolocationServiceIntent() => new Intent(ServiceContext, typeof(GeolocationBackgroundService));
     public event EventHandler<LocationReceivedEventArgs> LocationReceived;
     
     public GeolocationBackgroundServiceManager(IEnumeratorSettings settings)
@@ -41,10 +41,10 @@ public class GeolocationBackgroundServiceManager : IGeolocationBackgroundService
 
         if (listeners.Count > 0 && serviceConnection == null)
         {
-            ServiceContext.StartService(geolocationServiceIntent);
+            ServiceContext.StartService(GetGeolocationServiceIntent());
             
             serviceConnection = new ServiceConnection<GeolocationBackgroundService>();
-            ServiceContext.BindService(geolocationServiceIntent, serviceConnection, Bind.AutoCreate);
+            ServiceContext.BindService(GetGeolocationServiceIntent(), serviceConnection, Bind.AutoCreate);
 
             await serviceConnection.WaitOnServiceConnected();
             serviceConnection.Service.LocationReceived += ServiceOnLocationReceived;
@@ -75,10 +75,9 @@ public class GeolocationBackgroundServiceManager : IGeolocationBackgroundService
 
         if (listeners.Count == 0)
             UnbindService();
-        
     }
 
-    private void UnbindService()
+    private bool UnbindService()
     {
         if (serviceConnection != null)
         {
@@ -87,16 +86,22 @@ public class GeolocationBackgroundServiceManager : IGeolocationBackgroundService
             ServiceContext.UnbindService(serviceConnection);
             serviceConnection = null;
                 
-            ServiceContext.StopService(geolocationServiceIntent);
+            return ServiceContext.StopService(GetGeolocationServiceIntent());
         }
+        return true;
     }
 
+    public bool StopAll()
+    {
+        listeners.Clear();
+        return UnbindService();
+    }
     public void Dispose()
     {
         UnbindService();
         
         listeners = new();
         serviceConnection?.Dispose();
-        geolocationServiceIntent?.Dispose();
+        //geolocationServiceIntent?.Dispose();
     }
 }
