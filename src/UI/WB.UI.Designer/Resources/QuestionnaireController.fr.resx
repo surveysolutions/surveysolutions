@@ -129,6 +129,12 @@
   <data name="Cancel" xml:space="preserve">
     <value>Annuler</value>
   </data>
+  <data name="Assign" xml:space="preserve">
+    <value>Attribuer</value>
+  </data>
+  <data name="Assigning" xml:space="preserve">
+    <value>Attribution</value>
+  </data>
   <data name="CancelSearch" xml:space="preserve">
     <value>Annuler la recherche</value>
   </data>
@@ -136,7 +142,7 @@
     <value>Fermer</value>
   </data>
   <data name="Confirmation" xml:space="preserve">
-    <value>confirmation</value>
+    <value>Confirmation</value>
   </data>
   <data name="Copy" xml:space="preserve">
     <value>Copie</value>
@@ -156,14 +162,32 @@
   <data name="CreateNew" xml:space="preserve">
     <value>Créer nouveau</value>
   </data>
+  <data name="NewFolder" xml:space="preserve">
+    <value>Nouveau dossier</value>
+  </data>
   <data name="CreateNewQuestionnaire" xml:space="preserve">
     <value>Créer un nouveau questionnaire</value>
   </data>
   <data name="Delete" xml:space="preserve">
     <value>Supprimer</value>
   </data>
+  <data name="DeleteFolderConfirmation" xml:space="preserve">
+    <value>Êtes-vous sûr de vouloir supprimer le dossier {0} ?</value>
+  </data>
+  <data name="CreateSubFolder" xml:space="preserve">
+    <value>Créer un sous-dossier</value>
+  </data>
+  <data name="Rename" xml:space="preserve">
+    <value>Renommer</value>
+  </data>
+  <data name="AssignFolder" xml:space="preserve">
+    <value>Attribuer un dossier</value>
+  </data>
   <data name="DeleteConfirmationText" xml:space="preserve">
-    <value>Voulez-vous vraiment supprimer le questionnaire "{0}"?</value>
+    <value>Voulez-vous vraiment supprimer le questionnaire "{0}" ?</value>
+  </data>
+  <data name="AssignFolderText" xml:space="preserve">
+    <value>Veuillez attribuer un dossier pour le questionnaire "{0}"</value>
   </data>
   <data name="Deleting" xml:space="preserve">
     <value>Suppression</value>
@@ -172,10 +196,13 @@
     <value>Concepteur</value>
   </data>
   <data name="DownloadPdf" xml:space="preserve">
-    <value>Télécharger le fichier PDF</value>
+    <value>Télécharger le PDF</value>
   </data>
   <data name="EmptyList" xml:space="preserve">
     <value>Cette liste ne contient aucun enregistrement</value>
+  </data>
+  <data name="Location" xml:space="preserve">
+    <value>Emplacement</value>
   </data>
   <data name="Error" xml:space="preserve">
     <value>Erreur</value>
@@ -186,20 +213,35 @@
   <data name="ExportAsPDF" xml:space="preserve">
     <value>Exporter en PDF</value>
   </data>
+  <data name="ExportAsHtml" xml:space="preserve">
+    <value>Exporter en HTML</value>
+  </data>
   <data name="Forbidden" xml:space="preserve">
-    <value>Vous n'êtes pas autorisé à modifier ce questionnaire</value>
+    <value>Vous n'avez pas la permission de modifier ce questionnaire</value>
   </data>
   <data name="ForbiddenDelete" xml:space="preserve">
-    <value>Vous n'êtes pas autorisé à supprimer ce questionnaire.</value>
+    <value>Vous n'avez pas la permission de supprimer ce questionnaire.</value>
   </data>
   <data name="ForbiddenRevert" xml:space="preserve">
-    <value>Vous n'êtes pas autorisé à restaurer l'opération pour ce questionnaire.</value>
+    <value>Vous n'avez pas la permission de restaurer l'opération pour ce questionnaire.</value>
   </data>
   <data name="GeneratingPdf" xml:space="preserve">
-    <value>Génération de pdf pour "{0}"</value>
+    <value>Génération du PDF pour "{0}"</value>
   </data>
-  <data name="Hello" xml:space="preserve">
-    <value>Hello, {0}</value>
+  <data name="CreatingHtml" xml:space="preserve">
+    <value>Création du HTML pour "{0}"</value>
+  </data>
+  <data name="GeneratePdf" xml:space="preserve">
+    <value>Générer le PDF</value>
+  </data>
+  <data name="GetHtml" xml:space="preserve">
+    <value>Exporter en HTML</value>
+  </data>
+  <data name="ChooseLanguageTitle" xml:space="preserve">
+    <value>Veuillez choisir la traduction</value>
+  </data>
+  <data name="ChooseLanguage" xml:space="preserve">
+    <value>Choisir la traduction</value>
   </data>
   <data name="Initializing" xml:space="preserve">
     <value>Initialisation</value>
@@ -213,11 +255,29 @@
   <data name="MyQuestionnaires" xml:space="preserve">
     <value>Mes questionnaires</value>
   </data>
+  <data name="ControlPanel" xml:space="preserve">
+    <value>Panneau de contrôle</value>
+  </data>
+  <data name="Hello" xml:space="preserve">
+    <value>Bonjour, {0}</value>
+  </data>
   <data name="Open" xml:space="preserve">
     <value>Ouvrir</value>
   </data>
   <data name="PublicQuestionnaires" xml:space="preserve">
     <value>Questionnaires publics</value>
+  </data>
+  <data name="QuestionnaireTreeFolders" xml:space="preserve">
+    <value>Dossiers</value>
+  </data>
+  <data name="FoldersManagement" xml:space="preserve">
+    <value>Gestion des dossiers</value>
+  </data>
+  <data name="FoldersDescription" xml:space="preserve">
+    <value>Vous pouvez configurer la structure des dossiers pour la page des questionnaires publics. Pour cela, cliquez sur le dossier avec le bouton droit, puis utilisez l'une des opérations :
+&lt;br/&gt;- "Créer un sous-dossier" pour créer un sous-dossier
+&lt;br/&gt;- "Renommer" pour renommer le dossier
+&lt;br/&gt;- "Supprimer" pour supprimer le dossier avec ses sous-dossiers</value>
   </data>
   <data name="QuestionnaireTitle" xml:space="preserve">
     <value>Titre du questionnaire</value>
@@ -225,17 +285,23 @@
   <data name="RestoreQuestionnaire" xml:space="preserve">
     <value>Restaurer le questionnaire</value>
   </data>
+  <data name="RestoreQuestionnaireDocument" xml:space="preserve">
+    <value>Restaurer le document du questionnaire (ancien)</value>
+  </data>
   <data name="RetryExportPDF" xml:space="preserve">
     <value>Réessayer l'exportation en PDF</value>
   </data>
   <data name="SelectTabFile" xml:space="preserve">
-    <value>Choisissez le fichier tab-separateur tabulation à importer, s'il vous plaît</value>
+    <value>Veuillez choisir un fichier de valeurs séparées par des tabulations à importer</value>
   </data>
   <data name="SuccessDeleteMessage" xml:space="preserve">
-    <value>Le questionnaire "{0}" a bien été supprimé</value>
+    <value>Le questionnaire "{0}" a été supprimé avec succès</value>
   </data>
   <data name="TabFilesOnly" xml:space="preserve">
-    <value>Seuls les fichiers tab-separateur tabulation sont acceptés</value>
+    <value>Seuls les fichiers de valeurs séparées par des tabulations sont acceptés</value>
+  </data>
+  <data name="ExcelOrTabFilesOnly" xml:space="preserve">
+    <value>Seuls les fichiers Excel ou de valeurs séparées par des tabulations sont acceptés</value>
   </data>
   <data name="Title" xml:space="preserve">
     <value>Titre</value>
@@ -243,64 +309,25 @@
   <data name="You" xml:space="preserve">
     <value>vous</value>
   </data>
-  <data name="Assign" xml:space="preserve">
-    <value>Attribuer</value>
-  </data>
-  <data name="AssignFolder" xml:space="preserve">
-    <value>Attribuer un fichier/dossier</value>
-  </data>
-  <data name="AssignFolderText" xml:space="preserve">
-    <value>S'il vous plait, attribuer dossier pour "{0}" questionnaire</value>
-  </data>
-  <data name="Assigning" xml:space="preserve">
-    <value>Attribution</value>
-  </data>
-  <data name="ChooseLanguage" xml:space="preserve">
-    <value>Annuler la recherche</value>
-  </data>
-  <data name="ChooseLanguageTitle" xml:space="preserve">
-    <value>S'il vous plait, choisir la traduction</value>
-  </data>
-  <data name="CreateSubFolder" xml:space="preserve">
-    <value>Créer un sous dossier</value>
-  </data>
-  <data name="CreatingHtml" xml:space="preserve">
-    <value>Creation de Html pour "{0}"</value>
-  </data>
-  <data name="DeleteFolderConfirmation" xml:space="preserve">
-    <value>Etes-vous sûr de vouloir supprimer le dossier {0}?</value>
-  </data>
-  <data name="ExportAsHtml" xml:space="preserve">
-    <value>Exporter en Html</value>
-  </data>
-  <data name="FoldersDescription" xml:space="preserve">
-    <value>Vous pouvez configurer la structure des dossiers pour la page des questionnaires publics.Pour cela, cliquez sur le dossier par le bouton droit, puis utilisez l'une des opérations:
-&lt;br/&gt; - " Créer un sous-dossier " pour créer un sous-dossier
-&lt;br/&gt; - " Renommer " pour renommer le nom du dossier
-&lt;br/&gt; - " Supprimer " pour supprimer le dossier avec sous-dossiers </value>
-  </data>
-  <data name="GeneratePdf" xml:space="preserve">
-    <value>Generer un pdf</value>
-  </data>
-  <data name="GetHtml" xml:space="preserve">
-    <value>Exporter Html</value>
-  </data>
-  <data name="Location" xml:space="preserve">
-    <value>Emplacement</value>
-  </data>
-  <data name="NewFolder" xml:space="preserve">
-    <value>Nouveau dossier</value>
-  </data>
-  <data name="QuestionnaireTreeFolders" xml:space="preserve">
-    <value>Dossier</value>
-  </data>
-  <data name="Rename" xml:space="preserve">
-    <value>Renommer</value>
+  <data name="Untitled" xml:space="preserve">
+    <value>Sans titre</value>
   </data>
   <data name="SharedQuestionnaires" xml:space="preserve">
     <value>Questionnaires partagés avec moi</value>
   </data>
-  <data name="Untitled" xml:space="preserve">
-    <value>Non-titre</value>
+  <data name="NotSupportedBrowserUsed" xml:space="preserve">
+    <value>Le navigateur Internet n'est pas pris en charge. Veuillez utiliser un autre navigateur.</value>
+  </data>
+  <data name="NotSupportedBrowserUsedDescr" xml:space="preserve">
+    <value>Vous utilisez le navigateur Internet Explorer qui n'est pas pris en charge. Certaines fonctionnalités pourraient ne pas fonctionner correctement.</value>
+  </data>
+  <data name="Classifications" xml:space="preserve">
+    <value>Classifications</value>
+  </data>
+  <data name="SaveAs" xml:space="preserve">
+    <value>Enregistrer sous</value>
+  </data>
+  <data name="CloneDeletedWarning" xml:space="preserve">
+    <value>Vous créez une copie d'un questionnaire supprimé. Certaines parties pourraient être perdues.</value>
   </data>
 </root>

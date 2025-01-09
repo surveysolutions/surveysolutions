@@ -117,167 +117,14 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Attachment_Delete" xml:space="preserve">
-    <value>Pièce jointe {0} supprimée</value>
-  </data>
-  <data name="Attachment_Update" xml:space="preserve">
-    <value>La pièce jointe {0} a été mise à jour</value>
-  </data>
-  <data name="Cancel" xml:space="preserve">
-    <value>Annuler</value>
-  </data>
-  <data name="Change" xml:space="preserve">
-    <value>Changer</value>
-  </data>
-  <data name="Confirm" xml:space="preserve">
-    <value>Confirmer</value>
+    <data name="reverted" xml:space="preserve">
+    <value>Le questionnaire "{0}" a été restauré</value>
   </data>
   <data name="Edit" xml:space="preserve">
     <value>Modifier</value>
   </data>
-  <data name="LookupTable_Add" xml:space="preserve">
-    <value>La table de référence {0} a été ajoutée</value>
-  </data>
-  <data name="LookupTable_Delete" xml:space="preserve">
-    <value>La table de référence {0} a été supprimée</value>
-  </data>
-  <data name="LookupTable_Update" xml:space="preserve">
-    <value>La table de référence {0} a été mise à jour</value>
-  </data>
-  <data name="Macro_Add" xml:space="preserve">
-    <value>Macro {0} ajouté</value>
-  </data>
-  <data name="Macro_Delete" xml:space="preserve">
-    <value>Macro {0} supprimé</value>
-  </data>
-  <data name="Macro_Update" xml:space="preserve">
-    <value>Macro {0} mis à jour</value>
-  </data>
-  <data name="NoTitle" xml:space="preserve">
-    <value>Sans titre</value>
-  </data>
-  <data name="Person_Add" xml:space="preserve">
-    <value>Utilisateur avec e-mail {0} ajouté aux personnes partagées</value>
-  </data>
-  <data name="Person_Delete" xml:space="preserve">
-    <value>Utilisateur avec un e-mail {0} supprimé des personnes partagées</value>
-  </data>
-  <data name="Question_Add" xml:space="preserve">
-    <value>Question {0} ajoutée</value>
-  </data>
-  <data name="Question_Clone" xml:space="preserve">
-    <value>Question {0} copiée à partir de la question {1}</value>
-  </data>
-  <data name="Question_Delete" xml:space="preserve">
-    <value>Question {0} supprimée</value>
-  </data>
-  <data name="Question_Move_To_Roster" xml:space="preserve">
-    <value>La question {0} a été déplacée vers la liste {1}</value>
-  </data>
-  <data name="Question_Move_To_Section" xml:space="preserve">
-    <value>Question {0} déplacée vers la section {1}</value>
-  </data>
-  <data name="Question_Update" xml:space="preserve">
-    <value>Question {0} mise à jour</value>
-  </data>
-  <data name="Questionnaire_Add" xml:space="preserve">
-    <value>Questionnaire {0} créé</value>
-  </data>
-  <data name="Questionnaire_Clone" xml:space="preserve">
-    <value>Questionnaire {0} cloné à partir du questionnaire {1}</value>
-  </data>
-  <data name="Questionnaire_Delete" xml:space="preserve">
-    <value>Questionnaire {0} supprimé</value>
-  </data>
-  <data name="Questionnaire_Import" xml:space="preserve">
-    <value>Questionnaire {0} importé</value>
-  </data>
-  <data name="Questionnaire_Replace" xml:space="preserve">
-    <value>Questionnaire {0} remplacé</value>
-  </data>
-  <data name="Questionnaire_Update" xml:space="preserve">
-    <value>Questionnaire {0} mis à jour</value>
-  </data>
   <data name="QuestionnaireChangeHistory" xml:space="preserve">
     <value>Historique des modifications du questionnaire</value>
-  </data>
-  <data name="ResetQuestionnaireToThis" xml:space="preserve">
-    <value>Restaurer le questionnaire à la version à {0}?</value>
-  </data>
-  <data name="Revert" xml:space="preserve">
-    <value>Revenir</value>
-  </data>
-  <data name="reverted" xml:space="preserve">
-    <value>Le questionnaire "{0}" a été restauré</value>
-  </data>
-  <data name="reverted_to" xml:space="preserve">
-    <value>Le questionnaire "{0}" est restauré à la version de {1}</value>
-  </data>
-  <data name="RevertToThisVersion" xml:space="preserve">
-    <value>Revenir à cette version</value>
-  </data>
-  <data name="Roster_Add" xml:space="preserve">
-    <value>Roster {0} ajouté</value>
-  </data>
-  <data name="Roster_Clone" xml:space="preserve">
-    <value>Roster {0} copié à partir du Roster {1}</value>
-  </data>
-  <data name="Roster_Delete" xml:space="preserve">
-    <value>Roster {0} supprimé</value>
-  </data>
-  <data name="Roster_Move_To_Roster" xml:space="preserve">
-    <value>Roster {0} déplacé vers le roster {1}</value>
-  </data>
-  <data name="Roster_Move_To_Section" xml:space="preserve">
-    <value>Roster {0} déplacé vers la section {1}</value>
-  </data>
-  <data name="Roster_RosterBecameAGroup" xml:space="preserve">
-    <value>Roster {0} est devenu une sous-section</value>
-  </data>
-  <data name="Roster_Update" xml:space="preserve">
-    <value>Roster {0} mis à jour</value>
-  </data>
-  <data name="Section_Add" xml:space="preserve">
-    <value>Section {0} ajoutée</value>
-  </data>
-  <data name="Section_Clone" xml:space="preserve">
-    <value>Section {0} copiée à partir de la section {1}</value>
-  </data>
-  <data name="Section_Delete" xml:space="preserve">
-    <value>Section {0} supprimée</value>
-  </data>
-  <data name="Section_GroupBecameARoster" xml:space="preserve">
-    <value>La sous-section {0} est devenue un roster</value>
-  </data>
-  <data name="Section_Move_To_Roster" xml:space="preserve">
-    <value>Section {0} déplacée vers le roster {1}</value>
-  </data>
-  <data name="Section_Move_To_Section" xml:space="preserve">
-    <value>Section {0} déplacée vers la section {1}</value>
-  </data>
-  <data name="Section_Update" xml:space="preserve">
-    <value>Section {0} mise à jour</value>
-  </data>
-  <data name="StaticText_Add" xml:space="preserve">
-    <value>Texte statique {0} ajouté</value>
-  </data>
-  <data name="StaticText_Clone" xml:space="preserve">
-    <value>Texte statique {0} copié à partir du texte statique {1}</value>
-  </data>
-  <data name="StaticText_Delete" xml:space="preserve">
-    <value>Texte statique {0} supprimé</value>
-  </data>
-  <data name="StaticText_Move_To_Roster" xml:space="preserve">
-    <value>Texte statique {0} déplacé vers le roster {1}</value>
-  </data>
-  <data name="StaticText_Move_To_Section" xml:space="preserve">
-    <value>Texte statique {0} déplacé vers la section {1}</value>
-  </data>
-  <data name="StaticText_Update" xml:space="preserve">
-    <value>Texte statique {0} mis à jour</value>
-  </data>
-  <data name="TextsReplaced" xml:space="preserve">
-    <value>Tous les '{0}' ont été remplacés par '{1}'. {2} entrées concernées</value>
   </data>
   <data name="ThisListDoesNotContainAnyRecords" xml:space="preserve">
     <value>Cette liste ne contient aucun enregistrement</value>
@@ -285,43 +132,235 @@
   <data name="Timestamp" xml:space="preserve">
     <value>Horodatage</value>
   </data>
-  <data name="Translation_Delete" xml:space="preserve">
-    <value>Traduction {0} supprimée</value>
-  </data>
-  <data name="Translation_Update" xml:space="preserve">
-    <value>Traduction {0} mise à jour</value>
-  </data>
   <data name="UnknownUserName" xml:space="preserve">
     <value>&lt;&lt; INCONNU &gt;&gt;</value>
   </data>
   <data name="UserName" xml:space="preserve">
     <value>Nom d'utilisateur</value>
   </data>
+  <data name="Change" xml:space="preserve">
+    <value>Changer</value>
+  </data>
+  <data name="Macro_Delete" xml:space="preserve">
+    <value>Macro {0} supprimé</value>
+  </data>
+  <data name="Macro_Update" xml:space="preserve">
+    <value>Macro {0} mis à jour</value>
+  </data>
+  <data name="Macro_Add" xml:space="preserve">
+    <value>Macro {0} ajouté</value>
+  </data>
+  <data name="LookupTable_Delete" xml:space="preserve">
+    <value>La table de référence {0} a été supprimée</value>
+  </data>
+  <data name="LookupTable_Update" xml:space="preserve">
+    <value>La table de référence {0} a été mise à jour</value>
+  </data>
+  <data name="LookupTable_Add" xml:space="preserve">
+    <value>La table de référence {0} a été ajoutée</value>
+  </data>
+  <data name="Attachment_Delete" xml:space="preserve">
+    <value>Pièce jointe {0} supprimée</value>
+  </data>
+  <data name="Attachment_Update" xml:space="preserve">
+    <value>La pièce jointe {0} a été mise à jour</value>
+  </data>
   <data name="Variable_Add" xml:space="preserve">
     <value>La variable {0} a été ajoutée</value>
-  </data>
-  <data name="Variable_Clone" xml:space="preserve">
-    <value>La variable {0} clonée à partir de la variable {1}</value>
   </data>
   <data name="Variable_Delete" xml:space="preserve">
     <value>Variable {0} supprimée</value>
   </data>
-  <data name="Variable_Move_To_Roster" xml:space="preserve">
-    <value>La variable {0} a été déplacée vers la liste {1}</value>
+  <data name="Variable_Update" xml:space="preserve">
+    <value>La variable {0} a été mise à jour</value>
+  </data>
+  <data name="Categories_Add" xml:space="preserve">
+    <value>Catégories {0} ajoutées</value>
+  </data>
+  <data name="Categories_Delete" xml:space="preserve">
+    <value>Catégories {0} supprimées</value>
+  </data>
+  <data name="Categories_Update" xml:space="preserve">
+    <value>Catégories {0} mises à jour</value>
+  </data>
+  <data name="CriticalRule_Add" xml:space="preserve">
+    <value>Règle critique {0} ajoutée</value>
+  </data>
+  <data name="CriticalRule_Delete" xml:space="preserve">
+    <value>Règle critique {0} supprimée</value>
+  </data>
+  <data name="CriticalRule_Update" xml:space="preserve">
+    <value>Règle critique {0} mise à jour</value>
+  </data>
+  <data name="Translation_Delete" xml:space="preserve">
+    <value>Traduction {0} supprimée</value>
+  </data>
+  <data name="Translation_Update" xml:space="preserve">
+    <value>Traduction {0} mise à jour</value>
+  </data>
+  <data name="TextsReplaced" xml:space="preserve">
+    <value>Tous les '{0}' ont été remplacés par '{1}'. {2} entrées concernées</value>
+  </data>
+  <data name="RevertToThisVersion" xml:space="preserve">
+    <value>Revenir à cette version</value>
+  </data>
+  <data name="Comment" xml:space="preserve">
+    <value>Commentaire</value>
+  </data>
+  <data name="LeaveComment" xml:space="preserve">
+    <value>Laisser un commentaire</value>
+  </data>
+  <data name="ExtractAtRevision" xml:space="preserve">
+    <value>Extraire à la révision</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Sauvegarder</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Confirmer</value>
+  </data>
+  <data name="ResetQuestionnaireToThis" xml:space="preserve">
+    <value>Restaurer le questionnaire à la version à {0}?</value>
+  </data>
+  <data name="reverted_to" xml:space="preserve">
+    <value>Le questionnaire "{0}" est restauré à la version de {1}</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Annuler</value>
+  </data>
+  <data name="Revert" xml:space="preserve">
+    <value>Revenir</value>
+  </data>
+  <data name="Section_Add" xml:space="preserve">
+    <value>Section {0} ajoutée</value>
+  </data>
+  <data name="Section_Delete" xml:space="preserve">
+    <value>Section {0} supprimée</value>
+  </data>
+  <data name="Section_Update" xml:space="preserve">
+    <value>Section {0} mise à jour</value>
+  </data>
+  <data name="Question_Add" xml:space="preserve">
+    <value>Question {0} ajoutée</value>
+  </data>
+  <data name="Question_Delete" xml:space="preserve">
+    <value>Question {0} supprimée</value>
+  </data>
+  <data name="Question_Update" xml:space="preserve">
+    <value>Question {0} mise à jour</value>
+  </data>
+  <data name="Roster_Add" xml:space="preserve">
+    <value>Roster {0} ajouté</value>
+  </data>
+  <data name="Roster_Delete" xml:space="preserve">
+    <value>Roster {0} supprimé</value>
+  </data>
+  <data name="Roster_Update" xml:space="preserve">
+    <value>Roster {0} mis à jour</value>
+  </data>
+  <data name="StaticText_Add" xml:space="preserve">
+    <value>Texte statique {0} ajouté</value>
+  </data>
+  <data name="StaticText_Delete" xml:space="preserve">
+    <value>Texte statique {0} supprimé</value>
+  </data>
+  <data name="StaticText_Update" xml:space="preserve">
+    <value>Texte statique {0} mis à jour</value>
+  </data>
+  <data name="NoTitle" xml:space="preserve">
+    <value>Sans titre</value>
+  </data>
+  <data name="StaticText_Clone" xml:space="preserve">
+    <value>Texte statique {0} copié à partir du texte statique {1}</value>
+  </data>
+  <data name="Variable_Clone" xml:space="preserve">
+    <value>La variable {0} clonée à partir de la variable {1}</value>
+  </data>
+  <data name="Question_Clone" xml:space="preserve">
+    <value>Question {0} copiée à partir de la question {1}</value>
+  </data>
+  <data name="Section_Clone" xml:space="preserve">
+    <value>Section {0} copiée à partir de la section {1}</value>
+  </data>
+  <data name="Roster_Clone" xml:space="preserve">
+    <value>Roster {0} copié à partir du Roster {1}</value>
+  </data>
+  <data name="Questionnaire_Clone" xml:space="preserve">
+    <value>Questionnaire {0} cloné à partir du questionnaire {1}</value>
+  </data>
+  <data name="Questionnaire_Replace" xml:space="preserve">
+    <value>Questionnaire {0} remplacé</value>
+  </data>
+  <data name="Questionnaire_Import" xml:space="preserve">
+    <value>Questionnaire {0} importé</value>
+  </data>
+  <data name="Section_GroupBecameARoster" xml:space="preserve">
+    <value>La sous-section {0} est devenue un roster</value>
+  </data>
+  <data name="Roster_RosterBecameAGroup" xml:space="preserve">
+    <value>Roster {0} est devenu une sous-section</value>
+  </data>
+  <data name="Person_Add" xml:space="preserve">
+    <value>Utilisateur avec e-mail {0} ajouté aux personnes partagées</value>
+  </data>
+  <data name="Questionnaire_Move" xml:space="preserve">
+    <value>La propriété du questionnaire a été transférée à l'utilisateur avec l'e-mail "{0}"</value>
+  </data>
+  <data name="Person_Delete" xml:space="preserve">
+    <value>Utilisateur avec un e-mail {0} supprimé des personnes partagées</value>
+  </data>
+  <data name="Questionnaire_Add" xml:space="preserve">
+    <value>Questionnaire {0} créé</value>
+  </data>
+  <data name="Questionnaire_Update" xml:space="preserve">
+    <value>Questionnaire {0} mis à jour</value>
+  </data>
+  <data name="Questionnaire_Delete" xml:space="preserve">
+    <value>Questionnaire {0} supprimé</value>
+  </data>
+  <data name="Question_Move_To_Section" xml:space="preserve">
+    <value>Question {0} déplacée vers la section {1}</value>
+  </data>
+  <data name="Question_Move_To_Roster" xml:space="preserve">
+    <value>La question {0} a été déplacée vers la liste {1}</value>
+  </data>
+  <data name="StaticText_Move_To_Section" xml:space="preserve">
+    <value>Texte statique {0} déplacé vers la section {1}</value>
+  </data>
+  <data name="StaticText_Move_To_Roster" xml:space="preserve">
+    <value>Texte statique {0} déplacé vers le roster {1}</value>
   </data>
   <data name="Variable_Move_To_Section" xml:space="preserve">
     <value>La variable {0} est déplacée vers la section {1}</value>
   </data>
-  <data name="Variable_Update" xml:space="preserve">
-    <value>La variable {0} a été mise à jour</value>
+  <data name="Variable_Move_To_Roster" xml:space="preserve">
+    <value>La variable {0} a été déplacée vers la liste {1}</value>
   </data>
-  <data name="Metadata_Update" xml:space="preserve">
-    <value>Métadonnées du questionnaire {0} mises à jour</value>
+  <data name="Section_Move_To_Section" xml:space="preserve">
+    <value>Section {0} déplacée vers la section {1}</value>
+  </data>
+  <data name="Section_Move_To_Roster" xml:space="preserve">
+    <value>Section {0} déplacée vers le roster {1}</value>
+  </data>
+  <data name="Roster_Move_To_Section" xml:space="preserve">
+    <value>Roster {0} déplacé vers la section {1}</value>
+  </data>
+  <data name="Roster_Move_To_Roster" xml:space="preserve">
+    <value>Roster {0} déplacé vers le roster {1}</value>
+  </data>
+  <data name="Translation_Original" xml:space="preserve">
+    <value>Original</value>
   </data>
   <data name="Translation_DefaultTranslationSet" xml:space="preserve">
     <value>La traduction par défaut est définie sur {0}</value>
   </data>
-  <data name="Translation_Original" xml:space="preserve">
-    <value>Original</value>
+  <data name="Metadata_Update" xml:space="preserve">
+    <value>Métadonnées du questionnaire {0} mises à jour</value>
+  </data>
+  <data name="Questionnaire_ImportToHq" xml:space="preserve">
+    <value>Questionnaire importé vers Headquarters ({0}) en tant que {2} par {1}</value>
+  </data>
+  <data name="MigratedNewCoverSupport" xml:space="preserve">
+    <value>Page de couverture générée</value>
   </data>
 </root>

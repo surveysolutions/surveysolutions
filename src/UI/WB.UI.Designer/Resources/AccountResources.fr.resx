@@ -121,7 +121,7 @@
     <value>Tout droit reservé</value>
   </data>
   <data name="AppDescription" xml:space="preserve">
-    <value>Ceci est un instrument pour la conception d'enquête pourla plateforme CAPI de la Banque Mondiale, doté de fonctionnalité de collaboration et d'exportation vers PDF</value>
+    <value>Ceci est un instrument pour la conception d'enquête pour la plateforme CAPI de la Banque Mondiale, doté de fonctionnalité de collaboration et d'exportation vers PDF</value>
   </data>
   <data name="AppName" xml:space="preserve">
     <value>Questionnaire Designer</value>
@@ -134,6 +134,12 @@
   </data>
   <data name="ChangePassword" xml:space="preserve">
     <value>Changer de mot de passe</value>
+  </data>
+  <data name="ManageAccount" xml:space="preserve">
+    <value>Gérer le compte</value>
+  </data>
+  <data name="EditProfile" xml:space="preserve">
+    <value>Modifier le profil</value>
   </data>
   <data name="CompanyName" xml:space="preserve">
     <value>Le Group de la Banque Mondiale</value>
@@ -150,32 +156,17 @@
   <data name="Email" xml:space="preserve">
     <value>e-mail</value>
   </data>
-  <data name="ExternalLoginRemoved" xml:space="preserve">
-    <value>Le login externe a été retiré</value>
-  </data>
   <data name="ForgotPassword" xml:space="preserve">
     <value>Mot de passe oublié?</value>
   </data>
   <data name="Help" xml:space="preserve">
     <value>Aide</value>
   </data>
-  <data name="InvalidEmail" xml:space="preserve">
-    <value>L'adresse mail fournie est invalide. Veuillez le vérifier et essayez à nouveau</value>
-  </data>
-  <data name="InvalidPassword" xml:space="preserve">
-    <value>Le mot de passe fournit est invalide. Veuillez saisir un mot de passe valide</value>
+  <data name="Forum" xml:space="preserve">
+    <value>Forum</value>
   </data>
   <data name="InvalidResetPasswordLink" xml:space="preserve">
     <value>Le mot de passe restaure un lien invalide ou expiré. Veuillez essayer à nouveau</value>
-  </data>
-  <data name="InvalidRetrievalAnswer" xml:space="preserve">
-    <value>La réponse de récupération du mot de passe fournit est invalide. Veuillez vérifier et essayer à nouveau</value>
-  </data>
-  <data name="InvalidRetrievalQuestion" xml:space="preserve">
-    <value>La question de récupération du mot de passe fournit est invalide. Veuillez vérifier et essayer à nouveau</value>
-  </data>
-  <data name="InvalidUserName" xml:space="preserve">
-    <value>Le nom d'utilisateur fournit n'est pas valide. Veuillez vérifier et essayer à nouveau</value>
   </data>
   <data name="Legal" xml:space="preserve">
     <value>Légal</value>
@@ -189,14 +180,14 @@
   <data name="LoginName" xml:space="preserve">
     <value>Nom d'utilisateur</value>
   </data>
+  <data name="FullName" xml:space="preserve">
+    <value>Nom complet</value>
+  </data>
   <data name="LoginOrEmail" xml:space="preserve">
     <value>Nom d'utilisateur ou e-mail</value>
   </data>
   <data name="Logout" xml:space="preserve">
     <value>Se déconnecter</value>
-  </data>
-  <data name="MembershipProviderError" xml:space="preserve">
-    <value>L'authentification donne une erreur. Veuillez vérifier et essayer à nouveau. Si le problème persiste, veuillez contacter votre adminstrateur de système.</value>
   </data>
   <data name="OutdatedBrowserMessage" xml:space="preserve">
     <value>Vous utilisez un navigateur obsolète</value>
@@ -204,17 +195,11 @@
   <data name="Password" xml:space="preserve">
     <value>Mot de passe</value>
   </data>
-  <data name="PasswordChanged" xml:space="preserve">
-    <value>Votre mot de passe a été changé.</value>
-  </data>
   <data name="PasswordReset" xml:space="preserve">
     <value>Réinitialiser le mot de passe</value>
   </data>
   <data name="PasswordResetDescription" xml:space="preserve">
     <value>Entrez le login ou e-mail et nous vous enverrons un lien pour la réinitialisation du mot de passe</value>
-  </data>
-  <data name="PasswordSet" xml:space="preserve">
-    <value>Votre mot de passe a été défini.</value>
   </data>
   <data name="PasswordWatermark" xml:space="preserve">
     <value>Nouveau mot de passe (min 10 symboles, chiffres ET lettres)</value>
@@ -237,6 +222,9 @@
   <data name="StaySignedIn" xml:space="preserve">
     <value>Restez connecté pour un jour</value>
   </data>
+  <data name="ShowPassword" xml:space="preserve">
+    <value>Afficher le mot de passe</value>
+  </data>
   <data name="TesterApp" xml:space="preserve">
     <value>Installez Survey Solutions Questionnaire Tester sur une tablette Android pour tester les questionnaires que vous développez sur Designer.</value>
   </data>
@@ -246,14 +234,11 @@
   <data name="ThankYou" xml:space="preserve">
     <value>Merci</value>
   </data>
-  <data name="UnknownError" xml:space="preserve">
-    <value>Une erreur inconnue est survenue. Veuillez vérifier votre entrée et essayez à nouveau. Si le problème persiste, contactez votre administrateur système.</value>
-  </data>
   <data name="UpgradeYourBrowser" xml:space="preserve">
     <value>Veuillez &lt;a href="http://browsehappy.com/"&gt; mettre à jour votre navigateur &lt;/a&gt; pour utiliser l'application Designer</value>
   </data>
-  <data name="UserCreationRequestCanceled" xml:space="preserve">
-    <value>La demande de création d'utilisateur a été annulée. Veuillez vérifier votre entrée et essayez à nouveau. Si le problème persiste, contactez votre administrateur système.</value>
+  <data name="Welcome" xml:space="preserve">
+    <value>Bienvenue sur Survey Solutions</value>
   </data>
   <data name="UserNameExists" xml:space="preserve">
     <value>Ce nom d'utilisateur existe déjà. Veuillez saisir un autre nom d'utilisateur.</value>
@@ -261,7 +246,58 @@
   <data name="UserNameForEmailExists" xml:space="preserve">
     <value>Un nom d'utilisateur pour cette adresse e-mail existe déjà. Veuillez saisir une adresse e-mail différente</value>
   </data>
-  <data name="Welcome" xml:space="preserve">
-    <value>Bienvenue sur Survey Solutions</value>
+  <data name="InvalidPassword" xml:space="preserve">
+    <value>Le mot de passe fournit est invalide. Veuillez saisir un mot de passe valide</value>
+  </data>
+  <data name="InvalidEmail" xml:space="preserve">
+    <value>L'adresse mail fournie est invalide. Veuillez le vérifier et essayez à nouveau</value>
+  </data>
+  <data name="InvalidRetrievalAnswer" xml:space="preserve">
+    <value>La réponse de récupération du mot de passe fournit est invalide. Veuillez vérifier et essayer à nouveau</value>
+  </data>
+  <data name="InvalidRetrievalQuestion" xml:space="preserve">
+    <value>La question de récupération du mot de passe fournit est invalide. Veuillez vérifier et essayer à nouveau</value>
+  </data>
+  <data name="InvalidUserName" xml:space="preserve">
+    <value>Le nom d'utilisateur fournit n'est pas valide. Veuillez vérifier et essayer à nouveau</value>
+  </data>
+  <data name="MembershipProviderError" xml:space="preserve">
+    <value>L'authentification donne une erreur. Veuillez vérifier et essayer à nouveau. Si le problème persiste, veuillez contacter votre adminstrateur de système.</value>
+  </data>
+  <data name="UserCreationRequestCanceled" xml:space="preserve">
+    <value>La demande de création d'utilisateur a été annulée. Veuillez vérifier votre entrée et essayez à nouveau. Si le problème persiste, contactez votre administrateur système.</value>
+  </data>
+  <data name="UnknownError" xml:space="preserve">
+    <value>Une erreur inconnue est survenue. Veuillez vérifier votre entrée et essayez à nouveau. Si le problème persiste, contactez votre administrateur système.</value>
+  </data>
+  <data name="PasswordChanged" xml:space="preserve">
+    <value>Votre mot de passe a été changé.</value>
+  </data>
+  <data name="PasswordSet" xml:space="preserve">
+    <value>Votre mot de passe a été défini.</value>
+  </data>
+  <data name="AccountInfoUpdated" xml:space="preserve">
+    <value>Les informations du compte ont été mises à jour avec succès</value>
+  </data>
+  <data name="ExternalLoginRemoved" xml:space="preserve">
+    <value>Le login externe a été retiré</value>
+  </data>
+  <data name="LogoutText" xml:space="preserve">
+    <value>Vous vous êtes déconnecté avec succès de l'application.</value>
+  </data>
+  <data name="LockedOut" xml:space="preserve">
+    <value>Verrouillé</value>
+  </data>
+  <data name="LockedOutText" xml:space="preserve">
+    <value>Votre compte est verrouillé. Contactez l'administrateur pour déverrouiller votre compte</value>
+  </data>
+  <data name="PasswordEmailSent" xml:space="preserve">
+    <value>Veuillez vérifier votre e-mail pour réinitialiser votre mot de passe.</value>
+  </data>
+  <data name="EmailChangeShouldBeConfirmed" xml:space="preserve">
+    <value>Veuillez suivre les instructions envoyées à l'e-mail fourni ({0}) pour confirmer le changement d'e-mail.</value>
+  </data>
+  <data name="PendingEmailUpdate" xml:space="preserve">
+    <value>Mise à jour en attente vers {0}</value>
   </data>
 </root>
