@@ -117,11 +117,35 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+    <data name="TargetPersonStopShareNotification_cshtml_Execute_Hello__0____br____br____1__has_stopped_to_share_with_you_questionnaire___2_" xml:space="preserve">
+    <value>Bonjour {0}, &lt;br&gt; {1} a arrêté de partager avec vous le questionnaire: {2}</value>
+  </data>
+  <data name="TargetPersonShareNotification_cshtml_Execute_Hello__0____br____br____1__has_invited_you_to__2__the_following_questionnaire_" xml:space="preserve">
+    <value>Bonjour {0}, &lt;br&gt; {1} vous a invité à {2} au questionnaire suivant:</value>
+  </data>
+  <data name="OwnerStopShareNotification_cshtml_Execute_Hello__0____br____br____1__has_revoked_access_for__2__to_your_questionnaire___3_" xml:space="preserve">
+    <value>Bonjour {0}, &lt;br&gt; {1} a révoqué l'accès de {2} à votre questionnaire: {3}</value>
+  </data>
+  <data name="OwnerShareNotification_cshtml_Execute_Hello__0____br____br____1__has_invited__2__to__3__your_questionnaire__" xml:space="preserve">
+    <value>Bonjour {0}, &lt;br&gt; {1} a invité {2} à {3} votre questionnaire:</value>
+  </data>
+  <data name="ConfirmationEmail" xml:space="preserve">
+    <value>Bonjour {0}, &lt;br/&gt;&lt;br/&gt; Pour terminer le processus d'inscription, cliquez sur ce lien:</value>
+  </data>
   <data name="CompleteRegistration" xml:space="preserve">
     <value>enregistrement terminé</value>
   </data>
-  <data name="ConfirmationEmail" xml:space="preserve">
-    <value>Bonjour {0}, Pour terminer le processus d'inscription, cliquez sur ce lien:</value>
+  <data name="AnonymousSharingEmail" xml:space="preserve">
+    <value>Bonjour {0}, &lt;br/&gt;&lt;br/&gt; Vous avez activé l'accès en lecture seule à votre questionnaire "{1}" pour les utilisateurs anonymes via le lien suivant:</value>
+  </data>
+  <data name="EmailSendInfo" xml:space="preserve">
+    <value>Ce message a été envoyé automatiquement par l'outil Survey Solutions Designer.</value>
+  </data>
+  <data name="ResetPasswordEmail" xml:space="preserve">
+    <value>Bonjour {0}, &lt;br/&gt;&lt;br/&gt; Pour terminer le processus de réinitialisation du mot de passe, cliquez sur ce lien:</value>
+  </data>
+  <data name="ResetPassword" xml:space="preserve">
+    <value>réinitialiser le mot de passe</value>
   </data>
   <data name="MailNotifier_NotifyOwnerAboutShareChange_view" xml:space="preserve">
     <value>examiner</value>
@@ -135,20 +159,11 @@
   <data name="MailNotifier_NotifyTargetPersonAboutShareChange_user" xml:space="preserve">
     <value>utilisateur</value>
   </data>
-  <data name="OwnerShareNotification_cshtml_Execute_Hello__0____br____br____1__has_invited__2__to__3__your_questionnaire__" xml:space="preserve">
-    <value>Bonjour {0}, &lt;br&gt; {1} a invité {2} à {3} votre questionnaire:</value>
-  </data>
-  <data name="OwnerStopShareNotification_cshtml_Execute_Hello__0____br____br____1__has_revoked_access_for__2__to_your_questionnaire___3_" xml:space="preserve">
-    <value>Bonjour {0}, &lt;br&gt; {1} a révoqué l'accès de {2} à votre questionnaire: {3}</value>
-  </data>
-  <data name="ResetPassword" xml:space="preserve">
-    <value>réinitialiser le mot de passe</value>
-  </data>
-  <data name="ResetPasswordEmail" xml:space="preserve">
-    <value>Bonjour {0}, Pour terminer le processus de réinitialisation du mot de passe, cliquez sur ce lien:</value>
-  </data>
   <data name="SystemMailer_ConfirmationEmail_Complete_Registration_Process" xml:space="preserve">
     <value>Terminer le processus d'enrégistrement</value>
+  </data>
+  <data name="SystemMailer_AnonymousSharingEmail_Subject" xml:space="preserve">
+    <value>Lien de partage anonyme</value>
   </data>
   <data name="SystemMailer_GetOwnerShareNotificationEmail_Your_questionnaire_sharing_notification" xml:space="preserve">
     <value>Votre notification de partage de questionnaire</value>
@@ -165,10 +180,13 @@
   <data name="SystemMailer_ResetPasswordEmail_Complete_Password_Reset" xml:space="preserve">
     <value>Mot de passe complet réinitialisé</value>
   </data>
-  <data name="TargetPersonShareNotification_cshtml_Execute_Hello__0____br____br____1__has_invited_you_to__2__the_following_questionnaire_" xml:space="preserve">
-    <value>Bonjour {0}, &lt;br&gt; {1} vous a invité à {2} au questionnaire suivant:</value>
+  <data name="TranfserOwnershipNotification" xml:space="preserve">
+    <value>Bonjour {0}, &lt;br&gt; {1} a transféré la propriété du questionnaire {2} à vous</value>
   </data>
-  <data name="TargetPersonStopShareNotification_cshtml_Execute_Hello__0____br____br____1__has_stopped_to_share_with_you_questionnaire___2_" xml:space="preserve">
-    <value>Bonjour {0}, &lt;br&gt; {1} a arrêté de partager avec vous le questionnaire: {2}</value>
+  <data name="EmailChange" xml:space="preserve">
+    <value>Bonjour {0}, &lt;br/&gt;&lt;br/&gt; Pour confirmer le changement d'e-mail, veuillez utiliser le lien suivant:</value>
+  </data>
+  <data name="EmailChangeLink" xml:space="preserve">
+    <value>confirmer</value>
   </data>
 </root>
