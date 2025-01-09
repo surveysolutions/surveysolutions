@@ -607,7 +607,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                 GetQuestionReference<EntityWithError>(interview, questionnaire, identity)
             ).ToArray();
             
-            Identity[] unansweredIds = interview.GetAllUnansweredQuestions().Take(30).ToArray();
+            Identity[] unansweredIds = interview.GetAllUnansweredQuestions(false).Take(30).ToArray();
             var unansweredQuestions = unansweredIds.Select(identity => 
                 GetQuestionReference<EntityWithError>(interview, questionnaire, identity)
             ).ToArray();

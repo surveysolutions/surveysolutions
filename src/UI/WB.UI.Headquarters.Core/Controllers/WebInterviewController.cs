@@ -331,12 +331,6 @@ namespace WB.UI.Headquarters.Controllers
                             return this.Redirect(GenerateUrl("Cover", invitation.InterviewId));
                         }
                     }
-
-                    var interviewId = this.CreateInterview(assignment);
-                    invitationService.InterviewWasCreated(invitation.Id, interviewId);
-                    HttpContext.Session.SaveWebInterviewAccessForCurrentUser(interviewId);
-
-                    return this.Redirect(GenerateUrl("Cover", interviewId));
                 }
                 else
                 {
@@ -368,24 +362,6 @@ namespace WB.UI.Headquarters.Controllers
                         HttpOnly = true,
                         Expires = DateTime.UtcNow.AddDays(7)
                     });
-                }
-
-                if (!webInterviewConfig.UseCaptcha && string.IsNullOrWhiteSpace(assignment.Password) &&
-                    webInterviewConfig.SingleResponse)
-                {
-                    var interviewId = this.CreateInterview(assignment);
-
-                    if (DoesInterviewExist(invitation.InterviewId))
-                    {
-                        Response.Cookies.Append($"InterviewId-{assignment.Id}", interviewId, new CookieOptions
-                        {
-                            HttpOnly = true,
-                            Expires = DateTime.Now.AddYears(1)
-                        });
-
-                        HttpContext.Session.SaveWebInterviewAccessForCurrentUser(interviewId);
-                        return this.Redirect(GenerateUrl("Cover", interviewId));
-                    }
                 }
             }
 
@@ -1016,7 +992,7 @@ namespace WB.UI.Headquarters.Controllers
                 SubmitUrl = Url.Action("Start", "WebInterview"),
                 UseCaptcha = webInterviewConfig.UseCaptcha,
                 RecaptchaSiteKey = webInterviewConfig.UseCaptcha && captchaConfig.Value.CaptchaType == CaptchaProviderType.Recaptcha ? recaptchaSettings.Value.SiteKey : null,
-                HostedCaptchaHtml = webInterviewConfig.UseCaptcha && captchaConfig.Value.CaptchaType == CaptchaProviderType.Hosted ? serviceLocator.GetInstance<IHostedCaptcha>().Render<string>(null).Value : null,
+                HostedCaptchaHtml = webInterviewConfig.UseCaptcha && captchaConfig.Value.CaptchaType == CaptchaProviderType.Hosted ? serviceLocator.GetInstance<IHostedCaptcha>().Render().Value : null,
             };
 
             if (assignment == null)

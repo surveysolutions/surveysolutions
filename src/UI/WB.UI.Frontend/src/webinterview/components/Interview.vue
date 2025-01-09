@@ -1,8 +1,6 @@
 <template>
     <div>
-        <signalr @connected="connected"
-            :interviewId="interviewId"
-            :mode="mode" />
+        <signalr @connected="connected" :interviewId="interviewId" :mode="mode" />
         <router-view />
     </div>
 </template>
@@ -10,8 +8,8 @@
 <script lang="js">
 
 import http from '~/webinterview/api/http'
-import Vue from 'vue'
 import localStorage from '~/shared/localStorage'
+import { defineAsyncComponent } from 'vue';
 
 export default {
     name: 'WebInterviwew',
@@ -24,11 +22,12 @@ export default {
     },
 
     components: {
-        signalr: () => import('./signalr/core.signalr'),
+        signalr: defineAsyncComponent(() => import('./signalr/core.signalr')),
     },
 
     beforeMount() {
-        Vue.use(http, { store: this.$store })
+        const app = this.$root;
+        http.install(app, { store: this.$store });
     },
     beforeRouteUpdate(to, from, next) {
         return this.changeSection(to.params.sectionId, from.params.sectionId)
@@ -55,9 +54,9 @@ export default {
             this.$store.dispatch('getLanguageInfo')
             const lastVisitedSection = new localStorage().getItem(`${this.interviewId}_lastSection`)
 
-            if(lastVisitedSection && lastVisitedSection != this.$route.params.sectionId) {
+            if (lastVisitedSection && lastVisitedSection != this.$route.params.sectionId) {
                 // there might be navigations from inside of interview. Do not reopen previous section in such case
-                if(document.referrer && document.referrer.indexOf(this.$route.params.interviewId) === -1) {
+                if (document.referrer && document.referrer.indexOf(this.$route.params.interviewId) === -1) {
                     const coverPageId = this.$config.coverPageId == undefined ? this.$config.model.coverPageId : this.$config.coverPageId
                     this.$router.push({
                         name: coverPageId == lastVisitedSection ? 'cover' : 'section',

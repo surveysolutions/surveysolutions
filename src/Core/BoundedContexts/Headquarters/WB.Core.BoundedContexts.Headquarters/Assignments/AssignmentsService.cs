@@ -131,8 +131,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                     && (a.Assignment.Quantity == null || a.Assignment.InterviewSummaries.Count < a.Assignment.Quantity)
                     && a.Answer.Latitude <= north
                     && a.Answer.Latitude >= south
-                    && a.Answer.Longitude <= east
-                    && a.Answer.Longitude >= west 
+                    && ( east >= west 
+                        ? a.Answer.Longitude <= east && a.Answer.Longitude >= west
+                        : (a.Answer.Longitude <= east && a.Answer.Longitude >= -180 
+                           ||  a.Answer.Longitude <= 180 && a.Answer.Longitude >= west ))
+                     
                 );
             
             if (questionnaireId.HasValue)
@@ -309,7 +312,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 ResponsibleId = assignment.ResponsibleId,
                 ResponsibleName = assignment.Responsible.Name,
                 IsAudioRecordingEnabled = assignment.AudioRecording,
-                Comments = assignment.Comments
+                Comments = assignment.Comments,
+                TargetArea = assignment.TargetArea,
             };
 
             var assignmentIdentifyingData = assignment.IdentifyingData.ToLookup(id => id.Identity);

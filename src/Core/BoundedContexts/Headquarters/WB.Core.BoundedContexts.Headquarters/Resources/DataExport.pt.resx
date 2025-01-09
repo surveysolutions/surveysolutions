@@ -117,43 +117,307 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="BinaryData" xml:space="preserve">
-    <value>Dados binários</value>
-  </data>
-  <data name="ConfirmStop" xml:space="preserve">
-    <value>Tem certeza que quer parar</value>
+<data name="DataExport_Title" xml:space="preserve">
+    <value>Exportação de Dados</value>
   </data>
   <data name="DataExport_Header" xml:space="preserve">
-    <value>Selecione o tipo e formato de dados para exportar</value>
+    <value>Selecione o tipo e o formato dos dados a serem exportados</value>
   </data>
-  <data name="DataExport_Title" xml:space="preserve">
-    <value>Exportação de dados</value>
+  <data name="BinaryData" xml:space="preserve">
+    <value>Dados Binários</value>
   </data>
   <data name="DDI" xml:space="preserve">
     <value>DDI</value>
   </data>
-  <data name="export" xml:space="preserve">
-    <value>exportação</value>
-  </data>
-  <data name="Format" xml:space="preserve">
-    <value>Formato</value>
-  </data>
-  <data name="LastUpdateDate" xml:space="preserve">
-    <value>Data da última atualização</value>
-  </data>
-  <data name="Metadata" xml:space="preserve">
-    <value>Metadados</value>
+  <data name="ParaData" xml:space="preserve">
+    <value>Paradata</value>
   </data>
   <data name="Name" xml:space="preserve">
     <value>Nome</value>
   </data>
-  <data name="ParaData" xml:space="preserve">
-    <value>Para dados</value>
+  <data name="Format" xml:space="preserve">
+    <value>Formato</value>
+  </data>
+  <data name="StartDate" xml:space="preserve">
+    <value>Data de Início</value>
+  </data>
+  <data name="LastUpdateDate" xml:space="preserve">
+    <value>Data da Última Atualização</value>
   </data>
   <data name="Progress" xml:space="preserve">
     <value>Progresso</value>
   </data>
-  <data name="StartDate" xml:space="preserve">
-    <value>Data de início</value>
+  <data name="ConfirmStop" xml:space="preserve">
+    <value>Tem certeza de que deseja parar</value>
+  </data>
+  <data name="export" xml:space="preserve">
+    <value>processo de exportação</value>
+  </data>
+  <data name="Metadata" xml:space="preserve">
+    <value>Metadados</value>
+  </data>
+  <data name="BinaryDescription" xml:space="preserve">
+    <value>Arquivo zip com dados binários (por exemplo, imagens, áudio)</value>
+  </data>
+  <data name="ErrorThereAreRunningProcesses" xml:space="preserve">
+    <value>Você não pode alterar as configurações de exportação porque o processo de exportação já está em execução.</value>
+  </data>
+  <data name="Bytes" xml:space="preserve">
+    <value>MB</value>
+  </data>
+  <data name="Completed" xml:space="preserve">
+    <value>Concluído</value>
+  </data>
+  <data name="DataWasNotGenerated" xml:space="preserve">
+    <value>Não gerado</value>
+  </data>
+  <data name="DDIDescription" xml:space="preserve">
+    <value>Dados XML da Iniciativa de Documentação de Dados</value>
+  </data>
+  <data name="Download" xml:space="preserve">
+    <value>Baixar</value>
+  </data>
+  <data name="ExportRange" xml:space="preserve">
+    <value>Intervalo de exportação:</value>
+  </data>
+  <data name="FileSizeTitle" xml:space="preserve">
+    <value>Tamanho do arquivo</value>
+  </data>
+  <data name="FormatTitle" xml:space="preserve">
+    <value>formato</value>
+  </data>
+  <data name="Generate" xml:space="preserve">
+    <value>Gerar</value>
+  </data>
+  <data name="Generating" xml:space="preserve">
+    <value>Gerando</value>
+  </data>
+  <data name="Preparing" xml:space="preserve">
+    <value>Preparando</value>
+  </data>
+  <data name="Compressing" xml:space="preserve">
+    <value>Comprimindo</value>
+  </data>
+  <data name="LastGeneratedTitle" xml:space="preserve">
+    <value>Gerado em</value>
+  </data>
+  <data name="MainSurveyDataTitle" xml:space="preserve">
+    <value>Dados da Pesquisa Principal</value>
+  </data>
+  <data name="NoDataAvailable" xml:space="preserve">
+    <value>Sem dados disponíveis</value>
+  </data>
+  <data name="ParadataDescription" xml:space="preserve">
+    <value>Metadados sobre o processo de entrevista (eventos e cronograma)</value>
+  </data>
+  <data name="QueuedTitle" xml:space="preserve">
+    <value>Na fila</value>
+  </data>
+  <data name="StatusOfExportTitle" xml:space="preserve">
+    <value>Status das entrevistas exportadas</value>
+  </data>
+  <data name="FromDate" xml:space="preserve">
+    <value>De</value>
+  </data>
+  <data name="ToDate" xml:space="preserve">
+    <value>Para</value>
+  </data>
+  <data name="SurveyTemplateTitle" xml:space="preserve">
+    <value>(versão) Questionário da pesquisa</value>
+  </data>
+  <data name="ZipArchiveDescription" xml:space="preserve">
+    <value>Arquivo zip com os principais dados da entrevista</value>
+  </data>
+  <data name="XMLFileDescription" xml:space="preserve">
+    <value>Formato XML</value>
+  </data>
+  <data name="ItemsInQueue" xml:space="preserve">
+    <value>Itens na fila de exportação:</value>
+  </data>
+  <data name="TabularFormat" xml:space="preserve">
+    <value>Formato Tabular</value>
+  </data>
+  <data name="ExportExplanation" xml:space="preserve">
+    <value>Pressionar o botão Gerar cria um arquivo de dados das entrevistas disponíveis no servidor naquele momento. A hora da criação do arquivo e o tamanho do arquivo são mostrados na tabela. O último arquivo de dados gerado pode ser baixado pressionando o botão Baixar. Pressione o botão Gerar novamente para criar um novo arquivo.</value>
+  </data>
+  <data name="ZipFile" xml:space="preserve">
+    <value>Arquivo zip</value>
+  </data>
+  <data name="Dropbox" xml:space="preserve">
+    <value>Dropbox</value>
+  </data>
+  <data name="OneDrive" xml:space="preserve">
+    <value>OneDrive</value>
+  </data>
+  <data name="GoogleDrive" xml:space="preserve">
+    <value>Google Drive</value>
+  </data>
+  <data name="SaveBinaryDataTo" xml:space="preserve">
+    <value>Salvar dados binários em:</value>
+  </data>
+  <data name="ExportBtn" xml:space="preserve">
+    <value>Exportar</value>
+  </data>
+  <data name="DataExport_Destination_Dropbox" xml:space="preserve">
+    <value>O arquivo de exportação será enviado para o Dropbox</value>
+  </data>
+  <data name="DataExport_Destination_File" xml:space="preserve">
+    <value>O arquivo de exportação estará disponível para download</value>
+  </data>
+  <data name="DataExport_Destination_GoogleDrive" xml:space="preserve">
+    <value>O arquivo de exportação será enviado para o Google Drive</value>
+  </data>
+  <data name="DataExport_Destination_OneDrive" xml:space="preserve">
+    <value>O arquivo de exportação será enviado para o OneDrive</value>
+  </data>
+  <data name="DataExport_QueuedOn" xml:space="preserve">
+    <value>Na fila em {{date}}</value>
+  </data>
+  <data name="DataExport_CompletedOn" xml:space="preserve">
+    <value>Concluído em {{date}}</value>
+  </data>
+  <data name="DataExport_QuestionnaireWithVersion" xml:space="preserve">
+    <value>{{title}} (ver. {{version}})</value>
+  </data>
+  <data name="DataExport_Regenerate" xml:space="preserve">
+    <value>Regenerar</value>
+  </data>
+  <data name="DataExport_RegenerateDesc" xml:space="preserve">
+    <value>Colocar na fila de exportação com os mesmos parâmetros</value>
+  </data>
+  <data name="DataExport_FileLastUpdate" xml:space="preserve">
+    <value>Última atualização: {{date}}</value>
+  </data>
+  <data name="DataExport_FileWasRegenerated" xml:space="preserve">
+    <value>O arquivo foi regenerado</value>
+  </data>
+  <data name="DataExport_FileSize" xml:space="preserve">
+    <value>Tamanho do arquivo: {{size}} MB</value>
+  </data>
+  <data name="DataExport_ProducedIn" xml:space="preserve">
+    <value>Produzido em:</value>
+  </data>
+  <data name="DataExport_InQueue" xml:space="preserve">
+    <value>Na fila:</value>
+  </data>
+  <data name="DataExport_Destination" xml:space="preserve">
+    <value>Destino: {{dest}}</value>
+  </data>
+  <data name="DataExport_ServiceIsNotAvailable" xml:space="preserve">
+    <value>O serviço de exportação não está disponível</value>
+  </data>
+  <data name="DataType" xml:space="preserve">
+    <value>Tipo de dados</value>
+  </data>
+  <data name="DataType_Binary" xml:space="preserve">
+    <value>Dados Binários. Arquivo zip com dados binários (por exemplo, imagens, áudio)</value>
+  </data>
+  <data name="DataType_Ddi" xml:space="preserve">
+    <value>DDI. Dados XML da Iniciativa de Documentação de Dados</value>
+  </data>
+  <data name="DataType_MainSurveyData" xml:space="preserve">
+    <value>Dados da Pesquisa Principal. Arquivo zip com os principais dados da entrevista</value>
+  </data>
+  <data name="FilterTitle" xml:space="preserve">
+    <value>Filtrar entrevistas para exportar</value>
+  </data>
+  <data name="SurveyQuestionnaire" xml:space="preserve">
+    <value>Questionário</value>
+  </data>
+  <data name="SurveyQuestionnaireVersion" xml:space="preserve">
+    <value>Versão do questionário</value>
+  </data>
+  <data name="DataType_Paradata" xml:space="preserve">
+    <value>Paradata. Metadados sobre o processo de entrevista (eventos e cronograma)</value>
+  </data>
+  <data name="DataDestination" xml:space="preserve">
+    <value>Destino do arquivo de exportação</value>
+  </data>
+  <data name="DataFormat" xml:space="preserve">
+    <value>Formato dos dados</value>
+  </data>
+  <data name="DataDestination_Dropbox" xml:space="preserve">
+    <value>Enviar para o Dropbox</value>
+  </data>
+  <data name="DataDestination_GoogleDrive" xml:space="preserve">
+    <value>Enviar para o Google Drive</value>
+  </data>
+  <data name="DataDestination_OneDrive" xml:space="preserve">
+    <value>Enviar para o OneDrive</value>
+  </data>
+  <data name="DataDestination_Zip" xml:space="preserve">
+    <value>Baixar</value>
+  </data>
+  <data name="DataFormat_Spss" xml:space="preserve">
+    <value>Formato SPSS</value>
+  </data>
+  <data name="DataFormat_Stata" xml:space="preserve">
+    <value>Formato Stata 14</value>
+  </data>
+  <data name="DataFormat_Tab" xml:space="preserve">
+    <value>Dados separados por tabulação</value>
+  </data>
+  <data name="QuestionnaireInformation" xml:space="preserve">
+    <value>Informações do questionário</value>
+  </data>
+  <data name="QuestionnaireInformation_Include" xml:space="preserve">
+    <value>Incluir informações meta sobre o questionário</value>
+  </data>
+  <data name="QuestionnaireInformation_Exclude" xml:space="preserve">
+    <value>Excluir informações meta sobre o questionário</value>
+  </data>
+  <data name="AddToQueue" xml:space="preserve">
+    <value>Adicionar à fila</value>
+  </data>
+  <data name="GeneratedDataSets" xml:space="preserve">
+    <value>Conjuntos de dados exportados anteriormente</value>
+  </data>
+  <data name="GeneratedDataSets_Desc" xml:space="preserve">
+    <value>Os dados são exportados em um arquivo zip contendo os arquivos de dados do conteúdo e tipo especificados. Abaixo está uma lista dos arquivos de dados exportados anteriormente.</value>
+  </data>
+  <data name="NoDataSets" xml:space="preserve">
+    <value>Nenhum conjunto de dados gerado ainda</value>
+  </data>
+  <data name="DataExportApi" xml:space="preserve">
+    <value>API de exportação de dados</value>
+  </data>
+  <data name="DataExportApiDesc" xml:space="preserve">
+    <value>Você pode configurar a exportação automática dos dados coletados das entrevistas usando nosso conjunto de ferramentas API para mais informações e instruções, use:</value>
+  </data>
+  <data name="DataExportApiInfoPage" xml:space="preserve">
+    <value>Referência da API de exportação de dados</value>
+  </data>
+  <data name="Error_Canceled" xml:space="preserve">
+    <value>O trabalho de exportação foi cancelado pelo usuário.</value>
+  </data>
+  <data name="Error_NotEnoughExternalStorageSpace" xml:space="preserve">
+    <value>Não há espaço suficiente para o provedor de armazenamento em nuvem selecionado. Por favor, libere espaço e reinicie o trabalho ou escolha outro provedor.</value>
+  </data>
+  <data name="Error_Unhandled" xml:space="preserve">
+    <value>Ocorreu um erro inesperado durante a exportação. Pedimos desculpas pelo inconveniente. Por favor, entre em contato com sua equipe de suporte ao servidor. Informações adicionais sobre este problema estão disponíveis na página de suporte: https://support.mysurvey.solutions/headquarters/config/standalone-server-errors/.</value>
+  </data>
+  <data name="AllStatuses" xml:space="preserve">
+    <value>todos os status</value>
+  </data>
+  <data name="ApprovedByHeadquarters" xml:space="preserve">
+    <value>Aprovado pelo status da Sede</value>
+  </data>
+  <data name="ApprovedBySupervisor" xml:space="preserve">
+    <value>Aprovado pelo status do Supervisor</value>
+  </data>
+  <data name="DataExport_InterviewsStatus" xml:space="preserve">
+    <value>Entrevistas em {{status}}.</value>
+  </data>
+  <data name="InterviewerAssigned" xml:space="preserve">
+    <value>Status do entrevistador atribuído</value>
+  </data>
+  <data name="QuestionnaireTranslation" xml:space="preserve">
+    <value>Tradução</value>
+  </data>
+  <data name="Translation_CardLabel" xml:space="preserve">
+    <value>Tradução: {{language}}</value>
+  </data>
+  <data name="SurveyQuestionnaireTranslation" xml:space="preserve">
+    <value>Tradução</value>
   </data>
 </root>

@@ -1,28 +1,27 @@
 <template>
     <HqLayout :hasFilter="false">
-        <div slot="headers">
-            <ol class="breadcrumb">
-                <li>
-                    <a :href="$config.model.mapsUrl">{{$t("Pages.MapList_Title")}}</a>
-                </li>
-            </ol>
-            <h1>{{$t("Pages.MapList_UserMapsTitle")}}</h1>
-            <p >
-                <a :href="$config.model.userMapLinkingUrl">{{$t('Pages.MapList_UserLinking')}}</a>
-            </p>
-        </div>
-        <DataTables ref="table"
-            :tableOptions="tableOptions"></DataTables>
-
-        <Confirm
-            ref="confirmDiscard"
-            id="discardConfirm"
-            slot="modals">{{ $t("Pages.Map_DiscardConfirm") }}</Confirm>
+        <template v-slot:headers>
+            <div>
+                <ol class="breadcrumb">
+                    <li>
+                        <a :href="$config.model.mapsUrl">{{ $t("Pages.MapList_Title") }}</a>
+                    </li>
+                </ol>
+                <h1>{{ $t("Pages.MapList_UserMapsTitle") }}</h1>
+                <p>
+                    <a :href="$config.model.userMapLinkingUrl">{{ $t('Pages.MapList_UserLinking') }}</a>
+                </p>
+            </div>
+        </template>
+        <DataTables ref="table" :tableOptions="tableOptions"></DataTables>
+        <template v-slot:models>
+            <Confirm ref="confirmDiscard" id="discardConfirm">{{ $t("Pages.Map_DiscardConfirm") }}</Confirm>
+        </template>
     </HqLayout>
 </template>
 
 <script>
-import {map, join, uniqBy, filter, some, orderBy} from 'lodash'
+import { map, join, uniqBy, filter, some, orderBy } from 'lodash'
 import * as toastr from 'toastr'
 import gql from 'graphql-tag'
 const query = gql`query UserMaps($workspace: String!, $order: [MapsSort!], $skip: Int, $take: Int, $where: MapsFilter) {
@@ -39,7 +38,7 @@ const query = gql`query UserMaps($workspace: String!, $order: [MapsSort!], $skip
 }`
 
 export default {
-    data: function() {
+    data: function () {
         return {
             statusMessage: '',
             errorList: [],
@@ -112,7 +111,7 @@ export default {
                         },
                     },
                 ],
-                ajax (data, callback, settings) {
+                ajax(data, callback, settings) {
                     const order = {}
                     const order_col = data.order[0]
                     const column = data.columns[order_col.column]
@@ -131,15 +130,16 @@ export default {
 
                     const search = data.search.value
 
-                    if(search && search != '') {
-                        where.and.push({ or: [
-                            {fileName : {startsWith : search }},
-                            {users : {some : {userName : {startsWith: search.toLowerCase()}}}},
-                        ],
+                    if (search && search != '') {
+                        where.and.push({
+                            or: [
+                                { fileName: { startsWith: search } },
+                                { users: { some: { userName: { startsWith: search.toLowerCase() } } } },
+                            ],
                         })
                     }
 
-                    if(where.and.length > 0) {
+                    if (where.and.length > 0) {
                         variables.where = where
                     }
 
@@ -153,11 +153,11 @@ export default {
                         const interviewers = uniqBy(map(nodes, 'users').flat(), 'userName')
                         const sortedInterviewers = orderBy(interviewers, [column.data], [order_col.dir])
 
-                        const rows = map(sortedInterviewers, function(inter){
+                        const rows = map(sortedInterviewers, function (inter) {
                             return {
                                 userName: inter.userName,
-                                maps: filter(nodes, function(map){
-                                    return some(map.users, { userName: inter.userName})
+                                maps: filter(nodes, function (map) {
+                                    return some(map.users, { userName: inter.userName })
                                 }),
                             }
                         })

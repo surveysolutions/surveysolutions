@@ -63,7 +63,6 @@ namespace WB.UI.Supervisor.Services.Implementation
         public override Task NavigateToCreateAndLoadInterview(int assignmentId)
         {
             return Task.CompletedTask;
-            //throw new NotImplementedException();
         }
 
         public override Task NavigateToLoginAsync()
@@ -90,7 +89,7 @@ namespace WB.UI.Supervisor.Services.Implementation
                 new InterviewViewModelArgs
                 {
                     InterviewId = interviewId,
-                    NavigationIdentity = navigationIdentity
+                    NavigationIdentity = navigationIdentity,
                 });
         }
 

@@ -117,47 +117,17 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AccountCreationDateTooltip" xml:space="preserve">
-    <value>Fecha cuando la cuenta fue creada</value>
-  </data>
   <data name="AddAPIUser" xml:space="preserve">
     <value>Adicionar un usuario API</value>
   </data>
   <data name="AddHeadquarters" xml:space="preserve">
     <value>Adicionar sede</value>
   </data>
-  <data name="AddInterviewer" xml:space="preserve">
-    <value>Adicionar entrevistador</value>
-  </data>
-  <data name="AddObserver" xml:space="preserve">
-    <value>Adicionar observador</value>
-  </data>
   <data name="AddSupervisor" xml:space="preserve">
     <value>Adicionar supervisor</value>
   </data>
-  <data name="Admin" xml:space="preserve">
-    <value>Administrar</value>
-  </data>
   <data name="APIUsers" xml:space="preserve">
     <value>Usuarios API</value>
-  </data>
-  <data name="ApiUsersCountDescription" xml:space="preserve">
-      <value>Usuarios API ({{count}})</value>
-  </data>
-  <data name="ArchivedSupervisors" xml:space="preserve">
-    <value>Supervisores archivados</value>
-  </data>
-  <data name="ArchivingStatusTitle" xml:space="preserve">
-    <value>Estado de archivo</value>
-  </data>
-  <data name="ClickToReturn" xml:space="preserve">
-    <value>Haga clic para volver a su cuenta</value>
-  </data>
-  <data name="CreateAdmin" xml:space="preserve">
-    <value>Para completar la instalación, cree un nuevo usuario administrador</value>
-  </data>
-  <data name="CreateAndTryLogin" xml:space="preserve">
-    <value>Crear y probar logan</value>
   </data>
   <data name="CreateAPIUser" xml:space="preserve">
     <value>Crear usuario API</value>
@@ -171,6 +141,72 @@
   <data name="CreateSupervisor" xml:space="preserve">
     <value>Crear supervisor</value>
   </data>
+  <data name="CreateAdministrator" xml:space="preserve">
+    <value>Crear administrador</value>
+  </data>
+  <data name="ArchivedSupervisors" xml:space="preserve">
+    <value>Supervisores archivados</value>
+  </data>
+  <data name="ClickToReturn" xml:space="preserve">
+    <value>Haga clic para volver a su cuenta</value>
+  </data>
+  <data name="CreateAdmin" xml:space="preserve">
+    <value>Para completar la instalación, cree un nuevo usuario administrador</value>
+  </data>
+  <data name="FinishInstallation" xml:space="preserve">
+    <value>Finalizar instalación</value>
+  </data>
+  <data name="Headquarters" xml:space="preserve">
+    <value>Sedes</value>
+  </data>
+  <data name="ImpersonateAsUser" xml:space="preserve">
+    <value>Suplantar a este usuario en modo de lectura</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Remover</value>
+  </data>
+  <data name="Observer" xml:space="preserve">
+    <value>Observador</value>
+  </data>
+  <data name="ObserverDisclaimerFormat" xml:space="preserve">
+    <value>Este es el contenido que &lt;b&gt; {0} &lt;/ b&gt; ve.</value>
+  </data>
+  <data name="Observers" xml:space="preserve">
+    <value>Observadores</value>
+  </data>
+  <data name="Supervisor" xml:space="preserve">
+    <value>Supervisor</value>
+  </data>
+  <data name="Supervisors" xml:space="preserve">
+    <value>Supervisores</value>
+  </data>
+  <data name="SupervisorsCountDescription" xml:space="preserve">
+    <value>Supervisores ({{count}})</value>
+  </data>
+  <data name="InterviewersCountDescription" xml:space="preserve">
+    <value>Entrevistadores ({{count}})</value>
+  </data>
+  <data name="ApiUsersCountDescription" xml:space="preserve">
+    <value>Usuarios API ({{count}})</value>
+  </data>
+  <data name="HeadquartersCountDescription" xml:space="preserve">
+    <value>Sedes ({{count}})</value>
+  </data>
+  <data name="ObserversCountDescription" xml:space="preserve">
+    <value>Observadores ({{count}})</value>
+  </data>
+  <data name="Supervisors_Edit" xml:space="preserve">
+    <value>Editar supervisor</value>
+  </data>
+  <data name="SupervisorsInTeam" xml:space="preserve">
+    <value>supervisores en su equipo</value>
+  </data>
+  <data name="Admin" xml:space="preserve">
+    <value>Administrar</value>
+  </data>
+  <data name="CreateAndTryLogin" xml:space="preserve">
+    <value>Crear y probar logan</value>
+  </data>
   <data name="CreationDate" xml:space="preserve">
     <value>Cuenta creada</value>
   </data>
@@ -183,35 +219,11 @@
   <data name="Email" xml:space="preserve">
     <value>Correo electrónico</value>
   </data>
-  <data name="FinishInstallation" xml:space="preserve">
-    <value>Finalizar instalación</value>
-  </data>
-  <data name="HeadquarterAccountCreationDate" xml:space="preserve">
-    <value>Fecha en que se creó la cuenta de la sede</value>
-  </data>
-  <data name="Headquarters" xml:space="preserve">
-    <value>Sedes</value>
-  </data>
-  <data name="HeadquartersCountDescription" xml:space="preserve">
-      <value>Sedes {{count}}</value>
-  </data>
-  <data name="HeadquartersEmail" xml:space="preserve">
-    <value>Correo electrónico de sede</value>
-  </data>
-  <data name="ImpersonateAsUser" xml:space="preserve">
-    <value>Suplantar a este usuario en modo de lectura</value>
-  </data>
   <data name="Interviewer" xml:space="preserve">
     <value>Entrevistador</value>
   </data>
-  <data name="InterviewerIssues" xml:space="preserve">
-    <value>Problemas de entrevistador</value>
-  </data>
   <data name="Interviewers" xml:space="preserve">
     <value>Entrevistadores</value>
-  </data>
-  <data name="InterviewersCountDescription" xml:space="preserve">
-      <value>Entrevistadores {{count}}</value>
   </data>
   <data name="Locked" xml:space="preserve">
     <value>Bloqueado</value>
@@ -219,65 +231,50 @@
   <data name="NotLinkedToDevice" xml:space="preserve">
     <value>Sin enlace con el dispositivo</value>
   </data>
+  <data name="TotalInterviewers" xml:space="preserve">
+    <value>Total de entrevistadores</value>
+  </data>
+  <data name="UserName" xml:space="preserve">
+    <value>Usuario</value>
+  </data>
+  <data name="AddObserver" xml:space="preserve">
+    <value>Adicionar observador</value>
+  </data>
+  <data name="TryLater" xml:space="preserve">
+    <value>Intente nuevamente más tarde</value>
+  </data>
+  <data name="HeadquarterAccountCreationDate" xml:space="preserve">
+    <value>Fecha en que se creó la cuenta de la sede</value>
+  </data>
+  <data name="SupervisorAccountCreationDate" xml:space="preserve">
+    <value>Fecha en que se creó la cuenta del supervisor</value>
+  </data>
   <data name="NotLinkedToDeviceTitle" xml:space="preserve">
     <value>Número de entrevistadores que aún no sincronizaron correctamente sus tabletas con el servidor</value>
   </data>
   <data name="NumberOfInterviewersInTeam" xml:space="preserve">
     <value>número de entrevistadores en el equipo</value>
   </data>
-  <data name="Observer" xml:space="preserve">
-    <value>Observador</value>
-  </data>
-  <data name="ObserverDisclaimerFormat" xml:space="preserve">
-    <value>Este es el contenido que &lt;b&gt; {0} &lt;/ b&gt; ve.</value>
-  </data>
-  <data name="Observers" xml:space="preserve">
-    <value>Observadores</value>
-  </data>
-  <data name="ObserversCountDescription" xml:space="preserve">
-      <value>Observadores ({{count}})</value>
+  <data name="AccountCreationDateTooltip" xml:space="preserve">
+    <value>Fecha cuando la cuenta fue creada</value>
   </data>
   <data name="ObserversEmail" xml:space="preserve">
     <value>Correo electrónico del Observador</value>
   </data>
-  <data name="Remove" xml:space="preserve">
-    <value>Remover</value>
-  </data>
-  <data name="Supervisor" xml:space="preserve">
-    <value>Supervisor</value>
-  </data>
-  <data name="SupervisorAccountCreationDate" xml:space="preserve">
-    <value>Fecha en que se creó la cuenta del supervisor</value>
-  </data>
   <data name="SupervisorEmail" xml:space="preserve">
     <value>Correo electrónico del supervisor</value>
   </data>
-  <data name="Supervisors" xml:space="preserve">
-    <value>Supervisores</value>
+  <data name="HeadquartersEmail" xml:space="preserve">
+    <value>Correo electrónico de sede</value>
   </data>
-  <data name="Supervisors_Edit" xml:space="preserve">
-    <value>Editar supervisor</value>
+  <data name="AddInterviewer" xml:space="preserve">
+    <value>Adicionar entrevistador</value>
   </data>
-  <data name="SupervisorsCountDescription" xml:space="preserve">
-      <value>Supervisores ({{count}})</value>
+  <data name="ArchivingStatusTitle" xml:space="preserve">
+    <value>Estado de archivo</value>
   </data>
-  <data name="SupervisorsInTeam" xml:space="preserve">
-    <value>supervisores en su equipo</value>
-  </data>
-  <data name="TotalInterviewers" xml:space="preserve">
-    <value>Total de entrevistadores</value>
-  </data>
-  <data name="TryLater" xml:space="preserve">
-    <value>Intente nuevamente más tarde</value>
-  </data>
-  <data name="UserName" xml:space="preserve">
-    <value>Usuario</value>
-  </data>
-  <data name="CreateAdministrator" xml:space="preserve">
-    <value>Create administrator</value>
-  </data>
-  <data name="PasswordChanged" xml:space="preserve">
-    <value>Contraseña para el usuario {0} cambiada</value>
+  <data name="InterviewerIssues" xml:space="preserve">
+    <value>Problemas de entrevistador</value>
   </data>
   <data name="ResetPassword" xml:space="preserve">
     <value>Reset Clave</value>
@@ -287,5 +284,35 @@
   </data>
   <data name="UserNotFound" xml:space="preserve">
     <value>Usuario no encontrado</value>
+  </data>
+  <data name="PasswordChanged" xml:space="preserve">
+    <value>Contraseña para el usuario {0} cambiada</value>
+  </data>
+  <data name="Filter_AllUsers" xml:space="preserve">
+    <value>Todos los usuarios</value>
+  </data>
+  <data name="Filter_WithMissingWorkspace" xml:space="preserve">
+    <value>Espacios de trabajo ausentes</value>
+  </data>
+  <data name="Filter_WithDisabledWorkspaces" xml:space="preserve">
+    <value>Con espacios de trabajo desactivados solo</value>
+  </data>
+  <data name="Filter_Locked" xml:space="preserve">
+    <value>Usuarios bloqueados</value>
+  </data>
+  <data name="Filter_Archived" xml:space="preserve">
+    <value>Usuarios archivados</value>
+  </data>
+  <data name="UsersTitle" xml:space="preserve">
+    <value>Usuarios</value>
+  </data>
+  <data name="AddUser" xml:space="preserve">
+    <value>Adicionar usuario</value>
+  </data>
+  <data name="UploadUsers" xml:space="preserve">
+    <value>Cargar usuarios</value>
+  </data>
+  <data name="ApiTokenTitle" xml:space="preserve">
+    <value>Token de API del usuario</value>
   </data>
 </root>

@@ -1,60 +1,87 @@
 /* Forms */
-.form-control{
-	border-color: $gray_form;
-	box-shadow: none;
-	&:hover, &:focus, &:active, &:active:focus{
-		@extend %shadow;
-	}
-	&.with-clear-btn{
-		padding-right: 40px;
-	}
+.form-control {
+    border-color: $gray_form;
+    box-shadow: none;
+
+    &:hover,
+    &:focus,
+    &:active,
+    &:active:focus {
+        @extend %shadow;
+    }
+
+    &.with-clear-btn {
+        padding-right: 40px;
+    }
 }
-.input-group .form-control{
-	&:hover, &:focus, &:active, &:active:focus{
-		z-index: 3;
-	}
+
+.input-group .form-control {
+
+    &:hover,
+    &:focus,
+    &:active,
+    &:active:focus {
+        z-index: 3;
+    }
 }
+
 .has-error {
-	.form-control, .field-to-fill{
-		box-shadow: inset 0 0 3px rgba(231, 73, 36, 0.6);
-		&:hover, &:focus, &:active, &:active:focus {
-			border-color: #c33615;
-			box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), inset 0 0 6px #f19580; 
-		}
-	}
+
+    .form-control,
+    .field-to-fill {
+        box-shadow: inset 0 0 3px rgba(231, 73, 36, 0.6);
+
+        &:hover,
+        &:focus,
+        &:active,
+        &:active:focus {
+            border-color: #c33615;
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), inset 0 0 6px #f19580;
+        }
+    }
 }
-.has-error .information-block .form-control{
-	box-shadow: none;
-	&:hover, &:focus, &:active, &:active:focus{
-		border-color: $gray_form;
-		@extend %shadow;
-	}
+
+.has-error .information-block .form-control {
+    box-shadow: none;
+
+    &:hover,
+    &:focus,
+    &:active,
+    &:active:focus {
+        border-color: $gray_form;
+        @extend %shadow;
+    }
 }
-.field{
-	position: relative;
-	.field-to-fill{
-		@extend %field-to-fill;
-	}
-	// &.answered, &.has-error{
-	// 	.btn-clear{
-	// 		@extend %visibility-visible;
-	// 	}
-	// }
+
+.field {
+    position: relative;
+
+    .field-to-fill {
+        @extend %field-to-fill;
+    }
+
+    // &.answered, &.has-error{
+    // 	.btn-clear{
+    // 		@extend %visibility-visible;
+    // 	}
+    // }
 }
+
 @include placeholder {
     font-weight: normal !important;
     font-style: italic;
     color: $gray_light !important;
 }
+
 input.wb-checkbox,
 input.checkbox-filter,
 input.double-checkbox,
 input.double-checkbox-white,
 .radio input.wb-radio,
-input.radio-row{
-	display: block;
+input.radio-row {
+    display: block;
     position: absolute;
-	left: -999999px;
+    left: -999999px;
 }
 
 .disabled-item {
@@ -62,703 +89,880 @@ input.radio-row{
     color: $gray-light;
 }
 
-input.wb-checkbox{
+input.wb-checkbox {
     @extend %questionnaire-sprite;
-	& ~ label:hover .tick,
-	&:focus ~ label .tick,
-  	& ~ label:focus .tick{
-    	background-position: -37px 2px;
-  	}
-  	&:checked ~ label .tick {
-    	background-position: -78px 2px;
-  	}
-  	&:checked ~ label:hover .tick,
-  	&:checked ~ label:focus .tick,
-	&:checked:focus ~ label .tick {
-    	background-position: -119px 2px;
-  	}
-  	&:disabled ~ label .tick {
-    	background-position: -160px 2px;
-  	}
-  	&:disabled ~ label:hover .tick,
-  	&:disabled ~ label:focus .tick{
-    	background-position: -201px 2px;
-  	}
-  	&:checked:disabled ~ label .tick{
-    	background-position: -242px 2px;
-  	}
-  	&:checked:disabled ~ label:hover .tick,
-  	&:checked:disabled ~ label:focus .tick{
-    	background-position: -283px 2px;
-	}
-}
 
-input.checkbox-filter{
-  	& ~ label{
-  		position: relative;
-  		padding-left: 30px;
-  		cursor: pointer;
-  	}
-  	& ~ label .tick {
-	    display: inline-block;
-    	@include size(25px, 20px);
-    	vertical-align: middle;
-	    @include absolute(0, null, null, -5px);
-	    background: transparent url("#{$assetsPath}/img/chekboxes.png") no-repeat;
-	    background-size: 68px 350px;
-	    background-position: 0 0;
-	    margin-right: 10px;
-		@include image-2x("#{$assetsPath}/img/chekboxes2k.png", 68px, 350px);
-	  }
-	&:focus ~ label .tick,
-  	& ~ label:hover .tick,
-  	& ~ label:focus .tick{
-    	background-position: 0px -36px;
-  	}
-  	&:checked ~ label .tick {
-    	background-position: 0px -72px;
-	}
-  	&:checked ~ label:hover .tick,
-	&:checked ~ label:focus .tick,
-	&:checked:focus ~ label .tick{
-    	background-position: 0px -108px;
-  	}
-  	&:disabled ~ label .tick,
-  	&:checked:disabled ~ label .tick {
-    	background-position: 0px -144px;
-  	}
-  	&:disabled ~ label:hover .tick,
-  	&:checked:disabled ~ label:hover .tick,
-  	&:disabled ~ label:focus .tick,
-  	&:checked:disabled ~ label:focus .tick {
-    	background-position: 0px -180px;
-	  }
-}
-input.double-checkbox{
-  	& ~ label{
-  		position: relative;
-  		cursor: pointer;
-  		margin: 0;
-  	}
-  	& ~ label .tick {
-	    display: inline-block;
-	    @include size(25px, 20px);
-	    vertical-align: middle;
-	    background: transparent url("#{$assetsPath}/img/chekboxes.png") no-repeat;
-	    background-size: 68px 350px;
-	    background-position: 0 -216px;
-		@include image-2x("#{$assetsPath}/img/chekboxes2k.png", 68px, 350px);
-  	}
-	& ~ label:hover .tick,
-	&:focus ~ label .tick,
-  	& ~ label:focus .tick{
-    	background-position: 0px -254px;
-  	}
-  	&:checked ~ label .tick {
-    	background-position: 0px -292px;
-  	}
-  	&:checked ~ label:hover .tick,
-  	&:checked ~ label:focus .tick,
-	&:checked:focus ~ label .tick {
-    	background-position: 0px -330px;
-  	}
-}
-input.double-checkbox-white{
-  	& ~ label{
-  		position: relative;
-  		cursor: pointer;
-  		margin: 0;
-  	}
-  	& ~ label .tick {
-	    display: inline-block;
-	    @include size(25px, 20px);
-	    vertical-align: middle;
-	    background: transparent url("#{$assetsPath}/img/chekboxes.png") no-repeat;
-	    background-size: 68px 350px;
-	    background-position: -44px -216px;
-		@include image-2x("#{$assetsPath}/img/chekboxes2k.png", 68px, 350px);
-	}
-	&:focus ~ label .tick,
-  	& ~ label:hover .tick,
-  	& ~ label:focus .tick{
-    	background-position: -44px -254px;
-  	}
-  	&:checked ~ label .tick {
-    	background-position: -44px -292px;
-  	}
-  	&:checked ~ label:hover .tick,
-  	&:checked ~ label:focus .tick,
-	&:checked:focus ~ label .tick {
-    	background-position: -44px -330px;
-  	}
-}
-.radio{
-	margin: 0;
-	label{
-	    color: $gray_light;
-	    font-weight: normal;
-	    padding: 7px 0;
-	}
-    input.wb-radio{
-	    @extend %questionnaire-sprite;
-	    &:checked + label{
-            color:  $gray_text;
-            font-weight: bold;
-        }
-       	& + label .tick {background-position: -326px 2px;}
+    &~label:hover .tick,
+    &:focus~label .tick,
+    &~label:focus .tick {
+        background-position: -37px 2px;
+    }
 
-		& + label:hover .tick,
-		&:focus + label .tick,
-	  	& + label:focus .tick{
-	    	background-position: -367px 2px;
-	  	}
-	  	&:checked + label .tick {
-	    	background-position: -408px 2px;
-	  	}
-	  	&:checked + label:hover .tick,
-	  	&:checked + label:focus .tick,
-		&:checked:focus + label .tick {
-	    	background-position: -449px 2px;
-	  	}
-	  	&:disabled + label .tick {
-	    	background-position: -572px 2px;
-	  	}
-	  	&:disabled + label:hover .tick,
-	  	&:disabled + label:focus .tick{
-	    	background-position: -613px 2px;
-	  	}
-	  	&:checked:disabled + label .tick{
-	    	background-position: -490px 2px;
-	  	}
-	  	&:checked:disabled + label:hover .tick,
-	  	&:checked:disabled + label:focus .tick{
-	    	background-position: -531px 2px;
-	  	}
+    &:checked~label .tick {
+        background-position: -78px 2px;
+    }
+
+    &:checked~label:hover .tick,
+    &:checked~label:focus .tick,
+    &:checked:focus~label .tick {
+        background-position: -119px 2px;
+    }
+
+    &:disabled~label .tick {
+        background-position: -160px 2px;
+    }
+
+    &:disabled~label:hover .tick,
+    &:disabled~label:focus .tick {
+        background-position: -201px 2px;
+    }
+
+    &:checked:disabled~label .tick {
+        background-position: -242px 2px;
+    }
+
+    &:checked:disabled~label:hover .tick,
+    &:checked:disabled~label:focus .tick {
+        background-position: -283px 2px;
     }
 }
-input.radio-row{
-	@extend %questionnaire-sprite;
-	& + label,
-	& + label .format-data{
-		font-family: "RobotoRegular";
-		font-weight: normal;
-	}
-	&:checked + label,
-	&:checked + label .format-data{
-		color:  $gray_text;
-		font-family: "RobotoBold";
-	}
-	& + label .tick {
-		background-position: -326px 2px;
-	}
 
-	& + label:hover .tick,
-	&:focus + label .tick,
-	  & + label:focus .tick{
-		background-position: -367px 2px;
-	  }
-	  &:checked + label .tick {
-		background-position: -735px 2px;
-	  }
-	  &:checked + label:hover .tick,
-	  &:checked + label:focus .tick,
-		&:checked:focus + label .tick {
-			background-position: -449px 2px;
-	  }
+input.checkbox-filter {
+    &~label {
+        position: relative;
+        padding-left: 30px;
+        cursor: pointer;
+    }
+
+    &~label .tick {
+        display: inline-block;
+        @include size(25px, 20px);
+        vertical-align: middle;
+        @include absolute(0, null, null, -5px);
+        background: transparent url("#{$assetsPath}/img/chekboxes.png") no-repeat;
+        background-size: 68px 350px;
+        background-position: 0 0;
+        margin-right: 10px;
+        @include image-2x("#{$assetsPath}/img/chekboxes2k.png", 68px, 350px);
+    }
+
+    &:focus~label .tick,
+    &~label:hover .tick,
+    &~label:focus .tick {
+        background-position: 0px -36px;
+    }
+
+    &:checked~label .tick {
+        background-position: 0px -72px;
+    }
+
+    &:checked~label:hover .tick,
+    &:checked~label:focus .tick,
+    &:checked:focus~label .tick {
+        background-position: 0px -108px;
+    }
+
+    &:disabled~label .tick,
+    &:checked:disabled~label .tick {
+        background-position: 0px -144px;
+    }
+
+    &:disabled~label:hover .tick,
+    &:checked:disabled~label:hover .tick,
+    &:disabled~label:focus .tick,
+    &:checked:disabled~label:focus .tick {
+        background-position: 0px -180px;
+    }
 }
-.control-label{
-	font-size: 14px;
-	line-height: 16px;
-	display: block;
-	margin-bottom: 15px; 
+
+input.double-checkbox {
+    &~label {
+        position: relative;
+        cursor: pointer;
+        margin: 0;
+    }
+
+    &~label .tick {
+        display: inline-block;
+        @include size(25px, 20px);
+        vertical-align: middle;
+        background: transparent url("#{$assetsPath}/img/chekboxes.png") no-repeat;
+        background-size: 68px 350px;
+        background-position: 0 -216px;
+        @include image-2x("#{$assetsPath}/img/chekboxes2k.png", 68px, 350px);
+    }
+
+    &~label:hover .tick,
+    &:focus~label .tick,
+    &~label:focus .tick {
+        background-position: 0px -254px;
+    }
+
+    &:checked~label .tick {
+        background-position: 0px -292px;
+    }
+
+    &:checked~label:hover .tick,
+    &:checked~label:focus .tick,
+    &:checked:focus~label .tick {
+        background-position: 0px -330px;
+    }
 }
-.input-group{
-	width: $form-width; 
-	&.date{
-		box-shadow: none;
-	}
-	input{
-		&:focus, &:active, &:active:focus{
-			outline: none;
-		}
-	}
-	.form-control{
-		border-color: $gray_form;
-		border-right: none;
-		input {
-			ul{
-				width: 100%;
-				top: 34px; 
-				left: 0px; 
-			}
-		}
-	}
-	.input-group-btn{
-		.btn{
-			height: $input-height-base;
-			border-color: $gray-form;
-			border-left: none;
-			&:hover, &:focus, &:active{
-				opacity: 0.5;
-			}
-			&:disabled, &.disabled{
-				background: $gray_form;
-				opacity: 1;
-			}
-			span{
-				$cross-height: 16px;
-				@include cancel($cross-height);
-				padding: ($input-height-base - 2*1px /*border*/ - 2*$padding-base-vertical - $cross-height)*0.5 0;
-				&:before{
-					top: (($cross-height - 2px)*0.5 - 1px);
-				}
-				&:after{
-					top: ($cross-height*0.5 - 4px);
-				}
-                
-			}
-            span.add{
+
+input.double-checkbox-white {
+    &~label {
+        position: relative;
+        cursor: pointer;
+        margin: 0;
+    }
+
+    &~label .tick {
+        display: inline-block;
+        @include size(25px, 20px);
+        vertical-align: middle;
+        background: transparent url("#{$assetsPath}/img/chekboxes.png") no-repeat;
+        background-size: 68px 350px;
+        background-position: -44px -216px;
+        @include image-2x("#{$assetsPath}/img/chekboxes2k.png", 68px, 350px);
+    }
+
+    &:focus~label .tick,
+    &~label:hover .tick,
+    &~label:focus .tick {
+        background-position: -44px -254px;
+    }
+
+    &:checked~label .tick {
+        background-position: -44px -292px;
+    }
+
+    &:checked~label:hover .tick,
+    &:checked~label:focus .tick,
+    &:checked:focus~label .tick {
+        background-position: -44px -330px;
+    }
+}
+
+.radio {
+    margin: 0;
+
+    label {
+        color: $gray_light;
+        font-weight: normal;
+        padding: 7px 0;
+    }
+
+    input.wb-radio {
+        @extend %questionnaire-sprite;
+
+        &:checked+label {
+            color: $gray_text;
+            font-weight: bold;
+        }
+
+        &+label .tick {
+            background-position: -326px 2px;
+        }
+
+        &+label:hover .tick,
+        &:focus+label .tick,
+        &+label:focus .tick {
+            background-position: -367px 2px;
+        }
+
+        &:checked+label .tick {
+            background-position: -408px 2px;
+        }
+
+        &:checked+label:hover .tick,
+        &:checked+label:focus .tick,
+        &:checked:focus+label .tick {
+            background-position: -449px 2px;
+        }
+
+        &:disabled+label .tick {
+            background-position: -572px 2px;
+        }
+
+        &:disabled+label:hover .tick,
+        &:disabled+label:focus .tick {
+            background-position: -613px 2px;
+        }
+
+        &:checked:disabled+label .tick {
+            background-position: -490px 2px;
+        }
+
+        &:checked:disabled+label:hover .tick,
+        &:checked:disabled+label:focus .tick {
+            background-position: -531px 2px;
+        }
+    }
+}
+
+input.radio-row {
+    @extend %questionnaire-sprite;
+
+    &+label,
+    &+label .format-data {
+        font-family: "RobotoRegular";
+        font-weight: normal;
+    }
+
+    &:checked+label,
+    &:checked+label .format-data {
+        color: $gray_text;
+        font-family: "RobotoBold";
+    }
+
+    &+label .tick {
+        background-position: -326px 2px;
+    }
+
+    &+label:hover .tick,
+    &:focus+label .tick,
+    &+label:focus .tick {
+        background-position: -367px 2px;
+    }
+
+    &:checked+label .tick {
+        background-position: -735px 2px;
+    }
+
+    &:checked+label:hover .tick,
+    &:checked+label:focus .tick,
+    &:checked:focus+label .tick {
+        background-position: -449px 2px;
+    }
+}
+
+.control-label {
+    font-size: 14px;
+    line-height: 16px;
+    display: block;
+    margin-bottom: 15px;
+}
+
+.input-group {
+    width: $form-width;
+
+    &.date {
+        box-shadow: none;
+    }
+
+    input {
+
+        &:focus,
+        &:active,
+        &:active:focus {
+            outline: none;
+        }
+    }
+
+    .form-control {
+        border-color: $gray_form;
+        border-right: none;
+
+        input {
+            ul {
+                width: 100%;
+                top: 34px;
+                left: 0px;
+            }
+        }
+    }
+
+    .input-group-btn {
+        .btn {
+            height: $input-height-base;
+            border-color: $gray-form;
+            border-left: none;
+
+            &:hover,
+            &:focus,
+            &:active {
+                opacity: 0.5;
+            }
+
+            &:disabled,
+            &.disabled {
+                background: $gray_form;
+                opacity: 1;
+            }
+
+            span {
+                $cross-height: 16px;
+                @include cancel($cross-height);
+                padding: ($input-height-base - 2*1px
+                        /*border*/
+                        - 2*$padding-base-vertical - $cross-height)*0.5 0;
+
+                &:before {
+                    top: (($cross-height - 2px)*0.5 - 1px);
+                }
+
+                &:after {
+                    top: ($cross-height*0.5 - 4px);
+                }
+
+            }
+
+            span.add {
                 $add-height: 16px;
                 @include add($add-height);
             }
-		}
-	} 
+        }
+    }
 }
+
 .bootstrap-select.btn-group,
-.bootstrap-select.dropdown{
-	width: $form-width !important;	
-	.dropdown-toggle{
-		box-shadow: none;
-		background-color: transparent;
-		text-transform: none;
-		letter-spacing: normal;
-		font-size: 14px;
-		line-height: 20px;
-		font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
-		border-color:  $gray_form;
-		height: 40px;
-		&:hover, &:focus, &:active, &:active:focus{
-			outline: none !important;
-			background-color: transparent;
-			border-color:  $gray_form;
-			@extend %shadow;
-		}
-		.filter-option{
+.bootstrap-select.dropdown {
+    width: $form-width !important;
+
+    .dropdown-toggle {
+        box-shadow: none;
+        background-color: transparent;
+        text-transform: none;
+        letter-spacing: normal;
+        font-size: 14px;
+        line-height: 20px;
+        font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+        border-color: $gray_form;
+        height: 40px;
+
+        &:hover,
+        &:focus,
+        &:active,
+        &:active:focus {
+            outline: none !important;
+            background-color: transparent;
+            border-color: $gray_form;
+            @extend %shadow;
+        }
+
+        .filter-option {
             @include text-overflow();
-            .filter-option-inner{
+
+            .filter-option-inner {
                 padding-right: 18px;
             }
-		}
-		.bs-caret .caret{
-		    right: 10px;
-		    top: 39%;
-		    @include size(0, 0); 
-		    display: block;
-		    border-top: 12px solid $gray-light;
-		    border-right: 7px solid transparent;
-		    border-left: 7px solid transparent;
-		    border-bottom: none;
-		}
-	}
-	.dropdown-menu{
-		width: 100%;
-		& > li > a{
-			span.text{
-				display: block !important;
-			}
-			padding: 10px;
-			white-space: normal;
-			&:hover, &:focus, &:active{
-				color: #000;
-			}
-		}
-	} 
-	&.open{
-		.dropdown-toggle{
-			@extend %shadow;
-		}
-		.bs-caret .caret{
-			border-top: none;
-   			border-bottom: 12px solid $gray-light;
-		}
-	}
-}
-ul.typeahead.dropdown-menu {
-	width: 100%;
-	li a {
-    	padding: 10px;
-	}
-	&>.active>a, &>.active>a:focus, &>.active>a:hover{
-		color: #000;
-		background-color: #f5f5f5;
-	}
-}
-.btn-input {
-   display: block;
-   .dropdown-toggle{
-   		background-color: transparent;
-   		box-shadow: none;
-   		border: 1px solid $gray_form;
-   		border-radius: 4px;
-   		width: $form-width;
-   		text-align: left;
-   		padding: 7px 12px;
-   		overflow: hidden;
-	    text-overflow: ellipsis;
-	    white-space: nowrap;
-   		&:hover, &:focus, &:active, &:active:focus{
-			@extend %shadow;
-		}
-   		span:first-child {
-		   left: 10px;
-		   @include text-overflow();
-		   position: absolute;
-		   right: 30px;
-		}
-		.caret-large {
-		    margin-top: -1px;
-		    position: absolute;
-		    right: 10px;
-		    top: 35%;
-		    @include size(0, 0); 
-		    display: block;
-		    border-top: 12px solid $gray-light;
-		    border-right: 7px solid transparent;
-		    border-left: 7px solid transparent;
-		}
-   }
-   .dropdown-menu > li{	
-   		&> a {
-	   		white-space: pre-wrap;
-	   		padding: 7px 10px;
-	   		color: $gray_text;
-			&:hover, &:focus{
-	   			background-color: $gray-super-light;
+        }
+
+        .bs-caret .caret {
+            right: 10px;
+            top: 39%;
+            @include size(0, 0);
+            display: block;
+            border-top: 12px solid $gray-light;
+            border-right: 7px solid transparent;
+            border-left: 7px solid transparent;
+            border-bottom: none;
+        }
+    }
+
+    .dropdown-menu {
+        width: 100%;
+
+        &>li>a {
+            span.text {
+                display: block !important;
             }
-             
-            &.disabled-item {
+
+            padding: 10px;
+            white-space: normal;
+
+            &:hover,
+            &:focus,
+            &:active {
+                color: #000;
+            }
+        }
+    }
+
+    &.open {
+        .dropdown-toggle {
+            @extend %shadow;
+        }
+
+        .bs-caret .caret {
+            border-top: none;
+            border-bottom: 12px solid $gray-light;
+        }
+    }
+}
+
+ul.typeahead.dropdown-menu {
+    width: 100%;
+
+    li a {
+        padding: 10px;
+    }
+
+    &>.active>a,
+    &>.active>a:focus,
+    &>.active>a:hover {
+        color: #000;
+        background-color: #f5f5f5;
+    }
+}
+
+.btn-input {
+    display: block;
+
+    .dropdown-toggle {
+        background-color: transparent;
+        box-shadow: none;
+        border: 1px solid $gray_form;
+        border-radius: 4px;
+        width: $form-width;
+        text-align: left;
+        padding: 7px 12px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+
+        &:hover,
+        &:focus,
+        &:active,
+        &:active:focus {
+            @extend %shadow;
+        }
+
+        span:first-child {
+            left: 10px;
+            @include text-overflow();
+            position: absolute;
+            right: 30px;
+        }
+
+        .caret-large {
+            margin-top: -1px;
+            position: absolute;
+            right: 10px;
+            top: 35%;
+            @include size(0, 0);
+            display: block;
+            border-top: 12px solid $gray-light;
+            border-right: 7px solid transparent;
+            border-left: 7px solid transparent;
+        }
+    }
+
+    .dropdown-menu {
+        &>li {
+            &>a {
+                white-space: pre-wrap;
+                padding: 7px 10px;
+                color: $gray_text;
+
+                &:hover,
+                &:focus {
+                    background-color: $gray-super-light;
+                }
+
+                &.disabled-item {
                     color: $gray-light;
                     text-decoration: line-through;
+                }
             }
-  		}
-   }
-   	&.open {
-		.dropdown-toggle{
-			@extend %shadow;
-		}
-   		.caret-large{
-   			border-top: none;
-   			border-bottom: 12px solid $gray-light;
-   		}
-	   	&> .dropdown-menu {
-		    display: block;
-		    width: $form-width;
-		    padding: 5px;
-	   		border: 1px solid $gray_form;
-	   		overflow: auto;
-	    	max-height: 300px;
-	    	border-radius: 4px;
-		} 
-   }
-} 
-.search{
-	min-width: 30px;
-	display: block;
-	@include absolute(0, null, null, 0);
- 	background-color: #fff;
-	border: 1px solid transparent;
-	border-radius: 3px;
-	margin-left: 10px;
-	.btn-search{
-		@include absolute(0, null, null, 0);
-		border: none;
-		height: 35px;
-		display: inline-block;
-		padding: 10px;
-	    background: url('#{$assetsPath}/img/search.png') no-repeat;
-	    background-position: 0 8px;
-	    background-size: 80px 20px;
-	    @include image-2x("#{$assetsPath}/img/search2k.png", 80px, 20px);
-	    cursor: pointer;
-		@include transition(none);
-	    &:hover{
-	    	background-position: -40px 8px;
-	    }
-	}
-	.btn-clear{
-		@include clear(22px);
-		right: -37px;
-		padding: 6px;
-		@extend %delete-outline;
-		transition: none;
-		background-color: #fff;
-	}
-	.form-control{
-		height: 35px;
-		width: 0;
-		display: inline-block;
-		padding-right: 0;
-		padding-left: 0;
-		border: none;
-		@extend %delete-outline;
-	}
-}	
-.active-search{
-	color: transparent;
-	&:after{
-		border-color: transparent !important;
-	}
-	.search{
- 		z-index: 4;
- 		border-color: $gray_form;
- 		width: calc(100% - 36px - 10px);
- 		max-width: 315px;
-		.form-control{
-			width: calc(100% - 36px);
-			padding-left: 10px;
-			padding-right: 10px;
-			font-family: "RobotoRegular";
-		}
-		.btn-search{
-			left: auto;
-			right: 0;
-			margin: 0 10px;
-			background-position: -40px 10px;
-			&:hover{
-				background-position: -60px 10px;
-			}
-		}
-		.btn-clear{
-			@extend %visibility-visible;
-		}
-	}
-}
-.block-filter {
-	.btn-group.bootstrap-select, 
-	.dropdown.bootstrap-select, 
-	.combo-box, 
-	.input-group, 
-	.field{
-		margin-left: 0;
-	}
-	.field{
-		width: $form-width;
-	}
-} 
+        }
 
-.combo-box{
-	position: relative;
-	width: $form-width;
-	@extend %combobox;
-	.btn-input .dropdown-toggle {
-		padding: 10px 38px 10px 10px;
-		span{
-			position: static !important;
-		}
-		.dropdown-menu{
-			z-index: 3;
-		}
-	}
-	.btn-clear{
-		@extend %visibility-visible;
-	}
-	@media (max-width: $screen-md-min){
-        .btn-clear{
+        &.show {
+            display: block;
+            width: $form-width;
+            padding: 5px;
+            border: 1px solid $gray_form;
+            overflow: auto;
+            max-height: 300px;
+            border-radius: 4px;
+        }
+    }
+
+    &.open {
+        .dropdown-toggle {
+            @extend %shadow;
+        }
+
+        .caret-large {
+            border-top: none;
+            border-bottom: 12px solid $gray-light;
+        }
+
+        &>.dropdown-menu {
+            display: block;
+            width: $form-width;
+            padding: 5px;
+            border: 1px solid $gray_form;
+            overflow: auto;
+            max-height: 300px;
+            border-radius: 4px;
+        }
+    }
+}
+
+.search {
+    min-width: 30px;
+    display: block;
+    @include absolute(0, null, null, 0);
+    background-color: #fff;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    margin-left: 10px;
+
+    .btn-search {
+        @include absolute(0, null, null, 0);
+        border: none;
+        height: 35px;
+        display: inline-block;
+        padding: 10px;
+        background: url('#{$assetsPath}/img/search.png') no-repeat;
+        background-position: 0 8px;
+        background-size: 80px 20px;
+        @include image-2x("#{$assetsPath}/img/search2k.png", 80px, 20px);
+        cursor: pointer;
+        @include transition(none);
+
+        &:hover {
+            background-position: -40px 8px;
+        }
+    }
+
+    .btn-clear {
+        @include clear(22px);
+        right: -37px;
+        padding: 6px;
+        @extend %delete-outline;
+        transition: none;
+        background-color: #fff;
+    }
+
+    .form-control {
+        height: 35px;
+        width: 0;
+        display: inline-block;
+        padding-right: 0;
+        padding-left: 0;
+        border: none;
+        @extend %delete-outline;
+    }
+}
+
+.active-search {
+    color: transparent;
+
+    &:after {
+        border-color: transparent !important;
+    }
+
+    .search {
+        z-index: 4;
+        border-color: $gray_form;
+        width: calc(100% - 36px - 10px);
+        max-width: 315px;
+
+        .form-control {
+            width: calc(100% - 36px);
+            padding-left: 10px;
+            padding-right: 10px;
+            font-family: "RobotoRegular";
+        }
+
+        .btn-search {
+            left: auto;
+            right: 0;
+            margin: 0 10px;
+            background-position: -40px 10px;
+
+            &:hover {
+                background-position: -60px 10px;
+            }
+        }
+
+        .btn-clear {
+            @extend %visibility-visible;
+        }
+    }
+}
+
+.block-filter {
+
+    .btn-group.bootstrap-select,
+    .dropdown.bootstrap-select,
+    .combo-box,
+    .input-group,
+    .field {
+        margin-left: 0;
+    }
+
+    .field {
+        width: $form-width;
+    }
+}
+
+.combo-box {
+    position: relative;
+    width: $form-width;
+    @extend %combobox;
+
+    .btn-input .dropdown-toggle {
+        padding: 10px 38px 10px 10px;
+
+        span {
+            position: static !important;
+        }
+
+        .dropdown-menu {
+            z-index: 3;
+        }
+    }
+
+    .btn-clear {
+        @extend %visibility-visible;
+    }
+
+    @media (max-width: $screen-md-min) {
+        .btn-clear {
             right: 0;
         }
-    }  
+    }
 }
-.form-date.answered{
-	.form-control{
-		padding-right: 35px;
-	}
-	.btn-clear{
-		z-index: 5;
-		right: 40px;
-	}
+
+.form-date.answered {
+    .form-control {
+        padding-right: 35px;
+    }
+
+    .btn-clear {
+        z-index: 5;
+        right: 40px;
+    }
 }
-ul.dropdown-menu li, ul.dropdown-menu li *{
-	word-wrap: break-word;
+
+ul.dropdown-menu li,
+ul.dropdown-menu li * {
+    word-wrap: break-word;
     overflow-wrap: break-word;
 }
-.form-date .input-group.date .form-control{
-	z-index: 0;
+
+.form-date .input-group.date .form-control {
+    z-index: 0;
 }
-.profile, .contain-input{
-	.form-control, .input-group, .btn-input{
-		margin-left: -10px;
-		& + .btn-clear{
-			right: 10px;
-		}
-	}
-	.input-group, .btn-input{
-		.form-control{
-			margin-left: 0;
-			width: $form-width;
-		}
-	} 
-	.help-block{
-		margin: 0;
-	}
-	.separate-line{
-		max-width: 500px;
-	}
-	.block-filter{
-		&:last-of-type{
-			margin-bottom: 25px;
-		}
-		h5{
-			margin-top: 5px;
-		}
-		label{
-			font-size: 14px;
-    		line-height: 16px;
-			margin-bottom: 2px;
-		}
-		.form-group{
-			.field{
-				float: left;
-				margin-right: 20px;
-			}
-			.help-block{
-				float: left;
-				max-width: 400px;
-				display: flex;
-				align-items: center;
-				min-height: 40px;
-			}
-			&:after{
-				display: block;
-				content: "";
-				clear: both;
-			}
-			.single-checkbox + label{
-				font-weight: bold;
-			}
-		}
-	}
-	h2{
-		margin-bottom: 15px;
-	}
+
+.profile,
+.contain-input {
+
+    .form-control,
+    .input-group,
+    .btn-input {
+        margin-left: -10px;
+
+        &+.btn-clear {
+            right: 10px;
+        }
+    }
+
+    .input-group,
+    .btn-input {
+        .form-control {
+            margin-left: 0;
+            width: $form-width;
+        }
+    }
+
+    .help-block {
+        margin: 0;
+    }
+
+    .separate-line {
+        max-width: 500px;
+    }
+
+    .block-filter {
+        &:last-of-type {
+            margin-bottom: 25px;
+        }
+
+        h5 {
+            margin-top: 5px;
+        }
+
+        label {
+            font-size: 14px;
+            line-height: 16px;
+            margin-bottom: 2px;
+        }
+
+        .form-group {
+            .field {
+                float: left;
+                margin-right: 20px;
+            }
+
+            .help-block {
+                float: left;
+                max-width: 400px;
+                display: flex;
+                align-items: center;
+                min-height: 40px;
+            }
+
+            &:after {
+                display: block;
+                content: "";
+                clear: both;
+            }
+
+            .single-checkbox+label {
+                font-weight: bold;
+            }
+        }
+    }
+
+    h2 {
+        margin-bottom: 15px;
+    }
 }
+
 .profile .form-control .combo-box .btn-clear {
     right: -10px;
 }
-.contain-input .block-filter .form-group .single-checkbox + label{
-	margin-top: 10px;
-}
-@media (max-width: $screen-md-min){
-    .profile{
-		.separate-line{
-			margin-left: -10px !important;
-		}
-    } 
-}
-@media only screen and (max-width: 780px){
-	.profile{
-		.block-filter{
-			.form-group{
-				.field{
-					float: none;
-					margin-right: 0;
-				}
-				.help-block{
-					float: none;
-					margin-top: 10px;
 
-					max-width: 280px;
-				}
-			}
-		}
-	}
-} 
-.input-group.hidden-input-group-addon-inside .form-control{
-	border-right: 1px solid $gray_form;
-	border-top-right-radius: 4px !important;
-	border-bottom-right-radius: 4px !important;
+.contain-input .block-filter .form-group .single-checkbox+label {
+    margin-top: 10px;
 }
-.input-group-addon{
-	background-color: transparent;
-	border-color: $gray_form;
-	border-left: none;
-	border-bottom-right-radius: 4px !important;
-	border-top-right-radius: 4px !important;
-	padding: 3px 10px; 
-	cursor: pointer;
-	color: $gray_light;
-	@include transition(color, 0.2s);
-	&:hover, &:focus, &:active{
-		color: darken($gray_light, 30%);
-	}
+
+@media (max-width: $screen-md-min) {
+    .profile {
+        .separate-line {
+            margin-left: -10px !important;
+        }
+    }
 }
-.compulsory-field{
-	position: relative;
-	&:before{
-		display: block;
-		content: "*";
-		color: $red_error;
-		@include absolute(0, null, null, -10px);
-		font-size: 20px;
-	}
+
+@media only screen and (max-width: 780px) {
+    .profile {
+        .block-filter {
+            .form-group {
+                .field {
+                    float: none;
+                    margin-right: 0;
+                }
+
+                .help-block {
+                    float: none;
+                    margin-top: 10px;
+
+                    max-width: 280px;
+                }
+            }
+        }
+    }
 }
-textarea.field-to-fill{
-	resize: none;
-	max-height: 500px;
-	display: block;
-	height: 41px;
+
+.input-group.hidden-input-group-addon-inside .form-control {
+    border-right: 1px solid $gray_form;
+    border-top-right-radius: 4px !important;
+    border-bottom-right-radius: 4px !important;
+}
+
+.input-group-addon {
+    background-color: transparent;
+    border-color: $gray_form;
+    border-left: none;
+    border-bottom-right-radius: 4px !important;
+    border-top-right-radius: 4px !important;
+    padding: 3px 10px;
+    cursor: pointer;
+    color: $gray_light;
+    @include transition(color, 0.2s);
+
+    &:hover,
+    &:focus,
+    &:active {
+        color: darken($gray_light, 30%);
+    }
+}
+
+.compulsory-field {
+    position: relative;
+
+    &:before {
+        display: block;
+        content: "*";
+        color: $red_error;
+        @include absolute(0, null, null, -10px);
+        font-size: 20px;
+    }
+}
+
+textarea.field-to-fill {
+    resize: none;
+    max-height: 500px;
+    display: block;
+    height: 41px;
     min-height: 41px;
 }
 
 
 
-.form-block{
-	label{
-		font: 14px/16px "RobotoRegular";
-		font-weight: normal;
-		color: $gray-highlight-font;
-	}
-	input.checkbox-filter{
-		& ~ label{
-			&:hover, &:focus{
-				color: $gray_text
-			}
-	  		.tick {
-	  			left: -5px;
-	  		}
-		}
-		&:checked ~ label{
-			color: #3f3f3f;
-			font-weight: 700;
-		}
-	}
+.form-block {
+    label {
+        font: 14px/16px "RobotoRegular";
+        font-weight: normal;
+        color: $gray-highlight-font;
+    }
+
+    input.checkbox-filter {
+        &~label {
+
+            &:hover,
+            &:focus {
+                color: $gray_text
+            }
+
+            .tick {
+                left: -5px;
+            }
+        }
+
+        &:checked~label {
+            color: #3f3f3f;
+            font-weight: 700;
+        }
+    }
 }
-.form-container{
-	.form-inline{
-		.form-group{
-			vertical-align: top;
-			.field{
-				width: 250px;
-			}
-		}
-	}
-	.form-group{
-		
-		.field{
-			margin-right: 20px;
-			width: 100%;
-		}
-		// & > .field{
-		// 	width: 100%;
-		// }
-		input{
-			width: 100%;
-		}
-		.help-block{
-			font-size: 14px;
-			line-height: 16px;
-			font-style: italic;
-		}
-	}
-	
+
+.form-container {
+    .form-inline {
+        .form-group {
+            vertical-align: top;
+
+            .field {
+                width: 250px;
+            }
+        }
+    }
+
+    .form-group {
+
+        .field {
+            margin-right: 20px;
+            width: 100%;
+        }
+
+        // & > .field{
+        // 	width: 100%;
+        // }
+        input {
+            width: 100%;
+        }
+
+        .help-block {
+            font-size: 14px;
+            line-height: 16px;
+            font-style: italic;
+        }
+    }
+
 
 }

@@ -1,32 +1,28 @@
 <template>
-    <HqLayout :title="$config.model.title"
-        :hasFilter="false">
-        <template slot="headers">
+    <HqLayout :title="$config.model.title" :hasFilter="false">
+        <template v-slot:headers>
             <ol class="breadcrumb">
                 <li>
-                    <a :href="this.$config.model.surveySetup">
-                        {{this.$t('MainMenu.SurveySetup')}}
+                    <a :href="$config.model.surveySetup">
+                        {{ $t('MainMenu.SurveySetup') }}
                     </a>
                 </li>
                 <li>
-                    <a :href="this.$config.model.import">
-                        {{this.$t('QuestionnaireImport.ListOfMyQuestionnaires')}}
+                    <a :href="$config.model.import">
+                        {{ $t('QuestionnaireImport.ListOfMyQuestionnaires') }}
                     </a>
                 </li>
             </ol>
-            <h1>{{this.$t('ImportQuestionnaire.PageHeader')}}</h1>
+            <h1>{{ $t('ImportQuestionnaire.PageHeader') }}</h1>
             <div class="signed-name">
-                {{this.$t('ImportQuestionnaire.SignedInBlock', {user: this.$config.model.designerUserName })}}
+                {{ $t('ImportQuestionnaire.SignedInBlock', { user: $config.model.designerUserName }) }}
 
-                <a :href="this.$config.model.logoutFromDesigner">
-                    {{this.$t('ImportQuestionnaire.SignOut')}}
+                <a :href="$config.model.logoutFromDesigner">
+                    {{ $t('ImportQuestionnaire.SignOut') }}
                 </a>
             </div>
         </template>
-        <DataTables
-            ref="table"
-            :tableOptions="tableOptions"
-            tableClass='import-interview'></DataTables>
+        <DataTables ref="table" :tableOptions="tableOptions" tableClass='import-interview'></DataTables>
     </HqLayout>
 </template>
 
@@ -54,7 +50,7 @@ export default {
                         name: 'LastEntryDate',
                         'class': 'changed-recently',
                         title: this.$t('ImportQuestionnaire.Table_LastModified'),
-                        render: function(data) {
+                        render: function (data) {
                             if (data === null || data === undefined || data === '')
                                 return ''
                             const utcDate = moment.utc(data)

@@ -119,6 +119,7 @@ namespace WB.UI.Headquarters.Code
             {
                 c.SwaggerEndpoint("../swagger/v1/swagger.json", "Survey Solutions API");
                 c.RoutePrefix = "apidocs";
+                c.EnableDeepLinking();
             });
         }
     }

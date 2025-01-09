@@ -6,7 +6,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 
 namespace WB.UI.Shared.Enumerator.CustomServices
 {
-    public class VibrationService : IVirbationService
+    public class VibrationService : IVibrationService
     {
         private readonly IMvxAndroidCurrentTopActivity currentTopActivity;
 

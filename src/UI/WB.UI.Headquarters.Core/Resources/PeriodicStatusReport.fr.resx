@@ -135,6 +135,12 @@
   <data name="AverageInterviewDuration" xml:space="preserve">
     <value>Durée moyenne de l'entretien</value>
   </data>
+  <data name="AverageInterviewDurationDescription" xml:space="preserve">
+    <value>La durée moyenne entre le moment où la première réponse est enregistrée sur une tablette et le moment où l'enquêteur marque le questionnaire comme terminé.</value>
+  </data>
+  <data name="AverageInterviewDurationForSupervisors" xml:space="preserve">
+    <value>Temps moyen que l'entretien a été présenté sur l'écran de l'enquêteur avant la fin par le superviseur.</value>
+  </data>
   <data name="AverageOverallCaseProcessingTime" xml:space="preserve">
     <value>Délai moyen de traitement global</value>
   </data>
@@ -150,17 +156,11 @@
   <data name="BackToSupervisors" xml:space="preserve">
     <value>Retour aux chefs d'équipe</value>
   </data>
-  <data name="By" xml:space="preserve">
-    <value>Par</value>
+  <data name="BackToTeams" xml:space="preserve">
+    <value>Retour aux équipes</value>
   </data>
   <data name="Day" xml:space="preserve">
     <value>Jour</value>
-  </data>
-  <data name="From" xml:space="preserve">
-    <value>A partir de</value>
-  </data>
-  <data name="InThe" xml:space="preserve">
-    <value>dans le</value>
   </data>
   <data name="Month" xml:space="preserve">
     <value>Mois</value>
@@ -168,11 +168,17 @@
   <data name="NumberOfCompletedInterviews" xml:space="preserve">
     <value>Nombre d'entretiens achevés</value>
   </data>
+  <data name="NumberOfCompletedInterviewsDescriptionPerTeam" xml:space="preserve">
+    <value>Nombre d'entretiens achevés par une équipe. Les entretiens rejetés puis achevés sont comptés comme des événements d'achèvement distincts.</value>
+  </data>
+  <data name="NumberOfCompletedInterviewsDescriptionPerInterviewer" xml:space="preserve">
+    <value>Nombre d'entretiens achevés par enquêteur. Les entretiens rejetés puis achevés sont comptés comme des événements d'achèvement distincts.</value>
+  </data>
   <data name="NumberOfInterviewsApprovedByHQ" xml:space="preserve">
-    <value>Nombre d’entetiens approuvés par le quartier général</value>
+    <value>Nombre d’entretiens approuvés par le quartier général</value>
   </data>
   <data name="NumberOfInterviewsApprovedByHQDescription" xml:space="preserve">
-    <value>Nombre de entretiens recueillis par {0} approuvé par le QG.</value>
+    <value>Nombre d'entretiens recueillis par {0} approuvé par le QG.</value>
   </data>
   <data name="NumberOfInterviewTransactionsByHQ" xml:space="preserve">
     <value>Nombre d'actions sur des entretiens par le QG</value>
@@ -185,6 +191,9 @@
   </data>
   <data name="NumberOfInterviewTransactionsBySupervisorDescriptionPerTeam" xml:space="preserve">
     <value>Nombre d'approbations et de rejets faits par un chef d'équipe sur les entretiens réalisés par un {0}.</value>
+  </data>
+  <data name="NumberOfInterviewTransactionsBySupervisorDescriptionPerInterviewer" xml:space="preserve">
+    <value>Nombre d'approbations et de rejets faits par un chef d'équipe sur les entretiens réalisés par enquêteur</value>
   </data>
   <data name="Period" xml:space="preserve">
     <value>Unité de temps</value>
@@ -219,20 +228,20 @@
   <data name="InterviewActions" xml:space="preserve">
     <value>actions d'entretien</value>
   </data>
+  <data name="By" xml:space="preserve">
+    <value>Par</value>
+  </data>
+  <data name="InThe" xml:space="preserve">
+    <value>dans le</value>
+  </data>
+  <data name="From" xml:space="preserve">
+    <value>A partir de</value>
+  </data>
   <data name="InTheSupervisorTeamFormat" xml:space="preserve">
     <value>dans l'équipe {0}</value>
   </data>
   <data name="LastDateToShowLabel" xml:space="preserve">
     <value>A partir de</value>
-  </data>
-  <data name="NumberOfCompletedInterviewsDescriptionPerTeam" xml:space="preserve">
-    <value>Nombre d'entretiens achevés par une équipe. Les entretiens rejetés puis achevés sont comptés comme des événements d'achèvement distincts.</value>
-  </data>
-  <data name="PeriodUnit" xml:space="preserve">
-    <value>Durée</value>
-  </data>
-  <data name="AverageInterviewDurationDescription" xml:space="preserve">
-    <value>La durée moyenne entre le moment où la première réponse est enregistrée sur une tablette et le moment où l'enquêteur marque le questionnaire comme terminé.</value>
   </data>
   <data name="OverTheLast" xml:space="preserve">
     <value>Pendant le dernier</value>

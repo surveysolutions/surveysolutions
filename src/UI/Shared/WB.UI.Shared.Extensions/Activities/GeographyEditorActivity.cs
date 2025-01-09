@@ -6,6 +6,7 @@ using Android.Views;
 using Android.Widget;
 using Esri.ArcGISRuntime.UI.Controls;
 using MvvmCross.Binding.BindingContext;
+using MvvmCross.WeakSubscription;
 using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.UI.Shared.Enumerator.Activities;
@@ -20,11 +21,14 @@ namespace WB.UI.Shared.Extensions.Activities
         Theme = "@style/AppTheme", 
         ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize,
         Exported = false)]
-    public class GeographyEditorActivity : BaseActivity<GeographyEditorViewModel>
+    public class GeographyEditorActivity : MapsBaseActivity<GeographyEditorViewModel>
     {
         protected override int ViewResourceId => Resource.Layout.interview_area_editor;
 
         public static Action<AreaEditorResult> OnAreaEditCompleted;
+
+        private MvxWeakEventSubscription<ImageButton> clickedMenuButton;
+        private MvxWeakEventSubscription<ImageButton> clickedZoomMenuButton;
 
         private void Cancel()
         {
@@ -38,12 +42,14 @@ namespace WB.UI.Shared.Extensions.Activities
             base.OnCreate(bundle);
 
             this.ViewModel.MapView = this.FindViewById<MapView>(Resource.Id.map_view);
-
-            var toolbar = this.FindViewById<Toolbar>(Resource.Id.toolbar);
-            toolbar.Title = "";
-            this.SetSupportActionBar(toolbar);
             
             this.ViewModel.OnAreaEditCompleted = OnAreaEditCompleted;
+            
+            var buttonMenu = this.FindViewById<ImageButton>(Resource.Id.butMenu);
+            clickedMenuButton = buttonMenu.WeakSubscribe(nameof(buttonMenu.Click), this.ClickedMenuButton);
+        
+            var buttonEye = this.FindViewById<ImageButton>(Resource.Id.butZoomMenu);
+            clickedZoomMenuButton = buttonEye.WeakSubscribe(nameof(buttonEye.Click), this.ClickedZoomButton);
         }
 
         protected override bool BackButtonCustomAction => true;
@@ -51,21 +57,29 @@ namespace WB.UI.Shared.Extensions.Activities
         {
             Cancel();
         }
-
-        public override bool OnCreateOptionsMenu(IMenu menu)
+        
+        private void ClickedZoomButton(object sender, EventArgs e)
         {
-            this.MenuInflater.Inflate(Resource.Menu.area_editor, menu);
-
-            menu.LocalizeMenuItem(Resource.Id.map_editor_exit, UIResources.MenuItem_Title_AreaCancelEdit);
-
-            return base.OnCreateOptionsMenu(menu);
+            ShowPopupMenu((ImageButton)sender, [
+                new CustomMenuItem(UIResources.MenuItem_Title_ZoomMap, () => this.ViewModel.ShowFullMapCommand.Execute(), Resource.Drawable.icon_zoom_map),
+                new CustomMenuItem(UIResources.MenuItem_Title_ZoomShapefile, () => this.ViewModel.ShowShapefileCommand.Execute(), Resource.Drawable.icon_zoom_everything),
+                new CustomMenuItem(UIResources.MenuItem_Title_ZoomCollectedData, () => this.ViewModel.ShowAllItemsCommand.Execute(), Resource.Drawable.icon_zoom_collected_data),
+            ]);
         }
-        public override bool OnOptionsItemSelected(IMenuItem item)
+
+        private void ClickedMenuButton(object sender, EventArgs e)
         {
-            if(item.ItemId == Resource.Id.map_editor_exit)
-                this.ViewModel.CancelCommand.Execute();
+            List<CustomMenuItem> customMenuItems = new();
+            customMenuItems.Add(new CustomMenuItem(UIResources.MenuItem_Title_ChangeMap, () => this.ViewModel.SwitchMapCommand.Execute(), Resource.Drawable.icon_change_map));
+            customMenuItems.Add(new CustomMenuItem(UIResources.MenuItem_Title_ChangeShapefile, () => this.ViewModel.SwitchShapefileCommand.Execute(), Resource.Drawable.icon_change_shapefile));
+                
+            customMenuItems.Add(this.ViewModel.IsLocationEnabled
+                ? new CustomMenuItem(UIResources.MenuItem_Title_HideLocation, () => this.ViewModel.SwitchLocatorCommand.Execute(), Resource.Drawable.icon_location)
+                : new CustomMenuItem(UIResources.MenuItem_Title_ShowLocation, () => this.ViewModel.SwitchLocatorCommand.Execute(), Resource.Drawable.icon_location));
             
-            return base.OnOptionsItemSelected(item);
+            customMenuItems.Add(new CustomMenuItem(UIResources.MenuItem_Title_AreaCancelEdit, () => this.ViewModel.CancelCommand.Execute(), Resource.Drawable.icon_exit));
+
+            ShowPopupMenu((ImageButton)sender, customMenuItems);
         }
 
         protected override void Dispose(bool disposing)
@@ -73,6 +87,11 @@ namespace WB.UI.Shared.Extensions.Activities
             if (disposing)
             {
                 this.ViewModel.OnAreaEditCompleted = null;
+                
+                clickedMenuButton?.Dispose();
+                clickedMenuButton = null;
+                clickedZoomMenuButton?.Dispose();
+                clickedZoomMenuButton = null;
             }
 
             base.Dispose(disposing);

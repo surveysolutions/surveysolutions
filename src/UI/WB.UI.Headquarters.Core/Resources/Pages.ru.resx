@@ -594,7 +594,7 @@
   <data name="ApprovedByHeadquarters" xml:space="preserve">
     <value>Утверждено хедквотером</value>
   </data>
-  <data name="ApprovedByupervisor" xml:space="preserve">
+  <data name="ApprovedBySupervisor" xml:space="preserve">
     <value>Утверждена супервизором</value>
   </data>
   <data name="Attention" xml:space="preserve">
@@ -1138,7 +1138,7 @@
     <value> Отключить поддержку карт ESRI</value>
   </data>
   <data name="GetEsriExtraDescription" xml:space="preserve">
-    <value>Она нужна только если вы пользуетесь функциональностью ESRI GIS. Включение этой фунции значительно увеличит размер приложения и время загрузки.</value>
+      <value>Функциональность ГИС значительно увеличит размер приложения и время загрузки. Следуйте инструкциям вашего руководителя относительно того, какая версия приложения Interviewer (с картами или без) необходима для вашей задачи.</value>
   </data>
   <data name="StatusDuration" xml:space="preserve">
     <value>Длительность статусов</value>

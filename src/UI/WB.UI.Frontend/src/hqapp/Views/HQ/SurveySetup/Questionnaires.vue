@@ -1,30 +1,22 @@
 <template>
-    <HqLayout
-        :title="$config.model.title"
-        :hasFilter="false"
-        :topicButton="$t('Dashboard.ImportTemplate')"
-        :topicButtonRef="
-            !$config.model.isObserver
-                ? $config.model.importQuestionnaireUrl
-                : ''
-        "
-    >
-        <ol class="list-unstyled" slot="subtitle">
-            <li>{{ this.$t('Dashboard.SurveySetupIntroMessage1') }}</li>
-            <li>{{ this.$t('Dashboard.SurveySetupIntroMessage2') }}</li>
-        </ol>
+    <HqLayout :title="$config.model.title" :hasFilter="false" :topicButton="$t('Dashboard.ImportTemplate')"
+        :topicButtonRef="!$config.model.isObserver
+        ? $config.model.importQuestionnaireUrl
+        : ''
+        ">
+        <template v-slot:subtitle>
+            <ol class="list-unstyled">
+                <li>{{ $t('Dashboard.SurveySetupIntroMessage1') }}</li>
+                <li>{{ $t('Dashboard.SurveySetupIntroMessage2') }}</li>
+            </ol>
+        </template>
 
-        <DataTables
-            ref="table"
-            multiorder
-            :tableOptions="tableOptions"
-            :contextMenuItems="contextMenuItems"
-        ></DataTables>
 
-        <ModalFrame
-            ref="deleteQuestionnaireModal"
-            :title="$t('Pages.ConfirmationNeededTitle')"
-        >
+
+        <DataTables ref="table" multiorder :tableOptions="tableOptions" :contextMenuItems="contextMenuItems">
+        </DataTables>
+
+        <ModalFrame ref="deleteQuestionnaireModal" :title="$t('Pages.ConfirmationNeededTitle')">
             <form onsubmit="return false;">
                 <p style="color: red">
                     {{ $t('Pages.GlobalSettings_DeleteQuestionnaireWarning') }}
@@ -33,7 +25,7 @@
                     {{
                         $t(
                             'Pages.GlobalSettings_DeleteQuestionnaireConfirmation',
-                        )
+                    )
                     }}
                 </p>
                 <p class="text-danger" v-if="this.deletionWarnMsg">
@@ -41,37 +33,27 @@
                 </p>
                 <div class="form-group">
                     <div style="overflow-x: auto">
-                        <label
-                            style="white-space: pre"
-                            class="control-label"
-                            for="deleteConfirmInput"
-                        >
+                        <label style="white-space: pre" class="control-label" for="deleteConfirmInput">
                             {{ deletionApproveLabel }}
                         </label>
                     </div>
                 </div>
                 <div class="form-group">
-                    <input
-                        type="text"
-                        class="form-control"
-                        id="deleteConfirmInput"
-                        v-model="deletionQuestionnaireName"
-                    />
+                    <input type="text" class="form-control" id="deleteConfirmInput"
+                        v-model="deletionQuestionnaireName" />
                 </div>
             </form>
-            <div slot="actions">
-                <button
-                    type="button"
-                    class="btn btn-danger"
-                    :disabled="deleteBtnDisabled"
-                    @click="deleteQuestionnaire"
-                >
-                    {{ $t('Common.Delete') }}
-                </button>
-                <button type="button" class="btn btn-link" data-dismiss="modal">
-                    {{ $t('Common.Cancel') }}
-                </button>
-            </div>
+            <template v-slot:actions>
+                <div>
+                    <button type="button" class="btn btn-danger" :disabled="deleteBtnDisabled"
+                        @click="deleteQuestionnaire">
+                        {{ $t('Common.Delete') }}
+                    </button>
+                    <button type="button" class="btn btn-link" data-bs-dismiss="modal">
+                        {{ $t('Common.Cancel') }}
+                    </button>
+                </div>
+            </template>
         </ModalFrame>
     </HqLayout>
 </template>
@@ -121,8 +103,8 @@ export default {
                         '/' +
                         encodeURI(
                             selectedRow.questionnaireId +
-                                '$' +
-                                selectedRow.version,
+                            '$' +
+                            selectedRow.version,
                         )
                 },
             })
@@ -346,7 +328,7 @@ export default {
                     )
                     .Delete()
                 if (response.status == 200) {
-                    this.$refs.deleteQuestionnaireModal.modal('hide')
+                    this.$refs.deleteQuestionnaireModal.hide()
                 }
                 this.reloadTable()
             }

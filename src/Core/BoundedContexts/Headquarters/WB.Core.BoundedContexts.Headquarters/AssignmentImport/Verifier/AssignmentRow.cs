@@ -26,6 +26,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         public AssignmentWebMode WebMode { get; set; }
         public AssignmentRecordAudio RecordAudio { get; set; }
         public AssignmentComments Comments { get; set; }
+        public AssignmentTargetArea TargetArea { get; set; }
 
         public override string ToString() =>
             $"{InterviewIdValue?.Value}[{string.Join("_", RosterInstanceCodes.Select(x => x.Value))}]";
@@ -208,4 +209,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
     [DebuggerDisplay("{Value}")]
     public class AssignmentComments : AssignmentValue { }
+    
+    [DebuggerDisplay("{Value}")]
+    public class AssignmentTargetArea : AssignmentValue { }
 }

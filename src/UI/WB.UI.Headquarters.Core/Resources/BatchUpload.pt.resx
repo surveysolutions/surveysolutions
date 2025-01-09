@@ -117,32 +117,20 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AdvancedMode" xml:space="preserve">
-    <value>Modo de carregamento de dados avançada</value>
+    <data name="AdvancedMode" xml:space="preserve">
+    <value>Modo de carregamento de dados avançado</value>
   </data>
   <data name="AdvancedModeDescription" xml:space="preserve">
-    <value>Para pré-carregar dados mais seções e variáveis, você pode preparar um conjunto de arquivos Tab que correspondem à estrutura de seu questionário e colocar em um arquivo. zip. Por favor, use o arquivo de modelo abaixo. Você pode colocar apenas aqueles arquivos e colunas que você deseja carregar. Todas as colunas deixaram falta ou com títulos não correspondente a uma variável existente no questionário será ignorado.</value>
+    <value>Para pré-carregar dados em mais seções e variáveis, você pode preparar um conjunto de arquivos .tab que correspondem à estrutura do seu questionário e colocá-los em um arquivo .zip. Por favor, use o arquivo de modelo abaixo. Você pode colocar apenas aqueles arquivos e colunas que deseja carregar. Quaisquer colunas ausentes ou com títulos que não correspondam a uma variável existente no questionário serão ignoradas.</value>
   </data>
   <data name="All" xml:space="preserve">
     <value>Todos</value>
   </data>
-  <data name="AreYouSureYouWantToDeleteFormat" xml:space="preserve">
-    <value>Tem a certeza que deseja apagar o arquivo</value>
-  </data>
-  <data name="BatchUpload_Title" xml:space="preserve">
-    <value>Lote de upload</value>
-  </data>
   <data name="BrowseTeams" xml:space="preserve">
-    <value>Pesquisar equipas</value>
+    <value>Pesquisar equipes</value>
   </data>
   <data name="Code" xml:space="preserve">
     <value>Código</value>
-  </data>
-  <data name="Column" xml:space="preserve">
-    <value>Coluna</value>
-  </data>
-  <data name="CreateSample" xml:space="preserve">
-    <value>Criar amostra apartir destes dados</value>
   </data>
   <data name="CreateUsers" xml:space="preserve">
     <value>Criar usuários</value>
@@ -151,7 +139,7 @@
     <value>Criando usuários</value>
   </data>
   <data name="DataIsValid" xml:space="preserve">
-    <value>Dados são válidos</value>
+    <value>Os dados são válidos</value>
   </data>
   <data name="Delete" xml:space="preserve">
     <value>Apagar</value>
@@ -159,56 +147,29 @@
   <data name="Details" xml:space="preserve">
     <value>Detalhes</value>
   </data>
-  <data name="DownloadInvalidInterviews" xml:space="preserve">
-    <value>Baixar entrevistas inválidas</value>
-  </data>
-  <data name="EstimatedTime" xml:space="preserve">
-    <value>Tempo estimado</value>
+  <data name="DownloadTemplateArchive" xml:space="preserve">
+    <value>Baixar modelo .zip para este questionário</value>
   </data>
   <data name="FileName" xml:space="preserve">
     <value>Nome do arquivo</value>
   </data>
-  <data name="FileNotParsed" xml:space="preserve">
-    <value>Arquivo não foi analisado. Pode ser carregado somente arquivo delimitado por tabulação.</value>
-  </data>
   <data name="FileSize" xml:space="preserve">
     <value>Tamanho do arquivo</value>
   </data>
-  <data name="FileSizeLimit" xml:space="preserve">
-    <value>O tamanho do arquivo não pode exceder 300MB.</value>
-  </data>
   <data name="Finished" xml:space="preserve">
-    <value>Terminou</value>
+    <value>Concluído</value>
   </data>
   <data name="FinishedWithError" xml:space="preserve">
-    <value>Terminou com erro</value>
+    <value>Concluído com erro(s)</value>
   </data>
   <data name="FinishedWithErrorMessage" xml:space="preserve">
-    <value>Terminou com erro, razão pela qual:</value>
-  </data>
-  <data name="FormatNotSupported" xml:space="preserve">
-    <value>Formato de arquivo não é suportado, dados dentro dela serão ignorados</value>
-  </data>
-  <data name="ImportInProgress" xml:space="preserve">
-    <value>Outro processo de importação de entrevista está sendo executado. É permitido somente uma entrevista do processo de importação de cada vez. Esperar o processo terminar e enviar a amostra de novo. Siga o link se você deseja obter informações mais detalhadas de progresso sobre o processo de importação de outros.</value>
-  </data>
-  <data name="ImportInterviews_ChooseFile" xml:space="preserve">
-    <value>Você deve escolher um arquivo para carregar</value>
-  </data>
-  <data name="ImportInterviews_SelectButtonText" xml:space="preserve">
-    <value>Selecione</value>
-  </data>
-  <data name="ImportSample" xml:space="preserve">
-    <value>Amostra de importação</value>
-  </data>
-  <data name="ImportStatus" xml:space="preserve">
-    <value>Status de importação</value>
+    <value>Concluído com erro(s). Motivo:</value>
   </data>
   <data name="InVerificationProcess" xml:space="preserve">
-    <value>é no processo de verificação, verificado</value>
+    <value>está em processo de verificação, verificado</value>
   </data>
   <data name="IsInvalid" xml:space="preserve">
-    <value>é inválido. Por favor corrigir erro (s) abaixo e fazer o upload novamente.</value>
+    <value>é inválido. Por favor, corrija o(s) erro(s) abaixo e carregue novamente.</value>
   </data>
   <data name="LastUpdateDate" xml:space="preserve">
     <value>Data da última atualização</value>
@@ -216,23 +177,14 @@
   <data name="Message" xml:space="preserve">
     <value>Mensagem</value>
   </data>
-  <data name="NumberInterviewCreated" xml:space="preserve">
-    <value>Interview(s) criado</value>
-  </data>
   <data name="OutOf" xml:space="preserve">
     <value>de</value>
   </data>
   <data name="PleaseWait" xml:space="preserve">
-    <value>Por favor aguarde, o arquivo.</value>
-  </data>
-  <data name="PrefilledQuestionsRequired" xml:space="preserve">
-    <value>Arquivo não contiver colunas necessárias por perguntas pré-carregadas:&lt;br&gt;&lt;br&gt;&lt;b&gt;{0}&lt;/b&gt;</value>
-  </data>
-  <data name="Processing" xml:space="preserve">
-    <value>Processamento de...</value>
+    <value>Por favor, aguarde, o arquivo</value>
   </data>
   <data name="ReadyForUserCreation" xml:space="preserve">
-    <value>Pronta para criação de usuário</value>
+    <value>Pronto para criação de usuário</value>
   </data>
   <data name="ReadyForValidation" xml:space="preserve">
     <value>Pronto para validação</value>
@@ -240,71 +192,38 @@
   <data name="RecordsCount" xml:space="preserve">
     <value>Contagem de registros</value>
   </data>
-  <data name="RefreshActionOnUserUpload" xml:space="preserve">
-    <value>Atualização</value>
-  </data>
-  <data name="ResponsibleSupervisorWillBeAssigned" xml:space="preserve">
-    <value>Supervisor responsável será atribuído automaticamente</value>
-  </data>
-  <data name="Row" xml:space="preserve">
-    <value>Linha</value>
-  </data>
-  <data name="RunningInterviewImportProcess" xml:space="preserve">
-    <value>Ir para o processo de importação de entrevista em execução</value>
-  </data>
-  <data name="SampleCreationCompleted" xml:space="preserve">
-    <value>Criação de amostra foi succefully concluída.</value>
-  </data>
-  <data name="SampleCreationResult" xml:space="preserve">
-    <value>Resultado de criação de amostra</value>
-  </data>
-  <data name="SampleImportWithErrors" xml:space="preserve">
-    <value>Importação de amostra é concluída com erros</value>
-  </data>
-  <data name="SampleSuccess" xml:space="preserve">
-    <value>Importação de amostra for concluída com êxito</value>
-  </data>
   <data name="Status" xml:space="preserve">
-    <value>Estatuto</value>
+    <value>Status</value>
   </data>
   <data name="Upload" xml:space="preserve">
-    <value>Fazer upload</value>
+    <value>Carregar</value>
   </data>
   <data name="UploadDate" xml:space="preserve">
-    <value>Upload de data</value>
+    <value>Data de carregamento</value>
   </data>
   <data name="Uploaded" xml:space="preserve">
     <value>Carregado</value>
-  </data>
-  <data name="UploadNewData" xml:space="preserve">
-    <value>Fazer upload de novos dados</value>
   </data>
   <data name="UploadNewFile" xml:space="preserve">
     <value>Carregar um novo arquivo</value>
   </data>
   <data name="UploadSample" xml:space="preserve">
-    <value>Upload de amostra</value>
+    <value>Carregar amostra</value>
   </data>
   <data name="UploadSampleDescription" xml:space="preserve">
-    <value>Para enviar a amostra para ser entrevistado, por favor, prepare um arquivo (até 300MB de tamanho) com valores separados por tabulação (Tab arquivo) correspondente ao modelo abaixo, que contém os valores dessas variáveis de seu questionário que foram marcados como pré-preenchido.</value>
+    <value>Para carregar a amostra a ser entrevistada, por favor, prepare um arquivo (tamanho de até 300MB) com valores separados por tabulação (.tab) correspondente ao modelo abaixo, contendo valores das variáveis do seu questionário que foram marcadas como identificadoras.</value>
   </data>
   <data name="UploadUsers" xml:space="preserve">
-    <value>Lote de Upload de usuário</value>
-  </data>
-  <data name="UploadUsers_Title" xml:space="preserve">
-    <value>Lista de arquivos com usuários pré-carregado</value>
+    <value>Carregamento em lote de usuários</value>
   </data>
   <data name="UploadUsersDescription" xml:space="preserve">
-    <value>Prepare um arquivo com valores separados por tabulação (Tab arquivo) correspondente a um modelo abaixo. Colunas marcadas com (*) são necessárias. São permitidos apenas valores 'Supervisor' ou 'Entrevistador' na coluna 'papel'.</value>
+    <value>Prepare um arquivo com valores separados por tabulação (.tab) correspondente a um modelo abaixo. Colunas marcadas com (*) são obrigatórias. Apenas 'Supervisor' ou 'Entrevistador' são permitidos na coluna 'papel'.</value>
   </data>
   <data name="UserBatchUploads" xml:space="preserve">
-    <value>Lote de Upload de usuário</value>
-  </data>
-  <data name="UserPreloadingProcessIsMissing" xml:space="preserve">
-    <value>Processo de pré-carregamento de usuário está faltando</value>
+    <value>Carregamento em lote de usuários</value>
   </data>
   <data name="UsersHaveBeenCreated" xml:space="preserve">
-    <value>usuário (s) foram criadas</value>
+    <value>usuário(s) foram criados</value>
   </data>
   <data name="Validated" xml:space="preserve">
     <value>Validado</value>
@@ -316,15 +235,373 @@
     <value>Validado</value>
   </data>
   <data name="Verify" xml:space="preserve">
-    <value>Verifique se</value>
+    <value>Verificar</value>
   </data>
-  <data name="VerifyPanelData" xml:space="preserve">
-    <value>Verificar dados de painel</value>
+  <data name="AreYouSureYouWantToDeleteFormat" xml:space="preserve">
+    <value>Tem certeza de que deseja excluir este arquivo?</value>
+  </data>
+  <data name="UserPreloadingProcessIsMissing" xml:space="preserve">
+    <value>O processo de pré-carregamento de usuário está faltando</value>
+  </data>
+  <data name="UploadUsers_Title" xml:space="preserve">
+    <value>Lista de arquivos com usuários pré-carregados</value>
+  </data>
+  <data name="RefreshActionOnUserUpload" xml:space="preserve">
+    <value>Atualizar</value>
+  </data>
+  <data name="BatchUpload_Title" xml:space="preserve">
+    <value>Carregamento em lote</value>
+  </data>
+  <data name="PrefilledQuestionsRequired" xml:space="preserve">
+    <value>O arquivo não contém coluna(s) para as perguntas identificadoras obrigatórias: &lt;br/&gt; &lt;br/&gt; &lt;b&gt;{0}&lt;/b&gt;</value>
+  </data>
+  <data name="ImportInterviews_ChooseFile" xml:space="preserve">
+    <value>Escolha um arquivo para carregar</value>
+  </data>
+  <data name="ImportInterviews_SelectResponsible" xml:space="preserve">
+    <value>Selecione o responsável</value>
+  </data>
+  <data name="ImportInterviews_SelectButtonText" xml:space="preserve">
+    <value>Selecionar</value>
+  </data>
+  <data name="FileSizeLimit" xml:space="preserve">
+    <value>O tamanho do arquivo não pode exceder 300MB.</value>
+  </data>
+  <data name="ImportSample" xml:space="preserve">
+    <value>Importar amostra</value>
+  </data>
+  <data name="FileNotParsed" xml:space="preserve">
+    <value>O arquivo não foi analisado. Apenas arquivos delimitados por tabulação são permitidos.</value>
+  </data>
+  <data name="FormatNotSupported" xml:space="preserve">
+    <value>O formato do arquivo não é suportado. Os dados dentro do arquivo serão ignorados</value>
+  </data>
+  <data name="SampleCreationResult" xml:space="preserve">
+    <value>Resultado da criação da entrevista</value>
+  </data>
+  <data name="Processing" xml:space="preserve">
+    <value>Processando...</value>
+  </data>
+  <data name="SampleCreationCompleted" xml:space="preserve">
+    <value>Criação da entrevista concluída com sucesso.</value>
+  </data>
+  <data name="UploadNewData" xml:space="preserve">
+    <value>Carregar novos dados</value>
+  </data>
+  <data name="Column" xml:space="preserve">
+    <value>Coluna</value>
+  </data>
+  <data name="Row" xml:space="preserve">
+    <value>Linha</value>
   </data>
   <data name="VerifySampleData" xml:space="preserve">
-    <value>Verifique se os dados de exemplo</value>
+    <value>Verificar dados</value>
   </data>
-  <data name="DownloadTemplateArchive" xml:space="preserve">
-    <value>baixar o arquivo de modelo</value>
+  <data name="ImportInProgress" xml:space="preserve">
+    <value>Outro processo de importação de atribuições está em execução. Apenas um processo de importação de atribuições por vez é permitido. Aguarde até que o processo seja concluído e, em seguida, carregue um novo arquivo de amostra. Siga o link se você deseja obter informações mais detalhadas sobre o progresso do outro processo de importação.</value>
+  </data>
+  <data name="CreateSample" xml:space="preserve">
+    <value>Criar entrevistas a partir destes dados</value>
+  </data>
+  <data name="SampleSuccess" xml:space="preserve">
+    <value>Importação da entrevista concluída com sucesso</value>
+  </data>
+  <data name="SampleImportWithErrors" xml:space="preserve">
+    <value>Importação da entrevista concluída com erros</value>
+  </data>
+  <data name="ImportStatus" xml:space="preserve">
+    <value>Status da importação</value>
+  </data>
+  <data name="NumberInterviewCreated" xml:space="preserve">
+    <value>Entrevista(s) criada(s)</value>
+  </data>
+  <data name="EstimatedTime" xml:space="preserve">
+    <value>Tempo estimado</value>
+  </data>
+  <data name="DownloadInvalidInterviews" xml:space="preserve">
+    <value>Baixar entrevistas inválidas</value>
+  </data>
+  <data name="DownloadInvalidAssignments" xml:space="preserve">
+    <value>Baixar atribuições inválidas</value>
+  </data>
+  <data name="ResponsibleSupervisorWillBeAssigned" xml:space="preserve">
+    <value>O supervisor responsável será atribuído automaticamente</value>
+  </data>
+  <data name="VerifyPanelData" xml:space="preserve">
+    <value>Verificar dados do painel</value>
+  </data>
+  <data name="RunningInterviewImportProcess" xml:space="preserve">
+    <value>Ir para o processo de importação de atribuições em execução</value>
+  </data>
+  <data name="BatchDescription" xml:space="preserve">
+    <value>Carregue um arquivo zip com um ou mais arquivos separados por tabulação correspondentes ao nível principal da entrevista e listas subordinadas. Permite pré-carregar variáveis em qualquer nível da entrevista.&lt;br/&gt;
+Todos os arquivos de dados devem conter a variável interview__id com um identificador exclusivo de string ou numérico da entrevista. Links dentro de listas e listas aninhadas estabelecidos da mesma forma que nos dados exportados.&lt;br/&gt;
+</value>
+    <comment>Não traduza _responsible, _quantity, _email, _webmode, _record_audio. Mantenha os nomes em inglês</comment>
+  </data>
+  <data name="BatchTitle" xml:space="preserve">
+    <value>Dados identificadores e coletados (arquivo)</value>
+  </data>
+  <data name="BatchColumnsTitle" xml:space="preserve">
+    <value>Opcionalmente, pode especificar as seguintes colunas no arquivo de nível principal da entrevista:</value>
+  </data>
+  <data name="CreatingMultipleInterviews" xml:space="preserve">
+    <value>Criando várias entrevistas</value>
+  </data>
+  <data name="CreatingMultipleAssignments" xml:space="preserve">
+    <value>Criando várias atribuições</value>
+  </data>
+  <data name="EmptySupervisorDescription" xml:space="preserve">
+    <value>Se os nomes de usuário não forem especificados na coluna "_responsible", você precisará atribuir um supervisor a todas as atribuições em uma etapa posterior.</value>
+  </data>
+  <data name="ManualModeDescription" xml:space="preserve">
+    <value>Você pode criar atribuições individuais inserindo todos os dados necessários em {{url}}</value>
+  </data>
+  <data name="ManualModeLinkTitle" xml:space="preserve">
+    <value>modo manual</value>
+  </data>
+  <data name="SimpleDescription" xml:space="preserve">
+    <value>Carregue um arquivo separado por tabulação com valores para perguntas apenas no nível da entrevista. Inclua valores para perguntas identificadoras e outras perguntas no nível principal da entrevista. Não permite pré-carregar valores dentro de listas.</value>
+  </data>
+  <data name="SimpleTitle" xml:space="preserve">
+    <value>Apenas dados identificadores</value>
+  </data>
+  <data name="SimpleColumnsTitle" xml:space="preserve">
+    <value>Opcionalmente, pode especificar as seguintes colunas:</value>
+  </data>
+  <data name="ColumnsDescription" xml:space="preserve">
+    <value>&lt;b&gt;_responsible&lt;/b&gt; - nome de usuário de uma sede, supervisor ou entrevistador que será responsável pela atribuição;&lt;br/&gt;
+&lt;b&gt;_quantity&lt;/b&gt; - capacidade da atribuição;&lt;br/&gt;
+&lt;b&gt;_email&lt;/b&gt; - email do respondente (apenas para entrevistas web);&lt;br/&gt;
+&lt;b&gt;_password&lt;/b&gt; - senha para iniciar uma entrevista (apenas para entrevistas web);&lt;br/&gt;
+&lt;b&gt;_webmode&lt;/b&gt; - modo para atribuição (1 para CAWI, 0 ou em branco para CAPI);&lt;br/&gt;
+&lt;b&gt;_record_audio&lt;/b&gt; - gravação de áudio está habilitada para entrevistas (1 - habilitado, 0 - desabilitado, em branco - obter este valor do questionário);&lt;br/&gt;
+&lt;b&gt;_comment&lt;/b&gt; - comentários para a atribuição</value>
+    <comment>Não traduza _responsible, _quantity, _email, _webmode, _record_audio. Mantenha os nomes em inglês</comment>
+  </data>
+  <data name="UploadDescription" xml:space="preserve">
+    <value>Carregue um arquivo com dados identificadores para criar novas atribuições.
+Especifique nomes de usuário para sede, supervisores ou entrevistadores para fazer atribuições em lote.</value>
+  </data>
+  <data name="FileTypeDescription" xml:space="preserve">
+    <value>Salve o arquivo em codificação UTF8 para suportar textos específicos de idioma.</value>
+  </data>
+  <data name="UploadTabFile" xml:space="preserve">
+    <value>Carregar arquivo .tab</value>
+  </data>
+  <data name="UploadZipFile" xml:space="preserve">
+    <value>Carregar arquivo .zip</value>
+  </data>
+  <data name="ViewListPrefilledData" xml:space="preserve">
+    <value>Ver lista de dados identificadores obrigatórios</value>
+  </data>
+  <data name="ViewListPreloadedData" xml:space="preserve">
+    <value>Ver lista de valores pré-carregados</value>
+  </data>
+  <data name="DownloadTabTemplate" xml:space="preserve">
+    <value>Baixar modelo .tab para este questionário</value>
+  </data>
+  <data name="DownloadDescListRequiredPreffiledData" xml:space="preserve">
+    <value>Variáveis marcadas como Identificadoras no Designer. Baixar um</value>
+  </data>
+  <data name="DownloadLinkTitleListRequiredPreffiledData" xml:space="preserve">
+    <value>modelo .tab.</value>
+  </data>
+  <data name="HideListPrefilledData" xml:space="preserve">
+    <value>Ocultar lista de dados identificadores obrigatórios</value>
+  </data>
+    <data name="PrefilledRequiredData" xml:space="preserve">
+    <value>Dados identificadores obrigatórios</value>
+  </data>
+  <data name="IdentifyingQuestions" xml:space="preserve">
+    <value>Perguntas identificadoras</value>
+  </data>
+  <data name="BatchFileVerificationFailed" xml:space="preserve">
+    <value>Falha na verificação do arquivo carregado</value>
+  </data>
+  <data name="BreadCrumbs_CreatingMultipleInterviews" xml:space="preserve">
+    <value>criando várias atribuições</value>
+  </data>
+  <data name="ImportFrom" xml:space="preserve">
+    <value>Importando informações de {{fileName}} para {{title}}</value>
+  </data>
+  <data name="ImportInterviews_PageTitle" xml:space="preserve">
+    <value>Criando várias entrevistas com carregamento em lote</value>
+  </data>
+  <data name="ImportAssignments_PageTitle" xml:space="preserve">
+    <value>Criando várias atribuições com carregamento em lote</value>
+  </data>
+  <data name="InterviewsAreNotCreated" xml:space="preserve">
+    <value>Nenhuma entrevista foi criada</value>
+  </data>
+  <data name="MultipleErrorsWereFound" xml:space="preserve">
+    <value>{{count}} erros encontrados</value>
+    <comment>{0} - contagem de erros encontrados</comment>
+  </data>
+  <data name="SingleErrorFound" xml:space="preserve">
+    <value>1 erro encontrado</value>
+  </data>
+  <data name="BackToImport" xml:space="preserve">
+    <value>Voltar para importação</value>
+  </data>
+  <data name="AssignedToMultipleEnumerators" xml:space="preserve">
+    <value>Atribuído a {0} entrevistadores</value>
+    <comment>{0} - contagem de entrevistadores (sempre &gt; 1)</comment>
+  </data>
+  <data name="AssignedToMultipleSupervisors" xml:space="preserve">
+    <value>Atribuído a {0} supervisores</value>
+    <comment>{0} - contagem de supervisores (sempre &gt; 1)</comment>
+  </data>
+  <data name="AssignedToSingleEnumerator" xml:space="preserve">
+    <value>Atribuído a 1 entrevistador</value>
+  </data>
+  <data name="AssignedToSingleSupervisor" xml:space="preserve">
+    <value>Atribuído a 1 supervisor</value>
+  </data>
+  <data name="CreateInterviews" xml:space="preserve">
+    <value>Criar entrevistas</value>
+  </data>
+  <data name="CreateAssignments" xml:space="preserve">
+    <value>Criar atribuições</value>
+  </data>
+  <data name="DataForMultipleInterviewsFound" xml:space="preserve">
+    <value>Dados para {0} entrevistas encontrados</value>
+    <comment>{0} - contagem de entrevistas (sempre &gt; 1)</comment>
+  </data>
+  <data name="DataForMultipleAssignmentsFound" xml:space="preserve">
+    <value>Dados para {0} atribuições encontrados</value>
+    <comment>{0} - contagem de atribuições (sempre &gt; 1)</comment>
+  </data>
+  <data name="DataForSingleInterviewFound" xml:space="preserve">
+    <value>Dados para 1 entrevista encontrados</value>
+  </data>
+  <data name="DataForSingleAssignmentFound" xml:space="preserve">
+    <value>Dados para 1 atribuição encontrados</value>
+  </data>
+  <data name="Importing" xml:space="preserve">
+    <value>Importando</value>
+  </data>
+  <data name="ImportInterviewsFor" xml:space="preserve">
+    <value>Importando entrevistas para {0}</value>
+    <comment>{0} - nome e versão do questionário</comment>
+  </data>
+  <data name="ImportAssignmentsFor" xml:space="preserve">
+    <value>Importando atribuições para {{title}}</value>
+  </data>
+  <data name="ImportInterviews_Done" xml:space="preserve">
+    <value>Concluído:</value>
+  </data>
+  <data name="ImportInterviews_NoneFailed" xml:space="preserve">
+    <value>Nenhuma falha</value>
+  </data>
+  <data name="ImportProgressFormat" xml:space="preserve">
+    <value>{{createdCount}} de {{totalCount}}</value>
+  </data>
+  <data name="InterviewsImport_ImportingProgressPageTitle" xml:space="preserve">
+    <value>Importando atribuições</value>
+  </data>
+  <data name="MultipleInterviewFailedToBeCreated" xml:space="preserve">
+    <value>{0} entrevistas falharam ao serem criadas</value>
+    <comment>{0} - contagem de entrevistas criadas (sempre &gt; 1)</comment>
+  </data>
+  <data name="MultipleAssignmentFailedToBeCreated" xml:space="preserve">
+    <value>{{count}} atribuições falharam ao serem criadas</value>
+  </data>
+  <data name="MultipleInterviewsCreated" xml:space="preserve">
+    <value>{0} entrevistas criadas</value>
+    <comment>{0} - contagem de entrevistas criadas (sempre &gt; 1)</comment>
+  </data>
+  <data name="MultipleAssignmentsCreated" xml:space="preserve">
+    <value>{{count}} atribuições criadas</value>
+  </data>
+  <data name="SelectResponsibleToAssign" xml:space="preserve">
+    <value>Selecione o responsável por este lote</value>
+  </data>
+  <data name="SingleInterviewCreated" xml:space="preserve">
+    <value>1 entrevista criada</value>
+  </data>
+  <data name="SingleAssignmentCreated" xml:space="preserve">
+    <value>1 atribuição criada</value>
+  </data>
+  <data name="SingleInterviewFailedToBeCreated" xml:space="preserve">
+    <value>1 entrevista falhou ao ser criada</value>
+  </data>
+  <data name="SingleAssignmentFailedToBeCreated" xml:space="preserve">
+    <value>1 atribuição falhou ao ser criada</value>
+  </data>
+  <data name="VerificationCompleted" xml:space="preserve">
+    <value>Verificação concluída</value>
+  </data>
+  <data name="SupervisorMustBeSelected" xml:space="preserve">
+    <value>Supervisor ou entrevistador deve ser selecionado</value>
+  </data>
+  <data name="Cell" xml:space="preserve">
+    <value>Célula</value>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>Arquivo</value>
+  </data>
+  <data name="UploadUsers_NotAllowedExtension" xml:space="preserve">
+    <value>Apenas arquivos com extensões {0} e {1} são permitidos para upload.</value>
+  </data>
+  <data name="Prerequisite_FileOpen" xml:space="preserve">
+    <value>O arquivo carregado não pode ser aberto. Verifique se está no formato correto.</value>
+  </data>
+  <data name="Prerequisite_TabOrTxtFile" xml:space="preserve">
+    <value>Apenas arquivos .tab e .txt são permitidos para upload.</value>
+  </data>
+  <data name="Prerequisite_UnsupportedFiles" xml:space="preserve">
+    <value>Os seguintes arquivos não são suportados: {0}.</value>
+  </data>
+  <data name="Prerequisite_ZipFile" xml:space="preserve">
+    <value>Apenas arquivos .zip são permitidos para upload.</value>
+  </data>
+  <data name="AssignmentsAreNotCreated" xml:space="preserve">
+    <value>Nenhuma atribuição foi criada</value>
+  </data>
+  <data name="Import_VerificationOfAssignmentData" xml:space="preserve">
+    <value>Verificação dos dados da atribuição</value>
+  </data>
+  <data name="Import_VerificationOfAssignments_ForQuestionnaire" xml:space="preserve">
+    <value>Verificação das atribuições para o questionário {{title}}</value>
+  </data>
+  <data name="Import_VerificationOfDataFile" xml:space="preserve">
+    <value>Verificação do arquivo de dados</value>
+  </data>
+  <data name="Import_VerificationOfDataFile_Progress" xml:space="preserve">
+    <value>etapa {{verifiedCount}} de {{totalCount}}</value>
+  </data>
+  <data name="Import_VerificationOfDataFile_Succeeded" xml:space="preserve">
+    <value>Verificação do arquivo de dados concluída com sucesso</value>
+  </data>
+  <data name="Import_Verification_1_AssignmentVerified" xml:space="preserve">
+    <value>1 atribuição verificada com sucesso</value>
+  </data>
+  <data name="Import_Verification_1_Error" xml:space="preserve">
+    <value>1 erro</value>
+  </data>
+  <data name="Import_Verification_AssignmentsVerified" xml:space="preserve">
+    <value>{{count}} atribuições verificadas com sucesso</value>
+  </data>
+  <data name="Import_Verification_Errors" xml:space="preserve">
+    <value>{{count}} erros</value>
+  </data>
+  <data name="Prerequisite_Questionnaire" xml:space="preserve">
+    <value>O questionário não pode ser usado para pré-carregamento</value>
+  </data>
+  <data name="HiddenQuestions" xml:space="preserve">
+    <value>Perguntas ocultas</value>
+  </data>
+  <data name="RosterSizeQuestions" xml:space="preserve">
+    <value>Perguntas de origem da lista</value>
+  </data>
+  <data name="Select_Responsible" xml:space="preserve">
+    <value>Selecione o responsável padrão (obrigatório)</value>
+  </data>
+  <data name="Select_Responsible_Description" xml:space="preserve">
+    <value>Se nenhum responsável for atribuído no arquivo de lote, use esta conta de sede/supervisor/entrevistador:</value>
+  </data>
+  <data name="RequiredField" xml:space="preserve">
+    <value>Este campo é obrigatório</value>
   </data>
 </root>

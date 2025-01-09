@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using NUnit.Framework.Legacy;
 using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
@@ -61,7 +62,7 @@ namespace WB.Tests.Unit.Designer.Applications.BinderTests
 
             var revision = context.Result.Model as QuestionnaireRevision;
 
-            Assert.NotNull(revision);
+            ClassicAssert.NotNull(revision);
             Assert.That(revision.QuestionnaireId, Is.EqualTo(questionnaireId));
         }
 
@@ -85,7 +86,7 @@ namespace WB.Tests.Unit.Designer.Applications.BinderTests
 
             // assert
             var revision = context.Result.Model as QuestionnaireRevision;
-            Assert.NotNull(revision);
+            ClassicAssert.NotNull(revision);
 
             Assert.That(revision.QuestionnaireId, Is.EqualTo(questionnaireId));
             Assert.That(revision.Revision, Is.EqualTo(revisionid));
@@ -102,8 +103,8 @@ namespace WB.Tests.Unit.Designer.Applications.BinderTests
 
             // assert
             var revision = context.Result.Model as QuestionnaireRevision;
-            Assert.Null(revision);
-            Assert.False(context.Result.IsModelSet);
+            ClassicAssert.Null(revision);
+            ClassicAssert.False(context.Result.IsModelSet);
         }
     }
 }

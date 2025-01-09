@@ -1,51 +1,37 @@
 <template>
-    <HqLayout
-        :title="$config.model.reportName"
-        :subtitle="$config.model.subtitle"
-        :hasFilter="true">
-        <Filters slot="filters">
-            <FilterBlock :title="$t('Common.Questionnaire')">
-                <Typeahead
-                    control-id="questionnaireId"
-                    ref="questionnaireIdControl"
-                    data-vv-name="questionnaireId"
-                    data-vv-as="questionnaire"
-                    :placeholder="$t('Common.AllQuestionnaires')"
-                    :value="questionnaireId"
-                    v-on:selected="questionnaireSelected"
-                    :fetch-url="$config.model.questionnairesUrl"/>
-            </FilterBlock>
+    <HqLayout :title="$config.model.reportName" :subtitle="$config.model.subtitle" :hasFilter="true">
+        <template v-slot:filters>
+            <Filters>
+                <FilterBlock :title="$t('Common.Questionnaire')">
+                    <Typeahead control-id="questionnaireId" ref="questionnaireIdControl" data-vv-name="questionnaireId"
+                        data-vv-as="questionnaire" :placeholder="$t('Common.AllQuestionnaires')"
+                        :value="questionnaireId" v-on:selected="questionnaireSelected"
+                        :fetch-url="$config.model.questionnairesUrl" />
+                </FilterBlock>
 
-            <FilterBlock :title="$t('Common.QuestionnaireVersion')">
-                <Typeahead
-                    control-id="questionnaireVersion"
-                    ref="questionnaireVersionControl"
-                    data-vv-name="questionnaireVersion"
-                    data-vv-as="questionnaireVersion"
-                    :placeholder="$t('Common.AllVersions')"
-                    :value="questionnaireVersion"
-                    v-on:selected="questionnaireVersionSelected"
-                    :fetch-url="questionnaireVersionFetchUrl"
-                    :disabled="questionnaireVersionFetchUrl == null"/>
-            </FilterBlock>
-        </Filters>
+                <FilterBlock :title="$t('Common.QuestionnaireVersion')">
+                    <Typeahead control-id="questionnaireVersion" ref="questionnaireVersionControl"
+                        data-vv-name="questionnaireVersion" data-vv-as="questionnaireVersion"
+                        :placeholder="$t('Common.AllVersions')" :value="questionnaireVersion"
+                        v-on:selected="questionnaireVersionSelected" :fetch-url="questionnaireVersionFetchUrl"
+                        :disabled="questionnaireVersionFetchUrl == null" />
+                </FilterBlock>
+            </Filters>
+        </template>
         <div class="clearfix">
             <div class="col-sm-8">
-                <h4>{{this.questionnaireId == null ? $t('Common.AllQuestionnaires') : this.questionnaireId.value}}, {{this.questionnaireVersion == null ? $t('Common.AllVersions').toLowerCase() : this.questionnaireVersion.value}}</h4>
+                <h4>{{ this.questionnaireId == null ? $t('Common.AllQuestionnaires') : this.questionnaireId.value }},
+                    {{ this.questionnaireVersion == null ? $t('Common.AllVersions').toLowerCase() :
+                        this.questionnaireVersion.value}}</h4>
             </div>
         </div>
-        <DataTables
-            ref="table"
-            :tableOptions="tableOptions"
-            :addParamsToRequest="addFilteringParams"
-            :no-search="true"
-            exportable
-            hasTotalRow></DataTables>
+        <DataTables ref="table" :tableOptions="tableOptions" :addParamsToRequest="addFilteringParams" :no-search="true"
+            exportable hasTotalRow></DataTables>
     </HqLayout>
 </template>
 <script>
-import {formatNumber} from './helpers'
-import {assign, isNumber, isUndefined} from 'lodash'
+import { formatNumber } from './helpers'
+import { assign, isNumber, isUndefined } from 'lodash'
 export default {
     data() {
         return {
@@ -120,7 +106,7 @@ export default {
                 queryString.questionnaireVersion = ''
             }
 
-            this.$router.push({query: queryString})
+            this.$router.push({ query: queryString })
         },
 
         addFilteringParams(data) {
@@ -146,10 +132,10 @@ export default {
 
             if (questionnaireId && version) {
                 requestParams = assign(
-                    {questionnaireIdentity: questionnaireId + '$' + version, cache: false},
+                    { questionnaireIdentity: questionnaireId + '$' + version, cache: false },
                     this.ajaxParams
                 )
-                const response = await this.$http.get(this.$config.model.questionnaireByIdUrl, {params: requestParams})
+                const response = await this.$http.get(this.$config.model.questionnaireByIdUrl, { params: requestParams })
 
                 if (response.data) {
                     return {

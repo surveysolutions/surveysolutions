@@ -1,92 +1,121 @@
-body > .ui-pnotify{
+body>.ui-pnotify {
     z-index: 100050;
 }
-.ui-pnotify-modal-overlay, .modal-backdrop{
-    background-color: rgba(0,0,0,.4);
+
+.ui-pnotify-modal-overlay,
+.modal-backdrop {
+    background-color: rgba(0, 0, 0, .4);
 }
-%modal-window{
+
+.modal-backdrop.show {
+    opacity: 0.5;
+}
+
+%modal-window {
     background: #fff;
- 	box-shadow: 9px 9px 3px rgba(0, 0, 0, 0.1), 0 0 3px #323232;
-	border-radius: 0;
+    box-shadow: 9px 9px 3px rgba(0, 0, 0, 0.1), 0 0 3px #323232;
+    border-radius: 0;
 }
-.ui-pnotify{
- 	@extend %modal-window;
-     width: 500px !important;
-  	.alert{
-   		font-family: $roboto_medium;
+
+.ui-pnotify {
+    @extend %modal-window;
+    width: 500px !important;
+
+    .alert {
+        font-family: $roboto_medium;
         margin: 0;
         border-top: none !important;
-  		padding: 20px;
-        &.alert-warning{
+        padding: 20px;
+
+        &.alert-warning {
             border-top: 10px solid $blue;
             color: $blue;
         }
-        &.alert-success{
+
+        &.alert-success {
             border-top: 10px solid $green;
             color: $green;
         }
-        &.alert-info{
+
+        &.alert-info {
             border-top: 10px solid $blue;
             color: $blue;
         }
-        &.alert-danger{
+
+        &.alert-danger {
             border-top: 10px solid $red;
             color: $red;
         }
-        .ui-pnotify-closer{
+
+        .ui-pnotify-closer {
             visibility: visible !important;
         }
-    	.ui-pnotify-title{
-     		font: 18px/20px "RobotoRegular";
+
+        .ui-pnotify-title {
+            font: 18px/20px "RobotoRegular";
             color: $gray_text;
             margin-bottom: 20px;
-    	}
-        .ui-pnotify-icon{
+        }
+
+        .ui-pnotify-icon {
             display: none;
         }
-    	.ui-pnotify-text{
-     		font: 14px/16px Arial, sans-serif;
-     		color: $gray_text;
 
-    	}
-    	.ui-pnotify-action-bar{
-			margin-top: 25px !important;
-			text-align: left !important;
-			.btn{
-				border-color: transparent;
-				color: $blue;
-				padding: 0;
-				margin-right: 20px;
-				&:last-of-type{
-					margin-right: 0;
-				}
-				&:hover, &:focus, &:active{
-					background-color: transparent;
-					text-decoration: underline;
-				}
-			}
-		}
-		.ui-pnotify-closer span{
-    		@include cancel(16px);
-    	}
-  	}
-    &.loading-indicator{
+        .ui-pnotify-text {
+            font: 14px/16px Arial, sans-serif;
+            color: $gray_text;
+
+        }
+
+        .ui-pnotify-action-bar {
+            margin-top: 25px !important;
+            text-align: left !important;
+
+            .btn {
+                border-color: transparent;
+                color: $blue;
+                padding: 0;
+                margin-right: 20px;
+
+                &:last-of-type {
+                    margin-right: 0;
+                }
+
+                &:hover,
+                &:focus,
+                &:active {
+                    background-color: transparent;
+                    text-decoration: underline;
+                }
+            }
+        }
+
+        .ui-pnotify-closer span {
+            @include cancel(16px);
+        }
+    }
+
+    &.loading-indicator {
         border-radius: 0;
-        .ui-pnotify-container{
+
+        .ui-pnotify-container {
             border-radius: 0;
             box-shadow: 9px 9px 3px rgba(0, 0, 0, 0.1);
         }
-        .ui-pnotify-container.alert{
+
+        .ui-pnotify-container.alert {
             padding: 30px 40px;
             border-top: none;
         }
-        .ui-pnotify-title{
-     		font: 24px/26px "RobotoLight";
+
+        .ui-pnotify-title {
+            font: 24px/26px "RobotoLight";
             padding: 0;
             margin: 0;
-    	}
+        }
     }
-    &.centered-modal{
+
+    &.centered-modal {
         position: fixed;
         left: 50% !important;
         top: 50% !important;
@@ -95,216 +124,279 @@ body > .ui-pnotify{
         margin: 0;
     }
 }
-@media only screen and (max-width: 840px){
+
+@media only screen and (max-width: 840px) {
+
     #statusHistoryModal .modal-dialog,
     .statusHistoryModal .modal-dialog {
-		width: calc(100% - 40px) !important;
-        margin: 20px; 
-	}
+        width: calc(100% - 40px) !important;
+        margin: 20px;
+    }
 }
-@media only screen and (max-width: 680px){
-    .modal-dialog{
-		width: calc(100% - 40px) !important;
-        margin: 20px; 
-	}
+
+@media only screen and (max-width: 680px) {
+    .modal-dialog {
+        width: calc(100% - 40px) !important;
+        margin: 20px;
+    }
 }
-@media only screen and (min-width: $screen-sm-min){ 
-  .modal:before {
-    display: inline-block;
-    vertical-align: middle;
-    content: " ";
-    height: 100%;
-  }
+
+@media only screen and (min-width: $screen-sm-min) {
+    .modal:before {
+        display: inline-block;
+        vertical-align: middle;
+        content: " ";
+        height: 100%;
+    }
 }
+
 .modal {
-  text-align: center;
-  padding-right: 0 !important;
-  .table{
-    td{
-        .comment{
-            padding-top: 10px;
-            h4{
-                margin-bottom: 5px;
+    text-align: center;
+    padding-right: 0 !important;
+
+    .table {
+        td {
+            .comment {
+                padding-top: 10px;
+
+                h4 {
+                    margin-bottom: 5px;
+                }
             }
         }
-    }
-    td, th{
-        padding: 10px;
-        &:first-child{
-            min-width: 160px;
+
+        td,
+        th {
+            padding: 10px;
+
+            &:first-child {
+                min-width: 160px;
+            }
+        }
+
+        th {
+            border-top: none !important;
         }
     }
-    th{
-		border-top: none !important;
-	}
-  }
-    %hover{
-		color: $gray-text;
-		&:hover, &:focus, &:active{
-			color: $blue;
-			text-decoration: none;
-		}
-	}
-	.template, .tetle-row{
-		font-size: 16px;
-		line-height: 18px;
-	}
-	.title-row{
-		font-size: 16px;
-		line-height: 18px;
-		@extend %hover;
-	}
-	.interviewer{
-		@extend %hover;
-	}	
+
+    %hover {
+        color: $gray-text;
+
+        &:hover,
+        &:focus,
+        &:active {
+            color: $blue;
+            text-decoration: none;
+        }
+    }
+
+    .template,
+    .tetle-row {
+        font-size: 16px;
+        line-height: 18px;
+    }
+
+    .title-row {
+        font-size: 16px;
+        line-height: 18px;
+        @extend %hover;
+    }
+
+    .interviewer {
+        @extend %hover;
+    }
 }
+
 #statusHistoryModal .modal-dialog,
-.statusHistoryModal .modal-dialog { 
-    width: 800px; 
+.statusHistoryModal .modal-dialog {
+    width: 800px;
 }
+
 .modal-dialog {
-  display: inline-block;
-  text-align: left;
-  vertical-align: middle;
-  width: 660px;
+    display: inline-block;
+    text-align: left;
+    vertical-align: middle;
+    width: 660px;
 }
-.modal-content{
+
+.modal-content {
     border: none;
-    box-shadow: 0 0 15px rgba(0,0,0,.5);
-    h3{
+    box-shadow: 0 0 15px rgba(0, 0, 0, .5);
+
+    h3 {
         font-size: 14px;
         line-height: 16px;
     }
+
     font-size: 14px;
     line-height: 16px;
-    p + h3{
+
+    p+h3 {
         margin-top: 25px;
     }
-    
-	.modal-header{
+
+    .modal-header {
         border: none;
         border-top-left-radius: 6px;
         border-top-right-radius: 6px;
         padding: 20px 20px 0;
-		//margin-bottom: 25px;
+        //margin-bottom: 25px;
     }
-    .close{
+
+    .close {
         position: relative;
         @include opacity(0.5);
-        span{
+
+        span {
             @include cancel(20px);
         }
     }
-	.modal-body{
-		padding: 20px 20px 10px;
-        .bootbox-body{
-            h3{
+
+    .modal-header {
+        .bootbox-close-button {
+            width: 1em;
+            height: 1em;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'%3e%3cpath d='M.293.293a1 1 0 0 1 1.414 0L8 6.586 14.293.293a1 1 0 1 1 1.414 1.414L9.414 8l6.293 6.293a1 1 0 0 1-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L6.586 8 .293 1.707a1 1 0 0 1 0-1.414z'/%3e%3c/svg%3e");
+        }
+    }
+
+    .modal-body {
+        padding: 20px 20px 10px;
+
+        .bootbox-body {
+            h3 {
                 font: 18px/20px RobotoRegular;
             }
-            p:last-child{
+
+            p:last-child {
                 margin: 0;
             }
         }
+
         ul li {
             margin-bottom: 5px;
-            label{
+
+            label {
                 font: 14px/16px "RobotoRegular";
                 font-weight: normal;
             }
+
             input {
-                &:checked + label{
+                &:checked+label {
                     color: $gray_text;
                 }
-                & + label{
+
+                &+label {
                     color: $gray_light;
                 }
             }
         }
-        .table-striped td{
+
+        .table-striped td {
             border-right: 1px solid $gray-form;
-            &:last-child{
+
+            &:last-child {
                 border: none;
             }
         }
-	}
-    .modal-footer{
+    }
+
+    .modal-footer {
         border: none;
         text-align: left;
         padding: 20px;
-        .btn-link{
+
+        .btn-link {
             padding: 0;
             margin-right: 20px;
         }
     }
 }
-#confirmApprove{
-    .modal-header{
+
+#confirmApprove {
+    .modal-header {
         border-top: 6px solid #28a428;
         color: #28a428;
     }
 }
-#rejectConfirm{
-    .modal-header{
+
+#rejectConfirm {
+    .modal-header {
         border-top: 6px solid #dd2c2c;
         color: #dd2c2c;
     }
 }
-.modal-dropdown{
+
+.modal-dropdown {
     width: 315px;
     max-height: none;
     overflow-y: visible;
 }
-.context-menu{
- 	@extend %modal-window;
+
+.context-menu {
+    @extend %modal-window;
     width: 280px;
     padding: 15px 10px;
-    h3{
+
+    h3 {
         font: 14px/16px "RobotoBold";
         margin-bottom: 20px;
         margin-left: 10px;
     }
-    li{
-        a{
+
+    li {
+        a {
             padding: 10px;
-            &:hover, &:focus, &:active{
+
+            &:hover,
+            &:focus,
+            &:active {
                 background-color: #eff4f8;
             }
         }
-        span{
+
+        span {
             display: inline-block;
             padding: 10px;
             color: $gray_light;
         }
     }
 }
-.audio-question{
-    .modal{
-        .modal-dialog{
+
+.audio-question {
+    .modal {
+        .modal-dialog {
             max-width: 450px;
         }
-        .modal-header{
+
+        .modal-header {
+
             //margin-bottom: 10px;
-            h5{
+            h5 {
                 padding: 0;
                 line-height: 18px;
             }
+
             .modal-title {
                 margin-bottom: 5px;
             }
         }
-        .modal-body{
-            canvas{
+
+        .modal-body {
+            canvas {
                 display: block;
                 margin: 0 auto;
             }
         }
-        .modal-footer{
-            
-            .recordign-time{
+
+        .modal-footer {
+
+            .recordign-time {
                 float: left;
                 font: 24px/36px "RobotoLight";
             }
-            button{
+
+            button {
                 float: right;
                 padding: 10px;
                 margin: 0 10px 0 0;
@@ -312,62 +404,78 @@ body > .ui-pnotify{
         }
     }
 }
-@media (max-width: $screen-xs-min){
-    .ui-pnotify{
+
+@media (max-width: $screen-xs-min) {
+    .ui-pnotify {
         width: 300px !important;
-        .input-group{
+
+        .input-group {
             width: 100%;
         }
     }
 }
 
-#overview{
-    .modal-content{
+#overview {
+    .modal-content {
         padding: 0;
     }
-    .modal-dialog{
+
+    .modal-dialog {
         max-width: 500px;
     }
-    .modal-header{
+
+    .modal-header {
         background-color: $gray-highlight-font;
         color: #fff;
         padding: 20px;
+
         //margin-bottom: 10px;
-        h3{
+        h3 {
             margin-bottom: 0;
             font-size: 18px;
             line-height: 20px;
         }
-        .close{
-            span{
-                &:before, &:after{
+
+        .close {
+            span {
+
+                &:before,
+                &:after {
                     background-color: $gray-highlighting;
                 }
-                &:hover, &:focus, &:active{
+
+                &:hover,
+                &:focus,
+                &:active {
                     opacity: 1;
-                    &::before, &::after{
+
+                    &::before,
+                    &::after {
                         background-color: #fff;
-                        
+
                     }
                 }
             }
         }
     }
-    .modal-footer{
+
+    .modal-footer {
         padding: 20px;
     }
-    
+
 }
-.overview-item{
+
+.overview-item {
     display: flex;
-	flex-direction: row;
-	flex-wrap: nowrap;
-	justify-content: flex-start;
-	align-items: stretch;
-	align-content: stretch;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: stretch;
+    align-content: stretch;
     padding-right: 35px;
     position: relative;
-    .date{
+
+    .date {
         min-width: 65px;
         text-align: right;
         padding: 10px;
@@ -375,50 +483,60 @@ body > .ui-pnotify{
         font-size: 12px;
         line-height: 14px;
         color: $gray_text;
-        div:first-of-type{
+
+        div:first-of-type {
             color: $gray_form;
         }
     }
-    .item-content{
-        word-wrap: break-word; 
+
+    .item-content {
+        word-wrap: break-word;
         cursor: pointer;
         flex-grow: 1;
         padding: 10px;
         width: calc(100% - 65px);
-        h4{
+
+        h4 {
             margin-top: 0;
             margin-bottom: 5px;
             font-size: 16px;
             line-height: 18px;
         }
-        p{
+
+        p {
             font-family: "Robotobold";
             margin: 0;
         }
     }
-    &.unanswered{
-        .item-content{
+
+    &.unanswered {
+        .item-content {
             background-color: $gray-super-light;
-            p{
+
+            p {
                 color: $blue;
                 font-style: italic;
             }
         }
-        .date div:last-of-type{
+
+        .date div:last-of-type {
             color: $gray_form;
         }
-        &.hasComment{
 
-            .item-content{
+        &.hasComment {
+
+            .item-content {
                 position: relative;
-                *{
+
+                * {
                     position: relative;
                     z-index: 10;
                 }
-                &:after{
+
+                &:after {
                     display: block;
                     content: "";
-                    position: absolute; 
+                    position: absolute;
                     width: 100%;
                     height: 100%;
                     top: 0;
@@ -428,31 +546,38 @@ body > .ui-pnotify{
             }
         }
     }
-    &.unanswered + .unanswered{
-        .item-content{
+
+    &.unanswered+.unanswered {
+        .item-content {
             border-top: 1px solid $gray_form;
         }
     }
-    &.invalid{
+
+    &.invalid {
         color: $red_error;
-        .item-content{
+
+        .item-content {
             background-color: $red-super-light;
         }
-        .date div:last-of-type{
-            color: $red_error;  
-        }
-        &.hasComment{
 
-            .item-content{
+        .date div:last-of-type {
+            color: $red_error;
+        }
+
+        &.hasComment {
+
+            .item-content {
                 position: relative;
-                *{
+
+                * {
                     position: relative;
                     z-index: 10;
                 }
-                &:after{
+
+                &:after {
                     display: block;
                     content: "";
-                    position: absolute; 
+                    position: absolute;
                     width: 100%;
                     height: 100%;
                     top: 0;
@@ -462,120 +587,146 @@ body > .ui-pnotify{
             }
         }
     }
-    &.hasComment{
+
+    &.hasComment {
         background-color: rgba(245, 168, 226, 0.4);
-        .date div:first-of-type{
+
+        .date div:first-of-type {
             color: $gray_light;
         }
     }
-    &.section{
-        .item-content{
+
+    &.section {
+        .item-content {
             cursor: default;
         }
-        
-        &:first-of-type{
+
+        &:first-of-type {
             border-top: none;
             margin-top: 0;
         }
+
         display: block;
         border-top: 2px solid $gray_form;
         padding: 0 35px 0 65px;
         margin-top: 10px;
-        h4{
+
+        h4 {
             font: 20px/22px "RobotoBold";
         }
     }
-    &.group{
-        .item-content{
+
+    &.group {
+        .item-content {
             cursor: default;
         }
-        &:first-of-type{
+
+        &:first-of-type {
             border-top: none;
             margin-top: 0;
         }
+
         display: block;
         border-top: 1px solid $gray_form;
         padding: 0 35px 0 65px;
         margin-top: 10px;
-        h4{
+
+        h4 {
             font: 20px/22px "RobotoRegular";
         }
-        
+
     }
 }
-.custom-popover{
+
+.custom-popover {
     visibility: hidden;
     opacity: 0;
     transition: opacity 0.5s;
     border-radius: 7px;
     position: absolute;
-    top: 50%; 
+    top: 50%;
     box-shadow: 0 0 10px;
     word-wrap: break-word;
-    transform: translate(0,-50%);
+    transform: translate(0, -50%);
     right: -345px;
     width: 315px;
     background-color: #fff;
-    &.visible{
+
+    &.visible {
         visibility: visible;
         opacity: 1;
     }
-    .popover-header{
+
+    .popover-header {
         padding: 15px 20px 5px;
         color: $gray_text;
-        h5{
+
+        h5 {
             margin-top: 0;
         }
     }
-    .popover-content{
+
+    .popover-content {
         padding: 0 10px;
-        h6{
+
+        h6 {
             margin-top: 10px;
-            span{
+
+            span {
                 color: $gray_form;
             }
         }
     }
-    .popover-footer{
+
+    .popover-footer {
         padding: 0 10px;
     }
 
-    .comments-block .comment{
+    .comments-block .comment {
         display: block;
-        label{
+
+        label {
             color: $gray_text;
         }
+
         margin-bottom: 15px;
-        .input-group{
+
+        .input-group {
             display: block;
         }
-        textarea.form-control{
+
+        textarea.form-control {
             width: 100%;
             margin: 0 0 10px;
             resize: none;
             overflow: hidden;
             min-height: 40px;
         }
-        .input-group-btn{
+
+        .input-group-btn {
             padding-left: 0;
         }
     }
-    &:after{
+
+    &:after {
         content: " ";
         position: absolute;
         top: 50%;
-        right: 100%; /* To the left of the tooltip */
+        right: 100%;
+        /* To the left of the tooltip */
         margin-top: -25px;
         border-width: 25px;
         border-style: solid;
         border-color: transparent #fff transparent transparent;
     }
 }
-.overloaded{
+
+.overloaded {
     position: relative;
     max-height: 56px;
     overflow: hidden;
-    &:after{
+
+    &:after {
         content: "";
         display: block;
         width: 100%;
@@ -584,15 +735,17 @@ body > .ui-pnotify{
         left: 0;
         box-shadow: 0px 0px 20px 15px #fff;
     }
-    .btn-horizontal-hamburger{
+
+    .btn-horizontal-hamburger {
         position: absolute;
         bottom: 0;
         left: -8px;
         z-index: 2;
     }
 }
-@media only screen and (max-width:  $screen-md){
-    .custom-popover{
+
+@media only screen and (max-width: $screen-md) {
+    .custom-popover {
         box-shadow: 0 0 40px;
         top: auto;
         bottom: -15px;
@@ -600,7 +753,8 @@ body > .ui-pnotify{
         left: 50%;
         transform: translate(-50%, 100%);
         z-index: 15;
-        &:after{
+
+        &:after {
             top: auto;
             bottom: 99%;
             right: auto;
@@ -611,62 +765,81 @@ body > .ui-pnotify{
         }
     }
 }
-#serverEditor{
-    .modal-header{
-        h2{
+
+#serverEditor {
+    .modal-header {
+        h2 {
             margin: 5px 0;
         }
-        h3{
+
+        h3 {
             font: 20px/22px "RobotoLight";
         }
-        .sub-header .label{
+
+        .sub-header .label {
             font: inherit;
         }
+
         border-bottom: 1px solid rgb(221, 221, 221);
-        
+
     }
-    .modal-body{
+
+    .modal-body {
         padding: 0;
-        .alert{
+
+        .alert {
             @extend .alert-warning;
             border-radius: 0;
             padding: 15px 20px;
             border-top: 1px solid #faebcc;
             border-bottom: 1px solid #faebcc;
         }
-        .details{
+
+        .details {
             padding: 0 20px;
             margin: 10px 0;
-            p{
+
+            p {
                 margin-bottom: 5px;
-                &:last-of-type{
+
+                &:last-of-type {
                     margin-bottom: 0;
-                    label{
+
+                    label {
                         margin-bottom: 0;
                     }
                 }
             }
-            .form-group:last-of-type{
+
+            .form-group:last-of-type {
                 margin-bottom: 5px;
             }
-            &.administration-block{
+
+            &.administration-block {
                 border-top: 1px solid #337ab7;
                 border-bottom: 1px solid #337ab7;
                 background-color: #c6def3;
                 padding: 15px 20px;
-                .radio{
-                    label{
+
+                .radio {
+                    label {
                         padding: 8px;
                     }
-                    input{
+
+                    input {
                         margin-top: 0;
                     }
-                    & + .radio{
+
+                    &+.radio {
                         margin-top: 0;
                     }
-                } 
+                }
             }
         }
-        
+
     }
+}
+
+.modal.show.fade {
+    opacity: 1;
 }

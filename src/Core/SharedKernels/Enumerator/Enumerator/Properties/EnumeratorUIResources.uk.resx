@@ -1002,4 +1002,16 @@
   <data name="YouChangeYouPasswordTryToLoginAgainWithNewPassword" xml:space="preserve">
     <value>Ви змінили поточний пароль. Спробуйте увійти ще раз з новим паролем.</value>
   </data>
+  <data name="MenuItem_Title_Return" xml:space="preserve">
+      <value>Повернутися</value>
+  </data>
+  <data name="Dashboard_CreateInterview_TargetArea_Warning" xml:space="preserve">
+    <value>Завдання вимагає створювати інтев'ю з Карти завдання. Рекомендовано використовувати режим Гео Зонування. Бажаєте продовжити?</value>
+  </data>
+  <data name="AssigmentMap_CreateInterview_OutTargetArea_Warning" xml:space="preserve">
+    <value>Ви створюєте інтерв’ю за межами цільової області. Бажаєте продовжити?</value>
+  </data>
+  <data name="AssigmentMap_CreateInterview_DisabledTargetArea_Warning" xml:space="preserve">
+    <value>Рекомендується увімкнути геофенсинг для перевірки цільової зони. Бажаєте продовжити?</value>
+  </data>
 </root>

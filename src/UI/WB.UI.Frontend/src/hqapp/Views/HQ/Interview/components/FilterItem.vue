@@ -1,6 +1,6 @@
 <template>
     <div class="form-group">
-        <input class="checkbox-filter" :id="option" type="checkbox" v-model="value" @change="change">
+        <input class="checkbox-filter" :id="option" type="checkbox" v-model="value" @change.stop="change">
         <label :for="option">
             <span class="tick"></span>{{ title }} ({{ found }})
         </label>

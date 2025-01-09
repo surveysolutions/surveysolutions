@@ -5,6 +5,7 @@ using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
@@ -87,7 +88,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 
         [Test]
         public void It_should_not_switch_translation() =>
-            Assert.IsEmpty(this.eventContext.GetEvents<TranslationSwitched>());
+            ClassicAssert.IsEmpty(this.eventContext.GetEvents<TranslationSwitched>());
 
         static InterviewSynchronizationDto synchronizationDto;
         static StatefulInterview interview;

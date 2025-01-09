@@ -53,7 +53,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         public IMvxAsyncCommand CancelCommand => new MvxAsyncCommand(this.NavigateToPreviousViewModel, () => !this.IsInProgress);
 
         public IMvxAsyncCommand NavigateToDiagnosticsPageCommand
-            => new MvxAsyncCommand(this.ViewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>,
+            => new MvxAsyncCommand(
+                () => this.ViewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>(),
                 () => !this.IsInProgress);
 
         public IMvxAsyncCommand RelinkCommand => new MvxAsyncCommand(this.RelinkCurrentInterviewerToDeviceAsync, () => !this.IsInProgress);

@@ -36,10 +36,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             return this.EntityWithErrorsViewModels<EntityWithErrorsViewModel>(interviewId, navigationState, invalidEntities, interview);
         }
 
-        public IEnumerable<EntityWithErrorsViewModel> GetTopUnansweredQuestions(string interviewId, NavigationState navigationState)
+        public IEnumerable<EntityWithErrorsViewModel> GetTopUnansweredQuestions(string interviewId, NavigationState navigationState, bool forSupervisor)
         {
             IStatefulInterview interview = this.interviewRepository.Get(interviewId);
-            Identity[] invalidEntities = interview.GetAllUnansweredQuestions().Take(this.maxNumberOfEntities).ToArray();
+            Identity[] invalidEntities = interview.GetAllUnansweredQuestions(forSupervisor).Take(this.maxNumberOfEntities).ToArray();
             return this.EntityWithErrorsViewModels<EntityWithErrorsViewModel>(interviewId, navigationState, invalidEntities, interview, false);
         }
 

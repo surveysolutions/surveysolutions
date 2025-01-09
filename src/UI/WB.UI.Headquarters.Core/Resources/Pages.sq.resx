@@ -147,7 +147,7 @@
   <data name="ApprovedByHeadquarters" xml:space="preserve">
     <value>Miratuar nga zyra qendrore </value>
   </data>
-  <data name="ApprovedByupervisor" xml:space="preserve">
+  <data name="ApprovedBySupervisor" xml:space="preserve">
     <value>Miratuar nga supervizori</value>
   </data>
   <data name="ApproveRejectPartialView_ApproveAction" xml:space="preserve">
@@ -271,7 +271,7 @@
     <value>I/e ndaluar</value>
   </data>
   <data name="GetEsriExtraDescription" xml:space="preserve">
-    <value>Mbështetja e Hartës ESRI është një element eksperimental. Përdoreni vetëm nëse ju duhet funksioni i përparuar ESRI GIS. Përfshirja e këtij funksioni do të rritë ndjeshëm madhësinë e aplikimit dhe kohën e shkarkimit. </value>
+      <value>Funksionaliteti GIS do të rrisë ndjeshëm madhësinë e aplikacionit dhe kohën e shkarkimit. Ndiqni udhëzimet e mbikëqyrësit tuaj se cili version i aplikacionit Intervistues (me ose pa harta) nevojitet për detyrën tuaj.</value>
   </data>
   <data name="GetLatestApp" xml:space="preserve">
     <value>Shkarko aplikimin e fundit të Intervistuesit </value>

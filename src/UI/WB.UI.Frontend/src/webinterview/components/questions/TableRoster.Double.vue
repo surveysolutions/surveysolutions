@@ -1,26 +1,18 @@
 <template>
-    <input
-        type="text"
-        autocomplete="off"
-        inputmode="decimal"
-        class="ag-cell-edit-input"
-        ref="inputDouble"
-        :placeholder="noAnswerWatermark"
-        :title="noAnswerWatermark"
-        :value="$me.answer"
-        :disabled="!$me.acceptAnswer"
+    <input type="text" autocomplete="off" inputmode="decimal" class="ag-cell-edit-input" ref="inputDouble"
+        :placeholder="noAnswerWatermark" :title="noAnswerWatermark" :value="$me.answer" :disabled="!$me.acceptAnswer"
         v-numericFormatting="{
-            minimumValue:'-99999999999999.99999999999999',
-            maximumValue:'99999999999999.99999999999999',
+            minimumValue: '-99999999999999.99999999999999',
+            maximumValue: '99999999999999.99999999999999',
             digitGroupSeparator: groupSeparator,
-            decimalCharacter:decimalSeparator,
+            decimalCharacter: decimalSeparator,
             decimalPlaces: decimalPlacesCount,
             allowDecimalPadding: false
-        }"/>
+        }" />
 </template>
 
 <script lang="js">
-import Vue from 'vue'
+import { nextTick } from 'vue'
 import { entityDetails, tableCellEditor } from '../mixins'
 import { getGroupSeparator, getDecimalSeparator, getDecimalPlacesCount } from './question_helpers'
 
@@ -30,11 +22,14 @@ export default {
 
     data() {
         return {
-            autoNumericElement: null,
+            //autoNumericElement: null,
             cancelBeforeStart: true,
         }
     },
     computed: {
+        autoNumericElement() {
+            return this.$refs.inputDouble.autoNumericElement
+        },
         noAnswerWatermark() {
             return !this.$me.acceptAnswer && !this.$me.isAnswered ? this.$t('Details.NoAnswer') : this.$t('WebInterviewUI.DecimalEnter')
         },
@@ -56,7 +51,7 @@ export default {
         answerDoubleQuestion(evnt) {
             const answerString = this.autoNumericElement.getNumericString()
             if (answerString.replace(/[^0-9]/g, '').length > 15) {
-                this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.DecimalTooBig'))
+                this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.DecimalTooBig') + " '" + answerString + "'")
                 return
             }
 
@@ -66,14 +61,14 @@ export default {
 
             this.saveAnswerValue(answer)
         },
-        saveAnswerValue(answer){
+        saveAnswerValue(answer) {
             this.sendAnswer(() => {
-                if(this.handleEmptyAnswer(answer)) {
+                if (this.handleEmptyAnswer(answer)) {
                     return
                 }
 
                 if (answer > 999999999999999 || answer < -999999999999999) {
-                    this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.DecimalCannotParse'))
+                    this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.DecimalCannotParse') + " '" + answer + "'")
                     return
                 }
 
@@ -96,14 +91,14 @@ export default {
         this.cancelBeforeStart = this.editorParams.charPress && ('1234567890'.indexOf(this.editorParams.charPress) < 0)
     },
     mounted() {
-        Vue.nextTick(() => {
+        nextTick(() => {
             if (this.$refs.inputDouble) {
                 this.$refs.inputDouble.select()
                 this.$refs.inputDouble.focus()
             }
         })
     },
-    beforeDestroy () {
+    beforeDestroy() {
         this.destroy()
     },
 }

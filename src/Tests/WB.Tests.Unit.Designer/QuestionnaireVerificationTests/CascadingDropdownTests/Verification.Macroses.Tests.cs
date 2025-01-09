@@ -2,6 +2,7 @@
 using System;
 using System.Linq;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Verifier;
 
@@ -25,11 +26,11 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests.CascadingDropdow
             var verificationMessages = verifier.GetAllErrors(Create.QuestionnaireView(questionnaire));
 
             //assert
-            Assert.AreEqual(verificationMessages.Count(), 1);
-            Assert.AreEqual(verificationMessages.Single().Code, "WB0271");
-            Assert.AreEqual(verificationMessages.Single().References.Count, 1);
+            ClassicAssert.AreEqual(verificationMessages.Count(), 1);
+            ClassicAssert.AreEqual(verificationMessages.Single().Code, "WB0271");
+            ClassicAssert.AreEqual(verificationMessages.Single().References.Count, 1);
             Assert.That(verificationMessages.Single().References.Select(x=>x.Type), Is.All.EqualTo(QuestionnaireVerificationReferenceType.Macro));
-            Assert.AreEqual(verificationMessages.Single().References.ElementAt(0).Id, macroId);
+            ClassicAssert.AreEqual(verificationMessages.Single().References.ElementAt(0).Id, macroId);
         }
     }
 }

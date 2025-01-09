@@ -5,25 +5,23 @@ namespace WB.Core.Infrastructure.FileSystem
 {
     public interface IArchiveUtils
     {
-        void ZipDirectoryToFile(string sourceDirectory, string archiveFilePath);
-        void Unzip(string archivedFile, string extractToFolder, bool ignoreRootDirectory = false);
-        void Unzip(Stream archivedFile, string extractToFolder, bool ignoreRootDirectory = false);
-        
-        IEnumerable<ExtractedFile> GetFilesFromArchive(byte[] archivedFileAsArray);
+        // Extraction methods
+        void ExtractToDirectory(string archivedFile, string extractToFolder, bool ignoreRootDirectory = false);
+        void ExtractToDirectory(Stream archivedFile, string extractToFolder, bool ignoreRootDirectory = false);
         ExtractedFile GetFileFromArchive(string archiveFilePath, string fileName);
         ExtractedFile GetFileFromArchive(byte[] archivedFileAsArray, string fileName);
-
-        bool IsZipFile(string filePath);
+        IList<ExtractedFile> GetFilesFromArchive(Stream inputStream);
         bool IsZipStream(Stream zipStream);
 
-        Dictionary<string, long> GetArchivedFileNamesAndSize(string filePath);
-        Dictionary<string, long> GetArchivedFileNamesAndSize(byte[] archivedFileAsArray);
-        Dictionary<string, long> GetArchivedFileNamesAndSize(Stream inpuStream);
-        byte[] CompressStringToByteArray(string fileName, string fileContentAsString);
+        // File information methods
+        Dictionary<string, long> GetFileNamesAndSizesFromArchive(byte[] archivedFileAsArray);
+        Dictionary<string, long> GetFileNamesAndSizesFromArchive(Stream inputStream);
+
+        // Compression methods
         string CompressString(string stringToCompress);
         string DecompressString(string stringToDecompress);
-        IEnumerable<ExtractedFile> GetFilesFromArchive(Stream inputStream);
-        byte[] ZipFiles(Stream uncompressedDataStream, string entryName);
-        void ZipFiles(IEnumerable<string> files, string archiveFilePath);
+        byte[] CompressContentToSingleFile(byte[] uncompressedData, string entryName);
+        void CreateArchiveFromDirectory(string directory, string archiveFile);
+        void CreateArchiveFromFileList(IEnumerable<string> files, string archiveFilePath);
     }
 }

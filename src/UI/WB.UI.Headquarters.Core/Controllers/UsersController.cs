@@ -22,6 +22,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Enumerator.Native.WebInterview;
+using WB.Infrastructure.Native.Workspaces;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Code.Authentication;
 using WB.UI.Headquarters.Code.UsersManagement;
@@ -30,6 +31,7 @@ using WB.UI.Headquarters.Models;
 using WB.UI.Headquarters.Models.Users;
 using WB.UI.Headquarters.Resources;
 using WB.UI.Headquarters.Services.Impl;
+using WB.UI.Shared.Web.Extensions;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -1091,7 +1093,7 @@ namespace WB.UI.Headquarters.Controllers
                 ImpersonateUrl = authorizedUser.IsObserver ? Url.Action("ObservePerson", "Account") : null,
                 ArchiveUsersUrl = authorizedUser.IsAdministrator ? Url.Action("ArchiveUsers", "UsersApi") : null,
                 SupervisorsUrl = Url.Action("SupervisorsCombobox", "Teams"),
-                MoveUserToAnotherTeamUrl = Url.Action("MoveUserToAnotherTeam", "UsersApi"),
+                MoveUserToAnotherTeamUrl = Url.ActionAtWorkspace(WorkspaceContext.Users, "MoveUserToAnotherTeam", "UsersApi"),
                 InterviewerProfile = Url.Action("Profile", "Interviewer"),
                 EditUrl = authorizedUser.IsAdministrator ? Url.Action("Manage") : null,
                 CreateUrl = canAddUser ? Url.Action("Create", new{ id = UserRoles.Interviewer }) : null,

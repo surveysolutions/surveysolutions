@@ -49,12 +49,14 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
 
             return services
                 .AddGraphQLServer()
+                .InitializeOnStartup()
                 .ConfigureSchema(x=>
                 {
                     x.Use<WorkspaceGraphQlMiddleware>();
                 })
                 .AddAuthorization()
-                .SetPagingOptions(new PagingOptions(){MaxPageSize = 200})
+                .ModifyPagingOptions(o => { o.MaxPageSize = 200; })
+                .ModifyCostOptions(o => { o.EnforceCostLimits = false; })
                 .AddQueryType(x => x.Name("HeadquartersQuery"))
                 .AddType<AssignmentsQueryExtension>()
                 .AddType<InterviewsQueryExtension>()
@@ -72,7 +74,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
                 .AddConvention<INamingConventions>(new CompatibilityNamingConvention())
                 .BindRuntimeType<string, CustomStringOperationFilterInput>()
                 .BindRuntimeType<IdentifyEntityValue, IdentifyEntityValueFilterInput>()
+                .AddType<IdentifyEntityValueFilterInput>()
                 .BindRuntimeType<QuestionnaireCompositeItem, QuestionnaireItemsFilterType>()
+                .AddType<QuestionnaireItemsFilterType>()
                 .AddSorting();
         }
 

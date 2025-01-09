@@ -33,6 +33,8 @@ namespace WB.UI.Shared.Web.Captcha
                 
                 var inputText = captchaInput[0];
                 var token = request.Form[TokenName][0];
+                if (inputText == null || token == null)
+                    return Task.FromResult(false);
 
                 var protector = protectionProvider.CreateProtector("Captcha code protector");
                 var code = protector.Unprotect(token);
@@ -50,7 +52,7 @@ namespace WB.UI.Shared.Web.Captcha
             return Task.FromResult(false);
         }
 
-        public HtmlString Render<T>(IHtmlHelper<T> html)
+        public HtmlString Render()
         {
             var imageGenerator = new CaptchaImageGenerator();
             var code = RandomString(6);
@@ -62,6 +64,7 @@ namespace WB.UI.Shared.Web.Captcha
             if (imageGenerator.IsFontFound)
             {
                 var imageBytes = imageGenerator.Generate(code);
+                ArgumentNullException.ThrowIfNull(imageBytes);
 
                 htmlContent = $@"
 <input id='{TokenName}' name='{TokenName}' type='hidden' value='{token}'>

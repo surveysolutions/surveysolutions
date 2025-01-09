@@ -1,34 +1,29 @@
 <template>
-    <HqLayout :title="$t('Pages.InterviewersAndDevicesTitle')"
-        :subtitle="$t('Pages.InterviewersAndDevicesSubtitle')"
+    <HqLayout :title="$t('Pages.InterviewersAndDevicesTitle')" :subtitle="$t('Pages.InterviewersAndDevicesSubtitle')"
         :hasSearch="true">
-        <div slot="subtitle">
-            <a
-                v-if="supervisorId"
-                :href="interviewersAndDevicesUrl"
-                class="btn btn-default">
-                <span class="glyphicon glyphicon-arrow-left"></span>
-                {{ $t('PeriodicStatusReport.BackToTeams') }}
-            </a>
-        </div>
-        <DataTables ref="table"
-            :tableOptions="tableOptions"
-            exportable
-            hasTotalRow></DataTables>
+        <template v-slot:subtitle>
+            <div>
+                <a v-if="supervisorId" :href="interviewersAndDevicesUrl" class="btn btn-default">
+                    <span class="glyphicon glyphicon-arrow-left"></span>
+                    {{ $t('PeriodicStatusReport.BackToTeams') }}
+                </a>
+            </div>
+        </template>
+        <DataTables ref="table" :tableOptions="tableOptions" exportable hasTotalRow></DataTables>
     </HqLayout>
 </template>
 
 <script>
 export default {
     mounted() {
-        if (this.$refs.table){
+        if (this.$refs.table) {
             this.$refs.table.reload()
         }
     },
     methods: {
         renderCell(data, row, facet) {
             const formatedNumber = this.formatNumber(data)
-            if(data === 0 || row.DT_RowClass == 'total-row') {
+            if (data === 0 || row.DT_RowClass == 'total-row') {
                 return `<span>${formatedNumber}</span>`
             }
 
@@ -42,20 +37,20 @@ export default {
             if (value == null || value == undefined)
                 return value
             var language = navigator.languages && navigator.languages[0] ||
-               navigator.language ||
-               navigator.userLanguage
+                navigator.language ||
+                navigator.userLanguage
             return value.toLocaleString(language)
         },
         hasIssue(data) {
             return data.lowStorageCount || data.wrongDateOnTabletCount
         },
-        getLinkToInterviewerProfile(data, row){
+        getLinkToInterviewerProfile(data, row) {
             const formatedNumber = this.formatNumber(data)
             const linkClass = this.hasIssue(row) ? 'text-danger' : ''
 
             return `<a href='${this.$config.model.interviewerProfileUrl}/${row.teamId}'><hi class='${linkClass}'>${formatedNumber}</hi></a>`
         },
-        getLinkToSupervisorProfile(data, supervisorId){
+        getLinkToSupervisorProfile(data, supervisorId) {
             const formatedNumber = this.formatNumber(data)
 
             return `<a href='${this.$config.model.supervisorProfileUrl}/${supervisorId}'><hi>${formatedNumber}</hi></a>`
@@ -68,7 +63,7 @@ export default {
         supervisorId() {
             return this.$route.params.supervisorId
         },
-        interviewersAndDevicesUrl(){
+        interviewersAndDevicesUrl() {
             return this.$config.model.baseReportUrl
         },
         tableOptions() {
@@ -81,17 +76,17 @@ export default {
                         name: 'TeamName',
                         title: self.supervisorId ? this.$t('DevicesInterviewers.Interviewers') : this.$t('DevicesInterviewers.Teams'),
                         orderable: true,
-                        render: function(data, type, row) {
+                        render: function (data, type, row) {
 
-                            if(self.supervisorId && row.DT_RowClass == 'total-row') {
+                            if (self.supervisorId && row.DT_RowClass == 'total-row') {
                                 return self.getLinkToSupervisorProfile(data, self.supervisorId)
                             }
 
-                            if(row.DT_RowClass == 'total-row') {
+                            if (row.DT_RowClass == 'total-row') {
                                 return `<span>${data}</span>`
                             }
 
-                            if(self.supervisorId) {
+                            if (self.supervisorId) {
                                 return self.getLinkToInterviewerProfile(data, row)
                             }
 
@@ -115,7 +110,7 @@ export default {
                         'class': 'type-numeric',
                         orderable: true,
                         title: this.$t('DevicesInterviewers.NoAssignments'),
-                        render: function(data, type, row) {
+                        render: function (data, type, row) {
                             return self.renderCell(data, row, 'NoAssignmentsReceived')
                         },
                     },
@@ -125,7 +120,7 @@ export default {
                         'class': 'type-numeric',
                         orderable: true,
                         title: this.$t('DevicesInterviewers.NeverUploaded'),
-                        render: function(data, type, row) {
+                        render: function (data, type, row) {
                             return self.renderCell(data, row, 'NeverUploaded')
                         },
                     },
@@ -135,7 +130,7 @@ export default {
                         'class': 'type-numeric',
                         orderable: true,
                         title: this.$t('DevicesInterviewers.TabletReassigned'),
-                        render: function(data, type, row) {
+                        render: function (data, type, row) {
                             return self.renderCell(data, row, 'TabletReassigned')
                         },
                     },

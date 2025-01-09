@@ -8,10 +8,10 @@ namespace WB.UI.Shared.Web.Authentication
 {
     public static class BasicAuthenticationExtensions
     {
-        public static BasicCredentials ParseBasicCredentials(this IHeaderDictionary headerDictionary)
+        public static BasicCredentials? ParseBasicCredentials(this IHeaderDictionary headerDictionary)
         {
             var authorizationHeader = headerDictionary[HeaderNames.Authorization];
-            AuthenticationHeaderValue authHeader = AuthenticationHeaderValue.Parse(authorizationHeader);
+            AuthenticationHeaderValue authHeader = AuthenticationHeaderValue.Parse(authorizationHeader!);
             if (authHeader.Parameter == null)
                 return null;
             
@@ -19,11 +19,7 @@ namespace WB.UI.Shared.Web.Authentication
             var credentials = Encoding.UTF8.GetString(credentialBytes).Split(':');
             var username = credentials[0];
             var password = credentials[1];
-            BasicCredentials creds = new BasicCredentials
-            {
-                Username = username, 
-                Password = password
-            };
+            BasicCredentials creds = new BasicCredentials(username, password);
 
             return creds;
         }

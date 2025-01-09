@@ -1,5 +1,5 @@
-import Vue from 'vue'
 import { capitalize, sum, unionBy, find } from 'lodash'
+import { api } from '../../../../../webinterview/api/http'
 
 function getSelectedFlags(state) {
     const flags = Object.keys(state.filter)
@@ -46,7 +46,7 @@ export default {
             const flags = getSelectedFlags(state)
             const skip = state.search.needToClear ? 0 : state.search.skip
             const limit = state.search.pageSize
-            const res = await Vue.$api.interview.get('search', { flags, skip, limit })
+            const res = await api.get('search', { flags, skip, limit })
             commit('LOG_LAST_ACTIVITY')
             commit('SET_SEARCH_RESULT', res)
         },
@@ -68,7 +68,7 @@ export default {
         },
 
         getStatusesHistory() {
-            return Vue.$api.interview('getStatusesHistory')
+            return api.interview('getStatusesHistory')
         },
 
         resetAllFilters({ commit, state, dispatch }) {
@@ -133,7 +133,7 @@ export default {
             Object.keys(state.filter).forEach(key => {
                 if (state.filter[key].value != false)
                     state.search.needToClear = true
-                Vue.set(state.filter[key], 'value', false)
+                state.filter[key]['value'] = false
             })
         },
     },

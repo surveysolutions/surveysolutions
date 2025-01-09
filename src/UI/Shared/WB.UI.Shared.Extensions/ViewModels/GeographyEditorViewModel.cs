@@ -40,12 +40,11 @@ namespace WB.UI.Shared.Extensions.ViewModels
             IMapService mapService, IUserInteractionService userInteractionService, ILogger logger,
             IEnumeratorSettings enumeratorSettings, IMapUtilityService mapUtilityService,
             IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher,
-            IVirbationService vibrationService,
-            IPermissionsService permissionsService,
-            IEnumeratorSettings settings
+            IVibrationService vibrationService,
+            IPermissionsService permissionsService
             )
             : base(principal, viewModelNavigationService, mapService, userInteractionService, logger,
-                enumeratorSettings, mapUtilityService, mainThreadAsyncDispatcher, permissionsService, settings)
+                enumeratorSettings, mapUtilityService, mainThreadAsyncDispatcher, permissionsService)
         {
             VibrationService = vibrationService;
         }
@@ -57,7 +56,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
         private Geometry Geometry { set; get; }
         private GeometryType RequestedGeometryType { get; set; }
 
-        private IVirbationService VibrationService { get; set; }
+        private IVibrationService VibrationService { get; set; }
 
         public string MapName { set; get; }
         public string Title { set; get; }
@@ -643,7 +642,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 
                 var collectedPoints = geometryBuilder.PointCount;
                 this.CanSave = CalculateCanSave(collectedPoints);
-                
+                this.CanUndo = collectedPoints > 0;
+
                 await UpdateDrawNeighborsAsync(geometryBuilder.ToGeometry(), this.GeographyNeighbors);
             }
         }
@@ -656,7 +656,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             }
         }
 
-        public IMvxAsyncCommand UndoCommand => new MvxAsyncCommand(this.BtnUndo);
+        public IMvxAsyncCommand UndoCommand => new MvxAsyncCommand(this.BtnUndo, () => CanUndo);
         public IMvxCommand CancelEditCommand => new MvxCommand(this.BtnCancelCommand);
 
         private bool isCollecting = false;
@@ -913,20 +913,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
             get => this.startButtonVisible;
             set => this.RaiseAndSetIfChanged(ref this.startButtonVisible, value);
         }        
-
-        private bool isPanelVisible;
-        public bool IsPanelVisible
-        {
-            get => this.isPanelVisible;
-            set => this.RaiseAndSetIfChanged(ref this.isPanelVisible, value);
-        }
-
-        public IMvxCommand SwitchPanelCommand => new MvxCommand(() =>
-        {
-            IsPanelVisible = !IsPanelVisible;
-        });
         
-        public IMvxAsyncCommand<MapDescription> SwitchMapCommand => new MvxAsyncCommand<MapDescription>(async (mapDescription) =>
+        /*public IMvxAsyncCommand<MapDescription> SwitchMapCommand => new MvxAsyncCommand<MapDescription>(async (mapDescription) =>
         {
             IsPanelVisible = false;
 
@@ -949,7 +937,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
                 await DrawNeighborsAsync(geometry).ConfigureAwait(false);
             }
-        });
+        });*/
 
         public override void ViewDisappearing()
         {

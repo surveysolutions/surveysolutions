@@ -1,4 +1,4 @@
-import Vue from 'vue'
+//import Vue from 'vue'
 
 import Headquarters from './Headquarters'
 import Manage from './Manage'
@@ -15,10 +15,7 @@ import ShowRecoveryCodes from './ShowRecoveryCodes'
 import ResetRecoveryCodes from './ResetRecoveryCodes'
 import Disable2fa from './Disable2fa'
 import ChangePassword from './ChangePassword'
-import ProfileLayout from './ProfileLayout'
 import ApiTokens from './ApiTokens'
-
-Vue.component('ProfileLayout', ProfileLayout)
 
 export default class UsersComponent {
     constructor(rootStore) {

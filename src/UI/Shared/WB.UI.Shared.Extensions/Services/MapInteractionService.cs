@@ -1,5 +1,3 @@
-using System;
-using System.Threading.Tasks;
 using Esri.ArcGISRuntime;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -40,10 +38,12 @@ namespace WB.UI.Shared.Extensions.Services
             this.viewModelNavigationService = viewModelNavigationService;
         }
 
-        public async Task<AreaEditResult> EditAreaAsync(EditAreaArgs args)
+        public async Task<AreaEditResult> EditAreaAsync(EditAreaArgs args, bool supportOfflineMaps)
         {
             await this.permissions.AssureHasPermissionOrThrow<Permissions.LocationWhenInUse>().ConfigureAwait(false);
-            await this.permissions.AssureHasExternalStoragePermissionOrThrow().ConfigureAwait(false);
+            
+            if(supportOfflineMaps)
+                await this.permissions.AssureHasExternalStoragePermissionOrThrow().ConfigureAwait(false);
 
             return await this.EditAreaImplAsync(args);
         }
@@ -54,6 +54,14 @@ namespace WB.UI.Shared.Extensions.Services
 
             await this.viewModelNavigationService.NavigateToAsync<InterviewerMapDashboardViewModel, MapDashboardViewModelArgs>(
                 new MapDashboardViewModelArgs(), finishActivityOnSuccess: true).ConfigureAwait(false);
+        }
+
+        public async Task OpenAssignmentMapAsync(int assignmentId)
+        {
+            await this.permissions.AssureHasExternalStoragePermissionOrThrow().ConfigureAwait(false);
+
+            await this.viewModelNavigationService.NavigateToAsync<AssignmentMapViewModel, AssignmentMapViewModelArgs>(
+                new AssignmentMapViewModelArgs() { AssignmentId = assignmentId }, finishActivityOnSuccess: true).ConfigureAwait(false);
         }
 
         public async Task OpenSupervisorMapDashboardAsync()

@@ -1,8 +1,7 @@
-import Vue from 'vue'
 import i18next from 'i18next'
 
 export default {
-    initialize(browserLanguage) {
+    initialize(browserLanguage, vue) {
         const locale = browserLanguage.split('-')[0]
 
         const options = {
@@ -16,7 +15,7 @@ export default {
             interpolation: { escapeValue: false, skipOnVariables: false },
             saveMissing: true,
             missingKeyHandler(lng, ns, key, fallbackValue) {
-                console.warn('Missing translation for language', lng, 'key',ns + '.' + fallbackValue)
+                console.warn('Missing translation for language', lng, 'key', ns + '.' + fallbackValue)
             },
             appendNamespaceToMissingKey: true,
             parseMissingKeyHandler(key) {
@@ -25,11 +24,7 @@ export default {
         }
         i18next.init(options)
 
-        Vue.$t = function() {
-            return i18next.t.apply(i18next, arguments)
-        }
-
-        Vue.prototype.$t = function() {
+        vue.config.globalProperties.$t = function () {
             return i18next.t.apply(i18next, arguments)
         }
 

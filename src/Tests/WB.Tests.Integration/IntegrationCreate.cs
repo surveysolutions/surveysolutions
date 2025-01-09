@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Autofac;
+using Autofac.Core;
 using Humanizer;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Events;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Ncqrs.Eventing;
@@ -18,6 +18,7 @@ using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
 using NHibernate.Tool.hbm2ddl;
 using Npgsql;
+using NSubstitute;
 using WB.Core.BoundedContexts.Designer.CodeGenerationV2;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
@@ -442,8 +443,44 @@ namespace WB.Tests.Integration
         public static IUnitOfWork UnitOfWork(ISessionFactory factory,
             IWorkspaceContextAccessor workspaceContextAccessor = null)
         {
-            return new UnitOfWork(new Lazy<ISessionFactory>(() => factory), 
-                Mock.Of<ILogger<UnitOfWork>>(),  workspaceContextAccessor ?? Create.Service.WorkspaceContextAccessor(), Mock.Of<ILifetimeScope>());
+            var sessionFactory = new Lazy<ISessionFactory>(() => factory);
+            
+            IComponentRegistration componentRegistration = new Mock<IComponentRegistration>().Object;
+            var componentRegistry = new Mock<IComponentRegistry>();
+            
+            ServiceRegistration serviceRegistration = new ServiceRegistration();
+            
+            componentRegistry.Setup(x =>
+                    x.TryGetServiceRegistration(It.IsAny<Service>(), out serviceRegistration))
+                .Returns(true);
+            
+            var container = new Mock<ILifetimeScope>(){ CallBase = true };
+
+            container.Setup(x => x.ResolveComponent(It.Ref<ResolveRequest>.IsAny))
+                 .Returns(() => {
+                     return sessionFactory;
+                 });
+
+            container.Setup(x => x.BeginLifetimeScope(It.IsAny<string>()))
+                .Returns(() => {
+                    return container.Object;
+                });
+            container.SetupGet(x => x.ComponentRegistry)
+                .Returns(() =>
+                {
+                    return componentRegistry.Object;
+                });
+            
+            return new UnitOfWork( 
+                Mock.Of<ILogger<UnitOfWork>>(),
+                workspaceContextAccessor ?? Create.Service.WorkspaceContextAccessor(), 
+                
+                container.Object);
+                // Mock.Of<ILifetimeScope>(
+                //     x => 
+                //         //x.Resolve<Lazy<ISessionFactory>>() == new Lazy<ISessionFactory>(() => factory) && 
+                //                               x.Resolve<ISessionFactory>() == factory
+                //         ));
         }
 
         private static HbmMapping GetMappingsFor(IEnumerable<Type> painStorageEntityMapTypes, string schemaName = null)

@@ -153,7 +153,7 @@
   <data name="ApprovedByHeadquarters" xml:space="preserve">
     <value>Schváleno Ústředím</value>
   </data>
-  <data name="ApprovedByupervisor" xml:space="preserve">
+  <data name="ApprovedBySupervisor" xml:space="preserve">
     <value>Schváleno Garantem</value>
   </data>
   <data name="AreaQestion_Area" xml:space="preserve">
@@ -196,7 +196,7 @@
     <value>Chyba</value>
   </data>
   <data name="GetEsriExtraDescription" xml:space="preserve">
-    <value>Podpora ESRI Map je ve vývoji. Použijte jej pouze v případě, že potřebujete pokročilé funkce ESRI GIS. Využívání této funkce výrazně zvýší velikost aplikace a dobu stahování.</value>
+      <value>Funkce GIS výrazně zvýší velikost aplikace a dobu stahování. Postupujte podle pokynů svého nadřízeného, ​​která verze aplikace Tazatel (s mapami nebo bez nich) je pro váš úkol potřeba.</value>
   </data>
   <data name="GetLatestApp" xml:space="preserve">
     <value>Stáhněte si nejnovější verzi aplikace Tazatel</value>

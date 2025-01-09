@@ -10,14 +10,15 @@
 Please wait while data is being loaded from server...
 </pre>
 
-<a href="@Url.Action("GetSchema","ControlPanel", new {getFile = true})" class="btn btn-default" target="_blank">Download</a>
+<a href="@Url.Action("GetSchema","ControlPanel", new {getFile = true})" class="btn btn-default"
+    target="_blank">Download</a>
 
-@section scripts{
+@section scripts {
     <script type="text/javascript">
-        $(function() {
-            var schemaUrl = '@Url.Action("GetSchema","ControlPanel")';
-            $.getJSON(schemaUrl, function(data) {
-                $(".raw").text(data);                
+        document.addEventListener('DOMContentLoaded', function () {
+            var schemaUrl = '@Url.Action("GetSchema", "ControlPanel")';
+            $.getJSON(schemaUrl, function (data) {
+                $(".raw").text(data);
             });
         });
     </script>

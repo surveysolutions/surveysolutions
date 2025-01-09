@@ -108,6 +108,7 @@ namespace WB.UI.Supervisor.ServiceLocation
             registry.Bind<IHandleCommunicationMessage, InterviewerUpdateHandler>();
             registry.Bind<IHandleCommunicationMessage, SupervisorCalendarEventsHandler>();
             registry.Bind<IHandleCommunicationMessage, SupervisorInterviewerSettingsHandler>();
+            registry.Bind<IHandleCommunicationMessage, SupervisorGeoTrackingHandler>();
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)

@@ -1,23 +1,17 @@
 <template>
-    <div class="filters-container"
-        id="questionsFilters">
+    <div class="filters-container" id="questionsFilters">
         <h4>
-            {{$t("Interviews.FiltersByQuestions")}}
+            {{ $t("Interviews.FiltersByQuestions") }}
         </h4>
         <div class="block-filter">
-            <button type="button"
-                id="btnQuestionsFilter"
-                class="btn"
-                :disabled="isDisabled"
-                :title="isDisabled ? $t('Interviews.QuestionsFilterNotAvailable'):''"
+            <button type="button" id="btnQuestionsFilter" class="btn" :disabled="isDisabled"
+                :title="isDisabled ? $t('Interviews.QuestionsFilterNotAvailable') : ''"
                 @click="$refs.questionsSelector.modal()">
-                {{$t("Interviews.QuestionsSelector")}}
+                {{ $t("Interviews.QuestionsSelector") }}
             </button>
         </div>
 
-        <ModalFrame ref="questionsSelector"
-            id="modalQuestionsSelector"
-            :title="$t('Interviews.ChooseQuestionsTitle')">
+        <ModalFrame ref="questionsSelector" id="modalQuestionsSelector" :title="$t('Interviews.ChooseQuestionsTitle')">
             <form onsubmit="return false;">
                 <div class="action-container">
                     <!-- <div class="pull-right">
@@ -26,66 +20,56 @@
                     <div>
                         <Checkbox v-for="questionnaireItem in questionnaireItemsList"
                             :key="'cb_' + questionnaireItem.variable"
-                            :label="`${sanitizeHtml(questionnaireItem.title)}`"
-                            :value="isChecked(questionnaireItem)"
-                            :name="'check_' + questionnaireItem.variable"
-                            @input="check(questionnaireItem)" />
+                            :label="`${sanitizeHtml(questionnaireItem.title)}`" :value="isChecked(questionnaireItem)"
+                            :name="'check_' + questionnaireItem.variable" @input.self="check(questionnaireItem)" />
                     </div>
                 </div>
             </form>
-            <div slot="actions">
-                <button
-                    id="btnQuestionsSelectorOk"
-                    type="button"
-                    class="btn btn-primary"
-                    data-dismiss="modal"
-                    role="cancel">{{ $t("Common.Ok") }}</button>
-            </div>
+            <template v-slot:actions>
+                <div>
+                    <button id="btnQuestionsSelectorOk" type="button" class="btn btn-primary" data-bs-dismiss="modal"
+                        role="cancel">{{ $t("Common.Ok") }}</button>
+                </div>
+            </template>
         </ModalFrame>
 
-        <ModalFrame ref="questionsExposedSelector"
-            id="modalQuestionsExposedSelector"
+        <ModalFrame ref="questionsExposedSelector" id="modalQuestionsExposedSelector" class="vue-query-builder"
             :title="$t('Interviews.DynamicFilter')">
-            <vue-query-builder
-                :rules="rules"
-                :maxDepth="6"
-                :labels="labels"
-                v-model="queryExposedVariables">
-                <template v-slot:default="slotProps">
-                    <query-builder-group
-                        v-bind="slotProps"
-                        :query.sync="queryExposedVariables"/>
+            <query-builder :config="config" v-model="queryExposedVariables">
+
+                <template #groupOperator="props">
+                    <query-builder-group-operator :groupCtrl="props" :labels="labels"
+                        :query.sync="queryExposedVariables" />
                 </template>
-            </vue-query-builder>
+
+                <template #groupControl="props">
+                    <query-builder-group :groupCtrl="props" :labels="labels" :query.sync="queryExposedVariables" />
+                </template>
+
+                <template #rule="props">
+                    <rule-slot :ruleCtrl="props" :rule="getRuleById(props.ruleIdentifier)" :labels="labels" />
+                </template>
+
+            </query-builder>
             <!-- <div>{{queryExposedVariables}}</div> -->
-            <div slot="actions">
-                <button
-                    id="btnQuestionsExposedSelectorOk"
-                    type="button"
-                    class="btn btn-primary"
-                    :disabled="saveDisabled"
-                    @click="saveExposedVariablesFilter">{{ $t("Common.Apply") }}</button>
-            </div>
+            <template v-slot:actions>
+                <div>
+                    <button id="btnQuestionsExposedSelectorOk" type="button" class="btn btn-primary"
+                        :disabled="saveDisabled" @click="saveExposedVariablesFilter">{{ $t("Common.Apply") }}</button>
+                </div>
+            </template>
         </ModalFrame>
 
-        <InterviewFilter
-
-            v-for="condition in conditions"
-            :key="'filter_' + condition.variable"
-            :id="'filter_' + condition.variable"
-            :item="itemFor(condition)"
-            :condition="condition"
+        <InterviewFilter v-for="condition in conditions" :key="'filter_' + condition.variable"
+            :id="'filter_' + condition.variable" :item="itemFor(condition)" :condition="condition"
             @change="conditionChanged">
         </InterviewFilter>
 
         <div class="block-filter">
-            <button type="button"
-                id="btnExposedQuestionsFilter"
-                class="btn"
-                :disabled="isDynamicDisabled"
-                :title="isDynamicDisabled ? $t('Interviews.DynamicFilterNotAvailable'):''"
+            <button type="button" id="btnExposedQuestionsFilter" class="btn" :disabled="isDynamicDisabled"
+                :title="isDynamicDisabled ? $t('Interviews.DynamicFilterNotAvailable') : ''"
                 @click="$refs.questionsExposedSelector.modal()">
-                {{$t("Interviews.AdvancedFilterSelector")}}
+                {{ $t("Interviews.AdvancedFilterSelector") }}
             </button>
         </div>
 
@@ -94,27 +78,29 @@
 </template>
 <script>
 
-import VueQueryBuilder from 'vue-query-builder'
-import 'vue-query-builder/dist/VueQueryBuilder.css'
+import QueryBuilder from 'query-builder-vue-3'
+import RuleSlot from "./components/CustomBootstrapRule.vue";
 import QueryBuilderGroup from './components/CustomBootstrapGroup.vue'
+import QueryBuilderGroupOperator from './components/CustomBootstrapGroupOperator.vue'
 import moment from 'moment'
 import { DateFormats } from '~/shared/helpers'
 import gql from 'graphql-tag'
 import InterviewFilter from './InterviewFilter'
 import { find, filter } from 'lodash'
 import _sanitizeHtml from 'sanitize-html'
-const sanitizeHtml = text => _sanitizeHtml(text,  { allowedTags: [], allowedAttributes: [] })
+const sanitizeHtml = text => _sanitizeHtml(text, { allowedTags: [], allowedAttributes: [] })
 
 export default {
     data() {
         return {
-            queryExposedVariables: { logicalOperator : 'all', children : [] },
+            queryExposedVariables: { operatorIdentifier: "all", children: [] },
             conditions: [], /** { } */
             questionnaireItems: [],
             selectedQuestion: null,
             checked: {},
 
             lastSavedQuery: null,
+
         }
     },
 
@@ -122,17 +108,19 @@ export default {
         questionnaireId: {
             type: String, required: false,
         },
-        questionnaireVersion : {
+        questionnaireVersion: {
             type: Number,
         },
-        questionsFilter:{ type: Object},
-        value: {type: Array},
-        exposedValuesFilter: {type: Object},
+        questionsFilter: { type: Object },
+        value: { type: Array },
+        exposedValuesFilter: { type: Object },
     },
 
+    emits: ['change', 'changeFilter'],
+
     apollo: {
-        questionnaireItems:{
-            query :gql`query questionnaireItems($workspace: String!, $id: UUID!, $version: Long!) {
+        questionnaireItems: {
+            query: gql`query questionnaireItems($workspace: String!, $id: UUID!, $version: Long!) {
                 questionnaireItems(workspace: $workspace, id: $id, version: $version, where: { or: [{identifying: {eq: true}}, {includedInReportingAtUtc: {neq: null}}]}) {
                     title, label, type, variable, entityType, variableType, identifying
                     options { title, value, parentValue }
@@ -152,7 +140,7 @@ export default {
     },
 
     mounted() {
-        if(this.value != null) {
+        if (this.value != null) {
             this.conditions = this.value
         }
     },
@@ -164,27 +152,27 @@ export default {
 
         questionnaireId() {
             this.conditions = this.value
-            this.queryExposedVariables = { logicalOperator : 'all', children : [] }
+            this.queryExposedVariables = { operatorIdentifier: "all", children: [] }
             this.saveExposedVariablesFilter()
         },
 
         questionnaireVersion() {
             this.conditions = this.value
-            this.queryExposedVariables = { logicalOperator : 'all', children : [] }
+            this.queryExposedVariables = { operatorIdentifier: "all", children: [] }
             this.saveExposedVariablesFilter()
         },
     },
 
     methods: {
-        isChecked(item){
-            return find(this.conditions, {variable: item.variable}) != null
+        isChecked(item) {
+            return find(this.conditions, { variable: item.variable }) != null
         },
 
         check(item) {
-            const condition = find(this.conditions, {variable: item.variable})
+            const condition = find(this.conditions, { variable: item.variable })
 
-            if(condition == null) {
-                this.conditions.push({variable: item.variable, field: null, value: null})
+            if (condition == null) {
+                this.conditions.push({ variable: item.variable, field: null, value: null })
             } else {
                 this.conditions = filter(this.conditions, c => c.variable != item.variable)
             }
@@ -207,19 +195,19 @@ export default {
         },
 
         conditionChanged(changedCondition) {
-            const condition = find(this.conditions, {variable: changedCondition.variable})
+            const condition = find(this.conditions, { variable: changedCondition.variable })
 
-            if(condition == null) {
+            if (condition == null) {
                 this.conditions.push(changedCondition)
             }
 
-            if(condition != null) {
+            if (condition != null) {
                 condition.field = changedCondition.field
                 condition.value = changedCondition.value
                 this.$emit('change', [...this.conditions])
             }
         },
-        saveExposedVariablesFilter(){
+        saveExposedVariablesFilter() {
             this.lastSavedQuery = this.transformQuery
             this.$emit('changeFilter', this.transformQuery)
             this.$refs.questionsExposedSelector.hide()
@@ -227,177 +215,174 @@ export default {
 
         sanitizeHtml: sanitizeHtml,
 
-        handleGroup(group){
+        handleGroup(group) {
 
-            if(group.children === undefined || group.children.length == 0){
+            if (group.children === undefined || group.children.length == 0) {
                 return null
             }
 
             var conditions = []
             group.children.forEach(element => {
-                if(element.type == 'query-builder-rule')
-                    conditions.push(this.handleRule(element.query))
-                else if(element.type == 'query-builder-group')
-                {
-                    var group = this.handleGroup(element.query)
-                    if(group != null)
+                //if (element.type == 'query-builder-rule')
+                if (element.identifier)
+                    conditions.push(this.handleRule(element))
+                //else if (element.type == 'query-builder-group') {
+                else if (element.children) {
+                    var group = this.handleGroup(element)
+                    if (group != null)
                         conditions.push(group)
                 }
             })
 
-            if(conditions.length == 0)
+            if (conditions.length == 0)
                 return null
 
             var result = {}
-            if(group.logicalOperator == 'any')
-            {
+            if (group.operatorIdentifier == 'any') {
                 result.or = conditions
             }
-            else if (group.logicalOperator == 'all')
-            {
+            else if (group.operatorIdentifier == 'all') {
                 result.and = conditions
             }
 
             return result
 
         },
-        handleRule(query){
+        handleRule(query) {
+
+            if (!query.value)
+                return
 
             var some = {
-                entity: {variable: {eq: query.rule}},
-                isEnabled: {eq: true},
+                entity: { variable: { eq: query.identifier } },
+                isEnabled: { eq: true },
             }
 
-            var entity = find(this.questionnaireItems, {variable: query.rule})
+            var entity = find(this.questionnaireItems, { variable: query.identifier })
             var ruleMap = this.getRuleMap(entity)
-            var operator = this.getOperatorMap(query.operator)
+            var operator = this.getOperatorMap(query.value.operator)
 
-            if(operator === 'notanswered')
-            {
-                some.value = {eq : ''}
+            if (operator === 'notanswered') {
+                some.value = { eq: '' }
                 var notAnsweredResult = {}
                 notAnsweredResult.or =
-                        [{identifyingData : { none: { entity: {variable: {eq: query.rule}}} }},
-                            {identifyingData : { some: some }}]
+                    [{ identifyingData: { none: { entity: { variable: { eq: query.identifier } } } } },
+                    { identifyingData: { some: some } }]
                 return notAnsweredResult
             }
 
             var singleCondition = {}
-            if(operator === 'answered')
-            {
+            if (operator === 'answered') {
                 singleCondition['neq'] = ruleMap.ruleType == 'text' ? '' : null
             }
-            else if(ruleMap.ruleType === 'select' && entity.variableType === 'BOOLEAN'){
-                singleCondition[operator] = query.value == '1' ? true : false
+            else if (ruleMap.ruleType === 'select' && entity.variableType === 'BOOLEAN') {
+                singleCondition[operator] = query.value.value == '1' ? true : false
             }
-            else if(ruleMap.ruleType == 'numeric')
-            {
-                singleCondition[operator] = query.value ? Number(query.value) : null
+            else if (ruleMap.ruleType == 'numeric') {
+                singleCondition[operator] = query.value.value ? Number(query.value.value) : null
             }
-            else if(ruleMap.ruleType == 'date')
-            {
-                if(!query.value)
-                {
+            else if (ruleMap.ruleType == 'date') {
+                if (!query.value.value) {
                     singleCondition['eq'] = null
                 }
                 else
                     switch (operator) {
                         case 'on': {
-                            var leftOn = {...some}
-                            leftOn[ruleMap.valueName] = {gte : moment(query.value).format(DateFormats.date) + 'T00:00:00Z' }
-                            var rightOn = {...some}
-                            rightOn[ruleMap.valueName] = {lte : moment(query.value).format(DateFormats.date) + 'T23:59:59Z' }
+                            var leftOn = { ...some }
+                            leftOn[ruleMap.valueName] = { gte: moment(query.value.value).format(DateFormats.date) + 'T00:00:00Z' }
+                            var rightOn = { ...some }
+                            rightOn[ruleMap.valueName] = { lte: moment(query.value.value).format(DateFormats.date) + 'T23:59:59Z' }
 
                             var dateOnResult = {
-                                and : [
-                                    {identifyingData : { some: leftOn }},
-                                    {identifyingData : { some: rightOn }},
-                                ]}
+                                and: [
+                                    { identifyingData: { some: leftOn } },
+                                    { identifyingData: { some: rightOn } },
+                                ]
+                            }
                             return dateOnResult
                         }
                         case 'noton': {
 
-                            var leftNotOn = {...some}
-                            leftNotOn[ruleMap.valueName] = {lt : moment(query.value).format(DateFormats.date) + 'T00:00:00Z' }
-                            var rightNotOn = {...some}
-                            rightNotOn[ruleMap.valueName] = {gt: moment(query.value).format(DateFormats.date) + 'T23:59:59Z' }
+                            var leftNotOn = { ...some }
+                            leftNotOn[ruleMap.valueName] = { lt: moment(query.value.value).format(DateFormats.date) + 'T00:00:00Z' }
+                            var rightNotOn = { ...some }
+                            rightNotOn[ruleMap.valueName] = { gt: moment(query.value.value).format(DateFormats.date) + 'T23:59:59Z' }
 
                             var dateNotOnResult = {
-                                or : [
-                                    {identifyingData : { some: leftNotOn }},
-                                    {identifyingData : { some: rightNotOn }},
-                                ]}
+                                or: [
+                                    { identifyingData: { some: leftNotOn } },
+                                    { identifyingData: { some: rightNotOn } },
+                                ]
+                            }
                             return dateNotOnResult
                         }
-                        case 'before':{
-                            singleCondition['lt'] = moment(query.value).format(DateFormats.date) + 'T00:00:00Z'
+                        case 'before': {
+                            singleCondition['lt'] = moment(query.value.value).format(DateFormats.date) + 'T00:00:00Z'
                             break
                         }
                         case 'notlaterthan': {
-                            singleCondition['lte'] = moment(query.value).format(DateFormats.date) + 'T23:59:59Z'
+                            singleCondition['lte'] = moment(query.value.value).format(DateFormats.date) + 'T23:59:59Z'
                             break
                         }
                         case 'after': {
-                            singleCondition['gt'] = moment(query.value).format(DateFormats.date) + 'T23:59:59Z'
+                            singleCondition['gt'] = moment(query.value.value).format(DateFormats.date) + 'T23:59:59Z'
                             break
                         }
-                        case 'onorafter':{
-                            singleCondition['gte'] = moment(query.value).format(DateFormats.date) + 'T00:00:00Z'
+                        case 'onorafter': {
+                            singleCondition['gte'] = moment(query.value.value).format(DateFormats.date) + 'T00:00:00Z'
                             break
                         }
                     }
             }
-            else{
-                singleCondition[operator] = query.value
+            else {
+                singleCondition[operator] = query.value.value
             }
 
             some[ruleMap.valueName] = singleCondition
 
-            var result = {identifyingData : { some: some }}
+            var result = { identifyingData: { some: some } }
 
             return result
         },
-        getRuleMap(entity){
+        getRuleMap(entity) {
 
-            const comparableOperators = ['=','<>','<','<=','>','>=']
-            const textOperators = ['equals','not equals','contains','not contains','starts with','not starts with']
-            const selectOperators = ['equals','not equals']
+            const comparableOperators = ['=', '<>', '<', '<=', '>', '>=']
+            const textOperators = ['equals', 'not equals', 'contains', 'not contains', 'starts with', 'not starts with']
+            const selectOperators = ['equals', 'not equals']
             const dateOperators = ['on', 'not on', 'before', 'not later than', 'after', 'on or after']
             const unaryOperators = ['answered', 'not answered']
 
-            if(entity.entityType =='QUESTION')
-            {
-                switch(entity.type) {
+            if (entity.entityType == 'QUESTION') {
+                switch (entity.type) {
                     case 'NUMERIC':
-                        return {ruleType: 'numeric', valueName: 'valueLong', operators: comparableOperators.concat(unaryOperators), unaryOperators: unaryOperators}
+                        return { ruleType: 'numeric', valueName: 'valueLong', operators: comparableOperators.concat(unaryOperators), unaryOperators: unaryOperators }
                     case 'SINGLEOPTION':
-                        return {ruleType: 'select', valueName: 'answerCode', operators: selectOperators.concat(unaryOperators), unaryOperators: unaryOperators}
+                        return { ruleType: 'select', valueName: 'answerCode', operators: selectOperators.concat(unaryOperators), unaryOperators: unaryOperators }
                     case 'DATETIME':
-                        return {ruleType: 'date', valueName: 'valueDate', operators: dateOperators.concat(unaryOperators), unaryOperators: unaryOperators }
+                        return { ruleType: 'date', valueName: 'valueDate', operators: dateOperators.concat(unaryOperators), unaryOperators: unaryOperators }
                     case 'TEXT':
-                        return {ruleType:'text', valueName: 'value' , operators: textOperators.concat(unaryOperators), unaryOperators: unaryOperators}
+                        return { ruleType: 'text', valueName: 'value', operators: textOperators.concat(unaryOperators), unaryOperators: unaryOperators }
                 }
             }
-            else if(entity.entityType == 'VARIABLE')
-            {
-                switch(entity.variableType) {
+            else if (entity.entityType == 'VARIABLE') {
+                switch (entity.variableType) {
                     case 'DOUBLE':
-                        return {ruleType: 'numeric', valueName: 'valueDouble', operators: comparableOperators.concat(unaryOperators), unaryOperators: unaryOperators}
+                        return { ruleType: 'numeric', valueName: 'valueDouble', operators: comparableOperators.concat(unaryOperators), unaryOperators: unaryOperators }
                     case 'LONGINTEGER':
-                        return {ruleType: 'numeric', valueName: 'valueLong', operators: comparableOperators.concat(unaryOperators), unaryOperators: unaryOperators}
+                        return { ruleType: 'numeric', valueName: 'valueLong', operators: comparableOperators.concat(unaryOperators), unaryOperators: unaryOperators }
                     case 'BOOLEAN':
-                        return {ruleType: 'select',valueName: 'valueBool', operators: selectOperators.concat(unaryOperators), unaryOperators: unaryOperators}
+                        return { ruleType: 'select', valueName: 'valueBool', operators: selectOperators.concat(unaryOperators), unaryOperators: unaryOperators }
                     case 'DATETIME':
-                        return {ruleType: 'date', valueName: 'valueDate', operators: dateOperators.concat(unaryOperators), unaryOperators: unaryOperators}
-                    case 'STRING' :
-                        return {ruleType:'text', valueName: 'value', operators: textOperators.concat(unaryOperators), unaryOperators: unaryOperators}
+                        return { ruleType: 'date', valueName: 'valueDate', operators: dateOperators.concat(unaryOperators), unaryOperators: unaryOperators }
+                    case 'STRING':
+                        return { ruleType: 'text', valueName: 'value', operators: textOperators.concat(unaryOperators), unaryOperators: unaryOperators }
                 }
             }
             return 'text'
         },
         //move it into ruleMap
-        getOperatorMap(operator){
-            switch(operator){
+        getOperatorMap(operator) {
+            switch (operator) {
                 case '=': return 'eq'
                 case '<>': return 'neq'
                 case '<': return 'lt'
@@ -419,17 +404,80 @@ export default {
                 case 'after': return 'after'
                 case 'on or after': return 'onorafter'
 
-                case 'not answered' : return 'notanswered'
-                case 'answered' : return 'answered'
+                case 'not answered': return 'notanswered'
+                case 'answered': return 'answered'
             }
         },
-        getDisplayTitle(title){
+        getDisplayTitle(title) {
             var transformedTitle = sanitizeHtml(title).replace(/%[\w_]+%/g, '[..]')
-            return transformedTitle.length  >= 57 ? transformedTitle.substring(0,54) + '...' : transformedTitle
+            return transformedTitle.length >= 57 ? transformedTitle.substring(0, 54) + '...' : transformedTitle
         },
+
+        getRuleById(identifier) {
+            const entity = this.questionnaireAllItemsList.find(ent => ent.variable == identifier)
+            return this.getRuleByEntity(entity)
+        },
+
+        getRuleByEntity(entity) {
+            var map = this.getRuleMap(entity)
+            var type = map.ruleType
+
+            var rule = {
+                type: type,
+                identifier: entity.variable,
+                name: entity.label
+                    ? this.getDisplayTitle(entity.label)
+                    : (entity.title ? this.getDisplayTitle(entity.title) : entity.variable),
+            }
+
+            if (type === 'select') {
+                if (entity.entityType == 'VARIABLE' && entity.variableType === 'BOOLEAN') {
+                    rule.choices = [{ label: 'True', value: '1' }, { label: 'False', value: '0' }]
+                }
+                else
+                    rule.choices = entity.options.map(o => ({ label: this.getDisplayTitle(o.title), value: o.value }))
+            }
+            else if (type === 'date') {
+                rule.inputType = 'date'
+            }
+
+            if (map.operators !== undefined)
+                rule.operators = map.operators
+
+            if (map.unaryOperators !== undefined)
+                rule.unaryOperators = map.unaryOperators
+
+            return rule
+        }
     },
 
     computed: {
+        config() {
+            return {
+                rules: this.rules,
+                maxDepth: 6,
+                labels: this.labels,
+                operators: [
+                    {
+                        name: 'AND',
+                        identifier: 'all',
+                    },
+                    {
+                        name: 'OR',
+                        identifier: 'any',
+                    },
+                ],
+                colors: [
+                    '8bc34a',
+                    '00bcd4',
+                    'ff5722',
+                    'ffff00',
+                    'ff00ff',
+                    '9900ff',
+                    '999900'
+                ],
+            }
+        },
         questionnaireItemsList() {
             const array = filter([...(this.questionnaireItems || [])], q => {
                 return (q.type == 'SINGLEOPTION'
@@ -466,7 +514,7 @@ export default {
                 || this.questionnaireAllItemsList.length == 0
                 || this.rules.length == 0
         },
-        rules(){
+        rules() {
             return this.questionnaireAllItemsList.map(entity => {
 
                 var map = this.getRuleMap(entity)
@@ -474,44 +522,42 @@ export default {
 
                 var rule = {
                     type: type,
-                    id: entity.variable,
-                    label: entity.label
+                    identifier: entity.variable,
+                    name: entity.label
                         ? this.getDisplayTitle(entity.label)
                         : (entity.title ? this.getDisplayTitle(entity.title) : entity.variable),
                 }
 
-                if(type === 'select')
-                {
-                    if(entity.entityType == 'VARIABLE' && entity.variableType === 'BOOLEAN'){
-                        rule.choices = [{label: 'True', value: '1'}, {label: 'False', value: '0'}]
+                if (type === 'select') {
+                    if (entity.entityType == 'VARIABLE' && entity.variableType === 'BOOLEAN') {
+                        rule.choices = [{ label: 'True', value: '1' }, { label: 'False', value: '0' }]
                     }
                     else
-                        rule.choices = entity.options.map(o=>({label:this.getDisplayTitle(o.title), value: o.value}))
+                        rule.choices = entity.options.map(o => ({ label: this.getDisplayTitle(o.title), value: o.value }))
                 }
-                else if(type === 'date')
-                {
+                else if (type === 'date') {
                     rule.inputType = 'date'
                 }
 
-                if(map.operators !== undefined)
+                if (map.operators !== undefined)
                     rule.operators = map.operators
 
-                if(map.unaryOperators !== undefined)
+                if (map.unaryOperators !== undefined)
                     rule.unaryOperators = map.unaryOperators
 
                 return rule
             })
 
         },
-        transformQuery(){
+        transformQuery() {
             return this.handleGroup(this.queryExposedVariables)
         },
-        labels(){
+        labels() {
             return {
                 'matchType': this.$t('Interviews.DynamicFilter_MatchType'),
                 'matchTypes': [
-                    {'id': 'all', 'label': this.$t('Interviews.DynamicFilter_MatchTypes_And')},
-                    {'id': 'any', 'label': this.$t('Interviews.DynamicFilter_MatchTypes_Or')},
+                    { 'id': 'all', 'label': this.$t('Interviews.DynamicFilter_MatchTypes_And') },
+                    { 'id': 'any', 'label': this.$t('Interviews.DynamicFilter_MatchTypes_Or') },
                 ],
                 'addRule': this.$t('Interviews.DynamicFilter_MatchTypes_AddRule'),
                 'removeRule': '&times;',
@@ -520,15 +566,17 @@ export default {
                 'textInputPlaceholder': this.$t('Interviews.DynamicFilter_MatchTypes_ValuePlaceholder'),
             }
         },
-        saveDisabled(){
+        saveDisabled() {
             return this.transformQuery === this.lastSavedQuery
         },
     },
 
     components: {
         InterviewFilter,
-        VueQueryBuilder,
+        QueryBuilder,
         QueryBuilderGroup,
+        QueryBuilderGroupOperator,
+        RuleSlot
     },
 }
 </script>

@@ -1485,9 +1485,9 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
-        public static string ApprovedByupervisor {
+        public static string ApprovedBySupervisor {
             get {
-                return ResourceManager.GetString("ApprovedByupervisor", resourceCulture);
+                return ResourceManager.GetString("ApprovedBySupervisor", resourceCulture);
             }
         }
         

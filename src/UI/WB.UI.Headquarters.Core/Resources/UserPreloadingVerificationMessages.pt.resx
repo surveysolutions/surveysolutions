@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="PLU0001Description" xml:space="preserve">
+    <value>O usuário '{0}' já existe</value>
+  </data>
+  <data name="PLU0002Description" xml:space="preserve">
+    <value>Existem usuários duplicados com login '{0}' no arquivo</value>
+  </data>
+  <data name="PLU0003Description" xml:space="preserve">
+    <value>O usuário '{0}' está arquivado e pertence a outra equipe</value>
+  </data>
+  <data name="PLU0004Description" xml:space="preserve">
+    <value>O usuário '{0}' está arquivado e possui outro papel</value>
+  </data>
+  <data name="PLU0005Description" xml:space="preserve">
+    <value>O login '{0}' está no formato errado</value>
+  </data>
+  <data name="PLU0006Description" xml:space="preserve">
+    <value>A senha '{0}' está no formato errado</value>
+  </data>
+  <data name="PLU0007Description" xml:space="preserve">
+    <value>O email '{0}' está no formato errado</value>
+  </data>
+  <data name="PLU0008Description" xml:space="preserve">
+    <value>O número de telefone '{0}' está no formato errado</value>
+  </data>
+  <data name="PLU0009Description" xml:space="preserve">
+    <value>O papel '{0}' é inválido</value>
+  </data>
+  <data name="PLU0010Description" xml:space="preserve">
+    <value>O supervisor '{0}' não foi encontrado no espaço de trabalho</value>
+  </data>
+  <data name="PLU0011Description" xml:space="preserve">
+    <value>A coluna do supervisor deve estar vazia para o papel de supervisor</value>
+  </data>
+  <data name="PLU0012Description" xml:space="preserve">
+    <value>O nome completo '{0}' está no formato errado</value>
+  </data>
+  <data name="PLU0013Description" xml:space="preserve">
+    <value>O número de telefone '{0}' está no formato errado</value>
+  </data>
+  <data name="PLU0014Description" xml:space="preserve">
+    <value>O nome completo '{0}' contém caracteres inválidos</value>
+  </data>
+  <data name="PLU0001" xml:space="preserve">
+    <value>Login não é único</value>
+  </data>
+  <data name="PLU0002" xml:space="preserve">
+    <value>Duplicado</value>
+  </data>
+  <data name="PLU0003" xml:space="preserve">
+    <value>Equipe errada</value>
+  </data>
+  <data name="PLU0004" xml:space="preserve">
+    <value>Papel errado</value>
+  </data>
+  <data name="PLU0005" xml:space="preserve">
+    <value>Formato de login errado</value>
+  </data>
+  <data name="PLU0006" xml:space="preserve">
+    <value>Formato de senha errado</value>
+  </data>
+  <data name="PLU0007" xml:space="preserve">
+    <value>Formato de email errado</value>
+  </data>
+  <data name="PLU0008" xml:space="preserve">
+    <value>Formato de número de telefone errado</value>
+  </data>
+  <data name="PLU0009" xml:space="preserve">
+    <value>Papel inválido</value>
+  </data>
+  <data name="PLU0010" xml:space="preserve">
+    <value>Erro de dependência</value>
+  </data>
+  <data name="PLU0011" xml:space="preserve">
+    <value>Erro de dependência</value>
+  </data>
+  <data name="PLU0012" xml:space="preserve">
+    <value>Comprimento errado do nome completo</value>
+  </data>
+  <data name="PLU0013" xml:space="preserve">
+    <value>Comprimento errado do número de telefone</value>
+  </data>
+  <data name="PLU0014" xml:space="preserve">
+    <value>Formato de nome completo errado</value>
+  </data>
+  <data name="PLU0001Recomendation" xml:space="preserve">
+    <value>O usuário deve ser único</value>
+  </data>
+  <data name="PLU0002Recomendation" xml:space="preserve">
+    <value>Resolver duplicatas</value>
+  </data>
+  <data name="PLU0003Recomendation" xml:space="preserve">
+    <value>O usuário arquivado não pode ser reutilizado porque pertence a outra equipe</value>
+  </data>
+  <data name="PLU0004Recomendation" xml:space="preserve">
+    <value>O usuário arquivado não pode ser reutilizado porque existe em outro papel</value>
+  </data>
+  <data name="PLU0005Recomendation" xml:space="preserve">
+    <value>O nome de login deve ter entre 3 e 15 caracteres e pode conter apenas letras, dígitos e o símbolo de sublinhado. As letras devem ser apenas do alfabeto latino (inglês): 'A'..'Z' ou 'a'..'z'. Outras letras (cirílico, árabe, etc.) não são válidas para uso em nomes de login.</value>
+  </data>
+  <data name="PLU0006Recomendation" xml:space="preserve">
+    <value>Deve conter pelo menos um número, um caractere maiúsculo e um caractere minúsculo. O comprimento deve ser entre 10 e 100 caracteres</value>
+  </data>
+  <data name="PLU0007Recomendation" xml:space="preserve">
+    <value>Corrigir e-mail</value>
+  </data>
+  <data name="PLU0008Recomendation" xml:space="preserve">
+    <value>Corrigir número de telefone</value>
+  </data>
+  <data name="PLU0009Recomendation" xml:space="preserve">
+    <value>Somente "supervisor" ou "entrevistador" são permitidos</value>
+  </data>
+  <data name="PLU0010Recomendation" xml:space="preserve">
+    <value>Corrigir supervisor</value>
+  </data>
+  <data name="PLU0011Recomendation" xml:space="preserve">
+    <value>Fornecer valor para supervisor</value>
+  </data>
+  <data name="PLU0012Recomendation" xml:space="preserve">
+    <value>Não deve conter mais de 100 caracteres</value>
+  </data>
+  <data name="PLU0013Recomendation" xml:space="preserve">
+    <value>Não deve conter mais de 15 caracteres</value>
+  </data>
+  <data name="PLU0014Recomendation" xml:space="preserve">
+    <value>Somente letras, pontos, espaços e apóstrofos são permitidos</value>
+  </data>
+  <data name="PLU0015" xml:space="preserve">
+    <value>Senha muito curta</value>
+  </data>
+  <data name="PLU0015Description" xml:space="preserve">
+    <value>A senha '{0}' é muito curta</value>
+  </data>
+  <data name="PLU0015Recomendation" xml:space="preserve">
+    <value>A senha deve ter pelo menos 10 caracteres</value>
+  </data>
+  <data name="PLU0016" xml:space="preserve">
+    <value>Senha simples</value>
+  </data>
+  <data name="PLU0016Description" xml:space="preserve">
+    <value>A senha '{0}' não contém caractere não alfanumérico</value>
+  </data>
+  <data name="PLU0016Recomendation" xml:space="preserve">
+    <value>Adicione pelo menos um caractere não alfanumérico</value>
+  </data>
+  <data name="PLU0017" xml:space="preserve">
+    <value>Senha simples</value>
+  </data>
+  <data name="PLU0017Description" xml:space="preserve">
+    <value>A senha '{0}' não contém dígito</value>
+  </data>
+  <data name="PLU0017Recomendation" xml:space="preserve">
+    <value>Adicione pelo menos um dígito ('0'-'9').</value>
+  </data>
+  <data name="PLU0018" xml:space="preserve">
+    <value>Senha simples</value>
+  </data>
+  <data name="PLU0018Description" xml:space="preserve">
+    <value>A senha '{0}' não contém caractere minúsculo</value>
+  </data>
+  <data name="PLU0018Recomendation" xml:space="preserve">
+    <value>Adicione pelo menos um caractere minúsculo ('a'-'z').</value>
+  </data>
+  <data name="PLU0019" xml:space="preserve">
+    <value>Senha simples</value>
+  </data>
+  <data name="PLU0019Description" xml:space="preserve">
+    <value>A senha '{0}' não contém caractere maiúsculo</value>
+  </data>
+  <data name="PLU0019Recomendation" xml:space="preserve">
+    <value>Adicione pelo menos um caractere maiúsculo ('A'-'Z').</value>
+  </data>
+  <data name="PLU0020" xml:space="preserve">
+    <value>Senha simples</value>
+  </data>
+  <data name="PLU0020Description" xml:space="preserve">
+    <value>A senha '{0}' não contém caracteres únicos suficientes</value>
+  </data>
+  <data name="PLU0020Recomendation" xml:space="preserve">
+    <value>Adicione caracteres diferentes.</value>
+  </data>
+  <data name="PLU0021" xml:space="preserve">
+    <value>Senha necessária</value>
+  </data>
+  <data name="PLU0021Description" xml:space="preserve">
+    <value>A senha é necessária</value>
+  </data>
+  <data name="PLU0021Recomendation" xml:space="preserve">
+    <value>Adicione senha</value>
+  </data>
+  <data name="PLU0022" xml:space="preserve">
+    <value>Espaço de trabalho não encontrado</value>
+  </data>
+  <data name="PLU0022Description" xml:space="preserve">
+    <value>O espaço de trabalho deve existir e estar habilitado</value>
+  </data>
+  <data name="PLU0022Recomendation" xml:space="preserve">
+    <value>Verifique o nome do espaço de trabalho</value>
+  </data>
+</root>

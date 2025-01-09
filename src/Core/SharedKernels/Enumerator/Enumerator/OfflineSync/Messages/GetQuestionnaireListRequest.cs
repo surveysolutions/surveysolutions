@@ -74,6 +74,11 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Messages
         public AuditLogEntitiesApiView AuditLogEntity { get; set; }
     }
 
+    public class UploadGeoTrackingPackageRequest : ICommunicationMessage
+    {
+        public GeoTrackingPackageApiView Package { get; set; }
+    }
+
     public class UploadInterviewRequest : ICommunicationMessage
     {
         public string InterviewKey { get; set; }

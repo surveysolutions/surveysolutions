@@ -15,7 +15,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre
     [DebuggerDisplay("Id#{Id}; SessionId: {SessionId}")]
     public sealed class UnitOfWork : IUnitOfWork
     {
-        private readonly Lazy<ISessionFactory> sessionFactory;
         private readonly ILogger<UnitOfWork> logger;
         
         private bool shouldAcceptChanges = false;
@@ -28,7 +27,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         private int disposeCount;
 
         public UnitOfWork(
-            Lazy<ISessionFactory> sessionFactory,
             ILogger<UnitOfWork> logger, 
             IWorkspaceContextAccessor workspaceContextAccessor,
             ILifetimeScope scope)
@@ -44,11 +42,10 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                 // caused an error
                 // Will throw later with ObjectDisposedException
             }
-
-            this.sessionFactory = sessionFactory;
             this.logger = logger;
             this.workspaceContextAccessor = workspaceContextAccessor;
             Id = Interlocked.Increment(ref counter);
+            this.scope = scope;
         }
 
         public void AcceptChanges()
@@ -64,6 +61,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         }
 
         readonly ConcurrentDictionary<string, (ISession session, ITransaction transaction)> unitOfWorks = new();
+        private readonly ILifetimeScope scope;
 
         public ISession Session
         {
@@ -85,7 +83,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre
 
                 var unitOfWork = unitOfWorks.GetOrAdd(ws?.Name ?? WorkspaceConstants.SchemaName, workspace =>
                 {
-                    var session = sessionFactory.Value.OpenSession();
+                    //resolving when needed but not when injected
+                    var session = scope.Resolve<Lazy<ISessionFactory>>().Value.OpenSession();
                     var transaction = session.BeginTransaction(IsolationLevel.ReadCommitted);
                     return (session, transaction);
                 });

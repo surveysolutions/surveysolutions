@@ -1,17 +1,11 @@
 <template>
     <span class="dropdown">
-        <span role="button"
-            style="border-bottom: 1px dashed"
-            data-toggle="dropdown"
-            aria-haspopup="true"
-            aria-expanded="true">{{text}}</span>
-        <ul class="dropdown-menu"
-            style="width:auto">
-            <li v-for="item in options"
-                :key="item[keySelector]"
-                @click="select(item)">
-                <a href="javascript:void(0)"
-                    v-html="item[valueSelector]" /></li>
+        <span role="button" style="border-bottom: 1px dashed" data-bs-toggle="dropdown" aria-haspopup="true"
+            aria-expanded="true">{{ text }}</span>
+        <ul class="dropdown-menu" style="width:auto">
+            <li v-for="item in options" :key="item[keySelector]" @click="select(item)">
+                <a href="javascript:void(0)" v-dompurify-html="item[valueSelector]" />
+            </li>
         </ul>
     </span>
 </template>
@@ -23,7 +17,7 @@ export default {
             type: Array,
             required: true,
         },
-        value: {
+        modelValue: {
             required: true,
         },
         keySelector: {
@@ -37,28 +31,31 @@ export default {
         },
     },
 
+    emits: ['update:modelValue', 'input'],
+
     methods: {
         select(item) {
-            this.$emit('input', item)
+            //this.$emit('input', item)
+            this.$emit('update:modelValue', item);
         },
     },
 
     computed: {
         text() {
-            if(this.value == null) {
-                if(this.noEmpty && this.options.length > 0) {
+            if (this.modelValue == null) {
+                if (this.noEmpty && this.options.length > 0) {
                     this.select(this.options[0])
                     return ''
                 }
                 return this.$t('Common.SelectOption')
             }
-            return this.value[this.valueSelector]
+            return this.modelValue[this.valueSelector]
         },
     },
 
     watch: {
         options(to) {
-            if(to[this.valueSelector] == null) {
+            if (to[this.valueSelector] == null) {
                 this.select(to[0])
             }
         },

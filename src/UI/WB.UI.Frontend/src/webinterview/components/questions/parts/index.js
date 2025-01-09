@@ -1,13 +1,16 @@
-import Vue from 'vue'
+import { defineAsyncComponent } from 'vue';
 
-Vue.component('wb-comments',        () => import( './Comments'))
-Vue.component('wb-comment-item',    () => import( './CommentItem'))
-Vue.component('wb-instructions',    () => import( './Instructions'))
-Vue.component('wb-title',           () => import( './Title'))
-Vue.component('wb-validation',      () => import( './Validation'))
-Vue.component('wb-warnings',        () => import( './Warnings'))
-Vue.component('wb-remove-answer',   () => import( './RemoveAnswer'))
-Vue.component('wb-progress',        () => import( './Progress'))
-Vue.component('wb-attachment',      () => import( './Attachment'))
-Vue.component('wb-lock',            () => import( './Lock'))
-Vue.component('wb-flag',            () => import( './Flag'))
+export function registerPartsComponents(vue) {
+
+    vue.component('wb-comments', defineAsyncComponent(() => import('./Comments')))
+    vue.component('wb-comment-item', defineAsyncComponent(() => import('./CommentItem')))
+    vue.component('wb-instructions', defineAsyncComponent(() => import('./Instructions')))
+    vue.component('wb-title', defineAsyncComponent(() => import('./Title')))
+    vue.component('wb-validation', defineAsyncComponent(() => import('./Validation')))
+    vue.component('wb-warnings', defineAsyncComponent(() => import('./Warnings')))
+    vue.component('wb-remove-answer', defineAsyncComponent(() => import('./RemoveAnswer')))
+    vue.component('wb-progress', defineAsyncComponent(() => import('./Progress')))
+    vue.component('wb-attachment', defineAsyncComponent(() => import('./Attachment')))
+    vue.component('wb-lock', defineAsyncComponent(() => import('./Lock')))
+    vue.component('wb-flag', defineAsyncComponent(() => import('./Flag')))
+}

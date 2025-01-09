@@ -528,4 +528,26 @@
   <data name="Value" xml:space="preserve">
       <value>Значение</value>
   </data>
-</root>
+  <data name="Action_QuantityChanged" xml:space="preserve">
+      <value>Ожидаемое количество изменёно</value>
+  </data>
+  <data name="DetailsTargetAreaa" xml:space="preserve">
+      <value>Целевая область</value>
+  </data>
+  <data name="DetailsGeoTracking" xml:space="preserve">
+      <value>Гео-отслеживание</value>
+  </data>
+  <data name="ChangeTargetAreaModalTitle" xml:space="preserve">
+      <value>Изменить целевую область назначения {{assignmentId}}</value>
+  </data>
+  <data name="TargetAreaExplanation" xml:space="preserve">
+      <value>Задайте имя карты области назначения</value>
+  </data>
+  <data name="Action_TargetAreaChanged" xml:space="preserve">
+      <value>Целевая область изменена</value>
+  </data>
+  <data name="TargetArea" xml:space="preserve">
+      <value>Область назначения</value>
+  </data>  <data name="EnterTargetArea" xml:space="preserve">
+      <value>Введите область</value>
+  </data></root>

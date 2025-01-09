@@ -6,6 +6,7 @@ using Main.Core.Entities.SubEntities;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
@@ -460,7 +461,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
             var gpsAnswers = factory.GetGpsAnswers(questionnaireId.QuestionnaireId, questionnaireId.Version, "gps", 2, supervisorId);
 
             //assert
-            Assert.IsEmpty(gpsAnswers);
+            ClassicAssert.IsEmpty(gpsAnswers);
         }
 
         protected class GpsAnswer

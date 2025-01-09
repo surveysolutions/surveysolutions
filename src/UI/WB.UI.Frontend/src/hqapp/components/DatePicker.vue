@@ -1,23 +1,12 @@
 <template>
-    <div class="form-date input-group"
-        id="dates-range">
-        <input
-            type="text"
-            :id="id"
-            :disabled="disabled"
-            class="form-control flatpickr-input"
-            readonly="readonly"
-            :name="name"
-            :placeholder="placeholder"
-            :required="required"
-            v-model="mutableValue"
-            data-input/>
-        <button type="submit"
-            class="btn btn-link btn-clear">
+    <div class="form-date input-group" id="dates-range">
+        <input type="text" :id="id" :disabled="disabled ? true : null" class="form-control flatpickr-input"
+            readonly="readonly" :name="name" :placeholder="placeholder" :required="required" v-model="mutableValue"
+            data-input />
+        <button type="submit" class="btn btn-link btn-clear">
             <span></span>
         </button>
-        <span class="input-group-addon"
-            data-toggle>
+        <span class="input-group-addon" data-toggle>
             <span class="calendar"></span>
         </span>
     </div>
@@ -25,9 +14,9 @@
 
 <script type="text/javascript">
 import Flatpickr from 'flatpickr'
-import {browserLanguage} from '~/shared/helpers'
+import { browserLanguage } from '~/shared/helpers'
 import FlatpickrLocale from 'flatpickr/dist/l10n'
-import {assign} from 'lodash'
+import { assign } from 'lodash'
 
 Flatpickr.localize(FlatpickrLocale[browserLanguage])
 // You have to import css yourself
@@ -100,16 +89,16 @@ export default {
             if (this.withClear) {
                 config = assign(
                     {
-                        onReady: function(dateObj, dateStr, instance) {
-                            $('.flatpickr-calendar').each(function() {
+                        onReady: function (dateObj, dateStr, instance) {
+                            $('.flatpickr-calendar').each(function () {
                                 var $this = $(this)
                                 if ($this.find('.flatpickr-clear').length < 1) {
                                     $this.append(
                                         '<div class="flatpickr-clear" style=" cursor: pointer;">' +
-                                            (self.clearLabel || 'Clear') +
-                                            '</div>'
+                                        (self.clearLabel || 'Clear') +
+                                        '</div>'
                                     )
-                                    $this.find('.flatpickr-clear').on('click', function() {
+                                    $this.find('.flatpickr-clear').on('click', function () {
                                         instance.close()
                                         self.$emit('clear')
                                         self.fp.setDate(null, true)
@@ -162,4 +151,3 @@ export default {
     },
 }
 </script>
-

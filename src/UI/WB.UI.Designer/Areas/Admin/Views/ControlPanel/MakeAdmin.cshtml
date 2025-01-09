@@ -1,4 +1,9 @@
-﻿@using WB.UI.Shared.Web.Extensions
+<script type="module" crossorigin src="/js/editform.js"></script>
+<link rel="modulepreload" crossorigin href="/js/modulepreload-polyfill.js">
+<link rel="modulepreload" crossorigin href="/js/jquery.min.js">
+<link rel="modulepreload" crossorigin href="/js/jquery.validate.js">
+<link rel="stylesheet" crossorigin href="/css/editform.css">
+@using WB.UI.Shared.Web.Extensions
 @model WB.UI.Designer.Models.ControlPanel.MakeAdminViewModel
 @{
     Layout = "Layout.ControlPanel";
@@ -7,9 +12,6 @@
 
 @section scripts
 {
-    <!-- editform:js -->
-    <script src="/js/editform.js"></script>
-    <!-- endinject -->
 }
 
 <div class="page-header">
@@ -20,11 +22,11 @@
 
 @if (TempData.ContainsKey(Alerts.SUCCESS))
 {
-<pre class="alert alert-success">@Html.Raw(@TempData[Alerts.SUCCESS])</pre>
+    <pre class="alert alert-success">@Html.Raw(@TempData[Alerts.SUCCESS])</pre>
 }
 @if (TempData.ContainsKey(Alerts.ERROR))
 {
-<pre class="alert alert-danger">@Html.Raw(TempData[Alerts.ERROR])</pre>
+    <pre class="alert alert-danger">@Html.Raw(TempData[Alerts.ERROR])</pre>
 }
 <form method="post">
     @Html.AntiForgeryToken()

@@ -1,14 +1,21 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+//import Vue from 'vue'
+import { createStore } from 'vuex'
+import routeParams from '../shared/stores/store.routeParams'
 
-Vue.use(Vuex)
+//Vue.use(Vuex)
 
-const store = new Vuex.Store({
-    getters:{
-        workspace(){
-            return window.CONFIG.workspace
+export function registerStore(vue) {
+
+    const store = createStore({
+        modules: { route: routeParams },
+        getters: {
+            workspace() {
+                return window.CONFIG.workspace
+            },
         },
-    },
-})
+    })
 
-export default store
+    vue.use(store)
+
+    return store
+}

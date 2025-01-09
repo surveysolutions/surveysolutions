@@ -8,7 +8,7 @@
     <AspNetCoreModuleName>AspNetCoreModuleV2</AspNetCoreModuleName>
     <Nullable>enable</Nullable>
     <WarningsAsErrors>CS8600;CS8601;CS8602;CS8603;CS8604;CS8610;CS8613;CS8614;CS8618;CS8619;CS8620;CS8625;CS8629;CS8632;CS8634;CS8714</WarningsAsErrors>
-    <SpaRoot>questionnaire-app\</SpaRoot>
+    <SpaRoot>questionnaire\</SpaRoot>
     <Configurations>Release;Debug</Configurations>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -25,37 +25,42 @@
   <ItemGroup>
     <Content Update="**\*.json" CopyToPublishDirectory="Never" />
     <Content Update="wwwroot\**\*" CopyToPublishDirectory="PreserveNewest" />
-    <Content Include="wwwroot\assets\.vite\manifest.json" CopyToPublishDirectory="PreserveNewest" />
+    <Content Include="wwwroot\assets\.vite\manifest.json" CopyToPublishDirectory="PreserveNewest"
+             Condition="Exists('wwwroot\assets\.vite\manifest.json')"/>
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentMigrator" Version="3.3.2" />
-    <PackageReference Include="FluentMigrator.Runner.Core" Version="3.3.2" />
-    <PackageReference Include="Newtonsoft.Json.Schema" Version="3.0.15" />
+    <PackageReference Include="FluentMigrator" Version="6.2.0" />
+    <PackageReference Include="FluentMigrator.Runner.Core" Version="6.2.0" />
+    <PackageReference Include="Newtonsoft.Json.Schema" Version="3.0.16" />
     <PackageReference Include="NJsonSchema" Version="10.9.0" />
-    <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="2.88.6" />
-    <PackageReference Include="SkiaSharp.QrCode" Version="0.6.0" />
+    <PackageReference Include="SkiaSharp" Version="3.116.1" />
+    <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="3.116.1" />
+    <PackageReference Include="SkiaSharp.NativeAssets.Linux.NoDependencies" Version="3.116.1" />
+    <PackageReference Include="SkiaSharp.QrCode" Version="0.7.0" />
     <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.20071.2" />
-    <PackageReference Include="FluentMigrator.Runner" Version="3.3.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0" />
+    <PackageReference Include="FluentMigrator.Runner" Version="6.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.10" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.2" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.0" />
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.10" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.11" />
     <PackageReference Include="reCAPTCHA.AspNetCore" Version="2.2.5" />
-    <PackageReference Include="Serilog.AspNetCore" Version="8.0.0" />
+    <PackageReference Include="Serilog.AspNetCore" Version="8.0.3" />
     <PackageReference Include="SharpZipLib" Version="1.4.2" />
-    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.4" />
-    <PackageReference Include="StackExchange.Exceptional.AspNetCore" Version="2.2.32" />
-    <PackageReference Include="StackExchange.Exceptional.PostgreSql" Version="2.2.32" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.6" />
+    <PackageReference Include="StackExchange.Exceptional.AspNetCore" Version="3.0.1" />
+    <PackageReference Include="StackExchange.Exceptional.PostgreSql" Version="3.0.1" />
     <PackageReference Include="Shark.PdfConvert" Version="1.0.5" />
-    <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="8.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="8.0.10" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
-    <PackageReference Include="System.Drawing.Common" Version="8.0.4" />
+    <PackageReference Include="System.Drawing.Common" Version="8.0.7" />
+    <PackageReference Include="System.Security.Cryptography.Xml" Version="9.0.0" />
+    <PackageReference Include="System.Text.Json" Version="8.0.5" />
     <PackageReference Include="VueCliMiddleware" Version="6.0.0" />
   </ItemGroup>
   <ItemGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <PackageReference Include="Yarp.ReverseProxy" Version="2.1.0" />
+    <PackageReference Include="Yarp.ReverseProxy" Version="2.2.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\WB.Core.BoundedContexts.Designer.csproj" />
@@ -112,7 +117,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="questionnaire-app" />
+    <None Include="questionnaire" />
   </ItemGroup>
 
   <ItemGroup>

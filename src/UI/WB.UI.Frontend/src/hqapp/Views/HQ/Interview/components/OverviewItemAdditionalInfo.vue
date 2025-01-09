@@ -11,21 +11,24 @@
             <div v-if="additionalInfo.errors && additionalInfo.errors.length > 0">
                 <div class="information-block text-danger">
                     <h6>{{ $t("WebInterviewUI.AnswerIsInvalid") }}</h6>
-                    <p v-for="(error, index) in additionalInfo.errors" :key="index"><span v-html="error"></span></p>
+                    <p v-for="(error, index) in additionalInfo.errors" :key="index"><span
+                            v-dompurify-html="error"></span></p>
                 </div>
                 <hr />
             </div>
             <div v-if="additionalInfo.warnings && additionalInfo.warnings.length > 0">
                 <div class="information-block text-warning">
                     <h6>{{ $t("WebInterviewUI.WarningsHeader") }}</h6>
-                    <p v-for="(warning, index) in additionalInfo.warnings" :key="index"><span v-html="warning"></span></p>
+                    <p v-for="(warning, index) in additionalInfo.warnings" :key="index"><span
+                            v-dompurify-html="warning"></span>
+                    </p>
                 </div>
                 <hr />
             </div>
             <div class="information-block comments-block">
-                <template v-for="comment in additionalInfo.comments">
-                    <wb-comment-item :userRole="comment.userRole" :text="comment.text" :isOwnComment="comment.isOwnComment"
-                        :resolved="comment.resolved" :key="comment.commentTimeUtc"
+                <template v-for="comment in additionalInfo.comments" :key="comment.commentTimeUtc">
+                    <wb-comment-item :userRole="comment.userRole" :text="comment.text"
+                        :isOwnComment="comment.isOwnComment" :resolved="comment.resolved"
                         :commentOnPreviousAnswer="comment.commentOnPreviousAnswer" />
                 </template>
                 <div class="comment" v-if="isCommentFormIsVisible">
@@ -33,7 +36,7 @@
                         <label>{{ $t("WebInterviewUI.CommentYours") }}</label>
                         <div class="form-group">
                             <div class="input-group comment-field">
-                                <textarea-autosize autocomplete="off" rows="1" v-on:keyup.enter="postComment"
+                                <textarea v-autosize autocomplete="off" rows="1" v-on:keyup.enter="postComment"
                                     v-model="comment" :placeholder='$t("WebInterviewUI.CommentEnter")'
                                     :disabled="!addCommentsAllowed" class="form-control" :title="inputTitle" />
                                 <div class="input-group-btn">

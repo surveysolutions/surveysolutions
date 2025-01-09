@@ -129,7 +129,7 @@
   <data name="ApprovedByHeadquarters" xml:space="preserve">
     <value>总部已审核通过</value>
   </data>
-  <data name="ApprovedByupervisor" xml:space="preserve">
+  <data name="ApprovedBySupervisor" xml:space="preserve">
     <value>督导员已审核通过</value>
   </data>
   <data name="ApproveRejectPartialView_ApproveAction" xml:space="preserve">
@@ -916,7 +916,7 @@
     <value>任务</value>
   </data>
   <data name="GetEsriExtraDescription" xml:space="preserve">
-    <value>ESRI地图支持只是试用性的功能。只有当您需要高级的ESRI GIS功能的时候才需要使用它。包含此功能的调查员app安装包将变得很大。</value>
+      <value>GIS 功能将显著增加应用程序的大小和下载时间。请按照主管的指示，确定您的任务需要哪个版本的 Interviewer 应用程序（带或不带地图）。</value>
   </data>
   <data name="GetLatestAppDescription" xml:space="preserve">
     <value>下载并安装此用于调研的、没有ESRI GIS功能的调查员app。此app由于没有ESRI SDK，故安装包更小且下载速度更快。</value>

@@ -117,14 +117,17 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ChooseResponsibleInterviewer" xml:space="preserve">
-    <value>L'entretien n'a aucun responsable. S'il vous plaît, choisissez un enquêteur responsable</value>
-  </data>
   <data name="Area_ShowCoordinates" xml:space="preserve">
     <value>Afficher les coordonnées</value>
   </data>
-  <data name="Duration" xml:space="preserve">
-    <value>Durée</value>
+  <data name="Area_Coordinates" xml:space="preserve">
+    <value>Coordonnées</value>
+  </data>
+  <data name="ChooseResponsibleInterviewer" xml:space="preserve">
+    <value>L'entretien n'a aucun responsable. S'il vous plaît, choisissez un enquêteur responsable</value>
+  </data>
+  <data name="YouCanChangeResponsibleInterviewer" xml:space="preserve">
+    <value>Vous pouvez changer le responsable de l'entretien en cas de rejet. Veuillez choisir un enquêteur responsable</value>
   </data>
   <data name="FlagTitleFlagged" xml:space="preserve">
     <value>Marqué</value>
@@ -141,9 +144,6 @@
   <data name="NoSearchResults" xml:space="preserve">
     <value>Aucun élément trouvé</value>
   </data>
-  <data name="Questionnaire" xml:space="preserve">
-    <value>Questionnaire: {{ name }}</value>
-  </data>
   <data name="Responsible" xml:space="preserve">
     <value>Responsable</value>
   </data>
@@ -155,5 +155,20 @@
   </data>
   <data name="Status" xml:space="preserve">
     <value>Statut: {{ name }}</value>
+  </data>
+  <data name="Questionnaire" xml:space="preserve">
+    <value>Questionnaire: {{ name }}</value>
+  </data>
+  <data name="Duration" xml:space="preserve">
+    <value>Durée</value>
+  </data>
+  <data name="Overview" xml:space="preserve">
+    <value>Vue d'ensemble</value>
+  </data>
+  <data name="ShowQuestionnaireDetails" xml:space="preserve">
+    <value>Afficher les détails du questionnaire</value>
+  </data>
+  <data name="InterviewMode" xml:space="preserve">
+    <value>Mode</value>
   </data>
 </root>

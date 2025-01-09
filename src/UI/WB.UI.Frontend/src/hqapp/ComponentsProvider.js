@@ -42,14 +42,15 @@ export default class ComponentsProvider {
             const beforeEnter = component.beforeEnter ? (to, from, next) => component.beforeEnter(to, from, next) : null
             const routes = component.routes || []
 
-            if(init || beforeEnter || component.modules) {
+            if (init || beforeEnter || component.modules) {
                 routes.forEach((route) => {
                     route.beforeEnter = (to, from, next) => {
-                        if(component._isInitialized !== true) {
+                        if (component._isInitialized !== true) {
 
-                            if(component.modules != null) {
+                            if (component.modules != null) {
                                 Object.keys(component.modules).forEach((module) => {
-                                    this.rootStore.registerModule(module, safeStore(component.modules[module]))
+                                    const store = safeStore(component.modules[module])
+                                    this.rootStore.registerModule(module, store)
                                 })
                             }
 
@@ -58,7 +59,7 @@ export default class ComponentsProvider {
                             component._isInitialized = true
                         }
 
-                        if(beforeEnter != null){
+                        if (beforeEnter != null) {
                             beforeEnter(to, from, next)
                         }
                         else next()

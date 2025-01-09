@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using ApprovalUtilities.Utilities;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using WB.Services.Export.CsvExport.Exporters;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Questionnaire;
@@ -27,8 +28,8 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters.ExportedQuestionTests
 
             var exportedVariable = exportService.GetExportedVariable(variable, headerItem, false);
 
-            Assert.AreEqual(exportedVariable.Length, 1);
-            Assert.AreEqual(exportedVariable[0], exportResult);
+            ClassicAssert.AreEqual(exportedVariable.Length, 1);
+            ClassicAssert.AreEqual(exportedVariable[0], exportResult);
         }
 
         [TestCase(789L, VariableType.LongInteger)]
@@ -47,8 +48,8 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters.ExportedQuestionTests
 
             var exportedVariable = exportService.GetExportedVariable(variable, headerItem, true);
 
-            Assert.AreEqual(exportedVariable.Length, 1);
-            Assert.AreEqual(exportedVariable[0], ExportFormatSettings.DisableValue);
+            ClassicAssert.AreEqual(exportedVariable.Length, 1);
+            ClassicAssert.AreEqual(exportedVariable[0], ExportFormatSettings.DisableValue);
         }
 
         [Test]
@@ -65,8 +66,8 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters.ExportedQuestionTests
 
             var exportedVariable = exportService.GetExportedVariable(variable, headerItem, false);
 
-            Assert.AreEqual(exportedVariable.Length, 1);
-            Assert.AreEqual(exportedVariable[0], "789.56");
+            ClassicAssert.AreEqual(exportedVariable.Length, 1);
+            ClassicAssert.AreEqual(exportedVariable[0], "789.56");
         }
 
         [Test]
@@ -82,8 +83,8 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters.ExportedQuestionTests
 
             var exportedVariable = exportService.GetExportedVariable(dateTime, headerItem, false);
 
-            Assert.AreEqual(exportedVariable.Length, 1);
-            Assert.AreEqual(exportedVariable[0], "2017-09-12T14:09:37");
+            ClassicAssert.AreEqual(exportedVariable.Length, 1);
+            ClassicAssert.AreEqual(exportedVariable[0], "2017-09-12T14:09:37");
         }
 
 
@@ -103,8 +104,8 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters.ExportedQuestionTests
 
             var exportedVariable = exportService.GetExportedVariable(variable, headerItem, false);
 
-            Assert.AreEqual(exportedVariable.Length, 1);
-            Assert.AreEqual(exportedVariable[0], exportResult);
+            ClassicAssert.AreEqual(exportedVariable.Length, 1);
+            ClassicAssert.AreEqual(exportedVariable[0], exportResult);
         }
     }
 }

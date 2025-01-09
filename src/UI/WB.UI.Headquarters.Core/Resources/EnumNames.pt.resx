@@ -117,8 +117,8 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="InterviewStatus_ApprovedByHeadquarters" xml:space="preserve">
-    <value>Aprovado pela sede</value>
+    <data name="InterviewStatus_ApprovedByHeadquarters" xml:space="preserve">
+    <value>Aprovado pela Sede</value>
   </data>
   <data name="InterviewStatus_ApprovedBySupervisor" xml:space="preserve">
     <value>Aprovado pelo Supervisor</value>
@@ -128,5 +128,77 @@
   </data>
   <data name="InterviewStatus_InterviewerAssigned" xml:space="preserve">
     <value>Entrevistador atribuído</value>
+  </data>
+  <data name="UserRoles_Administrator" xml:space="preserve">
+    <value>Administrador</value>
+  </data>
+  <data name="UserRoles_Supervisor" xml:space="preserve">
+    <value>Supervisor</value>
+  </data>
+  <data name="UserRoles_Interviewer" xml:space="preserve">
+    <value>Entrevistador</value>
+  </data>
+  <data name="UserRoles_Headquarter" xml:space="preserve">
+    <value>Sede</value>
+  </data>
+  <data name="UserRoles_Observer" xml:space="preserve">
+    <value>Observador</value>
+  </data>
+  <data name="UserRoles_ApiUser" xml:space="preserve">
+    <value>Usuário de API</value>
+  </data>
+  <data name="MenuItem_Completed" xml:space="preserve">
+    <value>Concluído</value>
+  </data>
+  <data name="MenuItem_Rejected" xml:space="preserve">
+    <value>Rejeitado</value>
+  </data>
+  <data name="MenuItem_Started" xml:space="preserve">
+    <value>Iniciado</value>
+  </data>
+  <data name="MenuItem_Profile" xml:space="preserve">
+    <value>Perfil</value>
+  </data>
+  <data name="InterviewerFacet_None" xml:space="preserve">
+    <value>Nenhum</value>
+  </data>
+  <data name="WebInterviewUserMessages_FinishInterview" xml:space="preserve">
+    <value>Texto de Conclusão</value>
+  </data>
+  <data name="WebInterviewUserMessages_Invitation" xml:space="preserve">
+    <value>Convite de Boas-vindas</value>
+  </data>
+  <data name="WebInterviewUserMessages_ResumeInvitation" xml:space="preserve">
+    <value>Convite para Retomar</value>
+  </data>
+  <data name="WebInterviewUserMessages_ResumeWelcome" xml:space="preserve">
+    <value>Retomar Cabeçalho</value>
+  </data>
+  <data name="WebInterviewUserMessages_SurveyName" xml:space="preserve">
+    <value>Nome da Pesquisa</value>
+  </data>
+  <data name="WebInterviewUserMessages_WebSurveyHeader" xml:space="preserve">
+    <value>Conclusão Cabeçalho</value>
+  </data>
+  <data name="WebInterviewUserMessages_WelcomeText" xml:space="preserve">
+    <value>Boas-vindas Cabeçalho</value>
+  </data>
+  <data name="WebInterviewUserMessages_CompleteNoteToSupervisor" xml:space="preserve">
+    <value>Nota para o Supervisor</value>
+  </data>
+  <data name="WebInterviewUserMessages_CompleteButton" xml:space="preserve">
+    <value>Concluir</value>
+  </data>
+  <data name="WebInterviewUserMessages_StartNewButton" xml:space="preserve">
+    <value>Iniciar nova entrevista</value>
+  </data>
+  <data name="WebInterviewUserMessages_ResumeButton" xml:space="preserve">
+    <value>Retomar</value>
+  </data>
+  <data name="WebInterviewUserMessages_LinkInvitation" xml:space="preserve">
+    <value>Convite</value>
+  </data>
+  <data name="WebInterviewUserMessages_LinkWelcome" xml:space="preserve">
+    <value>Boas-vindas Cabeçalho</value>
   </data>
 </root>

@@ -147,7 +147,7 @@
   <data name="ApprovedByHeadquarters" xml:space="preserve">
     <value>Aprobat de coordonatori</value>
   </data>
-  <data name="ApprovedByupervisor" xml:space="preserve">
+  <data name="ApprovedBySupervisor" xml:space="preserve">
     <value>Aprobat de supervizor</value>
   </data>
   <data name="ApproveRejectPartialView_ApproveAction" xml:space="preserve">
@@ -256,7 +256,7 @@
     <value>Interzis</value>
   </data>
   <data name="GetEsriExtraDescription" xml:space="preserve">
-    <value>Suportul ESRI Map este o caracteristică experimentală. Utilizați-l numai dacă aveți nevoie de funcționalitatea avansată ESRI GIS. Includerea acestei funcționalități va mări semnificativ dimensiunea aplicației și timpul de descărcare.</value>
+      <value>Funcționalitatea GIS va crește semnificativ dimensiunea aplicației și timpul de descărcare. Urmați instrucțiunile supervizorului dvs. cu privire la ce versiune a aplicației Intervievator (cu sau fără hărți) este necesară pentru sarcina dvs.</value>
   </data>
   <data name="GetLatestApp" xml:space="preserve">
     <value>Descărcați ultima versiune a aplicației pentru anchetator</value>

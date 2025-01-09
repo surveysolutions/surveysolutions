@@ -33,7 +33,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         private readonly IUserViewFactory usersFactory;
         private readonly IUserArchiveService archiveService;
         private readonly IAuditLogService auditLogService;
-        private readonly UserManager<HqUser> userManager;
+        private readonly HqUserManager userManager;
         private readonly IUnitOfWork unitOfWork;
         private readonly ISystemLog systemLog;
         private readonly IWorkspaceContextAccessor workspaceContextAccessor;
@@ -44,7 +44,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         public UsersController(IUserViewFactory usersFactory,
             IUserArchiveService archiveService,
             IAuditLogService auditLogService,
-            UserManager<HqUser> userManager, 
+            HqUserManager userManager, 
             IUnitOfWork unitOfWork,
             ISystemLog systemLog,
             IWorkspaceContextAccessor workspaceContextAccessor,

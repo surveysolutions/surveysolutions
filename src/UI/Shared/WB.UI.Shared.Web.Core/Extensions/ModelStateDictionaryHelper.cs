@@ -16,12 +16,14 @@ namespace WB.UI.Shared.Web.Extensions
             this ModelStateDictionary me,
             Expression<Func<TViewModel, object>> lambdaExpression, string error)
         {
-            me.AddModelError(GetPropertyName(lambdaExpression), error);
+            var propertyName = GetPropertyName(lambdaExpression);
+            ArgumentNullException.ThrowIfNull(propertyName);
+            me.AddModelError(propertyName, error);
         }
 
-        private static string GetPropertyName(Expression lambdaExpression)
+        private static string? GetPropertyName(Expression lambdaExpression)
         {
-            IList<string> list = new List<string>();
+            IList<string?> list = new List<string?>();
             var e = lambdaExpression;
 
             while (true)
@@ -39,7 +41,7 @@ namespace WB.UI.Shared.Web.Extensions
                         list.Add(prop);
 
                         var memberExpression = (MemberExpression)e;
-                        if (memberExpression.Expression.NodeType != ExpressionType.Parameter)
+                        if (memberExpression.Expression != null && memberExpression.Expression.NodeType != ExpressionType.Parameter)
                         {
                             var parameter = GetParameterExpression(memberExpression.Expression);
                             if (parameter != null)
@@ -55,13 +57,13 @@ namespace WB.UI.Shared.Web.Extensions
             }
         }
 
-        private static ParameterExpression GetParameterExpression(Expression expression)
+        private static ParameterExpression? GetParameterExpression(Expression? expression)
         {
-            while (expression.NodeType == ExpressionType.MemberAccess)
+            while (expression != null && expression.NodeType == ExpressionType.MemberAccess)
             {
-                expression = ((MemberExpression)expression).Expression;
+                expression = (expression as MemberExpression)?.Expression;
             }
-            return expression.NodeType == ExpressionType.Parameter ? (ParameterExpression)expression : null;
+            return expression?.NodeType == ExpressionType.Parameter ? (ParameterExpression)expression : null;
         }
     }
 }

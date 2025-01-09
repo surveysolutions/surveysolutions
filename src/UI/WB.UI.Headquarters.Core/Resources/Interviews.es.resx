@@ -117,130 +117,176 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ApproveConfirmMessage" xml:space="preserve">
-      <value>{{count}} entrevista (s) será aprobada.</value>
+    <data name="ApproveConfirmMessage" xml:space="preserve">
+      <value>{{count}} entrevista(s) será aprobada.</value>
   </data>
   <data name="ApproveConfirmMessageHQ" xml:space="preserve">
-      <value>&lt;h3&gt; &lt;b&gt; {{count}} &lt;/ b&gt; entrevista (s) será aprobada. &lt;/ h3&gt; &lt;b&gt; ¡Nota! &lt;/ b&gt; Solo puede aprobar entrevistas con el siguiente estado: &lt;i&gt; {{status1}} &lt;/ i&gt;,  &lt;i&gt; {{status2}} &lt;/ i&gt; y &lt;i&gt;{{status3}}&lt;/i&gt;</value>
+      <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; entrevista(s) será aprobada.&lt;/h3&gt;
+&lt;b&gt;¡Nota!&lt;/b&gt; Solo puede aprobar entrevistas con los siguientes estados: &lt;i&gt;{{status1}}&lt;/i&gt;, &lt;i&gt;{{status2}}&lt;/i&gt; y &lt;i&gt;{{status3}}&lt;/i&gt;.</value>
   </data>
   <data name="AssignConfirmMessage" xml:space="preserve">
-    <value>&lt;h3&gt; &lt;b&gt; {{count}} &lt;/ b&gt; entrevista (s) seleccionadas para reasignar. &lt;/ h3&gt; &lt;b&gt; ¡Nota! &lt;/ b&gt; Puede asignar entrevistas solo con los siguientes estados: &lt;i&gt; {{status1}} &lt;/ i&gt;, &lt;i&gt; {{status2}} (solo en otro entrevistador) &lt;/ i&gt; y &lt;i&gt; {{status3}} &lt;/ i&gt;</value>
-  </data>
-  <data name="Assignment" xml:space="preserve">
-    <value>Asignación</value>
+    <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; entrevista(s) seleccionada(s) para reasignar.&lt;/h3&gt;
+&lt;b&gt;¡Nota!&lt;/b&gt; Puede asignar entrevistas solo con los siguientes estados: &lt;i&gt;{{status1}}&lt;/i&gt;, &lt;i&gt;{{status2}} (solo a otro entrevistador)&lt;/i&gt; y &lt;i&gt;{{status3}}&lt;/i&gt;.</value>
   </data>
   <data name="AssignReceivedConfirm" xml:space="preserve">
     <value>Aplicar en {{count}} entrevista(s) que el entrevistador ya recibió</value>
   </data>
-  <data name="AssignToOtherTeamConfirmMessage" xml:space="preserve">
-    <value>&lt;h3&gt; &lt;b&gt; {{count}} &lt;/ b&gt; entrevista (s) serán asignadas. &lt;/ h3&gt; &lt;b&gt; ¡Nota! &lt;/ b&gt; Solo las entrevistas que no están en el estado &lt;i&gt; {{status1}} &lt;/ i&gt; y &lt;i&gt; {{status2}} &lt;/ i&gt; podrían reasignarse.</value>
+  <data name="AssignReceivedWarning" xml:space="preserve">
+    <value>Los entrevistadores responsables actuales no serán notificados sobre la reasignación hasta la próxima sincronización. Si ya han comenzado a trabajar en la entrevista, ¡todos los datos que hayan ingresado antes de la próxima sincronización serán DESCARTADOS!</value>
   </data>
-  <data name="ChooseResponsible" xml:space="preserve">
-    <value>No se ha elegido responsable para alguna entrevista (s). Por favor elija un supervisor o entrevistador responsable.</value>
+  <data name="ApproveReceivedWarning" xml:space="preserve">
+    <value>Los entrevistadores responsables actuales no serán notificados sobre la aprobación de la(s) entrevista(s) hasta la próxima sincronización. Si ya han comenzado a trabajar en la entrevista, ¡todos los datos que hayan ingresado antes de la próxima sincronización serán DESCARTADOS!</value>
+  </data>
+  <data name="SwitchToCawiReceivedWarning" xml:space="preserve">
+    <value>Los entrevistadores responsables actuales no serán notificados sobre el cambio de modo de entrevista hasta la próxima sincronización. Si ya han comenzado a trabajar en la entrevista, ¡todos los datos que hayan ingresado antes de la próxima sincronización serán DESCARTADOS!</value>
+  </data>
+  <data name="AssignToOtherTeamConfirmMessage" xml:space="preserve">
+    <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; entrevista(s) será asignada.&lt;/h3&gt;
+&lt;b&gt;¡Nota!&lt;/b&gt; Solo las entrevistas que no están en los estados &lt;i&gt;{{status1}}&lt;/i&gt; y &lt;i&gt;{{status2}}&lt;/i&gt; pueden ser reasignadas.</value>
   </data>
   <data name="ChooseResponsibleInterviewer" xml:space="preserve">
-    <value>No se ha elegido responsable para alguna entrevista (s). Por favor elija un supervisor o entrevistador responsable.</value>
+    <value>Por favor, elija un entrevistador.</value>
   </data>
   <data name="ChooseResponsibleSupervisor" xml:space="preserve">
-    <value>No se ha elegido responsable para alguna entrevista (s). Por favor elija un supervisor o entrevistador responsable.</value>
+    <value>Por favor, elija un supervisor.</value>
   </data>
-  <data name="ClientKeyTitle" xml:space="preserve">
-    <value>La clave fue generada en el dispositivo, pero se cambió debido a la colisión con la entrevista existente en el servidor</value>
+  <data name="ChooseResponsible" xml:space="preserve">
+    <value>Por favor, elija un supervisor o entrevistador.</value>
   </data>
   <data name="ContinueConfirmMessage" xml:space="preserve">
-    <value>Desea continuar?</value>
+    <value>¿Desea continuar?</value>
   </data>
   <data name="ContinueConfirmMessageHQ" xml:space="preserve">
-    <value>Desea continuar?</value>
+    <value>¿Desea continuar?</value>
   </data>
   <data name="DeleteConfirmMessageHQ" xml:space="preserve">
-    <value>&lt;h3&gt; &lt;b&gt; {{count}} &lt;/ b&gt; entrevista (s) será eliminada. &lt;/ h3&gt; &lt;b&gt; ¡Nota! &lt;/ b&gt; Puede eliminar entrevistas que no haya recibido Interviewer solo con los siguientes estados: &lt;i&gt; {{status1}} &lt;/ i&gt; y &lt;i&gt; {{status2}} &lt;/ i&gt;.</value>
+    <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; entrevista(s) será eliminada.&lt;/h3&gt;
+&lt;b&gt;¡Nota!&lt;/b&gt; Puede eliminar entrevistas no recibidas por el entrevistador solo con los siguientes estados: &lt;i&gt;{{status1}}&lt;/i&gt; y &lt;i&gt;{{status2}}&lt;/i&gt;.</value>
   </data>
   <data name="RejectConfirmMessage" xml:space="preserve">
-    <value>&lt;h3&gt; &lt;b&gt; {{count}} &lt;/ b&gt; entrevista (s) será rechazada. &lt;/ h3&gt; &lt;b&gt; ¡Nota! &lt;/ b&gt; Solo puede rechazar entrevistas con los siguientes estados: &lt;i&gt; {{status1}} &lt;/ i&gt; y &lt;i&gt; {{status2}} &lt;/ i&gt;.</value>
+    <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; entrevista(s) será rechazada.&lt;/h3&gt;
+&lt;b&gt;¡Nota!&lt;/b&gt; Solo puede rechazar entrevistas con los siguientes estados: &lt;i&gt;{{status1}}&lt;/i&gt; y &lt;i&gt;{{status2}}&lt;/i&gt;.</value>
   </data>
   <data name="RejectConfirmMessageHQ" xml:space="preserve">
-    <value>&lt;h3&gt; &lt;b&gt; {{count}} &lt;/ b&gt; entrevista (s) será rechazada. &lt;/ h3&gt; &lt;b&gt; ¡Tenga en cuenta! &lt;/ b&gt; Puede rechazar entrevistas solo con el siguiente estado: &lt;i&gt; {{status1}} &lt;/ i&gt; y &lt;i&gt; {{status2}} &lt;/ i&gt;.</value>
+    <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; entrevista(s) será rechazada.&lt;/h3&gt;
+&lt;b&gt;¡Nota!&lt;/b&gt; Solo puede rechazar entrevistas con los siguientes estados: &lt;i&gt;{{status1}}&lt;/i&gt; y &lt;i&gt;{{status2}}&lt;/i&gt;.</value>
+  </data>
+  <data name="RejectToOriginal" xml:space="preserve">
+    <value>Rechazar al responsable original</value>
+  </data>
+  <data name="RejectToNewResponsible" xml:space="preserve">
+    <value>Rechazar y elegir nuevo responsable</value>
+  </data>
+  <data name="UnapproveConfirmMessageHQ" xml:space="preserve">
+    <value>&lt;h3&gt;&lt;b&gt;{{count}}&lt;/b&gt; entrevista(s) será desaprobada.&lt;/h3&gt;
+&lt;b&gt;¡Nota!&lt;/b&gt; Solo puede desaprobar entrevistas con el siguiente estado: &lt;i&gt;{{status1}}&lt;/i&gt;.</value>
+  </data>
+  <data name="Assignment" xml:space="preserve">
+    <value>ID de asignación</value>
+  </data>
+  <data name="ClientKeyTitle" xml:space="preserve">
+    <value>Clave que se generó en el dispositivo, pero se cambió debido a la colisión con la entrevista existente en el servidor</value>
   </data>
   <data name="Tooltip_Filter_Assignment" xml:space="preserve">
     <value>ID de asignación. Haga clic en el campo para escribir el número de identificación completo.</value>
   </data>
+  <data name="Tooltip_Filter_Questionnaire" xml:space="preserve">
+    <value>Seleccione un cuestionario para ver sus entrevistas asociadas en la lista. Seleccione "Todos los cuestionarios" para ver entrevistas asociadas con cualquier cuestionario.</value>
+  </data>
   <data name="Tooltip_Filter_Responsible" xml:space="preserve">
-    <value>Usuario responsable. Haga clic en el campo para elegir un nombre de usuario ya sea seleccionándolo directamente o escribiendo en el filtro de  listas de nombres de usuario.</value>
+    <value>Usuario responsable. Haga clic en el campo para elegir un nombre de usuario ya sea seleccionándolo directamente o escribiendo para filtrar la lista de nombres de usuario.</value>
   </data>
   <data name="Tooltip_Filter_Status" xml:space="preserve">
     <value>Estado de la entrevista. Seleccione un estado para ver todas las entrevistas en ese estado. Seleccione "Todos los estados" para ver entrevistas con cualquier estado.</value>
   </data>
   <data name="Tooltip_Table_Assignment" xml:space="preserve">
-    <value>Identificador de la tarea a la que pertenece esta entrevista. Haga clic en el icono de ordenar para ordenar por número de tarea</value>
+    <value>Identificador de la asignación a la que pertenece esta entrevista. Haga clic en el icono de ordenar para ordenar por número de asignación.</value>
   </data>
   <data name="Tooltip_Table_HideShowIdentifying" xml:space="preserve">
     <value>Haga clic aquí para ocultar o mostrar las preguntas de identificación. Ocultar preguntas de identificación puede proporcionar más espacio para otra información. Mostrar preguntas de identificación puede proporcionar detalles para diferenciar entre entrevistas.</value>
   </data>
   <data name="Tooltip_Table_IdentifyingQuestions" xml:space="preserve">
-    <value>Información que identifica cada tarea. Estas son las respuestas a las preguntas marcadas como identificadas en Designer.</value>
+    <value>Información que identifica cada asignación. Estas son las respuestas a las preguntas marcadas como identificadoras en Designer.</value>
   </data>
   <data name="Tooltip_Table_InterviewKey" xml:space="preserve">
-    <value>Identificador de caso corto que aparece en todo el sistema: en la Sede, el Supervisor y el Entrevistador. Considere usar esta identificación cuando se comunique con el equipo de campo, en lugar de un conjunto grande de preguntas de identificación</value>
+    <value>Identificador de caso corto que aparece en todo el sistema: en la Sede, el Supervisor y el Entrevistador. Considere usar esta identificación cuando se comunique con el equipo de campo, en lugar de un conjunto grande de preguntas de identificación.</value>
   </data>
   <data name="Tooltip_Table_LastUpdate" xml:space="preserve">
     <value>Cuando los cambios a la entrevista fueron publicados por última vez en el servidor. Haga clic en el icono de ordenar para ordenar por tiempo.</value>
   </data>
   <data name="Tooltip_Table_ReceivedByInterviewer" xml:space="preserve">
-    <value>Indicador  si la entrevista se descargó en la tableta del entrevistador. Haga clic en el icono de ordenar para ordenar por recibo por el entrevistador.</value>
+    <value>Indicador de si la entrevista se descargó en la tableta del entrevistador. Haga clic en el icono de ordenar para ordenar por recibo por el entrevistador.</value>
   </data>
   <data name="Tooltip_Table_Responsible" xml:space="preserve">
-    <value>Usuario actualmente responsable de la tarea. Haga clic en el icono de ordenar para ordenar el nombre de usuario.</value>
+    <value>Usuario actualmente responsable de la asignación. Haga clic en el icono de ordenar para ordenar por nombre de usuario.</value>
   </data>
   <data name="Tooltip_Table_Status" xml:space="preserve">
     <value>Estado de la entrevista en el flujo de trabajo de la encuesta. Haga clic en el icono de ordenar para ordenar por estado.</value>
   </data>
-  <data name="UnapproveConfirmMessageHQ" xml:space="preserve">
-    <value>&lt;h3&gt; &lt;b&gt; {{count}} &lt;/ b&gt; entrevista (s) no será aprobada. &lt;/ h3&gt; &lt;b&gt; ¡Tenga en cuenta! &lt;/ b&gt; Puede desaprobar las entrevistas con el siguiente estado solamente: &lt;i&gt; {{status1}} &lt;/ i&gt;.</value>
-  </data>
-  <data name="Note" xml:space="preserve">
-      <value>¡Nota!</value>
-  </data>
-  <data name="ApproveConfirmMessage_other" xml:space="preserve">
-      <value>{{count}} entrevistas será aprobada.</value>
-  </data>
-  <data name="ApproveConfirmMessage_Statuses" xml:space="preserve">
-      <value>Solo puede aprobar entrevistas con los siguientes estados: {{status1}},  {{status2}}, {{status3}}</value>
-  </data>
-  <data name="AssignReceivedWarning" xml:space="preserve">
-    <value>Los entrevistadores responsables actuales no serán notificados sobre la reasignación hasta la próxima sincronización. Si ya han comenzado a trabajar en la entrevista, ¡todos los datos que hayan ingresado antes de la próxima sincronización serán DESCARTADOS!</value>
-  </data>
-  <data name="ChooseQuestionsTitle" xml:space="preserve">
-    <value>Elija preguntas de identificación para usar en el filtro</value>
+  <data name="Tooltip_Table_ErrorsCount" xml:space="preserve">
+    <value>Muestra el número total de preguntas y textos estáticos no válidos en la entrevista. Varias condiciones de validación fallidas en la misma entidad se cuentan como 1.</value>
   </data>
   <data name="Errors" xml:space="preserve">
     <value>Conteo de errores</value>
   </data>
-  <data name="FiltersByQuestions" xml:space="preserve">
-    <value>Filtra por preguntas</value>
+  <data name="Tooltip_Table_NotAnsweredCount" xml:space="preserve">
+    <value>Número de preguntas sin respuesta. Incluye preguntas del supervisor, identificadoras y del entrevistador. Puede contener valores nulos para entrevistas que se completaron antes del lanzamiento 20.09.</value>
+  </data>
+  <data name="Tooltip_Table_InterviewMode" xml:space="preserve">
+    <value>Mostrar estado actual (CAPI o CAWI) de cada entrevista</value>
   </data>
   <data name="NotAnsweredCount" xml:space="preserve">
     <value>Sin respuesta</value>
   </data>
-  <data name="QuestionsFilterNotAvailable" xml:space="preserve">
-    <value>Los filtros por preguntas solo están disponibles cuando se selecciona una versión específica del cuestionario</value>
+  <data name="ChooseQuestionsTitle" xml:space="preserve">
+    <value>Elija preguntas de identificación para usar en el filtro</value>
+  </data>
+  <data name="DynamicFilter" xml:space="preserve">
+    <value>Filtro dinámico</value>
+  </data>
+  <data name="FiltersByQuestions" xml:space="preserve">
+    <value>Filtros por preguntas</value>
   </data>
   <data name="QuestionsSelector" xml:space="preserve">
     <value>Selector de preguntas</value>
   </data>
-  <data name="RejectToNewResponsible" xml:space="preserve">
-    <value>Rechazar y elegir nuevo responsable</value>
+  <data name="AdvancedFilterSelector" xml:space="preserve">
+    <value>Filtro dinámico</value>
   </data>
-  <data name="RejectToOriginal" xml:space="preserve">
-    <value>Rechazar al responsable original</value>
+  <data name="QuestionsFilterNotAvailable" xml:space="preserve">
+    <value>Los filtros por preguntas solo están disponibles cuando se selecciona una versión específica del cuestionario</value>
   </data>
-  <data name="Tooltip_Filter_Questionnaire" xml:space="preserve">
-    <value>Seleccione un cuestionario para ver sus entrevistas asociadas en la lista. Seleccione "Todos los cuestionarios" para ver las entrevistas asociadas con cualquier cuestionario.</value>
+  <data name="DynamicFilterNotAvailable" xml:space="preserve">
+    <value>No hay datos disponibles</value>
   </data>
-  <data name="Tooltip_Table_ErrorsCount" xml:space="preserve">
-    <value>Muestra el número total de preguntas y textos estáticos no válidas en la entrevista. Varias condiciones de validación fallidas en la misma entidad se cuentan como 1.</value>
+  <data name="ApproveConfirmMessage_other" xml:space="preserve">
+      <value>{{count}} entrevistas serán aprobadas.</value>
   </data>
-  <data name="Tooltip_Table_NotAnsweredCount" xml:space="preserve">
-    <value>Number of questions without answer. Includes supervisor, identifying and interviewer questions. Can contain nulls for interviews that were completed prior to 20.09 release.</value>
+  <data name="Note" xml:space="preserve">
+      <value>¡Nota!</value>
+  </data>
+  <data name="ApproveConfirmMessage_Statuses" xml:space="preserve">
+      <value>Solo puede aprobar entrevistas con los siguientes estados: {{status1}}, {{status2}} y {{status3}}.</value>
+  </data>
+  <data name="DynamicFilter_MatchType" xml:space="preserve">
+    <value>Tipo de coincidencia</value>
+  </data>
+  <data name="DynamicFilter_MatchTypes_And" xml:space="preserve">
+    <value>Y</value>
+  </data>
+  <data name="DynamicFilter_MatchTypes_Or" xml:space="preserve">
+    <value>O</value>
+  </data>
+  <data name="DynamicFilter_MatchTypes_AddRule" xml:space="preserve">
+    <value>Agregar regla</value>
+  </data>
+  <data name="DynamicFilter_MatchTypes_AddGroup" xml:space="preserve">
+    <value>Agregar grupo</value>
+  </data>
+  <data name="DynamicFilter_MatchTypes_ValuePlaceholder" xml:space="preserve">
+    <value>valor</value>
+  </data>
+  <data name="WebInterviewResponsibleWarning" xml:space="preserve">
+      <value>El responsable no es el entrevistador. El enlace no funcionará.</value>
   </data>
 </root>

@@ -1,6 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using StackExchange.Exceptional;
 using WB.UI.Headquarters.Code.Workspaces;
 using WB.UI.Shared.Web.Attributes;
+using WB.UI.Shared.Web.Exceptions;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 {
@@ -10,6 +15,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
     [Route("error")]
     public class ErrorController : Controller
     {
+        private const int MaxLengthToSave = 1000;
+
         [Route("404")]
         public new IActionResult NotFound() => View("NotFound");
 
@@ -41,5 +48,30 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         
         [Route("AntiForgery")]
         public IActionResult AntiForgery() => this.View("AntiForgery");
+        
+        [Route("report")]
+        [HttpPost]
+        public IActionResult LogError([FromBody] JObject clientError)
+        {
+            string json = clientError.ToString();
+            ClientException exception;
+            
+            try
+            {
+                var clientErrorModel = JsonConvert.DeserializeObject<ClientErrorModel>(json);
+                exception = clientErrorModel != null
+                    ? new ClientException(clientErrorModel)
+                    : new ClientException("Client error is null", 
+                        json.Substring(0, Math.Min(MaxLengthToSave, json.Length)));
+            }
+            catch
+            {
+                exception = new ClientException("Error deserialize client error", 
+                    json.Substring(0, Math.Min(MaxLengthToSave, json.Length)));
+            }
+            
+            exception.Log(HttpContext, category: "vue3");
+            return Ok();
+        }
     }
 }

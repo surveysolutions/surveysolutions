@@ -4,14 +4,12 @@ using System.Globalization;
 using System.IO;
 using CsvHelper;
 using CsvHelper.Configuration;
-using Ionic.Zip;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.UI.Headquarters.Resources;
 
 namespace WB.UI.Headquarters.Controllers.Api
 {
@@ -23,14 +21,17 @@ namespace WB.UI.Headquarters.Controllers.Api
         private readonly IAssignmentsUpgradeService upgradeService;
         private readonly IQuestionnaireBrowseViewFactory browseViewFactory;
         private readonly IFileSystemAccessor fileNameService;
+        private readonly IArchiveUtils archiveUtils;
 
         public AssignmentsUpgradeApiController(IAssignmentsUpgradeService upgradeService,
             IQuestionnaireBrowseViewFactory browseViewFactory,
-            IFileSystemAccessor fileNameService)
+            IFileSystemAccessor fileNameService,
+            IArchiveUtils archiveUtils)
         {
             this.upgradeService = upgradeService;
             this.browseViewFactory = browseViewFactory;
             this.fileNameService = fileNameService;
+            this.archiveUtils = archiveUtils;
         }
 
         [HttpGet]
@@ -91,7 +92,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             streamWriter.Flush();
 
             resultStream.Seek(0, SeekOrigin.Begin);
-            var fileContents = Compress(resultStream);
+            var fileContents = archiveUtils.CompressContentToSingleFile(resultStream.ToArray(), "assignments.tab");
             var fileName = this.GetOutputFileName(assignmentUpgradeProgressDetails.MigrateTo);
             return File(fileContents, "application/octet-stream", fileName, null, null, false);
         }
@@ -103,22 +104,6 @@ namespace WB.UI.Headquarters.Controllers.Api
             var fileName = this.fileNameService.MakeValidFileName(
                 $"Web {questionnaireBrowseItem.Title} (ver. {questionnaireBrowseItem.Version}).zip");
             return fileName;
-        }
-
-        private static byte[] Compress(Stream uncompressedDataStream)
-        {
-            byte[] compressedBytes;
-            using (MemoryStream memoryStream = new MemoryStream())
-            {
-                using (ZipFile zip = new ZipFile())
-                {
-                    zip.AddEntry("assignments.tab", uncompressedDataStream);
-                    zip.Save(memoryStream);
-                }
-
-                compressedBytes = memoryStream.ToArray();
-            }
-            return compressedBytes;
         }
     }
 }

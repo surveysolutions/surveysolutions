@@ -1,17 +1,12 @@
 <template>
-    <wb-question :question="$me"
-        :questionCssClassName="statusClass"
-        noTitle="true"
-        noValidation="true"
-        noInstructions="true"
-        noComments="true"
-        noFlag="true">
+    <wb-question :question="$me" :questionCssClassName="statusClass" noTitle="true" noValidation="true"
+        noInstructions="true" noComments="true" noFlag="true">
         <div class="options-group">
-            <a class="btn btn-roster-section"
-                :class="btnStatusClass"
-                :disabled="shouldDisable"
+            <a class="btn btn-roster-section" :class="btnStatusClass" :disabled="shouldDisable ? true : null"
                 @click="navigate">
-                <span v-html="$me.title"></span><span v-if="this.$me.isRoster && !this.$me.hasCustomRosterTitle"> - <i>{{rosterTitle}}</i></span>
+                <span v-dompurify-html="$me.title"></span><span
+                    v-if="this.$me.isRoster && !this.$me.hasCustomRosterTitle"> -
+                    <i>{{ rosterTitle }}</i></span>
             </a>
         </div>
     </wb-question>
@@ -41,9 +36,9 @@ export default {
         this.scroll()
     },
 
-    data: function() {
+    data: function () {
         return {
-            clicked : false,
+            clicked: false,
         }
     },
     computed: {
@@ -55,7 +50,7 @@ export default {
                 },
             }
         },
-        rosterTitle(){
+        rosterTitle() {
             return this.$me.rosterTitle ? `${this.$me.rosterTitle}` : '[...]'
         },
         isNotStarted() {
@@ -74,7 +69,7 @@ export default {
             return [{
                 'btn-success': this.$me.validity.isValid && this.isCompleted,
                 'btn-danger': !this.$me.validity.isValid,
-                'btn-primary': !this.isCompleted ,
+                'btn-primary': !this.isCompleted,
                 'disabled': this.$me.isDisabled,
             }]
         },
@@ -84,24 +79,24 @@ export default {
                 'has-error': !this.$me.validity.isValid,
                 '': this.$me.validity.isValid && !this.isCompleted,
             },
-            {
-                'answered': this.isCompleted,
-            }]
+                {
+                    'answered': this.isCompleted,
+                }]
         },
         shouldDisable() {
             return this.clicked == true && this.$store.getters.loadingProgress === true
         },
     },
-    methods : {
-        doScroll: debounce(function() {
-            if(this.$store.getters.scrollState ==  this.id){
+    methods: {
+        doScroll: debounce(function () {
+            if (this.$store.getters.scrollState == this.id) {
                 window.scroll({ top: this.$el.offsetTop, behavior: 'smooth' })
                 this.$store.dispatch('resetScroll')
             }
         }, 200),
 
         scroll() {
-            if(this.$store && this.$store.state.route.hash === '#' + this.id) {
+            if (this.$store && this.$store.state.route.hash === '#' + this.id) {
                 this.doScroll()
             }
         },

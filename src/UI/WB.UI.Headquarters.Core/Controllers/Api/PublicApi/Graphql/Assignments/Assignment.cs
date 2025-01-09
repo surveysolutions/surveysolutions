@@ -18,6 +18,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Assignments
             descriptor.Field(x => x.Archived);
             descriptor.Field(x => x.CreatedAtUtc).Type<NonNullType<DateTimeType>>();
             descriptor.Field(x => x.Email).Type<StringType>();
+            descriptor.Field(x => x.TargetArea).Type<StringType>();
             descriptor.Field(x => x.Id).Type<NonNullType<IdType>>();
             descriptor.Field(x => x.InterviewsNeeded);
             descriptor.Field(x => x.ReceivedByTabletAtUtc)

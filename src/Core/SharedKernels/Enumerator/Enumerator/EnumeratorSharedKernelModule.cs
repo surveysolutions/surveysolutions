@@ -28,6 +28,7 @@ using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Services.Workspace;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
@@ -71,6 +72,7 @@ namespace WB.Core.SharedKernels.Enumerator
             registry.BindAsSingleton<INearbyConnection, NearbyConnection>();
 
             registry.BindAsSingleton<ISynchronizationCompleteSource, SynchronizationCompleteSource>();
+            registry.Bind<IGeoTrackingSynchronizer, DummyGeoTrackingSynchronizer>();
 
             registry.Bind<IAudioFileStorage, InterviewerAudioFileStorage>();
             registry.Bind<IImageFileStorage, InterviewerImageFileStorage>();

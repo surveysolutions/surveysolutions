@@ -1,17 +1,18 @@
-﻿  <script>
-      $(function() {
-              var isIE11 = !!window.MSInputMethodContext && !!document.documentMode;
-              if (isIE11) {
-                  $('#mIe11').modal({ show: true });
-              }
-          }
-      )
-  </script>
+﻿<script type="module">
+    document.addEventListener('DOMContentLoaded', function () {
+        var isIE11 = !!window.MSInputMethodContext && !!document.documentMode;
+        if (isIE11) {
+            $('#mIe11').modal({ show: true });
+        }
+    }
+    )
+</script>
 <div class="modal fade" id="mIe11">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="@QuestionnaireController.Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal"
+                    aria-label="@QuestionnaireController.Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">@QuestionnaireController.NotSupportedBrowserUsed</h4>
             </div>
             <div class="modal-body">

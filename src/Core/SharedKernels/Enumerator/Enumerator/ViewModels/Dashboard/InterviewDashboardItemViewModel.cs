@@ -57,7 +57,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
         protected InterviewView interview;
         private string assignmentIdLabel;
 
-        public InterviewDashboardItemViewModel(IServiceLocator serviceLocator, IAuditLogService auditLogService) : base(serviceLocator)
+        public InterviewDashboardItemViewModel(IServiceLocator serviceLocator, IAuditLogService auditLogService, 
+            IMapInteractionService mapInteractionService) : base(serviceLocator, mapInteractionService)
         {
             this.serviceLocator = serviceLocator;
             this.auditLogService = auditLogService;
@@ -67,7 +68,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
         {
             this.interview = interviewView;
             this.questionnaireIdentity = QuestionnaireIdentity.Parse(interview.QuestionnaireId);
-            this.Status = this.GetDashboardCategoryForInterview(interview.Status, interview.StartedDateTime);
+            this.Status = this.GetDashboardInterviewStatusByInterviewStatus(interview.Status, interview.StartedDateTime);
 
             BindDetails(details);
             BindTitles();
@@ -137,7 +138,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
                     DashboardInterviewStatus.InProgress => EnumeratorUIResources.Dashboard_Open,
                     DashboardInterviewStatus.Completed => EnumeratorUIResources.Dashboard_Reopen,
                     DashboardInterviewStatus.Rejected => EnumeratorUIResources.Dashboard_ViewIssues,
-                    _ => throw new ArgumentOutOfRangeException()
+                    _ => throw new ArgumentOutOfRangeException($"Unexpected status: {Status}")
                 };
             }
 
@@ -149,7 +150,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
                     DashboardInterviewStatus.New => EnumeratorUIResources.Dashboard_Discard,
                     DashboardInterviewStatus.InProgress => EnumeratorUIResources.Dashboard_Discard,
                     DashboardInterviewStatus.Rejected => EnumeratorUIResources.Dashboard_Discard,
-                    _ => throw new ArgumentOutOfRangeException()
+                    _ => throw new ArgumentOutOfRangeException($"Unexpected status: {Status}")
                 };
             }
         }
@@ -231,30 +232,30 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
 
         public int? AssignmentId => this.interview.Assignment;
         
-        private string GetInterviewDateCommentByStatus(InterviewView interview)
+        private string GetInterviewDateCommentByStatus(InterviewView currentInterview)
         {
             switch (this.Status)
             {
                 case DashboardInterviewStatus.Assignment:
-                    return FormatDateTimeString(EnumeratorUIResources.DashboardItem_AssignedOn, interview.InterviewerAssignedDateTime);
+                    return FormatDateTimeString(EnumeratorUIResources.DashboardItem_AssignedOn, currentInterview.InterviewerAssignedDateTime);
                 case DashboardInterviewStatus.New:
-                    return FormatDateTimeString(EnumeratorUIResources.DashboardItem_AssignedOn, interview.InterviewerAssignedDateTime);
+                    return FormatDateTimeString(EnumeratorUIResources.DashboardItem_AssignedOn, currentInterview.InterviewerAssignedDateTime);
                 case DashboardInterviewStatus.InProgress:
-                    return FormatDateTimeString(EnumeratorUIResources.DashboardItem_StartedOn, interview.StartedDateTime);
+                    return FormatDateTimeString(EnumeratorUIResources.DashboardItem_StartedOn, currentInterview.StartedDateTime);
                 case DashboardInterviewStatus.Completed:
-                    return FormatDateTimeString(EnumeratorUIResources.DashboardItem_CompletedOn, interview.CompletedDateTime);
+                    return FormatDateTimeString(EnumeratorUIResources.DashboardItem_CompletedOn, currentInterview.CompletedDateTime);
                 case DashboardInterviewStatus.Rejected:
-                    return FormatDateTimeString(EnumeratorUIResources.DashboardItem_RejectedOn, interview.RejectedDateTime);
+                    return FormatDateTimeString(EnumeratorUIResources.DashboardItem_RejectedOn, currentInterview.RejectedDateTime);
                 case DashboardInterviewStatus.RejectedByHeadquarters:
-                    return FormatDateTimeString(EnumeratorUIResources.DashboardItem_RejectedByHqOn, interview.RejectedDateTime);
+                    return FormatDateTimeString(EnumeratorUIResources.DashboardItem_RejectedByHqOn, currentInterview.RejectedDateTime);
                 case DashboardInterviewStatus.ApprovedBySupervisor:
-                    return FormatDateTimeString(EnumeratorUIResources.DashboardItem_ApprovedBySupervisor, interview.ApprovedDateTimeUtc);
+                    return FormatDateTimeString(EnumeratorUIResources.DashboardItem_ApprovedBySupervisor, currentInterview.ApprovedDateTimeUtc);
                 default:
                     return string.Empty;
             }
         }
 
-        private DashboardInterviewStatus GetDashboardCategoryForInterview(
+        private DashboardInterviewStatus GetDashboardInterviewStatusByInterviewStatus(
             InterviewStatus interviewStatus, DateTime? startedDateTime)
         {
             switch (interviewStatus)
@@ -278,7 +279,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             }
         }
 
-        private string GetInterviewCommentByStatus(InterviewView interview)
+        private string GetInterviewCommentByStatus(InterviewView currentInterview)
         {
             switch (this.Status)
             {
@@ -286,10 +287,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
                     return string.Empty;
                 case DashboardInterviewStatus.Completed:
                 case DashboardInterviewStatus.Rejected:
-                    return interview.LastInterviewerOrSupervisorComment;
+                    return currentInterview.LastInterviewerOrSupervisorComment;
                 case DashboardInterviewStatus.ApprovedBySupervisor:
                 case DashboardInterviewStatus.RejectedByHeadquarters:
-                    return interview.LastInterviewerOrSupervisorComment;
+                    return currentInterview.LastInterviewerOrSupervisorComment;
                 default:
                     return string.Empty;
             }

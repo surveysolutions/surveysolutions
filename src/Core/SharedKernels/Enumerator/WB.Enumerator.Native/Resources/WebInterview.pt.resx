@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Interview_Group_Status_CompletedFormat" xml:space="preserve">
+    <value>Seção concluída: {{value}}</value>
+  </data>
+  <data name="Interview_Group_AnsweredQuestions_Many" xml:space="preserve">
+    <value>{{value}} respostas</value>
+  </data>
+  <data name="Interview_Group_Subgroups_ManyFormat" xml:space="preserve">
+    <value>{{value}} sub-seções</value>
+  </data>
+  <data name="Interview_Group_Subgroups_Zero" xml:space="preserve">
+    <value>nenhuma sub-seção</value>
+  </data>
+  <data name="Interview_Group_Status_NotStarted" xml:space="preserve">
+    <value>Seção não iniciada</value>
+  </data>
+  <data name="Interview_Group_AnsweredQuestions_One" xml:space="preserve">
+    <value>uma resposta</value>
+  </data>
+  <data name="Interview_Group_Subgroups_One" xml:space="preserve">
+    <value>uma sub-seção</value>
+  </data>
+  <data name="Interview_Group_Status_StartedIncompleteFormat" xml:space="preserve">
+    <value>Seção iniciada: {{value}}</value>
+  </data>
+  <data name="Interview_Group_InvalidAnswers_ManyFormat" xml:space="preserve">
+    <value>{{value}} erros</value>
+  </data>
+  <data name="Interview_Group_InvalidAnswers_One" xml:space="preserve">
+    <value>um erro</value>
+  </data>
+  <data name="ServerUnderLoad" xml:space="preserve">
+    <value>Desculpe, muitas pessoas estão acessando este site ao mesmo tempo. Estamos trabalhando neste problema. Por favor, tente novamente mais tarde.</value>
+  </data>
+  <data name="RefreshPage" xml:space="preserve">
+    <value>Atualizar página</value>
+  </data>
+  <data name="InvitationSmallText" xml:space="preserve">
+    <value>O processo de entrevista requer uma conexão com a internet. Nenhum software adicional é necessário.</value>
+  </data>
+  <data name="InvitationText" xml:space="preserve">
+    <value>Você foi convidado a participar da seguinte pesquisa: "%QUESTIONNAIRE%"</value>
+  </data>
+  <data name="WelcomeText" xml:space="preserve">
+    <value>Olá e Bem-vindo à Pesquisa Web do Survey Solutions</value>
+  </data>
+  <data name="WebSurvey" xml:space="preserve">
+    <value>Pesquisa Web do Survey Solutions</value>
+  </data>
+  <data name="CompletionText" xml:space="preserve">
+    <value>Esta entrevista foi concluída</value>
+  </data>
+  <data name="InProgressText" xml:space="preserve">
+    <value>Em andamento</value>
+  </data>
+  <data name="NotStartedText" xml:space="preserve">
+    <value>Não iniciado</value>
+  </data>
+  <data name="FinishInterviewText" xml:space="preserve">
+    <value>Esta entrevista foi concluída</value>
+  </data>
+  <data name="StartedInterviewText" xml:space="preserve">
+    <value>Esta entrevista não foi concluída</value>
+  </data>
+  <data name="SurveyFormatText" xml:space="preserve">
+    <value>Pesquisa: "%QUESTIONNAIRE%"</value>
+  </data>
+  <data name="InterviewIdFormatText" xml:space="preserve">
+    <value>ID da entrevista: {0}</value>
+    <comment>{0} - id da entrevista humana</comment>
+  </data>
+  <data name="InterviewStartDateFormatText" xml:space="preserve">
+    <value>Data de início da entrevista: </value>
+  </data>
+  <data name="InterviewCompletionDateFormatText" xml:space="preserve">
+    <value>Data de conclusão da entrevista: </value>
+  </data>
+  <data name="DownloadAnswers" xml:space="preserve">
+    <value>Baixar transcrição da entrevista</value>
+  </data>
+  <data name="DownloadAnswersHint" xml:space="preserve">
+    <value>Baixar respostas da entrevista como arquivo pdf</value>
+  </data>
+  <data name="Start" xml:space="preserve">
+    <value>Iniciar nova entrevista</value>
+  </data>
+  <data name="StartPageTitle" xml:space="preserve">
+    <value>Pesquisa Web</value>
+  </data>
+  <data name="PleaseFillCaptcha" xml:space="preserve">
+    <value>Por favor, preencha o campo captcha</value>
+  </data>
+  <data name="InvalidPassword" xml:space="preserve">
+    <value>Senha incorreta</value>
+  </data>
+  <data name="Original_Language" xml:space="preserve">
+    <value>Original</value>
+  </data>
+  <data name="ToInterview" xml:space="preserve">
+    <value>Para entrevista</value>
+  </data>
+  <data name="ResumeInterview" xml:space="preserve">
+    <value>Retomar entrevista</value>
+  </data>
+  <data name="DiscardAndStart" xml:space="preserve">
+    <value>Reabrir</value>
+  </data>
+  <data name="OrStartInterview" xml:space="preserve">
+    <value>Ou você pode iniciar uma nova entrevista</value>
+  </data>
+  <data name="HasPreviousStartedInterview" xml:space="preserve">
+    <value>Você começou uma entrevista</value>
+  </data>
+  <data name="Resume_InvitationSmallText" xml:space="preserve">
+    <value>O processo de entrevista requer conexão com a internet, nenhum software adicional é necessário</value>
+  </data>
+  <data name="Resume_InvitationText" xml:space="preserve">
+    <value>Você pode navegar para a entrevista na seguinte pesquisa: "%QUESTIONNAIRE%"</value>
+  </data>
+  <data name="Resume_WelcomeText" xml:space="preserve">
+    <value>Olá e Bem-vindo à Pesquisa Web do Survey Solutions</value>
+  </data>
+  <data name="Error_InterviewExpired" xml:space="preserve">
+    <value>O link expirou</value>
+  </data>
+  <data name="Error_NoActionsNeeded" xml:space="preserve">
+    <value>As informações sobre essa entrevista foram registradas. Nenhuma ação adicional é necessária</value>
+  </data>
+  <data name="InterviewReceivedByInterviewer" xml:space="preserve">
+    <value>Não é possível modificar a entrevista que foi recebida pelo dispositivo</value>
+  </data>
+  <data name="Error_NotFound" xml:space="preserve">
+    <value>A entrevista não foi encontrada ou não há necessidade de uma nova entrevista</value>
+  </data>
+  <data name="EnterPasswordText" xml:space="preserve">
+    <value>Este link é protegido por senha, que foi distribuída com o link. Por favor, insira-a aqui</value>
+  </data>
+  <data name="PictureQuestionNotAPicture" xml:space="preserve">
+    <value>Apenas arquivos de imagem são aceitos</value>
+  </data>
+  <data name="Error_CookiesTurnedOff" xml:space="preserve">
+    <value>Os cookies não estão habilitados no seu navegador. Por favor, habilite os cookies nas preferências do seu navegador para continuar</value>
+  </data>
+  <data name="Error_Forbidden" xml:space="preserve">
+    <value>Proibido</value>
+  </data>
+  <data name="Error_UserNotAuthorised" xml:space="preserve">
+    <value>Usuário não autorizado</value>
+  </data>
+  <data name="CompleteInterview" xml:space="preserve">
+    <value>Concluir entrevista</value>
+  </data>
+  <data name="Filters_Title" xml:space="preserve">
+    <value>Filtrar Perguntas</value>
+  </data>
+  <data name="Filters_Flagged" xml:space="preserve">
+    <value>Marcadas</value>
+  </data>
+  <data name="Filters_WithComments" xml:space="preserve">
+    <value>Com comentários</value>
+  </data>
+  <data name="Filters_Invalid" xml:space="preserve">
+    <value>Inválidas</value>
+  </data>
+  <data name="Filters_Valid" xml:space="preserve">
+    <value>Válidas</value>
+  </data>
+  <data name="Filters_Answered" xml:space="preserve">
+    <value>Respondidas</value>
+  </data>
+  <data name="Filters_NotAnswered" xml:space="preserve">
+    <value>Não respondidas</value>
+  </data>
+  <data name="Filters_ForSupervisor" xml:space="preserve">
+    <value>Para supervisor</value>
+  </data>
+  <data name="Filters_ForInterviewer" xml:space="preserve">
+    <value>Para entrevistador</value>
+  </data>
+  <data name="Filters_NotFlagged" xml:space="preserve">
+    <value>Sem marcação</value>
+  </data>
+  <data name="Filters_CriticalQuestions" xml:space="preserve">
+    <value>Perguntas críticas</value>
+  </data>
+  <data name="Filters_CriticalRules" xml:space="preserve">
+    <value>Regras críticas</value>
+  </data>
+  <data name="PoweredBy" xml:space="preserve">
+    <value>Desenvolvido por</value>
+  </data>
+  <data name="Filters_ClearSelection" xml:space="preserve">
+    <value>Redefinir todos os filtros</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Erro</value>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>Aviso</value>
+  </data>
+  <data name="QuestionnaireNameFormat" xml:space="preserve">
+    <value>{0} (ver. {1})</value>
+  </data>
+  <data name="InterviewSizeLimitReached" xml:space="preserve">
+    <value>A entrevista contém número total de instâncias de roster e perguntas que excedem os limites do sistema.</value>
+  </data>
+  <data name="AssignmentLimitReached" xml:space="preserve">
+    <value>Coletamos todas as entrevistas nesta pesquisa.</value>
+  </data>
+  <data name="InterviewNotFound" xml:space="preserve">
+    <value>A entrevista não foi encontrada.</value>
+  </data>
+  <data name="Email_InvitationTemplate_Subject" xml:space="preserve">
+    <value>Convite para participar de %SURVEYNAME%</value>
+  </data>
+  <data name="Email_InvitationTemplate_Message" xml:space="preserve">
+    <value>Bem-vindo a %SURVEYNAME%!
+
+Para participar da pesquisa, clique no seguinte link: %SURVEYLINK% e insira sua senha: %PASSWORD%
+ 
+Obrigado pela sua cooperação!</value>
+  </data>
+  <data name="Email_NoResponse_Subject" xml:space="preserve">
+    <value>Lembrete, não se esqueça de participar de %SURVEYNAME%</value>
+  </data>
+    <data name="Email_NoResponse_Message" xml:space="preserve">
+    <value>Você está recebendo este lembrete porque você não começou a responder a %SURVEYNAME%!
+ 
+Para participar da pesquisa, clique no seguinte link: %SURVEYLINK% e insira sua senha: %PASSWORD%
+ 
+Obrigado pela sua cooperação!</value>
+  </data>
+  <data name="Email_PartialResponse_Subject" xml:space="preserve">
+    <value>Lembrete, por favor, complete sua resposta a %SURVEYNAME%</value>
+  </data>
+  <data name="Email_PartialResponse_Message" xml:space="preserve">
+    <value>Você está recebendo este lembrete porque você começou a responder a %SURVEYNAME%, mas não completou o processo.
+ 
+Para continuar a pesquisa, clique no seguinte link: %SURVEYLINK% e insira sua senha: %PASSWORD%.
+ 
+Por favor, responda todas as perguntas aplicáveis e clique no botão 'CONCLUIR' para enviar suas respostas.
+ 
+Obrigado pela sua cooperação!</value>
+  </data>
+  <data name="Email_RejectEmail_Subject" xml:space="preserve">
+    <value>Sua ação é necessária em %SURVEYNAME%</value>
+  </data>
+  <data name="Email_RejectEmail_Message" xml:space="preserve">
+    <value>Obrigado por participar de %SURVEYNAME%!
+ 
+Ao processar sua resposta, nossa equipe encontrou alguns problemas, que você está sendo solicitado a revisar.
+ 
+Para continuar a pesquisa, clique no seguinte link: %SURVEYLINK% e insira sua senha: %PASSWORD%.
+ 
+Agradecemos se você tentar resolver todos os problemas marcados em sua resposta e clicar no botão 'CONCLUIR' para enviar suas respostas.
+ 
+Obrigado pela sua cooperação!</value>
+  </data>
+  <data name="NoteForSupervisor" xml:space="preserve">
+    <value>Comentário</value>
+  </data>
+  <data name="Complete" xml:space="preserve">
+    <value>Concluir</value>
+    <comment>Texto do botão Concluir entrevista</comment>
+  </data>
+  <data name="LinkToWebInterviewExample" xml:space="preserve">
+    <value>Link para exemplo de página de destino de entrevista na web</value>
+  </data>
+</root>

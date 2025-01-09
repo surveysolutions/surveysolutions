@@ -10,37 +10,39 @@
     {
         <div class="alert alert-success header">@Html.Raw(@TempData[Alerts.SUCCESS])</div>
     }
-<form method="post">
-    <input type="hidden" asp-for="QuestionnaireId" />
-    <input type="hidden" asp-for="Revision" />
-    <h1>@QuestionnaireController.CopyQuestionnaire</h1>
-    @if (TempData.ContainsKey(Alerts.ERROR))
-    {
-        <p class="note has-error">@Html.Raw(TempData[Alerts.ERROR])</p>
-    }
-    @if (Model.IsDeleted)
-    {
+    <form method="post">
+        <input type="hidden" asp-for="QuestionnaireId" />
+        <input type="hidden" asp-for="Revision" />
+        <h1>@QuestionnaireController.CopyQuestionnaire</h1>
+        @if (TempData.ContainsKey(Alerts.ERROR))
+        {
+            <p class="note has-error">@Html.Raw(TempData[Alerts.ERROR])</p>
+        }
+        @if (Model.IsDeleted)
+        {
+            <div class="form-group">
+                <span class="text-danger">@QuestionnaireController.CloneDeletedWarning</span>
+            </div>
+        }
         <div class="form-group">
-            <span class="text-danger">@QuestionnaireController.CloneDeletedWarning</span>
+            <input type="text" asp-for="Title" class="form-control"
+                placeholder="@QuestionnaireController.QuestionnaireTitle" />
+            <span asp-validation-for="Title" class="text-danger header-line"></span>
         </div>
-    }
-    <div class="form-group">
-        <input type="text" asp-for="Title" class="form-control" placeholder="@QuestionnaireController.QuestionnaireTitle" />
-        <span asp-validation-for="Title" class="text-danger header-line"></span>
-    </div>
-    <div class="form-actions">
-        <input type="submit" class="btn btn-success btn-lg" value="@QuestionnaireController.Copy" id="inputCloneQuestionnaire" />
-        <a asp-action="Index" asp-controller="QuestionnaireList" class="btn btn-link">
-            @QuestionnaireController.Cancel
-        </a>
-    </div>
-</form>
+        <div class="form-actions">
+            <input type="submit" class="btn btn-success btn-lg" value="@QuestionnaireController.Copy"
+                id="inputCloneQuestionnaire" />
+            <a asp-action="Index" asp-controller="QuestionnaireList" class="btn btn-link">
+                @QuestionnaireController.Cancel
+            </a>
+        </div>
+    </form>
 </div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
     <script>
-        $(function () {
+        document.addEventListener('DOMContentLoaded', function () {
             $('#edit-form').submit(function () {
                 $('#inputCloneQuestionnaire').attr("disabled", true);
                 return true;
@@ -48,4 +50,3 @@
         });
     </script>
 }
-

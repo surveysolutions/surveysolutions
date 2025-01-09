@@ -18,6 +18,7 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Assignment
         public List<string> ProtectedVariables { get; }
         public string Comment { get; }
         public int? UpgradedFromId { get; }
+        public string TargetArea { get; }
 
         public CreateAssignment(Guid publicKey,
             int id,
@@ -32,6 +33,7 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Assignment
             List<InterviewAnswer> answers, 
             List<string> protectedVariables,
             string comment,
+            string targetArea,
             int? upgradedFromId = null) 
             : base(publicKey, userId, questionnaireId)
         {
@@ -46,6 +48,7 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Assignment
             ProtectedVariables = protectedVariables ?? new List<string>();
             Comment = comment;
             UpgradedFromId = upgradedFromId;
+            TargetArea = targetArea;
         }
     }
 }

@@ -117,14 +117,105 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+ <data name="SlowConnection" xml:space="preserve">
+    <value>La conexión de red es lenta</value>
+  </data>
+  <data name="CloseInterviewTitle" xml:space="preserve">
+    <value>Esta entrevista está abierta en otra pestaña o navegador</value>
+  </data>
+  <data name="Network" xml:space="preserve">
+    <value>Red</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>Recargar</value>
+  </data>
+  <data name="SessionTimeoutTitle" xml:space="preserve">
+    <value>Tu sesión ha expirado</value>
+  </data>
+  <data name="SessionTimeoutMessageTitle" xml:space="preserve">
+    <value>Tu sesión ha expirado porque no has realizado ninguna acción durante 15 minutos.</value>
+  </data>
+  <data name="SessionTimeoutMessage" xml:space="preserve">
+    <value>Por favor, vuelva a cargar la página para continuar con esta entrevista.</value>
+  </data>
+  <data name="Disconnected" xml:space="preserve">
+    <value>Desconectado</value>
+  </data>
+  <data name="ConnectionLostTitle" xml:space="preserve">
+    <value>Se ha perdido la conexión con el servidor.</value>
+  </data>
+  <data name="ConnectionLostMessage" xml:space="preserve">
+    <value>Vuelva a cargar la página para restaurar la conexión y continuar con esta entrevista.</value>
+  </data>
+  <data name="CloseInterviewMessage" xml:space="preserve">
+    <value>&lt;p&gt;La Entrevista Web sólo admite una pestaña activa con la entrevista. &lt;/p&gt;&lt;p&gt; Recargue esta página para continuar usando esta pestaña o cerrarla.&lt;/p&gt;</value>
+  </data>
+  <data name="CommentAdd" xml:space="preserve">
+    <value>Agregar comentario</value>
+  </data>
+  <data name="CommentHide" xml:space="preserve">
+    <value>Ocultar comentario</value>
+  </data>
+  <data name="CommentEnter" xml:space="preserve">
+    <value>Escribe tu comentario</value>
+  </data>
+  <data name="CommentPost" xml:space="preserve">
+    <value>Enviar</value>
+  </data>
+  <data name="CommentYours" xml:space="preserve">
+    <value>Tu comentario</value>
+  </data>
+  <data name="CommentOnPreviousAnswer" xml:space="preserve">
+    <value>En respuesta anterior</value>
+  </data>
+  <data name="CommentAdmin" xml:space="preserve">
+    <value>Comentario de administrador</value>
+  </data>
+  <data name="CommentSupervisor" xml:space="preserve">
+    <value>Comentario del supervisor</value>
+  </data>
+  <data name="CommentInterviewer" xml:space="preserve">
+    <value>Comentario del entrevistador</value>
+  </data>
+  <data name="CommentHeadquarters" xml:space="preserve">
+    <value>Comentarios de la Oficina Central</value>
+  </data>
+  <data name="Comment" xml:space="preserve">
+    <value>Comentario</value>
+  </data>
+  <data name="Instruction" xml:space="preserve">
+    <value>Instrucción</value>
+  </data>
+  <data name="InstructionShow" xml:space="preserve">
+    <value>Mostrar instrucción</value>
+  </data>
+  <data name="ProgressText" xml:space="preserve">
+    <value>{{progress}}% Completo</value>
+    <comment>No traduzca partes dentro de {{}}: {{progress}}%. deje % como está</comment>
+  </data>
   <data name="AnswerIsInvalid" xml:space="preserve">
     <value>La respuesta no es válida</value>
   </data>
   <data name="AnswerWasNotSaved" xml:space="preserve">
     <value>La respuesta no se guardó</value>
   </data>
-  <data name="AudioClickRecord" xml:space="preserve">
-    <value>Haga clic para grabar audio</value>
+  <data name="NotCalculated" xml:space="preserve">
+    <value>No calculado</value>
+  </data>
+  <data name="ClickToAnswer" xml:space="preserve">
+    <value>Haga clic para responder</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Cargando...</value>
+  </data>
+  <data name="NoResultsFound" xml:space="preserve">
+    <value>No se han encontrado resultados</value>
+  </data>
+  <data name="Done" xml:space="preserve">
+    <value>Hecho</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancelar</value>
   </data>
   <data name="AudioInitializationFailed" xml:space="preserve">
     <value>Error de inicialización de audio</value>
@@ -132,98 +223,24 @@
   <data name="AudioRecording" xml:space="preserve">
     <value>Grabación de audio</value>
   </data>
-  <data name="AudioRecordingDuration" xml:space="preserve">
-    <value>{{humanizedLength}} ({{formattedLength}}) de grabación de audio</value>
+  <data name="AudioClickRecord" xml:space="preserve">
+    <value>Haga clic para grabar audio</value>
   </data>
   <data name="AudioRecordNew" xml:space="preserve">
     <value>Nueva grabación</value>
   </data>
-  <data name="Cancel" xml:space="preserve">
-    <value>Cancelar</value>
+  <data name="AudioRecordingDuration" xml:space="preserve">
+    <value>{{humanizedLength}} ({{formattedLength}}) de grabación de audio</value>
+    <comment>No traduzca partes dentro de {{}}: {{humanizedLength}} y {{formattedLength}}</comment>
   </data>
-  <data name="ClickToAnswer" xml:space="preserve">
-    <value>Haga clic para responder</value>
+  <data name="RecordCurrentTime" xml:space="preserve">
+    <value>Grabar la hora actual</value>
   </data>
-  <data name="CloseInterviewMessage" xml:space="preserve">
-    <value>&lt;p&gt;La Entrevista Web sólo admite una pestaña activa con la entrevista. &lt;/p&gt;&lt;p&gt; Recargue esta página para continuar usando esta pestaña o cerrarla.&lt;/p&gt;</value>
+  <data name="EnterDate" xml:space="preserve">
+    <value>Ingresar fecha</value>
   </data>
-  <data name="CloseInterviewTitle" xml:space="preserve">
-    <value>Esta entrevista está abierta en otra pestaña o navegador</value>
-  </data>
-  <data name="Comment" xml:space="preserve">
-    <value>Comentario</value>
-  </data>
-  <data name="CommentAdd" xml:space="preserve">
-    <value>Agregar comentario</value>
-  </data>
-  <data name="CommentAdmin" xml:space="preserve">
-    <value>Comentario de administrador</value>
-  </data>
-  <data name="CommentEnter" xml:space="preserve">
-    <value>Escribe tu comentario</value>
-  </data>
-  <data name="CommentHeadquarters" xml:space="preserve">
-    <value>Comentarios de la Oficina Central</value>
-  </data>
-  <data name="CommentHide" xml:space="preserve">
-    <value>Ocultar comentario</value>
-  </data>
-  <data name="CommentInterviewer" xml:space="preserve">
-    <value>Comentario del entrevistador</value>
-  </data>
-  <data name="CommentPost" xml:space="preserve">
-    <value>Enviar</value>
-  </data>
-  <data name="CommentSupervisor" xml:space="preserve">
-    <value>Comentario del supervisor</value>
-  </data>
-  <data name="CommentYours" xml:space="preserve">
-    <value>Tu comentario</value>
-  </data>
-  <data name="Complete" xml:space="preserve">
-    <value>Completar</value>
-  </data>
-  <data name="CompleteAbout" xml:space="preserve">
-    <value>Estás a punto de completar esta entrevista</value>
-  </data>
-  <data name="CompleteErrors" xml:space="preserve">
-    <value>Preguntas con errores:</value>
-  </data>
-  <data name="CompleteFirstErrors" xml:space="preserve">
-    <value>Primeras {{count}} entidades con errores:</value>
-  </data>
-  <data name="CompleteNoteToSupervisor" xml:space="preserve">
-      <value>Nota</value>
-  </data>
-  <data name="CompleteQuestionsAnswered" xml:space="preserve">
-    <value>Contestada</value>
-  </data>
-  <data name="CompleteQuestionsStatus" xml:space="preserve">
-    <value>Estado de las preguntas:</value>
-  </data>
-  <data name="CompleteQuestionsUnanswered" xml:space="preserve">
-    <value>Sin respuesta</value>
-  </data>
-  <data name="ConfirmRosterRemove" xml:space="preserve">
-    <value>¿Seguro que quieres eliminar la lista relacionada?</value>
-  </data>
-  <data name="ConnectionLostMessage" xml:space="preserve">
-    <value>Vuelva a cargar la página para restaurar la conexión y continuar con esta entrevista.</value>
-  </data>
-  <data name="ConnectionLostTitle" xml:space="preserve">
-    <value>Se ha perdido la conexión con el servidor.</value>
-  </data>
-  <data name="Cover" xml:space="preserve">
-    <value>Portada</value>
-  </data>
-  <data name="CoverComments" xml:space="preserve">
-    <value>Preguntas con comentarios:</value>
-  </data>
-  <data name="CoverFirstComments" xml:space="preserve">
-    <value>Primeras {{count}} entidades con comentarios:</value>
-  </data>
-  <data name="CoverSupervisorNote" xml:space="preserve">
-    <value>Nota del supervisor:</value>
+  <data name="DecimalTooBig" xml:space="preserve">
+    <value>El valor ingresado es muy grande. Se permiten sólo 15 dígitos</value>
   </data>
   <data name="DecimalCannotParse" xml:space="preserve">
     <value>El valor introducido no se puede analizar como valor decimal</value>
@@ -231,26 +248,20 @@
   <data name="DecimalEnter" xml:space="preserve">
     <value>Introducir decimal</value>
   </data>
-  <data name="DecimalTooBig" xml:space="preserve">
-    <value>El valor ingresado es muy grande. Se permiten sólo 15 dígitos</value>
+  <data name="OptionsAvailableAfterAnswer" xml:space="preserve">
+    <value>Las opciones estarán disponibles después de contestar la pregunta de referencia</value>
   </data>
-  <data name="Disconnected" xml:space="preserve">
-    <value>Desconectado</value>
+  <data name="MaxAnswersCountSelected" xml:space="preserve">
+    <value>Se ha realizado el número máximo de selecciones ({{value}}) en esta pregunta</value>
   </data>
-  <data name="Done" xml:space="preserve">
-    <value>Hecho</value>
+  <data name="ConfirmRosterRemove" xml:space="preserve">
+    <value>¿Seguro que quieres eliminar la lista relacionada?</value>
   </data>
-  <data name="EnterDate" xml:space="preserve">
-    <value>Ingresar fecha</value>
+  <data name="GPSRecord" xml:space="preserve">
+    <value>Grabar GPS</value>
   </data>
-  <data name="Error" xml:space="preserve">
-    <value>Error</value>
-  </data>
-  <data name="Error_other" xml:space="preserve">
-    <value>Errores</value>
-  </data>
-  <data name="GPSError" xml:space="preserve">
-    <value>No se pudo determinar la posición debido a un error desconocido (Código: {{strErrorCode}}).</value>
+  <data name="AreaRecord" xml:space="preserve">
+    <value>Área de edición</value>
   </data>
   <data name="GPSNotAvailable" xml:space="preserve">
     <value>Su navegador no admite la recepción de Geo localización</value>
@@ -261,98 +272,49 @@
   <data name="GPSPositionUnavailable" xml:space="preserve">
     <value>No se pudo determinar la posición actual.</value>
   </data>
-  <data name="GPSRecord" xml:space="preserve">
-    <value>Grabar GPS</value>
-  </data>
   <data name="GPSTimeout" xml:space="preserve">
     <value>La posición actual no se pudo determinar dentro del período de tiempo de espera especificado.</value>
   </data>
-  <data name="Help" xml:space="preserve">
-    <value>Ayuda</value>
-  </data>
-  <data name="Instruction" xml:space="preserve">
-    <value>Instrucción</value>
-  </data>
-  <data name="InstructionShow" xml:space="preserve">
-    <value>Mostrar instrucción</value>
-  </data>
-  <data name="Loading" xml:space="preserve">
-    <value>Cargando...</value>
-  </data>
-  <data name="LoadingWait" xml:space="preserve">
-    <value>Cargando por favor espere</value>
-  </data>
-  <data name="Network" xml:space="preserve">
-    <value>Red</value>
-  </data>
-  <data name="No" xml:space="preserve">
-    <value>No</value>
-  </data>
-  <data name="NoResultsFound" xml:space="preserve">
-    <value>No se han encontrado resultados</value>
-  </data>
-  <data name="NumberCannotParse" xml:space="preserve">
-    <value>El valor ingresado no se puede analizar como valor entero</value>
+  <data name="GPSError" xml:space="preserve">
+    <value>No se pudo determinar la posición debido a un error desconocido (Código: {{strErrorCode}}).</value>
+    <comment>No traduzca partes dentro de {{}}: {{strErrorCode}}</comment>
   </data>
   <data name="NumberEnter" xml:space="preserve">
     <value>Ingresar número</value>
   </data>
+  <data name="NumberCannotParse" xml:space="preserve">
+    <value>El valor ingresado no se puede analizar como valor entero</value>
+  </data>
+  <data name="NumberCannotBeLessThanProtected" xml:space="preserve">
+    <value>El valor ingresado no puede ser menor que la respuesta protegida</value>
+  </data>
   <data name="NumberRosterError" xml:space="preserve">
     <value>La respuesta '{{answer}}' es incorrecta porque la pregunta se utiliza como el tamaño de la lista y la respuesta especificada es negativa</value>
-  </data>
-  <data name="NumberRosterRemoveConfirm" xml:space="preserve">
-    <value>¿Está seguro de que quiere eliminar la {{amountOfRostersToRemove}} fila (s) de cada lista relacionada?</value>
+    <comment>No traduzca partes dentro de {{}}: {{answer}}</comment>
   </data>
   <data name="NumberRosterUpperBound" xml:space="preserve">
     <value>Respuesta '{{answer}}' es incorrecta porque la respuesta es mayor que el límite superior de la lista {{answerMaxValue}}.</value>
+    <comment>No traduzca partes dentro de {{}}: {{answer}}, {{answerMaxValue}}</comment>
   </data>
-  <data name="OptionsAvailableAfterAnswer" xml:space="preserve">
-    <value>Las opciones estarán disponibles después de contestar la pregunta de referencia</value>
-  </data>
-  <data name="PhotoIsNotImage" xml:space="preserve">
-    <value>Sólo se permite subir archivos de imagen</value>
-  </data>
-  <data name="PhotoTooBig" xml:space="preserve">
-    <value>La imagen es demasiado grande para subirla. Por favor, elija una imagen de menos de 30 Mb</value>
+  <data name="NumberRosterRemoveConfirm" xml:space="preserve">
+    <value>¿Está seguro de que quiere eliminar la {{amountOfRostersToRemove}} fila (s) de cada lista relacionada?</value>
+    <comment>No traduzca partes dentro de {{}}: {{amountOfRostersToRemove}}</comment>
   </data>
   <data name="PhotoUpload" xml:space="preserve">
     <value>Subir foto</value>
   </data>
-  <data name="ProgressText" xml:space="preserve">
-    <value>{{progress}}% Completo</value>
+  <data name="PhotoTooBig" xml:space="preserve">
+    <value>La imagen es demasiado grande para subirla. Por favor, elija una imagen de menos de 30 Mb</value>
   </data>
-  <data name="QuestionUnsupported" xml:space="preserve">
-    <value>Tipo de pregunta no admitido</value>
-  </data>
-  <data name="RecordCurrentTime" xml:space="preserve">
-    <value>Grabar la hora actual</value>
-  </data>
-  <data name="Reload" xml:space="preserve">
-    <value>Recargar</value>
-  </data>
-  <data name="Search" xml:space="preserve">
-    <value>Buscar</value>
-  </data>
-  <data name="SessionTimeoutMessage" xml:space="preserve">
-    <value>Por favor, vuelva a cargar la página para continuar con esta entrevista.</value>
-  </data>
-  <data name="SessionTimeoutMessageTitle" xml:space="preserve">
-    <value>Tu sesión ha expirado porque no has realizado ninguna acción durante 15 minutos.</value>
-  </data>
-  <data name="SessionTimeoutTitle" xml:space="preserve">
-    <value>Tu sesión ha expirado</value>
-  </data>
-  <data name="SlowConnection" xml:space="preserve">
-    <value>La conexión de red es lenta</value>
-  </data>
-  <data name="SwitchingLanguage" xml:space="preserve">
-    <value>Cambio de idioma. Por favor espera...</value>
+  <data name="PhotoIsNotImage" xml:space="preserve">
+    <value>Sólo se permite subir archivos de imagen</value>
   </data>
   <data name="TextEnter" xml:space="preserve">
     <value>Ingrese texto</value>
   </data>
   <data name="TextEnterMasked" xml:space="preserve">
     <value>Ingrese texto  {{userFriendlyMask}}</value>
+    <comment>No traduzca partes dentro de {{}}: {{userFriendlyMask}}</comment>
   </data>
   <data name="TextEnterNewItem" xml:space="preserve">
     <value>Ingrese nuevo elemento</value>
@@ -360,11 +322,88 @@
   <data name="TextRequired" xml:space="preserve">
     <value>Por favor, complete todos los valores requeridos</value>
   </data>
+  <data name="QuestionUnsupported" xml:space="preserve">
+    <value>Tipo de pregunta no admitido</value>
+  </data>
+  <data name="Complete" xml:space="preserve">
+    <value>Completar</value>
+  </data>
+  <data name="CompleteAbout" xml:space="preserve">
+    <value>Estás a punto de completar esta entrevista</value>
+  </data>
+  <data name="CompleteQuestionsStatus" xml:space="preserve">
+    <value>Estado de las preguntas:</value>
+  </data>
+  <data name="CompleteQuestionsAnswered" xml:space="preserve">
+    <value>Contestada</value>
+  </data>
+  <data name="CompleteQuestionsUnanswered" xml:space="preserve">
+    <value>Sin respuesta</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Error</value>
+    <comment>Forma plural: Cero elementos</comment>
+  </data>
+  <data name="Error_other" xml:space="preserve">
+    <value>Errores</value>
+    <comment>Forma plural: plural</comment>
+  </data>
+  <data name="CompleteFirstErrors" xml:space="preserve">
+    <value>Primeras {{count}} preguntas con errores:</value>
+  </data>
+  <data name="CompleteErrors" xml:space="preserve">
+    <value>Preguntas con errores:</value>
+  </data>
+  <data name="CriticalQuestionErrors" xml:space="preserve">
+    <value>Requiere respuestas a estas preguntas:</value>
+  </data>
+  <data name="CriticalityConditionsErrors" xml:space="preserve">
+    <value>Requiere corregir estos errores:</value>
+  </data>
+  <data name="UnansweredQuestions" xml:space="preserve">
+    <value>Preguntas sin respuesta:</value>
+  </data>
+  <data name="CompleteNoteToSupervisor" xml:space="preserve">
+    <value>Comentario</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="Cover" xml:space="preserve">
+    <value>Portada</value>
+  </data>
+  <data name="CoverSupervisorNote" xml:space="preserve">
+    <value>Nota del supervisor:</value>
+  </data>
+  <data name="CoverFirstComments" xml:space="preserve">
+    <value>Primeras {{count}} entidades con comentarios:</value>
+  </data>
+  <data name="CoverComments" xml:space="preserve">
+    <value>Preguntas con comentarios:</value>
+  </data>
+  <data name="CoverBrokenPackegeTitle" xml:space="preserve">
+    <value>Error: esta entrevista está dañada</value>
+  </data>
+  <data name="CoverBrokenPackegeText" xml:space="preserve">
+    <value>¡Atención! Esta entrevista tiene datos corruptos, &lt;br /&gt; solo está disponible la versión previa de la entrevista. &lt;br /&gt; Póngase en contacto con el soporte para obtener asistencia.</value>
+  </data>
+  <data name="LoadingWait" xml:space="preserve">
+    <value>Cargando por favor espere</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Buscar</value>
+  </data>
   <data name="ToggleNavigation" xml:space="preserve">
     <value>Navegación alterna</value>
   </data>
   <data name="WebInterview" xml:space="preserve">
     <value>Entrevista Web</value>
+  </data>
+  <data name="Help" xml:space="preserve">
+    <value>Ayuda</value>
+  </data>
+  <data name="SwitchingLanguage" xml:space="preserve">
+    <value>Cambio de idioma. Por favor espera...</value>
   </data>
   <data name="Yes" xml:space="preserve">
     <value>Si</value>
@@ -375,6 +414,51 @@
   <data name="InterviewReceivedCantModify" xml:space="preserve">
     <value>La entrevista ha sido recibida por un entrevistador y no puede modificarse</value>
   </data>
+  <data name="ShowOnMap" xml:space="preserve">
+    <value>Mostrar en el mapa</value>
+  </data>
+  <data name="WebTesterSessionOver" xml:space="preserve">
+    <value>La sesión del probador ha terminado</value>
+  </data>
+  <data name="WebTesterSessionOverMessage" xml:space="preserve">
+    <value>Por favor cierra esta página. Puede abrir uno nuevo volviendo al sitio del Diseñador</value>
+  </data>
+  <data name="CompleteCommentCriticalityLevelBlock" xml:space="preserve">
+    <value>Para activar el botón, resuelva los problemas críticos</value>
+  </data>
+  <data name="CompleteCommentCriticalityLevelWarn" xml:space="preserve">
+    <value>Para activar el botón, resuelva los problemas críticos o proporcione una explicación en el cuadro de comentarios anterior</value>
+  </data>
+  <data name="CompleteNoteCommentCriticality" xml:space="preserve">
+    <value>Resuelva los problemas respondiendo preguntas críticas y asegurándose de que las respuestas satisfacen las reglas críticas</value>
+  </data>
+  <data name="CompleteCriticalityWarnConfirmation" xml:space="preserve">
+    <value>Confirme que desea enviar esta entrevista con problemas críticos.</value>
+  </data>
+  <data name="ConfirmationNeededTitle" xml:space="preserve">
+    <value>Confirmación necesaria</value>
+  </data>
+  <data name="LoadingQuestionnaire" xml:space="preserve">
+    <value>Cargando cuestionario. Por favor espera...</value>
+  </data>
+  <data name="WarningsHeader" xml:space="preserve">
+    <value>Advertencias</value>
+  </data>
+  <data name="ReloadQuestionnaire" xml:space="preserve">
+    <value>Recargar cuestionario</value>
+  </data>
+    <data name="Interview_Overview_NotAnswered" xml:space="preserve">
+    <value>No respondido</value>
+  </data>
+  <data name="Interview_Overview_NoValue" xml:space="preserve">
+    <value>Sin valor</value>
+  </data>
+  <data name="Interview_Overview_AdditionalInformation" xml:space="preserve">
+    <value>Información adicional de la pregunta</value>
+  </data>
+  <data name="MultimediaNotSupported" xml:space="preserve">
+    <value>La reproducción de multimedia no es compatible con su navegador. Puede descargarlo en su lugar.</value>
+  </data>
   <data name="EmailLink_Header" xml:space="preserve">
     <value>Ingrese su dirección de correo electrónico</value>
   </data>
@@ -382,7 +466,7 @@
     <value>Le enviaremos un mensaje con el enlace para reanudar la entrevista si necesita continuar más tarde.</value>
   </data>
   <data name="EmailLink_ResumeAnyTime" xml:space="preserve">
-    <value>Puede cancelar ahora y continuar con la entrevista. Y puede enviarlo más tarde haciendo clic en el elemento 'Enlace para reanudar' en el menú superior.</value>
+    <value>Puede cancelar ahora y continuar con la entrevista. Y puede enviarlo más tarde haciendo clic en el elemento 'Enlace de reanudación por correo electrónico' en el menú superior.</value>
   </data>
   <data name="EmailLink_Placeholder" xml:space="preserve">
     <value>Ingrese correo electrónico</value>
@@ -391,7 +475,13 @@
     <value>{{email}} es una dirección de correo electrónico no válida</value>
   </data>
   <data name="EmailLink_EmailResumeLink" xml:space="preserve">
-    <value>Enlace para reanudar</value>
+    <value>Enlace de reanudación por correo electrónico</value>
+  </data>
+  <data name="HideVariables" xml:space="preserve">
+    <value>Ocultar variables</value>
+  </data>
+  <data name="ShowVariables" xml:space="preserve">
+    <value>Mostrar variables</value>
   </data>
   <data name="Interview_Questions_RemoveRowFromRosterMessage" xml:space="preserve">
     <value>¿Está seguro de que desea eliminar la lista relacionada '{{rosterTitle}}'?</value>
@@ -401,25 +491,25 @@
   </data>
   <data name="Resolve" xml:space="preserve">
     <value>Resolver</value>
-    <comment>Resolve comment button text</comment>
+    <comment>Texto del botón de comentario de resolución</comment>
   </data>
   <data name="ResolveHint" xml:space="preserve">
-    <value>Los comentarios resueltos están ocultos por defecto, pero pueden ser revisados por todos los participantes de la entrevista.</value>
+    <value>Los comentarios resueltos se ocultan de forma predeterminada, pero pueden ser revisados por todos los participantes de la entrevista</value>
   </data>
   <data name="HideResolved" xml:space="preserve">
-    <value>Ocultar resuelto</value>
+    <value>Ocultar resueltos</value>
   </data>
   <data name="ShowResolved" xml:space="preserve">
-    <value>Mostrar resuelto</value>
+    <value>Mostrar resueltos</value>
   </data>
   <data name="SaveScenarioOptions" xml:space="preserve">
-    <value>Seleccionar escenario para reemplazar</value>
+    <value>Seleccione el escenario para reemplazar</value>
   </data>
   <data name="SaveScenarioDesignerLogin" xml:space="preserve">
-    <value>La sesión en la aplicación Designer ha caducado. Inicie sesión en la aplicación Designer para poder guardar.</value>
+    <value>La sesión en la aplicación Designer ha expirado. Inicie sesión en la aplicación Designer para poder guardar.</value>
   </data>
   <data name="SaveScenarioGoToDesigner" xml:space="preserve">
-    <value>Diseñador abierto</value>
+    <value>Abrir Designer</value>
   </data>
   <data name="NoQuestionnaireAccess" xml:space="preserve">
     <value>No tienes acceso al cuestionario</value>
@@ -428,60 +518,42 @@
     <value>Nombre</value>
   </data>
   <data name="SaveScenarioOptions_ReplaceExisting" xml:space="preserve">
-    <value>Remplaza el existente</value>
+    <value>Reemplazar existente</value>
   </data>
   <data name="SaveScenarioOptions_SaveNew" xml:space="preserve">
     <value>Guardar nuevo</value>
   </data>
-  <data name="AreaRecord" xml:space="preserve">
-    <value>Área de edición</value>
-  </data>
-  <data name="CoverBrokenPackegeText" xml:space="preserve">
-    <value>¡Atención! Esta entrevista tiene datos corruptos, &lt;br /&gt; solo está disponible la versión previa de la entrevista. &lt;br /&gt; Póngase en contacto con el soporte para obtener asistencia.</value>
-  </data>
-  <data name="CoverBrokenPackegeTitle" xml:space="preserve">
-    <value>Error: esta entrevista está dañada</value>
-  </data>
-  <data name="Interview_Overview_AdditionalInformation" xml:space="preserve">
-    <value>Información adicional de la pregunta</value>
-  </data>
-  <data name="Interview_Overview_NotAnswered" xml:space="preserve">
-    <value>No contestado</value>
-  </data>
-  <data name="LoadingQuestionnaire" xml:space="preserve">
-    <value>Cargando cuestionario. Por favor espera...</value>
-  </data>
-  <data name="MultimediaNotSupported" xml:space="preserve">
-    <value>La reproducción multimedia no es compatible con su navegador. Puedes descargarlo en su lugar.</value>
-  </data>
-  <data name="NumberCannotBeLessThanProtected" xml:space="preserve">
-    <value>El valor ingresado no puede ser menor que la respuesta protegida</value>
-  </data>
-  <data name="ShowOnMap" xml:space="preserve">
-    <value>Mostrar en el mapa</value>
-  </data>
-  <data name="WarningsHeader" xml:space="preserve">
-    <value>Advertencias</value>
-  </data>
-  <data name="WebTesterSessionOver" xml:space="preserve">
-    <value>La sesión del probador ha terminado</value>
-  </data>
-  <data name="WebTesterSessionOverMessage" xml:space="preserve">
-    <value>Por favor cierra esta página. Puede abrir uno nuevo volviendo al sitio del Diseñador</value>
-  </data>
-  <data name="CommentOnPreviousAnswer" xml:space="preserve">
-    <value>En respuesta anterior</value>
-  </data>
-  <data name="EnterPassword" xml:space="preserve">
-    <value>Introducir la contraseña</value>
-  </data>
-  <data name="MaxAnswersCountSelected" xml:space="preserve">
-    <value>Se ha realizado el número máximo de selecciones ({{value}}) en esta pregunta</value>
-  </data>
   <data name="PickLocation" xml:space="preserve">
     <value>Elegir del mapa</value>
   </data>
-  <data name="ReloadQuestionnaire" xml:space="preserve">
-    <value>Recargar cuestionario</value>
+  <data name="EnterPassword" xml:space="preserve">
+    <value>Ingrese la contraseña</value>
+  </data>
+  <data name="Progress" xml:space="preserve">
+    <value>Progreso</value>
+  </data>
+  <data name="SwitchToWebMode" xml:space="preserve">
+    <value>Cambiar la entrevista al modo web</value>
+  </data>
+  <data name="SwitchToWebMode_LinkDescription" xml:space="preserve">
+    <value>El siguiente enlace se puede usar para continuar esta entrevista</value>
+  </data>
+  <data name="AssignmentLimitError" xml:space="preserve">
+    <value>No puede crear más entrevistas a partir de esta asignación</value>
+  </data>
+  <data name="CompleteInterviewStatus" xml:space="preserve">
+    <value>Problemas en la entrevista:</value>
+  </data>
+  <data name="Complete_CriticalUnansweredQuestions" xml:space="preserve">
+    <value>Preguntas críticas sin respuesta: {{count}}</value>
+  </data>
+  <data name="Complete_FailedCriticalRules" xml:space="preserve">
+    <value>Reglas críticas fallidas: {{count}}</value>
+  </data>
+  <data name="Complete_UnansweredQuestions" xml:space="preserve">
+    <value>Preguntas sin respuesta: {{count}}</value>
+  </data>
+  <data name="Complete_QuestionsWithErrors" xml:space="preserve">
+    <value>Preguntas con errores: {{count}}</value>
   </data>
 </root>

@@ -1,5 +1,6 @@
 using System.Globalization;
 using Android.App;
+using Android.Content.PM;
 using Android.OS;
 using AndroidX.AppCompat.App;
 using AndroidX.Preference;
@@ -15,6 +16,7 @@ namespace WB.UI.Interviewer.Activities
     [Activity(Label = "Preferences activity", 
         NoHistory = false, 
         Theme = "@style/GrayAppTheme",
+        ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize,
         Exported = false)]
     public class PrefsActivity : AppCompatActivity
     {
@@ -29,6 +31,8 @@ namespace WB.UI.Interviewer.Activities
 
         public class PrefsFragment : PreferenceFragmentCompat
         {
+            private static int tapTimes;
+            
             public override void OnCreatePreferences(Bundle savedInstanceState, string rootKey)
             {
                 this.AddPreferencesFromResource(Resource.Xml.preferences);
@@ -117,6 +121,7 @@ namespace WB.UI.Interviewer.Activities
                 }
 
                 this.UpdateSettings();
+                this.SetupVersionPreference();
             }
 
             private void UpdateSettings()
@@ -198,6 +203,19 @@ namespace WB.UI.Interviewer.Activities
                 {
                     checkBoxPreference.Checked = defaultValue;
                 }
+            }
+            
+            private void SetupVersionPreference()
+            {
+                Preference versionPreference = this.FindPreference("version");
+                versionPreference.PreferenceClick += (sender, args) =>
+                {
+                    Interlocked.Increment(ref tapTimes);
+                    if (tapTimes > 7)
+                    {
+                        throw new InvalidOperationException("Test Exception" + " Should not have clicked this!");
+                    }
+                };
             }
         }
     }

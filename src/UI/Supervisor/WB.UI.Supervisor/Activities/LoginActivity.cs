@@ -1,5 +1,6 @@
 ﻿using Android.App;
 using Android.Content;
+using Android.Content.PM;
 using Android.OS;
 using Android.Views;
 using AndroidX.AppCompat.Widget;
@@ -14,6 +15,7 @@ namespace WB.UI.Supervisor.Activities
 {
     [Activity(WindowSoftInputMode = SoftInput.StateHidden, 
         Theme = "@style/GrayAppTheme",
+        ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize,
         Exported = false)]
     public class LoginActivity: BaseActivity<LoginViewModel>
     {

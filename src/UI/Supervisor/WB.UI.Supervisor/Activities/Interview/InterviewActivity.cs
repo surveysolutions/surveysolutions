@@ -25,7 +25,7 @@ namespace WB.UI.Supervisor.Activities.Interview
             {
                 Resource.Id.menu_dashboard,
                 EnumeratorUIResources.MenuItem_Title_Dashboard,
-                this.ViewModel.NavigateToDashboardCommand
+                this.ViewModel.NavigateFromInterviewAsync
             },
             {
                 Resource.Id.menu_signout,

@@ -35,8 +35,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
         private readonly IEnumeratorSettings enumeratorSettings;
         private readonly IMapUtilityService mapUtilityService;
         protected readonly IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher;
-        private readonly IPermissionsService permissionsService;
-        private readonly IEnumeratorSettings settings;
+        protected readonly IPermissionsService permissionsService;
 
         protected BaseMapInteractionViewModel(IPrincipal principal,
             IViewModelNavigationService viewModelNavigationService,
@@ -46,8 +45,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             IEnumeratorSettings enumeratorSettings,
             IMapUtilityService mapUtilityService,
             IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher,
-            IPermissionsService permissionsService,
-            IEnumeratorSettings settings) 
+            IPermissionsService permissionsService) 
             : base(principal, viewModelNavigationService)
         {
             this.UserInteractionService = userInteractionService;
@@ -58,7 +56,6 @@ namespace WB.UI.Shared.Extensions.ViewModels
             this.mapUtilityService = mapUtilityService;
             this.mainThreadAsyncDispatcher = mainThreadAsyncDispatcher;
             this.permissionsService = permissionsService;
-            this.settings = settings;
         }
 
         public abstract Task OnMapLoaded();
@@ -75,8 +72,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 this.AvailableShapefiles =
                     new MvxObservableCollection<ShapefileDescription>(this.mapService.GetAvailableShapefiles());
 
-                var includeOnlineMaps = !string.IsNullOrEmpty(settings.EsriApiKey);
-                ArcGISRuntimeEnvironment.ApiKey = includeOnlineMaps ? settings.EsriApiKey : String.Empty;
+                var includeOnlineMaps = !string.IsNullOrEmpty(enumeratorSettings.EsriApiKey);
+                ArcGISRuntimeEnvironment.ApiKey = includeOnlineMaps ? enumeratorSettings.EsriApiKey : String.Empty;
                 
                 var localMaps = this.mapService.GetAvailableMaps(includeOnlineMaps);
                 var defaultMap = this.mapService.PrepareAndGetDefaultMapOrNull();
@@ -122,6 +119,20 @@ namespace WB.UI.Shared.Extensions.ViewModels
             set => this.RaiseAndSetIfChanged(ref this.isLocationServiceSwitchEnabled, value);
         }
         
+        private bool isLocationEnabled = false;
+        public bool IsLocationEnabled
+        {
+            get => this.isLocationEnabled;
+            set => this.RaiseAndSetIfChanged(ref this.isLocationEnabled, value);
+        }
+        
+        private bool isCompassVisible = false;
+        public bool IsCompassVisible
+        {
+            get => this.isCompassVisible;
+            set => this.RaiseAndSetIfChanged(ref this.isCompassVisible, value);
+        }
+        
         public IMvxAsyncCommand ShowFullMapCommand => new MvxAsyncCommand(async () =>
         {
             if (this.Map?.Basemap?.BaseLayers.Count > 0 && this.Map?.Basemap?.BaseLayers[0]?.FullExtent != null)
@@ -132,12 +143,23 @@ namespace WB.UI.Shared.Extensions.ViewModels
             }
         });
 
+        public IMvxAsyncCommand ShowShapefileCommand => new MvxAsyncCommand(async () =>
+        {
+            var existedLayer = this.MapView.Map?.OperationalLayers.FirstOrDefault(l => l.Name == ShapefileLayerName);
+            if (existedLayer?.FullExtent != null)
+            {
+                await MapView.SetViewpointGeometryAsync(existedLayer.FullExtent);
+            }
+        });
+
         protected virtual void ShowedFullMap() { }
 
-        public IMvxAsyncCommand SwitchLocatorCommand => new MvxAsyncCommand(async () =>
+        public IMvxAsyncCommand SwitchLocatorCommand => new MvxAsyncCommand(async () => { await SwitchLocator(); });
+
+        protected async Task<bool> SwitchLocator()
         {
             if (!IsLocationServiceSwitchEnabled)
-                return;
+                return false;
 
             //try to workaround Esri crash with location service
             //Esri case 02209395
@@ -161,23 +183,52 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 }
 
                 this.MapView.LocationDisplay.IsEnabled = true;
+                this.IsLocationEnabled = true;
                 this.MapView.LocationDisplay.LocationChanged += LocationDisplayOnLocationChanged;
+                return true;
             }
             catch (MissingPermissionsException mp) when (mp.PermissionType == typeof(Permissions.LocationWhenInUse))
             {
                 this.UserInteractionService.ShowToast(UIResources.MissingPermissions_MapsLocation);
-                return;
+                return false;
             }
             catch (Exception exc)
             {
                 logger.Error("Error occurred on map location start.", exc);
             }
-        });
+            
+            return false; 
+        }
+        
+        public IMvxAsyncCommand ShowLocationSignCommand => 
+            new MvxAsyncCommand(async () => await ShowLocationSign());
+
+        protected async Task<bool> ShowLocationSign()
+        {
+            if (!this.MapView.LocationDisplay.IsEnabled)
+                return false;
+
+            var location = this.MapView?.LocationDisplay.Location;
+            if (location != null)
+            {
+                await MapView.SetViewpointCenterAsync(location.Position);
+            }
+            
+            return true;
+        }
 
         private void DataSourceOnStatusChanged(object sender, LocationDataSourceStatus e)
         {
             if(e == LocationDataSourceStatus.FailedToStart)
                 this.UserInteractionService.ShowToast(UIResources.AreaMap_LocationDataSourceFailed);
+        }
+        
+        private void MapViewPointChanged(object sender, EventArgs e)
+        {
+            if (((MapView)sender).MapRotation != 0)
+                this.IsCompassVisible = true;
+            else
+                this.IsCompassVisible = false;
         }
 
         protected async void LocationDisplayOnLocationChanged(object sender, Location e)
@@ -300,6 +351,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 {
                     FirstLoad = false;
                     await MapView.SetViewpointGeometryAsync(this.Map.Basemap.BaseLayers[0].FullExtent);
+                    
+                    MapView.ViewpointChanged += MapViewPointChanged;
                 }
                 
                 if (this.MapView?.VisibleArea != null)
@@ -312,8 +365,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
                         if (projectedArea != null &&
                             !GeometryEngine.Intersects(this.Map.Basemap.BaseLayers[0].FullExtent, projectedArea))
-                            this.UserInteractionService.ShowToast(UIResources
-                                .AreaMap_MapIsOutOfVisibleBoundaries);
+                            this.UserInteractionService.ShowToast(UIResources.AreaMap_MapIsOutOfVisibleBoundaries, isTop: true);
                     });
                 }
             }
@@ -340,7 +392,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
         {
             if (this.MapView != null && this.MapView.MapScale != Double.NaN)
                 await this.MapView.SetViewpointRotationAsync(0);
-        });
+        }, () => true);
 
         public IMvxAsyncCommand ZoomMapIn => new MvxAsyncCommand(async () =>
         {
@@ -371,6 +423,11 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     return;
             }
 
+            await LoadShapefileByPath(fullPathToShapefile);
+        });
+
+        protected async Task LoadShapefileByPath(string fullPathToShapefile)
+        {
             try 
             {
                 LoadedShapefile = await ShapefileFeatureTable.OpenAsync(fullPathToShapefile);
@@ -396,7 +453,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 logger.Error("Error on shapefile loading", e);
                 UserInteractionService.ShowToast(UIResources.AreaMap_ErrorOnShapefileLoading);
             }
-        });
+        }
 
         protected virtual Task AfterShapefileLoadedHandler()
         {
@@ -430,7 +487,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             set => this.RaiseAndSetIfChanged(ref this.warning, value);
         }
         
-        public IMvxCommand HideShapefile => new MvxAsyncCommand(async() =>
+        public IMvxAsyncCommand HideShapefile => new MvxAsyncCommand(async() =>
         {
             if (!ShapeFileLoaded)
                 return;
@@ -462,9 +519,69 @@ namespace WB.UI.Shared.Extensions.ViewModels
             
             if (this.MapView?.LocationDisplay?.DataSource != null)
                 this.MapView.LocationDisplay.DataSource.StatusChanged -= DataSourceOnStatusChanged;
+
+            if (this.MapView != null)
+            {
+                this.MapView.ViewpointChanged -= MapViewPointChanged;
+            }
             
-           
             this.MapView?.Dispose();
         }
+        
+        public IMvxAsyncCommand SwitchMapCommand => new MvxAsyncCommand(async () =>
+        {
+            var options = AvailableMaps.Select(m => new BottomSheetOption()
+            {
+                Name = m.MapName,
+                Value = m.MapName,
+                IsSelected = m.MapName == SelectedMap
+            }).ToArray();
+            var args = new BottomSheetOptionsSelectorViewModelArgs()
+            {
+                Title = UIResources.SelectMapTitle,
+                Options = options,
+                Callback = async (option) =>
+                {
+                    if (SelectedMap != option.Value)
+                    {
+                        await UpdateBaseMap(option.Value);
+                    
+                        await this.ShowFullMapCommand.ExecuteAsync(null);
+                    }
+                }
+            };
+            await NavigationService.Navigate<BottomSheetOptionsSelectorViewModel, BottomSheetOptionsSelectorViewModelArgs>(args);
+        });
+        
+        public IMvxAsyncCommand SwitchShapefileCommand => new MvxAsyncCommand(async () =>
+        {
+            var options = AvailableShapefiles.Select(m => new BottomSheetOption()
+            {
+                Name = m.ShapefileName,
+                Value = m.FullPath,
+                IsSelected = m.FullPath == LoadedShapefile?.Path
+            }).ToArray();
+            var args = new BottomSheetOptionsSelectorViewModelArgs()
+            {
+                Title = UIResources.AreaMap_SelectShapefile,
+                Options = options,
+                SelectionRequired = false,
+                Callback = async (option) =>
+                {
+                    if (option == null)
+                    {
+                        if (ShapeFileLoaded)
+                            await HideShapefile.ExecuteAsync();
+                    }
+                    else if (!ShapeFileLoaded || LoadedShapefile?.Path != option.Value)
+                    {
+                        await LoadShapefileByPath(option.Value);
+
+                        await this.ShowShapefileCommand.ExecuteAsync();
+                    }
+                }
+            };
+            await NavigationService.Navigate<BottomSheetOptionsSelectorViewModel, BottomSheetOptionsSelectorViewModelArgs>(args);
+        });
     }
 }

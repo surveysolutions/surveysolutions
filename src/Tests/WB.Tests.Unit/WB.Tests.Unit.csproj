@@ -38,25 +38,25 @@
     <ProjectReference Include="..\WB.Tests.Abc\WB.Tests.Abc.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="coverlet.collector" Version="6.0.0">
+    <PackageReference Include="coverlet.collector" Version="6.0.2">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Antlr3.Runtime" Version="3.5.1" />
     <PackageReference Include="Castle.Core" Version="5.1.1" />
-    <PackageReference Include="CsvHelper" Version="30.0.1" />
-    <PackageReference Include="FluentAssertions" Version="6.12.0" />
+    <PackageReference Include="CsvHelper" Version="33.0.1" />
+    <PackageReference Include="FluentAssertions" Version="7.0.0" />
     <PackageReference Include="Humanizer.Core" Version="2.14.1" />
-    <PackageReference Include="Iesi.Collections" Version="4.0.5" />
+    <PackageReference Include="Iesi.Collections" Version="4.1.1" />
     <PackageReference Include="JsonDiffPatch.Net" Version="2.3.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.2" />
-    <PackageReference Include="Moq" Version="4.20.70" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.11" />
+    <PackageReference Include="Moq" Version="4.20.72" />
     <PackageReference Include="MvvmCross.Plugin.Messenger" Version="9.2.0" />
     <PackageReference Include="MvvmCross.Tests" Version="9.2.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="NHibernate" Version="5.5.1" />
-    <PackageReference Include="NSubstitute" Version="5.1.0" />
-    <PackageReference Include="NUnit" Version="3.14.0" />
+    <PackageReference Include="NHibernate" Version="5.5.2" />
+    <PackageReference Include="NSubstitute" Version="5.3.0" />
+    <PackageReference Include="NUnit" Version="4.2.2" />
     <PackageReference Include="NUnit.Extension.NUnitProjectLoader" Version="3.7.1" />
     <PackageReference Include="NUnit.Extension.TeamCityEventListener" Version="1.0.9" />
     <PackageReference Include="NUnit.Extension.VSProjectLoader" Version="3.9.0" />
@@ -64,10 +64,10 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Quartz" Version="3.8.1" />
-    <PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
-    <PackageReference Include="ReflectionMagic" Version="5.0.0" />
+    <PackageReference Include="Quartz" Version="3.13.1" />
+    <PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
+    <PackageReference Include="ReflectionMagic" Version="5.0.1" />
 
   </ItemGroup>
 </Project>

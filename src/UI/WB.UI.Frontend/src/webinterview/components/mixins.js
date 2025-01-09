@@ -4,7 +4,7 @@ import { getLocationHash } from '~/shared/helpers'
 export const entityPartial = {
     computed: {
         $me() {
-            const id = this.id || this.$parent.id
+            const id = this.id || this.$parent.$parent.id
 
             return this.$store.state.webinterview.entityDetails[id] || {
                 isAnswered: false,
@@ -93,8 +93,8 @@ export const entityDetails = {
         cleanValidity() {
             this.$store.dispatch('clearAnswerValidity', { id: this.id })
         },
-        markAnswerAsNotSavedWithMessage(message) {
-            this.$store.dispatch('setAnswerAsNotSaved', { id: this.id, message })
+        markAnswerAsNotSavedWithMessage(message, notSavedAnswerValue) {
+            this.$store.dispatch('setAnswerAsNotSaved', { id: this.id, message, notSavedAnswerValue })
         },
         removeAnswer() {
             this.$store.dispatch('removeAnswer', this.$me.id)

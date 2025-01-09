@@ -1,6 +1,7 @@
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
+using WB.Core.BoundedContexts.Headquarters.GeoTracking;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
@@ -36,7 +37,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                 Mock.Of<IStatefulInterviewRepository>(),
                 Mock.Of<IAssignmentPasswordGenerator>(),
                 Mock.Of<ICommandService>(),
-                Mock.Of<IAssignmentFactory>()
+                Mock.Of<IAssignmentFactory>(),
+                Mock.Of<IPlainStorageAccessor<GeoTrackingRecord>>()
             );
 
             controller.Get(new AssignmentsApiController.AssignmentsDataTableRequest

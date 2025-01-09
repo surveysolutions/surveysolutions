@@ -117,110 +117,128 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="PLU0001Description" xml:space="preserve">
+    <value>Un usuario '{0}' ya existe</value>
+  </data>
+  <data name="PLU0002Description" xml:space="preserve">
+    <value>Hay usuarios duplicados con el login '{0}' en el archivo</value>
+  </data>
+  <data name="PLU0003Description" xml:space="preserve">
+    <value>El usuario '{0}' está archivado y pertenece a otro equipo</value>
+  </data>
+  <data name="PLU0004Description" xml:space="preserve">
+    <value>El usuario '{0}' está archivado y tiene otro rol</value>
+  </data>
+  <data name="PLU0005Description" xml:space="preserve">
+    <value>El login '{0}' tiene un formato incorrecto</value>
+  </data>
+  <data name="PLU0006Description" xml:space="preserve">
+    <value>La contraseña '{0}' tiene un formato incorrecto</value>
+  </data>
+  <data name="PLU0007Description" xml:space="preserve">
+    <value>El correo electrónico '{0}' tiene un formato incorrecto</value>
+  </data>
+  <data name="PLU0008Description" xml:space="preserve">
+    <value>El número de teléfono '{0}' tiene un formato incorrecto</value>
+  </data>
+  <data name="PLU0009Description" xml:space="preserve">
+    <value>El rol '{0}' es inválido</value>
+  </data>
+  <data name="PLU0010Description" xml:space="preserve">
+    <value>El supervisor '{0}' no se encuentra en el espacio de trabajo</value>
+  </data>
+  <data name="PLU0011Description" xml:space="preserve">
+    <value>La columna del supervisor debe estar vacía para el rol de supervisor</value>
+  </data>
+  <data name="PLU0012Description" xml:space="preserve">
+    <value>El nombre completo '{0}' tiene un formato incorrecto</value>
+  </data>
+  <data name="PLU0013Description" xml:space="preserve">
+    <value>El número de teléfono '{0}' tiene un formato incorrecto</value>
+  </data>
+  <data name="PLU0014Description" xml:space="preserve">
+    <value>El nombre completo '{0}' tiene caracteres inválidos</value>
+  </data>
   <data name="PLU0001" xml:space="preserve">
-    <value>Ya existe un usuario con ese login</value>
+    <value>El login no es único</value>
   </data>
   <data name="PLU0002" xml:space="preserve">
-    <value>Existen valores de login duplicados en el archivo</value>
+    <value>Duplicado</value>
   </data>
   <data name="PLU0003" xml:space="preserve">
-    <value>El login de un usuario archivado no puede ser reusado pues éste pertenece a otro equipo</value>
+    <value>Equipo incorrecto</value>
   </data>
   <data name="PLU0004" xml:space="preserve">
-    <value>El login de un usuario archivado no puede ser reusado pues éste existe en otro rol</value>
+    <value>Rol incorrecto</value>
   </data>
   <data name="PLU0005" xml:space="preserve">
-    <value>El login debe contener entre 3 y 15 caracteres. Solamente debe contener letras, dígitos y símbolos de subrayado</value>
+    <value>Formato de login incorrecto</value>
   </data>
   <data name="PLU0006" xml:space="preserve">
-    <value>La palabra clave debe contener al menos un número, una letra en mayúscula y una letra en minúscula. Su longitud debe estar entre 10 y 100 caracteres.</value>
+    <value>Formato de contraseña incorrecto</value>
   </data>
   <data name="PLU0007" xml:space="preserve">
-    <value>El correo electrónico es inválido</value>
+    <value>Formato de correo electrónico incorrecto</value>
   </data>
   <data name="PLU0008" xml:space="preserve">
-    <value>El número de teléfono es inválido</value>
+    <value>Formato de número de teléfono incorrecto</value>
   </data>
   <data name="PLU0009" xml:space="preserve">
-    <value>Rol no válido</value>
+    <value>Rol inválido</value>
   </data>
   <data name="PLU0010" xml:space="preserve">
     <value>Error de dependencia</value>
   </data>
   <data name="PLU0011" xml:space="preserve">
-    <value>La columna del supervisor debe estar vacía para el usuario en modo "Supervisor"</value>
+    <value>Error de dependencia</value>
   </data>
   <data name="PLU0012" xml:space="preserve">
-    <value>El nombre no puede contener más de 100 caracteres</value>
+    <value>Longitud incorrecta del nombre completo</value>
   </data>
   <data name="PLU0013" xml:space="preserve">
-    <value>El número de teléfono no puede tener más de 15 caracteres</value>
+    <value>Longitud incorrecta del número de teléfono</value>
   </data>
   <data name="PLU0014" xml:space="preserve">
-    <value>El nombre de usuario tiene caracteres no válidos. Solamente letras, puntos, espacios y apóstrofes son permitidos.</value>
+    <value>Formato de nombre completo incorrecto</value>
   </data>
-  <data name="PLU0001Description" xml:space="preserve">
-    <value>Ya existe un usuario '{0}'</value>
+  <data name="PLU0001Recomendation" xml:space="preserve">
+    <value>El usuario debe ser único</value>
   </data>
-  <data name="PLU0002Description" xml:space="preserve">
-    <value>Hay usuarios duplicados con inicio de sesión "{0}" en el archivo.</value>
-  </data>
-  <data name="PLU0003Description" xml:space="preserve">
-    <value>El usuario '{0}' está archivado y pertenece a otro equipo</value>
+  <data name="PLU0002Recomendation" xml:space="preserve">
+    <value>Resolver duplicados</value>
   </data>
   <data name="PLU0003Recomendation" xml:space="preserve">
-    <value>El usuario archivado no se puede reutilizar porque pertenece a otro equipo</value>
-  </data>
-  <data name="PLU0004Description" xml:space="preserve">
-    <value>El usuario '{0}' está archivado y tiene otra función</value>
+    <value>El usuario archivado no puede ser reutilizado porque pertenece a otro equipo</value>
   </data>
   <data name="PLU0004Recomendation" xml:space="preserve">
-    <value>El usuario archivado no se puede reutilizar porque existe en otro rol</value>
-  </data>
-  <data name="PLU0005Description" xml:space="preserve">
-    <value>El formato de inicio de sesión '{0}' no es correcto</value>
+    <value>El usuario archivado no puede ser reutilizado porque existe en otro rol</value>
   </data>
   <data name="PLU0005Recomendation" xml:space="preserve">
-    <value>Debe tener entre 3 y 15 caracteres y solo puede contener letras, dígitos y el símbolo de subrayado</value>
-  </data>
-  <data name="PLU0006Description" xml:space="preserve">
-    <value>La contraseña "{0}" tiene un formato incorrecto</value>
+    <value>El nombre de usuario debe tener entre 3 y 15 caracteres y solo puede contener letras, dígitos y el símbolo de subrayado. Las letras deben ser solo del alfabeto latino (inglés): 'A'..'Z' o 'a'..'z'. Otras letras (cirílico, árabe, etc.) no son válidas para su uso en nombres de usuario.</value>
   </data>
   <data name="PLU0006Recomendation" xml:space="preserve">
     <value>Debe contener al menos un número, un carácter en mayúscula y un carácter en minúscula. La longitud debe estar entre 10 y 100 caracteres</value>
   </data>
-  <data name="PLU0007Description" xml:space="preserve">
-    <value>Email '{0}' is in wrong format</value>
+  <data name="PLU0007Recomendation" xml:space="preserve">
+    <value>Corregir correo electrónico</value>
   </data>
-  <data name="PLU0008Description" xml:space="preserve">
-    <value>El formato del número de teléfono "{0}" es incorrecto</value>
-  </data>
-  <data name="PLU0009Description" xml:space="preserve">
-    <value>La función '{0}' no es válida</value>
+  <data name="PLU0008Recomendation" xml:space="preserve">
+    <value>Corregir número de teléfono</value>
   </data>
   <data name="PLU0009Recomendation" xml:space="preserve">
-    <value>Solo se permiten "supervisor" o "interviewer"</value>
+    <value>Solo se permiten "supervisor" o "entrevistador"</value>
   </data>
-  <data name="PLU0010Description" xml:space="preserve">
-    <value>Supervisor '{0}' is not found</value>
+  <data name="PLU0010Recomendation" xml:space="preserve">
+    <value>Verificar valor para supervisor</value>
   </data>
-  <data name="PLU0011Description" xml:space="preserve">
-    <value>Supervisor column should be empty for supervisor role</value>
-  </data>
-  <data name="PLU0012Description" xml:space="preserve">
-    <value>El nombre completo "{0}" tiene un formato incorrecto</value>
+  <data name="PLU0011Recomendation" xml:space="preserve">
+    <value>Proporcionar valor para supervisor</value>
   </data>
   <data name="PLU0012Recomendation" xml:space="preserve">
-    <value>No debe contener más de 100 caracteres.</value>
-  </data>
-  <data name="PLU0013Description" xml:space="preserve">
-    <value>El formato del número de teléfono "{0}" es incorrecto</value>
+    <value>No debe contener más de 100 caracteres</value>
   </data>
   <data name="PLU0013Recomendation" xml:space="preserve">
-    <value>No debe contener más de 15 caracteres.</value>
-  </data>
-  <data name="PLU0014Description" xml:space="preserve">
-    <value>El nombre completo "{0}" tiene caracteres no válidos</value>
+    <value>No debe contener más de 15 caracteres</value>
   </data>
   <data name="PLU0014Recomendation" xml:space="preserve">
     <value>Solo se permiten letras, puntos, espacios y apóstrofos</value>
@@ -229,7 +247,7 @@
     <value>Contraseña demasiado corta</value>
   </data>
   <data name="PLU0015Description" xml:space="preserve">
-    <value>La contraseña "{0}" es demasiado corta</value>
+    <value>La contraseña '{0}' es demasiado corta</value>
   </data>
   <data name="PLU0015Recomendation" xml:space="preserve">
     <value>La contraseña debe tener al menos 10 caracteres</value>
@@ -238,54 +256,63 @@
     <value>Contraseña simple</value>
   </data>
   <data name="PLU0016Description" xml:space="preserve">
-    <value>La contraseña '{0}' no contiene caracteres no alfanuméricos</value>
+    <value>La contraseña '{0}' no contiene un carácter no alfanumérico</value>
   </data>
   <data name="PLU0016Recomendation" xml:space="preserve">
-    <value>Agregue al menos un carácter no alfanumérico</value>
+    <value>Agregar al menos un carácter no alfanumérico</value>
   </data>
   <data name="PLU0017" xml:space="preserve">
     <value>Contraseña simple</value>
   </data>
   <data name="PLU0017Description" xml:space="preserve">
-    <value>La contraseña '{0}' no contiene dígitos</value>
+    <value>La contraseña '{0}' no contiene un dígito</value>
   </data>
   <data name="PLU0017Recomendation" xml:space="preserve">
-    <value>Agregue al menos un dígito ('0' - '9').</value>
+    <value>Agregar al menos un dígito ('0'-'9').</value>
   </data>
   <data name="PLU0018" xml:space="preserve">
     <value>Contraseña simple</value>
   </data>
   <data name="PLU0018Description" xml:space="preserve">
-    <value>La contraseña '{0}' no contiene minúsculas</value>
+    <value>La contraseña '{0}' no contiene un carácter en minúscula</value>
   </data>
   <data name="PLU0018Recomendation" xml:space="preserve">
-    <value>Agregue al menos un carácter en minúscula ('a' - 'z').</value>
+    <value>Agregar al menos un carácter en minúscula ('a'-'z').</value>
   </data>
   <data name="PLU0019" xml:space="preserve">
     <value>Contraseña simple</value>
   </data>
   <data name="PLU0019Description" xml:space="preserve">
-    <value>La contraseña '{0}' no contiene mayúsculas</value>
+    <value>La contraseña '{0}' no contiene un carácter en mayúscula</value>
   </data>
   <data name="PLU0019Recomendation" xml:space="preserve">
-    <value>Add at least one uppercase ('A'-'Z').</value>
+    <value>Agregar al menos un carácter en mayúscula ('A'-'Z').</value>
   </data>
   <data name="PLU0020" xml:space="preserve">
     <value>Contraseña simple</value>
   </data>
   <data name="PLU0020Description" xml:space="preserve">
-    <value>Password '{0}' does not contain enough unique characters</value>
+    <value>La contraseña '{0}' no contiene suficientes caracteres únicos</value>
   </data>
   <data name="PLU0020Recomendation" xml:space="preserve">
-    <value>Agrega diferentes personajes.</value>
+    <value>Agregar caracteres diferentes.</value>
   </data>
   <data name="PLU0021" xml:space="preserve">
-    <value>Se requiere contraseña</value>
+    <value>Contraseña requerida</value>
   </data>
   <data name="PLU0021Description" xml:space="preserve">
     <value>Se requiere contraseña</value>
   </data>
   <data name="PLU0021Recomendation" xml:space="preserve">
     <value>Agregar contraseña</value>
+  </data>
+  <data name="PLU0022" xml:space="preserve">
+    <value>Espacio de trabajo no encontrado</value>
+  </data>
+  <data name="PLU0022Description" xml:space="preserve">
+    <value>El espacio de trabajo debe existir y estar habilitado</value>
+  </data>
+  <data name="PLU0022Recomendation" xml:space="preserve">
+    <value>Verificar el nombre del espacio de trabajo</value>
   </data>
 </root>

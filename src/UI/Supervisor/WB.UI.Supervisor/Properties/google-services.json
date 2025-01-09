@@ -1,0 +1,67 @@
+{
+  "project_info": {
+    "project_number": "229516543761",
+    "project_id": "surveysolutions-729db",
+    "storage_bucket": "surveysolutions-729db.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:229516543761:android:6cd3930d0ae3aee2a9aeb0",
+        "android_client_info": {
+          "package_name": "org.worldbank.solutions.Vtester"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_8Z9xhlpAXDIs0dvkO_ZQKm-4ZyhWIqQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:229516543761:android:a0524e9bbe40753da9aeb0",
+        "android_client_info": {
+          "package_name": "org.worldbank.solutions.interviewer"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_8Z9xhlpAXDIs0dvkO_ZQKm-4ZyhWIqQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:229516543761:android:b20be3817a9bc0b8a9aeb0",
+        "android_client_info": {
+          "package_name": "org.worldbank.solutions.supervisor"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_8Z9xhlpAXDIs0dvkO_ZQKm-4ZyhWIqQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

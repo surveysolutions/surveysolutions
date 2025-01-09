@@ -78,5 +78,6 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Synchronization
         
         Task<List<CalendarEventApiView>> GetCalendarEventsAsync(CancellationToken token = default);
         Task<SyncInfoPackageResponse> GetSyncInfoPackageResponse(Guid interviewId, InterviewSyncInfoPackage interviewSyncInfoPackage, CancellationToken cancellationToken);
+        Task UploadGeoTrackingAsync(GeoTrackingPackageApiView package, CancellationToken cancellationToken);
     }
 }

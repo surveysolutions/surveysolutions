@@ -1,22 +1,30 @@
-// import * as forEach from "lodash/foreach"
-import Vue from 'vue'
-import { DateFormats } from '~/shared/helpers'
-import { forEach } from 'lodash'
-import moment from 'moment'
+import { DateFormats } from '~/shared/helpers';
+import { forEach } from 'lodash';
+import moment from 'moment';
 
-Vue.directive('dateTimeFormatting', (el) => {
-    const timeElements = el.getElementsByTagName('time')
+export function registerDateTimeFormatting(app) {
+    app.directive('dateTimeFormatting', {
+        mounted(el) {
+            formatTimeElements(el);
+        },
+        updated(el) {
+            formatTimeElements(el);
+        }
+    });
+}
 
-    forEach(timeElements, timeElement => {
-        const dateTimeAttr = timeElement.getAttribute('datetime')
+function formatTimeElements(el) {
+    const timeElements = el.getElementsByTagName('time');
+
+    forEach(timeElements, (timeElement) => {
+        const dateTimeAttr = timeElement.getAttribute('datetime');
 
         if (dateTimeAttr) {
-            const dateTime = new Date(dateTimeAttr)
-            timeElement.innerHTML = moment(dateTime).format(DateFormats.dateTime)
+            const dateTime = new Date(dateTimeAttr);
+            timeElement.innerHTML = moment(dateTime).format(DateFormats.dateTime);
+        } else {
+            const date = timeElement.getAttribute('date');
+            timeElement.innerHTML = moment(date).format(DateFormats.date);
         }
-        else {
-            const date = timeElement.getAttribute('date')
-            timeElement.innerHTML = moment(date).format(DateFormats.date)
-        }
-    })
-})
+    });
+}

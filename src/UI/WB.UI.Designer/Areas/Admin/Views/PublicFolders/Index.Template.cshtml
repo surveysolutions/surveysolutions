@@ -1,0 +1,37 @@
+@using WB.UI.Designer.Resources
+@{
+    ViewBag.Title = QuestionnaireController.QuestionnaireTreeFolders;
+    Layout = "Layout.ControlPanel";
+}
+
+<script type="module" src="/build/entries/folders.js"></script>
+
+<script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function () {
+        var localization = {
+            CreateSubFolder: "@Html.Raw(QuestionnaireController.CreateSubFolder)",
+            Edit: '@Html.Raw(QuestionnaireController.Rename)',
+            Delete: "@Html.Raw(QuestionnaireController.Delete)",
+            DeleteConfirmation: "@Html.Raw(QuestionnaireController.DeleteFolderConfirmation)",
+            NewFolderName: "@Html.Raw(QuestionnaireController.NewFolder)"
+        };
+        var subFoldersUrl = '@Url.Action("GetFolders", "PublicFolders")';
+        var rootFoldersUrl = '@Url.Action("GetRootFolders", "PublicFolders")';
+        var addNodeUrl = '@Url.Action("CreateFolder", "PublicFolders")';
+        var renameNodeUrl = '@Url.Action("RenameFolder", "PublicFolders")';
+        var removeNodeUrl = '@Url.Action("RemoveFolder", "PublicFolders")';
+
+        window.foldersModel = new FoldersModel($("#jstree"), localization, rootFoldersUrl, subFoldersUrl, addNodeUrl, renameNodeUrl, removeNodeUrl);
+    });
+</script>
+
+
+<div class="page-header">
+    <h3>
+        @QuestionnaireController.FoldersManagement
+    </h3>
+    <p class="note">@Html.Raw(QuestionnaireController.FoldersDescription)</p>
+</div>
+
+<div id="jstree" class="folder-tree disableSelection">
+</div>

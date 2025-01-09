@@ -117,7 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="InterviewStatus_ApprovedByHeadquarters" xml:space="preserve">
+    <data name="InterviewStatus_ApprovedByHeadquarters" xml:space="preserve">
     <value>Approuvé par le QG</value>
   </data>
   <data name="InterviewStatus_ApprovedBySupervisor" xml:space="preserve">
@@ -129,14 +129,26 @@
   <data name="InterviewStatus_InterviewerAssigned" xml:space="preserve">
     <value>Affecté à l'Enquêteur</value>
   </data>
-  <data name="InterviewerFacet_None" xml:space="preserve">
-    <value>Aucun</value>
+  <data name="UserRoles_Administrator" xml:space="preserve">
+    <value>Administrateur</value>
+  </data>
+  <data name="UserRoles_Supervisor" xml:space="preserve">
+    <value>Chef d'équipe</value>
+  </data>
+  <data name="UserRoles_Interviewer" xml:space="preserve">
+    <value>Enquêteur</value>
+  </data>
+  <data name="UserRoles_Headquarter" xml:space="preserve">
+    <value>Quartier Général</value>
+  </data>
+  <data name="UserRoles_Observer" xml:space="preserve">
+    <value>Observateur</value>
+  </data>
+  <data name="UserRoles_ApiUser" xml:space="preserve">
+    <value>Utilisateur API</value>
   </data>
   <data name="MenuItem_Completed" xml:space="preserve">
     <value>Achevé</value>
-  </data>
-  <data name="MenuItem_Profile" xml:space="preserve">
-    <value>Profil</value>
   </data>
   <data name="MenuItem_Rejected" xml:space="preserve">
     <value>Rejeté</value>
@@ -144,23 +156,11 @@
   <data name="MenuItem_Started" xml:space="preserve">
     <value>Commencé</value>
   </data>
-  <data name="UserRoles_Administrator" xml:space="preserve">
-    <value>Administrateur</value>
+  <data name="MenuItem_Profile" xml:space="preserve">
+    <value>Profil</value>
   </data>
-  <data name="UserRoles_ApiUser" xml:space="preserve">
-    <value>Utilisateur API</value>
-  </data>
-  <data name="UserRoles_Headquarter" xml:space="preserve">
-    <value>Quartier Général</value>
-  </data>
-  <data name="UserRoles_Interviewer" xml:space="preserve">
-    <value>Enquêteur</value>
-  </data>
-  <data name="UserRoles_Observer" xml:space="preserve">
-    <value>Observateur</value>
-  </data>
-  <data name="UserRoles_Supervisor" xml:space="preserve">
-    <value>Chef d'équipe</value>
+  <data name="InterviewerFacet_None" xml:space="preserve">
+    <value>Aucun</value>
   </data>
   <data name="WebInterviewUserMessages_FinishInterview" xml:space="preserve">
     <value>Terminer le texte</value>
@@ -181,6 +181,24 @@
     <value>Terminer l'en-tête</value>
   </data>
   <data name="WebInterviewUserMessages_WelcomeText" xml:space="preserve">
+    <value>En-tête de bienvenue</value>
+  </data>
+  <data name="WebInterviewUserMessages_CompleteNoteToSupervisor" xml:space="preserve">
+    <value>Note pour le superviseur</value>
+  </data>
+  <data name="WebInterviewUserMessages_CompleteButton" xml:space="preserve">
+    <value>Terminer</value>
+  </data>
+  <data name="WebInterviewUserMessages_StartNewButton" xml:space="preserve">
+    <value>Commencer une nouvelle interview</value>
+  </data>
+  <data name="WebInterviewUserMessages_ResumeButton" xml:space="preserve">
+    <value>Reprendre</value>
+  </data>
+  <data name="WebInterviewUserMessages_LinkInvitation" xml:space="preserve">
+    <value>Invitation</value>
+  </data>
+  <data name="WebInterviewUserMessages_LinkWelcome" xml:space="preserve">
     <value>En-tête de bienvenue</value>
   </data>
 </root>
