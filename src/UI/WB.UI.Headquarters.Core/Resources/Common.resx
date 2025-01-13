@@ -403,7 +403,7 @@
       <value>User</value>
   </data>
   <data name="GeoTrackNumber" xml:space="preserve">
-      <value>Geo-tracking Number</value>
+      <value>Track</value>
   </data>
   <data name="DateRange" xml:space="preserve">
       <value>Date range</value>
