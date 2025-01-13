@@ -153,7 +153,7 @@ public class AssignmentGeoApiController: ControllerBase
             .ToList()
             .Select(x => new ResponsibleComboboxOptionModel(
                 x.Id.ToString(),  
-                x.Id.ToString() + ". " + x.Start, 
+                x.Start.ToString(), 
                 null))
             .ToArray();
 
