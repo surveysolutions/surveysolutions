@@ -27,8 +27,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
 
         public int AssignmentId => this.Assignment.Id;
 
-        protected AssignmentDashboardItemViewModel(IServiceLocator serviceLocator, IMapInteractionService mapInteractionService) 
-            : base(serviceLocator, mapInteractionService)
+        protected AssignmentDashboardItemViewModel(IServiceLocator serviceLocator, 
+            IMapInteractionService mapInteractionService, IUserInteractionService userInteractionService) 
+            : base(serviceLocator, mapInteractionService, userInteractionService)
         {
             this.serviceLocator = serviceLocator;
         }

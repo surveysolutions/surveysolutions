@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
 using NodaTime;
@@ -21,6 +22,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
     {
         private readonly IServiceLocator serviceLocator;
         private readonly IMapInteractionService mapInteractionService;
+        private readonly IUserInteractionService userInteractionService;
         private string idLabel;
         private string subTitle;
         private ZonedDateTime? calendarEventStart;
@@ -41,10 +43,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
 
         protected void RaiseOnItemUpdated() => OnItemUpdated?.Invoke(this, EventArgs.Empty);
 
-        public ExpandableQuestionsDashboardItemViewModel(IServiceLocator serviceLocator, IMapInteractionService mapInteractionService)
+        public ExpandableQuestionsDashboardItemViewModel(IServiceLocator serviceLocator, 
+            IMapInteractionService mapInteractionService,
+            IUserInteractionService userInteractionService)
         {
             this.serviceLocator = serviceLocator;
             this.mapInteractionService = mapInteractionService;
+            this.userInteractionService = userInteractionService;
             Actions = new MvxObservableCollection<ActionDefinition>();
             Actions.CollectionChanged += CollectionChanged;
         }
@@ -236,13 +241,26 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             Actions.Add(new ActionDefinition
             {
                 Command = new MvxAsyncCommand(
-                    () => mapInteractionService.OpenAssignmentMapAsync(assignmentId)),
+                    () => NavigateToMapDashboardAsync(assignmentId)),
 
                 ActionType = ActionType.TargetArea,
 
                 Label = EnumeratorUIResources.Dashboard_ShowAssignmentMap
             });
         }
+        
+        private async Task NavigateToMapDashboardAsync(int assignmentId)
+        {
+            try
+            {
+                await mapInteractionService.OpenAssignmentMapAsync(assignmentId);
+            }
+            catch (MissingPermissionsException e)
+            {
+                userInteractionService.ShowToast(e.Message);
+            }
+        }
+        
         public void Dispose()
         {
             Actions.CollectionChanged -= CollectionChanged;

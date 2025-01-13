@@ -40,7 +40,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.InterviewDashboar
 
 
             return new InterviewDashboardItemViewModel(serviceLocator, Mock.Of<IAuditLogService>(),
-                Mock.Of<IMapInteractionService>());
+                Mock.Of<IMapInteractionService>(), 
+                Mock.Of<IUserInteractionService>());
         }
     }
 }

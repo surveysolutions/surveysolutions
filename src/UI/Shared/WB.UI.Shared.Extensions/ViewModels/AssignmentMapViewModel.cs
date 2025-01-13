@@ -152,28 +152,28 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
 
     //do not restart services if the activity was killed
     
-    // protected override void SaveStateToBundle(IMvxBundle bundle)
-    // {
+    protected override void SaveStateToBundle(IMvxBundle bundle)
+    {
     //     isBackground = true;
     //     
-    //     base.SaveStateToBundle(bundle);
-    //     
-    //     bundle.Data["assignmentId"] = assignment.Id.ToString();
+         base.SaveStateToBundle(bundle);
+         
+         bundle.Data["assignmentId"] = assignment.Id.ToString();
     //     
     //     backgroundServiceManager.LocationReceived -= BackgroundServiceManagerOnLocationReceived;
-    // }
-    //
-    // protected override async void ReloadFromBundle(IMvxBundle state)
-    // {
+    }
+    
+    protected override void ReloadFromBundle(IMvxBundle state)
+    {
     //     isBackground = false;
-    //     
-    //     base.ReloadFromBundle(state);
-    //     
-    //     if (state.Data.TryGetValue("assignmentId", out var assignmentIdStr) && int.TryParse(assignmentIdStr, out var assignmentId))
-    //     {
-    //         assignment = assignmentsRepository.GetById(assignmentId);
-    //     }
-    //
+         
+        base.ReloadFromBundle(state);
+         
+        if (state.Data.TryGetValue("assignmentId", out var assignmentIdStr) && int.TryParse(assignmentIdStr, out var assignmentId))
+        {
+            assignment = assignmentsRepository.GetById(assignmentId);
+        }
+    
     //     var geofencing = backgroundServiceManager.GetListen(geofencingListener);
     //     var geotracking = backgroundServiceManager.GetListen(geoTrackingListener);
     //
@@ -200,7 +200,7 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
     //     }
     //     
     //     backgroundServiceManager.LocationReceived += BackgroundServiceManagerOnLocationReceived;
-    // }
+    }
         
     public override async Task Initialize()
     {
