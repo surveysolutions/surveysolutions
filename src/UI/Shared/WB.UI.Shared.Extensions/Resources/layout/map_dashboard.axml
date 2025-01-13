@@ -134,7 +134,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_marginBottom="@dimen/area_editor_lower_panel_margin_bottom"
                 android:orientation="horizontal"
-                local:MvxBind="Visible IsNullableHavingValue(ActiveMarkerIndex); CurrentItem ActiveMarkerIndex;"
+                local:MvxBind="CurrentItem ActiveMarkerIndex; Visible IsNullableHavingValue(ActiveMarkerIndex);"
         />
 
         
