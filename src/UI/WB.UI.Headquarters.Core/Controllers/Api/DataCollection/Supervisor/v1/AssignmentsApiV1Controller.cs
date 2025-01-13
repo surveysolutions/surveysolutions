@@ -42,8 +42,8 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
         [WriteToSyncLog(SynchronizationLogType.GetAssignmentsList)]
         [HttpGet]
         [Route("")]
-        public override Task<List<AssignmentApiView>> GetAssignmentsAsync(CancellationToken cancellationToken)
-            => base.GetAssignmentsAsync(cancellationToken);
+        public override ActionResult<List<AssignmentApiView>> GetAssignments(CancellationToken cancellationToken)
+            => base.GetAssignments(cancellationToken);
 
         [HttpPost]
         [Route("{id:int}/Received")]

@@ -55,7 +55,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             return assignmentApiDocument;
         }
 
-        public virtual Task<List<AssignmentApiView>> GetAssignmentsAsync(CancellationToken cancellationToken)
+        public virtual ActionResult<List<AssignmentApiView>> GetAssignments(CancellationToken cancellationToken)
         {
             var authorizedUserId = this.authorizedUser.Id;
 
@@ -80,7 +80,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
                 });
             }
 
-            return Task.FromResult(assignmentApiViews);
+            return assignmentApiViews;
         }
 
         public virtual IActionResult Received(int id)
