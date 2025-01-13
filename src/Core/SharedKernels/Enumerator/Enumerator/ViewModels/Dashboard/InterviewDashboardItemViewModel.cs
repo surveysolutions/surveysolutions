@@ -58,7 +58,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
         private string assignmentIdLabel;
 
         public InterviewDashboardItemViewModel(IServiceLocator serviceLocator, IAuditLogService auditLogService, 
-            IMapInteractionService mapInteractionService) : base(serviceLocator, mapInteractionService)
+            IMapInteractionService mapInteractionService, IUserInteractionService userInteractionService) 
+            : base(serviceLocator, mapInteractionService, userInteractionService)
         {
             this.serviceLocator = serviceLocator;
             this.auditLogService = auditLogService;
