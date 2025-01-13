@@ -65,6 +65,9 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
 
             foreach (var assignment in assignments)
             {
+                if (IsNeedUpdateApp(assignment))
+                    return StatusCode(StatusCodes.Status426UpgradeRequired);
+                
                 assignmentApiViews.Add(new AssignmentApiView
                 {
                     Id = assignment.Id,
