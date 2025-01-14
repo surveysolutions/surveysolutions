@@ -121,11 +121,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
                 && productVersion != null 
                 && productVersion <= new Version(24, 6))
             {
-#if DEBUG 
-                return false;
-#else
                 return true;
-#endif
             }
             
             return false;
