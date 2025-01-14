@@ -4,6 +4,7 @@ using System.Linq;
 using GreenDonut.Predicates;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Mvc;
+using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.GeoTracking;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.Responsible;
@@ -153,7 +154,7 @@ public class AssignmentGeoApiController: ControllerBase
             .ToList()
             .Select(x => new ResponsibleComboboxOptionModel(
                 x.Id.ToString(),  
-                x.Start.ToString(), 
+                x.Start.FormatDateWithTime(), 
                 null))
             .ToArray();
 
