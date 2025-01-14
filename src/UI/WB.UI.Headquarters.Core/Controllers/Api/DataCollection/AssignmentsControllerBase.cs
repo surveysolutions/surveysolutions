@@ -114,6 +114,9 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
         {
             var productVersion = this.Request.GetProductVersionFromUserAgent(ProductName);
 
+            if (productVersion == null)
+                return true;
+
             if (productVersion != null && !string.IsNullOrWhiteSpace(assignment.TargetArea) 
                 && productVersion != null 
                 && productVersion <= new Version(24, 6))
