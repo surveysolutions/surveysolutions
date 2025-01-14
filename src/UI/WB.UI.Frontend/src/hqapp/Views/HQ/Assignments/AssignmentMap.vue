@@ -5,7 +5,8 @@
                 <FilterBlock :title="$t('Common.GeoTrackNumber')">
                     <Typeahead control-id="trackId" :placeholder="$t('Common.AllGeoTracks')"
                         :value="selectedGeoTrackingId" :ajax-params="trackParams" :selectedValue="query.track"
-                        v-on:selected="selectedGeoTracking" :fetch-url="model.api.getTracks"></Typeahead>
+                        v-on:selected="selectedGeoTracking" :fetch-url="model.api.getTracks" noSearch="true">
+                    </Typeahead>
                 </FilterBlock>
                 <FilterBlock :title="$t('Common.Responsible')">
                     <Typeahead control-id="responsibleId" :placeholder="$t('Common.AllResponsible')"
