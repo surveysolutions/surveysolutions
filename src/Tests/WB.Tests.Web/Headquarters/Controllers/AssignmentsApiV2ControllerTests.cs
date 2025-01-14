@@ -44,7 +44,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                 Mock.Of<IUserToDeviceService>(),
                 Mock.Of<ICommandService>());
 
-            var assignments = await controller.GetAssignmentsAsync(new CancellationToken());
+            var assignments =  controller.GetAssignments(new CancellationToken()).Value;
 
             Assert.That(assignments.Single(), Has.Property(nameof(AssignmentApiView.Quantity))
                 .EqualTo(10 /* assignment.Quantity */ - 5 /* interviewSummary.Count */));
