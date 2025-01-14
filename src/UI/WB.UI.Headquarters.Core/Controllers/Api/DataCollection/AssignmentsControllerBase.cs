@@ -117,12 +117,8 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             if (productVersion == null)
                 return true;
 
-            if (productVersion != null && !string.IsNullOrWhiteSpace(assignment.TargetArea) 
-                && productVersion != null 
-                && productVersion <= new Version(24, 6))
-            {
+            if (!string.IsNullOrWhiteSpace(assignment.TargetArea) && productVersion <= new Version(24, 6))
                 return true;
-            }
             
             return false;
         }
