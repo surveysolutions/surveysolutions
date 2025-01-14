@@ -147,6 +147,9 @@ namespace WB.UI.Headquarters.Code
 
         public static Version GetProductVersionFromUserAgent(this HttpRequest request, string productName)
         {
+            if (request == null)
+                return null;
+            
             string userAgentString = request.Headers["User-Agent"].ToString();
  
             if (userAgentString?.StartsWith(productName, StringComparison.OrdinalIgnoreCase) ?? false)

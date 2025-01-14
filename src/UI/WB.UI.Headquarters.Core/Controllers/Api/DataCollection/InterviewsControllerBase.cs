@@ -100,7 +100,9 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
         {
             var productVersion = this.Request.GetProductVersionFromUserAgent(ProductName);
 
-            if (productVersion != null && productVersion < new Version(20, 5))
+            if (productVersion == null)
+                return true;
+            if (productVersion < new Version(20, 5))
             {
                 if (interviews.Any(interview => interviewsFactory.HasAnySmallSubstitutionEvent(interview.Id)))
                     return true;
@@ -224,7 +226,11 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
                 return false;
 
             var productVersion = this.Request.GetProductVersionFromUserAgent(ProductName);
-            if (productVersion != null && productVersion >= new Version(20, 5))
+            
+            if(productVersion == null)
+                return true;
+            
+            if (productVersion >= new Version(20, 5))
                 return false;
 
             return allEvents.Any(e =>
