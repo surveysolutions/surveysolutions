@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using HotChocolate;
+using NHibernate.Linq;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Infrastructure.Native.Storage.Postgre;
@@ -14,6 +15,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Users
         {
             unitOfWork.DiscardChanges();
             var query = unitOfWork.Session.Query<HqUser>();
+
+            query = query.Fetch(u => u.Profile);
 
             /*if (!authorizedUser.IsAdministrator)
             {
