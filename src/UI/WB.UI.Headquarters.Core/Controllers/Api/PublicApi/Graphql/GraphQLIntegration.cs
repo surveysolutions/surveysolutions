@@ -49,6 +49,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
 
             return services
                 .AddGraphQLServer()
+                .ModifyOptions(o => o.EnableDirectiveIntrospection = true)
                 .InitializeOnStartup()
                 .ConfigureSchema(x=>
                 {
@@ -98,8 +99,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
                 throw new ArgumentNullException(nameof(app));
             }
             
-            var options = new GraphQLServerOptions {EnableSchemaRequests = true};
+            var options = new GraphQLServerOptions { EnableSchemaRequests = true };
             //options.Tool.Credentials = DefaultCredentials.Include;
+            options.Tool.DisableTelemetry = true;
             
             return app.UseEndpoints(x => x.MapGraphQL().WithOptions(options));
         }
