@@ -199,7 +199,7 @@
     <value>Tap to enter number</value>
   </data>
   <data name="RealQuestion_Hint" xml:space="preserve">
-    <value>Tap to enter decimal</value>
+    <value>Tap to enter number</value>
   </data>
   <data name="Interview_Questions_RemoveRowFromRosterMessage" xml:space="preserve">
     <value>Are you sure you want to remove related roster '{0}' from each related roster?</value>
