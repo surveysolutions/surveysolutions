@@ -17,6 +17,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Users
             var query = unitOfWork.Session.Query<HqUser>();
 
             query = query.Fetch(u => u.Profile);
+            query = query.Fetch(u => u.Roles);
+            query = query.Fetch(u => u.Workspaces);
 
             /*if (!authorizedUser.IsAdministrator)
             {
