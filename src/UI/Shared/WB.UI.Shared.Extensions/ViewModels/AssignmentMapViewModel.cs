@@ -219,13 +219,11 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
     public override async void ViewAppeared()
     {
         base.ViewAppeared();
+        this.MapView?.RefreshDrawableState();
         
         backgroundServiceManager.LocationReceived += BackgroundServiceManagerOnLocationReceived;
         
         await DrawGeoTrackingAsync();
-        
-        this.MapView?.RefreshDrawableState();
-        
         if (!reminderWasShown && (lastGeoFencingStateOnInterviewCreation || lastGeoTrackingStateOnInterviewCreation))
         {
             await this.UserInteractionService.AlertAsync(
@@ -491,14 +489,13 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
 
     private async void BackgroundServiceManagerOnLocationReceived(object sender, LocationReceivedEventArgs e)
     {
-        LogTestRecords(e);
-
+        //LogTestRecords(e);
         await UpdateGeoTrackingPointsAsync(e.Location);
     }
 
     public const string GeoTrackingLayerName = "GeoTrackingLayer";
 
-    private Feature lastGeoTrackingFeature;
+    private Feature currentTrackFeature;
 
     RecordWithPoints lastRecordWithPoints = new RecordWithPoints() { Points = new List<GeoTrackingPoint>()};
 
@@ -593,20 +590,21 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
         }
         finally
         {
-            //Monitor.Exit(geoTrackingLayerLock);
             isDrawingGeoTracking = false;
         }
     }
 
     private object geoTrackingLayerLock = new object();
+
+    private bool isUpdating = false;
     
     private async Task UpdateGeoTrackingPointsAsync(GpsLocation location)
     {
         if (!IsEnabledGeoTracking || lastRecordWithPoints?.Points == null)
             return;
 
-        var existedLayer = this.MapView.Map.OperationalLayers.FirstOrDefault(l => l.Name == GeoTrackingLayerName);
-        if (existedLayer == null)
+        var geoTrackingLayer = this.MapView.Map.OperationalLayers.FirstOrDefault(l => l.Name == GeoTrackingLayerName);
+        if (geoTrackingLayer == null)
             return;
         
         lastRecordWithPoints.Points.Add(new GeoTrackingPoint()
@@ -615,57 +613,59 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
             Latitude = location.Latitude,
         });
 
+        if(isUpdating)
+           return;
         try
         {
-            Monitor.Enter(geoTrackingLayerLock);
-            
-            var featureCollectionLayer = (FeatureCollectionLayer)existedLayer;
+            isUpdating = true;
+
+            var featureCollectionLayer = (FeatureCollectionLayer)geoTrackingLayer;
             var featureCollectionTables = featureCollectionLayer.FeatureCollection.Tables;
 
             if (lastRecordWithPoints.Points.Count == 1)
             {
                 var geoTrackingPointFeatureCollectionTable = featureCollectionTables[1];
-                var feature = geoTrackingPointFeatureCollectionTable.CreateFeature();
+                var updatedTrackFeature = geoTrackingPointFeatureCollectionTable.CreateFeature();
+
                 Geometry point = new MapPoint(location.Longitude, location.Latitude, SpatialReferences.Wgs84);
                 if (point.SpatialReference != Map.SpatialReference)
                     point = point.Project(Map.SpatialReference);
 
-                feature.Geometry = point;
-                await geoTrackingPointFeatureCollectionTable.AddFeatureAsync(feature);
-                this.lastGeoTrackingFeature = feature;
+                updatedTrackFeature.Geometry = point;
+                await geoTrackingPointFeatureCollectionTable.AddFeatureAsync(updatedTrackFeature);
+
+                this.currentTrackFeature = updatedTrackFeature;
             }
             else if (lastRecordWithPoints.Points.Count > 1)
             {
                 var mapPoints = lastRecordWithPoints.Points.Select(point =>
-                    new MapPoint(point.Longitude, point.Latitude, SpatialReferences.Wgs84))
+                        new MapPoint(point.Longitude, point.Latitude, SpatialReferences.Wgs84))
                     .ToList();
-                
+
+                //IsWarningVisible = true;
+                //Warning = this.Map.
+
                 var geoTrackingPolylineFeatureCollectionTable = featureCollectionTables[0];
-                var feature = geoTrackingPolylineFeatureCollectionTable.CreateFeature();
+                var updatedTrackFeature = geoTrackingPolylineFeatureCollectionTable.CreateFeature();
                 Geometry polyline = new Polyline(mapPoints, SpatialReferences.Wgs84);
                 if (polyline.SpatialReference != Map.SpatialReference)
                     polyline = polyline.Project(Map.SpatialReference);
 
-                feature.Geometry = polyline;
-                await geoTrackingPolylineFeatureCollectionTable.AddFeatureAsync(feature);
-                
-                if (lastGeoTrackingFeature.FeatureTable?.GeometryType == GeometryType.Point)
-                    await featureCollectionTables[1].DeleteFeatureAsync(lastGeoTrackingFeature);
+                updatedTrackFeature.Geometry = polyline;
+
+                if (currentTrackFeature.FeatureTable?.GeometryType == GeometryType.Point)
+                    await featureCollectionTables[1].DeleteFeatureAsync(currentTrackFeature);
                 else
-                    await featureCollectionTables[0].DeleteFeatureAsync(lastGeoTrackingFeature);
-                    
-                lastGeoTrackingFeature = feature;
+                    await featureCollectionTables[0].DeleteFeatureAsync(currentTrackFeature);
+
+                await geoTrackingPolylineFeatureCollectionTable.AddFeatureAsync(updatedTrackFeature);
+
+                currentTrackFeature = updatedTrackFeature;
             }
-        }
-        catch(Exception e)
-        {
-            await Task.Delay(1000);
-            Debug.WriteLine(e);
-            // ignore
         }
         finally
         {
-            Monitor.Exit(geoTrackingLayerLock);
+            isUpdating = false;
         }
     }
 
