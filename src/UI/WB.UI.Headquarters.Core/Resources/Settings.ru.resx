@@ -376,10 +376,10 @@
     <value>Частичная синхронизация</value>
   </data>
   <data name="InterviewerGeographyQuestionAccuracyInMeters" xml:space="preserve">
-    <value>Точность для гео вопроса</value>
+      <value>Граничная точность координат </value>
   </data>
   <data name="GeographyQuestionAccuracyInMetersDescription" xml:space="preserve">
-    <value>Установить точность для геовопроса в метрах</value>
+      <value>Установить точность для получаемых координат в метрах</value>
   </data>
   <data name="InterviewerGeographyQuestionPeriodInSeconds" xml:space="preserve">
     <value>Период для гео вопроса</value>

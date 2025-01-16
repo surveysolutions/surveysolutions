@@ -259,10 +259,10 @@ Possible reasons:
     <value>When enabled, interviewer tablets will send answers in noncompleted interviews to Headquarters</value>
   </data>
   <data name="InterviewerGeographyQuestionAccuracyInMeters" xml:space="preserve">
-    <value>Geography question accuracy</value>
+      <value>Location accuracy limit</value>
   </data>
   <data name="GeographyQuestionAccuracyInMetersDescription" xml:space="preserve">
-    <value>Set accuracy in meters for geography question</value>
+      <value>Set threshold accuracy in meters for obtained location coordinates </value>
   </data>
   <data name="InterviewerGeographyQuestionPeriodInSeconds" xml:space="preserve">
     <value>Geography question period</value>
