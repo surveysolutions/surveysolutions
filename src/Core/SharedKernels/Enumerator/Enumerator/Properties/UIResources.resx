@@ -723,10 +723,10 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
     <value>Stop geofencing</value>
   </data>
   <data name="MenuItem_Title_StartGeoTracking" xml:space="preserve">
-    <value>Start tracking recording</value>
+    <value>Start track recording</value>
   </data>
   <data name="MenuItem_Title_StopGeoTracking" xml:space="preserve">
-    <value>Stop tracking recording</value>
+    <value>Stop track recording</value>
   </data>
   <data name="MenuItem_Title_ShowLocation" xml:space="preserve">
     <value>Show location</value>
