@@ -24,6 +24,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         IUpdateHandler<Assignment, AssignmentWebModeChanged>,
         IUpdateHandler<Assignment, AssignmentAudioRecordingChanged>,
         IUpdateHandler<Assignment, AssignmentQuantityChanged>,
+        IUpdateHandler<Assignment, AssignmentTargetAreaChanged>,
         IUpdateHandler<Assignment, AssignmentReceivedByTablet>
     {
         private readonly IQuestionnaireStorage questionnaireStorage;
@@ -48,6 +49,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 @event.Payload.Password,
                 @event.Payload.WebMode,
                 @event.Payload.Comment,
+                @event.Payload.TargetArea,
                 @event.Payload.UpgradedFromId);
 
             state.Answers = @event.Payload.Answers;
@@ -157,6 +159,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 });
         }
 
+        public Assignment Update(Assignment state, IPublishedEvent<AssignmentTargetAreaChanged> @event)
+        {
+            return UpdateAssignment(state, @event.Payload.OriginDate.UtcDateTime,
+                assignment =>
+                {
+                    assignment.TargetArea = @event.Payload.TargetArea;
+                });
+        }
+        
         public Assignment Update(Assignment state, IPublishedEvent<AssignmentDeleted> @event)
         {
             return null;

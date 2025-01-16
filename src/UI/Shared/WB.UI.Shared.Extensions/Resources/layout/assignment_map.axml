@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:local="http://schemas.android.com/apk/res-auto"
+        android:fitsSystemWindows="true"
+        android:id="@+id/main_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
+    <LinearLayout
+            android:id="@+id/area_map_view_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+        <Esri.ArcGISRuntime.UI.Controls.MapView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/map_view"
+                local:MvxBind="Map Map; GraphicsOverlays GraphicsOverlays;"/>
+    </LinearLayout>
+
+    <LinearLayout
+            android:id="@+id/area_warning"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="@dimen/area_editor_buttons_margin_space"
+            android:layout_marginLeft="@dimen/area_editor_warning_margin"
+            android:layout_marginRight="@dimen/area_editor_warning_margin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.75"
+                android:gravity="center_vertical|left"
+                android:orientation="vertical"
+                android:layout_marginBottom="1dp"
+                android:background="@drawable/warning"
+                local:MvxBind="Visible IsWarningVisible;">
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/area_editor_buttons_margin_space"
+                    android:layout_marginRight="@dimen/area_editor_buttons_margin_space"
+                    android:textSize="@dimen/area_editor_warning_text"
+                    android:textColor="@color/map_warning_text_color"
+                    android:gravity="left"
+                    android:duplicateParentState="true"
+                    android:singleLine="false"
+                    android:maxLines="2"
+                    android:id="@+id/areaEditor_Warnings"
+                    local:MvxBind="Text Warning;"/>
+        </LinearLayout>
+    </LinearLayout>
+    
+    
+    <ImageButton
+            android:id="@+id/butBack"
+            style="@style/Area_BackButton"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            local:MvxBind="Click NavigateToDashboardCommand;"
+            android:layout_marginTop="@dimen/area_editor_buttons_margin_space"
+            android:layout_marginLeft="@dimen/area_editor_buttons_margin_space" />
+
+    <ImageButton
+            android:id="@+id/butMenu"
+            style="@style/Area_MenuButton"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="@dimen/area_editor_buttons_margin_space"
+            android:layout_marginRight="@dimen/area_editor_buttons_margin_space" />
+    <ImageButton
+            android:id="@+id/butGeoTracking"
+            style="@style/Area_GeoTrackingButton"
+            android:layout_below="@id/butMenu"
+            android:layout_alignEnd="@id/butMenu"
+            android:layout_marginTop="@dimen/area_editor_buttons_margin_space"
+            local:MvxBind="Click StartGeoTrackingCommand; SelectedState IsEnabledGeoTracking; 
+              Visible And(IsGeoTrackingAvailable, IsGeoTrackingPemitted);"
+            />
+    <ImageButton
+            android:id="@+id/butGeofencing"
+            style="@style/Area_GeofencingButton"
+            android:layout_below="@id/butGeoTracking"
+            android:layout_alignEnd="@id/butGeoTracking"
+            android:layout_marginTop="@dimen/area_editor_buttons_margin_space"
+            local:MvxBind="Click StartGeofencingCommand; SelectedState IsEnabledGeofencing; 
+              Visible And(IsGeofencingAvailable, IsGeofencingPermitted);"
+             />
+       <ImageButton
+                android:id="@+id/butGeoTracking_disabled"
+                style="@style/Area_GeoTrackingButton_disabled"
+                android:layout_below="@id/butMenu"
+                android:layout_alignEnd="@id/butMenu"
+                android:layout_marginTop="@dimen/area_editor_buttons_margin_space"
+                local:MvxBind="Visible And(Not(IsGeoTrackingAvailable), IsGeoTrackingPemitted);"/>
+        <ImageButton
+                android:id="@+id/butGeofencing_disabled"
+                style="@style/Area_GeofencingButton_disabled"
+                android:layout_below="@id/butGeoTracking"
+                android:layout_alignEnd="@id/butGeoTracking"
+                android:layout_marginTop="@dimen/area_editor_buttons_margin_space"
+                local:MvxBind="Visible And(Not(IsGeofencingAvailable), IsGeofencingPermitted);"/>    
+    
+    <ImageButton
+            android:id="@+id/butCompass"
+            style="@style/Area_CompassButton"
+            android:layout_above="@id/butNavigation"
+            android:layout_alignStart="@id/butNavigation"
+            local:MvxBind="Click RotateMapToNorth; Visible IsCompassVisible;"
+            android:layout_marginBottom="@dimen/area_editor_buttons_margin_space" />
+    <ImageButton
+            android:id="@+id/butNavigation"
+            style="@style/Area_NavigateButton"
+            android:layout_above="@id/butZoomMenu"
+            android:layout_alignStart="@id/butZoomMenu"
+            local:MvxBind="Click ShowLocationSignCommand; Visible IsLocationEnabled;"
+            android:layout_marginBottom="@dimen/area_editor_buttons_margin_space" />
+    <ImageButton
+            android:id="@+id/butZoomMenu"
+            style="@style/Area_ZoomMenuButton"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="@dimen/area_editor_buttons_margin_space"
+            android:layout_marginBottom="@dimen/area_editor_lower_panel_margin_bottom"
+             />
+
+    <ImageButton
+            android:id="@+id/butCreateInterview"
+            style="@style/AssigmentMap_CreateInterview"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            local:MvxBind="Click CreateInterviewCommand; Visible AllowCreateInterview;"
+            android:layout_marginRight="@dimen/area_editor_buttons_margin_space"
+            android:layout_marginBottom="@dimen/area_editor_lower_panel_margin_bottom"
+    />
+    
+    
+    <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/carousel_view_pager"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:elevation="1dp"
+            android:translationZ="1dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="@dimen/area_editor_lower_panel_margin_bottom"
+            android:orientation="horizontal"
+            local:MvxBind="CurrentItem ActiveMarkerIndex; Visible IsNullableHavingValue(ActiveMarkerIndex);"
+    />
+</RelativeLayout>
+

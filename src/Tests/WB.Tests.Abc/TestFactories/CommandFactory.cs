@@ -380,7 +380,8 @@ namespace WB.Tests.Abc.TestFactories
             bool? webMode = null,
             List<InterviewAnswer> answers = null,
             List<string> protectedVariables = null,
-            string comment = null)
+            string comment = null,
+            string targetArea = null)
         {
             return new CreateAssignment(
                 assignmentId ?? Guid.NewGuid(), 
@@ -395,7 +396,8 @@ namespace WB.Tests.Abc.TestFactories
                 webMode,
                 answers,
                 protectedVariables,
-                comment);
+                comment,
+                targetArea);
         }
 
         public ArchiveAssignment ArchiveAssignment(Guid? assignmentId = null, Guid? userId = null, QuestionnaireIdentity questionnaireIdentity = null)
@@ -433,6 +435,11 @@ namespace WB.Tests.Abc.TestFactories
         public UpdateAssignmentQuantity UpdateAssignmentQuantity(Guid? assignmentId = null, Guid? userId = null, int? quantity = null, QuestionnaireIdentity questionnaireIdentity = null)
         {
             return new UpdateAssignmentQuantity(assignmentId ?? Guid.NewGuid(), userId ?? Guid.NewGuid(), quantity, questionnaireIdentity ?? new QuestionnaireIdentity());
+        }
+        
+        public UpdateAssignmentTargetArea UpdateAssignmentTargetArea(Guid? assignmentId = null, Guid? userId = null, string targetAreaName = null, QuestionnaireIdentity questionnaireIdentity = null)
+        {
+            return new UpdateAssignmentTargetArea(assignmentId ?? Guid.NewGuid(), userId ?? Guid.NewGuid(), targetAreaName, questionnaireIdentity ?? new QuestionnaireIdentity());
         }
 
         public UpgradeAssignmentCommand UpgradeAssignment()

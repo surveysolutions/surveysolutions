@@ -21,7 +21,7 @@ namespace WB.UI.Shared.Web.CommandDeserialization
             try
             {
                 Type resultCommandType = GetTypeOfResultCommandOrThrowArgumentException(commandType);
-                ICommand command = (ICommand)JsonConvert.DeserializeObject(serializedCommand, resultCommandType);
+                ICommand command = (ICommand)JsonConvert.DeserializeObject(serializedCommand, resultCommandType)!;
                 
                 return command;
             }

@@ -1,38 +1,26 @@
 <template>
-    <aside class="content"
-        v-if="sections"
-        style="transform: translateZ(0);">
-        <div v-if="interviewState!=null"
-            class="interview-progress">
+    <aside class="content" v-if="sections" style="transform: translateZ(0);">
+        <div v-if="interviewState != null" class="interview-progress">
             <div class="progress-counts">
-                {{this.$t('WebInterviewUI.Progress')}}:{{interviewState.answeredQuestionsCount}}/{{interviewState.activeQuestionCount}}
+                {{ this.$t('WebInterviewUI.Progress') }}:{{ interviewState.answeredQuestionsCount }}/{{ interviewState.activeQuestionCount }}
             </div>
-            <wb-progress
-                :striped = false
-                :visible="interviewState!=null"
-                :valuemax="interviewState.activeQuestionCount"
+            <wb-progress :striped=false :visible="interviewState != null" :valuemax="interviewState.activeQuestionCount"
                 :valuenow="interviewState.answeredQuestionsCount" />
             <div class="progress-percents">
-                {{progressPercent}}%
+                {{ progressPercent }}%
             </div>
         </div>
-        <wb-humburger id="sidebarHamburger"
-            :show-foldback-button-as-hamburger="showFoldbackButtonAsHamburger" />
+        <wb-humburger id="sidebarHamburger" :show-foldback-button-as-hamburger="showFoldbackButtonAsHamburger" />
         <div class="panel-group structured-content">
-            <SidebarPanel :panel="coverSection"
-                v-if="showCover" />
-            <SidebarPanel v-for="section in sections"
-                :key="section.id"
-                :panel="section"
-                :currentPanel="currentPanel" />
-            <SidebarPanel :panel="completeSection"
-                v-if="showComplete && !$config.splashScreen" />
+            <SidebarPanel :panel="coverSection" v-if="showCover" />
+            <SidebarPanel v-for="section in sections" :key="section.id" :panel="section" :currentPanel="currentPanel" />
+            <SidebarPanel :panel="completeSection" v-if="showComplete && !$config.splashScreen" />
         </div>
     </aside>
 </template>
 <script lang="js">
 import SidebarPanel from './SidebarPanel'
-import Vue from 'vue'
+import { nextTick } from 'vue'
 import { GroupStatus } from './questions'
 
 export default {
@@ -90,7 +78,7 @@ export default {
             }
         },
 
-        progressPercent(){
+        progressPercent() {
             return this.interviewState.activeQuestionCount == 0 ? 100 : Math.round((this.interviewState.answeredQuestionsCount / this.interviewState.activeQuestionCount) * 100)
         },
     },
@@ -106,7 +94,7 @@ export default {
     },
     methods: {
         fetchSidebar() {
-            Vue.nextTick(() => this.$store.dispatch('fetchSidebar', null))
+            nextTick(() => this.$store.dispatch('fetchSidebar', null))
         },
         fetchInterviewStatus() {
             this.$store.dispatch('fetchInterviewStatus')

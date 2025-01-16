@@ -329,7 +329,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         protected virtual async Task CloseInterviewAfterComplete(bool switchInterviewToCawiMode)
         {
-            await this.viewModelNavigationService.NavigateToDashboardAsync(this.InterviewId.ToString());
+            await this.viewModelNavigationService.NavigateFromInterviewAsync(this.InterviewId.ToString());
             Dispose();
             Messenger.Publish(new InterviewCompletedMessage(this));
         }

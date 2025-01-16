@@ -1,21 +1,9 @@
 <template>
-    <div class="field"
-        :class="{'answered': hasValue === true}">
-        <input
-            class="form-control with-clear-btn"
-            :class="{'input-validation-error': haserror === true}"
-            v-bind="$attrs"
-            v-bind:value="value"
-            v-on="inputListeners"
-            ref="input"
-            autocomplete="new-password"/>
-
-        <button
-            type="button"
-            class="btn btn-link btn-clear"
-            v-if="hasValue"
-            @click="clearFilter"
-            tabindex="-1">
+    <div class="field" :class="{ 'answered': hasValue === true }">
+        <input class="form-control with-clear-btn" :class="{ 'input-validation-error': haserror === true }"
+            v-bind="$attrs" @input="$emit('update:modelValue', $event.target.value)" :value="modelValue" ref="input"
+            autocomplete="new-password" />
+        <button type="button" class="btn btn-link btn-clear" v-if="hasValue" @click="clearFilter" tabindex="-1">
             <span></span>
         </button>
     </div>
@@ -31,7 +19,7 @@ export default {
     },
     inheritAttrs: false,
     props: {
-        value: {
+        modelValue: {
             default: null,
         },
         haserror: {
@@ -44,31 +32,14 @@ export default {
         },
     },
     computed: {
-        hasValue: function() {
-            return this.type == 'text' && !this.disabled && this.canClear && this.value !== null && this.value !== ''
-        },
-        inputListeners: function() {
-            var vm = this
-            // `Object.assign` объединяет объекты вместе, чтобы получить новый объект
-            return Object.assign(
-                {},
-                // Мы добавляем все слушатели из родителя
-                this.$listeners,
-                // Затем мы можем добавить собственные слушатели или
-                // перезаписать поведение некоторых существующих.
-                {
-                    // Это обеспечит, что будет работать v-model на компоненте
-                    input: function(event) {
-                        vm.$emit('input', event.target.value)
-                    },
-                }
-            )
-        },
+        hasValue: function () {
+            return this.type == 'text' && !this.disabled && this.canClear && this.modelValue !== null && this.modelValue !== ''
+        }
     },
     methods: {
         clearFilter() {
-            this.$emit('input', null)
-            this.$emit('changed')
+            this.$emit('update:modelValue', null)
+            this.$emit('onChanged')
         },
     },
     mounted() {

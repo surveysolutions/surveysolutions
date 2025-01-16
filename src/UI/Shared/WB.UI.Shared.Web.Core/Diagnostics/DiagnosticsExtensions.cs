@@ -8,7 +8,7 @@ namespace WB.UI.Shared.Web.Diagnostics
 {
     public static class DiagnosticsExtensions
     {
-        private static string version = null;
+        private static string? version = null;
         public static IEndpointConventionBuilder MapVersionEndpoint(this IEndpointRouteBuilder endpoints, string pattern = ".version")
         {
             return endpoints.MapGet("/" + pattern, context =>

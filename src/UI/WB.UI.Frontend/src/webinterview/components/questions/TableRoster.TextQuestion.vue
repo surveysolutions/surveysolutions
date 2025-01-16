@@ -5,7 +5,7 @@
 </template>
 
 <script lang="js">
-import Vue from 'vue'
+import { nextTick } from 'vue'
 import { entityDetails, tableCellEditor } from '../mixins'
 
 export default {
@@ -48,7 +48,7 @@ export default {
                 }
 
                 if (this.$me.mask && !target.data('maskCompleted')) {
-                    this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.TextRequired'))
+                    this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.TextRequired'), answer)
                 }
                 else {
                     this.$store.dispatch('answerTextQuestion', { identity: this.id, text: answer })
@@ -57,7 +57,7 @@ export default {
         },
     },
     mounted() {
-        Vue.nextTick(() => {
+        nextTick(() => {
             const input = $(this.$refs.input)
             if (input) {
                 input.focus()

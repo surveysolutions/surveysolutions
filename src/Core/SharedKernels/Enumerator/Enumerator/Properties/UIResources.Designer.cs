@@ -1239,6 +1239,102 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
             }
         }
         
+        public static string MenuItem_Title_StartGeofencing {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_StartGeofencing", resourceCulture);
+            }
+        }
+        
+        public static string MenuItem_Title_StopGeofencing {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_StopGeofencing", resourceCulture);
+            }
+        }
+        
+        public static string MenuItem_Title_StartGeoTracking {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_StartGeoTracking", resourceCulture);
+            }
+        }
+        
+        public static string MenuItem_Title_StopGeoTracking {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_StopGeoTracking", resourceCulture);
+            }
+        }
+        
+        public static string MenuItem_Title_ShowLocation {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_ShowLocation", resourceCulture);
+            }
+        }
+        
+        public static string MenuItem_Title_HideLocation {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_HideLocation", resourceCulture);
+            }
+        }
+        
+        public static string MenuItem_Title_ExitToDashboard {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_ExitToDashboard", resourceCulture);
+            }
+        }
+        
+        public static string MenuItem_Title_ChangeMap {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_ChangeMap", resourceCulture);
+            }
+        }
+        
+        public static string MenuItem_Title_ChangeShapefile {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_ChangeShapefile", resourceCulture);
+            }
+        }
+        
+        public static string MenuItem_Title_CreateInterview {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_CreateInterview", resourceCulture);
+            }
+        }
+        
+        public static string AssignmentMap_Title_CreateInterview {
+            get {
+                return ResourceManager.GetString("AssignmentMap_Title_CreateInterview", resourceCulture);
+            }
+        }
+        
+        public static string MenuItem_Title_ZoomMap {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_ZoomMap", resourceCulture);
+            }
+        }
+        
+        public static string MenuItem_Title_ZoomShapefile {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_ZoomShapefile", resourceCulture);
+            }
+        }
+        
+        public static string MenuItem_Title_ZoomCollectedData {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_ZoomCollectedData", resourceCulture);
+            }
+        }
+        
+        public static string MenuItem_Title_ZoomEverything {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_ZoomEverything", resourceCulture);
+            }
+        }
+        
+        public static string MenuItem_Title_ZoomGeoTracking {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_ZoomGeoTracking", resourceCulture);
+            }
+        }
+        
         public static string MenuItem_Title_Dashboard {
             get {
                 return ResourceManager.GetString("MenuItem_Title_Dashboard", resourceCulture);
@@ -1602,6 +1698,24 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string InterviewStatus_SupervisorAssigned {
             get {
                 return ResourceManager.GetString("InterviewStatus_SupervisorAssigned", resourceCulture);
+            }
+        }
+        
+        public static string SelectMapTitle {
+            get {
+                return ResourceManager.GetString("SelectMapTitle", resourceCulture);
+            }
+        }
+        
+        public static string Geofencing_Warning_Message {
+            get {
+                return ResourceManager.GetString("Geofencing_Warning_Message", resourceCulture);
+            }
+        }
+        
+        public static string SelectShapefileTitle {
+            get {
+                return ResourceManager.GetString("SelectShapefileTitle", resourceCulture);
             }
         }
     }

@@ -120,7 +120,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 this.logger.Debug($"Updating Quantity for assignment {local.Id} local: {local.Quantity} remote: {remote.Quantity}");
                 local.Quantity = remote.Quantity;
             }
-
+            
+            if (local.TargetArea != remote.TargetArea)
+            {
+                this.logger.Debug($"Updating TargetArea for assignment {local.Id} local: {local.TargetArea} remote: {remote.TargetArea}");
+                local.TargetArea = remote.TargetArea;
+            }
+           
             if (ReceivedByInterviewerTimeShouldBeReset(remote.ResponsibleId, local.ResponsibleId,
                 local.OriginalResponsibleId))
             {

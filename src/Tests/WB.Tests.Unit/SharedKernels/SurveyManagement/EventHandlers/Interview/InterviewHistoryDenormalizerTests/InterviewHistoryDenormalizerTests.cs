@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
@@ -45,9 +46,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
                 interviewExportedDataDenormalizer);
 
 
-            Assert.AreEqual(interviewHistoryView.Records[0].Parameters["answer"], "hi");
-            Assert.AreEqual(interviewHistoryView.Records[0].Timestamp, dateTimeOffset.UtcDateTime);
-            Assert.AreEqual(interviewHistoryView.Records[0].Offset, dateTimeOffset.Offset);
+            ClassicAssert.AreEqual(interviewHistoryView.Records[0].Parameters["answer"], "hi");
+            ClassicAssert.AreEqual(interviewHistoryView.Records[0].Timestamp, dateTimeOffset.UtcDateTime);
+            ClassicAssert.AreEqual(interviewHistoryView.Records[0].Offset, dateTimeOffset.Offset);
 
         }
 
@@ -60,7 +61,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             var interfaceForEventType = typeof(IUpdateHandler<,>).MakeGenericType(typeof(InterviewHistoryView), eventType);
             var isImplimentedInterface = interfaceForEventType.IsAssignableFrom(typeof(InterviewParaDataEventHandler));
 
-            Assert.False(isImplimentedInterface);
+            ClassicAssert.False(isImplimentedInterface);
         }
 
         [Test]
@@ -89,7 +90,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             PublishEventsOnOnInterviewExportedDataDenormalizer(answerEvents, interviewHistoryView,
                 interviewExportedDataDenormalizer);
 
-            Assert.AreEqual(interviewHistoryView.Records[0].Parameters["question"], variableName);
+            ClassicAssert.AreEqual(interviewHistoryView.Records[0].Parameters["question"], variableName);
         }
 
         [Test]
@@ -119,9 +120,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             PublishEventsOnOnInterviewExportedDataDenormalizer(answerEvents, interviewHistoryView,
                 interviewExportedDataDenormalizer);
 
-            Assert.AreEqual(interviewHistoryView.Records[0].Parameters["question"], "text");
-            Assert.AreEqual(interviewHistoryView.Records[0].OriginatorName, "User");
-            Assert.AreEqual(interviewHistoryView.Records[0].OriginatorRole, "Supervisor");
+            ClassicAssert.AreEqual(interviewHistoryView.Records[0].Parameters["question"], "text");
+            ClassicAssert.AreEqual(interviewHistoryView.Records[0].OriginatorName, "User");
+            ClassicAssert.AreEqual(interviewHistoryView.Records[0].OriginatorRole, "Supervisor");
         }
     }
 }

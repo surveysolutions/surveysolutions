@@ -11,7 +11,7 @@
 }
 <ul class="nav navbar-nav">
     <li class="dropdown @(page == MenuItem.MapReport || page == MenuItem.Surveys || page == MenuItem.SurveyAndStatuses || page == MenuItem.Summary || page == MenuItem.Statuses || page == MenuItem.DevicesInterviewers || page == MenuItem.StatusDuration || page == MenuItem.InterviewsChart ? "active" : "")">
-        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" title="@MainMenu.Reports">
+        <a href="javascript:void(0);" class="dropdown-toggle" data-bs-toggle="dropdown" title="@MainMenu.Reports">
             @MainMenu.Reports <span class="caret"></span>
         </a>
         <ul class="dropdown-menu">
@@ -29,7 +29,7 @@
     @Html.MainMenuItem("Index", "Interviews", @MainMenu.Interviews, MenuItem.Interviews)
 
     <li class="dropdown @(page == MenuItem.Teams || page == MenuItem.Interviewers ? "active" : "")">
-        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" title="@MainMenu.TeamsAndRoles">
+        <a href="javascript:void(0);" class="dropdown-toggle" data-bs-toggle="dropdown" title="@MainMenu.TeamsAndRoles">
             @MainMenu.TeamsAndRoles <span class="caret"></span>
         </a>
         <ul class="dropdown-menu">
@@ -38,7 +38,7 @@
         </ul>
     </li>
     <li class="dropdown  @(page == MenuItem.Questionnaires || page == MenuItem.Assignments || page == MenuItem.Maps ? "active" : "")">
-        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" title="@MainMenu.SurveySetup">
+        <a href="javascript:void(0);" class="dropdown-toggle" data-bs-toggle="dropdown" title="@MainMenu.SurveySetup">
             @MainMenu.SurveySetup <span class="caret"></span>
         </a>
         <ul class="dropdown-menu">
@@ -70,7 +70,7 @@
         </a>
     </li>
     <li class="dropdown @(page == MenuItem.ManageAccount ? "active" : "")">
-        <a href="javascript:void(0);" class="dropdown-toggle toggle-sized" data-toggle="dropdown" title="@User.Identity.Name">
+        <a href="javascript:void(0);" class="dropdown-toggle toggle-sized" data-bs-toggle="dropdown" title="@User.Identity.Name">
             @User.Identity.Name <span class="caret"></span>
         </a>
         <ul class="dropdown-menu">

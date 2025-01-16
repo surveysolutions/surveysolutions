@@ -43,7 +43,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             this.Dispose();
         });
 
-        public IMvxCommand NavigateToDiagnosticsPageCommand => new MvxAsyncCommand(this.ViewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>);
+        public IMvxCommand NavigateToDiagnosticsPageCommand => 
+            new MvxAsyncCommand(() => this.ViewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>());
         public IMvxCommand SignOutCommand => new MvxAsyncCommand(async () =>
         {
             await this.ViewModelNavigationService.SignOutAndNavigateToLoginAsync();

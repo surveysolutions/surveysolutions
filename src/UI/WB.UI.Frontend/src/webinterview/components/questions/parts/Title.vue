@@ -1,7 +1,5 @@
 <template>
-    <h5 v-dateTimeFormatting
-        v-linkToRoute
-        v-html="$me.title"></h5>
+    <h5 v-dateTimeFormatting v-linkToRoute v-dompurify-html="$me.title"></h5>
 </template>
 <script lang="js">
 import { entityPartial } from '~/webinterview/components/mixins'

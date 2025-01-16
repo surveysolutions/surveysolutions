@@ -1,284 +1,225 @@
 {
-  "dist": "wwwroot",
-  "questionnaire": {
-    "htmls": ["questionnaire/views/**/*.html"],
-    "scripts": ["questionnaire/scripts/**/*.js"],
-    "static": [
-      "questionnaire/content/fonts/**/*",
-      "questionnaire/content/i/**/*",
-      "questionnaire/content/lib/i/**/*"
+    "dist": "wwwroot",
+    "questionnaire": {
+        "static": [
+            "questionnaire/content/fonts/**/*",
+            "questionnaire/content/i/**/*",
+            "questionnaire/content/lib/i/**/*"
+        ],
+        "markup": "questionnaire/content/markup.less",
+        "resources": [
+            "./Resources/QuestionnaireEditor.resx",
+            "./Resources/QuestionnaireEditor.*.resx"
+        ]
+    },
+    "assets": {
+        "images": [
+            "Content/images/*"
+        ],
+        "fonts": [
+            "Content/fonts/*",
+            "node_modules/@mdi/font/fonts/*"
+        ],
+        "qbank": [
+            "Content/qbank/**/*"
+        ]
+    },
+    "injectTargets": [
+        "Areas/Admin/Views/PublicFolders/Index.cshtml",
+        "Areas/Identity/Pages/_ValidationScriptsPartial.cshtml",
+        "Areas/Identity/Pages/Layout.Account.cshtml",
+        "Areas/Pdf/Views/Pdf/RenderQuestionnaire.cshtml",
+        "Views/Classifications/Index.cshtml",
+        "Views/QuestionnaireList/Public.cshtml",
+        "Views/Shared/_ValidationScriptsPartial.cshtml",
+        "Views/Shared/Layout.cshtml",
+        "Views/Error/Layout.Error.cshtml",
+        "Areas/Admin/Views/Shared/Layout.ControlPanel.cshtml"
     ],
-    "markup": "questionnaire/content/markup.less",
-    "resources": [
-      "./Resources/QuestionnaireEditor.resx",
-      "./Resources/QuestionnaireEditor.*.resx"
-    ]
-  },
-  "assets": {
-    "images": ["Content/images/*"],
-    "fonts": ["Content/fonts/*", "node_modules/@mdi/font/fonts/*"],
-    "qbank": ["Content/qbank/**/*" ]
-  },
-  "injectTargets": [
-    "Areas/Admin/Views/PublicFolders/Index.cshtml",
-    "Areas/Identity/Pages/_ValidationScriptsPartial.cshtml",
-    "Areas/Identity/Pages/Layout.Account.cshtml",
-    "Areas/Pdf/Views/Pdf/RenderQuestionnaire.cshtml",
-    "Views/Classifications/Index.cshtml",
-    "Views/QuestionnaireList/Public.cshtml",
-    "Views/Shared/_ValidationScriptsPartial.cshtml",
-    "Views/Shared/Layout.cshtml",
-    "Views/Error/Layout.Error.cshtml",
-    "Areas/Admin/Views/Shared/Layout.ControlPanel.cshtml"
-  ],
-  "vendor": {
-    "favicons": ["Content/identity/favicon-*.png"],
-    "files": [
-      "node_modules/angular-block-ui/dist/angular-block-ui.css",
-      "node_modules/angular-hotkeys/build/hotkeys.css",
-      "node_modules/angular-loading-bar/build/loading-bar.css",
-      "node_modules/perfect-scrollbar/dist/css/perfect-scrollbar.css",
-      "node_modules/pnotify/dist/pnotify.css",
-      "node_modules/pnotify/dist/pnotify.buttons.css",
-      "node_modules/angular-ui-tree/dist/angular-ui-tree.css",
-      "node_modules/jquery/dist/jquery.js",
-      "node_modules/ace-builds/src-noconflict/ace.js",
-      "node_modules/ace-builds/src-noconflict/ext-language_tools.js",
-      "node_modules/ace-builds/src-noconflict/mode-json.js",
-      "node_modules/angular/angular.js",
-      "node_modules/angular-animate/angular-animate.js",
-      "node_modules/angular-block-ui/dist/angular-block-ui.js",
-      "node_modules/angular-ui-bootstrap/dist/ui-bootstrap.js",
-      "node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js",
-      "node_modules/angular-cookies/angular-cookies.js",
-      "node_modules/angular-elastic/elastic.js",
-      "node_modules/angular-hotkeys/build/hotkeys.js",
-      "node_modules/angular-loading-bar/build/loading-bar.js",
-      "node_modules/perfect-scrollbar/dist/js/perfect-scrollbar.jquery.js",
-      "node_modules/pnotify/dist/pnotify.js",
-      "node_modules/pnotify/dist/pnotify.animate.js",
-      "node_modules/pnotify/dist/pnotify.buttons.js",
-      "node_modules/pnotify/dist/pnotify.callbacks.js",
-      "node_modules/pnotify/dist/pnotify.confirm.js",
-      "node_modules/pnotify/dist/pnotify.desktop.js",
-      "node_modules/pnotify/dist/pnotify.history.js",
-      "node_modules/pnotify/dist/pnotify.mobile.js",
-      "node_modules/pnotify/dist/pnotify.nonblock.js",
-      "node_modules/bootstrap/dist/js/bootstrap.js",
-      "node_modules/angular-resource/angular-resource.js",
-      "node_modules/angular-sanitize/angular-sanitize.js",
-      "node_modules/angular-ui-tree/dist/angular-ui-tree.js",
-      "node_modules/angular-ui-utils/modules/highlight/highlight.js",
-      "node_modules/angular-unsavedchanges/lib/unsavedChanges.js",
-      "node_modules/es5-shim/es5-shim.js",
-      "node_modules/jquery-mousewheel/jquery.mousewheel.js",
-      "node_modules/jquery-placeholder/jquery.placeholder.js",
-      "node_modules/jquery.scrollto/jquery.scrollTo.js",
-      "node_modules/json3/lib/json3.js",
-      "questionnaire/scripts/modules/ng-context-menu.js",
-      "node_modules/ng-file-upload/dist/ng-file-upload.js",
-      "node_modules/ng-file-upload/dist/ng-file-upload-shim.js",
-      "node_modules/moment/moment.js",
-      "node_modules/moment/locale/ru.js",
-      "node_modules/moment/locale/fr.js",
-      "node_modules/moment/locale/pt.js",
-      "node_modules/moment/locale/zh-cn.js",
-      "questionnaire/scripts/modules/positionCalculator.js",
-      "node_modules/underscore/underscore.js",
-      "node_modules/js-cookie/src/js.cookie.js",
-      "node_modules/@uirouter/angularjs/release/angular-ui-router.js",
-      "node_modules/@uirouter/angularjs/release/stateEvents.js",
-      "node_modules/xss/dist/xss.js",
-      "node_modules/html5shiv/dist/html5shiv.js",
-      "questionnaire/scripts/modules/ui-ace.js",
-      "questionnaire/external/jquery.validate.unobtrusive.bootstrap.js",
-      "node_modules/jquery-validation/dist/jquery.validate.js",
-      "questionnaire/scripts/modules/perfect_scrollbar.js",
-      "node_modules/angular-moment/angular-moment.js",
-      "node_modules/xss/dist/xss.js",
-      "node_modules/i18next/i18next.min.js",
-      "node_modules/i18next-http-backend/i18nextHttpBackend.min.js",
-      "node_modules/ng-i18next/dist/ng-i18next.js",
-      "node_modules/zebra_datepicker/dist/css/bootstrap/icons.png",
-      "node_modules/zebra_datepicker/dist/css/bootstrap/zebra_datepicker.min.css",
-      "node_modules/zebra_datepicker/dist/zebra_datepicker.min.js"
-    ]
-  },
-  "bundle": [    
-    {
-      "name": "i18next",
-      "inputFiles": [
-        "node_modules/i18next/i18next.js"
-      ]
+    "vendor": {
+        "favicons": [
+            "Content/identity/favicon-*.png"
+        ],
+        "files": [
+            "node_modules/perfect-scrollbar/dist/css/perfect-scrollbar.css"
+        ]
     },
-    {
-      "name": "require_libs",
-      "inputFiles": [
-        "Scripts/lib/require.js"
-      ]
-    },    
-    {
-      "name": "jquery",
-      "inputFiles": [
-        "node_modules/jquery/dist/jquery.js"
-      ]
-    },
-    {
-      "name": "cat__i18next",
-      "inputFiles": [
-        "node_modules/i18next/i18next.js"
-      ]
-    },
-    {
-      "name": "cat__a_i18next_http_backend",
-      "inputFiles": [
-        "node_modules/i18next-http-backend/i18nextHttpBackend.js"
-      ]
-    },
-    {
-      "name": "cat__vue",
-      "inputFiles": [
-        "node_modules/vue/dist/vue.js",
-        "node_modules/lodash/lodash.js"
-      ]
-    },    
-    {
-      "name": "cat__jquery",
-      "inputFiles": [
-        "node_modules/jquery/dist/jquery.js"
-      ]
-    },
-    {
-      "name": "cat__a_vuetify",
-      "inputFiles": [
-        "node_modules/vuetify/dist/vuetify.js"
-      ]
-    },
-    {
-      "name": "popup",
-      "inputFiles": [
-        "node_modules/vuetify/dist/vuetify.css",
-        "node_modules/@mdi/font/css/materialdesignicons.css"
-      ]
-    },
-    {
-      "name": "logon",
-      "inputFiles": [
-        "questionnaire/content/designer-start/bootstrap-custom.less",
-        "questionnaire/content/designer-start/designer-start.less"
-      ]
-    },
-    {
-      "name": "list",
-      "inputFiles": [
-        "node_modules/jquery-mousewheel/jquery.mousewheel.js",
-        "node_modules/perfect-scrollbar/dist/js/perfect-scrollbar.jquery.js",
-        "Scripts/custom/common.js",
-        "node_modules/moment/min/moment-with-locales.js",
-        "node_modules/perfect-scrollbar/dist/css/perfect-scrollbar.css",
-        "questionnaire/content/designer-start/bootstrap-custom.less",
-        "Styles/designer-list.less"
-      ]
-    },
-    {
-      "name": "editform",
-      "inputFiles": [
-        "node_modules/jquery-validation/dist/jquery.validate.js",
-        "Scripts/custom/jquery.validate.unobtrusive-custom-for-bootstrap.js",
-        "Scripts/custom/bootstrap3-unobtrusive-hack.js",
-        "node_modules/bootstrap-select/dist/js/bootstrap-select.js",
-        "node_modules/bootstrap-select/dist/css/bootstrap-select.min.css"
-      ]
-    },
-    {
-      "name": "simplepage",
-      "inputFiles": [
-        "node_modules/jquery/dist/jquery.js",
-        "node_modules/bootstrap/dist/js/bootstrap.js"
-      ]
-    },
-    {
-      "name": "folders",
-      "inputFiles": [
-        "node_modules/jquery.fancytree/dist/jquery.fancytree-all-deps.js",
-        "questionnaire/external/jquery.fancytree.contextMenu.js",
-        "node_modules/jquery-contextmenu/dist/jquery.contextMenu.js",
-        "Scripts/custom/public-folders.js",
-        "node_modules/jquery.fancytree/dist/skin-bootstrap/ui.fancytree.min.css",
-        "node_modules/jquery-contextmenu/dist/jquery.contextMenu.min.css"
-      ]
-    },
-    {
-      "name": "underconstruction",
-      "inputFiles": [
-        "questionnaire/content/designer-start/bootstrap-custom.less",
-        "node_modules/jquery.fancytree/dist/skin-bootstrap/ui.fancytree.min.css",
-        "node_modules/jquery-contextmenu/dist/jquery.contextMenu.min.css"
-      ]
-    },
-    {
-      "name": "vue",
-      "inputFiles": [
-        "node_modules/es6-promise/dist/es6-promise.auto.js",
-        "node_modules/vue/dist/vue.js",
-        "node_modules/vuex/dist/vuex.js",
-        "node_modules/vee-validate/dist/vee-validate.js",
-        "node_modules/axios/dist/axios.js",
-        "node_modules/jquery-contextmenu/dist/jquery.contextMenu.js",
-        "node_modules/jquery.ui.position/jquery-ui.js",
-        "node_modules/lodash/lodash.js"
-      ]
-    },
-    {
-      "name": "classifications",
-      "inputFiles": [
-        "node_modules/jquery-contextmenu/dist/jquery.contextMenu.min.css",
-        "Content/classifications.css",
-        "Scripts/classifications/components/CategoriesEditor.js",
-        "Scripts/classifications/components/ClassificationEditor.js",
-        "Scripts/classifications/components/GroupEditor.js",
-        "Scripts/classifications/routes.js",
-        "Scripts/classifications/store.js",
-        "Scripts/classifications/main.js"
-      ],
-      "assets": [
+    "bundle": [
         {
-          "glob": "node_modules/jquery-contextmenu/dist/font/**",
-          "prefix": "css/font"
-        }
-      ]
-    },
-    {
-      "name": "validation",
-      "inputFiles": [
-        "node_modules",
-        "node_modules/jquery-validation/dist/jquery.validate.js",
-        "node_modules/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js"
-      ]
-    },
-    {
-      "name": "pdf",
-      "inputFiles": [
-        "Areas/Pdf/Content/pdf.less"
-      ],
-      "assets": [
+            "name": "i18next",
+            "inputFiles": [
+                "node_modules/i18next/i18next.js"
+            ]
+        },
         {
-          "glob": "Areas/Pdf/Content/images/**",
-          "prefix": "images"
+            "name": "require_libs",
+            "inputFiles": [
+                "Scripts/lib/require.js"
+            ]
+        },
+        {
+            "name": "jquery",
+            "inputFiles": [
+                "node_modules/jquery/dist/jquery.js"
+            ]
+        },
+        {
+            "name": "cat__i18next",
+            "inputFiles": [
+                "node_modules/i18next/i18next.js"
+            ]
+        },
+        {
+            "name": "cat__a_i18next_http_backend",
+            "inputFiles": [
+                "node_modules/i18next-http-backend/i18nextHttpBackend.js"
+            ]
+        },
+        {
+            "name": "cat__vue",
+            "inputFiles": [
+                "node_modules/vue/dist/vue.js",
+                "node_modules/lodash/lodash.js"
+            ]
+        },
+        {
+            "name": "cat__jquery",
+            "inputFiles": [
+                "node_modules/jquery/dist/jquery.js"
+            ]
+        },
+        {
+            "name": "cat__a_vuetify",
+            "inputFiles": [
+                "node_modules/vuetify/dist/vuetify.js"
+            ]
+        },
+        {
+            "name": "popup",
+            "inputFiles": [
+                "node_modules/vuetify/dist/vuetify.css",
+                "node_modules/@mdi/font/css/materialdesignicons.css"
+            ]
+        },
+        {
+            "name": "logon",
+            "inputFiles": [
+                "questionnaire/content/designer-start/bootstrap-custom.less",
+                "questionnaire/content/designer-start/designer-start.less"
+            ]
+        },
+        {
+            "name": "list",
+            "inputFiles": [
+                "node_modules/jquery-mousewheel/jquery.mousewheel.js",
+                "node_modules/perfect-scrollbar/dist/js/perfect-scrollbar.jquery.js",
+                "node_modules/dompurify/dist/purify.js",
+                "Scripts/custom/common.js",
+                "node_modules/moment/min/moment-with-locales.js",
+                "node_modules/perfect-scrollbar/dist/css/perfect-scrollbar.css",
+                "questionnaire/content/designer-start/bootstrap-custom.less",
+                "Styles/designer-list.less"
+            ]
+        },
+        {
+            "name": "editform",
+            "inputFiles": [
+                "node_modules/jquery-validation/dist/jquery.validate.js",
+                "Scripts/custom/jquery.validate.unobtrusive-custom-for-bootstrap.js",
+                "Scripts/custom/bootstrap3-unobtrusive-hack.js",
+                "node_modules/bootstrap-select/dist/js/bootstrap-select.js",
+                "node_modules/bootstrap-select/dist/css/bootstrap-select.min.css"
+            ]
+        },
+        {
+            "name": "simplepage",
+            "inputFiles": [
+                "node_modules/jquery/dist/jquery.js",
+                "node_modules/bootstrap/dist/js/bootstrap.js"
+            ]
+        },
+        {
+            "name": "folders",
+            "inputFiles": [
+                "node_modules/jquery.fancytree/dist/jquery.fancytree-all-deps.js",
+                "questionnaire/external/jquery.fancytree.contextMenu.js",
+                "node_modules/jquery-contextmenu/dist/jquery.contextMenu.js",
+                "Scripts/custom/public-folders.js",
+                "node_modules/jquery.fancytree/dist/skin-bootstrap/ui.fancytree.min.css",
+                "node_modules/jquery-contextmenu/dist/jquery.contextMenu.min.css"
+            ]
+        },
+        {
+            "name": "underconstruction",
+            "inputFiles": [
+                "questionnaire/content/designer-start/bootstrap-custom.less",
+                "node_modules/jquery.fancytree/dist/skin-bootstrap/ui.fancytree.min.css",
+                "node_modules/jquery-contextmenu/dist/jquery.contextMenu.min.css"
+            ]
+        },
+        {
+            "name": "vue",
+            "inputFiles": [
+                "node_modules/es6-promise/dist/es6-promise.auto.js",
+                "node_modules/vue/dist/vue.js",
+                "node_modules/vuex/dist/vuex.js",
+                "node_modules/vee-validate/dist/vee-validate.js",
+                "node_modules/axios/dist/axios.js",
+                "node_modules/jquery-contextmenu/dist/jquery.contextMenu.js",
+                "node_modules/jquery.ui.position/jquery-ui.js",
+                "node_modules/lodash/lodash.js"
+            ]
+        },
+        {
+            "name": "classifications",
+            "inputFiles": [
+                "node_modules/jquery-contextmenu/dist/jquery.contextMenu.min.css",
+                "Content/classifications.css",
+                "Scripts/classifications/components/CategoriesEditor.js",
+                "Scripts/classifications/components/ClassificationEditor.js",
+                "Scripts/classifications/components/GroupEditor.js",
+                "Scripts/classifications/routes.js",
+                "Scripts/classifications/store.js",
+                "Scripts/classifications/main.js"
+            ],
+            "assets": [
+                {
+                    "glob": "node_modules/jquery-contextmenu/dist/font/**",
+                    "prefix": "css/font"
+                }
+            ]
+        },
+        {
+            "name": "validation",
+            "inputFiles": [
+                "node_modules",
+                "node_modules/jquery-validation/dist/jquery.validate.js",
+                "node_modules/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js"
+            ]
+        },
+        {
+            "name": "pdf",
+            "inputFiles": [
+                "Areas/Pdf/Content/pdf.less"
+            ],
+            "assets": [
+                {
+                    "glob": "Areas/Pdf/Content/images/**",
+                    "prefix": "images"
+                }
+            ]
+        },
+        {
+            "name": "admin",
+            "inputFiles": [
+                "Content/admin.css"
+            ]
+        },
+        {
+            "name": "utils",
+            "inputFiles": [
+                "Scripts/custom/utils.js"
+            ]
         }
-      ]
-    },
-    {
-      "name": "admin",
-      "inputFiles": [
-        "Content/admin.css"
-      ]
-    },
-    {
-      "name": "utils",
-      "inputFiles": [
-        "Scripts/custom/utils.js"
-      ]
-    }
-  ]
+    ]
 }

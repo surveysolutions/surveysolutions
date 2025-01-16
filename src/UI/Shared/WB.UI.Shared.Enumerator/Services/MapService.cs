@@ -20,13 +20,14 @@ namespace WB.UI.Shared.Enumerator.Services
         private readonly string shapefilesLocationCommon;
         
         private readonly ILogger logger;
+        private readonly IWorkspaceAccessor workspaceAccessor;
         private readonly IEnumeratorArchiveUtils archiveUtils;
 
         private readonly string[] mapFilesToSearch = { "*.tpk", "*.tpkx", "*.mmpk", "*.mmpkx",  "*.tif" };
         private readonly string[] shapefilesToSearch = { "*.shp"};
         private string tempSuffix = ".part";
 
-        private readonly string? workspaceName = null;
+        private string? GetWorkspaceName() => workspaceAccessor.GetCurrentWorkspaceName();
         private readonly bool webOnlyMode;
 
         public MapService(
@@ -38,8 +39,8 @@ namespace WB.UI.Shared.Enumerator.Services
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.logger = logger;
+            this.workspaceAccessor = workspaceAccessor;
             this.archiveUtils = archiveUtils;
-            this.workspaceName = workspaceAccessor.GetCurrentWorkspaceName();
             this.webOnlyMode = webOnlyMode;
             
             this.mapsLocationCommon = fileSystemAccessor.CombinePath(
@@ -54,12 +55,12 @@ namespace WB.UI.Shared.Enumerator.Services
         private string GetMapsLocationOrThrow()
         {
             CheckWorkspaceAndThrow();
-            return fileSystemAccessor.CombinePath(this.mapsLocationCommon, workspaceName);
+            return fileSystemAccessor.CombinePath(this.mapsLocationCommon, GetWorkspaceName());
         }
 
         private void CheckWorkspaceAndThrow()
         {
-            if (string.IsNullOrEmpty(workspaceName))
+            if (string.IsNullOrEmpty(GetWorkspaceName()))
             {
                 logger.Error("Workspace name is empty;");
                 throw new InvalidOperationException("Workspace name is empty;");
@@ -140,7 +141,7 @@ namespace WB.UI.Shared.Enumerator.Services
                     mapList.AddRange(newMaps);
             }
             
-            if(!string.IsNullOrEmpty(workspaceName))
+            if(!string.IsNullOrEmpty(GetWorkspaceName()))
                 AddMapsFromFolder(GetMapsLocationOrThrow(), true);
 
             AddMapsFromFolder(this.mapsLocationCommon, false);
@@ -150,7 +151,7 @@ namespace WB.UI.Shared.Enumerator.Services
 
         public bool DoesMapExist(string mapName)
         {
-            if (!string.IsNullOrEmpty(workspaceName))
+            if (!string.IsNullOrEmpty(GetWorkspaceName()))
             {
                 var filename = this.fileSystemAccessor.CombinePath(GetMapsLocationOrThrow(), mapName);
                 var isShapeFile = IsShapeFile(mapName);
@@ -261,6 +262,7 @@ namespace WB.UI.Shared.Enumerator.Services
 
             List<ShapefileDescription> shapefileDescriptions = new List<ShapefileDescription>();
 
+            var workspaceName = GetWorkspaceName();
             if (!string.IsNullOrEmpty(workspaceName))
             {
                 var shapesInFolder = GetShapesInFolder(fileSystemAccessor.CombinePath(

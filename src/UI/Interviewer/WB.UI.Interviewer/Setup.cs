@@ -71,6 +71,7 @@ namespace WB.UI.Interviewer
 #if !EXCLUDEEXTENSIONS
                 ,{typeof (Shared.Extensions.ViewModels.GeographyEditorViewModel), typeof (Shared.Extensions.Activities.GeographyEditorActivity)}
                 ,{typeof (Shared.Extensions.ViewModels.InterviewerMapDashboardViewModel), typeof (Shared.Extensions.Activities.InterviewerMapDashboardActivity)}
+                ,{typeof (Shared.Extensions.ViewModels.AssignmentMapViewModel), typeof (Shared.Extensions.Activities.AssignmentMapActivity)}
 #endif
             });
 
@@ -102,12 +103,6 @@ namespace WB.UI.Interviewer
         {
             base.InitializeApp(app);
 
-            string appcenterKey = ApplicationContext.Resources.GetString(Resource.String.appcenter_key);
-            if (!string.IsNullOrEmpty(appcenterKey))
-            {
-                CrashReporting.Init(appcenterKey);
-            }
-
             string arcgisruntimeKey = ApplicationContext.Resources.GetString(Resource.String.arcgisruntime_key);
             if (!string.IsNullOrEmpty(arcgisruntimeKey))
             {
@@ -138,6 +133,10 @@ namespace WB.UI.Interviewer
                 new EnumeratorSharedKernelModule(),
                 new InterviewerBoundedContextModule(),
                 new InterviewerUIModule(),
+#if !EXCLUDEEXTENSIONS                
+                new WB.UI.Shared.Extensions.MapExtensionsModule(),
+                new WB.UI.Shared.Extensions.InterviewerMapExtensionsModule(),
+#endif                
             };
 
             ContainerBuilder builder = new ContainerBuilder();

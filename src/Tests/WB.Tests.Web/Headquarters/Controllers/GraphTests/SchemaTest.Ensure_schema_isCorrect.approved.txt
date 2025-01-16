@@ -7,6 +7,7 @@ type Assignment {
   archived: Boolean!
   createdAtUtc: DateTime!
   email: String
+  targetArea: String
   id: ID!
   interviewsNeeded: Int
   "Will return `null` when assignment is not received by tablet"
@@ -14,7 +15,7 @@ type Assignment {
   responsibleId: UUID!
   webMode: Boolean!
   "Active Calendar Event associated with assignment"
-  calendarEvent: CalendarEvent
+  calendarEvent: CalendarEvent @cost(weight: "10")
 }
 
 type CalendarEvent {
@@ -43,7 +44,7 @@ type CategoricalOption {
 type Entity {
   identifying: Boolean
   label: String
-  options: [CategoricalOption!]!
+  options: [CategoricalOption!]! @cost(weight: "10")
   "Question text. May contain html tags."
   questionText: String
   scope: QuestionScope
@@ -82,70 +83,70 @@ type GeoBounds {
 }
 
 type HeadquartersMutation {
-  updateCalendarEvent("Workspace name" workspace: String! = "primary" "Comment" comment: String "Start of event" newStart: DateTime! "Calendar event publicKey" publicKey: UUID! "Start timezone" startTimezone: String!): CalendarEvent @authorize(roles: [ "Interviewer", "ApiUser" ])
-  deleteCalendarEvent("Workspace name" workspace: String! = "primary" "Calendar event publicKey" publicKey: UUID!): CalendarEvent @authorize(roles: [ "Interviewer", "ApiUser" ])
-  addAssignmentCalendarEvent("Workspace name" workspace: String! = "primary" "Assignment Id" assignmentId: Int! "Comment" comment: String "Start of event" newStart: DateTime! "Start timezone" startTimezone: String!): CalendarEvent @authorize(roles: [ "Interviewer", "ApiUser" ])
-  addInterviewCalendarEvent("Workspace name" workspace: String! = "primary" "Comment" comment: String "Interview id" interviewId: UUID! "Start of event" newStart: DateTime! "Start timezone" startTimezone: String!): CalendarEvent @authorize(roles: [ "Interviewer", "ApiUser" ])
-  deleteMap("Workspace name" workspace: String! = "primary" "Map file name" fileName: String!): Map @authorize(roles: [ "Administrator", "Headquarter", "ApiUser" ])
-  deleteUserFromMap("Workspace name" workspace: String! = "primary" "Map file name" fileName: String! userName: String!): Map @authorize(roles: [ "Administrator", "Headquarter", "Supervisor", "ApiUser" ])
-  addUserToMap("Workspace name" workspace: String! = "primary" "Map file name" fileName: String! userName: String!): Map @authorize(roles: [ "Administrator", "Headquarter", "Supervisor", "ApiUser" ])
-  uploadMap("Workspace name" workspace: String! = "primary" file: Upload!): [Map] @authorize(roles: [ "Administrator", "Headquarter", "ApiUser" ])
+  updateCalendarEvent("Workspace name" workspace: String! = "primary" "Comment" comment: String "Start of event" newStart: DateTime! "Calendar event publicKey" publicKey: UUID! "Start timezone" startTimezone: String!): CalendarEvent @authorize(roles: [ "ApiUser", "Interviewer" ])
+  deleteCalendarEvent("Workspace name" workspace: String! = "primary" "Calendar event publicKey" publicKey: UUID!): CalendarEvent @authorize(roles: [ "ApiUser", "Interviewer" ])
+  addAssignmentCalendarEvent("Workspace name" workspace: String! = "primary" "Assignment Id" assignmentId: Int! "Comment" comment: String "Start of event" newStart: DateTime! "Start timezone" startTimezone: String!): CalendarEvent @authorize(roles: [ "ApiUser", "Interviewer" ])
+  addInterviewCalendarEvent("Workspace name" workspace: String! = "primary" "Comment" comment: String "Interview id" interviewId: UUID! "Start of event" newStart: DateTime! "Start timezone" startTimezone: String!): CalendarEvent @authorize(roles: [ "ApiUser", "Interviewer" ])
+  deleteMap("Workspace name" workspace: String! = "primary" "Map file name" fileName: String!): Map @authorize(roles: [ "Administrator", "ApiUser", "Headquarter" ]) @cost(weight: "10")
+  deleteUserFromMap("Workspace name" workspace: String! = "primary" "Map file name" fileName: String! userName: String!): Map @authorize(roles: [ "Administrator", "ApiUser", "Headquarter", "Supervisor" ])
+  addUserToMap("Workspace name" workspace: String! = "primary" "Map file name" fileName: String! userName: String!): Map @authorize(roles: [ "Administrator", "ApiUser", "Headquarter", "Supervisor" ])
+  uploadMap("Workspace name" workspace: String! = "primary" file: Upload!): [Map] @authorize(roles: [ "Administrator", "ApiUser", "Headquarter" ]) @cost(weight: "10")
 }
 
 type HeadquartersQuery {
-  assignments("Workspace name" workspace: String! = "primary" skip: Int take: Int where: AssignmentsFilter): IPagedConnectionOfAssignment @authorize
-  interviews("Workspace name" workspace: String! = "primary" skip: Int take: Int where: InterviewsFilter order: [InterviewSort!]): IPagedConnectionOfInterview @authorize
-  maps("Workspace name" workspace: String! = "primary" skip: Int take: Int where: MapsFilter order: [MapsSort!]): IPagedConnectionOfMap @authorize
+  assignments("Workspace name" workspace: String! = "primary" skip: Int take: Int where: AssignmentsFilter @cost(weight: "10")): IPagedConnectionOfAssignment @authorize @cost(weight: "10")
+  interviews("Workspace name" workspace: String! = "primary" skip: Int take: Int where: InterviewsFilter @cost(weight: "10") order: [InterviewSort!] @cost(weight: "10")): IPagedConnectionOfInterview @authorize @cost(weight: "10")
+  maps("Workspace name" workspace: String! = "primary" skip: Int take: Int where: MapsFilter @cost(weight: "10") order: [MapsSort!] @cost(weight: "10")): IPagedConnectionOfMap @authorize @cost(weight: "10")
   "Gets questionnaire details"
-  questionnaires("Workspace name" workspace: String! = "primary" skip: Int take: Int "Questionnaire id" id: UUID "Questionnaire version" version: Long): IPagedConnectionOfQuestionnaire @authorize
-  questions("Workspace name" workspace: String! = "primary" "Questionnaire id" id: UUID! "Questionnaire version" version: Long! "Questionnaire language" language: String where: QuestionFilter): [Entity] @authorize
-  questionnaireItems("Workspace name" workspace: String! = "primary" "Questionnaire id" id: UUID! "Questionnaire version" version: Long! "Questionnaire language" language: String where: QuestionnaireItemsFilter): [QuestionnaireItem] @authorize
+  questionnaires("Workspace name" workspace: String! = "primary" skip: Int take: Int "Questionnaire id" id: UUID "Questionnaire version" version: Long): IPagedConnectionOfQuestionnaire @authorize @cost(weight: "10")
+  questions("Workspace name" workspace: String! = "primary" "Questionnaire id" id: UUID! "Questionnaire version" version: Long! "Questionnaire language" language: String where: QuestionFilter @cost(weight: "10")): [Entity] @authorize @cost(weight: "10")
+  questionnaireItems("Workspace name" workspace: String! = "primary" "Questionnaire id" id: UUID! "Questionnaire version" version: Long! "Questionnaire language" language: String where: QuestionnaireItemsFilter @cost(weight: "10")): [QuestionnaireItem] @authorize @cost(weight: "10")
   viewer: Viewer @authorize
-  users(skip: Int take: Int order: [UsersSortInput!] where: UsersFilterInput): Users @authorize(roles: [ "Administrator" ])
-  mapReport("Workspace name" workspace: String! = "primary" "Questionnaire id" questionnaireId: UUID! "Questionnaire version" questionnaireVersion: Long "Variable name for question" variable: String "Zoom level" zoom: Int! "Visible area width" clientMapWidth: Int! "East coordinate" east: Float! "West coordinate" west: Float! "North coordinate" north: Float! "South coordinate" south: Float! where: MapReportFilter): MapReportHolder @authorize
+  users(skip: Int take: Int order: [UsersSortInput!] @cost(weight: "10") where: UsersFilterInput @cost(weight: "10")): Users @authorize(roles: [ "Administrator" ]) @cost(weight: "10")
+  mapReport("Workspace name" workspace: String! = "primary" "Questionnaire id" questionnaireId: UUID! "Questionnaire version" questionnaireVersion: Long "Variable name for question" variable: String "Zoom level" zoom: Int! "Visible area width" clientMapWidth: Int! "East coordinate" east: Float! "West coordinate" west: Float! "North coordinate" north: Float! "South coordinate" south: Float! where: MapReportFilter @cost(weight: "10")): MapReportHolder @authorize @cost(weight: "10")
 }
 
 type IPagedConnectionOfAssignment {
   "A flattened list of the nodes."
-  nodes: [Assignment]!
+  nodes: [Assignment]! @cost(weight: "10")
   "Total count of nodes without filtering applied"
-  totalCount: Int!
+  totalCount: Int! @cost(weight: "10")
   "Filtered count of nodes without paging"
-  filteredCount: Int!
+  filteredCount: Int! @cost(weight: "10")
 }
 
 type IPagedConnectionOfInterview {
   "A flattened list of the nodes."
-  nodes: [Interview]!
+  nodes: [Interview]! @cost(weight: "10")
   "Total count of nodes without filtering applied"
-  totalCount: Int!
+  totalCount: Int! @cost(weight: "10")
   "Filtered count of nodes without paging"
-  filteredCount: Int!
+  filteredCount: Int! @cost(weight: "10")
 }
 
 type IPagedConnectionOfMap {
   "A flattened list of the nodes."
-  nodes: [Map]!
+  nodes: [Map]! @cost(weight: "10")
   "Total count of nodes without filtering applied"
-  totalCount: Int!
+  totalCount: Int! @cost(weight: "10")
   "Filtered count of nodes without paging"
-  filteredCount: Int!
+  filteredCount: Int! @cost(weight: "10")
 }
 
 type IPagedConnectionOfQuestionnaire {
   "A flattened list of the nodes."
-  nodes: [Questionnaire]!
+  nodes: [Questionnaire]! @cost(weight: "10")
   "Total count of nodes without filtering applied"
-  totalCount: Int!
+  totalCount: Int! @cost(weight: "10")
   "Filtered count of nodes without paging"
-  filteredCount: Int!
+  filteredCount: Int! @cost(weight: "10")
 }
 
 "Identifying variable or question"
 type IdentifyingEntity {
   "Answer value for categorical questions"
   answerValue: Int
-  entity: Entity!
+  entity: Entity! @cost(weight: "10")
   value: String
   "Bool answer value"
   valueBool: Boolean
@@ -191,13 +192,13 @@ type Interview {
   questionnaireVariable: String!
   questionnaireVersion: Long!
   "Information that identifies each assignment. These are the answers to questions marked as identifying in Designer"
-  identifyingData: [IdentifyingEntity]
+  identifyingData: [IdentifyingEntity] @cost(weight: "10")
   "Number of questions without answer. Includes supervisor, identifying and interviewer questions. Can contain nulls for interviews that were completed prior to 20.09 release"
   notAnsweredCount: Int
   "Active Calendar Event associated with interview"
-  calendarEvent: CalendarEvent
+  calendarEvent: CalendarEvent @cost(weight: "10")
   "Link for interview in CAWI mode"
-  cawiLink: String
+  cawiLink: String @cost(weight: "10")
 }
 
 type Map {
@@ -210,7 +211,7 @@ type Map {
   "User which uploaded map on HQ"
   uploadedBy: UUID
   "List of users assigned to map"
-  users: [UserMap]
+  users: [UserMap] @cost(weight: "10")
   xMaxVal: Float!
   yMaxVal: Float!
   xMinVal: Float!
@@ -233,7 +234,7 @@ type MapReport {
 
 type MapReportHolder {
   "Map report"
-  report: MapReport!
+  report: MapReport! @cost(weight: "10")
 }
 
 type Questionnaire {
@@ -242,8 +243,8 @@ type Questionnaire {
   version: Long!
   id: ID
   title: String!
-  defaultLanguageName: String
-  translations: [Translation!]!
+  defaultLanguageName: String @cost(weight: "10")
+  translations: [Translation!]! @cost(weight: "10")
 }
 
 type QuestionnaireItem {
@@ -257,7 +258,7 @@ type QuestionnaireItem {
   variableType: VariableType
   identifying: Boolean
   includedInReportingAtUtc: DateTime
-  options: [CategoricalOption!]!
+  options: [CategoricalOption!]! @cost(weight: "10")
 }
 
 type Translation {
@@ -267,7 +268,7 @@ type Translation {
 
 type User {
   id: ID!
-  role: UserRoles!
+  role: UserRoles! @cost(weight: "10")
   userName: String!
   fullName: String
   email: String
@@ -275,8 +276,8 @@ type User {
   creationDate: Date
   isLocked: Boolean
   isArchived: Boolean
-  isRelinkAllowed: Boolean
-  workspaces: [String!]!
+  isRelinkAllowed: Boolean @cost(weight: "10")
+  workspaces: [String!]! @cost(weight: "10")
 }
 
 type UserMap {
@@ -286,16 +287,16 @@ type UserMap {
 
 type Users {
   "A flattened list of the nodes."
-  nodes: [User]!
+  nodes: [User]! @cost(weight: "10")
   "Total count of nodes without filtering applied"
-  totalCount: Int!
+  totalCount: Int! @cost(weight: "10")
   "Filtered count of nodes without paging"
-  filteredCount: Int!
+  filteredCount: Int! @cost(weight: "10")
 }
 
 type Viewer {
   id: ID!
-  role: UserRoles!
+  role: UserRoles! @cost(weight: "10")
   userName: String!
   workspaces: [String!]!
 }
@@ -309,56 +310,57 @@ input AssignmentsFilter {
   responsibleId: UuidOperationFilterInput
   webMode: BooleanOperationFilterInput
   receivedByTabletAtUtc: DateTimeOperationFilterInput
+  targetArea: StringOperationFilterInput
 }
 
 input BooleanOperationFilterInput {
-  eq: Boolean
-  neq: Boolean
+  eq: Boolean @cost(weight: "10")
+  neq: Boolean @cost(weight: "10")
 }
 
 input DateTimeOperationFilterInput {
-  eq: DateTime
-  neq: DateTime
-  in: [DateTime]
-  nin: [DateTime]
-  gt: DateTime
-  ngt: DateTime
-  gte: DateTime
-  ngte: DateTime
-  lt: DateTime
-  nlt: DateTime
-  lte: DateTime
-  nlte: DateTime
+  eq: DateTime @cost(weight: "10")
+  neq: DateTime @cost(weight: "10")
+  in: [DateTime] @cost(weight: "10")
+  nin: [DateTime] @cost(weight: "10")
+  gt: DateTime @cost(weight: "10")
+  ngt: DateTime @cost(weight: "10")
+  gte: DateTime @cost(weight: "10")
+  ngte: DateTime @cost(weight: "10")
+  lt: DateTime @cost(weight: "10")
+  nlt: DateTime @cost(weight: "10")
+  lte: DateTime @cost(weight: "10")
+  nlte: DateTime @cost(weight: "10")
 }
 
 input DecimalOperationFilterInput {
-  eq: Decimal
-  neq: Decimal
-  in: [Decimal]
-  nin: [Decimal]
-  gt: Decimal
-  ngt: Decimal
-  gte: Decimal
-  ngte: Decimal
-  lt: Decimal
-  nlt: Decimal
-  lte: Decimal
-  nlte: Decimal
+  eq: Decimal @cost(weight: "10")
+  neq: Decimal @cost(weight: "10")
+  in: [Decimal] @cost(weight: "10")
+  nin: [Decimal] @cost(weight: "10")
+  gt: Decimal @cost(weight: "10")
+  ngt: Decimal @cost(weight: "10")
+  gte: Decimal @cost(weight: "10")
+  ngte: Decimal @cost(weight: "10")
+  lt: Decimal @cost(weight: "10")
+  nlt: Decimal @cost(weight: "10")
+  lte: Decimal @cost(weight: "10")
+  nlte: Decimal @cost(weight: "10")
 }
 
 input FloatOperationFilterInput {
-  eq: Float
-  neq: Float
-  in: [Float]
-  nin: [Float]
-  gt: Float
-  ngt: Float
-  gte: Float
-  ngte: Float
-  lt: Float
-  nlt: Float
-  lte: Float
-  nlte: Float
+  eq: Float @cost(weight: "10")
+  neq: Float @cost(weight: "10")
+  in: [Float] @cost(weight: "10")
+  nin: [Float] @cost(weight: "10")
+  gt: Float @cost(weight: "10")
+  ngt: Float @cost(weight: "10")
+  gte: Float @cost(weight: "10")
+  ngte: Float @cost(weight: "10")
+  lt: Float @cost(weight: "10")
+  nlt: Float @cost(weight: "10")
+  lte: Float @cost(weight: "10")
+  nlte: Float @cost(weight: "10")
 }
 
 input IdentifyEntityValueFilter {
@@ -385,48 +387,48 @@ input IdentifyEntityValueFilter {
 }
 
 input IntOperationFilterInput {
-  eq: Int
-  neq: Int
-  in: [Int]
-  nin: [Int]
-  gt: Int
-  ngt: Int
-  gte: Int
-  ngte: Int
-  lt: Int
-  nlt: Int
-  lte: Int
-  nlte: Int
+  eq: Int @cost(weight: "10")
+  neq: Int @cost(weight: "10")
+  in: [Int] @cost(weight: "10")
+  nin: [Int] @cost(weight: "10")
+  gt: Int @cost(weight: "10")
+  ngt: Int @cost(weight: "10")
+  gte: Int @cost(weight: "10")
+  ngte: Int @cost(weight: "10")
+  lt: Int @cost(weight: "10")
+  nlt: Int @cost(weight: "10")
+  lte: Int @cost(weight: "10")
+  nlte: Int @cost(weight: "10")
 }
 
 input InterviewModeOperationFilterInput {
-  eq: InterviewMode
-  neq: InterviewMode
-  in: [InterviewMode!]
-  nin: [InterviewMode!]
+  eq: InterviewMode @cost(weight: "10")
+  neq: InterviewMode @cost(weight: "10")
+  in: [InterviewMode!] @cost(weight: "10")
+  nin: [InterviewMode!] @cost(weight: "10")
 }
 
 input InterviewSort {
-  key: SortEnumType
-  createdDate: SortEnumType
-  updateDateUtc: SortEnumType
-  responsibleName: SortEnumType
-  responsibleRole: SortEnumType
-  assignmentId: SortEnumType
-  errorsCount: SortEnumType
-  status: SortEnumType
-  receivedByInterviewerAtUtc: SortEnumType
-  questionnaireId: SortEnumType
-  questionnaireVersion: SortEnumType
-  id: SortEnumType
-  notAnsweredCount: SortEnumType
+  key: SortEnumType @cost(weight: "10")
+  createdDate: SortEnumType @cost(weight: "10")
+  updateDateUtc: SortEnumType @cost(weight: "10")
+  responsibleName: SortEnumType @cost(weight: "10")
+  responsibleRole: SortEnumType @cost(weight: "10")
+  assignmentId: SortEnumType @cost(weight: "10")
+  errorsCount: SortEnumType @cost(weight: "10")
+  status: SortEnumType @cost(weight: "10")
+  receivedByInterviewerAtUtc: SortEnumType @cost(weight: "10")
+  questionnaireId: SortEnumType @cost(weight: "10")
+  questionnaireVersion: SortEnumType @cost(weight: "10")
+  id: SortEnumType @cost(weight: "10")
+  notAnsweredCount: SortEnumType @cost(weight: "10")
 }
 
 input InterviewStatusOperationFilterInput {
-  eq: InterviewStatus
-  neq: InterviewStatus
-  in: [InterviewStatus!]
-  nin: [InterviewStatus!]
+  eq: InterviewStatus @cost(weight: "10")
+  neq: InterviewStatus @cost(weight: "10")
+  in: [InterviewStatus!] @cost(weight: "10")
+  nin: [InterviewStatus!] @cost(weight: "10")
 }
 
 input InterviewsFilter {
@@ -454,32 +456,32 @@ input InterviewsFilter {
 }
 
 input ListFilterInputTypeOfIdentifyEntityValueFilterInput {
-  all: IdentifyEntityValueFilter
-  none: IdentifyEntityValueFilter
-  some: IdentifyEntityValueFilter
-  any: Boolean
+  all: IdentifyEntityValueFilter @cost(weight: "10")
+  none: IdentifyEntityValueFilter @cost(weight: "10")
+  some: IdentifyEntityValueFilter @cost(weight: "10")
+  any: Boolean @cost(weight: "10")
 }
 
 input ListFilterInputTypeOfUserMapFilterInput {
-  all: UserMapFilterInput
-  none: UserMapFilterInput
-  some: UserMapFilterInput
-  any: Boolean
+  all: UserMapFilterInput @cost(weight: "10")
+  none: UserMapFilterInput @cost(weight: "10")
+  some: UserMapFilterInput @cost(weight: "10")
+  any: Boolean @cost(weight: "10")
 }
 
 input LongOperationFilterInput {
-  eq: Long
-  neq: Long
-  in: [Long]
-  nin: [Long]
-  gt: Long
-  ngt: Long
-  gte: Long
-  ngte: Long
-  lt: Long
-  nlt: Long
-  lte: Long
-  nlte: Long
+  eq: Long @cost(weight: "10")
+  neq: Long @cost(weight: "10")
+  in: [Long] @cost(weight: "10")
+  nin: [Long] @cost(weight: "10")
+  gt: Long @cost(weight: "10")
+  ngt: Long @cost(weight: "10")
+  gte: Long @cost(weight: "10")
+  ngte: Long @cost(weight: "10")
+  lt: Long @cost(weight: "10")
+  nlt: Long @cost(weight: "10")
+  lte: Long @cost(weight: "10")
+  nlte: Long @cost(weight: "10")
 }
 
 input MapReportFilter {
@@ -498,16 +500,16 @@ input MapsFilter {
 }
 
 input MapsSort {
-  fileName: SortEnumType
-  importDateUtc: SortEnumType
-  size: SortEnumType
+  fileName: SortEnumType @cost(weight: "10")
+  importDateUtc: SortEnumType @cost(weight: "10")
+  size: SortEnumType @cost(weight: "10")
 }
 
 input NullableOfQuestionScopeOperationFilterInput {
-  eq: QuestionScope
-  neq: QuestionScope
-  in: [QuestionScope]
-  nin: [QuestionScope]
+  eq: QuestionScope @cost(weight: "10")
+  neq: QuestionScope @cost(weight: "10")
+  in: [QuestionScope] @cost(weight: "10")
+  nin: [QuestionScope] @cost(weight: "10")
 }
 
 input QuestionFilter {
@@ -541,35 +543,35 @@ input QuestionnaireItemsFilter {
 input RoleFilterInput {
   and: [RoleFilterInput!]
   or: [RoleFilterInput!]
-  eq: UserRoles
+  eq: UserRoles @cost(weight: "10")
 }
 
 input StringOperationFilterInput {
   and: [StringOperationFilterInput!]
   or: [StringOperationFilterInput!]
-  eq: String
-  neq: String
-  contains: String
-  ncontains: String
-  in: [String]
-  nin: [String]
-  startsWith: String
-  nstartsWith: String
-  endsWith: String
-  nendsWith: String
+  eq: String @cost(weight: "10")
+  neq: String @cost(weight: "10")
+  contains: String @cost(weight: "20")
+  ncontains: String @cost(weight: "20")
+  in: [String] @cost(weight: "10")
+  nin: [String] @cost(weight: "10")
+  startsWith: String @cost(weight: "20")
+  nstartsWith: String @cost(weight: "20")
+  endsWith: String @cost(weight: "20")
+  nendsWith: String @cost(weight: "20")
 }
 
 input StringOperationFilterInputType {
   and: [StringOperationFilterInputType!]
   or: [StringOperationFilterInputType!]
-  eq: String
-  neq: String
-  contains: String
-  ncontains: String
-  in: [String]
-  nin: [String]
-  startsWith: String
-  nstartsWith: String
+  eq: String @cost(weight: "10")
+  neq: String @cost(weight: "10")
+  contains: String @cost(weight: "10")
+  ncontains: String @cost(weight: "10")
+  in: [String] @cost(weight: "10")
+  nin: [String] @cost(weight: "10")
+  startsWith: String @cost(weight: "10")
+  nstartsWith: String @cost(weight: "10")
 }
 
 input UserMapFilterInput {
@@ -581,10 +583,10 @@ input UserMapFilterInput {
 }
 
 input UserRolesOperationFilterInput {
-  eq: UserRoles
-  neq: UserRoles
-  in: [UserRoles!]
-  nin: [UserRoles!]
+  eq: UserRoles @cost(weight: "10")
+  neq: UserRoles @cost(weight: "10")
+  in: [UserRoles!] @cost(weight: "10")
+  nin: [UserRoles!] @cost(weight: "10")
 }
 
 input UsersFilterInput {
@@ -602,33 +604,37 @@ input UsersFilterInput {
 }
 
 input UsersSortInput {
-  userName: SortEnumType
-  creationDate: SortEnumType
-  fullName: SortEnumType
-  email: SortEnumType
-  phoneNumber: SortEnumType
-  isLocked: SortEnumType
-  isArchived: SortEnumType
+  userName: SortEnumType @cost(weight: "10")
+  creationDate: SortEnumType @cost(weight: "10")
+  fullName: SortEnumType @cost(weight: "10")
+  email: SortEnumType @cost(weight: "10")
+  phoneNumber: SortEnumType @cost(weight: "10")
+  isLocked: SortEnumType @cost(weight: "10")
+  isArchived: SortEnumType @cost(weight: "10")
 }
 
 input UuidOperationFilterInput {
-  eq: UUID
-  neq: UUID
-  in: [UUID]
-  nin: [UUID]
-  gt: UUID
-  ngt: UUID
-  gte: UUID
-  ngte: UUID
-  lt: UUID
-  nlt: UUID
-  lte: UUID
-  nlte: UUID
+  eq: UUID @cost(weight: "10")
+  neq: UUID @cost(weight: "10")
+  in: [UUID] @cost(weight: "10")
+  nin: [UUID] @cost(weight: "10")
+  gt: UUID @cost(weight: "10")
+  ngt: UUID @cost(weight: "10")
+  gte: UUID @cost(weight: "10")
+  ngte: UUID @cost(weight: "10")
+  lt: UUID @cost(weight: "10")
+  nlt: UUID @cost(weight: "10")
+  lte: UUID @cost(weight: "10")
+  nlte: UUID @cost(weight: "10")
 }
 
+"Defines when a policy shall be executed."
 enum ApplyPolicy {
+  "Before the resolver was executed."
   BEFORE_RESOLVER
+  "After the resolver was executed."
   AFTER_RESOLVER
+  "The policy is applied in the validation step before the execution."
   VALIDATION
 }
 
@@ -729,9 +735,11 @@ enum VariableType {
   STRING
 }
 
-directive @allowAnonymous repeatable on FIELD_DEFINITION
-
+"The authorize directive."
 directive @authorize("The name of the authorization policy that determines access to the annotated resource." policy: String "Roles that are allowed to access the annotated resource." roles: [String!] "Defines when when the authorize directive shall be applied.By default the authorize directives are applied during the validation phase." apply: ApplyPolicy! = BEFORE_RESOLVER) repeatable on OBJECT | FIELD_DEFINITION
+
+"The purpose of the `cost` directive is to define a `weight` for GraphQL types, fields, and arguments. Static analysis can use these weights when calculating the overall cost of a query or response."
+directive @cost("The `weight` argument defines what value to add to the overall cost for every appearance, or possible appearance, of a type, field, argument, etc." weight: String!) on SCALAR | OBJECT | FIELD_DEFINITION | ARGUMENT_DEFINITION | ENUM | INPUT_FIELD_DEFINITION
 
 "The `@specifiedBy` directive is used within the type system definition language to provide a URL for specifying the behavior of custom scalar definitions."
 directive @specifiedBy("The specifiedBy URL points to a human-readable specification. This field will only read a result for scalar types." url: String!) on SCALAR
@@ -744,7 +752,7 @@ scalar Date
 "The `DateTime` scalar represents an ISO-8601 compliant date time type."
 scalar DateTime @specifiedBy(url: "https:\/\/www.graphql-scalars.com\/date-time")
 
-"The built-in `Decimal` scalar type."
+"The `Decimal` scalar type represents a decimal floating-point number."
 scalar Decimal
 
 "The `Long` scalar type represents non-fractional signed whole 64-bit numeric values. Long can represent values between -(2^63) and 2^63 - 1."

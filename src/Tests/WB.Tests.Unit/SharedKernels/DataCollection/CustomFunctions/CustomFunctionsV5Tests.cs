@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using NUnit.Framework.Legacy;
 using WB.Core.SharedKernels.DataCollection.V5.CustomFunctions;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
@@ -39,7 +40,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
             
             foreach (var email in validEmails)
             {
-                Assert.IsTrue(email.IsValidEmail());
+                ClassicAssert.IsTrue(email.IsValidEmail());
             }
         }
 
@@ -61,7 +62,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
 
             foreach (var email in invalidEmails)
             {
-                Assert.IsFalse(email.IsValidEmail());
+                ClassicAssert.IsFalse(email.IsValidEmail());
             }
         }
 

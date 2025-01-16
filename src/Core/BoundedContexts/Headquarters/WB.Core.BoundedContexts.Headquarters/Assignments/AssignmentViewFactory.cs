@@ -258,6 +258,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                             q.Quantity
                         };
                         break;
+                    case AssignmentTargetAreaChanged t:
+                        historyItem.Action = AssignmentHistoryAction.TargetAreaChanged;
+                        historyItem.AdditionalData = new
+                        {
+                            t.TargetArea
+                        };
+                        break;
                     case AssignmentReassigned r:
                         historyItem.Action = AssignmentHistoryAction.Reassigned;
                         var targetLogin =

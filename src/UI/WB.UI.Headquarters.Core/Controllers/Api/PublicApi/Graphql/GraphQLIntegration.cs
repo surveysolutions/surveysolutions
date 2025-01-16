@@ -49,12 +49,16 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
 
             return services
                 .AddGraphQLServer()
+                .AllowIntrospection(true) 
+                .ModifyOptions(o => o.EnableDirectiveIntrospection = true)
+                .InitializeOnStartup()
                 .ConfigureSchema(x=>
                 {
                     x.Use<WorkspaceGraphQlMiddleware>();
                 })
                 .AddAuthorization()
-                .SetPagingOptions(new PagingOptions(){MaxPageSize = 200})
+                .ModifyPagingOptions(o => { o.MaxPageSize = 200; })
+                .ModifyCostOptions(o => { o.EnforceCostLimits = false; })
                 .AddQueryType(x => x.Name("HeadquartersQuery"))
                 .AddType<AssignmentsQueryExtension>()
                 .AddType<InterviewsQueryExtension>()
@@ -72,7 +76,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
                 .AddConvention<INamingConventions>(new CompatibilityNamingConvention())
                 .BindRuntimeType<string, CustomStringOperationFilterInput>()
                 .BindRuntimeType<IdentifyEntityValue, IdentifyEntityValueFilterInput>()
+                .AddType<IdentifyEntityValueFilterInput>()
                 .BindRuntimeType<QuestionnaireCompositeItem, QuestionnaireItemsFilterType>()
+                .AddType<QuestionnaireItemsFilterType>()
                 .AddSorting();
         }
 
@@ -94,8 +100,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
                 throw new ArgumentNullException(nameof(app));
             }
             
-            var options = new GraphQLServerOptions {EnableSchemaRequests = true};
+            var options = new GraphQLServerOptions { EnableSchemaRequests = true };
             //options.Tool.Credentials = DefaultCredentials.Include;
+            options.Tool.DisableTelemetry = true;
             
             return app.UseEndpoints(x => x.MapGraphQL().WithOptions(options));
         }

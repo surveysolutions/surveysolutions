@@ -18,6 +18,8 @@
     
     <dimen name="dashboard_card_base_margin">14dp</dimen>
     <dimen name="dashboard_card_duo_margin">28dp</dimen>
+
+    <dimen name="dashboard_card_extra_margin">20dp</dimen>    
     
     <dimen name="Dashboard_Layout_border_width">1dp</dimen>
     <dimen name="Dashboard_Layout_border_radius">3dp</dimen>

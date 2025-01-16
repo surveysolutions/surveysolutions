@@ -30,7 +30,7 @@ namespace WB.UI.Shared.Web.Versions
             this.historyStorage.Store(versionChange, versionChange.UpdateTimeUtc);
         }
 
-        private string GetLastRegisteredVersion()
+        private string? GetLastRegisteredVersion()
                => this.historyStorage.Query(_
                     => _.OrderByDescending(change => change.UpdateTimeUtc)
                         .FirstOrDefault()?

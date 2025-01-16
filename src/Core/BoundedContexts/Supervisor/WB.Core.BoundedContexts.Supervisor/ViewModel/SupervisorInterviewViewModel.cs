@@ -27,12 +27,13 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         }
 
         public override IMvxCommand ReloadCommand => new MvxAsyncCommand(async () 
-            => await this.ViewModelNavigationService.NavigateToInterviewAsync(this.InterviewId, this.NavigationState.CurrentNavigationIdentity));
+            => await this.ViewModelNavigationService.NavigateToInterviewAsync(this.InterviewId, 
+                this.NavigationState.CurrentNavigationIdentity));
 
 
         public override async Task NavigateBack()
         {
-            await this.ViewModelNavigationService.NavigateToDashboardAsync(this.InterviewId);
+            await this.ViewModelNavigationService.NavigateFromInterviewAsync(this.InterviewId);
             this.Dispose();
         }
 

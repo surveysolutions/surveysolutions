@@ -3,6 +3,9 @@
 	  xmlns:local="http://schemas.android.com/apk/res-auto"
       android:id="@+id/menu">
   <item
+      android:id="@+id/menu_return"
+      local:showAsAction="never" />
+  <item
       android:id="@+id/menu_dashboard"
       local:showAsAction="never" />
   <item

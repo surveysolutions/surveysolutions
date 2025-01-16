@@ -9,10 +9,10 @@
                                 {{ this.$t('Pages.Questionnaire_Info') }}:
                                 <b>
                                     {{ $t('Pages.QuestionnaireNameVersionFirst',
-                                    {
-                                        name: model.title,
-                                        version: model.version,
-                                    }) }}
+                                        {
+                                            name: model.title,
+                                            version: model.version,
+                                        }) }}
                                     <a :href="model.designerUrl" target="_blank" v-if="model.designerUrl != null">
                                         <span :title="$t('Dashboard.ShowOnDesigner')" class="glyphicon glyphicon-link">
                                         </span>
@@ -23,7 +23,7 @@
                         <div class="questionnaire-details-actions clearfix">
                             <div class="buttons-container">
                                 <div class="dropdown aside-menu" :disabled="model.isObserving">
-                                    <button type="button" data-toggle="dropdown" aria-haspopup="true"
+                                    <button type="button" data-bs-toggle="dropdown" aria-haspopup="true"
                                         aria-expanded="false" class="btn btn-link" :disabled="model.isObserving">
                                         <span></span>
                                     </button>
@@ -93,11 +93,11 @@
                                 <td>{{ $t('Dashboard.ImportedBy') }}</td>
                                 <td>
                                     {{ model.importedBy != null
-                                    ? $t('Dashboard.ImportedByText', {
-                                        role: $t('Roles.' + model.importedBy.role),
-                                        name: model.importedBy.name
-                                    })
-                                    : ''
+                                        ? $t('Dashboard.ImportedByText', {
+                                            role: $t('Roles.' + model.importedBy.role),
+                                            name: model.importedBy.name
+                                        })
+                                        : ''
                                     }}
                                 </td>
                             </tr>
@@ -206,15 +206,17 @@
             </div>
             <ModalFrame ref="audioAuditModal" :title="$t('Pages.ConfirmationNeededTitle')" :canClose="false">
                 <p>{{ $t('Pages.GlobalSettings_TurningAudioAuditOn') }}</p>
-                <div slot="actions">
-                    <button type="button" class="btn btn-danger" v-bind:disabled="model.isObserving"
-                        @click="recordAudioSend">
-                        {{ $t('Common.Ok') }}
-                    </button>
-                    <button type="button" class="btn btn-link" data-dismiss="modal" @click="cancelSetAudio">
-                        {{ $t('Common.Cancel') }}
-                    </button>
-                </div>
+                <template v-slot:actions>
+                    <div>
+                        <button type="button" class="btn btn-danger" v-bind:disabled="model.isObserving"
+                            @click="recordAudioSend(true)">
+                            {{ $t('Common.Ok') }}
+                        </button>
+                        <button type="button" class="btn btn-link" data-bs-dismiss="modal" @click="cancelSetAudio">
+                            {{ $t('Common.Cancel') }}
+                        </button>
+                    </div>
+                </template>
             </ModalFrame>
 
             <ModalFrame ref="criticalityLevelModal"
@@ -236,15 +238,17 @@
                         </Typeahead>
                     </div>
                 </form>
-                <div slot="actions">
-                    <button type="button" class="btn btn-primary" @click="updateCriticalityLevel"
-                        :disabled="!showSelectors">
-                        {{ $t('Common.Save') }}
-                    </button>
-                    <button type="button" class="btn btn-link" data-dismiss="modal">
-                        {{ $t('Common.Cancel') }}
-                    </button>
-                </div>
+                <template v-slot:actions>
+                    <div>
+                        <button type="button" class="btn btn-primary" @click="updateCriticalityLevel"
+                            :disabled="!showSelectors">
+                            {{ $t('Common.Save') }}
+                        </button>
+                        <button type="button" class="btn btn-link" data-bs-dismiss="modal">
+                            {{ $t('Common.Cancel') }}
+                        </button>
+                    </div>
+                </template>
             </ModalFrame>
         </div>
     </main>
@@ -276,7 +280,7 @@ export default {
     },
     mounted() {
         this.audioAudit = this.$config.model.audioAudit
-        this.criticalityLevelDisplay = find(this.$config.model.criticalityLevels, { key: this.model.criticalityLevel }).value
+        this.criticalityLevelDisplay = find(this.$config.model.criticalityLevels, { key: this.model.criticalityLevel })?.value
     },
     methods: {
         assignSelected() { },
@@ -293,7 +297,8 @@ export default {
                     backdrop: 'static',
                     keyboard: false,
                 })
-            else return this.recordAudioSend()
+            else
+                return this.recordAudioSend(false)
         },
         criticalityLevelChange() {
             this.criticalityLevel = find(this.$config.model.criticalityLevels, { key: this.model.criticalityLevel })
@@ -308,15 +313,18 @@ export default {
             if (response.status === 204) {
                 this.model.criticalityLevel = this.criticalityLevel.key;
                 this.criticalityLevelDisplay = find(this.$config.model.criticalityLevels, { key: this.model.criticalityLevel }).value
-                this.$refs.criticalityLevelModal.modal('hide');
+                this.$refs.criticalityLevelModal.hide();
             }
         },
-        async recordAudioSend() {
+        async recordAudioSend(needToCloseModal) {
             const response = await this.$hq
                 .Questionnaire(this.model.questionnaireId, this.model.version)
                 .AudioAudit(this.audioAudit)
-            if (response.status !== 204) this.audioAudit = !this.audioAudit
-            this.$refs.audioAuditModal.modal('hide')
+            if (response.status !== 204)
+                this.audioAudit = !this.audioAudit
+
+            if (needToCloseModal)
+                this.$refs.audioAuditModal.hide()
         },
         cancelSetAudio() {
             this.audioAudit = false

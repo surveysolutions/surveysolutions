@@ -51,6 +51,8 @@ namespace WB.UI.Tester.Activities
                 this.SetPreferenceTitleAndSummary(TesterSettings.DesignerEndpointParameterName, TesterUIResources.Prefs_DesignerEndPointTitle, settings.Endpoint);
                 this.SetPreferenceTitleAndSummary("AcceptUnsignedSslCertificate", TesterUIResources.Prefs_AcceptUnsignedTitle, TesterUIResources.Prefs_AcceptUnsignedSummary);
 
+                this.SetPreferenceTitleAndSummary(TesterSettings.TestApplicationCrash, "Crash application", string.Empty);
+                
                 this.SetBooleanPreferenceTitleAndSummary(TesterSettings.ShowVariablesParameterName, TesterUIResources.Prefs_ShowVariables,
                     settings.ShowVariables ? TesterUIResources.Prefs_ShowVariablesSummary_Checked : TesterUIResources.Prefs_ShowVariablesSummary_UnChecked, settings.ShowVariables);
                 this.FindPreference(TesterSettings.ShowVariablesParameterName).PreferenceChange += (sender, args) =>
@@ -60,6 +62,11 @@ namespace WB.UI.Tester.Activities
                         TesterUIResources.Prefs_ShowVariablesSummary_Checked
                         : TesterUIResources.Prefs_ShowVariablesSummary_UnChecked;
                     checkBoxPreference.Summary = summary;
+                };
+                
+                this.FindPreference(TesterSettings.TestApplicationCrash).PreferenceChange += (sender, args) =>
+                {
+                    throw new InvalidOperationException("Test Exception" + " Should not have clicked this!");
                 };
 
                 this.SetBooleanPreferenceTitleAndSummary(TesterSettings.ShowAnsweringTimeName, TesterUIResources.Prefs_ShowAnswerTime, TesterUIResources.Prefs_ShowAnswerTimeSummary, settings.ShowAnswerTime);

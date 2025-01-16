@@ -28,6 +28,7 @@
         UserPasswordChanged = 23,
         UserPasswordChangeFailed = 24,
         EsriApiKeyChanged = 25,        
-        ActionOnSubmissionChanged = 26
+        ActionOnSubmissionChanged = 26,
+        AssignmentTargetAreaChanged = 27,
     }
 }

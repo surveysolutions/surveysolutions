@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using WB.Infrastructure.Native.Workspaces;
 
@@ -23,7 +24,13 @@ namespace WB.UI.Shared.Web.Extensions
         public static string ActionAtWorkspace(this IUrlHelper helper, WorkspaceContext workspaceContext, 
             string action, string controller)
         {
-            return workspaceContext.PathBase + "/" + workspaceContext.Name + "/" + helper.Action(action, controller);
+            var original = helper.Action(action, controller);
+            var strings = original?.Split('/');
+            if (strings == null || strings.Length < 2)
+                return original ?? String.Empty;
+            strings[1] = workspaceContext.Name;
+            var newAction = string.Join('/', strings);
+            return newAction;
         }
     }
 }

@@ -1,29 +1,29 @@
 <template>
     <div>
-        <OverviewItem
-            v-for="item in items"
-            :key="item.id"
-            :item="item"
-            @mount="registerItemToStick"/>
+        <OverviewItem v-for="item in items" :key="item.id" :item="item" @mount="registerItemToStick" />
 
-        <infinite-loading
-            ref="loader"
-            v-if="overview.total > 0 && items.length > 0"
-            @infinite="infiniteHandler"
+        <infinite-loading ref="loader" v-if="overview.total > 0 && items.length > 0" @infinite="infiniteHandler"
             :distance="1000">
-            <span slot="no-more"></span>
-            <span slot="no-results"></span>
+            <template #complete>
+                <span slot="no-more"></span>
+            </template>
         </infinite-loading>
     </div>
 </template>
 
 <script>
-import InfiniteLoading from 'vue-infinite-loading'
+import InfiniteLoading from "v3-infinite-loading";
+import "v3-infinite-loading/lib/style.css";
+
 import OverviewItem from './components/OverviewItem'
-import {slice, sortedIndexBy} from 'lodash'
+import { slice, sortedIndexBy } from 'lodash'
 
 export default {
-    components: {InfiniteLoading, OverviewItem},
+    components:
+    {
+        InfiniteLoading,
+        OverviewItem
+    },
 
     data() {
         return {
@@ -55,7 +55,7 @@ export default {
         currentSection() {
             if (this.sticked.length == 0) return null
 
-            const index = sortedIndexBy(this.sticked, {top: this.scroll + this.breadcrumbsOffset()}, it => it.top)
+            const index = sortedIndexBy(this.sticked, { top: this.scroll + this.breadcrumbsOffset() }, it => it.top)
 
             const item = this.sticked[index > 0 ? index - 1 : index]
             return item.item
@@ -83,9 +83,11 @@ export default {
 
             self.loaded += 500
 
-            $state.loaded()
             if (self.overview.isLoaded && self.loaded >= self.overview.total) {
                 $state.complete()
+            }
+            else {
+                $state.loaded()
             }
         },
 
@@ -97,11 +99,9 @@ export default {
             const item = arg.item
             const top = arg.el.offsetTop
 
-            const index = sortedIndexBy(this.sticked, {top}, it => it.top)
-            this.sticked.splice(index, 0, {top, item})
+            const index = sortedIndexBy(this.sticked, { top }, it => it.top)
+            this.sticked.splice(index, 0, { top, item })
         },
     },
 }
 </script>
-
-

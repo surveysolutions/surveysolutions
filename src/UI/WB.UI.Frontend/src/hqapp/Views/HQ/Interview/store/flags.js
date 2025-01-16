@@ -1,7 +1,4 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-
-Vue.use(Vuex)
+import { api } from '~/webinterview/api/http'
 
 export default {
     state: {
@@ -10,15 +7,15 @@ export default {
 
     actions: {
         setFlag({ commit, dispatch }, { questionId, hasFlag }) {
-            return Vue.$api.interview.answer(questionId, 'setFlag', { hasFlag })
+            return api.answer(questionId, 'setFlag', { hasFlag })
                 .then(() => {
                     commit('SET_FLAG', { questionId, hasFlag })
                     dispatch('refreshSearchResults')
-                    dispatch('fetchEntity',  { id:  questionId })
+                    dispatch('fetchEntity', { id: questionId })
                 })
         },
         async fetchFlags({ commit }) {
-            const flags = await Vue.$api.interview.get('getFlags')
+            const flags = await api.get('getFlags')
             commit('SET_FLAGS', { flags })
         },
     },
@@ -26,9 +23,9 @@ export default {
     mutations: {
         SET_FLAG(state, { questionId, hasFlag }) {
             if (hasFlag) {
-                Vue.set(state.flagged, questionId, true)
+                state.flagged[questionId] = true
             } else {
-                Vue.delete(state.flagged, questionId)
+                delete state.flagged[questionId]
             }
         },
         SET_FLAGS(state, { flags }) {

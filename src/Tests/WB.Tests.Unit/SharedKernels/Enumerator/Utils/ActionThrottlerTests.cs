@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using WB.Core.SharedKernels.Enumerator.Utils;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.Utils
@@ -17,7 +18,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Utils
 
             Thread.Sleep(1000);
 
-            Assert.True(isPass);
+            ClassicAssert.True(isPass);
         }
 
         [Test]
@@ -32,7 +33,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Utils
 
             Thread.Sleep(500);
 
-            Assert.False(isPass);
+            ClassicAssert.False(isPass);
         }
 
         [Test]
@@ -57,7 +58,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Utils
 
             Thread.Sleep(500);
 
-            Assert.False(isPass);
+            ClassicAssert.False(isPass);
         }
     }
 }

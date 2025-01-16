@@ -1,4 +1,4 @@
-import Vue from 'vue'
+import { nextTick } from 'vue'
 import { isEqual, isNaN, clone, assign } from 'lodash'
 
 export default {
@@ -14,7 +14,7 @@ export default {
 
     computed: {
         query() {
-            return this.$store.state.route.query
+            return this.$route.query
         },
     },
 
@@ -27,7 +27,7 @@ export default {
             const self = this
 
             if (wereEmpty) {
-                Vue.nextTick(() => {
+                nextTick(() => {
                     const changes = self.changesQueue
                     self.changesQueue = []
 
@@ -51,7 +51,7 @@ export default {
 
             // clean up uri from default values
             Object.keys(newQuery).forEach(key => {
-                if (newQuery[key] && !isNaN(newQuery[key])) {
+                if (newQuery[key] == 0 || (newQuery[key] && !isNaN(newQuery[key]))) {
                     query[key] = newQuery[key]
                 }
             })

@@ -1,35 +1,26 @@
 <template>
-    <HqLayout
-        :title="$t('Pages.SurveysAndStatuses_Overview')"
-        :subtitle="$t('Pages.SurveysAndStatuses_SupervisorDescription')"
-        :hasFilter="true">
-        <div slot="subtitle">
-            <p v-if="questionnaireId != null">
-                <a id="lnkBackToQuestionnaires"
-                    :href="$config.model.selfUrl">{{$t('Reports.ToAllQuestionnaires')}}</a>
-            </p>
-        </div>
-        <Filters slot="filters">
-            <FilterBlock :title="$t('Pages.SurveysAndStatuses_InterviewerTitle')">
-                <Typeahead
-                    control-id="responsibleSelector"
-                    ref="responsibleIdControl"
-                    data-vv-name="responsibleId"
-                    data-vv-as="responsible"
-                    :placeholder="$t('Strings.AllInterviewers')"
-                    :value="responsible"
-                    v-on:selected="selectResponsible"
-                    :fetch-url="$config.model.responsiblesUrl"/>
-            </FilterBlock>
-        </Filters>
+    <HqLayout :title="$t('Pages.SurveysAndStatuses_Overview')"
+        :subtitle="$t('Pages.SurveysAndStatuses_SupervisorDescription')" :hasFilter="true">
+        <template v-slot:subtitle>
+            <div>
+                <p v-if="questionnaireId != null">
+                    <a id="lnkBackToQuestionnaires" :href="$config.model.selfUrl">{{ $t('Reports.ToAllQuestionnaires')
+                        }}</a>
+                </p>
+            </div>
+        </template>
+        <template v-slot:filters>
+            <Filters>
+                <FilterBlock :title="$t('Pages.SurveysAndStatuses_InterviewerTitle')">
+                    <Typeahead control-id="responsibleSelector" ref="responsibleIdControl" data-vv-name="responsibleId"
+                        data-vv-as="responsible" :placeholder="$t('Strings.AllInterviewers')" :value="responsible"
+                        v-on:selected="selectResponsible" :fetch-url="$config.model.responsiblesUrl" />
+                </FilterBlock>
+            </Filters>
+        </template>
 
-        <DataTables
-            ref="table"
-            :tableOptions="tableOptions"
-            :addParamsToRequest="addFilteringParams"
-            :no-search="true"
-            exportable
-            :hasTotalRow="questionnaireId != null"></DataTables>
+        <DataTables ref="table" :tableOptions="tableOptions" :addParamsToRequest="addFilteringParams" :no-search="true"
+            exportable :hasTotalRow="questionnaireId != null"></DataTables>
     </HqLayout>
 </template>
 <script>
@@ -45,8 +36,8 @@ export default {
         }
     },
     mounted() {
-        if(this.$route.query.responsible) {
-            this.responsible = {key: '1', value: this.$route.query.responsible}
+        if (this.$route.query.responsible) {
+            this.responsible = { key: '1', value: this.$route.query.responsible }
         }
     },
     methods: {
@@ -55,7 +46,7 @@ export default {
                 data.responsibleName = this.responsible.value
             }
 
-            if(this.questionnaireId) {
+            if (this.questionnaireId) {
                 data.questionnaireId = this.questionnaireId
             }
         },
@@ -66,12 +57,12 @@ export default {
             })
         },
         reloadTable() {
-            if(this.$refs.table != null) {
+            if (this.$refs.table != null) {
                 this.$refs.table.reload()
             }
         },
         getLinkToInterviews(data, row, status) {
-            if(data == 0)
+            if (data == 0)
                 return `<span>${data}</span>`
             const responsibleName = (this.responsible || {}).value
             const url = `${this.$config.model.interviewsUrl}?questionnaireId=${row.questionnaireId}&questionnaireVersion=${row.questionnaireVersion || ''}&responsibleName=${encodeURI(responsibleName || '')}&status=${status.toUpperCase()}`
@@ -93,7 +84,7 @@ export default {
                     className: 'type-title changed-recently',
                     name: 'QuestionnaireTitle',
                     render(data, type, row) {
-                        if(self.questionnaireId != null) {
+                        if (self.questionnaireId != null) {
                             if (!data) {
                                 return self.$t('Strings.AllQuestionnaires')
                             }
@@ -195,7 +186,7 @@ export default {
                 },
             ]
 
-            if(self.questionnaireId) {
+            if (self.questionnaireId) {
                 columns.splice(1, 0,
                     {
                         data: 'questionnaireVersion',
@@ -218,7 +209,7 @@ export default {
                 bInfo: false,
                 footer: true,
                 responsive: false,
-                createdRow: function(row) {
+                createdRow: function (row) {
                     $(row)
                         .find('td:eq(0)')
                         .attr('nowrap', 'nowrap')

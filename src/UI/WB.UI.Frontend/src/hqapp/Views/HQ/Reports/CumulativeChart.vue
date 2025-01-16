@@ -1,107 +1,119 @@
-<script>
-import {Line} from 'vue-chartjs'
-import Vue from 'vue'
-import {assign} from 'lodash'
+<template>
+    <div class="interviewChart">
+        <Line :data="chartData" ref="chart" :options="chartOptions" />
+    </div>
+</template>
 
+<script>
 const chartOptions = {
-    chartId: 'interviewChart',
     elements: {
-        point: {radius: 0},
-        line: {fill: true, tension: 0},
+        point: { radius: 0 },
+        line: { fill: true, tension: 0 },
     },
     responsive: true,
     maintainAspectRatio: false,
-    tooltips: {
-        mode: 'x',
-        intersect: false,
+    layout: {
+        padding: 5
     },
-    hover: {
+    interaction: {
+        intersect: false,
         mode: 'index',
-        intersect: false,
     },
-
+    plugins: {
+        legend: {
+            display: true,
+            position: 'top',
+        },
+        tooltip: {
+            mode: 'x',
+            intersect: false,
+            position: 'average',
+        }
+    },
     scales: {
-        xAxes: [
-            {
-                type: 'time',
-
-                gridLines: {
-                    display: true,
-                    tickMarkLength: 10,
-                },
-
-                ticks: {
-                    source: 'data',
-                    autoSkipPadding: 10,
-                    maxRotation: 45,
-                    autoSkip: true,
-                },
-                time: {
-                    bounds: 'ticks',
-                    minUnit: 'day',
-                    displayFormats: {
-                        week: 'll',
-                        day: 'MMM D YYYY',
-                    },
+        x:
+        {
+            type: 'time',
+            gridLines: {
+                display: true,
+                tickMarkLength: 10,
+            },
+            time: {
+                bounds: 'ticks',
+                minUnit: 'day',
+                displayFormats: {
+                    week: 'll',
+                    day: 'MMM D YYYY',
                 },
             },
-        ],
-        yAxes: [
-            {
-                afterDataLimits: function(axis) {
-                    axis.max += 1 // add 1px to top
-                    axis.min = 0
-                },
-                type: 'linear',
-                stacked: true,
-                ticks: {
-                    beginAtZero: true,
-                    userCallback: function(label, index, labels) {
-                        // when the floored value is the same as the value we have a whole number
-                        if (Math.floor(label) === label) {
-                            return label
-                        }
-                    },
+            ticks: {
+                source: 'data',
+                autoSkipPadding: 10,
+                maxRotation: 45,
+                autoSkip: true,
+            },
+        },
+        y:
+        {
+            afterDataLimits: function (axis) {
+                axis.max += 1 // add 1px to top
+                axis.min = 0
+            },
+            type: 'linear',
+            stacked: true,
+            beginAtZero: true,
+            ticks: {
+                beginAtZero: true,
+                callback: function (label, index, labels) {
+                    // when the floored value is the same as the value we have a whole number
+                    if (Math.floor(label) === label) {
+                        return label
+                    }
                 },
             },
-        ],
+        },
     },
 }
 
+import { Line } from 'vue-chartjs'
+import 'chartjs-adapter-moment'
+import { Chart, LineController, Title, Tooltip, Legend, LineElement, PointElement, LinearScale, CategoryScale, TimeScale, Filler } from 'chart.js';
+
+Chart.register(LineController, Title, Tooltip, Legend, LineElement, PointElement, LinearScale, CategoryScale, TimeScale, Filler);
+
+
 export default {
-    extends: Line,
+    name: 'ComulativeLineChart',
+    components: { Line },
     props: {
-        options: {required: false},
-        height: {default: 600},
+        chartData: {
+            type: Object,
+            required: true
+        },
+        options: {
+            type: Object,
+            required: false
+        }
     },
+    computed: {
+        chartOptions() {
+            var self = this
+            this.options.animation = {
+                onComplete: () => {
+                    self.$emit('ready')
+                }
+            }
 
-    mounted() {
-        this.$emit('mounted')
+            return Object.assign(chartOptions, this.options)
+        }
     },
-
+    expose: ['getImage'],
     methods: {
-        render(chartData) {
-            this.renderChart(
-                chartData,
-                assign(
-                    chartOptions,
-                    {
-                        animation: {
-                            onComplete: () => {
-                                this.$emit('ready')
-                            },
-                        },
-                    },
-                    this.options
-                )
-            )
-        },
-
         getImage() {
-            if (this.$data._chart == null) return null
+            if (this.$refs.chart.chart == null) return null
+            return this.$refs.chart.chart.canvas.toDataURL('image/png')
+        }
+    }
 
-            return this.$data._chart.canvas.toDataURL('image/png')
-        },
-    },
 }
 </script>

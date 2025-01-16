@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
+using WB.Core.BoundedContexts.Headquarters.GeoTracking;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
@@ -40,6 +41,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         private readonly IAssignmentPasswordGenerator passwordGenerator;
         private readonly ICommandService commandService;
         private readonly IAssignmentFactory assignmentFactory;
+        private readonly IPlainStorageAccessor<GeoTrackingRecord> geoTrackingStorage;
 
         public AssignmentsApiController(IAssignmentViewFactory assignmentViewFactory,
             IAuthorizedUser authorizedUser,
@@ -51,7 +53,8 @@ namespace WB.UI.Headquarters.Controllers.Api
             IStatefulInterviewRepository interviews, 
             IAssignmentPasswordGenerator passwordGenerator,
             ICommandService commandService,
-            IAssignmentFactory assignmentFactory)
+            IAssignmentFactory assignmentFactory,
+            IPlainStorageAccessor<GeoTrackingRecord> geoTrackingStorage)
         {
             this.assignmentViewFactory = assignmentViewFactory;
             this.authorizedUser = authorizedUser;
@@ -64,6 +67,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             this.passwordGenerator = passwordGenerator;
             this.commandService = commandService;
             this.assignmentFactory = assignmentFactory;
+            this.geoTrackingStorage = geoTrackingStorage;
         }
         
         [HttpGet]
@@ -259,7 +263,6 @@ namespace WB.UI.Headquarters.Controllers.Api
 
             try
             {
-
                 var assignment = assignmentFactory.CreateAssignment(authorizedUser.Id,
                 interview.QuestionnaireIdentity,
                 request.ResponsibleId,
@@ -270,7 +273,8 @@ namespace WB.UI.Headquarters.Controllers.Api
                 isAudioRecordingEnabled,
                 answers,
                 null,
-                request.Comments);
+                request.Comments,
+                string.IsNullOrWhiteSpace(request.TargetArea) ? null : request.TargetArea.Trim());
                 
                 this.invitationService.CreateInvitationForWebInterview(assignment);
                 
@@ -292,6 +296,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             public bool? WebMode { get; set; }
             public bool? IsAudioRecordingEnabled { get; set; }
             public string Comments { get; set; }
+            public string TargetArea { get; set; }
         }
 
         public class UpdateAssignmentRequest

@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -176,7 +177,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             //act
             var isKeywordReserved = keywordProvider.IsReservedKeyword(keyword);
             //assert
-            Assert.IsTrue(isKeywordReserved);
+            ClassicAssert.IsTrue(isKeywordReserved);
         }
 
         [TestCase("myvar")]
@@ -189,7 +190,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             //act
             var isKeywordReserved = keywordProvider.IsReservedKeyword(keyword);
             //assert
-            Assert.IsFalse(isKeywordReserved);
+            ClassicAssert.IsFalse(isKeywordReserved);
         }
 
         protected static IKeywordsProvider CreateKeywordsProvider(ISubstitutionService substitutionService = null)

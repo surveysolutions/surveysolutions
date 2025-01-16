@@ -13,16 +13,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
     {
         private readonly IViewModelEventRegistry eventRegistry;
         private readonly IEnumeratorSettings settings;
-        private readonly IVirbationService virbationService;
+        private readonly IVibrationService vibrationService;
 
         public VibrationViewModel(
             IViewModelEventRegistry eventRegistry,
             IEnumeratorSettings settings,
-            IVirbationService virbationService)
+            IVibrationService vibrationService)
         {
             this.eventRegistry = eventRegistry;
             this.settings = settings;
-            this.virbationService = virbationService;
+            this.vibrationService = vibrationService;
         }
 
         public void Initialize(string interviewId)
@@ -37,11 +37,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private void Vibrate()
         {
             if (this.settings.VibrateOnError)
-                this.virbationService.Vibrate();
+                this.vibrationService.Vibrate();
 
         }
-        public void Disable() => this.virbationService.Disable();
-        public void Enable() => this.virbationService.Enable();
+        public void Disable() => this.vibrationService.Disable();
+        public void Enable() => this.vibrationService.Enable();
 
         public void Dispose() => this.eventRegistry.Unsubscribe(this);
     }

@@ -2,14 +2,14 @@
     this.ViewBag.Title = "Control Panel: Expression Generation";
 }
 <style type="text/css">
-pre.wrap {
-    white-space: pre-wrap;       
-    white-space: -moz-pre-wrap;  
-    white-space: -pre-wrap;      
-    white-space: -o-pre-wrap;    
-}
+    pre.wrap {
+        white-space: pre-wrap;
+        white-space: -moz-pre-wrap;
+        white-space: -pre-wrap;
+        white-space: -o-pre-wrap;
+    }
 </style>
-<div id="edit-form" >
+<div id="edit-form">
     <h3>Questionnaire Expression Generation</h3>
 
     <div class="well">
@@ -17,10 +17,10 @@ pre.wrap {
             <div class="form-group">
                 <label for="questionnaireId" class="col-xs-3 control-label">Questionnaire identifier</label>
                 <div class="col-xs-7">
-                    <input id="questionnaireId" type="text" class="form-control" value="@ViewBag.QuestionnaireId"/>
+                    <input id="questionnaireId" type="text" class="form-control" value="@ViewBag.QuestionnaireId" />
                 </div>
                 <div class="col-xs-2">
-                    <input id="version" type="text" class="form-control" value=""/>
+                    <input id="version" type="text" class="form-control" value="" />
                 </div>
             </div>
             <div class="form-group">
@@ -34,7 +34,8 @@ pre.wrap {
         </form>
     </div>
 
-    <pre id="resultArea" class="wrap" style="height: 800px; overflow-y: scroll;"></pre></div>
+    <pre id="resultArea" class="wrap" style="height: 800px; overflow-y: scroll;"></pre>
+</div>
 
 @section scripts
 {
@@ -45,7 +46,7 @@ pre.wrap {
 
     <script type="text/javascript">
 
-        $(function () {
+        document.addEventListener('DOMContentLoaded', function () {
 
             var editor = ace.edit("resultArea");
             editor.setTheme("ace/theme/github");
@@ -56,7 +57,7 @@ pre.wrap {
                 highlightGutterLine: false
             });
 
-            $('#getPartial').click(function() {
+            $('#getPartial').click(function () {
                 performPrettyAjaxRequest($('#outputResult'), {
                     type: 'GET',
                     url: '@Url.Action("GetAllClassesForLatestVersion", "ExpressionGeneration")',
@@ -64,7 +65,7 @@ pre.wrap {
                 });
             });
 
-            $('#getAssembly').click(function() {
+            $('#getAssembly').click(function () {
                 $('#outputResult').text("sending request...");
                 editor.setValue("");
                 downloadURL('@Url.Action("GetLatestVersionAssembly", "ExpressionGeneration")' + '?id=' + $('#questionnaireId').val() + "&version=" + $('#version').val())
@@ -76,10 +77,10 @@ pre.wrap {
                     type: 'GET',
                     url: '@Url.Action("GetCompilationResultForLatestVersion", "ExpressionGeneration")',
                     data: { id: $('#questionnaireId').val(), version: $('#version').val() },
-                }, function(response) {
+                }, function (response) {
                     var errors = response.responseJSON;
                     var errorList = "";
-                    $.each(errors, function(i) {
+                    $.each(errors, function (i) {
                         errorList += errors[i] + "\n";
                     });
 
@@ -96,7 +97,7 @@ pre.wrap {
                 ).done(function (result) {
                     editor.setValue(result);
                     $output.text("done");
-                }).fail(function(xhr, status, error) {
+                }).fail(function (xhr, status, error) {
                     $output.text("failed: " + error + "\r\n" + getExceptionDetails(xhr));
                     if (faildRequestProcessor !== undefined) {
                         try {
@@ -104,7 +105,7 @@ pre.wrap {
                         } catch (err) {
                         }
                     }
-                }).always(function() {
+                }).always(function () {
                     $('button').removeAttr('disabled');
                 });
             }
@@ -134,4 +135,3 @@ pre.wrap {
 
     </script>
 }
-

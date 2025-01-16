@@ -1,14 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Assignment;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.WebApi;
+using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.Controllers.Api.DataCollection
 {
@@ -40,13 +45,17 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             {
                 return Forbid();
             }
+            
+            var isNeedUpdateApp = IsNeedUpdateApp(assignment);
+            if (isNeedUpdateApp)
+                return StatusCode(StatusCodes.Status426UpgradeRequired);
 
             AssignmentApiDocument assignmentApiDocument = this.assignmentsService.MapAssignment(assignment);
 
             return assignmentApiDocument;
         }
 
-        public virtual Task<List<AssignmentApiView>> GetAssignmentsAsync(CancellationToken cancellationToken)
+        public virtual ActionResult<List<AssignmentApiView>> GetAssignments(CancellationToken cancellationToken)
         {
             var authorizedUserId = this.authorizedUser.Id;
 
@@ -56,6 +65,9 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
 
             foreach (var assignment in assignments)
             {
+                if (IsNeedUpdateApp(assignment))
+                    return StatusCode(StatusCodes.Status426UpgradeRequired);
+                
                 assignmentApiViews.Add(new AssignmentApiView
                 {
                     Id = assignment.Id,
@@ -63,11 +75,12 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
                     QuestionnaireId = assignment.QuestionnaireId,
                     ResponsibleId = assignment.ResponsibleId,
                     ResponsibleName = assignment.Responsible.Name,
-                    IsAudioRecordingEnabled = assignment.AudioRecording
+                    IsAudioRecordingEnabled = assignment.AudioRecording,
+                    TargetArea = assignment.TargetArea
                 });
             }
 
-            return Task.FromResult(assignmentApiViews);
+            return assignmentApiViews;
         }
 
         public virtual IActionResult Received(int id)
@@ -95,5 +108,19 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
 
         protected abstract IEnumerable<Assignment> GetAssignmentsForResponsible(Guid responsibleId);
 
+        protected abstract string ProductName { get; }
+
+        private bool IsNeedUpdateApp(Assignment assignment)
+        {
+            var productVersion = this.Request.GetProductVersionFromUserAgent(ProductName);
+
+            if (productVersion == null)
+                return true;
+
+            if (!string.IsNullOrWhiteSpace(assignment.TargetArea) && productVersion <= new Version(24, 6))
+                return true;
+            
+            return false;
+        }
     }
 }

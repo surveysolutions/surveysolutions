@@ -13,7 +13,7 @@
     <NoWarn>1701;1702;1705;612;618;1030</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Markdig" Version="0.33.0" />
+    <PackageReference Include="Markdig" Version="0.38.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj" />

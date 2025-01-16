@@ -172,7 +172,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
             }
             
             var archiveUtils = new Mock<IArchiveUtils>();
-            archiveUtils.Setup(x => x.GetArchivedFileNamesAndSize(It.IsAny<byte[]>()))
+            archiveUtils.Setup(x => x.GetFileNamesAndSizesFromArchive(It.IsAny<byte[]>()))
                 .Returns(files);
 
             foreach (var questionnaireAttachment in questionnaireAttachments)
@@ -282,7 +282,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
             SetupLookupQuery(lookup2);
 
             var archiveUtils = new Mock<IArchiveUtils>();
-            archiveUtils.Setup(x => x.GetArchivedFileNamesAndSize(It.IsAny<byte[]>()))
+            archiveUtils.Setup(x => x.GetFileNamesAndSizesFromArchive(It.IsAny<byte[]>()))
                 .Returns(new Dictionary<string, long>()
                 {
                     {lookup1.id.FormatGuid(), 1},

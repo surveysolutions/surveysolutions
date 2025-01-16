@@ -18,6 +18,7 @@ using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
 using NHibernate.Tool.hbm2ddl;
 using Npgsql;
+using NSubstitute;
 using WB.Core.BoundedContexts.Designer.CodeGenerationV2;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
@@ -453,11 +454,22 @@ namespace WB.Tests.Integration
                     x.TryGetServiceRegistration(It.IsAny<Service>(), out serviceRegistration))
                 .Returns(true);
             
-            var container = new Mock<ILifetimeScope>();
-            container.Setup(x => x.BeginLifetimeScope(It.IsAny<string>())).Returns(container.Object);
-            container.SetupGet(x => x.ComponentRegistry).Returns(componentRegistry.Object);
-            container.Setup(x => x.ResolveComponent( It.IsAny<ResolveRequest>()))
-                .Returns(sessionFactory);
+            var container = new Mock<ILifetimeScope>(){ CallBase = true };
+
+            container.Setup(x => x.ResolveComponent(It.Ref<ResolveRequest>.IsAny))
+                 .Returns(() => {
+                     return sessionFactory;
+                 });
+
+            container.Setup(x => x.BeginLifetimeScope(It.IsAny<string>()))
+                .Returns(() => {
+                    return container.Object;
+                });
+            container.SetupGet(x => x.ComponentRegistry)
+                .Returns(() =>
+                {
+                    return componentRegistry.Object;
+                });
             
             return new UnitOfWork( 
                 Mock.Of<ILogger<UnitOfWork>>(),

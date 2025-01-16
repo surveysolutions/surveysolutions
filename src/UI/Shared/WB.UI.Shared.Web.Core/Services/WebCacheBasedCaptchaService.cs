@@ -8,7 +8,7 @@ namespace WB.UI.Shared.Web.Services
 {
     public interface ICaptchaService
     {
-        bool ShouldShowCaptcha(string username);
+        bool ShouldShowCaptcha(string? username);
         void RegisterFailedLogin(string username);
         void ResetFailedLogin(string username);
     }
@@ -32,15 +32,14 @@ namespace WB.UI.Shared.Web.Services
         private string GetCacheKey(string name) => $"_captcha_{name}";
         private const string ShouldShowCaptchaCookieName = "ShowCaptcha";
 
-        public bool ShouldShowCaptcha(string username)
+        public bool ShouldShowCaptcha(string? username)
         {
-
             if (httpContextAccessor.HttpContext != null)
             {
                 var requestCookieCollection = httpContextAccessor.HttpContext.Request.Cookies;
                 if (requestCookieCollection.ContainsKey(ShouldShowCaptchaCookieName))
                 {
-                    string requestCookie = requestCookieCollection[ShouldShowCaptchaCookieName];
+                    string? requestCookie = requestCookieCollection[ShouldShowCaptchaCookieName];
                     return !string.IsNullOrEmpty(requestCookie);
                 }
             }
@@ -48,7 +47,7 @@ namespace WB.UI.Shared.Web.Services
             if (string.IsNullOrEmpty(username)) return false;
             var userKey = this.GetCacheKey(username);
 
-            Queue<DateTime> existingLoginAttempts = cache.Get<Queue<DateTime>>(userKey);
+            Queue<DateTime>? existingLoginAttempts = cache.Get<Queue<DateTime>>(userKey);
 
             if (existingLoginAttempts == null) return false;
 

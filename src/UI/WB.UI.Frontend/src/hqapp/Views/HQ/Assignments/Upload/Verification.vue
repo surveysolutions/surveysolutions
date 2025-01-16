@@ -1,23 +1,26 @@
 <template>
     <HqLayout :hasFilter="false">
-        <div slot="headers">
-            <ol class="breadcrumb">
-                <li>
-                    <a href="../../../SurveySetup">{{ $t('MainMenu.SurveySetup') }}</a>
-                </li>
-                <li>
-                    <a :href="assignmentsUploadUrl">{{ $t('BatchUpload.BreadCrumbs_CreatingMultipleInterviews') }}</a>
-                </li>
-            </ol>
-            <h1>{{ $t('BatchUpload.CreatingMultipleAssignments') }}</h1>
-        </div>
+        <template v-slot:headers>
+            <div>
+                <ol class="breadcrumb">
+                    <li>
+                        <a href="../../../SurveySetup">{{ $t('MainMenu.SurveySetup') }}</a>
+                    </li>
+                    <li>
+                        <a :href="assignmentsUploadUrl">{{ $t('BatchUpload.BreadCrumbs_CreatingMultipleInterviews')
+                            }}</a>
+                    </li>
+                </ol>
+                <h1>{{ $t('BatchUpload.CreatingMultipleAssignments') }}</h1>
+            </div>
+        </template>
         <div class="row">
             <div class="col-sm-7">
                 <h3>
                     {{ $t('BatchUpload.Import_VerificationOfAssignments_ForQuestionnaire', {
-        title:
-            $t('Pages.QuestionnaireNameFormat', { name: questionnaire.title, version: questionnaire.version })
-    }) }}
+                        title:
+                            $t('Pages.QuestionnaireNameFormat', { name: questionnaire.title, version: questionnaire.version })
+                    }) }}
                     <router-link :to="{ name: 'questionnairedetails', params: { questionnaireId: questionnaire.id } }"
                         target='_blank'>
                         <span :title="$t('Details.ShowQuestionnaireDetails')" class="glyphicon glyphicon-link" />
@@ -34,9 +37,9 @@
                     <p>
                         {{ $t('BatchUpload.Import_VerificationOfAssignmentData') }}
                         <span>{{ $t('BatchUpload.Import_VerificationOfDataFile_Progress', {
-        verifiedCount:
-            status.verifiedCount, totalCount: status.totalCount
-    }) }}</span>
+                            verifiedCount:
+                                status.verifiedCount, totalCount: status.totalCount
+                            }) }}</span>
                     </p>
                     <p class="success-text"
                         v-if="status.verifiedCount > 0 && ((status.verifiedCount - status.withErrorsCount) == 1)">
@@ -44,9 +47,9 @@
                     <p class="success-text"
                         v-if="status.verifiedCount > 0 && ((status.verifiedCount - status.withErrorsCount) > 1)">
                         {{ $t('BatchUpload.Import_Verification_AssignmentsVerified', {
-        count: status.verifiedCount -
-            status.withErrorsCount
-    }) }}</p>
+                            count: status.verifiedCount -
+                                status.withErrorsCount
+                        }) }}</p>
                     <p class="default-text" v-if="status.withErrorsCount == 0">
                         {{ $t('BatchUpload.ImportInterviews_NoneFailed') }}</p>
                     <p class="error-text" v-if="status.withErrorsCount == 1">
@@ -57,7 +60,7 @@
                 <div class="cancelable-progress">
                     <div class="progress">
                         <div class="progress-bar progress-bar-success"
-                            v-bind:style="{ width: (100 * status.verifiedCount/status.totalCount) + '%' }"
+                            v-bind:style="{ width: (100 * status.verifiedCount / status.totalCount) + '%' }"
                             role="progressbar" :aria-valuenow="status.verifiedCount" aria-valuemin="0"
                             :aria-valuemax="status.totalCount">
                             <span class="sr-only"></span>

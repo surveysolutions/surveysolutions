@@ -1,15 +1,8 @@
 <template>
-    <div class="form-group"
-        :title="tooltip">
-        <input class="checkbox-filter"
-            :id="name"
-            type="checkbox"
-            :disabled="!enabled ? 'disabled': null"
-            :name="name"
-            :checked="checked"
-            @change="checkedChange" />
-        <label :for="name"
-            :class="classes">
+    <div class="form-group" :title="tooltip">
+        <input class="checkbox-filter" :id="name" type="checkbox" :disabled="!enabled ? 'disabled' : null" :name="name"
+            :checked="checked" @change="checkedChange" />
+        <label :for="name" :class="classes">
             <span class="tick"></span>{{ label }}</label>
     </div>
 </template>
@@ -17,15 +10,18 @@
 <script>
 export default {
     props: {
-        enabled: {type: Boolean, default: true},
+        enabled: { type: Boolean, default: true },
 
         name: {
             type: String,
             required: true,
         },
 
+        modelValue: {
+            required: false,
+        },
         value: {
-            required: true,
+            required: false,
         },
 
         label: String,
@@ -35,6 +31,8 @@ export default {
         classes: String,
     },
 
+    emits: ['input', 'update:modelValue'],
+
     methods: {
         checkedChange(ev) {
             this.$emit('input', ev.target.checked, {
@@ -42,16 +40,17 @@ export default {
                 selected: this.radioGroup,
                 name: this.name,
             })
+            this.$emit('update:modelValue', ev.target.checked);
         },
     },
 
     computed: {
         checked() {
-            if(this.inputType == 'checkbox') {
-                return this.value
+            if (this.inputType == 'checkbox') {
+                return this.modelValue !== undefined ? this.modelValue : this.value;
             }
 
-            return this.value == this.radioGroup
+            return this.modelValue == this.radioGroup
         },
 
         inputType() {

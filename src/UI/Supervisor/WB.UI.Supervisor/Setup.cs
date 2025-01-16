@@ -71,6 +71,7 @@ namespace WB.UI.Supervisor
 #if !EXCLUDEEXTENSIONS
                 ,{typeof (Shared.Extensions.ViewModels.GeographyEditorViewModel), typeof (Shared.Extensions.Activities.GeographyEditorActivity)}
                 ,{typeof (Shared.Extensions.ViewModels.SupervisorMapDashboardViewModel), typeof (Shared.Extensions.Activities.SupervisorMapDashboardActivity)}
+                ,{typeof (Shared.Extensions.ViewModels.AssignmentMapViewModel), typeof (Shared.Extensions.Activities.AssignmentMapActivity)}
 #endif
             };
 
@@ -103,12 +104,6 @@ namespace WB.UI.Supervisor
         protected override void InitializeApp(IMvxApplication app)
         {
             base.InitializeApp(app);
-
-            string appcenterKey = ApplicationContext.Resources.GetString(Resource.String.appcenter_key);
-            if (!string.IsNullOrEmpty(appcenterKey))
-            {
-                CrashReporting.Init(appcenterKey);
-            }
             
             string arcgisruntimeKey = ApplicationContext.Resources.GetString(Resource.String.arcgisruntime_key);
             if (!string.IsNullOrEmpty(arcgisruntimeKey))
@@ -145,7 +140,12 @@ namespace WB.UI.Supervisor
                 new EnumeratorSharedKernelModule(),
                 new SupervisorInfrastructureModule(),
                 new SupervisorBoundedContextModule(), 
-                new SupervisorUiModule()};
+                new SupervisorUiModule(),
+#if !EXCLUDEEXTENSIONS                
+            new WB.UI.Shared.Extensions.MapExtensionsModule(),
+            new WB.UI.Shared.Extensions.SupervisorMapExtensionsModule(),
+#endif                
+            };
 
             ContainerBuilder builder = new ContainerBuilder();
             builder.RegisterSource(new AnyConcreteTypeNotAlreadyRegisteredSource());

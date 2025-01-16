@@ -74,7 +74,7 @@ public class AssignAssignmentDialogViewModel: ActionDialogViewModel<AssignAssign
 
             this.AssignmentsStorage.Store(assignment);
 
-            this.messenger.Publish(new DashboardChangedMsg(this) { AssignmentId = assignmentId });
+            this.messenger.Publish(new DashboardChangedMessage(this) { AssignmentId = assignmentId });
             this.auditLogService.Write(new AssignResponsibleToAssignmentAuditLogEntity(assignmentId, responsible.Id, responsible.Login));
         }
         finally

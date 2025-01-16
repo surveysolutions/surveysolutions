@@ -64,7 +64,7 @@ class QuestionnaireApi {
         return response.data
     }
 
-    ChangeVariableExposeStatus(questionnaireIdentity, variables){
+    ChangeVariableExposeStatus(questionnaireIdentity, variables) {
         return this.http.post('api/QuestionnairesApi/changeVariableExposeStatus', {
             questionnaireIdentity: questionnaireIdentity,
             variables: variables,
@@ -230,6 +230,17 @@ class MapDashboard {
     }
 }
 
+
+class GeoTracking {
+    constructor(http) {
+        this.http = http
+    }
+
+    async GetTracks(request) {
+        return await this.http.get('api/AssignmentGeoApi/GeoTrackingHistory', { params: request })
+    }
+}
+
 class InterviewsPublicApi {
     constructor(http) {
         this.http = http
@@ -389,6 +400,19 @@ class AssignmentsApi {
         })
     }
 
+    changeTargetArea(assignmentId, targetArea) {
+        var url = `${this.base}/${assignmentId}/changeTargetArea`
+        return this.http({
+            method: 'post',
+            url: url,
+            data: targetArea,
+            headers: {
+                accept: 'text/plain',
+                'content-type': 'application/json',
+            },
+        })
+    }
+
     changeMode(assignmentId, isEnabled) {
         var url = `${this.base}/${assignmentId}/changeMode`
 
@@ -432,8 +456,9 @@ class WebInterviewSettingsApi {
                     subject: subject,
                     message: message,
                     passwordDescription: passwordDescription,
-                    linkText: linkText},
-                headers: {'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie()},
+                    linkText: linkText
+                },
+                headers: { 'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie() },
             })
     }
 
@@ -449,8 +474,9 @@ class WebInterviewSettingsApi {
                     messageType: messageType,
                     messageText: messageText,
                     buttonType: buttonType,
-                    buttonText: buttonText},
-                headers: {'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie()},
+                    buttonText: buttonText
+                },
+                headers: { 'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie() },
             })
     }
 
@@ -476,7 +502,7 @@ class WebInterviewSettingsApi {
         return this.http(
             {
                 method: 'post',
-                url:url,
+                url: url,
                 data: {
                     spamProtection: isEnabledSpamProtection,
                     reminderAfterDaysIfNoResponse: reminderAfterDaysIfNoResponse,
@@ -484,8 +510,9 @@ class WebInterviewSettingsApi {
                     singleResponse: singleResponse,
                     emailOnComplete: emailOnComplete,
                     attachAnswersInEmail: attachAnswersInEmail,
-                    allowSwitchToCawiForInterviewer: allowSwitchToCawiForInterviewer},
-                headers: {'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie()},
+                    allowSwitchToCawiForInterviewer: allowSwitchToCawiForInterviewer
+                },
+                headers: { 'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie() },
             })
     }
 
@@ -494,9 +521,9 @@ class WebInterviewSettingsApi {
 
         return this.http(
             {
-                url:url,
+                url: url,
                 method: 'post',
-                headers: {'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie()},
+                headers: { 'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie() },
             })
     }
 
@@ -504,9 +531,9 @@ class WebInterviewSettingsApi {
         var url = `${this.base}/${questionnaireId}/stop`
         return this.http(
             {
-                url:url,
+                url: url,
                 method: 'post',
-                headers: {'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie()},
+                headers: { 'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie() },
             })
     }
 }
@@ -523,8 +550,8 @@ class ExportSettings {
             {
                 method: 'post',
                 url: url,
-                data:{ enableState: val },
-                headers: {'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie()},
+                data: { enableState: val },
+                headers: { 'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie() },
             })
     }
 
@@ -537,16 +564,16 @@ class ExportSettings {
             {
                 method: 'post',
                 url: `${this.base}/RegeneratePassword`,
-                headers: {'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie()},
+                headers: { 'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie() },
             })
     }
 
     dropExportCache() {
         return this.http({
-                method: 'delete',
-                url: `${this.base}/RemoveExportCache`,
-                headers: {'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie()},
-            })
+            method: 'delete',
+            url: `${this.base}/RemoveExportCache`,
+            headers: { 'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie() },
+        })
     }
 
     statusDropExportCache() {
@@ -595,29 +622,29 @@ class AdminSettings {
     constructor(http) {
         this.http = http
         this.base = 'api/AdminSettings'
-    }    
+    }
     setGlobalNotice(newNotice) {
         return this.http({
             method: 'post',
             url: `${this.base}/GlobalNoticeSettings`,
-            headers: {'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie()},
-            data: {GlobalNotice: newNotice}
+            headers: { 'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie() },
+            data: { GlobalNotice: newNotice }
         })
     }
-    
+
     setProfileSettings(allowInterviewerUpdateProfile) {
         return this.http({
             method: 'post',
             url: `${this.base}/ProfileSettings`,
-            headers: {'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie()},
+            headers: { 'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie() },
             data: { allowInterviewerUpdateProfile: allowInterviewerUpdateProfile }
-        })        
+        })
     }
     setInterviewerSettings(isInterviewerAutomaticUpdatesEnabled, isDeviceNotificationsEnabled, isPartialSynchronizationEnabled) {
         return this.http({
             method: 'post',
             url: `${this.base}/InterviewerSettings`,
-            headers: {'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie()},
+            headers: { 'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie() },
             data: {
                 interviewerAutoUpdatesEnabled: isInterviewerAutomaticUpdatesEnabled,
                 notificationsEnabled: isDeviceNotificationsEnabled,
@@ -629,7 +656,7 @@ class AdminSettings {
         return this.http({
             method: 'post',
             url: `${this.base}/InterviewerGeographyQuestionAccuracyInMeters`,
-            headers: {'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie()},
+            headers: { 'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie() },
             data: { geographyQuestionAccuracyInMeters: geographyQuestionAccuracyInMeters }
         })
     }
@@ -637,19 +664,19 @@ class AdminSettings {
         return this.http({
             method: 'post',
             url: `${this.base}/InterviewerGeographyQuestionPeriodInSeconds`,
-            headers: {'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie()},
+            headers: { 'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie() },
             data: { geographyQuestionPeriodInSeconds: geographyQuestionPeriodInSeconds }
-        })        
+        })
     }
     setEsriApiKey(esriApiKey) {
         return this.http({
             method: 'post',
             url: `${this.base}/UpdateEsriApiKey`,
-            headers: {'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie()},
+            headers: { 'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie() },
             data: { esriApiKey: esriApiKey }
-        })        
-    }   
-    
+        })
+    }
+
     getWorkspaceSettings() {
         return this.http.get(`${this.base}/WorkspaceSettings`)
     }
@@ -658,28 +685,30 @@ class AdminSettings {
         return this.http({
             method: 'post',
             url: `${this.base}/WebInterviewSettings`,
-            headers: {'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie()},
-            data: {allowEmails: allowEmails}
+            headers: { 'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie() },
+            data: { allowEmails: allowEmails }
         })
     }
 }
 
-class HttpUtil {
-    getCsrfCookie() {
-        var name = 'CSRF-TOKEN='
-        var decodedCookie = decodeURIComponent(document.cookie)
-        var ca = decodedCookie.split(';')
-        for (var i = 0; i < ca.length; i++) {
-            var c = ca[i]
-            while (c.charAt(0) == ' ') {
-                c = c.substring(1)
-            }
-            if (c.indexOf(name) == 0) {
-                return c.substring(name.length, c.length)
-            }
+export function getCsrfCookie() {
+    var name = 'CSRF-TOKEN='
+    var decodedCookie = decodeURIComponent(document.cookie)
+    var ca = decodedCookie.split(';')
+    for (var i = 0; i < ca.length; i++) {
+        var c = ca[i]
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1)
         }
-        return ''
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length)
+        }
     }
+    return ''
+}
+
+class HttpUtil {
+    getCsrfCookie = getCsrfCookie
 }
 
 class HqApiClient {
@@ -709,6 +738,10 @@ class HqApiClient {
 
     get MapDashboard() {
         return new MapDashboard(this.http)
+    }
+
+    get GeoTracking() {
+        return new GeoTracking(this.http)
     }
 
     get WebInterviewSettings() {
@@ -756,20 +789,24 @@ class HqApiClient {
 /*  the Plugin */
 export default {
     install: function (vue) {
-        const instance = new HqApiClient(vue.$config.apiBasePath || vue.$config.basePath, vue.$config.workspace)
+        const instance = new HqApiClient(
+            vue.config.globalProperties.$config.apiBasePath || vue.config.globalProperties.$config.basePath,
+            vue.config.globalProperties.$config.workspace)
 
-        // /*  expose a global API method  */
-        Object.defineProperty(vue, '$hq', {
-            get() {
-                return instance
-            },
-        })
+        vue.config.globalProperties.$hq = instance
 
-        /*  expose a local API method  */
-        Object.defineProperty(vue.prototype, '$hq', {
-            get() {
-                return instance
-            },
-        })
+        // // /*  expose a global API method  */
+        // Object.defineProperty(vue, '$hq', {
+        //     get() {
+        //         return instance
+        //     },
+        // })
+
+        // /*  expose a local API method  */
+        // Object.defineProperty(vue.prototype, '$hq', {
+        //     get() {
+        //         return instance
+        //     },
+        // })
     },
 }

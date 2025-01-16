@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using WB.Services.Infrastructure.Tenant;
 using WB.Services.Scheduler.Model;
 using WB.Services.Scheduler.Model.Events;
@@ -150,7 +151,7 @@ namespace WB.Services.Scheduler.Tests.JobServiceTests
 
             var service = serviceProvider.GetService<JobService>();
 
-            Assert.Null(await service.GetFreeJobAsync());
+            ClassicAssert.Null(await service.GetFreeJobAsync());
         }
 
         [Test]

@@ -27,8 +27,8 @@
                 <ul class="list-unstyled marked-questions">
                     <li v-for="item in group.items" :key="item.id">
                         <a v-if="item.parentId || item.isPrefilled" href="javascript:void(0);" @click="navigateTo(item)"
-                            v-html="item.title"></a>
-                        <span v-else v-html="item.title"></span>
+                            v-dompurify-html="item.title"></a>
+                        <span v-else v-dompurify-html="item.title"></span>
                     </li>
                 </ul>
             </ExpandableList>
@@ -40,9 +40,8 @@
                     {{ noteToSupervisor }}
                 </label>
                 <div class="field">
-                    <textarea-autosize class="field-to-fill" id="comment-for-supervisor"
-                        :placeholder="$t('WebInterviewUI.TextEnter')" v-model="comment"
-                        maxlength="750"></textarea-autosize>
+                    <textarea class="field-to-fill" id="comment-for-supervisor" v-autosize
+                        :placeholder="$t('WebInterviewUI.TextEnter')" v-model="comment" maxlength="750"></textarea>
                     <button type="submit" class="btn btn-link btn-clear">
                         <span></span>
                     </button>

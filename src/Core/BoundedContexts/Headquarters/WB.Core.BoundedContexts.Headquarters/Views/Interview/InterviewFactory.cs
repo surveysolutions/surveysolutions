@@ -140,16 +140,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             double east, double north, double west, double south)
         {
             var userId = authorizedUser.Id;
-            
+
             var gpsQuery = QueryGpsAnswers()
                 .Where(x => x.Answer.IsEnabled &&
                             x.QuestionnaireItem.Featured == true &&
                             x.QuestionnaireItem.QuestionType == QuestionType.GpsCoordinates &&
                             x.Answer.Latitude <= north &&
                             x.Answer.Latitude >= south &&
-                            x.Answer.Longitude <= east &&
-                            x.Answer.Longitude >= west 
-                            );
+                            (east >= west
+                                ? x.Answer.Longitude <= east && x.Answer.Longitude >= west
+                                : (x.Answer.Longitude <= east && x.Answer.Longitude >= -180||
+                                   x.Answer.Longitude <= 180 && x.Answer.Longitude >= west)));
 
             if (questionnaireId.HasValue)
             {

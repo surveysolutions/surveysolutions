@@ -1,7 +1,7 @@
 <template>
-    <ProfileLayout ref="profile" :role="userInfo.role" :isOwnProfile="userInfo.isOwnProfile" :userName="userInfo.userName"
-        :canChangePassword="userInfo.canChangePassword" :userId="userInfo.userId" :currentTab="currentTab"
-        :canGenerateToken="userInfo.canGetApiToken" :isRestricted="userInfo.isRestricted">
+    <ProfileLayout ref="profile" :role="userInfo.role" :isOwnProfile="userInfo.isOwnProfile"
+        :userName="userInfo.userName" :canChangePassword="userInfo.canChangePassword" :userId="userInfo.userId"
+        :currentTab="currentTab" :canGenerateToken="userInfo.canGetApiToken" :isRestricted="userInfo.isRestricted">
         <div>
             <div>
                 <h2>{{ $t('Strings.HQ_Views_EnableAuthenticator_Title') }}</h2>
@@ -35,12 +35,13 @@
                         <form>
                             <form-group :label="$t('FieldsAndValidations.VerificationCodeFieldName')"
                                 :error="modelState['VerificationCode']">
-                                <TextInput v-model.trim="verificationCode"
-                                    :haserror="modelState['VerificationCode'] !== undefined" id="VerificationCode" />
+                                <TextInput id="VerificationCode" v-model.trim="verificationCode"
+                                    :haserror="modelState['VerificationCode'] !== undefined" />
                             </form-group>
                             <div class="block-filter">
                                 <button type="submit" class="btn btn-success" id="btnVerify"
-                                    v-bind:disabled="userInfo.isObserving || userInfo.isRestricted" @click="verify">{{
+                                    v-bind:disabled="userInfo.isObserving || userInfo.isRestricted || isVerifying"
+                                    @click="verify">{{
                                         $t('Pages.Verify') }}</button>
                             </div>
                         </form>
@@ -52,7 +53,6 @@
 </template>
 
 <script>
-import Vue from 'vue'
 import { each } from 'lodash'
 import QRCode from 'qrcode'
 
@@ -62,6 +62,7 @@ export default {
             modelState: {},
             personName: null,
             verificationCode: null,
+            isVerifying: false
         }
     },
     computed: {
@@ -89,7 +90,7 @@ export default {
     },
     watch: {
         verificationCode: function (val) {
-            Vue.delete(this.modelState, 'VerificationCode')
+            delete this.modelState['VerificationCode']
         },
     },
     methods: {
@@ -100,6 +101,7 @@ export default {
             }
             event.preventDefault()
             var self = this
+            this.isVerifying = true
             this.$http({
                 method: 'post',
                 url: this.model.api.checkVerificationCodeUrl,
@@ -113,10 +115,12 @@ export default {
                 },
             }).then(
                 response => {
+                    self.isVerifying = false
                     window.location.href = self.model.api.showRecoveryCodesUrl
                 },
                 error => {
                     self.processModelState(error.response.data, self)
+                    self.isVerifying = false
                 }
             )
         },
@@ -132,7 +136,7 @@ export default {
                             }
                             message += stateError
                         })
-                        vm.$set(vm.modelState, state.key, message)
+                        vm.modelState[state.key] = message
                     }
                 })
             }

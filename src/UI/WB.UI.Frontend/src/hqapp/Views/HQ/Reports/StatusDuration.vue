@@ -1,86 +1,57 @@
 <template>
-    <HqLayout
-        :hasFilter="true"
-        :title="$t('Pages.StatusDuration')"
-        :subtitle="$t('Pages.StatusDurationDescription')">
-        <Filters slot="filters">
-            <FilterBlock :title="$t('Common.Questionnaire')">
-                <Typeahead
-                    control-id="questionnaireId"
-                    data-vv-name="questionnaireId"
-                    data-vv-as="questionnaire"
-                    :placeholder="$t('Common.AllQuestionnaires')"
-                    :value="questionnaireId"
-                    v-on:selected="selectQuestionnaire"
-                    :fetch-url="$config.model.questionnairesUrl"/>
-            </FilterBlock>
+    <HqLayout :hasFilter="true" :title="$t('Pages.StatusDuration')" :subtitle="$t('Pages.StatusDurationDescription')">
+        <template v-slot:filters>
+            <Filters>
+                <FilterBlock :title="$t('Common.Questionnaire')">
+                    <Typeahead control-id="questionnaireId" data-vv-name="questionnaireId" data-vv-as="questionnaire"
+                        :placeholder="$t('Common.AllQuestionnaires')" :value="questionnaireId"
+                        v-on:selected="selectQuestionnaire" :fetch-url="$config.model.questionnairesUrl" />
+                </FilterBlock>
 
-            <FilterBlock :title="$t('Common.QuestionnaireVersion')">
-                <Typeahead
-                    control-id="questionnaireVersion"
-                    ref="questionnaireIdControl"
-                    data-vv-name="questionnaireVersion"
-                    data-vv-as="questionnaireVersion"
-                    :placeholder="$t('Common.AllVersions')"
-                    :value="questionnaireVersion"
-                    v-on:selected="questionnaireVersionSelected"
-                    :fetch-url="questionnaireVersionFetchUrl"
-                    :disabled="questionnaireVersionFetchUrl == null"/>
-            </FilterBlock>
-            <FilterBlock :title="$t('Strings.Teams')"
-                v-if="!$config.model.isSupervisorMode">
-                <Typeahead
-                    control-id="teams"
-                    :placeholder="$t('Strings.AllTeams')"
-                    :value="supervisorId"
-                    @selected="selectSupervisor"
-                    :ajax-params="supervisorsParams"
-                    :fetch-url="supervisorsUrl"
-                    data-vv-name="UserId"
-                    data-vv-as="UserName"/>
-            </FilterBlock>
-        </Filters>
+                <FilterBlock :title="$t('Common.QuestionnaireVersion')">
+                    <Typeahead control-id="questionnaireVersion" ref="questionnaireIdControl"
+                        data-vv-name="questionnaireVersion" data-vv-as="questionnaireVersion"
+                        :placeholder="$t('Common.AllVersions')" :value="questionnaireVersion"
+                        v-on:selected="questionnaireVersionSelected" :fetch-url="questionnaireVersionFetchUrl"
+                        :disabled="questionnaireVersionFetchUrl == null" />
+                </FilterBlock>
+                <FilterBlock :title="$t('Strings.Teams')" v-if="!$config.model.isSupervisorMode">
+                    <Typeahead control-id="teams" :placeholder="$t('Strings.AllTeams')" :value="supervisorId"
+                        @selected="selectSupervisor" :ajax-params="supervisorsParams" :fetch-url="supervisorsUrl"
+                        data-vv-name="UserId" data-vv-as="UserName" />
+                </FilterBlock>
+            </Filters>
+        </template>
         <div class="clearfix">
             <div class="col-sm-8">
-                <h4>{{this.questionnaireId == null ? $t('Common.AllQuestionnaires') : this.questionnaireId.value}}, {{this.questionnaireVersion == null ? $t('Common.AllVersions').toLowerCase() : this.questionnaireVersion.value}}</h4>
+                <h4>{{ this.questionnaireId == null ? $t('Common.AllQuestionnaires') : this.questionnaireId.value }},
+                    {{ this.questionnaireVersion == null ? $t('Common.AllVersions').toLowerCase() :
+                        this.questionnaireVersion.value }}</h4>
             </div>
         </div>
-        <DataTables
-            ref="table"
-            :tableOptions="tableOptions"
-            :addParamsToRequest="addFilteringParams"
-            noPaging
-            noSearch
+        <DataTables ref="table" :tableOptions="tableOptions" :addParamsToRequest="addFilteringParams" noPaging noSearch
             exportable>
-            <tr slot="header">
-                <th rowspan="2"
-                    class="vertical-align-middle text-center">
-                    {{$t("Strings.Days")}}
+            <template v-slot:header>
+
+                <th rowspan="1" class="vertical-align-middle text-center">
+                    <!-- {{ $t("Strings.Days") }} -->
                 </th>
-                <th
-                    colspan="2"
-                    class="type-numeric sorting_disabled text-center">{{$t("Strings.Assignments")}}</th>
-                <th
-                    colspan="5"
-                    class="type-numeric sorting_disabled text-center">{{$t("Strings.Interviews")}}</th>
-            </tr>
-            <tr slot="header">
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-            </tr>
+                <th colspan="2" class="type-numeric sorting_disabled text-center">
+                    {{ $t("Strings.Assignments") }}
+                </th>
+                <th colspan="5" class="type-numeric sorting_disabled text-center">
+                    {{ $t("Strings.Interviews") }}
+                </th>
+
+            </template>
         </DataTables>
     </HqLayout>
 </template>
 
 <script>
-import {formatNumber} from './helpers'
+import { formatNumber } from './helpers'
 import routeSync from '~/shared/routeSync'
-import {chain} from 'lodash'
+import { chain } from 'lodash'
 
 export default {
     mixins: [routeSync],
@@ -89,28 +60,28 @@ export default {
             questionnaireId: null,
             questionnaireVersion: null,
             supervisorId: null,
-            supervisorsParams: {limit: 10},
+            supervisorsParams: { limit: 10 },
             loading: {
                 supervisors: false,
             },
         }
     },
     watch: {
-        questionnaireId: function(newValue) {
+        questionnaireId: function (newValue) {
             this.onChange(s => {
-                s.questionnaireId = (newValue || {key: null}).key
+                s.questionnaireId = (newValue || { key: null }).key
                 s.version = this.questionnaireVersion
             })
             this.reload()
         },
-        questionnaireVersion: function(newValue) {
+        questionnaireVersion: function (newValue) {
             this.onChange(s => {
-                s.version = (newValue || {key: null}).key
-                s.questionnaireId = (this.questionnaireId || {key: null}).key
+                s.version = (newValue || { key: null }).key
+                s.questionnaireId = (this.questionnaireId || { key: null }).key
             })
             this.reload()
         },
-        supervisorId: function(newValue) {
+        supervisorId: function (newValue) {
             this.reload()
         },
     },
@@ -118,11 +89,11 @@ export default {
         var questionnaireInfo = await this.loadQuestionnaireId()
 
         if (this.$route.query.questionnaireId) {
-            this.questionnaireId = {key: questionnaireInfo.questionnaireId, value: questionnaireInfo.questionnaireTitle}
+            this.questionnaireId = { key: questionnaireInfo.questionnaireId, value: questionnaireInfo.questionnaireTitle }
         }
         if (this.$route.query.version) {
             this.$refs.questionnaireIdControl.fetchOptions().then(q => {
-                this.questionnaireVersion = {key: questionnaireInfo.version, value: 'ver. ' + questionnaireInfo.version}
+                this.questionnaireVersion = { key: questionnaireInfo.version, value: 'ver. ' + questionnaireInfo.version }
             })
         }
         this.reload()
@@ -157,7 +128,7 @@ export default {
                         title: this.$t('Strings.Days'),
                         orderable: true,
                         className: 'nowrap',
-                        render: function(data, type, row) {
+                        render: function (data, type, row) {
                             if (data == 0 || row.DT_RowClass == 'total-row') return `<span>${data}</span>`
                             return data
                         },
@@ -167,7 +138,7 @@ export default {
                         className: 'type-numeric',
                         title: this.$t('Strings.InterviewStatus_SupervisorAssigned'),
                         orderable: false,
-                        render: function(data, type, row) {
+                        render: function (data, type, row) {
                             return self.renderAssignmentsUrl(row, data, 'Supervisor')
                         },
                     },
@@ -176,7 +147,7 @@ export default {
                         className: 'type-numeric',
                         title: this.$t('Strings.InterviewStatus_InterviewerAssigned'),
                         orderable: false,
-                        render: function(data, type, row) {
+                        render: function (data, type, row) {
                             return self.renderAssignmentsUrl(row, data, 'Interviewer')
                         },
                     },
@@ -185,7 +156,7 @@ export default {
                         className: 'type-numeric',
                         title: this.$t('Strings.InterviewStatus_Completed'),
                         orderable: false,
-                        render: function(data, type, row) {
+                        render: function (data, type, row) {
                             return self.renderInterviewsUrl(row, data, 'Completed')
                         },
                     },
@@ -194,7 +165,7 @@ export default {
                         className: 'type-numeric',
                         title: this.$t('Strings.InterviewStatus_RejectedBySupervisor'),
                         orderable: false,
-                        render: function(data, type, row) {
+                        render: function (data, type, row) {
                             return self.renderInterviewsUrl(row, data, 'RejectedBySupervisor')
                         },
                     },
@@ -203,7 +174,7 @@ export default {
                         className: 'type-numeric',
                         title: this.$t('Strings.InterviewStatus_ApprovedBySupervisor'),
                         orderable: false,
-                        render: function(data, type, row) {
+                        render: function (data, type, row) {
                             return self.renderInterviewsUrl(row, data, 'ApprovedBySupervisor')
                         },
                     },
@@ -212,7 +183,7 @@ export default {
                         className: 'type-numeric',
                         title: this.$t('Strings.InterviewStatus_RejectedByHeadquarters'),
                         orderable: false,
-                        render: function(data, type, row) {
+                        render: function (data, type, row) {
                             return self.renderInterviewsUrl(row, data, 'RejectedByHeadquarters')
                         },
                     },
@@ -221,7 +192,7 @@ export default {
                         className: 'type-numeric',
                         title: this.$t('Strings.InterviewStatus_ApprovedByHeadquarters'),
                         orderable: false,
-                        render: function(data, type, row) {
+                        render: function (data, type, row) {
                             if (self.$config.model.isSupervisorMode) {
                                 const formatedNumber = formatNumber(data)
                                 return `<span>${formatedNumber}</span>`
@@ -239,7 +210,7 @@ export default {
                 bInfo: false,
                 footer: true,
                 responsive: false,
-                createdRow: function(row) {
+                createdRow: function (row) {
                     $(row)
                         .find('td:eq(0)')
                         .attr('nowrap', 'nowrap')
@@ -254,8 +225,8 @@ export default {
             version = version === '' ? '0' : version
 
             if (questionnaireId && version) {
-                let requestParams = {questionnaireIdentity: questionnaireId + '$' + version, cache: false}
-                const response = await this.$http.get(this.$config.model.questionnaireByIdUrl, {params: requestParams})
+                let requestParams = { questionnaireIdentity: questionnaireId + '$' + version, cache: false }
+                const response = await this.$http.get(this.$config.model.questionnaireByIdUrl, { params: requestParams })
 
                 if (response.data) {
                     return {

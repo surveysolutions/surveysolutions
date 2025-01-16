@@ -20,7 +20,8 @@ namespace WB.Services.Export.Assignment
         IEventHandler<AssignmentReceivedByTablet>,    
         IEventHandler<AssignmentAudioRecordingChanged>,    
         IEventHandler<AssignmentWebModeChanged>,    
-        IEventHandler<AssignmentQuantityChanged>
+        IEventHandler<AssignmentQuantityChanged>,
+        IEventHandler<AssignmentTargetAreaChanged>
     {
         private readonly TenantDbContext dbContext;
 
@@ -28,7 +29,6 @@ namespace WB.Services.Export.Assignment
         {
             this.dbContext = dbContext;
         }
-
 
         public void Handle(PublishedEvent<AssignmentCreated> @event)
         {
@@ -42,13 +42,15 @@ namespace WB.Services.Export.Assignment
                 AudioRecording = @event.Event.AudioRecording,
                 Comment = @event.Event.Comment,
                 QuestionnaireId = @event.Event.QuestionnaireIdentity,
-                UpgradedFromId = @event.Event.UpgradedFromId
+                UpgradedFromId = @event.Event.UpgradedFromId,
+                TargetArea = @event.Event.TargetArea 
             });
 
             AddRecord(@event, AssignmentExportedAction.Created, ToUpgradedFromString(@event.Event.UpgradedFromId), null, @event.Event.Comment, position: 1);
             AddRecord(@event, AssignmentExportedAction.QuantityChanged, null, ToQuantityString(@event.Event.Quantity), null, position: 2);
             AddRecord(@event, AssignmentExportedAction.WebModeChanged, null, ToWebModeString(@event.Event.WebMode), null, position: 3);
             AddRecord(@event, AssignmentExportedAction.AudioRecordingChanged, null, ToAudioRecordingString(@event.Event.AudioRecording), null, position: 4);
+            AddRecord(@event, AssignmentExportedAction.TargetAreaChanged, null, @event.Event.TargetArea, null, position: 5);
         }
 
         public void Handle(PublishedEvent<AssignmentArchived> @event)
@@ -116,6 +118,17 @@ namespace WB.Services.Export.Assignment
 
             assignment.Quantity = @event.Event.Quantity;
         }
+        
+        public void Handle(PublishedEvent<AssignmentTargetAreaChanged> @event)
+        {
+            var assignment = GetAssignment(@event.EventSourceId);
+            if (assignment == null) return;
+            
+            AddRecord(@event, AssignmentExportedAction.TargetAreaChanged,
+                assignment.TargetArea, @event.Event.TargetArea, null);
+
+            assignment.TargetArea = @event.Event.TargetArea;
+        }
 
         private void AddRecord<T>(PublishedEvent<T> @event, AssignmentExportedAction action, 
             string? oldValue, string? newValue, string? comment, int position = 1) 
@@ -153,6 +166,6 @@ namespace WB.Services.Export.Assignment
         private string ToQuantityString(int? quantity) => quantity.HasValue ? quantity.Value.ToString(CultureInfo.InvariantCulture) : "-1";
         private string? ToWebModeString(bool? webMode) => webMode == false ? "0" : (webMode == true ? "1" : null);
         private string ToAudioRecordingString(bool audioRecording) => audioRecording == false ? "0" : "1";
-        private string? ToUpgradedFromString(int? upgradedFromId) => upgradedFromId.HasValue ? upgradedFromId.Value.ToString(CultureInfo.InvariantCulture): null; 
+        private string? ToUpgradedFromString(int? upgradedFromId) => upgradedFromId.HasValue ? upgradedFromId.Value.ToString(CultureInfo.InvariantCulture): null;
     }
 }

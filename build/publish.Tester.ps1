@@ -25,9 +25,10 @@ Log-Block "Update project version" {
 }
 
 Set-AndroidXmlResourceValue $AndroidProject "google_maps_api_key" $GoogleMapKey
-Set-AndroidXmlResourceValue $AndroidProject "appcenter_key" $AppCenterKey
 Set-AndroidXmlResourceValue $AndroidProject "arcgisruntime_key" $ArcGisKey
 Set-AndroidXmlResourceValue $AndroidProject "arcgisruntime_api_key" $ArcGisApiKey
+
+Set-AndroidXmlResourceValue $AndroidProject "com_crashlytics_android_active" 'true'
 
 $androidKeyStore = $ENV:ANDROID_KEY_STORE
 $keyStore = [System.IO.Path]::GetTempFileName()

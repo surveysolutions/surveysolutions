@@ -1,66 +1,42 @@
 <template>
     <div class="attachment">
-        <div
-            v-if="localContentType === 'image'"
-            class="image-zoom-box image-wrapper"
-            :class="customCssClass">
-            <img
-                :src="thumbPath"
-                alt="custom photo"
-                class="zoomImg"
-                @load="imageLoaded"
-                @click="showModal(true)"
-                :style="previewStyle"/>
+        <div v-if="localContentType === 'image'" class="image-zoom-box image-wrapper" :class="customCssClass">
+            <img :src="thumbPath" alt="custom photo" class="zoomImg" @load="imageLoaded" @click="showModal(true)"
+                :style="previewStyle" />
             <portal to="body">
-                <div class="modal-img"
-                    v-if="modal"
-                    :style="modalView"
-                    @click="showModal(false)">
+                <div class="modal-img" v-if="modal" :style="modalView" @click="showModal(false)">
                     <span class="close-zoomming-img">×</span>
-                    <img class="modal-img-content"
-                        :src="fullPath"
-                        alt />
+                    <img class="modal-img-content" :src="fullPath" alt />
                     <span class="caption"></span>
                 </div>
             </portal>
         </div>
         <div v-if="localContentType === 'audio'">
             <div class="instructions-wrapper">
-                <a class="btn btn-link"
-                    :href="contentUrl"
-                    target="_blank">
-                    {{$t("Common.Download")}}
+                <a class="btn btn-link" :href="contentUrl" target="_blank">
+                    {{ $t("Common.Download") }}
                 </a>
             </div>
             <div>
-                <audio
-                    controls
-                    preload="auto"
-                    :src="contentUrl">{{ $t('WebInterviewUI.MultimediaNotSupported') }}</audio>
+                <audio controls preload="auto" :src="contentUrl">{{ $t('WebInterviewUI.MultimediaNotSupported')
+                    }}</audio>
             </div>
         </div>
         <div v-if="localContentType === 'video'">
             <div class="instructions-wrapper">
-                <a class="btn btn-link"
-                    :href="contentUrl"
-                    target="_blank">
-                    {{$t("Common.Download")}}
+                <a class="btn btn-link" :href="contentUrl" target="_blank">
+                    {{ $t("Common.Download") }}
                 </a>
             </div>
             <div>
-                <video
-                    controls
-                    preload="auto"
-                    style="width:300px"
-                    :src="contentUrl">{{ $t('WebInterviewUI.MultimediaNotSupported') }}</video>
+                <video controls preload="auto" style="width:300px" :src="contentUrl">{{
+            $t('WebInterviewUI.MultimediaNotSupported') }}</video>
             </div>
         </div>
         <div v-if="localContentType === 'pdf'">
             <div class="instructions-wrapper">
-                <a class="btn btn-link"
-                    :href="contentUrl"
-                    target="_blank">
-                    {{$t("Common.Download")}}
+                <a class="btn btn-link" :href="contentUrl" target="_blank">
+                    {{ $t("Common.Download") }}
                 </a>
             </div>
         </div>
@@ -68,16 +44,14 @@
 </template>
 <script lang="js">
 import axios from 'axios'
-import appendquery from 'append-query'
-import {
-    startsWith
-} from 'lodash'
+import appendQuery from 'append-query'
+import { startsWith } from 'lodash'
 
 function appendSearchParam(uri, name, value) {
     const args = {
         [name]: value,
-    } // keep in separate line to make IE happy
-    return appendquery(uri, args)
+    } // keep in separate line to make IE happy 
+    return appendQuery(uri, args)
 }
 
 export default {
@@ -86,6 +60,7 @@ export default {
         return {
             modal: false,
             contentType: '',
+            onEscape: null,
         }
     },
     props: {
@@ -124,26 +99,25 @@ export default {
             default: false,
         },
     },
-    created() {
+    mounted() {
         const self = this
-        const onEscape = (e) => {
+        this.onEscape = (e) => {
             if (self.modal && e.keyCode === 27) {
                 self.showModal(false)
             }
         }
-        document.addEventListener('keydown', onEscape)
-        this.$once('hook:destroyed', () => {
-            document.removeEventListener('keydown', onEscape)
-        })
-    },
-    mounted() {
+        document.addEventListener('keydown', this.onEscape)
+
         return this.fetchContentType()
     },
+    beforeUnmount() {
+        document.removeEventListener('keydown', this.onEscape)
+    },
     watch: {
-        contentId(){
+        contentId() {
             this.fetchContentType()
         },
-        attachmentName(){
+        attachmentName() {
             this.fetchContentType()
         },
     },
@@ -204,7 +178,7 @@ export default {
     },
     methods: {
         async fetchContentType() {
-            if(this.thumb || this.filename) {
+            if (this.thumb || this.filename) {
                 this.contentType = 'image'
             }
             else {

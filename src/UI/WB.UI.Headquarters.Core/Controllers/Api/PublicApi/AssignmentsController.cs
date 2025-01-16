@@ -344,7 +344,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             try
             {
                 this.VerifyAssigneeInRoles(responsibleUser, assigneeRequest?.Responsible, UserRoles.Interviewer,
-                    UserRoles.Supervisor);
+                    UserRoles.Supervisor, UserRoles.Headquarter);
             }
             catch (HttpException e)
             {
@@ -439,6 +439,35 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             commandService.Execute(
                 new UpdateAssignmentQuantity(assignment.PublicKey, authorizedUser.Id, quantity, assignment.QuestionnaireId));
             this.auditLog.AssignmentSizeChanged(id, quantity);
+
+            return GetUpdatedAssignment(id);
+        }
+        
+        /// <summary>
+        /// Change assignment target area
+        /// </summary>
+        /// <param name="id">Assignment id</param>
+        /// <param name="targetArea">Tha name of the targer area</param>
+        /// <response code="200">Assignment details with updated target area name</response>
+        /// <response code="404">Assignment not found</response>
+        /// <response code="406">Target area cannot be changed</response>
+        [HttpPost]
+        [Route("{id:int}/changeTargetArea")]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [Produces(MediaTypeNames.Application.Json)]
+        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Headquarter, UserRoles.Administrator)]
+        [ObservingNotAllowed]
+        public ActionResult<AssignmentDetails> ChangeTargetArea(int id, [FromBody] string targetArea)
+        {
+            var assignment = assignmentsStorage.GetAssignment(id);
+            if (assignment == null)
+            {
+                return NotFound();
+            }
+
+            commandService.Execute(
+                new UpdateAssignmentTargetArea(assignment.PublicKey, authorizedUser.Id, targetArea, assignment.QuestionnaireId));
+            this.auditLog.AssignmentTargetAreaChanged(id, targetArea);
 
             return GetUpdatedAssignment(id);
         }

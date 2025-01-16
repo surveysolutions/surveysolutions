@@ -56,7 +56,7 @@ namespace WB.UI.Shared.Enumerator
             registry.Bind<IExternalAppLauncher, ExternalAppLauncher>();
             registry.Bind<IPermissionsService, PermissionsService>();
             registry.Bind<IImageHelper, BitmapHelper>();
-            registry.Bind<IVirbationService, VibrationService>();
+            registry.Bind<IVibrationService, VibrationService>();
             registry.Bind<IMvxViewModelTypeFinder, MvxViewModelViewTypeFinder>();
             registry.Bind<MvxViewModelViewTypeFinder>();
             registry.Bind<IMvxViewModelByNameLookup, MvxViewModelByNameLookup>();
@@ -98,6 +98,7 @@ namespace WB.UI.Shared.Enumerator
             registry.BindAsSingleton<IConnectionsApiLimits, ConnectionsApiLimits>();
             registry.BindAsSingleton<IGoogleApiClientFactory, GoogleApiClientFactory>();
             registry.BindAsSingleton<INearbyConnectionClient, NearbyConnectionClient>();
+            registry.BindAsSingleton<IGeolocationBackgroundServiceManager, GeolocationBackgroundServiceManager>();
 
             // SecureStorage is singleton because very very long getting secret keys
             registry.BindAsSingleton<ISecureStorage, SecureStorage>();

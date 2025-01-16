@@ -59,19 +59,21 @@ namespace WB.UI.Interviewer.ViewModel
             this.Dispose();
         });
 
-        public IMvxCommand NavigateToDiagnosticsPageCommand => new MvxAsyncCommand(this.ViewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>);
+        public IMvxCommand NavigateToDiagnosticsPageCommand => 
+            new MvxAsyncCommand(() => this.ViewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>());
         public IMvxCommand SignOutCommand => new MvxAsyncCommand(async () =>
         {
             await this.ViewModelNavigationService.SignOutAndNavigateToLoginAsync();
             this.Dispose();
         });
 
-        public IMvxCommand NavigateToMapsCommand => new MvxAsyncCommand(this.ViewModelNavigationService.NavigateToAsync<MapsViewModel>);
+        public IMvxCommand NavigateToMapsCommand => 
+            new MvxAsyncCommand(() => this.ViewModelNavigationService.NavigateToAsync<MapsViewModel>());
 
 
         public async Task NavigateBack()
         {
-            await this.ViewModelNavigationService.NavigateToDashboardAsync(this.InterviewId);
+            await this.ViewModelNavigationService.NavigateFromInterviewAsync(this.InterviewId);
         }
 
         public override void ViewAppeared()

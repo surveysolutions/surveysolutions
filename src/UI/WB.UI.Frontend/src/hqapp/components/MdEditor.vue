@@ -1,97 +1,117 @@
 <template>
-    <md-editor
-        v-bind:initialValue="initialValue"
-        v-on:change="onEditorChange"
-        v-bind="$attrs"
-        initialEditType="markdown"
-        ref="mdEditor"
-        previewStyle="global"
-        :options="editorOptions"
-        v-on="$listeners" >
-    </md-editor>
+    <div ref="editor"></div>
 </template>
+<style>
+.toastui-editor-tabs {
+    display: none;
+}
+</style>
 <script>
-import 'codemirror/lib/codemirror.css'
+
 import '@toast-ui/editor/dist/toastui-editor.css'
 
-import { Editor } from '@toast-ui/vue-editor'
-import _sanitizeHtml from 'sanitize-html'
-const sanitizeHtml = text => _sanitizeHtml(text,  { allowedTags: [], allowedAttributes: [] })
+import Editor from '@toast-ui/editor';
 import { escape, unescape } from 'lodash'
-
+import { markRaw } from 'vue';
 
 export default {
-    components:{
-        mdEditor: Editor,
-    },
-
-    props:{
-        value: {type: String, required: true},
-        supportHtml: {type: Boolean, required: false, default:false},
+    emits: ['input', 'update:modelValue'],
+    props: {
+        modelValue: { type: String, required: true },
+        supportHtml: { type: Boolean, required: false, default: false },
     },
     data() {
         return {
             initialValue: '',
+            editor: null,
+            height: '300px'
         }
+    },
+    mounted() {
+        let val = this.modelValue
+        this.initialValue = val
+        if (this.supportHtml != true) {
+            val = unescape(val)
+        }
+
+        const options = {
+            ...this.editorOptions,
+            el: this.getRootElement(),
+            initialValue: val,
+            height: this.height,
+            events: {
+                //change: () => emit("update:modelValue", e.getMarkdown())
+                change: () => this.onEditorChange()
+            }
+        };
+
+        this.editor = markRaw(new Editor(options));
+    },
+    unmounted() {
+        this.editor.off('change');
+        this.editor.destroy();
+        this.editor = null
     },
     computed: {
         editorOptions() {
             return {
                 usageStatistics: false,
+                initialEditType: 'markdown',
+                previewStyle: "global",
                 hideModeSwitch: true,
+                //previewHighlight: false,
+                //previewStyle: 'vertical',
                 //useDefaultHTMLSanitizer: true,
                 //customHTMLSanitizer: sanitizeHtml,
-                toolbarItems: [
+                toolbarItems: [[
                     'heading',
                     'bold',
                     'italic',
                     'ul',
-                    'ol',
-                    'divider',
+                    'ol'
+                ],
+                [
                     'image',
                     'link',
-                ],
+                ]],
             }
         },
     },
-
-    mounted() {
-        let val = this.value
-        this.initialValue = val
-        if (this.supportHtml != true) {
-            val = unescape(val)
-        }
-        this.$refs.mdEditor.invoke('setMarkdown', val)
-    },
-    watch:{
-        value(newValue, oldValue) {
+    watch: {
+        modelValue(newValue) {
             let val = newValue
-            if (val != this.value || val == this.initialValue) {
-                if (this.supportHtml != true) {
-                    val = unescape(val)
-                }
 
-                this.$refs.mdEditor.invoke('setMarkdown', val)
+            if (this.supportHtml != true) {
+                val = unescape(val)
             }
-        },
+
+            const edVal = this.editor.getMarkdown()
+            if (val !== edVal) {
+                this.editor.setMarkdown(val);
+            }
+        }
     },
+    expose: ['refresh'],
     methods: {
         onEditorChange() {
-            let markDown = this.$refs.mdEditor.invoke('getMarkdown')
+            let markDown = this.editor.getMarkdown()
 
             if (this.supportHtml != true) {
                 markDown = escape(markDown)
             }
 
-            if(this.value != markDown) {
+            if (this.modelValue != markDown) {
                 this.$emit('input', markDown)
+                this.$emit('update:modelValue', markDown);
             }
         },
         refresh() {
-            var self = this
             setTimeout(() => {
-                this.$refs.mdEditor.invoke('moveCursorToStart')
+                this.editor.moveCursorToStart(false)
             }, 100)
+        },
+        getRootElement() {
+            return this.$refs.editor
         },
     },
 }

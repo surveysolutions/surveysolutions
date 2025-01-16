@@ -278,13 +278,13 @@
     <value>описание</value>
   </data>
   <data name="SideBarCriticalityConditionsEmptyLine1" xml:space="preserve">
-    <value>Используйте вкладку для определения критических условий.</value>
+    <value>Используйте вкладку для добавления критических условий.</value>
   </data>
   <data name="SideBarCriticalityConditionsEmptyLine2" xml:space="preserve">
-    <value>Критическое условие - это ...</value>
+    <value>Каждое критическое условие состоит из выражения и сообщения. Критические выражения могут сстылаться на любые вопросы или переменные и должны быть удовлетворены (возвращать true). Как обрабатывать интервью с неудовлетворенными критическими выражениями определяется во время импорта анкеты на сервер.</value>
   </data>
   <data name="SideBarCriticalityConditionsEmptyLine3" xml:space="preserve">
-    <value>еще описание</value>
+    <value>Добавьте сообщение для интервьюера (респондента), чтобы объяснить, что нужно изменить в интервью (сообщение отображается, когда не удовлетворяет критическому условию). Добавление гиперссылок на вопросы в сообщение облегчит навигацию.</value>
   </data>
   <data name="SideBarHideDescription" xml:space="preserve">
     <value>cкрыть описание</value>

@@ -22,7 +22,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
             IAuthorizedUser authorizedUser,
             IUserRepository userViewFactory,
             IUserToDeviceService userToDeviceService,
-            UserManager<HqUser> userManager,
+            HqUserManager userManager,
             SignInManager<HqUser> signInManager,
             IApiTokenProvider apiAuthTokenProvider)
             :base(userManager, signInManager, apiAuthTokenProvider)

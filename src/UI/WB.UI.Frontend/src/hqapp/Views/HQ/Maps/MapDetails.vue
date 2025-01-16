@@ -1,71 +1,85 @@
 <template>
     <HqLayout :hasFilter="true" :hasHeader="true" :fixedWidth="false">
-        <Filters slot="filters" :title="$t('Common.Properties')">
-            <FilterBlock>
-                <ul class="list-group small" style="list-style: none;">
-                    <li v-if="!$config.model.shapeType"><strong>{{
-                        $t("Pages.MapDetails_MaxScale") }}:</strong> <span>{{ $config.model.maxScale }}</span></li>
-                    <li v-if="!$config.model.shapesCount"><strong>{{
-                        $t("Pages.MapDetails_MinScale") }}:</strong> <span>{{ $config.model.minScale }}</span></li>
-                    <li v-if="$config.model.shapeType"><strong>{{
-                        $t("Pages.MapDetails_ShapeType") }}:</strong> <span>{{ $config.model.shapeType }}</span></li>
-                    <li v-if="$config.model.shapesCount"><strong>{{
-                        $t("Pages.MapDetails_ShapesCount") }}:</strong> <span>{{ $config.model.shapesCount }}</span>
-                    </li>
-                    <li><strong>{{ $t("Pages.MapDetails_Size") }}:</strong> <span>{{
-                        $config.model.size }}</span>
-                    </li>
-                    <li><strong>Wkid:</strong> <span>{{ $config.model.wkid }}</span></li>
-                    <li><strong>{{ $t("Pages.MapDetails_ImportedOn") }}:</strong> <span>{{
-                        importDate }}</span>
-                    </li>
-                    <li v-if="$config.model.uploadedBy"><strong>
-                            {{ $t("Pages.MapDetails_UploadedBy") }}:</strong> <span>{{ $config.model.uploadedBy }}</span>
-                    </li>
-                </ul>
-            </FilterBlock>
+        <template v-slot:filters>
 
-            <div class="filters-container" id="linkedUsers" slot="additional">
-                <h4>
-                    {{ $t('Common.LinkedUsers') }}
-                </h4>
-                <div class="block-filter">
+            <Filters :title="$t('Common.Properties')">
+                <FilterBlock>
+                    <ul class="list-group small" style="list-style: none;">
+                        <li v-if="!$config.model.shapeType"><strong>{{
+                            $t("Pages.MapDetails_MaxScale") }}:</strong> <span>{{ $config.model.maxScale }}</span>
+                        </li>
+                        <li v-if="!$config.model.shapesCount"><strong>{{
+                            $t("Pages.MapDetails_MinScale") }}:</strong> <span>{{ $config.model.minScale }}</span>
+                        </li>
+                        <li v-if="$config.model.shapeType"><strong>{{
+                            $t("Pages.MapDetails_ShapeType") }}:</strong> <span>{{ $config.model.shapeType }}</span>
+                        </li>
+                        <li v-if="$config.model.shapesCount"><strong>{{
+                            $t("Pages.MapDetails_ShapesCount") }}:</strong> <span>{{ $config.model.shapesCount
+                                }}</span>
+                        </li>
+                        <li><strong>{{ $t("Pages.MapDetails_Size") }}:</strong> <span>{{
+                            $config.model.size }}</span>
+                        </li>
+                        <li><strong>Wkid:</strong> <span>{{ $config.model.wkid }}</span></li>
+                        <li><strong>{{ $t("Pages.MapDetails_ImportedOn") }}:</strong> <span>{{
+                            importDate }}</span>
+                        </li>
+                        <li v-if="$config.model.uploadedBy"><strong>
+                                {{ $t("Pages.MapDetails_UploadedBy") }}:</strong> <span>{{ $config.model.uploadedBy
+                                }}</span>
+                        </li>
+                    </ul>
+                </FilterBlock>
 
-                    <h5>{{ $t("Pages.MapDetails_SelectUser") }}</h5>
-                    <div class="input-group">
-                        <Typeahead control-id="newLikedUserId" :placeholder="$t('Common.LinkUser')" :value="newLikedUserId"
-                            :ajax-params="{}" @selected="newLinkedUserSelected" :fetch-url="config.api.users"
-                            class="with-extra-btn">
-                        </Typeahead>
+                <template v-slot:additional>
+                    <div class="filters-container" id="linkedUsers">
+                        <h4>
+                            {{ $t('Common.LinkedUsers') }}
+                        </h4>
+                        <div class="block-filter">
 
-                        <div class="input-group-btn">
-                            <button class="btn btn-success" @click="linkUserToMap" :disabled="!newLikedUserId">
-                                <span aria-hidden="true" class="glyphicon add"></span>
-                            </button>
+                            <h5>{{ $t("Pages.MapDetails_SelectUser") }}</h5>
+                            <div class="input-group">
+                                <Typeahead control-id="newLikedUserId" :placeholder="$t('Common.LinkUser')"
+                                    :value="newLikedUserId" :ajax-params="{}" @selected="newLinkedUserSelected"
+                                    :fetch-url="config.api.users" class="with-extra-btn">
+                                </Typeahead>
+
+                                <div class="input-group-btn">
+                                    <button class="btn btn-success" @click="linkUserToMap" :disabled="!newLikedUserId">
+                                        <span aria-hidden="true" class="glyphicon add"></span>
+                                    </button>
+                                </div>
+
+                            </div>
+
+                            <DataTables ref="table" :tableOptions="tableOptions"
+                                :addParamsToRequest="addParamsToRequest" :contextMenuItems="contextMenuItems"
+                                style="margin-left: 0px;">
+                            </DataTables>
                         </div>
-
                     </div>
+                </template>
+            </Filters>
+        </template>
 
-                    <DataTables ref="table" :tableOptions="tableOptions" :addParamsToRequest="addParamsToRequest"
-                        :contextMenuItems="contextMenuItems" style="margin-left: 0px;">
-                    </DataTables>
 
-                    <Confirm ref="confirmDiscard" id="discardConfirm" slot="modals" :okTitle="$t('Pages.MapDetails_Unlink')"
-                        okClass="btn-danger">
-                        <p>{{ $t("Pages.MapUserLink_DiscardConfirm") }} </p>
-                        <p class="text-danger">{{ $t("Pages.MapUserLink_DiscardConfirm1") }} </p>
-                    </Confirm>
-                </div>
+        <Confirm ref="confirmDiscard" id="discardConfirm" :okTitle="$t('Pages.MapDetails_Unlink')" okClass="btn-danger">
+            <p>{{ $t("Pages.MapUserLink_DiscardConfirm") }} </p>
+            <p class="text-danger">{{ $t("Pages.MapUserLink_DiscardConfirm1") }} </p>
+        </Confirm>
+
+        <template v-slot:headers>
+            <div>
+                <ol class="breadcrumb">
+                    <li>
+                        <a :href="$config.model.mapsUrl">{{ $t("Pages.MapList_Title") }}</a>
+                    </li>
+                </ol>
+                <h1>{{ $config.model.fileName }}</h1>
             </div>
-        </Filters>
-        <div slot="headers">
-            <ol class="breadcrumb">
-                <li>
-                    <a :href="$config.model.mapsUrl">{{ $t("Pages.MapList_Title") }}</a>
-                </li>
-            </ol>
-            <h1>{{ $config.model.fileName }}</h1>
-        </div>
+        </template>
         <div style="display: flex; width: 100%; height: 100%; flex-direction: column;">
             <iframe title="Map preview" style="flex-grow: 1; border: none; margin: 0; padding: 0; min-height: 550px;"
                 id="map-iframe" :src="$config.model.mapPreviewUrl"></iframe>
@@ -127,9 +141,6 @@ export default {
                     }).then(response => {
                         self.$refs.table.reload();
                     }).catch(err => {
-
-
-
                         console.error(err);
                         toastr.error(err.message.toString());
                     });

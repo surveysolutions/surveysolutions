@@ -102,7 +102,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         public IMvxAsyncCommand SignInCommand => new MvxAsyncCommand(this.SignIn);
         public IMvxAsyncCommand OnlineSignInCommand => new MvxAsyncCommand(this.RemoteSignInAsync);
         public IMvxAsyncCommand NavigateToDiagnosticsPageCommand => 
-            new MvxAsyncCommand(this.viewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>);
+            new MvxAsyncCommand(() => this.viewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>());
 
         public abstract bool HasUser();
         public abstract string GetUserName();

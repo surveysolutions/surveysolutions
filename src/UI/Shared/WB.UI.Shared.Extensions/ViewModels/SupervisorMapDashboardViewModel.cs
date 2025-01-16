@@ -41,12 +41,11 @@ public class SupervisorMapDashboardViewModel : MapDashboardViewModel
         IPlainStorage<InterviewerDocument> usersRepository,
         IDashboardViewModelFactory dashboardViewModelFactory,
         IMvxMessenger messenger,
-        IPermissionsService permissionsService,
-        IEnumeratorSettings settings) 
+        IPermissionsService permissionsService) 
         : base(principal, viewModelNavigationService, userInteractionService, 
             mapService, assignmentsRepository, interviewViewRepository, enumeratorSettings, 
             logger, mapUtilityService, mainThreadAsyncDispatcher, dashboardViewModelFactory, 
-            permissionsService, settings)
+            permissionsService)
     {
         this.usersRepository = usersRepository;
         this.messenger = messenger;
@@ -87,7 +86,7 @@ public class SupervisorMapDashboardViewModel : MapDashboardViewModel
     public override void ViewAppeared()
     {
         base.ViewAppeared();
-        messengerSubscription = messenger.Subscribe<DashboardChangedMsg>(async msg =>
+        messengerSubscription = messenger.Subscribe<DashboardChangedMessage>(async msg =>
         {
             ActiveMarkerIndex = null;
             

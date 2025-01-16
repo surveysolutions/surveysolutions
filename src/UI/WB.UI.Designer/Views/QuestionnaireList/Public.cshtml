@@ -8,31 +8,25 @@
 
     bool? isSupportAssignFolders = Model!.IsSupportAssignFolders;
 }
-@section Scripts {
-    @if (isSupportAssignFolders == true)
-    {
-        <!-- folders:css -->
-        <link rel="stylesheet" href="~/css/folders.css">
-        <!-- endinject -->
 
-        <!-- folders:js -->
-        <script src="~/js/folders.js"></script>
-        <!-- endinject -->
-    }
+@if (isSupportAssignFolders == true)
+{
+    <partial name="_FoldersScript" />
+}
 
-    <script type="text/javascript">
-        var ajusteHeight = function () {
-            var height = $(".public-questionnaires-breadcrumb").outerHeight();
-            $(".wrapper-questionnaire-table #table-content-holder").css("bottom", height);
-        };
-        $(document).ready(function () {
-            ajusteHeight();
-        });
+<script type="text/javascript">
+    var ajusteHeight = function () {
+        var height = $(".public-questionnaires-breadcrumb").outerHeight();
+        $(".wrapper-questionnaire-table #table-content-holder").css("bottom", height);
+    };
+    document.addEventListener('DOMContentLoaded', function () {
+        ajusteHeight();
+
         $(window).resize(function () {
             ajusteHeight();
         });
-    </script>
-}
+    });
+</script>
 
 <ol class="breadcrumb public-questionnaires-breadcrumb">
     @foreach (var folder in Model.Breadcrumbs)
@@ -43,16 +37,16 @@
         }
         else if (folder.FolderId == Guid.Empty)
         {
-            <li><a href="@Url.Action("Public", new {id = (Guid?) null})">@folder.Title</a></li>
+            <li><a href='@Url.Action("Public", new {id = (Guid?) null})'>@folder.Title</a></li>
         }
         else if (folder.FolderId.HasValue)
         {
-            <li>@Html.ActionLink(folder.Title, "Public", "QuestionnaireList", new {id = folder.FolderId})</li>
+            <li>@Html.ActionLink(folder.Title, "Public", "QuestionnaireList", new { id = folder.FolderId })</li>
         }
     }
 </ol>
 
-<partial name="_QuestionnairesList" model="Model.Questionnaires"/>
+<partial name="_QuestionnairesList" model="Model.Questionnaires" />
 
 @section Modal
 {
@@ -71,8 +65,8 @@
     </div>
     @if (isSupportAssignFolders == true)
     {
-    <div>
-        <partial name="_AssignFolderDialog" />
-    </div>
+        <div>
+            <partial name="_AssignFolderDialog" />
+        </div>
     }
 }

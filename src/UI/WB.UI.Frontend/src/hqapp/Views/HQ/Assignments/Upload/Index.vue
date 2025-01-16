@@ -1,27 +1,25 @@
 <template>
-    <HqLayout :hasFilter="false"
-        :fixedWidth="true"
-        :hasRow="false">
+    <HqLayout :hasFilter="false" :fixedWidth="true" :hasRow="false">
 
-        <template slot="headers">
+        <template v-slot:headers>
             <ol class="breadcrumb">
                 <li>
-                    <a href="/SurveySetup">{{$t('MainMenu.SurveySetup')}}</a>
+                    <a href="SurveySetup">{{ $t('MainMenu.SurveySetup') }}</a>
                 </li>
             </ol>
-            <h1>{{$t('BatchUpload.CreatingMultipleAssignments')}}</h1>
+            <h1>{{ $t('BatchUpload.CreatingMultipleAssignments') }}</h1>
         </template>
 
         <div class="row">
             <div class="col-sm-8">
                 <h2>
-                    {{$t('Pages.QuestionnaireNameFormat', { name : questionnaire.title, version : questionnaire.version})}}
-                    <router-link
-                        :to="{ name: 'questionnairedetails', params: { questionnaireId: questionnaire.id } }"
+                    {{ $t('Pages.QuestionnaireNameFormat', {
+                        name: questionnaire.title, version:
+                            questionnaire.version
+                    }) }}
+                    <router-link :to="{ name: 'questionnairedetails', params: { questionnaireId: questionnaire.id } }"
                         target='_blank'>
-                        <span
-                            :title="$t('Details.ShowQuestionnaireDetails')"
-                            class="glyphicon glyphicon-link"/>
+                        <span :title="$t('Details.ShowQuestionnaireDetails')" class="glyphicon glyphicon-link" />
                     </router-link>
                 </h2>
             </div>
@@ -29,70 +27,48 @@
         <div class="row">
             <div class="col-sm-6 col-xs-10 prefilled-data-info info-block">
                 <p>
-                    {{$t('BatchUpload.UploadDescription')}}
+                    {{ $t('BatchUpload.UploadDescription') }}
                     <br />
-                    <i>{{$t('BatchUpload.FileTypeDescription')}}</i>
+                    <i>{{ $t('BatchUpload.FileTypeDescription') }}</i>
                 </p>
             </div>
         </div>
-        <div
-            class="row"
+        <div class="row"
             v-if="questionnaire.identifyingQuestions.length > 0 || questionnaire.hiddenQuestions > 0 || questionnaire.rosterSizeQuestions > 0">
-            <div
-                v-if="!showQuestions"
+            <div v-if="!showQuestions"
                 class="col-sm-6 col-xs-10 prefilled-data-info info-block short-prefilled-data-info">
-                <a
-                    class="list-required-prefilled-data"
-                    href="javascript:void(0);"
-                    @click="showQuestions = true">{{$t('BatchUpload.ViewListPreloadedData')}}</a>
+                <a class="list-required-prefilled-data" href="javascript:void(0);" @click="showQuestions = true">{{
+                    $t('BatchUpload.ViewListPreloadedData') }}</a>
             </div>
-            <div
-                v-if="showQuestions"
+            <div v-if="showQuestions"
                 class="col-sm-6 col-xs-10 prefilled-data-info info-block full-prefilled-data-info">
-                <h3
-                    v-if="questionnaire.identifyingQuestions.length > 0">{{$t('BatchUpload.IdentifyingQuestions')}}</h3>
+                <h3 v-if="questionnaire.identifyingQuestions.length > 0">{{ $t('BatchUpload.IdentifyingQuestions') }}
+                </h3>
 
-                <ul
-                    v-if="questionnaire.identifyingQuestions.length > 0"
-                    class="list-unstyled prefilled-data">
-                    <li
-                        v-for="item in questionnaire.identifyingQuestions"
-                        :key="item.caption">{{ item.caption}}</li>
+                <ul v-if="questionnaire.identifyingQuestions.length > 0" class="list-unstyled prefilled-data">
+                    <li v-for="item in questionnaire.identifyingQuestions" :key="item.caption">{{ item.caption }}</li>
                 </ul>
                 <h3 v-if="questionnaire.hiddenQuestions.length > 0">
-                    {{$t('BatchUpload.HiddenQuestions')}}
+                    {{ $t('BatchUpload.HiddenQuestions') }}
                 </h3>
-                <ul v-if="questionnaire.hiddenQuestions.length > 0"
-                    class="list-unstyled prefilled-data">
-                    <li v-for="item in questionnaire.hiddenQuestions"
-                        :key="item">{{item}}</li>
+                <ul v-if="questionnaire.hiddenQuestions.length > 0" class="list-unstyled prefilled-data">
+                    <li v-for="item in questionnaire.hiddenQuestions" :key="item">{{ item }}</li>
                 </ul>
 
-                <h3
-                    v-if="questionnaire.rosterSizeQuestions.length > 0">{{$t('BatchUpload.RosterSizeQuestions')}}</h3>
-                <ul
-                    v-if="questionnaire.rosterSizeQuestions.length > 0"
-                    class="list-unstyled prefilled-data">
-                    <li v-for="item in questionnaire.rosterSizeQuestions"
-                        :key="item">{{item}}</li>
+                <h3 v-if="questionnaire.rosterSizeQuestions.length > 0">{{ $t('BatchUpload.RosterSizeQuestions') }}</h3>
+                <ul v-if="questionnaire.rosterSizeQuestions.length > 0" class="list-unstyled prefilled-data">
+                    <li v-for="item in questionnaire.rosterSizeQuestions" :key="item">{{ item }}</li>
                 </ul>
             </div>
         </div>
         <div class="row">
             <div class="col-sm-6 col-xs-10 prefilled-data-info info-block full-prefilled-data-info">
-                <h3>{{$t('BatchUpload.Select_Responsible')}}</h3>
-                <p>{{$t('BatchUpload.Select_Responsible_Description')}}</p>
+                <h3>{{ $t('BatchUpload.Select_Responsible') }}</h3>
+                <p>{{ $t('BatchUpload.Select_Responsible_Description') }}</p>
                 <form-group :error="errorByResponsible">
-                    <div
-                        class="field form-control"
-                        :class="{answered: responsible != null}"
-                        style="padding:0">
-                        <Typeahead
-                            control-id="responsible"
-                            :value="responsible"
-                            :ajax-params="{ }"
-                            :fetch-url="api.responsiblesUrl"
-                            @selected="responsibleSelected"></Typeahead>
+                    <div class="field form-control" :class="{ answered: responsible != null }" style="padding:0">
+                        <Typeahead control-id="responsible" :value="responsible" :ajax-params="{}"
+                            :fetch-url="api.responsiblesUrl" @selected="responsibleSelected"></Typeahead>
                     </div>
                 </form-group>
             </div>
@@ -101,89 +77,64 @@
             <div class="col-sm-6">
                 <div class="flex-block selection-box">
                     <div class="block prefilled-data-info">
-                        <h3>{{$t('BatchUpload.SimpleTitle')}}</h3>
-                        <p> {{$t('BatchUpload.SimpleDescription')}}</p>
-                        <h5>{{$t('BatchUpload.SimpleColumnsTitle')}}</h5>
-                        <p v-html="$t('BatchUpload.ColumnsDescription')"
-                            style="margin-left:30px;"></p>
+                        <h3>{{ $t('BatchUpload.SimpleTitle') }}</h3>
+                        <p> {{ $t('BatchUpload.SimpleDescription') }}</p>
+                        <h5>{{ $t('BatchUpload.SimpleColumnsTitle') }}</h5>
+                        <p v-dompurify-html="$t('BatchUpload.ColumnsDescription')" style="margin-left:30px;"></p>
                     </div>
                     <div>
                         <a v-bind:href="api.simpleTemplateDownloadUrl">
-                            {{$t('BatchUpload.DownloadTabTemplate')}}
+                            {{ $t('BatchUpload.DownloadTabTemplate') }}
                         </a>
-                        <div class="progress-wrapper-block"
-                            v-if="hasUploadProcess">
+                        <div class="progress-wrapper-block" v-if="hasUploadProcess">
                             <p class="warning-message">
-                                {{$t('UploadUsers.UploadInProgress', {userName: ownerOfCurrentUploadProcess})}}
+                                {{ $t('UploadUsers.UploadInProgress', { userName: ownerOfCurrentUploadProcess }) }}
                                 <br />
-                                {{$t('UploadUsers.UploadInProgressDescription')}}
+                                {{ $t('UploadUsers.UploadInProgressDescription') }}
                             </p>
                             <div class="progress">
-                                <div
-                                    class="progress-bar progress-bar-info"
-                                    role="progressbar"
-                                    aria-valuenow="5"
-                                    aria-valuemin="0"
-                                    aria-valuemax="11"
+                                <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="5"
+                                    aria-valuemin="0" aria-valuemax="11"
                                     v-bind:style="{ width: importedAssignmentsInPercents + '%' }">
-                                    <span class="sr-only">{{importedAssignmentsInPercents}}%</span>
+                                    <span class="sr-only">{{ importedAssignmentsInPercents }}%</span>
                                 </div>
                             </div>
-                            <span>{{$t('UploadUsers.EstimatedTime', {estimatedTime: estimatedTimeToFinishCurrentProcess })}}</span>
+                            <span>{{ $t('UploadUsers.EstimatedTime', {
+                                estimatedTime: estimatedTimeToFinishCurrentProcess
+                            }) }}</span>
                         </div>
-                        <input
-                            v-if="!hasUploadProcess"
-                            name="file"
-                            ref="uploader"
-                            v-show="false"
-                            accept=".tab, .txt, .zip"
-                            type="file"
-                            @change="onSimpleFileSelected"
-                            class="btn btn-default btn-lg btn-action-questionnaire"/>
-                        <button
-                            v-if="!hasUploadProcess"
-                            :disabled="isUploading"
-                            type="button"
-                            class="btn btn-success"
-                            @click="uploadSimple">{{$t('BatchUpload.UploadTabFile')}}</button>
+                        <input v-if="!hasUploadProcess" name="file" ref="uploader" v-show="false"
+                            accept=".tab, .txt, .zip" type="file" @change="onSimpleFileSelected"
+                            class="btn btn-default btn-lg btn-action-questionnaire" />
+                        <button v-if="!hasUploadProcess" :disabled="isUploading" type="button" class="btn btn-success"
+                            @click="uploadSimple">{{ $t('BatchUpload.UploadTabFile') }}</button>
                     </div>
                 </div>
             </div>
             <div class="col-sm-6">
                 <div class="flex-block selection-box">
                     <div class="block">
-                        <h3>{{$t('BatchUpload.BatchTitle')}}</h3>
-                        <p v-html="$t('BatchUpload.BatchDescription')"></p>
-                        <h5>{{$t('BatchUpload.BatchColumnsTitle')}}</h5>
-                        <p v-html="$t('BatchUpload.ColumnsDescription')"
-                            style="margin-left:30px;"></p>
+                        <h3>{{ $t('BatchUpload.BatchTitle') }}</h3>
+                        <p v-dompurify-html="$t('BatchUpload.BatchDescription')"></p>
+                        <h5>{{ $t('BatchUpload.BatchColumnsTitle') }}</h5>
+                        <p v-dompurify-html="$t('BatchUpload.ColumnsDescription')" style="margin-left:30px;"></p>
                     </div>
                     <div>
                         <a v-bind:href="api.templateDownloadUrl">
-                            {{$t('BatchUpload.DownloadTemplateArchive')}}
+                            {{ $t('BatchUpload.DownloadTemplateArchive') }}
                         </a>
-                        <input
-                            name="file"
-                            ref="uploaderAdvanced"
-                            v-show="false"
-                            v-if="!hasUploadProcess"
-                            accept=".zip"
-                            type="file"
-                            @change="onAdvancedFileSelected"
-                            class="btn btn-default btn-lg btn-action-questionnaire"/>
-                        <button
-                            v-if="!hasUploadProcess"
-                            :disabled="isUploading"
-                            type="button"
-                            class="btn btn-success"
-                            @click="uploadAdvanced">{{$t('BatchUpload.UploadZipFile')}}</button>
+                        <input name="file" ref="uploaderAdvanced" v-show="false" v-if="!hasUploadProcess" accept=".zip"
+                            type="file" @change="onAdvancedFileSelected"
+                            class="btn btn-default btn-lg btn-action-questionnaire" />
+                        <button v-if="!hasUploadProcess" :disabled="isUploading" type="button" class="btn btn-success"
+                            @click="uploadAdvanced">{{ $t('BatchUpload.UploadZipFile') }}</button>
                     </div>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-md-4 col-sm-5 text-page">
-                <p v-html="manualModeDescription"></p>
+                <p v-dompurify-html="manualModeDescription"></p>
             </div>
         </div>
     </HqLayout>
@@ -219,11 +170,11 @@ export default {
         manualModeDescription() {
             return this.$t('BatchUpload.ManualModeDescription', {
                 url:
-          '<a href=\'' +
-          this.api.createAssignmentUrl +
-          '\'>' +
-          this.$t('BatchUpload.ManualModeLinkTitle') +
-          '</a>',
+                    '<a href=\'' +
+                    this.api.createAssignmentUrl +
+                    '\'>' +
+                    this.$t('BatchUpload.ManualModeLinkTitle') +
+                    '</a>',
             })
         },
         questionnaireId() {
@@ -232,7 +183,7 @@ export default {
         hasUploadProcess() {
             return (
                 this.currentUploadProcess != null &&
-        this.currentUploadProcess.processStatus != 'ImportCompleted'
+                this.currentUploadProcess.processStatus != 'ImportCompleted'
             )
         },
         ownerOfCurrentUploadProcess() {
@@ -242,7 +193,7 @@ export default {
             let now = moment()
             let timeDiff = now - moment.utc(this.currentUploadProcess.startedDate)
             let timeRemaining =
-        (timeDiff / this.importedAssignmentsCount) * this.assignmentsInQueue
+                (timeDiff / this.importedAssignmentsCount) * this.assignmentsInQueue
 
             return moment.duration(timeRemaining).humanize()
         },
@@ -252,9 +203,9 @@ export default {
         importedAssignmentsCount() {
             return (
                 this.currentUploadProcess.verifiedCount +
-        this.currentUploadProcess.processedCount +
-        this.currentUploadProcess.withErrorsCount *
-          2 /* because verification and import */
+                this.currentUploadProcess.processedCount +
+                this.currentUploadProcess.withErrorsCount *
+                2 /* because verification and import */
             )
         },
         totalAssignmentsToImportCount() {
@@ -265,7 +216,7 @@ export default {
         importedAssignmentsInPercents() {
             return (
                 (this.importedAssignmentsCount / this.totalAssignmentsToImportCount) *
-        100
+                100
             )
         },
     },

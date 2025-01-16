@@ -204,7 +204,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<ITranslationImporter, TranslationImporter>();
             registry.Bind<ICategoriesImporter, CategoriesImporter>();
             registry.Bind<IAssemblyService, AssemblyService>();
-            registry.Bind<IArchiveUtils, IProtectedArchiveUtils, ZipArchiveUtils>();
+            registry.Bind<IArchiveUtils, ZipArchiveUtils>();
             registry.Bind<IReusableCategoriesStorage, ReusableCategoriesStorage>();
             registry.Bind<IReusableCategoriesFillerIntoQuestionnaire, ReusableCategoriesFillerIntoQuestionnaire>();
 
@@ -427,6 +427,7 @@ namespace WB.Core.BoundedContexts.Headquarters
                 .Handles<MarkAssignmentAsReceivedByTablet>(aggregate => aggregate.MarkAssignmentAsReceivedByTablet)
                 .Handles<UpdateAssignmentAudioRecording>(aggregate => aggregate.UpdateAssignmentAudioRecording)
                 .Handles<UpdateAssignmentQuantity>(aggregate => aggregate.UpdateAssignmentQuantity)
+                .Handles<UpdateAssignmentTargetArea>(aggregate => aggregate.UpdateAssignmentTargetArea)
                 .Handles<UpgradeAssignmentCommand>(aggregate => aggregate.UpgradeAssignment)
                 .Handles<UpdateAssignmentWebMode>(aggregate => aggregate.UpdateAssignmentWebMode);
 

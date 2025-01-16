@@ -1,137 +1,76 @@
 <template>
     <div>
         <FilterBlock :title="$t('Reports.Questionnaire')">
-            <Typeahead
-                control-id="questionnaire"
-                :placeholder="selectedQuestionnairePlaceholder"
-                noClear
-                :values="questionnaireList"
-                :value="selectedQuestionnaire"
-                :forceLoadingState="loading.questionnaire"
-                @selected="selectQuestionnaire"/>
+            <Typeahead control-id="questionnaire" :placeholder="selectedQuestionnairePlaceholder" noClear
+                :values="questionnaireList" :value="selectedQuestionnaire" :forceLoadingState="loading.questionnaire"
+                @selected="selectQuestionnaire" />
         </FilterBlock>
 
         <FilterBlock :title="$t('Common.QuestionnaireVersion')">
-            <Typeahead
-                control-id="version"
-                :placeholder="$t('Common.AllVersions')"
-                noSearch
-                :values="questionnaireVersionsList"
-                :value="selectedQuestionnaireVersion"
-                :forceLoadingState="loading.questionnaire"
-                :disabled="selectedQuestionnaire == null"
-                @selected="selectQuestionnaireVersion"/>
+            <Typeahead control-id="version" :placeholder="$t('Common.AllVersions')" noSearch
+                :values="questionnaireVersionsList" :value="selectedQuestionnaireVersion"
+                :forceLoadingState="loading.questionnaire" :disabled="selectedQuestionnaire == null"
+                @selected="selectQuestionnaireVersion" />
         </FilterBlock>
 
         <FilterBlock :title="$t('Common.Status')">
-            <Typeahead
-                control-id="status"
-                :selectedKey="selectedStatus"
-                data-vv-name="status"
-                data-vv-as="status"
-                :placeholder="$t('Common.AllStatuses')"
-                :value="status"
-                :values="statuses"
-                v-on:selected="statusSelected"/>
+            <Typeahead control-id="status" :selectedKey="selectedStatus" data-vv-name="status" data-vv-as="status"
+                :placeholder="$t('Common.AllStatuses')" :value="status" :values="statuses"
+                v-on:selected="statusSelected" />
         </FilterBlock>
 
         <FilterBlock :title="$t('Reports.Question')">
-            <Typeahead
-                control-id="question"
-                :placeholder="selectedQuestionPlaceholder"
-                noClear
-                :forceLoadingState="loading.questions"
-                :values="questionsList"
-                :value="selectedQuestion"
-                @selected="selectQuestion"/>
+            <Typeahead control-id="question" :placeholder="selectedQuestionPlaceholder" noClear
+                :forceLoadingState="loading.questions" :values="questionsList" :value="selectedQuestion"
+                @selected="selectQuestion" />
         </FilterBlock>
 
-        <FilterBlock
-            :title="$t('Reports.ViewOptions')"
-            v-if="!isSupervisor && this.question != null">
+        <FilterBlock :title="$t('Reports.ViewOptions')" v-if="!isSupervisor && this.question != null">
             <div class="options-group">
-                <Radio
-                    :label="$t('Reports.TeamLeadsOnly')"
-                    :radioGroup="false"
-                    name="expandTeams"
-                    :value="expandTeams"
-                    @input="radioChanged"/>
-                <Radio
-                    :label="$t('Reports.WithInterviewers')"
-                    :radioGroup="true"
-                    name="expandTeams"
-                    :value="expandTeams"
-                    @input="radioChanged"/>
+                <Radio :label="$t('Reports.TeamLeadsOnly')" :radioGroup="false" name="expandTeams" :value="expandTeams"
+                    @input="radioChanged" />
+                <Radio :label="$t('Reports.WithInterviewers')" :radioGroup="true" name="expandTeams"
+                    :value="expandTeams" @input="radioChanged" />
             </div>
         </FilterBlock>
 
-        <FilterBlock
-            :title="$t('Reports.ByAnswerValue')"
-            v-if="question && question.Type == 'Numeric'">
-            <div class="row">
+        <FilterBlock :title="$t('Reports.ByAnswerValue')" v-if="question && question.Type == 'Numeric'">
+            <Form as="div" v-slot="{ errors, meta }" class="row">
                 <div class="col-xs-6">
-                    <div
-                        class="form-group"
-                        v-bind:class="{'has-error': errors.has('min')}"
-                        :title="errors.first('min')">
+                    <div class="form-group" v-bind:class="{ 'has-error': errors.min }" :title="errors.min">
                         <label for="min">
                             {{ $t("Reports.Min") }}
                         </label>
-                        <input
-                            type="number"
-                            class="form-control input-sm"
-                            name="min"
-                            :placeholder="$t('Reports.Min')"
-                            @input="inputChange"
-                            v-validate.initial="{ max_value: max  || Number.MAX_VALUE }"
-                            :value="min"/>
+                        <Field type="number" class="form-control input-sm" name="min" :placeholder="$t('Reports.Min')"
+                            v-number="/^([-]?\d*)$/" @input="inputChange" :rules="{ max_value: max || 2147483647 }"
+                            :value="min" />
                     </div>
                 </div>
                 <div class="col-xs-6">
-                    <div
-                        class="form-group"
-                        v-bind:class="{'has-error': errors.has('max')}"
-                        :title="errors.first('max')">
+                    <div class="form-group" :class="{ 'has-error': errors.max }" :title="errors.max">
                         <label for="max">
                             {{ $t("Reports.Max") }}
                         </label>
-                        <input
-                            type="number"
-                            class="form-control input-sm"
-                            :placeholder="$t('Reports.Max')"
-                            v-validate.initial="{ min_value: min || Number.MIN_VALUE }"
-                            name="max"
-                            @input="inputChange"
-                            :value="max"/>
+                        <Field type="number" class="form-control input-sm" :placeholder="$t('Reports.Max')"
+                            v-number="/^([-]?\d*)$/" :rules="{ min_value: min == 0 ? Number(0) : (min || -2147483648) }"
+                            name="max" @input="inputChange" :value="max" />
                     </div>
                 </div>
-            </div>
+            </Form>
         </FilterBlock>
 
         <template v-if="question != null && question.SupportConditions">
             <FilterBlock :title="$t('Reports.ConditionQuestion')">
-                <Typeahead
-                    control-id="condition"
-                    :placeholder="$t('Reports.SelectConditionQuestion')"
-                    :values="conditionVariablesList"
-                    :value="selectedCondition"
-                    @selected="selectCondition"/>
+                <Typeahead control-id="condition" :placeholder="$t('Reports.SelectConditionQuestion')"
+                    :values="conditionVariablesList" :value="selectedCondition" @selected="selectCondition" />
             </FilterBlock>
             <template v-if="condition != null">
-                <Checkbox
-                    :label="$t('Reports.PivotView')"
-                    name="pivot"
-                    :value="query.pivot"
-                    @input="pivotChanged" />
+                <Checkbox :label="$t('Reports.PivotView')" name="pivot" :value="query.pivot" @input="pivotChanged" />
 
-                <ul class="list-group small"
-                    v-if="!query.pivot">
-                    <li
-                        class="list-group-item pointer"
-                        v-for="answer in condition.Answers"
-                        :key="answer.Answer"
-                        :class="{ 'list-group-item-success': isSelectedAnswer(answer.Answer)}"
-                        @click="selectConditionAnswer(answer.Answer)">{{answer.Answer}}. {{answer.Text}}</li>
+                <ul class="list-group small" v-if="!query.pivot">
+                    <li class="list-group-item pointer" v-for="answer in condition.Answers" :key="answer.Answer"
+                        :class="{ 'list-group-item-success': isSelectedAnswer(answer.Answer) }"
+                        @click="selectConditionAnswer(answer.Answer)">{{ answer.Answer }}. {{ answer.Text }}</li>
                 </ul>
             </template>
         </template>
@@ -139,19 +78,24 @@
 </template>
 
 <script>
-import Vue from 'vue'
 import routeSync from '~/shared/routeSync'
-import { xor, find, assign, isEqual, chain, isNumber, isUndefined, filter } from 'lodash'
+import { xor, find, assign, isEqual, chain, filter } from 'lodash'
+import { Form, Field, ErrorMessage } from 'vee-validate'
 
 export default {
     mixins: [
         routeSync,
     ],
 
+    components: {
+        Form,
+        Field,
+        ErrorMessage
+    },
     data() {
         return {
-            selectedQuestionnaire:null,
-            selectedQuestionnaireVersion:null,
+            selectedQuestionnaire: null,
+            selectedQuestionnaireVersion: null,
             questionnaires: [],
             questions: [],
             selectedAnswers: [],
@@ -167,7 +111,7 @@ export default {
     },
 
     props: {
-        isSupervisor: {default: false},
+        isSupervisor: { default: false },
     },
 
     watch: {
@@ -185,19 +129,19 @@ export default {
     async mounted() {
         await this.loadQuestionnaires()
 
-        if(this.query.status != null) {
-            this.status = find(this.statuses, { key: this.query.status})
+        if (this.query.status != null) {
+            this.status = find(this.statuses, { key: this.query.status })
         }
 
         if (this.query.name != null)
-            this.selectedQuestionnaire = find(this.questionnaireList, {value: this.query.name})
+            this.selectedQuestionnaire = find(this.questionnaireList, { value: this.query.name })
 
         let key = parseInt(this.query.version)
         key = Number.isNaN(key) ? null : key
-        this.selectedQuestionnaireVersion = find(this.questionnaireVersionsList, {key})
+        this.selectedQuestionnaireVersion = find(this.questionnaireVersionsList, { key })
 
-        if(this.selectedQuestionnaire == null && this.questionnaireList.length > 0)
-            this.selectedQuestionnaire =  this.questionnaireList[this.questionnaireList.length - 1]
+        if (this.selectedQuestionnaire == null && this.questionnaireList.length > 0)
+            this.selectedQuestionnaire = this.questionnaireList[this.questionnaireList.length - 1]
 
         await this.selectQuestionnaireInt(this.selectedQuestionnaire)
 
@@ -354,7 +298,8 @@ export default {
 
         max() {
             const result = parseInt(this.query.max)
-            return isNaN(result) ? null : result
+            const returnVal = isNaN(result) ? null : result
+            return returnVal
         },
 
         expandTeams() {
@@ -363,7 +308,8 @@ export default {
 
         min() {
             const result = parseInt(this.query.min)
-            return isNaN(result) ? null : result
+            const returnVal = isNaN(result) ? null : result
+            return returnVal
         },
 
         questionnaireList() {
@@ -456,13 +402,13 @@ export default {
         // drop down
         selectedQuestion() {
             if (this.query.questionId == null) return null
-            return find(this.questionsList, {name: this.query.questionId})
+            return find(this.questionsList, { name: this.query.questionId })
         },
 
         // drop down
         selectedCondition() {
             if (this.query.conditionId == null) return null
-            return find(this.questionsList, {name: this.query.conditionId})
+            return find(this.questionsList, { name: this.query.conditionId })
         },
 
         selectedQuestionnairePlaceholder() {

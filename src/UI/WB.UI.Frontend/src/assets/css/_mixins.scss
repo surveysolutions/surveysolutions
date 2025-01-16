@@ -1,56 +1,68 @@
-@mixin fontface($family){
-	@font-face {
-    font-family: '#{$family}';
-    src: url('#{$assetsPath}/fonts/#{$family}.woff2') format('woff2'),
-         url('#{$assetsPath}/fonts/#{$family}.woff') format('woff'),
-         url('#{$assetsPath}/fonts/#{$family}.ttf') format('truetype'),
-         url('#{$assetsPath}/fonts/#{$family}.svg##{$family}') format('svg');}
+@mixin fontface($family) {
+    @font-face {
+        font-family: '#{$family}';
+        src: url('#{$assetsPath}/fonts/#{$family}.woff2') format('woff2'),
+        url('#{$assetsPath}/fonts/#{$family}.woff') format('woff'),
+        url('#{$assetsPath}/fonts/#{$family}.ttf') format('truetype'),
+        url('#{$assetsPath}/fonts/#{$family}.svg##{$family}') format('svg');
+    }
 }
-@mixin font($size, $height, $font_family: inherit){
+
+@mixin font($size, $height, $font_family: inherit) {
     font-size: $size;
     line-height: $height;
     font-family: $font_family;
 }
+
 // Sizing shortcuts
 @mixin size($width, $height) {
     width: $width;
     height: $height;
 }
+
 @mixin square($size) {
     @include size($size, $size);
 }
+
 // Opacity
 @mixin opacity($opacity) {
     opacity: $opacity;
     // IE8 filter
-    $opacity-ie: ($opacity * 100);
-    filter: alpha(opacity=$opacity-ie);
+    $opacity-ie: (
+        $opacity * 100
+    );
+filter: alpha(opacity=$opacity-ie);
 }
-  // Transformations
+
+// Transformations
 @mixin scale($ratio...) {
     -webkit-transform: scale($ratio);
-        -ms-transform: scale($ratio); // IE9 only
-         -o-transform: scale($ratio);
-            transform: scale($ratio);
+    -ms-transform: scale($ratio); // IE9 only
+    -o-transform: scale($ratio);
+    transform: scale($ratio);
 }
+
 @mixin rotate($degrees) {
     -webkit-transform: rotate($degrees);
-        -ms-transform: rotate($degrees); // IE9 only
-         -o-transform: rotate($degrees);
-            transform: rotate($degrees);
+    -ms-transform: rotate($degrees); // IE9 only
+    -o-transform: rotate($degrees);
+    transform: rotate($degrees);
 }
+
 @mixin translate($x, $y) {
     -webkit-transform: translate($x, $y);
-        -ms-transform: translate($x, $y); // IE9 only
-         -o-transform: translate($x, $y);
-            transform: translate($x, $y);
+    -ms-transform: translate($x, $y); // IE9 only
+    -o-transform: translate($x, $y);
+    transform: translate($x, $y);
 }
+
 // Center-align a block level element
 @mixin center-block() {
     display: block;
     margin-left: auto;
     margin-right: auto;
 }
+
 @mixin absolute($top: null, $right: null, $bottom: null, $left: null) {
     position: absolute;
     top: $top;
@@ -58,52 +70,62 @@
     bottom: $bottom;
     left: $left;
 }
+
 // Animations
 @mixin animation($animation) {
     -webkit-animation: $animation;
-         -o-animation: $animation;
-            animation: $animation;
+    -o-animation: $animation;
+    animation: $animation;
 }
+
 @mixin animation-name($name) {
     -webkit-animation-name: $name;
-            animation-name: $name;
+    animation-name: $name;
 }
+
 @mixin animation-duration($duration) {
     -webkit-animation-duration: $duration;
-            animation-duration: $duration;
+    animation-duration: $duration;
 }
+
 @mixin animation-timing-function($timing-function) {
     -webkit-animation-timing-function: $timing-function;
-            animation-timing-function: $timing-function;
+    animation-timing-function: $timing-function;
 }
+
 @mixin animation-delay($delay) {
     -webkit-animation-delay: $delay;
-            animation-delay: $delay;
+    animation-delay: $delay;
 }
-@mixin transition($type: all, $time: 0.5s, $kind: linear, $delay: 0s){
-	-webkit-transition: $type $time $kind $delay;
-	   -moz-transition: $type $time $kind $delay;
-		-ms-transition: $type $time $kind $delay;
-		 -o-transition: $type $time $kind $delay;
-			transition: $type $time $kind $delay;
+
+@mixin transition($type: all, $time: 0.5s, $kind: linear, $delay: 0s) {
+    -webkit-transition: $type $time $kind $delay;
+    -moz-transition: $type $time $kind $delay;
+    -ms-transition: $type $time $kind $delay;
+    -o-transition: $type $time $kind $delay;
+    transition: $type $time $kind $delay;
 }
+
 // Keep images from scaling beyond the width of their parents.
 @mixin img-responsive($display: block) {
     display: $display;
     max-width: 100%; // Part 1: Set a maximum relative to the parent
     height: auto; // Part 2: Scale the height according to the width, otherwise you get stretching
 }
+
 @mixin image-2x($image, $width, $height) {
+
     @media (min--moz-device-pixel-ratio: 1.3),
-        (-o-min-device-pixel-ratio: 2.6/2),
-        (-webkit-min-device-pixel-ratio: 1.3),
-        (min-device-pixel-ratio: 1.3),
-        (min-resolution: 1.3dppx) {
-    /* on retina, use image that's scaled by 2 */
-    background-image: url($image);
-    background-size: $width $height;
+    (-o-min-device-pixel-ratio: 2.6/2),
+    (-webkit-min-device-pixel-ratio: 1.3),
+    (min-device-pixel-ratio: 1.3),
+    (min-resolution: 1.3dppx) {
+        /* on retina, use image that's scaled by 2 */
+        background-image: url($image);
+        background-size: $width $height;
     }
 }
+
 // Horizontal gradient, from left to right
 @mixin gradient-horizontal($start-color: #555, $end-color: #333, $start-percent: 0%, $end-percent: 100%) {
     background-image: -webkit-linear-gradient(left, $start-color $start-percent, $end-color $end-percent); // Safari 5.1-6, Chrome 10+
@@ -112,90 +134,120 @@
     background-repeat: repeat-x;
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#{ie-hex-str($start-color)}', endColorstr='#{ie-hex-str($end-color)}', GradientType=1); // IE9 and down
 }
+
 // Vertical gradient, from top to bottom
 @mixin gradient-vertical($start-color: #555, $end-color: #333, $start-percent: 0%, $end-percent: 100%) {
-    background-image: -webkit-linear-gradient(top, $start-color $start-percent, $end-color $end-percent);  // Safari 5.1-6, Chrome 10+
-    background-image: -o-linear-gradient(top, $start-color $start-percent, $end-color $end-percent);  // Opera 12
+    background-image: -webkit-linear-gradient(top, $start-color $start-percent, $end-color $end-percent); // Safari 5.1-6, Chrome 10+
+    background-image: -o-linear-gradient(top, $start-color $start-percent, $end-color $end-percent); // Opera 12
     background-image: linear-gradient(to bottom, $start-color $start-percent, $end-color $end-percent); // Standard, IE10, Firefox 16+, Opera 12.10+, Safari 7+, Chrome 26+
     background-repeat: repeat-x;
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#{ie-hex-str($start-color)}', endColorstr='#{ie-hex-str($end-color)}', GradientType=0); // IE9 and down
 }
+
 // Drop shadows
 @mixin box-shadow($shadow...) {
     -webkit-box-shadow: $shadow; // iOS <4.3 & Android <4.1
-            box-shadow: $shadow;
+    box-shadow: $shadow;
 }
+
 // Clearfix
 @mixin clearfix() {
+
     &:before,
     &:after {
-      content: " "; // 1
-      display: table; // 2
+        content: " "; // 1
+        display: table; // 2
     }
+
     &:after {
-      clear: both;
+        clear: both;
     }
 }
-@mixin accordion($initial-padding){
+
+@mixin accordion($initial-padding) {
     $padding : $initial-padding;
     $cummulativePadding: $initial-padding;
     @include paccordion($cummulativePadding);
-        $cummulativePadding: $cummulativePadding + $padding;
-    & .panel-default{
+    $cummulativePadding: $cummulativePadding + $padding;
+
+    & .panel-default {
         @include paccordion($cummulativePadding);
         $cummulativePadding: $cummulativePadding + $padding;
-        & .panel-default{
+
+        & .panel-default {
             @include paccordion($cummulativePadding);
             $cummulativePadding: $cummulativePadding + $padding;
-            & .panel-default{
+
+            & .panel-default {
                 @include paccordion($cummulativePadding);
                 $cummulativePadding: $cummulativePadding + $padding;
-                & .panel-default{
+
+                & .panel-default {
                     @include paccordion($cummulativePadding);
                     $cummulativePadding: $cummulativePadding + $padding;
-                    & .panel-default{
+
+                    & .panel-default {
                         @include paccordion($cummulativePadding);
                         $cummulativePadding: $cummulativePadding + $padding;
-                        & .panel-default{
+
+                        & .panel-default {
                             @include paccordion($cummulativePadding);
                             $cummulativePadding: $cummulativePadding + $padding;
-                            & .panel-default{
+
+                            & .panel-default {
                                 @include paccordion($cummulativePadding);
                                 $cummulativePadding: $cummulativePadding + $padding;
-                                & .panel-default{
+
+                                & .panel-default {
                                     @include paccordion($cummulativePadding);
                                     $cummulativePadding: $cummulativePadding + $padding;
-                                    & .panel-default{
+
+                                    & .panel-default {
                                         @include paccordion($cummulativePadding);
                                         $cummulativePadding: $cummulativePadding + $padding;
                                     }
                                 }
-                            } 
-                        } 
-                    } 
-                } 
-            } 
-        } 
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }
-@mixin paccordion($cummulativePadding){
-  & > .panel-heading h3{
-    .btn-plus{
-        left: $cummulativePadding - 10px;
+
+@mixin paccordion($cummulativePadding) {
+    &>.panel-heading h3 {
+        .btn-plus {
+            left: $cummulativePadding - 10px;
+        }
+
+        a {
+            margin-left: $cummulativePadding;
+        }
     }
-    a{
-        margin-left: $cummulativePadding;
-    }
-  } 
 }
+
 @mixin placeholder {
-  ::-webkit-input-placeholder {@content}
-  :-moz-placeholder           {@content}
-  ::-moz-placeholder          {@content}
-  :-ms-input-placeholder      {@content}  
+    ::-webkit-input-placeholder {
+        @content
+    }
+
+    :-moz-placeholder {
+        @content
+    }
+
+    ::-moz-placeholder {
+        @content
+    }
+
+    :-ms-input-placeholder {
+        @content
+    }
 }
-@mixin cancel($width: 14px){
-    $height: 2px; 
+
+@mixin cancel($width: 14px) {
+    $height: 2px;
     background-color: transparent;
     @include square($width);
     position: relative;
@@ -203,8 +255,9 @@
     @include opacity(0.5);
     display: block;
     @include box-sizing(content-box);
-    
-    &:before, &:after{
+
+    &:before,
+    &:after {
         display: block;
         content: "";
         @include size($width, $height);
@@ -214,18 +267,25 @@
         top: ($width - $height)*0.5;
         @include transition(background, 0.2s);
     }
-    &:after{
+
+    &:after {
         @include rotate(-45deg);
         top: ($width*0.5 - $height - 1px);
     }
-    &:hover, &:focus, &:active{
-        &:before, &:after{
+
+    &:hover,
+    &:focus,
+    &:active {
+
+        &:before,
+        &:after {
             background-color: darken($gray_light, 30%);
         }
     }
 }
-@mixin add($width: 14px){
-    $height: 2px; 
+
+@mixin add($width: 14px) {
+    $height: 2px;
     background-color: transparent;
     @include square($width);
     position: relative;
@@ -233,8 +293,9 @@
     @include opacity(0.5);
     display: block;
     @include box-sizing(content-box);
-    
-    &:before, &:after{
+
+    &:before,
+    &:after {
         display: block;
         content: "";
         @include size($width, $height);
@@ -244,133 +305,169 @@
         top: ($width - $height)*0.5;
         @include transition(background, 0.2s);
     }
-    &:after{
+
+    &:after {
         @include rotate(0deg);
         top: ($width*0.5 - $height - 1px);
     }
-    &:hover, &:focus, &:active{
-        &:before, &:after{
+
+    &:hover,
+    &:focus,
+    &:active {
+
+        &:before,
+        &:after {
             background-color: darken($white, 30%);
         }
     }
 }
-@mixin clear($width: 18px){
-    &:active, &:active:focus, &:focus{
-        span:before, span:after{
+
+@mixin clear($width: 18px) {
+
+    &:active,
+    &:active:focus,
+    &:focus {
+
+        span:before,
+        span:after {
             background-color: #000;
             @include opacity(1);
         }
     }
-    span{
+
+    span {
         @include cancel($width);
     }
+
     @include absolute(0, 0);
     @extend %visibility-hidden;
 }
-@mixin question_title_colors($default, $with_error, $filled){
-    .unit-title{
+
+@mixin question_title_colors($default, $with_error, $filled) {
+    .unit-title {
         background-color: lighten($blue, $default);
     }
+
     &.section-with-error>.unit-title,
-    .has-error>.unit-title{
-        background-color: lighten($red_error, $with_error) ;
+    .has-error>.unit-title {
+        background-color: lighten($red_error, $with_error);
     }
+
     &.complete-section>.unit-title,
-    .complete-section>.unit-title{
+    .complete-section>.unit-title {
         background-color: lighten($green, $filled);
     }
 }
-@mixin keyframes($animationName){
+
+@mixin keyframes($animationName) {
     @-webkit-keyframes #{$animationName} {
         @content;
     }
+
     @-moz-keyframes #{$animationName} {
         @content;
     }
+
     @-o-keyframes #{$animationName} {
         @content;
     }
+
     @keyframes #{$animationName} {
         @content;
     }
 }
+
 @mixin btn-back-questionnaire($base-color, $arrow) {
-    &:before{
-        background: url("#{$assetsPath}/img/#{$arrow}") no-repeat; 
+    &:before {
+        background: url("#{$assetsPath}/img/#{$arrow}") no-repeat;
         background-size: 22.5px 33.75px;
     }
+
     color: $base-color;
     border-color: $base-color;
-    &:active{
-        &:focus{
+
+    &:active {
+        &:focus {
             background-color: lighten($base-color, 40%);
             color: $base-color;
             border-color: darken($base-color, 10%);
         }
     }
+
     &:hover,
-    &:focus{
+    &:focus {
         background-color: lighten($base-color, 40%);
         color: $base-color;
         border-color: darken($base-color, 10%);
     }
 }
-%font-header{
+
+%font-header {
     color: $white;
     font: 18px/20px "RobotoLight";
 }
-%default-logo-size{
+
+%default-logo-size {
     @include size(365px, 329px);
     background-size: 365px 329px !important;
 }
-%retina-headquarter-size{
+
+%retina-headquarter-size {
     @include size(260px, 82px);
     background-size: 260px 82px !important;
 }
-%retina-world-bank-size{
+
+%retina-world-bank-size {
     @include size(270px, 53px);
     background-size: 100% !important;
 }
-%instructions{
+
+%instructions {
     font: 26px/28px "RobotoLight";
     color: $gray_text;
     margin-bottom: 22px;
 }
-%uppercase-font{
+
+%uppercase-font {
     font: 12px/14px $trebuchet_bold;
     text-transform: uppercase;
     letter-spacing: 0.13em;
-} 
-%gray-uppercase{
+}
+
+%gray-uppercase {
     color: $gray_light;
     font: 11px/13px $trebuchet_bold;
     letter-spacing: 1px;
     text-transform: uppercase;
 }
-%inactive{
-    opacity: 0; 
+
+%inactive {
+    opacity: 0;
     display: none;
 }
-%aside{
+
+%aside {
     height: auto;
     overflow: auto;
     top: 0;
     left: 0;
     bottom: 0;
     margin-top: 70px;
-    padding-bottom: 50px;    
+    padding-bottom: 50px;
     position: fixed;
     background-color: #fff;
     z-index: 5;
     @include transition(left, 0.3s);
 }
-%form{
+
+%form {
     border: 1px solid $gray-form;
     background-color: $white;
     border-radius: 5px;
 }
-%questionnaire-sprite{
-    & ~ label .tick {
+
+%questionnaire-sprite {
+    &~label .tick {
         display: inline-block;
         @include square(18px);
         min-width: 18px;
@@ -382,99 +479,126 @@
         @include image-2x("#{$assetsPath}/img/questionnaire-sprite2k.png", 793px, 18px);
     }
 }
-%visibility-visible{
+
+%visibility-visible {
     visibility: visible;
     @include opacity(1);
 }
-%visibility-hidden{
+
+%visibility-hidden {
     @include opacity(0);
     visibility: hidden;
 }
-%action-btn{
-    .question-unit .options-group .action-btn-holder .btn-default{
+
+%action-btn {
+    .question-unit .options-group .action-btn-holder .btn-default {
         border-color: $gray_form;
-        &:hover, &:focus, &:active{
+
+        &:hover,
+        &:focus,
+        &:active {
             border-color: darken($gray_light, 10%);
         }
     }
-    .question-unit .options-group .field .btn-clear{
+
+    .question-unit .options-group .field .btn-clear {
         top: -11px;
     }
-    .block-with-data{
+
+    .block-with-data {
         font-size: 14px;
         line-height: 16px;
         font-weight: bold;
         margin-bottom: 20px;
     }
 }
-@mixin hidden-foldback-button(){
-    .foldback-button{
+
+@mixin hidden-foldback-button() {
+    .foldback-button {
         right: - $width-foldback-button;
         background-color: $gray_form;
         border-top-right-radius: 4px;
         border-bottom-right-radius: 4px;
-        span.arrow{
+
+        span.arrow {
             right: 2px;
             @include rotate(-45deg);
-            &:first-of-type{
+
+            &:first-of-type {
                 @include rotate(45deg);
             }
         }
-        .glyphicon{
+
+        .glyphicon {
             display: inline-block;
         }
     }
 }
-@mixin tight-filters-aside(){
-    .filters{
+
+@mixin tight-filters-aside() {
+    .filters {
         margin-top: 60px;
     }
 }
-@mixin visible-foldback-button(){
-    .foldback-button{
+
+@mixin visible-foldback-button() {
+    .foldback-button {
         right: 10px;
         background-color: transparent;
-        span.arrow{
+
+        span.arrow {
             @include rotate(45deg);
-            &:first-of-type{
+
+            &:first-of-type {
                 @include rotate(-45deg);
             }
         }
-        .glyphicon{
+
+        .glyphicon {
             display: none;
         }
     }
 }
-@mixin width-questionnaire($margin-left){
+
+@mixin width-questionnaire($margin-left) {
     margin-left: $margin-left;
     width: calc(100% - #{$margin-left});
 }
-%delete-outline{
-    &:hover, &:focus, &:active, &.active:focus{
+
+%delete-outline {
+
+    &:hover,
+    &:focus,
+    &:active,
+    &.active:focus {
         box-shadow: none;
     }
 }
-@mixin fullscreen-hidden-filter($block){
-    .fullscreen-hidden-filters .#{$block}{
+
+@mixin fullscreen-hidden-filter($block) {
+    .fullscreen-hidden-filters .#{$block} {
         margin-left: 0;
         padding-left: 12px;
-    } 
+    }
 }
-@mixin stripe-gradient($first-color, $second-color){
+
+@mixin stripe-gradient($first-color, $second-color) {
     background-image: -webkit-linear-gradient(-45deg, $first-color 15%, $second-color 15%, $second-color 50%, $first-color 50%, $first-color 65%, $second-color 65%, $second-color);
     background-image: -o-linear-gradient(-45deg, $first-color 15%, $second-color 15%, $second-color 50%, $first-color 50%, $first-color 65%, $second-color 65%, $second-color);
     background-image: -moz-linear-gradient(-45deg, $first-color 15%, $second-color 15%, $second-color 50%, $first-color 50%, $first-color 65%, $second-color 65%, $second-color);
     background-image: linear-gradient(-45deg, $first-color 15%, $second-color 15%, $second-color 50%, $first-color 50%, $first-color 65%, $second-color 65%, $second-color);
     background-size: 8px 8px;
 }
-%loading-indicator{
+
+%loading-indicator {
     @include absolute(0, 0, 0, 0);
     z-index: 100;
     width: 100%;
     text-align: center;
     height: 100%;
-    background: rgba(0,0,0, 0.1);
-    div{
+    background: rgba(0, 0, 0, 0.1);
+
+    div {
         background-color: white;
         padding: 30px 40px;
         display: inline-block;
@@ -483,11 +607,14 @@
         box-shadow: 9px 9px 3px rgba(0, 0, 0, 0.1), 0 0 3px $gray_light;
     }
 }
-@mixin synchronizations-arrow($color, $angle-after, $angle-before){
+
+@mixin synchronizations-arrow($color, $angle-after, $angle-before) {
     position: relative;
     width: 15px;
     height: 10px;
-    &:before, &:after{
+
+    &:before,
+    &:after {
         position: absolute;
         content: "";
         top: 3px;
@@ -496,20 +623,24 @@
         background: $color;
         border-radius: 3px;
     }
-    &:after{
+
+    &:after {
         left: 5px;
         @include rotate($angle-after);
     }
-    &:before{
+
+    &:before {
         right: 5px;
         @include rotate($angle-before);
     }
 }
-@mixin connection-status($color){
+
+@mixin connection-status($color) {
     width: 15px;
     height: 6px;
     position: relative;
-    &:before{
+
+    &:before {
         display: block;
         border-radius: 3px;
         content: "";
@@ -521,10 +652,12 @@
         background-color: $color;
     }
 }
-%shadow{
+
+%shadow {
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
 }
-%field-to-fill{
+
+%field-to-fill {
     width: 100%;
     padding: 11px 12px;
     border: none;
@@ -533,74 +666,96 @@
     font-weight: bold;
     padding-right: 38px;
     border-radius: 5px;
-    &:hover, &:focus, &:active, &:active:focus{
+
+    &:hover,
+    &:focus,
+    &:active,
+    &:active:focus {
         outline: none;
-		@extend %shadow;
-	}
+        @extend %shadow;
+    }
 }
-%combobox{
-   .dropdown-toggle {
+
+%combobox {
+    .dropdown-toggle {
         @extend %field-to-fill;
         height: 40px;
         padding: 11px 38px 11px 10px;
-        span{
+
+        span {
             position: static;
             font: 14px/18px Arial, sans-serif;
             font-weight: bold;
             letter-spacing: normal;
             text-transform: none;
             color: $gray_text;
-            &.gray-text{
-				color: $gray_light;
-				font-weight: normal;
-				font-style: italic;
-			}
+
+            &.gray-text {
+                color: $gray_light;
+                font-weight: normal;
+                font-style: italic;
+            }
         }
-        &:hover, &:focus, &:active {
+
+        &:hover,
+        &:focus,
+        &:active {
             z-index: 0;
         }
     }
-    .btn-input.open > .dropdown-menu{
+
+    .btn-input>.dropdown-menu.show {
         width: 100%;
-        padding:  5px 10px;
-        li{
-            &>input{
+        padding: 5px 10px;
+
+        li {
+            &>input {
                 width: 100%;
                 border: none;
                 padding: 7px 10px;
             }
+
             border-bottom: 1px solid $gray_form;
-            &:last-child{
+
+            &:last-child {
                 border: none;
             }
         }
     }
-    input:checked ~ .btn-clear{
+
+    input:checked~.btn-clear {
         @extend %visibility-visible;
     }
-    @media (max-width: $screen-md-min){
-        .btn-input.open > .dropdown-menu{
+
+    @media (max-width: $screen-md-min) {
+        .btn-input>.dropdown-menu.show {
             width: 100%;
         }
-    }  
+    }
 }
-%filter-indent{
-    & > *{
-		margin-left: 10px;
-	}
-	& > .block-filter{
-		margin-left: 0;
-		& > *{
-			margin-left: 10px;
-		}
-        .btn-group.bootstrap-select, 
-	    .dropdown.bootstrap-select, 
-        .combo-box, 
-        .input-group, .field{
-			margin-left: 0 !important;
-		}
-	}
+
+%filter-indent {
+    &>* {
+        margin-left: 10px;
+    }
+
+    &>.block-filter {
+        margin-left: 0;
+
+        &>* {
+            margin-left: 10px;
+        }
+
+        .btn-group.bootstrap-select,
+        .dropdown.bootstrap-select,
+        .combo-box,
+        .input-group,
+        .field {
+            margin-left: 0 !important;
+        }
+    }
 }
+
 @mixin flexbox() {
     display: -webkit-box;
     display: -moz-box;
@@ -608,23 +763,27 @@
     display: -webkit-flex;
     display: flex;
 }
-%logo-icon{
-    .logo-icon{
-        img{
+
+%logo-icon {
+    .logo-icon {
+        img {
             display: block;
             max-height: 120px;
             width: auto;
         }
-        .default-icon{
+
+        .default-icon {
             display: none;
         }
-        &.no-logo{
-            img{
+
+        &.no-logo {
+            img {
                 display: none;
             }
-            .default-icon{
+
+            .default-icon {
                 display: block;
             }
         }
-    }	
+    }
 }

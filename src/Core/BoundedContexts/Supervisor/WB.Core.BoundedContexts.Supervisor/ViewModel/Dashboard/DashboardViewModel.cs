@@ -13,6 +13,7 @@ using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services;
 using WB.Core.BoundedContexts.Supervisor.Views;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.Enumerator.Attributes;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -32,6 +33,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
         public Guid? InterviewId { get; set; }
     }
 
+    [InterviewEntryPoint]
     public class DashboardViewModel : BaseViewModel<DashboardViewModelArgs>
     {
         private readonly IMvxNavigationService mvxNavigationService;
@@ -88,7 +90,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
             this.mvxNavigationService.DidNavigate += OnAfterNavigate;
             this.Synchronization.OnProgressChanged += SynchronizationOnProgressChanged;
 
-            messengerSubscription = messenger.Subscribe<RequestSynchronizationMsg>(msg => SynchronizationCommand.Execute());
+            messengerSubscription = messenger.Subscribe<RequestSynchronizationMessage>(msg => SynchronizationCommand.Execute());
         }
 
         public DashboardNotificationsViewModel DashboardNotifications { get; set; }
@@ -155,7 +157,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
             return this.ViewModelNavigationService.NavigateToAsync<MapsViewModel>();
         });
 
-        public IMvxAsyncCommand ShowSearchCommand => new MvxAsyncCommand(this.ViewModelNavigationService.NavigateToAsync<SearchViewModel>);
+        public IMvxAsyncCommand ShowSearchCommand => 
+            new MvxAsyncCommand(() => this.ViewModelNavigationService.NavigateToAsync<SearchViewModel>());
 
         public override void ViewAppeared()
         {

@@ -437,6 +437,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
             foreach (var question in questionnaire.Find<ICategoricalQuestion>())
             {
+                if (question.CategoriesId.HasValue) continue;
                 var categories = question.Answers?.Where(y => y.HasValue())?.ToArray();
 
                 if (categories == null || categories.Length == 0) continue;

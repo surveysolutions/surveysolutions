@@ -1,20 +1,16 @@
 <template>
-    <ModalFrame :id="id"
-        :title="confirm_title">
+    <ModalFrame :id="id" :title="confirm_title" ref="confirmModal">
         <slot />
-        <button slot="actions"
-            type="button"
-            :class="ok_class"
-            :disabled="disableOk"
-            @click="confirm">
-            {{ ok_title }}
-        </button>
-        <button slot="actions"
-            type="button"
-            class="btn btn-link"
-            @click="cancel">
-            {{$t("Common.Cancel")}}
-        </button>
+        <template v-slot:actions>
+            <div>
+                <button type="button" :class="ok_class" :disabled="disableOk" @click="confirm">
+                    {{ ok_title }}
+                </button>
+                <button type="button" class="btn btn-link" @click="cancel">
+                    {{ $t("Common.Cancel") }}
+                </button>
+            </div>
+        </template>
     </ModalFrame>
 </template>
 
@@ -63,16 +59,19 @@ export default {
         cancel() {
             this.callback(false)
             this.$emit('cancel')
-            $(this.$el).modal('hide')
+            this.$refs.confirmModal.hide()
+            //$(this.$el).modal('hide')
         },
         confirm() {
             this.callback(true)
             this.$emit('confirm')
-            $(this.$el).modal('hide')
+            this.$refs.confirmModal.hide()
+            //$(this.$el).modal('hide')
         },
         promt(callback) {
             this.callback = callback
-            $(this.$el).appendTo('body').modal()
+            this.$refs.confirmModal.modal({ keyboard: false })
+            //$(this.$el).appendTo('body').modal()
         },
     },
 }

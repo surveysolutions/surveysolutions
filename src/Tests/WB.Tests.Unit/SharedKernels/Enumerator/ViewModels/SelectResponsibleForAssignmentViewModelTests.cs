@@ -302,7 +302,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             Assert.That(assignment.ResponsibleName, Is.EqualTo(newResponsibleName));
             Assert.That(assignment.ReceivedByInterviewerAt, Is.EqualTo(null));
 
-            mockOfMvxMessenger.Verify(x => x.Publish(It.Is<DashboardChangedMsg>(y => y.Sender == viewModel), false), Times.Once);
+            mockOfMvxMessenger.Verify(x => x.Publish(It.Is<DashboardChangedMessage>(y => y.Sender == viewModel), false), Times.Once);
         }
 
         [Test]

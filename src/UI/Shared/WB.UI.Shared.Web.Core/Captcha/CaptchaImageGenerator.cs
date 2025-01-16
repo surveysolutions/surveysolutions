@@ -20,7 +20,7 @@ namespace WB.UI.Shared.Web.Captcha
     {
         public bool IsFontFound { get; private set; }
         
-        string[] fontFamilies;
+        string[] fontFamilies = [];
         static readonly Color[] colors = { Color.Red, Color.DarkBlue, Color.Chocolate, Color.DarkCyan, Color.Orange };
         private static readonly FontStyle[] fontStyles = { FontStyle.Bold, FontStyle.Italic, FontStyle.Regular };
 
@@ -78,7 +78,7 @@ namespace WB.UI.Shared.Web.Captcha
             return rnd.NextDouble() * (maximum - minimum) + minimum;
         }
 
-        public byte[] Generate(string code, int width = 300, int height = 70)
+        public byte[]? Generate(string code, int width = 300, int height = 70)
         {
             if (!IsFontFound)
                 return null;

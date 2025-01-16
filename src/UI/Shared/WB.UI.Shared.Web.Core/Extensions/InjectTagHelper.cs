@@ -25,7 +25,7 @@ namespace WB.UI.Shared.Web.Extensions
         public override int Order => 1;
 
         [HtmlAttributeName("component")]
-        public string Component { get; set; }
+        public string? Component { get; set; }
 
         [HtmlAttributeName("path")]
         public string Path { get; set; } = "locale/";
@@ -58,6 +58,8 @@ namespace WB.UI.Shared.Web.Extensions
                 entry.AddExpirationToken(webHostEnvironment.WebRootFileProvider.Watch(folder + "/" + "*.js"));
                 return localeFiles;
             });
+            
+            ArgumentNullException.ThrowIfNull(locales);
 
             output.TagName = "script";
             var current = System.Globalization.CultureInfo.CurrentUICulture.Name.Split('-')[0];

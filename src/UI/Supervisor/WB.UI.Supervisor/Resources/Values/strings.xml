@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string name="vertical_ellipsis">&#8942;</string>
-    <string name="lorem_ipsum_long">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sagittis rhoncus efficitur. Nam id lobortis justo, vel tincidunt est. Integer scelerisque justo lacinia ultricies eleifend. Cras ac lacinia nisi. Curabitur a purus eu libero iaculis pulvinar. Etiam ut placerat magna. Cras vitae justo ut justo accumsan dictum. Nunc vulputate bibendum congue.
+  <string name="lorem_ipsum_long">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sagittis rhoncus efficitur. Nam id lobortis justo, vel tincidunt est. Integer scelerisque justo lacinia ultricies eleifend. Cras ac lacinia nisi. Curabitur a purus eu libero iaculis pulvinar. Etiam ut placerat magna. Cras vitae justo ut justo accumsan dictum. Nunc vulputate bibendum congue.
 
 Sed sed nisl id lectus posuere sodales. Nulla consectetur velit vitae euismod lobortis. Integer condimentum, arcu nec rhoncus lobortis, lacus libero varius mauris, pretium feugiat est tellus eu risus. Quisque ac purus magna. Mauris efficitur lacus ante, non tristique risus fringilla id. Sed varius auctor tellus. In facilisis placerat ipsum, id varius urna. Cras ac sollicitudin purus. Curabitur pellentesque sapien at placerat fermentum. In hac habitasse platea dictumst. Proin est erat, aliquam eu elit in, mattis pharetra odio. Donec semper gravida quam non scelerisque. Donec porta orci sit amet fringilla malesuada.
 
@@ -12,6 +12,5 @@ Donec vitae scelerisque mi. Sed eu sagittis urna, quis imperdiet tortor. Sed qui
 Fusce non feugiat eros. Pellentesque hendrerit augue ligula, id congue orci eleifend nec. Suspendisse at ultrices ex. Nullam ullamcorper pellentesque pretium. Donec ut turpis ante. Nulla a hendrerit sapien. Aliquam vel pharetra purus. Pellentesque laoreet molestie quam at rutrum. Duis pellentesque, felis id lacinia posuere, nulla nisi semper odio, ac suscipit turpis tortor nec leo. Nulla fringilla, turpis quis vestibulum finibus, arcu neque dapibus dui, nec porta tortor ante ac sem.</string>
    
     
-    <string name="appbar_scrolling_view_behavior" translatable="false">com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior</string>
-    
+  <string name="appbar_scrolling_view_behavior" translatable="false">com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior</string>    
 </resources>

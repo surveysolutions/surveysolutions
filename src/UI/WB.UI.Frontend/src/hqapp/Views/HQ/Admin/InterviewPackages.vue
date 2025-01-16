@@ -1,139 +1,94 @@
 <template>
-    <HqLayout
-        :title="$t('Pages.Admin_InterviewPackages_Title', {count: totalCount})"
-        :subtitle="$t('Pages.Admin_InterviewPackages_Subtitle')"
-        :hasFilter="true">
-        <Filters slot="filters">
-            <FilterBlock
-                :title="$t('Pages.Admin_InterviewPackages_Type')">
-                <input type="radio"
-                    name="type"
-                    id="typeBroken"
-                    :value="false"
-                    v-model="returnOnlyUnknownExceptionType">
-                <label for="typeBroken">
-                    {{$t('Pages.Admin_InterviewPackages_Broken')}}
-                </label>
-                <input type="radio"
-                    id="typeRejected"
-                    name="type"
-                    :value="true"
-                    v-model="returnOnlyUnknownExceptionType">
-                <label for="typeRejected">
-                    {{$t('Pages.Admin_InterviewPackages_Rejected')}}
-                </label>
-            </FilterBlock>
-            <FilterBlock
-                :title="$t('Pages.Admin_InterviewPackages_Interviewer')">
-                <Typeahead
-                    control-id="responsibleSelector"
-                    :placeholder="$t('Pages.Admin_InterviewPackages_SelectInterviewer')"
-                    :value="responsible"
-                    v-on:selected="selectResponsible"
-                    :fetch-url="`${this.$hq.basePath}api/Teams/InterviewersCombobox`"/>
-            </FilterBlock>
-            <FilterBlock
-                :title="$t('Pages.Admin_InterviewPackages_Questionnaire')">
-                <Typeahead
-                    control-id="questionnaireSelector"
-                    :placeholder="$t('Pages.Admin_InterviewPackages_SelectQuestionnaire')"
-                    :value="questionnaireIdentity"
-                    v-on:selected="selectQuestionnaire"
-                    :fetch-url="`${this.$hq.basePath}api/QuestionnairesApi/QuestionnairesCombobox`"/>
-            </FilterBlock>
-            <FilterBlock v-if="returnOnlyUnknownExceptionType"
-                :title="$t('Pages.Admin_InterviewPackages_ExceptionType')">
-                <Typeahead
-                    control-id="exceptionTypeSelector"
-                    :placeholder="$t('Pages.Admin_InterviewPackages_SelectExceptionType')"
-                    :value="exceptionType"
-                    v-on:selected="selectExceptionType"
-                    :fetch-url="`${this.$hq.basePath}api/ControlPanelApi/ExceptionTypes`"/>
-            </FilterBlock>
-            <FilterBlock
-                :title="$t('Pages.Admin_InterviewPackages_Period')">
-                <DatePicker :config="datePickerConfig"
-                    :value="selectedDateRange"
-                    :withClear="true"
-                    v-on:clear="clearDateRange"></DatePicker>
-            </FilterBlock>
-        </Filters>
+    <HqLayout :title="$t('Pages.Admin_InterviewPackages_Title', { count: totalCount })"
+        :subtitle="$t('Pages.Admin_InterviewPackages_Subtitle')" :hasFilter="true">
+        <template v-slot:filters>
+            <Filters>
+                <FilterBlock :title="$t('Pages.Admin_InterviewPackages_Type')">
+                    <input type="radio" name="type" id="typeBroken" :value="false"
+                        v-model="returnOnlyUnknownExceptionType">
+                    <label for="typeBroken">
+                        {{ $t('Pages.Admin_InterviewPackages_Broken') }}
+                    </label>
+                    <input type="radio" id="typeRejected" name="type" :value="true"
+                        v-model="returnOnlyUnknownExceptionType">
+                    <label for="typeRejected">
+                        {{ $t('Pages.Admin_InterviewPackages_Rejected') }}
+                    </label>
+                </FilterBlock>
+                <FilterBlock :title="$t('Pages.Admin_InterviewPackages_Interviewer')">
+                    <Typeahead control-id="responsibleSelector"
+                        :placeholder="$t('Pages.Admin_InterviewPackages_SelectInterviewer')" :value="responsible"
+                        v-on:selected="selectResponsible"
+                        :fetch-url="`${$hq.basePath}api/Teams/InterviewersCombobox`" />
+                </FilterBlock>
+                <FilterBlock :title="$t('Pages.Admin_InterviewPackages_Questionnaire')">
+                    <Typeahead control-id="questionnaireSelector"
+                        :placeholder="$t('Pages.Admin_InterviewPackages_SelectQuestionnaire')"
+                        :value="questionnaireIdentity" v-on:selected="selectQuestionnaire"
+                        :fetch-url="`${$hq.basePath}api/QuestionnairesApi/QuestionnairesCombobox`" />
+                </FilterBlock>
+                <FilterBlock v-if="returnOnlyUnknownExceptionType"
+                    :title="$t('Pages.Admin_InterviewPackages_ExceptionType')">
+                    <Typeahead control-id="exceptionTypeSelector"
+                        :placeholder="$t('Pages.Admin_InterviewPackages_SelectExceptionType')" :value="exceptionType"
+                        v-on:selected="selectExceptionType"
+                        :fetch-url="`${$hq.basePath}api/ControlPanelApi/ExceptionTypes`" />
+                </FilterBlock>
+                <FilterBlock :title="$t('Pages.Admin_InterviewPackages_Period')">
+                    <DatePicker :config="datePickerConfig" :value="selectedDateRange" :withClear="true"
+                        v-on:clear="clearDateRange"></DatePicker>
+                </FilterBlock>
+            </Filters>
+        </template>
 
-        <DataTables
-            ref="table"
-            :tableOptions="tableOptions"
-            :selectable="true"
-            selectableId="id"
-            @selectedRowsChanged="rows => (selectedPackages = rows)"
-            @totalRows="rows => (totalCount = rows)"
-            @page="resetSelection"
-            :addParamsToRequest="addParamsToRequest"
-            mutliRowSelect
-            :noPaging="false"></DataTables>
+        <DataTables ref="table" :tableOptions="tableOptions" :selectable="true" selectableId="id"
+            @selectedRowsChanged="rows => (selectedPackages = rows)" @totalRows="rows => (totalCount = rows)"
+            @page="resetSelection" :addParamsToRequest="addParamsToRequest" mutliRowSelect :noPaging="false">
+        </DataTables>
 
-        <Confirm
-            ref="confirmReprocessSelected"
-            id="confirmReprocessSelected"
-            slot="modals">{{$t('Pages.Admin_InterviewPackages_ReprocessSelectedConfirmation')}}</Confirm>
-        <ModalFrame ref="putReasonModal"
-            :title="$t('Pages.ConfirmationNeededTitle')">
-            <p>{{ $t("Pages.Admin_InterviewPackages_NumberOfPackagesAffected", {count: selectedPackages.length} )}}</p>
+        <template v-slot:modals>
+            <Confirm ref="confirmReprocessSelected" id="confirmReprocessSelected">
+                {{ $t('Pages.Admin_InterviewPackages_ReprocessSelectedConfirmation') }}</Confirm>
+        </template>
+        <ModalFrame ref="putReasonModal" :title="$t('Pages.ConfirmationNeededTitle')">
+            <p>{{ $t("Pages.Admin_InterviewPackages_NumberOfPackagesAffected", { count: selectedPackages.length }) }}
+            </p>
             <form onsubmit="return false;">
                 <div class="form-group">
-                    <label
-                        class="control-label"
-                        for="reasonId">{{ $t("Pages.Admin_InterviewPackages_Reason") }}</label>
-                    <Typeahead
-                        control-id="reasonId"
-                        :placeholder="$t('Pages.Admin_InterviewPackages_SelectReason')"
-                        :value="reason"
-                        :ajax-params="{ }"
-                        @selected="selectReason"
+                    <label class="control-label" for="reasonId">{{ $t("Pages.Admin_InterviewPackages_Reason") }}</label>
+                    <Typeahead control-id="reasonId" :placeholder="$t('Pages.Admin_InterviewPackages_SelectReason')"
+                        :value="reason" :ajax-params="{}" @selected="selectReason"
                         :fetch-url="`${this.$hq.basePath}api/ControlPanelApi/ExpectedExceptionTypes`"></Typeahead>
                 </div>
             </form>
-            <div slot="actions">
-                <button
-                    type="button"
-                    class="btn btn-primary"
-                    @click="putReasonAsync"
-                    :disabled="!reason">{{ $t("Common.Ok") }}</button>
-                <button
-                    type="button"
-                    class="btn btn-link"
-                    data-dismiss="modal">{{ $t("Common.Cancel") }}</button>
-            </div>
+            <template v-slot:actions>
+                <div>
+                    <button type="button" class="btn btn-primary" @click="putReasonAsync" :disabled="!reason">{{
+        $t("Common.Ok") }}</button>
+                    <button type="button" class="btn btn-link" data-dismiss="modal">{{ $t("Common.Cancel") }}</button>
+                </div>
+            </template>
         </ModalFrame>
-        <div class="panel panel-table"
-            v-if="hasSelectedPackages">
+        <div class="panel panel-table" v-if="hasSelectedPackages">
             <div class="panel-body">
-                <input
-                    class="double-checkbox-white"
-                    id="q1az"
-                    type="checkbox"
-                    checked
-                    disabled="disabled"/>
+                <input class="double-checkbox-white" id="q1az" type="checkbox" checked disabled="disabled" />
                 <label for="q1az">
                     <span class="tick"></span>
-                    <span>{{$t('Pages.Admin_InterviewPackages_SelectedPackagesCount', {count:selectedPackages.length})}}</span>
+                    <span>{{ $t('Pages.Admin_InterviewPackages_SelectedPackagesCount',
+        { count: selectedPackages.length }) }}</span>
                 </label>
-                <button
-                    type="button"
-                    class="btn btn-primary"
-                    @click="reprocessSelected">{{$t('Pages.Admin_InterviewPackages_Reprocess')}}</button>
-                <button
-                    type="button"
-                    class="btn btn-primary"
-                    @click="showReasonModal">{{$t('Pages.Admin_InterviewPackages_PutReason')}}</button>
+                <button type="button" class="btn btn-primary" @click="reprocessSelected">{{
+        $t('Pages.Admin_InterviewPackages_Reprocess') }}</button>
+                <button type="button" class="btn btn-primary" @click="showReasonModal">{{
+                    $t('Pages.Admin_InterviewPackages_PutReason') }}</button>
             </div>
         </div>
     </HqLayout>
 </template>
 
 <script>
-import Vue from 'vue'
 import moment from 'moment'
-import {DateFormats, humanFileSize} from '~/shared/helpers'
+import { DateFormats, humanFileSize } from '~/shared/helpers'
 export default {
     data() {
         return {
@@ -164,7 +119,7 @@ export default {
         exceptionType: function (value) {
             this.loadData()
         },
-        dateRange:function(value){
+        dateRange: function (value) {
             this.loadData()
         },
     },
@@ -174,7 +129,7 @@ export default {
             requestData.questionnaireIdentity = (
                 this.questionnaireIdentity || {}
             ).key
-            if(this.dateRange != null){
+            if (this.dateRange != null) {
                 requestData.fromProcessingDateTime = moment(this.dateRange.startDate).format(DateFormats.date)
                 requestData.toProcessingDateTime = moment(this.dateRange.endDate).format(DateFormats.date)
             }
@@ -190,16 +145,16 @@ export default {
         resetSelection() {
             this.selectedPackages.splice(0, this.selectedPackages.length)
         },
-        selectResponsible(value){
+        selectResponsible(value) {
             this.responsible = value
         },
-        selectQuestionnaire(value){
+        selectQuestionnaire(value) {
             this.questionnaireIdentity = value
         },
-        selectExceptionType(value){
+        selectExceptionType(value) {
             this.exceptionType = value
         },
-        selectReason(value){
+        selectReason(value) {
             this.reason = value
         },
         reprocessSelected() {
@@ -207,7 +162,7 @@ export default {
             this.$refs.confirmReprocessSelected.promt(async ok => {
                 if (ok) await this.$http.post(`${self.$hq.basePath}api/ControlPanelApi/ReprocessSelectedBrokenPackages`, {
                     packageIds: self.selectedPackages,
-                }).then(function(response) {self.loadData()})
+                }).then(function (response) { self.loadData() })
             })
         },
         showReasonModal() {
@@ -250,8 +205,8 @@ export default {
                         title: this.$t('Pages.Admin_InterviewPackages_InterviewId'),
                         orderable: true,
                         className: 'nowrap',
-                        render: function(data, _, row) {
-                            return  `<a href='${self.$hq.basePath}Interview/Review/${data}'>${data}</a>`
+                        render: function (data, _, row) {
+                            return `<a href='${self.$hq.basePath}Interview/Review/${data}'>${data}</a>`
                         },
                     },
                     {
@@ -260,7 +215,7 @@ export default {
                         className: 'date',
                         title: this.$t('Pages.Admin_InterviewPackages_IncomingDate'),
                         orderable: true,
-                        render: function(data, type, row) {
+                        render: function (data, type, row) {
                             var localDate = moment.utc(data).local()
                             return localDate.format(DateFormats.dateTimeInList)
                         },
@@ -271,7 +226,7 @@ export default {
                         className: 'date',
                         title: this.$t('Pages.Admin_InterviewPackages_ProcessingDate'),
                         orderable: true,
-                        render: function(data, type, row) {
+                        render: function (data, type, row) {
                             var localDate = moment.utc(data).local()
                             return localDate.format(DateFormats.dateTimeInList)
                         },
@@ -281,8 +236,8 @@ export default {
                         name: 'PackageSize',
                         title: this.$t('Pages.Admin_InterviewPackages_PackageSize'),
                         orderable: true,
-                        render: function(data, type, row) {
-                            return  `<a href='${self.$hq.basePath}api/ControlPanelApi/DownloadSyncPackage/${row.id}'>${humanFileSize(data, false)}</a> / <a href='${self.$hq.basePath}api/ControlPanelApi/DownloadSyncPackage/${row.id}?format=json'>json</a>`
+                        render: function (data, type, row) {
+                            return `<a href='${self.$hq.basePath}api/ControlPanelApi/DownloadSyncPackage/${row.id}'>${humanFileSize(data, false)}</a> / <a href='${self.$hq.basePath}api/ControlPanelApi/DownloadSyncPackage/${row.id}?format=json'>json</a>`
                         },
                     },
                     {
@@ -296,17 +251,17 @@ export default {
                         name: 'ExceptionMessage',
                         title: this.$t('Pages.Admin_InterviewPackages_Exception'),
                         orderable: true,
-                        render: function(data, type, row) {
+                        render: function (data, type, row) {
                             return '<div class="accordion-group accordion-caret">' +
-                            '<div class="accordion-heading">' +
-                                `<a class="accordion-toggle collapsed" data-toggle="collapse" href= "#show${row.id}">` +
-                                    `<strong>${data}</strong>` +
+                                '<div class="accordion-heading">' +
+                                `<a class="accordion-toggle collapsed" data-bs-toggle="collapse" href= "#show${row.id}">` +
+                                `<strong>${data}</strong>` +
                                 '</a>' +
-                            '</div>' +
-                            `<div class="accordion-body collapse" id="show${row.id}">` +
+                                '</div>' +
+                                `<div class="accordion-body collapse" id="show${row.id}">` +
                                 `<pre class="accordion-inner margin-left10">${row.exceptionStackTrace}</pre>` +
-                            '</div>' +
-                        '</div>'
+                                '</div>' +
+                                '</div>'
                         },
                     },
                 ],
@@ -327,10 +282,10 @@ export default {
                 onChange: (selectedDates, dateStr, instance) => {
                     const start = selectedDates.length > 0 ? selectedDates[0] : null
                     const end = selectedDates.length > 1 ? selectedDates[1] : null
-                    if(start != null && end != null){
+                    if (start != null && end != null) {
                         self.dateRange = {
-                            startDate : start,
-                            endDate : end,
+                            startDate: start,
+                            endDate: end,
                         }
                     }
                 },

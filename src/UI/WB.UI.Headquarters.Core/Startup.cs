@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,6 +28,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Refit;
 using Serilog;
+using Vite.Extensions.AspNetCore;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
@@ -230,6 +232,16 @@ namespace WB.UI.Headquarters
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+#if DEBUG
+            //hot reload on global level brakes other pars of application
+            services.AddViteHelper(options =>
+            {
+                options.Entry = "src/webinterview/main.js";
+                options.VitePort = 3001;
+            });
+            //services.AddTransient<ITagHelperComponent, ViteTagHelperComponent>();
+#endif
+            
             services.AddUnderConstruction();
 
             services.AddOptions();
@@ -416,6 +428,7 @@ namespace WB.UI.Headquarters
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseViteForwarder();
             app.UseForwardedHeaders();
 
             app.UseExceptional();

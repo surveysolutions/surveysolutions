@@ -1,7 +1,7 @@
-import Vue from 'vue'
 import { find, findIndex, chunk } from 'lodash'
 import moment from 'moment'
 import { DateFormats } from '~/shared/helpers'
+import axios from 'axios'
 
 function formatDate(data) {
     return moment.utc(data).local().format(DateFormats.dateTimeInList)
@@ -17,15 +17,16 @@ export default {
 
     actions: {
         async getExportStatus({ state, dispatch, commit }) {
+            var self = this
 
             if (state._exportStatusUpdateInProgres) return
             commit('SET_UPDATE_IN_PROGRESS', true)
 
-            const api = Vue.$config.model.api
+            const api = window.CONFIG.model.api
             const jobsToUpdate = []
 
             try {
-                const response = await Vue.$http.get(api.statusUrl)
+                const response = await axios.get(api.statusUrl)
 
                 if (response.data == null) {
                     commit('SET_SERVICE_STATE', false)
@@ -59,7 +60,7 @@ export default {
                 if (error && error.response && error.response.status === 401)
                     location.reload()
                 else
-                    Vue.config.errorHandler(error)
+                    self.$errorHandler(error)
             } finally {
                 await new Promise(r => setTimeout(r, jobsToUpdate.length > 0 ? 1000 : 2000))
                 commit('SET_UPDATE_IN_PROGRESS', false)
@@ -68,12 +69,12 @@ export default {
         },
 
         async getJobsUpdate({ commit }, ids) {
-            const api = Vue.$config.model.api
+            const api = window.CONFIG.model.api
 
             const chunks = chunk(ids, 20)
 
             for (let i = 0; i < chunks.length; i++) {
-                const response = await Vue.$http.post(api.exportStatusUrl, chunks[i])
+                const response = await axios.post(api.exportStatusUrl, chunks[i])
 
                 if (response.data == null) {
                     return
@@ -123,12 +124,12 @@ export default {
             job.fileDestination = job.dataDestination
             job.error = (job.error || {}).message
             job.timeEstimation = moment.duration(job.timeEstimation).humanize(true)
-            Vue.set(state.jobs, index, job)
+            state.jobs[index] = job
         },
 
         REMOVE_JOB(state, { id }) {
             const index = findIndex(state.jobs, { id })
-            Vue.delete(state.jobs, index)
+            delete state.jobs[index]
         },
 
         SET_UPDATE_IN_PROGRESS(state, value) {

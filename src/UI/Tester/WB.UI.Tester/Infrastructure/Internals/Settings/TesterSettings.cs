@@ -21,6 +21,9 @@ namespace WB.UI.Tester.Infrastructure.Internals.Settings
         internal const string ShowVariablesParameterName = "ShowVariables";
         internal const string ShowLocationOnMapParamName = "ShowLocationOnMap";
         internal const string ShowAnsweringTimeName = "ShowAnsweringTime";
+        
+        internal const string TestApplicationCrash = "TestApplicationCrash";
+        
 
         private static ISharedPreferences SharedPreferences => PreferenceManager.GetDefaultSharedPreferences(Application.Context);
 

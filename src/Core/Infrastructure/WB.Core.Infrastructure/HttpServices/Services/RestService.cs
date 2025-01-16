@@ -308,36 +308,44 @@ namespace WB.Core.Infrastructure.HttpServices.Services
             var response = await this.ExecuteRequestAsync(url: url, credentials: credentials, method: HttpMethod.Get,
                 userCancellationToken: token, request: null, customHeaders: customHeaders).ConfigureAwait(false);
 
-            var restResponse = await this.ReceiveBytesWithProgressAsync(response,
+            try
+            {
+                var restResponse = await this.ReceiveBytesWithProgressAsync(response,
                         transferProgress: transferProgress, token: token ?? default)
-                .ConfigureAwait(false);
+                    .ConfigureAwait(false);
 
-            if (restResponse.StatusCode == HttpStatusCode.NotModified)
-            {
-                return new RestFile(null, string.Empty, null, null, null, restResponse.StatusCode);
-            }
-
-            var fileContent = this.GetDecompressedContentFromHttpResponseMessage(restResponse);
-
-            if (restResponse.ContentMD5 != null)
-            {
-                using (var crypto = MD5.Create())
+                if (restResponse.StatusCode == HttpStatusCode.NotModified)
                 {
-                    var hash = crypto.ComputeHash(fileContent);
+                    return new RestFile(null, string.Empty, null, null, null, restResponse.StatusCode);
+                }
 
-                    if (!hash.SequenceEqual(restResponse.ContentMD5))
+                var fileContent = this.GetDecompressedContentFromHttpResponseMessage(restResponse);
+
+                if (restResponse.ContentMD5 != null)
+                {
+                    using (var crypto = MD5.Create())
                     {
-                        throw new RestException("Downloaded file failed hash check. Please try again");
+                        var hash = crypto.ComputeHash(fileContent);
+
+                        if (!hash.SequenceEqual(restResponse.ContentMD5))
+                        {
+                            throw new RestException("Downloaded file failed hash check. Please try again");
+                        }
                     }
                 }
-            }
 
-            return new RestFile(content: fileContent, contentType: restResponse.RawContentType,
-                contentHash: restResponse.ETag, contentLength: restResponse.Length, fileName: restResponse.FileName,
-                statusCode: restResponse.StatusCode)
+                return new RestFile(content: fileContent, contentType: restResponse.RawContentType,
+                    contentHash: restResponse.ETag, contentLength: restResponse.Length, fileName: restResponse.FileName,
+                    statusCode: restResponse.StatusCode)
+                {
+                    ContentMD5 = restResponse.ContentMD5
+                };
+
+            }
+            finally
             {
-                ContentMD5 = restResponse.ContentMD5
-            };
+                response.Response.Dispose();
+            }
         }
 
         public async Task<RestStreamResult> GetResponseStreamAsync(string url, RestCredentials credentials = null,

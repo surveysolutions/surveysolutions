@@ -376,7 +376,8 @@ All data files must contain variable interview__id with a unique string or numer
 &lt;b&gt;_password&lt;/b&gt; - password to start an interview (for web-interviews only);&lt;br/&gt;
 &lt;b&gt;_webmode&lt;/b&gt; - mode for assignment (1 for CAWI, 0 or blank for CAPI);&lt;br/&gt;
 &lt;b&gt;_record_audio&lt;/b&gt; - audio recording is enabled for interviews (1 - enabled, 0 - disabled, blank - get this value from questionnaire);&lt;br/&gt;
-&lt;b&gt;_comment&lt;/b&gt; - comments for the assignment</value>
+&lt;b&gt;_comment&lt;/b&gt; - comments for the assignment;&lt;br/&gt;
+&lt;b&gt;_target_area&lt;/b&gt; - target area for the assignment</value>
     <comment>Do not translate _responsible, _quantity, _email, _webmode, _record_audio. Keep english names</comment>
   </data>
   <data name="UploadDescription" xml:space="preserve">

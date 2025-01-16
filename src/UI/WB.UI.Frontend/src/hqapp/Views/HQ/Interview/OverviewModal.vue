@@ -1,88 +1,83 @@
 <template>
-    <ModalFrame ref="modal"
-        id="overview">
-        <div slot="title">
-            <h3>{{$t("Pages.InterviewOverview")}}</h3>
-        </div>
+    <ModalFrame ref="modal" id="overview">
+        <template v-slot:title>
+            <div>
+                <h3>{{ $t("Pages.InterviewOverview") }}</h3>
+            </div>
+        </template>
 
-        <OverviewItem
-            v-for="item in items"
-            :key="item.id"
-            :item="item"
-            @showAdditionalInfo="onShowAdditionalInfo"/>
+        <OverviewItem v-for="item in items" :key="item.id" :item="item" @showAdditionalInfo="onShowAdditionalInfo" />
 
-        <infinite-loading
-            ref="loader"
-            v-if="overview.total > 0 && items.length > 0"
-            @infinite="infiniteHandler"
+        <infinite-loading ref="loader" v-if="overview.total > 0 && items.length > 0" @infinite="infiniteHandler"
             :distance="1000">
-            <span slot="no-more"></span>
-            <span slot="no-results"></span>
+            <template #complete>
+                <span slot="no-more"></span>
+            </template>
         </infinite-loading>
 
-        <div slot="actions">
-            <button type="button"
-                class="btn btn-link"
-                @click="hide">
-                {{ $t("Pages.CloseLabel") }}
-            </button>
-            <button type="button"
-                class="btn btn-link"
-                style="float:right"
-                @click="print">
-                {{ $t("Pages.Print") }}
-            </button>
-        </div>
+        <template v-slot:actions>
+            <div>
+                <button type="button" class="btn btn-link" @click="hide">
+                    {{ $t("Pages.CloseLabel") }}
+                </button>
+                <button type="button" class="btn btn-link" style="float:right" @click="print">
+                    {{ $t("Pages.Print") }}
+                </button>
+            </div>
+        </template>
     </ModalFrame>
 </template>
 
 <style>
-
-    @media print {
-        .overviewOpenned .web-interview-for-supervisor {
-            display: none;
-        }
-
-        .overviewOpenned .footer {
-            display: none;
-        }
-
-        .overviewOpenned .overviewModal {
-            padding-left: 0px !important;
-            position: unset;
-        }
-
-        .overviewOpenned .overviewModal .modal-content {
-            border-radius: 0px;
-        }
-
-        .overviewOpenned .overviewModal .modal-header {
-            border-radius: 0px;
-            display: none;
-        }
-
-        .overviewOpenned .overviewModal .modal-dialog {
-            margin: 0px;
-            width: 100% !important;
-            max-width: 100% !important;
-            display: block;
-        }
-
-        .overviewOpenned .overviewModal .modal-footer {
-            display:none;
-        }
+@media print {
+    .overviewOpenned .web-interview-for-supervisor {
+        display: none;
     }
+
+    .overviewOpenned .footer {
+        display: none;
+    }
+
+    .overviewOpenned .overviewModal {
+        padding-left: 0px !important;
+        position: unset;
+    }
+
+    .overviewOpenned .overviewModal .modal-content {
+        border-radius: 0px;
+    }
+
+    .overviewOpenned .overviewModal .modal-header {
+        border-radius: 0px;
+        display: none;
+    }
+
+    .overviewOpenned .overviewModal .modal-dialog {
+        margin: 0px;
+        width: 100% !important;
+        max-width: 100% !important;
+        display: block;
+    }
+
+    .overviewOpenned .overviewModal .modal-footer {
+        display: none;
+    }
+}
 </style>
 
 <script>
-import InfiniteLoading from 'vue-infinite-loading'
+import InfiniteLoading from "v3-infinite-loading";
+import "v3-infinite-loading/lib/style.css";
+
 import OverviewItem from './components/OverviewItem'
-import vue from 'vue'
-import {slice} from 'lodash'
+import { slice } from 'lodash'
 
 export default {
-    components: {InfiniteLoading, OverviewItem},
-    data: function() {
+    components: {
+        InfiniteLoading,
+        OverviewItem
+    },
+    data: function () {
         return {
             loaded: 100,
             sticked: [],
@@ -110,7 +105,7 @@ export default {
     methods: {
         hide() {
             document.removeEventListener('scroll', this.handleScroll)
-            $(this.$refs.modal).modal('hide')
+            this.$refs.modal.hide()
             $('body').removeClass('overviewOpenned')
         },
 
@@ -131,9 +126,11 @@ export default {
 
             self.loaded += 500
 
-            $state.loaded()
             if (self.overview.isLoaded && self.loaded >= self.overview.total) {
                 $state.complete()
+            }
+            else {
+                $state.loaded()
             }
         },
 
