@@ -49,7 +49,7 @@ export default {
     methods: {
         select(item) {
             const value = item[this.keySelector]
-            this.$emit('update:modelValue', item);
+            this.$emit('update:modelValue', value);
             this.$emit('change', value);
         },
     },
