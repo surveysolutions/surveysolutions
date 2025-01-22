@@ -172,7 +172,7 @@ namespace Ncqrs.Eventing.Sourcing
             }
             catch (Exception e)
             {
-                throw new OnEventApplyException(evnt, e.Message, e);
+                throw new OnEventApplyException($"Error on applying event of {evnt.GetType().FullName}", e);
             }
             
             _currentVersion++;
