@@ -41,7 +41,7 @@ const store = {
         },
         openInterview(context, interviewId) {
             context.dispatch('showProgress', true)
-            window.location = window.CONFIG.model.interviewerHqEndpoint + '/OpenInterview/' + interviewId
+            window.location.href = window.CONFIG.model.interviewerHqEndpoint + '/OpenInterview/' + interviewId
         },
 
         discardInterview(context, { callback, interviewId }) {
