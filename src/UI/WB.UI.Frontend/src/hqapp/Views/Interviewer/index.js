@@ -22,7 +22,7 @@ const store = {
             )
                 .done(function (data, textStatus) {
                     dispatch('showProgress', true)
-                    window.location = '/' + config.workspace + '/WebInterview/' + data.interviewId + '/Cover'
+                    window.location.href = '/' + config.workspace + '/WebInterview/' + data.interviewId + '/Cover'
                 })
                 .catch(data => {
                     if (data.responseJSON && data.responseJSON.redirectUrl) {
