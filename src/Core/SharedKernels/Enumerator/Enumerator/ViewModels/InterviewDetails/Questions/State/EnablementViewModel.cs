@@ -94,13 +94,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private async Task UpdateSelfFromModel()
         {
-            await this.mvxMainThreadDispatcher.ExecuteOnMainThreadAsync(async() =>
+            await this.mvxMainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
             {
-                this.Enabled = await GetEnablementFromInterview();
+                this.Enabled = GetEnablementFromInterview();
             });   
         }
 
-        public async Task<bool> GetEnablementFromInterview()
+        public bool GetEnablementFromInterview()
         {
             if(!initiated)
                 throw new InvalidOperationException("Model was not initiated.");
@@ -109,7 +109,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (interview == null)
             {
                 logger.Error("Interview is null. interviewId: " + InterviewId);
-                await ViewModelNavigationService.NavigateToDashboardAsync().ConfigureAwait(false);
+                ViewModelNavigationService.NavigateToDashboardAsync().ConfigureAwait(false);
                 return false;
             }
             
