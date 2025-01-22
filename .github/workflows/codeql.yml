@@ -78,6 +78,9 @@ jobs:
         yes | sdkmanager --licenses
         sdkmanager "platforms;android-34" "platform-tools"
 
+    - name: Export Android SDK Path
+      run: echo "ANDROID_SDK_ROOT=$HOME/Android/Sdk" >> $GITHUB_ENV
+
     # Autobuild attempts to build any compiled languages  (C/C++, C#, Go, or Java).
     # If this step fails, then you should remove it and run the build manually (see below)
     - name: Autobuild
