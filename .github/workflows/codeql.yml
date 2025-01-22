@@ -66,6 +66,18 @@ jobs:
     - name: Install android workload
       run: dotnet workload install android
 
+    - name: Install Android SDK
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y openjdk-11-jdk
+        mkdir -p ~/Android/Sdk/cmdline-tools
+        curl -o tools.zip https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip
+        unzip tools.zip -d ~/Android/Sdk/cmdline-tools
+        mv ~/Android/Sdk/cmdline-tools/cmdline-tools ~/Android/Sdk/cmdline-tools/latest
+        export PATH=$PATH:~/Android/Sdk/cmdline-tools/latest/bin
+        yes | sdkmanager --licenses
+        sdkmanager "platforms;android-34" "platform-tools"
+
     # Autobuild attempts to build any compiled languages  (C/C++, C#, Go, or Java).
     # If this step fails, then you should remove it and run the build manually (see below)
     - name: Autobuild
