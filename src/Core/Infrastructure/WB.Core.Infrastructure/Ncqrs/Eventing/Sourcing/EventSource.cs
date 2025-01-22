@@ -161,7 +161,20 @@ namespace Ncqrs.Eventing.Sourcing
         private void ApplyEventFromHistory(CommittedEvent evnt)
         {
             ValidateHistoricalEvent(evnt);
-            HandleEvent(evnt.Payload);
+            
+            try
+            {
+                HandleEvent(evnt.Payload);
+            }
+            catch (EventNotHandledException)
+            {
+                throw;
+            }
+            catch (Exception e)
+            {
+                throw new OnEventApplyException(evnt, e.Message, e);
+            }
+            
             _currentVersion++;
         }
 
