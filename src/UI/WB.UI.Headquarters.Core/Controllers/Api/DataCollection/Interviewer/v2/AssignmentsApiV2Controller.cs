@@ -37,8 +37,8 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2
         [HttpGet]
         [Route("")]
         [WriteToSyncLog(SynchronizationLogType.GetAssignmentsList)]
-        public override Task<List<AssignmentApiView>> GetAssignmentsAsync(CancellationToken cancellationToken)
-            => base.GetAssignmentsAsync(cancellationToken);
+        public override ActionResult<List<AssignmentApiView>> GetAssignments(CancellationToken cancellationToken)
+            => base.GetAssignments(cancellationToken);
 
         [HttpGet]
         [Route("{id:int}")]

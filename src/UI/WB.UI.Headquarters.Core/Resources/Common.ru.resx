@@ -411,7 +411,7 @@
       <value>Пользователь</value>
   </data>
   <data name="GeoTrackNumber" xml:space="preserve">
-      <value>Номер гео-отслеживания</value>
+      <value>Трек</value>
   </data>
   <data name="DateRange" xml:space="preserve">
       <value>Диапозон дат</value>

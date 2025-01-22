@@ -2,6 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Net.Http.Headers;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Controllers;
+using Microsoft.AspNetCore.Routing;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -24,6 +29,9 @@ namespace WB.Tests.Web.Headquarters.Controllers.InterviewerInterviewsControllerT
             controller = CreateInterviewerInterviewsController(
                 authorizedUser: Mock.Of<IAuthorizedUser>(x => x.Id == interviewerId),
                 interviewsFactory: interviewInformationFactory);
+            
+            controller.ControllerContext = new ControllerContext(new ActionContext(new DefaultHttpContext(), new RouteData(), new ControllerActionDescriptor()));
+            controller.Request.Headers[HeaderNames.UserAgent] = "org.worldbank.solutions.interviewer/25.01 (build 33333) (QuestionnaireVersion/27.0.0)";
 
             // act
             response = controller.Get();

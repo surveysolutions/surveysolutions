@@ -19,7 +19,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             IViewModelNavigationService viewModelNavigationService,
             IMapInteractionService mapInteractionService,
             IUserInteractionService userInteractionService) 
-            : base(serviceLocator, mapInteractionService)
+            : base(serviceLocator, mapInteractionService, userInteractionService)
         {
             this.viewModelNavigationService = viewModelNavigationService;
             this.userInteractionService = userInteractionService;

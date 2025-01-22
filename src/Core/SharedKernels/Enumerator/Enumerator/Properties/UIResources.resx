@@ -199,7 +199,7 @@
     <value>Tap to enter number</value>
   </data>
   <data name="RealQuestion_Hint" xml:space="preserve">
-    <value>Tap to enter decimal</value>
+    <value>Tap to enter number</value>
   </data>
   <data name="Interview_Questions_RemoveRowFromRosterMessage" xml:space="preserve">
     <value>Are you sure you want to remove related roster '{0}' from each related roster?</value>
@@ -723,10 +723,10 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
     <value>Stop geofencing</value>
   </data>
   <data name="MenuItem_Title_StartGeoTracking" xml:space="preserve">
-    <value>Start tracking recording</value>
+    <value>Start track recording</value>
   </data>
   <data name="MenuItem_Title_StopGeoTracking" xml:space="preserve">
-    <value>Stop tracking recording</value>
+    <value>Stop track recording</value>
   </data>
   <data name="MenuItem_Title_ShowLocation" xml:space="preserve">
     <value>Show location</value>

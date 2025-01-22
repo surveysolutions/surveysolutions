@@ -246,7 +246,7 @@
     <value>Entered value cannot be parsed as decimal value</value>
   </data>
   <data name="DecimalEnter" xml:space="preserve">
-    <value>Enter decimal</value>
+    <value>Enter number</value>
   </data>
   <data name="OptionsAvailableAfterAnswer" xml:space="preserve">
     <value>Categories will be available after answering referenced question</value>

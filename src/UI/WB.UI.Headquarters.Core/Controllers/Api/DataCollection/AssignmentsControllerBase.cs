@@ -55,7 +55,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             return assignmentApiDocument;
         }
 
-        public virtual Task<List<AssignmentApiView>> GetAssignmentsAsync(CancellationToken cancellationToken)
+        public virtual ActionResult<List<AssignmentApiView>> GetAssignments(CancellationToken cancellationToken)
         {
             var authorizedUserId = this.authorizedUser.Id;
 
@@ -65,6 +65,9 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
 
             foreach (var assignment in assignments)
             {
+                if (IsNeedUpdateApp(assignment))
+                    return StatusCode(StatusCodes.Status426UpgradeRequired);
+                
                 assignmentApiViews.Add(new AssignmentApiView
                 {
                     Id = assignment.Id,
@@ -77,7 +80,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
                 });
             }
 
-            return Task.FromResult(assignmentApiViews);
+            return assignmentApiViews;
         }
 
         public virtual IActionResult Received(int id)
@@ -111,16 +114,11 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
         {
             var productVersion = this.Request.GetProductVersionFromUserAgent(ProductName);
 
-            if (!string.IsNullOrWhiteSpace(assignment.TargetArea) 
-                && productVersion != null 
-                && productVersion <= new Version(24, 6))
-            {
-#if DEBUG 
-                return false;
-#else
+            if (productVersion == null)
                 return true;
-#endif
-            }
+
+            if (!string.IsNullOrWhiteSpace(assignment.TargetArea) && productVersion <= new Version(24, 6))
+                return true;
             
             return false;
         }

@@ -17,8 +17,9 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
 
         public SupervisorAssignmentDashboardItemViewModel(IServiceLocator serviceLocator, 
             IMapInteractionService mapInteractionService,
-            IViewModelNavigationService navigationService) 
-            : base(serviceLocator, mapInteractionService)
+            IViewModelNavigationService navigationService,
+            IUserInteractionService userInteractionService) 
+            : base(serviceLocator, mapInteractionService, userInteractionService)
         {
             this.navigationService = navigationService;
         }
