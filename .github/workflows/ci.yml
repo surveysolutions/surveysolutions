@@ -41,7 +41,7 @@ jobs:
       - name: Test coverage artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: test-coverage
+          name: test-coverage-${{ github.run_id }}
           retention-days: 1
           path: |
             src/Tests/WB.Tests.Unit/TestResults/**/*.xml
@@ -108,7 +108,7 @@ jobs:
       - name: Test coverage artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: test-coverage
+          name: test-coverage-${{ github.run_id }}
           retention-days: 1
           path: |
             src/Tests/WB.Tests.Integration/TestResults/**/*.xml
@@ -146,7 +146,7 @@ jobs:
       - uses: actions/download-artifact@v4
         id: test-results
         with:
-          name: test-coverage
+          name: test-coverage-${{ github.run_id }}
           path: test-results
 
       - name: build with scan
