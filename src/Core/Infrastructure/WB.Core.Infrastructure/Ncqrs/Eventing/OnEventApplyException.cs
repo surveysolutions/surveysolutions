@@ -22,5 +22,8 @@ namespace Ncqrs.Domain
         {
             Event = evnt;
         }
+        
+        public OnEventApplyException(String message, Exception inner)
+            : base(message, inner) { }
     }
 }

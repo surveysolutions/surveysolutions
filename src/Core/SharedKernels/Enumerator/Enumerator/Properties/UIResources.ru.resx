@@ -546,7 +546,7 @@
     <value>Обновить карты</value>
   </data>
   <data name="Version_Not_Supports" xml:space="preserve">
-    <value>Версия вашего приложения не поддерживает данный функционал</value>
+    <value>Ваша версия приложения не поддерживает эту функцию. Пожалуйста, установите Interviewer с картами, чтобы включить её.</value>
   </data>
   <data name="AreaMap_UpdateFailed" xml:space="preserve">
     <value>Обновление не удалось</value>

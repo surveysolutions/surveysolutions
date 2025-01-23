@@ -4,6 +4,8 @@ using MvvmCross.Plugin.Messenger;
 using MvvmCross.Tests;
 using MvvmCross.Views;
 using NUnit.Framework;
+using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
@@ -41,7 +43,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelT
             return new StaticTextViewModel(
                 questionState: questionState ??
                                new StaticTextStateViewModel(
-                                   new EnablementViewModel(statefulInterviewRepository, liteEventRegistry, plainQuestionnaireRepository),
+                                   new EnablementViewModel(statefulInterviewRepository, liteEventRegistry, plainQuestionnaireRepository, 
+                                       Mock.Of<IViewModelNavigationService>(), Mock.Of<ILogger>()),
                                    new ValidityViewModel(liteEventRegistry, statefulInterviewRepository, Create.ViewModel.ErrorMessagesViewModel()),
                                    new WarningsViewModel(liteEventRegistry, statefulInterviewRepository, Create.ViewModel.ErrorMessagesViewModel())),
                 attachmentViewModel: attachmentViewModel ??
