@@ -161,6 +161,7 @@ jobs:
         name: Mobile Apps
         path: ${{ github.workspace }}/artifacts
         overwrite: true
+        retention-days: 1
 
   docker:
     needs: [prepare, mobile]
@@ -315,3 +316,4 @@ jobs:
           path: ${{ steps.build-installer.outputs.filename }}
             #artifacts/WB.UI.Headquarters.Offline.zip
           overwrite: true
+          retention-days: 1
