@@ -86,7 +86,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                         }
                         catch (Exception e)
                         {
-                            this.logger.LogWarning($"Send completed email to {senderInfo.Address} for {interviewId} failed");
+                            this.logger.LogWarning($"Send completed email to {senderInfo.Address} for {interviewId} failed", e);
                         }
                     }
                     
