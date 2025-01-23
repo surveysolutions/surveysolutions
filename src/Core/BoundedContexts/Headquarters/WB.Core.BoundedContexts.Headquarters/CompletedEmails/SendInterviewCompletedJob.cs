@@ -79,8 +79,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 {
                     foreach (var interviewId in interviewIds.AsParallel())
                     {
-                        await SendInterviewCompleteEmail(interviewId, senderInfo)
-                            .ConfigureAwait(false);
+                        try
+                        {
+                            await SendInterviewCompleteEmail(interviewId, senderInfo)
+                                .ConfigureAwait(false);
+                        }
+                        catch (Exception e)
+                        {
+                            this.logger.LogWarning($"Send completed email to {senderInfo.Address} for {interviewId} failed");
+                        }
                     }
                     
                     interviewIds = completedEmailsQueue.GetInterviewIdsForSend();
