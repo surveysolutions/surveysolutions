@@ -198,7 +198,7 @@ jobs:
         id: download
         uses: actions/download-artifact@v4
         with:
-          name: Mobile Apps
+          name: Mobile Apps ${{ github.run_id }}
           path: artifacts
 
       - name: Build and push
@@ -242,7 +242,7 @@ jobs:
         id: download
         uses: actions/download-artifact@v4
         with:
-          name: Mobile Apps
+          name: Mobile Apps ${{ github.run_id }}
           path: installer/artifacts
 
       - name: Save Code Signing Certificate
