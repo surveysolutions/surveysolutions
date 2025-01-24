@@ -312,8 +312,7 @@ jobs:
       - name: Publish
         uses: actions/upload-artifact@v4
         with:
-          name: Windows Installer ${{ github.run_id }}
+          name: Windows Installer
           path: ${{ steps.build-installer.outputs.filename }}
             #artifacts/WB.UI.Headquarters.Offline.zip
           overwrite: true
-          retention-days: 1
