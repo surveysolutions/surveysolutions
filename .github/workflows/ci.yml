@@ -47,7 +47,7 @@ jobs:
             src/Tests/WB.Tests.Unit/TestResults/**/*.xml
             src/Tests/WB.Tests.Web/TestResults/**/*.xml
             src/Tests/WB.Tests.Unit.Designer/TestResults/**/*.xml
-          overwrite: true
+          overwrite: false
 
   integration:
     runs-on: ubuntu-latest
@@ -115,7 +115,7 @@ jobs:
             src/Tests/WB.Tests.Integration.Designer/TestResults/**/*.xml
             src/Services/Export/WB.Services.Export.Tests/TestResults/**/*.xml
             src/Services/Core/WB.Services.Scheduler.Tests/TestResults/**/*.xml
-          overwrite: true
+          overwrite: false
 
   code-analysis:
     if: |
