@@ -158,11 +158,21 @@ jobs:
     - name: Publish
       uses: actions/upload-artifact@v4
       with:
-        name: Mobile-Apps-${{ github.run_id }}
+        name: Mobile-Apps-${{ github.workspace }}
         path: ${{ github.workspace }}/artifacts
         overwrite: false
         merge-multiple: true
         retention-days: 1
+
+    merge:
++    runs-on: ubuntu-latest
++    needs: upload
++    steps:
++      - name: Merge Artifacts
++        uses: actions/upload-artifact/merge@v4
++        with:
++          name: Mobile-Apps-${{ github.run_id }}
++          pattern: Mobile-Apps-*
 
   docker:
     needs: [prepare, mobile]
