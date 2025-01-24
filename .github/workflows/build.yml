@@ -158,7 +158,7 @@ jobs:
     - name: Publish
       uses: actions/upload-artifact@v4
       with:
-        name: Mobile-Apps-${{ github.workspace }}
+        name: Mobile-Apps-${{ matrix.task }}
         path: ${{ github.workspace }}/artifacts
         overwrite: false
         merge-multiple: true
