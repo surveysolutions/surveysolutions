@@ -3,6 +3,7 @@ using MvvmCross.Commands;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Dialogs;
@@ -15,8 +16,10 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
         private readonly IViewModelNavigationService navigationService;
 
         public SupervisorAssignmentDashboardItemViewModel(IServiceLocator serviceLocator, 
-            IViewModelNavigationService navigationService) 
-            : base(serviceLocator)
+            IMapInteractionService mapInteractionService,
+            IViewModelNavigationService navigationService,
+            IUserInteractionService userInteractionService) 
+            : base(serviceLocator, mapInteractionService, userInteractionService)
         {
             this.navigationService = navigationService;
         }
@@ -39,6 +42,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
                 Command = new MvxAsyncCommand(this.SelectInterviewerAsync),
                 Label = EnumeratorUIResources.Dashboard_Assign
             });
+            
+            BindTargetAreaAction(Assignment.Id, Assignment.TargetArea);
         }
 
         private Task SelectInterviewerAsync() =>

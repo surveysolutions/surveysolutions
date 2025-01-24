@@ -33,7 +33,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             string password,
             bool? webMode, 
             string comments,
-            int? upgradedFromId = null) : this()
+            string targetArea,
+            int? upgradedFromId = null
+            ) : this()
         {
             this.PublicKey = publicKey;
             this.Id = id;
@@ -46,6 +48,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             this.WebMode = webMode;
             this.Comments = comments;
             this.UpgradedFromId = upgradedFromId;
+            this.TargetArea = targetArea;
         }
 
         public virtual Guid PublicKey { get; set; }
@@ -76,6 +79,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         public virtual string Email { get; set; }
         public virtual string Password { get; set; }
         public virtual bool? WebMode { get; set; }
+        public virtual string TargetArea { get; set; }
 
         public virtual IList<IdentifyingAnswer> IdentifyingData { get; set; }
 

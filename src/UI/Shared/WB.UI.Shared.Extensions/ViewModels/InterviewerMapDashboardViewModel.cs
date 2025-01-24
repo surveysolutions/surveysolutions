@@ -32,12 +32,11 @@ public class InterviewerMapDashboardViewModel : MapDashboardViewModel
         IMapUtilityService mapUtilityService, 
         IMvxMainThreadAsyncDispatcher mainThreadAsyncDispatcher,
         IDashboardViewModelFactory dashboardViewModelFactory,
-        IPermissionsService permissionsService,
-        IEnumeratorSettings settings) 
+        IPermissionsService permissionsService) 
         : base(principal, viewModelNavigationService, userInteractionService, 
             mapService, assignmentsRepository, interviewViewRepository, enumeratorSettings, 
             logger, mapUtilityService, mainThreadAsyncDispatcher, dashboardViewModelFactory, 
-            permissionsService, settings)
+            permissionsService)
     {
     }
 

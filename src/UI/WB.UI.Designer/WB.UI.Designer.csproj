@@ -25,6 +25,8 @@
   <ItemGroup>
     <Content Update="**\*.json" CopyToPublishDirectory="Never" />
     <Content Update="wwwroot\**\*" CopyToPublishDirectory="PreserveNewest" />
+    <Content Include="wwwroot\assets\.vite\manifest.json" CopyToPublishDirectory="PreserveNewest"
+             Condition="Exists('wwwroot\assets\.vite\manifest.json')"/>
   </ItemGroup>
 
   <ItemGroup>
@@ -32,7 +34,9 @@
     <PackageReference Include="FluentMigrator.Runner.Core" Version="6.2.0" />
     <PackageReference Include="Newtonsoft.Json.Schema" Version="3.0.16" />
     <PackageReference Include="NJsonSchema" Version="10.9.0" />
-    <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="3.116.0" />
+    <PackageReference Include="SkiaSharp" Version="3.116.1" />
+    <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="3.116.1" />
+    <PackageReference Include="SkiaSharp.NativeAssets.Linux.NoDependencies" Version="3.116.1" />
     <PackageReference Include="SkiaSharp.QrCode" Version="0.7.0" />
     <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.20071.2" />
     <PackageReference Include="FluentMigrator.Runner" Version="6.2.0" />

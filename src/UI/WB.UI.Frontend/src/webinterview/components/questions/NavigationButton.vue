@@ -1,7 +1,7 @@
 <template>
     <div class="action-container" v-if="$me && visible">
         <a class="btn btn-lg" :class="css" :disabled="shouldDisable ? true : null" @click="navigate">
-            <span v-html="buttonTitle"></span>
+            <span v-dompurify-html="buttonTitle"></span>
         </a>
     </div>
 </template>

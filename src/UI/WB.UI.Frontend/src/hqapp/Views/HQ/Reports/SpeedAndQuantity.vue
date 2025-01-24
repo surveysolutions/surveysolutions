@@ -50,7 +50,7 @@
 
         <div class="clearfix">
             <div class="col-sm-8">
-                <h4 v-html="selectedQuestionnaireTitle" />
+                <h4 v-dompurify-html="selectedQuestionnaireTitle" />
             </div>
         </div>
 

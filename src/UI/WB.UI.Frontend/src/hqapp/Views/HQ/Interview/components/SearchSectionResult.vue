@@ -5,7 +5,7 @@
         <a href="javascript:void(0)" v-for="link in search.questions" :key="link.target" class="question" :class='{
             "short-row": search.sectionId != "critical-rules"
         }' @click="navigate(link)">
-            <span v-html="link.title" />
+            <span v-dompurify-html="link.title" />
         </a>
     </div>
 </template>

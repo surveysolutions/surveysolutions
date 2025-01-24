@@ -15,6 +15,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         AudioRecordingChanged = 6,
         Reassigned = 7,
         QuantityChanged = 8,
-        WebModeChanged = 9
+        WebModeChanged = 9,
+        TargetAreaChanged = 10,
     }
 }

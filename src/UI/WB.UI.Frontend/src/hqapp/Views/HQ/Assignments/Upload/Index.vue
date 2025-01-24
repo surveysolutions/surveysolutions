@@ -80,7 +80,7 @@
                         <h3>{{ $t('BatchUpload.SimpleTitle') }}</h3>
                         <p> {{ $t('BatchUpload.SimpleDescription') }}</p>
                         <h5>{{ $t('BatchUpload.SimpleColumnsTitle') }}</h5>
-                        <p v-html="$t('BatchUpload.ColumnsDescription')" style="margin-left:30px;"></p>
+                        <p v-dompurify-html="$t('BatchUpload.ColumnsDescription')" style="margin-left:30px;"></p>
                     </div>
                     <div>
                         <a v-bind:href="api.simpleTemplateDownloadUrl">
@@ -115,9 +115,9 @@
                 <div class="flex-block selection-box">
                     <div class="block">
                         <h3>{{ $t('BatchUpload.BatchTitle') }}</h3>
-                        <p v-html="$t('BatchUpload.BatchDescription')"></p>
+                        <p v-dompurify-html="$t('BatchUpload.BatchDescription')"></p>
                         <h5>{{ $t('BatchUpload.BatchColumnsTitle') }}</h5>
-                        <p v-html="$t('BatchUpload.ColumnsDescription')" style="margin-left:30px;"></p>
+                        <p v-dompurify-html="$t('BatchUpload.ColumnsDescription')" style="margin-left:30px;"></p>
                     </div>
                     <div>
                         <a v-bind:href="api.templateDownloadUrl">
@@ -134,7 +134,7 @@
         </div>
         <div class="row">
             <div class="col-md-4 col-sm-5 text-page">
-                <p v-html="manualModeDescription"></p>
+                <p v-dompurify-html="manualModeDescription"></p>
             </div>
         </div>
     </HqLayout>

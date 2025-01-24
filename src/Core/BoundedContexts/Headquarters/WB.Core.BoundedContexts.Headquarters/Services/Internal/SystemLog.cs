@@ -109,6 +109,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
             this.Append(LogEntryType.AssignmentSizeChanged, $"Assignment {id}", "size changed", $"{quantity ?? -1}");
         }
 
+        public void AssignmentTargetAreaChanged(int id, string targetAreaName)
+        {
+            this.Append(LogEntryType.AssignmentTargetAreaChanged, $"Assignment {id}", "target area changed", $"{targetAreaName}");
+        }
+
         public void ExportEncryptionChanged(bool enabled)
         {
             this.Append(LogEntryType.ExportEncryptionChanged, "Export encryption", "changed",

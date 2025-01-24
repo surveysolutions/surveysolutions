@@ -1,7 +1,6 @@
 <template>
     <div class="cell-unit">
-        <span class="cell-content"
-            v-html="roster.rosterTitle"></span>
+        <span class="cell-content" v-dompurify-html="roster?.rosterTitle"></span>
     </div>
 </template>
 
@@ -11,12 +10,14 @@ export default {
 
     data() {
         return {
-            rowIndex : null,
-            matrixRoster : null,
+            rowIndex: null,
+            matrixRoster: null,
         }
     },
     computed: {
-        roster(){
+        roster() {
+            if (this.matrixRoster.$me.isLoading)
+                return null
             return this.matrixRoster.$me.instances[this.rowIndex]
         },
     },

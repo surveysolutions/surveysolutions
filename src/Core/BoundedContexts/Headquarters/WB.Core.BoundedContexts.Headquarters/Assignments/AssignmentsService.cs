@@ -312,7 +312,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 ResponsibleId = assignment.ResponsibleId,
                 ResponsibleName = assignment.Responsible.Name,
                 IsAudioRecordingEnabled = assignment.AudioRecording,
-                Comments = assignment.Comments
+                Comments = assignment.Comments,
+                TargetArea = assignment.TargetArea,
             };
 
             var assignmentIdentifyingData = assignment.IdentifyingData.ToLookup(id => id.Identity);

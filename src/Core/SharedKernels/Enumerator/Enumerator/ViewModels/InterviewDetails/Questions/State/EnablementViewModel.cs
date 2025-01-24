@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 using MvvmCross;
 using MvvmCross.Base;
 using MvvmCross.ViewModels;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State
@@ -27,6 +29,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IViewModelEventRegistry eventRegistry;
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IMvxMainThreadAsyncDispatcher mvxMainThreadDispatcher;
+        
+        private readonly ILogger logger;
+        
+        protected readonly IViewModelNavigationService ViewModelNavigationService;
 
         public event EventHandler EntityEnabled;
         public event EventHandler EntityDisabled;
@@ -34,12 +40,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         protected EnablementViewModel() { }
 
         public EnablementViewModel(IStatefulInterviewRepository interviewRepository, IViewModelEventRegistry eventRegistry, 
-            IQuestionnaireStorage questionnaireRepository)
+            IQuestionnaireStorage questionnaireRepository, IViewModelNavigationService viewModelNavigationService, ILogger logger)
         {
             this.interviewRepository = interviewRepository ?? throw new ArgumentNullException(nameof(interviewRepository));
             this.eventRegistry = eventRegistry ?? throw new ArgumentNullException(nameof(eventRegistry));
             this.questionnaireRepository = questionnaireRepository ?? throw new ArgumentNullException(nameof(questionnaireRepository));
             this.mvxMainThreadDispatcher = Mvx.IoCProvider.Resolve<IMvxMainThreadAsyncDispatcher>();
+            this.ViewModelNavigationService = viewModelNavigationService;
+            this.logger = logger;
         }
 
         private string InterviewId { get; set; }
@@ -98,8 +106,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 throw new InvalidOperationException("Model was not initiated.");
             var interview = this.interviewRepository.Get(this.InterviewId);
             
-            if(interview == null)
-                throw new InvalidOperationException($"Interview was not found for interview [{this.InterviewId}]");
+            if (interview == null)
+            {
+                logger.Error("Interview is null. interviewId: " + InterviewId);
+                ViewModelNavigationService.NavigateToDashboardAsync().ConfigureAwait(false);
+                return false;
+            }
             
             return interview.IsEnabled(this.entityIdentity);
         }

@@ -546,7 +546,7 @@
     <value>Обновить карты</value>
   </data>
   <data name="Version_Not_Supports" xml:space="preserve">
-    <value>Версия вашего приложения не поддерживает данный функционал</value>
+    <value>Ваша версия приложения не поддерживает эту функцию. Пожалуйста, установите Interviewer с картами, чтобы включить её.</value>
   </data>
   <data name="AreaMap_UpdateFailed" xml:space="preserve">
     <value>Обновление не удалось</value>
@@ -902,5 +902,62 @@
   </data>
   <data name="InterviewStatus_SupervisorAssigned" xml:space="preserve">
     <value>Супервизор назначен</value>
+  </data>
+  <data name="MenuItem_Title_StartGeofencing" xml:space="preserve">
+    <value>Начать геозонирование</value>
+  </data>
+  <data name="MenuItem_Title_StopGeofencing" xml:space="preserve">
+    <value>Остановить геозонирование</value>
+  </data>
+  <data name="MenuItem_Title_StartGeoTracking" xml:space="preserve">
+    <value>Начать запись геоданных</value>
+  </data>
+  <data name="MenuItem_Title_StopGeoTracking" xml:space="preserve">
+    <value>Остановить запись геоданных</value>
+  </data>
+  <data name="MenuItem_Title_ExitToDashboard" xml:space="preserve">
+    <value>Выйти на дешбоард</value>
+  </data>
+  <data name="MenuItem_Title_ChangeMap" xml:space="preserve">
+    <value>Сменить карту</value>
+  </data>
+  <data name="MenuItem_Title_ChangeShapefile" xml:space="preserve">
+    <value>Сменить файл границы</value>
+  </data>
+  <data name="MenuItem_Title_CreateInterview" xml:space="preserve">
+    <value>Создать новое интервью</value>
+  </data>
+  <data name="AssignmentMap_Title_CreateInterview" xml:space="preserve">
+    <value>Старт</value>
+  </data>
+  <data name="MenuItem_Title_ZoomMap" xml:space="preserve">
+    <value>Показать всю карту</value>
+  </data>
+  <data name="MenuItem_Title_ZoomShapefile" xml:space="preserve">
+    <value>Показать границы</value>
+  </data>
+  <data name="MenuItem_Title_ZoomCollectedData" xml:space="preserve">
+    <value>Показать собранные данные</value>
+  </data>
+  <data name="MenuItem_Title_ZoomEverything" xml:space="preserve">
+    <value>Показать все</value>
+  </data>
+  <data name="MenuItem_Title_ZoomGeoTracking" xml:space="preserve">
+    <value>Показать все геоданные</value>
+  </data>
+  <data name="SelectMapTitle" xml:space="preserve">
+    <value>Выберите карту:</value>
+  </data>
+  <data name="SelectShapefileTitle" xml:space="preserve">
+    <value>Выберите файл границ:</value>
+  </data>
+  <data name="Geofencing_Warning_Message" xml:space="preserve">
+    <value>Вы находитесь за пределами установленной зоны</value>
+  </data>
+  <data name="MenuItem_Title_ShowLocation" xml:space="preserve">
+    <value>Показать позицию</value>
+  </data>
+  <data name="MenuItem_Title_HideLocation" xml:space="preserve">
+    <value>Спрятать позицию</value>
   </data>
 </root>

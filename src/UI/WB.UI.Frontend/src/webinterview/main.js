@@ -7,6 +7,9 @@ toastr.options.escapeHtml = true
 const vue = createApp(App)
 setupErrorHandler(vue)
 
+import VueDOMPurifyHTML from 'vue-dompurify-html';
+vue.use(VueDOMPurifyHTML)
+
 import config from '~/shared/config'
 vue.use(config)
 

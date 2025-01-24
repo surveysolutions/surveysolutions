@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
 using NodaTime;
@@ -11,6 +12,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.Views.Dashboard;
 
@@ -19,6 +21,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
     public abstract class ExpandableQuestionsDashboardItemViewModel : MvxNotifyPropertyChanged, IDashboardItemWithEvents, IDisposable
     {
         private readonly IServiceLocator serviceLocator;
+        private readonly IMapInteractionService mapInteractionService;
+        private readonly IUserInteractionService userInteractionService;
         private string idLabel;
         private string subTitle;
         private ZonedDateTime? calendarEventStart;
@@ -39,9 +43,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
 
         protected void RaiseOnItemUpdated() => OnItemUpdated?.Invoke(this, EventArgs.Empty);
 
-        public ExpandableQuestionsDashboardItemViewModel(IServiceLocator serviceLocator)
+        public ExpandableQuestionsDashboardItemViewModel(IServiceLocator serviceLocator, 
+            IMapInteractionService mapInteractionService,
+            IUserInteractionService userInteractionService)
         {
             this.serviceLocator = serviceLocator;
+            this.mapInteractionService = mapInteractionService;
+            this.userInteractionService = userInteractionService;
             Actions = new MvxObservableCollection<ActionDefinition>();
             Actions.CollectionChanged += CollectionChanged;
         }
@@ -55,6 +63,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             RaisePropertyChanged(nameof(HasSecondaryAction));
             RaisePropertyChanged(nameof(ExtraAction));
             RaisePropertyChanged(nameof(HasExtraAction));
+            RaisePropertyChanged(nameof(TargetAreaAction));
+            RaisePropertyChanged(nameof(HasTargetAreaAction));
         }
 
         private IExternalAppLauncher ExternalAppLauncher =>
@@ -93,12 +103,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
         public ActionDefinition PrimaryAction => Actions.SingleOrDefault(a => a.ActionType == ActionType.Primary);
         public ActionDefinition SecondaryAction => Actions.SingleOrDefault(a => a.ActionType == ActionType.Secondary);
         public ActionDefinition ExtraAction => Actions.SingleOrDefault(a => a.ActionType == ActionType.Extra);
+        public ActionDefinition TargetAreaAction => Actions.SingleOrDefault(a => a.ActionType == ActionType.TargetArea);
         public IEnumerable<ActionDefinition> ContextMenu => Actions.Where(a => a.ActionType == ActionType.Context);
 
         public bool HasContextMenu => ContextMenu.Any(cm => cm.IsEnabled);
 
         public bool HasSecondaryAction => SecondaryAction != null;
         public bool HasExtraAction => ExtraAction != null;
+        public bool HasTargetAreaAction => TargetAreaAction != null;
 
         public MvxObservableCollection<ActionDefinition> Actions { get; }
 
@@ -221,6 +233,40 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
                 Label = EnumeratorUIResources.Dashboard_ShowLocation
             });
         }
+        
+        protected void BindTargetAreaAction(int assignmentId, string targetArea)
+        {
+            if (string.IsNullOrWhiteSpace(targetArea)) return;
+
+            Actions.Add(new ActionDefinition
+            {
+                Command = new MvxAsyncCommand(
+                    () => NavigateToMapDashboardAsync(assignmentId)),
+
+                ActionType = ActionType.TargetArea,
+
+                Label = EnumeratorUIResources.Dashboard_ShowAssignmentMap
+            });
+        }
+        
+        private async Task NavigateToMapDashboardAsync(int assignmentId)
+        {
+            if (!mapInteractionService.DoesSupportMaps)
+            {
+                userInteractionService.ShowToast(UIResources.Version_Not_Supports);
+                return;
+            }
+            
+            try
+            {
+                await mapInteractionService.OpenAssignmentMapAsync(assignmentId);
+            }
+            catch (MissingPermissionsException e)
+            {
+                userInteractionService.ShowToast(e.Message);
+            }
+        }
+        
         public void Dispose()
         {
             Actions.CollectionChanged -= CollectionChanged;

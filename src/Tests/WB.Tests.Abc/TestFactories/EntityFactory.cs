@@ -2355,7 +2355,9 @@ namespace WB.Tests.Abc.TestFactories
             IViewModelNavigationService viewModelNavigationService = null)
         {
             return new InterviewerAssignmentDashboardItemViewModel(serviceLocator, 
-                viewModelNavigationService ?? Mock.Of<IViewModelNavigationService>());
+                viewModelNavigationService ?? Mock.Of<IViewModelNavigationService>(),
+                Mock.Of<IMapInteractionService>(),
+                Mock.Of<IUserInteractionService>());
         }
 
         public DashboardSubTitleViewModel DashboardSubTitleViewModel()

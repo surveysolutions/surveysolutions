@@ -13,6 +13,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
+using WB.Core.SharedKernels.Enumerator.Attributes;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Entities;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
@@ -30,6 +31,7 @@ using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 {
+    [InterviewEntryPoint]
     public class DashboardViewModel : BaseOfflineSyncViewModel<DashboardViewModelArgs>
     {
         private readonly IInterviewerPrincipal principal;
@@ -209,7 +211,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         public IMvxAsyncCommand NavigateToMapDashboardCommand =>
             new MvxAsyncCommand(async () => await NavigateToMapDashboard(), 
                 () => !string.IsNullOrEmpty(CurrentWorkspace));
-
+        
         private async Task NavigateToMapDashboard()
         {
             try

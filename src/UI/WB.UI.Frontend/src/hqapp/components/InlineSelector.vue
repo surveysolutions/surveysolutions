@@ -4,7 +4,7 @@
             aria-expanded="true">{{ text }}</span>
         <ul class="dropdown-menu" style="width:auto">
             <li v-for="item in options" :key="item[keySelector]" @click="select(item)">
-                <a href="javascript:void(0)" v-html="item[valueSelector]" />
+                <a href="javascript:void(0)" v-dompurify-html="item[valueSelector]" />
             </li>
         </ul>
     </span>

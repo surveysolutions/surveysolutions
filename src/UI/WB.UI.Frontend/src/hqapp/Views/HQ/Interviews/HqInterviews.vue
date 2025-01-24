@@ -124,7 +124,7 @@
                         :fetch-url="config.api.responsible"></Typeahead>
                 </div>
                 <div id="pnlAssignToOtherTeamConfirmMessage">
-                    <p v-html="this.config.isSupervisor
+                    <p v-dompurify-html="this.config.isSupervisor
                         ? $t('Interviews.AssignConfirmMessage', {
                             count: this.getFilteredToAssign().length,
                             status1: 'Supervisor assigned',
@@ -171,7 +171,7 @@
         </ModalFrame>
         <ModalFrame ref="deleteModal" :title="$t('Common.Delete')">
             <div class="action-container">
-                <p v-html="$t('Interviews.DeleteConfirmMessageHQ', {
+                <p v-dompurify-html="$t('Interviews.DeleteConfirmMessageHQ', {
                     count: this.getFilteredToDelete().length,
                     status1: 'Supervisor assigned',
                     status2: 'Interviewer assigned',
@@ -202,7 +202,7 @@
                     </p>
                 </div>
                 <div class="action-container" v-else>
-                    <p v-html="$t('Interviews.ApproveConfirmMessageHQ', {
+                    <p v-dompurify-html="$t('Interviews.ApproveConfirmMessageHQ', {
                         count: this.getFilteredToApprove().length,
                         status1: 'Completed',
                         status2: 'Approved by Supervisor',
@@ -248,12 +248,12 @@
         <ModalFrame ref="rejectModal" :title="$t('Common.Reject')" id="rejectModel">
             <form onsubmit="return false;">
                 <div class="action-container">
-                    <p v-if="!config.isSupervisor" v-html="$t('Interviews.RejectConfirmMessageHQ', {
+                    <p v-if="!config.isSupervisor" v-dompurify-html="$t('Interviews.RejectConfirmMessageHQ', {
                         count: this.getFilteredToReject().length,
                         status1: 'Completed',
                         status2: 'Approved by Supervisor',
                     })"></p>
-                    <p v-if="config.isSupervisor" v-html="$t('Interviews.RejectConfirmMessage', {
+                    <p v-if="config.isSupervisor" v-dompurify-html="$t('Interviews.RejectConfirmMessage', {
                         count: this.getFilteredToReject().length,
                         status1: 'Completed',
                         status2: 'Rejected by Headquarters',
@@ -301,7 +301,7 @@
         <ModalFrame ref="unapproveModal" :title="$t('Common.Unapprove')">
             <form onsubmit="return false;">
                 <div class="action-container">
-                    <p v-html="$t('Interviews.UnapproveConfirmMessageHQ', {
+                    <p v-dompurify-html="$t('Interviews.UnapproveConfirmMessageHQ', {
                         count: this.getFilteredToUnApprove().length,
                         status1: 'Approved by Headquarters',
                     })"></p>
@@ -326,7 +326,7 @@
                         {{ interviewKey }}
                     </a>
                     by
-                    <span :class="responsibleClass" v-html="responsibleLink"></span>
+                    <span :class="responsibleClass" v-dompurify-html="responsibleLink"></span>
                 </p>
             </div>
             <div class="table-with-scroll">
@@ -356,7 +356,7 @@
         </ModalFrame>
         <ModalFrame ref="modalChangeToCAWI" data-suso="change-interview-mode-modal" :title="$t('Common.ChangeToCAWI')">
             <div class="action-container">
-                <p v-html="$t('Common.ChangeToCAWIConfirmHQ', { count: getFilteredToCawi().length })"></p>
+                <p v-dompurify-html="$t('Common.ChangeToCAWIConfirmHQ', { count: getFilteredToCawi().length })"></p>
             </div>
             <div class="form-group" :id="'group__switchToCawi_id_' + filteredCount"
                 v-if="CountReceivedByInterviewerItems() > 0">
@@ -387,7 +387,7 @@
         </ModalFrame>
         <ModalFrame ref="modalChangeToCAPI" data-suso="change-interview-mode-modal" :title="$t('Common.ChangeToCAPI')">
             <div class="action-container">
-                <p v-html="$t('Common.ChangeToCAPIConfirmHQ', { count: getFilteredToCapi().length })"></p>
+                <p v-dompurify-html="$t('Common.ChangeToCAPIConfirmHQ', { count: getFilteredToCapi().length })"></p>
             </div>
             <div class="form-group" :id="'group__switchToCapi_id_' + filteredCount"
                 v-if="CountReceivedByInterviewerItems() > 0">

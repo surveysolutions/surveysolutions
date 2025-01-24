@@ -7,6 +7,7 @@ type Assignment {
   archived: Boolean!
   createdAtUtc: DateTime!
   email: String
+  targetArea: String
   id: ID!
   interviewsNeeded: Int
   "Will return `null` when assignment is not received by tablet"
@@ -309,6 +310,7 @@ input AssignmentsFilter {
   responsibleId: UuidOperationFilterInput
   webMode: BooleanOperationFilterInput
   receivedByTabletAtUtc: DateTimeOperationFilterInput
+  targetArea: StringOperationFilterInput
 }
 
 input BooleanOperationFilterInput {

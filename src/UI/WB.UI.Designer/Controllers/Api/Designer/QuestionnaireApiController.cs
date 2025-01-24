@@ -38,7 +38,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         private readonly IWebTesterService webTesterService;
         private readonly DesignerDbContext dbContext;
         private const int MaxCountOfOptionForFilteredCombobox = 200;
-        public const int MaxVerificationErrors = 100;
+        public const int MaxVerificationErrorsOrWarnings = 100;
 
         public QuestionnaireApiController(IChapterInfoViewFactory chapterInfoViewFactory,
             IQuestionnaireInfoViewFactory questionnaireInfoViewFactory,
@@ -200,12 +200,12 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             
             var verificationErrors = verificationMessagesAndWarning
                 .Where(x => x.MessageLevel > VerificationMessageLevel.Warning)
-                .Take(MaxVerificationErrors)
+                .Take(MaxVerificationErrorsOrWarnings)
                 .ToArray();
 
             var verificationWarnings = verificationMessagesAndWarning
                 .Where(x => x.MessageLevel == VerificationMessageLevel.Warning)
-                .Take(MaxVerificationErrors - verificationErrors.Length)
+                .Take(MaxVerificationErrorsOrWarnings)
                 .ToArray();
 
             var readOnlyQuestionnaire = new ReadOnlyQuestionnaireDocument(questionnaireView.Source);

@@ -866,5 +866,46 @@ namespace WB.UI.Headquarters.Resources {
                 return ResourceManager.GetString("Action_QuantityChanged", resourceCulture);
             }
         }
+        
+        public static string DetailsTargetAreaa {
+            get {
+                return ResourceManager.GetString("DetailsTargetAreaa", resourceCulture);
+            }
+        }
+        
+        public static string DetailsGeoTracking {
+            get {
+                return ResourceManager.GetString("DetailsGeoTracking", resourceCulture);
+            }
+        }
+        
+        public static string ChangeTargetAreaModalTitle {
+            get {
+                return ResourceManager.GetString("ChangeTargetAreaModalTitle", resourceCulture);
+            }
+        }
+        
+        public static string TargetAreaExplanation {
+            get {
+                return ResourceManager.GetString("TargetAreaExplanation", resourceCulture);
+            }
+        }
+        
+        public static string Action_TargetAreaChanged {
+            get {
+                return ResourceManager.GetString("Action_TargetAreaChanged", resourceCulture);
+            }
+        }
+        
+        public static string TargetArea {
+            get {
+                return ResourceManager.GetString("TargetArea", resourceCulture);
+            }
+        }
+        public static string EnterTargetArea {
+            get {
+                return ResourceManager.GetString("EnterTargetArea", resourceCulture);
+            }
+        }
     }
 }

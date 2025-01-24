@@ -174,8 +174,10 @@ namespace WB.UI.Shared.Extensions.Services
 
             // Make sure labeling is enabled for the layer
             newFeatureLayer.LabelsEnabled = true;
-
-            var symbolForRenderer = CreateSymbolForRenderer(myShapefile.GeometryType, Color.Red);
+            
+            var lineColor = Color.FromArgb(140, 89, 222);
+            
+            var symbolForRenderer = CreateSymbolForRenderer(myShapefile.GeometryType, lineColor);
             var alternateRenderer = new SimpleRenderer(symbolForRenderer);
 
             RendererSceneProperties myRendererSceneProperties = alternateRenderer.SceneProperties;
@@ -204,8 +206,17 @@ namespace WB.UI.Shared.Extensions.Services
                 case GeometryType.Polygon:
                 case GeometryType.Polyline:
                 default:
-                    SimpleLineSymbol lineSymbol = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, color, 2.0);
-                    return new SimpleFillSymbol(SimpleFillSymbolStyle.Null, Color.White, lineSymbol);
+                {
+                    var solidInnerSymbol = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, color, 4);
+                    var dashedBorderSymbol = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, Color.White, 2);
+                    var compositeSymbol = new CompositeSymbol
+                    {
+                        Symbols = { solidInnerSymbol, dashedBorderSymbol }
+                    };
+
+                    return compositeSymbol;
+                    //return solidInnerSymbol;
+                }
             }
         }
     }

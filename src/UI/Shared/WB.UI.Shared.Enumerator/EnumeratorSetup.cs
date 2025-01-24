@@ -92,6 +92,7 @@ namespace WB.UI.Shared.Enumerator
         protected override IMvxViewsContainer InitializeViewLookup(IDictionary<Type, Type> viewModelViewLookup, IMvxIoCProvider iocProvider)
         {
             var lookup = base.InitializeViewLookup(viewModelViewLookup, iocProvider);
+            lookup.Add<BottomSheetOptionsSelectorViewModel, OptionsSelectorBottomSheetFragment>();
             lookup.Add<EnumerationStageViewModel, InterviewEntitiesListFragment>();
             lookup.Add<CoverInterviewViewModel, CoverInterviewFragment>();
             lookup.Add<OverviewViewModel, OverviewFragment>();
@@ -184,6 +185,7 @@ namespace WB.UI.Shared.Enumerator
             registry.RegisterCustomBindingFactory<TextInputLayout>("EndIconClick", (view) => new TextInputLayoutEndIconClickBinding(view));
             registry.RegisterCustomBindingFactory<TextView>("Html", (view) => new TextViewHtmlBinding(view));
             registry.RegisterCustomBindingFactory<TextView>("Color", (view) => new TextViewColorBinding(view));
+            registry.RegisterCustomBindingFactory<TextView>("Hint", (view) => new TextViewHintBinding(view));
             registry.RegisterCustomBindingFactory<TextView>("TextFormatted", (view) => new TextViewTextFormattedBinding(view));
             registry.RegisterCustomBindingFactory<TextView>("IsSelectedYesNoOptionColor", (view) => new TextViewIsSelectedYesNoOptionColorBinding(view));
             registry.RegisterCustomBindingFactory<MaskedEditText>("IsMaskedQuestionAnswered", (editText) => new MaskedEditTextIsMaskedQuestionAnsweredBinding(editText));
@@ -234,6 +236,8 @@ namespace WB.UI.Shared.Enumerator
             registry.RegisterCustomBindingFactory<EditText>("TextLength", (editText) => new EditTextMaxLengthBinding(editText));
             registry.RegisterCustomBindingFactory<MapView>("SetGpsLocation", view => new ViewSetGpsLocationBinding(view));
             registry.RegisterCustomBindingFactory<ViewPager2>("CurrentItem", view => new ViewPager2CurrentItemBinding(view));
+            registry.RegisterCustomBindingFactory<ImageButton>("SelectedSupportClick", view => new ImageButtonSelectedSupportClickBinding(view));
+            registry.RegisterCustomBindingFactory<ImageButton>("SelectedState", view => new ImageButtonSelectedStateBinding(view));
             
             //MvxAppCompatSetupHelper.FillTargetFactories(registry);
 

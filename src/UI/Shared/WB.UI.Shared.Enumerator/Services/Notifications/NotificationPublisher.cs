@@ -38,7 +38,6 @@ namespace WB.UI.Shared.Enumerator.Services.Notifications
             NotificationCompat.Builder builder =
                     new NotificationCompat.Builder(context)
                         .SetAutoCancel(notificationModel.AutoCancel)
-
                         .SetContentIntent(notificationModel.Intent)
                         .SetContentTitle(notificationModel.ContentTitle)
                         .SetContentText(notificationModel.ContentText)

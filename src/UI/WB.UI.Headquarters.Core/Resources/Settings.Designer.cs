@@ -566,5 +566,89 @@ namespace WB.UI.Headquarters.Resources {
                 return ResourceManager.GetString("EsriApiKeyDescription", resourceCulture);
             }
         }
+        
+        public static string EmailProvider_Smtp {
+            get {
+                return ResourceManager.GetString("EmailProvider_Smtp", resourceCulture);
+            }
+        }
+        
+        public static string EmailProvider_SmtpDescription {
+            get {
+                return ResourceManager.GetString("EmailProvider_SmtpDescription", resourceCulture);
+            }
+        }
+        
+        public static string EmailProvider_SmtpHost {
+            get {
+                return ResourceManager.GetString("EmailProvider_SmtpHost", resourceCulture);
+            }
+        }
+        
+        public static string EmailProvider_SmtpHostHelp {
+            get {
+                return ResourceManager.GetString("EmailProvider_SmtpHostHelp", resourceCulture);
+            }
+        }
+        
+        public static string EmailProvider_SmtpPort {
+            get {
+                return ResourceManager.GetString("EmailProvider_SmtpPort", resourceCulture);
+            }
+        }
+        
+        public static string EmailProvider_SmtpPortHelp {
+            get {
+                return ResourceManager.GetString("EmailProvider_SmtpPortHelp", resourceCulture);
+            }
+        }
+        
+        public static string EmailProvider_SmtpTlsEncryption {
+            get {
+                return ResourceManager.GetString("EmailProvider_SmtpTlsEncryption", resourceCulture);
+            }
+        }
+        
+        public static string EmailProvider_SmtpTlsEncryptionHelp {
+            get {
+                return ResourceManager.GetString("EmailProvider_SmtpTlsEncryptionHelp", resourceCulture);
+            }
+        }
+        
+        public static string EmailProvider_SmtpAuthentication {
+            get {
+                return ResourceManager.GetString("EmailProvider_SmtpAuthentication", resourceCulture);
+            }
+        }
+        
+        public static string EmailProvider_SmtpAuthenticationHelp {
+            get {
+                return ResourceManager.GetString("EmailProvider_SmtpAuthenticationHelp", resourceCulture);
+            }
+        }
+        
+        public static string EmailProvider_SmtpUsername {
+            get {
+                return ResourceManager.GetString("EmailProvider_SmtpUsername", resourceCulture);
+            }
+        }
+        
+        public static string EmailProvider_SmtpUsernameHelp {
+            get {
+                return ResourceManager.GetString("EmailProvider_SmtpUsernameHelp", resourceCulture);
+            }
+        }
+        
+        public static string EmailProvider_SmtpPassword {
+            get {
+                return ResourceManager.GetString("EmailProvider_SmtpPassword", resourceCulture);
+            }
+        }
+        
+        public static string EmailProvider_SmtpPasswordHelp {
+            get {
+                return ResourceManager.GetString("EmailProvider_SmtpPasswordHelp", resourceCulture);
+            }
+        }
     }
 }

@@ -212,10 +212,17 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             return tcs.Task;
         }
 
-        public void ShowToast(string message)
+        public void ShowToast(string message, bool isTop = false)
         {
             var activity = this.mvxCurrentTopActivity.Activity; //sometime activity is null
-            activity?.RunOnUiThread(() => Toast.MakeText(activity, message, ToastLength.Short).Show());
+            activity?.RunOnUiThread(() =>
+            {
+                var toast = Toast.MakeText(activity, message, ToastLength.Short);
+                if (isTop)
+                    toast.SetGravity(GravityFlags.CenterHorizontal | GravityFlags.Top, toast.XOffset, toast.YOffset);
+
+                toast.Show();
+            });
         }
 
         public bool HasPendingUserInteractions => UserInteractions.Count > 0;

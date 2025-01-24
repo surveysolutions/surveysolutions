@@ -129,6 +129,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                         WebMode = x.WebMode,
                         ReceivedByTabletAtUtc = x.ReceivedByTabletAtUtc,
                         Comments = x.Comments,
+                        TargetArea = x.TargetArea,
                         CalendarEvent = GetCalendarEventForAssignmentOrNull(x.Id)
                     };
 
@@ -256,6 +257,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                         historyItem.AdditionalData = new
                         {
                             q.Quantity
+                        };
+                        break;
+                    case AssignmentTargetAreaChanged t:
+                        historyItem.Action = AssignmentHistoryAction.TargetAreaChanged;
+                        historyItem.AdditionalData = new
+                        {
+                            t.TargetArea
                         };
                         break;
                     case AssignmentReassigned r:

@@ -29,7 +29,7 @@ public class QController : QControllerBase
         IQuestionnaireViewFactory questionnaireViewFactory)
         : base(dbContext, questionnaireViewFactory)
     {
-        tagHelperComponentManager.Components.Add(new ViteTagHelperComponent(webHost, options, memoryCache));
+        ViteTagHelperComponent.RegisterIfRequired(tagHelperComponentManager, webHost, options, memoryCache);
     }
     
     [QuestionnairePermissions]

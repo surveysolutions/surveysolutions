@@ -21,10 +21,10 @@
                             {{ $t('Pages.InterviewerProfile_InterviewerAppVersion') }}:
                             {{ $config.model.interviewerAppVersion }} &mdash;
 
-                            <span v-if="!$config.model.hasUpdateForInterviewerApp"
-                                class="success-text">{{ $t('Pages.InterviewerProfile_InterviewerUpToDate') }}</span>
-                            <span v-else
-                                class="error-text">{{ $t('Pages.InterviewerProfile_InterviewerCanBeUpdated') }}</span>
+                            <span v-if="!$config.model.hasUpdateForInterviewerApp" class="success-text">{{
+                                $t('Pages.InterviewerProfile_InterviewerUpToDate') }}</span>
+                            <span v-else class="error-text">{{ $t('Pages.InterviewerProfile_InterviewerCanBeUpdated')
+                                }}</span>
                         </b>
                     </li>
                 </ul>
@@ -54,7 +54,7 @@
                                     {{ record.message }}
                                     <template v-if="record.description">
                                         <br />
-                                        <pre v-html="record.description"></pre>
+                                        <pre v-dompurify-html="record.description"></pre>
                                     </template>
                                 </span>
                             </td>

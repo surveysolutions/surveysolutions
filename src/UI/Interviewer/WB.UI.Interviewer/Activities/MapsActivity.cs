@@ -82,6 +82,14 @@ namespace WB.UI.Interviewer.Activities
             }
             return base.OnOptionsItemSelected(item);
         }
+        protected override bool BackButtonCustomAction => true;
+        
+        protected override async void BackButtonPressed()
+        {
+            await this.ViewModel.NavigateToDashboardCommand.ExecuteAsync(); 
+            this.Finish();
+        }
+
 
         public void StartSync() => this.Binder.GetService().SyncMaps();
 

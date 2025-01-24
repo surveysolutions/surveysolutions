@@ -1,7 +1,7 @@
 <template>
     <div>
         <Confirm id="move-interviewer-confirmation" ref="move"
-            :title="$t('Pages.Interviewers_MoveInterviewerPopupTitle', {names: this.formatNames(this.interviewers)})"
+            :title="$t('Pages.Interviewers_MoveInterviewerPopupTitle', { names: this.formatNames(this.interviewers) })"
             slot="modals" :disableOk="!whatToDoWithAssignments || !supervisor">
             <div class="alert">
                 <Typeahead ref="supervisorControl" control-id="supervisorToAssign" data-vv-name="supervisor"
@@ -13,12 +13,12 @@
                 <br />
                 <div v-if="supervisor && interviewersToStay.length > 0">
                     <p
-                        v-html="$t('Pages.Interviewers_InterviewersToStay', { interviewers: `<b>${interviewersToStayNamesOnly}</b>`, supervisor: `<b>${selectedSupervisor}</b>` })">
+                        v-dompurify-html="$t('Pages.Interviewers_InterviewersToStay', { interviewers: `<b>${interviewersToStayNamesOnly}</b>`, supervisor: `<b>${selectedSupervisor}</b>` })">
                     </p>
                 </div>
                 <div v-if="supervisor && interviewersToMove.length > 0">
                     <p
-                        v-html="$t('Pages.Interviewers_InterviewersToMove', { interviewers: `<b>${interviewersToMoveNamesOnly}</b>`, supervisor: `<b>${selectedSupervisor}</b>`})">
+                        v-dompurify-html="$t('Pages.Interviewers_InterviewersToMove', { interviewers: `<b>${interviewersToMoveNamesOnly}</b>`, supervisor: `<b>${selectedSupervisor}</b>` })">
                     </p>
                 </div>
 
@@ -37,12 +37,12 @@
                     <label for="moveAllToNewTeam">
                         <span class="tick"></span>
                         <span
-                            v-html="$t('Pages.Interviewers_MoveAllToNewTeam', { supervisor: `<b>${selectedSupervisor}</b>`})"></span>
+                            v-dompurify-html="$t('Pages.Interviewers_MoveAllToNewTeam', { supervisor: `<b>${selectedSupervisor}</b>` })"></span>
                     </label>
                 </div>
 
                 <span class="text-warning" v-if="showWebModeReassignWarning">
-                    {{ $t('Pages.Interviewers_MoveWebAssigment')}}
+                    {{ $t('Pages.Interviewers_MoveWebAssigment') }}
                 </span>
             </div>
         </Confirm>
@@ -63,7 +63,8 @@
                                 <span class="interviewer">
                                     <a target="_blank" :href="$config.basePath + 'Manage/' + interviewer.userId"
                                         :v-text="interviewer.userName"
-                                        :class="{ 'text-danger': interviewer.inProgress }">{{ interviewer.userName }}</a>
+                                        :class="{ 'text-danger': interviewer.inProgress }">{{ interviewer.userName
+                                        }}</a>
                                 </span>
                             </td>
                             <td v-text="interviewer.interviewsProcessed"></td>
@@ -73,7 +74,7 @@
                             <td colspan="5">
                                 <p>{{ $t('Pages.Interviewers_FinishedWithErrors') }}</p>
                                 <ul v-for="error in interviewer.errors" v-bind:key="error">
-                                    <li :v-text="error">{{error}}</li>
+                                    <li :v-text="error">{{ error }}</li>
                                 </ul>
                             </td>
                         </tr>

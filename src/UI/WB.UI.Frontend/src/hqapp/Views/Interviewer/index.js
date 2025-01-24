@@ -22,14 +22,11 @@ const store = {
             )
                 .done(function (data, textStatus) {
                     dispatch('showProgress', true)
-                    const interviewId = data.interviewId
-                    const workspace = config.workspace
-                    const url = `/${workspace}/WebInterview/${interviewId}/Cover`
-                    window.location = url
+                    window.location.href = '/' + config.workspace + '/WebInterview/' + data.interviewId + '/Cover'
                 })
                 .catch(data => {
                     if (data.responseJSON && data.responseJSON.redirectUrl) {
-                        window.location = data.responseJSON.redirectUrl
+                        window.location.href = data.responseJSON.redirectUrl
                         return
                     }
 
@@ -44,7 +41,7 @@ const store = {
         },
         openInterview(context, interviewId) {
             context.dispatch('showProgress', true)
-            window.location = window.CONFIG.model.interviewerHqEndpoint + '/OpenInterview/' + interviewId
+            window.location.href = window.CONFIG.model.interviewerHqEndpoint + '/OpenInterview/' + interviewId
         },
 
         discardInterview(context, { callback, interviewId }) {

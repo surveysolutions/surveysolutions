@@ -15,12 +15,12 @@ namespace WB.UI.Headquarters.Controllers
     {
         private readonly ISupportedVersionProvider supportedVersionProvider;
         private readonly SignInManager<HqUser> signInManager;
-        private readonly UserManager<HqUser> userManager;
+        private readonly HqUserManager userManager;
         private readonly IUserRepository userRepository;
         
         public InstallController(ISupportedVersionProvider supportedVersionProvider,
                                  SignInManager<HqUser> identityManager,
-                                 UserManager<HqUser> userManager,
+                                 HqUserManager userManager,
                                  IUserRepository userRepository)
         {
             this.userManager = userManager;

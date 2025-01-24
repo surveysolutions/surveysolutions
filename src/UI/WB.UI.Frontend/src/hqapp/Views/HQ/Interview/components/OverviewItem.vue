@@ -10,9 +10,9 @@
         </div>
         <div ref="itemContent" class="item-content" @click="showAdditionalDetails">
             <h4>
-                <span v-html="item.title"></span>
+                <span v-dompurify-html="item.title"></span>
                 <template v-if="item.rosterTitle != null"><span> - </span>
-                    <i v-if="item.rosterTitle != null" v-html="item.rosterTitle"></i>
+                    <i v-if="item.rosterTitle != null" v-dompurify-html="item.rosterTitle"></i>
                 </template>
             </h4>
             <div class="answer" v-if="hasAttachment">
@@ -28,7 +28,8 @@
                     </audio>
                 </div>
                 <div v-else-if="item.controlType === 'area'">
-                    <iframe width="100%" height="250px" frameBorder="0" :src="areaAnswerUrl"></iframe>
+                    <iframe title="Area preview" width="100%" height="250px" frameBorder="0"
+                        :src="areaAnswerUrl"></iframe>
                 </div>
                 <div v-else-if="item.controlType === 'map'">
                     <a v-bind:href="goolgeMapUrl" :title="$t('WebInterviewUI.ShowOnMap')" target="_blank">

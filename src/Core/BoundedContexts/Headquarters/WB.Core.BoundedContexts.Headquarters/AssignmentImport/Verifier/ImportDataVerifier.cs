@@ -653,7 +653,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                     or ServiceColumns.PasswordColumnName 
                     or ServiceColumns.WebModeColumnName 
                     or ServiceColumns.RecordAudioColumnName 
-                    or ServiceColumns.CommentsColumnName && 
+                    or ServiceColumns.CommentsColumnName  
+                    or ServiceColumns.TargetAreaColumnName && 
                 IsQuestionnaireFile(file.QuestionnaireOrRosterName, questionnaire)) return false;
 
             if (ServiceColumns.AllSystemVariables.Contains(columnName)) return false;

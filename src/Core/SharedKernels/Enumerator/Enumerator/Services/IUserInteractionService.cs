@@ -11,7 +11,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services
         Task AlertAsync(string message, string title = "", string okButton = null);
 
 
-        void ShowToast(string message);
+        void ShowToast(string message, bool isTop = false);
 
         bool HasPendingUserInteractions { get; }
 

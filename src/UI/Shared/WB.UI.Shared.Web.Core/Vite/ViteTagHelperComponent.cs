@@ -10,19 +10,34 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Microsoft.AspNetCore.Mvc.Razor.TagHelpers;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 
 namespace Vite.Extensions.AspNetCore;
 
 /// <remarks>See Github sources from <see href="https://github.com/alfeg/vite-aspnetcore">Source</see></remarks>
-public class ViteTagHelperComponent : TagHelperComponent
+public class ViteTagHelperComponent : ITagHelperComponent
 {
     private readonly IWebHostEnvironment _webHost;
     private readonly IOptions<ViteTagOptions> _options;
     private readonly IMemoryCache _memoryCache;
 
-    public ViteTagHelperComponent(IWebHostEnvironment webHost,
+    public virtual int Order => 0;
+
+    public static void RegisterIfRequired(ITagHelperComponentManager tagHelperComponentManager, 
+        IWebHostEnvironment webHost, IOptions<ViteTagOptions> options, IMemoryCache memoryCache)
+    {
+//#if DEBUG
+        tagHelperComponentManager.Components.Add(new ViteTagHelperComponent(webHost, options, memoryCache));
+//#endif
+    }
+
+    public void Init(TagHelperContext context)
+    {
+    }
+
+    private ViteTagHelperComponent(IWebHostEnvironment webHost,
         IOptions<ViteTagOptions> options,
         IMemoryCache memoryCache)
     {
@@ -31,7 +46,7 @@ public class ViteTagHelperComponent : TagHelperComponent
         _memoryCache = memoryCache;
     }
 
-    public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+    public async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
     {
         if (context.TagName.Equals("head", StringComparison.OrdinalIgnoreCase))
         {

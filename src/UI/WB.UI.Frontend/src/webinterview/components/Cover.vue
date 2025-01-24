@@ -1,9 +1,7 @@
 <template>
     <div class="unit-section" :class="coverStatusClass">
         <div class="unit-title">
-            <wb-humburger
-                :showFoldbackButtonAsHamburger="showHumburger"
-            ></wb-humburger>
+            <wb-humburger :showFoldbackButtonAsHamburger="showHumburger"></wb-humburger>
             <h3 id="cover-title">
                 {{
                     this.$store.state.webinterview.breadcrumbs.title ||
@@ -19,7 +17,7 @@
                     {{ $t('WebInterviewUI.CoverBrokenPackegeTitle') }}
                 </h4>
                 <p class="error-text">
-                    <i v-html="$t('WebInterviewUI.CoverBrokenPackegeText')"></i>
+                    <i v-dompurify-html="$t('WebInterviewUI.CoverBrokenPackegeText')"></i>
                 </p>
             </div>
         </div>
@@ -41,15 +39,9 @@
                     {{ commentsTitle }}
                 </h4>
                 <ul class="list-unstyled marked-questions">
-                    <li
-                        v-for="commentedQuestion in commentedQuestions"
-                        :key="commentedQuestion.id"
-                    >
-                        <a
-                            href="javascript:void(0);"
-                            @click="navigateTo(commentedQuestion)"
-                            >{{ commentedQuestion.title }}</a
-                        >
+                    <li v-for="commentedQuestion in commentedQuestions" :key="commentedQuestion.id">
+                        <a href="javascript:void(0);" @click="navigateTo(commentedQuestion)">{{ commentedQuestion.title
+                            }}</a>
                     </li>
                 </ul>
             </div>
@@ -115,9 +107,9 @@ export default {
                 .length <
                 this.$store.state.webinterview.coverInfo.commentedQuestionsCount
                 ? this.$t('WebInterviewUI.CoverFirstComments', {
-                      count: this.$store.state.webinterview.coverInfo
-                          .entitiesWithComments.length,
-                  })
+                    count: this.$store.state.webinterview.coverInfo
+                        .entitiesWithComments.length,
+                })
                 : this.$t('WebInterviewUI.CoverComments')
         },
         entities() {

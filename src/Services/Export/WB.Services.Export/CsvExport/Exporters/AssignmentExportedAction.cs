@@ -13,5 +13,6 @@
         Reassigned = 7,
         QuantityChanged = 8,
         WebModeChanged = 9,
+        TargetAreaChanged = 10,
     }
 }

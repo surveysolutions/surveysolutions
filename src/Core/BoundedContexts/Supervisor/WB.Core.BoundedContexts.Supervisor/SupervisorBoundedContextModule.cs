@@ -12,11 +12,13 @@ namespace WB.Core.BoundedContexts.Supervisor
         public void Load(IIocRegistry registry)
         {
             registry.BindWithConstructorArgument<ISynchronizationStep, UploadCalendarEvents>("sortOrder", 3);
+            registry.BindWithConstructorArgument<ISynchronizationStep, UploadGeoTrackingSynchronizationStep>("sortOrder", 4);
             registry.BindWithConstructorArgument<ISynchronizationStep, SupervisorUploadInterviews>("sortOrder", 5);
             registry.BindWithConstructorArgument<ISynchronizationStep, UpdateEncryptionKey>("sortOrder", 7);
             registry.BindWithConstructorArgument<ISynchronizationStep, SyncronizeInterviewers>("sortOrder", 10);
             registry.BindWithConstructorArgument<ISynchronizationStep, SynchronizeSupervisor>("sortOrder", 20);
             registry.BindWithConstructorArgument<ISynchronizationStep, SynchronizeAssignments>("sortOrder", 30);
+            registry.BindWithConstructorArgument<ISynchronizationStep, RemoveGeoTrackingSynchronizationStep>("sortOrder", 40);
             registry.BindWithConstructorArgument<ISynchronizationStep, DownloadDeletedQuestionnairesList>("sortOrder", 50);
             registry.BindWithConstructorArgument<ISynchronizationStep, SupervisorDownloadInterviews>("sortOrder", 60);
             registry.BindWithConstructorArgument<ISynchronizationStep, UpdateQuestionnaires>("sortOrder", 70);//all questionnaires are downloaded

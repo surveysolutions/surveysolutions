@@ -35,17 +35,19 @@
             <div class="row"
                 v-if="!isCoverPage && ((showEnablingConditions === undefined && activeGroup.enablementCondition) || showEnablingConditions)">
                 <div class="form-group col-xs-11">
-                    <div class="enabling-group-marker" :class="{ 'hide-if-disabled': activeGroup.hideIfDisabled }"></div>
+                    <div class="enabling-group-marker" :class="{ 'hide-if-disabled': activeGroup.hideIfDisabled }">
+                    </div>
                     <label for="edit-group-condition">{{ $t('QuestionnaireEditor.EnablingCondition') }}
                         <help link="conditionExpression" />
                     </label>
 
                     <input type="checkbox" class="wb-checkbox" disabled="disabled" checked="checked"
                         v-if="questionnaire.hideIfDisabled" :title="$t('QuestionnaireEditor.HideIfDisabledNested')" />
-                    <input v-if="!questionnaire.hideIfDisabled" id="cb-hideIfDisabled" type="checkbox" class="wb-checkbox"
-                        v-model="activeGroup.hideIfDisabled" />
+                    <input v-if="!questionnaire.hideIfDisabled" id="cb-hideIfDisabled" type="checkbox"
+                        class="wb-checkbox" v-model="activeGroup.hideIfDisabled" />
                     <label for="cb-hideIfDisabled">
-                        <span :title="questionnaire.hideIfDisabled ? $t('QuestionnaireEditor.HideIfDisabledNested') : ''">
+                        <span
+                            :title="questionnaire.hideIfDisabled ? $t('QuestionnaireEditor.HideIfDisabledNested') : ''">
                         </span>
                         {{ $t('QuestionnaireEditor.HideIfDisabled') }}
                         <help link="hideIfDisabled" />
@@ -89,8 +91,8 @@
                     </span>
                 </button>
                 <button type="button" v-show="!questionnaire.isReadOnlyForUser && !currentChapter.isReadOnly"
-                    v-if="!isCoverPage" id="edit-chapter-delete-button" class="btn btn-lg btn-link" @click="deleteGroup()"
-                    unsaved-warning-clear>{{ $t('QuestionnaireEditor.Delete') }}</button>
+                    v-if="!isCoverPage" id="edit-chapter-delete-button" class="btn btn-lg btn-link error"
+                    @click="deleteGroup()" unsaved-warning-clear>{{ $t('QuestionnaireEditor.Delete') }}</button>
                 <MoveToChapterSnippet :item-id="groupId" :item-type="'Group'"
                     v-show="!questionnaire.isReadOnlyForUser && !currentChapter.isReadOnly"
                     v-if="!isChapter && !isCoverPage">

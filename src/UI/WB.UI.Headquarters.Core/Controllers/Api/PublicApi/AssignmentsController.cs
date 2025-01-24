@@ -442,6 +442,35 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 
             return GetUpdatedAssignment(id);
         }
+        
+        /// <summary>
+        /// Change assignment target area
+        /// </summary>
+        /// <param name="id">Assignment id</param>
+        /// <param name="targetArea">Tha name of the targer area</param>
+        /// <response code="200">Assignment details with updated target area name</response>
+        /// <response code="404">Assignment not found</response>
+        /// <response code="406">Target area cannot be changed</response>
+        [HttpPost]
+        [Route("{id:int}/changeTargetArea")]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [Produces(MediaTypeNames.Application.Json)]
+        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Headquarter, UserRoles.Administrator)]
+        [ObservingNotAllowed]
+        public ActionResult<AssignmentDetails> ChangeTargetArea(int id, [FromBody] string targetArea)
+        {
+            var assignment = assignmentsStorage.GetAssignment(id);
+            if (assignment == null)
+            {
+                return NotFound();
+            }
+
+            commandService.Execute(
+                new UpdateAssignmentTargetArea(assignment.PublicKey, authorizedUser.Id, targetArea, assignment.QuestionnaireId));
+            this.auditLog.AssignmentTargetAreaChanged(id, targetArea);
+
+            return GetUpdatedAssignment(id);
+        }
 
         /// <summary>
         /// Archive assignment
@@ -705,7 +734,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                         this.userViewFactory, new Dictionary<string, UserToVerify>()),
                 Answers = identifyingAnswers.Select(x => this.ToPreloadAnswer(x, questionnaire)).ToArray(),
                 Comments = new PreloadingValue
-                    {Value = assignmentInfo.Comments, Column = nameof(assignmentInfo.Comments)}.ToAssignmentComments()
+                    {Value = assignmentInfo.Comments, Column = nameof(assignmentInfo.Comments)}.ToAssignmentComments(),
+                TargetArea = new PreloadingValue
+                    {Value = assignmentInfo.TargetArea, Column = nameof(assignmentInfo.TargetArea)}.ToAssignmentTargetArea(),
             };
 
             var rosterRows = rosterAnswers

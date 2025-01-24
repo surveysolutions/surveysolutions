@@ -31,7 +31,7 @@ namespace WB.UI.Tester.Activities
             {
                 Resource.Id.interview_dashboard,
                 TesterUIResources.MenuItem_Title_Dashboard,
-                this.ViewModel.NavigateToDashboardCommand
+                this.ViewModel.NavigateFromInterviewAsync
             },
             {
                 Resource.Id.interview_settings,

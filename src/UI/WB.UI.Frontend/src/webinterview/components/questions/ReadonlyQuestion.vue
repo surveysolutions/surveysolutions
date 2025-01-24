@@ -7,7 +7,8 @@
                         <a :href="getGpsUrl(entity)" target="_blank">{{ entity.answer }}</a>
                         <br />
                     </b>
-                    <b v-else-if="entity.entityType == 'DateTime'" v-dateTimeFormatting v-html="entity.answer">
+                    <b v-else-if="entity.entityType == 'DateTime'" v-dateTimeFormatting
+                        v-dompurify-html="entity.answer">
                     </b>
                     <b v-else>{{ entity.answer }}</b>
                     <wb-attachment :attachmentName="getAttachment(entity)" :interviewId="interviewId"

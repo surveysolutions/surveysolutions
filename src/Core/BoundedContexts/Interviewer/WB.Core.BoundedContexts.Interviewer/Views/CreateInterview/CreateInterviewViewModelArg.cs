@@ -1,4 +1,5 @@
 ﻿using System;
+using WB.Core.SharedKernels.Enumerator.ViewModels;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
 {

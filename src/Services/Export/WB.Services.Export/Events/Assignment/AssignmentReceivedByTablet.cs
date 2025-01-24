@@ -1,5 +1,4 @@
-﻿using System;
-using WB.Services.Export.Events.Assignment.Base;
+﻿using WB.Services.Export.Events.Assignment.Base;
 
 namespace WB.Services.Export.Events.Assignment
 {

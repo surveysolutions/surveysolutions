@@ -40,6 +40,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 ReceivedDateUtc = remote.CreatedAtUtc,
                 IsAudioRecordingEnabled = remote.IsAudioRecordingEnabled,
                 Comments = remote.Comments,
+                TargetArea = remote.TargetArea,
                 ProtectedVariables = remote.ProtectedVariables?.Select(x => new AssignmentDocument.AssignmentProtectedVariable
                 {
                     Variable = x,

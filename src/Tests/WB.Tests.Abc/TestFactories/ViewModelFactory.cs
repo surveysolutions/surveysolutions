@@ -94,7 +94,7 @@ namespace WB.Tests.Abc.TestFactories
             IUserInterfaceStateService userInterfaceStateService = null,
             IMvxMainThreadAsyncDispatcher mvxMainThreadDispatcher = null,
             ICompositeCollectionInflationService compositeCollectionInflationService = null,
-            IVirbationService virbationService = null)
+            IVibrationService vibrationService = null)
             => new EnumerationStageViewModel(
                 interviewViewModelFactory ?? Mock.Of<IInterviewViewModelFactory>(),
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
@@ -320,7 +320,9 @@ namespace WB.Tests.Abc.TestFactories
             IViewModelEventRegistry eventRegistry = null, IQuestionnaireStorage questionnaireRepository = null)
             => new EnablementViewModel(interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 eventRegistry ?? Create.Service.LiteEventRegistry(), 
-                questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>());
+                questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
+                Mock.Of<IViewModelNavigationService>(),
+                Mock.Of<ILogger>());
 
         public FilteredOptionsViewModel FilteredOptionsViewModel(
             Identity questionId,
@@ -489,11 +491,11 @@ namespace WB.Tests.Abc.TestFactories
         }
 
         public VibrationViewModel VibrationViewModel(IViewModelEventRegistry eventRegistry = null,
-            IEnumeratorSettings enumeratorSettings = null, IVirbationService vibrationService = null)
+            IEnumeratorSettings enumeratorSettings = null, IVibrationService vibrationService = null)
             => new VibrationViewModel(
                 eventRegistry ?? Mock.Of<IViewModelEventRegistry>(),
                 enumeratorSettings ?? Mock.Of<IEnumeratorSettings>(), 
-                vibrationService ?? Mock.Of<IVirbationService>());
+                vibrationService ?? Mock.Of<IVibrationService>());
 
         public SingleOptionQuestionOptionViewModel SingleOptionQuestionOptionViewModel(int? value = null)
         {
@@ -543,7 +545,8 @@ namespace WB.Tests.Abc.TestFactories
                 Mock.Of<IViewModelNavigationService>(),
                 principal ?? Mock.Of<IPrincipal>(x => x.CurrentUserIdentity == Create.Other.SupervisorIdentity(null, null, null, null)),
                 interviewers ?? new InMemoryPlainStorage<InterviewerDocument>(Mock.Of<ILogger>()),
-                Mock.Of<IUserInteractionService>());
+                Mock.Of<IUserInteractionService>(),
+                Mock.Of<IMapInteractionService>());
 
             if (interviewId.HasValue)
             {

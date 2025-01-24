@@ -42,6 +42,9 @@ registerGlobalComponents(vue)
 import PortalVue from 'portal-vue'
 vue.use(PortalVue)
 
+import VueDOMPurifyHTML from 'vue-dompurify-html';
+vue.use(VueDOMPurifyHTML)
+
 import { Popover } from 'uiv'
 vue.component('popover', Popover)
 

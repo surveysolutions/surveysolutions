@@ -16,8 +16,10 @@ namespace WB.Core.BoundedContexts.Interviewer
             registry.BindWithConstructorArgument<ISynchronizationStep, InterviewerUpdateAppSettings>("sortOrder", 20);
             registry.BindWithConstructorArgument<ISynchronizationStep, DownloadHQChangesForInterview>("sortOrder", 30);
             registry.BindWithConstructorArgument<ISynchronizationStep, UploadCalendarEvents>("sortOrder", 35);
+            registry.BindWithConstructorArgument<ISynchronizationStep, UploadGeoTrackingSynchronizationStep>("sortOrder", 37);
             registry.BindWithConstructorArgument<ISynchronizationStep, InterviewerUploadInterviews>("sortOrder", 40);
             registry.BindWithConstructorArgument<ISynchronizationStep, SynchronizeAssignments>("sortOrder", 50);
+            registry.BindWithConstructorArgument<ISynchronizationStep, RemoveGeoTrackingSynchronizationStep>("sortOrder", 60);
             registry.BindWithConstructorArgument<ISynchronizationStep, InterviewerDownloadInterviews>("sortOrder", 70);
             registry.BindWithConstructorArgument<ISynchronizationStep, UpdateQuestionnaires>("sortOrder", 80);//all questionnaires are downloaded, updating 
             registry.BindWithConstructorArgument<ISynchronizationStep, DownloadCalendarEvents>("sortOrder", 85);

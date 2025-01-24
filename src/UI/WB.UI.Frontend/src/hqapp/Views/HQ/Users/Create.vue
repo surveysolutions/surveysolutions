@@ -14,9 +14,9 @@
             <div class="profile">
                 <div class="col-sm-7">
                     <p>
-                        <span v-html="$t('Pages.User_CreateText1')"></span>
+                        <span v-dompurify-html="$t('Pages.User_CreateText1')"></span>
                         <br />
-                        <span v-html="$t('Pages.User_CreateText2', { link: uploadUri })"></span>
+                        <span v-dompurify-html="$t('Pages.User_CreateText2', { link: uploadUri })"></span>
                     </p>
                 </div>
                 <div class="col-sm-12">
@@ -70,7 +70,7 @@
                     <div class="separate-line"></div>
                 </div>
                 <div class="col-sm-12">
-                    <h5 class="extra-margin-bottom" v-html="$t('Pages.PublicSection')"></h5>
+                    <h5 class="extra-margin-bottom" v-dompurify-html="$t('Pages.PublicSection')"></h5>
                     <form-group :label="$t('FieldsAndValidations.PersonNameFieldName')"
                         :error="modelState['PersonName']">
                         <TextInput v-model.trim="personName" :haserror="modelState['PersonName'] !== undefined"

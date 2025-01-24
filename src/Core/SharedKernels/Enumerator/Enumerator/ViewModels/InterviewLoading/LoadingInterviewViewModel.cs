@@ -139,7 +139,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
             }
             else
             {
-                await this.ViewModelNavigationService.NavigateToInterviewAsync(interviewId.FormatGuid(), navigationIdentity: null);
+                await this.ViewModelNavigationService.NavigateToInterviewAsync(interviewId.FormatGuid(), 
+                    navigationIdentity: null);
             }
         }
 

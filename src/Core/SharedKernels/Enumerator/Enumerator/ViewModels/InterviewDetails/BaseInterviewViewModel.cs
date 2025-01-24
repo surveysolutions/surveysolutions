@@ -360,7 +360,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private IReadOnlyCollection<string> availableLanguages;
         public override IReadOnlyCollection<string> AvailableLanguages => this.availableLanguages;
 
-        public IMvxAsyncCommand NavigateToDashboardCommand => new MvxAsyncCommand(async () =>
+        public IMvxAsyncCommand NavigateFromInterviewAsync => new MvxAsyncCommand(async () =>
+        {
+            await this.ViewModelNavigationService.NavigateFromInterviewAsync(this.InterviewId);
+            this.Dispose();
+        });
+
+        public IMvxAsyncCommand NavigateToDashboardInterviewAsync => new MvxAsyncCommand(async () =>
         {
             await this.ViewModelNavigationService.NavigateToDashboardAsync(this.InterviewId);
             this.Dispose();
@@ -379,7 +385,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         });
         
         public IMvxCommand NavigateToSettingsCommand => new MvxCommand(this.ViewModelNavigationService.NavigateToSettings);
-        public IMvxCommand NavigateToDiagnosticsPageCommand => new MvxAsyncCommand(this.ViewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>);
+        public IMvxCommand NavigateToDiagnosticsPageCommand => 
+            new MvxAsyncCommand(() => this.ViewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>());
 
         public void NavigateToPreviousViewModel(Action navigateToIfHistoryIsEmpty)
             => this.NavigationState.NavigateBack(navigateToIfHistoryIsEmpty);

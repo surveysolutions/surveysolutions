@@ -709,6 +709,9 @@
   <data name="Dashboard_ShowLocation" xml:space="preserve">
     <value>Показать на карте</value>
   </data>
+  <data name="Dashboard_ShowAssignmentMap" xml:space="preserve">
+    <value>Показать зону назначения</value>
+  </data>
   <data name="DashboardItem_AssignmentLeftComment" xml:space="preserve">
     <value>{0} интервью</value>
     <comment>осталось создать {0} интервью</comment>
@@ -833,6 +836,12 @@
   <data name="Synchronization_UploadAuditLog" xml:space="preserve">
     <value>Загрузка аудит информации</value>
     <comment>Загрузка аудит информации</comment>
+  </data>
+  <data name="Synchronization_UploadGeoTracking" xml:space="preserve">
+    <value>Загрузка гео-маршрутов информации</value>
+  </data>
+  <data name="Synchronization_RemoveObsoleteGeoTracking" xml:space="preserve">
+    <value>Удаление устаревших гео-маршрутов</value>
   </data>
   <data name="Synchronization_ReceivingAuditLog" xml:space="preserve">
     <value>Получение аудит информации</value>
@@ -1029,5 +1038,26 @@
   </data>
   <data name="DashboardItem_QRCode" xml:space="preserve">
     <value>Показать QR код</value>
+  </data>
+  <data name="Error_NoGpsProvider" xml:space="preserve">
+    <value>Не найдет GPS провайден на этом устройстве.</value>
+  </data>
+  <data name="Error_NoTargetAreaShapefile" xml:space="preserve">
+    <value>Не найден файл границ для целейвой области.</value>
+  </data>
+  <data name="MenuItem_Title_Return" xml:space="preserve">
+      <value>Вернуться</value>
+  </data>
+  <data name="Dashboard_CreateInterview_TargetArea_Warning" xml:space="preserve">
+    <value>Задание требует создавать интевью на Карте задания. Рекомендуется использовать режим Гео Зонирования. Хотите продолжить?</value>
+  </data>
+  <data name="AssigmentMap_CreateInterview_OutTargetArea_Warning" xml:space="preserve">
+    <value>Вы создаете интервью за пределами целевой области. Хотите продолжить?</value>
+  </data>
+  <data name="AssigmentMap_CreateInterview_DisabledTargetArea_Warning" xml:space="preserve">
+    <value>Рекомендуется включить геофенсинг для проверки целевой зоны. Хотите продолжить?</value>
+  </data>
+  <data name="AssigmentMap_GeoTrackingReminder" xml:space="preserve">
+      <value>Вы использовали функции Гео локации при создании последнего интервью. Пожалуйста, включите их, если необходимо</value>
   </data>
 </root>

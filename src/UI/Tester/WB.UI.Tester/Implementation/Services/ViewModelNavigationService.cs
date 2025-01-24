@@ -61,7 +61,7 @@ namespace WB.UI.Tester.Implementation.Services
             => await NavigateToAsync<TesterInterviewViewModel, InterviewViewModelArgs>(new InterviewViewModelArgs
             {
                 InterviewId = interviewId,
-                NavigationIdentity = navigationIdentity
+                NavigationIdentity = navigationIdentity,
             });
 
         public override Task NavigateToCreateAndLoadInterview(int assignmentId)

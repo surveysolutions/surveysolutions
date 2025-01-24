@@ -161,6 +161,27 @@
                         </div>
                     </wb-question>
 
+                    <wb-question ref="ref_email" :question="targetAreaQuestion" noValidation="true" noComments="true"
+                        questionCssClassName="text-question">
+                        <h5>{{ this.$t("Assignments.TargetArea") }}</h5>
+                        <div class="question-unit">
+                            <div class="options-group">
+                                <div class="form-group">
+                                    <div class="field answered">
+                                        <Field v-model="targetAreaQuestion.answer"
+                                            :title="this.$t('Assignments.TargetAreaExplanation')"
+                                            :placeholder="$t('Assignments.EnterTargetArea')" name="targetArea"
+                                            type="text" autocomplete="off" class="field-to-fill" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="information-block text-danger" v-if="!targetAreaQuestion.validity.isValid">
+                            <p>{{ this.$t("Assignments.InvalidTargetArea") }}</p>
+                        </div>
+                    </wb-question>
+
+
                     <wb-question :question="commentsQuestion" noValidation="true" noComments="true"
                         questionCssClassName="text-question">
                         <h5>{{ this.$t("Assignments.Comments") }}</h5>
@@ -314,6 +335,15 @@ export default {
                     isValid: true,
                 },
             },
+            targetAreaQuestion: {
+                id: 'targetArea',
+                acceptAnswer: true,
+                isAnswered: true,
+                answer: null,
+                validity: {
+                    isValid: true,
+                },
+            },
         }
     },
     computed: {
@@ -411,6 +441,7 @@ export default {
                         webMode: this.webMode.answer,
                         isAudioRecordingEnabled: this.isAudioRecordingEnabled.answer,
                         comments: this.commentsQuestion.answer,
+                        targetArea: this.targetAreaQuestion.answer,
                     })
                     .then(response => {
                         window.location.href = self.config.assignmentsUrl

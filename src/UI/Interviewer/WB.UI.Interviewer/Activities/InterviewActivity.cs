@@ -3,6 +3,7 @@ using Android.Views;
 using Java.Interop;
 using MvvmCross.Commands;
 using WB.Core.SharedKernels.Enumerator.Properties;
+using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.UI.Interviewer.ViewModel;
 using WB.UI.Shared.Enumerator.Activities;
 
@@ -24,11 +25,20 @@ namespace WB.UI.Interviewer.Activities
         protected override MenuDescription MenuDescriptor => new MenuDescription
         {
             {
+                Resource.Id.menu_return,
+                EnumeratorUIResources.MenuItem_Title_Return,
+                new MvxAsyncCommand(async () =>
+                {
+                    await this.ViewModel.NavigateFromInterviewAsync.ExecuteAsync();
+                    this.ReleaseActivity();
+                })
+            },
+            {
                 Resource.Id.menu_dashboard,
                 EnumeratorUIResources.MenuItem_Title_Dashboard,
-                new MvxAsyncCommand(async () =>  
+                new MvxAsyncCommand(async () =>
                 {
-                    await this.ViewModel.NavigateToDashboardCommand.ExecuteAsync();
+                    await this.ViewModel.NavigateToDashboardInterviewAsync.ExecuteAsync();
                     this.ReleaseActivity();
                 })
             },
