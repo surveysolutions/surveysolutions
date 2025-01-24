@@ -164,15 +164,15 @@ jobs:
         merge-multiple: true
         retention-days: 1
 
-    merge:
-+    runs-on: ubuntu-latest
-+    needs: upload
-+    steps:
-+      - name: Merge Artifacts
-+        uses: actions/upload-artifact/merge@v4
-+        with:
-+          name: Mobile-Apps-${{ github.run_id }}
-+          pattern: Mobile-Apps-*
+  merge:
+    runs-on: ubuntu-latest
+    needs: mobile
+    steps:
+      - name: Union Mibile Apps
+        uses: actions/upload-artifact/merge@v4
+        with:
+          name: Mobile-Apps-${{ github.run_id }}
+          pattern: Mobile-Apps-*
 
   docker:
     needs: [prepare, mobile]
