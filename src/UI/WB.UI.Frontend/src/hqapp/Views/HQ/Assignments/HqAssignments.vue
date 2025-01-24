@@ -713,7 +713,7 @@ export default {
                 return false
             }
 
-            if (!this.showSelectors())
+            if (!this.showSelectors)
                 return false
 
             let targetQuantity = null
