@@ -20,7 +20,7 @@ export default {
     },
     methods: {
         changeLanguage(language) {
-            this.$store.dispatch('changeLanguage', language?.id)
+            this.$store.dispatch('changeLanguage', language)
         },
     },
     updated() {

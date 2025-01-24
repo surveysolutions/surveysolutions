@@ -621,7 +621,7 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
     <value>Update maps</value>
   </data>
   <data name="Version_Not_Supports" xml:space="preserve">
-    <value>Your version of application doesn't support this functionality</value>
+    <value>Your application version does not support this feature. Please install Interviewer with Maps to enable it.</value>
   </data>
   <data name="AreaMap_UpdateFailed" xml:space="preserve">
     <value>Update failed</value>

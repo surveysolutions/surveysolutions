@@ -251,6 +251,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
         
         private async Task NavigateToMapDashboardAsync(int assignmentId)
         {
+            if (!mapInteractionService.DoesSupportMaps)
+            {
+                userInteractionService.ShowToast(UIResources.Version_Not_Supports);
+                return;
+            }
+            
             try
             {
                 await mapInteractionService.OpenAssignmentMapAsync(assignmentId);

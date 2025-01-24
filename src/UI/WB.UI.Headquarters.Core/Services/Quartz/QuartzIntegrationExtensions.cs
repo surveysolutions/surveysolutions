@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Npgsql;
 using Quartz;
+using Quartz.Impl.Matchers;
 using Quartz.Listener;
 using Quartz.Logging;
 using Quartz.Spi;
@@ -118,6 +119,17 @@ namespace WB.UI.Headquarters.Services.Quartz
             foreach (var schedule in services.GetServices<IScheduledJob>())
             {
                 await schedule.RegisterJob();
+            }
+
+            var tiggers = await scheduler.GetTriggerKeys(GroupMatcher<TriggerKey>.AnyGroup());
+            foreach (var triggerKey in tiggers)
+            {
+                var triggerState = await scheduler.GetTriggerState(triggerKey);
+                if (triggerState == TriggerState.Error)
+                {
+                    Log.Information($"Reseting Error state for trigger {triggerKey}.");
+                    await scheduler.ResetTriggerFromErrorState(triggerKey);
+                }
             }
         }
 

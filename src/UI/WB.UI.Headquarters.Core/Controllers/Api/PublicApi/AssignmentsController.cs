@@ -734,7 +734,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                         this.userViewFactory, new Dictionary<string, UserToVerify>()),
                 Answers = identifyingAnswers.Select(x => this.ToPreloadAnswer(x, questionnaire)).ToArray(),
                 Comments = new PreloadingValue
-                    {Value = assignmentInfo.Comments, Column = nameof(assignmentInfo.Comments)}.ToAssignmentComments()
+                    {Value = assignmentInfo.Comments, Column = nameof(assignmentInfo.Comments)}.ToAssignmentComments(),
+                TargetArea = new PreloadingValue
+                    {Value = assignmentInfo.TargetArea, Column = nameof(assignmentInfo.TargetArea)}.ToAssignmentTargetArea(),
             };
 
             var rosterRows = rosterAnswers
