@@ -161,6 +161,7 @@ jobs:
         name: Mobile-Apps-${{ github.run_id }}
         path: ${{ github.workspace }}/artifacts
         overwrite: false
+        merge-multiple: true
         retention-days: 1
 
   docker:
