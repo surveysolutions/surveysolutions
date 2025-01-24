@@ -220,6 +220,7 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
 
         [DataMember] public bool? IsAudioRecordingEnabled { get; set; }
         [DataMember] public string Comments { get; set; }
+        [DataMember] public string TargetArea { get; set; }
         
         /// <summary>
         /// List of protected variables

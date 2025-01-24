@@ -1,5 +1,7 @@
 using Moq;
 using MvvmCross.Tests;
+using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
@@ -17,7 +19,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.EnablementViewModelT
             return new EnablementViewModel(
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(), 
                 registry ?? Create.Service.LiteEventRegistry(), 
-                questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>());
+                questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
+                Mock.Of<IViewModelNavigationService>(),
+                Mock.Of<ILogger>());
         }
     }
 }
