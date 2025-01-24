@@ -129,6 +129,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                         WebMode = x.WebMode,
                         ReceivedByTabletAtUtc = x.ReceivedByTabletAtUtc,
                         Comments = x.Comments,
+                        TargetArea = x.TargetArea,
                         CalendarEvent = GetCalendarEventForAssignmentOrNull(x.Id)
                     };
 
