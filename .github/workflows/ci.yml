@@ -124,7 +124,7 @@ jobs:
       - name: Union Reports
         uses: actions/upload-artifact/merge@v4
         with:
-          name: test-coverage-${{ github.run_id }}
+          name: test-coverage
           pattern: test-coverage-*
 
   code-analysis:
@@ -156,7 +156,7 @@ jobs:
       - uses: actions/download-artifact@v4
         id: test-results
         with:
-          name: test-coverage-${{ github.run_id }}
+          name: test-coverage
           path: test-results
 
       - name: build with scan
