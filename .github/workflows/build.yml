@@ -164,7 +164,7 @@ jobs:
         merge-multiple: true
         retention-days: 1
 
-  merge:
+  union-apps:
     runs-on: ubuntu-latest
     needs: [prepare, mobile]
     steps:
@@ -175,7 +175,7 @@ jobs:
           pattern: Mobile-Apps-*
 
   docker:
-    needs: [prepare, mobile, merge]
+    needs: [prepare, mobile, union-apps]
     runs-on: ubuntu-latest
     environment: ${{ needs.prepare.outputs.environment }}
     permissions:
@@ -222,7 +222,7 @@ jobs:
             -nodeVersion "${{ env.NODE_VERSION }}"
 
   installer:
-    needs: [prepare, mobile, merge]
+    needs: [prepare, mobile, union-apps]
     runs-on: windows-2019
     environment: ${{ needs.prepare.outputs.environment }}
 
