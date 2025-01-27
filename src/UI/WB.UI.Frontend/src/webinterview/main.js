@@ -23,7 +23,16 @@ import Vuei18n from '~/shared/plugins/locale'
 import { browserLanguage } from '~/shared/helpers'
 const i18n = Vuei18n.initialize(browserLanguage, vue)
 
-import './init'
+import 'bootstrap'
+import 'flatpickr/dist/flatpickr.css'
+import 'toastr/build/toastr.css'
+
+import moment from 'moment'
+moment.locale(browserLanguage)
+
+import * as poly from 'smoothscroll-polyfill'
+poly.polyfill()
+
 import box from '@/shared/modal'
 import { registerGlobalComponents } from './componentsRegistry'
 registerGlobalComponents(vue)
