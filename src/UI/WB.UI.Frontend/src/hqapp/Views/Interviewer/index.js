@@ -9,9 +9,9 @@ const store = {
         pendingHandle: null,
     },
     actions: {
-        createInterview({ dispatch }, assignmentId) {
-            dispatch('showProgress', true)
-
+        createInterview(context, assignmentId) {
+            context.dispatch('showProgress', true)
+            var currentContext = context
             $.post(
                 {
                     url: window.CONFIG.model.interviewerHqEndpoint + '/StartNewInterview/' + assignmentId,
@@ -21,8 +21,7 @@ const store = {
                 }
             )
                 .done(function (data, textStatus) {
-                    dispatch('showProgress', true)
-                    window.location.href = '/' + config.workspace + '/WebInterview/' + data.interviewId + '/Cover'
+                    currentContext.dispatch('openInterview', data.interviewId)
                 })
                 .catch(data => {
                     if (data.responseJSON && data.responseJSON.redirectUrl) {
@@ -43,7 +42,6 @@ const store = {
             context.dispatch('showProgress', true)
             window.location.href = window.CONFIG.model.interviewerHqEndpoint + '/OpenInterview/' + interviewId
         },
-
         discardInterview(context, { callback, interviewId }) {
             $.ajax({
                 url: window.CONFIG.model.interviewerHqEndpoint + '/DiscardInterview/' + interviewId,
