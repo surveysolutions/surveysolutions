@@ -1,8 +1,8 @@
-﻿<div class="modal fade" id="mExportPdf">
+﻿<div class="modal" id="mExportPdf">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close close-pdf-dialog" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close close-pdf-dialog" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">
                     @Html.Raw(string.Format(QuestionnaireController.GeneratingPdf, "<span id=\"export-pdf-modal-questionnaire-title\">?</span>"))
                 </h4>
@@ -12,7 +12,7 @@
                     <p>@QuestionnaireController.ChooseLanguageTitle</p>
 
                     <div class="dropdown clearfix">
-                        <button class="btn btn-default dropdown-toggle" type="button" title="@QuestionnaireController.ChooseLanguage" id="dropdownMenuButton" data-toggle="dropdown" 
+                        <button class="btn btn-default dropdown-toggle" type="button" title="@QuestionnaireController.ChooseLanguage" id="dropdownMenuButton" data-bs-toggle="dropdown" 
                                 aria-haspopup="true" aria-expanded="true">
                         </button>
                         <ul class="dropdown-menu languages-combobox" aria-labelledby="dropdownMenuButton">
@@ -26,7 +26,7 @@
             <div class="modal-footer">
                 <button id="pdfDownloadButton" class="btn btn-primary pull-left">@QuestionnaireController.DownloadPdf</button>
                 <button id="pdfRetryGenerate" class="btn btn-primary" onclick="questionnaireActionModel.retryPdfExport()">@QuestionnaireController.RetryExportPDF</button>
-                <button id="pdfCancelButton" class="btn pull-right close-pdf-dialog" data-dismiss="modal" aria-hidden="true">@QuestionnaireController.Cancel</button>
+                <button id="pdfCancelButton" class="btn pull-right close-pdf-dialog" data-bs-dismiss="modal" aria-hidden="true">@QuestionnaireController.Cancel</button>
             </div>
         </div>
     </div>
