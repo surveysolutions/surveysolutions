@@ -28,7 +28,8 @@
     "author": "",
     "dependencies": {
         "@mdi/font": "^5.2.45",
-        "bootstrap": "3.4.1",
+        "bootstrap": "^5.3.3",
+        "bootstrap-less": "^3.3.8",
         "bootstrap-select": "^1.13.18",
         "dompurify": "^3.2.3",
         "jquery": "^3.7.1",
