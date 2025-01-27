@@ -253,7 +253,9 @@ function ItemViewModel() {
         typeaheadCtrl.unbind('click');
         typeaheadCtrl.click(function (evn) {
             var link = $(evn.target);
-            selectTranslationFunc(link);
+            self.selectedTransalation = link.attr('value');
+            $('#dropdownMenuButton').text(link.text());
+            $('#pdfGenerateButton').prop('disabled', false);
         });
 
         $('#pdfGenerateButton').prop('disabled', true);
