@@ -58,6 +58,8 @@ module.exports = class LocalizationBuilder {
 
             this.ensureDirectoryExistence(resultPath);
 
+            console.log(resultPath)
+
             fs.writeFileSync(resultPath, fileBody);
 
             response[language] = path
