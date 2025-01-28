@@ -7,6 +7,7 @@ import Vue from '@vitejs/plugin-vue';
 import LocalizationPlugin from './tools/vite-plugin-localization';
 //import { VuetifyResolver } from 'unplugin-vue-components/resolvers'
 import Vuetify from 'vite-plugin-vuetify';
+import { normalizePath } from 'vite';
 
 const baseDir = path.resolve(__dirname, './');
 const join = path.join.bind(path, baseDir);
@@ -37,12 +38,20 @@ export default defineConfig(({ mode, command }) => {
                 noHash: true,
                 inline: true,
                 patterns: [
-                    join('../Resources/QuestionnaireEditor.resx'),
-                    join('../Resources/QuestionnaireEditor.*.resx'),
-                    join('../Resources/AccountResources.resx'),
-                    join('../Resources/AccountResources.*.resx'),
-                    join('../Resources/QuestionnaireController.resx'),
+                    normalizePath(
+                        join('../Resources/QuestionnaireEditor.resx')
+                    ),
+                    normalizePath(
+                        join('../Resources/QuestionnaireEditor.*.resx')
+                    ),
+                    normalizePath(join('../Resources/AccountResources.resx')),
+                    normalizePath(join('../Resources/AccountResources.*.resx')),
+                    normalizePath(
+                        join('../Resources/QuestionnaireController.resx')
+                    ),
+                    normalizePath(
                     join('../Resources/QuestionnaireController.*.resx')
+                    )
                 ],
                 destination: './src/locale',
                 locales: {
