@@ -14,6 +14,8 @@ const join = path.join.bind(path, baseDir);
 const outDir = path.resolve(__dirname + '/../wwwroot/assets');
 //const outDir = path.resolve(__dirname + '/../wwwroot');
 
+console.log(join('../Resources/QuestionnaireEditor.resx'));
+
 export default defineConfig(({ mode, command }) => {
     const isDevMode = mode === 'development';
     const isProdMode = !isDevMode;
