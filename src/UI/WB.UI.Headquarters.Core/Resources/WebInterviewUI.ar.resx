@@ -468,4 +468,82 @@
   <data name="WebTesterSessionOverMessage" xml:space="preserve">
     <value>يرجى إغلاق هذه الصفحة. يمكنك فتح واحدة جديدة من خلال العودة إلى موقع المصمم</value>
   </data>
+    <data name="HideVariables" xml:space="preserve">
+    <value>إخفاء المتغيرات</value>
+  </data>
+    <data name="ShowVariables" xml:space="preserve">
+    <value>عرض المتغيرات</value>
+  </data>
+    <data name="Interview_Questions_RemoveRowFromRosterMessage" xml:space="preserve">
+    <value>هل أنت متأكد أنك تريد إزالة القائمة ذات الصلة '{{rosterTitle}}'؟</value>
+  </data>
+    <data name="SaveScenario" xml:space="preserve">
+    <value>حفظ السيناريو</value>
+  </data>
+    <data name="Resolve" xml:space="preserve">
+    <value>حل</value>
+  </data>
+    <data name="ResolveHint" xml:space="preserve">
+    <value>يتم إخفاء التعليقات التي تم حلها افتراضيًا، ولكن يمكن مراجعتها من قبل جميع المشاركين في المقابلة</value>
+  </data>
+    <data name="HideResolved" xml:space="preserve">
+    <value>إخفاء المحلولة</value>
+  </data>
+    <data name="ShowResolved" xml:space="preserve">
+    <value>عرض المحلولة</value>
+  </data>
+    <data name="SaveScenarioOptions" xml:space="preserve">
+    <value>حدد السيناريو لاستبداله</value>
+  </data>
+    <data name="SaveScenarioDesignerLogin" xml:space="preserve">
+    <value>انتهت الجلسة على تطبيق المصمم. سجل الدخول على تطبيق المصمم لتتمكن من الحفظ.</value>
+  </data>
+    <data name="SaveScenarioGoToDesigner" xml:space="preserve">
+    <value>افتح المصمم</value>
+  </data>
+    <data name="NoQuestionnaireAccess" xml:space="preserve">
+    <value>ليس لديك حق الوصول إلى الاستبيان</value>
+  </data>
+    <data name="SaveScenarioName" xml:space="preserve">
+    <value>اسم</value>
+  </data>
+    <data name="SaveScenarioOptions_ReplaceExisting" xml:space="preserve">
+    <value>استبدال الموجود</value>
+  </data>
+    <data name="SaveScenarioOptions_SaveNew" xml:space="preserve">
+    <value>حفظ جديد</value>
+  </data>
+    <data name="PickLocation" xml:space="preserve">
+    <value>اختر من الخريطة</value>
+  </data>
+    <data name="EnterPassword" xml:space="preserve">
+    <value>أدخل كلمة المرور</value>
+  </data>
+    <data name="Progress" xml:space="preserve">
+    <value>التقدم</value>
+  </data>
+    <data name="SwitchToWebMode" xml:space="preserve">
+    <value>تبديل المقابلة إلى وضع الويب</value>
+  </data>
+    <data name="SwitchToWebMode_LinkDescription" xml:space="preserve">
+    <value>يمكن استخدام الرابط التالي لمتابعة هذه المقابلة</value>
+  </data>
+    <data name="AssignmentLimitError" xml:space="preserve">
+    <value>لا يمكنك إنشاء المزيد من المقابلات من هذا التعيين</value>
+  </data>
+    <data name="CompleteInterviewStatus" xml:space="preserve">
+    <value>مشكلات المقابلة:</value>
+  </data>
+    <data name="Complete_CriticalUnansweredQuestions" xml:space="preserve">
+    <value>الأسئلة الحرجة التي لم تتم الإجابة عنها: {{count}}</value>
+  </data>
+    <data name="Complete_FailedCriticalRules" xml:space="preserve">
+    <value>فشل القواعد الحرجة: {{count}}</value>
+  </data>
+    <data name="Complete_UnansweredQuestions" xml:space="preserve">
+    <value>الأسئلة التي لم تتم الإجابة عنها: {{count}}</value>
+  </data>
+    <data name="Complete_QuestionsWithErrors" xml:space="preserve">
+    <value>الأسئلة التي بها أخطاء: {{count}}</value>
+  </data>
 </root>

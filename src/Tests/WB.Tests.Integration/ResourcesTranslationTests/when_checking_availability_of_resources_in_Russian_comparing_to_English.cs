@@ -7,11 +7,26 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
     [TestFixture]
     internal class when_checking_availability_of_resources_in_Russian_comparing_to_English : ResourcesTranslationTestsContext
     {
-        [Test]
-        public void should_be_the_same_set_of_resources_in_Russian_as_it_is_in_English()
+        [TestCase ("ru")]
+        //[TestCase ("es")]
+        //[TestCase ("fr")]
+        //[TestCase ("cs")]
+        //[TestCase ("uk")]
+        //[TestCase ("ar")]
+        //[TestCase ("es")]
+        //[TestCase ("id")]
+        //[TestCase ("ka")]
+        //[TestCase ("km")]
+        //[TestCase ("pt")]
+        //[TestCase ("ro")]
+        //[TestCase ("th")]
+        //[TestCase ("sq")]
+        //[TestCase ("vi")]
+        //[TestCase ("zh")]
+        public void should_be_the_same_set_of_resources_in_other_culture_as_it_is_in_English(string culture)
         {
             russianResourceFiles = TestEnvironment
-                .GetAllFilesInSolution("*.ru.resx")
+                .GetAllFilesInSolution($"*.{culture}.resx")
                 .ToList();
 
             englishResourceFiles = TestEnvironment
@@ -41,7 +56,7 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
             Assert.That(englishResourceFiles, Is.Not.Empty);
 
             //should_be_the_same_set_of_resource_files_in_Russian_as_it_is_in_English() => 
-            Assert.That(russianResourceFiles.Select(f => f.Replace(".ru.", ".")).OrderBy(x => x), 
+            Assert.That(russianResourceFiles.Select(f => f.Replace($".{culture}.", ".")).OrderBy(x => x), 
                 Is.EquivalentTo(englishResourceFiles.OrderBy(x => x)));
 
             // should_be_the_same_set_of_resources_in_Russian_as_it_is_in_English() =>
