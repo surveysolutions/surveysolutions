@@ -87,6 +87,8 @@ module.exports = class LocalizationBuilder {
 
             const xml = fs.readFileSync(file);
 
+            console.log('Readed ' + file)
+
             const info = path.parse(file);
 
             if (!info.name.includes('.')) {
