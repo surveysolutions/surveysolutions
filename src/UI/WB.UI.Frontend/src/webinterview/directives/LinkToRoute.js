@@ -1,5 +1,4 @@
-export function registerLinkToRoute(vue) {
-
+export function registerLinkToRoute(vue, { router, store }) {    
     vue.directive('linkToRoute', {
         beforeMount: (el, _, vnode) => {
             el.addEventListener('click', event => {
@@ -31,7 +30,7 @@ export function registerLinkToRoute(vue) {
                             event.preventDefault()
 
                             // do not go into interview from take new page
-                            if (vnode.context.$store.getters.isTakeNewAssignment === true || to.includes('void(0)'))
+                            if (store.getters.isTakeNewAssignment === true || to.includes('void(0)'))
                                 return
 
                             if (to.startsWith('/api/')) {
@@ -39,13 +38,13 @@ export function registerLinkToRoute(vue) {
                                 return
                             }
 
-                            var toPath = vnode.context.$router.options.base == '/'
+                            var toPath = router.options.history.base == '/'
                                 ? to
-                                : to.replace(vnode.context.$router.options.base, '')
+                                : to.replace(router.options.history.base, '')
                             if (!toPath.startsWith('/'))
                                 toPath = '/' + toPath
 
-                            vnode.context.$router.push({ path: toPath })
+                            router.push({ path: toPath })
                         }
                     }
                 }
