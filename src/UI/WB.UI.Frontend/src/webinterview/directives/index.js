@@ -7,13 +7,13 @@ import { registerMaskedText } from './MaskedText'
 import { registerLinkToRoute } from './LinkToRoute'
 import autosize from './autosize'
 
-export function registerDerictives(vue) {
+export function registerDerictives(vue, { router, store }) {
 
     registerBlurOnEnterKey(vue)
     registerDateTimeFormatting(vue)
     registerMultiSelectDirectives(vue)
     registerNumericFormatting(vue)
     registerMaskedText(vue)
-    registerLinkToRoute(vue)
+    registerLinkToRoute(vue, { router, store })
     autosize(vue)
 }
