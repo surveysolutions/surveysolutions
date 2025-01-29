@@ -228,7 +228,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
                 {
                     this.ReleaseAudioRecorder();
                     throw new AudioException(AudioExceptionType.Unhandled,
-                        "Unexpected exception during start audio recording", ex);
+                        $"Unexpected exception during start audio recording: {ex.Message}", ex);
                 }
             }
         }
