@@ -1,14 +1,14 @@
 import * as toastr from 'toastr'
 import modal from '@/shared/modal'
 
-const connectionStore = (vue) => ({
+const connectionStore = {
     state: {
         isReconnecting: false,
         isDisconnected: false,
     },
     actions: {
         connectionSlow() {
-            toastr.warning(vue.config.globalProperties.$t('WebInterviewUI.SlowConnection'), vue.config.globalProperties.$t('WebInterviewUI.Network'), {
+            toastr.warning($t('WebInterviewUI.SlowConnection'), $t('WebInterviewUI.Network'), {
                 preventDuplicates: true,
             })
         },
@@ -20,8 +20,8 @@ const connectionStore = (vue) => ({
                 commit('IS_DISCONNECTED', true)
 
                 modal.alert({
-                    title: vue.config.globalProperties.$t('WebInterviewUI.Disconnected'),
-                    message: '<p>' + vue.config.globalProperties.$t('WebInterviewUI.ConnectionLostTitle') + '</p><p>' + vue.config.globalProperties.$t('WebInterviewUI.ConnectionLostMessage') + '</p>',
+                    title: $t('WebInterviewUI.Disconnected'),
+                    message: '<p>' + $t('WebInterviewUI.ConnectionLostTitle') + '</p><p>' + $t('WebInterviewUI.ConnectionLostMessage') + '</p>',
                     callback: () => {
                         location.reload()
                     },
@@ -29,7 +29,7 @@ const connectionStore = (vue) => ({
                     closeButton: false,
                     buttons: {
                         ok: {
-                            label: vue.config.globalProperties.$t('WebInterviewUI.Reload'),
+                            label: $t('WebInterviewUI.Reload'),
                             className: 'btn-success',
                         },
                     },
@@ -45,5 +45,5 @@ const connectionStore = (vue) => ({
             state.isDisconnected = isDisconnected
         },
     },
-})
+}
 export default connectionStore

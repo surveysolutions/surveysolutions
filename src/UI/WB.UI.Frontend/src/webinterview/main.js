@@ -33,7 +33,7 @@ import routeParams from '../shared/stores/store.routeParams.js'
 
 const store = createStore({
     modules: {
-        webinterview: webinterviewStore(vue),
+        webinterview: webinterviewStore,
         route: routeParams
     },
 })
