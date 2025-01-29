@@ -35,7 +35,7 @@ export default {
     },
 }
 
-export function $t(args) {
-    return t(args)
+export function $t(...args) {
+    return t(...args)
 }
 
