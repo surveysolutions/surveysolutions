@@ -24,6 +24,8 @@ export function registerLinkToRoute(vue, { router, store }) {
                     // don't handle same page links/anchors
                     const url = new URL(target.href)
                     const to = url.pathname
+                    if (url.hash)
+                        to = to + '#' + url.hash
 
                     if (url.protocol !== 'mailto:' && url.protocol !== 'tel:') {
                         if (window.location.pathname !== to && event.preventDefault) {
