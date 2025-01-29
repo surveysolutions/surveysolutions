@@ -13,7 +13,7 @@ function getAnswer(state, identity) {
     return question.answer
 }
 
-export default {
+export default (vue) => ({
     async loadInterview({ commit, state, rootState, $router }) {
         const details = await api.get('getInterviewDetails')
         commit('SET_INTERVIEW_INFO', details)
@@ -149,8 +149,8 @@ export default {
 
     closeInterview({ dispatch }) {
         modal.alert({
-            title: $t('WebInterviewUI.CloseInterviewTitle'),
-            message: $t('WebInterviewUI.CloseInterviewMessage'),
+            title: vue.config.globalProperties.$t('WebInterviewUI.CloseInterviewTitle'),
+            message: vue.config.globalProperties.$t('WebInterviewUI.CloseInterviewMessage'),
             callback: () => {
                 dispatch('reloadInterview')
             },
@@ -158,7 +158,7 @@ export default {
             closeButton: false,
             buttons: {
                 ok: {
-                    label: $t('WebInterviewUI.Reload'),
+                    label: vue.config.globalProperties.$t('WebInterviewUI.Reload'),
                     className: 'btn-success',
                 },
             },
@@ -361,4 +361,4 @@ export default {
     setShowVariables({ commit, rootState }, { value }) {
         commit('SHOW_VARIABLES', { value: value })
     },
-}
+})

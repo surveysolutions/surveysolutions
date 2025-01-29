@@ -6,9 +6,9 @@ import mutations from './store.mutations'
 import sidebar from './store.sidebar'
 import routeParams from '../../shared/stores/store.routeParams.js'
 
-const store =
+export default (vue) =>
     safeStore({
-        modules: { fetch, sidebar: sidebar, connection, route: routeParams },
+        modules: { fetch, sidebar: sidebar, connection: connection(vue), route: routeParams },
         state: {
             lastActivityTimestamp: new Date(),
             hasCoverPage: false,
@@ -28,7 +28,7 @@ const store =
             interviewCannotBeChanged: false,
             showVariables: false,
         },
-        actions,
+        actions: actions(vue),
         mutations,
         getters: {
             loadingProgress(state) {
@@ -60,5 +60,3 @@ const store =
             },
         },
     })
-
-export default store
