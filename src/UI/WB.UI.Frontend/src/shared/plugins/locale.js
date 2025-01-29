@@ -1,5 +1,7 @@
 import i18next from 'i18next'
 
+let t
+
 export default {
     initialize(browserLanguage, vue) {
         const locale = browserLanguage.split('-')[0]
@@ -28,6 +30,12 @@ export default {
             return i18next.t.apply(i18next, arguments)
         }
 
+        t = vue.config.globalProperties.$t
         return i18next
     },
 }
+
+export function $t(args) {
+    return t(args)
+}
+
