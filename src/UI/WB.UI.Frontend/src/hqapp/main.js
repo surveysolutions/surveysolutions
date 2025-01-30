@@ -36,9 +36,6 @@ vue.component('ProfileLayout', ProfileLayout)
 
 import './compatibility.js'
 
-import { registerGlobalComponents } from '~/webinterview/componentsRegistry'
-registerGlobalComponents(vue)
-
 import PortalVue from 'portal-vue'
 vue.use(PortalVue)
 
@@ -84,6 +81,9 @@ const router = new Router({
 }).router
 
 vue.use(router)
+
+import { registerGlobalComponents } from '~/webinterview/componentsRegistry'
+registerGlobalComponents(vue, { router, store })
 
 import { pageTitle } from 'vue-page-title'
 vue.use(pageTitle)

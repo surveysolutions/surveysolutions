@@ -13,6 +13,7 @@ import fs from 'fs';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 import { ViteFilemanager } from 'filemanager-plugin';
 import saveSelectedFilesPlugin from './tools/saveSelectedFilesPlugin.cjs';
+import { normalizePath } from 'vite';
 
 const baseDir = path.relative(__dirname, "./");
 const join = path.join.bind(path, baseDir);
@@ -116,9 +117,9 @@ const fileTargets = [
 
 
 const resxFiles = [
-    "../WB.UI.Headquarters.Core/**/*.resx",
-    "../../Core/SharedKernels/Enumerator/WB.Enumerator.Native/Resources/*.resx",
-    "../../Core/BoundedContexts/Headquarters/WB.Core.BoundedContexts.Headquarters/Resources/*.resx"
+    normalizePath("../WB.UI.Headquarters.Core/**/*.resx"),
+    normalizePath("../../Core/SharedKernels/Enumerator/WB.Enumerator.Native/Resources/*.resx"),
+    normalizePath("../../Core/BoundedContexts/Headquarters/WB.Core.BoundedContexts.Headquarters/Resources/*.resx")
 ]
 
 let inputPages = {};
