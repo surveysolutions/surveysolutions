@@ -65,7 +65,7 @@
                     :values="conditionVariablesList" :value="selectedCondition" @selected="selectCondition" />
             </FilterBlock>
             <template v-if="condition != null">
-                <Checkbox :label="$t('Reports.PivotView')" name="pivot" :value="query.pivot" @input="pivotChanged" />
+                <Checkbox :label="$t('Reports.PivotView')" name="pivot" :value="query.pivot == 'true'" @input="pivotChanged" />
 
                 <ul class="list-group small" v-if="!query.pivot">
                     <li class="list-group-item pointer" v-for="answer in condition.Answers" :key="answer.Answer"

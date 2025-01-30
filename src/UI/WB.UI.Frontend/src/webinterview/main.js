@@ -34,8 +34,6 @@ import * as poly from 'smoothscroll-polyfill'
 poly.polyfill()
 
 import box from '@/shared/modal'
-import { registerGlobalComponents } from './componentsRegistry'
-registerGlobalComponents(vue)
 
 import createRouter from './router'
 import webinterviewStore from './stores'
@@ -56,6 +54,9 @@ const router = createRouter(store)
 
 vue.use(store)
 vue.use(router)
+
+import { registerGlobalComponents } from './componentsRegistry'
+registerGlobalComponents(vue, { router, store })
 
 box.init(i18n, browserLanguage)
 
