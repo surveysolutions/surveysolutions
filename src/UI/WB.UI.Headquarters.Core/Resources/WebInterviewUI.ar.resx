@@ -455,10 +455,7 @@
   </data>
   <data name="ShowOnMap" xml:space="preserve">
     <value>عرض على الخريطة</value>
-  </data>
-  <data name="ShowResolved" xml:space="preserve">
-    <value>عرض حلها</value>
-  </data>
+  </data>  
   <data name="WarningsHeader" xml:space="preserve">
     <value>تحذيرات</value>
   </data>
@@ -473,19 +470,7 @@
   </data>
     <data name="ShowVariables" xml:space="preserve">
     <value>عرض المتغيرات</value>
-  </data>
-    <data name="Interview_Questions_RemoveRowFromRosterMessage" xml:space="preserve">
-    <value>هل أنت متأكد أنك تريد إزالة القائمة ذات الصلة '{{rosterTitle}}'؟</value>
-  </data>
-    <data name="SaveScenario" xml:space="preserve">
-    <value>حفظ السيناريو</value>
-  </data>
-    <data name="Resolve" xml:space="preserve">
-    <value>حل</value>
-  </data>
-    <data name="ResolveHint" xml:space="preserve">
-    <value>يتم إخفاء التعليقات التي تم حلها افتراضيًا، ولكن يمكن مراجعتها من قبل جميع المشاركين في المقابلة</value>
-  </data>    
+  </data>      
   <data name="ShowResolved" xml:space="preserve">
     <value>عرض المحلولة</value>
   </data>
@@ -543,4 +528,43 @@
     <data name="Complete_QuestionsWithErrors" xml:space="preserve">
     <value>الأسئلة التي بها أخطاء: {{count}}</value>
   </data>
+    <data name="CommentOnPreviousAnswer" xml:space="preserve">
+  <value>على الإجابة السابقة</value>
+</data>
+    <data name="CompleteCommentCriticalityLevelWarn" xml:space="preserve">
+  <value>لتفعيل الزر، يرجى حل المشكلات الحرجة أو تقديم تفسير في مربع التعليقات أعلاه</value>
+</data>
+    <data name="CompleteCommentCriticalityLevelBlock" xml:space="preserve">
+  <value>لتفعيل الزر، يرجى حل المشكلات الحرجة</value>
+</data>
+    <data name="CompleteNoteCommentCriticality" xml:space="preserve">
+  <value>يرجى حل المشكلات عن طريق الإجابة على الأسئلة الحرجة والتأكد من أن الإجابات تلبي القواعد الحرجة</value>
+</data>
+    <data name="CompleteCriticalityWarnConfirmation" xml:space="preserve">
+  <value>يرجى تأكيد رغبتك في تقديم هذه المقابلة مع المشكلات الحرجة.</value>
+</data>
+    <data name="CompleteNoteToSupervisor" xml:space="preserve">
+  <value>تعليق</value>
+</data>
+    <data name="ConfirmationNeededTitle" xml:space="preserve">
+  <value>تأكيد مطلوب</value>
+</data>
+    <data name="CriticalQuestionErrors" xml:space="preserve">
+  <value>تتطلب إجابات على هذه الأسئلة:</value>
+</data>
+    <data name="CriticalityConditionsErrors" xml:space="preserve">
+  <value>تتطلب إصلاح هذه الأخطاء:</value>
+</data>
+    <data name="Interview_Overview_NoValue" xml:space="preserve">
+  <value>لا توجد قيمة</value>
+</data>
+    <data name="MaxAnswersCountSelected" xml:space="preserve">
+  <value>تم الوصول إلى الحد الأقصى لعدد الاختيارات ({{value}}) في هذا السؤال</value>
+</data>
+    <data name="NotCalculated" xml:space="preserve">
+  <value>لم يتم الحساب</value>
+</data>
+    <data name="UnansweredQuestions" xml:space="preserve">
+  <value>الأسئلة التي لم تتم الإجابة عنها:</value>
+</data>
 </root>

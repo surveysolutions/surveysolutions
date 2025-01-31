@@ -117,28 +117,40 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="IncorrectUserNameOrPassword" xml:space="preserve">
-    <value>اسم المستخدم أو كلمة المرور غير صحيحة.</value>
-  </data>
-  <data name="PleaseFillCaptcha" xml:space="preserve">
-    <value>يرجى ملء خانة كلمة التحقق</value>
-  </data>
-  <data name="Questionnaire_verification_failed" xml:space="preserve">
-    <value>يحتوي الاستبيان "{0}" على أخطاء في التجميع. يرجى تصحيحها في المصمم</value>
-  </data>
-  <data name="RequestTimeout" xml:space="preserve">
-    <value>انتهت مهلة عند محاولة الاتصال بالمصمم. الرجاء التحقق من اتصال الانترنت الخاص بك</value>
-  </data>
-  <data name="ServerError" xml:space="preserve">
-    <value>حدث خطأ داخلي في الخادم. يرجى الاتصال بفريق دعم عملاء</value>
-  </data>
-  <data name="ServiceUnavailable" xml:space="preserve">
-    <value>المصمم غير موجود. الرجاء التأكد من أن المصمم ليس في وضع الصيانة</value>
-  </data>
-  <data name="SiteAccessNotAllowed" xml:space="preserve">
-    <value>ليس لديك إذن بالدخول إلى هذا الموقع. تواصل مع مديرك.</value>
-  </data>
-  <data name="TemplateNotFound" xml:space="preserve">
-    <value>لا يمكن العثور على الاستبيان "{0}". يرجى تحديث قائمة الاستبيانات</value>
-  </data>
+    <data name="TemplateNotFound" xml:space="preserve">
+  <value>لا يمكن العثور على الاستبيان "{0}". يرجى تحديث قائمة الاستبيانات.</value>
+</data>
+    <data name="Questionnaire_verification_failed" xml:space="preserve">
+  <value>يحتوي الاستبيان "{0}" على أخطاء في التجميع. يرجى تصحيحها في المصمم.</value>
+</data>
+    <data name="ServerError" xml:space="preserve">
+  <value>حدث خطأ داخلي في الخادم. يرجى الاتصال بفريق الدعم الخاص بك.</value>
+</data>
+    <data name="RequestTimeout" xml:space="preserve">
+  <value>انتهت مهلة الاتصال بالمصمم. يرجى التحقق من اتصال الإنترنت الخاص بك.</value>
+</data>
+    <data name="ServiceUnavailable" xml:space="preserve">
+  <value>المصمم غير متاح. يرجى التأكد من أن المصمم ليس في وضع الصيانة.</value>
+</data>
+    <data name="IncorrectUserNameOrPassword" xml:space="preserve">
+  <value>اسم المستخدم أو كلمة المرور غير صحيحة.</value>
+</data>
+    <data name="InvalidAuthenticatorCode" xml:space="preserve">
+  <value>رمز المصادقة غير صحيح.</value>
+</data>
+    <data name="InvalidRecoveryCode" xml:space="preserve">
+  <value>تم إدخال رمز الاسترداد غير صحيح.</value>
+</data>
+    <data name="QuestionnaireAlreadyImporting" xml:space="preserve">
+  <value>يتم استيراد استبيان آخر إلى المقر الرئيسي الآن.</value>
+</data>
+    <data name="SiteAccessNotAllowed" xml:space="preserve">
+  <value>ليس لديك إذن بالدخول إلى هذا الموقع. تواصل مع مديرك.</value>
+</data>
+    <data name="PleaseFillCaptcha" xml:space="preserve">
+  <value>يرجى ملء خانة كلمة التحقق.</value>
+</data>
+    <data name="ApiUserIsNotAllowedToSignIn" xml:space="preserve">
+  <value>لا يُسمح لمستخدم API بتسجيل الدخول عبر واجهة المستخدم.</value>
+</data>
 </root>

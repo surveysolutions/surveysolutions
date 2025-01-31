@@ -543,4 +543,58 @@
   <data name="ViewListPrefilledData" xml:space="preserve">
     <value>عرض قائمة بيانات التعريف المطلوبة</value>
   </data>
+    <data name="FileTypeDescription" xml:space="preserve">
+  <value>احفظ الملف بترميز UTF8 لدعم النصوص الخاصة باللغة.</value>
+</data>
+    <data name="IdentifyingQuestions" xml:space="preserve">
+  <value>الأسئلة التعريفية</value>
+</data>
+    <data name="SimpleColumnsTitle" xml:space="preserve">
+  <value>يمكنك تحديد الأعمدة التالية اختياريًا:</value>
+</data>
+    <data name="SimpleDescription" xml:space="preserve">
+  <value>قم بتحميل ملف مفصول بعلامات جدولة يحتوي على قيم للأسئلة في مستوى المقابلة فقط. قم بتضمين قيم للأسئلة التعريفية والأسئلة الأخرى في مستوى المقابلة الرئيسي. لا يسمح بتحميل القيم مسبقًا داخل القوائم.</value>
+</data>
+    <data name="UploadDescription" xml:space="preserve">
+    <value>قم بتحميل ملف يحتوي على بيانات تعريفية لإنشاء تعيينات جديدة.
+حدد أسماء المستخدمين للمقر الرئيسي أو المشرفين أو المقابلين لإنشاء تعيينات دفعة.</value>
+  </data>
+    <data name="ViewListPreloadedData" xml:space="preserve">
+  <value>عرض قائمة القيم المحملة مسبقًا</value>
+</data>
+    <data name="ColumnsDescription" xml:space="preserve">
+    <value>&lt;b&gt;_responsible&lt;/b&gt; - اسم المستخدم للمقر الرئيسي أو المشرف أو الباحث الذي سيكون مسؤولاً عن التعيين;&lt;br/&gt;
+&lt;b&gt;_quantity&lt;/b&gt; - سعة التعيين;&lt;br/&gt;
+&lt;b&gt;_email&lt;/b&gt; - البريد الإلكتروني للمستجيب (للمقابلات عبر الويب فقط)؛&lt;br/&gt;
+&lt;b&gt;_password&lt;/b&gt; - كلمة المرور لبدء المقابلة (للمقابلات عبر الويب فقط);&lt;br/&gt;
+&lt;b&gt;_webmode&lt;/b&gt; - وضع التعيين (1 لـ CAWI، 0 أو فارغ لـ CAPI);&lt;br/&gt;
+&lt;b&gt;_record_audio&lt;/b&gt; - تمكين تسجيل الصوت للمقابلات (1 - تمكين، 0 - تعطيل، فارغ - احصل على هذه القيمة من الاستبيان);&lt;br/&gt;
+&lt;b&gt;_comment&lt;/b&gt; - تعليقات على التعيين;&lt;br/&gt;
+&lt;b&gt;_target_area&lt;/b&gt; - المنطقة المستهدفة للتعيين</value>
+        <comment>لا تترجم _responsible, _quantity, _email, _webmode, _record_audio. احتفظ بالأسماء الإنجليزية</comment>
+  </data>
+    <data name="BatchColumnsTitle" xml:space="preserve">
+  <value>يمكنك تحديد الأعمدة التالية اختياريًا في ملف مستوى المقابلة الرئيسي:</value>
+</data>
+    <data name="BatchDescription" xml:space="preserve">
+    <value>قم بتحميل أرشيف zip يحتوي على ملف أو أكثر مفصول بعلامات جدولة يتوافق مع مستوى المقابلة الرئيسي والقوائم الفرعية. يسمح بتحميل المتغيرات مسبقًا في أي مستوى من المقابلة.&lt;br/&gt;
+يجب أن تحتوي جميع ملفات البيانات على متغير interview__id بمعرف فريد نصي أو رقمي للمقابلة. يتم إنشاء الروابط داخل القوائم والقوائم المتداخلة بنفس الطريقة كما في البيانات المصدرة.&lt;br/&gt;
+</value>
+        <comment>لا تترجم _responsible, _quantity, _email, _webmode, _record_audio. احتفظ بالأسماء الإنجليزية</comment>
+  </data>
+    <data name="HiddenQuestions" xml:space="preserve">
+  <value>الأسئلة المخفية</value>
+</data>
+    <data name="RosterSizeQuestions" xml:space="preserve">
+  <value>أسئلة مصدر القائمة</value>
+</data>
+    <data name="Select_Responsible" xml:space="preserve">
+  <value>اختر المسؤول الافتراضي (مطلوب)</value>
+</data>
+    <data name="Select_Responsible_Description" xml:space="preserve">
+  <value>إذا لم يتم تعيين مسؤول في ملف الدفعة، استخدم حساب هذا المقر الرئيسي/المشرف/المقابل:</value>
+</data>
+    <data name="RequiredField" xml:space="preserve">
+  <value>هذا الحقل إلزامي</value>
+</data>
 </root>
