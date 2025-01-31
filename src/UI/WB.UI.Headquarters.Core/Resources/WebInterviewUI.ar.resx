@@ -485,11 +485,8 @@
   </data>
     <data name="ResolveHint" xml:space="preserve">
     <value>يتم إخفاء التعليقات التي تم حلها افتراضيًا، ولكن يمكن مراجعتها من قبل جميع المشاركين في المقابلة</value>
-  </data>
-    <data name="HideResolved" xml:space="preserve">
-    <value>إخفاء المحلولة</value>
-  </data>
-    <data name="ShowResolved" xml:space="preserve">
+  </data>    
+  <data name="ShowResolved" xml:space="preserve">
     <value>عرض المحلولة</value>
   </data>
     <data name="SaveScenarioOptions" xml:space="preserve">
