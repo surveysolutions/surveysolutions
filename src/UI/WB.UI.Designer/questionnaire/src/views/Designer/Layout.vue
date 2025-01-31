@@ -25,7 +25,7 @@
                     <li role="presentation" :class="{ active: activePage == 'classifications' }">
                         <a href="/classifications">{{ $t('QuestionnaireController.Classifications') }}</a>
                     </li>
-                    <li role="presentation">
+                    <li v-if="isAdmin" role="presentation">
                         <a href="/Admin/Users">{{ $t('QuestionnaireController.ManageUsers') }}</a>
                     </li>
                     <li class="create" role="presentation"><a href="/questionnaire/create">{{
