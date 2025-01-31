@@ -139,7 +139,7 @@
     <value>Completar</value>
   </data>
   <data name="CompletePage" xml:space="preserve">
-    <value>Complete</value>
+      <value>Completar</value>
   </data>
   <data name="CustomizeDisplayedText" xml:space="preserve">
     <value>Personaliza el texto mostrado para los encuestados</value>
@@ -251,5 +251,26 @@
   </data>
   <data name="WelcomePage" xml:space="preserve">
     <value>Pagina de bienvenida</value>
+  </data>
+    <data name="InterviewDataInsertInTextDescription" xml:space="preserve">
+  <value>En esta plantilla de correo electrónico puede usar el marcador de posición %question_variable% en el texto como respuesta a la pregunta en la entrevista. La pregunta debe ser del nivel superior del cuestionario (no dentro de los grupos).</value>
+</data>
+    <data name="InterviewDataInsertBarcodeDescription" xml:space="preserve">
+  <value>%question_variable:barcode% - mostrar respuesta como Código de Barras 128</value>
+</data>
+    <data name="InterviewDataInsertQrCodeDescription" xml:space="preserve">
+  <value>%question_variable:qrcode% - mostrar respuesta como Código QR</value>
+</data>
+    <data name="LinkToInterviewPage" xml:space="preserve">
+  <value>Página de aterrizaje de la entrevista web</value>
+</data>
+    <data name="SendWithPartialResponse" xml:space="preserve">
+  <value>Envía recordatorios a personas con una respuesta parcial</value>
+</data>
+    <data name="AnswerOn" xml:space="preserve">
+  <value>respuesta en {{variable}}</value>
+</data>
+  <data name="CompleteEmailMessage" xml:space="preserve">
+      <value>Completar</value>
   </data>
 </root>

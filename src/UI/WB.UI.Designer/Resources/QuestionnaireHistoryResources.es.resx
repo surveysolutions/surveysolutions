@@ -300,9 +300,9 @@
   <data name="UnknownUserName" xml:space="preserve">
     <value>&lt;&lt;DESCNONOCIDO&gt;&gt;</value>
   </data>
-  <data name="UserName" xml:space="preserve">
-    <value>Login</value>
-  </data>
+    <data name="UserName" xml:space="preserve">
+  <value>Nombre de usuario</value>
+</data>
   <data name="Variable_Add" xml:space="preserve">
     <value>Variable {0} adicionada</value>
   </data>
@@ -322,7 +322,7 @@
     <value>Variable {0} cargada</value>
   </data>
   <data name="Categories_Add" xml:space="preserve">
-    <value>Categories {0} added</value>
+      <value>Categorias {0} added</value>
   </data>
   <data name="Categories_Delete" xml:space="preserve">
     <value>Categorías {0} eliminadas</value>
@@ -348,10 +348,20 @@
   <data name="Questionnaire_ImportToHq" xml:space="preserve">
     <value>Cuestionario importado a la sede ({0}) como {2} por {1}</value>
   </data>
-  <data name="Questionnaire_Move" xml:space="preserve">
-    <value>Questionnaire ownership transferred to user with email "{0}"</value>
-  </data>
+  
   <data name="Save" xml:space="preserve">
     <value>save</value>
   </data>
+    <data name="CriticalRule_Add" xml:space="preserve">
+  <value>Regla crítica {0} añadida</value>
+</data>
+    <data name="CriticalRule_Delete" xml:space="preserve">
+  <value>Regla crítica {0} eliminada</value>
+</data>
+    <data name="CriticalRule_Update" xml:space="preserve">
+  <value>Regla crítica {0} actualizada</value>
+</data>
+    <data name="Questionnaire_Move" xml:space="preserve">
+  <value>Propiedad del cuestionario transferida al usuario con el correo electrónico "{0}"</value>
+</data>
 </root>

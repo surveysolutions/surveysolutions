@@ -1632,9 +1632,6 @@ Vous avez entré une entrée invalide. Chaque ligne doit suivre le format : "Tit
   <data name="ManageAccount" xml:space="preserve">
     <value>Gérer le compte</value>
   </data>
-  <data name="OldUi" xml:space="preserve">
-      <value>Ancienne interface</value>
-  </data>
   <data name="ShowList" xml:space="preserve">
       <value>Afficher la liste</value>
   </data>

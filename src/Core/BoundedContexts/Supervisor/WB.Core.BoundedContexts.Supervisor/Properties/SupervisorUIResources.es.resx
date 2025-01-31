@@ -153,4 +153,7 @@
   <data name="Synchronization_UploadStatisticsStats" xml:space="preserve">
     <value>Subido {0} de {1}</value>
   </data>
+    <data name="Confirm_Approve_Synchronized_Interview_Message" xml:space="preserve">
+  <value>El entrevistador responsable actual no será notificado sobre la aprobación de la entrevista hasta la próxima sincronización. Si el entrevistador ya ha comenzado a trabajar en la entrevista, todos los datos que el entrevistador haya ingresado antes de la próxima sincronización serán DESCARTADOS!</value>
+</data>
 </root>

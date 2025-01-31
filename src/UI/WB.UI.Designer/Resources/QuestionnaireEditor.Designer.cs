@@ -3063,12 +3063,6 @@ namespace WB.UI.Designer.Resources {
             }
         }
         
-        public static string OldUi {
-            get {
-                return ResourceManager.GetString("OldUi", resourceCulture);
-            }
-        }
-        
         public static string ShowList {
             get {
                 return ResourceManager.GetString("ShowList", resourceCulture);

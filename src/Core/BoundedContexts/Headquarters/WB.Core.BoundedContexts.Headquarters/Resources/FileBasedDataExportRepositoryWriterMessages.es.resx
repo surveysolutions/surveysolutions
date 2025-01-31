@@ -138,10 +138,10 @@
   <data name="Supervisor" xml:space="preserve">
     <value>Supervisor</value>
   </data>
-  <data name="UnknownRole" xml:space="preserve">
-    <value>&lt;UNKNOWN ROLE&gt;</value>
-  </data>
-  <data name="UnknownUser" xml:space="preserve">
-    <value>&lt;UNKNOWN USER&gt;</value>
-  </data>
+    <data name="UnknownRole" xml:space="preserve">
+  <value>&lt;ROL DESCONOCIDO&gt;</value>
+</data>
+    <data name="UnknownUser" xml:space="preserve">
+  <value>&lt;USUARIO DESCONOCIDO&gt;</value>
+</data>
 </root>

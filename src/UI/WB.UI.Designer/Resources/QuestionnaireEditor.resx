@@ -1634,9 +1634,6 @@ You entered an invalid input. Each line should follow the format: "Title...Paren
   <data name="ManageAccount" xml:space="preserve">
     <value>Manage account</value>
   </data>
-  <data name="OldUi" xml:space="preserve">
-      <value>Old UI</value>
-  </data>
   <data name="ShowList" xml:space="preserve">
       <value>Show list</value>
   </data>
