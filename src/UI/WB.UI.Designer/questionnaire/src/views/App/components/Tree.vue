@@ -15,7 +15,7 @@
                         :title="$t('QuestionnaireEditor.Search')"></span>
                     <input id="chapterSearch" type="text" v-model="search.searchText" focus-on-out="focusSearch"
                         hotkey="{esc: hideSearch}" hotkey-allow-in="INPUT" />
-                    <span class="input-group-addon glyphicon glyphicon-option-horizontal pointer"
+                    <span class="input-group-addon glyphicon glyphicon-option-horizontal pointer" style="padding-top:10px;"
                         @click="showFindReplaceDialog()" :title="$t('QuestionnaireEditor.FindReplaceTitle')"></span>
                 </div>
                 <button @click.stop="hideSearch()" type="button" :title="$t('QuestionnaireEditor.Cancel')"></button>

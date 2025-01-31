@@ -1,5 +1,6 @@
 import * as toastr from 'toastr'
 import modal from '@/shared/modal'
+import { $t } from '~/shared/plugins/locale'
 
 const connectionStore = {
     state: {

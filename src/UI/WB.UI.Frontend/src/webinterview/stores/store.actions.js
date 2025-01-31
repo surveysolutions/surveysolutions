@@ -4,8 +4,9 @@ import { batchedAction } from '../helpers'
 import { api } from '../api/http'
 import { hubApi } from '../components/signalr/core.signalr'
 import { config } from '~/shared/config'
-
 import modal from '@/shared/modal'
+
+import { $t } from '~/shared/plugins/locale'
 
 function getAnswer(state, identity) {
     const question = state.entityDetails[identity]
