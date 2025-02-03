@@ -9,6 +9,7 @@
     },
     "devDependencies": {
         "@rollup/plugin-inject": "^5.0.5",
+        "@vitejs/plugin-vue": "^5.2.1",
         "filemanager-plugin": "2.8.2",
         "glob": "^10.0.0",
         "jshint": "^2.13.4",
@@ -44,7 +45,8 @@
         "mande": "^2.0.9",
         "moment": "^2.29.4",
         "perfect-scrollbar": "^1.5.5",
-        "roboto-fontface": "^0.10.0"
+        "roboto-fontface": "^0.10.0",
+        "vite-plugin-vuetify": "^2.0.4"
     },
     "overrides": {
         "@babel/traverse": ">=7.23.3",
