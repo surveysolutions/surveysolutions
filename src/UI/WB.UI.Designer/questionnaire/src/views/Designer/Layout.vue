@@ -100,7 +100,10 @@ export default {
     computed: {
         userName() {
             return this.$store.state.userName;
-        }
+        },
+        isAdmin() {
+            return this.$store.state.isAdmin;
+        },
     },
 
     mounted() {
