@@ -474,28 +474,7 @@
   <data name="ShowResolved" xml:space="preserve">
     <value>عرض المحلولة</value>
   </data>
-    <data name="SaveScenarioOptions" xml:space="preserve">
-    <value>حدد السيناريو لاستبداله</value>
-  </data>
-    <data name="SaveScenarioDesignerLogin" xml:space="preserve">
-    <value>انتهت الجلسة على تطبيق المصمم. سجل الدخول على تطبيق المصمم لتتمكن من الحفظ.</value>
-  </data>
-    <data name="SaveScenarioGoToDesigner" xml:space="preserve">
-    <value>افتح المصمم</value>
-  </data>
-    <data name="NoQuestionnaireAccess" xml:space="preserve">
-    <value>ليس لديك حق الوصول إلى الاستبيان</value>
-  </data>
-    <data name="SaveScenarioName" xml:space="preserve">
-    <value>اسم</value>
-  </data>
-    <data name="SaveScenarioOptions_ReplaceExisting" xml:space="preserve">
-    <value>استبدال الموجود</value>
-  </data>
-    <data name="SaveScenarioOptions_SaveNew" xml:space="preserve">
-    <value>حفظ جديد</value>
-  </data>
-    <data name="PickLocation" xml:space="preserve">
+  <data name="PickLocation" xml:space="preserve">
     <value>اختر من الخريطة</value>
   </data>
     <data name="EnterPassword" xml:space="preserve">
