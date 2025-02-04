@@ -199,6 +199,7 @@ inputPages.questionnare = path.join(baseDir, 'questionnaire/src/main.js')
 
 
 export default defineConfig(({ mode, command }) => {
+
     const isDevMode = mode === 'development';
     const isProdMode = !isDevMode;
 
@@ -271,8 +272,8 @@ export default defineConfig(({ mode, command }) => {
                 ],
                 options: {
                     parallel: 1,
-                    log: 'all',
-                    //log: 'error',
+                    //log: 'all',
+                    log: 'error',
                 },
             }),
             {
