@@ -354,4 +354,13 @@
   <data name="Variable_Update" xml:space="preserve">
     <value>Proměnná {0} aktualizována</value>
   </data>
+    <data name="CriticalRule_Add" xml:space="preserve">
+  <value>Kritické pravidlo {0} přidáno</value>
+</data>
+    <data name="CriticalRule_Delete" xml:space="preserve">
+  <value>Kritické pravidlo {0} smazáno</value>
+</data>
+    <data name="CriticalRule_Update" xml:space="preserve">
+  <value>Kritické pravidlo {0} aktualizováno</value>
+</data>
 </root>

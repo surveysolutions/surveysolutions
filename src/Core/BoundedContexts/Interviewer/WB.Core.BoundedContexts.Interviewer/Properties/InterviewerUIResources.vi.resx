@@ -160,7 +160,7 @@
     <value>Chuyển đã hoàn thành. {0} cuộc phỏng vấn không thể đồng bộ hóa</value>
   </data>
     <data name="SendToSupervisor_LookingForSupervisor" xml:space="preserve">
-    <value>Đang t��m kiếm thiết bị của giám sát viên</value>
+    <value>Đang tìm kiếm thiết bị của giám sát viên</value>
   </data>
     <data name="SendToSupervisor_Note" xml:space="preserve">
     <value>Lưu ý: Hành động này sẽ mất nhiều thời gian hơn bình thường, không tắt thiết bị này</value>

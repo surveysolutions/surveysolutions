@@ -172,6 +172,6 @@
     <value>ხელახლა ცდა</value>
   </data>
     <data name="SendToSupervisor_BluetoothError" xml:space="preserve">
-    <value>Interviewer აპლიკაციას არ შეუძლია Bluetooth-ის მდგომარეობის განსაზღვრა (მაგ., ჩ���რთული/გამორთული, დაკავშირებული/გათიშული). ჯერ გადატვირთეთ ორივე მოწყობილობა Interviewer და Supervisor. შემდეგ სცადეთ სინქრონიზაცია ხელახლა.</value>
+    <value>Interviewer აპლიკაციას არ შეუძლია Bluetooth-ის მდგომარეობის განსაზღვრა (მაგ., ჩართული/გამორთული, დაკავშირებული/გათიშული). ჯერ გადატვირთეთ ორივე მოწყობილობა Interviewer და Supervisor. შემდეგ სცადეთ სინქრონიზაცია ხელახლა.</value>
   </data>
 </root>

@@ -825,4 +825,26 @@
   <data name="WB3010_LinkToHiddenQuestionNotAllowed" xml:space="preserve">
     <value>Odkaz na skrytou otázku není povolen</value>
   </data>
+    
+    <data name="WB0317_CriticalityIsNotAllowed" xml:space="preserve">
+      <value>Rozsah kritické otázky nemůže být žádný z následujících: skrytý, supervizor.</value>
+    </data>
+    <data name="WB0318_CriticalityConditionExpressionHasIncorrectSyntax" xml:space="preserve">
+      <value>Kritická podmínka má chybu v syntaxi výrazu.</value>
+    </data>
+    <data name="WB0319_CriticalityConditionExpressionIsEmpty" xml:space="preserve">
+      <value>Kritická podmínka je prázdná.</value>
+    </data>
+    <data name="WB0320_CriticalityConditionExpressionIsEmpty" xml:space="preserve">
+      <value>Zpráva v kritickém pravidle je prázdná.</value>
+    </data>
+    <data name="WB0321_CriticalityConditionUsingForbiddenClasses" xml:space="preserve">
+      <value>Kritická podmínka používá zakázaný typ.</value>
+    </data>
+    <data name="WB0322_CriticalRuleExpressionIsTooLong" xml:space="preserve">
+      <value>Výraz kritického pravidla má více než {0} znaků.</value>
+    </data>
+    <data name="WB0323_CriticalRuleMessageIsTooLong" xml:space="preserve">
+      <value>Zpráva kritické podmínky má více než {0} znaků.</value>
+    </data>
 </root>

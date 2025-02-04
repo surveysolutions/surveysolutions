@@ -1,0 +1,811 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="ABW" xml:space="preserve">
+    <value>Aruba</value>
+  </data>
+  <data name="AFG" xml:space="preserve">
+    <value>Afeganistão</value>
+  </data>
+  <data name="AFR" xml:space="preserve">
+    <value>África</value>
+  </data>
+  <data name="AGO" xml:space="preserve">
+    <value>Angola</value>
+  </data>
+  <data name="AIA" xml:space="preserve">
+    <value>Anguila</value>
+  </data>
+  <data name="ALB" xml:space="preserve">
+    <value>Albânia</value>
+  </data>
+  <data name="AND" xml:space="preserve">
+    <value>Andorra</value>
+  </data>
+  <data name="ANT" xml:space="preserve">
+    <value>Antilhas Holandesas</value>
+  </data>
+  <data name="ARE" xml:space="preserve">
+    <value>Emirados Árabes Unidos</value>
+  </data>
+  <data name="ARG" xml:space="preserve">
+    <value>Argentina</value>
+  </data>
+  <data name="ARM" xml:space="preserve">
+    <value>Armênia</value>
+  </data>
+  <data name="ASM" xml:space="preserve">
+    <value>Samoa Americana</value>
+  </data>
+  <data name="ATA" xml:space="preserve">
+    <value>Antártica</value>
+  </data>
+  <data name="ATF" xml:space="preserve">
+    <value>Terras Austrais e Antárticas Francesas</value>
+  </data>
+  <data name="ATG" xml:space="preserve">
+    <value>Antígua e Barbuda</value>
+  </data>
+  <data name="AUS" xml:space="preserve">
+    <value>Austrália</value>
+  </data>
+  <data name="AUT" xml:space="preserve">
+    <value>Áustria</value>
+  </data>
+  <data name="AZE" xml:space="preserve">
+    <value>Azerbaijão</value>
+  </data>
+  <data name="BDI" xml:space="preserve">
+    <value>Burundi</value>
+  </data>
+  <data name="BEL" xml:space="preserve">
+    <value>Bélgica</value>
+  </data>
+  <data name="BEN" xml:space="preserve">
+    <value>Benim</value>
+  </data>
+  <data name="BFA" xml:space="preserve">
+    <value>Burkina Faso</value>
+  </data>
+  <data name="BGD" xml:space="preserve">
+    <value>Bangladesh</value>
+  </data>
+  <data name="BGR" xml:space="preserve">
+    <value>Bulgária</value>
+  </data>
+  <data name="BHR" xml:space="preserve">
+    <value>Bahrein</value>
+  </data>
+  <data name="BHS" xml:space="preserve">
+    <value>Bahamas</value>
+  </data>
+  <data name="BIH" xml:space="preserve">
+    <value>Bósnia e Herzegovina</value>
+  </data>
+  <data name="BLR" xml:space="preserve">
+    <value>Bielorrússia</value>
+  </data>
+  <data name="BLZ" xml:space="preserve">
+    <value>Belize</value>
+  </data>
+  <data name="BMU" xml:space="preserve">
+    <value>Bermudas</value>
+  </data>
+  <data name="BOL" xml:space="preserve">
+    <value>Bolívia</value>
+  </data>
+  <data name="BRA" xml:space="preserve">
+    <value>Brasil</value>
+  </data>
+  <data name="BRB" xml:space="preserve">
+    <value>Barbados</value>
+  </data>
+  <data name="BRN" xml:space="preserve">
+    <value>Brunei</value>
+  </data>
+  <data name="BTN" xml:space="preserve">
+    <value>Butão</value>
+  </data>
+  <data name="BVT" xml:space="preserve">
+    <value>Ilha Bouvet</value>
+  </data>
+  <data name="BWA" xml:space="preserve">
+    <value>Botsuana</value>
+  </data>
+  <data name="CAF" xml:space="preserve">
+    <value>República Centro-Africana</value>
+  </data>
+  <data name="CAN" xml:space="preserve">
+    <value>Canadá</value>
+  </data>
+  <data name="CCK" xml:space="preserve">
+    <value>Ilhas Cocos</value>
+  </data>
+  <data name="CHE" xml:space="preserve">
+    <value>Suíça</value>
+  </data>
+  <data name="CHL" xml:space="preserve">
+    <value>Chile</value>
+  </data>
+  <data name="CHN" xml:space="preserve">
+    <value>China</value>
+  </data>
+  <data name="CIV" xml:space="preserve">
+    <value>Costa do Marfim</value>
+  </data>
+  <data name="CMR" xml:space="preserve">
+    <value>Camarões</value>
+  </data>
+  <data name="COD" xml:space="preserve">
+    <value>República Democrática do Congo</value>
+  </data>
+  <data name="COG" xml:space="preserve">
+    <value>República do Congo</value>
+  </data>
+  <data name="COK" xml:space="preserve">
+    <value>Ilhas Cook</value>
+  </data>
+  <data name="COL" xml:space="preserve">
+    <value>Colômbia</value>
+  </data>
+  <data name="COM" xml:space="preserve">
+    <value>Comores</value>
+  </data>
+  <data name="CPV" xml:space="preserve">
+    <value>República de Cabo Verde</value>
+  </data>
+  <data name="CRI" xml:space="preserve">
+    <value>Costa Rica</value>
+  </data>
+  <data name="CUB" xml:space="preserve">
+    <value>Cuba</value>
+  </data>
+  <data name="CXR" xml:space="preserve">
+    <value>Ilha Christmas</value>
+  </data>
+  <data name="CYM" xml:space="preserve">
+    <value>Ilhas Cayman</value>
+  </data>
+  <data name="CYP" xml:space="preserve">
+    <value>Chipre</value>
+  </data>
+  <data name="CZE" xml:space="preserve">
+    <value>República Tcheca</value>
+  </data>
+  <data name="DEU" xml:space="preserve">
+    <value>Alemanha</value>
+  </data>
+  <data name="DJI" xml:space="preserve">
+    <value>Djibuti</value>
+  </data>
+  <data name="DMA" xml:space="preserve">
+    <value>Dominica</value>
+  </data>
+  <data name="DNK" xml:space="preserve">
+    <value>Dinamarca</value>
+  </data>
+  <data name="DOM" xml:space="preserve">
+    <value>República Dominicana</value>
+  </data>
+  <data name="DZA" xml:space="preserve">
+    <value>Argélia</value>
+  </data>
+  <data name="ECA" xml:space="preserve">
+    <value>Europa e Ásia Central</value>
+  </data>
+  <data name="ECU" xml:space="preserve">
+    <value>Equador</value>
+  </data>
+  <data name="EGY" xml:space="preserve">
+    <value>Egito</value>
+  </data>
+  <data name="ERI" xml:space="preserve">
+    <value>Eritreia</value>
+  </data>
+  <data name="ESH" xml:space="preserve">
+    <value>Sahara Ocidental</value>
+  </data>
+  <data name="ESP" xml:space="preserve">
+    <value>Espanha</value>
+  </data>
+  <data name="EST" xml:space="preserve">
+    <value>Estônia</value>
+  </data>
+  <data name="ETH" xml:space="preserve">
+    <value>Etiópia</value>
+  </data>
+  <data name="FIN" xml:space="preserve">
+    <value>Finlândia</value>
+  </data>
+  <data name="FJI" xml:space="preserve">
+    <value>Fiji</value>
+  </data>
+  <data name="FLK" xml:space="preserve">
+    <value>Ilhas Malvinas</value>
+  </data>
+  <data name="FRA" xml:space="preserve">
+    <value>França</value>
+  </data>
+  <data name="FRO" xml:space="preserve">
+    <value>Ilhas Faroé</value>
+  </data>
+  <data name="FSM" xml:space="preserve">
+    <value>Micronésia</value>
+  </data>
+  <data name="FXX" xml:space="preserve">
+    <value>França Metropolitana</value>
+  </data>
+  <data name="GAB" xml:space="preserve">
+    <value>Gabão</value>
+  </data>
+  <data name="GBR" xml:space="preserve">
+    <value>Reino Unido</value>
+  </data>
+  <data name="GEO" xml:space="preserve">
+    <value>Geórgia</value>
+  </data>
+  <data name="GHA" xml:space="preserve">
+    <value>Gana</value>
+  </data>
+  <data name="GIB" xml:space="preserve">
+    <value>Gibraltar</value>
+  </data>
+  <data name="GIN" xml:space="preserve">
+    <value>Guiné</value>
+  </data>
+  <data name="GLP" xml:space="preserve">
+    <value>Guadalupe</value>
+  </data>
+  <data name="GMB" xml:space="preserve">
+    <value>Gâmbia</value>
+  </data>
+  <data name="GNB" xml:space="preserve">
+    <value>Guiné-Bissau</value>
+  </data>
+  <data name="GNQ" xml:space="preserve">
+    <value>Guiné Equatorial</value>
+  </data>
+  <data name="GRC" xml:space="preserve">
+    <value>Grécia</value>
+  </data>
+  <data name="GRD" xml:space="preserve">
+    <value>Granada</value>
+  </data>
+  <data name="GRL" xml:space="preserve">
+    <value>Groenlândia</value>
+  </data>
+  <data name="GTM" xml:space="preserve">
+    <value>Guatemala</value>
+  </data>
+  <data name="GUF" xml:space="preserve">
+    <value>Guiana Francesa</value>
+  </data>
+  <data name="GUM" xml:space="preserve">
+    <value>Guam</value>
+  </data>
+  <data name="GUY" xml:space="preserve">
+    <value>Guiana</value>
+  </data>
+  <data name="HKG" xml:space="preserve">
+    <value>Hong Kong, RAE da China</value>
+  </data>
+  <data name="HMD" xml:space="preserve">
+    <value>Ilhas Heard e McDonald</value>
+  </data>
+  <data name="HND" xml:space="preserve">
+    <value>Honduras</value>
+  </data>
+  <data name="HRV" xml:space="preserve">
+    <value>Croácia</value>
+  </data>
+  <data name="HTI" xml:space="preserve">
+    <value>Haiti</value>
+  </data>
+  <data name="HUN" xml:space="preserve">
+    <value>Hungria</value>
+  </data>
+  <data name="IDN" xml:space="preserve">
+    <value>Indonésia</value>
+  </data>
+  <data name="IND" xml:space="preserve">
+    <value>Índia</value>
+  </data>
+  <data name="IOT" xml:space="preserve">
+    <value>Território Britânico do Oceano Índico</value>
+  </data>
+  <data name="IRL" xml:space="preserve">
+    <value>Irlanda</value>
+  </data>
+  <data name="IRN" xml:space="preserve">
+    <value>Irã</value>
+  </data>
+  <data name="IRQ" xml:space="preserve">
+    <value>Iraque</value>
+  </data>
+  <data name="ISL" xml:space="preserve">
+    <value>Islândia</value>
+  </data>
+  <data name="ISR" xml:space="preserve">
+    <value>Israel</value>
+  </data>
+  <data name="ITA" xml:space="preserve">
+    <value>Itália</value>
+  </data>
+  <data name="JAM" xml:space="preserve">
+    <value>Jamaica</value>
+  </data>
+  <data name="JER" xml:space="preserve">
+    <value>Jerusalém</value>
+  </data>
+  <data name="JOR" xml:space="preserve">
+    <value>Jordânia</value>
+  </data>
+  <data name="JPN" xml:space="preserve">
+    <value>Japão</value>
+  </data>
+  <data name="KAZ" xml:space="preserve">
+    <value>Cazaquistão</value>
+  </data>
+  <data name="KEN" xml:space="preserve">
+    <value>Quênia</value>
+  </data>
+  <data name="KGZ" xml:space="preserve">
+    <value>Quirguistão</value>
+  </data>
+  <data name="KHM" xml:space="preserve">
+    <value>Camboja</value>
+  </data>
+  <data name="KIR" xml:space="preserve">
+    <value>Quiribati</value>
+  </data>
+  <data name="KNA" xml:space="preserve">
+    <value>São Cristóvão e Nevis</value>
+  </data>
+  <data name="KOR" xml:space="preserve">
+    <value>Coreia do Sul</value>
+  </data>
+  <data name="KSV" xml:space="preserve">
+    <value>Kosovo</value>
+  </data>
+  <data name="KWT" xml:space="preserve">
+    <value>Kuwait</value>
+  </data>
+  <data name="LAC" xml:space="preserve">
+    <value>América Latina e Caribe</value>
+  </data>
+  <data name="LAO" xml:space="preserve">
+    <value>Laos</value>
+  </data>
+  <data name="LBN" xml:space="preserve">
+    <value>Líbano</value>
+  </data>
+  <data name="LBR" xml:space="preserve">
+    <value>Libéria</value>
+  </data>
+  <data name="LBY" xml:space="preserve">
+    <value>Líbia</value>
+  </data>
+  <data name="LCA" xml:space="preserve">
+    <value>Santa Lúcia</value>
+  </data>
+  <data name="LIE" xml:space="preserve">
+    <value>Liechtenstein</value>
+  </data>
+  <data name="LKA" xml:space="preserve">
+    <value>Sri Lanka</value>
+  </data>
+  <data name="LSO" xml:space="preserve">
+    <value>Lesoto</value>
+  </data>
+  <data name="LTU" xml:space="preserve">
+    <value>Lituânia</value>
+  </data>
+  <data name="LUX" xml:space="preserve">
+    <value>Luxemburgo</value>
+  </data>
+    <data name="LVA" xml:space="preserve">
+    <value>Letônia</value>
+  </data>
+  <data name="MAC" xml:space="preserve">
+    <value>Macau</value>
+  </data>
+  <data name="MAR" xml:space="preserve">
+    <value>Marrocos</value>
+  </data>
+  <data name="MCO" xml:space="preserve">
+    <value>Mônaco</value>
+  </data>
+  <data name="MDA" xml:space="preserve">
+    <value>Moldávia</value>
+  </data>
+  <data name="MDG" xml:space="preserve">
+    <value>Madagáscar</value>
+  </data>
+  <data name="MDV" xml:space="preserve">
+    <value>Maldivas</value>
+  </data>
+  <data name="MEX" xml:space="preserve">
+    <value>México</value>
+  </data>
+  <data name="MHL" xml:space="preserve">
+    <value>Ilhas Marshall</value>
+  </data>
+  <data name="MKD" xml:space="preserve">
+    <value>Macedônia, ARJ</value>
+  </data>
+  <data name="MLI" xml:space="preserve">
+    <value>Mali</value>
+  </data>
+  <data name="MLT" xml:space="preserve">
+    <value>Malta</value>
+  </data>
+  <data name="MMR" xml:space="preserve">
+    <value>Myanmar</value>
+  </data>
+  <data name="MNE" xml:space="preserve">
+    <value>Montenegro</value>
+  </data>
+  <data name="MNG" xml:space="preserve">
+    <value>Mongólia</value>
+  </data>
+  <data name="MNP" xml:space="preserve">
+    <value>Ilhas Marianas do Norte</value>
+  </data>
+  <data name="MOZ" xml:space="preserve">
+    <value>Moçambique</value>
+  </data>
+  <data name="MRT" xml:space="preserve">
+    <value>Mauritânia</value>
+  </data>
+  <data name="MSR" xml:space="preserve">
+    <value>Montserrat</value>
+  </data>
+  <data name="MTQ" xml:space="preserve">
+    <value>Martinica</value>
+  </data>
+  <data name="MUS" xml:space="preserve">
+    <value>Maurício</value>
+  </data>
+  <data name="MWI" xml:space="preserve">
+    <value>Malawi</value>
+  </data>
+  <data name="MYS" xml:space="preserve">
+    <value>Malásia</value>
+  </data>
+  <data name="MYT" xml:space="preserve">
+    <value>Mayotte</value>
+  </data>
+  <data name="NAM" xml:space="preserve">
+    <value>Namíbia</value>
+  </data>
+  <data name="NCL" xml:space="preserve">
+    <value>Nova Caledônia</value>
+  </data>
+  <data name="NER" xml:space="preserve">
+    <value>Níger</value>
+  </data>
+  <data name="NFK" xml:space="preserve">
+    <value>Ilha Norfolk</value>
+  </data>
+  <data name="NGA" xml:space="preserve">
+    <value>Nigéria</value>
+  </data>
+  <data name="NIC" xml:space="preserve">
+    <value>Nicarágua</value>
+  </data>
+  <data name="NIU" xml:space="preserve">
+    <value>Niue</value>
+  </data>
+  <data name="NLD" xml:space="preserve">
+    <value>Países Baixos</value>
+  </data>
+  <data name="NOR" xml:space="preserve">
+    <value>Noruega</value>
+  </data>
+  <data name="NPL" xml:space="preserve">
+    <value>Nepal</value>
+  </data>
+  <data name="NRU" xml:space="preserve">
+    <value>Nauru</value>
+  </data>
+  <data name="NZL" xml:space="preserve">
+    <value>Nova Zelândia</value>
+  </data>
+  <data name="OMN" xml:space="preserve">
+    <value>Omã</value>
+  </data>
+  <data name="PAK" xml:space="preserve">
+    <value>Paquistão</value>
+  </data>
+  <data name="PAN" xml:space="preserve">
+    <value>Panamá</value>
+  </data>
+  <data name="PCN" xml:space="preserve">
+    <value>Ilha Pitcairn</value>
+  </data>
+  <data name="PER" xml:space="preserve">
+    <value>Peru</value>
+  </data>
+  <data name="PHL" xml:space="preserve">
+    <value>Filipinas</value>
+  </data>
+  <data name="PLW" xml:space="preserve">
+    <value>Palau</value>
+  </data>
+  <data name="PNG" xml:space="preserve">
+    <value>Papua Nova Guiné</value>
+  </data>
+  <data name="POL" xml:space="preserve">
+    <value>Polônia</value>
+  </data>
+  <data name="PRI" xml:space="preserve">
+    <value>Porto Rico</value>
+  </data>
+  <data name="PRK" xml:space="preserve">
+    <value>Coreia, Rep. Dem.</value>
+  </data>
+  <data name="PRT" xml:space="preserve">
+    <value>Portugal</value>
+  </data>
+  <data name="PRY" xml:space="preserve">
+    <value>Paraguai</value>
+  </data>
+  <data name="PSE" xml:space="preserve">
+    <value>Cisjordânia e Gaza</value>
+  </data>
+  <data name="PYF" xml:space="preserve">
+    <value>Polinésia Francesa</value>
+  </data>
+  <data name="QAT" xml:space="preserve">
+    <value>Catar</value>
+  </data>
+  <data name="ROM" xml:space="preserve">
+    <value>Romênia</value>
+  </data>
+  <data name="RUS" xml:space="preserve">
+    <value>Federação Russa</value>
+  </data>
+  <data name="RWA" xml:space="preserve">
+    <value>Ruanda</value>
+  </data>
+  <data name="SAU" xml:space="preserve">
+    <value>Arábia Saudita</value>
+  </data>
+  <data name="SCG" xml:space="preserve">
+    <value>Sérvia e Montenegro</value>
+  </data>
+  <data name="SDN" xml:space="preserve">
+    <value>Sudão</value>
+  </data>
+  <data name="SEN" xml:space="preserve">
+    <value>Senegal</value>
+  </data>
+  <data name="SGP" xml:space="preserve">
+    <value>Cingapura</value>
+  </data>
+  <data name="SGS" xml:space="preserve">
+    <value>Ilhas Geórgia do Sul e Sandwich do Sul</value>
+  </data>
+  <data name="SHN" xml:space="preserve">
+    <value>Santa Helena</value>
+  </data>
+  <data name="SJM" xml:space="preserve">
+    <value>Ilhas Svalbard e Jan Mayen</value>
+  </data>
+  <data name="SLB" xml:space="preserve">
+    <value>Ilhas Salomão</value>
+  </data>
+  <data name="SLE" xml:space="preserve">
+    <value>Serra Leoa</value>
+  </data>
+  <data name="SLV" xml:space="preserve">
+    <value>El Salvador</value>
+  </data>
+  <data name="SMR" xml:space="preserve">
+    <value>San Marino</value>
+  </data>
+  <data name="SOM" xml:space="preserve">
+    <value>Somália</value>
+  </data>
+  <data name="SPM" xml:space="preserve">
+    <value>São Pedro e Miquelon</value>
+  </data>
+  <data name="SRB" xml:space="preserve">
+    <value>Sérvia</value>
+  </data>
+  <data name="SSD" xml:space="preserve">
+    <value>Sudão do Sul</value>
+  </data>
+  <data name="STP" xml:space="preserve">
+    <value>São Tomé e Príncipe</value>
+  </data>
+  <data name="SUR" xml:space="preserve">
+    <value>Suriname</value>
+  </data>
+  <data name="SVK" xml:space="preserve">
+    <value>República Eslovaca</value>
+  </data>
+  <data name="SVN" xml:space="preserve">
+    <value>Eslovênia</value>
+  </data>
+  <data name="SWE" xml:space="preserve">
+    <value>Suécia</value>
+  </data>
+  <data name="SWZ" xml:space="preserve">
+    <value>Suazilândia</value>
+  </data>
+  <data name="SYC" xml:space="preserve">
+    <value>Seychelles</value>
+  </data>
+  <data name="SYR" xml:space="preserve">
+    <value>República Árabe Síria</value>
+  </data>
+  <data name="TCA" xml:space="preserve">
+    <value>Ilhas Turcas e Caicos</value>
+  </data>
+  <data name="TCD" xml:space="preserve">
+    <value>Chade</value>
+  </data>
+  <data name="TGO" xml:space="preserve">
+    <value>Togo</value>
+  </data>
+  <data name="THA" xml:space="preserve">
+    <value>Tailândia</value>
+  </data>
+  <data name="TJK" xml:space="preserve">
+    <value>Tajiquistão</value>
+  </data>
+  <data name="TKL" xml:space="preserve">
+    <value>Toquelau</value>
+  </data>
+  <data name="TKM" xml:space="preserve">
+    <value>Turcomenistão</value>
+  </data>
+  <data name="TLS" xml:space="preserve">
+    <value>Timor-Leste</value>
+  </data>
+  <data name="TON" xml:space="preserve">
+    <value>Tonga</value>
+  </data>
+  <data name="TTO" xml:space="preserve">
+    <value>Trindade e Tobago</value>
+  </data>
+  <data name="TUN" xml:space="preserve">
+    <value>Tunísia</value>
+  </data>
+  <data name="TUR" xml:space="preserve">
+    <value>Turquia</value>
+  </data>
+  <data name="TUV" xml:space="preserve">
+    <value>Tuvalu</value>
+  </data>
+  <data name="TWN" xml:space="preserve">
+    <value>Taiwan</value>
+  </data>
+  <data name="TZA" xml:space="preserve">
+    <value>Tanzânia</value>
+  </data>
+  <data name="UGA" xml:space="preserve">
+    <value>Uganda</value>
+  </data>
+  <data name="UKR" xml:space="preserve">
+    <value>Ucrânia</value>
+  </data>
+  <data name="UMI" xml:space="preserve">
+    <value>Ilhas Menores Distantes dos EUA</value>
+  </data>
+  <data name="URY" xml:space="preserve">
+    <value>Uruguai</value>
+  </data>
+  <data name="USA" xml:space="preserve">
+    <value>Estados Unidos</value>
+  </data>
+  <data name="UZB" xml:space="preserve">
+    <value>Uzbequistão</value>
+  </data>
+  <data name="VAT" xml:space="preserve">
+    <value>Santa Sé</value>
+  </data>
+  <data name="VCT" xml:space="preserve">
+    <value>São Vicente e Granadinas</value>
+  </data>
+  <data name="VEN" xml:space="preserve">
+    <value>Venezuela, RB</value>
+  </data>
+  <data name="VGB" xml:space="preserve">
+    <value>Ilhas Virgens Britânicas</value>
+  </data>
+  <data name="VGB1" xml:space="preserve">
+    <value>Ilhas Virgens (Britânicas)</value>
+  </data>
+  <data name="VIR" xml:space="preserve">
+    <value>Ilhas Virgens, EUA</value>
+  </data>
+  <data name="VNM" xml:space="preserve">
+    <value>Vietnã</value>
+  </data>
+  <data name="VUT" xml:space="preserve">
+    <value>Vanuatu</value>
+  </data>
+  <data name="WBG" xml:space="preserve">
+    <value>Cisjordânia e Gaza</value>
+  </data>
+  <data name="WLD" xml:space="preserve">
+    <value>Mundo</value>
+  </data>
+  <data name="WLF" xml:space="preserve">
+    <value>Wallis e Futuna</value>
+  </data>
+  <data name="WSM" xml:space="preserve">
+    <value>Samoa</value>
+  </data>
+  <data name="YEM" xml:space="preserve">
+    <value>Iémen, Rep.</value>
+  </data>
+  <data name="ZAF" xml:space="preserve">
+    <value>África do Sul</value>
+  </data>
+  <data name="ZMB" xml:space="preserve">
+    <value>Zâmbia</value>
+  </data>
+  <data name="ZWE" xml:space="preserve">
+    <value>Zimbábue</value>
+  </data>
+</root>

@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="AppendixLink" xml:space="preserve">
+    <value>E {0} outros símbolos [{1}]</value>
+  </data>
+  <data name="Appendix_Conditions" xml:space="preserve">
+    <value>Apêndice {0} {1} condições de habilitação</value>
+  </data>
+  <data name="Appendix_Instructions" xml:space="preserve">
+    <value>Apêndice {0} {1} instruções</value>
+  </data>
+  <data name="Appendix_OptionFilters" xml:space="preserve">
+    <value>Apêndice {0} {1} filtros de categorias</value>
+  </data>
+  <data name="Appendix_Options" xml:space="preserve">
+    <value>Apêndice {0} {1} categorias</value>
+  </data>
+  <data name="Appendix_SpecialValues" xml:space="preserve">
+    <value>Apêndice {0} {1} valores especiais</value>
+  </data>
+  <data name="Appendix_CriticalRules" xml:space="preserve">
+    <value>Apêndice {0} {1} regras críticas</value>
+  </data>
+  <data name="Appendix_Validations" xml:space="preserve">
+    <value>Apêndice {0} {1} condições e mensagens de validação</value>
+  </data>
+  <data name="Appendix_Variables" xml:space="preserve">
+    <value>Apêndice {0} {1} variáveis</value>
+  </data>
+  <data name="CreatedBy" xml:space="preserve">
+    <value>Questionário criado por {0}</value>
+  </data>
+  <data name="OwnedBy" xml:space="preserve">
+    <value>Questionário de propriedade de {0}</value>
+  </data>
+  <data name="EnablementCondition" xml:space="preserve">
+    <value>Condição de habilitação:</value>
+  </data>
+  <data name="CriticalityCondition" xml:space="preserve">
+    <value>Condição crítica:</value>
+  </data>
+  <data name="CriticalityMessage" xml:space="preserve">
+    <value>Mensagem:</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Descrição:</value>
+  </data>
+  <data name="GeneratedBy" xml:space="preserve">
+    <value>Gerado por {0}</value>
+  </data>
+  <data name="LastEdited" xml:space="preserve">
+    <value>{0} editado pela última vez em {1}</value>
+  </data>
+  <data name="LastModifiedBy" xml:space="preserve">
+    <value>Última modificação por {0}</value>
+  </data>
+  <data name="Legend" xml:space="preserve">
+    <value>Lenda</value>
+  </data>
+  <data name="NeverEdited" xml:space="preserve">
+    <value>{0} (nunca editado)</value>
+  </data>
+  <data name="NotShared" xml:space="preserve">
+    <value>Não compartilhado com ninguém</value>
+  </data>
+  <data name="Options" xml:space="preserve">
+    <value>Categorias:</value>
+  </data>
+  <data name="PdfLegend" xml:space="preserve">
+    <value>Lenda e estrutura das informações neste arquivo</value>
+  </data>
+  <data name="QuestionScope_Identifying" xml:space="preserve">
+    <value>identificação</value>
+  </data>
+  <data name="QuestionType_Area" xml:space="preserve">
+    <value>geografia:</value>
+  </data>
+  <data name="QuestionType_Area_Polygon" xml:space="preserve">
+    <value>polígono</value>
+  </data>
+  <data name="QuestionType_Area_Polyline" xml:space="preserve">
+    <value>polilinha</value>
+  </data>
+  <data name="QuestionType_Area_Multipoint" xml:space="preserve">
+    <value>multiponto</value>
+  </data>
+  <data name="QuestionType_Area_Point" xml:space="preserve">
+    <value>ponto</value>
+  </data>
+  <data name="QuestionType_Audio" xml:space="preserve">
+    <value>áudio</value>
+  </data>
+  <data name="QuestionType_Barcode" xml:space="preserve">
+    <value>código de barras</value>
+  </data>
+  <data name="QuestionType_Cascading" xml:space="preserve">
+    <value>cascata</value>
+  </data>
+  <data name="QuestionType_Combobox" xml:space="preserve">
+    <value>caixa de combinação</value>
+  </data>
+  <data name="QuestionType_CurrentTime" xml:space="preserve">
+    <value>data: hora atual</value>
+  </data>
+  <data name="QuestionType_Date" xml:space="preserve">
+    <value>data</value>
+  </data>
+  <data name="QuestionType_Decimal" xml:space="preserve">
+    <value>decimal</value>
+  </data>
+  <data name="QuestionType_GPS" xml:space="preserve">
+    <value>GPS</value>
+  </data>
+  <data name="QuestionType_Integer" xml:space="preserve">
+    <value>inteiro</value>
+  </data>
+  <data name="QuestionType_Linked" xml:space="preserve">
+    <value>vinculado</value>
+  </data>
+  <data name="QuestionType_List" xml:space="preserve">
+    <value>lista</value>
+  </data>
+  <data name="QuestionType_MultiSelect" xml:space="preserve">
+    <value>seleção múltipla</value>
+  </data>
+  <data name="QuestionType_Numeric" xml:space="preserve">
+    <value>numérico:</value>
+  </data>
+  <data name="QuestionType_Ordered" xml:space="preserve">
+    <value>ordenado</value>
+  </data>
+  <data name="QuestionType_Picture" xml:space="preserve">
+    <value>imagem</value>
+  </data>
+  <data name="QuestionType_SingleSelect" xml:space="preserve">
+    <value>seleção única</value>
+  </data>
+  <data name="QuestionType_Text" xml:space="preserve">
+    <value>texto</value>
+  </data>
+  <data name="QuestionType_YesNo" xml:space="preserve">
+    <value>sim/não</value>
+  </data>
+  <data name="Roster" xml:space="preserve">
+    <value>Lista:</value>
+  </data>
+  <data name="RosterType_List" xml:space="preserve">
+    <value>lista</value>
+  </data>
+  <data name="RosterType_Multi" xml:space="preserve">
+    <value>seleção múltipla</value>
+  </data>
+  <data name="RosterType_Numeric" xml:space="preserve">
+    <value>numérico</value>
+  </data>
+  <data name="Roster_GeneretedByFixedList" xml:space="preserve">
+    <value>gerado por lista fixa</value>
+  </data>
+  <data name="Roster_GeneretedByQuestion" xml:space="preserve">
+    <value>gerado pela pergunta {0} {1}</value>
+  </data>
+  <data name="Scope" xml:space="preserve">
+    <value>Escopo: {0}</value>
+  </data>
+  <data name="SourceOfCategories" xml:space="preserve">
+    <value>Fonte das categorias:</value>
+  </data>
+  <data name="RosterSourceOfCategories" xml:space="preserve">
+    <value>Lista</value>
+  </data>
+  <data name="TextListSourceOfCategories" xml:space="preserve">
+    <value>Pergunta de lista de texto</value>
+  </data>
+  <data name="QuestionInRosterSourceOfCategories" xml:space="preserve">
+    <value>Pergunta</value>
+  </data>
+  <data name="InRosterSourceOfCategories" xml:space="preserve">
+    <value>na lista</value>
+  </data>
+  <data name="SharedWith" xml:space="preserve">
+    <value>Compartilhado com:</value>
+  </data>
+  <data name="SpecialValues" xml:space="preserve">
+    <value>Valores especiais</value>
+  </data>
+  <data name="GeographyType" xml:space="preserve">
+    <value>Tipo de geografia</value>
+  </data>
+  <data name="GeographyInputMode" xml:space="preserve">
+    <value>Modo de entrada</value>
+  </data>
+  <data name="GeometryOverlapDetection" xml:space="preserve">
+    <value>Detecção de sobreposição</value>
+  </data>
+  <data name="StaticText" xml:space="preserve">
+    <value>Texto estático</value>
+  </data>
+  <data name="Stat_NoQuestions" xml:space="preserve">
+    <value>Sem perguntas</value>
+  </data>
+  <data name="Stat_NoRosters" xml:space="preserve">
+    <value>Sem listas</value>
+  </data>
+  <data name="Stat_NoSubsections" xml:space="preserve">
+    <value>Sem subseções</value>
+  </data>
+  <data name="Stat_Questions" xml:space="preserve">
+    <value>Perguntas: {0}</value>
+  </data>
+  <data name="Stat_QuestionsWithConditions" xml:space="preserve">
+    <value>Perguntas com condições de habilitação: {0}</value>
+  </data>
+  <data name="Stat_QuestionsWithValidation" xml:space="preserve">
+    <value>Perguntas com condições de validação: {0}</value>
+  </data>
+  <data name="Stat_Rosters" xml:space="preserve">
+    <value>Listas: {0}</value>
+  </data>
+  <data name="Stat_Sections" xml:space="preserve">
+    <value>Seções: {0}</value>
+  </data>
+  <data name="Stat_StaticTexts" xml:space="preserve">
+    <value>Textos estáticos: {0}</value>
+  </data>
+  <data name="Stat_Subsections" xml:space="preserve">
+    <value>Subseções: {0}</value>
+  </data>
+  <data name="Stat_Variables" xml:space="preserve">
+    <value>Variáveis: {0}</value>
+  </data>
+  <data name="ValidationCondition" xml:space="preserve">
+    <value>Condição de validação:</value>
+  </data>
+  <data name="ValidationMessage" xml:space="preserve">
+    <value>Mensagem de validação:</value>
+  </data>
+  <data name="Variable" xml:space="preserve">
+    <value>Variável</value>
+  </data>
+  <data name="QuestionScope_Hidden" xml:space="preserve">
+    <value>oculto</value>
+  </data>
+  <data name="QuestionScope_Supervisor" xml:space="preserve">
+    <value>supervisor</value>
+  </data>
+  <data name="MetadataTitle" xml:space="preserve">
+    <value>Título</value>
+  </data>
+  <data name="MetadataSubtitle" xml:space="preserve">
+    <value>Subtítulo</value>
+  </data>
+  <data name="MetadataVersionIdentificator" xml:space="preserve">
+    <value>Identificador de versão</value>
+  </data>
+  <data name="MetadataVersionNotes" xml:space="preserve">
+    <value>Notas de versão</value>
+  </data>
+  <data name="MetadataStudyType" xml:space="preserve">
+    <value>Tipo de estudo</value>
+  </data>
+  <data name="MetadataKindOfData" xml:space="preserve">
+    <value>Tipo de dados</value>
+  </data>
+  <data name="MetadataModeOfDataCollection" xml:space="preserve">
+    <value>Modo de coleta de dados</value>
+  </data>
+  <data name="MetadataCountry" xml:space="preserve">
+    <value>País</value>
+  </data>
+  <data name="MetadataYear" xml:space="preserve">
+    <value>Ano</value>
+  </data>
+  <data name="MetadataLanguages" xml:space="preserve">
+    <value>Idiomas</value>
+  </data>
+  <data name="MetadataUnitOfAlalysis" xml:space="preserve">
+    <value>Unidade de análise</value>
+  </data>
+  <data name="MetadataCoverage" xml:space="preserve">
+    <value>Abrangência</value>
+  </data>
+  <data name="MetadataUniverse" xml:space="preserve">
+    <value>Universo</value>
+  </data>
+  <data name="MetadataPrimaryInvestigator" xml:space="preserve">
+    <value>Investigador principal</value>
+  </data>
+  <data name="MetadataConsultants" xml:space="preserve">
+    <value>Consultores</value>
+  </data>
+  <data name="MetadataNotes" xml:space="preserve">
+    <value>Notas</value>
+  </data>
+  <data name="MetadataKeywords" xml:space="preserve">
+    <value>Palavras-chave</value>
+  </data>
+  <data name="MetadataFunding" xml:space="preserve">
+    <value>Financiamento</value>
+  </data>
+  <data name="MetadataAgreeToMakeThisQuestionnairePublic" xml:space="preserve">
+    <value>Concordo em tornar este questionário público</value>
+  </data>
+  <data name="MetadataSectionTitle" xml:space="preserve">
+    <value>Informações de identificação da pesquisa</value>
+  </data>
+  <data name="MetadataSectionSubTitle" xml:space="preserve">
+    <value>descrição do questionário</value>
+  </data>
+  <data name="SideBarMetadataBasicInfo" xml:space="preserve">
+    <value>Informações básicas</value>
+  </data>
+  <data name="SideBarMetadataSurveyDataInfo" xml:space="preserve">
+    <value>Informações dos dados da pesquisa</value>
+  </data>
+  <data name="SideBarMetadataSurveyInfo" xml:space="preserve">
+    <value>Informações da pesquisa</value>
+  </data>
+  <data name="SideBarMetadataAdditionalInfo" xml:space="preserve">
+    <value>Informações adicionais</value>
+  </data>
+  <data name="VariableExcludedFromExport" xml:space="preserve">
+    <value>Esta variável está excluída dos dados exportados</value>
+  </data>
+  <data name="On" xml:space="preserve">
+    <value>LIGADO</value>
+  </data>
+  <data name="Off" xml:space="preserve">
+    <value>DESLIGADO</value>
+  </data>
+</root>

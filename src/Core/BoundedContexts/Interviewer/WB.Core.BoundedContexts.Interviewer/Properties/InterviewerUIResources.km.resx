@@ -121,7 +121,7 @@
       <value>ធ្វើបច្ចុប្បន្នភាព</value>
   </data>
     <data name="SendToSupervisor_MovingToSupervisorDevice" xml:space="preserve">
-    <value>ផ្លាស់ទីការសម្ភាសន៍ទាំងអស់ដែលបានបញ្ចប់ទៅឧបករណ៍អ្នកគ្រប់គ��រង</value>
+    <value>កំពុងផ្លាស់ប្តូរការសម្ភាសន៍ទាំងអស់ដែលបានបញ្ចប់ទៅឧបករណ៍អ្នកគ្រប់គ្រង</value>
   </data>
     <data name="SendToSupervisor_MovingToSupervisorFormat" xml:space="preserve">
     <value>ផ្លាស់ទីការសម្ភាសន៍ទាំងអស់ដែលបានបញ្ចប់ទៅ '{0}'</value>
@@ -154,7 +154,7 @@
     <value>ការសម្ភាសន៍មួយចំនួនឥឡូវនេះនៅលើឧបករណ៍ផ្សេងទៀត</value>
   </data>
     <data name="SendToSupervisor_SyncCompleted" xml:space="preserve">
-    <value>ការផ្ទេរបានបញ្ចប់។ ការសម្ភាសន៍ទាំងអស់ដែលបានបញ្ចប់ឥឡូវនេះនៅលើឧបក���ណ៍ផ្សេងទៀត</value>
+    <value>ការផ្ទេរត្រូវបានបញ្ចប់។ ការសម្ភាសន៍ទាំងអស់ដែលបានបញ្ចប់ឥឡូវនេះនៅលើឧបករណ៍ផ្សេងទៀត</value>
   </data>
   <data name="SendToSupervisor_SyncCompletedWithErrorsFormat" xml:space="preserve">
       <value>ការផ្ទេរត្រូវបានបញ្ចប់។ ការសម្ភាសន៍ {0} បានបរាជ័យក្នុងការធ្វើសមកាលកម្ម</value>
@@ -166,7 +166,7 @@
     <value>ចំណាំ៖ សកម្មភាពនេះនឹងចំណាយពេលច្រើនជាងធម្មតា សូមកុំបិទឧបករណ៍នេះ</value>
   </data>
     <data name="SendToSupervisor_ConnectionFailed" xml:space="preserve">
-    <value>ប្រាកដថាឧបករណ៍ទាំងពីរនៅជិត; WiFi និង Bluetooth គួរតែបើកនៅលើឧបករណ៍ទាំងពីរ; កម្មវិធីអ្នកគ្រប់គ្រងគួរតែបើកនៅលើឧបករណ៍អ្នកគ្រប់គ្រង</value>
+    <value>ប្រាកដថាឧបករណ៍ទាំងពីរនៅជិត; WiFi និងBluetooth គួរតែបើកនៅលើឧបករណ៍ទាំងពីរ; កម្មវិធីអ្នកគ្រប់គ្រងគួរតែបើកនៅលើឧបករណ៍អ្នកគ្រប់គ្រង</value>
   </data>
     <data name="SendToSupervisor_Retry" xml:space="preserve">
     <value>ព្យាយាមម្តងទៀត</value>

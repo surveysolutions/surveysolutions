@@ -124,7 +124,7 @@
     <value>ย้ายการสัมภาษณ์ที่เสร็จสิ้นทั้งหมดไปยังอุปกรณ์ของหัวหน้างาน</value>
   </data>
     <data name="SendToSupervisor_MovingToSupervisorFormat" xml:space="preserve">
-    <value>ย้ายกา���สัมภาษณ์ที่เสร็จสิ้นทั้งหมดไปยัง '{0}'</value>
+    <value>ย้ายการสัมภาษณ์ที่เสร็จสิ้นทั้งหมดไปยัง '{0}'</value>
   </data>
     <data name="SendToSupervisor_CheckSupervisorDevice" xml:space="preserve">
     <value>ตรวจสอบว่าอุปกรณ์ของหัวหน้างานเปิด WiFi และ Bluetooth และคุณอยู่ใกล้เคียง</value>

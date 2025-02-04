@@ -1,376 +1,901 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
-  <!-- 
-    Microsoft ResX Schema 
-    
-    Version 2.0
-    
-    The primary goals of this format is to allow a simple XML format 
-    that is mostly human readable. The generation and parsing of the 
-    various data types are done through the TypeConverter classes 
-    associated with the data types.
-    
-    Example:
-    
-    ... ado.net/XML headers & schema ...
-    <resheader name="resmimetype">text/microsoft-resx</resheader>
-    <resheader name="version">2.0</resheader>
-    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
-    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
-    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
-    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
-    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
-        <value>[base64 mime encoded serialized .NET Framework object]</value>
-    </data>
-    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
-        <comment>This is a comment</comment>
-    </data>
-                
-    There are any number of "resheader" rows that contain simple 
-    name/value pairs.
-    
-    Each data row contains a name, and value. The row also contains a 
-    type or mimetype. Type corresponds to a .NET class that support 
-    text/value conversion through the TypeConverter architecture. 
-    Classes that don't support this are serialized and stored with the 
-    mimetype set.
-    
-    The mimetype is used for serialized objects, and tells the 
-    ResXResourceReader how to depersist the object. This is currently not 
-    extensible. For a given mimetype the value must be set accordingly:
-    
-    Note - application/x-microsoft.net.object.binary.base64 is the format 
-    that the ResXResourceWriter will generate, however the reader can 
-    read any of the formats listed below.
-    
-    mimetype: application/x-microsoft.net.object.binary.base64
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
-            : and then encoded with base64 encoding.
-    
-    mimetype: application/x-microsoft.net.object.soap.base64
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
-            : and then encoded with base64 encoding.
-
-    mimetype: application/x-microsoft.net.object.bytearray.base64
-    value   : The object must be serialized into a byte array 
-            : using a System.ComponentModel.TypeConverter
-            : and then encoded with base64 encoding.
-    -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
-    <xsd:element name="root" msdata:IsDataSet="true">
-      <xsd:complexType>
-        <xsd:choice maxOccurs="unbounded">
-          <xsd:element name="metadata">
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
             <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
-              </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
             </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="assembly">
-            <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="data">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="resheader">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
-            </xsd:complexType>
-          </xsd:element>
-        </xsd:choice>
-      </xsd:complexType>
-    </xsd:element>
-  </xsd:schema>
-  <resheader name="resmimetype">
-    <value>text/microsoft-resx</value>
-  </resheader>
-  <resheader name="version">
-    <value>2.0</value>
-  </resheader>
-  <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </resheader>
-  <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </resheader>
-  <data name="Cancel" xml:space="preserve">
-    <value>Hủy bỏ</value>
-  </data>
-  <data name="Dashboard_EmptyQuestionnairesList" xml:space="preserve">
-    <value>Chưa có bộ câu hỏi nào
-Bạn có thể tạo hoặc chỉnh sửa bộ câu hỏi trong Survey Solutions Designer</value>
-  </data>
-  <data name="Dashboard_EmptySearchResult" xml:space="preserve">
-    <value>Không tìm thấy bộ câu hỏi</value>
-  </data>
-  <data name="Dashboard_LastEntryDate_Format" xml:space="preserve">
-    <value>{0:dd MMM HH:mm}</value>
-  </data>
-  <data name="Dashboard_ToolbarText" xml:space="preserve">
-    <value>Bộ câu hỏi</value>
-  </data>
-  <data name="DateQuestion_Hint" xml:space="preserve">
-    <value>Nhấn vào để nhập ngày</value>
-  </data>
-  <data name="EndpointHint" xml:space="preserve">
-    <value>Điểm đích để đồng bộ hóa</value>
-  </data>
-  <data name="EndpointText" xml:space="preserve">
-    <value>Web dịch vụ điểm cuối:</value>
-  </data>
-  <data name="ErrorMessage_AccountIsLockedOnServer" xml:space="preserve">
-    <value>Tài khoản của bạn đã bị khóa. Vui lòng liên hệ với nhóm hỗ trợ.</value>
-  </data>
-  <data name="ErrorMessage_AccountIsNotApprovedOnServer" xml:space="preserve">
-    <value>Tài khoản của bạn chưa được chấp thuận. Vui lòng xác nhận tài khoản.</value>
-  </data>
-  <data name="ErrorMessage_InternalServerError" xml:space="preserve">
-    <value>Lỗi máy chủ. Vui lòng liên hệ với nhóm hỗ trợ</value>
-  </data>
-  <data name="ErrorMessage_InvalidEndpoint" xml:space="preserve">
-    <value>Trang web Survey Solutions Designer được cung cấp không phù hợp. Kiểm tra cài đặt.</value>
-  </data>
-  <data name="ErrorMessage_Maintenance" xml:space="preserve">
-    <value>Trang web Survey Solutions Designer đang trong chế độ bảo trì. Xin lỗi vì sự bất tiện này</value>
-  </data>
-  <data name="ErrorMessage_RequestTimeout" xml:space="preserve">
-    <value>Thời gian kết nối với trang web  Survey Solutions Designer đã hết. Kiểm tra kết nối Internet của bạn.</value>
-  </data>
-  <data name="ErrorMessage_ServiceUnavailable" xml:space="preserve">
-    <value>Không kết nối được với trang web Survey Solutions Designer. Vui lòng đảm bảo trang web này đang hoạt động.</value>
-  </data>
-  <data name="ErrorMessage_Unauthorized" xml:space="preserve">
-    <value>Tên đăng nhập hoặc mật khẩu không chính xác</value>
-  </data>
-  <data name="ErrorMessage_UpgradeRequired" xml:space="preserve">
-    <value>Đã có phiên bản mới của ứng dụng. Xin vui lòng cập nhật!</value>
-  </data>
-  <data name="FilteredComboboxQuestion_Hint" xml:space="preserve">
-    <value>Nhấn vào để nhập văn bản</value>
-  </data>
-  <data name="GpsQuestion_Timeout" xml:space="preserve">
-    <value>GPS là không thể xác định vị trí của bạn. Để khắc phục sự cố, hãy thử như sau: đảm bảo rằng bạn đang ở ngoài trời, xác nhận rằng GPS đã được kích hoạt, hoặc thay đổi cài đặt thời gian chờ GPS.</value>
-  </data>
-  <data name="IntegerQuestion_Hint" xml:space="preserve">
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+<data name="ErrorMessage_AccountIsLockedOnServer" xml:space="preserve">
+    <value>Tài khoản người dùng của bạn đã bị khóa. Vui lòng liên hệ với nhóm hỗ trợ.</value>
+</data>
+<data name="Dashboard_MyQuestionnairesLinkText" xml:space="preserve">
+    <value>Của tôi</value>
+</data>
+<data name="Dashboard_SharedWithMeLinkText" xml:space="preserve">
+    <value>Chia sẻ với tôi</value>
+</data>
+<data name="Dashboard_PublicQuestionnairesLinkText" xml:space="preserve">
+    <value>Công khai</value>
+</data>
+<data name="Dashboard_ToolbarText" xml:space="preserve">
+    <value>Bảng câu hỏi</value>
+</data>
+<data name="EndpointText" xml:space="preserve">
+    <value>Điểm cuối dịch vụ web:</value>
+</data>
+<data name="ErrorMessage_UpgradeRequired" xml:space="preserve">
+    <value>Phiên bản mới của ứng dụng đã được phát hành. Vui lòng cập nhật ứng dụng</value>
+</data>
+<data name="ErrorMessage_InternalServerError" xml:space="preserve">
+    <value>Lỗi máy chủ. Vui lòng liên hệ với bộ phận hỗ trợ</value>
+</data>
+<data name="LoginNameHint" xml:space="preserve">
+    <value>Đăng nhập của bạn</value>
+</data>
+<data name="LoginText" xml:space="preserve">
+    <value>Đăng nhập</value>
+</data>
+<data name="LoginTitleText" xml:space="preserve">
+    <value>Trình kiểm tra bảng câu hỏi Survey Solutions</value>
+</data>
+<data name="ErrorMessage_Maintenance" xml:space="preserve">
+    <value>Trang web của Survey Solutions Designer đang trong chế độ bảo trì. Xin lỗi vì sự bất tiện này</value>
+</data>
+<data name="PrefilledQuestions_StartInterview" xml:space="preserve">
+    <value>BẮT ĐẦU</value>
+</data>
+<data name="PasswordHint" xml:space="preserve">
+    <value>Mật khẩu</value>
+</data>
+<data name="OldPasswordHint" xml:space="preserve">
+    <value>Mật khẩu hiện tại</value>
+</data>
+<data name="NewPasswordHint" xml:space="preserve">
+    <value>Mật khẩu mới</value>
+</data>
+<data name="ConfirmNewPasswordHint" xml:space="preserve">
+    <value>Xác nhận mật khẩu mới</value>
+</data>
+<data name="ErrorMessage_RequestTimeout" xml:space="preserve">
+    <value>Hết thời gian kết nối với trang web Survey Solutions Designer. Kiểm tra kết nối internet của bạn.</value>
+</data>
+<data name="ErrorMessage_ServiceUnavailable" xml:space="preserve">
+    <value>Không có kết nối với Survey Solutions Designer. Vui lòng đảm bảo rằng trang web có sẵn.</value>
+</data>
+<data name="StaySignedInText" xml:space="preserve">
+    <value>Giữ đăng nhập</value>
+</data>
+<data name="ErrorMessage_Unauthorized" xml:space="preserve">
+    <value>Tên đăng nhập hoặc mật khẩu của bạn không chính xác</value>
+</data>
+<data name="Interview_Questions_Gps_SaveAnswer" xml:space="preserve">
+    <value>Nhấn để ghi GPS</value>
+</data>
+<data name="Interview_Questions_Audio_SaveAnswer" xml:space="preserve">
+    <value>Nhấn để ghi âm</value>
+</data>
+<data name="Interview_Questions_Audio_RecordNew" xml:space="preserve">
+    <value>Ghi âm mới</value>
+</data>
+<data name="Interview_Instruction_Title" xml:space="preserve">
+    <value>Hướng dẫn</value>
+</data>
+<data name="TextQuestion_Hint" xml:space="preserve">
+    <value>Nhấn để nhập văn bản</value>
+</data>
+<data name="IntegerQuestion_Hint" xml:space="preserve">
     <value>Nhấn để nhập số</value>
-  </data>
-  <data name="Interview_Comment_Interviewer_Caption" xml:space="preserve">
+</data>
+<data name="RealQuestion_Hint" xml:space="preserve">
+    <value>Nhấn để nhập số</value>
+</data>
+<data name="Interview_Questions_RemoveRowFromRosterMessage" xml:space="preserve">
+    <value>Bạn có chắc chắn muốn xóa danh sách liên quan '{0}' khỏi mỗi danh sách liên quan không?</value>
+</data>
+<data name="Interview_Questions_RemoveRowFromRosterListMessage" xml:space="preserve">
+    <value>Bạn có chắc chắn muốn xóa các danh sách liên quan không?</value>
+</data>
+<data name="Yes" xml:space="preserve">
+    <value>Có</value>
+</data>
+<data name="Adjust" xml:space="preserve">
+    <value>Điều chỉnh</value>
+</data>
+<data name="InvalidTimeMessage" xml:space="preserve">
+    <value>Điều quan trọng là cài đặt đồng hồ phải chính xác. Đồng hồ của bạn cho biết ngày hiện tại được đặt không chính xác. Điều chỉnh đồng hồ bằng cách đặt ngày/giờ chính xác trước khi tiếp tục công việc của bạn.</value>
+</data>
+<data name="Validity_Answered_Invalid_ErrorCaption" xml:space="preserve">
+    <value>Câu trả lời không hợp lệ</value>
+</data>
+<data name="Warnings" xml:space="preserve">
+    <value>Cảnh báo</value>
+</data>
+<data name="Validity_NotAnswered_InterviewException_ErrorCaption" xml:space="preserve">
+    <value>Câu trả lời không được lưu</value>
+</data>
+<data name="Interview_Comment_OnPreviousAnswer" xml:space="preserve">
+    <value>Trên câu trả lời trước</value>
+</data>
+<data name="Interview_Comment_Interviewer_Caption" xml:space="preserve">
     <value>Bình luận của bạn</value>
-  </data>
-  <data name="Interview_Complete_Answered" xml:space="preserve">
-    <value>Đã trả lời</value>
-  </data>
-  <data name="Interview_Complete_Button" xml:space="preserve">
-    <value>Hoàn thành</value>
-  </data>
-  <data name="Interview_Complete_Consequences_Instrunction" xml:space="preserve">
-    <value>Sau khi bạn kết thúc, cuộc phỏng vấn sẽ được đánh dấu là đã hoàn thành và được chuyển tải đến giám sát viên trong quá trình đồng bộ hóa tiếp theo của bạn</value>
-  </data>
-  <data name="Interview_Complete_Errors" xml:space="preserve">
-    <value>Lỗi</value>
-  </data>
-  <data name="Interview_Complete_No" xml:space="preserve">
-    <value>Không</value>
-  </data>
-  <data name="Interview_Complete_Note_For_Supervisor" xml:space="preserve">
-    <value>Lưu ý cho giám sát viên</value>
-  </data>
-  <data name="Interview_Complete_Questions_Status" xml:space="preserve">
-    <value>Tình trạng câu hỏi</value>
-  </data>
-  <data name="Interview_Complete_Screen_Description" xml:space="preserve">
-    <value>Bạn chuẩn bị hoàn thành cuộc phỏng vấn này</value>
-  </data>
-  <data name="Interview_Complete_Screen_Title" xml:space="preserve">
-    <value>Hoàn thành</value>
-  </data>
-  <data name="Interview_Complete_Unanswered" xml:space="preserve">
-    <value>Chưa trả lời</value>
-  </data>
-  <data name="Interview_CompleteScreen_ButtonText" xml:space="preserve">
-    <value>Chuyển tới màn hình hoàn thành</value>
+</data>
+<data name="Interview_Comment_Resolve" xml:space="preserve">
+    <value>Giải quyết</value>
+</data>
+<data name="DateQuestion_Hint" xml:space="preserve">
+    <value>Nhấn để nhập ngày</value>
+</data>
+<data name="Interview_Questions_QrBarcode_SaveAnswer" xml:space="preserve">
+    <value>Nhấn để chụp mã vạch</value>
+</data>
+<data name="Interview_Questions_Area_SaveAnswer" xml:space="preserve">
+    <value>Nhấn để trả lời</value>
+</data>
+    <data name="Interview_Group_Status_CompletedFormat" xml:space="preserve">
+      <value>Phần đã hoàn thành: {0}</value>
   </data>
   <data name="Interview_Group_AnsweredQuestions_Many" xml:space="preserve">
-    <value>{0} câu trả lời</value>
-  </data>
-  <data name="Interview_Group_AnsweredQuestions_One" xml:space="preserve">
-    <value>một trả lời</value>
-  </data>
-  <data name="Interview_Group_InvalidAnswers_ManyFormat" xml:space="preserve">
-    <value>{0} lỗi</value>
-  </data>
-  <data name="Interview_Group_InvalidAnswers_One" xml:space="preserve">
-    <value>một lỗi</value>
-  </data>
-  <data name="Interview_Group_Status_CompletedFormat" xml:space="preserve">
-    <value>Số mục đã hoàn thành: {0}</value>
-  </data>
-  <data name="Interview_Group_Status_NotStarted" xml:space="preserve">
-    <value>Số mục chưa phỏng vấn</value>
-  </data>
-  <data name="Interview_Group_Status_StartedIncompleteFormat" xml:space="preserve">
-    <value>Số mục đã bắt đầu phỏng vấn: {0}</value>
+      <value>{0} câu trả lời</value>
   </data>
   <data name="Interview_Group_Subgroups_ManyFormat" xml:space="preserve">
-    <value>{0} mục con</value>
-  </data>
-  <data name="Interview_Group_Subgroups_One" xml:space="preserve">
-    <value>một mục con</value>
+      <value>{0} tiểu mục</value>
   </data>
   <data name="Interview_Group_Subgroups_Zero" xml:space="preserve">
-    <value>Không có mục con</value>
+      <value>không có tiểu mục</value>
   </data>
-  <data name="Interview_Instruction_Title" xml:space="preserve">
-    <value>Hướng dẫn:</value>
+  <data name="Interview_Group_Status_NotStarted" xml:space="preserve">
+      <value>Phần chưa bắt đầu</value>
   </data>
-  <data name="Interview_LinkedQuestion_Empty" xml:space="preserve">
-    <value>Các tùy chọn sẽ hiển thị sau khi trả lời câu hỏi tham chiếu</value>
+  <data name="Interview_Group_AnsweredQuestions_One" xml:space="preserve">
+      <value>một câu trả lời</value>
   </data>
-  <data name="Interview_NextSection_ButtonText" xml:space="preserve">
-    <value>Mục tiếp theo</value>
+  <data name="Interview_Group_Subgroups_One" xml:space="preserve">
+      <value>một tiểu mục</value>
   </data>
-  <data name="Interview_PreviousGroupNavigation_AnsweredQuestions" xml:space="preserve">
-    <value>Tất cả {0} câu hỏi đã được trả lời</value>
-  </data>
-  <data name="Interview_PreviousGroupNavigation_UnansweredQuestions" xml:space="preserve">
-    <value>Lưu ý: {0} câu hỏi chưa được trả lời</value>
-  </data>
-  <data name="Interview_Question_Cascading_NoMatchingValue" xml:space="preserve">
-    <value>Câu trả lời "{0}" không khớp với bất kỳ tùy chọn nào</value>
-  </data>
-  <data name="Interview_Question_Filter_MatchError" xml:space="preserve">
-    <value>Câu trả lời "{0}" không khớp với bất kỳ tùy chọn nào</value>
-  </data>
-  <data name="Interview_Question_Integer_EmptyValueError" xml:space="preserve">
-    <value>Không thể lưu câu trả lời trống</value>
-  </data>
-  <data name="Interview_Question_Integer_NegativeRosterSizeAnswer" xml:space="preserve">
-    <value>Câu trả lời '{0}' không chính xác vì câu hỏi này để xác định kích cỡ danh sách mà câu trả lời cụ thể là số âm</value>
+  <data name="Interview_Group_Status_StartedIncompleteFormat" xml:space="preserve">
+      <value>Phần đã bắt đầu: {0}</value>
   </data>
   <data name="Interview_Question_Integer_ParsingError" xml:space="preserve">
-    <value>Câu trả lời không có dạng số nguyên</value>
-  </data>
-  <data name="Interview_Question_Integer_RosterSizeAnswerMoreThanMaxValue" xml:space="preserve">
-    <value>Câu trả lời '{0}' không chính xác vì lớn hơn giá trị chặn trên của danh sách '{1}'.</value>
-  </data>
-  <data name="Interview_Question_List_Empty_Values_Are_Not_Allowed" xml:space="preserve">
-    <value>Không được phép để trống</value>
+      <value>Giá trị nhập vào không thể phân tích thành số nguyên</value>
   </data>
   <data name="Interview_Question_Real_ParsingError" xml:space="preserve">
-    <value>Giá trị không có dạng số thập phân</value>
+      <value>Giá trị nhập vào không thể phân tích thành số thập phân</value>
   </data>
-  <data name="Interview_Question_Text_MaskError" xml:space="preserve">
-    <value>Hãy điền tất cả các giá trị được yêu cầu</value>
+  <data name="Interview_Group_InvalidAnswers_ManyFormat" xml:space="preserve">
+      <value>{0} lỗi</value>
   </data>
-  <data name="Interview_Questions_Gps_SaveAnswer" xml:space="preserve">
-    <value>Nhấn vào để ghi lại vị trí</value>
+  <data name="Interview_Group_InvalidAnswers_One" xml:space="preserve">
+      <value>một lỗi</value>
   </data>
   <data name="Interview_Questions_Multimedia_TapToTakePhoto" xml:space="preserve">
-    <value>Nhấn vào để chụp ảnh</value>
+      <value>Nhấn để chụp ảnh</value>
   </data>
-  <data name="Interview_Questions_QrBarcode_SaveAnswer" xml:space="preserve">
-    <value>Nhấn vào để lấy mã vạch</value>
+  <data name="Interview_PreviousGroupNavigation_AnsweredQuestions" xml:space="preserve">
+      <value>Tất cả {0} câu hỏi đã được trả lời</value>
   </data>
-  <data name="Interviewer_ApplicationName" xml:space="preserve">
-    <value>Survey Solutions Interviewer</value>
+  <data name="Interview_PreviousGroupNavigation_UnansweredQuestions" xml:space="preserve">
+      <value>Lưu ý: {0} câu hỏi chưa được trả lời</value>
   </data>
-  <data name="Interviewer_Diagnostics" xml:space="preserve">
-    <value>Xem lỗi </value>
-  </data>
-  <data name="Interviewer_RelinkDevice_Cancel" xml:space="preserve">
-    <value>Hủy bỏ</value>
-  </data>
-  <data name="Interviewer_RelinkDevice_InterviewerLinkedToAnotherDeviceMessage" xml:space="preserve">
-    <value>Bạn đang thực hiện nhiệm vụ trên một thiết bị khác</value>
-  </data>
-  <data name="Interviewer_RelinkDevice_RelinkButtonText" xml:space="preserve">
-    <value>Liên kết lại</value>
-  </data>
-  <data name="Interviewer_RelinkDevice_RelinkMessage" xml:space="preserve">
-    <value>Nếu bạn liên kết cho thiết bị này&lt;br&gt;Tất cả dữ liệu trên liên kết cũ sẽ bị mất</value>
-  </data>
-  <data name="Interviewer_TryOnlineLogin" xml:space="preserve">
-    <value>Cố gắng để đăng nhập trực tuyến</value>
-  </data>
-  <data name="LoginNameHint" xml:space="preserve">
-    <value>Thông tin đăng nhập</value>
-  </data>
-  <data name="LoginText" xml:space="preserve">
-    <value>Đăng nhập</value>
-  </data>
-  <data name="LoginTitleText" xml:space="preserve">
-    <value>Survey Solutions Questionnaire Tester</value>
-  </data>
-  <data name="No" xml:space="preserve">
-    <value>Không được</value>
-  </data>
-  <data name="PasswordHint" xml:space="preserve">
-    <value>Mật khẩu</value>
-  </data>
-  <data name="PlayServicesLocationWatcher_Google_Play_Services_are_not_available" xml:space="preserve">
-    <value>Google Play Services không có sẵn</value>
-  </data>
-  <data name="PlayServicesLocationWatcher_Location_Client_not_started" xml:space="preserve">
-    <value>Location Client chưa hoạt động</value>
-  </data>
-  <data name="PlayServicesLocationWatcher_You_cannot_start_MvxLocation_service_more_than_once" xml:space="preserve">
-    <value>Bạn không thể khởi động dịch vụ MvxLocation nhiều hơn một lần</value>
-  </data>
-  <data name="PrefilledQuestions_StartInterview" xml:space="preserve">
-    <value>BẮT ĐẦU</value>
-  </data>
-  <data name="Prefs_GpsDesiredAccuracyTitle" xml:space="preserve">
-    <value>Độ chính xác mong muốn của các câu hỏi GPS</value>
-  </data>
-  <data name="RealQuestion_Hint" xml:space="preserve">
-    <value>Nhấn vào để nhập số thập phân</value>
-  </data>
-  <data name="StaySignedInText" xml:space="preserve">
-    <value>Ở trạng thái đăng nhập</value>
-  </data>
-  <data name="Synchronization_UserLinkedToAnotherDevice_Description" xml:space="preserve">
-    <value>Bạn không có nhiệm vụ nào trên thiết bị này. Gửi thông tin máy tính bảng, xóa dữ liệu và đăng nhập bằng tài khoản khác</value>
+  <data name="Dashboard_EmptyQuestionnairesList" xml:space="preserve">
+      <value>Chưa có bảng câu hỏi nào.
+  
+  Bạn có thể tạo hoặc chỉnh sửa bảng câu hỏi của mình trong Survey Solutions Designer</value>
   </data>
   <data name="TextListQuestion_Hint" xml:space="preserve">
-    <value>Nhấn vào để nhập mục mới</value>
+      <value>Nhấn để nhập mục mới</value>
   </data>
-  <data name="TextQuestion_Hint" xml:space="preserve">
-    <value>Nhấn vào để nhập văn bản</value>
+  <data name="Interview_Question_Text_MaskError" xml:space="preserve">
+      <value>Vui lòng điền tất cả các giá trị cần thiết</value>
+  </data>
+  <data name="Interview_Question_Text_Empty" xml:space="preserve">
+      <value>Câu trả lời không được để trống</value>
+  </data>
+  <data name="FilteredComboboxQuestion_Hint" xml:space="preserve">
+      <value>Nhấn để nhập văn bản</value>
+  </data>
+  <data name="GpsQuestion_Timeout" xml:space="preserve">
+      <value>GPS không thể xác định vị trí của bạn. Để khắc phục sự cố, vui lòng thử các cách sau: đảm bảo rằng bạn đang ở ngoài trời, xác nhận rằng GPS của bạn đã được bật, hoặc thay đổi cài đặt thời gian chờ của GPS</value>
+  </data>
+  <data name="NoMapsApplication" xml:space="preserve">
+      <value>Không tìm thấy ứng dụng điều hướng</value>
+  </data>
+  <data name="ErrorMessage_InvalidEndpoint" xml:space="preserve">
+      <value>URL của Survey Solutions Designer được cung cấp không hợp lệ. Kiểm tra cài đặt.</value>
+  </data>
+  <data name="Interview_LinkedQuestion_Empty" xml:space="preserve">
+      <value>Các danh mục sẽ xuất hiện chỉ sau khi trả lời câu hỏi xác định các danh mục của câu hỏi này.</value>
+  </data>
+  <data name="Interview_Question_Cascading_NoMatchingValue" xml:space="preserve">
+      <value>Câu trả lời "{0}" không được phép cho câu hỏi này</value>
+  </data>
+  <data name="Interview_Question_Filter_MatchError" xml:space="preserve">
+      <value>Câu trả lời "{0}" không được phép cho câu hỏi này</value>
+  </data>
+  <data name="Interview_NextSection_ButtonText" xml:space="preserve">
+      <value>Phần tiếp theo</value>
+  </data>
+  <data name="Dashboard_LastEntryDate_Format" xml:space="preserve">
+      <value>{0:dd MMM HH:mm}</value>
   </data>
   <data name="TextQuestion_MaskHint" xml:space="preserve">
-    <value>Nhấn vào để nhập văn bản ({0})</value>
+      <value>Nhấn để nhập văn bản ({0})</value>
   </data>
-  <data name="Validity_Answered_Invalid_ErrorCaption" xml:space="preserve">
-    <value>Câu trả lời không phù hợp</value>
+  <data name="Interview_Question_Integer_NegativeRosterSizeAnswer" xml:space="preserve">
+      <value>Câu trả lời '{0}' không chính xác vì câu hỏi là câu hỏi nguồn của danh sách và câu trả lời được chỉ định là số âm</value>
   </data>
-  <data name="Validity_NotAnswered_InterviewException_ErrorCaption" xml:space="preserve">
-    <value>Câu trả lời chưa được lưu</value>
+  <data name="Interview_Question_Integer_RosterSizeAnswerMoreThanMaxValue" xml:space="preserve">
+      <value>Câu trả lời '{0}' không chính xác vì câu trả lời lớn hơn giới hạn trên của danh sách '{1}'.</value>
   </data>
-  <data name="Yes" xml:space="preserve">
-    <value>Có</value>
+  <data name="Interview_Question_Integer_EmptyValueError" xml:space="preserve">
+      <value>Giá trị trống không thể lưu</value>
+  </data>
+  <data name="ErrorMessage_AccountIsNotApprovedOnServer" xml:space="preserve">
+      <value>Tài khoản của bạn chưa được phê duyệt. Vui lòng xác nhận tài khoản của bạn trước.</value>
+  </data>
+  <data name="Interview_Question_List_Empty_Values_Are_Not_Allowed" xml:space="preserve">
+      <value>Không được phép giá trị trống</value>
+  </data>
+  <data name="Interview_Complete_Answered" xml:space="preserve">
+      <value>Đã trả lời</value>
+  </data>
+  <data name="Interview_Complete_Button" xml:space="preserve">
+      <value>Hoàn thành</value>
+  </data>
+  <data name="Interview_Complete_Consequences_Instrunction" xml:space="preserve">
+      <value>Sau khi bạn hoàn thành cuộc phỏng vấn này, nó sẽ được đánh dấu là đã hoàn thành và sẽ được tải lên giám sát viên trong lần đồng bộ tiếp theo của bạn</value>
+  </data>
+  <data name="Interview_Complete_CriticalIssues_Instrunction" xml:space="preserve">
+      <value>Nút này bị vô hiệu hóa vì không cho phép gửi các cuộc phỏng vấn có vấn đề nghiêm trọng</value>
+  </data>
+  <data name="Interview_Complete_Errors" xml:space="preserve">
+      <value>Lỗi</value>
+  </data>
+  <data name="Interview_Complete_CriticalUnanswered" xml:space="preserve">
+      <value>Các câu hỏi quan trọng chưa được trả lời: {0}</value>
+  </data>
+  <data name="Interview_Complete_FailCriticalConditions" xml:space="preserve">
+      <value>Không đạt các quy tắc quan trọng: {0}</value>
+  </data>
+  <data name="Interview_Complete_No" xml:space="preserve">
+      <value>Không</value>
+  </data>
+  <data name="Interview_Complete_Note_For_Supervisor" xml:space="preserve">
+      <value>Ghi chú cho giám sát viên</value>
+  </data>
+  <data name="Interview_Complete_WithWarningCriticality" xml:space="preserve">
+      <value>Vui lòng xác nhận bạn muốn gửi cuộc phỏng vấn này với các vấn đề nghiêm trọng.</value>
+  </data>
+  <data name="Interview_Complete_Note_For_Supervisor_with_Criticality" xml:space="preserve">
+      <value>Nút này vẫn bị vô hiệu hóa cho đến khi bạn chỉ định một bình luận cho các vấn đề nghiêm trọng ở trên</value>
+  </data>
+  <data name="Interview_Complete_Questions_Status" xml:space="preserve">
+      <value>Trạng thái câu hỏi</value>
+  </data>
+  <data name="Interview_Complete_Interview_Status" xml:space="preserve">
+      <value>Vấn đề phỏng vấn:</value>
+  </data>
+  <data name="Interview_Complete_CriticalityIssuesDescription" xml:space="preserve">
+      <value>Vui lòng giải quyết các vấn đề bằng cách trả lời các câu hỏi quan trọng và đảm bảo rằng các câu trả lời đáp ứng các quy tắc quan trọng</value>
+  </data>
+  <data name="Interview_Complete_Unanswered" xml:space="preserve">
+      <value>Chưa trả lời</value>
+  </data>
+  <data name="Interview_Complete_Screen_Description" xml:space="preserve">
+      <value>Bạn sắp hoàn thành cuộc phỏng vấn này</value>
+  </data>
+  <data name="Interview_Complete_Screen_DescriptionWithInterviewKey" xml:space="preserve">
+      <value>Bạn sắp hoàn thành cuộc phỏng vấn {0}</value>
+  </data>
+  <data name="Interview_Complete_Screen_Title" xml:space="preserve">
+      <value>Hoàn thành</value>
+  </data>
+  <data name="Interviewer_ApplicationName" xml:space="preserve">
+      <value>Survey Solutions Interviewer</value>
+  </data>
+  <data name="Supervisor_ApplicationName" xml:space="preserve">
+      <value>Survey Solutions Supervisor</value>
+  </data>
+  <data name="Interview_CompleteScreen_ButtonText" xml:space="preserve">
+      <value>Để hoàn thành màn hình</value>
+  </data>
+  <data name="Interviewer_RelinkDevice_Cancel" xml:space="preserve">
+      <value>Hủy</value>
+  </data>
+  <data name="Interviewer_Reassign_Comment" xml:space="preserve">
+      <value>Để lại bình luận cho người chịu trách nhiệm mới</value>
+  </data>
+  <data name="Interviewer_Comment" xml:space="preserve">
+      <value>Để lại bình luận</value>
+  </data>
+  <data name="Interviewer_Reassign_AlreadyReceivedInterview" xml:space="preserve">
+      <value>Người phỏng vấn {0} đã nhận được cuộc phỏng vấn này {1}. Bạn có chắc chắn muốn giao lại không?</value>
+  </data>
+  <data name="Interviewer_Reassign_AlreadyReceivedAssignment" xml:space="preserve">
+      <value>Người phỏng vấn {0} đã nhận được nhiệm vụ này {1}. Bạn có chắc chắn muốn giao lại không?</value>
+  </data>
+  <data name="Interviewer_Done" xml:space="preserve">
+      <value>Hoàn thành</value>
+  </data>
+  <data name="Interviewer_AudioRecording" xml:space="preserve">
+      <value>Ghi âm</value>
+  </data>
+  <data name="Interviewer_RelinkDevice_InterviewerLinkedToAnotherDeviceMessage" xml:space="preserve">
+      <value>Bạn đã được gán cho một thiết bị khác</value>
+  </data>
+  <data name="Interviewer_RelinkDevice_RelinkButtonText" xml:space="preserve">
+      <value>Liên kết lại</value>
+  </data>
+  <data name="Interviewer_RelinkDevice_RelinkMessage" xml:space="preserve">
+      <value>Nếu bạn liên kết lại với thiết bị này &lt;br/&gt; tất cả dữ liệu trên thiết bị cũ sẽ bị mất</value>
+  </data>
+  <data name="Dashboard_EmptySearchResult" xml:space="preserve">
+      <value>Không tìm thấy bảng câu hỏi</value>
+  </data>
+  <data name="EndpointHint" xml:space="preserve">
+      <value>Điểm cuối đồng bộ hóa</value>
+  </data>
+  <data name="Interviewer_TryOnlineLogin" xml:space="preserve">
+      <value>Thử đăng nhập trực tuyến</value>
+  </data>
+  <data name="PlayServicesLocationWatcher_Google_Play_Services_are_not_available" xml:space="preserve">
+      <value>Google Play Services không khả dụng</value>
+  </data>
+  <data name="PlayServicesLocationWatcher_You_cannot_start_MvxLocation_service_more_than_once" xml:space="preserve">
+      <value>Bạn không thể khởi động dịch vụ MvxLocation nhiều hơn một lần</value>
+  </data>
+  <data name="PlayServicesLocationWatcher_Location_Client_not_started" xml:space="preserve">
+      <value>Khách hàng vị trí chưa được khởi động</value>
+  </data>
+  <data name="Synchronization_UserLinkedToAnotherDevice_Description" xml:space="preserve">
+      <value>Bạn không có nhiệm vụ nào trên thiết bị này. Gửi thông tin máy tính bảng, xóa dữ liệu ứng dụng và đăng nhập bằng tài khoản khác</value>
+  </data>
+  <data name="No" xml:space="preserve">
+      <value>Không</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+      <value>Hủy</value>
+  </data>
+  <data name="PasswordMatchError" xml:space="preserve">
+      <value>Mật khẩu phải giống nhau</value>
+  </data>
+  <data name="Interviewer_Diagnostics" xml:space="preserve">
+      <value>Chẩn đoán</value>
+  </data>
+  <data name="Prefs_GpsDesiredAccuracySubTitle" xml:space="preserve">
+      <value>Số mét để đặt độ chính xác</value>
+  </data>
+  <data name="Prefs_GpsDesiredAccuracyTitle" xml:space="preserve">
+      <value>Độ chính xác mong muốn của các câu hỏi GPS</value>
+  </data>
+  <data name="Interview_Instruction_ShowInstruction" xml:space="preserve">
+      <value>Hiển thị hướng dẫn</value>
+  </data>
+  <data name="Interview_Questions_Timestamp_SaveAnswer" xml:space="preserve">
+      <value>Nhấn để ghi lại thời gian hiện tại</value>
+  </data>
+  <data name="Interview_Complete_Entities_With_Errors" xml:space="preserve">
+      <value>Các câu hỏi có lỗi:</value>
+  </data>
+  <data name="Interview_Complete_First_n_Entities_With_Errors" xml:space="preserve">
+      <value>Các câu hỏi đầu tiên {0} có lỗi:</value>
+  </data>
+  <data name="Messages_WaitPendingOperation" xml:space="preserve">      
+      <value>Vui lòng đợi cho đến khi hoàn thành thao tác hiện tại</value>
+  </data>
+  <data name="Prefs_VibrateOnErrorSummary" xml:space="preserve">
+      <value>Máy tính bảng sẽ rung khi câu trả lời không vượt qua được xác thực</value>
+  </data>
+  <data name="Prefs_VibrateOnErrorTitle" xml:space="preserve">
+      <value>Rung khi câu trả lời không hợp lệ</value>
+  </data>
+  <data name="Interview_Cover_Screen_Title" xml:space="preserve">
+      <value>Bìa</value>
+  </data>
+  <data name="Interview_Cover_First_n_Questions_With_Comments" xml:space="preserve">
+      <value>Các câu hỏi đầu tiên {0} có bình luận:</value>
+  </data>
+  <data name="Interview_Cover_Questions_With_Comments" xml:space="preserve">
+      <value>Các câu hỏi có bình luận của giám sát viên:</value>
+  </data>
+  <data name="Interview_Cover_Supervisor_Comments_does_not_exists" xml:space="preserve">
+      <value>Không có bình luận từ giám sát viên</value>
+  </data>
+  <data name="Interview_Other_Comment_Caption" xml:space="preserve">
+      <value>Bình luận của người dùng</value>
+  </data>
+  <data name="Interview_Supervisor_Comment_Caption" xml:space="preserve">
+      <value>Bình luận của giám sát viên</value>
+  </data>
+  <data name="Interview_Cover_Supervisor_Note" xml:space="preserve">
+      <value>Ghi chú của giám sát viên:</value>
+  </data>
+  <data name="Prefs_ShowLocationOnMap" xml:space="preserve">
+      <value>Hiển thị vị trí trên bản đồ</value>
+  </data>
+  <data name="Prefs_DownloadUpdatesForInterviewerApp" xml:space="preserve">
+      <value>Tải xuống các bản cập nhật cho ứng dụng Người phỏng vấn</value>
+  </data>
+  <data name="Prefs_ShowLocationOnMapSummary" xml:space="preserve">
+      <value>Tải bản đồ để hiển thị vị trí cho các câu hỏi GPS</value>
+  </data>
+  <data name="Prefs_DownloadUpdatesForInterviewerAppSummary" xml:space="preserve">
+      <value>Nếu người phỏng vấn không có quyền truy cập internet, chức năng này nên được bật, vì nó cho phép cập nhật ứng dụng của họ trong quá trình đồng bộ hóa ngoại tuyến với ứng dụng Giám sát viên</value>
+  </data>
+  <data name="VariableEmptyValue" xml:space="preserve">
+      <value>&lt;trống&gt;</value>
+  </data>
+  <data name="Interview_Headquarters_Comment_Caption" xml:space="preserve">
+      <value>Bình luận của trụ sở chính</value>
+  </data>
+  <data name="Interview_Interviewer_Comment_Caption" xml:space="preserve">
+      <value>Bình luận của người phỏng vấn</value>
+  </data>
+  <data name="GpsQuestion_MissingPermissions" xml:space="preserve">
+    <value>Ứng dụng không có đủ quyền để thực hiện hành động yêu cầu. Thử trả lời lại câu hỏi và cho phép truy cập. Nếu bạn không thấy cửa sổ bật lên quyền, hãy vào Cài đặt và cho phép ứng dụng sử dụng vị trí của thiết bị.</value>
+  </data>
+  <data name="MissingPermissions_Camera" xml:space="preserve">
+    <value>Ứng dụng cần có quyền sử dụng máy ảnh để trả lời câu hỏi này. Thử trả lời lại câu hỏi và cho phép truy cập. Nếu bạn không thấy cửa sổ bật lên quyền, hãy vào Cài đặt và cho phép ứng dụng sử dụng máy ảnh.</value>
+  </data>
+  <data name="MissingPermissions_Microphone" xml:space="preserve">
+    <value>Ứng dụng cần có quyền sử dụng micro để trả lời câu hỏi này. Thử trả lời lại câu hỏi và cho phép truy cập. Nếu bạn không thấy cửa sổ bật lên quyền, hãy vào Cài đặt và cho phép ứng dụng sử dụng micro.</value>
+  </data>
+  <data name="MissingPermissions_Storage" xml:space="preserve">
+    <value>Ứng dụng cần có quyền sử dụng bộ nhớ để trả lời câu hỏi này. Thử trả lời lại câu hỏi và cho phép truy cập. Nếu bạn không thấy cửa sổ bật lên quyền, hãy vào Cài đặt và cho phép ứng dụng sử dụng bộ nhớ.</value>
+  </data>
+  <data name="MissingPermissions_MapsLocation" xml:space="preserve">
+    <value>Ứng dụng cần có quyền sử dụng vị trí. Nếu bạn không thấy cửa sổ bật lên quyền, hãy vào Cài đặt và cho phép ứng dụng sử dụng vị trí.</value>
+  </data>
+  <data name="MissingPermissions_Microphone_Global" xml:space="preserve">
+    <value>Ứng dụng cần có quyền sử dụng micro. Thử lại hành động cuối cùng và cho phép truy cập. Nếu bạn không thấy cửa sổ bật lên quyền, hãy vào Cài đặt và cho phép ứng dụng sử dụng micro.</value>
+  </data>
+  <data name="MissingPermissions_Storage_Global" xml:space="preserve">
+    <value>Ứng dụng cần có quyền sử dụng bộ nhớ. Thử lại hành động cuối cùng và cho phép truy cập. Nếu bạn không thấy cửa sổ bật lên quyền, hãy vào Cài đặt và cho phép ứng dụng sử dụng bộ nhớ.</value>
+  </data>
+  <data name="MissingPermission" xml:space="preserve">
+    <value>Ứng dụng không có đủ quyền để thực hiện hành động yêu cầu</value>
+  </data>
+  <data name="Ok" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="Multimedia_PickFromGallery" xml:space="preserve">
+    <value>Chọn từ thư viện</value>
+  </data>
+  <data name="Multimedia_PictureSource" xml:space="preserve">
+    <value>Chọn một tùy chọn</value>
+  </data>
+  <data name="Multimedia_TakePhoto" xml:space="preserve">
+    <value>Chụp ảnh</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Lỗi</value>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>Cảnh báo</value>
+  </data>
+  <data name="AreaMap_Edit" xml:space="preserve">
+    <value>Chỉnh sửa</value>
+  </data>
+  <data name="AreaMap_Location" xml:space="preserve">
+    <value>Vị trí</value>
+  </data>
+  <data name="AreaMap_NoChangesInfo" xml:space="preserve">
+    <value>Không có thay đổi nào để lưu.</value>
+  </data>
+  <data name="AreaMap_LocationOutOfBoundaries" xml:space="preserve">
+    <value>Vị trí của bạn nằm ngoài ranh giới của bản đồ.</value>
+  </data>
+  <data name="AreaMap_LocationDataSourceFailed" xml:space="preserve">
+    <value>Không thể lấy vị trí. Để khắc phục sự cố, vui lòng thử các cách sau: đảm bảo rằng bạn đang ở ngoài trời, xác nhận rằng GPS của bạn đã được bật, hoặc thay đổi cài đặt thời gian chờ của GPS</value>
+  </data>
+  <data name="AreaMap_MapIsOutOfVisibleBoundaries" xml:space="preserve">
+    <value>Bản đồ đã tải nằm ngoài ranh giới có thể nhìn thấy</value>
+  </data>
+  <data name="AreaMap_SelectShapefile" xml:space="preserve">
+    <value>Chọn tệp ranh giới</value>
+  </data>
+  <data name="AreaMap_ErrorOnShapefileLoading" xml:space="preserve">
+    <value>Đã xảy ra lỗi khi tải. Không thể xử lý tệp ranh giới</value>
+  </data>
+  <data name="AreaMap_NoMapsFound" xml:space="preserve">
+    <value>Không tìm thấy bản đồ nào. Vui lòng cập nhật bản đồ</value>
+  </data>
+  <data name="AreaMap_Save" xml:space="preserve">
+    <value>Lưu</value>
+  </data>
+  <data name="AreaMap_Undo" xml:space="preserve">
+    <value>Hoàn tác</value>
+  </data>
+  <data name="AreaMap_UpdateMaps" xml:space="preserve">
+    <value>Cập nhật bản đồ</value>
+  </data>
+  <data name="Version_Not_Supports" xml:space="preserve">
+    <value>Phiên bản ứng dụng của bạn không hỗ trợ tính năng này. Vui lòng cài đặt Người phỏng vấn với Bản đồ để kích hoạt nó.</value>
+  </data>
+  <data name="AreaMap_UpdateFailed" xml:space="preserve">
+    <value>Cập nhật thất bại</value>
+  </data>
+  <data name="Device_Does_Not_Support" xml:space="preserve">
+    <value>Thiết bị của bạn không hỗ trợ chức năng này</value>
+  </data>
+  <data name="AreaMap_MapTitle" xml:space="preserve">
+    <value>Bản đồ</value>
+  </data>
+  <data name="AreaMap_AreaFormat" xml:space="preserve">
+    <value>Diện tích: {0:0.00} m2</value>
+  </data>
+  <data name="AreaMap_OverlapsWith" xml:space="preserve">
+    <value>Chồng chéo với:</value>
+  </data>
+  <data name="AreaMap_OverlapsWithOther" xml:space="preserve">
+    <value>và {0} khác.</value>
+  </data>
+  <data name="AreaMap_ItemsOutsideDedicatedArea" xml:space="preserve">
+    <value>Một số điểm đánh dấu nằm ngoài khu vực được chỉ định</value>
+  </data>
+  <data name="AreaMap_PointsFormat" xml:space="preserve">
+    <value>Điểm: {0}</value>
+  </data>
+  <data name="AreaMap_Cancel" xml:space="preserve">
+    <value>Hủy</value>
+  </data>
+  <data name="AreaMap_LengthFormat" xml:space="preserve">
+    <value>Chiều dài: {0:0.00} m</value>
+  </data>
+  <data name="AreaMap_PerimeterFormat" xml:space="preserve">
+    <value>Chu vi: {0:0.00} m</value>
+  </data>
+  <data name="AreaMap_Active_Map_Title" xml:space="preserve">
+    <value>BẢN ĐỒ ĐANG HOẠT ĐỘNG:</value>
+  </data>
+  <data name="AreaMap_Available_Maps_Title" xml:space="preserve">
+    <value>BẢN ĐỒ CÓ SẴN</value>
+  </data>
+  <data name="AreaMap_LoadShapefile" xml:space="preserve">
+    <value>Tải tệp ranh giới</value>
+  </data>
+  <data name="AreaMap_ShowBoundaries" xml:space="preserve">
+    <value>Hiển thị ranh giới</value>
+  </data>
+  <data name="AreaMap_HideBoundaries" xml:space="preserve">
+    <value>Ẩn ranh giới</value>
+  </data>
+  <data name="MapDashboard_Assignments" xml:space="preserve">
+    <value>Nhiệm vụ</value>
+  </data>
+  <data name="MapDashboard_Interviews" xml:space="preserve">
+    <value>Phỏng vấn</value>
+  </data>
+  <data name="MapDashboard_Disclaimer" xml:space="preserve">
+    <value>chỉ hiển thị các mục có tọa độ đã biết</value>
+  </data>
+  <data name="MapDashboard_AllQuestionnaires" xml:space="preserve">
+    <value>Tất cả bảng câu hỏi</value>
+  </data>
+  <data name="MapDashboard_AllResponsibles" xml:space="preserve">
+    <value>Tất cả người chịu trách nhiệm</value>
+  </data>
+  <data name="MapDashboard_AllStatuses" xml:space="preserve">
+    <value>Tất cả trạng thái</value>
+  </data>
+  <data name="MapDashboard_QuestionnaireTitle" xml:space="preserve">
+    <value>Bảng câu hỏi</value>
+  </data>
+  <data name="MapDashboard_ResponsibleTitle" xml:space="preserve">
+    <value>Người chịu trách nhiệm</value>
+  </data>
+  <data name="MapDashboard_StatusTitle" xml:space="preserve">
+    <value>Trạng thái</value>
+  </data>
+  <data name="MapDashboard_TypeTitle" xml:space="preserve">
+    <value>Loại</value>
+  </data>
+  <data name="MapDashboard_FiltersTitle" xml:space="preserve">
+    <value>Bộ lọc</value>
+  </data>
+  <data name="AreaMap_Close" xml:space="preserve">
+    <value>Đóng</value>
+  </data>
+  <data name="AreaMap_Update_Maps" xml:space="preserve">
+    <value>Cập nhật bản đồ</value>
+  </data>
+  <data name="MenuItem_Title_AreaCancel" xml:space="preserve">
+    <value>Thoát Trình chỉnh sửa Bản đồ</value>
+  </data>
+  <data name="MenuItem_Title_AreaCancelEdit" xml:space="preserve">
+    <value>Xóa tất cả</value>
+  </data>
+  <data name="MenuItem_Title_StartGeofencing" xml:space="preserve">
+    <value>Bắt đầu định vị địa lý</value>
+  </data>
+  <data name="MenuItem_Title_StopGeofencing" xml:space="preserve">
+    <value>Dừng định vị địa lý</value>
+  </data>
+  <data name="MenuItem_Title_StartGeoTracking" xml:space="preserve">
+    <value>Bắt đầu ghi lại đường đi</value>
+  </data>
+  <data name="MenuItem_Title_StopGeoTracking" xml:space="preserve">
+    <value>Dừng ghi lại đường đi</value>
+  </data>
+  <data name="MenuItem_Title_ShowLocation" xml:space="preserve">
+    <value>Hiển thị vị trí</value>
+  </data>
+  <data name="MenuItem_Title_HideLocation" xml:space="preserve">
+    <value>Ẩn vị trí</value>
+  </data>
+  <data name="MenuItem_Title_ExitToDashboard" xml:space="preserve">
+    <value>Thoát về bảng điều khiển</value>
+  </data>
+  <data name="MenuItem_Title_ChangeMap" xml:space="preserve">
+    <value>Thay đổi bản đồ</value>
+  </data>
+  <data name="MenuItem_Title_ChangeShapefile" xml:space="preserve">
+    <value>Thay đổi ranh giới</value>
+  </data>
+  <data name="MenuItem_Title_CreateInterview" xml:space="preserve">
+    <value>Tạo cuộc phỏng vấn mới</value>
+  </data>
+  <data name="AssignmentMap_Title_CreateInterview" xml:space="preserve">
+    <value>Bắt đầu</value>
+  </data>
+  <data name="MenuItem_Title_ZoomMap" xml:space="preserve">
+    <value>Phóng to bản đồ</value>
+  </data>
+  <data name="MenuItem_Title_ZoomShapefile" xml:space="preserve">
+    <value>Phóng to ranh giới</value>
+  </data>
+  <data name="MenuItem_Title_ZoomCollectedData" xml:space="preserve">
+    <value>Phóng to dữ liệu đã thu thập</value>
+  </data>
+  <data name="MenuItem_Title_ZoomEverything" xml:space="preserve">
+    <value>Phóng to tất cả</value>
+  </data>
+  <data name="MenuItem_Title_ZoomGeoTracking" xml:space="preserve">
+    <value>Phóng to các bản ghi theo dõi</value>
+  </data>
+  <data name="MenuItem_Title_Dashboard" xml:space="preserve">
+    <value>Bảng điều khiển</value>
+  </data>
+  <data name="InterviewKey" xml:space="preserve">
+    <value>Khóa phỏng vấn: {0}</value>
+  </data>
+  <data name="AssignmentN" xml:space="preserve">
+    <value>Nhiệm vụ #{0}</value>
+  </data>
+  <data name="AudioQuestion_DurationFormat" xml:space="preserve">
+    <value>{0} của bản ghi âm</value>
+  </data>
+  <data name="Audio_Io_Exception_Message" xml:space="preserve">
+    <value>Không thể lưu tệp âm thanh. Vui lòng kiểm tra xem thiết bị có bộ nhớ trong khả dụng hay không.</value>
+  </data>
+  <data name="Audio_Unhandled_Exception_Message" xml:space="preserve">
+    <value>Đã xảy ra ngoại lệ không mong muốn khi bắt đầu ghi âm</value>
+  </data>
+  <data name="AnswerRecordedMsg" xml:space="preserve">
+    <value>Câu trả lời đã được chấp nhận. Mất {0} để xử lý</value>
+  </data>
+  <data name="AnswerRecordedMsgDismiss" xml:space="preserve">
+    <value>Bỏ qua</value>
+  </data>
+  <data name="Interview_SignatureClear" xml:space="preserve">
+    <value>Xóa</value>
+  </data>
+  <data name="Interview_SignatureSignHere" xml:space="preserve">
+    <value>Ký tại đây</value>
+  </data>
+  <data name="Interview_TakeSignature" xml:space="preserve">
+    <value>Lưu chữ ký</value>
+  </data>
+  <data name="Interview_Questions_Integer_ProtectedValue" xml:space="preserve">
+    <value>Câu trả lời mới cho câu hỏi được bảo vệ phải lớn hơn hoặc bằng {0}</value>
+  </data>
+  <data name="Interview_MaxAnswersCount" xml:space="preserve">
+    <value>{0} trong số {1} danh mục đã chọn</value>
+  </data>
+  <data name="Interview_MaxAnswersCountSelected" xml:space="preserve">
+    <value>Số lượng lựa chọn tối đa ({0}) trong câu hỏi này đã được thực hiện</value>
+  </data>
+  <data name="Interview_Overview" xml:space="preserve">
+    <value>Tổng quan</value>
+  </data>
+    <data name="Interview_Overview_Name" xml:space="preserve">
+    <value>Tổng quan</value>
+  </data>
+  <data name="Interview_Overview_NotAnswered" xml:space="preserve">
+    <value>Chưa trả lời</value>
+  </data>
+  <data name="Interview_Overview_AdditionalInfo" xml:space="preserve">
+    <value>Thông tin bổ sung</value>
+  </data>
+  <data name="Interview_Overview_Warnings" xml:space="preserve">
+    <value>Cảnh báo</value>
+  </data>
+  <data name="Interview_Overview_Comments" xml:space="preserve">
+    <value>Bình luận</value>
+  </data>
+  <data name="Supervisor_Complete_Approve_btn" xml:space="preserve">
+    <value>Phê duyệt</value>
+  </data>
+  <data name="Supervisor_Complete_Assign_btn" xml:space="preserve">
+    <value>Giao nhiệm vụ</value>
+  </data>
+  <data name="Supervisor_Complete_Reject_btn" xml:space="preserve">
+    <value>Từ chối</value>
+  </data>
+  <data name="OfflineSync_Cancel" xml:space="preserve">
+    <value>Hủy</value>
+  </data>
+  <data name="OfflineSync_Abort" xml:space="preserve">
+    <value>Ngừng</value>
+  </data>
+  <data name="OfflineSync_BackToDashboard" xml:space="preserve">
+    <value>Quay lại bảng điều khiển</value>
+  </data>
+  <data name="OfflineSync_Retry" xml:space="preserve">
+    <value>Thử lại</value>
+  </data>
+  <data name="OfflineSync_NetworkInfo" xml:space="preserve">
+    <value>Tốc độ: {0}, Thời gian còn lại: {1}</value>
+  </data>
+  <data name="OfflineSync_InstallPlayServices" xml:space="preserve">
+    <value>Phải cài đặt Google Play Services.</value>
+  </data>
+  <data name="OfflineSync_DeviceNotSupported" xml:space="preserve">
+    <value>Thiết bị này không được hỗ trợ.</value>
+  </data>
+  <data name="Synchronization_FoundDevice" xml:space="preserve">
+    <value>Đã tìm thấy thiết bị của người phỏng vấn ({0})</value>
+    <comment>{0} - đăng nhập của người phỏng vấn</comment>
+  </data>
+  <data name="OfflineSync_Supervisor_Title" xml:space="preserve">
+    <value>Đồng bộ hóa nhiệm vụ và phỏng vấn</value>
+  </data>
+  <data name="Validity_QuestionDoesntExist" xml:space="preserve">
+    <value>Danh sách hiện tại không còn tồn tại nữa. Vui lòng điều hướng đến phần hoặc danh sách có sẵn tiếp theo bằng cách sử dụng menu điều hướng.</value>
+  </data>
+  <data name="Interview_ShowPdf" xml:space="preserve">
+    <value>Hiển thị PDF</value>
+  </data>
+  <data name="Interview_PlayVideo" xml:space="preserve">
+    <value>Phát Video</value>
+  </data>
+  <data name="Interview_PlayAudio" xml:space="preserve">
+    <value>Phát Âm thanh</value>
+  </data>
+  <data name="Validity_InterviewSizeLimitReached" xml:space="preserve">
+    <value>Cuộc phỏng vấn này chứa nhiều dữ liệu hơn hệ thống cho phép. Nếu có thể, hãy xóa các hàng danh sách không cần thiết và/hoặc các câu hỏi chưa trả lời.</value>
+  </data>
+  <data name="Notifications_SummaryTitle" xml:space="preserve">
+    <value>{0} thông báo</value>
+  </data>
+  <data name="Interview_Question_NumberRosterRemoveConfirm" xml:space="preserve">
+    <value>Bạn có chắc chắn muốn xóa {0} hàng khỏi mỗi danh sách liên quan không?</value>
+  </data>
+  <data name="Interview_Question_HideResolvedComments" xml:space="preserve">
+    <value>Ẩn đã giải quyết</value>
+  </data>
+  <data name="Interview_Question_ShowResolvedComments" xml:space="preserve">
+    <value>Hiển thị đã giải quyết</value>
+  </data>
+  <data name="ErrorMessage_PermissionForUnkownSourcesRequired" xml:space="preserve">
+    <value>Không có quyền cấp cho ứng dụng để tự cập nhật. Vui lòng bật tùy chọn "Cho phép từ nguồn này" trong menu cài đặt 'Thông tin ứng dụng'.</value>
+  </data>
+  <data name="Comment" xml:space="preserve">
+    <value>Bình luận</value>
+  </data>
+  <data name="NoComment" xml:space="preserve">
+    <value>Không có bình luận nào được chỉ định</value>
+  </data>
+  <data name="Interview_Complete_SwitchTo_WebMode_Checkbox" xml:space="preserve">
+    <value>Chuyển cuộc phỏng vấn sang Chế độ Web</value>
+  </data>
+  <data name="Interview_Complete_SwitchTo_WebMode_Instruction" xml:space="preserve">
+    <value>Cuộc phỏng vấn này sẽ có thể truy cập trực tuyến sau khi đồng bộ hóa. Để truy cập cuộc phỏng vấn, người trả lời nên nhập liên kết dưới đây vào trình duyệt trên máy tính, máy tính bảng hoặc điện thoại thông minh có kết nối internet. Liên kết tương tự có thể được quét bằng mã QR hiển thị bên dưới.</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Đang tải...</value>
+  </data>
+  <data name="AreaMap_Save_With_Warning_Confirm" xml:space="preserve">
+    <value>Bạn sắp lưu kết quả không chính xác. Bạn có muốn tiếp tục không?</value>
+  </data>
+  <data name="AreaMap_Start_Measurement" xml:space="preserve">
+    <value>Bắt đầu</value>
+  </data>
+  <data name="AreaMap_InitLocation" xml:space="preserve">
+    <value>Đang khởi tạo...</value>
+  </data>
+  <data name="InterviewStatus_ApprovedByHeadquarters" xml:space="preserve">
+    <value>Được phê duyệt bởi Trụ sở chính</value>
+  </data>
+  <data name="InterviewStatus_ApprovedBySupervisor" xml:space="preserve">
+    <value>Được phê duyệt bởi Giám sát viên</value>
+  </data>
+  <data name="InterviewStatus_Completed" xml:space="preserve">
+    <value>Hoàn thành</value>
+  </data>
+  <data name="InterviewStatus_Created" xml:space="preserve">
+    <value>Đã tạo</value>
+  </data>
+  <data name="InterviewStatus_Deleted" xml:space="preserve">
+    <value>Đã xóa</value>
+  </data>
+  <data name="InterviewStatus_InterviewerAssigned" xml:space="preserve">
+    <value>Người phỏng vấn được chỉ định</value>
+  </data>
+  <data name="InterviewStatus_RejectedByHeadquarters" xml:space="preserve">
+    <value>Bị từ chối bởi Trụ sở chính</value>
+  </data>
+  <data name="InterviewStatus_RejectedBySupervisor" xml:space="preserve">
+    <value>Bị từ chối bởi Giám sát viên</value>
+  </data>
+  <data name="InterviewStatus_Restarted" xml:space="preserve">
+    <value>Đã khởi động lại</value>
+  </data>
+  <data name="InterviewStatus_Restored" xml:space="preserve">
+    <value>Đã khôi phục</value>
+  </data>
+  <data name="InterviewStatus_SupervisorAssigned" xml:space="preserve">
+    <value>Giám sát viên được chỉ định</value>
+  </data>
+  <data name="SelectMapTitle" xml:space="preserve">
+    <value>Chọn Bản đồ:</value>
+  </data>
+  <data name="Geofencing_Warning_Message" xml:space="preserve">
+    <value>Bạn đang ở ngoài khu vực được chỉ định</value>
+  </data>
+  <data name="SelectShapefileTitle" xml:space="preserve">
+    <value>Chọn Ranh giới:</value>
   </data>
 </root>

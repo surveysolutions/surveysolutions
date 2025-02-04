@@ -441,6 +441,12 @@ namespace WB.UI.Designer.Resources {
             }
         }
         
+        public static string SideBarCriticalityConditionNoMessage {
+            get {
+                return ResourceManager.GetString("SideBarCriticalityConditionNoMessage", resourceCulture);
+            }
+        }
+        
         public static string SideBarShowDescription {
             get {
                 return ResourceManager.GetString("SideBarShowDescription", resourceCulture);
@@ -450,12 +456,6 @@ namespace WB.UI.Designer.Resources {
         public static string SideBarAddCriticalityCondition {
             get {
                 return ResourceManager.GetString("SideBarAddCriticalityCondition", resourceCulture);
-            }
-        }
-        
-        public static string SideBarCriticalityConditionNoMessage {
-            get {
-                return ResourceManager.GetString("SideBarCriticalityConditionNoMessage", resourceCulture);
             }
         }
         

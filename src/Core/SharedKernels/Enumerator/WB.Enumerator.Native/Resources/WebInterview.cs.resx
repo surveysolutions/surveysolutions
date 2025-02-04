@@ -376,4 +376,10 @@ Děkujeme za spolupráci!</value>
   <data name="AssignmentLimitReached" xml:space="preserve">
     <value>Vyplňme všechny rozhovory v tomto šetření</value>
   </data>
+    <data name="Filters_CriticalQuestions" xml:space="preserve">
+  <value>Kritické otázky</value>
+</data>
+    <data name="Filters_CriticalRules" xml:space="preserve">
+  <value>Kritická pravidla</value>
+</data>
 </root>

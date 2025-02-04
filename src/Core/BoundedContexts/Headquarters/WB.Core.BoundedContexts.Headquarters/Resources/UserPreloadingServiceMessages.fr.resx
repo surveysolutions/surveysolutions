@@ -132,4 +132,7 @@
   <data name="TheDatasetMaxRecordNumberReachedFormat" xml:space="preserve">
     <value>La base de données contient {0} enregistrements, mais le nombre maximal autorisé d'enregistrements.</value>
   </data>
+    <data name="FileDoesNotContainAnyData" xml:space="preserve">
+  <value>Le fichier '{0}' ne contient aucune donnée utilisateur</value>
+</data>
 </root>

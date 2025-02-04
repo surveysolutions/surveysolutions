@@ -1581,4 +1581,79 @@ Zadali jste neplatný vstup. Každý řádek by měl mít formát: "Název... Pa
   <data name="ManageAccount" xml:space="preserve">
       <value>Spravovat účet</value>
   </data>
+  <data name="Default" xml:space="preserve">
+      <value>Výchozí</value>
+  </data>
+    <data name="HelpCriticalityConditionExpression" xml:space="preserve">
+        <value>Logický výraz, který vyhodnocuje rozhovor jako celek, aby určil, zda splňuje kritická pravidla (když se tento výraz vyhodnotí jako "Pravda"). Může odkazovat na jakékoli otázky nebo proměnné.</value>
+    </data>
+    <data name="HelpCriticalityConditionMessage" xml:space="preserve">
+        <value>Tato zpráva se zobrazí, když se kritická podmínka vyhodnotí jako "Nepravda" nebo dojde k výjimce během vyhodnocování výrazu. Zpráva může využívat hypertextové odkazy a substituci textu.</value>
+    </data>
+    <data name="HelpIsCritical" xml:space="preserve">
+        <value>Autoři dotazníku mohou uvést, že odpověď na otázku je kritická pro odeslání rozhovoru.</value>
+    </data>
+  <data name="Login" xml:space="preserve">
+      <value>Přihlásit se</value>
+  </data>
+  <data name="No" xml:space="preserve">
+      <value>Ne</value>
+  </data>
+    <data name="QuestionIsCritical" xml:space="preserve">
+    <value>Toto je kritická otázka</value>
+</data>
+  <data name="Refresh" xml:space="preserve">
+      <value>Obnovit</value>
+  </data>
+    <data name="RefreshPageConfirm" xml:space="preserve">
+      <value>Aktualizovali jsme tento web, prosím obnovte stránku, jinak můžete zaznamenat neočekávané chování</value>
+    </data>
+  <data name="Register" xml:space="preserve">
+      <value>Registrace</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+      <value>Reset</value>
+  </data>
+    <data name="ShowList" xml:space="preserve">
+        <value>Zobrazit seznam</value>
+    </data>
+    <data name="SideBarAddCriticalityCondition" xml:space="preserve">
+      <value>přidat nové kritické pravidlo</value>
+    </data>
+    <data name="SideBarHideDescription" xml:space="preserve">
+      <value>skrýt popis</value>
+    </data>
+    <data name="SideBarCriticalityConditionExpression" xml:space="preserve">
+        <value>Kritická podmínka</value>
+    </data>
+    <data name="SideBarCriticalityConditionsCounter" xml:space="preserve">
+        <value>{{count}} Kritické pravidlo:</value>
+    </data>
+    <data name="SideBarCriticalityConditionsCounter_plural" xml:space="preserve">
+        <value>{{count}} Kritická pravidla:</value>
+    </data>
+    <data name="SideBarCriticalityConditionDescription" xml:space="preserve">
+        <value>Popis</value>
+    </data>
+    <data name="SideBarCriticalityConditionsEmptyLine1" xml:space="preserve">
+      <value>Použijte tuto kartu k definování kritických pravidel.</value>
+    </data>
+    <data name="SideBarCriticalityConditionsEmptyLine2" xml:space="preserve">
+      <value>Každé kritické pravidlo se skládá z podmínky a zprávy. Kritické podmínky mohou odkazovat na jakékoli otázky nebo proměnné a musí být splněny (vyhodnoceny jako pravdivé). Zacházení s rozhovory s nesplněnými kritickými podmínkami je určeno během importu dotazníku na datový server.</value>
+    </data>
+    <data name="SideBarCriticalityConditionsEmptyLine3" xml:space="preserve">
+      <value>Zahrňte zprávu pro tazatele (respondenta), aby vysvětlila, co je třeba změnit v rozhovoru (zpráva se zobrazí, když kritická podmínka není splněna). Zahrnutí hypertextových odkazů na otázky ve zprávě je užitečné pro navigaci.</value>
+    </data>
+    <data name="SideBarCriticalityConditionsTitle" xml:space="preserve">
+      <value>Kritická pravidla</value>
+    </data>
+    <data name="SideBarCriticalityConditionMessage" xml:space="preserve">
+        <value>Zpráva</value>
+    </data>
+    <data name="SideBarCriticalityConditionNoMessage" xml:space="preserve">
+      <value>Kritické pravidlo bez zprávy</value>
+    </data>
+    <data name="SideBarShowDescription" xml:space="preserve">
+      <value>přidat popis</value>
+    </data>
 </root>

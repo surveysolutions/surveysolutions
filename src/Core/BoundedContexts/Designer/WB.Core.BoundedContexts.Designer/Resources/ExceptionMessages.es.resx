@@ -391,7 +391,7 @@
   <value>Las dimensiones de la imagen son demasiado grandes</value>
 </data>
     <data name="CriticalRuleAlreadyExist" xml:space="preserve">
-  <value>La regla cr��tica ya existe.</value>
+  <value>La regla crítica ya existe.</value>
 </data>
     <data name="CriticalRuleIsAbsent" xml:space="preserve">
   <value>La regla crítica está ausente.</value>
