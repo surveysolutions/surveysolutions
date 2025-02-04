@@ -6,6 +6,8 @@ import Vue from '@vitejs/plugin-vue';
 import Vuetify from 'vite-plugin-vuetify';
 import LocalizationPlugin from './questionnaire/tools/vite-plugin-localization';
 import { normalizePath } from 'vite';
+import { sync } from 'rimraf';
+import fs from 'fs';
 
 const baseDir = path.resolve(__dirname, './');
 const join = path.join.bind(path, baseDir);
