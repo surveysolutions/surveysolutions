@@ -117,4 +117,61 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+    <data name="Synchronization_UpdateApp" xml:space="preserve">
+    <value>Cập nhật</value>
+  </data>
+    <data name="SendToSupervisor_MovingToSupervisorDevice" xml:space="preserve">
+    <value>Chuyển tất cả các cuộc phỏng vấn đã hoàn thành sang thiết bị của giám sát viên</value>
+  </data>
+    <data name="SendToSupervisor_MovingToSupervisorFormat" xml:space="preserve">
+    <value>Chuyển tất cả các cuộc phỏng vấn đã hoàn thành sang '{0}'</value>
+  </data>
+    <data name="SendToSupervisor_CheckSupervisorDevice" xml:space="preserve">
+    <value>Kiểm tra rằng thiết bị của giám sát viên đã bật WiFi và Bluetooth và bạn đang ở gần</value>
+  </data>
+    <data name="SendToSupervisor_TransferInProgress" xml:space="preserve">
+    <value>Đang chuyển</value>
+  </data>
+    <data name="SendToSupervisor_TransferWasAborted" xml:space="preserve">
+    <value>Chuyển đã bị hủy</value>
+  </data>
+    <data name="SendToSupervisor_DeviceFound" xml:space="preserve">
+    <value>Đã tìm thấy thiết bị của giám sát viên. Đang yêu cầu kết nối</value>
+  </data>
+    <data name="SendToSupervisor_DeviceConnectionAccepting" xml:space="preserve">
+    <value>Đang chờ giám sát viên chấp nhận kết nối</value>
+  </data>
+    <data name="SendToSupervisor_DeviceConnectionAccepted" xml:space="preserve">
+    <value>Đã kết nối với thiết bị của giám sát viên</value>
+  </data>
+    <data name="SendToSupervisor_SupervisorNotFound" xml:space="preserve">
+    <value>Chuyển chưa được bắt đầu. Không thể tìm thấy thiết bị của giám sát viên</value>
+  </data>
+    <data name="SendToSupervisor_SupervisorTerminateTransfering" xml:space="preserve">
+    <value>Chuyển đã bị hủy trên thiết bị thứ hai.</value>
+  </data>
+    <data name="SendToSupervisor_SomeInterviewsOnSupervisor" xml:space="preserve">
+    <value>Một số cuộc phỏng vấn hiện đang trên thiết bị khác</value>
+  </data>
+    <data name="SendToSupervisor_SyncCompleted" xml:space="preserve">
+    <value>Chuyển đã hoàn thành. Tất cả các cuộc phỏng vấn đã hoàn thành hiện đang trên thiết bị khác</value>
+  </data>
+    <data name="SendToSupervisor_SyncCompletedWithErrorsFormat" xml:space="preserve">
+    <value>Chuyển đã hoàn thành. {0} cuộc phỏng vấn không thể đồng bộ hóa</value>
+  </data>
+    <data name="SendToSupervisor_LookingForSupervisor" xml:space="preserve">
+    <value>Đang tìm kiếm thiết bị của giám sát viên</value>
+  </data>
+    <data name="SendToSupervisor_Note" xml:space="preserve">
+    <value>Lưu ý: Hành động này sẽ mất nhiều thời gian hơn bình thường, không tắt thiết bị này</value>
+  </data>
+    <data name="SendToSupervisor_ConnectionFailed" xml:space="preserve">
+    <value>Đảm bảo rằng cả hai thiết bị đều ở gần nhau; WiFi và Bluetooth nên được bật trên cả hai thiết bị; Ứng dụng giám sát nên được mở trên thiết bị của giám sát viên</value>
+  </data>
+    <data name="SendToSupervisor_Retry" xml:space="preserve">
+    <value>Thử lại</value>
+  </data>
+    <data name="SendToSupervisor_BluetoothError" xml:space="preserve">
+    <value>Ứng dụng Interviewer không thể xác định trạng thái của Bluetooth (ví dụ: bật/tắt, kết nối/không kết nối). Trước tiên, khởi động lại cả hai thiết bị Interviewer và Supervisor. Sau đó thử đồng bộ hóa lại.</value>
+  </data>
 </root>

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="Synchronization_UploadBrokenInterviewPackages" xml:space="preserve">
+    <value>Ngarkimi i paketave të intervistave të prishura</value>
+</data>
+    <data name="Synchronization_UploadExceptions" xml:space="preserve">
+    <value>Ngarkimi i mesazheve të gabimeve të intervistuesit</value>
+</data>
+    <data name="OfflineSync_ReceivingInterviewsFromDevices" xml:space="preserve">
+    <value>Marrja e intervistave nga pajisja e intervistuesit</value>
+</data>
+    <data name="OfflineSync_ReceivingInterviews" xml:space="preserve">
+    <value>Marrja e intervistave</value>
+</data>
+    <data name="OfflineSync_NoDevicesDetectedFormat" xml:space="preserve">
+    <value>Nuk u gjetën pajisje dërguese.
+ID-ja e pajisjes tuaj është '{0}'</value>
+</data>
+    <data name="OfflineSync_WaitingInterviewers" xml:space="preserve">
+    <value>Duke pritur veprim nga pajisjet e intervistuesit</value>
+</data>
+    <data name="Synchronization_UploadStatistics" xml:space="preserve">
+    <value>Ngarkimi i statistikave të sinkronizimit të intervistuesve</value>
+</data>
+    <data name="Synchronization_UploadStatisticsStats" xml:space="preserve">
+    <value>Ngarkuar {0} nga {1}</value>
+</data>
+    <data name="Synchronization_Synchronize_HQ" xml:space="preserve">
+    <value>Sinkronizimi me selinë</value>
+</data>
+    <data name="Synchronization_Download_Interviewer_Apps" xml:space="preserve">
+    <value>Shkarkimi i përditësimeve për aplikacionin e intervistuesit</value>
+</data>
+    <data name="Synchronization_Download_Interviewer_Apps_Format" xml:space="preserve">
+    <value>Shkarkimi i përditësimeve. Shkarkuar {0} nga {1}</value>
+</data>
+    <data name="Synchronization_Synchronize_Offline" xml:space="preserve">
+    <value>Sinkronizimi me intervistuesit</value>
+</data>
+    <data name="Confirm_Approve_Synchronized_Interview_Message" xml:space="preserve">
+    <value>Intervistuesi përgjegjës aktual nuk do të njoftohet për miratimin e intervistës deri në sinkronizimin e ardhshëm. Nëse intervistuesi ka filluar të punojë në intervistë tashmë, të gjitha të dhënat që intervistuesi ka futur para sinkronizimit të ardhshëm do të FSHIHEN!</value>
+</data>
+</root>

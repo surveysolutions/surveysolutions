@@ -408,4 +408,16 @@
   <data name="ZipFile" xml:space="preserve">
     <value>Archivo zip</value>
   </data>
+    <data name="SurveyQuestionnaireTranslation" xml:space="preserve">
+    <value>Traducción</value>
+</data>
+    <data name="DataExport_InQueue" xml:space="preserve">
+  <value>En cola:</value>
+</data>
+    <data name="DataExport_ProducedIn" xml:space="preserve">
+  <value>Producido en:</value>
+</data>
+    <data name="SurveyQuestionnaireVersion" xml:space="preserve">
+  <value>Versión del cuestionario</value>
+</data>
 </root>

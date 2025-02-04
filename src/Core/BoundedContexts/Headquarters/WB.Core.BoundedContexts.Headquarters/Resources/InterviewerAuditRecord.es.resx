@@ -216,4 +216,13 @@
   <data name="SynchronizationStarted" xml:space="preserve">
     <value>Sincronización iniciada ({0})</value>
   </data>
+    <data name="RejectInterviewToInterviewer" xml:space="preserve">
+  <value>Entrevista {0} rechazada al entrevistador {1}</value>
+</data>
+    <data name="RestartInterview" xml:space="preserve">
+  <value>Entrevista {0} reiniciada</value>
+</data>
+    <data name="SwitchInterviewMode" xml:space="preserve">
+  <value>Entrevista {0} cambiada al modo {1}</value>
+</data>
 </root>

@@ -899,4 +899,63 @@ Você pode criar ou editar seus questionários no Survey Solutions Designer</val
 <data name="InterviewStatus_SupervisorAssigned" xml:space="preserve">
   <value>Supervisor atribuído</value>
 </data>
+<data name="SelectMapTitle" xml:space="preserve">
+  <value>Selecionar Mapa:</value>
+</data>
+<data name="Geofencing_Warning_Message" xml:space="preserve">
+  <value>Você está fora da área designada</value>
+</data>
+<data name="SelectShapefileTitle" xml:space="preserve">
+  <value>Selecionar Limites:</value>
+</data>
+<data name="AssignmentMap_Title_CreateInterview" xml:space="preserve">
+  <value>Iniciar</value>
+</data>
+    <data name="MenuItem_Title_ChangeMap" xml:space="preserve">
+      <value>Alterar mapa</value>
+    </data>
+    <data name="MenuItem_Title_ChangeShapefile" xml:space="preserve">
+      <value>Alterar limites</value>
+    </data>
+    <data name="MenuItem_Title_CreateInterview" xml:space="preserve">
+      <value>Criar nova entrevista</value>
+    </data>
+    
+    <data name="MenuItem_Title_StartGeofencing" xml:space="preserve">
+      <value>Iniciar geofencing</value>
+    </data>
+    <data name="MenuItem_Title_StopGeofencing" xml:space="preserve">
+      <value>Parar geofencing</value>
+    </data>
+    <data name="MenuItem_Title_StartGeoTracking" xml:space="preserve">
+      <value>Iniciar gravação de trilha</value>
+    </data>
+    <data name="MenuItem_Title_StopGeoTracking" xml:space="preserve">
+      <value>Parar gravação de trilha</value>
+    </data>
+    <data name="MenuItem_Title_ShowLocation" xml:space="preserve">
+      <value>Mostrar localização</value>
+    </data>
+    <data name="MenuItem_Title_HideLocation" xml:space="preserve">
+      <value>Ocultar localização</value>
+    </data>
+      
+    <data name="MenuItem_Title_ExitToDashboard" xml:space="preserve">
+      <value>Sair para o painel</value>
+    </data>
+    <data name="MenuItem_Title_ZoomMap" xml:space="preserve">
+      <value>Ampliar para o mapa</value>
+    </data>
+    <data name="MenuItem_Title_ZoomShapefile" xml:space="preserve">
+      <value>Ampliar para os limites</value>
+    </data>
+    <data name="MenuItem_Title_ZoomCollectedData" xml:space="preserve">
+      <value>Ampliar para os dados coletados</value>
+    </data>
+    <data name="MenuItem_Title_ZoomEverything" xml:space="preserve">
+      <value>Ampliar tudo</value>
+    </data>
+    <data name="MenuItem_Title_ZoomGeoTracking" xml:space="preserve">
+      <value>Ampliar para os registros de rastreamento</value>
+    </data>
 </root>

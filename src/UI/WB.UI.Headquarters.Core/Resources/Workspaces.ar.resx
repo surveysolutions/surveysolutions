@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <!-- 
+      Microsoft ResX Schema 
+      
+      Version 2.0
+      
+      The primary goals of this format is to allow a simple XML format 
+      that is mostly human readable. The generation and parsing of the 
+      various data types are done through the TypeConverter classes 
+      associated with the data types.
+      
+      Example:
+      
+      ... ado.net/XML headers & schema ...
+      <resheader name="resmimetype">text/microsoft-resx</resheader>
+      <resheader name="version">2.0</resheader>
+      <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+      <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+      <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+      <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+      <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+          <value>[base64 mime encoded serialized .NET Framework object]</value>
+      </data>
+      <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+          <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+          <comment>This is a comment</comment>
+      </data>
+                  
+      There are any number of "resheader" rows that contain simple 
+      name/value pairs.
+      
+      Each data row contains a name, and value. The row also contains a 
+      type or mimetype. Type corresponds to a .NET class that support 
+      text/value conversion through the TypeConverter architecture. 
+      Classes that don't support this are serialized and stored with the 
+      mimetype set.
+      
+      The mimetype is used for serialized objects, and tells the 
+      ResXResourceReader how to depersist the object. This is currently not 
+      extensible. For a given mimetype the value must be set accordingly:
+      
+      Note - application/x-microsoft.net.object.binary.base64 is the format 
+      that the ResXResourceWriter will generate, however the reader can 
+      read any of the formats listed below.
+      
+      mimetype: application/x-microsoft.net.object.binary.base64
+      value   : The object must be serialized with 
+              : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+              : and then encoded with base64 encoding.
+      
+      mimetype: application/x-microsoft.net.object.soap.base64
+      value   : The object must be serialized with 
+              : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+              : and then encoded with base64 encoding.
+  
+      mimetype: application/x-microsoft.net.object.bytearray.base64
+      value   : The object must be serialized into a byte array 
+              : using a System.ComponentModel.TypeConverter
+              : and then encoded with base64 encoding.
+      -->
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="Name" xml:space="preserve">
+    <value>الاسم</value>
+  </data>
+    <data name="DisplayName" xml:space="preserve">
+    <value>اسم العرض</value>
+  </data>
+    <data name="NameRequired" xml:space="preserve">
+    <value>الاسم مطلوب</value>
+  </data>
+    <data name="DisplayNameRequired" xml:space="preserve">
+    <value>اسم العرض مطلوب</value>
+  </data>
+    <data name="InvalidName" xml:space="preserve">
+    <value>يسمح فقط بالأرقام والحروف الصغيرة</value>
+  </data>
+    <data name="NameShouldBeUnique" xml:space="preserve">
+    <value>يجب أن يكون الاسم فريدًا</value>
+  </data>
+    <data name="EditWorkspace" xml:space="preserve">
+    <value>تحرير مساحة العمل "{{name}}"</value>
+  </data>
+    <data name="WorkspacesSubtitle" xml:space="preserve">
+    <value>كل مساحة عمل تحتوي على استبيانات ومقابلات وتعيينات معزولة.</value>
+  </data>
+    <data name="AddNew" xml:space="preserve">
+    <value>إنشاء جديد</value>
+  </data>
+    <data name="NameShouldNotBeOneOfForbidden" xml:space="preserve">
+    <value>اسم مساحة العمل المقدم غير مسموح به</value>
+  </data>
+    <data name="CurrentWorkspace" xml:space="preserve">
+    <value>مساحة العمل الحالية</value>
+  </data>
+    <data name="CreateWorkspace" xml:space="preserve">
+    <value>إنشاء مساحة عمل</value>
+  </data>
+    <data name="CanNotBeChanged" xml:space="preserve">
+    <value>لا يمكن تغييره بعد الإنشاء</value>
+  </data>
+    <data name="DisplayNameHelpText" xml:space="preserve">
+    <value>سيتم استخدامه لعرض مساحة العمل في القوائم. حاول اختيار أسماء أقصر</value>
+  </data>
+    <data name="WorkspaceSettings" xml:space="preserve">
+    <value>الإعدادات</value>
+  </data>
+    <data name="Edit" xml:space="preserve">
+    <value>تحرير</value>
+  </data>
+    <data name="AssignedWorkspaces" xml:space="preserve">
+    <value>اختر مساحات العمل التي يمكن للمستخدم الوصول إليها</value>
+  </data>
+    <data name="UserWorkspacesTab" xml:space="preserve">
+    <value>مساحات العمل</value>
+  </data>
+    <data name="WorkspacesUpdated" xml:space="preserve">
+    <value>تم تحديث قائمة مساحات العمل</value>
+  </data>
+    <data name="DisableWorkspacePopupTitle" xml:space="preserve">
+    <value>تأكيد تعطيل "{{name}}"</value>
+  </data>
+    <data name="Disable" xml:space="preserve">
+    <value>تعطيل</value>
+  </data>
+    <data name="DisableExplanation" xml:space="preserve">
+    <value>سيؤدي تعطيل مساحة العمل إلى إيقاف الوصول إليها لجميع المستخدمين. سيوقف جميع جمع البيانات التي قد تكون جارية.</value>
+  </data>
+    <data name="Enable" xml:space="preserve">
+    <value>تمكين</value>
+  </data>
+    <data name="DeleteWorkspacePopupTitle" xml:space="preserve">
+    <value>حذف مساحة العمل "{{name}}"</value>
+  </data>
+    <data name="DeleteExplanation" xml:space="preserve">
+    <value>هل أنت متأكد أنك تريد حذف مساحة العمل &lt;strong&gt;{{name}}&lt;/strong&gt;؟
+سيتم إزالة جميع حسابات المستخدمين المتصلة بهذه المساحة. لن تتمكن تطبيقات Survey Solutions Interviewer و Supervisor المثبتة على أجهزة التابلت الخاصة بهؤلاء المستخدمين من التواصل مع هذه المساحة وسيتم فقدان البيانات التي تم جمعها في هذه المساحة.
+
+سيتم حذف البيانات التالية المرتبطة بهذه المساحة:</value>
+  </data>
+    <data name="CantDeleteExplanation" xml:space="preserve">
+    <value>لا يمكن حذف مساحة العمل. هناك على الأقل استبيان واحد مرتبط بهذه المساحة. يمكن حذف مساحات العمل التي لا تحتوي على استبيانات فقط.</value>
+  </data>
+    <data name="InterviewersCount" xml:space="preserve">
+    <value>المقابلون: {{count}}</value>
+  </data>
+    <data name="SupervisorsCount" xml:space="preserve">
+    <value>المشرفون: {{count}}</value>
+  </data>
+    <data name="MapsCount" xml:space="preserve">
+    <value>الخرائط المحملة: {{count}}</value>
+  </data>
+    <data name="AgreeToDelete" xml:space="preserve">
+    <value>أفهم أن هذه العملية لا يمكن عكسها</value>
+  </data>
+    <data name="WorkspaceDisabledReason" xml:space="preserve">
+        <value>تم تعطيل مساحة العمل ولا يمكن الوصول إليها. إذا كنت تعتقد أن هذا خطأ، فيرجى الاتصال بمسؤول الخادم لديك.</value>
+  </data>
+    <data name="WorkspaceAccessDisabledReason" xml:space="preserve">
+    <value>تم تعطيل حسابك في مساحة العمل من قبل مسؤول النظام، ونتيجة لذلك لا يمكنك استخدام وظائف هذا الموقع. إذا كنت تعتقد أن هذا خطأ، يرجى الاتصال بمسؤول الخادم الخاص بك.</value>
+  </data>
+    <data name="WorkspaceCantBeRemoved" xml:space="preserve">
+    <value>لا يمكن إزالة مساحة العمل لأن المستخدم لديه عمل معين. أعد تعيين جميع التعيينات (بما في ذلك المؤرشفة)، المقابلات غير المكتملة وللمشرف انقل جميع أعضاء الفريق إلى فريق آخر. المقابلات: {0}، التعيينات: {1}، أعضاء الفريق: {2}</value>
+        <comment>{0} عدد المقابلات، {1} عدد التعيينات، {2} عدد المقابلين</comment>
+  </data>
+    <data name="Open" xml:space="preserve">
+    <value>فتح</value>
+  </data>
+    <data name="CreatedAt" xml:space="preserve">
+    <value>تم الإنشاء في</value>
+  </data>
+    <data name="Tooltip_Table_CreatedAt" xml:space="preserve">
+    <value>عندما تم إنشاء مساحة العمل لأول مرة. انقر على أيقونة الفرز للفرز حسب الوقت.</value>
+  </data>
+</root>

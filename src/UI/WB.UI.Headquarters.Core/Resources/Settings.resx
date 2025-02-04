@@ -139,8 +139,7 @@
     <value>Clearing export cache is running</value>
   </data>
   <data name="RemoveExportCacheFail" xml:space="preserve">
-    <value>Export cache cannot be cleared at the moment. Please try again later. 
-
+    <value>Export cache cannot be cleared at the moment. Please try again later.
 Possible reasons:
 * An export file is being generated.
 * Generated export file is being downloaded.

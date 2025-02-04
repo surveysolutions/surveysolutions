@@ -199,7 +199,7 @@
     <value>Vuelva a cargar el archivo .tab</value>
   </data>
   <data name="Role" xml:space="preserve">
-    <value>Role</value>
+      <value>Rol</value>
   </data>
   <data name="TimeDetermination" xml:space="preserve">
     <value>determinación del tiempo</value>
@@ -228,4 +228,13 @@
   <data name="VerificationFailed" xml:space="preserve">
     <value>Fallo en la verificación</value>
   </data>
+    <data name="Workspace" xml:space="preserve">
+  <value>Espacio de trabajo</value>
+</data>
+    <data name="SelectWorkspace" xml:space="preserve">
+  <value>Seleccionar espacio de trabajo</value>
+</data>
+    <data name="SelectWorkspaceDescription" xml:space="preserve">
+  <value>Si no se asigna un espacio de trabajo en el archivo por lotes, use este espacio de trabajo como predeterminado</value>
+</data>
 </root>

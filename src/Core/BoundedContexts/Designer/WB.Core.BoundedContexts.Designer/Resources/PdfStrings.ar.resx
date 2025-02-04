@@ -432,4 +432,16 @@
   <data name="VariableExcludedFromExport" xml:space="preserve">
     <value>يتم استبعاد هذا المتغير من البيانات المصدرة</value>
   </data>
+    <data name="Appendix_CriticalRules" xml:space="preserve">
+      <value>الملحق {0} {1} القواعد الحرجة</value>
+    </data>
+    <data name="CriticalityCondition" xml:space="preserve">
+      <value>الشرط الحرج:</value>
+    </data>
+    <data name="CriticalityMessage" xml:space="preserve">
+      <value>رسالة:</value>
+    </data>
+    <data name="Description" xml:space="preserve">
+      <value>وصف:</value>
+    </data>
 </root>

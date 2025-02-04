@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="NoData_ContactSupport" xml:space="preserve">
+    <value>Os dados da entrevista {0} foram corrompidos. Entre em contato com o suporte para recuperar essa entrevista</value>
+  </data>
+  <data name="NoData_ContactSupportWithMoreDetails" xml:space="preserve">
+    <value>Por favor, entre em contato com o suporte para fornecer mais detalhes</value>
+  </data>
+  <data name="NoData_InterveiwWasNotUploadedYet" xml:space="preserve">
+    <value>A entrevista {0} ainda não foi sincronizada</value>
+  </data>
+  <data name="NoData_InterviewDeleted" xml:space="preserve">
+    <value>A entrevista {0} foi deletada pelo HQ ou Administrador, e portanto não pode ser recuperada</value>
+  </data>
+  <data name="NoData_InterviewerChangedDevice" xml:space="preserve">
+    <value>O entrevistador trocou de tablet. Os dados da entrevista {0} podem ter sido perdidos porque os dados são deletados quando os entrevistadores mudam de um tablet para outro. Se for o caso, essa entrevista não pode ser recuperada</value>
+  </data>
+  <data name="NoData_InterviewWasNotReceived" xml:space="preserve">
+    <value>A entrevista {0} ainda não foi recebida pelo entrevistador {1}.</value>
+  </data>
+  <data name="NoData_InterviewWasReassigned" xml:space="preserve">
+    <value>A entrevista {0} foi reatribuída a um entrevistador diferente. A entrevista está atualmente no tablet desse último entrevistador.</value>
+  </data>
+  <data name="NoData_NoIssuesInterviewOnServer" xml:space="preserve">
+    <value>A entrevista {0} não tem problemas registrados no servidor.&lt;br /&gt;Por favor, obtenha mais informações da pessoa atualmente responsável por essa entrevista.&lt;br /&gt;Se o problema persistir, entre em contato com o suporte para fornecer mais detalhes</value>
+  </data>
+  <data name="NoData_NotFound" xml:space="preserve">
+    <value>A entrevista {0} não pode ser encontrada</value>
+  </data>
+  <data name="NoData_QuestionnaireDeleted" xml:space="preserve">
+    <value>O administrador do servidor deletou o questionário da entrevista {0}. Como consequência, todas as entrevistas associadas a esse questionário foram deletadas e não podem ser restauradas</value>
+  </data>
+  <data name="MissingCensusInterviews_NoBrokenPackages_Message" xml:space="preserve">
+    <value>Se a entrevista que você está tentando localizar não estiver na lista, por favor, instrua o entrevistador a completar a entrevista e sincronizar novamente.</value>
+  </data>
+  <data name="MissingCensusInterviews_SomeBrokenPackages_Message" xml:space="preserve">
+    <value>Se a entrevista que você está tentando localizar não estiver na lista, por favor, instrua o entrevistador a completar a entrevista e sincronizar novamente. Em seguida, procure a entrevista novamente. Se a entrevista não for localizada na segunda busca, entre em contato com a equipe de suporte.</value>
+  </data>
+</root>

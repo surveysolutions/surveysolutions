@@ -327,4 +327,7 @@
   <data name="You" xml:space="preserve">
     <value>ty</value>
   </data>
+  <data name="CloneDeletedWarning" xml:space="preserve">
+      <value>Vytváříte kopii smazaného dotazníku. Některé části mohou být ztraceny.</value>
+  </data>
 </root>

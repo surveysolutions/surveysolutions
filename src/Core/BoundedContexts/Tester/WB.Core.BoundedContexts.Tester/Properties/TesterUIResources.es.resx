@@ -222,4 +222,22 @@
   <data name="Prefs_ShowAnswerTimeSummary" xml:space="preserve">
     <value>Activación el tiempo de activación, validación y propagación del roster. El tiempo de recepción de datos GPS y tiempo para tomar fotografías no están incluidos.</value>
   </data>
+    <data name="AnonymousQuestionnaires_QuestionnaireUrl" xml:space="preserve">
+  <value>URL del cuestionario anónimo</value>
+</data>
+    <data name="AnonymousQuestionnaires_Open" xml:space="preserve">
+  <value>Abrir</value>
+</data>
+    <data name="AnonymousQuestionnaires_Error_NotFound" xml:space="preserve">
+  <value>No se puede abrir el cuestionario. El cuestionario no se puede encontrar.</value>
+</data>
+    <data name="AnonymousQuestionnaires_Error_Confirm" xml:space="preserve">
+  <value>No se puede abrir el cuestionario. ¿Eliminarlo de la lista?</value>
+</data>
+    <data name="MenuItem_Title_AnonymousQuestionnaires" xml:space="preserve">
+  <value>Cuestionarios anónimos</value>
+</data>
+    <data name="MenuItem_Title_Login" xml:space="preserve">
+  <value>Iniciar sesión</value>
+</data>
 </root>

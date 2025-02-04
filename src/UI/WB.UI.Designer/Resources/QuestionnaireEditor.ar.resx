@@ -1,148 +1,74 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
-  <!-- 
-    Microsoft ResX Schema 
-    
-    Version 2.0
-    
-    The primary goals of this format is to allow a simple XML format 
-    that is mostly human readable. The generation and parsing of the 
-    various data types are done through the TypeConverter classes 
-    associated with the data types.
-    
-    Example:
-    
-    ... ado.net/XML headers & schema ...
-    <resheader name="resmimetype">text/microsoft-resx</resheader>
-    <resheader name="version">2.0</resheader>
-    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
-    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
-    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
-    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
-    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
-        <value>[base64 mime encoded serialized .NET Framework object]</value>
-    </data>
-    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
-        <comment>This is a comment</comment>
-    </data>
-                
-    There are any number of "resheader" rows that contain simple 
-    name/value pairs.
-    
-    Each data row contains a name, and value. The row also contains a 
-    type or mimetype. Type corresponds to a .NET class that support 
-    text/value conversion through the TypeConverter architecture. 
-    Classes that don't support this are serialized and stored with the 
-    mimetype set.
-    
-    The mimetype is used for serialized objects, and tells the 
-    ResXResourceReader how to depersist the object. This is currently not 
-    extensible. For a given mimetype the value must be set accordingly:
-    
-    Note - application/x-microsoft.net.object.binary.base64 is the format 
-    that the ResXResourceWriter will generate, however the reader can 
-    read any of the formats listed below.
-    
-    mimetype: application/x-microsoft.net.object.binary.base64
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
-            : and then encoded with base64 encoding.
-    
-    mimetype: application/x-microsoft.net.object.soap.base64
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
-            : and then encoded with base64 encoding.
-
-    mimetype: application/x-microsoft.net.object.bytearray.base64
-    value   : The object must be serialized into a byte array 
-            : using a System.ComponentModel.TypeConverter
-            : and then encoded with base64 encoding.
-    -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
-    <xsd:element name="root" msdata:IsDataSet="true">
-      <xsd:complexType>
-        <xsd:choice maxOccurs="unbounded">
-          <xsd:element name="metadata">
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
             <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
-              </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
             </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="assembly">
-            <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="data">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="resheader">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
-            </xsd:complexType>
-          </xsd:element>
-        </xsd:choice>
-      </xsd:complexType>
-    </xsd:element>
-  </xsd:schema>
-  <resheader name="resmimetype">
-    <value>text/microsoft-resx</value>
-  </resheader>
-  <resheader name="version">
-    <value>2.0</value>
-  </resheader>
-  <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </resheader>
-  <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </resheader>
-  <data name="AddNewSection" xml:space="preserve">
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+   <data name="AddNewSection" xml:space="preserve">
     <value>إضافة قسم جديد</value>
   </data>
-  <data name="AddQuestion" xml:space="preserve">
-    <value>إضافة سؤال</value>
-  </data>
-  <data name="AddRoster" xml:space="preserve">
-    <value>إضافة لائحة</value>
-  </data>
-  <data name="AddStaticText" xml:space="preserve">
-    <value>إضافة نص ثابت</value>
-  </data>
-  <data name="AddSubsection" xml:space="preserve">
-    <value>إضافة قسم فرعي</value>
-  </data>
-  <data name="AddValidationRule" xml:space="preserve">
-    <value>إضافة قاعدة تحقق جديدة</value>
-  </data>
-  <data name="AddVariable" xml:space="preserve">
-    <value>إضافة متغير</value>
-  </data>
-  <data name="AttachmentPreview" xml:space="preserve">
-    <value>معاينة المرفق</value>
-  </data>
   <data name="Backup" xml:space="preserve">
-    <value>النسخ الاحتياطي</value>
+    <value>نسخ احتياطي</value>
+  </data>
+  <data name="SaveAs" xml:space="preserve">
+    <value>حفظ باسم</value>
+  </data>
+  <data name="CopyTo" xml:space="preserve">
+    <value>نسخ إلى</value>
   </data>
   <data name="Cancel" xml:space="preserve">
     <value>إلغاء</value>
@@ -153,74 +79,17 @@
   <data name="ClickHere" xml:space="preserve">
     <value>انقر هنا</value>
   </data>
-  <data name="Close" xml:space="preserve">
-    <value>اغلق</value>
-  </data>
-  <data name="CompilationErrorsCounter" xml:space="preserve">
-    <value>{{count}} وجد خطأ</value>
-  </data>
-  <data name="CompilationErrorsCounter_plural" xml:space="preserve">
-    <value>{{count}} وجد أخطاء</value>
-  </data>
-  <data name="CompilationLabel" xml:space="preserve">
-    <value>تجميع</value>
-  </data>
-  <data name="CompilationWarningsCounter" xml:space="preserve">
-    <value>{{count}} وجد تحذير</value>
-  </data>
-  <data name="CompilationWarningsCounter_plural" xml:space="preserve">
-    <value>{{count}} وجد تحذيرات</value>
-  </data>
   <data name="Compile" xml:space="preserve">
-    <value>جمع</value>
-  </data>
-  <data name="ConditionMightBeBroken" xml:space="preserve">
-    <value>قد يتم فك العناصر المترابطة أو المتتالية</value>
+    <value>تجميع</value>
   </data>
   <data name="Copy" xml:space="preserve">
     <value>نسخ</value>
   </data>
-  <data name="DefaultNewRoster" xml:space="preserve">
-    <value>لائحة جديدة</value>
-  </data>
-  <data name="DefaultNewSection" xml:space="preserve">
-    <value>قسم جديد</value>
-  </data>
-  <data name="DefaultNewStaticText" xml:space="preserve">
-    <value>نص ثابت جديد</value>
-  </data>
-  <data name="DefaultNewSubsection" xml:space="preserve">
-    <value>قسم فرعي جديد</value>
-  </data>
   <data name="Delete" xml:space="preserve">
     <value>حذف</value>
   </data>
-  <data name="DeleteConfirmQuestion" xml:space="preserve">
-    <value>هل تريد بالتأكيد حذف المجلد {{trimmedTitle}}؟</value>
-  </data>
   <data name="Download" xml:space="preserve">
     <value>تنزيل</value>
-  </data>
-  <data name="EmptySectionLine1" xml:space="preserve">
-    <value>هذا القسم فارغ</value>
-  </data>
-  <data name="EmptySectionLine2" xml:space="preserve">
-    <value>يمكنك البدء باستخدام أزرار {{-addQuestionBtn}} و {{-addSubsectionBtn}}</value>
-  </data>
-  <data name="EmptySectionLine5" xml:space="preserve">
-    <value>يمكن العثور عليها في  {{-settingsBtn}} لوحة (الزاوية اليسرى العليا)</value>
-  </data>
-  <data name="EnablingCondition" xml:space="preserve">
-    <value>شرط التمكين</value>
-  </data>
-  <data name="EnteredMoreThanAllowed" xml:space="preserve">
-    <value>لقد أدخلت أكثر من الحد الأقصى المسموح به {{max}}</value>
-  </data>
-  <data name="EntryWasNotFound" xml:space="preserve">
-    <value>لم يتم العثور على إدخال في الاستبيان، يرجى اختيار آخر.</value>
-  </data>
-  <data name="ErrorMessage" xml:space="preserve">
-    <value>رسالة خطأ</value>
   </data>
   <data name="ErrorsCounter" xml:space="preserve">
     <value>{{count}} خطأ</value>
@@ -228,32 +97,465 @@
   <data name="ErrorsCounter_plural" xml:space="preserve">
     <value>{{count}} أخطاء</value>
   </data>
-  <data name="Export" xml:space="preserve">
-    <value>تصدير</value>
+  <data name="HellowMessageBtn" xml:space="preserve">
+    <value>مرحبًا، {{currentUserName}}</value>
   </data>
-  <data name="FindReplaceBackToSearch" xml:space="preserve">
-    <value>الرجوع الى البحث</value>
+  <data name="Help" xml:space="preserve">
+    <value>مساعدة</value>
   </data>
-  <data name="FindReplaceDone" xml:space="preserve">
-    <value>أنجز</value>
+  <data name="History" xml:space="preserve">
+    <value>التاريخ</value>
   </data>
-  <data name="FindReplaceFindAll" xml:space="preserve">
-    <value>جد كل</value>
+  <data name="LogOut" xml:space="preserve">
+    <value>تسجيل الخروج</value>
+  </data>
+  <data name="Ok" xml:space="preserve">
+    <value>موافق</value>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>فتح</value>
+  </data>
+  <data name="PasteAfter" xml:space="preserve">
+    <value>لصق بعد</value>
+  </data>
+  <data name="QuestionnaireSummary" xml:space="preserve">
+    <value>({{questionsCount}}س، {{groupsCount}}ق، {{rostersCount}}ف)</value>
+    <comment>س، ق، ف هي الحروف الأولى من سؤال، قسم وفريق. احتفظ بالقيم الموجودة في {{}} دون تغيير</comment>
+  </data>
+  <data name="ReadOnly" xml:space="preserve">
+    <value>للقراءة فقط</value>
+  </data>
+  <data name="ReadOnlyQuestion" xml:space="preserve">
+    <value>هذا سؤال للقراءة فقط. لا يمكنك تحريره.</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>حفظ</value>
+  </data>
+  <data name="SavedAtTimestamp" xml:space="preserve">
+    <value>تم الحفظ في {{dateTime، H:mm}}</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>الإعدادات</value>
+  </data>
+  <data name="SideBarAddMacro" xml:space="preserve">
+    <value>إضافة ماكرو جديد</value>
+  </data>
+  <data name="SideBarAttachmentName" xml:space="preserve">
+    <value>اسم المرفق</value>
+  </data>
+  <data name="SideBarAttachmentsCounter" xml:space="preserve">
+    <value>{{count}} مرفق ملف ({{bytes}} إجمالي)</value>
+  </data>
+  <data name="SideBarAttachmentsCounter_plural" xml:space="preserve">
+    <value>{{count}} مرفقات ملفات ({{bytes}} إجمالي)</value>
+  </data>
+  <data name="SideBarAttachmentsEmptyLine1" xml:space="preserve">
+    <value>استخدم هذا التبويب لتحميل الملفات المتعددة الوسائط التي قد يتم الرجوع إليها في الاستبيان.</value>
+  </data>
+  <data name="SideBarAttachmentsEmptyLine2" xml:space="preserve">
+    <value>لتجنب التزامن البطيء نوصي بأن لا يتجاوز الحجم الإجمالي لجميع الملفات المرفقة 2 ميجابايت. لأنواع الملفات المدعومة، التنسيقات، والأبعاد</value>
+  </data>
+  <data name="SideBarAttachmentsEmptyLine3" xml:space="preserve">
+    <value>للإشارة إلى مرفق في الاستبيان أضف عنصر نص ثابت وحدد المرفق {{-name}} في خاصية المرفق</value>
+  </data>
+  <data name="SideBarAttachmentsEstimate" xml:space="preserve">
+    <value>الوقت المقدر للتحميل: {{timeString}} عند {{downloadSpeed}} كيلوبايت/ث (EDGE)</value>
+  </data>
+  <data name="SideBarAttachmentsUpload" xml:space="preserve">
+    <value>تحميل جديد</value>
+  </data>
+  <data name="SideBarLookupEmptyLine1" xml:space="preserve">
+    <value>استخدم هذا التبويب لتعريف جداول البحث.</value>
+  </data>
+  <data name="SideBarLookupEmptyLine2" xml:space="preserve">
+    <value>يوفر جدول البحث معلومات مرجعية يمكن الاستعلام عنها بواسطة مفتاح واستخدامها في شروط التمكين وتعبيرات التحقق.</value>
+  </data>
+  <data name="SideBarLookupEmptyLine3" xml:space="preserve">
+    <value>يتكون جدول البحث من اسم وملف البحث، والذي قد يحتوي على أعمدة متعددة مفصولة بعلامات تبويب من القيم الرقمية.</value>
+  </data>
+  <data name="SideBarLookupTableAdd" xml:space="preserve">
+    <value>إضافة جدول بحث جديد</value>
+  </data>
+  <data name="SideBarLookupTableDropFile" xml:space="preserve">
+    <value>إسقاط الملف هنا</value>
+  </data>
+  <data name="SideBarEditCategories" xml:space="preserve">
+    <value>تحرير الفئات</value>
+  </data>
+  <data name="SideBarLookupTableFileName" xml:space="preserve">
+    <value>اسم الملف</value>
+  </data>
+  <data name="SideBarLookupTableName" xml:space="preserve">
+    <value>اسم الجدول</value>
+  </data>
+  <data name="SideBarLookupTablesCounter" xml:space="preserve">
+    <value>{{count}} جدول بحث:</value>
+  </data>
+  <data name="SideBarLookupTablesCounter_plural" xml:space="preserve">
+    <value>{{count}} جداول بحث:</value>
+  </data>
+  <data name="SideBarLookupTableSelectFile" xml:space="preserve">
+    <value>اختر الملف</value>
+  </data>
+  <data name="SideBarLookupTableUpdateFile" xml:space="preserve">
+    <value>تحديث الملف</value>
+  </data>
+  <data name="SideBarMacroContent" xml:space="preserve">
+    <value>المحتوى</value>
+  </data>
+  <data name="SideBarMacroCounter" xml:space="preserve">
+    <value>{{count}} ماكرو:</value>
+  </data>
+  <data name="SideBarMacroCounter_plural" xml:space="preserve">
+    <value>{{count}} ماكرو:</value>
+  </data>
+  <data name="SideBarMacroDescription" xml:space="preserve">
+    <value>الوصف</value>
+  </data>
+  <data name="SideBarMacroEmptyLine1" xml:space="preserve">
+    <value>استخدم هذا التبويب لتعريف استبدالات الماكرو.</value>
+  </data>
+  <data name="SideBarMacroEmptyLine2" xml:space="preserve">
+    <value>الماكرو هو تعبير مسمى يمكن استخدامه في شروط التمكين وتعبيرات التحقق. يتكون الماكرو من اسم ومحتوى.</value>
+  </data>
+  <data name="SideBarMacroEmptyLine3" xml:space="preserve">
+    <value>يمكن استخدامه في تعبير، للإشارة إلى الماكرو.</value>
+  </data>
+  <data name="SideBarMacroHideDescription" xml:space="preserve">
+    <value>إخفاء الوصف</value>
+  </data>
+  <data name="SideBarMacroName" xml:space="preserve">
+    <value>اسم الماكرو</value>
+  </data>
+  <data name="SideBarMacroShowDescription" xml:space="preserve">
+    <value>إضافة وصف</value>
+  </data>
+  <data name="SideBarCriticalityConditionExpression" xml:space="preserve">
+    <value>شرط حرج</value>
+  </data>
+  <data name="SideBarCriticalityConditionsCounter" xml:space="preserve">
+    <value>{{count}} قاعدة حرجة:</value>
+  </data>
+  <data name="SideBarCriticalityConditionsCounter_plural" xml:space="preserve">
+    <value>{{count}} قواعد حرجة:</value>
+  </data>
+  <data name="SideBarCriticalityConditionDescription" xml:space="preserve">
+    <value>الوصف</value>
+  </data>
+  <data name="SideBarCriticalityConditionsEmptyLine1" xml:space="preserve">
+    <value>استخدم هذا التبويب لتعريف القواعد الحرجة.</value>
+  </data>
+  <data name="SideBarCriticalityConditionsEmptyLine2" xml:space="preserve">
+    <value>تتكون كل قاعدة حرجة من شرط ورسالة. قد تشير الشروط الحرجة إلى أي أسئلة أو متغيرات ويجب أن تكون مستوفاة (تقييمها إلى صحيح). يتم تحديد معالجة المقابلات التي لا تستوفي الشروط الحرجة أثناء استيراد الاستبيان إلى خادم البيانات.</value>
+  </data>
+  <data name="SideBarCriticalityConditionsEmptyLine3" xml:space="preserve">
+    <value>قم بتضمين رسالة للمحاور (المستجيب) لشرح ما يحتاج إلى تغييره في المقابلة (تظهر الرسالة عندما لا يتم استيفاء الشرط الحرج). تضمين الروابط التشعبية للأسئلة في الرسالة مفيد للتنقل.</value>
+  </data>
+  <data name="SideBarHideDescription" xml:space="preserve">
+    <value>إخفاء الوصف</value>
+  </data>
+  <data name="SideBarCriticalityConditionMessage" xml:space="preserve">
+    <value>رسالة</value>
+  </data>
+  <data name="SideBarCriticalityConditionNoMessage" xml:space="preserve">
+    <value>قاعدة حرجة بدون رسالة</value>
+  </data>
+  <data name="SideBarShowDescription" xml:space="preserve">
+    <value>إضافة وصف</value>
+  </data>
+  <data name="SideBarAddCriticalityCondition" xml:space="preserve">
+    <value>إضافة قاعدة حرجة جديدة</value>
+  </data>
+  <data name="SideBarScenarioCounter" xml:space="preserve">
+    <value>{{count}} سيناريو:</value>
+  </data>
+  <data name="SideBarScenarioCounter_plural" xml:space="preserve">
+    <value>{{count}} سيناريوهات:</value>
+  </data>
+  <data name="SideBarScenarioEmptyLine1" xml:space="preserve">
+    <value>استخدم هذا التبويب لعرض السيناريوهات الخاصة بك.</value>
+  </data>
+  <data name="SideBarScenarioEmptyLine2" xml:space="preserve">
+    <value>السيناريو هو لقطة لحالة المختبر، يمكنك حفظها على المختبر بالنقر على زر "حفظ السيناريو".</value>
+  </data>
+  <data name="SideBarScenarioName" xml:space="preserve">
+    <value>عنوان السيناريو</value>
+  </data>
+  <data name="SideBarSectionsCounter" xml:space="preserve">
+    <value>{{count}} قسم:</value>
+  </data>
+  <data name="SideBarSectionsCounter_plural" xml:space="preserve">
+    <value>{{count}} أقسام:</value>
+  </data>
+  <data name="SideBarTranslationDownloadXlsx" xml:space="preserve">
+    <value>تنزيل xlsx</value>
+  </data>
+  <data name="SideBarDownload" xml:space="preserve">
+    <value>تنزيل:</value>
+  </data>
+  <data name="SideBarXlsx" xml:space="preserve">
+    <value>Xlsx</value>
+  </data>
+  <data name="SideBarTab" xml:space="preserve">
+    <value>علامة تبويب</value>
+  </data>
+  <data name="SideBarTranslationGetTemplate" xml:space="preserve">
+    <value>الحصول على قالب لـ </value>
+  </data>
+  <data name="SideBarTranslationGetTemplateLinkTextXlsx" xml:space="preserve">
+    <value>Excel (xlsx)</value>
+  </data>
+  <data name="SideBarTranslationGetTemplateLinkTextCsv" xml:space="preserve">
+    <value>علامة تبويب (txt)</value>
+  </data>
+  <data name="SideBarTranslationName" xml:space="preserve">
+    <value>اسم الترجمة</value>
+  </data>
+  <data name="SideBarCategoriesName" xml:space="preserve">
+    <value>اسم الفئات</value>
+  </data>
+  <data name="SideBarTranslationsCounter" xml:space="preserve">
+    <value>{{count}} ترجمة</value>
+  </data>
+  <data name="SideBarCategoriesCounter" xml:space="preserve">
+    <value>{{count}} فئات</value>
+  </data>
+  <data name="SideBarTranslationsCounter_plural" xml:space="preserve">
+    <value>{{count}} ترجمات</value>
+  </data>
+  <data name="SideBarTranslationsEmptyLine1" xml:space="preserve">
+    <value>استخدم هذا التبويب لإدارة ترجمات الاستبيان.</value>
+  </data>
+  <data name="SideBarCategoriesEmptyLine1" xml:space="preserve">
+    <value>استخدم هذا التبويب لإدارة الفئات القابلة لإعادة الاستخدام.</value>
+  </data>
+  <data name="SideBarTranslationsEmptyLine2" xml:space="preserve">
+    <value>يمكنك تنزيل وتحديث الترجمات إلى لغات مختلفة.</value>
+  </data>
+  <data name="SideBarCategoriesEmptyLine2" xml:space="preserve">
+    <value>يمكنك تنزيل الفئات وتحديثها.</value>
+  </data>
+  <data name="SideBarTranslationsEmptyLine3" xml:space="preserve">
+    <value>سيتم تطبيق الترجمة على النصوص الأصلية وتجاوز القيم. يمكنك ترك بعض النصوص فارغة لاستخدام الترجمات الأصلية الافتراضية.</value>
+  </data>
+  <data name="SideBarCategoriesEmptyLine3" xml:space="preserve">
+    <value>سيتم إضافتها إلى قائمة الفئات القابلة لإعادة الاستخدام لأي نوع من الأسئلة الفئوية</value>
+  </data>
+  <data name="ToggleDropdown" xml:space="preserve">
+    <value>تبديل القائمة المنسدلة</value>
+  </data>
+  <data name="Update" xml:space="preserve">
+    <value>تحديث</value>
+  </data>
+  <data name="VariableName" xml:space="preserve">
+    <value>اسم</value>
+  </data>
+  <data name="WarningsCounter" xml:space="preserve">
+    <value>{{count}} تحذير</value>
+  </data>
+  <data name="WarningsCounter_plural" xml:space="preserve">
+    <value>{{count}} تحذيرات</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>إغلاق</value>
+  </data>
+  <data name="CompilationErrorsCounter" xml:space="preserve">
+    <value>{{count}} خطأ تم العثور عليه</value>
+  </data>
+  <data name="CompilationErrorsCounter_plural" xml:space="preserve">
+    <value>{{count}} أخطاء تم العثور عليها</value>
+  </data>
+  <data name="CompilationLabel" xml:space="preserve">
+    <value>التجميع:</value>
+  </data>
+  <data name="CompilationWarningsCounter" xml:space="preserve">
+    <value>{{count}} تحذير تم العثور عليه</value>
+  </data>
+  <data name="CompilationWarningsCounter_plural" xml:space="preserve">
+    <value>{{count}} تحذيرات تم العثور عليها</value>
+  </data>
+  <data name="MoveTo" xml:space="preserve">
+    <value>نقل إلى</value>
+  </data>
+  <data name="Recompile" xml:space="preserve">
+    <value>إعادة التجميع</value>
+  </data>
+  <data name="SideBarAttachmentDetailsFormat" xml:space="preserve">
+    <value>التنسيق: {{- type}}</value>
+  </data>
+  <data name="SideBarAttachmentDetailsResolution" xml:space="preserve">
+    <value>{{width}} × {{height}}بكسل</value>
+  </data>
+  <data name="SideBarAttachmentDetailsSize" xml:space="preserve">
+    <value>الحجم: {{size}}</value>
+  </data>
+  <data name="SideBarAttachmentsTitle" xml:space="preserve">
+    <value>المرفقات</value>
+  </data>
+  <data name="SideBarCommentsTitle" xml:space="preserve">
+    <value>التعليقات</value>
+  </data>
+  <data name="SideBarCriticalityConditionsTitle" xml:space="preserve">
+    <value>القواعد الحرجة</value>
+  </data>
+  <data name="SideBarMetadataHeader" xml:space="preserve">
+    <value>وصف الاستبيان ومعلومات المسح</value>
+  </data>
+  <data name="SideBarMetadataBasicInfo" xml:space="preserve">
+    <value>معلومات أساسية</value>
+  </data>
+  <data name="SideBarMetadataTitle" xml:space="preserve">
+    <value>عنوان الاستبيان</value>
+  </data>
+  <data name="SideBarMetadataSubtitle" xml:space="preserve">
+    <value>العنوان الفرعي:</value>
+  </data>
+  <data name="SideBarMetadataVersionIdentificator" xml:space="preserve">
+    <value>معرف الإصدار:</value>
+  </data>
+  <data name="SideBarMetadataVersionNotes" xml:space="preserve">
+    <value>ملاحظات الإصدار:</value>
+  </data>
+  <data name="SideBarMetadataSurveyDataInfo" xml:space="preserve">
+    <value>معلومات بيانات المسح</value>
+  </data>
+  <data name="SideBarMetadataStudyTypes" xml:space="preserve">
+    <value>أنواع الدراسة:</value>
+  </data>
+  <data name="SideBarMetadataKindOfData" xml:space="preserve">
+    <value>نوع البيانات:</value>
+  </data>
+  <data name="SideBarMetadataModeOfDataCollection" xml:space="preserve">
+    <value>وضع جمع البيانات:</value>
+  </data>
+  <data name="SideBarMetadataSurveyInfo" xml:space="preserve">
+    <value>معلومات المسح</value>
+  </data>
+  <data name="SideBarMetadataCountry" xml:space="preserve">
+    <value>البلد:</value>
+  </data>
+  <data name="SideBarMetadataYear" xml:space="preserve">
+    <value>السنة:</value>
+  </data>
+  <data name="SideBarMetadataLanguages" xml:space="preserve">
+    <value>اللغات:</value>
+  </data>
+  <data name="SideBarMetadataUnitOfAlalysis" xml:space="preserve">
+    <value>وحدة التحليل:</value>
+  </data>
+  <data name="SideBarMetadataCoverage" xml:space="preserve">
+    <value>التغطية:</value>
+  </data>
+  <data name="SideBarMetadataUniverse" xml:space="preserve">
+    <value>الكون:</value>
+  </data>
+  <data name="SideBarMetadataPrimaryInvestigator" xml:space="preserve">
+    <value>المحقق الرئيسي:</value>
+  </data>
+  <data name="SideBarMetadataConsultants" xml:space="preserve">
+    <value>المستشارون:</value>
+  </data>
+  <data name="SideBarMetadataAdditionalInfo" xml:space="preserve">
+    <value>معلومات إضافية</value>
+  </data>
+  <data name="SideBarMetadataNotes" xml:space="preserve">
+    <value>ملاحظات:</value>
+  </data>
+  <data name="SideBarMetadataKeywords" xml:space="preserve">
+    <value>الكلمات المفتاحية:</value>
+  </data>
+  <data name="SideBarMetadataFunding" xml:space="preserve">
+    <value>التمويل:</value>
+  </data>
+  <data name="SideBarMetadataQuestionnaireAccess" xml:space="preserve">
+    <value>الوصول إلى الاستبيان</value>
+  </data>
+  <data name="SideBarMetadataAgreeToMakeThisQuestionnairePublic" xml:space="preserve">
+    <value>الموافقة على جعل هذا الاستبيان عامًا</value>
+  </data>
+  <data name="SideBarAttachmentUploaded" xml:space="preserve">
+    <value>تم التحميل: {{-lastUpdate, MMMM DD[,] YYYY [at] k:mm}}</value>
+  </data>
+  <data name="SideBarLookupTitle" xml:space="preserve">
+    <value>جداول البحث</value>
+  </data>
+  <data name="SideBarMacroTitle" xml:space="preserve">
+    <value>الماكرو</value>
+  </data>
+  <data name="SideBarScenarioTitle" xml:space="preserve">
+    <value>السيناريوهات</value>
+  </data>
+  <data name="SideBarSectionsTitle" xml:space="preserve">
+    <value>الأقسام</value>
+  </data>
+  <data name="SideBarTranslationsTitle" xml:space="preserve">
+    <value>الترجمات</value>
+  </data>
+  <data name="SideBarCategoriesTitle" xml:space="preserve">
+    <value>الفئات</value>
+  </data>
+  <data name="SideBarTranslationsUploadNew" xml:space="preserve">
+    <value>تحميل ترجمة جديدة</value>
+  </data>
+  <data name="SideBarCategoriesUploadNew" xml:space="preserve">
+    <value>تحميل فئات جديدة</value>
+  </data>
+  <data name="AttachmentPreview" xml:space="preserve">
+    <value>معاينة المرفق</value>
   </data>
   <data name="FindReplaceFindWhat" xml:space="preserve">
-    <value>العثور على ما يلي:</value>
+    <value>ابحث عن:</value>
+  </data>
+  <data name="FindReplaceMatchCase" xml:space="preserve">
+    <value>مطابقة الحالة</value>
+  </data>
+  <data name="FindReplaceMatchWord" xml:space="preserve">
+    <value>مطابقة الكلمة بأكملها</value>
+  </data>
+  <data name="FindReplaceReplaceWith" xml:space="preserve">
+    <value>استبدال بـ:</value>
+  </data>
+  <data name="FindReplaceTitle" xml:space="preserve">
+    <value>البحث والاستبدال</value>
+  </data>
+  <data name="FindReplaceUseRegex" xml:space="preserve">
+    <value>استخدام التعبير العادي</value>
+  </data>
+  <data name="FindReplaceСonfirm" xml:space="preserve">
+    <value>يرجى تأكيد الإجراء.</value>
+  </data>
+  <data name="ModalConfirm" xml:space="preserve">
+    <value>تأكيد</value>
+  </data>
+  <data name="ModalInfo" xml:space="preserve">
+    <value>معلومات</value>
+  </data>
+  <data name="MoveToAnotherSubSection" xml:space="preserve">
+    <value>نقل إلى قسم آخر:</value>
+  </data>
+  <data name="FindReplaceReplaceAllConfirm" xml:space="preserve">
+    <value>استبدال الكل</value>
+  </data>
+  <data name="FindReplaceBackToSearch" xml:space="preserve">
+    <value>العودة إلى البحث</value>
+  </data>
+  <data name="FindReplaceDone" xml:space="preserve">
+    <value>تم</value>
+  </data>
+  <data name="FindReplaceFindAll" xml:space="preserve">
+    <value>البحث عن الكل</value>
   </data>
   <data name="FindReplaceInAll" xml:space="preserve">
     <value>الكل</value>
   </data>
-  <data name="FindReplaceMatchCase" xml:space="preserve">
-    <value>حالة التطابق</value>
+  <data name="FindReplaceInAllFound" xml:space="preserve">
+    <value>في {{count}} كيان تم العثور عليه؟</value>
+  </data>
+  <data name="FindReplaceInAllFound_plural" xml:space="preserve">
+    <value>في {{count}} كيانات تم العثور عليها؟</value>
   </data>
   <data name="FindReplaceMatchingLines" xml:space="preserve">
-    <value>الخطوط المطابقة: {{count}}</value>
-  </data>
-  <data name="FindReplaceMatchWord" xml:space="preserve">
-    <value>تطابق الكلمة بالكامل</value>
+    <value>الأسطر المطابقة: {{count}}</value>
   </data>
   <data name="FindReplaceNext" xml:space="preserve">
     <value>التالي</value>
@@ -264,212 +566,47 @@
   <data name="FindReplaceReplaceAll" xml:space="preserve">
     <value>استبدال الكل ({{count}})</value>
   </data>
-  <data name="FindReplaceReplaceAllConfirm" xml:space="preserve">
-    <value>استبدال الكل </value>
-  </data>
   <data name="FindReplaceReplaceAllConfirmWith" xml:space="preserve">
     <value>مع</value>
   </data>
-  <data name="FindReplaceReplaceWith" xml:space="preserve">
-    <value>استبدال ب:</value>
-  </data>
-  <data name="FindReplaceTitle" xml:space="preserve">
-    <value>بحث واستبدال</value>
-  </data>
-  <data name="FindReplaceUseRegex" xml:space="preserve">
-    <value>استخدم تعابير منتظمة</value>
-  </data>
   <data name="FindReplaceWereReplaced" xml:space="preserve">
-    <value>تم استبدالها </value>
+    <value>تم استبدالها بـ</value>
   </data>
-  <data name="FindReplaceСonfirm" xml:space="preserve">
-    <value>يرجى تأكيد الإجراء.</value>
+  <data name="EnablingCondition" xml:space="preserve">
+    <value>شرط التمكين</value>
   </data>
   <data name="GroupTitle" xml:space="preserve">
-    <value>عنوان</value>
-  </data>
-  <data name="HellowMessageBtn" xml:space="preserve">
-    <value>مرحبا, {{currentUserName}}</value>
-  </data>
-  <data name="Help" xml:space="preserve">
-    <value>مساعدة</value>
-  </data>
-  <data name="HelpConditionExpression" xml:space="preserve">
-    <value>تعبير منطقي يفعل (يعطل) العنصر الحالي اعتمادا على إجابات الأسئلة الأخرى.</value>
-  </data>
-  <data name="HelpExpression" xml:space="preserve">
-    <value>التعبير المنطقي الذي يتم حسابه اعتمادا على الإجابات على الأسئلة الأخرى.</value>
-  </data>
-  <data name="HelpFixedTitles" xml:space="preserve">
-    <value>يحدد عدد العناصر حجم اللائحة. كل عنصر من عناصر اللائحة يتوافق مع عنوان صف اللائحة. وينبغي وضع كل عنصر من عناصر اللائحة على سطر منفصل.</value>
-  </data>
-  <data name="HelpHideIfDisabled" xml:space="preserve">
-    <value>بشكل افتراضي، يتم تعطيل العنصر المعطل. سيؤدي تحديد هذا الخيار إلى إخفاء سؤال أو قسم معطل على الجهاز اللوحي.</value>
-  </data>
-  <data name="HelpHideInstructions" xml:space="preserve">
-    <value>بشكل افتراضي، يتم عرض نص تعليمات على الجهاز اللوحي. سيؤدي تحديد هذا الخيار إلى عرض السطر الأول من الإرشادات فقط. الضغط على هذا الخط سوف يظهر النص الكامل.</value>
-  </data>
-  <data name="HelpInstruction" xml:space="preserve">
-    <value>نص التعليمات التي سوف تعلق على السؤال.</value>
-  </data>
-  <data name="HelpIsTimestamp" xml:space="preserve">
-    <value>هذا الخيار يسمح للمستخدم ختم الوقت الحالي على الكمبيوتر اللوحي</value>
-  </data>
-  <data name="HelpSourceQuestion" xml:space="preserve">
-    <value>سؤال المصدر (الجواب يولد عدد الصفوف)</value>
-  </data>
-  <data name="HelpTitles" xml:space="preserve">
-    <value>عناوين الصفوف</value>
-  </data>
-  <data name="HelpUseFormatting" xml:space="preserve">
-    <value>عند تحديده، سيتم تنسيق الحقل الرقمي على الجهاز اللوحي على النحو التالي: d، دد، ddd.dd، "d" يمثل الأرقام (0-9)، "،" (فاصلة) هو فاصل ألف، و "." (نقطة) هو رمز النقطة العشرية. قد يختلف فاصل ألف ورمز النقطة العشرية للأقراص مع الثقافات المختلفة.</value>
-  </data>
-  <data name="HelpValidationExpression" xml:space="preserve">
-    <value>التتعبير المنطقي الذي  يتحقق من صحة  إجابة السؤال الحالي. قد يشمل قيم الأسئلة الأخرى.</value>
-  </data>
-  <data name="HelpValidationMessage" xml:space="preserve">
-    <value>تظهر رسالة الخطأ عند تقييم حالة التحقق من الصحة إلى "خطأ" أو حدث خطأ أثناء تقييم التعبير.</value>
-  </data>
-  <data name="HelpVariableDescription" xml:space="preserve">
-    <value>النص الذي سيتم عرضه بجوار متغير لأغراض الاختبار</value>
-  </data>
-  <data name="HelpVariableLabel" xml:space="preserve">
-    <value>نص يصل إلى {{maxLength}} من الأحرف التي سيتم إرفاقها بالمتغير المصدر.</value>
-  </data>
-  <data name="HelpVariableName" xml:space="preserve">
-    <value>يمكن أن تكون أسماء المتغيرات ومعرفات القوائم من {{minLength}} إلى أحرف {{maxLength}} طويلة ويجب أن تحتوي على الأحرف التالية فقط: a-z أو A-Z أو _ أو 0-9. لا يمكن أن يكون الحرف الأول 0-9 أو _ وآخر لا يمكن أن يكون _.</value>
+    <value>العنوان</value>
   </data>
   <data name="HideIfDisabled" xml:space="preserve">
     <value>إخفاء إذا تم تعطيله</value>
   </data>
-  <data name="History" xml:space="preserve">
-    <value>سجل</value>
+  <data name="FlatRoster" xml:space="preserve">
+    <value>وضع مسطح</value>
   </data>
-  <data name="HotkeysCloseLookup" xml:space="preserve">
-    <value>اغلق لوحة جداول البحث</value>
+  <data name="AddValidationRule" xml:space="preserve">
+    <value>إضافة شرط تحقق جديد</value>
   </data>
-  <data name="HotkeysCloseTranslations" xml:space="preserve">
-    <value> اغلق لوحة الترجمة</value>
+  <data name="EnteredMoreThanAllowed" xml:space="preserve">
+    <value>لقد أدخلت أكثر من الحد الأقصى المسموح به {{max}}</value>
   </data>
-  <data name="HotkeysFocusTitle" xml:space="preserve">
-    <value>حقل عنوان التركيز في المحرر</value>
-  </data>
-  <data name="HotkeysHideAttachments" xml:space="preserve">
-    <value>اغلق لوحة المرفقات</value>
-  </data>
-  <data name="HotkeysHideSections" xml:space="preserve">
-    <value>اغلق الأقسام</value>
-  </data>
-  <data name="HotkeysOpenItem" xml:space="preserve">
-    <value>افتح العنصر في المحرر</value>
-  </data>
-  <data name="HotkeysOpenSection" xml:space="preserve">
-    <value>افتح القسم</value>
-  </data>
-  <data name="HotkeysPrint" xml:space="preserve">
-    <value>طباعة</value>
-  </data>
-  <data name="HotkeysSearch" xml:space="preserve">
-    <value>ابحث عن الأقسام الفرعية والأسئلة في القسم</value>
-  </data>
-  <data name="HotkeysShortcuts" xml:space="preserve">
-    <value>اختصارات لوحة المفاتيح</value>
-  </data>
-  <data name="HotkeysShowHideHelp" xml:space="preserve">
-    <value>اظهار\اخفاء قائمة المساعدة هذه</value>
-  </data>
-  <data name="IncorrectRosterTitle" xml:space="preserve">
-    <value>سؤال عنوان اللائحة غير صحيح</value>
-  </data>
-  <data name="LogOut" xml:space="preserve">
-    <value>تسجيل الخروج</value>
-  </data>
-  <data name="MarkAsDefault" xml:space="preserve">
-    <value>وضع علامة كلغة افتراضية</value>
-  </data>
-  <data name="ModalConfirm" xml:space="preserve">
-    <value>الاثبات</value>
-  </data>
-  <data name="ModalInfo" xml:space="preserve">
-    <value>معلومات</value>
-  </data>
-  <data name="MoveTo" xml:space="preserve">
-    <value>الانتقال إلى</value>
-  </data>
-  <data name="MultipleDependencies" xml:space="preserve">
-    <value>يعتمد واحد أو أكثر من الأسئلة / الأقسام الفرعية على</value>
-  </data>
-  <data name="NoPermissions" xml:space="preserve">
-    <value>ليس لديك صلاحيات لتغيير هذا الاستبيان</value>
-  </data>
-  <data name="NotAnImage" xml:space="preserve">
-    <value>الملف المختار ليس صورة</value>
-  </data>
-  <data name="NothingFound" xml:space="preserve">
-    <value>لم يتم العثور على شيء</value>
-  </data>
-  <data name="Ok" xml:space="preserve">
-    <value>حسنا</value>
-  </data>
-  <data name="Open" xml:space="preserve">
-    <value>افتح</value>
-  </data>
-  <data name="OptionsCloseWindow" xml:space="preserve">
-    <value> اغلق النافذة؟</value>
+  <data name="ErrorMessage" xml:space="preserve">
+    <value>رسالة خطأ أو تحذير</value>
   </data>
   <data name="OptionsListError" xml:space="preserve">
-    <value>لقد أدخلت مدخلا غير صالح. كل سطر يجب أن يتبع شكل: "عنوان ... القيمة". يجب أن تكون "القيمة" عددا صحيحا. يجب أن يكون العنوان سلسلة أبجدية رقمية. لا يسمح بالخطوط الفارغة.</value>
-  </data>
-  <data name="OptionsUploadApply" xml:space="preserve">
-    <value>تطبيق </value>
-  </data>
-  <data name="OptionsUploadLimit" xml:space="preserve">
-    <value>لا فئات. اختر تبويب الملف المفصول. يمكن أن يحتوي الملف على {limit} فئات كحد أقصى.</value>
-  </data>
-  <data name="OptionsUploadParent" xml:space="preserve">
-    <value>قيمة الأصل</value>
-  </data>
-  <data name="OptionsUploadTitle" xml:space="preserve">
-    <value>عنوان</value>
-  </data>
-  <data name="OptionsUploadValue" xml:space="preserve">
-    <value>القيمة</value>
-  </data>
-  <data name="Paste" xml:space="preserve">
-    <value>لصق</value>
-  </data>
-  <data name="PasteAfter" xml:space="preserve">
-    <value>لصق بعد</value>
-  </data>
-  <data name="PleaseWait" xml:space="preserve">
-    <value>يرجى الانتظار...</value>
+    <value>لقد أدخلت إدخالًا غير صالح. يجب أن يتبع كل سطر التنسيق: 'العنوان...القيمة[...اسم المرفق]'. يجب أن تكون 'القيمة' رقمًا صحيحًا. يجب أن يكون 'العنوان' سلسلة أبجدية رقمية. 'اسم المرفق' اختياري. لا يُسمح بوجود أسطر فارغة.</value>
   </data>
   <data name="QuestionAddInstruction" xml:space="preserve">
-    <value>إضافة تعليمات الباحث</value>
-  </data>
-  <data name="QuestionAddOption" xml:space="preserve">
-    <value>إضافة فئة</value>
-  </data>
-  <data name="QuestionCascading" xml:space="preserve">
-    <value>مربع التحرير و السرد المتتالي</value>
+    <value>إضافة تعليمات للمحاور</value>
   </data>
   <data name="QuestionClickReload" xml:space="preserve">
-    <value>انقر على اعادة التحميل</value>
-  </data>
-  <data name="QuestionComboBox" xml:space="preserve">
-    <value>مربع التحرير و السرد </value>
-  </data>
-  <data name="QuestionCurrentTime" xml:space="preserve">
-    <value>الوقت الحالي</value>
-  </data>
-  <data name="QuestionDecimalPlaces" xml:space="preserve">
-    <value>عدد المنازل العشرية</value>
+    <value>انقر لإعادة التحميل</value>
   </data>
   <data name="QuestionFilter" xml:space="preserve">
     <value>تصفية</value>
   </data>
   <data name="QuestionGpsNavigation" xml:space="preserve">
-    <value>وسيتم التعامل مع هذا السؤال على أنها مسألة نظام تحديد المواقع للمقابلة</value>
+    <value>سيتم التعامل مع هذا السؤال كسؤال ملاحة GPS للمحاور</value>
   </data>
   <data name="QuestionHideInstruction" xml:space="preserve">
     <value>إخفاء التعليمات</value>
@@ -477,47 +614,23 @@
   <data name="QuestionInstruction" xml:space="preserve">
     <value>تعليمات</value>
   </data>
-  <data name="QuestionInteger" xml:space="preserve">
-    <value>عدد صحيح</value>
-  </data>
-  <data name="QuestionIsLinked" xml:space="preserve">
-    <value>مرتبط</value>
-  </data>
   <data name="QuestionLinkedDescr" xml:space="preserve">
-    <value>ربط ادراج سؤال أو سؤال من مجموعة اللائحة</value>
-  </data>
-  <data name="QuestionMaxListCount" xml:space="preserve">
-    <value>الحد الأقصى لعدد عناصر القائمة</value>
-  </data>
-  <data name="QuestionMaxNumberOfAnswers" xml:space="preserve">
-    <value>أقصى عدد من الإجابات</value>
+    <value>ربط بسؤال القائمة أو سؤال من مجموعة الروستر</value>
   </data>
   <data name="QuestionMustBeBound" xml:space="preserve">
     <value>يجب ربط هذا السؤال</value>
   </data>
-  <data name="QuestionnaireSummary" xml:space="preserve">
-    <value>({{questionsCount}}Q, {{groupsCount}}S, {{rostersCount}}R)</value>
-  </data>
-  <data name="QuestionOnlyInts" xml:space="preserve">
-    <value>يسمح فقط باعداد صحيحة.</value>
-  </data>
-  <data name="QuestionOpenEditorConfirm" xml:space="preserve">
-    <value>لفتح محرر ، يجب حفظ جميع التغييرات غير المحفوظة. يجب علينا حفظها الآن؟</value>
-  </data>
-  <data name="QuestionOpenEditorSaved" xml:space="preserve">
-    <value>تم حفظه بنجاح. سيتم فتح نافذة تحميل الملف.</value>
-  </data>
-  <data name="QuestionOptionsCut" xml:space="preserve">
-    <value>تم وضع علامة على السؤال كـ "مربع تحرير وسرد" أو "مربع تحرير وسرد متتالي" أثناء تحميل تفاصيل السؤال وتضمين عددًا كبيرًا جدًا من الفئات ، وتم تقليل عددهم إلى {{count}}</value>
-  </data>
-  <data name="QuestionOrdered" xml:space="preserve">
-    <value>سجل إجابة النظام</value>
-  </data>
-  <data name="QuestionPattern" xml:space="preserve">
-    <value>نمط</value>
-  </data>
   <data name="QuestionQuestionType" xml:space="preserve">
     <value>نوع السؤال</value>
+  </data>
+  <data name="QuestionDisplayMode" xml:space="preserve">
+    <value>وضع العرض</value>
+  </data>
+  <data name="BindToReusableCategories" xml:space="preserve">
+    <value>ربط بالفئات القابلة لإعادة الاستخدام</value>
+  </data>
+  <data name="SelectCategories" xml:space="preserve">
+    <value>اختر الفئات</value>
   </data>
   <data name="QuestionScope" xml:space="preserve">
     <value>نطاق السؤال</value>
@@ -526,91 +639,52 @@
     <value>نص السؤال</value>
   </data>
   <data name="QuestionToUpdateOptions" xml:space="preserve">
-    <value>تحديث الفئة</value>
-  </data>
-  <data name="QuestionUploadOptions" xml:space="preserve">
-    <value>تحميل فئات جديدة</value>
-  </data>
-  <data name="QuestionUseSeparator" xml:space="preserve">
-    <value>استخدم 1000 فاصل</value>
+    <value>لتحديث الفئات</value>
   </data>
   <data name="QuestionVariableLabel" xml:space="preserve">
-    <value>تسميه متغيره</value>
+    <value>تسمية المتغير</value>
   </data>
   <data name="QuestionVariableName" xml:space="preserve">
     <value>اسم المتغير</value>
-  </data>
-  <data name="QuestionYesNoMode" xml:space="preserve">
-    <value>وضع نعم \لا</value>
-  </data>
-  <data name="ReadOnly" xml:space="preserve">
-    <value>للقراءة فقط</value>
-  </data>
-  <data name="Recompile" xml:space="preserve">
-    <value>إعادة ترجمة</value>
-  </data>
-  <data name="RequestFailedUnexpectedly" xml:space="preserve">
-    <value>فشل الطلب بشكل غير متوقع.</value>
   </data>
   <data name="RosterAddItem" xml:space="preserve">
     <value>إضافة عنصر</value>
   </data>
   <data name="RosterName" xml:space="preserve">
-    <value>اسم القائمة</value>
+    <value>اسم الروستر</value>
   </data>
   <data name="RosterSource" xml:space="preserve">
-    <value>مصدر القائمة</value>
+    <value>مصدر الروستر</value>
   </data>
   <data name="RosterSourceFixed" xml:space="preserve">
-    <value>مجموعة ثابتة من البنود:</value>
+    <value>مجموعة ثابتة من العناصر:</value>
   </data>
   <data name="RosterSourceNumericQuestion" xml:space="preserve">
-    <value>سؤال المصدر لارقام الصفوف</value>
+    <value>سؤال المصدر لعدد الصفوف:</value>
   </data>
   <data name="RosterSourceNumericTitles" xml:space="preserve">
-    <value>سؤال المصدر لاسماء الصفوف</value>
+    <value>سؤال المصدر لأسماء الصفوف:</value>
   </data>
   <data name="RosterSourceQuestion" xml:space="preserve">
-    <value>سؤال المصدر (يحدد الجواب كلا من عدد الصفوف في قائمة الصفوف واسمها):</value>
+    <value>سؤال المصدر (الإجابة تحدد كل من العدد واسم صفوف الروستر):</value>
   </data>
   <data name="RosterVariableName" xml:space="preserve">
-    <value>رقم تعريف القائمة</value>
+    <value>معرف الروستر</value>
   </data>
-  <data name="Save" xml:space="preserve">
-    <value>حفظ</value>
-  </data>
-  <data name="SavedAtTimestamp" xml:space="preserve">
-    <value>حفظ في {{dateTime, H:mm}}</value>
-  </data>
-  <data name="Search" xml:space="preserve">
-    <value>البحث</value>
-  </data>
-  <data name="SelectedInvalidItem" xml:space="preserve">
-    <value>تم اختيار بند غير فعال غيره او عدله</value>
-  </data>
-  <data name="SelectItemFromTheList" xml:space="preserve">
-    <value>حدد عنصرا من القائمة</value>
-  </data>
-  <data name="SelectParentQuestion" xml:space="preserve">
-    <value>حدد السؤال الرئيسي</value>
-  </data>
-  <data name="SelectParentQuestionError" xml:space="preserve">
-    <value>يجب تحديد السؤال الأصلي</value>
+  <data name="SectionVariableName" xml:space="preserve">
+    <value>اسم المتغير</value>
   </data>
   <data name="SelectQuestion" xml:space="preserve">
-    <value>اختر سؤالا</value>
+    <value>اختر السؤال</value>
   </data>
-  <data name="Settings" xml:space="preserve">
-    <value>الاعدادات</value>
+  <data name="AddFilter" xml:space="preserve">
+    <value>إضافة فلتر</value>
   </data>
   <data name="SettingsCan" xml:space="preserve">
-    <value>يستطيع</value>
-  </data>
-  <data name="SettingsInvite" xml:space="preserve">
-    <value>دعوة</value>
+    <value>يمكن</value>
   </data>
   <data name="SettingsInviteCollaborators" xml:space="preserve">
-    <value>دعوة المتعاونين عن طريق البريد الإلكتروني:</value>
+    <value>دعوة المزيد من المستخدمين عن طريق تسجيل الدخول أو البريد الإلكتروني المسجل</value>
   </data>
   <data name="SettingsOwner" xml:space="preserve">
     <value>مالك</value>
@@ -618,176 +692,209 @@
   <data name="SettingsPrivate" xml:space="preserve">
     <value>خاص</value>
   </data>
-  <data name="SettingsProvideExistingEmail" xml:space="preserve">
-    <value>تقديم بريد إلكتروني للمستخدم الحالي</value>
-  </data>
-  <data name="SettingsProvideValidEmail" xml:space="preserve">
-    <value>تقديم بريد إلكتروني صالح</value>
-  </data>
   <data name="SettingsPublic" xml:space="preserve">
     <value>عام</value>
   </data>
+  <data name="SettingsAnonymous" xml:space="preserve">
+    <value>مجهول</value>
+  </data>
+  <data name="RegenerateQuestionnaireSharingLink" xml:space="preserve">
+    <value>إعادة توليد الرابط</value>
+  </data>
+  <data name="AnonymousQuestionnaireGeneratedDate" xml:space="preserve">
+    <value>تم توليد الرابط: {{datetime}}</value>
+  </data>
   <data name="SettingsQuestionnaireName" xml:space="preserve">
-      <value>عنوان الاستبيان</value>
+    <value>عنوان الاستبيان</value>
   </data>
   <data name="SettingsQuestionnaireSharing" xml:space="preserve">
-    <value>قم بإجراء هذا الاستبيان</value>
+    <value>اجعل هذا الاستبيان</value>
   </data>
   <data name="SettingsRevokeAccess" xml:space="preserve">
-    <value>إبطال الوصول</value>
-  </data>
-  <data name="SettingsShareEdit" xml:space="preserve">
-    <value>تحرير</value>
-  </data>
-  <data name="SettingsShareView" xml:space="preserve">
-    <value>عرض</value>
+    <value>إلغاء الوصول</value>
   </data>
   <data name="SettingsTitle" xml:space="preserve">
-    <value>إعدادات الاستبيان</value>
+    <value>الإعدادات</value>
   </data>
   <data name="SettingsVisibleToEveryone" xml:space="preserve">
-    <value>مرئية للجميع في وضع القراءة فقط</value>
+    <value>مرئي للجميع في وضع القراءة فقط</value>
+  </data>
+  <data name="SettingsAccessibleToEveryone" xml:space="preserve">
+    <value>متاح في وضع القراءة فقط لأي شخص لديه الرابط</value>
+  </data>
+  <data name="SettingsStatusAllowAnonymousAccess" xml:space="preserve">
+    <value>المشاركة المجهولة مفعلة حاليًا.</value>
+  </data>
+  <data name="SettingsStatusDontAllowAnonymousAccess" xml:space="preserve">
+    <value>المشاركة المجهولة غير مفعلة حاليًا.</value>
+  </data>
+  <data name="SettingsTurnOnAnonymousAccess" xml:space="preserve">
+    <value>تفعيل المشاركة المجهولة.</value>
+  </data>
+  <data name="SettingsTurnOffAnonymousAccess" xml:space="preserve">
+    <value>إيقاف المشاركة المجهولة.</value>
   </data>
   <data name="SettingsVisibleToOwner" xml:space="preserve">
-    <value>مرئية للمالك فقط</value>
+    <value>مرئي للمالك فقط</value>
   </data>
   <data name="SettingsWhoHasAccess" xml:space="preserve">
-    <value>من يمكنه الدخول</value>
+    <value>من لديه الوصول</value>
   </data>
-  <data name="SideBarAttachmentDetailsFormat" xml:space="preserve">
-    <value>الشكل: {{- type}}</value>
+  <data name="ValidationCondition" xml:space="preserve">
+    <value>شرط التحقق</value>
   </data>
-  <data name="SideBarAttachmentDetailsResolution" xml:space="preserve">
-    <value>{{width}} × {{height}}px</value>
+  <data name="AddQuestion" xml:space="preserve">
+    <value>إضافة سؤال</value>
   </data>
-  <data name="SideBarAttachmentDetailsSize" xml:space="preserve">
-    <value>الحجم :{{size}}</value>
+  <data name="AddRoster" xml:space="preserve">
+    <value>إضافة روستر</value>
   </data>
-  <data name="SideBarAttachmentName" xml:space="preserve">
-    <value>اسم المرفق</value>
+  <data name="AddStaticText" xml:space="preserve">
+    <value>إضافة نص ثابت</value>
   </data>
-  <data name="SideBarAttachmentNoName" xml:space="preserve">
-    <value>مرفق بدون اسم</value>
+  <data name="AddSubsection" xml:space="preserve">
+    <value>إضافة قسم فرعي</value>
   </data>
-  <data name="SideBarAttachmentsCounter" xml:space="preserve">
-    <value>{{count}} ملف ملرفق ({{bytes}} مجموع)</value>
+  <data name="VirtualCoverPage" xml:space="preserve">
+    <value>صفحة الغلاف الافتراضية</value>
   </data>
-  <data name="SideBarAttachmentsCounter_plural" xml:space="preserve">
-    <value>{{count}} ملفات مرفقة ({{bytes}} مجموع)</value>
+  <data name="MigrateToNewCover" xml:space="preserve">
+    <value>توليد الغلاف</value>
   </data>
-  <data name="SideBarAttachmentsEmptyLine1" xml:space="preserve">
-    <value>استخدم علامة التبويب هذه لتحميل ملفات الوسائط المتعددة التي يمكن الرجوع إليها في الاستبيان.</value>
+  <data name="AddVariable" xml:space="preserve">
+    <value>إضافة متغير</value>
   </data>
-  <data name="SideBarAttachmentsEmptyLine2" xml:space="preserve">
-    <value>لتجنب تزامن بطيء نوصي بألا يتجاوز اجمالي حجم جميع الملفات المرفقة  2MB. بالنسبة لأنواع الملفات المدعومة والتنسيقات والأبعاد</value>
+  <data name="EmptySectionLine1" xml:space="preserve">
+    <value>هذا القسم فارغ.</value>
   </data>
-  <data name="SideBarAttachmentsTitle" xml:space="preserve">
-    <value>مرفقات</value>
+  <data name="EmptySectionLine2" xml:space="preserve">
+    <value>يمكنك البدء باستخدام أزرار {{-addQuestionBtn}} و{{-addSubsectionBtn}}</value>
   </data>
-  <data name="SideBarAttachmentsUpload" xml:space="preserve">
-    <value>تحميل جديد</value>
+  <data name="EmptySectionLine3" xml:space="preserve">
+    <value>في أعلى هذا الكتلة أو إدارة الأقسام باستخدام اللوحة اليسرى {{-panel}}</value>
   </data>
-  <data name="SideBarAttachmentUploaded" xml:space="preserve">
-    <value>تم تحميل :{{-lastUpdate, MMMM DD[,] YYYY [at] k:mm}}</value>
+  <data name="EmptySectionLine4" xml:space="preserve">
+    <value>اسم الاستبيان، المتغير، التعاون وخيارات أخرى</value>
   </data>
-  <data name="SideBarLookupEmptyLine1" xml:space="preserve">
-    <value>استخدم علامة التبويب هذه لتحديد جداول البحث.</value>
+  <data name="EmptySectionLine5" xml:space="preserve">
+    <value>يمكن العثور عليها في لوحة {{-settingsBtn}} (الزاوية العلوية اليمنى)</value>
   </data>
-  <data name="SideBarLookupEmptyLine2" xml:space="preserve">
-    <value>يوفر جدول البحث معلومات مرجعية يمكن الاستعلام عنها بواسطة مفتاح ويتم استخدامها في شروط التمكين وتعبيرات التحقق من الصحة.</value>
+  <data name="NothingFound" xml:space="preserve">
+    <value>لم يتم العثور على شيء</value>
   </data>
-  <data name="SideBarLookupEmptyLine3" xml:space="preserve">
-    <value>يتكون جدول البحث من اسم وملف البحث، الذي قد يحتوي على عدة أعمدة مفصولة بعلامات جدولة من القيم الرقمية.</value>
+  <data name="Paste" xml:space="preserve">
+    <value>لصق</value>
   </data>
-  <data name="SideBarLookupTableAdd" xml:space="preserve">
-    <value>إضافة جدول بحث جديد</value>
+  <data name="QuestionAddOption" xml:space="preserve">
+    <value>إضافة فئة</value>
   </data>
-  <data name="SideBarLookupTableDropFile" xml:space="preserve">
-    <value>ضع الملف هنا</value>
+  <data name="QuestionCascading" xml:space="preserve">
+    <value>صندوق التحرير المتسلسل</value>
   </data>
-  <data name="SideBarLookupTableFileName" xml:space="preserve">
-    <value>اسم الملف</value>
+  <data name="QuestionComboBox" xml:space="preserve">
+    <value>صندوق التحرير</value>
   </data>
-  <data name="SideBarLookupTableName" xml:space="preserve">
-    <value>اسم الجدول</value>
+  <data name="QuestionCheckboxes" xml:space="preserve">
+    <value>مربعات الاختيار</value>
   </data>
-  <data name="SideBarLookupTableNoName" xml:space="preserve">
-    <value>جدول بحث بلا اسم</value>
+  <data name="QuestionCurrentTime" xml:space="preserve">
+    <value>الطابع الزمني الحالي (التاريخ والوقت)</value>
   </data>
-  <data name="SideBarLookupTablesCounter" xml:space="preserve">
-    <value>:{{count}} جدول البحث</value>
+  <data name="QuestionDefaultDate" xml:space="preserve">
+    <value>التاريخ الافتراضي</value>
   </data>
-  <data name="SideBarLookupTablesCounter_plural" xml:space="preserve">
-    <value>:{{count}} جداول البحث</value>
+  <data name="GeometryType" xml:space="preserve">
+    <value>نوع الهندسة</value>
   </data>
-  <data name="SideBarLookupTableSelectFile" xml:space="preserve">
-    <value>اختار الملف</value>
+  <data name="GeometryInputMode" xml:space="preserve">
+    <value>وضع الإدخال</value>
   </data>
-  <data name="SideBarLookupTableUpdateFile" xml:space="preserve">
-    <value>حدث الملف</value>
+  <data name="GeometryOverlapDetection" xml:space="preserve">
+    <value>كشف التداخل</value>
   </data>
-  <data name="SideBarLookupTitle" xml:space="preserve">
-    <value>جداول البحث</value>
+  <data name="QuestionDecimalPlaces" xml:space="preserve">
+    <value>عدد المنازل العشرية</value>
   </data>
-  <data name="SideBarMacroContent" xml:space="preserve">
-    <value>المحتوى</value>
+  <data name="QuestionInteger" xml:space="preserve">
+    <value>عدد صحيح</value>
   </data>
-  <data name="SideBarMacroDescription" xml:space="preserve">
-    <value>وصف</value>
+  <data name="QuestionIsLinked" xml:space="preserve">
+    <value>مرتبط</value>
   </data>
-  <data name="SideBarMacroEmptyLine1" xml:space="preserve">
-    <value>استخدم علامة التبويب هذه لتعريف بدائل الماكرو (macro)</value>
+  <data name="QuestionMaxListCount" xml:space="preserve">
+    <value>الحد الأقصى لعدد عناصر القائمة</value>
   </data>
-  <data name="SideBarMacroHideDescription" xml:space="preserve">
-    <value>إخفاء الوصف</value>
+  <data name="QuestionMaxNumberOfAnswers" xml:space="preserve">
+    <value>الحد الأقصى لعدد الإجابات</value>
   </data>
-  <data name="SideBarMacroShowDescription" xml:space="preserve">
-    <value>اضافة وصف</value>
+  <data name="QuestionOnlyInts" xml:space="preserve">
+    <value>يسمح بالأعداد الصحيحة فقط</value>
   </data>
-  <data name="SideBarSectionsCounter" xml:space="preserve">
-    <value>{{count}} قسم:</value>
+  <data name="QuestionOneToFiftyAllowed" xml:space="preserve">
+    <value>يسمح بالأعداد الصحيحة بين 1 و50</value>
   </data>
-  <data name="SideBarSectionsCounter_plural" xml:space="preserve">
-    <value>{{count}} أقسام:</value>
+  <data name="QuestionOptionsCut" xml:space="preserve">
+    <value>تم تحديد السؤال كـ "صندوق تحرير" أو "صندوق تحرير متسلسل" أثناء تحميل تفاصيل السؤال واحتوى على العديد من الفئات، تم تقليل عددها إلى {{count}}</value>
   </data>
-  <data name="SideBarSectionsTitle" xml:space="preserve">
-    <value>اقسام</value>
+  <data name="QuestionOrdered" xml:space="preserve">
+    <value>تسجيل ترتيب الإجابة</value>
   </data>
-  <data name="SideBarTranslationDownloadXlsx" xml:space="preserve">
-    <value>تنزيل xlsx</value>
+  <data name="QuestionPattern" xml:space="preserve">
+    <value>نمط</value>
   </data>
-  <data name="SideBarTranslationGetTemplate" xml:space="preserve">
-    <value>الحصول على نموذج ل</value>
+  <data name="QuestionUploadOptions" xml:space="preserve">
+    <value>تحميل فئات جديدة</value>
   </data>
-  <data name="SideBarTranslationGetTemplateLinkTextXlsx" xml:space="preserve">
-    <value>اكسل (xlsx)</value>
+  <data name="QuestionUseSeparator" xml:space="preserve">
+    <value>استخدم فاصل الألف</value>
   </data>
-  <data name="SideBarTranslationName" xml:space="preserve">
-    <value>اسم الترجمة</value>
+  <data name="QuestionYesNoMode" xml:space="preserve">
+    <value>أزرار نعم/لا</value>
   </data>
-  <data name="SideBarTranslationNoName" xml:space="preserve">
-    <value>الترجمة دون اسم</value>
+  <data name="GeographyInputModeManual" xml:space="preserve">
+    <value>يدوي</value>
   </data>
-  <data name="SideBarTranslationsCounter" xml:space="preserve">
-    <value>{{count}} ترجمة</value>
+  <data name="GeographyInputModeAutomatic" xml:space="preserve">
+    <value>تلقائي</value>
   </data>
-  <data name="SideBarTranslationsCounter_plural" xml:space="preserve">
-    <value>{{count}} ترجمات</value>
+  <data name="GeographyInputModeSemiautomatic" xml:space="preserve">
+    <value>شبه تلقائي</value>
   </data>
-  <data name="SideBarTranslationsEmptyLine1" xml:space="preserve">
-    <value>استخدم علامة التبويب هذه لادارة ترجمة الاستبانة </value>
+  <data name="Search" xml:space="preserve">
+    <value>بحث</value>
   </data>
-  <data name="SideBarTranslationsEmptyLine2" xml:space="preserve">
-    <value>يمكنك تحميل وتحديث الترجمات إلى لغات مختلفة.</value>
+  <data name="Filter" xml:space="preserve">
+    <value>فلتر</value>
   </data>
-  <data name="SideBarTranslationsEmptyLine3" xml:space="preserve">
-    <value>سيتم تطبيق الترجمة على النصوص الأصلية وتجاوز القيم. يمكنك ترك بعض النصوص فارغة لاستخدام الترجمة الأصلية الافتراضية.</value>
+  <data name="SelectParentQuestion" xml:space="preserve">
+    <value>اختر السؤال الأب</value>
   </data>
-  <data name="SideBarTranslationsTitle" xml:space="preserve">
-    <value>الترجمات</value>
+  <data name="SelectParentQuestionError" xml:space="preserve">
+    <value>يجب عليك اختيار السؤال الأب</value>
   </data>
-  <data name="SideBarTranslationsUploadNew" xml:space="preserve">
-    <value>تحميل ترجمة جديدة</value>
+  <data name="UserDefinedCategories" xml:space="preserve">
+    <value>الفئات المعرفة من قبل المستخدم</value>
+  </data>
+  <data name="ReusableCategories" xml:space="preserve">
+    <value>الفئات القابلة لإعادة الاستخدام</value>
+  </data>
+  <data name="SourceOfCategories" xml:space="preserve">
+    <value>مصدر الفئات</value>
+  </data>
+  <data name="RostersQuestion" xml:space="preserve">
+    <value>سؤال القائمة أو سؤال من مجموعة الروستر</value>
+  </data>
+  <data name="QuestionRadioButtonList" xml:space="preserve">
+    <value>قائمة أزرار الراديو</value>
+  </data>
+  <data name="SettingsInvite" xml:space="preserve">
+    <value>دعوة</value>
+  </data>
+  <data name="SettingsProvideExistingEmail" xml:space="preserve">
+    <value>تقديم البريد الإلكتروني أو تسجيل الدخول للمستخدم الحالي</value>
+  </data>
+  <data name="SettingsProvideValidEmail" xml:space="preserve">
+    <value>تقديم بريد إلكتروني صالح</value>
   </data>
   <data name="StaticText" xml:space="preserve">
     <value>نص ثابت</value>
@@ -795,17 +902,8 @@
   <data name="StaticTextAttachmentName" xml:space="preserve">
     <value>اسم المرفق</value>
   </data>
-  <data name="ToggleDropdown" xml:space="preserve">
-    <value>تبديل القائمة المنسدلة</value>
-  </data>
   <data name="ToggleSearch" xml:space="preserve">
     <value>تبديل البحث</value>
-  </data>
-  <data name="TranslationsObtained" xml:space="preserve">
-    <value>تم الحصول على صف {0} من ملف الترجمة</value>
-  </data>
-  <data name="TranslationsObtained_plural" xml:space="preserve">
-    <value>تم الحصول على صف {0} من ملف الترجمة</value>
   </data>
   <data name="TreeAddQuestion" xml:space="preserve">
     <value>إضافة سؤال</value>
@@ -814,10 +912,10 @@
     <value>إضافة سؤال بعد</value>
   </data>
   <data name="TreeAddRoster" xml:space="preserve">
-    <value>إضافة لائحة</value>
+    <value>إضافة روستر</value>
   </data>
   <data name="TreeAddRosterAfter" xml:space="preserve">
-    <value>إضافة لائحة بعد</value>
+    <value>إضافة روستر بعد</value>
   </data>
   <data name="TreeAddSection" xml:space="preserve">
     <value>إضافة قسم فرعي</value>
@@ -838,87 +936,666 @@
     <value>إضافة متغير بعد</value>
   </data>
   <data name="TreeRoster" xml:space="preserve">
-    <value>قائمة:</value>
-  </data>
-  <data name="UnMarkAsDefault" xml:space="preserve">
-    <value>لا تستخدم افتراضيا</value>
-  </data>
-  <data name="UnsavedChangesLeave" xml:space="preserve">
-    <value>ستفقد التغييرات غير المحفوظة إذا تركت هذه الصفحة</value>
-  </data>
-  <data name="UnsavedChangesReload" xml:space="preserve">
-    <value>ستفقد التغييرات غير المحفوظة في حالة إعادة تحميل هذه الصفحة</value>
-  </data>
-  <data name="UntitledGroupOrRoster" xml:space="preserve">
-    <value>فسم فرعي اة قائمة بدون عنوان</value>
-  </data>
-  <data name="UntitledQuestion" xml:space="preserve">
-    <value>سؤال بدون عنوان</value>
-  </data>
-  <data name="UntitledRoster" xml:space="preserve">
-    <value>قائمة بلا عنوان</value>
-  </data>
-  <data name="UntitledSection" xml:space="preserve">
-    <value>قسم بلا عنوان</value>
-  </data>
-  <data name="UntitledStaticText" xml:space="preserve">
-    <value>نص ثابت بدون عنوان</value>
-  </data>
-  <data name="UntitledVariable" xml:space="preserve">
-    <value>متغير بدون عنوان</value>
-  </data>
-  <data name="Update" xml:space="preserve">
-    <value>تحديث</value>
-  </data>
-  <data name="Upload" xml:space="preserve">
-    <value>تحميل</value>
-  </data>
-  <data name="ValidationCondition" xml:space="preserve">
-    <value>شرط التحقق </value>
+    <value>روستر:</value>
   </data>
   <data name="VariableExpression" xml:space="preserve">
-    <value>التعبير</value>
+    <value>تعبير</value>
   </data>
   <data name="VariableLabel" xml:space="preserve">
-    <value>تسميه متغيره</value>
-  </data>
-  <data name="VariableName" xml:space="preserve">
-    <value>الأسم</value>
+    <value>تسمية المتغير</value>
   </data>
   <data name="VariableType" xml:space="preserve">
     <value>نوع المتغير</value>
   </data>
-  <data name="WarningsCounter" xml:space="preserve">
-    <value>{{count}} تحذير</value>
+  <data name="HelpConditionExpression" xml:space="preserve">
+    <value>تعبير منطقي ينشط (يعطل) العنصر الحالي بناءً على الإجابات على الأسئلة الأخرى.</value>
   </data>
-  <data name="WarningsCounter_plural" xml:space="preserve">
-    <value>{{count}} تحذيرات</value>
+  <data name="HelpExpression" xml:space="preserve">
+    <value>تعبير منطقي يتم حسابه بناءً على الإجابات على الأسئلة الأخرى.</value>
+  </data>
+  <data name="HelpFixedTitles" xml:space="preserve">
+    <value>عدد العناصر يحدد حجم القائمة. كل عنصر في القائمة يتوافق مع عنوان صف القائمة. يجب وضع كل عنصر في سطر منفصل.</value>
+  </data>
+  <data name="HelpHideIfDisabled" xml:space="preserve">
+    <value>بشكل افتراضي، يتم تظليل العنصر المعطل. تحديد هذا الخيار سيخفي السؤال أو القسم المعطل على الجهاز اللوحي.</value>
+  </data>
+  <data name="HelpRosterDisplayMode" xml:space="preserve">
+      <value>القسم الفرعي - يتم عرض أسئلة القائمة خلف الأزرار المقابلة لحالات القائمة.
+  الوضع المسطح - يتم عرض أسئلة القائمة في نفس المستوى مفصولة بعناوين مقابلة لحالات القائمة.
+  الجدول - يتم عرض أسئلة القائمة في نفس المستوى كصفوف وأعمدة الجدول.
+  المصفوفة - يتم عرض سؤال تصنيفي للقائمة كمصفوفة.
+  يتم دعم طرق العرض الجدول والمصفوفة فقط في الاستبيان عبر الويب، ويعود الجهاز اللوحي إلى وضع "القسم الفرعي".</value>
+  </data>
+  <data name="HelpHideInstructions" xml:space="preserve">
+      <value>بشكل افتراضي، يتم عرض نص التعليمات على الجهاز اللوحي. تحديد هذا الخيار سيعرض السطر الأول فقط من التعليمات. النقر على هذا السطر سيعرض النص الكامل.</value>
+  </data>
+  <data name="HelpInstruction" xml:space="preserve">
+      <value>نص التعليمات الذي سيتم إرفاقه بالسؤال.</value>
+  </data>
+  <data name="HelpIsTimestamp" xml:space="preserve">
+      <value>يتيح هذا الخيار للمستخدم ختم الوقت الحالي على الجهاز اللوحي</value>
+  </data>
+  <data name="HelpDefaultDate" xml:space="preserve">
+      <value>سيتم عرض هذا التاريخ كتاريخ بدء للاختيار على الجهاز اللوحي</value>
+  </data>
+  <data name="HelpDoNotExport" xml:space="preserve">
+      <value>حدد هذا المتغير لاستبعاده من التصدير</value>
+  </data>
+  <data name="VariableNoExport" xml:space="preserve">
+      <value>لا تصدر</value>
+  </data>
+  <data name="HelpMask" xml:space="preserve">
+      <value>إدخال منسق للقيم الأبجدية الرقمية: أرقام الهواتف، رموز الهوية، إلخ. أمثلة: "~" - يمثل حرفًا أبجديًا (A-Z,a-z)، "#" - يمثل حرفًا رقميًا (0-9)، "*" - يمثل حرفًا أبجديًا رقميًا (A-Z,a-z,0-9). "##/##/####" - تاريخ، "(###) ###-####" - رقم هاتف، "AA####" - رقم رحلة تديرها الخطوط الجوية الأمريكية أو "~*-###-~###"</value>
+  </data>
+  <data name="HelpSourceQuestion" xml:space="preserve">
+      <value>سؤال المصدر (الإجابة تولد عدد الصفوف)</value>
+  </data>
+  <data name="HelpTitles" xml:space="preserve">
+      <value>عناوين الصفوف.</value>
+  </data>
+  <data name="HelpUseFormatting" xml:space="preserve">
+      <value>عند التحديد، سيتم تنسيق الحقل الرقمي على الجهاز اللوحي كالتالي: d,ddd,ddd.dd، "d" يمثل الأرقام (0-9)، "," (الفاصلة) هي فاصل الألف، و "." (النقطة) هي رمز الفاصلة العشرية. قد يختلف فاصل الألف ورمز الفاصلة العشرية للأجهزة اللوحية ذات الثقافات المختلفة.</value>
+  </data>
+  <data name="HelpValidationExpression" xml:space="preserve">
+      <value>تعبير منطقي يتحقق من صحة الإجابة على السؤال الحالي. قد يتضمن قيم الأسئلة الأخرى.</value>
+  </data>
+  <data name="HelpValidationMessage" xml:space="preserve">
+      <value>يتم عرض رسالة خطأ أو تحذير عندما يكون شرط التحقق "خطأ" أو يحدث خطأ أثناء تقييم التعبير.</value>
+  </data>
+  <data name="HelpVariableDescription" xml:space="preserve">
+      <value>النص الذي سيتم عرضه بجانب المتغير لأغراض الاختبار</value>
+  </data>
+  <data name="HelpVariableLabel" xml:space="preserve">
+      <value>نص يصل إلى {{maxLength}} حرفًا سيتم إرفاقه بالمتغير المصدر.</value>
+  </data>
+  <data name="HelpVariableName" xml:space="preserve">
+      <value>قد تتراوح أسماء المتغيرات ومعرفات القائمة من {{minLength}} إلى {{maxLength}} حرفًا ويجب أن تحتوي فقط على الأحرف التالية: a-z، A-Z، _، أو 0-9. لا يمكن أن يكون الحرف الأول 0-9 أو _ ولا يمكن أن يكون الأخير _.</value>
+  </data>
+  <data name="HelpAttachmentName" xml:space="preserve">
+      <value>اسم ملف المرفق الذي سيتم عرضه.</value>
+  </data>
+  <data name="HelpCoverPage" xml:space="preserve">
+      <value>يحتوي القسم الأول من كل استبيان على أسئلة تعريفية يتم عرضها أيضًا في لوحات التحكم الخاصة بالمقابلين والمشرفين.</value>
+  </data>
+  <data name="HelpVirtualCoverPage" xml:space="preserve">
+      <value>الغلاف هو قسم افتراضي يعرض جميع الأسئلة التعريفية.
+  لا يمكن تغيير الأسئلة في هذا القسم</value>
+  </data>
+  <data name="ConditionMightBeBroken" xml:space="preserve">
+      <value>قد تكون الحالة أو العناصر التابعة المتتالية معطلة</value>
+  </data>
+  <data name="HotkeysCloseLookup" xml:space="preserve">
+      <value>إغلاق لوحة جداول البحث</value>
+  </data>
+  <data name="HotkeysCloseMacros" xml:space="preserve">
+      <value>إغلاق لوحة الماكرو</value>
+  </data>
+  <data name="HotkeysCloseMetadata" xml:space="preserve">
+      <value>إغلاق لوحة البيانات الوصفية</value>
+  </data>
+  <data name="HotkeysCloseScenarios" xml:space="preserve">
+      <value>إغلاق لوحة السيناريوهات</value>
+  </data>
+  <data name="HotkeysCloseTranslations" xml:space="preserve">
+      <value>إغلاق لوحة الترجمات</value>
+  </data>
+  <data name="HotkeysCloseCategories" xml:space="preserve">
+      <value>إغلاق لوحة الفئات</value>
+  </data>
+  <data name="HotkeysCloseComments" xml:space="preserve">
+      <value>إغلاق لوحة التعليقات</value>
+  </data>
+  <data name="HotkeysFocusTitle" xml:space="preserve">
+      <value>تركيز حقل العنوان في المحرر</value>
+  </data>
+  <data name="HotkeysFocusTree" xml:space="preserve">
+      <value>تركيز شجرة الاستبيان</value>
+  </data>
+  <data name="HotkeysHideAttachments" xml:space="preserve">
+      <value>إغلاق لوحة المرفقات</value>
+  </data>
+  <data name="HotkeysHideSections" xml:space="preserve">
+      <value>إغلاق الأقسام</value>
+  </data>
+  <data name="HotkeysNavigateToPrevSibling" xml:space="preserve">
+      <value>التنقل إلى العنصر السابق</value>
+  </data>
+  <data name="HotkeysNavigateToSibling" xml:space="preserve">
+      <value>التنقل إلى العنصر التالي</value>
+  </data>
+  <data name="HotkeysOpenItem" xml:space="preserve">
+      <value>فتح العنصر في المحرر</value>
+  </data>
+  <data name="HotkeysOpenSection" xml:space="preserve">
+      <value>فتح القسم</value>
+  </data>
+  <data name="HotkeysPrint" xml:space="preserve">
+      <value>طباعة</value>
+  </data>
+  <data name="HotkeysSearch" xml:space="preserve">
+      <value>البحث عن الأقسام الفرعية والأسئلة في القسم</value>
+  </data>
+
+<data name="MultipleDependencies" xml:space="preserve">
+    <value>يعتمد على سؤال أو أكثر / قسم فرعي</value>
+  </data>
+  <data name="NoPermissions" xml:space="preserve">
+    <value>ليس لديك أذونات لتغيير هذا الاستبيان</value>
+  </data>
+  <data name="NotAnImage" xml:space="preserve">
+    <value>الملف المختار ليس صورة</value>
+  </data>
+  <data name="QuestionOpenEditorConfirm" xml:space="preserve">
+    <value>لفتح المحرر يجب حفظ جميع التغييرات غير المحفوظة. هل يجب أن نحفظها الآن؟</value>
+  </data>
+  <data name="QuestionOpenEditorSaved" xml:space="preserve">
+    <value>تم الحفظ بنجاح. سيتم فتح نافذة لتحميل الملف.</value>
+  </data>
+  <data name="SettingsShareEdit" xml:space="preserve">
+    <value>تحرير</value>
+  </data>
+  <data name="SettingsShareView" xml:space="preserve">
+    <value>عرض</value>
+  </data>
+  <data name="DeleteConfirmQuestion" xml:space="preserve">
+    <value>هل أنت متأكد أنك تريد حذف "{{trimmedTitle}}"؟</value>
+  </data>
+  <data name="DeleteConfirmCategories" xml:space="preserve">
+    <value>هل أنت متأكد أنك تريد حذف مجموعة الفئات "{{trimmedTitle}}"؟ سيتم تغيير مصدر الفئات للأسئلة التصنيفية المعتمدة عليها إلى فئات معرفة من قبل المستخدم</value>
+  </data>
+  <data name="UntitledQuestion" xml:space="preserve">
+    <value>سؤال بدون عنوان</value>
+  </data>
+  <data name="TranslationsObtained" xml:space="preserve">
+    <value>تم الحصول على {0} صف من ملف الترجمة</value>
+  </data>
+  <data name="TranslationsObtained_plural" xml:space="preserve">
+    <value>تم الحصول على {0} صفوف من ملف الترجمة</value>
+  </data>
+  <data name="CategoriesObtained" xml:space="preserve">
+    <value>تم الحصول على {0} صف من ملف الفئات</value>
+  </data>
+  <data name="CategoriesObtained_plural" xml:space="preserve">
+    <value>تم الحصول على {0} صفوف من ملف الفئات</value>
+  </data>
+  <data name="UnsavedChangesLeave" xml:space="preserve">
+    <value>ستفقد التغييرات غير المحفوظة إذا غادرت هذه الصفحة</value>
+  </data>
+  <data name="UnsavedChangesReload" xml:space="preserve">
+    <value>ستفقد التغييرات غير المحفوظة إذا قمت بإعادة تحميل هذه الصفحة</value>
+  </data>
+  <data name="Export" xml:space="preserve">
+    <value>تصدير</value>
+  </data>
+  <data name="OptionsCloseWindow" xml:space="preserve">
+    <value>إغلاق النافذة؟</value>
+  </data>
+  <data name="OptionsUploadApply" xml:space="preserve">
+    <value>تطبيق التغييرات</value>
+  </data>
+  <data name="OptionsUploadRevert" xml:space="preserve">
+    <value>التراجع عن التغييرات</value>
+  </data>
+  <data name="OptionsWindowTitle" xml:space="preserve">
+    <value>تحرير الفئات</value>
+  </data>
+  <data name="CascadingOptionsWindowTitle" xml:space="preserve">
+    <value>تحرير الفئات المتسلسلة</value>
+  </data>
+  <data name="OptionsUploadLimit" xml:space="preserve">
+    <value>لا توجد فئات. اختر ملف مفصول بعلامات تبويب. يمكن أن يحتوي الملف على ما يصل إلى {limit} فئات.</value>
+  </data>
+  <data name="OptionsUploadTitle" xml:space="preserve">
+    <value>العنوان</value>
+  </data>
+  <data name="OptionsUploadValue" xml:space="preserve">
+    <value>القيمة</value>
+  </data>
+  <data name="AttachmentName" xml:space="preserve">
+    <value>اسم المرفق</value>
+  </data>
+  <data name="OptionsUploadParent" xml:space="preserve">
+    <value>القيمة الأصلية</value>
+  </data>
+  <data name="SideBarMacroNoName" xml:space="preserve">
+    <value>ماكرو بدون اسم</value>
+  </data>
+  <data name="Upload" xml:space="preserve">
+    <value>تحميل</value>
+  </data>
+  <data name="SideBarLookupTableNoName" xml:space="preserve">
+    <value>جدول بحث بدون اسم</value>
+  </data>
+  <data name="SideBarTranslationNoName" xml:space="preserve">
+    <value>ترجمة بدون اسم</value>
+  </data>
+  <data name="SideBarCategoriesNoName" xml:space="preserve">
+    <value>فئات بدون اسم</value>
+  </data>
+  <data name="SideBarAttachmentNoName" xml:space="preserve">
+    <value>مرفق بدون اسم</value>
+  </data>
+  <data name="DefaultNewRoster" xml:space="preserve">
+    <value>قائمة جديدة</value>
+  </data>
+  <data name="DefaultNewSection" xml:space="preserve">
+    <value>قسم جديد</value>
+  </data>
+  <data name="DefaultNewStaticText" xml:space="preserve">
+    <value>نص ثابت جديد</value>
+  </data>
+  <data name="DefaultNewSubsection" xml:space="preserve">
+    <value>قسم فرعي جديد</value>
+  </data>
+  <data name="HotkeysShortcuts" xml:space="preserve">
+    <value>اختصارات لوحة المفاتيح</value>
+  </data>
+  <data name="HotkeysShowHideHelp" xml:space="preserve">
+    <value>إظهار / إخفاء قائمة المساعدة هذه</value>
+  </data>
+  <data name="MarkAsDefault" xml:space="preserve">
+    <value>تعيين كلغة افتراضية</value>
+  </data>
+  <data name="UnMarkAsDefault" xml:space="preserve">
+    <value>عدم استخدام كافتراضي</value>
+  </data>
+  <data name="Default" xml:space="preserve">
+    <value>افتراضي</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>إعادة تعيين</value>
+  </data>
+  <data name="PleaseWait" xml:space="preserve">
+    <value>يرجى الانتظار...</value>
+  </data>
+  <data name="EntryWasNotFound" xml:space="preserve">
+    <value>لم يتم العثور على الإدخال في الاستبيان، يرجى اختيار آخر.</value>
+  </data>
+  <data name="RequestFailedUnexpectedly" xml:space="preserve">
+    <value>فشل الطلب بشكل غير متوقع.</value>
+  </data>
+  <data name="IncorrectRosterTitle" xml:space="preserve">
+    <value>عنوان القائمة غير صحيح</value>
+  </data>
+  <data name="SelectedInvalidItem" xml:space="preserve">
+    <value>تم اختيار عنصر غير صالح. قم بإصلاحه.</value>
+  </data>
+  <data name="SelectItemFromTheList" xml:space="preserve">
+    <value>اختر عنصرًا من القائمة</value>
+  </data>
+  <data name="UntitledGroupOrRoster" xml:space="preserve">
+    <value>قسم فرعي أو قائمة بدون عنوان</value>
+  </data>
+  <data name="UntitledVariable" xml:space="preserve">
+    <value>متغير بدون عنوان</value>
+  </data>
+  <data name="UntitledSection" xml:space="preserve">
+    <value>قسم بدون عنوان</value>
+  </data>
+  <data name="UntitledRoster" xml:space="preserve">
+    <value>قائمة بدون عنوان</value>
+  </data>
+  <data name="UntitledStaticText" xml:space="preserve">
+    <value>نص ثابت بدون عنوان</value>
+  </data>
+  <data name="SelectModeOfDataCollection" xml:space="preserve">
+    <value>اختر وضع جمع البيانات</value>
+  </data>
+  <data name="SelectCountry" xml:space="preserve">
+    <value>اختر الدولة</value>
+  </data>
+  <data name="SelectStudyType" xml:space="preserve">
+    <value>اختر نوع الدراسة</value>
+  </data>
+  <data name="SelectKindOfData" xml:space="preserve">
+    <value>اختر نوع البيانات</value>
+  </data>
+  <data name="Test" xml:space="preserve">
+    <value>اختبار</value>
+  </data>
+  <data name="QuestionAddSpecialValues" xml:space="preserve">
+    <value>إضافة قيمة خاصة</value>
+  </data>
+  <data name="EntityComment" xml:space="preserve">
+    <value>تعليق جديد</value>
+  </data>
+  <data name="IsSignature" xml:space="preserve">
+    <value>استخدام لوحة التوقيع</value>
+  </data>
+  <data name="HelpNewComment" xml:space="preserve">
+    <value>إضافة تعليق</value>
+  </data>
+  <data name="VariableVariableName" xml:space="preserve">
+    <value>اسم المتغير</value>
+  </data>
+  <data name="SideBarCommentsCounter" xml:space="preserve">
+    <value>{{count}} سلسلة تعليقات:</value>
+  </data>
+  <data name="SideBarCommentsCounter_plural" xml:space="preserve">
+    <value>{{count}} سلاسل تعليقات:</value>
+  </data>
+  <data name="SideBarEmptyCommentsLine" xml:space="preserve">
+    <value>سترى التعليقات هنا</value>
+  </data>
+  <data name="ViewResolvedCommentsCounter" xml:space="preserve">
+    <value>عرض جميع {{count}} التعليقات المحلولة</value>
+  </data>
+  <data name="ViewResolvedCommentsCounter_plural" xml:space="preserve">
+    <value>عرض جميع {{count}} التعليقات المحلولة</value>
+  </data>
+  <data name="HideResolvedComments" xml:space="preserve">
+    <value>إخفاء التعليقات المحلولة</value>
+  </data>
+  <data name="EditorAddComment" xml:space="preserve">
+    <value>إضافة تعليق</value>
+  </data>
+  <data name="EditorShowComments" xml:space="preserve">
+    <value>عرض التعليقات ({{count}})</value>
+  </data>
+  <data name="JumpToEdit" xml:space="preserve">
+    <value>الانتقال إلى التحرير</value>
+  </data>
+  <data name="CommentEditorResolve" xml:space="preserve">
+    <value>حل</value>
+  </data>
+  <data name="EditorHideComment" xml:space="preserve">
+    <value>إخفاء التعليقات</value>
+  </data>
+  <data name="MaxCommentLengthErrorMessage" xml:space="preserve">
+    <value>لا يمكن أن يحتوي التعليق على أكثر من {1} حرف</value>
+  </data>
+  <data name="IsWarning" xml:space="preserve">
+    <value>تحذير</value>
+  </data>
+  <data name="SettingsQuestionnaireVariable" xml:space="preserve">
+    <value>متغير الاستبيان</value>
+  </data>
+  <data name="CollaboratorsSettings" xml:space="preserve">
+    <value>المتعاونون</value>
+  </data>
+  <data name="CollaboratorsDescriptionSettings" xml:space="preserve">
+    <value>لدى المستخدمين التاليين حق الوصول إلى هذا الاستبيان</value>
+  </data>
+  <data name="AccessSettings" xml:space="preserve">
+    <value>الوصول</value>
+  </data>
+  <data name="PublicAccessSettings" xml:space="preserve">
+      <value>الوصول العام</value>
+  </data>
+  <data name="PublicAccessDescriptionSettings" xml:space="preserve">
+      <value>الاستبيانات العامة مرئية لجميع المستخدمين الذين لديهم حساب في هذا النظام في وضع القراءة فقط.</value>
+  </data>
+  <data name="PublicAccessSettingsStatusOn" xml:space="preserve">
+      <value>الاستبيان مشترك حاليًا كعام.</value>
+  </data>
+  <data name="PublicAccessSettingsStatusOff" xml:space="preserve">
+      <value>الاستبيان غير مشترك حاليًا كعام.</value>
+  </data>
+  <data name="PublicAccessSettingsOn" xml:space="preserve">
+      <value>تشغيل الوصول العام.</value>
+  </data>
+  <data name="PublicAccessSettingsOff" xml:space="preserve">
+      <value>إيقاف الوصول العام.</value>
+  </data>
+  <data name="AnonymousQuestionnaireSettings" xml:space="preserve">
+      <value>مشاركة الرابط</value>
+  </data>
+  <data name="AnonymousLink" xml:space="preserve">
+      <value>رابط مجهول:</value>
+  </data>
+  <data name="CopyLink" xml:space="preserve">
+      <value>نسخ الرابط</value>
+  </data>
+  <data name="AnonymousQuestionnaireDescriptionSettings" xml:space="preserve">
+      <value>سيتمكن المستخدمون الذين لديهم هذا الرابط من فتح هذا الاستبيان</value>
+  </data>
+  <data name="QuestionnaireSettings" xml:space="preserve">
+      <value>إعدادات الاستبيان</value>
+  </data>
+  <data name="HelpCombobox" xml:space="preserve">
+      <value>المربع المنسدل هو مزيج من قائمة منسدلة ومربع نصي قابل للتحرير بسطر واحد. يمكن اختيار الفئات إما عن طريق كتابة قيمة أو جزء منها أو اختيار قيمة من القائمة</value>
+  </data>
+  <data name="HelpQuestionnaireVarible" xml:space="preserve">
+      <value>يستخدم متغير الاستبيان كبادئة في تشكيل أسماء ملفات التصدير. يمكن أن تتراوح أسماء المتغيرات ومعرفات القوائم من {{minLength}} إلى {{maxLength}} حرفًا ويجب أن تحتوي فقط على الأحرف التالية: a-z، A-Z، _، أو 0-9. لا يمكن أن يكون الحرف الأول 0-9 أو _ ولا يمكن أن يكون الأخير _.</value>
+  </data>
+  <data name="DeleteCommentConfirm" xml:space="preserve">
+      <value>هل أنت متأكد أنك تريد حذف التعليق؟</value>
+  </data>
+  <data name="RefreshPageConfirm" xml:space="preserve">
+      <value>لقد قمنا بتحديث هذا الموقع، يرجى تحديث الصفحة، أو قد تواجه سلوكًا غير متوقع</value>
+  </data>
+  <data name="Refresh" xml:space="preserve">
+      <value>تحديث</value>
+  </data>
+  <data name="NotSupportedAttachment" xml:space="preserve">
+      <value>الملف المحدد غير مدعوم كمرفق</value>
+  </data>
+  <data name="AttachmentDimensionsAreTooBig" xml:space="preserve">
+      <value>الأبعاد كبيرة جدًا</value>
+  </data>
+  <data name="SettingsHideIfDisabled" xml:space="preserve">
+      <value>إخفاء العنصر عند تعطيله</value>
+  </data>
+  <data name="HideIfDisabledNested" xml:space="preserve">
+      <value>متداخل من الاستبيان</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+      <value>إضافة</value>
+  </data>
+  <data name="AllClassifications" xml:space="preserve">
+      <value>جميع التصنيفات</value>
+  </data>
+  <data name="ClassificationShowCategories" xml:space="preserve">
+      <value>إظهار الفئات</value>
+  </data>
+  <data name="ClassificationsTitle" xml:space="preserve">
+      <value>بنك الأسئلة. التصنيفات</value>
+  </data>
+  <data name="QuestionAddClassification" xml:space="preserve">
+      <value>البحث عن تصنيف</value>
+  </data>
+  <data name="SearchClassification" xml:space="preserve">
+      <value>البحث عن تصنيف</value>
+  </data>
+  <data name="ReplaceOptionsConfirmation" xml:space="preserve">
+      <value>هل أنت متأكد أنك تريد استبدال الفئات الحالية للسؤال "{{trimmedTitle}}"؟</value>
+  </data>
+  <data name="OnlyFirstOptionsWillBeTakenConfirmation" xml:space="preserve">
+      <value>سيتم أخذ أول {{count}} فئات فقط للسؤال "{{trimmedTitle}}"؟</value>
+  </data>
+  <data name="MyClassifications" xml:space="preserve">
+      <value>تصنيفاتي</value>
+  </data>
+  <data name="ClassificationAdd" xml:space="preserve">
+      <value>إضافة تصنيف</value>
+  </data>
+  <data name="ClassificationAddGroup" xml:space="preserve">
+      <value>إضافة مجموعة</value>
+  </data>
+  <data name="ClassificationGroupBreadcrumbs" xml:space="preserve">
+      <value>المجموعات</value>
+  </data>
+  <data name="ClassificationGroupTitle" xml:space="preserve">
+      <value>عنوان المجموعة</value>
+  </data>
+  <data name="ClassificationsStringOptionsEditorPlaceholder" xml:space="preserve">
+      <value>أدخل الفئات</value>
+  </data>
+  <data name="ClassificationTitle" xml:space="preserve">
+      <value>عنوان التصنيف</value>
+  </data>
+  <data name="SearchForQuestion" xml:space="preserve">
+      <value>البحث عن سؤال</value>
+  </data>
+  <data name="AllFolders" xml:space="preserve">
+      <value>جميع المجلدات</value>
+  </data>
+  <data name="SearchQuestionPlaceholder" xml:space="preserve">
+      <value>البحث عن سؤال</value>
+  </data>
+  <data name="QuestionsSearchTitle" xml:space="preserve">
+      <value>بنك الأسئلة</value>
+  </data>
+  <data name="QuestionsSearchEntities" xml:space="preserve">
+      <value>نتائج البحث</value>
+  </data>
+  <data name="ClassificationsSearchEntities" xml:space="preserve">
+      <value>التصنيفات</value>
+  </data>
+  <data name="ShowAsList" xml:space="preserve">
+      <value>عرض كقائمة فئات</value>
+  </data>
+  <data name="QuestionShowListLimit" xml:space="preserve">
+      <value>إذا لم يكن أكثر من</value>
+  </data>
+    <data name="RosterDisplayMode_SubSection" xml:space="preserve">
+      <value>القسم الفرعي</value>
+  </data>
+  <data name="RosterDisplayMode_Flat" xml:space="preserve">
+      <value>مسطح</value>
+  </data>
+  <data name="RosterDisplayMode_Table" xml:space="preserve">
+      <value>جدول</value>
+  </data>
+  <data name="RosterDisplayMode_Matrix" xml:space="preserve">
+      <value>مصفوفة</value>
+  </data>
+  <data name="RosterDisplayMode" xml:space="preserve">
+      <value>وضع العرض:</value>
+  </data>
+  <data name="AreYouSure" xml:space="preserve">
+      <value>هل أنت متأكد؟</value>
+  </data>
+  <data name="MakeOwnerConfirmationMessage" xml:space="preserve">
+      <value>إذا قمت بنقل الملكية، سيتم إخطار المالك الجديد. قد لا تتمكن من تغيير إعدادات الملكية، وقد يقوم المالك الجديد أيضًا بإزالة وصولك.</value>
+  </data>
+  <data name="SettingsMakeOwner" xml:space="preserve">
+      <value>تعيين كمالك</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+      <value>نعم</value>
+  </data>
+  <data name="Run" xml:space="preserve">
+      <value>تشغيل</value>
+  </data>
+  <data name="View" xml:space="preserve">
+      <value>عرض</value>
+  </data>
+  <data name="ScenarioDetails" xml:space="preserve">
+      <value>سيناريو</value>
   </data>
   <data name="DownloadPdf" xml:space="preserve">
       <value>تنزيل PDF</value>
-      <comment>تنزيل PDF</comment>
   </data>
   <data name="GeneratePdf" xml:space="preserve">
-      <value>إنشاء ملف pdf</value>
-      <comment>إنشاء ملف pdf</comment>
+      <value>إنشاء PDF</value>
   </data>
   <data name="ChooseLanguageTitle" xml:space="preserve">
-      <value>يرجى اختيار لغة لتقديم PDF الاستبيان عليها</value>
-      <comment>يرجى اختيار لغة لتقديم PDF الاستبيان عليها</comment>
+      <value>يرجى اختيار الترجمة</value>
   </data>
   <data name="Initializing" xml:space="preserve">
-      <value>جار تهيئة</value>
-      <comment>جار تهيئة</comment>
+      <value>جارٍ التهيئة</value>
   </data>
   <data name="RetryExportPDF" xml:space="preserve">
-      <value>اعادة محاولة التصدير كملف PDF</value>
-      <comment>اعادة محاولة التصدير كملف PDF</comment>
+      <value>إعادة محاولة التصدير كـ PDF</value>
   </data>
   <data name="Translation_Original" xml:space="preserve">
-      <value>أصلي</value>
-      <comment>أصلي</comment>
+      <value>الأصلية</value>
   </data>
-  <data name="SideBarMetadataTitle" xml:space="preserve">
-      <value>عنوان الاستبيان</value>
+  <data name="Preview" xml:space="preserve">
+      <value>معاينة الإصدار #{{revision}}</value>
+  </data>
+  <data name="CustomRosterTitle" xml:space="preserve">
+      <value>عنوان مخصص</value>
+  </data>
+  <data name="HelpOptionValue" xml:space="preserve">
+      <value>رمز الفئة الرقمي (غير مرئي للمحاور)</value>
+  </data>
+  <data name="HelpOptionTitle" xml:space="preserve">
+      <value>تسمية نصية للفئة (مرئية للمحاور)</value>
+  </data>
+  <data name="HelpOverlapDetection" xml:space="preserve">
+      <value>عرض وتسليط الضوء على التداخلات في إجابة هذا السؤال مع الإجابات على نفس الأسئلة في حالات القائمة الشقيقة</value>
+  </data>
+  <data name="NewItem" xml:space="preserve">
+      <value>عنصر جديد</value>
+  </data>
+  <data name="EditItem" xml:space="preserve">
+      <value>تحرير العنصر</value>
+  </data>
+  <data name="DeleteItemCofirm" xml:space="preserve">
+      <value>هل أنت متأكد أنك تريد حذف هذا العنصر؟</value>
+  </data>
+  <data name="Forum" xml:space="preserve">
+      <value>منتدى</value>
+  </data>
+  <data name="TableView" xml:space="preserve">
+      <value>عرض الجدول</value>
+  </data>
+  <data name="StringsView" xml:space="preserve">
+      <value>عرض النص</value>
+  </data>
+  <data name="ValidationIntValue" xml:space="preserve">
+      <value>القيمة كبيرة جدًا</value>
+  </data>
+  <data name="RequiredField" xml:space="preserve">
+      <value>حقل مطلوب</value>
+  </data>
+  <data name="FileUploaded" xml:space="preserve">
+      <value>تم تحميل الملف</value>
+  </data>
+  <data name="DataChangesReverted" xml:space="preserve">
+      <value>تم التراجع عن تغييرات البيانات</value>
+  </data>
+  <data name="OptionsSizeLimit" xml:space="preserve">
+      <value>الحد الأقصى {max_rows} صفوف مسموح بها</value>
+  </data>
+  <data name="CommunicationError" xml:space="preserve">
+      <value>خطأ في الشبكة</value>
+  </data>
+  <data name="SideBarCategoriesAddNew" xml:space="preserve">
+      <value>إضافة فئات جديدة</value>
+  </data>
+  <data name="RowAdded" xml:space="preserve">
+      <value>تمت إضافة الصف</value>
+  </data>
+  <data name="OptionsCascadingListError" xml:space="preserve">
+      <value>لقد أدخلت إدخالًا غير صالح. يجب أن يتبع كل سطر التنسيق: "العنوان...قيمة الوالد/القيمة[...اسم المرفق]". يجب أن تكون "القيمة" و"قيمة الوالد" رقمًا صحيحًا. يجب أن يكون "العنوان" سلسلة أبجدية رقمية. "اسم المرفق" اختياري. لا يُسمح بوجود أسطر فارغة.</value>
+  </data>
+  <data name="ShowParentValues" xml:space="preserve">
+      <value>عرض قيم الوالد</value>
+  </data>
+  <data name="HideParentValues" xml:space="preserve">
+      <value>إخفاء قيم الوالد</value>
+  </data>
+  <data name="AddEnablingCondition" xml:space="preserve">
+      <value>إضافة شرط تمكين</value>
+  </data>
+  <data name="ManageAccount" xml:space="preserve">
+      <value>إدارة الحساب</value>
+  </data>
+  <data name="ShowList" xml:space="preserve">
+      <value>عرض القائمة</value>
+  </data>
+  <data name="Login" xml:space="preserve">
+      <value>تسجيل الدخول</value>
+  </data>
+  <data name="Register" xml:space="preserve">
+      <value>تسجيل</value>
+  </data>
+  <data name="No" xml:space="preserve">
+      <value>لا</value>
+  </data>
+  <data name="QuestionIsCritical" xml:space="preserve">
+      <value>هذا سؤال حاسم</value>
+  </data>
+  <data name="HelpIsCritical" xml:space="preserve">
+      <value>قد يشير مؤلفو الاستبيان إلى أن الإجابة على سؤال ما حاسمة لتقديم المقابلة.</value>
+  </data>
+  <data name="HelpCriticalityConditionExpression" xml:space="preserve">
+      <value>تعبير منطقي يقيم المقابلة ككل لتحديد ما إذا كانت تلبي القواعد الحاسمة (عندما يقيم هذا التعبير على أنه "صحيح"). قد يشير إلى أي أسئلة أو متغيرات.</value>
+  </data>
+  <data name="HelpCriticalityConditionMessage" xml:space="preserve">
+      <value>يتم عرض هذه الرسالة عندما يقيم الشرط الحاسم على أنه "خطأ" أو يحدث استثناء أثناء تقييم التعبير. قد تستخدم الرسالة الروابط التشعبية واستبدال النص.</value>
   </data>
 </root>

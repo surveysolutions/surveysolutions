@@ -174,4 +174,19 @@
   <data name="TranfserOwnershipNotification" xml:space="preserve">
     <value>Hola, {0}: &lt;br&gt; {1} le ha transferido la propiedad del cuestionario {2}.</value>
   </data>
+    <data name="AnonymousSharingEmail" xml:space="preserve">
+  <value>Hola {0}, &lt;br/&gt;&lt;br/&gt; Ha habilitado el acceso de solo lectura a su cuestionario "{1}" para usuarios anónimos a través del siguiente enlace: </value>
+</data>
+    <data name="SystemMailer_AnonymousSharingEmail_Subject" xml:space="preserve">
+  <value>Enlace de compartición anónima</value>
+</data>
+    <data name="EmailSendInfo" xml:space="preserve">
+  <value>Este mensaje fue enviado automáticamente por la herramienta Survey Solutions Designer.</value>
+</data>
+    <data name="EmailChange" xml:space="preserve">
+  <value>Hola {0}, &lt;br/&gt; &lt;br/&gt; Para confirmar el cambio de correo electrónico, utilice el siguiente enlace: </value>
+</data>
+    <data name="EmailChangeLink" xml:space="preserve">
+  <value>confirmar</value>
+</data>
 </root>

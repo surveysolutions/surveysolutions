@@ -343,4 +343,13 @@
   <data name="Properties" xml:space="preserve">
     <value>Vlastnosti</value>
   </data>
+    <data name="AllGeoTracks" xml:space="preserve">
+        <value>Všechny geo stopy</value>
+    </data>
+    <data name="DateRange" xml:space="preserve">
+        <value>Časové rozmezí</value>
+    </data>
+    <data name="GeoTrackNumber" xml:space="preserve">
+        <value>Geotrack</value>
+    </data>
 </root>

@@ -323,7 +323,7 @@ for further instructions</value>
     <value>{0} of {1} new interviews downloaded</value>
   </data>
   <data name="Synchronization_Fail_State_InterviewsPartialDownloaded_Format" xml:space="preserve">
-    <value>{0} of {1} partial interviews downloaded</value>
+    <value>{0} of {1}  partial  interviews downloaded</value>
   </data>
   <data name="Synchronization_Fail_State_RejectedInterviews_Format" xml:space="preserve">
     <value>{0} of {1} rejected interviews returned</value>

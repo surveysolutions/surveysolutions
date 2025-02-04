@@ -225,4 +225,77 @@
   <data name="ViewHelpers_Invalid_property" xml:space="preserve">
     <value>خاصية غير صالحة</value>
   </data>
+    <data name="HQ_Views_TwoFactorAuthentication_Disabled" xml:space="preserve">
+  <value>معطل</value>
+</data>
+    <data name="HQ_Views_TwoFactorAuthentication_Enabled" xml:space="preserve">
+  <value>ممكّن</value>
+</data>
+    <data name="SurverManagement_MainMenu_ChangePassword" xml:space="preserve">
+  <value>تغيير كلمة المرور</value>
+</data>
+    <data name="Teams" xml:space="preserve">
+  <value>الفرق</value>
+</data>
+  <data name="WithErrors" xml:space="preserve">
+    <value>مع أخطاء</value>
+  </data>
+  <data name="HQ_Views_EnableAuthenticator_Title" xml:space="preserve">
+    <value>إعداد تطبيق المصادقة</value>
+  </data>
+    <data name="HQ_Views_ResetAuthenticator_Title" xml:space="preserve">
+  <value>إعادة تعيين مفتاح المصادقة</value>
+</data>
+    <data name="HQ_Views_ShowRecoveryCodes_Title" xml:space="preserve">
+  <value>رموز الاسترداد</value>
+</data>
+    <data name="HQ_Views_DisableTwoFactorAuth_Title" xml:space="preserve">
+  <value>تعطيل المصادقة الثنائية</value>
+</data>
+    <data name="HQ_Views_ResetRecoveryCodes_Title" xml:space="preserve">
+  <value>إعادة تعيين رموز الاسترداد</value>
+</data>
+    
+    <data name="HQ_Views_TwoFactorAuthentication_SetupAuthenticator_Description" xml:space="preserve">
+  <value>قم بإعداد جهاز جديد للمصادقة الثنائية. يمكنك إعداد عدة أجهزة في وقت واحد.</value>
+</data>
+    <data name="HQ_Views_TwoFactorAuthentication_ResetAuthenticator_Description" xml:space="preserve">
+  <value>إعادة تعيين إلى رمز سري جديد إذا فقد أي من أجهزتك المستخدمة للمصادقة الثنائية أو سُرق.</value>
+</data>
+    <data name="HQ_Views_TwoFactorAuthentication_ResetRecoveryCodes_Description" xml:space="preserve">
+  <value>إبطال أي رموز استرداد غير مستخدمة وتوليد 10 رموز جديدة.</value>
+</data>
+    <data name="HQ_Views_TwoFactorAuthentication_Disable2fa_Description" xml:space="preserve">
+  <value>إيقاف المصادقة الثنائية وترك الحساب محميًا بكلمة المرور فقط.</value>
+</data>    
+    <data name="HQ_Views_TwoFactorAuthentication_Title" xml:space="preserve">
+  <value>المصادقة الثنائية</value>
+</data>
+    <data name="HQ_Views_TwoFactorAuthentication_Description" xml:space="preserve">
+  <value>المصادقة الثنائية هي ميزة أمان متقدمة تجعل من الصعب على المخترق تسجيل الدخول إلى حسابك باستخدام كلمة مرور مسروقة فقط.</value>
+</data>    
+    <data name="AllInterviewersExceptApprovedByHeadquarters" xml:space="preserve">
+  <value>غير معتمد من المقر الرئيسي</value>
+</data>
+    <data name="AllInterviewersExceptAssignedToInterviewer" xml:space="preserve">
+  <value>غير مخصص لمقابل</value>
+</data>
+    <data name="NoPermissionsToExecute" xml:space="preserve">
+  <value>المستخدم غير مصرح له بتنفيذ الإجراء المقدم</value>
+</data>
+    <data name="HQ_Views_ApiTokens_Title" xml:space="preserve">
+    <value>الوصول إلى API</value>
+</data>
+    <data name="HQ_Views_Api_Token_Description" xml:space="preserve">
+  <value>يتم استخدام رمز API لإجراء مكالمات API إلى النظام</value>
+</data>
+    <data name="HQ_Views_Api_Token_Issued" xml:space="preserve">
+  <value>ممكّن</value>
+</data>
+    <data name="HQ_Views_Api_Token_Not_Issued" xml:space="preserve">
+  <value>معطل</value>
+</data>
+    <data name="HQ_Views_Api_Token_Generate_Description" xml:space="preserve">
+  <value>يرجى حفظ الرمز الآن. ستتمكن من رؤيته مرة واحدة فقط!</value>
+</data>
 </root>
