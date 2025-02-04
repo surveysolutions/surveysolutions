@@ -13,7 +13,7 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
         [TestCase ("cs")]
         [TestCase ("pt")]
         //[TestCase ("uk")]
-        //[TestCase ("ar")]
+        [TestCase ("ar")]
         //[TestCase ("id")]
         //[TestCase ("ka")]
         //[TestCase ("km")]

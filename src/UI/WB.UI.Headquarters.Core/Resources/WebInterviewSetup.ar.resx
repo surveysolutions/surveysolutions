@@ -1,156 +1,268 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
-  <!-- 
-    Microsoft ResX Schema 
-    
-    Version 2.0
-    
-    The primary goals of this format is to allow a simple XML format 
-    that is mostly human readable. The generation and parsing of the 
-    various data types are done through the TypeConverter classes 
-    associated with the data types.
-    
-    Example:
-    
-    ... ado.net/XML headers & schema ...
-    <resheader name="resmimetype">text/microsoft-resx</resheader>
-    <resheader name="version">2.0</resheader>
-    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
-    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
-    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
-    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
-    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
-        <value>[base64 mime encoded serialized .NET Framework object]</value>
-    </data>
-    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
-        <comment>This is a comment</comment>
-    </data>
-                
-    There are any number of "resheader" rows that contain simple 
-    name/value pairs.
-    
-    Each data row contains a name, and value. The row also contains a 
-    type or mimetype. Type corresponds to a .NET class that support 
-    text/value conversion through the TypeConverter architecture. 
-    Classes that don't support this are serialized and stored with the 
-    mimetype set.
-    
-    The mimetype is used for serialized objects, and tells the 
-    ResXResourceReader how to depersist the object. This is currently not 
-    extensible. For a given mimetype the value must be set accordingly:
-    
-    Note - application/x-microsoft.net.object.binary.base64 is the format 
-    that the ResXResourceWriter will generate, however the reader can 
-    read any of the formats listed below.
-    
-    mimetype: application/x-microsoft.net.object.binary.base64
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
-            : and then encoded with base64 encoding.
-    
-    mimetype: application/x-microsoft.net.object.soap.base64
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
-            : and then encoded with base64 encoding.
-
-    mimetype: application/x-microsoft.net.object.bytearray.base64
-    value   : The object must be serialized into a byte array 
-            : using a System.ComponentModel.TypeConverter
-            : and then encoded with base64 encoding.
-    -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
-    <xsd:element name="root" msdata:IsDataSet="true">
-      <xsd:complexType>
-        <xsd:choice maxOccurs="unbounded">
-          <xsd:element name="metadata">
+    <!-- 
+      Microsoft ResX Schema 
+      
+      Version 2.0
+      
+      The primary goals of this format is to allow a simple XML format 
+      that is mostly human readable. The generation and parsing of the 
+      various data types are done through the TypeConverter classes 
+      associated with the data types.
+      
+      Example:
+      
+      ... ado.net/XML headers & schema ...
+      <resheader name="resmimetype">text/microsoft-resx</resheader>
+      <resheader name="version">2.0</resheader>
+      <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+      <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+      <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+      <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+      <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+          <value>[base64 mime encoded serialized .NET Framework object]</value>
+      </data>
+      <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+          <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+          <comment>This is a comment</comment>
+      </data>
+                  
+      There are any number of "resheader" rows that contain simple 
+      name/value pairs.
+      
+      Each data row contains a name, and value. The row also contains a 
+      type or mimetype. Type corresponds to a .NET class that support 
+      text/value conversion through the TypeConverter architecture. 
+      Classes that don't support this are serialized and stored with the 
+      mimetype set.
+      
+      The mimetype is used for serialized objects, and tells the 
+      ResXResourceReader how to depersist the object. This is currently not 
+      extensible. For a given mimetype the value must be set accordingly:
+      
+      Note - application/x-microsoft.net.object.binary.base64 is the format 
+      that the ResXResourceWriter will generate, however the reader can 
+      read any of the formats listed below.
+      
+      mimetype: application/x-microsoft.net.object.binary.base64
+      value   : The object must be serialized with 
+              : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+              : and then encoded with base64 encoding.
+      
+      mimetype: application/x-microsoft.net.object.soap.base64
+      value   : The object must be serialized with 
+              : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+              : and then encoded with base64 encoding.
+  
+      mimetype: application/x-microsoft.net.object.bytearray.base64
+      value   : The object must be serialized into a byte array 
+              : using a System.ComponentModel.TypeConverter
+              : and then encoded with base64 encoding.
+      -->
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
             <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
-              </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
             </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="assembly">
-            <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="data">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="resheader">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
-            </xsd:complexType>
-          </xsd:element>
-        </xsd:choice>
-      </xsd:complexType>
-    </xsd:element>
-  </xsd:schema>
-  <resheader name="resmimetype">
-    <value>text/microsoft-resx</value>
-  </resheader>
-  <resheader name="version">
-    <value>2.0</value>
-  </resheader>
-  <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </resheader>
-  <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </resheader>
-  <data name="BackToQuestionnaires" xml:space="preserve">
-    <value>الرجوع إلى نظام المسح</value>
-  </data>
-  <data name="Done" xml:space="preserve">
-    <value>أنجز</value>
-  </data>
-  <data name="DownloadTitle" xml:space="preserve">
-    <value>تنزيل ({{count}})</value>
-  </data>
-  <data name="ExportAssignmentsTitle" xml:space="preserve">
-    <value>يمكنك تنزيل قائمة بالمهام المستحدثة التي أسندت إلى الباحث من أجل تسليم الوصلات الإلكترونية إلى المجيبين</value>
-  </data>
-  <data name="SelectInterviwer" xml:space="preserve">
-    <value>اختر الباحث</value>
-  </data>
-  <data name="Start" xml:space="preserve">
-    <value>بدء</value>
-  </data>
-  <data name="Started_Title" xml:space="preserve">
-    <value>تم البدء بالمقابلة الإلكترونية</value>
-  </data>
-  <data name="StartInfo" xml:space="preserve">
-    <value>البدء بالمقابلة الإلكترونية لـ {{name}}</value>
-  </data>
-  <data name="StopWebInterview" xml:space="preserve">
-    <value>إيقاف المقابلة الإلكترونية </value>
-  </data>
-  <data name="WebInterviewSetup_PageHeader" xml:space="preserve">
-    <value>تهيئة المقابلة الإلكترونية </value>
-  </data>
-  <data name="WebInterviewSetup_Title" xml:space="preserve">
-    <value>تهيئة المقابلة الإلكترونية </value>
-  </data>
-  <data name="WebInterviewStarted" xml:space="preserve">
-    <value>تم البدء بالمقابلة الإلكترونية  لـ {{name}}</value>
-  </data>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+<data name="BackToQuestionnaires" xml:space="preserve">
+  <value>العودة إلى إعداد الاستبيان</value>
+</data>
+<data name="Done" xml:space="preserve">
+  <value>تم</value>
+</data>
+<data name="SelectInterviwer" xml:space="preserve">
+  <value>اختر المحاور</value>
+</data>
+<data name="Start" xml:space="preserve">
+  <value>ابدأ</value>
+</data>
+<data name="Started_Title" xml:space="preserve">
+  <value>بدأت المقابلة عبر الويب</value>
+</data>
+<data name="StartInfo" xml:space="preserve">
+  <value>بدء المقابلة عبر الويب لـ {{name}}</value>
+</data>
+<data name="WebInterviewSetup_PageHeader" xml:space="preserve">
+  <value>إعداد المقابلة عبر الويب</value>
+</data>
+<data name="WebInterviewSetup_Title" xml:space="preserve">
+  <value>إعداد المقابلة عبر الويب</value>
+</data>
+<data name="WebInterviewStarted" xml:space="preserve">
+  <value>بدأت المقابلة عبر الويب لـ {{name}}</value>
+</data>
+<data name="UseCaptcha" xml:space="preserve">
+  <value>استخدام CAPTCHA قبل بدء المقابلة</value>
+</data>
+<data name="DownloadTitle" xml:space="preserve">
+  <value>تنزيل ({{count}})</value>
+  <comment>{0} - عدد المقابلات في الملف</comment>
+</data>
+<data name="ExportAssignmentsTitle" xml:space="preserve">
+  <value>يمكنك تنزيل قائمة المهام التي تم إنشاؤها والتي تم تعيينها للمحاور لتسليم الروابط الإلكترونية للمستجيبين</value>
+</data>
+<data name="StopWebInterview" xml:space="preserve">
+  <value>إيقاف المقابلة عبر الويب</value>
+</data>
+<data name="WebInterviewUserMessages_FinishInterview_Descr" xml:space="preserve">
+  <value>النص المعروض في الصفحة النهائية عند اكتمال المقابلة</value>
+</data>
+<data name="WebInterviewUserMessages_Invitation_Descr" xml:space="preserve">
+  <value>نص الدعوة المقدم للمستخدم في الصفحة الأولى. يتم استبدال %QUESTIONNAIRE% باسم الاستبيان</value>
+</data>
+<data name="WebInterviewUserMessages_ResumeInvitation_Descr" xml:space="preserve">
+  <value>النص المعروض للمستخدم العائد عند استئناف المقابلة. يتم استبدال %QUESTIONNAIRE% باسم الاستبيان</value>
+</data>
+<data name="WebInterviewUserMessages_ResumeWelcome_Descr" xml:space="preserve">
+  <value>نص العنوان المعروض للمستخدم العائد قبل استئناف المقابلة</value>
+</data>
+<data name="WebInterviewUserMessages_SurveyName_Descr" xml:space="preserve">
+  <value>اسم الاستبيان الذي تم إجراؤه. يتم استبدال %QUESTIONNAIRE% باسم الاستبيان</value>
+</data>
+<data name="WebInterviewUserMessages_WebSurveyHeader_Descr" xml:space="preserve">
+  <value>نص العنوان المعروض بعد اكتمال المقابلة</value>
+</data>
+<data name="WebInterviewUserMessages_WelcomeText_Descr" xml:space="preserve">
+  <value>نص الترحيب المعروض في الصفحة الأولى</value>
+</data>
+<data name="CustomText" xml:space="preserve">
+  <value>استخدام نص مخصص</value>
+</data>
+<data name="TextsUpdated" xml:space="preserve">
+  <value>تم تحديث النصوص</value>
+</data>
+<data name="SaveAll" xml:space="preserve">
+  <value>حفظ الكل</value>
+</data>
+<data name="TextCustomize" xml:space="preserve">
+  <value>يمكن تخصيص النص المعروض للمستجيبين</value>
+</data>
+<data name="CustomMessageTooLong" xml:space="preserve">
+  <value>يجب ألا تحتوي الرسالة المخصصة على أكثر من {0} حرف (بما في ذلك html)</value>
+</data>
+<data name="WebInterviewSetup_SendInvitationsTitle" xml:space="preserve">
+  <value>إرسال الدعوات</value>
+</data>
+<data name="Invitations" xml:space="preserve">
+  <value>الدعوات</value>
+</data>
+<data name="Invitations_TotalInvitations" xml:space="preserve">
+  <value>{{count}} إجمالي الدعوات.</value>
+</data>
+<data name="Invitations_Sent" xml:space="preserve">
+  <value>تم إرسال {{count}} دعوات بالفعل.</value>
+</data>
+<data name="Invitations_NothingSent" xml:space="preserve">
+  <value>لم يتم إرسال أي دعوات بعد.</value>
+</data>
+<data name="Invitations_ToSend" xml:space="preserve">
+  <value>{{count}} دعوة للإرسال.</value>
+</data>
+<data name="Invitations_NothingToSend" xml:space="preserve">
+  <value>لا توجد دعوات للإرسال في الوقت الحالي.</value>
+</data>
+<data name="Invitations_SetupError" xml:space="preserve">
+  <value>لا يمكن إرسال الدعوات.</value>
+</data>
+<data name="Invitations_EmailIsNotSetUp" xml:space="preserve">
+  <value>لم يتم إعداد مزود البريد الإلكتروني.</value>
+</data>
+<data name="Invitations_ChangeEmailSettingsAdmin" xml:space="preserve">
+  <value>يمكنك تغيير هذه الإعدادات في صفحة &lt;a href="{{url}}"&gt;'مزودي البريد الإلكتروني'&lt;/a&gt;.</value>
+</data>
+<data name="Invitations_ChangeEmailSettingsNotAdmin" xml:space="preserve">
+  <value>أخبر المستخدم المسؤول لديك بتغيير هذه الإعدادات في صفحة 'مزودي البريد الإلكتروني'.</value>
+</data>
+<data name="Invitations_SurveyIsNotStarted" xml:space="preserve">
+  <value>لم يبدأ الاستبيان عبر الويب. قم بإعداد و &lt;a href="{{url}}"&gt;بدء الاستبيان عبر الويب&lt;/a&gt; قبل إرسال الدعوات.</value>
+</data>
+<data name="Invitations_SuccessfulSetup" xml:space="preserve">
+  <value>تم بدء الاستبيان عبر الويب وتم إعداد مزود البريد الإلكتروني بشكل صحيح. النظام جاهز لإرسال الدعوات.</value>
+</data>
+<data name="Invitations_SendAction" xml:space="preserve">
+  <value>إرسال {{count}} دعوات</value>
+</data>
+<data name="WebInterviewUserMessages_CompleteButton_Descr" xml:space="preserve">
+  <value>إكمال</value>
+</data>
+<data name="WebInterviewUserMessages_CompleteNoteToSupervisor_Descr" xml:space="preserve">
+  <value>ملاحظة للمشرف</value>
+</data>
+<data name="SingleResponse" xml:space="preserve">
+  <value>تحديد مقابلة واحدة لكل مستجيب</value>
+</data>
+<data name="WebInterviewUserMessages_StartNewButton_Descr" xml:space="preserve">
+  <value>بدء مقابلة جديدة</value>
+</data>
+<data name="WebInterviewUserMessages_ResumeButton_Descr" xml:space="preserve">
+  <value>استئناف</value>
+</data>
+<data name="EmailOnComplete" xml:space="preserve">
+  <value>إرسال بريد إلكتروني بعد اكتمال المقابلة عبر الويب</value>
+</data>
+<data name="AttachAnswersToCompleteEmail" xml:space="preserve">
+  <value>إرفاق نص المقابلة بصيغة Pdf</value>
+</data>
+<data name="AllowSwitchToCawiForInterviewer" xml:space="preserve">
+  <value>السماح للمحاور بالتبديل إلى وضع CAWI</value>
+</data>
+<data name="WebInterviewUserMessages_LinkInvitation_Descr" xml:space="preserve">
+  <value>النص المعروض للمستخدم عند التنقل إلى رابط المقابلة الذي لم يتم مزامنته بعد مع الخادم</value>
+</data>
+<data name="WebInterviewUserMessages_LinkWelcome_Descr" xml:space="preserve">
+  <value>نص الترحيب المعروض في صفحة الهبوط لرابط المقابلة عبر الويب</value>
+</data>
 </root>

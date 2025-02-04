@@ -1385,7 +1385,7 @@
     <value>Upload users mappings</value>
   </data>
   <data name="MapLinking_UploadDescription" xml:space="preserve">
-    <value>This will allow you to create map to user correspondence.</value>
+    <value> This will allow you to create map to user correspondence. </value>
   </data>
   <data name="MapLinking_DownloadExisting" xml:space="preserve">
     <value>Download existing links</value>
