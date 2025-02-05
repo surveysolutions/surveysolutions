@@ -1,4 +1,5 @@
 ﻿import DOMPurify from 'dompurify';
+import { Modal } from 'bootstrap';
 
 function ItemViewModel() {
     
@@ -88,7 +89,12 @@ function ItemViewModel() {
             headers: { 'X-CSRF-TOKEN': getCsrfCookie() },
         }).done(function (result) {
             if (result.length && result.length > 1) {
-                $('#mExportHtml').modal('show');
+                var mExportHtml = document.getElementById('mExportHtml')
+                //var mExportHtmlModal = Modal.getInstance(mExportHtml)
+                var mExportHtmlModal = new Modal(mExportHtml, {
+                    keyboard: false
+                });
+                mExportHtmlModal.show();
 
                 $('#export-html-modal-questionnaire-id').val(self.itemId);
                 $('#export-html-modal-questionnaire-title').text(self.itemName);
@@ -130,7 +136,7 @@ function ItemViewModel() {
                             self.selectedTransalationHtml,
                         '_blank'
                     );
-                    $('#mExportHtml').modal('hide');
+                    mExportHtmlModal.hide();
                 });
             } else {
                 window.open(self.htmlDownloadUrl, '_blank');

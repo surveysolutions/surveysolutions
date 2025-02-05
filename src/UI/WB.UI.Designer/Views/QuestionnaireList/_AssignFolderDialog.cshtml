@@ -41,11 +41,11 @@
 </script>
 
 
-<div class="modal fade" id="mAssignFolder">
+<div class="modal" id="mAssignFolder">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="@QuestionnaireController.Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="@QuestionnaireController.Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">@QuestionnaireController.AssignFolder <small>@QuestionnaireController.Confirmation</small></h4>
             </div>
             <div class="modal-body">
@@ -59,7 +59,7 @@
                     @Html.AntiForgeryToken()
                     <input name="folderId" id="assign-folder-modal-folder-id" type="hidden" />
                     <input name="id" id="assign-folder-modal-questionnaire-id" type="hidden" />
-                    <button class="btn" data-dismiss="modal" aria-hidden="true">@QuestionnaireController.Cancel</button>
+                    <button class="btn" data-bs-dismiss="modal" aria-hidden="true">@QuestionnaireController.Cancel</button>
                     <button id="assign-folder-button" type="submit" class="btn btn-primary" value="@QuestionnaireController.Assign" onclick="this.disabled = true; this.value = '@QuestionnaireController.Assigning'; window.assignFolder();">@QuestionnaireController.Assign</button>
                 </form>
             </div>

@@ -69,7 +69,7 @@ public class ViteTagHelperComponent : ITagHelperComponent
     {
         var result = await _memoryCache.GetOrCreateAsync("fs://assets/" + renderPart, async entry =>
         {
-            entry.AddExpirationToken(_webHost.WebRootFileProvider.Watch("assets/.vite/manifest.json"));
+            entry.AddExpirationToken(_webHost.WebRootFileProvider.Watch(".vite/manifest.json"));
             return await RenderPart(renderPart).ConfigureAwait(false);
         }).ConfigureAwait(false);
 
@@ -78,7 +78,7 @@ public class ViteTagHelperComponent : ITagHelperComponent
 
     private async Task<string> RenderPart(ViteRender renderPart)
     {
-        var manifestJson = _webHost.WebRootFileProvider.GetFileInfo("assets/.vite/manifest.json");
+        var manifestJson = _webHost.WebRootFileProvider.GetFileInfo(".vite/manifest.json");
         if (!manifestJson.Exists)
         {
             if (renderPart == ViteRender.Js)
@@ -94,7 +94,8 @@ public class ViteTagHelperComponent : ITagHelperComponent
                            .ConfigureAwait(false)
                        ?? new Dictionary<string, ViteManifestItem?>();
 
-        var entryItem = manifest.FirstOrDefault(v => v.Value?.isEntry == true);
+        var entryItem = manifest.FirstOrDefault(v => 
+            v.Key.EndsWith("main.js") && v.Value?.isEntry == true);
 
         IHtmlContentBuilder html = new HtmlContentBuilder();
 
@@ -104,7 +105,7 @@ public class ViteTagHelperComponent : ITagHelperComponent
             {
                 var tag = new TagBuilder("link");
                 tag.Attributes.Add("rel", "stylesheet");
-                tag.Attributes.Add("href", $"/assets/{css}");
+                tag.Attributes.Add("href", $"/{css}");
                 tag.Attributes.Add("type", "text/css");
                 tag.TagRenderMode = TagRenderMode.SelfClosing;
                 html = html.AppendHtml(tag);
@@ -113,7 +114,7 @@ public class ViteTagHelperComponent : ITagHelperComponent
         else if (renderPart == ViteRender.Js)
         {
             var tag = new TagBuilder("script");
-            tag.Attributes.Add("src", $"/assets/{entryItem.Value?.file}");
+            tag.Attributes.Add("src", $"/{entryItem.Value?.file}");
             tag.Attributes.Add("type", "module");
             tag.TagRenderMode = TagRenderMode.Normal;
             html = html.AppendHtml(tag);
