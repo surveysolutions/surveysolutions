@@ -117,185 +117,298 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Confirm" xml:space="preserve">
-    <value>تأكيد </value>
-  </data>
-  <data name="Cancel" xml:space="preserve">
-    <value>إلغاء</value>
-  </data>
-  <data name="Ok" xml:space="preserve">
-    <value>حسنا</value>
-  </data>
-  <data name="Admin" xml:space="preserve">
-    <value>مدير</value>
-  </data>
-  <data name="AllAssignments" xml:space="preserve">
-    <value>جميع المهام</value>
-  </data>
-  <data name="AllQuestionnaires" xml:space="preserve">
-    <value>جميع الاستبيانات</value>
-  </data>
-  <data name="AllResponsible" xml:space="preserve">
-    <value>جميع المسؤولين</value>
-  </data>
-  <data name="AllStatuses" xml:space="preserve">
-    <value>جميع الحالات</value>
-  </data>
-  <data name="AllSupervisors" xml:space="preserve">
-    <value>جميع المشرفين</value>
-  </data>
-  <data name="AlRightsReserved" xml:space="preserve">
-    <value>جميع الحقوق محفوظة</value>
-  </data>
-  <data name="Any" xml:space="preserve">
-    <value>أي</value>
-  </data>
-  <data name="Approve" xml:space="preserve">
-    <value>الموافقة </value>
-  </data>
-  <data name="Archived" xml:space="preserve">
-    <value>تم أرشفته</value>
-  </data>
-  <data name="Assign" xml:space="preserve">
-    <value>تعيين</value>
-  </data>
-  <data name="Assignment" xml:space="preserve">
-    <value>مهمة</value>
-  </data>
-  <data name="AuditLog" xml:space="preserve">
-    <value>سجل التدقيق</value>
-  </data>
-  <data name="Create" xml:space="preserve">
-    <value>انشاء</value>
-  </data>
-  <data name="CreatedOnClient" xml:space="preserve">
-    <value>تم انشاءه للعميل</value>
-  </data>
-  <data name="CreateNewAssignment" xml:space="preserve">
-    <value>انشاء مهمة جديدة</value>
-  </data>
-  <data name="Delete" xml:space="preserve">
-    <value>حذف</value>
-  </data>
-  <data name="Download" xml:space="preserve">
-    <value>تنزيل</value>
-  </data>
-  <data name="ErrorsLog" xml:space="preserve">
-    <value>سجل الأخطاء</value>
-  </data>
-  <data name="GetInterviewerApp" xml:space="preserve">
-    <value>الحصول على تطبيق الباحث</value>
-  </data>
-  <data name="HideIdentifying" xml:space="preserve">
-    <value>مخفي</value>
-  </data>
-  <data name="InterviewKey" xml:space="preserve">
-    <value>مفتاح المقابلة</value>
-  </data>
-  <data name="Interviews" xml:space="preserve">
-    <value>مقابلات</value>
-  </data>
-  <data name="LastUpdate" xml:space="preserve">
-    <value>تم تحديثه في</value>
-  </data>
-  <data name="Legal" xml:space="preserve">
-    <value>قانوني</value>
-  </data>
-  <data name="Loading" xml:space="preserve">
-    <value>جاري التحميل الرجاءالانتظار</value>
-  </data>
-  <data name="Logoff" xml:space="preserve">
-    <value>إطفاء</value>
-  </data>
-  <data name="Name" xml:space="preserve">
-    <value>الأسم</value>
-  </data>
-  <data name="NewVersionAvailable" xml:space="preserve">
-    <value>الإصدار الجديد متاح:</value>
-  </data>
-  <data name="No" xml:space="preserve">
-    <value>لا</value>
-  </data>
-  <data name="NoResultsFound" xml:space="preserve">
-    <value>لم يتم العثور على نتائج</value>
-  </data>
-  <data name="Open" xml:space="preserve">
-    <value>افتح</value>
-  </data>
-  <data name="OpenResponsiblesProfile" xml:space="preserve">
-    <value>افتح الملف الشخصي للشخص المسؤول</value>
-  </data>
-  <data name="PrefilledQuestions" xml:space="preserve">
-    <value>تحديد الأسئلة</value>
-  </data>
-  <data name="Processing" xml:space="preserve">
-    <value>قيد المعالجة…</value>
-  </data>
-  <data name="Questionnaire" xml:space="preserve">
-    <value>استبيان</value>
-  </data>
-  <data name="Questionnaires" xml:space="preserve">
-    <value>الاستبيانات</value>
-  </data>
-  <data name="ReceivedByInterviewer" xml:space="preserve">
-    <value>مستلم من الباحث</value>
-  </data>
-  <data name="Refresh" xml:space="preserve">
-    <value>تحديث</value>
-  </data>
-  <data name="Reject" xml:space="preserve">
-    <value>رفض</value>
-  </data>
-  <data name="Responsible" xml:space="preserve">
-    <value>مسؤول</value>
-  </data>
-  <data name="Save" xml:space="preserve">
-    <value>حفظ</value>
-  </data>
-  <data name="SaveChanges" xml:space="preserve">
-    <value>حفظ التغييرات</value>
-  </data>
-  <data name="Search" xml:space="preserve">
-    <value>البحث</value>
-  </data>
-  <data name="Settings" xml:space="preserve">
-    <value>الاعدادات</value>
-  </data>
-  <data name="ShowIdentifying" xml:space="preserve">
-    <value>اظهار التحديد</value>
-  </data>
-  <data name="ShowStatusHistory" xml:space="preserve">
-    <value>اظهار تاريخ الحالة </value>
-  </data>
-  <data name="SignIn" xml:space="preserve">
-    <value>تسجيل الدخول</value>
-  </data>
-  <data name="Status" xml:space="preserve">
-    <value>الحالة</value>
-  </data>
-  <data name="Template" xml:space="preserve">
-    <value>نموذج</value>
-  </data>
-  <data name="TheWorldBankGroup" xml:space="preserve">
-    <value>مجموعة البنك الدولي</value>
-  </data>
-  <data name="Title" xml:space="preserve">
-    <value>عنوان</value>
-  </data>
-  <data name="Total" xml:space="preserve">
-    <value>مجموع</value>
-  </data>
-  <data name="Unapprove" xml:space="preserve">
-    <value>عدم الموافقة</value>
-  </data>
-  <data name="Yes" xml:space="preserve">
-    <value>نعم</value>
-  </data>
-  <data name="НasErrors" xml:space="preserve">
-    <value>فيه أخطاء</value>
-  </data>
-  <data name="SelectQuestionnaire" xml:space="preserve">
-      <value>حدد الاستبيان</value>
-    <comment>حدد الاستبيان</comment>
-  </data>
+    <data name="Search" xml:space="preserve">
+  <value>بحث</value>
+</data>
+    <data name="Create" xml:space="preserve">
+  <value>إنشاء</value>
+</data>
+    <data name="ViewAssignmentDetails" xml:space="preserve">
+  <value>عرض تفاصيل التعيين</value>
+</data>
+    <data name="SaveChanges" xml:space="preserve">
+  <value>حفظ التغييرات</value>
+</data>
+    <data name="Template" xml:space="preserve">
+  <value>نموذج</value>
+</data>
+    <data name="Status" xml:space="preserve">
+  <value>الحالة</value>
+</data>
+    <data name="Assignment" xml:space="preserve">
+  <value>تعيين</value>
+</data>
+    <data name="Responsible" xml:space="preserve">
+  <value>المسؤول</value>
+</data>
+    <data name="Save" xml:space="preserve">
+  <value>حفظ</value>
+</data>
+    <data name="Apply" xml:space="preserve">
+  <value>تطبيق</value>
+</data>
+    <data name="ErrorsLog" xml:space="preserve">
+  <value>سجل الأخطاء</value>
+</data>
+    <data name="Questionnaires" xml:space="preserve">
+  <value>الاستبيانات</value>
+</data>
+    <data name="Questionnaire" xml:space="preserve">
+  <value>استبيان</value>
+</data>
+    <data name="Assignments" xml:space="preserve">
+  <value>التعيينات</value>
+</data>
+    <data name="Interviews" xml:space="preserve">
+  <value>المقابلات</value>
+</data>
+    <data name="PrefilledQuestions" xml:space="preserve">
+  <value>الأسئلة التعريفية</value>
+</data>
+    <data name="ShowIdentifying" xml:space="preserve">
+  <value>عرض التعريف</value>
+</data>
+    <data name="HideIdentifying" xml:space="preserve">
+  <value>إخفاء</value>
+</data>
+    <data name="InterviewKey" xml:space="preserve">
+  <value>مفتاح المقابلة</value>
+</data>
+    <data name="LastUpdate" xml:space="preserve">
+  <value>تم التحديث في</value>
+</data>
+    <data name="НasErrors" xml:space="preserve">
+  <value>لديه أخطاء</value>
+</data>
+    <data name="ReceivedByInterviewer" xml:space="preserve">
+  <value>تم الاستلام عن طريق الجهاز اللوحي</value>
+</data>
+    <data name="CreatedOnClient" xml:space="preserve">
+  <value>تم الإنشاء على الجهاز اللوحي</value>
+</data>
+    <data name="Any" xml:space="preserve">
+  <value>أي</value>
+</data>
+    <data name="AllAssignments" xml:space="preserve">
+  <value>جميع التعيينات</value>
+</data>
+    <data name="NoResultsFound" xml:space="preserve">
+  <value>لم يتم العثور على نتائج</value>
+</data>
+    <data name="Processing" xml:space="preserve">
+  <value>جارٍ المعالجة...</value>
+</data>
+    <data name="Refresh" xml:space="preserve">
+  <value>تحديث</value>
+</data>
+    <data name="Total" xml:space="preserve">
+  <value>الإجمالي</value>
+</data>
+    <data name="CreateNewAssignment" xml:space="preserve">
+  <value>إنشاء تعيين جديد</value>
+</data>
+    <data name="Name" xml:space="preserve">
+  <value>الاسم</value>
+</data>
+    <data name="GetInterviewerApp" xml:space="preserve">
+  <value>احصل على تطبيق المقابل</value>
+</data>
+    <data name="Loading" xml:space="preserve">
+  <value>جارٍ التحميل. يرجى الانتظار</value>
+</data>
+    <data name="Admin" xml:space="preserve">
+  <value>المسؤول</value>
+</data>
+    <data name="Approve" xml:space="preserve">
+  <value>الموافقة</value>
+</data>
+    <data name="Assign" xml:space="preserve">
+  <value>تعيين</value>
+</data>
+    <data name="Reject" xml:space="preserve">
+  <value>رفض</value>
+</data>
+    <data name="Unapprove" xml:space="preserve">
+  <value>إلغاء الموافقة</value>
+</data>
+    <data name="Delete" xml:space="preserve">
+  <value>حذف</value>
+</data>
+    <data name="SignIn" xml:space="preserve">
+  <value>تسجيل الدخول</value>
+</data>
+    <data name="Title" xml:space="preserve">
+  <value>العنوان</value>
+</data>
+    <data name="AlRightsReserved" xml:space="preserve">
+  <value>جميع الحقوق محفوظة</value>
+</data>
+    <data name="Legal" xml:space="preserve">
+  <value>قانوني</value>
+</data>
+    <data name="TheWorldBankGroup" xml:space="preserve">
+  <value>مجموعة البنك الدولي</value>
+</data>
+    <data name="Settings" xml:space="preserve">
+  <value>الإعدادات</value>
+</data>
+    <data name="EmailProviders" xml:space="preserve">
+  <value>مزودو البريد الإلكتروني</value>
+</data>
+    <data name="AuditLog" xml:space="preserve">
+  <value>سجل التدقيق</value>
+</data>
+    <data name="Logoff" xml:space="preserve">
+  <value>تسجيل الخروج</value>
+</data>
+    <data name="Cancel" xml:space="preserve">
+  <value>إلغاء</value>
+</data>
+    <data name="Clear" xml:space="preserve">
+  <value>مسح</value>
+</data>
+    <data name="NewVersionAvailable" xml:space="preserve">
+  <value>الإصدار الجديد متاح:</value>
+</data>
+    <data name="No" xml:space="preserve">
+  <value>لا</value>
+</data>
+    <data name="Yes" xml:space="preserve">
+  <value>نعم</value>
+</data>
+    <data name="Ok" xml:space="preserve">
+  <value>موافق</value>
+</data>
+    <data name="Download" xml:space="preserve">
+  <value>تنزيل</value>
+</data>
+    <data name="DownloadSupervisor" xml:space="preserve">
+  <value>تنزيل تطبيق المشرف</value>
+</data>
+    <data name="Open" xml:space="preserve">
+  <value>فتح</value>
+</data>
+    <data name="ShowStatusHistory" xml:space="preserve">
+  <value>عرض تاريخ الحالة</value>
+</data>
+    <data name="AllStatuses" xml:space="preserve">
+  <value>جميع الحالات</value>
+</data>
+    <data name="AllSupervisors" xml:space="preserve">
+  <value>جميع المشرفين</value>
+</data>
+    <data name="AllResponsible" xml:space="preserve">
+  <value>أي مسؤول</value>
+</data>
+    <data name="AllQuestionnaires" xml:space="preserve">
+  <value>جميع الاستبيانات</value>
+</data>
+    <data name="AllGpsQuestions" xml:space="preserve">
+  <value>جميع أسئلة GPS</value>
+</data>
+    <data name="OpenResponsiblesProfile" xml:space="preserve">
+  <value>فتح ملف المسؤول</value>
+</data>
+    <data name="MapDashboard" xml:space="preserve">
+  <value>لوحة التحكم بالخريطة</value>
+</data>
+    <data name="OpenAssignment" xml:space="preserve">
+  <value>فتح التعيين</value>
+</data>
+    <data name="Confirm" xml:space="preserve">
+  <value>تأكيد</value>
+</data>
+    <data name="Archived" xml:space="preserve">
+  <value>مؤرشف</value>
+</data>
+    <data name="NothingSelected" xml:space="preserve">
+  <value>لم يتم تحديد شيء</value>
+</data>
+    <data name="QuestionnaireVersion" xml:space="preserve">
+  <value>إصدار الاستبيان</value>
+</data>
+    <data name="AllVersions" xml:space="preserve">
+  <value>جميع الإصدارات</value>
+</data>
+    <data name="SelectQuestionnaire" xml:space="preserve">
+  <value>اختر الاستبيان</value>
+</data>
+    <data name="Reset" xml:space="preserve">
+  <value>إعادة تعيين</value>
+</data>
+    <data name="EqualValues" xml:space="preserve">
+  <value>يساوي</value>
+</data>
+    <data name="NotEquals" xml:space="preserve">
+  <value>لا يساوي</value>
+</data>
+    <data name="SelectOption" xml:space="preserve">
+  <value>اختر الخيار</value>
+</data>
+    <data name="StartsWith" xml:space="preserve">
+  <value>يبدأ بـ</value>
+</data>
+    <data name="Unknown" xml:space="preserve">
+  <value>غير معروف</value>
+</data>
+    <data name="EditCalendarEvent" xml:space="preserve">
+  <value>تحرير حدث التقويم</value>
+</data>
+    <data name="CalendarEvent" xml:space="preserve">
+  <value>حدث التقويم</value>
+</data>
+    <data name="Add" xml:space="preserve">
+  <value>إضافة</value>
+</data>
+    <data name="Remove" xml:space="preserve">
+  <value>إزالة</value>
+</data>
+    <data name="Return" xml:space="preserve">
+  <value>عودة</value>
+</data>
+    <data name="ChangeToCAPI" xml:space="preserve">
+  <value>التغيير إلى CAPI</value>
+</data>
+    <data name="ChangeToCAPIConfirmHQ" xml:space="preserve">
+  <value>سيتم تغيير وضع {{count}} المقابلات المحددة إلى CAPI</value>
+</data>
+    <data name="ChangeToCAWI" xml:space="preserve">
+  <value>التغيير إلى CAWI</value>
+</data>
+    <data name="ChangeToCAWIConfirmHQ" xml:space="preserve">
+  <value>سيتم تغيير وضع {{count}} المقابلات المحددة إلى CAWI</value>
+</data>
+    <data name="InterviewMode" xml:space="preserve">
+  <value>وضع المقابلة</value>
+</data>
+    <data name="Capi" xml:space="preserve">
+  <value>CAPI</value>
+</data>
+    <data name="Cawi" xml:space="preserve">
+  <value>CAWI</value>
+</data>
+    <data name="Enable" xml:space="preserve">
+  <value>تمكين</value>
+</data>
+    <data name="Disable" xml:space="preserve">
+  <value>تعطيل</value>
+</data>
+    <data name="Properties" xml:space="preserve">
+  <value>الخصائص</value>
+</data>
+    <data name="LinkedUsers" xml:space="preserve">
+  <value>المستخدمون المرتبطون</value>
+</data>
+    <data name="LinkUser" xml:space="preserve">
+  <value>مستخدم</value>
+</data>
+    <data name="GeoTrackNumber" xml:space="preserve">
+  <value>المسار</value>
+</data>
+    <data name="DateRange" xml:space="preserve">
+  <value>نطاق التاريخ</value>
+</data>
+    <data name="AllGeoTracks" xml:space="preserve">
+  <value>جميع المسارات الجغرافية</value>
+</data>
 </root>

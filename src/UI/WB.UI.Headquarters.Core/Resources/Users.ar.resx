@@ -1,276 +1,259 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
-  <!-- 
-    Microsoft ResX Schema 
-    
-    Version 2.0
-    
-    The primary goals of this format is to allow a simple XML format 
-    that is mostly human readable. The generation and parsing of the 
-    various data types are done through the TypeConverter classes 
-    associated with the data types.
-    
-    Example:
-    
-    ... ado.net/XML headers & schema ...
-    <resheader name="resmimetype">text/microsoft-resx</resheader>
-    <resheader name="version">2.0</resheader>
-    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
-    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
-    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
-    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
-    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
-        <value>[base64 mime encoded serialized .NET Framework object]</value>
-    </data>
-    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
-        <comment>This is a comment</comment>
-    </data>
-                
-    There are any number of "resheader" rows that contain simple 
-    name/value pairs.
-    
-    Each data row contains a name, and value. The row also contains a 
-    type or mimetype. Type corresponds to a .NET class that support 
-    text/value conversion through the TypeConverter architecture. 
-    Classes that don't support this are serialized and stored with the 
-    mimetype set.
-    
-    The mimetype is used for serialized objects, and tells the 
-    ResXResourceReader how to depersist the object. This is currently not 
-    extensible. For a given mimetype the value must be set accordingly:
-    
-    Note - application/x-microsoft.net.object.binary.base64 is the format 
-    that the ResXResourceWriter will generate, however the reader can 
-    read any of the formats listed below.
-    
-    mimetype: application/x-microsoft.net.object.binary.base64
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
-            : and then encoded with base64 encoding.
-    
-    mimetype: application/x-microsoft.net.object.soap.base64
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
-            : and then encoded with base64 encoding.
-
-    mimetype: application/x-microsoft.net.object.bytearray.base64
-    value   : The object must be serialized into a byte array 
-            : using a System.ComponentModel.TypeConverter
-            : and then encoded with base64 encoding.
-    -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
-    <xsd:element name="root" msdata:IsDataSet="true">
-      <xsd:complexType>
-        <xsd:choice maxOccurs="unbounded">
-          <xsd:element name="metadata">
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
             <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
-              </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
             </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="assembly">
-            <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="data">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="resheader">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
-            </xsd:complexType>
-          </xsd:element>
-        </xsd:choice>
-      </xsd:complexType>
-    </xsd:element>
-  </xsd:schema>
-  <resheader name="resmimetype">
-    <value>text/microsoft-resx</value>
-  </resheader>
-  <resheader name="version">
-    <value>2.0</value>
-  </resheader>
-  <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </resheader>
-  <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </resheader>
-  <data name="AccountCreationDateTooltip" xml:space="preserve">
-    <value>تاريخ انشاء الحساب</value>
-  </data>
-  <data name="AddAPIUser" xml:space="preserve">
-    <value>إضافة مستخدم API</value>
-  </data>
-  <data name="AddHeadquarters" xml:space="preserve">
-    <value>إضافة مقر رئيسي</value>
-  </data>
-  <data name="AddInterviewer" xml:space="preserve">
-    <value>إضافة باحث</value>
-  </data>
-  <data name="AddObserver" xml:space="preserve">
-    <value>إضافة مراقب</value>
-  </data>
-  <data name="AddSupervisor" xml:space="preserve">
-    <value>إضافة مشرف</value>
-  </data>
-  <data name="Admin" xml:space="preserve">
-    <value>مدير</value>
-  </data>
-  <data name="APIUsers" xml:space="preserve">
-    <value>مستخدم API</value>
-  </data>
-  <data name="ApiUsersCountDescription" xml:space="preserve">
-      <value>مستخدم API ({{count}})</value>
-  </data>
-  <data name="ArchivedSupervisors" xml:space="preserve">
-    <value>المشرفين الذين تم أرشفتهم</value>
-  </data>
-  <data name="ArchivingStatusTitle" xml:space="preserve">
-    <value>حالة الأرشفة</value>
-  </data>
-  <data name="ClickToReturn" xml:space="preserve">
-    <value>انقر للعودة إلى حسابك.</value>
-  </data>
-  <data name="CreateAdmin" xml:space="preserve">
-    <value>لإكمال التثبيت، يرجى إنشاء مستخدم مسؤول جديد</value>
-  </data>
-  <data name="CreateAndTryLogin" xml:space="preserve">
-    <value>إنشاء وتجربة تسجيل الدخول</value>
-  </data>
-  <data name="CreateAPIUser" xml:space="preserve">
-    <value>انشاء مستخدم API</value>
-  </data>
-  <data name="CreateHeadquarters" xml:space="preserve">
-    <value>انشىء مقر رئيسي</value>
-  </data>
-  <data name="CreateObserver" xml:space="preserve">
-    <value>إنشاء مراقب</value>
-  </data>
-  <data name="CreateSupervisor" xml:space="preserve">
-    <value>إنشاء مشرف</value>
-  </data>
-  <data name="CreationDate" xml:space="preserve">
-    <value>تم إنشاء الحساب على</value>
-  </data>
-  <data name="Edit" xml:space="preserve">
-    <value>تحرير</value>
-  </data>
-  <data name="EditFormat" xml:space="preserve">
-    <value>تحرير: {0}</value>
-  </data>
-  <data name="Email" xml:space="preserve">
-    <value>البريد الإلكتروني</value>
-  </data>
-  <data name="FinishInstallation" xml:space="preserve">
-    <value>إنهاء التثبيت</value>
-  </data>
-  <data name="HeadquarterAccountCreationDate" xml:space="preserve">
-    <value>التاريخ الذي تم  إنشاء حساب المقر الرئيسي فيه</value>
-  </data>
-  <data name="Headquarters" xml:space="preserve">
-    <value>المقرات الرئيسية</value>
-  </data>
-  <data name="HeadquartersCountDescription" xml:space="preserve">
-      <value>المقرات الرئيسية ({{count}})</value>
-  </data>
-  <data name="HeadquartersEmail" xml:space="preserve">
-    <value>ايميلات المقرات الرئيسية</value>
-  </data>
-  <data name="ImpersonateAsUser" xml:space="preserve">
-    <value>اتخاذ هذا المستخدم في وضع القراءة</value>
-  </data>
-  <data name="Interviewer" xml:space="preserve">
-    <value>الباحث</value>
-  </data>
-  <data name="InterviewerIssues" xml:space="preserve">
-    <value>قضايا الباحث</value>
-  </data>
-  <data name="Interviewers" xml:space="preserve">
-    <value>الباحثين</value>
-  </data>
-  <data name="InterviewersCountDescription" xml:space="preserve">
-      <value>الباحثين ({{count}})</value>
-  </data>
-  <data name="Locked" xml:space="preserve">
-    <value>مقفل</value>
-  </data>
-  <data name="NotLinkedToDevice" xml:space="preserve">
-    <value>غير مرتبط بالجهاز</value>
-  </data>
-  <data name="NotLinkedToDeviceTitle" xml:space="preserve">
-    <value>عدد الباحثين الذين لم تتزامن بنجاح اجهزتهم اللوحية إلى الخادم حتى الآن</value>
-  </data>
-  <data name="NumberOfInterviewersInTeam" xml:space="preserve">
-    <value>عدد المراقبين في الفريق</value>
-  </data>
-  <data name="Observer" xml:space="preserve">
-    <value>مراقب</value>
-  </data>
-  <data name="ObserverDisclaimerFormat" xml:space="preserve">
-    <value>هذا المحتوى &lt;b&gt;{0}&lt;/b&gt; الذي يظهر.</value>
-  </data>
-  <data name="Observers" xml:space="preserve">
-    <value>المراقبين</value>
-  </data>
-  <data name="ObserversCountDescription" xml:space="preserve">
-      <value>المراقبين  ({{count}})</value>
-  </data>
-  <data name="ObserversEmail" xml:space="preserve">
-    <value>البريد الالكتروني للمراقب</value>
-  </data>
-  <data name="Remove" xml:space="preserve">
-    <value>إزالة</value>
-  </data>
-  <data name="Supervisor" xml:space="preserve">
-    <value>المشرف</value>
-  </data>
-  <data name="SupervisorAccountCreationDate" xml:space="preserve">
-    <value>تاريخ انشاء حساب المشرف</value>
-  </data>
-  <data name="SupervisorEmail" xml:space="preserve">
-    <value>البريد الالكتروني للمشرف</value>
-  </data>
-  <data name="Supervisors" xml:space="preserve">
-    <value>المشرفين</value>
-  </data>
-  <data name="Supervisors_Edit" xml:space="preserve">
-    <value>تحرير المشرفين</value>
-  </data>
-  <data name="SupervisorsCountDescription" xml:space="preserve">
-      <value>المشرفين ({{count}})</value>
-  </data>
-  <data name="SupervisorsInTeam" xml:space="preserve">
-    <value>المشرفين في الفريق الخاص بك</value>
-  </data>
-  <data name="TotalInterviewers" xml:space="preserve">
-    <value>مجموع المقابلين</value>
-  </data>
-  <data name="TryLater" xml:space="preserve">
-    <value>يرجى المحاولة مرة أخرى فيما بعد</value>
-  </data>
-  <data name="UserName" xml:space="preserve">
-    <value>اسم تسجيل الدخول</value>
-  </data>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+<data name="AddAPIUser" xml:space="preserve">
+  <value>إضافة مستخدم API</value>
+</data>
+<data name="AddHeadquarters" xml:space="preserve">
+  <value>إضافة المقر الرئيسي</value>
+</data>
+<data name="AddSupervisor" xml:space="preserve">
+  <value>إضافة مشرف</value>
+</data>
+<data name="APIUsers" xml:space="preserve">
+  <value>مستخدمي API</value>
+</data>
+<data name="CreateAPIUser" xml:space="preserve">
+  <value>إنشاء مستخدم API</value>
+</data>
+<data name="CreateHeadquarters" xml:space="preserve">
+  <value>إنشاء المقر الرئيسي</value>
+</data>
+<data name="CreateObserver" xml:space="preserve">
+  <value>إنشاء مراقب</value>
+</data>
+<data name="CreateSupervisor" xml:space="preserve">
+  <value>إنشاء مشرف</value>
+</data>
+<data name="CreateAdministrator" xml:space="preserve">
+  <value>إنشاء مسؤول</value>
+</data>
+<data name="ArchivedSupervisors" xml:space="preserve">
+  <value>المشرفين المؤرشفين</value>
+</data>
+<data name="ClickToReturn" xml:space="preserve">
+  <value>انقر للعودة إلى حسابك.</value>
+</data>
+<data name="CreateAdmin" xml:space="preserve">
+  <value>لإكمال التثبيت، يرجى إنشاء مستخدم مسؤول جديد</value>
+</data>
+<data name="FinishInstallation" xml:space="preserve">
+  <value>إنهاء التثبيت</value>
+</data>
+<data name="Headquarters" xml:space="preserve">
+  <value>المقر الرئيسي</value>
+</data>
+<data name="ImpersonateAsUser" xml:space="preserve">
+  <value>عرض كمستخدم في وضع القراءة فقط</value>
+</data>
+<data name="Remove" xml:space="preserve">
+  <value>إزالة</value>
+</data>
+<data name="Observer" xml:space="preserve">
+  <value>مراقب</value>
+</data>
+<data name="ObserverDisclaimerFormat" xml:space="preserve">
+  <value>هذا هو المحتوى الذي يراه &lt;b&gt;{0}&lt;/b&gt;.</value>
+</data>
+<data name="Observers" xml:space="preserve">
+  <value>المراقبين</value>
+</data>
+<data name="Supervisor" xml:space="preserve">
+  <value>مشرف</value>
+</data>
+<data name="Supervisors" xml:space="preserve">
+  <value>المشرفين</value>
+</data>
+<data name="SupervisorsCountDescription" xml:space="preserve">
+  <value>المشرفين ({{count}})</value>
+</data>
+<data name="InterviewersCountDescription" xml:space="preserve">
+  <value>المحاورين ({{count}})</value>
+</data>
+<data name="ApiUsersCountDescription" xml:space="preserve">
+  <value>مستخدمي API ({{count}})</value>
+</data>
+<data name="HeadquartersCountDescription" xml:space="preserve">
+  <value>المقر الرئيسي ({{count}})</value>
+</data>
+<data name="ObserversCountDescription" xml:space="preserve">
+  <value>المراقبين ({{count}})</value>
+</data>
+<data name="Supervisors_Edit" xml:space="preserve">
+  <value>تحرير مشرف</value>
+</data>
+<data name="SupervisorsInTeam" xml:space="preserve">
+  <value>المشرفين في فريقك</value>
+</data>
+<data name="Admin" xml:space="preserve">
+  <value>مسؤول</value>
+</data>
+<data name="CreateAndTryLogin" xml:space="preserve">
+  <value>إنشاء وتجربة تسجيل الدخول</value>
+</data>
+<data name="CreationDate" xml:space="preserve">
+  <value>تم إنشاء الحساب في</value>
+</data>
+<data name="Edit" xml:space="preserve">
+  <value>تحرير</value>
+</data>
+<data name="EditFormat" xml:space="preserve">
+  <value>تحرير: {0}</value>
+</data>
+<data name="Email" xml:space="preserve">
+  <value>البريد الإلكتروني</value>
+</data>
+<data name="Interviewer" xml:space="preserve">
+  <value>محاور</value>
+</data>
+<data name="Interviewers" xml:space="preserve">
+  <value>المحاورين</value>
+</data>
+<data name="Locked" xml:space="preserve">
+  <value>مقفل</value>
+</data>
+<data name="NotLinkedToDevice" xml:space="preserve">
+  <value>غير مرتبط بالجهاز</value>
+</data>
+<data name="TotalInterviewers" xml:space="preserve">
+  <value>إجمالي المحاورين</value>
+</data>
+<data name="UserName" xml:space="preserve">
+  <value>اسم المستخدم</value>
+</data>
+<data name="AddObserver" xml:space="preserve">
+  <value>إضافة مراقب</value>
+</data>
+<data name="TryLater" xml:space="preserve">
+  <value>يرجى المحاولة مرة أخرى لاحقًا</value>
+</data>
+<data name="HeadquarterAccountCreationDate" xml:space="preserve">
+  <value>تاريخ إنشاء حساب المقر الرئيسي</value>
+</data>
+<data name="SupervisorAccountCreationDate" xml:space="preserve">
+  <value>تاريخ إنشاء حساب المشرف</value>
+</data>
+<data name="NotLinkedToDeviceTitle" xml:space="preserve">
+  <value>عدد المحاورين الذين لم يقوموا بمزامنة أجهزتهم اللوحية مع الخادم بعد</value>
+</data>
+<data name="NumberOfInterviewersInTeam" xml:space="preserve">
+  <value>عدد المحاورين في الفريق</value>
+</data>
+<data name="AccountCreationDateTooltip" xml:space="preserve">
+  <value>تاريخ إنشاء الحساب</value>
+</data>
+<data name="ObserversEmail" xml:space="preserve">
+  <value>البريد الإلكتروني للمراقب</value>
+</data>
+<data name="SupervisorEmail" xml:space="preserve">
+  <value>البريد الإلكتروني للمشرف</value>
+</data>
+<data name="HeadquartersEmail" xml:space="preserve">
+  <value>البريد الإلكتروني للمقر الرئيسي</value>
+</data>
+<data name="AddInterviewer" xml:space="preserve">
+  <value>إضافة محاور</value>
+</data>
+<data name="ArchivingStatusTitle" xml:space="preserve">
+  <value>حالة الأرشفة</value>
+</data>
+<data name="InterviewerIssues" xml:space="preserve">
+  <value>مشاكل المحاور</value>
+</data>
+<data name="ResetPassword" xml:space="preserve">
+  <value>إعادة تعيين كلمة المرور</value>
+</data>
+<data name="ResetPasswordTitle" xml:space="preserve">
+  <value>إعادة تعيين كلمة مرور المستخدم</value>
+</data>
+<data name="UserNotFound" xml:space="preserve">
+  <value>المستخدم غير موجود</value>
+</data>
+<data name="PasswordChanged" xml:space="preserve">
+  <value>تم تغيير كلمة المرور للمستخدم {0}</value>
+</data>
+<data name="Filter_AllUsers" xml:space="preserve">
+  <value>جميع المستخدمين</value>
+</data>
+<data name="Filter_WithMissingWorkspace" xml:space="preserve">
+  <value>مساحات العمل المفقودة</value>
+</data>
+<data name="Filter_WithDisabledWorkspaces" xml:space="preserve">
+  <value>مع مساحات العمل المعطلة فقط</value>
+</data>
+<data name="Filter_Locked" xml:space="preserve">
+  <value>المستخدمين المقفلين</value>
+</data>
+<data name="Filter_Archived" xml:space="preserve">
+  <value>المستخدمين المؤرشفين</value>
+</data>
+<data name="UsersTitle" xml:space="preserve">
+  <value>المستخدمين</value>
+</data>
+<data name="AddUser" xml:space="preserve">
+  <value>إضافة مستخدم</value>
+</data>
+<data name="UploadUsers" xml:space="preserve">
+  <value>تحميل المستخدمين</value>
+</data>
+<data name="ApiTokenTitle" xml:space="preserve">
+  <value>رمز API للمستخدم</value>
+</data>
 </root>

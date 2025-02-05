@@ -1,216 +1,196 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
-  <!-- 
-    Microsoft ResX Schema 
-    
-    Version 2.0
-    
-    The primary goals of this format is to allow a simple XML format 
-    that is mostly human readable. The generation and parsing of the 
-    various data types are done through the TypeConverter classes 
-    associated with the data types.
-    
-    Example:
-    
-    ... ado.net/XML headers & schema ...
-    <resheader name="resmimetype">text/microsoft-resx</resheader>
-    <resheader name="version">2.0</resheader>
-    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
-    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
-    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
-    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
-    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
-        <value>[base64 mime encoded serialized .NET Framework object]</value>
-    </data>
-    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
-        <comment>This is a comment</comment>
-    </data>
-                
-    There are any number of "resheader" rows that contain simple 
-    name/value pairs.
-    
-    Each data row contains a name, and value. The row also contains a 
-    type or mimetype. Type corresponds to a .NET class that support 
-    text/value conversion through the TypeConverter architecture. 
-    Classes that don't support this are serialized and stored with the 
-    mimetype set.
-    
-    The mimetype is used for serialized objects, and tells the 
-    ResXResourceReader how to depersist the object. This is currently not 
-    extensible. For a given mimetype the value must be set accordingly:
-    
-    Note - application/x-microsoft.net.object.binary.base64 is the format 
-    that the ResXResourceWriter will generate, however the reader can 
-    read any of the formats listed below.
-    
-    mimetype: application/x-microsoft.net.object.binary.base64
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
-            : and then encoded with base64 encoding.
-    
-    mimetype: application/x-microsoft.net.object.soap.base64
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
-            : and then encoded with base64 encoding.
-
-    mimetype: application/x-microsoft.net.object.bytearray.base64
-    value   : The object must be serialized into a byte array 
-            : using a System.ComponentModel.TypeConverter
-            : and then encoded with base64 encoding.
-    -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
-    <xsd:element name="root" msdata:IsDataSet="true">
-      <xsd:complexType>
-        <xsd:choice maxOccurs="unbounded">
-          <xsd:element name="metadata">
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
             <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
-              </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
             </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="assembly">
-            <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="data">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="resheader">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
-            </xsd:complexType>
-          </xsd:element>
-        </xsd:choice>
-      </xsd:complexType>
-    </xsd:element>
-  </xsd:schema>
-  <resheader name="resmimetype">
-    <value>text/microsoft-resx</value>
-  </resheader>
-  <resheader name="version">
-    <value>2.0</value>
-  </resheader>
-  <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </resheader>
-  <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </resheader>
-  <data name="SurveySetup" xml:space="preserve">
-    <value>إعداد المسح</value>
-  </data>
-  <data name="ApiUsers" xml:space="preserve">
-    <value>مستخدم API</value>
-  </data>
-  <data name="Assignments" xml:space="preserve">
-    <value>مهام</value>
-  </data>
-  <data name="Completed" xml:space="preserve">
-    <value>مكتمل</value>
-  </data>
-  <data name="CreateNew" xml:space="preserve">
-    <value>انشاء جديد</value>
-  </data>
-  <data name="CumulativeChart" xml:space="preserve">
-    <value>مخطط المقابلة التراكمي</value>
-  </data>
-  <data name="DataExport" xml:space="preserve">
-    <value>تصدير البيانات</value>
-  </data>
-  <data name="DevicesInterviewers" xml:space="preserve">
-    <value>الأجهزة/الباحثين</value>
-  </data>
-  <data name="Headquarters" xml:space="preserve">
-    <value>المقرات الرئيسية</value>
-  </data>
-  <data name="Help" xml:space="preserve">
-    <value>مساعدة</value>
-  </data>
-  <data name="Interviewers" xml:space="preserve">
-    <value>الباحثين</value>
-  </data>
-  <data name="Interviews" xml:space="preserve">
-    <value>مقابلات</value>
-  </data>
-  <data name="MapReport" xml:space="preserve">
-    <value>تقرير الخريطة</value>
-  </data>
-  <data name="Maps" xml:space="preserve">
-    <value>خرائط</value>
-  </data>
-  <data name="Observers" xml:space="preserve">
-    <value>المراقبين</value>
-  </data>
-  <data name="Quantity" xml:space="preserve">
-    <value>كمية</value>
-  </data>
-  <data name="Questionnaires" xml:space="preserve">
-    <value>الاستبيانات</value>
-  </data>
-  <data name="QueueSizeTitle" xml:space="preserve">
-    <value>عدد المقابلات التي تمت مزامنتها ولكن لم تتم معالجتها بعد</value>
-  </data>
-  <data name="Rejected" xml:space="preserve">
-    <value>مرفوض</value>
-  </data>
-  <data name="Reports" xml:space="preserve">
-    <value>تقارير</value>
-  </data>
-  <data name="Speed" xml:space="preserve">
-    <value>سرعة</value>
-  </data>
-  <data name="Started" xml:space="preserve">
-    <value>بدأت</value>
-  </data>
-  <data name="StatusDuration" xml:space="preserve">
-    <value>بقاء الحالة</value>
-  </data>
-  <data name="Supervisors" xml:space="preserve">
-    <value>المشرفين</value>
-  </data>
-  <data name="SurveysAndStatuses" xml:space="preserve">
-    <value>الدراسات الاستقصائية والحالات</value>
-  </data>
-  <data name="TeamAndRoles" xml:space="preserve">
-    <value>الفريق والادوار</value>
-  </data>
-  <data name="TeamMembersAndStatuses" xml:space="preserve">
-    <value>اعضاء الفريق  والادوار</value>
-  </data>
-  <data name="TeamsAndRoles" xml:space="preserve">
-    <value>المجموعات والادوار</value>
-  </data>
-  <data name="TeamsAndStatuses" xml:space="preserve">
-    <value>المجموعات والحالات</value>
-  </data>
-  <data name="Troubleshooting" xml:space="preserve">
-    <value>استكشاف الأخطاء وإصلاحها</value>
-  </data>
-  <data name="UserBatchUpload" xml:space="preserve">
-    <value>تحميل دفعة المستخدم</value>
-  </data>
-  <data name="Users" xml:space="preserve">
-    <value>المستخدمين</value>
-  </data>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+<data name="ApiUsers" xml:space="preserve">
+  <value>مستخدمو API</value>
+</data>
+<data name="Assignments" xml:space="preserve">
+  <value>المهام</value>
+</data>
+<data name="AuditLog" xml:space="preserve">
+  <value>سجل التدقيق</value>
+</data>
+<data name="CumulativeChart" xml:space="preserve">
+  <value>مخطط المقابلات التراكمي</value>
+</data>
+<data name="DataExport" xml:space="preserve">
+  <value>تصدير البيانات</value>
+</data>
+<data name="DeviceLogs" xml:space="preserve">
+  <value>سجلات الأجهزة</value>
+</data>
+<data name="Diagnostics" xml:space="preserve">
+  <value>التشخيصات</value>
+</data>
+<data name="Headquarters" xml:space="preserve">
+  <value>المقر الرئيسي</value>
+</data>
+<data name="Help" xml:space="preserve">
+  <value>مساعدة</value>
+</data>
+<data name="Interviewers" xml:space="preserve">
+  <value>المحاورون</value>
+</data>
+<data name="InterviewPackages" xml:space="preserve">
+  <value>حزم المقابلات</value>
+</data>
+<data name="Interviews" xml:space="preserve">
+  <value>المقابلات</value>
+</data>
+<data name="MapReport" xml:space="preserve">
+  <value>تقرير الخريطة</value>
+</data>
+<data name="Observers" xml:space="preserve">
+  <value>المراقبون</value>
+</data>
+<data name="Settings" xml:space="preserve">
+  <value>الإعدادات</value>
+</data>
+<data name="WorkspaceSettings" xml:space="preserve">
+  <value>إعدادات مساحة العمل</value>
+</data>
+<data name="EmailProviders" xml:space="preserve">
+  <value>مزودو البريد الإلكتروني</value>
+</data>
+<data name="Quantity" xml:space="preserve">
+  <value>الكمية</value>
+</data>
+<data name="SurveySetup" xml:space="preserve">
+  <value>إعداد الاستبيان</value>
+</data>
+<data name="Maps" xml:space="preserve">
+  <value>الخرائط</value>
+</data>
+<data name="QueueSizeTitle" xml:space="preserve">
+  <value>عدد المقابلات المتزامنة ولكن لم تتم معالجتها بعد</value>
+</data>
+<data name="Reports" xml:space="preserve">
+  <value>التقارير</value>
+</data>
+<data name="Speed" xml:space="preserve">
+  <value>السرعة</value>
+</data>
+<data name="SurveyStatistics" xml:space="preserve">
+  <value>إحصائيات الاستبيان</value>
+</data>
+<data name="StatusDuration" xml:space="preserve">
+  <value>مدة الحالة</value>
+</data>
+<data name="Supervisors" xml:space="preserve">
+  <value>المشرفون</value>
+</data>
+<data name="CreateNew" xml:space="preserve">
+  <value>إنشاء جديد</value>
+</data>
+<data name="Started" xml:space="preserve">
+  <value>بدأت</value>
+</data>
+<data name="Completed" xml:space="preserve">
+  <value>مكتمل</value>
+</data>
+<data name="Rejected" xml:space="preserve">
+  <value>مرفوض</value>
+</data>
+<data name="MapDashboard" xml:space="preserve">
+  <value>لوحة تحكم الخريطة</value>
+</data>
+<data name="SurveysAndStatuses" xml:space="preserve">
+  <value>الاستبيانات والحالات</value>
+</data>
+<data name="TabletInfos" xml:space="preserve">
+  <value>معلومات الجهاز اللوحي</value>
+</data>
+<data name="TeamAndRoles" xml:space="preserve">
+  <value>الفريق والأدوار</value>
+</data>
+<data name="TeamMembersAndStatuses" xml:space="preserve">
+  <value>أعضاء الفريق والحالات</value>
+</data>
+<data name="TeamsAndRoles" xml:space="preserve">
+  <value>الفرق والأدوار</value>
+</data>
+<data name="TeamsAndStatuses" xml:space="preserve">
+  <value>الفرق والحالات</value>
+</data>
+<data name="DevicesInterviewers" xml:space="preserve">
+  <value>الأجهزة/المحاورون</value>
+</data>
+<data name="Troubleshooting" xml:space="preserve">
+  <value>استكشاف الأخطاء وإصلاحها</value>
+</data>
+<data name="UserBatchUpload" xml:space="preserve">
+  <value>تحميل المستخدمين دفعة واحدة</value>
+</data>
+<data name="Users" xml:space="preserve">
+  <value>المستخدمون</value>
+</data>
+<data name="Questionnaires" xml:space="preserve">
+  <value>الاستبيانات</value>
+</data>
+<data name="Administration" xml:space="preserve">
+  <value>الإدارة</value>
+</data>
+<data name="Workspaces" xml:space="preserve">
+  <value>مساحات العمل</value>
+</data>
+<data name="ServerAdministration">
+  <value>الإدارة</value>
+</data>
 </root>

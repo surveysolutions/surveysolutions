@@ -246,4 +246,7 @@
   <data name="OverTheLast" xml:space="preserve">
     <value>Pendant le dernier</value>
   </data>
+    <data name="PeriodUnit" xml:space="preserve">
+  <value>Unité de période</value>
+</data>
 </root>

@@ -402,4 +402,13 @@
   <data name="LinkUser" xml:space="preserve">
     <value>Usuário</value>
   </data>
+    <data name="AllGeoTracks" xml:space="preserve">
+        <value>Todos os rastreamentos geográficos</value>
+    </data>
+    <data name="GeoTrackNumber" xml:space="preserve">
+        <value>Rastreamento</value>
+    </data>
+    <data name="DateRange" xml:space="preserve">
+        <value>Intervalo de datas</value>
+    </data>
 </root>

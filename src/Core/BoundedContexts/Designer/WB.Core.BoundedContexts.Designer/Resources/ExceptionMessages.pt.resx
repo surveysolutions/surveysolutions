@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="LookupTableAlreadyExist" xml:space="preserve">
+    <value>A tabela de consulta com esse ID já existe.</value>
+  </data>
+  <data name="LookupTableIsAbsent" xml:space="preserve">
+    <value>A tabela de consulta com esse ID está ausente.</value>
+  </data>
+  <data name="LookupTables_cant_has_empty_content" xml:space="preserve">
+    <value>Arquivo sem dados não pode ser carregado</value>
+  </data>
+  <data name="LookupTables_data_value_cannot_be_parsed" xml:space="preserve">
+    <value>O valor {0} não pode ser analisado como número decimal. Coluna {1}, linha {2}.</value>
+  </data>
+  <data name="LookupTables_empty_or_invalid_header_are_not_allowed" xml:space="preserve">
+    <value>Cabeçalhos vazios ou inválidos não são permitidos</value>
+  </data>
+  <data name="LookupTables_rowcode_column_is_mandatory" xml:space="preserve">
+    <value>A coluna de código de linha obrigatória está ausente</value>
+  </data>
+  <data name="LookupTables_rowcode_values_must_be_unique" xml:space="preserve">
+    <value>Os valores do código de linha devem ser únicos</value>
+  </data>
+  <data name="LookupTables_rowcode_value_cannot_be_parsed" xml:space="preserve">
+    <value>O valor {0} não pode ser analisado como número inteiro longo. Coluna {1}, linha {2}.</value>
+  </data>
+  <data name="LookupTables_too_many_columns" xml:space="preserve">
+    <value>Muitas colunas no arquivo carregado. O número máximo de colunas é {0}</value>
+  </data>
+  <data name="LookupTables_too_many_rows" xml:space="preserve">
+    <value>A tabela de consulta contém {1} linhas, o que excede o limite de número de linhas em uma tabela de consulta ({0} linhas).</value>
+  </data>
+  <data name="MacroAlreadyExist" xml:space="preserve">
+    <value>A macro já existe.</value>
+  </data>
+  <data name="MacroIsAbsent" xml:space="preserve">
+    <value>A macro está ausente.</value>
+  </data>
+  <data name="CriticalRuleAlreadyExist" xml:space="preserve">
+    <value>A regra crítica já existe.</value>
+  </data>
+  <data name="CriticalRuleIsAbsent" xml:space="preserve">
+    <value>A regra crítica está ausente.</value>
+  </data>
+  <data name="LookupTables_duplicating_headers_are_not_allowed" xml:space="preserve">
+    <value>Cabeçalhos duplicados não são permitidos</value>
+  </data>
+  <data name="Attachments_uploaded_file_is_not_image" xml:space="preserve">
+    <value>O arquivo enviado não é uma imagem</value>
+  </data>
+  <data name="Attachments_uploaded_file_image_is_too_big" xml:space="preserve">
+    <value>As dimensões da imagem são muito grandes</value>
+  </data>
+  <data name="Attachments_Unsupported_content" xml:space="preserve">
+    <value>O conteúdo enviado não é suportado</value>
+  </data>
+  <data name="CantMoveSubsectionInWrongPosition" xml:space="preserve">
+    <value>Você não pode mover para a subseção {0} porque a posição {1} não é aceitável.</value>
+  </data>
+  <data name="ComboboxCannotBeFound" xml:space="preserve">
+    <value>A pergunta da caixa de combinação com a chave pública {0} não pode ser encontrada</value>
+  </data>
+  <data name="ItemWithIdExistsAlready" xml:space="preserve">
+    <value>Um ou mais itens do questionário com o mesmo ID {0} já existem.</value>
+  </data>
+  <data name="MoreThanOneSubSectionWithSameId" xml:space="preserve">
+    <value>Uma ou mais subseções com o mesmo ID {0} já existem: {1}{2}.</value>
+  </data>
+  <data name="NoPremissionsToEditQuestionnaire" xml:space="preserve">
+    <value>Você não tem permissões para alterar este questionário</value>
+  </data>
+  <data name="QuestionCannotBeFound" xml:space="preserve">
+    <value>A pergunta com a chave pública {0} não pode ser encontrada.</value>
+  </data>
+  <data name="QuestionIsNotCombobox" xml:space="preserve">
+    <value>A pergunta {0} não é uma caixa de combinação</value>
+  </data>
+  <data name="QuestionnaireCantBeFound" xml:space="preserve">
+    <value>O item do questionário com o ID {0} não pode ser encontrado.</value>
+  </data>
+  <data name="QuestionnaireTitleIsEmpty" xml:space="preserve">
+    <value>O título do questionário não pode estar vazio ou conter apenas espaços em branco.</value>
+  </data>
+  <data name="QuestionnaireSuportedNewCover" xml:space="preserve">
+    <value>O questionário já suporta página de capa.</value>
+  </data>
+  <data name="SubSectionCantBeFound" xml:space="preserve">
+    <value>A subseção com a chave pública {0} não pode ser encontrada.</value>
+  </data>
+  <data name="SubSectionDepthLimit" xml:space="preserve">
+    <value>A profundidade da subseção ou da lista não pode ser maior que {0}.</value>
+  </data>
+  <data name="SectionCantHaveMoreThan_Items" xml:space="preserve">
+    <value>A seção não pode ter mais de {0} itens filhos</value>
+  </data>
+  <data name="SubsectionCantHaveMoreThan_DirectChildren" xml:space="preserve">
+    <value>A seção ou subseção não pode ter mais de {0} itens filhos diretos</value>
+  </data>
+  <data name="MoreThanOneQuestionWithSameId" xml:space="preserve">
+    <value>Uma ou mais perguntas com o mesmo ID {0} já existem: {1}{2}.</value>
+  </data>
+  <data name="CantPasteQuestion" xml:space="preserve">
+    <value>A pergunta não pode ser colada aqui.</value>
+  </data>
+  <data name="CantRemoveLastSectionInQuestionnaire" xml:space="preserve">
+    <value>A última seção existente não pode ser removida do questionário</value>
+  </data>
+  <data name="CantRemoveCoverPageInQuestionnaire" xml:space="preserve">
+    <value>A seção de capa não pode ser removida do questionário</value>
+  </data>
+  <data name="CoverPageMustBeFirstInQuestionnaire" xml:space="preserve">
+    <value>A seção de capa deve ser a primeira seção do questionário</value>
+  </data>
+  <data name="CoverPageCanContainsOnlyQuestionsAndStaticTextsAndVariables" xml:space="preserve">
+    <value>A seção de capa pode conter apenas perguntas, textos estáticos e variáveis</value>
+  </data>
+  <data name="CantEditCoverPageInOldQuestionnaire" xml:space="preserve">
+    <value>É uma seção de capa somente leitura. Você não pode editar ou reordenar perguntas nela.</value>
+  </data>
+  <data name="CantRemoveUserFromTheList" xml:space="preserve">
+    <value>Não foi possível remover o usuário, pois ele não existe na lista de compartilhamento</value>
+  </data>
+  <data name="FailedToAddGroup" xml:space="preserve">
+    <value>Tentativa falhada de adicionar o grupo {0} ao grupo {1}. Mas o grupo {1} não existe no documento {2}</value>
+  </data>
+  <data name="ImportOfDeletedQuestionnaire" xml:space="preserve">
+    <value>Tentando importar o modelo de questionário excluído</value>
+  </data>
+  <data name="InvalidFixedTitle" xml:space="preserve">
+    <value>Lista de títulos inválida</value>
+  </data>
+  <data name="InvalidValueOfFixedTitle" xml:space="preserve">
+    <value>Valores não vazios para títulos de lista fixa são necessários</value>
+  </data>
+  <data name="OnlyQuestionnaireDocumentsAreSupported" xml:space="preserve">
+    <value>Somente documentos de questionário são suportados por enquanto</value>
+  </data>
+  <data name="QuestionnaireRevisionCantBeFound" xml:space="preserve">
+    <value>O questionário {0} da versão {1} não pode ser encontrado</value>
+  </data>
+  <data name="QuestionTypeIsNotSupported" xml:space="preserve">
+    <value>O tipo de pergunta não é suportado: {0}</value>
+  </data>
+  <data name="RosterCantBePaste" xml:space="preserve">
+    <value>A lista não pode ser colada aqui.</value>
+  </data>
+  <data name="StaticTextCantBePaste" xml:space="preserve">
+    <value>O texto estático não pode ser colado aqui.</value>
+  </data>
+  <data name="UnknownTypeCantBePaste" xml:space="preserve">
+    <value>Tipo de item desconhecido. A colagem falhou.</value>
+  </data>
+  <data name="UserIsInTheList" xml:space="preserve">
+    <value>O usuário {0} já existe na lista de compartilhamento.</value>
+  </data>
+  <data name="InvalidUserInfo" xml:space="preserve">
+    <value>Informações do usuário inválidas.</value>
+  </data>
+  <data name="UserIsOwner" xml:space="preserve">
+    <value>O usuário {0} é o proprietário deste questionário. Por favor, insira outro e-mail.</value>
+  </data>
+  <data name="ValueOfFixedTitleCantBeParsed" xml:space="preserve">
+    <value>O valor do conjunto fixo de itens da lista deve conter apenas caracteres numéricos</value>
+  </data>
+  <data name="VariableCantBePaste" xml:space="preserve">
+    <value>A variável não pode ser colada aqui.</value>
+  </data>
+  <data name="CategoricalCascadingOptionsCantContainsEmptyParentValueField" xml:space="preserve">
+    <value>As categorias na pergunta em cascata não podem ter a coluna ParentValue vazia.</value>
+  </data>
+  <data name="CategoricalCascadingOptionsCantContainsNotDecimalParentValueField" xml:space="preserve">
+    <value>As categorias na pergunta em cascata não podem ter valor não numérico na coluna ParentValue.</value>
+  </data>
+  <data name="CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair" xml:space="preserve">
+    <value>Há pelo menos um duplicado de pares "Título" e "Valor Pai". A lista não deve conter duplicatas.</value>
+  </data>
+    <data name="OptionValuesShouldBeNumbers" xml:space="preserve">
+    <value>O valor da categoria deve conter apenas caracteres numéricos</value>
+  </data>
+  <data name="AttachmentIdIsMissing" xml:space="preserve">
+    <value>Falta o anexo com o id {0}</value>
+  </data>
+  <data name="LookupTableHasEmptyContent" xml:space="preserve">
+    <value>A tabela de consulta com o id {0} não tem conteúdo</value>
+  </data>
+  <data name="LookupTableIsMissing" xml:space="preserve">
+    <value>A tabela de consulta com o id {0} está ausente</value>
+  </data>
+  <data name="OldAttachmentIdIsEmpty" xml:space="preserve">
+    <value>O id do anexo antigo está vazio e o arquivo está ausente para o anexo {0} no questionário {1}</value>
+  </data>
+  <data name="ProvidedFileHasErrors" xml:space="preserve">
+    <value>Foram encontrados erros no arquivo fornecido</value>
+  </data>
+  <data name="TranlationExcelFileHasErrors" xml:space="preserve">
+    <value>Foram encontrados erros no arquivo excel</value>
+  </data>
+  <data name="TranslationCellIndexIsInvalid" xml:space="preserve">
+    <value>{0} tem índice inválido em [{1}]</value>
+  </data>
+  <data name="TranslationCellTypeIsInvalid" xml:space="preserve">
+    <value>{0} tem tipo inválido [{1}]</value>
+  </data>
+  <data name="TranslationCel_A_lIsInvalid" xml:space="preserve">
+    <value>{0} tem id inválido em [{1}]</value>
+  </data>
+  <data name="TranslationFileIsEmpty" xml:space="preserve">
+    <value>O arquivo Excel está vazio - não contém planilhas</value>
+  </data>
+  <data name="TranslationsCantBeExtracted" xml:space="preserve">
+    <value>Falha ao extrair traduções do arquivo carregado</value>
+  </data>
+  <data name="CategoriesCantBeExtracted" xml:space="preserve">
+    <value>Falha ao extrair categorias do arquivo carregado</value>
+  </data>
+  <data name="TranslationWorksheetIsMissing" xml:space="preserve">
+    <value>Planilha com traduções não encontrada</value>
+  </data>
+  <data name="VariableWithIdWasNotFound" xml:space="preserve">
+    <value>A variável com o id {0} não foi encontrada no questionário {1}</value>
+  </data>
+  <data name="RequiredHeaderWasNotFound" xml:space="preserve">
+    <value>O cabeçalho {0} não foi encontrado no arquivo excel</value>
+  </data>
+  <data name="HeaderWasNotFound" xml:space="preserve">
+    <value>O cabeçalho não foi encontrado no arquivo</value>
+  </data>
+  <data name="NoParentCascadingOptions" xml:space="preserve">
+    <value>Não foram encontradas categorias para a pergunta em cascata pai '{0}'</value>
+  </data>
+  <data name="Column" xml:space="preserve">
+    <value>coluna</value>
+  </data>
+  <data name="Row" xml:space="preserve">
+    <value>linha</value>
+  </data>
+  <data name="ImportOptions_MissingRequiredColumns" xml:space="preserve">
+    <value>Algumas colunas estão ausentes. Certifique-se de que você carregou o arquivo com as colunas necessárias</value>
+  </data>
+  <data name="ImportOptions_EmptyValue" xml:space="preserve">
+    <value>Valor vazio</value>
+  </data>
+  <data name="ImportOptions_NotNumber" xml:space="preserve">
+    <value>Valor inteiro de 32 bits inválido '{0}'. O valor deve estar entre -2147483647 e 2147483647</value>
+  </data>
+  <data name="ImportOptions_ParentValueNotFound" xml:space="preserve">
+    <value>A pergunta pai não tem uma categoria com o valor '{0}'</value>
+  </data>
+  <data name="ImportOptions_DuplicateByTitleAndParentIds" xml:space="preserve">
+    <value>Categoria duplicada '{0}' com valor pai '{1}'</value>
+  </data>
+  <data name="ImportOptions_DuplicatedParentValues" xml:space="preserve">
+    <value>A pergunta pai '{0}' tem {1} categorias com o valor '{2}'</value>
+  </data>
+  <data name="ImportOptions_TitleTooLong" xml:space="preserve">
+    <value>O título é muito longo. O comprimento do título deve ser menor que {0}</value>
+  </data>
+  <data name="ImportOptions_AttachmentNameTooLong" xml:space="preserve">
+    <value>O nome do anexo é muito longo. O nome do anexo deve ser menor que {0}</value>
+  </data>
+  <data name="ImportOptions_ValueIsNotUnique" xml:space="preserve">
+    <value>Categoria duplicada '{0}' com valor '{1}'</value>
+  </data>
+  <data name="Excel_Categories_Int_Invalid" xml:space="preserve">
+    <value>[{0}] Valor numérico inválido</value>
+  </data>
+  <data name="Excel_Categories_Empty_Text" xml:space="preserve">
+    <value>[{0}] Título vazio</value>
+  </data>
+  <data name="Excel_Categories_Empty_Value" xml:space="preserve">
+    <value>[{0}] Valor vazio</value>
+  </data>
+  <data name="Excel_Categories_Duplicated" xml:space="preserve">
+    <value>Categorias duplicadas nas linhas: {0}</value>
+  </data>
+  <data name="Excel_Categories_Empty_ParentId" xml:space="preserve">
+    <value>Algumas categorias não têm um id pai</value>
+  </data>
+  <data name="Excel_Categories_More_Than_Limit" xml:space="preserve">
+    <value>O conjunto de categorias tem mais de {0} categorias</value>
+  </data>
+  <data name="Excel_NoCategories" xml:space="preserve">
+    <value>Não há categorias no arquivo</value>
+  </data>
+  <data name="Excel_Categories_Less_2_Options" xml:space="preserve">
+    <value>O conjunto de categorias deve ter pelo menos 2 categorias</value>
+  </data>
+  <data name="Excel_Categories_Text_More_Than_250" xml:space="preserve">
+    <value>[{0}] O texto da categoria deve ter menos de 250 caracteres</value>
+  </data>
+  <data name="ImportOptions_Tab_Or_Excel_Only" xml:space="preserve">
+    <value>Somente valores separados por tabulação (\*.tab, \*.txt, \*.tsv) ou arquivos excel (\*.xslx, \*.xls, \*.ods) são aceitos</value>
+  </data>
+  <data name="QuestionnaireAlreadySupportedCover" xml:space="preserve">
+    <value>O questionário já suporta capa</value>
+  </data>
+  <data name="Questionnaire_CategoriesWereNotFound" xml:space="preserve">
+    <value>As categorias não foram encontradas</value>
+  </data>
+</root>

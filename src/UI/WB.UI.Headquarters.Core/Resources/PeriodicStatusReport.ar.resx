@@ -1,240 +1,252 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
-  <!-- 
-    Microsoft ResX Schema 
-    
-    Version 2.0
-    
-    The primary goals of this format is to allow a simple XML format 
-    that is mostly human readable. The generation and parsing of the 
-    various data types are done through the TypeConverter classes 
-    associated with the data types.
-    
-    Example:
-    
-    ... ado.net/XML headers & schema ...
-    <resheader name="resmimetype">text/microsoft-resx</resheader>
-    <resheader name="version">2.0</resheader>
-    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
-    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
-    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
-    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
-    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
-        <value>[base64 mime encoded serialized .NET Framework object]</value>
-    </data>
-    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
-        <comment>This is a comment</comment>
-    </data>
-                
-    There are any number of "resheader" rows that contain simple 
-    name/value pairs.
-    
-    Each data row contains a name, and value. The row also contains a 
-    type or mimetype. Type corresponds to a .NET class that support 
-    text/value conversion through the TypeConverter architecture. 
-    Classes that don't support this are serialized and stored with the 
-    mimetype set.
-    
-    The mimetype is used for serialized objects, and tells the 
-    ResXResourceReader how to depersist the object. This is currently not 
-    extensible. For a given mimetype the value must be set accordingly:
-    
-    Note - application/x-microsoft.net.object.binary.base64 is the format 
-    that the ResXResourceWriter will generate, however the reader can 
-    read any of the formats listed below.
-    
-    mimetype: application/x-microsoft.net.object.binary.base64
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
-            : and then encoded with base64 encoding.
-    
-    mimetype: application/x-microsoft.net.object.soap.base64
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
-            : and then encoded with base64 encoding.
-
-    mimetype: application/x-microsoft.net.object.bytearray.base64
-    value   : The object must be serialized into a byte array 
-            : using a System.ComponentModel.TypeConverter
-            : and then encoded with base64 encoding.
-    -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
-    <xsd:element name="root" msdata:IsDataSet="true">
-      <xsd:complexType>
-        <xsd:choice maxOccurs="unbounded">
-          <xsd:element name="metadata">
+    <!-- 
+      Microsoft ResX Schema 
+      
+      Version 2.0
+      
+      The primary goals of this format is to allow a simple XML format 
+      that is mostly human readable. The generation and parsing of the 
+      various data types are done through the TypeConverter classes 
+      associated with the data types.
+      
+      Example:
+      
+      ... ado.net/XML headers & schema ...
+      <resheader name="resmimetype">text/microsoft-resx</resheader>
+      <resheader name="version">2.0</resheader>
+      <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+      <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+      <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+      <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+      <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+          <value>[base64 mime encoded serialized .NET Framework object]</value>
+      </data>
+      <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+          <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+          <comment>This is a comment</comment>
+      </data>
+                  
+      There are any number of "resheader" rows that contain simple 
+      name/value pairs.
+      
+      Each data row contains a name, and value. The row also contains a 
+      type or mimetype. Type corresponds to a .NET class that support 
+      text/value conversion through the TypeConverter architecture. 
+      Classes that don't support this are serialized and stored with the 
+      mimetype set.
+      
+      The mimetype is used for serialized objects, and tells the 
+      ResXResourceReader how to depersist the object. This is currently not 
+      extensible. For a given mimetype the value must be set accordingly:
+      
+      Note - application/x-microsoft.net.object.binary.base64 is the format 
+      that the ResXResourceWriter will generate, however the reader can 
+      read any of the formats listed below.
+      
+      mimetype: application/x-microsoft.net.object.binary.base64
+      value   : The object must be serialized with 
+              : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+              : and then encoded with base64 encoding.
+      
+      mimetype: application/x-microsoft.net.object.soap.base64
+      value   : The object must be serialized with 
+              : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+              : and then encoded with base64 encoding.
+  
+      mimetype: application/x-microsoft.net.object.bytearray.base64
+      value   : The object must be serialized into a byte array 
+              : using a System.ComponentModel.TypeConverter
+              : and then encoded with base64 encoding.
+      -->
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
             <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
-              </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
             </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="assembly">
-            <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="data">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="resheader">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
-            </xsd:complexType>
-          </xsd:element>
-        </xsd:choice>
-      </xsd:complexType>
-    </xsd:element>
-  </xsd:schema>
-  <resheader name="resmimetype">
-    <value>text/microsoft-resx</value>
-  </resheader>
-  <resheader name="version">
-    <value>2.0</value>
-  </resheader>
-  <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </resheader>
-  <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </resheader>
-  <data name="Average" xml:space="preserve">
-    <value>معدل </value>
-  </data>
-  <data name="AverageCaseAssignmentDuration" xml:space="preserve">
-    <value>معدل مدة تعيين الحالة</value>
-  </data>
-  <data name="AverageCaseAssignmentDurationDescription" xml:space="preserve">
-    <value>معدل الوقت من تعيين المقابلة للباحث ووقت الضغط على زر الاكمال في الجهاز اللوحي</value>
-  </data>
-  <data name="AverageHQProcessingTime" xml:space="preserve">
-    <value>معدل وقت معالجة المكتب الرئيسي</value>
-  </data>
-  <data name="AverageHQProcessingTimeDescription" xml:space="preserve">
-    <value>معدل الوقت من قبول المشرف للمقابلة ووقت قبول او رفض هذه المقابلة من قبل المقر الرئيسي</value>
-  </data>
-  <data name="AverageInterviewDuration" xml:space="preserve">
-    <value>معدل مدة المقابلة</value>
-  </data>
-  <data name="AverageInterviewDurationDescription" xml:space="preserve">
-    <value>معدل وقت تسجيل الباحث لأول اجابة على الجهاز اللوحي ووقت ضغط الباحث على زر الاكمال</value>
-  </data>
-  <data name="AverageOverallCaseProcessingTime" xml:space="preserve">
-    <value>معدل الوقت اللازم لمعالجة الحالة الكلية</value>
-  </data>
-  <data name="AverageOverallCaseProcessingTimeDescription" xml:space="preserve">
-    <value>معدل الوقت من تعيين الباحث ووقت الموافقة على المقابلة من قبل المقر الرئيسي</value>
-  </data>
-  <data name="AverageSupervisorProcessingTime" xml:space="preserve">
-    <value>معدل وقت معالجة المشرف</value>
-  </data>
-  <data name="AverageSupervisorProcessingTimeDescription" xml:space="preserve">
-    <value>معدل الوقت الذي يضغط فيه الباحث على الزر الاكمال والوقت الذي يقبل به المشرف أو يرفض تلك المقابلة.</value>
-  </data>
-  <data name="BackToSupervisors" xml:space="preserve">
-    <value>الرجوع الى المشرفين</value>
-  </data>
-  <data name="By" xml:space="preserve">
-    <value>من قبل</value>
-  </data>
-  <data name="Day" xml:space="preserve">
-    <value>أيام</value>
-  </data>
-  <data name="From" xml:space="preserve">
-    <value>من</value>
-  </data>
-  <data name="InterviewActions" xml:space="preserve">
-    <value>إجراءات المقابلة</value>
-  </data>
-  <data name="InThe" xml:space="preserve">
-    <value>في</value>
-  </data>
-  <data name="InTheSupervisorTeamFormat" xml:space="preserve">
-    <value>في الفريق  {0}</value>
-  </data>
-  <data name="LastDateToShowLabel" xml:space="preserve">
-    <value>ابتداء من </value>
-  </data>
-  <data name="Month" xml:space="preserve">
-    <value>شهور</value>
-  </data>
-  <data name="NumberOfCompletedInterviews" xml:space="preserve">
-    <value>عدد المقابلات المكتملة</value>
-  </data>
-  <data name="NumberOfCompletedInterviewsDescriptionPerTeam" xml:space="preserve">
-    <value>عدد المقابلات المكتملة من قبل الفريق. </value>
-  </data>
-  <data name="NumberOfInterviewsApprovedByHQ" xml:space="preserve">
-    <value>عدد المقابلات التي وافق عليها المقر الرئيسي</value>
-  </data>
-  <data name="NumberOfInterviewsApprovedByHQDescription" xml:space="preserve">
-    <value>عدد المقابلات التي تم جمعها بواسطة {0} ووافق عليها المقر الرئيسي.</value>
-  </data>
-  <data name="NumberOfInterviewTransactionsByHQ" xml:space="preserve">
-    <value>عدد معاملات المقابلات التي أجراها المقر الرئيسي</value>
-  </data>
-  <data name="NumberOfInterviewTransactionsByHQDescription" xml:space="preserve">
-    <value>عدد الموافقات والرفض من المقر الرئيسي على المقابلات التي تم جمعها من قبل {0}.</value>
-  </data>
-  <data name="NumberOfInterviewTransactionsBySupervisor" xml:space="preserve">
-    <value>عدد معاملات المقابلات من قبل المشرف</value>
-  </data>
-  <data name="NumberOfInterviewTransactionsBySupervisorDescriptionPerTeam" xml:space="preserve">
-    <value>عدد الموافقات والرفض من قبل المشرف على المقابلات التي تم جمعها من قبل {0}.</value>
-  </data>
-  <data name="OverTheLast" xml:space="preserve">
-    <value>خلال اخر</value>
-  </data>
-  <data name="Period" xml:space="preserve">
-    <value>فترة</value>
-  </data>
-  <data name="PeriodCount" xml:space="preserve">
-    <value>تعداد الفترة</value>
-  </data>
-  <data name="PeriodUnit" xml:space="preserve">
-    <value>وحدة الفترة</value>
-  </data>
-  <data name="Questionnaire" xml:space="preserve">
-    <value>استبيان</value>
-  </data>
-  <data name="Team" xml:space="preserve">
-    <value>الفريق</value>
-  </data>
-  <data name="TeamMember" xml:space="preserve">
-    <value>عضو الفريق</value>
-  </data>
-  <data name="TimeSpentToCompleteInterviewInHours" xml:space="preserve">
-    <value>معدل وقت اكمال المقابلة</value>
-  </data>
-  <data name="Total" xml:space="preserve">
-    <value>المجموع</value>
-  </data>
-  <data name="Type" xml:space="preserve">
-    <value>النوع</value>
-  </data>
-  <data name="Version" xml:space="preserve">
-    <value>النسخة</value>
-  </data>
-  <data name="Week" xml:space="preserve">
-    <value>أسابيع</value>
-  </data>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+<data name="Average" xml:space="preserve">
+  <value>متوسط</value>
+</data>
+<data name="BackToSupervisors" xml:space="preserve">
+  <value>العودة إلى المشرفين</value>
+</data>
+<data name="BackToTeams" xml:space="preserve">
+  <value>العودة إلى الفرق</value>
+</data>
+<data name="Day" xml:space="preserve">
+  <value>أيام</value>
+</data>
+<data name="Month" xml:space="preserve">
+  <value>أشهر</value>
+</data>
+<data name="NumberOfCompletedInterviews" xml:space="preserve">
+  <value>عدد المقابلات المكتملة</value>
+</data>
+<data name="NumberOfInterviewsApprovedByHQ" xml:space="preserve">
+  <value>عدد المقابلات المعتمدة من قبل المقر الرئيسي</value>
+</data>
+<data name="NumberOfInterviewTransactionsByHQ" xml:space="preserve">
+  <value>عدد معاملات المقابلات من قبل المقر الرئيسي</value>
+</data>
+<data name="NumberOfInterviewTransactionsBySupervisor" xml:space="preserve">
+  <value>عدد معاملات المقابلات من قبل المشرف</value>
+</data>
+<data name="LastDateToShowLabel" xml:space="preserve">
+  <value>بدءًا من</value>
+</data>
+<data name="OverTheLast" xml:space="preserve">
+  <value>خلال الفترة السابقة</value>
+</data>
+<data name="Period" xml:space="preserve">
+  <value>الفترة</value>
+</data>
+<data name="PeriodUnit" xml:space="preserve">
+  <value>وحدة الفترة</value>
+</data>
+<data name="PeriodCount" xml:space="preserve">
+  <value>عدد الفترات</value>
+</data>
+<data name="Questionnaire" xml:space="preserve">
+  <value>الاستبيان</value>
+</data>
+<data name="Team" xml:space="preserve">
+  <value>الفريق</value>
+</data>
+<data name="TeamMember" xml:space="preserve">
+  <value>عضو الفريق</value>
+</data>
+<data name="TimeSpentToCompleteInterviewInHours" xml:space="preserve">
+  <value>متوسط الوقت لإكمال المقابلة</value>
+</data>
+<data name="Total" xml:space="preserve">
+  <value>الإجمالي</value>
+</data>
+<data name="Type" xml:space="preserve">
+  <value>النوع</value>
+</data>
+<data name="InterviewActions" xml:space="preserve">
+  <value>إجراءات المقابلة</value>
+</data>
+<data name="Version" xml:space="preserve">
+  <value>الإصدار</value>
+</data>
+<data name="Week" xml:space="preserve">
+  <value>أسابيع</value>
+</data>
+<data name="AverageCaseAssignmentDuration" xml:space="preserve">
+  <value>متوسط مدة تعيين الحالة</value>
+</data>
+<data name="AverageHQProcessingTime" xml:space="preserve">
+  <value>متوسط وقت معالجة المقر الرئيسي</value>
+</data>
+<data name="AverageInterviewDuration" xml:space="preserve">
+  <value>متوسط مدة المقابلة</value>
+</data>
+<data name="AverageOverallCaseProcessingTime" xml:space="preserve">
+  <value>متوسط وقت معالجة الحالة الإجمالي</value>
+</data>
+<data name="AverageSupervisorProcessingTime" xml:space="preserve">
+  <value>متوسط وقت معالجة المشرف</value>
+</data>
+<data name="AverageCaseAssignmentDurationDescription" xml:space="preserve">
+  <value>متوسط الوقت من تعيين المقابلة إلى المحاور حتى الضغط على زر الإكمال على الجهاز اللوحي.</value>
+</data>
+<data name="AverageHQProcessingTimeDescription" xml:space="preserve">
+  <value>متوسط الوقت من موافقة المشرف على المقابلة إلى أن يتم اعتمادها أو رفضها من قبل المقر الرئيسي.</value>
+</data>
+<data name="AverageInterviewDurationDescription" xml:space="preserve">
+  <value>متوسط الوقت الذي تم عرض المقابلة فيه على شاشة المحاور قبل الإكمال لكل محاور.</value>
+</data>
+<data name="AverageInterviewDurationForSupervisors" xml:space="preserve">
+  <value>متوسط الوقت الذي تم عرض المقابلة فيه على شاشة المحاور قبل الإكمال لكل مشرف.</value>
+</data>
+<data name="AverageOverallCaseProcessingTimeDescription" xml:space="preserve">
+  <value>متوسط الوقت من تعيين المقابلة لأول مرة إلى أن يتم اعتمادها من قبل المقر الرئيسي.</value>
+</data>
+<data name="AverageSupervisorProcessingTimeDescription" xml:space="preserve">
+  <value>متوسط الوقت من الضغط على زر الإكمال من قبل المحاور إلى أن يقبل المشرف أو يرفض تلك المقابلة.</value>
+</data>
+<data name="NumberOfCompletedInterviewsDescriptionPerTeam" xml:space="preserve">
+  <value>عدد المقابلات المكتملة لكل فريق. يتم احتساب المقابلات المرفوضة ثم المكتملة كأحداث إكمال منفصلة.</value>
+</data>
+<data name="NumberOfCompletedInterviewsDescriptionPerInterviewer" xml:space="preserve">
+  <value>عدد المقابلات المكتملة لكل محاور. يتم احتساب المقابلات المرفوضة ثم المكتملة كأحداث إكمال منفصلة.</value>
+</data>
+<data name="NumberOfInterviewsApprovedByHQDescription" xml:space="preserve">
+  <value>عدد المقابلات التي جمعها {0} واعتمدها المقر الرئيسي.</value>
+</data>
+<data name="NumberOfInterviewTransactionsByHQDescription" xml:space="preserve">
+  <value>عدد الموافقات والرفض من قبل المقر الرئيسي على المقابلات التي جمعها {0}.</value>
+</data>
+<data name="NumberOfInterviewTransactionsBySupervisorDescriptionPerTeam" xml:space="preserve">
+  <value>عدد الموافقات والرفض من قبل المشرف على المقابلات التي جمعها {0}.</value>
+</data>
+<data name="NumberOfInterviewTransactionsBySupervisorDescriptionPerInterviewer" xml:space="preserve">
+  <value>عدد الموافقات والرفض من قبل المشرف على المقابلات التي جمعها المحاور</value>
+</data>
+<data name="By" xml:space="preserve">
+  <value>بواسطة</value>
+</data>
+<data name="InThe" xml:space="preserve">
+  <value>في</value>
+</data>
+<data name="From" xml:space="preserve">
+  <value>من</value>
+</data>
+<data name="InTheSupervisorTeamFormat" xml:space="preserve">
+  <value>في فريق {0}</value>
+</data>
 </root>

@@ -117,442 +117,844 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AreaMap_Active_Map_Title" xml:space="preserve">
-    <value>الخريطة النشطة:</value>
-  </data>
-  <data name="AreaMap_Available_Maps_Title" xml:space="preserve">
-    <value>الخرائط المتوفرة على الجهاز</value>
-  </data>
-  <data name="AreaMap_Cancel" xml:space="preserve">
-    <value>إلغاء</value>
-  </data>
-  <data name="AreaMap_Close" xml:space="preserve">
-    <value>إغلاق</value>
-  </data>
-  <data name="AreaMap_Edit" xml:space="preserve">
-    <value>تحرير</value>
-  </data>
-  <data name="AreaMap_Location" xml:space="preserve">
-    <value>الموقع</value>
-  </data>
-  <data name="AreaMap_MapTitle" xml:space="preserve">
-    <value>خريطة</value>
-  </data>
-  <data name="AreaMap_NoChangesInfo" xml:space="preserve">
-    <value>لم يتم إجراء أي تغييرات ليتم حفظها.</value>
-  </data>
-  <data name="AreaMap_NoMapsFound" xml:space="preserve">
-    <value>لم يتم العثور على خرائط. يرجى تحديث الخرائط</value>
-  </data>
-  <data name="AreaMap_Save" xml:space="preserve">
-    <value>حفظ</value>
-  </data>
-  <data name="AreaMap_Undo" xml:space="preserve">
-    <value>تراجع</value>
-  </data>
-  <data name="AreaMap_Update_Maps" xml:space="preserve">
-    <value>تحديث الخرائط</value>
-  </data>
-  <data name="AreaMap_UpdateFailed" xml:space="preserve">
-    <value>فشل التحديث</value>
-  </data>
-  <data name="AreaMap_UpdateMaps" xml:space="preserve">
-    <value>تحديث الخرائط</value>
-  </data>
-  <data name="AssignmentN" xml:space="preserve">
-    <value>مهمة #{0}</value>
-  </data>
-  <data name="Audio_Io_Exception_Message" xml:space="preserve">
-    <value>تعذر كتابة ملف صوتي. تأكد من أن الجهاز يحتوي على مساحة حرة على وحدة تخزين داخلية</value>
-  </data>
-  <data name="Audio_Unhandled_Exception_Message" xml:space="preserve">
-    <value>استثناء غير المتوقع خلال بدء التسجيل الصوتي</value>
-  </data>
-  <data name="AudioQuestion_DurationFormat" xml:space="preserve">
-    <value>{0} من التسجيل الصوتي</value>
-  </data>
-  <data name="Cancel" xml:space="preserve">
-    <value>إلغاء</value>
-  </data>
-  <data name="Dashboard_EmptyQuestionnairesList" xml:space="preserve">
-    <value>لا توجد استبيانات بعد
-
-
-يمكنك إنشاء أو تحرير الاستبيانات الخاصة بك في مصمم Survey Solutions</value>
-  </data>
-  <data name="Dashboard_EmptySearchResult" xml:space="preserve">
-    <value>لم يتم العثور على أية استبيانات</value>
-  </data>
-  <data name="Dashboard_LastEntryDate_Format" xml:space="preserve">
-    <value>{0:dd MMM HH:mm}</value>
-  </data>
-  <data name="Dashboard_ToolbarText" xml:space="preserve">
+    <data name="ErrorMessage_AccountIsLockedOnServer" xml:space="preserve">
+    <value>تم قفل حساب المستخدم الخاص بك. يرجى الاتصال بفريق الدعم.</value>
+</data>
+    <data name="Dashboard_MyQuestionnairesLinkText" xml:space="preserve">
+    <value>خاصتي</value>
+</data>
+    <data name="Dashboard_SharedWithMeLinkText" xml:space="preserve">
+    <value>مشترك معي</value>
+</data>
+    <data name="Dashboard_PublicQuestionnairesLinkText" xml:space="preserve">
+    <value>عام</value>
+</data>
+    <data name="Dashboard_ToolbarText" xml:space="preserve">
     <value>الاستبيانات</value>
-  </data>
-  <data name="DateQuestion_Hint" xml:space="preserve">
-    <value>انقر لادخال التاريخ</value>
-  </data>
-  <data name="Device_Does_Not_Support" xml:space="preserve">
-    <value>لا يدعم جهازك هذه الوظيفة</value>
-  </data>
-  <data name="EndpointHint" xml:space="preserve">
-    <value>نقطة نهاية المزامنة</value>
-  </data>
-  <data name="EndpointText" xml:space="preserve">
-    <value>نقطة نهاية خدمة ويب:</value>
-  </data>
-  <data name="Error" xml:space="preserve">
-    <value>خطأ</value>
-  </data>
-  <data name="ErrorMessage_AccountIsLockedOnServer" xml:space="preserve">
-    <value>تم قفل حساب المستخدم. يرجى الاتصال بفريق الدعم على.</value>
-  </data>
-  <data name="ErrorMessage_AccountIsNotApprovedOnServer" xml:space="preserve">
-    <value>لم تتم الموافقة على حسابك. الرجاء تأكيد حسابك أولا.</value>
-  </data>
-  <data name="ErrorMessage_InternalServerError" xml:space="preserve">
-    <value>خطأ في الخادم .الرجاء التواصل مع فريق الدعم عن طريق</value>
-  </data>
-  <data name="ErrorMessage_InvalidEndpoint" xml:space="preserve">
-    <value>عنوان مصمم Survey Solutions المقدم URL غير صالح. تحقق من الإعدادات.</value>
-  </data>
-  <data name="ErrorMessage_Maintenance" xml:space="preserve">
-    <value>موقع مصمم Survey Solutions في وضع الصيانة الآن. آسف للإزعاج</value>
-  </data>
-  <data name="ErrorMessage_RequestTimeout" xml:space="preserve">
-    <value>انتهت المهلة عند الاتصال بموقع مصمم Survey Solutions. تحقق من اتصالك بالإنترنت.</value>
-  </data>
-  <data name="ErrorMessage_ServiceUnavailable" xml:space="preserve">
-    <value>لا يوجد اتصال بمصمم Survey Solutions. يرجى التأكد من أن الموقع  متاح.</value>
-  </data>
-  <data name="ErrorMessage_Unauthorized" xml:space="preserve">
-    <value>تسجيل الدخول أو كلمة المرور غير صحيحة</value>
-  </data>
-  <data name="ErrorMessage_UpgradeRequired" xml:space="preserve">
-    <value>تم إصدار نسخة جديدة من التطبيق. الرجاء تحديث التطبيق</value>
-  </data>
-  <data name="FilteredComboboxQuestion_Hint" xml:space="preserve">
-    <value>انقر لادخال نص</value>
-  </data>
-  <data name="GpsQuestion_MissingPermissions" xml:space="preserve">
-    <value>يحتاج التطبيق  لصلاحية استخدام موقع الجهاز الخالي من أجل الإجابة على هذا السؤال. أعد محاولة الإجابة عن السؤال والسماح بالوصول. إذا كنت لا ترى الصلاحيات المنبثقة انتقل إلى الإعدادات واسمح للتطبيق باستخدام الموقع.</value>
-  </data>
-  <data name="GpsQuestion_Timeout" xml:space="preserve">
-    <value>تعذر على نظام تحديد المواقع العالمي تحديد موقعك. لتحري الخلل وإصلاحه، يرجى تجربة ما يلي: تأكد من أنك في الهواء الطلق، أو تأكد من تمكين نظام تحديد المواقع العالمي ، أو قم بتغيير إعدادات مهلة نظام تحديد المواقع العالمي</value>
-  </data>
-  <data name="IntegerQuestion_Hint" xml:space="preserve">
-    <value>انقر لادخال رقم </value>
-  </data>
-  <data name="Interview_Comment_Interviewer_Caption" xml:space="preserve">
-    <value>تعليقك</value>
-  </data>
-  <data name="Interview_Complete_Answered" xml:space="preserve">
-    <value>تمت الاجابة</value>
-  </data>
-  <data name="Interview_Complete_Button" xml:space="preserve">
-    <value>مكتمل</value>
-  </data>
-  <data name="Interview_Complete_Consequences_Instrunction" xml:space="preserve">
-    <value>بعد الانتهاء من هذه المقابلة سيتم وضع علامة على أنها اكتملت وسيتم تحميلها إلى المشرف خلال المزامنة القادمة</value>
-  </data>
-  <data name="Interview_Complete_Entities_With_Errors" xml:space="preserve">
-    <value>الصيغ التي بها أخطاء:</value>
-  </data>
-  <data name="Interview_Complete_Errors" xml:space="preserve">
-    <value>خطأ (اخطاء)</value>
-  </data>
-  <data name="Interview_Complete_First_n_Entities_With_Errors" xml:space="preserve">
-    <value>أول {0} مادة/مواد تنطوي على أخطاء:</value>
-  </data>
-  <data name="Interview_Complete_No" xml:space="preserve">
-    <value>لا</value>
-  </data>
-  <data name="Interview_Complete_Note_For_Supervisor" xml:space="preserve">
-    <value>ملاحظة للمشرف</value>
-  </data>
-  <data name="Interview_Complete_Questions_Status" xml:space="preserve">
-    <value>حالة الأسئلة:</value>
-  </data>
-  <data name="Interview_Complete_Screen_Description" xml:space="preserve">
-    <value>أنت على وشك إكمال هذه المقابلة </value>
-  </data>
-  <data name="Interview_Complete_Screen_DescriptionWithInterviewKey" xml:space="preserve">
-    <value>أنت على وشك إتمام المقابلة {0}</value>
-  </data>
-  <data name="Interview_Complete_Screen_Title" xml:space="preserve">
-    <value>مكتمل</value>
-  </data>
-  <data name="Interview_Complete_Unanswered" xml:space="preserve">
-    <value>لم تتم الإجابة عنها</value>
-  </data>
-  <data name="Interview_CompleteScreen_ButtonText" xml:space="preserve">
-    <value>لاكمال الشاشة</value>
-  </data>
-  <data name="Interview_Cover_First_n_Questions_With_Comments" xml:space="preserve">
-    <value>أول {0} مادة/مواد تنطوي على تعليقات:</value>
-  </data>
-  <data name="Interview_Cover_Questions_With_Comments" xml:space="preserve">
-    <value>أسئلة مع تعليقات المشرف:</value>
-  </data>
-  <data name="Interview_Cover_Screen_Title" xml:space="preserve">
-    <value>غلاف</value>
-  </data>
-  <data name="Interview_Cover_Supervisor_Note" xml:space="preserve">
-    <value>ملاحظة المشرف: </value>
-  </data>
-  <data name="Interview_Group_AnsweredQuestions_Many" xml:space="preserve">
-    <value>{0} إجابات</value>
-  </data>
-  <data name="Interview_Group_AnsweredQuestions_One" xml:space="preserve">
-    <value>جواب واحد</value>
-  </data>
-  <data name="Interview_Group_InvalidAnswers_ManyFormat" xml:space="preserve">
-    <value>{0} أخطاء</value>
-  </data>
-  <data name="Interview_Group_InvalidAnswers_One" xml:space="preserve">
-    <value>خطأ واحد</value>
-  </data>
-  <data name="Interview_Group_Status_CompletedFormat" xml:space="preserve">
-    <value>اكتمل القسم: {0}</value>
-  </data>
-  <data name="Interview_Group_Status_NotStarted" xml:space="preserve">
-    <value>لم يبدأ القسم</value>
-  </data>
-  <data name="Interview_Group_Status_StartedIncompleteFormat" xml:space="preserve">
-    <value>تم البدء بالقسم: {0}</value>
-  </data>
-  <data name="Interview_Group_Subgroups_ManyFormat" xml:space="preserve">
-    <value>{0} أقسام فرعية</value>
-  </data>
-  <data name="Interview_Group_Subgroups_One" xml:space="preserve">
-    <value>قسم فرعي واحد</value>
-  </data>
-  <data name="Interview_Group_Subgroups_Zero" xml:space="preserve">
-    <value>لا يوجد اقسام فرعية</value>
-  </data>
-  <data name="Interview_Headquarters_Comment_Caption" xml:space="preserve">
-    <value>تعليق المقرات الرئيسية</value>
-  </data>
-  <data name="Interview_Instruction_ShowInstruction" xml:space="preserve">
-    <value>إظهار التعليمات</value>
-  </data>
-  <data name="Interview_Instruction_Title" xml:space="preserve">
-    <value>تعليمات</value>
-  </data>
-  <data name="Interview_Interviewer_Comment_Caption" xml:space="preserve">
-    <value>تعليق الباحث</value>
-  </data>
-  <data name="Interview_LinkedQuestion_Empty" xml:space="preserve">
-    <value>سوف تصبح الخيارات متاحة بعد الإجابة عن السؤال المشار إليه</value>
-  </data>
-  <data name="Interview_NextSection_ButtonText" xml:space="preserve">
-    <value>القسم التالي</value>
-  </data>
-  <data name="Interview_Other_Comment_Caption" xml:space="preserve">
-    <value>تعليق المستخدم</value>
-  </data>
-  <data name="Interview_PreviousGroupNavigation_AnsweredQuestions" xml:space="preserve">
-    <value>كل {0} تم الإجابة على الأسئلة</value>
-  </data>
-  <data name="Interview_PreviousGroupNavigation_UnansweredQuestions" xml:space="preserve">
-    <value>ملاحظة: {0} الأسئلة غير مجابة</value>
-  </data>
-  <data name="Interview_Question_Cascading_NoMatchingValue" xml:space="preserve">
-    <value>الإجابة "{0}" لا تطابق أي خيار</value>
-  </data>
-  <data name="Interview_Question_Filter_MatchError" xml:space="preserve">
-    <value>الإجابة "{0}" لا تطابق أي خيار</value>
-  </data>
-  <data name="Interview_Question_Integer_EmptyValueError" xml:space="preserve">
-    <value>لا يمكن حفظ القيمة الفارغة</value>
-  </data>
-  <data name="Interview_Question_Integer_NegativeRosterSizeAnswer" xml:space="preserve">
-    <value>الجواب '{0}' غير صحيح لأن السؤال يستخدم كحجم للقائمة والإجابة المحددة سلبية</value>
-  </data>
-  <data name="Interview_Question_Integer_ParsingError" xml:space="preserve">
-    <value>لا يمكن تحليل القيمة التي تم إدخالها كقيمة عدد صحيح</value>
-  </data>
-  <data name="Interview_Question_Integer_RosterSizeAnswerMoreThanMaxValue" xml:space="preserve">
-    <value>الجواب '{0}' غير صحيح لأن الإجابة أكبر من الحد الاعلى لللائحة '{1}'.</value>
-  </data>
-  <data name="Interview_Question_List_Empty_Values_Are_Not_Allowed" xml:space="preserve">
-    <value>لا يسمح بالقيم الفارغة</value>
-  </data>
-  <data name="Interview_Question_Real_ParsingError" xml:space="preserve">
-    <value>لا يمكن تحليل القيمة التي تم إدخالها كقيمة عشرية</value>
-  </data>
-  <data name="Interview_Question_Text_Empty" xml:space="preserve">
-    <value>يجب ان لا تكون الإجابة فارغة</value>
-  </data>
-  <data name="Interview_Question_Text_MaskError" xml:space="preserve">
-    <value>يرجى ملء كل القيم المطلوبة</value>
-  </data>
-  <data name="Interview_Questions_Area_SaveAnswer" xml:space="preserve">
-    <value>انقر لتعديل المنطقة</value>
-  </data>
-  <data name="Interview_Questions_Audio_RecordNew" xml:space="preserve">
-    <value>تسجيل جديد</value>
-  </data>
-  <data name="Interview_Questions_Audio_SaveAnswer" xml:space="preserve">
-    <value>انقر لتسجيل صوت</value>
-  </data>
-  <data name="Interview_Questions_Gps_SaveAnswer" xml:space="preserve">
-    <value>انقر لتسجيل نظام تسجيل الموقع</value>
-  </data>
-  <data name="Interview_Questions_Multimedia_TapToTakePhoto" xml:space="preserve">
-    <value>انقر لالتقاط صورة</value>
-  </data>
-  <data name="Interview_Questions_QrBarcode_SaveAnswer" xml:space="preserve">
-    <value>انقر لاخذ الشيفرة</value>
-  </data>
-  <data name="Interview_Questions_Timestamp_SaveAnswer" xml:space="preserve">
-    <value>انقر لتسجيل الوقت الحالي</value>
-  </data>
-  <data name="Interview_Supervisor_Comment_Caption" xml:space="preserve">
-    <value>تعليق المشرف</value>
-  </data>
-  <data name="Interviewer_ApplicationName" xml:space="preserve">
-    <value>باحث Survey Solutions</value>
-  </data>
-  <data name="Interviewer_AudioRecording" xml:space="preserve">
-    <value>تسجيل صوتي</value>
-  </data>
-  <data name="Interviewer_Diagnostics" xml:space="preserve">
-    <value>التشخيص</value>
-  </data>
-  <data name="Interviewer_Done" xml:space="preserve">
-    <value>أنجز</value>
-  </data>
-  <data name="Interviewer_RelinkDevice_Cancel" xml:space="preserve">
-    <value>إلغاء</value>
-  </data>
-  <data name="Interviewer_RelinkDevice_InterviewerLinkedToAnotherDeviceMessage" xml:space="preserve">
-    <value>أنت على وشك إكمال هذا المقابلة</value>
-  </data>
-  <data name="Interviewer_RelinkDevice_RelinkButtonText" xml:space="preserve">
-    <value>إعادة ربط</value>
-  </data>
-  <data name="Interviewer_RelinkDevice_RelinkMessage" xml:space="preserve">
-    <value>إذا تمت إعادة الربط إلى هذا الجهاز &lt;br/&gt; فسيتم فقد جميع البيانات الموجودة على الجهاز القديم</value>
-  </data>
-  <data name="Interviewer_TryOnlineLogin" xml:space="preserve">
-    <value>حاول تسجيل الدخول عبر الانترنت</value>
-  </data>
-  <data name="InterviewKey" xml:space="preserve">
-    <value>مفتاح المقابلة: {0}</value>
-  </data>
-  <data name="LoginNameHint" xml:space="preserve">
-    <value>تسجيل دخولك</value>
-  </data>
-  <data name="LoginText" xml:space="preserve">
+</data>
+    <data name="EndpointText" xml:space="preserve">
+    <value>نقطة نهاية خدمة الويب:</value>
+</data>
+    <data name="ErrorMessage_UpgradeRequired" xml:space="preserve">
+    <value>تم إصدار نسخة جديدة من التطبيق. يرجى تحديث التطبيق</value>
+</data>
+    <data name="ErrorMessage_InternalServerError" xml:space="preserve">
+    <value>خطأ في الخادم. يرجى الاتصال بالدعم</value>
+</data>
+    <data name="LoginNameHint" xml:space="preserve">
+    <value>تسجيل الدخول الخاص بك</value>
+</data>
+    <data name="LoginText" xml:space="preserve">
     <value>تسجيل الدخول</value>
-  </data>
-  <data name="LoginTitleText" xml:space="preserve">
-    <value>اختبار Survey Solutions للاستبيان</value>
-  </data>
-  <data name="MenuItem_Title_AreaCancel" xml:space="preserve">
-    <value>الخروج من محرر الخريطة</value>
-  </data>
-  <data name="MenuItem_Title_AreaCancelEdit" xml:space="preserve">
-    <value>امسح الكل</value>
-  </data>
-  <data name="Messages_WaitPendingOperation" xml:space="preserve">
-    <value>يرجى الانتظار حتى اكتمال العملية</value>
-  </data>
-  <data name="MissingPermission" xml:space="preserve">
-    <value>التطبيق ليس لديه أذونات كافية لتنفيذ الإجراء المطلوب</value>
-  </data>
-  <data name="MissingPermissions_Camera" xml:space="preserve">
-    <value>يحتاج التطبيق  لصلاحية استخدام الكاميرا من أجل الإجابة على هذا السؤال. أعد محاولة الإجابة عن السؤال والسماح بالوصول. إذا كنت لا ترى الصلاحيات المنبثقة انتقل إلى الإعدادات واسمح للتطبيق لاستخدام الكاميرا.</value>
-  </data>
-  <data name="MissingPermissions_Microphone" xml:space="preserve">
-    <value>يحتاج التطبيق  لصلاحية استخدام المايكروفون  من أجل الإجابة على هذا السؤال. أعد محاولة الإجابة عن السؤال والسماح بالوصول. إذا كنت لا ترى الصلاحيات المنبثقة انتقل إلى الإعدادات واسمح للتطبيق لاستخدام المايكروفون.</value>
-  </data>
-  <data name="MissingPermissions_Storage" xml:space="preserve">
-    <value>يحتاج التطبيق لديك لصلاحية استخدام مساحة التخزين  من أجل الإجابة على هذا السؤال. أعد محاولة الإجابة عن السؤال والسماح بالوصول. إذا كنت لا ترى الصلاحيات المنبثقة انتقل إلى الإعدادات واسمح للتطبيق لاستخدام مساحة التخزين.</value>
-  </data>
-  <data name="Multimedia_PickFromGallery" xml:space="preserve">
-    <value>اختر من المعرض</value>
-  </data>
-  <data name="Multimedia_PictureSource" xml:space="preserve">
-    <value>حدد اختيارا</value>
-  </data>
-  <data name="Multimedia_TakePhoto" xml:space="preserve">
-    <value>التقط صورة</value>
-  </data>
-  <data name="No" xml:space="preserve">
-    <value>لا</value>
-  </data>
-  <data name="Ok" xml:space="preserve">
-    <value>حسنا</value>
-  </data>
-  <data name="PasswordHint" xml:space="preserve">
+</data>
+    <data name="LoginTitleText" xml:space="preserve">
+    <value>مُختبر استبيانات حلول المسح</value>
+</data>
+    <data name="ErrorMessage_Maintenance" xml:space="preserve">
+    <value>موقع مصمم حلول المسح في وضع الصيانة الآن. نعتذر عن الإزعاج</value>
+</data>
+    <data name="PrefilledQuestions_StartInterview" xml:space="preserve">
+    <value>ابدأ</value>
+</data>
+    <data name="PasswordHint" xml:space="preserve">
     <value>كلمة المرور</value>
-  </data>
-  <data name="PlayServicesLocationWatcher_Google_Play_Services_are_not_available" xml:space="preserve">
-    <value>خدمات Google Play غير متوفرة</value>
-  </data>
-  <data name="PlayServicesLocationWatcher_Location_Client_not_started" xml:space="preserve">
-    <value>لم يبدأ موقع العميل</value>
-  </data>
-  <data name="PlayServicesLocationWatcher_You_cannot_start_MvxLocation_service_more_than_once" xml:space="preserve">
-    <value>لا يمكنك بدء تشغيل خدمة MvxLocation أكثر من مرة</value>
-  </data>
-  <data name="PrefilledQuestions_StartInterview" xml:space="preserve">
-    <value>ابدأ </value>
-  </data>
-  <data name="Prefs_GpsDesiredAccuracySubTitle" xml:space="preserve">
-    <value>عدد الأمتار لتحديد الدقة</value>
-  </data>
-  <data name="Prefs_GpsDesiredAccuracyTitle" xml:space="preserve">
-    <value>الدقة المطلوبة لأسئلة نظام الملاحة GPS</value>
-  </data>
-  <data name="Prefs_ShowLocationOnMap" xml:space="preserve">
-    <value>اظهار الموقع على الخريطة</value>
-  </data>
-  <data name="Prefs_ShowLocationOnMapSummary" xml:space="preserve">
-    <value>تحميل الخريطة لإظهار الموقع الجغرافي للأسئلة</value>
-  </data>
-  <data name="Prefs_VibrateOnErrorSummary" xml:space="preserve">
-    <value>سيهتز الجهاز اللوحي في حال عدم اجتياز الاجابة للتحقق من الصحة</value>
-  </data>
-  <data name="Prefs_VibrateOnErrorTitle" xml:space="preserve">
-    <value>الاهتزاز عند إعطاء إجابة غير صالحة</value>
-  </data>
-  <data name="RealQuestion_Hint" xml:space="preserve">
-    <value>انقر لادخال الابعاد</value>
-  </data>
-  <data name="StaySignedInText" xml:space="preserve">
-    <value>استمر مسجلا للدخول</value>
-  </data>
-  <data name="Synchronization_UserLinkedToAnotherDevice_Description" xml:space="preserve">
-    <value>ليس لديك أية مهام على هذا الجهاز. إرسال معلومات الى الجهاز اللوحي، بيانات التطبيق واضحة وتسجيل الدخول عن طريق حساب آخر</value>
-  </data>
-  <data name="TextListQuestion_Hint" xml:space="preserve">
-    <value>انقر لادخال عنصر جديد</value>
-  </data>
-  <data name="TextQuestion_Hint" xml:space="preserve">
-    <value>انقر لادخال نص</value>
-  </data>
-  <data name="TextQuestion_MaskHint" xml:space="preserve">
-    <value>انقر لادخال نص ({0})</value>
-  </data>
-  <data name="Validity_Answered_Invalid_ErrorCaption" xml:space="preserve">
-    <value>إجابة غير صالحة</value>
-  </data>
-  <data name="Validity_NotAnswered_InterviewException_ErrorCaption" xml:space="preserve">
-    <value>لم يتم حفظ الإجابة</value>
-  </data>
-  <data name="VariableEmptyValue" xml:space="preserve">
-    <value>&lt;فارغ&gt;</value>
-  </data>
-  <data name="Version_Not_Supports" xml:space="preserve">
-    <value>لا يدعم إصدار التطبيق الخاص بك هذه الوظيفة</value>
-  </data>
-  <data name="Yes" xml:space="preserve">
+</data>
+    <data name="OldPasswordHint" xml:space="preserve">
+    <value>كلمة المرور الحالية</value>
+</data>
+    <data name="NewPasswordHint" xml:space="preserve">
+    <value>كلمة المرور الجديدة</value>
+</data>
+    <data name="ConfirmNewPasswordHint" xml:space="preserve">
+    <value>تأكيد كلمة المرور الجديدة</value>
+</data>
+    <data name="ErrorMessage_RequestTimeout" xml:space="preserve">
+    <value>انتهت مهلة الاتصال بموقع مصمم حلول المسح. تحقق من اتصالك بالإنترنت.</value>
+</data>
+    <data name="ErrorMessage_ServiceUnavailable" xml:space="preserve">
+    <value>لا يوجد اتصال بمصمم حلول المسح. يرجى التأكد من أن الموقع متاح.</value>
+</data>
+    <data name="StaySignedInText" xml:space="preserve">
+    <value>البقاء مسجلاً</value>
+</data>
+    <data name="ErrorMessage_Unauthorized" xml:space="preserve">
+    <value>تسجيل الدخول أو كلمة المرور غير صحيحة</value>
+</data>
+    <data name="Interview_Questions_Gps_SaveAnswer" xml:space="preserve">
+    <value>اضغط لتسجيل GPS</value>
+</data>
+    <data name="Interview_Questions_Audio_SaveAnswer" xml:space="preserve">
+    <value>اضغط لتسجيل الصوت</value>
+</data>
+    <data name="Interview_Questions_Audio_RecordNew" xml:space="preserve">
+    <value>تسجيل جديد</value>
+</data>
+    <data name="Interview_Instruction_Title" xml:space="preserve">
+    <value>تعليمات</value>
+</data>
+    <data name="TextQuestion_Hint" xml:space="preserve">
+    <value>اضغط لإدخال النص</value>
+</data>
+    <data name="IntegerQuestion_Hint" xml:space="preserve">
+    <value>اضغط لإدخال الرقم</value>
+</data>
+    <data name="RealQuestion_Hint" xml:space="preserve">
+    <value>اضغط لإدخال الرقم</value>
+</data>
+    <data name="Interview_Questions_RemoveRowFromRosterMessage" xml:space="preserve">
+    <value>هل أنت متأكد أنك تريد إزالة القائمة ذات الصلة '{0}' من كل قائمة ذات صلة؟</value>
+</data>
+    <data name="Interview_Questions_RemoveRowFromRosterListMessage" xml:space="preserve">
+    <value>هل أنت متأكد أنك تريد إزالة القوائم ذات الصلة؟</value>
+</data>
+    <data name="Yes" xml:space="preserve">
     <value>نعم</value>
-  </data>
-  <data name="Interview_Question_NumberRosterRemoveConfirm" xml:space="preserve">
-    <value>هل أنت أكيد من أنك تريد حذف {0} صفاً (صفوفاً) من كل جدول ذي صلة؟</value>
-  </data>
+</data>
+    <data name="Adjust" xml:space="preserve">
+    <value>تعديل</value>
+</data>
+    <data name="InvalidTimeMessage" xml:space="preserve">
+    <value>من المهم ضبط الساعة بدقة. تشير ساعتك إلى أن التاريخ الحالي مضبوط بشكل غير صحيح. اضبط الساعة عن طريق ضبط التاريخ/الوقت الصحيح قبل متابعة عملك.</value>
+</data>
+    <data name="Validity_Answered_Invalid_ErrorCaption" xml:space="preserve">
+    <value>الإجابة غير صالحة</value>
+</data>
+    <data name="Warnings" xml:space="preserve">
+    <value>تحذيرات</value>
+</data>
+    <data name="Validity_NotAnswered_InterviewException_ErrorCaption" xml:space="preserve">
+    <value>لم يتم حفظ الإجابة</value>
+</data>
+    <data name="Interview_Comment_OnPreviousAnswer" xml:space="preserve">
+    <value>على الإجابة السابقة</value>
+</data>
+    <data name="Interview_Comment_Interviewer_Caption" xml:space="preserve">
+    <value>تعليقك</value>
+</data>
+    <data name="Interview_Comment_Resolve" xml:space="preserve">
+    <value>حل</value>
+</data>
+    <data name="DateQuestion_Hint" xml:space="preserve">
+    <value>اضغط لإدخال التاريخ</value>
+</data>
+    <data name="Interview_Questions_QrBarcode_SaveAnswer" xml:space="preserve">
+    <value>اضغط لأخذ الباركود</value>
+</data>
+    <data name="Interview_Questions_Area_SaveAnswer" xml:space="preserve">
+    <value>اضغط للإجابة</value>
+</data>
+    <data name="Interview_Group_Status_CompletedFormat" xml:space="preserve">
+    <value>القسم مكتمل: {0}</value>
+</data>
+    <data name="Interview_Group_AnsweredQuestions_Many" xml:space="preserve">
+    <value>{0} إجابات</value>
+</data>
+    <data name="Interview_Group_Subgroups_ManyFormat" xml:space="preserve">
+    <value>{0} أقسام فرعية</value>
+</data>
+    <data name="Interview_Group_Subgroups_Zero" xml:space="preserve">
+    <value>لا توجد أقسام فرعية</value>
+</data>
+    <data name="Interview_Group_Status_NotStarted" xml:space="preserve">
+    <value>القسم لم يبدأ</value>
+</data>
+    <data name="Interview_Group_AnsweredQuestions_One" xml:space="preserve">
+    <value>إجابة واحدة</value>
+</data>
+    <data name="Interview_Group_Subgroups_One" xml:space="preserve">
+    <value>قسم فرعي واحد</value>
+</data>
+    <data name="Interview_Group_Status_StartedIncompleteFormat" xml:space="preserve">
+    <value>القسم بدأ: {0}</value>
+</data>
+    <data name="Interview_Question_Integer_ParsingError" xml:space="preserve">
+    <value>القيمة المدخلة لا يمكن تحليلها كقيمة عدد صحيح</value>
+</data>
+    <data name="Interview_Question_Real_ParsingError" xml:space="preserve">
+    <value>القيمة المدخلة لا يمكن تحليلها كقيمة عشرية</value>
+</data>
+    <data name="Interview_Group_InvalidAnswers_ManyFormat" xml:space="preserve">
+    <value>{0} أخطاء</value>
+</data>
+    <data name="Interview_Group_InvalidAnswers_One" xml:space="preserve">
+    <value>خطأ واحد</value>
+</data>
+    <data name="Interview_Questions_Multimedia_TapToTakePhoto" xml:space="preserve">
+    <value>اضغط لأخذ صورة</value>
+</data>
+    <data name="Interview_PreviousGroupNavigation_AnsweredQuestions" xml:space="preserve">
+    <value>تمت الإجابة على جميع {0} الأسئلة</value>
+</data>
+    <data name="Interview_PreviousGroupNavigation_UnansweredQuestions" xml:space="preserve">
+    <value>ملاحظة: {0} سؤال غير مجاب</value>
+</data>
+    <data name="Dashboard_EmptyQuestionnairesList" xml:space="preserve">
+    <value>لا توجد استبيانات بعد.
+
+يمكنك إنشاء أو تعديل استبياناتك في مصمم حلول المسح</value>
+</data>
+    <data name="TextListQuestion_Hint" xml:space="preserve">
+    <value>اضغط لإدخال عنصر جديد</value>
+</data>
+    <data name="Interview_Question_Text_MaskError" xml:space="preserve">
+    <value>يرجى ملء جميع القيم المطلوبة</value>
+</data>
+    <data name="Interview_Question_Text_Empty" xml:space="preserve">
+    <value>يجب ألا تكون الإجابة فارغة</value>
+</data>
+    <data name="FilteredComboboxQuestion_Hint" xml:space="preserve">
+    <value>اضغط لإدخال النص</value>
+</data>
+    <data name="GpsQuestion_Timeout" xml:space="preserve">
+    <value>لم يتمكن GPS من تحديد موقعك. لاستكشاف الأخطاء وإصلاحها، يرجى تجربة ما يلي: تأكد من أنك في الخارج، تأكد من تمكين GPS، أو قم بتغيير إعداد مهلة GPS</value>
+</data>
+    <data name="NoMapsApplication" xml:space="preserve">
+    <value>لم يتم العثور على تطبيق الملاحة</value>
+</data>
+    <data name="ErrorMessage_InvalidEndpoint" xml:space="preserve">
+    <value>عنوان URL لمصمم حلول المسح غير صالح. تحقق من الإعدادات.</value>
+</data>
+    <data name="Interview_LinkedQuestion_Empty" xml:space="preserve">
+    <value>ستظهر الفئات فقط بعد الإجابة على السؤال الذي يحدد فئات هذا السؤال.</value>
+</data>
+    <data name="Interview_Question_Cascading_NoMatchingValue" xml:space="preserve">
+    <value>الإجابة "{0}" غير مسموح بها لهذا السؤال</value>
+</data>
+    <data name="Interview_Question_Filter_MatchError" xml:space="preserve">
+    <value>الإجابة "{0}" غير مسموح بها لهذا السؤال</value>
+</data>
+    <data name="Interview_NextSection_ButtonText" xml:space="preserve">
+    <value>القسم التالي</value>
+</data>
+    <data name="Dashboard_LastEntryDate_Format" xml:space="preserve">
+    <value>{0:dd MMM HH:mm}</value>
+</data>
+    <data name="TextQuestion_MaskHint" xml:space="preserve">
+    <value>اضغط لإدخال النص ({0})</value>
+</data>
+    <data name="Interview_Question_Integer_NegativeRosterSizeAnswer" xml:space="preserve">
+    <value>الإجابة '{0}' غير صحيحة لأن السؤال هو سؤال مصدر القائمة والإجابة المحددة سلبية</value>
+</data>
+    <data name="Interview_Question_Integer_RosterSizeAnswerMoreThanMaxValue" xml:space="preserve">
+    <value>الإجابة '{0}' غير صحيحة لأن الإجابة أكبر من الحد الأعلى للقائمة '{1}'.</value>
+</data>
+    <data name="Interview_Question_Integer_EmptyValueError" xml:space="preserve">
+    <value>لا يمكن حفظ القيمة الفارغة</value>
+</data>
+    <data name="ErrorMessage_AccountIsNotApprovedOnServer" xml:space="preserve">
+    <value>حسابك غير معتمد. يرجى تأكيد حسابك أولاً.</value>
+</data>
+    <data name="Interview_Question_List_Empty_Values_Are_Not_Allowed" xml:space="preserve">
+    <value>القيم الفارغة غير مسموح بها</value>
+</data>
+    <data name="Interview_Complete_Answered" xml:space="preserve">
+    <value>تمت الإجابة</value>
+</data>
+    <data name="Interview_Complete_Button" xml:space="preserve">
+    <value>إكمال</value>
+</data>
+    <data name="Interview_Complete_Consequences_Instrunction" xml:space="preserve">
+    <value>بعد الانتهاء من هذا الاستبيان سيتم وضع علامة عليه كمكتمل وسيتم تحميله إلى المشرف أثناء المزامنة التالية</value>
+</data>
+    <data name="Interview_Complete_CriticalIssues_Instrunction" xml:space="preserve">
+    <value>تم تعطيل هذا الزر لأن إرسال الاستبيانات ذات القضايا الحرجة غير مسموح به</value>
+</data>
+    <data name="Interview_Complete_Errors" xml:space="preserve">
+    <value>خطأ(أخطاء)</value>
+</data>
+    <data name="Interview_Complete_CriticalUnanswered" xml:space="preserve">
+    <value>أسئلة حرجة غير مجابة: {0}</value>
+</data>
+    <data name="Interview_Complete_FailCriticalConditions" xml:space="preserve">
+    <value>فشل في القواعد الحرجة: {0}</value>
+</data>
+    <data name="Interview_Complete_No" xml:space="preserve">
+    <value>لا</value>
+</data>
+    <data name="Interview_Complete_Note_For_Supervisor" xml:space="preserve">
+    <value>ملاحظة للمشرف</value>
+</data>
+    <data name="Interview_Complete_WithWarningCriticality" xml:space="preserve">
+    <value>يرجى تأكيد أنك تريد إرسال هذا الاستبيان مع القضايا الحرجة.</value>
+</data>
+    <data name="Interview_Complete_Note_For_Supervisor_with_Criticality" xml:space="preserve">
+    <value>يبقى هذا الزر معطلاً حتى تحدد تعليقًا على القضايا الحرجة أعلاه</value>
+</data>
+    <data name="Interview_Complete_Questions_Status" xml:space="preserve">
+    <value>حالة الأسئلة</value>
+</data>
+    <data name="Interview_Complete_Interview_Status" xml:space="preserve">
+    <value>قضايا الاستبيان:</value>
+</data>
+    <data name="Interview_Complete_CriticalityIssuesDescription" xml:space="preserve">
+    <value>يرجى حل القضايا عن طريق الإجابة على الأسئلة الحرجة والتأكد من أن الإجابات تلبي القواعد الحرجة</value>
+</data>
+    <data name="Interview_Complete_Unanswered" xml:space="preserve">
+    <value>غير مجاب</value>
+</data>
+    <data name="Interview_Complete_Screen_Description" xml:space="preserve">
+    <value>أنت على وشك إكمال هذا الاستبيان</value>
+</data>
+    <data name="Interview_Complete_Screen_DescriptionWithInterviewKey" xml:space="preserve">
+    <value>أنت على وشك إكمال الاستبيان {0}</value>
+</data>
+    <data name="Interview_Complete_Screen_Title" xml:space="preserve">
+    <value>إكمال</value>
+</data>
+    <data name="Interviewer_ApplicationName" xml:space="preserve">
+    <value>مقابل حلول المسح</value>
+</data>
+    <data name="Supervisor_ApplicationName" xml:space="preserve">
+    <value>مشرف حلول المسح</value>
+</data>
+    <data name="Interview_CompleteScreen_ButtonText" xml:space="preserve">
+    <value>للانتقال إلى شاشة الإكمال</value>
+</data>
+    <data name="Interviewer_RelinkDevice_Cancel" xml:space="preserve">
+    <value>إلغاء</value>
+</data>
+    <data name="Interviewer_Reassign_Comment" xml:space="preserve">
+    <value>اترك تعليقًا للمسؤول الجديد</value>
+</data>
+    <data name="Interviewer_Comment" xml:space="preserve">
+    <value>اترك تعليقًا</value>
+</data>
+    <data name="Interviewer_Reassign_AlreadyReceivedInterview" xml:space="preserve">
+    <value>المقابل {0} قد تلقى بالفعل هذا الاستبيان {1}. هل أنت متأكد أنك تريد إعادة تعيينه؟</value>
+</data>
+    <data name="Interviewer_Reassign_AlreadyReceivedAssignment" xml:space="preserve">
+    <value>المقابل {0} قد تلقى بالفعل هذه المهمة {1}. هل أنت متأكد أنك تريد إعادة تعيينها؟</value>
+</data>
+    <data name="Interviewer_Done" xml:space="preserve">
+    <value>تم</value>
+</data>
+    <data name="Interviewer_AudioRecording" xml:space="preserve">
+    <value>تسجيل الصوت</value>
+</data>
+    <data name="Interviewer_RelinkDevice_InterviewerLinkedToAnotherDeviceMessage" xml:space="preserve">
+    <value>أنت مرتبط بالفعل بجهاز آخر</value>
+</data>
+    <data name="Interviewer_RelinkDevice_RelinkButtonText" xml:space="preserve">
+    <value>إعادة الربط</value>
+</data>
+    <data name="Interviewer_RelinkDevice_RelinkMessage" xml:space="preserve">
+    <value>إذا قمت بإعادة الربط إلى هذا الجهاز &lt;br/&gt; سيتم فقدان جميع البيانات على الجهاز القديم</value>
+</data>
+    <data name="Dashboard_EmptySearchResult" xml:space="preserve">
+    <value>لم يتم العثور على استبيانات</value>
+</data>
+    <data name="EndpointHint" xml:space="preserve">
+    <value>نقطة نهاية المزامنة</value>
+</data>
+    <data name="Interviewer_TryOnlineLogin" xml:space="preserve">
+    <value>حاول تسجيل الدخول عبر الإنترنت</value>
+</data>
+    <data name="PlayServicesLocationWatcher_Google_Play_Services_are_not_available" xml:space="preserve">
+    <value>خدمات Google Play غير متاحة</value>
+</data>
+    <data name="PlayServicesLocationWatcher_You_cannot_start_MvxLocation_service_more_than_once" xml:space="preserve">
+    <value>لا يمكنك بدء خدمة MvxLocation أكثر من مرة</value>
+</data>
+    <data name="PlayServicesLocationWatcher_Location_Client_not_started" xml:space="preserve">
+  <value>لم يتم بدء عميل الموقع</value>
+</data>
+    <data name="Synchronization_UserLinkedToAnotherDevice_Description" xml:space="preserve">
+  <value>ليس لديك أي مهام على هذا الجهاز. أرسل معلومات الجهاز، امسح بيانات التطبيق وقم بتسجيل الدخول بحساب آخر</value>
+</data>
+    <data name="No" xml:space="preserve">
+  <value>لا</value>
+</data>
+    <data name="Cancel" xml:space="preserve">
+  <value>إلغاء</value>
+</data>
+    <data name="PasswordMatchError" xml:space="preserve">
+  <value>يجب أن تكون كلمة المرور متطابقة</value>
+</data>
+    <data name="Interviewer_Diagnostics" xml:space="preserve">
+  <value>التشخيص</value>
+</data>
+    <data name="Prefs_GpsDesiredAccuracySubTitle" xml:space="preserve">
+  <value>عدد الأمتار لتحديد الدقة</value>
+</data>
+    <data name="Prefs_GpsDesiredAccuracyTitle" xml:space="preserve">
+  <value>الدقة المطلوبة لأسئلة GPS</value>
+</data>
+    <data name="Interview_Instruction_ShowInstruction" xml:space="preserve">
+  <value>عرض التعليمات</value>
+</data>
+    <data name="Interview_Questions_Timestamp_SaveAnswer" xml:space="preserve">
+  <value>اضغط لتسجيل الوقت الحالي</value>
+</data>
+    <data name="Interview_Complete_Entities_With_Errors" xml:space="preserve">
+  <value>الأسئلة التي تحتوي على أخطاء:</value>
+</data>
+    <data name="Interview_Complete_First_n_Entities_With_Errors" xml:space="preserve">
+  <value>أول {0} أسئلة تحتوي على أخطاء:</value>
+</data>
+    <data name="Messages_WaitPendingOperation" xml:space="preserve">
+  <value>يرجى الانتظار حتى تكتمل العملية الحالية</value>
+</data>
+    <data name="Prefs_VibrateOnErrorSummary" xml:space="preserve">
+  <value>سوف يهتز الجهاز اللوحي عندما لا تمر الإجابة التحقق</value>
+</data>
+    <data name="Prefs_VibrateOnErrorTitle" xml:space="preserve">
+  <value>الاهتزاز عند إعطاء إجابة غير صالحة</value>
+</data>
+    <data name="Interview_Cover_Screen_Title" xml:space="preserve">
+  <value>الغلاف</value>
+</data>
+    <data name="Interview_Cover_First_n_Questions_With_Comments" xml:space="preserve">
+  <value>أول {0} أسئلة مع تعليقات:</value>
+</data>
+    <data name="Interview_Cover_Questions_With_Comments" xml:space="preserve">
+  <value>الأسئلة مع تعليقات المشرف:</value>
+</data>
+    <data name="Interview_Cover_Supervisor_Comments_does_not_exists" xml:space="preserve">
+  <value>لا توجد تعليقات من المشرف</value>
+</data>
+    <data name="Interview_Other_Comment_Caption" xml:space="preserve">
+  <value>تعليق المستخدم</value>
+</data>
+    <data name="Interview_Supervisor_Comment_Caption" xml:space="preserve">
+  <value>تعليق المشرف</value>
+</data>
+    <data name="Interview_Cover_Supervisor_Note" xml:space="preserve">
+  <value>ملاحظة المشرف:</value>
+</data>
+    <data name="Prefs_ShowLocationOnMap" xml:space="preserve">
+  <value>عرض الموقع على الخريطة</value>
+</data>
+    <data name="Prefs_DownloadUpdatesForInterviewerApp" xml:space="preserve">
+  <value>تنزيل التحديثات لتطبيق المقابل</value>
+</data>
+    <data name="Prefs_ShowLocationOnMapSummary" xml:space="preserve">
+  <value>تحميل الخريطة لعرض الموقع لأسئلة GPS</value>
+</data>
+    <data name="Prefs_DownloadUpdatesForInterviewerAppSummary" xml:space="preserve">
+  <value>إذا لم يكن لدى المقابلين إمكانية الوصول إلى الإنترنت، فيجب تمكين هذه الوظيفة لأنها تجعل من الممكن تحديث تطبيقاتهم أثناء المزامنة غير المتصلة بالإنترنت مع تطبيق المشرف</value>
+</data>
+    <data name="VariableEmptyValue" xml:space="preserve">
+  <value>&lt;فارغ&gt;</value>
+</data>
+    <data name="Interview_Headquarters_Comment_Caption" xml:space="preserve">
+  <value>تعليق المقر الرئيسي</value>
+</data>
+    <data name="Interview_Interviewer_Comment_Caption" xml:space="preserve">
+  <value>تعليق المقابل</value>
+</data>
+    <data name="GpsQuestion_MissingPermissions" xml:space="preserve">
+  <value>التطبيق لا يملك الأذونات الكافية لتنفيذ الإجراء المطلوب. أعد محاولة الإجابة على السؤال واسمح بالوصول. إذا لم تشاهد نافذة الأذونات المنبثقة، فانتقل إلى الإعدادات واسمح للتطبيق باستخدام موقع الجهاز.</value>
+</data>
+    <data name="MissingPermissions_Camera" xml:space="preserve">
+  <value>يجب أن يكون للتطبيق إذن لاستخدام الكاميرا للإجابة على هذا السؤال. أعد محاولة الإجابة على السؤال واسمح بالوصول. إذا لم تشاهد نافذة منبثقة للأذونات، فانتقل إلى الإعدادات واسمح للتطبيق باستخدام الكاميرا.</value>
+</data>
+    <data name="MissingPermissions_Microphone" xml:space="preserve">
+  <value>يحتاج التطبيق إلى إذن لاستخدام الميكروفون للإجابة على هذا السؤال. أعد محاولة الإجابة على السؤال واسمح بالوصول. إذا لم تشاهد نافذة الأذونات المنبثقة، فانتقل إلى الإعدادات واسمح للتطبيق باستخدام الميكروفون.</value>
+</data>
+    <data name="MissingPermissions_Storage" xml:space="preserve">
+  <value>يحتاج التطبيق إلى إذن لاستخدام التخزين للإجابة على هذا السؤال. أعد محاولة الإجابة على السؤال واسمح بالوصول. إذا لم تشاهد نافذة الأذونات المنبثقة، فانتقل إلى الإعدادات واسمح للتطبيق باستخدام التخزين.</value>
+</data>
+    <data name="MissingPermissions_MapsLocation" xml:space="preserve">
+  <value>يحتاج التطبيق إلى إذن لاستخدام الموقع. إذا لم تشاهد نافذة الأذونات المنبثقة، فانتقل إلى الإعدادات واسمح للتطبيق باستخدام الموقع.</value>
+</data>
+    <data name="MissingPermissions_Microphone_Global" xml:space="preserve">
+  <value>يحتاج التطبيق إلى إذن لاستخدام الميكروفون. أعد محاولة الإجراء الأخير واسمح بالوصول. إذا لم تشاهد نافذة الأذونات المنبثقة، فانتقل إلى الإعدادات واسمح للتطبيق باستخدام الميكروفون.</value>
+</data>
+    <data name="MissingPermissions_Storage_Global" xml:space="preserve">
+  <value>يحتاج التطبيق إلى إذن لاستخدام التخزين. أعد محاولة الإجراء الأخير واسمح بالوصول. إذا لم تشاهد نافذة الأذونات المنبثقة، فانتقل إلى الإعدادات واسمح للتطبيق باستخدام التخزين.</value>
+</data>
+    <data name="MissingPermission" xml:space="preserve">
+  <value>التطبيق لا يملك الأذونات الكافية لتنفيذ الإجراء المطلوب</value>
+</data>
+    <data name="Ok" xml:space="preserve">
+  <value>موافق</value>
+</data>
+    <data name="Multimedia_PickFromGallery" xml:space="preserve">
+  <value>اختر من المعرض</value>
+</data>
+    <data name="Multimedia_PictureSource" xml:space="preserve">
+  <value>اختر خيارًا</value>
+</data>
+    <data name="Multimedia_TakePhoto" xml:space="preserve">
+  <value>التقط صورة</value>
+</data>
+    <data name="Error" xml:space="preserve">
+  <value>خطأ</value>
+</data>
+    <data name="Warning" xml:space="preserve">
+  <value>تحذير</value>
+</data>
+    <data name="AreaMap_Edit" xml:space="preserve">
+  <value>تحرير</value>
+</data>
+    <data name="AreaMap_Location" xml:space="preserve">
+  <value>الموقع</value>
+</data>
+    <data name="AreaMap_NoChangesInfo" xml:space="preserve">
+  <value>لا توجد تغييرات ليتم حفظها.</value>
+</data>
+    <data name="AreaMap_LocationOutOfBoundaries" xml:space="preserve">
+  <value>موقعك خارج حدود الخريطة.</value>
+</data>
+    <data name="AreaMap_LocationDataSourceFailed" xml:space="preserve">
+  <value>لا يمكن التقاط الموقع. لاستكشاف الأخطاء وإصلاحها، يرجى محاولة ما يلي: تأكد من أنك في الهواء الطلق، تأكد من تمكين GPS الخاص بك، أو قم بتغيير إعداد مهلة GPS الخاص بك</value>
+</data>
+    <data name="AreaMap_MapIsOutOfVisibleBoundaries" xml:space="preserve">
+  <value>الخريطة المحملة خارج الحدود المرئية</value>
+</data>
+    <data name="AreaMap_SelectShapefile" xml:space="preserve">
+  <value>اختر ملف الحدود</value>
+</data>
+    <data name="AreaMap_ErrorOnShapefileLoading" xml:space="preserve">
+  <value>حدث خطأ أثناء التحميل. لا يمكن التعامل مع ملف الشكل</value>
+</data>
+    <data name="AreaMap_NoMapsFound" xml:space="preserve">
+  <value>لم يتم العثور على خرائط. يرجى تحديث الخرائط</value>
+</data>
+    <data name="AreaMap_Save" xml:space="preserve">
+  <value>حفظ</value>
+</data>
+    <data name="AreaMap_Undo" xml:space="preserve">
+  <value>تراجع</value>
+</data>
+    <data name="AreaMap_UpdateMaps" xml:space="preserve">
+  <value>تحديث الخرائط</value>
+</data>
+    <data name="Version_Not_Supports" xml:space="preserve">
+  <value>إصدار التطبيق الخاص بك لا يدعم هذه الميزة. يرجى تثبيت تطبيق المقابل مع الخرائط لتمكينها.</value>
+</data>
+    <data name="AreaMap_UpdateFailed" xml:space="preserve">
+  <value>فشل التحديث</value>
+</data>
+    <data name="Device_Does_Not_Support" xml:space="preserve">
+  <value>جهازك لا يدعم هذه الوظيفة</value>
+</data>
+    <data name="AreaMap_MapTitle" xml:space="preserve">
+  <value>الخريطة</value>
+</data>
+    <data name="AreaMap_AreaFormat" xml:space="preserve">
+  <value>المساحة: {0:0.00} م²</value>
+</data>
+    <data name="AreaMap_OverlapsWith" xml:space="preserve">
+  <value>يتداخل مع:</value>
+</data>
+    <data name="AreaMap_OverlapsWithOther" xml:space="preserve">
+  <value>و {0} آخر.</value>
+</data>
+    <data name="AreaMap_ItemsOutsideDedicatedArea" xml:space="preserve">
+  <value>بعض العلامات تقع خارج المنطقة المحددة</value>
+</data>
+    <data name="AreaMap_PointsFormat" xml:space="preserve">
+  <value>النقاط: {0}</value>
+</data>
+    <data name="AreaMap_Cancel" xml:space="preserve">
+  <value>إلغاء</value>
+</data>
+    <data name="AreaMap_LengthFormat" xml:space="preserve">
+  <value>الطول: {0:0.00} م</value>
+</data>
+    <data name="AreaMap_PerimeterFormat" xml:space="preserve">
+  <value>المحيط: {0:0.00} م</value>
+</data>
+    <data name="AreaMap_Active_Map_Title" xml:space="preserve">
+  <value>الخريطة النشطة:</value>
+</data>
+    <data name="AreaMap_Available_Maps_Title" xml:space="preserve">
+    <value>الخرائط المتاحة</value>
+</data>
+    <data name="AreaMap_LoadShapefile" xml:space="preserve">
+  <value>تحميل ملف الشكل</value>
+</data>
+    <data name="AreaMap_ShowBoundaries" xml:space="preserve">
+  <value>عرض الحدود</value>
+</data>
+    <data name="AreaMap_HideBoundaries" xml:space="preserve">
+  <value>إخفاء الحدود</value>
+</data>
+    <data name="MapDashboard_Assignments" xml:space="preserve">
+  <value>المهام</value>
+</data>
+    <data name="MapDashboard_Interviews" xml:space="preserve">
+  <value>المقابلات</value>
+</data>
+    <data name="MapDashboard_Disclaimer" xml:space="preserve">
+  <value>فقط العناصر ذات الإحداثيات المعروفة معروضة</value>
+</data>
+    <data name="MapDashboard_AllQuestionnaires" xml:space="preserve">
+  <value>جميع الاستبيانات</value>
+</data>
+    <data name="MapDashboard_AllResponsibles" xml:space="preserve">
+  <value>جميع المسؤولين</value>
+</data>
+    <data name="MapDashboard_AllStatuses" xml:space="preserve">
+  <value>جميع الحالات</value>
+</data>
+    <data name="MapDashboard_QuestionnaireTitle" xml:space="preserve">
+  <value>الاستبيان</value>
+</data>
+    <data name="MapDashboard_ResponsibleTitle" xml:space="preserve">
+  <value>المسؤول</value>
+</data>
+    <data name="MapDashboard_StatusTitle" xml:space="preserve">
+  <value>الحالة</value>
+</data>
+    <data name="MapDashboard_TypeTitle" xml:space="preserve">
+  <value>النوع</value>
+</data>
+    <data name="MapDashboard_FiltersTitle" xml:space="preserve">
+  <value>الفلاتر</value>
+</data>
+    <data name="AreaMap_Close" xml:space="preserve">
+  <value>إغلاق</value>
+</data>
+    <data name="AreaMap_Update_Maps" xml:space="preserve">
+  <value>تحديث الخرائط</value>
+</data>
+    <data name="MenuItem_Title_AreaCancel" xml:space="preserve">
+  <value>الخروج من محرر الخرائط</value>
+</data>
+    <data name="MenuItem_Title_AreaCancelEdit" xml:space="preserve">
+  <value>مسح الكل</value>
+</data>
+    <data name="MenuItem_Title_StartGeofencing" xml:space="preserve">
+  <value>بدء السياج الجغرافي</value>
+</data>
+    <data name="MenuItem_Title_StopGeofencing" xml:space="preserve">
+  <value>إيقاف السياج الجغرافي</value>
+</data>
+    <data name="MenuItem_Title_StartGeoTracking" xml:space="preserve">
+  <value>بدء تسجيل المسار</value>
+</data>
+    <data name="MenuItem_Title_StopGeoTracking" xml:space="preserve">
+  <value>إيقاف تسجيل المسار</value>
+</data>
+    <data name="MenuItem_Title_ShowLocation" xml:space="preserve">
+  <value>عرض الموقع</value>
+</data>
+    <data name="MenuItem_Title_HideLocation" xml:space="preserve">
+  <value>إخفاء الموقع</value>
+</data>
+    <data name="MenuItem_Title_ExitToDashboard" xml:space="preserve">
+  <value>الخروج إلى لوحة التحكم</value>
+</data>
+    <data name="MenuItem_Title_ChangeMap" xml:space="preserve">
+  <value>تغيير الخريطة</value>
+</data>
+    <data name="MenuItem_Title_ChangeShapefile" xml:space="preserve">
+  <value>تغيير الحدود</value>
+</data>
+    <data name="MenuItem_Title_CreateInterview" xml:space="preserve">
+  <value>إنشاء مقابلة جديدة</value>
+</data>
+    <data name="AssignmentMap_Title_CreateInterview" xml:space="preserve">
+  <value>بدء</value>
+</data>
+    <data name="MenuItem_Title_ZoomMap" xml:space="preserve">
+  <value>تكبير إلى الخريطة</value>
+</data>
+    <data name="MenuItem_Title_ZoomShapefile" xml:space="preserve">
+  <value>تكبير إلى الحدود</value>
+</data>
+    <data name="MenuItem_Title_ZoomCollectedData" xml:space="preserve">
+  <value>تكبير إلى البيانات المجمعة</value>
+</data>
+    <data name="MenuItem_Title_ZoomEverything" xml:space="preserve">
+  <value>تكبير كل شيء</value>
+</data>
+    <data name="MenuItem_Title_ZoomGeoTracking" xml:space="preserve">
+  <value>تكبير إلى سجلات التتبع</value>
+</data>
+    <data name="MenuItem_Title_Dashboard" xml:space="preserve">
+  <value>لوحة التحكم</value>
+</data>
+    <data name="InterviewKey" xml:space="preserve">
+  <value>مفتاح المقابلة: {0}</value>
+</data>
+    <data name="AssignmentN" xml:space="preserve">
+  <value>المهمة رقم {0}</value>
+</data>
+    <data name="AudioQuestion_DurationFormat" xml:space="preserve">
+  <value>{0} من تسجيل الصوت</value>
+</data>
+    <data name="Audio_Io_Exception_Message" xml:space="preserve">
+  <value>تعذر حفظ ملف الصوت. يرجى التحقق مما إذا كان الجهاز يحتوي على مساحة تخزين داخلية متاحة.</value>
+</data>
+    <data name="Audio_Unhandled_Exception_Message" xml:space="preserve">
+  <value>استثناء غير متوقع أثناء بدء تسجيل الصوت</value>
+</data>
+    <data name="AnswerRecordedMsg" xml:space="preserve">
+  <value>تم قبول الإجابة. استغرق {0} لمعالجتها</value>
+</data>
+    <data name="AnswerRecordedMsgDismiss" xml:space="preserve">
+  <value>رفض</value>
+</data>
+    <data name="Interview_SignatureClear" xml:space="preserve">
+    <value>مسح</value>
+    </data>
+    <data name="Interview_SignatureSignHere" xml:space="preserve">
+  <value>وقّع هنا</value>
+</data>
+    <data name="Interview_TakeSignature" xml:space="preserve">
+  <value>احفظ التوقيع</value>
+</data>
+    <data name="Interview_Questions_Integer_ProtectedValue" xml:space="preserve">
+  <value>يجب أن تكون الإجابة الجديدة على السؤال المحمي أكبر أو تساوي {0}</value>
+</data>
+    <data name="Interview_MaxAnswersCount" xml:space="preserve">
+  <value>{0} من {1} الفئات المحددة</value>
+</data>
+    <data name="Interview_MaxAnswersCountSelected" xml:space="preserve">
+  <value>تم الوصول إلى الحد الأقصى لعدد الاختيارات ({0}) في هذا السؤال</value>
+</data>
+    <data name="Interview_Overview" xml:space="preserve">
+  <value>نظرة عامة</value>
+</data>
+    <data name="Interview_Overview_Name" xml:space="preserve">
+  <value>نظرة عامة</value>
+</data>
+    <data name="Interview_Overview_NotAnswered" xml:space="preserve">
+  <value>لم تتم الإجابة</value>
+</data>
+    <data name="Interview_Overview_AdditionalInfo" xml:space="preserve">
+  <value>معلومات إضافية</value>
+</data>
+    <data name="Interview_Overview_Warnings" xml:space="preserve">
+  <value>تحذير(ات)</value>
+</data>
+    <data name="Interview_Overview_Comments" xml:space="preserve">
+  <value>تعليقات</value>
+</data>
+    <data name="Supervisor_Complete_Approve_btn" xml:space="preserve">
+  <value>موافقة</value>
+</data>
+    <data name="Supervisor_Complete_Assign_btn" xml:space="preserve">
+  <value>تعيين</value>
+</data>
+    <data name="Supervisor_Complete_Reject_btn" xml:space="preserve">
+  <value>رفض</value>
+</data>
+    <data name="OfflineSync_Cancel" xml:space="preserve">
+  <value>إلغاء</value>
+</data>
+    <data name="OfflineSync_Abort" xml:space="preserve">
+  <value>إيقاف</value>
+</data>
+    <data name="OfflineSync_BackToDashboard" xml:space="preserve">
+  <value>العودة إلى لوحة التحكم</value>
+</data>
+    <data name="OfflineSync_Retry" xml:space="preserve">
+  <value>إعادة المحاولة</value>
+</data>
+    <data name="OfflineSync_NetworkInfo" xml:space="preserve">
+  <value>السرعة: {0}، الوقت المتبقي: {1}</value>
+</data>
+    <data name="OfflineSync_InstallPlayServices" xml:space="preserve">
+  <value>يجب تثبيت خدمات Google Play.</value>
+</data>
+    <data name="OfflineSync_DeviceNotSupported" xml:space="preserve">
+  <value>هذا الجهاز غير مدعوم.</value>
+</data>
+    <data name="Synchronization_FoundDevice" xml:space="preserve">
+  <value>تم العثور على جهاز المحاور ({0})</value>
+        <comment>{0} - تسجيل دخول المحاور</comment>
+</data>
+    <data name="OfflineSync_Supervisor_Title" xml:space="preserve">
+  <value>مزامنة المهام والمقابلات</value>
+</data>
+    <data name="Validity_QuestionDoesntExist" xml:space="preserve">
+  <value>القائمة الحالية لم تعد موجودة. يرجى الانتقال إلى القسم أو القائمة التالية المتاحة باستخدام قائمة التنقل.</value>
+</data>
+    <data name="Interview_ShowPdf" xml:space="preserve">
+  <value>عرض PDF</value>
+</data>
+    <data name="Interview_PlayVideo" xml:space="preserve">
+  <value>تشغيل الفيديو</value>
+</data>
+    <data name="Interview_PlayAudio" xml:space="preserve">
+  <value>تشغيل الصوت</value>
+</data>
+    <data name="Validity_InterviewSizeLimitReached" xml:space="preserve">
+  <value>تحتوي هذه المقابلة على بيانات أكثر مما يسمح به النظام. إذا أمكن، احذف الصفوف غير الضرورية من القائمة و/أو أجب عن الأسئلة.</value>
+</data>
+    <data name="Notifications_SummaryTitle" xml:space="preserve">
+  <value>{0} إشعارات</value>
+</data>
+    <data name="Interview_Question_NumberRosterRemoveConfirm" xml:space="preserve">
+  <value>هل أنت متأكد أنك تريد إزالة {0} صف(وف) من كل قائمة ذات صلة؟</value>
+</data>
+    <data name="Interview_Question_HideResolvedComments" xml:space="preserve">
+  <value>إخفاء المحلولة</value>
+</data>
+    <data name="Interview_Question_ShowResolvedComments" xml:space="preserve">
+  <value>عرض المحلولة</value>
+</data>
+    <data name="ErrorMessage_PermissionForUnkownSourcesRequired" xml:space="preserve">
+  <value>لم يتم منح الإذن للتطبيق للتحديث الذاتي. يرجى تمكين خيار "السماح من هذا المصدر" في قائمة إعدادات "معلومات التطبيق".</value>
+</data>
+    <data name="Comment" xml:space="preserve">
+  <value>تعليق</value>
+</data>
+    <data name="NoComment" xml:space="preserve">
+  <value>لم يتم تحديد تعليق</value>
+</data>
+    <data name="Interview_Complete_SwitchTo_WebMode_Checkbox" xml:space="preserve">
+  <value>تبديل المقابلة إلى وضع الويب</value>
+</data>
+    <data name="Interview_Complete_SwitchTo_WebMode_Instruction" xml:space="preserve">
+  <value>ستكون هذه المقابلة متاحة عبر الإنترنت بعد المزامنة. للوصول إلى المقابلة، يجب على المستجيب إدخال الرابط أدناه في المتصفح على جهاز كمبيوتر أو جهاز لوحي أو هاتف ذكي متصل بالإنترنت. يمكن مسح نفس الرابط باستخدام رمز QR الموضح أدناه.</value>
+</data>
+    <data name="Loading" xml:space="preserve">
+  <value>جارٍ التحميل...</value>
+</data>
+    <data name="AreaMap_Save_With_Warning_Confirm" xml:space="preserve">
+  <value>أنت على وشك حفظ نتيجة غير دقيقة. هل تريد المتابعة؟</value>
+</data>
+    <data name="AreaMap_Start_Measurement" xml:space="preserve">
+  <value>ابدأ</value>
+</data>
+    <data name="AreaMap_InitLocation" xml:space="preserve">
+  <value>جارٍ التهيئة...</value>
+</data>
+    <data name="InterviewStatus_ApprovedByHeadquarters" xml:space="preserve">
+  <value>تمت الموافقة من قبل المقر الرئيسي</value>
+</data>
+    <data name="InterviewStatus_ApprovedBySupervisor" xml:space="preserve">
+  <value>تمت الموافقة من قبل المشرف</value>
+</data>
+    <data name="InterviewStatus_Completed" xml:space="preserve">
+  <value>مكتمل</value>
+</data>
+    <data name="InterviewStatus_Created" xml:space="preserve">
+  <value>تم الإنشاء</value>
+</data>
+    <data name="InterviewStatus_Deleted" xml:space="preserve">
+  <value>تم الحذف</value>
+</data>
+    <data name="InterviewStatus_InterviewerAssigned" xml:space="preserve">
+  <value>تم تعيين المحاور</value>
+</data>
+    <data name="InterviewStatus_RejectedByHeadquarters" xml:space="preserve">
+  <value>تم الرفض من قبل المقر الرئيسي</value>
+</data>
+    <data name="InterviewStatus_RejectedBySupervisor" xml:space="preserve">
+  <value>تم الرفض من قبل المشرف</value>
+</data>
+    <data name="InterviewStatus_Restarted" xml:space="preserve">
+  <value>تمت إعادة التشغيل</value>
+</data>
+    <data name="InterviewStatus_Restored" xml:space="preserve">
+  <value>تمت الاستعادة</value>
+</data>
+    <data name="InterviewStatus_SupervisorAssigned" xml:space="preserve">
+  <value>تم تعيين المشرف</value>
+</data>
+    <data name="SelectMapTitle" xml:space="preserve">
+  <value>اختر الخريطة:</value>
+</data>
+    <data name="Geofencing_Warning_Message" xml:space="preserve">
+  <value>أنت خارج المنطقة المخصصة</value>
+</data>
+    <data name="SelectShapefileTitle" xml:space="preserve">
+  <value>اختر الحدود:</value>
+</data>
 </root>

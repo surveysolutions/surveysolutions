@@ -903,12 +903,6 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
-        public static string TargetAreaExplanation {
-            get {
-                return ResourceManager.GetString("TargetAreaExplanation", resourceCulture);
-            }
-        }
-        
         public static string Action_TargetAreaChanged {
             get {
                 return ResourceManager.GetString("Action_TargetAreaChanged", resourceCulture);
@@ -920,7 +914,13 @@ namespace WB.UI.Headquarters.Resources {
                 return ResourceManager.GetString("TargetArea", resourceCulture);
             }
         }
-
+        
+        public static string TargetAreaExplanation {
+            get {
+                return ResourceManager.GetString("TargetAreaExplanation", resourceCulture);
+            }
+        }
+        
         public static string EnterTargetArea {
             get {
                 return ResourceManager.GetString("EnterTargetArea", resourceCulture);

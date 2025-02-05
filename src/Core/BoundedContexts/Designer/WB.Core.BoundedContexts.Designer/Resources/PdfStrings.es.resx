@@ -232,7 +232,10 @@
     <value>si/no</value>
   </data>
   <data name="Roster" xml:space="preserve">
-    <value>Roster:</value>
+    <value>Lista:</value>
+  </data>
+    <data name="RosterSourceOfCategories" xml:space="preserve">
+    <value>Lista</value>
   </data>
   <data name="Roster_GeneretedByFixedList" xml:space="preserve">
     <value>generada por lista fija</value>
@@ -387,4 +390,58 @@
   <data name="VariableExcludedFromExport" xml:space="preserve">
     <value>Esta variable está excluida de los datos exportados.</value>
   </data>
+    <data name="CriticalityCondition" xml:space="preserve">
+  <value>Condición crítica:</value>
+</data>
+    <data name="CriticalityMessage" xml:space="preserve">
+  <value>Mensaje:</value>
+</data>
+    <data name="GeographyType" xml:space="preserve">
+  <value>Tipo de geografía</value>
+</data>
+    <data name="GeographyInputMode" xml:space="preserve">
+  <value>Modo de entrada</value>
+</data>
+    <data name="GeometryOverlapDetection" xml:space="preserve">
+  <value>Detección de superposición</value>
+</data>
+    <data name="Appendix_CriticalRules" xml:space="preserve">
+  <value>Apéndice {0} {1} reglas críticas</value>
+</data>
+    <data name="Description" xml:space="preserve">
+  <value>Descripción:</value>
+</data>
+    <data name="InRosterSourceOfCategories" xml:space="preserve">
+  <value>en lista</value>
+</data>
+    <data name="On" xml:space="preserve">
+  <value>ENCENDIDO</value>
+</data>
+    <data name="Off" xml:space="preserve">
+  <value>APAGADO</value>
+</data>
+    <data name="OwnedBy" xml:space="preserve">
+  <value>Cuestionario propiedad de {0}</value>
+</data>
+    <data name="QuestionInRosterSourceOfCategories" xml:space="preserve">
+  <value>Pregunta</value>
+</data>
+    <data name="QuestionType_Area_Polygon" xml:space="preserve">
+  <value>polígono</value>
+</data>
+    <data name="QuestionType_Area_Polyline" xml:space="preserve">
+  <value>polilínea</value>
+</data>
+    <data name="QuestionType_Area_Multipoint" xml:space="preserve">
+  <value>multipunto</value>
+</data>
+    <data name="QuestionType_Area_Point" xml:space="preserve">
+  <value>punto</value>
+</data>
+    <data name="SourceOfCategories" xml:space="preserve">
+  <value>Fuente de categorías:</value>
+</data>
+    <data name="TextListSourceOfCategories" xml:space="preserve">
+  <value>Pregunta de lista de texto</value>
+</data>
 </root>

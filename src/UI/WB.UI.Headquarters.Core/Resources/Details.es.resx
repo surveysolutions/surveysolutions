@@ -141,9 +141,9 @@
   <data name="Duration" xml:space="preserve">
     <value>Duración</value>
   </data>
-  <data name="NoAnswer" xml:space="preserve">
-    <value>Not answered</value>
-  </data>
+    <data name="NoAnswer" xml:space="preserve">
+  <value>No respondido</value>
+</data>
   <data name="NoSearchResults" xml:space="preserve">
     <value>No se encontraron artículos</value>
   </data>
@@ -165,4 +165,10 @@
   <data name="YouCanChangeResponsibleInterviewer" xml:space="preserve">
     <value>Puede cambiar de responsable de la entrevista al rechazarla. Por favor, elija entrevistador responsable</value>
   </data>
+    <data name="Area_Coordinates" xml:space="preserve">
+  <value>Coordenadas</value>
+</data>
+    <data name="InterviewMode" xml:space="preserve">
+  <value>Modo</value>
+</data>
 </root>

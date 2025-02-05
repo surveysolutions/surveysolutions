@@ -384,4 +384,13 @@
   <data name="WithInterviewers" xml:space="preserve">
     <value>Por miembros del equipo</value>
   </data>
+    <data name="ClusterInfo" xml:space="preserve">
+  <value>Esta área contiene</value>
+</data>
+    <data name="AssignReceivedConfirm" xml:space="preserve">
+  <value>Entendí que esta entrevista ya fue recibida por la tableta</value>
+</data>
+    <data name="AssignReceivedWarning" xml:space="preserve">
+  <value>El entrevistador responsable actual no será notificado sobre la reasignación hasta la próxima sincronización. Si ya ha comenzado a trabajar en la entrevista, todos los datos que haya ingresado antes de la próxima sincronización serán DESCARTADOS!</value>
+</data>
 </root>

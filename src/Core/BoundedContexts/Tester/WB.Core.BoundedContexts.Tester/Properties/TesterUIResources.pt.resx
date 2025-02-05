@@ -1,64 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
-  <!-- 
-    Microsoft ResX Schema 
-    
-    Version 2.0
-    
-    The primary goals of this format is to allow a simple XML format 
-    that is mostly human readable. The generation and parsing of the 
-    various data types are done through the TypeConverter classes 
-    associated with the data types.
-    
-    Example:
-    
-    ... ado.net/XML headers & schema ...
-    <resheader name="resmimetype">text/microsoft-resx</resheader>
-    <resheader name="version">2.0</resheader>
-    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
-    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
-    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
-    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
-    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
-        <value>[base64 mime encoded serialized .NET Framework object]</value>
-    </data>
-    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
-        <comment>This is a comment</comment>
-    </data>
-                
-    There are any number of "resheader" rows that contain simple 
-    name/value pairs.
-    
-    Each data row contains a name, and value. The row also contains a 
-    type or mimetype. Type corresponds to a .NET class that support 
-    text/value conversion through the TypeConverter architecture. 
-    Classes that don't support this are serialized and stored with the 
-    mimetype set.
-    
-    The mimetype is used for serialized objects, and tells the 
-    ResXResourceReader how to depersist the object. This is currently not 
-    extensible. For a given mimetype the value must be set accordingly:
-    
-    Note - application/x-microsoft.net.object.binary.base64 is the format 
-    that the ResXResourceWriter will generate, however the reader can 
-    read any of the formats listed below.
-    
-    mimetype: application/x-microsoft.net.object.binary.base64
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
-            : and then encoded with base64 encoding.
-    
-    mimetype: application/x-microsoft.net.object.soap.base64
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
-            : and then encoded with base64 encoding.
-
-    mimetype: application/x-microsoft.net.object.bytearray.base64
-    value   : The object must be serialized into a byte array 
-            : using a System.ComponentModel.TypeConverter
-            : and then encoded with base64 encoding.
-    -->
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
@@ -118,75 +59,127 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Dashboard_HaveNotBeenUpdated" xml:space="preserve">
-    <value>lista ainda não foi atualizado</value>
+    <value>a lista não foi atualizada</value>
   </data>
   <data name="Dashboard_LastUpdated" xml:space="preserve">
-    <value>lista foi atualizado {0}</value>
+    <value>a lista foi atualizada {0}</value>
+  </data>
+  <data name="ImportQuestionnaireAttachments_DownloadProgress" xml:space="preserve">
+    <value>Baixando anexos do questionário - {0}%</value>
   </data>
   <data name="ImportQuestionnaire_CheckConnectionToServer" xml:space="preserve">
     <value>Conectando ao servidor</value>
   </data>
   <data name="ImportQuestionnaire_CreateInterview" xml:space="preserve">
-    <value>Criação de entrevista</value>
+    <value>Criando entrevista</value>
   </data>
   <data name="ImportQuestionnaire_DownloadProgress" xml:space="preserve">
-    <value>Transferindo o questionário - {0} %</value>
+    <value>Baixando questionário - {0}%</value>
   </data>
   <data name="ImportQuestionnaire_Error_Forbidden" xml:space="preserve">
-    <value>Não é possível abrir o questionário "{0}". Sua conta de usuário do Designer não é autorizada. Por favor, verifique seu login e senha.</value>
+    <value>Não é possível abrir o questionário "{0}". Sua conta de usuário do Designer não está autorizada. Verifique seu login e senha.</value>
   </data>
+  <data name="AnonymousQuestionnaires_QuestionnaireUrl" xml:space="preserve">
+    <value>URL do questionário anônimo</value>
+  </data>
+  <data name="AnonymousQuestionnaires_Open" xml:space="preserve">
+    <value>Abrir</value>
+  </data>
+  <data name="AnonymousQuestionnaires_Error_NotFound" xml:space="preserve">
+    <value>Não é possível abrir o questionário. O questionário não pode ser encontrado.</value>
+  </data>
+  <data name="AnonymousQuestionnaires_Error_Confirm" xml:space="preserve">
+    <value>Não é possível abrir o questionário. Removê-lo da lista?</value>
+  </data>
+  
   <data name="ImportQuestionnaire_Error_NotFound" xml:space="preserve">
     <value>Não é possível abrir o questionário "{0}". O questionário não pode ser encontrado. Por favor, atualize a lista de questionários.</value>
   </data>
   <data name="ImportQuestionnaire_Error_PreconditionFailed" xml:space="preserve">
-    <value>Não é possível abrir o questionário "{0}". O questionário tem erros. Por favor corrigir isso no Designer.</value>
+    <value>Não é possível abrir o questionário "{0}". O questionário tem erros. Por favor, corrija isso no Designer.</value>
   </data>
   <data name="ImportQuestionnaire_StoreQuestionnaire" xml:space="preserve">
-    <value>Salvando o questionário para armazenamento local</value>
+    <value>Salvando questionário no armazenamento local</value>
   </data>
   <data name="Login_Error_NotFound" xml:space="preserve">
-    <value>Aplicativo web Designer não está acessível neste momento. Verifique a configuração de conexão, ou tente novamente mais tarde</value>
+    <value>A aplicação web do Designer não está acessível neste momento. Verifique a configuração de conexão ou tente novamente mais tarde</value>
+  </data>
+  <data name="Login_Error_EmptyName" xml:space="preserve">
+    <value>Por favor, insira um login correto</value>
   </data>
   <data name="MenuItem_Title_Dashboard" xml:space="preserve">
     <value>Questionários</value>
+  </data>
+  <data name="MenuItem_Title_Language" xml:space="preserve">
+    <value>Idioma</value>
+  </data>
+  <data name="MenuItem_Title_Language_Original" xml:space="preserve">
+    <value>Original</value>
+  </data>
+  <data name="MenuItem_Title_Reload" xml:space="preserve">
+    <value>Recarregar questionário</value>
+  </data>
+  <data name="MenuItem_Title_AnonymousQuestionnaires" xml:space="preserve">
+    <value>Questionários Anônimos</value>
   </data>
   <data name="MenuItem_Title_Settings" xml:space="preserve">
     <value>Configurações</value>
   </data>
   <data name="MenuItem_Title_SignOut" xml:space="preserve">
-    <value>Terminar sessão</value>
+    <value>Sair</value>
+  </data>
+  <data name="MenuItem_Title_Login" xml:space="preserve">
+    <value>Login</value>
   </data>
   <data name="Prefs_AcceptUnsignedSummary" xml:space="preserve">
-    <value>Desabilitar a validação de certificado SSL</value>
+    <value>Desativar validação de certificado SSL</value>
   </data>
   <data name="Prefs_AcceptUnsignedTitle" xml:space="preserve">
     <value>Aceitar todos os certificados SSL</value>
   </data>
   <data name="Prefs_ConnectionSettings" xml:space="preserve">
-    <value>Configurações de Conexão</value>
+    <value>Configurações de conexão</value>
   </data>
   <data name="Prefs_DesignerEndPointSummary" xml:space="preserve">
-    <value>URL que é usada para se comunicar com o aplicativo designer</value>
+    <value>URL usada para comunicar com a aplicação do designer</value>
   </data>
   <data name="Prefs_DesignerEndPointTitle" xml:space="preserve">
-    <value>URL do designer</value>
+    <value>URL do Designer</value>
   </data>
   <data name="Prefs_GpsReceiveTimeoutSecSummary" xml:space="preserve">
-    <value>Número de segundos para esperar por coordenadas</value>
+    <value>Número de segundos para esperar pelas coordenadas</value>
   </data>
   <data name="Prefs_GpsReceiveTimeoutSecTitle" xml:space="preserve">
-    <value>GPS receber timeout</value>
+    <value>Tempo limite de recebimento do GPS</value>
   </data>
   <data name="Prefs_HttpResponseTimeoutSummary" xml:space="preserve">
-    <value>Número de segundos para esperar a resposta do servidor</value>
+    <value>Número de segundos para esperar pela resposta do servidor</value>
   </data>
   <data name="Prefs_HttpResponseTimeoutTitle" xml:space="preserve">
     <value>Tempo limite de resposta do servidor</value>
+  </data>
+  <data name="Prefs_ShowAnswerTime" xml:space="preserve">
+    <value>Mostrar tempo decorrido por resposta</value>
+  </data>
+  <data name="Prefs_ShowAnswerTimeSummary" xml:space="preserve">
+    <value>Mede o tempo de habilitação, validação e propagação do roster. O tempo de recebimento de dados GPS ou de captura de imagem não está incluído.</value>
+  </data>
+  <data name="Prefs_ShowVariables" xml:space="preserve">
+    <value>Mostrar variáveis</value>
+  </data>
+  <data name="Prefs_ShowVariablesSummary_Checked" xml:space="preserve">
+    <value>As variáveis são mostradas na entrevista com valor e descrição</value>
+  </data>
+  <data name="Prefs_ShowVariablesSummary_UnChecked" xml:space="preserve">
+    <value>As variáveis estão ocultas</value>
   </data>
   <data name="Prefs_VersionSummaryFormat" xml:space="preserve">
     <value>Versão: {0}</value>
   </data>
   <data name="Prefs_VersionTitle" xml:space="preserve">
-    <value>Versão do aplicativo</value>
+    <value>Versão da aplicação</value>
+  </data>
+  <data name="ReloadInterviewErrorMessage" xml:space="preserve">
+    <value>Os dados da entrevista não podem ser aplicados a uma nova versão do questionário. Abriremos uma entrevista vazia</value>
   </data>
 </root>

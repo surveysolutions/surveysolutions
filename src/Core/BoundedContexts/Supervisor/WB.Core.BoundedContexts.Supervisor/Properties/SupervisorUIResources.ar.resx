@@ -58,4 +58,44 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+    <data name="Synchronization_UploadBrokenInterviewPackages" xml:space="preserve">
+  <value>تحميل حزم المقابلات التالفة</value>
+</data>
+    <data name="Synchronization_UploadExceptions" xml:space="preserve">
+  <value>تحميل رسائل خطأ المقابل</value>
+</data>
+    <data name="OfflineSync_ReceivingInterviewsFromDevices" xml:space="preserve">
+  <value>استلام المقابلات من جهاز المقابل</value>
+</data>
+    <data name="OfflineSync_ReceivingInterviews" xml:space="preserve">
+  <value>استلام المقابلات</value>
+</data>
+    <data name="OfflineSync_NoDevicesDetectedFormat" xml:space="preserve">
+  <value>لم يتم اكتشاف أي أجهزة إرسال.
+معرف جهازك هو '{0}'</value>
+</data>
+    <data name="OfflineSync_WaitingInterviewers" xml:space="preserve">
+  <value>في انتظار إجراء من أجهزة المقابلين</value>
+</data>
+    <data name="Synchronization_UploadStatistics" xml:space="preserve">
+  <value>تحميل إحصائيات مزامنة المقابلين</value>
+</data>
+    <data name="Synchronization_UploadStatisticsStats" xml:space="preserve">
+  <value>تم تحميل {0} من {1} </value>
+</data>
+    <data name="Synchronization_Synchronize_HQ" xml:space="preserve">
+  <value>المزامنة مع المقر الرئيسي</value>
+</data>
+    <data name="Synchronization_Download_Interviewer_Apps" xml:space="preserve">
+  <value>تحميل تحديثات تطبيق المقابل</value>
+</data>
+    <data name="Synchronization_Download_Interviewer_Apps_Format" xml:space="preserve">
+  <value>تحميل التحديثات. تم تحميل {0} من {1}</value>
+</data>
+    <data name="Synchronization_Synchronize_Offline" xml:space="preserve">
+  <value>المزامنة مع المقابلين</value>
+</data>
+    <data name="Confirm_Approve_Synchronized_Interview_Message" xml:space="preserve">
+  <value>لن يتم إخطار المقابل المسؤول الحالي بالموافقة على المقابلة حتى المزامنة التالية. إذا كان المقابل قد بدأ العمل على المقابلة بالفعل، فسيتم تجاهل جميع البيانات التي أدخلها المقابل قبل المزامنة التالية!</value>
+</data>
 </root>

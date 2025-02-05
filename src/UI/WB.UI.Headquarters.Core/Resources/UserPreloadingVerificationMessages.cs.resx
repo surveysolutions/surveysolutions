@@ -297,4 +297,22 @@
   <data name="PLU0022Recomendation" xml:space="preserve">
     <value>Zkontrolujte název prostředí</value>
   </data>
+    <data name="PLU0001Recomendation" xml:space="preserve">
+    <value>Uživatel musí být jedinečný</value>
+</data>
+    <data name="PLU0002Recomendation" xml:space="preserve">
+    <value>Vyřešte duplicity</value>
+</data>
+    <data name="PLU0007Recomendation" xml:space="preserve">
+    <value>Opravit e-mail</value>
+</data>
+    <data name="PLU0008Recomendation" xml:space="preserve">
+    <value>Opravit telefonní číslo</value>
+</data>
+    <data name="PLU0010Recomendation" xml:space="preserve">
+        <value>Ověřte hodnotu pro supervizora</value>
+    </data>
+    <data name="PLU0011Recomendation" xml:space="preserve">
+        <value>Poskytněte hodnotu pro supervizora</value>
+    </data>
 </root>

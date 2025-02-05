@@ -150,4 +150,7 @@
   <data name="QuestionnaireAlreadyImporting" xml:space="preserve">
     <value>Ahora se está importando otro cuestionario a la Sede.</value>
   </data>
+    <data name="ApiUserIsNotAllowedToSignIn" xml:space="preserve">
+    <value>El usuario de la API no tiene permitido iniciar sesión con la interfaz de usuario</value>
+</data>
 </root>

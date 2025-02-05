@@ -118,7 +118,7 @@ export default {
         },
 
         isPivot() {
-            return this.filter.pivot && this.filter.condition != null
+            return (this.filter.pivot == true || this.filter.pivot == 'true') && this.filter.condition != null
         },
 
         conditionAnswers() {
@@ -226,7 +226,12 @@ export default {
         },
 
         tableColumns() {
-            return concat(this.identifyingColumns, this.numericColumns, this.categoriesColumns, this.totalColumn)
+            return [
+                ...this.identifyingColumns,
+                ...this.numericColumns,
+                ...this.categoriesColumns,
+                ...this.totalColumn
+            ]
         },
 
         tableOptions() {

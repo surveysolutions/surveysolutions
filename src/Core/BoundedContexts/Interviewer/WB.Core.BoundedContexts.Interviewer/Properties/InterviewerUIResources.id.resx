@@ -117,4 +117,61 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+    <data name="Synchronization_UpdateApp" xml:space="preserve">
+    <value>Perbarui</value>
+  </data>
+    <data name="SendToSupervisor_MovingToSupervisorDevice" xml:space="preserve">
+    <value>Memindahkan semua wawancara yang telah selesai ke perangkat supervisor</value>
+  </data>
+    <data name="SendToSupervisor_MovingToSupervisorFormat" xml:space="preserve">
+    <value>Memindahkan semua wawancara yang telah selesai ke '{0}'</value>
+  </data>
+    <data name="SendToSupervisor_CheckSupervisorDevice" xml:space="preserve">
+    <value>Periksa bahwa perangkat supervisor memiliki WiFi dan Bluetooth yang diaktifkan dan Anda berada dalam jarak dekat</value>
+  </data>
+    <data name="SendToSupervisor_TransferInProgress" xml:space="preserve">
+    <value>Transfer sedang berlangsung</value>
+  </data>
+    <data name="SendToSupervisor_TransferWasAborted" xml:space="preserve">
+    <value>Transfer dibatalkan</value>
+  </data>
+    <data name="SendToSupervisor_DeviceFound" xml:space="preserve">
+    <value>Perangkat supervisor ditemukan. Meminta koneksi</value>
+  </data>
+    <data name="SendToSupervisor_DeviceConnectionAccepting" xml:space="preserve">
+    <value>Menunggu persetujuan koneksi dari supervisor</value>
+  </data>
+    <data name="SendToSupervisor_DeviceConnectionAccepted" xml:space="preserve">
+    <value>Terhubung ke perangkat supervisor</value>
+  </data>
+    <data name="SendToSupervisor_SupervisorNotFound" xml:space="preserve">
+    <value>Transfer belum dimulai. Perangkat supervisor tidak dapat ditemukan</value>
+  </data>
+    <data name="SendToSupervisor_SupervisorTerminateTransfering" xml:space="preserve">
+    <value>Transfer dibatalkan pada perangkat kedua.</value>
+  </data>
+    <data name="SendToSupervisor_SomeInterviewsOnSupervisor" xml:space="preserve">
+    <value>Beberapa wawancara sekarang ada di perangkat lain</value>
+  </data>
+    <data name="SendToSupervisor_SyncCompleted" xml:space="preserve">
+    <value>Transfer selesai. Semua wawancara yang telah selesai sekarang ada di perangkat lain</value>
+  </data>
+    <data name="SendToSupervisor_SyncCompletedWithErrorsFormat" xml:space="preserve">
+    <value>Transfer selesai. {0} wawancara gagal disinkronkan</value>
+  </data>
+    <data name="SendToSupervisor_LookingForSupervisor" xml:space="preserve">
+    <value>Mencari perangkat supervisor</value>
+  </data>
+    <data name="SendToSupervisor_Note" xml:space="preserve">
+    <value>Catatan: Tindakan ini akan memakan waktu lebih lama dari biasanya, jangan matikan perangkat ini</value>
+  </data>
+    <data name="SendToSupervisor_ConnectionFailed" xml:space="preserve">
+    <value>Pastikan kedua perangkat berada dalam jarak dekat; WIFI dan Bluetooth harus diaktifkan pada kedua perangkat; Aplikasi supervisor harus dibuka di perangkat supervisor</value>
+  </data>
+    <data name="SendToSupervisor_Retry" xml:space="preserve">
+    <value>Coba lagi</value>
+  </data>
+    <data name="SendToSupervisor_BluetoothError" xml:space="preserve">
+    <value>Aplikasi Interviewer tidak dapat menentukan status Bluetooth (misalnya, hidup/mati, terhubung/tidak terhubung). Pertama, reboot kedua perangkat Interviewer dan Supervisor. Kemudian coba sinkronisasi lagi.</value>
+  </data>
 </root>

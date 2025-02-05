@@ -1,162 +1,318 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
-  <!-- 
-    Microsoft ResX Schema 
-    
-    Version 2.0
-    
-    The primary goals of this format is to allow a simple XML format 
-    that is mostly human readable. The generation and parsing of the 
-    various data types are done through the TypeConverter classes 
-    associated with the data types.
-    
-    Example:
-    
-    ... ado.net/XML headers & schema ...
-    <resheader name="resmimetype">text/microsoft-resx</resheader>
-    <resheader name="version">2.0</resheader>
-    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
-    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
-    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
-    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
-    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
-        <value>[base64 mime encoded serialized .NET Framework object]</value>
-    </data>
-    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
-        <comment>This is a comment</comment>
-    </data>
-                
-    There are any number of "resheader" rows that contain simple 
-    name/value pairs.
-    
-    Each data row contains a name, and value. The row also contains a 
-    type or mimetype. Type corresponds to a .NET class that support 
-    text/value conversion through the TypeConverter architecture. 
-    Classes that don't support this are serialized and stored with the 
-    mimetype set.
-    
-    The mimetype is used for serialized objects, and tells the 
-    ResXResourceReader how to depersist the object. This is currently not 
-    extensible. For a given mimetype the value must be set accordingly:
-    
-    Note - application/x-microsoft.net.object.binary.base64 is the format 
-    that the ResXResourceWriter will generate, however the reader can 
-    read any of the formats listed below.
-    
-    mimetype: application/x-microsoft.net.object.binary.base64
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
-            : and then encoded with base64 encoding.
-    
-    mimetype: application/x-microsoft.net.object.soap.base64
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
-            : and then encoded with base64 encoding.
-
-    mimetype: application/x-microsoft.net.object.bytearray.base64
-    value   : The object must be serialized into a byte array 
-            : using a System.ComponentModel.TypeConverter
-            : and then encoded with base64 encoding.
-    -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
-    <xsd:element name="root" msdata:IsDataSet="true">
-      <xsd:complexType>
-        <xsd:choice maxOccurs="unbounded">
-          <xsd:element name="metadata">
+    <!-- 
+      Microsoft ResX Schema 
+      
+      Version 2.0
+      
+      The primary goals of this format is to allow a simple XML format 
+      that is mostly human readable. The generation and parsing of the 
+      various data types are done through the TypeConverter classes 
+      associated with the data types.
+      
+      Example:
+      
+      ... ado.net/XML headers & schema ...
+      <resheader name="resmimetype">text/microsoft-resx</resheader>
+      <resheader name="version">2.0</resheader>
+      <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+      <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+      <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+      <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+      <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+          <value>[base64 mime encoded serialized .NET Framework object]</value>
+      </data>
+      <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+          <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+          <comment>This is a comment</comment>
+      </data>
+                  
+      There are any number of "resheader" rows that contain simple 
+      name/value pairs.
+      
+      Each data row contains a name, and value. The row also contains a 
+      type or mimetype. Type corresponds to a .NET class that support 
+      text/value conversion through the TypeConverter architecture. 
+      Classes that don't support this are serialized and stored with the 
+      mimetype set.
+      
+      The mimetype is used for serialized objects, and tells the 
+      ResXResourceReader how to depersist the object. This is currently not 
+      extensible. For a given mimetype the value must be set accordingly:
+      
+      Note - application/x-microsoft.net.object.binary.base64 is the format 
+      that the ResXResourceWriter will generate, however the reader can 
+      read any of the formats listed below.
+      
+      mimetype: application/x-microsoft.net.object.binary.base64
+      value   : The object must be serialized with 
+              : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+              : and then encoded with base64 encoding.
+      
+      mimetype: application/x-microsoft.net.object.soap.base64
+      value   : The object must be serialized with 
+              : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+              : and then encoded with base64 encoding.
+  
+      mimetype: application/x-microsoft.net.object.bytearray.base64
+      value   : The object must be serialized into a byte array 
+              : using a System.ComponentModel.TypeConverter
+              : and then encoded with base64 encoding.
+      -->
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
             <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
-              </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
             </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="assembly">
-            <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="data">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="resheader">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
-            </xsd:complexType>
-          </xsd:element>
-        </xsd:choice>
-      </xsd:complexType>
-    </xsd:element>
-  </xsd:schema>
-  <resheader name="resmimetype">
-    <value>text/microsoft-resx</value>
-  </resheader>
-  <resheader name="version">
-    <value>2.0</value>
-  </resheader>
-  <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </resheader>
-  <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </resheader>
-  <data name="PLU0001" xml:space="preserve">
-    <value>هناك مستخدم لديه تسجيل الدخول هذا موجود من قبل</value>
-  </data>
-  <data name="PLU0002" xml:space="preserve">
-    <value>هناك قيم مكررة لتسجيل الدخول في الملف</value>
-  </data>
-  <data name="PLU0003" xml:space="preserve">
-    <value>لا يمكن إعادة تسجيل الدخول إلى مستخدم مؤرشف لأنه ينتمي إلى فريق آخر</value>
-  </data>
-  <data name="PLU0004" xml:space="preserve">
-    <value>لا يمكن إعادة تسجيل الدخول إلى مستخدم مؤرشف لأنه موجود في دور آخر</value>
-  </data>
-  <data name="PLU0005" xml:space="preserve">
-    <value>يجب أن يكون تسجيل الدخول بين 3 و 15 حرفا، ويجب أن يحتوي على أحرف وأرقام ورمز شرطة سفلية فقط</value>
-  </data>
-  <data name="PLU0006" xml:space="preserve">
-    <value>يجب أن تحتوي كلمة المرور على رقم واحد على الأقل، وحرف واحد من الأحرف الكبيرة، وحرف واحد من الأحرف الصغيرة. يجب أن يكون الطول بين 10 و 100 حرف.</value>
-  </data>
-  <data name="PLU0007" xml:space="preserve">
-    <value>البريد الإلكتروني غير صالح</value>
-  </data>
-  <data name="PLU0008" xml:space="preserve">
-    <value>رقم الهاتف غير صالح</value>
-  </data>
-  <data name="PLU0009" xml:space="preserve">
-    <value>الدور غير صالح. يسمح فقط "المشرف" أو "الباحث"</value>
-  </data>
-  <data name="PLU0010" xml:space="preserve">
-    <value>يجب أن يكون المشرف إما مستخدم موجود أو مستخدم تم إنشاؤه في الملف الحالي</value>
-  </data>
-  <data name="PLU0011" xml:space="preserve">
-    <value>عامود المشرف يجي ان يكون فارغ للمستخدم صاحب دور المشرف</value>
-  </data>
-  <data name="PLU0012" xml:space="preserve">
-    <value>الأسم لا يمكن ان يحتوي على أكثر من 100 حرف</value>
-  </data>
-  <data name="PLU0013" xml:space="preserve">
-    <value>رقم الهانف لا يمكن ان يحتوي على أكثر من 15 حرف</value>
-  </data>
-  <data name="PLU0014" xml:space="preserve">
-    <value>اسم المستخدم يحتوي على احرف خاطئة. فقط أحرف أبجدية، نقات، مساحات فارغه، او فواصل منقوطة مسموح بها</value>
-  </data>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+<data name="PLU0001Description" xml:space="preserve">
+  <value>المستخدم '{0}' موجود بالفعل</value>
+</data>
+<data name="PLU0002Description" xml:space="preserve">
+  <value>هناك مستخدمون مكررون بتسجيل الدخول '{0}' في الملف</value>
+</data>
+<data name="PLU0003Description" xml:space="preserve">
+  <value>المستخدم '{0}' مؤرشف وينتمي إلى فريق آخر</value>
+</data>
+<data name="PLU0004Description" xml:space="preserve">
+  <value>المستخدم '{0}' مؤرشف وله دور آخر</value>
+</data>
+<data name="PLU0005Description" xml:space="preserve">
+  <value>تسجيل الدخول '{0}' في تنسيق خاطئ</value>
+</data>
+<data name="PLU0006Description" xml:space="preserve">
+  <value>كلمة المرور '{0}' في تنسيق خاطئ</value>
+</data>
+<data name="PLU0007Description" xml:space="preserve">
+  <value>البريد الإلكتروني '{0}' في تنسيق خاطئ</value>
+</data>
+<data name="PLU0008Description" xml:space="preserve">
+  <value>رقم الهاتف '{0}' في تنسيق خاطئ</value>
+</data>
+<data name="PLU0009Description" xml:space="preserve">
+  <value>الدور '{0}' غير صالح</value>
+</data>
+<data name="PLU0010Description" xml:space="preserve">
+  <value>المشرف '{0}' غير موجود في مساحة العمل</value>
+</data>
+<data name="PLU0011Description" xml:space="preserve">
+  <value>يجب أن يكون عمود المشرف فارغًا لدور المشرف</value>
+</data>
+<data name="PLU0012Description" xml:space="preserve">
+  <value>الاسم الكامل '{0}' في تنسيق خاطئ</value>
+</data>
+<data name="PLU0013Description" xml:space="preserve">
+  <value>رقم الهاتف '{0}' في تنسيق خاطئ</value>
+</data>
+<data name="PLU0014Description" xml:space="preserve">
+  <value>الاسم الكامل '{0}' يحتوي على أحرف غير صالحة</value>
+</data>
+<data name="PLU0001" xml:space="preserve">
+  <value>تسجيل الدخول غير فريد</value>
+</data>
+<data name="PLU0002" xml:space="preserve">
+  <value>مكرر</value>
+</data>
+<data name="PLU0003" xml:space="preserve">
+  <value>فريق خاطئ</value>
+</data>
+<data name="PLU0004" xml:space="preserve">
+  <value>دور خاطئ</value>
+</data>
+<data name="PLU0005" xml:space="preserve">
+  <value>تنسيق تسجيل الدخول خاطئ</value>
+</data>
+<data name="PLU0006" xml:space="preserve">
+  <value>تنسيق كلمة المرور خاطئ</value>
+</data>
+<data name="PLU0007" xml:space="preserve">
+  <value>تنسيق البريد الإلكتروني خاطئ</value>
+</data>
+<data name="PLU0008" xml:space="preserve">
+  <value>تنسيق رقم الهاتف خاطئ</value>
+</data>
+<data name="PLU0009" xml:space="preserve">
+  <value>دور غير صالح</value>
+</data>
+<data name="PLU0010" xml:space="preserve">
+  <value>خطأ في التبعية</value>
+</data>
+<data name="PLU0011" xml:space="preserve">
+  <value>خطأ في التبعية</value>
+</data>
+<data name="PLU0012" xml:space="preserve">
+  <value>طول الاسم الكامل خاطئ</value>
+</data>
+<data name="PLU0013" xml:space="preserve">
+  <value>طول رقم الهاتف خاطئ</value>
+</data>
+<data name="PLU0014" xml:space="preserve">
+  <value>تنسيق الاسم الكامل خاطئ</value>
+</data>
+<data name="PLU0001Recomendation" xml:space="preserve">
+  <value>يجب أن يكون المستخدم فريدًا</value>
+</data>
+<data name="PLU0002Recomendation" xml:space="preserve">
+  <value>حل التكرارات</value>
+</data>
+<data name="PLU0003Recomendation" xml:space="preserve">
+  <value>لا يمكن إعادة استخدام المستخدم المؤرشف لأنه ينتمي إلى فريق آخر</value>
+</data>
+<data name="PLU0004Recomendation" xml:space="preserve">
+  <value>لا يمكن إعادة استخدام المستخدم المؤرشف لأنه موجود في دور آخر</value>
+</data>
+<data name="PLU0005Recomendation" xml:space="preserve">
+  <value>يجب أن يكون اسم تسجيل الدخول بين 3 و 15 حرفًا، ويمكن أن يحتوي فقط على أحرف وأرقام ورمز الشرطة السفلية. يجب أن تكون الأحرف من الأبجدية اللاتينية (الإنجليزية) فقط: 'A'..'Z' أو 'a'..'z'. الأحرف الأخرى (السيريلية، العربية، إلخ) غير صالحة للاستخدام في أسماء تسجيل الدخول.</value>
+</data>
+<data name="PLU0006Recomendation" xml:space="preserve">
+  <value>يجب أن تحتوي على رقم واحد على الأقل، وحرف كبير واحد وحرف صغير واحد. يجب أن يكون الطول بين 10 و 100 حرف</value>
+</data>
+<data name="PLU0007Recomendation" xml:space="preserve">
+  <value>إصلاح البريد الإلكتروني</value>
+</data>
+<data name="PLU0008Recomendation" xml:space="preserve">
+  <value>إصلاح رقم الهاتف</value>
+</data>
+<data name="PLU0009Recomendation" xml:space="preserve">
+  <value>يسمح فقط بـ "المشرف" أو "المحاور"</value>
+</data>
+<data name="PLU0010Recomendation" xml:space="preserve">
+  <value>تحقق من قيمة المشرف</value>
+</data>
+<data name="PLU0011Recomendation" xml:space="preserve">
+  <value>توفير قيمة للمشرف</value>
+</data>
+<data name="PLU0012Recomendation" xml:space="preserve">
+  <value>يجب ألا يحتوي على أكثر من 100 حرف</value>
+</data>
+<data name="PLU0013Recomendation" xml:space="preserve">
+  <value>يجب ألا يحتوي على أكثر من 15 حرفًا</value>
+</data>
+<data name="PLU0014Recomendation" xml:space="preserve">
+  <value>يسمح فقط بالأحرف والنقاط والمسافات والفواصل العليا</value>
+</data>
+<data name="PLU0015" xml:space="preserve">
+  <value>كلمة المرور قصيرة جدًا</value>
+</data>
+<data name="PLU0015Description" xml:space="preserve">
+  <value>كلمة المرور '{0}' قصيرة جدًا</value>
+</data>
+<data name="PLU0015Recomendation" xml:space="preserve">
+  <value>يجب أن تكون كلمة المرور على الأقل 10 أحرف</value>
+</data>
+<data name="PLU0016" xml:space="preserve">
+  <value>كلمة مرور بسيطة</value>
+</data>
+<data name="PLU0016Description" xml:space="preserve">
+  <value>كلمة المرور '{0}' لا تحتوي على حرف غير أبجدي رقمي</value>
+</data>
+<data name="PLU0016Recomendation" xml:space="preserve">
+  <value>أضف حرفًا غير أبجدي رقمي على الأقل</value>
+</data>
+<data name="PLU0017" xml:space="preserve">
+  <value>كلمة مرور بسيطة</value>
+</data>
+<data name="PLU0017Description" xml:space="preserve">
+  <value>كلمة المرور '{0}' لا تحتوي على رقم</value>
+</data>
+<data name="PLU0017Recomendation" xml:space="preserve">
+  <value>أضف رقمًا واحدًا على الأقل ('0'-'9').</value>
+</data>
+<data name="PLU0018" xml:space="preserve">
+  <value>كلمة مرور بسيطة</value>
+</data>
+<data name="PLU0018Description" xml:space="preserve">
+  <value>كلمة المرور '{0}' لا تحتوي على حرف صغير</value>
+</data>
+<data name="PLU0018Recomendation" xml:space="preserve">
+  <value>أضف حرفًا صغيرًا واحدًا على الأقل ('a'-'z').</value>
+</data>
+<data name="PLU0019" xml:space="preserve">
+  <value>كلمة مرور بسيطة</value>
+</data>
+<data name="PLU0019Description" xml:space="preserve">
+  <value>كلمة المرور '{0}' لا تحتوي على حرف كبير</value>
+</data>
+<data name="PLU0019Recomendation" xml:space="preserve">
+  <value>أضف حرفًا كبيرًا واحدًا على الأقل ('A'-'Z').</value>
+</data>
+<data name="PLU0020" xml:space="preserve">
+  <value>كلمة مرور بسيطة</value>
+</data>
+<data name="PLU0020Description" xml:space="preserve">
+  <value>كلمة المرور '{0}' لا تحتوي على أحرف فريدة كافية</value>
+</data>
+<data name="PLU0020Recomendation" xml:space="preserve">
+  <value>أضف أحرفًا مختلفة.</value>
+</data>
+<data name="PLU0021" xml:space="preserve">
+  <value>كلمة المرور مطلوبة</value>
+</data>
+<data name="PLU0021Description" xml:space="preserve">
+  <value>كلمة المرور مطلوبة</value>
+</data>
+<data name="PLU0021Recomendation" xml:space="preserve">
+  <value>أضف كلمة مرور</value>
+</data>
+<data name="PLU0022" xml:space="preserve">
+  <value>مساحة العمل غير موجودة</value>
+</data>
+<data name="PLU0022Description" xml:space="preserve">
+  <value>يجب أن تكون مساحة العمل موجودة ومفعلة</value>
+</data>
+<data name="PLU0022Recomendation" xml:space="preserve">
+  <value>تحقق من اسم مساحة العمل</value>
+</data>
 </root>

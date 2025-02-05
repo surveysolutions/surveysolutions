@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+<data name="TargetPersonStopShareNotification_cshtml_Execute_Hello__0____br____br____1__has_stopped_to_share_with_you_questionnaire___2_" xml:space="preserve">
+    <value>Olá {0}, &lt;br&gt; {1} parou de compartilhar com você o questionário: {2}</value>
+</data>
+<data name="TargetPersonShareNotification_cshtml_Execute_Hello__0____br____br____1__has_invited_you_to__2__the_following_questionnaire_" xml:space="preserve">
+    <value>Olá {0}, &lt;br&gt; {1} convidou você para {2} o seguinte questionário:</value>
+</data>
+<data name="OwnerStopShareNotification_cshtml_Execute_Hello__0____br____br____1__has_revoked_access_for__2__to_your_questionnaire___3_" xml:space="preserve">
+    <value>Olá {0}, &lt;br&gt; {1} revogou o acesso de {2} ao seu questionário: {3}</value>
+</data>
+<data name="OwnerShareNotification_cshtml_Execute_Hello__0____br____br____1__has_invited__2__to__3__your_questionnaire__" xml:space="preserve">
+    <value>Olá {0}, &lt;br&gt; {1} convidou {2} para {3} o seu questionário:</value>
+</data>
+<data name="ConfirmationEmail" xml:space="preserve">
+    <value>Olá {0}, &lt;br/&gt;&lt;br/&gt; Para completar o processo de registro, clique neste link:</value>
+</data>
+<data name="CompleteRegistration" xml:space="preserve">
+    <value>completar registro</value>
+</data>
+<data name="AnonymousSharingEmail" xml:space="preserve">
+    <value>Olá {0}, &lt;br/&gt;&lt;br/&gt; Você habilitou o acesso somente leitura ao seu questionário "{1}" para usuários anônimos através do seguinte link:</value>
+</data>
+<data name="EmailSendInfo" xml:space="preserve">
+    <value>Esta mensagem foi enviada automaticamente pela ferramenta Survey Solutions Designer.</value>
+</data>
+<data name="ResetPasswordEmail" xml:space="preserve">
+    <value>Olá {0}, &lt;br/&gt;&lt;br/&gt; Para completar o processo de redefinição de senha, clique neste link:</value>
+</data>
+<data name="ResetPassword" xml:space="preserve">
+    <value>redefinir senha</value>
+</data>
+<data name="MailNotifier_NotifyOwnerAboutShareChange_view" xml:space="preserve">
+    <value>visualizar</value>
+</data>
+<data name="MailNotifier_NotifyTargetPersonAboutShareChange_edit" xml:space="preserve">
+    <value>editar</value>
+</data>
+<data name="MailNotifier_NotifyTargetPersonAboutShareChange_link" xml:space="preserve">
+    <value>link</value>
+</data>
+<data name="MailNotifier_NotifyTargetPersonAboutShareChange_user" xml:space="preserve">
+    <value>usuário</value>
+</data>
+<data name="SystemMailer_ConfirmationEmail_Complete_Registration_Process" xml:space="preserve">
+    <value>Completar Processo de Registro</value>
+</data>
+<data name="SystemMailer_AnonymousSharingEmail_Subject" xml:space="preserve">
+    <value>Link de compartilhamento anônimo</value>
+</data>
+<data name="SystemMailer_GetOwnerShareNotificationEmail_Your_questionnaire_sharing_notification" xml:space="preserve">
+    <value>Notificação de compartilhamento do seu questionário</value>
+</data>
+<data name="SystemMailer_GetOwnerStopShareNotificationEmail_Your_questionnaire_stop_sharing_notification" xml:space="preserve">
+    <value>Notificação de interrupção de compartilhamento do seu questionário</value>
+</data>
+<data name="SystemMailer_GetShareNotificationEmail_Questionnaire_sharing_notification" xml:space="preserve">
+    <value>Notificação de compartilhamento de questionário</value>
+</data>
+<data name="SystemMailer_GetStopShareNotificationEmail_Questionnaire_stop_sharing_notification" xml:space="preserve">
+    <value>Notificação de interrupção de compartilhamento de questionário</value>
+</data>
+<data name="SystemMailer_ResetPasswordEmail_Complete_Password_Reset" xml:space="preserve">
+    <value>Completar Redefinição de Senha</value>
+</data>
+<data name="TranfserOwnershipNotification" xml:space="preserve">
+    <value>Olá {0}, &lt;br&gt; {1} transferiu a propriedade do questionário {2} para você</value>
+</data>
+<data name="EmailChange" xml:space="preserve">
+    <value>Olá {0}, &lt;br/&gt;&lt;br/&gt; Para confirmar a alteração de e-mail, use o seguinte link:</value>
+</data>
+<data name="EmailChangeLink" xml:space="preserve">
+    <value>confirmar</value>
+</data>
+</root>
