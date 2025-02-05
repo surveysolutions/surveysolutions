@@ -45,7 +45,7 @@
                             {{ $t('QuestionnaireEditor.HellowMessageBtn', {
                         currentUserName: userName
                     }) }}</a>
-                        <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                        <a class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true"
                             aria-expanded="false">
                             <span class="caret"></span>
                             <span class="sr-only"></span>
