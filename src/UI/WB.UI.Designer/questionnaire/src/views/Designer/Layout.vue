@@ -34,9 +34,9 @@
                 <nav>
                     <a class="btn btn-default" target="_blank" href="http://support.mysurvey.solutions/designer"
                         rel="noopener">{{
-                        $t('AccountResources.Help') }}</a>
+                        $t('AccountResources.Help') }}</a>&nbsp;
                     <a class="btn btn-default" href="https://forum.mysurvey.solutions" target="_blank" rel="noopener">{{
-                        $t('AccountResources.Forum') }}</a>
+                        $t('AccountResources.Forum') }}</a>&nbsp;
                     <a v-if="isAdmin" class="btn btn-default" href="/admin/controlpanel">
                         {{ $t('QuestionnaireController.ControlPanel') }}
                     </a>
@@ -63,7 +63,7 @@
                             </li>
                             <li>
                                 <a href="/identity/account/logout">{{
-                                    $t('AccountResources.LogOut')
+                                    $t('AccountResources.Logout')
                                     }}</a>
                             </li>
                         </ul>
