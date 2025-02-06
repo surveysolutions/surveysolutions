@@ -186,4 +186,10 @@
   <data name="TOTAL" xml:space="preserve">
     <value>Total</value>
   </data>
+    <data name="COLUMN_TEAM_SIZE" xml:space="preserve">
+  <value>TAILLE DE L'ÉQUIPE</value>
+</data>
+  <data name="TimeLeft" xml:space="preserve">
+      <value>Temps restant</value>
+  </data>
 </root>

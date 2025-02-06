@@ -80,6 +80,7 @@
 </template>
 
 <script>
+import '@mdi/font/css/materialdesignicons.css'
 import CategoryTable from './components/OptionItemsTable.vue';
 import CategoryStrings from './components/OptionItemsAsStrings.vue';
 import { optionsApi } from './services';

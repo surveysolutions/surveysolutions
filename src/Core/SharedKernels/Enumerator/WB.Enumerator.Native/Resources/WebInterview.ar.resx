@@ -336,4 +336,28 @@
   <data name="Warning" xml:space="preserve">
     <value>تحذير</value>
   </data>
+    <data name="AssignmentLimitReached" xml:space="preserve">
+  <value>لقد جمعنا جميع المقابلات في هذا الاستطلاع.</value>
+</data>
+    <data name="DownloadAnswers" xml:space="preserve">
+  <value>تحميل نص المقابلة</value>
+</data>
+    <data name="DownloadAnswersHint" xml:space="preserve">
+  <value>تحميل إجابات المقابلة كملف pdf</value>
+</data>
+    <data name="Filters_CriticalQuestions" xml:space="preserve">
+  <value>الأسئلة الحرجة</value>
+</data>
+    <data name="Filters_CriticalRules" xml:space="preserve">
+  <value>القواعد الحرجة</value>
+</data>
+    <data name="InterviewNotFound" xml:space="preserve">
+  <value>لم يتم العثور على المقابلة.</value>
+</data>
+    <data name="InvalidPassword" xml:space="preserve">
+  <value>كلمة المرور خاطئة</value>
+</data>
+    <data name="LinkToWebInterviewExample" xml:space="preserve">
+  <value>رابط إلى مثال صفحة الهبوط للمقابلة الإلكترونية</value>
+</data>
 </root>

@@ -387,4 +387,31 @@
   <data name="Row" xml:space="preserve">
     <value>Fila</value>
   </data>
+    <data name="Attachments_uploaded_file_image_is_too_big" xml:space="preserve">
+  <value>Las dimensiones de la imagen son demasiado grandes</value>
+</data>
+    <data name="CriticalRuleAlreadyExist" xml:space="preserve">
+  <value>La regla crítica ya existe.</value>
+</data>
+    <data name="CriticalRuleIsAbsent" xml:space="preserve">
+  <value>La regla crítica está ausente.</value>
+</data>
+    <data name="CoverPageCanContainsOnlyQuestionsAndStaticTextsAndVariables" xml:space="preserve">
+  <value>La sección de portada solo puede contener preguntas, textos estáticos y variables</value>
+</data>
+    <data name="HeaderWasNotFound" xml:space="preserve">
+  <value>El encabezado no se encontró en el archivo</value>
+</data>
+    <data name="ImportOptions_AttachmentNameTooLong" xml:space="preserve">
+  <value>El nombre del archivo adjunto es demasiado largo. El nombre del archivo adjunto debe tener menos de {0}</value>
+</data>
+    <data name="InvalidUserInfo" xml:space="preserve">
+  <value>Información de usuario no válida.</value>
+</data>
+    <data name="Questionnaire_CategoriesWereNotFound" xml:space="preserve">
+  <value>No se encontraron categorías</value>
+</data>
+    <data name="SubsectionCantHaveMoreThan_DirectChildren" xml:space="preserve">
+  <value>La sección o subsección no puede tener más de {0} elementos hijos directos</value>
+</data>
 </root>

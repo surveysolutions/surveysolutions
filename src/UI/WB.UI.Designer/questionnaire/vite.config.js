@@ -16,11 +16,28 @@ const outDir = path.resolve(__dirname + '/../wwwroot/assets');
 //const outDir = path.resolve(__dirname + '/../wwwroot');
 
 export default defineConfig(({ mode, command }) => {
+
     const isDevMode = mode === 'development';
     const isProdMode = !isDevMode;
 
+
     const base = command == 'serve' ? '/.vite/' : '/assets/';
     //const base = command == 'serve' ? '/.vite/' : '/';
+
+    if (command != "dummy") {
+        console.log('Dummy call')
+        return {
+            plugins: [],
+            server: false,
+            build: {
+                emptyOutDir: true,
+                rollupOptions: {
+                    input: 'data:text/javascript,', 
+                },
+            },
+        };
+    }
+
 
     if (command == 'serve' && mode != 'test') {
         sync(outDir);

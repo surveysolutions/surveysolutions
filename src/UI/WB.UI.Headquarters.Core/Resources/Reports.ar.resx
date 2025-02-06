@@ -117,136 +117,280 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ApprovedByHQ" xml:space="preserve">
-    <value>موافق عليه من قبل المقر الرئيسي</value>
-  </data>
-  <data name="ApprovedBySupervisor" xml:space="preserve">
-    <value>موافق عليه من قبل المشرف</value>
-  </data>
-  <data name="Completed" xml:space="preserve">
-    <value>مكتمل</value>
-  </data>
-  <data name="CompletionDate" xml:space="preserve">
-    <value>تاريخ الاكمال</value>
-  </data>
-  <data name="CumulativeInterviewChart" xml:space="preserve">
-    <value>مخطط المقابلة التراكمي</value>
-  </data>
-  <data name="DatesRange" xml:space="preserve">
-    <value>مدى التواريخ</value>
-  </data>
-  <data name="InterviewChart" xml:space="preserve">
-    <value>مخطط المقابلة</value>
-  </data>
-  <data name="InterviewerAssigned" xml:space="preserve">
-    <value>الباحث المعين</value>
-  </data>
-  <data name="Interviewers" xml:space="preserve">
-    <value>الباحثين</value>
-  </data>
-  <data name="Questionnaire" xml:space="preserve">
-    <value>استبيان</value>
-  </data>
-  <data name="RejectedByHQ" xml:space="preserve">
-    <value>مرفوض من قبل المقر الرئيسي</value>
-  </data>
-  <data name="RejectedBySupervisor" xml:space="preserve">
-    <value>مرفوض من قبل المشرف</value>
-  </data>
-  <data name="Report_Average_case_assignment_duration" xml:space="preserve">
-    <value>متوسط مدة تعيين الحالة</value>
-  </data>
-  <data name="Report_Average_HQ_processing_time" xml:space="preserve">
-    <value>معدل وقت معالجة المكتب الرئيسي</value>
-  </data>
-  <data name="Report_Average_Interview_Duration" xml:space="preserve">
-    <value>معدل مدة المقابلة</value>
-  </data>
-  <data name="Report_Average_overall_case_processing_time" xml:space="preserve">
-    <value>معدل الوقت اللازم لمعالجة الحالة الكلية</value>
-  </data>
-  <data name="Report_Average_supervisor_processing_time" xml:space="preserve">
-    <value>معدل وقت معالجة المشرف</value>
-  </data>
-  <data name="Report_Days_by_Interview_Status" xml:space="preserve">
-    <value>الأيام حسب حالة المقابلة</value>
-  </data>
-  <data name="Report_Devices_and_Interviewers" xml:space="preserve">
-    <value>الأجهزة و الباحثين</value>
-  </data>
-  <data name="Report_Number_of_Completed_Interviews" xml:space="preserve">
-    <value>عدد المقابلات المكتملة</value>
-  </data>
-  <data name="Report_Number_of_interview_transactions_by_HQ" xml:space="preserve">
-    <value>عدد عمليات المقابلة الموافق عليها من قبل المقر الرئيسي</value>
-  </data>
-  <data name="Report_Number_of_interview_transactions_by_Supervisor" xml:space="preserve">
-    <value>عدد عمليات المقابلة الموافق عليها من قبل المشرف</value>
-  </data>
-  <data name="Report_Number_of_interviews_approved_by_HQ" xml:space="preserve">
-    <value>عدد المقابلات الموافق علها من قبل المقر الرئيسي</value>
-  </data>
-  <data name="Report_Quantity_By_Interviewers" xml:space="preserve">
-    <value>الكمية من قبل الباحثين</value>
-  </data>
-  <data name="Report_Quantity_By_Supervisors" xml:space="preserve">
-    <value>الكمية من قبل المشرفين</value>
-  </data>
-  <data name="Report_Speed_Between_Statuses_By_Interviewers" xml:space="preserve">
-    <value>السرعه بين الحالات من قبل الباحثين</value>
-  </data>
-  <data name="Report_Speed_Between_Statuses_By_Supervisors" xml:space="preserve">
-    <value>السرعه بين الحالات من قبل المشرفين</value>
-  </data>
-  <data name="Report_Speed_By_Interviewers" xml:space="preserve">
-    <value>السرعه من قبل الباحثين</value>
-  </data>
-  <data name="Report_Speed_By_Supervisors" xml:space="preserve">
-    <value>السرعه من قبل المشرفين</value>
-  </data>
-  <data name="Report_Status_Duration" xml:space="preserve">
-    <value>مدة الحالة</value>
-  </data>
-  <data name="Report_Supervisors_And_Statuses" xml:space="preserve">
-    <value>المشرفين والحالات</value>
-  </data>
-  <data name="Report_Surveys_and_Statuses" xml:space="preserve">
-    <value>الدراسات الاستقصائية و الحالات</value>
-  </data>
-  <data name="Report_Team_Members_and_Statuses" xml:space="preserve">
-    <value>أعضاء الفريق والحالات</value>
-  </data>
-  <data name="Report_Teams_and_Statuses" xml:space="preserve">
-    <value>الفرق والحالات</value>
-  </data>
-  <data name="Restarted" xml:space="preserve">
-    <value>تم اعادة تشغيله</value>
-  </data>
-  <data name="StatusDuration" xml:space="preserve">
-    <value>عدد أيام المقابلة في الحالة</value>
-  </data>
-  <data name="SupervisorAssigned" xml:space="preserve">
-    <value>المشرف المعين</value>
-  </data>
-  <data name="SupervisorsAndSurveys" xml:space="preserve">
-    <value>المشرفين و الدراسات الاستقصائية</value>
-  </data>
-  <data name="SurveyName" xml:space="preserve">
-    <value>عنوان الاستبيان</value>
-  </data>
-  <data name="SurveysAndStatuses" xml:space="preserve">
-    <value>الدراسات الاستقصائية و الحالات</value>
-  </data>
-  <data name="TeamsAndStatuses" xml:space="preserve">
-    <value>الفرق والحالات</value>
-  </data>
-  <data name="TemplateVersion" xml:space="preserve">
-    <value>نسخة الاستبيان</value>
-  </data>
-  <data name="Variables" xml:space="preserve">
-    <value>المتغييرات</value>
-  </data>
-  <data name="Version" xml:space="preserve">
-    <value>نسخة</value>
-  </data>
+    <data name="CumulativeInterviewChart" xml:space="preserve">
+  <value>مخطط المقابلات التراكمي</value>
+</data>
+    <data name="CumulativeInterviewChartSubtitle" xml:space="preserve">
+  <value>يظهر مخطط المقابلات التراكمي تطور عدد المقابلات في كل حالة بمرور الوقت</value>
+</data>
+    <data name="InterviewChart" xml:space="preserve">
+  <value>مخطط المقابلات</value>
+</data>
+    <data name="Interviewers" xml:space="preserve">
+  <value>الباحثين</value>
+</data>
+    <data name="ImportUsersTemplate" xml:space="preserve">
+  <value>قالب استيراد المستخدمين</value>
+</data>
+    <data name="DatesRange" xml:space="preserve">
+  <value>نطاق التواريخ</value>
+</data>
+    <data name="SupervisorsAndSurveys" xml:space="preserve">
+  <value>المشرفون والاستطلاعات</value>
+</data>
+    <data name="SurveysAndStatuses" xml:space="preserve">
+  <value>الدراسات الاستقصائية والحالات</value>
+</data>
+    <data name="TeamsAndStatuses" xml:space="preserve">
+  <value>الفرق والحالات</value>
+</data>
+    <data name="TeamsAndStatuses_SupervisorSubtitle" xml:space="preserve">
+  <value>يظهر تقرير الفرق والحالات عدد المقابلات في كل حالة حسب الباحث</value>
+</data>
+    <data name="TeamsAndStatuses_HeadquartersSubtitle" xml:space="preserve">
+  <value>يعرض تقرير الفرق والحالات عدد المقابلات في كل حالة حسب الفرق</value>
+</data>
+    <data name="StatusDuration" xml:space="preserve">
+  <value>عدد أيام المقابلة في الحالة</value>
+</data>
+    <data name="SurveyName" xml:space="preserve">
+  <value>عنوان الاستبيان</value>
+</data>
+    <data name="TemplateVersion" xml:space="preserve">
+  <value>نسخة الاستبيان</value>
+</data>
+    <data name="SupervisorAssigned" xml:space="preserve">
+  <value>المشرف المعين</value>
+</data>
+    <data name="InterviewerAssigned" xml:space="preserve">
+  <value>الباحث المعين</value>
+</data>
+    <data name="RejectedBySupervisor" xml:space="preserve">
+  <value>مرفوض من قبل المشرف</value>
+</data>
+    <data name="ApprovedBySupervisor" xml:space="preserve">
+  <value>موافق عليه من قبل المشرف</value>
+</data>
+    <data name="ApprovedByHQ" xml:space="preserve">
+  <value>موافق عليه من قبل المقر الرئيسي</value>
+</data>
+    <data name="Completed" xml:space="preserve">
+  <value>مكتمل</value>
+</data>
+    <data name="Restarted" xml:space="preserve">
+  <value>تم اعادة تشغيله</value>
+</data>
+    <data name="RejectedByHQ" xml:space="preserve">
+  <value>مرفوض من قبل المقر الرئيسي</value>
+</data>
+    <data name="CompletionDate" xml:space="preserve">
+  <value>تاريخ الاكتمال</value>
+</data>
+    <data name="Questionnaire" xml:space="preserve">
+  <value>استبيان</value>
+</data>
+    <data name="Variables" xml:space="preserve">
+  <value>المتغييرات</value>
+</data>
+    <data name="Version" xml:space="preserve">
+  <value>نسخة</value>
+</data>
+    <data name="Report_Surveys_and_Statuses" xml:space="preserve">
+  <value>الدراسات الاستقصائية والحالات</value>
+</data>
+    <data name="Report_Teams_and_Statuses" xml:space="preserve">
+  <value>الفرق والحالات</value>
+</data>
+    <data name="Report_Quantity_By_Interviewers" xml:space="preserve">
+  <value>الكمية من قبل الباحثين</value>
+</data>
+    <data name="Report_Quantity_By_Supervisors" xml:space="preserve">
+  <value>الكمية من قبل المشرفين</value>
+</data>
+    <data name="Report_Speed_By_Interviewers" xml:space="preserve">
+  <value>السرعة من قبل الباحثين</value>
+</data>
+    <data name="Report_Speed_Between_Statuses_By_Supervisors" xml:space="preserve">
+  <value>السرعة بين الحالات من قبل المشرفين</value>
+</data>
+    <data name="Report_Speed_Between_Statuses_By_Interviewers" xml:space="preserve">
+  <value>السرعة بين الحالات من قبل الباحثين</value>
+</data>
+    <data name="Report_Speed_By_Supervisors" xml:space="preserve">
+  <value>السرعة من قبل المشرفين</value>
+</data>
+    <data name="Report_Supervisors_And_Statuses" xml:space="preserve">
+  <value>المشرفين والحالات</value>
+</data>
+    <data name="Report_Devices_and_Interviewers" xml:space="preserve">
+  <value>الأجهزة والباحثين</value>
+</data>
+    <data name="Report_Days_by_Interview_Status" xml:space="preserve">
+  <value>الأيام حسب حالة المقابلة</value>
+</data>
+    <data name="Report_Average_Interview_Duration" xml:space="preserve">
+  <value>معدل مدة المقابلة</value>
+</data>
+    <data name="Report_Number_of_Completed_Interviews" xml:space="preserve">
+  <value>عدد المقابلات المكتملة</value>
+</data>
+    <data name="Report_Status_Duration" xml:space="preserve">
+  <value>مدة الحالة</value>
+</data>
+    <data name="Report_Team_Members_and_Statuses" xml:space="preserve">
+  <value>أعضاء الفريق والحالات</value>
+</data>
+    <data name="Report_Average_case_assignment_duration" xml:space="preserve">
+  <value>متوسط مدة تعيين الحالة</value>
+</data>
+    <data name="Report_Average_HQ_processing_time" xml:space="preserve">
+  <value>معدل وقت معالجة المكتب الرئيسي</value>
+</data>
+    <data name="Report_Average_overall_case_processing_time" xml:space="preserve">
+  <value>معدل الوقت اللازم لمعالجة الحالة الكلية</value>
+</data>
+    <data name="Report_Average_supervisor_processing_time" xml:space="preserve">
+  <value>معدل وقت معالجة المشرف</value>
+</data>
+    <data name="Report_Number_of_interviews_approved_by_HQ" xml:space="preserve">
+  <value>عدد المقابلات الموافق عليها من قبل المقر الرئيسي</value>
+</data>
+    <data name="Report_Number_of_interview_transactions_by_HQ" xml:space="preserve">
+  <value>عدد عمليات المقابلة الموافق عليها من قبل المقر الرئيسي</value>
+</data>
+    <data name="Report_Number_of_interview_transactions_by_Supervisor" xml:space="preserve">
+  <value>عدد عمليات المقابلة الموافق عليها من قبل المشرف</value>
+</data>
+    <data name="LastUpdatedDate" xml:space="preserve">
+  <value>تم التحديث في</value>
+</data>
+    <data name="Updated" xml:space="preserve">
+  <value>تم التحديث {0}</value>
+</data>
+    <data name="Updating" xml:space="preserve">
+  <value>جاري التحديث</value>
+</data>
+    <data name="UpdateNow" xml:space="preserve">
+  <value>تحديث الآن</value>
+</data>
+    <data name="Question" xml:space="preserve">
+  <value>سؤال</value>
+</data>
+    <data name="SelectQuestion" xml:space="preserve">
+  <value>اختر سؤال</value>
+</data>
+    <data name="ConditionQuestion" xml:space="preserve">
+  <value>سؤال الشرط</value>
+</data>
+    <data name="TeamLeadsOnly" xml:space="preserve">
+  <value>حسب الفرق</value>
+</data>
+    <data name="WithInterviewers" xml:space="preserve">
+  <value>حسب أعضاء الفريق</value>
+</data>
+    <data name="PivotView" xml:space="preserve">
+  <value>جدول محوري</value>
+</data>
+    <data name="QuestionText" xml:space="preserve">
+  <value>نص السؤال</value>
+</data>
+    <data name="Average" xml:space="preserve">
+  <value>المتوسط</value>
+</data>
+    <data name="ByAnswerValue" xml:space="preserve">
+  <value>تصفية حسب القيمة العددية</value>
+</data>
+    <data name="Count" xml:space="preserve">
+  <value>العدد</value>
+</data>
+    <data name="Max" xml:space="preserve">
+  <value>الحد الأقصى</value>
+</data>
+    <data name="Min" xml:space="preserve">
+  <value>الحد الأدنى</value>
+</data>
+    <data name="Percentile05" xml:space="preserve">
+  <value>النسبة المئوية 05</value>
+</data>
+    <data name="Percentile50" xml:space="preserve">
+  <value>النسبة المئوية 50</value>
+</data>
+    <data name="Percentile95" xml:space="preserve">
+  <value>النسبة المئوية 95</value>
+</data>
+    <data name="SelectConditionQuestion" xml:space="preserve">
+  <value>اختر سؤال الشرط</value>
+</data>
+    <data name="Sum" xml:space="preserve">
+  <value>المجموع</value>
+</data>
+    <data name="ViewOptions" xml:space="preserve">
+  <value>خيارات العرض</value>
+</data>
+    <data name="QuestionLabel" xml:space="preserve">
+  <value>تسمية السؤال</value>
+</data>
+    <data name="Median" xml:space="preserve">
+  <value>الوسيط</value>
+</data>
+    <data name="Supervisor" xml:space="preserve">
+  <value>المشرف</value>
+</data>
+    <data name="HeatMapView" xml:space="preserve">
+  <value>عرض خريطة الحرارة</value>
+</data>
+    <data name="HeatRadius" xml:space="preserve">
+  <value>نصف قطر الحرارة</value>
+</data>
+    <data name="MapDataLoading" xml:space="preserve">
+  <value>جاري تحميل بيانات الخريطة</value>
+</data>
+    <data name="ClusterInfo" xml:space="preserve">
+  <value>تحتوي هذه المنطقة على</value>
+</data>
+    <data name="AssignReceivedConfirm" xml:space="preserve">
+  <value>فهمت أن هذه المقابلة قد تم استلامها بالفعل بواسطة الجهاز اللوحي</value>
+</data>
+    <data name="AssignReceivedWarning" xml:space="preserve">
+  <value>لن يتم إخطار الباحث المسؤول الحالي عن إعادة التعيين حتى المزامنة التالية. إذا كان قد بدأ بالفعل في العمل على المقابلة، فسيتم تجاهل جميع البيانات التي أدخلها قبل المزامنة التالية!</value>
+</data>
+    <data name="QuestionnaireCompatibilityIssues_UnknownAnswer" xml:space="preserve">
+  <value>هناك مشكلات توافق بين إصدارات الاستبيان. تم تجاهل الإجابات في الإصدارات السابقة من الاستبيان التي لم تعد موجودة في أحدث إصدار من الاستبيان.</value>
+</data>
+    <data name="ToAllQuestionnaires" xml:space="preserve">
+  <value>العودة إلى الاستبيانات</value>
+</data>
+    <data name="SaveAsImage" xml:space="preserve">
+  <value>حفظ كصورة</value>
+</data>
+    <data name="ThisWeek" xml:space="preserve">
+  <value>هذا الأسبوع</value>
+</data>
+    <data name="LastWeek" xml:space="preserve">
+  <value>الأسبوع الماضي</value>
+</data>
+    <data name="ThisMonth" xml:space="preserve">
+  <value>هذا الشهر</value>
+</data>
+    <data name="LastMonth" xml:space="preserve">
+  <value>الشهر الماضي</value>
+</data>
+    <data name="PreviousWeek" xml:space="preserve">
+  <value>الأسبوع السابق</value>
+</data>
+    <data name="PreviousMonth" xml:space="preserve">
+  <value>الشهر السابق</value>
+</data>
+    <data name="LastNDays" xml:space="preserve">
+  <value>آخر {{days}} يوم</value>
+</data>
+    <data name="QuickRanges" xml:space="preserve">
+  <value>نطاقات التاريخ السريعة</value>
+</data>
+    <data name="RangeRelativeToData" xml:space="preserve">
+  <value>النطاق بالنسبة للبيانات</value>
+</data>
+    <data name="AllData" xml:space="preserve">
+  <value>كل البيانات</value>
+</data>
 </root>

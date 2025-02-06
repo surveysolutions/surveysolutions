@@ -117,4 +117,61 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+    <data name="Synchronization_UpdateApp" xml:space="preserve">
+    <value>อัปเดต</value>
+  </data>
+    <data name="SendToSupervisor_MovingToSupervisorDevice" xml:space="preserve">
+    <value>ย้ายการสัมภาษณ์ที่เสร็จสิ้นทั้งหมดไปยังอุปกรณ์ของหัวหน้างาน</value>
+  </data>
+    <data name="SendToSupervisor_MovingToSupervisorFormat" xml:space="preserve">
+    <value>ย้ายการสัมภาษณ์ที่เสร็จสิ้นทั้งหมดไปยัง '{0}'</value>
+  </data>
+    <data name="SendToSupervisor_CheckSupervisorDevice" xml:space="preserve">
+    <value>ตรวจสอบว่าอุปกรณ์ของหัวหน้างานเปิด WiFi และ Bluetooth และคุณอยู่ใกล้เคียง</value>
+  </data>
+    <data name="SendToSupervisor_TransferInProgress" xml:space="preserve">
+    <value>กำลังถ่ายโอน</value>
+  </data>
+    <data name="SendToSupervisor_TransferWasAborted" xml:space="preserve">
+    <value>การถ่ายโอนถูกยกเลิก</value>
+  </data>
+    <data name="SendToSupervisor_DeviceFound" xml:space="preserve">
+    <value>พบอุปกรณ์ของหัวหน้างาน กำลังขอการเชื่อมต่อ</value>
+  </data>
+    <data name="SendToSupervisor_DeviceConnectionAccepting" xml:space="preserve">
+    <value>รอการอนุมัติการเชื่อมต่อจากหัวหน้างาน</value>
+  </data>
+    <data name="SendToSupervisor_DeviceConnectionAccepted" xml:space="preserve">
+    <value>เชื่อมต่อกับอุปกรณ์ของหัวหน้างานแล้ว</value>
+  </data>
+    <data name="SendToSupervisor_SupervisorNotFound" xml:space="preserve">
+    <value>การถ่ายโอนไม่ได้เริ่มต้น อุปกรณ์ของหัวหน้างานไม่สามารถพบได้</value>
+  </data>
+    <data name="SendToSupervisor_SupervisorTerminateTransfering" xml:space="preserve">
+    <value>การถ่ายโอนถูกยกเลิกบนอุปกรณ์ที่สอง</value>
+  </data>
+    <data name="SendToSupervisor_SomeInterviewsOnSupervisor" xml:space="preserve">
+    <value>การสัมภาษณ์บางส่วนอยู่บนอุปกรณ์อื่นแล้ว</value>
+  </data>
+    <data name="SendToSupervisor_SyncCompleted" xml:space="preserve">
+    <value>การถ่ายโอนเสร็จสิ้น การสัมภาษณ์ที่เสร็จสิ้นทั้งหมดอยู่บนอุปกรณ์อื่นแล้ว</value>
+  </data>
+    <data name="SendToSupervisor_SyncCompletedWithErrorsFormat" xml:space="preserve">
+    <value>การถ่ายโอนเสร็จสิ้น {0} การสัมภาษณ์ล้มเหลวในการซิงโครไนซ์</value>
+  </data>
+    <data name="SendToSupervisor_LookingForSupervisor" xml:space="preserve">
+    <value>กำลังมองหาอุปกรณ์ของหัวหน้างาน</value>
+  </data>
+    <data name="SendToSupervisor_Note" xml:space="preserve">
+    <value>หมายเหตุ: การดำเนินการนี้จะใช้เวลานานกว่าปกติ อย่าปิดอุปกรณ์นี้</value>
+  </data>
+    <data name="SendToSupervisor_ConnectionFailed" xml:space="preserve">
+    <value>ตรวจสอบให้แน่ใจว่าอุปกรณ์ทั้งสองอยู่ใกล้กัน; WiFi และ Bluetooth ควรเปิดใช้งานบนอุปกรณ์ทั้งสอง; แอปพลิเคชันหัวหน้างานควรเปิดบนอุปกรณ์ของหัวหน้างาน</value>
+  </data>
+    <data name="SendToSupervisor_Retry" xml:space="preserve">
+    <value>ลองใหม่</value>
+  </data>
+    <data name="SendToSupervisor_BluetoothError" xml:space="preserve">
+    <value>แอปพลิเคชัน Interviewer ไม่สามารถกำหนดสถานะของ Bluetooth ได้ (เช่น เปิด/ปิด, เชื่อมต่อ/ตัดการเชื่อมต่อ) ก่อนอื่นให้รีบูตอุปกรณ์ Interviewer และ Supervisor ทั้งสอง จากนั้นลองซิงโครไนซ์อีกครั้ง</value>
+  </data>
 </root>

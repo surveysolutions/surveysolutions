@@ -483,14 +483,11 @@
     <data name="Interviewer_Done" xml:space="preserve">
     <value>Hecho</value>
   </data>
+    <data name="MenuItem_Title_AreaCancelEdit" xml:space="preserve">
+  <value>Limpiar todo</value>
+</data>
     <data name="InterviewKey" xml:space="preserve">
     <value>Llave de entrevista: {0} </value>
-  </data>
-    <data name="MenuItem_Title_AreaCancel" xml:space="preserve">
-    <value>Salir del editor de mapa</value>
-  </data>
-    <data name="MenuItem_Title_AreaCancelEdit" xml:space="preserve">
-    <value>Limpiar todo</value>
   </data>
     <data name="Messages_WaitPendingOperation" xml:space="preserve">
     <value>Por favor espere a que la operación actual sea completada</value>
@@ -585,9 +582,6 @@
     <data name="Interview_Comment_OnPreviousAnswer" xml:space="preserve">
     <value>En respuesta anterior</value>
   </data>
-    <data name="Interview_Comment_Resolve" xml:space="preserve">
-    <value>Resolve</value>
-  </data>
     <data name="Interview_MaxAnswersCount" xml:space="preserve">
     <value>{0} de {1} categorías seleccionadas</value>
   </data>
@@ -649,8 +643,8 @@
     <value>solo se muestran los elementos con coordenadas conocidas</value>
   </data>
     <data name="MapDashboard_FiltersTitle" xml:space="preserve">
-    <value>Filters</value>
-  </data>
+        <value>Filtros</value>
+    </data>
     <data name="MapDashboard_Interviews" xml:space="preserve">
     <value>Entrevistas</value>
   </data>
@@ -729,4 +723,235 @@
     <data name="Warnings" xml:space="preserve">
     <value>Advertencias</value>
   </data>
+    <data name="Dashboard_MyQuestionnairesLinkText" xml:space="preserve">
+        <value>Mis</value>
+    </data>
+    <data name="Interview_Complete_CriticalIssues_Instrunction" xml:space="preserve">
+        <value>Este botón está deshabilitado porque no se permite la presentación de entrevistas con problemas críticos</value>
+    </data>
+    <data name="Adjust" xml:space="preserve">
+        <value>Ajustar</value>
+    </data>
+    <data name="SelectShapefileTitle" xml:space="preserve">
+        <value>Seleccione los límites:</value>
+    </data>
+    <data name="SelectMapTitle" xml:space="preserve">
+        <value>Seleccione el mapa:</value>
+    </data>
+    <data name="InterviewStatus_SupervisorAssigned" xml:space="preserve">
+        <value>Supervisor asignado</value>
+    </data>
+    <data name="InterviewStatus_Restored" xml:space="preserve">
+        <value>Restaurado</value>
+    </data>
+    <data name="InterviewStatus_Restarted" xml:space="preserve">
+        <value>Reiniciado</value>
+    </data>
+    <data name="InterviewStatus_RejectedBySupervisor" xml:space="preserve">
+        <value>echazado por el supervisor</value>
+    </data>
+    <data name="InterviewStatus_RejectedByHeadquarters" xml:space="preserve">
+        <value>Rechazado por la sede</value>
+    </data>
+    <data name="InterviewStatus_InterviewerAssigned" xml:space="preserve">
+        <value>Entrevistador asignado</value>
+    </data>
+    <data name="InterviewStatus_Deleted" xml:space="preserve">
+        <value>Eliminado</value>
+    </data>
+    <data name="InterviewStatus_Created" xml:space="preserve">
+        <value>Creado</value>
+    </data>
+    <data name="AreaMap_HideBoundaries" xml:space="preserve">
+        <value>Ocultar límites</value>
+    </data>
+    <data name="AreaMap_Save_With_Warning_Confirm" xml:space="preserve">
+        <value>Está a punto de guardar un resultado no preciso. ¿Desea continuar?</value>
+    </data>
+    <data name="AreaMap_Start_Measurement" xml:space="preserve">
+        <value>Iniciar</value>
+    </data>
+    <data name="Comment" xml:space="preserve">
+        <value>Comentario</value>
+    </data>
+    <data name="ErrorMessage_PermissionForUnkownSourcesRequired" xml:space="preserve">
+        <value>No se ha otorgado permiso a la aplicación para actualizarse. Por favor, habilite la opción "Permitir desde esta fuente" en el menú de configuración 'Información de la aplicación'.</value>
+    </data>
+    <data name="Geofencing_Warning_Message" xml:space="preserve">
+        <value>Está fuera del área designada</value>
+    </data>
+    <data name="InterviewStatus_ApprovedByHeadquarters" xml:space="preserve">
+        <value>Aprobado por la Sede</value>
+    </data>
+    <data name="InterviewStatus_ApprovedBySupervisor" xml:space="preserve">
+        <value>Aprobado por el Supervisor</value>
+    </data>
+    <data name="InterviewStatus_Completed" xml:space="preserve">
+        <value>Completado</value>
+    </data>
+    <data name="Loading" xml:space="preserve">
+        <value>Cargando..</value>
+    </data>
+    <data name="NoComment" xml:space="preserve">
+        <value>No se especificó ningún comentario</value>
+    </data>
+    <data name="AreaMap_OverlapsWith" xml:space="preserve">
+        <value>Se superpone con:</value>
+    </data>
+    <data name="MenuItem_Title_ZoomShapefile" xml:space="preserve">
+    <value>Zoom a los límites</value>
+  </data>
+    <data name="MenuItem_Title_ZoomMap" xml:space="preserve">
+    <value>Zoom al mapa</value>
+  </data>
+    <data name="MenuItem_Title_ZoomGeoTracking" xml:space="preserve">
+    <value>Zoom a los registros de seguimiento</value>
+  </data>
+    <data name="MenuItem_Title_ZoomEverything" xml:space="preserve">
+    <value>Zoom a todo</value>
+  </data>
+    <data name="MenuItem_Title_ZoomCollectedData" xml:space="preserve">
+    <value>Zoom a los datos recopilados</value>
+  </data>
+    <data name="MenuItem_Title_StopGeoTracking" xml:space="preserve">
+    <value>Detener el registro de seguimiento</value>
+  </data>
+    <data name="MenuItem_Title_StopGeofencing" xml:space="preserve">
+    <value>Detener la geovalla</value>
+  </data>
+    <data name="MenuItem_Title_StartGeoTracking" xml:space="preserve">
+    <value>Iniciar el registro de seguimiento</value>
+  </data>
+    <data name="MenuItem_Title_StartGeofencing" xml:space="preserve">
+    <value>Iniciar la geovalla</value>
+  </data>
+    <data name="MenuItem_Title_ShowLocation" xml:space="preserve">
+    <value>Mostrar ubicación</value>
+  </data>
+    <data name="MenuItem_Title_HideLocation" xml:space="preserve">
+    <value>Ocultar ubicación</value>
+  </data>
+    <data name="MenuItem_Title_ExitToDashboard" xml:space="preserve">
+    <value>Salir al tablero</value>
+  </data>  
+  <data name="MenuItem_Title_CreateInterview" xml:space="preserve">
+    <value>Crear nueva entrevista</value>
+  </data>
+    <data name="MenuItem_Title_ChangeShapefile" xml:space="preserve">
+    <value>Cambiar límites</value>
+  </data>
+    <data name="MenuItem_Title_ChangeMap" xml:space="preserve">
+    <value>Cambiar mapa</value>
+  </data>    
+    <data name="MenuItem_Title_AreaCancel" xml:space="preserve">
+    <value>Salir del editor de mapas</value>
+  </data>    
+    <data name="AnswerRecordedMsg" xml:space="preserve">
+        <value>Respuesta aceptada. Tardó {0} en procesar</value>
+    </data>
+    <data name="AreaMap_InitLocation" xml:space="preserve">
+        <value>Iniciando...</value>
+    </data>
+    <data name="AreaMap_ItemsOutsideDedicatedArea" xml:space="preserve">
+        <value>Algunos marcadores están fuera del área delimitada</value>
+    </data>
+    <data name="AreaMap_OverlapsWithOther" xml:space="preserve">
+        <value>y {0} otro.</value>
+    </data>
+    <data name="AreaMap_SelectShapefile" xml:space="preserve">
+        <value>Seleccionar archivo de límites</value>
+    </data>
+    <data name="AreaMap_ShowBoundaries" xml:space="preserve">
+        <value>Mostrar límites</value>
+    </data>
+    <data name="AssignmentMap_Title_CreateInterview" xml:space="preserve">
+        <value>Comenzar</value>
+    </data>
+    <data name="ConfirmNewPasswordHint" xml:space="preserve">
+        <value>Confirmar nueva contraseña</value>
+    </data>
+    <data name="Error" xml:space="preserve">
+        <value>Error</value>
+    </data>
+    <data name="Interviewer_Comment" xml:space="preserve">
+        <value>Deja un comentario</value>
+    </data>
+    <data name="Interviewer_Reassign_AlreadyReceivedAssignment" xml:space="preserve">
+        <value>El entrevistador {0} ya recibió esta tarea {1}. ¿Está seguro de que desea reasignarla?</value>
+    </data>
+    <data name="Interviewer_Reassign_AlreadyReceivedInterview" xml:space="preserve">
+        <value>El entrevistador {0} ya recibió esta entrevista {1}. ¿Está seguro de que desea reasignarla?</value>
+    </data>
+    <data name="Interview_Comment_Resolve" xml:space="preserve">
+        <value>Resolver</value>
+    </data>
+    <data name="Interview_Complete_CriticalityIssuesDescription" xml:space="preserve">
+        <value>Resuelva los problemas respondiendo las preguntas críticas y asegurándose de que las respuestas cumplan con las reglas críticas.</value>
+    </data>
+    <data name="Interview_Complete_CriticalUnanswered" xml:space="preserve">
+        <value>Preguntas críticas sin respuesta: {0}</value>
+    </data>
+    <data name="Interview_Complete_FailCriticalConditions" xml:space="preserve">
+        <value>Reglas críticas fallidas: {0}</value>
+    </data>
+    <data name="Interview_Complete_Interview_Status" xml:space="preserve">
+        <value>Problemas de la entrevista:</value>
+    </data>
+    <data name="Interview_Complete_No" xml:space="preserve">
+        <value>No</value>
+    </data>
+    <data name="Interview_Complete_Note_For_Supervisor_with_Criticality" xml:space="preserve">
+        <value>Este botón permanecerá deshabilitado hasta que especifique un comentario para los problemas críticos anteriores.</value>
+    </data>
+    <data name="Interview_Complete_SwitchTo_WebMode_Checkbox" xml:space="preserve">
+        <value>Cambiar la entrevista al modo web</value>
+    </data>
+    <data name="Interview_Complete_SwitchTo_WebMode_Instruction" xml:space="preserve">
+        <value>Esta entrevista será accesible en línea después de la sincronización. Para acceder a la entrevista, el encuestado debe ingresar el enlace que aparece a continuación en el navegador de una computadora, tableta o teléfono inteligente conectado a Internet. El mismo enlace se puede escanear utilizando el código QR que se muestra a continuación.</value>
+    </data>
+    <data name="Interview_Complete_WithWarningCriticality" xml:space="preserve">
+        <value>Por favor, confirme que desea enviar esta entrevista con cuestiones críticas.</value>
+    </data>
+    <data name="Interview_Cover_Supervisor_Comments_does_not_exists" xml:space="preserve">
+        <value>No hay comentarios del supervisor</value>
+    </data>
+    <data name="Interview_MaxAnswersCountSelected" xml:space="preserve">
+        <value>Se ha realizado el número máximo de selecciones ({0}) en esta pregunta</value>
+    </data>
+    <data name="Interview_PlayAudio" xml:space="preserve">
+        <value>Reproducir audio</value>
+    </data>
+    <data name="Interview_PlayVideo" xml:space="preserve">
+        <value>Reproducir vídeo</value>
+    </data>
+    <data name="InvalidTimeMessage" xml:space="preserve">
+        <value>Es importante que la configuración del reloj sea precisa. El reloj indica que la fecha actual está configurada incorrectamente. Ajuste el reloj configurando la fecha y la hora correctas antes de continuar con su trabajo.</value>
+    </data>
+    <data name="MapDashboard_AllResponsibles" xml:space="preserve">
+        <value>Todos los responsables</value>
+    </data>
+    <data name="MapDashboard_AllStatuses" xml:space="preserve">
+        <value>Todos los estados</value>
+    </data>
+    <data name="MapDashboard_ResponsibleTitle" xml:space="preserve">
+        <value>Responsable</value>
+    </data>
+    <data name="MapDashboard_StatusTitle" xml:space="preserve">
+        <value>Estado</value>
+    </data>
+    <data name="MissingPermissions_MapsLocation" xml:space="preserve">
+        <value>La aplicación debe tener permiso para usar la ubicación. Si no ve la ventana emergente de permisos, vaya a Configuración y permita que la aplicación use la ubicación.</value>
+    </data>
+    <data name="NewPasswordHint" xml:space="preserve">
+        <value>Nueva contraseña</value>
+    </data>
+    <data name="NoMapsApplication" xml:space="preserve">
+        <value>No se encontró la aplicación de navegación</value>
+    </data>
+    <data name="OldPasswordHint" xml:space="preserve">
+        <value>Contraseña actual</value>
+    </data>
+    <data name="PasswordMatchError" xml:space="preserve">
+        <value>La contraseña debe ser la misma</value>
+    </data>
 </root>

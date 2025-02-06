@@ -1,243 +1,214 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
-  <!-- 
-    Microsoft ResX Schema 
-    
-    Version 2.0
-    
-    The primary goals of this format is to allow a simple XML format 
-    that is mostly human readable. The generation and parsing of the 
-    various data types are done through the TypeConverter classes 
-    associated with the data types.
-    
-    Example:
-    
-    ... ado.net/XML headers & schema ...
-    <resheader name="resmimetype">text/microsoft-resx</resheader>
-    <resheader name="version">2.0</resheader>
-    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
-    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
-    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
-    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
-    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
-        <value>[base64 mime encoded serialized .NET Framework object]</value>
-    </data>
-    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
-        <comment>This is a comment</comment>
-    </data>
-                
-    There are any number of "resheader" rows that contain simple 
-    name/value pairs.
-    
-    Each data row contains a name, and value. The row also contains a 
-    type or mimetype. Type corresponds to a .NET class that support 
-    text/value conversion through the TypeConverter architecture. 
-    Classes that don't support this are serialized and stored with the 
-    mimetype set.
-    
-    The mimetype is used for serialized objects, and tells the 
-    ResXResourceReader how to depersist the object. This is currently not 
-    extensible. For a given mimetype the value must be set accordingly:
-    
-    Note - application/x-microsoft.net.object.binary.base64 is the format 
-    that the ResXResourceWriter will generate, however the reader can 
-    read any of the formats listed below.
-    
-    mimetype: application/x-microsoft.net.object.binary.base64
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
-            : and then encoded with base64 encoding.
-    
-    mimetype: application/x-microsoft.net.object.soap.base64
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
-            : and then encoded with base64 encoding.
-
-    mimetype: application/x-microsoft.net.object.bytearray.base64
-    value   : The object must be serialized into a byte array 
-            : using a System.ComponentModel.TypeConverter
-            : and then encoded with base64 encoding.
-    -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
-    <xsd:element name="root" msdata:IsDataSet="true">
-      <xsd:complexType>
-        <xsd:choice maxOccurs="unbounded">
-          <xsd:element name="metadata">
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
             <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
-              </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
             </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="assembly">
-            <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="data">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="resheader">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
-            </xsd:complexType>
-          </xsd:element>
-        </xsd:choice>
-      </xsd:complexType>
-    </xsd:element>
-  </xsd:schema>
-  <resheader name="resmimetype">
-    <value>text/microsoft-resx</value>
-  </resheader>
-  <resheader name="version">
-    <value>2.0</value>
-  </resheader>
-  <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </resheader>
-  <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </resheader>
-  <data name="AccountBlocked" xml:space="preserve">
-    <value>تم حظر حسابك. اتصل بالمسؤول لإلغاء حظر حسابك.</value>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="ClientVersionIsNotSupported" xml:space="preserve">
+    <value>فشل في فتح الاستبيان. إصدارك هو {0}. يرجى التحديث.</value>
   </data>
-  <data name="ApplicationUpdateRequired" xml:space="preserve">
-    <value>يلزم تحديث التطبيق</value>
-  </data>
-  <data name="ClientVersionIsNotSupported" xml:space="preserve">
-    <value>فشل في فتح الاستبيان. إصدارك {0}. يرجى التحديث.</value>
-  </data>
-  <data name="ConfirmAccount" xml:space="preserve">
-    <value>الرجاء تأكيد حسابك أولا. لقد أرسلنا رابط تأكيد إلى {0}. لم تحصل عليه؟</value>
-  </data>
-  <data name="Email_required" xml:space="preserve">
-    <value>البريد الالكتروني مطلوب</value>
-  </data>
-  <data name="EmptyTranslationFile" xml:space="preserve">
-    <value>الملف المترجم الذي تم اختياره فارغ </value>
-  </data>
-  <data name="EmptyUserNameOrPassword" xml:space="preserve">
-    <value>اسم المستخدم او كلمة السر فارغ</value>
-  </data>
-  <data name="IncorrectUserNameOrPassword" xml:space="preserve">
-    <value>تسجيل الدخول أو كلمة المرور غير صحيحة. حاول مرة اخرى.</value>
-  </data>
-  <data name="InvalidEmailAddress" xml:space="preserve">
-    <value>البريد الإلكتروني غير صالح</value>
-  </data>
-  <data name="Maintenance" xml:space="preserve">
-    <value>الخادم في وضع الصيانة الآن. نأسف للإزعاج. الرجاء معاودة المحاولة في وقت لاحق.</value>
-  </data>
-  <data name="NoAccessToQuestionnaire" xml:space="preserve">
-    <value>المستخدم ليس لديه صلاحيات للوصول إلى الاستبيان المطلوب</value>
-  </data>
-  <data name="NoQuestionnaireIdToValidatePremissions" xml:space="preserve">
-    <value>لم يتم تقديم معرف الاستبيان للتحقق من الصلاحيات</value>
-  </data>
-  <data name="NotSupportedQuestionnaireVersion" xml:space="preserve">
-    <value>فشل في استيراد الاستبيان. الاستبيان "{0}" يحتوي على {1} الإصدار. يدعم تطبيق المقر الرئيسي فقط حتى الإصدار {2}.</value>
-  </data>
-  <data name="OldClientPleaseUpdate" xml:space="preserve">
-    <value>لديك إصدار قديمة من التطبيق المقرر. يرجى التواصل على support@mysurvey.solutions لطلب تحديث.</value>
-  </data>
-  <data name="OldPassword_required" xml:space="preserve">
-    <value>مطلوب كلمة المرور الحالية</value>
-  </data>
-  <data name="Password_must_be_at_least_characters_long" xml:space="preserve">
-    <value>يجب ألا يقل طول كلمة المرور عن {2} حرفا</value>
-  </data>
-  <data name="Password_required" xml:space="preserve">
-    <value>كلمة المرور مطلوبة</value>
-  </data>
-  <data name="PasswordResetNotAllowed" xml:space="preserve">
-    <value>اعادة ضبط كلمة المرور غير مسموح بها</value>
+  <data name="TemplateNotFound" xml:space="preserve">
+    <value>لا يمكن العثور على الاستبيان بالمعرف={0}. يرجى التحقق من قائمة الاستبيانات المتاحة، أو الاتصال بالزميل الذي شارك رابط الاستبيان معك.</value>
   </data>
   <data name="Questionnaire_verification_failed" xml:space="preserve">
-    <value>يحتوي الاستبيان على أخطاء. يرجى التحقق من الاستبيان على المصمم.</value>
+    <value>استبيانك يحتوي على أخطاء. يرجى التحقق من الاستبيان على المصمم.</value>
   </data>
-  <data name="QuestionnaireTitle_required" xml:space="preserve">
-    <value>عنوان الاستبيان مطلوب</value>
+  <data name="User_Not_authorized" xml:space="preserve">
+    <value>المستخدم غير مصرح له. يرجى التحقق من تسجيل الدخول وكلمة المرور.</value>
+  </data>
+  <data name="OldClientPleaseUpdate" xml:space="preserve">
+    <value>لديك إصدار قديم من تطبيق المقر الرئيسي. يرجى الاتصال بمسؤول الخادم لطلب التحديث.</value>
+  </data>
+  <data name="VersionParameterIsIncorrect" xml:space="preserve">
+    <value>هناك مشكلة في إصدار الاستبيان الخاص بك. يرجى الاتصال بـ support@mysurvey.solutions.</value>
+  </data>
+  <data name="NotSupportedQuestionnaireVersion" xml:space="preserve">
+    <value>فشل في استيراد الاستبيان. استبيانك "{0}" يحتوي على إصدار {1}. يدعم تطبيق المقر الرئيسي حتى الإصدار {2} فقط.</value>
+  </data>
+  <data name="UserLockedOut" xml:space="preserve">
+    <value>حسابك مغلق. يرجى الاتصال بـ support@mysurvey.solutions لفتح الحساب.</value>
+  </data>
+  <data name="ApplicationUpdateRequired" xml:space="preserve">
+    <value>مطلوب تحديث التطبيق.</value>
+  </data>
+  <data name="ServerError" xml:space="preserve">
+    <value>حدث خطأ في الخادم. يرجى الاتصال بـ support@mysurvey.solutions.</value>
+  </data>
+  <data name="The_user_name_or_password_provided_is_incorrect" xml:space="preserve">
+    <value>اسم المستخدم أو كلمة المرور المقدمة غير صحيحة. يرجى إعادة الإدخال.</value>
+  </data>
+  <data name="You_did_not_type_the_verification_word_correctly" xml:space="preserve">
+    <value>كلمة التحقق غير صحيحة. يرجى المحاولة مرة أخرى.</value>
+  </data>
+  <data name="EmptyUserNameOrPassword" xml:space="preserve">
+    <value>اسم المستخدم أو كلمة المرور فارغة.</value>
+  </data>
+  <data name="IncorrectUserNameOrPassword" xml:space="preserve">
+    <value>تسجيل الدخول أو كلمة المرور غير صحيحة. يرجى المحاولة مرة أخرى.</value>
+  </data>
+  <data name="AccountBlocked" xml:space="preserve">
+    <value>حسابك محظور. اتصل بالمسؤول لفتح حسابك.</value>
+  </data>
+  <data name="PasswordResetNotAllowed" xml:space="preserve">
+    <value>إعادة تعيين كلمة المرور غير مسموح بها</value>
+  </data>
+  <data name="ConfirmAccount" xml:space="preserve">
+    <value>يرجى تأكيد حسابك أولاً. لقد أرسلنا رابط تأكيد إلى {0}. لم تحصل عليه؟</value>
   </data>
   <data name="RequestAnotherEmail" xml:space="preserve">
-    <value>طلب آخر.</value>
+    <value>اطلب آخر.</value>
+  </data>
+  <data name="Your_email_is_verified" xml:space="preserve">
+    <value>تم التحقق من بريدك الإلكتروني بنجاح.</value>
+  </data>
+  <data name="Unexpected_error_occurred_Please_try_again_later" xml:space="preserve">
+    <value>حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى لاحقاً.</value>
+  </data>
+  <data name="User_does_not_exist" xml:space="preserve">
+    <value>المستخدم {0} غير موجود. يرجى إدخال اسم مستخدم أو بريد إلكتروني صالح.</value>
+  </data>
+  <data name="The_current_password_is_incorrect_or_the_new_password_is_invalid" xml:space="preserve">
+    <value>تركيبة كلمة المرور الحالية/الجديدة غير صالحة، يرجى إعادة الإدخال.</value>
+  </data>
+  <data name="User_already_confirmed_in_system" xml:space="preserve">
+   <value>المستخدم {0} تم تأكيده بالفعل في النظام. يرجى إدخال تسجيل الدخول وكلمة المرور لبدء استخدام المصمم.</value>
+  </data>
+  <data name="User_does_not_exist_Please_enter_a_valid_user_name" xml:space="preserve">
+    <value>المستخدم {0} غير موجود. يرجى إدخال اسم مستخدم أو بريد إلكتروني صالح.</value>
+  </data>
+  <data name="Your_password_successfully_changed" xml:space="preserve">
+    <value>تم تغيير كلمة المرور الخاصة بك بنجاح.</value>
+  </data>
+  <data name="The_password_and_confirmation_password_do_not_match" xml:space="preserve">
+    <value>كلمة المرور وكلمة المرور التأكيدية غير متطابقتين.</value>
+  </data>
+  <data name="Password_must_be_at_least_characters_long" xml:space="preserve">
+    <value>يجب أن تكون كلمة المرور على الأقل {2} أحرف طويلة.</value>
+  </data>
+  <data name="Password_must_contain_at_least_one_number_one_upper_case_character_and_one_lower_case_character" xml:space="preserve">
+    <value>يجب أن تحتوي كلمة المرور على رقم واحد على الأقل، وحرف كبير واحد وحرف صغير واحد.</value>
+  </data>
+  <data name="User_name_needs_to_be_between_3_and_15_characters" xml:space="preserve">
+    <value>يجب أن يكون اسم تسجيل الدخول بين 3 و 15 حرفًا، ويمكن أن يحتوي فقط على الأحرف والأرقام والرمز التسطير. يجب أن تكون الأحرف من الأبجدية اللاتينية (الإنجليزية) فقط: 'A'..'Z' أو 'a'..'z'. الأحرف الأخرى (السيريلية، العربية، إلخ) غير صالحة للاستخدام في أسماء تسجيل الدخول.</value>
+  </data>
+  <data name="Maintenance" xml:space="preserve">
+    <value>الخادم في وضع الصيانة الآن. نعتذر عن الإزعاج. يرجى المحاولة مرة أخرى لاحقاً.</value>
+  </data>
+  <data name="YourQuestionnaire_0_ContainsNewFunctionalityWhichIsNotSupportedByYourInstallationPleaseUpdate" xml:space="preserve">
+    <value>استبيانك "{0}" يحتوي على وظيفة جديدة: {1}. الميزات الجديدة غير مدعومة من قبل التثبيت الخاص بك. يرجى التحديث.</value>
+  </data>
+  <data name="UserNotApproved" xml:space="preserve">
+    <value>حسابك غير معتمد. يرجى تأكيد حسابك أولاً. لقد أرسلنا رابط تأكيد إلى {0}.</value>
   </data>
   <data name="RestorePassword_EmailSentInstructions" xml:space="preserve">
     <value>تم إرسال رسالة إلى حساب بريدك الإلكتروني. يرجى اتباع التعليمات في البريد الإلكتروني لاستعادة كلمة المرور.</value>
   </data>
-  <data name="ServerError" xml:space="preserve">
-    <value>حدث خطأ في الخادم. يرجى التوصل على support@mysurvey.solutions.</value>
+  <data name="EmptyTranslationFile" xml:space="preserve">
+    <value>ملف الترجمة المحدد فارغ</value>
   </data>
-  <data name="TemplateNotFound" xml:space="preserve">
-    <value>لا يمكن العثور على الاستبيان بالمعرف = {0}. يرجى التحقق من قائمة الاستبيانات المتاحة، أو الاتصال بالزميل الذي شارك رابط الاستبيان معك.</value>
+  <data name="NoAccessToQuestionnaire" xml:space="preserve">
+    <value>المستخدم ليس لديه إذن للوصول إلى الاستبيان المطلوب.</value>
   </data>
-  <data name="The_current_password_is_incorrect_or_the_new_password_is_invalid" xml:space="preserve">
-    <value>كلمة المرور الحالية / الجديدة غير صالحة، يرجى إعادة الادخال.</value>
+  <data name="UserNeedToContactSupportFormat" xml:space="preserve">
+    <value>أنت غير مصرح لك بتنفيذ هذا الإجراء. يرجى الاتصال بالدعم. IP:{0}</value>
   </data>
-  <data name="The_password_and_confirmation_password_do_not_match" xml:space="preserve">
-    <value>كلمة المرور وكلمة مرور التأكيد لا تتطابقان</value>
+  <data name="Email_required" xml:space="preserve">
+    <value>البريد الإلكتروني مطلوب</value>
   </data>
-  <data name="The_user_name_or_password_provided_is_incorrect" xml:space="preserve">
-    <value>اسم المستخدم أو كلمة المرور المقدمة غير صحيحة. الرجاء إعادة الدخول.</value>
+  <data name="EmailOrLogin_required" xml:space="preserve">
+    <value>تسجيل الدخول أو البريد الإلكتروني مطلوب</value>
   </data>
-  <data name="Unexpected_error_occurred_Please_try_again_later" xml:space="preserve">
-    <value>حدث خطأ غير متوقع. الرجاء محاولة الوصول الى المصمم مرة أخرى لاحقا.</value>
+  <data name="InvalidEmailAddress" xml:space="preserve">
+    <value>عنوان البريد الإلكتروني غير صالح</value>
   </data>
-  <data name="User_already_confirmed_in_system" xml:space="preserve">
-    <value>تم تأكيد المستخدم {0} في النظام. الرجاء إدخال معلومات تسجيل الدخول وكلمة المرور لبدء استخدام المصمم</value>
+  <data name="OldPassword_required" xml:space="preserve">
+    <value>كلمة المرور الحالية مطلوبة</value>
   </data>
-  <data name="User_does_not_exist" xml:space="preserve">
-    <value>المستخدم {0} غير موجود. الرجاء إدخال اسم مستخدم أو بريد إلكتروني صالح.</value>
-  </data>
-  <data name="User_does_not_exist_Please_enter_a_valid_user_name" xml:space="preserve">
-    <value>المستخدم {0} غير موجود. الرجاء إدخال اسم مستخدم أو بريد إلكتروني صالح.</value>
-  </data>
-  <data name="User_name_needs_to_be_between_3_and_15_characters" xml:space="preserve">
-    <value>يجب أن يكون اسم المستخدم بين 3 و 15 حرفا ويحتوي على أحرف وأرقام ورمز شرطة سفلية فقط</value>
-  </data>
-  <data name="User_Not_authorized" xml:space="preserve">
-    <value>المستخدم غير مخول. يرجى التحقق من تسجيل الدخول وكلمة المرور.</value>
-  </data>
-  <data name="UserLockedOut" xml:space="preserve">
-    <value>تم اغلاق حسابك. يرجى التواصل على support@mysurvey.solutions لفتحه.</value>
+  <data name="Password_required" xml:space="preserve">
+    <value>كلمة المرور مطلوبة</value>
   </data>
   <data name="UserName_required" xml:space="preserve">
-    <value>مطلوب تسجيل الدخول </value>
+    <value>تسجيل الدخول مطلوب</value>
   </data>
-  <data name="UserNotApproved" xml:space="preserve">
-    <value>لم تتم الموافقة على حسابك. الرجاء تأكيد حسابك أولا. لقد أرسلنا رابط تأكيد إلى {0}.</value>
+  <data name="QuestionnaireTitle_required" xml:space="preserve">
+    <value>عنوان الاستبيان مطلوب</value>
   </data>
-  <data name="VersionParameterIsIncorrect" xml:space="preserve">
-    <value>هناك مشكلة في إصدار الاستبيان الخاص بك. يرجى التواصل على support@mysurvey.solutions.</value>
+  <data name="NoQuestionnaireIdToValidatePremissions" xml:space="preserve">
+    <value>لم يتم توفير معرف الاستبيان للتحقق من الأذونات</value>
   </data>
-  <data name="You_did_not_type_the_verification_word_correctly" xml:space="preserve">
-    <value>كلمة التحقق غير صحيحة. حاول مرة اخرى.</value>
+  <data name="UnhandledExceptionDuringUpdateUserInfo" xml:space="preserve">
+    <value>تعذر تحديث معلومات المستخدم. يرجى المحاولة مرة أخرى لاحقاً.</value>
   </data>
-  <data name="Your_email_is_verified" xml:space="preserve">
-    <value>تحقق المصمم من بريدك الإلكتروني بنجاح.</value>
+  <data name="FullNameMaxLengthError" xml:space="preserve">
+    <value>لا يمكن أن يحتوي الاسم الكامل على أكثر من {1} حرف</value>
   </data>
-  <data name="Your_password_successfully_changed" xml:space="preserve">
-    <value>لقد تم تغيير كلمة السر بنجاح</value>
+  <data name="QuestionnaireVariable_required" xml:space="preserve">
+    <value>متغير الاستبيان مطلوب</value>
   </data>
-  <data name="YourQuestionnaire_0_ContainsNewFunctionalityWhichIsNotSupportedByYourInstallationPleaseUpdate" xml:space="preserve">
-    <value>يحتوي الاستبيان الخاص بك "{0}" على وظائف جديدة: {1}. ميزة جديدة (مميزات) غير معتمدة من قبل التثبيت. يرجى التحديث</value>
+  <data name="QuestionnaireVariable_rules" xml:space="preserve">
+    <value>يستخدم متغير الاستبيان كبادئة في تشكيل أسماء ملفات التصدير. يجب أن تحتوي أسماء المتغيرات ومعرفات الروستر على الأحرف التالية فقط: a-z، A-Z، _، أو 0-9. لا يمكن أن يكون الحرف الأول 0-9 أو _ ولا يمكن أن يكون الأخير _.</value>
+  </data>
+  <data name="QuestionnaireVariable_MaxLength" xml:space="preserve">
+    <value>يمكن أن تكون أسماء المتغيرات ومعرفات الروستر من 1 إلى {1} حرفًا طويلة</value>
+  </data>
+  <data name="QuestionnaireTitle_rules" xml:space="preserve">
+    <value>يمكن استخدام الأحرف التالية فقط في عنوان الاستبيان: A..Z a..z 0..9 ( ) \ / _ - والمسافة، ولا يجب أن تحتوي على حرفين أو أكثر متتاليين من التسطير.</value>
+  </data>
+  <data name="QuestionnaireTitle_MaxLength" xml:space="preserve">
+    <value>لا يمكن أن يحتوي عنوان الاستبيان على أكثر من {1} رمز.</value>
   </data>
 </root>

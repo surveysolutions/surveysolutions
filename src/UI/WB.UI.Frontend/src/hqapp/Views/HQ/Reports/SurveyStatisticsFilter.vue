@@ -65,9 +65,9 @@
                     :values="conditionVariablesList" :value="selectedCondition" @selected="selectCondition" />
             </FilterBlock>
             <template v-if="condition != null">
-                <Checkbox :label="$t('Reports.PivotView')" name="pivot" :value="query.pivot == 'true'" @input="pivotChanged" />
+                <Checkbox :label="$t('Reports.PivotView')" name="pivot" :value="isPivotChecked" @input="pivotChanged" />
 
-                <ul class="list-group small" v-if="!query.pivot">
+                <ul class="list-group small" v-if="!isPivotChecked">
                     <li class="list-group-item pointer" v-for="answer in condition.Answers" :key="answer.Answer"
                         :class="{ 'list-group-item-success': isSelectedAnswer(answer.Answer) }"
                         @click="selectConditionAnswer(answer.Answer)">{{ answer.Answer }}. {{ answer.Text }}</li>
@@ -279,6 +279,10 @@ export default {
             )
             filter.status = this.status == null ? null : JSON.parse(this.status.alias)
             return filter
+        },
+
+        isPivotChecked() {
+            return this.query.pivot == 'true'
         },
 
         queryString() {

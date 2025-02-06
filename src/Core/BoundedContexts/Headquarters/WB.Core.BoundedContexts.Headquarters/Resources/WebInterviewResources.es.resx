@@ -153,4 +153,13 @@
   <data name="WelcomeText" xml:space="preserve">
     <value>Hola, sea bienvenido a la Encuesta Web de Survey Solutions</value>
   </data>
+    <data name="LinkInvitation" xml:space="preserve">
+  <value>Ha sido invitado a participar en la siguiente encuesta: "%QUESTIONNAIRE%". Su entrevista aún no está lista.</value>
+</data>
+    <data name="LinkToInterviewPage" xml:space="preserve">
+  <value>Entrevista Web</value>
+</data>
+    <data name="LinkWelcome" xml:space="preserve">
+  <value>Hola y Bienvenido a la Encuesta Web de Survey Solutions</value>
+</data>
 </root>

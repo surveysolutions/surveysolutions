@@ -51,6 +51,8 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
             if (doesStartDiscoveryExecuted)
                 return;
 
+            
+            
             try
             {
                 doesStartDiscoveryExecuted = true;
@@ -58,15 +60,15 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
                 if (!ShouldStartAdvertising)
                     return;
                 
-                var isAllowedBluetooth = await TryBluetoothPermission();
+                var isAllowedBluetooth = await TryBluetoothPermission().ConfigureAwait(false);
                 if (!isAllowedBluetooth)
                     return;
 
-                var isAllowedNearby = await TryNearbyWifiDevicesPermission();
+                var isAllowedNearby = await TryNearbyWifiDevicesPermission().ConfigureAwait(false);
                 if (!isAllowedNearby)
                     return;
                 
-                var isAllowedGetLocation = await TryRequestLocationPermission();
+                var isAllowedGetLocation = await TryRequestLocationPermission().ConfigureAwait(false);
                 if (!isAllowedGetLocation)
                     return;
 

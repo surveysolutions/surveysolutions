@@ -408,4 +408,16 @@
   <data name="EmailProvider_SmtpPasswordHelp" xml:space="preserve">
     <value>Identifikátor potřebný pro přihlášení k SMTP serveru.</value>
   </data>
+    <data name="EsriApiKey" xml:space="preserve">
+    <value>ESRI API klíč</value>
+</data>
+    <data name="EsriApiKeyDescription" xml:space="preserve">
+    <value>Tento klíč umožní používat online mapy na zařízeních. Upozorňujeme, že používání této služby může být zpoplatněno. Prosím, konzultujte to s poskytovatelem služby.</value>
+</data>
+    <data name="RemoveExportCacheGeneratingFail" xml:space="preserve">
+      <value>Exportní mezipaměť nelze v tuto chvíli vymazat. Generuje se exportní soubor.</value>
+    </data>
+    <data name="RemovingExportCache" xml:space="preserve">
+      <value>Probíhá vymazání exportní mezipaměti</value>
+    </data>
 </root>

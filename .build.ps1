@@ -360,7 +360,7 @@ task PackageWebTester frontend, {
 
 task PackageDesigner {
     
-    @("$BuildRoot/src/UI/WB.UI.Designer", "$BuildRoot/src/UI/WB.UI.Designer/questionnaire") | ForEach-Object {
+    @("$BuildRoot/src/UI/WB.UI.Designer") | ForEach-Object {
 		exec {
 			Set-Location $_
 			npm i

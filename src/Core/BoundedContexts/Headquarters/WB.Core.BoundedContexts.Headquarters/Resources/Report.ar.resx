@@ -186,4 +186,10 @@
   <data name="TOTAL" xml:space="preserve">
     <value>مجموع</value>
   </data>
+    <data name="COLUMN_TEAM_SIZE" xml:space="preserve">
+  <value>حجم الفريق</value>
+</data>
+    <data name="TimeLeft" xml:space="preserve">
+  <value>الوقت المتبقي</value>
+</data>
 </root>

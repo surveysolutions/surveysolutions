@@ -320,6 +320,7 @@ namespace WB.UI.Designer
                     new CultureInfo("ru"),
                     new CultureInfo("fr"),
                     new CultureInfo("es"),
+                    new CultureInfo("pt"),
                     new CultureInfo("ar"),
                     new CultureInfo("zh"),
                     new CultureInfo("sq"),

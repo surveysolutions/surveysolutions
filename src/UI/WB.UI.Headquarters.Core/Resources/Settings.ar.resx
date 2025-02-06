@@ -117,61 +117,312 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ChangeStateConfirm" xml:space="preserve">
-    <value>هل انت متاكد أنك تريد تغيير حالة الحماية؟ سوف تحتاج الى إعادة تجديد البيانات المصدرة من اجل فتحها</value>
-  </data>
-  <data name="CurrentLogo" xml:space="preserve">
-    <value>الشعار الحالي</value>
-  </data>
-  <data name="EnableEncryption" xml:space="preserve">
-    <value>تفعيل التشفير</value>
-  </data>
-  <data name="ExportEncryption_Description" xml:space="preserve">
-    <value>حدد تفعيل مربع التشفير لتشفير أرشيفات بيانات التصدير وحمايتها باستخدام كلمة المرور المقدمة. تغيير كلمة المرور عن طريق الضغط على زر الخطأ. بعد التشفير، فقط الأشخاص الذين يعرفون كلمة المرور يمكنهم فتح البيانات التي تم تصديرها</value>
-  </data>
-  <data name="ExportEncryption_Title" xml:space="preserve">
-    <value>تصدير التشفير</value>
-  </data>
-  <data name="ExportEncryptionSettings" xml:space="preserve">
-    <value>تصدير اعدادات التشفير</value>
-  </data>
-  <data name="GlobalNoteClearingConfirm" xml:space="preserve">
-    <value>هل انت متأكد انك تريد حذف الملاحظة العامه؟</value>
-  </data>
-  <data name="GlobalNoteSaved" xml:space="preserve">
-    <value>لم يتم الحفظ</value>
-  </data>
-  <data name="GlobalNoteSettings" xml:space="preserve">
-    <value>ملاحظة عامة</value>
-  </data>
-  <data name="GlobalNoteSettings_Description" xml:space="preserve">
-    <value>حدد نص في حقل الملاحظة العامة ليتم عرضه في أعلى كل شاشة على الخادم</value>
-  </data>
-  <data name="GlobalNotice" xml:space="preserve">
-    <value>ملاحظة عامة</value>
-  </data>
-  <data name="Logo" xml:space="preserve">
-    <value>شعار الشركة</value>
-  </data>
-  <data name="LogoNotUpdated" xml:space="preserve">
-    <value>لم يتم تحديث شعار الشركة يرجى توزيد صورة صحيحة</value>
-  </data>
-  <data name="LogoSettings" xml:space="preserve">
-    <value>شعار الشركة</value>
-  </data>
-  <data name="LogoUpdated" xml:space="preserve">
-    <value>تم تحديث شعار الشركة</value>
-  </data>
-  <data name="Password" xml:space="preserve">
-    <value>كلمة المرور</value>
-  </data>
-  <data name="RegeneratePasswordConfirm" xml:space="preserve">
-    <value>هل انت متأكد انك تريد انشاء كلمة مرور جديدة؟ سوف تحتاج إلى اعدة تجديد البيانات المصدرة من أجل فتحها.</value>
-  </data>
-  <data name="RemoveLogo" xml:space="preserve">
-    <value>إزالة الشعار</value>
-  </data>
-  <data name="Settings_Title" xml:space="preserve">
-    <value>الاعدادات</value>
-  </data>
+    <data name="ExportEncryption_Title" xml:space="preserve">
+  <value>تشفير التصدير</value>
+</data>
+    <data name="ClearExportCache_Title" xml:space="preserve">
+  <value>مسح ذاكرة التخزين المؤقت للتصدير</value>
+</data>
+    <data name="ClearExportCache_Description" xml:space="preserve">
+  <value>ستؤدي هذه العملية إلى مسح جميع بيانات ذاكرة التخزين المؤقت للتصدير. سيستغرق التصدير التالي وقتًا أطول.</value>
+</data>
+    <data name="RemoveExportCache" xml:space="preserve">
+  <value>مسح ذاكرة التخزين المؤقت</value>
+</data>
+    <data name="RemoveExportCacheConfirm" xml:space="preserve">
+  <value>هل أنت متأكد أنك تريد مسح ذاكرة التخزين المؤقت للتصدير؟ سيتم إزالة جميع ملفات التصدير التي تم إنشاؤها من الخادم ولن تكون متاحة للتنزيل.</value>
+</data>
+    <data name="RemoveExportCacheSuccess" xml:space="preserve">
+  <value>تم مسح ذاكرة التخزين المؤقت للتصدير بنجاح</value>
+</data>
+    <data name="RemovingExportCache" xml:space="preserve">
+  <value>جارٍ مسح ذاكرة التخزين المؤقت للتصدير</value>
+</data>
+    <data name="RemoveExportCacheFail" xml:space="preserve">
+  <value>لا يمكن مسح ذاكرة التخزين المؤقت للتصدير في الوقت الحالي. يرجى المحاولة مرة أخرى لاحقًا.
+الأسباب المحتملة:
+* يتم إنشاء ملف تصدير.
+* يتم تنزيل ملف التصدير الذي تم إنشاؤه.
+* تم حظر إزالة ملف التصدير الذي تم إنشاؤه بواسطة برنامج آخر.
+* إلخ.</value>
+</data>
+    <data name="RemoveExportCacheGeneratingFail" xml:space="preserve">
+  <value>لا يمكن مسح ذاكرة التخزين المؤقت للتصدير في الوقت الحالي. يتم إنشاء ملف تصدير.</value>
+</data>
+    <data name="RemoveExportCache_Warning" xml:space="preserve">
+  <value>تحذير! هذا إجراء لا رجعة فيه</value>
+</data>
+    <data name="RegeneratePasswordConfirm" xml:space="preserve">
+  <value>هل أنت متأكد أنك تريد إنشاء كلمة مرور جديدة؟ سيتم تطبيق كلمة المرور الجديدة على جميع ملفات البيانات المصدرة التي تم إنتاجها من الآن فصاعدًا.</value>
+</data>
+    <data name="Settings_Title" xml:space="preserve">
+  <value>الإعدادات</value>
+</data>
+    <data name="ExportEncryptionSettings" xml:space="preserve">
+  <value>إعدادات تشفير التصدير</value>
+</data>
+    <data name="EnableEncryption" xml:space="preserve">
+  <value>تمكين التشفير</value>
+</data>
+    <data name="Password" xml:space="preserve">
+  <value>كلمة المرور</value>
+</data>
+    <data name="GlobalNotice" xml:space="preserve">
+  <value>ملاحظة عامة</value>
+</data>
+    <data name="Logo" xml:space="preserve">
+  <value>شعار الشركة</value>
+</data>
+    <data name="LogoUpdated" xml:space="preserve">
+  <value>تم تحديث شعار الشركة</value>
+</data>
+    <data name="UserProfileSettings_Title" xml:space="preserve">
+  <value>إعدادات ملف تعريف المستخدم</value>
+</data>
+    <data name="WebInterviewEmailNotifications_Title" xml:space="preserve">
+  <value>إعدادات المقابلة عبر الويب</value>
+</data>
+    <data name="MobileAppSettings_Title" xml:space="preserve">
+  <value>إعدادات تطبيق المقابل/المشرف</value>
+</data>
+    <data name="MobileAppSettings_Description" xml:space="preserve">
+  <value>بعض الإعدادات الخاصة بإصدار الأندرويد من تطبيق المقابل/المشرف</value>
+</data>
+    <data name="AllowInterviewerUpdateProfile" xml:space="preserve">
+  <value>تحرير ملف تعريف المقابل</value>
+</data>
+    <data name="AllowWebInterviewEmailNotifications" xml:space="preserve">
+  <value>إشعارات البريد الإلكتروني للمقابلة عبر الويب</value>
+</data>
+    <data name="AllowInterviewerUpdateProfileDesc" xml:space="preserve">
+  <value>السماح للمقابلين بتحديث معلومات الاتصال الخاصة بهم في ملف حسابهم</value>
+</data>
+    <data name="AllowWebInterviewEmailNotificationsDesc" xml:space="preserve">
+  <value>السماح للمستجيبين للمقابلات عبر الإنترنت بطلب رسائل بريد إلكتروني تحتوي على روابط لاستئناف المقابلات التي بدأت (ساري المفعول إذا تم إعداد مزود خدمة البريد الإلكتروني بالجملة)</value>
+</data>
+    <data name="InterviewerAutoUpdate" xml:space="preserve">
+  <value>تمكين التحديثات التلقائية</value>
+</data>
+    <data name="InterviewerAutoUpdateEnabled" xml:space="preserve">
+  <value>تم تمكين التحديثات التلقائية لتطبيقات الأندرويد</value>
+</data>
+    <data name="InterviewerAutoUpdateDisabled" xml:space="preserve">
+  <value>تم تعطيل التحديثات التلقائية لتطبيقات الأندرويد</value>
+</data>
+    <data name="LogoNotUpdated" xml:space="preserve">
+  <value>لم يتم تحديث شعار الشركة. يرجى تقديم صورة صالحة</value>
+</data>
+    <data name="ChangeStateConfirm" xml:space="preserve">
+  <value>هل أنت متأكد أنك تريد تغيير إعدادات أمان ملف التصدير؟ سيتم حماية جميع ملفات البيانات المصدرة بكلمة مرور.</value>
+</data>
+    <data name="ChangeStateDisabledConfirm" xml:space="preserve">
+  <value>هل أنت متأكد أنك تريد تغيير إعدادات أمان ملف التصدير؟ لن تكون ملفات البيانات المصدرة محمية بكلمة مرور بعد الآن.</value>
+</data>
+    <data name="GlobalNoteSettings" xml:space="preserve">
+  <value>ملاحظة عامة</value>
+</data>
+    <data name="LogoSettings" xml:space="preserve">
+  <value>شعار الشركة</value>
+</data>
+    <data name="RemoveLogo" xml:space="preserve">
+  <value>إزالة الشعار</value>
+</data>
+    <data name="GlobalNoteSaved" xml:space="preserve">
+  <value>تم حفظ الملاحظة</value>
+</data>
+    <data name="ExportEncryption_Description" xml:space="preserve">
+  <value>حدد خانة الاختيار "تمكين التشفير" لحماية أرشيفات بيانات التصدير عن طريق تشفيرها بكلمة المرور المقدمة. قم بتغيير كلمة المرور بالضغط على زر السهم الدائري. بعد التشفير، يمكن فقط للأشخاص الذين يعرفون كلمة المرور فتح البيانات المصدرة.</value>
+</data>
+    <data name="GlobalNoteSettings_Description" xml:space="preserve">
+  <value>حدد النص في حقل "ملاحظة عامة" ليتم عرضه في أعلى كل شاشة على الخادم.</value>
+</data>
+    <data name="LogoSettings_Description" xml:space="preserve">
+  <value>شعار الشركة هو صورة تظهر على صفحة تسجيل الدخول للخادم وعلى صفحة تسجيل الدخول لتطبيق المقابل.</value>
+</data>
+    <data name="LogoSettings_Description1" xml:space="preserve">
+  <value>انقر على زر "اختيار ملف" لتحميل صورة من جهاز الكمبيوتر الخاص بك إلى الخادم لاستخدامها كشعار. ثم انقر على زر "حفظ".</value>
+</data>
+    <data name="CurrentLogo" xml:space="preserve">
+  <value>الشعار الحالي</value>
+</data>
+    <data name="GlobalNoteClearingConfirm" xml:space="preserve">
+  <value>هل أنت متأكد أنك تريد حذف الملاحظة العامة؟</value>
+</data>
+    <data name="AutoUpdateDescription" xml:space="preserve">
+  <value>إذا تم تحديده، فسيتمكن فقط أحدث إصدار من تطبيق المقابل/المشرف من المزامنة مع المقر الرئيسي</value>
+</data>
+    <data name="InterviewerPartialSynchronization" xml:space="preserve">
+  <value>تمكين المزامنة الجزئية</value>
+</data>
+    <data name="PartialSynchronizationDescription" xml:space="preserve">
+  <value>عند التمكين، سترسل أجهزة المقابلين الإجابات في المقابلات غير المكتملة إلى المقر الرئيسي</value>
+</data>
+    <data name="InterviewerGeographyQuestionAccuracyInMeters" xml:space="preserve">
+  <value>حد دقة الموقع</value>
+</data>
+    <data name="GeographyQuestionAccuracyInMetersDescription" xml:space="preserve">
+  <value>تحديد دقة العتبة بالأمتار لإحداثيات الموقع التي تم الحصول عليها</value>
+</data>
+    <data name="InterviewerGeographyQuestionPeriodInSeconds" xml:space="preserve">
+  <value>فترة سؤال الجغرافيا</value>
+</data>
+    <data name="GeographyQuestionPeriodInSecondsDescription" xml:space="preserve">
+  <value>تحديد الفترة بالثواني لسؤال الجغرافيا</value>
+</data>
+    <data name="EmailProvider_Amazon" xml:space="preserve">
+  <value>خدمة البريد الإلكتروني البسيطة من أمازون (SES)</value>
+</data>
+    <data name="EmailProvider_None" xml:space="preserve">
+  <value>لا شيء</value>
+</data>
+    <data name="EmailProvider_Sendgrid" xml:space="preserve">
+  <value>خدمة توصيل البريد الإلكتروني SendGrid</value>
+</data>
+    <data name="EmailProvider_NoneDescription" xml:space="preserve">
+  <value>لا يتم إرسال رسائل الدعوة للمقابلات عبر الويب إلى المستجيبين بواسطة Survey Solutions.</value>
+</data>
+    <data name="EmailProvider_AmazonDescription" xml:space="preserve">
+  <value>قم بتكوين المعلمات للوصول إلى Amazon SES أدناه. تتوفر مزيد من المعلومات حول استخدام Amazon SES مع Survey Solutions </value>
+</data>
+    <data name="EmailProvider_SendgridDescription" xml:space="preserve">
+  <value>قم بتكوين المعلمات للوصول إلى SendGrid أدناه. تتوفر المزيد من المعلومات حول استخدام SendGrid مع Survey Solutions</value>
+</data>
+    <data name="EmailProvider_SenderAddress" xml:space="preserve">
+  <value>عنوان البريد الإلكتروني للمرسل</value>
+</data>
+    <data name="EmailProvider_SendGridApiKey" xml:space="preserve">
+  <value>مفتاح API</value>
+</data>
+    <data name="EmailProvider_AwsAccessKeyId" xml:space="preserve">
+  <value>معرف مفتاح الوصول</value>
+</data>
+    <data name="EmailProvider_AwsSecretAccessKey" xml:space="preserve">
+  <value>مفتاح الوصول السري</value>
+</data>
+    <data name="EmailProvider_TestEmailAddress" xml:space="preserve">
+  <value>عنوان البريد الإلكتروني</value>
+</data>
+    <data name="EmailProvider_SendTestEmail" xml:space="preserve">
+  <value>إرسال البريد الإلكتروني</value>
+</data>
+    <data name="EmailProvider_SendTestEmailResult" xml:space="preserve">
+  <value>تم إرسال مثال على رسالة البريد الإلكتروني للدعوة بنجاح</value>
+</data>
+    <data name="EmailProvider_SendTestEmailHeader" xml:space="preserve">
+  <value>إرسال بريد إلكتروني تجريبي</value>
+</data>
+    <data name="EmailProvider_PageDesc" xml:space="preserve">
+  <value>إعداد مزود خدمة البريد الإلكتروني بالجملة. تكوين كيفية إرسال الدعوات للمقابلات عبر الويب.</value>
+</data>
+    <data name="EmailProvider_SenderHeader" xml:space="preserve">
+  <value>معلومات المرسل</value>
+</data>
+    <data name="EmailProvider_SenderHelp" xml:space="preserve">
+  <value>عنوان البريد الإلكتروني للمرسل الذي سيظهر في حقل FROM للرسائل الواردة.</value>
+</data>
+    <data name="EmailProvider_ReplyAddressHelp" xml:space="preserve">
+  <value>عنوان البريد الإلكتروني الذي قد يتم إرسال الردود من المدعوين إليه (الافتراضي هو عنوان البريد الإلكتروني للمرسل).</value>
+</data>
+    <data name="EmailProvider_SenderName" xml:space="preserve">
+  <value>اسم المرسل</value>
+</data>
+    <data name="EmailProvider_ReplyAddress" xml:space="preserve">
+  <value>عنوان الرد</value>
+</data>
+    <data name="EmailProvider_SenderNameHelp" xml:space="preserve">
+  <value>اسم المرسل الذي سيظهر في حقل FROM للرسائل الواردة.</value>
+</data>
+    <data name="EmailProvider_Address" xml:space="preserve">
+  <value>عنوان البريد للمرسل</value>
+</data>
+    <data name="EmailProvider_AddressHelp" xml:space="preserve">
+  <value>العنوان البريدي الحالي للمرسل.</value>
+</data>
+    <data name="EmailProvider_ServiceProvideHeader" xml:space="preserve">
+  <value>تحديد مزود خدمة البريد الإلكتروني بالجملة</value>
+</data>
+    <data name="EmailProvider_AwsAccessKeyIdHelp" xml:space="preserve">
+  <value>يمكنك العثور على معرف حساب AWS من وحدة إدارة AWS</value>
+</data>
+    <data name="EmailProvider_AwsSecretAccessKeyHelp" xml:space="preserve">
+  <value>تم العثور عليه في بيانات الاعتماد الأمنية في وحدة إدارة AWS</value>
+</data>
+    <data name="EmailProvider_AwsRegion" xml:space="preserve">
+  <value>المنطقة</value>
+</data>
+    <data name="EmailProvider_AwsRegionHelp" xml:space="preserve">
+  <value>المنطقة لوحدة إدارة AWS</value>
+</data>
+    <data name="EmailProvider_AwsRegion_Unknown" xml:space="preserve">
+  <value>تم تحديد منطقة غير معروفة. يرجى التحقق منها.</value>
+</data>
+    <data name="EmailProvider_SendGridApiKeyHelp" xml:space="preserve">
+  <value>يمكنك العثور عليه في صفحة مفاتيح API ضمن عنصر قائمة إعدادات SendGrid</value>
+</data>
+    <data name="EmailProvider_GeneralError" xml:space="preserve">
+  <value>حدث خطأ عام</value>
+</data>
+    <data name="EmailProvider_HelpLinkText" xml:space="preserve">
+  <value>هنا</value>
+</data>
+    <data name="EmailProvider_SendTestEmailMessage" xml:space="preserve">
+  <value>أرسل لنفسك رسالة بريد إلكتروني تجريبية للتحقق من أن خدمة البريد الإلكتروني بالجملة تعمل وللحصول على معاينة لما سيتلقاه المستجيبون.</value>
+</data>
+    <data name="EmailProvider_SettingsSavedSuccessfully" xml:space="preserve">
+  <value>تم حفظ تكوين خدمة البريد الإلكتروني بنجاح.</value>
+</data>
+    <data name="DeviceNotifications" xml:space="preserve">
+  <value>تمكين الإشعارات على الجهاز</value>
+</data>
+    <data name="DeviceNotificationsDescription" xml:space="preserve">
+  <value>عند التمكين، ستقوم الأجهزة بإخطار المالكين بالتغييرات والإجراءات التي يجب اتخاذها</value>
+</data>
+    <data name="EsriApiKey" xml:space="preserve">
+  <value>مفتاح API لـ ESRI</value>
+</data>
+    <data name="EsriApiKeyDescription" xml:space="preserve">
+  <value>سيسمح هذا المفتاح باستخدام الخرائط عبر الإنترنت على الأجهزة. يرجى العلم أن استخدام هذه الخدمة قد يكلفك أموالًا إضافية. يرجى استشارة مزود الخدمة</value>
+</data>
+    <data name="EmailProvider_Smtp" xml:space="preserve">
+  <value>خادم SMTP</value>
+</data>
+    <data name="EmailProvider_SmtpDescription" xml:space="preserve">
+  <value>قم بتكوين المعلمات للوصول إلى خادم SMTP أدناه. تتوفر المزيد من المعلومات حول استخدام خادم SMTP مع Survey Solutions</value>
+</data>
+    <data name="EmailProvider_SmtpHost" xml:space="preserve">
+  <value>المضيف</value>
+</data>
+    <data name="EmailProvider_SmtpHostHelp" xml:space="preserve">
+  <value>عنوان خادم SMTP</value>
+</data>
+    <data name="EmailProvider_SmtpPort" xml:space="preserve">
+  <value>المنفذ</value>
+</data>
+    <data name="EmailProvider_SmtpPortHelp" xml:space="preserve">
+  <value>منفذ SMTP</value>
+</data>
+    <data name="EmailProvider_SmtpTlsEncryption" xml:space="preserve">
+  <value>استخدام تشفير TLS</value>
+</data>
+    <data name="EmailProvider_SmtpTlsEncryptionHelp" xml:space="preserve">
+  <value>تشفير TLS (أمان طبقة النقل) يؤمن الاتصال. يقوم بتشفير البيانات المرسلة بين العملاء والخوادم.</value>
+</data>
+    <data name="EmailProvider_SmtpAuthentication" xml:space="preserve">
+  <value>استخدام المصادقة</value>
+</data>
+    <data name="EmailProvider_SmtpAuthenticationHelp" xml:space="preserve">
+  <value>مصادقة SMTP تتحقق من هوية عميل أو خادم البريد الإلكتروني قبل السماح له بإرسال البريد الإلكتروني عبر خادم SMTP.</value>
+</data>
+    <data name="EmailProvider_SmtpUsername" xml:space="preserve">
+  <value>اسم المستخدم</value>
+</data>
+    <data name="EmailProvider_SmtpUsernameHelp" xml:space="preserve">
+  <value>بيانات الاعتماد المستخدمة أثناء عملية مصادقة SMTP للتحقق من الهوية.</value>
+</data>
+    <data name="EmailProvider_SmtpPassword" xml:space="preserve">
+  <value>كلمة المرور</value>
+</data>
+    <data name="EmailProvider_SmtpPasswordHelp" xml:space="preserve">
+  <value>بيانات الاعتماد المستخدمة أثناء عملية مصادقة SMTP للتحقق من الهوية.</value>
+</data>
 </root>
