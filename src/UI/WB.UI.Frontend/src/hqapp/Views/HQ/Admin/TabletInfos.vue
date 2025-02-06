@@ -17,6 +17,7 @@
 import { DateFormats, humanFileSize } from '~/shared/helpers'
 import moment from 'moment'
 import { escape } from 'lodash'
+import DataTables from 'datatables.net'
 
 export default {
     data() {
@@ -46,11 +47,13 @@ export default {
                     data: 'userName',
                     name: 'UserName',
                     title: this.$t('Pages.PackagesInfo_UserName'),
+                    render: DataTables.render.text()
                 },
                 {
                     data: 'userId',
                     name: 'UserId',
                     title: this.$t('Pages.PackagesInfo_UserId'),
+                    render: DataTables.render.text()
                 },
                 {
                     data: 'size',

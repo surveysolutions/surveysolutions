@@ -97,6 +97,7 @@ import gql from 'graphql-tag'
 import { DateFormats } from '~/shared/helpers'
 import moment from 'moment-timezone'
 import FilterBlock from '../../../components/FilterBlock.vue'
+import DataTables from 'datatables.net'
 
 export default {
     data() {
@@ -198,6 +199,7 @@ export default {
                         "class": "title",
                         title: this.$t("Pages.MapDetails_InterviewerName"),
                         orderable: true,
+                        render: DataTables.render.text()
                     },
                 ],
                 ajax(data, callback, settings) {

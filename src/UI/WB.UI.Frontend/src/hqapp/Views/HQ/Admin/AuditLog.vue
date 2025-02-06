@@ -1,18 +1,14 @@
 <template>
-    <HqLayout :hasFilter="false"
-        tag="audit-log-page"
-        :title="$t('AuditLog.PageTitle')" >
-        <DataTables
-            :tableOptions="tableOptions"
-            noSearch
-            exportable>
+    <HqLayout :hasFilter="false" tag="audit-log-page" :title="$t('AuditLog.PageTitle')">
+        <DataTables :tableOptions="tableOptions" noSearch exportable>
         </DataTables>
     </HqLayout>
 </template>
 
 <script>
-import {DateFormats} from '~/shared/helpers'
+import { DateFormats } from '~/shared/helpers'
 import moment from 'moment'
+import DataTables from 'datatables.net'
 
 export default {
     computed: {
@@ -26,7 +22,7 @@ export default {
                         name: 'LogDate',
                         width: '20%',
                         title: this.$t('AuditLog.LogDate'),
-                        render: function(data) {
+                        render: function (data) {
                             return self.formatUtcDate(data)
                         },
                     },
@@ -35,6 +31,7 @@ export default {
                         name: 'UserName',
                         width: '10%',
                         title: this.$t('AuditLog.User'),
+                        render: DataTables.render.text()
                     },
                     {
                         data: 'type',
@@ -42,11 +39,13 @@ export default {
                         orderable: false,
                         width: '10%',
                         title: this.$t('AuditLog.EventType'),
+                        render: DataTables.render.text()
                     },
                     {
                         data: 'log',
                         name: 'Log',
                         title: this.$t('AuditLog.Log'),
+                        render: DataTables.render.text()
                     },
                 ],
                 ajax: {
@@ -68,6 +67,4 @@ export default {
 }
 </script>
 
-<style>
-
-</style>
+<style></style>

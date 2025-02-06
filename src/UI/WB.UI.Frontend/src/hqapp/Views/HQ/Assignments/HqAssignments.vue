@@ -218,6 +218,7 @@ import { isEqual, map, join, assign, findIndex } from 'lodash'
 import moment from 'moment'
 import { DateFormats } from '~/shared/helpers'
 import { RoleNames } from '~/shared/constants'
+import DataTables from 'datatables.net'
 
 import _sanitizeHtml from 'sanitize-html'
 const sanitizeHtml = text => _sanitizeHtml(text, { allowedTags: [], allowedAttributes: [] })
@@ -361,6 +362,7 @@ export default {
                     searchable: false,
                     title: this.$t('Assignments.Expected'),
                     tooltip: this.$t('Assignments.Tooltip_Table_ExpectedValue'),
+                    render: DataTables.render.text(),
                     if() {
                         return self.config.isHeadquarter
                     },
@@ -454,6 +456,7 @@ export default {
                     title: this.$t('Assignments.Email'),
                     tooltip: this.$t('Assignments.Tooltip_Table_Email'),
                     searchable: false,
+                    render: DataTables.render.text()
                 },
                 {
                     data: 'password',
@@ -461,6 +464,7 @@ export default {
                     title: this.$t('Assignments.Password'),
                     tooltip: this.$t('Assignments.Tooltip_Table_Password'),
                     searchable: false,
+                    render: DataTables.render.text(),
                 },
                 {
                     data: 'receivedByTabletAtUtc',

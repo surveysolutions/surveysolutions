@@ -92,6 +92,8 @@ import { map, join, toNumber, filter, escape } from 'lodash'
 import gql from 'graphql-tag'
 import { config } from '~/shared/config'
 import _sanitizeHtml from 'sanitize-html'
+import DataTables from 'datatables.net'
+
 const sanitizeHtml = text => _sanitizeHtml(text, { allowedTags: [], allowedAttributes: [] })
 
 
@@ -444,6 +446,7 @@ export default {
                     orderable: true,
                     searchable: true,
                     width: '180px',
+                    render: DataTables.render.text()
                 },
                 {
                     data: 'assignmentId',
@@ -452,6 +455,7 @@ export default {
                     orderable: false,
                     searchable: false,
                     width: '50px',
+                    render: DataTables.render.text()
                 },
                 {
                     data: 'identifyingData',
