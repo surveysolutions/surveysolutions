@@ -25,12 +25,12 @@
                                         }}:</span>
                                         <span class="data">{{
                                             createdDate
-                                            }}</span>
+                                        }}</span>
                                     </li>
                                     <li id="detailsInfo_responsibleListItem">
                                         <span class="data-label">{{
                                             $t('Details.Responsible')
-                                            }}:
+                                        }}:
                                         </span>
                                         <span v-if="isInterviewerResponsible" class="data">
                                             <a v-bind:href="interviewerProfileUrl
@@ -38,22 +38,22 @@
                                         </span>
                                         <span v-else class="data supervisor">{{
                                             model.responsible.name
-                                        }}</span>
+                                            }}</span>
                                     </li>
                                 </ul>
                                 <ul class="list-unstyled pull-left table-info">
                                     <li id="detailsInfo_lastUpdatedListItem">
                                         <span class="data-label">{{
                                             this.$t('Details.LastUpdated')
-                                            }}:</span>
+                                        }}:</span>
                                         <span class="data">{{
                                             updatedDate
-                                            }}</span>
+                                        }}</span>
                                     </li>
                                     <li>
                                         <span class="data-label">{{
                                             $t('Common.CalendarEvent')
-                                            }}:</span>
+                                        }}:</span>
                                         <span class="data" data-bs-toggle="tooltip" v-if="calendarEventComment != null"
                                             :title="calendarEventComment == null ||
                                                 calendarEventComment == ''
@@ -162,7 +162,7 @@
                                             <h4>
                                                 <span>{{
                                                     question.title
-                                                }}</span>
+                                                    }}</span>
                                             </h4>
                                             <div class="answer">
                                                 <div v-dompurify-html="question.answer"></div>
@@ -815,6 +815,8 @@ export default {
                                 }
                             case 'ReceivedByTablet':
                                 return data.DeviceId
+                            case 'TargetAreaChanged':
+                                return escape(data.TargetArea)
                         }
                         return ''
                     },
