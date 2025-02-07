@@ -50,7 +50,8 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         
         private bool HasDuplicatedPair_ParentId_Text(Categories category, MultiLanguageQuestionnaireDocument questionnaire)
         {
-            var duplicated = 
+            // TODO: This code is working slowly on PostgreSql 13. After switch on PostgreSql 15 please switch on commented code
+            /*var duplicated = 
                 from row in this.reusableCategoriesService.GetCategoriesById(questionnaire.PublicKey, category.Id)
                 group row by new { row.Text, row.ParentId}
                 into g
@@ -59,6 +60,18 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
             if (duplicated.Any()) return true;
 
+            return false;*/
+
+            HashSet<string> duplicated = new();
+
+            var categories = this.reusableCategoriesService.GetCategoriesById(questionnaire.PublicKey, category.Id).ToList();
+
+            foreach (var categoriesItem in categories)
+            {
+                if (!duplicated.Add($"{categoriesItem.ParentId}$$${categoriesItem.Text}"))
+                    return true;
+            }
+            
             return false;
         } 
         
