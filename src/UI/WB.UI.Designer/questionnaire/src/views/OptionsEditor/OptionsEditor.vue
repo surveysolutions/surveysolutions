@@ -269,7 +269,7 @@ export default {
         resetChanges() {
             this.reloadCategories(() => {
                 this.snacks.formReverted = true;
-                this.isCascadingCategory = this.cascading;
+                this.isCascadingCategory = this.isCascading;
                 this.errors = [];
             });
         },
