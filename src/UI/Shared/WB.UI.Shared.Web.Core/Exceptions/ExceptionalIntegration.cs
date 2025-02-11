@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using System.Linq;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -38,6 +39,28 @@ namespace WB.UI.Shared.Web.Exceptions
                     config.Store.TableName = "\"logs\".\"Errors\"";
                     config.Store.ConnectionString = configuration.GetConnectionString("DefaultConnection");
                 }
+                
+                config.OnBeforeLog += (sender, args) =>
+                {
+                    var ex = args.Error;
+                    if (ex?.CustomData != null)
+                    {
+                        foreach (var key in ex.CustomData.Keys.ToList())
+                        {
+                            ex.CustomData[key] = ex.CustomData[key]?.Replace("\u0000", "");
+                        }
+                    }
+
+                    if (!string.IsNullOrEmpty(ex?.Message))
+                    {
+                        ex.Message = ex.Message.Replace("\u0000", "");
+                    }
+
+                    if (!string.IsNullOrEmpty(ex?.Detail))
+                    {
+                        ex.Detail = ex.Detail.Replace("\u0000", "");
+                    }
+                };
             });
         }
     }
