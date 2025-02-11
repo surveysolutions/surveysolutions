@@ -376,7 +376,6 @@ import { Form, Field, ErrorMessage } from 'vee-validate'
 import { nextTick } from 'vue'
 import { DateFormats, convertToLocal } from '~/shared/helpers'
 import { RoleNames } from '~/shared/constants'
-import DataTables from 'datatables.net'
 
 import moment from 'moment-timezone'
 import { escape } from 'lodash'
@@ -720,7 +719,6 @@ export default {
                 {
                     data: 'ActorName',
                     title: self.$t('Assignments.Actor'),
-                    render: DataTables.render.text()
                 },
                 {
                     data: 'UtcDate',

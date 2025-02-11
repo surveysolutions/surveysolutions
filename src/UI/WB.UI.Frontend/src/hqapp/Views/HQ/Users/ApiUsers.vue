@@ -1,5 +1,7 @@
 <template>
-    <HqLayout :hasFilter="false" :title="title" :topicButtonRef="this.model.createUrl"
+    <HqLayout :hasFilter="false"
+        :title="title"
+        :topicButtonRef="this.model.createUrl"
         :topicButton="$t('Users.AddAPIUser')">
         <div slot='subtitle'>
             <div class="neighbor-block-to-search">
@@ -10,7 +12,12 @@
             </div>
         </div>
 
-        <DataTables ref="table" :tableOptions="tableOptions" @ajaxComplete="onTableReload" noSelect :noPaging="false">
+        <DataTables
+            ref="table"
+            :tableOptions="tableOptions"
+            @ajaxComplete="onTableReload"
+            noSelect
+            :noPaging="false">
         </DataTables>
 
     </HqLayout>
@@ -21,12 +28,11 @@
 import moment from 'moment'
 import { formatNumber } from './formatNumber'
 import { DateFormats } from '~/shared/helpers'
-import DataTables from 'datatables.net'
 
 export default {
     data() {
         return {
-            usersCount: '',
+            usersCount : '',
         }
     },
     mounted() {
@@ -34,7 +40,7 @@ export default {
     },
     methods: {
         loadData() {
-            if (this.$refs.table) {
+            if (this.$refs.table){
                 this.$refs.table.reload()
             }
         },
@@ -47,7 +53,7 @@ export default {
             return this.$config.model
         },
         title() {
-            return this.$t('Users.ApiUsersCountDescription', { count: this.usersCount })
+            return this.$t('Users.ApiUsersCountDescription', {count: this.usersCount})
         },
         tableOptions() {
             var self = this
@@ -59,7 +65,7 @@ export default {
                         name: 'UserName',
                         title: this.$t('Users.UserName'),
                         className: 'nowrap',
-                        render: function (data, type, row) {
+                        render: function(data, type, row) {
                             return `<a href='${self.model.editUrl}/${row.userId}'>${data}</a>`
                         },
                     },
@@ -69,7 +75,7 @@ export default {
                         className: 'date',
                         title: this.$t('Users.CreationDate'),
                         tooltip: this.$t('Users.AccountCreationDateTooltip'),
-                        render: function (data, type, row) {
+                        render: function(data, type, row) {
                             var localDate = moment.utc(data).local()
                             return localDate.format(DateFormats.dateTimeInList)
                         },
@@ -79,7 +85,6 @@ export default {
                         name: 'IsLockedByHQ',
                         className: 'date',
                         title: this.$t('Users.Locked'),
-                        render: DataTables.render.text()
                     },
                 ],
                 ajax: {

@@ -1,15 +1,19 @@
 <template>
-    <HqLayout :hasFilter="false" tag="tablet-logs-page" :title="$t('TabletLogs.PageTitle')"
+    <HqLayout :hasFilter="false"
+        tag="tablet-logs-page"
+        :title="$t('TabletLogs.PageTitle')"
         :subtitle="$t('TabletLogs.PageSubTitle')">
-        <DataTables ref="table" :tableOptions="tableOptions" :contextMenuItems="contextMenuItems" noSearch></DataTables>
+        <DataTables ref="table"
+            :tableOptions="tableOptions"
+            :contextMenuItems="contextMenuItems"
+            noSearch></DataTables>
     </HqLayout>
 </template>
 
 <script>
-import { DateFormats } from '~/shared/helpers'
+import {DateFormats} from '~/shared/helpers'
 import moment from 'moment'
 import { escape } from 'lodash'
-import DataTables from 'datatables.net'
 
 export default {
     computed: {
@@ -22,7 +26,7 @@ export default {
                         data: 'deviceId',
                         name: 'DeviceId',
                         title: this.$t('TabletLogs.DeviceId'),
-                        render: function (data, type, row) {
+                        render: function(data, type, row){
                             return escape(data)
                         },
                     },
@@ -30,13 +34,12 @@ export default {
                         data: 'userName',
                         name: 'UserName',
                         title: this.$t('TabletLogs.UserName'),
-                        render: DataTables.render.text()
                     },
                     {
                         data: 'receiveDateUtc',
                         name: 'ReceiveDateUtc',
                         title: this.$t('TabletLogs.ReceiveDateUtc'),
-                        render: function (data) {
+                        render: function(data) {
                             return self.formatUtcDate(data)
                         },
                     },
@@ -52,7 +55,7 @@ export default {
         },
     },
     methods: {
-        contextMenuItems({ rowData, rowIndex }) {
+        contextMenuItems({rowData, rowIndex}) {
             const self = this
             const menu = []
             menu.push({

@@ -110,7 +110,6 @@ import routeSync from '~/shared/routeSync'
 import WorkspaceManager from './WorkspaceManager.vue'
 import AddInterviewerToWorkspace from './AddInterviewerToWorkspace'
 import InterviewersMoveToOtherTeam from './InterviewersMoveToOtherTeam'
-import DataTables from 'datatables.net'
 
 var arrayFilter = function (array, predicate) {
     array = array || []
@@ -257,7 +256,6 @@ export default {
                         title: this.$t('Pages.AccountManage_Role'),
                         sortable: false,
                         className: 'suso-created-by',
-                        render: DataTables.render.text()
                     },
                     {
                         data: 'workspaces',
@@ -285,7 +283,6 @@ export default {
                         title: this.$t('Pages.Interviewers_FullNameTitle'),
                         className: 'suso-full-name',
                         defaultContent: '',
-                        render: DataTables.render.text()
                     },
                     {
                         data: 'email',
@@ -303,7 +300,6 @@ export default {
                         defaultContent: '',
                         title: this.$t('UploadUsers.Phone'),
                         className: 'suso-phone',
-                        render: DataTables.render.text()
                     },
                 ],
 

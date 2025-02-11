@@ -114,7 +114,6 @@
 <script>
 import { map } from 'lodash'
 import _sanitizeHtml from 'sanitize-html'
-import DataTables from 'datatables.net'
 const sanitizeHtml = text => _sanitizeHtml(text, { allowedTags: [], allowedAttributes: [] })
 
 export default {
@@ -142,7 +141,7 @@ export default {
                         name: 'EntityType',
                         'width': '5%',
                         sortable: false,
-                        render: function (data, type, row) {
+                        'render': function (data, type, row) {
                             return self.getEntityDisplayType(data)
                         },
                     },
@@ -152,7 +151,6 @@ export default {
                         'width': '35%',
                         title: this.$t('Pages.ExposedVariables_VariableName'),
                         sortable: false,
-                        render: DataTables.render.text()
                     },
                     {
                         data: 'title',
@@ -160,7 +158,7 @@ export default {
                         'width': '55%',
                         title: this.$t('Pages.ExposedVariables_VariableDisplayTitle'),
                         sortable: false,
-                        render: function (data, type, row) {
+                        'render': function (data, type, row) {
                             return self.replaceSubstitutions(self.sanitizeHtml(data))
                         },
                     },

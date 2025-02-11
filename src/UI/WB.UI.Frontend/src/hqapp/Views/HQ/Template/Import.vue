@@ -30,7 +30,6 @@
 import escape from 'lodash'
 import { DateFormats } from '~/shared/helpers'
 import moment from 'moment'
-import DataTables from 'datatables.net'
 
 export default {
     computed: {
@@ -63,7 +62,6 @@ export default {
                         name: 'CreatorName',
                         title: this.$t('ImportQuestionnaire.Table_CreatedBy'),
                         'class': 'created-by',
-                        render: DataTables.render.text()
                     },
                 ],
                 ajax: {

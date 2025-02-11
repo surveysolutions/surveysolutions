@@ -28,8 +28,8 @@
                         @click="updateCalendarEvent">
                         {{ $t("Common.Save") }}</button>
                     <button type="button" class="btn btn-link" data-bs-dismiss="modal" role="cancel">{{
-                        $t("Common.Cancel")
-                    }}</button>
+        $t("Common.Cancel")
+    }}</button>
                     <button type="button" class="btn btn-danger pull-right" role="delete" v-if="calendarEventId != null"
                         @click="deleteCalendarEvent">
                         {{ $t("Common.Delete") }}</button>
@@ -44,7 +44,6 @@ import { DateFormats, convertToLocal } from '~/shared/helpers'
 import { updateCalendarEvent, addAssignmentCalendarEvent, deleteCalendarEvent } from './calendarEventsHelper'
 import moment from 'moment-timezone'
 import { map, join, escape } from 'lodash'
-import DataTables from 'datatables.net'
 
 import _sanitizeHtml from 'sanitize-html'
 const sanitizeHtml = text => _sanitizeHtml(text, { allowedTags: [], allowedAttributes: [] })
@@ -211,7 +210,6 @@ export default {
                     title: this.$t('Assignments.DetailsComments'),
                     searchable: false,
                     orderable: true,
-                    render: DataTables.render.text()
                 },
                 {
                     data: 'calendarEvent',

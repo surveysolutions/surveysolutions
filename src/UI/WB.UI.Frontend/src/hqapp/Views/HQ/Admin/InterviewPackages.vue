@@ -64,7 +64,7 @@
             <template v-slot:actions>
                 <div>
                     <button type="button" class="btn btn-primary" @click="putReasonAsync" :disabled="!reason">{{
-                        $t("Common.Ok") }}</button>
+        $t("Common.Ok") }}</button>
                     <button type="button" class="btn btn-link" data-dismiss="modal">{{ $t("Common.Cancel") }}</button>
                 </div>
             </template>
@@ -75,10 +75,10 @@
                 <label for="q1az">
                     <span class="tick"></span>
                     <span>{{ $t('Pages.Admin_InterviewPackages_SelectedPackagesCount',
-                        { count: selectedPackages.length }) }}</span>
+        { count: selectedPackages.length }) }}</span>
                 </label>
                 <button type="button" class="btn btn-primary" @click="reprocessSelected">{{
-                    $t('Pages.Admin_InterviewPackages_Reprocess') }}</button>
+        $t('Pages.Admin_InterviewPackages_Reprocess') }}</button>
                 <button type="button" class="btn btn-primary" @click="showReasonModal">{{
                     $t('Pages.Admin_InterviewPackages_PutReason') }}</button>
             </div>
@@ -89,7 +89,6 @@
 <script>
 import moment from 'moment'
 import { DateFormats, humanFileSize } from '~/shared/helpers'
-import DataTables from 'datatables.net'
 export default {
     data() {
         return {
@@ -199,7 +198,6 @@ export default {
                         title: this.$t('Pages.Admin_InterviewPackages_InterviewKey'),
                         orderable: true,
                         className: 'dt-head-nowrap',
-                        render: DataTables.render.text()
                     },
                     {
                         data: 'interviewId',
@@ -247,7 +245,6 @@ export default {
                         name: 'ExceptionType',
                         title: this.$t('Pages.Admin_InterviewPackages_ExceptionType'),
                         orderable: true,
-                        render: DataTables.render.text()
                     },
                     {
                         data: 'exceptionMessage',

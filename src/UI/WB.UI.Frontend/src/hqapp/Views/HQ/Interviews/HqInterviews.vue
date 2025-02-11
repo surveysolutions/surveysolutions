@@ -440,7 +440,6 @@ import gql from 'graphql-tag'
 import * as toastr from 'toastr'
 
 import _sanitizeHtml from 'sanitize-html'
-import DataTables from 'datatables.net'
 const sanitizeHtml = (text) =>
     _sanitizeHtml(text, { allowedTags: [], allowedAttributes: [] })
 
@@ -836,7 +835,6 @@ export default {
                         $(td).attr('role', 'assignment')
                     },
                     width: '50px',
-                    render: DataTables.render.text()
                 },
             ]
         },
@@ -1724,7 +1722,7 @@ export default {
                                 return resultString
                             },
                         },
-                        { data: 'comment', render: DataTables.render.text() },
+                        { data: 'comment' },
                     ],
                 })
 

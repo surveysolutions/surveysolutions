@@ -51,7 +51,7 @@
                         @click="unarchiveInterviewers">{{ $t("Pages.Interviewers_Unarchive") }}</button>
                     <button type="button" class="btn btn-default btn-warning last-btn"
                         v-if="selectedInterviewers.length" @click="moveToAnotherTeam">{{
-                            $t("Pages.Interviewers_MoveToAnotherTeam") }}</button>
+        $t("Pages.Interviewers_MoveToAnotherTeam") }}</button>
                 </div>
             </div>
         </DataTables>
@@ -64,7 +64,6 @@ import { formatNumber } from './formatNumber'
 import routeSync from '~/shared/routeSync'
 import { map, find } from 'lodash'
 import { DateFormats } from '~/shared/helpers'
-import DataTables from 'datatables.net'
 
 export default {
     mixins: [routeSync],
@@ -158,7 +157,6 @@ export default {
                     name: 'FullName',
                     title: this.$t('Pages.Interviewers_FullNameTitle'),
                     className: 'created-by',
-                    render: DataTables.render.text()
                 },
                 {
                     data: 'creationDate',

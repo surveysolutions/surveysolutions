@@ -24,7 +24,6 @@
 import { map, join, uniqBy, filter, some, orderBy } from 'lodash'
 import * as toastr from 'toastr'
 import gql from 'graphql-tag'
-import DataTables from 'datatables.net'
 const query = gql`query UserMaps($workspace: String!, $order: [MapsSort!], $skip: Int, $take: Int, $where: MapsFilter) {
   maps(workspace: $workspace, order: $order, skip: $skip, take: $take, where: $where) {
     totalCount,
@@ -86,7 +85,6 @@ export default {
                         data: 'userName',
                         name: 'UserName',
                         class: 'title',
-                        render: DataTables.render.text(),
 
                         title: this.$t('Pages.MapList_Name'),
                     },
