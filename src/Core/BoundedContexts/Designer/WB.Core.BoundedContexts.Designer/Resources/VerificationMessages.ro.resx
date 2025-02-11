@@ -133,7 +133,7 @@
     <value>Expresia variabilei are o lungime mai mare de {0} caractere.</value>
   </data>
   <data name="WB0006_OnlyOneGpsQuestionCouldBeMarkedAsPrefilled" xml:space="preserve">
-    <value>Numai o singură întrebare GPS poate fi stabilită ca întrebare de identificare</value>
+      <value>Doar o singură întrebare GPS poate fi plasată în secțiunea paginii de copertă</value>
   </data>
   <data name="WB0007_MultiOptionQuestionYesNoQuestionCantBeLinked" xml:space="preserve">
     <value>Întrebarea cu selectare multiplă da/nu nu poate fi legată</value>

@@ -133,7 +133,7 @@
     <value>La expresión que define la variable tiene más de {0} caracteres</value>
   </data>
   <data name="WB0006_OnlyOneGpsQuestionCouldBeMarkedAsPrefilled" xml:space="preserve">
-    <value>Solamente es permitido marcar como identificador una sola pregunta de tipo GPS</value>
+      <value>Solo se puede colocar una pregunta de GPS en la sección de la portada</value>
   </data>
   <data name="WB0007_MultiOptionQuestionYesNoQuestionCantBeLinked" xml:space="preserve">
     <value>Una pregunta de selección-múltiple de tipo si/no no puede ser enlazada</value>

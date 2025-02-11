@@ -133,7 +133,7 @@
     <value>يبلغ طول المقدار المتغير أكثر من {0} حرفا.</value>
   </data>
   <data name="WB0006_OnlyOneGpsQuestionCouldBeMarkedAsPrefilled" xml:space="preserve">
-    <value>يمكن تحديد سؤال واحد فقط خاص بنظام تحديد المواقع</value>
+      <value>يمكن وضع سؤال GPS واحد فقط في قسم صفحة الغلاف</value>
   </data>
   <data name="WB0007_MultiOptionQuestionYesNoQuestionCantBeLinked" xml:space="preserve">
     <value>سؤال الخيار المتعدد (نعم/ لا) لا يمكن ربطه</value>

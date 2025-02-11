@@ -340,7 +340,7 @@
     <value>Sub-section can have no more than {0} parent sub-sections.</value>
   </data>
   <data name="WB0006_OnlyOneGpsQuestionCouldBeMarkedAsPrefilled" xml:space="preserve">
-    <value>Only one GPS question could be marked as identifying</value>
+      <value>Only one GPS question may be placed in the cover page section</value>
   </data>
   <data name="WB0007_MultiOptionQuestionYesNoQuestionCantBeLinked" xml:space="preserve">
     <value>Multi select yes/no question can't be linked</value>
