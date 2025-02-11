@@ -273,4 +273,31 @@
   <data name="CompleteEmailMessage" xml:space="preserve">
       <value>Completar</value>
   </data>
+    <data name="Sending" xml:space="preserve">
+    <value>Enviando</value>
+</data>
+    <data name="NoErrors" xml:space="preserve">
+    <value>Sin errores</value>
+</data>
+    <data name="NothingWasSent" xml:space="preserve">
+    <value>No se envió nada</value>
+</data>
+    <data name="ProcessCancelled" xml:space="preserve">
+    <value>El proceso fue cancelado</value>
+</data>
+    <data name="DownloadErrors" xml:space="preserve">
+    <value>Descargar lista de asignaciones con errores</value>
+</data>
+    <data name="SendingFailed" xml:space="preserve">
+    <value>El envío de invitaciones ha fallado. Por favor, contacte al administrador del servidor para verificar la configuración del proveedor de correo electrónico</value>
+</data>
+    <data name="TotalSent" xml:space="preserve">
+    <value>{{ totalCount }} invitaciones para enviar</value>
+</data>
+    <data name="TotalProcessed" xml:space="preserve">
+    <value>{{ processedCount }} enviadas con éxito</value>
+</data>
+    <data name="TotalWithErrors" xml:space="preserve">
+    <value>{{ withErrorsCount }} no enviadas debido a errores.</value>
+</data>
 </root>

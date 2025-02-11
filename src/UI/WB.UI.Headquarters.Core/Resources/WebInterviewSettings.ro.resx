@@ -270,4 +270,31 @@
   <data name="InterviewDataInsertQrCodeDescription" xml:space="preserve">
     <value>%question_variable:qrcode% - afișează răspunsul ca QR Code</value>
   </data>
+    <data name="Sending" xml:space="preserve">
+    <value>Trimitere</value>
+</data>
+    <data name="NoErrors" xml:space="preserve">
+    <value>Fără erori</value>
+</data>
+    <data name="NothingWasSent" xml:space="preserve">
+    <value>Nu a fost trimis nimic</value>
+</data>
+    <data name="ProcessCancelled" xml:space="preserve">
+    <value>Procesul a fost anulat</value>
+</data>
+    <data name="DownloadErrors" xml:space="preserve">
+    <value>Descărcați lista de sarcini cu erori</value>
+</data>
+    <data name="SendingFailed" xml:space="preserve">
+    <value>Trimiterea invitațiilor a eșuat. Vă rugăm să contactați administratorul serverului pentru a verifica setările furnizorului de e-mail</value>
+</data>
+    <data name="TotalSent" xml:space="preserve">
+    <value>{{ totalCount }} invitații de trimis</value>
+</data>
+    <data name="TotalProcessed" xml:space="preserve">
+    <value>{{ processedCount }} trimise cu succes</value>
+</data>
+    <data name="TotalWithErrors" xml:space="preserve">
+    <value>{{ withErrorsCount }} nu au fost trimise din cauza erorilor.</value>
+</data>
 </root>

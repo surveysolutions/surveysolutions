@@ -276,4 +276,31 @@
   <value>بدء مقابلة جديدة</value>
         <comment>عنوان زر بدء مقابلة جديدة</comment>
 </data>
+    <data name="Sending" xml:space="preserve">
+    <value>إرسال</value>
+</data>
+    <data name="NoErrors" xml:space="preserve">
+    <value>لا توجد أخطاء</value>
+</data>
+    <data name="NothingWasSent" xml:space="preserve">
+    <value>لم يتم إرسال أي شيء</value>
+</data>
+    <data name="ProcessCancelled" xml:space="preserve">
+    <value>تم إلغاء العملية</value>
+</data>
+    <data name="DownloadErrors" xml:space="preserve">
+    <value>تنزيل قائمة المهام مع الأخطاء</value>
+</data>
+    <data name="SendingFailed" xml:space="preserve">
+    <value>فشل إرسال الدعوات. يرجى الاتصال بمسؤول الخادم للتحقق من إعدادات موفر البريد الإلكتروني</value>
+</data>
+    <data name="TotalSent" xml:space="preserve">
+    <value>{{ totalCount }} دعوات للإرسال</value>
+</data>
+    <data name="TotalProcessed" xml:space="preserve">
+    <value>{{ processedCount }} تم إرسالها بنجاح</value>
+</data>
+    <data name="TotalWithErrors" xml:space="preserve">
+    <value>{{ withErrorsCount }} لم يتم إرسالها بسبب الأخطاء.</value>
+</data>
 </root>

@@ -154,7 +154,7 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
                     }
                     else
                     {
-                        ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                        ModelState.AddModelError(string.Empty, ErrorMessages.InvalidLoginAttempt);
                         return Page();
                     }
                 }

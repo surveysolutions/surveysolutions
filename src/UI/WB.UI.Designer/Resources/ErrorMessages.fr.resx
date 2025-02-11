@@ -270,4 +270,7 @@
   <data name="QuestionnaireTitle_MaxLength" xml:space="preserve">
     <value>Le titre du questionnaire ne peut pas contenir plus de {1} caractères.</value>
   </data>
+  <data name="InvalidLoginAttempt" xml:space="preserve">
+      <value>Tentative de connexion invalide</value>
+  </data>
 </root>

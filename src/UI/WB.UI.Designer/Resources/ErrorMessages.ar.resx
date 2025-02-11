@@ -211,4 +211,7 @@
   <data name="QuestionnaireTitle_MaxLength" xml:space="preserve">
     <value>لا يمكن أن يحتوي عنوان الاستبيان على أكثر من {1} رمز.</value>
   </data>
+    <data name="InvalidLoginAttempt" xml:space="preserve">
+    <value>محاولة تسجيل دخول غير صالحة</value>
+</data>
 </root>
