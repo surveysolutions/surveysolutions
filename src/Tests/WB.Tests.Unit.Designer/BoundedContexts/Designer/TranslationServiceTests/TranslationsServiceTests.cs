@@ -122,7 +122,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             Assert.That(plainStorageAccessor.TranslationInstances.Single(x => x.QuestionnaireEntityId == Question1Id && x.Type == TranslationType.Title).Value, Is.EqualTo("<b>Question title</b>"));
             Assert.That(plainStorageAccessor.TranslationInstances.Single(x => x.QuestionnaireEntityId == Question1Id && 
                                                                       x.Type == TranslationType.ValidationMessage && 
-                                                                      x.TranslationIndex == "1").Value, Is.EqualTo("Question validation"));
+                                                                      x.TranslationIndex == "1").Value, Is.EqualTo("<b>Question validation</b>"));
 
             Assert.That(plainStorageAccessor.TranslationInstances.Single(x => x.QuestionnaireEntityId == Question1Id && 
                                                                       x.Type == TranslationType.SpecialValue && 
@@ -133,7 +133,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
 
             Assert.That(plainStorageAccessor.TranslationInstances.Single(x => x.QuestionnaireEntityId == StaticText2Id &&
                                                                       x.Type == TranslationType.ValidationMessage &&
-                                                                      x.TranslationIndex == "1").Value, Is.EqualTo("Static text validation"));
+                                                                      x.TranslationIndex == "1").Value, Is.EqualTo("<b>Static text validation</b>"));
 
             Assert.That(plainStorageAccessor.TranslationInstances.Single(x => x.QuestionnaireEntityId == Roster1Id && 
                                                                       x.Type == TranslationType.Title).Value, Is.EqualTo("Test"));

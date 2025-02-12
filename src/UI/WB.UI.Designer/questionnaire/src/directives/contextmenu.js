@@ -19,7 +19,7 @@ const contextmenu = app => {
             const menu = document.getElementById(menuId);
 
             if (!menu) {
-                console.error(`Element with id '${menuId}' not found`);
+                //console.error(`Element with id '${menuId}' not found`);
                 return;
             }
 
@@ -115,6 +115,9 @@ const contextmenu = app => {
             el._contextMenu = { el, menu, popperInstance, showMenu, hideMenu };
         },
         unmounted(el) {
+            if (!el._contextMenu)
+                return
+
             let { menu, popperInstance, showMenu, hideMenu } = el._contextMenu;
             el.removeEventListener('contextmenu', showMenu);
             document.removeEventListener('click', hideMenu);
