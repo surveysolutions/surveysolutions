@@ -270,4 +270,7 @@
   <data name="UnhandledExceptionDuringUpdateUserInfo" xml:space="preserve">
     <value>No se pudo actualizar la información del usuario. Por favor, inténtelo de nuevo más tarde.</value>
   </data>
+  <data name="InvalidLoginAttempt" xml:space="preserve">
+      <value>Intento de inicio de sesión no válido</value>
+  </data>
 </root>

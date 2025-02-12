@@ -261,4 +261,7 @@
   <data name="UnhandledExceptionDuringUpdateUserInfo" xml:space="preserve">
     <value>无法更新用户的信息。请稍后再试。</value>
   </data>
+  <data name="InvalidLoginAttempt" xml:space="preserve">
+      <value>无效的登录尝试</value>
+  </data>
 </root>

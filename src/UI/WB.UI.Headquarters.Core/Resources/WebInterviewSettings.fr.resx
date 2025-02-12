@@ -276,4 +276,31 @@
     <value>Commencer un nouvel entretien</value>
     <comment>Start new interview button title</comment>
   </data>
+    <data name="Sending" xml:space="preserve">
+    <value>Envoi</value>
+</data>
+    <data name="NoErrors" xml:space="preserve">
+    <value>Pas d'erreurs</value>
+</data>
+    <data name="NothingWasSent" xml:space="preserve">
+    <value>Rien n'a été envoyé</value>
+</data>
+    <data name="ProcessCancelled" xml:space="preserve">
+    <value>Le processus a été annulé</value>
+</data>
+    <data name="DownloadErrors" xml:space="preserve">
+    <value>Télécharger la liste des affectations avec des erreurs</value>
+</data>
+    <data name="SendingFailed" xml:space="preserve">
+    <value>L'envoi des invitations a échoué. Veuillez contacter votre administrateur serveur pour vérifier les paramètres du fournisseur de messagerie</value>
+</data>
+    <data name="TotalSent" xml:space="preserve">
+    <value>{{ totalCount }} invitations à envoyer</value>
+</data>
+    <data name="TotalProcessed" xml:space="preserve">
+    <value>{{ processedCount }} envoyées avec succès</value>
+</data>
+    <data name="TotalWithErrors" xml:space="preserve">
+    <value>{{ withErrorsCount }} non envoyées en raison d'erreurs.</value>
+</data>
 </root>

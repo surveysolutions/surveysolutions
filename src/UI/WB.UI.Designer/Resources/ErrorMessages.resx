@@ -270,4 +270,7 @@
   <data name="QuestionnaireTitle_MaxLength" xml:space="preserve">
     <value>Questionnaire's title can't have more than {1} symbols.</value>
   </data>
+  <data name="InvalidLoginAttempt" xml:space="preserve">
+      <value>Invalid login attempt</value>
+  </data>
 </root>
