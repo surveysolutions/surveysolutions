@@ -281,7 +281,7 @@
       <value>Sub-seção pode ter no máximo {0} sub-seções pai.</value>
     </data>
     <data name="WB0006_OnlyOneGpsQuestionCouldBeMarkedAsPrefilled" xml:space="preserve">
-      <value>Apenas uma pergunta de GPS pode ser marcada como identificadora.</value>
+        <value>Apenas uma pergunta de GPS pode ser colocada na seção da página de capa</value>
     </data>
     <data name="WB0007_MultiOptionQuestionYesNoQuestionCantBeLinked" xml:space="preserve">
       <value>Pergunta de multi-seleção sim/não não pode ser vinculada.</value>

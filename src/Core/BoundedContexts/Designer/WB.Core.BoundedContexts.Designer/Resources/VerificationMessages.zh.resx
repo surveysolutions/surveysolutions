@@ -133,7 +133,7 @@
     <value>计算变量表达式有长度超过{0}个字符。</value>
   </data>
   <data name="WB0006_OnlyOneGpsQuestionCouldBeMarkedAsPrefilled" xml:space="preserve">
-    <value>只能有一个GPS型问题可以标记为识别型</value>
+      <value>封面部分只能放置一个GPS问题</value>
   </data>
   <data name="WB0007_MultiOptionQuestionYesNoQuestionCantBeLinked" xml:space="preserve">
     <value>多选的 是/否型问题无法被关联</value>

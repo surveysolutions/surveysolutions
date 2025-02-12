@@ -133,7 +133,7 @@
     <value>Выражение переменной не может содержать более {0} символа.</value>
   </data>
   <data name="WB0006_OnlyOneGpsQuestionCouldBeMarkedAsPrefilled" xml:space="preserve">
-    <value>Только один GPS вопрос может быть помечен как идентифицирующий.</value>
+      <value>Только один GPS вопрос может быть на титульной странице</value>
   </data>
   <data name="WB0007_MultiOptionQuestionYesNoQuestionCantBeLinked" xml:space="preserve">
     <value>Да/нет вопрос с множественным выбором не может быть связанным.</value>

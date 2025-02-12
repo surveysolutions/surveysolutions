@@ -133,7 +133,7 @@
     <value>Variabilní výraz má délku delší než {0} znaků.</value>
   </data>
   <data name="WB0006_OnlyOneGpsQuestionCouldBeMarkedAsPrefilled" xml:space="preserve">
-    <value>Pouze jedna otázka GPS může být označena jako identifikační</value>
+      <value>Na stránku obálky lze umístit pouze jednu otázku GPS</value>
   </data>
   <data name="WB0007_MultiOptionQuestionYesNoQuestionCantBeLinked" xml:space="preserve">
     <value>Vícenásobný výběr ano/ne otázku nelze propojit</value>
