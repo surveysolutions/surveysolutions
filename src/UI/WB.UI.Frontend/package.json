@@ -30,7 +30,6 @@
         "axios": "^1.7.9",
         "bootbox": "^6.0.0",
         "bootstrap": "^5.3.3",
-        "bootstrap-sass": "^3.4.3",
         "bootstrap-select": "^1.13.18",
         "chart.js": "^4.4.7",
         "chartjs-adapter-moment": "^1.0.1",
