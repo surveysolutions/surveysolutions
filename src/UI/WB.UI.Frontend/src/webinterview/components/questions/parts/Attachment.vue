@@ -1,6 +1,6 @@
 <template>
     <div class="attachment">
-        <div v-if="localContentType === 'image'" class="image-zoom-box image-wrapper" :class="customCssClass">
+        <div v-if="localContentType === 'image' && thumbPath" class="image-zoom-box image-wrapper" :class="customCssClass">
             <img :src="thumbPath" alt="custom photo" class="zoomImg" @load="imageLoaded" @click="showModal(true)"
                 :style="previewStyle" />
             <portal to="body">
@@ -187,7 +187,9 @@ export default {
             }
         },
         appendCache(uri) {
-            return appendSearchParam(uri, 'cache', this.cache)
+            if (this.cache)
+                return appendSearchParam(uri, 'cache', this.cache)
+            return uri;
         },
         showModal(show) {
             if (this.previewOnly)
