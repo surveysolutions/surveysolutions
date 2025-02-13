@@ -50,7 +50,7 @@
                             </td>
                             <td>@(listViewModel.UserName ?? QuestionnaireHistoryResources.UnknownUserName)</td>
                             <td>
-                                <time time="@listViewModel.Timestamp.ToString("s")Z">@listViewModel.Timestamp.ConvertToLocalAndFormatDate()</time>
+                                @listViewModel.Timestamp.ConvertToLocalAndFormatDate()
                             </td>
                             @if (!Model.ReadonlyMode)
                             {
