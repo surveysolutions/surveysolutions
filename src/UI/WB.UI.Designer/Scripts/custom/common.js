@@ -1,8 +1,9 @@
 ﻿import DOMPurify from 'dompurify';
 import { Modal } from 'bootstrap';
 
+window.Modal = Modal;
+
 function ItemViewModel() {
-    
     var self = this;
     self.itemId = '';
     self.itemName = '';
@@ -109,12 +110,12 @@ function ItemViewModel() {
 
                 for (var i = 0; i < result.length; i++) {
                     let translationItem = result[i];
-                
+
                     let itemToAppend = '<li><a href="javascript:void(0)" value="' +
-                            translationItem.value +
-                            '">' +
-                            translationItem.name +
-                            '</a></li>';
+                        translationItem.value +
+                        '">' +
+                        translationItem.name +
+                        '</a></li>';
 
                     typeaheadCtrl.append(DOMPurify.sanitize(itemToAppend));
                 }
@@ -248,12 +249,12 @@ function ItemViewModel() {
             let translationItem = translationList[i];
 
             let itemToAppend = '<li><a href="javascript:void(0)" value="' +
-                    translationItem.value +
-                    '">' +
-                    translationItem.name +
-                    '</a></li>';
+                translationItem.value +
+                '">' +
+                translationItem.name +
+                '</a></li>';
 
-            typeaheadCtrl.append(DOMPurify.sanitize(itemToAppend));            
+            typeaheadCtrl.append(DOMPurify.sanitize(itemToAppend));
         }
 
         typeaheadCtrl.unbind('click');
