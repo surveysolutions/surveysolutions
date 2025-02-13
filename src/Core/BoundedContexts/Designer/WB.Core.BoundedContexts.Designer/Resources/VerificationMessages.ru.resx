@@ -133,7 +133,7 @@
     <value>Выражение переменной не может содержать более {0} символа.</value>
   </data>
   <data name="WB0006_OnlyOneGpsQuestionCouldBeMarkedAsPrefilled" xml:space="preserve">
-      <value>Только один GPS вопрос может быть на титульной странице</value>
+      <value>Только один GPS вопрос может быть на обложке.</value>
   </data>
   <data name="WB0007_MultiOptionQuestionYesNoQuestionCantBeLinked" xml:space="preserve">
     <value>Да/нет вопрос с множественным выбором не может быть связанным.</value>
@@ -813,7 +813,7 @@
     <value>Вопросы в секции "Обложка" должны иметь тег переменной.</value>
   </data>
   <data name="WB0308_IdentifyingQuestionsHaveOnlyAllowedTypes" xml:space="preserve">
-    <value>Идентификационные вопросы могут иметь только разрешенные типы (Текстовый, Числовой, Дата, Gps, Категориальный: выбор одного).</value>
+    <value>Вопросы на обложке могут быть только разрешенных типов (Текстовый, Числовой, Дата, Gps, Категориальный: выбор одного).</value>
   </data>
   <data name="WB0390_OnlyStringVariableAllowedAsAttachmentName" xml:space="preserve">
     <value>Только строковая переменная может быть использована как источник имени вложения.</value>
