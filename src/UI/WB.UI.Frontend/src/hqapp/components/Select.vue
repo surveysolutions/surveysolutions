@@ -2,7 +2,7 @@
     <span class="dropdown  bootstrap-select">
         <button type="button" tabindex="-1" class="btn dropdown-toggle bs-placeholder btn-default"
             data-bs-toggle="dropdown" role="combobox" aria-owns="bs-select-1" aria-haspopup="listbox"
-            aria-expanded="false" :title="text">
+            aria-expanded="false" :title="text" :disabled="isDisabled">
             <div class="filter-option">
                 <div class="filter-option-inner">
                     <div class="filter-option-inner-inner">{{ text }}</div>
@@ -42,6 +42,9 @@ export default {
             type: String, required: false, default: 'value',
         },
         noEmpty: {
+            type: Boolean, required: false, default: false,
+        },
+        isDisabled: {
             type: Boolean, required: false, default: false,
         },
     },
