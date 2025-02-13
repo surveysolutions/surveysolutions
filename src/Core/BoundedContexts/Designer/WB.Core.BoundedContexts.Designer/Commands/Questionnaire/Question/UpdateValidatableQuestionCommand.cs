@@ -9,14 +9,11 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
     public class UpdateValidatableQuestionCommand : AbstractUpdateQuestionCommand
     {
         public UpdateValidatableQuestionCommand(Guid responsibleId, Guid questionnaireId, Guid questionId, 
-            CommonQuestionParameters commonQuestionParameters, List<ValidationCondition> validationConditions)
+            CommonQuestionParameters commonQuestionParameters, List<ValidationCondition>? validationConditions)
             : base(responsibleId, questionnaireId, questionId, commonQuestionParameters)
         {
-            this.ValidationConditions = validationConditions;
-            this.ValidationConditions.ForEach(x => 
-                x.Message = (string.IsNullOrEmpty(x.Message) 
-                    ? x.Message 
-                    : CommandUtils.SanitizeHtml(x.Message, removeAllTags: false)));
+            this.ValidationConditions = validationConditions ?? new();
+            this.ValidationConditions.ForEach(x => CommandUtils.SanitizeHtml(x.Message, removeAllTags: false));
         }
 
         public List<ValidationCondition> ValidationConditions { get; set; }
