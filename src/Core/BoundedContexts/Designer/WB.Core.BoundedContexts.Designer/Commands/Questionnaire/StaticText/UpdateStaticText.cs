@@ -21,7 +21,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText
             this.ValidationConditions.ForEach(x => 
                         x.Message = (string.IsNullOrEmpty(x.Message) 
                             ? x.Message 
-                            : CommandUtils.SanitizeHtml(x.Message, removeAllTags: true)));
+                            : CommandUtils.SanitizeHtml(x.Message, removeAllTags: false)));
         }
 
         public string Text { get; set; }
