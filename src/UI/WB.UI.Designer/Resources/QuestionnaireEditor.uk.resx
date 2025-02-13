@@ -1566,7 +1566,7 @@
     <value>Переглянути всі {{count}} вирішені коментарі</value>
   </data>
   <data name="VirtualCoverPage" xml:space="preserve">
-    <value>Віртуальна титульна сторінка</value>
+    <value>Віртуальна обкладинка</value>
   </data>
   <data name="WarningsCounter" xml:space="preserve">
       <value>{{count}} попереджень</value>
