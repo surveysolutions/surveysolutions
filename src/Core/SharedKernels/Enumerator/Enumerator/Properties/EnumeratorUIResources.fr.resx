@@ -667,9 +667,9 @@ Veuillez composer votre mot de passe à nouveau. Si cela ne résout pas le probl
   <data name="Synchronization_CheckNewVersionOfApplication" xml:space="preserve">
     <value>Vérification des mises à jour de l'application</value>
   </data>
-  <data name="NotSupportedServerSyncProtocolVersion" xml:space="preserve">
-    <value>Vous avez une version incompatible de l'application Interviewer. Veuillez la désinstaller et la réinstaller depuis le site de votre quartier général Survey Solutions</value>
-  </data>
+    <data name="NotSupportedServerSyncProtocolVersion" xml:space="preserve">
+        <value>Se detectó una versión incompatible. Por favor, póngase en contacto con su supervisor para la resolución</value>
+    </data>
   <data name="Interview_Loading" xml:space="preserve">
     <value>Chargement des données de l'entretien</value>
   </data>

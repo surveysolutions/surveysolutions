@@ -743,7 +743,7 @@
     <value>التحقق من تحديثات التطبيق</value>
 </data>
     <data name="NotSupportedServerSyncProtocolVersion" xml:space="preserve">
-    <value>لديك إصدار غير متوافق من تطبيق المحاور. يرجى إلغاء التثبيت وإعادة التثبيت من موقع المقر الرئيسي الخاص بك في Survey Solutions</value>
+    <value>تم اكتشاف إصدار غير متوافق. يرجى التواصل مع المشرف للحصول على الحل</value>
 </data>
     <data name="Interview_Loading" xml:space="preserve">
     <value>جارٍ تحميل بيانات المقابلة</value>

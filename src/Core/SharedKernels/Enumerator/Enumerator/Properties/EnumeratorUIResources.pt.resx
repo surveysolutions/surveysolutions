@@ -735,7 +735,7 @@ Favor a digitar sua senha atualizada. Se isso não resolver o problema, entre em
     <value>Verificando atualizações do aplicativo</value>
   </data>
   <data name="NotSupportedServerSyncProtocolVersion" xml:space="preserve">
-    <value>Você tem uma versão incompatível do aplicativo de Entrevistador. Por favor, desinstale e instale novamente a partir do site da Sede do Survey Solutions</value>
+      <value>Versão incompatível detectada. Por favor, entre em contato com seu supervisor para resolução</value>
   </data>
   <data name="Interview_Loading" xml:space="preserve">
     <value>Carregando dados da entrevista</value>

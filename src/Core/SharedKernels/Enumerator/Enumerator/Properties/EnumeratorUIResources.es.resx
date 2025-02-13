@@ -637,7 +637,7 @@
     <value>Mapas</value>
   </data>
   <data name="NotSupportedServerSyncProtocolVersion" xml:space="preserve">
-    <value>Es posible que tenga una versión incompatible de la aplicación Interviewer. Por favor, desinstálela e instale de nuevo desde el webzine de Survey Solutions</value>
+      <value>Se detectó una versión incompatible. Por favor, póngase en contacto con su supervisor para la resolución</value>
   </data>
   <data name="Prefs_EventChunkSizeSummary" xml:space="preserve">
     <value>Cuántos eventos pueden ser leídos con una consulta</value>

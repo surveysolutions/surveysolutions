@@ -500,9 +500,9 @@ Staženo {3}%</value>
   <data name="Notifications_SyncTooLongAgoText" xml:space="preserve">
     <value>Již delší dobu nebyla provedena synchronizace. Prosím synchronizujte</value>
   </data>
-  <data name="NotSupportedServerSyncProtocolVersion" xml:space="preserve">
-    <value>Máte nainstalovanou nekompatibilní verzi aplikace Tazatel. Odinstalujte ji a znovu nainstalujte</value>
-  </data>
+    <data name="NotSupportedServerSyncProtocolVersion" xml:space="preserve">
+        <value>Byla zjištěna nekompatibilní verze. Obraťte se na svého supervizora pro řešení</value>
+    </data>
   <data name="Prefs_AboutApplication" xml:space="preserve">
     <value>O aplikaci</value>
   </data>

@@ -743,7 +743,7 @@ for further instructions</value>
     <value>Checking application updates</value>
   </data>
   <data name="NotSupportedServerSyncProtocolVersion" xml:space="preserve">
-    <value>You have an incompatible version of the Interviewer application. Please, uninstall and install it again from your Survey Solutions Headquarters website</value>
+      <value>Incompatible version detected. Please reach out your Supervisor for resolution</value>
   </data>
   <data name="Interview_Loading" xml:space="preserve">
     <value>Loading interview data</value>
