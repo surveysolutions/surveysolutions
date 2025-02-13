@@ -13,9 +13,10 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
             : base(responsibleId, questionnaireId, questionId, commonQuestionParameters)
         {
             this.ValidationConditions = validationConditions;
-            if (this.ValidationConditions != null)
-                this.ValidationConditions
-                    .ForEach(x => x.Message = CommandUtils.SanitizeHtml(x.Message, removeAllTags: true));
+            this.ValidationConditions.ForEach(x => 
+                x.Message = (string.IsNullOrEmpty(x.Message) 
+                    ? x.Message 
+                    : CommandUtils.SanitizeHtml(x.Message, removeAllTags: true)));
         }
 
         public List<ValidationCondition> ValidationConditions { get; set; }
