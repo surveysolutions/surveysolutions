@@ -68,7 +68,7 @@
                                                 @if (listViewModel.HasRevertTo)
                                                 {
                                                     <li>
-                                                        <a href='@($"/q/details/{Model.Id:N}${listViewModel.Sequence}")'>View</a>
+                                                        <a href='@($"/q/details/{Model.Id:N}${listViewModel.Sequence}")'>@QuestionnaireEditor.View</a>
                                                     </li>
                                                     <li class="divider"></li>
                                                     <li><a href="javascript:void(0);" onclick="confirmRevert('@listViewModel.Timestamp.ToString("s")', '@listViewModel.Id')">@QuestionnaireHistoryResources.RevertToThisVersion</a></li>
