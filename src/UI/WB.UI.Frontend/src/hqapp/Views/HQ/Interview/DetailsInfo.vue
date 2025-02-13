@@ -102,7 +102,7 @@
             </div>
             <div class="questionnaire-details-actions clearfix">
                 <div class="buttons-container">
-                    <SwitchLanguage v-if="canChangeLanguage" :disabled="changeLanguageDisabled" />
+                    <SwitchLanguage v-if="canChangeLanguage" :isDisabled="changeLanguageDisabled" />
                     <button id="btn_approve" type="button" class="btn btn-success marl" v-if="showApproveButton"
                         @click="approve" :disabled="changeStatusDisabled">
                         {{ $t('Pages.ApproveRejectPartialView_ApproveAction') }}
@@ -196,9 +196,9 @@
             " :disableOk="(interviewerShouldbeSelected || rejectToNewResponsible) &&
                 newResponsibleId == null
                 " :okTitle="showUnapproveButton
-                ? $t('Common.Unapprove')
-                : $t('Common.Reject')
-                " :okClass="btn - danger">
+                    ? $t('Common.Unapprove')
+                    : $t('Common.Reject')
+                    " :okClass="btn - danger">
             <form v-if="!showUnapproveButton" onsubmit="return false;">
                 <div class="form-group">
                     <Radio v-if="!interviewerShouldbeSelected" :label="$t('Interviews.RejectToOriginal')"

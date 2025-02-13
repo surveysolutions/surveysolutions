@@ -1,11 +1,16 @@
 <template>
-    <Select v-model="currentLanguage" :options="languages" />
+    <Select v-model="currentLanguage" :options="languages" :isDisabled="isDisabled" />
 </template>
 <script>
 
 import Select from '../../../components/Select.vue';
 
 export default {
+    props: {
+        isDisabled: {
+            type: Boolean, required: false, default: false,
+        },
+    },
     components: { Select },
     data: function () {
         return { currentLanguage: null }
