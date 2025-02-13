@@ -26,7 +26,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateStaticTextHandle
                 enablementCondition : enablementCondition,
                 responsibleId: responsibleId,
                 hideIfDisabled: true,
-                validationConditions: new List<ValidationCondition>() { new ValidationCondition(validationCondition, validationMessageWithTags) }
+                validationConditions: new List<ValidationCondition>() { new ValidationCondition(validationCondition, validationMessageWithValidTags), 
+                    new ValidationCondition(validationCondition, validationMessageWithInvalidTags) }
                 );
             BecauseOf();
         }
@@ -36,12 +37,15 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateStaticTextHandle
         [NUnit.Framework.Test] public void should_contains_statictext () =>
             questionnaire.QuestionnaireDocument.Find<IStaticText>(entityId).Should().NotBeNull();
 
-        [NUnit.Framework.Test] public void should_contains_statictext_with_validation_condition_count_equals_1 () =>
-            questionnaire.QuestionnaireDocument.Find<IStaticText>(entityId).ValidationConditions.Count.Should().Be(1);
+        [NUnit.Framework.Test] public void should_contains_statictext_with_validation_condition_count_equals_2 () =>
+            questionnaire.QuestionnaireDocument.Find<IStaticText>(entityId).ValidationConditions.Count.Should().Be(2);
 
-        [NUnit.Framework.Test] public void should_contains_statictext_with_validation_condition_message_specified () =>
-            questionnaire.QuestionnaireDocument.Find<IStaticText>(entityId).ValidationConditions.Single().Message.Should().Be(validationMessageSanitized);
+        [NUnit.Framework.Test] public void should_contains_statictext_with_validation_condition_message1_specified () =>
+            questionnaire.QuestionnaireDocument.Find<IStaticText>(entityId).ValidationConditions.First().Message.Should().Be(validationMessageWithValidTags);
 
+        [NUnit.Framework.Test] public void should_contains_statictext_with_validation_condition_message2_specified () =>
+            questionnaire.QuestionnaireDocument.Find<IStaticText>(entityId).ValidationConditions.Last().Message.Should().Be(validationMessageSanitized);
+        
         private static UpdateStaticText command;
         private static Questionnaire questionnaire;
         private static Guid entityId = Guid.Parse("11111111111111111111111111111112");
@@ -53,7 +57,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateStaticTextHandle
 
         private static string validationCondition = "some condition";
 
-        private static string validationMessageWithTags = "some message <b>test</b>";
-        private static string validationMessageSanitized = "some message test";
+        private static string validationMessageWithValidTags = "some message <b>test</b>";
+        
+        private static string validationMessageWithInvalidTags = "some message <a>test > 1</a>";
+        private static string validationMessageSanitized = "some message test > 1";
     }
 }
