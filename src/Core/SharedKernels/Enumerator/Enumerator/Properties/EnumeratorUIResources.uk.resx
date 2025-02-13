@@ -843,7 +843,7 @@
     <value>Синхронізація не виконувалася останнім часом. Будь ласка, виконайте синхронізацію</value>
   </data>
   <data name="NotSupportedServerSyncProtocolVersion" xml:space="preserve">
-    <value>У вас несумісна версія додатку Interviewer. Будь ласка, видаліть та інсталюйте її знову з веб-сайту Survey Solutions Headquarters</value>
+      <value>Виявлено несумісну версію. Будь ласка, зверніться до свого керівника для вирішення</value>
   </data>
   <data name="Prefs_AllowSyncWithHq" xml:space="preserve">
     <value>Дозволити синхронізацію зі штаб-квартирою</value>

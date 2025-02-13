@@ -468,7 +468,7 @@ pentru instrucțiuni suplimentare</value>
     <value>Fără rețea. Verificați setările de rețea</value>
   </data>
   <data name="NotSupportedServerSyncProtocolVersion" xml:space="preserve">
-    <value>Versiunea aplicației Interviewer este incompatibilă. Vă rugăm dezinstalați și reinstalați aplicația de pe site-ul Survey Solutions Headquarters</value>
+      <value>Versiune incompatibilă detectată. Vă rugăm să contactați supervizorul pentru rezolvare</value>
   </data>
   <data name="Prefs_AboutApplication" xml:space="preserve">
     <value>Despre aplicație</value>

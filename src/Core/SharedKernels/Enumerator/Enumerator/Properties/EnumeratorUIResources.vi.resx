@@ -742,8 +742,8 @@ hoặc liên hệ với giám sát viên của bạn
     <data name="Synchronization_CheckNewVersionOfApplication" xml:space="preserve">
     <value>Đang kiểm tra các bản cập nhật ứng dụng</value>
   </data>
-    <data name="NotSupportedServerSyncProtocolVersion" xml:space="preserve">
-    <value>Bạn có phiên bản không tương thích của ứng dụng Phỏng vấn viên. Vui lòng gỡ cài đặt và cài đặt lại từ trang web Trụ sở chính của bạn</value>
+  <data name="NotSupportedServerSyncProtocolVersion" xml:space="preserve">
+      <value>Phát hiện phiên bản không tương thích. Vui lòng liên hệ với giám sát viên của bạn để giải quyết&lt;</value>
   </data>
     <data name="Interview_Loading" xml:space="preserve">
     <value>Đang tải dữ liệu phỏng vấn</value>

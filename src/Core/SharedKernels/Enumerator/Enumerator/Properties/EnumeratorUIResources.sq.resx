@@ -538,7 +538,7 @@
     <value>Sinkronizimi nuk është kryer së fundmi. Ju lutemi, sinkronizoni</value>
   </data>
   <data name="NotSupportedServerSyncProtocolVersion" xml:space="preserve">
-    <value>Ju keni një version që nuk përputhet me aplikacionin e Intervistuesit. Ju lutemi, çinstalojeni dhe instalojeni prapë nga faqja e Zyrës Qendrore në Survey Solutions </value>
+      <value>U zbulua një version i papajtueshëm. Ju lutemi kontaktoni mbikëqyrësin tuaj për zgjidhje</value>
   </data>
   <data name="Prefs_AboutApplication" xml:space="preserve">
     <value>Rreth aplikacionit</value>
