@@ -44,9 +44,11 @@ namespace WB.UI.Headquarters.Controllers.Api
         private readonly IInterviewFactory interviewFactory;
         private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnairesAccessor;
         private readonly IPlainStorageAccessor<QuestionnaireCompositeItem> questionnaireItems;
+        private readonly IPlainStorageAccessor<InterviewSummary> interviewSummaryReader;
         private readonly IAssignmentsService assignmentsService;
         private readonly IMapStorageService mapStorageService;
         private readonly IPlainStorageAccessor<MapBrowseItem> mapPlainStorageAccessor;
+        private readonly IAuthorizedUser authorizedUser;
 
         public MapDashboardApiController(
             IInterviewFactory interviewFactory,
@@ -54,7 +56,9 @@ namespace WB.UI.Headquarters.Controllers.Api
             IPlainStorageAccessor<QuestionnaireCompositeItem> questionnaireItems,
             IAssignmentsService assignmentsService,
             IMapStorageService mapStorageService,
-            IPlainStorageAccessor<MapBrowseItem> mapPlainStorageAccessor)
+            IPlainStorageAccessor<MapBrowseItem> mapPlainStorageAccessor,
+            IPlainStorageAccessor<InterviewSummary> interviewSummaryReader,
+            IAuthorizedUser authorizedUser)
         {
             this.interviewFactory = interviewFactory;
             this.questionnairesAccessor = questionnairesAccessor;
@@ -62,6 +66,8 @@ namespace WB.UI.Headquarters.Controllers.Api
             this.assignmentsService = assignmentsService;
             this.mapStorageService = mapStorageService;
             this.mapPlainStorageAccessor = mapPlainStorageAccessor;
+            this.interviewSummaryReader = interviewSummaryReader;
+            this.authorizedUser = authorizedUser;
         }
         
         public enum MapMarkerType
@@ -342,6 +348,27 @@ namespace WB.UI.Headquarters.Controllers.Api
                     .Select(item => item.QuestionnaireIdentity)
                     .Distinct().ToList();
             });
+
+            if (authorizedUser.IsInterviewer)
+            {
+                //get all questionnaires available for interviewer over all interviews
+                var queryResult = this.interviewSummaryReader.Query(_ =>
+                {
+                    var filter = _.Where(summary => summary.ResponsibleId == this.authorizedUser.Id);
+
+                    return filter
+                        .OrderBy(s => s.QuestionnaireTitle).ThenBy(s => s.QuestionnaireVersion)
+                        .Select(s => new
+                        {
+                            s.QuestionnaireTitle,
+                            s.QuestionnaireId,
+                            s.QuestionnaireVersion
+                        })
+                        .Distinct().ToList();
+                }).Select(q => new QuestionnaireIdentity(q.QuestionnaireId, q.QuestionnaireVersion).Id).ToArray();
+
+                questionnaireIds = questionnaireIds.Select(x=> x).Where(x => queryResult.Contains(x)).ToList();
+            }
 
             return this.questionnairesAccessor.Query(_ => _
                 .Where(x => !x.IsDeleted 
