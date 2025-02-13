@@ -152,7 +152,10 @@
         window.confirmRevert = function(date, revertId) {
             $('#version').text(date);
             $('#commandId').val(revertId);
-            $('#revertModal').modal('show');
+
+            var revertModal = document.getElementById('revertModal');
+            const modal = new window.Modal(revertModal);
+            modal.show();
         };
 
         var comments = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model?.ChangeHistory.ToDictionary(c=> c.Id, c=> c.Comment)));
