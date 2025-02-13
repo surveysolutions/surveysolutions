@@ -357,10 +357,8 @@ namespace WB.UI.Headquarters.Controllers.Api
                     var filter = _.Where(summary => summary.ResponsibleId == this.authorizedUser.Id);
 
                     return filter
-                        .OrderBy(s => s.QuestionnaireTitle).ThenBy(s => s.QuestionnaireVersion)
                         .Select(s => new
                         {
-                            s.QuestionnaireTitle,
                             s.QuestionnaireId,
                             s.QuestionnaireVersion
                         })
