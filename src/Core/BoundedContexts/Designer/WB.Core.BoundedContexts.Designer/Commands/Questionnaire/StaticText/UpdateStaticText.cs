@@ -18,8 +18,9 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText
             this.HideIfDisabled = hideIfDisabled;
             
             this.ValidationConditions = validationConditions;
-            this.ValidationConditions
-                .ForEach(x => x.Message = CommandUtils.SanitizeHtml(x.Message, removeAllTags: true));
+            if(this.ValidationConditions != null)
+                this.ValidationConditions
+                    .ForEach(x => x.Message = CommandUtils.SanitizeHtml(x.Message, removeAllTags: true));
         }
 
         public string Text { get; set; }
