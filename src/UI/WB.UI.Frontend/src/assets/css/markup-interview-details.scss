@@ -1,4 +1,4 @@
-@use "variables";
-@use "mixins";
+@import "variables";
+@import "mixins";
 
-@use "interview-details";
+@import "interview-details";

@@ -1,16 +1,16 @@
-@use "variables";
-@use "mixins";
+@import "variables";
+@import "mixins";
 
-@use "panels";
+@import "panels";
 
-@use "import-questionnaires";
-@use "add-interviews"; 
-@use "batch-upload";
-@use "export";
-@use "survey-setup";
-@use "main-information";
-@use "interviews";
-@use "enumerator";
-@use "error-page";
-@use "maps";
-@use "../../../node_modules/bootstrap-select/sass/bootstrap-select.scss";
+@import "import-questionnaires";
+@import "add-interviews"; 
+@import "batch-upload";
+@import "export";
+@import "survey-setup";
+@import "main-information";
+@import "interviews";
+@import "enumerator";
+@import "error-page";
+@import "maps";
+@import "../../../node_modules/bootstrap-select/sass/bootstrap-select.scss";

@@ -1,4 +1,4 @@
-@use "variables";
+@import "variables";
 $icon-font-path: '../fonts/';
-@use "../bootstrap/stylesheets/_bootstrap.scss";
-@use "bootstrap-mvc-validation";
+@import "../bootstrap/stylesheets/_bootstrap.scss";
+@import "bootstrap-mvc-validation";
