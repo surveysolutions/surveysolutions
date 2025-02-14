@@ -9,14 +9,16 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText
     public class UpdateStaticText : QuestionnaireEntityCommand
     {
         public UpdateStaticText(Guid questionnaireId, Guid entityId, string text, string attachmentName, Guid responsibleId, 
-            string enablementCondition, bool hideIfDisabled,  IList<ValidationCondition> validationConditions)
+            string enablementCondition, bool hideIfDisabled, List<ValidationCondition>? validationConditions)
             : base(responsibleId: responsibleId, questionnaireId: questionnaireId, entityId: entityId)
         {
             this.Text = CommandUtils.SanitizeHtml(text);
             this.AttachmentName = attachmentName;
             this.EnablementCondition = enablementCondition;
-            this.ValidationConditions = validationConditions;
             this.HideIfDisabled = hideIfDisabled;
+            
+            this.ValidationConditions = validationConditions ?? new (); 
+            this.ValidationConditions.ForEach(x => x.Message = CommandUtils.SanitizeHtml(x.Message, removeAllTags: false));
         }
 
         public string Text { get; set; }
@@ -24,6 +26,6 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText
 
         public bool HideIfDisabled { get; set; }
         public string EnablementCondition { get; set; }
-        public IList<ValidationCondition> ValidationConditions { get; set; }
+        public List<ValidationCondition> ValidationConditions { get; set; }
     }
 }
