@@ -1,11 +1,11 @@
-@import "variables";
-@import "mixins";
+@use "variables";
+@use "mixins";
 
-@import "accordion";
-@import "zoomimg";
+@use "accordion";
+@use "zoomimg";
 
 
-@import "web-interview";
-@import "web-interview-start";
-@import "web-interview-first-last-chapter";
-@import "table-roster";
+@use "web-interview";
+@use "web-interview-start";
+@use "web-interview-first-last-chapter";
+@use "table-roster";

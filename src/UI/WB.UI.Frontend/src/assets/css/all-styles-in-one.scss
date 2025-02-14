@@ -1,42 +1,42 @@
-@import "variables";
+@use "variables";
 $icon-font-path: '../bootstrap/fonts/bootstrap/';
-@import "../bootstrap/stylesheets/_bootstrap.scss";
+@use "../bootstrap/stylesheets/_bootstrap.scss";
 
-@import "mixins";
-@import "buttons";
-@import "navbar";
-@import "progress-bars";
-@import "forms";
-@import "dropdown";
-@import "filters";
-@import "modal";
-@import "tables";
-@import "table-roster";
+@use "mixins";
+@use "buttons";
+@use "navbar";
+@use "progress-bars";
+@use "forms";
+@use "dropdown";
+@use "filters";
+@use "modal";
+@use "tables";
+@use "table-roster";
 
-@import "common";
-@import "login";
-@import "two-column-form";
-@import "bootstrap-mvc-validation";
+@use "common";
+@use "login";
+@use "two-column-form";
+@use "bootstrap-mvc-validation";
 
-@import "panels";
+@use "panels";
 
-@import "import-questionnaires";
-@import "add-interviews";
-@import "batch-upload";
-@import "export";
-@import "survey-setup";
-@import "main-information";
-@import "interviews";
-@import "enumerator";
-@import "error-page";
-@import "variables";
+@use "import-questionnaires";
+@use "add-interviews";
+@use "batch-upload";
+@use "export";
+@use "survey-setup";
+@use "main-information";
+@use "interviews";
+@use "enumerator";
+@use "error-page";
+@use "variables";
 
 
-@import "accordion";
-@import "zoomimg";
+@use "accordion";
+@use "zoomimg";
 
-@import "web-interview";
-@import "web-interview-start";
-@import "web-interview-first-last-chapter";
+@use "web-interview";
+@use "web-interview-start";
+@use "web-interview-first-last-chapter";
 
-@import "interview-details";
+@use "interview-details";

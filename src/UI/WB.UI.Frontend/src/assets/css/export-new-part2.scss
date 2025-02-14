@@ -1,5 +1,5 @@
-@import "variables";
-@import "mixins";
+@use "variables";
+@use "mixins";
 .button-wrapper{
 	margin-top: 15px;
 }
