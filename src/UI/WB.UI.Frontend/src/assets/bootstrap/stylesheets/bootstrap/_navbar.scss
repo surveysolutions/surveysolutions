@@ -92,24 +92,25 @@
 
 .navbar-fixed-top,
 .navbar-fixed-bottom {
-  .navbar-collapse {
-    max-height: $navbar-collapse-max-height;
 
-    @media (max-device-width: $screen-xs-min) and (orientation: landscape) {
-      max-height: 200px;
+    // Fix the top/bottom navbars when screen real estate supports it
+    position: fixed;
+    right: 0;
+    left: 0;
+    z-index: $zindex-navbar-fixed;
+  
+    // Undo the rounded corners
+    @media (min-width: $grid-float-breakpoint) {
+      border-radius: 0;
     }
-  }
+  
+    .navbar-collapse {
+        max-height: $navbar-collapse-max-height;
 
-  // Fix the top/bottom navbars when screen real estate supports it
-  position: fixed;
-  right: 0;
-  left: 0;
-  z-index: $zindex-navbar-fixed;
-
-  // Undo the rounded corners
-  @media (min-width: $grid-float-breakpoint) {
-    border-radius: 0;
-  }
+        @media (max-device-width: $screen-xs-min) and (orientation: landscape) {
+        max-height: 200px;
+        }
+    }
 }
 
 .navbar-fixed-top {
