@@ -1,3 +1,5 @@
+@use "sass:color";
+
 @mixin fontface($family) {
     @font-face {
         font-family: '#{$family}';
@@ -279,7 +281,7 @@ filter: alpha(opacity=$opacity-ie);
 
         &:before,
         &:after {
-            background-color: darken($gray_light, 30%);
+            background-color: color.adjust($gray_light, $lightness: -30%);
         }
     }
 }
@@ -317,7 +319,7 @@ filter: alpha(opacity=$opacity-ie);
 
         &:before,
         &:after {
-            background-color: darken($white, 30%);
+            background-color: color.adjust($white, $lightness: -30%);
         }
     }
 }
@@ -345,17 +347,17 @@ filter: alpha(opacity=$opacity-ie);
 
 @mixin question_title_colors($default, $with_error, $filled) {
     .unit-title {
-        background-color: lighten($blue, $default);
+        background-color: color.adjust($blue, $lightness: $default);
     }
 
     &.section-with-error>.unit-title,
     .has-error>.unit-title {
-        background-color: lighten($red_error, $with_error);
+        background-color: color.adjust($red_error, $lightness: $with_error);
     }
 
     &.complete-section>.unit-title,
     .complete-section>.unit-title {
-        background-color: lighten($green, $filled);
+        background-color: color.adjust($green, $lightness: $filled);
     }
 }
 
@@ -388,17 +390,17 @@ filter: alpha(opacity=$opacity-ie);
 
     &:active {
         &:focus {
-            background-color: lighten($base-color, 40%);
+            background-color: color.adjust($base-color, $lightness: 40%);
             color: $base-color;
-            border-color: darken($base-color, 10%);
+            border-color: color.adjust($base-color, $lightness: -10%);
         }
     }
 
     &:hover,
     &:focus {
-        background-color: lighten($base-color, 40%);
+        background-color: color.adjust($base-color, $lightness: 40%);
         color: $base-color;
-        border-color: darken($base-color, 10%);
+        border-color: color.adjust($base-color, $lightness: -10%);
     }
 }
 
@@ -497,7 +499,7 @@ filter: alpha(opacity=$opacity-ie);
         &:hover,
         &:focus,
         &:active {
-            border-color: darken($gray_light, 10%);
+            border-color: color.adjust($gray_light, $lightness: -10%);
         }
     }
 

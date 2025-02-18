@@ -1,4 +1,5 @@
 @use "sass:math";
+@use "sass:color";
 
 .btn {
     font: 12px/14px $trebuchet_bold;
@@ -55,7 +56,7 @@ a.disabled {
     &:hover,
     &:focus {
         text-decoration: none;
-        color: darken($blue, 15%);
+        color: color.adjust($blue, $lightness: -15%);
     }
 
     &:disabled,
@@ -180,7 +181,7 @@ a.disabled {
         &:hover,
         &:focus {
             border: none;
-            background-color: darken($gray_light, 10%);
+            background-color: color.adjust($gray_light, $lightness: -10%);
         }
     }
 
@@ -286,8 +287,8 @@ a.disabled {
     &:focus,
     &.focus,
     &:hover {
-        color: darken($red_error, 10%);
-        border-color: darken($red_error, 10%);
+        color: color.adjust($red_error, $lightness: -10%);
+        border-color: color.adjust($red_error, $lightness: -10%);
     }
 }
 
@@ -325,8 +326,8 @@ a.disabled {
     &:focus,
     &:active {
         background-color: $gray-super-light;
-        border-color: darken($gray_light, 10%);
-        color: darken($gray_light, 20%);
+        border-color: color.adjust($gray_light, $lightness: -10%);
+        color: color.adjust($gray_light, $lightness: -20%);
     }
 }
 
@@ -513,8 +514,8 @@ a.disabled {
     &:hover,
     &:focus,
     &:active {
-        background-color: darken(#fff, 10%);
-        border-color: darken($gray_light, 10%);
+        background-color: color.adjust(#fff, $lightness: -10%);
+        border-color: color.adjust($gray_light, $lightness: -10%);
     }
 }
 

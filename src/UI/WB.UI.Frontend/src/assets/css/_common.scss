@@ -1,3 +1,5 @@
+@use "sass:color";
+
 @include fontface(RobotoRegular);
 @include fontface(RobotoLight);
 @include fontface(RobotoBold);
@@ -753,7 +755,7 @@ main.hidden.display-block {
             border-bottom: 2px solid $gray_form;
 
             &.selected {
-                background-color: darken(#f8f9f9, 7%);
+                background-color: color.adjust(#f8f9f9, $lightness: -7%);
             }
 
             &:last-of-type {
@@ -953,7 +955,7 @@ dl {
     &:hover,
     &:focus,
     &:active {
-        color: darken($green, 10%);
+        color: color.adjust($green, $lightness: -10%);
     }
 }
 
