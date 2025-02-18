@@ -10,7 +10,7 @@
 
 @import "variables";
 @import "mixins";
-
+@use "sass:color";
 
 //
 // Buttons
@@ -133,7 +133,7 @@
 
 // Default navbar
 .navbar-default {
-  @include gradient-vertical($start-color: lighten($navbar-default-bg, 10%), $end-color: $navbar-default-bg);
+  @include gradient-vertical($start-color: color.adjust($navbar-default-bg, $lightness: 10%), $end-color: $navbar-default-bg);
   @include reset-filter; // Remove gradient in IE<10 to fix bug where dropdowns don't get triggered
   border-radius: $navbar-border-radius;
   $shadow: inset 0 1px 0 rgba(255, 255, 255, .15), 0 1px 5px rgba(0, 0, 0, .075);
@@ -152,12 +152,12 @@
 
 // Inverted navbar
 .navbar-inverse {
-  @include gradient-vertical($start-color: lighten($navbar-inverse-bg, 10%), $end-color: $navbar-inverse-bg);
+  @include gradient-vertical($start-color: color.adjust($navbar-inverse-bg, $lightness: 10%), $end-color: $navbar-inverse-bg);
   @include reset-filter; // Remove gradient in IE<10 to fix bug where dropdowns don't get triggered; see https://github.com/twbs/bootstrap/issues/10257
   border-radius: $navbar-border-radius;
   .navbar-nav > .open > a,
   .navbar-nav > .active > a {
-    @include gradient-vertical($start-color: $navbar-inverse-link-active-bg, $end-color: lighten($navbar-inverse-link-active-bg, 2.5%));
+    @include gradient-vertical($start-color: $navbar-inverse-link-active-bg, $end-color: color.adjust($navbar-inverse-link-active-bg, $lightness: 2.5%));
     @include box-shadow(inset 0 3px 9px rgba(0, 0, 0, .25));
   }
 
