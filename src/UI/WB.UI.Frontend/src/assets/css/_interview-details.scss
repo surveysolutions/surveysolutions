@@ -206,7 +206,7 @@
 	}
 	left: -$content-width;
 	background-color: $gray-super-light;
-	border-right-color: darken($gray-super-light, 5%);
+	border-right-color: color.adjust($gray-super-light, $lightness: -5%);
 	h2{
 		margin: 0;
 		padding: 30px 40px 25px 30px;

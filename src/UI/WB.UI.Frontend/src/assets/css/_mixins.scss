@@ -281,7 +281,7 @@ filter: alpha(opacity=$opacity-ie);
 
         &:before,
         &:after {
-            background-color: darken($gray_light, 30%);
+            background-color: color.adjust($gray_light, $lightness: -30%);
         }
     }
 }
@@ -319,7 +319,7 @@ filter: alpha(opacity=$opacity-ie);
 
         &:before,
         &:after {
-            background-color: darken($white, 30%);
+            background-color: color.adjust($white, $lightness: -30%);
         }
     }
 }
@@ -392,7 +392,7 @@ filter: alpha(opacity=$opacity-ie);
         &:focus {
             background-color: color.adjust($base-color, $lightness: 40%);
             color: $base-color;
-            border-color: darken($base-color, 10%);
+            border-color: color.adjust($base-color, $lightness: -10%);
         }
     }
 
@@ -400,7 +400,7 @@ filter: alpha(opacity=$opacity-ie);
     &:focus {
         background-color: color.adjust($base-color, $lightness: 40%);
         color: $base-color;
-        border-color: darken($base-color, 10%);
+        border-color: color.adjust($base-color, $lightness: -10%);
     }
 }
 
@@ -499,7 +499,7 @@ filter: alpha(opacity=$opacity-ie);
         &:hover,
         &:focus,
         &:active {
-            border-color: darken($gray_light, 10%);
+            border-color: color.adjust($gray_light, $lightness: -10%);
         }
     }
 

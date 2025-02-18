@@ -1,4 +1,5 @@
 // List Groups
+@use "sass:color";
 
 @mixin list-group-item-variant($state, $background, $color) {
   .list-group-item-#{$state} {
@@ -19,7 +20,7 @@
     &:hover,
     &:focus {
       color: $color;
-      background-color: darken($background, 5%);
+      background-color: color.adjust($background, $lightness: -5%);
     }
     &.active,
     &.active:hover,

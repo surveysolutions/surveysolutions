@@ -1,4 +1,5 @@
 // Typography
+@use "sass:color";
 
 // [converter] $parent hack
 @mixin text-emphasis-variant($parent, $color) {
@@ -7,6 +8,6 @@
   }
   a#{$parent}:hover,
   a#{$parent}:focus {
-    color: darken($color, 10%);
+    color: color.adjust($color, $lightness: -10%);
   }
 }

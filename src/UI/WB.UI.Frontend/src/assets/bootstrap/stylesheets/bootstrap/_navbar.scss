@@ -1,4 +1,6 @@
 @use "sass:math";
+@use "sass:color";
+
 //
 // Navbars
 // --------------------------------------------------
@@ -630,7 +632,7 @@
 
   .navbar-collapse,
   .navbar-form {
-    border-color: darken($navbar-inverse-bg, 7%);
+    border-color: color.adjust($navbar-inverse-bg, $lightness: -7%);
   }
 
   .navbar-link {

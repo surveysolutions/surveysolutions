@@ -1,4 +1,5 @@
 // Tables
+@use "sass:color";
 
 @mixin table-row-variant($state, $background) {
   // Exact selectors below required to override `.table-striped` and prevent
@@ -22,7 +23,7 @@
     &.#{$state}:hover > td,
     &:hover > .#{$state},
     &.#{$state}:hover > th {
-      background-color: darken($background, 5%);
+      background-color: color.adjust($background, $lightness: -5%);
     }
   }
 }
