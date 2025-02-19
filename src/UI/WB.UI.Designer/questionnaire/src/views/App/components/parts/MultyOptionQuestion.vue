@@ -1,7 +1,8 @@
 <template>
     <div class="row">
         <div class="col-xs-12">
-            <label class="wb-label" for="cb-categorical-kind">{{ $t('QuestionnaireEditor.QuestionDisplayMode') }}</label>
+            <label class="wb-label" for="cb-categorical-kind">{{ $t('QuestionnaireEditor.QuestionDisplayMode')
+                }}</label>
         </div>
     </div>
     <div class="row">
@@ -112,7 +113,8 @@
                 $t('QuestionnaireEditor.QuestionAddClassification') }}
             </a>
             <p></p>
-            <add-classification ref="classification" :activeQuestion='activeQuestion' :questionnaireId="questionnaireId">
+            <add-classification ref="classification" :activeQuestion='activeQuestion'
+                :questionnaireId="questionnaireId">
             </add-classification>
         </div>
     </div>
@@ -134,16 +136,18 @@
     <div class="row">
         <div class="col-md-5">
             <div class="checkbox checkbox-in-column">
-                <input id="cb-is-ordered" type="checkbox" class="wb-checkbox" v-model="activeQuestion.areAnswersOrdered" />
+                <input id="cb-is-ordered" type="checkbox" class="wb-checkbox"
+                    v-model="activeQuestion.areAnswersOrdered" />
                 <label for="cb-is-ordered"><span></span>{{ $t('QuestionnaireEditor.QuestionOrdered') }}</label>
             </div>
         </div>
         <div class="col-md-5 inline-inputs">
-            <div class="form-group singleline-group checkbox-in-column" :class="{ 'has-error': !validMaxAllowedAnswers }">
+            <div class="form-group singleline-group checkbox-in-column"
+                :class="{ 'has-error': !validMaxAllowedAnswers }">
                 <label for="edit-question-max-answers-number">
                     {{ $t('QuestionnaireEditor.QuestionMaxNumberOfAnswers') }}
                 </label>
-                <input maxlength="9" name="editQuestionMaxAnswersNumber" v-number="/^\d+$/"
+                <input maxlength="9" name="editQuestionMaxAnswersNumber" v-number="/^(\d*)$/"
                     id="edit-question-max-answers-number" type="text" inputmode="numeric"
                     class="form-control small-numeric-input" v-model.number="activeQuestion.maxAllowedAnswers" />
                 <p class="help-block ng-cloak" v-show="!validMaxAllowedAnswers">
