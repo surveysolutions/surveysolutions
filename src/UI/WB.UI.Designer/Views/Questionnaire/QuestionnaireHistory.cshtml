@@ -169,7 +169,10 @@
                         headers: {'X-CSRF-TOKEN': getCsrfCookie()} })
                 .done(function (data) { if(data) location.reload();});
             });
-            $('#commentModal').modal('show');
+            
+            var commentModal = document.getElementById('commentModal');
+            const modal = new window.Modal(commentModal);
+            modal.show();
         };
     });
 </script>
