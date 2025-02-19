@@ -1342,21 +1342,25 @@ namespace WB.Tests.Unit.Designer
                 return new UpdateLookupTable(questionnaireId, lookupTableId, responsibleId, lookupTableName, "file", oldLookupTableId);
             }
 
-            internal static UpdateMacro UpdateMacro(Guid questionnaireId, Guid macroId, string name, string content, string description, Guid? userId)
+            internal static UpdateMacro UpdateMacro(Guid questionnaireId, Guid macroId, string name, string content, 
+                string description, Guid? userId)
             {
                 return new UpdateMacro(questionnaireId, macroId, name, content, description, userId ?? Guid.NewGuid());
             }
 
-            public static UpdateStaticText UpdateStaticText(Guid questionnaireId, Guid entityId, string text, string attachmentName, Guid responsibleId,
-                string enablementCondition, bool hideIfDisabled = false, IList<ValidationCondition> validationConditions = null)
+            public static UpdateStaticText UpdateStaticText(Guid questionnaireId, Guid entityId, string text, 
+                string attachmentName, Guid responsibleId, string enablementCondition, bool hideIfDisabled = false, 
+                List<ValidationCondition> validationConditions = null)
             {
-                return new UpdateStaticText(questionnaireId, entityId, text, attachmentName, responsibleId, enablementCondition, hideIfDisabled, validationConditions);
+                return new UpdateStaticText(questionnaireId, entityId, text, attachmentName, responsibleId, 
+                    enablementCondition, hideIfDisabled, validationConditions);
             }
 
-            public static AddOrUpdateAttachment AddOrUpdateAttachment(Guid questionnaireId, Guid attachmentId, string attachmentContentId, 
-                Guid responsibleId, string attachmentName, Guid? oldAttachmentId = null)
+            public static AddOrUpdateAttachment AddOrUpdateAttachment(Guid questionnaireId, Guid attachmentId, 
+                string attachmentContentId, Guid responsibleId, string attachmentName, Guid? oldAttachmentId = null)
             {
-                return new AddOrUpdateAttachment(questionnaireId, attachmentId, responsibleId, attachmentName, attachmentContentId, oldAttachmentId);
+                return new AddOrUpdateAttachment(questionnaireId, attachmentId, responsibleId, attachmentName, 
+                    attachmentContentId, oldAttachmentId);
             }
 
             public static DeleteAttachment DeleteAttachment(Guid questionnaireId, Guid attachmentId, Guid responsibleId)
