@@ -73,7 +73,7 @@ export default {
         else if (size === 'extra-large') sizeClass = 'modal-xl';
 
         let buttonsHTML = Object.entries(buttons).map(([key, btn]) =>
-            `<button type="button" class="btn ${btn.className ?? 'btn-secondary'}" id="modal-btn-${key}">${btn.label}</button>`
+            `<button type="button" class="btn btn-default ${btn.className ?? (key == 'ok' || key == 'success' ? 'btn-primary' : 'btn-secondary')}" id="modal-btn-${key}">${btn.label}</button>`
         ).join('');
 
         let modalHTML = `
