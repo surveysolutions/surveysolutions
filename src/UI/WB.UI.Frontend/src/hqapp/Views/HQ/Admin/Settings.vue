@@ -86,7 +86,7 @@
                     </button>
                     <span class="text-success" v-if="globalNoticeUpdated">{{
                         $t('Settings.GlobalNoteSaved')
-                        }}</span>
+                    }}</span>
                 </div>
             </form>
         </div>
@@ -611,7 +611,7 @@ export default {
                 closeButton: true,
                 onEscape: true,
                 title:
-                    '<h2>' + self.$t('Pages.ConfirmationNeededTitle') + '</h2>',
+                    '<h2 style="display:inline">' + self.$t('Pages.ConfirmationNeededTitle') + '</h2>',
                 message:
                     `<p style="color: red;"> ${self.$t(
                         'Settings.RemoveExportCache_Warning',
