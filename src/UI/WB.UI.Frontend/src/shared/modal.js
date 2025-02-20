@@ -16,7 +16,7 @@ export default {
                 title: '',
                 message,
                 buttons: {
-                    success: { label: this.translations.OK, class: 'btn-primary', callback: resolve }
+                    success: { label: this.translations.OK, className: 'btn-primary', callback: resolve }
                 }
             });
         });
@@ -28,8 +28,8 @@ export default {
                 title: '',
                 message,
                 buttons: {
-                    success: { label: this.translations.CONFIRM, class: 'btn-primary', callback: () => resolve(true) },
-                    cancel: { label: this.translations.CANCEL, class: 'btn-secondary', callback: () => resolve(false) }
+                    success: { label: this.translations.CONFIRM, className: 'btn-primary', callback: () => resolve(true) },
+                    cancel: { label: this.translations.CANCEL, className: 'btn-secondary', callback: () => resolve(false) }
                 }
             });
         });
@@ -43,13 +43,13 @@ export default {
                 buttons: {
                     success: {
                         label: this.translations.OK,
-                        class: 'btn-primary',
+                        className: 'btn-primary',
                         callback: () => {
                             const inputValue = document.getElementById('promptInput').value;
                             resolve(inputValue);
                         }
                     },
-                    cancel: { label: this.translations.CANCEL, class: 'btn-secondary', callback: () => resolve(null) }
+                    cancel: { label: this.translations.CANCEL, className: 'btn-secondary', callback: () => resolve(null) }
                 }
             });
         });
@@ -61,16 +61,20 @@ export default {
         });
     },
 
-    showModal({ title = '', message = '', buttons = {}, closeButton = true }) {
-
+    showModal({ title = '', message = '', buttons = {}, closeButton = true, size = 'default', onShow = null }) {
         if (typeof buttons !== 'object' || buttons === null) {
             console.error('Error: buttons must be an object with success and/or cancel properties');
             buttons = {};
         }
 
+        let sizeClass = '';
+        if (size === 'small') sizeClass = 'modal-sm';
+        else if (size === 'large') sizeClass = 'modal-lg';
+        else if (size === 'extra-large') sizeClass = 'modal-xl';
+
         let modalHTML = `
       <div class="modal fade" id="customModal" tabindex="-1">
-        <div class="modal-dialog">
+        <div class="modal-dialog ${sizeClass}">
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title">${title}</h5>
@@ -78,8 +82,8 @@ export default {
             </div>
             <div class="modal-body">${message}</div>
             <div class="modal-footer">
-              ${buttons.cancel ? `<button type="button" class="btn btn-default ${buttons.cancel.class ?? 'btn-secondary'}" id="modal-btn-cancel">${buttons.cancel.label}</button>` : ''}
-              ${buttons.success ? `<button type="button" class="btn btn-default ${buttons.success.class ?? 'btn-primary'}" id="modal-btn-success">${buttons.success.label}</button>` : ''}
+              ${buttons.cancel ? `<button type="button" class="btn ${buttons.cancel.className ?? 'btn-secondary'}" id="modal-btn-cancel">${buttons.cancel.label}</button>` : ''}
+              ${buttons.success ? `<button type="button" class="btn ${buttons.success.className ?? 'btn-primary'}" id="modal-btn-success">${buttons.success.label}</button>` : ''}
             </div>
           </div>
         </div>
@@ -111,6 +115,12 @@ export default {
                 modalInstance.hide();
             });
         }
+
+        modalElement.addEventListener('shown.bs.modal', () => {
+            if (typeof onShow === 'function') {
+                onShow();
+            }
+        });
 
         modalInstance.show();
     }
