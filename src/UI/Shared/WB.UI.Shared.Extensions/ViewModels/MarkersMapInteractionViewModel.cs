@@ -78,7 +78,7 @@ public abstract class MarkersMapInteractionViewModel<TParam> : BaseMapInteractio
         }
     }
     
-    protected void NavigateToMarkerByCard(int? newPosition, int? oldPosition)
+    protected async void NavigateToMarkerByCard(int? newPosition, int? oldPosition)
     {
         if (newPosition == oldPosition)
             return;
@@ -97,7 +97,7 @@ public abstract class MarkersMapInteractionViewModel<TParam> : BaseMapInteractio
             var projectedArea = GeometryEngine.Project(this.MapView.VisibleArea, SpatialReferences.Wgs84);
             var mapPoint = new MapPoint(marker.Longitude, marker.Latitude, SpatialReferences.Wgs84);
             if (projectedArea != null && !GeometryEngine.Contains(projectedArea, mapPoint))
-                this.MapView.SetViewpointCenterAsync(marker.Latitude, marker.Longitude);
+                await this.SetViewpointAsync(mapPoint);
         }
     }
     

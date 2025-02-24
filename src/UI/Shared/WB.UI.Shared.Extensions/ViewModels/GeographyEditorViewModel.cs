@@ -956,7 +956,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             if (geometry != null)
             {
                 if (geometry is MapPoint point && !point.IsEmpty)
-                    await this.MapView.SetViewpointCenterAsync(point).ConfigureAwait(false);
+                    await this.SetViewpointAsync(point).ConfigureAwait(false);
                 else
                 {
                     if (geometry.Extent != null
@@ -973,17 +973,17 @@ namespace WB.UI.Shared.Extensions.ViewModels
                             case Polygon polygon:
                                 var polygonStart = polygon?.Parts is { Count: > 0 }? polygon?.Parts.First()?.StartPoint : null;
                                 if(polygonStart != null)
-                                    await this.MapView.SetViewpointCenterAsync(polygonStart).ConfigureAwait(false);
+                                    await this.SetViewpointAsync(polygonStart).ConfigureAwait(false);
                                 break;
                             case Polyline polyline:
                                 var polylineStart = polyline?.Parts is { Count: > 0 }? polyline?.Parts.First()?.StartPoint : null;
                                 if(polylineStart != null)
-                                    await this.MapView.SetViewpointCenterAsync(polylineStart).ConfigureAwait(false);
+                                    await this.SetViewpointAsync(polylineStart).ConfigureAwait(false);
                                 break;
                             case Multipoint multipoint:
                                 var multipointStart = multipoint?.Points is { Count: > 0 }? multipoint?.Points.First() : null ;
                                 if(multipointStart != null)
-                                    await this.MapView.SetViewpointCenterAsync(multipointStart).ConfigureAwait(false);
+                                    await this.SetViewpointAsync(multipointStart).ConfigureAwait(false);
                                 break;
                         }
                     }

@@ -137,7 +137,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
         {
             if (this.Map?.Basemap?.BaseLayers.Count > 0 && this.Map?.Basemap?.BaseLayers[0]?.FullExtent != null)
             {
-                await MapView.SetViewpointGeometryAsync(this.Map.Basemap.BaseLayers[0].FullExtent);
+                await SetViewpointAsync(this.Map.Basemap.BaseLayers[0].FullExtent);
 
                 ShowedFullMap();
             }
@@ -148,7 +148,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             var existedLayer = this.MapView.Map?.OperationalLayers.FirstOrDefault(l => l.Name == ShapefileLayerName);
             if (existedLayer?.FullExtent != null)
             {
-                await MapView.SetViewpointGeometryAsync(existedLayer.FullExtent);
+                await SetViewpointAsync(existedLayer.FullExtent);
             }
         });
 
@@ -211,7 +211,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             var location = this.MapView?.LocationDisplay.Location;
             if (location != null)
             {
-                await MapView.SetViewpointCenterAsync(location.Position);
+                await SetViewpointAsync(location.Position);
             }
             
             return true;
@@ -350,7 +350,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 if (FirstLoad)
                 {
                     FirstLoad = false;
-                    await MapView.SetViewpointGeometryAsync(this.Map.Basemap.BaseLayers[0].FullExtent);
+                    await SetViewpointAsync(this.Map.Basemap.BaseLayers[0].FullExtent);
                     
                     MapView.ViewpointChanged += MapViewPointChanged;
                 }
@@ -442,7 +442,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
                 // Zoom the map to the extent of the shapefile
                 if(newFeatureLayer.FullExtent != null)
-                    await this.MapView.SetViewpointGeometryAsync(newFeatureLayer.FullExtent);
+                    await this.SetViewpointAsync(newFeatureLayer.FullExtent);
 
                 ShapeFileLoaded = true;
                 await AfterShapefileLoadedHandler();
@@ -583,5 +583,12 @@ namespace WB.UI.Shared.Extensions.ViewModels
             };
             await NavigationService.Navigate<BottomSheetOptionsSelectorViewModel, BottomSheetOptionsSelectorViewModelArgs>(args);
         });
+
+        protected async Task SetViewpointAsync(Geometry geometry)
+        {
+            if (geometry == null || geometry.IsEmpty || MapView == null)
+                return;
+            await MapView.SetViewpointAsync(new Viewpoint(geometry), TimeSpan.FromSeconds(1)).ConfigureAwait(false);
+        }
     }
 }
