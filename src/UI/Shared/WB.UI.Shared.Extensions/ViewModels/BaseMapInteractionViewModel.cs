@@ -588,7 +588,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
         {
             if (geometry == null || geometry.IsEmpty || MapView == null)
                 return;
-            await MapView.SetViewpointAsync(new Viewpoint(geometry), TimeSpan.FromSeconds(1)).ConfigureAwait(false);
+            await MapView.SetViewpointAsync(new Viewpoint(geometry), TimeSpan.FromMilliseconds(200)).ConfigureAwait(false);
         }
     }
 }
