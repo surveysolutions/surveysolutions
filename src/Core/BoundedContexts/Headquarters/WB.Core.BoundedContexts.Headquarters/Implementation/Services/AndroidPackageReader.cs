@@ -26,7 +26,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                         manifestData = new byte[50 * 1024];
                         using (Stream strm = zipArchiveEntry.Open())
                         {
-                            strm.Read(manifestData, 0, manifestData.Length);
+                            strm.ReadExactly(manifestData);
                         }
                         allFound++;
                     }
