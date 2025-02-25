@@ -35,7 +35,6 @@
     <MandroidI18n>CJK,Mideast,Rare,West,Other</MandroidI18n>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\</SolutionDir>
     <DevInstrumentationEnabled>False</DevInstrumentationEnabled>
-    <AndroidHttpClientHandlerType>System.Net.Http.HttpClientHandler, System.Net.Http</AndroidHttpClientHandlerType>
     <DefineConstants Condition="'$(Configuration)' == 'Debug'">$(DefineConstants);TRACE;DEBUG</DefineConstants>
     <DefineConstants Condition="'$(Configuration)' == 'Debug-ESRI'">$(DefineConstants);TRACE;DEBUG</DefineConstants>
     <Configurations>Debug;Debug-ESRI;Release</Configurations>
