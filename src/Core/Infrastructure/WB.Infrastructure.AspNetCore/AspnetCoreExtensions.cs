@@ -123,7 +123,7 @@ namespace WB.Infrastructure.AspNetCore
 
                         if (args.Contains("--httpsys") && OperatingSystem.IsWindows())
                         {
-                            //webBuilder.UseHttpSys();
+                            webBuilder.UseHttpSys();
                         }
 
                         webBuilder.UseStartup<TStartup>();
