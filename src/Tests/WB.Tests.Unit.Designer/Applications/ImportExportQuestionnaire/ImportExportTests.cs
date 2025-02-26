@@ -1079,7 +1079,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
             return errors.Select(e => e.Message).ToList();
         }
         
-        private static Func<EquivalencyAssertionOptions<QuestionnaireDocument>, EquivalencyAssertionOptions<QuestionnaireDocument>> CompareOptions(
+        private static Func<EquivalencyOptions<QuestionnaireDocument>, EquivalencyOptions<QuestionnaireDocument>> CompareOptions(
             Func<IMemberInfo, bool> ignoreFunc = null)
         {
             return opt => opt
