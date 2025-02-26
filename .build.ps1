@@ -221,7 +221,7 @@ function Invoke-Android($CapiProject, $apk, $withMaps, $appCenterKey) {
         }
     )
 
-    $params += "/p:RuntimeIdentifier=android-arm;android-arm64;android-x86"
+    $params += "/p:RuntimeIdentifier=android-arm"
     
     $params -join ', ' | Out-Host
     exec { dotnet publish $params }
