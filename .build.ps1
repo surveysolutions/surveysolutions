@@ -220,6 +220,8 @@ function Invoke-Android($CapiProject, $apk, $withMaps, $appCenterKey) {
             "/p:AndroidSigningStorePass=$KeystorePassword"
         }
     )
+
+    $params += "/p:RuntimeIdentifier=android-arm;android-arm64;android-x86"
     
     $params -join ', ' | Out-Host
     exec { dotnet publish $params }
