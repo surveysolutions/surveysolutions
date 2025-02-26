@@ -22,8 +22,6 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Autofac" Version="8.1.1" />
-    <PackageReference Include="MvvmCross.Plugin.Json" Version="9.2.0" />
-    <PackageReference Include="MvvmCross.Plugin.Messenger" Version="9.2.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
     <PackageReference Include="Xamarin.FFImageLoading" Version="2.4.11.982" />
