@@ -4,6 +4,7 @@ using System.IO.Compression;
 using System.Text;
 using System.Xml;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.Infrastructure.FileSystem;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 {
@@ -26,7 +27,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                         manifestData = new byte[50 * 1024];
                         using (Stream strm = zipArchiveEntry.Open())
                         {
-                            strm.ReadExactly(manifestData);
+                            // strm.ReadExactly(manifestData);
+                            strm.Read(manifestData, 0, manifestData.Length);
                         }
                         allFound++;
                     }
