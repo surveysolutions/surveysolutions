@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using WB.Services.Export.Infrastructure;
 
+#nullable disable
+
 namespace WB.Services.Export.Migrations
 {
     [DbContext(typeof(TenantDbContext))]
@@ -15,166 +17,178 @@ namespace WB.Services.Export.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
-                .HasAnnotation("ProductVersion", "3.1.1")
+                .HasAnnotation("ProductVersion", "9.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
+
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("WB.Services.Export.Assignment.Assignment", b =>
                 {
                     b.Property<Guid>("PublicKey")
-                        .HasColumnName("public_key")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("public_key");
 
                     b.Property<bool>("AudioRecording")
-                        .HasColumnName("audio_recording")
-                        .HasColumnType("boolean");
+                        .HasColumnType("boolean")
+                        .HasColumnName("audio_recording");
 
                     b.Property<string>("Comment")
-                        .HasColumnName("comment")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("comment");
 
                     b.Property<int>("Id")
-                        .HasColumnName("id")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     b.Property<int?>("Quantity")
-                        .HasColumnName("quantity")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("quantity");
 
                     b.Property<string>("QuestionnaireId")
-                        .HasColumnName("questionnaire_id")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("questionnaire_id");
 
                     b.Property<Guid>("ResponsibleId")
-                        .HasColumnName("responsible_id")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("responsible_id");
+
+                    b.Property<string>("TargetArea")
+                        .HasColumnType("text")
+                        .HasColumnName("target_area");
+
+                    b.Property<int?>("UpgradedFromId")
+                        .HasColumnType("integer")
+                        .HasColumnName("upgraded_from_id");
 
                     b.Property<bool?>("WebMode")
-                        .HasColumnName("web_mode")
-                        .HasColumnType("boolean");
+                        .HasColumnType("boolean")
+                        .HasColumnName("web_mode");
 
                     b.HasKey("PublicKey");
 
                     b.HasAlternateKey("Id");
 
-                    b.ToTable("__assignment");
+                    b.ToTable("__assignment", (string)null);
                 });
 
             modelBuilder.Entity("WB.Services.Export.Assignment.AssignmentAction", b =>
                 {
                     b.Property<long>("GlobalSequence")
-                        .HasColumnName("global_sequence")
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("global_sequence");
 
                     b.Property<int>("Position")
-                        .HasColumnName("position")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("position");
 
                     b.Property<int>("AssignmentId")
-                        .HasColumnName("assignment_id")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("assignment_id");
 
                     b.Property<string>("Comment")
-                        .HasColumnName("comment")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("comment");
 
                     b.Property<string>("NewValue")
-                        .HasColumnName("new_value")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("new_value");
 
                     b.Property<string>("OldValue")
-                        .HasColumnName("old_value")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("old_value");
 
                     b.Property<Guid>("OriginatorId")
-                        .HasColumnName("originator_id")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("originator_id");
 
                     b.Property<Guid>("ResponsibleId")
-                        .HasColumnName("responsible_id")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("responsible_id");
 
                     b.Property<int>("Status")
-                        .HasColumnName("status")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("status");
 
                     b.Property<DateTime>("TimestampUtc")
-                        .HasColumnName("timestamp_utc")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("timestamp_utc");
 
                     b.HasKey("GlobalSequence", "Position");
 
                     b.HasIndex("AssignmentId");
 
-                    b.ToTable("__assignment__action");
+                    b.ToTable("__assignment__action", (string)null);
                 });
 
             modelBuilder.Entity("WB.Services.Export.InterviewDataStorage.GeneratedQuestionnaireReference", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnName("id")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("id");
 
                     b.Property<DateTime?>("DeletedAt")
-                        .HasColumnName("deleted_at")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("deleted_at");
 
                     b.HasKey("Id")
                         .HasName("pk_generated_questionnaires");
 
-                    b.ToTable("__generated_questionnaire_reference");
+                    b.ToTable("__generated_questionnaire_reference", (string)null);
                 });
 
             modelBuilder.Entity("WB.Services.Export.InterviewDataStorage.InterviewReference", b =>
                 {
                     b.Property<Guid>("InterviewId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("interview_id")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("interview_id");
 
                     b.Property<int?>("AssignmentId")
-                        .HasColumnName("assignment_id")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("assignment_id");
 
                     b.Property<DateTime?>("DeletedAtUtc")
-                        .HasColumnName("deleted_at_utc")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("deleted_at_utc");
 
                     b.Property<string>("Key")
-                        .HasColumnName("key")
-                        .HasColumnType("text");
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("key");
 
                     b.Property<string>("QuestionnaireId")
-                        .HasColumnName("questionnaire_id")
-                        .HasColumnType("text");
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("questionnaire_id");
 
                     b.Property<int>("Status")
-                        .HasColumnName("status")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("status");
 
                     b.Property<DateTime?>("UpdateDateUtc")
-                        .HasColumnName("update_date_utc")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("update_date_utc");
 
                     b.HasKey("InterviewId");
 
-                    b.ToTable("interview__references");
+                    b.ToTable("interview__references", (string)null);
                 });
 
             modelBuilder.Entity("WB.Services.Export.InterviewDataStorage.Metadata", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnName("id")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("id");
 
                     b.Property<string>("Value")
-                        .HasColumnName("value")
-                        .HasColumnType("text");
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("value");
 
                     b.HasKey("Id")
                         .HasName("pk_metadata");
 
-                    b.ToTable("metadata");
+                    b.ToTable("metadata", (string)null);
                 });
 #pragma warning restore 612, 618
         }
