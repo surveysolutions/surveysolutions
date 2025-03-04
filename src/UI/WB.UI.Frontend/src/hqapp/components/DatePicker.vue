@@ -85,7 +85,8 @@ export default {
             // Bind on parent element if wrap is true
             const elem = this.config.wrap ? this.$el.parentNode : this.$el
             const self = this
-            let config = this.config
+            const detectConfig = this.detectUserSettings({ value: {} })
+            let config = assign(detectConfig, this.config)
             if (this.withClear) {
                 config = assign(
                     {
@@ -107,7 +108,7 @@ export default {
                             })
                         },
                     },
-                    this.config
+                    config
                 )
             }
 
@@ -148,6 +149,27 @@ export default {
         value(newValue) {
             this.fp && this.fp.setDate(newValue, true)
         },
+    },
+    expose: ['refresh'],
+    methods: {
+        refresh() {
+            this.fp.redraw()
+        },
+        detectUserSettings(config) {
+            const is24HourFormat = new Intl.DateTimeFormat(undefined, {
+                hour: "numeric",
+                hour12: false,
+            })
+                .formatToParts()
+                .some((part) => part.type === "hour");
+
+            const firstDay = new Intl.DateTimeFormat(undefined, { weekday: "long" })
+                .resolvedOptions()
+                .firstDay || 0;
+
+            config.value.firstDayOfWeek = firstDay;
+            config.value.time_24hr = is24HourFormat;
+        }
     },
 }
 </script>
