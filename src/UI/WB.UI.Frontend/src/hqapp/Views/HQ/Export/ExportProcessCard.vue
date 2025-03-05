@@ -153,7 +153,7 @@ export default {
             return this.isInitializing == false && this.data.isRunning == false && this.data.error == null
         },
         canRegenerate() {
-            return this.data.dataDestination == 'File'
+            return false//this.data.dataDestination == 'File'
         },
         isRunning() {
             return this.data.jobStatus == 'Running'
