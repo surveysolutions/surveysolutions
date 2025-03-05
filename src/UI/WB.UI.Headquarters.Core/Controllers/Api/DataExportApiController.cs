@@ -237,7 +237,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                 case "today":
                 {
                     dateRangeFrom = DateTime.UtcNow.Date;
-                    dateRangeTo = DateTime.UtcNow.Date.AddDays(1).AddSeconds(-1);
+                    dateRangeTo = DateTime.UtcNow;//.Date.AddDays(1).AddSeconds(-1);
                     break;
                 }
                 case "yesterday":
