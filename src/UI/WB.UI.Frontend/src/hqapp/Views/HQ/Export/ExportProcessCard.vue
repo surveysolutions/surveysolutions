@@ -23,6 +23,11 @@
                     </span>
                     <span>&nbsp;{{ translation }}</span>
                 </p>
+                <p class="mb-0 font-regular" v-if="data.beginDate && data.endDate">
+                    <u class="font-bold">{{ data.beginDate || $t('DataExport.DateRangeFromAll') }}</u>
+                    &nbsp;-&nbsp;
+                    <u class="font-bold">{{ data.endDate || $t('DataExport.DateRangeToAll') }}</u>
+                </p>
             </div>
         </div>
         <div class="bottom-row" :class="{ 'is-failed': isFailed, 'is-successful': isSuccessfull }">
