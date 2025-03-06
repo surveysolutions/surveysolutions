@@ -34,7 +34,7 @@
 
 import { entityDetails } from '../mixins'
 import moment from 'moment'
-import box from 'bootbox'
+import modal from '@/shared/modal'
 
 class GpsAnswer {
     constructor(latitude,
@@ -132,7 +132,7 @@ export default {
         pickLocation() {
             var self = this
 
-            box.dialog({
+            modal.dialog({
                 title: self.$t('WebInterviewUI.PickLocation'),
                 message: '<div id="locationPicker"><div style="height: 400px;" id="map_canvas"></div></div>',
                 size: 'large',
