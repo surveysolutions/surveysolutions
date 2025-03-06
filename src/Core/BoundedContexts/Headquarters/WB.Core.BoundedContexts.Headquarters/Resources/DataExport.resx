@@ -456,4 +456,16 @@
   <data name="DateRangeToAll" xml:space="preserve">
       <value>Current moment</value>
   </data>
+  <data name="ParadataEventsFilter" xml:space="preserve">
+      <value>Events Filter</value>
+  </data>
+  <data name="ParadataEventsFilter_All" xml:space="preserve">
+      <value>All</value>
+  </data>
+  <data name="ParadataEventsFilter_Reduced" xml:space="preserve">
+      <value>Reduced</value>
+  </data>
+  <data name="ParadataEventsFilter_ReducedHint" xml:space="preserve">
+      <value>Does not include events: QuestionEnabled, QuestionDisabled, ...</value>
+  </data>
 </root>

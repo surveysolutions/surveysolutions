@@ -14,7 +14,8 @@
                         { title: data.title, version: data.questionnaireIdentity.version }) }}
                 </div>
                 <p class="mb-0 font-regular">
-                    <u class="font-bold">{{ data.format }}</u> format.
+                    <u class="font-bold">{{ data.format }}{{ data.format == "Paradata" && data.paradataReduced == true ?
+                        " (" + $t("DataExport.ParadataEventsFilter_Reduced") + ")" : "" }}</u> format.
                     <span v-if="data.format != 'DDI' && data.interviewStatus != null" class="font-bold">
                         {{ $t('DataExport.DataExport_InterviewsStatus', {
                             status: $t('DataExport.' + data.interviewStatus),

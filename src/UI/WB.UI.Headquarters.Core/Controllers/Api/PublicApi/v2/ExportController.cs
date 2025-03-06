@@ -122,7 +122,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.v2
                 requestBody.AccessToken, requestBody.RefreshToken, 
                 (WB.Core.BoundedContexts.Headquarters.DataExport.Dtos.ExternalStorageType?) requestBody.StorageType,
                 requestBody.TranslationId,
-                requestBody.IncludeMeta);
+                requestBody.IncludeMeta,
+                requestBody.ParadataReduced);
 
             this.auditLog.ExportStared(
                 $@"{questionnaireBrowseItem.Title} v{questionnaireBrowseItem.Version} {requestBody.InterviewStatus.ToString() ?? ""}",
@@ -339,6 +340,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.v2
             public Guid? TranslationId { get; set; }
 
             public bool? IncludeMeta { get; set; }
+            public bool? ParadataReduced { get; set; }
         }
 
         public class ExportProcess : CreateExportProcess

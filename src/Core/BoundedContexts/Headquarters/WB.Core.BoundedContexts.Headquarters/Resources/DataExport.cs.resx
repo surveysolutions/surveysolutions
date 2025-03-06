@@ -456,4 +456,16 @@
     <data name="DateRangeToAll" xml:space="preserve">
     <value>Aktuální okamžik</value>
 </data>
+    <data name="ParadataEventsFilter" xml:space="preserve">
+    <value>Filtr událostí</value>
+</data>
+    <data name="ParadataEventsFilter_All" xml:space="preserve">
+    <value>Vše</value>
+</data>
+    <data name="ParadataEventsFilter_Reduced" xml:space="preserve">
+    <value>Omezený</value>
+</data>
+    <data name="ParadataEventsFilter_ReducedHint" xml:space="preserve">
+    <value>Nezahrnuje události: QuestionEnabled, QuestionDisabled, ...</value>
+</data>
 </root>

@@ -456,4 +456,16 @@
     <data name="DateRangeToAll" xml:space="preserve">
     <value>اللحظة الحالية</value>
 </data>
+    <data name="ParadataEventsFilter" xml:space="preserve">
+    <value>مرشح الأحداث</value>
+</data>
+    <data name="ParadataEventsFilter_All" xml:space="preserve">
+    <value>الكل</value>
+</data>
+    <data name="ParadataEventsFilter_Reduced" xml:space="preserve">
+    <value>مخفض</value>
+</data>
+    <data name="ParadataEventsFilter_ReducedHint" xml:space="preserve">
+    <value>لا يتضمن الأحداث: QuestionEnabled, QuestionDisabled, ...</value>
+</data>
 </root>

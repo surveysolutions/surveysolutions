@@ -194,6 +194,12 @@ namespace WB.UI.Headquarters.Controllers.Api
             return result;
         }
 
+        public enum ParadataMode
+        {
+            All,
+            Reduced,
+        }
+
         [HttpPost]
         [ObservingNotAllowed]
         [ValidateAntiForgeryToken]
@@ -204,7 +210,8 @@ namespace WB.UI.Headquarters.Controllers.Api
             DateTimeOffset? from = null,
             DateTimeOffset? to = null,
             Guid? translationId = null,
-            bool? includeMeta = null)
+            bool? includeMeta = null,
+            ParadataMode paradataMode = ParadataMode.All)
         {
             DateTime? dateRangeFrom = null; 
             DateTime? dateRangeTo = null;
@@ -255,7 +262,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                 return NotFound("Questionnaire not found");
 
             return await RequestExportUpdateAsync(questionnaireBrowseItem, format, status, @dateRangeFrom, dateRangeTo, 
-                translation: translationId, includeMeta: includeMeta);
+                translation: translationId, includeMeta: includeMeta, paradataReduced: paradataMode == ParadataMode.Reduced);
         }
 
         private async Task<ActionResult<long>> RequestExportUpdateAsync(
@@ -268,7 +275,8 @@ namespace WB.UI.Headquarters.Controllers.Api
             string refreshToken = null,
             ExternalStorageType? externalStorageType = null,
             Guid? translation = null,
-            bool? includeMeta = null)
+            bool? includeMeta = null,
+            bool paradataReduced = false)
         {
             long jobId = 0;
             try
@@ -284,7 +292,8 @@ namespace WB.UI.Headquarters.Controllers.Api
                     refreshToken,
                     externalStorageType,
                     translation,
-                    includeMeta);
+                    includeMeta,
+                    paradataReduced);
 
                 jobId = result?.JobId ?? 0;
 
