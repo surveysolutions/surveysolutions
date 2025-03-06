@@ -77,6 +77,38 @@
                                                 :values="translations" :disabled="questionnaireVersion == null"
                                                 v-on:selected="translationSelected" />
                                         </div>
+                                        <h5>
+                                            {{ $t('DataExport.SurveyQuestionnaireDateRange') }}
+                                        </h5>
+                                        <div class="form-group">
+                                            <Select v-bind="field" v-model="dateRangeMode" :options="[
+                                                { id: null, value: $t('DataExport.DateRangeAllTime') },
+                                                { id: 'last24hours', value: $t('DataExport.DateRangeLast24hours') },
+                                                { id: 'last7days', value: $t('DataExport.DateRangeLast7days') },
+                                                { id: 'last30days', value: $t('DataExport.DateRangeLast30days') },
+                                                { id: 'today', value: $t('DataExport.DateRangeLastToday') },
+                                                { id: 'yesteday', value: $t('DataExport.DateRangeLastYesterday') },
+                                                { id: 'custom', value: $t('DataExport.DateRangeCustom') },
+                                            ]" />
+                                        </div>
+                                        <h5 v-if="isCustomDateRangeMode">
+                                            {{ $t('DataExport.SurveyQuestionnaireDateRangeFrom') }}
+                                        </h5>
+                                        <div class="form-group" v-if="isCustomDateRangeMode">
+                                            <DatePicker :config="datePickerConfigFrom" :value="selectedFromDate"
+                                                :withClear="true" v-on:clear="dateRangeFrom = null"
+                                                :placeholder="$t('DataExport.DateRangeFromAll')">
+                                            </DatePicker>
+                                        </div>
+                                        <h5 v-if="isCustomDateRangeMode">
+                                            {{ $t('DataExport.SurveyQuestionnaireDateRangeTo') }}
+                                        </h5>
+                                        <div class="form-group" v-if="isCustomDateRangeMode">
+                                            <DatePicker :config="datePickerConfigTo" :value="selectedToDate"
+                                                v-on:clear="dateRangeTo = null" :withClear="true"
+                                                :placeholder="$t('DataExport.DateRangeToAll')">
+                                            </DatePicker>
+                                        </div>
                                     </div>
 
                                     <div class="filter-column">
@@ -277,6 +309,8 @@ import { Form, Field, ErrorMessage } from 'vee-validate'
 import ExportProcessCard from './ExportProcessCard'
 import gql from 'graphql-tag'
 import { filter, toNumber, map } from 'lodash'
+import { DateFormats } from '~/shared/helpers'
+import moment from 'moment-timezone'
 
 const dataFormatNum = {
     Tabular: 1,
@@ -315,6 +349,10 @@ export default {
             pageState: {},
             updateInProgress: false,
             jobsLoadingBatchCount: 18,
+
+            dateRangeFrom: null,
+            dateRangeTo: null,
+            dateRangeMode: null,
         }
     },
 
@@ -351,6 +389,42 @@ export default {
                 return `${window.CONFIG.model.api.questionnairesUrl}/${this.questionnaireId.key}`
             return null
         },
+
+        selectedFromDate() {
+            return this.dateRangeFrom && moment(this.dateRangeFrom).format(DateFormats.dateTime)
+        },
+        selectedToDate() {
+            return this.dateRangeTo && moment(this.dateRangeTo).format(DateFormats.dateTime)
+        },
+        datePickerConfigFrom() {
+            var self = this
+            return {
+                mode: 'single',
+                enableTime: true,
+                wrap: true,
+                static: true,
+                onChange: (selectedDates, dateStr, instance) => {
+                    const start = selectedDates.length > 0 ? moment(selectedDates[0]).format(DateFormats.dateTime) : null
+                    self.dateRangeFrom = start
+                },
+            }
+        },
+        datePickerConfigTo() {
+            var self = this
+            return {
+                mode: 'single',
+                enableTime: true,
+                wrap: true,
+                static: true,
+                onChange: (selectedDates, dateStr, instance) => {
+                    const date = selectedDates.length > 0 ? moment(selectedDates[0]).format(DateFormats.dateTime) : null
+                    self.dateRangeTo = date
+                },
+            }
+        },
+        isCustomDateRangeMode() {
+            return this.dateRangeMode == 'custom'
+        },
     },
 
     mounted() {
@@ -372,6 +446,9 @@ export default {
             this.status = null
             this.hasInterviews = false
             this.hasBinaryData = false
+            this.dateRangeMode = null
+            this.dateRangeFrom = null
+            this.dateRangeTo = null
 
             this.$refs.exportForm.resetForm()
         },
@@ -394,7 +471,10 @@ export default {
                     self.dataDestination,
                     self.status,
                     self.questionnaireTranslation,
-                    this.includeMeta
+                    this.includeMeta,
+                    this.dateRangeMode,
+                    this.dateRangeFrom,
+                    this.dateRangeTo
                 )
 
                 self.$store.dispatch('showProgress')
@@ -437,7 +517,10 @@ export default {
                 this.dataDestination,
                 this.status,
                 this.questionnaireTranslation,
-                this.includeMeta
+                this.includeMeta,
+                this.dateRangeMode,
+                this.dateRangeFrom,
+                this.dateRangeTo
             )
 
             var state = {
@@ -494,7 +577,10 @@ export default {
             dataDestination,
             statusOption,
             translation,
-            includeMeta
+            includeMeta,
+            dateRangeMode,
+            dateRangeFrom,
+            dateRangeTo
         ) {
             var format = dataFormatNum.Tabular
 
@@ -523,6 +609,9 @@ export default {
                 status: status,
                 translationId: tr,
                 includeMeta: includeMeta,
+                dateRangeMode: dateRangeMode,
+                from: dateRangeFrom,
+                to: dateRangeTo
             }
         },
 

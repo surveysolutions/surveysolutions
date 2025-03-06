@@ -23,10 +23,19 @@
                     </span>
                     <span>&nbsp;{{ translation }}</span>
                 </p>
+                <p class="mb-0 font-regular" v-if="data.fromDate && data.toDate"
+                    :title="data.fromDate + ' - ' + data.toDate">
+                    <u class="font-bold">{{ formatDate(data.fromDate) || $t('DataExport.DateRangeFromAll') }}</u>
+                    &nbsp;-&nbsp;
+                    <u class="font-bold">{{ formatDate(data.toDate) || $t('DataExport.DateRangeToAll') }}</u>
+                </p>
+                <p class="mb-0 font-regular" v-if="data.fromDate == null && data.toDate == null">
+                    <u class="font-bold">{{ $t('DataExport.DateRangeAllTime') }}</u>
+                </p>
             </div>
         </div>
         <div class="bottom-row" :class="{ 'is-failed': isFailed, 'is-successful': isSuccessfull }">
-            <div class="export-destination" :title="data.timeEstimation" :class="data.dataDestination">
+            <div class="export-destination" :class="data.dataDestination">
                 <p>
                     <span v-if="data.dataDestination != null">
                         {{
@@ -119,7 +128,8 @@
 
 <script>
 import modal from '@/shared/modal'
-import moment from 'moment'
+import { DateFormats } from '~/shared/helpers'
+import moment from 'moment-timezone'
 
 export default {
     props: {
@@ -143,7 +153,7 @@ export default {
             return this.isInitializing == false && this.data.isRunning == false && this.data.error == null
         },
         canRegenerate() {
-            return this.data.dataDestination == 'File'
+            return false//this.data.dataDestination == 'File'
         },
         isRunning() {
             return this.data.jobStatus == 'Running'
@@ -210,7 +220,12 @@ export default {
             let duration = moment.duration(diff);
 
             return duration.humanize({ m: 60, h: 24, d: 7, w: 4 });
-        }
+        },
+        formatDate(date) {
+            if (date)
+                return moment(date).format(DateFormats.dateTimeInList)
+            return null
+        },
     },
 }
 </script>
