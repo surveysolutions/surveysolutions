@@ -10,6 +10,7 @@ using Serilog;
 using Serilog.Events;
 using Serilog.Exceptions;
 using Serilog.Formatting.Compact;
+using Microsoft.AspNetCore.Server.HttpSys;
 
 namespace WB.Infrastructure.AspNetCore
 {

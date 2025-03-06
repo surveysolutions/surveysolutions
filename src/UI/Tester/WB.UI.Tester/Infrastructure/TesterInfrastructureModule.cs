@@ -19,7 +19,6 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.UI.Shared.Enumerator.CustomServices;
 using WB.UI.Tester.Infrastructure.Internals;
-using WB.UI.Tester.Infrastructure.Internals.Rest;
 using WB.UI.Tester.Infrastructure.Internals.Security;
 using WB.UI.Tester.Infrastructure.Internals.Settings;
 using WB.UI.Tester.Infrastructure.Internals.Storage;
@@ -65,7 +64,6 @@ namespace WB.UI.Tester.Infrastructure
             registry.Bind<IRestServiceSettings, TesterSettings>();
             registry.Bind<INetworkService, AndroidNetworkService>();
             registry.Bind<IEnumeratorSettings, TesterSettings>();
-            registry.Bind<IRestServicePointManager, RestServicePointManager>();
             registry.Bind<IHttpClientFactory, AndroidHttpClientFactory>();
             registry.Bind<IRestService, RestService>();
             registry.Bind<IFastBinaryFilesHttpHandler, FastBinaryFilesHttpHandler>();

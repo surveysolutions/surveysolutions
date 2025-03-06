@@ -39,7 +39,6 @@ namespace WB.Core.Infrastructure.HttpServices.Services
             INetworkService networkService,
             IJsonAllTypesSerializer synchronizationSerializer,
             IStringCompressor stringCompressor,
-            IRestServicePointManager restServicePointManager,
             IHttpStatistician httpStatistician,
             IHttpClientFactory httpClientFactory, 
             IFastBinaryFilesHttpHandler fileDownloader,
@@ -53,9 +52,6 @@ namespace WB.Core.Infrastructure.HttpServices.Services
             this.httpClientFactory = httpClientFactory;
             this.fileDownloader = fileDownloader;
             this.logger = logger;
-
-            if (this.restServiceSettings.AcceptUnsignedSslCertificate)
-                restServicePointManager?.AcceptUnsignedSslCertificate();
         }
 
         private Task<ExecuteRequestResult> ExecuteRequestAsync(
