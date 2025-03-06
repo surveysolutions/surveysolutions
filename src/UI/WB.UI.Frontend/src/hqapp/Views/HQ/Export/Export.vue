@@ -446,6 +446,9 @@ export default {
             this.status = null
             this.hasInterviews = false
             this.hasBinaryData = false
+            this.dateRangeMode = null
+            this.dateRangeFrom = null
+            this.dateRangeTo = null
 
             this.$refs.exportForm.resetForm()
         },
@@ -514,7 +517,10 @@ export default {
                 this.dataDestination,
                 this.status,
                 this.questionnaireTranslation,
-                this.includeMeta
+                this.includeMeta,
+                this.dateRangeMode,
+                this.dateRangeFrom,
+                this.dateRangeTo
             )
 
             var state = {
