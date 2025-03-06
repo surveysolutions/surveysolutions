@@ -1,3 +1,5 @@
+@use "sass:color";
+
 /* Forms */
 .form-control {
     border-color: $gray_form;
@@ -879,7 +881,7 @@ ul.dropdown-menu li * {
     &:hover,
     &:focus,
     &:active {
-        color: darken($gray_light, 30%);
+        color: color.adjust($gray_light, $lightness: -30%);
     }
 }
 
