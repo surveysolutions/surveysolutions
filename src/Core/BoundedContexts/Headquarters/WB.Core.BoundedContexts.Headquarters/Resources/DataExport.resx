@@ -457,7 +457,7 @@
       <value>Current moment</value>
   </data>
   <data name="ParadataEventsFilter" xml:space="preserve">
-      <value>Events Filter</value>
+      <value>Events filter</value>
   </data>
   <data name="ParadataEventsFilter_All" xml:space="preserve">
       <value>All</value>
