@@ -231,29 +231,32 @@ namespace WB.UI.Headquarters.Controllers.Api
                 }
                 case "last7days":
                 {
-                    dateRangeFrom = DateTime.UtcNow.Date.AddDays(-7);
+                    dateRangeFrom = DateTime.UtcNow.Date.AddDays(-6);
                     dateRangeTo = DateTime.UtcNow;
                     break;
                 }
                 case "last30days":
                 {
-                    dateRangeFrom = DateTime.UtcNow.Date.AddDays(-30);
+                    dateRangeFrom = DateTime.UtcNow.Date.AddDays(-29);
                     dateRangeTo = DateTime.UtcNow;
                     break;
                 }
                 case "today":
                 {
                     dateRangeFrom = DateTime.UtcNow.Date;
-                    dateRangeTo = DateTime.UtcNow;//.Date.AddDays(1).AddSeconds(-1);
+                    dateRangeTo = DateTime.UtcNow;//.Date.AddDays(1).AddMicroseconds(-1);
                     break;
                 }
                 case "yesterday":
                 {
                     dateRangeFrom = DateTime.UtcNow.Date.AddDays(-1);
-                    dateRangeTo = DateTime.UtcNow.Date.AddSeconds(-1);
+                    dateRangeTo = DateTime.UtcNow.Date.AddMicroseconds(-1);
                     break;
                 }
             }
+            
+            if (!dateRangeTo.HasValue)
+                dateRangeTo = DateTime.UtcNow;
             
             var questionnaireIdentity = new QuestionnaireIdentity(id, version);
 

@@ -24,14 +24,15 @@
                     </span>
                     <span>&nbsp;{{ translation }}</span>
                 </p>
-                <p class="mb-0 font-regular" v-if="data.fromDate && data.toDate"
+                <p class="mb-0 font-regular" v-if="data.fromDate || data.toDate"
                     :title="data.fromDate + ' - ' + data.toDate">
-                    <u class="font-bold">{{ formatDate(data.fromDate) || $t('DataExport.DateRangeFromAll') }}</u>
-                    &nbsp;-&nbsp;
-                    <u class="font-bold">{{ formatDate(data.toDate) || $t('DataExport.DateRangeToAll') }}</u>
+                    {{ $t('DataExport.FromDate') }}
+                    <span class="font-bold">{{ formatDate(data.fromDate) || '-' }}</span>
+                    {{ $t('DataExport.ToDate') }}
+                    <span class="font-bold">{{ formatDate(data.toDate) || '-' }}</span>
                 </p>
                 <p class="mb-0 font-regular" v-if="data.fromDate == null && data.toDate == null">
-                    <u class="font-bold">{{ $t('DataExport.DateRangeAllTime') }}</u>
+                    <span class="font-bold">{{ $t('DataExport.DateRangeAllTime') }}</span>
                 </p>
             </div>
         </div>
