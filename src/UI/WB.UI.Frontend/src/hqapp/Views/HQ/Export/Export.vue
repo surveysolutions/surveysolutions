@@ -77,19 +77,32 @@
                                                 :values="translations" :disabled="questionnaireVersion == null"
                                                 v-on:selected="translationSelected" />
                                         </div>
+                                    </div>
+
+                                    <div class="filter-column">
+                                        <h5>
+                                            {{ $t('DataExport.StatusOfExportTitle') }}
+                                        </h5>
+                                        <Typeahead control-id="status" :selectedKey="pageState.status"
+                                            data-vv-name="status" data-vv-as="status" :noSearch="true"
+                                            :placeholder="$t('Common.AllStatuses')" :value="status" :values="statuses"
+                                            v-on:selected="statusSelected" />
                                         <h5>
                                             {{ $t('DataExport.SurveyQuestionnaireDateRange') }}
                                         </h5>
                                         <div class="form-group">
-                                            <Select v-bind="field" v-model="dateRangeMode" :options="[
-                                                { id: null, value: $t('DataExport.DateRangeAllTime') },
-                                                { id: 'last24hours', value: $t('DataExport.DateRangeLast24hours') },
-                                                { id: 'last7days', value: $t('DataExport.DateRangeLast7days') },
-                                                { id: 'last30days', value: $t('DataExport.DateRangeLast30days') },
-                                                { id: 'today', value: $t('DataExport.DateRangeLastToday') },
-                                                { id: 'yesteday', value: $t('DataExport.DateRangeLastYesterday') },
-                                                { id: 'custom', value: $t('DataExport.DateRangeCustom') },
-                                            ]" />
+                                            <Typeahead control-id="dateRangeMode" :selectedKey="dateRangeMode"
+                                                data-vv-name="dateRangeMode" data-vv-as="dateRangeMode" :noSearch="true"
+                                                :placeholder="$t('DataExport.DateRangeAllTime')" :value="dateRangeMode"
+                                                v-on:selected="value => { dateRangeMode = value }" :values="[
+                                                    //{ id: null, value: $t('DataExport.DateRangeAllTime') },
+                                                    { id: 'last24hours', value: $t('DataExport.DateRangeLast24hours') },
+                                                    { id: 'last7days', value: $t('DataExport.DateRangeLast7days') },
+                                                    { id: 'last30days', value: $t('DataExport.DateRangeLast30days') },
+                                                    { id: 'today', value: $t('DataExport.DateRangeLastToday') },
+                                                    { id: 'yesteday', value: $t('DataExport.DateRangeLastYesterday') },
+                                                    { id: 'custom', value: $t('DataExport.DateRangeCustom') },
+                                                ]" />
                                         </div>
                                         <h5 v-if="isCustomDateRangeMode">
                                             {{ $t('DataExport.SurveyQuestionnaireDateRangeFrom') }}
@@ -109,16 +122,6 @@
                                                 :placeholder="$t('DataExport.DateRangeToAll')">
                                             </DatePicker>
                                         </div>
-                                    </div>
-
-                                    <div class="filter-column">
-                                        <h5>
-                                            {{ $t('DataExport.StatusOfExportTitle') }}
-                                        </h5>
-                                        <Typeahead control-id="status" :selectedKey="pageState.status"
-                                            data-vv-name="status" data-vv-as="status"
-                                            :placeholder="$t('Common.AllStatuses')" :value="status" :values="statuses"
-                                            v-on:selected="statusSelected" />
                                     </div>
                                 </div>
                             </div>
@@ -423,7 +426,7 @@ export default {
             }
         },
         isCustomDateRangeMode() {
-            return this.dateRangeMode == 'custom'
+            return this.dateRangeMode?.id == 'custom'
         },
     },
 
@@ -601,6 +604,7 @@ export default {
 
             const status = (statusOption || { key: null }).key
             const tr = (translation || { key: null }).key
+            const drMode = dateRangeMode?.id
 
             return {
                 id: questionnaireId,
@@ -609,7 +613,7 @@ export default {
                 status: status,
                 translationId: tr,
                 includeMeta: includeMeta,
-                dateRangeMode: dateRangeMode,
+                dateRangeMode: drMode,
                 from: dateRangeFrom,
                 to: dateRangeTo
             }
