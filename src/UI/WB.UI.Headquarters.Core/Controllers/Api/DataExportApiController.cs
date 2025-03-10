@@ -248,6 +248,9 @@ namespace WB.UI.Headquarters.Controllers.Api
                 }
             }
             
+            if (!dateRangeTo.HasValue)
+                dateRangeTo = DateTime.UtcNow;
+            
             var questionnaireIdentity = new QuestionnaireIdentity(id, version);
 
             var questionnaireBrowseItem = this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
