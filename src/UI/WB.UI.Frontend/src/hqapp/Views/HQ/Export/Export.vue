@@ -238,7 +238,7 @@
                                         v-model="paradataMode" value="reduced" />
                                     <label for="paradataReduced" class>
                                         <span class="tick"></span>
-                                        <span class="format-data Tabular">
+                                        <span class="format-data ParadataReduced">
                                             {{ $t('DataExport.ParadataEventsFilter_Reduced') }}
                                         </span>
                                     </label>

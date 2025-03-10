@@ -1,7 +1,7 @@
 <template>
     <div class="export-card">
         <div class="top-row">
-            <div class="format-data" :class="data.format">
+            <div class="format-data" :class="iconClass">
                 <div class="gray-text-row">
                     <b>#{{ data.id }}&nbsp;</b>
                     <span v-if="!isCompleted">
@@ -144,6 +144,12 @@ export default {
     },
 
     computed: {
+        iconClass() {
+            if (this.data.format == 'Paradata' && this.data.paradataReduced == true)
+                return 'ParadataReduced'
+
+            return this.data.format
+        },
         downloadFileUrl() {
             var url = this.$config.model.api.downloadDataUrl
             return `${url}?id=${this.data.id}`
