@@ -44,7 +44,7 @@
         "@vee-validate/rules": "^4.15.0",
         "@vueuse/core": "^12.5.0",
         "ace-builds": "^1.37.5",
-        "axios": "^1.7.9",
+        "axios": "^1.8.2",
         "bootstrap": "^5.3.3",
         "bootstrap-less": "^3.3.8",
         "bootstrap-select": "^1.13.18",
