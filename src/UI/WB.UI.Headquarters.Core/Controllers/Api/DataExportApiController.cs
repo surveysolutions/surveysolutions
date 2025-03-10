@@ -200,18 +200,64 @@ namespace WB.UI.Headquarters.Controllers.Api
         public async Task<ActionResult<long>> RequestUpdate(Guid id, long version,
             DataExportFormat format,
             InterviewStatus? status = null,
-            DateTime? from = null,
-            DateTime? to = null,
+            string dateRangeMode = null,
+            DateTimeOffset? from = null,
+            DateTimeOffset? to = null,
             Guid? translationId = null,
             bool? includeMeta = null)
         {
+            DateTime? dateRangeFrom = null; 
+            DateTime? dateRangeTo = null;
+            switch (dateRangeMode)
+            {
+                case "custom":
+                {
+                    dateRangeFrom = from?.UtcDateTime;
+                    dateRangeTo = to?.UtcDateTime;
+                    break;
+                }
+                case "last24hours":
+                {
+                    dateRangeFrom = DateTime.UtcNow.AddDays(-1);
+                    dateRangeTo = DateTime.UtcNow;
+                    break;
+                }
+                case "last7days":
+                {
+                    dateRangeFrom = DateTime.UtcNow.Date.AddDays(-6);
+                    dateRangeTo = DateTime.UtcNow;
+                    break;
+                }
+                case "last30days":
+                {
+                    dateRangeFrom = DateTime.UtcNow.Date.AddDays(-29);
+                    dateRangeTo = DateTime.UtcNow;
+                    break;
+                }
+                case "today":
+                {
+                    dateRangeFrom = DateTime.UtcNow.Date;
+                    dateRangeTo = DateTime.UtcNow;//.Date.AddDays(1).AddMicroseconds(-1);
+                    break;
+                }
+                case "yesterday":
+                {
+                    dateRangeFrom = DateTime.UtcNow.Date.AddDays(-1);
+                    dateRangeTo = DateTime.UtcNow.Date.AddMicroseconds(-1);
+                    break;
+                }
+            }
+            
+            if (!dateRangeTo.HasValue)
+                dateRangeTo = DateTime.UtcNow;
+            
             var questionnaireIdentity = new QuestionnaireIdentity(id, version);
 
             var questionnaireBrowseItem = this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
             if (questionnaireBrowseItem == null)
                 return NotFound("Questionnaire not found");
 
-            return await RequestExportUpdateAsync(questionnaireBrowseItem, format, status, @from, to, 
+            return await RequestExportUpdateAsync(questionnaireBrowseItem, format, status, @dateRangeFrom, dateRangeTo, 
                 translation: translationId, includeMeta: includeMeta);
         }
 
