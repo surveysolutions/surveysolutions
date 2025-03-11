@@ -58,7 +58,8 @@
     <JavaMaximumHeapSize>1G</JavaMaximumHeapSize>
     <Debugger>Xamarin</Debugger>
     <DevInstrumentationEnabled>True</DevInstrumentationEnabled>
-    <RunAOTCompilation>false</RunAOTCompilation>
+    <RunAOTCompilation>true</RunAOTCompilation> 
+    <AndroidEnableProfiledAot>true</AndroidEnableProfiledAot>
     <EnableLLVM>false</EnableLLVM>
     <EnableProguard>False</EnableProguard>
     <AndroidTlsProvider>btls</AndroidTlsProvider>
