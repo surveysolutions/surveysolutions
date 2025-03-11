@@ -1,5 +1,6 @@
 import './jquery'
 import { Modal } from 'bootstrap';
+import sanitizeHtml from 'sanitize-html';
 
 export default {
     init(i18n, locale) {
@@ -73,8 +74,8 @@ export default {
         else if (size === 'large') sizeClass = 'modal-lg';
         else if (size === 'extra-large') sizeClass = 'modal-xl';
 
-        let buttonsHTML = Object.entries(buttons).map(([key, btn]) =>
-            `<button type="button" class="btn btn-default ${btn.className ?? (key == 'ok' || key == 'success' ? 'btn-primary' : 'btn-secondary')}" id="modal-btn-${key}">${btn.label}</button>`
+        let buttonsHTML = Object.entries(buttons).map(([key, btn]) => 
+            `<button type="button" class="btn btn-default ${btn.className ?? (key == 'ok' || key == 'success' ? 'btn-primary' : 'btn-secondary')}" id="modal-btn-${key}">${sanitizeHtml(btn.label)}</button>`
         ).join('');
 
         let modalHTML = `
@@ -82,10 +83,10 @@ export default {
         <div class="modal-dialog ${sizeClass}">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title">${title}</h5>
+              <h5 class="modal-title">${sanitizeHtml(title)}</h5>
               ${closeButton ? '<button type="button" class="bootbox-close-button close btn-close" data-bs-dismiss="modal" aria-label="Close"></button>' : ''}
             </div>
-            <div class="modal-body">${message}</div>
+            <div class="modal-body">${sanitizeHtml(message, { allowedTags: ['b', 'i', 'strong', 'em', 'p', 'ul', 'li', 'br'] })}</div>
             <div class="modal-footer">${buttonsHTML}</div>
           </div>
         </div>
