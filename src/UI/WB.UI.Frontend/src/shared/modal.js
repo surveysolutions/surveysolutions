@@ -1,3 +1,4 @@
+import './jquery'
 import { Modal } from 'bootstrap';
 
 export default {
