@@ -98,7 +98,10 @@ export default {
 
         document.body.insertAdjacentHTML('beforeend', modalHTML);
         const modalElement = document.getElementById('customModal');
-        const modalInstance = new Modal(modalElement, { keyboard: onEscape });
+        const modalInstance = new Modal(modalElement, { 
+            keyboard: onEscape,
+            backdrop: onEscape ? true : 'static'
+         });
 
         Object.entries(buttons).forEach(([key, btn]) => {
             document.getElementById(`modal-btn-${key}`).addEventListener('click', () => {
