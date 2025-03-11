@@ -1,0 +1,69 @@
+name: Veracode Static Analysis Pipeline Scan
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-and-pipeline-scan:
+    permissions:
+      security-events: write # for github/codeql-action/upload-sarif to upload SARIF results
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        include:
+          - task: Headquarters
+            package: PackageHq
+            output: WB.UI.Headquarters.zip
+          - task: Export
+            package: PackageExport
+            output: WB.Services.Export.zip
+          - task: Designer
+            package: PackageDesigner
+            output: WB.UI.Designer.zip
+
+    steps:
+
+    - uses: actions/setup-node@v2
+      with:
+        node-version: '16'
+
+    - uses: actions/checkout@v3
+    - name: Setup dotnet
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '6.0.x'
+    - name: Build ${{ matrix.task }}
+      run: ./.build.ps1 ${{ matrix.package }}
+      shell: pwsh
+
+    - run: curl --silent --show-error --fail -O https://downloads.veracode.com/securityscan/pipeline-scan-LATEST.zip
+    - run: unzip -o pipeline-scan-LATEST.zip
+
+    - uses: actions/setup-java@v3
+      with:
+        java-version: 8
+        distribution: 'temurin'
+    - run: |
+        java -jar pipeline-scan.jar \
+             --veracode_api_id "${{secrets.VERACODE_API_ID}}" --veracode_api_key "${{secrets.VERACODE_API_KEY}}" \
+             --fail_on_severity="Very High, High" \
+             --file ./artifacts/${{ matrix.output }} \
+             --json_output_file results-${{ matrix.task }}.json
+      continue-on-error: true
+    - name: Convert pipeline scan output to SARIF format
+      id: convert
+      uses: veracode/veracode-pipeline-scan-results-to-sarif@ff08ae5b45d5384cb4679932f184c013d34da9be
+      with:
+        pipeline-results-json: results-${{ matrix.task }}.json
+        output-results-sarif: veracode-results-${{ matrix.task }}.sarif
+        source-base-path-1: "^home/runner/work/scancopy/scancopy/src:src"
+        finding-rule-level: "4:3:0"
+
+    - uses: actions/upload-artifact@v2
+      with:
+        name: sarif
+        path: veracode-results-${{ matrix.task }}.sarif
+    - uses: github/codeql-action/upload-sarif@v2
+      with:
+        sarif_file: veracode-results-${{ matrix.task }}.sarif
