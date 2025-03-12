@@ -477,6 +477,6 @@
     <value>Сокращённый</value>
 </data>
     <data name="ParadataEventsFilter_ReducedHint" xml:space="preserve">
-    <value>Не включает события: QuestionEnabled, QuestionDisabled, ...</value>
+    <value>Сокращённый набор параданных не включает события со следующими кодами: QuestionEnabled (13), QuestionDisabled (14), GroupEnabled (15), GroupDisabled (16), QuestionDeclaredValid (17), QuestionDeclaredInvalid (18), VariableEnabled (23), VariableDisabled (24).</value>
 </data>
 </root>

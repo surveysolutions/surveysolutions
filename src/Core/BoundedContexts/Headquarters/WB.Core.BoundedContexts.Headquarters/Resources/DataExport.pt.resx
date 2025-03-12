@@ -466,6 +466,6 @@
     <value>Reduzido</value>
 </data>
     <data name="ParadataEventsFilter_ReducedHint" xml:space="preserve">
-    <value>Não inclui eventos: QuestionEnabled, QuestionDisabled, ...</value>
+    <value>O conjunto reduzido de paradata não inclui eventos com os seguintes códigos: QuestionEnabled (13), QuestionDisabled (14), GroupEnabled (15), GroupDisabled (16), QuestionDeclaredValid (17), QuestionDeclaredInvalid (18), VariableEnabled (23), VariableDisabled (24).</value>
 </data>
 </root>
