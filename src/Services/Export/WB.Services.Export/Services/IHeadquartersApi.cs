@@ -45,7 +45,7 @@ namespace WB.Services.Export.Services
         Task<HttpContent> GetInterviewAudioAsync(Guid interviewId, string audio);
 
         [Get("/api/export/v1/interview/batch/history")]
-        Task<List<InterviewHistoryView>> GetInterviewsHistory([Query(CollectionFormat.Multi)] Guid[] id);
+        Task<List<InterviewHistoryView>> GetInterviewsHistory([Query(CollectionFormat.Multi)] Guid[] id, bool? reduced);
 
         [Get("/api/export/v1/interviews/batch/audioAudit")]
         Task<List<AudioAuditView>> GetAudioAuditInterviewsAsync([Query(CollectionFormat.Multi), AliasAs("id")] Guid[] interviewIds);

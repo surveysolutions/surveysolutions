@@ -218,6 +218,33 @@
                                     </label>
                                 </div>
                             </div>
+
+                            <div class="mb-30" v-if="dataType == 'paraData' && questionnaireVersion">
+                                <h3>
+                                    {{ $t('DataExport.ParadataEventsFilter') }}
+                                </h3>
+                                <div class="radio-btn-row">
+                                    <input class="radio-row" type="radio" name="paradataMode" id="paradataAll"
+                                        v-model="paradataMode" value="all" />
+                                    <label for="paradataAll">
+                                        <span class="tick"></span>
+                                        <span class="format-data Tabular">
+                                            {{ $t('DataExport.ParadataEventsFilter_All') }}
+                                        </span>
+                                    </label>
+                                </div>
+                                <div class="radio-btn-row" :title="$t('DataExport.ParadataEventsFilter_ReducedHint')">
+                                    <input class="radio-row" type="radio" name="paradataMode" id="paradataReduced"
+                                        v-model="paradataMode" value="reduced" />
+                                    <label for="paradataReduced" class>
+                                        <span class="tick"></span>
+                                        <span class="format-data ParadataReduced">
+                                            {{ $t('DataExport.ParadataEventsFilter_Reduced') }}
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>
+
                             <div class="mb-30" v-if="canExportExternally && questionnaireVersion">
                                 <h3>{{ $t('DataExport.DataDestination') }}</h3>
                                 <div class="radio-btn-row">
@@ -352,6 +379,7 @@ export default {
             pageState: {},
             updateInProgress: false,
             jobsLoadingBatchCount: 18,
+            paradataMode: 'all',
 
             dateRangeFrom: null,
             dateRangeTo: null,
@@ -449,6 +477,7 @@ export default {
             this.status = null
             this.hasInterviews = false
             this.hasBinaryData = false
+            this.paradataMode = 'all'
             this.dateRangeMode = null
             this.dateRangeFrom = null
             this.dateRangeTo = null
@@ -477,7 +506,8 @@ export default {
                     this.includeMeta,
                     this.dateRangeMode,
                     this.dateRangeFrom,
-                    this.dateRangeTo
+                    this.dateRangeTo,
+                    this.paradataMode
                 )
 
                 self.$store.dispatch('showProgress')
@@ -523,7 +553,8 @@ export default {
                 this.includeMeta,
                 this.dateRangeMode,
                 this.dateRangeFrom,
-                this.dateRangeTo
+                this.dateRangeTo,
+                this.paradataMode
             )
 
             var state = {
@@ -583,7 +614,8 @@ export default {
             includeMeta,
             dateRangeMode,
             dateRangeFrom,
-            dateRangeTo
+            dateRangeTo,
+            paradataMode
         ) {
             var format = dataFormatNum.Tabular
 
@@ -615,7 +647,8 @@ export default {
                 includeMeta: includeMeta,
                 dateRangeMode: drMode,
                 from: dateRangeFrom,
-                to: dateRangeTo
+                to: dateRangeTo,
+                paradataMode: paradataMode
             }
         },
 

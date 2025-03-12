@@ -10,7 +10,7 @@ namespace WB.Services.Export.CsvExport
     {
         Task ExportInterviewsInTabularFormatAsync(ExportSettings exportSettings, string tempPath, ExportProgress progress, CancellationToken cancellationToken);
         Task GenerateDescriptionFileAsync(TenantInfo tenant, QuestionnaireId questionnaireId, string directoryPath, string tabDataFileExtension, CancellationToken cancellationToken);
-        Task GenerateShortDescriptionFileAsync(TenantInfo tenant, QuestionnaireId questionnaireId, string directoryPath, string tabDataFileExtension, CancellationToken cancellationToken);
+        Task GenerateShortDescriptionFileAsync(TenantInfo tenant, QuestionnaireId questionnaireId, string directoryPath, string tabDataFileExtension, bool? paradataReduced, CancellationToken cancellationToken);
         Task GenerateInformationFileAsync(TenantInfo tenant, QuestionnaireId questionnaireId, string directoryPath, CancellationToken cancellationToken);
     }
 }

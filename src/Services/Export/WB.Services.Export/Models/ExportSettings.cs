@@ -18,6 +18,7 @@ namespace WB.Services.Export.Models
             DateTime? toDate = null, 
             Guid? translation = null, 
             bool? includeMeta = null,
+            bool? paradataReduced = null,
             long? jobId = null)
         {
             JobId = jobId;
@@ -29,6 +30,7 @@ namespace WB.Services.Export.Models
             Tenant = tenant;
             Translation = translation;
             IncludeMeta = includeMeta;
+            ParadataReduced = paradataReduced;
         }
 
         public long? JobId { get; set; }
@@ -42,6 +44,7 @@ namespace WB.Services.Export.Models
         public Guid? Translation { get; set; }
 
         public bool? IncludeMeta { get; set; }
+        public bool? ParadataReduced { get; set; }
 
         public string NaturalId => $"{Tenant}${InterviewStatusString()}${ExportFormat}${this.QuestionnaireId}" +
                                    $"${this.FromDate?.ToString(@"YYYYMMDD") ?? "EMPTY FROM DATE"}" +

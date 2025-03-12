@@ -31,5 +31,6 @@ namespace WB.Services.Export.Services.Processing
         public Guid? TranslationId { get; set; }
 
         public bool? IncludeMeta { set; get; }
+        public bool? ParadataReduced { set; get; }
     }
 }

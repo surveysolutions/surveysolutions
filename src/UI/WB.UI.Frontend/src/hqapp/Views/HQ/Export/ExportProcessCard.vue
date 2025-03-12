@@ -1,7 +1,7 @@
 <template>
     <div class="export-card">
         <div class="top-row">
-            <div class="format-data" :class="data.format">
+            <div class="format-data" :class="iconClass">
                 <div class="gray-text-row">
                     <b>#{{ data.id }}&nbsp;</b>
                     <span v-if="!isCompleted">
@@ -14,7 +14,8 @@
                         { title: data.title, version: data.questionnaireIdentity.version }) }}
                 </div>
                 <p class="mb-0 font-regular">
-                    <u class="font-bold">{{ data.format }}</u> format.
+                    <u class="font-bold">{{ data.format }}{{ data.format == "Paradata" && data.paradataReduced == true ?
+                        " (" + $t("DataExport.ParadataEventsFilter_Reduced") + ")" : "" }}</u> format.
                     <span v-if="data.format != 'DDI' && data.interviewStatus != null" class="font-bold">
                         {{ $t('DataExport.DataExport_InterviewsStatus', {
                             status: $t('DataExport.' + data.interviewStatus),
@@ -143,6 +144,12 @@ export default {
     },
 
     computed: {
+        iconClass() {
+            if (this.data.format == 'Paradata' && this.data.paradataReduced == true)
+                return 'ParadataReduced'
+
+            return this.data.format
+        },
         downloadFileUrl() {
             var url = this.$config.model.api.downloadDataUrl
             return `${url}?id=${this.data.id}`

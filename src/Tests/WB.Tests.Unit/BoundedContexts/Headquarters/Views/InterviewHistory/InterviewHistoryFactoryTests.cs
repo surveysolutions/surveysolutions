@@ -93,7 +93,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Views.InterviewHistory
                 users.Object,
                 questionnaireExportStructureStorage.Object);
 
-            var historyView = interviewHistoryFactory.Load(new[]{interviewId1, interviewId2});
+            var historyView = interviewHistoryFactory.Load(new[]{interviewId1, interviewId2}, false);
             
             Assert.That(historyView.Length, Is.EqualTo(2));
             Assert.That(historyView[0].Records.Count, Is.EqualTo(4));
