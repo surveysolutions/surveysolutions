@@ -231,7 +231,7 @@ export default {
         },
         formatDate(date) {
             if (date)
-                return moment(date).format(DateFormats.dateTimeInList)
+                return moment.utc(date).local().format(DateFormats.dateTimeInList)
             return null
         },
     },
