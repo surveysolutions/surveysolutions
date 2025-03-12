@@ -77,7 +77,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory
 
                 foreach (var @event in events)
                 {
-                    if (ReducedEvents.Contains(@event.Payload.GetType()))
+                    if (reduced == true && ReducedEvents.Contains(@event.Payload.GetType()))
                         continue;
                     
                     interviewHistoryDenormalizer.Handle(@event);
