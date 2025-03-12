@@ -19,14 +19,6 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
             var fontResolverInfo = base.ResolveTypeface(familyName, isBold, isItalic);
             if (fontResolverInfo != null)
                 return fontResolverInfo;
-            
-            /*var fontNames = familyName.Split(',');
-            foreach (var fontName in fontNames)
-            {
-                var fontResolverInfo = base.ResolveTypeface(fontName.Trim(), isBold, isItalic);
-                if (fontResolverInfo != null)
-                    return fontResolverInfo;
-            }*/
 
             return defaultResolver.ResolveTypeface(defaultResolver.DefaultFontName, isBold, isItalic);
         }
