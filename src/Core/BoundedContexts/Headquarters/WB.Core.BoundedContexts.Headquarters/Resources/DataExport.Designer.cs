@@ -650,5 +650,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
                 return ResourceManager.GetString("SurveyQuestionnaireTranslation", resourceCulture);
             }
         }
+        
+        public static string DataType_AudioAuditFiles {
+            get {
+                return ResourceManager.GetString("DataType_AudioAuditFiles", resourceCulture);
+            }
+        }
     }
 }

@@ -112,6 +112,16 @@
                                         </span>
                                     </label>
                                 </div>
+                                <div class="radio-btn-row" v-if="hasInterviews && hasAudioAudit">
+                                    <input class="radio-row" type="radio" name="dataType" id="audioAuditFiles"
+                                        v-model="dataType" value="audioAuditFiles" />
+                                    <label for="audioAuditFiles">
+                                        <span class="tick"></span>
+                                        <span class="format-data AudioAudit">
+                                            {{ $t('DataExport.DataType_AudioAuditFiles') }}
+                                        </span>
+                                    </label>
+                                </div>
                                 <div class="radio-btn-row" v-if="hasInterviews">
                                     <input class="radio-row" type="radio" name="dataType" id="paraData"
                                         v-model="dataType" value="paraData" />
@@ -285,6 +295,7 @@ const dataFormatNum = {
     Binary: 4,
     Ddi: 5,
     Paradata: 6,
+    AudioAudit: 7,
 }
 const ExternalStorageType = { dropbox: 1, oneDrive: 2, googleDrive: 3 }
 
@@ -310,6 +321,7 @@ export default {
             isUpdatingDataAvailability: false,
             hasInterviews: false,
             hasBinaryData: false,
+            hasAudioAudit: false,
             externalStoragesSettings:
                 (window.CONFIG.model.externalStoragesSettings || {}).oAuth2 || {},
             pageState: {},
@@ -372,6 +384,7 @@ export default {
             this.status = null
             this.hasInterviews = false
             this.hasBinaryData = false
+            this.hasAudioAudit = false
 
             this.$refs.exportForm.resetForm()
         },
@@ -511,6 +524,9 @@ export default {
                 case 'paraData':
                     format = dataFormatNum.Paradata
                     break
+                case 'audioAudit':
+                    format = dataFormatNum.AudioAudit
+                    break
             }
 
             const status = (statusOption || { key: null }).key
@@ -589,6 +605,7 @@ export default {
         resetDataAvalability() {
             this.hasInterviews = null
             this.hasBinaryData = null
+            this.hasAudioAudit = null
             this.dataType = null
         },
 
@@ -605,6 +622,7 @@ export default {
                 .then((response) => {
                     this.hasInterviews = response.data.hasInterviews
                     this.hasBinaryData = response.data.hasBinaryData
+                    this.hasAudioAudit = response.data.hasAudioAudit
                     if (this.dataType == null) {
                         this.dataType = this.hasInterviews ? 'surveyData' : 'ddi'
                     }

@@ -420,4 +420,7 @@
   <data name="SurveyQuestionnaireTranslation" xml:space="preserve">
       <value>Translation</value>
   </data>
+  <data name="DataType_AudioAuditFiles" xml:space="preserve">
+      <value>Audio Audit Files. Arhive containing Audio Audit</value>
+  </data>
 </root>

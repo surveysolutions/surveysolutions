@@ -25,6 +25,7 @@ namespace WB.Services.Export.Jobs
             (DataExportType.Data, DataExportFormat.STATA),
             (DataExportType.Data, DataExportFormat.SPSS),
             (DataExportType.Data, DataExportFormat.Binary),
+            (DataExportType.Data, DataExportFormat.AudioAudit)
         };
 
         private readonly IDataExportProcessesService dataExportProcessesService;
