@@ -123,7 +123,7 @@ export default {
             job.dataFileLastUpdateDate = formatDate(job.dataFileLastUpdateDate)
             job.fileDestination = job.dataDestination
             job.error = (job.error || {}).message
-            job.timeEstimation = moment.duration(job.timeEstimation).humanize(true)
+            job.timeEstimation = job.isRunning ? moment.duration(job.timeEstimation).humanize(true) : null
             state.jobs[index] = job
         },
 
