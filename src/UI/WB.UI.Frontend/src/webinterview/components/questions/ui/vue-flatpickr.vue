@@ -1,21 +1,13 @@
 <template>
-    <input
-        type="text"
-        :id="id"
-        :disabled="disabled"
-        :class="inputClass"
-        :name="name"
-        :placeholder="placeholder"
-        :required="required"
-        v-model="mutableValue"
-        data-input/>
+    <input type="text" :id="id" :disabled="disabled" :class="inputClass" :name="name" :placeholder="placeholder"
+        :required="required" v-model="mutableValue" data-input />
 </template>
 
 <script type="text/javascript">
 import Flatpickr from 'flatpickr'
-import {browserLanguage} from '~/shared/helpers'
+import { browserLanguage } from '~/shared/helpers'
 import FlatpickrLocale from 'flatpickr/dist/l10n'
-import {assign} from 'lodash'
+import { assign } from 'lodash'
 
 Flatpickr.localize(FlatpickrLocale[browserLanguage])
 // You have to import css yourself
@@ -40,6 +32,7 @@ export default {
             type: Object,
             default: () => ({
                 wrap: false,
+                disableMobile: true,
             }),
         },
         disabled: Boolean,
@@ -114,4 +107,3 @@ export default {
     },
 }
 </script>
-
