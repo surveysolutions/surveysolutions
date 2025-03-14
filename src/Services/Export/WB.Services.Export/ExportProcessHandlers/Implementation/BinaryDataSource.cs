@@ -41,6 +41,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
         }
 
         public async Task ForEachInterviewMultimediaAsync(ExportState state, 
+            MultimediaDataType multimediaDataType,
             Func<BinaryData, Task> binaryDataAction, CancellationToken cancellationToken)
         {
             var settings = state.Settings;
@@ -79,73 +80,44 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
                 long filesUploaded = 0;
                 var interviewProgress = interviewsProcessed.PercentOf(interviewsToExport.Count);
 
-                foreach (var answer in allMultimediaAnswers)
+                if (multimediaDataType == MultimediaDataType.Binary)
                 {
-                    try
-                    {
-                        var data = new BinaryData
-                        {
-                            InterviewId = answer.InterviewId,
-                            InterviewKey = interviewsKeyMap[answer.InterviewId],
-                            FileName = answer.Answer
-                        };
-
-                        switch (answer.Type)
-                        {
-                            case MultimediaType.Image:
-                                var imageContent = await api.GetInterviewImageAsync(answer.InterviewId, answer.Answer);
-                                var imageStream = new MemoryStream(await imageContent.ReadAsByteArrayAsync());
-                                data.Content = imageStream;
-                                data.ContentLength = imageStream.Length;
-                                data.Type = BinaryDataType.Image;
-
-                                break;
-                            case MultimediaType.Audio:
-                                var audioContent = await api.GetInterviewAudioAsync(answer.InterviewId, answer.Answer);
-                                var audioStream = new MemoryStream(await audioContent.ReadAsByteArrayAsync());
-                                data.Content = audioStream;
-                                data.ContentLength = audioStream.Length;
-                                data.Type = BinaryDataType.Audio;
-                                
-                                break;
-                            default:
-                                continue;
-                        }
-                        
-                        await binaryDataAction(data);
-
-                        filesUploaded++;
-
-                        var filesPercent = filesUploaded / totalFiles;
-                        var batchProgress = (long) (interviewIds.Length * filesPercent );
-                        var batchInterviewsProgress = batchProgress.PercentOf(interviewsToExport.Count);
-                        
-                        progress.Report(interviewProgress + batchInterviewsProgress);
-                    }
-                    catch(ApiException e) when (e.StatusCode == HttpStatusCode.NotFound)
-                    {
-                        logger.LogWarning("[{statusCode}] Cannot download file for {interviewId} - {answer}", e.StatusCode, answer.InterviewId, answer.Answer);
-                    }
-                }
-
-                foreach (var audioAuditInfo in audioAuditInfos)
-                {
-                    foreach (var fileName in audioAuditInfo.FileNames)
+                    foreach (var answer in allMultimediaAnswers)
                     {
                         try
                         {
-                            var audioContent = await api.GetAudioAuditAsync(audioAuditInfo.InterviewId, fileName);
-                            var memoryStream = new MemoryStream(await audioContent.ReadAsByteArrayAsync());
-
-                            await binaryDataAction(new BinaryData
+                            var data = new BinaryData
                             {
-                                InterviewId = audioAuditInfo.InterviewId,
-                                InterviewKey = interviewsKeyMap[audioAuditInfo.InterviewId],
-                                FileName = fileName,
-                                Content = memoryStream,
-                                ContentLength = memoryStream.Length,
-                                Type = BinaryDataType.AudioAudit
-                            });
+                                InterviewId = answer.InterviewId,
+                                InterviewKey = interviewsKeyMap[answer.InterviewId],
+                                FileName = answer.Answer
+                            };
+
+                            switch (answer.Type)
+                            {
+                                case MultimediaType.Image:
+                                    var imageContent =
+                                        await api.GetInterviewImageAsync(answer.InterviewId, answer.Answer);
+                                    var imageStream = new MemoryStream(await imageContent.ReadAsByteArrayAsync());
+                                    data.Content = imageStream;
+                                    data.ContentLength = imageStream.Length;
+                                    data.Type = BinaryDataType.Image;
+
+                                    break;
+                                case MultimediaType.Audio:
+                                    var audioContent =
+                                        await api.GetInterviewAudioAsync(answer.InterviewId, answer.Answer);
+                                    var audioStream = new MemoryStream(await audioContent.ReadAsByteArrayAsync());
+                                    data.Content = audioStream;
+                                    data.ContentLength = audioStream.Length;
+                                    data.Type = BinaryDataType.Audio;
+
+                                    break;
+                                default:
+                                    continue;
+                            }
+
+                            await binaryDataAction(data);
 
                             filesUploaded++;
 
@@ -157,7 +129,47 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
                         }
                         catch (ApiException e) when (e.StatusCode == HttpStatusCode.NotFound)
                         {
-                            logger.LogWarning("[{statusCode}] Cannot download audio audit record for interview: {interviewId} - {fileName}", e.StatusCode, audioAuditInfo.InterviewId, fileName);
+                            logger.LogWarning("[{statusCode}] Cannot download file for {interviewId} - {answer}",
+                                e.StatusCode, answer.InterviewId, answer.Answer);
+                        }
+                    }
+                }
+
+                if (multimediaDataType == MultimediaDataType.AudioAudit)
+                {
+                    foreach (var audioAuditInfo in audioAuditInfos)
+                    {
+                        foreach (var fileName in audioAuditInfo.FileNames)
+                        {
+                            try
+                            {
+                                var audioContent = await api.GetAudioAuditAsync(audioAuditInfo.InterviewId, fileName);
+                                var memoryStream = new MemoryStream(await audioContent.ReadAsByteArrayAsync());
+
+                                await binaryDataAction(new BinaryData
+                                {
+                                    InterviewId = audioAuditInfo.InterviewId,
+                                    InterviewKey = interviewsKeyMap[audioAuditInfo.InterviewId],
+                                    FileName = fileName,
+                                    Content = memoryStream,
+                                    ContentLength = memoryStream.Length,
+                                    Type = BinaryDataType.AudioAudit
+                                });
+
+                                filesUploaded++;
+
+                                var filesPercent = filesUploaded / totalFiles;
+                                var batchProgress = (long)(interviewIds.Length * filesPercent);
+                                var batchInterviewsProgress = batchProgress.PercentOf(interviewsToExport.Count);
+
+                                progress.Report(interviewProgress + batchInterviewsProgress);
+                            }
+                            catch (ApiException e) when (e.StatusCode == HttpStatusCode.NotFound)
+                            {
+                                logger.LogWarning(
+                                    "[{statusCode}] Cannot download audio audit record for interview: {interviewId} - {fileName}",
+                                    e.StatusCode, audioAuditInfo.InterviewId, fileName);
+                            }
                         }
                     }
                 }

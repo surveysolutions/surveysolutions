@@ -81,8 +81,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             var hasAudioAuditFiles = await this.audioAuditFileStorage.HasAnyAudioAuditFilesStoredAsync(questionnaireIdentity);
             return new ExportDataAvailabilityView
             {
-                HasBinaryData = questionnaire.HasAnyMultimediaQuestion() 
-                || hasAudioAuditFiles,
+                HasBinaryData = questionnaire.HasAnyMultimediaQuestion(), 
+                HasAudioAudit = hasAudioAuditFiles,
                 HasInterviews = true
             };
         }

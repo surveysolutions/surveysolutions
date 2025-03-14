@@ -2,13 +2,14 @@ using Microsoft.Extensions.Options;
 
 namespace WB.Services.Export.ExportProcessHandlers.Implementation.Handlers;
 
-internal class BinaryDataExternalStorageDataExportHandler : ExternalStorageDataExportHandlerBase
+internal class AudioAuditExternalStorageDataExportHandler: ExternalStorageDataExportHandlerBase
 {
-    public BinaryDataExternalStorageDataExportHandler(
+    public AudioAuditExternalStorageDataExportHandler(
         IOptions<ExportServiceSettings> interviewDataExportSettings,
         IExternalStorageDataClientFactory externalDataClientFactory,
         IBinaryDataSource binaryDataSource) : base(interviewDataExportSettings, externalDataClientFactory,
-        binaryDataSource, false)
+        binaryDataSource, true)
     {
     }
+    
 }

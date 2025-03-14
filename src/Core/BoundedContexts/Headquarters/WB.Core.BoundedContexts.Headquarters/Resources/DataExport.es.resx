@@ -420,4 +420,7 @@
     <data name="SurveyQuestionnaireVersion" xml:space="preserve">
   <value>Versión del cuestionario</value>
 </data>
+  <data name="DataType_AudioAuditFiles" xml:space="preserve">
+      <value>Archivos de auditoría de audio. Archivo que contiene auditoría de audio</value>
+  </data>
 </root>

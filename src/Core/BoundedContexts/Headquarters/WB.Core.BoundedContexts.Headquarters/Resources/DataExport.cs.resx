@@ -420,4 +420,7 @@
   <data name="SurveyQuestionnaireVersion" xml:space="preserve">
     <value>Typ dotazníku (verze)</value>
   </data>
+  <data name="DataType_AudioAuditFiles" xml:space="preserve">
+      <value>Zvukové auditní soubory. Archiv obsahující zvukový audit</value>
+  </data>
 </root>

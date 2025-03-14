@@ -431,4 +431,7 @@
   <data name="SurveyQuestionnaireTranslation" xml:space="preserve">
       <value>Перевод</value>
   </data>
+  <data name="DataType_AudioAuditFiles" xml:space="preserve">
+      <value>Файлы аудита аудио. Архив, содержащий аудио аудит</value>
+  </data>
 </root>

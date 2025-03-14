@@ -10,8 +10,10 @@ namespace WB.Services.Export.ExportProcessHandlers
     {
         public static void UseExportProcessHandlers(this IServiceCollection services)
         {
-            services.AddTransient<BinaryDataIntoArchiveExportHandler>();
+            services.AddTransient<BinaryDataArchiveFileExportHandler>();
             services.AddTransient<BinaryDataExternalStorageDataExportHandler>();
+            services.AddTransient<AudioAuditArchiveFileExportHandler>();
+            services.AddTransient<AudioAuditExternalStorageDataExportHandler>();
             services.AddTransient<TabularFormatParaDataExportProcessHandler>();
             services.AddTransient<TabularFormatDataExportHandler>();
             services.AddTransient<SpssFormatExportHandler>();

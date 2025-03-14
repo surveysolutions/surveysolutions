@@ -408,4 +408,7 @@
   <data name="Translation_CardLabel" xml:space="preserve">
     <value>Traducere: {{language}}</value>
   </data>
+  <data name="DataType_AudioAuditFiles" xml:space="preserve">
+      <value>Fișiere de audit audio. Arhivă care conține audit audio</value>
+  </data>
 </root>
