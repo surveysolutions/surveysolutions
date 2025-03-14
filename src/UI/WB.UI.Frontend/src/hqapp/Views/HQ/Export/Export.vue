@@ -117,7 +117,7 @@
                                         v-model="dataType" value="audioAuditFiles" />
                                     <label for="audioAuditFiles">
                                         <span class="tick"></span>
-                                        <span class="format-data AudioAudit">
+                                        <span class="format-data Binary">
                                             {{ $t('DataExport.DataType_AudioAuditFiles') }}
                                         </span>
                                     </label>
