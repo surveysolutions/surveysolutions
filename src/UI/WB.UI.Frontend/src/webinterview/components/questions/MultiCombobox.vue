@@ -21,8 +21,8 @@
                 <div class="form-group"
                     v-if="($me.acceptAnswer && !allAnswersGiven) || (!$me.acceptAnswer && !$me.isAnswered)">
                     <div class="field" :class="{ answered: $me.isAnswered }">
-                        <wb-typeahead :disabled="!$me.acceptAnswer" :questionId="$me.id" @input="appendCompboboxItem"
-                            :optionsSource="optionsSource"
+                        <wb-typeahead :disabled="(!$me.acceptAnswer || this.selectedOptions.length >= 200)"
+                            :questionId="$me.id" @input="appendCompboboxItem" :optionsSource="optionsSource"
                             :watermark="!$me.acceptAnswer && !$me.isAnswered ? $t('Details.NoAnswer') : null" />
                     </div>
                 </div>
