@@ -88,10 +88,8 @@ const httpPlugin = {
                 })
             },
 
-            post(actionName, args) {
+            post(actionName, interviewId, args) {
                 return query(null, args, async params => {
-                    const interviewId = params.interviewId
-                    delete params.interviewId
                     var headers = store.getters.isReviewMode === true ? { review: true } : {}
                     return await http.post(`api/webinterview/${actionName}?interviewId=${interviewId}`, params,
                         {
