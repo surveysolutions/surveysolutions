@@ -569,11 +569,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
 
         private InterviewQuestionInvariants RequireMaxAnswersCountLimit(int answersCount)
         {
-            int? maxSelectedOptions = this.Questionnaire.GetMaxSelectedAnswerOptions(this.QuestionId);
+            int maxSelectedOptions = 
+                Math.Min(this.Questionnaire.GetMaxSelectedAnswerOptions(this.QuestionId) ?? Int32.MaxValue, 
+                    Constants.MaxMultiOptionAnswersCount);
 
-            if (maxSelectedOptions.HasValue && maxSelectedOptions > 0 && answersCount > maxSelectedOptions)
+            if (answersCount > maxSelectedOptions)
                 throw new AnswerNotAcceptedException(
-                    $"Number of answers is greater than the maximum number of selected answers")
+                    $"Number of answers is greater than the allowed maximum number of selected answers")
                 {
                     Data =
                     {

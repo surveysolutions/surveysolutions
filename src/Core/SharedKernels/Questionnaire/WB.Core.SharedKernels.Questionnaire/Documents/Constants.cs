@@ -8,6 +8,7 @@ namespace WB.Core.SharedKernels.SurveySolutions.Documents
         public static readonly int MaxRosterRowCount = 200;
         public static readonly int MinRosterRowCount = 1;
         public static readonly int MaxMultiComboboxAnswersCount = 200;
+        public static readonly int MaxMultiOptionAnswersCount = 200;
         public static readonly int MaxLinkedQuestionAnsweredOptionsCount = 200;
         public static readonly string HtmlRemovalPattern = "<.*?>";
         public static readonly int ThrottlePeriod = 500;
