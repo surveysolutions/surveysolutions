@@ -83,12 +83,12 @@ export default {
             const self = this
             const interviewId = this.$route.params.interviewId
             const excludedOptionIds = self.$me.answer
-            const optionsPromise = api.get('getTopFilteredOptionsForQuestionWithExclude', {
-                interviewId, id: this.$me.id, filter, count: 20, excludedOptionIds
-            })
+            const optionsPromise = api.post('getTopFilteredOptionsForQuestionWithExclude',
+                interviewId,
+                { id: this.$me.id, filter, count: 20, excludedOptionIds })
             return optionsPromise
                 .then(options => {
-                    return loFilter(options, (o) => {
+                    return loFilter(options.data, (o) => {
                         return !includes(self.$me.answer, o.value)
                     })
                 })

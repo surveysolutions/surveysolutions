@@ -35,13 +35,19 @@ namespace WB.UI.WebTester.Controllers
         [HttpGet]
         [Route("getTopFilteredOptionsForQuestion")]
         public DropdownItem[] GetTopFilteredOptionsForQuestion(Guid interviewId, string id, string filter, int count)
-            => base.GetTopFilteredOptionsForQuestion(interviewId, id, filter, count);
+            => base.GetTopFilteredOptionsForQuestion(
+                interviewId,
+                new GetTopFilteredOptionsForQuestionRequest()
+                {
+                    Id = id,
+                    Filter = filter,
+                    Count = count
+                });
 
-        [HttpGet]
+        [HttpPost]
         [Route("getTopFilteredOptionsForQuestionWithExclude")]
-        public override DropdownItem[] GetTopFilteredOptionsForQuestion(Guid interviewId, string id, string filter, int count,
-            [FromQuery(Name = "excludedOptionIds[]")] int[] excludedOptionIds)
-            => base.GetTopFilteredOptionsForQuestion(interviewId, id, filter, count, excludedOptionIds);
+        public override DropdownItem[] GetTopFilteredOptionsForQuestion(Guid interviewId, [FromBody] GetTopFilteredOptionsForQuestionRequest request)
+            => base.GetTopFilteredOptionsForQuestion(interviewId, request);
 
         [HttpGet]
         [Route("getBreadcrumbs")]
