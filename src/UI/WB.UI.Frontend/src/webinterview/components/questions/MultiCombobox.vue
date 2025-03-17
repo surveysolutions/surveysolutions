@@ -19,7 +19,7 @@
                 </div>
 
                 <div class="form-group"
-                    v-if="($me.acceptAnswer && !allAnswersGiven) || (!$me.acceptAnswer && !$me.isAnswered) || this.selectedOptions.length >= 200">
+                    v-if="(($me.acceptAnswer && !allAnswersGiven) || (!$me.acceptAnswer && !$me.isAnswered)) && this.selectedOptions.length < 200">
                     <div class="field" :class="{ answered: $me.isAnswered }">
                         <wb-typeahead :disabled="!$me.acceptAnswer" :questionId="$me.id" @input="appendCompboboxItem"
                             :optionsSource="optionsSource"
