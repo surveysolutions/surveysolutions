@@ -4,7 +4,6 @@ import vue from '@vitejs/plugin-vue'
 import envCompatible from 'vite-plugin-env-compatible';
 import mpaPlugin from 'vite-plugin-mpa-plus'
 //import { createHtmlPlugin } from 'vite-plugin-html';
-import { viteCommonjs } from '@originjs/vite-plugin-commonjs';
 import LocalizationPlugin from './tools/vite-plugin-localization'
 import inject from '@rollup/plugin-inject';
 //import vitePluginRequire from "vite-plugin-require";
@@ -396,40 +395,40 @@ export default defineConfig(({ mode, command }) => {
 const silenceSomeSassDeprecationWarnings = {
     verbose: true,
     logger: {
-      warn(message, options) {
-        //console.log(message)
-        //console.log(options)
-        const { stderr } = process;
-        const span = options.span ?? undefined;
-        const stack = (options.stack === 'null' ? undefined : options.stack) ?? undefined;
+        warn(message, options) {
+            //console.log(message)
+            //console.log(options)
+            const { stderr } = process;
+            const span = options.span ?? undefined;
+            const stack = (options.stack === 'null' ? undefined : options.stack) ?? undefined;
 
-        if (options.deprecation) {
-            //if (stack.indexOf('node_modules') != - 1) {
-            //    return;
-            //}
-            if (stack.indexOf('assets/bootstrap') != -1) {
-                return;
+            if (options.deprecation) {
+                //if (stack.indexOf('node_modules') != - 1) {
+                //    return;
+                //}
+                if (stack.indexOf('assets/bootstrap') != -1) {
+                    return;
+                }
+
+                if (message.startsWith('Using / for division outside of calc() is deprecated')) {
+                    // silences above deprecation warning
+                    return;
+                }
+                stderr.write('DEPRECATION ');
             }
-      
-            if (message.startsWith('Using / for division outside of calc() is deprecated')) {
-                // silences above deprecation warning
-                return;
+            stderr.write(`WARNING: ${message}\n`);
+
+            if (span !== undefined) {
+                // output the snippet that is causing this warning
+                stderr.write(`\n"${span.text}"\n`);
             }
-            stderr.write('DEPRECATION ');
+
+            if (stack !== undefined) {
+                // indent each line of the stack
+                stderr.write(`    ${stack.toString().trimEnd().replace(/\n/gm, '\n    ')}\n`);
+            }
+
+            stderr.write('\n');
         }
-        stderr.write(`WARNING: ${message}\n`);
-  
-        if (span !== undefined) {
-          // output the snippet that is causing this warning
-          stderr.write(`\n"${span.text}"\n`);
-        }
-  
-        if (stack !== undefined) {
-          // indent each line of the stack
-          stderr.write(`    ${stack.toString().trimEnd().replace(/\n/gm, '\n    ')}\n`);
-        }
-  
-        stderr.write('\n');
-      }
     }
-  };
+};
