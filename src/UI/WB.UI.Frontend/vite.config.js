@@ -1,15 +1,9 @@
 import { defineConfig } from 'vite';
 import path from 'path';
 import vue from '@vitejs/plugin-vue'
-import envCompatible from 'vite-plugin-env-compatible';
-import mpaPlugin from 'vite-plugin-mpa-plus'
-//import { createHtmlPlugin } from 'vite-plugin-html';
 import LocalizationPlugin from './tools/vite-plugin-localization'
-import inject from '@rollup/plugin-inject';
-//import vitePluginRequire from "vite-plugin-require";
 import { rimrafSync } from 'rimraf';
 import fs from 'fs';
-import { viteStaticCopy } from 'vite-plugin-static-copy';
 import { ViteFilemanager } from 'filemanager-plugin';
 import saveSelectedFilesPlugin from './tools/saveSelectedFilesPlugin.cjs';
 import { normalizePath } from 'vite';
