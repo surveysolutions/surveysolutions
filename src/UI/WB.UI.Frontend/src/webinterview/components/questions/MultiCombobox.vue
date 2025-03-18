@@ -19,7 +19,7 @@
                 </div>
 
                 <div class="form-group"
-                    v-if="($me.acceptAnswer && !allAnswersGiven) || (!$me.acceptAnswer && !$me.isAnswered)">
+                    v-if="(($me.acceptAnswer && !allAnswersGiven) || (!$me.acceptAnswer && !$me.isAnswered)) && this.selectedOptions.length < 200">
                     <div class="field" :class="{ answered: $me.isAnswered }">
                         <wb-typeahead :disabled="!$me.acceptAnswer" :questionId="$me.id" @input="appendCompboboxItem"
                             :optionsSource="optionsSource"
@@ -29,8 +29,8 @@
                 <wb-lock />
             </div>
         </div>
-        <div v-if="allAnswersGiven" class="information-block text-info">
-            <h6>{{ $t("WebInterviewUI.MaxAnswersCountSelected", { value: $me.maxSelectedAnswersCount }) }}</h6>
+        <div v-if="allAnswersGiven || this.selectedOptions.length >= 200" class="information-block text-info">
+            <h6>{{ $t("WebInterviewUI.MaxAnswersCountSelected", { value: $me.maxSelectedAnswersCount ?? 200 }) }}</h6>
         </div>
     </wb-question>
 </template>
