@@ -37,26 +37,6 @@ export default {
         });
     },
 
-    prompt(message) {
-        return new Promise((resolve) => {
-            this.showModal({
-                title: '',
-                message: `<input type="text" class="form-control" id="promptInput">`,
-                buttons: {
-                    ok: {
-                        label: this.translations.OK,
-                        className: 'btn-primary',
-                        callback: () => {
-                            const inputValue = document.getElementById('promptInput').value;
-                            resolve(inputValue);
-                        }
-                    },
-                    cancel: { label: this.translations.CANCEL, className: 'btn-secondary', callback: () => resolve(null) }
-                }
-            });
-        });
-    },
-
     dialog(options) {
         return new Promise((resolve) => {
             this.showModal(options);
@@ -74,7 +54,7 @@ export default {
         else if (size === 'large') sizeClass = 'modal-lg';
         else if (size === 'extra-large') sizeClass = 'modal-xl';
 
-        let buttonsHTML = Object.entries(buttons).map(([key, btn]) => 
+        let buttonsHTML = Object.entries(buttons).map(([key, btn]) =>
             `<button type="button" class="btn btn-default ${btn.className ?? (key == 'ok' || key == 'success' ? 'btn-primary' : 'btn-secondary')}" id="modal-btn-${key}">${processText(btn.label)}</button>`
         ).join('');
 
@@ -99,10 +79,10 @@ export default {
 
         document.body.insertAdjacentHTML('beforeend', modalHTML);
         const modalElement = document.getElementById('customModal');
-        const modalInstance = new Modal(modalElement, { 
+        const modalInstance = new Modal(modalElement, {
             keyboard: onEscape,
             backdrop: onEscape ? true : 'static'
-         });
+        });
 
         Object.entries(buttons).forEach(([key, btn]) => {
             document.getElementById(`modal-btn-${key}`).addEventListener('click', () => {
@@ -122,15 +102,15 @@ export default {
         modalInstance.show();
     },
 
-    
+
     processText(str) {
         //return sanitizeHtml(str);
-        //sanitizeHtml(message, { allowedTags: ['b', 'i', 'strong', 'em', 'p', 'ul', 'li', 'br'] })
-        return String(str)
+        return sanitizeHtml(message, { allowedTags: ['b', 'i', 'strong', 'em', 'p', 'ul', 'li', 'br'] })
+        /*return String(str)
                 .replace(/&/g, '&amp;')
                 .replace(/</g, '&lt;')
                 .replace(/>/g, '&gt;')
                 .replace(/"/g, '&quot;')
-                .replace(/'/g, '&#039;');
+                .replace(/'/g, '&#039;');*/
     }
 };
