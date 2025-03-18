@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             // Assert
             exception.Should().NotBeNull();
-            exception.Message.Should().Be("Number of answers is greater than the maximum number of selected answers");
+            exception.Message.Should().Be("Number of answers is greater than the allowed maximum number of selected answers");
         }
     }
 }
