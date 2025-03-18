@@ -420,4 +420,40 @@
   <data name="SurveyQuestionnaireTranslation" xml:space="preserve">
     <value>Tradução</value>
   </data>
+    <data name="SurveyQuestionnaireDateRange" xml:space="preserve">
+    <value>Período</value>
+</data>
+    <data name="DateRangeAllTime" xml:space="preserve">
+    <value>Todo o tempo</value>
+</data>
+    <data name="DateRangeLast24hours" xml:space="preserve">
+    <value>Últimas 24 horas</value>
+</data>
+    <data name="DateRangeLast7days" xml:space="preserve">
+    <value>Últimos 7 dias</value>
+</data>
+    <data name="DateRangeLast30days" xml:space="preserve">
+    <value>Últimos 30 dias</value>
+</data>
+    <data name="DateRangeLastToday" xml:space="preserve">
+    <value>Hoje</value>
+</data>
+    <data name="DateRangeLastYesterday" xml:space="preserve">
+    <value>Ontem</value>
+</data>
+    <data name="DateRangeCustom" xml:space="preserve">
+    <value>Personalizado</value>
+</data>
+    <data name="SurveyQuestionnaireDateRangeFrom" xml:space="preserve">
+    <value>De</value>
+</data>
+    <data name="DateRangeFromAll" xml:space="preserve">
+    <value>Mais antigo disponível</value>
+</data>
+    <data name="SurveyQuestionnaireDateRangeTo" xml:space="preserve">
+    <value>Até</value>
+</data>
+    <data name="DateRangeToAll" xml:space="preserve">
+    <value>Momento atual</value>
+</data>
 </root>
