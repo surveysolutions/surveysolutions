@@ -8,6 +8,7 @@ import Flatpickr from 'flatpickr'
 import { browserLanguage } from '~/shared/helpers'
 import FlatpickrLocale from 'flatpickr/dist/l10n'
 import { assign } from 'lodash'
+import { merge } from 'jquery'
 
 Flatpickr.localize(FlatpickrLocale[browserLanguage])
 // You have to import css yourself
@@ -30,10 +31,7 @@ export default {
         // https://chmln.github.io/flatpickr/options/
         config: {
             type: Object,
-            default: () => ({
-                wrap: false,
-                disableMobile: true,
-            }),
+            default: () => ({})
         },
         disabled: Boolean,
         placeholder: {
@@ -59,15 +57,22 @@ export default {
     data() {
         return {
             mutableValue: this.value,
+            mergedConfig: {},
+            defaultConfig: {
+                wrap: false,
+                disableMobile: true,
+            },
             fp: null,
         }
     },
     mounted() {
+        Object.assign(this.mergedConfig, this.defaultConfig, this.config)
+
         // Load flatPickr if not loaded yet
         if (!this.fp) {
             // Bind on parent element if wrap is true
-            let elem = this.config.wrap ? this.$el.parentNode : this.$el
-            this.fp = new Flatpickr(elem, this.config)
+            let elem = this.mergedConfig.wrap ? this.$el.parentNode : this.$el
+            this.fp = new Flatpickr(elem, this.mergedConfig)
         }
     },
     beforeDestroy() {
@@ -84,7 +89,9 @@ export default {
          * @param newConfig Object
          */
         config(newConfig) {
-            this.fp.config = assign(this.fp.config, newConfig)
+            Object.assign(this.mergedConfig, this.defaultConfig, newConfig)
+
+            this.fp.config = assign(this.fp.config, this.mergedConfig)
             this.fp.redraw()
             this.fp.setDate(this.value, true)
         },
