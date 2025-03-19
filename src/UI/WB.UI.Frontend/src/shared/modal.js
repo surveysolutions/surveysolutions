@@ -1,6 +1,7 @@
-import './jquery'
+import './jquery';
 import { Modal } from 'bootstrap';
 import sanitizeHtml from 'sanitize-html';
+import { newGuid } from './guid';
 
 export default {
     init(i18n, locale) {
@@ -49,17 +50,19 @@ export default {
             buttons = {};
         }
 
+        const modalId = `customModal-${newGuid()}`;
+
         let sizeClass = '';
         if (size === 'small') sizeClass = 'modal-sm';
         else if (size === 'large') sizeClass = 'modal-lg';
         else if (size === 'extra-large') sizeClass = 'modal-xl';
 
         let buttonsHTML = Object.entries(buttons).map(([key, btn]) =>
-            `<button type="button" class="btn btn-default ${btn.className ?? (key == 'ok' || key == 'success' ? 'btn-primary' : 'btn-secondary')}" id="modal-btn-${key}">${this.processText(btn.label)}</button>`
+            `<button type="button" class="btn btn-default ${btn.className ?? (key == 'ok' || key == 'success' ? 'btn-primary' : 'btn-secondary')}" id="${modalId}-btn-${key}">${this.processText(btn.label)}</button>`
         ).join('');
 
         let modalHTML = `
-      <div class="modal fade" id="customModal" tabindex="-1" ${onEscape ? '' : 'data-bs-keyboard="false"'}>
+      <div class="modal fade" id="${modalId}" tabindex="-1" ${onEscape ? '' : 'data-bs-keyboard="false"'} aria-hidden="true">
         <div class="modal-dialog ${sizeClass}">
           <div class="modal-content">
             <div class="modal-header">
@@ -72,24 +75,20 @@ export default {
         </div>
       </div>`;
 
-        const existingModal = document.getElementById('customModal');
-        if (existingModal) {
-            existingModal.remove();
-        }
-
         document.body.insertAdjacentHTML('beforeend', modalHTML);
-        const modalElement = document.getElementById('customModal');
+        const modalElement = document.getElementById(modalId);
         const modalInstance = new Modal(modalElement, {
             keyboard: onEscape,
             backdrop: onEscape ? true : 'static'
         });
 
         Object.entries(buttons).forEach(([key, btn]) => {
-            document.getElementById(`modal-btn-${key}`).addEventListener('click', () => {
+            document.getElementById(`${modalId}-btn-${key}`).addEventListener('click', () => {
                 if (typeof btn.callback === 'function') {
                     btn.callback();
                 }
                 modalInstance.hide();
+                modalElement.remove(); // Remove modal from DOM after hiding
             });
         });
 
@@ -102,8 +101,7 @@ export default {
         modalInstance.show();
     },
 
-
     processText(message) {
-        return sanitizeHtml(message, { allowedTags: ['b', 'i', 'strong', 'em', 'p', 'ul', 'li', 'br'] })
+        return sanitizeHtml(message, { allowedTags: ['b', 'i', 'strong', 'em', 'p', 'ul', 'li', 'br'] });
     }
 };
