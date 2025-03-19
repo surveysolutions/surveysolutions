@@ -45,7 +45,24 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory
         {
             return this.RestoreInterviewHistory(reduced, interviewIds);
         }
-        
+
+        private HashSet<Type> ReducedEvents = new()
+        {
+            typeof(StaticTextsDeclaredInvalid),
+            typeof(StaticTextsDeclaredImplausible),
+            typeof(StaticTextsDeclaredPlausible),
+            typeof(StaticTextsDeclaredValid),
+            typeof(QuestionsDisabled),
+            typeof(QuestionsEnabled),
+            typeof(AnswersDeclaredInvalid),
+            typeof(AnswersDeclaredValid),
+            typeof(AnswersDeclaredImplausible),
+            typeof(AnswersDeclaredPlausible),
+            typeof(GroupsDisabled),
+            typeof(GroupsEnabled),
+            typeof(VariablesDisabled),
+            typeof(VariablesEnabled),
+        };
 
         private InterviewHistoryView[] RestoreInterviewHistory(bool? reduced, params Guid[] interviewIds)
         {
@@ -62,6 +79,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory
 
                 foreach (var @event in events)
                 {
+                    if (reduced == true && ReducedEvents.Contains(@event.Payload.GetType()))
+                        continue;
+                    
                     interviewHistoryDenormalizer.Handle(@event);
                 }
             }
@@ -70,12 +90,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory
             foreach (var history in interviewsHistory)
             {
                 int i = 0;
-                
-                if (reduced == true)
-                {
-                    history.ReduceActions();
-                }
-                
                 foreach (var @record in history.Records)
                 {
                     record.Index = i++;
