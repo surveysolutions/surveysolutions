@@ -100,7 +100,7 @@
                                                     { id: 'last7days', value: $t('DataExport.DateRangeLast7days') },
                                                     { id: 'last30days', value: $t('DataExport.DateRangeLast30days') },
                                                     { id: 'today', value: $t('DataExport.DateRangeLastToday') },
-                                                    { id: 'yesteday', value: $t('DataExport.DateRangeLastYesterday') },
+                                                    { id: 'yesterday', value: $t('DataExport.DateRangeLastYesterday') },
                                                     { id: 'custom', value: $t('DataExport.DateRangeCustom') },
                                                 ]" />
                                         </div>
@@ -617,6 +617,47 @@ export default {
             dateRangeTo,
             paradataMode
         ) {
+            const drMode = dateRangeMode?.id
+
+            let from = null;
+            let to = null;
+
+            switch (drMode) {
+                case "custom":
+                    from = dateRangeFrom ? moment(dateRangeFrom).utc().toISOString() : null;
+                    to = dateRangeTo ? moment(dateRangeTo).utc().toISOString() : null;
+                    break;
+
+                case "last24hours":
+                    from = moment().utc().subtract(1, 'days').toISOString();
+                    to = moment().utc().toISOString();
+                    break;
+
+                case "last7days":
+                    from = moment().startOf('day').utc().subtract(6, 'days').toISOString(); // 7 days ago
+                    to = moment().utc().toISOString();
+                    break;
+
+                case "last30days":
+                    from = moment().startOf('day').utc().subtract(29, 'days').toISOString(); // 30 days ago
+                    to = moment().utc().toISOString();
+                    break;
+
+                case "today":
+                    from = moment().startOf('day').utc().toISOString(); // Start of today
+                    to = moment().utc().toISOString();
+                    break;
+
+                case "yesterday":
+                    from = moment().startOf('day').utc().subtract(1, 'days').toISOString(); // Start of yesterday
+                    to = moment().endOf('day').utc().subtract(1, 'days').toISOString(); // End of yesterday
+                    break;
+            }
+
+            if (!to) {
+                to = moment().utc().toISOString(); // Default to now if not set
+            }
+
             var format = dataFormatNum.Tabular
 
             switch (dataType) {
@@ -636,7 +677,6 @@ export default {
 
             const status = (statusOption || { key: null }).key
             const tr = (translation || { key: null }).key
-            const drMode = dateRangeMode?.id
 
             return {
                 id: questionnaireId,
@@ -645,9 +685,8 @@ export default {
                 status: status,
                 translationId: tr,
                 includeMeta: includeMeta,
-                dateRangeMode: drMode,
-                from: dateRangeFrom,
-                to: dateRangeTo,
+                from: from,
+                to: to,
                 paradataMode: paradataMode
             }
         },
