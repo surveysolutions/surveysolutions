@@ -82,7 +82,8 @@
         "xss": "^1.0.15"
     },
     "overrides": {
-        "@babel/traverse": ">=7.23.3",
+        "@babel/runtime": ">=7.26.10",
+        "@babel/traverse": ">=7.26.10",
         "async": ">=3.2.3",
         "browserslist": ">=4.20.3",
         "braces": ">=3.0.3",
