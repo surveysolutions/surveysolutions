@@ -61,14 +61,19 @@ export default {
             `<button type="button" class="btn btn-default ${btn.className ?? (key == 'ok' || key == 'success' ? 'btn-primary' : 'btn-secondary')}" id="${modalId}-btn-${key}">${this.processText(btn.label)}</button>`
         ).join('');
 
+        let titleHTML = title ? `<h5 class="modal-title">${this.processText(title)}</h5>` : ''; // Render title only if provided
+
+        let headerHTML = (title || closeButton) ? `
+        <div class="modal-header">
+          ${titleHTML}
+          ${closeButton ? '<button type="button" class="bootbox-close-button close btn-close" data-bs-dismiss="modal" aria-label="Close"></button>' : ''}
+        </div>` : ''; // Render header only if title or closeButton is provided
+
         let modalHTML = `
       <div class="modal fade" id="${modalId}" tabindex="-1" ${onEscape ? '' : 'data-bs-keyboard="false"'} aria-hidden="true">
         <div class="modal-dialog ${sizeClass}">
           <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title">${this.processText(title)}</h5>
-              ${closeButton ? '<button type="button" class="bootbox-close-button close btn-close" data-bs-dismiss="modal" aria-label="Close"></button>' : ''}
-            </div>
+            ${headerHTML}
             <div class="modal-body">${this.processText(message)}</div>
             <div class="modal-footer">${buttonsHTML}</div>
           </div>
