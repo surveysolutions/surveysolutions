@@ -38,6 +38,17 @@ export default {
         });
     },
 
+    confirm(message, resultCallback) {
+        this.showModal({
+            title: '',
+            message,
+            buttons: {
+                confirm: { label: this.translations.CONFIRM, className: 'btn-primary', callback: () => resultCallback(true) },
+                cancel: { label: this.translations.CANCEL, className: 'btn-secondary', callback: () => resultCallback(false) }
+            }
+        });
+    },
+
     dialog(options) {
         return new Promise((resolve) => {
             this.showModal(options);
