@@ -33,7 +33,9 @@ export default {
                 buttons: {
                     confirm: { label: this.translations.CONFIRM, className: 'btn-primary', callback: () => resolve(true) },
                     cancel: { label: this.translations.CANCEL, className: 'btn-secondary', callback: () => resolve(false) }
-                }
+                },
+                closeButton: true,
+                onClose: () => resolve(false)
             });
         });
     },
@@ -45,7 +47,9 @@ export default {
             buttons: {
                 confirm: { label: this.translations.CONFIRM, className: 'btn-primary', callback: () => resultCallback(true) },
                 cancel: { label: this.translations.CANCEL, className: 'btn-secondary', callback: () => resultCallback(false) }
-            }
+            },
+            closeButton: true,
+            onClose: () => resultCallback(false)
         });
     },
 
@@ -55,7 +59,7 @@ export default {
         });
     },
 
-    showModal({ title = '', message = '', buttons = {}, closeButton = true, size = 'default', onEscape = true, onShow = null }) {
+    showModal({ title = '', message = '', buttons = {}, closeButton = true, size = 'default', onEscape = true, onShow = null, onClose = null }) {
         if (typeof buttons !== 'object' || buttons === null) {
             console.error('Error: buttons must be an object');
             buttons = {};
@@ -98,21 +102,41 @@ export default {
             backdrop: onEscape ? true : 'static'
         });
 
+        const buttonListeners = [];
         Object.entries(buttons).forEach(([key, btn]) => {
-            document.getElementById(`${modalId}-btn-${key}`).addEventListener('click', () => {
+            const buttonElement = document.getElementById(`${modalId}-btn-${key}`);
+            const listener = () => {
                 if (typeof btn.callback === 'function') {
                     btn.callback();
                 }
                 modalInstance.hide();
-                modalElement.remove(); // Remove modal from DOM after hiding
-            });
+            };
+            buttonElement.addEventListener('click', listener);
+            buttonListeners.push({ element: buttonElement, listener });
         });
 
-        modalElement.addEventListener('shown.bs.modal', () => {
+        const onShownListener = () => {
             if (typeof onShow === 'function') {
-                onShow();
+                onShow(modalElement);
             }
-        });
+        };
+
+        const onHiddenListener = () => {
+            if (typeof onClose === 'function') {
+                onClose();
+            }
+
+            // Remove event listeners and modal element
+            buttonListeners.forEach(({ element, listener }) => {
+                element.removeEventListener('click', listener);
+            });
+            modalElement.removeEventListener('shown.bs.modal', onShownListener);
+            modalElement.removeEventListener('hidden.bs.modal', onHiddenListener);
+            modalElement.remove();
+        };
+
+        modalElement.addEventListener('shown.bs.modal', onShownListener);
+        modalElement.addEventListener('hidden.bs.modal', onHiddenListener);
 
         modalInstance.show();
     },
