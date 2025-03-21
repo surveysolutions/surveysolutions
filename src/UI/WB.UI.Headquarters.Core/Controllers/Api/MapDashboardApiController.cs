@@ -384,10 +384,9 @@ namespace WB.UI.Headquarters.Controllers.Api
                             s.QuestionnaireId
                         })
                         .Distinct().ToList();
-                }).Select(q => 
-                    new QuestionnaireIdentity(q.QuestionnaireId.QuestionnaireId, q.QuestionnaireId.Version).Id).ToArray();
+                }).Select(q => q.QuestionnaireId.Id).ToArray();
 
-               var visibleQuestionnaires = queryAssignmentsResult.Concat(queryInterviewsResult).Distinct().ToList();
+                var visibleQuestionnaires = queryAssignmentsResult.Union(queryInterviewsResult).ToList();
                 
                 questionnaireIds = questionnaireIds.Select(x=> x)
                     .Where(x => visibleQuestionnaires.Contains(x)).ToList();
