@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using WB.Services.Export.Models;
 using WB.Services.Export.Questionnaire;
+using WB.Services.Export.Services.Processing;
 using WB.Services.Infrastructure.Tenant;
 
 namespace WB.Services.Export.CsvExport
@@ -10,7 +11,7 @@ namespace WB.Services.Export.CsvExport
     {
         Task ExportInterviewsInTabularFormatAsync(ExportSettings exportSettings, string tempPath, ExportProgress progress, CancellationToken cancellationToken);
         Task GenerateDescriptionFileAsync(TenantInfo tenant, QuestionnaireId questionnaireId, string directoryPath, string tabDataFileExtension, CancellationToken cancellationToken);
-        Task GenerateShortDescriptionFileAsync(TenantInfo tenant, QuestionnaireId questionnaireId, string directoryPath, string tabDataFileExtension, bool? paradataReduced, CancellationToken cancellationToken);
+        Task GenerateShortDescriptionFileAsync(TenantInfo tenant, QuestionnaireId questionnaireId, string directoryPath, string tabDataFileExtension, DataExportFormat dataExportFormat, bool? paradataReduced, CancellationToken cancellationToken);
         Task GenerateInformationFileAsync(TenantInfo tenant, QuestionnaireId questionnaireId, string directoryPath, CancellationToken cancellationToken);
     }
 }

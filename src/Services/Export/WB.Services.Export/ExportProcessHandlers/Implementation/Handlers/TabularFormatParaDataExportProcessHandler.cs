@@ -58,10 +58,10 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation.Handlers
 
             await this.tabularFormatExportService.GenerateShortDescriptionFileAsync(settings.Tenant,
                 settings.QuestionnaireId, state.ExportTempFolder,
-                ExportFileSettings.TabDataFileExtension, settings.ParadataReduced, cancellationToken);
+                ExportFileSettings.TabDataFileExtension, settings.ExportFormat, settings.ParadataReduced, 
+                cancellationToken);
             await this.tabularFormatExportService.GenerateInformationFileAsync(settings.Tenant,
                 settings.QuestionnaireId, state.ExportTempFolder, cancellationToken);
-            
             
             var interviewsToExport = this.interviewsToExportSource.GetInterviewsToExport(settings.QuestionnaireId,
                 settings.Status, settings.FromDate, settings.ToDate);

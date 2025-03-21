@@ -89,7 +89,7 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation
             // assert
             Assert.That(description, Is.Not.Null.Or.Empty);
             var lines = description.Split(new[] {Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries);
-            CollectionAssert.AreEqual(lines.Skip(4), new[]
+            CollectionAssert.AreEqual(lines.Skip(3), new[]
             {
                 "questionnaire.xlsx",
                 "x, y",
@@ -129,9 +129,8 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation
             // assert
             Assert.That(description, Is.Not.Empty);
             var lines = description.Split(new[] {Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries);
-            Assert.That(lines[1], Is.EqualTo($"All events are included"));
-            Assert.That(lines[2], Is.EqualTo($"The data in this download were collected using the Survey Solutions questionnaire \"{questionnaireDocument.Title}\". "));
-            Assert.That(lines[3], Is.EqualTo($"You can open the questionnaire in the Survey Solutions Designer online by that link: https://designer.mysurvey.solutions/questionnaire/details/11111111111111111111111111111111$1"));
+            Assert.That(lines[1], Is.EqualTo($"The data in this download were collected using the Survey Solutions questionnaire \"{questionnaireDocument.Title}\". "));
+            Assert.That(lines[2], Is.EqualTo($"You can open the questionnaire in the Survey Solutions Designer online by that link: https://designer.mysurvey.solutions/questionnaire/details/11111111111111111111111111111111$1"));
         }
         
         [Test]
