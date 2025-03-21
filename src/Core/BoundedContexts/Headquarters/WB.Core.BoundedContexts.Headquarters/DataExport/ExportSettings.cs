@@ -11,14 +11,18 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport
     public class ExportSettings : IExportSettings
     {
         private readonly IPlainKeyValueStorage<ExportEncryptionSettings> appSettingsStorage;
+        private readonly IPlainKeyValueStorage<ExportRetentionSettings> exportRetentionSettingsStorage;
         private readonly IMemoryCache settingCache;
+        private object exportencryptionsettings = ExportEncryptionSettings.EncryptionSettingId;
 
         public ExportSettings(
             IPlainKeyValueStorage<ExportEncryptionSettings> appSettingsStorage,
+            IPlainKeyValueStorage<ExportRetentionSettings> exportRetentionSettingsStorage,
             IMemoryCache memoryCache)
         {
             this.appSettingsStorage = appSettingsStorage;
             this.settingCache = memoryCache;
+            this.exportRetentionSettingsStorage = exportRetentionSettingsStorage;
         }
 
         public bool EncryptionEnforced()
@@ -30,7 +34,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport
 
         private ExportEncryptionSettings? GetSetting()
         {
-            return this.settingCache.GetOrCreate("ExportEncryptionSettings", cache =>
+            return this.settingCache.GetOrCreate(exportencryptionsettings, cache =>
             {
                 cache.SlidingExpiration = TimeSpan.FromMinutes(5);
                 return this.appSettingsStorage.GetById(ExportEncryptionSettings.EncryptionSettingId);
@@ -52,7 +56,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport
             var newSetting = new ExportEncryptionSettings(enabled, password);
             this.appSettingsStorage.Store(newSetting, ExportEncryptionSettings.EncryptionSettingId);
 
-            settingCache.Remove("ExportEncryptionSettings");
+            settingCache.Remove(exportencryptionsettings);
         }
 
         public void RegeneratePassword()
@@ -63,7 +67,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport
             var newSetting = new ExportEncryptionSettings(setting.IsEnabled, GeneratePassword());
             this.appSettingsStorage.Store(newSetting, ExportEncryptionSettings.EncryptionSettingId);
 
-            settingCache.Remove("ExportEncryptionSettings");
+            settingCache.Remove(exportencryptionsettings);
         }
 
         private string GeneratePassword()
@@ -71,6 +75,19 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport
             var pwd = new Password(true, true, true, true, 12);
             var result = pwd.Next();
             return result;
+        }
+
+        public bool IsRetenstionEnabled()
+        {
+            
+            var setting = this.settingCache.GetOrCreate(ExportEncryptionSettings.ExportRetentionSettingsKey, cache =>
+            {
+                cache.SlidingExpiration = TimeSpan.FromMinutes(5);
+                
+                return this.exportRetentionSettingsStorage.GetById(ExportEncryptionSettings.ExportRetentionSettingsKey);
+            });
+            
+            return setting?.Enabled == true;
         }
     }
 }

@@ -12,5 +12,11 @@
 
         public bool IsEnabled { get; set; }
         public string Password { get; set; }
+        
+        public bool IsRetentionEnabled { get; set; }
+
+        public int? RetentionLimitInDays { get; set; }
+
+        public int? RetentionLimitQuantity { get; set; }
     }
 }

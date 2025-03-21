@@ -650,5 +650,41 @@ namespace WB.UI.Headquarters.Resources {
                 return ResourceManager.GetString("EmailProvider_SmtpPasswordHelp", resourceCulture);
             }
         }
+        
+        public static string WorkspaceSettings {
+            get {
+                return ResourceManager.GetString("WorkspaceSettings", resourceCulture);
+            }
+        }
+        
+        public static string Export {
+            get {
+                return ResourceManager.GetString("Export", resourceCulture);
+            }
+        }
+        
+        public static string GlobalNote {
+            get {
+                return ResourceManager.GetString("GlobalNote", resourceCulture);
+            }
+        }
+        
+        public static string UserProfile {
+            get {
+                return ResourceManager.GetString("UserProfile", resourceCulture);
+            }
+        }
+        
+        public static string Devices {
+            get {
+                return ResourceManager.GetString("Devices", resourceCulture);
+            }
+        }
+        
+        public static string WebInterview {
+            get {
+                return ResourceManager.GetString("WebInterview", resourceCulture);
+            }
+        }
     }
 }

@@ -9,5 +9,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Security
 
         void SetEncryptionEnforcement(bool value);
         void RegeneratePassword();
+
+        bool IsRetenstionEnabled();
     }
 }

@@ -425,4 +425,22 @@ Possible reasons:
   <data name="EmailProvider_SmtpPasswordHelp" xml:space="preserve">
     <value>Credential used during the SMTP authentication process to verify the identity.</value>
   </data>
+  <data name="WorkspaceSettings" xml:space="preserve">
+      <value>Workspace settings</value>
+  </data>
+  <data name="Export" xml:space="preserve">
+      <value>Export</value>
+  </data>
+  <data name="GlobalNote" xml:space="preserve">
+      <value>Global note</value>
+  </data>
+  <data name="UserProfile" xml:space="preserve">
+      <value>User profile</value>
+  </data>
+  <data name="Devices" xml:space="preserve">
+      <value>Devices</value>
+  </data>
+  <data name="WebInterview" xml:space="preserve">
+      <value>Web interview</value>
+  </data>
 </root>
