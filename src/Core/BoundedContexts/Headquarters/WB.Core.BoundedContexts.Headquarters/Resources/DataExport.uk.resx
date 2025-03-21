@@ -420,4 +420,7 @@
   <data name="SurveyQuestionnaireTranslation" xml:space="preserve">
       <value>Переклад</value>
   </data>
+  <data name="DataType_AudioAuditFiles" xml:space="preserve">
+      <value>Файли аудиту аудіо. Архів, що містить аудіо ауди</value>
+  </data>
 </root>

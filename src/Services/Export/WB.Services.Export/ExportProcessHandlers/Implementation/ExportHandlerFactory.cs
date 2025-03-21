@@ -30,8 +30,12 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
                     return serviceProvider.GetRequiredService<TabularFormatParaDataExportProcessHandler>();
                 case DataExportFormat.Binary:
                     return externalStorageType == null
-                        ? (IExportHandler)serviceProvider.GetRequiredService<BinaryDataIntoArchiveExportHandler>()
+                        ? (IExportHandler)serviceProvider.GetRequiredService<BinaryDataExportHandler>()
                         : (IExportHandler)serviceProvider.GetRequiredService<BinaryDataExternalStorageDataExportHandler>();
+                case DataExportFormat.AudioAudit:
+                    return externalStorageType == null
+                        ? (IExportHandler)serviceProvider.GetRequiredService<AudioAuditDataExportHandler>()
+                        : (IExportHandler)serviceProvider.GetRequiredService<AudioAuditExternalStorageDataExportHandler>();
                 default:
                     throw new ArgumentOutOfRangeException(nameof(exportFormat), exportFormat, null);
             }
