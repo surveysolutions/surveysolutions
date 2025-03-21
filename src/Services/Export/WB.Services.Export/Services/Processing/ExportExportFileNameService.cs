@@ -70,7 +70,7 @@ namespace WB.Services.Export.Services.Processing
             var toDatePrefix = exportSettings.ToDate == null || exportSettings.ExportFormat == DataExportFormat.Binary 
                 ? "" : $"_{exportSettings.ToDate.Value:yyyyMMddTHHmm}Z";
             
-            var pardataReduced = exportSettings.ExportFormat == DataExportFormat.Paradata && exportSettings.ParadataReduced == true ? "_reduced" : "";
+            var pardataReduced = exportSettings.ExportFormat == DataExportFormat.Paradata && exportSettings.ParadataReduced == true ? "_Reduced" : "";
 
             string translationName = string.Empty;
             if (exportSettings.Translation.HasValue)
