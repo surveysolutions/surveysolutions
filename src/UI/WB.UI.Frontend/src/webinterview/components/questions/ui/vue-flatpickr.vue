@@ -8,7 +8,6 @@ import Flatpickr from 'flatpickr'
 import { browserLanguage } from '~/shared/helpers'
 import FlatpickrLocale from 'flatpickr/dist/l10n'
 import { assign } from 'lodash'
-import { merge } from 'jquery'
 
 Flatpickr.localize(FlatpickrLocale[browserLanguage])
 // You have to import css yourself
@@ -91,7 +90,7 @@ export default {
         config(newConfig) {
             Object.assign(this.mergedConfig, this.defaultConfig, newConfig)
 
-            this.fp.config = assign(this.fp.config, this.mergedConfig)
+            this.fp.config = Object.assign(this.fp.config, this.mergedConfig)
             this.fp.redraw()
             this.fp.setDate(this.value, true)
         },
