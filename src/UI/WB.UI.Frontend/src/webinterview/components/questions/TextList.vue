@@ -26,6 +26,7 @@
     </wb-question>
 </template>
 <script lang="js">
+import { sanitize } from '../../../shared/sanitize'
 import { entityDetails } from '../mixins'
 import modal from '@/shared/modal'
 
@@ -64,7 +65,7 @@ export default {
             }
 
             modal.confirm(this.$t('WebInterviewUI.Interview_Questions_RemoveRowFromRosterMessage', {
-                rosterTitle: this.$me.rows[index].text,
+                rosterTitle: sanitize(this.$me.rows[index].text),
             }), result => {
                 if (result) {
                     this.removeRow(index)

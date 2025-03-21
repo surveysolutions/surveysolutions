@@ -420,6 +420,42 @@
   <data name="SurveyQuestionnaireVersion" xml:space="preserve">
     <value>Typ dotazníku (verze)</value>
   </data>
+    <data name="SurveyQuestionnaireDateRange" xml:space="preserve">
+    <value>Časové období</value>
+</data>
+    <data name="DateRangeAllTime" xml:space="preserve">
+    <value>Po celou dobu</value>
+</data>
+    <data name="DateRangeLast24hours" xml:space="preserve">
+    <value>Posledních 24 hodin</value>
+</data>
+    <data name="DateRangeLast7days" xml:space="preserve">
+    <value>Posledních 7 dní</value>
+</data>
+    <data name="DateRangeLast30days" xml:space="preserve">
+    <value>Posledních 30 dní</value>
+</data>
+    <data name="DateRangeLastToday" xml:space="preserve">
+    <value>Dnes</value>
+</data>
+    <data name="DateRangeLastYesterday" xml:space="preserve">
+    <value>Včera</value>
+</data>
+    <data name="DateRangeCustom" xml:space="preserve">
+    <value>Vlastní</value>
+</data>
+    <data name="SurveyQuestionnaireDateRangeFrom" xml:space="preserve">
+    <value>Od</value>
+</data>
+    <data name="DateRangeFromAll" xml:space="preserve">
+    <value>Nejstarší dostupné</value>
+</data>
+    <data name="SurveyQuestionnaireDateRangeTo" xml:space="preserve">
+    <value>Do</value>
+</data>
+    <data name="DateRangeToAll" xml:space="preserve">
+    <value>Aktuální okamžik</value>
+</data>
   <data name="DataType_AudioAuditFiles" xml:space="preserve">
       <value>Zvukové auditní soubory. Archiv obsahující zvukový audit</value>
   </data>

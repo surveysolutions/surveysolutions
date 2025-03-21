@@ -651,10 +651,82 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
             }
         }
         
-        public static string DataType_AudioAuditFiles {
+        public static string SurveyQuestionnaireDateRange {
             get {
-                return ResourceManager.GetString("DataType_AudioAuditFiles", resourceCulture);
+                return ResourceManager.GetString("SurveyQuestionnaireDateRange", resourceCulture);
             }
         }
+        
+        public static string DateRangeAllTime {
+            get {
+                return ResourceManager.GetString("DateRangeAllTime", resourceCulture);
+            }
+        }
+        
+        public static string DateRangeLast24hours {
+            get {
+                return ResourceManager.GetString("DateRangeLast24hours", resourceCulture);
+            }
+        }
+        
+        public static string DateRangeLast7days {
+            get {
+                return ResourceManager.GetString("DateRangeLast7days", resourceCulture);
+            }
+        }
+        
+        public static string DateRangeLast30days {
+            get {
+                return ResourceManager.GetString("DateRangeLast30days", resourceCulture);
+            }
+        }
+        
+        public static string DateRangeLastToday {
+            get {
+                return ResourceManager.GetString("DateRangeLastToday", resourceCulture);
+            }
+        }
+        
+        public static string DateRangeLastYesterday {
+            get {
+                return ResourceManager.GetString("DateRangeLastYesterday", resourceCulture);
+            }
+        }
+        
+        public static string DateRangeCustom {
+            get {
+                return ResourceManager.GetString("DateRangeCustom", resourceCulture);
+            }
+        }
+        
+        public static string SurveyQuestionnaireDateRangeFrom {
+            get {
+                return ResourceManager.GetString("SurveyQuestionnaireDateRangeFrom", resourceCulture);
+            }
+        }
+        
+        public static string DateRangeFromAll {
+            get {
+                return ResourceManager.GetString("DateRangeFromAll", resourceCulture);
+            }
+        }
+        
+        public static string SurveyQuestionnaireDateRangeTo {
+            get {
+                return ResourceManager.GetString("SurveyQuestionnaireDateRangeTo", resourceCulture);
+            }
+        }
+        
+        public static string DateRangeToAll {
+            get {
+                return ResourceManager.GetString("DateRangeToAll", resourceCulture);
+            }
+        }
+
+		public static string DataType_AudioAuditFiles {
+            get {
+                return ResourceManager.GetString("DataType_AudioAuditFiles", resourceCulture);
+			}
+		}
     }
 }

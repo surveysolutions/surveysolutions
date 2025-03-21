@@ -420,7 +420,42 @@
     <data name="SurveyQuestionnaireTranslation" xml:space="preserve">
     <value>الترجمة</value>
 </data>
-  <data name="DataType_AudioAuditFiles" xml:space="preserve">
+    <data name="SurveyQuestionnaireDateRange" xml:space="preserve">
+    <value>النطاق الزمني</value>
+</data>
+    <data name="DateRangeAllTime" xml:space="preserve">
+    <value>كل الوقت</value>
+</data>
+    <data name="DateRangeLast24hours" xml:space="preserve">
+    <value>آخر 24 ساعة</value>
+</data>
+    <data name="DateRangeLast7days" xml:space="preserve">
+    <value>آخر 7 أيام</value>
+</data>
+    <data name="DateRangeLast30days" xml:space="preserve">
+    <value>آخر 30 يومًا</value>
+</data>
+    <data name="DateRangeLastToday" xml:space="preserve">
+    <value>اليوم</value>
+</data>
+    <data name="DateRangeLastYesterday" xml:space="preserve">
+    <value>أمس</value>
+</data>
+    <data name="DateRangeCustom" xml:space="preserve">
+    <value>مخصص</value>
+</data>
+    <data name="SurveyQuestionnaireDateRangeFrom" xml:space="preserve">
+    <value>من</value>
+</data>
+    <data name="DateRangeFromAll" xml:space="preserve">
+    <value>الأقدم المتاح</value>
+</data>
+    <data name="SurveyQuestionnaireDateRangeTo" xml:space="preserve">
+    <value>إلى</value>
+</data>
+    <data name="DateRangeToAll" xml:space="preserve">
+    <value>اللحظة الحالية</value>
+</data>  <data name="DataType_AudioAuditFiles" xml:space="preserve">
       <value>ملفات تدقيق الصوت. أرشيف يحتوي على تدقيق الصوت</value>
   </data>
 </root>
