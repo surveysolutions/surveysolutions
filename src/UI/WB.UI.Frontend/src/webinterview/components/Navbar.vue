@@ -158,13 +158,45 @@
             <!-- /.navbar-collapse -->
         </div>
         <!-- /.container-fluid -->
+
+        <teleport to="body">
+            <div ref="emailPersonalLinkModalRef" class="modal fade" id="emailPersonalLinkModal" tabindex="-1"
+                role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2>{{ $t('WebInterviewUI.EmailLink_Header') }}</h2>
+                        </div>
+                        <div class="modal-body">
+                            <form onsubmit="return false;" action="javascript:void(0)">
+                                <p>{{ $t('WebInterviewUI.EmailLink_Message') }}</p>
+                                <p>{{ $t('WebInterviewUI.EmailLink_ResumeAnyTime') }}</p>
+                                <div class="form-group">
+                                    <input type="email" id="txtEmail" class="form-control"
+                                        :placeholder="this.$t('WebInterviewUI.EmailLink_Placeholder')" />
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" @click="sendEmailWithPersonalLink">{{
+                                $t("Common.Ok") }}</button>
+                            <button type="button" class="btn btn-link" @click="hideEmailPersonalLink"
+                                data-bs-dismiss="modal">{{ $t("Common.Cancel")
+                                }}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </teleport>
+
     </nav>
 </template>
 <script lang="js">
-import modal from '@/shared/modal'
 import axios from 'axios'
 import * as toastr from 'toastr'
 import { filter } from 'lodash'
+import { Modal } from 'bootstrap'
+import { nextTick } from 'vue'
 
 export default {
     name: 'navbar',
@@ -178,6 +210,7 @@ export default {
             designerCredentialsExpired: false,
             selectedSaveOption: 'saveNew',
             newScenarioName: '',
+            emailModal: null,
         }
     },
     mounted() {
@@ -267,33 +300,25 @@ export default {
             this.selectedScenarioOption = -1
         },
         emailPersonalLink() {
-            var self = this
-            let prompt = modal.prompt({
-                title: this.$t('WebInterviewUI.EmailLink_Header'),
-
-                inputType: 'email',
-                callback: function (result) {
-                    if (result === null || result === undefined) return
-
-                    if (!self.validateEmail(result)) {
-                        var input = $(this).find('input')
-                        self.$nextTick(function () {
-                            input.next('span').remove()
-                            input.after('<span class=\'help-text text-danger\'>' + this.$t('WebInterviewUI.EmailLink_InvalidEmail', { email: result }) + '</span>')
-                        })
-                        return false
-                    }
-
-                    self.sendEmailWithPersonalLink(result)
-                },
+            nextTick(() => {
+                this.emailModal = new Modal(this.$refs.emailPersonalLinkModalRef)
+                this.emailModal.show()
             })
-
-            prompt.find('input').attr('placeholder', this.$t('WebInterviewUI.EmailLink_Placeholder'))
-            prompt.find('input').before('<p>' + this.$t('WebInterviewUI.EmailLink_Message') + '</p>')
-            prompt.find('input').before('<p>' + this.$t('WebInterviewUI.EmailLink_ResumeAnyTime') + '</p>')
         },
-        sendEmailWithPersonalLink(email) {
+        sendEmailWithPersonalLink() {
+            const emailInput = $('#txtEmail')
+            const email = emailInput.val()
+            if (email === null || email === undefined) return
+
             var self = this
+            if (!self.validateEmail(email)) {
+                self.$nextTick(function () {
+                    emailInput.next('span').remove()
+                    emailInput.after('<span class=\'help-text text-danger\'>' + this.$t('WebInterviewUI.EmailLink_InvalidEmail', { email: email }) + '</span>')
+                })
+                return false
+            }
+
             axios.post(this.$config.sendLinkUri, {
                 interviewId: this.$route.params.interviewId,
                 email: email,
@@ -305,6 +330,9 @@ export default {
                 if (error && error.response)
                     self.$errorHandler(error, self)
             })
+
+            this.emailModal.hide()
+            this.emailModal = null;
         },
         validateEmail(email) {
             var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/

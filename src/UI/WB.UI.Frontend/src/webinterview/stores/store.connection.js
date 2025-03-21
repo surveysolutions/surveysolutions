@@ -20,18 +20,18 @@ const connectionStore = {
             if (state.isReconnecting && !state.isDisconnected) {
                 commit('IS_DISCONNECTED', true)
 
-                modal.alert({
+                modal.dialog({
                     title: $t('WebInterviewUI.Disconnected'),
                     message: '<p>' + $t('WebInterviewUI.ConnectionLostTitle') + '</p><p>' + $t('WebInterviewUI.ConnectionLostMessage') + '</p>',
-                    callback: () => {
-                        location.reload()
-                    },
                     onEscape: false,
                     closeButton: false,
                     buttons: {
                         ok: {
                             label: $t('WebInterviewUI.Reload'),
                             className: 'btn-success',
+                            callback: () => {
+                                location.reload()
+                            },
                         },
                     },
                 })
