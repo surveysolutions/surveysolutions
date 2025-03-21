@@ -16,6 +16,7 @@ namespace WB.Services.Export.ExportProcessHandlers
 
     internal enum MultimediaDataType
     {
+        Unknown = 0,
         Binary = 1,
         AudioAudit = 2
     }

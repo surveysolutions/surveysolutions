@@ -4,12 +4,13 @@ using WB.Services.Export.Services.Processing;
 
 namespace WB.Services.Export.ExportProcessHandlers.Implementation.Handlers;
 
-internal class BinaryDataArchiveFileExportHandler : ArchiveFileExportHandlerBase
+internal class BinaryDataExportHandler : MultimediaDataExportHandlerBase
 {
-    public BinaryDataArchiveFileExportHandler(IFileSystemAccessor fileSystemAccessor, 
+    internal override MultimediaDataType MultimediaDataType { get; } = MultimediaDataType.Binary;
+    public BinaryDataExportHandler(IFileSystemAccessor fileSystemAccessor, 
         IOptions<ExportServiceSettings> interviewDataExportSettings, IBinaryDataSource binaryDataSource, 
         IDataExportFileAccessor dataExportFileAccessor) : base(fileSystemAccessor, interviewDataExportSettings, 
-        binaryDataSource, dataExportFileAccessor, false)
+        binaryDataSource, dataExportFileAccessor)
     {
     }
 }

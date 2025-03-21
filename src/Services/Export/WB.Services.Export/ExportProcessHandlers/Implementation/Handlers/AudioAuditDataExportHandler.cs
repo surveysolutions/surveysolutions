@@ -4,12 +4,14 @@ using WB.Services.Export.Services.Processing;
 
 namespace WB.Services.Export.ExportProcessHandlers.Implementation.Handlers;
 
-internal class AudioAuditArchiveFileExportHandler: ArchiveFileExportHandlerBase
+internal class AudioAuditDataExportHandler: MultimediaDataExportHandlerBase
 {
-    public AudioAuditArchiveFileExportHandler(IFileSystemAccessor fileSystemAccessor, 
+    internal override MultimediaDataType MultimediaDataType { get; } = MultimediaDataType.AudioAudit;
+    
+    public AudioAuditDataExportHandler(IFileSystemAccessor fileSystemAccessor, 
         IOptions<ExportServiceSettings> interviewDataExportSettings, IBinaryDataSource binaryDataSource, 
         IDataExportFileAccessor dataExportFileAccessor) : base(fileSystemAccessor, interviewDataExportSettings, 
-        binaryDataSource, dataExportFileAccessor, true)
+        binaryDataSource, dataExportFileAccessor)
     {
     }
 }

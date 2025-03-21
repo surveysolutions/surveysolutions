@@ -7,26 +7,25 @@ using WB.Services.Infrastructure;
 
 namespace WB.Services.Export.ExportProcessHandlers.Implementation.Handlers
 {
-    internal class ArchiveFileExportHandlerBase : IExportHandler
+    internal class MultimediaDataExportHandlerBase : IExportHandler
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IDataExportFileAccessor dataExportFileAccessor;
         private readonly IOptions<ExportServiceSettings> interviewDataExportSettings;
         private readonly IBinaryDataSource binaryDataSource;
-        private readonly bool isAudioAudit;
 
-        public ArchiveFileExportHandlerBase(
+        internal virtual MultimediaDataType MultimediaDataType { get; }
+
+        public MultimediaDataExportHandlerBase(
             IFileSystemAccessor fileSystemAccessor,
             IOptions<ExportServiceSettings> interviewDataExportSettings,
             IBinaryDataSource binaryDataSource, 
-            IDataExportFileAccessor dataExportFileAccessor,
-            bool isAudioAudit = false)
+            IDataExportFileAccessor dataExportFileAccessor)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.interviewDataExportSettings = interviewDataExportSettings;
             this.binaryDataSource = binaryDataSource;
             this.dataExportFileAccessor = dataExportFileAccessor;
-            this.isAudioAudit = isAudioAudit;
         }
         
         public async Task ExportDataAsync(ExportState state, CancellationToken cancellationToken)
@@ -38,8 +37,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation.Handlers
             {
                 using var archive = dataExportFileAccessor.CreateExportArchive(archiveFile, state.ProcessArgs.ArchivePassword);
 
-                await binaryDataSource.ForEachInterviewMultimediaAsync(state,
-                    isAudioAudit ? MultimediaDataType.AudioAudit : MultimediaDataType.Binary,
+                await binaryDataSource.ForEachInterviewMultimediaAsync(state, MultimediaDataType,
                     binaryDataAction =>
                     {
                         var path = binaryDataAction.InterviewKey ?? binaryDataAction.InterviewId.FormatGuid();

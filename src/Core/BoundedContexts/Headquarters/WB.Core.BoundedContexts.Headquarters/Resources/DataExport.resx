@@ -421,6 +421,6 @@
       <value>Translation</value>
   </data>
   <data name="DataType_AudioAuditFiles" xml:space="preserve">
-      <value>Audio Audit Files. Arhive containing Audio Audit</value>
+      <value>Audio Audit. Zip arhive containing Audio Audit data</value>
   </data>
 </root>

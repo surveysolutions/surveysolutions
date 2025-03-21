@@ -12,19 +12,16 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation.Handlers
         private readonly IOptions<ExportServiceSettings> interviewDataExportSettings;
         private readonly IExternalStorageDataClientFactory externalDataClientFactory;
         private readonly IBinaryDataSource binaryDataSource;
-        private readonly bool isAudioAudit;
-
+        internal virtual MultimediaDataType MultimediaDataType { get; }
+        
         public ExternalStorageDataExportHandlerBase(
             IOptions<ExportServiceSettings> interviewDataExportSettings,
             IExternalStorageDataClientFactory externalDataClientFactory,
-            IBinaryDataSource binaryDataSource,
-            bool isAudioAudit)
-
+            IBinaryDataSource binaryDataSource)
         {
             this.interviewDataExportSettings = interviewDataExportSettings ?? throw new ArgumentException("Export settings are missing.");
             this.binaryDataSource = binaryDataSource;
             this.externalDataClientFactory = externalDataClientFactory;
-            this.isAudioAudit = isAudioAudit;
         }
 
         public async Task ExportDataAsync(ExportState state, CancellationToken cancellationToken)
@@ -45,7 +42,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation.Handlers
                 dataClient.InitializeDataClient(state.ProcessArgs.AccessToken, state.ProcessArgs.RefreshToken,
                         state.Settings.Tenant);
 
-                string applicationFolder = isAudioAudit 
+                string applicationFolder = MultimediaDataType == MultimediaDataType.AudioAudit
                         ? await dataClient.CreateApplicationFolderAsync("Audio Audit") 
                         : await dataClient.CreateApplicationFolderAsync("Binary Data");
 
@@ -73,8 +70,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation.Handlers
                     }
                 }
 
-                await binaryDataSource.ForEachInterviewMultimediaAsync(state,
-                    isAudioAudit ? MultimediaDataType.AudioAudit : MultimediaDataType.Binary,
+                await binaryDataSource.ForEachInterviewMultimediaAsync(state, MultimediaDataType,
                     async binaryDataAction =>
                     {
                         var folderPath = await GetOrCreateFolderByType(binaryDataAction.Type,
