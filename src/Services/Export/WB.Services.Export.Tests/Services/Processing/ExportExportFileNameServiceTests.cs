@@ -113,5 +113,28 @@ namespace WB.Services.Export.Tests.Services.Processing
             Assert.That(fileNameForExportArchive, Is.EqualTo($"{questionnaire.QuestionnaireId}_Tabular_Completed.zip"));
 
         }
+
+        [Test]
+        public async Task should_generate_correct_file_name_if_paradata_reduced_selected()
+        {
+            long version = 45;
+            var questionnaire = Create.QuestionnaireDocument(
+                id: Id.g1,
+                version: version,
+                variableName: "var1");
+
+            var service = Create.ExportExportFileNameService(questionnaireStorage: Create.QuestionnaireStorage(questionnaire));
+
+            var fileNameForExportArchive = await service.GetFileNameForExportArchiveAsync(
+                new ExportSettings(
+                    tenant: new TenantInfo("http://test", ""),
+                    status: InterviewStatus.Completed,
+                    exportFormat: DataExportFormat.Paradata,
+                    questionnaireId: questionnaire.QuestionnaireId,
+                    paradataReduced: true
+                ));
+
+            Assert.That(fileNameForExportArchive, Is.EqualTo($"{questionnaire.QuestionnaireId}_Paradata_Reduced_Completed.zip"));
+        }
     }
 }
