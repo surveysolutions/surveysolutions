@@ -280,7 +280,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.v2
                 HasExportFile = exportProcess.HasFile,
                 InterviewStatus = exportProcess.InterviewStatus == null
                     ? ExportInterviewType.All
-                    : (ExportInterviewType) exportProcess.InterviewStatus
+                    : (ExportInterviewType) exportProcess.InterviewStatus,
+                IncludeMeta = exportProcess.IncludeMeta ?? false,
+                ParadataReduced = exportProcess.ParadataReduced ?? false,
             };
 
             if (exportProcess.IsRunning || exportProcess.HasFile)
