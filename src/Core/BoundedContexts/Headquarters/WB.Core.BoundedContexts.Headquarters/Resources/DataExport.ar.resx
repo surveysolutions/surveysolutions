@@ -446,16 +446,17 @@
 </data>
     <data name="SurveyQuestionnaireDateRangeFrom" xml:space="preserve">
     <value>من</value>
-</data>
-    <data name="DateRangeFromAll" xml:space="preserve">
+  </data>
+  <data name="DateRangeFromAll" xml:space="preserve">
     <value>الأقدم المتاح</value>
-</data>
-    <data name="SurveyQuestionnaireDateRangeTo" xml:space="preserve">
+  </data>
+  <data name="SurveyQuestionnaireDateRangeTo" xml:space="preserve">
     <value>إلى</value>
-</data>
-    <data name="DateRangeToAll" xml:space="preserve">
-    <value>اللحظة الحالية</value>
-</data>  <data name="DataType_AudioAuditFiles" xml:space="preserve">
+  </data>
+  <data name="DateRangeToAll" xml:space="preserve">
+      <value>اللحظة الحالية</value>
+  </data>
+  <data name="DataType_AudioAuditFiles" xml:space="preserve">
       <value>ملفات تدقيق الصوت. أرشيف يحتوي على تدقيق الصوت</value>
   </data>
 </root>

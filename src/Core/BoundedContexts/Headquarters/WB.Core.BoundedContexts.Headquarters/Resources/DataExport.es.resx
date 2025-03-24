@@ -450,12 +450,13 @@
     <data name="DateRangeFromAll" xml:space="preserve">
     <value>Más antiguo disponible</value>
 </data>
-    <data name="SurveyQuestionnaireDateRangeTo" xml:space="preserve">
+  <data name="SurveyQuestionnaireDateRangeTo" xml:space="preserve">
     <value>Hasta</value>
-</data>
-    <data name="DateRangeToAll" xml:space="preserve">
+  </data>
+  <data name="DateRangeToAll" xml:space="preserve">
     <value>Momento actual</value>
-</data>  <data name="DataType_AudioAuditFiles" xml:space="preserve">
-      <value>Archivos de auditoría de audio. Archivo que contiene auditoría de audio</value>
+  </data>
+  <data name="DataType_AudioAuditFiles" xml:space="preserve">
+    <value>Archivos de auditoría de audio. Archivo que contiene auditoría de audio</value>
   </data>
 </root>
