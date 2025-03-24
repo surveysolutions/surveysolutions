@@ -80,11 +80,11 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport
         public bool IsRetenstionEnabled()
         {
             
-            var setting = this.settingCache.GetOrCreate(ExportEncryptionSettings.ExportRetentionSettingsKey, cache =>
+            var setting = this.settingCache.GetOrCreate(ExportRetentionSettings.ExportRetentionSettingsKey, cache =>
             {
                 cache.SlidingExpiration = TimeSpan.FromMinutes(5);
                 
-                return this.exportRetentionSettingsStorage.GetById(ExportEncryptionSettings.ExportRetentionSettingsKey);
+                return this.exportRetentionSettingsStorage.GetById(ExportRetentionSettings.ExportRetentionSettingsKey);
             });
             
             return setting?.Enabled == true;
