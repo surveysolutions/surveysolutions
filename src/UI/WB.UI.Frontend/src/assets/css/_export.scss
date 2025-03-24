@@ -474,7 +474,7 @@
         @include size(63px, 41px);
         content: "";
         background: url("#{$assetsPath}/img/data-image2.png") no-repeat;
-        background-size: 63px 309px;
+        background-size: 63px 314px;
         //@include image-2x("#{$assetsPath}/img/data-image2k.png", 63px, 234px);
         background-position: 0 -200px;
     }
@@ -508,7 +508,7 @@
     }
 
     &.ParadataReduced:before {
-        background-position: 0 -268px;
+        background-position: 0 -271px;
     }
 
     &.no-meta:before {
