@@ -149,18 +149,18 @@ export default {
     navigeToRoute() { },
 
     closeInterview({ dispatch }) {
-        modal.alert({
+        modal.dialog({
             title: $t('WebInterviewUI.CloseInterviewTitle'),
             message: $t('WebInterviewUI.CloseInterviewMessage'),
-            callback: () => {
-                dispatch('reloadInterview')
-            },
             onEscape: false,
             closeButton: false,
             buttons: {
                 ok: {
                     label: $t('WebInterviewUI.Reload'),
                     className: 'btn-success',
+                    callback: () => {
+                        dispatch('reloadInterview')
+                    },
                 },
             },
         })
