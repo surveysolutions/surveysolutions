@@ -388,8 +388,7 @@ namespace WB.UI.Headquarters.Controllers.Api
 
                 var visibleQuestionnaires = queryAssignmentsResult.Union(queryInterviewsResult).ToList();
                 
-                questionnaireIds = questionnaireIds.Select(x=> x)
-                    .Where(x => visibleQuestionnaires.Contains(x)).ToList();
+                questionnaireIds = questionnaireIds.Where(x => visibleQuestionnaires.Contains(x)).ToList();
             }
 
             return this.questionnairesAccessor.Query(_ => _
