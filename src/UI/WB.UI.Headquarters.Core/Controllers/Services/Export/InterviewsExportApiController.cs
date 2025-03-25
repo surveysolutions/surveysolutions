@@ -138,9 +138,9 @@ namespace WB.UI.Headquarters.Controllers.Services.Export
         [Route("api/export/v1/interview/batch/history")]
         [HttpGet]
         [ApiNoCache]
-        public ActionResult<List<InterviewHistoryDto>> GetInterviewHistory([FromQuery(Name = "id")] Guid[] id)
+        public ActionResult<List<InterviewHistoryDto>> GetInterviewHistory([FromQuery(Name = "id")] Guid[] id, bool? reduced)
         {
-            var items = this.interviewHistoryFactory.Load(id);
+            var items = this.interviewHistoryFactory.Load(id, reduced);
             return items.Select(i => new InterviewHistoryDto {InterviewId = i.InterviewId, Records = i.Records}).ToList();
         }
     }

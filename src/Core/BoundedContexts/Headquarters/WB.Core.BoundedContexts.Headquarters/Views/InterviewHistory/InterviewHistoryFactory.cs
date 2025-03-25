@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
@@ -7,6 +8,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.DenormalizerStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory
@@ -34,17 +36,35 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory
             this.questionnaireStorage = questionnaireStorage;
         }
 
-        public InterviewHistoryView Load(Guid interviewId)
+        public InterviewHistoryView Load(Guid interviewId, bool? reduced)
         {
-            return this.RestoreInterviewHistory(interviewId).First();
+            return this.RestoreInterviewHistory(reduced, interviewId).First();
         }
 
-        public InterviewHistoryView[] Load(Guid[] interviewIds)
+        public InterviewHistoryView[] Load(Guid[] interviewIds, bool? reduced)
         {
-            return this.RestoreInterviewHistory(interviewIds);
+            return this.RestoreInterviewHistory(reduced, interviewIds);
         }
 
-        private InterviewHistoryView[] RestoreInterviewHistory(params Guid[] interviewIds)
+        private HashSet<Type> ReducedEvents = new()
+        {
+            typeof(StaticTextsDeclaredInvalid),
+            typeof(StaticTextsDeclaredImplausible),
+            typeof(StaticTextsDeclaredPlausible),
+            typeof(StaticTextsDeclaredValid),
+            typeof(QuestionsDisabled),
+            typeof(QuestionsEnabled),
+            typeof(AnswersDeclaredInvalid),
+            typeof(AnswersDeclaredValid),
+            typeof(AnswersDeclaredImplausible),
+            typeof(AnswersDeclaredPlausible),
+            typeof(GroupsDisabled),
+            typeof(GroupsEnabled),
+            typeof(VariablesDisabled),
+            typeof(VariablesEnabled),
+        };
+
+        private InterviewHistoryView[] RestoreInterviewHistory(bool? reduced, params Guid[] interviewIds)
         {
             var interviewHistoryReader = new InMemoryReadSideRepositoryAccessor<InterviewHistoryView>();
             var interviewHistoryDenormalizer = new InterviewParaDataEventHandler(interviewHistoryReader, 
@@ -59,6 +79,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory
 
                 foreach (var @event in events)
                 {
+                    if (reduced == true && ReducedEvents.Contains(@event.Payload.GetType()))
+                        continue;
+                    
                     interviewHistoryDenormalizer.Handle(@event);
                 }
             }

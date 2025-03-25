@@ -1,7 +1,7 @@
 <template>
     <div class="export-card">
         <div class="top-row">
-            <div class="format-data" :class="data.format">
+            <div class="format-data" :class="iconClass">
                 <div class="gray-text-row">
                     <b>#{{ data.id }}&nbsp;</b>
                     <span v-if="!isCompleted">
@@ -14,7 +14,8 @@
                         { title: data.title, version: data.questionnaireIdentity.version }) }}
                 </div>
                 <p class="mb-0 font-regular">
-                    <u class="font-bold">{{ data.format }}</u> format.
+                    <u class="font-bold">{{ data.format }}{{ data.format == "Paradata" && data.paradataReduced == true ?
+                        " (" + $t("DataExport.ParadataEventsFilter_Reduced") + ")" : "" }}</u> format.
                     <span v-if="data.format != 'DDI' && data.interviewStatus != null" class="font-bold">
                         {{ $t('DataExport.DataExport_InterviewsStatus', {
                             status: $t('DataExport.' + data.interviewStatus),
@@ -23,8 +24,7 @@
                     </span>
                     <span>&nbsp;{{ translation }}</span>
                 </p>
-                <p class="mb-0 font-regular" v-if="data.fromDate || data.toDate"
-                    :title="data.fromDate + ' - ' + data.toDate">
+                <p class="mb-0 font-regular" v-if="data.fromDate || data.toDate" :title="dateRangeTitle">
                     {{ $t('DataExport.FromDate') }}
                     <span class="font-bold">{{ formatDate(data.fromDate) || '-' }}</span>
                     {{ $t('DataExport.ToDate') }}
@@ -143,6 +143,12 @@ export default {
     },
 
     computed: {
+        iconClass() {
+            if (this.data.format == 'Paradata' && this.data.paradataReduced == true)
+                return 'ParadataReduced'
+
+            return this.data.format
+        },
         downloadFileUrl() {
             var url = this.$config.model.api.downloadDataUrl
             return `${url}?id=${this.data.id}`
@@ -165,6 +171,15 @@ export default {
         translation() {
             const languageName = this.data.translationName || this.$t('WebInterview.Original_Language')
             return this.$t('DataExport.Translation_CardLabel', { language: languageName })
+        },
+        dateRangeTitle() {
+            const title = this.$t('DataExport.FromDate') + ' ' +
+                (this.data.fromDate ? (this.data.fromDate + ' (UTC)') : '-') +
+                ' ' +
+                this.$t('DataExport.ToDate') + ' ' +
+                (this.data.toDate ? (this.data.toDate + ' (UTC)') : '-');
+            return title
+            //return data.fromDate + ' - ' + data.toDate
         },
     },
 

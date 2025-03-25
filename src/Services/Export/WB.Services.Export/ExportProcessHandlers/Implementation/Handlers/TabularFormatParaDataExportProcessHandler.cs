@@ -58,10 +58,10 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation.Handlers
 
             await this.tabularFormatExportService.GenerateShortDescriptionFileAsync(settings.Tenant,
                 settings.QuestionnaireId, state.ExportTempFolder,
-                ExportFileSettings.TabDataFileExtension, cancellationToken);
+                ExportFileSettings.TabDataFileExtension, settings.ExportFormat, settings.ParadataReduced, 
+                cancellationToken);
             await this.tabularFormatExportService.GenerateInformationFileAsync(settings.Tenant,
                 settings.QuestionnaireId, state.ExportTempFolder, cancellationToken);
-            
             
             var interviewsToExport = this.interviewsToExportSource.GetInterviewsToExport(settings.QuestionnaireId,
                 settings.Status, settings.FromDate, settings.ToDate);
@@ -88,7 +88,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation.Handlers
                 async Task QueryParadata(IEnumerable<InterviewToExport> interviews)
                 {
                     if (api == null) throw new InvalidOperationException("Api must be not null.");
-                    var historyItems = await api.GetInterviewsHistory(interviews.Select(i => i.Id).ToArray());
+                    var historyItems = await api.GetInterviewsHistory(interviews.Select(i => i.Id).ToArray(), settings.ParadataReduced);
                     logger.LogTrace("Query headquarters for interviews history. Got {historyItemsCount} items with {historyItemsSum} records",
                         historyItems.Count, historyItems.Sum(h => h.Records.Count));
 

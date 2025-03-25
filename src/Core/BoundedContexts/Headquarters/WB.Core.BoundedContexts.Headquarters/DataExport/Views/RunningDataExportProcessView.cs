@@ -65,5 +65,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
         public string TranslationName { get; set; }
 
         public bool? IncludeMeta { set; get; }
+        public bool? ParadataReduced { set; get; }
     }
 }

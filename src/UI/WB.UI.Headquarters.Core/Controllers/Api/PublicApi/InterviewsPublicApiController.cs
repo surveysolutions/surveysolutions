@@ -201,7 +201,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Administrator)]
         public ActionResult<InterviewHistoryView> InterviewHistory(Guid id)
         {
-            var interview = this.interviewHistoryViewFactory.Load(id);
+            var interview = this.interviewHistoryViewFactory.Load(id, reduced: false);
 
             if (interview == null)
             {
