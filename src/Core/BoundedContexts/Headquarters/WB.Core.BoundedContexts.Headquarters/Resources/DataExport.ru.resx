@@ -464,7 +464,10 @@
     <data name="SurveyQuestionnaireDateRangeTo" xml:space="preserve">
       <value>До</value>
   </data>
-    <data name="DateRangeToAll" xml:space="preserve">
-      <value>По текущий момент</value>
+  <data name="DateRangeToAll" xml:space="preserve">
+    <value>По текущий момент</value>
+  </data>
+  <data name="DataType_AudioAuditFiles" xml:space="preserve">
+    <value>Файлы аудита аудио. Архив, содержащий аудио аудит</value>
   </data>
 </root>

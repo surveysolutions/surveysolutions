@@ -65,9 +65,13 @@ namespace WB.Services.Export.Services.Processing
         {
             var statusSuffix = exportSettings.Status == null ? "All" : exportSettings.Status.ToString();
 
-            var fromDatePrefix = exportSettings.FromDate == null || exportSettings.ExportFormat == DataExportFormat.Binary 
+            var fromDatePrefix = exportSettings.FromDate == null 
+                                 || exportSettings.ExportFormat == DataExportFormat.Binary 
+                                 || exportSettings.ExportFormat == DataExportFormat.AudioAudit
                 ? "" : $"_{exportSettings.FromDate.Value:yyyyMMddTHHmm}Z";
-            var toDatePrefix = exportSettings.ToDate == null || exportSettings.ExportFormat == DataExportFormat.Binary 
+            var toDatePrefix = exportSettings.ToDate == null 
+                               || exportSettings.ExportFormat == DataExportFormat.Binary 
+                               || exportSettings.ExportFormat == DataExportFormat.AudioAudit
                 ? "" : $"_{exportSettings.ToDate.Value:yyyyMMddTHHmm}Z";
 
             string translationName = string.Empty;

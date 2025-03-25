@@ -455,5 +455,8 @@
   </data>
   <data name="DateRangeToAll" xml:space="preserve">
       <value>Current moment</value>
+  </data>    
+  <data name="DataType_AudioAuditFiles" xml:space="preserve">
+      <value>Audio Audit. Zip arhive containing Audio Audit data</value>
   </data>
 </root>

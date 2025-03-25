@@ -390,4 +390,7 @@
   <data name="ZipFile" xml:space="preserve">
     <value>Skedar Zip</value>
   </data>
+  <data name="DataType_AudioAuditFiles" xml:space="preserve">
+      <value>Skedarë të auditimit të audios. Arkiv që përmban auditimin e audios</value>
+  </data>
 </root>
