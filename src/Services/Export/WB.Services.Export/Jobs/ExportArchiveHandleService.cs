@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using WB.Services.Export.Models;
@@ -30,7 +31,7 @@ namespace WB.Services.Export.Jobs
             this.fileNameService = fileNameService;
         }
 
-        public async Task ClearAllExportArchives(TenantInfo tenant)
+        public async Task ClearExportArchives(TenantInfo tenant, int? countToKeep, int? daysToKeep)
         {
             if (this.externalArtifactsStorage.IsEnabled())
             {
@@ -38,11 +39,28 @@ namespace WB.Services.Export.Jobs
                 var items = await this.externalArtifactsStorage.ListAsync(externalStoragePath);
                 if(items == null) return;
 
-                logger.LogInformation("Deleting export archives for tenant: {tenant} - there is {count} files", tenant, items.Count);
+                logger.LogInformation("Deleting export archives for tenant: {tenant} - there are total {count} files", tenant, items.Count);
 
-                foreach (var file in items)
+                int? countToDelete = countToKeep.HasValue ? items.Count - countToKeep.Value : null;
+                foreach (var file in items.OrderByDescending(x => x.LastModified))
                 {
-                    await this.externalArtifactsStorage.RemoveAsync(file.Path);
+                    if (!countToKeep.HasValue && !daysToKeep.HasValue)
+                    {
+                        await this.externalArtifactsStorage.RemoveAsync(file.Path);
+                        continue;
+                    }
+
+                    if (daysToKeep.HasValue && file.LastModified < DateTime.UtcNow.AddDays(-daysToKeep.Value))
+                    { 
+                        await this.externalArtifactsStorage.RemoveAsync(file.Path);
+                        if(countToDelete.HasValue)
+                            countToDelete--;
+                    }
+                    else if (countToDelete is > 0)
+                    {
+                        await this.externalArtifactsStorage.RemoveAsync(file.Path);
+                        countToDelete--;
+                    }
                 }
 
                 return;
@@ -51,7 +69,35 @@ namespace WB.Services.Export.Jobs
             var directory = this.fileBasedExportedDataAccessor.GetExportDirectory(tenant);
             if (Directory.Exists(directory))
             {
-                Directory.Delete(directory, true);
+                logger.LogInformation("Deleting export archives for tenant: {tenant}", tenant);
+                
+                if(!countToKeep.HasValue && !daysToKeep.HasValue)
+                    Directory.Delete(directory, true);
+                else
+                {
+                    //get all files infos in directory recursively
+                    var files = Directory.GetFiles(directory, "*.zip", SearchOption.AllDirectories)
+                        .Select(f => new FileInfo(f))
+                        .OrderByDescending(f => f.LastWriteTimeUtc)
+                        .ToList();
+                    
+                    int? countToDelete = countToKeep.HasValue ? files.Count - countToKeep.Value : null;
+
+                    foreach (var file in files)
+                    {
+                        if (daysToKeep.HasValue && file.LastWriteTimeUtc < DateTime.UtcNow.AddDays(-daysToKeep.Value))
+                        { 
+                            File.Delete(file.FullName);
+                            if(countToDelete.HasValue)
+                                countToDelete--;
+                        }
+                        else if (countToDelete is > 0)
+                        {
+                            File.Delete(file.FullName);
+                            countToDelete--;
+                        }
+                    }
+                }
             }
         }
 

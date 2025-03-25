@@ -112,7 +112,7 @@ namespace WB.UI.Headquarters.Services.Quartz
             await services.GetRequiredService<SendRemindersTask>().Schedule(repeatIntervalInSeconds: 60 * 60);
             await services.GetRequiredService<SendInterviewCompletedTask>().Schedule(repeatIntervalInSeconds: 60);
             
-            await services.GetRequiredService<ExportDataRetensionTask>().Schedule(repeatIntervalInSeconds: 60 * 60 * 12);
+            await services.GetRequiredService<ExportDataRetentionTask>().Schedule(repeatIntervalInSeconds: 60 * 60 * 12);
             
             var scheduler = await services.GetRequiredService<ISchedulerFactory>().GetScheduler();
             

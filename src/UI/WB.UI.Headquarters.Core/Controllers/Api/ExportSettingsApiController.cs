@@ -147,7 +147,7 @@ namespace WB.UI.Headquarters.Controllers.Api
 
         private Task ClearExportData()
         {
-            return exportServiceApi.DeleteAll();
+            return exportServiceApi.DeleteArchives();
         }
 
         private async Task<bool> IsExistsDataExportInProgress()

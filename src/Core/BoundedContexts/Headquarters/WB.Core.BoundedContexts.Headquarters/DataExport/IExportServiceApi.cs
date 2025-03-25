@@ -66,7 +66,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport
         Task DeleteProcess(long jobId);
 
         [Delete("/api/v1/deleteArchives")]
-        Task DeleteAll();
+        Task DeleteArchives(int? countToKeep = null, int? daysToKeep = null);
 
         [Get("/api/v1/ddi")]
         Task<HttpContent> GetDdiArchive(string questionnaireId, string? archivePassword);

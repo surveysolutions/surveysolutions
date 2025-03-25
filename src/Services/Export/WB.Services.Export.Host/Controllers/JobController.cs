@@ -229,9 +229,9 @@ namespace WB.Services.Export.Host.Controllers
 
         [HttpDelete]
         [Route("api/v1/deleteArchives")]
-        public async Task<ActionResult> Delete()
+        public async Task<ActionResult> Delete(int? countToKeep, int? daysToKeep)
         {
-            await this.archiveHandleService.ClearAllExportArchives(tenantContext.Tenant);
+            await this.archiveHandleService.ClearExportArchives(tenantContext.Tenant, countToKeep, daysToKeep);
             return Ok();
         }
 

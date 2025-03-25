@@ -4,9 +4,9 @@ using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Jobs;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Jobs
 {
-    public class ExportDataRetensionTask : BaseTask
+    public class ExportDataRetentionTask : BaseTask
     {
-        public ExportDataRetensionTask(ISchedulerFactory schedulerFactory) 
+        public ExportDataRetentionTask(ISchedulerFactory schedulerFactory) 
             : base(schedulerFactory, "Export Files Retention", typeof(ExportDataRetentionJob)) { }
     }
 }

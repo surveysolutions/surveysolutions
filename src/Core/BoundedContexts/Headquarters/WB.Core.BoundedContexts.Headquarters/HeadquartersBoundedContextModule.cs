@@ -385,6 +385,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<SendInterviewCompletedTask>();
             registry.Bind<DeleteWorkspaceSchemaJob>();
             registry.Bind<ExportDataRetentionJob>();
+            registry.Bind<ExportDataRetentionTask>();
             
             registry.BindScheduledJob<DeleteWorkspaceSchemaJob, DeleteWorkspaceJobData>();
             registry.BindScheduledJob<DeleteQuestionnaireJob, DeleteQuestionnaireRequest>();

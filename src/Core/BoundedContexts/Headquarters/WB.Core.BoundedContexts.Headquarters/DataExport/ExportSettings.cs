@@ -77,7 +77,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport
             return result;
         }
 
-        public bool IsRetenstionEnabled()
+        public ExportRetentionSettings? GetExportRetentionSettings()
         {
             
             var setting = this.settingCache.GetOrCreate(ExportRetentionSettings.ExportRetentionSettingsKey, cache =>
@@ -87,7 +87,26 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport
                 return this.exportRetentionSettingsStorage.GetById(ExportRetentionSettings.ExportRetentionSettingsKey);
             });
             
-            return setting?.Enabled == true;
+            return setting;
+        }
+        
+        public void SetExportRetentionSettings(bool enabled, int? daysToKeep, int? countToKeep)
+        {
+            var setting = this.exportRetentionSettingsStorage.GetById(ExportRetentionSettings.ExportRetentionSettingsKey);
+            if (setting == null)
+            {
+                setting = new ExportRetentionSettings(enabled, daysToKeep, countToKeep);
+            }
+            else
+            {
+                setting.Enabled = enabled;
+                setting.DaysToKeep = daysToKeep;
+                setting.CountToKeep = countToKeep;
+            }
+
+            this.exportRetentionSettingsStorage.Store(setting, ExportRetentionSettings.ExportRetentionSettingsKey);
+            
+            settingCache.Remove(ExportRetentionSettings.ExportRetentionSettingsKey);
         }
     }
 }
