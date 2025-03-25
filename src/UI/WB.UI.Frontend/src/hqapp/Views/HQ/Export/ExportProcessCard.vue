@@ -24,8 +24,7 @@
                     </span>
                     <span>&nbsp;{{ translation }}</span>
                 </p>
-                <p class="mb-0 font-regular" v-if="data.fromDate || data.toDate"
-                    :title="data.fromDate + ' - ' + data.toDate">
+                <p class="mb-0 font-regular" v-if="data.fromDate || data.toDate" :title="dateRangeTitle">
                     {{ $t('DataExport.FromDate') }}
                     <span class="font-bold">{{ formatDate(data.fromDate) || '-' }}</span>
                     {{ $t('DataExport.ToDate') }}
@@ -172,6 +171,15 @@ export default {
         translation() {
             const languageName = this.data.translationName || this.$t('WebInterview.Original_Language')
             return this.$t('DataExport.Translation_CardLabel', { language: languageName })
+        },
+        dateRangeTitle() {
+            const title = this.$t('DataExport.FromDate') + ' ' +
+                (this.data.fromDate ? (this.data.fromDate + ' (UTC)') : '-') +
+                ' ' +
+                this.$t('DataExport.ToDate') + ' ' +
+                (this.data.toDate ? (this.data.toDate + ' (UTC)') : '-');
+            return title
+            //return data.fromDate + ' - ' + data.toDate
         },
     },
 
