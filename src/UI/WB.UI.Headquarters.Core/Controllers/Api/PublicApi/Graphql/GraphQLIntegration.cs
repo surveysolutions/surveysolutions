@@ -57,6 +57,11 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
                     x.Use<WorkspaceGraphQlMiddleware>();
                 })
                 .AddAuthorization()
+                .ModifyOptions(o =>
+                {
+                    o.DefaultQueryDependencyInjectionScope = DependencyInjectionScope.Request;
+                    o.DefaultMutationDependencyInjectionScope = DependencyInjectionScope.Request;
+                })
                 .ModifyPagingOptions(o => { o.MaxPageSize = 200; })
                 .ModifyCostOptions(o => { o.EnforceCostLimits = false; })
                 .AddQueryType(x => x.Name("HeadquartersQuery"))
