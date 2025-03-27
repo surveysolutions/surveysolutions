@@ -59,6 +59,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
                 .AddAuthorization()
                 .ModifyOptions(o =>
                 {
+                    // this property is required to save workspace context in the graphql request
                     o.DefaultQueryDependencyInjectionScope = DependencyInjectionScope.Request;
                     o.DefaultMutationDependencyInjectionScope = DependencyInjectionScope.Request;
                 })
