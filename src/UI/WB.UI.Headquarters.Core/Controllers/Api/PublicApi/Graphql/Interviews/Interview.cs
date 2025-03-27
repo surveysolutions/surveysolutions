@@ -1,6 +1,7 @@
 #nullable enable
 using System.Collections.Generic;
 using System.Linq;
+using GreenDonut;
 using HotChocolate.Resolvers;
 using HotChocolate.Types;
 using Main.Core.Entities.SubEntities;
@@ -89,24 +90,11 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
             descriptor.Field(x => x.IdentifyEntitiesValues)
                 .Name("identifyingData")
                 .Description("Information that identifies each assignment. These are the answers to questions marked as identifying in Designer")
-                .Resolve(async context => await
-                    context.BatchDataLoader<string, IReadOnlyList<IdentifyEntityValue>>(
-                            async (keys, token) =>
-                            {
-                                var unitOfWork = context.Service<IUnitOfWork>();
-                                var questionAnswers = await unitOfWork.Session.Query<IdentifyEntityValue>()
-                                    .Where(a => keys.Contains(a.InterviewSummary.SummaryId) && a.Identifying)
-                                    .OrderBy(a => a.Position)
-                                    .ToListAsync(cancellationToken: token)
-                                    .ConfigureAwait(false);
-
-                                var answers = questionAnswers
-                                    .GroupBy(x => x.InterviewSummary.SummaryId)
-                                    .ToDictionary(g => g.Key, g => (IReadOnlyList<IdentifyEntityValue>)g.ToList());
-
-                                return answers;
-                            }, "answersByInterview")
-                        .LoadAsync(context.Parent<InterviewSummary>().SummaryId, default))
+                .Resolve(async context =>
+                {
+                    var loader = context.DataLoader<IdentifyEntityValuesDataLoader>();
+                    return await loader.LoadAsync(context.Parent<InterviewSummary>().SummaryId, context.RequestAborted);
+                })
                 .Type<ListType<AnswerObjectType>>();
 
             
