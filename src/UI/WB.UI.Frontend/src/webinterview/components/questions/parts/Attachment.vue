@@ -44,14 +44,12 @@
 </template>
 <script lang="js">
 import axios from 'axios'
-import appendQuery from 'append-query'
 import { startsWith } from 'lodash'
 
 function appendSearchParam(uri, name, value) {
-    const args = {
-        [name]: value,
-    } // keep in separate line to make IE happy 
-    return appendQuery(uri, args)
+    const url = new URL(uri, window.location.origin);
+    url.searchParams.append(name, value);
+    return url.toString();
 }
 
 export default {
