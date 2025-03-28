@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using GreenDonut;
 using Microsoft.Extensions.DependencyInjection;
+using NHibernate;
 using NHibernate.Linq;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Infrastructure.Native.Storage.Postgre;
@@ -35,10 +36,14 @@ public class IdentifyEntityValuesDataLoader : BatchDataLoader<string, IReadOnlyL
         var questionAnswers = await unitOfWork.Session.Query<IdentifyEntityValue>()
             .Where(a => keys.Contains(a.InterviewSummary.SummaryId) && a.Identifying)
             .OrderBy(a => a.Position)
-            .Fetch(q => q.Entity)
             .ToListAsync(cancellationToken)
             .ConfigureAwait(false);
 
+        foreach (var answer in questionAnswers)
+        {
+            NHibernateUtil.Initialize(answer.Entity);
+        }
+        
         return questionAnswers
             .GroupBy(x => x.InterviewSummary.SummaryId)
             .ToDictionary(g => g.Key, g => (IReadOnlyList<IdentifyEntityValue>)g.ToList());
