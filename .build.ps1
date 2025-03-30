@@ -255,7 +255,7 @@ task frontend {
 
 task PackageHq frontend, {
 	"Starting HQ build task" | Out-Host
-    exec {
+  exec {
         dotnet publish @(
             "./src/UI/WB.UI.Headquarters.Core",
             "-c", "Release",
