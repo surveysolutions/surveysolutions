@@ -25,23 +25,24 @@ public class IdentifyEntityValuesDataLoader : BatchDataLoader<string, IReadOnlyL
         this.unitOfWork = unitOfWork;
     }
 
-    protected override Task<IReadOnlyDictionary<string, IReadOnlyList<IdentifyEntityValue>>> LoadBatchAsync(
+    protected override async Task<IReadOnlyDictionary<string, IReadOnlyList<IdentifyEntityValue>>> LoadBatchAsync(
         IReadOnlyList<string> keys, CancellationToken cancellationToken)
     {
         if (!unitOfWork.Session.IsOpen)
         {
-            throw new InvalidOperationException("GraphQL: NHibernate session is closed before query execution.");
+            throw new InvalidOperationException("GraphQL: session is closed before query execution.");
         }
         
-        var questionAnswers = unitOfWork.Session.Query<IdentifyEntityValue>()
+        var questionAnswers = await unitOfWork.Session.Query<IdentifyEntityValue>()
             .Where(a => keys.Contains(a.InterviewSummary.SummaryId) && a.Identifying)
             .OrderBy(a => a.Position)
             .Fetch(q => q.Entity)
-            .ToList();
-        
+            .ToListAsync(cancellationToken)
+            .ConfigureAwait(false);
+    
         IReadOnlyDictionary<string, IReadOnlyList<IdentifyEntityValue>> answers = questionAnswers
             .GroupBy(x => x.InterviewSummary.SummaryId)
             .ToDictionary(g => g.Key, g => (IReadOnlyList<IdentifyEntityValue>)g.ToList());
-        return Task.FromResult(answers);
+        return answers;
     }
 }
