@@ -723,6 +723,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
             }
         }
         
+        public static string DataType_AudioAuditFiles {
+            get {
+                return ResourceManager.GetString("DataType_AudioAuditFiles", resourceCulture);
+            }
+        }
         public static string ParadataEventsFilter {
             get {
                 return ResourceManager.GetString("ParadataEventsFilter", resourceCulture);

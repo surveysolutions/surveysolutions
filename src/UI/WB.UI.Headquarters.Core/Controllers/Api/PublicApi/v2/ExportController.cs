@@ -409,7 +409,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.v2
             SPSS = 3,
             Binary = 4,
             DDI = 5,
-            Paradata = 6
+            Paradata = 6,
+            AudioAudit = 7
         }
 
         public enum ExportStatus

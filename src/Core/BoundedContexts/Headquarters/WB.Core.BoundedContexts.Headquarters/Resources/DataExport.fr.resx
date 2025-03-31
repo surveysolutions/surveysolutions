@@ -452,10 +452,13 @@
 </data>
     <data name="SurveyQuestionnaireDateRangeTo" xml:space="preserve">
     <value>À</value>
-</data>
-    <data name="DateRangeToAll" xml:space="preserve">
+  </data>
+  <data name="DateRangeToAll" xml:space="preserve">
     <value>Moment actuel</value>
-</data>
+  </data>
+  <data name="DataType_AudioAuditFiles" xml:space="preserve">
+    <value>Fichiers d'audit audio. Archive contenant l'audit audio</value>
+  </data>
     <data name="ParadataEventsFilter" xml:space="preserve">
     <value>Filtre des événements</value>
 </data>

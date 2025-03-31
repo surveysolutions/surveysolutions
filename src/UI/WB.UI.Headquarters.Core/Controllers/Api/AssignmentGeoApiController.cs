@@ -1,14 +1,10 @@
 using System;
-using System.Globalization;
 using System.Linq;
-using GreenDonut.Predicates;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.GeoTracking;
 using WB.Core.BoundedContexts.Headquarters.Users;
-using WB.Core.BoundedContexts.Headquarters.Views.Responsible;
-using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Models.User;

@@ -456,6 +456,9 @@
     <data name="DateRangeToAll" xml:space="preserve">
     <value>Aktuální okamžik</value>
 </data>
+  <data name="DataType_AudioAuditFiles" xml:space="preserve">
+      <value>Zvukové auditní soubory. Archiv obsahující zvukový audit</value>
+  </data>
     <data name="ParadataEventsFilter" xml:space="preserve">
     <value>Filtr událostí</value>
 </data>
