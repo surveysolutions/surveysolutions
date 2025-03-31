@@ -93,7 +93,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                 .Resolve(async context =>
                 {
                     var loader = context.DataLoader<IdentifyEntityValuesDataLoader>();
-                    return await loader.LoadAsync(context.Parent<InterviewSummary>().SummaryId, context.RequestAborted);
+                    return await loader.LoadAsync(context.Parent<InterviewSummary>().Id, context.RequestAborted);
                 })
                 .Type<ListType<AnswerObjectType>>();
 

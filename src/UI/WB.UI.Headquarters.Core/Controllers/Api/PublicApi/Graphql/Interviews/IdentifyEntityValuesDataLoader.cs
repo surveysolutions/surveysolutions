@@ -12,7 +12,7 @@ using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews;
 
-public class IdentifyEntityValuesDataLoader : BatchDataLoader<string, IReadOnlyList<IdentifyEntityValue>>
+public class IdentifyEntityValuesDataLoader : BatchDataLoader<int, IReadOnlyList<IdentifyEntityValue>>
 {
     private readonly IUnitOfWork unitOfWork;
 
@@ -27,8 +27,10 @@ public class IdentifyEntityValuesDataLoader : BatchDataLoader<string, IReadOnlyL
 
     protected override bool AllowCachePropagation => false;
 
-    protected override async Task<IReadOnlyDictionary<string, IReadOnlyList<IdentifyEntityValue>>> LoadBatchAsync(
-        IReadOnlyList<string> keys, CancellationToken cancellationToken)
+    protected override bool AllowBranching => true;
+
+    protected override async Task<IReadOnlyDictionary<int, IReadOnlyList<IdentifyEntityValue>>> LoadBatchAsync(
+        IReadOnlyList<int> keys, CancellationToken cancellationToken)
     {
         if (!unitOfWork.Session.IsOpen)
         {
@@ -36,14 +38,14 @@ public class IdentifyEntityValuesDataLoader : BatchDataLoader<string, IReadOnlyL
         }
         
         var questionAnswers = await unitOfWork.Session.Query<IdentifyEntityValue>()
-            .Where(a => keys.Contains(a.InterviewSummary.SummaryId) && a.Identifying)
+            .Where(a => keys.Contains(a.InterviewSummary.Id) && a.Identifying)
             .OrderBy(a => a.Position)
             .Fetch(q => q.Entity)
             .ToListAsync(cancellationToken)
             .ConfigureAwait(false);
     
-        IReadOnlyDictionary<string, IReadOnlyList<IdentifyEntityValue>> answers = questionAnswers
-            .GroupBy(x => x.InterviewSummary.SummaryId)
+        IReadOnlyDictionary<int, IReadOnlyList<IdentifyEntityValue>> answers = questionAnswers
+            .GroupBy(x => x.InterviewSummary.Id)
             .ToDictionary(g => g.Key, g => (IReadOnlyList<IdentifyEntityValue>)g.ToList());
         return answers;
     }
