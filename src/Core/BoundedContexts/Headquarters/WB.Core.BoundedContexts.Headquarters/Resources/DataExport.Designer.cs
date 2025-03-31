@@ -728,5 +728,28 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
                 return ResourceManager.GetString("DataType_AudioAuditFiles", resourceCulture);
             }
         }
+        public static string ParadataEventsFilter {
+            get {
+                return ResourceManager.GetString("ParadataEventsFilter", resourceCulture);
+            }
+        }
+        
+        public static string ParadataEventsFilter_All {
+            get {
+                return ResourceManager.GetString("ParadataEventsFilter_All", resourceCulture);
+            }
+        }
+        
+        public static string ParadataEventsFilter_Reduced {
+            get {
+                return ResourceManager.GetString("ParadataEventsFilter_Reduced", resourceCulture);
+            }
+        }
+        
+        public static string ParadataEventsFilter_ReducedHint {
+            get {
+                return ResourceManager.GetString("ParadataEventsFilter_ReducedHint", resourceCulture);
+            }
+        }
     }
 }

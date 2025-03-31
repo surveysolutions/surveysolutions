@@ -146,7 +146,8 @@ namespace WB.Services.Export.Jobs
                     fromDate : fromDate,
                     toDate : toDate,
                     translation: null,
-                    includeMeta: null
+                    includeMeta: null,
+                    paradataReduced: null
                 );
                 var dataExportView = await this.CreateDataExportView(exportSettings,
                     supportedDataExport.exportType, allProcesses);
@@ -225,7 +226,8 @@ namespace WB.Services.Export.Jobs
                 fromDate : dataExportProcessView.FromDate,
                 toDate : dataExportProcessView.ToDate,
                 translation : dataExportProcessView.TranslationId,
-                includeMeta: dataExportProcessView.IncludeMeta
+                includeMeta: dataExportProcessView.IncludeMeta,
+                paradataReduced: dataExportProcessView.ParadataReduced
             );
 
             dataExportProcessView.HasFile = false;
@@ -271,6 +273,7 @@ namespace WB.Services.Export.Jobs
                 InterviewStatus = settings.Status,
                 TranslationId = settings.Translation,
                 IncludeMeta = settings.IncludeMeta,
+                ParadataReduced = settings.ParadataReduced,
                 FromDate = settings.FromDate,
                 ToDate = settings.ToDate,
                 Error = error == null
