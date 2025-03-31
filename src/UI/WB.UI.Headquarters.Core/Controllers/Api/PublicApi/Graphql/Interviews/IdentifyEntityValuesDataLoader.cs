@@ -25,6 +25,8 @@ public class IdentifyEntityValuesDataLoader : BatchDataLoader<string, IReadOnlyL
         this.unitOfWork = unitOfWork;
     }
 
+    protected override bool AllowCachePropagation => false;
+
     protected override async Task<IReadOnlyDictionary<string, IReadOnlyList<IdentifyEntityValue>>> LoadBatchAsync(
         IReadOnlyList<string> keys, CancellationToken cancellationToken)
     {
