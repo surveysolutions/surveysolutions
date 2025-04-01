@@ -150,7 +150,7 @@ namespace WB.Services.Export.Tests.ExportProcessHandlersTests
             };
             
             var hqApi = new Mock<IHeadquartersApi>();
-            hqApi.Setup(x => x.GetInterviewsHistory(new []{ Id.g1 }))
+            hqApi.Setup(x => x.GetInterviewsHistory(new []{ Id.g1 }, null))
                 .Returns(Task.FromResult(historyViews));
 
             var tenantApi = new Mock<ITenantApi<IHeadquartersApi>>();

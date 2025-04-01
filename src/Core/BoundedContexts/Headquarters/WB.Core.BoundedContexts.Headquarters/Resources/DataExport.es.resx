@@ -459,4 +459,16 @@
   <data name="DataType_AudioAuditFiles" xml:space="preserve">
     <value>Archivos de auditoría de audio. Archivo que contiene auditoría de audio</value>
   </data>
+    <data name="ParadataEventsFilter" xml:space="preserve">
+    <value>Filtro de eventos</value>
+</data>
+    <data name="ParadataEventsFilter_All" xml:space="preserve">
+    <value>Todos</value>
+</data>
+    <data name="ParadataEventsFilter_Reduced" xml:space="preserve">
+    <value>Reducido</value>
+</data>
+    <data name="ParadataEventsFilter_ReducedHint" xml:space="preserve">
+    <value>El conjunto reducido de paradata no incluye eventos con los siguientes códigos: QuestionEnabled (13), QuestionDisabled (14), GroupEnabled (15), GroupDisabled (16), QuestionDeclaredValid (17), QuestionDeclaredInvalid (18), VariableEnabled (23), VariableDisabled (24).</value>
+</data>
 </root>
