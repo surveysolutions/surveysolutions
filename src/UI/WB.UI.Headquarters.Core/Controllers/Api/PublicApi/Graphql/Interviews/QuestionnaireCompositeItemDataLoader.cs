@@ -16,17 +16,14 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews;
 public class QuestionnaireCompositeItemDataLoader : BatchDataLoader<int, QuestionnaireCompositeItem>
 {
     private readonly IUnitOfWork unitOfWork;
-    private readonly HttpContextAccessor httpContextAccessor;
 
     public QuestionnaireCompositeItemDataLoader(
         IBatchScheduler batchScheduler,
         IUnitOfWork unitOfWork,
-        DataLoaderOptions options = null,
-        HttpContextAccessor httpContextAccessor = null)
+        DataLoaderOptions options = null)
         : base(batchScheduler, options ?? new DataLoaderOptions(){ MaxBatchSize = 0 })
     {
         this.unitOfWork = unitOfWork;
-        this.httpContextAccessor = httpContextAccessor;
     }
 
     protected override bool AllowCachePropagation => false;
@@ -51,9 +48,7 @@ public class QuestionnaireCompositeItemDataLoader : BatchDataLoader<int, Questio
         }
         catch (Exception e)
         {
-            var httpContext = httpContextAccessor.HttpContext;
-            if (httpContext != null)
-                e.Log(httpContext);
+            e.LogNoContext();
             throw new Exception("TEST: fail to read query entity", e);
         }
     }
