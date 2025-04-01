@@ -32,19 +32,6 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
                     var loader = context.DataLoader<QuestionnaireCompositeItemDataLoader>();
                     return await loader.LoadAsync(context.Parent<IdentifyEntityValue>().Entity.Id, context.RequestAborted);
                 })
-                /*.Resolve(async context => {
-                        return await context.BatchDataLoader<int, QuestionnaireCompositeItem>(async (keys, token) =>
-                            {
-                                var unitOfWork = context.Service<IUnitOfWork>();
-                                if (unitOfWork == null) throw new InvalidOperationException("unitOfWork is null");
-
-                                return (await unitOfWork.Session.Query<QuestionnaireCompositeItem>()
-                                    .Where(q => keys.Contains(q.Id))
-                                    .ToListAsync(token)).ToDictionary(x => x.Id);
-                            },"questionByAnswer")
-                            .LoadAsync(context.Parent<IdentifyEntityValue>().Entity.Id);
-                    }
-                )*/
                 .Type<NonNullType<EntityItemObjectType>>();
             
             descriptor.Field(x => x.Value)
