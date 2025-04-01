@@ -19,12 +19,12 @@ public class QuestionnaireCompositeItemDataLoader : BatchDataLoader<int, Questio
         IBatchScheduler batchScheduler,
         IUnitOfWork unitOfWork,
         DataLoaderOptions options = null)
-        : base(batchScheduler, options ?? new DataLoaderOptions() { MaxBatchSize = 0 })
+        : base(batchScheduler, options ?? new DataLoaderOptions())
     {
         this.unitOfWork = unitOfWork;
     }
 
-    protected override bool AllowCachePropagation => false;
+    protected override bool AllowCachePropagation => true;
 
     protected override bool AllowBranching => true;
 
