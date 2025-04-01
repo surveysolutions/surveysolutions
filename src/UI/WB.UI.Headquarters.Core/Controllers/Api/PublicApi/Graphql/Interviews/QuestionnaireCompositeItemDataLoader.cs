@@ -21,7 +21,7 @@ public class QuestionnaireCompositeItemDataLoader : BatchDataLoader<int, Questio
         IBatchScheduler batchScheduler,
         IUnitOfWork unitOfWork,
         DataLoaderOptions options = null)
-        : base(batchScheduler, options ?? new DataLoaderOptions(){ MaxBatchSize = 0 })
+        : base(batchScheduler, options ?? new DataLoaderOptions())
     {
         this.unitOfWork = unitOfWork;
     }

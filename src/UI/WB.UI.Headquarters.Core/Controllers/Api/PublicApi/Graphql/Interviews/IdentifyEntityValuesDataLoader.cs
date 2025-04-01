@@ -20,7 +20,7 @@ public class IdentifyEntityValuesDataLoader : BatchDataLoader<int, IReadOnlyList
         IBatchScheduler batchScheduler, 
         IUnitOfWork unitOfWork, 
         DataLoaderOptions options = null) 
-        : base(batchScheduler, options ?? new DataLoaderOptions(){ MaxBatchSize = 0 })
+        : base(batchScheduler, options ?? new DataLoaderOptions())
     {
         this.unitOfWork = unitOfWork;
     }
