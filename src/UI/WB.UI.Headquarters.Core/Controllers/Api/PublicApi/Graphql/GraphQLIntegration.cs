@@ -66,6 +66,10 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
                     // this property is required to execute dataloaders one by one without connection conflicts
                     o.DefaultResolverStrategy = ExecutionStrategy.Serial;
                 })
+                .ModifyRequestOptions(opt =>
+                {
+                    opt.IncludeExceptionDetails = false;
+                })
                 .ModifyPagingOptions(o => { o.MaxPageSize = 200; })
                 .ModifyCostOptions(o => { o.EnforceCostLimits = false; })
                 .AddQueryType(x => x.Name("HeadquartersQuery"))
