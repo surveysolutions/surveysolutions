@@ -63,6 +63,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
                     o.DefaultQueryDependencyInjectionScope = DependencyInjectionScope.Request;
                     o.DefaultMutationDependencyInjectionScope = DependencyInjectionScope.Request;
 
+                    // this property is rrequired to execute dataloaders one by one without connection conflicts
                     o.DefaultResolverStrategy = ExecutionStrategy.Serial;
                 })
                 .ModifyPagingOptions(o => { o.MaxPageSize = 200; })
