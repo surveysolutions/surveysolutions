@@ -39,7 +39,7 @@ public class IdentifyEntityValuesDataLoader : BatchDataLoader<int, IReadOnlyList
         
         var questionAnswers = await unitOfWork.Session.Query<IdentifyEntityValue>()
             .Where(a => keys.Contains(a.InterviewSummary.Id) && a.Identifying)
-            .Fetch(q => q.Entity)
+            //.Fetch(q => q.Entity)
             .OrderBy(a => a.Position)
             .ToListAsync(cancellationToken)
             .ConfigureAwait(false);
