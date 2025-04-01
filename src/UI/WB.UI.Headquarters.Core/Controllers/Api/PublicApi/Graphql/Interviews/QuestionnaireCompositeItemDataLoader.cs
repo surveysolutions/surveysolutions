@@ -42,7 +42,8 @@ public class QuestionnaireCompositeItemDataLoader : BatchDataLoader<int, Questio
 
             var compositeItems = await unitOfWork.Session.Query<QuestionnaireCompositeItem>()
                 .Where(q => keys.Contains(q.Id))
-                .ToListAsync(cancellationToken);
+                .ToListAsync(cancellationToken)
+                .ConfigureAwait(false);
         
             return compositeItems.ToDictionary(x => x.Id);
         }
