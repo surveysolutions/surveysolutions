@@ -62,6 +62,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
                     // this property is required to save workspace context in the graphql request
                     o.DefaultQueryDependencyInjectionScope = DependencyInjectionScope.Request;
                     o.DefaultMutationDependencyInjectionScope = DependencyInjectionScope.Request;
+
+                    o.DefaultResolverStrategy = ExecutionStrategy.Serial;
                 })
                 .ModifyPagingOptions(o => { o.MaxPageSize = 200; })
                 .ModifyCostOptions(o => { o.EnforceCostLimits = false; })
