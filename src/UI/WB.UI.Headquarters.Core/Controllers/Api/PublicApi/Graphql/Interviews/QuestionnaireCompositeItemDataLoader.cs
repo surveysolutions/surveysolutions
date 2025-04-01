@@ -26,7 +26,7 @@ public class QuestionnaireCompositeItemDataLoader : BatchDataLoader<int, Questio
         this.unitOfWork = unitOfWork;
     }
 
-    protected override bool AllowCachePropagation => false;
+    protected override bool AllowCachePropagation => true;
 
     protected override bool AllowBranching => true;
 
