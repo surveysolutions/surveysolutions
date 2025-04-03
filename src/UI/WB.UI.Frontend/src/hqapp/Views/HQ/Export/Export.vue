@@ -654,17 +654,17 @@ export default {
                     break;
 
                 case "last24hours":
-                    from = moment().utc().subtract(1, 'days').toISOString();
+                    from = moment().subtract(1, 'days').utc().toISOString();
                     to = moment().utc().toISOString();
                     break;
 
                 case "last7days":
-                    from = moment().startOf('day').utc().subtract(6, 'days').toISOString(); // 7 days ago
+                    from = moment().startOf('day').subtract(6, 'days').utc().toISOString(); // 7 days ago
                     to = moment().utc().toISOString();
                     break;
 
                 case "last30days":
-                    from = moment().startOf('day').utc().subtract(29, 'days').toISOString(); // 30 days ago
+                    from = moment().startOf('day').subtract(29, 'days').utc().toISOString(); // 30 days ago
                     to = moment().utc().toISOString();
                     break;
 
