@@ -110,23 +110,37 @@
                                             {{ $t('DataExport.SurveyQuestionnaireDateRangeFrom') }}
                                         </h5>
                                         <div class="form-group" v-if="isCustomDateRangeMode">
-                                            <div>
-                                                <DatePicker :config="datePickerConfigFrom" :value="selectedFromDate"
-                                                    :withClear="true" v-on:clear="dateRangeFrom = null"
-                                                    :placeholder="$t('DataExport.DateRangeFromAll')">
-                                                </DatePicker>
-                                            </div>
+                                            <Field v-slot="{ field }" name="selectedFromDate" :value="selectedFromDate"
+                                                :rules="validateFromDate" label="selectedFromDate">
+                                                <div>
+                                                    <DatePicker v-bind="field" :config="datePickerConfigFrom"
+                                                        :value="selectedFromDate" :withClear="true"
+                                                        v-on:clear="dateRangeFrom = null"
+                                                        :placeholder="$t('DataExport.DateRangeFromAll')">
+                                                    </DatePicker>
+                                                </div>
+                                            </Field>
+                                            <span class="text-danger">
+                                                <ErrorMessage name="selectedFromDate" />
+                                            </span>
                                         </div>
                                         <h5 v-if="isCustomDateRangeMode">
                                             {{ $t('DataExport.SurveyQuestionnaireDateRangeTo') }}
                                         </h5>
                                         <div class="form-group" v-if="isCustomDateRangeMode">
-                                            <div>
-                                                <DatePicker :config="datePickerConfigTo" :value="selectedToDate"
-                                                    v-on:clear="dateRangeTo = null" :withClear="true"
-                                                    :placeholder="$t('DataExport.DateRangeToAll')">
-                                                </DatePicker>
-                                            </div>
+                                            <Field v-slot="{ field }" name="selectedToDate" :value="selectedToDate"
+                                                :rules="validateToDate" label="selectedToDate">
+                                                <div>
+                                                    <DatePicker v-bind="field" :config="datePickerConfigTo"
+                                                        :value="selectedToDate" v-on:clear="dateRangeTo = null"
+                                                        :withClear="true"
+                                                        :placeholder="$t('DataExport.DateRangeToAll')">
+                                                    </DatePicker>
+                                                </div>
+                                            </Field>
+                                            <span class="text-danger">
+                                                <ErrorMessage name="selectedToDate" />
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
@@ -810,6 +824,47 @@ export default {
                 .then(() => {
                     this.isUpdatingDataAvailability = false
                 })
+        },
+        validateFromDate(value) {
+            if (!value) {
+                return true;
+            }
+
+            const fromDate = moment(value);
+            const now = moment();
+
+            if (!fromDate.isValid()) {
+                return 'The "From" date must be a valid date.';
+            }
+
+            if (fromDate.isAfter(now)) {
+                return 'The "From" date cannot be in the future.';
+            }
+
+            return true;
+
+        },
+        validateToDate(value) {
+            if (!value) {
+                return true;
+            }
+
+            const toDate = moment(value);
+            const fromDate = moment(this.dateRangeFrom);
+
+            if (!toDate.isValid()) {
+                return 'The "To" date must be a valid date.';
+            }
+
+            if (!fromDate.isValid()) {
+                return 'The "From" date must be valid before validating the "To" date.';
+            }
+
+            if (toDate.isSameOrBefore(fromDate)) {
+                return 'The "To" date must be greater than the "From" date.';
+            }
+
+            return true;
         },
     }
 }
