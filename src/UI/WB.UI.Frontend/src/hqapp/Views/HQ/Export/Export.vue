@@ -834,15 +834,14 @@ export default {
             const now = moment();
 
             if (!fromDate.isValid()) {
-                return 'The "From" date must be a valid date.';
+                return this.$t('DataExport.Validation_FromDateInvalid');
             }
 
             if (fromDate.isAfter(now)) {
-                return 'The "From" date cannot be in the future.';
+                return this.$t('DataExport.Validation_FromDateInFuture');
             }
 
             return true;
-
         },
         validateToDate(value) {
             if (!value) {
@@ -853,15 +852,15 @@ export default {
             const fromDate = moment(this.dateRangeFrom);
 
             if (!toDate.isValid()) {
-                return 'The "To" date must be a valid date.';
+                return this.$t('DataExport.Validation_ToDateInvalid');
             }
 
             if (!fromDate.isValid()) {
-                return 'The "From" date must be valid before validating the "To" date.';
+                return this.$t('DataExport.Validation_FromDateInvalidBeforeTo');
             }
 
             if (toDate.isSameOrBefore(fromDate)) {
-                return 'The "To" date must be greater than the "From" date.';
+                return this.$t('DataExport.Validation_ToDateBeforeFrom');
             }
 
             return true;
