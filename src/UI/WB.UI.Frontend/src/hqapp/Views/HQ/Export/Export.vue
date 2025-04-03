@@ -83,10 +83,12 @@
                                         <h5>
                                             {{ $t('DataExport.StatusOfExportTitle') }}
                                         </h5>
-                                        <Typeahead control-id="status" :selectedKey="pageState.status"
-                                            data-vv-name="status" data-vv-as="status" :noSearch="true"
-                                            :placeholder="$t('Common.AllStatuses')" :value="status" :values="statuses"
-                                            v-on:selected="statusSelected" />
+                                        <div class="form-group">
+                                            <Typeahead control-id="status" :selectedKey="pageState.status"
+                                                data-vv-name="status" data-vv-as="status" :noSearch="true"
+                                                :placeholder="$t('Common.AllStatuses')" :value="status"
+                                                :values="statuses" v-on:selected="statusSelected" />
+                                        </div>
                                         <h5>
                                             {{ $t('DataExport.SurveyQuestionnaireDateRange') }}
                                         </h5>
@@ -108,19 +110,23 @@
                                             {{ $t('DataExport.SurveyQuestionnaireDateRangeFrom') }}
                                         </h5>
                                         <div class="form-group" v-if="isCustomDateRangeMode">
-                                            <DatePicker :config="datePickerConfigFrom" :value="selectedFromDate"
-                                                :withClear="true" v-on:clear="dateRangeFrom = null"
-                                                :placeholder="$t('DataExport.DateRangeFromAll')">
-                                            </DatePicker>
+                                            <div>
+                                                <DatePicker :config="datePickerConfigFrom" :value="selectedFromDate"
+                                                    :withClear="true" v-on:clear="dateRangeFrom = null"
+                                                    :placeholder="$t('DataExport.DateRangeFromAll')">
+                                                </DatePicker>
+                                            </div>
                                         </div>
                                         <h5 v-if="isCustomDateRangeMode">
                                             {{ $t('DataExport.SurveyQuestionnaireDateRangeTo') }}
                                         </h5>
                                         <div class="form-group" v-if="isCustomDateRangeMode">
-                                            <DatePicker :config="datePickerConfigTo" :value="selectedToDate"
-                                                v-on:clear="dateRangeTo = null" :withClear="true"
-                                                :placeholder="$t('DataExport.DateRangeToAll')">
-                                            </DatePicker>
+                                            <div>
+                                                <DatePicker :config="datePickerConfigTo" :value="selectedToDate"
+                                                    v-on:clear="dateRangeTo = null" :withClear="true"
+                                                    :placeholder="$t('DataExport.DateRangeToAll')">
+                                                </DatePicker>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -343,6 +349,12 @@
         </div>
     </HqLayout>
 </template>
+
+<style lang="scss">
+.export .filter-wrapper .flatpickr-wrapper {
+    display: block;
+}
+</style>
 
 <script>
 import { Form, Field, ErrorMessage } from 'vee-validate'
