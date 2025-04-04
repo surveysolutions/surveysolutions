@@ -83,10 +83,12 @@
                                         <h5>
                                             {{ $t('DataExport.StatusOfExportTitle') }}
                                         </h5>
-                                        <Typeahead control-id="status" :selectedKey="pageState.status"
-                                            data-vv-name="status" data-vv-as="status" :noSearch="true"
-                                            :placeholder="$t('Common.AllStatuses')" :value="status" :values="statuses"
-                                            v-on:selected="statusSelected" />
+                                        <div class="form-group">
+                                            <Typeahead control-id="status" :selectedKey="pageState.status"
+                                                data-vv-name="status" data-vv-as="status" :noSearch="true"
+                                                :placeholder="$t('Common.AllStatuses')" :value="status"
+                                                :values="statuses" v-on:selected="statusSelected" />
+                                        </div>
                                         <h5>
                                             {{ $t('DataExport.SurveyQuestionnaireDateRange') }}
                                         </h5>
@@ -108,19 +110,37 @@
                                             {{ $t('DataExport.SurveyQuestionnaireDateRangeFrom') }}
                                         </h5>
                                         <div class="form-group" v-if="isCustomDateRangeMode">
-                                            <DatePicker :config="datePickerConfigFrom" :value="selectedFromDate"
-                                                :withClear="true" v-on:clear="dateRangeFrom = null"
-                                                :placeholder="$t('DataExport.DateRangeFromAll')">
-                                            </DatePicker>
+                                            <Field v-slot="{ field }" name="selectedFromDate" :value="selectedFromDate"
+                                                :rules="validateFromDate" label="selectedFromDate">
+                                                <div>
+                                                    <DatePicker v-bind="field" :config="datePickerConfigFrom"
+                                                        :value="selectedFromDate" :withClear="true"
+                                                        v-on:clear="dateRangeFrom = null"
+                                                        :placeholder="$t('DataExport.DateRangeFromAll')">
+                                                    </DatePicker>
+                                                </div>
+                                            </Field>
+                                            <span class="text-danger">
+                                                <ErrorMessage name="selectedFromDate" />
+                                            </span>
                                         </div>
                                         <h5 v-if="isCustomDateRangeMode">
                                             {{ $t('DataExport.SurveyQuestionnaireDateRangeTo') }}
                                         </h5>
                                         <div class="form-group" v-if="isCustomDateRangeMode">
-                                            <DatePicker :config="datePickerConfigTo" :value="selectedToDate"
-                                                v-on:clear="dateRangeTo = null" :withClear="true"
-                                                :placeholder="$t('DataExport.DateRangeToAll')">
-                                            </DatePicker>
+                                            <Field v-slot="{ field }" name="selectedToDate" :value="selectedToDate"
+                                                :rules="validateToDate" label="selectedToDate">
+                                                <div>
+                                                    <DatePicker v-bind="field" :config="datePickerConfigTo"
+                                                        :value="selectedToDate" v-on:clear="dateRangeTo = null"
+                                                        :withClear="true"
+                                                        :placeholder="$t('DataExport.DateRangeToAll')">
+                                                    </DatePicker>
+                                                </div>
+                                            </Field>
+                                            <span class="text-danger">
+                                                <ErrorMessage name="selectedToDate" />
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
@@ -343,6 +363,12 @@
         </div>
     </HqLayout>
 </template>
+
+<style lang="scss">
+.export .filter-wrapper .flatpickr-wrapper {
+    display: block;
+}
+</style>
 
 <script>
 import { Form, Field, ErrorMessage } from 'vee-validate'
@@ -642,17 +668,17 @@ export default {
                     break;
 
                 case "last24hours":
-                    from = moment().utc().subtract(1, 'days').toISOString();
+                    from = moment().subtract(1, 'days').utc().toISOString();
                     to = moment().utc().toISOString();
                     break;
 
                 case "last7days":
-                    from = moment().startOf('day').utc().subtract(6, 'days').toISOString(); // 7 days ago
+                    from = moment().startOf('day').subtract(6, 'days').utc().toISOString(); // 7 days ago
                     to = moment().utc().toISOString();
                     break;
 
                 case "last30days":
-                    from = moment().startOf('day').utc().subtract(29, 'days').toISOString(); // 30 days ago
+                    from = moment().startOf('day').subtract(29, 'days').utc().toISOString(); // 30 days ago
                     to = moment().utc().toISOString();
                     break;
 
@@ -798,6 +824,46 @@ export default {
                 .then(() => {
                     this.isUpdatingDataAvailability = false
                 })
+        },
+        validateFromDate(value) {
+            if (!value) {
+                return true;
+            }
+
+            const fromDate = moment(value);
+            const now = moment();
+
+            if (!fromDate.isValid()) {
+                return this.$t('DataExport.Validation_FromDateInvalid');
+            }
+
+            if (fromDate.isAfter(now)) {
+                return this.$t('DataExport.Validation_FromDateInFuture');
+            }
+
+            return true;
+        },
+        validateToDate(value) {
+            if (!value) {
+                return true;
+            }
+
+            const toDate = moment(value);
+            const fromDate = moment(this.dateRangeFrom);
+
+            if (!toDate.isValid()) {
+                return this.$t('DataExport.Validation_ToDateInvalid');
+            }
+
+            if (!fromDate.isValid()) {
+                return this.$t('DataExport.Validation_FromDateInvalidBeforeTo');
+            }
+
+            if (toDate.isSameOrBefore(fromDate)) {
+                return this.$t('DataExport.Validation_ToDateBeforeFrom');
+            }
+
+            return true;
         },
     }
 }

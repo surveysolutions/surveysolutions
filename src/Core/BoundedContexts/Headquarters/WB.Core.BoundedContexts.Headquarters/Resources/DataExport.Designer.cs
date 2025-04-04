@@ -728,6 +728,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
                 return ResourceManager.GetString("DataType_AudioAuditFiles", resourceCulture);
             }
         }
+        
         public static string ParadataEventsFilter {
             get {
                 return ResourceManager.GetString("ParadataEventsFilter", resourceCulture);
@@ -749,6 +750,36 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         public static string ParadataEventsFilter_ReducedHint {
             get {
                 return ResourceManager.GetString("ParadataEventsFilter_ReducedHint", resourceCulture);
+            }
+        }
+        
+        public static string Validation_FromDateInvalid {
+            get {
+                return ResourceManager.GetString("Validation_FromDateInvalid", resourceCulture);
+            }
+        }
+        
+        public static string Validation_FromDateInFuture {
+            get {
+                return ResourceManager.GetString("Validation_FromDateInFuture", resourceCulture);
+            }
+        }
+        
+        public static string Validation_ToDateInvalid {
+            get {
+                return ResourceManager.GetString("Validation_ToDateInvalid", resourceCulture);
+            }
+        }
+        
+        public static string Validation_FromDateInvalidBeforeTo {
+            get {
+                return ResourceManager.GetString("Validation_FromDateInvalidBeforeTo", resourceCulture);
+            }
+        }
+        
+        public static string Validation_ToDateBeforeFrom {
+            get {
+                return ResourceManager.GetString("Validation_ToDateBeforeFrom", resourceCulture);
             }
         }
     }
