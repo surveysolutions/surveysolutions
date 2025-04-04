@@ -426,4 +426,40 @@ Posibles razones:
   <data name="EmailProvider_SmtpPasswordHelp" xml:space="preserve">
     <value>Credencial utilizada durante el proceso de autenticación SMTP para verificar la identidad.</value>
   </data>
+    <data name="WorkspaceSettings" xml:space="preserve">
+    <value>Configuración del espacio de trabajo</value>
+</data>
+    <data name="Export" xml:space="preserve">
+    <value>Exportar</value>
+</data>
+    <data name="GlobalNote" xml:space="preserve">
+    <value>Nota global</value>
+</data>
+    <data name="UserProfile" xml:space="preserve">
+    <value>Perfil de usuario</value>
+</data>
+    <data name="Devices" xml:space="preserve">
+    <value>Dispositivos</value>
+</data>
+    <data name="WebInterview" xml:space="preserve">
+    <value>Entrevista web</value>
+</data>
+    <data name="FileRetentionTitle" xml:space="preserve">
+    <value>Política de retención</value>
+</data>
+    <data name="FileRetentionDescription" xml:space="preserve">
+    <value>Los archivos de exportación antiguos se eliminarán periódicamente según estas configuraciones</value>
+</data>
+    <data name="RetentionInDaysTitle" xml:space="preserve">
+    <value>Días para conservar</value>
+</data>
+    <data name="RetentionInDaysDescription" xml:space="preserve">
+    <value>Número de días que se conservará el archivo de exportación</value>
+</data>
+    <data name="RetentionInCountTitle" xml:space="preserve">
+    <value>Número de archivos para conservar</value>
+</data>
+    <data name="RetentionInCountDescription" xml:space="preserve">
+    <value>Cantidad máxima de archivos de exportación para conservar en el almacenamiento</value>
+</data>  
 </root>

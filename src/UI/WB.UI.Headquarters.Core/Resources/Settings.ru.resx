@@ -438,4 +438,40 @@
   <data name="EmailProvider_SmtpUsernameHelp" xml:space="preserve">
       <value>Имя учетных данных, используемые в процессе аутентификации SMTP для проверки личности</value>
   </data>
+    <data name="WorkspaceSettings" xml:space="preserve">
+    <value>Настройки рабочего пространства</value>
+</data>
+    <data name="Export" xml:space="preserve">
+    <value>Экспорт</value>
+</data>
+    <data name="GlobalNote" xml:space="preserve">
+    <value>Глобальная заметка</value>
+</data>
+    <data name="UserProfile" xml:space="preserve">
+    <value>Профиль пользователя</value>
+</data>
+    <data name="Devices" xml:space="preserve">
+    <value>Устройства</value>
+</data>
+    <data name="WebInterview" xml:space="preserve">
+    <value>Веб-интервью</value>
+</data>
+    <data name="FileRetentionTitle" xml:space="preserve">
+    <value>Политика хранения</value>
+</data>
+    <data name="FileRetentionDescription" xml:space="preserve">
+    <value>Старые экспортные файлы будут периодически удаляться в соответствии с этими настройками</value>
+</data>
+    <data name="RetentionInDaysTitle" xml:space="preserve">
+    <value>Количество дней для хранения</value>
+</data>
+    <data name="RetentionInDaysDescription" xml:space="preserve">
+    <value>Количество дней, в течение которых экспортный файл будет сохранен</value>
+</data>
+    <data name="RetentionInCountTitle" xml:space="preserve">
+    <value>Количество файлов для хранения</value>
+</data>
+    <data name="RetentionInCountDescription" xml:space="preserve">
+    <value>Максимальное количество экспортных файлов для хранения в хранилище</value>
+</data>
 </root>

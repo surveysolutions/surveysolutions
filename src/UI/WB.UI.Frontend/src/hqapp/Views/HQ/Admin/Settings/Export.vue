@@ -37,8 +37,8 @@
         </div>
         <div class="row extra-margin-bottom contain-input" data-suso="settings-page">
             <div class="col-sm-9">
-                <h2>{{ $t('Settings.FileRetention_Title') }}</h2>
-                <p>{{ $t('Settings.FileRetention_Description') }}</p>
+                <h2>{{ $t('Settings.FileRetentionTitle') }}</h2>
+                <p>{{ $t('Settings.FileRetentionDescription') }}</p>
             </div>
             <div class="col-sm-9">
                 <div class="block-filter">
@@ -127,7 +127,7 @@
                             </button>
                         </div>
                         <div class="error">
-                            <ErrorMessage name="period"></ErrorMessage>
+                            <ErrorMessage name="countLimit"></ErrorMessage>
                         </div>
                     </div>
                 </Form>

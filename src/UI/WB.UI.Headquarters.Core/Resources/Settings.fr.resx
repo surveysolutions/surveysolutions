@@ -425,5 +425,41 @@ Raisons possibles :
   </data>
   <data name="EmailProvider_SmtpPasswordHelp" xml:space="preserve">
     <value>Identifiant utilisé lors du processus d'authentification SMTP pour vérifier l'identité.</value>
-  </data>  
+  </data>
+    <data name="WorkspaceSettings" xml:space="preserve">
+    <value>Paramètres de l'espace de travail</value>
+</data>
+    <data name="Export" xml:space="preserve">
+    <value>Exporter</value>
+</data>
+    <data name="GlobalNote" xml:space="preserve">
+    <value>Note globale</value>
+</data>
+    <data name="UserProfile" xml:space="preserve">
+    <value>Profil utilisateur</value>
+</data>
+    <data name="Devices" xml:space="preserve">
+    <value>Appareils</value>
+</data>
+    <data name="WebInterview" xml:space="preserve">
+    <value>Entretien web</value>
+</data>
+    <data name="FileRetentionTitle" xml:space="preserve">
+    <value>Politique de rétention</value>
+</data>
+    <data name="FileRetentionDescription" xml:space="preserve">
+    <value>Les anciens fichiers d'exportation seront périodiquement supprimés selon ces paramètres</value>
+</data>
+    <data name="RetentionInDaysTitle" xml:space="preserve">
+    <value>Nombre de jours de conservation</value>
+</data>
+    <data name="RetentionInDaysDescription" xml:space="preserve">
+    <value>Nombre de jours pendant lesquels le fichier d'exportation sera conservé</value>
+</data>
+    <data name="RetentionInCountTitle" xml:space="preserve">
+    <value>Nombre de fichiers à conserver</value>
+</data>
+    <data name="RetentionInCountDescription" xml:space="preserve">
+    <value>Nombre maximum de fichiers d'exportation à conserver dans le stockage</value>
+</data>
 </root>

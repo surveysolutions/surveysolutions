@@ -686,5 +686,41 @@ namespace WB.UI.Headquarters.Resources {
                 return ResourceManager.GetString("WebInterview", resourceCulture);
             }
         }
+        
+        public static string FileRetentionTitle {
+            get {
+                return ResourceManager.GetString("FileRetentionTitle", resourceCulture);
+            }
+        }
+        
+        public static string FileRetentionDescription {
+            get {
+                return ResourceManager.GetString("FileRetentionDescription", resourceCulture);
+            }
+        }
+        
+        public static string RetentionInDaysTitle {
+            get {
+                return ResourceManager.GetString("RetentionInDaysTitle", resourceCulture);
+            }
+        }
+        
+        public static string RetentionInDaysDescription {
+            get {
+                return ResourceManager.GetString("RetentionInDaysDescription", resourceCulture);
+            }
+        }
+        
+        public static string RetentionInCountTitle {
+            get {
+                return ResourceManager.GetString("RetentionInCountTitle", resourceCulture);
+            }
+        }
+        
+        public static string RetentionInCountDescription {
+            get {
+                return ResourceManager.GetString("RetentionInCountDescription", resourceCulture);
+            }
+        }
     }
 }

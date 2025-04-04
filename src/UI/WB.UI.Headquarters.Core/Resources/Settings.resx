@@ -443,4 +443,23 @@ Possible reasons:
   <data name="WebInterview" xml:space="preserve">
       <value>Web interview</value>
   </data>
+  <data name="FileRetentionTitle" xml:space="preserve">
+      <value>Retention policy</value>
+  </data>
+    <data name="FileRetentionDescription" xml:space="preserve">
+      <value>Older export files will be periodically deleted according to these settings</value>
+  </data>
+  <data name="RetentionInDaysTitle" xml:space="preserve">
+      <value>Days to keep</value>
+  </data>
+    <data name="RetentionInDaysDescription" xml:space="preserve">
+      <value>Number of days export file will be preserved</value>
+  </data>
+  <data name="RetentionInCountTitle" xml:space="preserve">
+      <value>Number of files to keep</value>
+  </data>
+    <data name="RetentionInCountDescription" xml:space="preserve">
+      <value>Maximum amount of export files to keep in the storage</value>
+  </data>
+    
 </root>
