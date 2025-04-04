@@ -42,17 +42,23 @@
 
                 </ul>
                 <div class="tab-content">
-                    <Export :encryptionEnabled="encryptionEnabled" :encryptionPassword="encryptionPassword"
-                        :isRetentionEnabled="isRetentionEnabled" :retentionLimitInDays="retentionLimitInDays"
-                        :retentionLimitQuantity="retentionLimitQuantity" />
-                    <Note :globalNotice="globalNotice" />
-                    <Profile :isAllowInterviewerUpdateProfile="isAllowInterviewerUpdateProfile" />
-                    <Devices :isInterviewerAutomaticUpdatesEnabled="isInterviewerAutomaticUpdatesEnabled"
-                        :isDeviceNotificationsEnabled="isDeviceNotificationsEnabled"
-                        :isPartialSynchronizationEnabled="isPartialSynchronizationEnabled"
-                        :geographyQuestionAccuracyInMeters="geographyQuestionAccuracyInMeters"
-                        :geographyQuestionPeriodInSeconds="geographyQuestionPeriodInSeconds" :esriApiKey="esriApiKey" />
-                    <WebInterview :isEmailAllowed="isEmailAllowed" />
+                    <Export v-model:encryptionEnabled="encryptionEnabled"
+                        v-model:encryptionPassword="encryptionPassword" v-model:isRetentionEnabled="isRetentionEnabled"
+                        v-model:retentionLimitInDays="retentionLimitInDays"
+                        v-model:retentionLimitQuantity="retentionLimitQuantity"
+                        v-model:retentionLimitInDaysCancel="retentionLimitInDaysCancel"
+                        v-model:retentionLimitQuantityCancel="retentionLimitQuantityCancel" />
+                    <Note v-model="globalNotice" />
+                    <Profile v-model="isAllowInterviewerUpdateProfile" />
+                    <Devices v-model:isInterviewerAutomaticUpdatesEnabled="isInterviewerAutomaticUpdatesEnabled"
+                        v-model:isDeviceNotificationsEnabled="isDeviceNotificationsEnabled"
+                        v-model:isPartialSynchronizationEnabled="isPartialSynchronizationEnabled"
+                        v-model:geographyQuestionAccuracyInMeters="geographyQuestionAccuracyInMeters"
+                        v-model:geographyQuestionPeriodInSecondsCancel="geographyQuestionPeriodInSecondsCancel"
+                        v-model:geographyQuestionPeriodInSeconds="geographyQuestionPeriodInSeconds"
+                        v-model:geographyQuestionAccuracyInMetersCancel="geographyQuestionAccuracyInMetersCancel"
+                        v-model:esriApiKey="esriApiKey" v-model:esriApiKeyCancel="esriApiKeyCancel" />
+                    <WebInterview v-model="isEmailAllowed" />
                     <Logo />
                 </div>
             </div>
@@ -60,34 +66,6 @@
     </HqLayout>
 </template>
 
-<style scoped>
-.logo {
-    max-width: 365px;
-    max-height: 329px;
-}
-
-.input-group .form-control.number {
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-.input-group .form-control.number[aria-invalid='true'] {
-    color: red;
-}
-
-.form-group .btn-success {
-    margin-left: 20px;
-    margin-top: 2px;
-}
-
-.form-group .input-group-save {
-    display: inline;
-}
-
-.block-filter .error {
-    color: red;
-}
-</style>
 
 <script>
 import { Form, Field, ErrorMessage } from 'vee-validate'
@@ -138,33 +116,30 @@ export default {
             isRetentionEnabled: false,
             retentionLimitInDays: null,
             retentionLimitQuantity: null,
+            retentionLimitInDaysCancel: null,
+            retentionLimitQuantityCancel: null,
         }
     },
-    mounted() {
-        this.getFormData()
+    async beforeMount() {
+        await this.getFormData()
     },
     methods: {
         noAction() { },
         async getFormData() {
 
             const workspaceSettings = await this.$hq.AdminSettings.getWorkspaceSettings()
-            this.isInterviewerAutomaticUpdatesEnabled =
-                workspaceSettings.data.interviewerAutoUpdatesEnabled
-            this.isDeviceNotificationsEnabled =
-                workspaceSettings.data.notificationsEnabled
-            this.isPartialSynchronizationEnabled =
-                workspaceSettings.data.partialSynchronizationEnabled
-            this.geographyQuestionAccuracyInMeters =
-                workspaceSettings.data.geographyQuestionAccuracyInMeters
-            this.geographyQuestionPeriodInSeconds =
-                workspaceSettings.data.geographyQuestionPeriodInSeconds
-            this.geographyQuestionAccuracyInMetersCancel =
-                workspaceSettings.data.geographyQuestionAccuracyInMeters
-            this.geographyQuestionPeriodInSecondsCancel =
-                workspaceSettings.data.geographyQuestionPeriodInSeconds
 
+            this.isInterviewerAutomaticUpdatesEnabled = workspaceSettings.data.interviewerAutoUpdatesEnabled
+            this.isDeviceNotificationsEnabled = workspaceSettings.data.notificationsEnabled
+            this.isPartialSynchronizationEnabled = workspaceSettings.data.partialSynchronizationEnabled
+
+            this.geographyQuestionAccuracyInMeters = workspaceSettings.data.geographyQuestionAccuracyInMeters
+            this.geographyQuestionAccuracyInMetersCancel = workspaceSettings.data.geographyQuestionAccuracyInMeters
+            this.geographyQuestionPeriodInSeconds = workspaceSettings.data.geographyQuestionPeriodInSeconds
+            this.geographyQuestionPeriodInSecondsCancel = workspaceSettings.data.geographyQuestionPeriodInSeconds
             this.esriApiKey = workspaceSettings.data.esriApiKey
             this.esriApiKeyInitial = workspaceSettings.data.esriApiKey
+
             this.encryptionEnabled = workspaceSettings.data.exportSettings.isEnabled
             this.encryptionPassword = workspaceSettings.data.exportSettings.password
             this.globalNotice = workspaceSettings.data.globalNotice
@@ -174,6 +149,8 @@ export default {
             this.isRetentionEnabled = workspaceSettings.data.exportSettings.isRetentionEnabled
             this.retentionLimitInDays = workspaceSettings.data.exportSettings.retentionLimitInDays
             this.retentionLimitQuantity = workspaceSettings.data.exportSettings.retentionLimitQuantity
+            this.retentionLimitInDaysCancel = workspaceSettings.data.exportSettings.retentionLimitInDays
+            this.retentionLimitQuantityCancel = workspaceSettings.data.exportSettings.retentionLimitQuantity
         },
 
         setPageActive(titleType, messageType) {

@@ -4,6 +4,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 
 public class ExportRetentionSettings: AppSetting
 {
+    public ExportRetentionSettings()
+    {
+    }
+
     public ExportRetentionSettings(bool enabled, int? daysToKeep, int? countToKeep)
     {
         this.Enabled = enabled;

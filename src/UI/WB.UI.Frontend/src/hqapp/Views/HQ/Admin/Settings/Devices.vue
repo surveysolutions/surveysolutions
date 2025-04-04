@@ -1,15 +1,16 @@
 <template>
     <div role="tabpanel" class="tab-pane page-preview-block" id="devices">
         <div class="row extra-margin-bottom contain-input">
-            <div class="col-sm-12">
+            <div class="col-sm-9">
                 <h2>{{ $t('Settings.MobileAppSettings_Title') }}</h2>
                 <p>{{ $t('Settings.MobileAppSettings_Description') }}</p>
             </div>
-            <div class="col-sm-12">
+            <div class="col-sm-9">
                 <div class="block-filter">
                     <div class="form-group">
-                        <input class="checkbox-filter single-checkbox" :value="isInterviewerAutomaticUpdatesEnabled"
-                            @change="updateDeviceSettings" id="interviewerAutomaticUpdatesEnabled" type="checkbox" />
+                        <input class="checkbox-filter single-checkbox"
+                            v-model="isInterviewerAutomaticUpdatesEnabledModel" @change="updateDeviceSettings"
+                            id="interviewerAutomaticUpdatesEnabled" type="checkbox" />
                         <label for="interviewerAutomaticUpdatesEnabled" style="font-weight: bold">
                             <span class="tick"></span>
                             {{ $t('Settings.InterviewerAutoUpdate') }}
@@ -20,10 +21,10 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-12">
+            <div class="col-sm-9">
                 <div class="block-filter">
                     <div class="form-group">
-                        <input class="checkbox-filter single-checkbox" :value="isDeviceNotificationsEnabled"
+                        <input class="checkbox-filter single-checkbox" v-model="isDeviceNotificationsEnabledModel"
                             @change="updateDeviceSettings" id="deviceNotificationsEnabled" type="checkbox" />
                         <label for="deviceNotificationsEnabled" style="font-weight: bold">
                             <span class="tick"></span>
@@ -35,10 +36,10 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-12">
+            <div class="col-sm-9">
                 <div class="block-filter">
                     <div class="form-group">
-                        <input class="checkbox-filter single-checkbox" :value="isPartialSynchronizationEnabled"
+                        <input class="checkbox-filter single-checkbox" v-model="isPartialSynchronizationEnabledModel"
                             @change="updateDeviceSettings" id="interviewerPartialSynchronizationEnabled"
                             type="checkbox" />
                         <label for="interviewerPartialSynchronizationEnabled" style="font-weight: bold">
@@ -51,8 +52,8 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-12">
-                <Form v-slot="{ meta }" @submit="noAction">
+            <div class="col-sm-9">
+                <Form v-slot="{ meta }" @submit="noAction" :data-vv-scope="'geographyQuestion'">
                     <div class="block-filter" style="padding-left: 30px">
                         <div class="form-group">
                             <label for="interviewerGeographyQuestionAccuracyInMeters" style="font-weight: bold">
@@ -65,25 +66,25 @@
                         </div>
                         <div class="form-group">
                             <div class="input-group input-group-save">
-                                <!-- <Field class="form-control number" v-model.number="geographyQuestionAccuracyInMeters"
-                                    :rules="{
+                                <Field class="form-control number"
+                                    v-model.number="geographyQuestionAccuracyInMetersModel" :rules="{
                                         integer: true,
                                         required: true,
                                         min_value: 1,
                                         max_value: 1000,
                                     }" :validateOnChange="true" :validateOnInput="true" name="accuracy"
-                                    label="Accuracy" id="interviewerGeographyQuestionAccuracyInMeters" type="number" /> -->
+                                    label="Accuracy" id="interviewerGeographyQuestionAccuracyInMeters" type="number" />
                             </div>
-                            <button type="button" class="btn btn-success" :disabled="geographyQuestionAccuracyInMeters ==
-                                geographyQuestionAccuracyInMetersCancel ||
-                                geographyQuestionAccuracyInMeters < 1 ||
-                                geographyQuestionAccuracyInMeters > 1000 ||
+                            <button type="button" class="btn btn-success" :disabled="geographyQuestionAccuracyInMetersModel ==
+                                geographyQuestionAccuracyInMetersCancelModel ||
+                                geographyQuestionAccuracyInMetersModel < 1 ||
+                                geographyQuestionAccuracyInMetersModel > 1000 ||
                                 meta.valid == false
                                 " @click="updateGeographyQuestionAccuracyInMeters">
                                 {{ $t('Common.Save') }}
                             </button>
                             <button type="button" class="btn btn-link"
-                                :disabled="geographyQuestionAccuracyInMeters == geographyQuestionAccuracyInMetersCancel"
+                                :disabled="geographyQuestionAccuracyInMetersModel == geographyQuestionAccuracyInMetersCancelModel"
                                 @click="cancelGeographyQuestionAccuracyInMeters">
                                 {{ $t('Common.Cancel') }}
                             </button>
@@ -94,7 +95,7 @@
                     </div>
                 </Form>
             </div>
-            <div class="col-sm-12">
+            <div class="col-sm-9">
                 <Form v-slot="{ meta }" @submit="noAction">
                     <div class="block-filter" style="padding-left: 30px">
                         <div class="form-group">
@@ -108,24 +109,24 @@
                         </div>
                         <div class="form-group">
                             <div class="input-group input-group-save">
-                                <!-- <Field class="form-control number" v-model.number="geographyQuestionPeriodInSeconds"
-                                    :rules="{
+                                <Field class="form-control number"
+                                    v-model.number="geographyQuestionPeriodInSecondsModel" :rules="{
                                         integer: true,
                                         required: true,
                                         min_value: 5,
                                         max_value: 1000,
                                     }" :validateOnChange="true" :validateOnInput="true" label="Period"
-                                    id="interviewerGeographyQuestionPeriodInSeconds" name="period" type="number" /> -->
+                                    id="interviewerGeographyQuestionPeriodInSeconds" name="period" type="number" />
                             </div>
-                            <button type="button" class="btn btn-success" :disabled="geographyQuestionPeriodInSeconds ==
-                                geographyQuestionPeriodInSecondsCancel ||
-                                geographyQuestionPeriodInSeconds < 5 ||
-                                geographyQuestionPeriodInSeconds > 1000 ||
+                            <button type="button" class="btn btn-success" :disabled="geographyQuestionPeriodInSecondsModel ==
+                                geographyQuestionPeriodInSecondsCancelModel ||
+                                geographyQuestionPeriodInSecondsModel < 5 ||
+                                geographyQuestionPeriodInSecondsModel > 1000 ||
                                 meta.valid == false" @click="updateGeographyQuestionPeriodInSeconds">
                                 {{ $t('Common.Save') }}
                             </button>
                             <button type="button" class="btn btn-link"
-                                :disabled="geographyQuestionPeriodInSeconds == geographyQuestionPeriodInSecondsCancel"
+                                :disabled="geographyQuestionPeriodInSecondsModel == geographyQuestionPeriodInSecondsCancelModel"
                                 @click="cancelGeographyQuestionPeriodInSeconds">
                                 {{ $t('Common.Cancel') }}
                             </button>
@@ -137,7 +138,7 @@
                 </Form>
             </div>
 
-            <div class="col-sm-12">
+            <div class="col-sm-9">
                 <div class="block-filter" style="padding-left: 30px">
                     <div class="form-group">
                         <label for="esriApiKey" style="font-weight: bold">
@@ -153,12 +154,12 @@
                             <input class="form-control number" type="password" :value="esriApiKey" id="esriApiKey"
                                 name="esriKey" />
                         </div>
-                        <button type="button" class="btn btn-success" :disabled="esriApiKey ==
-                            esriApiKeyInitial" @click="updateEsriKApiKey">
+                        <button type="button" class="btn btn-success" :disabled="esriApiKeyModel ==
+                            esriApiKeyInitialModel" @click="updateEsriKApiKey">
                             {{ $t('Common.Save') }}
                         </button>
-                        <button type="button" class="btn btn-link" :disabled="esriApiKey ==
-                            esriApiKeyInitial" @click="cancelEsriKApiKey">
+                        <button type="button" class="btn btn-link" :disabled="esriApiKeyModel ==
+                            esriApiKeyInitialModel" @click="cancelEsriKApiKey">
                             {{ $t('Common.Cancel') }}
                         </button>
                     </div>
@@ -175,8 +176,38 @@
     </div>
 </template>
 
+<style scoped>
+.logo {
+    max-width: 365px;
+    max-height: 329px;
+}
+
+.input-group .form-control.number {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.input-group .form-control.number[aria-invalid='true'] {
+    color: red;
+}
+
+.form-group .btn-success {
+    margin-left: 20px;
+    margin-top: 2px;
+}
+
+.form-group .input-group-save {
+    display: inline;
+}
+
+.block-filter .error {
+    color: red;
+}
+</style>
+
 <script>
 import { Form, Field, ErrorMessage } from 'vee-validate'
+import { nextTick } from 'vue'
 
 export default {
     props: {
@@ -184,77 +215,158 @@ export default {
         isDeviceNotificationsEnabled: Boolean,
         isPartialSynchronizationEnabled: Boolean,
         geographyQuestionAccuracyInMeters: Number,
+        geographyQuestionAccuracyInMetersCancel: Number,
         geographyQuestionPeriodInSeconds: Number,
+        geographyQuestionPeriodInSecondsCancel: Number,
         esriApiKey: String,
+        esriApiKeyCancel: String,
     },
+    emits: ['update:isInterviewerAutomaticUpdatesEnabled',
+        'update:isDeviceNotificationsEnabled',
+        'update:isPartialSynchronizationEnabled',
+        'update:geographyQuestionAccuracyInMeters',
+        'update:geographyQuestionPeriodInSeconds',
+        'update:esriApiKey',
+    ],
+    computed: {
+        isInterviewerAutomaticUpdatesEnabledModel: {
+            get() {
+                return this.isInterviewerAutomaticUpdatesEnabled
+            },
+            set(value) {
+                this.$emit('update:isInterviewerAutomaticUpdatesEnabled', value)
+            }
+        },
+        isDeviceNotificationsEnabledModel: {
+            get() {
+                return this.isDeviceNotificationsEnabled
+            },
+            set(value) {
+                this.$emit('update:isDeviceNotificationsEnabled', value)
+            }
+        },
+        isPartialSynchronizationEnabledModel: {
+            get() {
+                return this.isPartialSynchronizationEnabled
+            },
+            set(value) {
+                this.$emit('update:isPartialSynchronizationEnabled', value)
+            }
+        },
+
+        geographyQuestionAccuracyInMetersModel: {
+            get() {
+                return this.geographyQuestionAccuracyInMeters
+            },
+            set(value) {
+                this.$emit('update:geographyQuestionAccuracyInMeters', value)
+            }
+        },
+        geographyQuestionAccuracyInMetersCancelModel: {
+            get() {
+                return this.geographyQuestionAccuracyInMetersCancel
+            },
+            set(value) {
+                this.$emit('update:geographyQuestionAccuracyInMetersCancel', value)
+            }
+        },
+
+        geographyQuestionPeriodInSecondsModel: {
+            get() {
+                return this.geographyQuestionPeriodInSeconds
+            },
+            set(value) {
+                this.$emit('update:geographyQuestionPeriodInSeconds', value)
+            }
+        },
+        geographyQuestionPeriodInSecondsCancelModel: {
+            get() {
+                return this.geographyQuestionPeriodInSecondsCancel
+            },
+            set(value) {
+                this.$emit('update:geographyQuestionPeriodInSecondsCancel', value)
+            }
+        },
+        esriApiKeyModel: {
+            get() {
+                return this.esriApiKey
+            },
+            set(value) {
+                this.$emit('update:esriApiKey', value)
+            }
+        },
+        esriApiKeyInitialModel: {
+            get() {
+                return this.esriApiKeyInitial
+            },
+            set(value) {
+                this.$emit('update:esriApiKeyInitial', value)
+            }
+        },
+    },
+
     components: {
         Form,
         Field,
         ErrorMessage,
     },
 
-    data() {
-        return {
-            geographyQuestionAccuracyInMetersCancel: this.geographyQuestionAccuracyInMeters,
-            geographyQuestionPeriodInSecondsCancel: this.geographyQuestionPeriodInSeconds,
-            esriApiKeyInitial: this.esriApiKey,
-        }
-    },
     methods: {
 
         updateDeviceSettings() {
-            return this.$hq.AdminSettings.setInterviewerSettings(
-                this.isInterviewerAutomaticUpdatesEnabled,
-                this.isDeviceNotificationsEnabled,
-                this.isPartialSynchronizationEnabled,
-            )
+            nextTick(() => {
+                this.$hq.AdminSettings.setInterviewerSettings(
+                    this.isInterviewerAutomaticUpdatesEnabledModel,
+                    this.isDeviceNotificationsEnabledModel,
+                    this.isPartialSynchronizationEnabledModel,
+                )
+            })
         },
 
         async updateGeographyQuestionAccuracyInMeters() {
-            if (
-                this.geographyQuestionAccuracyInMeters < 5 &&
-                this.geographyQuestionAccuracyInMeters > 1000
-            )
-                return
-
-            return this.$hq.AdminSettings.setGeographyQuestionAccuracyInMeters(
-                this.geographyQuestionAccuracyInMeters,
-            ).then(() => {
-                this.geographyQuestionAccuracyInMetersCancel =
-                    this.geographyQuestionAccuracyInMeters
-            })
+            if (this.geographyQuestionAccuracyInMetersModel < 1 && this.geographyQuestionAccuracyInMetersModel > 1000)
+                this.geographyQuestionAccuracyInMetersModel = this.geographyQuestionAccuracyInMetersCancelModel
+            else
+                nextTick(() => {
+                    this.$hq.AdminSettings.setGeographyQuestionAccuracyInMeters(
+                        this.geographyQuestionAccuracyInMetersModel,
+                    ).then(() => {
+                        this.geographyQuestionAccuracyInMetersCancelModel =
+                            this.geographyQuestionAccuracyInMetersModel
+                    })
+                })
         },
         cancelGeographyQuestionAccuracyInMeters() {
-            this.geographyQuestionAccuracyInMeters = this.geographyQuestionAccuracyInMetersCancel
+            this.geographyQuestionAccuracyInMetersModel = this.geographyQuestionAccuracyInMetersCancelModel
         },
 
         async updateGeographyQuestionPeriodInSeconds() {
-            if (
-                this.geographyQuestionPeriodInSeconds < 5 &&
-                this.geographyQuestionPeriodInSeconds > 1000
-            )
-                return
-
-            return this.$hq.AdminSettings.setGeographyQuestionPeriodInSeconds(
-                this.geographyQuestionPeriodInSeconds,
-            ).then(() => {
-                this.geographyQuestionPeriodInSecondsCancel =
-                    this.geographyQuestionPeriodInSeconds
-            })
+            if (this.geographyQuestionPeriodInSecondsModel < 5 && this.geographyQuestionPeriodInSecondsModel > 1000)
+                this.geographyQuestionPeriodInSecondsModel = this.geographyQuestionPeriodInSecondsCancelModel
+            else
+                nextTick(() => {
+                    this.$hq.AdminSettings.setGeographyQuestionPeriodInSeconds(
+                        this.geographyQuestionPeriodInSecondsModel,
+                    ).then(() => {
+                        this.geographyQuestionPeriodInSecondsCancelModel =
+                            this.geographyQuestionPeriodInSecondsModel
+                    })
+                })
         },
 
         cancelGeographyQuestionPeriodInSeconds() {
-            this.geographyQuestionPeriodInSeconds =
-                this.geographyQuestionPeriodInSecondsCancel
+            this.geographyQuestionPeriodInSecondsModel = this.geographyQuestionPeriodInSecondsCancelModel
         },
         async updateEsriKApiKey() {
-            return this.$hq.AdminSettings.setEsriApiKey(
-                this.esriApiKey,
-            ).then(() => {
-                this.esriApiKeyInitial = this.esriApiKey
+            nextTick(() => {
+                return this.$hq.AdminSettings.setEsriApiKey(
+                    this.esriApiKeyModel,
+                ).then(() => {
+                    this.esriApiKeyInitialModel = this.esriApiKeyModel
+                })
             })
         },
-        cancelEsriKApiKey() { this.esriApiKey = this.esriApiKeyInitial },
+        cancelEsriKApiKey() { this.esriApiKeyModel = this.esriApiKeyInitial },
         noAction() {
             // Do nothing
         },

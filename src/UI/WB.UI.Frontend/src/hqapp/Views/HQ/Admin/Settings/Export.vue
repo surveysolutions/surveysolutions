@@ -1,14 +1,14 @@
 <template>
     <div role="tabpanel" class="tab-pane page-preview-block" id="export">
-        <div class="row extra-margin-bottom contain-input " data-suso="settings-page">
-            <div class="col-sm-12">
+        <div class="row extra-margin-bottom contain-input" data-suso="settings-page">
+            <div class="col-sm-9">
                 <h2>{{ $t('Settings.ExportEncryption_Title') }}</h2>
                 <p>{{ $t('Settings.ExportEncryption_Description') }}</p>
             </div>
-            <div class="col-sm-12">
+            <div class="col-sm-9">
                 <div class="block-filter">
                     <div class="form-group">
-                        <input class="checkbox-filter single-checkbox" :value="encryptionEnabled"
+                        <input class="checkbox-filter single-checkbox" v-model="encryptionEnabledModel"
                             @change="changeEncryptionEnabled" id="isEnabled" type="checkbox" />
                         <label for="isEnabled" style="font-weight: bold">
                             <span class="tick"></span>
@@ -16,16 +16,17 @@
                         </label>
                     </div>
                 </div>
-                <div class="block-filter">
+                <div class="block-filter" style="padding-left: 30px">
                     <label for="exportPassword">
                         {{ $t('Settings.Password') }}:
                     </label>
                     <div class="form-group">
                         <div class="input-group">
-                            <input id="exportPassword" type="text" :value="encryptionPassword" readonly="readonly"
+                            <input id="exportPassword" type="text" v-model="encryptionPasswordModel" readonly="readonly"
                                 class="form-control" />
                             <span class="input-group-btn">
-                                <button class="btn btn-default" @click="regenPassword" :disabled="!encryptionEnabled">
+                                <button class="btn btn-default" @click="regenPassword"
+                                    :disabled="!encryptionEnabledModel">
                                     <i class="glyphicon glyphicon-refresh"></i>
                                 </button>
                             </span>
@@ -34,100 +35,111 @@
                 </div>
             </div>
         </div>
-
-        <div class="col-sm-12">
-            <Form v-slot="{ meta }" @submit="noAction">
-                <div class="block-filter" style="padding-left: 30px">
-                    <div class="form-group">
-                        <label for="interviewerGeographyQuestionAccuracyInMeters" style="font-weight: bold">
-                            <span class="tick"></span>
-                            {{ $t('Settings.InterviewerGeographyQuestionAccuracyInMeters') }}
-                            <p style="font-weight: normal">
-                                {{ $t('Settings.GeographyQuestionAccuracyInMetersDescription') }}
-                            </p>
-                        </label>
-                    </div>
-                    <div class="form-group">
-                        <div class="input-group input-group-save">
-                            <!-- <Field class="form-control number" v-model.number="geographyQuestionAccuracyInMeters"
-                                    :rules="{
-                                        integer: true,
-                                        required: true,
-                                        min_value: 1,
-                                        max_value: 1000,
-                                    }" :validateOnChange="true" :validateOnInput="true" name="accuracy"
-                                    label="Accuracy" id="interviewerGeographyQuestionAccuracyInMeters" type="number" /> -->
-                        </div>
-                        <button type="button" class="btn btn-success" :disabled="geographyQuestionAccuracyInMeters ==
-                            geographyQuestionAccuracyInMetersCancel ||
-                            geographyQuestionAccuracyInMeters < 1 ||
-                            geographyQuestionAccuracyInMeters > 1000 ||
-                            meta.valid == false
-                            " @click="updateGeographyQuestionAccuracyInMeters">
-                            {{ $t('Common.Save') }}
-                        </button>
-                        <button type="button" class="btn btn-link"
-                            :disabled="geographyQuestionAccuracyInMeters == geographyQuestionAccuracyInMetersCancel"
-                            @click="cancelGeographyQuestionAccuracyInMeters">
-                            {{ $t('Common.Cancel') }}
-                        </button>
-                    </div>
-                    <div class="error">
-                        <ErrorMessage name="accuracy"></ErrorMessage>
-                    </div>
-                </div>
-            </Form>
-        </div>
-        <div class="col-sm-12">
-            <Form v-slot="{ meta }" @submit="noAction">
-                <div class="block-filter" style="padding-left: 30px">
-                    <div class="form-group">
-                        <label for="interviewerGeographyQuestionPeriodInSeconds" style="font-weight: bold">
-                            <span class="tick"></span>
-                            {{ $t('Settings.InterviewerGeographyQuestionPeriodInSeconds') }}
-                            <p style="font-weight: normal">
-                                {{ $t('Settings.GeographyQuestionPeriodInSecondsDescription') }}
-                            </p>
-                        </label>
-                    </div>
-                    <div class="form-group">
-                        <div class="input-group input-group-save">
-                            <!-- <Field class="form-control number" v-model.number="geographyQuestionPeriodInSeconds"
-                                    :rules="{
-                                        integer: true,
-                                        required: true,
-                                        min_value: 5,
-                                        max_value: 1000,
-                                    }" :validateOnChange="true" :validateOnInput="true" label="Period"
-                                    id="interviewerGeographyQuestionPeriodInSeconds" name="period" type="number" /> -->
-                        </div>
-                        <button type="button" class="btn btn-success" :disabled="geographyQuestionPeriodInSeconds ==
-                            geographyQuestionPeriodInSecondsCancel ||
-                            geographyQuestionPeriodInSeconds < 5 ||
-                            geographyQuestionPeriodInSeconds > 1000 ||
-                            meta.valid == false" @click="updateGeographyQuestionPeriodInSeconds">
-                            {{ $t('Common.Save') }}
-                        </button>
-                        <button type="button" class="btn btn-link"
-                            :disabled="geographyQuestionPeriodInSeconds == geographyQuestionPeriodInSecondsCancel"
-                            @click="cancelGeographyQuestionPeriodInSeconds">
-                            {{ $t('Common.Cancel') }}
-                        </button>
-                    </div>
-                    <div class="error">
-                        <ErrorMessage name="period"></ErrorMessage>
-                    </div>
-                </div>
-            </Form>
-        </div>
-
         <div class="row extra-margin-bottom contain-input" data-suso="settings-page">
-            <div class="col-sm-7">
+            <div class="col-sm-9">
+                <h2>{{ $t('Settings.FileRetention_Title') }}</h2>
+                <p>{{ $t('Settings.FileRetention_Description') }}</p>
+            </div>
+            <div class="col-sm-9">
+                <div class="block-filter">
+                    <div class="form-group">
+                        <input class="checkbox-filter single-checkbox" v-model="isRetentionEnabledModel"
+                            @change="changeRetentionEnabled" id="isRetentionEnabled" type="checkbox" />
+                        <label for="isRetentionEnabled" style="font-weight: bold">
+                            <span class="tick"></span>
+                            {{ $t('Settings.EnableFileRetention') }}
+                        </label>
+                    </div>
+                </div>
+
+                <Form v-slot="{ meta }" @submit="noAction" ref="retentionForm">
+                    <div class="block-filter" style="padding-left: 30px">
+                        <div class="form-group">
+                            <label for="retentionInDays" style="font-weight: bold">
+                                <span class="tick"></span>
+                                {{ $t('Settings.RetentionInDaysTitle') }}
+                                <p style="font-weight: normal">
+                                    {{ $t('Settings.RetentionInDaysDescription') }}
+                                </p>
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group input-group-save">
+                                <Field class="form-control number" v-model.number="inDaysModel" :rules="{
+                                    integer: true,
+                                    required: false,
+                                    min_value: 1,
+                                    max_value: 1000
+                                }" :validateOnChange="true" :validateOnInput="true" name="inDays" label="InDays"
+                                    id="retentionInDays" type="number" :disabled="!isRetentionEnabledModel" />
+                            </div>
+                            <button type="button" class="btn btn-success" :disabled="inDaysModel ==
+                                inDaysCancelModel ||
+                                inDaysModel < 1 ||
+                                inDaysModel > 1000 ||
+                                meta.valid == false
+                                " @click="updateInDays">
+                                {{ $t('Common.Save') }}
+                            </button>
+                            <button type="button" class="btn btn-link" :disabled="inDaysModel == inDaysCancelModel"
+                                @click="cancelInDays">
+                                {{ $t('Common.Cancel') }}
+                            </button>
+                        </div>
+                        <div class="error">
+                            <ErrorMessage name="inDays"></ErrorMessage>
+                        </div>
+                    </div>
+                </Form>
+            </div>
+            <div class="col-sm-9">
+                <Form v-slot="{ meta }" @submit="noAction" :disabled="!isRetentionEnabledModel">
+                    <div class="block-filter" style="padding-left: 30px">
+                        <div class="form-group">
+                            <label for="countLimit" style="font-weight: bold">
+                                <span class="tick"></span>
+                                {{ $t('Settings.RetentionInCountTitle') }}
+                                <p style="font-weight: normal">
+                                    {{ $t('Settings.RetentionInCountDescription') }}
+                                </p>
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group input-group-save">
+                                <Field class="form-control number" v-model.number="inCountLimitModel" :rules="{
+                                    integer: true,
+                                    required: false,
+                                    min_value: 1,
+                                    max_value: 100000,
+                                }" :validateOnChange="true" :validateOnInput="true" label="NumberLimit" id="countLimit"
+                                    name="countLimit" type="number" :disabled="!isRetentionEnabledModel" />
+                            </div>
+                            <button type="button" class="btn btn-success" :disabled="inCountLimitModel ==
+                                inCountLimitCancelModel ||
+                                inCountLimitModel < 1 ||
+                                inCountLimitModel > 100000 ||
+                                meta.valid == false" @click="updateInCountLimit">
+                                {{ $t('Common.Save') }}
+                            </button>
+                            <button type="button" class="btn btn-link"
+                                :disabled="inCountLimitModel == inCountLimitCancelModel" @click="cancelInCountLimit">
+                                {{ $t('Common.Cancel') }}
+                            </button>
+                        </div>
+                        <div class="error">
+                            <ErrorMessage name="period"></ErrorMessage>
+                        </div>
+                    </div>
+                </Form>
+            </div>
+        </div>
+        <div class="row extra-margin-bottom" data-suso="settings-page">
+            <div class="col-sm-9">
                 <h2>{{ $t('Settings.ClearExportCache_Title') }}</h2>
                 <p>{{ $t('Settings.ClearExportCache_Description') }}</p>
             </div>
-            <div class="col-sm-7">
-                <div class="block-filter action-block">
+            <div class="col-sm-9">
+                <div class="block-filter action-block" style="padding-left: 30px">
                     <button type="button" class="btn btn-danger" @click="removeExportCache"
                         :disabled="!allowToRemoveExportCache" style="margin-right: 15px">
                         {{ $t('Settings.RemoveExportCache') }}
@@ -149,10 +161,38 @@
         </div>
     </div>
 </template>
+<style scoped>
+.logo {
+    max-width: 365px;
+    max-height: 329px;
+}
 
+.input-group .form-control.number {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.input-group .form-control.number[aria-invalid='true'] {
+    color: red;
+}
+
+.form-group .btn-success {
+    margin-left: 20px;
+    margin-top: 2px;
+}
+
+.form-group .input-group-save {
+    display: inline;
+}
+
+.block-filter .error {
+    color: red;
+}
+</style>
 <script>
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import modal from '@/shared/modal'
+import { nextTick } from 'vue'
 
 export default {
     props: {
@@ -161,11 +201,71 @@ export default {
         isRetentionEnabled: Boolean,
         retentionLimitInDays: Number,
         retentionLimitQuantity: Number,
+        retentionLimitInDaysCancel: Number,
+        retentionLimitQuantityCancel: Number,
     },
     components: {
         Form,
         Field,
         ErrorMessage,
+    },
+    computed: {
+        encryptionEnabledModel: {
+            get() {
+                return this.encryptionEnabled
+            },
+            set(value) {
+                this.$emit('update:encryptionEnabled', value)
+            }
+        },
+        encryptionPasswordModel: {
+            get() {
+                return this.encryptionPassword
+            },
+            set(value) {
+                this.$emit('update:encryptionPassword', value)
+            }
+        },
+        isRetentionEnabledModel: {
+            get() {
+                return this.isRetentionEnabled
+            },
+            set(value) {
+                this.$emit('update:isRetentionEnabled', value)
+            }
+        },
+        inDaysModel: {
+            get() {
+                return this.retentionLimitInDays
+            },
+            set(value) {
+                this.$emit('update:retentionLimitInDays', value)
+            }
+        },
+        inCountLimitModel: {
+            get() {
+                return this.retentionLimitQuantity
+            },
+            set(value) {
+                this.$emit('update:retentionLimitQuantity', value)
+            }
+        },
+        inDaysCancelModel: {
+            get() {
+                return this.retentionLimitInDaysCancel
+            },
+            set(value) {
+                this.$emit('update:retentionLimitInDaysCancel', value)
+            }
+        },
+        inCountLimitCancelModel: {
+            get() {
+                return this.retentionLimitQuantityCancel
+            },
+            set(value) {
+                this.$emit('update:retentionLimitQuantityCancel', value)
+            }
+        },
     },
     data() {
         return {
@@ -180,14 +280,14 @@ export default {
             var self = this
             modal.dialog({
                 closeButton: false,
-                message: self.encryptionEnabled
+                message: self.encryptionEnabledModel
                     ? self.$t('Settings.ChangeStateConfirm')
                     : self.$t('Settings.ChangeStateDisabledConfirm'),
                 buttons: {
                     cancel: {
                         label: self.$t('Common.No'),
                         callback: () => {
-                            self.encryptionEnabled = !self.encryptionEnabled
+                            self.encryptionEnabledModel = !self.encryptionEnabledModel
                         },
                     },
                     success: {
@@ -195,10 +295,10 @@ export default {
                         callback: async () => {
                             const response =
                                 await self.$hq.ExportSettings.setEncryption(
-                                    self.encryptionEnabled,
+                                    self.encryptionEnabledModel,
                                 )
-                            self.encryptionEnabled = response.data.isEnabled
-                            self.encryptionPassword = response.data.password
+                            self.encryptionEnabledModel = response.data.isEnabled
+                            self.encryptionPasswordModel = response.data.password
                         },
                     },
                 },
@@ -219,8 +319,8 @@ export default {
                         callback: async () => {
                             const response =
                                 await this.$hq.ExportSettings.regenPassword()
-                            this.encryptionPassword = response.data.password
-                            this.encryptionEnabled = response.data.isEnabled
+                            this.encryptionPasswordModel = response.data.password
+                            this.encryptionEnabledModel = response.data.isEnabled
                         },
                     },
                 },
@@ -311,6 +411,27 @@ export default {
                     },
                 },
             })
+        },
+        changeRetentionEnabled() {
+            nextTick(() => {
+                this.$hq.ExportSettings.changeRetentionState(this.isRetentionEnabledModel)
+            })
+        },
+        updateInDays() {
+            nextTick(() => {
+                this.$hq.ExportSettings.setRetentionLimitInDays(this.inDaysModel)
+            })
+        },
+        cancelInDays() {
+            this.inDaysModel = this.inDaysCancelModel
+        },
+        updateInCountLimit() {
+            nextTick(() => {
+                this.$hq.ExportSettings.setRetentionLimitInDays(this.inCountLimitModel)
+            })
+        },
+        cancelInCountLimit() {
+            this.inCountLimitModel = this.inCountLimitCancelModel
         },
     }
 }

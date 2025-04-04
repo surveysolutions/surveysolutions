@@ -582,6 +582,35 @@ class ExportSettings {
             url: `${this.base}/StatusExportCache`
         })
     }
+
+    setRetentionLimitCount(retentionLimitCount) {
+        return this.http({
+            method: 'post',
+            url: `${this.base}/SetRetentionLimitCount`,
+            headers: { 'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie() },
+            data: { retentionLimitCount: retentionLimitCount }
+        })
+    }
+
+    setRetentionLimitInDays(retentionLimitInDays) {
+        return this.http({
+            method: 'post',
+            url: `${this.base}/SetRetentionLimitInDays`,
+            headers: { 'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie() },
+            data: { retentionLimitInDays: retentionLimitInDays }
+        })
+    }
+
+    changeRetentionState(newState) {
+        const url = `${this.base}/ChangeRetentionState`
+        return this.http(
+            {
+                method: 'post',
+                url: url,
+                data: { enableState: newState },
+                headers: { 'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie() },
+            })
+    }
 }
 
 // var $webInterviewSettingsUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "AdminSettings", action = "WebInterviewSettings" })';

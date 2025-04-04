@@ -1,7 +1,7 @@
 <template>
     <div role="tabpanel" class="tab-pane page-preview-block" id="logo">
-        <div class="row extra-margin-bottom contain-input">
-            <div class="col-sm-12">
+        <div class="row extra-margin-bottom">
+            <div class="col-sm-9">
                 <h2>{{ $t('Settings.LogoSettings') }}</h2>
                 <p>{{ $t('Settings.LogoSettings_Description') }}</p>
                 <p>{{ $t('Settings.LogoSettings_Description1') }}</p>
@@ -26,7 +26,7 @@
                     </button>
                 </div>
             </form>
-            <div class="col-sm-12">
+            <div class="col-sm-9">
                 <div class="block-filter">
                     <figure class="logo-wrapper">
                         <figcaption>

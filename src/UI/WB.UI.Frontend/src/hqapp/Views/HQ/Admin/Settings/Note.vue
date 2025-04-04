@@ -1,17 +1,17 @@
 <template>
     <div role="tabpanel" class="tab-pane page-preview-block" id="note">
-        <div class="row extra-margin-bottom contain-input">
-            <div class="col-sm-12">
+        <div class="row extra-margin-bottom">
+            <div class="col-sm-9">
                 <h2>{{ $t('Settings.GlobalNoteSettings') }}</h2>
                 <p>{{ $t('Settings.GlobalNoteSettings_Description') }}</p>
             </div>
-            <form class="col-sm-12">
+            <form class="col-sm-9">
                 <div class="block-filter">
                     <div class="form-group">
                         <label for="notificationText">
                             {{ $t('Settings.GlobalNotice') }}:
                         </label>
-                        <textarea class="form-control" id="notificationText" type="text" v-model="noticeModel"
+                        <textarea class="form-control" id="notificationText" type="text" v-model="notice"
                             maxlength="1000"></textarea>
                     </div>
                 </div>
@@ -22,9 +22,9 @@
                     <button type="button" class="btn btn-link" @click="clearMessage">
                         {{ $t('Common.Delete') }}
                     </button>
-                    <span class="text-success" v-if="globalNoticeUpdated">{{
-                        $t('Settings.GlobalNoteSaved')
-                    }}</span>
+                    <span class="text-success" v-if="globalNoticeUpdated">
+                        {{ $t('Settings.GlobalNoteSaved') }}
+                    </span>
                 </div>
             </form>
         </div>
@@ -32,29 +32,41 @@
 </template>
 
 <script>
+import { nextTick } from 'vue'
+
 export default {
-    props: {
-        globalNotice: String
+    props: ['modelValue'],
+    emits: ['update:modelValue'],
+    computed: {
+        notice: {
+            get() {
+                return this.modelValue
+            },
+            set(value) {
+                this.$emit('update:modelValue', value)
+            }
+        }
     },
     data() {
         return {
             globalNoticeUpdated: false,
-            noticeModel: this.globalNotice,
         }
     },
-
     methods: {
         async updateMessage() {
+            this.globalNoticeUpdated = false
             const response = await this.$hq.AdminSettings.setGlobalNotice(
-                this.noticeModel,
+                this.notice,
             )
             if (response.status === 200) {
                 this.globalNoticeUpdated = true
             }
         },
         async clearMessage() {
-            this.globalNotice = ''
-            return this.updateMessage()
+            this.notice = ''
+            nextTick(() => {
+                this.updateMessage()
+            })
         },
     }
 }
