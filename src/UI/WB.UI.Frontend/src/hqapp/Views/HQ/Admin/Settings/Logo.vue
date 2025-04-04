@@ -1,33 +1,38 @@
 <template>
     <div role="tabpanel" class="tab-pane page-preview-block" id="logo">
-        <div class="row extra-margin-bottom">
+        <div class="row contain-input" data-suso="settings-page">
             <div class="col-sm-9">
                 <h2>{{ $t('Settings.LogoSettings') }}</h2>
                 <p>{{ $t('Settings.LogoSettings_Description') }}</p>
-                <p>{{ $t('Settings.LogoSettings_Description1') }}</p>
             </div>
-            <form :action="$config.model.updateLogoUrl" method="post" enctype="multipart/form-data" class="col-sm-7"
+            <form :action="$config.model.updateLogoUrl" method="post" enctype="multipart/form-data" class="col-sm-9"
                 @submit="onLogoSubmit">
                 <input name="__RequestVerificationToken" type="hidden" :value="this.$hq.Util.getCsrfCookie()" />
-                <div class="block-filter">
-                    <div class="form-group" :class="{ 'has-error': this.$config.model.invalidImage }">
-                        <label for="companyLogo">
+                <div class="block-filter" style="padding-left: 30px">
+                    <div class="form-group">
+                        <label for="companyLogo" style="font-weight: bold">
+                            <span class="tick"></span>
                             {{ $t('Settings.Logo') }}
+                            <p style="font-weight: normal">
+                                {{ $t('Settings.LogoSettings_Description1') }}
+                            </p>
                         </label>
+                    </div>
+                    <div class="form-group" :class="{ 'has-error': this.$config.model.invalidImage }">
                         <input type="file" id="companyLogo" ref="logoRef" name="logo" @change="changedFile"
                             accept="image/gif, image/jpeg, image/png" />
                         <span class="help-block" v-if="this.$config.model.invalidImage">{{
                             this.$t('Settings.LogoNotUpdated') }}</span>
                     </div>
                 </div>
-                <div class="block-filter">
+                <div class="block-filter" style="padding-left: 30px">
                     <button :disabled="files.length == 0" type="submit" class="btn btn-success">
                         {{ $t('Common.Save') }}
                     </button>
                 </div>
             </form>
             <div class="col-sm-9">
-                <div class="block-filter">
+                <div class="block-filter" style="padding-left: 30px">
                     <figure class="logo-wrapper">
                         <figcaption>
                             {{ $t('Settings.CurrentLogo') }}:
@@ -36,7 +41,7 @@
                             @error="logoError" alt="logo image" />
                     </figure>
                 </div>
-                <div class="block-filter action-block">
+                <div class="block-filter action-block" style="padding-left: 30px">
                     <form :action="$config.model.removeLogoUrl" method="post">
                         <input name="__RequestVerificationToken" type="hidden" :value="this.$hq.Util.getCsrfCookie()" />
                         <button type="submit" class="btn btn-danger">

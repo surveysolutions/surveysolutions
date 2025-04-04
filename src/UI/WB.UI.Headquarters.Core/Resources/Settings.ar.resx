@@ -460,5 +460,8 @@
 </data>
     <data name="RetentionInCountDescription" xml:space="preserve">
     <value>الحد الأقصى لعدد ملفات التصدير للاحتفاظ بها في التخزين</value>
-</data>  
+</data>
+    <data name="EnableFileRetention" xml:space="preserve">
+    <value>تفعيل سياسة الاحتفاظ</value>
+</data>
 </root>

@@ -456,4 +456,7 @@
     <data name="RetentionInCountDescription" xml:space="preserve">
     <value>Maximální počet exportních souborů k uchování ve skladu</value>
 </data>
+    <data name="EnableFileRetention" xml:space="preserve">
+    <value>Povolit politiku uchovávání</value>
+</data>
 </root>

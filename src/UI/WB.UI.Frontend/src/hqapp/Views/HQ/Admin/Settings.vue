@@ -57,7 +57,7 @@
                         v-model:geographyQuestionPeriodInSecondsCancel="geographyQuestionPeriodInSecondsCancel"
                         v-model:geographyQuestionPeriodInSeconds="geographyQuestionPeriodInSeconds"
                         v-model:geographyQuestionAccuracyInMetersCancel="geographyQuestionAccuracyInMetersCancel"
-                        v-model:esriApiKey="esriApiKey" v-model:esriApiKeyCancel="esriApiKeyCancel" />
+                        v-model:esriApiKey="esriApiKey" v-model:esriApiKeyInitial="esriApiKeyInitial" />
                     <WebInterview v-model="isEmailAllowed" />
                     <Logo />
                 </div>

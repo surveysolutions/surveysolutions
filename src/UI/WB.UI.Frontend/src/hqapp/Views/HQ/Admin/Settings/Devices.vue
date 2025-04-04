@@ -1,6 +1,6 @@
 <template>
     <div role="tabpanel" class="tab-pane page-preview-block" id="devices">
-        <div class="row extra-margin-bottom contain-input">
+        <div class="row contain-input">
             <div class="col-sm-9">
                 <h2>{{ $t('Settings.MobileAppSettings_Title') }}</h2>
                 <p>{{ $t('Settings.MobileAppSettings_Description') }}</p>
@@ -59,7 +59,7 @@
                             <label for="interviewerGeographyQuestionAccuracyInMeters" style="font-weight: bold">
                                 <span class="tick"></span>
                                 {{ $t('Settings.InterviewerGeographyQuestionAccuracyInMeters') }}
-                                <p style="font-weight: normal">
+                                <p style="font-weight: normal;margin-bottom: 0px">
                                     {{ $t('Settings.GeographyQuestionAccuracyInMetersDescription') }}
                                 </p>
                             </label>
@@ -102,7 +102,7 @@
                             <label for="interviewerGeographyQuestionPeriodInSeconds" style="font-weight: bold">
                                 <span class="tick"></span>
                                 {{ $t('Settings.InterviewerGeographyQuestionPeriodInSeconds') }}
-                                <p style="font-weight: normal">
+                                <p style="font-weight: normal;margin-bottom: 0px">
                                     {{ $t('Settings.GeographyQuestionPeriodInSecondsDescription') }}
                                 </p>
                             </label>
@@ -144,7 +144,7 @@
                         <label for="esriApiKey" style="font-weight: bold">
                             <span class="tick"></span>
                             {{ $t('Settings.EsriApiKey') }}
-                            <p class="error" style="font-weight: normal">
+                            <p class="error" style="font-weight: normal;margin-bottom: 0px">
                                 {{ $t('Settings.EsriApiKeyDescription') }}
                             </p>
                         </label>
@@ -219,14 +219,17 @@ export default {
         geographyQuestionPeriodInSeconds: Number,
         geographyQuestionPeriodInSecondsCancel: Number,
         esriApiKey: String,
-        esriApiKeyCancel: String,
+        esriApiKeyInitial: String,
     },
     emits: ['update:isInterviewerAutomaticUpdatesEnabled',
         'update:isDeviceNotificationsEnabled',
         'update:isPartialSynchronizationEnabled',
         'update:geographyQuestionAccuracyInMeters',
         'update:geographyQuestionPeriodInSeconds',
+        'update:geographyQuestionAccuracyInMetersCancel',
+        'update:geographyQuestionPeriodInSecondsCancel',
         'update:esriApiKey',
+        'update:esriApiKeyInitial',
     ],
     computed: {
         isInterviewerAutomaticUpdatesEnabledModel: {

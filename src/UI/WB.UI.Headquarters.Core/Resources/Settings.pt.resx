@@ -462,4 +462,7 @@ Possíveis razões:
     <data name="RetentionInCountDescription" xml:space="preserve">
     <value>Quantidade máxima de arquivos de exportação a serem mantidos no armazenamento</value>
 </data>
+    <data name="EnableFileRetention" xml:space="preserve">
+    <value>Ativar política de retenção</value>
+</data>
 </root>

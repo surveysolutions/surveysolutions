@@ -474,4 +474,7 @@
     <data name="RetentionInCountDescription" xml:space="preserve">
     <value>Максимальное количество экспортных файлов для хранения в хранилище</value>
 </data>
+    <data name="EnableFileRetention" xml:space="preserve">
+    <value>Включить политику хранения</value>
+</data>
 </root>

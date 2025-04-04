@@ -1,6 +1,6 @@
 <template>
-    <div role="tabpanel" class="tab-pane page-preview-block" id="export">
-        <div class="row extra-margin-bottom contain-input" data-suso="settings-page">
+    <div role="tabpanel" class="tab-pane active page-preview-block" id="export">
+        <div class="row contain-input" data-suso="settings-page">
             <div class="col-sm-9">
                 <h2>{{ $t('Settings.ExportEncryption_Title') }}</h2>
                 <p>{{ $t('Settings.ExportEncryption_Description') }}</p>
@@ -17,8 +17,9 @@
                     </div>
                 </div>
                 <div class="block-filter" style="padding-left: 30px">
-                    <label for="exportPassword">
-                        {{ $t('Settings.Password') }}:
+                    <label for="exportPassword" style="font-weight: bold">
+                        <span class="tick"></span>
+                        {{ $t('Settings.Password') }}
                     </label>
                     <div class="form-group">
                         <div class="input-group">
@@ -35,7 +36,7 @@
                 </div>
             </div>
         </div>
-        <div class="row extra-margin-bottom contain-input" data-suso="settings-page">
+        <div class="row contain-input" data-suso="settings-page">
             <div class="col-sm-9">
                 <h2>{{ $t('Settings.FileRetentionTitle') }}</h2>
                 <p>{{ $t('Settings.FileRetentionDescription') }}</p>
@@ -58,7 +59,7 @@
                             <label for="retentionInDays" style="font-weight: bold">
                                 <span class="tick"></span>
                                 {{ $t('Settings.RetentionInDaysTitle') }}
-                                <p style="font-weight: normal">
+                                <p style="font-weight: normal; margin-bottom: 0px;">
                                     {{ $t('Settings.RetentionInDaysDescription') }}
                                 </p>
                             </label>
@@ -99,7 +100,7 @@
                             <label for="countLimit" style="font-weight: bold">
                                 <span class="tick"></span>
                                 {{ $t('Settings.RetentionInCountTitle') }}
-                                <p style="font-weight: normal">
+                                <p style="font-weight: normal;margin-bottom: 0px">
                                     {{ $t('Settings.RetentionInCountDescription') }}
                                 </p>
                             </label>
@@ -133,13 +134,13 @@
                 </Form>
             </div>
         </div>
-        <div class="row extra-margin-bottom" data-suso="settings-page">
+        <div class="row contain-input" data-suso="settings-page">
             <div class="col-sm-9">
                 <h2>{{ $t('Settings.ClearExportCache_Title') }}</h2>
                 <p>{{ $t('Settings.ClearExportCache_Description') }}</p>
             </div>
             <div class="col-sm-9">
-                <div class="block-filter action-block" style="padding-left: 30px">
+                <div class="block-filter" style="padding-left: 30px">
                     <button type="button" class="btn btn-danger" @click="removeExportCache"
                         :disabled="!allowToRemoveExportCache" style="margin-right: 15px">
                         {{ $t('Settings.RemoveExportCache') }}
@@ -204,6 +205,15 @@ export default {
         retentionLimitInDaysCancel: Number,
         retentionLimitQuantityCancel: Number,
     },
+    emits: [
+        'update:encryptionEnabled',
+        'update:encryptionPassword',
+        'update:isRetentionEnabled',
+        'update:retentionLimitInDays',
+        'update:retentionLimitQuantity',
+        'update:retentionLimitInDaysCancel',
+        'update:retentionLimitQuantityCancel',
+    ],
     components: {
         Form,
         Field,

@@ -779,9 +779,9 @@ ul.dropdown-menu li * {
     }
 
     .block-filter {
-        &:last-of-type {
-            margin-bottom: 25px;
-        }
+        // &:last-of-type {
+        //     margin-bottom: 25px;
+        // }
 
         h5 {
             margin-top: 5px;
@@ -818,18 +818,10 @@ ul.dropdown-menu li * {
             }
         }
     }
-
-    h2 {
-        margin-bottom: 15px;
-    }
 }
 
 .profile .form-control .combo-box .btn-clear {
     right: -10px;
-}
-
-.contain-input .block-filter .form-group .single-checkbox+label {
-    margin-top: 10px;
 }
 
 @media (max-width: $screen-md-min) {
