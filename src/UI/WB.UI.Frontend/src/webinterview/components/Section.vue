@@ -83,15 +83,7 @@ export default {
     methods: {
         loadSection() {
             this.$store.dispatch('fetchSectionEntities')
-
-            this.doScroll()
         },
-
-        doScroll: debounce(function () {
-            if (this.$store.getters.scrollState == null) {
-                window.scroll({ top: 0, behavior: 'smooth' })
-            }
-        }, 200),
     },
 }
 </script>

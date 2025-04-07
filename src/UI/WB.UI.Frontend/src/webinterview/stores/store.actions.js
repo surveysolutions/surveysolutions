@@ -244,6 +244,8 @@ export default {
             try {
                 commit('SET_LOADING_PROGRESS', true)
 
+                commit('SET_SECTION_DATA', [])
+
                 const showVariables = rootState.webinterview.showVariables || false
                 const section = await api.get('getFullSectionInfo', { sectionId: id, includeVariables: showVariables })
 
