@@ -147,6 +147,9 @@ export default {
             if (this.data.format == 'Paradata' && this.data.paradataReduced == true)
                 return 'ParadataReduced'
 
+            if (this.data.format == 'AudioAudit')
+                return 'Binary'
+
             return this.data.format
         },
         downloadFileUrl() {
