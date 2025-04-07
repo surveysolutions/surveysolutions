@@ -465,4 +465,7 @@ Raisons possibles :
     <data name="EnableFileRetention" xml:space="preserve">
     <value>Activer la politique de rétention</value>
 </data>
+    <data name="RetentionPolicyEneblingConfirm" xml:space="preserve">
+  <value>Êtes-vous sûr de vouloir activer la politique de rétention ? Les fichiers de données exportés pourraient être supprimés.</value>
+</data>
 </root>

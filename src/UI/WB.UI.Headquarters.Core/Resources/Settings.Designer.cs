@@ -728,5 +728,11 @@ namespace WB.UI.Headquarters.Resources {
                 return ResourceManager.GetString("EnableFileRetention", resourceCulture);
             }
         }
+        
+        public static string RetentionPolicyEneblingConfirm {
+            get {
+                return ResourceManager.GetString("RetentionPolicyEneblingConfirm", resourceCulture);
+            }
+        }
     }
 }

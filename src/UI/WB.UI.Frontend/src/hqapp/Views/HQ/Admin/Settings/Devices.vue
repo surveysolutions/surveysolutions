@@ -151,15 +151,15 @@
                     </div>
                     <div class="form-group">
                         <div class="input-group input-group-save">
-                            <input class="form-control number" type="password" :value="esriApiKey" id="esriApiKey"
+                            <input class="form-control number" type="password" v-model="esriApiKeyModel" id="esriApiKey"
                                 name="esriKey" />
                         </div>
                         <button type="button" class="btn btn-success" :disabled="esriApiKeyModel ==
-                            esriApiKeyInitialModel" @click="updateEsriKApiKey">
+                            esriApiKeyInitialModel" @click="updateEsriApiKey">
                             {{ $t('Common.Save') }}
                         </button>
                         <button type="button" class="btn btn-link" :disabled="esriApiKeyModel ==
-                            esriApiKeyInitialModel" @click="cancelEsriKApiKey">
+                            esriApiKeyInitialModel" @click="cancelEsriApiKey">
                             {{ $t('Common.Cancel') }}
                         </button>
                     </div>
@@ -360,7 +360,7 @@ export default {
         cancelGeographyQuestionPeriodInSeconds() {
             this.geographyQuestionPeriodInSecondsModel = this.geographyQuestionPeriodInSecondsCancelModel
         },
-        async updateEsriKApiKey() {
+        async updateEsriApiKey() {
             nextTick(() => {
                 return this.$hq.AdminSettings.setEsriApiKey(
                     this.esriApiKeyModel,
@@ -369,7 +369,7 @@ export default {
                 })
             })
         },
-        cancelEsriKApiKey() { this.esriApiKeyModel = this.esriApiKeyInitial },
+        cancelEsriApiKey() { this.esriApiKeyModel = this.esriApiKeyInitialModel },
         noAction() {
             // Do nothing
         },

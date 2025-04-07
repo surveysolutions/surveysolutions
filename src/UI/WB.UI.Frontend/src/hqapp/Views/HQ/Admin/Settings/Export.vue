@@ -56,7 +56,7 @@
                 <Form v-slot="{ meta }" @submit="noAction" ref="retentionForm">
                     <div class="block-filter" style="padding-left: 30px">
                         <div class="form-group">
-                            <label for="retentionInDays" style="font-weight: bold">
+                            <label for="Days" style="font-weight: bold">
                                 <span class="tick"></span>
                                 {{ $t('Settings.RetentionInDaysTitle') }}
                                 <p style="font-weight: normal; margin-bottom: 0px;">
@@ -71,13 +71,13 @@
                                     required: false,
                                     min_value: 1,
                                     max_value: 1000
-                                }" :validateOnChange="true" :validateOnInput="true" name="inDays" label="InDays"
+                                }" :validateOnChange="true" :validateOnInput="true" name="Days" label="Days"
                                     id="retentionInDays" type="number" :disabled="!isRetentionEnabledModel" />
                             </div>
                             <button type="button" class="btn btn-success" :disabled="inDaysModel ==
                                 inDaysCancelModel ||
-                                inDaysModel < 1 ||
-                                inDaysModel > 1000 ||
+                                (inDaysModel !== '' && inDaysModel < 1) ||
+                                (inDaysModel !== '' && inDaysModel > 1000) ||
                                 meta.valid == false
                                 " @click="updateInDays">
                                 {{ $t('Common.Save') }}
@@ -88,7 +88,7 @@
                             </button>
                         </div>
                         <div class="error">
-                            <ErrorMessage name="inDays"></ErrorMessage>
+                            <ErrorMessage name="Days"></ErrorMessage>
                         </div>
                     </div>
                 </Form>
@@ -97,7 +97,7 @@
                 <Form v-slot="{ meta }" @submit="noAction" :disabled="!isRetentionEnabledModel">
                     <div class="block-filter" style="padding-left: 30px">
                         <div class="form-group">
-                            <label for="countLimit" style="font-weight: bold">
+                            <label for="Files" style="font-weight: bold">
                                 <span class="tick"></span>
                                 {{ $t('Settings.RetentionInCountTitle') }}
                                 <p style="font-weight: normal;margin-bottom: 0px">
@@ -112,13 +112,13 @@
                                     required: false,
                                     min_value: 1,
                                     max_value: 100000,
-                                }" :validateOnChange="true" :validateOnInput="true" label="NumberLimit" id="countLimit"
-                                    name="countLimit" type="number" :disabled="!isRetentionEnabledModel" />
+                                }" :validateOnChange="true" :validateOnInput="true" label="Files" id="Files"
+                                    name="Files" type="number" :disabled="!isRetentionEnabledModel" />
                             </div>
                             <button type="button" class="btn btn-success" :disabled="inCountLimitModel ==
                                 inCountLimitCancelModel ||
-                                inCountLimitModel < 1 ||
-                                inCountLimitModel > 100000 ||
+                                (inCountLimitModel !== '' && inCountLimitModel < 1) ||
+                                (inCountLimitModel !== '' && inCountLimitModel > 100000) ||
                                 meta.valid == false" @click="updateInCountLimit">
                                 {{ $t('Common.Save') }}
                             </button>
@@ -128,7 +128,7 @@
                             </button>
                         </div>
                         <div class="error">
-                            <ErrorMessage name="countLimit"></ErrorMessage>
+                            <ErrorMessage name="Files"></ErrorMessage>
                         </div>
                     </div>
                 </Form>
@@ -423,13 +423,39 @@ export default {
             })
         },
         changeRetentionEnabled() {
-            nextTick(() => {
-                this.$hq.ExportSettings.changeRetentionState(this.isRetentionEnabledModel)
-            })
+            if (this.isRetentionEnabledModel) {
+                var self = this
+                modal.dialog({
+                    closeButton: false,
+                    message: self.$t('Settings.RetentionPolicyEneblingConfirm'),
+                    buttons: {
+                        cancel: {
+                            label: self.$t('Common.No'),
+                            callback: () => {
+                                self.isRetentionEnabledModel = !self.isRetentionEnabledModel
+                            },
+                        },
+                        success: {
+                            label: self.$t('Common.Yes'),
+                            callback: async () => {
+                                this.$hq.ExportSettings.changeRetentionState(this.isRetentionEnabledModel)
+                            },
+                        },
+                    },
+                })
+            }
+            else {
+                nextTick(() => {
+                    this.$hq.ExportSettings.changeRetentionState(this.isRetentionEnabledModel)
+                })
+            }
         },
         updateInDays() {
             nextTick(() => {
                 this.$hq.ExportSettings.setRetentionLimitInDays(this.inDaysModel)
+                    .then(() => {
+                        this.inDaysCancelModel = this.inDaysModel
+                    })
             })
         },
         cancelInDays() {
@@ -437,7 +463,10 @@ export default {
         },
         updateInCountLimit() {
             nextTick(() => {
-                this.$hq.ExportSettings.setRetentionLimitInDays(this.inCountLimitModel)
+                this.$hq.ExportSettings.setRetentionLimitCount(this.inCountLimitModel)
+                    .then(() => {
+                        this.inCountLimitCancelModel = this.inCountLimitModel
+                    })
             })
         },
         cancelInCountLimit() {
