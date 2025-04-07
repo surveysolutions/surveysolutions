@@ -168,9 +168,9 @@
                                     </label>
                                 </div>
                                 <div class="radio-btn-row" v-if="hasInterviews && hasAudioAudit">
-                                    <input class="radio-row" type="radio" name="dataType" id="audioAuditFiles"
-                                        v-model="dataType" value="audioAuditFiles" />
-                                    <label for="audioAuditFiles">
+                                    <input class="radio-row" type="radio" name="dataType" id="audioAudit"
+                                        v-model="dataType" value="audioAudit" />
+                                    <label for="audioAudit">
                                         <span class="tick"></span>
                                         <span class="format-data Binary">
                                             {{ $t('DataExport.DataType_AudioAuditFiles') }}
