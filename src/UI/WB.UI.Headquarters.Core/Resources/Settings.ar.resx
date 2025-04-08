@@ -467,4 +467,13 @@
     <data name="RetentionPolicyEneblingConfirm" xml:space="preserve">
   <value>هل أنت متأكد أنك تريد تفعيل سياسة الاحتفاظ؟ قد يتم حذف ملفات البيانات المصدرة.</value>
 </data>
+    <data name="ForceRunRetentionPolicy" xml:space="preserve">
+    <value>تشغيل إجباري</value>
+</data>
+    <data name="ForceRunRetentionPolicy_Warning" xml:space="preserve">
+    <value>تحذير! هذا إجراء حرج يؤثر على الملفات المصدرة الحالية</value>
+</data>
+    <data name="ForceRunRetentionPolicy_Confirm" xml:space="preserve">
+    <value>هل أنت متأكد أنك تريد تشغيل سياسة الاحتفاظ بشكل إجباري؟ سيتم إزالة جميع الملفات المصدرة التي تغطيها إعدادات السياسة الحالية من الخادم ولن تكون متاحة للتنزيل.</value>
+</data>
 </root>

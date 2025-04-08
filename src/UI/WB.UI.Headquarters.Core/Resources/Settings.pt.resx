@@ -468,4 +468,13 @@ Possíveis razões:
     <data name="RetentionPolicyEneblingConfirm" xml:space="preserve">
   <value>Tem certeza de que deseja ativar a política de retenção? Os arquivos de dados exportados podem ser excluídos.</value>
 </data>
+    <data name="ForceRunRetentionPolicy" xml:space="preserve">
+    <value>Executar forçadamente</value>
+</data>
+    <data name="ForceRunRetentionPolicy_Warning" xml:space="preserve">
+    <value>Aviso! Esta é uma ação crítica que afeta os arquivos de exportação existentes</value>
+</data>
+    <data name="ForceRunRetentionPolicy_Confirm" xml:space="preserve">
+    <value>Tem certeza de que deseja executar forçadamente a política de retenção? Todos os arquivos de exportação gerados que estão cobertos pelas configurações atuais da política serão removidos do servidor e NÃO estarão disponíveis para download.</value>
+</data>
 </root>

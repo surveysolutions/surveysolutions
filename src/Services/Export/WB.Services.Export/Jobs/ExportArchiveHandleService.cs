@@ -51,14 +51,32 @@ namespace WB.Services.Export.Jobs
                     }
 
                     if (daysToKeep.HasValue && file.LastModified < DateTime.UtcNow.AddDays(-daysToKeep.Value))
-                    { 
-                        await this.externalArtifactsStorage.RemoveAsync(file.Path);
+                    {
+                        try
+                        {
+                            await this.externalArtifactsStorage.RemoveAsync(file.Path);
+                        }
+                        catch (Exception e)
+                        {
+                            logger.LogInformation(
+                                "Unable to delete export archive {path} for tenant: {tenant}. Reason: {reason}", 
+                                file.Path, tenant, e.Message);
+                        }
                         if(countToDelete.HasValue)
                             countToDelete--;
                     }
                     else if (countToDelete is > 0)
                     {
-                        await this.externalArtifactsStorage.RemoveAsync(file.Path);
+                        try
+                        {
+                            await this.externalArtifactsStorage.RemoveAsync(file.Path);
+                        }
+                        catch (Exception e)
+                        {
+                            logger.LogInformation(
+                                "Unable to delete export archive {path} for tenant: {tenant}. Reason: {reason}", 
+                                file.Path, tenant, e.Message);
+                        }
                         countToDelete--;
                     }
                 }
@@ -76,8 +94,10 @@ namespace WB.Services.Export.Jobs
                 else
                 {
                     //get all files infos in directory recursively
+                    //exclude temp files
                     var files = Directory.GetFiles(directory, "*.zip", SearchOption.AllDirectories)
                         .Select(f => new FileInfo(f))
+                        .Where(f=> !f.FullName.Contains("temp"))
                         .OrderByDescending(f => f.LastWriteTimeUtc)
                         .ToList();
                     
@@ -87,13 +107,32 @@ namespace WB.Services.Export.Jobs
                     {
                         if (daysToKeep.HasValue && file.LastWriteTimeUtc < DateTime.UtcNow.AddDays(-daysToKeep.Value))
                         { 
-                            File.Delete(file.FullName);
+                            try
+                            {
+                                File.Delete(file.FullName);
+                            }
+                            catch (Exception e)
+                            {
+                                logger.LogInformation(
+                                    "Unable to delete export archive {path} for tenant: {tenant}. Reason: {reason}", 
+                                    file.FullName, tenant, e.Message);
+                            }
+                            
                             if(countToDelete.HasValue)
                                 countToDelete--;
                         }
                         else if (countToDelete is > 0)
                         {
-                            File.Delete(file.FullName);
+                            try
+                            {
+                                File.Delete(file.FullName);
+                            }
+                            catch (Exception e)
+                            {
+                                logger.LogInformation(
+                                    "Unable to delete export archive {path} for tenant: {tenant}. Reason: {reason}", 
+                                    file.FullName, tenant, e.Message);
+                            }
                             countToDelete--;
                         }
                     }

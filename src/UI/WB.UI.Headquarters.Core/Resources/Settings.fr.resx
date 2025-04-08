@@ -468,4 +468,13 @@ Raisons possibles :
     <data name="RetentionPolicyEneblingConfirm" xml:space="preserve">
   <value>Êtes-vous sûr de vouloir activer la politique de rétention ? Les fichiers de données exportés pourraient être supprimés.</value>
 </data>
+    <data name="ForceRunRetentionPolicy" xml:space="preserve">
+    <value>Exécution forcée</value>
+</data>
+    <data name="ForceRunRetentionPolicy_Warning" xml:space="preserve">
+    <value>Attention! Cette action critique affecte les fichiers d'exportation existants</value>
+</data>
+    <data name="ForceRunRetentionPolicy_Confirm" xml:space="preserve">
+    <value>Êtes-vous sûr de vouloir exécuter de force la politique de rétention? Tous les fichiers d'exportation générés couverts par les paramètres actuels de la politique seront supprimés du serveur et ne seront PAS disponibles au téléchargement.</value>
+</data>
 </root>

@@ -576,6 +576,14 @@ class ExportSettings {
         })
     }
 
+    forceRunRetentionPolicy() {
+        return this.http({
+            method: 'delete',
+            url: `${this.base}/ForceRunRetentionPolicy`,
+            headers: { 'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie() },
+        })
+    }
+
     statusDropExportCache() {
         return this.http({
             method: 'get',

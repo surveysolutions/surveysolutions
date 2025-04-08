@@ -480,4 +480,13 @@
     <data name="RetentionPolicyEneblingConfirm" xml:space="preserve">
   <value>Вы уверены, что хотите включить политику хранения? Экспортированные файлы данных могут быть удалены.</value>
 </data>
+    <data name="ForceRunRetentionPolicy" xml:space="preserve">
+    <value>Принудительный запуск</value>
+</data>
+    <data name="ForceRunRetentionPolicy_Warning" xml:space="preserve">
+    <value>Внимание! Это критическое действие, которое влияет на существующие экспортированные файлы</value>
+</data>
+    <data name="ForceRunRetentionPolicy_Confirm" xml:space="preserve">
+    <value>Вы уверены, что хотите принудительно запустить политику хранения? Все сгенерированные экспортированные файлы, подпадающие под текущие настройки политики, будут удалены с сервера и НЕ будут доступны для загрузки.</value>
+</data>
 </root>

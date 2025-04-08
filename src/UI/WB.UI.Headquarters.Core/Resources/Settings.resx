@@ -467,4 +467,13 @@ Possible reasons:
   <data name="RetentionPolicyEneblingConfirm" xml:space="preserve">
     <value>Are you sure you want to turn retention policy on? Export data files could be deleted.</value>
   </data>
+    <data name="ForceRunRetentionPolicy" xml:space="preserve">
+      <value>Force run</value>
+  </data>
+    <data name="ForceRunRetentionPolicy_Warning" xml:space="preserve">
+      <value>Warning! This is a critical action that affects existing export files</value>
+  </data>
+    <data name="ForceRunRetentionPolicy_Confirm" xml:space="preserve">
+      <value>Are you sure you want to forcibly run retenton policy? All generated export files will be removed from the server that current policy settings cover and will NOT be available for download.</value>
+  </data>
 </root>

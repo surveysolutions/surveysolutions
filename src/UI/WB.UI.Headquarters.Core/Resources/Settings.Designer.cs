@@ -734,5 +734,23 @@ namespace WB.UI.Headquarters.Resources {
                 return ResourceManager.GetString("RetentionPolicyEneblingConfirm", resourceCulture);
             }
         }
+        
+        public static string ForceRunRetentionPolicy {
+            get {
+                return ResourceManager.GetString("ForceRunRetentionPolicy", resourceCulture);
+            }
+        }
+        
+        public static string ForceRunRetentionPolicy_Warning {
+            get {
+                return ResourceManager.GetString("ForceRunRetentionPolicy_Warning", resourceCulture);
+            }
+        }
+        
+        public static string ForceRunRetentionPolicy_Confirm {
+            get {
+                return ResourceManager.GetString("ForceRunRetentionPolicy_Confirm", resourceCulture);
+            }
+        }
     }
 }

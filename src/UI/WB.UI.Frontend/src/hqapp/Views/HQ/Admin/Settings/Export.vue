@@ -133,6 +133,14 @@
                     </div>
                 </Form>
             </div>
+            <div class="col-sm-9">
+                <div class="block-filter" style="padding-left: 30px">
+                    <button type="button" class="btn btn-danger" @click="forceRunRetentionPolicy"
+                        :disabled="!isRetentionEnabledModel" style="margin-right: 15px">
+                        {{ $t('Settings.ForceRunRetentionPolicy') }}
+                    </button>
+                </div>
+            </div>
         </div>
         <div class="row contain-input" data-suso="settings-page">
             <div class="col-sm-9">
@@ -356,6 +364,34 @@ export default {
                             this.allowToRemoveExportCache = false
                             this.statusDropExportCache = 'Removing'
                             await this.runDropExportSchema()
+                        },
+                    },
+                    cancel: {
+                        label: self.$t('Common.Cancel'),
+                        className: 'btn btn-link',
+                        callback: () => { },
+                    },
+                },
+            })
+        },
+        forceRunRetentionPolicy() {
+            var self = this
+            modal.dialog({
+                closeButton: true,
+                onEscape: true,
+                title:
+                    '<h2>' + self.$t('Pages.ConfirmationNeededTitle') + '</h2>',
+                message:
+                    `<p style="color: red;"> ${self.$t(
+                        'Settings.ForceRunRetentionPolicy_Warning',
+                    )}</p>` +
+                    `<p>${self.$t('Settings.ForceRunRetentionPolicy_Confirm')}</p>`,
+                buttons: {
+                    success: {
+                        label: self.$t('Common.Clear'),
+                        className: 'btn btn-danger',
+                        callback: async () => {
+                            const status = await this.$hq.ExportSettings.forceRunRetentionPolicy()
                         },
                     },
                     cancel: {

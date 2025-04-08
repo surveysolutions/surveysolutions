@@ -258,5 +258,19 @@ namespace WB.UI.Headquarters.Controllers.Api
             
             return Ok(new {sucess = true});
         }
+
+        [HttpDelete]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ForceRunRetentionPolicy()
+        {
+            var exportRetentionSettings = this.exportSettings.GetExportRetentionSettings();
+            if (!exportRetentionSettings?.Enabled != true)
+                return;
+            
+            //exportServiceApi calls to delete old exports
+            await exportServiceApi.DeleteArchives(exportRetentionSettings.CountToKeep ,exportRetentionSettings.DaysToKeep);
+            
+            return Ok(new {sucess = true});
+        }
     }
 }
