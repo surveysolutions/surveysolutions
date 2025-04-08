@@ -443,17 +443,17 @@ export default {
             }
         },
         showAlert(message) {
-            modal.alert({
+            modal.dialog({
                 message: message,
-                callback: () => {
-                    location.reload()
-                },
                 onEscape: false,
                 closeButton: false,
                 buttons: {
                     ok: {
                         label: this.$t('WebInterviewUI.Reload'),
                         className: 'btn-success',
+                        callback: () => {
+                            location.reload()
+                        },
                     },
                 },
             })

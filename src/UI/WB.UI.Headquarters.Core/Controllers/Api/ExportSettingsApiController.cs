@@ -265,7 +265,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         {
             var exportRetentionSettings = this.exportSettings.GetExportRetentionSettings();
             if (!exportRetentionSettings?.Enabled != true)
-                return;
+                return Ok(new {sucess = true});
             
             //exportServiceApi calls to delete old exports
             await exportServiceApi.DeleteArchives(exportRetentionSettings.CountToKeep ,exportRetentionSettings.DaysToKeep);
