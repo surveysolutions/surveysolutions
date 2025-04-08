@@ -25,10 +25,8 @@
         "@vee-validate/i18n": "^4.15.0",
         "@vee-validate/rules": "^4.15.0",
         "@vue/apollo-option": "^4.2.0",
-        "append-query": "^2.1.1",
         "autonumeric": "^4.10.5",
-        "axios": "1.8.2",
-        "bootbox": "^6.0.0",
+        "axios": "^1.8.2",
         "bootstrap": "^5.3.3",
         "bootstrap-select": "^1.13.18",
         "chart.js": "^4.4.7",
@@ -83,7 +81,7 @@
         "rollup": "4.32.0",
         "sass": "^1.85.0",
         "terser": "^5.37.0",
-        "vite": "6.2.1",
+        "vite": "6.2.4",
         "xmldoc": "^1.1.2"
     },
     "prettier": {

@@ -464,7 +464,37 @@
     <data name="SurveyQuestionnaireDateRangeTo" xml:space="preserve">
       <value>До</value>
   </data>
-    <data name="DateRangeToAll" xml:space="preserve">
-      <value>По текущий момент</value>
+  <data name="DateRangeToAll" xml:space="preserve">
+    <value>По текущий момент</value>
   </data>
+  <data name="DataType_AudioAuditFiles" xml:space="preserve">
+    <value>Файлы аудита аудио. Архив, содержащий аудио аудит</value>
+  </data>
+    <data name="ParadataEventsFilter" xml:space="preserve">
+    <value>Фильтр событий</value>
+</data>
+    <data name="ParadataEventsFilter_All" xml:space="preserve">
+    <value>Все</value>
+</data>
+    <data name="ParadataEventsFilter_Reduced" xml:space="preserve">
+    <value>Сокращённый</value>
+</data>
+    <data name="ParadataEventsFilter_ReducedHint" xml:space="preserve">
+    <value>Сокращённый набор параданных не включает события со следующими кодами: QuestionEnabled (13), QuestionDisabled (14), GroupEnabled (15), GroupDisabled (16), QuestionDeclaredValid (17), QuestionDeclaredInvalid (18), VariableEnabled (23), VariableDisabled (24).</value>
+</data>
+    <data name="Validation_FromDateInvalid" xml:space="preserve">
+    <value>Дата "С" должна быть допустимой.</value>
+</data>
+    <data name="Validation_FromDateInFuture" xml:space="preserve">
+    <value>Дата "С" не может быть в будущем.</value>
+</data>
+    <data name="Validation_ToDateInvalid" xml:space="preserve">
+    <value>Дата "По" должна быть допустимой.</value>
+</data>
+    <data name="Validation_FromDateInvalidBeforeTo" xml:space="preserve">
+    <value>Дата "С" должна быть допустимой перед проверкой даты "По".</value>
+</data>
+    <data name="Validation_ToDateBeforeFrom" xml:space="preserve">
+    <value>Дата "По" должна быть больше даты "С".</value>
+</data>
 </root>

@@ -450,10 +450,40 @@
     <data name="DateRangeFromAll" xml:space="preserve">
     <value>Más antiguo disponible</value>
 </data>
-    <data name="SurveyQuestionnaireDateRangeTo" xml:space="preserve">
+  <data name="SurveyQuestionnaireDateRangeTo" xml:space="preserve">
     <value>Hasta</value>
-</data>
-    <data name="DateRangeToAll" xml:space="preserve">
+  </data>
+  <data name="DateRangeToAll" xml:space="preserve">
     <value>Momento actual</value>
+  </data>
+  <data name="DataType_AudioAuditFiles" xml:space="preserve">
+    <value>Archivos de auditoría de audio. Archivo que contiene auditoría de audio</value>
+  </data>
+    <data name="ParadataEventsFilter" xml:space="preserve">
+    <value>Filtro de eventos</value>
+</data>
+    <data name="ParadataEventsFilter_All" xml:space="preserve">
+    <value>Todos</value>
+</data>
+    <data name="ParadataEventsFilter_Reduced" xml:space="preserve">
+    <value>Reducido</value>
+</data>
+    <data name="ParadataEventsFilter_ReducedHint" xml:space="preserve">
+    <value>El conjunto reducido de paradata no incluye eventos con los siguientes códigos: QuestionEnabled (13), QuestionDisabled (14), GroupEnabled (15), GroupDisabled (16), QuestionDeclaredValid (17), QuestionDeclaredInvalid (18), VariableEnabled (23), VariableDisabled (24).</value>
+</data>
+    <data name="Validation_FromDateInvalid" xml:space="preserve">
+    <value>La fecha "Desde" debe ser válida.</value>
+</data>
+    <data name="Validation_FromDateInFuture" xml:space="preserve">
+    <value>La fecha "Desde" no puede estar en el futuro.</value>
+</data>
+    <data name="Validation_ToDateInvalid" xml:space="preserve">
+    <value>La fecha "Hasta" debe ser válida.</value>
+</data>
+    <data name="Validation_FromDateInvalidBeforeTo" xml:space="preserve">
+    <value>La fecha "Desde" debe ser válida antes de validar la fecha "Hasta".</value>
+</data>
+    <data name="Validation_ToDateBeforeFrom" xml:space="preserve">
+    <value>La fecha "Hasta" debe ser mayor que la fecha "Desde".</value>
 </data>
 </root>

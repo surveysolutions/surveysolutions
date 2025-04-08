@@ -420,40 +420,70 @@
   <data name="SurveyQuestionnaireTranslation" xml:space="preserve">
     <value>Tradução</value>
   </data>
-    <data name="SurveyQuestionnaireDateRange" xml:space="preserve">
+  <data name="SurveyQuestionnaireDateRange" xml:space="preserve">
     <value>Período</value>
-</data>
-    <data name="DateRangeAllTime" xml:space="preserve">
+  </data>
+  <data name="DateRangeAllTime" xml:space="preserve">
     <value>Todo o tempo</value>
-</data>
-    <data name="DateRangeLast24hours" xml:space="preserve">
+  </data>
+  <data name="DateRangeLast24hours" xml:space="preserve">
     <value>Últimas 24 horas</value>
-</data>
-    <data name="DateRangeLast7days" xml:space="preserve">
+  </data>
+  <data name="DateRangeLast7days" xml:space="preserve">
     <value>Últimos 7 dias</value>
-</data>
-    <data name="DateRangeLast30days" xml:space="preserve">
+  </data>
+  <data name="DateRangeLast30days" xml:space="preserve">
     <value>Últimos 30 dias</value>
-</data>
-    <data name="DateRangeLastToday" xml:space="preserve">
+  </data>
+  <data name="DateRangeLastToday" xml:space="preserve">
     <value>Hoje</value>
-</data>
-    <data name="DateRangeLastYesterday" xml:space="preserve">
+  </data>
+  <data name="DateRangeLastYesterday" xml:space="preserve">
     <value>Ontem</value>
-</data>
-    <data name="DateRangeCustom" xml:space="preserve">
+  </data>
+  <data name="DateRangeCustom" xml:space="preserve">
     <value>Personalizado</value>
-</data>
-    <data name="SurveyQuestionnaireDateRangeFrom" xml:space="preserve">
+  </data>
+  <data name="SurveyQuestionnaireDateRangeFrom" xml:space="preserve">
     <value>De</value>
-</data>
-    <data name="DateRangeFromAll" xml:space="preserve">
+  </data>
+  <data name="DateRangeFromAll" xml:space="preserve">
     <value>Mais antigo disponível</value>
-</data>
-    <data name="SurveyQuestionnaireDateRangeTo" xml:space="preserve">
+  </data>
+  <data name="SurveyQuestionnaireDateRangeTo" xml:space="preserve">
     <value>Até</value>
-</data>
-    <data name="DateRangeToAll" xml:space="preserve">
+  </data>
+  <data name="DateRangeToAll" xml:space="preserve">
     <value>Momento atual</value>
+  </data>
+  <data name="DataType_AudioAuditFiles" xml:space="preserve">
+    <value>Arquivos de auditoria de áudio. Arquivo contendo auditoria de áudio</value>
+  </data>
+    <data name="ParadataEventsFilter" xml:space="preserve">
+    <value>Filtro de eventos</value>
+</data>
+    <data name="ParadataEventsFilter_All" xml:space="preserve">
+    <value>Todos</value>
+</data>
+    <data name="ParadataEventsFilter_Reduced" xml:space="preserve">
+    <value>Reduzido</value>
+</data>
+    <data name="ParadataEventsFilter_ReducedHint" xml:space="preserve">
+    <value>O conjunto reduzido de paradata não inclui eventos com os seguintes códigos: QuestionEnabled (13), QuestionDisabled (14), GroupEnabled (15), GroupDisabled (16), QuestionDeclaredValid (17), QuestionDeclaredInvalid (18), VariableEnabled (23), VariableDisabled (24).</value>
+</data>
+    <data name="Validation_FromDateInvalid" xml:space="preserve">
+    <value>A data "De" deve ser válida.</value>
+</data>
+    <data name="Validation_FromDateInFuture" xml:space="preserve">
+    <value>A data "De" não pode estar no futuro.</value>
+</data>
+    <data name="Validation_ToDateInvalid" xml:space="preserve">
+    <value>A data "Até" deve ser válida.</value>
+</data>
+    <data name="Validation_FromDateInvalidBeforeTo" xml:space="preserve">
+    <value>A data "De" deve ser válida antes de validar a data "Até".</value>
+</data>
+    <data name="Validation_ToDateBeforeFrom" xml:space="preserve">
+    <value>A data "Até" deve ser maior que a data "De".</value>
 </data>
 </root>

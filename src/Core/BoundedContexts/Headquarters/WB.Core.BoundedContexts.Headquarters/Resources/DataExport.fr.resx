@@ -452,8 +452,38 @@
 </data>
     <data name="SurveyQuestionnaireDateRangeTo" xml:space="preserve">
     <value>À</value>
-</data>
-    <data name="DateRangeToAll" xml:space="preserve">
+  </data>
+  <data name="DateRangeToAll" xml:space="preserve">
     <value>Moment actuel</value>
+  </data>
+  <data name="DataType_AudioAuditFiles" xml:space="preserve">
+    <value>Fichiers d'audit audio. Archive contenant l'audit audio</value>
+  </data>
+    <data name="ParadataEventsFilter" xml:space="preserve">
+    <value>Filtre des événements</value>
+</data>
+    <data name="ParadataEventsFilter_All" xml:space="preserve">
+    <value>Tout</value>
+</data>
+    <data name="ParadataEventsFilter_Reduced" xml:space="preserve">
+    <value>Réduit</value>
+</data>
+    <data name="ParadataEventsFilter_ReducedHint" xml:space="preserve">
+    <value>L’ensemble réduit des paradata n’inclut pas les événements avec les codes suivants : QuestionEnabled (13), QuestionDisabled (14), GroupEnabled (15), GroupDisabled (16), QuestionDeclaredValid (17), QuestionDeclaredInvalid (18), VariableEnabled (23), VariableDisabled (24).</value>
+</data>
+    <data name="Validation_FromDateInvalid" xml:space="preserve">
+    <value>La date "De" doit être valide.</value>
+</data>
+    <data name="Validation_FromDateInFuture" xml:space="preserve">
+    <value>La date "De" ne peut pas être dans le futur.</value>
+</data>
+    <data name="Validation_ToDateInvalid" xml:space="preserve">
+    <value>La date "À" doit être valide.</value>
+</data>
+    <data name="Validation_FromDateInvalidBeforeTo" xml:space="preserve">
+    <value>La date "De" doit être valide avant de valider la date "À".</value>
+</data>
+    <data name="Validation_ToDateBeforeFrom" xml:space="preserve">
+    <value>La date "À" doit être postérieure à la date "De".</value>
 </data>
 </root>

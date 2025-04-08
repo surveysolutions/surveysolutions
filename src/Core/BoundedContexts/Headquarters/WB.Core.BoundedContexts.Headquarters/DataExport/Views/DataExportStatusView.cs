@@ -34,6 +34,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
     {
         public bool HasInterviews { get; set; }
         public bool HasBinaryData { get; set; }
+        public bool HasAudioAudit { get; set; }
     }
 
     public class DataExportUpdateRequestResult

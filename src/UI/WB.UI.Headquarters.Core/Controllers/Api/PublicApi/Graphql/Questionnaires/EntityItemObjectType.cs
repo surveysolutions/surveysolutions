@@ -1,15 +1,8 @@
 #nullable enable
-using System.Collections.Generic;
-using System.Linq;
-using HotChocolate.Resolvers;
 using HotChocolate.Types;
 using Main.Core.Entities.SubEntities;
-using NHibernate.Linq;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
-using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Infrastructure.Native.Storage.Postgre;
+
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires
 {
@@ -31,41 +24,11 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires
             
             descriptor.Field("options")
                 .Name("options")
-                .Resolve(async context => await
-                    context.BatchDataLoader<int, List<CategoricalOption>>(async (keys, token )  =>
-                    {
-                        var unitOfWork = context.Service<IUnitOfWork>();
-                        var questions = await unitOfWork.Session.Query<QuestionnaireCompositeItem>()
-                            .Where(q => keys.Contains(q.Id)).ToListAsync();
-
-                        if(!questions.Any()) return new Dictionary<int, List<CategoricalOption>>();
-                        
-                        var questionnaireStorage = context.Service<IQuestionnaireStorage>();
-                        string? language = null;
-                        if (context.ScopedContextData.ContainsKey("language"))
-                        {
-                            language = context.ScopedContextData["language"]?.ToString();
-                        }
-                        
-                        var questionnaires =  questions.Select(q
-                                => (q.Id, q.EntityId,
-                                    questionnaireStorage.GetQuestionnaire(
-                                        QuestionnaireIdentity.Parse(q.QuestionnaireIdentity), language))).ToList();
-
-                         return questionnaires.Where(q => q.Item3 != null).ToDictionary(
-                                q => q.Id, 
-                                q =>
-                                {
-                                    if (q.Item3!.IsQuestion(q.EntityId))
-                                    {
-                                        var questionType = q.Item3!.GetQuestionType(q.EntityId);
-                                        if (questionType == QuestionType.SingleOption)
-                                            return q.Item3!.GetOptionsForQuestion(q.EntityId, null, null, null).ToList();
-                                    }
-                                    return new List<CategoricalOption>();
-                                });
-                      
-                    },"optionsByQuestion").LoadAsync(context.Parent<QuestionnaireCompositeItem>().Id, default).ConfigureAwait(false))
+                .Resolve(async context =>
+                {
+                    var loader = context.DataLoader<QuestionnaireItemOptionsDataLoader>();
+                    return await loader.LoadAsync(context.Parent<QuestionnaireCompositeItem>().Id, context.RequestAborted);
+                })
                 .Type<NonNullType<ListType<NonNullType<CategoricalOptionType>>>>();
             
             descriptor.Field(x => x.QuestionText)
@@ -88,6 +51,5 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires
                 .Name("variableType")
                 .Type<VariableTypeObjectType>();
         }
-        
     }
 }
