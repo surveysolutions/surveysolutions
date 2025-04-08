@@ -457,7 +457,7 @@
       <value>Current moment</value>
   </data>    
   <data name="DataType_AudioAuditFiles" xml:space="preserve">
-      <value>Audio Audit. Zip arhive containing Audio Audit data</value>
+      <value>Audio Audit. Zip archive containing Audio Audit data</value>
   </data>
   <data name="ParadataEventsFilter" xml:space="preserve">
       <value>Events filter</value>
