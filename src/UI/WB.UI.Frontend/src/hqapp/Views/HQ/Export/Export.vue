@@ -701,7 +701,7 @@ export default {
                     break;
             }
 
-            if (!to) {
+            if (!to || moment(to).isAfter(moment())) {
                 to = moment().utc().toISOString(); // Default to now if not set
             }
 
