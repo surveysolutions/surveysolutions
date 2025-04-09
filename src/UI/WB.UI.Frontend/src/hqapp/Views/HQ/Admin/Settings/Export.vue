@@ -388,7 +388,7 @@ export default {
                     `<p>${self.$t('Settings.ForceRunRetentionPolicy_Confirm')}</p>`,
                 buttons: {
                     success: {
-                        label: self.$t('Common.Clear'),
+                        label: self.$t('Settings.ForceRunRetentionPolicy'),
                         className: 'btn btn-danger',
                         callback: async () => {
                             const status = await this.$hq.ExportSettings.forceRunRetentionPolicy()
@@ -507,6 +507,9 @@ export default {
         },
         cancelInCountLimit() {
             this.inCountLimitModel = this.inCountLimitCancelModel
+        },
+        noAction() {
+            // Do nothing
         },
     }
 }
