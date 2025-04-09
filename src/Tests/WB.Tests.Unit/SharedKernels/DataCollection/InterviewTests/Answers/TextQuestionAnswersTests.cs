@@ -17,7 +17,7 @@ public class TextQuestionAnswersTests : InterviewTestsContext
     private StatefulInterview interview;
 
     [SetUp]
-    public void Should_not_allow_removing_protected_answer()
+    public void setup_interview_with_text_question()
     {
         var variableName = "text_variable";
 
@@ -26,8 +26,7 @@ public class TextQuestionAnswersTests : InterviewTestsContext
 
         interview = Create.AggregateRoot.StatefulInterview(shouldBeInitialized: false,
             questionnaire: questionnaire);
-
-        var questionIdentity = Create.Identity(questionId);
+        
         var command = Create.Command.CreateInterview(
             questionnaire.PublicKey, 1,
             null, new List<InterviewAnswer>(),
@@ -37,7 +36,7 @@ public class TextQuestionAnswersTests : InterviewTestsContext
     }
 
     [Test]
-    public void When_answer_non_empty_text_answer_Should_allow()
+    public void When_answer_non_empty_text_answer_should_allow()
     {
         using (EventContext eventContext = new EventContext())
         {
@@ -48,7 +47,7 @@ public class TextQuestionAnswersTests : InterviewTestsContext
     }
 
     [Test]
-    public void When_answer_with_spaces_in_text_answer_Should_remove_answer()
+    public void When_answer_with_spaces_in_text_answer_should_remove_answer()
     {
         interview.AnswerTextQuestion(userId, questionId, RosterVector.Empty, DateTime.UtcNow, "value");
         
