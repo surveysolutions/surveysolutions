@@ -154,16 +154,28 @@ jobs:
         -GoogleMapKey "${{ secrets.GOOGLEMAPS_KEY }}" `
         -ArcGisKey "${{ secrets.ARCGIS_KEY }}"
         -ArcGisApiKey "${{ secrets.ARCGIS_API_KEY }}"
-       
+
     - name: Publish
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
-        name: Mobile Apps
+        name: Mobile-Apps-${{ matrix.task }}
         path: ${{ github.workspace }}/artifacts
-        overwrite: true
+        overwrite: false
+        merge-multiple: true
+        retention-days: 1
+
+  union-apps:
+    runs-on: ubuntu-latest
+    needs: [prepare, mobile]
+    steps:
+      - name: Union Mibile Apps
+        uses: actions/upload-artifact/merge@v4
+        with:
+          name: Mobile Apps All
+          pattern: Mobile-Apps-*
 
   docker:
-    needs: [prepare, mobile]
+    needs: [prepare, mobile, union-apps]
     runs-on: ubuntu-latest
     environment: ${{ needs.prepare.outputs.environment }}
     permissions:
@@ -195,9 +207,9 @@ jobs:
       - name: Download mobile artifacts
         if: ${{ matrix.task == 'DockerHq' }}
         id: download
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
-          name: Mobile Apps
+          name: Mobile Apps All
           path: artifacts
 
       - name: Build and push
@@ -210,7 +222,7 @@ jobs:
             -nodeVersion "${{ env.NODE_VERSION }}"
 
   installer:
-    needs: [prepare, mobile]
+    needs: [prepare, mobile, union-apps]
     runs-on: windows-2019
     environment: ${{ needs.prepare.outputs.environment }}
 
@@ -239,9 +251,9 @@ jobs:
 
       - name: Download mobile artifacts
         id: download
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
-          name: Mobile Apps
+          name: Mobile Apps All
           path: installer/artifacts
 
       - name: Save Code Signing Certificate
@@ -309,7 +321,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Publish
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Windows Installer
           path: ${{ steps.build-installer.outputs.filename }}
