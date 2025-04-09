@@ -66,7 +66,7 @@
                         </div>
                         <div class="form-group">
                             <div class="input-group input-group-save">
-                                <Field class="form-control number" v-model.number="inDaysModel" :rules="{
+                                <Field class="form-control number" v-model="inDaysModel" :rules="{
                                     integer: true,
                                     required: false,
                                     min_value: 1,
@@ -107,7 +107,7 @@
                         </div>
                         <div class="form-group">
                             <div class="input-group input-group-save">
-                                <Field class="form-control number" v-model.number="inCountLimitModel" :rules="{
+                                <Field class="form-control number" v-model="inCountLimitModel" :rules="{
                                     integer: true,
                                     required: false,
                                     min_value: 1,

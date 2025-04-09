@@ -66,8 +66,8 @@
                         </div>
                         <div class="form-group">
                             <div class="input-group input-group-save">
-                                <Field class="form-control number"
-                                    v-model.number="geographyQuestionAccuracyInMetersModel" :rules="{
+                                <Field class="form-control number" v-model="geographyQuestionAccuracyInMetersModel"
+                                    :rules="{
                                         integer: true,
                                         required: true,
                                         min_value: 1,
@@ -109,8 +109,8 @@
                         </div>
                         <div class="form-group">
                             <div class="input-group input-group-save">
-                                <Field class="form-control number"
-                                    v-model.number="geographyQuestionPeriodInSecondsModel" :rules="{
+                                <Field class="form-control number" v-model="geographyQuestionPeriodInSecondsModel"
+                                    :rules="{
                                         integer: true,
                                         required: true,
                                         min_value: 5,
