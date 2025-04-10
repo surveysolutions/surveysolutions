@@ -89,23 +89,11 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
             descriptor.Field(x => x.IdentifyEntitiesValues)
                 .Name("identifyingData")
                 .Description("Information that identifies each assignment. These are the answers to questions marked as identifying in Designer")
-                .Resolve(async context => await
-                    context.GroupDataLoader<string, IdentifyEntityValue>
-                        (async (keys, token) =>
-                    {
-                        var unitOfWork = context.Service<IUnitOfWork>(); 
-                        var questionAnswers = await unitOfWork.Session.Query<IdentifyEntityValue>()
-                            .Where(a => keys.Contains(a.InterviewSummary.SummaryId) && a.Identifying)
-                            .OrderBy(a => a.Position)
-                            .ToListAsync(cancellationToken: token)
-                            .ConfigureAwait(false);
-                        
-                        var answers = questionAnswers
-                            .ToLookup(x => x.InterviewSummary.SummaryId);
-
-                        return answers;
-                    },"answersByInterview")
-                        .LoadAsync(context.Parent<InterviewSummary>().SummaryId, default))
+                .Resolve(async context =>
+                {
+                    var loader = context.DataLoader<IdentifyEntityValuesDataLoader>();
+                    return await loader.LoadAsync(context.Parent<InterviewSummary>().Id, context.RequestAborted);
+                })
                 .Type<ListType<AnswerObjectType>>();
 
             
