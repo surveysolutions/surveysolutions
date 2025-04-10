@@ -42,7 +42,7 @@ namespace WB.Services.Export.Jobs
                 logger.LogInformation("Deleting export archives for tenant: {tenant} - there are total {count} files", tenant, items.Count);
 
                 int? countToDelete = countToKeep.HasValue ? items.Count - countToKeep.Value : null;
-                foreach (var file in items.OrderByDescending(x => x.LastModified))
+                foreach (var file in items.OrderBy(x => x.LastModified))
                 {
                     if (!countToKeep.HasValue && !daysToKeep.HasValue)
                     {
@@ -98,7 +98,7 @@ namespace WB.Services.Export.Jobs
                     var files = Directory.GetFiles(directory, "*.zip", SearchOption.AllDirectories)
                         .Select(f => new FileInfo(f))
                         .Where(f=> !f.FullName.Contains("temp"))
-                        .OrderByDescending(f => f.LastWriteTimeUtc)
+                        .OrderBy(f => f.LastWriteTimeUtc)
                         .ToList();
                     
                     int? countToDelete = countToKeep.HasValue ? files.Count - countToKeep.Value : null;

@@ -34,7 +34,7 @@ public class ExportDataRetentionJob : IJob
         {
             //this.logger.LogInformation("Export retention job: STARTED");
             var exportRetentionSettings = this.exportSettings.GetExportRetentionSettings();
-            if (!exportRetentionSettings?.Enabled != true)
+            if (exportRetentionSettings?.Enabled != true)
                 return;
             
             //exportServiceApi calls to delete old exports
