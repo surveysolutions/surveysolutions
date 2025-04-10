@@ -97,7 +97,6 @@ namespace WB.UI.Headquarters.Controllers.Api
                 await this.ClearExportData();
             }
 
-
             this.logger.LogInformation("Export settings were changed by {User}. Encryption password was changed.", new {User = base.User.Identity.Name});
 
             var retentionSetting = exportSettings.GetExportRetentionSettings();
@@ -218,7 +217,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             {
                 settings.DaysToKeep = message.RetentionLimitInDays;
             });
-
+            this.auditLog.RetentionPolicyDaysToKeepChanged(message.RetentionLimitInDays);
             return Ok(new {sucess = true});
         }
         
@@ -240,6 +239,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                 settings.CountToKeep = message.RetentionLimitCount;
             });
 
+            this.auditLog.RetentionPolicyFilesToKeepChanged(message.RetentionLimitCount);
             return Ok(new {sucess = true});
         }
 
@@ -255,6 +255,8 @@ namespace WB.UI.Headquarters.Controllers.Api
             {
                 settings.Enabled = changeSettingsState.EnableState;
             });
+            
+            this.auditLog.RetentionPolicyChanged(changeSettingsState.EnableState);
             
             return Ok(new {sucess = true});
         }

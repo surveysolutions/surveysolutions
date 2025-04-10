@@ -51,7 +51,9 @@ namespace WB.Services.Export.Jobs
                 var items = await this.externalArtifactsStorage.ListAsync(externalStoragePath);
                 if(items == null) return;
 
-                logger.LogInformation("Deleting export archives for tenant: {tenant} - there are total {count} files", tenant, items.Count);
+                logger.LogInformation(
+                    "Deleting export archives for tenant: {tenant} - there are total {count} files, daysToKeep: {daysToKeep}, countToKeep: {countToKeep}", 
+                    tenant, items.Count, daysToKeep, countToKeep);
 
                 int? countToDelete = countToKeep.HasValue ? items.Count - countToKeep.Value : null;
                 foreach (var file in items.OrderBy(x => x.LastModified))
@@ -99,7 +101,8 @@ namespace WB.Services.Export.Jobs
             var directory = this.fileBasedExportedDataAccessor.GetExportDirectory(tenant);
             if (Directory.Exists(directory))
             {
-                logger.LogInformation("Deleting export archives for tenant: {tenant}", tenant);
+                logger.LogInformation("Deleting export archives for tenant: {tenant}, daysToKeep: {daysToKeep}, countToKeep: {countToKeep}", 
+                    tenant, daysToKeep, countToKeep);
                 
                 if(!countToKeep.HasValue && !daysToKeep.HasValue)
                     Directory.Delete(directory, true);
