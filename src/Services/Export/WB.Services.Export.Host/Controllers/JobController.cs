@@ -231,9 +231,17 @@ namespace WB.Services.Export.Host.Controllers
 
         [HttpDelete]
         [Route("api/v1/deleteArchives")]
-        public async Task<ActionResult> Delete(int? countToKeep, int? daysToKeep)
+        public async Task<ActionResult> Delete()
         {
-            await this.archiveHandleService.ClearExportArchives(tenantContext.Tenant, countToKeep, daysToKeep);
+            await this.archiveHandleService.ClearExportArchives(tenantContext.Tenant);
+            return Ok();
+        }
+        
+        [HttpPost]
+        [Route("api/v1/runRetentionPolicy")]
+        public async Task<ActionResult> RunRetentionPolicy(int? countToKeep, int? daysToKeep)
+        {
+            await this.archiveHandleService.RunRetentionPolicy(tenantContext.Tenant, countToKeep, daysToKeep);
             return Ok();
         }
 

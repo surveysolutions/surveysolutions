@@ -8,6 +8,8 @@ namespace WB.Services.Export.Jobs
     {
         Task<DataExportArchive?> DownloadArchiveAsync(ExportSettings settings, string questionnaireNamePrefixOverride);
 
-        Task ClearExportArchives(TenantInfo tenant, int? countToKeep, int? daysToKeep);
+        Task ClearExportArchives(TenantInfo tenant);
+        
+        Task RunRetentionPolicy(TenantInfo tenant, int? countToKeep, int? daysToKeep);
     }
 }

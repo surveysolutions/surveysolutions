@@ -31,7 +31,19 @@ namespace WB.Services.Export.Jobs
             this.fileNameService = fileNameService;
         }
 
-        public async Task ClearExportArchives(TenantInfo tenant, int? countToKeep, int? daysToKeep)
+        public async Task RunRetentionPolicy(TenantInfo tenant, int? countToKeep, int? daysToKeep)
+        {
+            if(!countToKeep.HasValue && !daysToKeep.HasValue)
+                return;
+            await DeleteExportArchives(tenant, countToKeep, daysToKeep);
+        }
+
+        public async Task ClearExportArchives(TenantInfo tenant)
+        {
+            await DeleteExportArchives(tenant, null, null);
+        }
+        
+        private async Task DeleteExportArchives(TenantInfo tenant, int? countToKeep, int? daysToKeep)
         {
             if (this.externalArtifactsStorage.IsEnabled())
             {

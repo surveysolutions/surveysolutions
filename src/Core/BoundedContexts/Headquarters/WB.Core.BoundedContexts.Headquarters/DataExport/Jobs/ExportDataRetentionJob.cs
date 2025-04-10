@@ -38,7 +38,7 @@ public class ExportDataRetentionJob : IJob
                 return;
             
             //exportServiceApi calls to delete old exports
-            await exportServiceApi.DeleteArchives(exportRetentionSettings.CountToKeep ,exportRetentionSettings.DaysToKeep);
+            await exportServiceApi.RunRetentionPolicy(exportRetentionSettings.CountToKeep, exportRetentionSettings.DaysToKeep);
         }
         catch (OperationCanceledException)
         {

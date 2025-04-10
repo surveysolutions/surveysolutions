@@ -268,7 +268,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                 return Ok(new {sucess = true});
             
             //exportServiceApi calls to delete old exports
-            await exportServiceApi.DeleteArchives(exportRetentionSettings.CountToKeep ,exportRetentionSettings.DaysToKeep);
+            await exportServiceApi.RunRetentionPolicy(exportRetentionSettings.CountToKeep ,exportRetentionSettings.DaysToKeep);
             
             return Ok(new {sucess = true});
         }
