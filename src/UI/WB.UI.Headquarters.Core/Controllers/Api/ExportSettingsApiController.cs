@@ -264,7 +264,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         public async Task<IActionResult> ForceRunRetentionPolicy()
         {
             var exportRetentionSettings = this.exportSettings.GetExportRetentionSettings();
-            if (!exportRetentionSettings?.Enabled != true)
+            if (exportRetentionSettings?.Enabled != true)
                 return Ok(new {sucess = true});
             
             //exportServiceApi calls to delete old exports
