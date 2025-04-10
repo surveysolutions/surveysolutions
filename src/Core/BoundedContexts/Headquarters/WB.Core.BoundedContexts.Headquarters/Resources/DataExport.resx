@@ -439,7 +439,7 @@
       <value>Today</value>
   </data>
   <data name="DateRangeLastYesterday" xml:space="preserve">
-      <value>Yesteday</value>
+      <value>Yesterday</value>
   </data>
   <data name="DateRangeCustom" xml:space="preserve">
       <value>Custom</value>
@@ -457,7 +457,7 @@
       <value>Current moment</value>
   </data>    
   <data name="DataType_AudioAuditFiles" xml:space="preserve">
-      <value>Audio Audit. Zip arhive containing Audio Audit data</value>
+      <value>Audio Audit. Zip archive containing Audio Audit data</value>
   </data>
   <data name="ParadataEventsFilter" xml:space="preserve">
       <value>Events filter</value>
