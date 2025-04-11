@@ -172,4 +172,7 @@
   <data name="SendToSupervisor_TransferWasAborted" xml:space="preserve">
     <value>转换已被终止</value>
   </data>
+  <data name="Synchronization_UpdateApp" xml:space="preserve">
+      <value>更新</value>
+  </data>
 </root>

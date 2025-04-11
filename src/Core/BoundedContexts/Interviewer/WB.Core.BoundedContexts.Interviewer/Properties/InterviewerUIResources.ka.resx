@@ -117,4 +117,61 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+    <data name="Synchronization_UpdateApp" xml:space="preserve">
+    <value>განახლება</value>
+  </data>
+    <data name="SendToSupervisor_MovingToSupervisorDevice" xml:space="preserve">
+    <value>ყველა დასრულებული ინტერვიუს გადატანა სუპერვაიზერის მოწყობილობაზე</value>
+  </data>
+    <data name="SendToSupervisor_MovingToSupervisorFormat" xml:space="preserve">
+    <value>ყველა დასრულებული ინტერვიუს გადატანა '{0}'</value>
+  </data>
+  <data name="SendToSupervisor_CheckSupervisorDevice" xml:space="preserve">
+      <value>შეამოწმეთ, რომ ზედამხედველის მოწყობილობას აქვს ჩართული WiFi და Bluetooth და ახლოს ხართ</value>
+  </data>
+    <data name="SendToSupervisor_TransferInProgress" xml:space="preserve">
+    <value>გადაცემა მიმდინარეობს</value>
+  </data>
+    <data name="SendToSupervisor_TransferWasAborted" xml:space="preserve">
+    <value>გადაცემა შეწყდა</value>
+  </data>
+    <data name="SendToSupervisor_DeviceFound" xml:space="preserve">
+    <value>სუპერვაიზერის მოწყობილობა ნაპოვნია. კავშირის მოთხოვნა</value>
+  </data>
+    <data name="SendToSupervisor_DeviceConnectionAccepting" xml:space="preserve">
+    <value>ელოდება სუპერვაიზერის კავშირის დამტკიცებას</value>
+  </data>
+    <data name="SendToSupervisor_DeviceConnectionAccepted" xml:space="preserve">
+    <value>დაკავშირებულია სუპერვაიზერის მოწყობილობასთან</value>
+  </data>
+    <data name="SendToSupervisor_SupervisorNotFound" xml:space="preserve">
+    <value>გადაცემა არ დაწყებულა. სუპერვაიზერის მოწყობილობა ვერ მოიძებნა</value>
+  </data>
+    <data name="SendToSupervisor_SupervisorTerminateTransfering" xml:space="preserve">
+    <value>გადაცემა შეწყდა მეორე მოწყობილობაზე.</value>
+  </data>
+    <data name="SendToSupervisor_SomeInterviewsOnSupervisor" xml:space="preserve">
+    <value>ზოგიერთი ინტერვიუ ახლა სხვა მოწყობილობაზეა</value>
+  </data>
+    <data name="SendToSupervisor_SyncCompleted" xml:space="preserve">
+    <value>გადაცემა დასრულებულია. ყველა დასრულებული ინტერვიუ ახლა სხვა მოწყობილობაზეა</value>
+  </data>
+    <data name="SendToSupervisor_SyncCompletedWithErrorsFormat" xml:space="preserve">
+    <value>გადაცემა დასრულებულია. {0} ინტერვიუს სინქრონიზაცია ვერ მოხერხდა</value>
+  </data>
+    <data name="SendToSupervisor_LookingForSupervisor" xml:space="preserve">
+    <value>სუპერვაიზერის მოწყობილობის ძიება</value>
+  </data>
+    <data name="SendToSupervisor_Note" xml:space="preserve">
+    <value>შენიშვნა: ეს ქმედება უფრო მეტ დროს მოითხოვს, ვიდრე ჩვეულებრივ, არ გამორთოთ ეს მოწყობილობა</value>
+  </data>
+    <data name="SendToSupervisor_ConnectionFailed" xml:space="preserve">
+    <value>დარწმუნდით, რომ ორივე მოწყობილობა ახლოსაა; WiFi და Bluetooth ჩართული უნდა იყოს ორივე მოწყობილობაზე; სუპერვაიზერის აპლიკაცია უნდა იყოს გახსნილი სუპერვაიზერის მოწყობილობაზე</value>
+  </data>
+    <data name="SendToSupervisor_Retry" xml:space="preserve">
+    <value>ხელახლა ცდა</value>
+  </data>
+    <data name="SendToSupervisor_BluetoothError" xml:space="preserve">
+    <value>Interviewer აპლიკაციას არ შეუძლია Bluetooth-ის მდგომარეობის განსაზღვრა (მაგ., ჩართული/გამორთული, დაკავშირებული/გათიშული). ჯერ გადატვირთეთ ორივე მოწყობილობა Interviewer და Supervisor. შემდეგ სცადეთ სინქრონიზაცია ხელახლა.</value>
+  </data>
 </root>

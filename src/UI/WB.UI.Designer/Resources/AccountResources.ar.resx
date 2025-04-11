@@ -1,133 +1,74 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
-  <!-- 
-    Microsoft ResX Schema 
-    
-    Version 2.0
-    
-    The primary goals of this format is to allow a simple XML format 
-    that is mostly human readable. The generation and parsing of the 
-    various data types are done through the TypeConverter classes 
-    associated with the data types.
-    
-    Example:
-    
-    ... ado.net/XML headers & schema ...
-    <resheader name="resmimetype">text/microsoft-resx</resheader>
-    <resheader name="version">2.0</resheader>
-    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
-    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
-    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
-    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
-    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
-        <value>[base64 mime encoded serialized .NET Framework object]</value>
-    </data>
-    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
-        <comment>This is a comment</comment>
-    </data>
-                
-    There are any number of "resheader" rows that contain simple 
-    name/value pairs.
-    
-    Each data row contains a name, and value. The row also contains a 
-    type or mimetype. Type corresponds to a .NET class that support 
-    text/value conversion through the TypeConverter architecture. 
-    Classes that don't support this are serialized and stored with the 
-    mimetype set.
-    
-    The mimetype is used for serialized objects, and tells the 
-    ResXResourceReader how to depersist the object. This is currently not 
-    extensible. For a given mimetype the value must be set accordingly:
-    
-    Note - application/x-microsoft.net.object.binary.base64 is the format 
-    that the ResXResourceWriter will generate, however the reader can 
-    read any of the formats listed below.
-    
-    mimetype: application/x-microsoft.net.object.binary.base64
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
-            : and then encoded with base64 encoding.
-    
-    mimetype: application/x-microsoft.net.object.soap.base64
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
-            : and then encoded with base64 encoding.
-
-    mimetype: application/x-microsoft.net.object.bytearray.base64
-    value   : The object must be serialized into a byte array 
-            : using a System.ComponentModel.TypeConverter
-            : and then encoded with base64 encoding.
-    -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
-    <xsd:element name="root" msdata:IsDataSet="true">
-      <xsd:complexType>
-        <xsd:choice maxOccurs="unbounded">
-          <xsd:element name="metadata">
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
             <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
-              </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
             </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="assembly">
-            <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="data">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="resheader">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
-            </xsd:complexType>
-          </xsd:element>
-        </xsd:choice>
-      </xsd:complexType>
-    </xsd:element>
-  </xsd:schema>
-  <resheader name="resmimetype">
-    <value>text/microsoft-resx</value>
-  </resheader>
-  <resheader name="version">
-    <value>2.0</value>
-  </resheader>
-  <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </resheader>
-  <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </resheader>
-  <data name="AllRights" xml:space="preserve">
-    <value>جميع الحقوق محفوظة</value>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="AllRights" xml:space="preserve">
+    <value>جميع الحقوق محفوظة.</value>
   </data>
   <data name="AppDescription" xml:space="preserve">
-    <value>هذه الأداة لخلق استطلاعات لمنصة capi البنك الدولي مع قدرات التعاون والتحويل ل pdf</value>
+    <value>أداة تعاونية لإنشاء الاستبيانات لمنصة البنك الدولي CAPI/CAWI.</value>
   </data>
   <data name="AppName" xml:space="preserve">
-    <value>مصمم الاستبيان</value>
+    <value>مصمم الاستبيانات</value>
   </data>
   <data name="BackToLogin" xml:space="preserve">
-    <value>الرجوع الى تسجيل الدخول</value>
+    <value>العودة إلى تسجيل الدخول</value>
   </data>
   <data name="Change" xml:space="preserve">
     <value>تغيير</value>
@@ -135,14 +76,20 @@
   <data name="ChangePassword" xml:space="preserve">
     <value>تغيير كلمة المرور</value>
   </data>
+  <data name="ManageAccount" xml:space="preserve">
+    <value>إدارة الحساب</value>
+  </data>
+  <data name="EditProfile" xml:space="preserve">
+    <value>تعديل الملف الشخصي</value>
+  </data>
   <data name="CompanyName" xml:space="preserve">
     <value>مجموعة البنك الدولي</value>
   </data>
   <data name="CompleteRegistrationInstruction" xml:space="preserve">
-    <value>لإكمال عملية التسجيل، ابحث عن رسالة إلكترونية في بريدك الوارد توفر مزيدا من الإرشادات</value>
+    <value>لإكمال عملية التسجيل، ابحث عن بريد إلكتروني في صندوق الوارد الخاص بك يحتوي على تعليمات إضافية</value>
   </data>
   <data name="ConfirmPassword" xml:space="preserve">
-    <value>تأكيد كلمة المرور</value>
+   <value>تأكيد كلمة المرور</value>
   </data>
   <data name="CurrentPassword" xml:space="preserve">
     <value>كلمة المرور الحالية</value>
@@ -150,32 +97,17 @@
   <data name="Email" xml:space="preserve">
     <value>البريد الإلكتروني</value>
   </data>
-  <data name="ExternalLoginRemoved" xml:space="preserve">
-    <value>تمت إزالة تسجيل الدخول الخارجي.</value>
-  </data>
   <data name="ForgotPassword" xml:space="preserve">
-    <value>هل نسيت كلمة المرور؟</value>
+    <value>نسيت كلمة المرور؟</value>
   </data>
   <data name="Help" xml:space="preserve">
     <value>مساعدة</value>
   </data>
-  <data name="InvalidEmail" xml:space="preserve">
-    <value>عنوان البريد الإلكتروني المقدم غير صالح. يرجى التحقق من القيمة والمحاولة مرة أخرى.</value>
-  </data>
-  <data name="InvalidPassword" xml:space="preserve">
-    <value>كلمة المرور المقدمة غير صالحة. الرجاء إدخال كلمة مرور صالحة.</value>
+  <data name="Forum" xml:space="preserve">
+    <value>منتدى</value>
   </data>
   <data name="InvalidResetPasswordLink" xml:space="preserve">
-    <value>رابط إعادة تعيين كلمة المرور غير صالح أو منتهي الصلاحية. حاول مرة اخرى</value>
-  </data>
-  <data name="InvalidRetrievalAnswer" xml:space="preserve">
-    <value>إجابة استرداد كلمة المرور المقدمة غير صالحة. يرجى التحقق من القيمة والمحاولة مرة أخرى</value>
-  </data>
-  <data name="InvalidRetrievalQuestion" xml:space="preserve">
-    <value>سؤال استرداد كلمة المرور المقدمة غير صالحة. يرجى التحقق من القيمة والمحاولة مرة أخرى</value>
-  </data>
-  <data name="InvalidUserName" xml:space="preserve">
-    <value>اسم المستخدم المقدم غير صالح. يرجى التحقق من القيمة والمحاولة مرة أخرى.</value>
+    <value>رابط إعادة تعيين كلمة المرور غير صالح أو منتهي الصلاحية. يرجى المحاولة مرة أخرى</value>
   </data>
   <data name="Legal" xml:space="preserve">
     <value>قانوني</value>
@@ -189,76 +121,124 @@
   <data name="LoginName" xml:space="preserve">
     <value>تسجيل الدخول</value>
   </data>
+  <data name="FullName" xml:space="preserve">
+    <value>الاسم الكامل</value>
+  </data>
   <data name="LoginOrEmail" xml:space="preserve">
     <value>تسجيل الدخول أو البريد الإلكتروني</value>
   </data>
   <data name="Logout" xml:space="preserve">
     <value>تسجيل الخروج</value>
   </data>
-  <data name="MembershipProviderError" xml:space="preserve">
-    <value> موفر المصادقة خطأ. يرجى التحقق من دخول وحاول مرة أخرى. إذا استمرت المشكلة، يرجى الاتصال بمشرف النظام.</value>
-  </data>
   <data name="OutdatedBrowserMessage" xml:space="preserve">
-    <value>أنت تستخدم متصفحا قديم</value>
+    <value>أنت تستخدم متصفحًا قديمًا</value>
   </data>
   <data name="Password" xml:space="preserve">
     <value>كلمة المرور</value>
   </data>
-  <data name="PasswordChanged" xml:space="preserve">
-    <value>تم تغيير كلمة مرورك</value>
-  </data>
   <data name="PasswordReset" xml:space="preserve">
-    <value>اعادة ضبط كلمة المرور</value>
+    <value>إعادة تعيين كلمة المرور</value>
   </data>
   <data name="PasswordResetDescription" xml:space="preserve">
-    <value>أدخل معلومات تسجيل الدخول أو البريد الإلكتروني وسوف نرسل لك رابطا لإعادة تعيين كلمة المرور</value>
-  </data>
-  <data name="PasswordSet" xml:space="preserve">
-    <value>تم تعيين كلمة المرور الخاصة بك.</value>
+    <value>أدخل تسجيل الدخول أو البريد الإلكتروني وسنرسل لك رابطًا لإعادة تعيين كلمة المرور</value>
   </data>
   <data name="PasswordWatermark" xml:space="preserve">
-    <value>كلمة مرور جديدة (الحد الأدنى 10 رموز والأرقام والحروف)</value>
+    <value>كلمة مرور جديدة (10 رموز على الأقل، أرقام وحروف)</value>
   </data>
   <data name="Register" xml:space="preserve">
-    <value>سجل</value>
+    <value>تسجيل</value>
   </data>
   <data name="RegistrationError" xml:space="preserve">
     <value>خطأ في التسجيل</value>
   </data>
   <data name="RegistrationErrorDescription" xml:space="preserve">
-    <value>حدث خطأ أثناء تأكيد بريدك الإلكتروني. حاول مرة اخرى</value>
+    <value>حدث خطأ أثناء تأكيد بريدك الإلكتروني. يرجى المحاولة مرة أخرى.</value>
   </data>
   <data name="RepeatPassword" xml:space="preserve">
-    <value>اعد كلمة المرور</value>
+    <value>أعد كلمة المرور</value>
   </data>
   <data name="Restore" xml:space="preserve">
     <value>استعادة</value>
   </data>
   <data name="StaySignedIn" xml:space="preserve">
-    <value>استمر في تسجيل الدخول ليوم </value>
+    <value>البقاء مسجلاً للدخول ليوم واحد</value>
+  </data>
+  <data name="ShowPassword" xml:space="preserve">
+    <value>إظهار كلمة المرور</value>
   </data>
   <data name="TesterApp" xml:space="preserve">
-    <value>تثبيت اختبار استبيان Survey Solutions على جهاز اندرويد لاختبار الاستبيانات التي تقوم بتطويرها على مصمم.</value>
+    <value>قم بتثبيت تطبيق اختبار استبيانات حلول المسح على جهاز لوحي يعمل بنظام Android لاختبار الاستبيانات التي تطورها على المصمم.</value>
   </data>
   <data name="TesterAppImageDescription" xml:space="preserve">
-    <value>احصل عليه من متجر جوجل للتطبيقات</value>
+    <value>احصل عليه من Google Play</value>
   </data>
   <data name="ThankYou" xml:space="preserve">
-    <value>شكرا</value>
+    <value>شكرا لك</value>
   </data>
   <data name="UpgradeYourBrowser" xml:space="preserve">
-    <value>الرجاء &lt;a href="http://browsehappy.com/"&gt; ترقية المتصفح &lt;/a&gt; لاستخدام تطبيق المصمم.</value>
-  </data>
-  <data name="UserCreationRequestCanceled" xml:space="preserve">
-    <value>تم إلغاء طلب إنشاء المستخدم. يرجى التحقق من الدخول والمحاولة مرة أخرى. إذا استمرت المشكلة، يرجى الاتصال بمشرف النظام.</value>
-  </data>
-  <data name="UserNameExists" xml:space="preserve">
-    <value>اسم المستخدم موجود بالفعل. من فضلك أدخل اسم مستخدم آخر.</value>
-  </data>
-  <data name="UserNameForEmailExists" xml:space="preserve">
-    <value>يوجد اسم مستخدم لعنوان البريد الإلكتروني هذا بالفعل. الرجاء إدخال عنوان بريد إلكتروني مختلف.</value>
+    <value>يرجى &lt;a href="http://browsehappy.com/"&gt;ترقية متصفحك&lt;/a&gt; لاستخدام تطبيق المصمم.</value>
   </data>
   <data name="Welcome" xml:space="preserve">
-    <value>مرحبا بكم في Survey Solutions</value>
+    <value>مرحبًا بكم في حلول المسح</value>
+  </data>
+  <data name="UserNameExists" xml:space="preserve">
+   <value>اسم المستخدم موجود بالفعل. يرجى إدخال اسم مستخدم مختلف.</value>
+  </data>
+  <data name="UserNameForEmailExists" xml:space="preserve">
+    <value>اسم مستخدم لهذا البريد الإلكتروني موجود بالفعل. يرجى إدخال بريد إلكتروني مختلف.</value>
+  </data>
+  <data name="InvalidPassword" xml:space="preserve">
+    <value>كلمة المرور المقدمة غير صالحة. يرجى إدخال كلمة مرور صالحة.</value>
+  </data>
+  <data name="InvalidEmail" xml:space="preserve">
+    <value>عنوان البريد الإلكتروني المقدم غير صالح. يرجى التحقق من القيمة والمحاولة مرة أخرى.</value>
+  </data>
+  <data name="InvalidRetrievalAnswer" xml:space="preserve">
+    <value>إجابة استرجاع كلمة المرور المقدمة غير صالحة. يرجى التحقق من القيمة والمحاولة مرة أخرى.</value>
+  </data>
+  <data name="InvalidRetrievalQuestion" xml:space="preserve">
+    <value>سؤال استرجاع كلمة المرور المقدم غير صالح. يرجى التحقق من القيمة والمحاولة مرة أخرى.</value>
+  </data>
+  <data name="InvalidUserName" xml:space="preserve">
+    <value>اسم المستخدم المقدم غير صالح. يرجى التحقق من القيمة والمحاولة مرة أخرى.</value>
+  </data>
+  <data name="MembershipProviderError" xml:space="preserve">
+    <value>أعاد موفر المصادقة خطأ. يرجى التحقق من إدخالك والمحاولة مرة أخرى. إذا استمرت المشكلة، يرجى الاتصال بمسؤول النظام الخاص بك.</value>
+  </data>
+  <data name="UserCreationRequestCanceled" xml:space="preserve">
+    <value>تم إلغاء طلب إنشاء المستخدم. يرجى التحقق من إدخالك والمحاولة مرة أخرى. إذا استمرت المشكلة، يرجى الاتصال بمسؤول النظام الخاص بك.</value>
+  </data>
+  <data name="UnknownError" xml:space="preserve">
+    <value>حدث خطأ غير معروف. يرجى التحقق من إدخالك والمحاولة مرة أخرى. إذا استمرت المشكلة، يرجى الاتصال بمسؤول النظام الخاص بك.</value>
+  </data>
+  <data name="PasswordChanged" xml:space="preserve">
+    <value>تم تغيير كلمة المرور الخاصة بك.</value>
+  </data>
+  <data name="PasswordSet" xml:space="preserve">
+    <value>تم تعيين كلمة المرور الخاصة بك.</value>
+  </data>
+  <data name="AccountInfoUpdated" xml:space="preserve">
+    <value>تم تحديث معلومات الحساب بنجاح</value>
+  </data>
+  <data name="ExternalLoginRemoved" xml:space="preserve">
+    <value>تمت إزالة تسجيل الدخول الخارجي.</value>
+  </data>
+  <data name="LogoutText" xml:space="preserve">
+    <value>لقد قمت بتسجيل الخروج بنجاح من التطبيق.</value>
+  </data>
+  <data name="LockedOut" xml:space="preserve">
+    <value>مغلق</value>
+  </data>
+  <data name="LockedOutText" xml:space="preserve">
+    <value>حسابك مغلق. اتصل بالمسؤول لفتح حسابك</value>
+  </data>
+  <data name="PasswordEmailSent" xml:space="preserve">
+    <value>يرجى التحقق من بريدك الإلكتروني لإعادة تعيين كلمة المرور الخاصة بك.</value>
+  </data>
+  <data name="EmailChangeShouldBeConfirmed" xml:space="preserve">
+    <value>يرجى اتباع التعليمات المرسلة إلى البريد الإلكتروني المقدم ({0}) لتأكيد تغيير البريد الإلكتروني.</value>
+  </data>
+  <data name="PendingEmailUpdate" xml:space="preserve">
+    <value>تحديث معلق إلى {0}</value>
   </data>
 </root>

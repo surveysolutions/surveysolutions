@@ -135,4 +135,10 @@
   <data name="NoGpsQuestionsByQuestionnaire" xml:space="preserve">
     <value>Il n'y a aucun emplacement géolocalisation dans le questionnaire choisi</value>
   </data>
+    <data name="Assignment" xml:space="preserve">
+  <value>Affectation</value>
+</data>
+    <data name="ReloadGeoTacking" xml:space="preserve">
+    <value>Recharger les pistes</value>
+</data>
 </root>

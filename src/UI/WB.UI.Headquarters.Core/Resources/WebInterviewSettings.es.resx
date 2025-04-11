@@ -139,7 +139,7 @@
     <value>Completar</value>
   </data>
   <data name="CompletePage" xml:space="preserve">
-    <value>Complete</value>
+      <value>Completar</value>
   </data>
   <data name="CustomizeDisplayedText" xml:space="preserve">
     <value>Personaliza el texto mostrado para los encuestados</value>
@@ -252,4 +252,52 @@
   <data name="WelcomePage" xml:space="preserve">
     <value>Pagina de bienvenida</value>
   </data>
+    <data name="InterviewDataInsertInTextDescription" xml:space="preserve">
+  <value>En esta plantilla de correo electrónico puede usar el marcador de posición %question_variable% en el texto como respuesta a la pregunta en la entrevista. La pregunta debe ser del nivel superior del cuestionario (no dentro de los grupos).</value>
+</data>
+    <data name="InterviewDataInsertBarcodeDescription" xml:space="preserve">
+  <value>%question_variable:barcode% - mostrar respuesta como Código de Barras 128</value>
+</data>
+    <data name="InterviewDataInsertQrCodeDescription" xml:space="preserve">
+  <value>%question_variable:qrcode% - mostrar respuesta como Código QR</value>
+</data>
+    <data name="LinkToInterviewPage" xml:space="preserve">
+  <value>Página de aterrizaje de la entrevista web</value>
+</data>
+    <data name="SendWithPartialResponse" xml:space="preserve">
+  <value>Envía recordatorios a personas con una respuesta parcial</value>
+</data>
+    <data name="AnswerOn" xml:space="preserve">
+  <value>respuesta en {{variable}}</value>
+</data>
+  <data name="CompleteEmailMessage" xml:space="preserve">
+      <value>Completar</value>
+  </data>
+    <data name="Sending" xml:space="preserve">
+    <value>Enviando</value>
+</data>
+    <data name="NoErrors" xml:space="preserve">
+    <value>Sin errores</value>
+</data>
+    <data name="NothingWasSent" xml:space="preserve">
+    <value>No se envió nada</value>
+</data>
+    <data name="ProcessCancelled" xml:space="preserve">
+    <value>El proceso fue cancelado</value>
+</data>
+    <data name="DownloadErrors" xml:space="preserve">
+    <value>Descargar lista de asignaciones con errores</value>
+</data>
+    <data name="SendingFailed" xml:space="preserve">
+    <value>El envío de invitaciones ha fallado. Por favor, contacte al administrador del servidor para verificar la configuración del proveedor de correo electrónico</value>
+</data>
+    <data name="TotalSent" xml:space="preserve">
+    <value>{{ totalCount }} invitaciones para enviar</value>
+</data>
+    <data name="TotalProcessed" xml:space="preserve">
+    <value>{{ processedCount }} enviadas con éxito</value>
+</data>
+    <data name="TotalWithErrors" xml:space="preserve">
+    <value>{{ withErrorsCount }} no enviadas debido a errores.</value>
+</data>
 </root>

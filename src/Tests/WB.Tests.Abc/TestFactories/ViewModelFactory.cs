@@ -320,7 +320,9 @@ namespace WB.Tests.Abc.TestFactories
             IViewModelEventRegistry eventRegistry = null, IQuestionnaireStorage questionnaireRepository = null)
             => new EnablementViewModel(interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 eventRegistry ?? Create.Service.LiteEventRegistry(), 
-                questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>());
+                questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
+                Mock.Of<IViewModelNavigationService>(),
+                Mock.Of<ILogger>());
 
         public FilteredOptionsViewModel FilteredOptionsViewModel(
             Identity questionId,

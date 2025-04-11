@@ -117,426 +117,917 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AccountIsLockedOnServer" xml:space="preserve">
-    <value>Tài khoản của bạn bị khóa. Xin vui lòng liên hệ với giám sát của bạn.</value>
+    <data name="AccountIsLockedOnServer" xml:space="preserve">
+    <value>Tài khoản của bạn đã bị khóa. Vui lòng liên hệ với giám sát viên của bạn.</value>
   </data>
-  <data name="AccountIsNotAnInterviewer" xml:space="preserve">
-    <value>Tài khoản của bạn không có nhiệm vụ phỏng vấn</value>
+    <data name="AccountIsNotAnInterviewer" xml:space="preserve">
+    <value>Tài khoản của bạn không có vai trò phỏng vấn viên</value>
   </data>
-  <data name="AccountIsNotApprovedOnServer" xml:space="preserve">
-    <value>Tài khoản của bạn không được chấp thuận. Xin vui lòng liên hệ với giám sát của bạn.</value>
+    <data name="AccountIsNotApprovedOnServer" xml:space="preserve">
+    <value>Tài khoản của bạn chưa được phê duyệt. Vui lòng liên hệ với giám sát viên của bạn.</value>
   </data>
-  <data name="ApplicationIncompatibleWithServer" xml:space="preserve">
-    <value>Ứng dụng của bạn là không tương thích với máy chủ 1. Cập nhật ứng dụng phỏng vấn của bạn.</value>
+    <data name="DashboardItem_CensusModeComment" xml:space="preserve">
+    <value>Chế độ điều tra dân số, Các cuộc phỏng vấn đã tạo: {0}</value>
   </data>
-  <data name="Dashboard_CompletedLinkText" xml:space="preserve">
-    <value>Hoàn thành ({0})</value>
+    <data name="DashboardItem_CompletedOn" xml:space="preserve">
+    <value>Hoàn thành: {0}</value>
   </data>
-  <data name="Dashboard_NewItemsLinkText" xml:space="preserve">
-    <value>Mới ({0})</value>
+    <data name="DashboardItem_CreatedOn" xml:space="preserve">
+    <value>Đã tạo: {0}</value>
   </data>
-  <data name="Dashboard_NoInterviewsSyncButton" xml:space="preserve">
-    <value>Đồng bộ hóa</value>
-  </data>
-  <data name="Dashboard_NoInterviewsText" xml:space="preserve">
-    <value>Đồng bộ hóa để có nhiệm vụ mới hoặc liên hệ với giám sát của bạn để được hướng dẫn thêm</value>
-  </data>
-  <data name="Dashboard_NoInterviewsTitle" xml:space="preserve">
-    <value>Bạn không có nhiệm vụ mới</value>
-  </data>
-  <data name="Dashboard_NoNewItemsLinkText" xml:space="preserve">
-    <value>Không có gì mới</value>
-  </data>
-  <data name="Dashboard_Reinitialize_Interview_Message" xml:space="preserve">
-    <value>Cuộc phỏng vấn đã hoàn thành. Bạn có muốn khởi động lại cuộc phỏng vấn này không?</value>
-  </data>
-  <data name="Dashboard_RejectedLinkText" xml:space="preserve">
-    <value>Không chấp nhận ({0})</value>
-  </data>
-  <data name="Dashboard_RemoveInterviewQuestion" xml:space="preserve">
-    <value>Bạn có chắc chắn muốn xóa cuộc phỏng vấn này không {0}?</value>
-  </data>
-  <data name="Dashboard_StartedLinkText" xml:space="preserve">
-    <value>Bắt đầu ({0})</value>
-  </data>
-  <data name="DashboardItem_AssignedOn" xml:space="preserve">
-    <value>Giao nhiệm vụ vào {0}</value>
-  </data>
-  <data name="DashboardItem_CensusModeComment" xml:space="preserve">
-    <value>Cách thức tổng điều tra, thực hiện phỏng vấn: {0}</value>
-  </data>
-  <data name="DashboardItem_CompletedOn" xml:space="preserve">
-    <value>Hoàn tất vào {0}</value>
-  </data>
-  <data name="DashboardItem_CreatedOn" xml:space="preserve">
-    <value>Thực hiện vào {0}</value>
-  </data>
-  <data name="DashboardItem_NotStarted" xml:space="preserve">
+    <data name="DashboardItem_NotStarted" xml:space="preserve">
     <value>Chưa bắt đầu</value>
   </data>
-  <data name="DashboardItem_RejectedOn" xml:space="preserve">
-    <value>Không chấp nhận vào {0}</value>
+    <data name="DashboardItem_StartedOn" xml:space="preserve">
+    <value>Bắt đầu: {0}</value>
   </data>
-  <data name="DashboardItem_StartedOn" xml:space="preserve">
-    <value>Bắt đầu vào {0}</value>
-  </data>
-  <data name="DashboardItem_Title" xml:space="preserve">
+    <data name="DashboardItem_Title" xml:space="preserve">
     <value>{0} (v{1})</value>
   </data>
-  <data name="Diagnostics_BackupDate_Title" xml:space="preserve">
-    <value>Khi lưu:</value>
+    <data name="DashboardItem_AssignmentLeftComment" xml:space="preserve">
+    <value>{0} cuộc phỏng vấn</value>
   </data>
-  <data name="Diagnostics_BackupFileLocation_Title" xml:space="preserve">
-    <value>Sao lưu dự phòng tệp định vị:</value>
+    <data name="DashboardItem_AssignmentCreatedComment" xml:space="preserve">
+    <value>Các cuộc phỏng vấn đã tạo: {0}</value>
   </data>
-  <data name="Diagnostics_BackupReady_Title" xml:space="preserve">
-    <value>Dữ liệu được lưu</value>
+    <data name="Dashboard_CompletedLinkText" xml:space="preserve">
+    <value>Hoàn thành ({0})</value>
   </data>
-  <data name="Diagnostics_BackupScope_Title" xml:space="preserve">
-    <value>Phạm vi:</value>
+    <data name="Dashboard_WebInterviewsLinkText" xml:space="preserve">
+    <value>Phỏng vấn web ({0})</value>
   </data>
-  <data name="Diagnostics_BandwidthTestConnectionAbsent_Title" xml:space="preserve">
-    <value>&lt;font color="red"&gt;Không có kết nối mạng&lt;/font&gt;</value>
+    <data name="Dashboard_Start" xml:space="preserve">
+    <value>Bắt đầu</value>
   </data>
-  <data name="Diagnostics_BandwidthTestConnectionNotOK_Title" xml:space="preserve">
-    <value>Kết nối &lt;font color="red"&gt;không tốt&lt;/font&gt;</value>
+    <data name="Dashboard_AssignmentsTabTitle" xml:space="preserve">
+    <value>Tạo mới</value>
   </data>
-  <data name="Diagnostics_BandwidthTestConnectionOK_Title" xml:space="preserve">
-    <value>Kết nối được</value>
+    <data name="Dashboard_StartNewInterview" xml:space="preserve">
+    <value>Bắt đầu cuộc phỏng vấn mới</value>
   </data>
-  <data name="Diagnostics_BandwidthTestConnectionToTheServerAbsent_Title" xml:space="preserve">
-    <value>&lt;font color="red"&gt;Không kết nối với máy chủ&lt;/font&gt;</value>
+    <data name="Dashboard_NewItemsLinkText" xml:space="preserve">
+    <value>Mới ({0})</value>
   </data>
-  <data name="Diagnostics_BandwidthTestConnectionType_Title" xml:space="preserve">
-    <value>Loại kết nối:</value>
+    <data name="Dashboard_NoInterviewsSyncButton" xml:space="preserve">
+    <value>Đồng bộ hóa</value>
   </data>
-  <data name="Diagnostics_BandwidthTestNetworkName_Title" xml:space="preserve">
-    <value>Tên mạng:</value>
+    <data name="Dashboard_NoInterviewsText" xml:space="preserve">
+    <value>Đồng bộ hóa để nhận nhiệm vụ mới
+hoặc liên hệ với giám sát viên của bạn
+để được hướng dẫn thêm</value>
   </data>
-  <data name="Diagnostics_BandwidthTestPing_Title" xml:space="preserve">
-    <value>Ping:</value>
+    <data name="Maps_NoMapsText" xml:space="preserve">
+    <value>Đồng bộ hóa để nhận bản đồ
+hoặc liên hệ với giám sát viên của bạn
+để được hướng dẫn thêm</value>
   </data>
-  <data name="Diagnostics_CheckVersion_Description" xml:space="preserve">
-    <value>Chúng tôi sẽ kiểm tra phiên bản mới hơn trên máy chủ HQ</value>
+    <data name="Dashboard_NoInterviewsTitle" xml:space="preserve">
+    <value>Bạn không có nhiệm vụ mới</value>
   </data>
-  <data name="Diagnostics_CheckVersion_Title" xml:space="preserve">
-    <value>Phiên bản: {0}. Kiểm tra phiên bản mới</value>
+    <data name="Dashboard_NoNewItemsLinkText" xml:space="preserve">
+    <value>Không có mới</value>
   </data>
-  <data name="Diagnostics_Delete" xml:space="preserve">
-    <value>Xóa</value>
+    <data name="Dashboard_Reinitialize_Interview_Message" xml:space="preserve">
+    <value>Cuộc phỏng vấn này đã hoàn thành. Bạn có muốn mở lại cuộc phỏng vấn không?</value>
   </data>
-  <data name="Diagnostics_DownloadingPleaseWait" xml:space="preserve">
-    <value>Đang tải dữ liệu, xin vui lòng chờ….</value>
+    <data name="Dashboard_RejectedLinkText" xml:space="preserve">
+    <value>Bị từ chối ({0})</value>
   </data>
-  <data name="Diagnostics_NewVersionAvaliable_Title" xml:space="preserve">
-    <value>Tồn tại phiên bản mới. Bạn có muốn tải và cập nhật ứng dụng hay không?</value>
+    <data name="Dashboard_RemoveInterviewQuestion" xml:space="preserve">
+    <value>Bạn có chắc chắn muốn xóa cuộc phỏng vấn này {0} không?</value>
   </data>
-  <data name="Diagnostics_NewVersionNumber_Title" xml:space="preserve">
-    <value>Phiên bản số:</value>
+    <data name="Dashboard_StartedLinkText" xml:space="preserve">
+    <value>Đã bắt đầu ({0})</value>
   </data>
-  <data name="Diagnostics_No" xml:space="preserve">
-    <value>No</value>
+    <data name="Dashboard_Title" xml:space="preserve">
+    <value>{0} cuộc phỏng vấn cho {1}</value>
   </data>
-  <data name="Diagnostics_Restore_Description" xml:space="preserve">
-    <value>Qua việc khôi phục dữ liệu đã lưu bạn sẽ thay thế tất cả các nhiệm vụ hiện tại trên thiết bị này</value>
+    <data name="Dashboard_RefreshWorkspaces" xml:space="preserve">
+    <value>Đang làm mới không gian làm việc</value>
   </data>
-  <data name="Diagnostics_Restore_Title" xml:space="preserve">
-    <value>KHÔI PHỤC</value>
+    <data name="Dashboard_RefreshWorkspacesFinished" xml:space="preserve">
+    <value>Danh sách không gian làm việc đã được cập nhật</value>
   </data>
-  <data name="Diagnostics_RestoreReady_Title" xml:space="preserve">
-    <value>Tìm thấy dữ liệu đã lưu:</value>
+    <data name="Dashboard_RefreshWorkspacesError" xml:space="preserve">
+    <value>Lỗi khi lấy danh sách không gian làm việc. Vui lòng liên hệ với quản trị viên hệ thống của bạn.</value>
   </data>
-  <data name="Diagnostics_Send" xml:space="preserve">
-    <value>Gửi</value>
+    <data name="Maps_Title" xml:space="preserve">
+    <value>Bản đồ</value>
   </data>
-  <data name="Diagnostics_Send_Description" xml:space="preserve">
-    <value>Toàn bộ ứng dụng và số liệu phỏng vấn sẽ được tập hợp thành một bản sao lưu. Việc này có thể kéo dài tới 10 phút.</value>
+    <data name="HostUnreachable" xml:space="preserve">
+    <value>Không có kết nối internet đến máy chủ của bạn. Kiểm tra địa chỉ máy chủ và/hoặc cài đặt mạng</value>
   </data>
-  <data name="Diagnostics_Send_Title" xml:space="preserve">
-    <value>Tập hợp và gửi tới HQ tất cả các thông tin trên máy tính bảng</value>
-  </data>
-  <data name="Diagnostics_Share_Description" xml:space="preserve">
-    <value>Tất cả các thông tin dưới đây sẽ được chia sẻ như văn bản. Nó có thể gửi bằng thư điện tử, tin nhắn của bất cứ ứng dụng nào.</value>
-  </data>
-  <data name="Diagnostics_Share_Title" xml:space="preserve">
-    <value>Chia sẻ tất cả các thông tin kỹ thuật</value>
-  </data>
-  <data name="Diagnostics_TabletInformationReady_Title" xml:space="preserve">
-    <value>Dữ liệu lưu trữ đã sẵn sàng</value>
-  </data>
-  <data name="Diagnostics_TabletInformationScope_Title" xml:space="preserve">
-    <value>Phạm vi:</value>
-  </data>
-  <data name="Diagnostics_TabletInformationWhenGenerated_Title" xml:space="preserve">
-    <value>Khi thực hiện:</value>
-  </data>
-  <data name="Diagnostics_TestConnection_Description" xml:space="preserve">
-    <value>Chúng tôi sẽ kiểm tra kết nối với máy chủ và tốc độ của nó</value>
-  </data>
-  <data name="Diagnostics_TestConnection_Title" xml:space="preserve">
-    <value>Kiểm tra băng thông tới máy chủ</value>
-  </data>
-  <data name="Diagnostics_Title" xml:space="preserve">
-    <value>Các đặc tính</value>
-  </data>
-  <data name="Diagnostics_Update" xml:space="preserve">
-    <value>Cập nhật</value>
-  </data>
-  <data name="Diagnostics_YouHaveTheLatestVersionOfApplication" xml:space="preserve">
-    <value>Bạn có phiên bản mới nhất của ứng dụng</value>
-  </data>
-  <data name="InternalServerError" xml:space="preserve">
+    <data name="InternalServerError" xml:space="preserve">
     <value>Lỗi máy chủ. Vui lòng liên hệ với quản trị viên máy chủ của bạn.</value>
   </data>
-  <data name="InvalidEndpoint" xml:space="preserve">
-    <value>Địa chỉ trang web giám sát là không hợp lệ. Hãy chắc chắn rằng bạn nhập đúng địa chỉ url.</value>
+    <data name="ApplicationIncompatibleWithServer" xml:space="preserve">
+    <value>Ứng dụng của bạn không tương thích với máy chủ. Cập nhật ứng dụng Phỏng vấn viên của bạn.</value>
   </data>
-  <data name="Login_FinishInstallation_Message" xml:space="preserve">
-    <value>Đây là khởi động đầu tiên trên thiết bị này. Người dùng và tên miền không được thiết lập được.&lt;br&gt;Bạn cần kết nối internet để tiến hành</value>
+    <data name="InvalidEndpoint" xml:space="preserve">
+    <value>Địa chỉ trang web của giám sát viên không hợp lệ. Đảm bảo rằng bạn đã nhập đúng địa chỉ URL.</value>
   </data>
-  <data name="Login_Online_Signin_Explanation_message" xml:space="preserve">
-    <value>Bạn có thể thử để đăng nhập trực tuyến nếu bạn quên mật khẩu của bạn hoặc nó đã được đặt lại</value>
+    <data name="InvalidEndpointShort" xml:space="preserve">
+    <value>Địa chỉ không hợp lệ</value>
   </data>
-  <data name="Login_Online_SignIn_Failed" xml:space="preserve">
-    <value>Xác thực các vấn đề trên máy chủ từ xa quá. Xin vui lòng liên hệ với quản lý của bạn hoặc trụ sở chính</value>
+    <data name="BluetoothPermissionRequired" xml:space="preserve">
+    <value>Yêu cầu quyền Bluetooth để đồng bộ hóa ngoại tuyến</value>
   </data>
-  <data name="Login_WrongPassword" xml:space="preserve">
-    <value>Mật khẩu sai</value>
+    <data name="NearbyPermissionRequired" xml:space="preserve">
+    <value>Yêu cầu quyền thiết bị Wi-Fi gần đó để đồng bộ hóa ngoại tuyến</value>
   </data>
-  <data name="Maintenance" xml:space="preserve">
-    <value>Các trang web của cuộc khảo sát giải pháp giám sát là về chế độ bảo trì bây giờ. Xin lỗi vì sự bất tiện</value>
+    <data name="LocationPermissionRequired" xml:space="preserve">
+  <value>Quyền truy cập vị trí là bắt buộc để đồng bộ hóa ngoại tuyến</value>
   </data>
-  <data name="MenuItem_Title_Dashboard" xml:space="preserve">
-    <value>Bảng điều khiển</value>
+    <data name="Login_Online_Signin_Explanation_message" xml:space="preserve">
+    <value>Bạn có thể thử đăng nhập trực tuyến nếu bạn quên mật khẩu hoặc mật khẩu đã được đặt lại</value>
   </data>
-  <data name="MenuItem_Title_Login" xml:space="preserve">
-    <value>Đăng nhập</value>
+    <data name="Login_Online_SignIn_Failed" xml:space="preserve">
+  <value>Có vấn đề xác thực trên máy chủ từ xa. Vui lòng liên hệ với Giám sát viên của bạn</value>
   </data>
-  <data name="MenuItem_Title_Settings" xml:space="preserve">
-    <value>Cài đặt</value>
+    <data name="Login_WrongPassword" xml:space="preserve">
+    <value>Sai mật khẩu</value>
   </data>
-  <data name="MenuItem_Title_SignOut" xml:space="preserve">
-    <value>Đăng xuất</value>
+    <data name="Maintenance" xml:space="preserve">
+    <value>Trang web của Giám sát viên Survey Solutions đang bảo trì. Xin lỗi vì sự bất tiện</value>
   </data>
-  <data name="NoNetwork" xml:space="preserve">
+    <data name="NoNetwork" xml:space="preserve">
     <value>Không có mạng. Kiểm tra cài đặt mạng của bạn</value>
   </data>
-  <data name="Prefs_AboutApplication" xml:space="preserve">
+    <data name="Prefs_AboutApplication" xml:space="preserve">
     <value>Về ứng dụng</value>
   </data>
-  <data name="Prefs_ApplicationVersionTitle" xml:space="preserve">
+    <data name="Prefs_ApplicationVersionTitle" xml:space="preserve">
     <value>Phiên bản ứng dụng:</value>
   </data>
-  <data name="Prefs_BufferSizeSummary" xml:space="preserve">
-    <value>Số byte cho gói bởi nhận/truyền dữ liệu từ/đến giảng viên hướng dẫn ứng dụng</value>
+    <data name="Prefs_BufferSizeSummary" xml:space="preserve">
+    <value>Số byte cho gói khi nhận/truyền dữ liệu từ/đến ứng dụng giám sát viên</value>
   </data>
-  <data name="Prefs_BufferSizeTitle" xml:space="preserve">
-    <value>Kích thước gói thông tin liên lạc</value>
+    <data name="Prefs_BufferSizeTitle" xml:space="preserve">
+    <value>Kích thước gói truyền thông</value>
   </data>
-  <data name="Prefs_ConnectionSettings" xml:space="preserve">
+    <data name="Prefs_ConnectionSettings" xml:space="preserve">
     <value>Cài đặt kết nối</value>
   </data>
-  <data name="Prefs_DeviceIdTitle" xml:space="preserve">
+    <data name="Prefs_DeviceIdTitle" xml:space="preserve">
     <value>ID thiết bị:</value>
   </data>
-  <data name="Prefs_EndpointTitle" xml:space="preserve">
-    <value>Giám sát viên URL</value>
+    <data name="Prefs_EndpointTitle" xml:space="preserve">
+    <value>URL của giám sát viên</value>
   </data>
-  <data name="Prefs_GpsReceiveTimeoutSecSummary" xml:space="preserve">
-    <value>Số giây phải đợi tọa độ</value>
+    <data name="Prefs_GpsReceiveTimeoutSecSummary" xml:space="preserve">
+    <value>Số giây chờ để nhận tọa độ</value>
   </data>
-  <data name="Prefs_GpsReceiveTimeoutSecTitle" xml:space="preserve">
-    <value>GPS nhận được thời gian chờ</value>
+    <data name="Prefs_GpsReceiveTimeoutSecTitle" xml:space="preserve">
+    <value>Thời gian chờ nhận GPS</value>
   </data>
-  <data name="Prefs_HttpResponseTimeoutSummary" xml:space="preserve">
-    <value>Số giây phải đợi đến phản ứng máy chủ</value>
+    <data name="Prefs_HttpResponseTimeoutSummary" xml:space="preserve">
+    <value>Số giây chờ cho đến khi máy chủ phản hồi</value>
   </data>
-  <data name="Prefs_HttpResponseTimeoutTitle" xml:space="preserve">
-    <value>Thời gian chờ phản ứng máy chủ</value>
+    <data name="Prefs_HttpResponseTimeoutTitle" xml:space="preserve">
+    <value>Thời gian chờ phản hồi của máy chủ</value>
   </data>
-  <data name="Prefs_InterviewSettings" xml:space="preserve">
-    <value>Cài đặt cuộc phỏng vấn</value>
+    <data name="Prefs_InterviewSettings" xml:space="preserve">
+    <value>Cài đặt phỏng vấn</value>
   </data>
-  <data name="Prefs_Title" xml:space="preserve">
+    <data name="Prefs_Title" xml:space="preserve">
     <value>Cài đặt</value>
   </data>
-  <data name="RequestCanceledByUser" xml:space="preserve">
-    <value>Yêu cầu hủy bỏ bởi người dùng</value>
+    <data name="RequestCanceledByUser" xml:space="preserve">
+    <value>Yêu cầu bị hủy bởi người dùng</value>
   </data>
-  <data name="RequestTimeout" xml:space="preserve">
-    <value>Thời gian chờ khi kết nối với các trang web khảo sát giải pháp giám sát. Kiểm tra kết nối internet của bạn.</value>
+    <data name="RequestTimeout" xml:space="preserve">
+    <value>Hết thời gian chờ khi kết nối với trang web Giám sát viên Survey Solutions. Kiểm tra kết nối internet của bạn.</value>
   </data>
-  <data name="ServiceUnavailable" xml:space="preserve">
-    <value>Không có kết nối đến người quản lý giải pháp khảo sát. Xin vui lòng đảm bảo rằng trang web có sẵn.</value>
+    <data name="ServiceUnavailable" xml:space="preserve">
+    <value>Không có kết nối với Giám sát viên Survey Solutions. Vui lòng đảm bảo rằng trang web có sẵn.</value>
   </data>
-  <data name="Synchronization_Cancel" xml:space="preserve">
+    <data name="Synchronization_Cancel" xml:space="preserve">
     <value>Hủy bỏ</value>
   </data>
-  <data name="Synchronization_Download_Description_Format" xml:space="preserve">
-    <value>{0} của {1} {2} thực hiện</value>
+    <data name="Synchronization_Done" xml:space="preserve">
+    <value>Hoàn thành</value>
   </data>
-  <data name="Synchronization_Download_Title" xml:space="preserve">
-    <value>Cập Nhật bài tập</value>
+    <data name="Synchronization_Download_Description_Format" xml:space="preserve">
+    <value>{0} của {1} {2} đã hoàn thành</value>
   </data>
-  <data name="Synchronization_Fail_State_DeletedInterviews_Format" xml:space="preserve">
-    <value>{0} của {1} Các cuộc phỏng vấn đã xóa</value>
+    <data name="Synchronization_Download_Title" xml:space="preserve">
+    <value>Đang cập nhật nhiệm vụ</value>
   </data>
-  <data name="Synchronization_Fail_State_NewInterviews_Format" xml:space="preserve">
-    <value>{0} của {1} cuộc phỏng vấn mới tải về</value>
+    <data name="Synchronization_Download_CalendarEvents_Title" xml:space="preserve">
+    <value>Đang cập nhật sự kiện lịch</value>
   </data>
-  <data name="Synchronization_Fail_State_RejectedInterviews_Format" xml:space="preserve">
-    <value>{0} của {1} bị từ chối phỏng vấn trở lại</value>
+    <data name="Synchronization_Update_Interviews_Title" xml:space="preserve">
+    <value>Đang cập nhật các cuộc phỏng vấn địa phương với các thay đổi từ máy chủ</value>
   </data>
-  <data name="Synchronization_Fail_State_UploadedInterviews_Format" xml:space="preserve">
-    <value>{0} của {1} cuộc phỏng vấn hoàn thành tải lên</value>
+    <data name="Synchronization_Fail_State_NewInterviews_Format" xml:space="preserve">
+    <value>{0} của {1} cuộc phỏng vấn mới đã được tải xuống</value>
   </data>
-  <data name="Synchronization_Fail_Title" xml:space="preserve">
-    <value>Đồng bộ hóa đã bị ngắt, vui lòng thử lại</value>
+    <data name="Synchronization_Fail_State_InterviewsPartialDownloaded_Format" xml:space="preserve">
+    <value>{0} của {1} cuộc phỏng vấn một phần đã được tải xuống</value>
   </data>
-  <data name="Synchronization_Fail_UnexpectedException" xml:space="preserve">
-    <value>Bất ngờ ngoại lệ</value>
+    <data name="Synchronization_Fail_State_RejectedInterviews_Format" xml:space="preserve">
+    <value>{0} của {1} cuộc phỏng vấn bị từ chối đã được trả lại</value>
   </data>
-  <data name="Synchronization_Interviews" xml:space="preserve">
+    <data name="Synchronization_Fail_State_UploadedInterviews_Format" xml:space="preserve">
+    <value>{0} của {1} cuộc phỏng vấn hoàn thành đã được tải lên</value>
+  </data>
+    <data name="Synchronization_Fail_Title" xml:space="preserve">
+    <value>Đồng bộ hóa bị gián đoạn, vui lòng thử lại</value>
+  </data>
+    <data name="Synchronization_Fail_UnexpectedException" xml:space="preserve">
+    <value>Lỗi không mong muốn</value>
+  </data>
+    <data name="Synchronization_Interviews" xml:space="preserve">
     <value>cuộc phỏng vấn</value>
   </data>
-  <data name="Synchronization_LockedAssignments_Text" xml:space="preserve">
-    <value>Bài tập đang bị khóa cho đến khi đồng bộ hoá đầy đủ</value>
+    <data name="Synchronization_PartialInterviews" xml:space="preserve">
+    <value>thay đổi cuộc phỏng vấn</value>
   </data>
-  <data name="Synchronization_Questionnaires" xml:space="preserve">
-    <value>câu hỏi</value>
+    <data name="Synchronization_LockedAssignments_Text" xml:space="preserve">
+    <value>Nhiệm vụ bị khóa cho đến khi đồng bộ hóa hoàn thành</value>
   </data>
-  <data name="Synchronization_Success_Description" xml:space="preserve">
-    <value>Tất cả các bài tập được Cập Nhật</value>
+    <data name="Synchronization_LinkToErrors" xml:space="preserve">
+    <value>Thông tin thêm về các lỗi đồng bộ hóa có thể được tìm thấy tại &lt;a href="https://support.mysurvey.solutions/interviewer/troubleshooting/synchronization-problems"&gt;trang hỗ trợ&lt;/a&gt;</value>
   </data>
-  <data name="Synchronization_Success_State_DeletedInterviews_Format" xml:space="preserve">
-    <value>{0} Các cuộc phỏng vấn đã xóa</value>
+    <data name="Synchronization_Questionnaires" xml:space="preserve">
+    <value>bảng câu hỏi</value>
   </data>
-  <data name="Synchronization_Success_State_NewInterviews_Format" xml:space="preserve">
-    <value>{0} cuộc phỏng vấn mới tải về</value>
+    <data name="UpdatingQuestionnaires" xml:space="preserve">
+    <value>Đang cập nhật bảng câu hỏi</value>
   </data>
-  <data name="Synchronization_Success_State_RejectedInterviews_Format" xml:space="preserve">
-    <value>{0} bị từ chối phỏng vấn trở lại</value>
+    <data name="TransferringAssignments" xml:space="preserve">
+    <value>Đang chuyển nhiệm vụ</value>
   </data>
-  <data name="Synchronization_Success_State_UploadedInterviews_Format" xml:space="preserve">
-    <value>{0} cuộc phỏng vấn hoàn thành tải lên</value>
+    <data name="TransferringCalendarEvents" xml:space="preserve">
+    <value>Đang chuyển sự kiện lịch</value>
   </data>
-  <data name="Synchronization_Success_Title" xml:space="preserve">
-    <value>Đồng bộ hoá thành công hoàn thành</value>
+    <data name="Synchronization_Success_Description" xml:space="preserve">
+    <value>Tất cả các nhiệm vụ đã được cập nhật</value>
   </data>
-  <data name="Synchronization_Upload_CompletedAssignments_Text" xml:space="preserve">
-    <value>hoàn thành bài tập</value>
+    <data name="Maps_Synchronization_Success_Description" xml:space="preserve">
+    <value>Tất cả các bản đồ đã được đồng bộ hóa</value>
   </data>
-  <data name="Synchronization_Upload_Description_Format" xml:space="preserve">
-    <value>{0} của {1} {2} thực hiện</value>
+    <data name="Synchronization_Success_State_NewInterviews_Format" xml:space="preserve">
+    <value>{0} cuộc phỏng vấn mới đã được tải xuống</value>
   </data>
-  <data name="Synchronization_Upload_Interviews_Text" xml:space="preserve">
+    <data name="Synchronization_Success_State_InterviewsPartialDownloaded_Format" xml:space="preserve">
+    <value>{0} cuộc phỏng vấn đã được cập nhật</value>
+  </data>
+    <data name="Synchronization_Success_State_RejectedInterviews_Format" xml:space="preserve">
+    <value>{0} cuộc phỏng vấn bị từ chối đã được trả lại</value>
+  </data>
+    <data name="Synchronization_Success_State_UploadedInterviews_Format" xml:space="preserve">
+    <value>{0} cuộc phỏng vấn hoàn thành đã được tải lên</value>
+  </data>
+    <data name="Synchronization_Success_State_PartialUploadInterviews_Format" xml:space="preserve">
+    <value>{0} cuộc phỏng vấn một phần đã được tải lên</value>
+  </data>
+    <data name="Synchronization_Success_Title" xml:space="preserve">
+    <value>Đồng bộ hóa hoàn thành thành công</value>
+  </data>
+    <data name="Synchronization_DoneWithErrors_Title" xml:space="preserve">
+    <value>Đồng bộ hóa hoàn thành với lỗi</value>
+  </data>
+    <data name="Synchronization_Upload_CompletedAssignments_Text" xml:space="preserve">
+    <value>nhiệm vụ hoàn thành</value>
+  </data>
+    <data name="Synchronization_Upload_CalendarEvents_Text" xml:space="preserve">
+    <value>sự kiện lịch</value>
+  </data>
+    <data name="Synchronization_Upload_Description_Format" xml:space="preserve">
+    <value>{0} của {1} {2} đã hoàn thành</value>
+  </data>
+    <data name="Synchronization_Upload_Interviews_Text" xml:space="preserve">
     <value>cuộc phỏng vấn</value>
   </data>
-  <data name="Synchronization_Upload_Title_Format" xml:space="preserve">
-    <value>Tải lên {0}</value>
+    <data name="Synchronization_Upload_Title_Format" xml:space="preserve">
+    <value>Đang tải lên {0}</value>
   </data>
-  <data name="Synchronization_UserAuthentication_Description" xml:space="preserve">
-    <value>Chuẩn bị để đồng bộ hóa</value>
+    <data name="Synchronization_Receiving_Title_Format" xml:space="preserve">
+    <value>Đang nhận {0}</value>
   </data>
-  <data name="Synchronization_UserAuthentication_Title" xml:space="preserve">
+    <data name="Synchronization_UserAuthentication_Description" xml:space="preserve">
+    <value>Đang chuẩn bị cho đồng bộ hóa</value>
+  </data>
+    <data name="Synchronization_UserAuthentication_Title" xml:space="preserve">
     <value>Xác thực người dùng</value>
   </data>
-  <data name="Synchronization_UserLinkedToAnotherDevice_Status" xml:space="preserve">
+    <data name="Synchronization_UserPassword_Update_Format" xml:space="preserve">
+    <value>Vấn đề xác thực. Chúng tôi không thể xác nhận thông tin đăng nhập của bạn '{0}'. Tài khoản của bạn có thể có mật khẩu khác, bị khóa. Vui lòng nhập lại mật khẩu của bạn. Nếu vấn đề vẫn tiếp diễn, liên hệ với Giám sát viên hoặc Trụ sở chính của bạn.</value>
+  </data>
+    <data name="Synchronization_PasswordChangeRequired" xml:space="preserve">
+    <value>Mật khẩu của bạn đã được đặt lại. Bạn phải thay đổi nó để truy cập vào trang web.</value>
+  </data>
+    <data name="Synchronization_UserDoNotBelongToTeam" xml:space="preserve">
+  <value>Người dùng không còn thuộc nhóm Giám sát viên này. Vui lòng liên hệ với Trụ sở chính để biết chi tiết.</value>
+</data>
+    <data name="YouChangeYouPasswordTryToLoginAgainWithNewPassword" xml:space="preserve">
+    <value>Bạn đã thay đổi mật khẩu hiện tại của mình. Hãy thử đăng nhập lại bằng mật khẩu mới.</value>
+  </data>
+    <data name="Unauthorized" xml:space="preserve">
+    <value>Tên đăng nhập hoặc mật khẩu của bạn không đúng</value>
+  </data>
+    <data name="UnexpectedException" xml:space="preserve">
+    <value>Lỗi không mong muốn</value>
+  </data>
+    <data name="UpgradeRequired" xml:space="preserve">
+    <value>Phiên bản mới của ứng dụng đã được phát hành. Vui lòng cập nhật ứng dụng</value>
+  </data>
+    <data name="HeadquartersVersion" xml:space="preserve">
+    <value>Phiên bản Trụ sở chính được hỗ trợ: {0}</value>
+  </data>
+    <data name="SupervisorVersion" xml:space="preserve">
+    <value>Phiên bản Giám sát viên: {0}</value>
+  </data>
+    <data name="InterviewerVersion" xml:space="preserve">
+    <value>Phiên bản Người phỏng vấn: {0}</value>
+  </data>
+    <data name="Synchronization_UserLinkedToAnotherDevice_Status" xml:space="preserve">
     <value>Lỗi xác thực người dùng</value>
   </data>
-  <data name="Synchronization_UserLinkedToAnotherDevice_Title" xml:space="preserve">
-    <value>Tài khoản của bạn relinked để một viên thuốc</value>
+    <data name="Synchronization_SupervisorShouldDoOnlineSync_Title" xml:space="preserve">
+    <value>Ứng dụng Giám sát viên cần được đồng bộ hóa.</value>
   </data>
-  <data name="Synchronization_UserPassword_Update_Format" xml:space="preserve">
-    <value>Vấn đề xác thực. Chúng tôi đã không thể xác nhận tài khoản của bạn phỏng vấn ('{0}'). 
-your tài khoản có thể có một trong những vấn đề sau đây: có một mật khẩu khác nhau hơn bạn đã nhập, bị khóa bởi trụ sở chính, hoặc bị xóa bởi trụ. 
-Please nhập mật khẩu của bạn Cập Nhật. Nếu làm như vậy không giải quyết vấn đề, xin vui lòng liên hệ với quản lý của bạn hoặc trụ sở chính.</value>
+    <data name="Synchronization_SupervisorShouldDoOnlineSync" xml:space="preserve">
+    <value>Giám sát viên nên luôn có những thay đổi mới nhất từ Trụ sở chính, vì vậy nó nên được đồng bộ hóa cuối cùng trong nhóm trước khi đồng bộ hóa ngoại tuyến có sẵn</value>
   </data>
-  <data name="Troubleshooting_Backup" xml:space="preserve">
-    <value>Tạo sao lưu</value>
+    <data name="Synchronization_UserLinkedToAnotherDevice_Title" xml:space="preserve">
+    <value>Tài khoản của bạn đã được liên kết lại với một máy tính bảng khác</value>
   </data>
-  <data name="Troubleshooting_BackupErrorMessage" xml:space="preserve">
-    <value>Một cái gì đó đã đi sai và sao lưu không thể được tạo ra</value>
+    <data name="DashboardItem_RejectedOn" xml:space="preserve">
+    <value>Bị từ chối: {0}</value>
   </data>
-  <data name="Troubleshooting_BackupWasSaved" xml:space="preserve">
-    <value>Sao lưu được lưu vào {0}</value>
+    <data name="Synchronization_Fail_State_DeletedInterviews_Format" xml:space="preserve">
+    <value>{0} của {1} cuộc phỏng vấn đã bị xóa</value>
   </data>
-  <data name="Troubleshooting_CurrentVersion_CheckForUpdates" xml:space="preserve">
+    <data name="Synchronization_Success_State_DeletedInterviews_Format" xml:space="preserve">
+    <value>{0} cuộc phỏng vấn đã bị xóa</value>
+  </data>
+    <data name="Login_FinishInstallation_Message" xml:space="preserve">
+    <value>Máy tính bảng này chưa được thiết lập. Bạn cần kết nối internet để tiếp tục.</value>
+  </data>
+    <data name="Troubleshooting_Backup" xml:space="preserve">
+    <value>Tạo bản sao lưu</value>
+  </data>
+    <data name="Troubleshooting_BackupErrorMessage" xml:space="preserve">
+    <value>Đã xảy ra sự cố và không thể tạo bản sao lưu</value>
+  </data>
+    <data name="Troubleshooting_BackupWasSaved" xml:space="preserve">
+    <value>Bản sao lưu đã được lưu vào {0}</value>
+  </data>
+    <data name="Troubleshooting_CurrentVersion_CheckForUpdates" xml:space="preserve">
     <value>Phiên bản: {0}. Kiểm tra phiên bản mới</value>
   </data>
-  <data name="Troubleshooting_InformationPackageIsSuccessfullySent" xml:space="preserve">
-    <value>Gói thông tin được gửi thành công</value>
+    <data name="Troubleshooting_InformationPackageIsSuccessfullySent" xml:space="preserve">
+    <value>Gói thông tin đã được gửi thành công</value>
   </data>
-  <data name="Troubleshooting_InformationPackageSizeWarningFormat" xml:space="preserve">
-    <value>Thông tin gói kích thước {0} sẽ được gửi qua mạng. Bạn có chắc bạn muốn gửi nó?</value>
+    <data name="Troubleshooting_InformationPackageSizeWarningFormat" xml:space="preserve">
+    <value>Gói thông tin có kích thước {0} sẽ được gửi qua mạng. Bạn có chắc chắn muốn gửi nó không?</value>
   </data>
-  <data name="Troubleshooting_NewVerisonExist" xml:space="preserve">
-    <value>Phiên bản mới tồn tại. Bạn có muốn tải xuống và cập nhật ứng dụng?</value>
+    <data name="Troubleshooting_NewVerisonExist" xml:space="preserve">
+    <value>Phiên bản ứng dụng mới tồn tại. Bạn có muốn tải xuống và cập nhật ứng dụng không?</value>
   </data>
-  <data name="Troubleshooting_NoNewVersion" xml:space="preserve">
-    <value>Bạn có phiên bản mới nhất của ứng dụng</value>
+    <data name="Troubleshooting_NoNewVersion" xml:space="preserve">
+    <value>Bạn đang sử dụng phiên bản mới nhất của ứng dụng</value>
   </data>
-  <data name="Troubleshooting_Old_AreYouSureYouWantToRestore" xml:space="preserve">
-    <value>Tất cả dữ liệu hiện tại sẽ bị xóa. Bạn có chắc muốn tiếp tục khôi phục. Nếu muốn, xin chắc rằng dữ liệu khôi phục được thể hiện tại {0}</value>
+    <data name="Troubleshooting_RestorationErrorMessage" xml:space="preserve">
+    <value>Đã xảy ra sự cố và không thể khôi phục máy tính bảng</value>
   </data>
-  <data name="Troubleshooting_Old_CreatingInformationPackage" xml:space="preserve">
-    <value>Đang tạo gói thông tin</value>
-  </data>
-  <data name="Troubleshooting_Old_InformationPackage" xml:space="preserve">
-    <value>Gói thông tin</value>
-  </data>
-  <data name="Troubleshooting_Old_InformationPackageIsSuccessfullySent" xml:space="preserve">
-    <value>Gói thông tin được gửi thành công</value>
-  </data>
-  <data name="Troubleshooting_Old_InformationPackageSizeWarningFormat" xml:space="preserve">
-    <value>Gói thông tin với kích thước {0} sẽ được gửi qua mạng. Bạn có chắc chắn muốn gửi đi?</value>
-  </data>
-  <data name="Troubleshooting_Old_SendingInformationPackage" xml:space="preserve">
-    <value>Đang gửi gói thông tin</value>
-  </data>
-  <data name="Troubleshooting_Old_SendingOfInformationPackageIsCanceled" xml:space="preserve">
-    <value>Việc gửi gói thông tin bị hủy bỏ. Lý do: {0}</value>
-  </data>
-  <data name="Troubleshooting_Old_SendingOfInformationPackageIsCanceling" xml:space="preserve">
-    <value>Hủy bỏ</value>
-  </data>
-  <data name="Troubleshooting_RestorationErrorMessage" xml:space="preserve">
-    <value>Có điều gì sai và máy tính bảng không được khôi phục</value>
-  </data>
-  <data name="Troubleshooting_Restore" xml:space="preserve">
+    <data name="Troubleshooting_Restore" xml:space="preserve">
     <value>Khôi phục từ bản sao lưu</value>
   </data>
-  <data name="Troubleshooting_RestoreConfirmation" xml:space="preserve">
-    <value>Tất cả dữ liệu hiện tại sẽ bị xóa. Bạn có chắc muốn tiếp tục khôi phục. Nếu muốn, xin chắc rằng dữ liệu khôi phục được thể hiện tại {0}</value>
+    <data name="Troubleshooting_RestoreConfirmation" xml:space="preserve">
+    <value>Tất cả dữ liệu hiện tại sẽ bị xóa. Bạn có chắc chắn muốn tiếp tục khôi phục không? Nếu Có, vui lòng đảm bảo dữ liệu khôi phục có mặt tại {0}</value>
   </data>
-  <data name="Troubleshooting_RestoredSuccessfully" xml:space="preserve">
-    <value>Máy tính bảng được khôi phục thành công</value>
+    <data name="Troubleshooting_RestoredSuccessfully" xml:space="preserve">
+    <value>Máy tính bảng đã được khôi phục thành công</value>
   </data>
-  <data name="Troubleshooting_RestoreFolderIsEmpty" xml:space="preserve">
-    <value>Thư mục '{0}' rỗng. Hãy để bản sao lưu bạn muốn khôi phục ở thư mục này</value>
+    <data name="Troubleshooting_SendingOfInformationPackageErrorMessage" xml:space="preserve">
+    <value>Không thể gửi gói thông tin.</value>
   </data>
-  <data name="Troubleshooting_SendingOfInformationPackageErrorMessage" xml:space="preserve">
-    <value>Gói thông tin gửi không thành công</value>
-  </data>
-  <data name="Troubleshooting_SendTabletInformation" xml:space="preserve">
+    <data name="Troubleshooting_SendTabletInformation" xml:space="preserve">
     <value>Gửi thông tin của máy tính bảng</value>
   </data>
-  <data name="Troubleshooting_Title" xml:space="preserve">
-    <value>Giải đáp thắc mắc</value>
+    <data name="Troubleshooting_Title" xml:space="preserve">
+    <value>Khắc phục sự cố</value>
   </data>
-  <data name="Troubleshooting_Unknown_ErrorMessage" xml:space="preserve">
-    <value>Có lỗi trên phiên bản kiểm tra. Hãy kiểm tra cài đặt hoặc thử lại sau.</value>
+    <data name="Troubleshooting_Unknown_ErrorMessage" xml:space="preserve">
+    <value>Đã xảy ra lỗi khi kiểm tra phiên bản. Vui lòng kiểm tra cài đặt hoặc thử lại sau</value>
   </data>
-  <data name="Unauthorized" xml:space="preserve">
-    <value>Tên đăng nhập hoặc mật khẩu của bạn là không chính xác</value>
+    <data name="MenuItem_Title_Dashboard" xml:space="preserve">
+    <value>Bảng điều khiển</value>
   </data>
-  <data name="UnexpectedException" xml:space="preserve">
-    <value>Lỗi không xác định</value>
+    <data name="MenuItem_Title_Return" xml:space="preserve">
+    <value>Trở lại</value>
   </data>
-  <data name="UpgradeRequired" xml:space="preserve">
-    <value>Phiên bản mới của ứng dụng đã phát hành. Hãy cập nhật ứng dụng</value>
+    <data name="MenuItem_Title_Map_Dashboard" xml:space="preserve">
+    <value>Bảng điều khiển bản đồ</value>
   </data>
-  <data name="Warning" xml:space="preserve">
+    <data name="MenuItem_Title_Language" xml:space="preserve">
+    <value>Ngôn ngữ</value>
+  </data>
+    <data name="MenuItem_Title_Language_Original" xml:space="preserve">
+    <value>Nguyên bản</value>
+  </data>
+    <data name="MenuItem_Title_Login" xml:space="preserve">
+    <value>Đăng nhập</value>
+  </data>
+    <data name="MenuItem_Title_Settings" xml:space="preserve">
+    <value>Cài đặt</value>
+  </data>
+    <data name="MenuItem_Title_SignOut" xml:space="preserve">
+    <value>Đăng xuất</value>
+  </data>
+    <data name="MenuItem_Title_Search" xml:space="preserve">
+    <value>Tìm kiếm</value>
+  </data>
+    <data name="MenuItem_Title_Workspaces" xml:space="preserve">
+    <value>Không gian làm việc</value>
+  </data>
+    <data name="MenuItem_Title_RefreshWorkspaces" xml:space="preserve">
+    <value>Làm mới không gian làm việc</value>
+  </data>
+    <data name="Troubleshooting_Old_AreYouSureYouWantToRestore" xml:space="preserve">
+    <value>Tất cả dữ liệu hiện tại sẽ bị xóa. Bạn có chắc chắn muốn tiếp tục khôi phục không? Nếu Có, vui lòng đảm bảo dữ liệu khôi phục có mặt tại {0}</value>
+  </data>
+    <data name="Troubleshooting_Old_CreatingInformationPackage" xml:space="preserve">
+    <value>Đang tạo gói thông tin</value>
+  </data>
+    <data name="Troubleshooting_Old_InformationPackage" xml:space="preserve">
+    <value>Gói thông tin</value>
+  </data>
+    <data name="Troubleshooting_Old_InformationPackageIsSuccessfullySent" xml:space="preserve">
+    <value>Gói thông tin đã được gửi thành công</value>
+  </data>
+    <data name="Troubleshooting_Old_InformationPackageSizeWarningFormat" xml:space="preserve">
+    <value>Gói thông tin có kích thước {0} sẽ được gửi qua mạng. Bạn có chắc chắn muốn gửi nó không?</value>
+  </data>
+    <data name="Troubleshooting_Old_SendingInformationPackage" xml:space="preserve">
+    <value>Đang gửi gói thông tin</value>
+  </data>
+    <data name="Troubleshooting_Old_SendingOfInformationPackageIsCanceled" xml:space="preserve">
+    <value>Việc gửi gói thông tin đã bị hủy. Lý do: {0}</value>
+  </data>
+    <data name="Troubleshooting_Old_SendingOfInformationPackageIsCanceling" xml:space="preserve">
+    <value>Đang hủy</value>
+  </data>
+    <data name="Warning" xml:space="preserve">
     <value>Cảnh báo</value>
+  </data>
+    <data name="DashboardItem_AssignedOn" xml:space="preserve">
+    <value>Được giao: {0}</value>
+  </data>
+    <data name="Diagnostics_Backup_Description" xml:space="preserve">
+    <value>Lưu tất cả thông tin liên quan vào tệp trên thiết bị này.</value>
+  </data>
+    <data name="Diagnostics_Backup_Title" xml:space="preserve">
+    <value>Tạo gói hỗ trợ</value>
+  </data>
+    <data name="Diagnostics_CheckVersion_Description" xml:space="preserve">
+    <value>Chúng tôi sẽ kiểm tra phiên bản mới hơn của ứng dụng Người phỏng vấn trên máy chủ</value>
+  </data>
+    <data name="Diagnostics_CheckVersion_Title" xml:space="preserve">
+    <value>Phiên bản: {0}. Kiểm tra phiên bản mới</value>
+  </data>
+    <data name="Diagnostics_Restore_Description" xml:space="preserve">
+    <value>Bằng cách khôi phục dữ liệu đã lưu, bạn sẽ thay thế tất cả các nhiệm vụ hiện tại trên thiết bị này</value>
+  </data>
+    <data name="Diagnostics_Restore_Title" xml:space="preserve">
+    <value>KHÔI PHỤC</value>
+  </data>
+    <data name="Diagnostics_Send_Description" xml:space="preserve">
+    <value>Tất cả dữ liệu ứng dụng và phỏng vấn sẽ được thu thập vào một tệp lưu trữ duy nhất. Quá trình này có thể mất đến 10 phút.</value>
+  </data>
+    <data name="Diagnostics_Send_Title" xml:space="preserve">
+    <value>Gửi tất cả thông tin máy tính bảng đến Trụ sở chính để khắc phục sự cố.</value>
+  </data>
+    <data name="Diagnostics_Share_Description" xml:space="preserve">
+    <value>Tất cả thông tin dưới đây sẽ được chia sẻ dưới dạng văn bản thuần túy. Nó có thể được gửi qua email, google hangouts hoặc bất kỳ ứng dụng nhắn tin nào khác</value>
+  </data>
+    <data name="Diagnostics_Share_Title" xml:space="preserve">
+    <value>Chia sẻ tất cả thông tin kỹ thuật</value>
+  </data>
+    <data name="Diagnostics_Title" xml:space="preserve">
+    <value>Chẩn đoán</value>
+  </data>
+    <data name="Diagnostics_ServerUrl" xml:space="preserve">
+    <value>URL máy chủ: </value>
+  </data>
+    <data name="MenuItem_Title_Diagnostics" xml:space="preserve">
+    <value>Chẩn đoán</value>
+  </data>
+    <data name="MenuItem_Title_MapsSynchronization" xml:space="preserve">
+    <value>Đồng bộ hóa bản đồ</value>
+  </data>
+    <data name="MenuItem_Title_Maps" xml:space="preserve">
+    <value>Bản đồ</value>
+  </data>
+    <data name="Share_to_Title" xml:space="preserve">
+    <value>Chia sẻ thông tin đến..</value>
+  </data>
+    <data name="Diagnostics_TestConnection_Description" xml:space="preserve">
+    <value>Kiểm tra chất lượng và tốc độ kết nối với máy chủ.</value>
+  </data>
+    <data name="Diagnostics_TestConnection_Title" xml:space="preserve">
+    <value>Kiểm tra băng thông đến máy chủ</value>
+  </data>
+    <data name="Diagnostics_Delete" xml:space="preserve">
+    <value>Xóa</value>
+  </data>
+    <data name="Diagnostics_Send" xml:space="preserve">
+    <value>Gửi</value>
+  </data>
+    <data name="Diagnostics_TabletInformationReady_Title" xml:space="preserve">
+    <value>Tệp lưu trữ dữ liệu đã sẵn sàng</value>
+  </data>
+    <data name="Diagnostics_TabletInformationScope_Title" xml:space="preserve">
+    <value>Phạm vi:</value>
+  </data>
+    <data name="Diagnostics_TabletInformationWhenGenerated_Title" xml:space="preserve">
+    <value>Khi được tạo:</value>
+  </data>
+    <data name="Diagnostics_DownloadingPleaseWait" xml:space="preserve">
+    <value>Đang tải xuống, vui lòng đợi...</value>
+  </data>
+    <data name="Diagnostics_NewVersionAvaliable_Title" xml:space="preserve">
+    <value>Phiên bản mới tồn tại. Bạn có muốn tải xuống và cập nhật ứng dụng không?</value>
+  </data>
+    <data name="Diagnostics_NewVersionNumber_Title" xml:space="preserve">
+    <value>Số phiên bản:</value>
+  </data>
+    <data name="Diagnostics_No" xml:space="preserve">
+    <value>Không</value>
+  </data>
+    <data name="Diagnostics_Update" xml:space="preserve">
+    <value>Cập nhật</value>
+  </data>
+    <data name="Diagnostics_YouHaveTheLatestVersionOfApplication" xml:space="preserve">
+    <value>Bạn đang sử dụng phiên bản mới nhất của ứng dụng.</value>
+  </data>
+    <data name="Diagnostics_BackupDate_Title" xml:space="preserve">
+    <value>Khi được lưu:</value>
+  </data>
+    <data name="Diagnostics_BackupFileLocation_Title" xml:space="preserve">
+    <value>Vị trí tệp sao lưu:</value>
+  </data>
+    <data name="Diagnostics_BackupReady_Title" xml:space="preserve">
+    <value>Dữ liệu đã được lưu</value>
+  </data>
+    <data name="Diagnostics_BackupScope_Title" xml:space="preserve">
+    <value>Phạm vi:</value>
+  </data>
+    <data name="Diagnostics_RestoreReady_Title" xml:space="preserve">
+    <value>Dữ liệu đã lưu được tìm thấy:</value>
+  </data>
+    <data name="Diagnostics_BandwidthTestConnectionOK_Title" xml:space="preserve">
+    <value>Kết nối OK</value>
+  </data>
+    <data name="Diagnostics_BandwidthTestConnectionType_Title" xml:space="preserve">
+    <value>Loại kết nối:</value>
+  </data>
+    <data name="Diagnostics_BandwidthTestPing_Title" xml:space="preserve">
+    <value>Ping:</value>
+  </data>
+    <data name="Diagnostics_BandwidthTestNetworkName_Title" xml:space="preserve">
+    <value>Tên mạng:</value>
+  </data>
+    <data name="Diagnostics_BandwidthTestConnectionAbsent_Title" xml:space="preserve">
+    <value>&lt;font color="red"&gt;Không có kết nối internet&lt;/font&gt;</value>
+  </data>
+    <data name="Diagnostics_BandwidthTestConnectionNotOK_Title" xml:space="preserve">
+    <value>Kết nối &lt;font color="red"&gt;không tốt&lt;/font&gt;</value>
+  </data>
+    <data name="Diagnostics_BandwidthTestConnectionToTheServerAbsent_Title" xml:space="preserve">
+    <value>&lt;font color="red"&gt;Không có kết nối với máy chủ&lt;/font&gt;</value>
+  </data>
+    <data name="Troubleshooting_RestoreFolderIsEmpty" xml:space="preserve">
+    <value>Thư mục '{0}' trống. Vui lòng đặt bản sao lưu bạn muốn khôi phục vào thư mục.</value>
+  </data>
+    <data name="FinishInstallation_EndpointDiffers" xml:space="preserve">
+    <value>Điểm cuối đồng bộ hóa '{0}' khác với điểm cuối được cung cấp trong Cài đặt ('{1}'). Tải URL từ cài đặt?</value>
+  </data>
+    <data name="Prefs_EventChunkSizeSummary" xml:space="preserve">
+    <value>Số lượng sự kiện có thể đọc trong một truy vấn</value>
+  </data>
+    <data name="Prefs_EventChunkSizeTitle" xml:space="preserve">
+    <value>Kích thước khối sự kiện</value>
+  </data>
+    <data name="Synchronization_Download_AttachmentsCleanup" xml:space="preserve">
+    <value>Đang xóa các tệp đính kèm không cần thiết</value>
+  </data>
+    <data name="Synchronization_Check_Obsolete_Questionnaires" xml:space="preserve">
+    <value>Kiểm tra các bảng câu hỏi không cần thiết</value>
+  </data>
+    <data name="Synchronization_Of_AssignmentsFormat" xml:space="preserve">
+    <value>Đang đồng bộ hóa {0} của {1} nhiệm vụ</value>
+  </data>
+    <data name="AssignmentsSynchronization" xml:space="preserve">
+    <value>Đang đồng bộ hóa nhiệm vụ</value>
+  </data>
+    <data name="Synchronization_Check_Obsolete_Questionnaires_Description" xml:space="preserve">
+    <value>Đang xóa {0} bảng câu hỏi trong số {1}</value>
+  </data>
+    <data name="Synchronization_DownloadApplication" xml:space="preserve">
+    <value>Đang tải xuống các bản cập nhật ứng dụng</value>
+  </data>
+    <data name="Synchronization_UploadingApplication" xml:space="preserve">
+    <value>Đang gửi các bản cập nhật ứng dụng</value>
+  </data>
+    <data name="Synchronization_DownloadApplication_Description" xml:space="preserve">
+    <value>Đã nhận {0} của {1} tại {2} ({3}%)</value>
+  </data>
+    <data name="Synchronization_SendingApplication_Description" xml:space="preserve">
+    <value>Đã gửi {0} của {1} tại {2} ({3}%)</value>
+  </data>
+    <data name="Synchronization_CheckNewVersionOfApplication" xml:space="preserve">
+    <value>Đang kiểm tra các bản cập nhật ứng dụng</value>
+  </data>
+  <data name="NotSupportedServerSyncProtocolVersion" xml:space="preserve">
+      <value>Phát hiện phiên bản không tương thích. Vui lòng liên hệ với giám sát viên của bạn để giải quyết&lt;</value>
+  </data>
+    <data name="Interview_Loading" xml:space="preserve">
+    <value>Đang tải dữ liệu phỏng vấn</value>
+  </data>
+    <data name="Interview_Loading_Description" xml:space="preserve">
+    <value>Phỏng vấn sẽ bắt đầu ngay</value>
+  </data>
+    <data name="Interview_Creating" xml:space="preserve">
+    <value>Đang tạo phỏng vấn</value>
+  </data>
+    <data name="Interview_Creating_Description" xml:space="preserve">
+    <value>Điều này có thể mất vài phút, không thoát khỏi ứng dụng này</value>
+  </data>
+    <data name="Interview_Loading_With_Percents" xml:space="preserve">
+    <value>Đang tải dữ liệu phỏng vấn {0}%</value>
+  </data>
+    <data name="Synchronization_Fail_State_FailedToProcess_Format" xml:space="preserve">
+    <value>{0} phỏng vấn không đồng bộ hóa được</value>
+  </data>
+    <data name="FailedToLoadInterview" xml:space="preserve">
+    <value>Không thể mở phỏng vấn</value>
+  </data>
+    <data name="FailedToLoadInterviewDescription" xml:space="preserve">
+    <value>Trường hợp phỏng vấn không hợp lệ và không thể mở. Vui lòng liên hệ hỗ trợ hoặc thử đồng bộ hóa để làm mới các trường hợp.</value>
+  </data>
+    <data name="UnacceptableSSLCertificate" xml:space="preserve">
+    <value>Không thể xác minh chứng chỉ cho URL mục tiêu. Vui lòng kiểm tra xem địa chỉ trang web Trụ sở chính có hợp lệ và thiết bị của bạn có ngày và giờ hiện tại chính xác không</value>
+  </data>
+    <data name="InterviewerFromDifferentTeam" xml:space="preserve">
+    <value>Phỏng vấn viên là thành viên của nhóm khác. Vui lòng đồng bộ hóa với Trụ sở chính.</value>
+  </data>
+    <data name="Synchronization_DownloadingLogo" xml:space="preserve">
+    <value>Đang tải xuống logo</value>
+  </data>
+    <data name="Synchronization_UploadingLogo" xml:space="preserve">
+    <value>Đang tải lên logo</value>
+  </data>
+    <data name="Synchronization_UploadAuditLog" xml:space="preserve">
+    <value>Tải lên thông tin kiểm tra</value>
+  </data>
+    <data name="Synchronization_UploadGeoTracking" xml:space="preserve">
+    <value>Tải lên thông tin theo dõi địa lý</value>
+  </data>
+    <data name="Synchronization_RemoveObsoleteGeoTracking" xml:space="preserve">
+    <value>Xóa thông tin theo dõi địa lý không cần thiết</value>
+  </data>
+    <data name="Synchronization_ReceivingAuditLog" xml:space="preserve">
+    <value>Đang nhận thông tin kiểm tra</value>
+  </data>
+    <data name="Dashboard_CreateNewTabText" xml:space="preserve">
+    <value>Tạo phỏng vấn mới bằng cách sử dụng mẫu</value>
+  </data>
+    <data name="Dashboard_StartedTabText" xml:space="preserve">
+    <value>Phỏng vấn đã bắt đầu nhưng chưa hoàn thành Bạn cần hoàn thành nó để được đồng bộ hóa</value>
+  </data>
+    <data name="Dashboard_RejectedTabText" xml:space="preserve">
+    <value>Phỏng vấn bị từ chối bởi giám sát viên Vui lòng giải quyết các vấn đề được ghi chú trên trang bìa và gửi lại cho giám sát viên.</value>
+  </data>
+    <data name="Dashboard_CompletedTabText" xml:space="preserve">
+    <value>Phỏng vấn đã hoàn thành, sẽ được tải lên trong lần đồng bộ hóa tiếp theo của bạn</value>
+  </data>
+    <data name="Dashboard_WebInterviewTabText" xml:space="preserve">
+    <value>Phỏng vấn ở chế độ phỏng vấn web. Sẽ bị xóa trong quá trình đồng bộ hóa khi phỏng vấn web được hoàn thành bởi người trả lời</value>
+  </data>
+    <data name="Dashboard_QuestionnairesTabText" xml:space="preserve">
+    <value>Bạn có thể tạo phỏng vấn mới bằng cách sử dụng nhiệm vụ</value>
+  </data>
+    <data name="Dashboard_AssignmentCard_SubTitleCountdownFormat" xml:space="preserve">
+    <value>Để thu thập: {0} phỏng vấn</value>
+        <comment>{0} - số lượng phỏng vấn đã tạo {1} - số lượng phỏng vấn viên sẽ được tạo bởi nhiệm vụ</comment>
+  </data>
+    <data name="FailedToCreateInterview" xml:space="preserve">
+    <value>Không thể tạo phỏng vấn. Lý do: {0}</value>
+  </data>
+    <data name="Dashboard_AssignmentCard_SubTitleSingleInterivew" xml:space="preserve">
+    <value>Nhiệm vụ phỏng vấn đơn</value>
+  </data>
+    <data name="Dashboard_AssignmentCard_SubTitleCountdown_UnlimitedFormat" xml:space="preserve">
+    <value>Để thu thập: không giới hạn</value>
+        <comment>{0} - số lượng phỏng vấn đã tạo</comment>
+  </data>
+    <data name="Dashboard_Open" xml:space="preserve">
+    <value>Mở</value>
+  </data>
+    <data name="Dashboard_ViewIssues" xml:space="preserve">
+    <value>Xem vấn đề</value>
+  </data>
+    <data name="Dashboard_Reopen" xml:space="preserve">
+    <value>Mở lại</value>
+  </data>
+    <data name="Dashboard_ShowLocation" xml:space="preserve">
+    <value>Hiển thị vị trí</value>
+  </data>
+    <data name="Dashboard_ShowAssignmentMap" xml:space="preserve">
+    <value>Hiển thị khu vực mục tiêu</value>
+  </data>
+    <data name="Dashboard_Discard" xml:space="preserve">
+    <value>Loại bỏ</value>
+  </data>
+    <data name="Dashboard_AddCalendarEvent" xml:space="preserve">
+    <value>Thêm sự kiện lịch</value>
+  </data>
+    <data name="Dashboard_EditCalendarEvent" xml:space="preserve">
+    <value>Chỉnh sửa sự kiện lịch</value>
+  </data>
+    <data name="Dashboard_RemoveCalendarEvent" xml:space="preserve">
+    <value>Xóa sự kiện lịch</value>
+  </data>
+    <data name="Dashboard_ShowCalendarEvent" xml:space="preserve">
+    <value>Liên hệ tiếp theo: {0}</value>
+  </data>
+    <data name="Dashboard_PastDateCalendarEvent" xml:space="preserve">
+    <value>Ngày đã chọn là trong quá khứ</value>
+  </data>
+    <data name="Dashboard_PastTimeCalendarEvent" xml:space="preserve">
+    <value>Thời gian đã chọn là trong quá khứ</value>
+  </data>
+    <data name="Dashboard_Interview_QuestionsAnsweredFormat" xml:space="preserve">
+    <value>{0} câu hỏi đã được trả lời</value>
+  </data>
+    <data name="Dashboard_Interview_AssignmentLabelFormat" xml:space="preserve">
+    <value>Nhiệm vụ #{0}</value>
+        <comment>{0} - là id nhiệm vụ</comment>
+  </data>
+    <data name="Dashboard_No_InterviewKey" xml:space="preserve">
+    <value>Không có khóa phỏng vấn</value>
+  </data>
+    <data name="Dashboard_CensusAssignment" xml:space="preserve">
+    <value>Điều tra dân số</value>
+  </data>
+    <data name="Dashboard_CantOpenCawi" xml:space="preserve">
+    <value>Bạn không thể mở phỏng vấn ở chế độ CAWI. Nó sẽ được gửi đến trụ sở chính sau khi đồng bộ hóa.</value>
+  </data>
+    <data name="Dashboard_CawiLabel" xml:space="preserve">
+    <value>{0} (CAWI)</value>
+  </data>
+    <data name="MapSyncProvider_SyncronizeMapsAsync_Checking_maps_on_server" xml:space="preserve">
+    <value>Đang kiểm tra bản đồ trên máy chủ</value>
+  </data>
+    <data name="MapSyncProvider_SyncronizeMapsAsync_Progress_Report_Format" xml:space="preserve">
+    <value>Đang xử lý bản đồ {0}, {1} trong số {2}. Đã tải xuống {3}%</value>
+  </data>
+    <data name="MapSyncProvider_SyncronizeMapsAsync_Map_synchronization_succesfuly_finished" xml:space="preserve">
+    <value>Đồng bộ hóa bản đồ thành công</value>
+  </data>
+    <data name="MapSyncProvider_SyncronizeMapsAsync_Map_sync_error" xml:space="preserve">
+    <value>Lỗi đồng bộ hóa bản đồ</value>
+  </data>
+    <data name="Dashboard_SearchResult" xml:space="preserve">
+    <value>{0} phần tử được tìm thấy</value>
+  </data>
+    <data name="Dashboard_NotFoundSearchResult" xml:space="preserve">
+    <value>Không tìm thấy gì</value>
+  </data>
+    <data name="Dashboard_NeedTextForSearch" xml:space="preserve">
+    <value>Thực hiện tìm kiếm để hiển thị kết quả</value>
+  </data>
+    <data name="Dashboard_Searching" xml:space="preserve">
+    <value>Đang tìm kiếm...</value>
+  </data>
+    <data name="Dashboard_SearchWatermark" xml:space="preserve">
+    <value>Nhập văn bản để tìm kiếm</value>
+  </data>
+    <data name="Dashboard_Search_ExitSearch" xml:space="preserve">
+    <value>Thoát tìm kiếm</value>
+  </data>
+    <data name="Synchronization_CheckForObsolete_Interviews" xml:space="preserve">
+    <value>Kiểm tra các phỏng vấn không cần thiết</value>
+  </data>
+    <data name="Dashboard_Assign" xml:space="preserve">
+    <value>Giao nhiệm vụ</value>
+  </data>
+    <data name="Synchronization_Of_Interviewers" xml:space="preserve">
+    <value>Đồng bộ hóa phỏng vấn viên</value>
+  </data>
+    <data name="Synchronization_Of_Supervisor_details" xml:space="preserve">
+    <value>Đồng bộ hóa chi tiết giám sát viên</value>
+  </data>
+    <data name="Synchronization_Of_InterviewersFormat" xml:space="preserve">
+    <value>Đang đồng bộ hóa {0} của {1} phỏng vấn viên</value>
+  </data>
+    <data name="Prefs_AllowSyncWithHq" xml:space="preserve">
+    <value>Cho phép đồng bộ hóa với Trụ sở chính</value>
+  </data>
+    <data name="Prefs_AllowSyncWithHq_Summary" xml:space="preserve">
+    <value>Tắt cài đặt này nếu bạn muốn đồng bộ hóa chỉ với ứng dụng giám sát di động. Sau lần đồng bộ hóa thành công đầu tiên với Ứng dụng Giám sát, sẽ không thể bật lại cài đặt này</value>
+  </data>
+    <data name="Prefs_AllowSyncWithHq_Summary_Disabled" xml:space="preserve">
+    <value>Không thể đồng bộ hóa với Trụ sở chính một khi đã có ít nhất một lần đồng bộ hóa thành công với Ứng dụng Giám sát</value>
+  </data>
+    <data name="DashboardItem_Responsible" xml:space="preserve">
+    <value>Người chịu trách nhiệm: {0}</value>
+  </data>
+    <data name="DashboardItem_RejectedByHqOn" xml:space="preserve">
+    <value>Bị từ chối bởi Trụ sở chính: {0}</value>
+  </data>
+    <data name="DashboardItem_ApprovedBySupervisor" xml:space="preserve">
+    <value>Được giám sát viên phê duyệt: {0}</value>
+  </data>
+    <data name="FinishInstallation_QrBarcodeReaderErrorMessage" xml:space="preserve">
+    <value>Đã xảy ra lỗi khi quét</value>
+  </data>
+    <data name="SelectResponsible_Reassign" xml:space="preserve">
+    <value>Chuyển giao</value>
+  </data>
+    <data name="SelectResponsible_ReassignDescription" xml:space="preserve">
+    <value>Chọn người chịu trách nhiệm mới cho phỏng vấn. Nó sẽ xuất hiện trên thiết bị của phỏng vấn viên sau lần đồng bộ hóa tiếp theo</value>
+  </data>
+    <data name="SelectResponsible_ReassignButtonText" xml:space="preserve">
+    <value>Chuyển giao</value>
+  </data>
+    <data name="SelectResponsible_CancelButtonText" xml:space="preserve">
+    <value>Hủy bỏ</value>
+  </data>
+    <data name="Notifications_InterviewsTitle" xml:space="preserve">
+    <value>Phỏng vấn</value>
+  </data>
+    <data name="Notifications_CompletedInterviewsText" xml:space="preserve">
+    <value>Bạn có {0} phỏng vấn đã hoàn thành cần được đồng bộ hóa</value>
+  </data>
+    <data name="Notifications_RejectedInterviewsText" xml:space="preserve">
+    <value>Bạn có {0} phỏng vấn bị từ chối chưa được xử lý</value>
+  </data>
+    <data name="Notifications_SyncTitle" xml:space="preserve">
+    <value>Đồng bộ hóa</value>
+  </data>
+    <data name="Notifications_SyncTooLongAgoText" xml:space="preserve">
+    <value>Đã lâu không thực hiện đồng bộ hóa. Vui lòng đồng bộ hóa</value>
+  </data>
+    <data name="Notifications_SyncNoRetryTitle" xml:space="preserve">
+    <value>Không có lần thử lại sau khi đồng bộ hóa thất bại. Vui lòng thử lại</value>
+  </data>
+    <data name="Notifications_ManyStartedInterviews" xml:space="preserve">
+    <value>Bạn đã bắt đầu quá nhiều cuộc phỏng vấn. Vui lòng hoàn thành chúng.</value>
+  </data>
+    <data name="Notifications_ManyCompletedInterviews" xml:space="preserve">
+    <value>Có rất nhiều cuộc phỏng vấn đã hoàn thành. Vui lòng đồng bộ hóa.</value>
+  </data>
+    <data name="Notifications_StaleAssignments" xml:space="preserve">
+    <value>Một số nhiệm vụ không được cập nhật trong 3 ngày qua.</value>
+  </data>
+    <data name="Synchronization_UserLinkedToAnotherServer_Description" xml:space="preserve">
+    <value>Người dùng hiện tại được tạo trên một phiên bản khác của ứng dụng Trụ sở chính. Thay đổi URL điểm cuối đồng bộ hóa thành máy chủ gốc</value>
+  </data>
+    <data name="Synchronization_UserLinkedToAnotherServer_Status" xml:space="preserve">
+    <value>Người dùng liên kết với máy chủ khác</value>
+  </data>
+    <data name="Diagnostics_SendLogs" xml:space="preserve">
+    <value>Gửi nhật ký theo dõi</value>
+  </data>
+    <data name="Diagnostics_SendLogs_Description" xml:space="preserve">
+    <value>Gửi nhật ký chi tiết đến trang web trụ sở chính để điều tra sự cố</value>
+  </data>
+    <data name="Diagnostics_SendLogs_Success" xml:space="preserve">
+    <value>Nhật ký đã được gửi đến Trụ sở chính</value>
+  </data>
+    <data name="Synchronization_WorkspaceDisabled" xml:space="preserve">
+  <value>Tài khoản của bạn không còn hoạt động trên máy chủ này, vì không gian làm việc mà nó được xác định đã bị quản trị viên vô hiệu hóa. Vui lòng liên hệ với giám sát viên của bạn.</value>
+</data>
+    <data name="DashboardItem_QRCode" xml:space="preserve">
+    <value>Hiển thị mã QR</value>
+  </data>
+    <data name="Synchronization_WorkspaceAccessDisabledReason" xml:space="preserve">
+    <value>Tài khoản của bạn không còn hoạt động trong không gian làm việc. Vui lòng liên hệ với quản trị viên hệ thống của bạn.</value>
+  </data>
+    <data name="Interview_Progress_Format" xml:space="preserve">
+    <value>Tiến độ: {0}/{1}</value>
+  </data>
+    <data name="Error_NoGpsProvider" xml:space="preserve">
+    <value>Không có nhà cung cấp GPS trong thiết bị này</value>
+  </data>
+    <data name="Error_NoTargetAreaShapefile" xml:space="preserve">
+    <value>Không có ranh giới cho khu vực mục tiêu</value>
+  </data>
+    <data name="Dashboard_CreateInterview_TargetArea_Warning" xml:space="preserve">
+    <value>Nhiệm vụ yêu cầu bạn tạo một cuộc phỏng vấn trực tiếp từ bản đồ Nhiệm vụ. Khuyến nghị sử dụng chế độ Định vị địa lý. Bạn có muốn tiếp tục không?</value>
+  </data>
+    <data name="AssigmentMap_CreateInterview_OutTargetArea_Warning" xml:space="preserve">
+    <value>Bạn đang tạo một cuộc phỏng vấn ngoài khu vực mục tiêu. Bạn có muốn tiếp tục không?</value>
+  </data>
+    <data name="AssigmentMap_CreateInterview_DisabledTargetArea_Warning" xml:space="preserve">
+    <value>Khuyến nghị bật chế độ định vị địa lý để kiểm tra khu vực mục tiêu. Bạn có muốn tiếp tục không?</value>
+  </data>
+    <data name="AssigmentMap_GeoTrackingReminder" xml:space="preserve">
+    <value>Bạn đã sử dụng Định vị địa lý hoặc Định vị địa lý khi tạo cuộc phỏng vấn. Vui lòng bật lại nếu bạn muốn sử dụng nó.</value>
   </data>
 </root>

@@ -2,6 +2,12 @@ import path from 'path';
 import { defineConfig } from 'vite';
 import inject from '@rollup/plugin-inject';
 import { ViteFilemanager } from 'filemanager-plugin';
+import Vue from '@vitejs/plugin-vue';
+import Vuetify from 'vite-plugin-vuetify';
+import LocalizationPlugin from './questionnaire/tools/vite-plugin-localization';
+import { normalizePath } from 'vite';
+import { sync } from 'rimraf';
+import fs from 'fs';
 
 const baseDir = path.resolve(__dirname, './');
 const join = path.join.bind(path, baseDir);
@@ -96,6 +102,10 @@ const pages = {
         filename: path.join(baseDir, 'Areas/Pdf/Views/Pdf/Pdf.empty.cshtml'),
         template: path.join(baseDir, 'Areas/Pdf/Views/Pdf/Pdf.Template.cshtml'),
     },
+    /*questionnare: {
+        filename: path.join(baseDir, 'questionnaire/index.html'),
+        template: path.join(baseDir, 'questionnaire/index.template.html'),
+    },*/
 };
 
 const fileTargets = [
@@ -185,12 +195,23 @@ for (var attr in pages) {
     inputPages[attr] = templateHtmlPath;
 }
 
+inputPages.questionnare = path.join(baseDir, 'questionnaire/src/main.js')
+//inputPages.questionnare = path.join(baseDir, 'questionnaire/index.html')
+
+
+
 export default defineConfig(({ mode, command }) => {
+
     const isDevMode = mode === 'development';
     const isProdMode = !isDevMode;
 
     //const base = command == 'serve' ? '/.vite/' : '/assets/';
     const base = command == 'serve' ? '/.vite/' : '/';
+
+    if (command == 'serve' && mode != 'test') {
+        sync(outDir);
+        fs.mkdirSync(outDir);
+    }
 
     return {
         base,
@@ -198,6 +219,36 @@ export default defineConfig(({ mode, command }) => {
             include: ['jquery'],
         },
         plugins: [
+            Vue(),
+            Vuetify({ autoImport: { labs: true } }),
+            LocalizationPlugin({
+                noHash: true,
+                inline: true,
+                patterns: [
+                    normalizePath(
+                        join('../Resources/QuestionnaireEditor.resx')
+                    ),
+                    normalizePath(
+                        join('../Resources/QuestionnaireEditor.*.resx')
+                    ),
+                    normalizePath(join('../Resources/AccountResources.resx')),
+                    normalizePath(join('../Resources/AccountResources.*.resx')),
+                    normalizePath(
+                        join('../Resources/QuestionnaireController.resx')
+                    ),
+                    normalizePath(
+                    join('../Resources/QuestionnaireController.*.resx')
+                    )
+                ],
+                destination: './src/locale',
+                locales: {
+                    '.': [
+                        'QuestionnaireEditor',
+                        'AccountResources',
+                        'QuestionnaireController'
+                    ]
+                }
+            }),
             ViteFilemanager({
                 customHooks: [
                     {
@@ -227,13 +278,16 @@ export default defineConfig(({ mode, command }) => {
                     log: 'error',
                 },
             }),
+            {
+                name: 'CopyManifest'
+            }
         ],
         css: {
             preprocessorOptions: {
                 less: {
-                    additionalData: '@icon-font-path: "/fonts/";',
-                    relativeUrls: true,
-                    rootpath: './',
+                    //additionalData: '@icon-font-path: "../../fonts/";',
+                    //relativeUrls: true,
+                    //rootpath: './',
                     javascriptEnabled: true,
                 },
             },
@@ -242,7 +296,7 @@ export default defineConfig(({ mode, command }) => {
             alias: [
                 {
                     find: '@',
-                    replacement: path.resolve(__dirname, './'),
+                    replacement: path.resolve(__dirname, './questionnare/src'),
                 },
                 {
                     find: '~',
@@ -271,7 +325,7 @@ export default defineConfig(({ mode, command }) => {
         build: {
             minify: isProdMode,
             outDir,
-            //manifest: true,
+            manifest: true,
             rollupOptions: {
                 //external: ['jquery'],
                 //preserveEntrySignatures: true,

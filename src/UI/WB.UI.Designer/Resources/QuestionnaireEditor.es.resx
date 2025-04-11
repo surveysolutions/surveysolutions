@@ -153,9 +153,9 @@
   <data name="ClickHere" xml:space="preserve">
     <value>de clic aquí</value>
   </data>
-  <data name="Close" xml:space="preserve">
-    <value>Close</value>
-  </data>
+    <data name="Close" xml:space="preserve">
+  <value>Cerrar</value>
+</data>
   <data name="CompilationErrorsCounter" xml:space="preserve">
     <value>{{count}} errores encontrado</value>
   </data>
@@ -1061,9 +1061,7 @@
   <data name="HelpAttachmentName" xml:space="preserve">
     <value>El nombre del archivo adjunto que se mostrará.</value>
   </data>
-  <data name="HelpCombobox" xml:space="preserve">
-    <value>Un cuadro combinado es una combinación de una lista desplegable y un cuadro de texto editable de una sola línea. Las categorías se pueden seleccionar escribiendo un valor o su parte o seleccionando un valor de la lista</value>
-  </data>
+  
   <data name="HelpCoverPage" xml:space="preserve">
     <value>La primera sección de cada cuestionario contiene preguntas de identificación que también se muestran en los paneles de control de los entrevistadores y supervisores.</value>
   </data>
@@ -1082,9 +1080,7 @@
   <data name="HelpOptionValue" xml:space="preserve">
     <value>Código entero numérico de la categoría (invisible para el entrevistador)</value>
   </data>
-  <data name="HelpQuestionnaireVarible" xml:space="preserve">
-    <value>La variable del cuestionario se utiliza como prefijo para formar los nombres de los archivos de exportación. Los nombres de las variables y los ID de la lista pueden tener entre {{minLength}} y {{maxLength}} caracteres y deben contener solo los siguientes caracteres: a-z, A-Z, _ o 0-9. El primer carácter no puede ser 0-9 o _ y el último no puede ser _.</value>
-  </data>
+  
   <data name="HelpRosterDisplayMode" xml:space="preserve">
     <value>Subsección: las preguntas de la lista se muestran detrás de los botones correspondientes a las instancias de la lista. Plano: las preguntas de la lista se muestran en el mismo nivel, separadas por encabezados que corresponden a las instancias de la lista. Tabla: las preguntas de la lista se muestran en el mismo nivel que las filas y columnas de la tabla. Matriz: una pregunta categórica de la lista se muestra como matriz. Las vistas de tabla y matriz solo se admiten en encuestas web, la tableta vuelve al modo 'Subsección'.</value>
   </data>
@@ -1130,9 +1126,9 @@
   <data name="OnlyFirstOptionsWillBeTakenConfirmation" xml:space="preserve">
     <value>¿Solo las primeras {{count}} categorías se tomarán para la pregunta "{{trimmedTitle}}"?</value>
   </data>
-  <data name="OptionsWindowTitle" xml:space="preserve">
-    <value>Edit categories</value>
-  </data>
+    <data name="OptionsWindowTitle" xml:space="preserve">
+  <value>Editar categorías</value>
+</data>
   <data name="Preview" xml:space="preserve">
     <value>Vista previa de la revisión n.º {{revision}}</value>
   </data>
@@ -1244,14 +1240,14 @@
   <data name="SettingsQuestionnaireVariable" xml:space="preserve">
     <value>Variable del cuestionario</value>
   </data>
-  <data name="ShowAsList" xml:space="preserve">
-    <value>Show as a list of categories</value>
-  </data>
+    <data name="ShowAsList" xml:space="preserve">
+  <value>Mostrar como una lista de categorías</value>
+</data>
   <data name="SideBarAttachmentsEmptyLine3" xml:space="preserve">
     <value>Para hacer referencia a un archivo adjunto en el cuestionario, agregue un elemento de texto estático y especifique el archivo adjunto {{-name}} en su propiedad de archivo adjunto</value>
   </data>
   <data name="SideBarCategoriesCounter" xml:space="preserve">
-    <value>{{count}} Categories</value>
+      <value>{{count}} Categorias</value>
   </data>
   <data name="SideBarCategoriesEmptyLine1" xml:space="preserve">
     <value>Utilice esta pestaña para administrar categorías reutilizables.</value>
@@ -1280,17 +1276,11 @@
   <data name="SideBarCommentsCounter_plural" xml:space="preserve">
     <value>{{count}} Hilos de comentarios:</value>
   </data>
-  <data name="SideBarCommentsTitle" xml:space="preserve">
-    <value>Comments</value>
-  </data>
+    <data name="SideBarCommentsTitle" xml:space="preserve">
+  <value>Comentarios</value>
+</data>
   <data name="SideBarEmptyCommentsLine" xml:space="preserve">
     <value>Verás comentarios aquí</value>
-  </data>
-  <data name="SideBarMetadataAdditionalInfo" xml:space="preserve">
-    <value>Additional info</value>
-  </data>
-  <data name="SideBarMetadataAgreeToMakeThisQuestionnairePublic" xml:space="preserve">
-    <value>Agree to make this questionnaire public</value>
   </data>
   <data name="SideBarMetadataBasicInfo" xml:space="preserve">
     <value>Información básica</value>
@@ -1303,9 +1293,6 @@
   </data>
   <data name="SideBarMetadataCoverage" xml:space="preserve">
     <value>Cobertura:</value>
-  </data>
-  <data name="SideBarMetadataFunding" xml:space="preserve">
-    <value>Funding:</value>
   </data>
   <data name="SideBarMetadataHeader" xml:space="preserve">
     <value>Descripción del cuestionario e información de la encuesta</value>
@@ -1336,9 +1323,6 @@
   </data>
   <data name="SideBarMetadataSubtitle" xml:space="preserve">
     <value>Subtitular:</value>
-  </data>
-  <data name="SideBarMetadataSurveyDataInfo" xml:space="preserve">
-    <value>Survey data information</value>
   </data>
   <data name="SideBarMetadataSurveyInfo" xml:space="preserve">
     <value>Información de la encuesta</value>
@@ -1411,5 +1395,267 @@
   </data>
   <data name="ManageAccount" xml:space="preserve">
       <value>Administrar cuenta</value>
+  </data>
+    <data name="AccessSettings" xml:space="preserve">
+  <value>Acceso</value>
+</data>
+    <data name="AddEnablingCondition" xml:space="preserve">
+  <value>Agregar condición habilitante</value>
+</data>
+    <data name="AddFilter" xml:space="preserve">
+  <value>Agregar filtro</value>
+</data>
+    <data name="AnonymousLink" xml:space="preserve">
+  <value>Enlace anónimo:</value>
+</data>
+    <data name="CopyLink" xml:space="preserve">
+  <value>Copiar enlace</value>
+</data>
+    <data name="AnonymousQuestionnaireDescriptionSettings" xml:space="preserve">
+  <value>Los usuarios que tengan este enlace podrán abrir este cuestionario</value>
+</data>   
+    <data name="HelpCombobox" xml:space="preserve">
+  <value>Un cuadro combinado es una combinación de una lista desplegable y un cuadro de texto de una sola línea editable. Las categorías se pueden seleccionar escribiendo un valor o parte de él o seleccionando un valor de la lista</value>
+</data>
+    <data name="HelpQuestionnaireVarible" xml:space="preserve">
+  <value>La variable del cuestionario se usa como prefijo para formar nombres para los archivos de exportación. Los nombres de variables y los ID de roster pueden tener entre {{minLength}} y {{maxLength}} caracteres de longitud y deben contener solo los siguientes caracteres: a-z, A-Z, _, o 0-9. El primer carácter no puede ser 0-9 o _ y el último no puede ser _.</value>
+</data>
+    <data name="AnonymousQuestionnaireGeneratedDate" xml:space="preserve">
+  <value>enlace generado: {{datetime}}</value>
+</data>
+    <data name="AnonymousQuestionnaireSettings" xml:space="preserve">
+  <value>Compartir enlace</value>
+</data>
+    <data name="AttachmentDimensionsAreTooBig" xml:space="preserve">
+  <value>Las dimensiones son demasiado grandes</value>
+</data>
+    <data name="AttachmentName" xml:space="preserve">
+  <value>Nombre del adjunto</value>
+</data>
+    <data name="CollaboratorsDescriptionSettings" xml:space="preserve">
+  <value>los siguientes usuarios tienen acceso a este cuestionario</value>
+</data>
+    <data name="CommunicationError" xml:space="preserve">
+  <value>Error de red</value>
+</data>
+    <data name="CopyTo" xml:space="preserve">
+  <value>Copiar a</value>
+</data>
+    <data name="DataChangesReverted" xml:space="preserve">
+  <value>Cambios de datos revertidos</value>
+</data>
+    <data name="Default" xml:space="preserve">
+  <value>Predeterminado</value>
+</data>
+    <data name="DeleteItemCofirm" xml:space="preserve">
+  <value>¿Está seguro de que desea eliminar este elemento?</value>
+</data>
+    <data name="EditItem" xml:space="preserve">
+  <value>Editar elemento</value>
+</data>
+    <data name="EditorShowComments" xml:space="preserve">
+  <value>Mostrar comentarios ({{count}})</value>
+</data>
+    <data name="FileUploaded" xml:space="preserve">
+  <value>Archivo subido</value>
+</data>
+    <data name="Filter" xml:space="preserve">
+  <value>Filtro</value>
+</data>
+    <data name="GeographyInputModeManual" xml:space="preserve">
+  <value>Manual</value>
+</data>
+    <data name="GeographyInputModeAutomatic" xml:space="preserve">
+  <value>Automático</value>
+</data>
+    <data name="GeographyInputModeSemiautomatic" xml:space="preserve">
+  <value>Semiautomático</value>
+</data>
+    <data name="GeometryInputMode" xml:space="preserve">
+  <value>Modo de entrada</value>
+</data>
+    <data name="GeometryOverlapDetection" xml:space="preserve">
+  <value>Detección de superposición</value>
+</data>
+    <data name="QuestionIsCritical" xml:space="preserve">
+    <value>Esta es una pregunta crítica</value>
+</data>
+    <data name="HelpIsCritical" xml:space="preserve">
+    <value>Los autores del cuestionario pueden indicar que la respuesta a una pregunta es crítica para la presentación de la entrevista.</value>
+</data>
+    <data name="HelpCriticalityConditionExpression" xml:space="preserve">
+    <value>Una expresión lógica que evalúa la entrevista en su conjunto para determinar si cumple con las reglas críticas (cuando esta expresión se evalúa como "Verdadero"). Puede referirse a cualquier pregunta o variable.</value>
+</data>
+    <data name="HelpCriticalityConditionMessage" xml:space="preserve">
+    <value>Este mensaje se muestra cuando la condición crítica se evalúa como "Falso" o se produce una excepción durante la evaluación de la expresión. El mensaje puede utilizar hipervínculos y sustitución de texto.</value>
+</data>
+    <data name="HelpOverlapDetection" xml:space="preserve">
+  <value>Mostrar y resaltar las superposiciones de la respuesta a esta pregunta con las respuestas a las mismas preguntas en instancias de roster hermanas</value>
+</data>
+    <data name="HideParentValues" xml:space="preserve">
+  <value>Ocultar valores principales</value>
+</data>
+    <data name="HotkeysCloseComments" xml:space="preserve">
+  <value>Cerrar panel de comentarios</value>
+</data>
+    <data name="HotkeysCloseScenarios" xml:space="preserve">
+  <value>Cerrar panel de escenarios</value>
+</data>
+    <data name="Login" xml:space="preserve">
+  <value>Iniciar sesión</value>
+</data>
+  <data name="No" xml:space="preserve">
+      <value>No</value>
+  </data>
+    <data name="NewItem" xml:space="preserve">
+  <value>Nuevo elemento</value>
+</data>
+    <data name="OptionsCascadingListError" xml:space="preserve">
+  <value>
+Ingresaste una entrada no válida. Cada línea debe seguir el formato: "Título...ValorPadre/Valor[...Nombre del adjunto]". 'Valor' y 'ValorPadre' deben ser un número entero. 'Título' debe ser una cadena alfanumérica. 'Nombre del adjunto' es opcional. No se permiten líneas vacías.</value>
+</data>
+    <data name="OptionsSizeLimit" xml:space="preserve">
+  <value>Máximo {max_rows} filas permitidas</value>
+</data>
+    <data name="OptionsUploadRevert" xml:space="preserve">
+  <value>Annuler les modifications</value>
+</data>
+    <data name="PublicAccessDescriptionSettings" xml:space="preserve">
+  <value>Les questionnaires publics sont visibles par tous les utilisateurs ayant un compte dans ce système en mode lecture seule.</value>
+</data>
+    <data name="PublicAccessSettingsStatusOn" xml:space="preserve">
+  <value>Le questionnaire est actuellement partagé en public.</value>
+</data>
+    <data name="PublicAccessSettingsStatusOff" xml:space="preserve">
+  <value>Le questionnaire n'est actuellement pas partagé en public.</value>
+</data>
+    <data name="PublicAccessSettingsOn" xml:space="preserve">
+  <value>Activer l'accès public.</value>
+</data>
+    <data name="PublicAccessSettingsOff" xml:space="preserve">
+  <value>Désactiver l'accès public.</value>
+</data>
+    <data name="RefreshPageConfirm" xml:space="preserve">
+  <value>Nous avons mis à jour ce site, veuillez actualiser la page, ou vous pourriez rencontrer un comportement inattendu</value>
+</data>
+    <data name="Refresh" xml:space="preserve">
+  <value>Actualiser</value>
+</data>
+    <data name="RegenerateQuestionnaireSharingLink" xml:space="preserve">
+  <value>Link neu generieren</value>
+</data>
+    <data name="Register" xml:space="preserve">
+    <value>Registro</value>
+</data>
+    <data name="RequiredField" xml:space="preserve">
+  <value>Campo requerido</value>
+</data>
+    <data name="Reset" xml:space="preserve">
+  <value>Restablecer</value>
+</data>
+    <data name="RowAdded" xml:space="preserve">
+  <value>Fila añadida</value>
+</data>
+    <data name="SettingsAccessibleToEveryone" xml:space="preserve">
+  <value>accesible en modo de solo lectura para cualquiera con el enlace</value>
+</data>
+    <data name="SettingsStatusAllowAnonymousAccess" xml:space="preserve">
+  <value>El uso compartido anónimo está actualmente activado.</value>
+</data>
+    <data name="SettingsAnonymous" xml:space="preserve">
+  <value>Anónimo</value>
+</data>
+    <data name="SettingsStatusDontAllowAnonymousAccess" xml:space="preserve">
+  <value>El uso compartido anónimo está actualmente desactivado.</value>
+</data>
+    <data name="SettingsTurnOnAnonymousAccess" xml:space="preserve">
+  <value>Activar el uso compartido anónimo.</value>
+</data>
+    <data name="SettingsTurnOffAnonymousAccess" xml:space="preserve">
+  <value>Desactivar el uso compartido anónimo.</value>
+</data>
+    <data name="ShowList" xml:space="preserve">
+  <value>Mostrar lista</value>
+</data>
+    <data name="ShowParentValues" xml:space="preserve">
+  <value>Mostrar valores principales</value>
+</data>
+    <data name="SideBarAddCriticalityCondition" xml:space="preserve">
+  <value>añadir nueva regla crítica</value>
+</data>
+    <data name="SideBarCategoriesAddNew" xml:space="preserve">
+  <value>Añadir nuevas categorías</value>
+</data>
+    <data name="SideBarCriticalityConditionExpression" xml:space="preserve">
+    <value>Condición crítica</value>
+</data>
+    <data name="SideBarCriticalityConditionsCounter" xml:space="preserve">
+    <value>{{count}} Regla crítica:</value>
+</data>
+    <data name="SideBarCriticalityConditionsCounter_plural" xml:space="preserve">
+    <value>{{count}} Reglas críticas:</value>
+</data>
+    <data name="SideBarCriticalityConditionDescription" xml:space="preserve">
+    <value>Descripción</value>
+</data>
+    <data name="SideBarCriticalityConditionsEmptyLine1" xml:space="preserve">
+  <value>Utilice esta pestaña para definir reglas críticas.</value>
+</data>
+    <data name="SideBarCriticalityConditionsEmptyLine2" xml:space="preserve">
+  <value>Cada regla crítica consiste en una condición y un mensaje. Las condiciones críticas pueden referirse a cualquier pregunta o variable y deben ser satisfechas (evaluarse como verdadero). El tratamiento de entrevistas con condiciones críticas insatisfechas se determina durante la importación del cuestionario al servidor de datos.</value>
+</data>
+    <data name="SideBarCriticalityConditionsEmptyLine3" xml:space="preserve">
+  <value>Incluya un mensaje para el entrevistador (respondente) para explicar qué necesita ser cambiado en la entrevista (el mensaje se muestra cuando la condición crítica no se satisface). Incluir hipervínculos a preguntas en el mensaje es útil para la navegación.</value>
+</data>
+    <data name="SideBarCriticalityConditionMessage" xml:space="preserve">
+  <value>Mensaje</value>
+</data>
+    <data name="SideBarCriticalityConditionNoMessage" xml:space="preserve">
+  <value>Regla crítica sin mensaje</value>
+</data>
+    <data name="SideBarCriticalityConditionsTitle" xml:space="preserve">
+  <value>Reglas críticas</value>
+</data>
+    <data name="SideBarDownload" xml:space="preserve">
+  <value>Descargar:</value>
+</data>
+    <data name="SideBarEditCategories" xml:space="preserve">
+  <value>Editar categorías</value>
+</data>
+    <data name="SideBarHideDescription" xml:space="preserve">
+  <value>ocultar descripción</value>
+</data>
+    <data name="SideBarMetadataAdditionalInfo" xml:space="preserve">
+  <value>Información adicional</value>
+</data>
+    <data name="SideBarMetadataAgreeToMakeThisQuestionnairePublic" xml:space="preserve">
+  <value>Aceptar hacer público este cuestionario</value>
+</data>
+    <data name="SideBarMetadataFunding" xml:space="preserve">
+  <value>Financiación:</value>
+</data>
+    <data name="SideBarMetadataSurveyDataInfo" xml:space="preserve">
+  <value>Información de los datos de la encuesta</value>
+</data>
+    <data name="SideBarShowDescription" xml:space="preserve">
+  <value>añadir descripción</value>
+</data>
+  <data name="SideBarXlsx" xml:space="preserve">
+      <value>Xlsx</value>
+  </data>
+    <data name="StringsView" xml:space="preserve">
+  <value>Vista de texto</value>
+</data>
+    <data name="TableView" xml:space="preserve">
+  <value>Vista de tabla</value>
+</data>
+    <data name="ValidationIntValue" xml:space="preserve">
+  <value>El valor es demasiado grande</value>
+</data>
+  <data name="SideBarTranslationGetTemplateLinkTextCsv" xml:space="preserve">
+      <value>Tab (txt)</value>
+  </data>
+  <data name="SideBarTab" xml:space="preserve">
+      <value>Tab</value>
   </data>
 </root>

@@ -576,4 +576,21 @@
   <data name="ViewListPreloadedData" xml:space="preserve">
     <value>Ver lista de valores precargados</value>
   </data>
+    <data name="SimpleColumnsTitle" xml:space="preserve">
+  <value>Opcionalmente puede especificar las siguientes columnas:</value>
+</data>
+    <data name="BatchColumnsTitle" xml:space="preserve">
+  <value>Opcionalmente puede especificar las siguientes columnas en el archivo de nivel de entrevista principal:</value>
+</data>
+    <data name="ColumnsDescription" xml:space="preserve">
+    <value>&lt;b&gt;_responsible&lt;/b&gt; - nombre de usuario de una sede, supervisor o entrevistador que será responsable de la asignación;&lt;br/&gt;
+&lt;b&gt;_quantity&lt;/b&gt; - capacidad de la asignación;&lt;br/&gt;
+&lt;b&gt;_email&lt;/b&gt; - correo electrónico del encuestado (solo para entrevistas web);&lt;br/&gt;
+&lt;b&gt;_password&lt;/b&gt; - contraseña para iniciar una entrevista (solo para entrevistas web);&lt;br/&gt;
+&lt;b&gt;_webmode&lt;/b&gt; - modo de asignación (1 para CAWI, 0 o en blanco para CAPI);&lt;br/&gt;
+&lt;b&gt;_record_audio&lt;/b&gt; - la grabación de audio está habilitada para entrevistas (1 - habilitado, 0 - deshabilitado, en blanco - obtenga este valor del cuestionario);&lt;br/&gt;
+&lt;b&gt;_comment&lt;/b&gt; - comentarios para la asignación;&lt;br/&gt;
+&lt;b&gt;_target_area&lt;/b&gt; - área objetivo para la asignación</value>
+        <comment>No traduzca _responsible, _quantity, _email, _webmode, _record_audio. Mantenga los nombres en inglés</comment>
+  </data>
 </root>

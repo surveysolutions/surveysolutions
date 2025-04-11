@@ -279,4 +279,7 @@
   <data name="EmailOrLogin_required" xml:space="preserve">
     <value>Введите имя пользователя или email</value>
   </data>
+  <data name="InvalidLoginAttempt" xml:space="preserve">
+      <value>Неуспешная попытка входа</value>
+  </data>
 </root>

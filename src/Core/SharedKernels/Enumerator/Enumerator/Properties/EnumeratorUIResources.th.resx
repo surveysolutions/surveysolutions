@@ -432,4 +432,7 @@
   <data name="Warning" xml:space="preserve">
     <value>คำเตือน</value>
   </data>
+  <data name="NotSupportedServerSyncProtocolVersion" xml:space="preserve">
+      <value>ตรวจพบเวอร์ชันที่เข้ากันไม่ได้ โปรดติดต่อหัวหน้าของคุณเพื่อแก้ไขปัญหา</value>
+  </data>
 </root>

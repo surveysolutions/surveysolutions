@@ -117,103 +117,446 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Active" xml:space="preserve">
-    <value>نشط</value>
-  </data>
-  <data name="AllAssignments" xml:space="preserve">
-    <value>جميع المهام</value>
-  </data>
-  <data name="Archive" xml:space="preserve">
-    <value>الأرشيف</value>
-  </data>
-  <data name="Archived" xml:space="preserve">
-    <value>تم أرشفته</value>
-  </data>
-  <data name="AssignmentsHeader" xml:space="preserve">
-    <value>مهام</value>
-  </data>
-  <data name="AssignmentsSelected" xml:space="preserve">
-    <value>اختايار مهمة (مهام) {{count}}</value>
-  </data>
-  <data name="ChangeExpectedModalTitle" xml:space="preserve">
-    <value>تحرير الحجم للمهمة {{assignmentId}}</value>
-  </data>
-  <data name="Count" xml:space="preserve">
-    <value>تعداد</value>
-  </data>
-  <data name="CreateAssignment_AnswersInstruction" xml:space="preserve">
-    <value>املأ كل أو بعض حقول التحديد</value>
-  </data>
-  <data name="CreatedAt" xml:space="preserve">
-    <value>تم انشاءه على</value>
-  </data>
-  <data name="CreateInterview" xml:space="preserve">
-    <value>بدء مقابلة جديدة</value>
-  </data>
-  <data name="IdentifyingQuestions" xml:space="preserve">
-    <value>تحديد الأسئلة</value>
-  </data>
-  <data name="InterviewsNeeded" xml:space="preserve">
-    <value>المقابلات مطلوبة</value>
-  </data>
-  <data name="InvalidExpected" xml:space="preserve">
-    <value>حقل الحجم يجب ان يكون -1 أو أكثر</value>
-  </data>
-  <data name="NumberOfAssignmentsAffected" xml:space="preserve">
-    <value>{{count}} مهمة (مهام) سوف يتم تغيرها </value>
-  </data>
-  <data name="Questionnaire" xml:space="preserve">
-    <value>استبيان</value>
-  </data>
-  <data name="SelectResponsible" xml:space="preserve">
-    <value>اختر مسؤول</value>
-  </data>
-  <data name="ShowArchived" xml:space="preserve">
-    <value>حالة الأرشفة</value>
-  </data>
-  <data name="Expected" xml:space="preserve">
-    <value>الحجم</value>
-  </data>
-  <data name="ExpectedExplanation" xml:space="preserve">
-    <value>حدد العدد الأقصى للمقابلات التي ستنشأ لهذا التعيين. القيم المسموح بها: -1 هي للتخصيص غير المحدود، 0 هو للتخصيص الفارغ، وأرقام لحجم التعيين</value>
-  </data>
-  <data name="Tooltip_Filter_ArchivedStatus" xml:space="preserve">
-    <value>مؤشر ما إذا كانت التخصيصات نشطة أو تم حفظها.</value>
-  </data>
-  <data name="Tooltip_Filter_Questionnaire" xml:space="preserve">
-    <value>نسخة الاستبيان. حدد نسخة استبيان لرؤية المقابلات المرتبطة بها في التقرير إلى اليمين. حدد "جميع الاستبيانات" لرؤية المقابلات المرتبطة بأي استبيان.</value>
-  </data>
-  <data name="Tooltip_Filter_Responsible" xml:space="preserve">
-    <value>المستخدم المسؤول. انقر في الحقل لاختيار اسم مستخدم إما بتحديده مباشرة أو الكتابة لتصفية قائمة أسماء المستخدمين كذلك.</value>
-  </data>
-  <data name="Tooltip_Table_Count" xml:space="preserve">
-    <value>عدد المقابلات المقدمة حاليا لهذا التنازل. قد يكون قد تم إنشاء المزيد من المقابلات ولكن لم تتم مزامنتها. انقر على أي خلية لعرض المقابلات المرتبطة بها. انقر على أيقونة الفرز لفرز حسب العد.</value>
-  </data>
-  <data name="Tooltip_Table_CreatedAt" xml:space="preserve">
-    <value>عند إنشاء التعيين في البداية. انقر على رمز الفرز للفرز حسب الوقت.</value>
-  </data>
-  <data name="Tooltip_Table_IdentifyingQuestions" xml:space="preserve">
-    <value>المعلومات التي تحدد كل مهمة. هذه هي الإجابات على الأسئلة التي تم تحديدها على أنها محددة في المصمم.</value>
-  </data>
-  <data name="Tooltip_Table_InterviewsNeeded" xml:space="preserve">
-    <value>عدد المقابلات اللازمة لإتمام هذه المهمة.</value>
-  </data>
-  <data name="Tooltip_Table_Responsible" xml:space="preserve">
-    <value>المستخدم المسؤول حاليا عن التعيين. انقر على رمز الفرز لفرز اسم المستخدم.</value>
-  </data>
-  <data name="Tooltip_Table_ExpectedValue" xml:space="preserve">
-    <value>الحد الأقصى لعدد المقابلات التي يمكن إجراؤها لهذه المهمة. انقر على أي خلية لتغيير هذا الرقم. انقر على رمز الفرز للفرز حسب الحجم.</value>
-  </data>
-  <data name="Tooltip_Table_UpdatedAt" xml:space="preserve">
-    <value>عندما تم تحديث آخر مهمة. انقر على رمز الفرز للفرز حسب الوقت.</value>
-  </data>
-  <data name="Unarchive" xml:space="preserve">
-    <value>الغاء الارشفة</value>
-  </data>
-  <data name="Unlimited" xml:space="preserve">
-    <value>غير محدود</value>
-  </data>
-  <data name="UpdatedAt" xml:space="preserve">
-    <value>تم تحديثه في</value>
-  </data>
+    <data name="Active" xml:space="preserve">
+  <value>نشط</value>
+</data>
+    <data name="Archive" xml:space="preserve">
+  <value>أرشيف</value>
+</data>
+    <data name="Archived" xml:space="preserve">
+  <value>مؤرشف</value>
+</data>
+    <data name="AssignmentsHeader" xml:space="preserve">
+  <value>التعيينات</value>
+</data>
+    <data name="AssignmentsSelected" xml:space="preserve">
+  <value>تم اختيار {{count}} تعيين</value>
+</data>
+    <data name="AssignmentsSelected_other" xml:space="preserve">
+  <value>تم اختيار {{count}} تعيينات</value>
+</data>
+    <data name="ExpectedExplanation" xml:space="preserve">
+    <value>حدد الحد الأقصى لعدد المقابلات التي سيتم إنشاؤها لهذا التعيين. القيم المسموح بها: -1 للتعيين غير المحدود، 0 للتعيين الفارغ، الأرقام لقيمة التعيين المتوقعة</value>
+</data>
+    <data name="ChangeExpectedModalTitle" xml:space="preserve">
+    <value>تحرير القيمة المتوقعة للتعيين {{assignmentId}}</value>
+</data>
+    <data name="ChangeModeModalTitle" xml:space="preserve">
+  <value>تغيير الوضع للتعيين {{assignmentId}}</value>
+</data>
+    <data name="ModeExplanation" xml:space="preserve">
+  <value>يسمح وضع CAWI بجمع البيانات من المستجيبين مباشرة</value>
+</data>
+    <data name="CreatedAt" xml:space="preserve">
+  <value>تم الإنشاء في</value>
+</data>
+    <data name="IdentifyingQuestions" xml:space="preserve">
+  <value>الأسئلة التعريفية</value>
+</data>
+    <data name="Count" xml:space="preserve">
+  <value>تم جمعها</value>
+</data>
+    <data name="NumberOfAssignmentsAffected" xml:space="preserve">
+  <value>سيتم تغيير {{count}} تعيين</value>
+</data>
+    <data name="NumberOfAssignmentsAffected_other" xml:space="preserve">
+  <value>سيتم تغيير {{count}} تعيينات</value>
+</data>
+    <data name="Expected" xml:space="preserve">
+  <value>متوقع</value>
+</data>
+    <data name="SelectResponsible" xml:space="preserve">
+  <value>اختر المسؤول</value>
+</data>
+    <data name="ResponsibleRequired" xml:space="preserve">
+  <value>المسؤول مطلوب</value>
+</data>
+    <data name="WebModeNonInterviewer" xml:space="preserve">
+  <value>يجب أن يتم تعيين جميع التعيينات للمقابلات عبر الويب إلى مقابِل</value>
+</data>
+    <data name="WebModeReassignToNonInterviewer" xml:space="preserve">
+  <value>أنت تعيد تعيين التعيين عبر الويب إلى مستخدم ليس مقابِلًا. إذا كنت قد أرسلت الرابط بالفعل لهذا التعيين، فلن يتمكن المستجيبون من الرد على استبيانك حتى يتم إعادة التعيين إلى مستخدم في دور المقابِل.</value>
+</data>
+    <data name="WebModeReassignToNonInterviewer_other" xml:space="preserve">
+  <value>أنت تعيد تعيين التعيينات عبر الويب إلى مستخدم ليس مقابِلًا. إذا كنت قد أرسلت الروابط بالفعل لهذه التعيينات، فلن يتمكن المستجيبون من الرد على استبيانك حتى يتم إعادة التعيينات إلى مستخدم في دور المقابِل.</value>
+</data>
+    <data name="ShowArchived" xml:space="preserve">
+  <value>حالة الأرشيف</value>
+</data>
+    <data name="Unarchive" xml:space="preserve">
+  <value>إلغاء الأرشفة</value>
+</data>
+    <data name="Unlimited" xml:space="preserve">
+  <value>غير محدود</value>
+</data>
+    <data name="InterviewsNeeded" xml:space="preserve">
+  <value>المقابلات المطلوبة</value>
+</data>
+    <data name="CreateInterview" xml:space="preserve">
+  <value>بدء مقابلة جديدة</value>
+</data>
+    <data name="UpdatedAt" xml:space="preserve">
+  <value>تم التحديث في</value>
+</data>
+    <data name="CreateAssignment_AnswersInstruction" xml:space="preserve">
+  <value>املأ جميع أو بعض الحقول التعريفية</value>
+</data>
+    <data name="CreateAssignment_ResponsibleInstruction" xml:space="preserve">
+  <value>اختر المسؤول (المقر الرئيسي أو المشرف أو المقابِل) لهذا التعيين</value>
+</data>
+    <data name="Questionnaire" xml:space="preserve">
+  <value>الاستبيان</value>
+</data>
+    <data name="AllAssignments" xml:space="preserve">
+  <value>جميع التعيينات</value>
+</data>
+    <data name="Tooltip_Filter_ArchivedStatus" xml:space="preserve">
+  <value>مؤشر ما إذا كان التعيين نشطًا أو تم أرشفته.</value>
+</data>
+    <data name="Tooltip_Filter_Questionnaire" xml:space="preserve">
+  <value>اختر استبيانًا لرؤية التعيينات المرتبطة به. اختر "جميع الاستبيانات" لرؤية التعيينات المرتبطة بأي استبيان.</value>
+</data>
+    <data name="Tooltip_Filter_Responsible" xml:space="preserve">
+  <value>المستخدم المسؤول. انقر في الحقل لاختيار اسم المستخدم إما عن طريق تحديده مباشرة أو الكتابة لتصفية قائمة أسماء المستخدمين بشكل أكبر.</value>
+</data>
+    <data name="Tooltip_Table_Count" xml:space="preserve">
+  <value>عدد المقابلات المقدمة حاليًا لهذا التعيين. قد تكون قد تم إنشاء المزيد من المقابلات ولكن لم تتم مزامنتها. انقر على أي خلية لعرض المقابلات المرتبطة. انقر على أيقونة الفرز للفرز حسب العدد.</value>
+</data>
+    <data name="Tooltip_Table_CreatedAt" xml:space="preserve">
+  <value>عندما تم إنشاء التعيين في البداية. انقر على أيقونة الفرز للفرز حسب الوقت.</value>
+</data>
+    <data name="Tooltip_Table_IdentifyingQuestions" xml:space="preserve">
+  <value>المعلومات التي تحدد كل تعيين. هذه هي الإجابات على الأسئلة التي تم تحديدها كتعريفية في المصمم.</value>
+</data>
+    <data name="Tooltip_Table_InterviewsNeeded" xml:space="preserve">
+  <value>عدد المقابلات المطلوبة لإكمال هذا التعيين.</value>
+</data>
+    <data name="Tooltip_Table_Responsible" xml:space="preserve">
+  <value>المستخدم المسؤول حاليًا عن التعيين. انقر على أيقونة الفرز لفرز اسم المستخدم.</value>
+</data>
+    <data name="Tooltip_Table_ExpectedValue" xml:space="preserve">
+    <value>الحد الأقصى لعدد المقابلات التي يمكن إجراؤها لهذا التعيين. انقر على أي خلية لتغيير هذا الرقم. انقر على أيقونة الفرز للفرز حسب القيمة المتوقعة.</value>
+</data>
+    <data name="Tooltip_Table_UpdatedAt" xml:space="preserve">
+  <value>عندما تم تحديث التعيين آخر مرة. انقر على أيقونة الفرز للفرز حسب الوقت.</value>
+</data>
+    <data name="Tooltip_Table_ReceivedByTablet" xml:space="preserve">
+  <value>مؤشر على ما إذا كان التعيين قد تم تنزيله على الجهاز اللوحي. انقر على أيقونة الفرز للفرز حسب وقت الاستلام.</value>
+</data>
+    <data name="InvalidExpected" xml:space="preserve">
+    <value>يجب أن تكون القيمة المتوقعة -1 أو أكثر.</value>
+</data>
+    <data name="AssignmentExpectedInWebMode" xml:space="preserve">
+    <value>لا يمكن تغيير القيمة المتوقعة لتعيين وضع الويب.</value>
+</data>
+    <data name="SelectQuestionnaire" xml:space="preserve">
+  <value>اختر استبيانًا موجودًا لترقية التعيينات منه</value>
+</data>
+    <data name="UpgradeDescription" xml:space="preserve">
+  <value>عند ترقية التعيينات، سيتم ترقية جميع التعيينات المعلقة.</value>
+</data>
+    <data name="SelectQuestionnaireToUpgradeFrom" xml:space="preserve">
+  <value>اختر استبيانًا للترقية منه</value>
+</data>
+    <data name="UpgradeBtn" xml:space="preserve">
+  <value>ترقية</value>
+</data>
+    <data name="UpgradeProgressTitle" xml:space="preserve">
+  <value>ترقية التعيينات من {{from}} إلى {{to}}</value>
+</data>
+    <data name="UpgradeProgressNumbers" xml:space="preserve">
+  <value>ترقية {{processed}} من {{totalCount}}</value>
+</data>
+    <data name="UpgradeProgressErrors" xml:space="preserve">
+  <value>مع أخطاء {{errorCount}}</value>
+</data>
+    <data name="Stop" xml:space="preserve">
+  <value>إيقاف</value>
+</data>
+    <data name="UpgradePreparation" xml:space="preserve">
+  <value>في انتظار انتهاء الترقيات الأخرى</value>
+</data>
+    <data name="UpgradeCancelled" xml:space="preserve">
+  <value>تم إيقاف الترقية</value>
+</data>
+    <data name="UpgradeError" xml:space="preserve">
+  <value>حدث خطأ. حاول مرة أخرى لاحقًا.</value>
+</data>
+    <data name="UpgradeProgressDone" xml:space="preserve">
+  <value>تم</value>
+</data>
+    <data name="UpgradeProgressDoneCount" xml:space="preserve">
+  <value>تمت الترقية بنجاح: {{processed}}</value>
+</data>
+    <data name="UpgradeProgressErrorCount" xml:space="preserve">
+  <value>لم يتم الترقية: {{count}}</value>
+</data>
+    <data name="UpgradeDownloadFailed" xml:space="preserve">
+  <value>قائمة التنزيل</value>
+</data>
+    <data name="UpgradeProgressDoneTitle" xml:space="preserve">
+  <value>تم الانتهاء من الترقية من {{from}} إلى {{to}}</value>
+</data>
+    <data name="ReceivedByTablet_All" xml:space="preserve">
+  <value>عرض الكل</value>
+</data>
+    <data name="ReceivedByTablet_Received" xml:space="preserve">
+  <value>تم الاستلام بواسطة الجهاز اللوحي</value>
+</data>
+    <data name="ReceivedByTablet_NotReceived" xml:space="preserve">
+  <value>لم يتم الاستلام بواسطة الجهاز اللوحي</value>
+</data>
+    <data name="Tooltip_Filter_Received" xml:space="preserve">
+  <value>مؤشر على ما إذا كان التعيين قد تم استلامه أم لا</value>
+</data>
+    <data name="ReceivedByTablet" xml:space="preserve">
+  <value>تم الاستلام بواسطة الجهاز اللوحي</value>
+</data>
+    <data name="CreatingNewAssignment" xml:space="preserve">
+  <value>إنشاء تعيين جديد للاستبيان {{questionnaire}}</value>
+</data>
+    <data name="AssignTo" xml:space="preserve">
+  <value>تعيين إلى</value>
+</data>
+    <data name="Tooltip_Filter_QuestionnaireVersion" xml:space="preserve">
+  <value>اختر إصدار استبيان لرؤية التعيينات المرتبطة به. اختر "جميع الإصدارات" لرؤية التعيينات المرتبطة بأي إصدار من الاستبيان المحدد.</value>
+</data>
+    <data name="ErrorToCreateAssignment" xml:space="preserve">
+  <value>لا يمكن إنشاء التعيين.</value>
+</data>
+    <data name="IsAudioRecordingEnabled" xml:space="preserve">
+  <value>تسجيل الصوت</value>
+</data>
+    <data name="Tooltip_Table_IsAudioRecordingEnabled" xml:space="preserve">
+  <value>تسجيل عملية المقابلة</value>
+</data>
+    <data name="ChangeAudioRecordingModalTitle" xml:space="preserve">
+  <value>إعدادات تسجيل الصوت للتعيين {{id}}</value>
+</data>
+    <data name="AudioRecordingEnable" xml:space="preserve">
+  <value>تمكين تسجيل الصوت</value>
+</data>
+    <data name="CawiModeEnable" xml:space="preserve">
+  <value>تمكين وضع CAWI</value>
+</data>
+    <data name="AudioRecordingExplanation" xml:space="preserve">
+  <value>سيقوم تطبيق المقابِل بتسجيل الصوت للمقابلة عند تمكين تدقيق الصوت. لاحظ أن كمية بيانات المزامنة ستكون أكبر بكثير.</value>
+</data>
+    <data name="NewAssignment" xml:space="preserve">
+  <value>تعيين جديد</value>
+</data>
+    <data name="Email" xml:space="preserve">
+  <value>البريد الإلكتروني</value>
+</data>
+    <data name="EmailExplanation" xml:space="preserve">
+  <value>سيتم استخدام البريد الإلكتروني في التواصل مع مستلم التعيين</value>
+</data>
+    <data name="Password" xml:space="preserve">
+  <value>كلمة المرور</value>
+</data>
+    <data name="PasswordExplanation" xml:space="preserve">
+  <value>سيتم استخدام كلمة المرور لحماية التعيين</value>
+</data>
+    <data name="WebMode" xml:space="preserve">
+  <value>الوضع</value>
+</data>
+    <data name="CreateAssignmentWebModeExplanation" xml:space="preserve">
+  <value>سيتم استخدام هذا التعيين مع وضع الويب</value>
+</data>
+    <data name="Activated" xml:space="preserve">
+  <value>مفعل</value>
+</data>
+    <data name="CawiActivated" xml:space="preserve">
+  <value>تم تفعيل CAWI</value>
+</data>
+    <data name="Tooltip_Table_WebMode" xml:space="preserve">
+  <value>وضع التعيين</value>
+</data>
+    <data name="Tooltip_Table_Email" xml:space="preserve">
+  <value>البريد الإلكتروني للإشعارات</value>
+</data>
+    <data name="Tooltip_Table_Password" xml:space="preserve">
+  <value>كلمة المرور لتقييد الوصول</value>
+</data>
+    <data name="PasswordInstructions" xml:space="preserve">
+  <value>على الأقل 6 أرقام وحروف كبيرة أو رمز واحد '?' لتوليد كلمة المرور</value>
+</data>
+    <data name="EnterPassword" xml:space="preserve">
+  <value>أدخل كلمة المرور</value>
+</data>
+    <data name="EnterEmail" xml:space="preserve">
+  <value>أدخل البريد الإلكتروني</value>
+</data>
+    <data name="ExpectedInstructions" xml:space="preserve">
+  <value>يجب أن يكون رقمًا، -1 لغير محدود، 1 إذا تم تحديد البريد الإلكتروني</value>
+</data>
+    <data name="InvalidEmail" xml:space="preserve">
+  <value>البريد الإلكتروني غير صالح</value>
+</data>
+    <data name="InvalidPassword" xml:space="preserve">
+  <value>كلمة المرور غير صالحة</value>
+</data>
+    <data name="InvalidExpectedMessage" xml:space="preserve">
+    <value>القيمة المتوقعة غير صالحة</value>
+</data>
+    <data name="InvalidExpectedWithEmail" xml:space="preserve">
+    <value>للتعيينات التي تم توفير البريد الإلكتروني لها، القيمة المتوقعة المسموح بها هي 1</value>
+</data>
+    <data name="ExpectedForWebMode" xml:space="preserve">
+    <value>يجب أن يحتوي التعيين مع القيمة المتوقعة 1 لوضع الويب على البريد الإلكتروني أو كلمة المرور</value>
+</data>
+    <data name="DuplicatePasswordByWebModeWithQuantity1" xml:space="preserve">
+  <value>يجب أن تكون كلمة المرور للتعيين لوضع الويب مع الكمية 1 فريدة</value>
+</data>
+    <data name="QuestionnaireVersion" xml:space="preserve">
+  <value>الإصدار {{version}}</value>
+</data>
+    <data name="AssignmentId" xml:space="preserve">
+  <value>معرف التعيين</value>
+</data>
+    <data name="MultipleAssignmentsClose" xml:space="preserve">
+    <value>سيتم إغلاق {{count}} تعيينات مختارة. سيتم تعيين القيمة المتوقعة إلى عدد المقابلات التي تم جمعها حاليًا.</value>
+</data>
+    <data name="SingleAssignmentCloseConfirm" xml:space="preserve">
+    <value>سيتم تغيير القيمة المتوقعة للتعيين المحدد {{id}} من {{quantity}} إلى {{collected}} (عدد المقابلات التي تم جمعها حاليًا)</value>
+</data>
+    <data name="Close" xml:space="preserve">
+  <value>إغلاق</value>
+</data>
+    <data name="AssignmentCloseWebMode" xml:space="preserve">
+  <value>لا يمكن إغلاق التعيين {{id}} لأنه يحتوي على وضع الويب مفعل</value>
+</data>
+    <data name="AssignmentInfo" xml:space="preserve">
+  <value>معلومات التعيين التفصيلية</value>
+</data>
+    <data name="Action_Archived" xml:space="preserve">
+  <value>مؤرشف</value>
+</data>
+    <data name="DetailsComments" xml:space="preserve">
+  <value>تعليق</value>
+</data>
+    <data name="Comments" xml:space="preserve">
+  <value>تعليق</value>
+</data>
+    <data name="Action_AudioRecordingChanged" xml:space="preserve">
+  <value>تم تغيير تسجيل الصوت</value>
+</data>
+    <data name="EnterComments" xml:space="preserve">
+  <value>أدخل تعليقك هنا</value>
+</data>
+    <data name="DateFromPast" xml:space="preserve">
+  <value>التاريخ المحدد في الماضي</value>
+</data>
+    <data name="Action_Created" xml:space="preserve">
+  <value>تم الإنشاء</value>
+</data>
+    <data name="Action_Deleted" xml:space="preserve">
+  <value>تم الحذف</value>
+</data>
+    <data name="Action_ExpectedValueChanged" xml:space="preserve">
+    <value>تم تغيير القيمة المتوقعة</value>
+</data>
+    <data name="Action_ReceivedByTablet" xml:space="preserve">
+  <value>تم الاستلام بواسطة الجهاز اللوحي</value>
+</data>
+    <data name="Action_UnArchived" xml:space="preserve">
+  <value>تم إلغاء الأرشفة</value>
+</data>
+    <data name="Action_Reassigned" xml:space="preserve">
+  <value>تم إعادة التعيين</value>
+</data>
+    <data name="Action_WebModeChanged" xml:space="preserve">
+  <value>تم تغيير وضع الويب</value>
+</data>
+    <data name="Action" xml:space="preserve">
+  <value>الإجراء</value>
+</data>
+    <data name="Actor" xml:space="preserve">
+  <value>بواسطة</value>
+</data>
+    <data name="Date" xml:space="preserve">
+  <value>التاريخ</value>
+</data>
+    <data name="Action_AudioRecordingChanged_False" xml:space="preserve">
+  <value>تم تعطيل تسجيل الصوت</value>
+</data>
+    <data name="Action_AudioRecordingChanged_True" xml:space="preserve">
+  <value>تم تمكين تسجيل الصوت</value>
+</data>
+    <data name="Action_WebModeChanged_False" xml:space="preserve">
+  <value>تم تعطيل وضع الويب</value>
+</data>
+    <data name="Action_WebModeChanged_True" xml:space="preserve">
+  <value>تم تمكين وضع الويب</value>
+</data>
+    <data name="Action_ExpectedValueChanged_To" xml:space="preserve">
+    <value>تم تغيير القيمة المتوقعة إلى {{quantity}}</value>
+</data>
+    <data name="Action_ExpectedValueChanged_To_Unlimited" xml:space="preserve">
+    <value>تم تغيير القيمة المتوقعة إلى غير محدود</value>
+</data>
+    <data name="Action_Reassigned_To" xml:space="preserve">
+  <value>تم إعادة التعيين إلى {{newResponsible}}</value>
+</data>
+    <data name="Action_Reassigned_To_Comment" xml:space="preserve">
+  <value>تعليق: {{comment}}</value>
+</data>
+    <data name="AssignmentHistory" xml:space="preserve">
+  <value>التاريخ</value>
+</data>
+    <data name="Details_Column" xml:space="preserve">
+  <value>التفاصيل</value>
+        <comment>معلومات مفصلة عن الإجراء في صفحة تاريخ التعيين</comment>
+</data>
+    <data name="Action_Created_Comment" xml:space="preserve">
+  <value>تعليق: {{comment}}</value>
+</data>
+    <data name="Action_Created_Responsible" xml:space="preserve">
+  <value>تم التعيين إلى {{responsible}}</value>
+</data>
+    <data name="StartWebInterview" xml:space="preserve">
+  <value>بدء المقابلة عبر الويب</value>
+</data>
+    <data name="WebModeEnabledWarning" xml:space="preserve">
+  <value>لا يمكن إنهاء المهمة. تم تمكين وضع الويب، بينما تم تعطيل وضع جمع الويب في الاستبيان</value>
+</data>
+    <data name="NoComment" xml:space="preserve">
+  <value>(لا يوجد تعليق)</value>
+</data>
+    <data name="LinkToWebInterviewExample" xml:space="preserve">
+    <value>مثال على رابط التحويل إلى مقابلة عبر الويب</value>    
+</data>
+    <data name="Action_UpgradedFrom" xml:space="preserve">
+  <value>تم الترقية من التعيين {{id}}</value>
+</data>
+    <data name="Property" xml:space="preserve">
+    <value>الخاصية</value>
+</data>
+    <data name="Value" xml:space="preserve">
+    <value>القيمة</value>
+</data>
+    <data name="Action_QuantityChanged" xml:space="preserve">
+    <value>تم تغيير القيمة المتوقعة</value>
+</data>
+    <data name="DetailsTargetAreaa" xml:space="preserve">
+    <value>المنطقة المستهدفة</value>
+</data>
+    <data name="DetailsGeoTracking" xml:space="preserve">
+    <value>تتبع الموقع الجغرافي</value>
+</data>
+    <data name="ChangeTargetAreaModalTitle" xml:space="preserve">
+    <value>تغيير المنطقة المستهدفة للتعيين {{assignmentId}}</value>
+</data>
+    <data name="TargetAreaExplanation" xml:space="preserve">
+    <value>حدد اسم خريطة المنطقة المستهدفة للتعيين</value>
+</data>
+    <data name="Action_TargetAreaChanged" xml:space="preserve">
+    <value>تم تغيير المنطقة المستهدفة</value>
+</data>
+    <data name="TargetArea" xml:space="preserve">
+    <value>تحرير المنطقة المستهدفة</value>
+</data>
+    <data name="EnterTargetArea" xml:space="preserve">
+    <value>أدخل المنطقة المستهدفة</value>
+</data>
 </root>

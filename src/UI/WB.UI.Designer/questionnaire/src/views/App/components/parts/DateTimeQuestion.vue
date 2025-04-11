@@ -13,8 +13,15 @@
                 <!--input id="dt-default-date" type="text" jqdatepicker v-model="activeQuestion.defaultDate"
                     class="form-control small-date-input" /-->
 
-                <DatePicker v-model="activeQuestion.defaultDate" :popover="{ visibility: 'click' }" :hide-time-header="true"
-                    timezone="UTC">
+                <DatePicker 
+                    @dayclick="
+                        (_, event) => {
+                            event.target.blur();
+                        }
+                    "
+                    v-model="activeQuestion.defaultDate" :popover="{ visibility: 'click' }" :hide-time-header="true"
+                    timezone="UTC"
+                    >
                     <template #default="{ inputValue, inputEvents, togglePopover }">
                         <div class="date-wrapper">
                             <input id="dt-default-date" type="search" :value="formatedDate" v-on="inputEvents"

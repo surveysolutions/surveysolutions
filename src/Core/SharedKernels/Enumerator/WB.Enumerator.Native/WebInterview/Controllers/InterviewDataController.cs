@@ -575,19 +575,21 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @MultiCombobox.vue and @Combobox.vue")]
-        public virtual DropdownItem[] GetTopFilteredOptionsForQuestion(Guid interviewId, string id, string filter, int count, int[] excludedOptionIds = null)
+        public virtual DropdownItem[]GetTopFilteredOptionsForQuestion(Guid interviewId, GetTopFilteredOptionsForQuestionRequest request) 
         {
-            var questionIdentity = Identity.Parse(id);
             var statefulInterview = this.GetCallerInterview(interviewId);
             if (statefulInterview == null) return null;
-
+            
+            var questionIdentity = Identity.Parse(request.Id);
             var question = statefulInterview.GetQuestion(questionIdentity);
             var parentCascadingQuestion = question.GetAsInterviewTreeCascadingQuestion()?.GetCascadingParentQuestion();
             var parentCascadingQuestionAnswer = parentCascadingQuestion?.IsAnswered() ?? false
                 ? parentCascadingQuestion.GetAnswer()?.SelectedValue
                 : null;
 
-            var topFilteredOptionsForQuestion = statefulInterview.GetTopFilteredOptionsForQuestion(questionIdentity, parentCascadingQuestionAnswer, filter, count, excludedOptionIds);
+            var topFilteredOptionsForQuestion = 
+                statefulInterview.GetTopFilteredOptionsForQuestion(questionIdentity, parentCascadingQuestionAnswer, 
+                    request.Filter, request.Count, request.ExcludedOptionIds);
             return topFilteredOptionsForQuestion.Select(x => new DropdownItem(x.Value, x.Title, x.AttachmentName)).ToArray();
         }
 
@@ -667,6 +669,14 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                 SupervisorRejectComment = interview.SupervisorRejectComment
             };
             return coverInfo;
+        }
+
+        public class GetTopFilteredOptionsForQuestionRequest
+        {
+            public string Id { get; set; }
+            public string Filter { get; set; }
+            public int Count { get; set; }
+            public int[] ExcludedOptionIds { get; set; }
         }
     }
 }

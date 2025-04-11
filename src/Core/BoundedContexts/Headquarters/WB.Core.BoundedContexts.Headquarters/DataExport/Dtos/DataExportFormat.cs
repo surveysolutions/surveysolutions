@@ -10,6 +10,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Dtos
         SPSS = 3,
         Binary = 4,
         DDI = 5,
-        Paradata = 6
+        Paradata = 6,
+        AudioAudit = 7,
     }
 }

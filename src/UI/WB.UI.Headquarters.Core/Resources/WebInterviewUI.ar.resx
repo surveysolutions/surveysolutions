@@ -455,10 +455,7 @@
   </data>
   <data name="ShowOnMap" xml:space="preserve">
     <value>عرض على الخريطة</value>
-  </data>
-  <data name="ShowResolved" xml:space="preserve">
-    <value>عرض حلها</value>
-  </data>
+  </data>  
   <data name="WarningsHeader" xml:space="preserve">
     <value>تحذيرات</value>
   </data>
@@ -468,4 +465,85 @@
   <data name="WebTesterSessionOverMessage" xml:space="preserve">
     <value>يرجى إغلاق هذه الصفحة. يمكنك فتح واحدة جديدة من خلال العودة إلى موقع المصمم</value>
   </data>
+    <data name="HideVariables" xml:space="preserve">
+    <value>إخفاء المتغيرات</value>
+  </data>
+    <data name="ShowVariables" xml:space="preserve">
+    <value>عرض المتغيرات</value>
+  </data>      
+  <data name="ShowResolved" xml:space="preserve">
+    <value>عرض المحلولة</value>
+  </data>
+  <data name="PickLocation" xml:space="preserve">
+    <value>اختر من الخريطة</value>
+  </data>
+    <data name="EnterPassword" xml:space="preserve">
+    <value>أدخل كلمة المرور</value>
+  </data>
+    <data name="Progress" xml:space="preserve">
+    <value>التقدم</value>
+  </data>
+    <data name="SwitchToWebMode" xml:space="preserve">
+    <value>تبديل المقابلة إلى وضع الويب</value>
+  </data>
+    <data name="SwitchToWebMode_LinkDescription" xml:space="preserve">
+    <value>يمكن استخدام الرابط التالي لمتابعة هذه المقابلة</value>
+  </data>
+    <data name="AssignmentLimitError" xml:space="preserve">
+    <value>لا يمكنك إنشاء المزيد من المقابلات من هذا التعيين</value>
+  </data>
+    <data name="CompleteInterviewStatus" xml:space="preserve">
+    <value>مشكلات المقابلة:</value>
+  </data>
+    <data name="Complete_CriticalUnansweredQuestions" xml:space="preserve">
+    <value>الأسئلة الحرجة التي لم تتم الإجابة عنها: {{count}}</value>
+  </data>
+    <data name="Complete_FailedCriticalRules" xml:space="preserve">
+    <value>فشل القواعد الحرجة: {{count}}</value>
+  </data>
+    <data name="Complete_UnansweredQuestions" xml:space="preserve">
+    <value>الأسئلة التي لم تتم الإجابة عنها: {{count}}</value>
+  </data>
+    <data name="Complete_QuestionsWithErrors" xml:space="preserve">
+    <value>الأسئلة التي بها أخطاء: {{count}}</value>
+  </data>
+    <data name="CommentOnPreviousAnswer" xml:space="preserve">
+  <value>على الإجابة السابقة</value>
+</data>
+    <data name="CompleteCommentCriticalityLevelWarn" xml:space="preserve">
+  <value>لتفعيل الزر، يرجى حل المشكلات الحرجة أو تقديم تفسير في مربع التعليقات أعلاه</value>
+</data>
+    <data name="CompleteCommentCriticalityLevelBlock" xml:space="preserve">
+  <value>لتفعيل الزر، يرجى حل المشكلات الحرجة</value>
+</data>
+    <data name="CompleteNoteCommentCriticality" xml:space="preserve">
+  <value>يرجى حل المشكلات عن طريق الإجابة على الأسئلة الحرجة والتأكد من أن الإجابات تلبي القواعد الحرجة</value>
+</data>
+    <data name="CompleteCriticalityWarnConfirmation" xml:space="preserve">
+  <value>يرجى تأكيد رغبتك في تقديم هذه المقابلة مع المشكلات الحرجة.</value>
+</data>
+    <data name="CompleteNoteToSupervisor" xml:space="preserve">
+  <value>تعليق</value>
+</data>
+    <data name="ConfirmationNeededTitle" xml:space="preserve">
+  <value>تأكيد مطلوب</value>
+</data>
+    <data name="CriticalQuestionErrors" xml:space="preserve">
+  <value>تتطلب إجابات على هذه الأسئلة:</value>
+</data>
+    <data name="CriticalityConditionsErrors" xml:space="preserve">
+  <value>تتطلب إصلاح هذه الأخطاء:</value>
+</data>
+    <data name="Interview_Overview_NoValue" xml:space="preserve">
+  <value>لا توجد قيمة</value>
+</data>
+    <data name="MaxAnswersCountSelected" xml:space="preserve">
+  <value>تم الوصول إلى الحد الأقصى لعدد الاختيارات ({{value}}) في هذا السؤال</value>
+</data>
+    <data name="NotCalculated" xml:space="preserve">
+  <value>لم يتم الحساب</value>
+</data>
+    <data name="UnansweredQuestions" xml:space="preserve">
+  <value>الأسئلة التي لم تتم الإجابة عنها:</value>
+</data>
 </root>

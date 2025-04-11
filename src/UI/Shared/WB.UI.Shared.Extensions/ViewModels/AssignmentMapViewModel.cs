@@ -489,7 +489,7 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
 
     private async void BackgroundServiceManagerOnLocationReceived(object sender, LocationReceivedEventArgs e)
     {
-        //LogTestRecords(e);
+        ShowGeofencingWarningIfNeed(e);
         await UpdateGeoTrackingPointsAsync(e.Location);
     }
 
@@ -688,7 +688,7 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
         throw new Exception("Unknown geometry type " + geometryType);
     }
 
-    private void LogTestRecords(LocationReceivedEventArgs e)
+    private void ShowGeofencingWarningIfNeed(LocationReceivedEventArgs e)
     {
         if (!IsEnabledGeofencing)
             return;

@@ -1,6 +1,6 @@
 @import "variables";
-$icon-font-path: '../vendor/bootstrap-sass/assets/fonts/bootstrap/';
-@import "../vendor/bootstrap-sass/assets/stylesheets/_bootstrap.scss";
+$icon-font-path: '../bootstrap/fonts/bootstrap/';
+@import "../bootstrap/stylesheets/_bootstrap.scss";
 
 @import "mixins";
 @import "buttons";
@@ -21,7 +21,7 @@ $icon-font-path: '../vendor/bootstrap-sass/assets/fonts/bootstrap/';
 @import "panels";
 
 @import "import-questionnaires";
-@import "add-interviews"; 
+@import "add-interviews";
 @import "batch-upload";
 @import "export";
 @import "survey-setup";

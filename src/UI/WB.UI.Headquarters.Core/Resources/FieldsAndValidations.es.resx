@@ -267,7 +267,28 @@
   <data name="UserIsLockedByHq" xml:space="preserve">
     <value>El usuario está bloqueado por la sede</value>
   </data>
-  <data name="VerificationCodeFieldName" xml:space="preserve">
-    <value>Verification code</value>
-  </data>
+  <data name="RestrictedAccountMessage" xml:space="preserve">
+  <value>Esta cuenta está restringida para realizar esta acción</value>
+</data>
+    <data name="RestrictedAccount" xml:space="preserve">
+  <value>Esta cuenta está restringida</value>
+</data>
+    <data name="AllowRelinkTablet" xml:space="preserve">
+  <value>Permitir la vinculación a un dispositivo diferente con pérdida de datos en el dispositivo original.</value>
+</data>
+    <data name="PasswordChangeRequired" xml:space="preserve">
+  <value>Su contraseña ha sido restablecida. Debe cambiarla para obtener acceso al sitio.</value>
+</data>
+    <data name="WorkspaceRequired" xml:space="preserve">
+  <value>El espacio de trabajo es requerido</value>
+</data>
+    <data name="WorkspaceMissing" xml:space="preserve">
+  <value>Espacio de trabajo no encontrado</value>
+</data>
+    <data name="UserRoleRequired" xml:space="preserve">
+  <value>El rol de usuario es requerido</value>
+</data>
+    <data name="VerificationCodeFieldName" xml:space="preserve">
+  <value>Código de verificación</value>
+</data>
 </root>

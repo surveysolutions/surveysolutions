@@ -328,7 +328,7 @@
     <value>មិនអាចភ្ជាប់បណ្តាញ។ ពិនិត្យ បណ្តាញស៊ីតធីង</value>
   </data>
   <data name="NotSupportedServerSyncProtocolVersion" xml:space="preserve">
-    <value>អ្នកមិនអាចបញ្ជូលកំណែ ការស្នើសុំអ្នកសម្ភាសន៍បានទេ។ សូមកុំដំឡើងវា និង ដំឡើងវាម្តងទៀតពី​គេហទំព័រ Survey Solution Supervisor</value>
+      <value>រកឃើញកំណែដែលមិនត្រូវគ្នា។ សូមទាក់ទងអ្នកគ្រប់គ្រងរបស់អ្នកសម្រាប់ដំណោះស្រាយ</value>
   </data>
   <data name="Prefs_AboutApplication" xml:space="preserve">
     <value>អំពីការស្នើសុំ៖</value>

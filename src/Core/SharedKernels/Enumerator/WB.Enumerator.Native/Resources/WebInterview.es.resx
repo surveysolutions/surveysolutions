@@ -282,9 +282,9 @@
   <data name="InterviewReceivedByInterviewer" xml:space="preserve">
     <value>No se puede modificar una entrevista que ha sido recibida en el dispositivo</value>
   </data>
-  <data name="PoweredBy" xml:space="preserve">
-    <value>Powered by</value>
-  </data>
+    <data name="PoweredBy" xml:space="preserve">
+  <value>Desarrollado por</value>
+</data>
   <data name="EnterPasswordText" xml:space="preserve">
     <value>Este enlace está protegido con contraseña, que se distribuyó con el enlace. Por favor ingrésalo aquí</value>
   </data>
@@ -345,4 +345,19 @@
   <data name="QuestionnaireNameFormat" xml:space="preserve">
     <value>{0} (ver. {1})</value>
   </data>
+    <data name="AssignmentLimitReached" xml:space="preserve">
+  <value>Recopilamos todas las entrevistas en esta encuesta.</value>
+</data>
+    <data name="Filters_CriticalQuestions" xml:space="preserve">
+  <value>Preguntas críticas</value>
+</data>
+    <data name="Filters_CriticalRules" xml:space="preserve">
+  <value>Reglas críticas</value>
+</data>
+    <data name="InterviewNotFound" xml:space="preserve">
+  <value>La entrevista no fue encontrada.</value>
+</data>
+    <data name="LinkToWebInterviewExample" xml:space="preserve">
+  <value>Enlace a la página de ejemplo de la entrevista web</value>
+</data>
 </root>

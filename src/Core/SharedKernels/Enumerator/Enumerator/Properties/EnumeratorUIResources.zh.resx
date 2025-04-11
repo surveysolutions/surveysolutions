@@ -448,7 +448,7 @@
     <value>没有网络连接。请检查网络设置。</value>
   </data>
   <data name="NotSupportedServerSyncProtocolVersion" xml:space="preserve">
-    <value>调查员应用程序的版本不兼容。请卸载并重新安装</value>
+      <value>检测到不兼容的版本。请联系您的主管以解决问题</value>
   </data>
   <data name="Prefs_AboutApplication" xml:space="preserve">
     <value>关于应用程序</value>

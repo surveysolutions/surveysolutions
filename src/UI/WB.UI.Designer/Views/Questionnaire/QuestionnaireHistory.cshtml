@@ -6,6 +6,7 @@
 
 @{
     ViewBag.Title = QuestionnaireHistoryResources.QuestionnaireChangeHistory;
+    ViewBag.HideMenu = true;
 }
 
 <div id="edit-form" style="position: static;">
@@ -50,7 +51,7 @@
                             </td>
                             <td>@(listViewModel.UserName ?? QuestionnaireHistoryResources.UnknownUserName)</td>
                             <td>
-                                <time time="@listViewModel.Timestamp.ToString("s")Z">@listViewModel.Timestamp.ConvertToLocalAndFormatDate()</time>
+                                @listViewModel.Timestamp.ConvertToLocalAndFormatDate()
                             </td>
                             @if (!Model.ReadonlyMode)
                             {
@@ -61,14 +62,14 @@
                                     @if (listViewModel.HasRevertTo || listViewModel.CanEditComment)
                                     {
                                         <div class="btn-group pull-right">
-                                            <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#" aria-haspopup="true" aria-expanded="false">
+                                            <a class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" href="#" aria-haspopup="true" aria-expanded="false">
                                                 @QuestionnaireController.Action<span class="caret"></span>
                                             </a>
                                             <ul class="dropdown-menu">
                                                 @if (listViewModel.HasRevertTo)
                                                 {
                                                     <li>
-                                                        <a href='@($"/q/details/{Model.Id:N}${listViewModel.Sequence}")'>View</a>
+                                                        <a href='@($"/q/details/{Model.Id:N}${listViewModel.Sequence}")'>@QuestionnaireEditor.View</a>
                                                     </li>
                                                     <li class="divider"></li>
                                                     <li><a href="javascript:void(0);" onclick="confirmRevert('@listViewModel.Timestamp.ToString("s")', '@listViewModel.Id')">@QuestionnaireHistoryResources.RevertToThisVersion</a></li>
@@ -106,29 +107,29 @@
 
 @section Modal {
     <!-- Comment Modal -->
-    <div class="modal fade" id="commentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal" id="commentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title" id="myModalLabel">@QuestionnaireHistoryResources.LeaveComment</h4>
                 </div>
                 <div class="modal-body">
                     <textarea id="comment" rows="5" maxlength="500" class="form-control"></textarea>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">@QuestionnaireHistoryResources.Cancel</button>
+                    <button type="button" class="btn btn-default" data-bs-dismiss="modal">@QuestionnaireHistoryResources.Cancel</button>
                     <button type="button" class="btn btn-primary" id="saveCommentBtn">@QuestionnaireHistoryResources.Save</button>
                 </div>
             </div>
         </div>
     </div>
     <!-- Revert modal -->
-    <div class="modal fade" id="revertModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal" id="revertModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title" id="myModalLabel">@QuestionnaireHistoryResources.Confirm</h4>
                 </div>
                 <div class="modal-body">
@@ -137,7 +138,7 @@
                 <div class="modal-footer">
                     @using (Html.BeginForm("Revert", "Questionnaire", FormMethod.Post))
                     {
-                        <button type="button" class="btn btn-default" data-dismiss="modal">@QuestionnaireHistoryResources.Cancel</button>
+                        <button type="button" class="btn btn-default" data-bs-dismiss="modal">@QuestionnaireHistoryResources.Cancel</button>
                         @Html.Hidden("id", @Model?.Id)
                         @Html.Hidden("commandId", null, new { id = "commandId" })
                         <button type="submit" class="btn btn-primary" id="confirmRevertBtn">@QuestionnaireHistoryResources.Revert</button>
@@ -152,7 +153,10 @@
         window.confirmRevert = function(date, revertId) {
             $('#version').text(date);
             $('#commandId').val(revertId);
-            $('#revertModal').modal('show');
+
+            var revertModal = document.getElementById('revertModal');
+            const modal = new window.Modal(revertModal);
+            modal.show();
         };
 
         var comments = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model?.ChangeHistory.ToDictionary(c=> c.Id, c=> c.Comment)));
@@ -165,7 +169,10 @@
                         headers: {'X-CSRF-TOKEN': getCsrfCookie()} })
                 .done(function (data) { if(data) location.reload();});
             });
-            $('#commentModal').modal('show');
+            
+            var commentModal = document.getElementById('commentModal');
+            const modal = new window.Modal(commentModal);
+            modal.show();
         };
     });
 </script>

@@ -270,4 +270,7 @@
   <data name="YourQuestionnaire_0_ContainsNewFunctionalityWhichIsNotSupportedByYourInstallationPleaseUpdate" xml:space="preserve">
     <value>Ваша анкета "{0}" містить нову функцію: {1}. Нова(і) функція(ї) не підтримується вашою інсталяцією. Будь ласка, оновіть.</value>
   </data>
+  <data name="InvalidLoginAttempt" xml:space="preserve">
+      <value>Невдалий логін</value>
+  </data>
 </root>

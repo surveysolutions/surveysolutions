@@ -192,6 +192,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 Invitation invitation = invitationService.GetInvitation(invitationId);
                 var password = invitation.Assignment.Password;
                 var address = invitation.Assignment.Email;
+                if (string.IsNullOrEmpty(address))
+                    continue;
 
                 var link = this.interviewLinkProvider.WebInterviewStartLink(invitation);
                 var emailContent = new EmailContent(emailTemplate, questionnaireTitle, link, password);
@@ -226,7 +228,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                 catch (EmailServiceException e)
                 {
                     invitationService.ReminderWasNotSent(invitationId, invitation.AssignmentId, address, e.Message);
-                    this.logger.LogError(e, "Interview email was not sent");
+                    this.logger.LogError(e, $"Interview email was not sent for invitation {invitationId}.");
                 }
             }
         }

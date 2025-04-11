@@ -4,8 +4,9 @@ import { batchedAction } from '../helpers'
 import { api } from '../api/http'
 import { hubApi } from '../components/signalr/core.signalr'
 import { config } from '~/shared/config'
-
 import modal from '@/shared/modal'
+
+import { $t } from '~/shared/plugins/locale'
 
 function getAnswer(state, identity) {
     const question = state.entityDetails[identity]
@@ -148,18 +149,18 @@ export default {
     navigeToRoute() { },
 
     closeInterview({ dispatch }) {
-        modal.alert({
+        modal.dialog({
             title: $t('WebInterviewUI.CloseInterviewTitle'),
             message: $t('WebInterviewUI.CloseInterviewMessage'),
-            callback: () => {
-                dispatch('reloadInterview')
-            },
             onEscape: false,
             closeButton: false,
             buttons: {
                 ok: {
                     label: $t('WebInterviewUI.Reload'),
                     className: 'btn-success',
+                    callback: () => {
+                        dispatch('reloadInterview')
+                    },
                 },
             },
         })

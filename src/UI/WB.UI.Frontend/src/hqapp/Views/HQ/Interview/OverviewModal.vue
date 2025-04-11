@@ -34,6 +34,10 @@
         display: none;
     }
 
+    .overviewOpenned .view-mode {
+        display: none;
+    }
+
     .overviewOpenned .footer {
         display: none;
     }

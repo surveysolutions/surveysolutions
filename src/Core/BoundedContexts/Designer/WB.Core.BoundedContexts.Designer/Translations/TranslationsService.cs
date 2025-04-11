@@ -316,6 +316,8 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                     return isGroup ? 
                         System.Web.HttpUtility.HtmlDecode(CommandUtils.SanitizeHtml(value, true)):
                         System.Web.HttpUtility.HtmlDecode(CommandUtils.SanitizeHtml(value));                
+                case TranslationType.ValidationMessage:
+                    return System.Web.HttpUtility.HtmlDecode(CommandUtils.SanitizeHtml(value));                
                 default:
                     return System.Web.HttpUtility.HtmlDecode(CommandUtils.SanitizeHtml(value, true));
             }

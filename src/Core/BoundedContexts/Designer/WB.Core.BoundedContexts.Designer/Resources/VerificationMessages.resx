@@ -340,7 +340,7 @@
     <value>Sub-section can have no more than {0} parent sub-sections.</value>
   </data>
   <data name="WB0006_OnlyOneGpsQuestionCouldBeMarkedAsPrefilled" xml:space="preserve">
-    <value>Only one GPS question could be marked as identifying</value>
+      <value>Only one GPS question may be placed in the cover page section</value>
   </data>
   <data name="WB0007_MultiOptionQuestionYesNoQuestionCantBeLinked" xml:space="preserve">
     <value>Multi select yes/no question can't be linked</value>
@@ -749,7 +749,7 @@
     <value>Questions in Сover section must have variable label.</value>
   </data>
   <data name="WB0308_IdentifyingQuestionsHaveOnlyAllowedTypes" xml:space="preserve">
-    <value>Identifying questions can have only allowed types (Text, Numeric, DateTime, GpsCoordinates, SingleOption)</value>
+    <value>Cover page questions can have only allowed types (Text, Numeric, DateTime, GpsCoordinates, SingleOption)</value>
   </data>
   <data name="WB0288_ValueAndTitleNumbersIsNotEquals" xml:space="preserve">
     <value>Label {1} for code {0} is a number different from the value being labeled.</value>

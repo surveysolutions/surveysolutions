@@ -1,7 +1,9 @@
 ﻿import DOMPurify from 'dompurify';
+import { Modal } from 'bootstrap';
+
+window.Modal = Modal;
 
 function ItemViewModel() {
-    
     var self = this;
     self.itemId = '';
     self.itemName = '';
@@ -88,7 +90,12 @@ function ItemViewModel() {
             headers: { 'X-CSRF-TOKEN': getCsrfCookie() },
         }).done(function (result) {
             if (result.length && result.length > 1) {
-                $('#mExportHtml').modal('show');
+                var mExportHtml = document.getElementById('mExportHtml')
+                //var mExportHtmlModal = Modal.getInstance(mExportHtml)
+                var mExportHtmlModal = new Modal(mExportHtml, {
+                    keyboard: false
+                });
+                mExportHtmlModal.show();
 
                 $('#export-html-modal-questionnaire-id').val(self.itemId);
                 $('#export-html-modal-questionnaire-title').text(self.itemName);
@@ -103,12 +110,12 @@ function ItemViewModel() {
 
                 for (var i = 0; i < result.length; i++) {
                     let translationItem = result[i];
-                
+
                     let itemToAppend = '<li><a href="javascript:void(0)" value="' +
-                            translationItem.value +
-                            '">' +
-                            translationItem.name +
-                            '</a></li>';
+                        translationItem.value +
+                        '">' +
+                        translationItem.name +
+                        '</a></li>';
 
                     typeaheadCtrl.append(DOMPurify.sanitize(itemToAppend));
                 }
@@ -130,7 +137,7 @@ function ItemViewModel() {
                             self.selectedTransalationHtml,
                         '_blank'
                     );
-                    $('#mExportHtml').modal('hide');
+                    mExportHtmlModal.hide();
                 });
             } else {
                 window.open(self.htmlDownloadUrl, '_blank');
@@ -242,18 +249,20 @@ function ItemViewModel() {
             let translationItem = translationList[i];
 
             let itemToAppend = '<li><a href="javascript:void(0)" value="' +
-                    translationItem.value +
-                    '">' +
-                    translationItem.name +
-                    '</a></li>';
+                translationItem.value +
+                '">' +
+                translationItem.name +
+                '</a></li>';
 
-            typeaheadCtrl.append(DOMPurify.sanitize(itemToAppend));            
+            typeaheadCtrl.append(DOMPurify.sanitize(itemToAppend));
         }
 
         typeaheadCtrl.unbind('click');
         typeaheadCtrl.click(function (evn) {
             var link = $(evn.target);
-            selectTranslationFunc(link);
+            self.selectedTransalation = link.attr('value');
+            $('#dropdownMenuButton').text(link.text());
+            $('#pdfGenerateButton').prop('disabled', false);
         });
 
         $('#pdfGenerateButton').prop('disabled', true);

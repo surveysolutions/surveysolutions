@@ -117,10 +117,25 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="QuestionnaireNameUniqueFormat" xml:space="preserve">
-    <value>لقد قمت بالفعل باستيراد استبيان آخر بعنوان "{0}" من المصمم إذا كنت لا تزال ترغب في استيراد هذا الاستبيان، يرجى إعطائه اسما مختلفا في المصمم.</value>
-  </data>
-  <data name="UserDontHavePermissionsToAnswer" xml:space="preserve">
-    <value>فقط المشرف المسؤول عن هذه المهمة يمكن أن يجيب على أسئلة المشرف</value>
-  </data>
+    <data name="QuestionnaireNameUniqueFormat" xml:space="preserve">
+   <value>الاستبيان '{0}' موجود بالفعل. يرجى اختيار اسم آخر.</value>
+ </data>
+    <data name="QuestionnaireVariableUniqueFormat" xml:space="preserve">
+   <value>لقد قمت بالفعل باستيراد استبيان آخر بمتغير الاستبيان '{0}' من المصمم. إذا كنت لا تزال ترغب في استيراد هذا الاستبيان المحدد، يرجى إعطائه متغير استبيان مختلف في المصمم.</value>
+ </data>
+    <data name="UserDontHavePermissionsToAnswer" xml:space="preserve">
+   <value>فقط المشرف المسؤول عن هذا التعيين يمكنه الإجابة على أسئلة المشرف</value>
+ </data>
+    <data name="WebModeAssignmentShouldBeOnInterviewer" xml:space="preserve">
+   <value>يجب أن يكون التعيين لمقابلة الويب على مسؤول المقابلة</value>
+ </data>
+    <data name="AssignmentResponsibleNotFound" xml:space="preserve">
+   <value>لم يتم العثور على المسؤول</value>
+ </data>
+    <data name="QuestionnaireWasDeleted" xml:space="preserve">
+   <value>تم حذف الاستبيان</value>
+ </data>
+    <data name="AssignmentLimitReached" xml:space="preserve">
+   <value>تم الوصول إلى حد التعيين</value>
+ </data>
 </root>

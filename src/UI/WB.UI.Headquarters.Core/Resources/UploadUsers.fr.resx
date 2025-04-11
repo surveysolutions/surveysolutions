@@ -228,4 +228,13 @@
   <data name="VerificationFailed" xml:space="preserve">
     <value>Échec de la vérification</value>
   </data>
+    <data name="SelectWorkspace" xml:space="preserve">
+  <value>Sélectionner l'espace de travail</value>
+</data>
+    <data name="SelectWorkspaceDescription" xml:space="preserve">
+  <value>Si aucun espace de travail n'est assigné dans le fichier batch, utilisez cet espace de travail par défaut</value>
+</data>
+  <data name="Workspace" xml:space="preserve">
+      <value>Espace de travail</value>
+  </data>
 </root>

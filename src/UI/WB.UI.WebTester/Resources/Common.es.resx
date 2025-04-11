@@ -141,7 +141,10 @@
   <data name="ReloadInterviewErrorMessage" xml:space="preserve">
     <value>Los datos de la entrevista no se pueden aplicar a la nueva versión del cuestionario. Entrevista vacía creada</value>
   </data>
+  <data name="ReloadPartialInterviewErrorMessage" xml:space="preserve">
+  <value>Los datos de la entrevista no se pueden aplicar a la nueva versión del cuestionario. Solo aplicamos algunos datos.</value>
+</data>
   <data name="TheWorldBankGroup" xml:space="preserve">
-    <value>The World Bank Group</value>
+      <value>El Grupo del Banco Mundial</value>
   </data>
 </root>

@@ -117,4 +117,61 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+    <data name="Synchronization_UpdateApp" xml:space="preserve">
+    <value>تحديث</value>
+  </data>
+    <data name="SendToSupervisor_MovingToSupervisorDevice" xml:space="preserve">
+    <value>نقل جميع المقابلات المكتملة إلى جهاز المشرف</value>
+  </data>
+    <data name="SendToSupervisor_MovingToSupervisorFormat" xml:space="preserve">
+    <value>نقل جميع المقابلات المكتملة إلى '{0}'</value>
+  </data>
+    <data name="SendToSupervisor_CheckSupervisorDevice" xml:space="preserve">
+    <value>تحقق من أن جهاز المشرف يحتوي على WiFi و Bluetooth قيد التشغيل وأنك في مكان قريب</value>
+  </data>
+    <data name="SendToSupervisor_TransferInProgress" xml:space="preserve">
+    <value>جاري النقل</value>
+  </data>
+    <data name="SendToSupervisor_TransferWasAborted" xml:space="preserve">
+    <value>تم إلغاء النقل</value>
+  </data>
+    <data name="SendToSupervisor_DeviceFound" xml:space="preserve">
+    <value>تم العثور على جهاز المشرف. طلب الاتصال</value>
+  </data>
+    <data name="SendToSupervisor_DeviceConnectionAccepting" xml:space="preserve">
+    <value>في انتظار موافقة الاتصال من المشرف</value>
+  </data>
+    <data name="SendToSupervisor_DeviceConnectionAccepted" xml:space="preserve">
+    <value>متصل بجهاز المشرف</value>
+  </data>
+    <data name="SendToSupervisor_SupervisorNotFound" xml:space="preserve">
+    <value>لم يتم بدء النقل. لا يمكن العثور على جهاز المشرف</value>
+  </data>
+    <data name="SendToSupervisor_SupervisorTerminateTransfering" xml:space="preserve">
+    <value>تم إلغاء النقل على الجهاز الثاني.</value>
+  </data>
+    <data name="SendToSupervisor_SomeInterviewsOnSupervisor" xml:space="preserve">
+    <value>بعض المقابلات الآن على جهاز آخر</value>
+  </data>
+    <data name="SendToSupervisor_SyncCompleted" xml:space="preserve">
+    <value>اكتمل النقل. جميع المقابلات المكتملة الآن على جهاز آخر</value>
+  </data>
+    <data name="SendToSupervisor_SyncCompletedWithErrorsFormat" xml:space="preserve">
+    <value>اكتمل النقل. {0} مقابلة فشلت في المزامنة</value>
+  </data>
+    <data name="SendToSupervisor_LookingForSupervisor" xml:space="preserve">
+    <value>البحث عن جهاز المشرف</value>
+  </data>
+    <data name="SendToSupervisor_Note" xml:space="preserve">
+    <value>ملاحظة: سيستغرق هذا الإجراء وقتًا أطول من المعتاد، لا تقم بإيقاف تشغيل هذا الجهاز</value>
+  </data>
+    <data name="SendToSupervisor_ConnectionFailed" xml:space="preserve">
+    <value>تأكد من أن كلا الجهازين في مكان قريب؛ يجب تمكين WiFi و Bluetooth على كلا الجهازين؛ يجب فتح تطبيق المشرف على جهاز المشرف</value>
+  </data>
+    <data name="SendToSupervisor_Retry" xml:space="preserve">
+    <value>إعادة المحاولة</value>
+  </data>
+    <data name="SendToSupervisor_BluetoothError" xml:space="preserve">
+    <value>لا يمكن لتطبيق Interviewer تحديد حالة Bluetooth (مثل، تشغيل/إيقاف، متصل/غير متصل). أولاً، أعد تشغيل كلا الجهازين Interviewer و Supervisor. ثم حاول المزامنة مرة أخرى.</value>
+  </data>
 </root>

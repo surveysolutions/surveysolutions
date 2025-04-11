@@ -162,4 +162,43 @@
   <data name="UserRoles_Supervisor" xml:space="preserve">
     <value>مشرف</value>
   </data>
+    <data name="WebInterviewUserMessages_FinishInterview" xml:space="preserve">
+      <value>إنهاء النص</value>
+    </data>
+    <data name="WebInterviewUserMessages_Invitation" xml:space="preserve">
+      <value>دعوة الترحيب</value>
+    </data>
+    <data name="WebInterviewUserMessages_ResumeInvitation" xml:space="preserve">
+      <value>دعوة الاستئناف</value>
+    </data>
+    <data name="WebInterviewUserMessages_ResumeWelcome" xml:space="preserve">
+      <value>عنوان الاستئناف</value>
+    </data>
+    <data name="WebInterviewUserMessages_SurveyName" xml:space="preserve">
+      <value>اسم الاستبيان</value>
+    </data>
+    <data name="WebInterviewUserMessages_WebSurveyHeader" xml:space="preserve">
+      <value>عنوان الإنهاء</value>
+    </data>
+    <data name="WebInterviewUserMessages_WelcomeText" xml:space="preserve">
+      <value>عنوان الترحيب</value>
+    </data>
+    <data name="WebInterviewUserMessages_CompleteNoteToSupervisor" xml:space="preserve">
+      <value>ملاحظة للمشرف</value>
+    </data>
+    <data name="WebInterviewUserMessages_CompleteButton" xml:space="preserve">
+      <value>إكمال</value>
+    </data>
+    <data name="WebInterviewUserMessages_StartNewButton" xml:space="preserve">
+      <value>بدء مقابلة جديدة</value>
+    </data>
+    <data name="WebInterviewUserMessages_ResumeButton" xml:space="preserve">
+      <value>استئناف</value>
+    </data>
+    <data name="WebInterviewUserMessages_LinkInvitation" xml:space="preserve">
+      <value>دعوة</value>
+    </data>
+    <data name="WebInterviewUserMessages_LinkWelcome" xml:space="preserve">
+      <value>عنوان الترحيب</value>
+    </data>
 </root>

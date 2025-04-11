@@ -133,7 +133,7 @@
     <value>Вираз змінної має довжину більше {0} символів.</value>
   </data>
   <data name="WB0006_OnlyOneGpsQuestionCouldBeMarkedAsPrefilled" xml:space="preserve">
-    <value>Лише одне GPS-питання могло бути позначене як ідентифікаційне</value>
+      <value>Лише одне GPS-питання може бути на обкладинці.</value>
   </data>
   <data name="WB0007_MultiOptionQuestionYesNoQuestionCantBeLinked" xml:space="preserve">
     <value>Багатоваріантні питання з вибором "так/ні" не можуть бути пов'язаними</value>
@@ -793,7 +793,7 @@
     <value>Посилання на питання неіснуючої категорії багаторазового використання.</value>
   </data>
   <data name="WB0308_IdentifyingQuestionsHaveOnlyAllowedTypes" xml:space="preserve">
-    <value>Ідентифікаційні питання можуть мати лише дозволені типи (Текст, Числове, Дата, Час, GpsКоординати, ОдинОпція)</value>
+    <value>Питання на обкадинці можуть бути лише дозволених типів (Текст, Числове, Дата, Час, GpsКоординати, ОдинОпція)</value>
   </data>
   <data name="WB0309_IdentityQuestionsMustHaveVariableLabel" xml:space="preserve">
     <value>Питання в розділі Обкладинка повинні мати мітку.</value>

@@ -133,7 +133,7 @@
     <value>La expresión que define la variable tiene más de {0} caracteres</value>
   </data>
   <data name="WB0006_OnlyOneGpsQuestionCouldBeMarkedAsPrefilled" xml:space="preserve">
-    <value>Solamente es permitido marcar como identificador una sola pregunta de tipo GPS</value>
+      <value>Solo se puede colocar una pregunta de GPS en la sección de la portada</value>
   </data>
   <data name="WB0007_MultiOptionQuestionYesNoQuestionCantBeLinked" xml:space="preserve">
     <value>Una pregunta de selección-múltiple de tipo si/no no puede ser enlazada</value>
@@ -798,4 +798,52 @@
   <data name="WB0391" xml:space="preserve">
     <value>El texto estático no puede hacer referencia a una variable que tenga un alcance de lista más profundo que él mismo.</value>
   </data>
+    <data name="WB3010_LinkToHiddenQuestionNotAllowed" xml:space="preserve">
+    <value>El enlace a una pregunta oculta no está permitido</value>
+</data>
+    <data name="WB0311_IdentityVariablesMustHaveLabel" xml:space="preserve">
+  <value>Las variables en la sección de portada deben tener una etiqueta.</value>
+</data>
+    <data name="WB0312" xml:space="preserve">
+  <value>Las categorías deben tener al menos dos opciones.</value>
+</data>
+    <data name="WB0313_QuestionOptionReferenceToNonExistentAttachment" xml:space="preserve">
+  <value>La opción de pregunta se refiere a un adjunto inexistente.</value>
+</data>
+    <data name="WB0314_NonUniqueAttachment" xml:space="preserve">
+  <value>La pregunta contiene múltiples opciones que se refieren al mismo adjunto.</value>
+</data>
+    <data name="WB0315_AttachmentHasInvalidName" xml:space="preserve">
+  <value>El nombre del adjunto debe contener solo letras, dígitos y el carácter de subrayado. Debe comenzar con una letra, no tener guiones bajos consecutivos, no terminar con un guion bajo y no ser una palabra reservada. No debe estar vacío y debe tener menos de 32 caracteres.</value>
+</data>
+    <data name="WB0316_QuestionnaireWithOldCoverPage" xml:space="preserve">
+  <value>Cuestionario en formato antiguo. Por favor, use el enlace "Generar portada" en la sección de portada.</value>
+</data>
+    <data name="WB0317_CriticalityIsNotAllowed" xml:space="preserve">
+  <value>El alcance de la pregunta crítica no puede ser ninguno de los siguientes: oculta, supervisor.</value>
+</data>
+    <data name="WB0318_CriticalityConditionExpressionHasIncorrectSyntax" xml:space="preserve">
+  <value>La condición crítica tiene un error de sintaxis en la expresión.</value>
+</data>
+    <data name="WB0319_CriticalityConditionExpressionIsEmpty" xml:space="preserve">
+  <value>La condición crítica está vacía.</value>
+</data>
+    <data name="WB0320_CriticalityConditionExpressionIsEmpty" xml:space="preserve">
+  <value>El mensaje en la regla crítica está vacío.</value>
+</data>
+    <data name="WB0321_CriticalityConditionUsingForbiddenClasses" xml:space="preserve">
+  <value>La condición crítica está utilizando un tipo prohibido.</value>
+</data>
+    <data name="WB0322_CriticalRuleExpressionIsTooLong" xml:space="preserve">
+  <value>La expresión de la regla crítica tiene más de {0} caracteres.</value>
+</data>
+    <data name="WB0323_CriticalRuleMessageIsTooLong" xml:space="preserve">
+  <value>El mensaje de la condición crítica tiene más de {0} caracteres.</value>
+</data>
+    <data name="WB0138_SpecialValuesAttachmentsMustBeUniqueForNumericQuestion" xml:space="preserve">
+  <value>El nombre del archivo adjunto de valores especiales debe ser único.</value>
+</data>
+    <data name="WB0139_SpecialValuesAttachmentsReferAbsentAttachment" xml:space="preserve">
+  <value>El archivo adjunto de valores especiales hace referencia a un archivo adjunto inexistente.</value>
+</data>
 </root>

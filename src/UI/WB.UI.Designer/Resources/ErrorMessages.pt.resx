@@ -1,0 +1,170 @@
+<root>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="ClientVersionIsNotSupported" xml:space="preserve">
+      <value>Falha ao abrir o questionário. Sua versão é {0}. Por favor, atualize.</value>
+    </data>
+    <data name="TemplateNotFound" xml:space="preserve">
+      <value>Questionário com id={0} não pode ser encontrado. Por favor, verifique a lista de questionários disponíveis ou entre em contato com o colega que compartilhou o link do questionário com você.</value>
+    </data>
+    <data name="Questionnaire_verification_failed" xml:space="preserve">
+      <value>Seu questionário tem erros. Por favor, verifique o questionário no Designer.</value>
+    </data>
+    <data name="User_Not_authorized" xml:space="preserve">
+      <value>Usuário não autorizado. Por favor, verifique seu login e senha.</value>
+    </data>
+    <data name="OldClientPleaseUpdate" xml:space="preserve">
+      <value>Você tem uma versão obsoleta do aplicativo Headquarters. Por favor, entre em contato com o administrador do servidor para solicitar uma atualização.</value>
+    </data>
+    <data name="VersionParameterIsIncorrect" xml:space="preserve">
+      <value>Há um problema com a versão do seu questionário. Por favor, entre em contato com support@mysurvey.solutions.</value>
+    </data>
+    <data name="NotSupportedQuestionnaireVersion" xml:space="preserve">
+      <value>Falha ao importar questionário. Seu questionário "{0}" tem a versão {1}. O aplicativo Headquarters suporta apenas até a versão {2}.</value>
+    </data>
+    <data name="UserLockedOut" xml:space="preserve">
+      <value>Sua conta está bloqueada. Por favor, entre em contato com support@mysurvey.solutions para desbloqueá-la.</value>
+    </data>
+    <data name="ApplicationUpdateRequired" xml:space="preserve">
+      <value>Atualização do aplicativo necessária.</value>
+    </data>
+    <data name="ServerError" xml:space="preserve">
+      <value>Ocorreu um erro no servidor. Por favor, entre em contato com support@mysurvey.solutions.</value>
+    </data>
+    <data name="The_user_name_or_password_provided_is_incorrect" xml:space="preserve">
+      <value>O nome de usuário ou a senha fornecida está incorreta. Por favor, reentre.</value>
+    </data>
+    <data name="You_did_not_type_the_verification_word_correctly" xml:space="preserve">
+      <value>A palavra de verificação está incorreta. Por favor, tente novamente.</value>
+    </data>
+    <data name="EmptyUserNameOrPassword" xml:space="preserve">
+      <value>Nome de usuário ou senha está vazio.</value>
+    </data>
+    <data name="IncorrectUserNameOrPassword" xml:space="preserve">
+      <value>Login ou senha está incorreto. Por favor, tente novamente.</value>
+    </data>
+    <data name="AccountBlocked" xml:space="preserve">
+      <value>Sua conta está bloqueada. Entre em contato com o administrador para desbloquear sua conta.</value>
+    </data>
+    <data name="PasswordResetNotAllowed" xml:space="preserve">
+      <value>Redefinição de senha não é permitida</value>
+    </data>
+    <data name="ConfirmAccount" xml:space="preserve">
+      <value>Por favor, confirme sua conta primeiro. Enviamos um link de confirmação para {0}. Não recebeu?</value>
+    </data>
+    <data name="RequestAnotherEmail" xml:space="preserve">
+      <value>Solicitar outro.</value>
+    </data>
+    <data name="Your_email_is_verified" xml:space="preserve">
+      <value>O Designer verificou com sucesso seu e-mail.</value>
+    </data>
+    <data name="Unexpected_error_occurred_Please_try_again_later" xml:space="preserve">
+      <value>Ocorreu um erro inesperado. Por favor, tente acessar o Designer novamente mais tarde.</value>
+    </data>
+    <data name="User_does_not_exist" xml:space="preserve">
+      <value>Usuário {0} não existe. Por favor, insira um nome de usuário ou e-mail válido.</value>
+    </data>
+    <data name="The_current_password_is_incorrect_or_the_new_password_is_invalid" xml:space="preserve">
+      <value>A combinação de senha atual/nova é inválida, por favor, reentre.</value>
+    </data>
+    <data name="User_already_confirmed_in_system" xml:space="preserve">
+      <value>Usuário {0} já confirmado no sistema. Por favor, insira seu login e senha para começar a usar o Designer.</value>
+    </data>
+    <data name="User_does_not_exist_Please_enter_a_valid_user_name" xml:space="preserve">
+      <value>Usuário {0} não existe. Por favor, insira um nome de usuário ou e-mail válido.</value>
+    </data>
+    <data name="Your_password_successfully_changed" xml:space="preserve">
+      <value>Você alterou sua senha com sucesso.</value>
+    </data>
+    <data name="The_password_and_confirmation_password_do_not_match" xml:space="preserve">
+      <value>A senha e a confirmação da senha não coincidem.</value>
+    </data>
+    <data name="Password_must_be_at_least_characters_long" xml:space="preserve">
+      <value>A senha deve ter pelo menos {2} caracteres.</value>
+    </data>
+    <data name="Password_must_contain_at_least_one_number_one_upper_case_character_and_one_lower_case_character" xml:space="preserve">
+      <value>A senha deve conter pelo menos um número, uma letra maiúscula e uma letra minúscula.</value>
+    </data>
+    <data name="User_name_needs_to_be_between_3_and_15_characters" xml:space="preserve">
+      <value>O nome de login deve ter entre 3 e 15 caracteres e pode conter apenas letras, dígitos e o símbolo de sublinhado. As letras devem ser do alfabeto latino (inglês) apenas: 'A'..'Z' ou 'a'..'z'. Outras letras (cirílico, árabe, etc.) não são válidas para uso em nomes de login.</value>
+    </data>
+    <data name="Maintenance" xml:space="preserve">
+      <value>O servidor está em modo de manutenção agora. Desculpe pelo inconveniente. Por favor, tente novamente mais tarde.</value>
+    </data>
+    <data name="YourQuestionnaire_0_ContainsNewFunctionalityWhichIsNotSupportedByYourInstallationPleaseUpdate" xml:space="preserve">
+      <value>Seu questionário "{0}" contém nova funcionalidade: {1}. Novos recursos não são suportados pela sua instalação. Por favor, atualize.</value>
+    </data>
+    <data name="UserNotApproved" xml:space="preserve">
+      <value>Sua conta não está aprovada. Por favor, confirme sua conta primeiro. Enviamos um link de confirmação para {0}.</value>
+    </data>
+    <data name="RestorePassword_EmailSentInstructions" xml:space="preserve">
+      <value>Uma mensagem foi enviada para sua conta de e-mail. Por favor, siga as instruções no e-mail para restaurar a senha.</value>
+    </data>
+    <data name="EmptyTranslationFile" xml:space="preserve">
+      <value>O arquivo de tradução selecionado está vazio</value>
+    </data>
+    <data name="NoAccessToQuestionnaire" xml:space="preserve">
+      <value>O usuário não tem permissão para acessar o questionário solicitado.</value>
+    </data>
+    <data name="UserNeedToContactSupportFormat" xml:space="preserve">
+      <value>Você não está autorizado a realizar esta ação. Por favor, entre em contato com o suporte. IP:{0}</value>
+    </data>
+    <data name="Email_required" xml:space="preserve">
+      <value>E-mail é obrigatório</value>
+    </data>
+    <data name="EmailOrLogin_required" xml:space="preserve">
+      <value>Login ou E-mail é obrigatório</value>
+    </data>
+    <data name="InvalidEmailAddress" xml:space="preserve">
+      <value>Endereço de e-mail inválido</value>
+    </data>
+    <data name="OldPassword_required" xml:space="preserve">
+      <value>A senha atual é obrigatória</value>
+    </data>
+    <data name="Password_required" xml:space="preserve">
+      <value>A senha é obrigatória</value>
+    </data>
+    <data name="UserName_required" xml:space="preserve">
+      <value>Login é obrigatório</value>
+    </data>
+    <data name="QuestionnaireTitle_required" xml:space="preserve">
+      <value>O título do questionário é obrigatório</value>
+    </data>
+    <data name="NoQuestionnaireIdToValidatePremissions" xml:space="preserve">
+      <value>O id do questionário não foi fornecido para validar permissões</value>
+    </data>
+    <data name="UnhandledExceptionDuringUpdateUserInfo" xml:space="preserve">
+      <value>Não foi possível atualizar as informações do usuário. Por favor, tente novamente mais tarde.</value>
+    </data>
+    <data name="FullNameMaxLengthError" xml:space="preserve">
+      <value>O nome completo não pode conter mais de {1} caracteres</value>
+    </data>
+    <data name="QuestionnaireVariable_required" xml:space="preserve">
+      <value>A variável do questionário é obrigatória</value>
+    </data>
+    <data name="QuestionnaireVariable_rules" xml:space="preserve">
+      <value>A variável do questionário é usada como prefixo na formação de nomes para os arquivos de exportação. Os nomes das variáveis e IDs de rosters devem conter apenas os seguintes caracteres: a-z, A-Z, _, ou 0-9. O primeiro caractere não pode ser 0-9 ou _ e o último não pode ser _.</value>
+    </data>
+    <data name="QuestionnaireVariable_MaxLength" xml:space="preserve">
+      <value>Os nomes das variáveis e IDs de rosters podem ter de 1 a {1} caracteres</value>
+    </data>
+    <data name="QuestionnaireTitle_rules" xml:space="preserve">
+      <value>Apenas os seguintes caracteres podem ser usados no título do questionário: A..Z a..z 0..9 ( ) \ / _ - e espaço, e não deve ter dois ou mais caracteres de sublinhado consecutivos.</value>
+    </data>
+    <data name="QuestionnaireTitle_MaxLength" xml:space="preserve">
+      <value>O título do questionário não pode ter mais de {1} símbolos.</value>
+    </data>
+    <data name="InvalidLoginAttempt" xml:space="preserve">
+        <value>Tentativa de login inválida</value>
+    </data>
+</root>

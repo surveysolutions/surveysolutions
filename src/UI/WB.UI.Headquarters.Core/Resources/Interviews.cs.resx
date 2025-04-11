@@ -287,4 +287,7 @@
   <data name="Tooltip_Table_InterviewMode" xml:space="preserve">
     <value>Ukázat současný status (CAPI nebo CAWI) u každého tazatele</value>
   </data>
+    <data name="WebInterviewResponsibleWarning" xml:space="preserve">
+        <value>Odpovědná osoba není tazatel. Odkaz nebude fungovat.</value>
+    </data>
 </root>

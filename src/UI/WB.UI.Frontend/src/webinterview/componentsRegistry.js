@@ -8,12 +8,12 @@ import './misc/htmlPoly.js'
 
 import Idle from './IdleTimeout'
 
-export function registerGlobalComponents(vue) {
+export function registerGlobalComponents(vue, { router, store }) {
 
     registerComponents(vue)
     registerQuestionComponents(vue)
     registerPartsComponents(vue)
-    registerDerictives(vue)
+    registerDerictives(vue, { router, store })
 
     vue.component('IdleTimeoutService', Idle)
 }

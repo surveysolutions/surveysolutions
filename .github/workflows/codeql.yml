@@ -20,6 +20,9 @@ on:
   schedule:
     - cron: '19 22 * * 1'
 
+env:
+  DOTNET_VERSION: '9.0.x'
+
 jobs:
   analyze:
     name: Analyze
@@ -54,9 +57,29 @@ jobs:
         # Details on CodeQL's query packs refer to : https://docs.github.com/en/code-security/code-scanning/automatically-scanning-your-code-for-vulnerabilities-and-errors/configuring-code-scanning#using-queries-in-ql-packs
         # queries: security-extended,security-and-quality
 
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+  
     # Restore workload to build android
     - name: Install android workload
       run: dotnet workload install android
+
+    - name: Install Android SDK
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y openjdk-11-jdk
+        mkdir -p ~/Android/Sdk/cmdline-tools
+        curl -o tools.zip https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip
+        unzip tools.zip -d ~/Android/Sdk/cmdline-tools
+        mv ~/Android/Sdk/cmdline-tools/cmdline-tools ~/Android/Sdk/cmdline-tools/latest
+        export PATH=$PATH:~/Android/Sdk/cmdline-tools/latest/bin
+        yes | sdkmanager --licenses
+        sdkmanager "platforms;android-34" "platform-tools" "build-tools;34.0.0"
+
+    - name: Export Android SDK Path
+      run: echo "ANDROID_SDK_ROOT=$HOME/Android/Sdk" >> $GITHUB_ENV
 
     # Autobuild attempts to build any compiled languages  (C/C++, C#, Go, or Java).
     # If this step fails, then you should remove it and run the build manually (see below)

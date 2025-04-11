@@ -1566,7 +1566,7 @@
     <value>Переглянути всі {{count}} вирішені коментарі</value>
   </data>
   <data name="VirtualCoverPage" xml:space="preserve">
-    <value>Віртуальна титульна сторінка</value>
+    <value>Віртуальна обкладинка</value>
   </data>
   <data name="WarningsCounter" xml:space="preserve">
       <value>{{count}} попереджень</value>
@@ -1580,10 +1580,10 @@
   <data name="ManageAccount" xml:space="preserve">
       <value>Керування обліковим записом</value>
   </data>
-  <data name="OldUi" xml:space="preserve">
-      <value>Старий UI</value>
-  </data>
   <data name="ShowList" xml:space="preserve">
       <value>Відобразити списком</value>
+  </data>
+  <data name="QuestionIsCritical" xml:space="preserve">
+      <value>Це критичне питання</value>
   </data>
 </root>

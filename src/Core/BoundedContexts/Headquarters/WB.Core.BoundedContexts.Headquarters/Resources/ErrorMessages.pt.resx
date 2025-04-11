@@ -131,11 +131,26 @@
   </data>
   <data name="ServiceUnavailable" xml:space="preserve">
     <value>Servidor não está disponível.  Por favor, certifique-se de que o site 'Designer' está disponível e não é no modo de manutenção</value>
-  </data>
-  <data name="SiteAccessNotAllowed" xml:space="preserve">
-    <value>Você não tem acesso a este site. Contacte o administrador.</value>
-  </data>
+  </data>  
   <data name="TemplateNotFound" xml:space="preserve">
     <value>Questionário solicitado "{0}" não pode ser encontrado. Por favor, atualize a lista de questionários.</value>
   </data>
+    <data name="ApiUserIsNotAllowedToSignIn" xml:space="preserve">
+        <value>Usuário da API não tem permissão para fazer login com a interface do usuário</value>
+    </data>
+    <data name="InvalidAuthenticatorCode" xml:space="preserve">
+      <value>Código de autenticador inválido.</value>
+    </data>
+    <data name="InvalidRecoveryCode" xml:space="preserve">
+      <value>Código de recuperação inválido inserido.</value>
+    </data>
+    <data name="QuestionnaireAlreadyImporting" xml:space="preserve">
+        <value>Outro questionário está sendo importado para a Sede agora.</value>
+    </data>
+    <data name="SiteAccessNotAllowed" xml:space="preserve">
+      <value>Você não tem permissão para acessar este site. Contate o administrador.</value>
+    </data>
+    <data name="PleaseFillCaptcha" xml:space="preserve">
+      <value>Por favor, preencha o campo captcha</value>
+    </data>
 </root>

@@ -533,5 +533,30 @@
   </data>
   <data name="Value" xml:space="preserve">
     <value>Valor</value>
-  </data>  
+  </data>    
+  <data name="TargetArea" xml:space="preserve">
+        <value>Editar área alvo</value>
+    </data>
+  <data name="TargetAreaExplanation" xml:space="preserve">
+    <value>Especifique o nome do mapa da área alvo para a atribuição</value>
+  </data>
+  <data name="EnterTargetArea" xml:space="preserve">
+    <value>Digite a área alvo</value>
+  </data>
+    <data name="Action_QuantityChanged" xml:space="preserve">
+        <value>Valor esperado alterado</value>
+    </data>
+    <data name="Action_TargetAreaChanged" xml:space="preserve">
+        <value>Área alvo alterada</value>
+    </data>
+    <data name="ChangeTargetAreaModalTitle" xml:space="preserve">
+        <value>Alterar Área Alvo para a atribuição {{assignmentId}}</value>
+    </data>
+    <data name="DetailsGeoTracking" xml:space="preserve">
+        <value>Rastreamento Geográfico</value>
+    </data>
+    <data name="DetailsTargetAreaa" xml:space="preserve">
+        <value>Área Alvo</value>
+    </data>
+    
 </root>

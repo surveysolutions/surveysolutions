@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="Synchronization_UploadBrokenInterviewPackages" xml:space="preserve">
+    <value>กำลังอัปโหลดแพ็คเกจการสัมภาษณ์ที่เสียหาย</value>
+</data>
+    <data name="Synchronization_UploadExceptions" xml:space="preserve">
+    <value>กำลังอัปโหลดข้อความข้อผิดพลาดของผู้สัมภาษณ์</value>
+</data>
+    <data name="OfflineSync_ReceivingInterviewsFromDevices" xml:space="preserve">
+    <value>กำลังรับการสัมภาษณ์จากอุปกรณ์ของผู้สัมภาษณ์</value>
+</data>
+    <data name="OfflineSync_ReceivingInterviews" xml:space="preserve">
+    <value>กำลังรับการสัมภาษณ์</value>
+</data>
+    <data name="OfflineSync_NoDevicesDetectedFormat" xml:space="preserve">
+    <value>ไม่พบอุปกรณ์ที่ส่ง
+ID อุปกรณ์ของคุณคือ '{0}'</value>
+</data>
+    <data name="OfflineSync_WaitingInterviewers" xml:space="preserve">
+    <value>กำลังรอการดำเนินการจากอุปกรณ์ของผู้สัมภาษณ์</value>
+</data>
+    <data name="Synchronization_UploadStatistics" xml:space="preserve">
+    <value>กำลังอัปโหลดสถิติการซิงโครไนซ์ของผู้สัมภาษณ์</value>
+</data>
+    <data name="Synchronization_UploadStatisticsStats" xml:space="preserve">
+    <value>อัปโหลด {0} จาก {1}</value>
+</data>
+    <data name="Synchronization_Synchronize_HQ" xml:space="preserve">
+    <value>ซิงโครไนซ์กับสำนักงานใหญ่</value>
+</data>
+    <data name="Synchronization_Download_Interviewer_Apps" xml:space="preserve">
+    <value>กำลังดาวน์โหลดการอัปเดตสำหรับแอปพลิเคชันของผู้สัมภาษณ์</value>
+</data>
+    <data name="Synchronization_Download_Interviewer_Apps_Format" xml:space="preserve">
+    <value>กำลังดาวน์โหลดการอัปเดต {0} จาก {1} ดาวน์โหลดแล้ว</value>
+</data>
+    <data name="Synchronization_Synchronize_Offline" xml:space="preserve">
+    <value>ซิงโครไนซ์กับผู้สัมภาษณ์</value>
+</data>
+    <data name="Confirm_Approve_Synchronized_Interview_Message" xml:space="preserve">
+    <value>ผู้สัมภาษณ์ที่รับผิดชอบในปัจจุบันจะไม่ได้รับการแจ้งเตือนเกี่ยวกับการอนุมัติการสัมภาษณ์จนกว่าจะมีการซิงโครไนซ์ครั้งถัดไป หากผู้สัมภาษณ์ได้เริ่มทำงานกับการสัมภาษณ์แล้ว ข้อมูลทั้งหมดที่ผู้สัมภาษณ์ได้ป้อนก่อนการซิงโครไนซ์ครั้งถัดไปจะถูกลบ!</value>
+</data>
+</root>

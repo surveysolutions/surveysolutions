@@ -1,901 +1,957 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
-  <!-- 
-    Microsoft ResX Schema 
-    
-    Version 2.0
-    
-    The primary goals of this format is to allow a simple XML format 
-    that is mostly human readable. The generation and parsing of the 
-    various data types are done through the TypeConverter classes 
-    associated with the data types.
-    
-    Example:
-    
-    ... ado.net/XML headers & schema ...
-    <resheader name="resmimetype">text/microsoft-resx</resheader>
-    <resheader name="version">2.0</resheader>
-    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
-    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
-    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
-    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
-    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
-        <value>[base64 mime encoded serialized .NET Framework object]</value>
-    </data>
-    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
-        <comment>This is a comment</comment>
-    </data>
-                
-    There are any number of "resheader" rows that contain simple 
-    name/value pairs.
-    
-    Each data row contains a name, and value. The row also contains a 
-    type or mimetype. Type corresponds to a .NET class that support 
-    text/value conversion through the TypeConverter architecture. 
-    Classes that don't support this are serialized and stored with the 
-    mimetype set.
-    
-    The mimetype is used for serialized objects, and tells the 
-    ResXResourceReader how to depersist the object. This is currently not 
-    extensible. For a given mimetype the value must be set accordingly:
-    
-    Note - application/x-microsoft.net.object.binary.base64 is the format 
-    that the ResXResourceWriter will generate, however the reader can 
-    read any of the formats listed below.
-    
-    mimetype: application/x-microsoft.net.object.binary.base64
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
-            : and then encoded with base64 encoding.
-    
-    mimetype: application/x-microsoft.net.object.soap.base64
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
-            : and then encoded with base64 encoding.
-
-    mimetype: application/x-microsoft.net.object.bytearray.base64
-    value   : The object must be serialized into a byte array 
-            : using a System.ComponentModel.TypeConverter
-            : and then encoded with base64 encoding.
-    -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
-    <xsd:element name="root" msdata:IsDataSet="true">
-      <xsd:complexType>
-        <xsd:choice maxOccurs="unbounded">
-          <xsd:element name="metadata">
+    <!-- 
+      Microsoft ResX Schema 
+      
+      Version 2.0
+      
+      The primary goals of this format is to allow a simple XML format 
+      that is mostly human readable. The generation and parsing of the 
+      various data types are done through the TypeConverter classes 
+      associated with the data types.
+      
+      Example:
+      
+      ... ado.net/XML headers & schema ...
+      <resheader name="resmimetype">text/microsoft-resx</resheader>
+      <resheader name="version">2.0</resheader>
+      <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+      <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+      <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+      <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+      <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+          <value>[base64 mime encoded serialized .NET Framework object]</value>
+      </data>
+      <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+          <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+          <comment>This is a comment</comment>
+      </data>
+                  
+      There are any number of "resheader" rows that contain simple 
+      name/value pairs.
+      
+      Each data row contains a name, and value. The row also contains a 
+      type or mimetype. Type corresponds to a .NET class that support 
+      text/value conversion through the TypeConverter architecture. 
+      Classes that don't support this are serialized and stored with the 
+      mimetype set.
+      
+      The mimetype is used for serialized objects, and tells the 
+      ResXResourceReader how to depersist the object. This is currently not 
+      extensible. For a given mimetype the value must be set accordingly:
+      
+      Note - application/x-microsoft.net.object.binary.base64 is the format 
+      that the ResXResourceWriter will generate, however the reader can 
+      read any of the formats listed below.
+      
+      mimetype: application/x-microsoft.net.object.binary.base64
+      value   : The object must be serialized with 
+              : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+              : and then encoded with base64 encoding.
+      
+      mimetype: application/x-microsoft.net.object.soap.base64
+      value   : The object must be serialized with 
+              : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+              : and then encoded with base64 encoding.
+  
+      mimetype: application/x-microsoft.net.object.bytearray.base64
+      value   : The object must be serialized into a byte array 
+              : using a System.ComponentModel.TypeConverter
+              : and then encoded with base64 encoding.
+      -->
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
             <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
-              </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
             </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="assembly">
-            <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="data">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="resheader">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
-            </xsd:complexType>
-          </xsd:element>
-        </xsd:choice>
-      </xsd:complexType>
-    </xsd:element>
-  </xsd:schema>
-  <resheader name="resmimetype">
-    <value>text/microsoft-resx</value>
-  </resheader>
-  <resheader name="version">
-    <value>2.0</value>
-  </resheader>
-  <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </resheader>
-  <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </resheader>
- <data name="ErrorMessage_AccountIsLockedOnServer" xml:space="preserve">
-    <value>Votre compte utilisateur est verrouillé. Veuillez contacter l'équipe de support.</value>
-  </data>
-  <data name="Dashboard_MyQuestionnairesLinkText" xml:space="preserve">
-    <value>Mes</value>
-  </data>
-  <data name="Dashboard_SharedWithMeLinkText" xml:space="preserve">
-    <value>Partagé avec moi</value>
-  </data>
-  <data name="Dashboard_PublicQuestionnairesLinkText" xml:space="preserve">
-    <value>Public</value>
-  </data>
-  <data name="Dashboard_ToolbarText" xml:space="preserve">
-    <value>Questionnaires</value>
-  </data>
-  <data name="EndpointText" xml:space="preserve">
-    <value>Point de terminaison du service Web :</value>
-  </data>
-  <data name="ErrorMessage_UpgradeRequired" xml:space="preserve">
-    <value>Une nouvelle version de l'application a été publiée. Veuillez mettre à jour l'application</value>
-  </data>
-  <data name="ErrorMessage_InternalServerError" xml:space="preserve">
-    <value>Erreur du serveur. Veuillez contacter le support</value>
-  </data>
-  <data name="LoginNameHint" xml:space="preserve">
-    <value>Votre identifiant</value>
-  </data>
-  <data name="LoginText" xml:space="preserve">
-    <value>Se connecter</value>
-  </data>
-  <data name="LoginTitleText" xml:space="preserve">
-    <value>Testeur de questionnaire Survey Solutions</value>
-  </data>
-  <data name="ErrorMessage_Maintenance" xml:space="preserve">
-    <value>Le site Web de Survey Solutions Designer est en mode maintenance. Désolé pour le désagrément</value>
-  </data>
-  <data name="PrefilledQuestions_StartInterview" xml:space="preserve">
-    <value>DÉMARRER</value>
-  </data>
-  <data name="PasswordHint" xml:space="preserve">
-    <value>Mot de passe</value>
-  </data>
-  <data name="OldPasswordHint" xml:space="preserve">
-    <value>Mot de passe actuel</value>
-  </data>
-  <data name="NewPasswordHint" xml:space="preserve">
-    <value>Nouveau mot de passe</value>
-  </data>
-  <data name="ConfirmNewPasswordHint" xml:space="preserve">
-    <value>Confirmer le nouveau mot de passe</value>
-  </data>
-  <data name="ErrorMessage_RequestTimeout" xml:space="preserve">
-    <value>Délai d'attente dépassé lors de la connexion au site Web de Survey Solutions Designer. Vérifiez votre connexion Internet.</value>
-  </data>
-  <data name="ErrorMessage_ServiceUnavailable" xml:space="preserve">
-    <value>Aucune connexion au Survey Solutions Designer. Veuillez vous assurer que le site Web est disponible.</value>
-  </data>
-  <data name="StaySignedInText" xml:space="preserve">
-    <value>Rester connecté</value>
-  </data>
-  <data name="ErrorMessage_Unauthorized" xml:space="preserve">
-    <value>Votre identifiant ou mot de passe est incorrect</value>
-  </data>
-  <data name="Interview_Questions_Gps_SaveAnswer" xml:space="preserve">
-    <value>Appuyez pour enregistrer le GPS</value>
-  </data>
-  <data name="Interview_Questions_Audio_SaveAnswer" xml:space="preserve">
-    <value>Appuyez pour enregistrer l'audio</value>
-  </data>
-  <data name="Interview_Questions_Audio_RecordNew" xml:space="preserve">
-    <value>Enregistrer un nouveau</value>
-  </data>
-  <data name="Interview_Instruction_Title" xml:space="preserve">
-    <value>Instruction</value>
-  </data>
-  <data name="TextQuestion_Hint" xml:space="preserve">
-    <value>Appuyez pour entrer du texte</value>
-  </data>
-  <data name="IntegerQuestion_Hint" xml:space="preserve">
-    <value>Appuyez pour entrer un nombre</value>
-  </data>
-  <data name="RealQuestion_Hint" xml:space="preserve">
-    <value>Appuyez pour entrer un nombre décimal</value>
-  </data>
-  <data name="Interview_Questions_RemoveRowFromRosterMessage" xml:space="preserve">
-    <value>Êtes-vous sûr de vouloir supprimer le roster associé '{0}' de chaque roster associé ?</value>
-  </data>
-  <data name="Interview_Questions_RemoveRowFromRosterListMessage" xml:space="preserve">
-    <value>Êtes-vous sûr de vouloir supprimer les rosters associés ?</value>
-  </data>
-  <data name="Yes" xml:space="preserve">
-    <value>Oui</value>
-  </data>
-  <data name="Adjust" xml:space="preserve">
-    <value>Ajuster</value>
-  </data>
-  <data name="InvalidTimeMessage" xml:space="preserve">
-    <value>Il est important que le réglage de l'horloge soit précis. Votre horloge indique que la date actuelle est incorrecte. Ajustez l'horloge en réglant la date/heure correcte avant de continuer votre travail.</value>
-  </data>
-  <data name="Validity_Answered_Invalid_ErrorCaption" xml:space="preserve">
-    <value>La réponse est invalide</value>
-  </data>
-  <data name="Warnings" xml:space="preserve">
-    <value>Avertissements</value>
-  </data>
-  <data name="Validity_NotAnswered_InterviewException_ErrorCaption" xml:space="preserve">
-    <value>La réponse n'a pas été enregistrée</value>
-  </data>
-  <data name="Interview_Comment_OnPreviousAnswer" xml:space="preserve">
-    <value>Sur la réponse précédente</value>
-  </data>
-  <data name="Interview_Comment_Interviewer_Caption" xml:space="preserve">
-    <value>Votre commentaire</value>
-  </data>
-  <data name="Interview_Comment_Resolve" xml:space="preserve">
-    <value>Résoudre</value>
-  </data>
-  <data name="DateQuestion_Hint" xml:space="preserve">
-    <value>Appuyez pour entrer la date</value>
-  </data>
-  <data name="Interview_Questions_QrBarcode_SaveAnswer" xml:space="preserve">
-    <value>Appuyez pour scanner le code-barres</value>
-  </data>
-  <data name="Interview_Questions_Area_SaveAnswer" xml:space="preserve">
-    <value>Appuyez pour répondre</value>
-  </data>
-  <data name="Interview_Group_Status_CompletedFormat" xml:space="preserve">
-    <value>Section complétée : {0}</value>
-  </data>
-  <data name="Interview_Group_AnsweredQuestions_Many" xml:space="preserve">
-    <value>{0} réponses</value>
-  </data>
-  <data name="Interview_Group_Subgroups_ManyFormat" xml:space="preserve">
-    <value>{0} sous-sections</value>
-  </data>
-  <data name="Interview_Group_Subgroups_Zero" xml:space="preserve">
-    <value>aucune sous-section</value>
-  </data>
-  <data name="Interview_Group_Status_NotStarted" xml:space="preserve">
-    <value>Section non commencée</value>
-  </data>
-  <data name="Interview_Group_AnsweredQuestions_One" xml:space="preserve">
-    <value>une réponse</value>
-  </data>
-  <data name="Interview_Group_Subgroups_One" xml:space="preserve">
-    <value>une sous-section</value>
-  </data>
-  <data name="Interview_Group_Status_StartedIncompleteFormat" xml:space="preserve">
-    <value>Section commencée : {0}</value>
-  </data>
-  <data name="Interview_Question_Integer_ParsingError" xml:space="preserve">
-    <value>La valeur entrée ne peut pas être interprétée comme une valeur entière</value>
-  </data>
-  <data name="Interview_Question_Real_ParsingError" xml:space="preserve">
-    <value>La valeur entrée ne peut pas être interprétée comme une valeur décimale</value>
-  </data>
-  <data name="Interview_Group_InvalidAnswers_ManyFormat" xml:space="preserve">
-    <value>{0} erreurs</value>
-  </data>
-  <data name="Interview_Group_InvalidAnswers_One" xml:space="preserve">
-    <value>une erreur</value>
-  </data>
-  <data name="Interview_Questions_Multimedia_TapToTakePhoto" xml:space="preserve">
-    <value>Appuyez pour prendre une photo</value>
-  </data>
-  <data name="Interview_PreviousGroupNavigation_AnsweredQuestions" xml:space="preserve">
-    <value>Toutes les {0} questions répondues</value>
-  </data>
-  <data name="Interview_PreviousGroupNavigation_UnansweredQuestions" xml:space="preserve">
-    <value>Remarque : {0} questions sans réponse</value>
-  </data>
-  <data name="Dashboard_EmptyQuestionnairesList" xml:space="preserve">
-    <value>Pas encore de questionnaires. Vous pouvez créer ou modifier vos questionnaires dans Survey Solutions Designer</value>
-  </data>
-  <data name="TextListQuestion_Hint" xml:space="preserve">
-    <value>Appuyez pour entrer un nouvel élément</value>
-  </data>
-  <data name="Interview_Question_Text_MaskError" xml:space="preserve">
-    <value>Veuillez remplir toutes les valeurs requises</value>
-  </data>
-  <data name="Interview_Question_Text_Empty" xml:space="preserve">
-    <value>La réponse ne doit pas être vide</value>
-  </data>
-  <data name="FilteredComboboxQuestion_Hint" xml:space="preserve">
-    <value>Appuyez pour entrer du texte</value>
-  </data>
-  <data name="GpsQuestion_Timeout" xml:space="preserve">
-    <value>Le GPS n'a pas pu déterminer votre position. Pour résoudre ce problème, essayez ce qui suit : assurez-vous que vous êtes à l'extérieur, confirmez que votre GPS est activé ou modifiez le paramètre de délai d'attente de votre GPS</value>
-  </data>
-  <data name="NoMapsApplication" xml:space="preserve">
-    <value>Aucune application de navigation trouvée</value>
-  </data>
-  <data name="ErrorMessage_InvalidEndpoint" xml:space="preserve">
-    <value>L'URL fournie de Survey Solutions Designer est invalide. Vérifiez les paramètres.</value>
-  </data>
-  <data name="Interview_LinkedQuestion_Empty" xml:space="preserve">
-    <value>Les catégories apparaîtront uniquement après avoir répondu à la question qui définit les catégories de cette question.</value>
-  </data>
-  <data name="Interview_Question_Cascading_NoMatchingValue" xml:space="preserve">
-    <value>La réponse "{0}" n'est pas autorisée pour cette question</value>
-  </data>
-  <data name="Interview_Question_Filter_MatchError" xml:space="preserve">
-    <value>La réponse "{0}" n'est pas autorisée pour cette question</value>
-  </data>
-  <data name="Interview_NextSection_ButtonText" xml:space="preserve">
-    <value>Section suivante</value>
-  </data>
-  <data name="Dashboard_LastEntryDate_Format" xml:space="preserve">
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="Cancel" xml:space="preserve">
+    <value>Cancelar</value>
+  </data>
+    <data name="Dashboard_EmptyQuestionnairesList" xml:space="preserve">
+    <value>Todavía no hay cuestionarios. Puede crear o editar sus cuestionarios en Survey Solutions Designer</value>
+  </data>
+    <data name="Dashboard_EmptySearchResult" xml:space="preserve">
+    <value>No se encuentra ningún cuestionario</value>
+  </data>
+    <data name="Dashboard_LastEntryDate_Format" xml:space="preserve">
     <value>{0:dd MMM HH:mm}</value>
   </data>
-  <data name="TextQuestion_MaskHint" xml:space="preserve">
-    <value>Appuyez pour entrer du texte ({0})</value>
+    <data name="Dashboard_ToolbarText" xml:space="preserve">
+    <value>Cuestionarios</value>
   </data>
-  <data name="Interview_Question_Integer_NegativeRosterSizeAnswer" xml:space="preserve">
-    <value>La réponse '{0}' est incorrecte car la question est une question source de roster et la réponse spécifiée est négative</value>
+    <data name="DateQuestion_Hint" xml:space="preserve">
+    <value>Pulse para introducir fecha</value>
   </data>
-  <data name="Interview_Question_Integer_RosterSizeAnswerMoreThanMaxValue" xml:space="preserve">
-    <value>La réponse '{0}' est incorrecte car la réponse est supérieure à la limite supérieure du roster '{1}'.</value>
+    <data name="EndpointHint" xml:space="preserve">
+    <value>Punto final de sincronización</value>
   </data>
-  <data name="Interview_Question_Integer_EmptyValueError" xml:space="preserve">
-    <value>La valeur vide ne peut pas être enregistrée</value>
+    <data name="EndpointText" xml:space="preserve">
+    <value>Extremo de servicio Web:</value>
   </data>
-  <data name="ErrorMessage_AccountIsNotApprovedOnServer" xml:space="preserve">
-    <value>Votre compte n'est pas approuvé. Veuillez d'abord confirmer votre compte.</value>
+    <data name="ErrorMessage_AccountIsLockedOnServer" xml:space="preserve">
+    <value>Su cuenta de usuario está bloqueada. Por favor, póngase en contacto con el equipo de soporte.</value>
   </data>
-  <data name="Interview_Question_List_Empty_Values_Are_Not_Allowed" xml:space="preserve">
-    <value>Les valeurs vides ne sont pas autorisées</value>
+    <data name="ErrorMessage_AccountIsNotApprovedOnServer" xml:space="preserve">
+    <value>Su cuenta no está aprobada. Por favor, confirme su cuenta primero.</value>
   </data>
-  <data name="Interview_Complete_Answered" xml:space="preserve">
-    <value>Répondu</value>
+    <data name="ErrorMessage_InternalServerError" xml:space="preserve">
+    <value>Error del servidor. Por favor, póngase en contacto con el equipo de soporte.</value>
   </data>
-  <data name="Interview_Complete_Button" xml:space="preserve">
-    <value>Terminer</value>
+    <data name="ErrorMessage_InvalidEndpoint" xml:space="preserve">
+    <value>La URL de Survey Solutions Designer no es válida. Compruebe la configuración.</value>
   </data>
-  <data name="Interview_Complete_Consequences_Instrunction" xml:space="preserve">
-    <value>Après avoir terminé cet entretien, il sera marqué comme complété et sera téléchargé vers le superviseur lors de votre prochaine synchronisation</value>
+    <data name="ErrorMessage_Maintenance" xml:space="preserve">
+    <value>La web de Survey Solutions Designer está ahora en el modo de mantenimiento. Disculpen las molestias</value>
   </data>
-  <data name="Interview_Complete_CriticalIssues_Instrunction" xml:space="preserve">
-    <value>Ce bouton est désactivé car la soumission des entretiens avec des problèmes critiques n'est pas autorisée</value>
+    <data name="ErrorMessage_RequestTimeout" xml:space="preserve">
+    <value>Se ha excedido el tiempo de espera de conexión a la página web de Survey Solutions Designer. Compruebe su conexión a internet.</value>
   </data>
-  <data name="Interview_Complete_Errors" xml:space="preserve">
-    <value>Erreur(s)</value>
+    <data name="ErrorMessage_ServiceUnavailable" xml:space="preserve">
+    <value>No hay conexión con Survey Solutions Designer. Por favor, asegúrese de que el sitio web está disponible.</value>
   </data>
-  <data name="Interview_Complete_CriticalUnanswered" xml:space="preserve">
-    <value>Questions critiques sans réponse : {0}</value>
+    <data name="ErrorMessage_Unauthorized" xml:space="preserve">
+    <value>Su cuenta de usuario o contraseña es incorrecta</value>
   </data>
-  <data name="Interview_Complete_FailCriticalConditions" xml:space="preserve">
-    <value>Règles critiques non respectées : {0}</value>
+    <data name="ErrorMessage_UpgradeRequired" xml:space="preserve">
+    <value>Existe una nueva versión de la aplicación. Por favor, actualice la aplicación</value>
   </data>
-  <data name="Interview_Complete_No" xml:space="preserve">
-    <value>Non</value>
+    <data name="FilteredComboboxQuestion_Hint" xml:space="preserve">
+    <value>Pulse para ingresar texto</value>
   </data>
-  <data name="Interview_Complete_Note_For_Supervisor" xml:space="preserve">
-    <value>Note pour le superviseur</value>
+    <data name="GpsQuestion_Timeout" xml:space="preserve">
+    <value>El GPS fue incapaz de determinar su ubicación. Para solucionar el problema, por favor, pruebe lo siguiente: Asegúrese de que está al aire libre, confirme que su GPS está activado, o cambie la configuración de tiempo de espera de su GPS.</value>
   </data>
-  <data name="Interview_Complete_WithWarningCriticality" xml:space="preserve">
-    <value>Veuillez confirmer que vous souhaitez soumettre cet entretien avec des problèmes critiques.</value>
+    <data name="IntegerQuestion_Hint" xml:space="preserve">
+    <value>Pulse para introducir número</value>
   </data>
-  <data name="Interview_Complete_Note_For_Supervisor_with_Criticality" xml:space="preserve">
-    <value>Ce bouton reste désactivé jusqu'à ce que vous spécifiiez un commentaire pour les problèmes critiques ci-dessus</value>
+    <data name="Interview_Comment_Interviewer_Caption" xml:space="preserve">
+    <value>Comentarios</value>
   </data>
-  <data name="Interview_Complete_Questions_Status" xml:space="preserve">
-    <value>Statut des questions</value>
+    <data name="Interview_Complete_Answered" xml:space="preserve">
+    <value>Respondido</value>
   </data>
-  <data name="Interview_Complete_Interview_Status" xml:space="preserve">
-    <value>Problèmes d'entretien :</value>
+    <data name="Interview_Complete_Button" xml:space="preserve">
+    <value>Completar</value>
   </data>
-  <data name="Interview_Complete_CriticalityIssuesDescription" xml:space="preserve">
-    <value>Veuillez résoudre les problèmes en répondant aux questions critiques et en vous assurant que les réponses satisfont les règles critiques</value>
+    <data name="Interview_Complete_Consequences_Instrunction" xml:space="preserve">
+    <value>Después de terminar esta entrevista, la misma será marcada como completada y mandada al supervisor durante la siguiente sincronización</value>
   </data>
-  <data name="Interview_Complete_Unanswered" xml:space="preserve">
-    <value>Sans réponse</value>
+    <data name="Interview_Complete_Errors" xml:space="preserve">
+    <value>Errores</value>
   </data>
-  <data name="Interview_Complete_Screen_Description" xml:space="preserve">
-    <value>Vous êtes sur le point de terminer cet entretien</value>
+    <data name="Interview_Complete_Note_For_Supervisor" xml:space="preserve">
+    <value>Nota para el supervisor</value>
   </data>
-  <data name="Interview_Complete_Screen_DescriptionWithInterviewKey" xml:space="preserve">
-    <value>Vous êtes sur le point de terminer l'entretien {0}</value>
+    <data name="Interview_Complete_Questions_Status" xml:space="preserve">
+    <value>Estado de las preguntas</value>
   </data>
-  <data name="Interview_Complete_Screen_Title" xml:space="preserve">
-    <value>Terminer</value>
+    <data name="Interview_Complete_Screen_Description" xml:space="preserve">
+    <value>Está a punto de terminar esta entrevista</value>
   </data>
-  <data name="Interviewer_ApplicationName" xml:space="preserve">
-    <value>Survey Solutions Interviewer</value>
+    <data name="Interview_Complete_Screen_Title" xml:space="preserve">
+    <value>Completar</value>
   </data>
-  <data name="Supervisor_ApplicationName" xml:space="preserve">
-    <value>Survey Solutions Supervisor</value>
+    <data name="Interview_Complete_Unanswered" xml:space="preserve">
+    <value>Sin respuesta</value>
   </data>
-  <data name="Interview_CompleteScreen_ButtonText" xml:space="preserve">
-    <value>Pour terminer l'écran</value>
+    <data name="Interview_CompleteScreen_ButtonText" xml:space="preserve">
+    <value>Ir a pantalla de completar</value>
   </data>
-  <data name="Interviewer_RelinkDevice_Cancel" xml:space="preserve">
-    <value>Annuler</value>
+    <data name="Interview_Group_AnsweredQuestions_Many" xml:space="preserve">
+    <value>{0} respuesta</value>
   </data>
-  <data name="Interviewer_Reassign_Comment" xml:space="preserve">
-    <value>Laisser un commentaire pour un nouveau responsable</value>
+    <data name="Interview_Group_AnsweredQuestions_One" xml:space="preserve">
+    <value>una respuesta</value>
   </data>
-  <data name="Interviewer_Comment" xml:space="preserve">
-    <value>Laisser un commentaire</value>
+    <data name="Interview_Group_InvalidAnswers_ManyFormat" xml:space="preserve">
+    <value>{0} errores</value>
   </data>
-    <data name="Interviewer_Reassign_AlreadyReceivedInterview" xml:space="preserve">
-    <value>L'enquêteur {0} a déjà reçu cet entretien {1}. Êtes-vous sûr de vouloir le réaffecter ?</value>
+    <data name="Interview_Group_InvalidAnswers_One" xml:space="preserve">
+    <value>un error</value>
   </data>
-  <data name="Interviewer_Reassign_AlreadyReceivedAssignment" xml:space="preserve">
-    <value>L'enquêteur {0} a déjà reçu cette affectation {1}. Êtes-vous sûr de vouloir la réaffecter ?</value>
+    <data name="Interview_Group_Status_CompletedFormat" xml:space="preserve">
+    <value>Sección completada: {0}</value>
   </data>
-  <data name="Interviewer_Done" xml:space="preserve">
-    <value>Terminé</value>
+    <data name="Interview_Group_Status_NotStarted" xml:space="preserve">
+    <value>Sección no iniciada</value>
   </data>
-  <data name="Interviewer_AudioRecording" xml:space="preserve">
-    <value>Enregistrement audio</value>
+    <data name="Interview_Group_Status_StartedIncompleteFormat" xml:space="preserve">
+    <value>Sección iniciada: {0}</value>
   </data>
-  <data name="Interviewer_RelinkDevice_InterviewerLinkedToAnotherDeviceMessage" xml:space="preserve">
-    <value>Vous êtes déjà assigné à un autre appareil</value>
+    <data name="Interview_Group_Subgroups_ManyFormat" xml:space="preserve">
+    <value>{0} sub-secciones</value>
   </data>
-  <data name="Interviewer_RelinkDevice_RelinkButtonText" xml:space="preserve">
-    <value>Relier</value>
+    <data name="Interview_Group_Subgroups_One" xml:space="preserve">
+    <value>una sub-sección</value>
   </data>
-  <data name="Interviewer_RelinkDevice_RelinkMessage" xml:space="preserve">
-    <value>Si vous reliez à cet appareil &lt;br/&gt; toutes les données sur l'ancien seront perdues</value>
+    <data name="Interview_Group_Subgroups_Zero" xml:space="preserve">
+    <value>no sub-secciones</value>
   </data>
-  <data name="Dashboard_EmptySearchResult" xml:space="preserve">
-    <value>Aucun questionnaire trouvé</value>
+    <data name="Interview_Instruction_Title" xml:space="preserve">
+    <value>Instrucción</value>
   </data>
-  <data name="EndpointHint" xml:space="preserve">
-    <value>Point de synchronisation</value>
+    <data name="Interview_LinkedQuestion_Empty" xml:space="preserve">
+    <value>Las opciones estarán disponibles después de responder la pregunta a la que se hace referencia</value>
   </data>
-  <data name="Interviewer_TryOnlineLogin" xml:space="preserve">
-    <value>Essayez de vous connecter en ligne</value>
+    <data name="Interview_NextSection_ButtonText" xml:space="preserve">
+    <value>Siguiente sección</value>
   </data>
-  <data name="PlayServicesLocationWatcher_Google_Play_Services_are_not_available" xml:space="preserve">
-    <value>Google Play Services ne sont pas disponibles</value>
+    <data name="Interview_PreviousGroupNavigation_AnsweredQuestions" xml:space="preserve">
+    <value>Todas las {0} preguntas respondidas</value>
   </data>
-  <data name="PlayServicesLocationWatcher_You_cannot_start_MvxLocation_service_more_than_once" xml:space="preserve">
-    <value>Vous ne pouvez pas démarrer le service MvxLocation plus d'une fois</value>
+    <data name="Interview_PreviousGroupNavigation_UnansweredQuestions" xml:space="preserve">
+    <value>Nota: {0} preguntas sin respuesta</value>
   </data>
-  <data name="PlayServicesLocationWatcher_Location_Client_not_started" xml:space="preserve">
-    <value>Client de localisation non démarré</value>
+    <data name="Interview_Question_Cascading_NoMatchingValue" xml:space="preserve">
+    <value>Respuesta «{0}» no corresponde a ninguna opción</value>
   </data>
-  <data name="Synchronization_UserLinkedToAnotherDevice_Description" xml:space="preserve">
-    <value>Vous n'avez aucune affectation sur cet appareil. Envoyez les informations de la tablette, effacez les données de l'application et connectez-vous avec un autre compte</value>
+    <data name="Interview_Question_Filter_MatchError" xml:space="preserve">
+    <value>Respuesta «{0}» no corresponde a ninguna opción</value>
   </data>
-  <data name="No" xml:space="preserve">
-    <value>Non</value>
+    <data name="Interview_Question_Integer_EmptyValueError" xml:space="preserve">
+    <value>Valor en blanco no se puede guardar</value>
   </data>
-  <data name="Cancel" xml:space="preserve">
-    <value>Annuler</value>
+    <data name="Interview_Question_Integer_NegativeRosterSizeAnswer" xml:space="preserve">
+    <value>Respuesta '{0}' es incorrecta porque la pregunta se utiliza como tamaño de la lista y la respuesta especificada es negativa</value>
   </data>
-  <data name="PasswordMatchError" xml:space="preserve">
-    <value>Les mots de passe doivent être identiques</value>
+    <data name="Interview_Question_Integer_ParsingError" xml:space="preserve">
+    <value>Valor introducido no puede ser tratado como entero</value>
   </data>
-  <data name="Interviewer_Diagnostics" xml:space="preserve">
-    <value>Diagnostics</value>
+    <data name="Interview_Question_Integer_RosterSizeAnswerMoreThanMaxValue" xml:space="preserve">
+    <value>Respuesta '{0}' es incorrecta porque la respuesta es mayor que el límite superior de lista '{1}'.</value>
   </data>
-  <data name="Prefs_GpsDesiredAccuracySubTitle" xml:space="preserve">
-    <value>Nombre de mètres pour définir la précision</value>
+    <data name="Interview_Question_List_Empty_Values_Are_Not_Allowed" xml:space="preserve">
+    <value>No se permiten valores vacíos</value>
   </data>
-  <data name="Prefs_GpsDesiredAccuracyTitle" xml:space="preserve">
-    <value>Précision souhaitée des questions GPS</value>
+    <data name="Interview_Question_Real_ParsingError" xml:space="preserve">
+    <value>Valor introducido no puede ser analizado como valor decimal</value>
   </data>
-  <data name="Interview_Instruction_ShowInstruction" xml:space="preserve">
-    <value>Afficher l'instruction</value>
+    <data name="Interview_Question_Text_MaskError" xml:space="preserve">
+    <value>Por favor, rellene todos los valores necesarios</value>
   </data>
-  <data name="Interview_Questions_Timestamp_SaveAnswer" xml:space="preserve">
-    <value>Appuyez pour enregistrer l'heure actuelle</value>
+    <data name="Interview_Questions_Gps_SaveAnswer" xml:space="preserve">
+    <value>Pulse para registrar GPS</value>
   </data>
-  <data name="Interview_Complete_Entities_With_Errors" xml:space="preserve">
-    <value>Questions avec erreurs :</value>
+    <data name="Interview_Questions_Multimedia_TapToTakePhoto" xml:space="preserve">
+    <value>Pulse para tomar fotografía</value>
   </data>
-  <data name="Interview_Complete_First_n_Entities_With_Errors" xml:space="preserve">
-    <value>Premières {0} questions avec erreurs :</value>
+    <data name="Interview_Questions_QrBarcode_SaveAnswer" xml:space="preserve">
+    <value>Pulse para leer código de barras</value>
   </data>
-  <data name="Messages_WaitPendingOperation" xml:space="preserve">
-    <value>Veuillez attendre la fin de l'opération en cours</value>
+    <data name="Interviewer_ApplicationName" xml:space="preserve">
+    <value>Entrevistador de Survey Solutions</value>
   </data>
-  <data name="Prefs_VibrateOnErrorSummary" xml:space="preserve">
-    <value>La tablette va vibrer lorsqu'une réponse n'a pas passé la validation</value>
+    <data name="Interviewer_RelinkDevice_Cancel" xml:space="preserve">
+    <value>Cancelar</value>
   </data>
-  <data name="Prefs_VibrateOnErrorTitle" xml:space="preserve">
-    <value>Vibrer lorsqu'une réponse invalide est donnée</value>
+    <data name="Interviewer_RelinkDevice_InterviewerLinkedToAnotherDeviceMessage" xml:space="preserve">
+    <value>Usted ya ha sido vinculado/a a otro dispositivo</value>
   </data>
-  <data name="Interview_Cover_Screen_Title" xml:space="preserve">
-    <value>Couverture</value>
+    <data name="Interviewer_RelinkDevice_RelinkButtonText" xml:space="preserve">
+    <value>Volver a vincular </value>
   </data>
-  <data name="Interview_Cover_First_n_Questions_With_Comments" xml:space="preserve">
-    <value>Premières {0} questions avec commentaires :</value>
+    <data name="Interviewer_RelinkDevice_RelinkMessage" xml:space="preserve">
+    <value>Si usted se vincula a este dispositivo&lt;br&gt;se perderán todos los datos en su dispositivo anterior  </value>
   </data>
-  <data name="Interview_Cover_Questions_With_Comments" xml:space="preserve">
-    <value>Questions avec commentaires du superviseur :</value>
+    <data name="Interviewer_TryOnlineLogin" xml:space="preserve">
+    <value>Intente iniciar sesión en línea</value>
   </data>
-  <data name="Interview_Cover_Supervisor_Comments_does_not_exists" xml:space="preserve">
-    <value>Aucun commentaire du superviseur</value>
+    <data name="LoginNameHint" xml:space="preserve">
+    <value>Su inicio de sesión</value>
   </data>
-  <data name="Interview_Other_Comment_Caption" xml:space="preserve">
-    <value>Commentaire de l'utilisateur</value>
+    <data name="LoginText" xml:space="preserve">
+    <value>Iniciar sesión</value>
   </data>
-  <data name="Interview_Supervisor_Comment_Caption" xml:space="preserve">
-    <value>Commentaire du superviseur</value>
+    <data name="LoginTitleText" xml:space="preserve">
+    <value>Survey Solutions Questionnaire Tester</value>
   </data>
-  <data name="Interview_Cover_Supervisor_Note" xml:space="preserve">
-    <value>Note du superviseur :</value>
+    <data name="No" xml:space="preserve">
+    <value>No</value>
   </data>
-  <data name="Prefs_ShowLocationOnMap" xml:space="preserve">
-    <value>Afficher la localisation sur la carte</value>
+    <data name="PasswordHint" xml:space="preserve">
+    <value>Contraseña</value>
   </data>
-  <data name="Prefs_DownloadUpdatesForInterviewerApp" xml:space="preserve">
-    <value>Télécharger les mises à jour pour l'application Interviewer</value>
+    <data name="PlayServicesLocationWatcher_Google_Play_Services_are_not_available" xml:space="preserve">
+    <value>Google Play Services no está disponible</value>
   </data>
-  <data name="Prefs_ShowLocationOnMapSummary" xml:space="preserve">
-    <value>Charger la carte pour afficher la localisation des questions GPS</value>
+    <data name="PlayServicesLocationWatcher_Location_Client_not_started" xml:space="preserve">
+    <value>Ubicación cliente no iniciado</value>
   </data>
-  <data name="Prefs_DownloadUpdatesForInterviewerAppSummary" xml:space="preserve">
-    <value>Si les enquêteurs n'ont pas accès à Internet, cette fonctionnalité doit être activée, car elle permet de mettre à jour leurs applications lors de la synchronisation hors ligne avec l'application Superviseur</value>
+    <data name="PlayServicesLocationWatcher_You_cannot_start_MvxLocation_service_more_than_once" xml:space="preserve">
+    <value>No se puede iniciar servicio de MvxLocation más de una vez</value>
   </data>
-  <data name="VariableEmptyValue" xml:space="preserve">
-    <value>&lt;vide&gt;</value>
+    <data name="PrefilledQuestions_StartInterview" xml:space="preserve">
+    <value>INICIO</value>
   </data>
-  <data name="Interview_Headquarters_Comment_Caption" xml:space="preserve">
-    <value>Commentaire du siège</value>
+    <data name="RealQuestion_Hint" xml:space="preserve">
+    <value>Pulse para entrar decimal</value>
   </data>
-  <data name="Interview_Interviewer_Comment_Caption" xml:space="preserve">
-    <value>Commentaire de l'enquêteur</value>
+    <data name="StaySignedInText" xml:space="preserve">
+    <value>Mantenerse conectado</value>
   </data>
-  <data name="GpsQuestion_MissingPermissions" xml:space="preserve">
-    <value>L'application n'a pas suffisamment d'autorisations pour exécuter l'action demandée. Réessayez de répondre à la question et autorisez l'accès. Si vous ne voyez pas de popup d'autorisations, allez dans les paramètres et autorisez l'application à utiliser la localisation de l'appareil.</value>
+    <data name="Synchronization_UserLinkedToAnotherDevice_Description" xml:space="preserve">
+    <value>No tiene ninguna tarea en este dispositivo. Enviar información en la tableta, borrar datos de la aplicación y de la conexión a otra cuenta </value>
   </data>
-  <data name="MissingPermissions_Camera" xml:space="preserve">
-    <value>L'application doit avoir l'autorisation d'utiliser la caméra pour répondre à cette question. Réessayez de répondre à la question et autorisez l'accès. Si vous ne voyez pas de popup d'autorisations, allez dans les paramètres et autorisez l'application à utiliser la caméra.</value>
+    <data name="TextListQuestion_Hint" xml:space="preserve">
+    <value>Pulse para entrar otro elemento</value>
   </data>
-  <data name="MissingPermissions_Microphone" xml:space="preserve">
-    <value>L'application doit avoir l'autorisation d'utiliser le microphone pour répondre à cette question. Réessayez de répondre à la question et autorisez l'accès. Si vous ne voyez pas de popup d'autorisations, allez dans les paramètres et autorisez l'application à utiliser le microphone.</value>
+    <data name="TextQuestion_Hint" xml:space="preserve">
+    <value>Pulse para ingresar texto</value>
   </data>
-  <data name="MissingPermissions_Storage" xml:space="preserve">
-    <value>L'application doit avoir l'autorisation d'utiliser le stockage pour répondre à cette question. Réessayez de répondre à la question et autorisez l'accès. Si vous ne voyez pas de popup d'autorisations, allez dans les paramètres et autorisez l'application à utiliser le stockage.</value>
+    <data name="TextQuestion_MaskHint" xml:space="preserve">
+    <value>Pulse para ingresar texto ({0})</value>
   </data>
-  <data name="MissingPermissions_MapsLocation" xml:space="preserve">
-    <value>L'application doit avoir l'autorisation d'utiliser la localisation. Si vous ne voyez pas de popup d'autorisations, allez dans les paramètres et autorisez l'application à utiliser la localisation.</value>
+    <data name="Validity_Answered_Invalid_ErrorCaption" xml:space="preserve">
+    <value>Respuesta no válida</value>
   </data>
-  <data name="MissingPermissions_Microphone_Global" xml:space="preserve">
-    <value>L'application doit avoir l'autorisation d'utiliser le microphone. Réessayez la dernière action et autorisez l'accès. Si vous ne voyez pas de popup d'autorisations, allez dans les paramètres et autorisez l'application à utiliser le microphone.</value>
+    <data name="Validity_NotAnswered_InterviewException_ErrorCaption" xml:space="preserve">
+    <value>Respuesta no guardada</value>
   </data>
-  <data name="MissingPermissions_Storage_Global" xml:space="preserve">
-    <value>L'application doit avoir l'autorisation d'utiliser le stockage. Réessayez la dernière action et autorisez l'accès. Si vous ne voyez pas de popup d'autorisations, allez dans les paramètres et autorisez l'application à utiliser le stockage.</value>
+    <data name="Yes" xml:space="preserve">
+    <value>Si</value>
   </data>
-  <data name="MissingPermission" xml:space="preserve">
-    <value>L'application n'a pas suffisamment d'autorisations pour exécuter l'action demandée</value>
+    <data name="AreaMap_Active_Map_Title" xml:space="preserve">
+    <value>MAPA ACTIVO:</value>
   </data>
-  <data name="Ok" xml:space="preserve">
-    <value>OK</value>
+    <data name="AreaMap_Available_Maps_Title" xml:space="preserve">
+      <value>MAPAS DISPONIBLES</value>
   </data>
-  <data name="Multimedia_PickFromGallery" xml:space="preserve">
-    <value>Choisir dans la galerie</value>
+    <data name="AreaMap_Cancel" xml:space="preserve">
+    <value>Cancelar</value>
   </data>
-  <data name="Multimedia_PictureSource" xml:space="preserve">
-    <value>Sélectionnez une option</value>
+    <data name="AreaMap_Close" xml:space="preserve">
+    <value>Cerrar</value>
   </data>
-  <data name="Multimedia_TakePhoto" xml:space="preserve">
-    <value>Prendre une photo</value>
+    <data name="AreaMap_Edit" xml:space="preserve">
+    <value>Editar</value>
   </data>
-  <data name="Error" xml:space="preserve">
-    <value>Erreur</value>
+    <data name="AreaMap_Location" xml:space="preserve">
+    <value>Ubicación</value>
   </data>
-  <data name="Warning" xml:space="preserve">
-    <value>Avertissement</value>
+    <data name="AreaMap_MapTitle" xml:space="preserve">
+    <value>Mapa</value>
   </data>
-  <data name="AreaMap_Edit" xml:space="preserve">
-    <value>Modifier</value>
+    <data name="AreaMap_NoChangesInfo" xml:space="preserve">
+    <value>No hay cambios a guardar</value>
   </data>
-  <data name="AreaMap_Location" xml:space="preserve">
-    <value>Localisation</value>
+    <data name="AreaMap_NoMapsFound" xml:space="preserve">
+    <value>No se encontró ningún mapa. Por favor actualice los mapas</value>
   </data>
-  <data name="AreaMap_NoChangesInfo" xml:space="preserve">
-    <value>Aucun changement à enregistrer.</value>
+    <data name="AreaMap_Save" xml:space="preserve">
+    <value>Guardar</value>
   </data>
-  <data name="AreaMap_LocationOutOfBoundaries" xml:space="preserve">
-    <value>Votre localisation est en dehors des limites de la carte.</value>
+    <data name="AreaMap_Undo" xml:space="preserve">
+    <value>Deshacer</value>
   </data>
-  <data name="AreaMap_LocationDataSourceFailed" xml:space="preserve">
-    <value>La localisation ne peut pas être capturée. Pour résoudre ce problème, essayez ce qui suit : assurez-vous que vous êtes à l'extérieur, confirmez que votre GPS est activé ou modifiez le paramètre de délai d'attente de votre GPS</value>
+    <data name="AreaMap_Update_Maps" xml:space="preserve">
+    <value>Actualizar mapas</value>
   </data>
-  <data name="AreaMap_MapIsOutOfVisibleBoundaries" xml:space="preserve">
-    <value>La carte chargée est en dehors des limites visibles</value>
+    <data name="AreaMap_UpdateFailed" xml:space="preserve">
+    <value>Actualización fallida</value>
   </data>
-  <data name="AreaMap_SelectShapefile" xml:space="preserve">
-    <value>Sélectionnez le fichier de limites</value>
+    <data name="AreaMap_UpdateMaps" xml:space="preserve">
+    <value>Actualizar mapas</value>
   </data>
-  <data name="AreaMap_ErrorOnShapefileLoading" xml:space="preserve">
-    <value>Erreur lors du chargement. Le fichier de formes ne peut pas être traité</value>
+    <data name="AssignmentN" xml:space="preserve">
+    <value>Asignaciones #{0}</value>
   </data>
-  <data name="AreaMap_NoMapsFound" xml:space="preserve">
-    <value>Aucune carte trouvée. Veuillez mettre à jour les cartes</value>
+    <data name="Audio_Io_Exception_Message" xml:space="preserve">
+    <value>No fue posible escribir el archivo de audio. Asegúrese de que el dispositivo tenga espacio disponible</value>
   </data>
-  <data name="AreaMap_Save" xml:space="preserve">
-    <value>Enregistrer</value>
+    <data name="Audio_Unhandled_Exception_Message" xml:space="preserve">
+    <value>Excepción inesperada durante el inicio de la grabación de audio</value>
   </data>
-  <data name="AreaMap_Undo" xml:space="preserve">
-    <value>Annuler</value>
+    <data name="AudioQuestion_DurationFormat" xml:space="preserve">
+    <value>{0} grabaciones de audio</value>
   </data>
-  <data name="AreaMap_UpdateMaps" xml:space="preserve">
-    <value>Mettre à jour les cartes</value>
+    <data name="Device_Does_Not_Support" xml:space="preserve">
+    <value>Su dispositivo no soporta esta funcionalidad</value>
   </data>
-  <data name="Version_Not_Supports" xml:space="preserve">
-    <value>Votre version de l'application ne prend pas en charge cette fonctionnalité</value>
+    <data name="GpsQuestion_MissingPermissions" xml:space="preserve">
+    <value>La aplicación necesita tener autorización para determinar su ubicación para poder proceder con la acción.  Intente nuevamente contestar la pregunta y permita el acceso. Si no le aparece la ventana emergente,  entonces vaya a la opción de configuración y autorice el uso la la detección de ubicación.</value>
   </data>
-  <data name="AreaMap_UpdateFailed" xml:space="preserve">
-    <value>Échec de la mise à jour</value>
+    <data name="Interview_Complete_Entities_With_Errors" xml:space="preserve">
+    <value>Entidades con errores:</value>
   </data>
-  <data name="Device_Does_Not_Support" xml:space="preserve">
-    <value>Votre appareil ne prend pas en charge cette fonctionnalité</value>
+    <data name="Interview_Complete_First_n_Entities_With_Errors" xml:space="preserve">
+    <value>Primeras {0} entidades con errores:</value>
   </data>
-  <data name="AreaMap_MapTitle" xml:space="preserve">
-    <value>Carte</value>
+    <data name="Interview_Complete_Screen_DescriptionWithInterviewKey" xml:space="preserve">
+    <value>Está a punto de completar la entrevista {0}</value>
   </data>
-  <data name="AreaMap_AreaFormat" xml:space="preserve">
-    <value>Surface : {0:0.00} m2</value>
+    <data name="Interview_Cover_First_n_Questions_With_Comments" xml:space="preserve">
+    <value>Primeras {0} preguntas con comentarios:</value>
   </data>
-  <data name="AreaMap_OverlapsWith" xml:space="preserve">
-    <value>Chevauche avec :</value>
+    <data name="Interview_Cover_Questions_With_Comments" xml:space="preserve">
+    <value>Pregunta con comentarios del supervisor:</value>
   </data>
-  <data name="AreaMap_OverlapsWithOther" xml:space="preserve">
-    <value>et {0} autre(s).</value>
+    <data name="Interview_Cover_Screen_Title" xml:space="preserve">
+    <value>Portada</value>
   </data>
-  <data name="AreaMap_ItemsOutsideDedicatedArea" xml:space="preserve">
-    <value>Certains marqueurs se trouvent en dehors de la zone délimitée</value>
+    <data name="Interview_Cover_Supervisor_Note" xml:space="preserve">
+    <value>Nota del supervisor:</value>
+  </data>
+    <data name="Interview_Headquarters_Comment_Caption" xml:space="preserve">
+    <value>Comentarios de la sede</value>
+  </data>
+    <data name="Interview_Instruction_ShowInstruction" xml:space="preserve">
+    <value>Mostrar instrucción</value>
+  </data>
+    <data name="Interview_Interviewer_Comment_Caption" xml:space="preserve">
+    <value>Comentario del entrevistador</value>
+  </data>
+    <data name="Interview_Other_Comment_Caption" xml:space="preserve">
+    <value>Comentario de usuario</value>
+  </data>
+    <data name="Interview_Question_Text_Empty" xml:space="preserve">
+    <value>La respuesta no puede quedar en blanco</value>
+  </data>
+    <data name="Interview_Questions_Area_SaveAnswer" xml:space="preserve">
+    <value>Presione para editar el área</value>
+  </data>
+    <data name="Interview_Questions_Audio_RecordNew" xml:space="preserve">
+    <value>Registrar nuevo</value>
+  </data>
+    <data name="Interview_Questions_Audio_SaveAnswer" xml:space="preserve">
+    <value>Presione para grabar audio</value>
+  </data>
+    <data name="Interview_Questions_Timestamp_SaveAnswer" xml:space="preserve">
+    <value>Presione para registrar la fecha y hora</value>
+  </data>
+    <data name="Interview_Supervisor_Comment_Caption" xml:space="preserve">
+    <value>Comentario del supervisor</value>
+  </data>
+    <data name="Interviewer_AudioRecording" xml:space="preserve">
+    <value>Grabación de audio</value>
+  </data>
+    <data name="Interviewer_Diagnostics" xml:space="preserve">
+    <value>Diagnostico</value>
+  </data>
+    <data name="Interviewer_Done" xml:space="preserve">
+    <value>Hecho</value>
+  </data>
+    <data name="MenuItem_Title_AreaCancelEdit" xml:space="preserve">
+  <value>Limpiar todo</value>
+</data>
+    <data name="InterviewKey" xml:space="preserve">
+    <value>Llave de entrevista: {0} </value>
+  </data>
+    <data name="Messages_WaitPendingOperation" xml:space="preserve">
+    <value>Por favor espere a que la operación actual sea completada</value>
+  </data>
+    <data name="MissingPermission" xml:space="preserve">
+    <value>La aplicación no cuenta con suficientes privilegios para ejecutar la acción solicitada</value>
+  </data>
+    <data name="MissingPermissions_Camera" xml:space="preserve">
+    <value>La aplicación necesita tener autorización para usar la cámara para poder proceder con la acción. Intente nuevamente contestar la pregunta y permita el acceso. Si no le aparece la ventana emergente,  entonces vaya a la opción de configuración y autorice el uso de la cámara</value>
+  </data>
+    <data name="MissingPermissions_Microphone" xml:space="preserve">
+    <value>La aplicación necesita tener autorización para usar el micrófono para poder proceder con la acción.  Intente nuevamente contestar la pregunta y permita el acceso. Si no le aparece la ventana emergente,  entonces vaya a la opción de configuración y autorice el uso del micrófono</value>
+  </data>
+    <data name="MissingPermissions_Storage" xml:space="preserve">
+    <value>La aplicación necesita tener autorización para usar el almacenamiento interno para poder proceder con la acción.  Intente nuevamente contestar la pregunta y permita el acceso. Si no le aparece la ventana emergente,  entonces vaya a la opción de configuración y autorice el uso de el almacenamiento interno.</value>
+  </data>
+    <data name="Multimedia_PickFromGallery" xml:space="preserve">
+    <value>Selección de la galería</value>
+  </data>
+    <data name="Multimedia_PictureSource" xml:space="preserve">
+    <value>Seleccione una opción</value>
+  </data>
+    <data name="Multimedia_TakePhoto" xml:space="preserve">
+    <value>Tome la foto</value>
+  </data>
+    <data name="Ok" xml:space="preserve">
+    <value>Ok</value>
+  </data>
+    <data name="Prefs_GpsDesiredAccuracySubTitle" xml:space="preserve">
+    <value>Número de metros para fijar la precisión</value>
+  </data>
+    <data name="Prefs_GpsDesiredAccuracyTitle" xml:space="preserve">
+    <value>Precisión de pregunta GPS deseada</value>
+  </data>
+    <data name="Prefs_ShowLocationOnMap" xml:space="preserve">
+    <value>Mostrar localización en el mapa</value>
+  </data>
+    <data name="Prefs_ShowLocationOnMapSummary" xml:space="preserve">
+    <value>Cargar el mapa para mostrar locación en la pregunta GPS</value>
+  </data>
+    <data name="Prefs_VibrateOnErrorSummary" xml:space="preserve">
+    <value>La tableta vibrará cuando una pregunta no satisfaga su validación</value>
+  </data>
+    <data name="Prefs_VibrateOnErrorTitle" xml:space="preserve">
+    <value>Vibración cuando se introduzca una respuesta inválida</value>
+  </data>
+    <data name="VariableEmptyValue" xml:space="preserve">
+    <value>&lt;vacío&gt;</value>
+  </data>
+    <data name="Version_Not_Supports" xml:space="preserve">
+    <value>La versión de su aplicación no soporta esta funcionalidad</value>
+  </data>
+    <data name="Interview_Question_NumberRosterRemoveConfirm" xml:space="preserve">
+    <value>¿Está seguro de que quiere eliminar la {0} fila (s) de cada lista relacionada?</value>
+  </data>
+    <data name="AnswerRecordedMsgDismiss" xml:space="preserve">
+    <value>Descartar</value>
+  </data>
+    <data name="AreaMap_AreaFormat" xml:space="preserve">
+    <value>Area: {0:0.00} m2</value>
+  </data>
+    <data name="AreaMap_ErrorOnShapefileLoading" xml:space="preserve">
+    <value>Ocurrió un error al cargar. Shapefile no se puede abrir</value>
+  </data>
+    <data name="AreaMap_LengthFormat" xml:space="preserve">
+    <value>Longitud: {0:0.00} m</value>
+  </data>
+    <data name="AreaMap_LoadShapefile" xml:space="preserve">
+    <value>Cargar archivo de contorno</value>
+  </data>
+    <data name="AreaMap_LocationDataSourceFailed" xml:space="preserve">
+    <value>No se puede capturar la ubicación. Para solucionar problemas, intente lo siguiente: asegúrese de estar al aire libre, confirme que su GPS esté habilitado o cambie la configuración de tiempo de espera de su GPS</value>
+  </data>
+    <data name="AreaMap_LocationOutOfBoundaries" xml:space="preserve">
+    <value>Tu ubicación está fuera de los límites del mapa.</value>
+  </data>
+    <data name="AreaMap_MapIsOutOfVisibleBoundaries" xml:space="preserve">
+    <value>El mapa cargado está fuera de los límites visibles</value>
+  </data>
+    <data name="AreaMap_PerimeterFormat" xml:space="preserve">
+    <value>Perímetro: {0:0.00} m</value>
+  </data>
+    <data name="AreaMap_PointsFormat" xml:space="preserve">
+    <value>Puntos: {0}</value>
+  </data>
+    <data name="Dashboard_PublicQuestionnairesLinkText" xml:space="preserve">
+    <value>Público</value>
+  </data>
+    <data name="Dashboard_SharedWithMeLinkText" xml:space="preserve">
+    <value>Compartido conmigo</value>
+  </data>
+    <data name="Interview_Comment_OnPreviousAnswer" xml:space="preserve">
+    <value>En respuesta anterior</value>
+  </data>
+    <data name="Interview_MaxAnswersCount" xml:space="preserve">
+    <value>{0} de {1} categorías seleccionadas</value>
+  </data>
+    <data name="Interview_Overview" xml:space="preserve">
+    <value>Vista general</value>
+  </data>
+    <data name="Interview_Overview_AdditionalInfo" xml:space="preserve">
+    <value>Información adicional</value>
+  </data>
+    <data name="Interview_Overview_Comments" xml:space="preserve">
+    <value>Comentarios</value>
+  </data>
+    <data name="Interview_Overview_Name" xml:space="preserve">
+    <value>Vista general</value>
+  </data>
+    <data name="Interview_Overview_NotAnswered" xml:space="preserve">
+    <value>No contestado</value>
+  </data>
+    <data name="Interview_Overview_Warnings" xml:space="preserve">
+    <value>Advertencia (s)</value>
+  </data>
+    <data name="Interview_Question_HideResolvedComments" xml:space="preserve">
+    <value>Ocultar resuelto</value>
+  </data>
+    <data name="Interview_Question_ShowResolvedComments" xml:space="preserve">
+    <value>Mostrar resuelto</value>
+  </data>
+    <data name="Interview_Questions_Integer_ProtectedValue" xml:space="preserve">
+    <value>La nueva respuesta a una pregunta protegida debe ser mayor o igual a {0}</value>
+  </data>
+    <data name="Interview_Questions_RemoveRowFromRosterListMessage" xml:space="preserve">
+    <value>¿Estás seguro de que deseas eliminar las listas relacionadas?</value>
+  </data>
+    <data name="Interview_Questions_RemoveRowFromRosterMessage" xml:space="preserve">
+    <value>¿Está seguro de que desea eliminar la lista relacionada '{0}'?</value>
+  </data>
+    <data name="Interview_ShowPdf" xml:space="preserve">
+    <value>Mostrar PDF</value>
+  </data>
+    <data name="Interview_SignatureClear" xml:space="preserve">
+    <value>Claro</value>
+  </data>
+    <data name="Interview_SignatureSignHere" xml:space="preserve">
+    <value>Firma aqui</value>
+  </data>
+    <data name="Interview_TakeSignature" xml:space="preserve">
+    <value>Firma de la tienda</value>
+  </data>
+    <data name="Interviewer_Reassign_Comment" xml:space="preserve">
+    <value>Dejar comentario para un nuevo responsable</value>
+  </data>
+    <data name="MapDashboard_AllQuestionnaires" xml:space="preserve">
+    <value>Todos los cuestionarios</value>
+  </data>
+    <data name="MapDashboard_Assignments" xml:space="preserve">
+    <value>Asignaciones</value>
+  </data>
+    <data name="MapDashboard_Disclaimer" xml:space="preserve">
+    <value>solo se muestran los elementos con coordenadas conocidas</value>
+  </data>
+    <data name="MapDashboard_FiltersTitle" xml:space="preserve">
+        <value>Filtros</value>
+    </data>
+    <data name="MapDashboard_Interviews" xml:space="preserve">
+    <value>Entrevistas</value>
+  </data>
+    <data name="MapDashboard_QuestionnaireTitle" xml:space="preserve">
+    <value>Cuestionario</value>
+  </data>
+    <data name="MapDashboard_TypeTitle" xml:space="preserve">
+    <value>Tipo</value>
+  </data>
+    <data name="MenuItem_Title_Dashboard" xml:space="preserve">
+    <value>Tablero</value>
+  </data>
+    <data name="MissingPermissions_Microphone_Global" xml:space="preserve">
+    <value>La aplicación debe tener permiso para usar el micrófono. Vuelva a intentar la última acción y permita el acceso. Si no ve la ventana emergente de permisos, vaya a Configuración y permita que la aplicación use el micrófono.</value>
+  </data>
+    <data name="MissingPermissions_Storage_Global" xml:space="preserve">
+    <value>La aplicación debe tener permiso para usar el almacenamiento. Vuelva a intentar la última acción y permita el acceso. Si no ve la ventana emergente de permisos, vaya a Configuración y permita que la aplicación use el almacenamiento.</value>
+  </data>
+    <data name="Notifications_SummaryTitle" xml:space="preserve">
+    <value>{0} Notificaciones</value>
+  </data>
+    <data name="OfflineSync_Abort" xml:space="preserve">
+    <value>Abortar</value>
+  </data>
+    <data name="OfflineSync_BackToDashboard" xml:space="preserve">
+    <value>Volver al tablero</value>
+  </data>
+    <data name="OfflineSync_Cancel" xml:space="preserve">
+    <value>Cancelar</value>
+  </data>
+    <data name="OfflineSync_DeviceNotSupported" xml:space="preserve">
+    <value>Este dispositivo no es compatible.</value>
+  </data>
+    <data name="OfflineSync_InstallPlayServices" xml:space="preserve">
+    <value>Se deben instalar los servicios de Google Play.</value>
+  </data>
+    <data name="OfflineSync_NetworkInfo" xml:space="preserve">
+    <value>Velocidad: {0}, tiempo restante: {1}</value>
+  </data>
+    <data name="OfflineSync_Retry" xml:space="preserve">
+    <value>Reintentar</value>
+  </data>
+    <data name="OfflineSync_Supervisor_Title" xml:space="preserve">
+    <value>Sincronización de asignaciones y entrevistas</value>
+  </data>
+    <data name="Prefs_DownloadUpdatesForInterviewerApp" xml:space="preserve">
+    <value>Descargar actualizaciones para la aplicación Interviewer</value>
+  </data>
+    <data name="Prefs_DownloadUpdatesForInterviewerAppSummary" xml:space="preserve">
+    <value>Si los entrevistadores no tienen acceso a Internet, esta funcionalidad debe estar habilitada, ya que permite actualizar sus aplicaciones durante la sincronización fuera de línea con la aplicación Supervisor.</value>
+  </data>
+    <data name="Supervisor_ApplicationName" xml:space="preserve">
+    <value>Supervisor de soluciones de encuestas</value>
+  </data>
+    <data name="Supervisor_Complete_Approve_btn" xml:space="preserve">
+    <value>Aprobar</value>
+  </data>
+    <data name="Supervisor_Complete_Assign_btn" xml:space="preserve">
+    <value>Asignar</value>
+  </data>
+    <data name="Supervisor_Complete_Reject_btn" xml:space="preserve">
+    <value>Rechazar</value>
+  </data>
+    <data name="Synchronization_FoundDevice" xml:space="preserve">
+    <value>Dispositivo de entrevistador encontrado ({0})</value>
+  </data>
+    <data name="Validity_InterviewSizeLimitReached" xml:space="preserve">
+    <value>Esta entrevista contiene más datos de los que permite el sistema. Si es posible, elimine las filas innecesarias de la lista y / o las preguntas sin respuesta.</value>
+  </data>
+    <data name="Validity_QuestionDoesntExist" xml:space="preserve">
+    <value>La lista actual ya no existe. Navegue a la siguiente sección o lista disponible usando el menú de navegación.</value>
+  </data>
+    <data name="Warning" xml:space="preserve">
+    <value>Advertencia</value>
+  </data>
+    <data name="Warnings" xml:space="preserve">
+    <value>Advertencias</value>
+  </data>
+    <data name="Dashboard_MyQuestionnairesLinkText" xml:space="preserve">
+        <value>Mis</value>
+    </data>
+    <data name="Interview_Complete_CriticalIssues_Instrunction" xml:space="preserve">
+        <value>Este botón está deshabilitado porque no se permite la presentación de entrevistas con problemas críticos</value>
+    </data>
+    <data name="Adjust" xml:space="preserve">
+        <value>Ajustar</value>
+    </data>
+    <data name="SelectShapefileTitle" xml:space="preserve">
+        <value>Seleccione los límites:</value>
+    </data>
+    <data name="SelectMapTitle" xml:space="preserve">
+        <value>Seleccione el mapa:</value>
+    </data>
+    <data name="InterviewStatus_SupervisorAssigned" xml:space="preserve">
+        <value>Supervisor asignado</value>
+    </data>
+    <data name="InterviewStatus_Restored" xml:space="preserve">
+        <value>Restaurado</value>
+    </data>
+    <data name="InterviewStatus_Restarted" xml:space="preserve">
+        <value>Reiniciado</value>
+    </data>
+    <data name="InterviewStatus_RejectedBySupervisor" xml:space="preserve">
+        <value>echazado por el supervisor</value>
+    </data>
+    <data name="InterviewStatus_RejectedByHeadquarters" xml:space="preserve">
+        <value>Rechazado por la sede</value>
+    </data>
+    <data name="InterviewStatus_InterviewerAssigned" xml:space="preserve">
+        <value>Entrevistador asignado</value>
+    </data>
+    <data name="InterviewStatus_Deleted" xml:space="preserve">
+        <value>Eliminado</value>
+    </data>
+    <data name="InterviewStatus_Created" xml:space="preserve">
+        <value>Creado</value>
+    </data>
+    <data name="AreaMap_HideBoundaries" xml:space="preserve">
+        <value>Ocultar límites</value>
+    </data>
+    <data name="AreaMap_Save_With_Warning_Confirm" xml:space="preserve">
+        <value>Está a punto de guardar un resultado no preciso. ¿Desea continuar?</value>
+    </data>
+    <data name="AreaMap_Start_Measurement" xml:space="preserve">
+        <value>Iniciar</value>
+    </data>
+    <data name="Comment" xml:space="preserve">
+        <value>Comentario</value>
+    </data>
+    <data name="ErrorMessage_PermissionForUnkownSourcesRequired" xml:space="preserve">
+        <value>No se ha otorgado permiso a la aplicación para actualizarse. Por favor, habilite la opción "Permitir desde esta fuente" en el menú de configuración 'Información de la aplicación'.</value>
+    </data>
+    <data name="Geofencing_Warning_Message" xml:space="preserve">
+        <value>Está fuera del área designada</value>
+    </data>
+    <data name="InterviewStatus_ApprovedByHeadquarters" xml:space="preserve">
+        <value>Aprobado por la Sede</value>
+    </data>
+    <data name="InterviewStatus_ApprovedBySupervisor" xml:space="preserve">
+        <value>Aprobado por el Supervisor</value>
+    </data>
+    <data name="InterviewStatus_Completed" xml:space="preserve">
+        <value>Completado</value>
+    </data>
+    <data name="Loading" xml:space="preserve">
+        <value>Cargando..</value>
+    </data>
+    <data name="NoComment" xml:space="preserve">
+        <value>No se especificó ningún comentario</value>
+    </data>
+    <data name="AreaMap_OverlapsWith" xml:space="preserve">
+        <value>Se superpone con:</value>
+    </data>
+    <data name="MenuItem_Title_ZoomShapefile" xml:space="preserve">
+    <value>Zoom a los límites</value>
+  </data>
+    <data name="MenuItem_Title_ZoomMap" xml:space="preserve">
+    <value>Zoom al mapa</value>
+  </data>
+    <data name="MenuItem_Title_ZoomGeoTracking" xml:space="preserve">
+    <value>Zoom a los registros de seguimiento</value>
+  </data>
+    <data name="MenuItem_Title_ZoomEverything" xml:space="preserve">
+    <value>Zoom a todo</value>
+  </data>
+    <data name="MenuItem_Title_ZoomCollectedData" xml:space="preserve">
+    <value>Zoom a los datos recopilados</value>
+  </data>
+    <data name="MenuItem_Title_StopGeoTracking" xml:space="preserve">
+    <value>Detener el registro de seguimiento</value>
+  </data>
+    <data name="MenuItem_Title_StopGeofencing" xml:space="preserve">
+    <value>Detener la geovalla</value>
+  </data>
+    <data name="MenuItem_Title_StartGeoTracking" xml:space="preserve">
+    <value>Iniciar el registro de seguimiento</value>
+  </data>
+    <data name="MenuItem_Title_StartGeofencing" xml:space="preserve">
+    <value>Iniciar la geovalla</value>
+  </data>
+    <data name="MenuItem_Title_ShowLocation" xml:space="preserve">
+    <value>Mostrar ubicación</value>
+  </data>
+    <data name="MenuItem_Title_HideLocation" xml:space="preserve">
+    <value>Ocultar ubicación</value>
+  </data>
+    <data name="MenuItem_Title_ExitToDashboard" xml:space="preserve">
+    <value>Salir al tablero</value>
   </data>  
-  <data name="AreaMap_PointsFormat" xml:space="preserve">
-    <value>Points : {0}</value>
-  </data>
-  <data name="AreaMap_Cancel" xml:space="preserve">
-    <value>Annuler</value>
-  </data>
-  <data name="AreaMap_LengthFormat" xml:space="preserve">
-    <value>Longueur : {0:0.00} m</value>
-  </data>
-  <data name="AreaMap_PerimeterFormat" xml:space="preserve">
-    <value>Périmètre : {0:0.00} m</value>
-  </data>
-  <data name="AreaMap_Active_Map_Title" xml:space="preserve">
-    <value>CARTE ACTIVE :</value>
-  </data>
-  <data name="AreaMap_Available_Maps_Title" xml:space="preserve">
-    <value>CARTE DISPONIBLES</value>
-  </data>
-  <data name="AreaMap_LoadShapefile" xml:space="preserve">
-    <value>Charger le fichier de formes</value>
-  </data>
-  <data name="AreaMap_ShowBoundaries" xml:space="preserve">
-    <value>Afficher les limites</value>
-  </data>
-  <data name="AreaMap_HideBoundaries" xml:space="preserve">
-    <value>Masquer les limites</value>
-  </data>
-  <data name="MapDashboard_Assignments" xml:space="preserve">
-    <value>Affectations</value>
-  </data>
-  <data name="MapDashboard_Interviews" xml:space="preserve">
-    <value>Entretiens</value>
-  </data>
-  <data name="MapDashboard_Disclaimer" xml:space="preserve">
-    <value>seuls les éléments avec des coordonnées connues sont affichés</value>
-  </data>
-  <data name="MapDashboard_AllQuestionnaires" xml:space="preserve">
-    <value>Tous les questionnaires</value>
-  </data>
-  <data name="MapDashboard_AllResponsibles" xml:space="preserve">
-    <value>Tous les responsables</value>
-  </data>
-  <data name="MapDashboard_AllStatuses" xml:space="preserve">
-    <value>Tous les statuts</value>
-  </data>
-  <data name="MapDashboard_QuestionnaireTitle" xml:space="preserve">
-    <value>Questionnaire</value>
-  </data>
-  <data name="MapDashboard_ResponsibleTitle" xml:space="preserve">
-    <value>Responsable</value>
-  </data>
-  <data name="MapDashboard_StatusTitle" xml:space="preserve">
-    <value>Statut</value>
-  </data>
-  <data name="MapDashboard_TypeTitle" xml:space="preserve">
-    <value>Type</value>
-  </data>
-  <data name="MapDashboard_FiltersTitle" xml:space="preserve">
-    <value>Filtres</value>
-  </data>
-  <data name="AreaMap_Close" xml:space="preserve">
-    <value>Fermer</value>
-  </data>
-  <data name="AreaMap_Update_Maps" xml:space="preserve">
-    <value>Mettre à jour les cartes</value>
-  </data>
-  <data name="MenuItem_Title_AreaCancel" xml:space="preserve">
-    <value>Quitter l'éditeur de cartes</value>
-  </data>
-  <data name="MenuItem_Title_AreaCancelEdit" xml:space="preserve">
-    <value>Tout effacer</value>
-  </data>
-  <data name="MenuItem_Title_Dashboard" xml:space="preserve">
-    <value>Tableau de bord</value>
-  </data>
-  <data name="InterviewKey" xml:space="preserve">
-    <value>Clé d'entretien : {0}</value>
-  </data>
-  <data name="AssignmentN" xml:space="preserve">
-    <value>Affectation #{0}</value>
-  </data>
-  <data name="AudioQuestion_DurationFormat" xml:space="preserve">
-    <value>{0} d'enregistrement audio</value>
-  </data>
-  <data name="Audio_Io_Exception_Message" xml:space="preserve">
-    <value>Impossible de sauvegarder le fichier audio. Veuillez vérifier si l'appareil dispose d'un stockage interne disponible.</value>
-  </data>
-  <data name="Audio_Unhandled_Exception_Message" xml:space="preserve">
-    <value>Exception inattendue lors du démarrage de l'enregistrement audio</value>
-  </data>
-  <data name="AnswerRecordedMsg" xml:space="preserve">
-    <value>Réponse acceptée. Temps pris pour traiter : {0}</value>
-  </data>
-  <data name="AnswerRecordedMsgDismiss" xml:space="preserve">
-    <value>Rejeter</value>
-  </data>
-  <data name="Interview_SignatureClear" xml:space="preserve">
-    <value>Effacer</value>
-  </data>
-  <data name="Interview_SignatureSignHere" xml:space="preserve">
-    <value>Signez ici</value>
-  </data>
-  <data name="Interview_TakeSignature" xml:space="preserve">
-    <value>Enregistrer la signature</value>
-  </data>
-  <data name="Interview_Questions_Integer_ProtectedValue" xml:space="preserve">
-    <value>La nouvelle réponse à une question protégée doit être supérieure ou égale à {0}</value>
-  </data>
-  <data name="Interview_MaxAnswersCount" xml:space="preserve">
-    <value>{0} sur {1} catégories sélectionnées</value>
-  </data>
-  <data name="Interview_MaxAnswersCountSelected" xml:space="preserve">
-    <value>Le nombre maximum de sélections ({0}) pour cette question a été atteint</value>
-  </data>
-  <data name="Interview_Overview" xml:space="preserve">
-    <value>Vue d'ensemble</value>
-  </data>
-  <data name="Interview_Overview_Name" xml:space="preserve">
-    <value>Vue d'ensemble</value>
-  </data>
-  <data name="Interview_Overview_NotAnswered" xml:space="preserve">
-    <value>Non répondu</value>
-  </data>
-  <data name="Interview_Overview_AdditionalInfo" xml:space="preserve">
-    <value>Informations supplémentaires</value>
-  </data>
-  <data name="Interview_Overview_Warnings" xml:space="preserve">
-    <value>Avertissement(s)</value>
-  </data>
-  <data name="Interview_Overview_Comments" xml:space="preserve">
-    <value>Commentaires</value>
-  </data>
-  <data name="Supervisor_Complete_Approve_btn" xml:space="preserve">
-    <value>Approuver</value>
-  </data>
-  <data name="Supervisor_Complete_Assign_btn" xml:space="preserve">
-    <value>Affecter</value>
-  </data>
-  <data name="Supervisor_Complete_Reject_btn" xml:space="preserve">
-    <value>Rejeter</value>
-  </data>
-  <data name="OfflineSync_Cancel" xml:space="preserve">
-    <value>Annuler</value>
-  </data>
-  <data name="OfflineSync_Abort" xml:space="preserve">
-    <value>Abandonner</value>
-  </data>
-  <data name="OfflineSync_BackToDashboard" xml:space="preserve">
-    <value>Retour au tableau de bord</value>
-  </data>
-  <data name="OfflineSync_Retry" xml:space="preserve">
-    <value>Réessayer</value>
-  </data>
-  <data name="OfflineSync_NetworkInfo" xml:space="preserve">
-    <value>Vitesse : {0}, Temps restant : {1}</value>
-  </data>
-  <data name="OfflineSync_InstallPlayServices" xml:space="preserve">
-    <value>Google Play Services doit être installé.</value>
-  </data>
-  <data name="OfflineSync_DeviceNotSupported" xml:space="preserve">
-    <value>Cet appareil n'est pas pris en charge.</value>
-  </data>
-  <data name="Synchronization_FoundDevice" xml:space="preserve">
-    <value>Appareil enquêteur trouvé ({0})</value>
-    <comment>{0} - login de l'enquêteur</comment>
-  </data>
-  <data name="OfflineSync_Supervisor_Title" xml:space="preserve">
-    <value>Synchronisation des affectations et des entretiens</value>
-  </data>
-  <data name="Validity_QuestionDoesntExist" xml:space="preserve">
-    <value>Le roster actuel n'existe plus. Veuillez naviguer vers la section ou le roster disponible suivant en utilisant le menu de navigation.</value>
-  </data>
-  <data name="Interview_ShowPdf" xml:space="preserve">
-    <value>Afficher le PDF</value>
-  </data>
-  <data name="Interview_PlayVideo" xml:space="preserve">
-    <value>Lire la vidéo</value>
-  </data>
-  <data name="Interview_PlayAudio" xml:space="preserve">
-    <value>Lire l'audio</value>
-  </data>
-  <data name="Validity_InterviewSizeLimitReached" xml:space="preserve">
-    <value>Cet entretien contient plus de données que le système ne le permet. Si possible, supprimez les lignes de roster inutiles et/ou désélectionnez les questions.</value>
-  </data>
-  <data name="Notifications_SummaryTitle" xml:space="preserve">
-    <value>{0} notifications</value>
-  </data>
-  <data name="Interview_Question_NumberRosterRemoveConfirm" xml:space="preserve">
-    <value>Êtes-vous sûr de vouloir supprimer {0} ligne(s) de chaque roster associé ?</value>
-  </data>
-  <data name="Interview_Question_HideResolvedComments" xml:space="preserve">
-    <value>Masquer les résolus</value>
-  </data>
-  <data name="Interview_Question_ShowResolvedComments" xml:space="preserve">
-    <value>Afficher les résolus</value>
-  </data>
-  <data name="ErrorMessage_PermissionForUnkownSourcesRequired" xml:space="preserve">
-    <value>Aucune autorisation n'a été accordée à l'application pour se mettre à jour. Veuillez activer l'option "Autoriser à partir de cette source" dans le menu des paramètres 'Infos sur l'application'.</value>
-  </data>
-  <data name="Comment" xml:space="preserve">
-    <value>Commentaire</value>
-  </data>
-  <data name="NoComment" xml:space="preserve">
-    <value>Aucun commentaire spécifié</value>
-  </data>
-  <data name="Interview_Complete_SwitchTo_WebMode_Checkbox" xml:space="preserve">
-    <value>Passer l'entretien en mode Web</value>
-  </data>
-  <data name="Interview_Complete_SwitchTo_WebMode_Instruction" xml:space="preserve">
-    <value>Cet entretien sera accessible en ligne après synchronisation. Pour accéder à l'entretien, le répondant doit entrer le lien ci-dessous dans le navigateur d'un ordinateur, d'une tablette ou d'un smartphone connecté à Internet. Le même lien peut être scanné en utilisant le code QR affiché ci-dessous.</value>
-  </data>
-  <data name="Loading" xml:space="preserve">
-    <value>Chargement...</value>
-  </data>
-  <data name="AreaMap_Save_With_Warning_Confirm" xml:space="preserve">
-    <value>Vous êtes sur le point de sauvegarder un résultat imprécis. Voulez-vous continuer ?</value>
-  </data>
-  <data name="AreaMap_Start_Measurement" xml:space="preserve">
-    <value>Démarrer</value>
-  </data>
-  <data name="AreaMap_InitLocation" xml:space="preserve">
-    <value>Initialisation...</value>
-  </data>
-  <data name="InterviewStatus_ApprovedByHeadquarters" xml:space="preserve">
-    <value>Approuvé par le siège</value>
-  </data>
-  <data name="InterviewStatus_ApprovedBySupervisor" xml:space="preserve">
-    <value>Approuvé par le superviseur</value>
-  </data>
-  <data name="InterviewStatus_Completed" xml:space="preserve">
-    <value>Terminé</value>
-  </data>
-  <data name="InterviewStatus_Created" xml:space="preserve">
-    <value>Créé</value>
-  </data>
-  <data name="InterviewStatus_Deleted" xml:space="preserve">
-    <value>Supprimé</value>
-  </data>
-  <data name="InterviewStatus_InterviewerAssigned" xml:space="preserve">
-    <value>Enquêteur assigné</value>
-  </data>
-  <data name="InterviewStatus_RejectedByHeadquarters" xml:space="preserve">
-    <value>Rejeté par le siège</value>
-  </data>
-  <data name="InterviewStatus_RejectedBySupervisor" xml:space="preserve">
-    <value>Rejeté par le superviseur</value>
-  </data>
-  <data name="InterviewStatus_Restarted" xml:space="preserve">
-    <value>Redémarré</value>
-  </data>
-  <data name="InterviewStatus_Restored" xml:space="preserve">
-    <value>Restauré</value>
-  </data>
-  <data name="InterviewStatus_SupervisorAssigned" xml:space="preserve">
-    <value>Superviseur assigné</value>
-  </data>
+  <data name="MenuItem_Title_CreateInterview" xml:space="preserve">
+    <value>Crear nueva entrevista</value>
+  </data>
+    <data name="MenuItem_Title_ChangeShapefile" xml:space="preserve">
+    <value>Cambiar límites</value>
+  </data>
+    <data name="MenuItem_Title_ChangeMap" xml:space="preserve">
+    <value>Cambiar mapa</value>
+  </data>    
+    <data name="MenuItem_Title_AreaCancel" xml:space="preserve">
+    <value>Salir del editor de mapas</value>
+  </data>    
+    <data name="AnswerRecordedMsg" xml:space="preserve">
+        <value>Respuesta aceptada. Tardó {0} en procesar</value>
+    </data>
+    <data name="AreaMap_InitLocation" xml:space="preserve">
+        <value>Iniciando...</value>
+    </data>
+    <data name="AreaMap_ItemsOutsideDedicatedArea" xml:space="preserve">
+        <value>Algunos marcadores están fuera del área delimitada</value>
+    </data>
+    <data name="AreaMap_OverlapsWithOther" xml:space="preserve">
+        <value>y {0} otro.</value>
+    </data>
+    <data name="AreaMap_SelectShapefile" xml:space="preserve">
+        <value>Seleccionar archivo de límites</value>
+    </data>
+    <data name="AreaMap_ShowBoundaries" xml:space="preserve">
+        <value>Mostrar límites</value>
+    </data>
+    <data name="AssignmentMap_Title_CreateInterview" xml:space="preserve">
+        <value>Comenzar</value>
+    </data>
+    <data name="ConfirmNewPasswordHint" xml:space="preserve">
+        <value>Confirmar nueva contraseña</value>
+    </data>
+    <data name="Error" xml:space="preserve">
+        <value>Error</value>
+    </data>
+    <data name="Interviewer_Comment" xml:space="preserve">
+        <value>Deja un comentario</value>
+    </data>
+    <data name="Interviewer_Reassign_AlreadyReceivedAssignment" xml:space="preserve">
+        <value>El entrevistador {0} ya recibió esta tarea {1}. ¿Está seguro de que desea reasignarla?</value>
+    </data>
+    <data name="Interviewer_Reassign_AlreadyReceivedInterview" xml:space="preserve">
+        <value>El entrevistador {0} ya recibió esta entrevista {1}. ¿Está seguro de que desea reasignarla?</value>
+    </data>
+    <data name="Interview_Comment_Resolve" xml:space="preserve">
+        <value>Resolver</value>
+    </data>
+    <data name="Interview_Complete_CriticalityIssuesDescription" xml:space="preserve">
+        <value>Resuelva los problemas respondiendo las preguntas críticas y asegurándose de que las respuestas cumplan con las reglas críticas.</value>
+    </data>
+    <data name="Interview_Complete_CriticalUnanswered" xml:space="preserve">
+        <value>Preguntas críticas sin respuesta: {0}</value>
+    </data>
+    <data name="Interview_Complete_FailCriticalConditions" xml:space="preserve">
+        <value>Reglas críticas fallidas: {0}</value>
+    </data>
+    <data name="Interview_Complete_Interview_Status" xml:space="preserve">
+        <value>Problemas de la entrevista:</value>
+    </data>
+    <data name="Interview_Complete_No" xml:space="preserve">
+        <value>No</value>
+    </data>
+    <data name="Interview_Complete_Note_For_Supervisor_with_Criticality" xml:space="preserve">
+        <value>Este botón permanecerá deshabilitado hasta que especifique un comentario para los problemas críticos anteriores.</value>
+    </data>
+    <data name="Interview_Complete_SwitchTo_WebMode_Checkbox" xml:space="preserve">
+        <value>Cambiar la entrevista al modo web</value>
+    </data>
+    <data name="Interview_Complete_SwitchTo_WebMode_Instruction" xml:space="preserve">
+        <value>Esta entrevista será accesible en línea después de la sincronización. Para acceder a la entrevista, el encuestado debe ingresar el enlace que aparece a continuación en el navegador de una computadora, tableta o teléfono inteligente conectado a Internet. El mismo enlace se puede escanear utilizando el código QR que se muestra a continuación.</value>
+    </data>
+    <data name="Interview_Complete_WithWarningCriticality" xml:space="preserve">
+        <value>Por favor, confirme que desea enviar esta entrevista con cuestiones críticas.</value>
+    </data>
+    <data name="Interview_Cover_Supervisor_Comments_does_not_exists" xml:space="preserve">
+        <value>No hay comentarios del supervisor</value>
+    </data>
+    <data name="Interview_MaxAnswersCountSelected" xml:space="preserve">
+        <value>Se ha realizado el número máximo de selecciones ({0}) en esta pregunta</value>
+    </data>
+    <data name="Interview_PlayAudio" xml:space="preserve">
+        <value>Reproducir audio</value>
+    </data>
+    <data name="Interview_PlayVideo" xml:space="preserve">
+        <value>Reproducir vídeo</value>
+    </data>
+    <data name="InvalidTimeMessage" xml:space="preserve">
+        <value>Es importante que la configuración del reloj sea precisa. El reloj indica que la fecha actual está configurada incorrectamente. Ajuste el reloj configurando la fecha y la hora correctas antes de continuar con su trabajo.</value>
+    </data>
+    <data name="MapDashboard_AllResponsibles" xml:space="preserve">
+        <value>Todos los responsables</value>
+    </data>
+    <data name="MapDashboard_AllStatuses" xml:space="preserve">
+        <value>Todos los estados</value>
+    </data>
+    <data name="MapDashboard_ResponsibleTitle" xml:space="preserve">
+        <value>Responsable</value>
+    </data>
+    <data name="MapDashboard_StatusTitle" xml:space="preserve">
+        <value>Estado</value>
+    </data>
+    <data name="MissingPermissions_MapsLocation" xml:space="preserve">
+        <value>La aplicación debe tener permiso para usar la ubicación. Si no ve la ventana emergente de permisos, vaya a Configuración y permita que la aplicación use la ubicación.</value>
+    </data>
+    <data name="NewPasswordHint" xml:space="preserve">
+        <value>Nueva contraseña</value>
+    </data>
+    <data name="NoMapsApplication" xml:space="preserve">
+        <value>No se encontró la aplicación de navegación</value>
+    </data>
+    <data name="OldPasswordHint" xml:space="preserve">
+        <value>Contraseña actual</value>
+    </data>
+    <data name="PasswordMatchError" xml:space="preserve">
+        <value>La contraseña debe ser la misma</value>
+    </data>
 </root>

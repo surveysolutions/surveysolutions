@@ -316,14 +316,14 @@
   <data name="SideBarCriticalityConditionMessage" xml:space="preserve">
       <value>Message</value>
   </data>
+  <data name="SideBarCriticalityConditionNoMessage" xml:space="preserve">
+    <value>Critical rule with no message</value>
+  </data>
   <data name="SideBarShowDescription" xml:space="preserve">
     <value>add description</value>
   </data>
   <data name="SideBarAddCriticalityCondition" xml:space="preserve">
     <value>add new critical rule</value>
-  </data>
-  <data name="SideBarCriticalityConditionNoMessage" xml:space="preserve">
-    <value>Critical rule with no message</value>
   </data>
   <data name="SideBarScenarioCounter" xml:space="preserve">
     <value>{{count}} Scenario:</value>
@@ -1633,9 +1633,6 @@ You entered an invalid input. Each line should follow the format: "Title...Paren
   </data>
   <data name="ManageAccount" xml:space="preserve">
     <value>Manage account</value>
-  </data>
-  <data name="OldUi" xml:space="preserve">
-      <value>Old UI</value>
   </data>
   <data name="ShowList" xml:space="preserve">
       <value>Show list</value>

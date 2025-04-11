@@ -334,7 +334,7 @@
     <value>Seleccione cuestionario</value>
   </data>
   <data name="Reset" xml:space="preserve">
-    <value>Reset</value>
+      <value>Reiniciar</value>
   </data>
   <data name="EqualValues" xml:space="preserve">
     <value>Igual</value>
@@ -402,4 +402,13 @@
   <data name="LinkUser" xml:space="preserve">
     <value>Usuario</value>
   </data>
+    <data name="GeoTrackNumber" xml:space="preserve">
+    <value>Rastro</value>
+</data>
+    <data name="DateRange" xml:space="preserve">
+    <value>Rango de fechas</value>
+</data>
+    <data name="AllGeoTracks" xml:space="preserve">
+    <value>Todos los rastros geográficos</value>
+</data>
 </root>

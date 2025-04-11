@@ -150,4 +150,7 @@
   <data name="NoData_QuestionnaireDeleted" xml:space="preserve">
     <value>قام مسؤول الخادم بحذف الاستبيان للمقابلة {0}. ونتيجة لذلك، حذفت جميع المقابلات المرتبطة بهذا الاستبيان ولا يمكن استعادتها</value>
   </data>
+    <data name="NoData_InterviewWasReassigned" xml:space="preserve">
+  <value>تم إعادة تعيين المقابلة {0} إلى مقابِل آخر. المقابلة موجودة حاليًا على جهاز المقابِل الأخير.</value>
+</data>
 </root>

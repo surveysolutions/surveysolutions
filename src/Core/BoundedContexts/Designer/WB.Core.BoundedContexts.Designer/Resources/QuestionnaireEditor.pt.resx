@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="NewSection" xml:space="preserve">
+    <value>Nova Seção</value>
+  </data>
+  <data name="CoverPageSection" xml:space="preserve">
+    <value>Capa</value>
+  </data>
+  <data name="QuestionScopeHidden" xml:space="preserve">
+    <value>Oculto</value>
+  </data>
+  <data name="QuestionScopeIdentifying" xml:space="preserve">
+    <value>Identificação</value>
+  </data>
+  <data name="QuestionScopeInterviewer" xml:space="preserve">
+    <value>Entrevistador</value>
+  </data>
+  <data name="QuestionScopeSupervisor" xml:space="preserve">
+    <value>Supervisor</value>
+  </data>
+  <data name="QuestionTypeArea" xml:space="preserve">
+    <value>Área</value>
+  </data>
+  <data name="QuestionTypeGeography" xml:space="preserve">
+    <value>Geografia</value>
+  </data>
+  <data name="QuestionTypeAudio" xml:space="preserve">
+    <value>Áudio</value>
+  </data>
+  <data name="QuestionTypeBarcode" xml:space="preserve">
+    <value>Código de Barras</value>
+  </data>
+  <data name="QuestionTypeDate" xml:space="preserve">
+    <value>Data</value>
+  </data>
+  <data name="QuestionTypeGPS" xml:space="preserve">
+    <value>GPS</value>
+  </data>
+  <data name="QuestionTypeList" xml:space="preserve">
+    <value>Lista</value>
+  </data>
+  <data name="QuestionTypeMultiSelect" xml:space="preserve">
+    <value>Categórico: Seleção Múltipla</value>
+  </data>
+  <data name="QuestionTypeNumeric" xml:space="preserve">
+    <value>Numérico</value>
+  </data>
+  <data name="QuestionTypePicture" xml:space="preserve">
+    <value>Imagem</value>
+  </data>
+  <data name="QuestionTypeSingleSelect" xml:space="preserve">
+    <value>Categórico: Seleção Única</value>
+  </data>
+  <data name="QuestionTypeText" xml:space="preserve">
+    <value>Texto</value>
+  </data>
+  <data name="GeometryTypePolygon" xml:space="preserve">
+    <value>Polígono</value>
+  </data>
+  <data name="GeometryTypePolyline" xml:space="preserve">
+    <value>Polilinha</value>
+  </data>
+  <data name="GeometryTypePoint" xml:space="preserve">
+    <value>Ponto</value>
+  </data>
+  <data name="GeometryTypeMultipoint" xml:space="preserve">
+    <value>Multiponto</value>
+  </data>
+</root>

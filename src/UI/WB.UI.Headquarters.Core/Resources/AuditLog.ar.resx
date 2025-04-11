@@ -117,13 +117,25 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Empty" xml:space="preserve">
-    <value>السجل فارغ</value>
-  </data>
-  <data name="PageTitle" xml:space="preserve">
-    <value>سجل التدقيق</value>
-  </data>
-  <data name="ServerFilePath" xml:space="preserve">
-    <value>موقع الملف على الخادم</value>
-  </data>
+    <data name="Empty" xml:space="preserve">
+  <value>السجل فارغ</value>
+</data>
+    <data name="EventType" xml:space="preserve">
+  <value>نوع الحدث</value>
+</data>
+    <data name="Log" xml:space="preserve">
+  <value>السجل</value>
+</data>
+    <data name="LogDate" xml:space="preserve">
+  <value>تاريخ السجل</value>
+</data>
+    <data name="PageTitle" xml:space="preserve">
+  <value>سجل التدقيق</value>
+</data>
+    <data name="ServerFilePath" xml:space="preserve">
+  <value>موقع الملف على الخادم: </value>
+</data>
+    <data name="User" xml:space="preserve">
+  <value>المستخدم</value>
+</data>
 </root>

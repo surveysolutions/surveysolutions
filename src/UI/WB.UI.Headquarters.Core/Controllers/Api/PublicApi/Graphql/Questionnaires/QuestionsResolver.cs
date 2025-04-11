@@ -22,7 +22,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires
             var questionnaire = storage.GetQuestionnaireOrThrow(new QuestionnaireIdentity(id, version), language);
             var featured = questionnaire.GetPrefilledQuestions().ToHashSet();
 
-            resolverContext.ScopedContextData = resolverContext.ScopedContextData.SetItem("language", language);
+            if (!resolverContext.ContextData.ContainsKey("language"))
+                resolverContext.ContextData.Add("language", language);
 
             return from q in questionnaire.GetAllQuestions()
                 select new QuestionnaireCompositeItem

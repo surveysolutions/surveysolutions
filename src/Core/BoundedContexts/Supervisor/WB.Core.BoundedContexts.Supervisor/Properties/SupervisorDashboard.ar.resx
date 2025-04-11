@@ -58,4 +58,34 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+    <data name="CollectedInterviews" xml:space="preserve">
+  <value>المقابلات المجمعة</value>
+</data>
+    <data name="Outbox" xml:space="preserve">
+  <value>الصندوق الصادر</value>
+</data>
+    <data name="OutboxSubtitle" xml:space="preserve">
+  <value>المقابلات والتعيينات التي سيتم إرسالها من جهازك أثناء المزامنة التالية</value>
+</data>
+    <data name="SentToInterviewer" xml:space="preserve">
+  <value>تم إرسالها إلى المقابل</value>
+</data>
+    <data name="SentToInterviewerSubtitle" xml:space="preserve">
+  <value>التعيينات والمقابلات الموجودة على أجهزة المقابلين</value>
+</data>
+    <data name="ToBeAssigned" xml:space="preserve">
+  <value>المهام التي يجب تعيينها</value>
+</data>
+    <data name="ToBeAssignedListSubtitle" xml:space="preserve">
+  <value>التعيينات التي يجب تعيينها لأعضاء فريقك</value>
+</data>
+    <data name="WaitingForAction" xml:space="preserve">
+  <value>في انتظار الإجراء الخاص بك</value>
+</data>
+    <data name="WaitingForSupervisorActionSubtitle" xml:space="preserve">
+  <value>المقابلات التي تتطلب إجراءك ليتم حلها</value>
+</data>
+    <data name="YourTeam" xml:space="preserve">
+  <value>فريقك</value>
+</data>
 </root>

@@ -125,7 +125,7 @@
                         </perfect-scrollbar>
                     </div>
                     <!--div class="modal-footer">
-                    <button class="btn" data-dismiss="modal" aria-hidden="true">{{ $t('QuestionnaireEditor.Cancel') }}</button>
+                    <button class="btn" data-bs-dismiss="modal" aria-hidden="true">{{ $t('QuestionnaireEditor.Cancel') }}</button>
                     <button id="assign-folder-button" type="submit" class="btn btn-primary"
                         value="@QuestionnaireController.Assign"
                         onclick="this.disabled = true; this.value = '@QuestionnaireController.Assigning'; window.assignFolder();">@QuestionnaireController.Assign</button>

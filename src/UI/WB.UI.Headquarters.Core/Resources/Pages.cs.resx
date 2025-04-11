@@ -1738,4 +1738,28 @@
   <data name="QuestionnaireVersionAndName" xml:space="preserve">
     <value>(ver. {1}) {0}</value>
   </data>
+    <data name="Questionnaire_CriticalVerificationLevel" xml:space="preserve">
+        <value>Akce při odeslání</value>
+    </data>
+    <data name="Questionnaire_ChangeCriticalVerificationLevelTitle" xml:space="preserve">
+        <value>Nastavit akci při odeslání</value>
+    </data>
+    <data name="Questionnaire_SetActionOnSubmissionExplanation" xml:space="preserve">
+        <value>Vyberte, jaká akce by měla být provedena před odesláním rozhovoru</value>
+    </data>
+    <data name="Questionnaire_SetActionOnSubmissionExplanationIgnore" xml:space="preserve">
+        <value>IGNOROVAT - nekontrolovat žádná kritická pravidla, i když jsou přítomna.</value>
+    </data>
+    <data name="Questionnaire_SetActionOnSubmissionExplanationWarn" xml:space="preserve">
+        <value>VAROVAT - kontrolovat kritická pravidla a varovat uživatele před odesláním rozhovoru.</value>
+    </data>
+    <data name="Questionnaire_SetActionOnSubmissionExplanationBlock" xml:space="preserve">
+        <value>BLOKOVAT - kontrolovat kritická pravidla a zakázat odeslání rozhovoru, pokud jsou přítomny kritické problémy.</value>
+    </data>
+    <data name="ShowKey" xml:space="preserve">
+        <value>Zobrazit klíč</value>
+    </data>
+    <data name="Questionnaire_SupportCriticalVerifications" xml:space="preserve">
+        <value>Kritické ověřování</value>
+    </data>
 </root>

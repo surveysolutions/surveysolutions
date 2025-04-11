@@ -270,4 +270,7 @@
   <data name="YourQuestionnaire_0_ContainsNewFunctionalityWhichIsNotSupportedByYourInstallationPleaseUpdate" xml:space="preserve">
     <value>Váš dotazník "{0}" obsahuje nové funkce: {1}. Instalace nepodporuje nové funkce. Aktualizujte prosím.</value>
   </data>
+    <data name="InvalidLoginAttempt" xml:space="preserve">
+      <value>Neplatný pokus o přihlášení</value>
+  </data>    
 </root>

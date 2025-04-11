@@ -1,6 +1,6 @@
 import Assignments from './Assignments'
 import Interviews from './Interviews'
-import PNotify from 'pnotify'
+import * as toastr from 'toastr'
 import { getCsrfCookie } from '../../api/index'
 import { config } from '~/shared/config'
 
@@ -9,9 +9,9 @@ const store = {
         pendingHandle: null,
     },
     actions: {
-        createInterview({ dispatch }, assignmentId) {
-            dispatch('showProgress', true)
-
+        createInterview(context, assignmentId) {
+            context.dispatch('showProgress', true)
+            var currentContext = context
             $.post(
                 {
                     url: window.CONFIG.model.interviewerHqEndpoint + '/StartNewInterview/' + assignmentId,
@@ -21,8 +21,7 @@ const store = {
                 }
             )
                 .done(function (data, textStatus) {
-                    dispatch('showProgress', true)
-                    window.location = '/' + config.workspace + '/WebInterview/' + data.interviewId + '/Cover'
+                    currentContext.dispatch('openInterview', data.interviewId)
                 })
                 .catch(data => {
                     if (data.responseJSON && data.responseJSON.redirectUrl) {
@@ -30,20 +29,16 @@ const store = {
                         return
                     }
 
-                    new PNotify({
-                        title: 'Unhandled error occurred',
-                        text: data.responseStatus,
-                        type: 'error',
-                    })
+                    toastr.error(data.responseStatus, 'Unhandled error occurred')
+
                     dispatch('hideProgress')
                 })
                 .then(() => dispatch('hideProgress'))
         },
         openInterview(context, interviewId) {
             context.dispatch('showProgress', true)
-            window.location = window.CONFIG.model.interviewerHqEndpoint + '/OpenInterview/' + interviewId
+            window.location.href = window.CONFIG.model.interviewerHqEndpoint + '/OpenInterview/' + interviewId
         },
-
         discardInterview(context, { callback, interviewId }) {
             $.ajax({
                 url: window.CONFIG.model.interviewerHqEndpoint + '/DiscardInterview/' + interviewId,
