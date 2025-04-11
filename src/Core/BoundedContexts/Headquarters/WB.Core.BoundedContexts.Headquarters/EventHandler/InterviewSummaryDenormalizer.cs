@@ -481,10 +481,9 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewReceivedByInterviewer> @event)
         {
-            return this.UpdateInterviewSummary(state, @event.EventTimeStamp, interview =>
-            {
-                interview.ReceivedByInterviewerAtUtc = @event.Payload.OriginDate?.UtcDateTime ?? @event.EventTimeStamp;
-            });
+            //do not update UpdateDate for interview
+            state.ReceivedByInterviewerAtUtc = @event.Payload.OriginDate?.UtcDateTime ?? @event.EventTimeStamp;
+            return state;
         }
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewReceivedBySupervisor> @event)
