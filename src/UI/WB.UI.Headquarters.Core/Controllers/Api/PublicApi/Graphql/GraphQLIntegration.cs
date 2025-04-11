@@ -116,6 +116,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
             var options = new GraphQLServerOptions { EnableSchemaRequests = true };
             //options.Tool.Credentials = DefaultCredentials.Include;
             options.Tool.DisableTelemetry = true;
+            options.Tool.ServeMode = GraphQLToolServeMode.Embedded;
             
             return app.UseEndpoints(x => x.MapGraphQL().WithOptions(options));
         }
