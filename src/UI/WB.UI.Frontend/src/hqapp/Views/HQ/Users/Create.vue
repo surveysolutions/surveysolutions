@@ -22,14 +22,15 @@
                 <div class="col-sm-12">
                     <form-group :label="$t('Pages.UsersManage_WorkspacesFilterPlaceholder')"
                         :error="modelState['Workspace']" :mandatory="true">
-                        <div class="field form-control" :class="{ answered: workspace != null }" style="padding:0 10px">
+                        <div class="field form-control" :class="{ answered: workspace != null }"
+                            style="padding:0 10px 0 0">
                             <Typeahead control-id="workspace" :value="workspace" :ajax-params="{}"
                                 :fetch-url="model.api.workspacesUrl" @selected="workspaceSelected"></Typeahead>
                         </div>
                     </form-group>
                     <form-group :label="$t('Pages.UsersManage_RoleFilterPlaceholder')" :error="modelState['Role']"
                         :mandatory="true">
-                        <div class="field form-control" :class="{ answered: role != null }" style="padding:0 10px">
+                        <div class="field form-control" :class="{ answered: role != null }" style="padding:0 10px 0 0">
                             <Typeahead control-id="role" :value="role" :values="model.roles" @selected="roleSelected">
                             </Typeahead>
                         </div>

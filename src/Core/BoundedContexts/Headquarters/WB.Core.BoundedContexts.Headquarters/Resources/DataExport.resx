@@ -289,7 +289,7 @@
     <value>Last updated: {{date}}</value>
   </data>
   <data name="DataExport_FileWasRegenerated" xml:space="preserve">
-    <value>File was regenerated</value>
+    <value>File was regenerated or deleted</value>
   </data>
   <data name="DataExport_FileSize" xml:space="preserve">
     <value>File size: {{size}} MB</value>

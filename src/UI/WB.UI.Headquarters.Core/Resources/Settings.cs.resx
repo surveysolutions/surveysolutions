@@ -420,4 +420,55 @@
     <data name="RemovingExportCache" xml:space="preserve">
       <value>Probíhá vymazání exportní mezipaměti</value>
     </data>
+    <data name="WorkspaceSettings" xml:space="preserve">
+    <value>Nastavení pracovního prostoru</value>
+</data>
+    <data name="Export" xml:space="preserve">
+    <value>Export</value>
+</data>
+    <data name="GlobalNote" xml:space="preserve">
+    <value>Globální poznámka</value>
+</data>
+    <data name="UserProfile" xml:space="preserve">
+    <value>Uživatelský profil</value>
+</data>
+    <data name="Devices" xml:space="preserve">
+    <value>Zařízení</value>
+</data>
+    <data name="WebInterview" xml:space="preserve">
+    <value>Webový rozhovor</value>
+</data>
+    <data name="FileRetentionTitle" xml:space="preserve">
+    <value>Politika uchovávání</value>
+</data>
+    <data name="FileRetentionDescription" xml:space="preserve">
+    <value>Starší exportní soubory budou pravidelně mazány podle těchto nastavení</value>
+</data>
+    <data name="RetentionInDaysTitle" xml:space="preserve">
+    <value>Dny uchovávání</value>
+</data>
+    <data name="RetentionInDaysDescription" xml:space="preserve">
+    <value>Počet dnů, po které bude exportní soubor uchován</value>
+</data>
+    <data name="RetentionInCountTitle" xml:space="preserve">
+    <value>Počet souborů k uchování</value>
+</data>
+    <data name="RetentionInCountDescription" xml:space="preserve">
+    <value>Maximální počet exportních souborů k uchování ve skladu</value>
+</data>
+    <data name="EnableFileRetention" xml:space="preserve">
+    <value>Povolit politiku uchovávání</value>
+</data>
+    <data name="RetentionPolicyEneblingConfirm" xml:space="preserve">
+  <value>Opravdu chcete zapnout politiku uchovávání? Exportované datové soubory mohou být smazány.</value>
+</data>
+    <data name="ForceRunRetentionPolicy" xml:space="preserve">
+    <value>Vynutit spuštění</value>
+</data>
+    <data name="ForceRunRetentionPolicy_Warning" xml:space="preserve">
+    <value>Varování! Toto je kritická akce, která ovlivňuje existující exportované soubory</value>
+</data>
+    <data name="ForceRunRetentionPolicy_Confirm" xml:space="preserve">
+    <value>Opravdu chcete vynutit spuštění retenční politiky? Všechny vygenerované exportované soubory, na které se vztahují aktuální nastavení politiky, budou odstraněny ze serveru a NEBUDOU dostupné ke stažení.</value>
+</data>
 </root>

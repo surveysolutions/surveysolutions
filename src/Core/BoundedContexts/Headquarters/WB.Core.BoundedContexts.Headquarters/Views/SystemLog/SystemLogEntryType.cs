@@ -30,5 +30,8 @@
         EsriApiKeyChanged = 25,        
         ActionOnSubmissionChanged = 26,
         AssignmentTargetAreaChanged = 27,
+        RetentionPolicyStateChanged = 28,
+        RetentionPolicyFilesToKeepChanged = 29,
+        RetentionPolicyDaysToKeepChanged = 30,
     }
 }

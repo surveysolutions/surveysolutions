@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ExportEncryption_Title" xml:space="preserve">
-    <value>Export encryption</value>
+    <value>Encryption</value>
   </data>
   <data name="ClearExportCache_Title" xml:space="preserve">
     <value>Clear export cache</value>
@@ -177,16 +177,16 @@ Possible reasons:
     <value>Company logo updated</value>
   </data>
   <data name="UserProfileSettings_Title" xml:space="preserve">
-    <value>User profile settings</value>
+    <value>User profile</value>
   </data>
   <data name="WebInterviewEmailNotifications_Title" xml:space="preserve">
-    <value>Web interview settings</value>
+    <value>Web interview</value>
   </data>
   <data name="MobileAppSettings_Title" xml:space="preserve">
-    <value>Interviewer/Supervisor application settings</value>
+    <value>Interviewer/Supervisor applications</value>
   </data>
   <data name="MobileAppSettings_Description" xml:space="preserve">
-    <value>Some specific settings by android version of Interviewer/Supervisor application</value>
+    <value>Specific settings by Android version of Interviewer/Supervisor application</value>
   </data>
   <data name="AllowInterviewerUpdateProfile" xml:space="preserve">
     <value>Enumerator's profile editing</value>
@@ -424,5 +424,56 @@ Possible reasons:
   </data>
   <data name="EmailProvider_SmtpPasswordHelp" xml:space="preserve">
     <value>Credential used during the SMTP authentication process to verify the identity.</value>
+  </data>
+  <data name="WorkspaceSettings" xml:space="preserve">
+      <value>Workspace settings</value>
+  </data>
+  <data name="Export" xml:space="preserve">
+      <value>Export</value>
+  </data>
+  <data name="GlobalNote" xml:space="preserve">
+      <value>Global note</value>
+  </data>
+  <data name="UserProfile" xml:space="preserve">
+      <value>User profile</value>
+  </data>
+  <data name="Devices" xml:space="preserve">
+      <value>Devices</value>
+  </data>
+  <data name="WebInterview" xml:space="preserve">
+      <value>Web interview</value>
+  </data>
+  <data name="FileRetentionTitle" xml:space="preserve">
+      <value>Retention policy</value>
+  </data>
+    <data name="FileRetentionDescription" xml:space="preserve">
+      <value>Older export files will be periodically deleted according to these settings</value>
+  </data>
+  <data name="RetentionInDaysTitle" xml:space="preserve">
+      <value>Days to keep</value>
+  </data>
+    <data name="RetentionInDaysDescription" xml:space="preserve">
+      <value>Number of days export file will be preserved</value>
+  </data>
+  <data name="RetentionInCountTitle" xml:space="preserve">
+      <value>Number of files to keep</value>
+  </data>
+    <data name="RetentionInCountDescription" xml:space="preserve">
+      <value>Maximum amount of export files to keep in the storage</value>
+  </data>
+    <data name="EnableFileRetention" xml:space="preserve">
+      <value>Enable retention policy</value>
+  </data>
+  <data name="RetentionPolicyEneblingConfirm" xml:space="preserve">
+    <value>Are you sure you want to turn retention policy on? Export data files could be deleted.</value>
+  </data>
+    <data name="ForceRunRetentionPolicy" xml:space="preserve">
+      <value>Force run</value>
+  </data>
+    <data name="ForceRunRetentionPolicy_Warning" xml:space="preserve">
+      <value>Warning! This is a critical action that affects existing export files</value>
+  </data>
+    <data name="ForceRunRetentionPolicy_Confirm" xml:space="preserve">
+      <value>Are you sure you want to forcibly run retenton policy? All generated export files will be removed from the server that current policy settings cover and will NOT be available for download.</value>
   </data>
 </root>

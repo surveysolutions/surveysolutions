@@ -297,7 +297,7 @@
     <value>Последнее обновление: {{date}}</value>
   </data>
   <data name="DataExport_FileWasRegenerated" xml:space="preserve">
-    <value>Файл был пересоздан</value>
+    <value>Файл был пересоздан или удален</value>
   </data>
   <data name="DataExport_FileSize" xml:space="preserve">
     <value>Размер файла: {{size}} MB</value>

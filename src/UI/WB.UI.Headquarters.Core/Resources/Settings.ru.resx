@@ -438,4 +438,55 @@
   <data name="EmailProvider_SmtpUsernameHelp" xml:space="preserve">
       <value>Имя учетных данных, используемые в процессе аутентификации SMTP для проверки личности</value>
   </data>
+    <data name="WorkspaceSettings" xml:space="preserve">
+    <value>Настройки рабочего пространства</value>
+</data>
+    <data name="Export" xml:space="preserve">
+    <value>Экспорт</value>
+</data>
+    <data name="GlobalNote" xml:space="preserve">
+    <value>Глобальная заметка</value>
+</data>
+    <data name="UserProfile" xml:space="preserve">
+    <value>Профиль пользователя</value>
+</data>
+    <data name="Devices" xml:space="preserve">
+    <value>Устройства</value>
+</data>
+    <data name="WebInterview" xml:space="preserve">
+    <value>Веб-интервью</value>
+</data>
+    <data name="FileRetentionTitle" xml:space="preserve">
+    <value>Политика хранения</value>
+</data>
+    <data name="FileRetentionDescription" xml:space="preserve">
+    <value>Старые экспортные файлы будут периодически удаляться в соответствии с этими настройками</value>
+</data>
+    <data name="RetentionInDaysTitle" xml:space="preserve">
+    <value>Количество дней для хранения</value>
+</data>
+    <data name="RetentionInDaysDescription" xml:space="preserve">
+    <value>Количество дней, в течение которых экспортный файл будет сохранен</value>
+</data>
+    <data name="RetentionInCountTitle" xml:space="preserve">
+    <value>Количество файлов для хранения</value>
+</data>
+    <data name="RetentionInCountDescription" xml:space="preserve">
+    <value>Максимальное количество экспортных файлов для хранения в хранилище</value>
+</data>
+    <data name="EnableFileRetention" xml:space="preserve">
+    <value>Включить политику хранения</value>
+</data>
+    <data name="RetentionPolicyEneblingConfirm" xml:space="preserve">
+  <value>Вы уверены, что хотите включить политику хранения? Экспортированные файлы данных могут быть удалены.</value>
+</data>
+    <data name="ForceRunRetentionPolicy" xml:space="preserve">
+    <value>Принудительный запуск</value>
+</data>
+    <data name="ForceRunRetentionPolicy_Warning" xml:space="preserve">
+    <value>Внимание! Это критическое действие, которое влияет на существующие экспортированные файлы</value>
+</data>
+    <data name="ForceRunRetentionPolicy_Confirm" xml:space="preserve">
+    <value>Вы уверены, что хотите принудительно запустить политику хранения? Все сгенерированные экспортированные файлы, подпадающие под текущие настройки политики, будут удалены с сервера и НЕ будут доступны для загрузки.</value>
+</data>
 </root>

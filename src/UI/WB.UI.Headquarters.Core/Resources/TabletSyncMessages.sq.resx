@@ -154,7 +154,7 @@
     <value>Sinkronizimi dështoi. Ju lutemi, instalojeni aplikacionin nga e para. Identifikuesi i instaluesit mungon. Ju lutemi, kontaktoni me programuesit.</value>
   </data>
   <data name="OldInterviewerNeedsCleanup" xml:space="preserve">
-    <value>Sinkronizimi dështoi pjesërisht. Intervistat e përfunduara u dërguan në server, por ju nuk do të merrni detyra të reja. Ju lutemi, shkoni te cilësimet android -&gt; Apps -&gt; Intervistues dhe shtypni butonin “Pastro të dhënat”. Më pas, sinkronizoni nga e para.</value>
+    <value>Sinkronizimi dështoi pjesërisht. Intervistat e përfunduara u dërguan në server, por ju nuk do të merrni detyra të reja. Ju lutemi, shkoni te cilësimet Android -&gt; Apps -&gt; Intervistues dhe shtypni butonin “Pastro të dhënat”. Më pas, sinkronizoni nga e para.</value>
   </data>
   <data name="ServerError" xml:space="preserve">
     <value>Sinkronizimi dështoi. Gabim i brendshëm i serverit. Ju lutemi, kontaktoni krijuesit.</value>
@@ -163,6 +163,6 @@
     <value>Sinkronizimi dështoi. Paketa e sinkronizimit me identifikuesin '{0}' nuk u gjet në server. Ju lutemi, kontaktoni programuesit.</value>
   </data>
   <data name="WrongAndroidDeviceIdWasProvided" xml:space="preserve">
-    <value>Sinkronizimi dështoi. Identifikuesi i dhënë i pajisjes android ishte i gabuar. Ju lutemi, kontaktoni programuesit.</value>
+    <value>Sinkronizimi dështoi. Identifikuesi i dhënë i pajisjes Android ishte i gabuar. Ju lutemi, kontaktoni programuesit.</value>
   </data>
 </root>

@@ -18,6 +18,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views
         public static readonly string ProfileSettings = "ProfileSettings";
         public static readonly string WebInterviewSettings = "WebInterviewSettings";
         public static readonly string NatualKeySettings = "NatualKeySettings";
-
+        
+        public static readonly string ExportRetentionSettingsKey = "exportretentionsettings";
     }
 }

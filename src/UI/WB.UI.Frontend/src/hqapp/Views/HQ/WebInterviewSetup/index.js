@@ -1,7 +1,6 @@
 import Settings from './Settings'
 import SendInvitations from './SendInvitations'
 import SendInvitationsProgress from './SendInvitationsProgress'
-//import Vue from 'vue'
 
 export default class WebInterviewSetupComponent {
     get routes() {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using WB.Services.Export.Models;
@@ -30,7 +31,19 @@ namespace WB.Services.Export.Jobs
             this.fileNameService = fileNameService;
         }
 
-        public async Task ClearAllExportArchives(TenantInfo tenant)
+        public async Task RunRetentionPolicy(TenantInfo tenant, int? countToKeep, int? daysToKeep)
+        {
+            if(!countToKeep.HasValue && !daysToKeep.HasValue)
+                return;
+            await DeleteExportArchives(tenant, countToKeep, daysToKeep);
+        }
+
+        public async Task ClearExportArchives(TenantInfo tenant)
+        {
+            await DeleteExportArchives(tenant, null, null);
+        }
+        
+        private async Task DeleteExportArchives(TenantInfo tenant, int? countToKeep, int? daysToKeep)
         {
             if (this.externalArtifactsStorage.IsEnabled())
             {
@@ -38,11 +51,48 @@ namespace WB.Services.Export.Jobs
                 var items = await this.externalArtifactsStorage.ListAsync(externalStoragePath);
                 if(items == null) return;
 
-                logger.LogInformation("Deleting export archives for tenant: {tenant} - there is {count} files", tenant, items.Count);
+                logger.LogInformation(
+                    "Deleting export archives for tenant: {tenant} - there are total {count} files, daysToKeep: {daysToKeep}, countToKeep: {countToKeep}", 
+                    tenant, items.Count, daysToKeep, countToKeep);
 
-                foreach (var file in items)
+                int? countToDelete = countToKeep.HasValue ? items.Count - countToKeep.Value : null;
+                foreach (var file in items.OrderBy(x => x.LastModified))
                 {
-                    await this.externalArtifactsStorage.RemoveAsync(file.Path);
+                    if (!countToKeep.HasValue && !daysToKeep.HasValue)
+                    {
+                        await this.externalArtifactsStorage.RemoveAsync(file.Path);
+                        continue;
+                    }
+
+                    if (daysToKeep.HasValue && file.LastModified < DateTime.UtcNow.AddDays(-daysToKeep.Value))
+                    {
+                        try
+                        {
+                            await this.externalArtifactsStorage.RemoveAsync(file.Path);
+                        }
+                        catch (Exception e)
+                        {
+                            logger.LogInformation(
+                                "Unable to delete export archive {path} for tenant: {tenant}. Reason: {reason}", 
+                                file.Path, tenant, e.Message);
+                        }
+                        if(countToDelete.HasValue)
+                            countToDelete--;
+                    }
+                    else if (countToDelete is > 0)
+                    {
+                        try
+                        {
+                            await this.externalArtifactsStorage.RemoveAsync(file.Path);
+                        }
+                        catch (Exception e)
+                        {
+                            logger.LogInformation(
+                                "Unable to delete export archive {path} for tenant: {tenant}. Reason: {reason}", 
+                                file.Path, tenant, e.Message);
+                        }
+                        countToDelete--;
+                    }
                 }
 
                 return;
@@ -51,7 +101,57 @@ namespace WB.Services.Export.Jobs
             var directory = this.fileBasedExportedDataAccessor.GetExportDirectory(tenant);
             if (Directory.Exists(directory))
             {
-                Directory.Delete(directory, true);
+                logger.LogInformation("Deleting export archives for tenant: {tenant}, daysToKeep: {daysToKeep}, countToKeep: {countToKeep}", 
+                    tenant, daysToKeep, countToKeep);
+                
+                if(!countToKeep.HasValue && !daysToKeep.HasValue)
+                    Directory.Delete(directory, true);
+                else
+                {
+                    //get all files infos in directory recursively
+                    //exclude temp files
+                    var files = Directory.GetFiles(directory, "*.zip", SearchOption.AllDirectories)
+                        .Select(f => new FileInfo(f))
+                        .Where(f=> !f.FullName.Contains("temp"))
+                        .OrderBy(f => f.LastWriteTimeUtc)
+                        .ToList();
+                    
+                    int? countToDelete = countToKeep.HasValue ? files.Count - countToKeep.Value : null;
+
+                    foreach (var file in files)
+                    {
+                        if (daysToKeep.HasValue && file.LastWriteTimeUtc < DateTime.UtcNow.AddDays(-daysToKeep.Value))
+                        { 
+                            try
+                            {
+                                File.Delete(file.FullName);
+                            }
+                            catch (Exception e)
+                            {
+                                logger.LogInformation(
+                                    "Unable to delete export archive {path} for tenant: {tenant}. Reason: {reason}", 
+                                    file.FullName, tenant, e.Message);
+                            }
+                            
+                            if(countToDelete.HasValue)
+                                countToDelete--;
+                        }
+                        else if (countToDelete is > 0)
+                        {
+                            try
+                            {
+                                File.Delete(file.FullName);
+                            }
+                            catch (Exception e)
+                            {
+                                logger.LogInformation(
+                                    "Unable to delete export archive {path} for tenant: {tenant}. Reason: {reason}", 
+                                    file.FullName, tenant, e.Message);
+                            }
+                            countToDelete--;
+                        }
+                    }
+                }
             }
         }
 
