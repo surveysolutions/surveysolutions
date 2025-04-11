@@ -229,14 +229,7 @@ export default {
             $('.top-menu').toggleClass('top-animate')
             $('.mid-menu').toggleClass('mid-animate')
             $('.bottom-menu').toggleClass('bottom-animate')
-            if ($(window).width() < 880) {
-                if ($('.navbar-collapse.collapse.show').length > 0) {
-                    $('main').removeClass('display-block')
-                    $('main').removeClass('hidden')
-                } else {
-                    $('main').addClass('hidden')
-                }
-            }
+
         })
 
         if (this.$config.askForEmail) {
