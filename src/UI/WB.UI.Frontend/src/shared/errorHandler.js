@@ -4,7 +4,9 @@ import * as toastr from 'toastr'
 
 const errorUrl = '/error/report';
 
-export function setupErrorHandler(app) {
+
+export function errorHandler(err, vm, info) {
+
     const ignoreStatusCodes = [];
 
     const ignoredMessages = [
@@ -13,41 +15,91 @@ export function setupErrorHandler(app) {
         'Load failed'
     ];
 
-    app.config.errorHandler = (err, vm, info) => {
+    tryToShowErrorTooltip(err)
 
-        tryToShowErrorTooltip(err, vm, info)
+    const status = err.response?.status;
 
-        const status = err.response?.status;
+    if (status && ignoreStatusCodes.includes(status)) return false;
+    if (err.message && ignoredMessages.includes(err.message)) {
+        return false;
+    }
 
-        if (status && ignoreStatusCodes.includes(status)) return false;
-        if (err.message && ignoredMessages.includes(err.message)) {
-            return false;
+    var errorDetails = {
+        message: err.message,
+        additionalData: {
+            source: 'vue-error-handler',
+            component: vm?.$options?.name || 'unknown',
+            route: vm?.$route.fullPath,
+            info,
+            stack: err.stack ? getNestedErrorDetails(err) : '',
+            version: getCurrentVersion()
         }
-
-        var errorDetails = {
-            message: err.message,
-            additionalData: {
-                source: 'vue-error-handler',
-                component: vm?.$options?.name || 'unknown',
-                route: vm?.$route.fullPath,
-                info,
-                stack: err.stack ? getNestedErrorDetails(err) : '',
-                version: getCurrentVersion()
-            }
-        };
-
-        if (err.response) {
-            errorDetails.additionalData.resposeStatus = err.response.status;
-            errorDetails.additionalData.requestedUrl = err.response.url;
-        }
-
-        axios.post(errorUrl, errorDetails)
-            .catch(function (error) {
-                console.error('Error sending error details to server:', error);
-            });
-
-        console.error('Error Handler:', err);
     };
+
+    if (err.response) {
+        errorDetails.additionalData.resposeStatus = err.response.status;
+        errorDetails.additionalData.requestedUrl = err.response.url;
+    }
+
+    axios.post(errorUrl, errorDetails)
+        .catch(function (error) {
+            console.error('Error sending error details to server:', error);
+        });
+
+    console.error('Error Handler:', err);
+
+
+    function tryToShowErrorTooltip(error) {
+        if (error.response && error.response.data != null) {
+            var data = error.response.data
+
+            // handling asp net core validation errors
+            if (data.Type == 'https://tools.ietf.org/html/rfc7231#section-6.5.1'
+                || data.Type == 'https://tools.ietf.org/html/rfc9110#section-15.5.1'
+            ) {
+                let message = ''
+                Object.keys(data.Errors).forEach(k => {
+                    //message += k + ':\r\n'
+                    data.Errors[k].forEach(errMessage => message += '  ' + errMessage + '\r\n')
+                })
+
+                //console.error(data)
+                toastr.error(message, data.Title)
+                return
+            }
+
+            if (data.errors && data.errors.length > 0) {
+                let message = ''
+                data.errors.forEach(errMessage => message += '  ' + errMessage + '\r\n')
+
+                //console.error(data)
+                toastr.error(message)
+                return
+            }
+
+            const errorMessage = data.error || data.errorMessage
+            if (errorMessage) {
+                //console.error(data)
+                toastr.error(errorMessage)
+                return
+            }
+        }
+    }
+}
+
+function getNestedErrorDetails(error) {
+    let errorDetails = '';
+    while (error) {
+        errorDetails += `Message: ${error.message}\nStack: ${error.stack}\n\n`;
+        error = error.cause;
+    }
+    return errorDetails;
+}
+
+
+export function setupErrorHandler(app) {
+
+    app.config.errorHandler = errorHandler;
 
     window.addEventListener('error', function (e) {
         if (e.error) return false;
@@ -100,55 +152,6 @@ export function setupErrorHandler(app) {
 
         return false;
     });
-
-    function getNestedErrorDetails(error) {
-        let errorDetails = '';
-        while (error) {
-            errorDetails += `Message: ${error.message}\nStack: ${error.stack}\n\n`;
-            error = error.cause;
-        }
-        return errorDetails;
-    }
-
-
-
-    function tryToShowErrorTooltip(error, vm, info) {
-        if (error.response && error.response.data != null) {
-            var data = error.response.data
-
-            // handling asp net core validation errors
-            if (data.Type == 'https://tools.ietf.org/html/rfc7231#section-6.5.1'
-                || data.Type == 'https://tools.ietf.org/html/rfc9110#section-15.5.1'
-            ) {
-                let message = ''
-                Object.keys(data.Errors).forEach(k => {
-                    //message += k + ':\r\n'
-                    data.Errors[k].forEach(errMessage => message += '  ' + errMessage + '\r\n')
-                })
-
-                //console.error(data)
-                toastr.error(message, data.Title)
-                return
-            }
-
-            if (data.errors && data.errors.length > 0) {
-                let message = ''
-                data.errors.forEach(errMessage => message += '  ' + errMessage + '\r\n')
-
-                //console.error(data)
-                toastr.error(message)
-                return
-            }
-
-            const errorMessage = data.error || data.errorMessage
-            if (errorMessage) {
-                //console.error(data)
-                toastr.error(errorMessage)
-                return
-            }
-        }
-    }
-
 
     app.config.globalProperties.$errorHandler = app.config.errorHandler;
 }
