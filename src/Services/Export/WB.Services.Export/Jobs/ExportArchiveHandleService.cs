@@ -61,6 +61,9 @@ namespace WB.Services.Export.Jobs
                     if (!countToKeep.HasValue && !daysToKeep.HasValue)
                     {
                         await this.externalArtifactsStorage.RemoveAsync(file.Path);
+                        logger.LogInformation(
+                            "Export archive {path} deleted for tenant:{tenant}", 
+                            file.Path, tenant);
                         continue;
                     }
 
@@ -69,6 +72,9 @@ namespace WB.Services.Export.Jobs
                         try
                         {
                             await this.externalArtifactsStorage.RemoveAsync(file.Path);
+                            logger.LogInformation(
+                                "Export archive {path} deleted for tenant:{tenant}", 
+                                file.Path, tenant);
                         }
                         catch (Exception e)
                         {
@@ -84,6 +90,9 @@ namespace WB.Services.Export.Jobs
                         try
                         {
                             await this.externalArtifactsStorage.RemoveAsync(file.Path);
+                            logger.LogInformation(
+                                "Export archive {path} deleted for tenant:{tenant}", 
+                                file.Path, tenant);
                         }
                         catch (Exception e)
                         {
@@ -125,6 +134,9 @@ namespace WB.Services.Export.Jobs
                             try
                             {
                                 File.Delete(file.FullName);
+                                logger.LogInformation(
+                                    "Export archive {path} deleted for tenant:{tenant}", 
+                                    file.FullName, tenant);
                             }
                             catch (Exception e)
                             {
@@ -141,6 +153,9 @@ namespace WB.Services.Export.Jobs
                             try
                             {
                                 File.Delete(file.FullName);
+                                logger.LogInformation(
+                                    "Export archive {path} deleted for tenant:{tenant}", 
+                                    file.FullName, tenant);
                             }
                             catch (Exception e)
                             {
