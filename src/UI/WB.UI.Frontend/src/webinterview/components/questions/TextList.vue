@@ -7,7 +7,7 @@
                         <textarea v-autosize autocomplete="off" type="text" class="field-to-fill" rows="1"
                             :maxlength="$me.maxLength" :important="true" :value="row.text"
                             :disabled="!$me.acceptAnswer || row.isProtected" v-blurOnEnterKey
-                            @blur.native="updateRow($event, row)" @blur="updateRow($event, row)" />
+                            @blur.native="updateRow($event, row, index)" @blur="updateRow($event, row, index)" />
                         <button type="submit" class="btn btn-link btn-clear" v-if="$me.acceptAnswer && !row.isProtected"
                             tabindex="-1" @click="confirmAndRemoveRow(index)"><span></span></button>
                         <div class="lock"></div>
@@ -57,11 +57,11 @@ export default {
     },
     methods: {
         confirmAndRemoveRow(index) {
-            if (!this.canAnswer) return
+            if (!this.canAnswer) return;
 
             if (!this.$me.isRosterSize) {
                 this.removeRow(index)
-                return
+                return;
             }
 
             modal.confirm(this.$t('WebInterviewUI.Interview_Questions_RemoveRowFromRosterMessage', {
@@ -69,10 +69,10 @@ export default {
             }), result => {
                 if (result) {
                     this.removeRow(index)
-                    return
+                    return;
                 } else {
                     this.fetch()
-                    return
+                    return;
                 }
             })
         },
@@ -87,7 +87,7 @@ export default {
                 this.$store.dispatch('answerTextListQuestion', { identity: this.id, rows: this.$me.rows })
         },
 
-        updateRow(evnt, item) {
+        updateRow(evnt, item, index) {
             if (!this.canAnswer) return
 
             const target = $(evnt.target)
@@ -95,7 +95,12 @@ export default {
 
             if (item.text == text) return
 
-            if (!text || !text.trim() || text.trim() === item.text) {
+            if (!text || text.trim() === item.text) {
+                return
+            }
+
+            if (!text.trim()) {
+                this.confirmAndRemoveRow(index)
                 return
             }
 
