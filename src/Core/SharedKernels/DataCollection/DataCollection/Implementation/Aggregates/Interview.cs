@@ -975,9 +975,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
-            // remove empty answers
-            answers = answers.Where(answer => !string.IsNullOrWhiteSpace(answer.Item2)).ToArray();
-
             new InterviewQuestionInvariants(questionIdentity, questionnaire, this.Tree, questionOptionsRepository)
                 .RequireTextListAnswerAllowed(answers,
                     this.Tree.GetQuestion(questionIdentity)?.GetAsInterviewTreeTextListQuestion()?.ProtectedAnswer?.Rows ?? Array.Empty<TextListAnswerRow>());
