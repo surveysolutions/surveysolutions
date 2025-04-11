@@ -120,7 +120,7 @@
                                                     </DatePicker>
                                                 </div>
                                             </Field>
-                                            <span class="text-danger">
+                                            <span class="text-danger error-message">
                                                 <ErrorMessage name="selectedFromDate" />
                                             </span>
                                         </div>
@@ -138,7 +138,7 @@
                                                     </DatePicker>
                                                 </div>
                                             </Field>
-                                            <span class="text-danger">
+                                            <span class="text-danger error-message">
                                                 <ErrorMessage name="selectedToDate" />
                                             </span>
                                         </div>
@@ -365,8 +365,16 @@
 </template>
 
 <style lang="scss">
-.export .filter-wrapper .flatpickr-wrapper {
-    display: block;
+.export .filter-wrapper {
+
+    .flatpickr-wrapper {
+        display: block;
+    }
+
+    .error-message {
+        max-width: 290px;
+        display: block;
+    }
 }
 </style>
 
@@ -693,7 +701,7 @@ export default {
                     break;
             }
 
-            if (!to) {
+            if (!to || moment(to).isAfter(moment())) {
                 to = moment().utc().toISOString(); // Default to now if not set
             }
 
@@ -841,6 +849,7 @@ export default {
                 return this.$t('DataExport.Validation_FromDateInFuture');
             }
 
+
             return true;
         },
         validateToDate(value) {
@@ -855,11 +864,7 @@ export default {
                 return this.$t('DataExport.Validation_ToDateInvalid');
             }
 
-            if (!fromDate.isValid()) {
-                return this.$t('DataExport.Validation_FromDateInvalidBeforeTo');
-            }
-
-            if (toDate.isSameOrBefore(fromDate)) {
+            if (fromDate && toDate.isSameOrBefore(fromDate)) {
                 return this.$t('DataExport.Validation_ToDateBeforeFrom');
             }
 
