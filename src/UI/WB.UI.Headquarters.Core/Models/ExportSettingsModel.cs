@@ -6,7 +6,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
     {
         public ExportSettingsModel(){}
 
-        public ExportSettingsModel(bool isEnabled, string password, ExportRetentionSettings? exportRetentionSettings = null)
+        public ExportSettingsModel(bool isEnabled, string password, ExportRetentionSettings exportRetentionSettings = null)
         {
             this.IsEnabled = isEnabled;
             this.Password = password;
