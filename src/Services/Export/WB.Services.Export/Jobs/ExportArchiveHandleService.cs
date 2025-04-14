@@ -47,129 +47,92 @@ namespace WB.Services.Export.Jobs
         {
             if (this.externalArtifactsStorage.IsEnabled())
             {
-                var externalStoragePath = this.exportFileAccessor.GetExternalStoragePath(tenant, string.Empty);
-                var items = await this.externalArtifactsStorage.ListAsync(externalStoragePath);
-                if(items == null) return;
-
-                logger.LogInformation(
-                    "Deleting export archives for tenant: {tenant} - there are total {count} files, daysToKeep: {daysToKeep}, countToKeep: {countToKeep}", 
-                    tenant, items.Count, daysToKeep, countToKeep);
-
-                int? countToDelete = countToKeep.HasValue ? items.Count - countToKeep.Value : null;
-                foreach (var file in items.OrderBy(x => x.LastModified))
-                {
-                    if (!countToKeep.HasValue && !daysToKeep.HasValue)
-                    {
-                        await this.externalArtifactsStorage.RemoveAsync(file.Path);
-                        logger.LogInformation(
-                            "Export archive {path} deleted for tenant:{tenant}", 
-                            file.Path, tenant);
-                        continue;
-                    }
-
-                    if (daysToKeep.HasValue && file.LastModified < DateTime.UtcNow.AddDays(-daysToKeep.Value))
-                    {
-                        try
-                        {
-                            await this.externalArtifactsStorage.RemoveAsync(file.Path);
-                            logger.LogInformation(
-                                "Export archive {path} deleted for tenant:{tenant}", 
-                                file.Path, tenant);
-                        }
-                        catch (Exception e)
-                        {
-                            logger.LogInformation(
-                                "Unable to delete export archive {path} for tenant: {tenant}. Reason: {reason}", 
-                                file.Path, tenant, e.Message);
-                        }
-                        if(countToDelete.HasValue)
-                            countToDelete--;
-                    }
-                    else if (countToDelete is > 0)
-                    {
-                        try
-                        {
-                            await this.externalArtifactsStorage.RemoveAsync(file.Path);
-                            logger.LogInformation(
-                                "Export archive {path} deleted for tenant:{tenant}", 
-                                file.Path, tenant);
-                        }
-                        catch (Exception e)
-                        {
-                            logger.LogInformation(
-                                "Unable to delete export archive {path} for tenant: {tenant}. Reason: {reason}", 
-                                file.Path, tenant, e.Message);
-                        }
-                        countToDelete--;
-                    }
-                }
-
-                return;
+                await DeleteFromExternalStorage(tenant, countToKeep, daysToKeep);
             }
-
-            var directory = this.fileBasedExportedDataAccessor.GetExportDirectory(tenant);
-            if (Directory.Exists(directory))
+            else
             {
-                logger.LogInformation("Deleting export archives for tenant: {tenant}, daysToKeep: {daysToKeep}, countToKeep: {countToKeep}", 
-                    tenant, daysToKeep, countToKeep);
-                
-                if(!countToKeep.HasValue && !daysToKeep.HasValue)
-                    Directory.Delete(directory, true);
-                else
-                {
-                    //get all files infos in directory recursively
-                    //exclude temp files
-                    var files = Directory.GetFiles(directory, "*.zip", SearchOption.AllDirectories)
-                        .Select(f => new FileInfo(f))
-                        .Where(f=> !f.FullName.Contains("temp"))
-                        .OrderBy(f => f.LastWriteTimeUtc)
-                        .ToList();
-                    
-                    int? countToDelete = countToKeep.HasValue ? files.Count - countToKeep.Value : null;
-
-                    foreach (var file in files)
-                    {
-                        if (daysToKeep.HasValue && file.LastWriteTimeUtc < DateTime.UtcNow.AddDays(-daysToKeep.Value))
-                        { 
-                            try
-                            {
-                                File.Delete(file.FullName);
-                                logger.LogInformation(
-                                    "Export archive {path} deleted for tenant:{tenant}", 
-                                    file.FullName, tenant);
-                            }
-                            catch (Exception e)
-                            {
-                                logger.LogInformation(
-                                    "Unable to delete export archive {path} for tenant: {tenant}. Reason: {reason}", 
-                                    file.FullName, tenant, e.Message);
-                            }
-                            
-                            if(countToDelete.HasValue)
-                                countToDelete--;
-                        }
-                        else if (countToDelete is > 0)
-                        {
-                            try
-                            {
-                                File.Delete(file.FullName);
-                                logger.LogInformation(
-                                    "Export archive {path} deleted for tenant:{tenant}", 
-                                    file.FullName, tenant);
-                            }
-                            catch (Exception e)
-                            {
-                                logger.LogInformation(
-                                    "Unable to delete export archive {path} for tenant: {tenant}. Reason: {reason}", 
-                                    file.FullName, tenant, e.Message);
-                            }
-                            countToDelete--;
-                        }
-                    }
-                }
+                await DeleteFromLocalStorage(tenant, countToKeep, daysToKeep);
             }
         }
 
+        private async Task DeleteFromExternalStorage(TenantInfo tenant, int? countToKeep, int? daysToKeep)
+        {
+            var externalStoragePath = this.exportFileAccessor.GetExternalStoragePath(tenant, string.Empty);
+            var items = await this.externalArtifactsStorage.ListAsync(externalStoragePath);
+            if (items == null) return;
+
+            logger.LogInformation(
+                "Deleting export archives for tenant: {tenant} - there are total {count} files, daysToKeep: {daysToKeep}, countToKeep: {countToKeep}",
+                tenant, items.Count, daysToKeep, countToKeep);
+
+            int? countToDelete = countToKeep.HasValue ? items.Count - countToKeep.Value : null;
+
+            foreach (var file in items.OrderBy(x => x.LastModified))
+            {
+                await DeleteFile(file.Path, file.LastModified, tenant, daysToKeep, countToDelete, async path =>
+                {
+                    await this.externalArtifactsStorage.RemoveAsync(path);
+                });
+                if (countToDelete.HasValue) countToDelete--;
+            }
+        }
+
+        private async Task DeleteFromLocalStorage(TenantInfo tenant, int? countToKeep, int? daysToKeep)
+        {
+            var directory = this.fileBasedExportedDataAccessor.GetExportDirectory(tenant);
+            if (!Directory.Exists(directory)) return;
+
+            logger.LogInformation("Deleting export archives for tenant: {tenant}, daysToKeep: {daysToKeep}, countToKeep: {countToKeep}",
+                tenant, daysToKeep, countToKeep);
+
+            if (!countToKeep.HasValue && !daysToKeep.HasValue)
+            {
+                Directory.Delete(directory, true);
+                return;
+            }
+
+            var files = Directory.GetFiles(directory, "*.zip", SearchOption.AllDirectories)
+                .Select(f => new FileInfo(f))
+                .Where(f => !f.FullName.Contains("temp"))
+                .OrderBy(f => f.LastWriteTimeUtc)
+                .ToList();
+
+            int? countToDelete = countToKeep.HasValue ? files.Count - countToKeep.Value : null;
+
+            foreach (var file in files)
+            {
+                await DeleteFile(file.FullName, file.LastWriteTimeUtc, tenant, countToDelete, daysToKeep, path =>
+                {
+                    File.Delete(path);
+                    return Task.CompletedTask;
+                });
+                if (countToDelete.HasValue) countToDelete--;
+            }
+        }
+
+        private async Task DeleteFile(string path, DateTime lastModified, TenantInfo tenant, int? countToDelete, 
+            int? daysToKeep, Func<string, Task> deleteAction)
+        {
+            try
+            {
+                if (daysToKeep.HasValue && lastModified < DateTime.UtcNow.AddDays(-daysToKeep.Value))
+                {
+                    await deleteAction(path);
+                    logger.LogInformation("Export archive {path} deleted for tenant:{tenant}", path, tenant);
+                }
+                else if (countToDelete is > 0)
+                {
+                    await deleteAction(path);
+                    logger.LogInformation("Export archive {path} deleted for tenant:{tenant}", path, tenant);
+                }
+            }
+            catch (Exception e)
+            {
+                logger.LogInformation("Unable to delete export archive {path} for tenant: {tenant}. Reason: {reason}", 
+                    path, tenant, e.Message);
+            }
+        }
+        
         public async Task<DataExportArchive?> DownloadArchiveAsync(ExportSettings settings, string questionnaireNamePrefixOverride)
         {
             if (this.externalArtifactsStorage.IsEnabled())

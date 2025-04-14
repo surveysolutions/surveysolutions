@@ -149,7 +149,6 @@ namespace WB.UI.Headquarters.Controllers.Api
         public ActionResult<object> WorkspaceSettings()
         {
             var interviewerSettings = this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings);
-            var retentionSetting = exportSettings.GetExportRetentionSettings();
             
             return new
             {
@@ -163,9 +162,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                 AllowEmails = this.webInterviewSettingsStorage.GetById(AppSetting.WebInterviewSettings)?.AllowEmails ?? false,
                 AllowInterviewerUpdateProfile = this.profileSettingsStorage.GetById(AppSetting.ProfileSettings)?.AllowInterviewerUpdateProfile ?? false,
                 ExportSettings = new ExportSettingsModel(this.exportSettings.EncryptionEnforced(), this.exportSettings.GetPassword(),
-                    retentionSetting?.Enabled ?? false,
-                    retentionSetting?.DaysToKeep ?? null,
-                    retentionSetting?.CountToKeep ?? null)
+                    exportSettings.GetExportRetentionSettings())
             };
         }
 

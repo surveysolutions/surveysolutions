@@ -6,6 +6,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
@@ -49,12 +50,9 @@ namespace WB.UI.Headquarters.Controllers.Api
         [HttpGet]
         public ExportSettingsModel ExportSettings()
         {
-            var retentionSetting = exportSettings.GetExportRetentionSettings();
             ExportSettingsModel model = new ExportSettingsModel(this.exportSettings.EncryptionEnforced(), 
                 this.exportSettings.GetPassword(),
-                retentionSetting?.Enabled ?? false,
-                retentionSetting?.DaysToKeep ?? null,
-                retentionSetting?.CountToKeep ?? null);
+                exportSettings.GetExportRetentionSettings());
             return model;
         }
 
@@ -74,11 +72,9 @@ namespace WB.UI.Headquarters.Controllers.Api
             }
 
             this.auditLog.ExportEncryptionChanged(changeSettingsState.EnableState);
-            var retentionSetting = exportSettings.GetExportRetentionSettings();
-            var newExportSettingsModel = new ExportSettingsModel(this.exportSettings.EncryptionEnforced(), this.exportSettings.GetPassword(),
-                retentionSetting?.Enabled ?? false,
-                retentionSetting?.DaysToKeep ?? null,
-                retentionSetting?.CountToKeep ?? null);
+            var newExportSettingsModel = new ExportSettingsModel(this.exportSettings.EncryptionEnforced(), 
+                this.exportSettings.GetPassword(),
+                exportSettings.GetExportRetentionSettings());
             return newExportSettingsModel;
         }
 
@@ -99,11 +95,8 @@ namespace WB.UI.Headquarters.Controllers.Api
 
             this.logger.LogInformation("Export settings were changed by {User}. Encryption password was changed.", new {User = base.User.Identity.Name});
 
-            var retentionSetting = exportSettings.GetExportRetentionSettings();
             var newExportSettingsModel = new ExportSettingsModel(this.exportSettings.EncryptionEnforced(), this.exportSettings.GetPassword(),
-                retentionSetting?.Enabled ?? false,
-                retentionSetting?.DaysToKeep ?? null,
-                retentionSetting?.CountToKeep ?? null);
+                exportSettings.GetExportRetentionSettings());
             return newExportSettingsModel;
         }
         
@@ -267,7 +260,11 @@ namespace WB.UI.Headquarters.Controllers.Api
         {
             var exportRetentionSettings = this.exportSettings.GetExportRetentionSettings();
             if (exportRetentionSettings?.Enabled != true)
-                return Ok(new {sucess = true});
+                return StatusCode(StatusCodes.Status400BadRequest, new
+                {
+                    Success = false,
+                    Error = $"Error when running retention policy. Retention policy is not enabled.",
+                });
             
             //exportServiceApi calls to delete old exports
             await exportServiceApi.RunRetentionPolicy(exportRetentionSettings.CountToKeep ,exportRetentionSettings.DaysToKeep);

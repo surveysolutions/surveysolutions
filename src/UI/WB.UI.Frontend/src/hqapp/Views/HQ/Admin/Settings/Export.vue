@@ -392,6 +392,21 @@ export default {
                         className: 'btn btn-danger',
                         callback: async () => {
                             const status = await this.$hq.ExportSettings.forceRunRetentionPolicy()
+
+                            if (response.status !== 200) {
+                                if (
+                                    e.response &&
+                                    e.response.data &&
+                                    e.response.data.error
+                                ) {
+                                    this.showAlert(e.response.data.error)
+                                    return
+                                } else {
+                                    this.statusDropExportCache = 'Error'
+                                    this.allowToRemoveExportCache = true;
+                                    return
+                                }
+                            }
                         },
                     },
                     cancel: {

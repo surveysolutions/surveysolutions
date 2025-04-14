@@ -13,7 +13,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport
         private readonly IPlainKeyValueStorage<ExportEncryptionSettings> appSettingsStorage;
         private readonly IPlainKeyValueStorage<ExportRetentionSettings> exportRetentionSettingsStorage;
         private readonly IMemoryCache settingCache;
-        private object exportencryptionsettings = ExportEncryptionSettings.EncryptionSettingId;
+        private readonly string exportencryptionsettings = ExportEncryptionSettings.EncryptionSettingId;
 
         public ExportSettings(
             IPlainKeyValueStorage<ExportEncryptionSettings> appSettingsStorage,
