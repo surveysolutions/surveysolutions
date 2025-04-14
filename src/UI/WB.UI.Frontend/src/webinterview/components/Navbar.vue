@@ -214,15 +214,7 @@ export default {
         }
     },
     mounted() {
-        $(window).on('resize', function () {
-            if ($(window).width() > 880) {
-                if ($('.navbar-collapse.collapse.show').length > 0) {
-                    $('main').addClass('display-block')
-                }
-            } else {
-                $('main').removeClass('display-block')
-            }
-        })
+
         $('.navbar-toggle').click(function () {
             $('.navbar-collapse').fadeToggle()
             $('.navbar-collapse').animate({ height: '100%' }, 0)
