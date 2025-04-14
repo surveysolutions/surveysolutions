@@ -214,29 +214,14 @@ export default {
         }
     },
     mounted() {
-        $(window).on('resize', function () {
-            if ($(window).width() > 880) {
-                if ($('.navbar-collapse.collapse.show').length > 0) {
-                    $('main').addClass('display-block')
-                }
-            } else {
-                $('main').removeClass('display-block')
-            }
-        })
+
         $('.navbar-toggle').click(function () {
             $('.navbar-collapse').fadeToggle()
             $('.navbar-collapse').animate({ height: '100%' }, 0)
             $('.top-menu').toggleClass('top-animate')
             $('.mid-menu').toggleClass('mid-animate')
             $('.bottom-menu').toggleClass('bottom-animate')
-            if ($(window).width() < 880) {
-                if ($('.navbar-collapse.collapse.show').length > 0) {
-                    $('main').removeClass('display-block')
-                    $('main').removeClass('hidden')
-                } else {
-                    $('main').addClass('hidden')
-                }
-            }
+
         })
 
         if (this.$config.askForEmail) {
