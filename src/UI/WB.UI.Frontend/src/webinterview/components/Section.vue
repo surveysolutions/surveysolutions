@@ -1,5 +1,5 @@
 <template>
-    <div id="questionsList" ref="questionsList" class="unit-section section" :class="sectionClass">
+    <div id="questionsList" class="unit-section section" :class="sectionClass">
         <SectionLoadingProgress />
         <Breadcrumbs :showHumburger="showHumburger" />
         <component v-for="entity in entities" :key="entity.identity" :is="entity.entityType" :id="entity.identity">
@@ -12,7 +12,6 @@ import SectionProgress from './SectionLoadProgress'
 import Breadcrumbs from './Breadcrumbs.vue'
 
 import { GroupStatus } from './questions'
-import { debounce } from 'lodash'
 
 // import Vue from 'vue'
 

@@ -77,7 +77,6 @@ function NewRouter(store) {
         ],
         scrollBehavior(to, from, savedPosition) {
             if (savedPosition) {
-                //store.dispatch('sectionRequireScroll', { id: from.params.sectionId })
                 return savedPosition
             } else {
                 return { top: 0 }
