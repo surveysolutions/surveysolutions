@@ -54,8 +54,8 @@ export function errorHandler(err, vm, info) {
             var data = error.response.data
 
             // handling asp net core validation errors
-            if (data.Type == 'https://tools.ietf.org/html/rfc7231#section-6.5.1'
-                || data.Type == 'https://tools.ietf.org/html/rfc9110#section-15.5.1'
+            if (data.Type === 'https://tools.ietf.org/html/rfc7231#section-6.5.1'
+                || data.Type === 'https://tools.ietf.org/html/rfc9110#section-15.5.1'
             ) {
                 let message = ''
                 Object.keys(data.Errors).forEach(k => {
