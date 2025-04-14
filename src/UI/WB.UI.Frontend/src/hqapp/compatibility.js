@@ -38,20 +38,15 @@ window.ajustDetailsPanelHeight = function () {
 $(function () {
     $('main').removeClass('hold-transition')
     $('footer').removeClass('hold-transition')
-
-
-
     $('.navbar-toggle').click(function () {
         //$('.navbar-collapse').fadeToggle()
         $('.navbar-collapse').animate({ height: '100%' }, 0)
         $('.top-menu').toggleClass('top-animate')
         $('.mid-menu').toggleClass('mid-animate')
         $('.bottom-menu').toggleClass('bottom-animate')
-
     })
 
     $('form').preventDoubleSubmission()
-
 
     window.ajustNoticeHeight()
     window.ajustDetailsPanelHeight()
