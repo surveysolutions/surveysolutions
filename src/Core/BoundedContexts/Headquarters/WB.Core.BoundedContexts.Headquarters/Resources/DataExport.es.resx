@@ -283,7 +283,7 @@
     <value>Tamaño de archivo: {{size}} MB</value>
   </data>
   <data name="DataExport_FileWasRegenerated" xml:space="preserve">
-    <value>El archivo fue regenerado</value>
+      <value>El archivo fue regenerado o eliminado</value>
   </data>
   <data name="DataExport_InterviewsStatus" xml:space="preserve">
     <value>Entrevistas en {{status}}.</value>

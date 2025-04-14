@@ -16,6 +16,7 @@ using Quartz.Logging;
 using Quartz.Spi;
 using Serilog;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Jobs;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.QuartzIntegration;
 using WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.InterviewDetailsDataScheduler;
@@ -110,7 +111,9 @@ namespace WB.UI.Headquarters.Services.Quartz
             await services.GetRequiredService<SendInvitationsTask>().ScheduleRunAsync();
             await services.GetRequiredService<SendRemindersTask>().Schedule(repeatIntervalInSeconds: 60 * 60);
             await services.GetRequiredService<SendInterviewCompletedTask>().Schedule(repeatIntervalInSeconds: 60);
-
+            
+            await services.GetRequiredService<ExportDataRetentionTask>().Schedule(repeatIntervalInSeconds: 60 * 60 * 12);
+            
             var scheduler = await services.GetRequiredService<ISchedulerFactory>().GetScheduler();
             
             await scheduler.UnscheduleJob(new TriggerKey("Delete questionnaire trigger", "Delete questionnaire"));

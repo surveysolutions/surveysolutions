@@ -576,11 +576,48 @@ class ExportSettings {
         })
     }
 
+    forceRunRetentionPolicy() {
+        return this.http({
+            method: 'delete',
+            url: `${this.base}/ForceRunRetentionPolicy`,
+            headers: { 'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie() },
+        })
+    }
+
     statusDropExportCache() {
         return this.http({
             method: 'get',
             url: `${this.base}/StatusExportCache`
         })
+    }
+
+    setRetentionLimitCount(retentionLimitCount) {
+        return this.http({
+            method: 'post',
+            url: `${this.base}/SetRetentionLimitCount`,
+            headers: { 'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie() },
+            data: { retentionLimitCount: retentionLimitCount }
+        })
+    }
+
+    setRetentionLimitInDays(retentionLimitInDays) {
+        return this.http({
+            method: 'post',
+            url: `${this.base}/SetRetentionLimitInDays`,
+            headers: { 'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie() },
+            data: { retentionLimitInDays: retentionLimitInDays }
+        })
+    }
+
+    changeRetentionState(newState) {
+        const url = `${this.base}/ChangeRetentionState`
+        return this.http(
+            {
+                method: 'post',
+                url: url,
+                data: { enableState: newState },
+                headers: { 'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie() },
+            })
     }
 }
 

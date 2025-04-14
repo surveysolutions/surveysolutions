@@ -184,7 +184,7 @@
     <value>Madhësia e skedarit: {{size}} MB</value>
   </data>
   <data name="DataExport_FileWasRegenerated" xml:space="preserve">
-    <value>Skedari u gjenerua sërish</value>
+      <value>Skedari u rigjenerua ose u fshi</value>
   </data>
   <data name="DataExport_Header" xml:space="preserve">
     <value>Zgjidh llojin dhe formatin e të dhënave që do të eksportohen</value>

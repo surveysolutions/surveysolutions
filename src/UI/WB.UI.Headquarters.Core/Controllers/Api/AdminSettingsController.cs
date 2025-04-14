@@ -149,7 +149,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         public ActionResult<object> WorkspaceSettings()
         {
             var interviewerSettings = this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings);
-
+            
             return new
             {
                 InterviewerAutoUpdatesEnabled = interviewerSettings.IsAutoUpdateEnabled(),
@@ -161,7 +161,8 @@ namespace WB.UI.Headquarters.Controllers.Api
                 GlobalNotice = this.appSettingsStorage.GetById(AppSetting.GlobalNoticeKey)?.Message,
                 AllowEmails = this.webInterviewSettingsStorage.GetById(AppSetting.WebInterviewSettings)?.AllowEmails ?? false,
                 AllowInterviewerUpdateProfile = this.profileSettingsStorage.GetById(AppSetting.ProfileSettings)?.AllowInterviewerUpdateProfile ?? false,
-                ExportSettings = new ExportSettingsModel(this.exportSettings.EncryptionEnforced(), this.exportSettings.GetPassword())
+                ExportSettings = new ExportSettingsModel(this.exportSettings.EncryptionEnforced(), this.exportSettings.GetPassword(),
+                    exportSettings.GetExportRetentionSettings())
             };
         }
 
@@ -383,5 +384,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             var result = File(exportFileStream, exportFile.MimeType, fileNameStar);
             return result;
         }
+        
+        
     }
 }

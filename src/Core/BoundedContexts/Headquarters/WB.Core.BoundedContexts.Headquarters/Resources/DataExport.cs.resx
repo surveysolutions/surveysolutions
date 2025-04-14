@@ -238,7 +238,7 @@
     <value>Cíl exportu souboru</value>
   </data>
   <data name="DataExport_FileWasRegenerated" xml:space="preserve">
-    <value>Soubor byl obnoven</value>
+      <value>Soubor byl znovu vytvořen nebo smazán</value>
   </data>
   <data name="DataExport_Header" xml:space="preserve">
     <value>Vyberte typ a formát dat k exportu</value>
