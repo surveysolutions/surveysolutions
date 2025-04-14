@@ -77,9 +77,10 @@ function NewRouter(store) {
         ],
         scrollBehavior(to, from, savedPosition) {
             if (savedPosition) {
-                store.dispatch('sectionRequireScroll', { id: (from.params).sectionId })
+                //store.dispatch('sectionRequireScroll', { id: from.params.sectionId })
+                return savedPosition
             } else {
-                return { x: 0, y: 0 }
+                return { top: 0 }
             }
         },
     })
@@ -92,7 +93,7 @@ function NewRouter(store) {
         next()
     })
 
-    router.afterEach(() => {
+    router.afterEach((to, from) => {
         const hamburger = document.getElementById('sidebarHamburger')
 
         // check for button visibility.
