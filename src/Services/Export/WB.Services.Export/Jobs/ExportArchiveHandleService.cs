@@ -69,7 +69,7 @@ namespace WB.Services.Export.Jobs
 
             foreach (var file in items.OrderBy(x => x.LastModified))
             {
-                await DeleteFile(file.Path, file.LastModified, tenant, daysToKeep, countToDelete, async path =>
+                await DeleteFile(file.Path, file.LastModified.ToUniversalTime(), tenant, daysToKeep, countToDelete, async path =>
                 {
                     await this.externalArtifactsStorage.RemoveAsync(path);
                 });
@@ -115,12 +115,7 @@ namespace WB.Services.Export.Jobs
         {
             try
             {
-                if (daysToKeep.HasValue && lastModified < DateTime.UtcNow.AddDays(-daysToKeep.Value))
-                {
-                    await deleteAction(path);
-                    logger.LogInformation("Export archive {path} deleted for tenant:{tenant}", path, tenant);
-                }
-                else if (countToDelete is > 0)
+                if ((daysToKeep.HasValue && lastModified < DateTime.UtcNow.AddDays(-daysToKeep.Value)) || countToDelete is > 0)
                 {
                     await deleteAction(path);
                     logger.LogInformation("Export archive {path} deleted for tenant:{tenant}", path, tenant);

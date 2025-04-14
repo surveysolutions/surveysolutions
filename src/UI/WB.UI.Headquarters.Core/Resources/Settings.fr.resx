@@ -472,9 +472,9 @@ Raisons possibles :
     <value>Exécution forcée</value>
 </data>
     <data name="ForceRunRetentionPolicy_Warning" xml:space="preserve">
-    <value>Attention! Cette action critique affecte les fichiers d'exportation existants</value>
+    <value>Attention! Cette action critique affectera les fichiers d'exportation existants dans cet espace de travail</value>
 </data>
     <data name="ForceRunRetentionPolicy_Confirm" xml:space="preserve">
-    <value>Êtes-vous sûr de vouloir exécuter de force la politique de rétention? Tous les fichiers d'exportation générés couverts par les paramètres actuels de la politique seront supprimés du serveur et ne seront PAS disponibles au téléchargement.</value>
+    <value>Êtes-vous sûr de vouloir exécuter de force la politique de rétention maintenant? Veuillez noter que cette action peut entraîner la suppression irréversible des fichiers d'exportation stockés dans cet espace de travail, les rendant indisponibles pour le téléchargement.</value>
 </data>
 </root>

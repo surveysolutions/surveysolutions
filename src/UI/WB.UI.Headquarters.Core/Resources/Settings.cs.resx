@@ -466,9 +466,9 @@
     <value>Vynutit spuštění</value>
 </data>
     <data name="ForceRunRetentionPolicy_Warning" xml:space="preserve">
-    <value>Varování! Toto je kritická akce, která ovlivňuje existující exportované soubory</value>
+    <value>Varování! Toto je kritická akce, která ovlivní stávající exportované soubory v tomto pracovním prostoru</value>
 </data>
     <data name="ForceRunRetentionPolicy_Confirm" xml:space="preserve">
-    <value>Opravdu chcete vynutit spuštění retenční politiky? Všechny vygenerované exportované soubory, na které se vztahují aktuální nastavení politiky, budou odstraněny ze serveru a NEBUDOU dostupné ke stažení.</value>
+    <value>Opravdu chcete nyní vynuceně spustit politiku uchovávání? Upozorňujeme, že tato akce může vést k nevratnému smazání exportovaných souborů uložených v tomto pracovním prostoru, což je učiní nedostupnými ke stažení.</value>
 </data>
 </root>
