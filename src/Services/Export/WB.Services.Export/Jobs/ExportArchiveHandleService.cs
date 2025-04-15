@@ -69,7 +69,7 @@ namespace WB.Services.Export.Jobs
 
             foreach (var file in items.OrderBy(x => x.LastModified))
             {
-                await DeleteFile(file.Path, file.LastModified.ToUniversalTime(), tenant, daysToKeep, countToDelete, async path =>
+                await DeleteFile(file.Path, file.LastModified.ToUniversalTime(), tenant, countToDelete, daysToKeep, async path =>
                 {
                     await this.externalArtifactsStorage.RemoveAsync(path);
                 });

@@ -161,7 +161,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                 GlobalNotice = this.appSettingsStorage.GetById(AppSetting.GlobalNoticeKey)?.Message,
                 AllowEmails = this.webInterviewSettingsStorage.GetById(AppSetting.WebInterviewSettings)?.AllowEmails ?? false,
                 AllowInterviewerUpdateProfile = this.profileSettingsStorage.GetById(AppSetting.ProfileSettings)?.AllowInterviewerUpdateProfile ?? false,
-                ExportSettings = new ExportSettingsModel(this.exportSettings.EncryptionEnforced(), this.exportSettings.GetPassword(),
+                ExportSettings = new ExportSettingsModel(this.exportSettings.GetEncryptionSettings(),
                     exportSettings.GetExportRetentionSettings())
             };
         }
