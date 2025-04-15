@@ -19,12 +19,14 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
             var fontNames = familyName.Split(',');
             foreach (var fontName in fontNames)
             {
-                var fontResolverInfo = base.ResolveTypeface(fontName.Trim(), isBold, isItalic);
+                var trimFontName = fontName.Trim();
+                var fontResolverInfo = base.ResolveTypeface(trimFontName, isBold, isItalic);
                 if (fontResolverInfo != null)
                     return fontResolverInfo;
             }
 
-            return defaultResolver.ResolveTypeface(defaultResolver.DefaultFontName, isBold, isItalic);
+            var defaultTypeface = defaultResolver.ResolveTypeface(defaultResolver.DefaultFontName, isBold, isItalic);
+            return defaultTypeface;
         }
     }
 }
