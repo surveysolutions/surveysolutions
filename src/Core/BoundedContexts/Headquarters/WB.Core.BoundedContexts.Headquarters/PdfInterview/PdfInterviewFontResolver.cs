@@ -11,7 +11,7 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
         
         public PdfInterviewFontResolver()
         {
-            NullIfFontNotFound = true;
+            NullIfFontNotFound = false;
         }
 
         public override FontResolverInfo? ResolveTypeface(string familyName, bool isBold, bool isItalic)
