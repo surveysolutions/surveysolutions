@@ -6,7 +6,7 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
 {
     public class DefinePdfStyles
     {
-        public const string DefaultFonts = "Noto Sans, Arial Unicode MS, Arial, sans-serif";
+        public const string DefaultFonts = "Arial Unicode MS, Noto Sans, Arial, sans-serif";
 
         public void Define(Document document)
         {
