@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Models;
 using WB.Services.Export.Services.Processing;
 using WB.Services.Export.Storage;
@@ -17,18 +18,21 @@ namespace WB.Services.Export.Jobs
         private readonly IDataExportFileAccessor exportFileAccessor;
         private readonly ILogger<JobsStatusReporting> logger;
         private readonly IExportFileNameService fileNameService;
+        private readonly IFileSystemAccessor fileSystemAccessor;
 
         public ExportArchiveHandleService(IFileBasedExportedDataAccessor fileBasedExportedDataAccessor,
             IExternalArtifactsStorage externalArtifactsStorage,
             IDataExportFileAccessor exportFileAccessor,
             ILogger<JobsStatusReporting> logger,
-            IExportFileNameService fileNameService)
+            IExportFileNameService fileNameService,
+            IFileSystemAccessor fileSystemAccessor)
         {
             this.fileBasedExportedDataAccessor = fileBasedExportedDataAccessor;
             this.externalArtifactsStorage = externalArtifactsStorage;
             this.exportFileAccessor = exportFileAccessor;
             this.logger = logger;
             this.fileNameService = fileNameService;
+            this.fileSystemAccessor = fileSystemAccessor;
         }
 
         public async Task RunRetentionPolicy(TenantInfo tenant, int? countToKeep, int? daysToKeep)
@@ -80,20 +84,22 @@ namespace WB.Services.Export.Jobs
         private async Task DeleteFromLocalStorage(TenantInfo tenant, int? countToKeep, int? daysToKeep)
         {
             var directory = this.fileBasedExportedDataAccessor.GetExportDirectory(tenant);
-            if (!Directory.Exists(directory)) return;
+            if (!this.fileSystemAccessor.IsDirectoryExists(directory)) return;
 
             logger.LogInformation("Deleting export archives for tenant: {tenant}, daysToKeep: {daysToKeep}, countToKeep: {countToKeep}",
                 tenant, daysToKeep, countToKeep);
 
             if (!countToKeep.HasValue && !daysToKeep.HasValue)
             {
-                Directory.Delete(directory, true);
+                this.fileSystemAccessor.DeleteDirectory(directory);
                 return;
             }
 
-            var files = Directory.GetFiles(directory, "*.zip", SearchOption.AllDirectories)
-                .Select(f => new FileInfo(f))
-                .Where(f => !f.FullName.Contains("temp"))
+            var tempFolderMarker = "temp" + fileSystemAccessor.DirectorySeparatorChar();
+            
+            var files = this.fileSystemAccessor.GetFilesInDirectory(directory, "*.zip", true)
+                .Select(f => new {FullName = f, LastWriteTimeUtc = fileSystemAccessor.GetModificationTime(f).ToUniversalTime()})
+                .Where(f => !f.FullName.Contains(tempFolderMarker))
                 .OrderBy(f => f.LastWriteTimeUtc)
                 .ToList();
 
@@ -103,7 +109,7 @@ namespace WB.Services.Export.Jobs
             {
                 await DeleteFile(file.FullName, file.LastWriteTimeUtc, tenant, countToDelete, daysToKeep, path =>
                 {
-                    File.Delete(path);
+                    this.fileSystemAccessor.DeleteFile(path);
                     return Task.CompletedTask;
                 });
                 if (countToDelete.HasValue) countToDelete--;
@@ -135,7 +141,7 @@ namespace WB.Services.Export.Jobs
                 var internalFilePath = await this.fileNameService.GetFileNameForExportArchiveAsync(settings);
 
                 var externalStoragePath = this.exportFileAccessor.GetExternalStoragePath(
-                    settings.Tenant, Path.GetFileName(internalFilePath));
+                    settings.Tenant, this.fileSystemAccessor.GetFileName(internalFilePath));
 
                 var metadata = await this.externalArtifactsStorage.GetObjectMetadataAsync(externalStoragePath);
 
@@ -155,7 +161,7 @@ namespace WB.Services.Export.Jobs
             else
             {
                 var filePath = await this.fileBasedExportedDataAccessor.GetArchiveFilePathForExportedDataAsync(settings);
-                if (File.Exists(filePath))
+                if (this.fileSystemAccessor.IsFileExists(filePath))
                 {
                     var downloadFileName = await this.fileNameService.GetFileNameForExportArchiveAsync(settings, questionnaireNamePrefixOverride);
 

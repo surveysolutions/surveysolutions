@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
+using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Jobs;
 using WB.Services.Export.Services.Processing;
 using WB.Services.Export.Storage;
@@ -20,6 +21,7 @@ namespace WB.Services.Export.Tests.ExportJobTests
         private Mock<IDataExportFileAccessor> exportFileAccessor;
         private Mock<ILogger<JobsStatusReporting>> logger;
         private ExportArchiveHandleService exportArchiveHandleService;
+        private Mock<IFileSystemAccessor> fileSystemAccessor;
         
         private readonly string directory = "testDirectory";
 
@@ -30,24 +32,18 @@ namespace WB.Services.Export.Tests.ExportJobTests
             this.externalArtifactsStorage = new Mock<IExternalArtifactsStorage>();
             this.exportFileAccessor = new Mock<IDataExportFileAccessor>();
             this.logger = new Mock<ILogger<JobsStatusReporting>>();
+            this.fileSystemAccessor = new Mock<IFileSystemAccessor>();
 
             this.exportArchiveHandleService = new ExportArchiveHandleService(
                 fileBasedExportedDataAccessor.Object,
                 externalArtifactsStorage.Object,
                 exportFileAccessor.Object,
                 logger.Object,
-                Mock.Of<IExportFileNameService>());
+                Mock.Of<IExportFileNameService>(),
+                fileSystemAccessor.Object);
             
-            Directory.CreateDirectory(directory);
-        }
-        
-        [TearDown]
-        public void TearDown()
-        {
-            if (Directory.Exists(directory))
-            {
-                Directory.Delete(directory, true);
-            }
+            this.fileSystemAccessor.Object.CreateDirectory(directory);
+            this.fileSystemAccessor.Setup(x=> x.IsDirectoryExists(directory)).Returns(true);
         }
 
         [Test]
@@ -59,15 +55,12 @@ namespace WB.Services.Export.Tests.ExportJobTests
             this.externalArtifactsStorage.Setup(x => x.IsEnabled()).Returns(false);
             this.fileBasedExportedDataAccessor.Setup(x => 
                 x.GetExportDirectory(tenant)).Returns(directory);
-            
-            var testFile = Path.Combine(directory, "test.zip");
-            File.WriteAllText(testFile, "test content");
 
             // Act
             await this.exportArchiveHandleService.ClearExportArchives(tenant);
 
             // Assert
-            Assert.That(Directory.Exists(directory), Is.False);
+            this.fileSystemAccessor.Verify(x => x.DeleteDirectory(directory), Times.Once);
         }
 
         [Test]
@@ -79,19 +72,24 @@ namespace WB.Services.Export.Tests.ExportJobTests
             this.externalArtifactsStorage.Setup(x => x.IsEnabled()).Returns(false);
             this.fileBasedExportedDataAccessor.Setup(x => x.GetExportDirectory(tenant)).Returns(directory);
 
-            var oldFile = Path.Combine(directory, "old.zip");
-            var recentFile = Path.Combine(directory, "recent.zip");
-            File.WriteAllText(oldFile, "old content");
-            File.WriteAllText(recentFile, "recent content");
-            File.SetLastWriteTimeUtc(oldFile, DateTime.UtcNow.AddDays(-10));
-            File.SetLastWriteTimeUtc(recentFile, DateTime.UtcNow);
+            var filesInDirectory = new Dictionary<string, DateTime>
+            {
+                { "old.zip", DateTime.UtcNow.AddDays(-10) },
+                { "recent.zip", DateTime.UtcNow }
+            };
 
+            this.fileSystemAccessor.Setup(x => x.GetFilesInDirectory(directory, "*.zip", true))
+                .Returns(filesInDirectory.Keys.ToArray());
+
+            this.fileSystemAccessor.Setup(x => x.GetModificationTime(It.IsAny<string>()))
+                .Returns((string filePath) => filesInDirectory[filePath]);
+            
             // Act
             await this.exportArchiveHandleService.RunRetentionPolicy(tenant, null, 5);
 
             // Assert
-            Assert.That(File.Exists(oldFile), Is.False);
-            Assert.That(File.Exists(recentFile), Is.True);
+            this.fileSystemAccessor.Verify(x => x.DeleteFile(It.IsAny<string>()), Times.Once);
+            this.fileSystemAccessor.Verify(x => x.DeleteFile("old.zip"), Times.Once);
         }
 
         [Test]
@@ -102,24 +100,25 @@ namespace WB.Services.Export.Tests.ExportJobTests
             this.externalArtifactsStorage.Setup(x => x.IsEnabled()).Returns(false);
             this.fileBasedExportedDataAccessor.Setup(x => 
                 x.GetExportDirectory(tenant)).Returns(directory);
-
-            var file1 = Path.Combine(directory, "file1.zip");
-            var file2 = Path.Combine(directory, "file2.zip");
-            var file3 = Path.Combine(directory, "file3.zip");
-            File.WriteAllText(file1, "content1");
-            File.WriteAllText(file2, "content2");
-            File.WriteAllText(file3, "content3");
-            File.SetLastWriteTimeUtc(file1, DateTime.UtcNow.AddDays(-3));
-            File.SetLastWriteTimeUtc(file2, DateTime.UtcNow.AddDays(-2));
-            File.SetLastWriteTimeUtc(file3, DateTime.UtcNow.AddDays(-1));
+            
+            var filesInDirectory = new Dictionary<string, DateTime>
+            {
+                { "file1.zip", DateTime.UtcNow.AddDays(-3) },
+                { "file2.zip", DateTime.UtcNow.AddDays(-2) },
+                { "file3.zip", DateTime.UtcNow.AddDays(-1) }
+            };
+            this.fileSystemAccessor.Setup(x => x.GetFilesInDirectory(directory, "*.zip", true))
+                .Returns(filesInDirectory.Keys.ToArray());
+            
+            this.fileSystemAccessor.Setup(x => x.GetModificationTime(It.IsAny<string>()))
+                .Returns((string filePath) => filesInDirectory[filePath]);
 
             // Act
             await this.exportArchiveHandleService.RunRetentionPolicy(tenant, 2, null);
 
             // Assert
-            Assert.That(File.Exists(file1), Is.False);
-            Assert.That(File.Exists(file2), Is.True);
-            Assert.That(File.Exists(file3), Is.True);
+            this.fileSystemAccessor.Verify(x => x.DeleteFile(It.IsAny<string>()), Times.Once);
+            this.fileSystemAccessor.Verify(x => x.DeleteFile("file1.zip"), Times.Once);
         }
         
         [Test]
@@ -130,29 +129,26 @@ namespace WB.Services.Export.Tests.ExportJobTests
             this.externalArtifactsStorage.Setup(x => x.IsEnabled()).Returns(false);
             this.fileBasedExportedDataAccessor.Setup(x => x.GetExportDirectory(tenant)).Returns(directory);
 
-            var oldFile = Path.Combine(directory, "old.zip");
-            var recentFile1 = Path.Combine(directory, "recent1.zip");
-            var recentFile2 = Path.Combine(directory, "recent2.zip");
-            var recentFile3 = Path.Combine(directory, "recent3.zip");
-
-            File.WriteAllText(oldFile, "old content");
-            File.WriteAllText(recentFile1, "recent content 1");
-            File.WriteAllText(recentFile2, "recent content 2");
-            File.WriteAllText(recentFile3, "recent content 3");
-
-            File.SetLastWriteTimeUtc(oldFile, DateTime.UtcNow.AddDays(-10));
-            File.SetLastWriteTimeUtc(recentFile1, DateTime.UtcNow.AddDays(-3));
-            File.SetLastWriteTimeUtc(recentFile2, DateTime.UtcNow.AddDays(-2));
-            File.SetLastWriteTimeUtc(recentFile3, DateTime.UtcNow.AddDays(-1));
+            var filesInDirectory = new Dictionary<string, DateTime>
+            {
+                { "old.zip", DateTime.UtcNow.AddDays(-10) },
+                { "recent1.zip", DateTime.UtcNow.AddDays(-3) },
+                { "recent2.zip", DateTime.UtcNow.AddDays(-2) },
+                { "recent3.zip", DateTime.UtcNow.AddDays(-1) }
+            };
+            this.fileSystemAccessor.Setup(x => x.GetFilesInDirectory(directory, "*.zip", true))
+                .Returns(filesInDirectory.Keys.ToArray());
+            
+            this.fileSystemAccessor.Setup(x => x.GetModificationTime(It.IsAny<string>()))
+                .Returns((string filePath) => filesInDirectory[filePath]);
 
             // Act
             await this.exportArchiveHandleService.RunRetentionPolicy(tenant, 2, 5);
 
             // Assert
-            Assert.That(File.Exists(oldFile), Is.False); // Deleted due to daysToKeep
-            Assert.That(File.Exists(recentFile1), Is.False); // Deleted due to countToKeep
-            Assert.That(File.Exists(recentFile2), Is.True); // Kept
-            Assert.That(File.Exists(recentFile3), Is.True); // Kept
+            this.fileSystemAccessor.Verify(x => x.DeleteFile(It.IsAny<string>()), Times.Exactly(2));
+            this.fileSystemAccessor.Verify(x => x.DeleteFile("old.zip"), Times.Once);
+            this.fileSystemAccessor.Verify(x => x.DeleteFile("recent1.zip"), Times.Once);
         }
         
         [Test]
@@ -163,21 +159,22 @@ namespace WB.Services.Export.Tests.ExportJobTests
             this.externalArtifactsStorage.Setup(x => x.IsEnabled()).Returns(false);
             this.fileBasedExportedDataAccessor.Setup(x => x.GetExportDirectory(tenant)).Returns(directory);
 
-            var file1 = Path.Combine(directory, "file1.zip");
-            var file2 = Path.Combine(directory, "file2.zip");
-
-            File.WriteAllText(file1, "content1");
-            File.WriteAllText(file2, "content2");
-
-            File.SetLastWriteTimeUtc(file1, DateTime.UtcNow.AddDays(-3));
-            File.SetLastWriteTimeUtc(file2, DateTime.UtcNow.AddDays(-1));
-
+            var filesInDirectory = new Dictionary<string, DateTime>
+            {
+                { "file1.zip", DateTime.UtcNow.AddDays(-3) },
+                { "file2.zip", DateTime.UtcNow.AddDays(-2) }
+            };
+            this.fileSystemAccessor.Setup(x => x.GetFilesInDirectory(directory, "*.zip", true))
+                .Returns(filesInDirectory.Keys.ToArray());
+            
+            this.fileSystemAccessor.Setup(x => x.GetModificationTime(It.IsAny<string>()))
+                .Returns((string filePath) => filesInDirectory[filePath]);
+            
             // Act
             await this.exportArchiveHandleService.RunRetentionPolicy(tenant, null, null);
 
             // Assert
-            Assert.That(File.Exists(file1), Is.True); // File should not be deleted
-            Assert.That(File.Exists(file2), Is.True); // File should not be deleted
+            this.fileSystemAccessor.Verify(x => x.DeleteFile(It.IsAny<string>()), Times.Never);
         }
         
         [Test]
@@ -194,7 +191,7 @@ namespace WB.Services.Export.Tests.ExportJobTests
 
             // Assert
             this.externalArtifactsStorage.Verify(x => x.ListAsync(It.IsAny<string>()), Times.Once);
-            this.externalArtifactsStorage.Verify(x => x.RemoveAsync(It.IsAny<string>()), Times.Once); // No files to delete
+            this.externalArtifactsStorage.Verify(x => x.RemoveAsync(It.IsAny<string>()), Times.Never); // No files to delete
         }
         
         [Test]
@@ -219,6 +216,7 @@ namespace WB.Services.Export.Tests.ExportJobTests
             await this.exportArchiveHandleService.RunRetentionPolicy(tenant, 2, 5);
 
             // Assert
+            this.externalArtifactsStorage.Verify(x => x.RemoveAsync(It.IsAny<string>()), Times.Exactly(2));
             this.externalArtifactsStorage.Verify(x => x.RemoveAsync("oldFile.zip"), Times.Once); // Deleted due to daysToKeep
             this.externalArtifactsStorage.Verify(x => x.RemoveAsync("recentFile1.zip"), Times.Once); // Deleted due to countToKeep
             this.externalArtifactsStorage.Verify(x => x.RemoveAsync("recentFile2.zip"), Times.Never); // Kept
