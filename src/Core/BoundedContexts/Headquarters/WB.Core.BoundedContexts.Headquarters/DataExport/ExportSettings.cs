@@ -77,7 +77,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport
             return result;
         }
 
-        public ExportEncryptionSettings GetEncryptionSettings()
+        public ExportEncryptionSettings? GetEncryptionSettings()
         {
             return this.GetSetting();
         }
