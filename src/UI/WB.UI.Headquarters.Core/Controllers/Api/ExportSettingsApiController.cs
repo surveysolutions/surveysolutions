@@ -50,8 +50,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         [HttpGet]
         public ExportSettingsModel ExportSettings()
         {
-            ExportSettingsModel model = new ExportSettingsModel(this.exportSettings.EncryptionEnforced(), 
-                this.exportSettings.GetPassword(),
+            ExportSettingsModel model = new ExportSettingsModel(this.exportSettings.GetEncryptionSettings(),
                 exportSettings.GetExportRetentionSettings());
             return model;
         }
@@ -63,7 +62,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             if (await this.IsExistsDataExportInProgress())
                 return StatusCode((int)HttpStatusCode.Forbidden, new {message = DataExport.ErrorThereAreRunningProcesses});
 
-            ExportSettingsModel oldState = new ExportSettingsModel(this.exportSettings.EncryptionEnforced(), this.exportSettings.GetPassword());
+            ExportSettingsModel oldState = new ExportSettingsModel(this.exportSettings.GetEncryptionSettings());
 
             if (oldState.IsEnabled != changeSettingsState.EnableState)
             {
@@ -72,8 +71,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             }
 
             this.auditLog.ExportEncryptionChanged(changeSettingsState.EnableState);
-            var newExportSettingsModel = new ExportSettingsModel(this.exportSettings.EncryptionEnforced(), 
-                this.exportSettings.GetPassword(),
+            var newExportSettingsModel = new ExportSettingsModel(this.exportSettings.GetEncryptionSettings(),
                 exportSettings.GetExportRetentionSettings());
             return newExportSettingsModel;
         }
@@ -85,7 +83,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             if (await this.IsExistsDataExportInProgress())
                 return StatusCode((int)HttpStatusCode.Forbidden,new {message = DataExport.ErrorThereAreRunningProcesses}); 
 
-            ExportSettingsModel model = new ExportSettingsModel(this.exportSettings.EncryptionEnforced(), this.exportSettings.GetPassword());
+            ExportSettingsModel model = new ExportSettingsModel(this.exportSettings.GetEncryptionSettings());
 
             if (model.IsEnabled)
             {
@@ -95,7 +93,7 @@ namespace WB.UI.Headquarters.Controllers.Api
 
             this.logger.LogInformation("Export settings were changed by {User}. Encryption password was changed.", new {User = base.User.Identity.Name});
 
-            var newExportSettingsModel = new ExportSettingsModel(this.exportSettings.EncryptionEnforced(), this.exportSettings.GetPassword(),
+            var newExportSettingsModel = new ExportSettingsModel(this.exportSettings.GetEncryptionSettings(),
                 exportSettings.GetExportRetentionSettings());
             return newExportSettingsModel;
         }

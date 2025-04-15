@@ -6,10 +6,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
     {
         public ExportSettingsModel(){}
 
-        public ExportSettingsModel(bool isEnabled, string password, ExportRetentionSettings exportRetentionSettings = null)
+        public ExportSettingsModel(ExportEncryptionSettings exportEncryptionSettings, ExportRetentionSettings exportRetentionSettings = null)
         {
-            this.IsEnabled = isEnabled;
-            this.Password = password;
+            if(exportEncryptionSettings != null)
+            {
+                this.IsEnabled = exportEncryptionSettings.IsEnabled;
+                this.Password = exportEncryptionSettings.Value;
+            }
+            
             if (exportRetentionSettings != null)
             {
                 this.IsRetentionEnabled = exportRetentionSettings.Enabled;
@@ -18,7 +22,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
             }
         } 
         
-        public bool IsEnabled { get; set; }
+        public bool IsEnabled { get; set; } = false;
         public string Password { get; set; }
 
         public bool IsRetentionEnabled { get; set; } = false;
