@@ -12,6 +12,7 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
         {
             var paragraph = cell.AddParagraph();
             paragraph.Style = styleName;
+            paragraph.Format.Font.Name = PdfInterviewFontResolver.GetFontNameForText(text);
             text = WebUtility.HtmlDecode(text);
             return paragraph.AddFormattedText(text);
         }
@@ -37,6 +38,8 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
                 var str = i + 15 > text.Length
                     ? text.Substring(i)
                     : text.Substring(i, 15);
+                
+                paragraph.Format.Font.Name = PdfInterviewFontResolver.GetFontNameForText(str);
                 paragraph.AddText(str);
             }
         }
@@ -52,6 +55,7 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
                 var str = i + 15 > text.Length
                     ? text.Substring(i)
                     : text.Substring(i, 15);
+                paragraph.Format.Font.Name = PdfInterviewFontResolver.GetFontNameForText(str);
                 var formattedText = paragraph.AddFormattedText(str, style);
                 if (color.HasValue)
                     formattedText.Color = color.Value;
