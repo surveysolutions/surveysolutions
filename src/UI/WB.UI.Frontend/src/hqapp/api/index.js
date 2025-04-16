@@ -633,6 +633,10 @@ class ControlPanel {
         return this.http.get(`${this.base}/Configuration`)
     }
 
+    getJobs() {
+        return this.http.get(`${this.base}/Jobs`)
+    }
+
     getApkInfos() {
         return this.http.get(`${this.base}/AppUpdates`)
     }
