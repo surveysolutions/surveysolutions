@@ -471,4 +471,19 @@
     <data name="ParadataEventsFilter_ReducedHint" xml:space="preserve">
     <value>Omezená sada paradat nezahrnuje události s následujícími kódy: QuestionEnabled (13), QuestionDisabled (14), GroupEnabled (15), GroupDisabled (16), QuestionDeclaredValid (17), QuestionDeclaredInvalid (18), VariableEnabled (23), VariableDisabled (24).</value>
 </data>
+    <data name="Validation_FromDateInvalid" xml:space="preserve">
+    <value>Datum "Od" musí být platný.</value>
+</data>
+    <data name="Validation_FromDateInFuture" xml:space="preserve">
+    <value>Datum "Od" nemůže být v budoucnosti.</value>
+</data>
+    <data name="Validation_ToDateInvalid" xml:space="preserve">
+    <value>Datum "Do" musí být platný.</value>
+</data>
+    <data name="Validation_FromDateInvalidBeforeTo" xml:space="preserve">
+    <value>Datum "Od" musí být platný před ověřením data "Do".</value>
+</data>
+    <data name="Validation_ToDateBeforeFrom" xml:space="preserve">
+    <value>Datum "Do" musí být větší než datum "Od".</value>
+</data>
 </root>

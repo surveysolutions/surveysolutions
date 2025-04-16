@@ -471,4 +471,19 @@
     <data name="ParadataEventsFilter_ReducedHint" xml:space="preserve">
     <value>O conjunto reduzido de paradata não inclui eventos com os seguintes códigos: QuestionEnabled (13), QuestionDisabled (14), GroupEnabled (15), GroupDisabled (16), QuestionDeclaredValid (17), QuestionDeclaredInvalid (18), VariableEnabled (23), VariableDisabled (24).</value>
 </data>
+    <data name="Validation_FromDateInvalid" xml:space="preserve">
+    <value>A data "De" deve ser válida.</value>
+</data>
+    <data name="Validation_FromDateInFuture" xml:space="preserve">
+    <value>A data "De" não pode estar no futuro.</value>
+</data>
+    <data name="Validation_ToDateInvalid" xml:space="preserve">
+    <value>A data "Até" deve ser válida.</value>
+</data>
+    <data name="Validation_FromDateInvalidBeforeTo" xml:space="preserve">
+    <value>A data "De" deve ser válida antes de validar a data "Até".</value>
+</data>
+    <data name="Validation_ToDateBeforeFrom" xml:space="preserve">
+    <value>A data "Até" deve ser maior que a data "De".</value>
+</data>
 </root>
