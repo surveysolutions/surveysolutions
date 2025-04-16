@@ -22,6 +22,7 @@ public static class FontScriptDetector
         ("Noto Sans Arabic Extended-B", 0x08A0, 0x08FF),
         ("Noto Sans Arabic Presentation Forms-A", 0xFB1D, 0xFB4F),
         ("Noto Sans Arabic Presentation Forms-B", 0xFE70, 0xFEFF),
+        ("Noto Sans Thaana", 0x0780, 0x07BF),     
 
         ("Noto Sans Devanagari", 0x0900, 0x097F),
         ("Noto Sans Bengali", 0x0980, 0x09FF),

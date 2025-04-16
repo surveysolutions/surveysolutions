@@ -20,6 +20,9 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
             foreach (var fontName in fontNames)
             {
                 var trimFontName = fontName.Trim();
+                if (string.IsNullOrWhiteSpace(trimFontName))
+                    continue;
+                
                 var fontResolverInfo = base.ResolveTypeface(trimFontName, isBold, isItalic);
                 if (fontResolverInfo != null)
                     return fontResolverInfo;
