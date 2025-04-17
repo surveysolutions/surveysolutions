@@ -4,6 +4,7 @@
             <div class="col-sm-9">
                 <h2>{{ $t('Settings.ExportEncryption_Title') }}</h2>
                 <p>{{ $t('Settings.ExportEncryption_Description') }}</p>
+                <p class="error">{{ $t('Settings.ExportEncryption_Warning') }}</p>
             </div>
             <div class="col-sm-9">
                 <div class="block-filter">

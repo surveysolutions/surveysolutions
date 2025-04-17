@@ -752,5 +752,11 @@ namespace WB.UI.Headquarters.Resources {
                 return ResourceManager.GetString("ForceRunRetentionPolicy_Confirm", resourceCulture);
             }
         }
+        
+        public static string ExportEncryption_Warning {
+            get {
+                return ResourceManager.GetString("ExportEncryption_Warning", resourceCulture);
+            }
+        }
     }
 }

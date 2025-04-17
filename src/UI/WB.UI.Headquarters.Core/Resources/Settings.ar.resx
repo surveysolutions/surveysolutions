@@ -476,4 +476,7 @@
     <data name="ForceRunRetentionPolicy_Confirm" xml:space="preserve">
     <value>هل أنت متأكد أنك تريد تشغيل سياسة الاحتفاظ بالقوة الآن؟ يرجى ملاحظة أن هذا الإجراء قد يؤدي إلى حذف ملفات التصدير المخزنة في مساحة العمل هذه بشكل لا رجعة فيه، مما يجعلها غير متاحة للتنزيل.</value>
 </data>
+  <data name="ExportEncryption_Warning" xml:space="preserve">
+  <value>تعديل إعدادات التشفير سيؤدي إلى إزالة جميع ملفات التصدير التي تم إنشاؤها مسبقًا، مما يتطلب إنشاء ملفات تصدير جديدة.</value>
+</data>
 </root>
