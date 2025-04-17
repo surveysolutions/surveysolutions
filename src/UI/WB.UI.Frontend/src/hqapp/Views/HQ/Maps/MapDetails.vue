@@ -121,7 +121,7 @@ export default {
             return [{
                 name: this.$t("Pages.MapDetails_DelinkUser"),
                 callback: () => {
-                    if (config.isObserving) return;
+                    if (this.config.isObserving) return;
 
                     this.delinkUserFromMap(rowData.userName, this.$config.model.fileName);
                 },
@@ -157,7 +157,7 @@ export default {
         },
         linkUserToMap() {
 
-            if (config.isObserving) return;
+            if (this.config.isObserving) return;
 
             if (this.newLikedUserId) {
                 const self = this;
