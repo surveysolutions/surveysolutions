@@ -77,7 +77,7 @@
                             :title="$t('WebInterviewUI.SaveScenario')">
                             <span class="glyphicon glyphicon-floppy-disk"></span>
                         </button>
-                        <div class="modal fade" id="saveScenarioModal" ref="saveScenarioModalRef" tabindex="-1"
+                        <div class="modal" id="saveScenarioModal" ref="saveScenarioModalRef" tabindex="-1"
                             role="dialog">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
