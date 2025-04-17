@@ -279,7 +279,7 @@ export default {
     },
     methods: {
         hideScenarioSave() {
-            $(this.$refs.saveScenarioModalRef).modal('hide')
+            $(this.$refs.saveScenarioModalRef).hide()
             this.newScenarioName = ''
             this.selectedSaveOption = 'saveNew'
             this.selectedScenarioOption = -1
@@ -346,7 +346,7 @@ export default {
         async showSaveScenario() {
             this.scenarioSaving = true
             this.designerCredentialsExpired = false
-            $(this.$refs.saveScenarioModalRef).appendTo('body').modal('show')
+            $(this.$refs.saveScenarioModalRef).appendTo('body').show()
             try {
                 this.designerScenarios = []
                 var getScenarios = await axios.get(this.saveScenarioUrl, {
