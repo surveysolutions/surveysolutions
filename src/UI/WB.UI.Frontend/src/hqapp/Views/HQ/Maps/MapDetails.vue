@@ -47,7 +47,8 @@
                                 </Typeahead>
 
                                 <div class="input-group-btn">
-                                    <button class="btn btn-success" @click="linkUserToMap" :disabled="!newLikedUserId">
+                                    <button class="btn btn-success" @click="linkUserToMap"
+                                        :disabled="!newLikedUserId || config.isObserving">
                                         <span aria-hidden="true" class="glyphicon add"></span>
                                     </button>
                                 </div>
@@ -119,7 +120,11 @@ export default {
         contextMenuItems({ rowData }) {
             return [{
                 name: this.$t("Pages.MapDetails_DelinkUser"),
-                callback: () => { this.delinkUserFromMap(rowData.userName, this.$config.model.fileName); },
+                callback: () => {
+                    if (this.config.isObserving) return;
+
+                    this.delinkUserFromMap(rowData.userName, this.$config.model.fileName);
+                },
             }];
         },
         delinkUserFromMap(userName, fileName) {
@@ -151,6 +156,8 @@ export default {
             this.newLikedUserId = newValue
         },
         linkUserToMap() {
+
+            if (this.config.isObserving) return;
 
             if (this.newLikedUserId) {
                 const self = this;
