@@ -478,6 +478,6 @@ Raisons possibles :
     <value>Êtes-vous sûr de vouloir exécuter de force la politique de rétention maintenant? Veuillez noter que cette action peut entraîner la suppression irréversible des fichiers d'exportation stockés dans cet espace de travail, les rendant indisponibles pour le téléchargement.</value>
 </data>
   <data name="ExportEncryption_Warning" xml:space="preserve">
-  <value>Modifier les paramètres de chiffrement invalidera tous les fichiers d'exportation générés précédemment, nécessitant la création de nouvelles exportations</value>
+  <value>Modifier les paramètres de chiffrement supprimera tous les fichiers d'exportation précédemment générés, nécessitant la création de nouvelles exportations.</value>
 </data>
 </root>

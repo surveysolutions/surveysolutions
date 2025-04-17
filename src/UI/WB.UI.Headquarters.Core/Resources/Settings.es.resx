@@ -478,6 +478,6 @@ Posibles razones:
     <value>¿Está seguro de que desea ejecutar forzosamente la política de retención ahora? Tenga en cuenta que esta acción puede resultar en la eliminación irreversible de los archivos de exportación almacenados en este espacio de trabajo, lo que los hará inaccesibles para su descarga.</value>
 </data>
   <data name="ExportEncryption_Warning" xml:space="preserve">
-  <value>Modificar la configuración de cifrado invalidará todos los archivos de exportación generados previamente, lo que requerirá crear nuevas exportaciones.</value>
+  <value>Modificar la configuración de cifrado eliminará todos los archivos de exportación generados previamente, lo que requerirá crear nuevas exportaciones.</value>
 </data>
 </root>
