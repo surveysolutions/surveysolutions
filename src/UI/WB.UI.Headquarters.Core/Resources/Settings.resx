@@ -476,4 +476,7 @@ Possible reasons:
     <data name="ForceRunRetentionPolicy_Confirm" xml:space="preserve">
       <value>Are you sure you want to forcibly run the retention policy now? Please note that this action may result in the irrecoverable deletion of export files stored in this workspace, rendering them unavailable for download.</value>
   </data>
+  <data name="ExportEncryption_Warning" xml:space="preserve">
+    <value>Modifying the encryption settings will invalidate all previously generated export files, requiring new exports to be created</value>
+  </data>
 </root>

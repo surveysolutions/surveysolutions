@@ -471,4 +471,7 @@
     <data name="ForceRunRetentionPolicy_Confirm" xml:space="preserve">
     <value>Opravdu chcete nyní vynuceně spustit politiku uchovávání? Upozorňujeme, že tato akce může vést k nevratnému smazání exportovaných souborů uložených v tomto pracovním prostoru, což je učiní nedostupnými ke stažení.</value>
 </data>
+  <data name="ExportEncryption_Warning" xml:space="preserve">
+  <value>Úprava nastavení šifrování zneplatní všechny dříve vygenerované exportní soubory, což vyžaduje vytvoření nových exportů</value>
+</data>
 </root>

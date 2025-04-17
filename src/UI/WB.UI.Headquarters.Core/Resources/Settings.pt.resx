@@ -477,4 +477,7 @@ Possíveis razões:
     <data name="ForceRunRetentionPolicy_Confirm" xml:space="preserve">
     <value>Tem certeza de que deseja executar forçadamente a política de retenção agora? Observe que esta ação pode resultar na exclusão irreversível de arquivos de exportação armazenados neste espaço de trabalho, tornando-os indisponíveis para download.</value>
 </data>
+  <data name="ExportEncryption_Warning" xml:space="preserve">
+  <value>Modificar as configurações de criptografia invalidará todos os arquivos de exportação gerados anteriormente, exigindo a criação de novas exportações.</value>
+</data>
 </root>
