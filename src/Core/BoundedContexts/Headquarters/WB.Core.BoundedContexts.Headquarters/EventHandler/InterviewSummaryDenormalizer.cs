@@ -52,6 +52,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IUpdateHandler<InterviewSummary, InterviewResumed>,
         IUpdateHandler<InterviewSummary, InterviewRestored>,
         IUpdateHandler<InterviewSummary, AnswerCommentResolved>,
+        IUpdateHandler<InterviewSummary, AnswerCommented>,
         IUpdateHandler<InterviewSummary, SubstitutionTitlesChanged>,
         IUpdateHandler<InterviewSummary, VariablesChanged>
     {
@@ -621,6 +622,14 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             {
                 interview.InterviewMode = @event.Payload.Mode;
                 interview.ReceivedByInterviewerAtUtc = null;
+            });
+        }
+
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<AnswerCommented> @event)
+        {
+            return this.UpdateInterviewSummary(state, @event.EventTimeStamp, interview =>
+            {
+                //updating last update date
             });
         }
     }
