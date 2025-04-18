@@ -57,7 +57,7 @@
 
                             <DataTables ref="table" :tableOptions="tableOptions"
                                 :addParamsToRequest="addParamsToRequest" :contextMenuItems="contextMenuItems"
-                                style="margin-left: 0px;">
+                                :supportContextMenu="!config.isObserving" style="margin-left: 0px;">
                             </DataTables>
                         </div>
                     </div>
@@ -118,6 +118,9 @@ export default {
             requestData.mapName = this.$config.model.fileName;
         },
         contextMenuItems({ rowData }) {
+            if (this.config.isObserving)
+                return null;
+
             return [{
                 name: this.$t("Pages.MapDetails_DelinkUser"),
                 callback: () => {
