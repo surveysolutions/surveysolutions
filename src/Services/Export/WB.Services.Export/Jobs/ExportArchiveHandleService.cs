@@ -58,17 +58,19 @@ namespace WB.Services.Export.Jobs
                 await DeleteFromLocalStorage(tenant, countToKeep, daysToKeep);
             }
         }
+        
 
         private async Task DeleteFromExternalStorage(TenantInfo tenant, int? countToKeep, int? daysToKeep)
         {
             var externalStoragePath = this.exportFileAccessor.GetExternalStoragePath(tenant, string.Empty);
             var items = await this.externalArtifactsStorage.ListAsync(externalStoragePath);
-            if (items == null) return;
 
             logger.LogInformation(
-                "Deleting export archives for tenant: {tenant} - there are total {count} files, daysToKeep: {daysToKeep}, countToKeep: {countToKeep}",
-                tenant, items.Count, daysToKeep, countToKeep);
+                "Deleting export archives for tenant: {tenant}, total files: {count}, daysToKeep: {daysToKeep}, countToKeep: {countToKeep}",
+                tenant, items?.Count, daysToKeep, countToKeep);
 
+            if (items == null) return;
+            
             int? countToDelete = countToKeep.HasValue ? items.Count - countToKeep.Value : null;
 
             foreach (var file in items.OrderBy(x => x.LastModified))
