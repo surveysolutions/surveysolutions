@@ -1767,15 +1767,9 @@
     <value>Mostrar clave</value>
   </data>
   <data name="Observer_Memo1" xml:space="preserve">
-    <value>Has iniciado sesión como usuario en el rol de Observador. Los usuarios en este rol pueden observar la operación de recolección de datos, pero no pueden realizar ningún cambio. Puedes explorar el contenido impersonando a otro usuario (supervisor o sede central), lo que te da acceso a entrevistas, asignaciones, informes y otros datos almacenados aquí.</value>
+    <value>Los observadores pueden monitorear la recolección de datos pero no pueden realizar cambios. Impersona a otro usuario (supervisor o sede central) para acceder a entrevistas, asignaciones, informes y otros datos. Los observadores no pueden crear asignaciones, establecer respuestas, comentar, aprobar/rechazar entrevistas, exportar datos o modificar datos del servidor.</value>
 </data>
   <data name="Observer_Memo2" xml:space="preserve">
-    <value>Los observadores no pueden crear asignaciones, establecer respuestas, dejar comentarios, aprobar o rechazar entrevistas, exportar datos ni realizar ninguna otra acción que cambie los datos almacenados en el servidor.</value>
-</data>
-  <data name="Observer_Memo3" xml:space="preserve">
-    <value>Para comenzar, haz clic en cualquier cuenta y selecciona "Ver como este usuario en modo de solo lectura".</value>
-</data>
-  <data name="Observer_Memo4" xml:space="preserve">
-    <value>Mientras navegas por el contenido del servidor, un enlace en la parte superior de cualquier página te permitirá regresar a tu cuenta.</value>
+    <value>Haz clic en una cuenta y selecciona "Ver como este usuario en modo de solo lectura" para comenzar. Usa el enlace amarillo en la parte superior para regresar a tu cuenta.</value>
 </data>
 </root>

@@ -1767,15 +1767,9 @@
     <value>Afficher la clé</value>
   </data>
   <data name="Observer_Memo1" xml:space="preserve">
-    <value>Vous vous êtes connecté en tant qu'utilisateur dans le rôle d'Observateur. Les utilisateurs dans ce rôle peuvent observer l'opération de collecte de données, mais ne peuvent pas apporter de modifications. Vous pouvez explorer le contenu en vous faisant passer pour un autre utilisateur (superviseur ou siège), ce qui vous donne accès aux entretiens, affectations, rapports et autres données stockées ici.</value>
+    <value>Les observateurs peuvent surveiller la collecte de données mais ne peuvent pas effectuer de modifications. Impersonnez un autre utilisateur (superviseur ou siège) pour accéder aux entretiens, affectations, rapports et autres données. Les observateurs ne peuvent pas créer d'affectations, définir des réponses, commenter, approuver/rejeter des entretiens, exporter des données ou modifier les données du serveur.</value>
 </data>
   <data name="Observer_Memo2" xml:space="preserve">
-    <value>Les observateurs ne peuvent pas créer d'affectations, définir des réponses, laisser des commentaires, approuver ou rejeter des entretiens, exporter des données ou effectuer toute autre action modifiant les données stockées sur le serveur.</value>
-</data>
-  <data name="Observer_Memo3" xml:space="preserve">
-    <value>Pour commencer, cliquez sur un compte et sélectionnez "Voir en tant qu'utilisateur en mode lecture seule".</value>
-</data>
-  <data name="Observer_Memo4" xml:space="preserve">
-    <value>En parcourant le contenu du serveur, un lien en haut de n'importe quelle page vous permettra de revenir à votre compte.</value>
+    <value>Cliquez sur un compte et sélectionnez "Voir en tant qu'utilisateur en mode lecture seule" pour commencer. Utilisez le lien jaune en haut pour revenir à votre compte.</value>
 </data>
 </root>

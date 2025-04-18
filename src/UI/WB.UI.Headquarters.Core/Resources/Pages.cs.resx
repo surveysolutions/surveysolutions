@@ -1763,15 +1763,9 @@
         <value>Kritické ověřování</value>
     </data>
   <data name="Observer_Memo1" xml:space="preserve">
-    <value>Přihlásili jste se jako uživatel v roli Pozorovatele. Uživatelé v této roli mohou sledovat proces sběru dat, ale nemohou provádět žádné změny. Obsah můžete prozkoumat tím, že se vydáváte za jiného uživatele (supervizora nebo centrálu), což vám umožní přístup k rozhovorům, úkolům, zprávám a dalším datům uloženým zde.</value>
+    <value>Pozorovatelé mohou sledovat sběr dat, ale nemohou provádět změny. Přihlaste se jako jiný uživatel (supervizor nebo centrála) pro přístup k rozhovorům, úkolům, zprávám a dalším datům. Pozorovatelé nemohou vytvářet úkoly, nastavovat odpovědi, komentovat, schvalovat/odmítat rozhovory, exportovat data nebo upravovat data serveru.</value>
 </data>
   <data name="Observer_Memo2" xml:space="preserve">
-    <value>Pozorovatelé nemohou vytvářet úkoly, nastavovat odpovědi, zanechávat komentáře, schvalovat nebo odmítat rozhovory, exportovat data ani provádět žádné jiné akce, které by měnily data uložená na serveru.</value>
-</data>
-  <data name="Observer_Memo3" xml:space="preserve">
-    <value>Chcete-li začít, klikněte na libovolný účet a vyberte "Zobrazit jako tento uživatel v režimu pouze pro čtení".</value>
-</data>
-  <data name="Observer_Memo4" xml:space="preserve">
-    <value>Při procházení obsahu serveru vám odkaz v horní části jakékoli stránky umožní vrátit se zpět k vašemu účtu.</value>
+    <value>Klikněte na účet a vyberte "Zobrazit jako tento uživatel v režimu pouze pro čtení" pro začátek. Použijte žlutý odkaz nahoře pro návrat k vašemu účtu.</value>
 </data>
 </root>

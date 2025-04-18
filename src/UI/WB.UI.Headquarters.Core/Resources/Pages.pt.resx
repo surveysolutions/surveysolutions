@@ -1767,15 +1767,9 @@
     <value>Mostrar chave</value>
   </data>
   <data name="Observer_Memo1" xml:space="preserve">
-    <value>Você fez login como um usuário no papel de Observador. Usuários neste papel podem observar a operação de coleta de dados, mas não podem fazer alterações. Você pode explorar o conteúdo se passando por outro usuário (supervisor ou sede), o que lhe dá acesso a entrevistas, atribuições, relatórios e outros dados armazenados aqui.</value>
+    <value>Os observadores podem monitorar a coleta de dados, mas não podem fazer alterações. Personifique outro usuário (supervisor ou sede) para acessar entrevistas, atribuições, relatórios e outros dados. Os observadores não podem criar atribuições, definir respostas, comentar, aprovar/rejeitar entrevistas, exportar dados ou modificar dados do servidor.</value>
 </data>
   <data name="Observer_Memo2" xml:space="preserve">
-    <value>Os observadores não podem criar atribuições, definir respostas, deixar comentários, aprovar ou rejeitar entrevistas, exportar dados ou realizar qualquer outra ação que altere os dados armazenados no servidor.</value>
-</data>
-  <data name="Observer_Memo3" xml:space="preserve">
-    <value>Para começar, clique em qualquer conta e selecione "Visualizar como este usuário no modo somente leitura".</value>
-</data>
-  <data name="Observer_Memo4" xml:space="preserve">
-    <value>Enquanto navega pelo conteúdo do servidor, um link na parte superior de qualquer página permitirá que você volte para sua conta.</value>
+    <value>Clique em uma conta e selecione "Visualizar como este usuário no modo somente leitura" para começar. Use o link amarelo na parte superior para retornar à sua conta.</value>
 </data>
 </root>

@@ -1768,15 +1768,9 @@
       <value>Show key</value>
   </data>
   <data name="Observer_Memo1" xml:space="preserve">
-      <value>You have logged in as a user in the Observer role. Users in this role can observe the data collection operation, but cannot introduce any changes. You can explore the contents by impersonating another user (supervisor or headquarters), which gives you access to interviews, assignments, reports and other data stored here.</value>
+      <value>Observers can monitor data collection but cannot make changes. Impersonate another user (supervisor or headquarters) to access interviews, assignments, reports, and other data. Observers cannot create assignments, set answers, comment, approve/reject interviews, export data, or modify server data.</value>
   </data>
   <data name="Observer_Memo2" xml:space="preserve">
-      <value>Observers cannot create assignments, set answers, leave comments, approve or reject interviews, export the data or perform any other actions that change the data stored on the server.</value>
-  </data>
-  <data name="Observer_Memo3" xml:space="preserve">
-      <value>To begin, click on any account and select 'View as this user in read only mode'.</value>
-  </data>
-  <data name="Observer_Memo4" xml:space="preserve">
-      <value>As you are browsing the server content, a link on the yellow background at the top of any page will allow you to return back to your account.</value>
+      <value>Click an account and select 'View as this user in read-only mode' to start. Use the yellow link at the top to return to your account.</value>
   </data>
 </root>
