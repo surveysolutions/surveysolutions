@@ -195,7 +195,7 @@
     display: inline;
 }
 
-.block-filter .error {
+.error {
     color: red;
 }
 </style>

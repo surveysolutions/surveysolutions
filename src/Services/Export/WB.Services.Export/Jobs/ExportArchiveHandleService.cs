@@ -118,14 +118,14 @@ namespace WB.Services.Export.Jobs
             }
         }
 
-        private async Task DeleteFile(string path, DateTime lastModified, TenantInfo tenant, int? countToDelete, 
+        private async Task DeleteFile(string path, DateTime lastModifiedUtc, TenantInfo tenant, int? countToDelete, 
             int? daysToKeep, Func<string, Task> deleteAction)
         {
             try
             {
                 if (
                     (!countToDelete.HasValue && !daysToKeep.HasValue)
-                    || (daysToKeep.HasValue && lastModified < DateTime.UtcNow.AddDays(-daysToKeep.Value)) 
+                    || (daysToKeep.HasValue && lastModifiedUtc < DateTime.UtcNow.AddDays(-daysToKeep.Value)) 
                     || countToDelete is > 0)
                 {
                     await deleteAction(path);
