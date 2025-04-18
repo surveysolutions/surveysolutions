@@ -91,6 +91,12 @@ namespace WB.UI.Headquarters.Controllers
                 ShowAddUser = authorizedUser.IsAdministrator,
                 ShowInstruction = !authorizedUser.IsObserving && !authorizedUser.IsObserver,
                 ShowContextMenu = authorizedUser.IsObserver,
+                CurrentUser = new
+                {
+                    IsObserver = authorizedUser.IsObserver,
+                    IsObserving = authorizedUser.IsObserving,
+                    IsAdministrator = authorizedUser.IsAdministrator
+                }
             });
         }
 
