@@ -123,7 +123,10 @@ namespace WB.Services.Export.Jobs
         {
             try
             {
-                if ((daysToKeep.HasValue && lastModified < DateTime.UtcNow.AddDays(-daysToKeep.Value)) || countToDelete is > 0)
+                if (
+                    (!countToDelete.HasValue && !daysToKeep.HasValue)
+                    || (daysToKeep.HasValue && lastModified < DateTime.UtcNow.AddDays(-daysToKeep.Value)) 
+                    || countToDelete is > 0)
                 {
                     await deleteAction(path);
                     logger.LogInformation("Export archive {path} deleted for tenant:{tenant}", path, tenant);
