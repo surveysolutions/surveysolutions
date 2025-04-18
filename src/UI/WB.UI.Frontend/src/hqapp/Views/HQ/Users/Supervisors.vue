@@ -9,6 +9,13 @@
                     <ol v-if="!user.isObserver && !user.isObserving" class="list-unstyled">
                         <li>{{ $t('Pages.Users_Supervisors_Instruction2') }}</li>
                     </ol>
+
+                    <ol v-if="user.isObserver && !user.isObserving" class="list-unstyled">
+                        <li>{{ $t('Pages.Observer_Memo1') }}</li>
+                        <li>{{ $t('Pages.Observer_Memo2') }}</li>
+                        <li>{{ $t('Pages.Observer_Memo3') }}</li>
+                        <li>{{ $t('Pages.Observer_Memo4') }}</li>
+                    </ol>
                 </div>
             </div>
         </template>

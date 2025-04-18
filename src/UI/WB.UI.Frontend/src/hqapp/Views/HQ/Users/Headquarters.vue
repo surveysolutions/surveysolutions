@@ -1,26 +1,23 @@
 <template>
-    <HqLayout :hasFilter="false"
-        :title="title"
-        :topicButtonRef="this.model.createUrl"
+    <HqLayout :hasFilter="false" :title="title" :topicButtonRef="this.model.createUrl"
         :topicButton="$t('Users.AddHeadquarters')">
-        <div slot='subtitle'>
+        <template v-slot:subtitle>
             <div class="neighbor-block-to-search">
-                <ol v-if="this.model.showInstruction"
-                    class="list-unstyled">
+                <ol v-if="this.model.showInstruction" class="list-unstyled">
                     <li>{{ $t('Pages.Users_Headquarters_Instruction1') }}</li>
                     <li>{{ $t('Pages.Users_Headquarters_Instruction2') }}</li>
                 </ol>
+                <ol v-if="user.isObserver && !user.isObserving" class="list-unstyled">
+                    <li>{{ $t('Pages.Observer_Memo1') }}</li>
+                    <li>{{ $t('Pages.Observer_Memo2') }}</li>
+                    <li>{{ $t('Pages.Observer_Memo3') }}</li>
+                    <li>{{ $t('Pages.Observer_Memo4') }}</li>
+                </ol>
             </div>
-        </div>
+        </template>
 
-        <DataTables
-            ref="table"
-            :tableOptions="tableOptions"
-            @ajaxComplete="onTableReload"
-            :contextMenuItems="contextMenuItems"
-            :supportContextMenu="model.showContextMenu"
-            noSelect
-            :noPaging="false">
+        <DataTables ref="table" :tableOptions="tableOptions" @ajaxComplete="onTableReload"
+            :contextMenuItems="contextMenuItems" :supportContextMenu="model.showContextMenu" noSelect :noPaging="false">
         </DataTables>
 
     </HqLayout>
@@ -35,7 +32,7 @@ import { DateFormats } from '~/shared/helpers'
 export default {
     data() {
         return {
-            usersCount : '',
+            usersCount: '',
         }
     },
     mounted() {
@@ -43,14 +40,14 @@ export default {
     },
     methods: {
         loadData() {
-            if (this.$refs.table){
+            if (this.$refs.table) {
                 this.$refs.table.reload()
             }
         },
         onTableReload(data) {
             this.usersCount = formatNumber(data.recordsTotal)
         },
-        contextMenuItems({rowData, rowIndex}) {
+        contextMenuItems({ rowData, rowIndex }) {
             if (!this.model.showContextMenu)
                 return null
 
@@ -70,8 +67,11 @@ export default {
         model() {
             return this.$config.model
         },
+        user() {
+            return this.model.currentUser
+        },
         title() {
-            return this.$t('Users.HeadquartersCountDescription', {count: this.usersCount})
+            return this.$t('Users.HeadquartersCountDescription', { count: this.usersCount })
         },
         tableOptions() {
             var self = this
@@ -83,7 +83,7 @@ export default {
                         name: 'UserName',
                         title: this.$t('Users.UserName'),
                         className: 'nowrap',
-                        render: function(data, type, row) {
+                        render: function (data, type, row) {
                             return `<a href='${self.model.editUrl}/${row.userId}'>${data}</a>`
                         },
                     },
@@ -93,7 +93,7 @@ export default {
                         className: 'date',
                         title: this.$t('Users.CreationDate'),
                         tooltip: this.$t('Users.AccountCreationDateTooltip'),
-                        render: function(data, type, row) {
+                        render: function (data, type, row) {
                             var localDate = moment.utc(data).local()
                             return localDate.format(DateFormats.dateTimeInList)
                         },
@@ -103,7 +103,7 @@ export default {
                         name: 'Email',
                         className: 'date',
                         title: this.$t('Users.HeadquartersEmail'),
-                        render: function(data, type, row) {
+                        render: function (data, type, row) {
                             return data ? '<a href=\'mailto:' + data + '\'>' + data + '</a>' : ''
                         },
                     },

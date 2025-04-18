@@ -3332,5 +3332,29 @@ namespace WB.UI.Headquarters.Resources {
                 return ResourceManager.GetString("ShowKey", resourceCulture);
             }
         }
+        
+        public static string Observer_Memo1 {
+            get {
+                return ResourceManager.GetString("Observer_Memo1", resourceCulture);
+            }
+        }
+        
+        public static string Observer_Memo2 {
+            get {
+                return ResourceManager.GetString("Observer_Memo2", resourceCulture);
+            }
+        }
+        
+        public static string Observer_Memo3 {
+            get {
+                return ResourceManager.GetString("Observer_Memo3", resourceCulture);
+            }
+        }
+        
+        public static string Observer_Memo4 {
+            get {
+                return ResourceManager.GetString("Observer_Memo4", resourceCulture);
+            }
+        }
     }
 }
