@@ -117,31 +117,31 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
         public void ExportEncryptionChanged(bool enabled)
         {
             this.Append(LogEntryType.ExportEncryptionChanged, "Export encryption", "changed",
-                $"{(enabled ? "enabled" : "disabled")}'");
+                $"{(enabled ? "enabled" : "disabled")}");
         }
 
         public void RetentionPolicyChanged(bool enabled)
         {
             this.Append(LogEntryType.RetentionPolicyStateChanged, "Retention policy state", "changed",
-                $"{(enabled ? "enabled" : "disabled")}'");
+                $"{(enabled ? "enabled" : "disabled")}");
         }
         
         public void RetentionPolicyFilesToKeepChanged(int? count)
         {
             this.Append(LogEntryType.RetentionPolicyFilesToKeepChanged, "Retention policy files to keep", "changed",
-                $"{(count == null ? "empty" : count)}'");
+                $"{(count == null ? "empty" : count)}");
         }
         public void RetentionPolicyDaysToKeepChanged(int? count)
         {
             this.Append(LogEntryType.RetentionPolicyDaysToKeepChanged, "Retention policy days to keep", "changed",
-                $"{(count == null ? "empty" : count)}'");
+                $"{(count == null ? "empty" : count)}");
         }
         
         public void UserMovedToAnotherTeam(string interviewerName, string newSupervisorName,
             string previousSupervisorName)
         {
             this.Append(LogEntryType.UserMovedToAnotherTeam, $"User {interviewerName}", "moved",
-                $"From team {previousSupervisorName}' to {newSupervisorName}");
+                $"From team {previousSupervisorName} to {newSupervisorName}");
         }
 
         public void WorkspaceCreated(string workspaceName, string displayName)
