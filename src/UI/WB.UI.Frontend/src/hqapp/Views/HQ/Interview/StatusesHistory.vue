@@ -4,9 +4,9 @@
             <div>
                 <h3>{{ $t("Pages.HistoryOfStatuses_Interview") }} {{ $config.model.key }}</h3>
                 <p>
-                    {{ $t('Details.Responsible') }}: <span
-                        v-bind:class="[$config.model.responsibleRole.toLowerCase()]">{{
-                            $config.model.responsible }}</span>
+                    {{ $t('Details.Responsible') }}: <span v-bind:class="[$config.model.responsibleRole.toLowerCase()]">
+                        <a :href="$config.model.responsibleProfileUrl
+                            ">{{ $config.model.responsible }}</a></span>
                 </p>
             </div>
         </template>
