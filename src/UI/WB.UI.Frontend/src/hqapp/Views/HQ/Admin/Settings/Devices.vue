@@ -73,7 +73,8 @@
                                         min_value: 1,
                                         max_value: 1000,
                                     }" :validateOnChange="true" :validateOnInput="true" name="accuracy"
-                                    label="Accuracy" id="interviewerGeographyQuestionAccuracyInMeters" type="number" />
+                                    label="Accuracy" id="interviewerGeographyQuestionAccuracyInMeters" type="number"
+                                    onkeypress="return (event.charCode != 8 && event.charCode == 0 || (event.charCode >= 48 && event.charCode <= 57))" />
                             </div>
                             <button type="button" class="btn btn-success" :disabled="geographyQuestionAccuracyInMetersModel ==
                                 geographyQuestionAccuracyInMetersCancelModel ||
@@ -116,7 +117,8 @@
                                         min_value: 5,
                                         max_value: 1000,
                                     }" :validateOnChange="true" :validateOnInput="true" label="Period"
-                                    id="interviewerGeographyQuestionPeriodInSeconds" name="period" type="number" />
+                                    id="interviewerGeographyQuestionPeriodInSeconds" name="period" type="number"
+                                    onkeypress="return (event.charCode != 8 && event.charCode == 0 || (event.charCode >= 48 && event.charCode <= 57))" />
                             </div>
                             <button type="button" class="btn btn-success" :disabled="geographyQuestionPeriodInSecondsModel ==
                                 geographyQuestionPeriodInSecondsCancelModel ||

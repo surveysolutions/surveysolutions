@@ -73,13 +73,13 @@
                                     min_value: 1,
                                     max_value: 1000
                                 }" :validateOnChange="true" :validateOnInput="true" name="Days" label="Days"
-                                    id="retentionInDays" type="number" :disabled="!isRetentionEnabledModel" />
+                                    id="retentionInDays" type="number" :disabled="!isRetentionEnabledModel"
+                                    onkeypress="return (event.charCode != 8 && event.charCode == 0 || (event.charCode >= 48 && event.charCode <= 57))" />
                             </div>
-                            <button type="button" class="btn btn-success" :disabled="inDaysModel ==
-                                inDaysCancelModel ||
-                                (inDaysModel !== '' && inDaysModel < 1) ||
-                                (inDaysModel !== '' && inDaysModel > 1000) ||
-                                meta.valid == false
+                            <button type="button" class="btn btn-success" :disabled="inDaysModel == inDaysCancelModel
+                                || (inDaysModel !== '' && inDaysModel < 1)
+                                || (inDaysModel !== '' && inDaysModel > 1000)
+                                || meta.valid == false
                                 " @click="updateInDays">
                                 {{ $t('Common.Save') }}
                             </button>
@@ -114,7 +114,8 @@
                                     min_value: 1,
                                     max_value: 100000,
                                 }" :validateOnChange="true" :validateOnInput="true" label="Files" id="Files"
-                                    name="Files" type="number" :disabled="!isRetentionEnabledModel" />
+                                    name="Files" type="number" :disabled="!isRetentionEnabledModel"
+                                    onkeypress="return (event.charCode != 8 && event.charCode == 0 || (event.charCode >= 48 && event.charCode <= 57))" />
                             </div>
                             <button type="button" class="btn btn-success" :disabled="inCountLimitModel ==
                                 inCountLimitCancelModel ||
