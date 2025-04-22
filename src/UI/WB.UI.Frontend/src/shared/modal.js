@@ -25,31 +25,30 @@ export default {
         });
     },
 
-    confirm(message) {
-        return new Promise((resolve) => {
-            this.showModal({
-                title: '',
-                message,
-                buttons: {
-                    confirm: { label: this.translations.CONFIRM, className: 'btn-primary', callback: () => resolve(true) },
-                    cancel: { label: this.translations.CANCEL, className: 'btn-secondary', callback: () => resolve(false) }
-                },
-                closeButton: true,
-                onClose: () => resolve(false)
-            });
-        });
-    },
-
     confirm(message, resultCallback) {
+        var callbackWasCalled = false;
         this.showModal({
             title: '',
             message,
             buttons: {
-                confirm: { label: this.translations.CONFIRM, className: 'btn-primary', callback: () => resultCallback(true) },
-                cancel: { label: this.translations.CANCEL, className: 'btn-secondary', callback: () => resultCallback(false) }
+                confirm: {
+                    label: this.translations.CONFIRM, className: 'btn-primary', callback: () => {
+                        callbackWasCalled = true;
+                        resultCallback(true)
+                    }
+                },
+                cancel: {
+                    label: this.translations.CANCEL, className: 'btn-secondary', callback: () => {
+                        callbackWasCalled = true;
+                        resultCallback(false)
+                    }
+                }
             },
             closeButton: true,
-            onClose: () => resultCallback(false)
+            onClose: () => {
+                if (!callbackWasCalled)
+                    resultCallback(false)
+            }
         });
     },
 

@@ -729,9 +729,9 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
-        public static string RetentionPolicyEneblingConfirm {
+        public static string RetentionPolicyEnablingConfirm {
             get {
-                return ResourceManager.GetString("RetentionPolicyEneblingConfirm", resourceCulture);
+                return ResourceManager.GetString("RetentionPolicyEnablingConfirm", resourceCulture);
             }
         }
         

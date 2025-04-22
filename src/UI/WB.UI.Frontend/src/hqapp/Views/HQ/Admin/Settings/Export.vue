@@ -4,7 +4,6 @@
             <div class="col-sm-9">
                 <h2>{{ $t('Settings.ExportEncryption_Title') }}</h2>
                 <p>{{ $t('Settings.ExportEncryption_Description') }}</p>
-                <p class="error">{{ $t('Settings.ExportEncryption_Warning') }}</p>
             </div>
             <div class="col-sm-9">
                 <div class="block-filter">
@@ -298,52 +297,55 @@ export default {
     methods: {
         changeEncryptionEnabled() {
             var self = this
-            modal.dialog({
-                closeButton: false,
-                message: self.encryptionEnabledModel
-                    ? self.$t('Settings.ChangeStateConfirm')
-                    : self.$t('Settings.ChangeStateDisabledConfirm'),
-                buttons: {
-                    cancel: {
-                        label: self.$t('Common.No'),
-                        callback: () => {
-                            self.encryptionEnabledModel = !self.encryptionEnabledModel
-                        },
-                    },
-                    success: {
-                        label: self.$t('Common.Yes'),
-                        callback: async () => {
-                            const response =
-                                await self.$hq.ExportSettings.setEncryption(
-                                    self.encryptionEnabledModel,
-                                )
+
+            modal.confirm(self.encryptionEnabledModel
+                ? self.$t('Settings.ChangeStateConfirm')
+                : self.$t('Settings.ChangeStateDisabledConfirm'), result => {
+                    if (result) {
+                        self.$hq.ExportSettings.setEncryption(
+                            self.encryptionEnabledModel,
+                        ).then(response => {
+
+
+
+
+
+
+
+
+
+
+
                             self.encryptionEnabledModel = response.data.isEnabled
                             self.encryptionPasswordModel = response.data.password
-                        },
-                    },
-                },
-            })
+                        })
+                        return
+                    } else {
+                        self.encryptionEnabledModel = !self.encryptionEnabledModel
+                        return
+                    }
+                })
         },
         regenPassword() {
             const self = this
-            modal.dialog({
-                closeButton: false,
-                message: self.$t('Settings.RegeneratePasswordConfirm'),
-                buttons: {
-                    cancel: {
-                        label: self.$t('Common.No'),
-                    },
 
-                    success: {
-                        label: self.$t('Common.Yes'),
-                        callback: async () => {
-                            const response =
-                                await this.$hq.ExportSettings.regenPassword()
-                            this.encryptionPasswordModel = response.data.password
-                            this.encryptionEnabledModel = response.data.isEnabled
-                        },
-                    },
-                },
+
+
+
+
+
+
+
+            modal.confirm(self.$t('Settings.RegeneratePasswordConfirm'), result => {
+                if (result) {
+                    self.$hq.ExportSettings.regenPassword(
+                        self.encryptionEnabledModel,
+                    ).then(response => {
+                        this.encryptionPasswordModel = response.data.password
+                        this.encryptionEnabledModel = response.data.isEnabled
+                    })
+                    return
+                }
             })
         },
         removeExportCache() {
@@ -478,23 +480,23 @@ export default {
         changeRetentionEnabled() {
             if (this.isRetentionEnabledModel) {
                 var self = this
-                modal.dialog({
-                    closeButton: false,
-                    message: self.$t('Settings.RetentionPolicyEneblingConfirm'),
-                    buttons: {
-                        cancel: {
-                            label: self.$t('Common.No'),
-                            callback: () => {
-                                self.isRetentionEnabledModel = !self.isRetentionEnabledModel
-                            },
-                        },
-                        success: {
-                            label: self.$t('Common.Yes'),
-                            callback: async () => {
-                                this.$hq.ExportSettings.changeRetentionState(this.isRetentionEnabledModel)
-                            },
-                        },
-                    },
+
+                modal.confirm(self.$t('Settings.RetentionPolicyEnablingConfirm'), result => {
+                    if (result) {
+                        self.$hq.ExportSettings.changeRetentionState(
+                            self.isRetentionEnabledModel,
+                        )
+                        return
+                    }
+                    else {
+                        self.isRetentionEnabledModel = !self.isRetentionEnabledModel
+                        return
+                    }
+
+
+
+
+
                 })
             }
             else {

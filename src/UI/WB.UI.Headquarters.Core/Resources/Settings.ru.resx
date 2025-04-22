@@ -477,7 +477,7 @@
     <data name="EnableFileRetention" xml:space="preserve">
     <value>Включить политику хранения</value>
 </data>
-    <data name="RetentionPolicyEneblingConfirm" xml:space="preserve">
+    <data name="RetentionPolicyEnablingConfirm" xml:space="preserve">
   <value>Вы уверены, что хотите включить политику хранения? Экспортированные файлы данных могут быть удалены.</value>
 </data>
     <data name="ForceRunRetentionPolicy" xml:space="preserve">
