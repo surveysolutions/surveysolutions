@@ -57,7 +57,7 @@ namespace WB.UI.Headquarters.Models.Api
         public int Length
         {
             get => length;
-            set => length = value == 0 ? 10 : Math.Min(value, 100);
+            set => length = value <= 0 ? 10 : Math.Min(value, 100);
         }
 
         /// <summary>
