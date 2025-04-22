@@ -33,14 +33,13 @@
 
         <template v-slot:modals>
             <Confirm ref="confirmRestart" id="restartModal">
-                {{ $t("Pages.InterviewerHq_RestartConfirm") }}
-                <FilterBlock>
-                    <div class="form-group">
-                        <div class="field">
-                            <input class="form-control with-clear-btn" type="text" v-model="restart_comment" />
-                        </div>
-                    </div>
-                </FilterBlock>
+                <div>
+                    <label for="txtRestartInterviewComment">
+                        {{ $t('Pages.InterviewerHq_RestartConfirm') }}:
+                    </label>
+                    <textarea class="form-control" rows="10" maxlength="200" name="txtRestartInterviewComment"
+                        id="restartInterviewComment" v-model="restart_comment"></textarea>
+                </div>
             </Confirm>
 
             <Confirm ref="confirmDiscard" id="discardConfirm">
