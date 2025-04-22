@@ -76,6 +76,8 @@ namespace WB.UI.Headquarters.Controllers.Api
         {
             var isInterviewer = this.authorizedUser.IsInterviewer;
                        
+            request.Length = request.Length == 0 ? 20 : Math.Min(request.Length, 100);
+            
             var input = new AssignmentsInputModel
             {
                 Limit = request.PageSize,
@@ -95,7 +97,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                 SupervisorId = request.TeamId,
                 Id = request.Id
             };
-
+            
             if (this.authorizedUser.IsSupervisor)
             {
                 input.SupervisorId = this.authorizedUser.Id;
