@@ -464,7 +464,7 @@ Possible reasons:
     <data name="EnableFileRetention" xml:space="preserve">
       <value>Enable retention policy</value>
   </data>
-  <data name="RetentionPolicyEneblingConfirm" xml:space="preserve">
+  <data name="RetentionPolicyEnablingConfirm" xml:space="preserve">
     <value>Are you sure you want to turn retention policy on? Export data files could be deleted.</value>
   </data>
     <data name="ForceRunRetentionPolicy" xml:space="preserve">

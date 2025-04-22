@@ -459,7 +459,7 @@
     <data name="EnableFileRetention" xml:space="preserve">
     <value>Povolit politiku uchovávání</value>
 </data>
-    <data name="RetentionPolicyEneblingConfirm" xml:space="preserve">
+    <data name="RetentionPolicyEnablingConfirm" xml:space="preserve">
   <value>Opravdu chcete zapnout politiku uchovávání? Exportované datové soubory mohou být smazány.</value>
 </data>
     <data name="ForceRunRetentionPolicy" xml:space="preserve">

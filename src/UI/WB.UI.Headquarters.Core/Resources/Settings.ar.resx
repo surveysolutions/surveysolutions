@@ -464,7 +464,7 @@
     <data name="EnableFileRetention" xml:space="preserve">
     <value>تفعيل سياسة الاحتفاظ</value>
 </data>
-    <data name="RetentionPolicyEneblingConfirm" xml:space="preserve">
+    <data name="RetentionPolicyEnablingConfirm" xml:space="preserve">
   <value>هل أنت متأكد أنك تريد تفعيل سياسة الاحتفاظ؟ قد يتم حذف ملفات البيانات المصدرة.</value>
 </data>
     <data name="ForceRunRetentionPolicy" xml:space="preserve">

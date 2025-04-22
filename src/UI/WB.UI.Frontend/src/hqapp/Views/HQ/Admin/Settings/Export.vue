@@ -480,7 +480,7 @@ export default {
             if (this.isRetentionEnabledModel) {
                 var self = this
 
-                modal.confirm(self.$t('Settings.RetentionPolicyEneblingConfirm'), result => {
+                modal.confirm(self.$t('Settings.RetentionPolicyEnablingConfirm'), result => {
                     if (result) {
                         self.$hq.ExportSettings.changeRetentionState(
                             self.isRetentionEnabledModel,
