@@ -76,8 +76,6 @@ namespace WB.UI.Headquarters.Controllers.Api
         {
             var isInterviewer = this.authorizedUser.IsInterviewer;
                        
-            request.Length = request.Length == 0 ? 20 : Math.Min(request.Length, 100);
-            
             var input = new AssignmentsInputModel
             {
                 Limit = request.PageSize,
