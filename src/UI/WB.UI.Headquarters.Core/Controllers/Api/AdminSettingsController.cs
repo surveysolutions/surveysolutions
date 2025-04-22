@@ -317,7 +317,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             }
             catch (EmailServiceException e)
             {
-                logger.LogError(e, "Error when send test email to {Email}", model.Email);
+                logger.LogError(e, "Error when send test email to {Email}", model.Email.Replace(Environment.NewLine, ""));
                 return StatusCode((int)e.StatusCode, new
                 {
                     Success = false,
@@ -327,7 +327,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             }
             catch (Exception e)
             {
-                logger.LogError(e, "Error when send test email to {Email}", model.Email);
+                logger.LogError(e, "Error when send test email to {Email}", model.Email.Replace(Environment.NewLine, ""));
                 return StatusCode(StatusCodes.Status400BadRequest, new
                 {
                     Success = false,
