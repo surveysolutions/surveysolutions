@@ -69,11 +69,15 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
             bool doesContainField = false;
             try
             {
-                doesContainField = ctx.Selection.Field.Arguments.ContainsField("workspace");
-                if (!doesContainField)
+                var selection = ctx.Operation.FirstOrDefault()?.Selections.FirstOrDefault();
+                if (selection == null)
+                    return false;
+                
+                doesContainField = selection.Arguments.TryGetValue("workspace", out var argumentValue);
+                if (!doesContainField || argumentValue == null)
                     return false;
 
-                workspace = ctx.ArgumentValue<string>("workspace");
+                workspace = argumentValue.Value as string;
             }
             catch (GraphQLException)
             {

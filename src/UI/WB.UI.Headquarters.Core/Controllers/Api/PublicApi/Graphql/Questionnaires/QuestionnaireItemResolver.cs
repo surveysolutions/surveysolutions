@@ -39,7 +39,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Questionnaires
                 .Select(x => new {Id = x.EntityId, IncludedInReportingAtUtc = x.IncludedInReportingAtUtc})
                 .ToDictionary(x=>x.Id, x=> x.IncludedInReportingAtUtc);
             
-            resolverContext.ScopedContextData = resolverContext.ScopedContextData.SetItem("language", language);
+            if (!resolverContext.ContextData.ContainsKey("language"))
+                resolverContext.ContextData.Add("language", language);
 
             return from q in questionnaire.GetAllEntities()
                 let entityType = EntityTypeHelper.GetEntityType(q, questionnaire)

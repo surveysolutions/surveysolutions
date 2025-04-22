@@ -611,7 +611,7 @@ export default {
                 closeButton: true,
                 onEscape: true,
                 title:
-                    '<h2>' + self.$t('Pages.ConfirmationNeededTitle') + '</h2>',
+                    '<h2 style="display:inline">' + self.$t('Pages.ConfirmationNeededTitle') + '</h2>',
                 message:
                     `<p style="color: red;"> ${self.$t(
                         'Settings.RemoveExportCache_Warning',
@@ -675,17 +675,17 @@ export default {
             }
         },
         showAlert(message) {
-            modal.alert({
+            modal.dialog({
                 message: message,
-                callback: () => {
-                    location.reload()
-                },
                 onEscape: false,
                 closeButton: false,
                 buttons: {
                     ok: {
                         label: this.$t('WebInterviewUI.Reload'),
                         className: 'btn-success',
+                        callback: () => {
+                            location.reload()
+                        },
                     },
                 },
             })

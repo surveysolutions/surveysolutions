@@ -1,3 +1,5 @@
+@use "sass:color";
+
 .aside-menu {
     @include absolute(5px, 10px, null, null);
     z-index: 1;
@@ -13,11 +15,11 @@
         &:active,
         &:active:focus {
             span {
-                background-color: darken($gray-form, 10%);
+                background-color: color.adjust($gray-form, $lightness: -10%);
 
                 &:before,
                 &:after {
-                    background-color: darken($gray-form, 10%);
+                    background-color: color.adjust($gray-form, $lightness: -10%);
                 }
             }
         }
@@ -67,7 +69,7 @@
 
                 &:before,
                 &:after {
-                    background-color: darken($gray-form, 20%);
+                    background-color: color.adjust($gray-form, $lightness: -20%);
                 }
             }
         }

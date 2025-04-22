@@ -19,7 +19,7 @@
         "postcss": "^8.4.39",
         "rimraf": "^6.0.1",
         "sass": "1.55.0",
-        "vite": "6.1.1",
+        "vite": "6.2.6",
         "xmldoc": "^1.3.0"
     },
     "scripts": {
@@ -44,7 +44,7 @@
         "@vee-validate/rules": "^4.15.0",
         "@vueuse/core": "^12.5.0",
         "ace-builds": "^1.37.5",
-        "axios": "^1.7.9",
+        "axios": "1.8.2",
         "bootstrap": "^5.3.3",
         "bootstrap-less": "^3.3.8",
         "bootstrap-select": "^1.13.18",
@@ -82,7 +82,8 @@
         "xss": "^1.0.15"
     },
     "overrides": {
-        "@babel/traverse": ">=7.23.3",
+        "@babel/runtime": ">=7.26.10",
+        "@babel/traverse": ">=7.26.10",
         "async": ">=3.2.3",
         "browserslist": ">=4.20.3",
         "braces": ">=3.0.3",

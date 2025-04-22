@@ -57,6 +57,19 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
                     x.Use<WorkspaceGraphQlMiddleware>();
                 })
                 .AddAuthorization()
+                .ModifyOptions(o =>
+                {
+                    // this property is required to save workspace context in the graphql request
+                    o.DefaultQueryDependencyInjectionScope = DependencyInjectionScope.Request;
+                    o.DefaultMutationDependencyInjectionScope = DependencyInjectionScope.Request;
+
+                    // this property is required to execute dataloaders one by one without connection conflicts
+                    o.DefaultResolverStrategy = ExecutionStrategy.Serial;
+                })
+                .ModifyRequestOptions(opt =>
+                {
+                    opt.IncludeExceptionDetails = false;
+                })
                 .ModifyPagingOptions(o => { o.MaxPageSize = 200; })
                 .ModifyCostOptions(o => { o.EnforceCostLimits = false; })
                 .AddQueryType(x => x.Name("HeadquartersQuery"))
@@ -103,6 +116,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql
             var options = new GraphQLServerOptions { EnableSchemaRequests = true };
             //options.Tool.Credentials = DefaultCredentials.Include;
             options.Tool.DisableTelemetry = true;
+            options.Tool.ServeMode = GraphQLToolServeMode.Embedded;
             
             return app.UseEndpoints(x => x.MapGraphQL().WithOptions(options));
         }

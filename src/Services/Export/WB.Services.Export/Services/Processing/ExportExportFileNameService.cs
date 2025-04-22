@@ -65,10 +65,16 @@ namespace WB.Services.Export.Services.Processing
         {
             var statusSuffix = exportSettings.Status == null ? "All" : exportSettings.Status.ToString();
 
-            var fromDatePrefix = exportSettings.FromDate == null || exportSettings.ExportFormat == DataExportFormat.Binary 
+            var fromDatePrefix = exportSettings.FromDate == null 
+                                 || exportSettings.ExportFormat == DataExportFormat.Binary 
+                                 || exportSettings.ExportFormat == DataExportFormat.AudioAudit
                 ? "" : $"_{exportSettings.FromDate.Value:yyyyMMddTHHmm}Z";
-            var toDatePrefix = exportSettings.ToDate == null || exportSettings.ExportFormat == DataExportFormat.Binary 
+            var toDatePrefix = exportSettings.ToDate == null 
+                               || exportSettings.ExportFormat == DataExportFormat.Binary 
+                               || exportSettings.ExportFormat == DataExportFormat.AudioAudit
                 ? "" : $"_{exportSettings.ToDate.Value:yyyyMMddTHHmm}Z";
+            
+            var pardataReduced = exportSettings.ExportFormat == DataExportFormat.Paradata && exportSettings.ParadataReduced == true ? "_Reduced" : "";
 
             string translationName = string.Empty;
             if (exportSettings.Translation.HasValue)
@@ -88,7 +94,7 @@ namespace WB.Services.Export.Services.Processing
             string metaSuffix = exportSettings.IncludeMeta != false ? "" : "_no-meta";
             
             var archiveName = $"{questionnaireNamePrefixOverride ?? exportSettings.QuestionnaireId.ToString()}_" +
-                              $"{exportSettings.ExportFormat}_{statusSuffix}{fromDatePrefix}{toDatePrefix}{translationName}{metaSuffix}.zip";
+                              $"{exportSettings.ExportFormat}{pardataReduced}_{statusSuffix}{fromDatePrefix}{toDatePrefix}{translationName}{metaSuffix}.zip";
 
             return archiveName;
         }

@@ -206,7 +206,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             ManyToOne(x => x.Entity, mtm =>
             {
                 mtm.Lazy(LazyRelation.Proxy);
-                mtm.Column("entity_id");                
+                mtm.Column("entity_id");
             });
 
             ManyToOne(x => x.InterviewSummary, mtm => mtm.Column("interview_id"));

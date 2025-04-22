@@ -39,7 +39,7 @@
     <PackageReference Include="NHibernate" Version="5.5.2" />
     <PackageReference Include="Npgsql" Version="9.0.3" />
     <PackageReference Include="prometheus-net" Version="8.2.1" />
-    <PackageReference Include="SixLabors.Fonts" Version="2.0.6" />
+    <PackageReference Include="SixLabors.Fonts" Version="2.1.2" />
     <PackageReference Include="SkiaSharp" Version="3.116.0" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.6.0" />
     <PackageReference Include="System.IO.Packaging" Version="9.0.2" />

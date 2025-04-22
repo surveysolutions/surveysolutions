@@ -1,3 +1,5 @@
+@use "sass:color";
+
 html body.portal-landing-page{
     padding: 0;
     background-image: none;
@@ -107,7 +109,7 @@ html body.portal-landing-page{
                 }
             }
             &:hover,&:focus{
-                background-color: lighten(#ebf4f2, 3%);
+                background-color: color.adjust(#ebf4f2, $lightness: 3%);
                 text-decoration: none;
             }
         }
