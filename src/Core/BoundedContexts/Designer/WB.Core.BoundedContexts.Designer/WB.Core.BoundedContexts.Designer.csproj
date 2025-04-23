@@ -17,20 +17,6 @@
   </PropertyGroup>
   <ItemGroup>
     <!--Assemblies that are referenced during conditions assembly compilation-->
-    <PackageReference Include="System.Collections" Version="4.3.0" />
-    <PackageReference Include="System.Globalization" Version="4.3.0" />
-    <PackageReference Include="System.IO" Version="4.3.0" />
-    <PackageReference Include="System.Linq" Version="4.3.0" />
-    <PackageReference Include="System.Linq.Expressions" Version="4.3.0" />
-    <PackageReference Include="System.Reflection" Version="4.3.0" />
-    <PackageReference Include="System.Runtime" Version="4.3.1" />
-    <PackageReference Include="System.Runtime.Extensions" Version="4.3.0" />
-    <PackageReference Include="System.Runtime.Numerics" Version="4.3.0" />
-    <PackageReference Include="System.Text.Encoding.Extensions" Version="4.3.0" />
-    <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
-  </ItemGroup>  
-  <ItemGroup>
-    <!--Assemblies that are referenced during conditions assembly compilation-->
     <EmbeddedResource Include="$(NuGetPackageRoot)\system.collections\4.3.0\ref\netstandard1.3\System.Collections.dll" Visible="false" />
     <EmbeddedResource Include="$(NugetPackageRoot)\system.linq\4.3.0\ref\netstandard1.0\System.Linq.dll" Visible="false" />
     <EmbeddedResource Include="$(NugetPackageRoot)\system.linq.expressions\4.3.0\ref\netstandard1.3\System.Linq.Expressions.dll" Visible="false" />
