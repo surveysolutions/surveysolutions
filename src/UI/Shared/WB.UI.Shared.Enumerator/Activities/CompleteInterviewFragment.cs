@@ -14,21 +14,18 @@ namespace WB.UI.Shared.Enumerator.Activities
         protected override int ViewResourceId => Resource.Layout.interview_complete;
 
         private MvxRecyclerView recyclerView;
-        
-        public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-        {
-            var view = base.OnCreateView(inflater, container, savedInstanceState);
 
+        public override void OnViewCreated(View view, Bundle savedInstanceState)
+        {
+            base.OnViewCreated(view, savedInstanceState);
+            
             recyclerView = view.FindViewById<MvxRecyclerView>(Resource.Id.tv_Complete_Groups);
             recyclerView.SetLayoutManager(new MvxGuardedLinearLayoutManager(Context));
-            
             recyclerView.SetItemAnimator(null);
             
             ViewModel.CompleteGroups.CollectionChanged += AdjustRecyclerViewHeight;
-
-            return view;
         }
-        
+
         private int MeasureItemHeight(View view)
         {
             view.Measure(

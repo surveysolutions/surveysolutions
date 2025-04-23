@@ -1,4 +1,3 @@
-using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using AndroidX.RecyclerView.Widget;
