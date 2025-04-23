@@ -84,7 +84,7 @@
       <Version>2.1.0.4</Version>
     </PackageReference>
     <PackageReference Include="System.Collections.Immutable">
-      <Version>9.0.2</Version>
+      <Version>9.0.4</Version>
     </PackageReference>
     <PackageReference Include="System.Net.Http">
       <Version>4.3.4</Version>

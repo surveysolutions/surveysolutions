@@ -72,6 +72,6 @@
         <PackageReference Include="Remotion.Linq.EagerFetching" Version="2.2.0" />
         <PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
-        <PackageReference Include="System.Configuration.ConfigurationManager" Version="9.0.2" />
+        <PackageReference Include="System.Configuration.ConfigurationManager" Version="9.0.4" />
     </ItemGroup>
 </Project>
