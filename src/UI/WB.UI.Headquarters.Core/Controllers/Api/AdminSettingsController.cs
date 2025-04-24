@@ -149,7 +149,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         public ActionResult<object> WorkspaceSettings()
         {
             var interviewerSettings = this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings);
-
+            
             return new
             {
                 InterviewerAutoUpdatesEnabled = interviewerSettings.IsAutoUpdateEnabled(),
@@ -161,7 +161,8 @@ namespace WB.UI.Headquarters.Controllers.Api
                 GlobalNotice = this.appSettingsStorage.GetById(AppSetting.GlobalNoticeKey)?.Message,
                 AllowEmails = this.webInterviewSettingsStorage.GetById(AppSetting.WebInterviewSettings)?.AllowEmails ?? false,
                 AllowInterviewerUpdateProfile = this.profileSettingsStorage.GetById(AppSetting.ProfileSettings)?.AllowInterviewerUpdateProfile ?? false,
-                ExportSettings = new ExportSettingsModel(this.exportSettings.EncryptionEnforced(), this.exportSettings.GetPassword())
+                ExportSettings = new ExportSettingsModel(this.exportSettings.GetEncryptionSettings(),
+                    exportSettings.GetExportRetentionSettings())
             };
         }
 
@@ -316,7 +317,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             }
             catch (EmailServiceException e)
             {
-                logger.LogError(e, "Error when send test email to {Email}", model.Email);
+                logger.LogError(e, "Error when send test email to {Email}", model.Email.Replace(Environment.NewLine, ""));
                 return StatusCode((int)e.StatusCode, new
                 {
                     Success = false,
@@ -326,7 +327,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             }
             catch (Exception e)
             {
-                logger.LogError(e, "Error when send test email to {Email}", model.Email);
+                logger.LogError(e, "Error when send test email to {Email}", model.Email.Replace(Environment.NewLine, ""));
                 return StatusCode(StatusCodes.Status400BadRequest, new
                 {
                     Success = false,
@@ -383,5 +384,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             var result = File(exportFileStream, exportFile.MimeType, fileNameStar);
             return result;
         }
+        
+        
     }
 }

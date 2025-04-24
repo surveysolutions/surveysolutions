@@ -1762,4 +1762,10 @@
     <data name="Questionnaire_SupportCriticalVerifications" xml:space="preserve">
         <value>Kritické ověřování</value>
     </data>
+  <data name="Observer_Memo1" xml:space="preserve">
+    <value>Pozorovatelé mohou sledovat sběr dat, ale nemohou provádět změny. Přihlaste se jako jiný uživatel (supervizor nebo centrála) pro přístup k rozhovorům, úkolům, zprávám a dalším datům. Pozorovatelé nemohou vytvářet úkoly, nastavovat odpovědi, komentovat, schvalovat/odmítat rozhovory, exportovat data nebo upravovat data serveru.</value>
+</data>
+  <data name="Observer_Memo2" xml:space="preserve">
+    <value>Klikněte na účet a vyberte "Zobrazit jako tento uživatel v režimu pouze pro čtení" pro začátek. Použijte žlutý odkaz nahoře pro návrat k vašemu účtu.</value>
+</data>
 </root>

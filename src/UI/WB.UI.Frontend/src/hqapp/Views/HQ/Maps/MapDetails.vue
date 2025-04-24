@@ -47,7 +47,8 @@
                                 </Typeahead>
 
                                 <div class="input-group-btn">
-                                    <button class="btn btn-success" @click="linkUserToMap" :disabled="!newLikedUserId">
+                                    <button class="btn btn-success" @click="linkUserToMap"
+                                        :disabled="!newLikedUserId || config.isObserving">
                                         <span aria-hidden="true" class="glyphicon add"></span>
                                     </button>
                                 </div>
@@ -56,7 +57,7 @@
 
                             <DataTables ref="table" :tableOptions="tableOptions"
                                 :addParamsToRequest="addParamsToRequest" :contextMenuItems="contextMenuItems"
-                                style="margin-left: 0px;">
+                                :supportContextMenu="!config.isObserving" style="margin-left: 0px;">
                             </DataTables>
                         </div>
                     </div>
@@ -117,9 +118,16 @@ export default {
             requestData.mapName = this.$config.model.fileName;
         },
         contextMenuItems({ rowData }) {
+            if (this.config.isObserving)
+                return null;
+
             return [{
                 name: this.$t("Pages.MapDetails_DelinkUser"),
-                callback: () => { this.delinkUserFromMap(rowData.userName, this.$config.model.fileName); },
+                callback: () => {
+                    if (this.config.isObserving) return;
+
+                    this.delinkUserFromMap(rowData.userName, this.$config.model.fileName);
+                },
             }];
         },
         delinkUserFromMap(userName, fileName) {
@@ -151,6 +159,8 @@ export default {
             this.newLikedUserId = newValue
         },
         linkUserToMap() {
+
+            if (this.config.isObserving) return;
 
             if (this.newLikedUserId) {
                 const self = this;

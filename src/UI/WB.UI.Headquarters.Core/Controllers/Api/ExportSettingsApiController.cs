@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
@@ -48,7 +50,8 @@ namespace WB.UI.Headquarters.Controllers.Api
         [HttpGet]
         public ExportSettingsModel ExportSettings()
         {
-            ExportSettingsModel model = new ExportSettingsModel(this.exportSettings.EncryptionEnforced(), this.exportSettings.GetPassword());
+            ExportSettingsModel model = new ExportSettingsModel(this.exportSettings.GetEncryptionSettings(),
+                exportSettings.GetExportRetentionSettings());
             return model;
         }
 
@@ -59,7 +62,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             if (await this.IsExistsDataExportInProgress())
                 return StatusCode((int)HttpStatusCode.Forbidden, new {message = DataExport.ErrorThereAreRunningProcesses});
 
-            ExportSettingsModel oldState = new ExportSettingsModel(this.exportSettings.EncryptionEnforced(), this.exportSettings.GetPassword());
+            ExportSettingsModel oldState = new ExportSettingsModel(this.exportSettings.GetEncryptionSettings());
 
             if (oldState.IsEnabled != changeSettingsState.EnableState)
             {
@@ -68,7 +71,8 @@ namespace WB.UI.Headquarters.Controllers.Api
             }
 
             this.auditLog.ExportEncryptionChanged(changeSettingsState.EnableState);
-            var newExportSettingsModel = new ExportSettingsModel(this.exportSettings.EncryptionEnforced(), this.exportSettings.GetPassword());
+            var newExportSettingsModel = new ExportSettingsModel(this.exportSettings.GetEncryptionSettings(),
+                exportSettings.GetExportRetentionSettings());
             return newExportSettingsModel;
         }
 
@@ -79,7 +83,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             if (await this.IsExistsDataExportInProgress())
                 return StatusCode((int)HttpStatusCode.Forbidden,new {message = DataExport.ErrorThereAreRunningProcesses}); 
 
-            ExportSettingsModel model = new ExportSettingsModel(this.exportSettings.EncryptionEnforced(), this.exportSettings.GetPassword());
+            ExportSettingsModel model = new ExportSettingsModel(this.exportSettings.GetEncryptionSettings());
 
             if (model.IsEnabled)
             {
@@ -87,10 +91,10 @@ namespace WB.UI.Headquarters.Controllers.Api
                 await this.ClearExportData();
             }
 
-
             this.logger.LogInformation("Export settings were changed by {User}. Encryption password was changed.", new {User = base.User.Identity.Name});
 
-            var newExportSettingsModel = new ExportSettingsModel(this.exportSettings.EncryptionEnforced(), this.exportSettings.GetPassword());
+            var newExportSettingsModel = new ExportSettingsModel(this.exportSettings.GetEncryptionSettings(),
+                exportSettings.GetExportRetentionSettings());
             return newExportSettingsModel;
         }
         
@@ -147,7 +151,7 @@ namespace WB.UI.Headquarters.Controllers.Api
 
         private Task ClearExportData()
         {
-            return exportServiceApi.DeleteAll();
+            return exportServiceApi.DeleteArchives();
         }
 
         private async Task<bool> IsExistsDataExportInProgress()
@@ -172,7 +176,98 @@ namespace WB.UI.Headquarters.Controllers.Api
                 this.logger.LogError(e, "Fail to check status of remove Export service tenant.");
                 throw;
             }
+        }
+        
+        private void UpdateRetentionSettings(Action<ExportRetentionSettings> updateAction)
+        { 
+            var retentionSetting = exportSettings.GetExportRetentionSettings();
+            if (retentionSetting == null)
+                retentionSetting = new ExportRetentionSettings();
             
+            updateAction.Invoke(retentionSetting);
+            
+            exportSettings.SetExportRetentionSettings(retentionSetting.Enabled,
+                retentionSetting.DaysToKeep,
+                retentionSetting.CountToKeep);
+        }
+        
+        public class RetentionLimitInDaysModel
+        {
+            [Range(1, 1000)]
+            public int? RetentionLimitInDays { get; set; }
+        }
+        
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult SetRetentionLimitInDays([FromBody] RetentionLimitInDaysModel message)
+        {
+            if (!ModelState.IsValid)
+                return Ok(new {sucess = false});
+
+            UpdateRetentionSettings(settings =>
+            {
+                settings.DaysToKeep = message.RetentionLimitInDays;
+            });
+            this.auditLog.RetentionPolicyDaysToKeepChanged(message.RetentionLimitInDays);
+            return Ok(new {sucess = true});
+        }
+        
+        public class RetentionLimitCountModel
+        {
+            [Range(1, 100000)]
+            public int? RetentionLimitCount { get; set; }
+        }
+        
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult SetRetentionLimitCount([FromBody] RetentionLimitCountModel message)
+        {
+            if (!ModelState.IsValid)
+                return Ok(new {sucess = false});
+
+            UpdateRetentionSettings(settings =>
+            {
+                settings.CountToKeep = message.RetentionLimitCount;
+            });
+
+            this.auditLog.RetentionPolicyFilesToKeepChanged(message.RetentionLimitCount);
+            return Ok(new {sucess = true});
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult<ExportSettingsModel>> ChangeRetentionState(
+            [FromBody] ChangeSettingsModel changeSettingsState)
+        {
+            if (!ModelState.IsValid)
+                return Ok(new {sucess = false});
+
+            UpdateRetentionSettings(settings =>
+            {
+                settings.Enabled = changeSettingsState.EnableState;
+            });
+            
+            this.auditLog.RetentionPolicyChanged(changeSettingsState.EnableState);
+            
+            return Ok(new {sucess = true});
+        }
+
+        [HttpDelete]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ForceRunRetentionPolicy()
+        {
+            var exportRetentionSettings = this.exportSettings.GetExportRetentionSettings();
+            if (exportRetentionSettings?.Enabled != true)
+                return StatusCode(StatusCodes.Status400BadRequest, new
+                {
+                    Success = false,
+                    Error = $"Error when running retention policy. Retention policy is not enabled.",
+                });
+            
+            //exportServiceApi calls to delete old exports
+            await exportServiceApi.RunRetentionPolicy(exportRetentionSettings.CountToKeep ,exportRetentionSettings.DaysToKeep);
+            
+            return Ok(new {sucess = true});
         }
     }
 }

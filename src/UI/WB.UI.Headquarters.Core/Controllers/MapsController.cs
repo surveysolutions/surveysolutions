@@ -133,6 +133,7 @@ namespace WB.UI.Headquarters.Controllers
                         Count = l.Count
                     }).ToArray() ?? Array.Empty<DuplicateLabelModel>(),
                     IsPreviewGeoJson = map.IsPreviewGeoJson,
+                    IsObserving = authorizedUser.IsObserving,
                 };
 
             model.Api = new MapDetailsModel.ApiEndpoints

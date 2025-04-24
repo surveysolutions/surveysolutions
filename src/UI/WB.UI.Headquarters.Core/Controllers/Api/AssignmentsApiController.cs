@@ -95,7 +95,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                 SupervisorId = request.TeamId,
                 Id = request.Id
             };
-
+            
             if (this.authorizedUser.IsSupervisor)
             {
                 input.SupervisorId = this.authorizedUser.Id;

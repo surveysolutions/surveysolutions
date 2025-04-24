@@ -1766,4 +1766,10 @@
   <data name="ShowKey" xml:space="preserve">
     <value>Mostrar chave</value>
   </data>
+  <data name="Observer_Memo1" xml:space="preserve">
+    <value>Os observadores podem monitorar a coleta de dados, mas não podem fazer alterações. Personifique outro usuário (supervisor ou sede) para acessar entrevistas, atribuições, relatórios e outros dados. Os observadores não podem criar atribuições, definir respostas, comentar, aprovar/rejeitar entrevistas, exportar dados ou modificar dados do servidor.</value>
+</data>
+  <data name="Observer_Memo2" xml:space="preserve">
+    <value>Clique em uma conta e selecione "Visualizar como este usuário no modo somente leitura" para começar. Use o link amarelo na parte superior para retornar à sua conta.</value>
+</data>
 </root>
