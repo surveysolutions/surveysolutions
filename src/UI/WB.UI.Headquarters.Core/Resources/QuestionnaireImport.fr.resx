@@ -177,4 +177,13 @@
   <data name="Rosters" xml:space="preserve">
     <value>Rosters</value>
   </data>
+    <data name="Importing" xml:space="preserve">
+  <value>Importation {{percent}}%</value>
+</data>
+    <data name="Prepare" xml:space="preserve">
+  <value>Réception des données du questionnaire</value>
+</data>
+  <data name="UpgradeAssignments" xml:space="preserve">
+      <value>Mettre à jour les affectations</value>
+  </data>
 </root>

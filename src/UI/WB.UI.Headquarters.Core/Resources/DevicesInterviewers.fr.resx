@@ -144,4 +144,10 @@
   <data name="WrongDateOnTablet" xml:space="preserve">
     <value>Mauvais temps sur tablette</value>
   </data>
+  <data name="Interviewers" xml:space="preserve">
+      <value>Enquêteurs</value>
+  </data>
+  <data name="TeamSize" xml:space="preserve">
+      <value>Taille de l'équipe</value>
+  </data>
 </root>

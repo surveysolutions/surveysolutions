@@ -531,7 +531,31 @@
   <data name="Property" xml:space="preserve">
     <value>Propiedad</value>
   </data>
-  <data name="Value" xml:space="preserve">
+    <data name="Value" xml:space="preserve">
     <value>Valor</value>
-  </data>
+</data>
+    <data name="Action_QuantityChanged" xml:space="preserve">
+    <value>Valor esperado cambiado</value>
+</data>
+    <data name="DetailsTargetAreaa" xml:space="preserve">
+    <value>Área objetivo</value>
+</data>
+    <data name="DetailsGeoTracking" xml:space="preserve">
+    <value>Seguimiento geográfico</value>
+</data>
+    <data name="ChangeTargetAreaModalTitle" xml:space="preserve">
+    <value>Cambiar área objetivo para la asignación {{assignmentId}}</value>
+</data>
+    <data name="TargetAreaExplanation" xml:space="preserve">
+    <value>Especificar el nombre del mapa del área objetivo para la asignación</value>
+</data>
+    <data name="Action_TargetAreaChanged" xml:space="preserve">
+    <value>Área objetivo cambiada</value>
+</data>
+    <data name="TargetArea" xml:space="preserve">
+    <value>Editar área objetivo</value>
+</data>
+    <data name="EnterTargetArea" xml:space="preserve">
+    <value>Ingresar área objetivo</value>
+</data>
 </root>

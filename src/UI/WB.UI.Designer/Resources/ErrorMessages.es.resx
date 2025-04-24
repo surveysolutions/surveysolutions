@@ -258,9 +258,9 @@
   <data name="QuestionnaireTitle_rules" xml:space="preserve">
     <value>Solo se pueden usar los siguientes caracteres en el título del cuestionario: A..Z a..z 0..9 () \ / _ - y espacio, y no deben tener dos o más caracteres de subrayado consecutivos.</value>
   </data>
-  <data name="QuestionnaireVariable_MaxLength" xml:space="preserve">
-    <value>Variable names and roster IDs may be from 1 to {1} characters long</value>
-  </data>
+    <data name="QuestionnaireVariable_MaxLength" xml:space="preserve">
+  <value>Los nombres de las variables y los ID de los grupos pueden tener entre 1 y {1} caracteres de longitud</value>
+</data>
   <data name="QuestionnaireVariable_required" xml:space="preserve">
     <value>Se requiere la variable del cuestionario</value>
   </data>
@@ -269,5 +269,8 @@
   </data>
   <data name="UnhandledExceptionDuringUpdateUserInfo" xml:space="preserve">
     <value>No se pudo actualizar la información del usuario. Por favor, inténtelo de nuevo más tarde.</value>
+  </data>
+  <data name="InvalidLoginAttempt" xml:space="preserve">
+      <value>Intento de inicio de sesión no válido</value>
   </data>
 </root>

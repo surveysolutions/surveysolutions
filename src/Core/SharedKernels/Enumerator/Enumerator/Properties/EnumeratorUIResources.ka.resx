@@ -390,7 +390,7 @@
     <value>ქსელი არ არის. შეამოწმეთ ქსელის პარამეტრები</value>
   </data>
   <data name="NotSupportedServerSyncProtocolVersion" xml:space="preserve">
-    <value>თქვენ ინტერვიუერის აპლიკაციის არასწორი ვერსია გაქვთ. გთხოვთ, წაშალოთ ის და ჩვენი Survey Solutions Headquarters საიტიდან დააყენეთ თავიდან</value>
+      <value>აღმოჩენილია შეუთავსებელი ვერსია. გთხოვთ, დაუკავშირდეთ თქვენს ზედამხედველს პრობლემის მოსაგვარებლად</value>
   </data>
   <data name="Prefs_AboutApplication" xml:space="preserve">
     <value>აპლიკაციის შესახებ</value>

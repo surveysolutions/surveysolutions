@@ -294,4 +294,10 @@
   <data name="ShowPassword" xml:space="preserve">
     <value>Mostrar contraseña</value>
   </data>
+    <data name="EmailChangeShouldBeConfirmed" xml:space="preserve">
+  <value>Por favor, siga las instrucciones enviadas al correo electrónico proporcionado ({0}) para confirmar el cambio de correo electrónico.</value>
+</data>
+    <data name="PendingEmailUpdate" xml:space="preserve">
+  <value>Actualización pendiente a {0}</value>
+</data>
 </root>

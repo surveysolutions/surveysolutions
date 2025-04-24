@@ -117,7 +117,22 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="FileColumnsCantBeMappedFormat" xml:space="preserve">
-    <value>يحتوي الملف '{0}' على الأعمدة التالية التي لا يمكن تعيينها إلى أي موقع مستخدم (على سبيل المثال، الاسم الكامل ورقم الهاتف وما إلى ذلك): {1}</value>
-  </data>
+    <data name="FileColumnsMissingFormat" xml:space="preserve">
+  <value>الملف '{0}' لا يحتوي على الأعمدة المطلوبة: {1}</value>
+</data>
+    <data name="FileColumnsCantBeMappedFormat" xml:space="preserve">
+  <value>الملف '{0}' يحتوي على الأعمدة التالية التي لا يمكن ربطها بأي خاصية مستخدم (مثل الاسم الكامل، رقم الهاتف، إلخ): {1}</value>
+</data>
+    <data name="TheDatasetMaxRecordNumberReachedFormat" xml:space="preserve">
+  <value>الحد الأقصى المسموح به لعدد السجلات هو {0}</value>
+</data>
+    <data name="HasUsersToImport" xml:space="preserve">
+  <value>يرجى الانتظار حتى يكتمل استيراد المستخدمين السابق</value>
+</data>
+    <data name="CannotParseIncomingFile" xml:space="preserve">
+  <value>الملف المقدم يحتوي على خطأ في الصف {0} ولا يمكن تحليله</value>
+</data>
+    <data name="FileDoesNotContainAnyData" xml:space="preserve">
+  <value>الملف '{0}' لا يحتوي على أي بيانات مستخدم</value>
+</data>
 </root>

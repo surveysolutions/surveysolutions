@@ -626,5 +626,17 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
                 return ResourceManager.GetString("SubsectionCantHaveMoreThan_DirectChildren", resourceCulture);
             }
         }
+        
+        public static string CriticalRuleAlreadyExist {
+            get {
+                return ResourceManager.GetString("CriticalRuleAlreadyExist", resourceCulture);
+            }
+        }
+        
+        public static string CriticalRuleIsAbsent {
+            get {
+                return ResourceManager.GetString("CriticalRuleIsAbsent", resourceCulture);
+            }
+        }
     }
 }

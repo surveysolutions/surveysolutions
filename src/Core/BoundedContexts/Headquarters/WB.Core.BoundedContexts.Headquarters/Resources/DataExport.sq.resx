@@ -184,7 +184,7 @@
     <value>Madhësia e skedarit: {{size}} MB</value>
   </data>
   <data name="DataExport_FileWasRegenerated" xml:space="preserve">
-    <value>Skedari u gjenerua sërish</value>
+      <value>Skedari u rigjenerua ose u fshi</value>
   </data>
   <data name="DataExport_Header" xml:space="preserve">
     <value>Zgjidh llojin dhe formatin e të dhënave që do të eksportohen</value>
@@ -389,5 +389,8 @@
   </data>
   <data name="ZipFile" xml:space="preserve">
     <value>Skedar Zip</value>
+  </data>
+  <data name="DataType_AudioAuditFiles" xml:space="preserve">
+      <value>Skedarë të auditimit të audios. Arkiv që përmban auditimin e audios</value>
   </data>
 </root>

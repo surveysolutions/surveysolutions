@@ -88,6 +88,16 @@ const httpPlugin = {
                 })
             },
 
+            post(actionName, interviewId, args) {
+                return query(null, args, async params => {
+                    var headers = store.getters.isReviewMode === true ? { review: true } : {}
+                    return await http.post(`api/webinterview/${actionName}?interviewId=${interviewId}`, params,
+                        {
+                            headers: headers,
+                        })
+                })
+            },
+
             answer(id, actionName, args) {
                 return query(id, args, params => {
                     const interviewId = params.interviewId

@@ -1,12 +1,3 @@
-body>.ui-pnotify {
-    z-index: 100050;
-}
-
-.ui-pnotify-modal-overlay,
-.modal-backdrop {
-    background-color: rgba(0, 0, 0, .4);
-}
-
 .modal-backdrop.show {
     opacity: 0.5;
 }
@@ -15,114 +6,6 @@ body>.ui-pnotify {
     background: #fff;
     box-shadow: 9px 9px 3px rgba(0, 0, 0, 0.1), 0 0 3px #323232;
     border-radius: 0;
-}
-
-.ui-pnotify {
-    @extend %modal-window;
-    width: 500px !important;
-
-    .alert {
-        font-family: $roboto_medium;
-        margin: 0;
-        border-top: none !important;
-        padding: 20px;
-
-        &.alert-warning {
-            border-top: 10px solid $blue;
-            color: $blue;
-        }
-
-        &.alert-success {
-            border-top: 10px solid $green;
-            color: $green;
-        }
-
-        &.alert-info {
-            border-top: 10px solid $blue;
-            color: $blue;
-        }
-
-        &.alert-danger {
-            border-top: 10px solid $red;
-            color: $red;
-        }
-
-        .ui-pnotify-closer {
-            visibility: visible !important;
-        }
-
-        .ui-pnotify-title {
-            font: 18px/20px "RobotoRegular";
-            color: $gray_text;
-            margin-bottom: 20px;
-        }
-
-        .ui-pnotify-icon {
-            display: none;
-        }
-
-        .ui-pnotify-text {
-            font: 14px/16px Arial, sans-serif;
-            color: $gray_text;
-
-        }
-
-        .ui-pnotify-action-bar {
-            margin-top: 25px !important;
-            text-align: left !important;
-
-            .btn {
-                border-color: transparent;
-                color: $blue;
-                padding: 0;
-                margin-right: 20px;
-
-                &:last-of-type {
-                    margin-right: 0;
-                }
-
-                &:hover,
-                &:focus,
-                &:active {
-                    background-color: transparent;
-                    text-decoration: underline;
-                }
-            }
-        }
-
-        .ui-pnotify-closer span {
-            @include cancel(16px);
-        }
-    }
-
-    &.loading-indicator {
-        border-radius: 0;
-
-        .ui-pnotify-container {
-            border-radius: 0;
-            box-shadow: 9px 9px 3px rgba(0, 0, 0, 0.1);
-        }
-
-        .ui-pnotify-container.alert {
-            padding: 30px 40px;
-            border-top: none;
-        }
-
-        .ui-pnotify-title {
-            font: 24px/26px "RobotoLight";
-            padding: 0;
-            margin: 0;
-        }
-    }
-
-    &.centered-modal {
-        position: fixed;
-        left: 50% !important;
-        top: 50% !important;
-        transform: translate(-50%, -51%);
-        -ms-transform: translate3d(-50%, -51%, 0);
-        margin: 0;
-    }
 }
 
 @media only screen and (max-width: 840px) {
@@ -240,7 +123,6 @@ body>.ui-pnotify {
         border-top-left-radius: 6px;
         border-top-right-radius: 6px;
         padding: 20px 20px 0;
-        //margin-bottom: 25px;
     }
 
     .close {
@@ -405,15 +287,6 @@ body>.ui-pnotify {
     }
 }
 
-@media (max-width: $screen-xs-min) {
-    .ui-pnotify {
-        width: 300px !important;
-
-        .input-group {
-            width: 100%;
-        }
-    }
-}
 
 #overview {
     .modal-content {

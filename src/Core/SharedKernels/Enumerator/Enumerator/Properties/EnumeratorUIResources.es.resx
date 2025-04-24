@@ -637,7 +637,7 @@
     <value>Mapas</value>
   </data>
   <data name="NotSupportedServerSyncProtocolVersion" xml:space="preserve">
-    <value>Es posible que tenga una versión incompatible de la aplicación Interviewer. Por favor, desinstálela e instale de nuevo desde el webzine de Survey Solutions</value>
+      <value>Se detectó una versión incompatible. Por favor, póngase en contacto con su supervisor para la resolución</value>
   </data>
   <data name="Prefs_EventChunkSizeSummary" xml:space="preserve">
     <value>Cuántos eventos pueden ser leídos con una consulta</value>
@@ -688,7 +688,7 @@
     <value>Realice una búsqueda para mostrar resultados</value>
   </data>
   <data name="Dashboard_NotFoundSearchResult" xml:space="preserve">
-    <value>Nothing found</value>
+      <value>No se encontró nada</value>
   </data>
   <data name="Dashboard_Search_ExitSearch" xml:space="preserve">
     <value>Salir de la búsqueda</value>
@@ -846,9 +846,7 @@
   <data name="Synchronization_DownloadApplication" xml:space="preserve">
     <value>Descarga de actualizaciones de la aplicación</value>
   </data>
-  <data name="Synchronization_DownloadApplication_Description" xml:space="preserve">
-    <value>Received {0} of {1} at {2} ({3}%)</value>
-  </data>
+  
   <data name="Synchronization_Fail_State_InterviewsPartialDownloaded_Format" xml:space="preserve">
     <value>{0} de {1} entrevistas descargadas</value>
   </data>
@@ -915,7 +913,115 @@
   <data name="UpdatingQuestionnaires" xml:space="preserve">
     <value>Actualización de cuestionarios</value>
   </data>
+    <data name="Dashboard_AddCalendarEvent" xml:space="preserve">
+  <value>Agregar evento del calendario</value>
+</data>
   <data name="BluetoothPermissionRequired" xml:space="preserve">
       <value>Se requiere permiso de Bluetooth para la sincronización sin conexión</value>
+  </data>
+    <data name="Dashboard_EditCalendarEvent" xml:space="preserve">
+  <value>Editar evento del calendario</value>
+</data>
+    <data name="Dashboard_CantOpenCawi" xml:space="preserve">
+  <value>No puede abrir la entrevista en modo CAWI. Se enviará a la sede después de la sincronización.</value>
+</data>
+    <data name="Dashboard_CawiLabel" xml:space="preserve">
+  <value>{0} (CAWI)</value>
+</data>
+    <data name="Dashboard_PastTimeCalendarEvent" xml:space="preserve">
+  <value>La hora seleccionada está en el pasado</value>
+</data>
+    <data name="Dashboard_RefreshWorkspaces" xml:space="preserve">
+  <value>Actualizando espacios de trabajo</value>
+</data>
+    <data name="Dashboard_RefreshWorkspacesFinished" xml:space="preserve">
+  <value>Lista de espacios de trabajo actualizada</value>
+</data>
+    <data name="Dashboard_RefreshWorkspacesError" xml:space="preserve">
+  <value>Error al obtener la lista de espacios de trabajo. Por favor, póngase en contacto con su administrador del sistema.</value>
+</data>
+    <data name="Dashboard_RemoveCalendarEvent" xml:space="preserve">
+  <value>Eliminar evento del calendario</value>
+</data>
+    <data name="Dashboard_ShowCalendarEvent" xml:space="preserve">
+  <value>Próximo contacto: {0}</value>
+</data>
+    <data name="Dashboard_WebInterviewsLinkText" xml:space="preserve">
+  <value>Entrevistas web ({0})</value>
+</data>
+    <data name="Dashboard_WebInterviewTabText" xml:space="preserve">
+  <value>Entrevistas en modo de entrevista web. Se eliminarán durante la sincronización cuando el encuestado complete la entrevista web</value>
+</data>
+    <data name="NearbyPermissionRequired" xml:space="preserve">
+  <value>Se requiere permiso de dispositivos Wi-Fi cercanos para la sincronización sin conexión</value>
+</data>
+    <data name="MenuItem_Title_RefreshWorkspaces" xml:space="preserve">
+  <value>Actualizar espacios de trabajo</value>
+</data>
+  <data name="MenuItem_Title_Workspaces" xml:space="preserve">
+  <value>Espacios de trabajo</value>
+    </data>
+    <data name="Synchronization_Download_CalendarEvents_Title" xml:space="preserve">
+  <value>Actualizando eventos del calendario</value>
+</data>
+    <data name="Synchronization_DownloadApplication_Description" xml:space="preserve">
+  <value>Recibido {0} de {1} a {2} ({3}%)</value>
+</data>
+    <data name="Synchronization_RemoveObsoleteGeoTracking" xml:space="preserve">
+  <value>Eliminar información de geo-seguimiento obsoleta</value>
+</data>
+    <data name="Synchronization_PasswordChangeRequired" xml:space="preserve">
+  <value>Su contraseña ha sido restablecida. Debe cambiarla para acceder al sitio.</value>
+</data>
+    <data name="Synchronization_Upload_CalendarEvents_Text" xml:space="preserve">
+  <value>eventos del calendario</value>
+</data>
+  <data name="YouChangeYouPasswordTryToLoginAgainWithNewPassword" xml:space="preserve">
+      <value>Has cambiado tu contraseña. Intenta iniciar sesión nuevamente con la nueva contraseña.</value>
+  </data>
+  <data name="TransferringCalendarEvents" xml:space="preserve">
+      <value>Transferir eventos del calendario</value>
+  </data>
+  <data name="Synchronization_UploadGeoTracking" xml:space="preserve">
+      <value>Subir información de geo-seguimiento</value>
+  </data>
+  <data name="Dashboard_PastDateCalendarEvent" xml:space="preserve">
+      <value>La fecha seleccionada está en el pasado</value>
+  </data>
+  <data name="Dashboard_ShowAssignmentMap" xml:space="preserve">
+      <value>Mostrar área objetivo</value>
+  </data>
+  <data name="Synchronization_WorkspaceDisabled" xml:space="preserve">
+    <value>Su cuenta ya no está activa en este servidor, porque el espacio de trabajo en el que está definida fue deshabilitado por el administrador. Por favor, póngase en contacto con su supervisor.</value>
+  </data>
+    <data name="DashboardItem_QRCode" xml:space="preserve">
+  <value>Mostrar código QR</value>
+</data>
+    <data name="Synchronization_WorkspaceAccessDisabledReason" xml:space="preserve">
+  <value>Su cuenta ya no está activa en el espacio de trabajo. Por favor, póngase en contacto con su administrador del sistema.</value>
+</data>
+    <data name="Interview_Progress_Format" xml:space="preserve">
+  <value>Progreso: {0}/{1}</value>
+</data>
+    <data name="Error_NoGpsProvider" xml:space="preserve">
+  <value>No hay proveedor de GPS en este dispositivo</value>
+</data>
+    <data name="Error_NoTargetAreaShapefile" xml:space="preserve">
+  <value>No hay límites para el área objetivo</value>
+</data>
+    <data name="Dashboard_CreateInterview_TargetArea_Warning" xml:space="preserve">
+  <value>La asignación requiere que cree una entrevista directamente desde el mapa de asignación. Se recomienda usar el modo de geovalla. ¿Le gustaría continuar?</value>
+</data>
+    <data name="AssigmentMap_CreateInterview_OutTargetArea_Warning" xml:space="preserve">
+  <value>Está creando una entrevista fuera del área objetivo. ¿Desea continuar?</value>
+</data>
+    <data name="AssigmentMap_CreateInterview_DisabledTargetArea_Warning" xml:space="preserve">
+  <value>Se recomienda habilitar la geovalla para verificar el área objetivo. ¿Desea continuar?</value>
+</data>
+    <data name="AssigmentMap_GeoTrackingReminder" xml:space="preserve">
+  <value>Ha utilizado el seguimiento geográfico o la geovalla al crear una entrevista. Por favor, habilítelo nuevamente si desea usarlo.</value>
+</data>
+  <data name="MenuItem_Title_Return" xml:space="preserve">
+      <value>Regresar</value>
   </data>
 </root>

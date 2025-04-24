@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="PL0002_MoreThenOneLevel" xml:space="preserve">
-    <value>[PL0002] N/A</value>
+    <value>[PL0002] غير متاح</value>
   </data>
   <data name="PL0003_ColumnWasntMappedOnQuestion" xml:space="preserve">
     <value>لا يمكن تعيين العامود الى أي سؤال في الاستبيان</value>
@@ -128,6 +128,9 @@
   </data>
     <data name="PL0006_IdDublication" xml:space="preserve">
     <value>تم العثور على قيم معرف مكرر.</value>
+  </data>
+    <data name="PL0007_ServiceColumnIsAbsent" xml:space="preserve">
+    <value>يوجد عمود واحد أو أكثر من أعمدة معرف الوالدين مفقود.</value>
   </data>
   <data name="PL0008_OrphanRosterRecord" xml:space="preserve">
     <value>سجل القائمة ليس لديه الاصل.</value>
@@ -162,6 +165,9 @@
   <data name="PL0027_ResponsibleIsLocked" xml:space="preserve">
     <value>المسؤول هو مستخدم مقفل لواحد أو أكثر من الملاحظات</value>
   </data>
+    <data name="PL0028_UserIsNotHQOrSupervisorOrInterviewer" xml:space="preserve">
+  <value>المستخدم ليس من المقر الرئيسي أو مشرفًا أو مقابلاً لواحدة أو أكثر من الملاحظات.</value>
+</data>
   <data name="PL0029_AnswerIsIncorrectBecauseIsRosterSizeAndMoreThan40" xml:space="preserve">
     <value>لا يمكن أن تكون الإجابة على سؤال حجم القائمة أكبر من {0}.</value>
   </data>
@@ -192,4 +198,62 @@
     <data name="PL0040_QuestionnaireDataIsNotFound" xml:space="preserve">
     <value>الملف مع البيانات على مستوى الاستبيان مفقود.</value>
   </data>
+
+    <data name="PL0041_AnswerExceedsMaxAnswersCount" xml:space="preserve">
+  <value>عدد الخيارات المجابة في السؤال المتعدد الخيارات لا يمكن أن يتجاوز الحد الأقصى المسموح به.</value>
+</data>
+    <data name="PL0050_CategoricalMulti_AnswerMustBeGreaterOrEqualThen1" xml:space="preserve">
+  <value>القيمة السلبية غير مسموح بها للسؤال المتعدد الخيارات.</value>
+</data>
+    <data name="PL0042_IdIsEmpty" xml:space="preserve">
+  <value>عمود المعرف لا يحتوي على أي قيمة.</value>
+</data>
+    <data name="ArchiveWithPasswordNotSupported" xml:space="preserve">
+  <value>الأرشيفات المحمية بكلمة مرور غير مدعومة</value>
+</data>
+    <data name="PL0052_ColumnByTextListRosterSizeAnswerNotFound" xml:space="preserve">
+  <value>يجب أن تحتوي قائمة القائمة على عمود لإجابات القائمة النصية</value>
+</data>
+    <data name="PL0047_ProtectedVariables_MissingColumn" xml:space="preserve">
+  <value>العمود المطلوب {0} مفقود.</value>
+</data>
+    <data name="PL0048_ProtectedVariables_VariableNotFoundInQuestionnaire" xml:space="preserve">
+  <value>المتغير المحمي غير موجود في الاستبيان المقدم.</value>
+</data>
+    <data name="PL0049_ProtectedVariables_VariableNotSupportsProtection" xml:space="preserve">
+  <value>لا يمكن حماية نوع المتغير.</value>
+</data>
+    <data name="PL0053_InconsistentNumericRosterInstanceCodes" xml:space="preserve">
+  <value>رمز التعداد الرقمي غير متسق. يجب أن تكون تسلسل رموز التعداد 0، 1، ... إلى عدد حالات التعداد</value>
+</data>
+    <data name="PL0054_MaxInterviewsCountByAssignmentExeeded" xml:space="preserve">
+  <value>الكمية القصوى لا يجب أن تكون أكثر من {0}.</value>
+</data>
+    <data name="PL0055_InvalidEmail" xml:space="preserve">
+  <value>البريد الإلكتروني غير صالح</value>
+</data>
+    <data name="PL0056_InvalidPassword" xml:space="preserve">
+  <value>كلمة المرور غير صالحة. يجب أن تحتوي على 6 أرقام وحروف كبيرة على الأقل أو رمز واحد "؟" لإنشاء كلمة مرور</value>
+</data>
+    <data name="PL0057_IncosistentQuantityAndEmail" xml:space="preserve">
+  <value>الكمية المسموح بها للتعيينات مع البريد الإلكتروني هي 1</value>
+</data>
+    <data name="PL0058_IncosistentWebmodeAndEmail" xml:space="preserve">
+  <value>يجب تفعيل وضع الويب للتعيينات التي تحتوي على بريد إلكتروني</value>
+</data>
+    <data name="PL0059_IncosistentWebmodeAndPassword" xml:space="preserve">
+  <value>يجب تفعيل وضع الويب للتعيينات التي تحتوي على كلمة مرور</value>
+</data>
+    <data name="PL0060_WebmodeSizeOneHasNoEmailOrPassword" xml:space="preserve">
+  <value>يجب أن تحتوي التعيينات بحجم 1 في وضع الويب على بريد إلكتروني أو كلمة مرور</value>
+</data>
+    <data name="PL0061_DuplicatePasswordWithQuantity1" xml:space="preserve">
+  <value>كلمة المرور غير فريدة. يجب أن تكون كلمة المرور للتعيينات في وضع الويب بحجم 1 فريدة</value>
+</data>
+    <data name="PL0062_WebModeOnlyForInterviewer" xml:space="preserve">
+  <value>يجب أن تكون جميع التعيينات للمقابلات عبر الويب مخصصة لمقابل</value>
+</data>
+    <data name="PL0063_NoPermittedQuestion" xml:space="preserve">
+  <value>لا يمكن تحميل إجابة السؤال بالاسم المتغير {0}، لأنه من نوع غير مدعوم. راجع المقالة الداعمة التالية https://support.mysurvey.solutions/questionnaire-designer/limits/design-limitations-by-question-type للحصول على تفاصيل حول ما يمكن تحميله في الإصدار الحالي.</value>
+</data>
 </root>

@@ -132,4 +132,14 @@
   <data name="ViewInterviewContent" xml:space="preserve">
     <value>Ver entrevista de conteúdo</value>
   </data>
+    <data name="NoGpsQuestionsByQuestionnaire" xml:space="preserve">
+      <value>Não há perguntas do tipo GPS no questionário selecionado</value>
+      <comment>d</comment>
+    </data>
+    <data name="Assignment" xml:space="preserve">
+      <value>Atribuição</value>
+    </data>
+    <data name="ReloadGeoTacking" xml:space="preserve">
+        <value>Recarregar rastreamentos</value>
+    </data>
 </root>

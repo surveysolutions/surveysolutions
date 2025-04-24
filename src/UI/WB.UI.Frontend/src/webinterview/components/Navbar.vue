@@ -77,94 +77,131 @@
                             :title="$t('WebInterviewUI.SaveScenario')">
                             <span class="glyphicon glyphicon-floppy-disk"></span>
                         </button>
-                        <div class="modal fade" id="saveScenarioModal" ref="saveScenarioModalRef" tabindex="-1"
-                            role="dialog">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h2>{{ this.$t('WebInterviewUI.SaveScenario') }}</h2>
-                                    </div>
-                                    <div class="modal-body">
-                                        <form onsubmit="return false;" action="javascript:void(0)" class="panel-group"
-                                            v-if="!this.designerCredentialsExpired">
-                                            <div class="panel panel-default">
-                                                <div class="panel-heading">
-                                                    <div class="radio mb-1">
-                                                        <input name="rbScenarioSaveOption" type="radio"
-                                                            id="rbScenarioSaveNew" value="saveNew" class="wb-radio"
-                                                            v-model="selectedSaveOption" />
-                                                        <label for="rbScenarioSaveNew">
-                                                            <span class="tick"></span>
-                                                            {{ this.$t('WebInterviewUI.SaveScenarioOptions_SaveNew') }}
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <div class="panel-body" v-if="selectedSaveOption === 'saveNew'">
-                                                    <div class="form-group" v-if="selectedSaveOption === 'saveNew'">
-                                                        <label for="txtScenarioName" class="control-label">{{
-                                                            this.$t('WebInterviewUI.SaveScenarioName') }}</label>
-                                                        <input maxlength="32" id="txtScenarioName" class="form-control"
-                                                            v-model="newScenarioName" />
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="panel panel-default">
-                                                <div class="panel-heading">
-                                                    <div class="radio mb-1">
-                                                        <input name="rbScenarioSaveOption" type="radio"
-                                                            id="rbScenarioUpdateExisting" value="updateExisting"
-                                                            class="wb-radio" v-model="selectedSaveOption" />
-                                                        <label for="rbScenarioUpdateExisting">
-                                                            <span class="tick"></span>
-                                                            {{
-                                                                this.$t('WebInterviewUI.SaveScenarioOptions_ReplaceExisting')
-                                                            }}
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <div class="panel-body" v-if="selectedSaveOption === 'updateExisting'">
-                                                    <div class="form-group">
-                                                        <label for="slScenarioSaveOption" class="control-label">{{
-                                                            this.$t('WebInterviewUI.SaveScenarioOptions') }}</label>
-                                                        <select id="slScenarioSaveOption" class="form-control"
-                                                            v-model="selectedScenarioOption">
-                                                            <option v-for="s in designerScenarios" :value="s.id"
-                                                                :key="s.id">{{ s.title }}</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </form>
-                                        <div v-else>
-                                            <p>{{ this.$t('WebInterviewUI.SaveScenarioDesignerLogin') }}</p>
-                                            <a :href="this.$config.designerUrl" target="_blank">{{
-                                                this.$t('WebInterviewUI.SaveScenarioGoToDesigner') }}</a>
+                        <teleport to="body">
+                            <div class="modal fade" id="saveScenarioModal" ref="saveScenarioModalRef" tabindex="-1"
+                                role="dialog">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h2>{{ this.$t('WebInterviewUI.SaveScenario') }}</h2>
                                         </div>
-                                    </div>
-                                    <div class="modal-footer" v-if="!this.designerCredentialsExpired">
-                                        <button type="button" class="btn btn-primary"
-                                            :disabled="scenarioSaving || !scenarioValid" @click="saveScenario">{{
-                                                $t("Common.Save") }}</button>
-                                        <button type="button" class="btn btn-link" @click="hideScenarioSave">{{
-                                            $t("Common.Cancel") }}</button>
+                                        <div class="modal-body">
+                                            <form onsubmit="return false;" action="javascript:void(0)"
+                                                class="panel-group" v-if="!this.designerCredentialsExpired">
+                                                <div class="panel panel-default">
+                                                    <div class="panel-heading">
+                                                        <div class="radio mb-1">
+                                                            <input name="rbScenarioSaveOption" type="radio"
+                                                                id="rbScenarioSaveNew" value="saveNew" class="wb-radio"
+                                                                v-model="selectedSaveOption" />
+                                                            <label for="rbScenarioSaveNew">
+                                                                <span class="tick"></span>
+                                                                {{ this.$t('WebInterviewUI.SaveScenarioOptions_SaveNew')
+                                                                }}
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="panel-body" v-if="selectedSaveOption === 'saveNew'">
+                                                        <div class="form-group" v-if="selectedSaveOption === 'saveNew'">
+                                                            <label for="txtScenarioName" class="control-label">{{
+                                                                this.$t('WebInterviewUI.SaveScenarioName') }}</label>
+                                                            <input maxlength="32" id="txtScenarioName"
+                                                                class="form-control" v-model="newScenarioName" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="panel panel-default">
+                                                    <div class="panel-heading">
+                                                        <div class="radio mb-1">
+                                                            <input name="rbScenarioSaveOption" type="radio"
+                                                                id="rbScenarioUpdateExisting" value="updateExisting"
+                                                                class="wb-radio" v-model="selectedSaveOption" />
+                                                            <label for="rbScenarioUpdateExisting">
+                                                                <span class="tick"></span>
+                                                                {{
+                                                                    this.$t('WebInterviewUI.SaveScenarioOptions_ReplaceExisting')
+                                                                }}
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="panel-body"
+                                                        v-if="selectedSaveOption === 'updateExisting'">
+                                                        <div class="form-group">
+                                                            <label for="slScenarioSaveOption" class="control-label">{{
+                                                                this.$t('WebInterviewUI.SaveScenarioOptions') }}</label>
+                                                            <select id="slScenarioSaveOption" class="form-control"
+                                                                v-model="selectedScenarioOption">
+                                                                <option v-for="s in designerScenarios" :value="s.id"
+                                                                    :key="s.id">{{ s.title }}</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                            <div v-else>
+                                                <p>{{ this.$t('WebInterviewUI.SaveScenarioDesignerLogin') }}</p>
+                                                <a :href="this.$config.designerUrl" target="_blank">{{
+                                                    this.$t('WebInterviewUI.SaveScenarioGoToDesigner') }}</a>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer" v-if="!this.designerCredentialsExpired">
+                                            <button type="button" class="btn btn-primary"
+                                                :disabled="scenarioSaving || !scenarioValid" @click="saveScenario">{{
+                                                    $t("Common.Save") }}</button>
+                                            <button type="button" class="btn btn-link" data-bs-dismiss="modal"
+                                                @click="hideScenarioSave">{{
+                                                    $t("Common.Cancel") }}</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </teleport>
                     </li>
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
         </div>
         <!-- /.container-fluid -->
+
+        <teleport to="body">
+            <div ref="emailPersonalLinkModalRef" class="modal fade" id="emailPersonalLinkModal" tabindex="-1"
+                role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2>{{ $t('WebInterviewUI.EmailLink_Header') }}</h2>
+                        </div>
+                        <div class="modal-body">
+                            <form onsubmit="return false;" action="javascript:void(0)">
+                                <p>{{ $t('WebInterviewUI.EmailLink_Message') }}</p>
+                                <p>{{ $t('WebInterviewUI.EmailLink_ResumeAnyTime') }}</p>
+                                <div class="form-group">
+                                    <input type="email" id="txtEmail" class="form-control"
+                                        :placeholder="this.$t('WebInterviewUI.EmailLink_Placeholder')" />
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" @click="sendEmailWithPersonalLink">{{
+                                $t("Common.Ok") }}</button>
+                            <button type="button" class="btn btn-link" @click="hideEmailPersonalLink"
+                                data-bs-dismiss="modal">{{ $t("Common.Cancel")
+                                }}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </teleport>
+
     </nav>
 </template>
 <script lang="js">
-import modal from '@/shared/modal'
 import axios from 'axios'
 import * as toastr from 'toastr'
 import { filter } from 'lodash'
+import { Modal } from 'bootstrap'
+import { nextTick } from 'vue'
 
 export default {
     name: 'navbar',
@@ -178,32 +215,19 @@ export default {
             designerCredentialsExpired: false,
             selectedSaveOption: 'saveNew',
             newScenarioName: '',
+            emailModal: null,
+            saveScenarioModal: null,
         }
     },
     mounted() {
-        $(window).on('resize', function () {
-            if ($(window).width() > 880) {
-                if ($('.navbar-collapse.collapse.show').length > 0) {
-                    $('main').addClass('display-block')
-                }
-            } else {
-                $('main').removeClass('display-block')
-            }
-        })
+
         $('.navbar-toggle').click(function () {
             $('.navbar-collapse').fadeToggle()
             $('.navbar-collapse').animate({ height: '100%' }, 0)
             $('.top-menu').toggleClass('top-animate')
             $('.mid-menu').toggleClass('mid-animate')
             $('.bottom-menu').toggleClass('bottom-animate')
-            if ($(window).width() < 880) {
-                if ($('.navbar-collapse.collapse.show').length > 0) {
-                    $('main').removeClass('display-block')
-                    $('main').removeClass('hidden')
-                } else {
-                    $('main').addClass('hidden')
-                }
-            }
+
         })
 
         if (this.$config.askForEmail) {
@@ -261,39 +285,31 @@ export default {
     },
     methods: {
         hideScenarioSave() {
-            $(this.$refs.saveScenarioModalRef).modal('hide')
+            this.saveScenarioModal?.hide()
             this.newScenarioName = ''
             this.selectedSaveOption = 'saveNew'
             this.selectedScenarioOption = -1
         },
         emailPersonalLink() {
-            var self = this
-            let prompt = modal.prompt({
-                title: this.$t('WebInterviewUI.EmailLink_Header'),
-
-                inputType: 'email',
-                callback: function (result) {
-                    if (result === null || result === undefined) return
-
-                    if (!self.validateEmail(result)) {
-                        var input = $(this).find('input')
-                        self.$nextTick(function () {
-                            input.next('span').remove()
-                            input.after('<span class=\'help-text text-danger\'>' + this.$t('WebInterviewUI.EmailLink_InvalidEmail', { email: result }) + '</span>')
-                        })
-                        return false
-                    }
-
-                    self.sendEmailWithPersonalLink(result)
-                },
+            nextTick(() => {
+                this.emailModal = new Modal(this.$refs.emailPersonalLinkModalRef)
+                this.emailModal.show()
             })
-
-            prompt.find('input').attr('placeholder', this.$t('WebInterviewUI.EmailLink_Placeholder'))
-            prompt.find('input').before('<p>' + this.$t('WebInterviewUI.EmailLink_Message') + '</p>')
-            prompt.find('input').before('<p>' + this.$t('WebInterviewUI.EmailLink_ResumeAnyTime') + '</p>')
         },
-        sendEmailWithPersonalLink(email) {
+        sendEmailWithPersonalLink() {
+            const emailInput = $('#txtEmail')
+            const email = emailInput.val()
+            if (email === null || email === undefined) return
+
             var self = this
+            if (!self.validateEmail(email)) {
+                self.$nextTick(function () {
+                    emailInput.next('span').remove()
+                    emailInput.after('<span class=\'help-text text-danger\'>' + this.$t('WebInterviewUI.EmailLink_InvalidEmail', { email: email }) + '</span>')
+                })
+                return false
+            }
+
             axios.post(this.$config.sendLinkUri, {
                 interviewId: this.$route.params.interviewId,
                 email: email,
@@ -305,6 +321,9 @@ export default {
                 if (error && error.response)
                     self.$errorHandler(error, self)
             })
+
+            this.emailModal.hide()
+            this.emailModal = null;
         },
         validateEmail(email) {
             var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
@@ -333,7 +352,10 @@ export default {
         async showSaveScenario() {
             this.scenarioSaving = true
             this.designerCredentialsExpired = false
-            $(this.$refs.saveScenarioModalRef).appendTo('body').modal('show')
+
+            this.saveScenarioModal = new Modal(this.$refs.saveScenarioModalRef)
+            this.saveScenarioModal.show()
+
             try {
                 this.designerScenarios = []
                 var getScenarios = await axios.get(this.saveScenarioUrl, {

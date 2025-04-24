@@ -83,10 +83,65 @@
                                         <h5>
                                             {{ $t('DataExport.StatusOfExportTitle') }}
                                         </h5>
-                                        <Typeahead control-id="status" :selectedKey="pageState.status"
-                                            data-vv-name="status" data-vv-as="status"
-                                            :placeholder="$t('Common.AllStatuses')" :value="status" :values="statuses"
-                                            v-on:selected="statusSelected" />
+                                        <div class="form-group">
+                                            <Typeahead control-id="status" :selectedKey="pageState.status"
+                                                data-vv-name="status" data-vv-as="status" :noSearch="true"
+                                                :placeholder="$t('Common.AllStatuses')" :value="status"
+                                                :values="statuses" v-on:selected="statusSelected" />
+                                        </div>
+                                        <h5>
+                                            {{ $t('DataExport.SurveyQuestionnaireDateRange') }}
+                                        </h5>
+                                        <div class="form-group">
+                                            <Typeahead control-id="dateRangeMode" :selectedKey="dateRangeMode"
+                                                data-vv-name="dateRangeMode" data-vv-as="dateRangeMode" :noSearch="true"
+                                                :placeholder="$t('DataExport.DateRangeAllTime')" :value="dateRangeMode"
+                                                v-on:selected="value => { dateRangeMode = value }" :values="[
+                                                    //{ id: null, value: $t('DataExport.DateRangeAllTime') },
+                                                    { id: 'last24hours', value: $t('DataExport.DateRangeLast24hours') },
+                                                    { id: 'last7days', value: $t('DataExport.DateRangeLast7days') },
+                                                    { id: 'last30days', value: $t('DataExport.DateRangeLast30days') },
+                                                    { id: 'today', value: $t('DataExport.DateRangeLastToday') },
+                                                    { id: 'yesterday', value: $t('DataExport.DateRangeLastYesterday') },
+                                                    { id: 'custom', value: $t('DataExport.DateRangeCustom') },
+                                                ]" />
+                                        </div>
+                                        <h5 v-if="isCustomDateRangeMode">
+                                            {{ $t('DataExport.SurveyQuestionnaireDateRangeFrom') }}
+                                        </h5>
+                                        <div class="form-group" v-if="isCustomDateRangeMode">
+                                            <Field v-slot="{ field }" name="selectedFromDate" :value="selectedFromDate"
+                                                :rules="validateFromDate" label="selectedFromDate">
+                                                <div>
+                                                    <DatePicker v-bind="field" :config="datePickerConfigFrom"
+                                                        :value="selectedFromDate" :withClear="true"
+                                                        v-on:clear="dateRangeFrom = null"
+                                                        :placeholder="$t('DataExport.DateRangeFromAll')">
+                                                    </DatePicker>
+                                                </div>
+                                            </Field>
+                                            <span class="text-danger error-message">
+                                                <ErrorMessage name="selectedFromDate" />
+                                            </span>
+                                        </div>
+                                        <h5 v-if="isCustomDateRangeMode">
+                                            {{ $t('DataExport.SurveyQuestionnaireDateRangeTo') }}
+                                        </h5>
+                                        <div class="form-group" v-if="isCustomDateRangeMode">
+                                            <Field v-slot="{ field }" name="selectedToDate" :value="selectedToDate"
+                                                :rules="validateToDate" label="selectedToDate">
+                                                <div>
+                                                    <DatePicker v-bind="field" :config="datePickerConfigTo"
+                                                        :value="selectedToDate" v-on:clear="dateRangeTo = null"
+                                                        :withClear="true"
+                                                        :placeholder="$t('DataExport.DateRangeToAll')">
+                                                    </DatePicker>
+                                                </div>
+                                            </Field>
+                                            <span class="text-danger error-message">
+                                                <ErrorMessage name="selectedToDate" />
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -109,6 +164,16 @@
                                         <span class="tick"></span>
                                         <span class="format-data Binary">
                                             {{ $t('DataExport.DataType_Binary') }}
+                                        </span>
+                                    </label>
+                                </div>
+                                <div class="radio-btn-row" v-if="hasInterviews && hasAudioAudit">
+                                    <input class="radio-row" type="radio" name="dataType" id="audioAudit"
+                                        v-model="dataType" value="audioAudit" />
+                                    <label for="audioAudit">
+                                        <span class="tick"></span>
+                                        <span class="format-data Binary">
+                                            {{ $t('DataExport.DataType_AudioAuditFiles') }}
                                         </span>
                                     </label>
                                 </div>
@@ -183,6 +248,33 @@
                                     </label>
                                 </div>
                             </div>
+
+                            <div class="mb-30" v-if="dataType == 'paraData' && questionnaireVersion">
+                                <h3>
+                                    {{ $t('DataExport.ParadataEventsFilter') }}
+                                </h3>
+                                <div class="radio-btn-row">
+                                    <input class="radio-row" type="radio" name="paradataMode" id="paradataAll"
+                                        v-model="paradataMode" value="all" />
+                                    <label for="paradataAll">
+                                        <span class="tick"></span>
+                                        <span class="format-data Tabular">
+                                            {{ $t('DataExport.ParadataEventsFilter_All') }}
+                                        </span>
+                                    </label>
+                                </div>
+                                <div class="radio-btn-row" :title="$t('DataExport.ParadataEventsFilter_ReducedHint')">
+                                    <input class="radio-row" type="radio" name="paradataMode" id="paradataReduced"
+                                        v-model="paradataMode" value="reduced" />
+                                    <label for="paradataReduced" class>
+                                        <span class="tick"></span>
+                                        <span class="format-data ParadataReduced">
+                                            {{ $t('DataExport.ParadataEventsFilter_Reduced') }}
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>
+
                             <div class="mb-30" v-if="canExportExternally && questionnaireVersion">
                                 <h3>{{ $t('DataExport.DataDestination') }}</h3>
                                 <div class="radio-btn-row">
@@ -272,11 +364,27 @@
     </HqLayout>
 </template>
 
+<style lang="scss">
+.export .filter-wrapper {
+
+    .flatpickr-wrapper {
+        display: block;
+    }
+
+    .error-message {
+        max-width: 290px;
+        display: block;
+    }
+}
+</style>
+
 <script>
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import ExportProcessCard from './ExportProcessCard'
 import gql from 'graphql-tag'
 import { filter, toNumber, map } from 'lodash'
+import { DateFormats } from '~/shared/helpers'
+import moment from 'moment-timezone'
 
 const dataFormatNum = {
     Tabular: 1,
@@ -285,6 +393,7 @@ const dataFormatNum = {
     Binary: 4,
     Ddi: 5,
     Paradata: 6,
+    AudioAudit: 7,
 }
 const ExternalStorageType = { dropbox: 1, oneDrive: 2, googleDrive: 3 }
 
@@ -310,11 +419,17 @@ export default {
             isUpdatingDataAvailability: false,
             hasInterviews: false,
             hasBinaryData: false,
+            hasAudioAudit: false,
             externalStoragesSettings:
                 (window.CONFIG.model.externalStoragesSettings || {}).oAuth2 || {},
             pageState: {},
             updateInProgress: false,
             jobsLoadingBatchCount: 18,
+            paradataMode: 'all',
+
+            dateRangeFrom: null,
+            dateRangeTo: null,
+            dateRangeMode: null,
         }
     },
 
@@ -351,6 +466,42 @@ export default {
                 return `${window.CONFIG.model.api.questionnairesUrl}/${this.questionnaireId.key}`
             return null
         },
+
+        selectedFromDate() {
+            return this.dateRangeFrom && moment(this.dateRangeFrom).format(DateFormats.dateTime)
+        },
+        selectedToDate() {
+            return this.dateRangeTo && moment(this.dateRangeTo).format(DateFormats.dateTime)
+        },
+        datePickerConfigFrom() {
+            var self = this
+            return {
+                mode: 'single',
+                enableTime: true,
+                wrap: true,
+                static: true,
+                onChange: (selectedDates, dateStr, instance) => {
+                    const start = selectedDates.length > 0 ? moment(selectedDates[0]).format(DateFormats.dateTime) : null
+                    self.dateRangeFrom = start
+                },
+            }
+        },
+        datePickerConfigTo() {
+            var self = this
+            return {
+                mode: 'single',
+                enableTime: true,
+                wrap: true,
+                static: true,
+                onChange: (selectedDates, dateStr, instance) => {
+                    const date = selectedDates.length > 0 ? moment(selectedDates[0]).format(DateFormats.dateTime) : null
+                    self.dateRangeTo = date
+                },
+            }
+        },
+        isCustomDateRangeMode() {
+            return this.dateRangeMode?.id == 'custom'
+        },
     },
 
     mounted() {
@@ -372,6 +523,11 @@ export default {
             this.status = null
             this.hasInterviews = false
             this.hasBinaryData = false
+            this.paradataMode = 'all'
+            this.dateRangeMode = null
+            this.dateRangeFrom = null
+            this.dateRangeTo = null
+            this.hasAudioAudit = false
 
             this.$refs.exportForm.resetForm()
         },
@@ -394,7 +550,11 @@ export default {
                     self.dataDestination,
                     self.status,
                     self.questionnaireTranslation,
-                    this.includeMeta
+                    this.includeMeta,
+                    this.dateRangeMode,
+                    this.dateRangeFrom,
+                    this.dateRangeTo,
+                    this.paradataMode
                 )
 
                 self.$store.dispatch('showProgress')
@@ -437,7 +597,11 @@ export default {
                 this.dataDestination,
                 this.status,
                 this.questionnaireTranslation,
-                this.includeMeta
+                this.includeMeta,
+                this.dateRangeMode,
+                this.dateRangeFrom,
+                this.dateRangeTo,
+                this.paradataMode
             )
 
             var state = {
@@ -494,8 +658,53 @@ export default {
             dataDestination,
             statusOption,
             translation,
-            includeMeta
+            includeMeta,
+            dateRangeMode,
+            dateRangeFrom,
+            dateRangeTo,
+            paradataMode
         ) {
+            const drMode = dateRangeMode?.id
+
+            let from = null;
+            let to = null;
+
+            switch (drMode) {
+                case "custom":
+                    from = dateRangeFrom ? moment(dateRangeFrom).utc().toISOString() : null;
+                    to = dateRangeTo ? moment(dateRangeTo).utc().toISOString() : null;
+                    break;
+
+                case "last24hours":
+                    from = moment().subtract(1, 'days').utc().toISOString();
+                    to = moment().utc().toISOString();
+                    break;
+
+                case "last7days":
+                    from = moment().startOf('day').subtract(6, 'days').utc().toISOString(); // 7 days ago
+                    to = moment().utc().toISOString();
+                    break;
+
+                case "last30days":
+                    from = moment().startOf('day').subtract(29, 'days').utc().toISOString(); // 30 days ago
+                    to = moment().utc().toISOString();
+                    break;
+
+                case "today":
+                    from = moment().startOf('day').utc().toISOString(); // Start of today
+                    to = moment().utc().toISOString();
+                    break;
+
+                case "yesterday":
+                    from = moment().startOf('day').utc().subtract(1, 'days').toISOString(); // Start of yesterday
+                    to = moment().endOf('day').utc().subtract(1, 'days').toISOString(); // End of yesterday
+                    break;
+            }
+
+            if (!to || moment(to).isAfter(moment())) {
+                to = moment().utc().toISOString(); // Default to now if not set
+            }
+
             var format = dataFormatNum.Tabular
 
             switch (dataType) {
@@ -511,6 +720,9 @@ export default {
                 case 'paraData':
                     format = dataFormatNum.Paradata
                     break
+                case 'audioAudit':
+                    format = dataFormatNum.AudioAudit
+                    break
             }
 
             const status = (statusOption || { key: null }).key
@@ -523,6 +735,9 @@ export default {
                 status: status,
                 translationId: tr,
                 includeMeta: includeMeta,
+                from: from,
+                to: to,
+                paradataMode: paradataMode
             }
         },
 
@@ -589,6 +804,7 @@ export default {
         resetDataAvalability() {
             this.hasInterviews = null
             this.hasBinaryData = null
+            this.hasAudioAudit = null
             this.dataType = null
         },
 
@@ -605,6 +821,7 @@ export default {
                 .then((response) => {
                     this.hasInterviews = response.data.hasInterviews
                     this.hasBinaryData = response.data.hasBinaryData
+                    this.hasAudioAudit = response.data.hasAudioAudit
                     if (this.dataType == null) {
                         this.dataType = this.hasInterviews ? 'surveyData' : 'ddi'
                     }
@@ -615,6 +832,43 @@ export default {
                 .then(() => {
                     this.isUpdatingDataAvailability = false
                 })
+        },
+        validateFromDate(value) {
+            if (!value) {
+                return true;
+            }
+
+            const fromDate = moment(value);
+            const now = moment();
+
+            if (!fromDate.isValid()) {
+                return this.$t('DataExport.Validation_FromDateInvalid');
+            }
+
+            if (fromDate.isAfter(now)) {
+                return this.$t('DataExport.Validation_FromDateInFuture');
+            }
+
+
+            return true;
+        },
+        validateToDate(value) {
+            if (!value) {
+                return true;
+            }
+
+            const toDate = moment(value);
+            const fromDate = moment(this.dateRangeFrom);
+
+            if (!toDate.isValid()) {
+                return this.$t('DataExport.Validation_ToDateInvalid');
+            }
+
+            if (fromDate && toDate.isSameOrBefore(fromDate)) {
+                return this.$t('DataExport.Validation_ToDateBeforeFrom');
+            }
+
+            return true;
         },
     }
 }

@@ -370,7 +370,7 @@
     <value>La sous-section ne peut pas avoir plus de {0} sous-sections parentes.</value>
   </data>
   <data name="WB0006_OnlyOneGpsQuestionCouldBeMarkedAsPrefilled" xml:space="preserve">
-    <value>Une seule question GPS peut être marquée comme question d'identification.</value>
+      <value>Une seule question GPS peut être placée dans la section de la page de couverture</value>
   </data>
   <data name="WB0007_MultiOptionQuestionYesNoQuestionCantBeLinked" xml:space="preserve">
     <value>La question à réponse multiple oui / non ne peut pas être liée.</value>

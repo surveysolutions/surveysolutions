@@ -51,11 +51,7 @@
 import routeSync from '~/shared/routeSync'
 import moment from 'moment'
 import { forEach, findIndex, assign, sortBy, find } from 'lodash'
-
-//const LineChart = () => import('./CumulativeChart')
-
 import CumulativeLineChart from './CumulativeChart'
-import { data } from 'jquery';
 
 export default {
     mixins: [routeSync],

@@ -89,7 +89,8 @@ namespace WB.Services.Export.Host.Controllers
             string? refreshToken,
             Guid? translationId,
             ExternalStorageType? storageType,
-            bool? includeMeta)
+            bool? includeMeta,
+            bool? paradataReduced)
         {
             var args = new DataExportProcessArgs(new ExportSettings
             (
@@ -100,7 +101,8 @@ namespace WB.Services.Export.Host.Controllers
                 toDate: to,
                 translation: translationId,
                 status: status,
-                includeMeta: includeMeta
+                includeMeta: includeMeta,
+                paradataReduced: paradataReduced
             ))
             {
                 ArchivePassword = archivePassword,
@@ -231,7 +233,15 @@ namespace WB.Services.Export.Host.Controllers
         [Route("api/v1/deleteArchives")]
         public async Task<ActionResult> Delete()
         {
-            await this.archiveHandleService.ClearAllExportArchives(tenantContext.Tenant);
+            await this.archiveHandleService.ClearExportArchives(tenantContext.Tenant);
+            return Ok();
+        }
+        
+        [HttpPost]
+        [Route("api/v1/runRetentionPolicy")]
+        public async Task<ActionResult> RunRetentionPolicy(int? countToKeep, int? daysToKeep)
+        {
+            await this.archiveHandleService.RunRetentionPolicy(tenantContext.Tenant, countToKeep, daysToKeep);
             return Ok();
         }
 

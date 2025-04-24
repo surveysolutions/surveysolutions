@@ -1,11 +1,10 @@
 <template>
-    <span style="display:none"
-        :lastActivity="lastActivity" />
+    <span style="display:none" :lastActivity="lastActivity" />
 </template>
 
 <script>
 import modal from '@/shared/modal'
-import moment from'moment'
+import moment from 'moment'
 
 export default {
     computed: {
@@ -47,20 +46,20 @@ export default {
             this.shown = true
             this.$store.dispatch('stop')
 
-            modal.alert({
+            modal.dialog({
                 title: this.$t('WebInterviewUI.SessionTimeoutTitle'),
                 message: `<p>${this.$t(
                     'WebInterviewUI.SessionTimeoutMessageTitle'
                 )}</p><p>${this.$t('WebInterviewUI.SessionTimeoutMessage')}</p>`,
-                callback: () => {
-                    location.reload()
-                },
                 onEscape: false,
                 closeButton: false,
                 buttons: {
                     ok: {
                         label: this.$t('WebInterviewUI.Reload'),
                         className: 'btn-success',
+                        callback: () => {
+                            location.reload()
+                        },
                     },
                 },
             })

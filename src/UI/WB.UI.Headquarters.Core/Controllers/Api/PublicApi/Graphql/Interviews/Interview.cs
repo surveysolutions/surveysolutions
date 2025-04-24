@@ -1,5 +1,7 @@
 #nullable enable
+using System.Collections.Generic;
 using System.Linq;
+using GreenDonut;
 using HotChocolate.Resolvers;
 using HotChocolate.Types;
 using Main.Core.Entities.SubEntities;
@@ -85,7 +87,6 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Interviews
             descriptor.Field(x => x.QuestionnaireVariable).Type<NonNullType<StringType>>();
             descriptor.Field(x => x.QuestionnaireVersion).Type<NonNullType<LongType>>();
             
-
             descriptor.Field(x => x.IdentifyEntitiesValues)
                 .Name("identifyingData")
                 .Description("Information that identifies each assignment. These are the answers to questions marked as identifying in Designer")

@@ -538,4 +538,28 @@
   <data name="Value" xml:space="preserve">
     <value>Hodnota</value>
   </data>
+  <data name="Action_QuantityChanged" xml:space="preserve">
+      <value>Očekávaná hodnota změněna</value>
+  </data>
+  <data name="Action_TargetAreaChanged" xml:space="preserve">
+      <value>Cílová oblast změněna</value>
+  </data>
+  <data name="ChangeTargetAreaModalTitle" xml:space="preserve">
+      <value>Změnit cílovou oblast pro přiřazení {{assignmentId}}</value>
+  </data>
+    <data name="DetailsTargetAreaa" xml:space="preserve">
+    <value>Cílová oblast</value>
+</data>
+    <data name="DetailsGeoTracking" xml:space="preserve">
+    <value>Geotracking</value>
+</data>
+    <data name="EnterTargetArea" xml:space="preserve">
+    <value>Zadejte cílovou oblast</value>
+</data>
+    <data name="TargetArea" xml:space="preserve">
+        <value>Upravit cílovou oblast</value>
+    </data>
+    <data name="TargetAreaExplanation" xml:space="preserve">
+        <value>Zadejte název mapy cílové oblasti pro přiřazení</value>
+    </data>    
 </root>

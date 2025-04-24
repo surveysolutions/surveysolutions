@@ -2,6 +2,7 @@ import { find, findIndex, chunk } from 'lodash'
 import moment from 'moment'
 import { DateFormats } from '~/shared/helpers'
 import axios from 'axios'
+import { errorHandler } from '~/shared/errorHandler'
 
 function formatDate(data) {
     return moment.utc(data).local().format(DateFormats.dateTimeInList)
@@ -60,7 +61,7 @@ export default {
                 if (error && error.response && error.response.status === 401)
                     location.reload()
                 else
-                    self.$errorHandler(error)
+                    errorHandler(error)
             } finally {
                 await new Promise(r => setTimeout(r, jobsToUpdate.length > 0 ? 1000 : 2000))
                 commit('SET_UPDATE_IN_PROGRESS', false)
@@ -123,7 +124,7 @@ export default {
             job.dataFileLastUpdateDate = formatDate(job.dataFileLastUpdateDate)
             job.fileDestination = job.dataDestination
             job.error = (job.error || {}).message
-            job.timeEstimation = moment.duration(job.timeEstimation).humanize(true)
+            job.timeEstimation = job.isRunning ? moment.duration(job.timeEstimation).humanize(true) : null
             state.jobs[index] = job
         },
 

@@ -122,7 +122,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.v2
                 requestBody.AccessToken, requestBody.RefreshToken, 
                 (WB.Core.BoundedContexts.Headquarters.DataExport.Dtos.ExternalStorageType?) requestBody.StorageType,
                 requestBody.TranslationId,
-                requestBody.IncludeMeta);
+                requestBody.IncludeMeta,
+                requestBody.ParadataReduced);
 
             this.auditLog.ExportStared(
                 $@"{questionnaireBrowseItem.Title} v{questionnaireBrowseItem.Version} {requestBody.InterviewStatus.ToString() ?? ""}",
@@ -279,7 +280,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.v2
                 HasExportFile = exportProcess.HasFile,
                 InterviewStatus = exportProcess.InterviewStatus == null
                     ? ExportInterviewType.All
-                    : (ExportInterviewType) exportProcess.InterviewStatus
+                    : (ExportInterviewType) exportProcess.InterviewStatus,
+                IncludeMeta = exportProcess.IncludeMeta ?? false,
+                ParadataReduced = exportProcess.ParadataReduced ?? false,
             };
 
             if (exportProcess.IsRunning || exportProcess.HasFile)
@@ -339,6 +342,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.v2
             public Guid? TranslationId { get; set; }
 
             public bool? IncludeMeta { get; set; }
+            public bool? ParadataReduced { get; set; }
         }
 
         public class ExportProcess : CreateExportProcess
@@ -405,7 +409,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.v2
             SPSS = 3,
             Binary = 4,
             DDI = 5,
-            Paradata = 6
+            Paradata = 6,
+            AudioAudit = 7
         }
 
         public enum ExportStatus

@@ -1,7 +1,7 @@
 <template>
     <div class="export-card">
         <div class="top-row">
-            <div class="format-data" :class="data.format">
+            <div class="format-data" :class="iconClass">
                 <div class="gray-text-row">
                     <b>#{{ data.id }}&nbsp;</b>
                     <span v-if="!isCompleted">
@@ -14,7 +14,8 @@
                         { title: data.title, version: data.questionnaireIdentity.version }) }}
                 </div>
                 <p class="mb-0 font-regular">
-                    <u class="font-bold">{{ data.format }}</u> format.
+                    <u class="font-bold">{{ data.format }}{{ data.format == "Paradata" && data.paradataReduced == true ?
+                        " (" + $t("DataExport.ParadataEventsFilter_Reduced") + ")" : "" }}</u> format.
                     <span v-if="data.format != 'DDI' && data.interviewStatus != null" class="font-bold">
                         {{ $t('DataExport.DataExport_InterviewsStatus', {
                             status: $t('DataExport.' + data.interviewStatus),
@@ -23,10 +24,19 @@
                     </span>
                     <span>&nbsp;{{ translation }}</span>
                 </p>
+                <p class="mb-0 font-regular" v-if="data.fromDate || data.toDate" :title="dateRangeTitle">
+                    {{ $t('DataExport.FromDate') }}
+                    <span class="font-bold">{{ formatDate(data.fromDate) || '-' }}</span>
+                    {{ $t('DataExport.ToDate') }}
+                    <span class="font-bold">{{ formatDate(data.toDate) || '-' }}</span>
+                </p>
+                <p class="mb-0 font-regular" v-if="data.fromDate == null && data.toDate == null">
+                    <span class="font-bold">{{ $t('DataExport.DateRangeAllTime') }}</span>
+                </p>
             </div>
         </div>
         <div class="bottom-row" :class="{ 'is-failed': isFailed, 'is-successful': isSuccessfull }">
-            <div class="export-destination" :title="data.timeEstimation" :class="data.dataDestination">
+            <div class="export-destination" :class="data.dataDestination">
                 <p>
                     <span v-if="data.dataDestination != null">
                         {{
@@ -119,7 +129,8 @@
 
 <script>
 import modal from '@/shared/modal'
-import moment from 'moment'
+import { DateFormats } from '~/shared/helpers'
+import moment from 'moment-timezone'
 
 export default {
     props: {
@@ -132,6 +143,15 @@ export default {
     },
 
     computed: {
+        iconClass() {
+            if (this.data.format == 'Paradata' && this.data.paradataReduced == true)
+                return 'ParadataReduced'
+
+            if (this.data.format == 'AudioAudit')
+                return 'Binary'
+
+            return this.data.format
+        },
         downloadFileUrl() {
             var url = this.$config.model.api.downloadDataUrl
             return `${url}?id=${this.data.id}`
@@ -143,7 +163,7 @@ export default {
             return this.isInitializing == false && this.data.isRunning == false && this.data.error == null
         },
         canRegenerate() {
-            return this.data.dataDestination == 'File'
+            return false//this.data.dataDestination == 'File'
         },
         isRunning() {
             return this.data.jobStatus == 'Running'
@@ -154,6 +174,15 @@ export default {
         translation() {
             const languageName = this.data.translationName || this.$t('WebInterview.Original_Language')
             return this.$t('DataExport.Translation_CardLabel', { language: languageName })
+        },
+        dateRangeTitle() {
+            const title = this.$t('DataExport.FromDate') + ' ' +
+                (this.data.fromDate ? (this.data.fromDate + ' (UTC)') : '-') +
+                ' ' +
+                this.$t('DataExport.ToDate') + ' ' +
+                (this.data.toDate ? (this.data.toDate + ' (UTC)') : '-');
+            return title
+            //return data.fromDate + ' - ' + data.toDate
         },
     },
 
@@ -210,7 +239,12 @@ export default {
             let duration = moment.duration(diff);
 
             return duration.humanize({ m: 60, h: 24, d: 7, w: 4 });
-        }
+        },
+        formatDate(date) {
+            if (date)
+                return moment.utc(date).local().format(DateFormats.dateTimeInList)
+            return null
+        },
     },
 }
 </script>

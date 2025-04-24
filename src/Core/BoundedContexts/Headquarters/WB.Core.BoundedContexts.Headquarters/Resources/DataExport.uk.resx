@@ -187,7 +187,7 @@
     <value>Розмір файлу: {{size}} МБ</value>
   </data>
   <data name="DataExport_FileWasRegenerated" xml:space="preserve">
-    <value>Файл було перегенеровано</value>
+      <value>Файл було перегенеровано або видалено</value>
   </data>
   <data name="DataExport_Header" xml:space="preserve">
     <value>Виберіть тип і формат даних для експорту</value>
@@ -419,5 +419,8 @@
   </data>
   <data name="SurveyQuestionnaireTranslation" xml:space="preserve">
       <value>Переклад</value>
+  </data>
+  <data name="DataType_AudioAuditFiles" xml:space="preserve">
+      <value>Файли аудиту аудіо. Архів, що містить аудіо ауди</value>
   </data>
 </root>

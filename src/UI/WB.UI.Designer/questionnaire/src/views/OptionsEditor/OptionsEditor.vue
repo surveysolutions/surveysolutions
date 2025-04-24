@@ -80,6 +80,7 @@
 </template>
 
 <script>
+import '@mdi/font/css/materialdesignicons.css'
 import CategoryTable from './components/OptionItemsTable.vue';
 import CategoryStrings from './components/OptionItemsAsStrings.vue';
 import { optionsApi } from './services';
@@ -268,7 +269,7 @@ export default {
         resetChanges() {
             this.reloadCategories(() => {
                 this.snacks.formReverted = true;
-                this.isCascadingCategory = this.cascading;
+                this.isCascadingCategory = this.isCascading;
                 this.errors = [];
             });
         },

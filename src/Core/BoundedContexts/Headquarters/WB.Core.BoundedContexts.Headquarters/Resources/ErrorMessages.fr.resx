@@ -141,4 +141,16 @@
   <data name="PleaseFillCaptcha" xml:space="preserve">
     <value>S'il vous plaît remplir le champ captcha</value>
   </data>
+    <data name="InvalidAuthenticatorCode" xml:space="preserve">
+  <value>Code d'authentification invalide.</value>
+</data>
+    <data name="InvalidRecoveryCode" xml:space="preserve">
+  <value>Code de récupération invalide saisi.</value>
+</data>
+    <data name="QuestionnaireAlreadyImporting" xml:space="preserve">
+    <value>Un autre questionnaire est en cours d'importation dans le siège.</value>
+</data>
+    <data name="ApiUserIsNotAllowedToSignIn" xml:space="preserve">
+    <value>L'utilisateur API n'est pas autorisé à se connecter avec l'interface utilisateur</value>
+</data>
 </root>

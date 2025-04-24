@@ -270,4 +270,7 @@
   <data name="YourQuestionnaire_0_ContainsNewFunctionalityWhichIsNotSupportedByYourInstallationPleaseUpdate" xml:space="preserve">
     <value>Chestionarul dvs. „{0}” conține funcționalități noi: {1}. Instalarea dvs. nu acceptă funcții noi. Te rog actualizează.</value>
   </data>
+  <data name="InvalidLoginAttempt" xml:space="preserve">
+      <value>Tentativă de autentificare invalidă</value>
+  </data>
 </root>

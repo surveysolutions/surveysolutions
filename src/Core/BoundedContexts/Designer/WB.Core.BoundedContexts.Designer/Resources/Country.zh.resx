@@ -1,61 +1,811 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
-    <xsd:element name="root" msdata:IsDataSet="true">
-      <xsd:complexType>
-        <xsd:choice maxOccurs="unbounded">
-          <xsd:element name="metadata">
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
             <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
-              </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
             </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="assembly">
-            <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="data">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="resheader">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
-            </xsd:complexType>
-          </xsd:element>
-        </xsd:choice>
-      </xsd:complexType>
-    </xsd:element>
-  </xsd:schema>
-  <resheader name="resmimetype">
-    <value>text/microsoft-resx</value>
-  </resheader>
-  <resheader name="version">
-    <value>2.0</value>
-  </resheader>
-  <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </resheader>
-  <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </resheader>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="ABW" xml:space="preserve">
+      <value>阿鲁巴</value>
+    </data>
+    <data name="AFG" xml:space="preserve">
+      <value>阿富汗</value>
+    </data>
+    <data name="AFR" xml:space="preserve">
+      <value>非洲</value>
+    </data>
+    <data name="AGO" xml:space="preserve">
+      <value>安哥拉</value>
+    </data>
+    <data name="AIA" xml:space="preserve">
+      <value>安圭拉</value>
+    </data>
+    <data name="ALB" xml:space="preserve">
+      <value>阿尔巴尼亚</value>
+    </data>
+    <data name="AND" xml:space="preserve">
+      <value>安道尔</value>
+    </data>
+    <data name="ANT" xml:space="preserve">
+      <value>荷属安的列斯</value>
+    </data>
+    <data name="ARE" xml:space="preserve">
+      <value>阿联酋</value>
+    </data>
+    <data name="ARG" xml:space="preserve">
+      <value>阿根廷</value>
+    </data>
+    <data name="ARM" xml:space="preserve">
+      <value>亚美尼亚</value>
+    </data>
+    <data name="ASM" xml:space="preserve">
+      <value>美属萨摩亚</value>
+    </data>
+    <data name="ATA" xml:space="preserve">
+      <value>南极洲</value>
+    </data>
+    <data name="ATF" xml:space="preserve">
+      <value>法属南部领地</value>
+    </data>
+    <data name="ATG" xml:space="preserve">
+      <value>安提瓜和巴布达</value>
+    </data>
+    <data name="AUS" xml:space="preserve">
+      <value>澳大利亚</value>
+    </data>
+    <data name="AUT" xml:space="preserve">
+      <value>奥地利</value>
+    </data>
+    <data name="AZE" xml:space="preserve">
+      <value>阿塞拜疆</value>
+    </data>
+    <data name="BDI" xml:space="preserve">
+      <value>布隆迪</value>
+    </data>
+    <data name="BEL" xml:space="preserve">
+      <value>比利时</value>
+    </data>
+    <data name="BEN" xml:space="preserve">
+      <value>贝宁</value>
+    </data>
+    <data name="BFA" xml:space="preserve">
+      <value>布基纳法索</value>
+    </data>
+    <data name="BGD" xml:space="preserve">
+      <value>孟加拉国</value>
+    </data>
+    <data name="BGR" xml:space="preserve">
+      <value>保加利亚</value>
+    </data>
+    <data name="BHR" xml:space="preserve">
+      <value>巴林</value>
+    </data>
+    <data name="BHS" xml:space="preserve">
+      <value>巴哈马</value>
+    </data>
+    <data name="BIH" xml:space="preserve">
+      <value>波斯尼亚和黑塞哥维那</value>
+    </data>
+    <data name="BLR" xml:space="preserve">
+      <value>白俄罗斯</value>
+    </data>
+    <data name="BLZ" xml:space="preserve">
+      <value>伯利兹</value>
+    </data>
+    <data name="BMU" xml:space="preserve">
+      <value>百慕大</value>
+    </data>
+    <data name="BOL" xml:space="preserve">
+      <value>玻利维亚</value>
+    </data>
+    <data name="BRA" xml:space="preserve">
+      <value>巴西</value>
+    </data>
+    <data name="BRB" xml:space="preserve">
+      <value>巴巴多斯</value>
+    </data>
+    <data name="BRN" xml:space="preserve">
+      <value>文莱</value>
+    </data>
+    <data name="BTN" xml:space="preserve">
+      <value>不丹</value>
+    </data>
+    <data name="BVT" xml:space="preserve">
+      <value>布韦岛</value>
+    </data>
+    <data name="BWA" xml:space="preserve">
+      <value>博茨瓦纳</value>
+    </data>
+    <data name="CAF" xml:space="preserve">
+      <value>中非共和国</value>
+    </data>
+    <data name="CAN" xml:space="preserve">
+      <value>加拿大</value>
+    </data>
+    <data name="CCK" xml:space="preserve">
+      <value>科科斯群岛</value>
+    </data>
+    <data name="CHE" xml:space="preserve">
+      <value>瑞士</value>
+    </data>
+    <data name="CHL" xml:space="preserve">
+      <value>智利</value>
+    </data>
+    <data name="CHN" xml:space="preserve">
+      <value>中国</value>
+    </data>
+    <data name="CIV" xml:space="preserve">
+      <value>科特迪瓦</value>
+    </data>
+    <data name="CMR" xml:space="preserve">
+      <value>喀麦隆</value>
+    </data>
+    <data name="COD" xml:space="preserve">
+      <value>刚果（金）</value>
+    </data>
+    <data name="COG" xml:space="preserve">
+      <value>刚果（布）</value>
+    </data>
+    <data name="COK" xml:space="preserve">
+      <value>库克群岛</value>
+    </data>
+    <data name="COL" xml:space="preserve">
+      <value>哥伦比亚</value>
+    </data>
+    <data name="COM" xml:space="preserve">
+      <value>科摩罗</value>
+    </data>
+    <data name="CPV" xml:space="preserve">
+      <value>佛得角</value>
+    </data>
+    <data name="CRI" xml:space="preserve">
+      <value>哥斯达黎加</value>
+    </data>
+    <data name="CUB" xml:space="preserve">
+      <value>古巴</value>
+    </data>
+    <data name="CXR" xml:space="preserve">
+      <value>圣诞岛</value>
+    </data>
+    <data name="CYM" xml:space="preserve">
+      <value>开曼群岛</value>
+    </data>
+    <data name="CYP" xml:space="preserve">
+      <value>塞浦路斯</value>
+    </data>
+    <data name="CZE" xml:space="preserve">
+      <value>捷克共和国</value>
+    </data>
+    <data name="DEU" xml:space="preserve">
+      <value>德国</value>
+    </data>
+    <data name="DJI" xml:space="preserve">
+      <value>吉布提</value>
+    </data>
+    <data name="DMA" xml:space="preserve">
+      <value>多米尼加</value>
+    </data>
+    <data name="DNK" xml:space="preserve">
+      <value>丹麦</value>
+    </data>
+    <data name="DOM" xml:space="preserve">
+      <value>多米尼加共和国</value>
+    </data>
+    <data name="DZA" xml:space="preserve">
+      <value>阿尔及利亚</value>
+    </data>
+    <data name="ECA" xml:space="preserve">
+      <value>欧洲和中亚</value>
+    </data>
+    <data name="ECU" xml:space="preserve">
+      <value>厄瓜多尔</value>
+    </data>
+    <data name="EGY" xml:space="preserve">
+      <value>埃及</value>
+    </data>
+    <data name="ERI" xml:space="preserve">
+      <value>厄立特里亚</value>
+    </data>
+    <data name="ESH" xml:space="preserve">
+      <value>西撒哈拉</value>
+    </data>
+    <data name="ESP" xml:space="preserve">
+      <value>西班牙</value>
+    </data>
+    <data name="EST" xml:space="preserve">
+      <value>爱沙尼亚</value>
+    </data>
+    <data name="ETH" xml:space="preserve">
+      <value>埃塞俄比亚</value>
+    </data>
+    <data name="FIN" xml:space="preserve">
+      <value>芬兰</value>
+    </data>
+    <data name="FJI" xml:space="preserve">
+      <value>斐济</value>
+    </data>
+    <data name="FLK" xml:space="preserve">
+      <value>福克兰群岛</value>
+    </data>
+    <data name="FRA" xml:space="preserve">
+      <value>法国</value>
+    </data>
+    <data name="FRO" xml:space="preserve">
+      <value>法罗群岛</value>
+    </data>
+    <data name="FSM" xml:space="preserve">
+      <value>密克罗尼西亚</value>
+    </data>
+    <data name="FXX" xml:space="preserve">
+      <value>法国大都会</value>
+    </data>
+    <data name="GAB" xml:space="preserve">
+      <value>加蓬</value>
+    </data>
+    <data name="GBR" xml:space="preserve">
+      <value>英国</value>
+    </data>
+    <data name="GEO" xml:space="preserve">
+      <value>格鲁吉亚</value>
+    </data>
+    <data name="GHA" xml:space="preserve">
+      <value>加纳</value>
+    </data>
+    <data name="GIB" xml:space="preserve">
+      <value>直布罗陀</value>
+    </data>
+    <data name="GIN" xml:space="preserve">
+      <value>几内亚</value>
+    </data>
+    <data name="GLP" xml:space="preserve">
+      <value>瓜德罗普</value>
+    </data>
+    <data name="GMB" xml:space="preserve">
+      <value>冈比亚</value>
+    </data>
+    <data name="GNB" xml:space="preserve">
+      <value>几内亚比绍</value>
+    </data>
+    <data name="GNQ" xml:space="preserve">
+      <value>赤道几内亚</value>
+    </data>
+    <data name="GRC" xml:space="preserve">
+      <value>希腊</value>
+    </data>
+    <data name="GRD" xml:space="preserve">
+      <value>格林纳达</value>
+    </data>
+    <data name="GRL" xml:space="preserve">
+      <value>格陵兰</value>
+    </data>
+    <data name="GTM" xml:space="preserve">
+      <value>危地马拉</value>
+    </data>
+    <data name="GUF" xml:space="preserve">
+      <value>法属圭亚那</value>
+    </data>
+    <data name="GUM" xml:space="preserve">
+      <value>关岛</value>
+    </data>
+    <data name="GUY" xml:space="preserve">
+      <value>圭亚那</value>
+    </data>
+    <data name="HKG" xml:space="preserve">
+      <value>中国香港特别行政区</value>
+    </data>
+    <data name="HMD" xml:space="preserve">
+      <value>赫德岛和麦克唐纳群岛</value>
+    </data>
+    <data name="HND" xml:space="preserve">
+      <value>洪都拉斯</value>
+    </data>
+    <data name="HRV" xml:space="preserve">
+      <value>克罗地亚</value>
+    </data>
+    <data name="HTI" xml:space="preserve">
+      <value>海地</value>
+    </data>
+    <data name="HUN" xml:space="preserve">
+      <value>匈牙利</value>
+    </data>
+    <data name="IDN" xml:space="preserve">
+      <value>印度尼西亚</value>
+    </data>
+    <data name="IND" xml:space="preserve">
+      <value>印度</value>
+    </data>
+    <data name="IOT" xml:space="preserve">
+      <value>英属印度洋领地</value>
+    </data>
+    <data name="IRL" xml:space="preserve">
+      <value>爱尔兰</value>
+    </data>
+    <data name="IRN" xml:space="preserve">
+      <value>伊朗</value>
+    </data>
+    <data name="IRQ" xml:space="preserve">
+      <value>伊拉克</value>
+    </data>
+    <data name="ISL" xml:space="preserve">
+      <value>冰岛</value>
+    </data>
+    <data name="ISR" xml:space="preserve">
+      <value>以色列</value>
+    </data>
+    <data name="ITA" xml:space="preserve">
+      <value>意大利</value>
+    </data>
+    <data name="JAM" xml:space="preserve">
+      <value>牙买加</value>
+    </data>
+    <data name="JER" xml:space="preserve">
+      <value>耶路撒冷</value>
+    </data>
+    <data name="JOR" xml:space="preserve">
+      <value>约旦</value>
+    </data>
+    <data name="JPN" xml:space="preserve">
+      <value>日本</value>
+    </data>
+    <data name="KAZ" xml:space="preserve">
+      <value>哈萨克斯坦</value>
+    </data>
+    <data name="KEN" xml:space="preserve">
+      <value>肯尼亚</value>
+    </data>
+    <data name="KGZ" xml:space="preserve">
+      <value>吉尔吉斯斯坦</value>
+    </data>
+    <data name="KHM" xml:space="preserve">
+      <value>柬埔寨</value>
+    </data>
+    <data name="KIR" xml:space="preserve">
+      <value>基里巴斯</value>
+    </data>
+    <data name="KNA" xml:space="preserve">
+      <value>圣基茨和尼维斯</value>
+    </data>
+    <data name="KOR" xml:space="preserve">
+      <value>韩国</value>
+    </data>
+    <data name="KSV" xml:space="preserve">
+      <value>科索沃</value>
+    </data>
+    <data name="KWT" xml:space="preserve">
+      <value>科威特</value>
+    </data>
+    <data name="LAC" xml:space="preserve">
+      <value>拉丁美洲和加勒比</value>
+    </data>
+    <data name="LAO" xml:space="preserve">
+      <value>老挝</value>
+    </data>
+    <data name="LBN" xml:space="preserve">
+      <value>黎巴嫩</value>
+    </data>
+    <data name="LBR" xml:space="preserve">
+      <value>利比里亚</value>
+    </data>
+    <data name="LBY" xml:space="preserve">
+      <value>利比亚</value>
+    </data>
+    <data name="LCA" xml:space="preserve">
+      <value>圣卢西亚</value>
+    </data>
+    <data name="LIE" xml:space="preserve">
+      <value>列支敦士登</value>
+    </data>
+    <data name="LKA" xml:space="preserve">
+      <value>斯里兰卡</value>
+    </data>
+    <data name="LSO" xml:space="preserve">
+      <value>莱索托</value>
+    </data>
+    <data name="LTU" xml:space="preserve">
+      <value>立陶宛</value>
+    </data>
+    <data name="LUX" xml:space="preserve">
+      <value>卢森堡</value>
+    </data>
+    <data name="LVA" xml:space="preserve">
+      <value>拉脱维亚</value>
+    </data>
+    <data name="MAC" xml:space="preserve">
+      <value>澳门</value>
+    </data>
+    <data name="MAR" xml:space="preserve">
+      <value>摩洛哥</value>
+    </data>
+    <data name="MCO" xml:space="preserve">
+      <value>摩纳哥</value>
+    </data>
+    <data name="MDA" xml:space="preserve">
+      <value>摩尔多瓦</value>
+    </data>
+    <data name="MDG" xml:space="preserve">
+      <value>马达加斯加</value>
+    </data>
+    <data name="MDV" xml:space="preserve">
+      <value>马尔代夫</value>
+    </data>
+    <data name="MEX" xml:space="preserve">
+      <value>墨西哥</value>
+    </data>
+    <data name="MHL" xml:space="preserve">
+      <value>马绍尔群岛</value>
+    </data>
+    <data name="MKD" xml:space="preserve">
+      <value>马其顿，前南斯拉夫</value>
+    </data>
+    <data name="MLI" xml:space="preserve">
+      <value>马里</value>
+    </data>
+    <data name="MLT" xml:space="preserve">
+      <value>马耳他</value>
+    </data>
+    <data name="MMR" xml:space="preserve">
+      <value>缅甸</value>
+    </data>
+    <data name="MNE" xml:space="preserve">
+      <value>黑山</value>
+    </data>
+    <data name="MNG" xml:space="preserve">
+      <value>蒙古</value>
+    </data>
+    <data name="MNP" xml:space="preserve">
+      <value>北马里亚纳群岛</value>
+    </data>
+    <data name="MOZ" xml:space="preserve">
+      <value>莫桑比克</value>
+    </data>
+    <data name="MRT" xml:space="preserve">
+      <value>毛里塔尼亚</value>
+    </data>
+    <data name="MSR" xml:space="preserve">
+      <value>蒙特塞拉特</value>
+    </data>
+    <data name="MTQ" xml:space="preserve">
+      <value>马提尼克</value>
+    </data>
+    <data name="MUS" xml:space="preserve">
+      <value>毛里求斯</value>
+    </data>
+    <data name="MWI" xml:space="preserve">
+      <value>马拉维</value>
+    </data>
+    <data name="MYS" xml:space="preserve">
+      <value>马来西亚</value>
+    </data>
+    <data name="MYT" xml:space="preserve">
+      <value>马约特</value>
+    </data>
+    <data name="NAM" xml:space="preserve">
+      <value>纳米比亚</value>
+    </data>
+    <data name="NCL" xml:space="preserve">
+      <value>新喀里多尼亚</value>
+    </data>
+    <data name="NER" xml:space="preserve">
+      <value>尼日尔</value>
+    </data>
+    <data name="NFK" xml:space="preserve">
+      <value>诺福克岛</value>
+    </data>
+    <data name="NGA" xml:space="preserve">
+      <value>尼日利亚</value>
+    </data>
+    <data name="NIC" xml:space="preserve">
+      <value>尼加拉瓜</value>
+    </data>
+    <data name="NIU" xml:space="preserve">
+      <value>纽埃</value>
+    </data>
+    <data name="NLD" xml:space="preserve">
+      <value>荷兰</value>
+    </data>
+    <data name="NOR" xml:space="preserve">
+      <value>挪威</value>
+    </data>
+    <data name="NPL" xml:space="preserve">
+      <value>尼泊尔</value>
+    </data>
+    <data name="NRU" xml:space="preserve">
+      <value>瑙鲁</value>
+    </data>
+    <data name="NZL" xml:space="preserve">
+      <value>新西兰</value>
+    </data>
+    <data name="OMN" xml:space="preserve">
+      <value>阿曼</value>
+    </data>
+    <data name="PAK" xml:space="preserve">
+      <value>巴基斯坦</value>
+    </data>
+    <data name="PAN" xml:space="preserve">
+      <value>巴拿马</value>
+    </data>
+    <data name="PCN" xml:space="preserve">
+      <value>皮特凯恩岛</value>
+    </data>
+    <data name="PER" xml:space="preserve">
+      <value>秘鲁</value>
+    </data>
+    <data name="PHL" xml:space="preserve">
+      <value>菲律宾</value>
+    </data>
+    <data name="PLW" xml:space="preserve">
+      <value>帕劳</value>
+    </data>
+    <data name="PNG" xml:space="preserve">
+      <value>巴布亚新几内亚</value>
+    </data>
+    <data name="POL" xml:space="preserve">
+      <value>波兰</value>
+    </data>
+    <data name="PRI" xml:space="preserve">
+      <value>波多黎各</value>
+    </data>
+    <data name="PRK" xml:space="preserve">
+      <value>朝鲜</value>
+    </data>
+    <data name="PRT" xml:space="preserve">
+      <value>葡萄牙</value>
+    </data>
+    <data name="PRY" xml:space="preserve">
+      <value>巴拉圭</value>
+    </data>
+    <data name="PSE" xml:space="preserve">
+      <value>西岸和加沙</value>
+    </data>
+    <data name="PYF" xml:space="preserve">
+      <value>法属波利尼西亚</value>
+    </data>
+    <data name="QAT" xml:space="preserve">
+      <value>卡塔尔</value>
+    </data>
+    <data name="ROM" xml:space="preserve">
+      <value>罗马尼亚</value>
+    </data>
+    <data name="RUS" xml:space="preserve">
+      <value>俄罗斯联邦</value>
+    </data>
+    <data name="RWA" xml:space="preserve">
+      <value>卢旺达</value>
+    </data>
+    <data name="SAU" xml:space="preserve">
+      <value>沙特阿拉伯</value>
+    </data>
+    <data name="SCG" xml:space="preserve">
+      <value>塞尔维亚和黑山</value>
+    </data>
+    <data name="SDN" xml:space="preserve">
+      <value>苏丹</value>
+    </data>
+    <data name="SEN" xml:space="preserve">
+      <value>塞内加尔</value>
+    </data>
+    <data name="SGP" xml:space="preserve">
+      <value>新加坡</value>
+    </data>
+    <data name="SGS" xml:space="preserve">
+      <value>南乔治亚岛和南桑威奇群岛</value>
+    </data>
+    <data name="SHN" xml:space="preserve">
+      <value>圣赫勒拿</value>
+    </data>
+    <data name="SJM" xml:space="preserve">
+      <value>斯瓦尔巴和扬马延群岛</value>
+    </data>
+    <data name="SLB" xml:space="preserve">
+      <value>所罗门群岛</value>
+    </data>
+    <data name="SLE" xml:space="preserve">
+      <value>塞拉利昂</value>
+    </data>
+    <data name="SLV" xml:space="preserve">
+      <value>萨尔瓦多</value>
+    </data>
+    <data name="SMR" xml:space="preserve">
+      <value>圣马力诺</value>
+    </data>
+    <data name="SOM" xml:space="preserve">
+      <value>索马里</value>
+    </data>
+    <data name="SPM" xml:space="preserve">
+      <value>圣皮埃尔和密克隆</value>
+    </data>
+    <data name="SRB" xml:space="preserve">
+      <value>塞尔维亚</value>
+    </data>
+    <data name="SSD" xml:space="preserve">
+      <value>南苏丹</value>
+    </data>
+    <data name="STP" xml:space="preserve">
+      <value>圣多美和普林西比</value>
+    </data>
+    <data name="SUR" xml:space="preserve">
+      <value>苏里南</value>
+    </data>
+    <data name="SVK" xml:space="preserve">
+      <value>斯洛伐克共和国</value>
+    </data>
+    <data name="SVN" xml:space="preserve">
+      <value>斯洛文尼亚</value>
+    </data>
+    <data name="SWE" xml:space="preserve">
+      <value>瑞典</value>
+    </data>
+    <data name="SWZ" xml:space="preserve">
+      <value>斯威士兰</value>
+    </data>
+    <data name="SYC" xml:space="preserve">
+      <value>塞舌尔</value>
+    </data>
+    <data name="SYR" xml:space="preserve">
+      <value>阿拉伯叙利亚共和国</value>
+    </data>
+    <data name="TCA" xml:space="preserve">
+      <value>特克斯和凯科斯群岛</value>
+    </data>
+    <data name="TCD" xml:space="preserve">
+      <value>乍得</value>
+    </data>
+    <data name="TGO" xml:space="preserve">
+      <value>多哥</value>
+    </data>
+    <data name="THA" xml:space="preserve">
+      <value>泰国</value>
+    </data>
+    <data name="TJK" xml:space="preserve">
+      <value>塔吉克斯坦</value>
+    </data>
+    <data name="TKL" xml:space="preserve">
+      <value>托克劳</value>
+    </data>
+    <data name="TKM" xml:space="preserve">
+      <value>土库曼斯坦</value>
+    </data>
+    <data name="TLS" xml:space="preserve">
+      <value>东帝汶</value>
+    </data>
+    <data name="TON" xml:space="preserve">
+      <value>汤加</value>
+    </data>
+    <data name="TTO" xml:space="preserve">
+      <value>特立尼达和多巴哥</value>
+    </data>
+    <data name="TUN" xml:space="preserve">
+      <value>突尼斯</value>
+    </data>
+    <data name="TUR" xml:space="preserve">
+      <value>土耳其</value>
+    </data>
+    <data name="TUV" xml:space="preserve">
+      <value>图瓦卢</value>
+    </data>
+    <data name="TWN" xml:space="preserve">
+      <value>台湾</value>
+    </data>
+    <data name="TZA" xml:space="preserve">
+      <value>坦桑尼亚</value>
+    </data>
+    <data name="UGA" xml:space="preserve">
+      <value>乌干达</value>
+    </data>
+    <data name="UKR" xml:space="preserve">
+      <value>乌克兰</value>
+    </data>
+    <data name="UMI" xml:space="preserve">
+      <value>美国本土外小岛屿</value>
+    </data>
+    <data name="URY" xml:space="preserve">
+      <value>乌拉圭</value>
+    </data>
+    <data name="USA" xml:space="preserve">
+      <value>美国</value>
+    </data>
+    <data name="UZB" xml:space="preserve">
+      <value>乌兹别克斯坦</value>
+    </data>
+    <data name="VAT" xml:space="preserve">
+      <value>梵蒂冈</value>
+    </data>
+    <data name="VCT" xml:space="preserve">
+      <value>圣文森特和格林纳丁斯</value>
+    </data>
+    <data name="VEN" xml:space="preserve">
+      <value>委内瑞拉，玻利瓦尔共和国</value>
+    </data>
+    <data name="VGB" xml:space="preserve">
+      <value>英属维尔京群岛</value>
+    </data>
+    <data name="VGB1" xml:space="preserve">
+      <value>维尔京群岛（英属）</value>
+    </data>
+    <data name="VIR" xml:space="preserve">
+      <value>美属维尔京群岛</value>
+    </data>
+    <data name="VNM" xml:space="preserve">
+      <value>越南</value>
+    </data>
+    <data name="VUT" xml:space="preserve">
+      <value>瓦努阿图</value>
+    </data>
+    <data name="WBG" xml:space="preserve">
+      <value>西岸和加沙</value>
+    </data>
+    <data name="WLD" xml:space="preserve">
+      <value>世界</value>
+    </data>
+    <data name="WLF" xml:space="preserve">
+      <value>瓦利斯和富图纳</value>
+    </data>
+    <data name="WSM" xml:space="preserve">
+      <value>萨摩亚</value>
+    </data>
+    <data name="YEM" xml:space="preserve">
+      <value>也门共和国</value>
+    </data>
+    <data name="ZAF" xml:space="preserve">
+      <value>南非</value>
+    </data>
+    <data name="ZMB" xml:space="preserve">
+      <value>赞比亚</value>
+    </data>
+    <data name="ZWE" xml:space="preserve">
+      <value>津巴布韦</value>
+    </data>
 </root>

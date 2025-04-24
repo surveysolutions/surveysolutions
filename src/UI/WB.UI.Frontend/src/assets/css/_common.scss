@@ -1,3 +1,5 @@
+@use "sass:color";
+
 @include fontface(RobotoRegular);
 @include fontface(RobotoLight);
 @include fontface(RobotoBold);
@@ -109,21 +111,20 @@ h1 {
 
 h2,
 .h2 {
-    font: 26px/28px "RobotoLight";
+    font: 22px/24px "RobotoLight";
     font-weight: normal;
     margin-top: 0;
-    margin-bottom: 25px;
 }
 
 h3,
 .h3 {
-    font: 19px/21px "RobotoBold";
+    font: 20px/22px "RobotoBold";
     margin-top: 0;
 }
 
 h4,
 .h4 {
-    font: 22px/24px "RobotoLight";
+    font: 16px/18px "RobotoLight";
     margin-bottom: 20px;
 }
 
@@ -753,7 +754,7 @@ main.hidden.display-block {
             border-bottom: 2px solid $gray_form;
 
             &.selected {
-                background-color: darken(#f8f9f9, 7%);
+                background-color: color.adjust(#f8f9f9, $lightness: -7%);
             }
 
             &:last-of-type {
@@ -953,7 +954,7 @@ dl {
     &:hover,
     &:focus,
     &:active {
-        color: darken($green, 10%);
+        color: color.adjust($green, $lightness: -10%);
     }
 }
 

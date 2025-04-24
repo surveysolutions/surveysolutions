@@ -168,4 +168,7 @@
   <data name="ZeroRecords" xml:space="preserve">
     <value>Aucun enregistrement correspondant trouvé</value>
   </data>
+    <data name="InfoPostFix" xml:space="preserve">
+    <value />
+  </data>
 </root>

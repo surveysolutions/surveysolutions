@@ -21,11 +21,13 @@ namespace WB.Services.Export.Infrastructure
         void MoveFile(string fromPath, string toPath);
         string[] GetFilesInDirectory(string directoryPath);
         string[] GetFilesInDirectory(string pathToDirectory, string pattern);
+        string[] GetFilesInDirectory(string pathToDirectory, string pattern, bool recursive);
         bool IsFileExists(string filePath);
         byte[]? ReadAllBytes(string filePath);
         void WriteAllBytes(string filePath, byte[] data);
         string GetTempPath(string basePath);
         DateTime GetModificationTime(string filePath);
         long GetFileSize(string filePath);
+        char DirectorySeparatorChar();
     }
 }

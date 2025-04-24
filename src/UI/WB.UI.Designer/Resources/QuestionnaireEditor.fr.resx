@@ -1632,9 +1632,6 @@ Vous avez entré une entrée invalide. Chaque ligne doit suivre le format : "Tit
   <data name="ManageAccount" xml:space="preserve">
     <value>Gérer le compte</value>
   </data>
-  <data name="OldUi" xml:space="preserve">
-      <value>Ancienne interface</value>
-  </data>
   <data name="ShowList" xml:space="preserve">
       <value>Afficher la liste</value>
   </data>
@@ -1659,4 +1656,5 @@ Vous avez entré une entrée invalide. Chaque ligne doit suivre le format : "Tit
   <data name="HelpCriticalityConditionMessage" xml:space="preserve">
       <value>Ce message est affiché lorsque la condition critique est évaluée à "Faux" ou qu'une exception se produit lors de l'évaluation de l'expression. Le message peut utiliser des hyperliens et la substitution de texte.</value>
   </data>
+    
 </root>

@@ -133,7 +133,7 @@
     <value>يبلغ طول المقدار المتغير أكثر من {0} حرفا.</value>
   </data>
   <data name="WB0006_OnlyOneGpsQuestionCouldBeMarkedAsPrefilled" xml:space="preserve">
-    <value>يمكن تحديد سؤال واحد فقط خاص بنظام تحديد المواقع</value>
+      <value>يمكن وضع سؤال GPS واحد فقط في قسم صفحة الغلاف</value>
   </data>
   <data name="WB0007_MultiOptionQuestionYesNoQuestionCantBeLinked" xml:space="preserve">
     <value>سؤال الخيار المتعدد (نعم/ لا) لا يمكن ربطه</value>
@@ -826,4 +826,25 @@
   <data name="WB3010_LinkToHiddenQuestionNotAllowed" xml:space="preserve">
     <value>لا يسمح بالارتباط بالسؤال المخفي</value>
   </data>
+    <data name="WB0317_CriticalityIsNotAllowed" xml:space="preserve">
+      <value>لا يمكن أن يكون نطاق السؤال الحرج أيًا مما يلي: مخفي، مشرف.</value>
+    </data>
+    <data name="WB0318_CriticalityConditionExpressionHasIncorrectSyntax" xml:space="preserve">
+      <value>شرط الحرج يحتوي على خطأ في بناء الجملة.</value>
+    </data>
+    <data name="WB0319_CriticalityConditionExpressionIsEmpty" xml:space="preserve">
+      <value>شرط الحرج فارغ.</value>
+    </data>
+    <data name="WB0320_CriticalityConditionExpressionIsEmpty" xml:space="preserve">
+      <value>الرسالة في القاعدة الحرجة فارغة.</value>
+    </data>
+    <data name="WB0321_CriticalityConditionUsingForbiddenClasses" xml:space="preserve">
+      <value>شرط الحرج يستخدم نوعًا محظورًا.</value>
+    </data>
+    <data name="WB0322_CriticalRuleExpressionIsTooLong" xml:space="preserve">
+      <value>تعبير القاعدة الحرجة يحتوي على أكثر من {0} حرف.</value>
+    </data>
+    <data name="WB0323_CriticalRuleMessageIsTooLong" xml:space="preserve">
+      <value>رسالة الشرط الحرج تحتوي على أكثر من {0} حرف.</value>
+    </data>
 </root>

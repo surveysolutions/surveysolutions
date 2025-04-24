@@ -246,4 +246,7 @@
   <data name="NumberOfInterviewTransactionsBySupervisorDescriptionPerInterviewer" xml:space="preserve">
     <value>Número de aprobaciones y rechazos de un supervisor en entrevistas recopiladas por el entrevistador</value>
   </data>
+    <data name="BackToTeams" xml:space="preserve">
+  <value>Volver a los equipos</value>
+</data>
 </root>

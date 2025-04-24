@@ -315,7 +315,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             Logger.Warn($"Remove Interview {this.interview.InterviewId} (key: {this.interview.InterviewKey}, assignment: {this.interview.Assignment}) at {DateTime.Now}");
             this.InterviewerInterviewFactory.RemoveInterview(this.interview.InterviewId);
             auditLogService.Write(new DeleteInterviewAuditLogEntity(this.interview.InterviewId, this.interview.InterviewKey, this.interview.Assignment));
-            this.OnItemRemoved.Invoke(this, EventArgs.Empty);
+            
+            this.OnItemRemoved?.Invoke(this, EventArgs.Empty);
         }
 
         public virtual async Task LoadInterviewAsync()

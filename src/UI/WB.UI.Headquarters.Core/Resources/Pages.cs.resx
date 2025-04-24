@@ -1738,4 +1738,34 @@
   <data name="QuestionnaireVersionAndName" xml:space="preserve">
     <value>(ver. {1}) {0}</value>
   </data>
+    <data name="Questionnaire_CriticalVerificationLevel" xml:space="preserve">
+        <value>Akce při odeslání</value>
+    </data>
+    <data name="Questionnaire_ChangeCriticalVerificationLevelTitle" xml:space="preserve">
+        <value>Nastavit akci při odeslání</value>
+    </data>
+    <data name="Questionnaire_SetActionOnSubmissionExplanation" xml:space="preserve">
+        <value>Vyberte, jaká akce by měla být provedena před odesláním rozhovoru</value>
+    </data>
+    <data name="Questionnaire_SetActionOnSubmissionExplanationIgnore" xml:space="preserve">
+        <value>IGNOROVAT - nekontrolovat žádná kritická pravidla, i když jsou přítomna.</value>
+    </data>
+    <data name="Questionnaire_SetActionOnSubmissionExplanationWarn" xml:space="preserve">
+        <value>VAROVAT - kontrolovat kritická pravidla a varovat uživatele před odesláním rozhovoru.</value>
+    </data>
+    <data name="Questionnaire_SetActionOnSubmissionExplanationBlock" xml:space="preserve">
+        <value>BLOKOVAT - kontrolovat kritická pravidla a zakázat odeslání rozhovoru, pokud jsou přítomny kritické problémy.</value>
+    </data>
+    <data name="ShowKey" xml:space="preserve">
+        <value>Zobrazit klíč</value>
+    </data>
+    <data name="Questionnaire_SupportCriticalVerifications" xml:space="preserve">
+        <value>Kritické ověřování</value>
+    </data>
+  <data name="Observer_Memo1" xml:space="preserve">
+    <value>Pozorovatelé mohou sledovat sběr dat, ale nemohou provádět změny. Přihlaste se jako jiný uživatel (supervizor nebo centrála) pro přístup k rozhovorům, úkolům, zprávám a dalším datům. Pozorovatelé nemohou vytvářet úkoly, nastavovat odpovědi, komentovat, schvalovat/odmítat rozhovory, exportovat data nebo upravovat data serveru.</value>
+</data>
+  <data name="Observer_Memo2" xml:space="preserve">
+    <value>Klikněte na účet a vyberte "Zobrazit jako tento uživatel v režimu pouze pro čtení" pro začátek. Použijte žlutý odkaz nahoře pro návrat k vašemu účtu.</value>
+</data>
 </root>

@@ -276,4 +276,31 @@
     <value>Iniciar nova entrevista</value>
     <comment>Start new interview button title</comment>
   </data>
+    <data name="Sending" xml:space="preserve">
+    <value>Enviando</value>
+</data>
+    <data name="NoErrors" xml:space="preserve">
+    <value>Sem erros</value>
+</data>
+    <data name="NothingWasSent" xml:space="preserve">
+    <value>Nada foi enviado</value>
+</data>
+    <data name="ProcessCancelled" xml:space="preserve">
+    <value>O processo foi cancelado</value>
+</data>
+    <data name="DownloadErrors" xml:space="preserve">
+    <value>Baixar lista de atribuições com erros</value>
+</data>
+    <data name="SendingFailed" xml:space="preserve">
+    <value>O envio das convites falhou. Por favor, contate o administrador do servidor para verificar as configurações do provedor de e-mail</value>
+</data>
+    <data name="TotalSent" xml:space="preserve">
+    <value>{{ totalCount }} convites para enviar</value>
+</data>
+    <data name="TotalProcessed" xml:space="preserve">
+    <value>{{ processedCount }} enviados com sucesso</value>
+</data>
+    <data name="TotalWithErrors" xml:space="preserve">
+    <value>{{ withErrorsCount }} não enviados devido a erros.</value>
+</data>
 </root>

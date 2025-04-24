@@ -641,7 +641,7 @@
     <value>Удаление {0} опросника из {1}</value>
   </data>
   <data name="NotSupportedServerSyncProtocolVersion" xml:space="preserve">
-    <value>Ваша версия приложения не поддерживается сервером. Пожалуйста, удалите приложение Interviewer  и поставьте заново в Вашего веб сайта Survey Solutions Headquarters</value>
+      <value>Обнаружена несовместимая версия. Пожалуйста, обратитесь к вашему руководителю для разрешения</value>
   </data>
   <data name="Interview_Loading" xml:space="preserve">
     <value>Открытие</value>

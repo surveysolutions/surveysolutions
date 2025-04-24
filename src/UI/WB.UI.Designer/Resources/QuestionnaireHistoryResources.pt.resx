@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="reverted" xml:space="preserve">
+    <value>Questionnaire "{0}" reverted</value>
+  </data>
+    <data name="Edit" xml:space="preserve">
+    <value>Editar</value>
+  </data>
+  <data name="QuestionnaireChangeHistory" xml:space="preserve">
+    <value>Histórico de alterações do questionário</value>
+  </data>
+  <data name="ThisListDoesNotContainAnyRecords" xml:space="preserve">
+    <value>Esta lista não contém nenhum registro</value>
+  </data>
+  <data name="Timestamp" xml:space="preserve">
+    <value>Data e hora</value>
+  </data>
+  <data name="UnknownUserName" xml:space="preserve">
+    <value>&lt;&lt;DESCONHECIDO&gt;&gt;</value>
+  </data>
+  <data name="UserName" xml:space="preserve">
+    <value>Nome de usuário</value>
+  </data>
+  <data name="Change" xml:space="preserve">
+    <value>Alterar</value>
+  </data>
+  <data name="Macro_Delete" xml:space="preserve">
+    <value>Macro {0} excluída</value>
+  </data>
+  <data name="Macro_Update" xml:space="preserve">
+    <value>Macro {0} atualizada</value>
+  </data>
+  <data name="Macro_Add" xml:space="preserve">
+    <value>Macro {0} adicionada</value>
+  </data>
+  <data name="LookupTable_Delete" xml:space="preserve">
+    <value>Tabela de consulta {0} excluída</value>
+  </data>
+  <data name="LookupTable_Update" xml:space="preserve">
+    <value>Tabela de consulta {0} atualizada</value>
+  </data>
+  <data name="LookupTable_Add" xml:space="preserve">
+    <value>Tabela de consulta {0} adicionada</value>
+  </data>
+  <data name="Attachment_Delete" xml:space="preserve">
+    <value>Anexo {0} excluído</value>
+  </data>
+  <data name="Attachment_Update" xml:space="preserve">
+    <value>Anexo {0} atualizado</value>
+  </data>
+  <data name="Variable_Add" xml:space="preserve">
+    <value>Variável {0} adicionada</value>
+  </data>
+  <data name="Variable_Delete" xml:space="preserve">
+    <value>Variável {0} excluída</value>
+  </data>
+  <data name="Variable_Update" xml:space="preserve">
+    <value>Variável {0} atualizada</value>
+  </data>
+  <data name="Categories_Add" xml:space="preserve">
+    <value>Categorias {0} adicionadas</value>
+  </data>
+  <data name="Categories_Delete" xml:space="preserve">
+    <value>Categorias {0} excluídas</value>
+  </data>
+  <data name="Categories_Update" xml:space="preserve">
+    <value>Categorias {0} atualizadas</value>
+  </data>
+  <data name="CriticalRule_Add" xml:space="preserve">
+    <value>Regra crítica {0} adicionada</value>
+  </data>
+  <data name="CriticalRule_Delete" xml:space="preserve">
+    <value>Regra crítica {0} excluída</value>
+  </data>
+  <data name="CriticalRule_Update" xml:space="preserve">
+    <value>Regra crítica {0} atualizada</value>
+  </data>
+  <data name="Translation_Delete" xml:space="preserve">
+    <value>Tradução {0} excluída</value>
+  </data>
+  <data name="Translation_Update" xml:space="preserve">
+    <value>Tradução {0} atualizada</value>
+  </data>
+  <data name="TextsReplaced" xml:space="preserve">
+    <value>Todos os '{0}' foram substituídos por '{1}'. {2} entradas afetadas</value>
+  </data>
+  <data name="RevertToThisVersion" xml:space="preserve">
+    <value>Reverter para esta versão</value>
+  </data>
+  <data name="Comment" xml:space="preserve">
+    <value>Comentário</value>
+  </data>
+  <data name="LeaveComment" xml:space="preserve">
+    <value>Deixar um comentário</value>
+  </data>
+  <data name="ExtractAtRevision" xml:space="preserve">
+    <value>Extrair na revisão</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Salvar</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Confirmar</value>
+  </data>
+  <data name="ResetQuestionnaireToThis" xml:space="preserve">
+    <value>Redefinir questionário para a versão em {0}?</value>
+  </data>
+  <data name="reverted_to" xml:space="preserve">
+    <value>Questionário "{0}" revertido para a versão de {1}</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancelar</value>
+  </data>
+  <data name="Revert" xml:space="preserve">
+    <value>Reverter</value>
+  </data>
+  <data name="Section_Add" xml:space="preserve">
+    <value>Seção {0} adicionada</value>
+  </data>
+  <data name="Section_Delete" xml:space="preserve">
+    <value>Seção {0} excluída</value>
+  </data>
+  <data name="Section_Update" xml:space="preserve">
+    <value>Seção {0} atualizada</value>
+  </data>
+  <data name="Question_Add" xml:space="preserve">
+    <value>Pergunta {0} adicionada</value>
+  </data>
+  <data name="Question_Delete" xml:space="preserve">
+    <value>Pergunta {0} excluída</value>
+  </data>
+    <data name="Question_Update" xml:space="preserve">
+    <value>Pergunta {0} atualizada</value>
+  </data>
+  <data name="Roster_Add" xml:space="preserve">
+    <value>Lista {0} adicionada</value>
+  </data>
+  <data name="Roster_Delete" xml:space="preserve">
+    <value>Lista {0} excluída</value>
+  </data>
+  <data name="Roster_Update" xml:space="preserve">
+    <value>Lista {0} atualizada</value>
+  </data>
+  <data name="StaticText_Add" xml:space="preserve">
+    <value>Texto estático {0} adicionado</value>
+  </data>
+  <data name="StaticText_Delete" xml:space="preserve">
+    <value>Texto estático {0} excluído</value>
+  </data>
+  <data name="StaticText_Update" xml:space="preserve">
+    <value>Texto estático {0} atualizado</value>
+  </data>
+  <data name="NoTitle" xml:space="preserve">
+    <value>Sem título</value>
+  </data>
+  <data name="StaticText_Clone" xml:space="preserve">
+    <value>Texto estático {0} clonado de texto estático {1}</value>
+  </data>
+  <data name="Variable_Clone" xml:space="preserve">
+    <value>Variável {0} copiada de variável {1}</value>
+  </data>
+  <data name="Question_Clone" xml:space="preserve">
+    <value>Pergunta {0} clonada de pergunta {1}</value>
+  </data>
+  <data name="Section_Clone" xml:space="preserve">
+    <value>Seção {0} clonada de seção {1}</value>
+  </data>
+  <data name="Roster_Clone" xml:space="preserve">
+    <value>Lista {0} clonada de lista {1}</value>
+  </data>
+  <data name="Questionnaire_Clone" xml:space="preserve">
+    <value>Questionário {0} clonado de questionário {1}</value>
+  </data>
+  <data name="Questionnaire_Replace" xml:space="preserve">
+    <value>Questionário {0} substituído</value>
+  </data>
+  <data name="Questionnaire_Import" xml:space="preserve">
+    <value>Questionário {0} importado</value>
+  </data>
+  <data name="Section_GroupBecameARoster" xml:space="preserve">
+    <value>Subseção {0} tornou-se uma lista</value>
+  </data>
+  <data name="Roster_RosterBecameAGroup" xml:space="preserve">
+    <value>Lista {0} tornou-se uma subseção</value>
+  </data>
+  <data name="Person_Add" xml:space="preserve">
+    <value>Usuário com e-mail {0} adicionado às pessoas compartilhadas</value>
+  </data>
+  <data name="Questionnaire_Move" xml:space="preserve">
+    <value>Propriedade do questionário transferida para o usuário com e-mail "{0}"</value>
+  </data>
+  <data name="Person_Delete" xml:space="preserve">
+    <value>Usuário com e-mail {0} removido das pessoas compartilhadas</value>
+  </data>
+  <data name="Questionnaire_Add" xml:space="preserve">
+    <value>Questionário {0} criado</value>
+  </data>
+  <data name="Questionnaire_Update" xml:space="preserve">
+    <value>Questionário {0} atualizado</value>
+  </data>
+  <data name="Questionnaire_Delete" xml:space="preserve">
+    <value>Questionário {0} excluído</value>
+  </data>
+  <data name="Question_Move_To_Section" xml:space="preserve">
+    <value>Pergunta {0} movida para a seção {1}</value>
+  </data>
+  <data name="Question_Move_To_Roster" xml:space="preserve">
+    <value>Pergunta {0} movida para a lista {1}</value>
+  </data>
+  <data name="StaticText_Move_To_Section" xml:space="preserve">
+    <value>Texto estático {0} movido para a seção {1}</value>
+  </data>
+  <data name="StaticText_Move_To_Roster" xml:space="preserve">
+    <value>Texto estático {0} movido para a lista {1}</value>
+  </data>
+  <data name="Variable_Move_To_Section" xml:space="preserve">
+    <value>Variável {0} movida para a seção {1}</value>
+  </data>
+  <data name="Variable_Move_To_Roster" xml:space="preserve">
+    <value>Variável {0} movida para a lista {1}</value>
+  </data>
+  <data name="Section_Move_To_Section" xml:space="preserve">
+    <value>Seção {0} movida para a seção {1}</value>
+  </data>
+  <data name="Section_Move_To_Roster" xml:space="preserve">
+    <value>Seção {0} movida para a lista {1}</value>
+  </data>
+  <data name="Roster_Move_To_Section" xml:space="preserve">
+    <value>Lista {0} movida para a seção {1}</value>
+  </data>
+  <data name="Roster_Move_To_Roster" xml:space="preserve">
+    <value>Lista {0} movida para a lista {1}</value>
+  </data>
+  <data name="Translation_Original" xml:space="preserve">
+    <value>Original</value>
+  </data>
+  <data name="Translation_DefaultTranslationSet" xml:space="preserve">
+    <value>Tradução padrão definida para {0}</value>
+  </data>
+  <data name="Metadata_Update" xml:space="preserve">
+    <value>Metadados do questionário {0} atualizados</value>
+  </data>
+  <data name="Questionnaire_ImportToHq" xml:space="preserve">
+    <value>Questionário importado para a Sede ({0}) como {2} por {1}</value>
+  </data>
+  <data name="MigratedNewCoverSupport" xml:space="preserve">
+    <value>Página de capa gerada</value>
+  </data>
+</root>

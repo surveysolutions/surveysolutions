@@ -34,7 +34,6 @@
 </template>
 
 <script>
-//import 'datatables.net'
 
 import DataTable from 'datatables.net-vue3'
 import DataTablesLib from 'datatables.net'
@@ -325,7 +324,14 @@ export default {
                 $(this.$refs.body).empty()
             }
 
+            $.extend(true, $.fn.dataTable.defaults, {
+                "columnDefs": [
+                    { "targets": '_all', "render": $.fn.dataTable.render.text() }
+                ]
+            });
+
             this.table = $(this.$refs.table).DataTable(options)
+
             this.onTableInitComplete()
 
             this.table.on('select', (e, dt, type, indexes) => {

@@ -93,11 +93,10 @@
                                     </a>
                                 </td>
                                 <td class="date">
-                                    <time datetime="@listViewModel.LastEntryDate.ToString("o")">@listViewModel.LastEntryDate.ConvertToLocalAndFormatDate()</time>
-
+                                    @listViewModel.LastEntryDate.ConvertToLocalAndFormatDate()
                                 </td>
                                 <td class="date">
-                                    <time datetime="@listViewModel.CreationDate.ToString("o")">@listViewModel.CreationDate.ConvertToLocalAndFormatDate()</time>
+                                    @listViewModel.CreationDate.ConvertToLocalAndFormatDate()
                                 </td>
                                 <td class="email">
                                     @listViewModel.CreatedBy
@@ -110,7 +109,7 @@
                                             if (actionModel.CanCopy || actionModel.CanDelete || actionModel.CanExport || actionModel.CanSynchronize || actionModel.CanOpen)
                                             {
                                                 <div class="btn-group pull-right">
-                                                    <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#">
+                                                    <a class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" href="#">
                                                         @QuestionnaireController.Action
                                                         <span class="caret"></span>
                                                     </a>
@@ -125,7 +124,7 @@
                                                             {
                                                                 <li class="divider"></li>
                                                                 <li>
-                                                                    <a href="#mExportPdf" onclick='questionnaireActionModel.exportItemAsPdf("@itemId", "@itemType", "@itemName", "@pdfDownloadUrl", "@pdfStatusUrl", "@pdfRetryUrl", "@getLanguagesUrl")' data-toggle="modal">@QuestionnaireController.ExportAsPDF</a>
+                                                                    <a href="#mExportPdf" onclick='questionnaireActionModel.exportItemAsPdf("@itemId", "@itemType", "@itemName", "@pdfDownloadUrl", "@pdfStatusUrl", "@pdfRetryUrl", "@getLanguagesUrl")' data-bs-toggle="modal">@QuestionnaireController.ExportAsPDF</a>
                                                                 </li>
                                                             }
                                                             if (actionModel.CanExportToHtml)
@@ -142,12 +141,12 @@
                                                             if (actionModel.CanAssignFolder)
                                                             {
                                                                 <li class="divider"></li>
-                                                                <li><a href="#mAssignFolder" onclick='questionnaireActionModel.assignFolder("@itemId", "@itemType", "@itemName")' data-toggle="modal">@QuestionnaireController.AssignFolder</a></li>
+                                                                <li><a href="#mAssignFolder" onclick='questionnaireActionModel.assignFolder("@itemId", "@itemType", "@itemName")' data-bs-toggle="modal">@QuestionnaireController.AssignFolder</a></li>
                                                             }
                                                             if (actionModel.CanDelete)
                                                             {
                                                                 <li class="divider"></li>
-                                                                <li><a href="#mDelete" onclick='questionnaireActionModel.deleteItem("@itemId", "@itemType", "@itemName")' data-toggle="modal">@QuestionnaireController.Delete</a></li>
+                                                                <li><a href="#mDelete" onclick='questionnaireActionModel.deleteItem("@itemId", "@itemType", "@itemName")' data-bs-toggle="modal">@QuestionnaireController.Delete</a></li>
                                                             }
                                                         }
                                                     </ul>

@@ -900,4 +900,61 @@ Vous pouvez créer ou modifier vos questionnaires dans Survey Solutions Designer
   <data name="InterviewStatus_SupervisorAssigned" xml:space="preserve">
     <value>Superviseur assigné</value>
   </data>
+    <data name="AssignmentMap_Title_CreateInterview" xml:space="preserve">
+  <value>Commencer</value>
+</data>
+    <data name="Geofencing_Warning_Message" xml:space="preserve">
+  <value>Vous êtes en dehors de la zone désignée</value>
+</data>
+    <data name="SelectShapefileTitle" xml:space="preserve">
+  <value>Sélectionner les limites :</value>
+</data>
+    <data name="MenuItem_Title_ChangeMap" xml:space="preserve">
+  <value>Changer la carte</value>
+</data>
+    <data name="MenuItem_Title_ChangeShapefile" xml:space="preserve">
+  <value>Changer les limites</value>
+</data>
+    <data name="MenuItem_Title_CreateInterview" xml:space="preserve">
+  <value>Créer un nouvel entretien</value>
+</data>
+    <data name="MenuItem_Title_HideLocation" xml:space="preserve">
+  <value>Cacher la localisation</value>
+</data>
+    <data name="MenuItem_Title_ExitToDashboard" xml:space="preserve">
+  <value>Quitter le tableau de bord</value>
+</data>
+    <data name="MenuItem_Title_ShowLocation" xml:space="preserve">
+  <value>Afficher la localisation</value>
+</data>
+    <data name="MenuItem_Title_StartGeofencing" xml:space="preserve">
+  <value>Démarrer le géorepérage</value>
+</data>
+    <data name="MenuItem_Title_StopGeofencing" xml:space="preserve">
+  <value>Arrêter le géorepérage</value>
+</data>
+    <data name="MenuItem_Title_StartGeoTracking" xml:space="preserve">
+  <value>Démarrer l'enregistrement de la piste</value>
+</data>
+    <data name="MenuItem_Title_StopGeoTracking" xml:space="preserve">
+  <value>Arrêter l'enregistrement de la piste</value>
+</data>
+    <data name="MenuItem_Title_ZoomMap" xml:space="preserve">
+  <value>Zoomer sur la carte</value>
+</data>
+    <data name="MenuItem_Title_ZoomShapefile" xml:space="preserve">
+  <value>Zoomer sur les limites</value>
+</data>
+    <data name="MenuItem_Title_ZoomCollectedData" xml:space="preserve">
+  <value>Zoomer sur les données collectées</value>
+</data>
+    <data name="MenuItem_Title_ZoomEverything" xml:space="preserve">
+  <value>Tout zoomer</value>
+</data>
+    <data name="MenuItem_Title_ZoomGeoTracking" xml:space="preserve">
+  <value>Zoomer sur les enregistrements de suivi</value>
+</data>
+  <data name="SelectMapTitle" xml:space="preserve">
+      <value>Sélectionnez une carte:</value>
+  </data>
 </root>

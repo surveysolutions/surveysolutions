@@ -117,109 +117,373 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="BinaryData" xml:space="preserve">
-    <value>البيانات الثنائية</value>
+    <data name="DataExport_Title" xml:space="preserve">
+  <value>تصدير البيانات</value>
+</data>
+    <data name="DataExport_Header" xml:space="preserve">
+  <value>اختر نوع وتنسيق البيانات للتصدير</value>
+</data>
+    <data name="BinaryData" xml:space="preserve">
+  <value>البيانات الثنائية</value>
+</data>
+    <data name="DDI" xml:space="preserve">
+  <value>DDI</value>
+</data>
+    <data name="ParaData" xml:space="preserve">
+  <value>بيانات الفقرة</value>
+</data>
+    <data name="Name" xml:space="preserve">
+  <value>الاسم</value>
+</data>
+    <data name="Format" xml:space="preserve">
+  <value>التنسيق</value>
+</data>
+    <data name="StartDate" xml:space="preserve">
+  <value>تاريخ البدء</value>
+</data>
+    <data name="LastUpdateDate" xml:space="preserve">
+  <value>تاريخ آخر تحديث</value>
+</data>
+    <data name="Progress" xml:space="preserve">
+  <value>التقدم</value>
+</data>
+    <data name="ConfirmStop" xml:space="preserve">
+  <value>هل أنت متأكد أنك تريد التوقف</value>
+</data>
+    <data name="export" xml:space="preserve">
+  <value>عملية التصدير</value>
+</data>
+    <data name="Metadata" xml:space="preserve">
+  <value>البيانات الوصفية</value>
+</data>
+    <data name="BinaryDescription" xml:space="preserve">
+  <value>أرشيف مع البيانات الثنائية (مثل الصور والصوت)</value>
+</data>
+    <data name="ErrorThereAreRunningProcesses" xml:space="preserve">
+  <value>لا يمكنك تغيير إعدادات التصدير لأن عملية التصدير قيد التشغيل بالفعل.</value>
+</data>
+    <data name="Bytes" xml:space="preserve">
+  <value>ميجابايت</value>
+</data>
+    <data name="Completed" xml:space="preserve">
+  <value>مكتمل</value>
+</data>
+    <data name="DataWasNotGenerated" xml:space="preserve">
+  <value>لم يتم إنشاؤها</value>
+</data>
+    <data name="DDIDescription" xml:space="preserve">
+  <value>بيانات مبادرة توثيق البيانات XML</value>
+</data>
+    <data name="Download" xml:space="preserve">
+  <value>تنزيل</value>
+</data>
+    <data name="ExportRange" xml:space="preserve">
+  <value>نطاق التصدير:</value>
+</data>
+    <data name="FileSizeTitle" xml:space="preserve">
+  <value>حجم الملف</value>
+</data>
+    <data name="FormatTitle" xml:space="preserve">
+  <value>التنسيق</value>
+</data>
+    <data name="Generate" xml:space="preserve">
+  <value>إنشاء</value>
+</data>
+    <data name="Generating" xml:space="preserve">
+  <value>جاري الإنشاء</value>
+</data>
+    <data name="Preparing" xml:space="preserve">
+  <value>جاري التحضير</value>
+</data>
+    <data name="Compressing" xml:space="preserve">
+  <value>جاري الضغط</value>
+</data>
+    <data name="LastGeneratedTitle" xml:space="preserve">
+  <value>تم الإنشاء في</value>
+</data>
+    <data name="MainSurveyDataTitle" xml:space="preserve">
+  <value>بيانات المسح الرئيسية</value>
+</data>
+    <data name="NoDataAvailable" xml:space="preserve">
+  <value>لا تتوافر بيانات</value>
+</data>
+    <data name="ParadataDescription" xml:space="preserve">
+  <value>البيانات الوصفية عن عملية المقابلة (الأحداث والتوقيت)</value>
+</data>
+    <data name="QueuedTitle" xml:space="preserve">
+  <value>في قائمة الانتظار</value>
+</data>
+    <data name="StatusOfExportTitle" xml:space="preserve">
+  <value>حالة المقابلات المصدرة</value>
+</data>
+    <data name="FromDate" xml:space="preserve">
+  <value>من</value>
+</data>
+    <data name="ToDate" xml:space="preserve">
+  <value>إلى</value>
+</data>
+    <data name="SurveyTemplateTitle" xml:space="preserve">
+  <value>(نسخة) استبيان المسح</value>
+</data>
+    <data name="ZipArchiveDescription" xml:space="preserve">
+  <value>أرشيف مضغوط مع بيانات المقابلة الرئيسية</value>
+</data>
+    <data name="XMLFileDescription" xml:space="preserve">
+  <value>تنسيق XML</value>
+</data>
+    <data name="ItemsInQueue" xml:space="preserve">
+  <value>العناصر الموجودة في قائمة انتظار التصدير:</value>
+</data>
+    <data name="TabularFormat" xml:space="preserve">
+  <value>تنسيق جدولي</value>
+</data>
+    <data name="ExportExplanation" xml:space="preserve">
+  <value>الضغط على زر إنشاء ينشئ أرشيف بيانات من المقابلات المتاحة على الخادم في ذلك الوقت. يتم عرض وقت إنشاء الأرشيف وحجم الأرشيف في الجدول. يمكن تحميل آخر أرشيف بيانات تم إنشاؤه عن طريق الضغط على زر تنزيل. اضغط على زر إنشاء مرة أخرى لإنشاء أرشيف جديد.</value>
+</data>
+    <data name="ZipFile" xml:space="preserve">
+  <value>ملف مضغوط</value>
+</data>
+    <data name="Dropbox" xml:space="preserve">
+  <value>دروب بوكس</value>
+</data>
+    <data name="OneDrive" xml:space="preserve">
+  <value>ون درايف</value>
+</data>
+    <data name="GoogleDrive" xml:space="preserve">
+  <value>جوجل درايف</value>
+</data>
+    <data name="SaveBinaryDataTo" xml:space="preserve">
+  <value>حفظ البيانات الثنائية إلى:</value>
+</data>
+    <data name="ExportBtn" xml:space="preserve">
+  <value>تصدير</value>
+</data>
+    <data name="DataExport_Destination_Dropbox" xml:space="preserve">
+  <value>سيتم تحميل ملف التصدير إلى دروب بوكس</value>
+</data>
+    <data name="DataExport_Destination_File" xml:space="preserve">
+  <value>سيكون ملف التصدير متاحًا للتنزيل</value>
+</data>
+    <data name="DataExport_Destination_GoogleDrive" xml:space="preserve">
+  <value>سيتم تحميل ملف التصدير إلى جوجل درايف</value>
+</data>
+    <data name="DataExport_Destination_OneDrive" xml:space="preserve">
+  <value>سيتم تحميل ملف التصدير إلى ون درايف</value>
+</data>
+    <data name="DataExport_QueuedOn" xml:space="preserve">
+  <value>في قائمة الانتظار في {{date}}</value>
+</data>
+    <data name="DataExport_CompletedOn" xml:space="preserve">
+  <value>اكتمل في {{date}}</value>
+</data>
+    <data name="DataExport_QuestionnaireWithVersion" xml:space="preserve">
+  <value>{{title}} (الإصدار {{version}})</value>
+</data>
+    <data name="DataExport_Regenerate" xml:space="preserve">
+  <value>إعادة الإنشاء</value>
+</data>
+    <data name="DataExport_RegenerateDesc" xml:space="preserve">
+  <value>إضافة التصدير إلى قائمة الانتظار بنفس المعلمات</value>
+</data>
+    <data name="DataExport_FileLastUpdate" xml:space="preserve">
+  <value>آخر تحديث: {{date}}</value>
+</data>
+  <data name="DataExport_FileWasRegenerated" xml:space="preserve">
+    <value>تم إعادة إنشاء الملف أو حذفه</value>
   </data>
-  <data name="BinaryDescription" xml:space="preserve">
-    <value>الأرشيف مع البيانات الثنائية (على سبيل المثال، الصور والصوت)</value>
+    <data name="DataExport_FileSize" xml:space="preserve">
+  <value>حجم الملف: {{size}} ميجابايت</value>
+</data>
+    <data name="DataExport_ProducedIn" xml:space="preserve">
+  <value>تم إنتاجه في:</value>
+</data>
+    <data name="DataExport_InQueue" xml:space="preserve">
+  <value>في قائمة الانتظار:</value>
+</data>
+    <data name="DataExport_Destination" xml:space="preserve">
+  <value>الوجهة: {{dest}}</value>
+</data>
+    <data name="DataExport_ServiceIsNotAvailable" xml:space="preserve">
+  <value>خدمة التصدير غير متاحة</value>
+</data>
+    <data name="DataType" xml:space="preserve">
+  <value>نوع البيانات</value>
+</data>
+    <data name="DataType_Binary" xml:space="preserve">
+  <value>البيانات الثنائية. أرشيف مع البيانات الثنائية (مثل الصور والصوت)</value>
+</data>
+    <data name="DataType_Ddi" xml:space="preserve">
+  <value>DDI. بيانات مبادرة توثيق البيانات XML</value>
+</data>
+    <data name="DataType_MainSurveyData" xml:space="preserve">
+  <value>بيانات المسح الرئيسية. أرشيف مضغوط مع بيانات المقابلة الرئيسية</value>
+</data>
+    <data name="FilterTitle" xml:space="preserve">
+  <value>تصفية المقابلات للتصدير</value>
+</data>
+    <data name="SurveyQuestionnaire" xml:space="preserve">
+  <value>استبيان</value>
+</data>
+    <data name="SurveyQuestionnaireVersion" xml:space="preserve">
+  <value>إصدار الاستبيان</value>
+</data>
+    <data name="DataType_Paradata" xml:space="preserve">
+  <value>بيانات الفقرة. البيانات الوصفية عن عملية المقابلة (الأحداث والتوقيت)</value>
+</data>
+    <data name="DataDestination" xml:space="preserve">
+  <value>وجهة ملف التصدير</value>
+</data>
+    <data name="DataFormat" xml:space="preserve">
+  <value>تنسيق البيانات</value>
+</data>
+    <data name="DataDestination_Dropbox" xml:space="preserve">
+  <value>تحميل إلى دروب بوكس</value>
+</data>
+    <data name="DataDestination_GoogleDrive" xml:space="preserve">
+  <value>تحميل إلى جوجل درايف</value>
+</data>
+    <data name="DataDestination_OneDrive" xml:space="preserve">
+  <value>تحميل إلى ون درايف</value>
+</data>
+    <data name="DataDestination_Zip" xml:space="preserve">
+  <value>تنزيل</value>
+</data>
+    <data name="DataFormat_Spss" xml:space="preserve">
+  <value>تنسيق SPSS</value>
+</data>
+    <data name="DataFormat_Stata" xml:space="preserve">
+  <value>تنسيق Stata 14</value>
+</data>
+    <data name="DataFormat_Tab" xml:space="preserve">
+  <value>بيانات مفصولة بعلامات تبويب</value>
+</data>
+    <data name="QuestionnaireInformation" xml:space="preserve">
+  <value>معلومات الاستبيان</value>
+</data>
+    <data name="QuestionnaireInformation_Include" xml:space="preserve">
+  <value>تضمين المعلومات الوصفية عن الاستبيان</value>
+</data>
+    <data name="QuestionnaireInformation_Exclude" xml:space="preserve">
+  <value>استبعاد المعلومات الوصفية عن الاستبيان</value>
+</data>
+    <data name="AddToQueue" xml:space="preserve">
+  <value>إضافة إلى قائمة الانتظار</value>
+</data>
+    <data name="GeneratedDataSets" xml:space="preserve">
+  <value>مجموعات التصدير التي تم إنشاؤها سابقًا</value>
+</data>
+    <data name="GeneratedDataSets_Desc" xml:space="preserve">
+  <value>يتم تصدير البيانات في أرشيف مضغوط يحتوي على ملفات البيانات ذات المحتوى والنوع المحددين. فيما يلي قائمة بملفات البيانات التي تم تصديرها سابقًا.</value>
+</data>
+    <data name="NoDataSets" xml:space="preserve">
+  <value>لم يتم إنشاء أي مجموعات بيانات حتى الآن</value>
+</data>
+    <data name="DataExportApi" xml:space="preserve">
+  <value>واجهة برمجة تطبيقات تصدير البيانات</value>
+</data>
+    <data name="DataExportApiDesc" xml:space="preserve">
+  <value>يمكنك إعداد التصدير التلقائي لبيانات المقابلات المجمعة باستخدام مجموعة أدوات واجهة برمجة التطبيقات الخاصة بنا. لمزيد من المعلومات والتعليمات، استخدم:</value>
+</data>
+    <data name="DataExportApiInfoPage" xml:space="preserve">
+  <value>مرجع واجهة برمجة تطبيقات تصدير البيانات</value>
+</data>
+    <data name="Error_Canceled" xml:space="preserve">
+  <value>تم إلغاء مهمة التصدير من قبل المستخدم.</value>
+</data>
+    <data name="Error_NotEnoughExternalStorageSpace" xml:space="preserve">
+  <value>لا توجد مساحة كافية لمزود التخزين السحابي المحدد. يرجى تحرير مساحة وإعادة تشغيل المهمة أو اختيار مزود آخر.</value>
+</data>
+    <data name="Error_Unhandled" xml:space="preserve">
+  <value>حدث خطأ غير متوقع أثناء التصدير. نعتذر عن الإزعاج. يرجى الاتصال بفريق دعم الخادم الخاص بك. تتوفر معلومات إضافية حول هذه المشكلة في صفحة الدعم: https://support.mysurvey.solutions/headquarters/config/standalone-server-errors/.</value>
+</data>
+    <data name="AllStatuses" xml:space="preserve">
+  <value>جميع الحالات</value>
+</data>
+    <data name="ApprovedByHeadquarters" xml:space="preserve">
+  <value>حالة الموافقة من قبل المقر الرئيسي</value>
+</data>
+    <data name="ApprovedBySupervisor" xml:space="preserve">
+  <value>حالة الموافقة من قبل المشرف</value>
+</data>
+    <data name="DataExport_InterviewsStatus" xml:space="preserve">
+  <value>المقابلات في {{status}}.</value>
+</data>
+    <data name="InterviewerAssigned" xml:space="preserve">
+  <value>حالة تعيين المقابل</value>
+</data>
+    <data name="QuestionnaireTranslation" xml:space="preserve">
+  <value>الترجمة</value>
+</data>
+    <data name="Translation_CardLabel" xml:space="preserve">
+  <value>الترجمة: {{language}}</value>
+</data>
+    <data name="SurveyQuestionnaireTranslation" xml:space="preserve">
+    <value>الترجمة</value>
+</data>
+    <data name="SurveyQuestionnaireDateRange" xml:space="preserve">
+    <value>النطاق الزمني</value>
+</data>
+    <data name="DateRangeAllTime" xml:space="preserve">
+    <value>كل الوقت</value>
+</data>
+    <data name="DateRangeLast24hours" xml:space="preserve">
+    <value>آخر 24 ساعة</value>
+</data>
+    <data name="DateRangeLast7days" xml:space="preserve">
+    <value>آخر 7 أيام</value>
+</data>
+    <data name="DateRangeLast30days" xml:space="preserve">
+    <value>آخر 30 يومًا</value>
+</data>
+    <data name="DateRangeLastToday" xml:space="preserve">
+    <value>اليوم</value>
+</data>
+    <data name="DateRangeLastYesterday" xml:space="preserve">
+    <value>أمس</value>
+</data>
+    <data name="DateRangeCustom" xml:space="preserve">
+    <value>مخصص</value>
+</data>
+    <data name="SurveyQuestionnaireDateRangeFrom" xml:space="preserve">
+    <value>من</value>
   </data>
-  <data name="Bytes" xml:space="preserve">
-    <value>ميجابيت</value>
+  <data name="DateRangeFromAll" xml:space="preserve">
+    <value>الأقدم المتاح</value>
   </data>
-  <data name="Completed" xml:space="preserve">
-    <value>مكتمل</value>
+  <data name="SurveyQuestionnaireDateRangeTo" xml:space="preserve">
+    <value>إلى</value>
   </data>
-  <data name="Compressing" xml:space="preserve">
-    <value>ضغط</value>
+  <data name="DateRangeToAll" xml:space="preserve">
+      <value>اللحظة الحالية</value>
   </data>
-  <data name="ConfirmStop" xml:space="preserve">
-    <value>هل تريد التوقف بالتأكيد ؟</value>
+  <data name="DataType_AudioAuditFiles" xml:space="preserve">
+      <value>ملفات تدقيق الصوت. أرشيف يحتوي على تدقيق الصوت</value>
   </data>
-  <data name="DataExport_Header" xml:space="preserve">
-    <value>اختر النوع والتنسيق للتصدير </value>
-  </data>
-  <data name="DataExport_Title" xml:space="preserve">
-    <value>تصدير البيانات</value>
-  </data>
-  <data name="DataWasNotGenerated" xml:space="preserve">
-    <value>لم يتم إنشاؤها</value>
-  </data>
-  <data name="DDI" xml:space="preserve">
-    <value>DDI</value>
-  </data>
-  <data name="Download" xml:space="preserve">
-    <value>تنزيل</value>
-  </data>
-  <data name="ErrorThereAreRunningProcesses" xml:space="preserve">
-    <value>لا يمكنك تغيير إعدادات التصدير لأن عملية التصدير قيد التشغيل بالفعل.</value>
-  </data>
-  <data name="export" xml:space="preserve">
-    <value>عملية التصدير</value>
-  </data>
-  <data name="ExportExplanation" xml:space="preserve">
-    <value>الضغط على زر إنشاء  أرشيف البيانات من المقابلات المتاحة على الخادم في ذلك الوقت. يتم عرض وقت إنشاء الأرشيف وحجم الأرشيف في الجدول. آخر أرشيف بيانات تم إنشاءه يمكن تحميله عن طريق الضغط على زر تحميل. اضغط على زر إنشاء مرة أخرى لإنشاء أرشيف جديد.</value>
-  </data>
-  <data name="ExportRange" xml:space="preserve">
-    <value>نطاق التصدير:</value>
-  </data>
-  <data name="FileSizeTitle" xml:space="preserve">
-    <value>حجم الملف</value>
-  </data>
-  <data name="Format" xml:space="preserve">
-    <value>الشكل</value>
-  </data>
-  <data name="FormatTitle" xml:space="preserve">
-    <value>الشكل</value>
-  </data>
-  <data name="Generate" xml:space="preserve">
-    <value>انشاء</value>
-  </data>
-  <data name="ItemsInQueue" xml:space="preserve">
-    <value>العناصر الموجودة في قائمة انتظار التصدير:</value>
-  </data>
-  <data name="LastUpdateDate" xml:space="preserve">
-    <value>تاريخ آخر تحديث</value>
-  </data>
-  <data name="MainSurveyDataTitle" xml:space="preserve">
-    <value>بيانات المسح الرئيسية</value>
-  </data>
-  <data name="Metadata" xml:space="preserve">
-    <value>البيانات الوصفية</value>
-  </data>
-  <data name="Name" xml:space="preserve">
-    <value>الأسم</value>
-  </data>
-  <data name="NoDataAvailable" xml:space="preserve">
-    <value>لا تتوافر بيانات</value>
-  </data>
-  <data name="ParaData" xml:space="preserve">
-    <value>بيانات الفقرة</value>
-  </data>
-  <data name="ParadataDescription" xml:space="preserve">
-    <value>البيانات الوصفية عن عملية المقابلة (الأحداث والتوقيت)</value>
-  </data>
-  <data name="Progress" xml:space="preserve">
-    <value>التقدم</value>
-  </data>
-  <data name="QueuedTitle" xml:space="preserve">
-    <value>في قائمة الانتظار</value>
-  </data>
-  <data name="StartDate" xml:space="preserve">
-    <value>تاريخ البدء</value>
-  </data>
-  <data name="StatusOfExportTitle" xml:space="preserve">
-    <value>حالة لمقابلات مصدره</value>
-  </data>
-  <data name="SurveyTemplateTitle" xml:space="preserve">
-    <value>(نسخة) استبيان المسح</value>
-  </data>
-  <data name="TabularFormat" xml:space="preserve">
-    <value>تنسيق جدولي</value>
-  </data>
-  <data name="XMLFileDescription" xml:space="preserve">
-    <value>تنسيق xml</value>
-  </data>
-  <data name="ZipArchiveDescription" xml:space="preserve">
-    <value>أرشيف مضغوط مع بيانات المقابلة الرئيسية</value>
-  </data>
+   <data name="ParadataEventsFilter" xml:space="preserve">
+    <value>مرشح الأحداث</value>
+</data>
+    <data name="ParadataEventsFilter_All" xml:space="preserve">
+    <value>الكل</value>
+</data>
+    <data name="ParadataEventsFilter_Reduced" xml:space="preserve">
+    <value>مخفض</value>
+</data>
+    <data name="ParadataEventsFilter_ReducedHint" xml:space="preserve">
+    <value>مجموعة بيانات الباراداتا المخفضة لا تتضمن الأحداث ذات الأكواد التالية: QuestionEnabled (13)، QuestionDisabled (14)، GroupEnabled (15)، GroupDisabled (16)، QuestionDeclaredValid (17)، QuestionDeclaredInvalid (18)، VariableEnabled (23)، VariableDisabled (24).</value>
+</data>
+    <data name="Validation_FromDateInvalid" xml:space="preserve">
+    <value>يجب أن يكون التاريخ "من" صالحًا.</value>
+</data>
+    <data name="Validation_FromDateInFuture" xml:space="preserve">
+    <value>لا يمكن أن يكون التاريخ "من" في المستقبل.</value>
+</data>
+    <data name="Validation_ToDateInvalid" xml:space="preserve">
+    <value>يجب أن يكون التاريخ "إلى" صالحًا.</value>
+</data>
+    <data name="Validation_FromDateInvalidBeforeTo" xml:space="preserve">
+    <value>يجب أن يكون التاريخ "من" صالحًا قبل التحقق من التاريخ "إلى".</value>
+</data>
+    <data name="Validation_ToDateBeforeFrom" xml:space="preserve">
+    <value>يجب أن يكون التاريخ "إلى" أكبر من التاريخ "من".</value>
+</data>
 </root>

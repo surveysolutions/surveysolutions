@@ -14,6 +14,10 @@ export default class MapComponent {
                         component: () => import('./Configuration'),
                     },
                     {
+                        path: 'Jobs',
+                        component: () => import('./Jobs'),
+                    },
+                    {
                         path: 'AppUpdates',
                         component: AppUpdates,
                     },

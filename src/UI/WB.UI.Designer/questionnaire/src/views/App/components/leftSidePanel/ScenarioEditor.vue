@@ -20,15 +20,15 @@
                                 <div id="edit-scenario">
                                     <v-ace-editor id="edit-scenario" ref="editor" v-model:value="scenarioSteps"
                                         lang="json" theme="github" :options="{
-            maxLines: 40,
-            highlightActiveLine: false,
-            indentedSoftWrap: false,
-            printMargin: true,
-            showLineNumbers: false,
-            showGutter: false,
-            useWorker: false,
-            readOnly: true
-        }" />
+                                            maxLines: 40,
+                                            highlightActiveLine: false,
+                                            indentedSoftWrap: false,
+                                            printMargin: true,
+                                            showLineNumbers: false,
+                                            showGutter: false,
+                                            useWorker: false,
+                                            readOnly: true
+                                        }" />
                                     <!-- theme="chrome" -->
                                 </div>
                             </form>
@@ -74,7 +74,13 @@ export default {
 
             //client works only with json by supplying 'application/json'
             //server return string with json content
-            var replaced = scenario.length >= 2 ? scenario.slice(1, -1).replaceAll('\\"', '"') : "";
+            var replaced = scenario.length >= 2
+                ? scenario.slice(1, -1)
+                    .replaceAll('\\"', '"')
+                    .replaceAll('\\r\\n', '')
+                    .replaceAll('\\n', '')
+                    .replaceAll('\\r', '')
+                : "";
             var parced1 = JSON.parse(replaced);
             var scenarioFormatted = JSON.stringify(parced1, null, 4);
 

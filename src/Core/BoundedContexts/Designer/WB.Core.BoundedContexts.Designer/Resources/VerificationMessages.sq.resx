@@ -133,7 +133,7 @@
     <value>Shprehja variable është e gjatë më shumë se {0} karaktere.</value>
   </data>
   <data name="WB0006_OnlyOneGpsQuestionCouldBeMarkedAsPrefilled" xml:space="preserve">
-    <value>Vetëm një pyetje GPS mund të shënohet si identifikuese</value>
+      <value>Vetëm një pyetje GPS mund të vendoset në seksionin e faqes së kopertinës</value>
   </data>
   <data name="WB0007_MultiOptionQuestionYesNoQuestionCantBeLinked" xml:space="preserve">
     <value>Pyetjet po/jo me zgjedhje të shumëfishtë nuk mund të lidhen</value>

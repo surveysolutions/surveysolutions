@@ -315,4 +315,16 @@
   <data name="SharedQuestionnaires" xml:space="preserve">
     <value>Cuestionarios compartidos conmigo</value>
   </data>
+    <data name="CloneDeletedWarning" xml:space="preserve">
+    <value>Está creando una copia de un cuestionario eliminado. Algunas partes podrían perderse.</value>
+</data>
+    <data name="ExcelOrTabFilesOnly" xml:space="preserve">
+  <value>Solo se aceptan archivos de Excel o valores separados por tabulaciones</value>
+</data>
+    <data name="RestoreQuestionnaireDocument" xml:space="preserve">
+  <value>Restaurar documento del cuestionario (antiguo)</value>
+</data>
+    <data name="SaveAs" xml:space="preserve">
+  <value>Guardar como</value>
+</data>
 </root>

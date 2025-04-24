@@ -168,4 +168,7 @@
   <data name="ZeroRecords" xml:space="preserve">
     <value>Nic nebylo nalezeno</value>
   </data>
+    <data name="InfoPostFix" xml:space="preserve">
+    <value />
+  </data>
 </root>

@@ -213,4 +213,31 @@
   <data name="ReloadInterviewErrorMessage" xml:space="preserve">
     <value>لا يمكن تطبيق بيانات المقابلة على النسخة الجديدة من الاستبيان. سنفتح مقابلة فارغة</value>
   </data>
+    <data name="AnonymousQuestionnaires_Open" xml:space="preserve">
+      <value>افتح</value>
+    </data>
+    <data name="AnonymousQuestionnaires_Error_NotFound" xml:space="preserve">
+      <value>لا يمكن فتح الاستبيان. لم يتم العثور على الاستبيان.</value>
+    </data>
+    <data name="AnonymousQuestionnaires_Error_Confirm" xml:space="preserve">
+      <value>لا يمكن فتح الاستبيان. هل تريد إزالته من القائمة؟</value>
+    </data>
+    <data name="Prefs_ShowAnswerTime" xml:space="preserve">
+      <value>إظهار الوقت المستغرق لكل إجابة</value>
+    </data>
+    <data name="Prefs_ShowAnswerTimeSummary" xml:space="preserve">
+      <value>يقيس تمكين، التحقق من الصحة ووقت نشر القائمة. لا يشمل وقت استقبال بيانات GPS أو التقاط الصور.</value>
+    </data>
+    <data name="Login_Error_EmptyName" xml:space="preserve">
+      <value>يرجى إدخال تسجيل دخول صحيح</value>
+    </data>
+    <data name="MenuItem_Title_AnonymousQuestionnaires" xml:space="preserve">
+      <value>استبيانات مجهولة</value>
+    </data>
+    <data name="MenuItem_Title_Login" xml:space="preserve">
+      <value>تسجيل الدخول</value>
+    </data>
+    <data name="AnonymousQuestionnaires_QuestionnaireUrl" xml:space="preserve">
+      <value>رابط الاستبيان المجهول</value>
+    </data>
 </root>

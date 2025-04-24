@@ -289,7 +289,7 @@
     <value>Dernière mise à jour: {{date}}</value>
   </data>
   <data name="DataExport_FileWasRegenerated" xml:space="preserve">
-    <value>Le fichier a été régénéré</value>
+      <value>Le fichier a été régénéré ou supprimé</value>
   </data>
   <data name="DataExport_FileSize" xml:space="preserve">
     <value>Taille du fichier: {{size}} MB</value>
@@ -420,4 +420,70 @@
   <data name="SurveyQuestionnaireTranslation" xml:space="preserve">
     <value>Traduction</value>
   </data>
+    <data name="SurveyQuestionnaireDateRange" xml:space="preserve">
+    <value>Période</value>
+</data>
+    <data name="DateRangeAllTime" xml:space="preserve">
+    <value>Toujours</value>
+</data>
+    <data name="DateRangeLast24hours" xml:space="preserve">
+    <value>Dernières 24 heures</value>
+</data>
+    <data name="DateRangeLast7days" xml:space="preserve">
+    <value>Derniers 7 jours</value>
+</data>
+    <data name="DateRangeLast30days" xml:space="preserve">
+    <value>Derniers 30 jours</value>
+</data>
+    <data name="DateRangeLastToday" xml:space="preserve">
+    <value>Aujourd’hui</value>
+</data>
+    <data name="DateRangeLastYesterday" xml:space="preserve">
+    <value>Hier</value>
+</data>
+    <data name="DateRangeCustom" xml:space="preserve">
+    <value>Personnalisé</value>
+</data>
+    <data name="SurveyQuestionnaireDateRangeFrom" xml:space="preserve">
+    <value>De</value>
+</data>
+    <data name="DateRangeFromAll" xml:space="preserve">
+    <value>Le plus ancien disponible</value>
+</data>
+    <data name="SurveyQuestionnaireDateRangeTo" xml:space="preserve">
+    <value>À</value>
+  </data>
+  <data name="DateRangeToAll" xml:space="preserve">
+    <value>Moment actuel</value>
+  </data>
+  <data name="DataType_AudioAuditFiles" xml:space="preserve">
+    <value>Fichiers d'audit audio. Archive contenant l'audit audio</value>
+  </data>
+    <data name="ParadataEventsFilter" xml:space="preserve">
+    <value>Filtre des événements</value>
+</data>
+    <data name="ParadataEventsFilter_All" xml:space="preserve">
+    <value>Tout</value>
+</data>
+    <data name="ParadataEventsFilter_Reduced" xml:space="preserve">
+    <value>Réduit</value>
+</data>
+    <data name="ParadataEventsFilter_ReducedHint" xml:space="preserve">
+    <value>L’ensemble réduit des paradata n’inclut pas les événements avec les codes suivants : QuestionEnabled (13), QuestionDisabled (14), GroupEnabled (15), GroupDisabled (16), QuestionDeclaredValid (17), QuestionDeclaredInvalid (18), VariableEnabled (23), VariableDisabled (24).</value>
+</data>
+    <data name="Validation_FromDateInvalid" xml:space="preserve">
+    <value>La date "De" doit être valide.</value>
+</data>
+    <data name="Validation_FromDateInFuture" xml:space="preserve">
+    <value>La date "De" ne peut pas être dans le futur.</value>
+</data>
+    <data name="Validation_ToDateInvalid" xml:space="preserve">
+    <value>La date "À" doit être valide.</value>
+</data>
+    <data name="Validation_FromDateInvalidBeforeTo" xml:space="preserve">
+    <value>La date "De" doit être valide avant de valider la date "À".</value>
+</data>
+    <data name="Validation_ToDateBeforeFrom" xml:space="preserve">
+    <value>La date "À" doit être postérieure à la date "De".</value>
+</data>
 </root>

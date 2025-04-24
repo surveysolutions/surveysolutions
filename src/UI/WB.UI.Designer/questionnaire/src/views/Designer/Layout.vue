@@ -25,7 +25,7 @@
                     <li role="presentation" :class="{ active: activePage == 'classifications' }">
                         <a href="/classifications">{{ $t('QuestionnaireController.Classifications') }}</a>
                     </li>
-                    <li role="presentation">
+                    <li v-if="isAdmin" role="presentation">
                         <a href="/Admin/Users">{{ $t('QuestionnaireController.ManageUsers') }}</a>
                     </li>
                     <li class="create" role="presentation"><a href="/questionnaire/create">{{
@@ -34,9 +34,9 @@
                 <nav>
                     <a class="btn btn-default" target="_blank" href="http://support.mysurvey.solutions/designer"
                         rel="noopener">{{
-                        $t('AccountResources.Help') }}</a>
+                        $t('AccountResources.Help') }}</a>&nbsp;
                     <a class="btn btn-default" href="https://forum.mysurvey.solutions" target="_blank" rel="noopener">{{
-                        $t('AccountResources.Forum') }}</a>
+                        $t('AccountResources.Forum') }}</a>&nbsp;
                     <a v-if="isAdmin" class="btn btn-default" href="/admin/controlpanel">
                         {{ $t('QuestionnaireController.ControlPanel') }}
                     </a>
@@ -45,7 +45,7 @@
                             {{ $t('QuestionnaireEditor.HellowMessageBtn', {
                         currentUserName: userName
                     }) }}</a>
-                        <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                        <a class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true"
                             aria-expanded="false">
                             <span class="caret"></span>
                             <span class="sr-only"></span>
@@ -63,7 +63,7 @@
                             </li>
                             <li>
                                 <a href="/identity/account/logout">{{
-                                    $t('AccountResources.LogOut')
+                                    $t('AccountResources.Logout')
                                     }}</a>
                             </li>
                         </ul>
@@ -100,7 +100,10 @@ export default {
     computed: {
         userName() {
             return this.$store.state.userName;
-        }
+        },
+        isAdmin() {
+            return this.$store.state.isAdmin;
+        },
     },
 
     mounted() {

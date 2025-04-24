@@ -245,7 +245,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
         public ActionResult InterviewHistory(Guid id)
         {
-            return this.View(interviewHistoryViewFactory.Load(id));
+            return this.View(interviewHistoryViewFactory.Load(id, reduced: false));
         }
 
         [ExtraHeaderPermissions(HeaderPermissionType.Esri)]

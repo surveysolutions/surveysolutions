@@ -432,4 +432,16 @@
   <data name="VariableExcludedFromExport" xml:space="preserve">
     <value>Tato proměnná je vyloučena z exportovaných dat</value>
   </data>
+    <data name="Appendix_CriticalRules" xml:space="preserve">
+  <value>Příloha {0} {1} kritická pravidla</value>
+</data>
+    <data name="CriticalityCondition" xml:space="preserve">
+  <value>Kritická podmínka:</value>
+</data>
+    <data name="CriticalityMessage" xml:space="preserve">
+  <value>Zpráva:</value>
+</data>
+  <data name="Description" xml:space="preserve">
+      <value>Popis:</value>
+  </data>
 </root>

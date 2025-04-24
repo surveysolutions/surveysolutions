@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="Synchronization_UploadBrokenInterviewPackages" xml:space="preserve">
+    <value>上传损坏的面试包</value>
+</data>
+    <data name="Synchronization_UploadExceptions" xml:space="preserve">
+    <value>上传面试官错误消息</value>
+</data>
+    <data name="OfflineSync_ReceivingInterviewsFromDevices" xml:space="preserve">
+    <value>从面试官设备接收面试</value>
+</data>
+    <data name="OfflineSync_ReceivingInterviews" xml:space="preserve">
+    <value>接收面试</value>
+</data>
+    <data name="OfflineSync_NoDevicesDetectedFormat" xml:space="preserve">
+    <value>未检测到发送设备。
+您的设备ID是'{0}'</value>
+</data>
+    <data name="OfflineSync_WaitingInterviewers" xml:space="preserve">
+    <value>等待面试官设备的操作</value>
+</data>
+    <data name="Synchronization_UploadStatistics" xml:space="preserve">
+    <value>上传面试官同步统计数据</value>
+</data>
+    <data name="Synchronization_UploadStatisticsStats" xml:space="preserve">
+    <value>已上传{0}个，共{1}个</value>
+</data>
+    <data name="Synchronization_Synchronize_HQ" xml:space="preserve">
+    <value>与总部同步</value>
+</data>
+    <data name="Synchronization_Download_Interviewer_Apps" xml:space="preserve">
+    <value>下载面试官应用程序更新</value>
+</data>
+    <data name="Synchronization_Download_Interviewer_Apps_Format" xml:space="preserve">
+    <value>下载更新。已下载{0}个，共{1}个</value>
+</data>
+    <data name="Synchronization_Synchronize_Offline" xml:space="preserve">
+    <value>与面试官同步</value>
+</data>
+    <data name="Confirm_Approve_Synchronized_Interview_Message" xml:space="preserve">
+    <value>当前负责的面试官在下次同步之前不会收到面试批准的通知。如果面试官已经开始进行面试，面试官在下次同步之前输入的所有数据将被丢弃！</value>
+</data>
+</root>

@@ -138,4 +138,7 @@
   <data name="NoGpsQuestionsByQuestionnaire" xml:space="preserve">
     <value>No hay preguntas de tipo GPS en el cuestionario seleccionado</value>
   </data>
+    <data name="ReloadGeoTacking" xml:space="preserve">
+    <value>Recargar pistas</value>
+</data>
 </root>

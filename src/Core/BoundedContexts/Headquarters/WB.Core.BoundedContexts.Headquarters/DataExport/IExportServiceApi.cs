@@ -31,7 +31,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport
             string? refreshToken,
             ExternalStorageType? storageType,
             Guid? translationId,
-            bool? includeMeta);
+            bool? includeMeta,
+            bool? paradataReduced);
 
         [Get("/api/v1/job/status")]
         Task<DataExportStatusView> GetDataExportStatusForQuestionnaireAsync(
@@ -66,8 +67,11 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport
         Task DeleteProcess(long jobId);
 
         [Delete("/api/v1/deleteArchives")]
-        Task DeleteAll();
+        Task DeleteArchives();
 
+        [Post("/api/v1/runRetentionPolicy")]
+        Task RunRetentionPolicy(int? countToKeep = null, int? daysToKeep = null);
+        
         [Get("/api/v1/ddi")]
         Task<HttpContent> GetDdiArchive(string questionnaireId, string? archivePassword);
 

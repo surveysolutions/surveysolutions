@@ -1,6 +1,6 @@
 import Assignments from './Assignments'
 import Interviews from './Interviews'
-import PNotify from 'pnotify'
+import * as toastr from 'toastr'
 import { getCsrfCookie } from '../../api/index'
 import { config } from '~/shared/config'
 
@@ -29,11 +29,8 @@ const store = {
                         return
                     }
 
-                    new PNotify({
-                        title: 'Unhandled error occurred',
-                        text: data.responseStatus,
-                        type: 'error',
-                    })
+                    toastr.error(data.responseStatus, 'Unhandled error occurred')
+
                     dispatch('hideProgress')
                 })
                 .then(() => dispatch('hideProgress'))

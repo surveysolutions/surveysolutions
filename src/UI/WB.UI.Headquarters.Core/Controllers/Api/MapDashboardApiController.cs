@@ -27,6 +27,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.UI.Headquarters.Code;
@@ -34,6 +35,8 @@ using WB.UI.Headquarters.Controllers.Services;
 using WB.UI.Headquarters.Controllers.Services.Export;
 using WB.UI.Headquarters.Models.Api;
 using WB.UI.Headquarters.Models.ComponentModels;
+
+
 
 namespace WB.UI.Headquarters.Controllers.Api
 {
@@ -44,9 +47,12 @@ namespace WB.UI.Headquarters.Controllers.Api
         private readonly IInterviewFactory interviewFactory;
         private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnairesAccessor;
         private readonly IPlainStorageAccessor<QuestionnaireCompositeItem> questionnaireItems;
+        private readonly IPlainStorageAccessor<InterviewSummary> interviewSummaryReader;
+        private readonly IQueryableReadSideRepositoryReader<Assignment, Guid> assignmentsStorage;
         private readonly IAssignmentsService assignmentsService;
         private readonly IMapStorageService mapStorageService;
         private readonly IPlainStorageAccessor<MapBrowseItem> mapPlainStorageAccessor;
+        private readonly IAuthorizedUser authorizedUser;
 
         public MapDashboardApiController(
             IInterviewFactory interviewFactory,
@@ -54,7 +60,10 @@ namespace WB.UI.Headquarters.Controllers.Api
             IPlainStorageAccessor<QuestionnaireCompositeItem> questionnaireItems,
             IAssignmentsService assignmentsService,
             IMapStorageService mapStorageService,
-            IPlainStorageAccessor<MapBrowseItem> mapPlainStorageAccessor)
+            IPlainStorageAccessor<MapBrowseItem> mapPlainStorageAccessor,
+            IPlainStorageAccessor<InterviewSummary> interviewSummaryReader,
+            IAuthorizedUser authorizedUser,
+            IQueryableReadSideRepositoryReader<Assignment, Guid> assignmentsStorage)
         {
             this.interviewFactory = interviewFactory;
             this.questionnairesAccessor = questionnairesAccessor;
@@ -62,6 +71,9 @@ namespace WB.UI.Headquarters.Controllers.Api
             this.assignmentsService = assignmentsService;
             this.mapStorageService = mapStorageService;
             this.mapPlainStorageAccessor = mapPlainStorageAccessor;
+            this.interviewSummaryReader = interviewSummaryReader;
+            this.authorizedUser = authorizedUser;
+            this.assignmentsStorage = assignmentsStorage;
         }
         
         public enum MapMarkerType
@@ -342,6 +354,42 @@ namespace WB.UI.Headquarters.Controllers.Api
                     .Select(item => item.QuestionnaireIdentity)
                     .Distinct().ToList();
             });
+
+            if (authorizedUser.IsInterviewer)
+            {
+                //get all questionnaires available for interviewer over all interviews
+                var queryInterviewsResult = this.interviewSummaryReader.Query(_ =>
+                {
+                    var filter = _.Where(summary => summary.ResponsibleId == this.authorizedUser.Id);
+
+                    return filter
+                        .Select(s => new
+                        {
+                            s.QuestionnaireId,
+                            s.QuestionnaireVersion
+                        })
+                        .Distinct().ToList();
+                }).Select(q => 
+                    new QuestionnaireIdentity(q.QuestionnaireId, q.QuestionnaireVersion).Id).ToArray();
+
+                //get all questionnaires available for interviewer over all assignments
+                var queryAssignmentsResult = this.assignmentsStorage.Query(_ =>
+                {
+                    var filter = _.Where(assignment => assignment.ResponsibleId == this.authorizedUser.Id
+                            && assignment.Archived != true);
+
+                    return filter
+                        .Select(s => new
+                        {
+                            s.QuestionnaireId
+                        })
+                        .Distinct().ToList();
+                }).Select(q => q.QuestionnaireId.Id).ToArray();
+
+                var visibleQuestionnaires = queryAssignmentsResult.Union(queryInterviewsResult).ToList();
+                
+                questionnaireIds = questionnaireIds.Where(x => visibleQuestionnaires.Contains(x)).ToList();
+            }
 
             return this.questionnairesAccessor.Query(_ => _
                 .Where(x => !x.IsDeleted 

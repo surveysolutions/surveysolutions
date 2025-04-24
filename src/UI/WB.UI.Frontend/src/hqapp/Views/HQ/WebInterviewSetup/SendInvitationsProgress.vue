@@ -27,19 +27,26 @@
         <div class="row">
             <div class="col-sm-7 col-xs-12">
                 <div class="import-progress">
-                    <p v-if="isQueued" class="default-text">Preparing</p>
-                    <p v-if="isInProgress">Sending</p>
-                    <p v-if="isDone">Finished</p>
-                    <p v-if="isFailed" class="error-text">Sending invitations has failed. Please contact your server
-                        administrator to check the email provider settings.</p>
-                    <p v-if="isCanceled" class="error-text">The process was cancelled</p>
-                    <p v-if="isInProgress || isQueued">{{ totalCount }} invitations to send.</p>
-                    <p v-if="processedCount == 0" class="default-text">Nothing was sent.</p>
-                    <p v-else class="success-text">{{ processedCount }} sent successfully.</p>
-                    <p v-if="withErrorsCount == 0" class="default-text">No errors</p>
-                    <p v-else class="error-text">{{ withErrorsCount }} not sent because of errors.</p>
+                    <p v-if="isQueued" class="default-text">{{ $t('DataExport.Preparing') }}</p>
+                    <p v-if="isInProgress">{{ $t('WebInterviewSetup.Sending') }}</p>
+                    <p v-if="isDone">{{ $t('BatchUpload.Finished') }}</p>
+                    <p v-if="isFailed" class="error-text">{{ $t('WebInterviewSetup.SendingFailed') }} </p>
+                    <p v-if="isCanceled" class="error-text">{{ $t('WebInterviewSetup.ProcessCancelled') }}</p>
+                    <p v-if="isInProgress || isQueued">{{ $t('WebInterviewSetup.TotalSent', { totalCount: totalCount })
+                        }}
+                    </p>
+                    <p v-if="processedCount == 0" class="default-text">{{ $t('WebInterviewSetup.NothingWasSent') }}</p>
+                    <p v-else class="success-text">
+                        {{ $t('WebInterviewSetup.TotalProcessed', { processedCount: processedCount }) }}
+                    </p>
+                    <p v-if="withErrorsCount == 0" class="default-text">
+                        {{ $t('WebInterviewSetup.NoErrors') }}
+                    </p>
+                    <p v-else class="error-text">
+                        {{ $t('WebInterviewSetup.TotalWithErrors', { withErrorsCount: withErrorsCount }) }}
+                    </p>
                     <p v-if="isStopped && withErrorsCount > 0">
-                        <a :href="exportErrorsLink" target="_blank">Download list of assignments with errors</a>
+                        <a :href="exportErrorsLink" target="_blank">{{ $t('WebInterviewSetup.DownloadErrors') }}</a>
                     </p>
                 </div>
                 <div class="cancelable-progress" v-if="isInProgress">
@@ -50,12 +57,12 @@
                         </div>
                     </div>
                     <button class="btn  btn-link" type="button" @click="cancel">
-                        Cancel
+                        {{ $t('Common.Cancel') }}
                     </button>
                 </div>
                 <div class="action-buttons">
                     <a :href="$config.model.api.surveySetupUrl" class="back-link">
-                        Back to survey setup
+                        {{ $t('WebInterviewSetup.BackToQuestionnaires') }}
                     </a>
                 </div>
             </div>

@@ -1,0 +1,1600 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+        <xsd:element name="root" msdata:IsDataSet="true">
+            <xsd:complexType>
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string" />
+                            <xsd:attribute name="type" type="xsd:string" />
+                            <xsd:attribute name="mimetype" type="xsd:string" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string" />
+                            <xsd:attribute name="name" type="xsd:string" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+                            <xsd:attribute ref="xml:space" />
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" />
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
+            </xsd:complexType>
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="AddNewSection" xml:space="preserve">
+    <value>Adicionar nova seção</value>
+  </data>
+  <data name="Backup" xml:space="preserve">
+    <value>Backup</value>
+  </data>
+  <data name="SaveAs" xml:space="preserve">
+    <value>Salvar como</value>
+  </data>
+  <data name="CopyTo" xml:space="preserve">
+    <value>Copiar para</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancelar</value>
+  </data>
+  <data name="ChangePassword" xml:space="preserve">
+    <value>Alterar senha</value>
+  </data>
+  <data name="ClickHere" xml:space="preserve">
+    <value>clique aqui</value>
+  </data>
+  <data name="Compile" xml:space="preserve">
+    <value>Compilar</value>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>Copiar</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Excluir</value>
+  </data>
+  <data name="Download" xml:space="preserve">
+    <value>Baixar</value>
+  </data>
+  <data name="ErrorsCounter" xml:space="preserve">
+    <value>{{count}} erro</value>
+  </data>
+  <data name="ErrorsCounter_plural" xml:space="preserve">
+    <value>{{count}} erros</value>
+  </data>
+  <data name="HellowMessageBtn" xml:space="preserve">
+    <value>Oi, {{currentUserName}}</value>
+  </data>
+  <data name="Help" xml:space="preserve">
+    <value>Ajuda</value>
+  </data>
+  <data name="History" xml:space="preserve">
+    <value>Histórico</value>
+  </data>
+  <data name="LogOut" xml:space="preserve">
+    <value>Sair</value>
+  </data>
+  <data name="Ok" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>Abrir</value>
+  </data>
+  <data name="PasteAfter" xml:space="preserve">
+    <value>Colar depois</value>
+  </data>
+  <data name="QuestionnaireSummary" xml:space="preserve">
+    <value>({{questionsCount}}P, {{groupsCount}}S, {{rostersCount}}R)</value>
+    <comment>P, S, R são as primeiras letras de Pergunta, Seção e Roster. Mantenha os valores que estão em {{}} sem alterações</comment>
+  </data>
+  <data name="ReadOnly" xml:space="preserve">
+    <value>Somente leitura</value>
+  </data>
+  <data name="ReadOnlyQuestion" xml:space="preserve">
+    <value>É uma pergunta somente leitura. Você não pode editá-la.</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Salvar</value>
+  </data>
+  <data name="SavedAtTimestamp" xml:space="preserve">
+    <value>salvo em {{dateTime, H:mm}}</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Configurações</value>
+  </data>
+  <data name="SideBarAddMacro" xml:space="preserve">
+    <value>adicionar novo Macro</value>
+  </data>
+  <data name="SideBarAttachmentName" xml:space="preserve">
+    <value>nome do anexo</value>
+  </data>
+  <data name="SideBarAttachmentsCounter" xml:space="preserve">
+    <value>{{count}} Anexo de Arquivo ({{bytes}} no total)</value>
+  </data>
+  <data name="SideBarAttachmentsCounter_plural" xml:space="preserve">
+    <value>{{count}} Anexos de Arquivo ({{bytes}} no total)</value>
+  </data>
+  <data name="SideBarAttachmentsEmptyLine1" xml:space="preserve">
+    <value>Use esta aba para carregar arquivos multimídia que podem ser referenciados no questionário.</value>
+  </data>
+  <data name="SideBarAttachmentsEmptyLine2" xml:space="preserve">
+    <value>Para evitar sincronização lenta, recomendamos que o tamanho combinado de todos os arquivos anexados não exceda 2MB. Para tipos de arquivos suportados, formatos e dimensões</value>
+  </data>
+  <data name="SideBarAttachmentsEmptyLine3" xml:space="preserve">
+    <value>Para referenciar um anexo no questionário, adicione um elemento de texto estático e especifique o anexo {{-name}} em sua propriedade de anexo</value>
+  </data>
+  <data name="SideBarAttachmentsEstimate" xml:space="preserve">
+    <value>Tempo estimado de carregamento: {{timeString}} a {{downloadSpeed}}Kb/s (EDGE)</value>
+  </data>
+  <data name="SideBarAttachmentsUpload" xml:space="preserve">
+    <value>Carregar novo</value>
+  </data>
+  <data name="SideBarLookupEmptyLine1" xml:space="preserve">
+    <value>Use esta aba para definir tabelas de consulta.</value>
+  </data>
+  <data name="SideBarLookupEmptyLine2" xml:space="preserve">
+    <value>Uma tabela de consulta fornece informações de referência que podem ser consultadas por uma chave e usadas em condições de habilitação e expressões de validação.</value>
+  </data>
+  <data name="SideBarLookupEmptyLine3" xml:space="preserve">
+    <value>Uma tabela de consulta consiste em um nome e o arquivo de consulta, que pode conter várias colunas delimitadas por tabulação de valores numéricos.</value>
+  </data>
+  <data name="SideBarLookupTableAdd" xml:space="preserve">
+    <value>ADICIONAR NOVA Tabela de Consulta</value>
+  </data>
+  <data name="SideBarLookupTableDropFile" xml:space="preserve">
+    <value>Solte o Arquivo aqui</value>
+  </data>
+  <data name="SideBarEditCategories" xml:space="preserve">
+    <value>Editar Categorias</value>
+  </data>
+  <data name="SideBarLookupTableFileName" xml:space="preserve">
+    <value>nome do arquivo</value>
+  </data>
+  <data name="SideBarLookupTableName" xml:space="preserve">
+    <value>nome da tabela</value>
+  </data>
+  <data name="SideBarLookupTablesCounter" xml:space="preserve">
+    <value>{{count}} Tabela de Consulta:</value>
+  </data>
+  <data name="SideBarLookupTablesCounter_plural" xml:space="preserve">
+    <value>{{count}} Tabelas de Consulta:</value>
+  </data>
+  <data name="SideBarLookupTableSelectFile" xml:space="preserve">
+    <value>Selecionar arquivo</value>
+  </data>
+  <data name="SideBarLookupTableUpdateFile" xml:space="preserve">
+    <value>Atualizar arquivo</value>
+  </data>
+  <data name="SideBarMacroContent" xml:space="preserve">
+    <value>conteúdo</value>
+  </data>
+  <data name="SideBarMacroCounter" xml:space="preserve">
+    <value>{{count}} Macro:</value>
+  </data>
+  <data name="SideBarMacroCounter_plural" xml:space="preserve">
+    <value>{{count}} Macros:</value>
+  </data>
+  <data name="SideBarMacroDescription" xml:space="preserve">
+    <value>descrição</value>
+  </data>
+  <data name="SideBarMacroEmptyLine1" xml:space="preserve">
+    <value>Use esta aba para definir substituições de macro.</value>
+  </data>
+  <data name="SideBarMacroEmptyLine2" xml:space="preserve">
+    <value>Um macro é uma expressão nomeada que pode ser usada em condições de habilitação e expressões de validação. Um macro consiste em nome e conteúdo.</value>
+  </data>
+  <data name="SideBarMacroEmptyLine3" xml:space="preserve">
+    <value>pode ser usado em uma expressão, para referenciar o macro.</value>
+  </data>
+  <data name="SideBarMacroHideDescription" xml:space="preserve">
+    <value>ocultar descrição</value>
+  </data>
+  <data name="SideBarMacroName" xml:space="preserve">
+    <value>nome do macro</value>
+  </data>
+  <data name="SideBarMacroShowDescription" xml:space="preserve">
+    <value>adicionar descrição</value>
+  </data>
+  <data name="SideBarCriticalityConditionExpression" xml:space="preserve">
+    <value>Condição crítica</value>
+  </data>
+  <data name="SideBarCriticalityConditionsCounter" xml:space="preserve">
+    <value>{{count}} Regra crítica:</value>
+  </data>
+  <data name="SideBarCriticalityConditionsCounter_plural" xml:space="preserve">
+    <value>{{count}} Regras críticas:</value>
+  </data>
+  <data name="SideBarCriticalityConditionDescription" xml:space="preserve">
+    <value>Descrição</value>
+  </data>
+  <data name="SideBarCriticalityConditionsEmptyLine1" xml:space="preserve">
+    <value>Use esta aba para definir regras críticas.</value>
+  </data>
+  <data name="SideBarCriticalityConditionsEmptyLine2" xml:space="preserve">
+    <value>Cada regra crítica consiste em uma condição e uma mensagem. Condições críticas podem se referir a qualquer pergunta ou variável e devem ser satisfeitas (avaliar como verdadeiro). O tratamento de entrevistas com condições críticas não satisfeitas é determinado durante a importação do questionário para o servidor de dados.</value>
+  </data>
+  <data name="SideBarCriticalityConditionsEmptyLine3" xml:space="preserve">
+    <value>Inclua uma mensagem para o entrevistador (respondente) para explicar o que precisa ser alterado na entrevista (a mensagem é exibida quando a condição crítica não é satisfeita). Incluir hiperlinks para perguntas na mensagem é útil para navegação.</value>
+  </data>
+  <data name="SideBarHideDescription" xml:space="preserve">
+    <value>ocultar descrição</value>
+  </data>
+  <data name="SideBarCriticalityConditionMessage" xml:space="preserve">
+    <value>Mensagem</value>
+  </data>
+  <data name="SideBarCriticalityConditionNoMessage" xml:space="preserve">
+    <value>Regra crítica sem mensagem</value>
+  </data>
+  <data name="SideBarShowDescription" xml:space="preserve">
+    <value>adicionar descrição</value>
+  </data>
+  <data name="SideBarAddCriticalityCondition" xml:space="preserve">
+    <value>adicionar nova regra crítica</value>
+  </data>
+  <data name="SideBarScenarioCounter" xml:space="preserve">
+    <value>{{count}} Cenário:</value>
+  </data>
+  <data name="SideBarScenarioCounter_plural" xml:space="preserve">
+    <value>{{count}} Cenários:</value>
+  </data>
+  <data name="SideBarScenarioEmptyLine1" xml:space="preserve">
+    <value>Use esta aba para visualizar seus cenários.</value>
+  </data>
+  <data name="SideBarScenarioEmptyLine2" xml:space="preserve">
+    <value>Um cenário é um instantâneo do estado do testador, você pode salvá-lo no testador clicando no botão "Salvar Cenário".</value>
+  </data>
+  <data name="SideBarScenarioName" xml:space="preserve">
+    <value>título do cenário</value>
+  </data>
+  <data name="SideBarSectionsCounter" xml:space="preserve">
+    <value>{{count}} Seção:</value>
+  </data>
+  <data name="SideBarSectionsCounter_plural" xml:space="preserve">
+    <value>{{count}} Seções:</value>
+  </data>
+  <data name="SideBarTranslationDownloadXlsx" xml:space="preserve">
+    <value>Baixar xlsx</value>
+  </data>
+  <data name="SideBarDownload" xml:space="preserve">
+    <value>Baixar:</value>
+  </data>
+  <data name="SideBarXlsx" xml:space="preserve">
+    <value>Xlsx</value>
+  </data>
+  <data name="SideBarTab" xml:space="preserve">
+    <value>Aba</value>
+  </data>
+  <data name="SideBarTranslationGetTemplate" xml:space="preserve">
+    <value>Obter Modelo para </value>
+  </data>
+  <data name="SideBarTranslationGetTemplateLinkTextXlsx" xml:space="preserve">
+    <value>Excel (xlsx)</value>
+  </data>
+  <data name="SideBarTranslationGetTemplateLinkTextCsv" xml:space="preserve">
+    <value>Tab (txt)</value>
+  </data>
+  <data name="SideBarTranslationName" xml:space="preserve">
+    <value>nome da tradução</value>
+  </data>
+  <data name="SideBarCategoriesName" xml:space="preserve">
+    <value>nome das categorias</value>
+  </data>
+  <data name="SideBarTranslationsCounter" xml:space="preserve">
+    <value>{{count}} Tradução</value>
+  </data>
+  <data name="SideBarCategoriesCounter" xml:space="preserve">
+    <value>{{count}} Categorias</value>
+  </data>
+  <data name="SideBarTranslationsCounter_plural" xml:space="preserve">
+    <value>{{count}} Traduções</value>
+  </data>
+  <data name="SideBarTranslationsEmptyLine1" xml:space="preserve">
+    <value>Use esta aba para gerenciar traduções de questionários.</value>
+  </data>
+  <data name="SideBarCategoriesEmptyLine1" xml:space="preserve">
+    <value>Use esta aba para gerenciar categorias reutilizáveis.</value>
+  </data>
+  <data name="SideBarTranslationsEmptyLine2" xml:space="preserve">
+    <value>Você pode baixar e atualizar traduções para diferentes idiomas.</value>
+  </data>
+  <data name="SideBarCategoriesEmptyLine2" xml:space="preserve">
+    <value>Você pode baixar e atualizar categorias.</value>
+  </data>
+  <data name="SideBarTranslationsEmptyLine3" xml:space="preserve">
+    <value>A tradução será aplicada aos textos originais e substituirá os valores. Você pode deixar alguns textos vazios para usar as traduções originais padrão.</value>
+  </data>
+  <data name="SideBarCategoriesEmptyLine3" xml:space="preserve">
+    <value>será adicionado à lista de categorias reutilizáveis para qualquer tipo de perguntas categóricas</value>
+  </data>
+  <data name="ToggleDropdown" xml:space="preserve">
+    <value>Alternar Dropdown</value>
+  </data>
+  <data name="Update" xml:space="preserve">
+    <value>Atualizar</value>
+  </data>
+  <data name="VariableName" xml:space="preserve">
+    <value>nome</value>
+  </data>
+  <data name="WarningsCounter" xml:space="preserve">
+    <value>{{count}} aviso</value>
+  </data>
+  <data name="WarningsCounter_plural" xml:space="preserve">
+    <value>{{count}} avisos</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Fechar</value>
+  </data>
+  <data name="CompilationErrorsCounter" xml:space="preserve">
+    <value>{{count}} erro encontrado</value>
+  </data>
+  <data name="CompilationErrorsCounter_plural" xml:space="preserve">
+    <value>{{count}} erros encontrados</value>
+  </data>
+  <data name="CompilationLabel" xml:space="preserve">
+    <value>Compilação:</value>
+  </data>
+  <data name="CompilationWarningsCounter" xml:space="preserve">
+    <value>{{count}} aviso encontrado</value>
+  </data>
+  <data name="CompilationWarningsCounter_plural" xml:space="preserve">
+    <value>{{count}} avisos encontrados</value>
+  </data>
+  <data name="MoveTo" xml:space="preserve">
+    <value>Mover para</value>
+  </data>
+  <data name="Recompile" xml:space="preserve">
+    <value>Recompilar</value>
+  </data>
+  <data name="SideBarAttachmentDetailsFormat" xml:space="preserve">
+    <value>formato: {{- type}}</value>
+  </data>
+  <data name="SideBarAttachmentDetailsResolution" xml:space="preserve">
+    <value>{{width}} × {{height}}px</value>
+  </data>
+  <data name="SideBarAttachmentDetailsSize" xml:space="preserve">
+    <value>tamanho: {{size}}</value>
+  </data>
+  <data name="SideBarAttachmentsTitle" xml:space="preserve">
+    <value>Anexos</value>
+  </data>
+  <data name="SideBarCommentsTitle" xml:space="preserve">
+    <value>Comentários</value>
+  </data>
+  <data name="SideBarCriticalityConditionsTitle" xml:space="preserve">
+    <value>Regras críticas</value>
+  </data>
+  <data name="SideBarMetadataHeader" xml:space="preserve">
+    <value>Descrição do questionário e informações da pesquisa</value>
+  </data>
+  <data name="SideBarMetadataBasicInfo" xml:space="preserve">
+    <value>Informações básicas</value>
+  </data>
+  <data name="SideBarMetadataTitle" xml:space="preserve">
+    <value>Título do questionário</value>
+  </data>
+  <data name="SideBarMetadataSubtitle" xml:space="preserve">
+    <value>Subtítulo:</value>
+  </data>
+  <data name="SideBarMetadataVersionIdentificator" xml:space="preserve">
+    <value>Identificador da versão:</value>
+  </data>
+  <data name="SideBarMetadataVersionNotes" xml:space="preserve">
+    <value>Notas da versão:</value>
+  </data>
+  <data name="SideBarMetadataSurveyDataInfo" xml:space="preserve">
+    <value>Informações dos dados da pesquisa</value>
+  </data>
+  <data name="SideBarMetadataStudyTypes" xml:space="preserve">
+    <value>Tipos de estudo:</value>
+  </data>
+  <data name="SideBarMetadataKindOfData" xml:space="preserve">
+    <value>Tipo de dados:</value>
+  </data>
+  <data name="SideBarMetadataModeOfDataCollection" xml:space="preserve">
+    <value>Modo de coleta de dados:</value>
+  </data>
+  <data name="SideBarMetadataSurveyInfo" xml:space="preserve">
+    <value>Informações da pesquisa</value>
+  </data>
+  <data name="SideBarMetadataCountry" xml:space="preserve">
+    <value>País:</value>
+  </data>
+  <data name="SideBarMetadataYear" xml:space="preserve">
+    <value>Ano:</value>
+  </data>
+  <data name="SideBarMetadataLanguages" xml:space="preserve">
+    <value>Idiomas:</value>
+  </data>
+  <data name="SideBarMetadataUnitOfAlalysis" xml:space="preserve">
+    <value>Unidade de análise:</value>
+  </data>
+  <data name="SideBarMetadataCoverage" xml:space="preserve">
+    <value>Abrangência:</value>
+  </data>
+  <data name="SideBarMetadataUniverse" xml:space="preserve">
+    <value>Universo:</value>
+  </data>
+  <data name="SideBarMetadataPrimaryInvestigator" xml:space="preserve">
+    <value>Investigador principal:</value>
+  </data>
+  <data name="SideBarMetadataConsultants" xml:space="preserve">
+    <value>Consultores:</value>
+  </data>
+  <data name="SideBarMetadataAdditionalInfo" xml:space="preserve">
+    <value>Informações adicionais</value>
+  </data>
+  <data name="SideBarMetadataNotes" xml:space="preserve">
+    <value>Notas:</value>
+  </data>
+  <data name="SideBarMetadataKeywords" xml:space="preserve">
+    <value>Palavras-chave:</value>
+  </data>
+  <data name="SideBarMetadataFunding" xml:space="preserve">
+    <value>Financiamento:</value>
+  </data>
+  <data name="SideBarMetadataQuestionnaireAccess" xml:space="preserve">
+    <value>Acesso ao questionário</value>
+  </data>
+  <data name="SideBarMetadataAgreeToMakeThisQuestionnairePublic" xml:space="preserve">
+    <value>Concordo em tornar este questionário público</value>
+  </data>
+  <data name="SideBarAttachmentUploaded" xml:space="preserve">
+    <value>carregado: {{-lastUpdate, MMMM DD[,] YYYY [at] k:mm}}</value>
+  </data>
+  <data name="SideBarLookupTitle" xml:space="preserve">
+    <value>Tabelas de consulta</value>
+  </data>
+  <data name="SideBarMacroTitle" xml:space="preserve">
+    <value>Macros</value>
+  </data>
+  <data name="SideBarScenarioTitle" xml:space="preserve">
+    <value>Cenários</value>
+  </data>
+  <data name="SideBarSectionsTitle" xml:space="preserve">
+    <value>Seções</value>
+  </data>
+  <data name="SideBarTranslationsTitle" xml:space="preserve">
+    <value>Traduções</value>
+  </data>
+  <data name="SideBarCategoriesTitle" xml:space="preserve">
+    <value>Categorias</value>
+  </data>
+  <data name="SideBarTranslationsUploadNew" xml:space="preserve">
+    <value>Carregar nova tradução</value>
+  </data>
+  <data name="SideBarCategoriesUploadNew" xml:space="preserve">
+    <value>Carregar novas categorias</value>
+  </data>
+  <data name="AttachmentPreview" xml:space="preserve">
+    <value>Pré-visualização do anexo</value>
+  </data>
+  <data name="FindReplaceFindWhat" xml:space="preserve">
+    <value>Procurar por:</value>
+  </data>
+  <data name="FindReplaceMatchCase" xml:space="preserve">
+    <value>Coincidir maiúsculas/minúsculas</value>
+  </data>
+  <data name="FindReplaceMatchWord" xml:space="preserve">
+    <value>Coincidir palavra inteira</value>
+  </data>
+  <data name="FindReplaceReplaceWith" xml:space="preserve">
+    <value>Substituir por:</value>
+  </data>
+  <data name="FindReplaceTitle" xml:space="preserve">
+    <value>Procurar e substituir</value>
+  </data>
+  <data name="FindReplaceUseRegex" xml:space="preserve">
+    <value>Usar expressão regular</value>
+  </data>
+  <data name="FindReplaceСonfirm" xml:space="preserve">
+    <value>Por favor, confirme a ação.</value>
+  </data>
+  <data name="ModalConfirm" xml:space="preserve">
+    <value>Confirmação</value>
+  </data>
+  <data name="ModalInfo" xml:space="preserve">
+    <value>Informação</value>
+  </data>
+  <data name="MoveToAnotherSubSection" xml:space="preserve">
+    <value>Mover para outra seção:</value>
+  </data>
+  <data name="FindReplaceReplaceAllConfirm" xml:space="preserve">
+    <value>Substituir tudo</value>
+  </data>
+  <data name="FindReplaceBackToSearch" xml:space="preserve">
+    <value>Voltar para a pesquisa</value>
+  </data>
+  <data name="FindReplaceDone" xml:space="preserve">
+    <value>Concluído</value>
+  </data>
+  <data name="FindReplaceFindAll" xml:space="preserve">
+    <value>Procurar tudo</value>
+  </data>
+  <data name="FindReplaceInAll" xml:space="preserve">
+    <value>Todos</value>
+  </data>
+  <data name="FindReplaceInAllFound" xml:space="preserve">
+    <value>em {{count}} entidade encontrada?</value>
+  </data>
+  <data name="FindReplaceInAllFound_plural" xml:space="preserve">
+    <value>em {{count}} entidades encontradas?</value>
+  </data>
+  <data name="FindReplaceMatchingLines" xml:space="preserve">
+    <value>Linhas correspondentes: {{count}}</value>
+  </data>
+  <data name="FindReplaceNext" xml:space="preserve">
+    <value>Próximo</value>
+  </data>
+  <data name="FindReplacePrevious" xml:space="preserve">
+    <value>Anterior</value>
+  </data>
+  <data name="FindReplaceReplaceAll" xml:space="preserve">
+    <value>Substituir tudo ({{count}})</value>
+  </data>
+  <data name="FindReplaceReplaceAllConfirmWith" xml:space="preserve">
+    <value>com</value>
+  </data>
+  <data name="FindReplaceWereReplaced" xml:space="preserve">
+    <value>foram substituídos por</value>
+  </data>
+  <data name="EnablingCondition" xml:space="preserve">
+    <value>Condição de habilitação</value>
+  </data>
+  <data name="GroupTitle" xml:space="preserve">
+    <value>Título</value>
+  </data>
+  <data name="HideIfDisabled" xml:space="preserve">
+    <value>Ocultar se desabilitado</value>
+  </data>
+  <data name="FlatRoster" xml:space="preserve">
+    <value>Modo plano</value>
+  </data>
+  <data name="AddValidationRule" xml:space="preserve">
+    <value>Adicionar nova condição de validação</value>
+  </data>
+  <data name="EnteredMoreThanAllowed" xml:space="preserve">
+    <value>Você inseriu mais do que o máximo permitido {{max}}</value>
+  </data>
+  <data name="ErrorMessage" xml:space="preserve">
+    <value>Mensagem de erro ou aviso</value>
+  </data>
+  <data name="OptionsListError" xml:space="preserve">
+    <value>Você inseriu uma entrada inválida. Cada linha deve seguir o formato: 'Título...Valor[...Nome do anexo]'. 'Valor' deve ser um número inteiro. 'Título' deve ser uma string alfanumérica. 'Nome do anexo' é opcional. Não são permitidas linhas vazias.</value>
+  </data>
+  <data name="QuestionAddInstruction" xml:space="preserve">
+    <value>Adicionar instrução do entrevistador</value>
+  </data>
+  <data name="QuestionClickReload" xml:space="preserve">
+    <value>clique em recarregar</value>
+  </data>
+  <data name="QuestionFilter" xml:space="preserve">
+    <value>Filtro</value>
+  </data>
+  <data name="QuestionGpsNavigation" xml:space="preserve">
+    <value>Esta pergunta será tratada como uma pergunta de navegação GPS para o entrevistador</value>
+  </data>
+  <data name="QuestionHideInstruction" xml:space="preserve">
+    <value>Ocultar instrução</value>
+  </data>
+  <data name="QuestionInstruction" xml:space="preserve">
+    <value>Instrução</value>
+  </data>
+  <data name="QuestionLinkedDescr" xml:space="preserve">
+    <value>Vincular à lista de perguntas ou perguntas do grupo de rosters</value>
+  </data>
+  <data name="QuestionMustBeBound" xml:space="preserve">
+    <value>Você deve vincular esta pergunta</value>
+  </data>
+  <data name="QuestionQuestionType" xml:space="preserve">
+    <value>Tipo de pergunta</value>
+  </data>
+  <data name="QuestionDisplayMode" xml:space="preserve">
+    <value>Modo de exibição</value>
+  </data>
+  <data name="BindToReusableCategories" xml:space="preserve">
+    <value>Vincular a categorias reutilizáveis</value>
+  </data>
+  <data name="SelectCategories" xml:space="preserve">
+    <value>Selecionar categorias</value>
+  </data>
+  <data name="QuestionScope" xml:space="preserve">
+    <value>Escopo da pergunta</value>
+  </data>
+  <data name="QuestionText" xml:space="preserve">
+    <value>Texto da pergunta</value>
+  </data>
+  <data name="QuestionToUpdateOptions" xml:space="preserve">
+    <value>Para atualizar categorias</value>
+  </data>
+  <data name="QuestionVariableLabel" xml:space="preserve">
+    <value>Rótulo da variável</value>
+  </data>
+  <data name="QuestionVariableName" xml:space="preserve">
+    <value>Nome da variável</value>
+  </data>
+  <data name="RosterAddItem" xml:space="preserve">
+    <value>Adicionar item</value>
+  </data>
+  <data name="RosterName" xml:space="preserve">
+    <value>Nome do roster</value>
+  </data>
+  <data name="RosterSource" xml:space="preserve">
+    <value>Fonte do roster</value>
+  </data>
+  <data name="RosterSourceFixed" xml:space="preserve">
+    <value>Conjunto fixo de itens:</value>
+  </data>
+  <data name="RosterSourceNumericQuestion" xml:space="preserve">
+    <value>Pergunta fonte para número de linhas:</value>
+  </data>
+  <data name="RosterSourceNumericTitles" xml:space="preserve">
+    <value>Pergunta fonte para nomes de linhas:</value>
+  </data>
+  <data name="RosterSourceQuestion" xml:space="preserve">
+    <value>Pergunta fonte (resposta determina tanto o número quanto o nome das linhas do roster):</value>
+  </data>
+  <data name="RosterVariableName" xml:space="preserve">
+    <value>ID do roster</value>
+  </data>
+  <data name="SectionVariableName" xml:space="preserve">
+    <value>Nome da variável</value>
+  </data>
+  <data name="SelectQuestion" xml:space="preserve">
+    <value>Selecionar pergunta</value>
+  </data>
+  <data name="AddFilter" xml:space="preserve">
+    <value>Adicionar filtro</value>
+  </data>
+  <data name="SettingsCan" xml:space="preserve">
+    <value>Pode</value>
+  </data>
+  <data name="SettingsInviteCollaborators" xml:space="preserve">
+    <value>Convidar mais usuários por login ou e-mail registrado</value>
+  </data>
+  <data name="SettingsOwner" xml:space="preserve">
+    <value>proprietário</value>
+  </data>
+  <data name="SettingsPrivate" xml:space="preserve">
+    <value>Privado</value>
+  </data>
+  <data name="SettingsPublic" xml:space="preserve">
+    <value>Público</value>
+  </data>
+  <data name="SettingsAnonymous" xml:space="preserve">
+    <value>Anônimo</value>
+  </data>
+  <data name="RegenerateQuestionnaireSharingLink" xml:space="preserve">
+    <value>Regenerar link</value>
+  </data>
+  <data name="AnonymousQuestionnaireGeneratedDate" xml:space="preserve">
+    <value>link gerado: {{datetime}}</value>
+  </data>
+  <data name="SettingsQuestionnaireName" xml:space="preserve">
+    <value>Título do questionário</value>
+  </data>
+  <data name="SettingsQuestionnaireSharing" xml:space="preserve">
+    <value>Tornar este questionário</value>
+  </data>
+  <data name="SettingsRevokeAccess" xml:space="preserve">
+    <value>Revogar acesso</value>
+  </data>
+  <data name="SettingsTitle" xml:space="preserve">
+    <value>Configurações</value>
+  </data>
+  <data name="SettingsVisibleToEveryone" xml:space="preserve">
+    <value>visível para todos no modo somente leitura</value>
+  </data>
+  <data name="SettingsAccessibleToEveryone" xml:space="preserve">
+    <value>acessível no modo somente leitura para qualquer pessoa com o link</value>
+  </data>
+  <data name="SettingsStatusAllowAnonymousAccess" xml:space="preserve">
+    <value>O compartilhamento anônimo está atualmente ativado.</value>
+  </data>
+  <data name="SettingsStatusDontAllowAnonymousAccess" xml:space="preserve">
+    <value>O compartilhamento anônimo está atualmente desativado.</value>
+  </data>
+  <data name="SettingsTurnOnAnonymousAccess" xml:space="preserve">
+      <value>Ativar compartilhamento anônimo.</value>
+    </data>
+      <data name="SettingsTurnOffAnonymousAccess" xml:space="preserve">
+      <value>Desativar compartilhamento anônimo.</value>
+    </data>
+      <data name="SettingsVisibleToOwner" xml:space="preserve">
+      <value>visível apenas para o proprietário</value>
+    </data>
+      <data name="SettingsWhoHasAccess" xml:space="preserve">
+      <value>quem tem acesso</value>
+    </data>
+      <data name="ValidationCondition" xml:space="preserve">
+      <value>Condição de validação</value>
+    </data>
+      <data name="AddQuestion" xml:space="preserve">
+      <value>Adicionar pergunta</value>
+    </data>
+      <data name="AddRoster" xml:space="preserve">
+      <value>Adicionar lista</value>
+    </data>
+      <data name="AddStaticText" xml:space="preserve">
+      <value>Adicionar texto estático</value>
+    </data>
+      <data name="AddSubsection" xml:space="preserve">
+      <value>Adicionar subseção</value>
+    </data>
+      <data name="VirtualCoverPage" xml:space="preserve">
+      <value>Capa virtual</value>
+    </data>
+      <data name="MigrateToNewCover" xml:space="preserve">
+      <value>Gerar capa</value>
+    </data>
+      <data name="AddVariable" xml:space="preserve">
+      <value>Adicionar variável</value>
+    </data>
+      <data name="EmptySectionLine1" xml:space="preserve">
+      <value>Esta seção está vazia.</value>
+    </data>
+      <data name="EmptySectionLine2" xml:space="preserve">
+      <value>Você pode começar usando os botões {{-addQuestionBtn}} e {{-addSubsectionBtn}}</value>
+    </data>
+      <data name="EmptySectionLine3" xml:space="preserve">
+      <value>no topo deste bloco ou gerenciar seções com o painel {{-panel}} à esquerda</value>
+    </data>
+      <data name="EmptySectionLine4" xml:space="preserve">
+      <value>Nome do questionário, variável, colaboração e outras opções</value>
+    </data>
+      <data name="EmptySectionLine5" xml:space="preserve">
+      <value>podem ser encontrados no painel {{-settingsBtn}} (canto superior direito)</value>
+    </data>
+      <data name="NothingFound" xml:space="preserve">
+      <value>Nada encontrado</value>
+    </data>
+      <data name="Paste" xml:space="preserve">
+      <value>Colar</value>
+    </data>
+      <data name="QuestionAddOption" xml:space="preserve">
+      <value>Adicionar categoria</value>
+    </data>
+      <data name="QuestionCascading" xml:space="preserve">
+      <value>Caixa de combinação em cascata</value>
+    </data>
+      <data name="QuestionComboBox" xml:space="preserve">
+      <value>Caixa de combinação</value>
+    </data>
+      <data name="QuestionCheckboxes" xml:space="preserve">
+      <value>Caixas de seleção</value>
+    </data>
+      <data name="QuestionCurrentTime" xml:space="preserve">
+      <value>Carimbo de data e hora atual</value>
+    </data>
+      <data name="QuestionDefaultDate" xml:space="preserve">
+      <value>Data padrão</value>
+    </data>
+      <data name="GeometryType" xml:space="preserve">
+      <value>Tipo de geometria</value>
+    </data>
+      <data name="GeometryInputMode" xml:space="preserve">
+      <value>Modo de entrada</value>
+    </data>
+      <data name="GeometryOverlapDetection" xml:space="preserve">
+      <value>Detecção de sobreposição</value>
+    </data>
+      <data name="QuestionDecimalPlaces" xml:space="preserve">
+      <value>Número de casas decimais</value>
+    </data>
+      <data name="QuestionInteger" xml:space="preserve">
+      <value>Inteiro</value>
+    </data>
+      <data name="QuestionIsLinked" xml:space="preserve">
+      <value>Está vinculado</value>
+    </data>
+      <data name="QuestionMaxListCount" xml:space="preserve">
+      <value>Número máximo de elementos da lista</value>
+    </data>
+      <data name="QuestionMaxNumberOfAnswers" xml:space="preserve">
+      <value>Número máximo de respostas</value>
+    </data>
+      <data name="QuestionOnlyInts" xml:space="preserve">
+      <value>Apenas inteiros são permitidos</value>
+    </data>
+      <data name="QuestionOneToFiftyAllowed" xml:space="preserve">
+      <value>São permitidos inteiros entre 1 e 50</value>
+    </data>
+      <data name="QuestionOptionsCut" xml:space="preserve">
+      <value>A pergunta foi marcada como "Caixa de combinação" ou "Caixa de combinação em cascata" ao carregar os detalhes da pergunta e continha muitas categorias, seu número foi reduzido para até {{count}}</value>
+    </data>
+      <data name="QuestionOrdered" xml:space="preserve">
+      <value>Registrar ordem de resposta</value>
+    </data>
+      <data name="QuestionPattern" xml:space="preserve">
+      <value>Padrão</value>
+    </data>
+      <data name="QuestionUploadOptions" xml:space="preserve">
+      <value>Carregar novas categorias</value>
+    </data>
+      <data name="QuestionUseSeparator" xml:space="preserve">
+      <value>Usar separador de milhar</value>
+    </data>
+      <data name="QuestionYesNoMode" xml:space="preserve">
+      <value>Botões Sim/Não</value>
+    </data>
+      <data name="GeographyInputModeManual" xml:space="preserve">
+      <value>Manual</value>
+    </data>
+      <data name="GeographyInputModeAutomatic" xml:space="preserve">
+      <value>Automático</value>
+    </data>
+      <data name="GeographyInputModeSemiautomatic" xml:space="preserve">
+      <value>Semiautomático</value>
+    </data>
+      <data name="Search" xml:space="preserve">
+      <value>Pesquisar</value>
+    </data>
+      <data name="Filter" xml:space="preserve">
+      <value>Filtrar</value>
+    </data>
+      <data name="SelectParentQuestion" xml:space="preserve">
+      <value>Selecionar pergunta pai</value>
+    </data>
+      <data name="SelectParentQuestionError" xml:space="preserve">
+      <value>Você deve selecionar a pergunta pai</value>
+    </data>
+      <data name="UserDefinedCategories" xml:space="preserve">
+      <value>Categorias definidas pelo usuário</value>
+    </data>
+      <data name="ReusableCategories" xml:space="preserve">
+      <value>Categorias reutilizáveis</value>
+    </data>
+      <data name="SourceOfCategories" xml:space="preserve">
+      <value>Fonte das categorias</value>
+    </data>
+      <data name="RostersQuestion" xml:space="preserve">
+      <value>Pergunta da lista ou pergunta do grupo de listas</value>
+    </data>
+      <data name="QuestionRadioButtonList" xml:space="preserve">
+      <value>Lista de botões de rádio</value>
+    </data>
+      <data name="SettingsInvite" xml:space="preserve">
+      <value>Convidar</value>
+    </data>
+      <data name="SettingsProvideExistingEmail" xml:space="preserve">
+      <value>Forneça o e-mail ou login de um usuário existente</value>
+    </data>
+      <data name="SettingsProvideValidEmail" xml:space="preserve">
+      <value>Forneça um e-mail válido</value>
+    </data>
+      <data name="StaticText" xml:space="preserve">
+      <value>Texto estático</value>
+    </data>
+      <data name="StaticTextAttachmentName" xml:space="preserve">
+      <value>Nome do anexo</value>
+    </data>
+      <data name="ToggleSearch" xml:space="preserve">
+      <value>Alternar pesquisa</value>
+    </data>
+      <data name="TreeAddQuestion" xml:space="preserve">
+      <value>Adicionar pergunta</value>
+    </data>
+      <data name="TreeAddQuestionAfter" xml:space="preserve">
+      <value>Adicionar pergunta depois</value>
+    </data>
+      <data name="TreeAddRoster" xml:space="preserve">
+      <value>Adicionar lista</value>
+    </data>
+      <data name="TreeAddRosterAfter" xml:space="preserve">
+      <value>Adicionar lista depois</value>
+    </data>
+      <data name="TreeAddSection" xml:space="preserve">
+      <value>Adicionar subseção</value>
+    </data>
+      <data name="TreeAddSectionAfter" xml:space="preserve">
+      <value>Adicionar subseção depois</value>
+    </data>
+      <data name="TreeAddStaticText" xml:space="preserve">
+      <value>Adicionar texto estático</value>
+    </data>
+      <data name="TreeAddStaticTextAfter" xml:space="preserve">
+      <value>Adicionar texto estático depois</value>
+    </data>
+      <data name="TreeAddVariable" xml:space="preserve">
+      <value>Adicionar variável</value>
+    </data>
+      <data name="TreeAddVariableAfter" xml:space="preserve">
+      <value>Adicionar variável depois</value>
+    </data>
+      <data name="TreeRoster" xml:space="preserve">
+      <value>lista:</value>
+    </data>
+      <data name="VariableExpression" xml:space="preserve">
+      <value>Expressão</value>
+    </data>
+      <data name="VariableLabel" xml:space="preserve">
+      <value>Rótulo da variável</value>
+    </data>
+      <data name="VariableType" xml:space="preserve">
+      <value>Tipo de variável</value>
+    </data>
+      <data name="HelpConditionExpression" xml:space="preserve">
+      <value>Uma expressão lógica que ativa (desativa) o item atual dependendo das respostas às outras perguntas.</value>
+    </data>
+      <data name="HelpExpression" xml:space="preserve">
+      <value>Uma expressão lógica que é calculada dependendo das respostas às outras perguntas.</value>
+    </data>
+      <data name="HelpFixedTitles" xml:space="preserve">
+      <value>O número de itens determina o tamanho da lista. Cada elemento da lista corresponde a um título da linha da lista. Cada elemento da lista deve ser colocado em uma linha separada.</value>
+    </data>
+      <data name="HelpHideIfDisabled" xml:space="preserve">
+      <value>Por padrão, um item desativado é exibido em cinza. Marcar esta opção ocultará uma pergunta ou seção desativada em um tablet.</value>
+    </data>
+      <data name="HelpRosterDisplayMode" xml:space="preserve">
+      <value>Subseção - as perguntas da lista são exibidas atrás dos botões correspondentes às instâncias da lista.
+  Plano - as perguntas da lista são exibidas no mesmo nível, separadas por cabeçalhos correspondentes às instâncias da lista.
+  Tabela - as perguntas da lista são exibidas no mesmo nível como linhas e colunas da tabela.
+  Matriz - uma pergunta categórica da lista é exibida como matriz.
+  As visualizações de Tabela e Matriz são suportadas apenas na pesquisa Web, o tablet volta ao modo 'Subseção'.</value>
+    </data>
+      <data name="HelpHideInstructions" xml:space="preserve">
+      <value>Por padrão, um texto de instrução é exibido em um tablet. Marcar esta opção mostrará apenas a primeira linha das instruções. Tocar nessa linha mostrará o texto completo.</value>
+    </data>
+      <data name="HelpInstruction" xml:space="preserve">
+      <value>Texto de instrução que será anexado à pergunta.</value>
+    </data>
+      <data name="HelpIsTimestamp" xml:space="preserve">
+      <value>Esta opção permite ao usuário carimbar a hora atual no tablet</value>
+    </data>
+      <data name="HelpDefaultDate" xml:space="preserve">
+      <value>Esta data será exibida como data inicial para seleção em um tablet</value>
+    </data>
+      <data name="HelpDoNotExport" xml:space="preserve">
+      <value>Marque esta variável para excluí-la da exportação</value>
+    </data>
+      <data name="VariableNoExport" xml:space="preserve">
+      <value>Não exportar</value>
+    </data>
+      <data name="HelpMask" xml:space="preserve">
+      <value>Entrada formatada para valores alfanuméricos: números de telefone, códigos de identificação, etc. Exemplos: "~" - Representa um caractere alfabético (A-Z,a-z), "#" - Representa um caractere numérico (0-9), "*" - Representa um caractere alfanumérico (A-Z,a-z,0-9). "##/##/####" - data, "(###) ###-####" - número de telefone, "AA####" - número de voo operado pela American Airlines ou "~*-###-~###"</value>
+    </data>
+      <data name="HelpSourceQuestion" xml:space="preserve">
+      <value>Pergunta de origem (a resposta gera o número de linhas)</value>
+    </data>
+      <data name="HelpTitles" xml:space="preserve">
+      <value>Títulos das linhas.</value>
+    </data>
+    <data name="HelpUseFormatting" xml:space="preserve">
+    <value>Quando marcado, o campo numérico no tablet será formatado como: d,ddd,ddd.dd, "d" representa dígitos (0-9), "," (vírgula) é um separador de milhar, e "." (ponto) é um símbolo de ponto decimal. O separador de milhar e o símbolo de ponto decimal podem variar para tablets com diferentes culturas.</value>
+  </data>
+  <data name="HelpValidationExpression" xml:space="preserve">
+    <value>Uma expressão lógica que valida uma resposta à pergunta atual. Pode incluir valores de outras perguntas.</value>
+  </data>
+  <data name="HelpValidationMessage" xml:space="preserve">
+    <value>Mensagem de erro ou aviso é mostrada quando a condição de validação avalia como "Falso" ou ocorre um erro durante a avaliação da expressão.</value>
+  </data>
+  <data name="HelpVariableDescription" xml:space="preserve">
+    <value>Texto que será mostrado ao lado de uma variável para fins de teste</value>
+  </data>
+  <data name="HelpVariableLabel" xml:space="preserve">
+    <value>Um texto de até {{maxLength}} caracteres que será anexado à variável exportada.</value>
+  </data>
+  <data name="HelpVariableName" xml:space="preserve">
+    <value>Os nomes das variáveis e os IDs das listas podem ter de {{minLength}} a {{maxLength}} caracteres de comprimento e devem conter apenas os seguintes caracteres: a-z, A-Z, _, ou 0-9. O primeiro caractere não pode ser 0-9 ou _ e o último não pode ser _.</value>
+  </data>
+  <data name="HelpAttachmentName" xml:space="preserve">
+    <value>O nome do arquivo de anexo que será exibido.</value>
+  </data>
+  <data name="HelpCoverPage" xml:space="preserve">
+    <value>A primeira seção de cada questionário contém perguntas de identificação que também são exibidas nos painéis dos entrevistadores e supervisores.</value>
+  </data>
+  <data name="HelpVirtualCoverPage" xml:space="preserve">
+    <value>A capa é uma seção virtual que mostra todas as perguntas de identificação. As perguntas não podem ser alteradas nesta seção</value>
+  </data>
+  <data name="ConditionMightBeBroken" xml:space="preserve">
+    <value>A condição ou os itens dependentes em cascata podem estar quebrados</value>
+  </data>
+  <data name="HotkeysCloseLookup" xml:space="preserve">
+    <value>Fechar painel de tabelas de consulta</value>
+  </data>
+  <data name="HotkeysCloseMacros" xml:space="preserve">
+    <value>Fechar painel de macros</value>
+  </data>
+  <data name="HotkeysCloseMetadata" xml:space="preserve">
+    <value>Fechar painel de metadados</value>
+  </data>
+  <data name="HotkeysCloseScenarios" xml:space="preserve">
+    <value>Fechar painel de cenários</value>
+  </data>
+  <data name="HotkeysCloseTranslations" xml:space="preserve">
+    <value>Fechar painel de traduções</value>
+  </data>
+  <data name="HotkeysCloseCategories" xml:space="preserve">
+    <value>Fechar painel de categorias</value>
+  </data>
+  <data name="HotkeysCloseComments" xml:space="preserve">
+    <value>Fechar painel de comentários</value>
+  </data>
+  <data name="HotkeysFocusTitle" xml:space="preserve">
+    <value>Focar campo de título no editor</value>
+  </data>
+  <data name="HotkeysFocusTree" xml:space="preserve">
+    <value>Focar árvore do questionário</value>
+  </data>
+  <data name="HotkeysHideAttachments" xml:space="preserve">
+    <value>Fechar painel de anexos</value>
+  </data>
+  <data name="HotkeysHideSections" xml:space="preserve">
+    <value>Fechar seções</value>
+  </data>
+  <data name="HotkeysNavigateToPrevSibling" xml:space="preserve">
+    <value>Navegar para o irmão anterior</value>
+  </data>
+  <data name="HotkeysNavigateToSibling" xml:space="preserve">
+    <value>Navegar para o próximo irmão</value>
+  </data>
+  <data name="HotkeysOpenItem" xml:space="preserve">
+    <value>Abrir item no editor</value>
+  </data>
+  <data name="HotkeysOpenSection" xml:space="preserve">
+    <value>Abrir seção</value>
+  </data>
+  <data name="HotkeysPrint" xml:space="preserve">
+    <value>Imprimir</value>
+  </data>
+  <data name="HotkeysSearch" xml:space="preserve">
+    <value>Pesquisar por subseções e perguntas na seção</value>
+  </data>
+  <data name="MultipleDependencies" xml:space="preserve">
+    <value>Uma ou mais perguntas/subseções dependem de</value>
+  </data>
+  <data name="NoPermissions" xml:space="preserve">
+    <value>Você não tem permissões para alterar este questionário</value>
+  </data>
+  <data name="NotAnImage" xml:space="preserve">
+    <value>O arquivo escolhido não é uma imagem</value>
+  </data>
+  <data name="QuestionOpenEditorConfirm" xml:space="preserve">
+    <value>Para abrir o editor, todas as alterações não salvas devem ser salvas. Devemos salvá-las agora?</value>
+  </data>
+  <data name="QuestionOpenEditorSaved" xml:space="preserve">
+    <value>Foi salvo com sucesso. A janela para upload de arquivo será aberta.</value>
+  </data>
+  <data name="SettingsShareEdit" xml:space="preserve">
+    <value>Editar</value>
+  </data>
+  <data name="SettingsShareView" xml:space="preserve">
+    <value>Visualizar</value>
+  </data>
+  <data name="DeleteConfirmQuestion" xml:space="preserve">
+    <value>Tem certeza de que deseja excluir "{{trimmedTitle}}"?</value>
+  </data>
+  <data name="DeleteConfirmCategories" xml:space="preserve">
+    <value>Tem certeza de que deseja excluir o conjunto de categorias "{{trimmedTitle}}"? A fonte das categorias para perguntas categóricas dependentes será alterada para categorias definidas pelo usuário</value>
+  </data>
+  <data name="UntitledQuestion" xml:space="preserve">
+    <value>Pergunta sem título</value>
+  </data>
+  <data name="TranslationsObtained" xml:space="preserve">
+    <value>Obtido {0} linha do arquivo de tradução</value>
+  </data>
+  <data name="TranslationsObtained_plural" xml:space="preserve">
+    <value>Obtidas {0} linhas do arquivo de tradução</value>
+  </data>
+  <data name="CategoriesObtained" xml:space="preserve">
+    <value>Obtido {0} linha do arquivo de categorias</value>
+  </data>
+  <data name="CategoriesObtained_plural" xml:space="preserve">
+    <value>Obtidas {0} linhas do arquivo de categorias</value>
+  </data>
+  <data name="UnsavedChangesLeave" xml:space="preserve">
+    <value>Você perderá as alterações não salvas se sair desta página</value>
+  </data>
+  <data name="UnsavedChangesReload" xml:space="preserve">
+    <value>Você perderá as alterações não salvas se recarregar esta página</value>
+  </data>
+  <data name="Export" xml:space="preserve">
+    <value>Exportar</value>
+  </data>
+  <data name="OptionsCloseWindow" xml:space="preserve">
+    <value>Fechar janela?</value>
+  </data>
+  <data name="OptionsUploadApply" xml:space="preserve">
+    <value>Aplicar alterações</value>
+  </data>
+  <data name="OptionsUploadRevert" xml:space="preserve">
+    <value>Reverter alterações</value>
+  </data>
+  <data name="OptionsWindowTitle" xml:space="preserve">
+    <value>Editar categorias</value>
+  </data>
+  <data name="CascadingOptionsWindowTitle" xml:space="preserve">
+    <value>Editar categorias em cascata</value>
+  </data>
+  <data name="OptionsUploadLimit" xml:space="preserve">
+    <value>Sem categorias. Escolha um arquivo separado por tabulação. O arquivo pode conter até {limit} categorias.</value>
+  </data>
+  <data name="OptionsUploadTitle" xml:space="preserve">
+    <value>Título</value>
+  </data>
+  <data name="OptionsUploadValue" xml:space="preserve">
+    <value>Valor</value>
+  </data>
+  <data name="AttachmentName" xml:space="preserve">
+    <value>Nome do anexo</value>
+  </data>
+  <data name="OptionsUploadParent" xml:space="preserve">
+    <value>Valor pai</value>
+  </data>
+  <data name="SideBarMacroNoName" xml:space="preserve">
+    <value>macro sem nome</value>
+  </data>
+  <data name="Upload" xml:space="preserve">
+    <value>Carregar</value>
+  </data>
+  <data name="SideBarLookupTableNoName" xml:space="preserve">
+    <value>tabela de consulta sem nome</value>
+  </data>
+  <data name="SideBarTranslationNoName" xml:space="preserve">
+    <value>tradução sem nome</value>
+  </data>
+  <data name="SideBarCategoriesNoName" xml:space="preserve">
+    <value>categorias sem nome</value>
+  </data>
+  <data name="SideBarAttachmentNoName" xml:space="preserve">
+    <value>anexo sem nome</value>
+  </data>
+  <data name="DefaultNewRoster" xml:space="preserve">
+    <value>Nova lista</value>
+  </data>
+  <data name="DefaultNewSection" xml:space="preserve">
+    <value>Nova seção</value>
+  </data>
+  <data name="DefaultNewStaticText" xml:space="preserve">
+    <value>Novo texto estático</value>
+  </data>
+  <data name="DefaultNewSubsection" xml:space="preserve">
+    <value>Nova subseção</value>
+  </data>
+  <data name="HotkeysShortcuts" xml:space="preserve">
+    <value>Atalhos de teclado</value>
+  </data>
+  <data name="HotkeysShowHideHelp" xml:space="preserve">
+    <value>Mostrar / ocultar este menu de ajuda</value>
+  </data>
+  <data name="MarkAsDefault" xml:space="preserve">
+    <value>Marcar como idioma padrão</value>
+  </data>
+  <data name="UnMarkAsDefault" xml:space="preserve">
+    <value>Não usar como padrão</value>
+  </data>
+  <data name="Default" xml:space="preserve">
+    <value>Padrão</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>Redefinir</value>
+  </data>
+  <data name="PleaseWait" xml:space="preserve">
+    <value>Por favor, aguarde...</value>
+  </data>
+  <data name="EntryWasNotFound" xml:space="preserve">
+    <value>A entrada não foi encontrada no questionário, por favor selecione outra.</value>
+  </data>
+  <data name="RequestFailedUnexpectedly" xml:space="preserve">
+    <value>A solicitação falhou inesperadamente.</value>
+  </data>
+  <data name="IncorrectRosterTitle" xml:space="preserve">
+    <value>Título da lista incorreto</value>
+  </data>
+  <data name="SelectedInvalidItem" xml:space="preserve">
+    <value>Item inválido selecionado. Corrija-o.</value>
+  </data>
+  <data name="SelectItemFromTheList" xml:space="preserve">
+    <value>Selecione um item da lista</value>
+  </data>
+  <data name="UntitledGroupOrRoster" xml:space="preserve">
+    <value>Subseção ou lista sem título</value>
+  </data>
+  <data name="UntitledVariable" xml:space="preserve">
+    <value>Variável sem título</value>
+  </data>
+  <data name="UntitledSection" xml:space="preserve">
+    <value>Seção sem título</value>
+  </data>
+  <data name="UntitledRoster" xml:space="preserve">
+    <value>Lista sem título</value>
+  </data>
+   <data name="UntitledStaticText" xml:space="preserve">
+    <value>Texto estático sem título</value>
+  </data>
+  <data name="SelectModeOfDataCollection" xml:space="preserve">
+    <value>Selecione um modo de coleta de dados</value>
+  </data>
+  <data name="SelectCountry" xml:space="preserve">
+    <value>Selecione o país</value>
+  </data>
+  <data name="SelectStudyType" xml:space="preserve">
+    <value>Selecione um tipo de estudo</value>
+  </data>
+  <data name="SelectKindOfData" xml:space="preserve">
+    <value>Selecione um tipo de dado</value>
+  </data>
+  <data name="Test" xml:space="preserve">
+    <value>Teste</value>
+  </data>
+  <data name="QuestionAddSpecialValues" xml:space="preserve">
+    <value>Adicionar valor especial</value>
+  </data>
+  <data name="EntityComment" xml:space="preserve">
+    <value>Novo comentário</value>
+  </data>
+  <data name="IsSignature" xml:space="preserve">
+    <value>Usar pad de assinatura</value>
+  </data>
+  <data name="HelpNewComment" xml:space="preserve">
+    <value>Adicionar comentário</value>
+  </data>
+  <data name="VariableVariableName" xml:space="preserve">
+    <value>Nome da variável</value>
+  </data>
+  <data name="SideBarCommentsCounter" xml:space="preserve">
+    <value>{{count}} Tópico de comentário:</value>
+  </data>
+  <data name="SideBarCommentsCounter_plural" xml:space="preserve">
+    <value>{{count}} Tópicos de comentário:</value>
+  </data>
+  <data name="SideBarEmptyCommentsLine" xml:space="preserve">
+    <value>Você verá comentários aqui</value>
+  </data>
+  <data name="ViewResolvedCommentsCounter" xml:space="preserve">
+    <value>Ver todos os {{count}} comentários resolvidos</value>
+  </data>
+  <data name="ViewResolvedCommentsCounter_plural" xml:space="preserve">
+    <value>Ver todos os {{count}} comentários resolvidos</value>
+  </data>
+  <data name="HideResolvedComments" xml:space="preserve">
+    <value>Ocultar comentários resolvidos</value>
+  </data>
+  <data name="EditorAddComment" xml:space="preserve">
+    <value>Adicionar comentário</value>
+  </data>
+  <data name="EditorShowComments" xml:space="preserve">
+    <value>Mostrar comentários ({{count}})</value>
+  </data>
+  <data name="JumpToEdit" xml:space="preserve">
+    <value>Pular para edição</value>
+  </data>
+  <data name="CommentEditorResolve" xml:space="preserve">
+    <value>Resolver</value>
+  </data>
+  <data name="EditorHideComment" xml:space="preserve">
+    <value>Ocultar comentários</value>
+  </data>
+  <data name="MaxCommentLengthErrorMessage" xml:space="preserve">
+    <value>O comentário não pode conter mais de {1} caracteres</value>
+  </data>
+  <data name="IsWarning" xml:space="preserve">
+    <value>Aviso</value>
+  </data>
+  <data name="SettingsQuestionnaireVariable" xml:space="preserve">
+    <value>Variável do questionário</value>
+  </data>
+  <data name="CollaboratorsSettings" xml:space="preserve">
+    <value>Colaboradores</value>
+  </data>
+  <data name="CollaboratorsDescriptionSettings" xml:space="preserve">
+    <value>os seguintes usuários têm acesso a este questionário</value>
+  </data>
+  <data name="AccessSettings" xml:space="preserve">
+    <value>Acesso</value>
+  </data>
+  <data name="PublicAccessSettings" xml:space="preserve">
+    <value>Acesso público</value>
+  </data>
+  <data name="PublicAccessDescriptionSettings" xml:space="preserve">
+    <value>Questionários públicos são visíveis para todos os usuários com uma conta neste sistema em modo somente leitura.</value>
+  </data>
+  <data name="PublicAccessSettingsStatusOn" xml:space="preserve">
+    <value>O questionário está atualmente compartilhado como público.</value>
+  </data>
+  <data name="PublicAccessSettingsStatusOff" xml:space="preserve">
+    <value>O questionário atualmente não está compartilhado como público.</value>
+  </data>
+  <data name="PublicAccessSettingsOn" xml:space="preserve">
+    <value>Ativar acesso público.</value>
+  </data>
+  <data name="PublicAccessSettingsOff" xml:space="preserve">
+    <value>Desativar acesso público.</value>
+  </data>
+  <data name="AnonymousQuestionnaireSettings" xml:space="preserve">
+    <value>Compartilhamento de link</value>
+  </data>
+  <data name="AnonymousLink" xml:space="preserve">
+    <value>Link anônimo:</value>
+  </data>
+  <data name="CopyLink" xml:space="preserve">
+    <value>Copiar link</value>
+  </data>
+  <data name="AnonymousQuestionnaireDescriptionSettings" xml:space="preserve">
+    <value>Usuários com este link poderão abrir este questionário</value>
+  </data>
+  <data name="QuestionnaireSettings" xml:space="preserve">
+    <value>Configurações do questionário</value>
+  </data>
+  <data name="HelpCombobox" xml:space="preserve">
+    <value>Uma combo-box é uma combinação de uma lista suspensa e uma caixa de texto editável de uma linha. As categorias podem ser selecionadas digitando um valor ou parte dele ou selecionando um valor da lista</value>
+  </data>
+  <data name="HelpQuestionnaireVarible" xml:space="preserve">
+    <value>A variável do questionário é usada como prefixo na formação de nomes para os arquivos de exportação. Os nomes das variáveis e os IDs das listas podem ter de {{minLength}} a {{maxLength}} caracteres e devem conter apenas os seguintes caracteres: a-z, A-Z, _, ou 0-9. O primeiro caractere não pode ser 0-9 ou _ e o último não pode ser _.</value>
+  </data>
+  <data name="DeleteCommentConfirm" xml:space="preserve">
+    <value>Tem certeza de que deseja excluir o comentário?</value>
+  </data>
+  <data name="RefreshPageConfirm" xml:space="preserve">
+    <value>Atualizamos este site, por favor, atualize a página, ou você pode experimentar um comportamento inesperado</value>
+  </data>
+  <data name="Refresh" xml:space="preserve">
+    <value>Atualizar</value>
+  </data>
+  <data name="NotSupportedAttachment" xml:space="preserve">
+    <value>O arquivo selecionado não é suportado como anexo</value>
+  </data>
+  <data name="AttachmentDimensionsAreTooBig" xml:space="preserve">
+    <value>As dimensões são muito grandes</value>
+  </data>
+  <data name="SettingsHideIfDisabled" xml:space="preserve">
+    <value>Ocultar elemento quando estiver desativado</value>
+  </data>
+  <data name="HideIfDisabledNested" xml:space="preserve">
+    <value>Aninhado do questionário</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Adicionar</value>
+  </data>
+  <data name="AllClassifications" xml:space="preserve">
+    <value>Todas as classificações</value>
+  </data>
+  <data name="ClassificationShowCategories" xml:space="preserve">
+    <value>Mostrar categorias</value>
+  </data>
+  <data name="ClassificationsTitle" xml:space="preserve">
+    <value>Banco de Perguntas. Classificações</value>
+  </data>
+  <data name="QuestionAddClassification" xml:space="preserve">
+    <value>Pesquisar classificação</value>
+  </data>
+  <data name="SearchClassification" xml:space="preserve">
+    <value>Pesquisar classificação</value>
+  </data>
+  <data name="ReplaceOptionsConfirmation" xml:space="preserve">
+    <value>Tem certeza de que deseja substituir as categorias existentes para a pergunta "{{trimmedTitle}}"?</value>
+  </data>
+  <data name="OnlyFirstOptionsWillBeTakenConfirmation" xml:space="preserve">
+    <value>Apenas as primeiras {{count}} categorias serão consideradas para a pergunta "{{trimmedTitle}}"?</value>
+  </data>
+  <data name="MyClassifications" xml:space="preserve">
+    <value>Minhas classificações</value>
+  </data>
+  <data name="ClassificationAdd" xml:space="preserve">
+    <value>Adicionar classificação</value>
+  </data>
+  <data name="ClassificationAddGroup" xml:space="preserve">
+    <value>Adicionar grupo</value>
+  </data>
+  <data name="ClassificationGroupBreadcrumbs" xml:space="preserve">
+    <value>Grupos</value>
+  </data>
+  <data name="ClassificationGroupTitle" xml:space="preserve">
+    <value>Título do grupo</value>
+  </data>
+  <data name="ClassificationsStringOptionsEditorPlaceholder" xml:space="preserve">
+    <value>Insira categorias</value>
+  </data>
+  <data name="ClassificationTitle" xml:space="preserve">
+    <value>Título da classificação</value>
+  </data>
+  <data name="SearchForQuestion" xml:space="preserve">
+    <value>Pesquisar pergunta</value>
+  </data>
+  <data name="AllFolders" xml:space="preserve">
+    <value>Todas as pastas</value>
+  </data>
+  <data name="SearchQuestionPlaceholder" xml:space="preserve">
+    <value>Pesquisar uma pergunta</value>
+  </data>
+  <data name="QuestionsSearchTitle" xml:space="preserve">
+    <value>Banco de Perguntas</value>
+  </data>
+  <data name="QuestionsSearchEntities" xml:space="preserve">
+    <value>resultados da pesquisa</value>
+  </data>
+  <data name="ClassificationsSearchEntities" xml:space="preserve">
+    <value>classificações</value>
+  </data>
+  <data name="ShowAsList" xml:space="preserve">
+    <value>Mostrar como uma lista de categorias</value>
+  </data>
+  <data name="QuestionShowListLimit" xml:space="preserve">
+    <value>Se não mais que</value>
+  </data>
+  <data name="RosterDisplayMode_SubSection" xml:space="preserve">
+    <value>Subseção</value>
+  </data>
+  <data name="RosterDisplayMode_Flat" xml:space="preserve">
+    <value>Plano</value>
+  </data>
+  <data name="RosterDisplayMode_Table" xml:space="preserve">
+    <value>Tabela</value>
+  </data>
+  <data name="RosterDisplayMode_Matrix" xml:space="preserve">
+    <value>Matriz</value>
+  </data>
+    <data name="RosterDisplayMode" xml:space="preserve">
+      <value>Modo de exibição:</value>
+  </data>
+  <data name="AreYouSure" xml:space="preserve">
+      <value>Você tem certeza?</value>
+  </data>
+  <data name="MakeOwnerConfirmationMessage" xml:space="preserve">
+      <value>Se você transferir a propriedade, o novo proprietário será notificado. Você pode não conseguir mais alterar as configurações de propriedade, e o novo proprietário também pode remover seu acesso.</value>
+  </data>
+  <data name="SettingsMakeOwner" xml:space="preserve">
+      <value>Tornar proprietário</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+      <value>Sim</value>
+  </data>
+  <data name="Run" xml:space="preserve">
+      <value>Executar</value>
+  </data>
+  <data name="View" xml:space="preserve">
+      <value>Visualizar</value>
+  </data>
+  <data name="ScenarioDetails" xml:space="preserve">
+      <value>Cenário</value>
+  </data>
+  <data name="DownloadPdf" xml:space="preserve">
+      <value>Baixar PDF</value>
+  </data>
+  <data name="GeneratePdf" xml:space="preserve">
+      <value>Gerar PDF</value>
+  </data>
+  <data name="ChooseLanguageTitle" xml:space="preserve">
+      <value>Por favor, escolha a tradução</value>
+  </data>
+  <data name="Initializing" xml:space="preserve">
+      <value>Inicializando</value>
+  </data>
+  <data name="RetryExportPDF" xml:space="preserve">
+      <value>Tentar exportar como PDF novamente</value>
+  </data>
+  <data name="Translation_Original" xml:space="preserve">
+      <value>Original</value>
+  </data>
+  <data name="Preview" xml:space="preserve">
+      <value>Pré-visualizar revisão #{{revision}}</value>
+  </data>
+  <data name="CustomRosterTitle" xml:space="preserve">
+      <value>Título personalizado</value>
+  </data>
+  <data name="HelpOptionValue" xml:space="preserve">
+      <value>Código numérico inteiro da categoria (não visível para o entrevistador)</value>
+  </data>
+  <data name="HelpOptionTitle" xml:space="preserve">
+      <value>Rótulo de texto para a categoria (visível para o entrevistador)</value>
+  </data>
+  <data name="HelpOverlapDetection" xml:space="preserve">
+      <value>Exibir e destacar as sobreposições desta resposta de pergunta com respostas às mesmas perguntas em instâncias de lista de irmãos</value>
+  </data>
+  <data name="NewItem" xml:space="preserve">
+      <value>Novo item</value>
+  </data>
+  <data name="EditItem" xml:space="preserve">
+      <value>Editar item</value>
+  </data>
+  <data name="DeleteItemCofirm" xml:space="preserve">
+      <value>Você tem certeza de que deseja excluir este item?</value>
+  </data>
+  <data name="Forum" xml:space="preserve">
+      <value>Fórum</value>
+  </data>
+  <data name="TableView" xml:space="preserve">
+      <value>Visualização em tabela</value>
+  </data>
+  <data name="StringsView" xml:space="preserve">
+      <value>Visualização de texto</value>
+  </data>
+  <data name="ValidationIntValue" xml:space="preserve">
+      <value>O valor é muito grande</value>
+  </data>
+  <data name="RequiredField" xml:space="preserve">
+      <value>Campo obrigatório</value>
+  </data>
+  <data name="FileUploaded" xml:space="preserve">
+      <value>Arquivo enviado</value>
+  </data>
+  <data name="DataChangesReverted" xml:space="preserve">
+      <value>Alterações de dados revertidas</value>
+  </data>
+  <data name="OptionsSizeLimit" xml:space="preserve">
+      <value>Máximo de {max_rows} linhas permitidas</value>
+  </data>
+  <data name="CommunicationError" xml:space="preserve">
+      <value>Erro de rede</value>
+  </data>
+  <data name="SideBarCategoriesAddNew" xml:space="preserve">
+      <value>Adicionar novas categorias</value>
+  </data>
+  <data name="RowAdded" xml:space="preserve">
+      <value>Linha adicionada</value>
+  </data>
+  <data name="OptionsCascadingListError" xml:space="preserve">
+      <value>
+  Você inseriu uma entrada inválida. Cada linha deve seguir o formato: "Título...ValorPai/Valor[...Nome do anexo]". 'Valor' e 'ValorPai' devem ser números inteiros. 'Título' deve ser uma string alfanumérica. 'Nome do anexo' é opcional. Não são permitidas linhas vazias.</value>
+  </data>
+  <data name="ShowParentValues" xml:space="preserve">
+      <value>Mostrar valores dos pais</value>
+  </data>
+  <data name="HideParentValues" xml:space="preserve">
+      <value>Ocultar valores dos pais</value>
+  </data>
+  <data name="AddEnablingCondition" xml:space="preserve">
+      <value>Adicionar condição de habilitação</value>
+  </data>
+  <data name="ManageAccount" xml:space="preserve">
+      <value>Gerenciar conta</value>
+  </data>
+  <data name="ShowList" xml:space="preserve">
+      <value>Mostrar lista</value>
+  </data>
+  <data name="Login" xml:space="preserve">
+      <value>Entrar</value>
+  </data>
+  <data name="Register" xml:space="preserve">
+      <value>Registrar</value>
+  </data>
+  <data name="No" xml:space="preserve">
+      <value>Não</value>
+  </data>
+  <data name="QuestionIsCritical" xml:space="preserve">
+      <value>Esta é uma pergunta crítica</value>
+  </data>
+  <data name="HelpIsCritical" xml:space="preserve">
+      <value>Os autores do questionário podem indicar que a resposta a uma pergunta é crítica para a submissão da entrevista.</value>
+  </data>
+  <data name="HelpCriticalityConditionExpression" xml:space="preserve">
+      <value>Uma expressão lógica que avalia a entrevista como um todo para determinar se ela satisfaz as regras críticas (quando esta expressão avalia como "Verdadeiro"). Pode se referir a quaisquer perguntas ou variáveis.</value>
+  </data>
+  <data name="HelpCriticalityConditionMessage" xml:space="preserve">
+      <value>Esta mensagem é exibida quando a condição crítica avalia como "Falso" ou ocorre uma exceção durante a avaliação da expressão. A mensagem pode utilizar hiperlinks e substituição de texto.</value>
+  </data>
+</root>

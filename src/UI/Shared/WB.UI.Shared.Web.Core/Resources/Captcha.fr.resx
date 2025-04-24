@@ -129,4 +129,7 @@
   <data name="TryAnother" xml:space="preserve">
     <value>Essayez un autre</value>
   </data>
+    <data name="CaptchaError" xml:space="preserve">
+    <value>Erreur de génération du captcha. Veuillez contacter votre administrateur système.</value>
+</data>
 </root>

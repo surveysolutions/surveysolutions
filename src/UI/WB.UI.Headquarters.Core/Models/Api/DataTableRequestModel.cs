@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using WB.Core.GenericSubdomains.Portable;
 
@@ -9,6 +10,8 @@ namespace WB.UI.Headquarters.Models.Api
     /// </summary>
     public class DataTableRequest
     {
+        private int length = 10;
+
         public class SortOrder
         {
             public int Column { get; set; }
@@ -51,7 +54,11 @@ namespace WB.UI.Headquarters.Models.Api
         /// <summary>
         /// How many rows per page 
         /// </summary>
-        public int Length { get; set; } = 10;
+        public int Length
+        {
+            get => length;
+            set => length = value <= 0 ? 10 : Math.Min(value, 100);
+        }
 
         /// <summary>
         /// order of output

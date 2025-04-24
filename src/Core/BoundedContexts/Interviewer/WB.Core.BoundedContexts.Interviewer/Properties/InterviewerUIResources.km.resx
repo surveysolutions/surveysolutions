@@ -117,4 +117,61 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Synchronization_UpdateApp" xml:space="preserve">
+      <value>ធ្វើបច្ចុប្បន្នភាព</value>
+  </data>
+    <data name="SendToSupervisor_MovingToSupervisorDevice" xml:space="preserve">
+    <value>កំពុងផ្លាស់ប្តូរការសម្ភាសន៍ទាំងអស់ដែលបានបញ្ចប់ទៅឧបករណ៍អ្នកគ្រប់គ្រង</value>
+  </data>
+    <data name="SendToSupervisor_MovingToSupervisorFormat" xml:space="preserve">
+    <value>ផ្លាស់ទីការសម្ភាសន៍ទាំងអស់ដែលបានបញ្ចប់ទៅ '{0}'</value>
+  </data>
+    <data name="SendToSupervisor_CheckSupervisorDevice" xml:space="preserve">
+    <value>ពិនិត្យមើលថា ឧបករណ៍អ្នកគ្រប់គ្រងមាន WiFi និង Bluetooth បើក និងអ្នកនៅជិត</value>
+  </data>
+    <data name="SendToSupervisor_TransferInProgress" xml:space="preserve">
+    <value>ការផ្ទេរនៅក្នុងដំណើរការ</value>
+  </data>
+  <data name="SendToSupervisor_TransferWasAborted" xml:space="preserve">
+      <value>ការផ្ទេរត្រូវបានលុបចោល</value>
+  </data>
+    <data name="SendToSupervisor_DeviceFound" xml:space="preserve">
+    <value>ឧបករណ៍អ្នកគ្រប់គ្រងត្រូវបានរកឃើញ។ កំពុងស្នើសុំការតភ្ជាប់</value>
+  </data>
+    <data name="SendToSupervisor_DeviceConnectionAccepting" xml:space="preserve">
+    <value>កំពុងរង់ចាំការអនុម័តការតភ្ជាប់ពីអ្នកគ្រប់គ្រង</value>
+  </data>
+    <data name="SendToSupervisor_DeviceConnectionAccepted" xml:space="preserve">
+    <value>បានតភ្ជាប់ទៅឧបករណ៍អ្នកគ្រប់គ្រង</value>
+  </data>
+    <data name="SendToSupervisor_SupervisorNotFound" xml:space="preserve">
+    <value>ការផ្ទេរមិនត្រូវបានចាប់ផ្តើម។ មិនអាចរកឃើញឧបករណ៍អ្នកគ្រប់គ្រង</value>
+  </data>
+  <data name="SendToSupervisor_SupervisorTerminateTransfering" xml:space="preserve">
+      <value>ការផ្ទេរត្រូវបានបោះបង់នៅលើឧបករណ៍ទីពីរ។</value>
+  </data>
+    <data name="SendToSupervisor_SomeInterviewsOnSupervisor" xml:space="preserve">
+    <value>ការសម្ភាសន៍មួយចំនួនឥឡូវនេះនៅលើឧបករណ៍ផ្សេងទៀត</value>
+  </data>
+    <data name="SendToSupervisor_SyncCompleted" xml:space="preserve">
+    <value>ការផ្ទេរត្រូវបានបញ្ចប់។ ការសម្ភាសន៍ទាំងអស់ដែលបានបញ្ចប់ឥឡូវនេះនៅលើឧបករណ៍ផ្សេងទៀត</value>
+  </data>
+  <data name="SendToSupervisor_SyncCompletedWithErrorsFormat" xml:space="preserve">
+      <value>ការផ្ទេរត្រូវបានបញ្ចប់។ ការសម្ភាសន៍ {0} បានបរាជ័យក្នុងការធ្វើសមកាលកម្ម</value>
+  </data>
+    <data name="SendToSupervisor_LookingForSupervisor" xml:space="preserve">
+    <value>កំពុងស្វែងរកឧបករណ៍អ្នកគ្រប់គ្រង</value>
+  </data>
+    <data name="SendToSupervisor_Note" xml:space="preserve">
+    <value>ចំណាំ៖ សកម្មភាពនេះនឹងចំណាយពេលច្រើនជាងធម្មតា សូមកុំបិទឧបករណ៍នេះ</value>
+  </data>
+    <data name="SendToSupervisor_ConnectionFailed" xml:space="preserve">
+    <value>ប្រាកដថាឧបករណ៍ទាំងពីរនៅជិត; WiFi និងBluetooth គួរតែបើកនៅលើឧបករណ៍ទាំងពីរ; កម្មវិធីអ្នកគ្រប់គ្រងគួរតែបើកនៅលើឧបករណ៍អ្នកគ្រប់គ្រង</value>
+  </data>
+    <data name="SendToSupervisor_Retry" xml:space="preserve">
+    <value>ព្យាយាមម្តងទៀត</value>
+  </data>
+    <data name="SendToSupervisor_BluetoothError" xml:space="preserve">
+    <value>កម្មវិធីសម្ភាសកមិនអាចកំណត់ស្ថានភាព Bluetooth (ឧទាហរណ៍ បើក/បិទ, តភ្ជាប់/មិនតភ្ជាប់)។ ជាដំបូង សូមបើកឧបករណ៍សម្ភាសន៍ និងអ្នកគ្រប់គ្រងទាំងពីរឡើងវិញ។ បន្ទាប់មកព្យាយាមធ្វើសមកាលកម្មម្តងទៀត។</value>
+  </data>
 </root>

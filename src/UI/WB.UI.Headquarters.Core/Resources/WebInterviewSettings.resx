@@ -276,4 +276,31 @@
     <value>Start new interview</value>
     <comment>Start new interview button title</comment>
   </data>
+  <data name="Sending" xml:space="preserve">
+      <value>Sending</value>
+  </data>
+  <data name="NoErrors" xml:space="preserve">
+      <value>No errors</value>
+  </data>
+  <data name="NothingWasSent" xml:space="preserve">
+      <value>Nothing was sent</value>
+  </data>
+  <data name="ProcessCancelled" xml:space="preserve">
+      <value>The process was cancelled</value>
+  </data>
+  <data name="DownloadErrors" xml:space="preserve">
+      <value>Download list of assignments with errors</value>
+  </data>
+  <data name="SendingFailed" xml:space="preserve">
+      <value>Sending invitations has failed. Please contact your server administrator to check the email provider settings</value>
+  </data>
+  <data name="TotalSent" xml:space="preserve">
+      <value>{{ totalCount }} invitations to send</value>
+  </data>
+  <data name="TotalProcessed" xml:space="preserve">
+      <value>{{ processedCount }} sent successfully</value>
+  </data>
+  <data name="TotalWithErrors" xml:space="preserve">
+      <value>{{ withErrorsCount }} not sent because of errors.</value>
+  </data>
 </root>

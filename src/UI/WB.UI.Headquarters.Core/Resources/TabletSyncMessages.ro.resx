@@ -163,6 +163,6 @@
     <value>Sincronizarea a eșuat. Pachetul Sync cu id '{0}' nu a fost găsit pe server. Vă rugăm să contactați dezvoltatorii.</value>
   </data>
   <data name="WrongAndroidDeviceIdWasProvided" xml:space="preserve">
-    <value>Sincronizarea a eșuat. ID-ul dispozitivului android a fost furnizat greşit. Vă rugăm să contactați dezvoltatorii.</value>
+    <value>Sincronizarea a eșuat. ID-ul dispozitivului Android a fost furnizat greşit. Vă rugăm să contactați dezvoltatorii.</value>
   </data>
 </root>

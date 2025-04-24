@@ -276,4 +276,31 @@
   <data name="StartNew" xml:space="preserve">
     <value>Начать новое интервью</value>
   </data>
+    <data name="Sending" xml:space="preserve">
+    <value>Отправка</value>
+</data>
+    <data name="NoErrors" xml:space="preserve">
+    <value>Ошибок нет</value>
+</data>
+    <data name="NothingWasSent" xml:space="preserve">
+    <value>Ничего не было отправлено</value>
+</data>
+    <data name="ProcessCancelled" xml:space="preserve">
+    <value>Процесс был отменен</value>
+</data>
+    <data name="DownloadErrors" xml:space="preserve">
+    <value>Скачать список заданий с ошибками</value>
+</data>
+    <data name="SendingFailed" xml:space="preserve">
+    <value>Отправка приглашений не удалась. Пожалуйста, свяжитесь с администратором сервера для проверки настроек провайдера электронной почты</value>
+</data>
+    <data name="TotalSent" xml:space="preserve">
+    <value>{{ totalCount }} приглашений для отправки</value>
+</data>
+    <data name="TotalProcessed" xml:space="preserve">
+    <value>{{ processedCount }} успешно отправлено</value>
+</data>
+    <data name="TotalWithErrors" xml:space="preserve">
+    <value>{{ withErrorsCount }} не отправлено из-за ошибок.</value>
+</data>
 </root>

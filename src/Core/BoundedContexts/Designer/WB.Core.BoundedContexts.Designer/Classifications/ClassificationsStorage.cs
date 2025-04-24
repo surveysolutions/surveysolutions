@@ -30,6 +30,7 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
 
             var list = await dbContext.ClassificationEntities.Where(x => x.Type == ClassificationEntityType.Classification)
                 .Where(x => x.Parent!=null)
+                .Where(x => x.UserId == null || x.UserId == userId)
                 .GroupBy(x => x.Parent)
                 .Where(x=> x.Key != null)
                 .Select(x => new {Id = x.Key!.Value, Count = x.Count()})

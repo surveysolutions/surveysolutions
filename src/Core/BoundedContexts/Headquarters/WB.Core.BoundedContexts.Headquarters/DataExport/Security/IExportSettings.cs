@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿#nullable enable
+using System.Threading.Tasks;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Security
 {
@@ -9,5 +10,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Security
 
         void SetEncryptionEnforcement(bool value);
         void RegeneratePassword();
+
+        ExportEncryptionSettings? GetEncryptionSettings();
+        
+        ExportRetentionSettings? GetExportRetentionSettings();
+        void SetExportRetentionSettings(bool enabled, int? daysToKeep, int? countToKeep);
     }
 }

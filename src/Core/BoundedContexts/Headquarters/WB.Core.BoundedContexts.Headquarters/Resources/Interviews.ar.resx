@@ -126,4 +126,7 @@
   <data name="ImportInterviews_QuestionaireNotFound" xml:space="preserve">
     <value>لم يتم العثور على الاستبيان</value>
   </data>
+    <data name="ImportInterviews_GenericError" xml:space="preserve">
+  <value>حدث خطأ أثناء استيراد التعيين مع الإجابات: {0}. المسؤول: {1}، الاستثناء: {2}</value>
+</data>
 </root>

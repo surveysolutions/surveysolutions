@@ -650,5 +650,137 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
                 return ResourceManager.GetString("SurveyQuestionnaireTranslation", resourceCulture);
             }
         }
+        
+        public static string SurveyQuestionnaireDateRange {
+            get {
+                return ResourceManager.GetString("SurveyQuestionnaireDateRange", resourceCulture);
+            }
+        }
+        
+        public static string DateRangeAllTime {
+            get {
+                return ResourceManager.GetString("DateRangeAllTime", resourceCulture);
+            }
+        }
+        
+        public static string DateRangeLast24hours {
+            get {
+                return ResourceManager.GetString("DateRangeLast24hours", resourceCulture);
+            }
+        }
+        
+        public static string DateRangeLast7days {
+            get {
+                return ResourceManager.GetString("DateRangeLast7days", resourceCulture);
+            }
+        }
+        
+        public static string DateRangeLast30days {
+            get {
+                return ResourceManager.GetString("DateRangeLast30days", resourceCulture);
+            }
+        }
+        
+        public static string DateRangeLastToday {
+            get {
+                return ResourceManager.GetString("DateRangeLastToday", resourceCulture);
+            }
+        }
+        
+        public static string DateRangeLastYesterday {
+            get {
+                return ResourceManager.GetString("DateRangeLastYesterday", resourceCulture);
+            }
+        }
+        
+        public static string DateRangeCustom {
+            get {
+                return ResourceManager.GetString("DateRangeCustom", resourceCulture);
+            }
+        }
+        
+        public static string SurveyQuestionnaireDateRangeFrom {
+            get {
+                return ResourceManager.GetString("SurveyQuestionnaireDateRangeFrom", resourceCulture);
+            }
+        }
+        
+        public static string DateRangeFromAll {
+            get {
+                return ResourceManager.GetString("DateRangeFromAll", resourceCulture);
+            }
+        }
+        
+        public static string SurveyQuestionnaireDateRangeTo {
+            get {
+                return ResourceManager.GetString("SurveyQuestionnaireDateRangeTo", resourceCulture);
+            }
+        }
+        
+        public static string DateRangeToAll {
+            get {
+                return ResourceManager.GetString("DateRangeToAll", resourceCulture);
+            }
+        }
+        
+        public static string DataType_AudioAuditFiles {
+            get {
+                return ResourceManager.GetString("DataType_AudioAuditFiles", resourceCulture);
+            }
+        }
+        
+        public static string ParadataEventsFilter {
+            get {
+                return ResourceManager.GetString("ParadataEventsFilter", resourceCulture);
+            }
+        }
+        
+        public static string ParadataEventsFilter_All {
+            get {
+                return ResourceManager.GetString("ParadataEventsFilter_All", resourceCulture);
+            }
+        }
+        
+        public static string ParadataEventsFilter_Reduced {
+            get {
+                return ResourceManager.GetString("ParadataEventsFilter_Reduced", resourceCulture);
+            }
+        }
+        
+        public static string ParadataEventsFilter_ReducedHint {
+            get {
+                return ResourceManager.GetString("ParadataEventsFilter_ReducedHint", resourceCulture);
+            }
+        }
+        
+        public static string Validation_FromDateInvalid {
+            get {
+                return ResourceManager.GetString("Validation_FromDateInvalid", resourceCulture);
+            }
+        }
+        
+        public static string Validation_FromDateInFuture {
+            get {
+                return ResourceManager.GetString("Validation_FromDateInFuture", resourceCulture);
+            }
+        }
+        
+        public static string Validation_ToDateInvalid {
+            get {
+                return ResourceManager.GetString("Validation_ToDateInvalid", resourceCulture);
+            }
+        }
+        
+        public static string Validation_FromDateInvalidBeforeTo {
+            get {
+                return ResourceManager.GetString("Validation_FromDateInvalidBeforeTo", resourceCulture);
+            }
+        }
+        
+        public static string Validation_ToDateBeforeFrom {
+            get {
+                return ResourceManager.GetString("Validation_ToDateBeforeFrom", resourceCulture);
+            }
+        }
     }
 }
