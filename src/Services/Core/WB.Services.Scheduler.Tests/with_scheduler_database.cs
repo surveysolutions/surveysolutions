@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Dapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -68,7 +69,10 @@ namespace WB.Services.Scheduler.Tests
         {
             var services = new ServiceCollection()
                 .AddDbContext<JobContext>(ops =>
-                    ops.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
+                {
+                    ops.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"));
+                    ops.ConfigureWarnings(o => o.Throw(RelationalEventId.PendingModelChangesWarning));
+                });
             
             jobSettingsMock = new Mock<IOptions<JobSettings>>();
 

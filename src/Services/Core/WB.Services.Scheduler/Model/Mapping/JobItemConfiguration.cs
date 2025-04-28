@@ -23,16 +23,29 @@ namespace WB.Services.Scheduler.Model.Mapping
                 .IsRequired()
                 .HasConversionOfEnumToString();
 
-            map.Property(b => b.StartAt).IsRequired(false);
-            map.Property(b => b.EndAt).IsRequired(false);
-            map.Property(b => b.LastUpdateAt).IsRequired(true).HasDefaultValueSql("(now() at time zone 'utc')");
-            map.Property(b => b.CreatedAt).IsRequired().HasDefaultValueSql("(now() at time zone 'utc')");
+            map.Property(b => b.StartAt)
+                .IsRequired(false)
+                .HasColumnType("timestamp without time zone");
+            map.Property(b => b.EndAt)
+                .IsRequired(false)
+                .HasColumnType("timestamp without time zone");
+            map.Property(b => b.LastUpdateAt)
+                .IsRequired(true)
+                .HasColumnType("timestamp without time zone")
+                .HasDefaultValueSql("(now() at time zone 'utc')");
+            map.Property(b => b.CreatedAt)
+                .IsRequired()
+                .HasColumnType("timestamp without time zone")
+                .HasDefaultValueSql("(now() at time zone 'utc')");
 
             map.Property(b => b.Data)
                 .HasConversion(
                     v => JsonConvert.SerializeObject(v),
-                    v => JsonConvert.DeserializeObject<Dictionary<string, object?>>(v));
-            map.Property(p => p.ScheduleAt).IsRequired(false);
+                    v => JsonConvert.DeserializeObject<Dictionary<string, object?>>(v))
+                .IsRequired(true);
+            map.Property(p => p.ScheduleAt)
+                .IsRequired(false)
+                .HasColumnType("timestamp without time zone");
 
             map.HasIndex(nameof(JobItem.Tenant), nameof(JobItem.Status));
             map.HasIndex(ji => new {ji.Type, ji.Status, ji.Tenant});
