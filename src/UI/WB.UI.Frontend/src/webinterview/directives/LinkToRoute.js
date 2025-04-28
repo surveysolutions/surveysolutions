@@ -1,4 +1,4 @@
-export function registerLinkToRoute(vue, { router, store }) {    
+export function registerLinkToRoute(vue, { router, store }) {
     vue.directive('linkToRoute', {
         beforeMount: (el, _, vnode) => {
             el.addEventListener('click', event => {
@@ -23,7 +23,7 @@ export function registerLinkToRoute(vue, { router, store }) {
                     }
                     // don't handle same page links/anchors
                     const url = new URL(target.href)
-                    const to = url.pathname
+                    var to = url.pathname
                     if (url.hash)
                         to = to + '#' + url.hash
 
