@@ -15,8 +15,8 @@ namespace WB.Services.Scheduler.Model.Mapping
             map.HasKey(x => x.Id);
             map.Property(b => b.Id);
             map.Property(b => b.Type).IsRequired();
-            map.Property(b => b.Tag).IsRequired(false);
-            map.Property(b => b.Tenant).IsRequired();
+            map.Property(b => b.Tag).IsRequired(true);
+            map.Property(b => b.Tenant).IsRequired(false);
             map.Property(b => b.Args).IsRequired();
 
             map.Property(b => b.Status)
