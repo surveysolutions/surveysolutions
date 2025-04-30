@@ -31,17 +31,6 @@ export default {
             .withAutomaticReconnect()
             .build()
 
-        //this.$api.hub = hubApi;
-
-        /*const app = this.$root
-        if (!Object.prototype.hasOwnProperty.call(app.config.globalProperties, '$api')) {
-            app.config.globalProperties.$api = {}
-        }
-
-        Object.defineProperty(app.config.globalProperties.$api, 'hub', {
-            get() { return api },
-        })*/
-
         connection.on('refreshEntities', (questions) => {
             this.$store.dispatch('refreshEntities', questions)
         })

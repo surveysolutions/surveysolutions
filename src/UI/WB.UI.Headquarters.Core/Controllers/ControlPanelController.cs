@@ -33,6 +33,9 @@ namespace WB.UI.Headquarters.Controllers
 
         [ActivePage(MenuItem.Administration_Config)]
         public IActionResult Configuration() => View("Index");
+        
+        [ActivePage(MenuItem.Administration_Config)]
+        public IActionResult Jobs() => View("Index");
 
         [ActivePage(MenuItem.Administration_Exceptions)]
         public async Task Exceptions() => await ExceptionalMiddleware.HandleRequestAsync(HttpContext);

@@ -288,9 +288,9 @@
     <data name="DataExport_FileLastUpdate" xml:space="preserve">
   <value>آخر تحديث: {{date}}</value>
 </data>
-    <data name="DataExport_FileWasRegenerated" xml:space="preserve">
-  <value>تم إعادة إنشاء الملف</value>
-</data>
+  <data name="DataExport_FileWasRegenerated" xml:space="preserve">
+    <value>تم إعادة إنشاء الملف أو حذفه</value>
+  </data>
     <data name="DataExport_FileSize" xml:space="preserve">
   <value>حجم الملف: {{size}} ميجابايت</value>
 </data>

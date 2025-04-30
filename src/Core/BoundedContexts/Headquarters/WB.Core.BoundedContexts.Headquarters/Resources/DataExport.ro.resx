@@ -307,7 +307,7 @@
     <value>Dimensiunea fișierului: {{size}} MB</value>
   </data>
   <data name="DataExport_FileWasRegenerated" xml:space="preserve">
-    <value>Fișierul a fost regenerat</value>
+      <value>Fișierul a fost regenerat sau șters</value>
   </data>
   <data name="DataExport_InterviewsStatus" xml:space="preserve">
     <value>Interviuri în {{status}}</value>

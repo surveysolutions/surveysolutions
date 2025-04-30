@@ -46,6 +46,17 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Maps
             [Service] IUnitOfWork unitOfWork,
             [Service] IAuthorizedUser authorizedUser)
         {
+            if (authorizedUser.IsObserving)
+            {
+                throw new GraphQLException(new[]
+                {
+                    ErrorBuilder.New()
+                        .SetMessage("User has no permissions to perform this action")
+                        .SetCode(ErrorCodes.Authentication.NotAuthorized)
+                        .Build()
+                });
+            }
+            
             if (authorizedUser.IsSupervisor)
             {
                 //limit by team
@@ -90,6 +101,17 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Maps
             CheckUserExistsOrThrow(userName, unitOfWork);
             CheckMapExistsOrThrow(fileName, unitOfWork);
 
+            if (authorizedUser.IsObserving)
+            {
+                throw new GraphQLException(new[]
+                {
+                    ErrorBuilder.New()
+                        .SetMessage("User has no permissions to perform this action")
+                        .SetCode(ErrorCodes.Authentication.NotAuthorized)
+                        .Build()
+                });
+            }
+            
             if (authorizedUser.IsSupervisor)
             {
                 //limit by team

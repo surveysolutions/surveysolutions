@@ -22,10 +22,12 @@ export function copyItem(questionnaireId, item) {
 
     var itemIdToCopy = item.itemId;
 
+    var itemToCopyType = (item.itemType === 'Group' && item.isRoster === true) ? 'Roster' : item.itemType;
+
     var itemToCopy = {
         questionnaireId: questionnaireId,
         itemId: itemIdToCopy,
-        itemType: item.itemType
+        itemType: itemToCopyType
     };
 
     cookies.cookies.remove('itemToCopy');

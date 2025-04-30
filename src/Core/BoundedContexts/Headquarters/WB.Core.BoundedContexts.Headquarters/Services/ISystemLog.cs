@@ -38,5 +38,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
         void WorkspaceUserUnAssigned(string userName, ICollection<string> workspaces);
         void EsriApiKeyChanged(bool isEmpty);
         void CriticalityLevelChanged(string title, QuestionnaireIdentity questionnaire, CriticalityLevel? level);
+        
+        void RetentionPolicyChanged(bool enabled);
+        
+        void RetentionPolicyFilesToKeepChanged(int? count);
+        void RetentionPolicyDaysToKeepChanged(int? count);
     }
 }
