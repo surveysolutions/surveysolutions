@@ -121,7 +121,8 @@ export default {
             return true;
         },
         change(value) {
-            if (this.validate(this.categoriesAsText)) {
+            const validateResult = this.validate(this.categoriesAsText)
+            if (validateResult === true) {
                 const categories = convertToTable(this.categoriesAsText, this.showParentValue);
                 this.$emit('changeCategories', categories);
             }
