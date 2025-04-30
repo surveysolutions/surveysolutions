@@ -270,9 +270,9 @@ export default {
                                     supervisorName = ` (<span class="supervisor">${w.supervisor}</span>)`
                                 }
                                 if (w.disabled)
-                                    return `<span class="glyphicon glyphicon-asterisk"></span><strike>${$('<div>').text(w.displayName).html()}${supervisorName}</strike>`
+                                    return `<span>&#x25CF;</span><strike>${$('<div>').text(w.displayName).html()}${supervisorName}</strike>`
                                 else
-                                    return `<span class="glyphicon glyphicon-asterisk"></span>${$('<div>').text(w.displayName).html() + supervisorName}`
+                                    return `<span>&#x25CF;</span>${$('<div>').text(w.displayName).html() + supervisorName}`
 
                             }).join('<br> ')
                         },
