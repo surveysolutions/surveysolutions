@@ -123,8 +123,7 @@ namespace WB.Infrastructure.AspNetCore
 
                         if (args.Contains("--httpsys") && OperatingSystem.IsWindows())
                         {
-                            //webBuilder.UseHttpSys();
-                            throw new Exception("HttpSys is not supported. Use --kestrel");
+                            webBuilder.UseHttpSys();
                         }
 
                         webBuilder.UseStartup<TStartup>();
