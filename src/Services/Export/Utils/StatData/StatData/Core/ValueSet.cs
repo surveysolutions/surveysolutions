@@ -3,7 +3,7 @@
 namespace StatData.Core
 {
     /// <summary>
-    /// Represents an value set for a numeric variable
+    /// Represents a value set for a numeric variable
     /// </summary>
     public class ValueSet : Dictionary<double, string>
     {

@@ -121,8 +121,8 @@ namespace WB.Services.Export.Services
 
                     if (questionnaireLevelLabels != null)
                         UpdateMetaWithLabels(meta, questionnaireLevelLabels);
-                    else if (serviceDataLabels.ContainsKey(fileName))
-                        UpdateMetaWithLabels(meta, serviceDataLabels[fileName]);
+                    else if (serviceDataLabels.TryGetValue(fileName, out var label))
+                        UpdateMetaWithLabels(meta, label);
 
                     meta.ExtendedMissings.Add(ExportFormatSettings.MissingNumericQuestionValue, "missing");
                     meta.ExtendedStrMissings.Add(ExportFormatSettings.MissingStringQuestionValue, "missing");
@@ -152,6 +152,8 @@ namespace WB.Services.Export.Services
 
         private static void UpdateMetaWithLabels(IDatasetMeta meta, QuestionnaireLevelLabels questionnaireLevelLabels)
         {
+            var referencedLabelSets = new Dictionary<string, ValueSet>();
+            
             for (int index = 0; index < meta.Variables.Length; index++)
             {
                 var variableName = meta.Variables[index].VarName;
@@ -166,34 +168,38 @@ namespace WB.Services.Export.Services
                     Storage = GetStorageType(variableLabels.ValueType), VarLabel = variableLabels.VariableLabel
                 };
 
-                var valueSet = new ValueSet();
-
                 if (variableLabels.Value.IsReference)
                 {
-                    var labels =
-                        questionnaireLevelLabels.PredefinedLabels.FirstOrDefault(x =>
-                            x.Name == variableLabels.Value.Name);
-                    if (labels != null)
+                    var reusableValueSet = referencedLabelSets.GetOrAdd(variableLabels.Value.Name, () =>
                     {
-                        foreach (var variableValueLabel in labels.VariableValues)
+                        var valueSet = new ValueSet();
+                        var labels =
+                            questionnaireLevelLabels.PredefinedLabels.FirstOrDefault(x =>
+                                x.Name == variableLabels.Value.Name);
+                        if (labels != null)
                         {
-                            if (double.TryParse(variableValueLabel.Value, NumberStyles.Any, CultureInfo.InvariantCulture,
-                                out double value))
-                                valueSet.Add(value, variableValueLabel.Label);
+                            foreach (var variableValueLabel in labels.VariableValues)
+                            {
+                                if (double.TryParse(variableValueLabel.Value, NumberStyles.Any, CultureInfo.InvariantCulture,
+                                        out double value))
+                                    valueSet.Add(value, variableValueLabel.Label);
+                            }
                         }
-                    }
+                        return valueSet;
+                    });
+                    meta.AssociateValueSet(variableName, reusableValueSet);
                 }
                 else
                 {
+                    var valueSet = new ValueSet();
                     foreach (var variableValueLabel in variableLabels.Value.VariableValues)
                     {
                         if (double.TryParse(variableValueLabel.Value, NumberStyles.Any, CultureInfo.InvariantCulture,
                             out var value))
                             valueSet.Add(value, variableValueLabel.Label);
                     }
+                    meta.AssociateValueSet(variableName, valueSet);
                 }
-
-                meta.AssociateValueSet(variableName, valueSet);
             }
         }
 
@@ -220,9 +226,8 @@ namespace WB.Services.Export.Services
 
                     foreach (var variableValueLabel in variableLabels.VariableValueLabels)
                     {
-                        double value;
                         if (double.TryParse(variableValueLabel.Value, NumberStyles.Any, CultureInfo.InvariantCulture,
-                            out value))
+                                out var value))
                             valueSet.Add(value, variableValueLabel.Label);
                     }
 
