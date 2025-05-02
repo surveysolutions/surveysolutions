@@ -10,7 +10,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
     public interface IInvitationService
     {
         void CreateInvitationForWebInterview(Assignment assignment);
-        int CreateInvitationForPublicLink(Assignment assignment, string interviewId);
+        int GetOrCreateInvitationForPublicLink(Assignment assignment, string interviewId);
 
         int GetCountOfInvitations(QuestionnaireIdentity questionnaireIdentity);
         int GetCountOfNotSentInvitations(QuestionnaireIdentity questionnaireIdentity);
@@ -18,8 +18,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         InvitationDistributionStatus GetEmailDistributionStatus();
         List<int> GetInvitationIdsToSend(QuestionnaireIdentity questionnaireIdentity);
         Invitation GetInvitation(int invitationId);
-        void InvitationWasNotSent(InvitationDistributionStatus status, int invitationId, int assignmentId, string email, string reason);
-        void MarkInvitationAsSent(InvitationDistributionStatus status, int invitationId, string emailId);
+        void MarkInvitationAsSent(int invitationId, string emailId);
         void MarkInvitationAsReminded(int invitationId, string emailId);
 
         void RequestEmailDistributionProcess(QuestionnaireIdentity questionnaireIdentity, string identityName, string questionnaireTitle);
@@ -28,6 +27,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         void CompleteEmailDistribution(InvitationDistributionStatus status);
         void EmailDistributionFailed(InvitationDistributionStatus status);
         void EmailDistributionCanceled(InvitationDistributionStatus status);
+        void EmailDistributionIncrementProcessedCount(InvitationDistributionStatus status);
+        void EmailDistributionIncrementErrorCount(InvitationDistributionStatus status, int invitationId, int assignmentId, string email, string reason);
         void CancelEmailDistribution();
         CancellationToken GetCancellationToken();
         IEnumerable<int> GetPartialResponseInvitations(QuestionnaireIdentity identity, int thresholdDays);

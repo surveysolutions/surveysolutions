@@ -61,11 +61,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                     try
                     {
                         var emailId = await invitationMailingService.SendInvitationAsync(invitationId, invitation.Assignment);
-                        invitationService.MarkInvitationAsSent(status, invitationId, emailId);
+                        invitationService.MarkInvitationAsSent(invitationId, emailId);
+                        invitationService.EmailDistributionIncrementProcessedCount(status);
                     }
                     catch (EmailServiceException e)
                     {
-                        invitationService.InvitationWasNotSent(status, invitationId, invitation.AssignmentId, address, e.Message);
+                        invitationService.EmailDistributionIncrementErrorCount(status, invitationId, invitation.AssignmentId, address, e.Message);
                     }
                 }
                
