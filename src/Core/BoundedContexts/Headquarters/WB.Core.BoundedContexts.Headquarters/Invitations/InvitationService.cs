@@ -34,8 +34,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             this.tokenGenerator = tokenGenerator;
         }
         
-        public int CreateInvitationForPublicLink(Assignment assignment, string interviewId)
+        public int GetOrCreateInvitationForPublicLink(Assignment assignment, string interviewId)
         {
+            var invitationFromDb = invitationStorage.Query(i => i.Where(inv =>
+                inv.AssignmentId == assignment.Id && inv.InterviewId == interviewId)).FirstOrDefault();
+            if (invitationFromDb != null)
+                return invitationFromDb.Id;
+
             var invitation = new Invitation(assignment.Id);
             var token = tokenGenerator.GenerateUnique();
             invitation.SetToken(token);
@@ -265,7 +270,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             this.invitationsDistributionStatusStorage.Store(status, AppSetting.InvitationsDistributionStatus);
         }
 
-        public void StartEmailDistribution()
+        public InvitationDistributionStatus StartEmailDistribution()
         {
             cancellationTokenSource = new CancellationTokenSource();
             var status = this.GetEmailDistributionStatus();
@@ -273,33 +278,44 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             status.TotalCount = this.GetCountOfNotSentInvitations(status.QuestionnaireIdentity);
             status.StartedDate = DateTime.UtcNow;
             this.invitationsDistributionStatusStorage.Store(status, AppSetting.InvitationsDistributionStatus);
+            return status;
         }
 
-        public void CompleteEmailDistribution()
+        public void CompleteEmailDistribution(InvitationDistributionStatus status)
         {
-            var status = this.GetEmailDistributionStatus();
             if (status == null) return;
             status.Status = InvitationProcessStatus.Done;
             this.invitationsDistributionStatusStorage.Store(status, AppSetting.InvitationsDistributionStatus);
             cancellationTokenSource = null;
         }
 
-        public void EmailDistributionFailed()
+        public void EmailDistributionFailed(InvitationDistributionStatus status)
         {
-            var status = this.GetEmailDistributionStatus();
             if (status == null) return;
             status.Status = InvitationProcessStatus.Failed;
             this.invitationsDistributionStatusStorage.Store(status, AppSetting.InvitationsDistributionStatus);
             cancellationTokenSource = null;
         }
 
-        public void EmailDistributionCanceled()
+        public void EmailDistributionCanceled(InvitationDistributionStatus status)
         {
-            var status = this.GetEmailDistributionStatus();
             if (status == null) return;
             status.Status = InvitationProcessStatus.Canceled;
             this.invitationsDistributionStatusStorage.Store(status, AppSetting.InvitationsDistributionStatus);
             cancellationTokenSource = null;
+        }
+        
+        public void EmailDistributionIncrementProcessedCount(InvitationDistributionStatus status)
+        {
+            status.ProcessedCount++;
+            this.invitationsDistributionStatusStorage.Store(status, AppSetting.InvitationsDistributionStatus);
+        }
+
+        public void EmailDistributionIncrementErrorCount(InvitationDistributionStatus status, int invitationId, int assignmentId, string email, string reason)
+        {
+            status.WithErrorsCount++;
+            status.Errors.Add(new InvitationSendError(invitationId, assignmentId, email, reason));
+            this.invitationsDistributionStatusStorage.Store(status, AppSetting.InvitationsDistributionStatus);            this.invitationsDistributionStatusStorage.Store(status, AppSetting.InvitationsDistributionStatus);
         }
 
         public void CancelEmailDistribution()
@@ -370,26 +386,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         {
             return invitationStorage.GetById(invitationId);
         }
-
-        public void InvitationWasNotSent(int invitationId, int assignmentId, string email, string reason)
-        {
-            var status = this.GetEmailDistributionStatus();
-            status.WithErrorsCount++;
-            status.Errors.Add(new InvitationSendError(invitationId, assignmentId, email, reason));
-            this.invitationsDistributionStatusStorage.Store(status, AppSetting.InvitationsDistributionStatus);
-        }
-
+        
         public void MarkInvitationAsSent(int invitationId, string emailId)
         {
             var invitation = this.GetInvitation(invitationId);
             invitation.InvitationWasSent(emailId);
             invitationStorage.Store(invitation, invitationId);
-            var status = this.GetEmailDistributionStatus();
-            if (status != null)
-            {
-                status.ProcessedCount++;
-                this.invitationsDistributionStatusStorage.Store(status, AppSetting.InvitationsDistributionStatus);
-            }
         }
 
         private static Expression<Func<Invitation, bool>> LastReminderIsExpired(DateTime thresholdDate)

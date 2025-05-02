@@ -396,11 +396,13 @@ namespace WB.UI.Headquarters.Controllers
             var assignmentId = interviewSummary.GetById(data.InterviewId)?.AssignmentId ?? 0;
             var assignment = assignments.GetAssignment(assignmentId);
 
-            int invitationId = invitationService.CreateInvitationForPublicLink(assignment, data.InterviewId);
+            int invitationId = invitationService.GetOrCreateInvitationForPublicLink(assignment, data.InterviewId);
 
             try
             {
-                await invitationMailingService.SendResumeAsync(invitationId, assignment, data.Email);
+                var emailId = await invitationMailingService.SendResumeAsync(invitationId, assignment, data.Email);
+                invitationService.MarkInvitationAsSent(invitationId, emailId);
+
                 if (Request.Cookies[AskForEmail] != null)
                 {
                     Response.Cookies.Delete(AskForEmail);
@@ -410,7 +412,6 @@ namespace WB.UI.Headquarters.Controllers
             }
             catch (EmailServiceException e)
             {
-                invitationService.InvitationWasNotSent(invitationId, assignmentId, data.Email, e.Message);
                 return this.Json("fail");
             }
         }
