@@ -29,12 +29,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 
         public async Task Execute(IJobExecutionContext context)
         {
+            InvitationDistributionStatus status = null;
             try
             {
                 if (!emailService.IsConfigured())
                     return;
 
-                InvitationDistributionStatus status = invitationService.GetEmailDistributionStatus();
+                status = invitationService.GetEmailDistributionStatus();
 
                 if (status == null)
                     return;
@@ -44,7 +45,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 
                 this.logger.LogDebug("Invitations distribution job: Started");
 
-                invitationService.StartEmailDistribution();
+                status = invitationService.StartEmailDistribution();
                 var cancellationToken = invitationService.GetCancellationToken();
                 var sw = new Stopwatch();
                 sw.Start();
@@ -59,28 +60,29 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
                     var address = invitation.Assignment.Email;
                     try
                     {
-                        await invitationMailingService.SendInvitationAsync(invitationId, invitation.Assignment);
+                        var emailId = await invitationMailingService.SendInvitationAsync(invitationId, invitation.Assignment);
+                        invitationService.MarkInvitationAsSent(status, invitationId, emailId);
                     }
                     catch (EmailServiceException e)
                     {
-                        invitationService.InvitationWasNotSent(invitationId, invitation.AssignmentId, address, e.Message);
+                        invitationService.InvitationWasNotSent(status, invitationId, invitation.AssignmentId, address, e.Message);
                     }
                 }
                
                 sw.Stop();
                 
-                invitationService.CompleteEmailDistribution();
+                invitationService.CompleteEmailDistribution(status);
 
                 this.logger.LogDebug("Invitations distribution job: Finished. Elapsed time: {elapsed}", sw.Elapsed);
             }
             catch (OperationCanceledException)
             {
-                invitationService.EmailDistributionCanceled();
+                invitationService.EmailDistributionCanceled(status);
                 this.logger.LogWarning("Invitations distribution job: CANCELED.");
             }
             catch (Exception ex)
             {
-                invitationService.EmailDistributionFailed();
+                invitationService.EmailDistributionFailed(status);
                 this.logger.LogError(ex, "Invitations distribution job: FAILED ");
             }
         }

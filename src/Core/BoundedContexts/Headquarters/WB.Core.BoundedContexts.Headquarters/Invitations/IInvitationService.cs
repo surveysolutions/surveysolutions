@@ -18,16 +18,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
         InvitationDistributionStatus GetEmailDistributionStatus();
         List<int> GetInvitationIdsToSend(QuestionnaireIdentity questionnaireIdentity);
         Invitation GetInvitation(int invitationId);
-        void InvitationWasNotSent(int invitationId, int assignmentId, string email, string reason);
-        void MarkInvitationAsSent(int invitationId, string emailId);
+        void InvitationWasNotSent(InvitationDistributionStatus status, int invitationId, int assignmentId, string email, string reason);
+        void MarkInvitationAsSent(InvitationDistributionStatus status, int invitationId, string emailId);
         void MarkInvitationAsReminded(int invitationId, string emailId);
 
         void RequestEmailDistributionProcess(QuestionnaireIdentity questionnaireIdentity, string identityName, string questionnaireTitle);
 
-        void StartEmailDistribution();
-        void CompleteEmailDistribution();
-        void EmailDistributionFailed();
-        void EmailDistributionCanceled();
+        InvitationDistributionStatus StartEmailDistribution();
+        void CompleteEmailDistribution(InvitationDistributionStatus status);
+        void EmailDistributionFailed(InvitationDistributionStatus status);
+        void EmailDistributionCanceled(InvitationDistributionStatus status);
         void CancelEmailDistribution();
         CancellationToken GetCancellationToken();
         IEnumerable<int> GetPartialResponseInvitations(QuestionnaireIdentity identity, int thresholdDays);

@@ -265,7 +265,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             this.invitationsDistributionStatusStorage.Store(status, AppSetting.InvitationsDistributionStatus);
         }
 
-        public void StartEmailDistribution()
+        public InvitationDistributionStatus StartEmailDistribution()
         {
             cancellationTokenSource = new CancellationTokenSource();
             var status = this.GetEmailDistributionStatus();
@@ -273,29 +273,27 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             status.TotalCount = this.GetCountOfNotSentInvitations(status.QuestionnaireIdentity);
             status.StartedDate = DateTime.UtcNow;
             this.invitationsDistributionStatusStorage.Store(status, AppSetting.InvitationsDistributionStatus);
+            return status;
         }
 
-        public void CompleteEmailDistribution()
+        public void CompleteEmailDistribution(InvitationDistributionStatus status)
         {
-            var status = this.GetEmailDistributionStatus();
             if (status == null) return;
             status.Status = InvitationProcessStatus.Done;
             this.invitationsDistributionStatusStorage.Store(status, AppSetting.InvitationsDistributionStatus);
             cancellationTokenSource = null;
         }
 
-        public void EmailDistributionFailed()
+        public void EmailDistributionFailed(InvitationDistributionStatus status)
         {
-            var status = this.GetEmailDistributionStatus();
             if (status == null) return;
             status.Status = InvitationProcessStatus.Failed;
             this.invitationsDistributionStatusStorage.Store(status, AppSetting.InvitationsDistributionStatus);
             cancellationTokenSource = null;
         }
 
-        public void EmailDistributionCanceled()
+        public void EmailDistributionCanceled(InvitationDistributionStatus status)
         {
-            var status = this.GetEmailDistributionStatus();
             if (status == null) return;
             status.Status = InvitationProcessStatus.Canceled;
             this.invitationsDistributionStatusStorage.Store(status, AppSetting.InvitationsDistributionStatus);
@@ -371,20 +369,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             return invitationStorage.GetById(invitationId);
         }
 
-        public void InvitationWasNotSent(int invitationId, int assignmentId, string email, string reason)
+        public void InvitationWasNotSent(InvitationDistributionStatus status, int invitationId, int assignmentId, string email, string reason)
         {
-            var status = this.GetEmailDistributionStatus();
             status.WithErrorsCount++;
             status.Errors.Add(new InvitationSendError(invitationId, assignmentId, email, reason));
             this.invitationsDistributionStatusStorage.Store(status, AppSetting.InvitationsDistributionStatus);
         }
 
-        public void MarkInvitationAsSent(int invitationId, string emailId)
+        public void MarkInvitationAsSent(InvitationDistributionStatus status, int invitationId, string emailId)
         {
             var invitation = this.GetInvitation(invitationId);
             invitation.InvitationWasSent(emailId);
             invitationStorage.Store(invitation, invitationId);
-            var status = this.GetEmailDistributionStatus();
+
             if (status != null)
             {
                 status.ProcessedCount++;

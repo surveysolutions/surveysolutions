@@ -400,7 +400,11 @@ namespace WB.UI.Headquarters.Controllers
 
             try
             {
-                await invitationMailingService.SendResumeAsync(invitationId, assignment, data.Email);
+                var emailId = await invitationMailingService.SendResumeAsync(invitationId, assignment, data.Email);
+                //var emailDistributionStatus = invitationService.GetEmailDistributionStatus();
+                //if (emailDistributionStatus != null)
+                //    invitationService.MarkInvitationAsSent(emailDistributionStatus, invitationId, emailId);
+
                 if (Request.Cookies[AskForEmail] != null)
                 {
                     Response.Cookies.Delete(AskForEmail);
@@ -410,7 +414,7 @@ namespace WB.UI.Headquarters.Controllers
             }
             catch (EmailServiceException e)
             {
-                invitationService.InvitationWasNotSent(invitationId, assignmentId, data.Email, e.Message);
+                //invitationService.InvitationWasNotSent(invitationId, assignmentId, data.Email, e.Message);
                 return this.Json("fail");
             }
         }
