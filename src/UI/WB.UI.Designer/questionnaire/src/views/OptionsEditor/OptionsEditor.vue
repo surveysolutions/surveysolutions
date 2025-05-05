@@ -37,23 +37,24 @@
                             <v-window v-model="tab">
                                 <v-window-item value="table">
                                     <category-table ref="table" :categories="categories"
-                                        :parent-categories="parentCategories" :loading="loading" :is-category="isCategory"
-                                        :is-cascading="isCascading" :readonly="isReadonly"
+                                        :parent-categories="parentCategories" :loading="loading"
+                                        :is-category="isCategory" :is-cascading="isCascading" :readonly="isReadonly"
                                         @setCascading="setCascadingCategory" @update-categories="updateCategories" />
                                 </v-window-item>
                                 <v-window-item value="strings">
                                     <category-strings v-if="tab == 'strings'" ref="strings" :loading="loading"
                                         :show-parent-value="isCascading" :categories="categories" :readonly="isReadonly"
-                                        @string-valid="v => (stringsIsValid = v)" @changeCategories="v => (categories = v)"
-                                        @editing="v => (inEditMode = v)" @inprogress="v => (convert = v)" />
+                                        @string-valid="v => (stringsIsValid = v)"
+                                        @changeCategories="v => (categories = v)" @editing="v => (inEditMode = v)"
+                                        @inprogress="v => (convert = v)" />
                                 </v-window-item>
                             </v-window>
                         </v-card>
                     </v-col>
                 </v-row>
                 <v-footer app min-width="680">
-                    <v-btn v-if="!readonly" class="ma-2" color="success" :disabled="!canApplyChanges" :loading="submitting"
-                        @click="apply">{{ $t('QuestionnaireEditor.OptionsUploadApply') }}</v-btn>
+                    <v-btn v-if="!readonly" class="ma-2" color="success" :disabled="!canApplyChanges"
+                        :loading="submitting" @click="apply">{{ $t('QuestionnaireEditor.OptionsUploadApply') }}</v-btn>
                     <v-btn v-if="!readonly" @click="resetChanges">{{
                         $t('QuestionnaireEditor.OptionsUploadRevert')
                     }}</v-btn>
@@ -69,9 +70,11 @@
                         <v-icon>mdi-download</v-icon>
                         {{ $t('QuestionnaireEditor.SideBarDownload') }}
                     </span>
-                    <a :href="exportOptionsAsExlsUri" class="ma-2 v-btn v-size--default">
+                    <a :href="isDirty ? null : exportOptionsAsExlsUri" :class="{ 'disabled': isDirty }"
+                        @click.prevent="isDirty && $event.preventDefault()" class="ma-2 v-btn v-size--default">
                         {{ $t('QuestionnaireEditor.SideBarXlsx') }}</a>
-                    <a :href="exportOptionsAsTabUri" class="ma-2 v-btn v-size--default">
+                    <a :href="isDirty ? null : exportOptionsAsTabUri" :class="{ 'disabled': isDirty }"
+                        @click.prevent="isDirty && $event.preventDefault()" class="ma-2 v-btn v-size--default">
                         {{ $t('QuestionnaireEditor.SideBarTab') }}</a>
                 </v-footer>
             </v-container>
@@ -85,6 +88,7 @@ import CategoryTable from './components/OptionItemsTable.vue';
 import CategoryStrings from './components/OptionItemsAsStrings.vue';
 import { optionsApi } from './services';
 import 'vuetify/styles';
+import { isEqual } from 'lodash';
 
 export default {
     name: 'CategoriesEditor',
@@ -105,6 +109,7 @@ export default {
         return {
             tab: '',
             categories: [],
+            initialCategories: [],
             parentCategories: null,
             categoriesAsText: '',
             submitting: false,
@@ -190,7 +195,12 @@ export default {
 
         canApplyChanges() {
             return this.tab == 'strings' ? this.stringsIsValid : true;
-        }
+        },
+
+        isDirty() {
+            const equal = isEqual(this.categories, this.initialCategories)
+            return !equal;
+        },
     },
 
     mounted() {
@@ -236,6 +246,7 @@ export default {
 
                 const data = await query;
                 this.categories = data.options;
+                this.initialCategories = data.options;
                 this.readonly = data.isReadonly;
 
                 if (
