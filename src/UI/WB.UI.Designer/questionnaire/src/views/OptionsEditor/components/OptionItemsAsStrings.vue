@@ -1,22 +1,9 @@
 <template>
     <v-container fluid>
-        <v-textarea
-            ref="strings"
-            v-model="categoriesAsText"
-            rows="15"
-            filled
-            spellcheck="false"
-            wrap="off"
-            autocorrect="off"
-            :rules="textRules"
-            :disabled="loading || convert"
-            :loading="loading || convert"
-            :readonly="readonly"
-            style="font-family: monospace, monospace"
-            @change="change"
-            @focus="onFocus"
-            @blur="onBlur"
-        >
+        <v-textarea ref="strings" v-model="categoriesAsText" rows="15" filled spellcheck="false" wrap="off"
+            autocorrect="off" :rules="textRules" :disabled="loading || convert" :loading="loading || convert"
+            :readonly="readonly" style="font-family: monospace, monospace" @change="change" @focus="onFocus"
+            @blur="onBlur">
             <template #message="{ message }">
                 <div style="white-space: pre-wrap;">{{ message }}</div>
             </template>
@@ -30,9 +17,11 @@ import {
     validateText,
     convertToTable
 } from '../utils/tableToString';
+import { isEqual } from 'lodash';
 
 export default {
     name: 'CategoriesStrings',
+    expose: ['isDirty'],
 
     props: {
         categories: { type: Array, required: true },
@@ -44,6 +33,7 @@ export default {
     data() {
         return {
             categoriesAsText: null,
+            initialCategoriesAsText: null,
             convert: false,
             validity: true
         };
@@ -69,7 +59,13 @@ export default {
 
         valid() {
             return this.$refs.strings.valid;
-        }
+        },
+
+        isDirty() {
+            const equal = isEqual(this.categoriesAsText, this.initialCategoriesAsText)
+            console.log('isDirty', equal, this.categoriesAsText, this.initialCategoriesAsText)
+            return !equal;
+        },
     },
 
     watch: {
@@ -81,6 +77,10 @@ export default {
             if (to != from) {
                 this.$emit('string-valid', to === true);
             }
+        },
+
+        isDirty(newVal) {
+            this.$emit('isDirty', newVal)
         }
     },
 
@@ -109,8 +109,8 @@ export default {
                 const error = [
                     this.showParentValue
                         ? this.$t(
-                              'QuestionnaireEditor.OptionsCascadingListError'
-                          )
+                            'QuestionnaireEditor.OptionsCascadingListError'
+                        )
                         : this.$t('QuestionnaireEditor.OptionsListError'),
                     '',
                     ...top5Errors
@@ -145,6 +145,7 @@ export default {
             convertToText(this.categories, this.showParentValue).then(data => {
                 this.$nextTick(() => {
                     this.categoriesAsText = data;
+                    this.initialCategoriesAsText = data;
                 });
 
                 this.convert = false;
