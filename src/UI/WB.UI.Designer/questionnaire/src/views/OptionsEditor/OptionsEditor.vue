@@ -4,28 +4,28 @@
             <v-container fluid>
                 <v-snackbar v-model="snacks.fileUploaded" location='top' color="success">{{
                     $t('QuestionnaireEditor.FileUploaded')
-                }}</v-snackbar>
+                    }}</v-snackbar>
                 <v-snackbar v-model="snacks.formReverted" location='top' color="success">{{
                     $t('QuestionnaireEditor.DataChangesReverted')
-                }}</v-snackbar>
+                    }}</v-snackbar>
                 <v-snackbar v-model="snacks.ajaxError" location='top' color="error">{{
                     $t('QuestionnaireEditor.CommunicationError')
-                }}</v-snackbar>
+                    }}</v-snackbar>
                 <v-row align="start" justify="center">
                     <v-col lg="10">
                         <v-card class="mx-4 elevation-12" min-width="680">
                             <v-toolbar dense dark color="primary">
                                 <v-toolbar-title v-if="options">{{
                                     formTitle
-                                }}</v-toolbar-title>
+                                    }}</v-toolbar-title>
                             </v-toolbar>
                             <v-tabs v-model="tab" color="primary" fixed-tabs grow>
                                 <v-tab value="table" :disabled="!stringsIsValid">{{
                                     $t('QuestionnaireEditor.TableView')
-                                }}</v-tab>
+                                    }}</v-tab>
                                 <v-tab value="strings">{{
                                     $t('QuestionnaireEditor.StringsView')
-                                }}</v-tab>
+                                    }}</v-tab>
                             </v-tabs>
                             <div v-if="errors.length > 0" class="alert alert-danger">
                                 <v-card-text>
@@ -53,14 +53,14 @@
                     </v-col>
                 </v-row>
                 <v-footer app min-width="680">
-                    <v-btn v-if="!readonly" class="ma-2" color="success" :disabled="!canApplyChanges"
-                        :loading="submitting" @click="apply">{{ $t('QuestionnaireEditor.OptionsUploadApply') }}</v-btn>
-                    <v-btn v-if="!readonly" @click="resetChanges">{{
+                    <v-btn v-if="!readonly" class="ma-2" color="success" :disabled="!isDirty" :loading="submitting"
+                        @click="apply">{{ $t('QuestionnaireEditor.OptionsUploadApply') }}</v-btn>
+                    <v-btn v-if="!readonly" :disabled="!isDirty" @click="resetChanges">{{
                         $t('QuestionnaireEditor.OptionsUploadRevert')
-                    }}</v-btn>
+                        }}</v-btn>
                     <v-btn v-if="readonly" @click="close">{{
                         $t('QuestionnaireEditor.Close')
-                    }}</v-btn>
+                        }}</v-btn>
                     <v-spacer />
 
                     <v-file-input v-if="!readonly" ref="file" v-model="file" class="pt-2"
@@ -70,11 +70,15 @@
                         <v-icon>mdi-download</v-icon>
                         {{ $t('QuestionnaireEditor.SideBarDownload') }}
                     </span>
-                    <a :href="isDirty ? null : exportOptionsAsExlsUri" :class="{ 'disabled': isDirty }"
-                        @click.prevent="isDirty && $event.preventDefault()" class="ma-2 v-btn v-size--default">
+                    <a :href="!canDownloadCategories ? null : exportOptionsAsExlsUri"
+                        :class="{ 'disabled': !canDownloadCategories }"
+                        @click.prevent="!canDownloadCategories && $event.preventDefault()"
+                        class="ma-2 v-btn v-size--default">
                         {{ $t('QuestionnaireEditor.SideBarXlsx') }}</a>
-                    <a :href="isDirty ? null : exportOptionsAsTabUri" :class="{ 'disabled': isDirty }"
-                        @click.prevent="isDirty && $event.preventDefault()" class="ma-2 v-btn v-size--default">
+                    <a :href="!canDownloadCategories ? null : exportOptionsAsTabUri"
+                        :class="{ 'disabled': !canDownloadCategories }"
+                        @click.prevent="!canDownloadCategories && $event.preventDefault()"
+                        class="ma-2 v-btn v-size--default">
                         {{ $t('QuestionnaireEditor.SideBarTab') }}</a>
                 </v-footer>
             </v-container>
@@ -198,17 +202,17 @@ export default {
         },
 
         isDirty() {
-
-            if (this.inEditMode == true || this.convert == true) {
-                return true;
-            }
-
-            const tabIsValid = this.tab == 'strings' ? this.stringsIsValid : true;
-            if (!tabIsValid) return true;
-
-
             const equal = isEqual(this.categories, this.initialCategories)
             return !equal;
+        },
+
+        canDownloadCategories() {
+            if (this.inEditMode == true || this.convert == true)
+                return false;
+
+            if (!this.canApplyChanges)
+                return false;
+            return !this.isDirty;
         },
     },
 
