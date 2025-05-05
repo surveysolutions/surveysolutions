@@ -198,6 +198,15 @@ export default {
         },
 
         isDirty() {
+
+            if (this.inEditMode == true || this.convert == true) {
+                return true;
+            }
+
+            const tabIsValid = this.tab == 'strings' ? this.stringsIsValid : true;
+            if (!tabIsValid) return true;
+
+
             const equal = isEqual(this.categories, this.initialCategories)
             return !equal;
         },
