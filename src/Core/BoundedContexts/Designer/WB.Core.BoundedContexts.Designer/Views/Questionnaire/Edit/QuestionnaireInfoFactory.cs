@@ -584,10 +584,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                     questionView.YesNoView = multyOptionsQuestion.YesNoView;
                     questionView.AreAnswersOrdered = multyOptionsQuestion.AreAnswersOrdered;
                     questionView.MaxAllowedAnswers = multyOptionsQuestion.MaxAllowedAnswers;
-                    questionView.LinkedToEntityId = multyOptionsQuestion.LinkedToQuestionId?.FormatGuid() ?? multyOptionsQuestion.LinkedToRosterId?.FormatGuid();
+                    questionView.LinkedToEntityId = multyOptionsQuestion.LinkedToQuestionId?.FormatGuid() 
+                                                    ?? multyOptionsQuestion.LinkedToRosterId?.FormatGuid();
                     questionView.LinkedFilterExpression = multyOptionsQuestion.LinkedFilterExpression;
                     questionView.Options = CreateCategoricalOptions(multyOptionsQuestion.Answers);
-                    questionView.OptionsFilterExpression = multyOptionsQuestion.Properties?.OptionsFilterExpression;
+                    questionView.OptionsFilterExpression = 
+                        String.IsNullOrEmpty(multyOptionsQuestion.Properties?.OptionsFilterExpression)
+                        ? null
+                        : multyOptionsQuestion.Properties?.OptionsFilterExpression;
                     questionView.CategoriesId = multyOptionsQuestion.CategoriesId.FormatGuid();
                     return questionView;
                 case QuestionType.TextList:
@@ -609,7 +613,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                     questionView.IsFilteredCombobox = singleoptionQuestion.IsFilteredCombobox;
                     questionView.CascadeFromQuestionId = singleoptionQuestion.CascadeFromQuestionId?.FormatGuid();
                     questionView.Options = CreateCategoricalOptions(singleoptionQuestion.Answers);
-                    questionView.OptionsFilterExpression = singleoptionQuestion.Properties?.OptionsFilterExpression;
+                    questionView.OptionsFilterExpression = 
+                        String.IsNullOrEmpty(singleoptionQuestion.Properties?.OptionsFilterExpression)
+                        ? null
+                        : singleoptionQuestion.Properties?.OptionsFilterExpression;
                     questionView.ShowAsList = singleoptionQuestion.ShowAsList;
                     questionView.ShowAsListThreshold = singleoptionQuestion.ShowAsListThreshold;
                     questionView.CategoriesId = singleoptionQuestion.CategoriesId.FormatGuid();
