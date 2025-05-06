@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,7 +11,6 @@ using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.HttpServices.HttpClient;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -20,7 +18,6 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
-using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Questionnaire.Translations;
@@ -69,7 +66,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.questionnaireRepository = questionnaireRepository;
         }
 
-        public async Task<QuestionnaireIdentity> LoadQuestionnaireAsync(string questionnaireId, string questionnaireTitle,
+        public async Task<QuestionnaireIdentity> LoadQuestionnaireAndCreateInterviewAsync(string questionnaireId, string questionnaireTitle,
             IProgress<string> progress, CancellationToken cancellationToken)
         {
             var questionnaireIdentity = await DownloadQuestionnaireWithAllDependenciesAsync(questionnaireId, questionnaireTitle, progress, cancellationToken);
@@ -101,7 +98,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         }
 
         public async Task<bool> ReloadQuestionnaireAsync(string questionnaireId, string questionnaireTitle,
-            IStatefulInterview interview, NavigationIdentity navigationIdentity, IProgress<string> progress, CancellationToken cancellationToken)
+            Guid currentInterviewId, NavigationIdentity navigationIdentity, IProgress<string> progress, 
+            CancellationToken cancellationToken)
         {
             var questionnaireIdentity = await DownloadQuestionnaireWithAllDependenciesAsync(questionnaireId, questionnaireTitle, progress, cancellationToken);
             if (questionnaireIdentity != null)
@@ -116,7 +114,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                         ? NavigationIdentity.CreateForGroup(navigationIdentity.TargetGroup)
                         : null;
 
-                    var existingInterviewCommands = this.executedCommandsStorage.Get(interview.Id);
+                    var existingInterviewCommands = this.executedCommandsStorage.Get(currentInterviewId);
                     foreach (var existingInterviewCommand in existingInterviewCommands)
                     {
                         if (existingInterviewCommand is CreateInterview createCommand)
@@ -138,7 +136,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 }
                 finally
                 {
-                    this.executedCommandsStorage.Clear(interview.Id);
+                    this.executedCommandsStorage.Clear(currentInterviewId);
                 }
             }
 
