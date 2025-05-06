@@ -13,8 +13,8 @@
                 </div>
                 <div class="attachment-content">
                     <input focus-on-out="focusAttachment{{attachment.attachmentId}}" required="" maxlength="32"
-                        spellcheck="false" v-model="attachment.name" name="name" class="form-control table-name" type="text"
-                        :placeholder="$t('QuestionnaireEditor.SideBarAttachmentName')" />
+                        spellcheck="false" v-model="attachment.name" name="name" class="form-control table-name"
+                        type="text" :placeholder="$t('QuestionnaireEditor.SideBarAttachmentName')" />
                     <div class="divider"></div>
                     <div class="drop-box">
                         {{ $t('QuestionnaireEditor.SideBarLookupTableDropFile') }}
@@ -62,7 +62,7 @@
                             </button>
 
                             <file-upload ref="upload" v-if="!isReadOnlyForUser" :input-id="'tfunew'" v-model="file"
-                                :size="100 * 1024 * 1024" :drop="false" :drop-directory="false" @input-file="fileSelected"
+                                :size="maxFileSize" :drop="false" :drop-directory="false" @input-file="fileSelected"
                                 accept=".pdf,image/*,video/*,audio/*">
                             </file-upload>
 
@@ -93,7 +93,8 @@ export default {
     data() {
         return {
             downloadBaseUrl: '/attachments',
-            file: []
+            file: [],
+            maxFileSize: 100 * 1024 * 1024,
         }
     },
     computed: {
@@ -228,6 +229,17 @@ export default {
 
             this.$confirm(confirmParams);
         },
+
+        inputFilter(file) {
+            if (file.size > this.maxFileSize) {
+                notice(this.$t('QuestionnaireEditor.AttachmentSizeIsTooBig', {
+                    size: formatBytes(this.maxFileSize),
+                }));
+                return false;
+            }
+            return true;
+        },
+
     },
 
 }
