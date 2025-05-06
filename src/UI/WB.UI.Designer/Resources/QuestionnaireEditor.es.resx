@@ -1658,4 +1658,7 @@ Ingresaste una entrada no válida. Cada línea debe seguir el formato: "Título.
   <data name="SideBarTab" xml:space="preserve">
       <value>Tab</value>
   </data>
+  <data name="AttachmentSizeIsTooBig" xml:space="preserve">
+    <value>El tamaño del archivo adjunto es demasiado grande. Tamaño máximo: {{size}}</value>
+</data>
 </root>
