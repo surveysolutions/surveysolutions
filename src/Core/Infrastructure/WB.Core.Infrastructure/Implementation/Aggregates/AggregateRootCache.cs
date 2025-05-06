@@ -36,7 +36,7 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
         {
             expirationPeriod ??= Expiration;
 
-            TimeSpan expiration = expirationPeriod > MaxCachePeriod ? MaxCachePeriod : expirationPeriod.Value;
+            TimeSpan expiration = expirationPeriod > MaxCacheExpiration ? MaxCacheExpiration : expirationPeriod.Value;
             var value = new AggregateRootCacheItem(aggregateId);
 
             value = factory == null ? value : factory(value);

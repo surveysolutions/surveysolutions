@@ -104,7 +104,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             var questionnaireIdentity = await DownloadQuestionnaireWithAllDependenciesAsync(questionnaireId, questionnaireTitle, progress, cancellationToken);
             if (questionnaireIdentity != null)
             {
-                await viewModelNavigationService.NavigateToDashboardAsync();
                 try
                 {
                     progress.Report(TesterUIResources.ImportQuestionnaire_CreateInterview);
