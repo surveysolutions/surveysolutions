@@ -1,6 +1,8 @@
 ﻿using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.Infrastructure.Aggregates;
+using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.Services;
@@ -32,6 +34,9 @@ namespace WB.UI.Tester.ServiceLocation
             registry.Bind<IGroupStateCalculationStrategy, EnumeratorGroupGroupStateCalculationStrategy>();
             registry.Bind<IInterviewStateCalculationStrategy, EnumeratorInterviewStateCalculationStrategy>();
             registry.BindAsSingleton<IDenormalizerRegistry, TesterDenormalizerRegistry>();
+            
+            registry.BindWithConstructorArgument<IAggregateRootCache, AggregateRootCache>("settings", 
+                new AggregateRootCacheExpirationSettings(TimeSpan.FromDays(10), TimeSpan.FromDays(60)));
 
 #if EXCLUDEEXTENSIONS
             registry.Bind<IMapInteractionService, WB.UI.Shared.Enumerator.CustomServices.AreaEditor.DummyMapInteractionService>();
