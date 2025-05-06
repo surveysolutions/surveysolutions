@@ -55,7 +55,7 @@
                 <v-footer app min-width="680">
                     <v-btn v-if="!readonly" class="ma-2" color="success" :disabled="!canApplyChanges"
                         :loading="submitting" @click="apply">{{ $t('QuestionnaireEditor.OptionsUploadApply') }}</v-btn>
-                    <v-btn v-if="!readonly" :disabled="!canApplyChanges" @click="resetChanges">{{
+                    <v-btn v-if="!readonly" :disabled="!isDirty" @click="resetChanges">{{
                         $t('QuestionnaireEditor.OptionsUploadRevert')
                     }}</v-btn>
                     <v-btn v-if="readonly" @click="close">{{
