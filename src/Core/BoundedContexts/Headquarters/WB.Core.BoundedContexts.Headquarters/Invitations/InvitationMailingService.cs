@@ -33,21 +33,21 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             this.linkProvider = linkProvider;
         }
 
-        public async Task SendInvitationAsync(int invitationId, Assignment assignment, string email = null)
+        public async Task<string> SendInvitationAsync(int invitationId, Assignment assignment, string email = null)
         {
             Invitation invitation = invitationService.GetInvitation(invitationId);
             var link = this.linkProvider.WebInterviewStartLink(invitation);
-            await SendEmailByTemplate(invitation, assignment, email, EmailTextTemplateType.InvitationTemplate, link);
+            return await SendEmailByTemplate(invitation, assignment, email, EmailTextTemplateType.InvitationTemplate, link);
         }
         
-        public async Task SendResumeAsync(int invitationId, Assignment assignment, string email)
+        public async Task<string> SendResumeAsync(int invitationId, Assignment assignment, string email)
         {
             Invitation invitation = invitationService.GetInvitation(invitationId);
             var link = this.linkProvider.WebInterviewContinueLink(invitation);
-            await SendEmailByTemplate(invitation, assignment, email, EmailTextTemplateType.ResumeTemplate, link);
+            return await SendEmailByTemplate(invitation, assignment, email, EmailTextTemplateType.ResumeTemplate, link);
         }
 
-        private async Task SendEmailByTemplate(Invitation invitation, Assignment assignment, string email, 
+        private async Task<string> SendEmailByTemplate(Invitation invitation, Assignment assignment, string email, 
             EmailTextTemplateType emailTemplateType, string link)
         {
             WebInterviewConfig webInterviewConfig = webInterviewConfigProvider.Get(assignment.QuestionnaireId);
@@ -83,7 +83,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 
             var interviewEmail = await webInterviewEmailRenderer.RenderEmail(emailParams);
             var emailId = await emailService.SendEmailAsync(address, emailParams.Subject, interviewEmail.MessageHtml.Trim(), interviewEmail.MessageText.Trim());
-            invitationService.MarkInvitationAsSent(invitation.Id, emailId);
+            return emailId;
         }
     }
 }
