@@ -238,7 +238,7 @@ export default defineConfig(({ mode, command }) => {
                         join('./Resources/QuestionnaireController.*.resx')
                     ),
                 ],
-                destination: './src/locale',
+                destination: './questionnaire/src/locale',
                 locales: {
                     '.': [
                         'QuestionnaireEditor',

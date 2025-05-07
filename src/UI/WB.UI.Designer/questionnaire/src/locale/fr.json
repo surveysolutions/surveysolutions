@@ -503,7 +503,6 @@
     "HideParentValues": "Masquer les valeurs parentes",
     "AddEnablingCondition": "Ajouter une condition d'activation",
     "ManageAccount": "Gérer le compte",
-    "OldUi": "Ancienne interface",
     "ShowList": "Afficher la liste",
     "Login": "Connexion",
     "Register": "Inscription",
@@ -511,7 +510,8 @@
     "QuestionIsCritical": "C'est une question critique",
     "HelpIsCritical": "Les auteurs du questionnaire peuvent indiquer que la réponse à une question est critique pour la soumission de l'entretien.",
     "HelpCriticalityConditionExpression": "Une expression logique qui évalue l'entretien dans son ensemble pour déterminer s'il satisfait aux règles critiques (lorsque cette expression est évaluée à \"Vrai\"). Elle peut se référer à n'importe quelles questions ou variables.",
-    "HelpCriticalityConditionMessage": "Ce message est affiché lorsque la condition critique est évaluée à \"Faux\" ou qu'une exception se produit lors de l'évaluation de l'expression. Le message peut utiliser des hyperliens et la substitution de texte."
+    "HelpCriticalityConditionMessage": "Ce message est affiché lorsque la condition critique est évaluée à \"Faux\" ou qu'une exception se produit lors de l'évaluation de l'expression. Le message peut utiliser des hyperliens et la substitution de texte.",
+    "AttachmentSizeIsTooBig": "La taille de la pièce jointe est trop grande. Taille maximale : {{size}}"
   },
   "AccountResources": {
     "AllRights": "Tout droit reservé",
