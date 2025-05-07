@@ -758,5 +758,11 @@ namespace WB.UI.Headquarters.Resources {
                 return ResourceManager.GetString("ExportEncryption_Warning", resourceCulture);
             }
         }
+        
+        public static string LogoSizeLimit {
+            get {
+                return ResourceManager.GetString("LogoSizeLimit", resourceCulture);
+            }
+        }
     }
 }

@@ -6,7 +6,7 @@
                 <p>{{ $t('Settings.LogoSettings_Description') }}</p>
             </div>
             <form :action="$config.model.updateLogoUrl" method="post" enctype="multipart/form-data" class="col-sm-9"
-                @submit="onLogoSubmit">
+                @submit.prevent="onLogoSubmit">
                 <input name="__RequestVerificationToken" type="hidden" :value="this.$hq.Util.getCsrfCookie()" />
                 <div class="block-filter" style="padding-left: 30px">
                     <div class="form-group">
@@ -54,6 +54,9 @@
     </div>
 </template>
 <script>
+
+import { humanFileSize } from '~/shared/helpers'
+
 export default {
     data() {
         return {
@@ -69,10 +72,11 @@ export default {
                 window.Blob
             ) {
                 //get the file size and file type from file input field
-                var fsize = this.$refs.logoRef.files[0].size
+                const fsize = this.$refs.logoRef.files[0].size
+                const maxFileSize = 1024 * 1024 * 10
 
-                if (fsize > 1024 * 1024 * 10) {
-                    alert('Logo image size should be less than 10mb')
+                if (fsize > maxFileSize) {
+                    alert(this.$t('Settings.LogoSizeLimit', { size: humanFileSize(maxFileSize) }))
                     return false
                 } else {
                     return true
