@@ -63,7 +63,6 @@ export default {
 
         isDirty() {
             const equal = isEqual(this.categoriesAsText, this.initialCategoriesAsText)
-            console.log('isDirty', equal, this.categoriesAsText, this.initialCategoriesAsText)
             return !equal;
         },
     },

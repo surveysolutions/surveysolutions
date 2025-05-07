@@ -72,13 +72,11 @@
                     </span>
                     <a :href="!canDownloadCategories ? null : exportOptionsAsExlsUri"
                         :class="{ 'disabled': !canDownloadCategories }"
-                        @click.prevent="!canDownloadCategories && $event.preventDefault()"
-                        class="ma-2 v-btn v-size--default">
+                        @click="!canDownloadCategories && $event.preventDefault()" class="ma-2 v-btn v-size--default">
                         {{ $t('QuestionnaireEditor.SideBarXlsx') }}</a>
                     <a :href="!canDownloadCategories ? null : exportOptionsAsTabUri"
                         :class="{ 'disabled': !canDownloadCategories }"
-                        @click.prevent="!canDownloadCategories && $event.preventDefault()"
-                        class="ma-2 v-btn v-size--default">
+                        @click="!canDownloadCategories && $event.preventDefault()" class="ma-2 v-btn v-size--default">
                         {{ $t('QuestionnaireEditor.SideBarTab') }}</a>
                 </v-footer>
             </v-container>
@@ -206,7 +204,6 @@ export default {
         },
 
         isDirty() {
-            console.log('stringsEditor', this.$refs.stringsEditor)
             const equal = isEqual(this.categories, this.initialCategories)
             if (!equal)
                 return !equal;
