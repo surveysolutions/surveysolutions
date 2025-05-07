@@ -225,20 +225,18 @@ export default defineConfig(({ mode, command }) => {
                 noHash: true,
                 inline: true,
                 patterns: [
+                    normalizePath(join('./Resources/QuestionnaireEditor.resx')),
                     normalizePath(
-                        join('../Resources/QuestionnaireEditor.resx')
+                        join('./Resources/QuestionnaireEditor.*.resx')
+                    ),
+                    normalizePath(join('./Resources/AccountResources.resx')),
+                    normalizePath(join('./Resources/AccountResources.*.resx')),
+                    normalizePath(
+                        join('./Resources/QuestionnaireController.resx')
                     ),
                     normalizePath(
-                        join('../Resources/QuestionnaireEditor.*.resx')
+                        join('./Resources/QuestionnaireController.*.resx')
                     ),
-                    normalizePath(join('../Resources/AccountResources.resx')),
-                    normalizePath(join('../Resources/AccountResources.*.resx')),
-                    normalizePath(
-                        join('../Resources/QuestionnaireController.resx')
-                    ),
-                    normalizePath(
-                    join('../Resources/QuestionnaireController.*.resx')
-                    )
                 ],
                 destination: './src/locale',
                 locales: {
