@@ -1656,4 +1656,7 @@ Zadali jste neplatný vstup. Každý řádek by měl mít formát: "Název... Pa
     <data name="SideBarShowDescription" xml:space="preserve">
       <value>přidat popis</value>
     </data>
+  <data name="AttachmentSizeIsTooBig" xml:space="preserve">
+    <value>Příloha je příliš velká. Maximální velikost: {{size}}</value>
+</data>
 </root>
