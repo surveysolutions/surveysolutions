@@ -33,7 +33,6 @@
                                             @click="navigateTo(reference)">
                                             <a class="verification-item" href="javascript:void(0);"
                                                 data-bs-placement="right" data-bs-toggle="tooltip" data-bs-html="true"
-                                                :title="referencesWithErrors.compilationErrorMessages != null ? referencesWithErrors.compilationErrorMessages.slice(0, 10).join('<br />') + (referencesWithErrors.compilationErrorMessages.length > 10 ? '<br />...' : '') : ''"
                                                 data-bs-custom-class="error-tooltip in" data-bs-container='body'
                                                 :data-bs-title="referencesWithErrors.compilationErrorMessages != null ? referencesWithErrors.compilationErrorMessages.slice(0, 10).join('<br />') + (referencesWithErrors.compilationErrorMessages.length > 10 ? '<br />...' : '') : ''">
                                                 <span v-if="reference.type == 'Question'" class="icon"
