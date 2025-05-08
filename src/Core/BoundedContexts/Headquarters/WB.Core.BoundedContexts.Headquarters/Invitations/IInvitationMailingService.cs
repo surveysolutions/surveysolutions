@@ -5,7 +5,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
 {
     public interface IInvitationMailingService
     {
-        Task SendInvitationAsync(int invitationId, Assignment assignment, string email = null);
-        Task SendResumeAsync(int invitationId, Assignment assignment, string email);
+        Task<string> SendInvitationAsync(int invitationId, Assignment assignment, string email = null);
+        Task<string> SendResumeAsync(int invitationId, Assignment assignment, string email);
     }
 }

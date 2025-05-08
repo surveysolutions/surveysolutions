@@ -480,4 +480,7 @@ Possíveis razões:
   <data name="ExportEncryption_Warning" xml:space="preserve">
   <value>Modificar as configurações de criptografia removerá todos os arquivos de exportação gerados anteriormente, exigindo a criação de novas exportações.</value>
 </data>
+  <data name="LogoSizeLimit" xml:space="preserve">
+    <value>O tamanho da imagem do logotipo deve ser menor que {{size}}</value>
+</data>
 </root>

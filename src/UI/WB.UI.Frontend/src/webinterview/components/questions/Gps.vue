@@ -134,7 +134,7 @@ export default {
 
             modal.dialog({
                 title: self.$t('WebInterviewUI.PickLocation'),
-                message: '<div id="locationPicker"><div style="height: 400px;" id="map_canvas"></div></div>',
+                message: '<div id="locationPicker"><div id="map_canvas"></div></div>',
                 size: 'large',
                 onShow: () => {
                     self.pickedLocation = null
@@ -146,8 +146,11 @@ export default {
                         center: latlng,
                         streetViewControl: false,
                     }
-                    const map = new google.maps.Map(
-                        document.getElementById('map_canvas'), mapOptions)
+
+                    var canvas = document.getElementById('map_canvas');
+                    canvas.style.height = '400px';
+
+                    const map = new google.maps.Map(canvas, mapOptions)
 
                     if (navigator.geolocation) {
                         navigator.geolocation.getCurrentPosition((position) => {

@@ -78,7 +78,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 string questionnaireId = interview.QuestionnaireIdentity.QuestionnaireId.FormatGuid();
 
                 bool succeeded = await this.QuestionnaireDownloader.ReloadQuestionnaireAsync(
-                    questionnaireId, this.QuestionnaireTitle, interview, this.NavigationState.CurrentNavigationIdentity,
+                    questionnaireId, this.QuestionnaireTitle, interview.Id, this.NavigationState.CurrentNavigationIdentity,
                     new Progress<string>(), CancellationToken.None);
 
                 if (!succeeded) return;
@@ -102,11 +102,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 default:
                     return base.UpdateCurrentScreenViewModel(eventArgs);
             }
-        }
-
-        public override void Dispose()
-        {
-            base.Dispose();
         }
     }
 }

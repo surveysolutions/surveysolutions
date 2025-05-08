@@ -1598,4 +1598,7 @@
   <data name="HelpCriticalityConditionMessage" xml:space="preserve">
       <value>يتم عرض هذه الرسالة عندما يقيم الشرط الحاسم على أنه "خطأ" أو يحدث استثناء أثناء تقييم التعبير. قد تستخدم الرسالة الروابط التشعبية واستبدال النص.</value>
   </data>
+    <data name="AttachmentSizeIsTooBig" xml:space="preserve">
+    <value>حجم المرفق كبير جدًا. الحد الأقصى: {{size}}</value>
+</data>
 </root>

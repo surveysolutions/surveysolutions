@@ -6,8 +6,7 @@
             maximumValue: '99999999999999.99999999999999',
             digitGroupSeparator: groupSeparator,
             decimalCharacter: decimalSeparator,
-            decimalPlaces: decimalPlacesCount,
-            allowDecimalPadding: false
+            decimalPlaces: decimalPlacesCount
         }" />
 </template>
 

@@ -474,4 +474,7 @@
   <data name="ExportEncryption_Warning" xml:space="preserve">
   <value>Změna nastavení šifrování odstraní všechny dříve vytvořené exportní soubory, což bude vyžadovat vytvoření nových exportů.</value>
 </data>
+  <data name="LogoSizeLimit" xml:space="preserve">
+    <value>Velikost obrázku loga by měla být menší než {{size}}</value>
+</data>
 </root>
