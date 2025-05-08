@@ -206,7 +206,7 @@ export default {
         isDirty() {
             const equal = isEqual(this.categories, this.initialCategories)
             if (!equal)
-                return !equal;
+                return true;
             return this.tab == 'strings' ? this.stringsIsDirty : false;
         },
 
