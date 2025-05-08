@@ -90,7 +90,7 @@ import CategoryTable from './components/OptionItemsTable.vue';
 import CategoryStrings from './components/OptionItemsAsStrings.vue';
 import { optionsApi } from './services';
 import 'vuetify/styles';
-import { isEqual } from 'lodash';
+import { isEqual, cloneDeep } from 'lodash';
 
 export default {
     name: 'CategoriesEditor',
@@ -261,7 +261,7 @@ export default {
 
                 const data = await query;
                 this.categories = data.options;
-                this.initialCategories = data.options;
+                this.initialCategories = cloneDeep(data.options);
                 this.readonly = data.isReadonly;
 
                 if (
