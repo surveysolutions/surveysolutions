@@ -20,21 +20,19 @@
                 <perfect-scrollbar class="scroller">
                     <div id="verify-popover-content">
                         <div class="question-list" ref="errorsList">
-                            <div v-for="error in messagesToShow">
+                            <div v-for="(error, index) in messagesToShow" :key="index">
                                 <div class="error-message">
                                     <span class="error-code">[{{ error.code }}]:</span>{{ error.message }}
                                 </div>
-                                <ul class="verification-items" :class="{
-                                    singleError: !error.isGroupedMessage
-                                }">
+                                <ul class="verification-items" :class="{ singleError: !error.isGroupedMessage }">
                                     <template v-for="referencesWithErrors in error.errors">
                                         <li class="verification-item-container"
-                                            v-for="reference in referencesWithErrors.references"
-                                            @click="navigateTo(reference)">
+                                            v-for="(reference, index) in referencesWithErrors.references"
+                                            @click="navigateTo(reference)" :key="index">
                                             <a class="verification-item" href="javascript:void(0);"
-                                                data-bs-placement="right" data-bs-toggle="tooltip" data-bs-html="true"
+                                                data-bs-placement="right" data-bs-html="true"
                                                 data-bs-custom-class="error-tooltip in" data-bs-container='body'
-                                                :data-bs-title="referencesWithErrors.compilationErrorMessages != null ? referencesWithErrors.compilationErrorMessages.slice(0, 10).join('<br />') + (referencesWithErrors.compilationErrorMessages.length > 10 ? '<br />...' : '') : ''">
+                                                :title="referencesWithErrors.compilationErrorMessages != null ? referencesWithErrors.compilationErrorMessages.slice(0, 10).join('<br />') + (referencesWithErrors.compilationErrorMessages.length > 10 ? '<br />...' : '') : ''">
                                                 <span v-if="reference.type == 'Question'" class="icon"
                                                     :class="[reference.questionType, 'icon-' + typeOfMessageToBeShown]"></span>
                                                 <span v-if="reference.type == 'Questionnaire'"
