@@ -16,7 +16,7 @@
                 </FilterBlock>
                 <FilterBlock :title="$t('Common.Responsible')" v-if="model.userRole != 'Interviewer'">
                     <Typeahead control-id="responsibleId" :placeholder="$t('Common.AllResponsible')"
-                        :value="responsibleId" :ajax-params="responsibleParams" :selectedKey="query.responsibleId"
+                        :value="responsibleId" :ajax-params="responsibleParams" :selectedValue="query.responsible"
                         v-on:selected="selectResponsible" :fetch-url="model.responsible"></Typeahead>
                 </FilterBlock>
                 <FilterBlock :title="$t('Pages.Filters_Assignment')">
@@ -131,7 +131,7 @@ export default {
         },
         responsibleId(to) {
             this.onChange((q) => {
-                q.responsibleId = to == null ? null : to.key
+                q.responsible = to == null ? null : to.value
             })
 
             nextTick(() => {
@@ -172,7 +172,7 @@ export default {
             return {
                 questionnaireId: (this.selectedQuestionnaireId || {}).key || null,
                 questionnaireVersion: this.selectedVersionValue,
-                responsibleId: (this.responsibleId || {}).key || null,
+                responsible: (this.responsibleId || {}).value || null,
                 assignmentId: this.assignmentId,
             }
         },
@@ -229,7 +229,7 @@ export default {
         selectResponsible(newValue) {
             this.responsibleId = newValue
             this.onChange((q) => {
-                q.responsibleId = newValue == null ? null : newValue.key
+                q.responsible = newValue == null ? null : newValue.value
             })
             this.map.reloadMarkersInBounds()
         },
