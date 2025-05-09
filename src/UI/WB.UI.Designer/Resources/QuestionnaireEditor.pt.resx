@@ -1597,4 +1597,7 @@
   <data name="HelpCriticalityConditionMessage" xml:space="preserve">
       <value>Esta mensagem é exibida quando a condição crítica avalia como "Falso" ou ocorre uma exceção durante a avaliação da expressão. A mensagem pode utilizar hiperlinks e substituição de texto.</value>
   </data>
+    <data name="AttachmentSizeIsTooBig" xml:space="preserve">
+    <value>O tamanho do anexo é muito grande. Tamanho máximo: {{size}}</value>
+</data>
 </root>

@@ -59,7 +59,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 string questionnaireId = interview.QuestionnaireIdentity.QuestionnaireId.FormatGuid();
 
                 bool succeeded = await this.questionnaireDownloader.ReloadQuestionnaireAsync(
-                    questionnaireId, this.QuestionnaireTitle, interview, new NavigationIdentity() { TargetScreen = ScreenType.Identifying}, 
+                    questionnaireId, this.QuestionnaireTitle, interview.Id, new NavigationIdentity() { TargetScreen = ScreenType.Identifying}, 
                     new Progress<string>(), CancellationToken.None);
 
                 if (!succeeded) return;

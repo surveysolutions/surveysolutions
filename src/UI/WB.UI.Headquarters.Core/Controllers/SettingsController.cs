@@ -70,6 +70,7 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ActionName("Index")]
+        [RequestSizeLimit(10 * 1024 * 1024)]
         public async Task<ActionResult> UpdateLogo([FromForm(Name = "logo")]IFormFile file)
         {
             try

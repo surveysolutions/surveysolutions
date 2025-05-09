@@ -7,13 +7,13 @@
                     <span>{{ $t('QuestionnaireEditor.CompilationLabel') }}</span>
                     <span>&nbsp;</span>
                     <span v-if="typeOfMessageToBeShown === 'error'">{{
-        $t('QuestionnaireEditor.CompilationErrorsCounter', {
-            count: messagesToShow.length
-        }) }}</span>
+                        $t('QuestionnaireEditor.CompilationErrorsCounter', {
+                            count: messagesToShow.length
+                        }) }}</span>
                     <span v-if="typeOfMessageToBeShown === 'warning'">{{
-        $t('QuestionnaireEditor.CompilationWarningsCounter', {
-            count: messagesToShow.length
-        }) }}</span>
+                        $t('QuestionnaireEditor.CompilationWarningsCounter', {
+                            count: messagesToShow.length
+                        }) }}</span>
                 </h3>
             </div>
             <div class="modal-body">
@@ -25,16 +25,16 @@
                                     <span class="error-code">[{{ error.code }}]:</span>{{ error.message }}
                                 </div>
                                 <ul class="verification-items" :class="{
-        singleError: !error.isGroupedMessage
-    }">
+                                    singleError: !error.isGroupedMessage
+                                }">
                                     <template v-for="referencesWithErrors in error.errors">
                                         <li class="verification-item-container"
                                             v-for="reference in referencesWithErrors.references"
                                             @click="navigateTo(reference)">
                                             <a class="verification-item" href="javascript:void(0);"
                                                 data-bs-placement="right" data-bs-toggle="tooltip" data-bs-html="true"
-                                                :title="referencesWithErrors.compilationErrorMessages != null ? referencesWithErrors.compilationErrorMessages.slice(0, 10).join('<br />') + (referencesWithErrors.compilationErrorMessages.length > 10 ? '<br />...' : '') : ''"
-                                                data-bs-custom-class="error-tooltip in" data-bs-container='body'>
+                                                data-bs-custom-class="error-tooltip in" data-bs-container='body'
+                                                :data-bs-title="referencesWithErrors.compilationErrorMessages != null ? referencesWithErrors.compilationErrorMessages.slice(0, 10).join('<br />') + (referencesWithErrors.compilationErrorMessages.length > 10 ? '<br />...' : '') : ''">
                                                 <span v-if="reference.type == 'Question'" class="icon"
                                                     :class="[reference.questionType, 'icon-' + typeOfMessageToBeShown]"></span>
                                                 <span v-if="reference.type == 'Questionnaire'"
@@ -187,10 +187,7 @@ export default {
 
                 const errorsList = this.$refs.errorsList;
                 const tooltipTriggerList = errorsList.querySelectorAll('[data-bs-toggle="tooltip"]')
-                this.tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl/*, {
-                    customClass: 'right in',
-                    placement: 'right'
-                }*/))
+                this.tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
             })
         },
         disposeTooltips() {

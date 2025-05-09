@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.Extensions.Caching.Memory;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 
 namespace WB.UI.WebTester.Services.Implementation
