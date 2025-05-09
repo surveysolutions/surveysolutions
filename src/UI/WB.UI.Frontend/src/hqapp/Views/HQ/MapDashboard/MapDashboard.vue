@@ -16,7 +16,7 @@
                 </FilterBlock>
                 <FilterBlock :title="$t('Common.Responsible')" v-if="model.userRole != 'Interviewer'">
                     <Typeahead control-id="responsibleId" :placeholder="$t('Common.AllResponsible')"
-                        :value="responsibleId" :ajax-params="responsibleParams" :selectedValue="query.responsible"
+                        :value="responsibleId" :ajax-params="responsibleParams" :selectedKey="query.responsibleId"
                         v-on:selected="selectResponsible" :fetch-url="model.responsible"></Typeahead>
                 </FilterBlock>
                 <FilterBlock :title="$t('Pages.Filters_Assignment')">
@@ -131,7 +131,7 @@ export default {
         },
         responsibleId(to) {
             this.onChange((q) => {
-                q.responsibleId = to
+                q.responsibleId = to == null ? null : to.key
             })
 
             nextTick(() => {
@@ -170,10 +170,10 @@ export default {
 
         queryString() {
             return {
-                QuestionnaireId: (this.selectedQuestionnaireId || {}).key || null,
-                QuestionnaireVersion: this.selectedVersionValue,
-                ResponsibleId: (this.responsibleId || {}).key || null,
-                AssignmentId: this.assignmentId,
+                questionnaireId: (this.selectedQuestionnaireId || {}).key || null,
+                questionnaireVersion: this.selectedVersionValue,
+                responsibleId: (this.responsibleId || {}).key || null,
+                assignmentId: this.assignmentId,
             }
         },
 
@@ -196,7 +196,6 @@ export default {
 
     async mounted() {
         this.assignmentId = this.query.assignmentId
-        this.responsibleId = this.query.responsibleId
     },
 
     methods: {
@@ -230,7 +229,7 @@ export default {
         selectResponsible(newValue) {
             this.responsibleId = newValue
             this.onChange((q) => {
-                q.responsible = newValue == null ? null : newValue.value
+                q.responsibleId = newValue == null ? null : newValue.key
             })
             this.map.reloadMarkersInBounds()
         },
