@@ -6,7 +6,7 @@
                 <p>{{ $t('Settings.LogoSettings_Description') }}</p>
             </div>
             <form :action="$config.model.updateLogoUrl" method="post" enctype="multipart/form-data" class="col-sm-9"
-                @submit.prevent="onLogoSubmit">
+                @submit="onLogoSubmit">
                 <input name="__RequestVerificationToken" type="hidden" :value="this.$hq.Util.getCsrfCookie()" />
                 <div class="block-filter" style="padding-left: 30px">
                     <div class="form-group">
@@ -64,7 +64,7 @@ export default {
         }
     },
     methods: {
-        onLogoSubmit() {
+        onLogoSubmit(e) {
             if (
                 window.File &&
                 window.FileReader &&
@@ -76,6 +76,7 @@ export default {
                 const maxFileSize = 1024 * 1024 * 10
 
                 if (fsize > maxFileSize) {
+                    e.preventDefault();
                     alert(this.$t('Settings.LogoSizeLimit', { size: humanFileSize(maxFileSize) }))
                     return false
                 } else {
