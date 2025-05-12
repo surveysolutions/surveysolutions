@@ -483,4 +483,16 @@ Possíveis razões:
   <data name="LogoSizeLimit" xml:space="preserve">
     <value>O tamanho da imagem do logotipo deve ser menor que {{size}}</value>
 </data>
+  <data name="LogoUploadSuccess" xml:space="preserve">
+    <value>Logotipo carregado com sucesso.</value>
+</data>
+  <data name="LogoUploadError" xml:space="preserve">
+    <value>Falha ao carregar o logotipo. Por favor, tente novamente.</value>
+</data>
+  <data name="LogoRemoveSuccess" xml:space="preserve">
+    <value>Logotipo removido com sucesso.</value>
+</data>
+  <data name="LogoRemoveError" xml:space="preserve">
+    <value>Falha ao remover o logotipo. Por favor, tente novamente.</value>
+</data>
 </root>

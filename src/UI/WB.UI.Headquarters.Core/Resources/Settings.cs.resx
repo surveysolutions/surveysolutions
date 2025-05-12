@@ -477,4 +477,16 @@
   <data name="LogoSizeLimit" xml:space="preserve">
     <value>Velikost obrázku loga by měla být menší než {{size}}</value>
 </data>
+  <data name="LogoUploadSuccess" xml:space="preserve">
+    <value>Logo bylo úspěšně nahráno.</value>
+</data>
+  <data name="LogoUploadError" xml:space="preserve">
+    <value>Nahrání loga se nezdařilo. Zkuste to prosím znovu.</value>
+</data>
+  <data name="LogoRemoveSuccess" xml:space="preserve">
+    <value>Logo bylo úspěšně odstraněno.</value>
+</data>
+  <data name="LogoRemoveError" xml:space="preserve">
+    <value>Odstranění loga se nezdařilo. Zkuste to prosím znovu.</value>
+</data>
 </root>

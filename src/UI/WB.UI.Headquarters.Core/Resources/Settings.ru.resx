@@ -495,4 +495,16 @@
   <data name="LogoSizeLimit" xml:space="preserve">
     <value>Размер изображения логотипа должен быть меньше {{size}}</value>
 </data>
+  <data name="LogoUploadSuccess" xml:space="preserve">
+    <value>Логотип успешно загружен.</value>
+</data>
+  <data name="LogoUploadError" xml:space="preserve">
+    <value>Не удалось загрузить логотип. Пожалуйста, попробуйте ещё раз.</value>
+</data>
+  <data name="LogoRemoveSuccess" xml:space="preserve">
+    <value>Логотип был успешно удалён.</value>
+</data>
+  <data name="LogoRemoveError" xml:space="preserve">
+    <value>Не удалось удалить логотип. Пожалуйста, попробуйте ещё раз.</value>
+</data>
 </root>
