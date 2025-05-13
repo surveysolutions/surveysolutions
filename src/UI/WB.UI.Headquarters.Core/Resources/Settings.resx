@@ -482,7 +482,7 @@ Possible reasons:
   <data name="LogoSizeLimit" xml:space="preserve">
     <value>Logo image size should be less than {{size}}</value>
   </data>
-  <data name="Settings.SelectFileWarning" xml:space="preserve">
+  <data name="SelectFileWarning" xml:space="preserve">
     <value>Please select a file to upload.</value>
   </data>
   <data name="LogoUploadSuccess" xml:space="preserve">

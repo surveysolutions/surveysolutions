@@ -489,4 +489,7 @@
   <data name="LogoRemoveError" xml:space="preserve">
     <value>Odstranění loga se nezdařilo. Zkuste to prosím znovu.</value>
 </data>
+  <data name="SelectFileWarning" xml:space="preserve">
+    <value>Vyberte prosím soubor k nahrání.</value>
+</data>
 </root>

@@ -494,4 +494,7 @@
   <data name="LogoRemoveError" xml:space="preserve">
     <value>فشل في إزالة الشعار. يرجى المحاولة مرة أخرى.</value>
 </data>
+  <data name="SelectFileWarning" xml:space="preserve">
+    <value>يرجى اختيار ملف للتحميل.</value>
+</data>
 </root>

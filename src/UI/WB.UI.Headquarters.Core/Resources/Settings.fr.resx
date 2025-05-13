@@ -495,4 +495,7 @@ Raisons possibles :
   <data name="LogoRemoveError" xml:space="preserve">
     <value>Échec de la suppression du logo. Veuillez réessayer.</value>
 </data>
+  <data name="SelectFileWarning" xml:space="preserve">
+    <value>Veuillez sélectionner un fichier à télécharger.</value>
+</data>
 </root>

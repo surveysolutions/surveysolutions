@@ -507,4 +507,7 @@
   <data name="LogoRemoveError" xml:space="preserve">
     <value>Не удалось удалить логотип. Пожалуйста, попробуйте ещё раз.</value>
 </data>
+  <data name="SelectFileWarning" xml:space="preserve">
+    <value>Пожалуйста, выберите файл для загрузки.</value>
+</data>
 </root>

@@ -765,9 +765,9 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
-        public static string Settings_SelectFileWarning {
+        public static string SelectFileWarning {
             get {
-                return ResourceManager.GetString("Settings.SelectFileWarning", resourceCulture);
+                return ResourceManager.GetString("SelectFileWarning", resourceCulture);
             }
         }
         

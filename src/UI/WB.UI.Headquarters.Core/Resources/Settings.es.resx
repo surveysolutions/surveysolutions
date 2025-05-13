@@ -495,4 +495,7 @@ Posibles razones:
   <data name="LogoRemoveError" xml:space="preserve">
     <value>No se pudo eliminar el logotipo. Inténtalo de nuevo.</value>
 </data>
+  <data name="SelectFileWarning" xml:space="preserve">
+    <value>Por favor, seleccione un archivo para subir.</value>
+</data>
 </root>
