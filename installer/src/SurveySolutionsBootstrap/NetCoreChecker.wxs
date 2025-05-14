@@ -17,29 +17,30 @@
 	    <!-- aspnetcorev2.dll version is v18.0.24080.4 for Bundle 8.0.4 -->
 	    <!-- aspnetcorev2.dll version is v18.0.24141.6 for Bundle 8.0.6 -->
       <!-- aspnetcorev2.dll version is v19.0.25073.4 for Bundle 9.0.4 -->
+      <!-- aspnetcorev2.dll version is v19.0.25119.5 for Bundle 9.0.5 -->
 	  
       <PackageGroup Id="WindowsDotNetHosting501">
         <ExePackage
-          Name="dotnet-hosting-9.0.4-win.exe"
+          Name="dotnet-hosting-9.0.5-win.exe"
           InstallCommand="/install /quiet /norestart /log &quot;[WindowsDotNetHosting501Log]&quot;"
           RepairCommand="/repair /quiet /norestart /log &quot;[WindowsDotNetHosting501Log]&quot;"
           UninstallCommand="/uninstall /quiet /norestart /log &quot;[WindowsDotNetHosting501Log]&quot;"
           PerMachine="yes"
-          DetectCondition="WindowsIISHostingModuleExists AND WindowsIISHostingModuleVersion &gt;= v19.0.25073.4"
+          DetectCondition="WindowsIISHostingModuleExists AND WindowsIISHostingModuleVersion &gt;= v19.0.25119.5"
           InstallCondition="!(wix.WindowsDotNetHosting501InstalledInstallCondition)"
           Vital="yes"
           Permanent="yes"
           Protocol="burn"
-          DownloadUrl="https://builds.dotnet.microsoft.com/dotnet/aspnetcore/Runtime/9.0.4/dotnet-hosting-9.0.4-win.exe"
+          DownloadUrl="https://builds.dotnet.microsoft.com/dotnet/aspnetcore/Runtime/9.0.5/dotnet-hosting-9.0.5-win.exe"
           LogPathVariable="WindowsDotNetHosting501Log"
           Compressed="no">
         <!-- heat.exe payload "dotnet-hosting-3.1.1-win.exe" -o "dotnet-hosting.wxs" -->
-		<RemotePayload CertificatePublicKey="E1A12544F24B4CA968F37C3B8BDB839F65EE010A" 
-		CertificateThumbprint="8F985BE8FD256085C90A95D3C74580511A1DB975" 
-		Description="Microsoft .NET 9.0.4 - Windows Server Hosting" 
-		Hash="BEBBC06E2CDC7350627E772DA82918A9DD8C5456" 
-		ProductName="Microsoft .NET 9.0.4 - Windows Server Hosting" 
-		Size="115522424" Version="9.0.4.25164" />         
+		<RemotePayload CertificatePublicKey="233D5DBCF22E99F84BE4CE6D3F902D4A930D3653" 
+                CertificateThumbprint="245D262748012A4FE6CE8BA6C951A4C4AFBC3E5D" 
+                Description="Microsoft .NET 9.0.5 - Windows Server Hosting" 
+                Hash="771367C7AC098A875E51EE782AFE9127F529B33C" 
+                ProductName="Microsoft .NET 9.0.5 - Windows Server Hosting" 
+                Size="115663760" Version="9.0.5.25229" />     
       </ExePackage>
     </PackageGroup>
   </Fragment>
