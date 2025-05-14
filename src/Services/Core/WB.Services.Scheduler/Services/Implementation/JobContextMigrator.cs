@@ -47,6 +47,7 @@ namespace WB.Services.Scheduler.Services.Implementation
                 .WaitAndRetryAsync(5, i => TimeSpan.FromSeconds(rnd.NextDouble() * i + i))
                 .ExecuteAsync(async () =>
                 {
+                    await jobContext.Database.EnsureCreatedAsync(token);
                     await MoveMigrationTableAsync(token);
                     await jobContext.Database.MigrateAsync(token);
                     logger.LogInformation("Job scheduler schema migration completed");
