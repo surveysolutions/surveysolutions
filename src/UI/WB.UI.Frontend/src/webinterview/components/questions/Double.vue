@@ -15,7 +15,8 @@
 
                                 digitGroupSeparator: groupSeparator,
                                 decimalCharacter: decimalSeparator,
-                                decimalPlaces: decimalPlacesCount
+                                decimalPlaces: decimalPlacesCount,
+                                allowDecimalPadding: false
                             }" />
                         <wb-remove-answer v-if="!isSpecialValueSelected" :on-remove="removeAnswer" />
                     </div>
