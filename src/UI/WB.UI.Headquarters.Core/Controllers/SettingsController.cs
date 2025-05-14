@@ -89,13 +89,11 @@ namespace WB.UI.Headquarters.Controllers
                     }, AppSetting.CompanyLogoStorageKey);
                 }
 
-                return RedirectToAction("Index");
+                return Ok();
             }
             catch (UnknownImageFormatException)
             {
-                var model = GetSettingsModel();
-                model.InvalidImage = true;
-                return View("Index", model);
+                return BadRequest();
             }
         }
 
@@ -104,7 +102,7 @@ namespace WB.UI.Headquarters.Controllers
         public ActionResult RemoveLogo()
         {
             this.appSettingsStorage.Remove(CompanyLogo.CompanyLogoStorageKey);
-            return RedirectToAction("Index");
+            return Ok();
         }
 
         public class AdminSettingsModel
@@ -113,8 +111,6 @@ namespace WB.UI.Headquarters.Controllers
             public string RemoveLogoUrl { get; set; }
             public string LogoUrl { get; set; }
             public string DefaultLogoUrl { get; set; }
-            
-            public bool InvalidImage { get; set; }
         }
     }
 }

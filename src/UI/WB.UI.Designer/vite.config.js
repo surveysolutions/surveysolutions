@@ -341,6 +341,7 @@ export default defineConfig(({ mode, command }) => {
                     //manualChunks: undefined,
                     //format: 'es',
                     assetFileNames: (assetInfo) => {
+                        // this file is used to embed styles into an html page for pdf rendering
                         if (assetInfo.name == 'pdf.css') {
                             return `css/[name][extname]`;
                         }
