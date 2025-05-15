@@ -480,4 +480,22 @@ Posibles razones:
   <data name="ExportEncryption_Warning" xml:space="preserve">
   <value>Modificar la configuración de cifrado eliminará todos los archivos de exportación generados previamente, lo que requerirá crear nuevas exportaciones.</value>
 </data>
+  <data name="LogoSizeLimit" xml:space="preserve">
+    <value>El tamaño de la imagen del logotipo debe ser menor que {{size}}</value>
+</data>
+  <data name="LogoUploadSuccess" xml:space="preserve">
+    <value>Logotipo cargado correctamente.</value>
+</data>
+  <data name="LogoUploadError" xml:space="preserve">
+    <value>No se pudo cargar el logotipo. Inténtalo de nuevo.</value>
+</data>
+  <data name="LogoRemoveSuccess" xml:space="preserve">
+    <value>Logotipo eliminado correctamente.</value>
+</data>
+  <data name="LogoRemoveError" xml:space="preserve">
+    <value>No se pudo eliminar el logotipo. Inténtalo de nuevo.</value>
+</data>
+  <data name="SelectFileWarning" xml:space="preserve">
+    <value>Por favor, seleccione un archivo para subir.</value>
+</data>
 </root>

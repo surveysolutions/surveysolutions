@@ -479,4 +479,22 @@ Possible reasons:
   <data name="ExportEncryption_Warning" xml:space="preserve">
     <value>Modifying the encryption settings will remove all previously generated export files, requiring new exports to be created</value>
   </data>
+  <data name="LogoSizeLimit" xml:space="preserve">
+    <value>Logo image size should be less than {{size}}</value>
+  </data>
+  <data name="SelectFileWarning" xml:space="preserve">
+    <value>Please select a file to upload.</value>
+  </data>
+  <data name="LogoUploadSuccess" xml:space="preserve">
+    <value>Logo uploaded successfully.</value>
+  </data>
+  <data name="LogoUploadError" xml:space="preserve">
+    <value>Failed to upload logo. Please try again.</value>
+  </data>
+  <data name="LogoRemoveSuccess" xml:space="preserve">
+    <value>Logo was successfully removed.</value>
+  </data>
+  <data name="LogoRemoveError" xml:space="preserve">
+    <value>Failed to remove logo. Please try again.</value>
+  </data>
 </root>

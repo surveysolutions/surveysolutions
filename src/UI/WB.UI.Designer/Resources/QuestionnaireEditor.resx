@@ -448,6 +448,9 @@
   <data name="SideBarAttachmentDetailsSize" xml:space="preserve">
     <value>size: {{size}}</value>
   </data>
+  <data name="AttachmentSizeIsTooBig" xml:space="preserve">
+    <value>Attachment size is too big. Max size: {{size}}</value>
+  </data>
   <data name="SideBarAttachmentsTitle" xml:space="preserve">
     <value>Attachments</value>
   </data>

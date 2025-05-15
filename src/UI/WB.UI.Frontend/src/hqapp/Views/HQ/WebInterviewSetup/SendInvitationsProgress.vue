@@ -28,25 +28,28 @@
             <div class="col-sm-7 col-xs-12">
                 <div class="import-progress">
                     <p v-if="isQueued" class="default-text">{{ $t('DataExport.Preparing') }}</p>
-                    <p v-if="isInProgress">{{ $t('WebInterviewSetup.Sending') }}</p>
+                    <p v-if="isInProgress">{{ $t('WebInterviewSettings.Sending') }}</p>
                     <p v-if="isDone">{{ $t('BatchUpload.Finished') }}</p>
-                    <p v-if="isFailed" class="error-text">{{ $t('WebInterviewSetup.SendingFailed') }} </p>
-                    <p v-if="isCanceled" class="error-text">{{ $t('WebInterviewSetup.ProcessCancelled') }}</p>
-                    <p v-if="isInProgress || isQueued">{{ $t('WebInterviewSetup.TotalSent', { totalCount: totalCount })
+                    <p v-if="isFailed" class="error-text">{{ $t('WebInterviewSettings.SendingFailed') }} </p>
+                    <p v-if="isCanceled" class="error-text">{{ $t('WebInterviewSettings.ProcessCancelled') }}</p>
+                    <p v-if="isInProgress || isQueued">{{ $t('WebInterviewSettings.TotalSent', {
+                        totalCount: totalCount
+                    })
                         }}
                     </p>
-                    <p v-if="processedCount == 0" class="default-text">{{ $t('WebInterviewSetup.NothingWasSent') }}</p>
+                    <p v-if="processedCount == 0" class="default-text">{{ $t('WebInterviewSettings.NothingWasSent') }}
+                    </p>
                     <p v-else class="success-text">
-                        {{ $t('WebInterviewSetup.TotalProcessed', { processedCount: processedCount }) }}
+                        {{ $t('WebInterviewSettings.TotalProcessed', { processedCount: processedCount }) }}
                     </p>
                     <p v-if="withErrorsCount == 0" class="default-text">
-                        {{ $t('WebInterviewSetup.NoErrors') }}
+                        {{ $t('WebInterviewSettings.NoErrors') }}
                     </p>
                     <p v-else class="error-text">
-                        {{ $t('WebInterviewSetup.TotalWithErrors', { withErrorsCount: withErrorsCount }) }}
+                        {{ $t('WebInterviewSettings.TotalWithErrors', { withErrorsCount: withErrorsCount }) }}
                     </p>
                     <p v-if="isStopped && withErrorsCount > 0">
-                        <a :href="exportErrorsLink" target="_blank">{{ $t('WebInterviewSetup.DownloadErrors') }}</a>
+                        <a :href="exportErrorsLink" target="_blank">{{ $t('WebInterviewSettings.DownloadErrors') }}</a>
                     </p>
                 </div>
                 <div class="cancelable-progress" v-if="isInProgress">

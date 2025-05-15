@@ -37,24 +37,25 @@
                             <v-window v-model="tab">
                                 <v-window-item value="table">
                                     <category-table ref="table" :categories="categories"
-                                        :parent-categories="parentCategories" :loading="loading" :is-category="isCategory"
-                                        :is-cascading="isCascading" :readonly="isReadonly"
+                                        :parent-categories="parentCategories" :loading="loading"
+                                        :is-category="isCategory" :is-cascading="isCascading" :readonly="isReadonly"
                                         @setCascading="setCascadingCategory" @update-categories="updateCategories" />
                                 </v-window-item>
                                 <v-window-item value="strings">
-                                    <category-strings v-if="tab == 'strings'" ref="strings" :loading="loading"
+                                    <category-strings v-if="tab == 'strings'" ref="stringsEditor" :loading="loading"
                                         :show-parent-value="isCascading" :categories="categories" :readonly="isReadonly"
-                                        @string-valid="v => (stringsIsValid = v)" @changeCategories="v => (categories = v)"
-                                        @editing="v => (inEditMode = v)" @inprogress="v => (convert = v)" />
+                                        @string-valid="v => (stringsIsValid = v)"
+                                        @changeCategories="v => (categories = v)" @editing="v => (inEditMode = v)"
+                                        @inprogress="v => (convert = v)" @is-dirty="v => (stringsIsDirty = v)" />
                                 </v-window-item>
                             </v-window>
                         </v-card>
                     </v-col>
                 </v-row>
                 <v-footer app min-width="680">
-                    <v-btn v-if="!readonly" class="ma-2" color="success" :disabled="!canApplyChanges" :loading="submitting"
-                        @click="apply">{{ $t('QuestionnaireEditor.OptionsUploadApply') }}</v-btn>
-                    <v-btn v-if="!readonly" @click="resetChanges">{{
+                    <v-btn v-if="!readonly" class="ma-2" color="success" :disabled="!canApplyChanges"
+                        :loading="submitting" @click="apply">{{ $t('QuestionnaireEditor.OptionsUploadApply') }}</v-btn>
+                    <v-btn v-if="!readonly" :disabled="!isDirty" @click="resetChanges">{{
                         $t('QuestionnaireEditor.OptionsUploadRevert')
                     }}</v-btn>
                     <v-btn v-if="readonly" @click="close">{{
@@ -69,9 +70,13 @@
                         <v-icon>mdi-download</v-icon>
                         {{ $t('QuestionnaireEditor.SideBarDownload') }}
                     </span>
-                    <a :href="exportOptionsAsExlsUri" class="ma-2 v-btn v-size--default">
+                    <a :href="!canDownloadCategories ? null : exportOptionsAsExlsUri"
+                        :class="{ 'disabled': !canDownloadCategories }"
+                        @click="!canDownloadCategories && $event.preventDefault()" class="ma-2 v-btn v-size--default">
                         {{ $t('QuestionnaireEditor.SideBarXlsx') }}</a>
-                    <a :href="exportOptionsAsTabUri" class="ma-2 v-btn v-size--default">
+                    <a :href="!canDownloadCategories ? null : exportOptionsAsTabUri"
+                        :class="{ 'disabled': !canDownloadCategories }"
+                        @click="!canDownloadCategories && $event.preventDefault()" class="ma-2 v-btn v-size--default">
                         {{ $t('QuestionnaireEditor.SideBarTab') }}</a>
                 </v-footer>
             </v-container>
@@ -85,6 +90,7 @@ import CategoryTable from './components/OptionItemsTable.vue';
 import CategoryStrings from './components/OptionItemsAsStrings.vue';
 import { optionsApi } from './services';
 import 'vuetify/styles';
+import { isEqual, cloneDeep } from 'lodash';
 
 export default {
     name: 'CategoriesEditor',
@@ -105,6 +111,7 @@ export default {
         return {
             tab: '',
             categories: [],
+            initialCategories: [],
             parentCategories: null,
             categoriesAsText: '',
             submitting: false,
@@ -116,6 +123,7 @@ export default {
             readonly: true,
             convert: false,
             inEditMode: false,
+            stringsIsDirty: false,
 
             file: null,
 
@@ -189,8 +197,25 @@ export default {
         },
 
         canApplyChanges() {
-            return this.tab == 'strings' ? this.stringsIsValid : true;
-        }
+            if (this.tab == 'strings' && !this.stringsIsValid)
+                return false
+
+            return this.isDirty;
+        },
+
+        isDirty() {
+            const equal = isEqual(this.categories, this.initialCategories)
+            if (!equal)
+                return true;
+            return this.tab == 'strings' ? this.stringsIsDirty : false;
+        },
+
+        canDownloadCategories() {
+            if (this.isDirty)
+                return false
+
+            return this.tab == 'strings' && !this.stringsIsValid ? false : true;
+        },
     },
 
     mounted() {
@@ -236,6 +261,7 @@ export default {
 
                 const data = await query;
                 this.categories = data.options;
+                this.initialCategories = cloneDeep(data.options);
                 this.readonly = data.isReadonly;
 
                 if (

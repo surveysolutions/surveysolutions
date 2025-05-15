@@ -479,4 +479,22 @@
   <data name="ExportEncryption_Warning" xml:space="preserve">
   <value>تعديل إعدادات التشفير سيؤدي إلى إزالة جميع ملفات التصدير التي تم إنشاؤها مسبقًا، مما يتطلب إنشاء ملفات تصدير جديدة.</value>
 </data>
+  <data name="LogoSizeLimit" xml:space="preserve">
+    <value>يجب أن يكون حجم صورة الشعار أقل من {{size}}</value>
+</data>
+  <data name="LogoUploadSuccess" xml:space="preserve">
+    <value>تم تحميل الشعار بنجاح.</value>
+</data>
+  <data name="LogoUploadError" xml:space="preserve">
+    <value>فشل تحميل الشعار. يرجى المحاولة مرة أخرى.</value>
+</data>
+  <data name="LogoRemoveSuccess" xml:space="preserve">
+    <value>تمت إزالة الشعار بنجاح.</value>
+</data>
+  <data name="LogoRemoveError" xml:space="preserve">
+    <value>فشل في إزالة الشعار. يرجى المحاولة مرة أخرى.</value>
+</data>
+  <data name="SelectFileWarning" xml:space="preserve">
+    <value>يرجى اختيار ملف للتحميل.</value>
+</data>
 </root>
