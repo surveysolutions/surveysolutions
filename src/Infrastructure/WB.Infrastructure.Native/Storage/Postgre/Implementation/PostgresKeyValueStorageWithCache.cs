@@ -24,7 +24,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
         public override TEntity GetById(string id)
         {
-            return memoryCache.GetOrCreate(CachePrefix + id, cache =>
+            var entity = memoryCache.GetOrCreate(CachePrefix + id, cache =>
             {
                 lock (lockObj)
                 {
@@ -32,6 +32,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                     return base.GetById(id);
                 }
             });
+            return entity;
         }
 
         public override void Remove(string id)

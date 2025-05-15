@@ -425,4 +425,76 @@
     <data name="EmailProvider_SmtpPasswordHelp" xml:space="preserve">
   <value>بيانات الاعتماد المستخدمة أثناء عملية مصادقة SMTP للتحقق من الهوية.</value>
 </data>
+    <data name="WorkspaceSettings" xml:space="preserve">
+    <value>إعدادات مساحة العمل</value>
+</data>
+    <data name="Export" xml:space="preserve">
+    <value>تصدير</value>
+</data>
+    <data name="GlobalNote" xml:space="preserve">
+    <value>ملاحظة عامة</value>
+</data>
+    <data name="UserProfile" xml:space="preserve">
+    <value>ملف المستخدم</value>
+</data>
+    <data name="Devices" xml:space="preserve">
+    <value>الأجهزة</value>
+</data>
+    <data name="WebInterview" xml:space="preserve">
+    <value>مقابلة ويب</value>
+</data>
+    <data name="FileRetentionTitle" xml:space="preserve">
+    <value>سياسة الاحتفاظ</value>
+</data>
+    <data name="FileRetentionDescription" xml:space="preserve">
+    <value>سيتم حذف الملفات القديمة بشكل دوري وفقًا لهذه الإعدادات</value>
+</data>
+    <data name="RetentionInDaysTitle" xml:space="preserve">
+    <value>عدد الأيام للاحتفاظ</value>
+</data>
+    <data name="RetentionInDaysDescription" xml:space="preserve">
+    <value>عدد الأيام التي سيتم فيها الاحتفاظ بملف التصدير</value>
+</data>
+    <data name="RetentionInCountTitle" xml:space="preserve">
+    <value>عدد الملفات للاحتفاظ</value>
+</data>
+    <data name="RetentionInCountDescription" xml:space="preserve">
+    <value>الحد الأقصى لعدد ملفات التصدير للاحتفاظ بها في التخزين</value>
+</data>
+    <data name="EnableFileRetention" xml:space="preserve">
+    <value>تفعيل سياسة الاحتفاظ</value>
+</data>
+    <data name="RetentionPolicyEnablingConfirm" xml:space="preserve">
+  <value>هل أنت متأكد أنك تريد تفعيل سياسة الاحتفاظ؟ قد يتم حذف ملفات البيانات المصدرة.</value>
+</data>
+    <data name="ForceRunRetentionPolicy" xml:space="preserve">
+    <value>تشغيل إجباري</value>
+</data>
+    <data name="ForceRunRetentionPolicy_Warning" xml:space="preserve">
+    <value>تحذير! هذا إجراء حرج سيؤثر على ملفات التصدير الموجودة في مساحة العمل هذه</value>
+</data>
+    <data name="ForceRunRetentionPolicy_Confirm" xml:space="preserve">
+    <value>هل أنت متأكد أنك تريد تشغيل سياسة الاحتفاظ بالقوة الآن؟ يرجى ملاحظة أن هذا الإجراء قد يؤدي إلى حذف ملفات التصدير المخزنة في مساحة العمل هذه بشكل لا رجعة فيه، مما يجعلها غير متاحة للتنزيل.</value>
+</data>
+  <data name="ExportEncryption_Warning" xml:space="preserve">
+  <value>تعديل إعدادات التشفير سيؤدي إلى إزالة جميع ملفات التصدير التي تم إنشاؤها مسبقًا، مما يتطلب إنشاء ملفات تصدير جديدة.</value>
+</data>
+  <data name="LogoSizeLimit" xml:space="preserve">
+    <value>يجب أن يكون حجم صورة الشعار أقل من {{size}}</value>
+</data>
+  <data name="LogoUploadSuccess" xml:space="preserve">
+    <value>تم تحميل الشعار بنجاح.</value>
+</data>
+  <data name="LogoUploadError" xml:space="preserve">
+    <value>فشل تحميل الشعار. يرجى المحاولة مرة أخرى.</value>
+</data>
+  <data name="LogoRemoveSuccess" xml:space="preserve">
+    <value>تمت إزالة الشعار بنجاح.</value>
+</data>
+  <data name="LogoRemoveError" xml:space="preserve">
+    <value>فشل في إزالة الشعار. يرجى المحاولة مرة أخرى.</value>
+</data>
+  <data name="SelectFileWarning" xml:space="preserve">
+    <value>يرجى اختيار ملف للتحميل.</value>
+</data>
 </root>

@@ -705,6 +705,12 @@ namespace WB.UI.Designer.Resources {
             }
         }
         
+        public static string AttachmentSizeIsTooBig {
+            get {
+                return ResourceManager.GetString("AttachmentSizeIsTooBig", resourceCulture);
+            }
+        }
+        
         public static string SideBarAttachmentsTitle {
             get {
                 return ResourceManager.GetString("SideBarAttachmentsTitle", resourceCulture);

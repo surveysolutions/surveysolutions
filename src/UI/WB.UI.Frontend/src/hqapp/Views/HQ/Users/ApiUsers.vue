@@ -1,23 +1,16 @@
 <template>
-    <HqLayout :hasFilter="false"
-        :title="title"
-        :topicButtonRef="this.model.createUrl"
+    <HqLayout :hasFilter="false" :title="title" :topicButtonRef="this.model.createUrl"
         :topicButton="$t('Users.AddAPIUser')">
-        <div slot='subtitle'>
+        <template v-slot:subtitle>
             <div class="neighbor-block-to-search">
                 <ol class="list-unstyled">
                     <li>{{ $t('Pages.Users_API_Instruction1') }}</li>
                     <li>{{ $t('Pages.Users_API_Instruction2') }}</li>
                 </ol>
             </div>
-        </div>
+        </template>
 
-        <DataTables
-            ref="table"
-            :tableOptions="tableOptions"
-            @ajaxComplete="onTableReload"
-            noSelect
-            :noPaging="false">
+        <DataTables ref="table" :tableOptions="tableOptions" @ajaxComplete="onTableReload" noSelect :noPaging="false">
         </DataTables>
 
     </HqLayout>
@@ -32,7 +25,7 @@ import { DateFormats } from '~/shared/helpers'
 export default {
     data() {
         return {
-            usersCount : '',
+            usersCount: '',
         }
     },
     mounted() {
@@ -40,7 +33,7 @@ export default {
     },
     methods: {
         loadData() {
-            if (this.$refs.table){
+            if (this.$refs.table) {
                 this.$refs.table.reload()
             }
         },
@@ -53,7 +46,7 @@ export default {
             return this.$config.model
         },
         title() {
-            return this.$t('Users.ApiUsersCountDescription', {count: this.usersCount})
+            return this.$t('Users.ApiUsersCountDescription', { count: this.usersCount })
         },
         tableOptions() {
             var self = this
@@ -65,7 +58,7 @@ export default {
                         name: 'UserName',
                         title: this.$t('Users.UserName'),
                         className: 'nowrap',
-                        render: function(data, type, row) {
+                        render: function (data, type, row) {
                             return `<a href='${self.model.editUrl}/${row.userId}'>${data}</a>`
                         },
                     },
@@ -75,7 +68,7 @@ export default {
                         className: 'date',
                         title: this.$t('Users.CreationDate'),
                         tooltip: this.$t('Users.AccountCreationDateTooltip'),
-                        render: function(data, type, row) {
+                        render: function (data, type, row) {
                             var localDate = moment.utc(data).local()
                             return localDate.format(DateFormats.dateTimeInList)
                         },

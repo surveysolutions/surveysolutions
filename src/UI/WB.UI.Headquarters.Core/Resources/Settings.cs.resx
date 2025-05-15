@@ -420,4 +420,76 @@
     <data name="RemovingExportCache" xml:space="preserve">
       <value>Probíhá vymazání exportní mezipaměti</value>
     </data>
+    <data name="WorkspaceSettings" xml:space="preserve">
+    <value>Nastavení pracovního prostoru</value>
+</data>
+    <data name="Export" xml:space="preserve">
+    <value>Export</value>
+</data>
+    <data name="GlobalNote" xml:space="preserve">
+    <value>Globální poznámka</value>
+</data>
+    <data name="UserProfile" xml:space="preserve">
+    <value>Uživatelský profil</value>
+</data>
+    <data name="Devices" xml:space="preserve">
+    <value>Zařízení</value>
+</data>
+    <data name="WebInterview" xml:space="preserve">
+    <value>Webový rozhovor</value>
+</data>
+    <data name="FileRetentionTitle" xml:space="preserve">
+    <value>Politika uchovávání</value>
+</data>
+    <data name="FileRetentionDescription" xml:space="preserve">
+    <value>Starší exportní soubory budou pravidelně mazány podle těchto nastavení</value>
+</data>
+    <data name="RetentionInDaysTitle" xml:space="preserve">
+    <value>Dny uchovávání</value>
+</data>
+    <data name="RetentionInDaysDescription" xml:space="preserve">
+    <value>Počet dnů, po které bude exportní soubor uchován</value>
+</data>
+    <data name="RetentionInCountTitle" xml:space="preserve">
+    <value>Počet souborů k uchování</value>
+</data>
+    <data name="RetentionInCountDescription" xml:space="preserve">
+    <value>Maximální počet exportních souborů k uchování ve skladu</value>
+</data>
+    <data name="EnableFileRetention" xml:space="preserve">
+    <value>Povolit politiku uchovávání</value>
+</data>
+    <data name="RetentionPolicyEnablingConfirm" xml:space="preserve">
+  <value>Opravdu chcete zapnout politiku uchovávání? Exportované datové soubory mohou být smazány.</value>
+</data>
+    <data name="ForceRunRetentionPolicy" xml:space="preserve">
+    <value>Vynutit spuštění</value>
+</data>
+    <data name="ForceRunRetentionPolicy_Warning" xml:space="preserve">
+    <value>Varování! Toto je kritická akce, která ovlivní stávající exportované soubory v tomto pracovním prostoru</value>
+</data>
+    <data name="ForceRunRetentionPolicy_Confirm" xml:space="preserve">
+    <value>Opravdu chcete nyní vynuceně spustit politiku uchovávání? Upozorňujeme, že tato akce může vést k nevratnému smazání exportovaných souborů uložených v tomto pracovním prostoru, což je učiní nedostupnými ke stažení.</value>
+</data>
+  <data name="ExportEncryption_Warning" xml:space="preserve">
+  <value>Změna nastavení šifrování odstraní všechny dříve vytvořené exportní soubory, což bude vyžadovat vytvoření nových exportů.</value>
+</data>
+  <data name="LogoSizeLimit" xml:space="preserve">
+    <value>Velikost obrázku loga by měla být menší než {{size}}</value>
+</data>
+  <data name="LogoUploadSuccess" xml:space="preserve">
+    <value>Logo bylo úspěšně nahráno.</value>
+</data>
+  <data name="LogoUploadError" xml:space="preserve">
+    <value>Nahrání loga se nezdařilo. Zkuste to prosím znovu.</value>
+</data>
+  <data name="LogoRemoveSuccess" xml:space="preserve">
+    <value>Logo bylo úspěšně odstraněno.</value>
+</data>
+  <data name="LogoRemoveError" xml:space="preserve">
+    <value>Odstranění loga se nezdařilo. Zkuste to prosím znovu.</value>
+</data>
+  <data name="SelectFileWarning" xml:space="preserve">
+    <value>Vyberte prosím soubor k nahrání.</value>
+</data>
 </root>

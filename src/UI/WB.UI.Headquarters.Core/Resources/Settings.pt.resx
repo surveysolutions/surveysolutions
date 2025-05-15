@@ -426,4 +426,76 @@ Possíveis razões:
   <data name="EmailProvider_SmtpPasswordHelp" xml:space="preserve">
     <value>Credencial usada durante o processo de autenticação SMTP para verificar a identidade.</value>
   </data>
+    <data name="WorkspaceSettings" xml:space="preserve">
+    <value>Configurações do espaço de trabalho</value>
+</data>
+    <data name="Export" xml:space="preserve">
+    <value>Exportar</value>
+</data>
+    <data name="GlobalNote" xml:space="preserve">
+    <value>Nota global</value>
+</data>
+    <data name="UserProfile" xml:space="preserve">
+    <value>Perfil do usuário</value>
+</data>
+    <data name="Devices" xml:space="preserve">
+    <value>Dispositivos</value>
+</data>
+    <data name="WebInterview" xml:space="preserve">
+    <value>Entrevista web</value>
+</data>
+    <data name="FileRetentionTitle" xml:space="preserve">
+    <value>Política de retenção</value>
+</data>
+    <data name="FileRetentionDescription" xml:space="preserve">
+    <value>Os arquivos de exportação antigos serão periodicamente excluídos de acordo com estas configurações</value>
+</data>
+    <data name="RetentionInDaysTitle" xml:space="preserve">
+    <value>Dias para manter</value>
+</data>
+    <data name="RetentionInDaysDescription" xml:space="preserve">
+    <value>Número de dias que o arquivo de exportação será preservado</value>
+</data>
+    <data name="RetentionInCountTitle" xml:space="preserve">
+    <value>Número de arquivos para manter</value>
+</data>
+    <data name="RetentionInCountDescription" xml:space="preserve">
+    <value>Quantidade máxima de arquivos de exportação a serem mantidos no armazenamento</value>
+</data>
+    <data name="EnableFileRetention" xml:space="preserve">
+    <value>Ativar política de retenção</value>
+</data>
+    <data name="RetentionPolicyEnablingConfirm" xml:space="preserve">
+  <value>Tem certeza de que deseja ativar a política de retenção? Os arquivos de dados exportados podem ser excluídos.</value>
+</data>
+    <data name="ForceRunRetentionPolicy" xml:space="preserve">
+    <value>Executar forçadamente</value>
+</data>
+    <data name="ForceRunRetentionPolicy_Warning" xml:space="preserve">
+    <value>Aviso! Esta é uma ação crítica que afetará os arquivos de exportação existentes neste espaço de trabalho</value>
+</data>
+    <data name="ForceRunRetentionPolicy_Confirm" xml:space="preserve">
+    <value>Tem certeza de que deseja executar forçadamente a política de retenção agora? Observe que esta ação pode resultar na exclusão irreversível de arquivos de exportação armazenados neste espaço de trabalho, tornando-os indisponíveis para download.</value>
+</data>
+  <data name="ExportEncryption_Warning" xml:space="preserve">
+  <value>Modificar as configurações de criptografia removerá todos os arquivos de exportação gerados anteriormente, exigindo a criação de novas exportações.</value>
+</data>
+  <data name="LogoSizeLimit" xml:space="preserve">
+    <value>O tamanho da imagem do logotipo deve ser menor que {{size}}</value>
+</data>
+  <data name="LogoUploadSuccess" xml:space="preserve">
+    <value>Logotipo carregado com sucesso.</value>
+</data>
+  <data name="LogoUploadError" xml:space="preserve">
+    <value>Falha ao carregar o logotipo. Por favor, tente novamente.</value>
+</data>
+  <data name="LogoRemoveSuccess" xml:space="preserve">
+    <value>Logotipo removido com sucesso.</value>
+</data>
+  <data name="LogoRemoveError" xml:space="preserve">
+    <value>Falha ao remover o logotipo. Por favor, tente novamente.</value>
+</data>
+  <data name="SelectFileWarning" xml:space="preserve">
+    <value>Por favor, selecione um arquivo para enviar.</value>
+</data>
 </root>

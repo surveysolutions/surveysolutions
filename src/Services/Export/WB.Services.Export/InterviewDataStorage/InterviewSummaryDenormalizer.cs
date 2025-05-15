@@ -34,7 +34,9 @@ namespace WB.Services.Export.InterviewDataStorage
         IEventHandler<PictureQuestionAnswered>,
         IEventHandler<QRBarcodeQuestionAnswered>,
         IEventHandler<YesNoQuestionAnswered>,
-        IEventHandler<InterviewReceivedBySupervisor>
+        IEventHandler<InterviewReceivedBySupervisor>,
+        IEventHandler<AnswerCommented>,
+        IEventHandler<AnswerCommentResolved>
     {
         private readonly TenantDbContext dbContext;
 
@@ -203,6 +205,16 @@ namespace WB.Services.Export.InterviewDataStorage
         }
 
         public void Handle(PublishedEvent<InterviewReceivedBySupervisor> @event)
+        {
+            EnlistChange(@event.EventSourceId, @event.EventTimeStamp, null);
+        }
+
+        public void Handle(PublishedEvent<AnswerCommented> @event)
+        {
+            EnlistChange(@event.EventSourceId, @event.EventTimeStamp, null);
+        }
+
+        public void Handle(PublishedEvent<AnswerCommentResolved> @event)
         {
             EnlistChange(@event.EventSourceId, @event.EventTimeStamp, null);
         }

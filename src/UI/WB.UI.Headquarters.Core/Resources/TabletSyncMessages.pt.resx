@@ -154,7 +154,7 @@
     <value>A sincronização falhou. Por favor reinstale o aplicativo. Identificador de instalação está faltando. Entre em contato com os desenvolvedores.</value>
   </data>
   <data name="OldInterviewerNeedsCleanup" xml:space="preserve">
-    <value>Parcialmente a sincronização falhou. Concluídas entrevistas foram enviadas para o servidor, mas você não receberá novas atribuições. Por favor, navegue até configurações android-&gt; Apps-&gt; entrevistador e pressione o botão limpar dados. Então sincronizar a partir do zero.</value>
+    <value>Parcialmente a sincronização falhou. Concluídas entrevistas foram enviadas para o servidor, mas você não receberá novas atribuições. Por favor, navegue até configurações Android-&gt; Apps-&gt; entrevistador e pressione o botão limpar dados. Então sincronizar a partir do zero.</value>
   </data>
   <data name="ServerError" xml:space="preserve">
     <value>A sincronização falhou. Ocorreu um erro interno do servidor. Entre em contato com os desenvolvedores.</value>

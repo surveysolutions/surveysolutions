@@ -29,6 +29,7 @@ namespace WB.UI.Headquarters.Models.Maps
         public DuplicateLabelModel[] DuplicateMapLabels { get; set; }
         public bool IsPreviewGeoJson { get; set; }
         
+        public bool IsObserving { get; set; }
         public ApiEndpoints Api { get; set; }
 
         public class ApiEndpoints

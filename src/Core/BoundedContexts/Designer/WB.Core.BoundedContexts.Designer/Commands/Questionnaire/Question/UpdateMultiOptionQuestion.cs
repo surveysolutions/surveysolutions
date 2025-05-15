@@ -35,7 +35,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
             this.Scope = scope;
             options?.ToList()
                 .ForEach(x => x.Title = CommandUtils.SanitizeHtml(x.Title, removeAllTags: true));
-            this.Options = options ?? new Option[0];
+            this.Options = options;
             this.LinkedToEntityId = linkedToEntityId;
             this.LinkedFilterExpression = linkedFilterExpression;
             this.AreAnswersOrdered = areAnswersOrdered;
@@ -59,7 +59,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
 
         public bool? YesNoView { get; set; }
 
-        public Option[] Options { get; set; }
+        public Option[]? Options { get; set; }
         public Guid? CategoriesId { get; set; }
     }
 }

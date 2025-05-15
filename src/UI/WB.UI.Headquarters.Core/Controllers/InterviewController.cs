@@ -169,7 +169,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                                && !interviewSummary.WasCompleted,
                 
                 CanChangeToCapi = !authorizedUser.IsInterviewer 
-                                  && interviewSummary.InterviewMode != InterviewMode.CAPI
+                                  && interviewSummary.InterviewMode == InterviewMode.CAWI
                                   && (interviewSummary.Status == InterviewStatus.Created 
                                       || interviewSummary.Status == InterviewStatus.SupervisorAssigned
                                       || interviewSummary.Status == InterviewStatus.InterviewerAssigned

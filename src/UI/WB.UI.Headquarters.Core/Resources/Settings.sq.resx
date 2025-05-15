@@ -280,7 +280,7 @@
     <value>Logoja e kompanisë u përditësua</value>
   </data>
   <data name="MobileAppSettings_Description" xml:space="preserve">
-    <value>Disa cilësime specifike nga versioni android i aplikacionit të Intervistuesit/Supervizorit </value>
+    <value>Disa cilësime nga versioni Android i aplikacionit të Intervistuesit/Supervizorit </value>
   </data>
   <data name="MobileAppSettings_Title" xml:space="preserve">
     <value>Cilësimet e aplikacionit të Intervistuesit/Supervizorit </value>

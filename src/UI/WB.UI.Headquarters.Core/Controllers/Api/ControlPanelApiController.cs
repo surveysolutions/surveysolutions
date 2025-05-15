@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Newtonsoft.Json;
+using Quartz;
+using Quartz.Impl.Matchers;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -60,6 +62,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         private readonly IInterviewBrokenPackagesService brokenPackagesService;
         private readonly HealthCheckService healthCheckService;
         private readonly IDashboardStatisticsService dashboardStatisticsService;
+        private readonly ISchedulerFactory schedulerFactory;
 
         public ControlPanelApiController(IConfiguration configuration,
             ITabletInformationService tabletInformationService,
@@ -70,7 +73,8 @@ namespace WB.UI.Headquarters.Controllers.Api
             IJsonAllTypesSerializer serializer,
             IInterviewBrokenPackagesService brokenPackagesService,
             HealthCheckService healthCheckService,
-            IDashboardStatisticsService dashboardStatisticsService)
+            IDashboardStatisticsService dashboardStatisticsService,
+            ISchedulerFactory schedulerFactory)
         {
             this.configuration = configuration;
             this.tabletInformationService = tabletInformationService;
@@ -82,6 +86,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             this.brokenPackagesService = brokenPackagesService;
             this.healthCheckService = healthCheckService;
             this.dashboardStatisticsService = dashboardStatisticsService;
+            this.schedulerFactory = schedulerFactory;
         }
 
         public ActionResult<DataTableResponse<TabletInformationView>> TabletInfos(DataTableRequest request)
@@ -190,6 +195,24 @@ namespace WB.UI.Headquarters.Controllers.Api
             }
 
             return config;
+        }
+
+        public async Task<ActionResult<SortedList<string, KeyValuePair<string, string>>>> Jobs()
+        {
+            //get all Quartz schedulled tasks
+            var scheduler = await this.schedulerFactory.GetScheduler();
+            //get all registered Quartz triggers
+            var triggers = await scheduler.GetTriggerKeys(GroupMatcher<TriggerKey>.AnyGroup());
+            
+            var jobs = new SortedList<string, KeyValuePair<string, string>>();
+            foreach (var trigger in triggers)
+            {
+                var triggerValue = await scheduler.GetTrigger(trigger);
+                var triggerState = await scheduler.GetTriggerState(trigger);
+                jobs.Add(trigger.Name, new KeyValuePair<string, string>(trigger.Name, $"State: {triggerState.Humanize()}; Next Fire UTC: {triggerValue.GetNextFireTimeUtc()}"));
+            }
+
+            return jobs;
         }
 
         private static string RemovePasswordFromConnectionString(string connectionString)

@@ -81,7 +81,7 @@ export function convertToTable(stringified, isCascading) {
             return {};
         }
         if (isCascading) {
-            let attachmentC = matches.length > 6 ? matches[7] : '';
+            let attachmentC = matches.length > 6 ? matches[7] || null : null;
             if (matches.length > 3) {
                 return {
                     value: matches[4] * 1,
@@ -92,13 +92,16 @@ export function convertToTable(stringified, isCascading) {
             } else
                 return {
                     value: matches[2] * 1,
-                    title: matches[1]
+                    title: matches[1],
+                    parentValue: null,
+                    attachmentName: attachmentC
                 };
         } else {
-            let attachment = matches.length > 5 ? matches[6] : '';
+            let attachment = matches.length > 5 ? matches[6] || null : null;
             return {
                 value: matches[3] * 1,
                 title: matches[1],
+                parentValue: null,
                 attachmentName: attachment
             };
         }

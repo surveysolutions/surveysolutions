@@ -56,6 +56,10 @@ namespace WB.Services.Export.Infrastructure.Implementation
             return Directory.GetFiles(pathToDirectory, pattern);
         }
 
+        public string[] GetFilesInDirectory(string pathToDirectory, string pattern, bool recursive)
+        { 
+            return Directory.GetFiles(pathToDirectory, pattern, recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
+        }
         public bool IsFileExists(string filePath) => File.Exists(filePath);
         public byte[] ReadAllBytes(string filePath) => File.ReadAllBytes(filePath);
         public void WriteAllBytes(string filePath, byte[] data)
@@ -68,5 +72,7 @@ namespace WB.Services.Export.Infrastructure.Implementation
             => this.IsFileExists(filePath) ? new FileInfo(filePath).LastWriteTime : DateTime.MinValue;
 
         public long GetFileSize(string filePath) => this.IsFileExists(filePath) ? new FileInfo(filePath).Length : -1;
+        
+        public char DirectorySeparatorChar() => Path.DirectorySeparatorChar;
     }
 }

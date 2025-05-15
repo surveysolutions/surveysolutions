@@ -91,10 +91,18 @@ export function updateQuestion(
             command.linkedFilterExpression = question.linkedFilterExpression;
             command.yesNoView = question.yesNoView;
             command.isFilteredCombobox = question.isFilteredCombobox || false;
-            command.options = !_.isEmpty(command.linkedToEntityId)
-                ? null
-                : question.options;
             command.categoriesId = question.categoriesId;
+
+            if (
+                shouldGetOptionsOnServer ||
+                !_.isEmpty(command.linkedToEntityId) ||
+                !_.isEmpty(command.categoriesId) ||
+                command.isFilteredCombobox
+            ) {
+                command.options = null;
+            } else {
+                command.options = question.options;
+            }
             break;
         case 'Numeric':
             command.isInteger = question.isInteger;

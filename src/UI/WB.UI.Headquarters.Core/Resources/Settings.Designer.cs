@@ -650,5 +650,149 @@ namespace WB.UI.Headquarters.Resources {
                 return ResourceManager.GetString("EmailProvider_SmtpPasswordHelp", resourceCulture);
             }
         }
+        
+        public static string WorkspaceSettings {
+            get {
+                return ResourceManager.GetString("WorkspaceSettings", resourceCulture);
+            }
+        }
+        
+        public static string Export {
+            get {
+                return ResourceManager.GetString("Export", resourceCulture);
+            }
+        }
+        
+        public static string GlobalNote {
+            get {
+                return ResourceManager.GetString("GlobalNote", resourceCulture);
+            }
+        }
+        
+        public static string UserProfile {
+            get {
+                return ResourceManager.GetString("UserProfile", resourceCulture);
+            }
+        }
+        
+        public static string Devices {
+            get {
+                return ResourceManager.GetString("Devices", resourceCulture);
+            }
+        }
+        
+        public static string WebInterview {
+            get {
+                return ResourceManager.GetString("WebInterview", resourceCulture);
+            }
+        }
+        
+        public static string FileRetentionTitle {
+            get {
+                return ResourceManager.GetString("FileRetentionTitle", resourceCulture);
+            }
+        }
+        
+        public static string FileRetentionDescription {
+            get {
+                return ResourceManager.GetString("FileRetentionDescription", resourceCulture);
+            }
+        }
+        
+        public static string RetentionInDaysTitle {
+            get {
+                return ResourceManager.GetString("RetentionInDaysTitle", resourceCulture);
+            }
+        }
+        
+        public static string RetentionInDaysDescription {
+            get {
+                return ResourceManager.GetString("RetentionInDaysDescription", resourceCulture);
+            }
+        }
+        
+        public static string RetentionInCountTitle {
+            get {
+                return ResourceManager.GetString("RetentionInCountTitle", resourceCulture);
+            }
+        }
+        
+        public static string RetentionInCountDescription {
+            get {
+                return ResourceManager.GetString("RetentionInCountDescription", resourceCulture);
+            }
+        }
+        
+        public static string EnableFileRetention {
+            get {
+                return ResourceManager.GetString("EnableFileRetention", resourceCulture);
+            }
+        }
+        
+        public static string RetentionPolicyEnablingConfirm {
+            get {
+                return ResourceManager.GetString("RetentionPolicyEnablingConfirm", resourceCulture);
+            }
+        }
+        
+        public static string ForceRunRetentionPolicy {
+            get {
+                return ResourceManager.GetString("ForceRunRetentionPolicy", resourceCulture);
+            }
+        }
+        
+        public static string ForceRunRetentionPolicy_Warning {
+            get {
+                return ResourceManager.GetString("ForceRunRetentionPolicy_Warning", resourceCulture);
+            }
+        }
+        
+        public static string ForceRunRetentionPolicy_Confirm {
+            get {
+                return ResourceManager.GetString("ForceRunRetentionPolicy_Confirm", resourceCulture);
+            }
+        }
+        
+        public static string ExportEncryption_Warning {
+            get {
+                return ResourceManager.GetString("ExportEncryption_Warning", resourceCulture);
+            }
+        }
+        
+        public static string LogoSizeLimit {
+            get {
+                return ResourceManager.GetString("LogoSizeLimit", resourceCulture);
+            }
+        }
+        
+        public static string SelectFileWarning {
+            get {
+                return ResourceManager.GetString("SelectFileWarning", resourceCulture);
+            }
+        }
+        
+        public static string LogoUploadSuccess {
+            get {
+                return ResourceManager.GetString("LogoUploadSuccess", resourceCulture);
+            }
+        }
+        
+        public static string LogoUploadError {
+            get {
+                return ResourceManager.GetString("LogoUploadError", resourceCulture);
+            }
+        }
+        
+        public static string LogoRemoveSuccess {
+            get {
+                return ResourceManager.GetString("LogoRemoveSuccess", resourceCulture);
+            }
+        }
+        
+        public static string LogoRemoveError {
+            get {
+                return ResourceManager.GetString("LogoRemoveError", resourceCulture);
+            }
+        }
     }
 }

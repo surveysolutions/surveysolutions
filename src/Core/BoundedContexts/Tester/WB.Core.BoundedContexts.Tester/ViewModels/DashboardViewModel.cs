@@ -262,7 +262,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             try
             {
                 await this.QuestionnaireDownloader
-                    .LoadQuestionnaireAsync(questionnaireListItem.Id, questionnaireListItem.Title, progress,
+                    .LoadQuestionnaireAndCreateInterviewAsync(questionnaireListItem.Id, questionnaireListItem.Title, progress,
                         this.tokenSource.Token);
             }
             finally
