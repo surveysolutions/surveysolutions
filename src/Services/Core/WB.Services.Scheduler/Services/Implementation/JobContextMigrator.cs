@@ -47,7 +47,6 @@ namespace WB.Services.Scheduler.Services.Implementation
                 .WaitAndRetryAsync(5, i => TimeSpan.FromSeconds(rnd.NextDouble() * i + i))
                 .ExecuteAsync(async () =>
                 {
-                    await jobContext.Database.EnsureCreatedAsync(token);
                     await MoveMigrationTableAsync(token);
                     await jobContext.Database.MigrateAsync(token);
                     logger.LogInformation("Job scheduler schema migration completed");
@@ -89,6 +88,9 @@ END $$;
             }
             catch (Exception ex)
             {
+                if (ex is PostgresException pe && pe.SqlState == "3D000")
+                    return;
+                
                 logger.LogError(ex, $"An error occurred while moving the table: {ex.Message}");
                 throw;
             }
