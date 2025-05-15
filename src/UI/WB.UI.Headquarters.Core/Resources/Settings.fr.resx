@@ -483,4 +483,19 @@ Raisons possibles :
   <data name="LogoSizeLimit" xml:space="preserve">
     <value>La taille de l’image du logo doit être inférieure à {{size}}</value>
 </data>
+  <data name="LogoUploadSuccess" xml:space="preserve">
+    <value>Logo téléchargé avec succès.</value>
+</data>
+  <data name="LogoUploadError" xml:space="preserve">
+    <value>Échec du téléchargement du logo. Veuillez réessayer.</value>
+</data>
+  <data name="LogoRemoveSuccess" xml:space="preserve">
+    <value>Le logo a été supprimé avec succès.</value>
+</data>
+  <data name="LogoRemoveError" xml:space="preserve">
+    <value>Échec de la suppression du logo. Veuillez réessayer.</value>
+</data>
+  <data name="SelectFileWarning" xml:space="preserve">
+    <value>Veuillez sélectionner un fichier à télécharger.</value>
+</data>
 </root>

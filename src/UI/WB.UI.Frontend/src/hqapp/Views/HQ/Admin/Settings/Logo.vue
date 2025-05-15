@@ -6,7 +6,7 @@
                 <p>{{ $t('Settings.LogoSettings_Description') }}</p>
             </div>
             <form :action="$config.model.updateLogoUrl" method="post" enctype="multipart/form-data" class="col-sm-9"
-                @submit="onLogoSubmit">
+                @submit.prevent="onLogoSubmit">
                 <input name="__RequestVerificationToken" type="hidden" :value="this.$hq.Util.getCsrfCookie()" />
                 <div class="block-filter" style="padding-left: 30px">
                     <div class="form-group">
@@ -18,10 +18,10 @@
                             </p>
                         </label>
                     </div>
-                    <div class="form-group" :class="{ 'has-error': this.$config.model.invalidImage }">
+                    <div class="form-group" :class="{ 'has-error': invalidImage }">
                         <input type="file" id="companyLogo" ref="logoRef" name="logo" @change="changedFile"
                             accept="image/gif, image/jpeg, image/png" />
-                        <span class="help-block" v-if="this.$config.model.invalidImage">{{
+                        <span class="help-block" v-if="invalidImage">{{
                             this.$t('Settings.LogoNotUpdated') }}</span>
                     </div>
                 </div>
@@ -37,12 +37,12 @@
                         <figcaption>
                             {{ $t('Settings.CurrentLogo') }}:
                         </figcaption>
-                        <img class="logo extra-margin-bottom" ref="logoImage" :src="$config.model.logoUrl"
-                            @error="logoError" alt="logo image" />
+                        <img class="logo extra-margin-bottom" ref="logoImage" :src="logoImageSrc" @error="logoError"
+                            alt="logo image" />
                     </figure>
                 </div>
                 <div class="block-filter action-block" style="padding-left: 30px">
-                    <form :action="$config.model.removeLogoUrl" method="post">
+                    <form :action="$config.model.removeLogoUrl" method="post" @submit.prevent="onLogoRemove">
                         <input name="__RequestVerificationToken" type="hidden" :value="this.$hq.Util.getCsrfCookie()" />
                         <button type="submit" class="btn btn-danger">
                             {{ $t('Settings.RemoveLogo') }}
@@ -56,33 +56,88 @@
 <script>
 
 import { humanFileSize } from '~/shared/helpers'
+import * as toastr from 'toastr'
 
 export default {
     data() {
         return {
             files: [],
+            logoImageSrcDate: "",
+            invalidImage: false
         }
     },
-    methods: {
-        onLogoSubmit(e) {
-            if (
-                window.File &&
-                window.FileReader &&
-                window.FileList &&
-                window.Blob
-            ) {
-                //get the file size and file type from file input field
-                const fsize = this.$refs.logoRef.files[0].size
-                const maxFileSize = 1024 * 1024 * 10
-
-                if (fsize > maxFileSize) {
-                    e.preventDefault();
-                    alert(this.$t('Settings.LogoSizeLimit', { size: humanFileSize(maxFileSize) }))
-                    return false
-                } else {
-                    return true
-                }
+    computed: {
+        logoImageSrc() {
+            if (this.logoImageSrcDate === "") {
+                this.logoImageSrcDate = new Date().getTime()
             }
+            return this.$config.model.logoUrl + "?d=" + this.logoImageSrcDate
+        }
+    },
+
+    methods: {
+        async onLogoSubmit() {
+            const fileInput = this.$refs.logoRef;
+            const file = fileInput?.files?.[0];
+            const maxFileSize = 1024 * 1024 * 10; // 10 MB
+
+            if (!file) {
+                toastr.warning(this.$t('Settings.SelectFileWarning'));
+                this.invalidImage = true;
+                return;
+            }
+
+            if (file.size > maxFileSize) {
+                toastr.error(this.$t('Settings.LogoSizeLimit', { size: humanFileSize(maxFileSize) }));
+                this.invalidImage = true;
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('logo', file);
+
+            await this.sendLogoRequest(
+                this.$config.model.updateLogoUrl,
+                formData,
+                this.$t('Settings.LogoUploadSuccess'),
+                this.$t('Settings.LogoUploadError')
+            );
+
+            this.$refs.logoRef.value = '';
+            this.invalidImage = false;
+        },
+
+        async onLogoRemove() {
+            const formData = new FormData();
+
+            await this.sendLogoRequest(
+                this.$config.model.removeLogoUrl,
+                formData,
+                this.$t('Settings.LogoRemoveSuccess'),
+                this.$t('Settings.LogoRemoveError')
+            );
+        },
+
+        async sendLogoRequest(url, formData, successMsg, errorMsg) {
+            formData.append('__RequestVerificationToken', this.$hq.Util.getCsrfCookie());
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    throw new Error('Non-OK response');
+                }
+
+                toastr.info(successMsg);
+            } catch (err) {
+                console.error(errorMsg, err);
+                toastr.error(errorMsg);
+            }
+
+            this.logoImageSrcDate = Date.now();
         },
         changedFile(e) {
             this.files = this.$refs.logoRef.files

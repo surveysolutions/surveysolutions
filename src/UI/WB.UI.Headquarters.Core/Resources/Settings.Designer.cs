@@ -764,5 +764,35 @@ namespace WB.UI.Headquarters.Resources {
                 return ResourceManager.GetString("LogoSizeLimit", resourceCulture);
             }
         }
+        
+        public static string SelectFileWarning {
+            get {
+                return ResourceManager.GetString("SelectFileWarning", resourceCulture);
+            }
+        }
+        
+        public static string LogoUploadSuccess {
+            get {
+                return ResourceManager.GetString("LogoUploadSuccess", resourceCulture);
+            }
+        }
+        
+        public static string LogoUploadError {
+            get {
+                return ResourceManager.GetString("LogoUploadError", resourceCulture);
+            }
+        }
+        
+        public static string LogoRemoveSuccess {
+            get {
+                return ResourceManager.GetString("LogoRemoveSuccess", resourceCulture);
+            }
+        }
+        
+        public static string LogoRemoveError {
+            get {
+                return ResourceManager.GetString("LogoRemoveError", resourceCulture);
+            }
+        }
     }
 }
