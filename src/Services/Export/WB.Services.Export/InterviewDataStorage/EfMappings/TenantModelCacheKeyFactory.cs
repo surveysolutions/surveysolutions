@@ -12,7 +12,8 @@ namespace WB.Services.Export.InterviewDataStorage.EfMappings
 
             return new {
                 Type = context.GetType(),
-                Schema = dbContext?.TenantContext.Tenant.SchemaName()
+                Schema = dbContext?.TenantContext.Tenant.SchemaName(),
+                designTime
             };
         }
     }
