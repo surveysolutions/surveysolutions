@@ -6,15 +6,18 @@ namespace WB.Services.Export.InterviewDataStorage.EfMappings
 {
     public class TenantModelCacheKeyFactory : IModelCacheKeyFactory
     {
+        public object Create(DbContext context) => Create(context, false);
+        
         public object Create(DbContext context, bool designTime)
         {
-            var dbContext = context as TenantDbContext;
+            if (context is not TenantDbContext dbContext)
+                return context.GetType();
 
-            return new {
-                Type = context.GetType(),
-                Schema = dbContext?.TenantContext.Tenant.SchemaName(),
+            return (
+                context.GetType(),
+                dbContext.TenantContext.Tenant.SchemaName(),
                 designTime
-            };
+            );
         }
     }
 }
