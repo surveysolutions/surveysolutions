@@ -48,6 +48,14 @@ namespace WB.Services.Export.Migrations
                     b.Property<Guid>("ResponsibleId")
                         .HasColumnName("responsible_id")
                         .HasColumnType("uuid");
+                    
+                    b.Property<string>("TargetArea")
+                        .HasColumnName("target_area")
+                        .HasColumnType("text");
+
+                    b.Property<int?>("UpgradedFromId")
+                        .HasColumnName("upgraded_from_id")
+                        .HasColumnType("integer");
 
                     b.Property<bool?>("WebMode")
                         .HasColumnName("web_mode")
