@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -54,6 +55,7 @@ namespace WB.Services.Export.Host
             services.AddDbContext<TenantDbContext>(builder =>
             {
                 builder.ReplaceService<IModelCacheKeyFactory, TenantModelCacheKeyFactory>();
+                builder.ConfigureWarnings(w => w.Throw(RelationalEventId.PendingModelChangesWarning));
             });
 
             var healthChecksBuilder = services.AddHealthChecks();
