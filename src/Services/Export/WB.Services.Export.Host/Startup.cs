@@ -55,7 +55,7 @@ namespace WB.Services.Export.Host
             services.AddDbContext<TenantDbContext>(builder =>
             {
                 builder.ReplaceService<IModelCacheKeyFactory, TenantModelCacheKeyFactory>();
-                builder.ConfigureWarnings(w => w.Throw(RelationalEventId.PendingModelChangesWarning));
+                builder.ConfigureWarnings(w => w.Log(RelationalEventId.PendingModelChangesWarning));
             });
 
             var healthChecksBuilder = services.AddHealthChecks();
