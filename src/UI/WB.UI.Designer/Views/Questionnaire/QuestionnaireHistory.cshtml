@@ -116,10 +116,11 @@
                 </div>
                 <div class="modal-body">
                     <textarea id="comment" rows="5" maxlength="500" class="form-control"></textarea>
+                    <input aria-hidden="true" type="hidden" id="historyItemId" />
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-bs-dismiss="modal">@QuestionnaireHistoryResources.Cancel</button>
-                    <button type="button" class="btn btn-primary" id="saveCommentBtn">@QuestionnaireHistoryResources.Save</button>
+                    <a href="javascript:void(0);" class="btn btn-primary" id="saveCommentBtn" onclick="sendComment()">@QuestionnaireHistoryResources.Save</a>
                 </div>
             </div>
         </div>
@@ -163,16 +164,18 @@
 
         window.showComment = function (historyItemId) {
             $("#comment").val(comments[historyItemId])
-            $('#saveCommentBtn').click(function () {                    
-                $.post({url:"@Url.Action("SaveComment", "Questionnaire")",
-                        data:{id: '@Model?.Id', historyItemId: historyItemId, comment: $('#comment').val()},
-                        headers: {'X-CSRF-TOKEN': getCsrfCookie()} })
-                .done(function (data) { if(data) location.reload();});
-            });
+            $("#historyItemId").val(historyItemId)
             
             var commentModal = document.getElementById('commentModal');
             const modal = new window.Modal(commentModal);
             modal.show();
+        };
+        window.sendComment = function (){
+            var historyItemId = $("#historyItemId").val();
+            $.post({url:"@Url.Action("SaveComment", "Questionnaire")",
+                        data:{id: '@Model?.Id', historyItemId: historyItemId, comment: $('#comment').val()},
+                        headers: {'X-CSRF-TOKEN': getCsrfCookie()} })
+                .done(function (data) { if(data) location.reload();});
         };
     });
 </script>
