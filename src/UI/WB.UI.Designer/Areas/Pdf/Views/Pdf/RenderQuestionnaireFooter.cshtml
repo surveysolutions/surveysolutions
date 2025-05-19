@@ -1,8 +1,5 @@
 ﻿@{
     Layout = null;
-    var pageindex = Context.Request.Query["page"].FirstOrDefault() ?? "";
-    var topage = Context.Request.Query["topage"].FirstOrDefault() ?? "";
-    var subsection = Context.Request.Query["subsection"].FirstOrDefault() ?? "";
 }
 <!DOCTYPE html>
 <html>
@@ -11,9 +8,10 @@
     <style>
         .footer {
             width: 100%;
+            padding: 0 20px;
         }
 
-        .subsection {
+        .title {
             text-transform: uppercase;
             font-size: 10px;
             font-family: 'RobotoLight';
@@ -21,7 +19,7 @@
             overflow: hidden;
         }
 
-        .page-number {
+        .pageNumber {
             text-align: right;
             font-family: 'RobotoLight';
             font-size: 13px;
@@ -32,9 +30,9 @@
 <body>
     <table class="footer">
         <tr>
-            <td class="subsection">@subsection</td>
+            <td class="title"></td>
             <td class="page-number">
-                <span class="page">@pageindex</span> / <span class="topage">@topage</span>
+                <span class="pageNumber"></span> / <span class="totalPages"></span>
             </td>
         </tr>
     </table>
