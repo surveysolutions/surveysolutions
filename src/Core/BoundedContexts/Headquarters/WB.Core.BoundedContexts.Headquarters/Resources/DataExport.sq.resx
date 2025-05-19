@@ -280,7 +280,7 @@
     <value>Eksporto</value>
   </data>
   <data name="ExportExplanation" xml:space="preserve">
-    <value>Shtypja e butonit Gjenero krijon një arkiv të dhënash nga intervistat e vlefshme në server gjatë asaj kohe. Ora e krijimit të arkivit dhe madhësia e arkivit tregohen në tabelë. Arkivi i të dhënave krijuar së fundmi mund të shkarkohet duke shtypur butonin Shkarko. Shtyp butonin Krijo sërish, për të krijuar një arkiv të ri.</value>
+    <value>Duke shtypur butonin "Shto në radhë" krijohet një arkiv të dhënash të intervistave të disponueshme në server në atë moment. Koha e krijimit të arkivit dhe madhësia e tij shfaqen në tabelë. Arkivi i fundit i të dhënave të krijuar mund të shkarkohet duke shtypur butonin Shkarko. Shtypni përsëri "Shto në radhë" për të krijuar një arkiv të ri.</value>
   </data>
   <data name="ExportRange" xml:space="preserve">
     <value>Diapazoni i eksportit:</value>

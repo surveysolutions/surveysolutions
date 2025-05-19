@@ -238,7 +238,7 @@
     <value>Formato Tabular</value>
   </data>
   <data name="ExportExplanation" xml:space="preserve">
-    <value>Pressionar o botão Gerar cria um arquivo de dados das entrevistas disponíveis no servidor naquele momento. A hora da criação do arquivo e o tamanho do arquivo são mostrados na tabela. O último arquivo de dados gerado pode ser baixado pressionando o botão Baixar. Pressione o botão Gerar novamente para criar um novo arquivo.</value>
+    <value>Ao pressionar o botão "Adicionar à fila", é criado um arquivo de dados das entrevistas disponíveis no servidor naquele momento. O horário de criação do arquivo e o tamanho do arquivo são exibidos na tabela. O último arquivo de dados gerado pode ser baixado pressionando o botão Baixar. Pressione "Adicionar à fila" novamente para criar um novo arquivo.</value>
   </data>
   <data name="ZipFile" xml:space="preserve">
     <value>Arquivo zip</value>
