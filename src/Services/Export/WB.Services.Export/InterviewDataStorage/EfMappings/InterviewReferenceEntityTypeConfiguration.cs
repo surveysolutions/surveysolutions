@@ -17,6 +17,13 @@ namespace WB.Services.Export.InterviewDataStorage.EfMappings
         {
             builder.ToTable("interview__references", schema);
             builder.HasKey(x => x.InterviewId);
+            
+            builder.Property(e => e.UpdateDateUtc)
+                .HasColumnType("timestamp without time zone");
+            builder.Property(e => e.DeletedAtUtc)
+                .HasColumnType("timestamp without time zone");
+            builder.Property(e => e.QuestionnaireId).IsRequired(false);
+            builder.Property(e => e.Key).IsRequired(false);
         }
     }
 
@@ -33,7 +40,9 @@ namespace WB.Services.Export.InterviewDataStorage.EfMappings
         {
             builder.ToTable("__generated_questionnaire_reference", schema);
             builder.HasKey(x => x.Id);
-            builder.Property(_ => _.DeletedAt);
+
+            builder.Property(e => e.DeletedAt)
+                .HasColumnType("timestamp without time zone");
         }
     }
 
@@ -49,6 +58,8 @@ namespace WB.Services.Export.InterviewDataStorage.EfMappings
         public void Configure(EntityTypeBuilder<Metadata> builder)
         {
             builder.ToTable("metadata", schema);
+            
+            builder.Property(x => x.Value).IsRequired(false);
         }
     }
 
@@ -96,6 +107,8 @@ namespace WB.Services.Export.InterviewDataStorage.EfMappings
             builder.Property(a => a.OldValue).IsRequired(false);
             builder.Property(a => a.NewValue).IsRequired(false);
             builder.Property(a => a.Comment).IsRequired(false);
+            builder.Property(e => e.TimestampUtc)
+                .HasColumnType("timestamp without time zone");
 
         }
     }

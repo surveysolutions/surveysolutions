@@ -38,6 +38,7 @@ namespace WB.Services.Scheduler
             modelBuilder.UseSnakeCaseNaming();
             modelBuilder.HasDefaultSchema(jobSettings.Value.SchemaName);
             modelBuilder.ApplyConfiguration(new JobItemConfiguration());
+            modelBuilder.ApplyConfiguration(new JobArchiveConfiguration());
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
