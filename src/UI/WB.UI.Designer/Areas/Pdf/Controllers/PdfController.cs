@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Shark.PdfConvert;
+using Microsoft.Playwright;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
@@ -18,6 +18,7 @@ using WB.Core.BoundedContexts.Designer;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.UI.Designer.Controllers.Api.Designer;
 using WB.UI.Shared.Web.Services;
+using HtmlRenderer = Markdig.Renderers.HtmlRenderer;
 
 namespace WB.UI.Designer.Areas.Pdf.Controllers
 {
@@ -31,14 +32,9 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
 
         private class PdfGenerationProgress
         {
-            public PdfGenerationProgress()
-            {
-                FilePath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
-            }
-
             private DateTime? finishTime;
 
-            public string FilePath { get; }
+            public byte[] FileArray { get; set; } = [];
             public bool IsFailed { get; private set; }
             public bool IsFinished => finishTime.HasValue;
             public TimeSpan TimeSinceFinished => this.finishTime.HasValue ? DateTime.Now - this.finishTime.Value : TimeSpan.Zero;
@@ -138,9 +134,10 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
             {
                 var questionnaireTitle = this.pdfFactory.LoadQuestionnaireTitle(id.QuestionnaireId);
 
-                byte[] content = this.fileSystemAccessor.ReadAllBytes(pdfGenerationProgress.FilePath);
+                //byte[] content = this.fileSystemAccessor.ReadAllBytes(pdfGenerationProgress.FilePath);
+                byte[] content = pdfGenerationProgress.FileArray;
 
-                this.fileSystemAccessor.DeleteFile(pdfGenerationProgress.FilePath);
+                //this.fileSystemAccessor.DeleteFile(pdfGenerationProgress.FilePath);
                 GeneratedPdfs.TryRemove(pdfKey, out _);
 
                 // MS edge brakes on long file name
@@ -162,7 +159,7 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
             var pdfKey = GetHtmlKey(id, translation);
             PdfGenerationProgress pdfGenerationProgress = GeneratedPdfs.GetOrAdd(pdfKey, _ => StartNewHtmlGeneration(id, translation, timezoneOffsetMinutes));
 
-            long sizeInKb = this.GetFileSizeInKb(pdfGenerationProgress.FilePath);
+            long sizeInKb = pdfGenerationProgress.FileArray.Length / 1024;
             if (sizeInKb == 0)
                 return pdfGenerationProgress.IsFinished 
                     ? this.Json(PdfStatus.Failed(PdfMessages.FailedToGenerate))
@@ -190,9 +187,10 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
             {
                 var questionnaireTitle = this.pdfFactory.LoadQuestionnaireTitle(id.QuestionnaireId);
 
-                byte[] content = this.fileSystemAccessor.ReadAllBytes(pdfGenerationProgress.FilePath);
+                //byte[] content = this.fileSystemAccessor.ReadAllBytes(pdfGenerationProgress.FilePath);
+                byte[] content = pdfGenerationProgress.FileArray;
 
-                this.fileSystemAccessor.DeleteFile(pdfGenerationProgress.FilePath);
+                //this.fileSystemAccessor.DeleteFile(pdfGenerationProgress.FilePath);
                 GeneratedPdfs.TryRemove(pdfKey, out _);
 
                 // MS edge brakes on long file name
@@ -228,7 +226,8 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
                 }
             }
 
-            long sizeInKb = this.GetFileSizeInKb(pdfGenerationProgress.FilePath);
+            //long sizeInKb = this.GetFileSizeInKb(pdfGenerationProgress.FilePath);
+            long sizeInKb = pdfGenerationProgress.FileArray.LongLength / 1024;
 
             if (sizeInKb == 0)
                 return pdfGenerationProgress.IsFinished 
@@ -288,7 +287,7 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
             var questionnaireHtml = GetHtmlContent(id, newPdfGenerationProgress, translation, timezoneOffsetMinutes ?? 0);
             if (!newPdfGenerationProgress.IsFailed)
             {
-                System.IO.File.WriteAllText(newPdfGenerationProgress.FilePath, questionnaireHtml);
+                //System.IO.File.WriteAllText(newPdfGenerationProgress.FilePath, questionnaireHtml);
                 newPdfGenerationProgress.Finish();
             }
             
@@ -321,24 +320,28 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
             if(generationProgress.IsFailed)
                 return;
 
-            var pageFooterUrl = Url.Link("QuestionnaireFooter", new { });
-            var pathToWkHtmlToPdfExecutable = this.pdfSettings.Value.WKHtmlToPdfExecutablePath;
-            Task.Factory.StartNew(() =>
+            var footerHtml = RenderActionResultToString(nameof(RenderQuestionnaireFooter),new {}).Result;
+
+            Task.Factory.StartNew(async () =>
             {
                 try
                 {
-                    PdfConvert.Convert(new PdfConversionSettings
+                    using var playwright = await Playwright.CreateAsync();
+                    var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions()
                     {
-                        Content = questionnaireHtml,
-                        PageFooterUrl = pageFooterUrl,
-                        OutputPath = generationProgress.FilePath,
-                         
-                        PdfToolPath = pathToWkHtmlToPdfExecutable, 
-                        WkHtmlToPdfExeName = this.pdfSettings.Value.WkHtmlToPdfExeName,
-                        ExecutionTimeout = this.pdfSettings.Value.PdfGenerationTimeoutInMilliseconds,
-                        TempFilesPath = Path.GetTempPath(),
-                        Size = PdfPageSize.A4,
-                        Margins = new PdfPageMargins() {Top = 10, Bottom = 7, Left = 0, Right = 0},
+                        Headless = true
+                    });
+
+                    var page = await browser.NewPageAsync();
+                    await page.SetContentAsync(questionnaireHtml);
+
+                    generationProgress.FileArray = await page.PdfAsync(new PagePdfOptions()
+                    {
+                        HeaderTemplate = null,
+                        FooterTemplate = footerHtml,
+                        Format = "A4",
+                        DisplayHeaderFooter = true,
+                        Margin = new Margin() {Top = "10", Bottom = "7", Left = "0", Right = "0"},
                     });
 
                     generationProgress.Finish();
@@ -349,6 +352,23 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
                     generationProgress.Fail();
                 }
             }, TaskCreationOptions.LongRunning);
+        }
+        
+        [ResponseCache(Duration = 0, NoStore = true)]
+        [HttpGet]
+        [Route("install")]
+        public JsonResult Install()
+        {
+            try
+            {
+                Microsoft.Playwright.Program.Main(["install"]);
+
+                return this.Json("Ok");
+            }
+            catch (Exception e)
+            {
+                return this.Json("Fail: " + e.Message);
+            }
         }
 
         private async Task<string> RenderActionResultToString(string viewName, object model)
