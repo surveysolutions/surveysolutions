@@ -131,7 +131,7 @@ export default {
         },
         responsibleId(to) {
             this.onChange((q) => {
-                q.responsibleId = to
+                q.responsible = to == null ? null : to.value
             })
 
             nextTick(() => {
@@ -170,10 +170,10 @@ export default {
 
         queryString() {
             return {
-                QuestionnaireId: (this.selectedQuestionnaireId || {}).key || null,
-                QuestionnaireVersion: this.selectedVersionValue,
-                ResponsibleId: (this.responsibleId || {}).key || null,
-                AssignmentId: this.assignmentId,
+                questionnaireId: (this.selectedQuestionnaireId || {}).key || null,
+                questionnaireVersion: this.selectedVersionValue,
+                responsible: (this.responsibleId || {}).value || null,
+                assignmentId: this.assignmentId,
             }
         },
 
@@ -196,7 +196,6 @@ export default {
 
     async mounted() {
         this.assignmentId = this.query.assignmentId
-        this.responsibleId = this.query.responsibleId
     },
 
     methods: {
