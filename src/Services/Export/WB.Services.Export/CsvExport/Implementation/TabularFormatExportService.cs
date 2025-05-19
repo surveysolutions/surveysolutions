@@ -185,7 +185,7 @@ namespace WB.Services.Export.CsvExport.Implementation
                     descriptionBuilder.AppendLine($"All events are included");
             }
             descriptionBuilder.AppendLine($"The data in this download were collected using the Survey Solutions questionnaire \"{questionnaire.Title}\". ");
-            descriptionBuilder.AppendLine($"You can open the questionnaire in the Survey Solutions Designer online by that link: {questionnaireUrl}");
+            descriptionBuilder.AppendLine($"You can open the questionnaire in the Survey Solutions Designer online by clicking this link: {questionnaireUrl}");
 
             if (!isCaptionOnly)
             {

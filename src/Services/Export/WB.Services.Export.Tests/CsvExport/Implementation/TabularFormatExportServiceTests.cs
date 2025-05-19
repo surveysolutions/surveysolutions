@@ -130,7 +130,7 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation
             Assert.That(description, Is.Not.Empty);
             var lines = description.Split(new[] {Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries);
             Assert.That(lines[1], Is.EqualTo($"The data in this download were collected using the Survey Solutions questionnaire \"{questionnaireDocument.Title}\". "));
-            Assert.That(lines[2], Is.EqualTo($"You can open the questionnaire in the Survey Solutions Designer online by that link: https://designer.mysurvey.solutions/questionnaire/details/11111111111111111111111111111111$1"));
+            Assert.That(lines[2], Is.EqualTo($"You can open the questionnaire in the Survey Solutions Designer online by clicking this link: https://designer.mysurvey.solutions/questionnaire/details/11111111111111111111111111111111$1"));
         }
         
         [Test]
