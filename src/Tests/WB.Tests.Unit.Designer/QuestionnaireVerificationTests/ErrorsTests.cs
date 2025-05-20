@@ -316,6 +316,30 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                 .ExpectError("WB0118");
 
         [Test]
+        public void question_condition_uses_forbidden_Random_properties()
+            => Create.QuestionnaireDocumentWithOneChapter(new[]
+                {
+                    Create.Question(enablementCondition: "(new Random().Next() > 0")
+                })
+                .ExpectError("WB0324");
+
+        [Test]
+        public void group_condition_uses_forbidden_Random_properties()
+            => Create.QuestionnaireDocumentWithOneChapter(new[]
+                {
+                    Create.Group(enablementCondition: "(new Random().Next() > 0")
+                })
+                .ExpectError("WB0324");
+
+        [Test]
+        public void variable_condition_uses_forbidden_Random_properties()
+            => Create.QuestionnaireDocumentWithOneChapter(new[]
+                {
+                    Create.Variable(expression : "(new Random().Next() > 0")
+                })
+                .ExpectError("WB0324");
+
+        [Test]
         public void circular_reference_in_enablings()
             => Create.QuestionnaireDocumentWithOneChapter(children: new[]
                 {

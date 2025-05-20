@@ -13,6 +13,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
     {
         private static readonly string[] ForbiddenDateTimeStaticProperties = {"Now", "Today", "UtcNow"};
         public static readonly string ForbiddenDatetimeNow = "DateTime.Now";
+        public static readonly string ForbiddenRandomType = "Random";
 
         public IReadOnlyCollection<string> GetIdentifiersUsedInExpression(string expression)
         {
@@ -41,6 +42,23 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
             return identifiers
                 .Union(forbiddenIdentifiers)
+                .Distinct()
+                .ToReadOnlyCollection();
+        }
+
+        public IReadOnlyCollection<string> GetTypesUsedInExpression(string expression)
+        {
+            string code = WrapToClass(expression);
+            var tree = SyntaxFactory.ParseSyntaxTree(code);
+            var root = tree.GetRoot();
+
+            var types = root
+                .DescendantNodes()
+                .OfType<ObjectCreationExpressionSyntax>()
+                .Select(expr => expr.Type.ToString())
+                .Where(name => !string.IsNullOrEmpty(name));
+
+            return types
                 .Distinct()
                 .ToReadOnlyCollection();
         }

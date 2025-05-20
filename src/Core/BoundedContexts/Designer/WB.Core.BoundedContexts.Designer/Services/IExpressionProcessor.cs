@@ -8,6 +8,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
     public interface IExpressionProcessor
     {
         IReadOnlyCollection<string> GetIdentifiersUsedInExpression(string expression);
+        IReadOnlyCollection<string> GetTypesUsedInExpression(string expression);
         bool ContainsBitwiseAnd(string expression);
         bool ContainsBitwiseOr(string expression);
     }

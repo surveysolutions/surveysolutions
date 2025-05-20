@@ -850,4 +850,7 @@
   <data name="WB0323_CriticalRuleMessageIsTooLong" xml:space="preserve">
     <value>Critical condition message more than {0} characters.</value>
   </data>
+  <data name="WB0324_ExpressionReferencingForbiddenRandomType" xml:space="preserve">
+    <value>Expression referencing forbidden Random type. Consider using random questionnaire property.</value>
+  </data>
 </root>

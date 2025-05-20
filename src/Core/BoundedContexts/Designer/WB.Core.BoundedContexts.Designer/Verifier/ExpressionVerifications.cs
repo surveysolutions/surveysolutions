@@ -43,6 +43,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         private IEnumerable<Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>>> ErrorsVerifiers => new []
         {
             ExpressionError(ExpressionUsesForbiddenDateTimeProperties, "WB0118", WB0118_ExpressionReferencingForbiddenDateTimeProperies),
+            ExpressionError(ExpressionUsesForbiddenRandomType, "WB0324", VerificationMessages.WB0324_ExpressionReferencingForbiddenRandomType),
             ExpressionWarning(this.BitwiseAnd, "WB0237", VerificationMessages.WB0237_BitwiseAnd),
             ExpressionWarning(this.BitwiseOr, "WB0238", VerificationMessages.WB0238_BitwiseOr),
 
@@ -54,6 +55,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             CriticalRuleError(CriticalRuleMessageLengthMoreThanLimitLength, "WB0323", string.Format(VerificationMessages.WB0323_CriticalRuleMessageIsTooLong, MaxValidationMessageLength)),
             
             Critical<IVariable>(VariableExpressionHasLengthMoreThan10000Characters, "WB0005", string.Format(VerificationMessages.WB0005_VariableExpressionHasLengthMoreThan10000Characters, MaxExpressionLength)),
+            Error<IComposite, ValidationCondition>(GetValidationConditionsOrEmpty, ValidationConditionUsesForbiddenRandomType, "WB0324", index => VerificationMessages.WB0324_ExpressionReferencingForbiddenRandomType),
             Error<IComposite, ValidationCondition>(GetValidationConditionsOrEmpty, ValidationConditionUsesForbiddenDateTimeProperties, "WB0118", index => string.Format(WB0118_ExpressionReferencingForbiddenDateTimeProperies, index)),
             Error<IComposite, ValidationCondition>(GetValidationConditionsOrEmpty, ValidationConditionIsTooLong, "WB0104", index => string.Format(VerificationMessages.WB0104_ValidationConditionIsTooLong, index, MaxExpressionLength), VerificationMessageLevel.Critical),
             Error<IComposite, ValidationCondition>(GetValidationConditionsOrEmpty, ValidationConditionIsEmpty, "WB0106", index => string.Format(VerificationMessages.WB0106_ValidationConditionIsEmpty, index)),
@@ -445,6 +447,9 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         private bool ValidationConditionUsesForbiddenDateTimeProperties(IComposite question, ValidationCondition validationCondition, MultiLanguageQuestionnaireDocument questionnaire)
             => ExpressionUsesForbiddenDateTimeProperties(validationCondition.Expression, questionnaire);
 
+        private bool ValidationConditionUsesForbiddenRandomType(IComposite question, ValidationCondition validationCondition, MultiLanguageQuestionnaireDocument questionnaire)
+            => ExpressionUsesForbiddenRandomType(validationCondition.Expression, questionnaire);
+
         private static bool ValidationConditionIsEmpty(IComposite question, ValidationCondition validationCondition, MultiLanguageQuestionnaireDocument questionnaire)
             => string.IsNullOrWhiteSpace(validationCondition.Expression);
 
@@ -509,6 +514,21 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             if (string.IsNullOrWhiteSpace(expression)) return false;
             return GetIdentifiersUsedInExpression(expression, questionnaire)
                 .Contains(RoslynExpressionProcessor.ForbiddenDatetimeNow);
+        }
+
+        protected bool ExpressionUsesForbiddenRandomType(string? expression,
+            MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            if (string.IsNullOrWhiteSpace(expression)) return false;
+            var identifiers = GetTypesUsedInExpression(expression, questionnaire);
+            return identifiers.Contains(RoslynExpressionProcessor.ForbiddenRandomType);
+        }
+
+        protected IReadOnlyCollection<string> GetTypesUsedInExpression(string expression,
+            MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            string expressionWithInlinedMacros = this.macrosSubstitutionService.InlineMacros(expression, questionnaire.Macros.Values);
+            return this.expressionProcessor.GetTypesUsedInExpression(expressionWithInlinedMacros);
         }
 
         protected IReadOnlyCollection<string> GetIdentifiersUsedInExpression(string expression,
