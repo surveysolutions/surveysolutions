@@ -69,7 +69,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 ? left.ChildNodesAndTokens().Last()
                 : childNodesAndTokens.First();
 
-            return dateTimeNode.ToFullString().Trim() == "DateTime";
+            var dateTimeString = dateTimeNode.ToFullString().Trim();
+            return dateTimeString is "DateTime" or "DateTimeOffset";
         }
 
         public bool ContainsBitwiseAnd(string expression)

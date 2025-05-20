@@ -290,6 +290,30 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                     Create.Variable(expression: "(System.DateTime.UtcNow.AddMonth(1) - System.DateTime.Today).TotalSeconds")
                 })
                 .ExpectError("WB0118");
+        
+        [Test]
+        public void static_text_condition_uses_forbidden_DateTimeOffset_properties()
+            => Create.QuestionnaireDocumentWithOneChapter(new[]
+                {
+                    Create.StaticText(enablementCondition: "DateTimeOffset.Now.AddMonth(1) > System.DateTimeOffset.Today")
+                })
+                .ExpectError("WB0118");
+
+        [Test]
+        public void group_condition_uses_forbidden_DateTimeOffset_properties()
+            => Create.QuestionnaireDocumentWithOneChapter(new[]
+                {
+                    Create.Group(enablementCondition: "DateTimeOffset.Now.AddMonth(1) > DateTimeOffset.Today")
+                })
+                .ExpectError("WB0118");
+
+        [Test]
+        public void variable_condition_uses_forbidden_DateTimeOffset_properties()
+            => Create.QuestionnaireDocumentWithOneChapter(new[]
+                {
+                    Create.Variable(expression: "(System.DateTimeOffset.UtcNow.AddMonth(1) - System.DateTimeOffset.Today).TotalSeconds")
+                })
+                .ExpectError("WB0118");
 
         [Test]
         public void circular_reference_in_enablings()
