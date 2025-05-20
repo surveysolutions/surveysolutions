@@ -331,10 +331,12 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
                     using var playwright = await Playwright.CreateAsync();
                     var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions()
                     {
-                        Headless = true
+                        Headless = true,
+                        Args = new[] { "--disable-javascript" }
                     });
 
                     var page = await browser.NewPageAsync();
+                    await page.RouteAsync("**/*.js", async route => await route.AbortAsync());
                     await page.SetContentAsync(questionnaireHtml);
 
                     generationProgress.FileArray = await page.PdfAsync(new PagePdfOptions()
