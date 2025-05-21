@@ -26,8 +26,8 @@
     <PackageReference Include="StackExchange.Exceptional.AspNetCore" Version="3.0.1" />
     <PackageReference Include="StackExchange.Exceptional.PostgreSql" Version="3.0.1" />
     <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
-    <PackageReference Include="System.Security.Cryptography.Xml" Version="9.0.4" />
-    <PackageReference Include="System.Text.Json" Version="9.0.4" />
+    <PackageReference Include="System.Security.Cryptography.Xml" Version="9.0.5" />
+    <PackageReference Include="System.Text.Json" Version="9.0.5" />
   </ItemGroup>
   <ItemGroup Condition=" '$(Configuration)' == 'Debug' ">
     <PackageReference Include="Yarp.ReverseProxy" Version="2.3.0" />
