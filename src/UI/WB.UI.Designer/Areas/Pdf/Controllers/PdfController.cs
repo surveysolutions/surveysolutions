@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Net;
@@ -10,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Playwright;
+using StackExchange.Exceptional;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
@@ -352,6 +354,7 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
                 }
                 catch (Exception exception)
                 {
+                    exception.LogNoContext();
                     this.logger.LogError(exception, $"Failed to generate PDF {id}");
                     generationProgress.Fail();
                 }
