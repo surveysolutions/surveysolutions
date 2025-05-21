@@ -104,7 +104,7 @@ jobs:
             -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
       - name: Scheduler service tests
         run: |
-          echo "{ \"ConnectionStrings\": { \"DefaultConnection\": \"${{ env.DB_CONN }}Database=export_service_tests;\" }}" > appsettings.json
+          echo "{ \"ConnectionStrings\": { \"DefaultConnection\": \"${{ env.DB_CONN }}Database=export_scheduler_tests;\" }}" > appsettings.json
           dotnet test src/Services/Core/WB.Services.Scheduler.Tests \
             --collect:"XPlat Code Coverage" \
             -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
