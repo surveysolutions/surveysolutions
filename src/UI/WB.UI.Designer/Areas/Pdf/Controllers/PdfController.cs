@@ -372,8 +372,11 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
                 lock (lockInstalled)
                 {
                     if (!installed)
-                        Microsoft.Playwright.Program.Main(["install"]);
-                    installed = true;
+                    {
+                        var returnCode = Microsoft.Playwright.Program.Main(["install"]);
+                        installed = true;
+                        return this.Json("Ok. Installed" + returnCode);
+                    }
                 }
 
                 return this.Json("Ok");
