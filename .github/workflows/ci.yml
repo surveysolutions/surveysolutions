@@ -98,6 +98,7 @@ jobs:
             -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
       - name: Export service tests
         run: |
+          echo "{ \"ConnectionStrings\": { \"DefaultConnection\": \"${{ env.DB_CONN }}Database=export_service_tests;\" }}" > appsettings.json
           dotnet test src/Services/Export/WB.Services.Export.Tests \
             --collect:"XPlat Code Coverage" \
             -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
