@@ -60,7 +60,7 @@
     <PackageReference Include="NUnit.Extension.NUnitProjectLoader" Version="3.8.0" />
     <PackageReference Include="NUnit.Extension.TeamCityEventListener" Version="1.0.10" />
     <PackageReference Include="NUnit.Extension.VSProjectLoader" Version="3.9.0" />
-    <PackageReference Include="NUnit3TestAdapter" Version="4.5.0">
+    <PackageReference Include="NUnit3TestAdapter" Version="5.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
