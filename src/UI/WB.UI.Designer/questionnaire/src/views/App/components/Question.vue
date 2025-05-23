@@ -223,7 +223,7 @@
                         $t('QuestionnaireEditor.EditorShowComments',
                             {
                                 count: commentsCount
-                        }) }}</span>
+                            }) }}</span>
                     <span v-show="isCommentsBlockVisible">{{ $t('QuestionnaireEditor.EditorHideComment') }}</span>
                 </button>
                 <button type="button" v-show="!questionnaire.isReadOnlyForUser && !currentChapter.isReadOnly"
@@ -441,7 +441,7 @@ export default {
             this.showInstruction = this.activeQuestion.instructions ? true : false;
             this.showEnablingConditions = this.activeQuestion.enablementCondition ? true : false;
 
-            emitter.emit('questionChangesDiscarded');
+            emitter.emit('questionChangesDiscarded', this.activeQuestion);
         },
         toggleComments() {
             this.commentsStore.toggleComments();
