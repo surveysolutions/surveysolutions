@@ -67,8 +67,8 @@
 @selected-panel-border-color: #dbdfe2;
 @selected-panel-grey-color: #7e898f;
 @leftpanel-accent-color: #e004c9;
-@leftpanel-icons-sprite: url('../i/designer-left-icons-4-3.png');
-@leftpanel-icon-height: 50px;
+@leftpanel-icons-sprite: url('../i/designer-left-icons-5.svg');
+@leftpanel-icon-height: 52px;
 
 #left-menu {
     position: absolute;
@@ -98,43 +98,73 @@
 
 
             &.left-menu-chapters {
-                background: @leftpanel-icons-sprite 0 0 no-repeat;
+                background-image: @leftpanel-icons-sprite;
+                background-size: 100%;
+                background-position: 0 0;
+                background-repeat: no-repeat;
             }
 
             &.left-menu-macroses {
-                background: @leftpanel-icons-sprite 0 -@leftpanel-icon-height*2 no-repeat;
+                background-image: @leftpanel-icons-sprite;
+                background-size: 100%;
+                background-position: 0 -@leftpanel-icon-height*2;
+                background-repeat: no-repeat;
             }
 
             &.left-menu-scenarios {
-                background: @leftpanel-icons-sprite 0 -@leftpanel-icon-height*6 no-repeat;
+                background-image: @leftpanel-icons-sprite;
+                background-size: 100%;
+                background-position: 0 -@leftpanel-icon-height*6;
+                background-repeat: no-repeat;
             }
 
             &.left-menu-lookupTables {
-                background: @leftpanel-icons-sprite 0 -@leftpanel-icon-height*3 no-repeat;
+                background-image: @leftpanel-icons-sprite;
+                background-size: 100%;
+                background-position: 0 -@leftpanel-icon-height*3;
+                background-repeat: no-repeat;
             }
 
             &.left-menu-attachments {
-                background: @leftpanel-icons-sprite 0 -@leftpanel-icon-height*4 no-repeat;
+                background-image: @leftpanel-icons-sprite;
+                background-size: 100%;
+                background-position: 0 -@leftpanel-icon-height*4;
+                background-repeat: no-repeat;
             }
 
             &.left-menu-translations {
-                background: @leftpanel-icons-sprite 0 -@leftpanel-icon-height*1 no-repeat;
+                background-image: @leftpanel-icons-sprite;
+                background-size: 100%;
+                background-position: 0 -@leftpanel-icon-height*1;
+                background-repeat: no-repeat;
             }
 
             &.left-menu-comments {
-                background: @leftpanel-icons-sprite 0 -@leftpanel-icon-height*7 no-repeat;
+                background-image: @leftpanel-icons-sprite;
+                background-size: 100%;
+                background-position: 0 -@leftpanel-icon-height*7;
+                background-repeat: no-repeat;
             }
 
             &.left-menu-criticality-conditions {
-                background: @leftpanel-icons-sprite 0 -@leftpanel-icon-height*9 no-repeat;
+                background-image: @leftpanel-icons-sprite;
+                background-size: 100%;
+                background-position: 0 -@leftpanel-icon-height*9;
+                background-repeat: no-repeat;
             }
 
             &.left-menu-metadata {
-                background: @leftpanel-icons-sprite 0 -@leftpanel-icon-height*5 no-repeat;
+                background-image: @leftpanel-icons-sprite;
+                background-size: 100%;
+                background-position: 0 -@leftpanel-icon-height*5;
+                background-repeat: no-repeat;
             }
 
             &.left-menu-categories {
-                background: @leftpanel-icons-sprite 0 -@leftpanel-icon-height*8 no-repeat;
+                background-image: @leftpanel-icons-sprite;
+                background-size: 100%;
+                background-position: 0 -@leftpanel-icon-height*8;
+                background-repeat: no-repeat;
             }
 
             &:hover {
@@ -931,14 +961,14 @@
                     margin-left: 0;
 
                     .ace_placeholder {
-                       color: @macroses-decription-color;
-                       margin: 0;
-                      .arial-font();
-                      .lucida-console-font();
-                      font-size: 14px;
+                        color: @macroses-decription-color;
+                        margin: 0;
+                        .arial-font();
+                        .lucida-console-font();
+                        font-size: 14px;
                     }
                 }
-              
+
                 .actions {
                     button {
                         background: @macroses-panel-macros-bg;
