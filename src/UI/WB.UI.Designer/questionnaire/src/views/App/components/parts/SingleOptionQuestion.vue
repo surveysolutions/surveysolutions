@@ -1,7 +1,8 @@
 <template>
     <div class="row">
         <div class="col-xs-12">
-            <label class="wb-label" for="cb-categorical-kind">{{ $t('QuestionnaireEditor.QuestionDisplayMode') }}</label>
+            <label class="wb-label" for="cb-categorical-kind">{{ $t('QuestionnaireEditor.QuestionDisplayMode')
+                }}</label>
         </div>
     </div>
     <div class="row">
@@ -112,7 +113,8 @@
         </div>
     </div>
     <p></p>
-    <div class="row" v-if="activeQuestion.isFilteredCombobox && !isCascade && !isLinkedToReusableCategories && !isLinked">
+    <div class="row"
+        v-if="activeQuestion.isFilteredCombobox && !isCascade && !isLinkedToReusableCategories && !isLinked">
         <div class="col-xs-12">
             <FilteredComboboxOptionsTemplate :active-question="activeQuestion" :questionnaire-id="questionnaireId">
             </FilteredComboboxOptionsTemplate>
@@ -120,7 +122,8 @@
                 $t('QuestionnaireEditor.QuestionAddClassification') }}
             </a>
             <p></p>
-            <add-classification ref="classification" :activeQuestion='activeQuestion' :questionnaireId="questionnaireId">
+            <add-classification ref="classification" :activeQuestion='activeQuestion'
+                :questionnaireId="questionnaireId">
             </add-classification>
         </div>
     </div>
@@ -203,7 +206,7 @@ export default {
     },
     mounted() {
         this.$emitter.on('questionChangesDiscarded', this.questionChangesDiscarded);
-        this.reset();
+        this.reset(this.activeQuestion);
     },
     unmounted() {
         this.$emitter.off('questionChangesDiscarded', this.questionChangesDiscarded);
@@ -250,13 +253,14 @@ export default {
         },
     },
     methods: {
-        reset() {
-            this.isLinkedToReusableCategories = !_.isEmpty(this.activeQuestion.categoriesId);
-            this.isCascade = !_.isEmpty(this.activeQuestion.cascadeFromQuestionId);
-            this.isLinked = !_.isEmpty(this.activeQuestion.linkedToEntityId);
+        reset(question) {
+            debugger
+            this.isLinkedToReusableCategories = !_.isEmpty(question.categoriesId);
+            this.isCascade = !_.isEmpty(question.cascadeFromQuestionId);
+            this.isLinked = !_.isEmpty(question.linkedToEntityId);
         },
-        questionChangesDiscarded() {
-            this.reset()
+        questionChangesDiscarded(question) {
+            this.reset(question)
         },
         async prepareToSave() {
             if (this.hasOwnCategories)

@@ -334,6 +334,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
             var existingMap = this.AvailableMaps.FirstOrDefault(x => x.MapName == selectedMapToLoad);
             if (existingMap == null) return;
 
+            if (this.Map == null || this.MapView == null) return;
+            
             if (this.SelectedMap != selectedMapToLoad)
             {
                 var baseMap = await mapUtilityService.GetBaseMap(existingMap);
@@ -352,7 +354,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     FirstLoad = false;
                     await MapView.SetViewpointGeometryAsync(this.Map.Basemap.BaseLayers[0].FullExtent);
                     
-                    MapView.ViewpointChanged += MapViewPointChanged;
+                    this.MapView.ViewpointChanged += MapViewPointChanged;
                 }
                 
                 if (this.MapView?.VisibleArea != null)

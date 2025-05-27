@@ -209,7 +209,7 @@ namespace WB.UI.Designer.Code
                 case QuestionnaireItemType.Roster:
                     return "roster";
                 case QuestionnaireItemType.StaticText:
-                    return "static-text";
+                    return "statictext";
                 case QuestionnaireItemType.Variable:
                     return "variable";
             }
