@@ -26,7 +26,10 @@ using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.Infrastructure.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Questionnaire.Documents;
+using WB.Core.SharedKernels.Questionnaire.Translations;
 using Group = Main.Core.Entities.SubEntities.Group;
 
 
@@ -104,6 +107,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private readonly ILookupTableService lookupTableService;
         private readonly IAttachmentService attachmentService;
         private readonly IDesignerTranslationService translationService;
+        private readonly IQuestionnaireTranslator questionnaireTranslator;
+        private readonly ITranslationsService translationsService;
         private readonly IReusableCategoriesService reusableCategoriesService;
         private readonly IFindReplaceService findReplaceService;
         private readonly IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService;
@@ -118,7 +123,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             IDesignerTranslationService translationService,
             IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService,
             IReusableCategoriesService reusableCategoriesService,
-            IFindReplaceService findReplaceService)
+            IFindReplaceService findReplaceService, 
+            IQuestionnaireTranslator questionnaireTranslator, 
+            ITranslationsService translationsService
+            )
         {
             this.clock = clock;
             this.lookupTableService = lookupTableService;
@@ -127,6 +135,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.questionnaireHistoryVersionsService = questionnaireHistoryVersionsService;
             this.reusableCategoriesService = reusableCategoriesService;
             this.findReplaceService = findReplaceService;
+            this.questionnaireTranslator = questionnaireTranslator;
+            this.translationsService = translationsService;
         }
 
         #region Questionnaire command handlers
@@ -393,20 +403,25 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
 
+            AddOrUpdateTranslationImpl(command.TranslationId, command.OldTranslationId, command.Name);
+        }
+
+        private void AddOrUpdateTranslationImpl(Guid translationId, Guid? oldTranslationId, string name)
+        {
             var translation = new Translation
             {
-                Id = command.TranslationId,
-                Name = command.Name,
+                Id = translationId,
+                Name = name,
             };
-            innerDocument.Translations.RemoveAll(x => x.Id == command.TranslationId);
+            innerDocument.Translations.RemoveAll(x => x.Id == translationId);
 
-            if (command.OldTranslationId.HasValue)
+            if (oldTranslationId.HasValue)
             {
-                innerDocument.Translations.RemoveAll(x => x.Id == command.OldTranslationId.Value);
+                innerDocument.Translations.RemoveAll(x => x.Id == oldTranslationId.Value);
 
                 if (innerDocument.DefaultTranslation.HasValue &&
-                    innerDocument.DefaultTranslation == command.OldTranslationId)
-                    innerDocument.DefaultTranslation = command.TranslationId;
+                    innerDocument.DefaultTranslation == oldTranslationId)
+                    innerDocument.DefaultTranslation = translationId;
             }
 
             innerDocument.Translations.Add(translation);
@@ -421,11 +436,42 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 innerDocument.DefaultTranslation = null;
         }
 
-        public void SetDefaultTranslation(SetDefaultTranslation command)
+        public void SetDefaultTranslationOld(SetDefaultTranslation command)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
 
             this.innerDocument.DefaultTranslation = command.TranslationId;
+        }
+        
+        public void SetDefaultTranslation(SetDefaultTranslation command)
+        {
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
+
+            if (!command.TranslationId.HasValue) 
+                return;
+            
+            var translationInfo = innerDocument.Translations.FirstOrDefault(t => t.Id == command.TranslationId);
+            if (translationInfo == null) 
+                return;
+
+            var newTranslationId = Guid.NewGuid();
+            var translations = translationService.GetFromQuestionnaire(innerDocument)
+                .Where(t => t.Value != null)
+                .ToList();
+            translations.ForEach(t =>
+            {
+                t.Id = Guid.NewGuid();
+                t.TranslationId = newTranslationId;
+            });
+            translationService.Store(translations);
+
+            var translationName = innerDocument.DefaultLanguageName ?? "";
+            AddOrUpdateTranslationImpl(newTranslationId, null, translationName);
+                    
+            var translation = translationsService.Get(innerDocument.PublicKey, command.TranslationId.Value);
+            innerDocument = questionnaireTranslator.Translate(innerDocument, translation);
+            innerDocument.DefaultLanguageName = translationInfo.Name;
+            innerDocument.Translations.RemoveAll(x => x.Id == translationInfo.Id);
         }
 
         #endregion
