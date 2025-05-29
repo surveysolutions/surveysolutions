@@ -50,13 +50,13 @@ export function setDefaultTranslation(questionnaireId, translationId) {
     });
 }
 
-export function switchOnTranslation(questionnaireId, translationId) {
+export function switchToTranslation(questionnaireId, translationId) {
     var command = {
         questionnaireId: questionnaireId,
         translationId: translationId
     };
-    return commandCall('SwitchOnTranslation', command).then(response => {
-        emitter.emit('switchOnTranslationSet', {
+    return commandCall('SwitchToTranslation', command).then(response => {
+        emitter.emit('switchedToTranslation', {
             translationId: translationId
         });
     });

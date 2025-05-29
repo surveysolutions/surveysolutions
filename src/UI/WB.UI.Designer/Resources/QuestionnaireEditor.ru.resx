@@ -1677,10 +1677,10 @@
   <data name="AttachmentSizeIsTooBig" xml:space="preserve">
     <value>Размер вложения слишком большой. Максимальный размер: {{size}}</value>
 </data>
-  <data name="SwitchOn" xml:space="preserve">
+  <data name="SwitchTo" xml:space="preserve">
     <value>Переключить на</value>
 </data>
-  <data name="SwitchOnTranslationConfirm" xml:space="preserve">
+  <data name="SwitchToTranslationConfirm" xml:space="preserve">
     <value>Переключить на изменит язык отображения опросника. Перевод должен содержать текст для всех элементов.</value>
 </data>
 </root>

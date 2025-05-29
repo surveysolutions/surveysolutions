@@ -3117,15 +3117,15 @@ namespace WB.UI.Designer.Resources {
             }
         }
         
-        public static string SwitchOn {
+        public static string SwitchTo {
             get {
-                return ResourceManager.GetString("SwitchOn", resourceCulture);
+                return ResourceManager.GetString("SwitchTo", resourceCulture);
             }
         }
         
-        public static string SwitchOnTranslationConfirm {
+        public static string SwitchToTranslationConfirm {
             get {
-                return ResourceManager.GetString("SwitchOnTranslationConfirm", resourceCulture);
+                return ResourceManager.GetString("SwitchToTranslationConfirm", resourceCulture);
             }
         }
     }

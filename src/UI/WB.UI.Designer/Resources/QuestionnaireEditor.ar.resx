@@ -1601,10 +1601,10 @@
     <data name="AttachmentSizeIsTooBig" xml:space="preserve">
     <value>حجم المرفق كبير جدًا. الحد الأقصى: {{size}}</value>
 </data>
-    <data name="SwitchOn" xml:space="preserve">
+    <data name="SwitchTo" xml:space="preserve">
     <value>تبديل</value>
 </data>
-    <data name="SwitchOnTranslationConfirm" xml:space="preserve">
+    <data name="SwitchToTranslationConfirm" xml:space="preserve">
     <value>سيؤدي التبديل إلى تغيير لغة عرض الاستبيان. يجب أن تحتوي الترجمة على نص لجميع العناصر.</value>
 </data>
 </root>

@@ -36,8 +36,8 @@
 
                     <div class="permanent-actions pull-right">
                         <button type="button" class="btn lighter-hover"
-                            v-if="!isReadOnlyForUser && translation.translationId" @click.self="switchOnTranslation();">
-                            {{ $t('QuestionnaireEditor.SwitchOn') }}
+                            v-if="!isReadOnlyForUser && translation.translationId" @click.self="switchToTranslation();">
+                            {{ $t('QuestionnaireEditor.SwitchTo') }}
                         </button>
                         <button type="button" class="btn lighter-hover" v-if="!isReadOnlyForUser"
                             v-show="!translation.isDefault" @click.self="setDefaultTranslation(true);">
@@ -69,13 +69,13 @@
 import { isUndefined, isNull, cloneDeep } from 'lodash'
 import moment from 'moment'
 import { notice } from '../../../../services/notificationService';
-import { trimText, createQuestionForDeleteConfirmationPopup, createSwitchOnTranslationConfirmationPopup } from '../../../../services/utilityService'
+import { trimText, createQuestionForDeleteConfirmationPopup, createSwitchToTranslationConfirmationPopup } from '../../../../services/utilityService'
 import { useQuestionnaireStore } from '../../../../stores/questionnaire';
 import {
     deleteTranslation,
     updateTranslation,
     setDefaultTranslation,
-    switchOnTranslation
+    switchToTranslation
 } from '../../../../services/translationService';
 
 import { updateQuestionnaireSettings } from '../../../../services/questionnaireService';
@@ -202,7 +202,7 @@ export default {
             await setDefaultTranslation(this.questionnaireId, isDefault ? this.translation.translationId : null)
         },
 
-        async switchOnTranslation() {
+        async switchToTranslation() {
             event.preventDefault();
 
             if (!this.translation.translationId)
@@ -211,11 +211,11 @@ export default {
             var translationName = this.translation.name || this.$t('QuestionnaireEditor.SideBarTranslationNoName');
 
             var trimmedTranslationName = trimText(translationName);
-            var confirmParams = createSwitchOnTranslationConfirmationPopup(trimmedTranslationName)
+            var confirmParams = createSwitchToTranslationConfirmationPopup(trimmedTranslationName)
 
             confirmParams.callback = confirm => {
                 if (confirm) {
-                    switchOnTranslation(this.questionnaireId, this.translation.translationId)
+                    switchToTranslation(this.questionnaireId, this.translation.translationId)
                         .then(() => {
                             location.reload();
                         })

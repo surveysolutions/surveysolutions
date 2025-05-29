@@ -488,7 +488,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
              { "AddOrUpdateTranslation", typeof (AddOrUpdateTranslation) },
              { "DeleteTranslation", typeof (DeleteTranslation) },
              { "SetDefaultTranslation", typeof (SetDefaultTranslation) },
-             { "SwitchOnTranslation", typeof (SwitchOnTranslation) },
+             { "SwitchToTranslation", typeof (SwitchToTranslation) },
              // Metadata
              { "UpdateMetadata", typeof (UpdateMetadata) },
              { nameof(PassOwnershipFromQuestionnaire), typeof(PassOwnershipFromQuestionnaire) },

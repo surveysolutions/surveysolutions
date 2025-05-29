@@ -512,8 +512,8 @@
     "SideBarCriticalityConditionNoMessage": "Kritické pravidlo bez zprávy",
     "SideBarShowDescription": "přidat popis",
     "AttachmentSizeIsTooBig": "Příloha je příliš velká. Maximální velikost: {{size}}",
-    "SwitchOn": "Přepnout",
-    "SwitchOnTranslationConfirm": "Přepnutím se změní jazyk dotazníku. Překlad musí obsahovat text pro všechny prvky."
+    "SwitchTo": "Přepnout",
+    "SwitchToTranslationConfirm": "Přepnutím se změní jazyk dotazníku. Překlad musí obsahovat text pro všechny prvky."
   },
   "AccountResources": {
     "AccountInfoUpdated": "Informace o účtu byly úspěšně aktualizovány",

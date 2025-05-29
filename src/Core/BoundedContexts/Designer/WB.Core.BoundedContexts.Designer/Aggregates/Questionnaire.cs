@@ -449,7 +449,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument.DefaultTranslation = command.TranslationId;
         }
         
-        public void SwitchOnTranslation(SwitchOnTranslation command)
+        public void SwitchToTranslation(SwitchToTranslation command)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
 

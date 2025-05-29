@@ -1661,10 +1661,10 @@ Ingresaste una entrada no válida. Cada línea debe seguir el formato: "Título.
   <data name="AttachmentSizeIsTooBig" xml:space="preserve">
     <value>El tamaño del archivo adjunto es demasiado grande. Tamaño máximo: {{size}}</value>
 </data>
-  <data name="SwitchOn" xml:space="preserve">
+  <data name="SwitchTo" xml:space="preserve">
     <value>Cambiar</value>
 </data>
-  <data name="SwitchOnTranslationConfirm" xml:space="preserve">
+  <data name="SwitchToTranslationConfirm" xml:space="preserve">
     <value>Cambiar modificará el idioma de visualización del cuestionario. La traducción debe incluir texto para todos los elementos.</value>
 </data>
 </root>

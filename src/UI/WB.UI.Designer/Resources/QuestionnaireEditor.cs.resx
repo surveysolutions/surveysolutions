@@ -1659,10 +1659,10 @@ Zadali jste neplatný vstup. Každý řádek by měl mít formát: "Název... Pa
   <data name="AttachmentSizeIsTooBig" xml:space="preserve">
     <value>Příloha je příliš velká. Maximální velikost: {{size}}</value>
 </data>
-  <data name="SwitchOn" xml:space="preserve">
+  <data name="SwitchTo" xml:space="preserve">
     <value>Přepnout</value>
 </data>
-  <data name="SwitchOnTranslationConfirm" xml:space="preserve">
+  <data name="SwitchToTranslationConfirm" xml:space="preserve">
     <value>Přepnutím se změní jazyk dotazníku. Překlad musí obsahovat text pro všechny prvky.</value>
 </data>
 </root>
