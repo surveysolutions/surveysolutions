@@ -56,6 +56,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         ICommandPostProcessor<Questionnaire, AddOrUpdateTranslation>,
         ICommandPostProcessor<Questionnaire, DeleteTranslation>,
         ICommandPostProcessor<Questionnaire, SetDefaultTranslation>,
+        ICommandPostProcessor<Questionnaire, PopulateTranslation>,
         ICommandPostProcessor<Questionnaire, AddGroup>,
         ICommandPostProcessor<Questionnaire, UpdateGroup>,
         ICommandPostProcessor<Questionnaire, MoveGroup>,
@@ -425,6 +426,40 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
                 QuestionnaireItemType.Translation, command.ResponsibleId, aggregate.QuestionnaireDocument);
 
         public void Process(Questionnaire aggregate, SetDefaultTranslation command)
+        {
+            var state = this.questionnaireStateTrackerStorage.GetById(command.QuestionnaireId.FormatGuid());
+            if (state == null)
+                return;
+
+            bool isDirty = false;
+
+            if (state.TranslationState.TryGetValue(command.QuestionnaireId, out var defaultTranslation))
+            {
+                if (defaultTranslation != command.TranslationId?.FormatGuid())
+                {
+                    state.TranslationState[command.QuestionnaireId] = command.TranslationId?.FormatGuid();
+                    isDirty = true;
+                }
+            }
+            else
+            {
+                state.TranslationState.Add(command.QuestionnaireId, command.TranslationId?.FormatGuid());
+                isDirty = true;
+            }
+
+            if (isDirty)
+            {
+                this.questionnaireStateTrackerStorage.Store(state, command.QuestionnaireId.FormatGuid());
+            }
+
+            var translationName = aggregate.QuestionnaireDocument.Translations
+                .SingleOrDefault(t => t.Id == command.TranslationId)?.Name;
+
+            this.AddQuestionnaireChangeItem(command.QuestionnaireId, command.ResponsibleId, QuestionnaireActionType.Mark,
+              QuestionnaireItemType.Translation, command.QuestionnaireId, translationName, aggregate.QuestionnaireDocument);
+        }
+        
+        public void Process(Questionnaire aggregate, PopulateTranslation command)
         {
             var state = this.questionnaireStateTrackerStorage.GetById(command.QuestionnaireId.FormatGuid());
             if (state == null)

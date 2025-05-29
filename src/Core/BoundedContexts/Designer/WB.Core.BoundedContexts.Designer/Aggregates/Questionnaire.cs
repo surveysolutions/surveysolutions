@@ -436,18 +436,18 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 innerDocument.DefaultTranslation = null;
         }
 
-        public void SetDefaultTranslationOld(SetDefaultTranslation command)
+        public void SetDefaultTranslation(SetDefaultTranslation command)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
 
             this.innerDocument.DefaultTranslation = command.TranslationId;
         }
         
-        public void SetDefaultTranslation(SetDefaultTranslation command)
+        public void PopulateTranslation(PopulateTranslation command)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
 
-            if (!command.TranslationId.HasValue) 
+            if (!command.TranslationId.HasValue)
                 return;
             
             var translationInfo = innerDocument.Translations.FirstOrDefault(t => t.Id == command.TranslationId);
@@ -456,7 +456,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             var newTranslationId = Guid.NewGuid();
             var translations = translationService.GetFromQuestionnaire(innerDocument)
-                .Where(t => t.Value != null)
+                .Where(t => !string.IsNullOrWhiteSpace(t.Value))
                 .ToList();
             translations.ForEach(t =>
             {
@@ -469,7 +469,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             AddOrUpdateTranslationImpl(newTranslationId, null, translationName);
                     
             var translation = translationsService.Get(innerDocument.PublicKey, command.TranslationId.Value);
-            innerDocument = questionnaireTranslator.Translate(innerDocument, translation);
+            innerDocument = questionnaireTranslator.Translate(innerDocument, translation, useNullForEmptyTranslations: true);
+            
             innerDocument.DefaultLanguageName = translationInfo.Name;
             innerDocument.Translations.RemoveAll(x => x.Id == translationInfo.Id);
         }

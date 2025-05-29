@@ -20,13 +20,13 @@
                             {{ $t('QuestionnaireEditor.Save') }}
                         </button>
                         <button type="button" class="btn lighter-hover" @click.self="cancel()">{{
-                $t('QuestionnaireEditor.Cancel')
-            }}</button>
+                            $t('QuestionnaireEditor.Cancel')
+                            }}</button>
                     </div>
 
                     <span class="default-label" v-if="translation.isDefault">{{
-                $t('QuestionnaireEditor.Default')
-            }}</span>
+                        $t('QuestionnaireEditor.Default')
+                        }}</span>
 
                     <button type="button" class="btn btn-default" v-if="!isReadOnlyForUser"
                         v-show="translation.isDefault && !translation.isOriginalTranslation"
@@ -36,13 +36,17 @@
 
                     <div class="permanent-actions pull-right">
                         <button type="button" class="btn lighter-hover" v-if="!isReadOnlyForUser"
+                            @click.self="populateTranslation(true);">
+                            {{ $t('QuestionnaireEditor.Populate') }}
+                        </button>
+                        <button type="button" class="btn lighter-hover" v-if="!isReadOnlyForUser"
                             v-show="!translation.isDefault" @click.self="setDefaultTranslation(true);">
                             {{ $t('QuestionnaireEditor.MarkAsDefault') }}
                         </button>
 
                         <a v-if="downloadUrl" :href="downloadUrl" class="btn btn-default" target="_blank"
                             rel="noopener noreferrer">{{
-                $t('QuestionnaireEditor.SideBarTranslationDownloadXlsx') }}</a>
+                                $t('QuestionnaireEditor.SideBarTranslationDownloadXlsx') }}</a>
 
                         <file-upload ref="upload" v-if="!isReadOnlyForUser"
                             :input-id="'tfu' + translation.translationId" v-model="file" @input-file="fileSelected"
@@ -195,6 +199,11 @@ export default {
 
         async setDefaultTranslation(isDefault) {
             await setDefaultTranslation(this.questionnaireId, isDefault ? this.translation.translationId : null)
+        },
+
+        async populateTranslation(isDefault) {
+            await setDefaultTranslation(this.questionnaireId, isDefault ? this.translation.translationId : null)
+            location.reload();
         },
 
         openFileDialog() {

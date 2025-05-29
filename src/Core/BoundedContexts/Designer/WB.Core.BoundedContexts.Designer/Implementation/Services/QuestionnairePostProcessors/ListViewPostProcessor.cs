@@ -53,6 +53,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         ICommandPostProcessor<Questionnaire, AddOrUpdateTranslation>,
         ICommandPostProcessor<Questionnaire, DeleteTranslation>,
         ICommandPostProcessor<Questionnaire, SetDefaultTranslation>,
+        ICommandPostProcessor<Questionnaire, PopulateTranslation>,
         ICommandPostProcessor<Questionnaire, ReplaceTextsCommand>,
         ICommandPostProcessor<Questionnaire, AddGroup>,
         ICommandPostProcessor<Questionnaire, UpdateGroup>,
@@ -352,6 +353,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         public void Process(Questionnaire aggregate, AddOrUpdateTranslation command) => this.Update(command.QuestionnaireId.FormatGuid());
         public void Process(Questionnaire aggregate, DeleteTranslation command) => this.Update(command.QuestionnaireId.FormatGuid());
         public void Process(Questionnaire aggregate, SetDefaultTranslation command) => this.Update(command.QuestionnaireId.FormatGuid());
+        public void Process(Questionnaire aggregate, PopulateTranslation command) => this.Update(command.QuestionnaireId.FormatGuid());
         public void Process(Questionnaire aggregate, AddGroup command) => this.Update(command.QuestionnaireId.FormatGuid());
         public void Process(Questionnaire aggregate, UpdateGroup command) => this.Update(command.QuestionnaireId.FormatGuid());
         public void Process(Questionnaire aggregate, MoveGroup command) => this.Update(command.QuestionnaireId.FormatGuid());
