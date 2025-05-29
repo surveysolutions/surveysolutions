@@ -4,9 +4,9 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations;
 
 [Serializable]
-public class PopulateTranslation : QuestionnaireCommand
+public class SwitchOnTranslation : QuestionnaireCommand
 {
-    public PopulateTranslation(Guid questionnaireId, Guid responsibleId, Guid? translationId)
+    public SwitchOnTranslation(Guid questionnaireId, Guid responsibleId, Guid? translationId)
         : base(responsibleId: responsibleId, questionnaireId: questionnaireId)
     {
         this.TranslationId = translationId;

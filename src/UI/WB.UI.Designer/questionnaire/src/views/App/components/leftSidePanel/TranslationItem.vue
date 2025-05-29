@@ -36,8 +36,8 @@
 
                     <div class="permanent-actions pull-right">
                         <button type="button" class="btn lighter-hover" v-if="!isReadOnlyForUser"
-                            @click.self="populateTranslation(true);">
-                            {{ $t('QuestionnaireEditor.Populate') }}
+                            @click.self="switchOnTranslation(true);">
+                            {{ $t('QuestionnaireEditor.SwitchOn') }}
                         </button>
                         <button type="button" class="btn lighter-hover" v-if="!isReadOnlyForUser"
                             v-show="!translation.isDefault" @click.self="setDefaultTranslation(true);">
@@ -74,7 +74,8 @@ import { useQuestionnaireStore } from '../../../../stores/questionnaire';
 import {
     deleteTranslation,
     updateTranslation,
-    setDefaultTranslation
+    setDefaultTranslation,
+    switchOnTranslation
 } from '../../../../services/translationService';
 
 import { updateQuestionnaireSettings } from '../../../../services/questionnaireService';
@@ -201,8 +202,8 @@ export default {
             await setDefaultTranslation(this.questionnaireId, isDefault ? this.translation.translationId : null)
         },
 
-        async populateTranslation(isDefault) {
-            await setDefaultTranslation(this.questionnaireId, isDefault ? this.translation.translationId : null)
+        async switchOnTranslation(isDefault) {
+            await switchOnTranslation(this.questionnaireId, isDefault ? this.translation.translationId : null)
             location.reload();
         },
 

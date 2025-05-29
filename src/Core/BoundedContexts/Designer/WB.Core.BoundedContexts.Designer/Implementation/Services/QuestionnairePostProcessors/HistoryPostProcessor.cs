@@ -56,7 +56,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         ICommandPostProcessor<Questionnaire, AddOrUpdateTranslation>,
         ICommandPostProcessor<Questionnaire, DeleteTranslation>,
         ICommandPostProcessor<Questionnaire, SetDefaultTranslation>,
-        ICommandPostProcessor<Questionnaire, PopulateTranslation>,
+        ICommandPostProcessor<Questionnaire, SwitchOnTranslation>,
         ICommandPostProcessor<Questionnaire, AddGroup>,
         ICommandPostProcessor<Questionnaire, UpdateGroup>,
         ICommandPostProcessor<Questionnaire, MoveGroup>,
@@ -459,7 +459,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
               QuestionnaireItemType.Translation, command.QuestionnaireId, translationName, aggregate.QuestionnaireDocument);
         }
         
-        public void Process(Questionnaire aggregate, PopulateTranslation command)
+        public void Process(Questionnaire aggregate, SwitchOnTranslation command)
         {
             var state = this.questionnaireStateTrackerStorage.GetById(command.QuestionnaireId.FormatGuid());
             if (state == null)

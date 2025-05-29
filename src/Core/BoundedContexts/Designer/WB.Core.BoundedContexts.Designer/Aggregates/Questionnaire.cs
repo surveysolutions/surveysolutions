@@ -443,7 +443,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument.DefaultTranslation = command.TranslationId;
         }
         
-        public void PopulateTranslation(PopulateTranslation command)
+        public void SwitchOnTranslation(SwitchOnTranslation command)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
 
