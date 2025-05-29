@@ -476,20 +476,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             }
             
             var rosterVector = questionIdentity.RosterVector;
-            while (rosterVector.Length >= 0)
+            for (int length = rosterVector.Length; length >= 0; length--)
             {
-                var identity = new Identity(entityId, rosterVector);
+                var currentVector = length == 0 ? RosterVector.Empty : rosterVector.Shrink(length);
+                var identity = new Identity(entityId, currentVector);
                 var node = this.GetNodeByIdentity(identity);
                 if (node != null)
-                {
                     return node;
-                }
-                if(rosterVector.Length == 0)
-                {
-                    break;
-                }
-                
-                rosterVector = rosterVector.Shrink(rosterVector.Length - 1);
             }
 
             return null;
