@@ -1600,4 +1600,10 @@
     <data name="AttachmentSizeIsTooBig" xml:space="preserve">
     <value>O tamanho do anexo é muito grande. Tamanho máximo: {{size}}</value>
 </data>
+    <data name="SwitchOn" xml:space="preserve">
+    <value>Alterar</value>
+</data>
+    <data name="SwitchOnTranslationConfirm" xml:space="preserve">
+    <value>Alterar mudará o idioma de exibição do questionário. A tradução deve incluir texto para todos os elementos.</value>
+</data>
 </root>

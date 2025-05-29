@@ -159,9 +159,6 @@
   <data name="QuestionTypeMultiSelect" xml:space="preserve">
     <value>Categorical: Multi-select</value>
   </data>
-  <data name="SwitchOnTranslationConfirm" xml:space="preserve">
-    <value>Switch On will change display language of questionnaire. This translation must have all texts for all elements.</value>
-  </data>
   <data name="QuestionTypeNumeric" xml:space="preserve">
     <value>Numeric</value>
   </data>

@@ -129,12 +129,6 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
             }
         }
         
-        public static string SwitchOnTranslationConfirm {
-            get {
-                return ResourceManager.GetString("SwitchOnTranslationConfirm", resourceCulture);
-            }
-        }
-        
         public static string QuestionTypeNumeric {
             get {
                 return ResourceManager.GetString("QuestionTypeNumeric", resourceCulture);

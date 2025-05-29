@@ -1659,4 +1659,10 @@ Vous avez entré une entrée invalide. Chaque ligne doit suivre le format : "Tit
   <data name="AttachmentSizeIsTooBig" xml:space="preserve">
     <value>La taille de la pièce jointe est trop grande. Taille maximale : {{size}}</value>
 </data>
+  <data name="SwitchOn" xml:space="preserve">
+    <value>Changer</value>
+</data>
+  <data name="SwitchOnTranslationConfirm" xml:space="preserve">
+    <value>Changer modifiera la langue d’affichage du questionnaire. La traduction doit inclure un texte pour tous les éléments.</value>
+</data>
 </root>

@@ -3116,5 +3116,17 @@ namespace WB.UI.Designer.Resources {
                 return ResourceManager.GetString("HelpCriticalityConditionMessage", resourceCulture);
             }
         }
+        
+        public static string SwitchOn {
+            get {
+                return ResourceManager.GetString("SwitchOn", resourceCulture);
+            }
+        }
+        
+        public static string SwitchOnTranslationConfirm {
+            get {
+                return ResourceManager.GetString("SwitchOnTranslationConfirm", resourceCulture);
+            }
+        }
     }
 }
