@@ -1192,7 +1192,7 @@
     <value>Mostrar / ocultar este menu de ajuda</value>
   </data>
   <data name="MarkAsDefault" xml:space="preserve">
-    <value>Marcar como idioma padrão</value>
+    <value>Marcar como tradução padrão</value>
   </data>
   <data name="UnMarkAsDefault" xml:space="preserve">
     <value>Não usar como padrão</value>

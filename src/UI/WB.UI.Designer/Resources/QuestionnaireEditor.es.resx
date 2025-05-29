@@ -409,7 +409,7 @@
     <value>Salir</value>
   </data>
   <data name="MarkAsDefault" xml:space="preserve">
-    <value>Marcar como idioma por defecto</value>
+    <value>Marcar como traducción predeterminada</value>
   </data>
   <data name="ModalConfirm" xml:space="preserve">
     <value>Confirmación</value>

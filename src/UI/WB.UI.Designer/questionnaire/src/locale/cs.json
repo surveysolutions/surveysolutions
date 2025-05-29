@@ -177,7 +177,7 @@
     "JumpToEdit": "Přeskočit na úpravy",
     "LogOut": "Odhlášení ze systému",
     "MakeOwnerConfirmationMessage": "Pokud převedete vlastnictví, bude nový vlastník upozorněn. Je možné, že již nebudete moci změnit nastavení vlastnictví a nový vlastník vám také může odebrat přístup.",
-    "MarkAsDefault": "Označit jako výchozí jazyk",
+    "MarkAsDefault": "Nastavit jako výchozí překlad",
     "MaxCommentLengthErrorMessage": "Komentář nesmí obsahovat více než {1} znaků",
     "MigrateToNewCover": "Vygenerovat kryt",
     "ModalConfirm": "Potvrzení",
