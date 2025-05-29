@@ -512,8 +512,8 @@
     "HelpCriticalityConditionExpression": "Uma expressão lógica que avalia a entrevista como um todo para determinar se ela satisfaz as regras críticas (quando esta expressão avalia como \"Verdadeiro\"). Pode se referir a quaisquer perguntas ou variáveis.",
     "HelpCriticalityConditionMessage": "Esta mensagem é exibida quando a condição crítica avalia como \"Falso\" ou ocorre uma exceção durante a avaliação da expressão. A mensagem pode utilizar hiperlinks e substituição de texto.",
     "AttachmentSizeIsTooBig": "O tamanho do anexo é muito grande. Tamanho máximo: {{size}}",
-    "SwitchTo": "Alterar",
-    "SwitchToTranslationConfirm": "Alterar mudará o idioma de exibição do questionário. A tradução deve incluir texto para todos os elementos."
+    "SwitchTo": "Alterar para",
+    "SwitchToTranslationConfirm": "Alterar para mudará o idioma de exibição do questionário. A tradução deve incluir texto para todos os elementos."
   },
   "AccountResources": {
     "AllRights": "Todos os direitos reservados.",

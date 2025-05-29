@@ -512,8 +512,8 @@
     "HelpCriticalityConditionExpression": "Une expression logique qui évalue l'entretien dans son ensemble pour déterminer s'il satisfait aux règles critiques (lorsque cette expression est évaluée à \"Vrai\"). Elle peut se référer à n'importe quelles questions ou variables.",
     "HelpCriticalityConditionMessage": "Ce message est affiché lorsque la condition critique est évaluée à \"Faux\" ou qu'une exception se produit lors de l'évaluation de l'expression. Le message peut utiliser des hyperliens et la substitution de texte.",
     "AttachmentSizeIsTooBig": "La taille de la pièce jointe est trop grande. Taille maximale : {{size}}",
-    "SwitchTo": "Changer",
-    "SwitchToTranslationConfirm": "Changer modifiera la langue d’affichage du questionnaire. La traduction doit inclure un texte pour tous les éléments."
+    "SwitchTo": "Passer à",
+    "SwitchToTranslationConfirm": "Passer à changera la langue d’affichage du questionnaire. La traduction doit inclure un texte pour tous les éléments."
   },
   "AccountResources": {
     "AllRights": "Tout droit reservé",

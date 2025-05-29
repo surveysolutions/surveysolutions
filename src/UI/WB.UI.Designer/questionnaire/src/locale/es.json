@@ -512,8 +512,8 @@
     "SideBarTranslationGetTemplateLinkTextCsv": "Tab (txt)",
     "SideBarTab": "Tab",
     "AttachmentSizeIsTooBig": "El tamaño del archivo adjunto es demasiado grande. Tamaño máximo: {{size}}",
-    "SwitchTo": "Cambiar",
-    "SwitchToTranslationConfirm": "Cambiar modificará el idioma de visualización del cuestionario. La traducción debe incluir texto para todos los elementos."
+    "SwitchTo": "Cambiar a",
+    "SwitchToTranslationConfirm": "Cambiar a modificará el idioma de visualización del cuestionario. La traducción debe incluir texto para todos los elementos."
   },
   "AccountResources": {
     "AllRights": "Todos los derechos reservados",

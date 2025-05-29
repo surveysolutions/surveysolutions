@@ -1660,9 +1660,9 @@ Vous avez entré une entrée invalide. Chaque ligne doit suivre le format : "Tit
     <value>La taille de la pièce jointe est trop grande. Taille maximale : {{size}}</value>
 </data>
   <data name="SwitchTo" xml:space="preserve">
-    <value>Changer</value>
+    <value>Passer à</value>
 </data>
   <data name="SwitchToTranslationConfirm" xml:space="preserve">
-    <value>Changer modifiera la langue d’affichage du questionnaire. La traduction doit inclure un texte pour tous les éléments.</value>
+    <value>Passer à changera la langue d’affichage du questionnaire. La traduction doit inclure un texte pour tous les éléments.</value>
 </data>
 </root>
