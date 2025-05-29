@@ -342,22 +342,27 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
 
+            AddOrUpdateCategoriesImpl(innerDocument, command.CategoriesId, command.OldCategoriesId, command.Name);
+        }
+
+        private static void AddOrUpdateCategoriesImpl(QuestionnaireDocument document, Guid categoriesId, Guid? oldCategoriesId, string name)
+        {
             var categories = new Categories()
             {
-                Id = command.CategoriesId,
-                Name = command.Name,
+                Id = categoriesId,
+                Name = name,
             };
-            innerDocument.Categories.RemoveAll(x => x.Id == command.CategoriesId);
+            document.Categories.RemoveAll(x => x.Id == categoriesId);
 
-            if (command.OldCategoriesId.HasValue)
+            if (oldCategoriesId.HasValue)
             {
-                innerDocument.Categories.RemoveAll(x => x.Id == command.OldCategoriesId.Value);
+                document.Categories.RemoveAll(x => x.Id == oldCategoriesId.Value);
 
-                var categoricalQuestionsWithOldId = innerDocument.Find<ICategoricalQuestion>(c => c.CategoriesId == command.OldCategoriesId);
-                categoricalQuestionsWithOldId.ForEach(c => c.CategoriesId = command.CategoriesId);
+                var categoricalQuestionsWithOldId = document.Find<ICategoricalQuestion>(c => c.CategoriesId == oldCategoriesId);
+                categoricalQuestionsWithOldId.ForEach(c => c.CategoriesId = categoriesId);
             }
 
-            innerDocument.Categories.Add(categories);
+            document.Categories.Add(categories);
         }
 
         public void DeleteCategories(DeleteCategories command)
@@ -493,18 +498,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     newCategoryItems.Add(new CategoriesRow()
                     {
                         Id = categoriesItem.Id.ToString(),
-                        ParentId = categoriesItem.ParentId.ToString(),
+                        ParentId = categoriesItem.ParentId?.ToString(),
                         AttachmentName = categoriesItem.AttachmentName,
                         Text = newText,
                     });
                 }
                 
-                clonedDocument.Categories.RemoveAll(c => c.Id == categories.Id);
-                clonedDocument.Categories.Add(new Categories()
-                {
-                    Id = newCategoryId,
-                    Name = categories.Name
-                });
+                AddOrUpdateCategoriesImpl(clonedDocument, newCategoryId, categories.Id, categories.Name);
 
                 reusableCategoriesService.Store(clonedDocument.PublicKey, newCategoryId, newCategoryItems);
             }
