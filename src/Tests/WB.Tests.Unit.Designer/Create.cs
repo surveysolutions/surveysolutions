@@ -767,7 +767,9 @@ namespace WB.Tests.Unit.Designer
                 Mock.Of<IDesignerTranslationService>(),
                 historyVersionsService ?? Mock.Of<IQuestionnaireHistoryVersionsService>(),
                 Mock.Of<IReusableCategoriesService>(),
-                findReplaceService ?? Mock.Of<IFindReplaceService>());
+                findReplaceService ?? Mock.Of<IFindReplaceService>(),
+                Mock.Of<IQuestionnaireTranslator>(),
+                Mock.Of<ITranslationsService>());
         }
 
 
