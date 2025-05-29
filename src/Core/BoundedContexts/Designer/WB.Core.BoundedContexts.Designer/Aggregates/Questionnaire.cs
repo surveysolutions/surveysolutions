@@ -513,6 +513,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 t.Id = Guid.NewGuid();
                 t.TranslationId = newTranslationId;
+                t.QuestionnaireId = clonedDocument.PublicKey;
             });
             translationService.Store(documentTranslations);
             
