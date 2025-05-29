@@ -511,7 +511,9 @@
     "QuestionIsCritical": "This is a critical question",
     "HelpIsCritical": "Questionnaire authors may indicate that the answer to a question is critical for interview submission.",
     "HelpCriticalityConditionExpression": "A logical expression that evaluates the interview as a whole to determine whether it satisfies the critical rules (when this expression evaluates to \"True\"). It may refer to any questions or variables.",
-    "HelpCriticalityConditionMessage": "This message is shown when the critical condition evaluates to \"False\" or an exception occurs during expression evaluation. The message may utilize hyperlinks and text substitution."
+    "HelpCriticalityConditionMessage": "This message is shown when the critical condition evaluates to \"False\" or an exception occurs during expression evaluation. The message may utilize hyperlinks and text substitution.",
+    "SwitchOn": "Switch On",
+    "SwitchOnTranslationConfirm": "Switch On will change the display language of the questionnaire. The translation must include text for all elements."
   },
   "AccountResources": {
     "AccountInfoUpdated": "Të dhënat e llogarisë u përditësuan me sukses",

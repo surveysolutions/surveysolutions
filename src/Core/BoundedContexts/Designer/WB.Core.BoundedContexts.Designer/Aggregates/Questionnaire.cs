@@ -404,28 +404,28 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
 
-            AddOrUpdateTranslationImpl(command.TranslationId, command.OldTranslationId, command.Name);
+            AddOrUpdateTranslationImpl(innerDocument, command.TranslationId, command.OldTranslationId, command.Name);
         }
 
-        private void AddOrUpdateTranslationImpl(Guid translationId, Guid? oldTranslationId, string name)
+        private static void AddOrUpdateTranslationImpl(QuestionnaireDocument document, Guid translationId, Guid? oldTranslationId, string name)
         {
             var translation = new Translation
             {
                 Id = translationId,
                 Name = name,
             };
-            innerDocument.Translations.RemoveAll(x => x.Id == translationId);
+            document.Translations.RemoveAll(x => x.Id == translationId);
 
             if (oldTranslationId.HasValue)
             {
-                innerDocument.Translations.RemoveAll(x => x.Id == oldTranslationId.Value);
+                document.Translations.RemoveAll(x => x.Id == oldTranslationId.Value);
 
-                if (innerDocument.DefaultTranslation.HasValue &&
-                    innerDocument.DefaultTranslation == oldTranslationId)
-                    innerDocument.DefaultTranslation = translationId;
+                if (document.DefaultTranslation.HasValue &&
+                    document.DefaultTranslation == oldTranslationId)
+                    document.DefaultTranslation = translationId;
             }
 
-            innerDocument.Translations.Add(translation);
+            document.Translations.Add(translation);
         }
 
         public void DeleteTranslation(DeleteTranslation command)
@@ -457,10 +457,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             var clonedDocument = innerDocument.Clone();
 
-            var translations = translationService.GetFromQuestionnaire(clonedDocument)
+            var documentTranslations = translationService.GetFromQuestionnaire(clonedDocument)
                 .ToList();
 
-            bool isExistsEmptyText = translations.Any(t => string.IsNullOrWhiteSpace(t.Value));
+            bool isExistsEmptyText = documentTranslations.Any(t => string.IsNullOrWhiteSpace(t.Value));
             if (isExistsEmptyText)
                 throw new QuestionnaireException(DomainExceptionType.TranslationIsNotFull, ExceptionMessages.TranslationIsNotFull);
 
@@ -476,10 +476,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 
                 foreach (var categoriesItem in categoriesItems)
                 {
-                    translations.Add(new TranslationInstance()
+                    documentTranslations.Add(new TranslationInstance()
                     {
                         Type = TranslationType.Categories,
-                        QuestionnaireEntityId = categories.Id,
+                        QuestionnaireEntityId = newCategoryId,
                         TranslationId = newTranslationId,
                         Value = categoriesItem.Text,
                         Id = Guid.NewGuid(),
@@ -497,32 +497,35 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         AttachmentName = categoriesItem.AttachmentName,
                         Text = newText,
                     });
-
-                    clonedDocument.Categories.RemoveAll(c => c.Id == categories.Id);
-                    clonedDocument.Categories.Add(new Categories()
-                    {
-                        Id = newCategoryId,
-                        Name = categories.Name
-                    });
-                    
-                    reusableCategoriesService.Store(clonedDocument.PublicKey, newCategoryId, newCategoryItems);
                 }
+                
+                clonedDocument.Categories.RemoveAll(c => c.Id == categories.Id);
+                clonedDocument.Categories.Add(new Categories()
+                {
+                    Id = newCategoryId,
+                    Name = categories.Name
+                });
+
+                reusableCategoriesService.Store(clonedDocument.PublicKey, newCategoryId, newCategoryItems);
             }
             
-            translations.ForEach(t =>
+            documentTranslations.ForEach(t =>
             {
                 t.Id = Guid.NewGuid();
                 t.TranslationId = newTranslationId;
             });
-            translationService.Store(translations);
-
+            translationService.Store(documentTranslations);
+            
             
             var translationName = clonedDocument.DefaultLanguageName ?? "";
-            AddOrUpdateTranslationImpl(newTranslationId, null, translationName);
+            AddOrUpdateTranslationImpl(clonedDocument, newTranslationId, null, translationName);
                     
             clonedDocument = questionnaireTranslator.Translate(clonedDocument, translation, useNullForEmptyTranslations: false);
             
             clonedDocument.DefaultLanguageName = translationInfo.Name;
+            clonedDocument.DefaultTranslation = !clonedDocument.DefaultTranslation.HasValue
+                ? newTranslationId
+                : clonedDocument.DefaultTranslation.Value == translationInfo.Id ? null : clonedDocument.DefaultTranslation;
             clonedDocument.Translations.RemoveAll(x => x.Id == translationInfo.Id);
 
             
