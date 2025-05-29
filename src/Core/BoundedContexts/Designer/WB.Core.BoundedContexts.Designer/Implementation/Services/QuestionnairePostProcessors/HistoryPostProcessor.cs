@@ -461,35 +461,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         
         public void Process(Questionnaire aggregate, SwitchToTranslation command)
         {
-            var state = this.questionnaireStateTrackerStorage.GetById(command.QuestionnaireId.FormatGuid());
-            if (state == null)
-                return;
+            var translationName = aggregate.QuestionnaireDocument.DefaultLanguageName;
 
-            bool isDirty = false;
-
-            if (state.TranslationState.TryGetValue(command.QuestionnaireId, out var defaultTranslation))
-            {
-                if (defaultTranslation != command.TranslationId?.FormatGuid())
-                {
-                    state.TranslationState[command.QuestionnaireId] = command.TranslationId?.FormatGuid();
-                    isDirty = true;
-                }
-            }
-            else
-            {
-                state.TranslationState.Add(command.QuestionnaireId, command.TranslationId?.FormatGuid());
-                isDirty = true;
-            }
-
-            if (isDirty)
-            {
-                this.questionnaireStateTrackerStorage.Store(state, command.QuestionnaireId.FormatGuid());
-            }
-
-            var translationName = aggregate.QuestionnaireDocument.Translations
-                .SingleOrDefault(t => t.Id == command.TranslationId)?.Name;
-
-            this.AddQuestionnaireChangeItem(command.QuestionnaireId, command.ResponsibleId, QuestionnaireActionType.Mark,
+            this.AddQuestionnaireChangeItem(command.QuestionnaireId, command.ResponsibleId, QuestionnaireActionType.Replace,
               QuestionnaireItemType.Translation, command.QuestionnaireId, translationName, aggregate.QuestionnaireDocument);
         }
 
