@@ -483,7 +483,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         TranslationId = newTranslationId,
                         Value = categoriesItem.Text,
                         Id = Guid.NewGuid(),
-                        TranslationIndex = $"{categoriesItem.Id}${categoriesItem.ParentId}"
+                        TranslationIndex = categoriesItem.ParentId == null ? $"{categoriesItem.Id}" : $"{categoriesItem.Id}${categoriesItem.ParentId}"
                     });
 
                     var newText = translation.GetCategoriesText(categories.Id, categoriesItem.Id, categoriesItem.ParentId);

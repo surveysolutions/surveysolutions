@@ -35,8 +35,8 @@
                     </button>
 
                     <div class="permanent-actions pull-right">
-                        <button type="button" class="btn lighter-hover" v-if="!isReadOnlyForUser"
-                            @click.self="switchOnTranslation(true);">
+                        <button type="button" class="btn lighter-hover"
+                            v-if="!isReadOnlyForUser && translation.translationId" @click.self="switchOnTranslation();">
                             {{ $t('QuestionnaireEditor.SwitchOn') }}
                         </button>
                         <button type="button" class="btn lighter-hover" v-if="!isReadOnlyForUser"
@@ -69,7 +69,7 @@
 import { isUndefined, isNull, cloneDeep } from 'lodash'
 import moment from 'moment'
 import { notice } from '../../../../services/notificationService';
-import { trimText, createQuestionForDeleteConfirmationPopup } from '../../../../services/utilityService'
+import { trimText, createQuestionForDeleteConfirmationPopup, createSwitchOnTranslationConfirmationPopup } from '../../../../services/utilityService'
 import { useQuestionnaireStore } from '../../../../stores/questionnaire';
 import {
     deleteTranslation,
@@ -202,9 +202,28 @@ export default {
             await setDefaultTranslation(this.questionnaireId, isDefault ? this.translation.translationId : null)
         },
 
-        async switchOnTranslation(isDefault) {
-            await switchOnTranslation(this.questionnaireId, isDefault ? this.translation.translationId : null)
-            location.reload();
+        async switchOnTranslation() {
+            event.preventDefault();
+
+            if (!this.translation.translationId)
+                return;
+
+            var translationName = this.translation.name || this.$t('QuestionnaireEditor.SideBarTranslationNoName');
+
+            var trimmedTranslationName = trimText(translationName);
+            var confirmParams = createSwitchOnTranslationConfirmationPopup(trimmedTranslationName)
+
+            confirmParams.callback = confirm => {
+                if (confirm) {
+                    switchOnTranslation(this.questionnaireId, this.translation.translationId)
+                        .then(() => {
+                            location.reload();
+                        })
+
+                }
+            };
+
+            this.$confirm(confirmParams);
         },
 
         openFileDialog() {
