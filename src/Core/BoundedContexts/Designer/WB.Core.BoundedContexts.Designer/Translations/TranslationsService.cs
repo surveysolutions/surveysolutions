@@ -101,6 +101,14 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             return hasTranslatedTitle;
         }
 
+        public bool IsFullTranslated(QuestionnaireDocument questionnaire, ITranslation translation)
+        {
+            var categoriesService = new CategoriesService(questionnaire.PublicKey, this.reusableCategoriesService);
+            var translations = translationsExportService.GetTranslationTexts(questionnaire, translation, categoriesService);
+            return translations.All(t => !string.IsNullOrEmpty(t.Value));
+        }
+
+        
         public IEnumerable<TranslationInstance> GetFromQuestionnaire(QuestionnaireDocument questionnaire)
         {
             var translationDtos = GetFromQuestionnaireImpl(questionnaire);

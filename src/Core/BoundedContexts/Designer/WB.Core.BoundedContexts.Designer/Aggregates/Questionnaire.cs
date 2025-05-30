@@ -461,6 +461,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 return;
 
             var clonedDocument = innerDocument.Clone();
+            var translation = translationsService.Get(clonedDocument.PublicKey, command.TranslationId.Value);
+
+            var isFullTranslated = translationService.IsFullTranslated(clonedDocument, translation);
+            if (!isFullTranslated)
+                throw new QuestionnaireException(DomainExceptionType.TranslationIsNotFull, ExceptionMessages.TranslationIsNotFull);
 
             var documentTranslations = translationService.GetFromQuestionnaire(clonedDocument)
                 .ToList();
@@ -468,8 +473,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             bool isExistsEmptyText = documentTranslations.Any(t => string.IsNullOrWhiteSpace(t.Value));
             if (isExistsEmptyText)
                 throw new QuestionnaireException(DomainExceptionType.TranslationIsNotFull, ExceptionMessages.TranslationIsNotFull);
-
-            var translation = translationsService.Get(clonedDocument.PublicKey, command.TranslationId.Value);
+            
 
             var newTranslationId = Guid.NewGuid();
 
