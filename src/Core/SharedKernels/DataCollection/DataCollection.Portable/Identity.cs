@@ -30,8 +30,12 @@ namespace WB.Core.SharedKernels.DataCollection
 
         public override int GetHashCode()
         {
-            this.hashCode ??= this.Id.GetHashCode() ^ this.RosterVector.GetHashCode();
-
+            if (this.hashCode != null) return this.hashCode.Value;
+            
+            int hash = 269;
+            hash = (hash * 47) + Id.GetHashCode();
+            hashCode = (hash * 47) + RosterVector.GetHashCode();
+            
             return this.hashCode.Value;
         }
 

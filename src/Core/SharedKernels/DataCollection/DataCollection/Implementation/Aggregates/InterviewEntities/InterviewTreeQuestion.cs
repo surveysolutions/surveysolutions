@@ -440,7 +440,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (!this.IsLinkedToListQuestion) return Array.Empty<int>();
             var linkedToListQuestion = this.AsLinkedToList;
 
-            var refQuestion = this.Tree.FindEntityInQuestionBranch(linkedToListQuestion.LinkedSourceId, Identity) as InterviewTreeQuestion;
+            var refQuestion = this.Tree.GetTreeNodeByLevelOrNull(linkedToListQuestion.LinkedSourceId, Identity) as InterviewTreeQuestion;
 
             return refQuestion?.IsDisabled() ?? false
                 ? Array.Empty<int>()
@@ -594,14 +594,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (this.IsSingleLinkedToList)
             {
                 var singleToListAnswer = Convert.ToDecimal(((InterviewTreeSingleOptionLinkedToListQuestion)this.InterviewQuestion).GetAnswer().SelectedValue);
-                var refListQuestion = this.Tree.FindEntityInQuestionBranch(((InterviewTreeSingleOptionLinkedToListQuestion)this.InterviewQuestion).LinkedSourceId, Identity) as InterviewTreeQuestion;
+                var refListQuestion = this.Tree.GetTreeNodeByLevelOrNull(((InterviewTreeSingleOptionLinkedToListQuestion)this.InterviewQuestion).LinkedSourceId, Identity) as InterviewTreeQuestion;
                 var refListOption = ((InterviewTreeTextListQuestion)refListQuestion?.InterviewQuestion)?.GetAnswer()?.Rows.SingleOrDefault(x => x.Value == singleToListAnswer);
                 return refListOption?.Text;
             }
             if (this.IsMultiLinkedToList)
             {
                 var multiToListAnswers = ((InterviewTreeMultiOptionLinkedToListQuestion)this.InterviewQuestion).GetAnswer()?.ToDecimals()?.ToHashSet();
-                var refListQuestion = this.Tree.FindEntityInQuestionBranch(((InterviewTreeMultiOptionLinkedToListQuestion)this.InterviewQuestion).LinkedSourceId, Identity) as InterviewTreeQuestion;
+                var refListQuestion = this.Tree.GetTreeNodeByLevelOrNull(((InterviewTreeMultiOptionLinkedToListQuestion)this.InterviewQuestion).LinkedSourceId, Identity) as InterviewTreeQuestion;
                 var refListQuestionAllOptions = ((InterviewTreeTextListQuestion)refListQuestion?.InterviewQuestion)?.GetAnswer()?.Rows;
                 var refListOptions = refListQuestionAllOptions?.Where(x => multiToListAnswers?.Contains(x.Value) ?? false).ToArray();
                 return string.Join(", ", refListOptions.Select(o => o.Text));

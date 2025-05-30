@@ -397,7 +397,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         public InterviewTreeQuestion FindQuestionInQuestionBranch(Guid entityId, Identity questionIdentity)
-            => this.Tree.FindEntityInQuestionBranch(entityId, questionIdentity) as InterviewTreeQuestion;
+            => this.Tree.GetTreeNodeByLevelOrNull(entityId, questionIdentity) as InterviewTreeQuestion;
 
         public IEnumerable<Identity> FindQuestionsFromSameOrDeeperLevel(Guid entityId, Identity questionIdentity)
             => this.Tree.FindEntitiesFromSameOrDeeperLevel(entityId, questionIdentity);
