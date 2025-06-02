@@ -307,7 +307,32 @@ namespace WB.Tests.Unit.Designer.CodeGeneration
             Assert.That(dependensies, Is.EquivalentTo(new[] { s2Id, v1Id }));
         }
         
+        [Test]
+        public void when_GetValidationDependencyGraph_for_question_and_static_text_validations_dependent_on_variable()
+        {
+            var variableId = Id.g1;
+            var intQuestionId = Id.g2;
+            var staticTextId = Id.g3;
+            var textQuestionId = Id.g4;
+            var chapterId = Id.g5;
 
+            var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(chapterId,
+                Create.NumericIntegerQuestion(intQuestionId, variable: "int_q"),
+                Create.Variable(variableId, type: VariableType.Boolean, variableName: "v", expression: "IsAnswered(int_q)"),
+                Create.StaticText(staticTextId, validationConditions: new[] { new ValidationCondition("v.HasValue", "error"), }),
+                Create.TextQuestion(textQuestionId, variable: "t", validationConditions: new[] { new ValidationCondition("v.HasValue", "error"), })
+            );
+
+            var expressionProcessor = Create.RoslynExpressionProcessor();
+            var expressionsPlayOrderProvider = Create.ExpressionsPlayOrderProvider(expressionProcessor);
+
+            var expressionsPlayOrder = expressionsPlayOrderProvider.GetValidationDependencyGraph(questionnaireDocument.AsReadOnly());
+
+            Assert.That(expressionsPlayOrder[variableId], Is.EqualTo(new[] { staticTextId, textQuestionId }));
+            Assert.That(expressionsPlayOrder.ContainsKey(staticTextId), Is.False);
+            Assert.That(expressionsPlayOrder.ContainsKey(textQuestionId), Is.False);
+        }
+        
         private static List<Guid> GetDependensies(QuestionnaireDocument questionnaireDocument, Guid entityId)
         {
             var expressionProcessor = Create.RoslynExpressionProcessor();

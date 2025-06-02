@@ -24,18 +24,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public void SetValue(object value)
         {
-            if (value is string stringValue)
-            {
-                this.Value = stringValue.RemoveControlChars();
-            }
-            else if (value is DateTimeOffset dateTimeOffset)
-            {
-                this.Value = dateTimeOffset.DateTime;
-            }
+            if (value == null)
+                this.Value = null;
             else
-            {
-                this.Value = value;
-            }
+                this.Value = value switch
+                {
+                    string stringValue => stringValue.RemoveControlChars(),
+                    DateTimeOffset dateTimeOffset => dateTimeOffset.DateTime,
+                    _ => value
+                };
         }
 
         public sealed override SubstitutionText Title { get; protected set; }
@@ -55,10 +52,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public string GetValueAsString()
         {
-            if (!HasValue)
-                return null;
-
-            return AnswerUtils.AnswerToString(Value, isTimestamp: false);
+            return !HasValue ? null : AnswerUtils.AnswerToString(Value, isTimestamp: false);
         }
         
         public string GetValueAsStringBrowserReady()
