@@ -107,7 +107,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private readonly IClock clock;
         private readonly ILookupTableService lookupTableService;
         private readonly IAttachmentService attachmentService;
-        private readonly IDesignerTranslationService translationService;
+        private readonly IDesignerTranslationService designerTranslationService;
         private readonly IQuestionnaireTranslator questionnaireTranslator;
         private readonly ITranslationsService translationsService;
         private readonly IReusableCategoriesService reusableCategoriesService;
@@ -121,7 +121,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             IClock clock, 
             ILookupTableService lookupTableService, 
             IAttachmentService attachmentService,
-            IDesignerTranslationService translationService,
+            IDesignerTranslationService designerTranslationService,
             IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService,
             IReusableCategoriesService reusableCategoriesService,
             IFindReplaceService findReplaceService, 
@@ -132,7 +132,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.clock = clock;
             this.lookupTableService = lookupTableService;
             this.attachmentService = attachmentService;
-            this.translationService = translationService;
+            this.designerTranslationService = designerTranslationService;
             this.questionnaireHistoryVersionsService = questionnaireHistoryVersionsService;
             this.reusableCategoriesService = reusableCategoriesService;
             this.findReplaceService = findReplaceService;
@@ -203,7 +203,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             foreach (var translation in clonedDocument.Translations)
             {
                 var newTranslationId = Guid.NewGuid();
-                this.translationService.CloneTranslation(document.PublicKey, translation.Id, clonedDocument.PublicKey, newTranslationId);
+                this.designerTranslationService.CloneTranslation(document.PublicKey, translation.Id, clonedDocument.PublicKey, newTranslationId);
                 if (translation.Id == clonedDocument.DefaultTranslation)
                 {
                     clonedDocument.DefaultTranslation = newTranslationId;
@@ -462,12 +462,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             var clonedDocument = innerDocument.Clone();
             var translation = translationsService.Get(clonedDocument.PublicKey, command.TranslationId.Value);
+            if (translation == null)
+                throw new QuestionnaireException(DomainExceptionType.TranslationIsNotFull, ExceptionMessages.TranslationIsNotFull);
 
-            var isFullTranslated = translationService.IsFullTranslated(clonedDocument, translation);
+            var isFullTranslated = designerTranslationService.IsFullTranslated(clonedDocument, translation);
             if (!isFullTranslated)
                 throw new QuestionnaireException(DomainExceptionType.TranslationIsNotFull, ExceptionMessages.TranslationIsNotFull);
 
-            var documentTranslations = translationService.GetFromQuestionnaire(clonedDocument)
+            var documentTranslations = designerTranslationService.GetFromQuestionnaire(clonedDocument)
                 .ToList();
 
             bool isExistsEmptyText = documentTranslations.Any(t => string.IsNullOrWhiteSpace(t.Value));
@@ -519,7 +521,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 t.TranslationId = newTranslationId;
                 t.QuestionnaireId = clonedDocument.PublicKey;
             });
-            translationService.Store(documentTranslations);
+            designerTranslationService.Store(documentTranslations);
             
             
             var translationName = clonedDocument.DefaultLanguageName ?? "";
