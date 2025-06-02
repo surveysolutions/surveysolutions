@@ -36,7 +36,7 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
         {
             private DateTime? finishTime;
 
-            public byte[] FileArray { get; set; } = [];
+            public string FilePath { get; } = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
             public bool IsFailed { get; private set; }
             public bool IsFinished => finishTime.HasValue;
             public TimeSpan TimeSinceFinished => this.finishTime.HasValue ? DateTime.Now - this.finishTime.Value : TimeSpan.Zero;
@@ -133,9 +133,9 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
             {
                 var questionnaireTitle = this.pdfFactory.LoadQuestionnaireTitle(id.QuestionnaireId);
 
-                byte[] content = pdfGenerationProgress.FileArray;
+                byte[] content = this.fileSystemAccessor.ReadAllBytes(pdfGenerationProgress.FilePath);
 
-                pdfGenerationProgress.FileArray = [];
+                this.fileSystemAccessor.DeleteFile(pdfGenerationProgress.FilePath);
                 GeneratedPdfs.TryRemove(pdfKey, out _);
 
                 // MS edge brakes on long file name
@@ -158,7 +158,7 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
 
             PdfGenerationProgress pdfGenerationProgress = GeneratedPdfs.GetOrAdd(pdfKey, StartNewHtmlGeneration(id, translation, timezoneOffsetMinutes));
 
-            long sizeInKb = pdfGenerationProgress.FileArray.Length / 1024;
+            long sizeInKb = this.GetFileSizeInKb(pdfGenerationProgress.FilePath);
             if (sizeInKb == 0)
                 return pdfGenerationProgress.IsFinished 
                     ? this.Json(PdfStatus.Failed(PdfMessages.FailedToGenerate))
@@ -184,9 +184,9 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
             {
                 var questionnaireTitle = this.pdfFactory.LoadQuestionnaireTitle(id.QuestionnaireId);
 
-                byte[] content = pdfGenerationProgress.FileArray;
+                byte[] content = this.fileSystemAccessor.ReadAllBytes(pdfGenerationProgress.FilePath);
 
-                pdfGenerationProgress.FileArray = [];
+                this.fileSystemAccessor.DeleteFile(pdfGenerationProgress.FilePath);
                 GeneratedPdfs.TryRemove(pdfKey, out _);
 
                 // MS edge brakes on long file name
@@ -225,7 +225,7 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
                 }
             }
 
-            long sizeInKb = pdfGenerationProgress.FileArray.LongLength / 1024;
+            long sizeInKb = this.GetFileSizeInKb(pdfGenerationProgress.FilePath);
 
             if (sizeInKb == 0)
                 return pdfGenerationProgress.IsFinished 
@@ -293,7 +293,7 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
             var questionnaireHtml = await GetHtmlContent(id, newPdfGenerationProgress, translation, timezoneOffsetMinutes ?? 0);
             if (!newPdfGenerationProgress.IsFailed)
             {
-                newPdfGenerationProgress.FileArray = System.Text.Encoding.UTF8.GetBytes(questionnaireHtml);
+                System.IO.File.WriteAllText(newPdfGenerationProgress.FilePath, questionnaireHtml);
                 newPdfGenerationProgress.Finish();
             }
         }
@@ -341,7 +341,7 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
                     await page.RouteAsync("**/*.js", async route => await route.AbortAsync());
                     await page.SetContentAsync(questionnaireHtml);
 
-                    generationProgress.FileArray = await page.PdfAsync(new PagePdfOptions()
+                    var contetnt = await page.PdfAsync(new PagePdfOptions()
                     {
                         HeaderTemplate = "<html></html>",
                         FooterTemplate = footerHtml,
@@ -349,6 +349,7 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
                         DisplayHeaderFooter = true,
                         //Margin = new Margin() {Top = "10", Bottom = "7", Left = "0", Right = "0"},
                     });
+                    System.IO.File.WriteAllBytes(generationProgress.FilePath, contetnt);
 
                     generationProgress.Finish();
                 }
@@ -407,5 +408,10 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
         {
             return this.pdfFactory.Load(id, requestedByUserId, requestedByUserName, translation, useDefaultTranslation);
         }
+        
+        private long GetFileSizeInKb(string filepath)
+            => this.fileSystemAccessor.IsFileExists(filepath)
+                ? this.fileSystemAccessor.GetFileSize(filepath) / 1024
+                : 0;
     }
 }
