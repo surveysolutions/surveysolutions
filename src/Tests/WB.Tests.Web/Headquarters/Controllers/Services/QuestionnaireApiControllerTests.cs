@@ -25,7 +25,7 @@ namespace WB.Tests.Web.Headquarters.Controllers.Services
             var translatedQuestionnaire = Abc.Create.Entity.QuestionnaireDocument();
             var translator =
                 Mock.Of<IQuestionnaireTranslator>(x =>
-                    x.Translate(It.IsAny<QuestionnaireDocument>(), translation) == translatedQuestionnaire);
+                    x.Translate(It.IsAny<QuestionnaireDocument>(), translation, false) == translatedQuestionnaire);
 
             var jsonForTranslatedQuestionnaire = "{translated: true}";
             var serializer = Mock.Of<ISerializer>(x => x.Serialize(translatedQuestionnaire) == jsonForTranslatedQuestionnaire);

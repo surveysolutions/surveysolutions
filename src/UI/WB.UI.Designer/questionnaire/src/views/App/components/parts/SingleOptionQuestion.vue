@@ -254,7 +254,6 @@ export default {
     },
     methods: {
         reset(question) {
-            debugger
             this.isLinkedToReusableCategories = !_.isEmpty(question.categoriesId);
             this.isCascade = !_.isEmpty(question.cascadeFromQuestionId);
             this.isLinked = !_.isEmpty(question.linkedToEntityId);

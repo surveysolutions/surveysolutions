@@ -1194,7 +1194,7 @@
     <value>إظهار / إخفاء قائمة المساعدة هذه</value>
   </data>
   <data name="MarkAsDefault" xml:space="preserve">
-    <value>تعيين كلغة افتراضية</value>
+    <value>تعيين كترجمة افتراضية</value>
   </data>
   <data name="UnMarkAsDefault" xml:space="preserve">
     <value>عدم استخدام كافتراضي</value>
@@ -1598,7 +1598,13 @@
   <data name="HelpCriticalityConditionMessage" xml:space="preserve">
       <value>يتم عرض هذه الرسالة عندما يقيم الشرط الحاسم على أنه "خطأ" أو يحدث استثناء أثناء تقييم التعبير. قد تستخدم الرسالة الروابط التشعبية واستبدال النص.</value>
   </data>
-    <data name="AttachmentSizeIsTooBig" xml:space="preserve">
+  <data name="AttachmentSizeIsTooBig" xml:space="preserve">
     <value>حجم المرفق كبير جدًا. الحد الأقصى: {{size}}</value>
-</data>
+  </data>
+  <data name="SwitchTo" xml:space="preserve">
+    <value>التبديل إلى</value>
+  </data>
+  <data name="SwitchToTranslationConfirm" xml:space="preserve">
+    <value>سيؤدي التبديل إلى تغيير لغة عرض الاستبيان. يجب أن تحتوي الترجمة على نص لجميع العناصر.</value>
+  </data>
 </root>

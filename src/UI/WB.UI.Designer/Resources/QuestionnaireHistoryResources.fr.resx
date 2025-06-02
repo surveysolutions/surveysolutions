@@ -363,4 +363,7 @@
   <data name="MigratedNewCoverSupport" xml:space="preserve">
     <value>Page de couverture générée</value>
   </data>
+  <data name="Translation_Replace" xml:space="preserve">
+    <value>Le document a été basculé vers la traduction {0}</value>
+  </data>
 </root>

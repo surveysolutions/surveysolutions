@@ -1192,7 +1192,7 @@
     <value>Mostrar / ocultar este menu de ajuda</value>
   </data>
   <data name="MarkAsDefault" xml:space="preserve">
-    <value>Marcar como idioma padrão</value>
+    <value>Marcar como tradução padrão</value>
   </data>
   <data name="UnMarkAsDefault" xml:space="preserve">
     <value>Não usar como padrão</value>
@@ -1597,7 +1597,13 @@
   <data name="HelpCriticalityConditionMessage" xml:space="preserve">
       <value>Esta mensagem é exibida quando a condição crítica avalia como "Falso" ou ocorre uma exceção durante a avaliação da expressão. A mensagem pode utilizar hiperlinks e substituição de texto.</value>
   </data>
-    <data name="AttachmentSizeIsTooBig" xml:space="preserve">
+  <data name="AttachmentSizeIsTooBig" xml:space="preserve">
     <value>O tamanho do anexo é muito grande. Tamanho máximo: {{size}}</value>
-</data>
+  </data>
+  <data name="SwitchTo" xml:space="preserve">
+    <value>Alterar para</value>
+  </data>
+  <data name="SwitchToTranslationConfirm" xml:space="preserve">
+    <value>Alterar para mudará o idioma de exibição do questionário. A tradução deve incluir texto para todos os elementos.</value>
+  </data>
 </root>

@@ -304,4 +304,7 @@
   <data name="MigratedNewCoverSupport" xml:space="preserve">
     <value>تم إنشاء صفحة الغلاف</value>
   </data>
+  <data name="Translation_Replace" xml:space="preserve">
+    <value>تم تبديل المستند إلى الترجمة {0}</value>
+  </data>
 </root>
