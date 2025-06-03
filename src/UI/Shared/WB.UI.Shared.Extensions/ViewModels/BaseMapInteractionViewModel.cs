@@ -401,7 +401,6 @@ namespace WB.UI.Shared.Extensions.ViewModels
             get => this.mapView;
             set
             {
-                this.mapView = value;
                 this.RaiseAndSetIfChanged(ref this.mapView, value);
 
                 if (this.mapView != null)
