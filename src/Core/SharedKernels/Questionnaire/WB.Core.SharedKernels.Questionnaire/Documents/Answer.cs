@@ -28,7 +28,8 @@ namespace Main.Core.Entities.SubEntities
 
         public decimal GetParsedValue()
         {
-            return this.AnswerCode ?? decimal.Parse(this.AnswerValue, NumberStyles.Number, CultureInfo.InvariantCulture);
+            this.AnswerCode ??= decimal.Parse(this.AnswerValue, NumberStyles.Number, CultureInfo.InvariantCulture);
+            return this.AnswerCode.Value;
         }
 
         public int? GetParsedParentValue()
