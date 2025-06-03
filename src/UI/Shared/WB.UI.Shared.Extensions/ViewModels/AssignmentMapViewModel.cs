@@ -711,6 +711,9 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
         StopGeoServices();
         
         base.Dispose();
+        
+        this.MapView?.Dispose();
+        this.MapView = null;
     }
 
     private void StopGeoServices()

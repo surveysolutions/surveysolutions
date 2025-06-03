@@ -553,6 +553,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             }
             
             this.MapView?.Dispose();
+            this.MapView = null;
         }
         
         public IMvxAsyncCommand SwitchMapCommand => new MvxAsyncCommand(async () =>
