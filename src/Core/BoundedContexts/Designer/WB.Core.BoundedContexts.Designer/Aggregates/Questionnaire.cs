@@ -469,14 +469,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (!isFullTranslated)
                 throw new QuestionnaireException(DomainExceptionType.TranslationIsNotFull, ExceptionMessages.TranslationIsNotFull);
 
-            var documentTranslations = designerTranslationService.GetFromQuestionnaire(clonedDocument)
+            var documentTranslations = designerTranslationService
+                .GetFromQuestionnaire(clonedDocument)
                 .ToList();
-
-            bool isExistsEmptyText = documentTranslations.Any(t => string.IsNullOrWhiteSpace(t.Value));
-            if (isExistsEmptyText)
-                throw new QuestionnaireException(DomainExceptionType.TranslationIsNotFull, ExceptionMessages.TranslationIsNotFull);
             
-
             var newTranslationId = Guid.NewGuid();
 
             foreach (var categories in innerDocument.Categories)
@@ -521,6 +517,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 t.TranslationId = newTranslationId;
                 t.QuestionnaireId = clonedDocument.PublicKey;
             });
+            documentTranslations = documentTranslations.Where(t => !string.IsNullOrWhiteSpace(t.Value)).ToList();
             designerTranslationService.Store(documentTranslations);
             
             
