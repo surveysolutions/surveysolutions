@@ -1005,9 +1005,6 @@ namespace WB.UI.Shared.Extensions.ViewModels
             collectionCancellationTokenSource?.Cancel();
             collectionCancellationTokenSource?.Dispose();
             collectionCancellationTokenSource = null;
-            
-            this.MapView?.Dispose();
-            this.MapView = null;
 
             base.Dispose();
         }
