@@ -78,7 +78,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
                 Mock.Of<IDesignerTranslationService>(),
                 Mock.Of<IQuestionnaireHistoryVersionsService>(),
                 Mock.Of<IReusableCategoriesService>(),
-                Mock.Of<IFindReplaceService>());
+                Mock.Of<IFindReplaceService>(),
+                Mock.Of<IQuestionnaireTranslator>(),
+                Mock.Of<ITranslationsService>());
             questionnaireAr.Initialize(document.PublicKey, document, Enumerable.Empty<SharedPerson>());
             return questionnaireAr;
         }

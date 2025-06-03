@@ -177,7 +177,7 @@
     "JumpToEdit": "Přeskočit na úpravy",
     "LogOut": "Odhlášení ze systému",
     "MakeOwnerConfirmationMessage": "Pokud převedete vlastnictví, bude nový vlastník upozorněn. Je možné, že již nebudete moci změnit nastavení vlastnictví a nový vlastník vám také může odebrat přístup.",
-    "MarkAsDefault": "Označit jako výchozí jazyk",
+    "MarkAsDefault": "Nastavit jako výchozí překlad",
     "MaxCommentLengthErrorMessage": "Komentář nesmí obsahovat více než {1} znaků",
     "MigrateToNewCover": "Vygenerovat kryt",
     "ModalConfirm": "Potvrzení",
@@ -511,7 +511,9 @@
     "SideBarCriticalityConditionMessage": "Zpráva",
     "SideBarCriticalityConditionNoMessage": "Kritické pravidlo bez zprávy",
     "SideBarShowDescription": "přidat popis",
-    "AttachmentSizeIsTooBig": "Příloha je příliš velká. Maximální velikost: {{size}}"
+    "AttachmentSizeIsTooBig": "Příloha je příliš velká. Maximální velikost: {{size}}",
+    "SwitchTo": "Přepnout na",
+    "SwitchToTranslationConfirm": "Přepnutím se změní jazyk zobrazení dotazníku. Překlad musí obsahovat text pro všechny prvky."
   },
   "AccountResources": {
     "AccountInfoUpdated": "Informace o účtu byly úspěšně aktualizovány",

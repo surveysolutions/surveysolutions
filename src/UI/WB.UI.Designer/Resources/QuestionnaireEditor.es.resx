@@ -409,7 +409,7 @@
     <value>Salir</value>
   </data>
   <data name="MarkAsDefault" xml:space="preserve">
-    <value>Marcar como idioma por defecto</value>
+    <value>Marcar como traducción predeterminada</value>
   </data>
   <data name="ModalConfirm" xml:space="preserve">
     <value>Confirmación</value>
@@ -1660,5 +1660,11 @@ Ingresaste una entrada no válida. Cada línea debe seguir el formato: "Título.
   </data>
   <data name="AttachmentSizeIsTooBig" xml:space="preserve">
     <value>El tamaño del archivo adjunto es demasiado grande. Tamaño máximo: {{size}}</value>
+</data>
+  <data name="SwitchTo" xml:space="preserve">
+    <value>Cambiar a</value>
+</data>
+  <data name="SwitchToTranslationConfirm" xml:space="preserve">
+    <value>Cambiar a modificará el idioma de visualización del cuestionario. La traducción debe incluir texto para todos los elementos.</value>
 </data>
 </root>

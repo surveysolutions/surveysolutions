@@ -361,7 +361,10 @@
     <data name="CriticalRule_Update" xml:space="preserve">
   <value>Regla crítica {0} actualizada</value>
 </data>
-    <data name="Questionnaire_Move" xml:space="preserve">
-  <value>Propiedad del cuestionario transferida al usuario con el correo electrónico "{0}"</value>
-</data>
+  <data name="Questionnaire_Move" xml:space="preserve">
+    <value>Propiedad del cuestionario transferida al usuario con el correo electrónico "{0}"</value>
+  </data>
+  <data name="Translation_Replace" xml:space="preserve">
+    <value>El documento se cambió a la traducción {0}</value>
+  </data>
 </root>
