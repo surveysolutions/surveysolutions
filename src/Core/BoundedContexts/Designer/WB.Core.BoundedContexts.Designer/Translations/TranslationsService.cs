@@ -105,7 +105,9 @@ namespace WB.Core.BoundedContexts.Designer.Translations
         {
             var categoriesService = new CategoriesService(questionnaire.PublicKey, this.reusableCategoriesService);
             var translations = translationsExportService.GetTranslationTexts(questionnaire, translation, categoriesService);
-            return translations.All(t => !string.IsNullOrEmpty(t.Value));
+            return translations
+                .Where(t => t.Type != TranslationType.ValidationMessage)
+                .All(t => !string.IsNullOrEmpty(t.Value));
         }
 
         
