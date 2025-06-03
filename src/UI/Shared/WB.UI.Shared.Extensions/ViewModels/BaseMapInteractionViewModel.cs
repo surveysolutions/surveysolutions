@@ -280,6 +280,10 @@ namespace WB.UI.Shared.Extensions.ViewModels
             base.ViewCreated();
 
             // we use MapView and Map properties in MapControlCreatedAsync, need wait to init its
+            var initMapView = WaitForMapViewInitializationAsync();
+            if (initMapView != null)
+                await initMapView.ConfigureAwait(false);
+            
             if (InitializeTask?.Task != null)
                 await InitializeTask.Task.ConfigureAwait(false);
             
@@ -388,7 +392,28 @@ namespace WB.UI.Shared.Extensions.ViewModels
         
         protected ShapefileFeatureTable LoadedShapefile;
 
-        public MapView MapView { get; set; }
+        private TaskCompletionSource<bool> mapViewInitializedTaskSource = new TaskCompletionSource<bool>();
+        
+        private MapView mapView;
+        
+        public MapView MapView
+        {
+            get => this.mapView;
+            set
+            {
+                this.mapView = value;
+                this.RaiseAndSetIfChanged(ref this.mapView, value);
+
+                if (this.mapView != null)
+                {
+                    mapViewInitializedTaskSource.SetResult(true);
+                }
+            }
+        }
+        private Task WaitForMapViewInitializationAsync()
+        {
+            return mapViewInitializedTaskSource.Task;
+        }
 
         public IMvxAsyncCommand RotateMapToNorth => new MvxAsyncCommand(async () =>
         {
@@ -528,6 +553,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             }
             
             this.MapView?.Dispose();
+            this.MapView = null;
         }
         
         public IMvxAsyncCommand SwitchMapCommand => new MvxAsyncCommand(async () =>
