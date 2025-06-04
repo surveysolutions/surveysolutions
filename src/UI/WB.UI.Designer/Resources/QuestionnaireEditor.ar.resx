@@ -1194,7 +1194,7 @@
     <value>إظهار / إخفاء قائمة المساعدة هذه</value>
   </data>
   <data name="MarkAsDefault" xml:space="preserve">
-    <value>تعيين كترجمة افتراضية</value>
+    <value>تعيين كافتراضي</value>
   </data>
   <data name="UnMarkAsDefault" xml:space="preserve">
     <value>عدم استخدام كافتراضي</value>
