@@ -76,19 +76,4 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private bool IsDisposed = false;
     }
-
-    public class SingleOptionQuestionOptionViewModelEqualityComparer : IEqualityComparer<SingleOptionQuestionOptionViewModel>
-    {
-        public bool Equals(SingleOptionQuestionOptionViewModel x, SingleOptionQuestionOptionViewModel y)
-        {
-            return x.Title == y.Title
-                   && x.Value == y.Value
-                   && x.Selected == y.Selected;
-        }
-
-        public int GetHashCode(SingleOptionQuestionOptionViewModel obj)
-        {
-            return obj?.Value.GetHashCode() ?? 0;
-        }
-    }
 }
