@@ -207,6 +207,12 @@ namespace WB.UI.Designer.Resources {
             }
         }
         
+        public static string Translation_Replace {
+            get {
+                return ResourceManager.GetString("Translation_Replace", resourceCulture);
+            }
+        }
+        
         public static string TextsReplaced {
             get {
                 return ResourceManager.GetString("TextsReplaced", resourceCulture);

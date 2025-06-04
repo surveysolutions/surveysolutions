@@ -30,7 +30,7 @@ namespace WB.UI.Shared.Web.Extensions
         [HtmlAttributeName("path")]
         public string Path { get; set; } = "locale/";
 
-        private static readonly Regex ComponentMatcher = new Regex(@"(?<component>[\w\d-]*)\.([\da-f]*)?\.?(min\.)?(js)", RegexOptions.Compiled);
+        private static readonly Regex ComponentMatcher = new Regex(@"(?<component>[\w\d-]*)\.([\da-f]*)?\.?(min\.)?(js)$", RegexOptions.Compiled);
 
         public override Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {

@@ -76,7 +76,7 @@ jobs:
         mv ~/Android/Sdk/cmdline-tools/cmdline-tools ~/Android/Sdk/cmdline-tools/latest
         export PATH=$PATH:~/Android/Sdk/cmdline-tools/latest/bin
         yes | sdkmanager --licenses
-        sdkmanager "platforms;android-34" "platform-tools" "build-tools;34.0.0"
+        sdkmanager "platforms;android-34" "platform-tools" "build-tools;35.0.0"
 
     - name: Export Android SDK Path
       run: echo "ANDROID_SDK_ROOT=$HOME/Android/Sdk" >> $GITHUB_ENV

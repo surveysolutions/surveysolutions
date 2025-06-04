@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
 
             Assert.That(dto.Rows, Has.Count.EqualTo(2));
             Assert.That(dto.Rows[0].Text, Is.EqualTo("test"));
-            Assert.That(dto.Rows[1].Value, Is.EqualTo(1).Within(0.1m));
+            Assert.That(dto.Rows[1].Value, Is.EqualTo(1m).Within(0.1m));
         }
     }
 }

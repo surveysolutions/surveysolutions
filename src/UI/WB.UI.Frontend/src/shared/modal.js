@@ -141,6 +141,11 @@ export default {
     },
 
     processText(message) {
-        return sanitizeHtml(message, { allowedTags: ['b', 'i', 'strong', 'em', 'p', 'ul', 'li', 'br'] });
+        return sanitizeHtml(message, {
+            allowedTags: ['b', 'i', 'strong', 'em', 'p', 'ul', 'li', 'br', 'div'],
+            allowedAttributes: {
+                div: ['id'] // Allow 'id' attribute for 'div' tags
+            }
+        });
     }
 };

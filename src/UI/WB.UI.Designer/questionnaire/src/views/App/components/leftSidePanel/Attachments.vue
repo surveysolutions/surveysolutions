@@ -17,12 +17,13 @@
                     </p>
                 </div>
                 <input type="button" :value="$t('QuestionnaireEditor.SideBarAttachmentsUpload')"
-                    @click.stop="openFileDialog()" value="Upload new attachment" class="btn btn-default btn-lg pull-left"
-                    :class="{ 'btn-primary': !isReadOnlyForUser }" v-if="!isReadOnlyForUser" capture />
+                    @click.stop="openFileDialog()" value="Upload new attachment"
+                    class="btn btn-default btn-lg pull-left" :class="{ 'btn-primary': !isReadOnlyForUser }"
+                    v-if="!isReadOnlyForUser" capture />
 
                 <file-upload ref="upload" v-if="!isReadOnlyForUser" :input-id="'tfunew'" v-model="file"
-                    :size="100 * 1024 * 1024" :drop="false" :drop-directory="false" @input-file="createAndUploadFile"
-                    accept=".pdf,image/*,video/*,audio/*">
+                    :size="maxFileSize" :drop="false" :drop-directory="false" @input-file="createAndUploadFile"
+                    @input-filter="inputFilter" accept=".pdf,image/*,video/*,audio/*">
                 </file-upload>
             </div>
             <div class="empty-list" v-if="attachments.length == 0">
@@ -34,7 +35,8 @@
                         {{ $t('QuestionnaireEditor.ClickHere') }}
                     </a>
                 </p>
-                <p v-dompurify-html="$t('QuestionnaireEditor.SideBarAttachmentsEmptyLine3', { name: variableNameHtml })" />
+                <p
+                    v-dompurify-html="$t('QuestionnaireEditor.SideBarAttachmentsEmptyLine3', { name: variableNameHtml })" />
             </div>
             <form role="form" name="attachmentsForm" novalidate>
                 <div class="attachment-list">
@@ -46,7 +48,7 @@
         </perfect-scrollbar>
     </div>
 </template>
-  
+
 <script>
 
 import _ from 'lodash';
@@ -72,6 +74,7 @@ export default {
             downloadLookupFileBaseUrl: '/attachments',
             allowedMaxResolution: 4096,
             variableNameHtml: "<span class=\"variable-name\">" + this.$t('QuestionnaireEditor.VariableName') + "</span>",
+            maxFileSize: 100 * 1024 * 1024,
         }
     },
     computed: {
@@ -185,7 +188,16 @@ export default {
                 await updateAttachment(self.questionnaireId, attachment, true);
             });
         },
+
+        inputFilter(file) {
+            if (file.size > this.maxFileSize) {
+                notice(this.$t('QuestionnaireEditor.AttachmentSizeIsTooBig', {
+                    size: formatBytes(this.maxFileSize),
+                }));
+                return false;
+            }
+            return true;
+        },
     }
 }
 </script>
-  

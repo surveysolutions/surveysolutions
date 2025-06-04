@@ -705,6 +705,12 @@ namespace WB.UI.Designer.Resources {
             }
         }
         
+        public static string AttachmentSizeIsTooBig {
+            get {
+                return ResourceManager.GetString("AttachmentSizeIsTooBig", resourceCulture);
+            }
+        }
+        
         public static string SideBarAttachmentsTitle {
             get {
                 return ResourceManager.GetString("SideBarAttachmentsTitle", resourceCulture);
@@ -3108,6 +3114,18 @@ namespace WB.UI.Designer.Resources {
         public static string HelpCriticalityConditionMessage {
             get {
                 return ResourceManager.GetString("HelpCriticalityConditionMessage", resourceCulture);
+            }
+        }
+        
+        public static string SwitchTo {
+            get {
+                return ResourceManager.GetString("SwitchTo", resourceCulture);
+            }
+        }
+        
+        public static string SwitchToTranslationConfirm {
+            get {
+                return ResourceManager.GetString("SwitchToTranslationConfirm", resourceCulture);
             }
         }
     }

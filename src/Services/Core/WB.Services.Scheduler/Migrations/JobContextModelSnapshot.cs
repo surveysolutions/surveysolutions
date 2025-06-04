@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using WB.Services.Scheduler;
 
+#nullable disable
+
 namespace WB.Services.Scheduler.Migrations
 {
     [DbContext(typeof(JobContext))]
@@ -16,84 +18,91 @@ namespace WB.Services.Scheduler.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("scheduler")
-                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
-                .HasAnnotation("ProductVersion", "3.1.7")
+                .HasAnnotation("ProductVersion", "9.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
+
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("WB.Services.Scheduler.Model.JobArchive", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("id")
                         .HasColumnType("bigint")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<string>("Args")
                         .IsRequired()
-                        .HasColumnName("args")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("args");
 
                     b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("created_at")
-                        .HasColumnType("timestamp without time zone");
+                        .HasDefaultValueSql("(now() at time zone 'utc')");
 
                     b.Property<DateTime?>("EndAt")
-                        .HasColumnName("end_at")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("end_at");
 
                     b.Property<DateTime>("LastUpdateAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("last_update_at")
-                        .HasColumnType("timestamp without time zone");
+                        .HasDefaultValueSql("(now() at time zone 'utc')");
 
                     b.Property<DateTime?>("ScheduleAt")
-                        .HasColumnName("schedule_at")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("schedule_at");
 
                     b.Property<DateTime?>("StartAt")
-                        .HasColumnName("start_at")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("start_at");
 
                     b.Property<int>("Status")
-                        .HasColumnName("status")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("status");
 
                     b.Property<string>("Tenant")
-                        .HasColumnName("tenant")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("tenant");
 
                     b.Property<string>("TenantName")
                         .IsRequired()
-                        .HasColumnName("tenant_name")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("tenant_name");
 
                     b.Property<string>("Type")
                         .IsRequired()
-                        .HasColumnName("type")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("type");
 
                     b.HasKey("Id")
                         .HasName("pk_archive");
 
-                    b.ToTable("archive");
+                    b.ToTable("archive", "scheduler");
                 });
 
             modelBuilder.Entity("WB.Services.Scheduler.Model.JobItem", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("id")
                         .HasColumnType("bigint")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<string>("Args")
                         .IsRequired()
-                        .HasColumnName("args")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("args");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("created_at")
                         .HasColumnType("timestamp without time zone")
+                        .HasColumnName("created_at")
                         .HasDefaultValueSql("(now() at time zone 'utc')");
 
                     b.Property<string>("Data")
@@ -101,50 +110,50 @@ namespace WB.Services.Scheduler.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("EndAt")
-                        .HasColumnName("end_at")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("end_at");
 
                     b.Property<DateTime>("LastUpdateAt")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("last_update_at")
                         .HasColumnType("timestamp without time zone")
+                        .HasColumnName("last_update_at")
                         .HasDefaultValueSql("(now() at time zone 'utc')");
 
                     b.Property<DateTime?>("ScheduleAt")
-                        .HasColumnName("schedule_at")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("schedule_at");
 
                     b.Property<DateTime?>("StartAt")
-                        .HasColumnName("start_at")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("start_at");
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnName("status")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("status");
 
                     b.Property<string>("Tag")
-                        .HasColumnName("tag")
-                        .HasColumnType("text");
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("tag");
 
                     b.Property<string>("Tenant")
-                        .IsRequired()
-                        .HasColumnName("tenant")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("tenant");
 
                     b.Property<string>("TenantName")
                         .IsRequired()
-                        .HasColumnName("tenant_name")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("tenant_name");
 
                     b.Property<string>("Type")
                         .IsRequired()
-                        .HasColumnName("type")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("type");
 
                     b.Property<string>("WorkerId")
-                        .HasColumnName("worker_id")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("worker_id");
 
                     b.HasKey("Id")
                         .HasName("pk_jobs");
@@ -153,7 +162,7 @@ namespace WB.Services.Scheduler.Migrations
 
                     b.HasIndex("Type", "Status", "Tenant");
 
-                    b.ToTable("jobs");
+                    b.ToTable("jobs", "scheduler");
                 });
 #pragma warning restore 612, 618
         }

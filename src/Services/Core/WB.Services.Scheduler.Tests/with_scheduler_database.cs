@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Dapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -41,7 +42,11 @@ namespace WB.Services.Scheduler.Tests
         {
             var services = new ServiceCollection()
                 .AddDbContext<JobContext>(ops =>
-                    ops.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
+                {
+                    ops.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"));
+                    ops.ConfigureWarnings(w =>
+                        w.Throw(RelationalEventId.PendingModelChangesWarning));
+                });
             
             jobSettingsMock = new Mock<IOptions<JobSettings>>();
 
@@ -57,6 +62,7 @@ namespace WB.Services.Scheduler.Tests
 
         protected IConfiguration Configuration => new ConfigurationBuilder()
             .AddJsonFile($@"appsettings.json", true)
+            .AddJsonFile($@"appsettings.DEV_DEFAULTS.json", true)
             .AddJsonFile($"appsettings.{Environment.MachineName}.json", true)
             .Build();
 
@@ -68,7 +74,11 @@ namespace WB.Services.Scheduler.Tests
         {
             var services = new ServiceCollection()
                 .AddDbContext<JobContext>(ops =>
-                    ops.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
+                {
+                    ops.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"));
+                    ops.ConfigureWarnings(w =>
+                        w.Throw(RelationalEventId.PendingModelChangesWarning));
+                });
             
             jobSettingsMock = new Mock<IOptions<JobSettings>>();
 
@@ -87,7 +97,8 @@ namespace WB.Services.Scheduler.Tests
         {
             AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
             
-            this.SchemaName = "test_schema";
+            //this.SchemaName = "test_schema";
+            this.SchemaName = "scheduler";
 
             Console.WriteLine(SchemaName);
             using var scope = PrepareOneTime().CreateScope();
@@ -102,7 +113,7 @@ namespace WB.Services.Scheduler.Tests
                 .ExecuteAsync(async () =>
                 {
                     await db.Database.MigrateAsync();
-                    await db.Database.ExecuteSqlRawAsync("ALTER SCHEMA scheduler RENAME TO " + SchemaName);
+                    //await db.Database.ExecuteSqlRawAsync("ALTER SCHEMA scheduler RENAME TO " + SchemaName);
                 });
 
             

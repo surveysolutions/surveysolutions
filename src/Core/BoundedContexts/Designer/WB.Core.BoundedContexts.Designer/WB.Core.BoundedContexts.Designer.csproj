@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <GenerateAssemblyInformationalVersionAttribute>true</GenerateAssemblyInformationalVersionAttribute>
     <GenerateAssemblyVersionAttribute>true</GenerateAssemblyVersionAttribute>
     <GenerateAssemblyFileVersionAttribute>true</GenerateAssemblyFileVersionAttribute>
@@ -26,7 +26,7 @@
     <EmbeddedResource Include="$(NugetPackageRoot)\system.text.encoding.extensions\4.3.0\ref\netstandard1.3\System.Text.Encoding.Extensions.dll" Visible="false" />
     <EmbeddedResource Include="$(NugetPackageRoot)\system.reflection\4.3.0\ref\netstandard1.5\System.Reflection.dll" Visible="false" />
     <EmbeddedResource Include="$(NugetPackageRoot)\system.io\4.3.0\ref\netstandard1.5\System.IO.dll" Visible="false" WithCulture="false" />
-    <EmbeddedResource Include="$(NugetPackageRoot)\system.text.regularexpressions\4.3.0\ref\netstandard1.3\System.Text.RegularExpressions.dll" Visible="false" />
+    <EmbeddedResource Include="$(NugetPackageRoot)\system.text.regularexpressions\4.3.1\ref\netstandard1.3\System.Text.RegularExpressions.dll" Visible="false" />
     <EmbeddedResource Include="$(NugetPackageRoot)\system.globalization\4.3.0\ref\netstandard1.3\System.Globalization.dll" Visible="false" />
     <EmbeddedResource Include="$(NugetPackageRoot)\system.threading\4.3.0\ref\netstandard1.3\System.Threading.dll" Visible="false" />
   </ItemGroup>
@@ -34,18 +34,18 @@
     <PackageReference Include="AutoMapper" Version="13.0.1" />
     <PackageReference Include="CsvHelper" Version="33.0.1" />
     <PackageReference Include="ClosedXML" Version="0.102.3" />
-    <PackageReference Include="Dapper" Version="2.1.35" />
-    <PackageReference Include="HtmlSanitizer" Version="8.1.870" />
-    <PackageReference Include="JsonDiffPatch.Net" Version="2.3.0" />
-    <PackageReference Include="Markdig" Version="0.38.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.11" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.9.2" />
-    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="8.0.1" />
+    <PackageReference Include="Dapper" Version="2.1.66" />
+    <PackageReference Include="HtmlSanitizer" Version="9.0.884" />
+    <PackageReference Include="JsonDiffPatch.Net" Version="2.4.0" />
+    <PackageReference Include="Markdig" Version="0.41.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.3.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.5" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.14.0" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="9.0.5" />
     <PackageReference Include="NJsonSchema" Version="10.9.0" />
     <PackageReference Include="SixLabors.ImageSharp" Version="3.1.7" />
-    <PackageReference Include="System.CodeDom" Version="8.0.0" />
-    <PackageReference Include="System.Security.Cryptography.Xml" Version="9.0.0" />
+    <PackageReference Include="System.CodeDom" Version="9.0.5" />
+    <PackageReference Include="System.Security.Cryptography.Xml" Version="9.0.5" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Infrastructure\WB.Infrastructure.Native\WB.Infrastructure.Native.csproj" />

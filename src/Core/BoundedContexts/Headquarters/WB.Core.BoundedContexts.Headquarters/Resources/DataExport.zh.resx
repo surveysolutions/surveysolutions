@@ -178,7 +178,7 @@
     <value>您不能改变导出设置，因为导出过程已经开始运行</value>
   </data>
   <data name="ExportExplanation" xml:space="preserve">
-    <value>点击生成按钮创建一个数据归档。表格中将显示归档创建的时间和大小。最近一次生成的数据归档可以通过点击下载按钮下载。要创建新的归档，请再次点击生成按钮。</value>
+    <value>点击“添加到队列”按钮会创建一个包含当时服务器上可用访谈的数据归档。归档的创建时间和大小会显示在表格中。最后生成的数据归档可以通过点击下载按钮下载。再次点击“添加到队列”按钮可创建新的归档。</value>
   </data>
   <data name="ExportRange" xml:space="preserve">
     <value>导出范围：</value>

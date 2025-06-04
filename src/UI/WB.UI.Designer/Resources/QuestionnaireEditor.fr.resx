@@ -1251,7 +1251,7 @@ Les vues Table et Matrice sont uniquement prises en charge dans l'enquête Web, 
     <value>Afficher / masquer ce menu d'aide</value>
   </data>
   <data name="MarkAsDefault" xml:space="preserve">
-    <value>Marquer comme langue par défaut</value>
+    <value>Définir par défaut</value>
   </data>
   <data name="UnMarkAsDefault" xml:space="preserve">
     <value>Ne pas utiliser comme langue par défaut</value>
@@ -1656,5 +1656,13 @@ Vous avez entré une entrée invalide. Chaque ligne doit suivre le format : "Tit
   <data name="HelpCriticalityConditionMessage" xml:space="preserve">
       <value>Ce message est affiché lorsque la condition critique est évaluée à "Faux" ou qu'une exception se produit lors de l'évaluation de l'expression. Le message peut utiliser des hyperliens et la substitution de texte.</value>
   </data>
-    
+  <data name="AttachmentSizeIsTooBig" xml:space="preserve">
+    <value>La taille de la pièce jointe est trop grande. Taille maximale : {{size}}</value>
+</data>
+  <data name="SwitchTo" xml:space="preserve">
+    <value>Passer à</value>
+</data>
+  <data name="SwitchToTranslationConfirm" xml:space="preserve">
+    <value>Passer à changera la langue d’affichage du questionnaire. La traduction doit inclure un texte pour tous les éléments.</value>
+</data>
 </root>

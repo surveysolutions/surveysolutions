@@ -358,9 +358,9 @@
     "SideBarCriticalityConditionsEmptyLine3": "Include a message for the interviewer (respondent) to explain what needs to be changed in the interview (the message is displayed when the critical condition is not satisfied). Including hyperlinks to questions in the message is useful for navigation.",
     "SideBarHideDescription": "hide description",
     "SideBarCriticalityConditionMessage": "Message",
+    "SideBarCriticalityConditionNoMessage": "Critical rule with no message",
     "SideBarShowDescription": "add description",
     "SideBarAddCriticalityCondition": "add new critical rule",
-    "SideBarCriticalityConditionNoMessage": "Critical rule with no message",
     "SideBarScenarioCounter": "{{count}} Scenario:",
     "SideBarScenarioCounter_other": "{{count}} Scenarios:",
     "SideBarScenarioEmptyLine1": "Use this tab to view your scenarios.",
@@ -375,6 +375,7 @@
     "SideBarCategoriesEmptyLine1": "Use this tab to manage reusable categories.",
     "SideBarCategoriesEmptyLine2": "You may download and update categories.",
     "SideBarCategoriesEmptyLine3": "will be added to list of reusable categories for any types of categorical questions",
+    "AttachmentSizeIsTooBig": "Attachment size is too big. Max size: {{size}}",
     "SideBarCriticalityConditionsTitle": "Critical rules",
     "SideBarScenarioTitle": "Scenarios",
     "SideBarCategoriesTitle": "Categories",
@@ -503,7 +504,6 @@
     "ShowParentValues": "Show Parent values",
     "HideParentValues": "Hide Parent values",
     "AddEnablingCondition": "Add enabling condition",
-    "OldUi": "Old UI",
     "ShowList": "Show list",
     "Login": "Login",
     "Register": "Register",
@@ -511,7 +511,9 @@
     "QuestionIsCritical": "This is a critical question",
     "HelpIsCritical": "Questionnaire authors may indicate that the answer to a question is critical for interview submission.",
     "HelpCriticalityConditionExpression": "A logical expression that evaluates the interview as a whole to determine whether it satisfies the critical rules (when this expression evaluates to \"True\"). It may refer to any questions or variables.",
-    "HelpCriticalityConditionMessage": "This message is shown when the critical condition evaluates to \"False\" or an exception occurs during expression evaluation. The message may utilize hyperlinks and text substitution."
+    "HelpCriticalityConditionMessage": "This message is shown when the critical condition evaluates to \"False\" or an exception occurs during expression evaluation. The message may utilize hyperlinks and text substitution.",
+    "SwitchTo": "Switch To",
+    "SwitchToTranslationConfirm": "Switch To will change the display language of the questionnaire. The translation must include text for all elements."
   },
   "AccountResources": {
     "AllRights": "版权所有。",

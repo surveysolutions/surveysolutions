@@ -1012,7 +1012,7 @@
     <value>Ok</value>
   </data>
   <data name="MarkAsDefault" xml:space="preserve">
-    <value>Установить язык по умолчанию </value>
+    <value>Установить по умолчанию</value>
   </data>
   <data name="UnMarkAsDefault" xml:space="preserve">
     <value>Не использовать по умолчанию</value>
@@ -1674,4 +1674,13 @@
   <data name="HelpCriticalityConditionMessage" xml:space="preserve">
       <value>Сообщение критического условия.</value>
   </data>
+  <data name="AttachmentSizeIsTooBig" xml:space="preserve">
+    <value>Размер вложения слишком большой. Максимальный размер: {{size}}</value>
+</data>
+  <data name="SwitchTo" xml:space="preserve">
+    <value>Переключить на</value>
+</data>
+  <data name="SwitchToTranslationConfirm" xml:space="preserve">
+    <value>Переключить на изменит язык отображения опросника. Перевод должен содержать текст для всех элементов.</value>
+</data>
 </root>

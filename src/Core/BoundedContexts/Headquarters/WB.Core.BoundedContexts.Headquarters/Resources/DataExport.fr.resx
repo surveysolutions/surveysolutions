@@ -238,7 +238,7 @@
     <value>Format tabulaire</value>
   </data>
   <data name="ExportExplanation" xml:space="preserve">
-    <value>Appuyer sur le bouton Générer crée une archive de données d'entretiens disponibles sur le serveur à ce moment-là. L'heure de la création de l'archive et la taille de l'archive sont affichées dans le tableau. La dernière archive de données générée peut être téléchargée en appuyant sur le bouton Télécharger. Appuyez à nouveau sur le bouton Générer pour créer une nouvelle archive.</value>
+    <value>En appuyant sur le bouton "Ajouter à la file d'attente", une archive de données des interviews disponibles sur le serveur à ce moment est créée. L'heure de création de l'archive et sa taille sont affichées dans le tableau. La dernière archive générée peut être téléchargée en appuyant sur le bouton Télécharger. Appuyez à nouveau sur "Ajouter à la file d'attente" pour créer une nouvelle archive.</value>
   </data>
   <data name="ZipFile" xml:space="preserve">
     <value>Fichier zip</value>

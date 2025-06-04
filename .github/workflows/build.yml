@@ -12,7 +12,7 @@ on:
 env:
   REGISTRY: ghcr.io
   NODE_VERSION: 22
-  DOTNET_VERSION: '8.0.x'
+  DOTNET_VERSION: '9.0.x'
 
 jobs:
   prepare:
@@ -223,7 +223,7 @@ jobs:
 
   installer:
     needs: [prepare, mobile, union-apps]
-    runs-on: windows-2019
+    runs-on: windows-2022
     environment: ${{ needs.prepare.outputs.environment }}
 
     steps:

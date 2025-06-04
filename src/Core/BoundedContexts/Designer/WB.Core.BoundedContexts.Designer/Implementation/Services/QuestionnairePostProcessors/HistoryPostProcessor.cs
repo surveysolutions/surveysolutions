@@ -56,6 +56,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         ICommandPostProcessor<Questionnaire, AddOrUpdateTranslation>,
         ICommandPostProcessor<Questionnaire, DeleteTranslation>,
         ICommandPostProcessor<Questionnaire, SetDefaultTranslation>,
+        ICommandPostProcessor<Questionnaire, SwitchToTranslation>,
         ICommandPostProcessor<Questionnaire, AddGroup>,
         ICommandPostProcessor<Questionnaire, UpdateGroup>,
         ICommandPostProcessor<Questionnaire, MoveGroup>,
@@ -455,6 +456,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
                 .SingleOrDefault(t => t.Id == command.TranslationId)?.Name;
 
             this.AddQuestionnaireChangeItem(command.QuestionnaireId, command.ResponsibleId, QuestionnaireActionType.Mark,
+              QuestionnaireItemType.Translation, command.QuestionnaireId, translationName, aggregate.QuestionnaireDocument);
+        }
+        
+        public void Process(Questionnaire aggregate, SwitchToTranslation command)
+        {
+            var translationName = aggregate.QuestionnaireDocument.DefaultLanguageName;
+
+            this.AddQuestionnaireChangeItem(command.QuestionnaireId, command.ResponsibleId, QuestionnaireActionType.Replace,
               QuestionnaireItemType.Translation, command.QuestionnaireId, translationName, aggregate.QuestionnaireDocument);
         }
 

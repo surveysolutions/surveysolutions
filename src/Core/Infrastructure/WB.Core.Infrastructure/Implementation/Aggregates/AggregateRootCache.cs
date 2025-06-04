@@ -12,13 +12,18 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
         private readonly IMemoryCache memoryCache;
         private CancellationTokenSource resetCacheToken = new CancellationTokenSource();
 
-        public AggregateRootCache(IMemoryCache memoryCache)
+        public AggregateRootCache(IMemoryCache memoryCache, 
+            AggregateRootCacheExpirationSettings settings = null)
         {
             this.memoryCache = memoryCache;
+            Expiration = settings?.Expiration ?? TimeSpan.FromMinutes(5);
+            MaxCacheExpiration = settings?.MaxCacheExpiration ?? MaxCachePeriod;
         }
 
-        protected virtual TimeSpan Expiration { get; } = TimeSpan.FromMinutes(5);
+        protected virtual TimeSpan Expiration { get; }
+        protected virtual TimeSpan MaxCacheExpiration { get; } 
         private static readonly TimeSpan MaxCachePeriod = TimeSpan.FromHours(1);
+        
 
         protected virtual string Key(Guid id) => "ar::" + id;
 
@@ -31,7 +36,7 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
         {
             expirationPeriod ??= Expiration;
 
-            TimeSpan expiration = expirationPeriod > MaxCachePeriod ? MaxCachePeriod : expirationPeriod.Value;
+            TimeSpan expiration = expirationPeriod > MaxCacheExpiration ? MaxCacheExpiration : expirationPeriod.Value;
             var value = new AggregateRootCacheItem(aggregateId);
 
             value = factory == null ? value : factory(value);
@@ -74,6 +79,18 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
             }
 
             resetCacheToken = new CancellationTokenSource();
+        }
+    }
+
+    public class AggregateRootCacheExpirationSettings
+    {
+        public TimeSpan? Expiration { get; set; }
+        public TimeSpan? MaxCacheExpiration { get; set; }
+
+        public AggregateRootCacheExpirationSettings(TimeSpan? expiration = null, TimeSpan? maxCacheExpiration = null)
+        {
+            this.Expiration = expiration;
+            this.MaxCacheExpiration = maxCacheExpiration;
         }
     }
 }

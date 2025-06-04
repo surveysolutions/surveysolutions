@@ -280,6 +280,10 @@ namespace WB.UI.Shared.Extensions.ViewModels
             base.ViewCreated();
 
             // we use MapView and Map properties in MapControlCreatedAsync, need wait to init its
+            var initMapView = WaitForMapViewInitializationAsync();
+            if (initMapView != null)
+                await initMapView.ConfigureAwait(false);
+            
             if (InitializeTask?.Task != null)
                 await InitializeTask.Task.ConfigureAwait(false);
             
@@ -334,6 +338,8 @@ namespace WB.UI.Shared.Extensions.ViewModels
             var existingMap = this.AvailableMaps.FirstOrDefault(x => x.MapName == selectedMapToLoad);
             if (existingMap == null) return;
 
+            if (this.Map == null || this.MapView == null) return;
+            
             if (this.SelectedMap != selectedMapToLoad)
             {
                 var baseMap = await mapUtilityService.GetBaseMap(existingMap);
@@ -352,7 +358,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     FirstLoad = false;
                     await MapView.SetViewpointGeometryAsync(this.Map.Basemap.BaseLayers[0].FullExtent);
                     
-                    MapView.ViewpointChanged += MapViewPointChanged;
+                    this.MapView.ViewpointChanged += MapViewPointChanged;
                 }
                 
                 if (this.MapView?.VisibleArea != null)
@@ -386,7 +392,27 @@ namespace WB.UI.Shared.Extensions.ViewModels
         
         protected ShapefileFeatureTable LoadedShapefile;
 
-        public MapView MapView { get; set; }
+        private TaskCompletionSource<bool> mapViewInitializedTaskSource = new TaskCompletionSource<bool>();
+        
+        private MapView mapView;
+        
+        public MapView MapView
+        {
+            get => this.mapView;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref this.mapView, value);
+
+                if (this.mapView != null && mapViewInitializedTaskSource.Task.IsCompleted == false)
+                {
+                    mapViewInitializedTaskSource.SetResult(true);
+                }
+            }
+        }
+        private Task WaitForMapViewInitializationAsync()
+        {
+            return mapViewInitializedTaskSource.Task;
+        }
 
         public IMvxAsyncCommand RotateMapToNorth => new MvxAsyncCommand(async () =>
         {
@@ -526,6 +552,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             }
             
             this.MapView?.Dispose();
+            this.MapView = null;
         }
         
         public IMvxAsyncCommand SwitchMapCommand => new MvxAsyncCommand(async () =>

@@ -1093,7 +1093,6 @@ namespace WB.Tests.Abc.TestFactories
             INetworkService networkService = null,
             IJsonAllTypesSerializer synchronizationSerializer = null,
             IStringCompressor stringCompressor = null,
-            IRestServicePointManager restServicePointManager = null,
             IHttpStatistician httpStatistician = null,
             IHttpClientFactory httpClientFactory = null)
         {
@@ -1102,7 +1101,6 @@ namespace WB.Tests.Abc.TestFactories
                 networkService ?? Mock.Of<INetworkService>(x => x.IsNetworkEnabled() == true),
                 synchronizationSerializer ?? new JsonAllTypesSerializer(),
                 stringCompressor ?? Mock.Of<IStringCompressor>(),
-                restServicePointManager ?? Mock.Of<IRestServicePointManager>(),
                 httpStatistician ?? Mock.Of<IHttpStatistician>(),
                 httpClientFactory ?? Mock.Of<IHttpClientFactory>(),
                 new SimpleFileHandler(),
