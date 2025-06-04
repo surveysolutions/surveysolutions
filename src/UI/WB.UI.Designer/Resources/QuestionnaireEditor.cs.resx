@@ -654,7 +654,7 @@ Zobrazení tabulky a matice jsou podporována pouze ve webovém průzkumu, table
     <value>Pokud převedete vlastnictví, bude nový vlastník upozorněn. Je možné, že již nebudete moci změnit nastavení vlastnictví a nový vlastník vám také může odebrat přístup.</value>
   </data>
   <data name="MarkAsDefault" xml:space="preserve">
-    <value>Nastavit jako výchozí překlad</value>
+    <value>Nastavit jako výchozí</value>
   </data>
   <data name="MaxCommentLengthErrorMessage" xml:space="preserve">
     <value>Komentář nesmí obsahovat více než {1} znaků</value>

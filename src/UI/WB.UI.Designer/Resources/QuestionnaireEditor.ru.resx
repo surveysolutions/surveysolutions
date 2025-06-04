@@ -1012,7 +1012,7 @@
     <value>Ok</value>
   </data>
   <data name="MarkAsDefault" xml:space="preserve">
-    <value>Отметить как перевод по умолчанию</value>
+    <value>Установить по умолчанию</value>
   </data>
   <data name="UnMarkAsDefault" xml:space="preserve">
     <value>Не использовать по умолчанию</value>

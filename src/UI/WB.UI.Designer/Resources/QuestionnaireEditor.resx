@@ -1256,7 +1256,7 @@ Table and Matrix views are supported only in Web survey, tablet falls back to 'S
     <value>Show / hide this help menu</value>
   </data>
   <data name="MarkAsDefault" xml:space="preserve">
-    <value>Mark as default translation</value>
+    <value>Set as default</value>
   </data>
   <data name="UnMarkAsDefault" xml:space="preserve">
     <value>Don't use as default</value>
