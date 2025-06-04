@@ -403,7 +403,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
             {
                 this.RaiseAndSetIfChanged(ref this.mapView, value);
 
-                if (this.mapView != null)
+                if (this.mapView != null && mapViewInitializedTaskSource.Task.IsCompleted == false)
                 {
                     mapViewInitializedTaskSource.SetResult(true);
                 }
