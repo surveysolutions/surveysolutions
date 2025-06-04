@@ -78,6 +78,9 @@ namespace WB.UI.Shared.Enumerator.CustomControls
         {
             var typeOfViewModel = forItemObject.GetType();
 
+            if (EntityTemplates.TryGetValue(typeOfViewModel, out var type))
+                return type;
+            
             if (disabledViewModelTypes.Contains(typeOfViewModel))
             {
                 var enablementModel = this.GetEnablementViewModel(forItemObject);
@@ -115,10 +118,9 @@ namespace WB.UI.Shared.Enumerator.CustomControls
                 return Resource.Layout.interview_question_signature;
             }
 
-            return EntityTemplates.ContainsKey(typeOfViewModel)
-                ? EntityTemplates[typeOfViewModel]
-                : EntityTemplates.ContainsKey(typeOfViewModel.BaseType) ? EntityTemplates[typeOfViewModel.BaseType] :
-                    Resource.Layout.interview_empty_item;
+            return EntityTemplates.TryGetValue(typeOfViewModel.BaseType, out var template) 
+                ? template 
+                : Resource.Layout.interview_empty_item;
         }
 
         private EnablementViewModel GetEnablementViewModel(object item)
