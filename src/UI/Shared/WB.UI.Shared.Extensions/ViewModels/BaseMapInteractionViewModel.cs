@@ -401,10 +401,9 @@ namespace WB.UI.Shared.Extensions.ViewModels
             get => this.mapView;
             set
             {
-                this.mapView = value;
                 this.RaiseAndSetIfChanged(ref this.mapView, value);
 
-                if (this.mapView != null)
+                if (this.mapView != null && mapViewInitializedTaskSource.Task.IsCompleted == false)
                 {
                     mapViewInitializedTaskSource.SetResult(true);
                 }
