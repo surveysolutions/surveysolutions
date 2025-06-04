@@ -151,16 +151,16 @@
       <Version>2.1.4</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.AndroidX.ConstraintLayout">
-      <Version>2.2.0.1</Version>
+      <Version>2.2.1.1</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.AndroidX.MediaRouter">
-      <Version>1.7.0.7</Version>
+      <Version>1.7.0.9</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.AndroidX.Preference">
-      <Version>1.2.1.11</Version>
+      <Version>1.2.1.13</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.AndroidX.Work.Runtime">
-      <Version>2.10.0.1</Version>
+      <Version>2.10.0.4</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Build.Download">
       <Version>0.11.4</Version>
@@ -172,16 +172,16 @@
       <Version>2.4.11.982</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Firebase.Crashlytics">
-      <Version>119.2.1.1</Version>
+      <Version>119.4.2.1</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Google.Android.Material">
-      <Version>1.12.0.1</Version>
+      <Version>1.12.0.3</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.GooglePlayServices.Maps">
-      <Version>119.0.0.3</Version>
+      <Version>119.2.0.1</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.GooglePlayServices.Nearby">
-      <Version>119.3.0.3</Version>
+      <Version>119.3.0.5</Version>
     </PackageReference>
     <PackageReference Include="ZXing.Net.Mobile">
       <Version>3.0.0-beta5</Version>
@@ -190,10 +190,10 @@
       <Version>9.3.1</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.AndroidX.AsyncLayoutInflater">
-      <Version>1.0.0.30</Version>
+      <Version>1.1.0.1</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.AndroidX.VectorDrawable">
-      <Version>1.2.0.4</Version>
+      <Version>1.2.0.6</Version>
     </PackageReference>
   </ItemGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
