@@ -178,6 +178,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             questionnaireListViewItem.LastEntryDate = DateTime.UtcNow;
         }
 
+        private void Update(string questionnaireId, string title)
+        {
+            var questionnaireListViewItem = this.dbContext.Questionnaires.Find(questionnaireId);
+            if (questionnaireListViewItem == null) return;
+
+            questionnaireListViewItem.Title = title; 
+            questionnaireListViewItem.LastEntryDate = DateTime.UtcNow;
+        }
+
         private void Update(string questionnaireId, string title, bool isPublic)
         {
             var questionnaireListViewItem = this.dbContext.Questionnaires.Find(questionnaireId);
@@ -353,7 +362,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         public void Process(Questionnaire aggregate, AddOrUpdateTranslation command) => this.Update(command.QuestionnaireId.FormatGuid());
         public void Process(Questionnaire aggregate, DeleteTranslation command) => this.Update(command.QuestionnaireId.FormatGuid());
         public void Process(Questionnaire aggregate, SetDefaultTranslation command) => this.Update(command.QuestionnaireId.FormatGuid());
-        public void Process(Questionnaire aggregate, SwitchToTranslation command) => this.Update(command.QuestionnaireId.FormatGuid());
+        public void Process(Questionnaire aggregate, SwitchToTranslation command) => this.Update(command.QuestionnaireId.FormatGuid(), aggregate.QuestionnaireDocument.Title);
         public void Process(Questionnaire aggregate, AddGroup command) => this.Update(command.QuestionnaireId.FormatGuid());
         public void Process(Questionnaire aggregate, UpdateGroup command) => this.Update(command.QuestionnaireId.FormatGuid());
         public void Process(Questionnaire aggregate, MoveGroup command) => this.Update(command.QuestionnaireId.FormatGuid());
