@@ -49,3 +49,15 @@ export function setDefaultTranslation(questionnaireId, translationId) {
         });
     });
 }
+
+export function switchToTranslation(questionnaireId, translationId) {
+    var command = {
+        questionnaireId: questionnaireId,
+        translationId: translationId
+    };
+    return commandCall('SwitchToTranslation', command).then(response => {
+        emitter.emit('switchedToTranslation', {
+            translationId: translationId
+        });
+    });
+}

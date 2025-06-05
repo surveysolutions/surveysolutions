@@ -408,10 +408,13 @@
   <data name="VariableWithIdWasNotFound" xml:space="preserve">
     <value>Proměnná s id {0} nebyla nalezena v dotazníku {1}</value>
   </data>
-    <data name="CriticalRuleAlreadyExist" xml:space="preserve">
-  <value>Kritické pravidlo již existuje.</value>
-</data>
-    <data name="CriticalRuleIsAbsent" xml:space="preserve">
-  <value>Kritické pravidlo chybí.</value>
-</data>
+  <data name="CriticalRuleAlreadyExist" xml:space="preserve">
+    <value>Kritické pravidlo již existuje.</value>
+  </data>
+  <data name="CriticalRuleIsAbsent" xml:space="preserve">
+    <value>Kritické pravidlo chybí.</value>
+  </data>
+  <data name="TranslationIsNotFull" xml:space="preserve">
+    <value>Překlad je neúplný a neobsahuje všechny požadované texty pro každou položku</value>
+  </data>
 </root>

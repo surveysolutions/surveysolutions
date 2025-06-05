@@ -704,7 +704,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var changedInterviewTree = GetChangedTree();
 
-            changedInterviewTree.GetQuestion(questionIdentity).SetAnswer(TextAnswer.FromString(answer), originDate);
+            var question = changedInterviewTree.GetQuestion(questionIdentity);
+            
+            if (!string.IsNullOrWhiteSpace(answer))
+                question.SetAnswer(TextAnswer.FromString(answer), originDate);
+            else
+                question.RemoveAnswer();
 
             this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire, questionIdentity, originDate);
             var treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);

@@ -12,7 +12,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Services
         {
             if (variable == null) return string.Empty;
 
-            var variableAsString = variable.ToString();
+            string variableAsString = null;
             switch (variable)
             {
                 case int i:
@@ -32,7 +32,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Services
                     break;
             }
 
-            return variableAsString;
+            return variableAsString ?? variable.ToString();
         }
     }
 }

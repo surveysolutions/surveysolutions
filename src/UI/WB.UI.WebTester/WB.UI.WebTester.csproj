@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <AssemblyName>WB.UI.WebTester</AssemblyName>
     <RootNamespace>WB.UI.WebTester</RootNamespace>
     <LangVersion>latest</LangVersion>
@@ -28,14 +28,14 @@
   <ItemGroup>
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="10.0.0" />
     <PackageReference Include="AutoMapper" Version="13.0.1" />
-    <PackageReference Include="Dapper" Version="2.1.35" />
-    <PackageReference Include="Markdig" Version="0.38.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.10" />
-    <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson" Version="8.0.10" />
+    <PackageReference Include="Dapper" Version="2.1.66" />
+    <PackageReference Include="Markdig" Version="0.41.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="9.0.5" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson" Version="9.0.5" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Refit.Newtonsoft.Json" Version="8.0.0" />
-    <PackageReference Include="Serilog.AspNetCore" Version="8.0.3" />
-    <PackageReference Include="Serilog.Sinks.Console" Version="5.0.1" />
+    <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
     <PackageReference Include="refit" Version="8.0.0" />
     <PackageReference Include="System.Reactive" Version="6.0.1" />
   </ItemGroup>

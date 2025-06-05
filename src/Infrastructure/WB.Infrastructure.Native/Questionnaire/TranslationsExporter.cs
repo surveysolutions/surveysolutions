@@ -45,7 +45,18 @@ namespace WB.Infrastructure.Native.Questionnaire
             return translationFile;
         }
 
-        private Dictionary<string, List<TranslationRow>> GetTranslations(QuestionnaireDocument questionnaire,
+        public IEnumerable<TranslationDto> GetTranslationTexts(QuestionnaireDocument questionnaire,
+            ITranslation translation, ICategories categoriesService) =>
+            GetTranslatedTexts(questionnaire, translation, categoriesService)
+                .Select(row => new TranslationDto
+                {
+                    Type = row.Type != null ? Enum.Parse<TranslationType>(row.Type) : TranslationType.Unknown,
+                    QuestionnaireEntityId = row.EntityId != null ? Guid.Parse(row.EntityId) : Guid.Empty,
+                    TranslationIndex = row.OptionValueOrValidationIndexOrFixedRosterId,
+                    Value = row.Translation
+                });
+
+        private Dictionary<string, List<TranslationRow>> GetTranslationsBySheet(QuestionnaireDocument questionnaire,
             ITranslation translation, ICategories categoriesService) =>
             GetTranslatedTexts(questionnaire, translation, categoriesService)
                 .OrderByDescending(x => x.Sheet)
@@ -57,7 +68,7 @@ namespace WB.Infrastructure.Native.Questionnaire
         {
             Dictionary<string, string> aliases = new Dictionary<string, string>();
             
-            var textsToTranslateGroupedBySheets = GetTranslations(questionnaire, translation, categoriesService);
+            var textsToTranslateGroupedBySheets = GetTranslationsBySheet(questionnaire, translation, categoriesService);
             foreach (var textsToTranslate in textsToTranslateGroupedBySheets)
             {
                 string workSheetName = this.GenerateWorksheetName(aliases.Keys.ToList(),
@@ -75,7 +86,7 @@ namespace WB.Infrastructure.Native.Questionnaire
             
             using (XLWorkbook excelPackage = new XLWorkbook(loadOptions))
             {
-                var textsToTranslateGroupedBySheets = GetTranslations(questionnaire, translation, categoriesService);
+                var textsToTranslateGroupedBySheets = GetTranslationsBySheet(questionnaire, translation, categoriesService);
 
                 foreach (var textsToTranslate in textsToTranslateGroupedBySheets)
                 {

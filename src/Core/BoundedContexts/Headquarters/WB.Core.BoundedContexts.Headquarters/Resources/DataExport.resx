@@ -238,7 +238,7 @@
     <value>Tabular Format</value>
   </data>
   <data name="ExportExplanation" xml:space="preserve">
-    <value>Pressing Generate button creates a data archive of interviews available on the server at that time. The time of archive creation and the archive size are shown in the table. The last generated data archive can be downloaded by pressing Download button. Press Generate button again to create a new archive.</value>
+      <value>Pressing "Add to queue" button creates a data archive of interviews available on the server at that time. The time of archive creation and the archive size are shown in the table. The last generated data archive can be downloaded by pressing Download button. Press "Add to queue" button again to create a new archive.</value>
   </data>
   <data name="ZipFile" xml:space="preserve">
     <value>Zip file</value>

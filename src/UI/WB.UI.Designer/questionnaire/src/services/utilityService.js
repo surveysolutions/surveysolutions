@@ -104,6 +104,19 @@ export function createQuestionForDeleteConfirmationPopup(title) {
     };
 }
 
+export function createSwitchToTranslationConfirmationPopup(title) {
+    var trimmedTitle = trimText(title);
+    var message = i18n.t('QuestionnaireEditor.SwitchToTranslationConfirm', {
+        trimmedTitle: trimmedTitle,
+        interpolation: { escapeValue: false }
+    });
+    return {
+        title: message,
+        okButtonTitle: i18n.t('QuestionnaireEditor.Ok'),
+        cancelButtonTitle: i18n.t('QuestionnaireEditor.Cancel')
+    };
+}
+
 export function replaceOptionsConfirmationPopup(title) {
     var trimmedTitle = trimText(title);
     var message = i18n.t('QuestionnaireEditor.ReplaceOptionsConfirmation', {

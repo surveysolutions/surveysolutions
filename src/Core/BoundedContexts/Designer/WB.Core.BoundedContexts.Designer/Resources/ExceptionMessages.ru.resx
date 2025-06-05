@@ -425,4 +425,7 @@
   <data name="Questionnaire_CategoriesWereNotFound" xml:space="preserve">
     <value>Категории не найдены</value>
   </data>
+  <data name="TranslationIsNotFull" xml:space="preserve">
+    <value>Перевод неполный и не включает все необходимые тексты для каждого элемента</value>
+  </data>
 </root>

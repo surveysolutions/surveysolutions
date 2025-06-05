@@ -97,7 +97,7 @@
     "HotkeysShowHideHelp": "Mostrar / ocultar éste menú de ayuda",
     "IncorrectRosterTitle": "Pregunta incorrecta del título de la lista",
     "LogOut": "Salir",
-    "MarkAsDefault": "Marcar como idioma por defecto",
+    "MarkAsDefault": "Establecer como predeterminado",
     "ModalConfirm": "Confirmación",
     "ModalInfo": "Información",
     "MoveTo": "Mover a",
@@ -511,7 +511,9 @@
     "ValidationIntValue": "El valor es demasiado grande",
     "SideBarTranslationGetTemplateLinkTextCsv": "Tab (txt)",
     "SideBarTab": "Tab",
-    "AttachmentSizeIsTooBig": "El tamaño del archivo adjunto es demasiado grande. Tamaño máximo: {{size}}"
+    "AttachmentSizeIsTooBig": "El tamaño del archivo adjunto es demasiado grande. Tamaño máximo: {{size}}",
+    "SwitchTo": "Cambiar a",
+    "SwitchToTranslationConfirm": "Cambiar a modificará el idioma de visualización del cuestionario. La traducción debe incluir texto para todos los elementos."
   },
   "AccountResources": {
     "AllRights": "Todos los derechos reservados",

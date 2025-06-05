@@ -1256,7 +1256,7 @@ Table and Matrix views are supported only in Web survey, tablet falls back to 'S
     <value>Show / hide this help menu</value>
   </data>
   <data name="MarkAsDefault" xml:space="preserve">
-    <value>Mark as default language</value>
+    <value>Set as default</value>
   </data>
   <data name="UnMarkAsDefault" xml:space="preserve">
     <value>Don't use as default</value>
@@ -1660,5 +1660,11 @@ You entered an invalid input. Each line should follow the format: "Title...Paren
   </data>
   <data name="HelpCriticalityConditionMessage" xml:space="preserve">
       <value>This message is shown when the critical condition evaluates to "False" or an exception occurs during expression evaluation. The message may utilize hyperlinks and text substitution.</value>
+  </data>
+  <data name="SwitchTo" xml:space="preserve">
+    <value>Switch To</value>
+  </data>
+  <data name="SwitchToTranslationConfirm" xml:space="preserve">
+    <value>Switch To will change the display language of the questionnaire. The translation must include text for all elements.</value>
   </data>
 </root>

@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.Designer
         public static IQuestionnaireTranslator QuestionnaireTranslator(QuestionnaireDocument questionnaireDocument, ITranslation translation, QuestionnaireDocument translatedQuestionnaireDocument)
         {
             var serviceMock = new Mock<IQuestionnaireTranslator>();
-            serviceMock.Setup(x => x.Translate(questionnaireDocument, translation))
+            serviceMock.Setup(x => x.Translate(questionnaireDocument, translation, false))
                  .Returns(translatedQuestionnaireDocument);
 
             return serviceMock.Object;

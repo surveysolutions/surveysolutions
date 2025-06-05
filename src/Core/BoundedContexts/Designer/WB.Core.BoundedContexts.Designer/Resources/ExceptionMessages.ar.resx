@@ -408,10 +408,13 @@
   <data name="SubsectionCantHaveMoreThan_DirectChildren" xml:space="preserve">
     <value>لا يمكن أن يحتوي القسم أو القسم الفرعي على أكثر من {0} عناصر فرعية مباشرة</value>
   </data>
-    <data name="CriticalRuleAlreadyExist" xml:space="preserve">
-      <value>قاعدة حرجة موجودة بالفعل.</value>
-    </data>
-    <data name="CriticalRuleIsAbsent" xml:space="preserve">
-      <value>القاعدة الحرجة غائبة.</value>
-    </data>
+  <data name="CriticalRuleAlreadyExist" xml:space="preserve">
+    <value>قاعدة حرجة موجودة بالفعل.</value>
+  </data>
+  <data name="CriticalRuleIsAbsent" xml:space="preserve">
+    <value>القاعدة الحرجة غائبة.</value>
+  </data>
+  <data name="TranslationIsNotFull" xml:space="preserve">
+    <value>الترجمة غير مكتملة ولا تتضمن جميع النصوص المطلوبة لكل عنصر</value>
+  </data>
 </root>

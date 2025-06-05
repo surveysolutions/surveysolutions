@@ -60,7 +60,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 string browserSubstitutionResult = null;
                 bool shouldEncode = true;
 
-                var treeEntity = tree.FindEntityInQuestionBranch(substitution.Id, this.identity);
+                var treeEntity = tree.GetTreeNodeByLevelOrNull(substitution.Id, this.identity);
                 if (treeEntity != null)
                 {
                     var isDisabled = treeEntity.IsDisabled();

@@ -186,6 +186,9 @@
   <data name="NoPremissionsToEditQuestionnaire" xml:space="preserve">
     <value>You don't have permissions for changing this questionnaire</value>
   </data>
+  <data name="TranslationIsNotFull" xml:space="preserve">
+    <value>The translation is incomplete and does not include all required texts for every element</value>
+  </data>
   <data name="QuestionCannotBeFound" xml:space="preserve">
     <value>Question with public key {0} can't be found.</value>
   </data>

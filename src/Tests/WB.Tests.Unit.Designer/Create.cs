@@ -757,17 +757,23 @@ namespace WB.Tests.Unit.Designer
             
         }
 
-        public static Questionnaire Questionnaire(IExpressionProcessor expressionProcessor = null, IQuestionnaireHistoryVersionsService historyVersionsService = null,
-            IFindReplaceService findReplaceService = null)
+        public static Questionnaire Questionnaire(IExpressionProcessor expressionProcessor = null, 
+            IQuestionnaireHistoryVersionsService historyVersionsService = null,
+            IFindReplaceService findReplaceService = null, 
+            IQuestionnaireTranslator questionnaireTranslator = null,
+            ITranslationsService translationsService = null,
+            IDesignerTranslationService designerTranslationService = null)
         {
             return new Questionnaire(
                 Mock.Of<IClock>(),
                 Mock.Of<ILookupTableService>(),
                 Mock.Of<IAttachmentService>(),
-                Mock.Of<IDesignerTranslationService>(),
+                designerTranslationService ?? Mock.Of<IDesignerTranslationService>(),
                 historyVersionsService ?? Mock.Of<IQuestionnaireHistoryVersionsService>(),
                 Mock.Of<IReusableCategoriesService>(),
-                findReplaceService ?? Mock.Of<IFindReplaceService>());
+                findReplaceService ?? Mock.Of<IFindReplaceService>(),
+                questionnaireTranslator ?? Mock.Of<IQuestionnaireTranslator>(),
+                translationsService ?? Mock.Of<ITranslationsService>());
         }
 
 
@@ -1481,6 +1487,11 @@ namespace WB.Tests.Unit.Designer
             public static RevertVersionQuestionnaire RevertVersionQuestionnaire(Guid questionnaireId, Guid historyReferanceId, Guid responsibleId)
             {
                 return new RevertVersionQuestionnaire(questionnaireId, historyReferanceId, responsibleId);
+            }
+
+            public static SwitchToTranslation SwitchToTranslation(Guid questionnaireId, Guid responsibleId, Guid? translationId)
+            {
+                return new SwitchToTranslation(questionnaireId, responsibleId, translationId);
             }
 
             public static CreateQuestionnaire CreateQuestionnaire(Guid questionnaireId, string title, Guid? createdBy, bool isPublic, string variable = null)

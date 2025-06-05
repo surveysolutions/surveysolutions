@@ -181,8 +181,8 @@
     <value>Stažení</value>
   </data>
   <data name="ExportExplanation" xml:space="preserve">
-    <value>Stisknutím tlačítka Generovat vytvoříte zálozu dat z dotazníků dostupných na serveru. Čas vytvoření a velikost zálohy jsou uvedeny v tabulce. Poslední vytvořená záloha dat lze stáhnout stisknutím tlačítka Stáhnout. Opětovným stisknutím tlačítka Generovat vytvoříte novou zálohu.</value>
-  </data>
+    <value>Stisknutím tlačítka „Přidat do fronty“ vytvoříte datový archiv rozhovorů dostupných na serveru v daném okamžiku. Čas vytvoření archivu a jeho velikost jsou zobrazeny v tabulce. Poslední vygenerovaný archiv lze stáhnout stisknutím tlačítka Stáhnout. Pro vytvoření nového archivu stiskněte znovu „Přidat do fronty“.</value>
+</data>
   <data name="Format" xml:space="preserve">
     <value>Formát</value>
   </data>

@@ -37,8 +37,6 @@ public class AssignmentMapActivity : MarkersMapActivity<AssignmentMapViewModel, 
     protected override void OnCreate(Bundle savedInstanceState)
     {
         base.OnCreate(savedInstanceState);
-
-        this.ViewModel.MapView = this.FindViewById<MapView>(Resource.Id.map_view);
         
         var buttonMenu = this.FindViewById<ImageButton>(Resource.Id.butMenu);
         clickedMenuButton = buttonMenu.WeakSubscribe(nameof(buttonMenu.Click), this.ClickedMenuButton);

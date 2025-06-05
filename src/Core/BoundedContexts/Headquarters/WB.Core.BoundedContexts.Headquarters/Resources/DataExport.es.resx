@@ -160,8 +160,8 @@
     <value>proceso de exportación</value>
   </data>
   <data name="ExportExplanation" xml:space="preserve">
-    <value>Al presionar el botón "Generar" se crea un archivo de datos de las entrevistas disponibles en el servidor en ese momento. El tiempo de creación del archivo y el tamaño del archivo se muestran en la tabla. El último archivo de datos generado se puede descargar presionando el botón Descargar. Presione el botón "Generar" nuevamente para crear un nuevo archivo.</value>
-  </data>
+    <value>Al presionar el botón "Agregar a la cola" se crea un archivo de datos de las entrevistas disponibles en el servidor en ese momento. La hora de creación del archivo y el tamaño del archivo se muestran en la tabla. El último archivo de datos generado se puede descargar presionando el botón Descargar. Presione "Agregar a la cola" nuevamente para crear un nuevo archivo.</value>
+</data>
   <data name="ExportRange" xml:space="preserve">
     <value>Rango de exportación:</value>
   </data>

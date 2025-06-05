@@ -14,7 +14,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="script-src 'none'">
 	@*is passed as get param along with other on pdf generation and exceeds 2K limit for unicode*@
 	<title>@*@(questionnaire.Title.Length < 70 ? questionnaire.Title : questionnaire.Title.Substring(0, 70))*@</title>
 	<!-- pdf:css -->

@@ -22,9 +22,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 {
     public interface IPdfFactory
     {
-        PdfQuestionnaireModel? Load(QuestionnaireRevision questionnaireId, Guid? requestedByUserId, string? requestedByUserName, Guid? translation, bool useDefaultTranslation);
+        PdfQuestionnaireModel? Load(QuestionnaireRevision questionnaireRevision, Guid? requestedByUserId, string? requestedByUserName, Guid? translation, bool useDefaultTranslation);
         string? LoadQuestionnaireTitle(Guid questionnaireId);
     }
+
+    
 
     public class PdfFactory : IPdfFactory
     {

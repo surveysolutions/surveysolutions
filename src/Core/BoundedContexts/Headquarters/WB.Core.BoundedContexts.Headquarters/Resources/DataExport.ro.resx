@@ -166,7 +166,7 @@
     <value>Exportul datelor</value>
   </data>
   <data name="ExportExplanation" xml:space="preserve">
-    <value>Apăsând butonul Generați se creează o arhivă de date a interviurilor disponibile pe server în acel moment. Timpul creării arhivei și mărimea arhivelor sunt afișate în tabel. Ultima arhivă de date generată poate fi descărcată apăsând butonul Descărcare. Apăsați butonul Generați din nou pentru a crea o nouă arhivă.</value>
+    <value>Apăsarea butonului „Adaugă la coadă” creează o arhivă de date cu interviurile disponibile pe server la acel moment. Ora creării arhivei și dimensiunea acesteia sunt afișate în tabel. Ultima arhivă de date generată poate fi descărcată apăsând butonul Descărcare. Apăsați din nou „Adaugă la coadă” pentru a crea o nouă arhivă.</value>
   </data>
   <data name="ExportRange" xml:space="preserve">
     <value>Domeniul de export</value>
