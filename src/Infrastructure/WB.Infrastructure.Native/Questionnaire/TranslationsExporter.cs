@@ -47,7 +47,7 @@ namespace WB.Infrastructure.Native.Questionnaire
 
         public IEnumerable<TranslationDto> GetTranslationTexts(QuestionnaireDocument questionnaire,
             ITranslation translation, ICategories categoriesService) =>
-            GetTranslatedTexts(questionnaire, translation, categoriesService)
+            GetNonEmptyTranslatedTexts(questionnaire, translation, categoriesService)
                 .Select(row => new TranslationDto
                 {
                     Type = row.Type != null ? Enum.Parse<TranslationType>(row.Type) : TranslationType.Unknown,
@@ -58,7 +58,7 @@ namespace WB.Infrastructure.Native.Questionnaire
 
         private Dictionary<string, List<TranslationRow>> GetTranslationsBySheet(QuestionnaireDocument questionnaire,
             ITranslation translation, ICategories categoriesService) =>
-            GetTranslatedTexts(questionnaire, translation, categoriesService)
+            GetNonEmptyTranslatedTexts(questionnaire, translation, categoriesService)
                 .OrderByDescending(x => x.Sheet)
                 .GroupBy(x => x.Sheet)
                 .ToDictionary(x => x.Key, x => x.ToList());
@@ -178,6 +178,13 @@ namespace WB.Infrastructure.Native.Questionnaire
             //xlColumn.AdjustToContents();
         }
 
+        private IEnumerable<TranslationRow> GetNonEmptyTranslatedTexts(QuestionnaireDocument questionnaire,
+            ITranslation translation, ICategories categoriesService)
+        {
+            return GetTranslatedTexts(questionnaire, translation, categoriesService)
+                .Where(row => !string.IsNullOrWhiteSpace(row.OriginalText));
+        }
+        
         private IEnumerable<TranslationRow> GetTranslatedTexts(QuestionnaireDocument questionnaire, ITranslation translation, ICategories categoriesService)
         {
             yield return GetTranslatedTitle(questionnaire, translation);
