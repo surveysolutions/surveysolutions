@@ -145,7 +145,7 @@ namespace WB.UI.Interviewer.Services
         {
             Intent notificationIntent = Application.Context.PackageManager.GetLaunchIntentForPackage(Application.Context.PackageName);
             PendingIntent pendingIntent = PendingIntent.GetActivity(Application.Context, 0, 
-                notificationIntent, 0);
+                notificationIntent, PendingIntentFlags.Immutable);
 
             return pendingIntent;
         }

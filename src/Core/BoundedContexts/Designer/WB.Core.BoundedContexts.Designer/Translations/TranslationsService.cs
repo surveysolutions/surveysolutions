@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using ClosedXML.Excel;
 using ClosedXML.Graphics;
 using Main.Core.Documents;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
-using SixLabors.Fonts;
+using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Commands;
 using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.Resources;
@@ -16,7 +18,9 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Questionnaire.Categories;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.Questionnaire.Translations;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Infrastructure.Native.Utils;
 
 namespace WB.Core.BoundedContexts.Designer.Translations
@@ -43,8 +47,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             public string? OptionValueOrValidationIndexOrFixedRosterIdIndex { get; set; }
             public string? TranslationIndex { get; set; }
         }
-
-        private const string NotoSansFontFamilyName = "Noto Sans";
+        
         private readonly TranslationType[] translationTypesWithIndexes =
         {
             TranslationType.FixedRosterTitle,
@@ -96,6 +99,73 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                 && x.QuestionnaireEntityId == questionnaire.PublicKey
                 );
             return hasTranslatedTitle;
+        }
+
+        public bool IsFullTranslated(QuestionnaireDocument questionnaire, ITranslation translation)
+        {
+            var categoriesService = new CategoriesService(questionnaire.PublicKey, this.reusableCategoriesService);
+            var translations = translationsExportService.GetTranslationTexts(questionnaire, translation, categoriesService);
+            return translations
+                .Where(t => t.Type != TranslationType.ValidationMessage)
+                .All(t => !string.IsNullOrEmpty(t.Value));
+        }
+
+        
+        public IEnumerable<TranslationInstance> GetFromQuestionnaire(QuestionnaireDocument questionnaire)
+        {
+            var translationDtos = GetFromQuestionnaireImpl(questionnaire);
+            return translationDtos.Select(t => new TranslationInstance()
+            {
+                Value = t.Value,
+                QuestionnaireEntityId = t.QuestionnaireEntityId,
+                TranslationIndex = t.TranslationIndex,
+                Type = t.Type,
+                QuestionnaireId = questionnaire.PublicKey,
+            });
+        }
+        
+        private IEnumerable<TranslationDto> GetFromQuestionnaireImpl(QuestionnaireDocument questionnaire)
+        {
+            yield return GetTranslatedTitle(questionnaire);
+            
+            foreach (var entity in questionnaire.Children.TreeToEnumerable(x => x.Children))
+            {
+                yield return GetTranslatedTitle(entity);
+
+                var group = entity as IGroup;
+                var question = entity as IQuestion;
+
+                if (entity is IValidatable validatable)
+                    foreach (var translatedValidationMessage in GetTranslatedValidationMessages(validatable))
+                        yield return translatedValidationMessage;
+
+                if (question != null)
+                {
+                    if (!string.IsNullOrEmpty(question.Instructions))
+                        yield return GetTranslatedInstruction(question);
+
+                    foreach (var translatedOption in GetTranslatedOptions(question))
+                        yield return translatedOption;
+                }
+
+                if (group != null)
+                    foreach (var translatedRosterTitle in GetTranslatedRosterTitles(group))
+                        yield return translatedRosterTitle;
+            }
+
+            if (questionnaire.Categories.Any())
+            {
+                var categoriesService = new CategoriesService(questionnaire.PublicKey, this.reusableCategoriesService);
+                
+                foreach (var categories in questionnaire.Categories)
+                {
+                    foreach (var translatedOption in GetTranslatedOptions(categories, categoriesService))
+                        yield return translatedOption;
+                }
+            }
+
+            foreach (var criticalityCondition in questionnaire.CriticalRules)
+                yield return GetTranslatedCriticalityCondition(criticalityCondition);
         }
 
         private TranslationFile GetTranslationFile(QuestionnaireRevision questionnaireId, Guid? translationId = null)
@@ -166,17 +236,8 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                         questionnaire.Source, idsOfAllQuestionnaireEntities, questionnaireId, translationId, mappedName);
                     translationInstances.AddRange(worksheetTranslations);
                 }
-
-                var uniqueTranslationInstances = translationInstances
-                    .Distinct(new TranslationInstance.IdentityComparer())
-                    .ToList();
-
-                foreach (var translationInstance in uniqueTranslationInstances)
-                {
-                    this.dbContext.TranslationInstances.Add(translationInstance);
-                }
-
-                this.dbContext.SaveChanges();
+                
+                Store(translationInstances);
             }
             catch (NullReferenceException e)
             {
@@ -190,6 +251,23 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             {
                 throw new InvalidFileException(ExceptionMessages.TranslationsCantBeExtracted, e);
             }
+        }
+        
+        public void Store(IEnumerable<TranslationInstance> translationInstances)
+        {
+            //if (translationId == null) throw new ArgumentNullException(nameof(translationId));
+            if (translationInstances == null) throw new ArgumentNullException(nameof(translationInstances));
+
+            var uniqueTranslationInstances = translationInstances
+                .Distinct(new TranslationInstance.IdentityComparer())
+                .ToList();
+
+            foreach (var translationInstance in uniqueTranslationInstances)
+            {
+                this.dbContext.TranslationInstances.Add(translationInstance);
+            }
+
+            this.dbContext.SaveChanges();
         }
 
         private IEnumerable<TranslationInstance> GetWorksheetTranslations(
@@ -515,5 +593,72 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             public List<CategoriesItem> GetCategories(Guid categoriesId) =>
                 this.reusableCategoriesService.GetCategoriesById(questionnaireId, categoriesId).ToList();
         }
+        
+        private static TranslationDto GetTranslatedTitle(IComposite entity) => new TranslationDto
+        {
+            QuestionnaireEntityId = entity.PublicKey,
+            Type = TranslationType.Title,
+            Value = entity.GetTitle(),
+        };
+
+        private static TranslationDto GetTranslatedInstruction(IQuestion question) => new TranslationDto
+        {
+            QuestionnaireEntityId = question.PublicKey,
+            Type = TranslationType.Instruction,
+            Value = question.Instructions,
+        };
+
+        private static TranslationDto GetTranslatedCriticalityCondition(CriticalRule criticalRule) => new TranslationDto
+        {
+            QuestionnaireEntityId = criticalRule.Id,
+            Type = TranslationType.CriticalRuleMessage,
+            Value = criticalRule.Message,
+        };
+
+        private static IEnumerable<TranslationDto> GetTranslatedValidationMessages(IValidatable validatable)
+            => from validationCondition in validatable.ValidationConditions
+                let validationIndex = validatable.ValidationConditions.IndexOf(validationCondition) + 1
+                select new TranslationDto
+                {
+                    QuestionnaireEntityId = validatable.PublicKey,
+                    Type = TranslationType.ValidationMessage,
+                    Value = validationCondition.Message,
+                    TranslationIndex = validationIndex.ToString(),
+                };
+
+        private static IEnumerable<TranslationDto> GetTranslatedOptions(IQuestion question)
+        {
+            if (question is ICategoricalQuestion {CategoriesId: not null })
+                return [];
+            
+            return from option in question.Answers
+                select new TranslationDto
+                {
+                    QuestionnaireEntityId = question.PublicKey,
+                    Type = question.QuestionType == QuestionType.Numeric ? TranslationType.SpecialValue : TranslationType.OptionTitle,
+                    Value = option.AnswerText,
+                    TranslationIndex = option.ParentValue == null ? option.AnswerValue : $"{option.AnswerValue}${option.ParentValue}",
+                };
+        }
+
+        private IEnumerable<TranslationDto> GetTranslatedOptions(Categories categories, ICategories categoriesService) =>
+            categoriesService.GetCategories(categories.Id).Select(x =>
+                new TranslationDto
+                {
+                    QuestionnaireEntityId = categories.Id,
+                    Type = TranslationType.Categories,
+                    Value = x.Text,
+                    TranslationIndex = x.ParentId == null ? $"{x.Id}" : $"{x.Id}${x.ParentId}",
+                });
+
+        private static IEnumerable<TranslationDto> GetTranslatedRosterTitles(IGroup group)
+            => from fixedRoster in @group.FixedRosterTitles
+                select new TranslationDto
+                {
+                    QuestionnaireEntityId = @group.PublicKey,
+                    Type = TranslationType.FixedRosterTitle,
+                    Value = fixedRoster.Title,
+                    TranslationIndex = fixedRoster.Value.ToString("F0", CultureInfo.InvariantCulture)
+                };
     }
 }

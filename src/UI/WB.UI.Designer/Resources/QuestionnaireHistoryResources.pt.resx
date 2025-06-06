@@ -304,4 +304,7 @@
   <data name="MigratedNewCoverSupport" xml:space="preserve">
     <value>Página de capa gerada</value>
   </data>
+  <data name="Translation_Replace" xml:space="preserve">
+    <value>O documento foi alterado para a tradução {0}</value>
+  </data>
 </root>

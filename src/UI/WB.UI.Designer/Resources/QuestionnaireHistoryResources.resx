@@ -198,6 +198,9 @@
   <data name="Translation_Update" xml:space="preserve">
     <value>Translation {0} updated</value>
   </data>
+  <data name="Translation_Replace" xml:space="preserve">
+    <value>Document switched to {0} translation</value>
+  </data>
   <data name="TextsReplaced" xml:space="preserve">
     <value>All '{0}' were replaced with '{1}'. {2} entries affected</value>
   </data>

@@ -168,6 +168,6 @@
         QuestionnaireIsDeleted,
         CriticalRuleIsAbsent,
         CriticalRuleAlreadyExist,
-
+        TranslationIsNotFull,
     }
 }

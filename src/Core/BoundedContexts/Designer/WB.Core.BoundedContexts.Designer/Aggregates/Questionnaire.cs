@@ -26,7 +26,11 @@ using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.Infrastructure.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.Questionnaire.Documents;
+using WB.Core.SharedKernels.Questionnaire.Translations;
 using Group = Main.Core.Entities.SubEntities.Group;
 
 
@@ -103,7 +107,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private readonly IClock clock;
         private readonly ILookupTableService lookupTableService;
         private readonly IAttachmentService attachmentService;
-        private readonly IDesignerTranslationService translationService;
+        private readonly IDesignerTranslationService designerTranslationService;
+        private readonly IQuestionnaireTranslator questionnaireTranslator;
+        private readonly ITranslationsService translationsService;
         private readonly IReusableCategoriesService reusableCategoriesService;
         private readonly IFindReplaceService findReplaceService;
         private readonly IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService;
@@ -115,18 +121,23 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             IClock clock, 
             ILookupTableService lookupTableService, 
             IAttachmentService attachmentService,
-            IDesignerTranslationService translationService,
+            IDesignerTranslationService designerTranslationService,
             IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService,
             IReusableCategoriesService reusableCategoriesService,
-            IFindReplaceService findReplaceService)
+            IFindReplaceService findReplaceService, 
+            IQuestionnaireTranslator questionnaireTranslator, 
+            ITranslationsService translationsService
+            )
         {
             this.clock = clock;
             this.lookupTableService = lookupTableService;
             this.attachmentService = attachmentService;
-            this.translationService = translationService;
+            this.designerTranslationService = designerTranslationService;
             this.questionnaireHistoryVersionsService = questionnaireHistoryVersionsService;
             this.reusableCategoriesService = reusableCategoriesService;
             this.findReplaceService = findReplaceService;
+            this.questionnaireTranslator = questionnaireTranslator;
+            this.translationsService = translationsService;
         }
 
         #region Questionnaire command handlers
@@ -192,7 +203,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             foreach (var translation in clonedDocument.Translations)
             {
                 var newTranslationId = Guid.NewGuid();
-                this.translationService.CloneTranslation(document.PublicKey, translation.Id, clonedDocument.PublicKey, newTranslationId);
+                this.designerTranslationService.CloneTranslation(document.PublicKey, translation.Id, clonedDocument.PublicKey, newTranslationId);
                 if (translation.Id == clonedDocument.DefaultTranslation)
                 {
                     clonedDocument.DefaultTranslation = newTranslationId;
@@ -331,22 +342,27 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
 
+            AddOrUpdateCategoriesImpl(innerDocument, command.CategoriesId, command.OldCategoriesId, command.Name);
+        }
+
+        private static void AddOrUpdateCategoriesImpl(QuestionnaireDocument document, Guid categoriesId, Guid? oldCategoriesId, string name)
+        {
             var categories = new Categories()
             {
-                Id = command.CategoriesId,
-                Name = command.Name,
+                Id = categoriesId,
+                Name = name,
             };
-            innerDocument.Categories.RemoveAll(x => x.Id == command.CategoriesId);
+            document.Categories.RemoveAll(x => x.Id == categoriesId);
 
-            if (command.OldCategoriesId.HasValue)
+            if (oldCategoriesId.HasValue)
             {
-                innerDocument.Categories.RemoveAll(x => x.Id == command.OldCategoriesId.Value);
+                document.Categories.RemoveAll(x => x.Id == oldCategoriesId.Value);
 
-                var categoricalQuestionsWithOldId = innerDocument.Find<ICategoricalQuestion>(c => c.CategoriesId == command.OldCategoriesId);
-                categoricalQuestionsWithOldId.ForEach(c => c.CategoriesId = command.CategoriesId);
+                var categoricalQuestionsWithOldId = document.Find<ICategoricalQuestion>(c => c.CategoriesId == oldCategoriesId);
+                categoricalQuestionsWithOldId.ForEach(c => c.CategoriesId = categoriesId);
             }
 
-            innerDocument.Categories.Add(categories);
+            document.Categories.Add(categories);
         }
 
         public void DeleteCategories(DeleteCategories command)
@@ -393,23 +409,28 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
 
+            AddOrUpdateTranslationImpl(innerDocument, command.TranslationId, command.OldTranslationId, command.Name);
+        }
+
+        private static void AddOrUpdateTranslationImpl(QuestionnaireDocument document, Guid translationId, Guid? oldTranslationId, string name)
+        {
             var translation = new Translation
             {
-                Id = command.TranslationId,
-                Name = command.Name,
+                Id = translationId,
+                Name = name,
             };
-            innerDocument.Translations.RemoveAll(x => x.Id == command.TranslationId);
+            document.Translations.RemoveAll(x => x.Id == translationId);
 
-            if (command.OldTranslationId.HasValue)
+            if (oldTranslationId.HasValue)
             {
-                innerDocument.Translations.RemoveAll(x => x.Id == command.OldTranslationId.Value);
+                document.Translations.RemoveAll(x => x.Id == oldTranslationId.Value);
 
-                if (innerDocument.DefaultTranslation.HasValue &&
-                    innerDocument.DefaultTranslation == command.OldTranslationId)
-                    innerDocument.DefaultTranslation = command.TranslationId;
+                if (document.DefaultTranslation.HasValue &&
+                    document.DefaultTranslation == oldTranslationId)
+                    document.DefaultTranslation = translationId;
             }
 
-            innerDocument.Translations.Add(translation);
+            document.Translations.Add(translation);
         }
 
         public void DeleteTranslation(DeleteTranslation command)
@@ -426,6 +447,93 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
 
             this.innerDocument.DefaultTranslation = command.TranslationId;
+        }
+        
+        public void SwitchToTranslation(SwitchToTranslation command)
+        {
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
+
+            if (!command.TranslationId.HasValue)
+                return;
+            
+            var translationInfo = innerDocument.Translations.FirstOrDefault(t => t.Id == command.TranslationId);
+            if (translationInfo == null) 
+                return;
+
+            var clonedDocument = innerDocument.Clone();
+            var translation = translationsService.Get(clonedDocument.PublicKey, command.TranslationId.Value);
+            if (translation == null)
+                throw new QuestionnaireException(DomainExceptionType.TranslationIsNotFull, ExceptionMessages.TranslationIsNotFull);
+
+            var isFullTranslated = designerTranslationService.IsFullTranslated(clonedDocument, translation);
+            if (!isFullTranslated)
+                throw new QuestionnaireException(DomainExceptionType.TranslationIsNotFull, ExceptionMessages.TranslationIsNotFull);
+
+            var documentTranslations = designerTranslationService
+                .GetFromQuestionnaire(clonedDocument)
+                .ToList();
+            
+            var newTranslationId = Guid.NewGuid();
+
+            foreach (var categories in innerDocument.Categories)
+            {
+                var newCategoryId = Guid.NewGuid();
+                var newCategoryItems = new List<CategoriesRow>();
+                var categoriesItems = this.reusableCategoriesService.GetCategoriesById(clonedDocument.PublicKey, categories.Id);
+                
+                foreach (var categoriesItem in categoriesItems)
+                {
+                    documentTranslations.Add(new TranslationInstance()
+                    {
+                        Type = TranslationType.Categories,
+                        QuestionnaireEntityId = newCategoryId,
+                        TranslationId = newTranslationId,
+                        Value = categoriesItem.Text,
+                        Id = Guid.NewGuid(),
+                        TranslationIndex = categoriesItem.ParentId == null ? $"{categoriesItem.Id}" : $"{categoriesItem.Id}${categoriesItem.ParentId}"
+                    });
+
+                    var newText = translation.GetCategoriesText(categories.Id, categoriesItem.Id, categoriesItem.ParentId);
+                    if (string.IsNullOrWhiteSpace(newText))
+                        throw new QuestionnaireException(DomainExceptionType.TranslationIsNotFull, ExceptionMessages.TranslationIsNotFull);
+
+                    newCategoryItems.Add(new CategoriesRow()
+                    {
+                        Id = categoriesItem.Id.ToString(),
+                        ParentId = categoriesItem.ParentId?.ToString(),
+                        AttachmentName = categoriesItem.AttachmentName,
+                        Text = newText,
+                    });
+                }
+                
+                AddOrUpdateCategoriesImpl(clonedDocument, newCategoryId, categories.Id, categories.Name);
+
+                reusableCategoriesService.Store(clonedDocument.PublicKey, newCategoryId, newCategoryItems);
+            }
+            
+            documentTranslations.ForEach(t =>
+            {
+                t.Id = Guid.NewGuid();
+                t.TranslationId = newTranslationId;
+                t.QuestionnaireId = clonedDocument.PublicKey;
+            });
+            documentTranslations = documentTranslations.Where(t => !string.IsNullOrWhiteSpace(t.Value)).ToList();
+            designerTranslationService.Store(documentTranslations);
+            
+            
+            var translationName = clonedDocument.DefaultLanguageName ?? "";
+            AddOrUpdateTranslationImpl(clonedDocument, newTranslationId, null, translationName);
+                    
+            clonedDocument = questionnaireTranslator.Translate(clonedDocument, translation, useNullForEmptyTranslations: false);
+            
+            clonedDocument.DefaultLanguageName = translationInfo.Name;
+            clonedDocument.DefaultTranslation = !clonedDocument.DefaultTranslation.HasValue
+                ? newTranslationId
+                : clonedDocument.DefaultTranslation.Value == translationInfo.Id ? null : clonedDocument.DefaultTranslation;
+            clonedDocument.Translations.RemoveAll(x => x.Id == translationInfo.Id);
+
+            
+            this.innerDocument = clonedDocument;
         }
 
         #endregion

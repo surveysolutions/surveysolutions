@@ -20,13 +20,13 @@
                             {{ $t('QuestionnaireEditor.Save') }}
                         </button>
                         <button type="button" class="btn lighter-hover" @click.self="cancel()">{{
-                $t('QuestionnaireEditor.Cancel')
-            }}</button>
+                            $t('QuestionnaireEditor.Cancel')
+                            }}</button>
                     </div>
 
                     <span class="default-label" v-if="translation.isDefault">{{
-                $t('QuestionnaireEditor.Default')
-            }}</span>
+                        $t('QuestionnaireEditor.Default')
+                        }}</span>
 
                     <button type="button" class="btn btn-default" v-if="!isReadOnlyForUser"
                         v-show="translation.isDefault && !translation.isOriginalTranslation"
@@ -35,6 +35,10 @@
                     </button>
 
                     <div class="permanent-actions pull-right">
+                        <button type="button" class="btn lighter-hover"
+                            v-if="!isReadOnlyForUser && translation.translationId" @click.self="switchToTranslation();">
+                            {{ $t('QuestionnaireEditor.SwitchTo') }}
+                        </button>
                         <button type="button" class="btn lighter-hover" v-if="!isReadOnlyForUser"
                             v-show="!translation.isDefault" @click.self="setDefaultTranslation(true);">
                             {{ $t('QuestionnaireEditor.MarkAsDefault') }}
@@ -42,7 +46,7 @@
 
                         <a v-if="downloadUrl" :href="downloadUrl" class="btn btn-default" target="_blank"
                             rel="noopener noreferrer">{{
-                $t('QuestionnaireEditor.SideBarTranslationDownloadXlsx') }}</a>
+                                $t('QuestionnaireEditor.SideBarTranslationDownloadXlsx') }}</a>
 
                         <file-upload ref="upload" v-if="!isReadOnlyForUser"
                             :input-id="'tfu' + translation.translationId" v-model="file" @input-file="fileSelected"
@@ -65,12 +69,13 @@
 import { isUndefined, isNull, cloneDeep } from 'lodash'
 import moment from 'moment'
 import { notice } from '../../../../services/notificationService';
-import { trimText, createQuestionForDeleteConfirmationPopup } from '../../../../services/utilityService'
+import { trimText, createQuestionForDeleteConfirmationPopup, createSwitchToTranslationConfirmationPopup } from '../../../../services/utilityService'
 import { useQuestionnaireStore } from '../../../../stores/questionnaire';
 import {
     deleteTranslation,
     updateTranslation,
-    setDefaultTranslation
+    setDefaultTranslation,
+    switchToTranslation
 } from '../../../../services/translationService';
 
 import { updateQuestionnaireSettings } from '../../../../services/questionnaireService';
@@ -195,6 +200,30 @@ export default {
 
         async setDefaultTranslation(isDefault) {
             await setDefaultTranslation(this.questionnaireId, isDefault ? this.translation.translationId : null)
+        },
+
+        async switchToTranslation() {
+            event.preventDefault();
+
+            if (!this.translation.translationId)
+                return;
+
+            var translationName = this.translation.name || this.$t('QuestionnaireEditor.SideBarTranslationNoName');
+
+            var trimmedTranslationName = trimText(translationName);
+            var confirmParams = createSwitchToTranslationConfirmationPopup(trimmedTranslationName)
+
+            confirmParams.callback = confirm => {
+                if (confirm) {
+                    switchToTranslation(this.questionnaireId, this.translation.translationId)
+                        .then(() => {
+                            location.reload();
+                        })
+
+                }
+            };
+
+            this.$confirm(confirmParams);
         },
 
         openFileDialog() {

@@ -654,7 +654,7 @@ Zobrazení tabulky a matice jsou podporována pouze ve webovém průzkumu, table
     <value>Pokud převedete vlastnictví, bude nový vlastník upozorněn. Je možné, že již nebudete moci změnit nastavení vlastnictví a nový vlastník vám také může odebrat přístup.</value>
   </data>
   <data name="MarkAsDefault" xml:space="preserve">
-    <value>Označit jako výchozí jazyk</value>
+    <value>Nastavit jako výchozí</value>
   </data>
   <data name="MaxCommentLengthErrorMessage" xml:space="preserve">
     <value>Komentář nesmí obsahovat více než {1} znaků</value>
@@ -1658,5 +1658,11 @@ Zadali jste neplatný vstup. Každý řádek by měl mít formát: "Název... Pa
     </data>
   <data name="AttachmentSizeIsTooBig" xml:space="preserve">
     <value>Příloha je příliš velká. Maximální velikost: {{size}}</value>
-</data>
+  </data>
+  <data name="SwitchTo" xml:space="preserve">
+    <value>Přepnout na</value>
+  </data>
+  <data name="SwitchToTranslationConfirm" xml:space="preserve">
+    <value>Přepnutím se změní jazyk zobrazení dotazníku. Překlad musí obsahovat text pro všechny prvky.</value>
+  </data>
 </root>

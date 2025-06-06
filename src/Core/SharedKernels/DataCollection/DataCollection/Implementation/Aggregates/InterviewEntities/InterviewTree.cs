@@ -468,37 +468,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.AddNodeToCache(node);
         }
 
-        public IInterviewTreeNode FindEntityInQuestionBranch(Guid entityId, Identity questionIdentity)
+        public IInterviewTreeNode GetTreeNodeByLevelOrNull(Guid entityId, Identity questionIdentity)
         {
-            var foundEntities = FindEntity(entityId);
-
-            bool IsFound(IInterviewTreeNode entity)
+            if (questionIdentity == null || questionIdentity.RosterVector == RosterVector.Empty)
             {
-                var rosterVector = questionIdentity == null ? RosterVector.Empty : questionIdentity.RosterVector;
-                return entity.Identity.Equals(entityId, rosterVector, entity.Identity.RosterVector.Length);
+                return this.GetNodeByIdentity(new Identity(entityId, RosterVector.Empty));
             }
-
-            if (foundEntities is List<IInterviewTreeNode> foundList)
+            
+            var rosterVector = questionIdentity.RosterVector;
+            for (int length = rosterVector.Length; length >= 0; length--)
             {
-                for (var index = 0; index < foundList.Count; index++)
-                {
-                    var entity = foundList[index];
-
-                    if (IsFound(entity))
-                    {
-                        return entity;
-                    }
-                }
-            }
-            else
-            {
-                foreach (var entity in FindEntity(entityId))
-                {
-                    if (IsFound(entity))
-                    {
-                        return entity;
-                    }
-                }
+                var currentVector = length == 0 ? RosterVector.Empty : rosterVector.Shrink(length);
+                var identity = new Identity(entityId, currentVector);
+                var node = this.GetNodeByIdentity(identity);
+                if (node != null)
+                    return node;
             }
 
             return null;

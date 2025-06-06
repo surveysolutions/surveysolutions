@@ -35,11 +35,12 @@ namespace WB.UI.Shared.Extensions.Activities
         {
             base.OnCreate(bundle);
 
+            this.ViewModel.MapView = this.FindViewById<MapView>(Resource.Id.map_view);
+
             carouselCurrentItemMaxHeight = (int)this.Resources.GetDimension(Resource.Dimension.carousel_current_item_max_height);
             
             ConfigureCarousel();
 
-            this.ViewModel.MapView = this.FindViewById<MapView>(Resource.Id.map_view);
             onMapViewMapTappedSubscription = this.ViewModel.MapView.WeakSubscribe<MapView, GeoViewInputEventArgs>(
                 nameof(this.ViewModel.MapView.GeoViewTapped),
                 this.ViewModel.OnMapViewTapped);
