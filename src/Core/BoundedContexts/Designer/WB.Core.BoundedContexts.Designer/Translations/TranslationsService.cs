@@ -104,10 +104,18 @@ namespace WB.Core.BoundedContexts.Designer.Translations
         public bool IsFullTranslated(QuestionnaireDocument questionnaire, ITranslation translation)
         {
             var categoriesService = new CategoriesService(questionnaire.PublicKey, this.reusableCategoriesService);
-            var translations = translationsExportService.GetTranslationTexts(questionnaire, translation, categoriesService);
-            return translations
+            var translations = translationsExportService.GetTranslationTexts(questionnaire, translation, categoriesService)
                 .Where(t => t.Type != TranslationType.ValidationMessage)
-                .All(t => !string.IsNullOrEmpty(t.Value));
+                .Where(t => string.IsNullOrWhiteSpace(t.Value))
+                .Where(t =>
+                {
+                    if (t.Type == TranslationType.Categories)
+                        return questionnaire.Categories.Any(c => c.Id == t.QuestionnaireEntityId);
+                    if (t.Type == TranslationType.CriticalRuleMessage)
+                        return questionnaire.CriticalRules.Any(c => c.Id == t.QuestionnaireEntityId);
+                    return questionnaire.Find<IComposite>(t.QuestionnaireEntityId) != null;
+                });
+            return translations.Any();
         }
 
         
