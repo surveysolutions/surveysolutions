@@ -203,16 +203,16 @@
       <Version>2.1.4</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.AndroidX.ConstraintLayout">
-      <Version>2.2.0.1</Version>
+      <Version>2.2.1.1</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.AndroidX.MediaRouter">
-      <Version>1.7.0.7</Version>
+      <Version>1.7.0.9</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.AndroidX.Preference">
-      <Version>1.2.1.11</Version>
+      <Version>1.2.1.13</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.AndroidX.Work.Runtime">
-      <Version>2.10.0.1</Version>
+      <Version>2.10.0.4</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Controls.SignaturePad">
       <Version>3.0.0</Version>
@@ -221,10 +221,10 @@
       <Version>1.8.1</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Firebase.Crashlytics">
-      <Version>119.2.1.1</Version>
+      <Version>119.4.2.1</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Google.Android.Material">
-      <Version>1.12.0.1</Version>
+      <Version>1.12.0.3</Version>
     </PackageReference>
     <PackageReference Include="ZXing.Net.Mobile">
       <Version>3.0.0-beta5</Version>
@@ -233,10 +233,10 @@
       <Version>9.3.1</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.AndroidX.AsyncLayoutInflater">
-      <Version>1.0.0.30</Version>
+      <Version>1.1.0.1</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.AndroidX.VectorDrawable">
-      <Version>1.2.0.4</Version>
+      <Version>1.2.0.6</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>

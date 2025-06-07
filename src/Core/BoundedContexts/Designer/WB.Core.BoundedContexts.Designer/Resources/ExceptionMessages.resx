@@ -189,6 +189,9 @@
   <data name="TranslationIsNotFull" xml:space="preserve">
     <value>The translation is incomplete and does not include all required texts for every element</value>
   </data>
+  <data name="CategoryTranslationIsNotFull" xml:space="preserve">
+    <value>The category translation "{0}" is incomplete and does not include all options texts</value>
+  </data>
   <data name="QuestionCannotBeFound" xml:space="preserve">
     <value>Question with public key {0} can't be found.</value>
   </data>
