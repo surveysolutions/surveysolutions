@@ -21,12 +21,12 @@
                         </button>
                         <button type="button" class="btn lighter-hover" @click.self="cancel()">{{
                             $t('QuestionnaireEditor.Cancel')
-                            }}</button>
+                        }}</button>
                     </div>
 
                     <span class="default-label" v-if="translation.isDefault">{{
                         $t('QuestionnaireEditor.Default')
-                        }}</span>
+                    }}</span>
 
                     <button type="button" class="btn btn-default" v-if="!isReadOnlyForUser"
                         v-show="translation.isDefault && !translation.isOriginalTranslation"
@@ -146,9 +146,9 @@ export default {
             var match = this.matchFirstBalancedBraces(translation.meta.fileName);
             if (match && match.length > 1) {
                 translation.name = match;
-            } else {
-                translation.name = translation.meta.fileName;
             }
+            else
+                translation.name = translation.meta.fileName.replace(/\.[^/.]+$/, "");
 
             var fileNameLength = translation.name.length;
             translation.name = translation.name.substring(0, fileNameLength < maxNameLength ? fileNameLength : maxNameLength);
