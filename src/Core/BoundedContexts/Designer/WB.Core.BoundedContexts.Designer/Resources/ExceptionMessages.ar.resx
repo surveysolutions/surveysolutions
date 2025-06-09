@@ -417,4 +417,7 @@
   <data name="TranslationIsNotFull" xml:space="preserve">
     <value>الترجمة غير مكتملة ولا تتضمن جميع النصوص المطلوبة لكل عنصر</value>
   </data>
+  <data name="CategoryTranslationIsNotFull" xml:space="preserve">
+    <value>ترجمة الفئة "{0}" غير مكتملة ولا تتضمن جميع نصوص الخيارات</value>
+  </data>
 </root>
