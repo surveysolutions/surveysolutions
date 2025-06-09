@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WB.Services.Export.InterviewDataStorage
@@ -8,7 +9,7 @@ namespace WB.Services.Export.InterviewDataStorage
     {
         [Key] public required string Id { get; set; } 
 
-        public required string Value { get; set; }
+        public string Value { get; set; } = String.Empty;
 
         private long? asLong;
 
