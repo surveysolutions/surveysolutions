@@ -189,6 +189,12 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
             }
         }
         
+        public static string CategoryTranslationIsNotFull {
+            get {
+                return ResourceManager.GetString("CategoryTranslationIsNotFull", resourceCulture);
+            }
+        }
+        
         public static string QuestionCannotBeFound {
             get {
                 return ResourceManager.GetString("QuestionCannotBeFound", resourceCulture);

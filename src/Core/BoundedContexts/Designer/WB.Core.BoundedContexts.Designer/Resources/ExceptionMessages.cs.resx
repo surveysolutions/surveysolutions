@@ -417,4 +417,7 @@
   <data name="TranslationIsNotFull" xml:space="preserve">
     <value>Překlad je neúplný a neobsahuje všechny požadované texty pro každou položku</value>
   </data>
+  <data name="CategoryTranslationIsNotFull" xml:space="preserve">
+    <value>Překlad kategorie „{0}“ je neúplný a neobsahuje všechny texty možností</value>
+  </data>
 </root>
