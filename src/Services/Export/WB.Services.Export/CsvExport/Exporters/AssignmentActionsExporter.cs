@@ -150,9 +150,9 @@ namespace WB.Services.Export.CsvExport.Exporters
                     await GetUserRoleAsync(assignmentAction.OriginatorId),
                     await GetUserNameAsync(assignmentAction.ResponsibleId),
                     await GetUserRoleAsync(assignmentAction.ResponsibleId),
-                    assignmentAction.OldValue,
-                    assignmentAction.NewValue,
-                    assignmentAction.Comment,
+                    assignmentAction.OldValue ?? string.Empty,
+                    assignmentAction.NewValue ?? string.Empty,
+                    assignmentAction.Comment ?? string.Empty,
                 };
                 result.Add(resultRow.ToArray());
             }

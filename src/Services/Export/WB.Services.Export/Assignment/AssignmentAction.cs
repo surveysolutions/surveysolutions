@@ -15,8 +15,8 @@ namespace WB.Services.Export.Assignment
         public DateTime TimestampUtc { get; set; }
         public Guid OriginatorId { get; set; }
         public Guid ResponsibleId { get; set; }
-        public string OldValue { get; set; } = String.Empty;
-        public string NewValue { get; set; } = String.Empty;
-        public string Comment { get; set; } = String.Empty;
+        public string? OldValue { get; set; }
+        public string? NewValue { get; set; }
+        public string? Comment { get; set; }
     }
 }

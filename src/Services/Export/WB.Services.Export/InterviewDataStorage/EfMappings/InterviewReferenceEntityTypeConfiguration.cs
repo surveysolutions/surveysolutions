@@ -42,7 +42,8 @@ namespace WB.Services.Export.InterviewDataStorage.EfMappings
             builder.HasKey(x => x.Id);
 
             builder.Property(e => e.DeletedAt)
-                .HasColumnType("timestamp without time zone");
+                .HasColumnType("timestamp without time zone")
+                .IsRequired(false);
         }
     }
 
@@ -59,6 +60,7 @@ namespace WB.Services.Export.InterviewDataStorage.EfMappings
         {
             builder.ToTable("metadata", schema);
             
+            builder.HasKey(x => x.Id);
             builder.Property(x => x.Value).IsRequired(false);
         }
     }
@@ -80,10 +82,12 @@ namespace WB.Services.Export.InterviewDataStorage.EfMappings
 
             builder.Property(a => a.Id).ValueGeneratedNever();
             builder.Property(a => a.PublicKey).ValueGeneratedNever();
-            builder.Property(a => a.WebMode).IsRequired(false);
-            builder.Property(a => a.AudioRecording).IsRequired(true);
+            builder.Property(a => a.ResponsibleId).IsRequired(true);
             builder.Property(a => a.Quantity).IsRequired(false);
+            builder.Property(a => a.AudioRecording).IsRequired(true);
+            builder.Property(a => a.WebMode).IsRequired(false);
             builder.Property(a => a.Comment).IsRequired(false);
+            builder.Property(a => a.QuestionnaireId).IsRequired(false);
             builder.Property(a => a.UpgradedFromId).IsRequired(false);
             builder.Property(a => a.TargetArea).IsRequired(false);
         }
@@ -104,12 +108,17 @@ namespace WB.Services.Export.InterviewDataStorage.EfMappings
             builder.HasKey(aa => new { aa.GlobalSequence, aa.Position });
             builder.HasIndex(aa => aa.AssignmentId);
 
+            //builder.Property(a => a.GlobalSequence).IsRequired(true);
+            //builder.Property(a => a.Position).IsRequired(true);
+            //builder.Property(a => a.AssignmentId).IsRequired(true);
+            builder.Property(a => a.Status).IsRequired(true);
+            builder.Property(a => a.TimestampUtc).IsRequired(true)
+                .HasColumnType("timestamp without time zone");;
+            builder.Property(a => a.OriginatorId).IsRequired(true);
+            builder.Property(a => a.ResponsibleId).IsRequired(true);
             builder.Property(a => a.OldValue).IsRequired(false);
             builder.Property(a => a.NewValue).IsRequired(false);
             builder.Property(a => a.Comment).IsRequired(false);
-            builder.Property(e => e.TimestampUtc)
-                .HasColumnType("timestamp without time zone");
-
         }
     }
 }
