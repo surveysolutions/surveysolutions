@@ -18,10 +18,14 @@ namespace WB.Services.Export.InterviewDataStorage.EfMappings
             builder.ToTable("interview__references", schema);
             builder.HasKey(x => x.InterviewId);
             
-            builder.Property(e => e.QuestionnaireId).IsRequired(false);
+            builder.Property(e => e.QuestionnaireId)
+                .IsRequired(true)
+                .HasDefaultValue(string.Empty);
             //builder.Property(e => e.InterviewId).IsRequired(true);
             builder.Property(e => e.Status).IsRequired(true);
-            builder.Property(e => e.Key).IsRequired(false);
+            builder.Property(e => e.Key)
+                .IsRequired(true)
+                .HasDefaultValue(string.Empty);
             builder.Property(e => e.UpdateDateUtc)
                 .IsRequired(false)
                 .HasColumnType("timestamp without time zone");
