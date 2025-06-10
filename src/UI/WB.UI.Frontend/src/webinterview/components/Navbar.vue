@@ -165,8 +165,8 @@
         <!-- /.container-fluid -->
 
         <teleport to="body">
-            <div ref="emailPersonalLinkModalRef" class="modal fade" id="emailPersonalLinkModal" tabindex="-1"
-                role="dialog">
+            <div v-if="showEmailPersonalLink" ref="emailPersonalLinkModalRef" class="modal fade personal-link-modal"
+                id="emailPersonalLinkModal" tabindex="-1" role="dialog">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
