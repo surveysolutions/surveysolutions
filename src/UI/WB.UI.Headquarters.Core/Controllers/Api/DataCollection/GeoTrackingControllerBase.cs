@@ -1,6 +1,8 @@
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.GeoTracking;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.WebApi;
@@ -11,13 +13,16 @@ public abstract class GeoTrackingControllerBase : ControllerBase
 {
     private readonly ILogger<GeoTrackingControllerBase> logger;
     private readonly IPlainStorageAccessor<GeoTrackingRecord> geoTrackingStorage;
+    private readonly IAssignmentsService assignmentsService;
 
     protected GeoTrackingControllerBase(
         ILogger<GeoTrackingControllerBase> logger,
-        IPlainStorageAccessor<GeoTrackingRecord> geoTrackingStorage)
+        IPlainStorageAccessor<GeoTrackingRecord> geoTrackingStorage,
+        IAssignmentsService assignmentsService)
     {
         this.logger = logger;
         this.geoTrackingStorage = geoTrackingStorage;
+        this.assignmentsService = assignmentsService;
     }
 
     public virtual IActionResult Post(GeoTrackingPackageApiView package)
@@ -25,8 +30,18 @@ public abstract class GeoTrackingControllerBase : ControllerBase
         if (package == null)
             return this.BadRequest("Server cannot accept empty package content.");
 
+        var assignmentsIds = package.Records.Select(r => r.AssignmentId);
+        var uniqueAssignmentIds = new HashSet<int>(assignmentsIds);
+        var existedAssignmentIds = assignmentsService.GetExistedAssignmentIds(uniqueAssignmentIds);
+        
         foreach (var record in package.Records)
         {
+            if (!existedAssignmentIds.Contains(record.AssignmentId))
+            {
+                this.logger.LogWarning("GeoTracking record for assignment {AssignmentId} is not found.", record.AssignmentId);
+                continue;
+            }
+            
             var points = record.Points.Select(p => new GeoTrackingPoint()
             {
                 Latitude = p.Latitude,
@@ -41,6 +56,7 @@ public abstract class GeoTrackingControllerBase : ControllerBase
                 End = record.End?.UtcDateTime,
                 Points = points
             };
+            
             geoTrackingStorage.Store(geoTrackingRecord, null);
         }
 

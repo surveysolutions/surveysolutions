@@ -33,5 +33,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         List<AssignmentGpsInfo> GetAssignmentsWithGpsAnswer(Guid? questionnaireId, long? questionnaireVersion,
             Guid? responsibleId, int? assignmentId,
             double east, double north, double west, double south);
+
+        HashSet<int> GetExistedAssignmentIds(IEnumerable<int> assignmentIds);
     }
 }
