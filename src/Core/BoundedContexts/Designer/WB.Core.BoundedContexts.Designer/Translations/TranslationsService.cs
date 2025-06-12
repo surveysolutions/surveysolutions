@@ -107,7 +107,8 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             var translations = translationsExportService.GetTranslationTexts(questionnaire, translation, categoriesService);
             var isFullTranslated = translations
                 .Where(t => t.Type != TranslationType.ValidationMessage)
-                .Where(t => string.IsNullOrWhiteSpace(t.Value));
+                .Where(t => string.IsNullOrWhiteSpace(t.TranslationText))
+                ;
             return !isFullTranslated.Any();
         }
 

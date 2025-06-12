@@ -13,7 +13,7 @@ namespace WB.Core.SharedKernels.Questionnaire.Translations
         Dictionary<string, string> GetExportedAliasesForTranslations(QuestionnaireDocument questionnaire,
             ITranslation translation, ICategories categoriesService);
 
-        IEnumerable<TranslationDto> GetTranslationTexts(QuestionnaireDocument questionnaire,
+        IEnumerable<OriginalAndTranslationDto> GetTranslationTexts(QuestionnaireDocument questionnaire,
             ITranslation translation, ICategories categoriesService);
     }
 }

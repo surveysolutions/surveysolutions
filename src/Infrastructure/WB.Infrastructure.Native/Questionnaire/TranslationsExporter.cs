@@ -45,15 +45,16 @@ namespace WB.Infrastructure.Native.Questionnaire
             return translationFile;
         }
 
-        public IEnumerable<TranslationDto> GetTranslationTexts(QuestionnaireDocument questionnaire,
+        public IEnumerable<OriginalAndTranslationDto> GetTranslationTexts(QuestionnaireDocument questionnaire,
             ITranslation translation, ICategories categoriesService) =>
             GetNonEmptyTranslatedTexts(questionnaire, translation, categoriesService)
-                .Select(row => new TranslationDto
+                .Select(row => new OriginalAndTranslationDto
                 {
-                    Type = row.Type != null ? Enum.Parse<TranslationType>(row.Type) : TranslationType.Unknown,
-                    QuestionnaireEntityId = row.EntityId != null ? Guid.Parse(row.EntityId) : Guid.Empty,
+                    Type = row.Type != null ? Enum.Parse<TranslationType>(row.Type) : null,
+                    QuestionnaireEntityId = row.EntityId != null ? Guid.Parse(row.EntityId) : null,
                     TranslationIndex = row.OptionValueOrValidationIndexOrFixedRosterId,
-                    Value = row.Translation
+                    OriginalText = row.OriginalText,
+                    TranslationText = row.Translation,
                 });
 
         private Dictionary<string, List<TranslationRow>> GetTranslationsBySheet(QuestionnaireDocument questionnaire,
