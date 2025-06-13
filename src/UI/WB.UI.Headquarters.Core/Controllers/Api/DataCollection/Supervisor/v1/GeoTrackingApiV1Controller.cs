@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.GeoTracking;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.WebApi;
@@ -11,8 +12,9 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1;
 public class GeoTrackingApiV1Controller : GeoTrackingControllerBase
 {
     public GeoTrackingApiV1Controller(ILogger<GeoTrackingControllerBase> logger,
-        IPlainStorageAccessor<GeoTrackingRecord> geoTrackingStorage) 
-        : base(logger, geoTrackingStorage)
+        IPlainStorageAccessor<GeoTrackingRecord> geoTrackingStorage,
+        IAssignmentsService assignmentsService) 
+        : base(logger, geoTrackingStorage, assignmentsService)
     {
     }
 
