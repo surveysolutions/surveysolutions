@@ -204,7 +204,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 return new HashSet<int>();
             
             var uniqueAssignmentIds = new HashSet<int>(assignmentIds);
-            if (!uniqueAssignmentIds.Any())
+            if (uniqueAssignmentIds.Count == 0)
                 return new HashSet<int>();
 
             var existedAssignmentIds = this.assignmentsAccessor.Query(_ => _
