@@ -38,7 +38,7 @@ public abstract class GeoTrackingControllerBase : ControllerBase
         {
             if (!existedAssignmentIds.Contains(record.AssignmentId))
             {
-                this.logger.LogWarning("GeoTracking record for assignment {AssignmentId} is not found.", record.AssignmentId);
+                this.logger.LogWarning("Assignment {AssignmentId} for GeoTracking record is not found.", record.AssignmentId);
                 continue;
             }
             
