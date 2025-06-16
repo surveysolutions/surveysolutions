@@ -32,7 +32,7 @@ public abstract class GeoTrackingControllerBase : ControllerBase
 
         var assignmentsIds = package.Records.Select(r => r.AssignmentId);
         var uniqueAssignmentIds = new HashSet<int>(assignmentsIds);
-        var existedAssignmentIds = assignmentsService.GetExistedAssignmentIds(uniqueAssignmentIds);
+        var existedAssignmentIds = assignmentsService.GetExistingAssignmentIds(uniqueAssignmentIds);
         
         foreach (var record in package.Records)
         {

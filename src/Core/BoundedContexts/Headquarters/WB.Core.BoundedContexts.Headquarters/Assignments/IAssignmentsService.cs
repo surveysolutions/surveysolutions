@@ -34,6 +34,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             Guid? responsibleId, int? assignmentId,
             double east, double north, double west, double south);
 
-        HashSet<int> GetExistedAssignmentIds(IEnumerable<int> assignmentIds);
+        HashSet<int> GetExistingAssignmentIds(IEnumerable<int> assignmentIds);
     }
 }

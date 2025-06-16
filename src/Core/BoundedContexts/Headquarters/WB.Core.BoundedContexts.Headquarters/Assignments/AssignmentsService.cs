@@ -198,7 +198,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             return assignments;
         }
 
-        public HashSet<int> GetExistedAssignmentIds(IEnumerable<int> assignmentIds)
+        public HashSet<int> GetExistingAssignmentIds(IEnumerable<int> assignmentIds)
         {
             if (assignmentIds == null)
                 return new HashSet<int>();
