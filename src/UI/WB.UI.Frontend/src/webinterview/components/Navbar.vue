@@ -165,7 +165,7 @@
         <!-- /.container-fluid -->
 
         <teleport to="body">
-            <div v-if="showEmailPersonalLink" ref="emailPersonalLinkModalRef" class="modal fade personal-link-modal"
+            <div v-if="showEmailPersonalLink" ref="emailPersonalLinkModalRef" class="modal fade" aria-label="personal-link-modal"
                 id="emailPersonalLinkModal" tabindex="-1" role="dialog">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
