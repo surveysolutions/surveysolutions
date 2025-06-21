@@ -128,7 +128,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             File.WriteAllText(contentFilePath, doContent.ToString());
         }
 
-        private async Task<List<string[]>> QueryActionsChunkFromReadSide(int[] assignmentIds)
+        private async Task<List<string?[]>> QueryActionsChunkFromReadSide(int[] assignmentIds)
         {
             var assignmentActions = dbContext.AssignmentActions
                 .Where(selector => assignmentIds.Contains(selector.AssignmentId))
@@ -136,11 +136,11 @@ namespace WB.Services.Export.CsvExport.Exporters
                 .ThenBy(a => a.GlobalSequence)
                 .ThenBy(a => a.Position);
 
-            var result = new List<string[]>();
+            var result = new List<string?[]>();
 
             foreach (AssignmentAction assignmentAction in assignmentActions)
             {
-                var resultRow = new List<string>
+                var resultRow = new List<string?>
                 {
                     assignmentAction.AssignmentId.ToString(CultureInfo.InvariantCulture),
                     assignmentAction.TimestampUtc.ToString(ExportFormatSettings.ExportDateFormat, CultureInfo.InvariantCulture),

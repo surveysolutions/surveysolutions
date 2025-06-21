@@ -146,9 +146,9 @@ namespace WB.Services.Export.Assignment
                 Status = action,
                 OriginatorId = @event.Event.UserId,
                 ResponsibleId = assignment.ResponsibleId,
-                OldValue = oldValue ?? String.Empty,
-                NewValue = newValue ?? String.Empty,
-                Comment = comment ?? String.Empty,
+                OldValue = oldValue,
+                NewValue = newValue,
+                Comment = comment,
             };
             dbContext.AssignmentActions.Add(assignmentAction);
         }

@@ -6,13 +6,13 @@ namespace WB.Services.Export.InterviewDataStorage
 {
     public class InterviewReference
     {
-        public string QuestionnaireId { get; set; } = null!;
+        public string QuestionnaireId { get; set; } = string.Empty;
 
         public Guid InterviewId { get; set; }
 
         public InterviewStatus Status { get; set; }
 
-        public string Key { get; set; } = String.Empty;
+        public string Key { get; set; } = string.Empty;
 
         public DateTime? UpdateDateUtc { get; set; }
 
