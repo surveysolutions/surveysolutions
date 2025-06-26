@@ -1,14 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
      xmlns:local="http://schemas.android.com/apk/res-auto"
-    style="@style/VerticalFullWidthWrappingLayout"
-              android:background="@color/complete_screen_statistics_group_background"
+    
+              style="@style/Interview_Complete_ListItem"
+              android:background="@drawable/complete_info_item_layout_border"
               clickable="true" 
+              orientation="horizontal"
               local:MvxBind="Click NavigateToSectionCommand;">
-  <TextView
-           style="@style/Interview_Complete_Screen_Statistics_Errors_Label"  
-           android:layout_marginTop="@dimen/Interview_Entity_Title_margin_vertical"
-           android:layout_marginLeft="@dimen/Interview_Complete_Item_left_offset"
-           local:MvxBind="HtmlWithLinks MakeMarkdownLinksExecutable(EntityTitle, .); 
-                          Color CompleteItemToColor(.);" />
+
+    <View style="@style/Interview_Complete_ListItem_Status"
+          android:layout_height="match_parent"
+          android:layout_gravity="center_vertical"
+          local:MvxBind="BackgroundStyle CompleteItemToColor(.)"
+          android:background="@drawable/complete_item_status_error" />
+           />
+    
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="@dimen/Interview_Entity_Title_margin_vertical"
+            android:layout_marginBottom="@dimen/Interview_Entity_Title_margin_vertical"
+            android:layout_marginLeft="@dimen/Interview_Entity_Title_margin_vertical"
+            android:layout_marginRight="@dimen/Interview_Entity_Title_margin_vertical"
+    >
+
+        <TextView
+                style="@style/Interview_Complete_Screen_Statistics_Label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                local:MvxBind="HtmlWithLinks MakeMarkdownLinksExecutable(EntityTitle, .);"
+        />
+        <TextView
+                style="@style/Interview_Complete_Screen_Statistics_Error"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                local:MvxBind="HtmlWithLinks MakeMarkdownLinksExecutable(Error, .);"
+        />
+        <TextView
+                style="@style/Interview_Complete_Screen_Statistics_Comment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                local:MvxBind="HtmlWithLinks MakeMarkdownLinksExecutable(Comment, .);"
+        />
+    </LinearLayout>
 </LinearLayout>

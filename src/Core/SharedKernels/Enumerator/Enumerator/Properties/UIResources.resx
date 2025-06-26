@@ -957,4 +957,12 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="SelectShapefileTitle" xml:space="preserve">
     <value>Select Boundaries:</value>
   </data>  
+  <data name="Interview_Complete_Title" xml:space="preserve">
+    <value>Review &amp; Submit
+Interview {0}</value>
+  </data>
+  <data name="Interview_Complete_Success_Text" xml:space="preserve">
+    <value>All required questions answered
+No errors detected</value>
+  </data>
 </root>

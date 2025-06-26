@@ -1,0 +1,136 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name ="Interview_Complete_Screen_Scroll">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:fillViewport">true</item>
+        <item name="android:layout_alignParentTop">true</item>
+    </style>
+
+    <style name="Interview_Complete_Screen_Text" parent="Interview_Entity_BasicFont">
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textColor">@color/complete_screen_title_text</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/Interview_Entity_Title_margin_vertical</item>
+        <item name="android:layout_marginBottom">@dimen/Interview_Entity_Title_margin_vertical</item>
+        <item name="android:textSize">@dimen/textsize_14</item>
+        <item name="android:letterSpacing">0.1</item>
+    </style>
+
+    <style name="Interview_Complete_Screen_Web_Interview_Link" parent="Interview_Complete_Screen_Text">
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/complete_screen_statistics_web_interview_link_color</item>
+        <item name="android:textSize">@dimen/textsize_16</item>
+    </style>
+
+    <style name="Interview_Complete_Screen_Statistics_Column">
+        <item name="android:layout_width">@dimen/zero</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingLeft">@dimen/Interview_Entity_Element_margin_horizontal</item>
+        <item name="android:paddingRight">@dimen/Interview_Entity_Element_margin_horizontal</item>
+    </style>
+
+    <style name="Interview_Complete_Screen_Statistics_Column_With_Right_Border" parent="Interview_Complete_Screen_Statistics_Column">
+        <item name="android:background">@drawable/complete_screen_statistics_column_background</item>
+    </style>
+
+
+    <style name="Interview_Complete_Screen_Statistics_Container" parent="FullWidthWrappingLayout">
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="Interview_Complete_Screen_Statistics_Counter" parent="FullWidthWrappingLayout">
+        <item name="android:textSize">@dimen/textsize_28</item>
+        <item name="android:textColor">@color/complete_screen_statistics_neutral_color</item>
+        <item name="android:layout_marginTop">@dimen/Interview_Entity_Title_margin_vertical</item>
+        <item name="android:layout_marginBottom">@dimen/Interview_Entity_Title_margin_vertical</item>
+    </style>
+
+
+    <style name="Interview_Complete_Screen_Statistics_Answered_Counter" parent="Interview_Complete_Screen_Statistics_Counter">
+        <item name="android:textColor">@color/complete_screen_statistics_answered_color</item>
+    </style>
+
+    <style name="Interview_Complete_Screen_Statistics_Answered_Label" parent="Interview_Complete_Screen_Statistics_Label">
+        <item name="android:textColor">@color/complete_screen_statistics_answered_color</item>
+    </style>
+
+    <style name="Interview_Complete_Screen_Statistics_Unanswered_Counter" parent="Interview_Complete_Screen_Statistics_Counter">
+        <item name="android:textColor">@color/complete_screen_statistics_unanswered_color</item>
+    </style>
+
+    <style name="Interview_Complete_Screen_Statistics_Unanswered_Label" parent="Interview_Complete_Screen_Statistics_Label">
+        <item name="android:textColor">@color/complete_screen_statistics_unanswered_color</item>
+    </style>
+
+    <style name="Interview_Complete_Screen_Statistics_Errors_Counter" parent="Interview_Complete_Screen_Statistics_Counter">
+        <item name="android:textColor">@color/complete_screen_statistics_error_color</item>
+    </style>
+
+    <style name="Interview_Complete_Screen_Statistics_Errors_Label" parent="Interview_Complete_Screen_Statistics_Label">
+        <item name="android:textColor">@color/complete_screen_statistics_error_color</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+    
+    
+    
+    
+    <style name="Interview_Complete_ListItem">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+
+        <item name="android:clipChildren">false</item>
+        <item name="android:clipToPadding">false</item>
+    </style>
+
+    <style name="Interview_Complete_ListItem_Status">
+        <item name="android:layout_width">5dp</item>
+        <item name="android:layout_height">0dp</item>
+    </style>
+
+    <style name="Interview_Complete_Base">
+        <item name="android:fontFamily">Roboto</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="Interview_Complete_Page_Item" parent="Interview_Complete_Base">
+        <item name="android:layout_marginLeft">@dimen/Interview_Entity_margin_with_border_left</item>
+        <item name="android:layout_marginRight">@dimen/Interview_Entity_margin_with_border_left</item>
+        <item name="android:layout_marginBottom">@dimen/Interview_Entity_Title_margin_top</item>
+    </style>
+
+    <style name="Interview_Complete_Title" parent="Interview_Complete_Page_Item">
+        <item name="android:textSize">@dimen/textsize_24</item>
+        <item name="android:fontWeight">400</item>
+        <item name="android:layout_marginTop">@dimen/Interview_Entity_Title_margin_top</item>
+    </style>
+
+    <style name="Interview_Complete_Success_Text" parent="Interview_Question_Title_Base">
+        <item name="android:textSize">@dimen/textsize_16</item>
+        <item name="android:textColor">@color/group_completed</item>
+    </style>
+
+    <style name="Interview_Complete_Screen_Statistics_Label" parent="Interview_Complete_Base">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">@dimen/textsize_14</item>
+        <item name="android:textColor">@color/complete_screen_statistics_label</item>
+    </style>
+    
+    <style name="Interview_Complete_Screen_Statistics_Error" parent="Interview_Complete_Base">
+        <item name="android:textSize">@dimen/textsize_14</item>
+        <item name="android:textColor">@color/complete_screen_statistics_error</item>
+    </style>
+
+    <style name="Interview_Complete_Screen_Statistics_Comment" parent="Interview_Complete_Base">
+        <item name="android:textSize">@dimen/textsize_14</item>
+        <item name="android:textColor">@color/complete_screen_statistics_label</item>
+    </style>
+
+</resources>

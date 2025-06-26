@@ -87,7 +87,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.CompleteStatus = InterviewState.Status;
             this.Name.InitAsStatic(UIResources.Interview_Complete_Screen_Title);
 
-            this.CompleteScreenTitle = UIResources.Interview_Complete_Screen_Description;
+            var interview = this.interviewRepository.GetOrThrow(interviewId);
+            var interviewKey = interview.GetInterviewKey()?.ToString();
+            this.CompleteScreenTitle = string.Format(UIResources.Interview_Complete_Title, interviewKey);
+
 
             var questionsCount = InterviewState.QuestionsCount;
             this.AnsweredCount = InterviewState.AnsweredQuestionsCount;
@@ -115,6 +118,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.CompleteGroups = new CompositeCollection<MvxViewModel>();
             if (UnansweredCount > 0)
             {
+                Errors = unansweredGroup.Items;
                 CompleteGroups.AddCollection(new CovariantObservableCollection<MvxViewModel>() { unansweredGroup });
                 CompleteGroups.AddCollection(unansweredGroup.Items);
             }
@@ -132,6 +136,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public bool HasCompleteGroups => CompleteGroups.Count > 0;
         public CompositeCollection<MvxViewModel> CompleteGroups { get; set; }
+        public CompositeCollection<MvxViewModel> Errors { get; set; }
 
         public int AnsweredCount { get; set; }
 

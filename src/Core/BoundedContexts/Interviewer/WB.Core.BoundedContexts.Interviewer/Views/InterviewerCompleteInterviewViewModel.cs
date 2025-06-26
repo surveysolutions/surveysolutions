@@ -70,9 +70,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             RunConfiguration(interviewUid, navigationState);
             
             var interviewKey = interview.GetInterviewKey()?.ToString();
-            this.CompleteScreenTitle = string.IsNullOrEmpty(interviewKey)
-                ? UIResources.Interview_Complete_Screen_Description
-                : string.Format(UIResources.Interview_Complete_Screen_DescriptionWithInterviewKey, interviewKey);
+            this.CompleteScreenTitle = string.Format(UIResources.Interview_Complete_Title, interviewKey);
 
             var questionnaireView = questionnaireViewRepository.GetById(interview.QuestionnaireIdentity.ToString());
             if (questionnaireView.WebModeAllowed && interviewerSettings.WebInterviewUriTemplate != null && interview.GetAssignmentId() != null)

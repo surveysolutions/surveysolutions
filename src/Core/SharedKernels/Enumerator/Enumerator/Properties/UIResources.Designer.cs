@@ -1718,5 +1718,17 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
                 return ResourceManager.GetString("SelectShapefileTitle", resourceCulture);
             }
         }
+        
+        public static string Interview_Complete_Title {
+            get {
+                return ResourceManager.GetString("Interview_Complete_Title", resourceCulture);
+            }
+        }
+        
+        public static string Interview_Complete_Success_Text {
+            get {
+                return ResourceManager.GetString("Interview_Complete_Success_Text", resourceCulture);
+            }
+        }
     }
 }

@@ -13,13 +13,24 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
     public class EntityWithErrorsViewModel : ListEntityViewModel, IInterviewEntity
     {
-        public override void Init(NavigationIdentity entityIdentity, string title, NavigationState navigationState)
+        public override void Init(NavigationIdentity entityIdentity, 
+            string title, 
+            //string comment, 
+            //string error, 
+            NavigationState navigationState)
         {
             this.NavigationState = navigationState;
             this.entityIdentity = entityIdentity;
             this.entityTitle = title;
+            this.Comment = title;
+            this.Error = title;
+            // this.Comment = comment;
+            // this.Error = error;
             this.IsError = true;
         }
+
+        public string Comment { get; private set; }
+        public string Error { get; private set; }
 
         private string entityTitle;
         private NavigationIdentity entityIdentity;

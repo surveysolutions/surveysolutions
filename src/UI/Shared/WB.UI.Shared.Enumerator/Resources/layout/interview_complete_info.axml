@@ -2,10 +2,16 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
        xmlns:local="http://schemas.android.com/apk/res-auto">
     <TextView
-          style="@style/Interview_Question_Title"
+          style="@style/Interview_Complete_Title"
           android:layout_marginLeft="@dimen/Interview_Entity_margin_left"
           android:id="@+id/tv_Complete_Screen_Title"
           local:MvxBind="Text CompleteScreenTitle;" />
+
+    <TextView
+            style="@style/Interview_Complete_Success_Text"
+            android:layout_marginLeft="@dimen/Interview_Entity_margin_left"
+            android:id="@+id/tv_Complete_Screen_Title_Success_Text"
+            local:MvxBind="Text Localization('Interview_Complete_Success_Text'); Visible Not(IsLoading);" />
 
     <View style="@style/Interview_Entity_Divider" />
 
@@ -19,19 +25,15 @@
     <LinearLayout style="@style/Interview_Question" 
                   android:orientation="vertical"
                   local:MvxBind="Visible And(Not(IsLoading), HasCompleteGroups)">
-        <LinearLayout style="@style/Interview_Question_Header">
-            <TextView style="@style/Interview_Complete_Screen_Text"
-                      android:id="@+id/tv_Complete_Questions_Status"
-                      local:MvxBind="Text Localization('Interview_Complete_Interview_Status')" />
-
-            <TextView
-                    style="@style/Interview_Complete_Screen_Text"
-                    android:id="@+id/tv_Complete_CriticalityNote"
-                    local:MvxBind="Text Localization('Interview_Complete_CriticalityIssuesDescription');
-                        Visible HasCriticalIssues" />
-        </LinearLayout>
+        <MvxRecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/Interview_Entity_Title_margin_top"
+                android:nestedScrollingEnabled="false"
+                local:MvxItemTemplate="@layout/interview_complete_child_item"
+                local:MvxBind="ItemsSource Errors;" />
     </LinearLayout>
-    
+
     <MvxRecyclerView
             android:id="@+id/tv_Complete_Groups"
             android:layout_width="match_parent"
