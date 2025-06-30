@@ -180,6 +180,8 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
                 string entryPath = Path.GetFullPath(Path.Combine(destinationDirectory, zipEntry.FullName));
                 if (!entryPath.StartsWith(destinationDirectory, StringComparison.Ordinal))
                     throw new InvalidOperationException($"Entry is outside the target directory: {zipEntry.FullName}");
+                
+                result.Add(zipEntry.Name, zipEntry.Length);
             }
 
             return result;
