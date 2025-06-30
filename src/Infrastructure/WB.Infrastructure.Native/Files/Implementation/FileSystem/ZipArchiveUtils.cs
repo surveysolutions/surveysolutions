@@ -175,7 +175,7 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
             foreach (var zipEntry in zip.Entries)
             {
                 if (zipEntry.IsDirectory()) continue;
-                result.Add(zipEntry.FullName, zipEntry.Length);
+                result.Add(zipEntry.Name, zipEntry.Length);
             }
             
             return result;
