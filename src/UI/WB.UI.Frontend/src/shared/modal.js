@@ -84,7 +84,7 @@ export default {
         </div>` : ''; // Render header only if title or closeButton is provided
 
         let modalHTML = `
-      <div class="modal fade modal-dialog" id="${modalId}" tabindex="-1" ${onEscape ? '' : 'data-bs-keyboard="false"'} aria-hidden="true">
+      <div class="modal fade" aria-label="modal" id="${modalId}" tabindex="-1" ${onEscape ? '' : 'data-bs-keyboard="false"'} aria-hidden="true">
         <div class="modal-dialog ${sizeClass}">
           <div class="modal-content">
             ${headerHTML}
