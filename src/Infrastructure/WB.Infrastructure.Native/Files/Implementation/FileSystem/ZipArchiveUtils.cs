@@ -181,7 +181,7 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
                 if (!entryPath.StartsWith(destinationDirectory, StringComparison.Ordinal))
                     throw new InvalidOperationException($"Entry is outside the target directory: {zipEntry.FullName}");
                 
-                result.Add(zipEntry.Name, zipEntry.Length);
+                result.Add(zipEntry.FullName, zipEntry.Length);
             }
 
             return result;
