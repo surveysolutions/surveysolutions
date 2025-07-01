@@ -62,7 +62,8 @@ Other files
         {
             var fileName = fileInArchive.Key;
             var mapExtension = fileSystemAccessor.GetFileExtension(fileName);
-            var mapName = fileSystemAccessor.GetFileNameWithoutExtension(fileName);
+            var filwNameWithExtension = fileSystemAccessor.GetFileName(fileName);
+            var mapName = fileSystemAccessor.GetFileNameWithoutExtension(filwNameWithExtension);
 
             if (permittedMapFileExtensions.Contains(mapExtension))
             {
