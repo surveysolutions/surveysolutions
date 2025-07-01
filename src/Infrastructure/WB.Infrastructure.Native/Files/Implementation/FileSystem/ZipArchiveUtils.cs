@@ -177,13 +177,14 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
             {
                 if (entry.IsDirectory()) continue;
 
-                string destFileName = Path.GetFullPath(Path.Combine(destDirectory, entry.FullName));
+                var entryFullName = entry.FullName;
+                string destFileName = Path.GetFullPath(Path.Combine(destDirectory, entryFullName));
                 string fullDestDirPath = Path.GetFullPath(destDirectory + Path.DirectorySeparatorChar);
                 if (!destFileName.StartsWith(fullDestDirPath)) {
                     throw new System.InvalidOperationException("Entry is outside the target dir: " + destFileName);
                 }
                 
-                result.Add(entry.FullName, entry.Length);
+                result.Add(entryFullName, entry.Length);
             }
 
             return result;
