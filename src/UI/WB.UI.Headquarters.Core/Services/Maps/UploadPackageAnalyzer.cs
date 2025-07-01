@@ -68,7 +68,7 @@ Other files
             {
                 result.Maps.Add(new MapFiles() 
                 { 
-                    Name = fileName,
+                    Name = mapName,
                     Files = new List<MapFile>() { new() { Name = fileName, Size = fileInArchive.Value } }, 
                     Size = fileInArchive.Value 
                 });
