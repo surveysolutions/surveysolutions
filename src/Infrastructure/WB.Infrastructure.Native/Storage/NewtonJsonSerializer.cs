@@ -8,7 +8,7 @@ namespace WB.Infrastructure.Native.Storage
         private static readonly JsonSerializerSettings jsonSerializerSettings = 
             new JsonSerializerSettings
         {
-            TypeNameHandling = TypeNameHandling.Auto,
+            TypeNameHandling = TypeNameHandling.None,
             NullValueHandling = NullValueHandling.Ignore,
             FloatParseHandling = FloatParseHandling.Decimal,
             Formatting = Formatting.Indented,
