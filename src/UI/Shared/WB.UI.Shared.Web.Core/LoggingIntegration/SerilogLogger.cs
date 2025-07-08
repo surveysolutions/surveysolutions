@@ -14,40 +14,32 @@ namespace WB.UI.Shared.Web.LoggingIntegration
 
         public void Trace(string message, Exception? exception = null)
         {
-            this.logger.Verbose(exception, SanitizeMessage(message));
+            this.logger.Verbose(exception, message);
         }
 
         public void Debug(string message, Exception? exception = null)
         {
-            this.logger.Debug(exception, SanitizeMessage(message));
+            this.logger.Debug(exception, message);
         }
 
         public void Info(string message, Exception? exception = null)
         {
-            this.logger.Information(exception, SanitizeMessage(message));
+            this.logger.Information(exception, message);
         }
 
         public void Warn(string message, Exception? exception = null)
         {
-            this.logger.Warning(exception, SanitizeMessage(message));
+            this.logger.Warning(exception, message);
         }
 
         public void Error(string message, Exception? exception = null)
         {
-            this.logger.Error(exception, SanitizeMessage(message));
+            this.logger.Error(exception, message);
         }
 
         public void Fatal(string message, Exception? exception = null)
         {
-            this.logger.Fatal(exception, SanitizeMessage(message));
-        }
-
-        private string SanitizeMessage(string message)
-        {
-            // Implement sanitization logic here, e.g., masking sensitive data
-            // For demonstration, replace sensitive keywords with "[REDACTED]"
-            if (string.IsNullOrEmpty(message)) return message;
-            return message.Replace("changePassword", "[REDACTED]");
+            this.logger.Fatal(exception, message);
         }
     }
 }
