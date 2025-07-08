@@ -190,7 +190,7 @@ namespace WB.UI.Headquarters.Controllers
             var user = await signInManager.GetTwoFactorAuthenticationUserAsync();
             if (user == null || user.IsLocked)
             {
-                return RedirectToAction("LogOn", new { ReturnUrl = returnUrl, RememberMe = true });
+                return RedirectToAction(nameof(LogOn), new { ReturnUrl = returnUrl, RememberMe = true });
             }
 
             var authenticatorCode = model.TwoFactorCode.Replace(" ", string.Empty).Replace("-", string.Empty);
