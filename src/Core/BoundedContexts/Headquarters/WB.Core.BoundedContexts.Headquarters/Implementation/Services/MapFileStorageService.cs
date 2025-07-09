@@ -594,7 +594,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
         public void UpdateUserMaps(string mapName, string[] users)
         {
-            var fileName = fileSystemAccessor.GetFileName(mapName)
+            var fileName = fileSystemAccessor.GetFileName(mapName);
             var map = this.mapPlainStorageAccessor.GetById(fileName);
             if (map == null)
                 throw new ArgumentException($"Map was not found {mapName}", nameof(mapName));
