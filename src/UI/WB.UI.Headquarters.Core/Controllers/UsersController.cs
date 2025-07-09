@@ -583,7 +583,7 @@ namespace WB.UI.Headquarters.Controllers
         public async Task<ActionResult> CreateUser([FromBody] CreateUserModel model)
         {
             if (!this.ModelState.IsValid) return this.ModelState.ErrorsToJsonResult();
-
+            
             if (!Enum.TryParse(model.Role, true, out UserRoles role))
                 return BadRequest("Unknown user type");
 
@@ -616,8 +616,8 @@ namespace WB.UI.Headquarters.Controllers
                 var user = new HqUser
                 {
                     Id = Guid.NewGuid(),
-                    IsLockedBySupervisor = model.IsLockedBySupervisor,
-                    IsLockedByHeadquaters = model.IsLockedByHeadquarters,
+                    IsLockedBySupervisor = false,
+                    IsLockedByHeadquaters = false,
                     FullName = model.PersonName,
                     Email = model.Email,
                     UserName = model.UserName,
