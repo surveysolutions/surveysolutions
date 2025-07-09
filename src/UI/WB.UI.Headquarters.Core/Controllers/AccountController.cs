@@ -189,17 +189,11 @@ namespace WB.UI.Headquarters.Controllers
             }
 
             var user = await signInManager.GetTwoFactorAuthenticationUserAsync();
-            if (user == null)
+            if (user == null || user.IsLocked)
             {
                 return RedirectToAction(nameof(LogOn), new { ReturnUrl = returnUrl, RememberMe = true });
             }
-
-            var userAsync = await userManager.FindByIdAsync(user.Id.FormatGuid());
-            if (userAsync == null || userAsync.IsLocked)
-            {
-                return RedirectToAction(nameof(LogOn), new { ReturnUrl = returnUrl, RememberMe = true });
-            }
-
+            
             var authenticatorCode = model.TwoFactorCode.Replace(" ", string.Empty).Replace("-", string.Empty);
             var signInResult = await signInManager.TwoFactorAuthenticatorSignInAsync(authenticatorCode, true, false);
 
