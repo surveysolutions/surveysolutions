@@ -7,7 +7,7 @@ export function updateExportPdfStatus(questionnaireId, translationId) {
             '?timezoneOffsetMinutes=' +
             new Date().getTimezoneOffset() +
             '&translation=' +
-            translationId
+            encodeURIComponent(translationId)
     );
 }
 
