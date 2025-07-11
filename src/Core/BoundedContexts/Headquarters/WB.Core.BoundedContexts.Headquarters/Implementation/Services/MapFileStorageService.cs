@@ -474,18 +474,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         {
             var fileName = fileSystemAccessor.GetFileName(mapName);
             var map = await this.mapPlainStorageAccessor.GetByIdAsync(fileName);
-            if (map != null)
-                this.mapPlainStorageAccessor.Remove(fileName);
+            if (map == null)
+                throw new Exception("Map was not found.");
+
+            this.mapPlainStorageAccessor.Remove(map.FileName);
 
             if (externalFileStorage.IsEnabled())
             {
                 this.logger.LogWarning("Deleting map: '{map}' from external storage", mapName);
-                await this.externalFileStorage.RemoveAsync(GetExternalStoragePath(fileName));
+                await this.externalFileStorage.RemoveAsync(GetExternalStoragePath(map.FileName));
             }
             else
             {
                 this.logger.LogWarning("Deleting map: '{map}' from {folder}", mapName, this.mapsFolderPath);
-                var filePath = this.fileSystemAccessor.CombinePath(this.mapsFolderPath, fileName);
+                var filePath = this.fileSystemAccessor.CombinePath(this.mapsFolderPath, map.FileName);
 
                 if (this.fileSystemAccessor.IsFileExists(filePath))
                     fileSystemAccessor.DeleteFile(filePath);
@@ -501,7 +503,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             
             foreach (var map in maps)
             {
-                await this.DeleteMap(map.Id);
+                await this.DeleteMap(map.FileName);
             }
         }
 
