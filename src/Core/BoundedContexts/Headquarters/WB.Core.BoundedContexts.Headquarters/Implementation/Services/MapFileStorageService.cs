@@ -511,6 +511,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             if (user == null) throw new ArgumentNullException(nameof(user));
 
             var fileName = fileSystemAccessor.GetFileName(mapName);
+            var map = this.mapPlainStorageAccessor.GetById(fileName);
+            if (map == null)
+                throw new Exception("Map was not found.");
+            
             var lowerCasedUserName = user.ToLower();
             if (this.authorizedUser.IsSupervisor)
             {
@@ -527,13 +531,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 }
             }
             
-            var map = this.mapPlainStorageAccessor.GetById(fileName);
-
-            if (map == null)
-                throw new Exception("Map was not found.");
 
             var mapUsers = this.userMapsStorage
-                .Query(q => q.Where(x => x.Map.Id == fileName && x.UserName.ToLower() == lowerCasedUserName))
+                .Query(q => q.Where(x => x.Map.Id == map.FileName && x.UserName.ToLower() == lowerCasedUserName))
                 .ToList();
 
             if (mapUsers.Count > 0)
@@ -599,7 +599,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             if (map == null)
                 throw new ArgumentException($"Map was not found {mapName}", nameof(mapName));
 
-            var userMaps = userMapsStorage.Query(q => q.Where(x => x.Map.Id == fileName).ToList());
+            var userMaps = userMapsStorage.Query(q => q.Where(x => x.Map.Id == map.FileName).ToList());
 
             var interviewerRoleId = UserRoles.Interviewer.ToUserId();
             var supervisorRoleId = UserRoles.Supervisor.ToUserId();
@@ -683,7 +683,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             }
 
             var userMap = this.userMapsStorage
-                .Query(x => x.FirstOrDefault(um => um.Map.FileName == fileName && um.UserName == userName));
+                .Query(x => x.FirstOrDefault(um => um.Map.FileName == map.FileName && um.UserName == userName));
 
             if (userMap == null)
             {
@@ -694,7 +694,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 }, null);
             }
 
-            return this.mapPlainStorageAccessor.GetById(fileName);
+            return map;
         }
 
         public ComboboxViewItem[] GetUserShapefiles(string filter)
@@ -735,14 +735,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         public async Task<byte[]> GetMapContentAsync(string mapName)
         {
             var fileName = fileSystemAccessor.GetFileName(mapName);
-            
+            var map = await this.mapPlainStorageAccessor.GetByIdAsync(fileName);
+            if (map == null)
+                throw new InvalidOperationException(@"Map was not found.");
+
             if (externalFileStorage.IsEnabled())
             {
-                return await this.externalFileStorage.GetBinaryAsync((GetExternalStoragePath(fileName)));
+                return await this.externalFileStorage.GetBinaryAsync(GetExternalStoragePath(map.FileName));
             }
 
-            var filePath = this.fileSystemAccessor.CombinePath(this.mapsFolderPath, fileName);
-
+            var filePath = this.fileSystemAccessor.CombinePath(this.mapsFolderPath, map.FileName);
             if (!this.fileSystemAccessor.IsFileExists(filePath))
                 return null;
 
