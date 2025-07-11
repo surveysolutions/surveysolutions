@@ -66,7 +66,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
                     return Forbid();
             }
 
-            var mapContent = await this.mapRepository.GetMapContentAsync(fileName);
+            var mapContent = await this.mapRepository.GetMapContentAsync(map.FileName);
             if (mapContent == null)
                 return NotFound();
 
