@@ -481,12 +481,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
             if (externalFileStorage.IsEnabled())
             {
-                this.logger.LogWarning("Deleting map: '{map}' from external storage", mapName);
+                this.logger.LogWarning("Deleting map: '{map}' from external storage", map.FileName);
                 await this.externalFileStorage.RemoveAsync(GetExternalStoragePath(map.FileName));
             }
             else
             {
-                this.logger.LogWarning("Deleting map: '{map}' from {folder}", mapName, this.mapsFolderPath);
+                this.logger.LogWarning("Deleting map: '{map}' from {folder}", map.FileName, this.mapsFolderPath);
                 var filePath = this.fileSystemAccessor.CombinePath(this.mapsFolderPath, map.FileName);
 
                 if (this.fileSystemAccessor.IsFileExists(filePath))
