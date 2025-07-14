@@ -259,7 +259,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 
             if (workspace.DisabledAtUtc == null)
             {
-                ModelState.AddModelError(nameof(workspace.DisabledAtUtc), $"Workspace {name} is already enabled");
+                ModelState.AddModelError(nameof(workspace.DisabledAtUtc), $"Workspace {workspace.Name} is already enabled");
             }
 
             if (ModelState.IsValid)
