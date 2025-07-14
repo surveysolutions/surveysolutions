@@ -26,7 +26,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             "System.AppDomain", 
             "System.Console", 
             "System.Environment", 
-            "System.GC"
+            "System.GC",
+            "System.Type",
         };
 
         public IEnumerable<string> FindForbiddenClassesUsage(SyntaxTree syntaxTree, CSharpCompilation compilation)
