@@ -15,7 +15,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             "System.Collections",
             "System.Collections.Generic",
             "System.Linq",
-            "System.Linq.Expressions",
             "System.Linq.Queryable",
             "System.Text.RegularExpressions"
         };
