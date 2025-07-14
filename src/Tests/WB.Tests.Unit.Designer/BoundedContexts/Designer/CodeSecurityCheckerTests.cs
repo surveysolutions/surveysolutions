@@ -39,11 +39,17 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(forbiddenClassesUsed, Is.Empty);
         }
 
-        [TestCase("Activator.CreateInstance(typeof(AccessViolationException))", "System.Activator")]
+        [TestCase("Activator.CreateInstance(AccessViolationException)", "System.Activator")]
         [TestCase("Environment.Exit(1)", "System.Environment")]
         [TestCase("GC.Collect()", "System.GC")]
         [TestCase("var t = new System.Threading.SemaphoreSlim(0, 3)", "System.Threading.SemaphoreSlim")]
         [TestCase("num2_float.Value.ToString(\"N\", new System.Globalization.CultureInfo(\"hi-IN\"))", "System.Globalization.CultureInfo")]
+        //[TestCase("var p =System.Diagnostics.Process.Start(\"test\")", "System.Diagnostics.Process")]
+        //[TestCase("Diagnostics.Process.Start(\"test\")", "System.Diagnostics.Process")]
+        [TestCase("System.Type.GetType(\"test\")", "System.Type")]
+        [TestCase("typeof(System.DateTime)", "System.Type")]
+        [TestCase("new Type(\"test\")", "System.Type")]
+        [TestCase("System.IO.Path.Combine(\"test\", \"test\")", "System.IO.Path")]
         public void should_not_allow_usage_of_dangerous_classes(string codeToCheck, string expectedClassName)
         {
             string code = string.Format(TestClassToCompile, codeToCheck);
