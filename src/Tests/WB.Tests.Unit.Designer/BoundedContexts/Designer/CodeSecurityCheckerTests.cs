@@ -48,8 +48,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
         //[TestCase("Diagnostics.Process.Start(\"test\")", "System.Diagnostics.Process")]
         [TestCase("System.Type.GetType(\"test\")", "System.Type")]
         [TestCase("typeof(System.DateTime)", "System.Type")]
+        [TestCase("typeof(DateTime)", "System.Type")]
         [TestCase("new Type(\"test\")", "System.Type")]
         [TestCase("System.IO.Path.Combine(\"test\", \"test\")", "System.IO.Path")]
+        [TestCase("System.Reflection.Assembly.GetExecutingAssembly()", "System.Reflection.Assembly")]
         public void should_not_allow_usage_of_dangerous_classes(string codeToCheck, string expectedClassName)
         {
             string code = string.Format(TestClassToCompile, codeToCheck);
@@ -66,7 +68,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
         
         [TestCase("new System.Assembly")]
         [TestCase("new System.List()")]
-        public void should_allow_usage_of_same_classes(string codeToCheck)
+        public void should_allow_usage_of_class(string codeToCheck)
         {
             string code = string.Format(TestClassToCompile, codeToCheck);
             var syntaxTree = SyntaxFactory.ParseSyntaxTree(code);
