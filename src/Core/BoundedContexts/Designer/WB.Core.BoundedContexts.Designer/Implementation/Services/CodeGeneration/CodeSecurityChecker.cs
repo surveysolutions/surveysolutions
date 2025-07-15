@@ -67,6 +67,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     }
                 }
             }
+
+            var root = syntaxTree.GetRoot();
+            var dynamicNodes = root.DescendantNodes().OfType<IdentifierNameSyntax>()
+                .Where(node => node.Identifier.Text == "dynamic");
+
+            if (dynamicNodes.Any())
+                yield return "dynamic";
         }
 
         // https://stackoverflow.com/a/29178633/72174
