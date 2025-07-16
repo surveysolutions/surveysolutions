@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.TabletInformation;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.Configs;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Infrastructure.Native.Workspaces;

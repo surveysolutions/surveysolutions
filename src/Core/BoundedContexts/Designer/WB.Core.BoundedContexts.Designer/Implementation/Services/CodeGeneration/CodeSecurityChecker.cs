@@ -15,7 +15,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             "System.Collections",
             "System.Collections.Generic",
             "System.Linq",
-            "System.Linq.Expressions",
             "System.Linq.Queryable",
             "System.Text.RegularExpressions"
         };
@@ -27,7 +26,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             "System.AppDomain", 
             "System.Console", 
             "System.Environment", 
-            "System.GC"
+            "System.GC",
+            "System.Type",
         };
 
         public IEnumerable<string> FindForbiddenClassesUsage(SyntaxTree syntaxTree, CSharpCompilation compilation)
@@ -35,7 +35,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             var allUsedTypes = FindUsedTypes(syntaxTree, compilation);
 
             HashSet<string> foundForbiddenTypes = new HashSet<string>();
-            foreach (var namedTypeSymbol in allUsedTypes.Where(x => x.ContainingAssembly?.Name != compilation.AssemblyName))
+            var namedTypeSymbols = allUsedTypes.Where(x => x.ContainingAssembly?.Name != compilation.AssemblyName);
+            foreach (var namedTypeSymbol in namedTypeSymbols)
             {
                 var containingNamespace = namedTypeSymbol.ContainingNamespace.ToString();
                 if(containingNamespace == null) continue;
@@ -46,7 +47,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     string.Compare(containingNamespace, "System", StringComparison.InvariantCulture) == 0 &&
                     ForbiddenClassesFromSystemNamespace.Contains(symbol))
                 {
-                    
                     if (!foundForbiddenTypes.Contains(symbol))
                     {
                         foundForbiddenTypes.Add(symbol);
@@ -67,6 +67,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     }
                 }
             }
+
+            var root = syntaxTree.GetRoot();
+            var dynamicNodes = root.DescendantNodes().OfType<IdentifierNameSyntax>()
+                .Where(node => node.Identifier.Text == "dynamic");
+
+            if (dynamicNodes.Any())
+                yield return "dynamic";
         }
 
         // https://stackoverflow.com/a/29178633/72174
@@ -74,7 +81,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         {
             var root = tree.GetRoot();
             var st = root.SyntaxTree;
-            var sm = compilation.GetSemanticModel(st);
+            var semanticModel = compilation.GetSemanticModel(st);
             var syntaxNodes = root.DescendantNodes();
 
             foreach (var syntaxNode in syntaxNodes)
@@ -84,7 +91,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 //  - identifiers of any kind (including type names)
                 if (syntaxNode is IdentifierNameSyntax identifierNameSyntax)
                 {
-                    var symbol = sm.GetSymbolInfo(identifierNameSyntax).Symbol;
+                    var symbol = semanticModel.GetSymbolInfo(identifierNameSyntax).Symbol;
                     if (symbol is INamedTypeSymbol namedTypeSymbol)
                         yield return namedTypeSymbol;
                 }
@@ -96,7 +103,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 //  - all kinds of composite expressions
                 if (syntaxNode is ExpressionSyntax expressionSyntax)
                 {
-                    var type = sm.GetTypeInfo(expressionSyntax).Type;
+                    var type = semanticModel.GetTypeInfo(expressionSyntax).Type;
                     if (type is INamedTypeSymbol namedTypeSymbol)
                         yield return namedTypeSymbol;
                 }
