@@ -30,6 +30,20 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             "System.Type",
         };
 
+        public IEnumerable<string> FindForbiddenClassesUsage(SyntaxTree[] syntaxTrees, CSharpCompilation compilation)
+        {
+            if (syntaxTrees == null || syntaxTrees.Length == 0)
+                throw new ArgumentException("Syntax trees cannot be null or empty.", nameof(syntaxTrees));
+
+            foreach (var tree in syntaxTrees)
+            {
+                foreach (var forbiddenClass in FindForbiddenClassesUsage(tree, compilation))
+                {
+                    yield return forbiddenClass;
+                }
+            }
+        }
+
         public IEnumerable<string> FindForbiddenClassesUsage(SyntaxTree syntaxTree, CSharpCompilation compilation)
         {
             var allUsedTypes = FindUsedTypes(syntaxTree, compilation);

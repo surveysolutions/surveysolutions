@@ -47,11 +47,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
         //[TestCase("var p =System.Diagnostics.Process.Start(\"test\")", "System.Diagnostics.Process")]
         //[TestCase("Diagnostics.Process.Start(\"test\")", "System.Diagnostics.Process")]
         [TestCase("System.Type.GetType(\"test\")", "System.Type")]
+        [TestCase("5.GetType().ToString()", "System.Type")]
         [TestCase("typeof(System.DateTime)", "System.Type")]
         [TestCase("typeof(DateTime)", "System.Type")]
         [TestCase("new Type(\"test\")", "System.Type")]
         [TestCase("System.IO.Path.Combine(\"test\", \"test\")", "System.IO.Path")]
         [TestCase("System.Reflection.Assembly.GetExecutingAssembly()", "System.Reflection.Assembly")]
+        [TestCase("dynamic t = new object()", "dynamic")]
         public void should_not_allow_usage_of_dangerous_classes(string codeToCheck, string expectedClassName)
         {
             string code = string.Format(TestClassToCompile, codeToCheck);
