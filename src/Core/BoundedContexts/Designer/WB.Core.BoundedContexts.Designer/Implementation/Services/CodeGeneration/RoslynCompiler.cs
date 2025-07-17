@@ -5,6 +5,8 @@ using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Emit;
+using Microsoft.CodeAnalysis.Text;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.GenericSubdomains.Portable;
 
@@ -12,7 +14,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 {
     public class RoslynCompiler : IDynamicCompiler
     {
-        public EmitResult TryGenerateAssemblyAsStringAndEmitResult(
+        public GenerationResult TryGenerateAssemblyAsStringAndEmitResult(
             Guid templateId,
             Dictionary<string, string> generatedClasses,
             IEnumerable<MetadataReference> referencedPortableAssemblies,
@@ -20,7 +22,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         {
             generatedAssembly = string.Empty;
 
-            IEnumerable<SyntaxTree> syntaxTrees = generatedClasses.Select(
+            SyntaxTree[] syntaxTrees = generatedClasses.Select(
                     generatedClass => 
                         SyntaxFactory.ParseSyntaxTree(generatedClass.Value, 
                             path: generatedClass.Key, 
@@ -33,6 +35,20 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             CSharpCompilation compilation = CreateCompilation(templateId, syntaxTrees, metadataReferences);
             EmitResult compileResult;
             
+            var foundUsages = new CodeSecurityChecker().FindForbiddenClassesUsage(syntaxTrees, compilation);
+            if (foundUsages.Any())
+            {
+                return new GenerationResult(
+                    success: false,
+                    diagnostics: [
+                        Diagnostic.Create(
+                            new DiagnosticDescriptor("SEC001", "Forbidden class usage", 
+                            "Usage of forbidden class", "Security", DiagnosticSeverity.Error, true), 
+                            Location.None)
+                    ]
+                );
+            }
+            
             using (var stream = new MemoryStream())
             {
                 compileResult = compilation.Emit(stream);
@@ -42,9 +58,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     stream.Position = 0;
                     generatedAssembly = Convert.ToBase64String(stream.ToArray());
                 }
+
             }
 
-            return compileResult;
+            return new GenerationResult(compileResult.Success, compileResult.Diagnostics);
         }
 
         static CSharpCompilation CreateCompilation(Guid templateId, IEnumerable<SyntaxTree> syntaxTrees, List<MetadataReference> metadataReferences)
