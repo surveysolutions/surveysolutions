@@ -131,13 +131,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
 
         public void CloneLookupTable(Guid sourceQuestionnaireId, Guid sourceTableId, Guid newQuestionnaireId, Guid newLookupTableId)
         {
-            var content = GetLookupTableContent(sourceQuestionnaireId, sourceTableId);
+            var sourceLookupTableStorageId = this.GetLookupTableStorageId(sourceQuestionnaireId, sourceTableId);
+            var content = this.lookupTableContentStorage.GetById(sourceLookupTableStorageId);
             if (content == null)
                 throw new InvalidOperationException("Lookup table is empty.");
 
-            var lookupTableStorageId = this.GetLookupTableStorageId(newQuestionnaireId, newLookupTableId);
+            var newLookupTableStorageId = this.GetLookupTableStorageId(newQuestionnaireId, newLookupTableId);
 
-            this.lookupTableContentStorage.Store(content, lookupTableStorageId);
+            this.lookupTableContentStorage.Store(content, newLookupTableStorageId);
         }
 
         public bool IsLookupTableEmpty(Guid questionnaireId, Guid tableId, string? lookupTableName)
