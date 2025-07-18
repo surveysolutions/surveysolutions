@@ -12,7 +12,7 @@
                 <form asp-action="Delete" asp-controller="Questionnaire" method="post">
                     @Html.AntiForgeryToken()
                     <input name="id" id="delete-modal-questionnaire-id" type="hidden" />
-                    <button class="btn" data-bs-dismiss="modal" aria-hidden="true">@QuestionnaireController.Cancel</button>
+                    <button type="button" class="btn" data-bs-dismiss="modal" aria-hidden="true">@QuestionnaireController.Cancel</button>
                     <button type="submit" class="btn btn-danger" value="@QuestionnaireController.Delete" onclick="this.disabled = true;this.value = '@QuestionnaireController.Deleting';this.form.submit();">
                         @QuestionnaireController.Delete
                     </button>
