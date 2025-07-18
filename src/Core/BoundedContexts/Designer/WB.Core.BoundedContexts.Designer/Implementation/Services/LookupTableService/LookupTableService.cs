@@ -68,12 +68,19 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
         {
             var questionnaire = this.documentStorage.Get(questionnaireId);
             if (questionnaire == null)
-                throw new ArgumentException(string.Format(ExceptionMessages.QuestionCannotBeFound, questionnaireId));
+                throw new ArgumentException(string.Format(ExceptionMessages.QuestionnaireCantBeFound, questionnaireId));
+            
+            return GetLookupTableContent(questionnaire, lookupTableId);
+        }
 
-            if (!questionnaire.LookupTables.ContainsKey(lookupTableId))
+        private LookupTableContent? GetLookupTableContent(QuestionnaireDocument questionnaire, Guid lookupTableId)
+        {
+            if (questionnaire == null)
+                throw new ArgumentNullException(nameof(questionnaire));
+
+            if (!questionnaire.LookupTables.TryGetValue(lookupTableId, out var lookupTable))
                 throw new ArgumentException(string.Format(ExceptionMessages.LookupTableIsMissing, lookupTableId));
 
-            var lookupTable = questionnaire.LookupTables[lookupTableId];
             if (lookupTable == null)
                 throw new ArgumentException(string.Format(ExceptionMessages.LookupTableHasEmptyContent, lookupTableId));
 
@@ -155,7 +162,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
 
         private LookupTableContentFile? GetLookupTableContentFileImpl(QuestionnaireDocument questionnaire, Guid lookupTableId)
         {
-            var lookupTableContent = GetLookupTableContent(questionnaire.PublicKey, lookupTableId);
+            var lookupTableContent = GetLookupTableContent(questionnaire, lookupTableId);
 
             if (lookupTableContent == null)
                 return null;
