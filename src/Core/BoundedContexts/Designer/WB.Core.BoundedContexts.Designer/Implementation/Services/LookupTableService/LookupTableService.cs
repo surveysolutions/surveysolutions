@@ -68,12 +68,19 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
         {
             var questionnaire = this.documentStorage.Get(questionnaireId);
             if (questionnaire == null)
-                throw new ArgumentException(string.Format(ExceptionMessages.QuestionCannotBeFound, questionnaireId));
+                throw new ArgumentException(string.Format(ExceptionMessages.QuestionnaireCantBeFound, questionnaireId));
+            
+            return GetLookupTableContent(questionnaire, lookupTableId);
+        }
 
-            if (!questionnaire.LookupTables.ContainsKey(lookupTableId))
+        private LookupTableContent? GetLookupTableContent(QuestionnaireDocument questionnaire, Guid lookupTableId)
+        {
+            if (questionnaire == null)
+                throw new ArgumentNullException(nameof(questionnaire));
+
+            if (!questionnaire.LookupTables.TryGetValue(lookupTableId, out var lookupTable))
                 throw new ArgumentException(string.Format(ExceptionMessages.LookupTableIsMissing, lookupTableId));
 
-            var lookupTable = questionnaire.LookupTables[lookupTableId];
             if (lookupTable == null)
                 throw new ArgumentException(string.Format(ExceptionMessages.LookupTableHasEmptyContent, lookupTableId));
 
@@ -131,13 +138,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
 
         public void CloneLookupTable(Guid sourceQuestionnaireId, Guid sourceTableId, Guid newQuestionnaireId, Guid newLookupTableId)
         {
-            var content = GetLookupTableContent(sourceQuestionnaireId, sourceTableId);
+            var sourceLookupTableStorageId = this.GetLookupTableStorageId(sourceQuestionnaireId, sourceTableId);
+            var content = this.lookupTableContentStorage.GetById(sourceLookupTableStorageId);
             if (content == null)
                 throw new InvalidOperationException("Lookup table is empty.");
 
-            var lookupTableStorageId = this.GetLookupTableStorageId(newQuestionnaireId, newLookupTableId);
+            var newLookupTableStorageId = this.GetLookupTableStorageId(newQuestionnaireId, newLookupTableId);
 
-            this.lookupTableContentStorage.Store(content, lookupTableStorageId);
+            this.lookupTableContentStorage.Store(content, newLookupTableStorageId);
         }
 
         public bool IsLookupTableEmpty(Guid questionnaireId, Guid tableId, string? lookupTableName)
@@ -154,7 +162,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
 
         private LookupTableContentFile? GetLookupTableContentFileImpl(QuestionnaireDocument questionnaire, Guid lookupTableId)
         {
-            var lookupTableContent = GetLookupTableContent(questionnaire.PublicKey, lookupTableId);
+            var lookupTableContent = GetLookupTableContent(questionnaire, lookupTableId);
 
             if (lookupTableContent == null)
                 return null;
