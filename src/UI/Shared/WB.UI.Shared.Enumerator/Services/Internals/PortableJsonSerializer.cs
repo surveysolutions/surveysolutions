@@ -34,6 +34,11 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
             }
         });
 
+        public T DeserializeWithoutTypes<T>(string payload)
+        {
+            return JsonConvert.DeserializeObject<T>(payload);
+        }
+
         public T Deserialize<T>(string payload)
         {
             return JsonConvert.DeserializeObject<T>(payload, this.jsonSerializerSettings);
