@@ -616,8 +616,8 @@ namespace WB.UI.Headquarters.Controllers
                 var user = new HqUser
                 {
                     Id = Guid.NewGuid(),
-                    IsLockedBySupervisor = false,
-                    IsLockedByHeadquaters = false,
+                    IsLockedBySupervisor = model.IsLockedBySupervisor,
+                    IsLockedByHeadquaters = model.IsLockedByHeadquarters,
                     FullName = model.PersonName,
                     Email = model.Email,
                     UserName = model.UserName,
