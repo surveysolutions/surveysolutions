@@ -34,8 +34,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             
             CSharpCompilation compilation = CreateCompilation(templateId, syntaxTrees, metadataReferences);
             EmitResult compileResult;
-            
-            var foundUsages = new CodeSecurityChecker().FindForbiddenClassesUsage(syntaxTrees, compilation);
+
+            var syntaxTreesFromUser = syntaxTrees.Skip(1).ToArray();
+            var foundUsages = new CodeSecurityChecker().FindForbiddenClassesUsage(syntaxTreesFromUser, compilation);
             if (foundUsages.Any())
             {
                 return new GenerationResult(
