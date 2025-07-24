@@ -34,6 +34,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             
             CSharpCompilation compilation = CreateCompilation(templateId, syntaxTrees, metadataReferences);
             EmitResult compileResult;
+            
+            if (string.CompareOrdinal(syntaxTrees[0].FilePath,  "Questionnaire:General:" + templateId) != 0)
+                throw new Exception("First syntax tree must be the Questionnaire:General class.");
 
             var syntaxTreesFromUser = syntaxTrees.Skip(1).ToArray();
             var foundUsages = new CodeSecurityChecker().FindForbiddenClassesUsage(syntaxTreesFromUser, compilation);
