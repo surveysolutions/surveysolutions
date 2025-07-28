@@ -6,17 +6,12 @@ using WB.Core.SharedKernels.Enumerator.Utils;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
-    public abstract class ListEntityViewModel : BaseViewModel
+    public class EntityWithErrorsViewModel : MvxViewModel, IInterviewEntity
     {
-        public abstract void Init(NavigationIdentity entityIdentity, string title, NavigationState navigationState);
-    }
-
-    public class EntityWithErrorsViewModel : ListEntityViewModel, IInterviewEntity
-    {
-        public override void Init(NavigationIdentity entityIdentity, 
+        public void Init(NavigationIdentity entityIdentity, 
             string title, 
-            //string comment, 
-            //string error, 
+            string comment, 
+            string error, 
             NavigationState navigationState)
         {
             this.NavigationState = navigationState;
@@ -24,8 +19,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.entityTitle = title;
             this.Comment = title;
             this.Error = title;
-            // this.Comment = comment;
-            // this.Error = error;
+            this.Comment = comment;
+            this.Error = error;
             this.IsError = true;
         }
 
@@ -46,7 +41,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public static EntityWithErrorsViewModel InitTitle(string title)
         {
             var viewModel = new EntityWithErrorsViewModel();
-            viewModel.Init(null, title, null);
+            viewModel.Init(null, title, null, null, null);
             viewModel.IsError = false;
             return viewModel;
         }
@@ -54,7 +49,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public static EntityWithErrorsViewModel InitError(string title)
         {
             var viewModel = new EntityWithErrorsViewModel();
-            viewModel.Init(null, title, null);
+            viewModel.Init(null, null, null, title, null);
             return viewModel;
         }
 
@@ -68,10 +63,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.Identity = identity;
         }
     }
-
-    public class EntityWithCommentsViewModel : EntityWithErrorsViewModel
-    {
-    }    
+    
     
     public class CompleteGroup : MvxViewModel
     {

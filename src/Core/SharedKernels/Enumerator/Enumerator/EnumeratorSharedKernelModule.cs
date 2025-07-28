@@ -113,7 +113,6 @@ namespace WB.Core.SharedKernels.Enumerator
             registry.Bind<CoverInterviewViewModel>();
             registry.Bind<DynamicTextViewModel>();
             registry.Bind<EntityWithErrorsViewModel>();
-            registry.Bind<EntityWithCommentsViewModel>();
             registry.Bind<EnumerationStageViewModel>();
             registry.Bind<ReadOnlyQuestionViewModel>();
             registry.Bind<SideBarCompleteSectionViewModel>();

@@ -72,7 +72,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             set { this.prefilledEditableEntities = value; this.RaisePropertyChanged(); }
         }
 
-        public IList<EntityWithCommentsViewModel> CommentedEntities { get; private set; }
+        public IList<EntityWithErrorsViewModel> CommentedEntities { get; private set; }
 
         public bool DoesShowCommentsBlock { get; set; }
         public string CommentedEntitiesDescription { get; set; }

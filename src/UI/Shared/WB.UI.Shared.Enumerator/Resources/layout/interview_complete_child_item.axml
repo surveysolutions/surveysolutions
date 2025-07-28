@@ -29,19 +29,19 @@
                 style="@style/Interview_Complete_Screen_Statistics_Label"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                local:MvxBind="HtmlWithLinks MakeMarkdownLinksExecutable(EntityTitle, .);"
+                local:MvxBind="HtmlWithLinks MakeMarkdownLinksExecutable(EntityTitle, .); Visibility Visibility(EntityTitle);" />
         />
         <TextView
                 style="@style/Interview_Complete_Screen_Statistics_Error"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                local:MvxBind="HtmlWithLinks MakeMarkdownLinksExecutable(Error, .);"
+                local:MvxBind="HtmlWithLinks MakeMarkdownLinksExecutable(Error, .); Visibility Visibility(Error);"
         />
         <TextView
                 style="@style/Interview_Complete_Screen_Statistics_Comment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                local:MvxBind="HtmlWithLinks MakeMarkdownLinksExecutable(Comment, .);"
+                local:MvxBind="HtmlWithLinks MakeMarkdownLinksExecutable(Comment, .); Visibility Visibility(Comment);"
         />
     </LinearLayout>
 </LinearLayout>

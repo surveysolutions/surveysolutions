@@ -43,11 +43,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             return this.EntityWithErrorsViewModels<EntityWithErrorsViewModel>(interviewId, navigationState, invalidEntities, interview, false);
         }
 
-        public IEnumerable<EntityWithCommentsViewModel> GetTopEntitiesWithComments(string interviewId, NavigationState navigationState)
+        public IEnumerable<EntityWithErrorsViewModel> GetTopEntitiesWithComments(string interviewId, NavigationState navigationState)
         {
             IStatefulInterview interview = this.interviewRepository.Get(interviewId);
             Identity[] commentedBySupervisorEntities = interview.GetCommentedBySupervisorQuestionsVisibleToInterviewer().Take(this.maxNumberOfEntities).ToArray();
-            return this.EntityWithErrorsViewModels<EntityWithCommentsViewModel>(interviewId, navigationState, commentedBySupervisorEntities, interview);
+            return this.EntityWithErrorsViewModels<EntityWithErrorsViewModel>(interviewId, navigationState, commentedBySupervisorEntities, interview);
         }
 
         public IEnumerable<EntityWithErrorsViewModel> GetTopUnansweredCriticalQuestions(string interviewId, NavigationState navigationState)
@@ -71,7 +71,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 using (var title = this.dynamicTextViewModelFactory.CreateDynamicTextViewModel())
                 {
                     title.InitAsStatic(criticalRuleMessage);
-                    entityWithErrorsViewModel.Init(null, title.PlainText, navigationState);
+                    entityWithErrorsViewModel.Init(null, title.PlainText, null, title.PlainText, navigationState);
                     entityWithErrorsViewModel.IsError = true;
                     entityWithErrorsViewModel.AllowInnerLinks(interviewId, Identity.Create(interview.Id, RosterVector.Empty));
                 }
@@ -113,7 +113,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 using (var title = this.dynamicTextViewModelFactory.CreateDynamicTextViewModel())
                 {
                     title.Init(interviewId, invalidEntity);
-                    entityWithErrorsViewModel.Init(navigationIdentity, title.PlainText, navigationState);
+
+                    var question = interview.GetQuestion(invalidEntity);
+                    var comment = question?.AnswerComments.LastOrDefault()?.Comment;
+                    var error = interview.GetFailedValidationMessages(invalidEntity, null).FirstOrDefault();
+                    entityWithErrorsViewModel.Init(navigationIdentity, title.PlainText, comment, error, navigationState);
                     entityWithErrorsViewModel.IsError = isError;
                 }
 
