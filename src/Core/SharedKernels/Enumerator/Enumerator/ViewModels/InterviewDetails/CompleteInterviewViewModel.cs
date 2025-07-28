@@ -21,6 +21,14 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
+    public class TabViewModel : BaseViewModel
+    {
+        public bool IsEnabled { get; set; }
+        public string Title { get; set; }
+        public IList<EntityWithErrorsViewModel> Items { get; set; }
+    }
+
+    
     public class CompleteInterviewViewModel : BaseViewModel
     {
         protected readonly IViewModelNavigationService viewModelNavigationService;
@@ -116,12 +124,26 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             };
 
             this.CompleteGroups = new CompositeCollection<MvxViewModel>();
+            this.Tabs = new CompositeCollection<TabViewModel>();
             if (UnansweredCount > 0)
             {
                 Errors = unansweredGroup.Items;
                 CompleteGroups.AddCollection(new CovariantObservableCollection<MvxViewModel>() { unansweredGroup });
                 CompleteGroups.AddCollection(unansweredGroup.Items);
             }
+
+            Tabs.Add(new TabViewModel()
+            {
+                Title  = "Unanswered",
+                IsEnabled = true,//unansweredGroup.Items.Count > 0,
+                Items = unansweredQuestions
+            });
+            Tabs.Add(new TabViewModel()
+            {
+                Title  = "Errors",
+                IsEnabled = true,//errorsGroup.Items.Count > 0,
+                Items = EntitiesWithErrors
+            });
 
             if (ErrorsCount > 0)
             {
@@ -133,8 +155,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.CommentLabel = UIResources.Interview_Complete_Note_For_Supervisor;
             this.CompleteButtonComment = UIResources.Interview_Complete_Consequences_Instrunction;
         }
-
+        
         public bool HasCompleteGroups => CompleteGroups.Count > 0;
+        public CompositeCollection<TabViewModel> Tabs { get; set; }
+        
         public CompositeCollection<MvxViewModel> CompleteGroups { get; set; }
         public CompositeCollection<MvxViewModel> Errors { get; set; }
 

@@ -2,9 +2,17 @@
 using System.ComponentModel;
 using Android.Runtime;
 using Android.Views;
+using AndroidX.Fragment.App;
 using AndroidX.RecyclerView.Widget;
+using AndroidX.ViewPager2.Adapter;
+using AndroidX.ViewPager2.Widget;
+using Google.Android.Material.Tabs;
 using MvvmCross.DroidX.RecyclerView;
+using MvvmCross.Platforms.Android.Views.Fragments;
+using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
+using WB.UI.Shared.Enumerator.CustomControls;
+using Fragment = Android.App.Fragment;
 
 namespace WB.UI.Shared.Enumerator.Activities
 {
@@ -14,14 +22,84 @@ namespace WB.UI.Shared.Enumerator.Activities
         protected override int ViewResourceId => Resource.Layout.interview_complete;
 
         private MvxRecyclerView recyclerView;
+        private TabLayout tabLayout;
+        private ViewPager2 viewPager;
 
+        
+        
+        public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+        {
+            var view = inflater.Inflate(Resource.Layout.interview_complete, container, false);
+
+            tabLayout = view.FindViewById<TabLayout>(Resource.Id.tabLayout);
+            viewPager = view.FindViewById<ViewPager2>(Resource.Id.viewPager);
+
+            SetupTabs();
+
+            return view;
+        }
+        
+        public class TabConfigurationStrategy(CompleteInterviewViewModel viewModel)
+            : Java.Lang.Object, TabLayoutMediator.ITabConfigurationStrategy
+        {
+            private CompleteInterviewViewModel viewModel = viewModel;
+
+            public void OnConfigureTab(TabLayout.Tab tab, int position)
+            {
+                var tabVm = (TabViewModel)viewModel.Tabs[position];
+                tab.SetText(tabVm.Title);
+
+                if (!tabVm.IsEnabled)
+                {
+                    tab.View.Enabled = false;
+                    tab.View.Alpha = 0.4f;
+                }
+            }
+
+            protected override void Dispose(bool disposing)
+            {
+                this.viewModel = null;
+                
+                base.Dispose(disposing);
+            }
+        }
+
+        private void SetupTabs()
+        {
+            var viewModel = ViewModel;
+            var tabsViewModels = viewModel.Tabs.ToList();
+            //var adapter = new TabsPagerAdapter(this.Context, this.ChildFragmentManager, this.Lifecycle, tabsViewModels);
+            var adapter = new TabsPagerAdapter(this.Context, this.ChildFragmentManager, this.Lifecycle, tabsViewModels);
+            viewPager.Adapter = adapter;
+            
+            //adapter.InsertTab(typeof(QuestionnairesFragment), this.ViewModel.Tabs,
+            //    nameof(InterviewTabPanel.Title), 0);
+
+
+            var tabLayoutMediator = new TabLayoutMediator(tabLayout, viewPager, new TabConfigurationStrategy(ViewModel));
+            tabLayoutMediator.Attach();
+
+            tabLayout.TabSelected += (s, e) =>
+            {
+                var position = e.Tab.Position;
+                if (!((TabViewModel)viewModel.Tabs[position]).IsEnabled)
+                {
+                    e.Tab.Select(); // prevent selection
+                    viewPager.CurrentItem = viewPager.CurrentItem; // reset
+                }
+            };
+
+            // Optional: disable swipe
+            viewPager.UserInputEnabled = true;
+        }
+        
         public override void OnViewCreated(View view, Bundle savedInstanceState)
         {
             base.OnViewCreated(view, savedInstanceState);
             
-            recyclerView = view.FindViewById<MvxRecyclerView>(Resource.Id.tv_Complete_Groups);
-            recyclerView.SetLayoutManager(new MvxGuardedLinearLayoutManager(Context));
-            recyclerView.SetItemAnimator(null);
+            // recyclerView = view.FindViewById<MvxRecyclerView>(Resource.Id.tv_Complete_Groups);
+            // recyclerView.SetLayoutManager(new MvxGuardedLinearLayoutManager(Context));
+            // recyclerView.SetItemAnimator(null);
             
             ViewModel.CompleteGroups.CollectionChanged += AdjustRecyclerViewHeight;
         }
