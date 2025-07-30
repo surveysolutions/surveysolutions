@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/tab_container"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+              android:padding="8dp"
+              android:gravity="center">
+
+
+    <View
+            android:id="@+id/tab_indicator"
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:layout_marginBottom="4dp"
+            android:background="@color/group_started"
+            android:visibility="gone" />
+
+    <TextView
+            android:id="@+id/tab_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="134"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/default_input_button_disabled"/>
+
+    <TextView
+            android:id="@+id/tab_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Unanswered\nQuestions"
+            android:textSize="14sp"
+            android:gravity="center"
+            android:textColor="@color/default_input_button_disabled"/>
+</LinearLayout>

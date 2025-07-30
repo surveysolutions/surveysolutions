@@ -26,6 +26,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public bool IsEnabled { get; set; }
         public string Title { get; set; }
         public IList<EntityWithErrorsViewModel> Items { get; set; }
+        
+        public string Count => Items.Count > 0 ? $"({Items.Count})" : "No";
     }
 
     

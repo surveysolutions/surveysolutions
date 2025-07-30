@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using Android.Runtime;
 using Android.Views;
+using AndroidX.Core.Content;
 using AndroidX.Fragment.App;
 using AndroidX.RecyclerView.Widget;
 using AndroidX.ViewPager2.Adapter;
@@ -40,7 +41,7 @@ namespace WB.UI.Shared.Enumerator.Activities
             return view;
         }
         
-        public class TabConfigurationStrategy(CompleteInterviewViewModel viewModel)
+        public class TabConfigurationStrategy2(CompleteInterviewViewModel viewModel)
             : Java.Lang.Object, TabLayoutMediator.ITabConfigurationStrategy
         {
             private CompleteInterviewViewModel viewModel = viewModel;
@@ -64,6 +65,31 @@ namespace WB.UI.Shared.Enumerator.Activities
                 base.Dispose(disposing);
             }
         }
+        
+        public class TabConfigurationStrategy : Java.Lang.Object, TabLayoutMediator.ITabConfigurationStrategy
+        {
+            private readonly IList<TabViewModel> tabs;
+
+            public TabConfigurationStrategy(IList<TabViewModel> tabs)
+            {
+                this.tabs = tabs;
+            }
+
+            public void OnConfigureTab(TabLayout.Tab tab, int position)
+            {
+                var vm = tabs[position];
+
+                var view = LayoutInflater.From(tab.View.Context).Inflate(Resource.Layout.tab_item, null);
+                var countView = view.FindViewById<TextView>(Resource.Id.tab_count);
+                var titleView = view.FindViewById<TextView>(Resource.Id.tab_title);
+                var indicator = view.FindViewById<View>(Resource.Id.tab_indicator);
+
+                countView.Text = vm.Count; 
+                titleView.Text = vm.Title; 
+
+                tab.SetCustomView(view);
+            }
+        }
 
         private void SetupTabs()
         {
@@ -72,12 +98,8 @@ namespace WB.UI.Shared.Enumerator.Activities
             //var adapter = new TabsPagerAdapter(this.Context, this.ChildFragmentManager, this.Lifecycle, tabsViewModels);
             var adapter = new TabsPagerAdapter(this.Context, this.ChildFragmentManager, this.Lifecycle, tabsViewModels);
             viewPager.Adapter = adapter;
-            
-            //adapter.InsertTab(typeof(QuestionnairesFragment), this.ViewModel.Tabs,
-            //    nameof(InterviewTabPanel.Title), 0);
 
-
-            var tabLayoutMediator = new TabLayoutMediator(tabLayout, viewPager, new TabConfigurationStrategy(ViewModel));
+            var tabLayoutMediator = new TabLayoutMediator(tabLayout, viewPager, new TabConfigurationStrategy(tabsViewModels));
             tabLayoutMediator.Attach();
 
             tabLayout.TabSelected += (s, e) =>
@@ -88,10 +110,56 @@ namespace WB.UI.Shared.Enumerator.Activities
                     e.Tab.Select(); // prevent selection
                     viewPager.CurrentItem = viewPager.CurrentItem; // reset
                 }
+
+                UpdateTabViews();
             };
 
             // Optional: disable swipe
             viewPager.UserInputEnabled = true;
+        }
+        
+        private View CreateTabView(string title, string count, bool isSelected)
+        {
+            var inflater = LayoutInflater.From(this.Context);
+            var view = inflater.Inflate(Resource.Layout.tab_item, null);
+
+            var countView = view.FindViewById<TextView>(Resource.Id.tab_count);
+            var titleView = view.FindViewById<TextView>(Resource.Id.tab_title);
+
+            countView.Text = count;
+            titleView.Text = title;
+
+            if (isSelected)
+            {
+                //countView.SetTextColor(ContextCompat.GetColor(this.Context, Resource.Color.material_blue_grey_800));
+                //titleView.SetTextColor(ContextCompat.GetColor(this.Context, Resource.Color.material_blue_grey_800));
+            }
+
+            return view;
+        }
+
+        private void UpdateTabViews()
+        {
+            for (int i = 0; i < tabLayout.TabCount; i++)
+            {
+                var tab = tabLayout.GetTabAt(i);
+                var isSelected = tab?.IsSelected ?? false;
+                var view = tab?.CustomView;
+
+                if (view == null) continue;
+
+                var countView = view.FindViewById<TextView>(Resource.Id.tab_count);
+                var titleView = view.FindViewById<TextView>(Resource.Id.tab_title);
+                var indicator = view.FindViewById<View>(Resource.Id.tab_indicator);
+
+                var colorInt = ContextCompat.GetColor(Context, isSelected ? Resource.Color.material_blue_grey_800 : Resource.Color.disabledTextColor);
+                var color =  new Android.Graphics.Color(colorInt);
+                countView?.SetTextColor(color);
+                titleView?.SetTextColor(color);
+                indicator.Visibility = isSelected ? ViewStates.Visible : ViewStates.Gone;
+
+                view.Selected = isSelected;
+            }
         }
         
         public override void OnViewCreated(View view, Bundle savedInstanceState)
