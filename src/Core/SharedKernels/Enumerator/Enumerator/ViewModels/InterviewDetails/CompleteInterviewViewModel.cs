@@ -49,6 +49,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         
         protected CriticalityLevel? CriticalityLevel = null;
         
+        public bool IsAllOk => Tabs.All(t => t.Items.Count == 0);
+        
         public IList<EntityWithErrorsViewModel> TopUnansweredCriticalQuestions { get; protected set; } 
         public IList<EntityWithErrorsViewModel> TopFailedCriticalRules { get; protected set; }
 

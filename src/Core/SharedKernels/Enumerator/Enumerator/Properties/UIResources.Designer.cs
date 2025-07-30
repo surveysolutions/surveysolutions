@@ -513,6 +513,12 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
             }
         }
         
+        public static string Interview_Submit_interview_Button {
+            get {
+                return ResourceManager.GetString("Interview_Submit_interview_Button", resourceCulture);
+            }
+        }
+        
         public static string Interview_Complete_Consequences_Instrunction {
             get {
                 return ResourceManager.GetString("Interview_Complete_Consequences_Instrunction", resourceCulture);
@@ -1608,6 +1614,12 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string Interview_Complete_SwitchTo_WebMode_Instruction {
             get {
                 return ResourceManager.GetString("Interview_Complete_SwitchTo_WebMode_Instruction", resourceCulture);
+            }
+        }
+        
+        public static string Interview_Complete_Instruction {
+            get {
+                return ResourceManager.GetString("Interview_Complete_Instruction", resourceCulture);
             }
         }
         

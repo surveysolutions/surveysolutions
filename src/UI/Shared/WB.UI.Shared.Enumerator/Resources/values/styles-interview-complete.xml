@@ -8,15 +8,14 @@
         <item name="android:layout_alignParentTop">true</item>
     </style>
 
-    <style name="Interview_Complete_Screen_Text" parent="Interview_Entity_BasicFont">
-        <item name="android:textAllCaps">true</item>
+    <style name="Interview_Complete_Screen_Text" parent="Interview_Complete_Base">
+        <item name="android:textAllCaps">false</item>
         <item name="android:textColor">@color/complete_screen_title_text</item>
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginTop">@dimen/Interview_Entity_Title_margin_vertical</item>
         <item name="android:layout_marginBottom">@dimen/Interview_Entity_Title_margin_vertical</item>
         <item name="android:textSize">@dimen/textsize_14</item>
-        <item name="android:letterSpacing">0.1</item>
     </style>
 
     <style name="Interview_Complete_Screen_Web_Interview_Link" parent="Interview_Complete_Screen_Text">
@@ -96,6 +95,7 @@
 
     <style name="Interview_Complete_Base">
         <item name="android:fontFamily">Roboto</item>
+        <item name="android:textColor">@color/complete_screen_title_text</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
@@ -133,4 +133,43 @@
         <item name="android:textColor">@color/complete_screen_statistics_label</item>
     </style>
 
+    <style name="Interview_Submit_Button" parent="Button_Success">
+        <item name="android:textAllCaps">false</item>
+        <item name="android:drawableLeft">@drawable/complete_check</item>
+        <item name="android:drawableStart">@drawable/complete_check</item>
+    </style>
+
+    <style name="CompleteTabLayout" parent="Widget.MaterialComponents.TabLayout">
+        <item name="tabIndicator">@drawable/tab_indicator</item>
+        <item name="tabBackground">@drawable/tab_background</item>
+        <item name="tabTextAppearance">@style/CompleteTabTextAppearance</item>
+        <item name="tabRippleColor">@android:color/transparent</item>
+    </style>
+
+    <style name="CompleteTabTextAppearance" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/tab_selector</item>
+    </style>
+    
+    <style name="Interview_Complete_Note" parent="Interview_Complete_Base">
+        <item name="android:textSize">@dimen/textsize_16</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_marginBottom">@dimen/Interview_Entity_Title_margin_vertical</item>
+    </style>
+
+    <style name="Interview_Complete_Divider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/Interview_Complete_Divider</item>
+        <item name="android:background">#000000</item>
+    </style>
+
+    <style name="Interview_Complete_Divider_Gray" >
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/Interview_Entity_Divider_height</item>
+        <item name="android:background">#dadada</item>
+        <item name="android:layout_marginLeft">5dp</item>
+        <item name="android:layout_marginRight">5dp</item>
+    </style>
+    
 </resources>

@@ -120,7 +120,7 @@
     <color name="interviewStatusBarDisabled">#474747</color>
     <color name="assignmentsStatusBar">#8C59DE</color>
 
-    <color name="complete_screen_title_text">#747474</color>
+    <color name="complete_screen_title_text">#000000</color>
     <color name="complete_screen_statistics_border">#dadada</color>
     <color name="complete_screen_statistics_answered_color">#2a81cb</color>
     <color name="complete_screen_statistics_unanswered_color">#2a81cb</color>

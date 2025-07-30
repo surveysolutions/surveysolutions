@@ -11,9 +11,8 @@
             style="@style/Interview_Complete_Success_Text"
             android:layout_marginLeft="@dimen/Interview_Entity_margin_left"
             android:id="@+id/tv_Complete_Screen_Title_Success_Text"
-            local:MvxBind="Text Localization('Interview_Complete_Success_Text'); Visible Not(IsLoading);" />
+            local:MvxBind="Text Localization('Interview_Complete_Success_Text'); Visible And(Not(IsLoading), IsAllOk);" />
 
-    <View style="@style/Interview_Entity_Divider" />
 
     <ProgressBar
             android:visibility="visible"
@@ -24,21 +23,24 @@
 
     <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabLayout"
+            style="@style/CompleteTabLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            local:MvxBind="Visible Not(IsAllOk);" />
     <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/viewPager"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
+            android:layout_height="wrap_content"
+            local:MvxBind="Visible Not(IsAllOk);" />
     
-    <View style="@style/Interview_Entity_Divider" />
+    <View style="@style/Interview_Entity_Divider"
+        android:layout_marginTop="24dp" />
 
     <LinearLayout style="@style/Interview_Question" 
                   android:orientation="vertical"
                   local:MvxBind="Visible Not(IsLoading)">
         <TextView
-          style="@style/Interview_Complete_Screen_Text"
+          style="@style/Interview_Complete_Note"
           android:id="@+id/tv_Complete_NoteToSupervisorTxt"
           local:MvxBind="Text CommentLabel" />
         <EditText
