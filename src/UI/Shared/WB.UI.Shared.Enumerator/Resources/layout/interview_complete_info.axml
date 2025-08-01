@@ -24,9 +24,15 @@
     <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabLayout"
             style="@style/CompleteTabLayout"
+            tabGravity="start"
+            tabMode="scrollable"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             local:MvxBind="Visible Not(IsAllOk);" />
+    
+    <View style="@style/Interview_Complete_Divider"
+            android:translationY="-2dp" />
+
     <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/viewPager"
             android:layout_width="match_parent"

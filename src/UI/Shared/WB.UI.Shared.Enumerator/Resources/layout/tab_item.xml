@@ -1,18 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:local="http://schemas.android.com/apk/res-auto"
               android:id="@+id/tab_container"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
+              android:layout_width="240dp"
+              android:layout_height="120dp"
               android:orientation="vertical"
-              android:padding="8dp"
-              android:gravity="center">
+              android:translationY="-2dp"
+              android:paddingTop="4dp"
+              android:paddingBottom="4dp"
+              android:gravity="start">
 
 
     <View
             android:id="@+id/tab_indicator"
             android:layout_width="match_parent"
-            android:layout_height="4dp"
-            android:layout_marginBottom="4dp"
+            android:layout_height="5dp"
+            android:padding="3dp"
+            android:layout_marginBottom="2dp"
             android:background="@color/group_started"
             android:visibility="gone" />
 
@@ -20,17 +24,15 @@
             android:id="@+id/tab_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="134"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:textColor="@color/default_input_button_disabled"/>
+            style="@style/Interview_Complete_Tab_Count"
+            local:MvxBind="Text Count;"
+            />
 
     <TextView
             android:id="@+id/tab_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Unanswered\nQuestions"
-            android:textSize="14sp"
-            android:gravity="center"
-            android:textColor="@color/default_input_button_disabled"/>
+            style="@style/Interview_Complete_Tab_Title"
+            local:MvxBind="Text Title;"
+    />
 </LinearLayout>
