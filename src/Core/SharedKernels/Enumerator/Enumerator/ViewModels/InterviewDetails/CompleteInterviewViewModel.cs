@@ -23,11 +23,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
     public class TabViewModel : BaseViewModel
     {
-        public bool IsEnabled { get; set; }
+        public bool IsEnabled => Items.Count > 0;
         public string Title { get; set; }
         public IList<EntityWithErrorsViewModel> Items { get; set; }
         
-        public string Count => Items.Count > 0 ? $"({Items.Count})" : "No";
+        public string Count => Items.Count > 0 ? $"{Items.Count}" : "No";
     }
 
     
@@ -138,15 +138,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             Tabs.Add(new TabViewModel()
             {
-                Title  = "Unanswered",
-                IsEnabled = true,//unansweredGroup.Items.Count > 0,
-                Items = unansweredQuestions
+                Title  = "Critical\r\nerrors",
+                Items = EntitiesWithErrors
             });
             Tabs.Add(new TabViewModel()
             {
-                Title  = "Errors",
-                IsEnabled = true,//errorsGroup.Items.Count > 0,
+                Title  = "Questions\r\nwith errors",
                 Items = EntitiesWithErrors
+            });
+            Tabs.Add(new TabViewModel()
+            {
+                Title  = "Unanswered\r\nquestions",
+                Items = unansweredQuestions
             });
 
             if (ErrorsCount > 0)

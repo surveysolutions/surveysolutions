@@ -86,6 +86,7 @@ namespace WB.UI.Shared.Enumerator.Activities
 
                 countView.Text = vm.Count; 
                 titleView.Text = vm.Title; 
+                tab.View.Enabled = vm.IsEnabled;
 
                 tab.SetCustomView(view);
             }
@@ -112,10 +113,20 @@ namespace WB.UI.Shared.Enumerator.Activities
                 }
 
                 UpdateTabViews();
+                RecalculateRecyclerViewHeight();
             };
 
             // Optional: disable swipe
             viewPager.UserInputEnabled = true;
+
+            var firstEnabledTab = tabsViewModels.FirstOrDefault(t => t.IsEnabled);
+            if (firstEnabledTab != null)
+            {
+                var indexOf = tabsViewModels.IndexOf(firstEnabledTab);
+                var tab = tabLayout.GetTabAt(indexOf);
+                tab?.Select();
+            }
+            UpdateTabViews();
         }
         
         private View CreateTabView(string title, string count, bool isSelected)
@@ -156,7 +167,7 @@ namespace WB.UI.Shared.Enumerator.Activities
                 var color =  new Android.Graphics.Color(colorInt);
                 countView?.SetTextColor(color);
                 titleView?.SetTextColor(color);
-                indicator.Visibility = isSelected ? ViewStates.Visible : ViewStates.Gone;
+                indicator.Visibility = isSelected ? ViewStates.Visible : ViewStates.Invisible;
 
                 view.Selected = isSelected;
             }
@@ -170,7 +181,7 @@ namespace WB.UI.Shared.Enumerator.Activities
             // recyclerView.SetLayoutManager(new MvxGuardedLinearLayoutManager(Context));
             // recyclerView.SetItemAnimator(null);
             
-            ViewModel.CompleteGroups.CollectionChanged += AdjustRecyclerViewHeight;
+            //ViewModel.CompleteGroups.CollectionChanged += AdjustRecyclerViewHeight;
         }
 
         private int MeasureItemHeight(View view)
@@ -208,7 +219,10 @@ namespace WB.UI.Shared.Enumerator.Activities
 
         private void RecalculateRecyclerViewHeight()
         {
-            if (recyclerView.Visibility != ViewStates.Visible)
+            recyclerView = viewPager?.FindViewById<MvxRecyclerView>(Resource.Id.recyclerView);
+            recyclerView?.SetLayoutManager(new MvxGuardedLinearLayoutManager(Context));
+            
+            if (recyclerView?.Visibility != ViewStates.Visible)
                 return;
             
             recyclerView.Post(() =>
