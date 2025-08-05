@@ -20,7 +20,7 @@
                             <div class="hq-apps-wrapper">
                                 <h2>{{ $t('Pages.DownloadPage_Welcome') }}</h2>
 
-                                <div class="form-group">
+                                <div class="form-group" style="margin-top: 20px;">
                                     <input class="checkbox-filter" id="all-answer-options" type="checkbox"
                                         v-model="bigApkSelected">
                                     <label for="all-answer-options">
@@ -35,14 +35,14 @@
                                         <span v-if="interviewerSize" class="version">{{ $t('Pages.DownloadPage_Size') +
                                             ' ' + formattedInterviewerSize }}</span>
                                     </a>
-                                    <img v-if="supportQRCodeGeneration" id="download-qr" alt="QR Code" width="250"
-                                        height="250" :src="qrApkUrl" />
+                                    <img v-if="supportQRCodeGeneration" id="download-qr" class="download-qr"
+                                        alt="QR Code" width="250" height="250" :src="qrApkUrl" />
                                     <p>
                                         <b class="error-text">{{ $t('Pages.CautionTitle') }}</b>
                                         {{ $t('Pages.GetEsriExtraDescription') }}
                                     </p>
                                 </div>
-                                <div class="additional-info-block">
+                                <div class="additional-info-block" style="margin-top: 20px;">
                                     <a href="http://support.mysurvey.solutions/interviewer-installation"
                                         target="_blank">
                                         {{ $t('Pages.DownloadPage_Instructions') }}

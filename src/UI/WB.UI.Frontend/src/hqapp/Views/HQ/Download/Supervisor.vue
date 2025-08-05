@@ -27,8 +27,8 @@
                                         <span v-if="supervisorSize" class="version">{{ $t('Pages.DownloadPage_Size') +
                                             ' ' + formattedSupervisorSize }}</span>
                                     </a>
-                                    <img v-if="model.supportQRCodeGeneration" id="download-qr" alt="QR Code" width="250"
-                                        height="250" :src="model.apkQRUrl" />
+                                    <img v-if="model.supportQRCodeGeneration" id="download-qr" class="download-qr"
+                                        alt="QR Code" width="250" height="250" :src="model.apkQRUrl" />
                                 </div>
                             </div>
                         </div>
