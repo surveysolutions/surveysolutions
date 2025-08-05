@@ -189,8 +189,16 @@ namespace WB.UI.Headquarters.Controllers
             }
 
             var user = await signInManager.GetTwoFactorAuthenticationUserAsync();
-            if (user == null || user.IsLocked)
+            if (user == null)
             {
+                logger.LogWarning("Attempt to access 2FA with no authenticated user.");
+                return RedirectToAction(nameof(LogOn), new { ReturnUrl = returnUrl, RememberMe = true });
+            }
+
+            var userFromDb = await userManager.FindByIdAsync(user.Id.FormatGuid());
+            if (userFromDb == null || userFromDb.IsLocked)
+            {
+                logger.LogWarning($"Locked user {user.UserName} attempted to access 2FA.");
                 return RedirectToAction(nameof(LogOn), new { ReturnUrl = returnUrl, RememberMe = true });
             }
             
