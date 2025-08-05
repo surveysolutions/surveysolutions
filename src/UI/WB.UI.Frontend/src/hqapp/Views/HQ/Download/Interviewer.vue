@@ -19,33 +19,28 @@
                         <div class="centered-box-table-cell">
                             <div class="hq-apps-wrapper">
                                 <h2>{{ $t('Pages.DownloadPage_Welcome') }}</h2>
+
+                                <div class="form-group">
+                                    <input class="checkbox-filter" id="all-answer-options" type="checkbox"
+                                        v-model="bigApkSelected">
+                                    <label for="all-answer-options">
+                                        <span class="tick"></span>{{ $t('Pages.IncludeEsriTitle') }}
+                                    </label>
+                                </div>
                                 <div class="form-actions">
-                                    <a :href="apkUrl"
-                                        class="get-interviewer-app"
-                                        id="dowload">
+                                    <a :href="apkUrl" class="get-interviewer-app" id="dowload">
                                         <span>{{ $t('Pages.GetLatestApp') }}</span>
-                                        <span class="version">{{ $t('Pages.DownloadPage_Version') + ' ' + interviewerVersion }}</span>
+                                        <span class="version">{{ $t('Pages.DownloadPage_Version') + ' ' +
+                                            interviewerVersion }}</span>
+                                        <span v-if="interviewerSize" class="version">{{ $t('Pages.DownloadPage_Size') +
+                                            ' ' + formattedInterviewerSize }}</span>
                                     </a>
-                                    <img v-if="supportQRCodeGeneration"
-                                        id="download-qr"
-                                        alt="QR Code"
-                                        width="250"
-                                        height="250"
-                                        :src="qrApkUrl"/>
+                                    <img v-if="supportQRCodeGeneration" id="download-qr" alt="QR Code" width="250"
+                                        height="250" :src="qrApkUrl" />
                                     <p>
                                         <b class="error-text">{{ $t('Pages.CautionTitle') }}</b>
                                         {{ $t('Pages.GetEsriExtraDescription') }}
                                     </p>
-                                </div>
-                                <div class="form-group">
-                                    <input class="checkbox-filter"
-                                        id="all-answer-options"
-                                        type="checkbox"
-                                        checked=""
-                                        v-model="smallApkSelected">
-                                    <label for="all-answer-options">
-                                        <span class="tick"></span>{{ $t('Pages.ExcludeEsriTitle') }}
-                                    </label>
                                 </div>
                                 <div class="additional-info-block">
                                     <a href="http://support.mysurvey.solutions/interviewer-installation"
@@ -65,15 +60,20 @@
 
 <script>
 
+import { humanFileSize } from '~/shared/helpers'
+
 export default {
     data() {
         return {
-            smallApkSelected: true,
+            bigApkSelected: false,
         }
     },
     methods: {
     },
     computed: {
+        smallApkSelected() {
+            return !this.bigApkSelected
+        },
         model() {
             return this.$config.model
         },
@@ -100,6 +100,16 @@ export default {
             } else {
                 return this.model.fullApkVersion
             }
+        },
+        interviewerSize() {
+            if (this.smallApkSelected) {
+                return this.model.smallApkSize
+            } else {
+                return this.model.fullApkSize
+            }
+        },
+        formattedInterviewerSize() {
+            return this.interviewerSize ? humanFileSize(this.interviewerSize) : ''
         },
     },
 }
