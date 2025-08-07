@@ -1246,8 +1246,11 @@
   <data name="ExcludeEsriTitle" xml:space="preserve">
     <value>Excluir suporte ao mapa ESRI</value>
   </data>
+  <data name="IncludeEsriTitle" xml:space="preserve">
+    <value>Incluir funcionalidade de mapeamento</value>
+  </data>
   <data name="GetEsriExtraDescription" xml:space="preserve">
-      <value>A funcionalidade SIG aumentará significativamente o tamanho da aplicação e o tempo de download. Siga as instruções do seu supervisor sobre qual a versão da aplicação Entrevistador (com ou sem mapas) necessária para a sua tarefa.</value>
+    <value>A funcionalidade de mapeamento aumentará significativamente o tamanho do aplicativo e o tempo de download. Siga as instruções do seu supervisor sobre qual versão do aplicativo Interviewer (com ou sem mapas) é necessária para a sua tarefa.</value>
   </data>
   <data name="Filters_Assignment" xml:space="preserve">
     <value>Atribuição</value>
@@ -1567,6 +1570,9 @@
   </data>
   <data name="Admin_InterviewPackages_ProcessingDate" xml:space="preserve">
     <value>Data de processamento</value>
+  </data>
+  <data name="DownloadPage_Size" xml:space="preserve">
+    <value>Tamanho</value>
   </data>
   <data name="Admin_InterviewPackages_PackageSize" xml:space="preserve">
     <value>Tamanho</value>
