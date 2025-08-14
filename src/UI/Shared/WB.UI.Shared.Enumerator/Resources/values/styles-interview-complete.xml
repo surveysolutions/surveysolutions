@@ -144,6 +144,9 @@
         <item name="tabBackground">@drawable/tab_background_selector</item>
         <item name="tabTextAppearance">@style/CompleteTabTextAppearance</item>
         <item name="tabRippleColor">@android:color/transparent</item>
+        <item name="tabIndicatorFullWidth">false</item>
+        <item name="tabIndicatorHeight">10dp</item>
+        <item name="tabIndicatorColor">@android:color/holo_red_dark</item>
     </style>
 
     <style name="CompleteTabTextAppearance" parent="TextAppearance.Design.Tab">

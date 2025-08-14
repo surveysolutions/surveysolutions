@@ -18,14 +18,14 @@
 
     <TextView
             android:id="@+id/tab_count"
-            android:layout_width="160dp"
+            android:layout_width="200dp"
             style="@style/Interview_Complete_Tab_Count"
             local:MvxBind="Text Count;"
             />
 
     <TextView
             android:id="@+id/tab_title"
-            android:layout_width="160dp"
+            android:layout_width="200dp"
             style="@style/Interview_Complete_Tab_Title"
             local:MvxBind="Text Title;"
     />

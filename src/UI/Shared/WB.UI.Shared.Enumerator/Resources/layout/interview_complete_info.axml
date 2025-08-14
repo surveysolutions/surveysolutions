@@ -26,16 +26,16 @@
             style="@style/CompleteTabLayout"
             tabGravity="start"
             tabMode="scrollable"
+            android:background="@drawable/tablayout_border"
+            local:tabIndicatorColor="@android:color/white"
+            local:tabIndicatorHeight="4dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             local:MvxBind="Visible Not(IsAllOk);" />
-    
-    <View style="@style/Interview_Complete_Divider"
-            android:translationY="-2dp" />
 
     <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/viewPager"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             local:MvxBind="Visible Not(IsAllOk);" />
     
