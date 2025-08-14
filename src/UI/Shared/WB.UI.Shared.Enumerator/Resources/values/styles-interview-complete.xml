@@ -135,8 +135,6 @@
 
     <style name="Interview_Submit_Button" parent="Button_Success">
         <item name="android:textAllCaps">false</item>
-        <item name="android:drawableLeft">@drawable/complete_check</item>
-        <item name="android:drawableStart">@drawable/complete_check</item>
     </style>
 
     <style name="CompleteTabLayout" parent="Widget.MaterialComponents.TabLayout">

@@ -30,8 +30,8 @@
         android:orientation="vertical"
         android:layout_marginTop="@dimen/Interview_Group_margin_top"
         local:MvxBind="Visible And(RequestWebInterview, Not(IsLoading))">
-      <View
-          style="@style/Interview_Complete_Divider" />
+        <View
+                style="@style/Interview_Complete_Divider" />
 
       <TextView
           style="@style/Interview_Complete_Screen_Text"
@@ -60,15 +60,20 @@
                 style="@style/Interview_Complete_Screen_Text"
                 android:id="@+id/tv_Complete_Instruction"
                 local:MvxBind="Text Localization('Interview_Complete_Instruction');"  />
-      <Button
-              android:id="@+id/Complete_CompleteBtn"
-              style="@style/Interview_Submit_Button"
-              android:drawableStart="@drawable/complete_check"
-              local:MvxBind="HideKeyboardOnClick .; 
-                          Click CompleteInterviewCommand; 
-                          Text Localization('Interview_Submit_interview_Button'); 
-                          ButtonGroupStyle CompleteStatus; 
-                          " />
+
+        <com.google.android.material.button.MaterialButton
+                android:id="@+id/Complete_CompleteBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAllCaps="false"
+                local:icon="@drawable/complete_check"
+                local:iconGravity="textStart"
+                local:iconTint="?attr/colorOnPrimary"
+                local:MvxBind="HideKeyboardOnClick .;
+                                Text Localization('Interview_Submit_interview_Button'); 
+                                Click CompleteInterviewCommand;
+                                ButtonGroupStyle CompleteStatus;" />
+        
         <TextView
                 style="@style/Interview_Complete_Screen_Text"
                 android:id="@+id/tv_Complete_Instruction"
