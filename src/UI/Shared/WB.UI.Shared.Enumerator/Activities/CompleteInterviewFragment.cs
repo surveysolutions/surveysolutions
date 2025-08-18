@@ -22,7 +22,6 @@ namespace WB.UI.Shared.Enumerator.Activities
     {
         protected override int ViewResourceId => Resource.Layout.interview_complete;
 
-        private MvxRecyclerView recyclerView;
         private TabLayout tabLayout;
         private ViewPager2 viewPager;
 
@@ -35,6 +34,7 @@ namespace WB.UI.Shared.Enumerator.Activities
 
             tabLayout = view.FindViewById<TabLayout>(Resource.Id.tabLayout);
             viewPager = view.FindViewById<ViewPager2>(Resource.Id.viewPager);
+            viewPager.OffscreenPageLimit = 2;
 
             SetupTabs();
 
@@ -184,7 +184,7 @@ namespace WB.UI.Shared.Enumerator.Activities
             //ViewModel.CompleteGroups.CollectionChanged += AdjustRecyclerViewHeight;
         }
 
-        private int MeasureItemHeight(View view)
+        private int MeasureItemHeight(MvxRecyclerView recyclerView, View view)
         {
             view.Measure(
                 View.MeasureSpec.MakeMeasureSpec(recyclerView.Width, MeasureSpecMode.Exactly),
@@ -192,7 +192,7 @@ namespace WB.UI.Shared.Enumerator.Activities
             return view.MeasuredHeight;
         }
 
-        private int CalculateTotalHeight()
+        private int CalculateTotalHeight(MvxRecyclerView recyclerView)
         {
             int totalHeight = 0;
             var adapter = recyclerView.GetAdapter();
@@ -204,7 +204,7 @@ namespace WB.UI.Shared.Enumerator.Activities
                 int viewType = adapter.GetItemViewType(i);
                 RecyclerView.ViewHolder viewHolder = (RecyclerView.ViewHolder)adapter.CreateViewHolder(recyclerView, viewType);
                 adapter.BindViewHolder(viewHolder, i);
-                totalHeight += MeasureItemHeight(viewHolder.ItemView);
+                totalHeight += MeasureItemHeight(recyclerView, viewHolder.ItemView);
             }
 
             totalHeight += recyclerView.PaddingTop + recyclerView.PaddingBottom;
@@ -219,18 +219,23 @@ namespace WB.UI.Shared.Enumerator.Activities
 
         private void RecalculateRecyclerViewHeight()
         {
-            recyclerView = viewPager?.FindViewById<MvxRecyclerView>(Resource.Id.recyclerView);
-            recyclerView?.SetLayoutManager(new MvxGuardedLinearLayoutManager(Context));
-            
-            if (recyclerView?.Visibility != ViewStates.Visible)
-                return;
-            
-            recyclerView.Post(() =>
+            View.PostDelayed(() =>
             {
+                int currentItem = viewPager.CurrentItem; 
+                var currentView = (viewPager.GetChildAt(0) as ViewGroup)?.GetChildAt(currentItem);
+                var recyclerView = currentView?.FindViewById<MvxRecyclerView>(Resource.Id.recyclerView);
+
+                if (recyclerView?.Visibility != ViewStates.Visible)
+                    return;
+            
                 var layoutParams = recyclerView.LayoutParameters;
-                layoutParams.Height = CalculateTotalHeight();
+                layoutParams.Height = CalculateTotalHeight(recyclerView);
                 recyclerView.LayoutParameters = layoutParams;
-            });
+                
+                var viewPagerLayoutParams = viewPager.LayoutParameters;
+                viewPagerLayoutParams.Height = layoutParams.Height + 96;
+                viewPager.LayoutParameters = viewPagerLayoutParams;
+            }, 100);
         }
 
         protected override void Dispose(bool disposing)

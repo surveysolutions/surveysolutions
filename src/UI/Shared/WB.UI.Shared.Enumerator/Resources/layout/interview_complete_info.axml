@@ -20,27 +20,29 @@
             style="@style/LoadingProgressIndicator"
             android:layout_marginBottom="@dimen/Interview_Entity_margin_vertical"
             local:MvxBind="IndeterminateMode true; Visible IsLoading" />
+    
 
     <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabLayout"
             style="@style/CompleteTabLayout"
             tabGravity="start"
             tabMode="scrollable"
-            android:background="@drawable/tablayout_border"
             local:tabIndicatorColor="@android:color/white"
             local:tabIndicatorHeight="4dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/Interview_Entity_margin_left"
+            android:layout_marginRight="@dimen/Interview_Entity_margin_left"
             local:MvxBind="Visible Not(IsAllOk);" />
 
+    
     <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/viewPager"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             local:MvxBind="Visible Not(IsAllOk);" />
     
-    <View style="@style/Interview_Entity_Divider"
-        android:layout_marginTop="24dp" />
+    <View style="@style/Interview_Complete_Divider" />
 
     <LinearLayout style="@style/Interview_Question" 
                   android:orientation="vertical"
