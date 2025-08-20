@@ -1,5 +1,6 @@
 ﻿using System.Collections.Specialized;
 using System.ComponentModel;
+using Android.Content;
 using Android.Runtime;
 using Android.Views;
 using AndroidX.Core.Content;
@@ -8,6 +9,8 @@ using AndroidX.RecyclerView.Widget;
 using AndroidX.ViewPager2.Adapter;
 using AndroidX.ViewPager2.Widget;
 using Google.Android.Material.Tabs;
+using MvvmCross;
+using MvvmCross.Binding.BindingContext;
 using MvvmCross.DroidX.RecyclerView;
 using MvvmCross.Platforms.Android.Views.Fragments;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
@@ -68,27 +71,41 @@ namespace WB.UI.Shared.Enumerator.Activities
         
         public class TabConfigurationStrategy : Java.Lang.Object, TabLayoutMediator.ITabConfigurationStrategy
         {
+            private readonly Context context;
+            private readonly IMvxBindingContext bindingContext;
             private readonly IList<TabViewModel> tabs;
 
-            public TabConfigurationStrategy(IList<TabViewModel> tabs)
+            public TabConfigurationStrategy(Context context, IMvxBindingContext bindingContext,
+                IList<TabViewModel> tabs)
             {
+                this.context = context;
+                this.bindingContext = bindingContext;
                 this.tabs = tabs;
             }
 
             public void OnConfigureTab(TabLayout.Tab tab, int position)
             {
                 var vm = tabs[position];
+                
+                //var inflater = Mvx.IoCProvider.Resolve<LayoutInflater>();
+                var inflater = LayoutInflater.From(this.context);
+                var view = inflater.Inflate(Resource.Layout.interview_complete_tab_item, null);
+                
+                //var view = LayoutInflater.From(tab.View.Context).Inflate(Resource.Layout.interview_complete_tab_item, null);
+                //var countView = view.FindViewById<TextView>(Resource.Id.tab_count);
+                //var titleView = view.FindViewById<TextView>(Resource.Id.tab_title);
+                //var indicator = view.FindViewById<View>(Resource.Id.tab_indicator);
 
-                var view = LayoutInflater.From(tab.View.Context).Inflate(Resource.Layout.tab_item, null);
-                var countView = view.FindViewById<TextView>(Resource.Id.tab_count);
-                var titleView = view.FindViewById<TextView>(Resource.Id.tab_title);
-                var indicator = view.FindViewById<View>(Resource.Id.tab_indicator);
-
-                countView.Text = vm.Count; 
-                titleView.Text = vm.Title; 
+                //countView.Text = vm.Count; 
+                //titleView.Text = vm.Title; 
                 tab.View.Enabled = vm.IsEnabled;
 
                 tab.SetCustomView(view);
+                
+                //bindingContext.DataContext = vm;
+
+                //view.DataContext = vm;
+                //view.ViewModel = vm;
             }
         }
 
@@ -100,7 +117,8 @@ namespace WB.UI.Shared.Enumerator.Activities
             var adapter = new TabsPagerAdapter(this.Context, this.ChildFragmentManager, this.Lifecycle, tabsViewModels);
             viewPager.Adapter = adapter;
 
-            var tabLayoutMediator = new TabLayoutMediator(tabLayout, viewPager, new TabConfigurationStrategy(tabsViewModels));
+            var tabConfigurationStrategy = new TabConfigurationStrategy(this.Context, this.BindingContext, tabsViewModels);
+            var tabLayoutMediator = new TabLayoutMediator(tabLayout, viewPager, tabConfigurationStrategy);
             tabLayoutMediator.Attach();
 
             tabLayout.TabSelected += (s, e) =>
@@ -132,7 +150,7 @@ namespace WB.UI.Shared.Enumerator.Activities
         private View CreateTabView(string title, string count, bool isSelected)
         {
             var inflater = LayoutInflater.From(this.Context);
-            var view = inflater.Inflate(Resource.Layout.tab_item, null);
+            var view = inflater.Inflate(Resource.Layout.interview_complete_tab_item, null);
 
             var countView = view.FindViewById<TextView>(Resource.Id.tab_count);
             var titleView = view.FindViewById<TextView>(Resource.Id.tab_title);
@@ -219,7 +237,7 @@ namespace WB.UI.Shared.Enumerator.Activities
 
         private void RecalculateRecyclerViewHeight()
         {
-            View.PostDelayed(() =>
+            View?.PostDelayed(() =>
             {
                 int currentItem = viewPager.CurrentItem; 
                 var currentView = (viewPager.GetChildAt(0) as ViewGroup)?.GetChildAt(currentItem);
@@ -235,14 +253,11 @@ namespace WB.UI.Shared.Enumerator.Activities
                 var viewPagerLayoutParams = viewPager.LayoutParameters;
                 viewPagerLayoutParams.Height = layoutParams.Height + 96;
                 viewPager.LayoutParameters = viewPagerLayoutParams;
-            }, 100);
+            }, 1000);
         }
 
         protected override void Dispose(bool disposing)
         {
-            if(ViewModel != null && ViewModel.CompleteGroups != null)
-                ViewModel.CompleteGroups.CollectionChanged -= AdjustRecyclerViewHeight;
-            
             base.Dispose(disposing);
         }
     }

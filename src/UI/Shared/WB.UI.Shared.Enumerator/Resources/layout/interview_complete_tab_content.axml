@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" 
               xmlns:local="http://schemas.android.com/apk/res-auto"
-              style="@style/FullWidthWrappingLayout"
+              style="@style/Interview_Complete_Tab_Content"
               android:background="#FFFFFF"
               android:paddingBottom="24dp"
               android:layout_marginBottom="24dp"

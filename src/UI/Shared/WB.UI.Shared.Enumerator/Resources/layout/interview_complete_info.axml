@@ -34,6 +34,8 @@
             android:layout_marginLeft="@dimen/Interview_Entity_margin_left"
             android:layout_marginRight="@dimen/Interview_Entity_margin_left"
             local:MvxBind="Visible Not(IsAllOk);" />
+    <View style="@style/Interview_Complete_Divider" 
+            android:layout_width ="@dimen/Interview_Entity_margin_left"/>
 
     
     <androidx.viewpager2.widget.ViewPager2

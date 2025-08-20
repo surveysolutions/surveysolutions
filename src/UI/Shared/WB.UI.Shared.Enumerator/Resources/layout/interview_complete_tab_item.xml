@@ -14,19 +14,21 @@
             android:layout_marginTop="5dp"
             android:layout_marginBottom="2dp"
             android:background="@color/group_started"
-            android:visibility="invisible" />
+            android:visibility="invisible"
+            local:MvxBind="Color TabContentToColor(.)"
+            />
 
     <TextView
             android:id="@+id/tab_count"
             android:layout_width="200dp"
             style="@style/Interview_Complete_Tab_Count"
-            local:MvxBind="Text Count;"
+            local:MvxBind="Text Count; Color TabContentToColor(.)"
             />
 
     <TextView
             android:id="@+id/tab_title"
             android:layout_width="200dp"
             style="@style/Interview_Complete_Tab_Title"
-            local:MvxBind="Text Title;"
+            local:MvxBind="Text Title; Color TabContentToColor(.)"
     />
 </LinearLayout>

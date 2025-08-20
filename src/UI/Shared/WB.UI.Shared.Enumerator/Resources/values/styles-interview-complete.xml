@@ -174,14 +174,14 @@
     </style>
 
     <style name="Interview_Complete_Tab_Container" parent="Interview_Complete_Base">
-        <item name="android:layout_width">240dp</item>
-        <item name="android:layout_height">220dp</item>
+        <item name="android:layout_width">120dp</item>
+        <item name="android:layout_height">110dp</item>
         <item name="android:orientation">vertical</item>
         <item name="android:gravity">start</item>
     </style>
     
     <style name="Interview_Complete_Tab_Count" parent="Interview_Complete_Base">
-        <item name="android:textSize">@dimen/textsize_24</item>
+        <item name="android:textSize">@dimen/textsize_18</item>
         <item name="android:layout_marginBottom">2dp</item>
         <item name="android:fontWeight">800</item>
         <item name="android:textStyle">bold</item>
@@ -189,9 +189,12 @@
     </style>
 
     <style name="Interview_Complete_Tab_Title" parent="Interview_Complete_Base">
-        <item name="android:textSize">@dimen/textsize_18</item>
+        <item name="android:textSize">@dimen/textsize_14</item>
         <item name="android:textColor">@color/default_input_button_disabled</item>
         <item name="android:layout_marginBottom">5dp</item>
+    </style>
+    
+    <style name="Interview_Complete_Tab_Content" parent="FullWidthWrappingLayout">
     </style>
 
 </resources>
