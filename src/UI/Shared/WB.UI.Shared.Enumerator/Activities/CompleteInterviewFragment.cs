@@ -12,9 +12,11 @@ using Google.Android.Material.Tabs;
 using MvvmCross;
 using MvvmCross.Binding.BindingContext;
 using MvvmCross.DroidX.RecyclerView;
+using MvvmCross.Platforms.Android.Binding.BindingContext;
 using MvvmCross.Platforms.Android.Views.Fragments;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
+using WB.UI.Shared.Enumerator.Converters;
 using WB.UI.Shared.Enumerator.CustomControls;
 using Fragment = Android.App.Fragment;
 
@@ -71,14 +73,11 @@ namespace WB.UI.Shared.Enumerator.Activities
         
         public class TabConfigurationStrategy : Java.Lang.Object, TabLayoutMediator.ITabConfigurationStrategy
         {
-            private readonly Context context;
-            private readonly IMvxBindingContext bindingContext;
+            private readonly IMvxAndroidBindingContext bindingContext;
             private readonly IList<TabViewModel> tabs;
 
-            public TabConfigurationStrategy(Context context, IMvxBindingContext bindingContext,
-                IList<TabViewModel> tabs)
+            public TabConfigurationStrategy(IMvxAndroidBindingContext bindingContext, IList<TabViewModel> tabs)
             {
-                this.context = context;
                 this.bindingContext = bindingContext;
                 this.tabs = tabs;
             }
@@ -88,17 +87,26 @@ namespace WB.UI.Shared.Enumerator.Activities
                 var vm = tabs[position];
                 
                 //var inflater = Mvx.IoCProvider.Resolve<LayoutInflater>();
-                var inflater = LayoutInflater.From(this.context);
-                var view = inflater.Inflate(Resource.Layout.interview_complete_tab_item, null);
-                
-                //var view = LayoutInflater.From(tab.View.Context).Inflate(Resource.Layout.interview_complete_tab_item, null);
-                //var countView = view.FindViewById<TextView>(Resource.Id.tab_count);
-                //var titleView = view.FindViewById<TextView>(Resource.Id.tab_title);
-                //var indicator = view.FindViewById<View>(Resource.Id.tab_indicator);
 
-                //countView.Text = vm.Count; 
-                //titleView.Text = vm.Title; 
+                //var inflater = LayoutInflater.From(tab.View.Context);
+                //var view = inflater.Inflate(Resource.Layout.interview_complete_tab_item, null);
+                //var view = this.BindingInflate(Resource.Layout.interview_complete_tab_item, null);
+                var view = bindingContext.BindingInflate(Resource.Layout.interview_complete_tab_item, null);
+
+                var countView = view.FindViewById<TextView>(Resource.Id.tab_count);
+                var titleView = view.FindViewById<TextView>(Resource.Id.tab_title);
+                var indicator = view.FindViewById<View>(Resource.Id.tab_indicator);
+
+                countView.Text = vm.Count; 
+                titleView.Text = vm.Title; 
                 tab.View.Enabled = vm.IsEnabled;
+
+                var colorResInt = TabContentToColorConverter.GetColor(vm);
+                var colorInt = ContextCompat.GetColor(tab.View.Context, colorResInt);
+                var color = new Android.Graphics.Color(colorInt);
+                countView?.SetTextColor(color);
+                titleView?.SetTextColor(color);
+                indicator?.SetBackgroundColor(color);
 
                 tab.SetCustomView(view);
                 
@@ -117,7 +125,7 @@ namespace WB.UI.Shared.Enumerator.Activities
             var adapter = new TabsPagerAdapter(this.Context, this.ChildFragmentManager, this.Lifecycle, tabsViewModels);
             viewPager.Adapter = adapter;
 
-            var tabConfigurationStrategy = new TabConfigurationStrategy(this.Context, this.BindingContext, tabsViewModels);
+            var tabConfigurationStrategy = new TabConfigurationStrategy((IMvxAndroidBindingContext)this.BindingContext, tabsViewModels);
             var tabLayoutMediator = new TabLayoutMediator(tabLayout, viewPager, tabConfigurationStrategy);
             tabLayoutMediator.Attach();
 
@@ -181,10 +189,17 @@ namespace WB.UI.Shared.Enumerator.Activities
                 var titleView = view.FindViewById<TextView>(Resource.Id.tab_title);
                 var indicator = view.FindViewById<View>(Resource.Id.tab_indicator);
 
-                var colorInt = ContextCompat.GetColor(Context, isSelected ? Resource.Color.material_blue_grey_800 : Resource.Color.disabledTextColor);
-                var color =  new Android.Graphics.Color(colorInt);
-                countView?.SetTextColor(color);
-                titleView?.SetTextColor(color);
+                // var colorResInt = TabContentToColorConverter.GetColor((TabViewModel)ViewModel.Tabs[i]);
+                // var colorInt = ContextCompat.GetColor(Context, colorResInt);
+                // var color = new Android.Graphics.Color(colorInt);
+                // countView?.SetTextColor(color);
+                // titleView?.SetTextColor(color);
+                // indicator?.SetBackgroundColor(color);
+
+                // var colorInt = ContextCompat.GetColor(Context, isSelected ? Resource.Color.material_blue_grey_800 : Resource.Color.disabledTextColor);
+                // var color =  new Android.Graphics.Color(colorInt);
+                // countView?.SetTextColor(color);
+                // titleView?.SetTextColor(color);
                 indicator.Visibility = isSelected ? ViewStates.Visible : ViewStates.Invisible;
 
                 view.Selected = isSelected;
@@ -253,7 +268,7 @@ namespace WB.UI.Shared.Enumerator.Activities
                 var viewPagerLayoutParams = viewPager.LayoutParameters;
                 viewPagerLayoutParams.Height = layoutParams.Height + 96;
                 viewPager.LayoutParameters = viewPagerLayoutParams;
-            }, 1000);
+            }, 100);
         }
 
         protected override void Dispose(bool disposing)
