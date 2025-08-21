@@ -22,20 +22,32 @@
             local:MvxBind="IndeterminateMode true; Visible IsLoading" />
     
 
-    <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabLayout"
-            style="@style/CompleteTabLayout"
-            tabGravity="start"
-            tabMode="scrollable"
-            local:tabIndicatorColor="@android:color/white"
-            local:tabIndicatorHeight="4dp"
+    <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/Interview_Entity_margin_left"
-            android:layout_marginRight="@dimen/Interview_Entity_margin_left"
-            local:MvxBind="Visible Not(IsAllOk);" />
-    <View style="@style/Interview_Complete_Divider" 
-            android:layout_width ="@dimen/Interview_Entity_margin_left"/>
+            local:MvxBind="Visible Not(IsAllOk);">
+
+        <View style="@style/Interview_Complete_Divider"
+              android:layout_gravity="bottom"
+              android:layout_width ="@dimen/Interview_Entity_margin_left"/>
+
+        <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabLayout"
+                style="@style/CompleteTabLayout"
+                tabGravity="start"
+                tabMode="scrollable"
+                local:tabIndicatorColor="@android:color/white"
+                local:tabIndicatorHeight="4dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                 />
+        <View style="@style/Interview_Complete_Divider"
+              android:layout_width ="@dimen/Interview_Entity_margin_left"
+              android:layout_gravity="bottom" />
+        
+    </LinearLayout>
 
     
     <androidx.viewpager2.widget.ViewPager2
