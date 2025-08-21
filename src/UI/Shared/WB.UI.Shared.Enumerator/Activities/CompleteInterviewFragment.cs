@@ -40,6 +40,7 @@ namespace WB.UI.Shared.Enumerator.Activities
             tabLayout = view.FindViewById<TabLayout>(Resource.Id.tabLayout);
             viewPager = view.FindViewById<ViewPager2>(Resource.Id.viewPager);
             viewPager.OffscreenPageLimit = 2;
+            viewPager.UserInputEnabled = false;
 
             SetupTabs();
 
