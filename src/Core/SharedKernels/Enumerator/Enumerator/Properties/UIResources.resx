@@ -971,4 +971,8 @@ Interview {0}</value>
     <value>All required questions answered
 No errors detected</value>
   </data>
+  <data name="Interview_Complete_MoreCountString" xml:space="preserve">
+    <value>and {0} more</value>
+  </data>
+
 </root>

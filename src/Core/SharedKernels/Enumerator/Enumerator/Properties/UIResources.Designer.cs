@@ -1742,5 +1742,11 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
                 return ResourceManager.GetString("Interview_Complete_Success_Text", resourceCulture);
             }
         }
+        
+        public static string Interview_Complete_MoreCountString {
+            get {
+                return ResourceManager.GetString("Interview_Complete_MoreCountString", resourceCulture);
+            }
+        }
     }
 }

@@ -23,10 +23,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
     public class TabViewModel : BaseViewModel
     {
+        private const int ShowItemsCount = 1;
         public bool IsEnabled => Items.Count > 0;
+        public bool ShowMore => Items.Count > ShowItemsCount;
+        public string MoreCount => string.Format(UIResources.Interview_Complete_MoreCountString, Items.Count - ShowItemsCount);
         public string Title { get; set; }
         public CompleteTabContent TabContent { get; set; }
         public List<EntityWithErrorsViewModel> Items { get; set; }
+        public List<EntityWithErrorsViewModel> ShortItems => Items.Take(ShowItemsCount).ToList();
         
         public string Count => Items.Count > 0 ? $"{Items.Count}" : "No";
     }

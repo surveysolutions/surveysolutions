@@ -261,13 +261,24 @@ namespace WB.UI.Shared.Enumerator.Activities
 
                 if (recyclerView?.Visibility != ViewStates.Visible)
                     return;
-            
+                
                 var layoutParams = recyclerView.LayoutParameters;
-                layoutParams.Height = CalculateTotalHeight(recyclerView);
+                var totalHeight = CalculateTotalHeight(recyclerView);
+                layoutParams.Height = totalHeight;
                 recyclerView.LayoutParameters = layoutParams;
                 
+                var moreLabel = currentView?.FindViewById<TextView>(Resource.Id.tab_content_more_label);
+                if (moreLabel?.Visibility == ViewStates.Visible)
+                {
+                    moreLabel.Measure(
+                        View.MeasureSpec.MakeMeasureSpec(View.Width, MeasureSpecMode.Exactly),
+                        View.MeasureSpec.MakeMeasureSpec(0, MeasureSpecMode.Unspecified));
+
+                    totalHeight += moreLabel.MeasuredHeight + 36;
+                }
+                
                 var viewPagerLayoutParams = viewPager.LayoutParameters;
-                viewPagerLayoutParams.Height = layoutParams.Height + 96;
+                viewPagerLayoutParams.Height = totalHeight + 96;
                 viewPager.LayoutParameters = viewPagerLayoutParams;
             }, 100);
         }
