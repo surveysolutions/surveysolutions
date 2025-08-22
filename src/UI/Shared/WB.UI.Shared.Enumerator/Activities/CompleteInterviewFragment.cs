@@ -1,6 +1,7 @@
 ﻿using System.Collections.Specialized;
 using System.ComponentModel;
 using Android.Content;
+using Android.Content.Res;
 using Android.Runtime;
 using Android.Views;
 using AndroidX.Core.Content;
@@ -107,7 +108,7 @@ namespace WB.UI.Shared.Enumerator.Activities
                 var color = new Android.Graphics.Color(colorInt);
                 countView?.SetTextColor(color);
                 titleView?.SetTextColor(color);
-                indicator?.SetBackgroundColor(color);
+                indicator.BackgroundTintList = ColorStateList.ValueOf(color);
 
                 tab.SetCustomView(view);
                 
