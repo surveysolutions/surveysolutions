@@ -224,7 +224,12 @@ namespace WB.UI.Shared.Enumerator.Activities
             view.Measure(
                 View.MeasureSpec.MakeMeasureSpec(recyclerView.Width, MeasureSpecMode.Exactly),
                 View.MeasureSpec.MakeMeasureSpec(0, MeasureSpecMode.Unspecified));
-            return view.MeasuredHeight;
+            var itemHeight = view.MeasuredHeight + view.PaddingTop + view.PaddingBottom;
+            if (view.LayoutParameters is ViewGroup.MarginLayoutParams lp)
+            {
+                itemHeight += lp.TopMargin + lp.BottomMargin;
+            }
+            return itemHeight;
         }
 
         private int CalculateTotalHeight(MvxRecyclerView recyclerView)
@@ -279,7 +284,7 @@ namespace WB.UI.Shared.Enumerator.Activities
                 }
                 
                 var viewPagerLayoutParams = viewPager.LayoutParameters;
-                viewPagerLayoutParams.Height = totalHeight + 96;
+                viewPagerLayoutParams.Height = totalHeight + 76;
                 viewPager.LayoutParameters = viewPagerLayoutParams;
             }, 100);
         }

@@ -23,7 +23,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
     public class TabViewModel : BaseViewModel
     {
-        private const int ShowItemsCount = 1;
+        private const int ShowItemsCount = 10;
         public bool IsEnabled => Items.Count > 0;
         public bool ShowMore => Items.Count > ShowItemsCount;
         public string MoreCount => string.Format(UIResources.Interview_Complete_MoreCountString, Items.Count - ShowItemsCount);
