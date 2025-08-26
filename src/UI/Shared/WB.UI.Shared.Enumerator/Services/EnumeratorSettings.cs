@@ -1,6 +1,7 @@
 ﻿using System.Data.SqlTypes;
 using Android.Content.PM;
 using Android.Gms.Common;
+using Android.Gms.Maps;
 using Android.OS;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
@@ -271,6 +272,15 @@ namespace WB.UI.Shared.Enumerator.Services
         public void SetEsriApiKey(string esriApiKey)
         {
             this.SaveCurrentSettings(settings => settings.EsriApiKey = esriApiKey);
+        }
+
+        public string GoogleApiKey => this.CurrentWorkspaceSettings.GoogleApiKey;
+        public void SetGoogleApiKey(string googleApiKey)
+        {
+            throw new NotImplementedException("Need set GoogleApiKey to maps");
+            //MapsInitializer.Initialize(Application.Context);
+            //MapsInitializer.SetApiKey(googleApiKey);
+            //this.SaveCurrentSettings(settings => settings.GoogleApiKey = googleApiKey);
         }
 
         public bool SupportOfflineMaps => true;

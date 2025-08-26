@@ -17,6 +17,7 @@ using WB.Core.SharedKernels.Enumerator.Views;
 using WB.UI.Shared.Enumerator.CustomServices;
 using WB.UI.Shared.Enumerator.Migrations.Workspaces;
 using WB.UI.Shared.Enumerator.Services.Notifications;
+using Android.Gms.Maps;
 
 namespace WB.UI.Interviewer
 {
@@ -56,6 +57,10 @@ namespace WB.UI.Interviewer
             logger.Info($"Android Version: {this.deviceSettings.GetAndroidVersion()}");
             logger.Info($"Google Play Services Version: {this.deviceSettings.GetGooglePlayServicesVersion()}");
             logger.Info($"Disk: {this.deviceSettings.GetDiskInformation()}");
+
+            if(!string.IsNullOrWhiteSpace(this.enumeratorSettings.GoogleApiKey))
+                throw new NotImplementedException("Need set GoogleApiKey to maps");
+                //MapsInitializer.SetApiKey(this.enumeratorSettings.GoogleApiKey);
 
             migrationRunner.MigrateUp("Interviewer", this.GetType().Assembly, typeof(Encrypt_Data).Assembly);
 

@@ -185,6 +185,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
                 $"{(isEmpty ? "empty" : "not empty")}");
         }
 
+        public void GoogleApiKeyChanged(bool isEmpty)
+        {
+            this.Append(LogEntryType.GoogleAndroidApiKeyChanged, "Google Android API key", "changed",
+                $"{(isEmpty ? "empty" : "not empty")}");
+        }
+
         public void CriticalityLevelChanged(string title, QuestionnaireIdentity questionnaire, CriticalityLevel? level)
         {
                 this.Append(LogEntryType.ActionOnSubmissionChanged,

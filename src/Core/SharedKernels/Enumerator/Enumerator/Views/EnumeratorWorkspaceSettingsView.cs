@@ -17,5 +17,6 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         public int? GeographyQuestionAccuracyInMeters { get; set; }
         public int? GeographyQuestionPeriodInSeconds { get; set; }
         public string EsriApiKey { get; set; }
+        public string GoogleApiKey { get; set; }
     }
 }

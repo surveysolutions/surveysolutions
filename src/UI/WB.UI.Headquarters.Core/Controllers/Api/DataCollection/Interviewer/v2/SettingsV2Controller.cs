@@ -1,6 +1,8 @@
 ﻿using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using WB.Core.BoundedContexts.Headquarters.Configs;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
@@ -25,9 +27,10 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2
             IPlainKeyValueStorage<InterviewerSettings> interviewerSettingsStorage,
             IPlainStorageAccessor<ServerSettings> tenantSettings,
             ISecureStorage secureStorage, 
-            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires, 
-            IWebInterviewLinkProvider webInterviewLinkProvider) 
-            : base(appSettingsStorage, tenantSettings, secureStorage, interviewerSettingsStorage, webInterviewLinkProvider)
+            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires,
+            IWebInterviewLinkProvider webInterviewLinkProvider,
+            IOptions<GoogleMapsConfig> googleMapsConfig)
+            : base(appSettingsStorage, tenantSettings, secureStorage, interviewerSettingsStorage, webInterviewLinkProvider, googleMapsConfig)
         {
             this.interviewerSettingsStorage = interviewerSettingsStorage;
             this.questionnaires = questionnaires;

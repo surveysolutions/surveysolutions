@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using WB.Core.BoundedContexts.Headquarters.Configs;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
@@ -18,8 +20,9 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
             IPlainStorageAccessor<ServerSettings> settings, 
             ISecureStorage secureStorage,
             IPlainKeyValueStorage<InterviewerSettings> interviewerSettingsStorage,
-            IWebInterviewLinkProvider webInterviewLinkProvider)
-            : base(appSettingsStorage, settings, secureStorage, interviewerSettingsStorage, webInterviewLinkProvider)
+            IWebInterviewLinkProvider webInterviewLinkProvider,
+            IOptions<GoogleMapsConfig> googleMapsConfig)
+            : base(appSettingsStorage, settings, secureStorage, interviewerSettingsStorage, webInterviewLinkProvider, googleMapsConfig)
         {
         }
 

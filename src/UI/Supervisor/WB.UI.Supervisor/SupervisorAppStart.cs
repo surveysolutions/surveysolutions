@@ -11,6 +11,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Services.Workspace;
 using WB.UI.Shared.Enumerator.Migrations.Workspaces;
+using Android.Gms.Maps;
 
 namespace WB.UI.Supervisor
 {
@@ -22,6 +23,7 @@ namespace WB.UI.Supervisor
         private readonly IWorkspaceService workspaceService;
         private readonly ILifetimeScope lifetimeScope;
         private readonly IDeviceSettings deviceSettings;
+        private readonly IEnumeratorSettings enumeratorSettings;
 
         public SupervisorAppStart(IMvxApplication application,
             IViewModelNavigationService viewModelNavigation,
@@ -38,6 +40,7 @@ namespace WB.UI.Supervisor
             this.workspaceService = workspaceService;
             this.lifetimeScope = lifetimeScope;
             this.deviceSettings = deviceSettings;
+            this.enumeratorSettings = deviceSettings as IEnumeratorSettings;
         }
 
         protected override Task<object> ApplicationStartup(object hint = null)
@@ -47,7 +50,11 @@ namespace WB.UI.Supervisor
             logger.Info($"Android Version: {this.deviceSettings.GetAndroidVersion()}");
             logger.Info($"Google Play Services Version: {this.deviceSettings.GetGooglePlayServicesVersion()}");
             logger.Info($"Disk: {this.deviceSettings.GetDiskInformation()}");
-            
+
+            if(!string.IsNullOrWhiteSpace(this.enumeratorSettings?.GoogleApiKey))
+                //MapsInitializer.SetApiKey(this.enumeratorSettings.GoogleApiKey);
+                throw new NotImplementedException("Need set GoogleApiKey to maps");
+
             this.migrationRunner.MigrateUp("Supervisor", this.GetType().Assembly, typeof(Encrypt_Data).Assembly);
 
             return base.ApplicationStartup(hint);

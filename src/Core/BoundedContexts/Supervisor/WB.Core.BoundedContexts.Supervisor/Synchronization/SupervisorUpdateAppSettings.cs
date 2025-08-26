@@ -28,6 +28,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
             supervisorSettings.SetGeographyQuestionAccuracyInMeters(tabletSettings.GeographyQuestionAccuracyInMeters);
             supervisorSettings.SetGeographyQuestionPeriodInSeconds(tabletSettings.GeographyQuestionPeriodInSeconds);
             supervisorSettings.SetEsriApiKey(tabletSettings.EsriApiKey);
+            supervisorSettings.SetGoogleApiKey(tabletSettings.GoogleApiKey);
             supervisorSettings.SetNotifications(tabletSettings.NotificationsEnabled);
         }
     }

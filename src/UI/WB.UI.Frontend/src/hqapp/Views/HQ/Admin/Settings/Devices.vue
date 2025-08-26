@@ -174,6 +174,39 @@
                     </label>
                 </div>
             </div>
+            <div class="col-sm-9">
+                <div class="block-filter" style="padding-left: 30px">
+                    <div class="form-group">
+                        <label for="googleAndroidApiKey" style="font-weight: bold">
+                            <span class="tick"></span>
+                            {{ $t('Settings.GoogleAndroidApiKey') }}
+                            <p class="error" style="font-weight: normal;margin-bottom: 0px">
+                                {{ $t('Settings.GoogleAndroidApiKeyDescription') }}
+                            </p>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group input-group-save">
+                            <input class="form-control number" type="password" v-model="googleAndroidApiKeyModel" id="googleAndroidApiKey" name="googleKey" />
+                        </div>
+                        <button type="button" class="btn btn-success" :disabled="googleAndroidApiKeyModel ==
+                            googleAndroidApiKeyInitialModel" @click="updateGoogleAndroidApiKey">
+                            {{ $t('Common.Save') }}
+                        </button>
+                        <button type="button" class="btn btn-link" :disabled="googleAndroidApiKeyModel ==
+                            googleAndroidApiKeyInitialModel" @click="cancelGoogleAndroidApiKey">
+                            {{ $t('Common.Cancel') }}
+                        </button>
+                    </div>
+                </div>
+                <div class="block-filter" style="padding-left: 30px">
+                    <input id="ShowGoogleKey" type="checkbox"
+                        onclick="var pass = document.getElementById('googleAndroidApiKey');pass.type = (pass.type === 'text' ? 'password' : 'text');">
+                    <label for="ShowGoogleKey" style="padding-left:5px;">
+                        <span></span>{{ $t('Pages.ShowKey') }}
+                    </label>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -222,6 +255,8 @@ export default {
         geographyQuestionPeriodInSecondsCancel: Number,
         esriApiKey: String,
         esriApiKeyInitial: String,
+        googleAndroidApiKey: String,
+        googleAndroidApiKeyInitial: String,
     },
     emits: ['update:isInterviewerAutomaticUpdatesEnabled',
         'update:isDeviceNotificationsEnabled',
@@ -232,6 +267,8 @@ export default {
         'update:geographyQuestionPeriodInSecondsCancel',
         'update:esriApiKey',
         'update:esriApiKeyInitial',
+        'update:googleAndroidApiKey',
+        'update:googleAndroidApiKeyInitial',
     ],
     computed: {
         isInterviewerAutomaticUpdatesEnabledModel: {
@@ -308,6 +345,22 @@ export default {
                 this.$emit('update:esriApiKeyInitial', value)
             }
         },
+        googleAndroidApiKeyModel: {
+            get() {
+                return this.googleAndroidApiKey
+            },
+            set(value) {
+                this.$emit('update:googleAndroidApiKey', value)
+            }
+        },
+        googleAndroidApiKeyInitialModel: {
+            get() {
+                return this.googleAndroidApiKeyInitial
+            },
+            set(value) {
+                this.$emit('update:googleAndroidApiKeyInitial', value)
+            }
+        },
     },
 
     components: {
@@ -372,6 +425,16 @@ export default {
             })
         },
         cancelEsriApiKey() { this.esriApiKeyModel = this.esriApiKeyInitialModel },
+        async updateGoogleAndroidApiKey() {
+            nextTick(() => {
+                return this.$hq.AdminSettings.setGoogleAndroidApiKey(
+                    this.googleAndroidApiKeyModel,
+                ).then(() => {
+                    this.googleAndroidApiKeyInitialModel = this.googleAndroidApiKeyModel
+                })
+            })
+        },
+        cancelGoogleAndroidApiKey() { this.googleAndroidApiKeyModel = this.googleAndroidApiKeyInitialModel },
         noAction() {
             // Do nothing
         },

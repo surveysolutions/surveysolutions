@@ -57,7 +57,8 @@
                         v-model:geographyQuestionPeriodInSecondsCancel="geographyQuestionPeriodInSecondsCancel"
                         v-model:geographyQuestionPeriodInSeconds="geographyQuestionPeriodInSeconds"
                         v-model:geographyQuestionAccuracyInMetersCancel="geographyQuestionAccuracyInMetersCancel"
-                        v-model:esriApiKey="esriApiKey" v-model:esriApiKeyInitial="esriApiKeyInitial" />
+                        v-model:esriApiKey="esriApiKey" v-model:esriApiKeyInitial="esriApiKeyInitial"
+                        v-model:googleAndroidApiKey="googleAndroidApiKey" v-model:googleAndroidApiKeyInitial="googleAndroidApiKeyInitial" />
                     <WebInterview v-model="isEmailAllowed" />
                     <Logo />
                 </div>
@@ -112,6 +113,8 @@ export default {
             dropSchemaDots: 1,
             esriApiKey: null,
             esriApiKeyInitial: null,
+            googleAndroidApiKey: null,
+            googleAndroidApiKeyInitial: null,
 
             isRetentionEnabled: false,
             retentionLimitInDays: null,
@@ -139,6 +142,8 @@ export default {
             this.geographyQuestionPeriodInSecondsCancel = workspaceSettings.data.geographyQuestionPeriodInSeconds
             this.esriApiKey = workspaceSettings.data.esriApiKey
             this.esriApiKeyInitial = workspaceSettings.data.esriApiKey
+            this.googleAndroidApiKey = workspaceSettings.data.googleAndroidApiKey
+            this.googleAndroidApiKeyInitial = workspaceSettings.data.googleAndroidApiKey
 
             this.encryptionEnabled = workspaceSettings.data.exportSettings.isEnabled
             this.encryptionPassword = workspaceSettings.data.exportSettings.password

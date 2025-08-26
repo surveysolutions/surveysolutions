@@ -566,6 +566,18 @@ namespace WB.UI.Headquarters.Resources {
                 return ResourceManager.GetString("EsriApiKeyDescription", resourceCulture);
             }
         }
+
+        public static string GoogleAndroidApiKey {
+            get {
+                return ResourceManager.GetString("GoogleAndroidApiKey", resourceCulture);
+            }
+        }
+
+        public static string GoogleAndroidApiKeyDescription {
+            get {
+                return ResourceManager.GetString("GoogleAndroidApiKeyDescription", resourceCulture);
+            }
+        }
         
         public static string EmailProvider_Smtp {
             get {

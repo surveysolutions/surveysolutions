@@ -50,7 +50,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             "ExternalStorages:OAuth2:Dropbox:ClientId", "ExternalStorages:OAuth2:Dropbox:ClientSecret",
             "ExternalStorages:OAuth2:GoogleDrive:ClientId", "ExternalStorages:OAuth2:GoogleDrive:ClientSecret",
             "ExternalStorages:OAuth2:OneDrive:ClientId", "ExternalStorages:OAuth2:OneDrive:ClientSecret",
-            "GoogleMap:ApiKey", "JwtBearer:SecretKey",
+            "GoogleMap:ApiKey", "GoogleMap:AndroidApiKey", "JwtBearer:SecretKey",
         };
 
         private readonly ITabletInformationService tabletInformationService;

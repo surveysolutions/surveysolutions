@@ -3,6 +3,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
+using WB.Core.BoundedContexts.Headquarters.Configs;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
@@ -12,6 +13,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.UI.Headquarters.Models.CompanyLogo;
+using Microsoft.Extensions.Options;
 
 namespace WB.UI.Headquarters.Controllers.Api.DataCollection
 {
@@ -22,19 +24,22 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
         private readonly ISecureStorage secureStorage;
         private readonly IPlainKeyValueStorage<InterviewerSettings> interviewerSettingsStorage;
         private readonly IWebInterviewLinkProvider webInterviewLinkProvider;
+        private readonly IOptions<GoogleMapsConfig> googleMapsConfig;
 
         protected SettingsControllerBase(
             IPlainKeyValueStorage<CompanyLogo> appSettingsStorage,
             IPlainStorageAccessor<ServerSettings> tenantSettings,
             ISecureStorage secureStorage,
             IPlainKeyValueStorage<InterviewerSettings> interviewerSettingsStorage,
-            IWebInterviewLinkProvider webInterviewLinkProvider)
+            IWebInterviewLinkProvider webInterviewLinkProvider,
+            IOptions<GoogleMapsConfig> googleMapsConfig)
         {
             this.appSettingsStorage = appSettingsStorage;
             this.tenantSettings = tenantSettings;
             this.secureStorage = secureStorage;
             this.interviewerSettingsStorage = interviewerSettingsStorage;
             this.webInterviewLinkProvider = webInterviewLinkProvider;
+            this.googleMapsConfig = googleMapsConfig;
         }
 
         public virtual IActionResult CompanyLogo()
@@ -93,11 +98,19 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             
             GeographyQuestionPeriodInSeconds = this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings)
                 .GetGeographyQuestionPeriodInSeconds(),
-            
+
             NotificationsEnabled = this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings)
                 .IsDeviceNotificationsEnabled(),
-            
-            EsriApiKey = this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings).GetEsriApiKey()
+
+            EsriApiKey = this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings).GetEsriApiKey(),
+            GoogleApiKey = GetGoogleApiKey()
         };
+        private string GetGoogleApiKey()
+        {
+            var key = this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings).GetGoogleApiKey();
+            if (string.IsNullOrWhiteSpace(key))
+                key = this.googleMapsConfig.Value?.AndroidApiKey ?? string.Empty;
+            return key;
+        }
     }
 }

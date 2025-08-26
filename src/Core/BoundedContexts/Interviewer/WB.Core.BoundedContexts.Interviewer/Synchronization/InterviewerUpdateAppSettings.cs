@@ -28,6 +28,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
             interviewerSettings.SetGeographyQuestionAccuracyInMeters(tabletSettings.GeographyQuestionAccuracyInMeters);
             interviewerSettings.SetGeographyQuestionPeriodInSeconds(tabletSettings.GeographyQuestionPeriodInSeconds);
             interviewerSettings.SetEsriApiKey(tabletSettings.EsriApiKey);
+            interviewerSettings.SetGoogleApiKey(tabletSettings.GoogleApiKey);
             interviewerSettings.SetNotifications(tabletSettings.NotificationsEnabled);
         }
     }

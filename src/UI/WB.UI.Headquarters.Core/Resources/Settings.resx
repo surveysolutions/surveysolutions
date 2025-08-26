@@ -383,6 +383,12 @@ Possible reasons:
   <data name="EsriApiKeyDescription" xml:space="preserve">
       <value>This key will allow to use online maps on devices. Be advised that usage of this service could cost you extra money. Please consult with service provider</value>
   </data>
+  <data name="GoogleAndroidApiKey" xml:space="preserve">
+      <value>Google API Key</value>
+  </data>
+  <data name="GoogleAndroidApiKeyDescription" xml:space="preserve">
+      <value>Key for Google Maps SDK used by mobile applications.</value>
+  </data>
   <data name="EmailProvider_Smtp" xml:space="preserve">
     <value>SMTP Server</value>
   </data>

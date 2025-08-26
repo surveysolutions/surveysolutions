@@ -16,8 +16,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Security
         public bool? PartialSynchronizationEnabled { get; set; }
         public int? GeographyQuestionAccuracyInMeters { get; set; }
         public int? GeographyQuestionPeriodInSeconds { get; set; }
-        
+
         public string EsriApiKey { get; set; }
+        public string GoogleApiKey { get; set; }
     }
 
     public static class InterviewerSettingsExtensions
@@ -67,6 +68,14 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Security
                 return String.Empty;
 
             return settings.EsriApiKey;
+        }
+
+        public static string GetGoogleApiKey(this InterviewerSettings settings)
+        {
+            if (settings?.GoogleApiKey == null)
+                return String.Empty;
+
+            return settings.GoogleApiKey;
         }
     }
 }

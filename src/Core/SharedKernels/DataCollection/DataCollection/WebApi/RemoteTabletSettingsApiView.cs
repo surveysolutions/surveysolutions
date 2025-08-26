@@ -17,8 +17,9 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
         public bool PartialSynchronizationEnabled { get; set; }
         public string WebInterviewUrlTemplate { get; set; }
         public int GeographyQuestionAccuracyInMeters { get; set; }
-        public int GeographyQuestionPeriodInSeconds { get; set; }
-        
+       public int GeographyQuestionPeriodInSeconds { get; set; }
+
         public string EsriApiKey { get; set; } = string.Empty;
+        public string GoogleApiKey { get; set; } = string.Empty;
     }
 }

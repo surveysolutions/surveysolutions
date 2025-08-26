@@ -81,6 +81,11 @@ namespace WB.UI.Headquarters.Controllers.Api
         {
             public string EsriApiKey { get; set; }
         }
+
+        public class GoogleAndroidApiKeyModel
+        {
+            public string GoogleAndroidApiKey { get; set; }
+        }
         
         private readonly IPlainKeyValueStorage<ProfileSettings> profileSettingsStorage;
         private readonly IPlainKeyValueStorage<GlobalNotice> appSettingsStorage;
@@ -158,6 +163,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                 GeographyQuestionAccuracyInMeters = interviewerSettings.GetGeographyQuestionAccuracyInMeters(),
                 GeographyQuestionPeriodInSeconds = interviewerSettings.GetGeographyQuestionPeriodInSeconds(),
                 EsriApiKey = interviewerSettings.GetEsriApiKey(),
+                GoogleAndroidApiKey = interviewerSettings.GetGoogleApiKey(),
                 GlobalNotice = this.appSettingsStorage.GetById(AppSetting.GlobalNoticeKey)?.Message,
                 AllowEmails = this.webInterviewSettingsStorage.GetById(AppSetting.WebInterviewSettings)?.AllowEmails ?? false,
                 AllowInterviewerUpdateProfile = this.profileSettingsStorage.GetById(AppSetting.ProfileSettings)?.AllowInterviewerUpdateProfile ?? false,
@@ -287,8 +293,25 @@ namespace WB.UI.Headquarters.Controllers.Api
             {
                 settings.EsriApiKey = key.EsriApiKey;
             });
-            
+
             this.auditLog.EsriApiKeyChanged(String.IsNullOrEmpty(key.EsriApiKey));
+
+            return Ok(new {sucess = true});
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult UpdateGoogleAndroidApiKey([FromBody]GoogleAndroidApiKeyModel key)
+        {
+            if (!ModelState.IsValid)
+                return Ok(new {sucess = false});
+
+            UpdateInterviewerSettings(settings =>
+            {
+                settings.GoogleApiKey = key.GoogleAndroidApiKey;
+            });
+
+            this.auditLog.GoogleApiKeyChanged(String.IsNullOrEmpty(key.GoogleAndroidApiKey));
 
             return Ok(new {sucess = true});
         }

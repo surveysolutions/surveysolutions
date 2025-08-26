@@ -718,6 +718,15 @@ class AdminSettings {
         })
     }
 
+    setGoogleAndroidApiKey(googleAndroidApiKey) {
+        return this.http({
+            method: 'post',
+            url: `${this.base}/UpdateGoogleAndroidApiKey`,
+            headers: { 'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie() },
+            data: { googleAndroidApiKey: googleAndroidApiKey }
+        })
+    }
+
     getWorkspaceSettings() {
         return this.http.get(`${this.base}/WorkspaceSettings`)
     }

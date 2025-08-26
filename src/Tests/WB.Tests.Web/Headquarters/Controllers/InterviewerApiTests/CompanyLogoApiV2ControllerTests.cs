@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Moq;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Headquarters.Configs;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
@@ -80,7 +82,8 @@ namespace WB.Tests.Web.Headquarters.Controllers.InterviewerApiTests
                 new TestPlainStorage<ServerSettings>(),
                 Mock.Of<ISecureStorage>(),
                 Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>(),
-                Mock.Of<IWebInterviewLinkProvider>());
+                Mock.Of<IWebInterviewLinkProvider>(),
+                Mock.Of<IOptions<GoogleMapsConfig>>());
 
             var defaultHttpContext = new DefaultHttpContext();
             companyLogoApiV2Controller.ControllerContext  = new ControllerContext

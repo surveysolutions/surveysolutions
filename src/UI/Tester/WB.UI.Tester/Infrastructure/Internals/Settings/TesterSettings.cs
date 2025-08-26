@@ -191,6 +191,12 @@ namespace WB.UI.Tester.Infrastructure.Internals.Settings
             throw new NotImplementedException();
         }
 
+        public string GoogleApiKey { get; }
+        public void SetGoogleApiKey(string googleApiKey)
+        {
+            throw new NotImplementedException();
+        }
+
         public bool SupportOfflineMaps => false;
     }
 }
