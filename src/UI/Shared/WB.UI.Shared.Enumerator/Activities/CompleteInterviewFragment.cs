@@ -44,6 +44,7 @@ namespace WB.UI.Shared.Enumerator.Activities
             viewPager.UserInputEnabled = false;
 
             SetupTabs();
+            RecalculateRecyclerViewHeight();
 
             return view;
         }
@@ -145,7 +146,7 @@ namespace WB.UI.Shared.Enumerator.Activities
             };
 
             // Optional: disable swipe
-            viewPager.UserInputEnabled = true;
+            viewPager.UserInputEnabled = false;
 
             var firstEnabledTab = tabsViewModels.FirstOrDefault(t => t.IsEnabled);
             if (firstEnabledTab != null)
@@ -259,7 +260,7 @@ namespace WB.UI.Shared.Enumerator.Activities
 
         private void RecalculateRecyclerViewHeight()
         {
-            View?.PostDelayed(() =>
+            viewPager?.PostDelayed(() =>
             {
                 int currentItem = viewPager.CurrentItem; 
                 var currentView = (viewPager.GetChildAt(0) as ViewGroup)?.GetChildAt(currentItem);
