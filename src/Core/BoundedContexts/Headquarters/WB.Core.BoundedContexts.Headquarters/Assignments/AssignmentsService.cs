@@ -197,7 +197,24 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 .ToList();
             return assignments;
         }
-        
+
+        public HashSet<int> GetExistingAssignmentIds(IEnumerable<int> assignmentIds)
+        {
+            if (assignmentIds == null)
+                return new HashSet<int>();
+            
+            var uniqueAssignmentIds = new HashSet<int>(assignmentIds);
+            if (uniqueAssignmentIds.Count == 0)
+                return new HashSet<int>();
+
+            var existedAssignmentIds = this.assignmentsAccessor.Query(_ => _
+                .Where(x => uniqueAssignmentIds.Contains(x.Id))
+                .Select(x => x.Id)
+                .ToHashSet());
+
+            return existedAssignmentIds;
+        }
+
         private class AssigmentGpsAnswer
         {
             public Assignment Assignment { get; set; }

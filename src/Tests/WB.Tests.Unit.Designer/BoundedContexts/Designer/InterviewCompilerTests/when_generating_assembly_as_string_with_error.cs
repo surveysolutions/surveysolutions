@@ -28,8 +28,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.InterviewCompilerTests
             var emitResult = compiler.TryGenerateAssemblyAsStringAndEmitResult(Id.g1, generatedClasses, referencedPortableAssemblies, out string _);
 
             Assert.That(emitResult.Success, Is.False);
-            Assert.That(emitResult.Diagnostics, Has.Length.EqualTo(1));
-            Assert.That(emitResult.Diagnostics[0].Location.SourceTree.FilePath, Is.EqualTo(fileName));
+            Assert.That(emitResult.Diagnostics, Has.Count.EqualTo(1));
+            Assert.That(emitResult.Diagnostics[0].Location, Is.EqualTo(fileName));
         }
 
 

@@ -162,7 +162,7 @@ function ItemViewModel() {
                 '?timezoneOffsetMinutes=' +
                 new Date().getTimezoneOffset() +
                 '&translation=' +
-                translationId,
+                encodeURIComponent(translationId),
             cache: false,
         })
             .done(function (result) {
@@ -260,7 +260,7 @@ function ItemViewModel() {
         typeaheadCtrl.unbind('click');
         typeaheadCtrl.click(function (evn) {
             var link = $(evn.target);
-            self.selectedTransalation = link.attr('value');
+            self.selectedTransalation = DOMPurify.sanitize(link.attr('value'));
             $('#dropdownMenuButton').text(link.text());
             $('#pdfGenerateButton').prop('disabled', false);
         });

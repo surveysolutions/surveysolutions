@@ -189,6 +189,9 @@
   <data name="Admin_InterviewPackages_NumberOfPackagesAffected" xml:space="preserve">
     <value>{{count}} пакетів буде змінено</value>
   </data>
+  <data name="DownloadPage_Size" xml:space="preserve">
+    <value>Розмір</value>
+  </data>
   <data name="Admin_InterviewPackages_PackageSize" xml:space="preserve">
     <value>Розмір</value>
   </data>
