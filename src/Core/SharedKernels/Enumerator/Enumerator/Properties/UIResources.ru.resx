@@ -326,9 +326,6 @@
   <data name="Interview_Complete_Button" xml:space="preserve">
     <value>Завершить</value>
   </data>
-  <data name="Interview_Submit_interview_Button" xml:space="preserve">
-    <value>Отправить интервью</value>
-  </data>
   <data name="Interview_Complete_Consequences_Instrunction" xml:space="preserve">
     <value>По закрытию этого интервью оно будет помечено как законченное и будет загружено супервизору во время вашей следующей синхронизации</value>
   </data>

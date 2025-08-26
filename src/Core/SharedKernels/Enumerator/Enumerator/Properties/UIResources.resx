@@ -975,13 +975,16 @@ No errors detected</value>
     <value>and {0} more</value>
   </data>
   <data name="Interview_Complete_Tab_Title_Critical" xml:space="preserve">
-    <value>Critical\r\nerrors</value>
+    <value>Critical
+errors</value>
   </data>
   <data name="Interview_Complete_Tab_Title_WithErrors" xml:space="preserve">
-    <value>Questions\r\nwith errors</value>
+    <value>Questions
+with errors</value>
   </data>
   <data name="Interview_Complete_Tab_Title_Unanswered" xml:space="preserve">
-    <value>Unanswered\r\nquestions</value>
+    <value>Unanswered
+questions</value>
   </data>
 
 </root>
