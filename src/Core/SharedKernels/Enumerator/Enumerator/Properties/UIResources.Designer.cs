@@ -1748,5 +1748,23 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
                 return ResourceManager.GetString("Interview_Complete_MoreCountString", resourceCulture);
             }
         }
+        
+        public static string Interview_Complete_Tab_Title_Critical {
+            get {
+                return ResourceManager.GetString("Interview_Complete_Tab_Title_Critical", resourceCulture);
+            }
+        }
+        
+        public static string Interview_Complete_Tab_Title_WithErrors {
+            get {
+                return ResourceManager.GetString("Interview_Complete_Tab_Title_WithErrors", resourceCulture);
+            }
+        }
+        
+        public static string Interview_Complete_Tab_Title_Unanswered {
+            get {
+                return ResourceManager.GetString("Interview_Complete_Tab_Title_Unanswered", resourceCulture);
+            }
+        }
     }
 }

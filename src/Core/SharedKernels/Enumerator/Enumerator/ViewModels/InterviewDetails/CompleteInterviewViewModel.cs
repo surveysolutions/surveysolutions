@@ -112,7 +112,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.CompleteStatus = InterviewState.Status;
             this.Name.InitAsStatic(UIResources.Interview_Complete_Screen_Title);
 
-            var interview = this.interviewRepository.GetOrThrow(interviewId);
+            var interview = this.interviewRepository.Get(interviewId);
             var interviewKey = interview.GetInterviewKey()?.ToString();
             this.CompleteScreenTitle = string.Format(UIResources.Interview_Complete_Title, interviewKey);
 
@@ -132,19 +132,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             Tabs.Add(new TabViewModel()
             {
-                Title  = "Critical\r\nerrors",
+                Title  = UIResources.Interview_Complete_Tab_Title_Critical,
                 Items = new List<EntityWithErrorsViewModel>(),// entitiesWithErrors,
                 TabContent = CompleteTabContent.CriticalError
             });
             Tabs.Add(new TabViewModel()
             {
-                Title  = "Questions\r\nwith errors",
+                Title  = UIResources.Interview_Complete_Tab_Title_WithErrors,
                 Items = entitiesWithErrors,
                 TabContent = CompleteTabContent.Error
             });
             Tabs.Add(new TabViewModel()
             {
-                Title  = "Unanswered\r\nquestions",
+                Title  = UIResources.Interview_Complete_Tab_Title_Unanswered,
                 Items = unansweredQuestions,
                 TabContent = CompleteTabContent.Unanswered
             });
