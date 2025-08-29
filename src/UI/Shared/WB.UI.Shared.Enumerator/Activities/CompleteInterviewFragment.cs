@@ -144,10 +144,7 @@ namespace WB.UI.Shared.Enumerator.Activities
                 UpdateTabViews();
                 RecalculateRecyclerViewHeight();
             };
-
-            // Optional: disable swipe
-            viewPager.UserInputEnabled = false;
-
+            
             var firstEnabledTab = tabsViewModels.FirstOrDefault(t => t.IsEnabled);
             if (firstEnabledTab != null)
             {
@@ -262,6 +259,8 @@ namespace WB.UI.Shared.Enumerator.Activities
         {
             viewPager?.PostDelayed(() =>
             {
+                
+
                 int currentItem = viewPager.CurrentItem; 
                 var currentView = (viewPager.GetChildAt(0) as ViewGroup)?.GetChildAt(currentItem);
                 var recyclerView = currentView?.FindViewById<MvxRecyclerView>(Resource.Id.recyclerView);
@@ -272,6 +271,7 @@ namespace WB.UI.Shared.Enumerator.Activities
                 var layoutParams = recyclerView.LayoutParameters;
                 var totalHeight = CalculateTotalHeight(recyclerView);
                 layoutParams.Height = totalHeight;
+                layoutParams.Width = ViewGroup.LayoutParams.MatchParent;
                 recyclerView.LayoutParameters = layoutParams;
                 
                 var moreLabel = currentView?.FindViewById<TextView>(Resource.Id.tab_content_more_label);
@@ -280,13 +280,16 @@ namespace WB.UI.Shared.Enumerator.Activities
                     moreLabel.Measure(
                         View.MeasureSpec.MakeMeasureSpec(View.Width, MeasureSpecMode.Exactly),
                         View.MeasureSpec.MakeMeasureSpec(0, MeasureSpecMode.Unspecified));
-
+                
                     totalHeight += moreLabel.MeasuredHeight + 36;
                 }
                 
                 var viewPagerLayoutParams = viewPager.LayoutParameters;
                 viewPagerLayoutParams.Height = totalHeight + 76;
+                viewPagerLayoutParams.Width = ViewGroup.LayoutParams.MatchParent;
                 viewPager.LayoutParameters = viewPagerLayoutParams;
+                
+                viewPager.RequestLayout();
             }, 100);
         }
 
