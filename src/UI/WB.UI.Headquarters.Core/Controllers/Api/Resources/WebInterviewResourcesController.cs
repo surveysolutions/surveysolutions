@@ -109,8 +109,7 @@ namespace WB.UI.Headquarters.Controllers.Api.Resources
         }
 
         [HttpGet]
-        public async Task<IActionResult> Image([FromQuery] string interviewId, [FromQuery] string questionId,
-            [FromQuery] string filename)
+        public async Task<IActionResult> Image([FromQuery] string interviewId, [FromQuery] string questionId)
         {
             var interview = this.statefulInterviewRepository.Get(interviewId);
            
@@ -119,14 +118,20 @@ namespace WB.UI.Headquarters.Controllers.Api.Resources
                 return NotFound();
             }
 
+            var multimediaQuestion = interview.GetMultimediaQuestion(Identity.Parse(questionId));
+
             if (!interview.AcceptsInterviewerAnswers() 
-                && interview.GetMultimediaQuestion(Identity.Parse(questionId)) != null
+                && multimediaQuestion != null
                 && !this.authorizedUser.CanConductInterviewReview())
             {
                 return NoContent();
             }
 
-            var file = await this.imageFileStorage.GetInterviewBinaryDataAsync(interview.Id, filename);
+            if (multimediaQuestion == null || !multimediaQuestion.IsAnswered())
+                return NoContent();
+
+            var fileName = multimediaQuestion.GetAnswer().FileName;
+            var file = await this.imageFileStorage.GetInterviewBinaryDataAsync(interview.Id, fileName);
 
             if (file == null || file.Length == 0)
                 return NoContent();
