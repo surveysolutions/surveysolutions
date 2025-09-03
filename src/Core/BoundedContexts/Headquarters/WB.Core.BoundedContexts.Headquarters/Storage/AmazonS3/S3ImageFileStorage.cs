@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 
@@ -11,10 +12,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
     public class S3ImageFileStorage : IImageFileStorage
     {
         private readonly IExternalFileStorage externalFileStorage;
+        private readonly IFileSystemAccessor fileSystemAccessor;
 
-        public S3ImageFileStorage(IExternalFileStorage externalFileStorage)
+        public S3ImageFileStorage(IExternalFileStorage externalFileStorage, IFileSystemAccessor fileSystemAccessor)
         {
             this.externalFileStorage = externalFileStorage;
+            this.fileSystemAccessor = fileSystemAccessor;
         }
 
         public Task<byte[]> GetInterviewBinaryDataAsync(Guid interviewId, string filename)
@@ -27,7 +30,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
             return GetInterviewBinaryDataAsync(interviewId, fileName).Result;
         }
 
-        public string GetPath(Guid interviewId, string filename = null) => $"{GetInterviewDirectoryPath(interviewId)}/{filename ?? String.Empty}";
+        public string GetPath(Guid interviewId, string filename = null)
+        {
+            if (!string.IsNullOrWhiteSpace(filename))
+            {
+                if (fileSystemAccessor.IsInvalidFileName(filename))
+                    throw new ArgumentException("Invalid file name", nameof(filename));
+            }
+            
+            return $"{GetInterviewDirectoryPath(interviewId)}/{filename ?? String.Empty}";
+        }
+
         private string GetInterviewDirectoryPath(Guid interviewId) => $"images/{interviewId.FormatGuid()}";
         public async Task RemoveAllBinaryDataForInterviewsAsync(List<Guid> interviewIds)
         {
