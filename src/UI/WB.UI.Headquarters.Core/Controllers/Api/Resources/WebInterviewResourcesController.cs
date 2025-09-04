@@ -9,6 +9,7 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
+using WB.UI.Headquarters.Filters;
 using WB.UI.Shared.Web.Modules;
 using WB.UI.Shared.Web.Services;
 
@@ -16,6 +17,7 @@ namespace WB.UI.Headquarters.Controllers.Api.Resources
 {
     [Localizable(false)]
     [AllowAnonymous]
+    [WebInterviewAuthorize(InterviewIdQueryString = "interviewId")]
     [Route("api/{controller}/{action}")]
     public class WebInterviewResourcesController : ControllerBase
     {
