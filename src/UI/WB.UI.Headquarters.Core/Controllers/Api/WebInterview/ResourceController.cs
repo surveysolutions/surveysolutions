@@ -15,7 +15,6 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
 {
     [Route("Resource")]
     [ResponseCacheAttribute(NoStore = true, Location = ResponseCacheLocation.None)]
-    [WebInterviewAuthorize(InterviewIdQueryString = "interviewId")]
     public class ResourceController : ControllerBase
     {
         private readonly IImageFileStorage imageFileRepository;
