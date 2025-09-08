@@ -99,6 +99,17 @@ jobs:
 
       - name: Debug connection string
         run: echo "$DB_CONN"
+      - name: Wait for Postgres to be ready
+        run: |
+          echo "Waiting for Postgres..."
+          for i in {1..20}; do
+            if pg_isready -h postgres -p 5432; then
+              echo "Postgres is ready!"
+              break
+            fi
+            echo "Still waiting..."
+            sleep 2
+          done  
       - name: Headquarters tests
         run: |
           printf "[ConnectionStrings]\nTestConnection=\"Server=127.0.0.1;Port=5432;User Id=postgres;Password=P@$$w0rd;Database=postgres;CommandTimeout=60;\"\n" > src/Tests/WB.Tests.Integration/appsettings.cloud.ini
