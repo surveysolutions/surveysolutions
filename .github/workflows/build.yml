@@ -77,8 +77,8 @@ jobs:
       postgres:
         image: postgres:13.1
         env:
-          POSTGRES_USER: ${{ env.PG_USER }}
-          POSTGRES_PASSWORD: ${{ env.PG_PASSWORD }}
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: P@$$w0rd
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
