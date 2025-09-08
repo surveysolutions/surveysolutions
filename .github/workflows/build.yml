@@ -75,7 +75,7 @@ jobs:
 
     services:
       postgres:
-        image: postgres:13.1
+        image: postgres:15.1
         env:
           POSTGRES_USER: ${{ env.PG_USER }}
           POSTGRES_PASSWORD: ${{ env.PG_PASSWORD }}
@@ -95,7 +95,7 @@ jobs:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
       - name: Create db connection string
-        run: echo "DB_CONN=Server=127.0.0.1;Port=${{ job.services.postgres.ports[5432] }};User Id=${{ env.PG_USER }};Password=${{ env.PG_PASSWORD }};" >> $GITHUB_ENV
+        run: echo "DB_CONN=Server=postgres;Port=${{ job.services.postgres.ports[5432] }};User Id=${{ env.PG_USER }};Password=${{ env.PG_PASSWORD }};" >> $GITHUB_ENV
 
       - name: Headquarters tests
         run: |
