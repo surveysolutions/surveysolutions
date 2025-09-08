@@ -86,7 +86,7 @@ jobs:
           --health-retries 5
         ports:
           - 5432:5432
- 
+
     steps:
       - uses: actions/checkout@v4
       - name: Setup dotnet
@@ -99,11 +99,12 @@ jobs:
 
       - name: Headquarters tests
         run: |
-          echo "[ConnectionStrings]\nTestConnection=\"${DB_CONN}Database=postgres;CommandTimeout=60;\"" >> src/Tests/WB.Tests.Integration/appsettings.cloud.ini
+          printf "[ConnectionStrings]\nTestConnection=\"${DB_CONN}Database=postgres;CommandTimeout=60;\"\n" > src/Tests/WB.Tests.Integration/appsettings.cloud.ini
           dotnet test src/Tests/WB.Tests.Integration
+
       - name: Designer tests
         run: |
-          echo "[ConnectionSettings]\nTestConnectionStringFormat=\"${DB_CONN}Database=testdb_{0};CommandTimeout=60;\"" > src/Tests/WB.Tests.Integration.Designer/appsettings.cloud.ini
+          printf "[ConnectionSettings]\nTestConnectionStringFormat=\"${DB_CONN}Database=testdb_{0};CommandTimeout=60;\"\n" > src/Tests/WB.Tests.Integration.Designer/appsettings.cloud.ini
           dotnet test src/Tests/WB.Tests.Integration.Designer
 
   mobile:
