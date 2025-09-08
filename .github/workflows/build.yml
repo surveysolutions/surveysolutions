@@ -96,13 +96,10 @@ jobs:
 
       - name: Create db connection string
         run: echo "DB_CONN=Server=postgres;Port=${{ job.services.postgres.ports[5432] }};User Id=${{ env.PG_USER }};Password=${{ env.PG_PASSWORD }};" >> $GITHUB_ENV
-      - name: Print current working directory
-        run: pwd
+
       - name: Headquarters tests
         run: |
           echo "[ConnectionStrings]\nTestConnection=\"${{ env.DB_CONN }}Database=postgres;CommandTimeout=60;\"" >> src/Tests/WB.Tests.Integration/appsettings.cloud.ini
-          echo "Full path:"
-          echo "$(realpath src/Tests/WB.Tests.Integration/appsettings.cloud.ini)"
           dotnet test src/Tests/WB.Tests.Integration
       - name: Designer tests
         run: |
