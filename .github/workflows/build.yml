@@ -102,6 +102,7 @@ jobs:
       - name: Headquarters tests
         run: |
           printf "[ConnectionStrings]\nTestConnection=\"${DB_CONN}Database=postgres;CommandTimeout=60;\"\n" > src/Tests/WB.Tests.Integration/appsettings.cloud.ini
+          cat src/Tests/WB.Tests.Integration/appsettings.cloud.ini
           dotnet test src/Tests/WB.Tests.Integration
       - name: Print config file
         run: cat src/Tests/WB.Tests.Integration/appsettings.cloud.ini
