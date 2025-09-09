@@ -188,9 +188,6 @@ RUN ./configure \
   --enable-libass \
   --enable-libtheora \
   --enable-libwebp \
-  --enable-libjpeg \
-  --enable-libpng \
-  --enable-zlib \
   --enable-shared \
   --disable-static && \
   make -j$(nproc) && \
