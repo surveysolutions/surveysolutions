@@ -43,5 +43,13 @@
     <ItemGroup>
         <Folder Include="InterviewDataExport\InterviewDataDenormalizerTests-approved\" />
     </ItemGroup>
-
+    <ItemGroup>
+        <None Update="appsettings.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="appsettings.*.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+            <DependentUpon>appsettings.json</DependentUpon>
+        </None>
+    </ItemGroup>
 </Project>

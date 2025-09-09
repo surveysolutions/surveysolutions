@@ -50,5 +50,7 @@ namespace WB.Core.Infrastructure.FileSystem
 
         void MoveFile(string pathToFile, string newPathToFile);
         void MoveDirectory(string pathToDir, string newPathToDir);
+        char[] GetInvalidFileNameChars();
+        bool IsInvalidFileName(string filename);
     }
 }

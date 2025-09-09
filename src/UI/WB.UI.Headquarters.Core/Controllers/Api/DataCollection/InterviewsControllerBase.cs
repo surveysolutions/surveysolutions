@@ -28,6 +28,7 @@ using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.Synchronization.MetaInfo;
 using WB.UI.Headquarters.Code;
+using WB.UI.Shared.Web.Services;
 
 namespace WB.UI.Headquarters.Controllers.Api.DataCollection
 {
@@ -39,6 +40,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
         private readonly IAudioFileStorage audioFileStorage;
         private readonly IAudioAuditFileStorage audioAuditFileStorage;
         private readonly IWebHostEnvironment webHostEnvironment;
+        private readonly IImageProcessingService imageProcessingService;
         private readonly IAuthorizedUser authorizedUser;
         protected readonly IInterviewPackagesService packagesService;
         protected readonly ICommandService commandService;
@@ -59,7 +61,8 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             IHeadquartersEventStore eventStore,
             IAudioAuditFileStorage audioAuditFileStorage,
             IUserToDeviceService userToDeviceService,
-            IWebHostEnvironment webHostEnvironment)
+            IWebHostEnvironment webHostEnvironment,
+            IImageProcessingService imageProcessingService)
         {
             this.imageFileStorage = imageFileStorage;
             this.audioFileStorage = audioFileStorage;
@@ -72,6 +75,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             this.eventStore = eventStore;
             this.audioAuditFileStorage = audioAuditFileStorage;
             this.webHostEnvironment = webHostEnvironment;
+            this.imageProcessingService = imageProcessingService;
             this.userToDeviceService = userToDeviceService;
         }
 
@@ -134,8 +138,13 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
         
         public virtual IActionResult PostImage([FromBody] PostFileRequest request)
         {
-            this.imageFileStorage.StoreInterviewBinaryData(request.InterviewId, request.FileName,
-                Convert.FromBase64String(request.Data), null);
+            if (request?.Data == null)
+                return BadRequest("Request is null");
+            
+            var bytes = Convert.FromBase64String(request.Data);
+            this.imageProcessingService.Validate(bytes);
+
+            this.imageFileStorage.StoreInterviewBinaryData(request.InterviewId, request.FileName, bytes, null);
             return StatusCode(StatusCodes.Status204NoContent);
         }
 

@@ -32,7 +32,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
 
         public byte[] GetInterviewBinaryData(Guid interviewId, string fileName)
         {
-            var filePath = this.GetPathToFile(interviewId, fileName);
+            var fileNameWithoutPath = fileSystemAccessor.GetFileName(fileName);
+            var filePath = this.GetPathToFile(interviewId, fileNameWithoutPath);
 
             return !fileSystemAccessor.IsFileExists(filePath) ? null : fileSystemAccessor.ReadAllBytes(filePath);
         }
