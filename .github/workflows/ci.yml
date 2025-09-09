@@ -59,7 +59,7 @@ jobs:
       fail-fast: false
     env:
       PG_USER: postgres
-      PG_PASSWORD: P@$$w0rd
+      PG_PASSWORD: PasswordForTests123
 
     services:
       postgres:
