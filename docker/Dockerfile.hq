@@ -185,7 +185,6 @@ RUN ./configure \
   --enable-libvorbis \
   --enable-libopus \
   --enable-libmp3lame \
-  --enable-libfdk-aac \
   --enable-libass \
   --enable-libtheora \
   --enable-libwebp \
