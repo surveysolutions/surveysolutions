@@ -144,6 +144,80 @@ COPY --from=frontend /src/UI/WB.UI.Frontend/dist/package/hq src/UI/WB.UI.Headqua
 RUN dotnet publish src/UI/WB.UI.Headquarters.Core \
     -c Release -o /hq -p:Version="${VERSION}" -p:InformationalVersion="${INFO_VERSION}"
 
+# Building ffmpeg from source
+FROM alpine:3.21 as ffmpeg_builder
+
+RUN apk add --no-cache \
+    build-base \
+    git \
+    yasm \
+    nasm \
+    x264-dev \
+    x265-dev \
+    libvpx-dev \
+    libvorbis-dev \
+    opus-dev \
+    lame-dev \
+    fdk-aac-dev \
+    libass-dev \
+    libjpeg-turbo-dev \
+    libpng-dev \
+    libwebp-dev \
+    zlib-dev \
+    cmake \
+    pkgconf \
+    alsa-lib-dev \
+    libtheora-dev \
+    libtool \
+    autoconf \
+    automake
+
+RUN git clone --depth 1 --branch n7.0 https://git.ffmpeg.org/ffmpeg.git /ffmpeg
+WORKDIR /ffmpeg
+
+RUN ./configure \
+  --prefix=/ffmpeg-build \
+  --enable-gpl \
+  --enable-nonfree \
+  --enable-libx264 \
+  --enable-libx265 \
+  --enable-libvpx \
+  --enable-libvorbis \
+  --enable-libopus \
+  --enable-libmp3lame \
+  --enable-libfdk-aac \
+  --enable-libass \
+  --enable-libtheora \
+  --enable-libwebp \
+  --enable-libjpeg \
+  --enable-libpng \
+  --enable-zlib \
+  --enable-shared \
+  --disable-static && \
+  make -j$(nproc) && \
+  make install
+
+# Подготовка зависимостей для ffmpeg runtime
+FROM alpine:3.21 as ffmpeg_runtime
+RUN apk add --no-cache \
+    x264-libs \
+    x265-libs \
+    libvpx \
+    libvorbis \
+    opus \
+    lame \
+    fdk-aac \
+    libass \
+    libjpeg-turbo \
+    libpng \
+    libwebp \
+    zlib \
+    alsa-lib \
+    libtheora
+
+COPY --from=ffmpeg_builder /ffmpeg-build /usr/local
+RUN echo "/usr/local/lib" >> /etc/ld-musl-x86_64.path
+
 # Copy APK files if any
 FROM --platform=${PLATFORM} mcr.microsoft.com/dotnet/aspnet:${DOTNET_VERSION}-alpine AS apks
 ARG APK_FILES
@@ -165,7 +239,7 @@ FROM mcr.microsoft.com/dotnet/aspnet:${DOTNET_VERSION}-alpine
 ENV DOTNET_RUNNING_IN_CONTAINER=true
 ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
 
-RUN apk add --no-cache \ 
+RUN apk add --no-cache \
     \
     # .NET dependencies
     krb5-libs \
@@ -175,12 +249,11 @@ RUN apk add --no-cache \
     libstdc++ \
     zlib \
     \
-    icu-libs \ 
+    icu-libs \
     icu-data-full \
     \    
     gdal \
     gdal-tools \
-    ffmpeg \
     curl \
     fontconfig \
     libgdiplus \
@@ -188,6 +261,7 @@ RUN apk add --no-cache \
     && rm -rf /var/cache/apk/*
 
 COPY --from=fonts_source /raw_fonts /usr/share/fonts
+COPY --from=ffmpeg_runtime /usr/local /usr/local
 
 LABEL org.opencontainers.image.title="Headquaters All in One"
 LABEL org.opencontainers.image.description="Survey Solutions Headquarters with Export Service"
@@ -198,7 +272,7 @@ COPY --from=apks /apk /app/Client
 
 ENV HQ_Headquarters__BaseUrl=http://localhost
 ENV HQ_Headquarters__TenantName=survey
-ENV HQ_FileStorage__FFmpegExecutablePath=/usr/bin
+ENV HQ_FileStorage__FFmpegExecutablePath=/usr/local/bin
 ENV HQ_Geospatial__GdalHome=/usr/bin
 ENV HQ_Apks__ClientApkPath=/app/Client
 ENV HQ_Logging__LogsLocation=/app/AppData/logs
