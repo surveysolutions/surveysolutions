@@ -137,11 +137,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>TroubleshootingMessages.resx</DependentUpon>
     </Compile>
-    <Compile Update="Resources\WebInterviewResources - Copy.Designer.cs">
-      <DependentUpon>WebInterviewResources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
     <Compile Update="Resources\WebInterviewResources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>

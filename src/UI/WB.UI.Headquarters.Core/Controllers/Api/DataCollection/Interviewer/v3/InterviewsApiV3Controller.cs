@@ -18,6 +18,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.Synchronization.MetaInfo;
 using WB.UI.Headquarters.Code;
+using WB.UI.Shared.Web.Services;
 
 namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v3
 {
@@ -37,10 +38,11 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v3
             IHeadquartersEventStore eventStore,
             IAudioAuditFileStorage audioAuditFileStorage,
             IUserToDeviceService userToDeviceService,
-            IWebHostEnvironment webHostEnvironment) 
+            IWebHostEnvironment webHostEnvironment,
+            IImageProcessingService imageProcessingService) 
             : base(imageFileStorage, audioFileStorage, authorizedUser, interviewsFactory, packagesService, 
                 commandService, metaBuilder, synchronizationSerializer, eventStore, audioAuditFileStorage, 
-                userToDeviceService, webHostEnvironment)
+                userToDeviceService, webHostEnvironment, imageProcessingService)
         {
         }
 

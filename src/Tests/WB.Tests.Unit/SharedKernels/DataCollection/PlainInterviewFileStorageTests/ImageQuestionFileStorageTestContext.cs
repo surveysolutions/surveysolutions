@@ -21,6 +21,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainInterviewFileStorageTe
             var result = new Mock<IFileSystemAccessor>();
             result.Setup(x => x.CombinePath(Moq.It.IsAny<string>(), Moq.It.IsAny<string>()))
                 .Returns<string, string>(Path.Combine);
+            result.Setup(x => x.GetFileName(Moq.It.IsAny<string>()))
+                .Returns<string>(fileName => fileName);
             return result;
         }
     }

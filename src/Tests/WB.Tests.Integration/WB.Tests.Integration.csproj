@@ -22,6 +22,7 @@
         </None>
         <None Update="appsettings.*.ini">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+            <DependentUpon>appsettings.ini</DependentUpon>
         </None>
     </ItemGroup>
     <ItemGroup>

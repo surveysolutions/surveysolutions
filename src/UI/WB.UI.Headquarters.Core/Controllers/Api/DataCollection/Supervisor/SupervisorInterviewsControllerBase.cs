@@ -11,6 +11,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.Synchronization.MetaInfo;
+using WB.UI.Shared.Web.Services;
 
 namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor
 {
@@ -23,10 +24,10 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor
             ICommandService commandService, IMetaInfoBuilder metaBuilder, 
             IJsonAllTypesSerializer synchronizationSerializer, IHeadquartersEventStore eventStore, 
             IAudioAuditFileStorage audioAuditFileStorage, IUserToDeviceService userToDeviceService, 
-            IWebHostEnvironment webHostEnvironment) 
+            IWebHostEnvironment webHostEnvironment, IImageProcessingService imageProcessingService) 
             : base(imageFileStorage, audioFileStorage, authorizedUser, interviewsFactory, packagesService, commandService, 
                 metaBuilder, synchronizationSerializer, eventStore, audioAuditFileStorage,userToDeviceService, 
-                webHostEnvironment)
+                webHostEnvironment, imageProcessingService)
         {
         }
 

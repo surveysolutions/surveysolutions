@@ -9,14 +9,15 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
+using WB.UI.Headquarters.Filters;
 using WB.UI.Shared.Web.Modules;
 using WB.UI.Shared.Web.Services;
 
 namespace WB.UI.Headquarters.Controllers.Api.Resources
 {
     [Localizable(false)]
-    [AllowAnonymous]
     [Route("api/{controller}/{action}")]
+    [WebInterviewResourcesAuthorize(InterviewIdQueryString = "interviewId")]
     public class WebInterviewResourcesController : ControllerBase
     {
         private readonly IAuthorizedUser authorizedUser;
@@ -109,8 +110,7 @@ namespace WB.UI.Headquarters.Controllers.Api.Resources
         }
 
         [HttpGet]
-        public async Task<IActionResult> Image([FromQuery] string interviewId, [FromQuery] string questionId,
-            [FromQuery] string filename)
+        public async Task<IActionResult> Image([FromQuery] string interviewId, [FromQuery] string questionId)
         {
             var interview = this.statefulInterviewRepository.Get(interviewId);
            
@@ -119,14 +119,20 @@ namespace WB.UI.Headquarters.Controllers.Api.Resources
                 return NotFound();
             }
 
+            var multimediaQuestion = interview.GetMultimediaQuestion(Identity.Parse(questionId));
+
             if (!interview.AcceptsInterviewerAnswers() 
-                && interview.GetMultimediaQuestion(Identity.Parse(questionId)) != null
+                && multimediaQuestion != null
                 && !this.authorizedUser.CanConductInterviewReview())
             {
                 return NoContent();
             }
 
-            var file = await this.imageFileStorage.GetInterviewBinaryDataAsync(interview.Id, filename);
+            if (multimediaQuestion == null || !multimediaQuestion.IsAnswered())
+                return NoContent();
+
+            var fileName = multimediaQuestion.GetAnswer().FileName;
+            var file = await this.imageFileStorage.GetInterviewBinaryDataAsync(interview.Id, fileName);
 
             if (file == null || file.Length == 0)
                 return NoContent();
