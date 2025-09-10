@@ -106,7 +106,10 @@ namespace WB.Enumerator.Native.WebInterview.Services
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Error on compress audio");
+                if (ex is NonZeroExitCodeException nex)
+                    logger.LogError(nex, "Error on compress audio: {ErrorOutput}", nex.ErrorOutput);
+                else
+                    logger.LogError(ex, "Error on compress audio");
 
                 audioResult.MimeType = @"audio/wav";
                 audioResult.Binary = audio;
