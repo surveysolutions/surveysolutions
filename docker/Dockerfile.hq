@@ -256,6 +256,19 @@ RUN apk add --no-cache \
     && rm -rf /var/cache/apk/*
 
 COPY --from=fonts_source /raw_fonts /usr/share/fonts
+
+# ffmpeg dependencies
+RUN apk add --no-cache \
+  alsa-lib \
+  libass \
+  libvpx \
+  libwebp \
+  libmp3lame \
+  opus \
+  libtheora \
+  libvorbis \
+  x264 \
+  x265
 COPY --from=ffmpeg_runtime /usr/local /usr/local
 
 LABEL org.opencontainers.image.title="Headquaters All in One"
