@@ -145,31 +145,30 @@ RUN dotnet publish src/UI/WB.UI.Headquarters.Core \
     -c Release -o /hq -p:Version="${VERSION}" -p:InformationalVersion="${INFO_VERSION}"
 
 # Building ffmpeg from source
-FROM alpine:3.21 as ffmpeg_builder
+FROM alpine:3.21 AS ffmpeg_builder
 
 RUN apk add --no-cache \
-    build-base \
-    git \
-    yasm \
-    nasm \
-    x264-dev \
-    x265-dev \
-    libvpx-dev \
-    libvorbis-dev \
-    opus-dev \
-    lame-dev \
-    fdk-aac-dev \
-    libass-dev \
-    libjpeg-turbo-dev \
-    libpng-dev \
-    libwebp-dev \
+  build-base \
+  git \
+  yasm \
+  nasm \
+  x264-dev \
+  x265-dev \
+  libvpx-dev \
+  libvorbis-dev \
+  opus-dev \
+  lame-dev \
+  libass-dev \
+  libjpeg-turbo-dev \
+  libpng-dev \
+  libwebp-dev \
     zlib-dev \
     cmake \
     pkgconf \
-    alsa-lib-dev \
-    libtheora-dev \
+  alsa-lib-dev \
+  libtheora-dev \
     libtool \
-    autoconf \
+  autoconf \
     automake
 
 RUN git clone --depth 1 --branch n7.0 https://git.ffmpeg.org/ffmpeg.git /ffmpeg
@@ -193,22 +192,22 @@ RUN ./configure \
   make -j$(nproc) && \
   make install
 
-# Подготовка зависимостей для ffmpeg runtime
-FROM alpine:3.21 as ffmpeg_runtime
+# Preparing dependencies for ffmpeg runtime
+FROM alpine:3.21 AS ffmpeg_runtime
+
 RUN apk add --no-cache \
-    x264-libs \
-    x265-libs \
-    libvpx \
-    libvorbis \
-    opus \
-    lame \
-    fdk-aac \
-    libass \
-    libjpeg-turbo \
-    libpng \
-    libwebp \
+  x264-libs \
+  x265-libs \
+  libvpx \
+  libvorbis \
+  opus \
+  lame \
+  libass \
+  libjpeg-turbo \
+  libpng \
+  libwebp \
     zlib \
-    alsa-lib \
+  alsa-lib \
     libtheora
 
 COPY --from=ffmpeg_builder /ffmpeg-build /usr/local
@@ -238,21 +237,21 @@ ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
 RUN apk add --no-cache \
     \
     # .NET dependencies
-    krb5-libs \
-    libgcc \
-    libintl \
-    libssl3 \
-    libstdc++ \
-    zlib \
+  krb5-libs \
+  libgcc \
+  libintl \
+  libssl3 \
+  libstdc++ \
+  zlib \
     \
-    icu-libs \
-    icu-data-full \
+  icu-libs \
+  icu-data-full \
     \    
-    gdal \
-    gdal-tools \
-    curl \
-    fontconfig \
-    libgdiplus \
+  gdal \
+  gdal-tools \
+  curl \
+  fontconfig \
+  libgdiplus \
     binutils \
     && rm -rf /var/cache/apk/*
 
