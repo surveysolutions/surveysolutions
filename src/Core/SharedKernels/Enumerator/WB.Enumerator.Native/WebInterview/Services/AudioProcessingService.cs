@@ -13,6 +13,7 @@ using Microsoft.Extensions.Options;
 using WB.Core.SharedKernels.Configs;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Infrastructure.Native.Monitoring;
+using WB.Infrastructure.Native.Utils;
 
 namespace WB.Enumerator.Native.WebInterview.Services
 {
