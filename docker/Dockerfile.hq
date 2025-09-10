@@ -145,7 +145,7 @@ RUN dotnet publish src/UI/WB.UI.Headquarters.Core \
     -c Release -o /hq -p:Version="${VERSION}" -p:InformationalVersion="${INFO_VERSION}"
 
 # Building ffmpeg from source
-FROM alpine:3.21 AS ffmpeg_builder
+FROM mcr.microsoft.com/dotnet/aspnet:${DOTNET_VERSION}-alpine AS ffmpeg_builder
 
 RUN apk add --no-cache \
   build-base \
@@ -193,7 +193,7 @@ RUN ./configure \
   make install
 
 # Preparing dependencies for ffmpeg runtime
-FROM alpine:3.21 AS ffmpeg_runtime
+FROM mcr.microsoft.com/dotnet/aspnet:${DOTNET_VERSION}-alpine AS ffmpeg_runtime
 
 RUN apk add --no-cache \
   x264-libs \
