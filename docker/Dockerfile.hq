@@ -171,7 +171,7 @@ RUN apk add --no-cache \
   autoconf \
     automake
 
-RUN git clone --depth 1 --branch n7.0 https://git.ffmpeg.org/ffmpeg.git /ffmpeg
+RUN git clone --depth 1 --branch n7.0.3 https://git.ffmpeg.org/ffmpeg.git /ffmpeg
 WORKDIR /ffmpeg
 
 RUN ./configure \
