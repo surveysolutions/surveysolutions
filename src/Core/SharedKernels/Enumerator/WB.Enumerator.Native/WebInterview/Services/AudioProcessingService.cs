@@ -78,7 +78,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
 
                 if (!File.Exists(pathToFfmpeg))
                 {
-                    throw new InvalidOperationException("ffmpeg.exe was not found.");
+                    throw new InvalidOperationException("ffmpeg was not found.");
                 }
 
                 var ffmpegOutput = Infrastructure.Native.Utils.ConsoleCommand.Read(pathToFfmpeg

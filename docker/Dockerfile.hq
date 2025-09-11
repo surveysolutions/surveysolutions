@@ -180,7 +180,6 @@ RUN apk add --no-cache \
     \    
     gdal \
     gdal-tools \
-    ffmpeg \
     curl \
     fontconfig \
     libgdiplus \
