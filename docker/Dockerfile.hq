@@ -163,7 +163,8 @@ RUN apk add --no-cache \
   libtheora \
   zlib \
   curl \
-  tar
+  tar \
+  xz
 
 WORKDIR /tmp
 RUN curl -L -o ffmpeg.tar.xz https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-n8.0-latest-linux64-gpl-shared-8.0.tar.xz && \
