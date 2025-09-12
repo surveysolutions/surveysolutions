@@ -206,11 +206,11 @@ RUN apk add --no-cache \
   icu-libs \
   icu-data-full \
     \    
-  gdal \
-  gdal-tools \
-  curl \
-  fontconfig \
-  libgdiplus \
+    gdal \
+    gdal-tools \
+    curl \
+    fontconfig \
+    libgdiplus \
     binutils \
     && rm -rf /var/cache/apk/*
 
