@@ -217,6 +217,9 @@ RUN apk add --no-cache \
 COPY --from=fonts_source /raw_fonts /usr/share/fonts
 COPY --from=ffmpeg /usr/local /usr/local
 
+RUN ls -l /usr/local/bin/ffmpeg
+RUN chmod +x /usr/local/bin/ffmpeg
+
 LABEL org.opencontainers.image.title="Headquaters All in One"
 LABEL org.opencontainers.image.description="Survey Solutions Headquarters with Export Service"
 
