@@ -144,58 +144,11 @@ COPY --from=frontend /src/UI/WB.UI.Frontend/dist/package/hq src/UI/WB.UI.Headqua
 RUN dotnet publish src/UI/WB.UI.Headquarters.Core \
     -c Release -o /hq -p:Version="${VERSION}" -p:InformationalVersion="${INFO_VERSION}"
 
-# Building ffmpeg from source
-FROM mcr.microsoft.com/dotnet/aspnet:${DOTNET_VERSION}-alpine AS ffmpeg_builder
+# Building ffmpeg from github
+FROM mcr.microsoft.com/dotnet/aspnet:${DOTNET_VERSION}-alpine AS ffmpeg
 
 RUN apk add --no-cache \
-  build-base \
-  git \
-  yasm \
-  nasm \
-  x264-dev \
-  x265-dev \
-  libvpx-dev \
-  libvorbis-dev \
-  opus-dev \
-  lame-dev \
-  libass-dev \
-  libjpeg-turbo-dev \
-  libpng-dev \
-  libwebp-dev \
-    zlib-dev \
-    cmake \
-    pkgconf \
-  alsa-lib-dev \
-  libtheora-dev \
-    libtool \
-  autoconf \
-    automake
-
-RUN git clone --depth 1 --branch n7.0.3 https://git.ffmpeg.org/ffmpeg.git /ffmpeg
-WORKDIR /ffmpeg
-
-RUN ./configure \
-  --prefix=/ffmpeg-build \
-  --enable-gpl \
-  --enable-nonfree \
-  --enable-libx264 \
-  --enable-libx265 \
-  --enable-libvpx \
-  --enable-libvorbis \
-  --enable-libopus \
-  --enable-libmp3lame \
-  --enable-libass \
-  --enable-libtheora \
-  --enable-libwebp \
-  --enable-shared \
-  --disable-static && \
-  make -j$(nproc) && \
-  make install
-
-# Preparing dependencies for ffmpeg runtime
-FROM mcr.microsoft.com/dotnet/aspnet:${DOTNET_VERSION}-alpine AS ffmpeg_runtime
-
-RUN apk add --no-cache \
+  libstdc++ \
   x264-libs \
   x265-libs \
   libvpx \
@@ -206,12 +159,17 @@ RUN apk add --no-cache \
   libjpeg-turbo \
   libpng \
   libwebp \
-    zlib \
   alsa-lib \
-    libtheora
+  libtheora \
+  zlib \
+  curl \
+  tar
 
-COPY --from=ffmpeg_builder /ffmpeg-build /usr/local
-RUN echo "/usr/local/lib" >> /etc/ld-musl-x86_64.path
+WORKDIR /tmp
+RUN curl -L -o ffmpeg.tar.xz https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-n8.0-latest-linux64-gpl-shared-8.0.tar.xz && \
+    tar -xf ffmpeg.tar.xz && \
+    cp -r ffmpeg-n8.0-*/* /usr/local/ && \
+    rm -rf /tmp/*
 
 # Copy APK files if any
 FROM --platform=${PLATFORM} mcr.microsoft.com/dotnet/aspnet:${DOTNET_VERSION}-alpine AS apks
@@ -256,20 +214,7 @@ RUN apk add --no-cache \
     && rm -rf /var/cache/apk/*
 
 COPY --from=fonts_source /raw_fonts /usr/share/fonts
-
-# ffmpeg dependencies
-RUN apk add --no-cache \
-  alsa-lib \
-  libass \
-  libvpx \
-  libwebp \
-  lame \
-  opus \
-  libtheora \
-  libvorbis \
-  x264 \
-  x265
-COPY --from=ffmpeg_runtime /usr/local /usr/local
+COPY --from=ffmpeg /usr/local /usr/local
 
 LABEL org.opencontainers.image.title="Headquaters All in One"
 LABEL org.opencontainers.image.description="Survey Solutions Headquarters with Export Service"
