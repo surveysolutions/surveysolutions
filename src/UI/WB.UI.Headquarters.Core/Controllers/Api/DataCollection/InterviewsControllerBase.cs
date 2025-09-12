@@ -41,7 +41,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
         private readonly IAudioAuditFileStorage audioAuditFileStorage;
         private readonly IWebHostEnvironment webHostEnvironment;
         private readonly IImageProcessingService imageProcessingService;
-        private readonly IAuthorizedUser authorizedUser;
+        protected readonly IAuthorizedUser authorizedUser;
         protected readonly IInterviewPackagesService packagesService;
         protected readonly ICommandService commandService;
         protected readonly IMetaInfoBuilder metaBuilder;
@@ -135,7 +135,9 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
         }
 
         protected abstract string ProductName { get; }
-        
+
+        protected abstract bool AllowWorkWithInterview(Guid interviewId);
+
         public virtual IActionResult PostImage([FromBody] PostFileRequest request)
         {
             if (request?.Data == null)
@@ -143,13 +145,22 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             
             var bytes = Convert.FromBase64String(request.Data);
             this.imageProcessingService.Validate(bytes);
+            
+            if (!AllowWorkWithInterview(request.InterviewId))
+                return BadRequest("Access denied");
 
             this.imageFileStorage.StoreInterviewBinaryData(request.InterviewId, request.FileName, bytes, null);
             return StatusCode(StatusCodes.Status204NoContent);
         }
-
+        
         public virtual IActionResult PostAudio([FromBody] PostFileRequest request)
         {
+            if (request?.Data == null)
+                return BadRequest("Request is null");
+            
+            if (!AllowWorkWithInterview(request.InterviewId))
+                return BadRequest("Access denied");
+
             this.audioFileStorage.StoreInterviewBinaryData(request.InterviewId, request.FileName,
                 Convert.FromBase64String(request.Data), request.ContentType);
             return StatusCode(StatusCodes.Status204NoContent);
@@ -157,6 +168,12 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
 
         public virtual IActionResult PostAudioAudit([FromBody] PostFileRequest request)
         {
+            if (request?.Data == null)
+                return BadRequest("Request is null");
+            
+            if (!AllowWorkWithInterview(request.InterviewId))
+                return BadRequest("Access denied");
+
             this.audioAuditFileStorage.StoreInterviewBinaryData(request.InterviewId, request.FileName,
                 Convert.FromBase64String(request.Data), request.ContentType);
 
