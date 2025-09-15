@@ -146,10 +146,11 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             var bytes = Convert.FromBase64String(request.Data);
             this.imageProcessingService.Validate(bytes);
             
-            if (!AllowWorkWithInterview(request.InterviewId))
-                return BadRequest("Access denied");
-
-            this.imageFileStorage.StoreInterviewBinaryData(request.InterviewId, request.FileName, bytes, null);
+            if (AllowWorkWithInterview(request.InterviewId))
+                this.imageFileStorage.StoreInterviewBinaryData(request.InterviewId, request.FileName, bytes, null);
+            else
+                this.imageFileStorage.StoreBrokenInterviewBinaryData(User.UserId()!.Value, request.InterviewId, request.FileName, bytes, null);
+            
             return StatusCode(StatusCodes.Status204NoContent);
         }
         
@@ -158,11 +159,11 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             if (request?.Data == null)
                 return BadRequest("Request is null");
             
-            if (!AllowWorkWithInterview(request.InterviewId))
-                return BadRequest("Access denied");
-
-            this.audioFileStorage.StoreInterviewBinaryData(request.InterviewId, request.FileName,
-                Convert.FromBase64String(request.Data), request.ContentType);
+            if (AllowWorkWithInterview(request.InterviewId))
+                this.audioFileStorage.StoreInterviewBinaryData(request.InterviewId, request.FileName, Convert.FromBase64String(request.Data), request.ContentType);
+            else
+                this.audioFileStorage.StoreBrokenInterviewBinaryData(User.UserId()!.Value, request.InterviewId, request.FileName, Convert.FromBase64String(request.Data), request.ContentType);
+            
             return StatusCode(StatusCodes.Status204NoContent);
         }
 
@@ -171,11 +172,10 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             if (request?.Data == null)
                 return BadRequest("Request is null");
             
-            if (!AllowWorkWithInterview(request.InterviewId))
-                return BadRequest("Access denied");
-
-            this.audioAuditFileStorage.StoreInterviewBinaryData(request.InterviewId, request.FileName,
-                Convert.FromBase64String(request.Data), request.ContentType);
+            if (AllowWorkWithInterview(request.InterviewId))
+                this.audioAuditFileStorage.StoreInterviewBinaryData(request.InterviewId, request.FileName, Convert.FromBase64String(request.Data), request.ContentType);
+            else
+                this.audioAuditFileStorage.StoreBrokenInterviewBinaryData(User.UserId()!.Value, request.InterviewId, request.FileName, Convert.FromBase64String(request.Data), request.ContentType);
 
             return StatusCode(StatusCodes.Status204NoContent);
         }

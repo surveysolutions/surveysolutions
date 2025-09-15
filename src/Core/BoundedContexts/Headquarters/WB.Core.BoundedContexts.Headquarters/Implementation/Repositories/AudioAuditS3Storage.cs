@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -13,6 +14,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
     public class AudioAuditFileS3Storage : AudioAuditStorageBase
     {
         private const string AudioAuditS3Folder = "audio_audit/";
+        private const string BrokenAudioAuditS3Folder = $"{AudioAuditS3Folder}broken/";
         private readonly IExternalFileStorage externalFileStorage;
         private readonly IPlainStorageAccessor<AudioAuditFile> filePlainStorageAccessor;
 
@@ -67,6 +69,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
             };
             filePlainStorageAccessor.Store(file, file.Id);
             externalFileStorage.Store(AudioAuditS3Folder + id, data, contentType);
+        }
+
+        public override void StoreBrokenInterviewBinaryData(Guid userId, Guid interviewId, string fileName, byte[] data, string contentType)
+        {
+            var id = AudioAuditFile.GetFileId(interviewId, fileName);
+            var brokenId = $"{userId.FormatGuid()}#{DateTime.UtcNow}#{id}";
+            externalFileStorage.Store(BrokenAudioAuditS3Folder + brokenId, data, contentType);
         }
 
         public override async Task RemoveInterviewBinaryData(Guid interviewId, string fileName)

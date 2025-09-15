@@ -88,6 +88,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
             }
         }
 
+        public void StoreBrokenInterviewBinaryData(Guid userId, Guid interviewId, string fileName, byte[] data, string contentType)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task RemoveInterviewBinaryData(Guid interviewId, string fileName)
         {
             var metadataView = GetMetadata(interviewId, fileName);

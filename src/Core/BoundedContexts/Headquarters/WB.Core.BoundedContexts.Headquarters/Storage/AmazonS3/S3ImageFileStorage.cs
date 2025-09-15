@@ -68,6 +68,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
             externalFileStorage.Store(GetPath(interviewId, fileName), data, contentType);
         }
 
+        public void StoreBrokenInterviewBinaryData(Guid userId, Guid interviewId, string filename, byte[] data, string contentType)
+        {
+            if (!string.IsNullOrWhiteSpace(filename))
+            {
+                if (fileSystemAccessor.IsInvalidFileName(filename))
+                    throw new ArgumentException("Invalid file name", nameof(filename));
+            }
+
+            var nowUtc = DateTime.UtcNow;
+            var brokenPath = $"images/broken/{interviewId.FormatGuid()}/{userId.FormatGuid()}_{nowUtc}_{filename ?? String.Empty}";
+            
+            externalFileStorage.Store(brokenPath, data, contentType);
+        }
+
         public async Task RemoveInterviewBinaryData(Guid interviewId, string fileName)
         {
             await externalFileStorage.RemoveAsync(GetPath(interviewId, fileName)).ConfigureAwait(false);

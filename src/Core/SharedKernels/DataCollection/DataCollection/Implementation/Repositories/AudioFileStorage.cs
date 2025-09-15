@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
@@ -44,17 +45,35 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
 
         public void StoreInterviewBinaryData(Guid interviewId, string fileName, byte[] data, string contentType)
         {
+            var fileId = AudioFile.GetFileId(interviewId, fileName);
             var file = new AudioFile()
             {
-                Id = AudioFile.GetFileId(interviewId, fileName),
+                Id = fileId,
                 InterviewId = interviewId,
                 FileName = fileName,
                 Data = data,
                 ContentType = contentType
             };
-            var fileId = AudioFile.GetFileId(interviewId, fileName);
 
             filePlainStorageAccessor.Store(file, fileId);
+        }
+
+        public void StoreBrokenInterviewBinaryData(Guid userId, Guid interviewId, string fileName, byte[] data, string contentType)
+        {
+            var fileId = AudioFile.GetFileId(interviewId, fileName);
+            var brokenId = $"broken#{userId.FormatGuid()}#{DateTime.UtcNow}#{fileId}";
+            
+            var file = new AudioFile()
+            {
+                Id = brokenId,
+                InterviewId = interviewId,
+                FileName = fileName,
+                Data = data,
+                ContentType = contentType
+            };
+
+            filePlainStorageAccessor.Store(file, brokenId);
+
         }
 
         public Task RemoveInterviewBinaryData(Guid interviewId, string fileName)
