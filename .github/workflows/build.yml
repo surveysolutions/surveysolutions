@@ -273,6 +273,12 @@ jobs:
       - name: Build Headquarters
         run: ./.build.ps1 PackageHqOffline -BuildNumber ${{ needs.prepare.outputs.build_number }}
 
+      - name: Upload npm_deps.txt artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: npm-dependencies
+          path: npm_deps.txt
+          
       - name: Extract HQ Package
         run: |
           New-Item "HQsources" -ItemType Directory
