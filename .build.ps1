@@ -250,7 +250,7 @@ task frontend {
         npm ci
         npm list --all --json \
           | jq -r 'recurse(.dependencies[]?) | "\(.name)@\(.version)"' \
-          | sort -u > npm_deps.txt
+          | sort -u 
         npm run build
     }
 	"Finishing frontend task" | Out-Host
