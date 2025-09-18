@@ -15,8 +15,8 @@ COPY src/UI/WB.UI.Frontend/package*.json /src/UI/WB.UI.Frontend
 
 RUN npm ci && \
     npm list --all --json \
-    | jq -r 'recurse(.dependencies[]?) | "\(.name)@\(.version)"' \
-    | sort -u 
+       | jq -r 'paths(scalars) as $p | select($p[-1] == "version") | "\($p[-2])@\(getpath($p))"' \
+       | sort -u
 
 COPY [ "src/UI/WB.UI.Frontend", "/src/UI/WB.UI.Frontend/"]
 COPY [ "src/UI/WB.UI.Headquarters.Core/Resources", \

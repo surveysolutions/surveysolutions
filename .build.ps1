@@ -249,8 +249,8 @@ task frontend {
         Set-Location $BuildRoot/src/UI/WB.UI.Frontend
         npm ci
         npm list --all --json \
-          | jq -r 'recurse(.dependencies[]?) | "\(.name)@\(.version)"' \
-          | sort -u 
+            | jq -r 'paths(scalars) as $p | select($p[-1] == "version") | "\($p[-2])@\(getpath($p))"' \
+            | sort -u
         npm run build
     }
 	"Finishing frontend task" | Out-Host
