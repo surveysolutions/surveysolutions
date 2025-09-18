@@ -47,7 +47,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer
             if (interview == null)
                 return true; // new interview
 
-            if (interview.ResponsibleId == authorizedUser.Id)
+            if (interview.ResponsibleId == authorizedUser.Id && interview.Mode != InterviewMode.CAWI) 
                 return true;
 
             return false;
