@@ -221,6 +221,8 @@ jobs:
             -dockerRegistry ${{ env.REGISTRY }}/${{ github.repository }} `
             -apkFolder "artifacts" `
             -nodeVersion "${{ env.NODE_VERSION }}"
+        env:
+          DOCKER_BUILDKIT: 0
 
   installer:
     needs: [prepare, mobile, union-apps]
