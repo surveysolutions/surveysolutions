@@ -247,12 +247,25 @@ task frontend {
 	
     exec { 
         Set-Location $BuildRoot/src/UI/WB.UI.Frontend
-        npm ci
-        npm list --all --json \
-            | jq -r 'paths(scalars) as $p | select($p[-1] == "version") | "\($p[-2])@\(getpath($p))"' \
-            | sort -u
+        npm ci     
         npm run build
     }
+
+    $deps = npm list --all --json | ConvertFrom-Json
+
+    function Walk-Deps($node) {
+        if ($node.PSObject.Properties.Name -contains "dependencies") {
+            foreach ($d in $node.dependencies.PSObject.Properties) {
+                "$($d.Name)@$($d.Value.version)"
+                Walk-Deps $d.Value
+            }
+        }
+    }
+
+    $list = Walk-Deps $deps | Sort-Object -Unique
+    # $list | Out-File -FilePath deps.txt -Encoding utf8
+    $list | ForEach-Object { Write-Host $_ }
+
 	"Finishing frontend task" | Out-Host
 }
 
