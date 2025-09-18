@@ -13,7 +13,10 @@ FROM --platform=${PLATFORM} node:$NODE AS frontend
 WORKDIR /src/UI/WB.UI.Frontend
 COPY src/UI/WB.UI.Frontend/package*.json /src/UI/WB.UI.Frontend
 
-RUN npm ci
+RUN npm ci && \
+    npm list --all --json \
+    | jq -r 'recurse(.dependencies[]?) | "\(.name)@\(.version)"' \
+    | sort -u 
 
 COPY [ "src/UI/WB.UI.Frontend", "/src/UI/WB.UI.Frontend/"]
 COPY [ "src/UI/WB.UI.Headquarters.Core/Resources", \
