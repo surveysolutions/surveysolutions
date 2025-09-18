@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using WB.Services.Export.Infrastructure;
@@ -11,9 +12,11 @@ using WB.Services.Export.Infrastructure;
 namespace WB.Services.Export.Migrations
 {
     [DbContext(typeof(TenantDbContext))]
-    partial class TenantDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250609172850_AddedDefaultValue")]
+    partial class AddedDefaultValue
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -139,6 +142,7 @@ namespace WB.Services.Export.Migrations
             modelBuilder.Entity("WB.Services.Export.InterviewDataStorage.InterviewReference", b =>
                 {
                     b.Property<Guid>("InterviewId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid")
                         .HasColumnName("interview_id");
 
@@ -184,7 +188,6 @@ namespace WB.Services.Export.Migrations
                         .HasColumnName("id");
 
                     b.Property<string>("Value")
-                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("value");
 

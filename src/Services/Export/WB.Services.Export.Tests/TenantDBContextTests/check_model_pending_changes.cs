@@ -14,6 +14,7 @@ using Npgsql;
 using NUnit.Framework;
 using Polly;
 using WB.Services.Export.Infrastructure;
+using WB.Services.Infrastructure;
 using WB.Services.Infrastructure.Tenant;
 
 namespace WB.Services.Scheduler.Tests.TenantDbContextTests;
@@ -36,7 +37,7 @@ public class check_model_pending_changes
         
         var connectionStringBuilder = new NpgsqlConnectionStringBuilder();
         connectionStringBuilder.ConnectionString = connectionString;
-        connectionStringBuilder.Database = "exports_service_tests_" + Guid.NewGuid();
+        connectionStringBuilder.Database = "exports_service_tests_" + Guid.NewGuid().FormatGuid();
         connectionString = connectionStringBuilder.ToString();
         
         var services = new ServiceCollection()
@@ -80,7 +81,7 @@ public class check_model_pending_changes
     }
 
     [Test]
-    [Ignore("This test is ignored because it is has to befixed first.")]
+    //[Ignore("This test is ignored because it is has to befixed first.")]
     public void should_create_db_without_any_exceptions()
     {
         Assert.DoesNotThrowAsync(async () => await Init());

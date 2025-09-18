@@ -18,12 +18,23 @@ namespace WB.Services.Export.InterviewDataStorage.EfMappings
             builder.ToTable("interview__references", schema);
             builder.HasKey(x => x.InterviewId);
             
+            builder.Property(e => e.QuestionnaireId)
+                .IsRequired(true)
+                .HasDefaultValue(string.Empty);
+            builder.Property(e => e.InterviewId)
+                .ValueGeneratedNever()
+                .IsRequired(true);
+            builder.Property(e => e.Status).IsRequired(true);
+            builder.Property(e => e.Key)
+                .IsRequired(true)
+                .HasDefaultValue(string.Empty);
             builder.Property(e => e.UpdateDateUtc)
+                .IsRequired(false)
                 .HasColumnType("timestamp without time zone");
             builder.Property(e => e.DeletedAtUtc)
+                .IsRequired(false)
                 .HasColumnType("timestamp without time zone");
-            builder.Property(e => e.QuestionnaireId).IsRequired(false);
-            builder.Property(e => e.Key).IsRequired(false);
+            builder.Property(e => e.AssignmentId).IsRequired(false);
         }
     }
 
@@ -41,8 +52,12 @@ namespace WB.Services.Export.InterviewDataStorage.EfMappings
             builder.ToTable("__generated_questionnaire_reference", schema);
             builder.HasKey(x => x.Id);
 
+            builder.Property(e => e.Id)
+                .IsRequired(true)
+                .ValueGeneratedNever();
             builder.Property(e => e.DeletedAt)
-                .HasColumnType("timestamp without time zone");
+                .HasColumnType("timestamp without time zone")
+                .IsRequired(false);
         }
     }
 
@@ -59,7 +74,10 @@ namespace WB.Services.Export.InterviewDataStorage.EfMappings
         {
             builder.ToTable("metadata", schema);
             
-            builder.Property(x => x.Value).IsRequired(false);
+            builder.HasKey(x => x.Id);
+            
+            builder.Property(x => x.Id).IsRequired(true).ValueGeneratedNever();
+            builder.Property(x => x.Value).IsRequired(true);
         }
     }
 
@@ -80,10 +98,12 @@ namespace WB.Services.Export.InterviewDataStorage.EfMappings
 
             builder.Property(a => a.Id).ValueGeneratedNever();
             builder.Property(a => a.PublicKey).ValueGeneratedNever();
-            builder.Property(a => a.WebMode).IsRequired(false);
-            builder.Property(a => a.AudioRecording).IsRequired(true);
+            builder.Property(a => a.ResponsibleId).IsRequired(true);
             builder.Property(a => a.Quantity).IsRequired(false);
+            builder.Property(a => a.AudioRecording).IsRequired(true);
+            builder.Property(a => a.WebMode).IsRequired(false);
             builder.Property(a => a.Comment).IsRequired(false);
+            builder.Property(a => a.QuestionnaireId).IsRequired(false);
             builder.Property(a => a.UpgradedFromId).IsRequired(false);
             builder.Property(a => a.TargetArea).IsRequired(false);
         }
@@ -104,12 +124,17 @@ namespace WB.Services.Export.InterviewDataStorage.EfMappings
             builder.HasKey(aa => new { aa.GlobalSequence, aa.Position });
             builder.HasIndex(aa => aa.AssignmentId);
 
+            builder.Property(a => a.GlobalSequence).IsRequired(true).ValueGeneratedNever();
+            builder.Property(a => a.Position).IsRequired(true).ValueGeneratedNever();
+            builder.Property(a => a.AssignmentId).IsRequired(true).ValueGeneratedNever();
+            builder.Property(a => a.Status).IsRequired(true);
+            builder.Property(a => a.TimestampUtc).IsRequired(true)
+                .HasColumnType("timestamp without time zone");;
+            builder.Property(a => a.OriginatorId).IsRequired(true);
+            builder.Property(a => a.ResponsibleId).IsRequired(true);
             builder.Property(a => a.OldValue).IsRequired(false);
             builder.Property(a => a.NewValue).IsRequired(false);
             builder.Property(a => a.Comment).IsRequired(false);
-            builder.Property(e => e.TimestampUtc)
-                .HasColumnType("timestamp without time zone");
-
         }
     }
 }

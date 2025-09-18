@@ -19,7 +19,7 @@ namespace WB.Services.Export.Infrastructure.Implementation
             return new CsvWriterService(stream, delimiter);
         }
 
-        public void WriteData(string filePath, IEnumerable<string[]> records, string delimiter)
+        public void WriteData(string filePath, IEnumerable<string?[]> records, string delimiter)
         {
             if (filePath == null) throw new ArgumentNullException(nameof(filePath));
             if (records == null) throw new ArgumentNullException(nameof(records));
@@ -32,7 +32,7 @@ namespace WB.Services.Export.Infrastructure.Implementation
                 {
                     foreach (var cell in dataRow)
                     {
-                        tabWriter.WriteField(cell.RemoveNewLine());
+                        tabWriter.WriteField(cell?.RemoveNewLine());
                     }
 
                     tabWriter.NextRecord();
