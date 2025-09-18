@@ -18,12 +18,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
             : base(imageViewStorage, fileViewStorage, encryptionService)
         {
         }
-
-        public string GetPath(Guid interviewId, string filename = null)
-        {
-            return null;
-        }
-
+        
         public Task<bool> HasAnyAudioAuditFilesStoredAsync(QuestionnaireIdentity questionnaire)
         {
             throw new NotImplementedException();

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
@@ -26,7 +25,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
 
         public override byte[] GetInterviewBinaryData(Guid interviewId, string fileName)
         {
-            var fileId = AudioAuditFile.GetFileId(interviewId, fileName);
+            var fileId = GetFileId(interviewId, fileName);
             var databaseFile = filePlainStorageAccessor.GetById(fileId);
 
             return databaseFile?.Data;
@@ -49,7 +48,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
 
         public override void StoreInterviewBinaryData(Guid interviewId, string fileName, byte[] data, string contentType)
         {
-            var fileId = AudioAuditFile.GetFileId(interviewId, fileName);
+            var fileId = GetFileId(interviewId, fileName);
             var file = new AudioAuditFile()
             {
                 Id = fileId,
@@ -62,26 +61,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
             filePlainStorageAccessor.Store(file, fileId);
         }
 
-        public override void StoreBrokenInterviewBinaryData(Guid userId, Guid interviewId, string fileName, byte[] data, string contentType)
-        {
-            var id = AudioAuditFile.GetFileId(interviewId, fileName);
-            var brokenId = $"broken#{userId.FormatGuid()}#{DateTime.UtcNow}#{id}";
-
-            var file = new AudioAuditFile()
-            {
-                Id = brokenId,
-                InterviewId = interviewId,
-                FileName = fileName,
-                Data = data,
-                ContentType = contentType
-            };
-            
-            filePlainStorageAccessor.Store(file, brokenId);
-        }
-
         public override Task RemoveInterviewBinaryData(Guid interviewId, string fileName)
         {
-            var fileId = AudioAuditFile.GetFileId(interviewId, fileName);
+            var fileId = GetFileId(interviewId, fileName);
             filePlainStorageAccessor.Remove(fileId);
             return Task.CompletedTask;
         }

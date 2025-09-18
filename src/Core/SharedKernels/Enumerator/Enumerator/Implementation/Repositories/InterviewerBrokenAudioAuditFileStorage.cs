@@ -1,0 +1,36 @@
+using System;
+using SQLite;
+using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.Views;
+
+namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
+
+public class InterviewerBrokenAudioAuditFileStorage : InterviewerBrokenFileStorage<BrokenAudioAuditView, BrokenAudioAuditFileView>, IBrokenAudioAuditFileStorage
+{
+    public InterviewerBrokenAudioAuditFileStorage(
+        IPlainStorage<BrokenAudioAuditView> fileMetadataViewStorage,
+        IPlainStorage<BrokenAudioAuditFileView> fileViewStorage,
+        IEncryptionService encryptionService)
+        :base(fileMetadataViewStorage, fileViewStorage, encryptionService)
+    {
+    }
+}
+
+public class BrokenAudioAuditView : IFileMetadataView, IPlainStorageEntity
+{
+    [PrimaryKey]
+    public string Id { get; set; }
+    public Guid InterviewId { get; set; }
+    public string FileId { get; set; }
+    public string FileName { get; set; }
+    public string ContentType { get; set; }
+}
+
+public class BrokenAudioAuditFileView : IFileView, IPlainStorageEntity
+{
+    [PrimaryKey]
+    public string Id { get; set; }
+    public byte[] File { get; set; }
+}

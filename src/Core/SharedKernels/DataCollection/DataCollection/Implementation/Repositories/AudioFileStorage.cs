@@ -17,13 +17,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
         {
             this.filePlainStorageAccessor = filePlainStorageAccessor;
         }
-
+        
+        protected virtual string GetFileId(Guid interviewId, string fileName) => $"{interviewId}#{fileName}";
+        
         public Task<byte[]> GetInterviewBinaryDataAsync(Guid interviewId, string fileName) 
             => Task.FromResult(this.GetInterviewBinaryData(interviewId, fileName));
 
         public byte[] GetInterviewBinaryData(Guid interviewId, string fileName)
         {
-            var fileId = AudioFile.GetFileId(interviewId, fileName);
+            var fileId = GetFileId(interviewId, fileName);
             var databaseFile = filePlainStorageAccessor.GetById(fileId);
 
             return databaseFile?.Data;
@@ -45,7 +47,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
 
         public void StoreInterviewBinaryData(Guid interviewId, string fileName, byte[] data, string contentType)
         {
-            var fileId = AudioFile.GetFileId(interviewId, fileName);
+            var fileId = GetFileId(interviewId, fileName);
             var file = new AudioFile()
             {
                 Id = fileId,
@@ -58,27 +60,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             filePlainStorageAccessor.Store(file, fileId);
         }
 
-        public void StoreBrokenInterviewBinaryData(Guid userId, Guid interviewId, string fileName, byte[] data, string contentType)
-        {
-            var fileId = AudioFile.GetFileId(interviewId, fileName);
-            var brokenId = $"broken#{userId.FormatGuid()}#{DateTime.UtcNow}#{fileId}";
-            
-            var file = new AudioFile()
-            {
-                Id = brokenId,
-                InterviewId = interviewId,
-                FileName = fileName,
-                Data = data,
-                ContentType = contentType
-            };
-
-            filePlainStorageAccessor.Store(file, brokenId);
-
-        }
-
         public Task RemoveInterviewBinaryData(Guid interviewId, string fileName)
         {
-            var fileId = AudioFile.GetFileId(interviewId, fileName);
+            var fileId = GetFileId(interviewId, fileName);
             filePlainStorageAccessor.Remove(fileId);
             return Task.CompletedTask;
         }

@@ -30,7 +30,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
             return GetInterviewBinaryDataAsync(interviewId, fileName).Result;
         }
 
-        public string GetPath(Guid interviewId, string filename = null)
+        public virtual string GetPath(Guid interviewId, string filename = null)
         {
             if (!string.IsNullOrWhiteSpace(filename))
             {
@@ -41,7 +41,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
             return $"{GetInterviewDirectoryPath(interviewId)}/{filename ?? String.Empty}";
         }
 
-        private string GetInterviewDirectoryPath(Guid interviewId) => $"images/{interviewId.FormatGuid()}";
+        protected virtual string GetInterviewDirectoryPath(Guid interviewId) => $"images/{interviewId.FormatGuid()}";
         public async Task RemoveAllBinaryDataForInterviewsAsync(List<Guid> interviewIds)
         {
             if (!interviewIds.Any()) return;
@@ -66,20 +66,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
         public void StoreInterviewBinaryData(Guid interviewId, string fileName, byte[] data, string contentType)
         {
             externalFileStorage.Store(GetPath(interviewId, fileName), data, contentType);
-        }
-
-        public void StoreBrokenInterviewBinaryData(Guid userId, Guid interviewId, string filename, byte[] data, string contentType)
-        {
-            if (!string.IsNullOrWhiteSpace(filename))
-            {
-                if (fileSystemAccessor.IsInvalidFileName(filename))
-                    throw new ArgumentException("Invalid file name", nameof(filename));
-            }
-
-            var nowUtc = DateTime.UtcNow;
-            var brokenPath = $"images/broken/{interviewId.FormatGuid()}/{userId.FormatGuid()}_{nowUtc}_{filename ?? String.Empty}";
-            
-            externalFileStorage.Store(brokenPath, data, contentType);
         }
 
         public async Task RemoveInterviewBinaryData(Guid interviewId, string fileName)

@@ -41,6 +41,9 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
         private readonly IAudioAuditFileStorage audioAuditFileStorage;
         private readonly IWebHostEnvironment webHostEnvironment;
         private readonly IImageProcessingService imageProcessingService;
+        private readonly IBrokenImageFileStorage brokenImageFileStorage;
+        private readonly IBrokenAudioFileStorage brokenAudioFileStorage;
+        private readonly IBrokenAudioAuditFileStorage brokenAudioAuditFileStorage;
         protected readonly IAuthorizedUser authorizedUser;
         protected readonly IInterviewPackagesService packagesService;
         protected readonly ICommandService commandService;
@@ -62,7 +65,10 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             IAudioAuditFileStorage audioAuditFileStorage,
             IUserToDeviceService userToDeviceService,
             IWebHostEnvironment webHostEnvironment,
-            IImageProcessingService imageProcessingService)
+            IImageProcessingService imageProcessingService,
+            IBrokenImageFileStorage brokenImageFileStorage,
+            IBrokenAudioFileStorage brokenAudioFileStorage,
+            IBrokenAudioAuditFileStorage brokenAudioAuditFileStorage)
         {
             this.imageFileStorage = imageFileStorage;
             this.audioFileStorage = audioFileStorage;
@@ -76,6 +82,9 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             this.audioAuditFileStorage = audioAuditFileStorage;
             this.webHostEnvironment = webHostEnvironment;
             this.imageProcessingService = imageProcessingService;
+            this.brokenImageFileStorage = brokenImageFileStorage;
+            this.brokenAudioFileStorage = brokenAudioFileStorage;
+            this.brokenAudioAuditFileStorage = brokenAudioAuditFileStorage;
             this.userToDeviceService = userToDeviceService;
         }
 
@@ -149,7 +158,11 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             if (AllowWorkWithInterview(request.InterviewId))
                 this.imageFileStorage.StoreInterviewBinaryData(request.InterviewId, request.FileName, bytes, null);
             else
-                this.imageFileStorage.StoreBrokenInterviewBinaryData(User.UserId()!.Value, request.InterviewId, request.FileName, bytes, null);
+            {
+                var utcNow = DateTime.UtcNow.ToString("o");
+                var newFileName = $"broken#{User.UserId()!.Value.FormatGuid()}#{utcNow}#{request.FileName}";
+                this.brokenImageFileStorage.StoreInterviewBinaryData(request.InterviewId, newFileName, bytes, null);
+            }
             
             return StatusCode(StatusCodes.Status204NoContent);
         }
@@ -162,7 +175,11 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             if (AllowWorkWithInterview(request.InterviewId))
                 this.audioFileStorage.StoreInterviewBinaryData(request.InterviewId, request.FileName, Convert.FromBase64String(request.Data), request.ContentType);
             else
-                this.audioFileStorage.StoreBrokenInterviewBinaryData(User.UserId()!.Value, request.InterviewId, request.FileName, Convert.FromBase64String(request.Data), request.ContentType);
+            {
+                var utcNow = DateTime.UtcNow.ToString("o");
+                var newFileName = $"broken#{User.UserId()!.Value.FormatGuid()}#{utcNow}#{request.FileName}";
+                this.brokenAudioFileStorage.StoreInterviewBinaryData(request.InterviewId, newFileName, Convert.FromBase64String(request.Data), request.ContentType);
+            }
             
             return StatusCode(StatusCodes.Status204NoContent);
         }
@@ -175,7 +192,11 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             if (AllowWorkWithInterview(request.InterviewId))
                 this.audioAuditFileStorage.StoreInterviewBinaryData(request.InterviewId, request.FileName, Convert.FromBase64String(request.Data), request.ContentType);
             else
-                this.audioAuditFileStorage.StoreBrokenInterviewBinaryData(User.UserId()!.Value, request.InterviewId, request.FileName, Convert.FromBase64String(request.Data), request.ContentType);
+            {
+                var utcNow = DateTime.UtcNow.ToString("o");
+                var newFileName = $"broken#{User.UserId()!.Value.FormatGuid()}#{utcNow}#{request.FileName}";
+                this.brokenAudioAuditFileStorage.StoreInterviewBinaryData(request.InterviewId, newFileName, Convert.FromBase64String(request.Data), request.ContentType);
+            }
 
             return StatusCode(StatusCodes.Status204NoContent);
         }

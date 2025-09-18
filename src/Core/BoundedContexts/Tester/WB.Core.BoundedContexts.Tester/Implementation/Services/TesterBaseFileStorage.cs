@@ -68,11 +68,6 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
             fileSystemAccessor.WriteAllBytes(filePath, data);
         }
 
-        public void StoreBrokenInterviewBinaryData(Guid userId, Guid interviewId, string fileName, byte[] data, string contentType)
-        {
-            throw new NotImplementedException();
-        }
-
         public Task RemoveInterviewBinaryData(Guid interviewId, string fileName)
         {
             var filePath = this.GetPathToFile(fileName);

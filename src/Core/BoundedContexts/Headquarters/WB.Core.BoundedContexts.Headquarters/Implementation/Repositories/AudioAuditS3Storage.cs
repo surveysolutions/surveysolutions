@@ -13,8 +13,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
 {
     public class AudioAuditFileS3Storage : AudioAuditStorageBase
     {
-        private const string AudioAuditS3Folder = "audio_audit/";
-        private const string BrokenAudioAuditS3Folder = $"{AudioAuditS3Folder}broken/";
+        protected virtual string AudioAuditS3Folder => "audio_audit/";
         private readonly IExternalFileStorage externalFileStorage;
         private readonly IPlainStorageAccessor<AudioAuditFile> filePlainStorageAccessor;
 
@@ -29,7 +28,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
 
         public override async Task<byte[]> GetInterviewBinaryDataAsync(Guid interviewId, string fileName)
         {
-            string fileId = AudioAuditFile.GetFileId(interviewId, fileName);
+            string fileId = GetFileId(interviewId, fileName);
             var audioAuditData = filePlainStorageAccessor.GetById(fileId);
             if (audioAuditData.Data == null)
             {
@@ -59,7 +58,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
 
         public override void StoreInterviewBinaryData(Guid interviewId, string fileName, byte[] data, string contentType)
         {
-            var id = AudioAuditFile.GetFileId(interviewId, fileName);
+            var id = GetFileId(interviewId, fileName);
             var file = new AudioAuditFile
             {
                 Id = id,
@@ -71,16 +70,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
             externalFileStorage.Store(AudioAuditS3Folder + id, data, contentType);
         }
 
-        public override void StoreBrokenInterviewBinaryData(Guid userId, Guid interviewId, string fileName, byte[] data, string contentType)
-        {
-            var id = AudioAuditFile.GetFileId(interviewId, fileName);
-            var brokenId = $"{userId.FormatGuid()}#{DateTime.UtcNow}#{id}";
-            externalFileStorage.Store(BrokenAudioAuditS3Folder + brokenId, data, contentType);
-        }
-
         public override async Task RemoveInterviewBinaryData(Guid interviewId, string fileName)
         {
-            var fileId = AudioAuditFile.GetFileId(interviewId, fileName);
+            var fileId = GetFileId(interviewId, fileName);
             filePlainStorageAccessor.Remove(fileId);
             await externalFileStorage.RemoveAsync(AudioAuditS3Folder + fileId);
         }

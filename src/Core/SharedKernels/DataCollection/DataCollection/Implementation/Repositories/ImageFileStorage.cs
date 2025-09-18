@@ -13,9 +13,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
 {
     public class ImageFileStorage : IImageFileStorage
     {
-        private readonly IFileSystemAccessor fileSystemAccessor;
-        private readonly string basePath;
-        private readonly string brokenFolderName = "Broken";
+        protected readonly IFileSystemAccessor fileSystemAccessor;
+        protected readonly string basePath;
         private const string DataDirectoryName = "InterviewData";
 
         public ImageFileStorage(IFileSystemAccessor fileSystemAccessor, IOptions<FileStorageConfig> rootDirectoryPath)
@@ -71,23 +70,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
 
             fileSystemAccessor.WriteAllBytes(filePath, data);
         }
-
-        public void StoreBrokenInterviewBinaryData(Guid userId, Guid interviewId, string fileName, byte[] data, string contentType)
-        {
-            var directoryPath = fileSystemAccessor.CombinePath(basePath, brokenFolderName, interviewId.FormatGuid());;
-            
-            if (!fileSystemAccessor.IsDirectoryExists(directoryPath))
-                fileSystemAccessor.CreateDirectory(directoryPath);
-
-            var newFileName = $"{userId.FormatGuid()}_{DateTime.UtcNow}_{fileName}";
-            var filePath = fileSystemAccessor.CombinePath(directoryPath, newFileName);
-
-            if (fileSystemAccessor.IsFileExists(filePath))
-                fileSystemAccessor.DeleteFile(filePath);
-
-            fileSystemAccessor.WriteAllBytes(filePath, data);
-        }
-
+        
         public Task RemoveInterviewBinaryData(Guid interviewId, string fileName)
         {
             var filePath = this.GetPathToFile(interviewId, fileName);
@@ -118,7 +101,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             return fileSystemAccessor.CombinePath(GetPathToInterviewDirectory(interviewId), fileName);
         }
 
-        private string GetPathToInterviewDirectory(Guid interviewId, string baseDirectory=null)
+        protected virtual string GetPathToInterviewDirectory(Guid interviewId, string baseDirectory=null)
         {
             return fileSystemAccessor.CombinePath(baseDirectory ?? basePath, interviewId.FormatGuid());
         }

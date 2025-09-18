@@ -51,11 +51,6 @@ namespace WB.UI.WebTester.Services.Implementation
             mediaStorage.Store(file, fileName, interviewId);
         }
 
-        public void StoreBrokenInterviewBinaryData(Guid userId, Guid interviewId, string fileName, byte[] data, string contentType)
-        {
-            throw new NotImplementedException();
-        }
-
         public Task RemoveInterviewBinaryData(Guid interviewId, string fileName)
         {
             mediaStorage.Remove(fileName, interviewId);

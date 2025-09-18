@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
@@ -15,16 +16,28 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
         private readonly IAudioFileStorage audioFileStorage;
         private readonly IImageFileStorage imageFileStorage;
         private readonly IAudioAuditFileStorage audioAuditFileStorage;
+        private readonly IBrokenAudioFileStorage brokenAudioFileStorage;
+        private readonly IBrokenImageFileStorage brokenImageFileStorage;
+        private readonly IBrokenAudioAuditFileStorage brokenAudioAuditFileStorage;
+        private readonly IPlainStorage<InterviewView> interviews;
 
         public SupervisorBinaryHandler(IPlainStorage<CompanyLogo> logoStorage,
             IAudioFileStorage audioFileStorage,
             IImageFileStorage imageFileStorage, 
-            IAudioAuditFileStorage audioAuditFileStorage)
+            IAudioAuditFileStorage audioAuditFileStorage,
+            IBrokenAudioFileStorage brokenAudioFileStorage,
+            IBrokenImageFileStorage brokenImageFileStorage, 
+            IBrokenAudioAuditFileStorage brokenAudioAuditFileStorage,
+            IPlainStorage<InterviewView> interviews)
         {
             this.logoStorage = logoStorage;
             this.audioFileStorage = audioFileStorage;
             this.imageFileStorage = imageFileStorage;
             this.audioAuditFileStorage = audioAuditFileStorage;
+            this.brokenAudioFileStorage = brokenAudioFileStorage;
+            this.brokenImageFileStorage = brokenImageFileStorage;
+            this.brokenAudioAuditFileStorage = brokenAudioAuditFileStorage;
+            this.interviews = interviews;
         }
 
         public void Register(IRequestHandler requestHandler)
@@ -67,31 +80,82 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
         
         private Task<OkResponse> UploadAudioAudit(UploadInterviewAudioAuditRequest request)
         {
-            this.audioAuditFileStorage.StoreInterviewBinaryData(request.InterviewAudio.InterviewId, 
-                request.InterviewAudio.FileName,
-                Convert.FromBase64String(request.InterviewAudio.Data), 
-                request.InterviewAudio.ContentType);
+            if (AllowWorkWithInterview(request.UserId, request.InterviewAudio))
+            {
+                this.audioAuditFileStorage.StoreInterviewBinaryData(request.InterviewAudio.InterviewId,
+                    request.InterviewAudio.FileName,
+                    Convert.FromBase64String(request.InterviewAudio.Data),
+                    request.InterviewAudio.ContentType);
+            }
+            else
+            {
+                var newFileName = $"{request.UserId.FormatGuid()}_{DateTime.UtcNow:o}_{request.InterviewAudio.FileName}";
+                this.brokenAudioAuditFileStorage.StoreInterviewBinaryData(
+                    request.InterviewAudio.InterviewId,
+                    newFileName,
+                    Convert.FromBase64String(request.InterviewAudio.Data),
+                    request.InterviewAudio.ContentType);
+            }
 
             return Task.FromResult(new OkResponse());
         }
 
         private Task<OkResponse> UploadAudio(UploadInterviewAudioRequest request)
         {
-            this.audioFileStorage.StoreInterviewBinaryData(request.InterviewAudio.InterviewId, 
-                request.InterviewAudio.FileName,
-                Convert.FromBase64String(request.InterviewAudio.Data), 
-                request.InterviewAudio.ContentType);
+            if (AllowWorkWithInterview(request.UserId, request.InterviewAudio))
+            {
+                this.audioFileStorage.StoreInterviewBinaryData(request.InterviewAudio.InterviewId,
+                    request.InterviewAudio.FileName,
+                    Convert.FromBase64String(request.InterviewAudio.Data),
+                    request.InterviewAudio.ContentType);
+            }
+            else
+            {
+                var newFileName = $"{request.UserId.FormatGuid()}_{DateTime.UtcNow:o}_{request.InterviewAudio.FileName}";
+                this.brokenAudioFileStorage.StoreInterviewBinaryData(
+                    request.InterviewAudio.InterviewId, 
+                    newFileName,
+                    Convert.FromBase64String(request.InterviewAudio.Data), 
+                    request.InterviewAudio.ContentType);
+            }
 
             return Task.FromResult(new OkResponse());
         }
 
         private Task<OkResponse> UploadImage(UploadInterviewImageRequest request)
         {
-            this.imageFileStorage.StoreInterviewBinaryData(request.InterviewImage.InterviewId, 
-                request.InterviewImage.FileName,
-                Convert.FromBase64String(request.InterviewImage.Data), 
-                null);
+            if (AllowWorkWithInterview(request.UserId, request.InterviewImage))
+            {
+                this.imageFileStorage.StoreInterviewBinaryData(request.InterviewImage.InterviewId, 
+                    request.InterviewImage.FileName,
+                    Convert.FromBase64String(request.InterviewImage.Data), 
+                    null);
+            }
+            else
+            {
+                var newFileName = $"{request.UserId.FormatGuid()}_{DateTime.UtcNow:o}_{request.InterviewImage.FileName}";
+                this.brokenImageFileStorage.StoreInterviewBinaryData(
+                    request.InterviewImage.InterviewId, 
+                    newFileName,
+                    Convert.FromBase64String(request.InterviewImage.Data), 
+                    null);
+            }
             return Task.FromResult(new OkResponse());
+        }
+        
+        private bool AllowWorkWithInterview(Guid userId, PostFileApiView fileApiView)
+        {
+            var interviewId = fileApiView.InterviewId;
+
+            var interview = interviews.GetById(interviewId.FormatGuid());
+
+            if (interview == null)
+                return true; // new interview
+
+            if (interview.ResponsibleId == userId)
+                return true;
+
+            return false;
         }
     }
 }

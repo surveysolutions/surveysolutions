@@ -16,13 +16,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
         {
             this.unitOfWork = unitOfWork;
         }
-
+        
+        protected virtual string GetFileId(Guid interviewId, string fileName) => $"{interviewId}#{fileName}";
+        
+        
         public abstract Task<List<InterviewBinaryDataDescriptor>> GetBinaryFilesForInterview(Guid interviewId);
         public abstract byte[] GetInterviewBinaryData(Guid interviewId, string fileName);
         public abstract Task<byte[]> GetInterviewBinaryDataAsync(Guid interviewId, string fileName);
         public abstract Task RemoveInterviewBinaryData(Guid interviewId, string fileName);
         public abstract void StoreInterviewBinaryData(Guid interviewId, string fileName, byte[] data, string contentType);
-        public abstract void StoreBrokenInterviewBinaryData(Guid userId, Guid interviewId, string fileName, byte[] data, string contentType);
 
 
         public Task<bool> HasAnyAudioAuditFilesStoredAsync(QuestionnaireIdentity questionnaire)

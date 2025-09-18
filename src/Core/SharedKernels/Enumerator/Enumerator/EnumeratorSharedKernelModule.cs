@@ -74,6 +74,10 @@ namespace WB.Core.SharedKernels.Enumerator
             registry.BindAsSingleton<ISynchronizationCompleteSource, SynchronizationCompleteSource>();
             registry.Bind<IGeoTrackingSynchronizer, DummyGeoTrackingSynchronizer>();
 
+            registry.Bind<IBrokenAudioFileStorage, InterviewerBrokenAudioFileStorage>();
+            registry.Bind<IBrokenImageFileStorage, InterviewerBrokenImageFileStorage>();
+            registry.Bind<IBrokenAudioAuditFileStorage, InterviewerBrokenAudioAuditFileStorage>();
+
             registry.Bind<IAudioFileStorage, InterviewerAudioFileStorage>();
             registry.Bind<IImageFileStorage, InterviewerImageFileStorage>();
             registry.Bind<IAudioAuditFileStorage, InterviewerAudioAuditFileStorage>();

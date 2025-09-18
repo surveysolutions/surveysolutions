@@ -44,6 +44,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage
         public void Load(IIocRegistry registry)
         {
             registry.Bind<IAudioFileStorage, AudioFileStorage>();
+            registry.Bind<IBrokenAudioFileStorage, BrokenAudioFileStorage>();
 
             registry.Bind<IAmazonS3Configuration, AmazonS3Configuration>();
             StorageProviderType StorageType(IModuleContext c)
@@ -70,12 +71,30 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage
             _ => throw new ArgumentOutOfRangeException()
             });
 
+            registry.Bind<S3BrokenImageFileStorage>();
+            registry.Bind<BrokenImageFileStorage>();
+            registry.BindToMethod<IBrokenImageFileStorage>(c => StorageType(c) switch
+            {
+                StorageProviderType.AmazonS3 => c.Get<S3BrokenImageFileStorage>(),
+                StorageProviderType.FileSystem => c.Get<BrokenImageFileStorage>(),
+            _ => throw new ArgumentOutOfRangeException()
+            });
+
             registry.Bind<AudioAuditFileS3Storage>();
             registry.Bind<AudioAuditFileStorage>();
             registry.BindToMethod<IAudioAuditFileStorage>(c => StorageType(c) switch
             {
                 StorageProviderType.AmazonS3 => c.Get<AudioAuditFileS3Storage>(),
                 StorageProviderType.FileSystem => c.Get<AudioAuditFileStorage>(),
+                _ => throw new ArgumentOutOfRangeException()
+            });
+
+            registry.Bind<BrokenAudioAuditFileS3Storage>();
+            registry.Bind<BrokenAudioAuditFileStorage>();
+            registry.BindToMethod<IBrokenAudioAuditFileStorage>(c => StorageType(c) switch
+            {
+                StorageProviderType.AmazonS3 => c.Get<BrokenAudioAuditFileS3Storage>(),
+                StorageProviderType.FileSystem => c.Get<BrokenAudioAuditFileStorage>(),
                 _ => throw new ArgumentOutOfRangeException()
             });
 
