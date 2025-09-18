@@ -10,6 +10,8 @@ ARG PLATFORM=amd64
 # Building WB.UI.Frontend application
 FROM --platform=${PLATFORM} node:$NODE AS frontend
 
+RUN apt-get update && apt-get install -y jq
+
 WORKDIR /src/UI/WB.UI.Frontend
 COPY src/UI/WB.UI.Frontend/package*.json /src/UI/WB.UI.Frontend
 
