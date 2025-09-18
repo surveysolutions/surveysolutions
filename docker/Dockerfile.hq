@@ -10,10 +10,15 @@ ARG PLATFORM=amd64
 # Building WB.UI.Frontend application
 FROM --platform=${PLATFORM} node:$NODE AS frontend
 
+RUN apt-get update && apt-get install -y jq
+
 WORKDIR /src/UI/WB.UI.Frontend
 COPY src/UI/WB.UI.Frontend/package*.json /src/UI/WB.UI.Frontend
 
-RUN npm ci
+RUN npm ci && \
+    npm list --all --json \
+       | jq -r 'paths(scalars) as $p | select($p[-1] == "version") | "\($p[-2])@\(getpath($p))"' \
+       | sort -u
 
 COPY [ "src/UI/WB.UI.Frontend", "/src/UI/WB.UI.Frontend/"]
 COPY [ "src/UI/WB.UI.Headquarters.Core/Resources", \
