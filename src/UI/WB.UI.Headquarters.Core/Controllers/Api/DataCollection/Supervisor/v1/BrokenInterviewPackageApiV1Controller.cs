@@ -65,8 +65,6 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
 
         [HttpPost]
         [Route("api/supervisor/v1/brokenImage")]
-        [RequestSizeLimit(100 * 1024 * 1024)]
-        [RequestFormLimits(MultipartBodyLengthLimit = 100 * 1024 * 1024)]
         public IActionResult PostImage([FromBody]BrokenImagePackageApiView package)
         {
             if (package?.Data == null)
@@ -82,8 +80,6 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
 
         [HttpPost]
         [Route("api/supervisor/v1/brokenAudio")]
-        [RequestSizeLimit(100 * 1024 * 1024)]
-        [RequestFormLimits(MultipartBodyLengthLimit = 100 * 1024 * 1024)]
         public IActionResult PostImage([FromBody]BrokenAudioPackageApiView package)
         {
             if (package == null)
@@ -99,8 +95,6 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
 
         [HttpPost]
         [Route("api/supervisor/v1/brokenAudioAudit")]
-        [RequestSizeLimit(100 * 1024 * 1024)]
-        [RequestFormLimits(MultipartBodyLengthLimit = 100 * 1024 * 1024)]
         public IActionResult PostImage([FromBody]BrokenAudioAuditPackageApiView package)
         {
             if (package == null)
