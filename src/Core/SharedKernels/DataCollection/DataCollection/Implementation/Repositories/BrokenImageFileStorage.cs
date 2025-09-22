@@ -9,18 +9,19 @@ using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 
-public class BrokenImageFileStorage : ImageFileStorage, IBrokenImageFileStorage
+public class BrokenImageFileStorage : InterviewFileStorage, IImageFileStorage, IBrokenImageFileStorage
 {
     public BrokenImageFileStorage(IFileSystemAccessor fileSystemAccessor, IOptions<FileStorageConfig> rootDirectoryPath)
         : base(fileSystemAccessor, rootDirectoryPath)
     {
     }
         
-    private readonly string brokenFolderName = "Broken";
+    private readonly string brokenFolderName = "BrokenInterviewData";
+    private readonly string imagesFolderName = "images";
     
-    protected override string GetPathToInterviewDirectory(Guid interviewId, string baseDirectory=null)
+    protected override string GetPathToInterviewDirectory(Guid interviewId, string baseDirectory)
     {
-        return fileSystemAccessor.CombinePath(baseDirectory ?? basePath, brokenFolderName, interviewId.FormatGuid());
+        return fileSystemAccessor.CombinePath(baseDirectory, brokenFolderName, imagesFolderName, interviewId.FormatGuid());
     }
     
     public Task<InterviewBinaryDataDescriptor> FirstOrDefaultAsync()

@@ -8,14 +8,13 @@ using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories;
 
-public class AudioAuditFileStorageBase<T> : AudioAuditStorageBase
+public abstract class AudioAuditFileStorageBase<T> : AudioAuditStorageBase
     where T : AudioAuditFile, new()
 {
     private readonly IPlainStorageAccessor<T> filePlainStorageAccessor;
 
     public AudioAuditFileStorageBase(
-        IPlainStorageAccessor<T> filePlainStorageAccessor,
-        IUnitOfWork unitOfWork) : base(unitOfWork)
+        IPlainStorageAccessor<T> filePlainStorageAccessor) 
     {
         this.filePlainStorageAccessor = filePlainStorageAccessor;
     }

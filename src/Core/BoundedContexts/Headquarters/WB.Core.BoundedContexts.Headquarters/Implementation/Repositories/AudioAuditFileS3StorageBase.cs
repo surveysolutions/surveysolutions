@@ -18,8 +18,7 @@ public abstract class AudioAuditFileS3StorageBase<T> : AudioAuditStorageBase
 
     protected AudioAuditFileS3StorageBase(
         IExternalFileStorage externalFileStorage,
-        IPlainStorageAccessor<T> filePlainStorageAccessor,
-        IUnitOfWork unitOfWork) : base(unitOfWork)
+        IPlainStorageAccessor<T> filePlainStorageAccessor)
     {
         this.externalFileStorage = externalFileStorage ?? throw new ArgumentNullException(nameof(externalFileStorage));
         this.filePlainStorageAccessor = filePlainStorageAccessor ?? throw new ArgumentNullException(nameof(filePlainStorageAccessor));
