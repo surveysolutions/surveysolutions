@@ -160,7 +160,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             else
             {
                 var utcNow = DateTime.UtcNow.ToString("o");
-                var newFileName = $"broken#{User.UserId()!.Value.FormatGuid()}#{utcNow}#{request.FileName}";
+                var newFileName = $"{User.UserId()!.Value.FormatGuid()}#{utcNow}#{request.FileName}";
                 this.brokenImageFileStorage.StoreInterviewBinaryData(request.InterviewId, newFileName, bytes, null);
             }
             
@@ -177,7 +177,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             else
             {
                 var utcNow = DateTime.UtcNow.ToString("o");
-                var newFileName = $"broken#{User.UserId()!.Value.FormatGuid()}#{utcNow}#{request.FileName}";
+                var newFileName = $"{User.UserId()!.Value.FormatGuid()}#{utcNow}#{request.FileName}";
                 this.brokenAudioFileStorage.StoreInterviewBinaryData(request.InterviewId, newFileName, Convert.FromBase64String(request.Data), request.ContentType);
             }
             
@@ -194,7 +194,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             else
             {
                 var utcNow = DateTime.UtcNow.ToString("o");
-                var newFileName = $"broken#{User.UserId()!.Value.FormatGuid()}#{utcNow}#{request.FileName}";
+                var newFileName = $"{User.UserId()!.Value.FormatGuid()}#{utcNow}#{request.FileName}";
                 this.brokenAudioAuditFileStorage.StoreInterviewBinaryData(request.InterviewId, newFileName, Convert.FromBase64String(request.Data), request.ContentType);
             }
 
