@@ -159,8 +159,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
                 this.imageFileStorage.StoreInterviewBinaryData(request.InterviewId, request.FileName, bytes, null);
             else
             {
-                var utcNow = DateTime.UtcNow.ToString("o");
-                var newFileName = $"{User.UserId()!.Value.FormatGuid()}#{utcNow}#{request.FileName}";
+                var newFileName = GetBrokenFileName(request.FileName);
                 this.brokenImageFileStorage.StoreInterviewBinaryData(request.InterviewId, newFileName, bytes, null);
             }
             
@@ -176,8 +175,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
                 this.audioFileStorage.StoreInterviewBinaryData(request.InterviewId, request.FileName, Convert.FromBase64String(request.Data), request.ContentType);
             else
             {
-                var utcNow = DateTime.UtcNow.ToString("o");
-                var newFileName = $"{User.UserId()!.Value.FormatGuid()}#{utcNow}#{request.FileName}";
+                var newFileName = GetBrokenFileName(request.FileName);
                 this.brokenAudioFileStorage.StoreInterviewBinaryData(request.InterviewId, newFileName, Convert.FromBase64String(request.Data), request.ContentType);
             }
             
@@ -193,12 +191,18 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
                 this.audioAuditFileStorage.StoreInterviewBinaryData(request.InterviewId, request.FileName, Convert.FromBase64String(request.Data), request.ContentType);
             else
             {
-                var utcNow = DateTime.UtcNow.ToString("o");
-                var newFileName = $"{User.UserId()!.Value.FormatGuid()}#{utcNow}#{request.FileName}";
+                var newFileName = GetBrokenFileName(request.FileName);
                 this.brokenAudioAuditFileStorage.StoreInterviewBinaryData(request.InterviewId, newFileName, Convert.FromBase64String(request.Data), request.ContentType);
             }
 
             return StatusCode(StatusCodes.Status204NoContent);
+        }
+
+        private string GetBrokenFileName(string originalFileName)
+        {
+            var utcNow = DateTime.UtcNow.ToString("yyyyMMdd_HHmmssfff");
+            var newFileName = $"{User.UserId()!.Value.FormatGuid()}#{utcNow}#{originalFileName}";
+            return newFileName;
         }
 
         protected async Task<InterviewUploadState> GetInterviewUploadStateImpl(Guid id, [FromBody] EventStreamSignatureTag eventStreamSignatureTag)
