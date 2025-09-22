@@ -7,9 +7,9 @@ using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 
-public class BrokenAudioFileStorage : AudioFileStorage, IBrokenAudioFileStorage
+public class BrokenAudioFileStorage : AudioFileStorageBase<BrokenAudioFile>, IBrokenAudioFileStorage
 {
-    public BrokenAudioFileStorage(IPlainStorageAccessor<AudioFile> filePlainStorageAccessor) : base(filePlainStorageAccessor)
+    public BrokenAudioFileStorage(IPlainStorageAccessor<BrokenAudioFile> filePlainStorageAccessor) : base(filePlainStorageAccessor)
     {
     }
         

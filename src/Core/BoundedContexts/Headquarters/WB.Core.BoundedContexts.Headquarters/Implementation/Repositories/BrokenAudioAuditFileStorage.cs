@@ -9,9 +9,9 @@ using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories;
 
-public class BrokenAudioAuditFileStorage : AudioAuditFileStorage, IBrokenAudioAuditFileStorage
+public class BrokenAudioAuditFileStorage : AudioAuditFileStorageBase<BrokenAudioAuditFile>, IBrokenAudioAuditFileStorage
 {
-    public BrokenAudioAuditFileStorage(IPlainStorageAccessor<AudioAuditFile> filePlainStorageAccessor, 
+    public BrokenAudioAuditFileStorage(IPlainStorageAccessor<BrokenAudioAuditFile> filePlainStorageAccessor, 
         IUnitOfWork unitOfWork) 
         : base(filePlainStorageAccessor, unitOfWork)
     {

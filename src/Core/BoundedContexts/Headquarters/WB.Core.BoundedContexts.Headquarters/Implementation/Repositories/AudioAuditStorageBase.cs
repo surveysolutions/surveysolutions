@@ -25,8 +25,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
         public abstract Task<byte[]> GetInterviewBinaryDataAsync(Guid interviewId, string fileName);
         public abstract Task RemoveInterviewBinaryData(Guid interviewId, string fileName);
         public abstract void StoreInterviewBinaryData(Guid interviewId, string fileName, byte[] data, string contentType);
-
-
+        //public abstract Task<bool> HasAnyAudioAuditFilesStoredAsync(QuestionnaireIdentity questionnaire);
+        
         public Task<bool> HasAnyAudioAuditFilesStoredAsync(QuestionnaireIdentity questionnaire)
         {
             return this.unitOfWork.Session

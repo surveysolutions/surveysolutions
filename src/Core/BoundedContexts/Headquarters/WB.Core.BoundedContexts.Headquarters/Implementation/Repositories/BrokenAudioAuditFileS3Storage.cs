@@ -8,12 +8,12 @@ using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories;
 
-public class BrokenAudioAuditFileS3Storage : AudioAuditFileS3Storage, IBrokenAudioAuditFileStorage
+public class BrokenAudioAuditFileS3Storage : AudioAuditFileS3StorageBase<BrokenAudioAuditFile>, IBrokenAudioAuditFileStorage
 {
-    protected override string AudioAuditS3Folder => $"{base.AudioAuditS3Folder}broken/";
+    protected override string AudioAuditS3Folder => $"audio_audit/broken/";
 
     public BrokenAudioAuditFileS3Storage(IExternalFileStorage externalFileStorage, 
-        IPlainStorageAccessor<AudioAuditFile> filePlainStorageAccessor, 
+        IPlainStorageAccessor<BrokenAudioAuditFile> filePlainStorageAccessor, 
         IUnitOfWork unitOfWork) : base(externalFileStorage, filePlainStorageAccessor, unitOfWork)
     {
     }

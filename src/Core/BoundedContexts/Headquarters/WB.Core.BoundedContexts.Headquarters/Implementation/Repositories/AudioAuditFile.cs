@@ -1,7 +1,7 @@
 ﻿using System;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
-namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
+namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
 {
     public class AudioAuditFile : IView
     {
