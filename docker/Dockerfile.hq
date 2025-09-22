@@ -187,7 +187,6 @@ RUN apk add --no-cache \
     gdal-tools \
     curl \
     fontconfig \
-    libgdiplus \
     binutils \
     && rm -rf /var/cache/apk/*
 
