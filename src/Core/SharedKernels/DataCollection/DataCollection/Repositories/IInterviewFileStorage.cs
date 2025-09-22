@@ -12,5 +12,6 @@ namespace WB.Core.SharedKernels.DataCollection.Repositories
         Task<List<InterviewBinaryDataDescriptor>> GetBinaryFilesForInterview(Guid interviewId);
         void StoreInterviewBinaryData(Guid interviewId, string fileName, byte[] data, string contentType);
         Task RemoveInterviewBinaryData(Guid interviewId, string fileName);
+        Task RemoveAllBinaryDataForInterviewsAsync(List<Guid> interviewIds);
     }
 }

@@ -7,14 +7,14 @@ using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 
 namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3;
 
-public class S3BrokenImageFileStorage : S3ImageFileStorage, IBrokenImageFileStorage
+public class BrokenImageInterviewS3FileStorage : InterviewS3FileStorage, IBrokenImageFileStorage
 {
-    public S3BrokenImageFileStorage(IExternalFileStorage externalFileStorage, IFileSystemAccessor fileSystemAccessor)
+    public BrokenImageInterviewS3FileStorage(IExternalFileStorage externalFileStorage, IFileSystemAccessor fileSystemAccessor)
         :base(externalFileStorage, fileSystemAccessor)
     {
     }
         
-    protected override string GetInterviewDirectoryPath(Guid interviewId) => $"images/broken/{interviewId.FormatGuid()}";
+    protected override string GetInterviewDirectoryPath(Guid interviewId) => $"broken_interview_data/images/{interviewId.FormatGuid()}";
         
     public Task<InterviewBinaryDataDescriptor> FirstOrDefaultAsync()
     {
