@@ -4,7 +4,9 @@ using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.WebApi;
+using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
 {
@@ -73,7 +75,8 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
             if (fileSystemAccessor.IsInvalidFileName(package.FileName))
                 return BadRequest("Invalid file name");
             
-            brokenImageFileStorage.StoreInterviewBinaryData(package.InterviewId, package.FileName, package.Data, package.ContentType);
+            var newFileName = BrokenFileHelper.GetBrokenFileName(User.UserId()!.Value, package.FileName);
+            brokenImageFileStorage.StoreInterviewBinaryData(package.InterviewId, newFileName, package.Data, package.ContentType);
 
             return this.Ok();
         }
@@ -88,7 +91,8 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
             if (fileSystemAccessor.IsInvalidFileName(package.FileName))
                 return BadRequest("Invalid file name");
 
-            brokenAudioFileStorage.StoreInterviewBinaryData(package.InterviewId, package.FileName, package.Data, package.ContentType);
+            var newFileName = BrokenFileHelper.GetBrokenFileName(User.UserId()!.Value, package.FileName);
+            brokenAudioFileStorage.StoreInterviewBinaryData(package.InterviewId, newFileName, package.Data, package.ContentType);
 
             return this.Ok();
         }
@@ -103,7 +107,8 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
             if (fileSystemAccessor.IsInvalidFileName(package.FileName))
                 return BadRequest("Invalid file name");
 
-            brokenAudioAuditFileStorage.StoreInterviewBinaryData(package.InterviewId, package.FileName, package.Data, package.ContentType);
+            var newFileName = BrokenFileHelper.GetBrokenFileName(User.UserId()!.Value, package.FileName);
+            brokenAudioAuditFileStorage.StoreInterviewBinaryData(package.InterviewId, newFileName, package.Data, package.ContentType);
 
             return this.Ok();
         }

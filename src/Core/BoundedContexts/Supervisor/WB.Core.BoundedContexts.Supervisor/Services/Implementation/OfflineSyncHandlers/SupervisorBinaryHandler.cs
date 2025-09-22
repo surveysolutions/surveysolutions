@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
@@ -89,7 +90,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             }
             else
             {
-                var newFileName = $"{request.UserId.FormatGuid()}_{DateTime.UtcNow:o}_{request.InterviewAudio.FileName}";
+                var newFileName = BrokenFileHelper.GetBrokenFileName(request.UserId, request.InterviewAudio.FileName);
                 this.brokenAudioAuditFileStorage.StoreInterviewBinaryData(
                     request.InterviewAudio.InterviewId,
                     newFileName,
@@ -111,7 +112,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             }
             else
             {
-                var newFileName = $"{request.UserId.FormatGuid()}_{DateTime.UtcNow:o}_{request.InterviewAudio.FileName}";
+                var newFileName = BrokenFileHelper.GetBrokenFileName(request.UserId, request.InterviewAudio.FileName);
                 this.brokenAudioFileStorage.StoreInterviewBinaryData(
                     request.InterviewAudio.InterviewId, 
                     newFileName,
@@ -133,7 +134,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             }
             else
             {
-                var newFileName = $"{request.UserId.FormatGuid()}_{DateTime.UtcNow:o}_{request.InterviewImage.FileName}";
+                var newFileName = BrokenFileHelper.GetBrokenFileName(request.UserId, request.InterviewImage.FileName);
                 this.brokenImageFileStorage.StoreInterviewBinaryData(
                     request.InterviewImage.InterviewId, 
                     newFileName,

@@ -23,6 +23,7 @@ using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 using WB.Core.SharedKernels.DataCollection.WebApi;
@@ -159,7 +160,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
                 this.imageFileStorage.StoreInterviewBinaryData(request.InterviewId, request.FileName, bytes, null);
             else
             {
-                var newFileName = GetBrokenFileName(request.FileName);
+                var newFileName = BrokenFileHelper.GetBrokenFileName(User.UserId()!.Value, request.FileName);
                 this.brokenImageFileStorage.StoreInterviewBinaryData(request.InterviewId, newFileName, bytes, null);
             }
             
@@ -175,7 +176,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
                 this.audioFileStorage.StoreInterviewBinaryData(request.InterviewId, request.FileName, Convert.FromBase64String(request.Data), request.ContentType);
             else
             {
-                var newFileName = GetBrokenFileName(request.FileName);
+                var newFileName = BrokenFileHelper.GetBrokenFileName(User.UserId()!.Value, request.FileName);
                 this.brokenAudioFileStorage.StoreInterviewBinaryData(request.InterviewId, newFileName, Convert.FromBase64String(request.Data), request.ContentType);
             }
             
@@ -191,20 +192,13 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
                 this.audioAuditFileStorage.StoreInterviewBinaryData(request.InterviewId, request.FileName, Convert.FromBase64String(request.Data), request.ContentType);
             else
             {
-                var newFileName = GetBrokenFileName(request.FileName);
+                var newFileName = BrokenFileHelper.GetBrokenFileName(User.UserId()!.Value, request.FileName);
                 this.brokenAudioAuditFileStorage.StoreInterviewBinaryData(request.InterviewId, newFileName, Convert.FromBase64String(request.Data), request.ContentType);
             }
 
             return StatusCode(StatusCodes.Status204NoContent);
         }
-
-        private string GetBrokenFileName(string originalFileName)
-        {
-            var utcNow = DateTime.UtcNow.ToString("yyyyMMdd_HHmmssfff");
-            var newFileName = $"{User.UserId()!.Value.FormatGuid()}#{utcNow}#{originalFileName}";
-            return newFileName;
-        }
-
+        
         protected async Task<InterviewUploadState> GetInterviewUploadStateImpl(Guid id, [FromBody] EventStreamSignatureTag eventStreamSignatureTag)
         {
             var doesEventsExists = this.packagesService.IsPackageDuplicated(eventStreamSignatureTag);
