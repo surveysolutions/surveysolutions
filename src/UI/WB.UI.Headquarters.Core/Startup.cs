@@ -429,7 +429,13 @@ namespace WB.UI.Headquarters
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseViteForwarder();
-            app.UseForwardedHeaders();
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = 
+                    ForwardedHeaders.XForwardedFor | 
+                    ForwardedHeaders.XForwardedProto | 
+                    ForwardedHeaders.XForwardedHost
+            });
 
             app.UseExceptional();
 
