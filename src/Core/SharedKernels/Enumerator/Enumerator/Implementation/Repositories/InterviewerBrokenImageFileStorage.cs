@@ -9,10 +9,10 @@ using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
 
-public class InterviewerBrokenImageFileStorage : InterviewerBrokenFileStorage<BrokenMultimediaView, BrokenImageFileView>, IBrokenImageFileStorage
+public class InterviewerBrokenImageFileStorage : InterviewerBrokenFileStorage<BrokenImageMetadataView, BrokenImageFileView>, IBrokenImageFileStorage
 {
     public InterviewerBrokenImageFileStorage(
-        IPlainStorage<BrokenMultimediaView> imageViewStorage,
+        IPlainStorage<BrokenImageMetadataView> imageViewStorage,
         IPlainStorage<BrokenImageFileView> fileViewStorage,
         IEncryptionService encryptionService)
         : base(imageViewStorage, fileViewStorage, encryptionService)
@@ -20,7 +20,7 @@ public class InterviewerBrokenImageFileStorage : InterviewerBrokenFileStorage<Br
     }
 }
 
-public class BrokenMultimediaView : IFileMetadataView, IPlainStorageEntity
+public class BrokenImageMetadataView : IFileMetadataView, IPlainStorageEntity
 {
     [PrimaryKey]
     public string Id { get; set; }

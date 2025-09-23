@@ -7,10 +7,10 @@ using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
 
-public class InterviewerBrokenAudioFileStorage : InterviewerBrokenFileStorage<BrokenAudioView, BrokenAudioFileView>, IBrokenAudioFileStorage
+public class InterviewerBrokenAudioFileStorage : InterviewerBrokenFileStorage<BrokenAudioMetadataView, BrokenAudioFileView>, IBrokenAudioFileStorage
 {
     public InterviewerBrokenAudioFileStorage(
-        IPlainStorage<BrokenAudioView> fileMetadataViewStorage,
+        IPlainStorage<BrokenAudioMetadataView> fileMetadataViewStorage,
         IPlainStorage<BrokenAudioFileView> fileViewStorage,
         IEncryptionService encryptionService)
         :base(fileMetadataViewStorage, fileViewStorage, encryptionService)
@@ -18,7 +18,7 @@ public class InterviewerBrokenAudioFileStorage : InterviewerBrokenFileStorage<Br
     }
 }
 
-public class BrokenAudioView : IFileMetadataView, IPlainStorageEntity
+public class BrokenAudioMetadataView : IFileMetadataView, IPlainStorageEntity
 {
     [PrimaryKey]
     public string Id { get; set; }
