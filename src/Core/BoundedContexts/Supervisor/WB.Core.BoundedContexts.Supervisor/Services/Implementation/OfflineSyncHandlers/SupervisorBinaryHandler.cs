@@ -83,7 +83,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
         {
             if (AllowWorkWithInterview(request.UserId, request.InterviewAudio))
             {
-                this.audioAuditFileStorage.StoreInterviewBinaryData(request.InterviewAudio.InterviewId,
+                this.audioAuditFileStorage.StoreInterviewBinaryData(
+                    request.InterviewAudio.InterviewId,
                     request.InterviewAudio.FileName,
                     Convert.FromBase64String(request.InterviewAudio.Data),
                     request.InterviewAudio.ContentType);
@@ -105,7 +106,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
         {
             if (AllowWorkWithInterview(request.UserId, request.InterviewAudio))
             {
-                this.audioFileStorage.StoreInterviewBinaryData(request.InterviewAudio.InterviewId,
+                this.audioFileStorage.StoreInterviewBinaryData(
+                    request.InterviewAudio.InterviewId,
                     request.InterviewAudio.FileName,
                     Convert.FromBase64String(request.InterviewAudio.Data),
                     request.InterviewAudio.ContentType);
@@ -127,7 +129,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
         {
             if (AllowWorkWithInterview(request.UserId, request.InterviewImage))
             {
-                this.imageFileStorage.StoreInterviewBinaryData(request.InterviewImage.InterviewId, 
+                this.imageFileStorage.StoreInterviewBinaryData(
+                    request.InterviewImage.InterviewId, 
                     request.InterviewImage.FileName,
                     Convert.FromBase64String(request.InterviewImage.Data), 
                     null);
