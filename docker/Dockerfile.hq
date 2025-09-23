@@ -183,12 +183,12 @@ RUN apk add --no-cache \
     icu-libs \ 
     icu-data-full \
     \    
-    gdal \
-    gdal-tools \
-    curl \
-    fontconfig \
-    binutils \
-    && rm -rf /var/cache/apk/*
+  gdal-libs \
+  gdal-tools \
+  curl \
+  fontconfig \
+  binutils \
+  && rm -rf /var/cache/apk/*
 
 COPY --from=fonts_source /raw_fonts /usr/share/fonts
 
