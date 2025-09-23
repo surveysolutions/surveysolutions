@@ -221,6 +221,8 @@ jobs:
             -dockerRegistry ${{ env.REGISTRY }}/${{ github.repository }} `
             -apkFolder "artifacts" `
             -nodeVersion "${{ env.NODE_VERSION }}"
+        env:
+          DOCKER_BUILDKIT: 0
 
   installer:
     needs: [prepare, mobile, union-apps]
@@ -272,7 +274,7 @@ jobs:
 
       - name: Build Headquarters
         run: ./.build.ps1 PackageHqOffline -BuildNumber ${{ needs.prepare.outputs.build_number }}
-
+          
       - name: Extract HQ Package
         run: |
           New-Item "HQsources" -ItemType Directory
