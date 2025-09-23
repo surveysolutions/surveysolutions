@@ -74,7 +74,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
                     InterviewId = brokenFile.InterviewId,
                     FileName = brokenFile.FileName,
                     ContentType = brokenFile.ContentType,
-                    Data = await brokenFile.GetData(),
+                    Data = Convert.ToBase64String(await brokenFile.GetData()),
                 };
 
                 await this.synchronizationService.UploadBrokenImagePackageAsync(brokenImagePackage, cancellationToken);
@@ -96,7 +96,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
                     InterviewId = brokenFile.InterviewId,
                     FileName = brokenFile.FileName,
                     ContentType = brokenFile.ContentType,
-                    Data = await brokenFile.GetData(),
+                    Data = Convert.ToBase64String(await brokenFile.GetData()),
                 };
 
                 await this.synchronizationService.UploadBrokenAudioPackageAsync(brokenPackage, cancellationToken);
@@ -118,7 +118,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
                     InterviewId = brokenFile.InterviewId,
                     FileName = brokenFile.FileName,
                     ContentType = brokenFile.ContentType,
-                    Data = await brokenFile.GetData(),
+                    Data = Convert.ToBase64String(await brokenFile.GetData()),
                 };
 
                 await this.synchronizationService.UploadBrokenAudioAuditPackageAsync(brokenPackage, cancellationToken);

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.Infrastructure.FileSystem;
@@ -76,7 +77,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
                 return BadRequest("Invalid file name");
             
             var newFileName = BrokenFileHelper.GetBrokenFileName(User.UserId()!.Value, package.FileName);
-            brokenImageFileStorage.StoreInterviewBinaryData(package.InterviewId, newFileName, package.Data, package.ContentType);
+            brokenImageFileStorage.StoreInterviewBinaryData(package.InterviewId, newFileName, Convert.FromBase64String(package.Data), package.ContentType);
 
             return this.Ok();
         }
@@ -92,7 +93,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
                 return BadRequest("Invalid file name");
 
             var newFileName = BrokenFileHelper.GetBrokenFileName(User.UserId()!.Value, package.FileName);
-            brokenAudioFileStorage.StoreInterviewBinaryData(package.InterviewId, newFileName, package.Data, package.ContentType);
+            brokenAudioFileStorage.StoreInterviewBinaryData(package.InterviewId, newFileName, Convert.FromBase64String(package.Data), package.ContentType);
 
             return this.Ok();
         }
@@ -108,7 +109,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
                 return BadRequest("Invalid file name");
 
             var newFileName = BrokenFileHelper.GetBrokenFileName(User.UserId()!.Value, package.FileName);
-            brokenAudioAuditFileStorage.StoreInterviewBinaryData(package.InterviewId, newFileName, package.Data, package.ContentType);
+            brokenAudioAuditFileStorage.StoreInterviewBinaryData(package.InterviewId, newFileName, Convert.FromBase64String(package.Data), package.ContentType);
 
             return this.Ok();
         }

@@ -33,7 +33,7 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
         }
 
         public string ContentType { get; set; }
-        public byte[] Data { get; set; }
+        public string Data { get; set; }
     }
     
     public class BrokenImagePackageApiView : BrokenFilePackageApiView
