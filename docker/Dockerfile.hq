@@ -188,6 +188,7 @@ RUN apk add --no-cache \
     curl \
     fontconfig \
     binutils \
+    && apk del openexr \
     && rm -rf /var/cache/apk/*
 
 COPY --from=fonts_source /raw_fonts /usr/share/fonts
