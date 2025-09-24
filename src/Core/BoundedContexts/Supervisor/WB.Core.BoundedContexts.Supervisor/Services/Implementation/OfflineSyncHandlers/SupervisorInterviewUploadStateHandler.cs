@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Supervisor.Views;
 using WB.Core.GenericSubdomains.Portable;
@@ -38,15 +37,20 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
                      x.FirstEventTimestamp == request.Check.FirstEventTimeStamp &&
                      x.LastEventId == request.Check.LastEventId &&
                      x.LastEventTimestamp == request.Check.LastEventTimeStamp).Count;
-            
+
+            var audioFiles = await this.audioFileStorage.GetBinaryFilesForInterview(request.InterviewId);
+            var audioNames = audioFiles.Select(bf => bf.FileName).ToHashSet();
+            var images = await this.imageFileStorage.GetBinaryFilesForInterview(request.InterviewId);
+            var imagesNames = images.Select(bf => bf.FileName).ToHashSet();
+
             return new GetInterviewUploadStateResponse
             {
                 InterviewId = request.InterviewId,
                 UploadState = new InterviewUploadState
                 {
                     IsEventsUploaded = existingReceivedPackageLog > 0,
-                    AudioFilesNames = new(),
-                    ImagesFilesNames = new(),
+                    AudioFilesNames = audioNames,
+                    ImagesFilesNames = imagesNames
                 }
             };
         }
