@@ -20,6 +20,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
     public abstract class UploadInterviews : SynchronizationStep
     {
         private readonly IInterviewerInterviewAccessor interviewFactory;
+        private readonly IPlainStorage<InterviewMultimediaView> interviewMultimediaViewStorage;
         private readonly IImageFileStorage imagesStorage;
         private readonly IAudioFileStorage audioFileStorage;
         private readonly IAudioAuditFileStorage audioAuditFileStorage;
@@ -27,6 +28,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
         private readonly IPrincipal principal;
 
         protected UploadInterviews(IInterviewerInterviewAccessor interviewFactory,
+            IPlainStorage<InterviewMultimediaView> interviewMultimediaViewStorage,
             ILogger logger,
             IImageFileStorage imagesStorage,
             IAudioFileStorage audioFileStorage,
@@ -37,6 +39,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             int sortOrder) : base(sortOrder, synchronizationService, logger)
         {
             this.interviewFactory = interviewFactory ?? throw new ArgumentNullException(nameof(interviewFactory));
+            this.interviewMultimediaViewStorage = interviewMultimediaViewStorage ?? throw new ArgumentNullException(nameof(interviewMultimediaViewStorage));
             this.imagesStorage = imagesStorage ?? throw new ArgumentNullException(nameof(imagesStorage));
             this.audioFileStorage = audioFileStorage ?? throw new ArgumentNullException(nameof(audioFileStorage));
             this.audioAuditFileStorage = audioAuditFileStorage;
@@ -186,7 +189,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             IProgress<SyncProgressInfo> progress,
             CancellationToken cancellationToken)
         {
-            var imageViews = await this.imagesStorage.GetBinaryFilesForInterview(interview.InterviewId);
+            var imageViews = this.interviewMultimediaViewStorage.Where(image => image.InterviewId == interview.InterviewId);
             var transferProgress = progress.AsTransferReport();
 
             foreach (var imageView in imageViews)
@@ -209,7 +212,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     cancellationToken);
 
                 if (interview.Status == InterviewStatus.Completed)
+                {
+                    this.interviewMultimediaViewStorage.Remove(imageView.Id);
                     await this.imagesStorage.RemoveInterviewBinaryData(interview.InterviewId, imageView.FileName);
+                }
             }
         }
         
