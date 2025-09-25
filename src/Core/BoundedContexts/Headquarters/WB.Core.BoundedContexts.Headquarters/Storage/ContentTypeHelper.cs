@@ -1,6 +1,6 @@
 using System.IO;
 
-namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3;
+namespace WB.Core.BoundedContexts.Headquarters.Storage;
 
 public static class ContentTypeHelper
 {

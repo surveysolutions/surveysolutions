@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using WB.Core.BoundedContexts.Headquarters.Storage;
 using WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
