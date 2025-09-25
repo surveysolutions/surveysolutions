@@ -13,6 +13,7 @@ using Microsoft.Extensions.Options;
 using WB.Core.SharedKernels.Configs;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Infrastructure.Native.Monitoring;
+using WB.Infrastructure.Native.Utils;
 
 namespace WB.Enumerator.Native.WebInterview.Services
 {
@@ -106,8 +107,11 @@ namespace WB.Enumerator.Native.WebInterview.Services
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Error on compress audio");
-
+                if (ex is NonZeroExitCodeException nex)
+                    logger.LogError(nex, "Error on compress audio: {ErrorOutput}", nex.ErrorOutput);
+                else
+                    logger.LogError(ex, "Error on compress audio");
+                
                 audioResult.MimeType = @"audio/wav";
                 audioResult.Binary = audio;
                 audioResult.Duration = TimeSpan.FromSeconds(0);

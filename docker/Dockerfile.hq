@@ -10,10 +10,15 @@ ARG PLATFORM=amd64
 # Building WB.UI.Frontend application
 FROM --platform=${PLATFORM} node:$NODE AS frontend
 
+RUN apt-get update && apt-get install -y jq
+
 WORKDIR /src/UI/WB.UI.Frontend
 COPY src/UI/WB.UI.Frontend/package*.json /src/UI/WB.UI.Frontend
 
-RUN npm ci
+RUN npm ci && \
+    npm list --all --json \
+       | jq -r 'paths(scalars) as $p | select($p[-1] == "version") | "\($p[-2])@\(getpath($p))"' \
+       | sort -u
 
 COPY [ "src/UI/WB.UI.Frontend", "/src/UI/WB.UI.Frontend/"]
 COPY [ "src/UI/WB.UI.Headquarters.Core/Resources", \
@@ -30,7 +35,7 @@ COPY [ "src/Core/BoundedContexts/Headquarters/WB.Core.BoundedContexts.Headquarte
 RUN NODE_OPTIONS="--max-old-space-size=3072" npm run build -- -- --package
 
 # Building export
-FROM --platform=${PLATFORM} mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION}-alpine AS export_builder
+FROM --platform=${PLATFORM} mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION}-alpine3.22 AS export_builder
 ARG VERSION
 ARG INFO_VERSION
 
@@ -76,7 +81,7 @@ RUN dotnet publish src/Services/Export/WB.Services.Export.Host \
     -c Release -o /export -p:Version="${VERSION}" -p:InformationalVersion="${INFO_VERSION}"
 
 # Building HQ 
-FROM --platform=${PLATFORM} mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION}-alpine AS builder
+FROM --platform=${PLATFORM} mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION}-alpine3.22 AS builder
 ARG VERSION
 ARG INFO_VERSION
 
@@ -145,12 +150,12 @@ RUN dotnet publish src/UI/WB.UI.Headquarters.Core \
     -c Release -o /hq -p:Version="${VERSION}" -p:InformationalVersion="${INFO_VERSION}"
 
 # Copy APK files if any
-FROM --platform=${PLATFORM} mcr.microsoft.com/dotnet/aspnet:${DOTNET_VERSION}-alpine AS apks
+FROM --platform=${PLATFORM} mcr.microsoft.com/dotnet/aspnet:${DOTNET_VERSION}-alpine3.22 AS apks
 ARG APK_FILES
 COPY ${APK_FILES}/*.apk /apk/
 
 # include noto font into image
-FROM --platform=${PLATFORM} mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION}-alpine AS fonts_source
+FROM --platform=${PLATFORM} mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION}-alpine3.22 AS fonts_source
 RUN apk add --no-cache --virtual unzip
 
 ARG FONTS
@@ -161,7 +166,7 @@ RUN [ "/bin/ash" ,"-c", "export IFS=\";\"; for FONT in $FONTS_LIST; \
    && cd /raw_fonts && unzip -o $FONT ; done"]
 
 # Building runtime 
-FROM mcr.microsoft.com/dotnet/aspnet:${DOTNET_VERSION}-alpine
+FROM mcr.microsoft.com/dotnet/aspnet:${DOTNET_VERSION}-alpine3.22
 ENV DOTNET_RUNNING_IN_CONTAINER=true
 ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
 
@@ -182,7 +187,6 @@ RUN apk add --no-cache \
     gdal-tools \
     curl \
     fontconfig \
-    libgdiplus \
     binutils \
     && rm -rf /var/cache/apk/*
 

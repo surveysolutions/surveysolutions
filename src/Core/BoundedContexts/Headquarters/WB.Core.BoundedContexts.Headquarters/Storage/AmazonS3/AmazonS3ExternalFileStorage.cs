@@ -81,7 +81,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
                 {
                     Path = s3.Key.Substring(BucketInfo.PathPrefix.Length),
                     Size = s3.Size,
-                    LastModified = s3.LastModified
+                    LastModified = s3.LastModified,
                 }).ToList();
             }
             catch (AmazonS3Exception e) when (e.StatusCode == HttpStatusCode.NotFound)
