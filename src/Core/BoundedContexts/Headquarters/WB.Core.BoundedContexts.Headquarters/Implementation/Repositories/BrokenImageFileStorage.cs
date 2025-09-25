@@ -1,13 +1,14 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
+using WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Configs;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 
-namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
+namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories;
 
 public class BrokenImageFileStorage : InterviewFileStorage, IImageFileStorage, IBrokenImageFileStorage
 {
@@ -19,7 +20,7 @@ public class BrokenImageFileStorage : InterviewFileStorage, IImageFileStorage, I
     private readonly string brokenFolderName = "BrokenInterviewData";
     private readonly string imagesFolderName = "images";
     
-    protected override string ContentType => "image/jpg";
+    protected override string GetContentType(string filename) => ContentTypeHelper.GetImageContentType(filename);
     
     protected override string GetPathToInterviewDirectory(Guid interviewId, string baseDirectory)
     {

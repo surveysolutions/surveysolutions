@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
+using WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
@@ -23,7 +24,7 @@ public class BrokenAudioAuditFileStorage : InterviewFileStorage, IAudioAuditFile
     
     private readonly string brokenFolderName = "BrokenInterviewData";
     private readonly string imagesFolderName = "audio_audit";
-    protected override string ContentType => "audio/mp4";
+    protected override string GetContentType(string filename) => ContentTypeHelper.GetAudioContentType(filename);
     
     protected override string GetPathToInterviewDirectory(Guid interviewId, string baseDirectory)
     {
