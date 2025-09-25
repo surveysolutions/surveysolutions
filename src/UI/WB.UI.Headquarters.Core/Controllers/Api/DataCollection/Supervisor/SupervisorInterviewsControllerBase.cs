@@ -11,6 +11,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.Synchronization.MetaInfo;
 using WB.UI.Shared.Web.Services;
 
@@ -42,6 +43,9 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor
             var interview = interviewsFactory.GetInterviewsByIds([interviewId]).SingleOrDefault();
             if (interview == null)
                 return true; // new interview
+
+            if (interview.Mode == InterviewMode.CAWI)
+                return false;
 
             if (interview.ResponsibleId == authorizedUser.Id)
                 return true;

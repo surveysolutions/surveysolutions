@@ -19,6 +19,8 @@ public class BrokenImageFileStorage : InterviewFileStorage, IImageFileStorage, I
     private readonly string brokenFolderName = "BrokenInterviewData";
     private readonly string imagesFolderName = "images";
     
+    protected override string ContentType => "image/jpg";
+    
     protected override string GetPathToInterviewDirectory(Guid interviewId, string baseDirectory)
     {
         return fileSystemAccessor.CombinePath(baseDirectory, brokenFolderName, imagesFolderName, interviewId.FormatGuid());

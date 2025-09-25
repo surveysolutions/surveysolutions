@@ -42,6 +42,8 @@ public abstract class InterviewS3FileStorage : IInterviewFileStorage
 
     protected abstract string GetInterviewDirectoryPath(Guid interviewId);
     
+    protected abstract string ContentType { get; }
+    
     public async Task RemoveAllBinaryDataForInterviewsAsync(List<Guid> interviewIds)
     {
         if (!interviewIds.Any()) return;
@@ -58,7 +60,7 @@ public abstract class InterviewS3FileStorage : IInterviewFileStorage
         return files.Select(file =>
         {
             var filename = file.Path.Substring(prefix.Length);
-            return new InterviewBinaryDataDescriptor(interviewId, filename, "image/jpg",
+            return new InterviewBinaryDataDescriptor(interviewId, filename, ContentType,
                 () => this.GetInterviewBinaryDataAsync(interviewId, filename));
         }).ToList();
     }

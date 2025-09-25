@@ -13,5 +13,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
         }
 
         protected override string GetInterviewDirectoryPath(Guid interviewId) => $"images/{interviewId.FormatGuid()}";
+        protected override string ContentType => "image/jpg";
     }
 }

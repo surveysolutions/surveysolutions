@@ -20,5 +20,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
         {
             return fileSystemAccessor.CombinePath(baseDirectory, DataDirectoryName, interviewId.FormatGuid());
         }
+
+        protected override string ContentType => "image/jpg";
     }
 }

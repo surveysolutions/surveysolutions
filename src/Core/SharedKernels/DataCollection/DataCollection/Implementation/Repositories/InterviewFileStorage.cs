@@ -49,7 +49,7 @@ public abstract class InterviewFileStorage: IInterviewFileStorage
                     new InterviewBinaryDataDescriptor(
                         interviewId, 
                         fileSystemAccessor.GetFileName(fileName),
-                        null,
+                        ContentType,
                         () => Task.FromResult(fileSystemAccessor.ReadAllBytes(fileName)))).ToList();
         return Task.FromResult(interviewBinaryDataDescriptors);
     }
@@ -100,4 +100,5 @@ public abstract class InterviewFileStorage: IInterviewFileStorage
     }
 
     protected abstract string GetPathToInterviewDirectory(Guid interviewId, string baseDirectory);
+    protected abstract string ContentType { get; }
 }

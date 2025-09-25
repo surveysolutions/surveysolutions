@@ -70,6 +70,9 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
         [Route("api/supervisor/v1/brokenImage")]
         public IActionResult PostImage([FromBody]BrokenImagePackageApiView package)
         {
+            if (!ModelState.IsValid)
+                return this.BadRequest(ModelState);
+            
             if (package?.Data == null)
                 return this.BadRequest("Server cannot accept empty package content.");
             
@@ -86,6 +89,9 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
         [Route("api/supervisor/v1/brokenAudio")]
         public IActionResult PostImage([FromBody]BrokenAudioPackageApiView package)
         {
+            if (!ModelState.IsValid)
+                return this.BadRequest(ModelState);
+            
             if (package == null)
                 return this.BadRequest("Server cannot accept empty package content.");
 
@@ -102,6 +108,9 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
         [Route("api/supervisor/v1/brokenAudioAudit")]
         public IActionResult PostImage([FromBody]BrokenAudioAuditPackageApiView package)
         {
+            if (!ModelState.IsValid)
+                return this.BadRequest(ModelState);
+            
             if (package == null)
                 return this.BadRequest("Server cannot accept empty package content.");
 

@@ -34,7 +34,7 @@ public abstract class AudioFileStorageBase<T> : IAudioFileStorage
     public Task<List<InterviewBinaryDataDescriptor>> GetBinaryFilesForInterview(Guid interviewId)
     {
         var databaseFiles = filePlainStorageAccessor.Query(q => 
-            q.Where(f => f.InterviewId == interviewId && !f.FileName.StartsWith("broken"))
+            q.Where(f => f.InterviewId == interviewId)
         );
 
         var interviewBinaryDataDescriptors = databaseFiles.Select(file 

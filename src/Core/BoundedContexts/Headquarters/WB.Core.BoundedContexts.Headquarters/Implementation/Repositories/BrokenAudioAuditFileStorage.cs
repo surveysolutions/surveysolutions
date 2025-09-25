@@ -23,11 +23,13 @@ public class BrokenAudioAuditFileStorage : InterviewFileStorage, IAudioAuditFile
     
     private readonly string brokenFolderName = "BrokenInterviewData";
     private readonly string imagesFolderName = "audio_audit";
+    protected override string ContentType => "audio/mp4";
     
     protected override string GetPathToInterviewDirectory(Guid interviewId, string baseDirectory)
     {
         return fileSystemAccessor.CombinePath(baseDirectory, brokenFolderName, imagesFolderName, interviewId.FormatGuid());
     }
+
 
 
     public Task<InterviewBinaryDataDescriptor> FirstOrDefaultAsync()

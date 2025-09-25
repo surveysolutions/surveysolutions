@@ -7,13 +7,13 @@ using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
 
-public abstract class InterviewerBrokenFileStorage<TMetadataView, TFileView> :
-    InterviewerFileStorage<TMetadataView, TFileView>,
+public abstract class TabletBrokenFileStorage<TMetadataView, TFileView> :
+    InterviewFileStorage<TMetadataView, TFileView>,
     IInterviewBrokenFileStorage
     where TMetadataView : class, IFileMetadataView, IPlainStorageEntity, new()
     where TFileView : class, IFileView, IPlainStorageEntity, new()
 {
-    protected InterviewerBrokenFileStorage(
+    protected TabletBrokenFileStorage(
         IPlainStorage<TMetadataView> fileMetadataViewStorage,
         IPlainStorage<TFileView> fileViewStorage,
         IEncryptionService encryptionService)

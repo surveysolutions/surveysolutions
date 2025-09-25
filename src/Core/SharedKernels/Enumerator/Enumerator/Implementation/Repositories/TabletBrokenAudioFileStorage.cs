@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using SQLite;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
@@ -9,18 +7,18 @@ using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
 
-public class InterviewerBrokenImageFileStorage : InterviewerBrokenFileStorage<BrokenImageMetadataView, BrokenImageFileView>, IBrokenImageFileStorage
+public class TabletBrokenAudioFileStorage : TabletBrokenFileStorage<BrokenAudioMetadataView, BrokenAudioFileView>, IBrokenAudioFileStorage
 {
-    public InterviewerBrokenImageFileStorage(
-        IPlainStorage<BrokenImageMetadataView> imageViewStorage,
-        IPlainStorage<BrokenImageFileView> fileViewStorage,
+    public TabletBrokenAudioFileStorage(
+        IPlainStorage<BrokenAudioMetadataView> fileMetadataViewStorage,
+        IPlainStorage<BrokenAudioFileView> fileViewStorage,
         IEncryptionService encryptionService)
-        : base(imageViewStorage, fileViewStorage, encryptionService)
+        :base(fileMetadataViewStorage, fileViewStorage, encryptionService)
     {
     }
 }
 
-public class BrokenImageMetadataView : IFileMetadataView, IPlainStorageEntity
+public class BrokenAudioMetadataView : IFileMetadataView, IPlainStorageEntity
 {
     [PrimaryKey]
     public string Id { get; set; }
@@ -30,10 +28,9 @@ public class BrokenImageMetadataView : IFileMetadataView, IPlainStorageEntity
     public string ContentType { get; set; }
 }
 
-public class BrokenImageFileView : IFileView, IPlainStorageEntity
+public class BrokenAudioFileView : IFileView, IPlainStorageEntity
 {
     [PrimaryKey]
     public string Id { get; set; }
     public byte[] File { get; set; }
 }
-

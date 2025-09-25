@@ -15,6 +15,8 @@ public class BrokenImageInterviewS3FileStorage : InterviewS3FileStorage, IBroken
     }
         
     protected override string GetInterviewDirectoryPath(Guid interviewId) => $"broken_interview_data/images/{interviewId.FormatGuid()}";
+    
+    protected override string ContentType => "image/jpg";
         
     public Task<InterviewBinaryDataDescriptor> FirstOrDefaultAsync()
     {
