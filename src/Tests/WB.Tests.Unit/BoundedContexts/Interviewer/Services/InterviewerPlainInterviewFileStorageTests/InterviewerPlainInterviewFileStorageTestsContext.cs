@@ -8,7 +8,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerPlainInt
 {
     internal class InterviewerPlainInterviewFileStorageTestsContext
     {
-        public static InterviewerImageFileStorage CreateInterviewerPlainInterviewFileStorage(
+        public static TabletImageFileStorage CreateInterviewerPlainInterviewFileStorage(
             IPlainStorage<InterviewMultimediaView> imageViewStorage = null,
             IPlainStorage<InterviewFileView> fileViewStorage = null,
             IEncryptionService encryptionService = null)
@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerPlainInt
                 encryptionService = mockOfEncryptionService.Object;
             }
 
-            return new InterviewerImageFileStorage(
+            return new TabletImageFileStorage(
                 imageViewStorage: imageViewStorage ?? Mock.Of<IPlainStorage<InterviewMultimediaView>>(),
                 fileViewStorage: fileViewStorage ?? Mock.Of<IPlainStorage<InterviewFileView>>(),
                 encryptionService: encryptionService);

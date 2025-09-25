@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerPlainInt
                 FileId = imageFileId
             });
 
-            interviewerImageFileStorage = CreateInterviewerPlainInterviewFileStorage(
+            tabletImageFileStorage = CreateInterviewerPlainInterviewFileStorage(
                 fileViewStorage: fileViewStorage,
                 imageViewStorage: imageViewStorage);
 
@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerPlainInt
         }
 
         public void BecauseOf() =>
-            interviewerImageFileStorage.RemoveInterviewBinaryData(interviewId, imageFileName);
+            tabletImageFileStorage.RemoveInterviewBinaryData(interviewId, imageFileName);
 
         [Test]
         public void should_be_removed_multimedia_views_by_interview_id_and_file_name() =>
@@ -58,6 +58,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerPlainInt
         private static IPlainStorage<InterviewMultimediaView> imageViewStorage;
 
         private static IPlainStorage<InterviewFileView> fileViewStorage;
-        private static InterviewerImageFileStorage interviewerImageFileStorage;
+        private static TabletImageFileStorage tabletImageFileStorage;
     }
 }

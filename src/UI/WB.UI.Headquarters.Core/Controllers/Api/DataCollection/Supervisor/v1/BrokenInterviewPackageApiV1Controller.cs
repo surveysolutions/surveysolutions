@@ -1,8 +1,13 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Views;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.WebApi;
+using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
 {
@@ -10,10 +15,22 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
     public class BrokenInterviewPackageApiV1Controller : ControllerBase
     {
         private readonly IPlainStorageAccessor<BrokenInterviewPackage> brokenInterviewPackageStorage;
+        private readonly IBrokenImageFileStorage brokenImageFileStorage;
+        private readonly IBrokenAudioFileStorage brokenAudioFileStorage;
+        private readonly IBrokenAudioAuditFileStorage brokenAudioAuditFileStorage;
+        private readonly IFileSystemAccessor fileSystemAccessor;
 
-        public BrokenInterviewPackageApiV1Controller(IPlainStorageAccessor<BrokenInterviewPackage> brokenInterviewPackageStorage)
+        public BrokenInterviewPackageApiV1Controller(IPlainStorageAccessor<BrokenInterviewPackage> brokenInterviewPackageStorage,
+            IBrokenImageFileStorage brokenImageFileStorage,
+            IBrokenAudioFileStorage brokenAudioFileStorage,
+            IBrokenAudioAuditFileStorage brokenAudioAuditFileStorage,
+            IFileSystemAccessor fileSystemAccessor)
         {
             this.brokenInterviewPackageStorage = brokenInterviewPackageStorage;
+            this.brokenImageFileStorage = brokenImageFileStorage;
+            this.brokenAudioFileStorage = brokenAudioFileStorage;
+            this.brokenAudioAuditFileStorage = brokenAudioAuditFileStorage;
+            this.fileSystemAccessor = fileSystemAccessor;
         }
 
         [HttpPost]
@@ -45,6 +62,63 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
             };
 
             brokenInterviewPackageStorage.Store(brokenPackage, null);
+
+            return this.Ok();
+        }
+
+        [HttpPost]
+        [Route("api/supervisor/v1/brokenImage")]
+        public IActionResult PostImage([FromBody]BrokenImagePackageApiView package)
+        {
+            if (!ModelState.IsValid)
+                return this.BadRequest(ModelState);
+            
+            if (package?.Data == null)
+                return this.BadRequest("Server cannot accept empty package content.");
+            
+            if (fileSystemAccessor.IsInvalidFileName(package.FileName))
+                return BadRequest("Invalid file name");
+            
+            var newFileName = BrokenFileHelper.GetBrokenFileName(User.UserId()!.Value, package.FileName);
+            brokenImageFileStorage.StoreInterviewBinaryData(package.InterviewId, newFileName, Convert.FromBase64String(package.Data), package.ContentType);
+
+            return this.Ok();
+        }
+
+        [HttpPost]
+        [Route("api/supervisor/v1/brokenAudio")]
+        public IActionResult PostImage([FromBody]BrokenAudioPackageApiView package)
+        {
+            if (!ModelState.IsValid)
+                return this.BadRequest(ModelState);
+            
+            if (package == null)
+                return this.BadRequest("Server cannot accept empty package content.");
+
+            if (fileSystemAccessor.IsInvalidFileName(package.FileName))
+                return BadRequest("Invalid file name");
+
+            var newFileName = BrokenFileHelper.GetBrokenFileName(User.UserId()!.Value, package.FileName);
+            brokenAudioFileStorage.StoreInterviewBinaryData(package.InterviewId, newFileName, Convert.FromBase64String(package.Data), package.ContentType);
+
+            return this.Ok();
+        }
+
+        [HttpPost]
+        [Route("api/supervisor/v1/brokenAudioAudit")]
+        public IActionResult PostImage([FromBody]BrokenAudioAuditPackageApiView package)
+        {
+            if (!ModelState.IsValid)
+                return this.BadRequest(ModelState);
+            
+            if (package == null)
+                return this.BadRequest("Server cannot accept empty package content.");
+
+            if (fileSystemAccessor.IsInvalidFileName(package.FileName))
+                return BadRequest("Invalid file name");
+
+            var newFileName = BrokenFileHelper.GetBrokenFileName(User.UserId()!.Value, package.FileName);
+            brokenAudioAuditFileStorage.StoreInterviewBinaryData(package.InterviewId, newFileName, Convert.FromBase64String(package.Data), package.ContentType);
 
             return this.Ok();
         }
