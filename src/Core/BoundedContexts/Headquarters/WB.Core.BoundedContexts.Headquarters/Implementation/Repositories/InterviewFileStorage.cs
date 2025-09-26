@@ -50,7 +50,9 @@ public abstract class InterviewFileStorage: IInterviewFileStorage
                         interviewId, 
                         fileSystemAccessor.GetFileName(fileName),
                         GetContentType(fileName),
-                        () => Task.FromResult(fileSystemAccessor.ReadAllBytes(fileName)))).ToList();
+                        () => Task.FromResult(fileSystemAccessor.ReadAllBytes(fileName)),
+                        null))
+            .ToList();
         return Task.FromResult(interviewBinaryDataDescriptors);
     }
 

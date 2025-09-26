@@ -98,6 +98,7 @@ using WB.Infrastructure.Native.Questionnaire.Impl;
 using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Workspaces;
 using AttachmentContent = WB.Core.BoundedContexts.Headquarters.Views.Questionnaire.AttachmentContent;
+using FileInfo = WB.Core.SharedKernels.DataCollection.WebApi.FileInfo;
 using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
 namespace WB.Tests.Abc.TestFactories
@@ -364,7 +365,7 @@ namespace WB.Tests.Abc.TestFactories
 
         public InterviewBinaryDataDescriptor InterviewBinaryDataDescriptor(Guid? interviewId = null, string fileName = null)
             => new InterviewBinaryDataDescriptor(interviewId ?? Guid.NewGuid(), fileName ?? "test.jpeg", null, 
-                () => Task.FromResult(Array.Empty<byte>()));
+                () => Task.FromResult(Array.Empty<byte>()), null);
 
         public InterviewCommentedStatus InterviewCommentedStatus(
             InterviewExportedAction status = InterviewExportedAction.ApprovedBySupervisor,
@@ -2549,19 +2550,17 @@ namespace WB.Tests.Abc.TestFactories
         public InterviewUploadState InterviewUploadState(
             Guid responsibleId,
             bool isEventsUploaded = false,
-            HashSet<string> imagesQuestionsMd5 = null,
-            HashSet<string> audioQuestionsFilesMd5 = null,
-            HashSet<string> audioAuditFilesMd5 = null
+            List<FileInfo> imagesQuestions = null,
+            List<FileInfo> audioQuestionsFiles = null,
+            List<FileInfo> audioAuditFiles = null
             )
         {
             return new InterviewUploadState()
             {
                 IsEventsUploaded = isEventsUploaded,
-                ImagesFilesNames = new HashSet<string>(),
-                AudioFilesNames = new HashSet<string>(),
-                ImageQuestionsFilesMd5 = imagesQuestionsMd5 ?? new HashSet<string>(),
-                AudioQuestionsFilesMd5 = audioQuestionsFilesMd5 ?? new HashSet<string>(),
-                AudioAuditFilesMd5 = audioAuditFilesMd5 ?? new HashSet<string>(),
+                ImagesFiles = imagesQuestions ?? new List<FileInfo>(),
+                AudioFiles = audioQuestionsFiles ?? new List<FileInfo>(),
+                AudioAuditFiles = audioAuditFiles ?? new List<FileInfo>(),
                 ResponsibleId = responsibleId,
             };
         }

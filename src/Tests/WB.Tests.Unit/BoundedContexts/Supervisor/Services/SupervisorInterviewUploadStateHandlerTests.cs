@@ -63,7 +63,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
                 .ReturnsAsync(new List<InterviewBinaryDataDescriptor>
                 {
                     new InterviewBinaryDataDescriptor(Id.g1, "pic1.jpg", "image/data", 
-                        () => Task.FromResult(Array.Empty<byte>()))
+                        () => Task.FromResult(Array.Empty<byte>()), "pic1_md5")
                 });
 
             fixture.GetMock<IAudioFileStorage>()
@@ -71,7 +71,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
                 .ReturnsAsync(new List<InterviewBinaryDataDescriptor>
                 {
                     new InterviewBinaryDataDescriptor(Id.g1, "audio.jpg", "audio/data", 
-                        () => Task.FromResult(Array.Empty<byte>()))
+                        () => Task.FromResult(Array.Empty<byte>()), "audio_md5")
                 });
 
             var handler = fixture.Create<SupervisorInterviewUploadStateHandler>();
