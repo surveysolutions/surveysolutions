@@ -52,7 +52,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
                             interviewId, 
                             fileSystemAccessor.GetFileName(fileName),
                             null,
-                            () => Task.FromResult(fileSystemAccessor.ReadAllBytes(fileName)))).ToList();
+                            () => Task.FromResult(fileSystemAccessor.ReadAllBytes(fileName)),
+                            null))
+                .ToList();
             return Task.FromResult(interviewBinaryDataDescriptors);
         }
 

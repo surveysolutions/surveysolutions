@@ -48,7 +48,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
                     m.InterviewId,
                     m.FileName,
                     m.ContentType,
-                    () => Task.FromResult(this.GetFileById(m.FileId))
+                    () => Task.FromResult(this.GetFileById(m.FileId)),
+                    m.Md5
                 )
             ).ToList();
             return Task.FromResult(interviewBinaryDataDescriptors);
@@ -75,7 +76,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
                     InterviewId = interviewId,
                     FileId = fileId,
                     FileName = fileName,
-                    ContentType = contentType
+                    ContentType = contentType,
                 });
             }
             else
