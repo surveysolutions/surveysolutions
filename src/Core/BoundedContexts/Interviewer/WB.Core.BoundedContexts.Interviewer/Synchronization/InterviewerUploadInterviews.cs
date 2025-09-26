@@ -23,7 +23,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
 
         public InterviewerUploadInterviews(
             IInterviewerInterviewAccessor interviewFactory, 
-            IPlainStorage<InterviewMultimediaView> interviewMultimediaViewStorage, 
             ILogger logger, 
             IImageFileStorage imagesStorage, 
             IAudioFileStorage audioFileStorage, 
@@ -33,7 +32,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
             IPlainStorage<InterviewView> interviewViewRepository,
             IInterviewerSettings interviewerSettings,
             IEnumeratorEventStorage eventStorage,
-            IPrincipal principal) : base(interviewFactory, interviewMultimediaViewStorage, logger, imagesStorage, audioFileStorage, synchronizationService, audioAuditFileStorage, interviewViewRepository, principal, sortOrder)
+            IPrincipal principal) : base(interviewFactory, logger, imagesStorage, audioFileStorage, synchronizationService, audioAuditFileStorage, interviewViewRepository, principal, sortOrder)
         {
             this.interviewViewRepository = interviewViewRepository;
             this.interviewerSettings = interviewerSettings;
