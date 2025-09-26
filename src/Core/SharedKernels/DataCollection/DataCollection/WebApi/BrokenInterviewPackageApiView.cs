@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.SharedKernels.DataCollection.WebApi
@@ -18,5 +19,32 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
         public string ExceptionMessage { get; set; }
         public string ExceptionStackTrace { get; set; }
         public long PackageSize { get; set; }
+    }
+
+    public class BrokenFilePackageApiView
+    {
+        private string fileName;
+        public Guid InterviewId { get; set; }
+
+        public string FileName
+        {
+            get => fileName;
+            set => fileName = string.IsNullOrWhiteSpace(value) ? value : Path.GetFileName(value);
+        }
+
+        public string ContentType { get; set; }
+        public string Data { get; set; }
+    }
+    
+    public class BrokenImagePackageApiView : BrokenFilePackageApiView
+    {
+    }
+    
+    public class BrokenAudioPackageApiView : BrokenFilePackageApiView
+    {
+    }
+    
+    public class BrokenAudioAuditPackageApiView : BrokenFilePackageApiView
+    {
     }
 }

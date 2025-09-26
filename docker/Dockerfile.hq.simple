@@ -16,10 +16,9 @@ COPY $FONTS /usr/share/fonts
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
     gdal-bin \
-    ffmpeg \
+    #ffmpeg \
     curl \
     libfontconfig1 \
-    libgdiplus \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 

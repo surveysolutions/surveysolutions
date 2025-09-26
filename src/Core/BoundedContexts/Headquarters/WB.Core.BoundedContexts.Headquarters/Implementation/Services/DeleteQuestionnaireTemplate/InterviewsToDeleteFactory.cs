@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities.Question;
 using Microsoft.Extensions.Logging;
 using NHibernate.Linq;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services.DeleteQuestionnaireTemplate;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;

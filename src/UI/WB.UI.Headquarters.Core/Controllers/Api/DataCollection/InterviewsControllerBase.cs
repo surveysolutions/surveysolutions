@@ -23,6 +23,7 @@ using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 using WB.Core.SharedKernels.DataCollection.WebApi;
@@ -41,7 +42,10 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
         private readonly IAudioAuditFileStorage audioAuditFileStorage;
         private readonly IWebHostEnvironment webHostEnvironment;
         private readonly IImageProcessingService imageProcessingService;
-        private readonly IAuthorizedUser authorizedUser;
+        private readonly IBrokenImageFileStorage brokenImageFileStorage;
+        private readonly IBrokenAudioFileStorage brokenAudioFileStorage;
+        private readonly IBrokenAudioAuditFileStorage brokenAudioAuditFileStorage;
+        protected readonly IAuthorizedUser authorizedUser;
         protected readonly IInterviewPackagesService packagesService;
         protected readonly ICommandService commandService;
         protected readonly IMetaInfoBuilder metaBuilder;
@@ -62,7 +66,10 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             IAudioAuditFileStorage audioAuditFileStorage,
             IUserToDeviceService userToDeviceService,
             IWebHostEnvironment webHostEnvironment,
-            IImageProcessingService imageProcessingService)
+            IImageProcessingService imageProcessingService,
+            IBrokenImageFileStorage brokenImageFileStorage,
+            IBrokenAudioFileStorage brokenAudioFileStorage,
+            IBrokenAudioAuditFileStorage brokenAudioAuditFileStorage)
         {
             this.imageFileStorage = imageFileStorage;
             this.audioFileStorage = audioFileStorage;
@@ -76,6 +83,9 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             this.audioAuditFileStorage = audioAuditFileStorage;
             this.webHostEnvironment = webHostEnvironment;
             this.imageProcessingService = imageProcessingService;
+            this.brokenImageFileStorage = brokenImageFileStorage;
+            this.brokenAudioFileStorage = brokenAudioFileStorage;
+            this.brokenAudioAuditFileStorage = brokenAudioAuditFileStorage;
             this.userToDeviceService = userToDeviceService;
         }
 
@@ -135,7 +145,9 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
         }
 
         protected abstract string ProductName { get; }
-        
+
+        protected abstract bool AllowWorkWithInterview(Guid interviewId);
+
         public virtual IActionResult PostImage([FromBody] PostFileRequest request)
         {
             if (request?.Data == null)
@@ -143,26 +155,50 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             
             var bytes = Convert.FromBase64String(request.Data);
             this.imageProcessingService.Validate(bytes);
-
-            this.imageFileStorage.StoreInterviewBinaryData(request.InterviewId, request.FileName, bytes, null);
+            
+            if (AllowWorkWithInterview(request.InterviewId))
+                this.imageFileStorage.StoreInterviewBinaryData(request.InterviewId, request.FileName, bytes, null);
+            else
+            {
+                var newFileName = BrokenFileHelper.GetBrokenFileName(User.UserId()!.Value, request.FileName);
+                this.brokenImageFileStorage.StoreInterviewBinaryData(request.InterviewId, newFileName, bytes, null);
+            }
+            
             return StatusCode(StatusCodes.Status204NoContent);
         }
-
+        
         public virtual IActionResult PostAudio([FromBody] PostFileRequest request)
         {
-            this.audioFileStorage.StoreInterviewBinaryData(request.InterviewId, request.FileName,
-                Convert.FromBase64String(request.Data), request.ContentType);
+            if (request?.Data == null)
+                return BadRequest("Request is null");
+            
+            if (AllowWorkWithInterview(request.InterviewId))
+                this.audioFileStorage.StoreInterviewBinaryData(request.InterviewId, request.FileName, Convert.FromBase64String(request.Data), request.ContentType);
+            else
+            {
+                var newFileName = BrokenFileHelper.GetBrokenFileName(User.UserId()!.Value, request.FileName);
+                this.brokenAudioFileStorage.StoreInterviewBinaryData(request.InterviewId, newFileName, Convert.FromBase64String(request.Data), request.ContentType);
+            }
+            
             return StatusCode(StatusCodes.Status204NoContent);
         }
 
         public virtual IActionResult PostAudioAudit([FromBody] PostFileRequest request)
         {
-            this.audioAuditFileStorage.StoreInterviewBinaryData(request.InterviewId, request.FileName,
-                Convert.FromBase64String(request.Data), request.ContentType);
+            if (request?.Data == null)
+                return BadRequest("Request is null");
+            
+            if (AllowWorkWithInterview(request.InterviewId))
+                this.audioAuditFileStorage.StoreInterviewBinaryData(request.InterviewId, request.FileName, Convert.FromBase64String(request.Data), request.ContentType);
+            else
+            {
+                var newFileName = BrokenFileHelper.GetBrokenFileName(User.UserId()!.Value, request.FileName);
+                this.brokenAudioAuditFileStorage.StoreInterviewBinaryData(request.InterviewId, newFileName, Convert.FromBase64String(request.Data), request.ContentType);
+            }
 
             return StatusCode(StatusCodes.Status204NoContent);
         }
-
+        
         protected async Task<InterviewUploadState> GetInterviewUploadStateImpl(Guid id, [FromBody] EventStreamSignatureTag eventStreamSignatureTag)
         {
             var doesEventsExists = this.packagesService.IsPackageDuplicated(eventStreamSignatureTag);

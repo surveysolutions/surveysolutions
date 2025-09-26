@@ -39,10 +39,14 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v3
             IAudioAuditFileStorage audioAuditFileStorage,
             IUserToDeviceService userToDeviceService,
             IWebHostEnvironment webHostEnvironment,
-            IImageProcessingService imageProcessingService) 
+            IImageProcessingService imageProcessingService,
+            IBrokenImageFileStorage brokenImageFileStorage,
+            IBrokenAudioFileStorage brokenAudioFileStorage,
+            IBrokenAudioAuditFileStorage brokenAudioAuditFileStorage) 
             : base(imageFileStorage, audioFileStorage, authorizedUser, interviewsFactory, packagesService, 
                 commandService, metaBuilder, synchronizationSerializer, eventStore, audioAuditFileStorage, 
-                userToDeviceService, webHostEnvironment, imageProcessingService)
+                userToDeviceService, webHostEnvironment, imageProcessingService, brokenImageFileStorage, 
+                brokenAudioFileStorage, brokenAudioAuditFileStorage)
         {
         }
 
