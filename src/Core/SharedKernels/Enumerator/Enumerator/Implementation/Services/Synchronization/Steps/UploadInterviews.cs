@@ -198,6 +198,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 var fileContent = await this.imagesStorage.GetInterviewBinaryDataAsync(interview.InterviewId, imageView.FileName);
                 var hash = GetMd5Cache(fileContent);
                 if (uploadState.ImageQuestionsFilesMd5?.Contains(hash) ?? false) continue;
+                
+                var remoteImage = uploadState.ImagesFiles?.FirstOrDefault(f => f.FileName == imageView.FileName && f.Md5 == hash);
+                if (remoteImage != null) continue;
 
                 cancellationToken.ThrowIfCancellationRequested();
 
@@ -230,6 +233,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 var hash = GetMd5Cache(fileData);
                 if (uploadState.AudioAuditFilesMd5?.Contains(hash) ?? false) continue;
 
+                var remoteAudioAudit = uploadState.AudioAuditFiles?.FirstOrDefault(f => f.FileName == auditFile.FileName && f.Md5 == hash);
+                if (remoteAudioAudit != null) continue;
+
                 cancellationToken.ThrowIfCancellationRequested();
 
                 await this.synchronizationService.UploadInterviewAudioAuditAsync(
@@ -261,6 +267,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 var fileData = await audioFile.GetData();
                 var hash = GetMd5Cache(fileData);
                 if (uploadState.AudioQuestionsFilesMd5?.Contains(hash) ?? false) continue;
+
+                var remoteAudio = uploadState.AudioFiles?.FirstOrDefault(f => f.FileName == audioFile.FileName && f.Md5 == hash);
+                if (remoteAudio != null) continue;
 
                 cancellationToken.ThrowIfCancellationRequested();
 

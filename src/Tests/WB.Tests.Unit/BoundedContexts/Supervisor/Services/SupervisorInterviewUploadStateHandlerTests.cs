@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoFixture;
 using Moq;
@@ -82,8 +83,8 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
                 Check = new EventStreamSignatureTag()
             });
 
-            Assert.That(response.UploadState.AudioFilesNames, Contains.Item("audio.jpg"));
-            Assert.That(response.UploadState.ImagesFilesNames, Contains.Item("pic1.jpg"));
+            Assert.That(response.UploadState.AudioFiles.FirstOrDefault(s => s.FileName == "audio.jpg"), Is.Not.Null);
+            Assert.That(response.UploadState.ImagesFiles.FirstOrDefault(s => s.FileName == "pic1.jpg"), Is.Not.Null);
         }
     }
 }

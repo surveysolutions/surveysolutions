@@ -466,7 +466,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.SynchronizationSteeps
             var downloadHqChangesForInterview = new InterviewerUploadInterviews(
                 interviewFactory ?? Mock.Of<IInterviewerInterviewAccessor>(),
                 Mock.Of<ILogger>(),
-                imagesStorage ?? Mock.Of<IImageFileStorage>(),
+                imagesStorage ?? Mock.Of<IImageFileStorage>(s => s.GetBinaryFilesForInterview(It.IsAny<Guid>()) == Task.FromResult(new List<InterviewBinaryDataDescriptor>())),
                 audioFileStorage ?? Mock.Of<IAudioFileStorage>(s => s.GetBinaryFilesForInterview(It.IsAny<Guid>()) == Task.FromResult(new List<InterviewBinaryDataDescriptor>())),
                 synchronizationService ?? Mock.Of<ISynchronizationService>(),
                 audioAuditFileStorage ?? Mock.Of<IAudioAuditFileStorage>(s => s.GetBinaryFilesForInterview(It.IsAny<Guid>()) == Task.FromResult(new List<InterviewBinaryDataDescriptor>())),

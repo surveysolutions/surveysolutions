@@ -77,24 +77,26 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
         [Test]
         public async Task should_not_upload_binaries_that_exists()
         {
+            string md5_empty_hash = "d41d8cd98f00b204e9800998ecf8427e";
+            
             fixture.GetMock<IInterviewerInterviewAccessor>()
                 .Setup(s => s.GetInterviewEventStreamContainer(It.IsAny<Guid>(), It.IsAny<bool>(), It.IsAny<SyncInfoPackageResponse>()))
                 .Returns(new InterviewPackageContainer(interviewId, new[] { Create.Event.CommittedEvent() }.ToReadOnlyCollection()));
             // arrange interview with 2 images and 2 audio
-            fixture.GetMock<IPlainStorage<InterviewMultimediaView>>()
-                .Setup(s => s.Where(It.IsAny<Expression<Func<InterviewMultimediaView, bool>>>()))
-                .Returns(new List<InterviewMultimediaView>
+            fixture.GetMock<IImageFileStorage>()
+                .Setup(s => s.GetBinaryFilesForInterview(interviewId))
+                .ReturnsAsync(new List<InterviewBinaryDataDescriptor>
                 {
-                    new InterviewMultimediaView{ FileName = "pic1.jpg", InterviewId = interviewId},
-                    new InterviewMultimediaView{ FileName = "pic2.jpg", InterviewId = interviewId}
-                }.AsReadOnly());
+                    Create.Entity.InterviewBinaryDataDescriptor(interviewId, "pic1.jpg", md5_empty_hash),
+                    Create.Entity.InterviewBinaryDataDescriptor(interviewId, "pic2.jpg", md5_empty_hash)
+                });
 
             fixture.GetMock<IAudioFileStorage>()
                 .Setup(s => s.GetBinaryFilesForInterview(interviewId))
                 .ReturnsAsync(new List<InterviewBinaryDataDescriptor>
                 {
-                    Create.Entity.InterviewBinaryDataDescriptor(interviewId, "audio1.flac"),
-                    Create.Entity.InterviewBinaryDataDescriptor(interviewId, "audio2.mp3")
+                    Create.Entity.InterviewBinaryDataDescriptor(interviewId, "audio1.flac", md5_empty_hash),
+                    Create.Entity.InterviewBinaryDataDescriptor(interviewId, "audio2.mp3", md5_empty_hash)
                 });
 
             // arrange sync service to notify that 1 audio and 1 image is already uploaded
@@ -104,8 +106,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 .ReturnsAsync(new InterviewUploadState
                 {
                     IsEventsUploaded = true,
-                    ImagesFiles = new List<FileInfo> { new("pic1.jpg", "pic1_md5") },
-                    AudioFiles = new List<FileInfo> { new("audio1.flac", "audio1_md5") },
+                    ImagesFiles = new List<FileInfo> { new("pic1.jpg", md5_empty_hash) },
+                    AudioFiles = new List<FileInfo> { new("audio1.flac", md5_empty_hash) },
                 });
 
             await fixture.Create<InterviewerUploadInterviews>().ExecuteAsync();
