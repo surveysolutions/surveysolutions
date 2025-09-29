@@ -213,6 +213,9 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             return new InterviewUploadState
             {
                 IsEventsUploaded = doesEventsExists,
+                ImageQuestionsFilesMd5 = imagesQuestionsMd5.Select(i => i.Md5).ToHashSet(),
+                AudioQuestionsFilesMd5 = audioQuestionsFilesMd5.Select(i => i.Md5).ToHashSet(),
+                AudioAuditFilesMd5 = audioAuditFilesMd5.Select(i => i.Md5).ToHashSet(),
                 ImagesFiles = imagesQuestionsMd5,
                 AudioFiles = audioQuestionsFilesMd5,
                 AudioAuditFiles = audioAuditFilesMd5,
@@ -222,15 +225,15 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             };
         }
 
-        private static async Task<List<FileInfo>> GetFileInfoCaches(List<InterviewBinaryDataDescriptor> descriptors)
+        private static async Task<List<FileInfoUploadState>> GetFileInfoCaches(List<InterviewBinaryDataDescriptor> descriptors)
         {
-            List<FileInfo> caches = new List<FileInfo>(descriptors.Count);
+            List<FileInfoUploadState> caches = new List<FileInfoUploadState>(descriptors.Count);
 
             foreach (var descriptor in descriptors)
             {
                 var md5 = await GetMd5Cache(descriptor);
                 if (md5 != null)
-                    caches.Add(new FileInfo(descriptor.FileName, md5));
+                    caches.Add(new FileInfoUploadState(descriptor.FileName, md5));
             }
 
             return caches;

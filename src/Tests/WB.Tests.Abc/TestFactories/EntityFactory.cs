@@ -98,7 +98,6 @@ using WB.Infrastructure.Native.Questionnaire.Impl;
 using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Workspaces;
 using AttachmentContent = WB.Core.BoundedContexts.Headquarters.Views.Questionnaire.AttachmentContent;
-using FileInfo = WB.Core.SharedKernels.DataCollection.WebApi.FileInfo;
 using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
 namespace WB.Tests.Abc.TestFactories
@@ -2550,17 +2549,17 @@ namespace WB.Tests.Abc.TestFactories
         public InterviewUploadState InterviewUploadState(
             Guid responsibleId,
             bool isEventsUploaded = false,
-            List<FileInfo> imagesQuestions = null,
-            List<FileInfo> audioQuestionsFiles = null,
-            List<FileInfo> audioAuditFiles = null
+            List<FileInfoUploadState> imagesQuestions = null,
+            List<FileInfoUploadState> audioQuestionsFiles = null,
+            List<FileInfoUploadState> audioAuditFiles = null
             )
         {
             return new InterviewUploadState()
             {
                 IsEventsUploaded = isEventsUploaded,
-                ImagesFiles = imagesQuestions ?? new List<FileInfo>(),
-                AudioFiles = audioQuestionsFiles ?? new List<FileInfo>(),
-                AudioAuditFiles = audioAuditFiles ?? new List<FileInfo>(),
+                ImagesFiles = imagesQuestions ?? new List<FileInfoUploadState>(),
+                AudioFiles = audioQuestionsFiles ?? new List<FileInfoUploadState>(),
+                AudioAuditFiles = audioAuditFiles ?? new List<FileInfoUploadState>(),
                 ResponsibleId = responsibleId,
             };
         }
