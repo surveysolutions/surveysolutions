@@ -36,8 +36,8 @@
                     </div>
 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-lg btn-primary" @click="generate()" :disabled="isGenerating"
-                            v-if="!canRetryGenerate">
+                        <button type="button" class="btn btn-lg btn-primary" @click="generate()"
+                            :disabled="isGenerating" v-if="!canRetryGenerate">
                             {{ $t('QuestionnaireEditor.GeneratePdf') }}
                         </button>
                         <button type="button" class="btn btn-lg btn-primary" @click="retryGenerate()"
@@ -53,14 +53,15 @@
         </div>
         <div v-if="visible" uib-modal-backdrop="modal-backdrop" class="modal-backdrop fade ng-scope in"
             uib-modal-animation-class="fade" modal-in-class="in" modal-animation="true"
-            data-bootstrap-modal-aria-hidden-count="1" aria-hidden="true" style="z-index: 1040;" @click="cancel()"></div>
+            data-bootstrap-modal-aria-hidden-count="1" aria-hidden="true" style="z-index: 1040;" @click="cancel()">
+        </div>
     </teleport>
 </template>
 
 <script>
 import _ from 'lodash';
 import Help from './Help.vue';
-import { retryExportPdf, updateExportPdfStatus } from '../../../services/pdfService'
+import { retryExportPdf, updateExportPdfStatus, generateExportPdfStatus } from '../../../services/pdfService'
 
 export default {
     name: 'DownloadPDFDialog',
@@ -109,17 +110,19 @@ export default {
         selectTranslation(translation) {
             this.selectedTranslation = translation;
         },
-        generate() {
+        async generate() {
             this.generateStatusMessage = this.$t("QuestionnaireEditor.Initializing") + '...';
             this.isGenerating = true;
 
-            this.updateExportPdfStatus(this.selectedTranslation.translationId);
+            const translationId = this.selectedTranslation.translationId;
+            const result = await generateExportPdfStatus(this.questionnaireId, translationId)
+            this.onExportPdfStatusReceived(result, translationId);
         },
-        retryGenerate() {
+        async retryGenerate() {
             var translationId = this.selectedTranslation.translationId;
 
             retryExportPdf(this.questionnaireId, translationId);
-            this.generate();
+            await this.generate();
             this.canRetryGenerate = false;
         },
 

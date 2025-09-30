@@ -152,11 +152,13 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
         [ResponseCache (Duration = 0, NoStore = true)]
         [HttpGet]
         [Route("status/{id}")]
-        public JsonResult Status(QuestionnaireRevision id, Guid? translation, int? timezoneOffsetMinutes)
+        public IActionResult Status(QuestionnaireRevision id, Guid? translation, int? timezoneOffsetMinutes)
         {
             var pdfKey = GetHtmlKey(id, translation);
 
-            PdfGenerationProgress pdfGenerationProgress = GeneratedPdfs.GetOrAdd(pdfKey, StartNewHtmlGeneration(id, translation, timezoneOffsetMinutes));
+            PdfGenerationProgress pdfGenerationProgress = GeneratedPdfs.GetOrNull(pdfKey);
+            if (pdfGenerationProgress == null)
+                return NotFound();
 
             long sizeInKb = this.GetFileSizeInKb(pdfGenerationProgress.FilePath);
             if (sizeInKb == 0)
@@ -199,14 +201,14 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
                 return StatusCode((int)HttpStatusCode.NotFound);
             }
         }
-
+        
         [ResponseCache (Duration = 0, NoStore = true)]
-        [HttpGet]
-        [Route("statusPdf/{id}")]
-        public JsonResult StatusPdf(QuestionnaireRevision id, Guid? translation, int? timezoneOffsetMinutes)
+        [HttpPost]
+        [Route("generatePdf/{id}")]
+        public IActionResult GenereatePdf(QuestionnaireRevision id, Guid? translation, int? timezoneOffsetMinutes)
         {
             var pdfKey = GetPdfKey(id, translation);
-
+            
             PdfGenerationProgress StartPdf(string _) => StartNewPdfGeneration(id, translation, timezoneOffsetMinutes);
 
             PdfGenerationProgress pdfGenerationProgress = GeneratedPdfs.GetOrAdd(pdfKey, StartPdf);
@@ -224,6 +226,36 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
                     return this.Json(PdfStatus.InProgress(PdfMessages.PreparingToGenerate));
                 }
             }
+
+            long sizeInKb = this.GetFileSizeInKb(pdfGenerationProgress.FilePath);
+
+            if (sizeInKb == 0)
+                return pdfGenerationProgress.IsFinished 
+                    ? this.Json(PdfStatus.Failed(PdfMessages.FailedToGenerate))
+                    : this.Json(PdfStatus.InProgress(PdfMessages.PreparingToGenerate));
+
+            return this.Json(
+                pdfGenerationProgress.IsFinished
+                    ? PdfStatus.Ready(
+                        pdfGenerationProgress.TimeSinceFinished.TotalMinutes < 1
+                            ? string.Format(PdfMessages.GenerateLessMinute, sizeInKb)
+                            : string.Format(PdfMessages.Generate, (int)pdfGenerationProgress.TimeSinceFinished.TotalMinutes, sizeInKb))
+                    : PdfStatus.InProgress(string.Format(PdfMessages.GeneratingSuccess, sizeInKb)));
+        }
+
+        [ResponseCache (Duration = 0, NoStore = true)]
+        [HttpGet]
+        [Route("statusPdf/{id}")]
+        public IActionResult StatusPdf(QuestionnaireRevision id, Guid? translation, int? timezoneOffsetMinutes)
+        {
+            var pdfKey = GetPdfKey(id, translation);
+            
+            PdfGenerationProgress pdfGenerationProgress = GeneratedPdfs.GetOrNull(pdfKey);
+            if (pdfGenerationProgress == null)
+                return NotFound();
+
+            if (pdfGenerationProgress.IsFailed)
+                return this.Json(PdfStatus.Failed(PdfMessages.FailedToGenerate));
 
             long sizeInKb = this.GetFileSizeInKb(pdfGenerationProgress.FilePath);
 

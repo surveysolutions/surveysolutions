@@ -1,5 +1,9 @@
 import { getSilently, post } from './apiService';
 
+export function generateExportPdfStatus(questionnaireId, translationId) {
+    return post('/pdf/generatePdf/' + questionnaireId + '?timezoneOffsetMinutes=' + new Date().getTimezoneOffset() + '&translation=' + translationId);
+}
+
 export function updateExportPdfStatus(questionnaireId, translationId) {
     return getSilently(
         '/pdf/statusPdf/' +
