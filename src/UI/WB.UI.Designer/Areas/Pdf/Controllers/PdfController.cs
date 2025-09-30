@@ -158,7 +158,7 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
 
             PdfGenerationProgress pdfGenerationProgress = GeneratedPdfs.GetOrNull(pdfKey);
             if (pdfGenerationProgress == null)
-                return NotFound();
+                return this.Json(PdfStatus.Failed(PdfMessages.NotFound));
 
             long sizeInKb = this.GetFileSizeInKb(pdfGenerationProgress.FilePath);
             if (sizeInKb == 0)
@@ -252,7 +252,7 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
             
             PdfGenerationProgress pdfGenerationProgress = GeneratedPdfs.GetOrNull(pdfKey);
             if (pdfGenerationProgress == null)
-                return NotFound();
+                return this.Json(PdfStatus.Failed(PdfMessages.NotFound));
 
             if (pdfGenerationProgress.IsFailed)
                 return this.Json(PdfStatus.Failed(PdfMessages.FailedToGenerate));
@@ -263,7 +263,7 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
                 return pdfGenerationProgress.IsFinished 
                     ? this.Json(PdfStatus.Failed(PdfMessages.FailedToGenerate))
                     : this.Json(PdfStatus.InProgress(PdfMessages.PreparingToGenerate));
-
+            
             return this.Json(
                 pdfGenerationProgress.IsFinished
                     ? PdfStatus.Ready(

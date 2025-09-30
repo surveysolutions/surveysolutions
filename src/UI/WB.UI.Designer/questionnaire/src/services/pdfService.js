@@ -5,14 +5,7 @@ export function generateExportPdfStatus(questionnaireId, translationId) {
 }
 
 export function updateExportPdfStatus(questionnaireId, translationId) {
-    return getSilently(
-        '/pdf/statusPdf/' +
-            questionnaireId +
-            '?timezoneOffsetMinutes=' +
-            new Date().getTimezoneOffset() +
-            '&translation=' +
-            translationId
-    );
+    return getSilently('/pdf/statusPdf/' + questionnaireId + '?timezoneOffsetMinutes=' + new Date().getTimezoneOffset() + '&translation=' + translationId);
 }
 
 export function retryExportPdf(questionnaireId, translationId) {

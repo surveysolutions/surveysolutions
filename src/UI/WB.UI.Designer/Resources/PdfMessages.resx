@@ -140,4 +140,7 @@ Please wait...</value>
   <data name="Retry" xml:space="preserve">
     <value>Retring export as PDF.</value>
   </data>
+  <data name="NotFound" xml:space="preserve">
+    <value>The requested PDF job has not been located. Please attempt to retry.</value>
+  </data>
 </root>

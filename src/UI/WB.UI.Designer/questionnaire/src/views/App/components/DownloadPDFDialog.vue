@@ -31,7 +31,7 @@
                         </div>
                         <p></p>
                         <p>
-                        <pre v-if="isGenerating">{{ generateStatusMessage }}</pre>
+                        <pre v-if="isGenerating || generateStatusMessage">{{ generateStatusMessage }}</pre>
                         </p>
                     </div>
 
@@ -139,8 +139,7 @@ export default {
             if (data.message !== null)
                 this.generateStatusMessage = data.message;
             else
-                this.generateStatusMessage =
-                    "Unexpected server response.\r\nPlease contact support@mysurvey.solutions if problem persists.";
+                this.generateStatusMessage = "Unexpected server response.\r\nPlease contact support@mysurvey.solutions if problem persists.";
 
             this.canDownload = data.readyForDownload;
             this.canRetryGenerate = data.canRetry;
@@ -152,8 +151,7 @@ export default {
                 } else {
                     this.generateTimerId = setTimeout(function () {
                         self.updateExportPdfStatus(translationId);
-                    },
-                        1500);
+                    }, 1500);
                 }
             }
             else {
