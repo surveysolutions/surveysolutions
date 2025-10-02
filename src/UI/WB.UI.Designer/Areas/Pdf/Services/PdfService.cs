@@ -12,6 +12,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.UI.Designer.Areas.Pdf.Controllers;
+using WB.UI.Designer.Areas.Pdf.Utils;
 using WB.UI.Designer.Resources;
 using WB.UI.Shared.Web.Services;
 
@@ -19,8 +20,7 @@ namespace WB.UI.Designer.Areas.Pdf.Services;
 
 public class PdfService : IPdfService
 {
-    private static readonly ConcurrentDictionary<string, PdfGenerationProgress> GeneratedPdfs = new();
-
+    private static readonly PdfQuery pdfQuery = new PdfQuery(20, 7);
 
     private readonly IOptions<PdfSettings> options;
     private readonly IViewRenderService viewRenderingService;
@@ -29,7 +29,7 @@ public class PdfService : IPdfService
     private readonly IFileSystemAccessor fileSystemAccessor;
     private readonly IHttpContextAccessor httpContextAccessor;
 
-    private PdfService(IOptions<PdfSettings> options,
+    public PdfService(IOptions<PdfSettings> options,
         IViewRenderService viewRenderingService,
         ILogger<PdfService> logger,
         IPdfFactory pdfFactory,
@@ -53,14 +53,14 @@ public class PdfService : IPdfService
             ? StartNewPdfGeneration(id, translation, timezoneOffsetMinutes)
             : StartNewHtmlGeneration(id, translation, timezoneOffsetMinutes);
 
-        PdfGenerationProgress pdfGenerationProgress = GeneratedPdfs.GetOrAdd(key, RunGeneration);
+        PdfGenerationProgress pdfGenerationProgress = pdfQuery.GetOrAdd(key, GetUserId(), RunGeneration);
 
         if (pdfGenerationProgress.IsFailed)
         {
             if (timezoneOffsetMinutes == null)
             {
-                GeneratedPdfs.TryRemove(key, out _);
-                GeneratedPdfs.GetOrAdd(key, RunGeneration);
+                pdfQuery.Remove(key);
+                pdfQuery.GetOrAdd(key, GetUserId(), RunGeneration);
             }
         }
         
@@ -70,7 +70,7 @@ public class PdfService : IPdfService
     public PdfGenerationProgress? Status(QuestionnaireRevision id, Guid? translation, DocumentType documentType)
     {
         var pdfKey = GetKey(documentType, id, translation);
-        return GeneratedPdfs.GetOrNull(pdfKey);
+        return pdfQuery.GetOrNull(pdfKey);
     }
 
     public PdfGenerationProgress Retry(QuestionnaireRevision id, Guid? translation, DocumentType documentType)
@@ -81,26 +81,26 @@ public class PdfService : IPdfService
             ? StartNewPdfGeneration(id, translation, null)
             : StartNewHtmlGeneration(id, translation, null);
 
-        PdfGenerationProgress pdfGenerationProgress = GeneratedPdfs.GetOrAdd(key, RunGeneration);
+        PdfGenerationProgress pdfGenerationProgress = pdfQuery.GetOrAdd(key, GetUserId(), RunGeneration);
         if (pdfGenerationProgress.IsFailed)
         {
-            GeneratedPdfs.TryRemove(key, out _);
+            pdfQuery.Remove(key);
         }
             
-        return GeneratedPdfs.GetOrAdd(key, RunGeneration);
+        return pdfQuery.GetOrAdd(key, GetUserId(), RunGeneration);
     }
 
     public byte[]? Download(QuestionnaireRevision id, Guid? translation, DocumentType documentType)
     {
         var pdfKey = GetKey(documentType, id, translation);
-        PdfGenerationProgress pdfGenerationProgress = GeneratedPdfs.GetOrNull(pdfKey);
+        var pdfGenerationProgress = pdfQuery.GetOrNull(pdfKey);
 
         if (pdfGenerationProgress?.IsFinished == true)
         {
             byte[] content = this.fileSystemAccessor.ReadAllBytes(pdfGenerationProgress.FilePath);
 
             this.fileSystemAccessor.DeleteFile(pdfGenerationProgress.FilePath);
-            GeneratedPdfs.TryRemove(pdfKey, out _);
+            pdfQuery.Remove(pdfKey);
             return content;
         }
 
@@ -204,9 +204,9 @@ public class PdfService : IPdfService
     
     private PdfGenerationProgress StartNewPdfGeneration(QuestionnaireRevision id, Guid? translation, int? timezoneOffsetMinutes)
     {
-        var newPdfGenerationProgress = new PdfGenerationProgress();
-        var _ = this.StartRenderPdf(id, newPdfGenerationProgress, translation, timezoneOffsetMinutes ?? 0);
-        return newPdfGenerationProgress;
+        var progress = new PdfGenerationProgress();
+        var _ = this.StartRenderPdf(id, progress, translation, timezoneOffsetMinutes ?? 0);                
+        return progress;
     }
 
     private PdfQuestionnaireModel? LoadQuestionnaire(QuestionnaireRevision id, Guid? requestedByUserId, string? requestedByUserName, Guid? translation, bool useDefaultTranslation)
@@ -219,4 +219,12 @@ public class PdfService : IPdfService
         return documentType + ":" + id + ":" + translation;
     }
 
+    public Guid GetUserId()
+    {
+        var user = httpContextAccessor.HttpContext?.User;
+        if (user == null)
+            throw new Exception("HttpContext is null");
+        
+        return user.GetId();
+    }
 }
