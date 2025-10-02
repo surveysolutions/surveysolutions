@@ -147,9 +147,9 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
         [ResponseCache (Duration = 0, NoStore = true)]
         [HttpPost]
         [Route("generatePdf/{id}")]
-        public IActionResult GeneratePdf(QuestionnaireRevision id, Guid? translation, int? timezoneOffsetMinutes)
+        public async Task<IActionResult> GeneratePdf(QuestionnaireRevision id, Guid? translation, int? timezoneOffsetMinutes)
         {
-            var pdfGenerationProgress = pdfService.Enqueue(id, translation, DocumentType.Pdf, timezoneOffsetMinutes);
+            var pdfGenerationProgress = await pdfService.Enqueue(id, translation, DocumentType.Pdf, timezoneOffsetMinutes);
 
             if (pdfGenerationProgress.IsFailed)
             {
@@ -210,14 +210,14 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("retry/{id}")]
-        public ActionResult Retry(QuestionnaireRevision? id, [FromBody]RetryRequest? retryRequest)
+        public async Task<ActionResult> Retry(QuestionnaireRevision? id, [FromBody]RetryRequest? retryRequest)
         {
             if (id == null || retryRequest == null)
             {
                 return StatusCode((int)HttpStatusCode.NotFound);
             }
 
-            var pdfGenerationProgress = pdfService.Retry(id, retryRequest.Translation, DocumentType.Pdf);
+            var pdfGenerationProgress = await pdfService.Retry(id, retryRequest.Translation, DocumentType.Pdf);
             return this.Json(PdfStatus.InProgress(PdfMessages.Retry));
         }
             

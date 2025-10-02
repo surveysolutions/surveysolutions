@@ -45,13 +45,23 @@ public class PdfService : IPdfService
         this.httpContextAccessor = httpContextAccessor;
     }
 
-    public PdfGenerationProgress Enqueue(QuestionnaireRevision id, Guid? translation, DocumentType documentType, int? timezoneOffsetMinutes)
+    public async Task<PdfGenerationProgress> Enqueue(QuestionnaireRevision id, Guid? translation, DocumentType documentType, int? timezoneOffsetMinutes)
     {
         var key = GetKey(documentType, id, translation);
             
-        PdfGenerationProgress RunGeneration(string _) => documentType == DocumentType.Pdf
-            ? StartNewPdfGeneration(id, translation, timezoneOffsetMinutes)
-            : StartNewHtmlGeneration(id, translation, timezoneOffsetMinutes);
+        var existing = pdfQuery.GetOrNull(key);
+        if (existing != null)
+            return existing;
+
+        var progress = new PdfGenerationProgress();
+
+        string questionnaireHtml = await GetHtmlContent(id, progress, translation, timezoneOffsetMinutes ?? 0);
+        string footerHtml = await RenderActionResultToString(nameof(PdfController.RenderQuestionnaireFooter), new { });
+        
+        Task RunGeneration(PdfGenerationProgress p) =>
+            documentType == DocumentType.Pdf
+                ? StartRenderPdf(questionnaireHtml, footerHtml, p)
+                : StartRenderHtml(questionnaireHtml, footerHtml, p);
 
         PdfGenerationProgress pdfGenerationProgress = pdfQuery.GetOrAdd(key, GetUserId(), RunGeneration);
 
@@ -73,14 +83,20 @@ public class PdfService : IPdfService
         return pdfQuery.GetOrNull(pdfKey);
     }
 
-    public PdfGenerationProgress Retry(QuestionnaireRevision id, Guid? translation, DocumentType documentType)
+    public async Task<PdfGenerationProgress> Retry(QuestionnaireRevision id, Guid? translation, DocumentType documentType)
     {
         var key = GetKey(documentType, id, translation);
 
-        PdfGenerationProgress RunGeneration(string _) => documentType == DocumentType.Pdf
-            ? StartNewPdfGeneration(id, translation, null)
-            : StartNewHtmlGeneration(id, translation, null);
+        var progress = new PdfGenerationProgress();
 
+        string questionnaireHtml = await GetHtmlContent(id, progress, translation, 0);
+        string footerHtml = await RenderActionResultToString(nameof(PdfController.RenderQuestionnaireFooter), new { });
+        
+        Task RunGeneration(PdfGenerationProgress p) =>
+            documentType == DocumentType.Pdf
+                ? StartRenderPdf(questionnaireHtml, footerHtml, p)
+                : StartRenderHtml(questionnaireHtml, footerHtml, p);
+        
         PdfGenerationProgress pdfGenerationProgress = pdfQuery.GetOrAdd(key, GetUserId(), RunGeneration);
         if (pdfGenerationProgress.IsFailed)
         {
@@ -107,48 +123,42 @@ public class PdfService : IPdfService
         return null;
     }
 
-    private async Task StartRenderPdf(QuestionnaireRevision id, PdfGenerationProgress generationProgress, Guid? translation, int timezoneOffsetMinutes)
+    private async Task StartRenderPdf(string questionnaireHtml, string footerHtml, PdfGenerationProgress generationProgress)
     {
-        var questionnaireHtml = await GetHtmlContent(id, generationProgress, translation, timezoneOffsetMinutes);
         if (generationProgress.IsFailed)
             return;
 
-        var footerHtml = await RenderActionResultToString(nameof(PdfController.RenderQuestionnaireFooter),new {});
-
-        var t = Task.Factory.StartNew(async () =>
+        try
         {
-            try
+            using var playwright = await Playwright.CreateAsync();
+            var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions()
             {
-                using var playwright = await Playwright.CreateAsync();
-                var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions()
-                {
-                    Headless = true,
-                    Args = new[] { "--disable-javascript" }
-                });
+                Headless = true,
+                Args = new[] { "--disable-javascript" }
+            });
 
-                var page = await browser.NewPageAsync();
-                await page.RouteAsync("**/*.js", async route => await route.AbortAsync());
-                await page.SetContentAsync(questionnaireHtml);
+            var page = await browser.NewPageAsync();
+            await page.RouteAsync("**/*.js", async route => await route.AbortAsync());
+            await page.SetContentAsync(questionnaireHtml);
 
-                var contetnt = await page.PdfAsync(new PagePdfOptions()
-                {
-                    HeaderTemplate = "<html></html>",
-                    FooterTemplate = footerHtml,
-                    Format = "A4",
-                    DisplayHeaderFooter = true,
-                    //Margin = new Margin() {Top = "10", Bottom = "7", Left = "0", Right = "0"},
-                });
-                System.IO.File.WriteAllBytes(generationProgress.FilePath, contetnt);
-
-                generationProgress.Finish();
-            }
-            catch (Exception exception)
+            var contetnt = await page.PdfAsync(new PagePdfOptions()
             {
-                exception.LogNoContext();
-                this.logger.LogError(exception, $"Failed to generate PDF {id}");
-                generationProgress.Fail();
-            }
-        }, TaskCreationOptions.LongRunning);
+                HeaderTemplate = "<html></html>",
+                FooterTemplate = footerHtml,
+                Format = "A4",
+                DisplayHeaderFooter = true,
+                //Margin = new Margin() {Top = "10", Bottom = "7", Left = "0", Right = "0"},
+            });
+            System.IO.File.WriteAllBytes(generationProgress.FilePath, contetnt);
+
+            generationProgress.Finish();
+        }
+        catch (Exception exception)
+        {
+            exception.LogNoContext();
+            this.logger.LogError(exception, $"Failed to generate PDF");
+            generationProgress.Fail();
+        }
     }
     
     private async Task<string> RenderActionResultToString(string viewName, object model)
@@ -166,22 +176,13 @@ public class PdfService : IPdfService
         routeData.Values.Add("area", "Pdf");
         return await this.viewRenderingService.RenderToStringAsync(viewName, model, webRoot, webAppRoot, routeData);
     }
-    
-    private PdfGenerationProgress StartNewHtmlGeneration(QuestionnaireRevision id, Guid? translation, int? timezoneOffsetMinutes)
-    {
-        var newPdfGenerationProgress = new PdfGenerationProgress();
-        var _ = StartRenderHtml(id, translation, timezoneOffsetMinutes, newPdfGenerationProgress);
-        return newPdfGenerationProgress;
-    }
 
-    private async Task StartRenderHtml(QuestionnaireRevision id, Guid? translation, int? timezoneOffsetMinutes,
-        PdfGenerationProgress newPdfGenerationProgress)
+    private async Task StartRenderHtml(string questionnaireHtml, string footerHtml, PdfGenerationProgress progress)
     {
-        var questionnaireHtml = await GetHtmlContent(id, newPdfGenerationProgress, translation, timezoneOffsetMinutes ?? 0);
-        if (!newPdfGenerationProgress.IsFailed)
+        if (!progress.IsFailed)
         {
-            System.IO.File.WriteAllText(newPdfGenerationProgress.FilePath, questionnaireHtml);
-            newPdfGenerationProgress.Finish();
+            await System.IO.File.WriteAllTextAsync(progress.FilePath, questionnaireHtml);
+            progress.Finish();
         }
     }
         
@@ -202,13 +203,6 @@ public class PdfService : IPdfService
         return await RenderActionResultToString(nameof(PdfController.RenderQuestionnaire), questionnaire);
     }
     
-    private PdfGenerationProgress StartNewPdfGeneration(QuestionnaireRevision id, Guid? translation, int? timezoneOffsetMinutes)
-    {
-        var progress = new PdfGenerationProgress();
-        var _ = this.StartRenderPdf(id, progress, translation, timezoneOffsetMinutes ?? 0);                
-        return progress;
-    }
-
     private PdfQuestionnaireModel? LoadQuestionnaire(QuestionnaireRevision id, Guid? requestedByUserId, string? requestedByUserName, Guid? translation, bool useDefaultTranslation)
     {
         return this.pdfFactory.Load(id, requestedByUserId, requestedByUserName, translation, useDefaultTranslation);
@@ -219,7 +213,7 @@ public class PdfService : IPdfService
         return documentType + ":" + id + ":" + translation;
     }
 
-    public Guid GetUserId()
+    private Guid GetUserId()
     {
         var user = httpContextAccessor.HttpContext?.User;
         if (user == null)

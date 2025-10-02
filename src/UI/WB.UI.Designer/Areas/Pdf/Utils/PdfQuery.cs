@@ -6,6 +6,11 @@ using WB.UI.Designer.Areas.Pdf.Services;
 
 namespace WB.UI.Designer.Areas.Pdf.Utils;
 
+using System;
+using System.Collections.Concurrent;
+using System.Threading;
+using System.Threading.Tasks;
+
 public class PdfQuery
 {
     private readonly int workerCount;
@@ -27,7 +32,7 @@ public class PdfQuery
     public PdfGenerationProgress GetOrAdd(
         string key,
         Guid userId,
-        Func<string, PdfGenerationProgress> startGeneration)
+        Func<PdfGenerationProgress, Task> runGeneration)
     {
         if (jobs.TryGetValue(key, out var existing))
             return existing.Progress;
@@ -38,23 +43,7 @@ public class PdfQuery
                 $"You have already posted {maxPerUser} requests to create PDF documents."
             );
 
-        var job = new PdfJob(key, userId, (progress) =>
-        {
-            try
-            {
-                var pg = startGeneration(key); 
-                if (pg.IsFailed) 
-                    progress.Fail();
-                else 
-                    progress.Finish();
-            }
-            catch
-            {
-                progress.Fail();
-            }
-
-            return Task.CompletedTask;
-        });
+        var job = new PdfJob(key, userId, runGeneration);
 
         if (!jobs.TryAdd(key, job))
             return jobs[key].Progress;
