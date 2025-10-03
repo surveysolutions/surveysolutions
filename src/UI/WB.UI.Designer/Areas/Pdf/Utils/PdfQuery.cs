@@ -40,9 +40,11 @@ public class PdfQuery : IPdfQuery
 
         int current = perUserCount.GetOrAdd(userId, 0);
         if (current >= maxPerUser)
-            throw new InvalidOperationException(
-                $"You have already posted {maxPerUser} requests to create PDF documents."
-            );
+        {
+            var progress = new PdfGenerationProgress();
+            progress.Fail();
+            return progress;
+        }
 
         var job = new PdfJob(key, userId, runGeneration);
 
