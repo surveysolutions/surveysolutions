@@ -53,23 +53,24 @@ namespace WB.Tests.Unit.Designer.Services
         }
 
         [Test]
-        public void GetOrAdd_ShouldThrowException_WhenUserExceedsMaxJobs()
+        public void GetOrAdd_ShouldReturnFailedProgress_WhenUserExceedsMaxJobs()
         {
             // Arrange
             var userId = Id.g1;
             Func<PdfGenerationProgress, Task> runGeneration = async progress => await Task.Delay(10);
-            
+
             // Act - add maximum allowed jobs
-            for(int i = 0; i < this.pdfSettings.MaxPerUser; i++)
+            for (int i = 0; i < this.pdfSettings.MaxPerUser; i++)
             {
                 this.pdfQuery.GetOrAdd($"key_{i}", userId, runGeneration);
             }
-            
-            // Assert - next attempt should throw
-            var ex = Assert.Throws<InvalidOperationException>(() => 
-                this.pdfQuery.GetOrAdd("one_too_many", userId, runGeneration));
-            
-            Assert.That(ex.Message, Does.Contain($"{this.pdfSettings.MaxPerUser}"));
+
+            // Act - next attempt should return failed progress
+            var progress = this.pdfQuery.GetOrAdd("one_too_many", userId, runGeneration);
+
+            // Assert
+            Assert.That(progress, Is.Not.Null);
+            Assert.That(progress.IsFailed, Is.True, "Progress should be marked as failed when exceeding max jobs per user");
         }
 
         [Test]
