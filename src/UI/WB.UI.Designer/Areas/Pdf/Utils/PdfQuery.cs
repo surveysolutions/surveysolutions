@@ -83,10 +83,6 @@ public class PdfQuery
                 {
                     job.Progress.Fail();
                 }
-                finally
-                {
-                    Remove(job.Key);
-                }
             }
         }
     }
