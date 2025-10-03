@@ -20,29 +20,28 @@ namespace WB.UI.Designer.Areas.Pdf.Services;
 
 public class PdfService : IPdfService
 {
-    private static readonly PdfQuery pdfQuery = new PdfQuery(20, 7);
-
-    private readonly IOptions<PdfSettings> options;
     private readonly IViewRenderService viewRenderingService;
     private readonly ILogger logger;
     private readonly IPdfFactory pdfFactory;
     private readonly IFileSystemAccessor fileSystemAccessor;
     private readonly IHttpContextAccessor httpContextAccessor;
+    private readonly IPdfQuery pdfQuery;
 
-    public PdfService(IOptions<PdfSettings> options,
+    public PdfService(
         IViewRenderService viewRenderingService,
         ILogger<PdfService> logger,
         IPdfFactory pdfFactory,
         IFileSystemAccessor fileSystemAccessor,
-        IHttpContextAccessor httpContextAccessor
+        IHttpContextAccessor httpContextAccessor,
+        IPdfQuery pdfQuery
         )
     {
-        this.options = options;
         this.viewRenderingService = viewRenderingService;
         this.logger = logger;
         this.pdfFactory = pdfFactory;
         this.fileSystemAccessor = fileSystemAccessor;
         this.httpContextAccessor = httpContextAccessor;
+        this.pdfQuery = pdfQuery;
     }
 
     public async Task<PdfGenerationProgress> Enqueue(QuestionnaireRevision id, Guid? translation, DocumentType documentType, int? timezoneOffsetMinutes)

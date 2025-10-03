@@ -2,6 +2,8 @@ using System;
 using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
 using WB.UI.Designer.Areas.Pdf.Services;
 
 namespace WB.UI.Designer.Areas.Pdf.Utils;
@@ -11,21 +13,20 @@ using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
 
-public class PdfQuery
+public class PdfQuery : IPdfQuery
 {
-    private readonly int workerCount;
     private readonly int maxPerUser;
     private readonly ConcurrentQueue<PdfJob> queue = new();
     private readonly ConcurrentDictionary<string, PdfJob> jobs = new();
     private readonly ConcurrentDictionary<Guid, int> perUserCount = new();
     private readonly SemaphoreSlim signal = new(0);
 
-    public PdfQuery(int workerCount, int maxPerUser)
+    public PdfQuery(IOptions<PdfSettings> options)
     {
-        this.workerCount = workerCount;
-        this.maxPerUser = maxPerUser;
+        this.maxPerUser = options.Value.MaxPerUser;
+        var workerCount1 = options.Value.WorkerCount;
 
-        for (int i = 0; i < workerCount; i++)
+        for (int i = 0; i < workerCount1; i++)
             Task.Run(WorkerLoop);
     }
 

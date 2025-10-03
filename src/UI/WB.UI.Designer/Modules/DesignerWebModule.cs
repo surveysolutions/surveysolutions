@@ -13,6 +13,7 @@ using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Infrastructure.Native.Storage;
 using WB.UI.Designer.Api.WebTester;
 using WB.UI.Designer.Areas.Pdf.Services;
+using WB.UI.Designer.Areas.Pdf.Utils;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.ImportExport;
 using WB.UI.Designer.Controllers.Api.WebTester;
@@ -38,6 +39,7 @@ namespace WB.UI.Designer.Modules
             registry.Bind<IArchiveUtils, ZipArchiveUtils>();
 
             registry.Bind<IPdfService, PdfService>();
+            registry.BindAsSingleton<IPdfQuery, PdfQuery>();
             
             registry.Bind<IQuestionnaireSearchStorage, QuestionnaireSearchStorage>();
             registry.Bind<IClassificationsStorage, ClassificationsStorage>();
