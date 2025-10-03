@@ -145,4 +145,7 @@
   <data name="Retry" xml:space="preserve">
     <value>Réessayez l'exportation en PDF.</value>
   </data>
+  <data name="NotFound" xml:space="preserve">
+    <value>La tâche demandée est introuvable. Veuillez réessayer.</value>
+  </data>
 </root>

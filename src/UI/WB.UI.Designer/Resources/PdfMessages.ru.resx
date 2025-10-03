@@ -140,4 +140,7 @@
   <data name="Retry" xml:space="preserve">
     <value>Повторная попытка экспорта в формате PDF.</value>
   </data>
+  <data name="NotFound" xml:space="preserve">
+    <value>Запрошенное задание не найдено. Пожалуйста, попробуйте ещё раз.</value>
+  </data>
 </root>

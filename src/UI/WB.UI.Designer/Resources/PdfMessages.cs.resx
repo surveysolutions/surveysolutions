@@ -140,4 +140,7 @@ Velikost: {0} kB</value>
   <data name="Retry" xml:space="preserve">
     <value>Obnovení exportu ve formátu PDF.</value>
   </data>
+  <data name="NotFound" xml:space="preserve">
+    <value>Požadovaná úloha nebyla nalezena. Zkuste to prosím znovu.</value>
+  </data>
 </root>

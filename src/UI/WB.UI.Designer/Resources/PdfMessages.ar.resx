@@ -133,10 +133,13 @@
     <value>يتم إنشاء pdf الخاص بك. الحجم :{0} كيلوبيت</value>
   </data>
   <data name="PreparingToGenerate" xml:space="preserve">
-    <value>التحضير لتوليد PDF الخاص بك. 
+    <value>التحضير لتوليد PDF الخاص بك. 
 يرجى الإنتظار...</value>
   </data>
   <data name="Retry" xml:space="preserve">
     <value>إعادة التصدير كملف PDF.</value>
+  </data>
+  <data name="NotFound" xml:space="preserve">
+    <value>لم يتم العثور على المهمة المطلوبة. يرجى المحاولة مرة أخرى.</value>
   </data>
 </root>
