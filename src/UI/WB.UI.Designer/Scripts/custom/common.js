@@ -8,6 +8,7 @@ function ItemViewModel() {
     self.itemId = '';
     self.itemName = '';
     self.itemType = '';
+    self.pdfGenerateUrl = '';
     self.pdfStatusUrl = '';
     self.selectedTransalation = null;
     self.selectedTransalationHtml = null;
@@ -38,6 +39,7 @@ function ItemViewModel() {
         id,
         type,
         name,
+        pdfGenerateUrl,
         pdfDownloadUrl,
         pdfStatusUrl,
         pdfRetryUrl,
@@ -51,6 +53,7 @@ function ItemViewModel() {
         self.pdfDownloadUrl = pdfDownloadUrl;
         self.pdfRetryUrl = pdfRetryUrl;
         self.getLanguagesUrl = getLanguagesUrl;
+        self.pdfGenerateUrl = pdfGenerateUrl;
 
         self.setPdfMessage('');
 
@@ -276,7 +279,17 @@ function ItemViewModel() {
         $('#startPdf').hide();
         $('#export-pdf-modal-status').show();
 
-        self.updateExportPdfStatusNeverending(translation);
+        $.ajax({
+            url: self.pdfGenerateUrl,
+            method: 'POST',
+            data: {
+                id: self.itemId,
+                translation: translation
+            },
+            headers: { 'X-CSRF-TOKEN': getCsrfCookie() },
+        }).always(function () {
+            self.updateExportPdfStatusNeverending(translation);
+        });
 
         $('.close-pdf-dialog').unbind('click');
         $('.close-pdf-dialog').click(function (evn) {
