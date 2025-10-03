@@ -149,13 +149,13 @@ public class PdfService : IPdfService
                 DisplayHeaderFooter = true,
                 //Margin = new Margin() {Top = "10", Bottom = "7", Left = "0", Right = "0"},
             });
-            System.IO.File.WriteAllBytes(generationProgress.FilePath, contetnt);
+            await System.IO.File.WriteAllBytesAsync(generationProgress.FilePath, contetnt);
 
             generationProgress.Finish();
         }
         catch (Exception exception)
         {
-            exception.LogNoContext();
+            await exception.LogNoContextAsync();
             this.logger.LogError(exception, $"Failed to generate PDF");
             generationProgress.Fail();
         }
@@ -217,8 +217,8 @@ public class PdfService : IPdfService
     {
         var user = httpContextAccessor.HttpContext?.User;
         if (user == null)
-            throw new Exception("HttpContext is null");
+            return Guid.Empty;
         
-        return user.GetId();
+        return user.GetIdOrNull() ?? Guid.Empty;
     }
 }
