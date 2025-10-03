@@ -149,9 +149,14 @@ function ItemViewModel() {
     };
 
     self.retryPdfExport = function () {
-        $.post(self.pdfRetryUrl, {
-            id: self.itemId,
-            translation: self.selectedTransalation,
+        $.ajax({
+            url: self.pdfRetryUrl,
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                translation: self.selectedTransalation
+            }),
+            headers: { 'X-CSRF-TOKEN': getCsrfCookie() },
         });
         $('#pdfRetryGenerate').hide();
         self.setPdfMessage('Retrying export as PDF.');

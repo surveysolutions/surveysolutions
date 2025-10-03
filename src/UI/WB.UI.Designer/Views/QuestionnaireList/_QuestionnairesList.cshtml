@@ -81,7 +81,7 @@
                             var pdfDownloadUrl = Url.Action("downloadPdf", "Pdf", routevalues.AddArea("Pdf"));
                             var htmlDownloadUrl = Url.Action("PrintPreview", "Pdf", routevalues.AddArea("Pdf"));
                             var pdfStatusUrl = Url.Action("statusPdf", "Pdf", routevalues.AddArea("Pdf"));
-                            var pdfRetryUrl = Url.Action("Retry", "Pdf", routevalues.AddArea("Pdf"));
+                            var pdfRetryUrl = Url.Action("retry", "Pdf", routevalues.AddArea("Pdf"));
                             var getLanguagesUrl = Url.Action("GetLanguages", "Questionnaire", routevalues);
                             var openActionName = listViewModel.IsFolder ? "Public" : "Details";
                             var iconCssClass = listViewModel.IsFolder ? "tree-icon folder-closed" : "tree-icon";
