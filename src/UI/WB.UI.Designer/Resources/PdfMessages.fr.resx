@@ -146,6 +146,9 @@
     <value>Réessayez l'exportation en PDF.</value>
   </data>
   <data name="NotFound" xml:space="preserve">
-    <value>La tâche demandée est introuvable. Veuillez réessayer.</value>
+    <value>La tâche demandée n'a pas été localisée. Veuillez réessayer.</value>
+  </data>
+  <data name="PdfLimitReached" xml:space="preserve">
+    <value>Vous avez déjà envoyé {0} demandes pour créer des documents PDF pour vos questionnaires</value>
   </data>
 </root>

@@ -143,4 +143,7 @@ Velikost: {0} kB</value>
   <data name="NotFound" xml:space="preserve">
     <value>Požadovaná úloha nebyla nalezena. Zkuste to prosím znovu.</value>
   </data>
+  <data name="PdfLimitReached" xml:space="preserve">
+    <value>Již jste odeslali {0} žádostí o vytvoření dokumentů PDF pro vaše dotazníky</value>
+  </data>
 </root>

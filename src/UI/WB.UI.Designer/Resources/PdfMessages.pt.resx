@@ -82,6 +82,9 @@
       <value>Tentando exportar como PDF novamente.</value>
   </data>
   <data name="NotFound" xml:space="preserve">
-    <value>O trabalho solicitado não foi encontrado. Por favor, tente novamente.</value>
+    <value>A tarefa solicitada não foi localizada. Por favor, tente novamente.</value>
+  </data>
+  <data name="PdfLimitReached" xml:space="preserve">
+    <value>Você já enviou {0} solicitações para criar documentos PDF para seus questionários</value>
   </data>
 </root>

@@ -143,4 +143,7 @@
   <data name="NotFound" xml:space="preserve">
     <value>Запрошенное задание не найдено. Пожалуйста, попробуйте ещё раз.</value>
   </data>
+  <data name="PdfLimitReached" xml:space="preserve">
+    <value>Вы уже отправили {0} запросов на создание PDF-документов для ваших анкет</value>
+  </data>
 </root>

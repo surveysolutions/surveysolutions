@@ -42,9 +42,7 @@ public class PdfQuery : IPdfQuery
         int current = perUserCount.GetOrAdd(userId, 0);
         if (current >= maxPerUser)
         {
-            var progress = new PdfGenerationProgress();
-            progress.Fail();
-            return progress;
+            throw new PdfLimitReachedException(maxPerUser);
         }
 
         var job = new PdfJob(key, userId, runGeneration);

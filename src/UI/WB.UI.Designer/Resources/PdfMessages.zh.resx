@@ -140,4 +140,10 @@
   <data name="Retry" xml:space="preserve">
     <value>正在重试导出为PDF文件。</value>
   </data>
+  <data name="NotFound" xml:space="preserve">
+    <value>未找到请求的任务。请尝试重试。</value>
+  </data>
+  <data name="PdfLimitReached" xml:space="preserve">
+    <value>您已经为问卷提交了 {0} 个创建PDF文档的请求</value>
+  </data>
 </root>

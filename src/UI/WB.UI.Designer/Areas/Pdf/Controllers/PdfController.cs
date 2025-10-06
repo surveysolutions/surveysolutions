@@ -150,34 +150,41 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
         [Route("generatePdf/{id}")]
         public async Task<IActionResult> GeneratePdf(QuestionnaireRevision id, Guid? translation, int? timezoneOffsetMinutes)
         {
-            var pdfGenerationProgress = await pdfService.Enqueue(id, translation, DocumentType.Pdf, timezoneOffsetMinutes);
-
-            if (pdfGenerationProgress.IsFailed)
+            try
             {
-                if (timezoneOffsetMinutes != null)
+                var pdfGenerationProgress = await pdfService.Enqueue(id, translation, DocumentType.Pdf, timezoneOffsetMinutes);
+
+                if (pdfGenerationProgress.IsFailed)
                 {
-                    return this.Json(PdfStatus.Failed(PdfMessages.FailedToGenerate));
+                    if (timezoneOffsetMinutes != null)
+                    {
+                        return this.Json(PdfStatus.Failed(PdfMessages.FailedToGenerate));
+                    }
+                    else
+                    {
+                        return this.Json(PdfStatus.InProgress(PdfMessages.PreparingToGenerate));
+                    }
                 }
-                else
-                {
-                    return this.Json(PdfStatus.InProgress(PdfMessages.PreparingToGenerate));
-                }
+
+                long sizeInKb = this.GetFileSizeInKb(pdfGenerationProgress.FilePath);
+
+                if (sizeInKb == 0)
+                    return pdfGenerationProgress.IsFinished 
+                        ? this.Json(PdfStatus.Failed(PdfMessages.FailedToGenerate))
+                        : this.Json(PdfStatus.InProgress(PdfMessages.PreparingToGenerate));
+
+                return this.Json(
+                    pdfGenerationProgress.IsFinished
+                        ? PdfStatus.Ready(
+                            pdfGenerationProgress.TimeSinceFinished.TotalMinutes < 1
+                                ? string.Format(PdfMessages.GenerateLessMinute, sizeInKb)
+                                : string.Format(PdfMessages.Generate, (int)pdfGenerationProgress.TimeSinceFinished.TotalMinutes, sizeInKb))
+                        : PdfStatus.InProgress(string.Format(PdfMessages.GeneratingSuccess, sizeInKb)));
             }
-
-            long sizeInKb = this.GetFileSizeInKb(pdfGenerationProgress.FilePath);
-
-            if (sizeInKb == 0)
-                return pdfGenerationProgress.IsFinished 
-                    ? this.Json(PdfStatus.Failed(PdfMessages.FailedToGenerate))
-                    : this.Json(PdfStatus.InProgress(PdfMessages.PreparingToGenerate));
-
-            return this.Json(
-                pdfGenerationProgress.IsFinished
-                    ? PdfStatus.Ready(
-                        pdfGenerationProgress.TimeSinceFinished.TotalMinutes < 1
-                            ? string.Format(PdfMessages.GenerateLessMinute, sizeInKb)
-                            : string.Format(PdfMessages.Generate, (int)pdfGenerationProgress.TimeSinceFinished.TotalMinutes, sizeInKb))
-                    : PdfStatus.InProgress(string.Format(PdfMessages.GeneratingSuccess, sizeInKb)));
+            catch (PdfLimitReachedException ex)
+            {
+                return this.Json(PdfStatus.Failed(string.Format(PdfMessages.PdfLimitReached, ex.UserLimit)));
+            }
         }
 
         [ResponseCache (Duration = 0, NoStore = true)]

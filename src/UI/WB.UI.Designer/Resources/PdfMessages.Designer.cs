@@ -86,5 +86,11 @@ namespace WB.UI.Designer.Resources {
                 return ResourceManager.GetString("NotFound", resourceCulture);
             }
         }
+        
+        public static string PdfLimitReached {
+            get {
+                return ResourceManager.GetString("PdfLimitReached", resourceCulture);
+            }
+        }
     }
 }

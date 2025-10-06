@@ -140,6 +140,9 @@
     <value>إعادة التصدير كملف PDF.</value>
   </data>
   <data name="NotFound" xml:space="preserve">
-    <value>لم يتم العثور على المهمة المطلوبة. يرجى المحاولة مرة أخرى.</value>
+    <value>لم يتم تحديد موقع المهمة المطلوبة. الرجاء محاولة إعادة المحاولة.</value>
+  </data>
+  <data name="PdfLimitReached" xml:space="preserve">
+    <value>لقد أرسلت بالفعل {0} طلبات لإنشاء مستندات PDF لاستبياناتك</value>
   </data>
 </root>
