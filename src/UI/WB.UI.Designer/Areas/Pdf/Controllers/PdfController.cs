@@ -220,13 +220,20 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
         [Route("retry/{id}")]
         public async Task<ActionResult> Retry(QuestionnaireRevision? id, [FromBody]RetryRequest? retryRequest)
         {
-            if (id == null || retryRequest == null)
+            try
             {
-                return StatusCode((int)HttpStatusCode.NotFound);
-            }
+                if (id == null || retryRequest == null)
+                {
+                    return StatusCode((int)HttpStatusCode.NotFound);
+                }
 
-            var pdfGenerationProgress = await pdfService.Retry(id, retryRequest.Translation, DocumentType.Pdf);
-            return this.Json(PdfStatus.InProgress(PdfMessages.Retry));
+                var pdfGenerationProgress = await pdfService.Retry(id, retryRequest.Translation, DocumentType.Pdf);
+                return this.Json(PdfStatus.InProgress(PdfMessages.Retry));
+            }
+            catch (PdfLimitReachedException ex)
+            {
+                return this.Json(PdfStatus.Failed(string.Format(PdfMessages.PdfLimitReached, ex.UserLimit)));
+            }
         }
             
         public class RetryRequest
