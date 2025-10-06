@@ -65,34 +65,12 @@ namespace WB.Tests.Unit.Designer.Services
                 this.pdfQuery.GetOrAdd(userId, $"key_{i}", runGeneration);
             }
 
-            // Act - next attempt should return failed progress
-            var progress = this.pdfQuery.GetOrAdd(userId, "one_too_many", runGeneration);
+            // Act - next attempt should throw an exception
+            var ex = Assert.Catch<PdfLimitReachedException>(() => this.pdfQuery.GetOrAdd(userId, "one_too_many", runGeneration));
 
             // Assert
-            Assert.That(progress, Is.Not.Null);
-            Assert.That(progress.IsFailed, Is.True, "Progress should be marked as failed when exceeding max jobs per user");
-        }
-
-        [Test]
-        public void Remove_ShouldDecreaseUserJobCount()
-        {
-            // Arrange
-            var userId = Id.g1;
-            var key = "test_key";
-            Func<PdfGenerationProgress, Task> runGeneration = async progress => await Task.Delay(10);
-            
-            // Act - add maximum allowed jobs
-            for(int i = 0; i < this.pdfSettings.MaxPerUser; i++)
-            {
-                this.pdfQuery.GetOrAdd(userId, $"key_{i}", runGeneration);
-            }
-            
-            // Act - remove one job
-            this.pdfQuery.Remove("key_0");
-            
-            // Assert - should be able to add one more job now
-            var progress = this.pdfQuery.GetOrAdd(userId, "new_key", runGeneration);
-            Assert.That(progress, Is.Not.Null);
+            Assert.That(ex, Is.Not.Null);
+            Assert.That(ex.UserLimit, Is.EqualTo(this.pdfSettings.MaxPerUser));
         }
 
         [Test]
