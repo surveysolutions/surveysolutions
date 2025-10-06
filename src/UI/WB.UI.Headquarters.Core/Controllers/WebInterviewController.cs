@@ -377,6 +377,10 @@ namespace WB.UI.Headquarters.Controllers
             public string? Email { get; set; }
         }
 
+        //remove
+        //just render the link instead of sending email
+        //take into consideration that interview could be not materialized yet
+        //probably we should materialize it on link generation
         [HttpPost]
         [Route("EmailLink")]
         public async Task<IActionResult> EmailLink([FromBody]SendLinkModel data)
@@ -610,15 +614,17 @@ namespace WB.UI.Headquarters.Controllers
                    || !string.IsNullOrEmpty(interview.SupervisorRejectComment)
                    || interview.GetCommentedBySupervisorQuestionsVisibleToInterviewer().Any();
         }
-
+        
+        [WebInterviewAuthorize]
         [Route("Finish/{id:Guid}")]
         public ActionResult Finish(string id)
         {
             var interview = this.statefulInterviewRepository.Get(id);            
             if (interview == null ) return NotFound();
 
-            if ((interview.IsCompleted || interview.Mode == InterviewMode.CAWI) 
-                && this.IsAuthorizedUser(interview.CurrentResponsibleId))
+            var isAuthorizedUser = this.IsAuthorizedUser(interview.CurrentResponsibleId);
+            
+            if ((interview.IsCompleted || interview.Mode == InterviewMode.CAWI) && isAuthorizedUser)
             {
                 return RedirectToAction("Completed", "InterviewerHq");
             }
@@ -627,9 +633,7 @@ namespace WB.UI.Headquarters.Controllers
 
             var webInterviewConfig = this.configProvider.Get(interview.QuestionnaireIdentity);
 
-            if ((webInterviewConfig.UseCaptcha 
-                 && !this.IsAuthorizedUser(interview.CurrentResponsibleId) 
-                 && this.CapchaVerificationNeededForInterview(id)) 
+            if ((webInterviewConfig.UseCaptcha && !isAuthorizedUser && this.CapchaVerificationNeededForInterview(id)) 
                 || !IsPasswordProtectedInterviewPermitted(interview))
             {
                 var returnUrl = GenerateUrl(@"Finish", id);
@@ -686,6 +690,7 @@ namespace WB.UI.Headquarters.Controllers
             return Redirect(GenerateUrl(@"Cover", id));
         }
 
+        [WebInterviewAuthorize]
         [Route("{id:Guid}/Complete")]
         public ActionResult Complete(string id)
         {
@@ -698,7 +703,6 @@ namespace WB.UI.Headquarters.Controllers
             }
 
             var webInterviewConfig = this.configProvider.Get(interview.QuestionnaireIdentity);
-
             var isAuthorizedUser = this.IsAuthorizedUser(interview.CurrentResponsibleId);
 
             if (isAuthorizedUser && interview.Status == InterviewStatus.Completed)

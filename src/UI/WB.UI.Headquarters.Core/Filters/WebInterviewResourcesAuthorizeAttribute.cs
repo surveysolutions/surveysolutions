@@ -11,6 +11,7 @@ namespace WB.UI.Headquarters.Filters
 {
     public class WebInterviewResourcesAuthorizeAttribute : ActionFilterAttribute
     {
+        
         public string InterviewIdQueryString { get; set; }
 
         public override void OnActionExecuting(ActionExecutingContext context)

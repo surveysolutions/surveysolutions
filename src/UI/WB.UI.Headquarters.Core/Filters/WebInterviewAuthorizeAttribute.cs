@@ -12,6 +12,7 @@ namespace WB.UI.Headquarters.Filters
     {
         public string InterviewIdQueryString { get; set; }
         
+        
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             var interviewId = string.IsNullOrWhiteSpace(InterviewIdQueryString)

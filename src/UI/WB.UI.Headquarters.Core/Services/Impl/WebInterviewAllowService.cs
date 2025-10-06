@@ -83,7 +83,7 @@ namespace WB.UI.Headquarters.Services.Impl
 
             QuestionnaireIdentity questionnaireIdentity = interview.QuestionnaireIdentity;
 
-            WebInterviewConfig webInterviewConfig = webInterviewConfigProvider.Get( questionnaireIdentity);
+            WebInterviewConfig webInterviewConfig = webInterviewConfigProvider.Get(questionnaireIdentity);
 
             //interview is not public available and logged in user is not current interview responsible
             if (!webInterviewConfig.Started && interview.Status == InterviewStatus.InterviewerAssigned 
