@@ -19,6 +19,7 @@ using WB.UI.Designer.Resources;
 using WB.Core.BoundedContexts.Designer;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.UI.Designer.Areas.Pdf.Services;
+using WB.UI.Designer.Areas.Pdf.Utils;
 using WB.UI.Designer.Controllers.Api.Designer;
 using WB.UI.Shared.Web.Services;
 using HtmlRenderer = Markdig.Renderers.HtmlRenderer;
@@ -255,6 +256,16 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
                 installed = false;
                 return this.Json("Fail: " + e.Message);
             }
+        }
+        
+        [Authorize(Roles = "Administrator")]
+        [ResponseCache(Duration = 0, NoStore = true)]
+        [HttpGet]
+        [Route("queryInfo")]
+        public IActionResult QueryInfo()
+        {
+            var json = pdfService.GetCurrentInfoJson();
+            return Json(json);
         }
         
         private long GetFileSizeInKb(string filepath)

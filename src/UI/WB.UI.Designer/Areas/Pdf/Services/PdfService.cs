@@ -122,6 +122,8 @@ public class PdfService : IPdfService
         return null;
     }
 
+    public string GetCurrentInfoJson() => pdfQuery.GetQueryInfoJson();
+
     private async Task StartRenderPdf(string questionnaireHtml, string footerHtml, PdfGenerationProgress generationProgress)
     {
         if (generationProgress.IsFailed)

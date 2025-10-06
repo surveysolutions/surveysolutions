@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Concurrent;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
@@ -66,6 +67,43 @@ public class PdfQuery : IPdfQuery
     public PdfGenerationProgress? GetOrNull(string key)
     {
         return jobs.TryGetValue(key, out var job) ? job.Progress : null;
+    }
+
+    public string GetQueryInfoJson()
+    {
+        var queueInfo = new
+        {
+            QueueSize = queue.Count,
+            ActiveJobs = jobs.Count
+        };
+
+        var userLimits = perUserCount.Select(userCount => new
+        {
+            UserId = userCount.Key,
+            CurrentTasks = userCount.Value,
+            MaxAllowed = maxPerUser,
+            Remaining = Math.Max(0, maxPerUser - userCount.Value)
+        }).ToArray();
+
+        var activeJobs = jobs.Select(job => new
+        {
+            Key = job.Key,
+            Status = job.Value.Progress.IsFinished ? "Finished" : (job.Value.Progress.IsFailed ? "Failed" : "In Progress"),
+            UserId = job.Value.UserId,
+            ElapsedTime = job.Value.Progress.IsFinished ? job.Value.Progress.TimeSinceFinished.ToString() : null
+        }).ToArray();
+
+        var result = new
+        {
+            QueueStatus = queueInfo,
+            UserLimits = userLimits,
+            ActiveJobs = activeJobs
+        };
+
+        return System.Text.Json.JsonSerializer.Serialize(result, new System.Text.Json.JsonSerializerOptions
+        {
+            WriteIndented = true
+        });
     }
 
     private async Task WorkerLoop()

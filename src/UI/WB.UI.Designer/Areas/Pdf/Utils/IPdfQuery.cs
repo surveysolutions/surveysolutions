@@ -12,4 +12,5 @@ public interface IPdfQuery
 
     void Remove(string key);
     PdfGenerationProgress? GetOrNull(string key);
+    string GetQueryInfoJson();
 }
