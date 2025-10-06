@@ -59,8 +59,8 @@
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.14.0" />
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="4.14.0" />
         <PackageReference Include="Moq" Version="4.20.72" />
-        <PackageReference Include="MvvmCross.Plugin.Messenger" Version="9.3.1" />
-        <PackageReference Include="MvvmCross.Tests" Version="9.3.1" />
+        <PackageReference Include="MvvmCross.Plugin.Messenger" Version="9.4.0" />
+        <PackageReference Include="MvvmCross.Tests" Version="9.4.0" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
         <PackageReference Include="NHibernate" Version="5.5.2" />
         <PackageReference Include="Npgsql" Version="9.0.3" />
