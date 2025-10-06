@@ -41,10 +41,10 @@ namespace WB.Tests.Unit.Designer.Services
             };
             
             // Act - first call should add the job
-            var progress1 = this.pdfQuery.GetOrAdd(key, userId, runGeneration);
+            var progress1 = this.pdfQuery.GetOrAdd(userId, key, runGeneration);
             
             // Act - second call should return the same progress
-            var progress2 = this.pdfQuery.GetOrAdd(key, userId, runGeneration);
+            var progress2 = this.pdfQuery.GetOrAdd(userId, key, runGeneration);
             
             // Assert
             Assert.That(progress1, Is.Not.Null);
@@ -62,11 +62,11 @@ namespace WB.Tests.Unit.Designer.Services
             // Act - add maximum allowed jobs
             for (int i = 0; i < this.pdfSettings.MaxPerUser; i++)
             {
-                this.pdfQuery.GetOrAdd($"key_{i}", userId, runGeneration);
+                this.pdfQuery.GetOrAdd(userId, $"key_{i}", runGeneration);
             }
 
             // Act - next attempt should return failed progress
-            var progress = this.pdfQuery.GetOrAdd("one_too_many", userId, runGeneration);
+            var progress = this.pdfQuery.GetOrAdd(userId, "one_too_many", runGeneration);
 
             // Assert
             Assert.That(progress, Is.Not.Null);
@@ -84,14 +84,14 @@ namespace WB.Tests.Unit.Designer.Services
             // Act - add maximum allowed jobs
             for(int i = 0; i < this.pdfSettings.MaxPerUser; i++)
             {
-                this.pdfQuery.GetOrAdd($"key_{i}", userId, runGeneration);
+                this.pdfQuery.GetOrAdd(userId, $"key_{i}", runGeneration);
             }
             
             // Act - remove one job
             this.pdfQuery.Remove("key_0");
             
             // Assert - should be able to add one more job now
-            var progress = this.pdfQuery.GetOrAdd("new_key", userId, runGeneration);
+            var progress = this.pdfQuery.GetOrAdd(userId, "new_key", runGeneration);
             Assert.That(progress, Is.Not.Null);
         }
 
@@ -117,7 +117,7 @@ namespace WB.Tests.Unit.Designer.Services
             Func<PdfGenerationProgress, Task> runGeneration = async progress => await Task.Delay(10);
             
             // Act - add a job
-            var addedProgress = this.pdfQuery.GetOrAdd(key, userId, runGeneration);
+            var addedProgress = this.pdfQuery.GetOrAdd(userId, key, runGeneration);
             
             // Act - get the progress
             var retrievedProgress = this.pdfQuery.GetOrNull(key);
@@ -143,7 +143,7 @@ namespace WB.Tests.Unit.Designer.Services
             };
             
             // Act
-            var progress = this.pdfQuery.GetOrAdd(key, userId, runGeneration);
+            var progress = this.pdfQuery.GetOrAdd(userId, key, runGeneration);
             
             // Allow worker thread to process the job
             await Task.Delay(100);
@@ -167,7 +167,7 @@ namespace WB.Tests.Unit.Designer.Services
             };
             
             // Act
-            var progress = this.pdfQuery.GetOrAdd(key, userId, runGeneration);
+            var progress = this.pdfQuery.GetOrAdd(userId, key, runGeneration);
             
             // Allow worker thread to process the job
             await Task.Delay(100);

@@ -6,9 +6,8 @@ namespace WB.UI.Designer.Areas.Pdf.Utils;
 
 public interface IPdfQuery
 {
-    PdfGenerationProgress GetOrAdd(
+    PdfGenerationProgress GetOrAdd(Guid userId, 
         string key,
-        Guid userId,
         Func<PdfGenerationProgress, Task> runGeneration);
 
     void Remove(string key);

@@ -24,15 +24,15 @@ public class PdfQuery : IPdfQuery
     public PdfQuery(IOptions<PdfSettings> options)
     {
         this.maxPerUser = options.Value.MaxPerUser;
-        var workerCount1 = options.Value.WorkerCount;
+        var workerCount = options.Value.WorkerCount;
 
-        for (int i = 0; i < workerCount1; i++)
+        for (int i = 0; i < workerCount; i++)
             Task.Run(WorkerLoop);
     }
 
     public PdfGenerationProgress GetOrAdd(
+        Guid userId, 
         string key,
-        Guid userId,
         Func<PdfGenerationProgress, Task> runGeneration)
     {
         if (jobs.TryGetValue(key, out var existing))
@@ -60,10 +60,7 @@ public class PdfQuery : IPdfQuery
 
     public void Remove(string key)
     {
-        if (jobs.TryRemove(key, out var job))
-        {
-            perUserCount.AddOrUpdate(job.UserId, 0, (_, old) => Math.Max(0, old - 1));
-        }
+        jobs.TryRemove(key, out var job);
     }
 
     public PdfGenerationProgress? GetOrNull(string key)
@@ -85,6 +82,11 @@ public class PdfQuery : IPdfQuery
                 catch
                 {
                     job.Progress.Fail();
+                }
+                finally
+                {
+                    // decrease user count limit
+                    perUserCount.AddOrUpdate(job.UserId, 0, (_, old) => Math.Max(0, old - 1));
                 }
             }
         }

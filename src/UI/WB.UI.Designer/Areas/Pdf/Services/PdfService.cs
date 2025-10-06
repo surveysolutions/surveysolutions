@@ -62,14 +62,14 @@ public class PdfService : IPdfService
                 ? StartRenderPdf(questionnaireHtml, footerHtml, p)
                 : StartRenderHtml(questionnaireHtml, footerHtml, p);
 
-        PdfGenerationProgress pdfGenerationProgress = pdfQuery.GetOrAdd(key, GetUserId(), RunGeneration);
+        PdfGenerationProgress pdfGenerationProgress = pdfQuery.GetOrAdd(GetUserId(), key, RunGeneration);
 
         if (pdfGenerationProgress.IsFailed)
         {
             if (timezoneOffsetMinutes == null)
             {
                 pdfQuery.Remove(key);
-                pdfQuery.GetOrAdd(key, GetUserId(), RunGeneration);
+                pdfQuery.GetOrAdd(GetUserId(), key, RunGeneration);
             }
         }
         
@@ -96,13 +96,13 @@ public class PdfService : IPdfService
                 ? StartRenderPdf(questionnaireHtml, footerHtml, p)
                 : StartRenderHtml(questionnaireHtml, footerHtml, p);
         
-        PdfGenerationProgress pdfGenerationProgress = pdfQuery.GetOrAdd(key, GetUserId(), RunGeneration);
+        PdfGenerationProgress pdfGenerationProgress = pdfQuery.GetOrAdd(GetUserId(), key, RunGeneration);
         if (pdfGenerationProgress.IsFailed)
         {
             pdfQuery.Remove(key);
         }
             
-        return pdfQuery.GetOrAdd(key, GetUserId(), RunGeneration);
+        return pdfQuery.GetOrAdd(GetUserId(), key, RunGeneration);
     }
 
     public byte[]? Download(QuestionnaireRevision id, Guid? translation, DocumentType documentType)
@@ -207,9 +207,9 @@ public class PdfService : IPdfService
         return this.pdfFactory.Load(id, requestedByUserId, requestedByUserName, translation, useDefaultTranslation);
     }
 
-    private static string GetKey(DocumentType documentType, QuestionnaireRevision id, Guid? translation)
+    private string GetKey(DocumentType documentType, QuestionnaireRevision id, Guid? translation)
     {
-        return documentType + ":" + id + ":" + translation;
+        return GetUserId() + ":" + documentType + ":" + id + ":" + translation;
     }
 
     private Guid GetUserId()
