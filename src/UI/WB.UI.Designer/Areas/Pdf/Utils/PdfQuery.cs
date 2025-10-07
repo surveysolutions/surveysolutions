@@ -107,7 +107,7 @@ public class PdfQuery : IPdfQuery
 
         var result = new
         {
-            SettingsInfo = settingsInfo,
+            Settings = settingsInfo,
             QueueStatus = queueInfo,
             UserLimits = userLimits,
             ActiveJobs = activeJobs
