@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 
 public class PdfQuery : IPdfQuery
 {
+    private readonly IOptions<PdfSettings> options;
     private readonly int maxPerUser;
     private readonly ConcurrentQueue<PdfJob> queue = new();
     private readonly ConcurrentDictionary<string, PdfJob> jobs = new();
@@ -24,6 +25,7 @@ public class PdfQuery : IPdfQuery
 
     public PdfQuery(IOptions<PdfSettings> options)
     {
+        this.options = options;
         this.maxPerUser = options.Value.MaxPerUser;
         var workerCount = options.Value.WorkerCount;
 
@@ -75,6 +77,12 @@ public class PdfQuery : IPdfQuery
 
     public string GetQueryInfoJson()
     {
+        var settingsInfo = new
+        {
+            MaxPerUser = options.Value.MaxPerUser,
+            WorkerCount = options.Value.WorkerCount
+        };
+
         var queueInfo = new
         {
             QueueSize = queue.Count,
@@ -99,6 +107,7 @@ public class PdfQuery : IPdfQuery
 
         var result = new
         {
+            SettingsInfo = settingsInfo,
             QueueStatus = queueInfo,
             UserLimits = userLimits,
             ActiveJobs = activeJobs

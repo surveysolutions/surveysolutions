@@ -9,7 +9,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         public int AttachmentSize { get; set; }
         public int PdfGenerationTimeoutInMilliseconds { get; set; }
         public int VariableExpressionExcerptLength { get; set; }
-        public int WorkerCount { get; set; } = 30;
-        public int MaxPerUser { get; set; } = 10;
+        public int WorkerCount { get; set; } = 10;
+        public int MaxPerUser { get; set; } = 5;
     }
 }
