@@ -10,7 +10,8 @@ public class PdfJob
     public Guid UserId { get; }
     public Func<PdfGenerationProgress, Task> Work { get; }
     public PdfGenerationProgress Progress { get; }
-
+    public bool Started { get; set; }
+    
     public PdfJob(string key, Guid userId, Func<PdfGenerationProgress, Task> work)
     {
         Key = key;

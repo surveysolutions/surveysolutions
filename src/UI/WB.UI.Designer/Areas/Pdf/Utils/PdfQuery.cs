@@ -59,7 +59,13 @@ public class PdfQuery : IPdfQuery
 
     public void Remove(string key)
     {
-        jobs.TryRemove(key, out var job);
+        if (jobs.TryRemove(key, out var job))
+        {
+            if (!job.Started)
+            {
+                perUserCount.AddOrUpdate(job.UserId, 0, (_, old) => Math.Max(0, old - 1));
+            }
+        }
     }
 
     public PdfGenerationProgress? GetOrNull(string key)
@@ -111,6 +117,7 @@ public class PdfQuery : IPdfQuery
             await signal.WaitAsync();
             if (queue.TryDequeue(out var job))
             {
+                job.Started = true;
                 try
                 {
                     await job.Work(job.Progress);
