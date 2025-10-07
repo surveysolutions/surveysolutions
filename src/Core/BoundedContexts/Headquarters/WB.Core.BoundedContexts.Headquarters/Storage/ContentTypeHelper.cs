@@ -20,6 +20,8 @@ public static class ContentTypeHelper
                 return "image/gif";
             case ".bmp":
                 return "image/bmp";
+            case ".webp":
+                return "image/webp";
             case ".tiff":
             case ".tif":
                 return "image/tiff";
