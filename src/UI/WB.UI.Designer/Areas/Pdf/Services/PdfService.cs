@@ -50,8 +50,11 @@ public class PdfService : IPdfService
             
         var existing = pdfQuery.GetOrNull(key);
         if (existing != null)
-            return existing;
-
+        {
+            if (!existing.IsFailed)
+                return existing;
+        }
+        
         var progress = new PdfGenerationProgress();
 
         string questionnaireHtml = await GetHtmlContent(id, progress, translation, timezoneOffsetMinutes ?? 0);
