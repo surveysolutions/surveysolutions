@@ -279,7 +279,7 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
         public IActionResult QueryInfo()
         {
             var json = pdfService.GetCurrentInfoJson();
-            return Json(json);
+            return Ok(json);
         }
         
         private long GetFileSizeInKb(string filepath)
