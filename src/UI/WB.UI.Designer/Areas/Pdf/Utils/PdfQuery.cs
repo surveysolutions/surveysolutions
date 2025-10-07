@@ -65,7 +65,7 @@ public class PdfQuery : IPdfQuery
         {
             if (!job.Started)
             {
-                perUserCount.AddOrUpdate(job.UserId, 0, (_, old) => Math.Max(0, old - 1));
+                DecreaseUserJobCount(job.UserId);
             }
         }
     }
@@ -137,10 +137,20 @@ public class PdfQuery : IPdfQuery
                 }
                 finally
                 {
-                    // decrease user count limit
-                    perUserCount.AddOrUpdate(job.UserId, 0, (_, old) => Math.Max(0, old - 1));
+                    DecreaseUserJobCount(job.UserId);
                 }
             }
         }
+    }
+    
+    private void DecreaseUserJobCount(Guid userId)
+    {
+        perUserCount.AddOrUpdate(userId, 0, (_, old) =>
+        {
+            var newCount = Math.Max(0, old - 1);
+            if (newCount == 0)
+                perUserCount.TryRemove(userId, out var _);
+            return newCount;
+        });
     }
 }
