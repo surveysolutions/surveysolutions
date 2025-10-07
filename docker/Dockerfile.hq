@@ -149,34 +149,6 @@ COPY --from=frontend /src/UI/WB.UI.Frontend/dist/package/hq src/UI/WB.UI.Headqua
 RUN dotnet publish src/UI/WB.UI.Headquarters.Core \
     -c Release -o /hq -p:Version="${VERSION}" -p:InformationalVersion="${INFO_VERSION}"
 
-# Building ffmpeg from github
-FROM mcr.microsoft.com/dotnet/aspnet:${DOTNET_VERSION}-alpine3.22 AS ffmpeg
-
-RUN apk add --no-cache \
-  libstdc++ \
-  x264-libs \
-  x265-libs \
-  libvpx \
-  libvorbis \
-  opus \
-  lame \
-  libass \
-  libjpeg-turbo \
-  libpng \
-  libwebp \
-  alsa-lib \
-  libtheora \
-  zlib \
-  curl \
-  tar \
-  xz
-
-WORKDIR /tmp
-RUN curl -L -o ffmpeg.tar.xz https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-n8.0-latest-linux64-gpl-shared-8.0.tar.xz && \
-    tar -xf ffmpeg.tar.xz && \
-    cp -r ffmpeg-n8.0-*/* /usr/local/ && \
-    rm -rf /tmp/*
-
 # Copy APK files if any
 FROM --platform=${PLATFORM} mcr.microsoft.com/dotnet/aspnet:${DOTNET_VERSION}-alpine3.22 AS apks
 ARG APK_FILES
@@ -216,14 +188,9 @@ RUN apk add --no-cache \
     curl \
     fontconfig \
     binutils \
-    && apk del openexr \
     && rm -rf /var/cache/apk/*
 
 COPY --from=fonts_source /raw_fonts /usr/share/fonts
-COPY --from=ffmpeg /usr/local /usr/local
-
-RUN ls -l /usr/local/bin/ffmpeg
-RUN chmod +x /usr/local/bin/ffmpeg
 
 LABEL org.opencontainers.image.title="Headquaters All in One"
 LABEL org.opencontainers.image.description="Survey Solutions Headquarters with Export Service"
@@ -234,7 +201,7 @@ COPY --from=apks /apk /app/Client
 
 ENV HQ_Headquarters__BaseUrl=http://localhost
 ENV HQ_Headquarters__TenantName=survey
-ENV HQ_FileStorage__FFmpegExecutablePath=/usr/local/bin
+ENV HQ_FileStorage__FFmpegExecutablePath=/usr/bin
 ENV HQ_Geospatial__GdalHome=/usr/bin
 ENV HQ_Apks__ClientApkPath=/app/Client
 ENV HQ_Logging__LogsLocation=/app/AppData/logs
