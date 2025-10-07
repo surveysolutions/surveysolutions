@@ -88,7 +88,10 @@ namespace WB.Tests.Web.Headquarters.Controllers.InterviewerInterviewsControllerT
                 audioAuditFileStorage: audioAuditFileStorage ?? Mock.Of<IAudioAuditFileStorage>(),
                 userToDeviceService ?? Mock.Of<IUserToDeviceService>(),
                 webHostEnvironment: webHostEnvironment ?? Mock.Of<IWebHostEnvironment>(),
-                imageProcessingService: Mock.Of<IImageProcessingService>());
+                imageProcessingService: Mock.Of<IImageProcessingService>(),
+                brokenImageFileStorage: Mock.Of<IBrokenImageFileStorage>(),
+                brokenAudioFileStorage: Mock.Of<IBrokenAudioFileStorage>(),
+                brokenAudioAuditFileStorage: Mock.Of<IBrokenAudioAuditFileStorage>());
             controller.ControllerContext = controllerContext;
             return controller;
         }

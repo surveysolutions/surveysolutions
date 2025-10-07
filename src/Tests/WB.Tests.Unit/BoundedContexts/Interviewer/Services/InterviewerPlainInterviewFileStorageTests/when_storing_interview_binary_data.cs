@@ -13,14 +13,14 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerPlainInt
             imageViewStorage.Setup(x => x.Where(Moq.It.IsAny<Expression<Func<InterviewMultimediaView, bool>>>()))
                 .Returns(new InterviewMultimediaView[0]);
 
-            interviewerImageFileStorage = CreateInterviewerPlainInterviewFileStorage(
+            tabletImageFileStorage = CreateInterviewerPlainInterviewFileStorage(
                 fileViewStorage: fileViewStorage.Object,
                 imageViewStorage: imageViewStorage.Object);
             BecauseOf();
         }
 
         public void BecauseOf() =>
-            interviewerImageFileStorage.StoreInterviewBinaryData(interviewId, imageFileName, imageFileBytes, null);
+            tabletImageFileStorage.StoreInterviewBinaryData(interviewId, imageFileName, imageFileBytes, null);
 
         [NUnit.Framework.Test] public void should_store_specified_interview_mulimedia_view () =>
             imageViewStorage.Verify(x=>x.Store(Moq.It.IsAny<InterviewMultimediaView>()), Times.Once);
@@ -33,6 +33,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerPlainInt
         private static readonly byte[] imageFileBytes = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 };
         private static readonly Mock<IPlainStorage<InterviewMultimediaView>> imageViewStorage = new Mock<IPlainStorage<InterviewMultimediaView>>();
         private static readonly Mock<IPlainStorage<InterviewFileView>> fileViewStorage = new Mock<IPlainStorage<InterviewFileView>>();
-        private static InterviewerImageFileStorage interviewerImageFileStorage;
+        private static TabletImageFileStorage tabletImageFileStorage;
     }
 }

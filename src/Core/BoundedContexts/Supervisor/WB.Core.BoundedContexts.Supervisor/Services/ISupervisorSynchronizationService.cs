@@ -15,6 +15,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Services
         Task<SupervisorApiView> GetSupervisorAsync(RestCredentials credentials = null, CancellationToken token = default);
         Task<List<InterviewerFullApiView>> GetInterviewersAsync(CancellationToken cancellationToken = default);
         Task UploadBrokenInterviewPackageAsync(BrokenInterviewPackageApiView brokenInterviewPackage, CancellationToken cancellationToken = default);
+        Task UploadBrokenImagePackageAsync(BrokenImagePackageApiView brokenImagePackage, CancellationToken token = default);
+        Task UploadBrokenAudioPackageAsync(BrokenAudioPackageApiView brokenAudioPackage, CancellationToken token = default);
+        Task UploadBrokenAudioAuditPackageAsync(BrokenAudioAuditPackageApiView brokenAudioAuditPackage, CancellationToken token = default);
         Task UploadInterviewerExceptionsAsync(List<UnexpectedExceptionFromInterviewerView> exceptions, CancellationToken cancellationToken = default);
         Task UploadTabletInfoAsync(DeviceInfoApiView deviceInfoApiView, CancellationToken cancellationToken = default);
         Task UploadInterviewerSyncStatistic(InterviewerSyncStatisticsApiView statisticToSend, CancellationToken cancellationToken = default);

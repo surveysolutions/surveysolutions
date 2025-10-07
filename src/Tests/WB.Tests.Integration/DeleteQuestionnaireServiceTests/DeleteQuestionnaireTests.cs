@@ -154,7 +154,7 @@ namespace WB.Tests.Integration.DeleteQuestionnaireServiceTests
 
             var storage = new PostgresPlainStorageRepository<AudioFile>(unitOfWork);
 
-            var fileId = AudioFile.GetFileId(interviewId, "test");
+            var fileId = $"{interviewId}#test";
             storage.Store(new AudioFile()
             {
                 Id = fileId,
@@ -170,7 +170,7 @@ namespace WB.Tests.Integration.DeleteQuestionnaireServiceTests
 
             var storage = new PostgresPlainStorageRepository<AudioAuditFile>(unitOfWork);
 
-            var fileId = AudioAuditFile.GetFileId(interviewId, "test");
+            var fileId = $"{interviewId}#test";
             storage.Store(new AudioAuditFile()
             {
                 Id = fileId,

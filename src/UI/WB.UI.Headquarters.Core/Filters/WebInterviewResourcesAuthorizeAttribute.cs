@@ -1,23 +1,79 @@
 ﻿using System;
 using System.Linq;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.DependencyInjection;
+using WB.Enumerator.Native.WebInterview;
+using WB.UI.Headquarters.API.WebInterview;
+using WB.UI.Headquarters.Services;
 
 namespace WB.UI.Headquarters.Filters
 {
-    public class WebInterviewResourcesAuthorizeAttribute : WebInterviewAuthorizeBaseAttribute
+    public class WebInterviewResourcesAuthorizeAttribute : ActionFilterAttribute
     {
-        protected override bool IsReview(ActionExecutingContext context)
+        public string InterviewIdQueryString { get; set; }
+
+        public override void OnActionExecuting(ActionExecutingContext context)
         {
-            var ctx = context.HttpContext;
-            var referer = ctx.Request.Headers.Referer;
-            var url = referer.ToString();
-            if (string.IsNullOrEmpty(url))
+            var interviewId = string.IsNullOrWhiteSpace(InterviewIdQueryString)
+                ? context.RouteData.Values["id"].ToString()
+                : context.HttpContext.Request.Query[InterviewIdQueryString].ToString();
+
+            if (string.IsNullOrEmpty(interviewId))
+            {
+                RedirectToError(context, Enumerator.Native.Resources.WebInterview.InterviewNotFound);
+                return;
+            }
+
+            if (!HasAccessToWebInterview(context, interviewId, out var interviewAccessException) 
+                && !HasAccessInReviewMode(context, interviewId, out interviewAccessException))
+            {
+                string errorMessage = WebInterview.GetUiMessageFromException(interviewAccessException);
+
+                RedirectToError(context, errorMessage);
+            }
+        }
+
+        private static bool HasAccessToWebInterview(ActionExecutingContext context, string interviewId, out InterviewAccessException interviewAccessException)
+        {
+            try
+            {
+                var services = context.HttpContext.RequestServices;
+                services.GetRequiredService<IWebInterviewAllowService>().CheckWebInterviewAccessPermissions(interviewId);
+                interviewAccessException = null;
+                return true;
+            }
+            catch (InterviewAccessException e)
+            {
+                interviewAccessException = e;
                 return false;
-            
-            var uri = new Uri(url);
-            var segments = uri.Segments;
-            bool isReview = segments.Any(s => s.Trim('/').Equals("Review", StringComparison.OrdinalIgnoreCase));
-            return isReview;
+            }
+        }
+
+        private static bool HasAccessInReviewMode(ActionExecutingContext context, string interviewId, out InterviewAccessException interviewAccessException)
+        {
+            try
+            {
+                var services = context.HttpContext.RequestServices;
+                services.GetRequiredService<IReviewAllowedService>().CheckIfAllowed(Guid.Parse(interviewId));
+                interviewAccessException = null;
+                return true;
+            }
+            catch (InterviewAccessException e)
+            {
+                interviewAccessException = e;
+                return false;
+            }
+        }
+
+        private void RedirectToError(ActionExecutingContext context, string errorMessage)
+        {
+            if (context.Controller is Controller controller)
+            {
+                controller.TempData["WebInterview.ErrorMessage"] = errorMessage;
+            }
+
+            context.Result = new RedirectToActionResult("Error", "WebInterview", null); 
         }
     }
 }

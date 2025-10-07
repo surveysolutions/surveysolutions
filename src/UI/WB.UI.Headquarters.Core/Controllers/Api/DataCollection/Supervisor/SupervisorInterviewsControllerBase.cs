@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Ncqrs.Eventing.Storage;
@@ -10,6 +11,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.Synchronization.MetaInfo;
 using WB.UI.Shared.Web.Services;
 
@@ -24,16 +26,36 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor
             ICommandService commandService, IMetaInfoBuilder metaBuilder, 
             IJsonAllTypesSerializer synchronizationSerializer, IHeadquartersEventStore eventStore, 
             IAudioAuditFileStorage audioAuditFileStorage, IUserToDeviceService userToDeviceService, 
-            IWebHostEnvironment webHostEnvironment, IImageProcessingService imageProcessingService) 
+            IWebHostEnvironment webHostEnvironment, IImageProcessingService imageProcessingService,
+            IBrokenImageFileStorage brokenImageFileStorage,
+            IBrokenAudioFileStorage brokenAudioFileStorage,
+            IBrokenAudioAuditFileStorage brokenAudioAuditFileStorage) 
             : base(imageFileStorage, audioFileStorage, authorizedUser, interviewsFactory, packagesService, commandService, 
                 metaBuilder, synchronizationSerializer, eventStore, audioAuditFileStorage,userToDeviceService, 
-                webHostEnvironment, imageProcessingService)
+                webHostEnvironment, imageProcessingService, brokenImageFileStorage, brokenAudioFileStorage, brokenAudioAuditFileStorage)
         {
         }
 
         protected override string ProductName => "org.worldbank.solutions.supervisor";
 
+        protected override bool AllowWorkWithInterview(Guid interviewId)
+        {
+            var interview = interviewsFactory.GetInterviewsByIds([interviewId]).SingleOrDefault();
+            if (interview == null)
+                return true; // new interview
 
+            if (interview.Mode == InterviewMode.CAWI)
+                return false;
+
+            if (interview.ResponsibleId == authorizedUser.Id)
+                return true;
+            
+            if (interview.SupervisorId != authorizedUser.Id)
+                return true;
+
+            return false;
+        }
+        
         protected override IEnumerable<InterviewInformation> GetInProgressInterviewsForResponsible(Guid supervisorId)
         {
             return this.interviewsFactory.GetInProgressInterviewsForSupervisor(supervisorId);

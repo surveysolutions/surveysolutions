@@ -265,7 +265,7 @@ task frontend {
     $list = Walk-Deps $deps | Sort-Object -Unique
     # $list | Out-File -FilePath deps.txt -Encoding utf8
     $list | ForEach-Object { Write-Host $_ }
-
+    
 	"Finishing frontend task" | Out-Host
 }
 
