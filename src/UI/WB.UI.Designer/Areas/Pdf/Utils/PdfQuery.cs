@@ -145,12 +145,22 @@ public class PdfQuery : IPdfQuery
     
     private void DecreaseUserJobCount(Guid userId)
     {
-        perUserCount.AddOrUpdate(userId, 0, (_, old) =>
+        while (true)
         {
-            var newCount = Math.Max(0, old - 1);
+            if (!perUserCount.TryGetValue(userId, out var oldCount))
+                break;
+            
+            var newCount = Math.Max(0, oldCount - 1);
             if (newCount == 0)
-                perUserCount.TryRemove(userId, out var _);
-            return newCount;
-        });
+            {
+                if (perUserCount.TryRemove(userId, out _))
+                    break;
+            }
+            else
+            {
+                if (perUserCount.TryUpdate(userId, newCount, oldCount))
+                    break;
+            }
+        }
     }
 }
