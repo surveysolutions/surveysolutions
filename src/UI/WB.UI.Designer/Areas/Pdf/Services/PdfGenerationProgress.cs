@@ -10,7 +10,7 @@ public  class PdfGenerationProgress
     public PdfGenerationStatus Status { get; private set; } = PdfGenerationStatus.InQuery;
 
     public string FilePath { get; } = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
-    public TimeSpan TimeSinceStarted => this.startTime.HasValue ? DateTime.UtcNow - this.startTime.Value : TimeSpan.Zero;
+    public DateTime? StartedTime => this.startTime;
     public TimeSpan TimeSinceFinished => this.finishTime.HasValue ? DateTime.UtcNow - this.finishTime.Value : TimeSpan.Zero;
 
     public void Started()

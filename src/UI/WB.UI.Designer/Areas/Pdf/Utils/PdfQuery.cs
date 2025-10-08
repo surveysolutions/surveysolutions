@@ -102,7 +102,7 @@ public class PdfQuery : IPdfQuery
             Key = job.Key,
             Status = job.Value.Progress.Status.ToString(),
             UserId = job.Value.UserId,
-            StartedTime = job.Value.Progress.TimeSinceStarted.ToString(),
+            StartedTime = job.Value.Progress.StartedTime?.ToString(),
             ElapsedTime = job.Value.Progress.TimeSinceFinished.ToString()
         }).ToArray();
 
