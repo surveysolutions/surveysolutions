@@ -69,7 +69,6 @@ import Export from './Settings/Export'
 import Note from './Settings/Note'
 import Profile from './Settings/Profile'
 import Devices from './Settings/Devices'
-import WebInterview from './Settings/WebInterview'
 import Logo from './Settings/Logo'
 
 export default {
@@ -78,7 +77,6 @@ export default {
         Note,
         Profile,
         Devices,
-        WebInterview,
         Logo,
 
         Form,
