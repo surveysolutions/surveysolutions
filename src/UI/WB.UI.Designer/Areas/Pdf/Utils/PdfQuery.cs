@@ -100,7 +100,7 @@ public class PdfQuery : IPdfQuery
         var activeJobs = jobs.Select(job => new
         {
             Key = job.Key,
-            Status = job.Value.StartedTime.HasValue ? "Started" : job.Value.Progress.IsFinished ? "Finished" : (job.Value.Progress.IsFailed ? "Failed" : "In Progress"),
+            Status = job.Value.StartedTime.HasValue ? "Started" : job.Value.Progress.IsFinished ? "Finished" : (job.Value.Progress.IsFailed ? "Failed" : "In Query"),
             UserId = job.Value.UserId,
             StartedTime = job.Value.StartedTime?.ToString(),
             ElapsedTime = job.Value.Progress.IsFinished ? job.Value.Progress.TimeSinceFinished.ToString() : null
