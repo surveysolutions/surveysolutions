@@ -141,9 +141,11 @@ Velikost: {0} kB</value>
     <value>Obnovení exportu ve formátu PDF.</value>
   </data>
   <data name="NotFound" xml:space="preserve">
-    <value>Požadovaná úloha nebyla nalezena. Zkuste to prosím znovu.</value>
+    <value>Požadovaná úloha nebyla nalezena. 
+Zkuste to prosím znovu.</value>
   </data>
   <data name="PdfLimitReached" xml:space="preserve">
-    <value>Již jste odeslali {0} žádostí o vytvoření dokumentů PDF pro vaše dotazníky</value>
+    <value>Již jste odeslali {0} žádostí o vytvoření dokumentů PDF pro vaše dotazníky.
+Zkuste to prosím znovu později.</value>
   </data>
 </root>

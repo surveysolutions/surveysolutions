@@ -144,9 +144,11 @@ Vă rog așteptați...</value>
     <value>Se extrage exportul în format PDF.</value>
   </data>
   <data name="NotFound" xml:space="preserve">
-    <value>Sarcina solicitată nu a fost localizată. Vă rugăm să încercați din nou.</value>
+    <value>Sarcina solicitată nu a fost localizată. 
+Vă rugăm să încercați din nou.</value>
   </data>
   <data name="PdfLimitReached" xml:space="preserve">
-    <value>Ați trimis deja {0} cereri de creare a documentelor PDF pentru chestionarele dvs</value>
+    <value>Ați trimis deja {0} cereri de creare a documentelor PDF pentru chestionarele dvs.
+Vă rugăm să încercați din nou mai târziu.</value>
   </data>
 </root>

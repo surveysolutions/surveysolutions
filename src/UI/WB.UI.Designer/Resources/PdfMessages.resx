@@ -141,9 +141,11 @@ Please wait...</value>
     <value>Retring export as PDF.</value>
   </data>
   <data name="NotFound" xml:space="preserve">
-    <value>The requested job has not been located. Please attempt to retry.</value>
+    <value>The requested job has not been located. 
+Please try again.</value>
   </data>
   <data name="PdfLimitReached" xml:space="preserve">
-    <value>You have already posted {0} requests to create PDF documents for your questionnaires</value>
+    <value>You have already posted {0} requests to create PDF documents for your questionnaires.
+Please try again later.</value>
   </data>
 </root>
