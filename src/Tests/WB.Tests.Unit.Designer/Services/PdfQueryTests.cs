@@ -151,7 +151,7 @@ namespace WB.Tests.Unit.Designer.Services
             
             // Assert
             Assert.That(taskExecuted, Is.True, "Job should have been executed");
-            Assert.That(progress.IsFinished, Is.True, "Progress should be marked as finished");
+            Assert.That(progress.Status, Is.EqualTo(PdfGenerationStatus.Finished), "Progress should be marked as finished");
         }
 
         [Test]
@@ -174,7 +174,7 @@ namespace WB.Tests.Unit.Designer.Services
             await Task.Delay(100);
             
             // Assert
-            Assert.That(progress.IsFailed, Is.True, "Progress should be marked as failed");
+            Assert.That(progress.Status, Is.EqualTo(PdfGenerationStatus.Failed), "Progress should be marked as failed");
         }
     }
 }

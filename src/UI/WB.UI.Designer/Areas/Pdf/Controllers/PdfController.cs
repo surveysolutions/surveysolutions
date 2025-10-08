@@ -115,12 +115,12 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
 
             long sizeInKb = this.GetFileSizeInKb(pdfGenerationProgress.FilePath);
             if (sizeInKb == 0)
-                return pdfGenerationProgress.IsFinished 
+                return pdfGenerationProgress.Status == PdfGenerationStatus.Finished 
                     ? this.Json(PdfStatus.Failed(PdfMessages.FailedToGenerate))
                     : this.Json(PdfStatus.InProgress(PdfMessages.PreparingToGenerate));
 
             return this.Json(
-                pdfGenerationProgress.IsFinished
+                pdfGenerationProgress.Status == PdfGenerationStatus.Finished
                     ? PdfStatus.Ready(
                         pdfGenerationProgress.TimeSinceFinished.TotalMinutes < 1
                             ? string.Format(PdfMessages.GenerateLessMinute, sizeInKb)
@@ -154,7 +154,7 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
             {
                 var pdfGenerationProgress = await pdfService.Enqueue(id, translation, DocumentType.Pdf, timezoneOffsetMinutes);
 
-                if (pdfGenerationProgress.IsFailed)
+                if (pdfGenerationProgress.Status == PdfGenerationStatus.Failed)
                 {
                     if (timezoneOffsetMinutes != null)
                     {
@@ -169,12 +169,12 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
                 long sizeInKb = this.GetFileSizeInKb(pdfGenerationProgress.FilePath);
 
                 if (sizeInKb == 0)
-                    return pdfGenerationProgress.IsFinished 
+                    return pdfGenerationProgress.Status == PdfGenerationStatus.Finished 
                         ? this.Json(PdfStatus.Failed(PdfMessages.FailedToGenerate))
                         : this.Json(PdfStatus.InProgress(PdfMessages.PreparingToGenerate));
 
                 return this.Json(
-                    pdfGenerationProgress.IsFinished
+                    pdfGenerationProgress.Status == PdfGenerationStatus.Finished
                         ? PdfStatus.Ready(
                             pdfGenerationProgress.TimeSinceFinished.TotalMinutes < 1
                                 ? string.Format(PdfMessages.GenerateLessMinute, sizeInKb)
@@ -196,18 +196,18 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
             if (pdfGenerationProgress == null)
                 return this.Json(PdfStatus.Failed(PdfMessages.NotFound));
 
-            if (pdfGenerationProgress.IsFailed)
+            if (pdfGenerationProgress.Status == PdfGenerationStatus.Failed)
                 return this.Json(PdfStatus.Failed(PdfMessages.FailedToGenerate));
 
             long sizeInKb = this.GetFileSizeInKb(pdfGenerationProgress.FilePath);
 
             if (sizeInKb == 0)
-                return pdfGenerationProgress.IsFinished 
+                return pdfGenerationProgress.Status == PdfGenerationStatus.Finished 
                     ? this.Json(PdfStatus.Failed(PdfMessages.FailedToGenerate))
                     : this.Json(PdfStatus.InProgress(PdfMessages.PreparingToGenerate));
             
             return this.Json(
-                pdfGenerationProgress.IsFinished
+                pdfGenerationProgress.Status == PdfGenerationStatus.Finished
                     ? PdfStatus.Ready(
                         pdfGenerationProgress.TimeSinceFinished.TotalMinutes < 1
                             ? string.Format(PdfMessages.GenerateLessMinute, sizeInKb)

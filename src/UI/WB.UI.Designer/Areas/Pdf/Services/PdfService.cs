@@ -50,10 +50,7 @@ public class PdfService : IPdfService
             
         var existing = pdfQuery.GetOrNull(key);
         if (existing != null)
-        {
-            if (!existing.IsFailed)
-                return existing;
-        }
+            pdfQuery.Remove(key);
         
         var progress = new PdfGenerationProgress();
 
@@ -67,7 +64,7 @@ public class PdfService : IPdfService
 
         PdfGenerationProgress pdfGenerationProgress = pdfQuery.GetOrAdd(GetUserId(), key, RunGeneration);
 
-        if (pdfGenerationProgress.IsFailed)
+        if (pdfGenerationProgress.Status == PdfGenerationStatus.Failed)
         {
             if (timezoneOffsetMinutes == null)
             {
@@ -100,7 +97,7 @@ public class PdfService : IPdfService
                 : StartRenderHtml(questionnaireHtml, footerHtml, p);
         
         PdfGenerationProgress pdfGenerationProgress = pdfQuery.GetOrAdd(GetUserId(), key, RunGeneration);
-        if (pdfGenerationProgress.IsFailed)
+        if (pdfGenerationProgress.Status == PdfGenerationStatus.Failed)
         {
             pdfQuery.Remove(key);
         }
@@ -113,7 +110,7 @@ public class PdfService : IPdfService
         var pdfKey = GetKey(documentType, id, translation);
         var pdfGenerationProgress = pdfQuery.GetOrNull(pdfKey);
 
-        if (pdfGenerationProgress?.IsFinished == true)
+        if (pdfGenerationProgress?.Status == PdfGenerationStatus.Finished)
         {
             byte[] content = this.fileSystemAccessor.ReadAllBytes(pdfGenerationProgress.FilePath);
 
@@ -129,7 +126,7 @@ public class PdfService : IPdfService
 
     private async Task StartRenderPdf(string questionnaireHtml, string footerHtml, PdfGenerationProgress generationProgress)
     {
-        if (generationProgress.IsFailed)
+        if (generationProgress.Status == PdfGenerationStatus.Failed)
             return;
 
         try
@@ -187,7 +184,7 @@ public class PdfService : IPdfService
 
     private async Task StartRenderHtml(string questionnaireHtml, string footerHtml, PdfGenerationProgress progress)
     {
-        if (!progress.IsFailed)
+        if (progress.Status != PdfGenerationStatus.Failed)
         {
             await System.IO.File.WriteAllTextAsync(progress.FilePath, questionnaireHtml);
             progress.Finish();

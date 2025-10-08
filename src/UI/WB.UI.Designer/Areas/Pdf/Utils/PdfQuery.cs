@@ -63,7 +63,7 @@ public class PdfQuery : IPdfQuery
     {
         if (jobs.TryRemove(key, out var job))
         {
-            if (!job.StartedTime.HasValue)
+            if (job.Progress.Status != PdfGenerationStatus.Started)
             {
                 DecreaseUserJobCount(job.UserId);
             }
@@ -100,10 +100,10 @@ public class PdfQuery : IPdfQuery
         var activeJobs = jobs.Select(job => new
         {
             Key = job.Key,
-            Status = job.Value.StartedTime.HasValue ? "Started" : job.Value.Progress.IsFinished ? "Finished" : (job.Value.Progress.IsFailed ? "Failed" : "In Query"),
+            Status = job.Value.Progress.Status.ToString(),
             UserId = job.Value.UserId,
-            StartedTime = job.Value.StartedTime?.ToString(),
-            ElapsedTime = job.Value.Progress.IsFinished ? job.Value.Progress.TimeSinceFinished.ToString() : null
+            StartedTime = job.Value.Progress.TimeSinceStarted.ToString(),
+            ElapsedTime = job.Value.Progress.TimeSinceFinished.ToString()
         }).ToArray();
 
         var result = new
@@ -128,7 +128,7 @@ public class PdfQuery : IPdfQuery
             
             if (queue.TryDequeue(out var job))
             {
-                job.StartedTime = DateTime.Now;
+                job.Progress.Started();
 
                 try
                 {
