@@ -192,9 +192,7 @@ function ItemViewModel() {
             } else if (result.canRetry) {
                 $('#pdfRetryGenerate').show();
             } else {
-                setTimeout(function() {
-                    self.updateExportPdfStatusNeverending(translation);
-                }, 1500);
+                self.updateExportPdfStatusNeverending(translation);
             }
         } else {
             self.setPdfMessage(self.getStandardErrorMessage());
@@ -222,13 +220,11 @@ function ItemViewModel() {
     };
 
     self.updateExportPdfStatusNeverending = function (translation) {
-        $.when(self.updateExportPdfStatus(translation)).done(function () {
-            if (!self.ExportDialogClosed) {
-                setTimeout(function () {
-                    self.updateExportPdfStatusNeverending(translation);
-                }, 1500);
-            }
-        });
+        if (self.ExportDialogClosed) return;
+
+        setTimeout(function () {
+            self.updateExportPdfStatus(translation);
+        }, 1000);
     };
 
     self.setPdfMessage = function (message) {
