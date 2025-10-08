@@ -11,5 +11,6 @@ namespace WB.UI.Headquarters.Models.WebInterview
         public string CoverPageId { get; set; }
         public bool MayBeSwitchedToWebMode { get; set; }
         public string WebInterviewUrl { get; set; }
+        public string ContinueLink { get; set; }
     }
 }

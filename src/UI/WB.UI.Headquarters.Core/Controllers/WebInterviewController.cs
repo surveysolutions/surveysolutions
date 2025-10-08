@@ -218,20 +218,9 @@ namespace WB.UI.Headquarters.Controllers
 
         private WebInterviewIndexPageModel GetInterviewModel(string interviewId, IStatefulInterview interview, WebInterviewConfig webInterviewConfig)
         {
-            var emailSettings = this.emailProviderSettingsStorage.GetById(AppSetting.EmailProviderSettings);
-
-            bool isAskForEmailAvailable =
-                emailSettings != null 
-                && emailSettings.Provider != EmailProvider.None
-                && interview.Mode == InterviewMode.CAWI;
-
-            if (isAskForEmailAvailable)
-            {
-                isAskForEmailAvailable =
-                    this.webInterviewSettingsStorage.GetById(AppSetting.WebInterviewSettings)?.AllowEmails ?? false;
-            }
-
-            var askForEmail = isAskForEmailAvailable ? Request.Cookies[AskForEmail] ?? "false" : "false";
+            bool isGenerateLinkAvailable = interview.Mode == InterviewMode.CAWI;
+         
+            var askForEmail = isGenerateLinkAvailable ? Request.Cookies[AskForEmail] ?? "false" : "false";
             var questionnaire = this.questionnaireStorage.GetQuestionnaireDocument(interview.QuestionnaireIdentity) 
                                 ?? throw new ArgumentNullException("Questionnaire not found");
 
@@ -243,16 +232,27 @@ namespace WB.UI.Headquarters.Controllers
                 webInterviewConfig.CustomMessages[messageKey] = 
                     SubstituteQuestionnaireName(oldMessage, questionnaire.Title);
             }
+
+            var assignmentId = interview.GetAssignmentId() ?? 0;
+            var assignment = assignments.GetAssignment(assignmentId);
             
-            return new WebInterviewIndexPageModel
+            var invitation = this.invitationService.GetInvitationForPublicLinkOrNull(assignment, interviewId);
+            var continueLink = (invitation == null)
+                ? ""
+                : webInterviewLinkProvider.WebInterviewContinueLink(invitation);
+            
+            var model = new WebInterviewIndexPageModel
             {
                 Id = interviewId,
                 CoverPageId = questionnaire.IsCoverPageSupported ? questionnaire.CoverPageSectionId.FormatGuid() : "",
                 AskForEmail = askForEmail,
                 CustomMessages = webInterviewConfig.CustomMessages,
                 MayBeSwitchedToWebMode = config.Started && config.AllowSwitchToCawiForInterviewer && (interview.Mode != InterviewMode.CAWI),
-                WebInterviewUrl = RenderWebInterviewUri(interview.GetAssignmentId() ?? 0, interview.Id)
+                WebInterviewUrl = RenderWebInterviewUri(assignmentId, interview.Id),
+                ContinueLink = continueLink,
             };
+            
+            return model;
         }
 
         private string RenderWebInterviewUri(int assignmentId, Guid interviewId)
@@ -371,53 +371,37 @@ namespace WB.UI.Headquarters.Controllers
             return this.View(model);
         }
 
-        public class SendLinkModel
+        public class GetLinkModel
         {
             public string? InterviewId { get; set; }
-            public string? Email { get; set; }
         }
 
-        //remove
-        //just render the link instead of sending email
-        //take into consideration that interview could be not materialized yet
-        //probably we should materialize it on link generation
         [HttpPost]
-        [Route("EmailLink")]
-        public async Task<IActionResult> EmailLink([FromBody]SendLinkModel data)
+        [Route("CreateResumeLink")]
+        public IActionResult CreateResumeLink([FromBody] GetLinkModel data)
         {
             var interviewId = data.InterviewId;
 
-            if (interviewId != null && Guid.TryParse(interviewId, out var aggregateId))
+            if (interviewId == null || !Guid.TryParse(interviewId, out var aggregateId))
+                return this.Json(new { link = string.Empty });
+            
+            inScopeExecutor.Execute(serviceLocator =>
             {
-                inScopeExecutor.Execute(serviceLocator =>
-                {
-                    var promoterServiceLocal =
-                        serviceLocator.GetInstance<IAggregateRootPrototypePromoterService>();
-                    promoterServiceLocal.MaterializePrototypeIfRequired(aggregateId);
-                });
-            }
+                var promoterServiceLocal =
+                    serviceLocator.GetInstance<IAggregateRootPrototypePromoterService>();
+                promoterServiceLocal.MaterializePrototypeIfRequired(aggregateId);
+            });
+
 
             var assignmentId = interviewSummary.GetById(data.InterviewId)?.AssignmentId ?? 0;
             var assignment = assignments.GetAssignment(assignmentId);
 
             int invitationId = invitationService.GetOrCreateInvitationForPublicLink(assignment, data.InterviewId);
 
-            try
-            {
-                var emailId = await invitationMailingService.SendResumeAsync(invitationId, assignment, data.Email);
-                invitationService.MarkInvitationAsSent(invitationId, emailId);
+            var link = webInterviewLinkProvider.WebInterviewContinueLink(
+                invitationService.GetInvitation(invitationId));
 
-                if (Request.Cookies[AskForEmail] != null)
-                {
-                    Response.Cookies.Delete(AskForEmail);
-                }
-
-                return this.Json("ok");
-            }
-            catch (EmailServiceException e)
-            {
-                return this.Json("fail");
-            }
+            return this.Json(new { link });
         }
 
         [HttpPost]

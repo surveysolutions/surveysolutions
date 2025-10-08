@@ -175,16 +175,14 @@
                         <div class="modal-body">
                             <form onsubmit="return false;" action="javascript:void(0)">
                                 <p>{{ $t('WebInterviewUI.EmailLink_Message') }}</p>
-                                <p>{{ $t('WebInterviewUI.EmailLink_ResumeAnyTime') }}</p>
-                                <div class="form-group">
-                                    <input type="email" id="txtEmail" class="form-control"
-                                        :placeholder="this.$t('WebInterviewUI.EmailLink_Placeholder')" />
-                                </div>
+                                <p v-if="!continueLink">{{ $t('WebInterviewUI.EmailLink_ResumeAnyTime') }}</p>
+                                <p><b>{{ continueLink }}</b></p>
                             </form>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-primary" @click="sendEmailWithPersonalLink">{{
-                                $t("Common.Ok") }}</button>
+                            <button v-if="!continueLink" type="button" class="btn btn-primary"
+                                @click="getPermanentlLink">{{
+                                    $t("Common.Create") }}</button>
                             <button type="button" class="btn btn-link" @click="hideEmailPersonalLink"
                                 data-bs-dismiss="modal">{{ $t("Common.Cancel")
                                 }}</button>
@@ -208,6 +206,7 @@ export default {
     data() {
         return {
             showEmailPersonalLink: this.$config.askForEmail,
+            continueLink: this.$config.continueLink,
             scenarioText: null,
             designerScenarios: [],
             selectedScenarioOption: -1,
@@ -230,9 +229,9 @@ export default {
 
         })
 
-        if (this.$config.askForEmail) {
-            this.emailPersonalLink()
-        }
+        //if (this.$config.askForEmail) {
+        //    this.emailPersonalLink()
+        //}
     },
     updated() {
         document.title = this.$config.splashScreen ? this.$t('WebInterviewUI.LoadingQuestionnaire') : `${this.$store.state.webinterview.interviewKey} | ${this.questionnaireTitle} | ${this.$t('WebInterviewUI.WebInterview')}`
@@ -296,39 +295,20 @@ export default {
                 this.emailModal.show()
             })
         },
-        sendEmailWithPersonalLink() {
-            const emailInput = $('#txtEmail')
-            const email = emailInput.val()
-            if (email === null || email === undefined) return
-
+        getPermanentlLink() {
             var self = this
-            if (!self.validateEmail(email)) {
-                self.$nextTick(function () {
-                    emailInput.next('span').remove()
-                    emailInput.after('<span class=\'help-text text-danger\'>' + this.$t('WebInterviewUI.EmailLink_InvalidEmail', { email: email }) + '</span>')
-                })
-                return false
-            }
-
             axios.post(this.$config.sendLinkUri, {
                 interviewId: this.$route.params.interviewId,
-                email: email,
             }).then(function (response) {
-                self.showEmailPersonalLink = false
-                if (response && response.data === 'fail')
-                    toastr.error('Email was not sent')
+                if (response && response.data !== '' && response.data.link) {
+                    self.continueLink = response.data.link
+                }
             }).catch(function (error) {
                 if (error && error.response)
                     self.$errorHandler(error, self)
             })
+        },
 
-            this.emailModal.hide()
-            this.emailModal = null;
-        },
-        validateEmail(email) {
-            var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-            return re.test(String(email).toLowerCase())
-        },
         changeLanguage(language) {
 
             this.$store.dispatch('changeLanguage', language)

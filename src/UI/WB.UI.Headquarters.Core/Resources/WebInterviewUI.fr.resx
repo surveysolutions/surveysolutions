@@ -462,13 +462,13 @@ Veuillez contacter l'équipe de support pour obtenir de l'aide.</value>
     <value>La lecture multimédia n'est pas prise en charge par votre navigateur. Vous pouvez le télécharger à la place.</value>
   </data>
   <data name="EmailLink_Header" xml:space="preserve">
-    <value>Entrez votre adresse e-mail</value>
+    <value>Lien pour reprendre</value>
   </data>
   <data name="EmailLink_Message" xml:space="preserve">
-    <value>Nous vous enverrons un message avec le lien pour reprendre l'entretien si vous devez continuer plus tard.</value>
+    <value>Ce lien permet de reprendre l'entretien si vous devez continuer plus tard.</value>
   </data>
   <data name="EmailLink_ResumeAnyTime" xml:space="preserve">
-    <value>Vous pouvez annuler maintenant et continuer l'entretien. Et vous pouvez l'envoyer plus tard en cliquant sur l'élément 'Lien de reprise par e-mail' dans le menu supérieur.</value>
+    <value>Vous pouvez créer un lien pour continuer l'entretien. Ce lien permanent peut être enregistré et utilisé plus tard.</value>
   </data>
   <data name="EmailLink_Placeholder" xml:space="preserve">
     <value>Entrez l'e-mail</value>
@@ -477,7 +477,7 @@ Veuillez contacter l'équipe de support pour obtenir de l'aide.</value>
     <value>{{email}} est une adresse e-mail invalide</value>
   </data>
   <data name="EmailLink_EmailResumeLink" xml:space="preserve">
-    <value>Lien de reprise par e-mail</value>
+    <value>Lien de reprise</value>
   </data>
   <data name="HideVariables" xml:space="preserve">
     <value>Masquer les variables</value>
