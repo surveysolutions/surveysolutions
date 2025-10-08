@@ -220,7 +220,7 @@ namespace WB.UI.Headquarters.Controllers
         {
             bool isGenerateLinkAvailable = interview.Mode == InterviewMode.CAWI;
          
-            var askForEmail = isGenerateLinkAvailable ? Request.Cookies[AskForEmail] ?? "false" : "false";
+            var askForEmail = isGenerateLinkAvailable ? "true" :"false";
             var questionnaire = this.questionnaireStorage.GetQuestionnaireDocument(interview.QuestionnaireIdentity) 
                                 ?? throw new ArgumentNullException("Questionnaire not found");
 
@@ -354,15 +354,6 @@ namespace WB.UI.Headquarters.Controllers
                 if (assignment.IsCompleted)
                     throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired,
                         Enumerator.Native.Resources.WebInterview.Error_InterviewExpired);
-
-                if (invitation.InterviewId == null)
-                {
-                    Response.Cookies.Append(AskForEmail, "true", new CookieOptions
-                    {
-                        HttpOnly = true,
-                        Expires = DateTime.UtcNow.AddDays(7)
-                    });
-                }
             }
 
             var model = this.GetStartModel(assignment.QuestionnaireId, webInterviewConfig, assignment);

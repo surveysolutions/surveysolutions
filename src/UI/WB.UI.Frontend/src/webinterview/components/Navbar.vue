@@ -196,7 +196,6 @@
 </template>
 <script lang="js">
 import axios from 'axios'
-import * as toastr from 'toastr'
 import { filter } from 'lodash'
 import { Modal } from 'bootstrap'
 import { nextTick } from 'vue'
