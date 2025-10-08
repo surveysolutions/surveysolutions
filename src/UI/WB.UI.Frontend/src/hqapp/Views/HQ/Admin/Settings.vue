@@ -28,12 +28,6 @@
                         </a>
                     </li>
                     <li role="presentation">
-                        <a href="#webinterview" @click="setPageActive('welcomeTextTitle', 'welcomeTextDescription')"
-                            aria-controls="webinterview" role="tab" data-bs-toggle="tab">
-                            {{ $t('Settings.WebInterview') }}
-                        </a>
-                    </li>
-                    <li role="presentation">
                         <a href="#logo" @click="setPageActive('welcomeTextTitle', 'welcomeTextDescription')"
                             aria-controls="logo" role="tab" data-bs-toggle="tab">
                             {{ $t('Settings.Logo') }}
