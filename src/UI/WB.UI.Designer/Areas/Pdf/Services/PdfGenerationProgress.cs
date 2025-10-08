@@ -7,7 +7,7 @@ public  class PdfGenerationProgress
 {
     private DateTime? finishTime;
     private DateTime? startTime;
-    public PdfGenerationStatus Status { get; private set; } = PdfGenerationStatus.InQuery;
+    public PdfGenerationStatus Status { get; private set; } = PdfGenerationStatus.InQueue;
 
     public string FilePath { get; } = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
     public DateTime? StartedTime => this.startTime;
