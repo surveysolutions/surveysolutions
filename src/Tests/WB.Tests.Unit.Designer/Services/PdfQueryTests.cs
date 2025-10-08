@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.Designer.Services
             this.pdfSettings = new PdfSettings { MaxPerUser = 3, WorkerCount = 1 };
             this.mockOptions = new Mock<IOptions<PdfSettings>>();
             this.mockOptions.Setup(o => o.Value).Returns(this.pdfSettings);
-            this.pdfQuery = new PdfQuery(this.mockOptions.Object);
+            this.pdfQuery = new PdfQuery(this.mockOptions.Object, Mock.Of<Microsoft.Extensions.Logging.ILogger<PdfQuery>>());
         }
 
         [Test]
