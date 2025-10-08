@@ -43,15 +43,15 @@ public class PdfQuery : IPdfQuery
         if (jobs.TryGetValue(key, out var existing))
             return existing.Progress;
 
-        var job = new PdfJob(key, userId, runGeneration);
-
-        if (!jobs.TryAdd(key, job))
-            return jobs[key].Progress;
-
         int current = perUserCount.GetOrAdd(userId, 0);
         if (current >= maxPerUser)
             throw new PdfLimitReachedException(maxPerUser);
 
+        var job = new PdfJob(key, userId, runGeneration);
+
+        if (!jobs.TryAdd(key, job))
+            return jobs[key].Progress;
+        
         queue.Enqueue(job);
         perUserCount.AddOrUpdate(userId, 1, (_, old) => old + 1);
         signal.Release();
