@@ -3,29 +3,31 @@ using System.Collections.Concurrent;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using StackExchange.Exceptional;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
 using WB.UI.Designer.Areas.Pdf.Services;
 
 namespace WB.UI.Designer.Areas.Pdf.Utils;
 
-using System;
-using System.Collections.Concurrent;
-using System.Threading;
-using System.Threading.Tasks;
-
 public class PdfQuery : IPdfQuery
 {
+    private static readonly TimeSpan JobTimeout = TimeSpan.FromMinutes(10);
     private readonly IOptions<PdfSettings> options;
+    private readonly ILogger<PdfQuery> logger;
     private readonly int maxPerUser;
     private readonly ConcurrentQueue<PdfJob> queue = new();
     private readonly ConcurrentDictionary<string, PdfJob> jobs = new();
     private readonly ConcurrentDictionary<Guid, int> perUserCount = new();
     private readonly SemaphoreSlim signal = new(0);
 
-    public PdfQuery(IOptions<PdfSettings> options)
+    public PdfQuery(IOptions<PdfSettings> options,
+        ILogger<PdfQuery> logger)
     {
         this.options = options;
+        this.logger = logger;
+        
         this.maxPerUser = options.Value.MaxPerUser;
         var workerCount = options.Value.WorkerCount;
 
@@ -41,16 +43,14 @@ public class PdfQuery : IPdfQuery
         if (jobs.TryGetValue(key, out var existing))
             return existing.Progress;
 
-        int current = perUserCount.GetOrAdd(userId, 0);
-        if (current >= maxPerUser)
-        {
-            throw new PdfLimitReachedException(maxPerUser);
-        }
-
         var job = new PdfJob(key, userId, runGeneration);
 
         if (!jobs.TryAdd(key, job))
             return jobs[key].Progress;
+
+        int current = perUserCount.GetOrAdd(userId, 0);
+        if (current >= maxPerUser)
+            throw new PdfLimitReachedException(maxPerUser);
 
         queue.Enqueue(job);
         perUserCount.AddOrUpdate(userId, 1, (_, old) => old + 1);
@@ -101,6 +101,7 @@ public class PdfQuery : IPdfQuery
         {
             Key = job.Key,
             Status = job.Value.Progress.IsFinished ? "Finished" : (job.Value.Progress.IsFailed ? "Failed" : "In Progress"),
+            Started = job.Value.Started,
             UserId = job.Value.UserId,
             ElapsedTime = job.Value.Progress.IsFinished ? job.Value.Progress.TimeSinceFinished.ToString() : null
         }).ToArray();
@@ -124,16 +125,20 @@ public class PdfQuery : IPdfQuery
         while (true)
         {
             await signal.WaitAsync();
+            
             if (queue.TryDequeue(out var job))
             {
                 job.Started = true;
+
                 try
                 {
                     await job.Work(job.Progress);
                 }
-                catch
+                catch(Exception ex)
                 {
                     job.Progress.Fail();
+                    this.logger.LogError(ex, $"Failed job {job.Key}");
+                    await ex.LogNoContextAsync();
                 }
                 finally
                 {
@@ -164,3 +169,5 @@ public class PdfQuery : IPdfQuery
         }
     }
 }
+
+
