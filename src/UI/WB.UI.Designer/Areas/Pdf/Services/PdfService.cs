@@ -143,7 +143,11 @@ public class PdfService : IPdfService
 
             var page = await browser.NewPageAsync();
             await page.RouteAsync("**/*.js", async route => await route.AbortAsync());
-            await page.SetContentAsync(questionnaireHtml);
+            await page.SetContentAsync(questionnaireHtml, new PageSetContentOptions
+            {
+                Timeout = 120_000,
+                WaitUntil = WaitUntilState.DOMContentLoaded,
+            });
 
             var contetnt = await page.PdfAsync(new PagePdfOptions()
             {
