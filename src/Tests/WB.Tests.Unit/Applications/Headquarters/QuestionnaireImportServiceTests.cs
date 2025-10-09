@@ -217,11 +217,11 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 .Returns(Task.FromResult(package ?? new QuestionnaireCommunicationPackage(String.Empty,string.Empty, 0, false)));
 
             designerApi
-                .Setup(d => d.GetPdfStatus(It.IsAny<Guid>(), It.IsAny<Guid?>()))
+                .Setup(d => d.GetHtmlStatus(It.IsAny<Guid>(), It.IsAny<Guid?>()))
                 .Returns(Task.FromResult(new PdfStatus { ReadyForDownload = true }));
             
             designerApi
-                .Setup(d => d.DownloadPdf(It.IsAny<Guid>(), It.IsAny<Guid?>()))
+                .Setup(d => d.DownloadHtml(It.IsAny<Guid>(), It.IsAny<Guid?>()))
                 .Returns(Task.FromResult(new RestFile(new byte[] { 1 }, "image/png", "content id", 0, "file.png", HttpStatusCode.OK)));
         }
 
