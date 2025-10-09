@@ -68,7 +68,6 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IInScopeExecutor inScopeExecutor;
 
         private readonly IPlainKeyValueStorage<EmailProviderSettings> emailProviderSettingsStorage;
-        private readonly IPlainKeyValueStorage<WebInterviewSettings> webInterviewSettingsStorage;
         private readonly IOptions<RecaptchaSettings> recaptchaSettings;
         private readonly IOptions<CaptchaConfig> captchaConfig;
         private readonly IServiceLocator serviceLocator;
@@ -78,7 +77,6 @@ namespace WB.UI.Headquarters.Controllers
         private const string CaptchaCompletedKey = "CaptchaCompletedKey";
         private const string PasswordVerifiedKey = "PasswordVerifiedKey";
         public static readonly string LastCreatedInterviewIdKey = "lastCreatedInterviewId";
-        public static readonly string AskForEmail = "askForEmail";
 
         private readonly ICalendarEventService calendarEventService;
         
@@ -130,7 +128,6 @@ namespace WB.UI.Headquarters.Controllers
             INativeReadSideStorage<InterviewSummary> interviewSummary,
             IInvitationMailingService invitationMailingService,
             IPlainKeyValueStorage<EmailProviderSettings> emailProviderSettingsStorage,
-            IPlainKeyValueStorage<WebInterviewSettings> webInterviewSettingsStorage,
             IOptions<RecaptchaSettings> recaptchaSettings,
             IOptions<CaptchaConfig> captchaConfig,
             IServiceLocator serviceLocator,
@@ -153,7 +150,6 @@ namespace WB.UI.Headquarters.Controllers
             this.interviewSummary = interviewSummary;
             this.invitationMailingService = invitationMailingService;
             this.emailProviderSettingsStorage = emailProviderSettingsStorage;
-            this.webInterviewSettingsStorage = webInterviewSettingsStorage;
             this.recaptchaSettings = recaptchaSettings;
             this.captchaConfig = captchaConfig;
             this.serviceLocator = serviceLocator;
@@ -218,20 +214,9 @@ namespace WB.UI.Headquarters.Controllers
 
         private WebInterviewIndexPageModel GetInterviewModel(string interviewId, IStatefulInterview interview, WebInterviewConfig webInterviewConfig)
         {
-            var emailSettings = this.emailProviderSettingsStorage.GetById(AppSetting.EmailProviderSettings);
-
-            bool isAskForEmailAvailable =
-                emailSettings != null 
-                && emailSettings.Provider != EmailProvider.None
-                && interview.Mode == InterviewMode.CAWI;
-
-            if (isAskForEmailAvailable)
-            {
-                isAskForEmailAvailable =
-                    this.webInterviewSettingsStorage.GetById(AppSetting.WebInterviewSettings)?.AllowEmails ?? false;
-            }
-
-            var askForEmail = isAskForEmailAvailable ? Request.Cookies[AskForEmail] ?? "false" : "false";
+            bool isGenerateLinkAvailable = interview.Mode == InterviewMode.CAWI;
+         
+            var isResumeLinkAvailable = isGenerateLinkAvailable ? "true" :"false";
             var questionnaire = this.questionnaireStorage.GetQuestionnaireDocument(interview.QuestionnaireIdentity) 
                                 ?? throw new ArgumentNullException("Questionnaire not found");
 
@@ -243,16 +228,27 @@ namespace WB.UI.Headquarters.Controllers
                 webInterviewConfig.CustomMessages[messageKey] = 
                     SubstituteQuestionnaireName(oldMessage, questionnaire.Title);
             }
+
+            var assignmentId = interview.GetAssignmentId() ?? 0;
+            var assignment = assignments.GetAssignment(assignmentId);
             
-            return new WebInterviewIndexPageModel
+            var invitation = this.invitationService.GetInvitationForPublicLinkOrNull(assignment, interviewId);
+            var continueLink = (invitation == null)
+                ? ""
+                : webInterviewLinkProvider.WebInterviewContinueLink(invitation);
+            
+            var model = new WebInterviewIndexPageModel
             {
                 Id = interviewId,
                 CoverPageId = questionnaire.IsCoverPageSupported ? questionnaire.CoverPageSectionId.FormatGuid() : "",
-                AskForEmail = askForEmail,
+                IsResumeLinkAvailable = isResumeLinkAvailable,
                 CustomMessages = webInterviewConfig.CustomMessages,
                 MayBeSwitchedToWebMode = config.Started && config.AllowSwitchToCawiForInterviewer && (interview.Mode != InterviewMode.CAWI),
-                WebInterviewUrl = RenderWebInterviewUri(interview.GetAssignmentId() ?? 0, interview.Id)
+                WebInterviewUrl = RenderWebInterviewUri(assignmentId, interview.Id),
+                ContinueLink = continueLink,
             };
+            
+            return model;
         }
 
         private string RenderWebInterviewUri(int assignmentId, Guid interviewId)
@@ -354,15 +350,6 @@ namespace WB.UI.Headquarters.Controllers
                 if (assignment.IsCompleted)
                     throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired,
                         Enumerator.Native.Resources.WebInterview.Error_InterviewExpired);
-
-                if (invitation.InterviewId == null)
-                {
-                    Response.Cookies.Append(AskForEmail, "true", new CookieOptions
-                    {
-                        HttpOnly = true,
-                        Expires = DateTime.UtcNow.AddDays(7)
-                    });
-                }
             }
 
             var model = this.GetStartModel(assignment.QuestionnaireId, webInterviewConfig, assignment);
@@ -371,49 +358,37 @@ namespace WB.UI.Headquarters.Controllers
             return this.View(model);
         }
 
-        public class SendLinkModel
+        public class GetLinkModel
         {
             public string? InterviewId { get; set; }
-            public string? Email { get; set; }
         }
 
         [HttpPost]
-        [Route("EmailLink")]
-        public async Task<IActionResult> EmailLink([FromBody]SendLinkModel data)
+        [Route("CreateResumeLink")]
+        public IActionResult CreateResumeLink([FromBody] GetLinkModel data)
         {
             var interviewId = data.InterviewId;
 
-            if (interviewId != null && Guid.TryParse(interviewId, out var aggregateId))
+            if (interviewId == null || !Guid.TryParse(interviewId, out var aggregateId))
+                return this.Json(new { link = string.Empty });
+            
+            inScopeExecutor.Execute(serviceLocator =>
             {
-                inScopeExecutor.Execute(serviceLocator =>
-                {
-                    var promoterServiceLocal =
-                        serviceLocator.GetInstance<IAggregateRootPrototypePromoterService>();
-                    promoterServiceLocal.MaterializePrototypeIfRequired(aggregateId);
-                });
-            }
+                var promoterServiceLocal =
+                    serviceLocator.GetInstance<IAggregateRootPrototypePromoterService>();
+                promoterServiceLocal.MaterializePrototypeIfRequired(aggregateId);
+            });
+
 
             var assignmentId = interviewSummary.GetById(data.InterviewId)?.AssignmentId ?? 0;
             var assignment = assignments.GetAssignment(assignmentId);
 
             int invitationId = invitationService.GetOrCreateInvitationForPublicLink(assignment, data.InterviewId);
 
-            try
-            {
-                var emailId = await invitationMailingService.SendResumeAsync(invitationId, assignment, data.Email);
-                invitationService.MarkInvitationAsSent(invitationId, emailId);
+            var link = webInterviewLinkProvider.WebInterviewContinueLink(
+                invitationService.GetInvitation(invitationId));
 
-                if (Request.Cookies[AskForEmail] != null)
-                {
-                    Response.Cookies.Delete(AskForEmail);
-                }
-
-                return this.Json("ok");
-            }
-            catch (EmailServiceException e)
-            {
-                return this.Json("fail");
-            }
+            return this.Json(new { link });
         }
 
         [HttpPost]
@@ -610,15 +585,17 @@ namespace WB.UI.Headquarters.Controllers
                    || !string.IsNullOrEmpty(interview.SupervisorRejectComment)
                    || interview.GetCommentedBySupervisorQuestionsVisibleToInterviewer().Any();
         }
-
+        
+        [WebInterviewAuthorize]
         [Route("Finish/{id:Guid}")]
         public ActionResult Finish(string id)
         {
             var interview = this.statefulInterviewRepository.Get(id);            
             if (interview == null ) return NotFound();
 
-            if ((interview.IsCompleted || interview.Mode == InterviewMode.CAWI) 
-                && this.IsAuthorizedUser(interview.CurrentResponsibleId))
+            var isAuthorizedUser = this.IsAuthorizedUser(interview.CurrentResponsibleId);
+            
+            if ((interview.IsCompleted || interview.Mode == InterviewMode.CAWI) && isAuthorizedUser)
             {
                 return RedirectToAction("Completed", "InterviewerHq");
             }
@@ -627,9 +604,7 @@ namespace WB.UI.Headquarters.Controllers
 
             var webInterviewConfig = this.configProvider.Get(interview.QuestionnaireIdentity);
 
-            if ((webInterviewConfig.UseCaptcha 
-                 && !this.IsAuthorizedUser(interview.CurrentResponsibleId) 
-                 && this.CapchaVerificationNeededForInterview(id)) 
+            if ((webInterviewConfig.UseCaptcha && !isAuthorizedUser && this.CapchaVerificationNeededForInterview(id)) 
                 || !IsPasswordProtectedInterviewPermitted(interview))
             {
                 var returnUrl = GenerateUrl(@"Finish", id);
@@ -686,6 +661,7 @@ namespace WB.UI.Headquarters.Controllers
             return Redirect(GenerateUrl(@"Cover", id));
         }
 
+        [WebInterviewAuthorize]
         [Route("{id:Guid}/Complete")]
         public ActionResult Complete(string id)
         {
@@ -698,7 +674,6 @@ namespace WB.UI.Headquarters.Controllers
             }
 
             var webInterviewConfig = this.configProvider.Get(interview.QuestionnaireIdentity);
-
             var isAuthorizedUser = this.IsAuthorizedUser(interview.CurrentResponsibleId);
 
             if (isAuthorizedUser && interview.Status == InterviewStatus.Completed)

@@ -31,8 +31,8 @@
             basePath: '@Url.Content("~/")',
             id: '@Model.Id',
             coverPageId: '@Model.CoverPageId',
-            askForEmail: @(Model.AskForEmail ?? "false"),
-            sendLinkUri: '@Url.Action("EmailLink", "WebInterview")',
+            askForEmail: @(Model.IsResumeLinkAvailable ?? "false"),
+            sendLinkUri: '@Url.Action("CreateResumeLink", "WebInterview")',
             virtualPath: '@Url.Content("~/WebInterview")',
             imageUploadUri: '@Url.Action("Image", "WebInterviewBinary")',
             audioUploadUri: '@Url.Action("Audio", "WebInterviewBinary")',
@@ -53,7 +53,8 @@
                 noteToSupervisor: '@Html.ToSafeJavascriptMessage(Model.CustomMessages.GetText(WebInterviewUserMessages.CompleteNoteToSupervisor).ToString())'
             },
             mayBeSwitchedToWebMode: @(Model.MayBeSwitchedToWebMode ? "true" : "false"),
-            webInterviewUrl: '@Model.WebInterviewUrl'
+            webInterviewUrl: '@Model.WebInterviewUrl',
+            continueLink: '@Model.ContinueLink'
         }
     </script>
     <locale component="webinterview"></locale>
