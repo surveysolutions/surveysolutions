@@ -204,7 +204,7 @@ export default {
     name: 'navbar',
     data() {
         return {
-            showEmailPersonalLink: this.$config.IsResumeLinkAvailable,
+            showEmailPersonalLink: this.$config.isResumeLinkAvailable,
             continueLink: this.$config.continueLink,
             scenarioText: null,
             designerScenarios: [],
