@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Http;
+//using Microsoft.AspNetCore.Http;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
@@ -9,6 +11,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Enumerator.Native.WebInterview;
 using WB.UI.Headquarters.API.WebInterview;
+using WB.UI.Headquarters.Code.WebInterview;
 
 namespace WB.UI.Headquarters.Services.Impl
 {
@@ -19,6 +22,7 @@ namespace WB.UI.Headquarters.Services.Impl
         private readonly IAuthorizedUser authorizedUser;
         private readonly IAggregateRootPrototypeService prototypeService;
         private readonly IUserViewFactory usersRepository;
+        private readonly IHttpContextAccessor contextAccessor;
 
         private static readonly List<InterviewStatus> AllowedInterviewStatuses = new()
         {
@@ -33,13 +37,15 @@ namespace WB.UI.Headquarters.Services.Impl
             IWebInterviewConfigProvider webInterviewConfigProvider,
             IAuthorizedUser authorizedUser,
             IAggregateRootPrototypeService prototypeService,
-            IUserViewFactory usersRepository)
+            IUserViewFactory usersRepository,
+            IHttpContextAccessor contextAccessor)
         {
             this.statefulInterviewRepository = statefulInterviewRepository;
             this.webInterviewConfigProvider = webInterviewConfigProvider;
             this.authorizedUser = authorizedUser;
             this.prototypeService = prototypeService;
             this.usersRepository = usersRepository;
+            this.contextAccessor = contextAccessor;
         }
 
         public void CheckWebInterviewAccessPermissions(string interviewId)
@@ -58,6 +64,14 @@ namespace WB.UI.Headquarters.Services.Impl
                 throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewNotFound, 
                     Enumerator.Native.Resources.WebInterview.Error_NotFound);
 
+            //finish page for anonymous for completed interview
+            if (!this.authorizedUser.IsAuthenticated && interview.Status == InterviewStatus.Completed)
+            {
+                var hasAccess = contextAccessor.HttpContext.Session.HasAccessToWebInterviewAfterComplete(interview);
+                if (hasAccess)
+                    return;
+            }
+            
             if (!AllowedInterviewStatuses.Contains(interview.Status))
                 throw new InterviewAccessException(InterviewAccessExceptionReason.NoActionsNeeded, 
                     Enumerator.Native.Resources.WebInterview.Error_NoActionsNeeded);
@@ -83,7 +97,7 @@ namespace WB.UI.Headquarters.Services.Impl
 
             QuestionnaireIdentity questionnaireIdentity = interview.QuestionnaireIdentity;
 
-            WebInterviewConfig webInterviewConfig = webInterviewConfigProvider.Get( questionnaireIdentity);
+            WebInterviewConfig webInterviewConfig = webInterviewConfigProvider.Get(questionnaireIdentity);
 
             //interview is not public available and logged in user is not current interview responsible
             if (!webInterviewConfig.Started && interview.Status == InterviewStatus.InterviewerAssigned 

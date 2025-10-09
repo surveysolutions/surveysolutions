@@ -462,13 +462,13 @@ Contact support for assistance.</value>
     <value>Multimedia playback is not supported by your browser. You can download it instead.</value>
   </data>
   <data name="EmailLink_Header" xml:space="preserve">
-    <value>Enter your email address</value>
+    <value>Resume link</value>
   </data>
   <data name="EmailLink_Message" xml:space="preserve">
-    <value>We will send you a message with the link to resume the interview if you need to continue later.</value>
+    <value>This link is to resume the interview if you need to continue later.</value>
   </data>
   <data name="EmailLink_ResumeAnyTime" xml:space="preserve">
-    <value>You can cancel now and proceed with the interview. And you can send it later by clicking 'Email resume link' item in the top menu.</value>
+    <value>You can create a link to continue the interview. This permanent link can be saved and used later.</value>
   </data>
   <data name="EmailLink_Placeholder" xml:space="preserve">
     <value>Enter email</value>
@@ -477,7 +477,7 @@ Contact support for assistance.</value>
     <value>{{email}} is invalid email address</value>
   </data>
   <data name="EmailLink_EmailResumeLink" xml:space="preserve">
-    <value>Email resume link</value>
+    <value>Resume link</value>
   </data>
   <data name="HideVariables" xml:space="preserve">
     <value>Hide variables</value>

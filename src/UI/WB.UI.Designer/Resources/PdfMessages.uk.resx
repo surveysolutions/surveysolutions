@@ -140,4 +140,12 @@
   <data name="Retry" xml:space="preserve">
     <value>Повторна спроба експорту у форматі PDF.</value>
   </data>
+  <data name="NotFound" xml:space="preserve">
+    <value>Запитане завдання не знайдено. 
+Будь ласка, спробуйте ще раз.</value>
+  </data>
+  <data name="PdfLimitReached" xml:space="preserve">
+    <value>Ви вже надіслали {0} запитів на створення PDF-документів для ваших анкет.
+Будь ласка, спробуйте пізніше.</value>
+  </data>
 </root>
