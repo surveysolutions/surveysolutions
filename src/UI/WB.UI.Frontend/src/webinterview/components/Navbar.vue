@@ -51,7 +51,7 @@
                             </li>
                         </ul>
                     </li>
-                    <li v-if="showEmailPersonalLink">
+                    <li v-if="isResumeLinkAvailable">
                         <a href="#" @click="emailPersonalLink"
                             :title="$t('WebInterviewUI.EmailLink_EmailResumeLink')">{{
                                 $t('WebInterviewUI.EmailLink_EmailResumeLink') }}</a>
@@ -204,7 +204,7 @@ export default {
     name: 'navbar',
     data() {
         return {
-            showEmailPersonalLink: this.$config.IsResumeLinkAvailable,
+            isResumeLinkAvailable: this.$config.isResumeLinkAvailable,
             continueLink: this.$config.continueLink,
             scenarioText: null,
             designerScenarios: [],
