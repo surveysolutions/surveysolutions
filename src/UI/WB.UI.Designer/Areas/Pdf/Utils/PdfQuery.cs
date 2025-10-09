@@ -32,7 +32,7 @@ public class PdfQuery : IPdfQuery, IDisposable
         var workerCount = options.Value.WorkerCount;
 
         for (int i = 0; i < workerCount; i++)
-            Task.Run(WorkerLoop);
+            Task.Factory.StartNew(WorkerLoop, TaskCreationOptions.LongRunning);
     }
 
     public PdfGenerationProgress GetOrAdd(
@@ -122,6 +122,8 @@ public class PdfQuery : IPdfQuery, IDisposable
 
     private async Task WorkerLoop()
     {
+        Thread.CurrentThread.Priority = ThreadPriority.BelowNormal;
+        
         while (true)
         {
             await signal.WaitAsync();
