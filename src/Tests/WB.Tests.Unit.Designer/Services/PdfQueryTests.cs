@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Moq;
@@ -34,10 +35,10 @@ namespace WB.Tests.Unit.Designer.Services
             var userId = Id.g1;
             var taskExecuted = false;
             
-            Func<PdfGenerationProgress, Task> runGeneration = async progress => 
+            Func<PdfGenerationProgress, CancellationToken, Task> runGeneration = async (progress, token) => 
             {
                 taskExecuted = true;
-                await Task.Delay(10);
+                await Task.Delay(10, token);
             };
             
             // Act - first call should add the job
@@ -57,7 +58,7 @@ namespace WB.Tests.Unit.Designer.Services
         {
             // Arrange
             var userId = Id.g1;
-            Func<PdfGenerationProgress, Task> runGeneration = async progress => await Task.Delay(10);
+            Func<PdfGenerationProgress, CancellationToken, Task> runGeneration = async (progress, token) =>  await Task.Delay(10, token);
 
             // Act - add maximum allowed jobs
             for (int i = 0; i < this.pdfSettings.MaxPerUser; i++)
@@ -80,7 +81,7 @@ namespace WB.Tests.Unit.Designer.Services
             var userId = Id.g1;
             var user2Id = Id.g2;
             var key = "test_key";
-            Func<PdfGenerationProgress, Task> runGeneration = async progress => await Task.Delay(10);
+            Func<PdfGenerationProgress, CancellationToken, Task> runGeneration = async (progress, token) =>  await Task.Delay(10, token);
             
             // Act - add maximum allowed jobs
             for(int i = 0; i < this.pdfSettings.MaxPerUser; i++)
@@ -115,7 +116,7 @@ namespace WB.Tests.Unit.Designer.Services
             // Arrange
             var key = "test_key";
             var userId = Id.g1;
-            Func<PdfGenerationProgress, Task> runGeneration = async progress => await Task.Delay(10);
+            Func<PdfGenerationProgress, CancellationToken, Task> runGeneration = async (progress, token) =>  await Task.Delay(10, token);
             
             // Act - add a job
             var addedProgress = this.pdfQuery.GetOrAdd(userId, key, runGeneration);
@@ -136,10 +137,10 @@ namespace WB.Tests.Unit.Designer.Services
             var userId = Id.g1;
             var taskExecuted = false;
             
-            Func<PdfGenerationProgress, Task> runGeneration = async progress => 
+            Func<PdfGenerationProgress, CancellationToken, Task> runGeneration = async (progress, token) =>  
             {
                 taskExecuted = true;
-                await Task.Delay(10);
+                await Task.Delay(10, token);
                 progress.Finish();
             };
             
@@ -161,9 +162,9 @@ namespace WB.Tests.Unit.Designer.Services
             var key = "test_key";
             var userId = Id.g1;
             
-            Func<PdfGenerationProgress, Task> runGeneration = async progress => 
+            Func<PdfGenerationProgress, CancellationToken, Task> runGeneration = async (progress, token) =>  
             {
-                await Task.Delay(10);
+                await Task.Delay(10, token);
                 throw new Exception("Test exception");
             };
             

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Concurrent;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -57,10 +58,10 @@ public class PdfService : IPdfService
         string questionnaireHtml = await GetHtmlContent(id, progress, translation, timezoneOffsetMinutes ?? 0);
         string footerHtml = await RenderActionResultToString(nameof(PdfController.RenderQuestionnaireFooter), new { });
         
-        Task RunGeneration(PdfGenerationProgress p) =>
+        Task RunGeneration(PdfGenerationProgress p, CancellationToken token) =>
             documentType == DocumentType.Pdf
-                ? StartRenderPdf(questionnaireHtml, footerHtml, p)
-                : StartRenderHtml(questionnaireHtml, footerHtml, p);
+                ? StartRenderPdf(questionnaireHtml, footerHtml, p, token)
+                : StartRenderHtml(questionnaireHtml, footerHtml, p, token);
 
         PdfGenerationProgress pdfGenerationProgress = pdfQuery.GetOrAdd(GetUserId(), key, RunGeneration);
         return pdfGenerationProgress;
@@ -92,27 +93,27 @@ public class PdfService : IPdfService
 
     public string GetCurrentInfoJson() => pdfQuery.GetQueryInfoJson();
 
-    private async Task StartRenderPdf(string questionnaireHtml, string footerHtml, PdfGenerationProgress generationProgress)
+    private async Task StartRenderPdf(string questionnaireHtml, string footerHtml, PdfGenerationProgress generationProgress, CancellationToken token)
     {
         if (generationProgress.Status == PdfGenerationStatus.Failed)
             return;
 
         try
         {
-            using var playwright = await Playwright.CreateAsync();
+            using var playwright = await Playwright.CreateAsync().WaitAsync(token);
             var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions()
             {
                 Headless = true,
                 Args = new[] { "--disable-javascript" }
-            });
+            }).WaitAsync(token);
 
-            var page = await browser.NewPageAsync();
-            await page.RouteAsync("**/*.js", async route => await route.AbortAsync());
+            var page = await browser.NewPageAsync().WaitAsync(token);
+            await page.RouteAsync("**/*.js", async route => await route.AbortAsync()).WaitAsync(token);
             await page.SetContentAsync(questionnaireHtml, new PageSetContentOptions
             {
                 Timeout = 120_000,
                 WaitUntil = WaitUntilState.DOMContentLoaded,
-            });
+            }).WaitAsync(token);
 
             var content = await page.PdfAsync(new PagePdfOptions()
             {
@@ -122,7 +123,7 @@ public class PdfService : IPdfService
                 DisplayHeaderFooter = true,
                 //Margin = new Margin() {Top = "10", Bottom = "7", Left = "0", Right = "0"},
             });
-            await this.fileSystemAccessor.WriteAllBytesAsync(generationProgress.FilePath, content);
+            await this.fileSystemAccessor.WriteAllBytesAsync(generationProgress.FilePath, content, token);
 
             generationProgress.Finish();
         }
@@ -150,7 +151,7 @@ public class PdfService : IPdfService
         return await this.viewRenderingService.RenderToStringAsync(viewName, model, webRoot, webAppRoot, routeData);
     }
 
-    private async Task StartRenderHtml(string questionnaireHtml, string footerHtml, PdfGenerationProgress progress)
+    private async Task StartRenderHtml(string questionnaireHtml, string footerHtml, PdfGenerationProgress progress, CancellationToken token)
     {
         if (progress.Status != PdfGenerationStatus.Failed)
         {

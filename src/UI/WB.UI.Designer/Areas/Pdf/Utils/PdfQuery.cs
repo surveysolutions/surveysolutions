@@ -38,7 +38,7 @@ public class PdfQuery : IPdfQuery, IDisposable
     public PdfGenerationProgress GetOrAdd(
         Guid userId, 
         string key,
-        Func<PdfGenerationProgress, Task> runGeneration)
+        Func<PdfGenerationProgress, CancellationToken, Task> runGeneration)
     {
         if (jobs.TryGetValue(key, out var existing))
             return existing.Progress;
@@ -132,7 +132,8 @@ public class PdfQuery : IPdfQuery, IDisposable
 
                 try
                 {
-                    await job.Work(job.Progress);
+                    CancellationTokenSource cts = new(JobTimeout);
+                    await job.Work(job.Progress, cts.Token);
                 }
                 catch(Exception ex)
                 {

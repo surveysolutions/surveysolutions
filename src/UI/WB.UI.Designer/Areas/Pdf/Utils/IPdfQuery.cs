@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using WB.UI.Designer.Areas.Pdf.Services;
 
@@ -8,7 +9,7 @@ public interface IPdfQuery
 {
     PdfGenerationProgress GetOrAdd(Guid userId, 
         string key,
-        Func<PdfGenerationProgress, Task> runGeneration);
+        Func<PdfGenerationProgress, CancellationToken, Task> runGeneration);
 
     void Remove(string key);
     PdfGenerationProgress? GetOrNull(string key);
