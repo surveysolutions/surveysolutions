@@ -190,6 +190,7 @@ function ItemViewModel() {
                 });
                 $('#pdfDownloadButton').show();
             } else if (result.canRetry) {
+                $('#pdfDownloadButton').hide();
                 $('#pdfRetryGenerate').show();
             } else {
                 self.updateExportPdfStatusNeverending(translation);
