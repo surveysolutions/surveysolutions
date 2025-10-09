@@ -150,7 +150,6 @@ namespace WB.UI.Headquarters.Controllers
             this.interviewSummary = interviewSummary;
             this.invitationMailingService = invitationMailingService;
             this.emailProviderSettingsStorage = emailProviderSettingsStorage;
-            this.webInterviewSettingsStorage = webInterviewSettingsStorage;
             this.recaptchaSettings = recaptchaSettings;
             this.captchaConfig = captchaConfig;
             this.serviceLocator = serviceLocator;
