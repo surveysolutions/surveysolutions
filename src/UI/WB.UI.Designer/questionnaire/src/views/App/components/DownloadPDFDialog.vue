@@ -132,6 +132,9 @@ export default {
 
             request.then(function (result) {
                 self.onExportPdfStatusReceived(result, translationId);
+            }).catch(function () {
+                self.showGeneralError();
+                self.canRetryGenerate = true;
             });
         },
         onExportPdfStatusReceived(data, translationId) {
@@ -139,7 +142,7 @@ export default {
             if (data.message !== null)
                 this.generateStatusMessage = data.message;
             else
-                this.generateStatusMessage = "Unexpected server response.\r\nPlease contact support@mysurvey.solutions if problem persists.";
+                this.showGeneralError();
 
             this.canDownload = data.readyForDownload;
             this.canRetryGenerate = data.canRetry;
@@ -158,6 +161,9 @@ export default {
                 this.cancel();
                 window.location = '/pdf/downloadPdf/' + this.questionnaireId + '?translation=' + translationId;
             }
+        },
+        showGeneralError() {
+            this.generateStatusMessage = "Unexpected server response.\r\nPlease contact support@mysurvey.solutions if problem persists.";
         },
         cancel() {
             clearTimeout(this.generateTimerId);
