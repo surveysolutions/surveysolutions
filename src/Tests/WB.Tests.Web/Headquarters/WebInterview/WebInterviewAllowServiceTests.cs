@@ -31,8 +31,7 @@ namespace WB.Tests.Web.Headquarters.WebInterview
         private Mock<IStatefulInterviewRepository> statefulInterviewRepo;
         private StatefulInterview interview;
         private Mock<IUserViewFactory> usersRepositoryMock;
-        private Mock<IHttpContextAccessor> contextAccessor;
-
+        private IHttpContextAccessor contextAccessor;
 
         [SetUp]
         public void Setup()
@@ -43,7 +42,10 @@ namespace WB.Tests.Web.Headquarters.WebInterview
             authorizedUserMock = new Mock<IAuthorizedUser>();
             prototypeService = new Mock<IAggregateRootPrototypeService>();
             usersRepositoryMock = new Mock<IUserViewFactory>();
-            contextAccessor = new Mock<IHttpContextAccessor>();
+            
+            contextAccessor = Mock.Of<IHttpContextAccessor>(rrr => rrr.HttpContext == new DefaultHttpContext(){
+                Session = Mock.Of<ISession>()
+            });
 
             var interviewAllowService = new WebInterviewAllowService(
                 statefulInterviewRepo.Object,
@@ -51,7 +53,7 @@ namespace WB.Tests.Web.Headquarters.WebInterview
                 authorizedUserMock.Object, 
                 prototypeService.Object,
                 usersRepositoryMock.Object,
-                contextAccessor.Object);
+                contextAccessor);
             webInterviewAllowService = interviewAllowService;
         }
 
