@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Concurrent;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -43,6 +44,13 @@ public class PdfService : IPdfService
         this.fileSystemAccessor = fileSystemAccessor;
         this.httpContextAccessor = httpContextAccessor;
         this.pdfQuery = pdfQuery;
+    }
+    
+    public async Task<byte[]> GetHtmlContent(QuestionnaireRevision id, Guid? translation)
+    {
+        var progress = new PdfGenerationProgress();
+        string questionnaireHtml = await GetHtmlContent(id, progress, translation, 0);
+        return Encoding.UTF8.GetBytes(questionnaireHtml);
     }
 
     public async Task<PdfGenerationProgress> Enqueue(QuestionnaireRevision id, Guid? translation, DocumentType documentType, int? timezoneOffsetMinutes)

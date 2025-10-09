@@ -86,13 +86,12 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
         
         [ResponseCache(Duration = 0, NoStore = true)]
         [Route("download/{id}")]
-        public IActionResult Download(QuestionnaireRevision id, Guid? translation)
+        public async Task<IActionResult> Download(QuestionnaireRevision id, Guid? translation)
         {
-            var content = pdfService.Download(id, translation, DocumentType.Html);
+            var content = await pdfService.GetHtmlContent(id, translation);
 
-            if (content != null)
+            if (content.Length > 0)
             {
-                // MS edge brakes on long file name
                 var questionnaireTitle = this.pdfFactory.LoadQuestionnaireTitle(id.QuestionnaireId);
                 string? validTitle = (questionnaireTitle?.Length < 250 ? questionnaireTitle : questionnaireTitle?.Substring(0, 250) ?? "questionnaire");
 
@@ -109,23 +108,7 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
         [Route("status/{id}")]
         public IActionResult Status(QuestionnaireRevision id, Guid? translation, int? timezoneOffsetMinutes)
         {
-            var pdfGenerationProgress = pdfService.Status(id, translation, DocumentType.Html); 
-            if (pdfGenerationProgress == null)
-                return this.Json(PdfStatus.Failed(PdfMessages.NotFound));
-
-            long sizeInKb = this.GetFileSizeInKb(pdfGenerationProgress.FilePath);
-            if (sizeInKb == 0)
-                return pdfGenerationProgress.Status == PdfGenerationStatus.Finished 
-                    ? this.Json(PdfStatus.Failed(PdfMessages.FailedToGenerate))
-                    : this.Json(PdfStatus.InProgress(PdfMessages.PreparingToGenerate));
-
-            return this.Json(
-                pdfGenerationProgress.Status == PdfGenerationStatus.Finished
-                    ? PdfStatus.Ready(
-                        pdfGenerationProgress.TimeSinceFinished.TotalMinutes < 1
-                            ? string.Format(PdfMessages.GenerateLessMinute, sizeInKb)
-                            : string.Format(PdfMessages.Generate, (int)pdfGenerationProgress.TimeSinceFinished.TotalMinutes, sizeInKb))
-                    : PdfStatus.InProgress(string.Format(PdfMessages.GeneratingSuccess, sizeInKb)));
+            return this.Json(PdfStatus.Ready("ready"));
         }
         
         [ResponseCache(Duration = 0, NoStore = true)]
@@ -145,10 +128,10 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
             return StatusCode((int)HttpStatusCode.NotFound);
         }
         
-        [ResponseCache (Duration = 0, NoStore = true)]
+        [ResponseCache(Duration = 0, NoStore = true)]
         [HttpPost]
         [Route("generatePdf/{id}")]
-        public async Task<IActionResult> GeneratePdf(QuestionnaireRevision id, Guid? translation, int? timezoneOffsetMinutes)
+        public async Task<IActionResult> GeneratePdf(QuestionnaireRevision id, Guid? translation, int? timezoneOffsetMinutes) 
         {
             try
             {

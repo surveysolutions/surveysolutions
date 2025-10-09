@@ -10,4 +10,5 @@ public interface IPdfService
     PdfGenerationProgress? Status(QuestionnaireRevision id, Guid? translation, DocumentType documentType);
     byte[]? Download(QuestionnaireRevision id, Guid? translation, DocumentType documentType);
     string GetCurrentInfoJson();
+    Task<byte[]> GetHtmlContent(QuestionnaireRevision id, Guid? translation);
 }
