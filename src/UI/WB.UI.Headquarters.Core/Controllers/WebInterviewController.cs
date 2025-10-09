@@ -68,7 +68,6 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IInScopeExecutor inScopeExecutor;
 
         private readonly IPlainKeyValueStorage<EmailProviderSettings> emailProviderSettingsStorage;
-        private readonly IPlainKeyValueStorage<WebInterviewSettings> webInterviewSettingsStorage;
         private readonly IOptions<RecaptchaSettings> recaptchaSettings;
         private readonly IOptions<CaptchaConfig> captchaConfig;
         private readonly IServiceLocator serviceLocator;
@@ -78,7 +77,6 @@ namespace WB.UI.Headquarters.Controllers
         private const string CaptchaCompletedKey = "CaptchaCompletedKey";
         private const string PasswordVerifiedKey = "PasswordVerifiedKey";
         public static readonly string LastCreatedInterviewIdKey = "lastCreatedInterviewId";
-        public static readonly string AskForEmail = "askForEmail";
 
         private readonly ICalendarEventService calendarEventService;
         
@@ -130,7 +128,6 @@ namespace WB.UI.Headquarters.Controllers
             INativeReadSideStorage<InterviewSummary> interviewSummary,
             IInvitationMailingService invitationMailingService,
             IPlainKeyValueStorage<EmailProviderSettings> emailProviderSettingsStorage,
-            IPlainKeyValueStorage<WebInterviewSettings> webInterviewSettingsStorage,
             IOptions<RecaptchaSettings> recaptchaSettings,
             IOptions<CaptchaConfig> captchaConfig,
             IServiceLocator serviceLocator,
@@ -220,7 +217,7 @@ namespace WB.UI.Headquarters.Controllers
         {
             bool isGenerateLinkAvailable = interview.Mode == InterviewMode.CAWI;
          
-            var askForEmail = isGenerateLinkAvailable ? "true" :"false";
+            var isResumeLinkAvailable = isGenerateLinkAvailable ? "true" :"false";
             var questionnaire = this.questionnaireStorage.GetQuestionnaireDocument(interview.QuestionnaireIdentity) 
                                 ?? throw new ArgumentNullException("Questionnaire not found");
 
@@ -245,7 +242,7 @@ namespace WB.UI.Headquarters.Controllers
             {
                 Id = interviewId,
                 CoverPageId = questionnaire.IsCoverPageSupported ? questionnaire.CoverPageSectionId.FormatGuid() : "",
-                AskForEmail = askForEmail,
+                IsResumeLinkAvailable = isResumeLinkAvailable,
                 CustomMessages = webInterviewConfig.CustomMessages,
                 MayBeSwitchedToWebMode = config.Started && config.AllowSwitchToCawiForInterviewer && (interview.Mode != InterviewMode.CAWI),
                 WebInterviewUrl = RenderWebInterviewUri(assignmentId, interview.Id),
@@ -590,7 +587,7 @@ namespace WB.UI.Headquarters.Controllers
                    || interview.GetCommentedBySupervisorQuestionsVisibleToInterviewer().Any();
         }
         
-        [WebInterviewAuthorize]
+        //[WebInterviewAuthorize]
         [Route("Finish/{id:Guid}")]
         public ActionResult Finish(string id)
         {

@@ -31,7 +31,7 @@
             basePath: '@Url.Content("~/")',
             id: '@Model.Id',
             coverPageId: '@Model.CoverPageId',
-            askForEmail: @(Model.AskForEmail ?? "false"),
+            askForEmail: @(Model.IsResumeLinkAvailable ?? "false"),
             sendLinkUri: '@Url.Action("CreateResumeLink", "WebInterview")',
             virtualPath: '@Url.Content("~/WebInterview")',
             imageUploadUri: '@Url.Action("Image", "WebInterviewBinary")',

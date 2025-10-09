@@ -204,7 +204,7 @@ export default {
     name: 'navbar',
     data() {
         return {
-            showEmailPersonalLink: this.$config.askForEmail,
+            showEmailPersonalLink: this.$config.IsResumeLinkAvailable,
             continueLink: this.$config.continueLink,
             scenarioText: null,
             designerScenarios: [],
@@ -227,10 +227,6 @@ export default {
             $('.bottom-menu').toggleClass('bottom-animate')
 
         })
-
-        //if (this.$config.askForEmail) {
-        //    this.emailPersonalLink()
-        //}
     },
     updated() {
         document.title = this.$config.splashScreen ? this.$t('WebInterviewUI.LoadingQuestionnaire') : `${this.$store.state.webinterview.interviewKey} | ${this.questionnaireTitle} | ${this.$t('WebInterviewUI.WebInterview')}`
@@ -300,7 +296,13 @@ export default {
                 interviewId: this.$route.params.interviewId,
             }).then(function (response) {
                 if (response && response.data !== '' && response.data.link) {
-                    self.continueLink = response.data.link
+                    try {
+                        const linkUrl = new URL(response.data.link);
+                        if (linkUrl.hostname === window.location.hostname)
+                            self.continueLink = response.data.link
+                    } catch (e) {
+                        return false;
+                    }
                 }
             }).catch(function (error) {
                 if (error && error.response)

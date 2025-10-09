@@ -52,7 +52,7 @@
                         v-model:geographyQuestionPeriodInSeconds="geographyQuestionPeriodInSeconds"
                         v-model:geographyQuestionAccuracyInMetersCancel="geographyQuestionAccuracyInMetersCancel"
                         v-model:esriApiKey="esriApiKey" v-model:esriApiKeyInitial="esriApiKeyInitial" />
-                    <WebInterview v-model="isEmailAllowed" />
+
                     <Logo />
                 </div>
             </div>
@@ -92,7 +92,6 @@ export default {
             isInterviewerAutomaticUpdatesEnabled: false,
             isPartialSynchronizationEnabled: false,
             isDeviceNotificationsEnabled: false,
-            isEmailAllowed: false,
             files: [],
             geographyQuestionAccuracyInMeters: 10,
             geographyQuestionPeriodInSeconds: 10,
@@ -136,7 +135,6 @@ export default {
             this.encryptionPassword = workspaceSettings.data.exportSettings.password
             this.globalNotice = workspaceSettings.data.globalNotice
             this.isAllowInterviewerUpdateProfile = workspaceSettings.data.allowInterviewerUpdateProfile
-            this.isEmailAllowed = workspaceSettings.data.allowEmails
 
             this.isRetentionEnabled = workspaceSettings.data.exportSettings.isRetentionEnabled
             this.retentionLimitInDays = workspaceSettings.data.exportSettings.retentionLimitInDays
