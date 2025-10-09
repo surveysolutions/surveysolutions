@@ -109,7 +109,7 @@ public class PdfService : IPdfService
         try
         {
             using var playwright = await Playwright.CreateAsync().WaitAsync(token);
-            var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions()
+            await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions()
             {
                 Headless = true,
                 Args = new[] { "--disable-javascript" }
