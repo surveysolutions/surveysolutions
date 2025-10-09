@@ -8,7 +8,6 @@ public interface IPdfService
 {
     Task<PdfGenerationProgress> Enqueue(QuestionnaireRevision id, Guid? translation, DocumentType documentType, int? timezoneOffsetMinutes);
     PdfGenerationProgress? Status(QuestionnaireRevision id, Guid? translation, DocumentType documentType);
-    Task<PdfGenerationProgress> Retry(QuestionnaireRevision id, Guid? translation, DocumentType documentType);
     byte[]? Download(QuestionnaireRevision id, Guid? translation, DocumentType documentType);
     string GetCurrentInfoJson();
 }

@@ -13,15 +13,28 @@ public  class PdfGenerationProgress
     public DateTime? StartedTime => this.startTime;
     public TimeSpan TimeSinceFinished => this.finishTime.HasValue ? DateTime.UtcNow - this.finishTime.Value : TimeSpan.Zero;
 
-    public void Started()
+    public void Start()
     {
+        if (Status != PdfGenerationStatus.InQueue)
+            throw new InvalidOperationException("Cannot start a job that is not in queue");
+        
         Status = PdfGenerationStatus.Started;
         startTime = DateTime.UtcNow;
     }
 
-    public void Fail() => Status = PdfGenerationStatus.Failed;
+    public void Fail()
+    {
+        if (Status != PdfGenerationStatus.Started)
+            throw new InvalidOperationException("Cannot start a job that is not started");
+
+        Status = PdfGenerationStatus.Failed;
+    }
+
     public void Finish()
     {
+        if (Status != PdfGenerationStatus.Started)
+            throw new InvalidOperationException("Cannot start a job that is not started");
+
         Status = PdfGenerationStatus.Finished;
         finishTime = DateTime.UtcNow;
     }

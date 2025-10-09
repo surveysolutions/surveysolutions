@@ -216,7 +216,6 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
         }
         
         [HttpPost]
-        [ValidateAntiForgeryToken]
         [Route("retry/{id}")]
         public async Task<ActionResult> Retry(QuestionnaireRevision? id, [FromBody]RetryRequest? retryRequest)
         {
@@ -227,7 +226,7 @@ namespace WB.UI.Designer.Areas.Pdf.Controllers
                     return StatusCode((int)HttpStatusCode.NotFound);
                 }
 
-                var pdfGenerationProgress = await pdfService.Retry(id, retryRequest.Translation, DocumentType.Pdf);
+                var pdfGenerationProgress = await pdfService.Enqueue(id, retryRequest.Translation, DocumentType.Pdf, 0);
                 return this.Json(PdfStatus.InProgress(PdfMessages.Retry));
             }
             catch (PdfLimitReachedException ex)

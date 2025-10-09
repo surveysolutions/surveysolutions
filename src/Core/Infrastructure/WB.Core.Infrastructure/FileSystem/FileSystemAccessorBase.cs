@@ -18,6 +18,7 @@ namespace WB.Core.Infrastructure.FileSystem
         public string GetFileExtension(string filePath) => Path.GetExtension(filePath);
 
         public void WriteAllText(string pathToFile, string content) => File.WriteAllText(pathToFile, content);
+        public Task WriteAllTextAsync(string pathToFile, string content) => File.WriteAllTextAsync(pathToFile, content);
 
         public void WriteAllBytes(string pathToFile, byte[] content)
         {

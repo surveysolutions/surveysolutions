@@ -63,16 +63,6 @@ public class PdfService : IPdfService
                 : StartRenderHtml(questionnaireHtml, footerHtml, p);
 
         PdfGenerationProgress pdfGenerationProgress = pdfQuery.GetOrAdd(GetUserId(), key, RunGeneration);
-
-        if (pdfGenerationProgress.Status == PdfGenerationStatus.Failed)
-        {
-            if (timezoneOffsetMinutes == null)
-            {
-                pdfQuery.Remove(key);
-                pdfQuery.GetOrAdd(GetUserId(), key, RunGeneration);
-            }
-        }
-        
         return pdfGenerationProgress;
     }
 
@@ -82,28 +72,6 @@ public class PdfService : IPdfService
         return pdfQuery.GetOrNull(pdfKey);
     }
 
-    public async Task<PdfGenerationProgress> Retry(QuestionnaireRevision id, Guid? translation, DocumentType documentType)
-    {
-        var key = GetKey(documentType, id, translation);
-
-        var progress = new PdfGenerationProgress();
-
-        string questionnaireHtml = await GetHtmlContent(id, progress, translation, 0);
-        string footerHtml = await RenderActionResultToString(nameof(PdfController.RenderQuestionnaireFooter), new { });
-        
-        Task RunGeneration(PdfGenerationProgress p) =>
-            documentType == DocumentType.Pdf
-                ? StartRenderPdf(questionnaireHtml, footerHtml, p)
-                : StartRenderHtml(questionnaireHtml, footerHtml, p);
-        
-        PdfGenerationProgress pdfGenerationProgress = pdfQuery.GetOrAdd(GetUserId(), key, RunGeneration);
-        if (pdfGenerationProgress.Status == PdfGenerationStatus.Failed)
-        {
-            pdfQuery.Remove(key);
-        }
-            
-        return pdfQuery.GetOrAdd(GetUserId(), key, RunGeneration);
-    }
 
     public byte[]? Download(QuestionnaireRevision id, Guid? translation, DocumentType documentType)
     {
@@ -146,7 +114,7 @@ public class PdfService : IPdfService
                 WaitUntil = WaitUntilState.DOMContentLoaded,
             });
 
-            var contetnt = await page.PdfAsync(new PagePdfOptions()
+            var content = await page.PdfAsync(new PagePdfOptions()
             {
                 HeaderTemplate = "<html></html>",
                 FooterTemplate = footerHtml,
@@ -154,7 +122,7 @@ public class PdfService : IPdfService
                 DisplayHeaderFooter = true,
                 //Margin = new Margin() {Top = "10", Bottom = "7", Left = "0", Right = "0"},
             });
-            await System.IO.File.WriteAllBytesAsync(generationProgress.FilePath, contetnt);
+            await this.fileSystemAccessor.WriteAllBytesAsync(generationProgress.FilePath, content);
 
             generationProgress.Finish();
         }
@@ -186,7 +154,7 @@ public class PdfService : IPdfService
     {
         if (progress.Status != PdfGenerationStatus.Failed)
         {
-            await System.IO.File.WriteAllTextAsync(progress.FilePath, questionnaireHtml);
+            await this.fileSystemAccessor.WriteAllTextAsync(progress.FilePath, questionnaireHtml);
             progress.Finish();
         }
     }

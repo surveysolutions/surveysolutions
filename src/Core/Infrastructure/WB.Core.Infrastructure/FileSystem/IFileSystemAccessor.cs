@@ -34,6 +34,7 @@ namespace WB.Core.Infrastructure.FileSystem
         string[] GetFilesInDirectory(string pathToDirectory, string pattern, bool searchInSubdirectories = false);
 
         void WriteAllText(string pathToFile, string content);
+        Task WriteAllTextAsync(string pathToFile, string content);
         void WriteAllBytes(string pathToFile, byte[] content);
         Task WriteAllBytesAsync(string pathToFile, byte[] content);
         byte[] ReadHash(string pathToFile);

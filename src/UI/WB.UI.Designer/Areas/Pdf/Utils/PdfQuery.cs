@@ -11,7 +11,7 @@ using WB.UI.Designer.Areas.Pdf.Services;
 
 namespace WB.UI.Designer.Areas.Pdf.Utils;
 
-public class PdfQuery : IPdfQuery
+public class PdfQuery : IPdfQuery, IDisposable
 {
     private static readonly TimeSpan JobTimeout = TimeSpan.FromMinutes(10);
     private readonly IOptions<PdfSettings> options;
@@ -128,7 +128,7 @@ public class PdfQuery : IPdfQuery
             
             if (queue.TryDequeue(out var job))
             {
-                job.Progress.Started();
+                job.Progress.Start();
 
                 try
                 {
@@ -167,6 +167,11 @@ public class PdfQuery : IPdfQuery
                     break;
             }
         }
+    }
+
+    public void Dispose()
+    {
+        signal.Dispose();
     }
 }
 
