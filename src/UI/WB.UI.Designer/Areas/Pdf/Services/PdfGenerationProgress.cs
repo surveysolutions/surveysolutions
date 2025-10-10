@@ -24,9 +24,6 @@ public  class PdfGenerationProgress
 
     public void Fail()
     {
-        if (Status != PdfGenerationStatus.Started)
-            throw new InvalidOperationException("Cannot start a job that is not started");
-
         Status = PdfGenerationStatus.Failed;
     }
 
