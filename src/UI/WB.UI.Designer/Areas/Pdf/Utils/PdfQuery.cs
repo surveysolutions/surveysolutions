@@ -86,7 +86,7 @@ public class PdfQuery : IPdfQuery, IDisposable
         var queueInfo = new
         {
             QueueSize = queue.Count,
-            ActiveJobs = jobs.Count
+            Jobs = jobs.Count
         };
 
         var userLimits = perUserCount.Select(userCount => new
