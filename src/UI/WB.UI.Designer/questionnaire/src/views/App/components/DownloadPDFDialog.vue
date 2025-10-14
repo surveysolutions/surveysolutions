@@ -19,7 +19,8 @@
                                     {{ selectedTranslation.name }}
                                     <span class="dropdown-arrow"></span>
                                 </button>
-                                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu10">
+                                <ul v-if="!isGenerating" class="dropdown-menu" role="menu"
+                                    aria-labelledby="dropdownMenu10">
                                     <li role="presentation" v-for="translation in translations">
                                         <a role="menuitem" tabindex="-1" href="javascript:void(0);"
                                             @click="selectTranslation(translation)">
