@@ -1,7 +1,6 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 using Microsoft.Playwright;
 
 namespace WB.UI.Designer.Areas.Pdf.Services;
@@ -99,6 +98,5 @@ public class PdfRender : IPdfRender, IAsyncDisposable
         
         playwright?.Dispose();
         browserInitLock.Dispose();
-        GC.SuppressFinalize(this);
     }
 }
