@@ -24,7 +24,6 @@ public class PdfRender : IPdfRender, IAsyncDisposable
                 JavaScriptEnabled = false,
             }).WaitAsync(token).ConfigureAwait(false);
             page = await context.NewPageAsync().WaitAsync(token).ConfigureAwait(false);
-            await page.RouteAsync("**/*.js", async route => await route.AbortAsync()).WaitAsync(token).ConfigureAwait(false);
             await page.SetContentAsync(questionnaireHtml, new PageSetContentOptions
             {
                 Timeout = 120_000,
@@ -93,27 +92,26 @@ public class PdfRender : IPdfRender, IAsyncDisposable
             return;
 
         await browserInitLock.WaitAsync().ConfigureAwait(false);
-
-        if (disposed) 
-            return;
-
-        disposed = true;
-
+        
         try
         {
-        
-            if (browser != null)
-            {
-                try { await browser.CloseAsync(); } catch { /* ignore */ }
-                browser = null;
-            }
-            
-            playwright?.Dispose();
+            if (disposed) 
+                return;
+
+            disposed = true;
         }
         finally
         {
             browserInitLock.Release();
-            browserInitLock.Dispose();
         }   
+        
+        if (browser != null)
+        {
+            try { await browser.CloseAsync(); } catch { /* ignore */ }
+            browser = null;
+        }
+            
+        playwright?.Dispose();
+        browserInitLock.Dispose();
     }
 }
