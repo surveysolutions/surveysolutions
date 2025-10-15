@@ -78,7 +78,8 @@ namespace WB.Tests.Unit.Designer.Services
                 this.mockPdfFactory.Object,
                 this.mockFileSystemAccessor.Object,
                 this.mockHttpContextAccessor.Object,
-                this.mockPdfQuery.Object);
+                this.mockPdfQuery.Object,
+                Mock.Of<IPdfRender>());
         }
 
         private static PdfQuestionnaireModel CreateTestPdfQuestionnaireModel()
