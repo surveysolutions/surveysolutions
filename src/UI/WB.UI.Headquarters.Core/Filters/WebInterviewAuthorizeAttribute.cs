@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Enumerator.Native.WebInterview;
 using WB.UI.Headquarters.API.WebInterview;
 using WB.UI.Headquarters.Services;
@@ -12,8 +11,6 @@ namespace WB.UI.Headquarters.Filters
     public class WebInterviewAuthorizeAttribute : ActionFilterAttribute
     {
         public string InterviewIdQueryString { get; set; }
-        
-        public InterviewStatus[] AdditionalAllowedStatuses { get; set; } = [];
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             var interviewId = string.IsNullOrWhiteSpace(InterviewIdQueryString)
@@ -36,7 +33,7 @@ namespace WB.UI.Headquarters.Filters
                 }
                 else
                 {
-                    services.GetRequiredService<IWebInterviewAllowService>().CheckWebInterviewAccessPermissions(interviewId, AdditionalAllowedStatuses);
+                    services.GetRequiredService<IWebInterviewAllowService>().CheckWebInterviewAccessPermissions(interviewId);
                 }
             }
             catch (InterviewAccessException ie)

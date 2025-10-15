@@ -48,7 +48,7 @@ namespace WB.UI.Headquarters.Services.Impl
             this.contextAccessor = contextAccessor;
         }
 
-        public void CheckWebInterviewAccessPermissions(string interviewId, InterviewStatus[] additionalAllowedStatuses)
+        public void CheckWebInterviewAccessPermissions(string interviewId)
         {
             if (Guid.TryParse(interviewId, out var id))
             {
@@ -65,15 +65,14 @@ namespace WB.UI.Headquarters.Services.Impl
                     Enumerator.Native.Resources.WebInterview.Error_NotFound);
 
             //finish page for anonymous for completed interview
-            if (!this.authorizedUser.IsAuthenticated && interview.Status == InterviewStatus.Completed)
+            if (interview.Status == InterviewStatus.Completed)
             {
                 var hasAccess = contextAccessor.HttpContext.Session.HasAccessToWebInterviewAfterComplete(interview);
                 if (hasAccess)
                     return;
             }
             
-            if (!AllowedInterviewStatuses.Contains(interview.Status) 
-                && (additionalAllowedStatuses == null || Array.IndexOf(additionalAllowedStatuses, interview.Status) < 0))
+            if (!AllowedInterviewStatuses.Contains(interview.Status))
                 throw new InterviewAccessException(InterviewAccessExceptionReason.NoActionsNeeded, 
                     Enumerator.Native.Resources.WebInterview.Error_NoActionsNeeded);
 

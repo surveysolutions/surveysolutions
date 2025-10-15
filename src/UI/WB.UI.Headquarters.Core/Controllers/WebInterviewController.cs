@@ -586,7 +586,7 @@ namespace WB.UI.Headquarters.Controllers
                    || interview.GetCommentedBySupervisorQuestionsVisibleToInterviewer().Any();
         }
         
-        [WebInterviewAuthorize(AdditionalAllowedStatuses = [InterviewStatus.Completed])]
+        [WebInterviewAuthorize]
         [Route("Finish/{id:Guid}")]
         public ActionResult Finish(string id)
         {
@@ -698,6 +698,8 @@ namespace WB.UI.Headquarters.Controllers
                 return this.RedirectToAction("Resume", routeValues: new { id, returnUrl });
             }
 
+            HttpContext.Session.SaveWebInterviewAccessForCurrentUser(id);
+            
             return View("Index", GetInterviewModel(id, interview, webInterviewConfig));
         }
 

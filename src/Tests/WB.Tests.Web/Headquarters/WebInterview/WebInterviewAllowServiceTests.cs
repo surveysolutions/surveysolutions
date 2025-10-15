@@ -59,8 +59,7 @@ namespace WB.Tests.Web.Headquarters.WebInterview
 
         private void Act()
         {
-            webInterviewAllowService.CheckWebInterviewAccessPermissions(interviewId.FormatGuid(),
-                Array.Empty<InterviewStatus>());
+            webInterviewAllowService.CheckWebInterviewAccessPermissions(interviewId.FormatGuid());
         }
 
         private void ArrangeTest(
