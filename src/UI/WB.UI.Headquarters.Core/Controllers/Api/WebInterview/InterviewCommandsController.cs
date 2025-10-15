@@ -20,6 +20,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Controllers;
 using WB.Enumerator.Native.WebInterview.Models;
+using WB.UI.Headquarters.Code.WebInterview;
 using WB.UI.Headquarters.Controllers.Services;
 using WB.UI.Headquarters.Filters;
 
@@ -146,6 +147,8 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
             
             ICommand command = new CompleteInterviewCommand(interviewId, GetCommandResponsibleId(interviewId), completeInterviewRequest.Comment, criticalLevel);
             this.commandService.Execute(command);
+            
+            HttpContext.Session.SaveWebInterviewAccessForCurrentUser(interviewId.FormatGuid());
             return Ok();
         }
 
