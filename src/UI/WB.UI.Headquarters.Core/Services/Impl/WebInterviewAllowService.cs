@@ -73,7 +73,7 @@ namespace WB.UI.Headquarters.Services.Impl
             }
             
             if (!AllowedInterviewStatuses.Contains(interview.Status) 
-                && (additionalAllowedStatuses != null && Array.IndexOf(additionalAllowedStatuses, interview.Status) < 0))
+                && (additionalAllowedStatuses == null || Array.IndexOf(additionalAllowedStatuses, interview.Status) < 0))
                 throw new InterviewAccessException(InterviewAccessExceptionReason.NoActionsNeeded, 
                     Enumerator.Native.Resources.WebInterview.Error_NoActionsNeeded);
 
