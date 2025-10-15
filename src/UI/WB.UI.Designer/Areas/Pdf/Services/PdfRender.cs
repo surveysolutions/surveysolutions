@@ -96,7 +96,10 @@ public class PdfRender : IPdfRender, IAsyncDisposable
             browser = null;
         }
         
-        playwright?.Dispose();
+        if (playwright != null)
+        {
+            try { await playwright.DisposeAsync(); } catch { /* ignore */ }
+        }
         browserInitLock.Dispose();
     }
 }
