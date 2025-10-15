@@ -65,7 +65,8 @@ namespace WB.UI.Headquarters.Services.Impl
                     Enumerator.Native.Resources.WebInterview.Error_NotFound);
 
             //finish page for anonymous for completed interview
-            if (interview.Status == InterviewStatus.Completed)
+            if ( (!this.authorizedUser.IsAuthenticated || this.authorizedUser.IsInterviewer) 
+                 && interview.Status == InterviewStatus.Completed)
             {
                 var hasAccess = contextAccessor.HttpContext.Session.HasAccessToWebInterviewAfterComplete(interview);
                 if (hasAccess)
