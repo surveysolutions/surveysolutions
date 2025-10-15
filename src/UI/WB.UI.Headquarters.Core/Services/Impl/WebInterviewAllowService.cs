@@ -48,7 +48,7 @@ namespace WB.UI.Headquarters.Services.Impl
             this.contextAccessor = contextAccessor;
         }
 
-        public void CheckWebInterviewAccessPermissions(string interviewId)
+        public void CheckWebInterviewAccessPermissions(string interviewId, InterviewStatus[] additionalAllowedStatuses)
         {
             if (Guid.TryParse(interviewId, out var id))
             {
@@ -72,7 +72,8 @@ namespace WB.UI.Headquarters.Services.Impl
                     return;
             }
             
-            if (!AllowedInterviewStatuses.Contains(interview.Status))
+            if (!AllowedInterviewStatuses.Contains(interview.Status) 
+                && (additionalAllowedStatuses != null && Array.IndexOf(additionalAllowedStatuses, interview.Status) < 0))
                 throw new InterviewAccessException(InterviewAccessExceptionReason.NoActionsNeeded, 
                     Enumerator.Native.Resources.WebInterview.Error_NoActionsNeeded);
 
@@ -100,7 +101,7 @@ namespace WB.UI.Headquarters.Services.Impl
             WebInterviewConfig webInterviewConfig = webInterviewConfigProvider.Get(questionnaireIdentity);
 
             //interview is not public available and logged in user is not current interview responsible
-            if (!webInterviewConfig.Started && interview.Status == InterviewStatus.InterviewerAssigned 
+            if (!webInterviewConfig.Started && interview.Status == InterviewStatus.InterviewerAssigned
                 && this.authorizedUser.IsAuthenticated)
             {
                 throw new InterviewAccessException(InterviewAccessExceptionReason.UserNotAuthorised,

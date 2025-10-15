@@ -586,7 +586,7 @@ namespace WB.UI.Headquarters.Controllers
                    || interview.GetCommentedBySupervisorQuestionsVisibleToInterviewer().Any();
         }
         
-        [WebInterviewAuthorize]
+        [WebInterviewAuthorize(AdditionalAllowedStatuses = [InterviewStatus.Completed])]
         [Route("Finish/{id:Guid}")]
         public ActionResult Finish(string id)
         {
