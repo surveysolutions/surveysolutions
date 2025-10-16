@@ -65,7 +65,8 @@ namespace WB.UI.Headquarters.Services.Impl
                     Enumerator.Native.Resources.WebInterview.Error_NotFound);
 
             //finish page for anonymous for completed interview
-            if (!this.authorizedUser.IsAuthenticated && interview.Status == InterviewStatus.Completed)
+            if ( (!this.authorizedUser.IsAuthenticated || this.authorizedUser.IsInterviewer) 
+                 && interview.Status == InterviewStatus.Completed)
             {
                 var hasAccess = contextAccessor.HttpContext.Session.HasAccessToWebInterviewAfterComplete(interview);
                 if (hasAccess)
@@ -100,7 +101,7 @@ namespace WB.UI.Headquarters.Services.Impl
             WebInterviewConfig webInterviewConfig = webInterviewConfigProvider.Get(questionnaireIdentity);
 
             //interview is not public available and logged in user is not current interview responsible
-            if (!webInterviewConfig.Started && interview.Status == InterviewStatus.InterviewerAssigned 
+            if (!webInterviewConfig.Started && interview.Status == InterviewStatus.InterviewerAssigned
                 && this.authorizedUser.IsAuthenticated)
             {
                 throw new InterviewAccessException(InterviewAccessExceptionReason.UserNotAuthorised,
