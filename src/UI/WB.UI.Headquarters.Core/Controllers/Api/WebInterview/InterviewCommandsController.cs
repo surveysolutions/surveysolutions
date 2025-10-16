@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.CalendarEvents;
@@ -38,6 +39,7 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
         private readonly ICalendarEventService calendarEventService;
         private readonly IAssignmentsService assignmentsStorage;
         private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage;
+        private readonly IHttpContextAccessor contextAccessor;
 
         public InterviewCommandsController(ICommandService commandService, 
             IImageFileStorage imageFileStorage, 
@@ -50,7 +52,8 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
             IUserViewFactory userViewFactory, 
             ICalendarEventService calendarEventService, 
             IAssignmentsService assignmentsStorage,
-            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage
+            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage,
+            IHttpContextAccessor contextAccessor
             ) 
             : base(commandService, imageFileStorage, audioFileStorage, questionnaireRepository, statefulInterviewRepository, webInterviewNotificationService)
         {
@@ -60,6 +63,7 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
             this.calendarEventService = calendarEventService;
             this.assignmentsStorage = assignmentsStorage;
             this.questionnaireBrowseItemStorage = questionnaireBrowseItemStorage;
+            this.contextAccessor = contextAccessor;
         }
 
         protected bool IsReviewMode() =>
@@ -135,6 +139,21 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
         [Route("sendNewComment")]
         public override IActionResult SendNewComment(Guid interviewId, [FromBody]NewCommentRequest request) => base.SendNewComment(interviewId, request);
 
+
+        [HttpPost]
+        [Route("prepareCompleteInterview")]
+        public override IActionResult PrepareCompleteInterview(Guid interviewId)
+        {
+            var interview = statefulInterviewRepository.Get(interviewId.FormatGuid());
+            if (interview == null)
+                return NotFound();
+
+            contextAccessor.HttpContext.Session.SaveWebInterviewAccessForCurrentUser(interviewId.FormatGuid());
+            
+            return Ok();
+        }
+
+
         [HttpPost]
         [Route("completeInterview")]
         public override IActionResult CompleteInterview(Guid interviewId, [FromBody]CompleteInterviewRequest completeInterviewRequest)
@@ -142,13 +161,15 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
             var interview = statefulInterviewRepository.Get(interviewId.FormatGuid());
             if (interview == null)
                 return NotFound();
+            
+            contextAccessor.HttpContext.Session.SaveWebInterviewAccessForCurrentUser(interviewId.FormatGuid());
+            
             var questionnaireBrowseItem = questionnaireBrowseItemStorage.GetById(interview.QuestionnaireIdentity.ToString());
             CriticalityLevel? criticalLevel = questionnaireBrowseItem.CriticalityLevel;
             
             ICommand command = new CompleteInterviewCommand(interviewId, GetCommandResponsibleId(interviewId), completeInterviewRequest.Comment, criticalLevel);
             this.commandService.Execute(command);
             
-            HttpContext.Session.SaveWebInterviewAccessForCurrentUser(interviewId.FormatGuid());
             return Ok();
         }
 
