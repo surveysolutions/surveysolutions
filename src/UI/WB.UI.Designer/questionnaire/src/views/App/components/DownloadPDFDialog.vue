@@ -19,7 +19,8 @@
                                     {{ selectedTranslation.name }}
                                     <span class="dropdown-arrow"></span>
                                 </button>
-                                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu10">
+                                <ul v-if="!isGenerating" class="dropdown-menu" role="menu"
+                                    aria-labelledby="dropdownMenu10">
                                     <li role="presentation" v-for="translation in translations">
                                         <a role="menuitem" tabindex="-1" href="javascript:void(0);"
                                             @click="selectTranslation(translation)">
@@ -31,13 +32,13 @@
                         </div>
                         <p></p>
                         <p>
-                        <pre v-if="isGenerating">{{ generateStatusMessage }}</pre>
+                        <pre v-if="isGenerating || generateStatusMessage">{{ generateStatusMessage }}</pre>
                         </p>
                     </div>
 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-lg btn-primary" @click="generate()" :disabled="isGenerating"
-                            v-if="!canRetryGenerate">
+                        <button type="button" class="btn btn-lg btn-primary" @click="generate()"
+                            :disabled="isGenerating" v-if="!canRetryGenerate">
                             {{ $t('QuestionnaireEditor.GeneratePdf') }}
                         </button>
                         <button type="button" class="btn btn-lg btn-primary" @click="retryGenerate()"
@@ -53,14 +54,15 @@
         </div>
         <div v-if="visible" uib-modal-backdrop="modal-backdrop" class="modal-backdrop fade ng-scope in"
             uib-modal-animation-class="fade" modal-in-class="in" modal-animation="true"
-            data-bootstrap-modal-aria-hidden-count="1" aria-hidden="true" style="z-index: 1040;" @click="cancel()"></div>
+            data-bootstrap-modal-aria-hidden-count="1" aria-hidden="true" style="z-index: 1040;" @click="cancel()">
+        </div>
     </teleport>
 </template>
 
 <script>
 import _ from 'lodash';
 import Help from './Help.vue';
-import { retryExportPdf, updateExportPdfStatus } from '../../../services/pdfService'
+import { retryExportPdf, updateExportPdfStatus, generateExportPdfStatus } from '../../../services/pdfService'
 
 export default {
     name: 'DownloadPDFDialog',
@@ -100,6 +102,7 @@ export default {
             this.selectedTranslation = this.translations[0];
             this.generateStatusMessage = '';
 
+            this.canRetryGenerate = false;
             this.isGenerating = false;
             this.visible = true;
         },
@@ -109,17 +112,19 @@ export default {
         selectTranslation(translation) {
             this.selectedTranslation = translation;
         },
-        generate() {
+        async generate() {
             this.generateStatusMessage = this.$t("QuestionnaireEditor.Initializing") + '...';
             this.isGenerating = true;
 
-            this.updateExportPdfStatus(this.selectedTranslation.translationId);
+            const translationId = this.selectedTranslation.translationId;
+            const result = await generateExportPdfStatus(this.questionnaireId, translationId)
+            this.onExportPdfStatusReceived(result, translationId);
         },
-        retryGenerate() {
+        async retryGenerate() {
             var translationId = this.selectedTranslation.translationId;
 
             retryExportPdf(this.questionnaireId, translationId);
-            this.generate();
+            await this.generate();
             this.canRetryGenerate = false;
         },
 
@@ -129,6 +134,9 @@ export default {
 
             request.then(function (result) {
                 self.onExportPdfStatusReceived(result, translationId);
+            }).catch(function () {
+                self.showGeneralError();
+                self.canRetryGenerate = true;
             });
         },
         onExportPdfStatusReceived(data, translationId) {
@@ -136,8 +144,7 @@ export default {
             if (data.message !== null)
                 this.generateStatusMessage = data.message;
             else
-                this.generateStatusMessage =
-                    "Unexpected server response.\r\nPlease contact support@mysurvey.solutions if problem persists.";
+                this.showGeneralError();
 
             this.canDownload = data.readyForDownload;
             this.canRetryGenerate = data.canRetry;
@@ -149,14 +156,16 @@ export default {
                 } else {
                     this.generateTimerId = setTimeout(function () {
                         self.updateExportPdfStatus(translationId);
-                    },
-                        1500);
+                    }, 1500);
                 }
             }
             else {
                 this.cancel();
                 window.location = '/pdf/downloadPdf/' + this.questionnaireId + '?translation=' + translationId;
             }
+        },
+        showGeneralError() {
+            this.generateStatusMessage = "Unexpected server response.\r\nPlease contact support@mysurvey.solutions if problem persists.";
         },
         cancel() {
             clearTimeout(this.generateTimerId);

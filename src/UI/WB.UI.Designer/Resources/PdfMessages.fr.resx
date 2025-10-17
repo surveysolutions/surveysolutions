@@ -145,4 +145,12 @@
   <data name="Retry" xml:space="preserve">
     <value>Réessayez l'exportation en PDF.</value>
   </data>
+  <data name="NotFound" xml:space="preserve">
+    <value>Le travail demandé n'a pas été localisé. 
+Veuillez réessayer.</value>
+  </data>
+  <data name="PdfLimitReached" xml:space="preserve">
+    <value>Vous avez déjà envoyé {0} demandes pour créer des documents PDF pour vos questionnaires.
+Veuillez réessayer plus tard.</value>
+  </data>
 </root>
