@@ -1243,6 +1243,9 @@
   <data name="Admin_InterviewPackages_NumberOfPackagesAffected" xml:space="preserve">
     <value>{{count}} pachete vor fi modificate</value>
   </data>
+  <data name="DownloadPage_Size" xml:space="preserve">
+    <value>Mărime</value>
+  </data>
   <data name="Admin_InterviewPackages_PackageSize" xml:space="preserve">
     <value>Mărime</value>
   </data>
