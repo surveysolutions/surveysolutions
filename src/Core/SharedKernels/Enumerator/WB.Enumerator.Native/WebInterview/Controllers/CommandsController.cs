@@ -198,6 +198,9 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
 
         [ObservingNotAllowed]
         public abstract IActionResult CompleteInterview(Guid interviewId, CompleteInterviewRequest completeInterviewRequest);
+        
+        [ObservingNotAllowed]
+        public abstract IActionResult PrepareCompleteInterview(Guid interviewId);
 
         public class NewCommentRequest : AnswerRequest
         {
