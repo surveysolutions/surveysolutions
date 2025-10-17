@@ -135,6 +135,9 @@
   <data name="Admin_InterviewPackages_NumberOfPackagesAffected" xml:space="preserve">
     <value>Balíčků, které budou změněny - {{count}}</value>
   </data>
+  <data name="DownloadPage_Size" xml:space="preserve">
+    <value>Velikost</value>
+  </data>
   <data name="Admin_InterviewPackages_PackageSize" xml:space="preserve">
     <value>Velikost</value>
   </data>
@@ -195,8 +198,11 @@
   <data name="ErrorIndex_Title" xml:space="preserve">
     <value>Chyba</value>
   </data>
+  <data name="IncludeEsriTitle" xml:space="preserve">
+    <value>Zahrnout mapovou funkci</value>
+  </data>
   <data name="GetEsriExtraDescription" xml:space="preserve">
-      <value>Funkce GIS výrazně zvýší velikost aplikace a dobu stahování. Postupujte podle pokynů svého nadřízeného, ​​která verze aplikace Tazatel (s mapami nebo bez nich) je pro váš úkol potřeba.</value>
+    <value>Mapová funkce výrazně zvýší velikost aplikace a dobu stahování. Řiďte se pokyny svého nadřízeného, která verze aplikace Interviewer (s mapami nebo bez nich) je potřebná pro váš úkol.</value>
   </data>
   <data name="GetLatestApp" xml:space="preserve">
     <value>Stáhněte si nejnovější verzi aplikace Tazatel</value>

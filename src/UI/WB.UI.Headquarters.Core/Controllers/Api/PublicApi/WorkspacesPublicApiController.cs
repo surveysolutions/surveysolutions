@@ -225,7 +225,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             if (ModelState.IsValid)
             {
                 workspace.Disable();
-                this.logger.LogInformation("Workspace {name} was disabled by {user}", name, this.authorizedUser.UserName);
+                this.logger.LogInformation("Workspace {name} was disabled by {user}", workspace.Name, this.authorizedUser.UserName);
                 this.workspacesCache.InvalidateCache();
                 this.systemLog.WorkspaceDisabled(name);
                 this.webInterviewNotification.Execute(_ => _.ShutDownAllWebInterviews());
@@ -259,7 +259,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 
             if (workspace.DisabledAtUtc == null)
             {
-                ModelState.AddModelError(nameof(workspace.DisabledAtUtc), $"Workspace {name} is already enabled");
+                ModelState.AddModelError(nameof(workspace.DisabledAtUtc), $"Workspace {workspace.Name} is already enabled");
             }
 
             if (ModelState.IsValid)

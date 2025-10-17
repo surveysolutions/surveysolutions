@@ -56,7 +56,7 @@
 	<uses-feature android:name="android.hardware.bluetooth" android:required="false"/>
 	<uses-feature android:name="android.hardware.bluetooth_le" android:required="false"/>
 	
-	<uses-sdk android:minSdkVersion="26" android:targetSdkVersion="34" />
+	<uses-sdk android:minSdkVersion="26" android:targetSdkVersion="35" />
 
 	<queries>
 		<intent>
