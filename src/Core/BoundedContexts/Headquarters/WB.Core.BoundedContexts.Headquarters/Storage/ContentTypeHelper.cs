@@ -8,8 +8,9 @@ public static class ContentTypeHelper
     {
         if (string.IsNullOrWhiteSpace(filename))
             return null;
-        
-        switch(Path.GetExtension(filename))
+
+        var extension = Path.GetExtension(filename).ToLower();
+        switch(extension)
         {
             case ".jpg":
             case ".jpeg":
@@ -35,7 +36,8 @@ public static class ContentTypeHelper
         if (string.IsNullOrWhiteSpace(filename))
             return null;
         
-        switch(Path.GetExtension(filename))
+        var extension = Path.GetExtension(filename).ToLower();
+        switch(extension)
         {
             case ".aac":
                 return "audio/aac";
