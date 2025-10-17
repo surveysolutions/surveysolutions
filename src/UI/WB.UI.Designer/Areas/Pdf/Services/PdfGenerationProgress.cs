@@ -11,6 +11,7 @@ public  class PdfGenerationProgress
 
     public string FilePath { get; } = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
     public DateTime? StartedTime => this.startTime;
+    public DateTime? FinishTime => this.finishTime;
     public TimeSpan TimeSinceFinished => this.finishTime.HasValue ? DateTime.UtcNow - this.finishTime.Value : TimeSpan.Zero;
 
     public void Start()

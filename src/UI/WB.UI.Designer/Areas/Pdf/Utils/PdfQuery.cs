@@ -21,6 +21,7 @@ public class PdfQuery : IPdfQuery, IDisposable
     private readonly ConcurrentDictionary<string, PdfJob> jobs = new();
     private readonly ConcurrentDictionary<Guid, int> perUserCount = new();
     private readonly SemaphoreSlim signal = new(0);
+    private readonly CancellationTokenSource disposeCts = new();
 
     public PdfQuery(IOptions<PdfSettings> options,
         ILogger<PdfQuery> logger)
@@ -33,6 +34,25 @@ public class PdfQuery : IPdfQuery, IDisposable
 
         for (int i = 0; i < workerCount; i++)
             Task.Factory.StartNew(WorkerLoop, TaskCreationOptions.LongRunning);
+    }
+
+    public JobInfo[] GetOldJobs()
+    {
+        var utcNow = DateTime.UtcNow;
+        var timeToCheckNextCleanup = utcNow.AddMinutes(options.Value.FinishedJobRetentionInMinutes);
+
+        return jobs.Where(s =>
+            {
+                if (s.Value.Progress.Status == PdfGenerationStatus.Finished
+                    && s.Value.Progress.FinishTime > timeToCheckNextCleanup)
+                    return true;
+                if (s.Value.Progress.Status == PdfGenerationStatus.Failed
+                    && (s.Value.Progress.StartedTime > timeToCheckNextCleanup ||
+                        s.Value.Progress.StartedTime == null))
+                    return true;
+                return false;
+            })
+            .Select(j => new JobInfo(j.Key, j.Value.Progress.FilePath)).ToArray();
     }
 
     public PdfGenerationProgress GetOrAdd(
@@ -80,7 +100,9 @@ public class PdfQuery : IPdfQuery, IDisposable
         var settingsInfo = new
         {
             MaxPerUser = options.Value.MaxPerUser,
-            WorkerCount = options.Value.WorkerCount
+            WorkerCount = options.Value.WorkerCount,
+            FinishedJobRetentionInMinutes = options.Value.FinishedJobRetentionInMinutes,
+            CleanupIntervalInSeconds = options.Value.CleanupIntervalInSeconds
         };
 
         var queueInfo = new
@@ -124,9 +146,10 @@ public class PdfQuery : IPdfQuery, IDisposable
     {
         Thread.CurrentThread.Priority = ThreadPriority.BelowNormal;
         
-        while (true)
+        while (!disposeCts.IsCancellationRequested)
         {
             await signal.WaitAsync();
+            if (disposeCts.IsCancellationRequested) break;
             
             if (queue.TryDequeue(out var job))
             {
@@ -174,8 +197,9 @@ public class PdfQuery : IPdfQuery, IDisposable
 
     public void Dispose()
     {
+        disposeCts.Cancel();
+        signal.Release(int.MaxValue);
         signal.Dispose();
+        disposeCts.Dispose();
     }
 }
-
-

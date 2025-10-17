@@ -40,6 +40,8 @@ namespace WB.UI.Designer.Modules
             registry.Bind<IPdfService, PdfService>();
             registry.BindAsSingleton<IPdfRender, PdfRender>();
             registry.BindAsSingleton<IPdfQuery, PdfQuery>();
+            registry.BindAsSingleton<PdfJobsCleanup, PdfJobsCleanup>();
+
             
             registry.Bind<IQuestionnaireSearchStorage, QuestionnaireSearchStorage>();
             registry.Bind<IClassificationsStorage, ClassificationsStorage>();

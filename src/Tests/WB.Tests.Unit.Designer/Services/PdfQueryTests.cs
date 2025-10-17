@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
@@ -176,6 +177,37 @@ namespace WB.Tests.Unit.Designer.Services
             
             // Assert
             Assert.That(progress.Status, Is.EqualTo(PdfGenerationStatus.Failed), "Progress should be marked as failed");
+        }
+
+        [Test]
+        public async Task PdfJobsCleanup_ShouldRemoveFinishedJob_AndDeleteFile()
+        {
+            this.pdfQuery.Dispose();
+            this.pdfSettings = new PdfSettings
+            {
+                MaxPerUser = 3,
+                WorkerCount = 1,
+                FinishedJobRetentionInMinutes = 0,
+                CleanupIntervalInSeconds = 60
+            };
+            this.mockOptions.Setup(o => o.Value).Returns(this.pdfSettings);
+            this.pdfQuery = new PdfQuery(this.mockOptions.Object, Mock.Of<Microsoft.Extensions.Logging.ILogger<PdfQuery>>());
+            var cleanup = new PdfJobsCleanup(this.pdfQuery, this.mockOptions.Object, Mock.Of<Microsoft.Extensions.Logging.ILogger<PdfJobsCleanup>>());
+            var key = "cleanup_test";
+            var userId = Id.g1;
+            string filePath = "";
+            Func<PdfGenerationProgress, CancellationToken, Task> runGeneration = async (progress, token) =>
+            {
+                filePath = progress.FilePath;
+                await File.WriteAllTextAsync(filePath, "test", token);
+                progress.Finish();
+            };
+            this.pdfQuery.GetOrAdd(userId, key, runGeneration);
+            await Task.Delay(200); // allow worker to finish
+            Assert.That(File.Exists(filePath), Is.True, "File should exist before cleanup");
+            cleanup.Cleanup();
+            Assert.That(this.pdfQuery.GetOrNull(key), Is.Null, "Job should be removed by cleanup");
+            Assert.That(File.Exists(filePath), Is.False, "File should be deleted by cleanup");
         }
     }
 }

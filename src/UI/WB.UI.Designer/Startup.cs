@@ -32,6 +32,7 @@ using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.DependencyInjection;
 using WB.Core.Infrastructure.Versions;
 using WB.Infrastructure.Native.Files;
+using WB.UI.Designer.Areas.Pdf.Services;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.Attributes;
 using WB.UI.Designer.Code.Implementation;
@@ -227,7 +228,7 @@ namespace WB.UI.Designer
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
             services.Configure<UiConfig>(Configuration.GetSection("UI"));
             services.Configure<IntegrationsConfig>(Configuration.GetSection("Integrations"));
-
+            
             var membershipSection = this.Configuration.GetSection("Membership");
             services.Configure<IdentityOptions>(opt =>
             {
@@ -254,6 +255,8 @@ namespace WB.UI.Designer
             services.Configure<PdfSettings>(Configuration.GetSection("Pdf"));
             services.Configure<QuestionnaireHistorySettings>(Configuration.GetSection("QuestionnaireHistorySettings"));
             services.Configure<WebTesterSettings>(Configuration.GetSection("WebTester"));
+
+            services.AddHostedService<PdfJobsCleanupHostedService>();
 
             aspCoreKernel = new AspCoreKernel(services);
 
