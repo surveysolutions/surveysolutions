@@ -51,12 +51,8 @@ export default {
                 const target = this.$refs.input || this.$refs.inputTextArea;
                 const answer = target.value
 
-                if (!answer || answer.trim() === '') {
-                    this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.TextRequired'), answer)
-                    return
-                }
-
                 if (this.handleEmptyAnswer(answer)) {
+                    target.value = ''
                     return
                 }
 
