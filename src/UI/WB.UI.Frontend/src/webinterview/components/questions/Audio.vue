@@ -9,8 +9,8 @@
                     <ul class="block-with-data list-unstyled">
                         <li :id="answerHolderId">{{ $t("WebInterviewUI.AudioRecordingDuration", {
                             humanizedLength:
-                            humanizedLength, formattedLength
-                            }) }}</li>
+                                humanizedLength, formattedLength
+                        }) }}</li>
                     </ul>
                     <wb-remove-answer />
                 </div>
@@ -156,7 +156,9 @@ export default {
                         self.stopwatchInterval = setInterval(self.updateTimer, 31)
                         self.maxDurationInterval = setInterval(self.stopRecording, self.maxDuration)
                     },
-                    errorCallback: (e) => {
+                    errorCallback: (error, stack) => {
+                        console.error('An error occurred in a child component:', error);
+                        console.error('Stack trace:', stack);
                         self.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.AudioInitializationFailed'))
                         this.closeModal()
                     },

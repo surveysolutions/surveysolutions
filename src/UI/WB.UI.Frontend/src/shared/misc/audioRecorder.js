@@ -438,18 +438,24 @@ if (!window.AudioRecorder) {
 
         self.initAudio = function (configuration) {
             config = configuration
-            if (!navigator.getUserMedia)
-                navigator.getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia
-            if (!navigator.cancelAnimationFrame)
-                navigator.cancelAnimationFrame = navigator.webkitCancelAnimationFrame || navigator.mozCancelAnimationFrame
-            if (!navigator.requestAnimationFrame)
-                navigator.requestAnimationFrame = navigator.webkitRequestAnimationFrame || navigator.mozRequestAnimationFrame
 
-            if (!navigator.getUserMedia) {
-                config.errorCallback()
-            }
-            else {
-                navigator.getUserMedia(settings, successCallback, config.errorCallback)
+            // Check for modern API first
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                // Use modern Promise-based API
+                navigator.mediaDevices.getUserMedia(settings)
+                    .then(successCallback)
+                    .catch(config.errorCallback)
+            } else {
+                // Fallback for very old browsers
+                var getUserMedia = navigator.getUserMedia ||
+                    navigator.webkitGetUserMedia ||
+                    navigator.mozGetUserMedia
+
+                if (getUserMedia) {
+                    getUserMedia.call(navigator, settings, successCallback, config.errorCallback)
+                } else {
+                    config.errorCallback(new Error('getUserMedia is not supported'))
+                }
             }
         }
 
