@@ -1,21 +1,17 @@
 using System;
-using System.Collections.Concurrent;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Microsoft.Playwright;
 using StackExchange.Exceptional;
 using WB.Core.BoundedContexts.Designer;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.UI.Designer.Areas.Pdf.Controllers;
 using WB.UI.Designer.Areas.Pdf.Utils;
-using WB.UI.Designer.Resources;
 using WB.UI.Shared.Web.Services;
 
 namespace WB.UI.Designer.Areas.Pdf.Services;
@@ -28,14 +24,16 @@ public class PdfService : IPdfService
     private readonly IFileSystemAccessor fileSystemAccessor;
     private readonly IHttpContextAccessor httpContextAccessor;
     private readonly IPdfQuery pdfQuery;
-
+    private readonly IPdfRender pdfRender;
+    
     public PdfService(
         IViewRenderService viewRenderingService,
         ILogger<PdfService> logger,
         IPdfFactory pdfFactory,
         IFileSystemAccessor fileSystemAccessor,
         IHttpContextAccessor httpContextAccessor,
-        IPdfQuery pdfQuery
+        IPdfQuery pdfQuery,
+        IPdfRender pdfRender
         )
     {
         this.viewRenderingService = viewRenderingService;
@@ -44,6 +42,7 @@ public class PdfService : IPdfService
         this.fileSystemAccessor = fileSystemAccessor;
         this.httpContextAccessor = httpContextAccessor;
         this.pdfQuery = pdfQuery;
+        this.pdfRender = pdfRender;
     }
     
     public async Task<byte[]> GetHtmlContent(QuestionnaireRevision id, Guid? translation)
@@ -69,7 +68,7 @@ public class PdfService : IPdfService
         Task RunGeneration(PdfGenerationProgress p, CancellationToken token) =>
             documentType == DocumentType.Pdf
                 ? StartRenderPdf(questionnaireHtml, footerHtml, p, token)
-                : StartRenderHtml(questionnaireHtml, footerHtml, p, token);
+                : StartRenderHtml(questionnaireHtml, p, token);
 
         PdfGenerationProgress pdfGenerationProgress = pdfQuery.GetOrAdd(GetUserId(), key, RunGeneration);
         return pdfGenerationProgress;
@@ -101,6 +100,7 @@ public class PdfService : IPdfService
 
     public string GetCurrentInfoJson() => pdfQuery.GetQueryInfoJson();
 
+
     private async Task StartRenderPdf(string questionnaireHtml, string footerHtml, PdfGenerationProgress generationProgress, CancellationToken token)
     {
         if (generationProgress.Status == PdfGenerationStatus.Failed)
@@ -108,31 +108,9 @@ public class PdfService : IPdfService
 
         try
         {
-            using var playwright = await Playwright.CreateAsync().WaitAsync(token);
-            await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions()
-            {
-                Headless = true,
-                Args = new[] { "--disable-javascript" }
-            }).WaitAsync(token);
-
-            var page = await browser.NewPageAsync().WaitAsync(token);
-            await page.RouteAsync("**/*.js", async route => await route.AbortAsync()).WaitAsync(token);
-            await page.SetContentAsync(questionnaireHtml, new PageSetContentOptions
-            {
-                Timeout = 120_000,
-                WaitUntil = WaitUntilState.DOMContentLoaded,
-            }).WaitAsync(token);
-
-            var content = await page.PdfAsync(new PagePdfOptions()
-            {
-                HeaderTemplate = "<html></html>",
-                FooterTemplate = footerHtml,
-                Format = "A4",
-                DisplayHeaderFooter = true,
-                //Margin = new Margin() {Top = "10", Bottom = "7", Left = "0", Right = "0"},
-            });
-            await this.fileSystemAccessor.WriteAllBytesAsync(generationProgress.FilePath, content, token);
-
+            var content = await pdfRender.RenderPdf(questionnaireHtml, footerHtml, token).ConfigureAwait(false);
+            await this.fileSystemAccessor.WriteAllBytesAsync(generationProgress.FilePath, content, token).ConfigureAwait(false);
+            
             generationProgress.Finish();
         }
         catch (Exception exception)
@@ -151,7 +129,7 @@ public class PdfService : IPdfService
         
         var uri = new Uri($"{request.Scheme}://{request.Host}{request.PathBase}");
         string webRoot = uri.ToString().TrimEnd('/');
-        string webAppRoot = uri.GetLeftPart(System.UriPartial.Authority);
+        string webAppRoot = uri.GetLeftPart(UriPartial.Authority);
         var routeData = new Microsoft.AspNetCore.Routing.RouteData();
         routeData.DataTokens.Add("area", "Pdf");
         routeData.Values.Add("controller", "Pdf");
@@ -159,7 +137,7 @@ public class PdfService : IPdfService
         return await this.viewRenderingService.RenderToStringAsync(viewName, model, webRoot, webAppRoot, routeData);
     }
 
-    private async Task StartRenderHtml(string questionnaireHtml, string footerHtml, PdfGenerationProgress progress, CancellationToken token)
+    private async Task StartRenderHtml(string questionnaireHtml, PdfGenerationProgress progress, CancellationToken _)
     {
         if (progress.Status != PdfGenerationStatus.Failed)
         {

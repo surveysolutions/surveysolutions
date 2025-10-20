@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.Maps;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.UI.Headquarters.Code;
@@ -18,8 +19,9 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2
     public class MapsApiV2Controller : MapsControllerBase
     {
         public MapsApiV2Controller(IMapStorageService mapRepository, IAuthorizedUser authorizedUser,
-            IPlainStorageAccessor<MapBrowseItem> mapPlainStorageAccessor, IUserRepository userRepository) 
-            : base(mapRepository, authorizedUser, mapPlainStorageAccessor, userRepository)
+            IPlainStorageAccessor<MapBrowseItem> mapPlainStorageAccessor, IUserRepository userRepository,
+            IFileSystemAccessor fileSystemAccessor)
+            : base(mapRepository, authorizedUser, mapPlainStorageAccessor, userRepository, fileSystemAccessor)
         {
         }
 

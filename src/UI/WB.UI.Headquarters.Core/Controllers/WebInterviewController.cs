@@ -698,6 +698,8 @@ namespace WB.UI.Headquarters.Controllers
                 return this.RedirectToAction("Resume", routeValues: new { id, returnUrl });
             }
 
+            HttpContext.Session.SaveWebInterviewAccessForCurrentUser(id);
+            
             return View("Index", GetInterviewModel(id, interview, webInterviewConfig));
         }
 

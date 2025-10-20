@@ -294,7 +294,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         [AllowAnonymous]
         public async Task<ActionResult> ExportToExternalStorage(ExportToExternalStorageModel model)
         {
-            var state = this.serializer.Deserialize<ExternalStorageStateModel>(model.State);
+            var state = this.serializer.DeserializeWithoutTypes<ExternalStorageStateModel>(model.State);
             if (state == null)
                 return BadRequest("Export parameters not found");
 

@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Models.CompanyLogo;
@@ -190,9 +191,9 @@ namespace WB.UI.Headquarters.Controllers
             var user = await signInManager.GetTwoFactorAuthenticationUserAsync();
             if (user == null || user.IsLocked)
             {
-                return RedirectToAction("LogOn", new { ReturnUrl = returnUrl, RememberMe = true });
+                return RedirectToAction(nameof(LogOn), new { ReturnUrl = returnUrl, RememberMe = true });
             }
-
+            
             var authenticatorCode = model.TwoFactorCode.Replace(" ", string.Empty).Replace("-", string.Empty);
             var signInResult = await signInManager.TwoFactorAuthenticatorSignInAsync(authenticatorCode, true, false);
 
@@ -210,7 +211,7 @@ namespace WB.UI.Headquarters.Controllers
                     return Redirect(returnUrl);
                 }
 
-                return Redirect(Url.Action("Index", "Home"));
+                return RedirectToAction("Index", "Home");
             }
 
             if (signInResult.IsLockedOut)
