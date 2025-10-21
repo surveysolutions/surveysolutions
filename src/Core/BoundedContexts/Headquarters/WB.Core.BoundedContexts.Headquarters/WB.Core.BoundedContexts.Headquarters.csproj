@@ -64,7 +64,7 @@
     <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="9.0.5" />
     <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="9.0.5" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="9.0.5" />
-    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="9.0.5" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="9.0.9" />
     <PackageReference Include="NetTopologySuite.IO.Esri.Shapefile" Version="1.2.0" />
     <PackageReference Include="NetTopologySuite.IO.GeoJSON" Version="4.0.0" />
     <PackageReference Include="NewId" Version="4.0.1" />
@@ -136,11 +136,6 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>TroubleshootingMessages.resx</DependentUpon>
-    </Compile>
-    <Compile Update="Resources\WebInterviewResources - Copy.Designer.cs">
-      <DependentUpon>WebInterviewResources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
     </Compile>
     <Compile Update="Resources\WebInterviewResources.Designer.cs">
       <DesignTime>True</DesignTime>

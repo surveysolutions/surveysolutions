@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Supervisor.Properties;
 using WB.Core.BoundedContexts.Supervisor.Views;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -21,21 +22,138 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
         private readonly IPlainStorage<UnexpectedExceptionFromInterviewerView, int?> unexpectedExceptionsStorage;
         private readonly ITabletInfoService tabletInfoService;
         private readonly IPlainStorage<InterviewerSyncStatisticsView, int?> statisticsStorage;
+        private readonly IBrokenImageFileStorage brokenImageFileStorage;
+        private readonly IBrokenAudioFileStorage brokenAudioFileStorage;
+        private readonly IBrokenAudioAuditFileStorage brokenAudioAuditFileStorage;
 
         public TechInfoSynchronizer(IPlainStorage<BrokenInterviewPackageView, int?> brokenInterviewPackageStorage,
             ISupervisorSynchronizationService synchronizationService, 
             IPlainStorage<UnexpectedExceptionFromInterviewerView, int?> unexpectedExceptionsStorage,
             ITabletInfoService tabletInfoService,
-            IPlainStorage<InterviewerSyncStatisticsView, int?> statisticsStorage)
+            IPlainStorage<InterviewerSyncStatisticsView, int?> statisticsStorage,
+            IBrokenImageFileStorage brokenImageFileStorage,
+            IBrokenAudioFileStorage brokenAudioFileStorage,
+            IBrokenAudioAuditFileStorage brokenAudioAuditFileStorage
+            )
         {
             this.brokenInterviewPackageStorage = brokenInterviewPackageStorage;
             this.synchronizationService = synchronizationService;
             this.unexpectedExceptionsStorage = unexpectedExceptionsStorage;
             this.tabletInfoService = tabletInfoService;
             this.statisticsStorage = statisticsStorage;
+            this.brokenImageFileStorage = brokenImageFileStorage;
+            this.brokenAudioFileStorage = brokenAudioFileStorage;
+            this.brokenAudioAuditFileStorage = brokenAudioAuditFileStorage;
         }
 
         public async Task SynchronizeAsync(IProgress<SyncProgressInfo> progress, SynchronizationStatistics statistics, CancellationToken cancellationToken)
+        {
+            await UploadBrokenInterviewPackages(progress, cancellationToken);
+
+            await UploadBrokenImages(cancellationToken);
+            await UploadBrokenAudios(cancellationToken);
+            await UploadBrokenAudioAudits(cancellationToken);
+
+            await UploadInterviewerExceptions(progress, cancellationToken);
+
+            await UploadTabletInfo(cancellationToken);
+
+            await UploadSynchronizationStatistics(progress, cancellationToken);
+        }
+
+        private async Task UploadBrokenImages(CancellationToken cancellationToken)
+        {
+            while (true)
+            {
+                var brokenFile = await brokenImageFileStorage.FirstOrDefaultAsync();
+                if (brokenFile == null)
+                    break;
+
+                var brokenImagePackage = new BrokenImagePackageApiView
+                {
+                    InterviewId = brokenFile.InterviewId,
+                    FileName = brokenFile.FileName,
+                    ContentType = brokenFile.ContentType,
+                    Data = Convert.ToBase64String(await brokenFile.GetData()),
+                };
+
+                await this.synchronizationService.UploadBrokenImagePackageAsync(brokenImagePackage, cancellationToken);
+
+                await brokenImageFileStorage.RemoveInterviewBinaryData(brokenFile.InterviewId, brokenFile.FileName);
+            }
+        }
+
+        private async Task UploadBrokenAudios(CancellationToken cancellationToken)
+        {
+            while (true)
+            {
+                var brokenFile = await brokenAudioFileStorage.FirstOrDefaultAsync();
+                if (brokenFile == null)
+                    break;
+
+                var brokenPackage = new BrokenAudioPackageApiView
+                {
+                    InterviewId = brokenFile.InterviewId,
+                    FileName = brokenFile.FileName,
+                    ContentType = brokenFile.ContentType,
+                    Data = Convert.ToBase64String(await brokenFile.GetData()),
+                };
+
+                await this.synchronizationService.UploadBrokenAudioPackageAsync(brokenPackage, cancellationToken);
+
+                await brokenAudioFileStorage.RemoveInterviewBinaryData(brokenFile.InterviewId, brokenFile.FileName);
+            }
+        }
+
+        private async Task UploadBrokenAudioAudits(CancellationToken cancellationToken)
+        {
+            while (true)
+            {
+                var brokenFile = await brokenAudioAuditFileStorage.FirstOrDefaultAsync();
+                if (brokenFile == null)
+                    break;
+
+                var brokenPackage = new BrokenAudioAuditPackageApiView
+                {
+                    InterviewId = brokenFile.InterviewId,
+                    FileName = brokenFile.FileName,
+                    ContentType = brokenFile.ContentType,
+                    Data = Convert.ToBase64String(await brokenFile.GetData()),
+                };
+
+                await this.synchronizationService.UploadBrokenAudioAuditPackageAsync(brokenPackage, cancellationToken);
+
+                await brokenAudioAuditFileStorage.RemoveInterviewBinaryData(brokenFile.InterviewId, brokenFile.FileName);
+            }
+        }
+
+        private async Task UploadTabletInfo(CancellationToken cancellationToken)
+        {
+            while (true)
+            {
+                var tabletInfo = tabletInfoService.GetTopRecordForSync();
+                if (tabletInfo == null)
+                    break;
+                
+                await this.synchronizationService.UploadTabletInfoAsync(tabletInfo.DeviceInfo, cancellationToken);
+
+                tabletInfoService.Remove(tabletInfo.Id);
+            }
+        }
+
+        private async Task UploadInterviewerExceptions(IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken)
+        {
+            progress.Report(new SyncProgressInfo
+            {
+                Title = SupervisorUIResources.Synchronization_UploadExceptions
+            });
+
+            var exceptions = this.unexpectedExceptionsStorage.LoadAll().ToList();
+            await this.synchronizationService.UploadInterviewerExceptionsAsync(exceptions, cancellationToken);
+            this.unexpectedExceptionsStorage.RemoveAll();
+        }
+
+        private async Task UploadBrokenInterviewPackages(IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken)
         {
             progress.Report(new SyncProgressInfo
             {
@@ -69,29 +187,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
 
                 brokenInterviewPackageStorage.Remove(brokenInterviewPackage.Id);
             }
-
-            progress.Report(new SyncProgressInfo
-            {
-                Title = SupervisorUIResources.Synchronization_UploadExceptions
-            });
-
-            var exceptions = this.unexpectedExceptionsStorage.LoadAll().ToList();
-            await this.synchronizationService.UploadInterviewerExceptionsAsync(exceptions, cancellationToken);
-            this.unexpectedExceptionsStorage.RemoveAll();
-
-            while (true)
-            {
-                var tabletInfo = tabletInfoService.GetTopRecordForSync();
-                if (tabletInfo == null)
-                    break;
-                
-                await this.synchronizationService.UploadTabletInfoAsync(tabletInfo.DeviceInfo, cancellationToken);
-
-                tabletInfoService.Remove(tabletInfo.Id);
-            }
-
-
-            await UploadSynchronizationStatistics(progress, cancellationToken);
         }
 
         private async Task UploadSynchronizationStatistics(IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken)

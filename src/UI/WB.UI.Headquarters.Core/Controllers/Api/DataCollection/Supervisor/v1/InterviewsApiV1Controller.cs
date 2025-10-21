@@ -17,6 +17,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.Synchronization.MetaInfo;
 using WB.UI.Headquarters.Code;
+using WB.UI.Shared.Web.Services;
 
 namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
 {
@@ -35,7 +36,11 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
             IJsonAllTypesSerializer synchronizationSerializer,
             IHeadquartersEventStore eventStore,
             IUserToDeviceService userToDeviceService,
-            IWebHostEnvironment webHostEnvironment) 
+            IWebHostEnvironment webHostEnvironment,
+            IImageProcessingService imageProcessingService,
+            IBrokenImageFileStorage brokenImageFileStorage,
+            IBrokenAudioFileStorage brokenAudioFileStorage,
+            IBrokenAudioAuditFileStorage brokenAudioAuditFileStorage) 
             : base(imageFileStorage,
                 audioFileStorage,
                 authorizedUser,
@@ -47,7 +52,11 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
                 eventStore,
                 audioAuditFileStorage,
                 userToDeviceService,
-                webHostEnvironment)
+                webHostEnvironment,
+                imageProcessingService, 
+                brokenImageFileStorage, 
+                brokenAudioFileStorage, 
+                brokenAudioAuditFileStorage)
         {
         }
 

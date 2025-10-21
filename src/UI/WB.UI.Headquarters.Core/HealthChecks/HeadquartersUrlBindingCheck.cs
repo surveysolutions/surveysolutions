@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
@@ -26,7 +27,7 @@ namespace WB.UI.Headquarters.HealthChecks
             var baseUrl = this.hqConfig.Value.BaseUrl;
             var requestUrl = this.contextAccessor.HttpContext.Request.GetDisplayUrl();
 
-            if (requestUrl.StartsWith(baseUrl))
+            if (requestUrl.StartsWith(baseUrl, StringComparison.OrdinalIgnoreCase))
             {
                 return Task.FromResult(HealthCheckResult.Healthy(
                     Diagnostics.hq_baseurl_check_Healthy.FormatString(baseUrl)));

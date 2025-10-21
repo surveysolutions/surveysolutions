@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
 using WB.Enumerator.Native.WebInterview;
 using WB.UI.Headquarters.API.WebInterview;
-using WB.UI.Headquarters.Models.WebInterview;
 using WB.UI.Headquarters.Services;
 
 namespace WB.UI.Headquarters.Filters
@@ -12,7 +11,6 @@ namespace WB.UI.Headquarters.Filters
     public class WebInterviewAuthorizeAttribute : ActionFilterAttribute
     {
         public string InterviewIdQueryString { get; set; }
-
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             var interviewId = string.IsNullOrWhiteSpace(InterviewIdQueryString)
@@ -27,11 +25,9 @@ namespace WB.UI.Headquarters.Filters
 
             try
             {
-                var ctx = context.HttpContext;
-                var isReview = ctx.Request.Headers.ContainsKey(@"review");
                 var services = context.HttpContext.RequestServices;
 
-                if (isReview)
+                if (IsReview(context))
                 {
                     services.GetRequiredService<IReviewAllowedService>().CheckIfAllowed(Guid.Parse(interviewId));
                 }
@@ -56,6 +52,13 @@ namespace WB.UI.Headquarters.Filters
             }
 
             context.Result = new RedirectToActionResult("Error", "WebInterview", null); 
+        }
+    
+        protected bool IsReview(ActionExecutingContext context)
+        {
+            var ctx = context.HttpContext;
+            var isReview = ctx.Request.Headers.ContainsKey(@"review");
+            return isReview;
         }
     }
 }

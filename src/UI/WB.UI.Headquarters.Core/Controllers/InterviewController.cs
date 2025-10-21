@@ -75,8 +75,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             return false;
         }
 
-
-
         [ActivePage(MenuItem.Docs)]
         [Route("Interview/Review/{id:guid}")]
         [Route("Interview/Review/{id:guid}/Cover")]
@@ -204,7 +202,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                     StartTimezone = ce.Start.Zone.Id,
                     Comment = ce.Comment
                 };
-
         }
 
         private ApproveRejectAllowed GetApproveReject(InterviewSummary interviewSummary)

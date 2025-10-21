@@ -330,6 +330,7 @@ export default {
         const interviewId = rootState.route.params.interviewId
         commit('CURRENT_SECTION', { interviewId: interviewId, section: null })
 
+        api.answer(null, 'prepareCompleteInterview')
         api.answer(null, 'completeInterview', { comment })
     },
 

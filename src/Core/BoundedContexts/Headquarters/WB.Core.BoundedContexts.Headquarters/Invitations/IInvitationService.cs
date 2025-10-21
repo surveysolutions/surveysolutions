@@ -11,6 +11,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
     {
         void CreateInvitationForWebInterview(Assignment assignment);
         int GetOrCreateInvitationForPublicLink(Assignment assignment, string interviewId);
+        Invitation GetInvitationForPublicLinkOrNull(Assignment assignment, string interviewId);
 
         int GetCountOfInvitations(QuestionnaireIdentity questionnaireIdentity);
         int GetCountOfNotSentInvitations(QuestionnaireIdentity questionnaireIdentity);

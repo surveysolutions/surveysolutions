@@ -28,12 +28,6 @@
                         </a>
                     </li>
                     <li role="presentation">
-                        <a href="#webinterview" @click="setPageActive('welcomeTextTitle', 'welcomeTextDescription')"
-                            aria-controls="webinterview" role="tab" data-bs-toggle="tab">
-                            {{ $t('Settings.WebInterview') }}
-                        </a>
-                    </li>
-                    <li role="presentation">
                         <a href="#logo" @click="setPageActive('welcomeTextTitle', 'welcomeTextDescription')"
                             aria-controls="logo" role="tab" data-bs-toggle="tab">
                             {{ $t('Settings.Logo') }}
@@ -58,7 +52,7 @@
                         v-model:geographyQuestionPeriodInSeconds="geographyQuestionPeriodInSeconds"
                         v-model:geographyQuestionAccuracyInMetersCancel="geographyQuestionAccuracyInMetersCancel"
                         v-model:esriApiKey="esriApiKey" v-model:esriApiKeyInitial="esriApiKeyInitial" />
-                    <WebInterview v-model="isEmailAllowed" />
+
                     <Logo />
                 </div>
             </div>
@@ -75,7 +69,6 @@ import Export from './Settings/Export'
 import Note from './Settings/Note'
 import Profile from './Settings/Profile'
 import Devices from './Settings/Devices'
-import WebInterview from './Settings/WebInterview'
 import Logo from './Settings/Logo'
 
 export default {
@@ -84,7 +77,6 @@ export default {
         Note,
         Profile,
         Devices,
-        WebInterview,
         Logo,
 
         Form,
@@ -100,7 +92,6 @@ export default {
             isInterviewerAutomaticUpdatesEnabled: false,
             isPartialSynchronizationEnabled: false,
             isDeviceNotificationsEnabled: false,
-            isEmailAllowed: false,
             files: [],
             geographyQuestionAccuracyInMeters: 10,
             geographyQuestionPeriodInSeconds: 10,
@@ -144,7 +135,6 @@ export default {
             this.encryptionPassword = workspaceSettings.data.exportSettings.password
             this.globalNotice = workspaceSettings.data.globalNotice
             this.isAllowInterviewerUpdateProfile = workspaceSettings.data.allowInterviewerUpdateProfile
-            this.isEmailAllowed = workspaceSettings.data.allowEmails
 
             this.isRetentionEnabled = workspaceSettings.data.exportSettings.isRetentionEnabled
             this.retentionLimitInDays = workspaceSettings.data.exportSettings.retentionLimitInDays
