@@ -95,15 +95,19 @@ export default {
             return `audio_dialog_${this.$me.id}`
         },
         audioRecordPath() {
-            return api.resources.audioRecordUri(this.interviewId, this.$me.filename) + '#' + this.$me.updatedAt.getTime()
+            return api.resources.audioRecordUri(this.interviewId, this.$me.filename, this.$me.updatedAt.getTime())
+
         },
         formattedLength() {
             if (this.$me.isAnswered) {
-                var d = moment.utc(this.$me.answer)
+                // Floor to full seconds (remove milliseconds)
+                const fullSecondsMs = Math.floor(this.$me.answer / 1000) * 1000
+                var d = moment.utc(fullSecondsMs)
                 return d.format('mm:ss')
             }
             return ''
         },
+
         humanizedLength() {
             if (this.$me.isAnswered) {
                 return moment.duration(this.$me.answer, 'milliseconds').humanize()

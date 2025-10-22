@@ -162,9 +162,6 @@
         this.node.onaudioprocess = function (e) {
             if (!recording) return
 
-
-
-
             worker.postMessage({
                 command: 'record',
                 buffer: [
@@ -251,9 +248,9 @@ if (!window.AudioRecorder) {
                 return false
             }
             var mimeTypes = [
+                'audio/aac',
                 'audio/mp4;codecs=mp4a.40.2', // AAC-LC
                 'audio/mp4',
-                'audio/aac',
                 'audio/webm;codecs=opus' // Opus as fallback
             ]
             for (var i = 0; i < mimeTypes.length; i++) {
@@ -286,7 +283,7 @@ if (!window.AudioRecorder) {
             useAACCompression = supportedMimeType !== false
 
             if (useAACCompression) {
-                console.log('Using AAC compression with codec:', supportedMimeType)
+
                 try {
                     mediaRecorder = new MediaRecorder(stream, {
                         mimeType: supportedMimeType,
@@ -300,10 +297,16 @@ if (!window.AudioRecorder) {
                     }
 
                     mediaRecorder.onstop = function () {
-                        var blob = new Blob(audioChunks, { type: supportedMimeType })
                         var duration = (Date.now() - recordingStartTime) / 1000
-                        config.doneCallback(blob, duration)
-                        audioChunks = []
+                        var blob = new Blob(audioChunks, { type: supportedMimeType })
+
+                        var audioURL = window.URL.createObjectURL(blob)
+                        var audio = new Audio(audioURL)
+                        audio.onloadedmetadata = function () {
+                            var duration = audio.duration
+                            config.doneCallback(blob, duration)
+                            audioChunks = []
+                        }
                     }
                 } catch (e) {
                     console.warn('Failed to initialize MediaRecorder, falling back to WAV:', e)
@@ -404,14 +407,17 @@ if (!window.AudioRecorder) {
         self.start = function () {
             if (useAACCompression && mediaRecorder) {
                 audioChunks = []
-                recordingStartTime = Date.now()
                 mediaRecorder.start()
+                recordingStartTime = Date.now()
                 config.startRecordingCallback()
             } else if (recorder) {
                 recorder.clear()
                 recorder.record()
+                recordingStartTime = Date.now()
                 config.startRecordingCallback()
             }
+            else
+                throw new Error('Error starting audio recording: no recorder available')
         }
 
         self.stop = function () {
@@ -420,6 +426,14 @@ if (!window.AudioRecorder) {
             } else if (recorder) {
                 recorder.stop()
                 recorder.getBuffers(gotBuffers)
+            }
+
+            // Stop all media stream tracks to release microphone
+            if (mediaStream) {
+                mediaStream.getTracks().forEach(function (track) {
+                    track.stop()
+                })
+                mediaStream = null
             }
 
             cancelAnalyserUpdates()
@@ -433,6 +447,15 @@ if (!window.AudioRecorder) {
                 recorder.stop()
                 recorder.clear()
             }
+
+            // Stop all media stream tracks to release microphone
+            if (mediaStream) {
+                mediaStream.getTracks().forEach(function (track) {
+                    track.stop()
+                })
+                mediaStream = null
+            }
+
             cancelAnalyserUpdates()
         }
 
