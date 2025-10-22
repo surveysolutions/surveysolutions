@@ -75,7 +75,7 @@ namespace WB.UI.Headquarters.Controllers
                 var audioDuration = TimeSpan.Zero;
                 if(contentType is "audio/wav" or "audio/x-wav")
                 {
-                    var audioInfo = await this.audioProcessingService.CompressAudioFileAsync(bytes, file.ContentType);
+                    var audioInfo = await this.audioProcessingService.CompressAudioFileAsync(bytes, contentType);
                     audioFileStorage.StoreInterviewBinaryData(id, fileName, audioInfo.Binary, audioInfo.MimeType); 
                     audioDuration = audioInfo.Duration == TimeSpan.Zero 
                         ? (Double.TryParse(duration, out var dur) ? TimeSpan.FromSeconds(dur) : TimeSpan.Zero)
