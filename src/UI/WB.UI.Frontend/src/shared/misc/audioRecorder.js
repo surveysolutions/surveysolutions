@@ -351,8 +351,13 @@ if (!window.AudioRecorder) {
             var audioURL = window.URL.createObjectURL(blob)
             var audio = new Audio(audioURL)
             audio.onloadedmetadata = function () {
-                var duration = audio.duration
-                config.doneCallback(blob, duration)
+                let calculatedDuration = audio.duration
+                if (calculatedDuration === Infinity) {
+                    // Firefox bug: duration is Infinity for blobs
+                    calculatedDuration = (Date.now() - recordingStartTime) / 1000
+                }
+
+                config.doneCallback(blob, calculatedDuration)
             }
         }
 
