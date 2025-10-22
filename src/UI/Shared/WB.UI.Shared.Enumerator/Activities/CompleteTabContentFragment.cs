@@ -16,7 +16,7 @@ using Fragment = Android.App.Fragment;
 
 namespace WB.UI.Shared.Enumerator.Activities
 {
-    [Register("wb.ui.enumerator.activities.interview.CompleteInterviewFragment")]
+    [Register("wb.ui.enumerator.activities.interview.CompleteTabContentFragment")]
     public class CompleteTabContentFragment : BaseFragment<TabViewModel>
     {
         protected override int ViewResourceId => Resource.Layout.interview_complete_tab_content;

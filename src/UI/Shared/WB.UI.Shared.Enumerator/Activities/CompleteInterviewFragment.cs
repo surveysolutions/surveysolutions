@@ -246,7 +246,11 @@ namespace WB.UI.Shared.Enumerator.Activities
             }
 
             totalHeight += recyclerView.PaddingTop + recyclerView.PaddingBottom;
-
+            if (recyclerView.LayoutParameters is ViewGroup.MarginLayoutParams lp)
+            {
+                totalHeight += lp.TopMargin + lp.BottomMargin;
+            }
+            
             return totalHeight;
         }
         
@@ -259,8 +263,6 @@ namespace WB.UI.Shared.Enumerator.Activities
         {
             viewPager?.PostDelayed(() =>
             {
-                
-
                 int currentItem = viewPager.CurrentItem; 
                 var currentView = (viewPager.GetChildAt(0) as ViewGroup)?.GetChildAt(currentItem);
                 var recyclerView = currentView?.FindViewById<MvxRecyclerView>(Resource.Id.recyclerView);
@@ -285,7 +287,7 @@ namespace WB.UI.Shared.Enumerator.Activities
                 }
                 
                 var viewPagerLayoutParams = viewPager.LayoutParameters;
-                viewPagerLayoutParams.Height = totalHeight + 76;
+                viewPagerLayoutParams.Height = totalHeight + 24;
                 viewPagerLayoutParams.Width = ViewGroup.LayoutParams.MatchParent;
                 viewPager.LayoutParameters = viewPagerLayoutParams;
                 
