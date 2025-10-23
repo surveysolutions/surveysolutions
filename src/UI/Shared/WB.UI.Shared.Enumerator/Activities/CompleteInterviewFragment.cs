@@ -50,19 +50,14 @@ namespace WB.UI.Shared.Enumerator.Activities
         private void RegisterPageChangeCallback()
         {
             if (viewPager == null) return;
-            pageChangeCallback = new HeightPageChangeCallback(this);
+            pageChangeCallback = new CompleteInterviewPageChangeCallback(this);
             viewPager.RegisterOnPageChangeCallback(pageChangeCallback);
         }
 
-        private class HeightPageChangeCallback : ViewPager2.OnPageChangeCallback
+        internal void OnPageChangedFromCallback()
         {
-            private readonly CompleteInterviewFragment fragment;
-            public HeightPageChangeCallback(CompleteInterviewFragment fragment) => this.fragment = fragment;
-            public override void OnPageSelected(int position)
-            {
-                fragment.UpdateTabViews();
-                fragment.viewPager?.Post(fragment.RecalculateRecyclerViewHeight);
-            }
+            UpdateTabViews();
+            viewPager?.Post(RecalculateRecyclerViewHeight);
         }
 
         public class TabConfigurationStrategy2(CompleteInterviewViewModel viewModel)
