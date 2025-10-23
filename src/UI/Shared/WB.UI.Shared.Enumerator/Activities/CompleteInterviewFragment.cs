@@ -30,25 +30,41 @@ namespace WB.UI.Shared.Enumerator.Activities
 
         private TabLayout tabLayout;
         private ViewPager2 viewPager;
+        private ViewPager2.OnPageChangeCallback pageChangeCallback;
 
-        
-        
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
             var view = base.OnCreateView(inflater, container, savedInstanceState);
-            //var view = inflater.Inflate(Resource.Layout.interview_complete, container, false);
-
             tabLayout = view.FindViewById<TabLayout>(Resource.Id.tabLayout);
             viewPager = view.FindViewById<ViewPager2>(Resource.Id.viewPager);
             viewPager.OffscreenPageLimit = 2;
             viewPager.UserInputEnabled = false;
 
             SetupTabs();
-            RecalculateRecyclerViewHeight();
+            RegisterPageChangeCallback();
+            viewPager.Post(RecalculateRecyclerViewHeight);
 
             return view;
         }
-        
+
+        private void RegisterPageChangeCallback()
+        {
+            if (viewPager == null) return;
+            pageChangeCallback = new HeightPageChangeCallback(this);
+            viewPager.RegisterOnPageChangeCallback(pageChangeCallback);
+        }
+
+        private class HeightPageChangeCallback : ViewPager2.OnPageChangeCallback
+        {
+            private readonly CompleteInterviewFragment fragment;
+            public HeightPageChangeCallback(CompleteInterviewFragment fragment) => this.fragment = fragment;
+            public override void OnPageSelected(int position)
+            {
+                fragment.UpdateTabViews();
+                fragment.viewPager?.Post(fragment.RecalculateRecyclerViewHeight);
+            }
+        }
+
         public class TabConfigurationStrategy2(CompleteInterviewViewModel viewModel)
             : Java.Lang.Object, TabLayoutMediator.ITabConfigurationStrategy
         {
@@ -124,7 +140,6 @@ namespace WB.UI.Shared.Enumerator.Activities
         {
             var viewModel = ViewModel;
             var tabsViewModels = viewModel.Tabs.ToList();
-            //var adapter = new TabsPagerAdapter(this.Context, this.ChildFragmentManager, this.Lifecycle, tabsViewModels);
             var adapter = new TabsPagerAdapter(this.Context, this.ChildFragmentManager, this.Lifecycle, tabsViewModels);
             viewPager.Adapter = adapter;
 
@@ -137,12 +152,11 @@ namespace WB.UI.Shared.Enumerator.Activities
                 var position = e.Tab.Position;
                 if (!((TabViewModel)viewModel.Tabs[position]).IsEnabled)
                 {
-                    e.Tab.Select(); // prevent selection
-                    viewPager.CurrentItem = viewPager.CurrentItem; // reset
+                    e.Tab.Select(); 
+                    viewPager.CurrentItem = viewPager.CurrentItem; 
                 }
 
                 UpdateTabViews();
-                RecalculateRecyclerViewHeight();
             };
             
             var firstEnabledTab = tabsViewModels.FirstOrDefault(t => t.IsEnabled);
@@ -217,86 +231,142 @@ namespace WB.UI.Shared.Enumerator.Activities
             //ViewModel.CompleteGroups.CollectionChanged += AdjustRecyclerViewHeight;
         }
 
-        private int MeasureItemHeight(MvxRecyclerView recyclerView, View view)
-        {
-            view.Measure(
-                View.MeasureSpec.MakeMeasureSpec(recyclerView.Width, MeasureSpecMode.Exactly),
-                View.MeasureSpec.MakeMeasureSpec(0, MeasureSpecMode.Unspecified));
-            var itemHeight = view.MeasuredHeight + view.PaddingTop + view.PaddingBottom;
-            if (view.LayoutParameters is ViewGroup.MarginLayoutParams lp)
-            {
-                itemHeight += lp.TopMargin + lp.BottomMargin;
-            }
-            return itemHeight;
-        }
-
         private int CalculateTotalHeight(MvxRecyclerView recyclerView)
         {
             int totalHeight = 0;
             var adapter = recyclerView.GetAdapter();
-
             if (adapter == null) return 0;
+
+            int width = recyclerView.MeasuredWidth > 0 ? recyclerView.MeasuredWidth : recyclerView.Width;
+            if (width <= 0) return 0;
+            int widthSpec = View.MeasureSpec.MakeMeasureSpec(width, MeasureSpecMode.Exactly);
 
             for (int i = 0; i < adapter.ItemCount; i++)
             {
                 int viewType = adapter.GetItemViewType(i);
-                RecyclerView.ViewHolder viewHolder = (RecyclerView.ViewHolder)adapter.CreateViewHolder(recyclerView, viewType);
+                var viewHolder = (RecyclerView.ViewHolder)adapter.CreateViewHolder(recyclerView, viewType);
                 adapter.BindViewHolder(viewHolder, i);
-                totalHeight += MeasureItemHeight(recyclerView, viewHolder.ItemView);
+                var itemView = viewHolder.ItemView;
+                itemView.Measure(widthSpec, View.MeasureSpec.MakeMeasureSpec(0, MeasureSpecMode.Unspecified));
+                int h = itemView.MeasuredHeight;
+                if (itemView.LayoutParameters is ViewGroup.MarginLayoutParams mlp)
+                    h += mlp.TopMargin + mlp.BottomMargin;
+                totalHeight += h;
             }
 
             totalHeight += recyclerView.PaddingTop + recyclerView.PaddingBottom;
             if (recyclerView.LayoutParameters is ViewGroup.MarginLayoutParams lp)
-            {
                 totalHeight += lp.TopMargin + lp.BottomMargin;
-            }
-            
+
             return totalHeight;
         }
-        
-        private void AdjustRecyclerViewHeight(object sender, NotifyCollectionChangedEventArgs e)
+
+        private int GetRecyclerContentHeight(MvxRecyclerView recyclerView)
         {
-            RecalculateRecyclerViewHeight();
+            int scrollRange = recyclerView.ComputeVerticalScrollRange();
+            if (scrollRange > 0)
+            {
+                return scrollRange; 
+            }
+            return CalculateTotalHeight(recyclerView);
+        }
+
+        private int GetVisibleRecyclerHeight(MvxRecyclerView recyclerView)
+        {
+            int childCount = recyclerView.ChildCount;
+            if (childCount == 0) return 0;
+            int minTop = int.MaxValue;
+            int maxBottom = 0;
+            for (int i = 0; i < childCount; i++)
+            {
+                var child = recyclerView.GetChildAt(i);
+                if (child == null) continue;
+                int top = child.Top;
+                int bottom = child.Bottom;
+                if (top < minTop) minTop = top;
+                if (bottom > maxBottom) maxBottom = bottom;
+            }
+            if (minTop == int.MaxValue) return 0;
+            int visibleHeight = (maxBottom - minTop) + recyclerView.PaddingTop + recyclerView.PaddingBottom;
+            if (recyclerView.LayoutParameters is ViewGroup.MarginLayoutParams lp)
+                visibleHeight += lp.TopMargin + lp.BottomMargin;
+            return visibleHeight;
         }
 
         private void RecalculateRecyclerViewHeight()
         {
-            viewPager?.PostDelayed(() =>
+            viewPager?.Post(() =>
             {
-                int currentItem = viewPager.CurrentItem; 
-                var currentView = (viewPager.GetChildAt(0) as ViewGroup)?.GetChildAt(currentItem);
+                if (viewPager == null) return;
+                int currentItem = viewPager.CurrentItem;
+                var currentViewGroup = viewPager.GetChildAt(0) as ViewGroup; 
+                var currentView = currentViewGroup?.GetChildAt(currentItem);
                 var recyclerView = currentView?.FindViewById<MvxRecyclerView>(Resource.Id.recyclerView);
-
-                if (recyclerView?.Visibility != ViewStates.Visible)
-                    return;
-                
-                var layoutParams = recyclerView.LayoutParameters;
-                var totalHeight = CalculateTotalHeight(recyclerView);
-                layoutParams.Height = totalHeight;
-                layoutParams.Width = ViewGroup.LayoutParams.MatchParent;
-                recyclerView.LayoutParameters = layoutParams;
-                
-                var moreLabel = currentView?.FindViewById<TextView>(Resource.Id.tab_content_more_label);
-                if (moreLabel?.Visibility == ViewStates.Visible)
+                if (recyclerView == null || recyclerView.Visibility != ViewStates.Visible)
                 {
-                    moreLabel.Measure(
-                        View.MeasureSpec.MakeMeasureSpec(View.Width, MeasureSpecMode.Exactly),
-                        View.MeasureSpec.MakeMeasureSpec(0, MeasureSpecMode.Unspecified));
-                
-                    totalHeight += moreLabel.MeasuredHeight + 36;
+                    viewPager.PostDelayed(RecalculateRecyclerViewHeight, 50);
+                    return;
                 }
+
+                if (recyclerView.Width == 0 && recyclerView.MeasuredWidth == 0)
+                {
+                    recyclerView.Post(RecalculateRecyclerViewHeight);
+                    return;
+                }
+
+                int contentHeight = GetRecyclerContentHeight(recyclerView);
+                if (contentHeight == 0)
+                {
+                    recyclerView.PostDelayed(RecalculateRecyclerViewHeight, 50);
+                    return;
+                }
+
+                int visibleHeight = GetVisibleRecyclerHeight(recyclerView);
+                if (visibleHeight > 0 && visibleHeight < contentHeight)
+                    contentHeight = visibleHeight;
+
+                var moreLabel = currentView?.FindViewById<TextView>(Resource.Id.tab_content_more_label);
+                int extraHeight = 0;
+                if (moreLabel?.Visibility == ViewStates.Visible)
+                    extraHeight += GetViewHeight(moreLabel, viewPager);
                 
-                var viewPagerLayoutParams = viewPager.LayoutParameters;
-                viewPagerLayoutParams.Height = totalHeight + 24;
-                viewPagerLayoutParams.Width = ViewGroup.LayoutParams.MatchParent;
-                viewPager.LayoutParameters = viewPagerLayoutParams;
-                
+                var rvParams = recyclerView.LayoutParameters;
+                rvParams.Height = contentHeight; 
+                rvParams.Width = ViewGroup.LayoutParams.MatchParent;
+                recyclerView.LayoutParameters = rvParams;
+
+                var vpParams = viewPager.LayoutParameters;
+                vpParams.Height = contentHeight + extraHeight + 90; 
+                vpParams.Width = ViewGroup.LayoutParams.MatchParent;
+                viewPager.LayoutParameters = vpParams;
+
                 viewPager.RequestLayout();
-            }, 100);
+            });
+        }
+        
+        private int GetViewHeight(View view, View parent)
+        {
+            int parentWidth = parent.MeasuredWidth > 0 ? parent.MeasuredWidth : parent.Width;
+            if (parentWidth <= 0)
+                parentWidth = ViewGroup.LayoutParams.MatchParent;
+
+            view.Measure(
+                View.MeasureSpec.MakeMeasureSpec(parentWidth, MeasureSpecMode.Exactly),
+                View.MeasureSpec.MakeMeasureSpec(0, MeasureSpecMode.Unspecified));
+
+            int itemHeight = view.MeasuredHeight;
+            if (view.LayoutParameters is ViewGroup.MarginLayoutParams lp)
+                itemHeight += lp.TopMargin + lp.BottomMargin;
+            return itemHeight;
         }
 
         protected override void Dispose(bool disposing)
         {
+            if (disposing && viewPager != null && pageChangeCallback != null)
+            {
+                viewPager.UnregisterOnPageChangeCallback(pageChangeCallback);
+                pageChangeCallback = null;
+            }
             base.Dispose(disposing);
         }
     }
