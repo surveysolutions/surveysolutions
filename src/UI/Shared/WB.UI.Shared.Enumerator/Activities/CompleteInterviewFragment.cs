@@ -328,11 +328,7 @@ namespace WB.UI.Shared.Enumerator.Activities
                     recyclerView.PostDelayed(RecalculateRecyclerViewHeight, 50);
                     return;
                 }
-
-                int visibleHeight = GetVisibleRecyclerHeight(recyclerView);
-                if (visibleHeight > 0 && visibleHeight < contentHeight)
-                    contentHeight = visibleHeight;
-
+                
                 var moreLabel = currentView?.FindViewById<TextView>(Resource.Id.tab_content_more_label);
                 int extraHeight = 0;
                 if (moreLabel?.Visibility == ViewStates.Visible)
