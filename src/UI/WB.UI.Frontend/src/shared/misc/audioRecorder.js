@@ -303,7 +303,11 @@ if (!window.AudioRecorder) {
                         var audioURL = window.URL.createObjectURL(blob)
                         var audio = new Audio(audioURL)
                         audio.onloadedmetadata = function () {
-                            var duration = audio.duration
+                            var calculatedDuration = audio.duration
+                            if (calculatedDuration === Infinity) {
+                                // Firefox bug: duration is Infinity for blobs
+                                calculatedDuration = duration
+                            }
                             config.doneCallback(blob, duration)
                             audioChunks = []
                         }
