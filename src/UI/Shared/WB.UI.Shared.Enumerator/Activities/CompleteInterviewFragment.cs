@@ -152,21 +152,29 @@ namespace WB.UI.Shared.Enumerator.Activities
                 var position = e.Tab.Position;
                 if (!((TabViewModel)viewModel.Tabs[position]).IsEnabled)
                 {
-                    e.Tab.Select(); 
-                    viewPager.CurrentItem = viewPager.CurrentItem; 
+                    viewPager.Post(() => viewPager.SetCurrentItem(viewPager.CurrentItem, false));
+                    return;
                 }
-
                 UpdateTabViews();
             };
             
-            var firstEnabledTab = tabsViewModels.FirstOrDefault(t => t.IsEnabled);
-            if (firstEnabledTab != null)
+            int firstNonEmptyIndex = tabsViewModels.FindIndex(t => t.IsEnabled);
+            if (firstNonEmptyIndex > 0)
             {
-                var indexOf = tabsViewModels.IndexOf(firstEnabledTab);
-                var tab = tabLayout.GetTabAt(indexOf);
-                tab?.Select();
+                viewPager.Post(() =>
+                {
+                    if (firstNonEmptyIndex < viewModel.Tabs.Count)
+                    {
+                        viewPager.SetCurrentItem(firstNonEmptyIndex, false);
+                        UpdateTabViews();
+                        RecalculateRecyclerViewHeight();
+                    }
+                });
             }
-            UpdateTabViews();
+            else
+            {
+                UpdateTabViews();
+            }
         }
         
         private View CreateTabView(string title, string count, bool isSelected)
