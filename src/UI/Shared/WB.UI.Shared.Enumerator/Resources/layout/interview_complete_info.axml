@@ -39,9 +39,6 @@
                 tabMode="scrollable"
                 local:tabIndicatorColor="@android:color/white"
                 local:tabIndicatorHeight="4dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
                  />
         <View style="@style/Interview_Complete_Divider"
               android:layout_width ="@dimen/Interview_Entity_margin_left"
