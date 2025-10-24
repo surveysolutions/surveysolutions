@@ -229,6 +229,7 @@ if (!window.AudioRecorder) {
         var mediaRecorder = null
         var mediaStream = null
         var audioChunks = []
+        var canceled = false
         var useAACCompression = false
         var recordingStartTime = null
 
@@ -291,25 +292,27 @@ if (!window.AudioRecorder) {
                     })
 
                     mediaRecorder.ondataavailable = function (event) {
-                        if (event.data.size > 0) {
+                        if (event.data.size > 0 && !canceled) {
                             audioChunks.push(event.data)
                         }
                     }
 
                     mediaRecorder.onstop = function () {
-                        var duration = (Date.now() - recordingStartTime) / 1000
-                        var blob = new Blob(audioChunks, { type: supportedMimeType })
+                        if (audioChunks.length > 0 && !canceled) {
+                            var duration = (Date.now() - recordingStartTime) / 1000
+                            var blob = new Blob(audioChunks, { type: supportedMimeType })
 
-                        var audioURL = window.URL.createObjectURL(blob)
-                        var audio = new Audio(audioURL)
-                        audio.onloadedmetadata = function () {
-                            var calculatedDuration = audio.duration
-                            if (calculatedDuration === Infinity) {
-                                // Firefox bug: duration is Infinity for blobs
-                                calculatedDuration = duration
+                            var audioURL = window.URL.createObjectURL(blob)
+                            var audio = new Audio(audioURL)
+                            audio.onloadedmetadata = function () {
+                                var calculatedDuration = audio.duration
+                                if (calculatedDuration === Infinity) {
+                                    // Firefox bug: duration is Infinity for blobs
+                                    calculatedDuration = duration
+                                }
+                                config.doneCallback(blob, duration)
+                                audioChunks = []
                             }
-                            config.doneCallback(blob, duration)
-                            audioChunks = []
                         }
                     }
                 } catch (e) {
@@ -414,6 +417,7 @@ if (!window.AudioRecorder) {
         }
 
         self.start = function () {
+            canceled = false
             if (useAACCompression && mediaRecorder) {
                 audioChunks = []
                 mediaRecorder.start()
@@ -430,6 +434,7 @@ if (!window.AudioRecorder) {
         }
 
         self.stop = function () {
+            canceled = false
             if (useAACCompression && mediaRecorder && mediaRecorder.state !== 'inactive') {
                 mediaRecorder.stop()
             } else if (recorder) {
@@ -449,9 +454,10 @@ if (!window.AudioRecorder) {
         }
 
         self.cancel = function () {
+            canceled = true
             if (useAACCompression && mediaRecorder && mediaRecorder.state !== 'inactive') {
-                mediaRecorder.stop()
                 audioChunks = []
+                mediaRecorder.stop()
             } else if (recorder) {
                 recorder.stop()
                 recorder.clear()
