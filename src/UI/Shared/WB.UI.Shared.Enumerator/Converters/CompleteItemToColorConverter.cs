@@ -8,7 +8,7 @@ public class CompleteItemToColorConverter : MvxValueConverter<EntityWithErrorsVi
 {
     protected override int Convert(EntityWithErrorsViewModel item, Type targetType, object parameter, CultureInfo culture)
     {
-        if (string.IsNullOrWhiteSpace(item.Comment)) 
+        if (!string.IsNullOrWhiteSpace(item.Comment)) 
             return Resource.Drawable.complete_item_status_commented; 
         if (item.IsError) 
             return Resource.Drawable.complete_item_status_error; 
