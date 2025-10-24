@@ -333,9 +333,12 @@ namespace WB.UI.Shared.Enumerator.Activities
                 rvParams.Height = contentHeight; 
                 rvParams.Width = ViewGroup.LayoutParams.MatchParent;
                 recyclerView.LayoutParameters = rvParams;
+                
+                var tabContentLinearLayout = currentView?.FindViewById<LinearLayout>(Resource.Id.tabContentLinearLayout);
+                var tabContentPaddings = tabContentLinearLayout.PaddingBottom + tabContentLinearLayout.PaddingTop;
 
                 var vpParams = viewPager.LayoutParameters;
-                vpParams.Height = contentHeight + extraHeight + 90; 
+                vpParams.Height = contentHeight + extraHeight + tabContentPaddings; 
                 vpParams.Width = ViewGroup.LayoutParams.MatchParent;
                 viewPager.LayoutParameters = vpParams;
 
