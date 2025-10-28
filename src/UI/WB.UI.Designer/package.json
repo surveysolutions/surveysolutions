@@ -19,7 +19,7 @@
         "postcss": "^8.4.39",
         "rimraf": "^6.0.1",
         "sass": "1.55.0",
-        "vite": "6.3.5",
+        "vite": "6.4.1",
         "xmldoc": "^1.3.0"
     },
     "scripts": {
@@ -44,7 +44,7 @@
         "@vee-validate/rules": "^4.15.0",
         "@vueuse/core": "^12.5.0",
         "ace-builds": "^1.37.5",
-        "axios": "1.8.2",
+        "axios": "1.13.0",
         "bootstrap": "^5.3.3",
         "bootstrap-less": "^3.3.8",
         "bootstrap-select": "^1.13.18",
