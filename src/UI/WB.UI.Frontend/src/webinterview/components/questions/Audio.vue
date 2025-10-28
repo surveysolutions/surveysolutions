@@ -15,7 +15,7 @@
                     <wb-remove-answer />
                 </div>
                 <div v-if="$me.isAnswered" class="action-btn-holder time-question">
-                    <audio controls preload="auto" style="width:480px" :src="audioRecordPath">
+                    <audio controls preload="auto" style="width:100%" :src="audioRecordPath">
                     </audio>
                 </div>
                 <wb-lock />

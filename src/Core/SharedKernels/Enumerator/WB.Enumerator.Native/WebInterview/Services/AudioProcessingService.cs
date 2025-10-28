@@ -45,11 +45,11 @@ namespace WB.Enumerator.Native.WebInterview.Services
             audioFilesInQueue.Inc();
             return tcs.Task;
         }
-
+        
         private async Task<AudioFileInformation> CompressData(byte[] audio, string mimeType)
         {
             var destFile = Path.ChangeExtension(Path.Combine(TempFilesFolder, "resultAudio"), ".aac");
-            var sourceFile = Path.ChangeExtension(Path.Combine(TempFilesFolder, "incomingAudio"), ".wav");
+            var sourceFile = Path.ChangeExtension(Path.Combine(TempFilesFolder, "incomingAudio"), ".tmp");
             var audioResult = new AudioFileInformation();
 
             try
