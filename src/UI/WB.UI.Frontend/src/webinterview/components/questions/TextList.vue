@@ -113,7 +113,11 @@ export default {
             const target = $(evnt.target)
             let text = target.val()
 
-            if (!text || !text.trim()) return
+            if (!text || !text.trim()) {
+                this.$refs.inputTextArea.val = undefined
+                target.val(undefined)
+                return
+            }
 
             let newRowValue = 1
             if (this.$me.rows != undefined && this.$me.rows.length > 0)
