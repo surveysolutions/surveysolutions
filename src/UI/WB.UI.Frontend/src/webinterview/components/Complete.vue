@@ -11,6 +11,8 @@
                 <h2>{{ $store.state.webinterview.interviewKey }}</h2>
             </div>
         </div>
+
+
         <div class="wrapper-info" v-if="completeGroups.length > 0">
             <div class="container-info info-block">
                 <div class="gray-uppercase">
@@ -21,6 +23,24 @@
                 </div>
             </div>
         </div>
+
+        <ul class="wrapper-info wi-complete-tabs" role="tablist">
+            <li v-for="(completeGroup, idx) in completeGroups" :key="idx" class="tab-item"
+                :class="['wi-complete-tab', completeGroup.cssClass, { active: idx === activeCompleteGroupIndex, disabled: !(completeGroup.items?.length > 0) }]"
+                role="presentation" @click.stop="setActive(idx)">
+                <div class="tab-count">{{
+                    moreThen30(completeGroup.items.length) }}</div>
+                <div class="tab-title" v-dompurify-html="completeGroup.title"></div>
+            </li>
+        </ul>
+
+        <ul class="tab-content wrapper-info list-unstyled marked-questions">
+            <li v-for="item in activeGroup.items" :key="item.id">
+                <a v-if="item.parentId || item.isPrefilled" href="javascript:void(0);" @click="navigateTo(item)"
+                    v-dompurify-html="item.title"></a>
+                <span v-else v-dompurify-html="item.title"></span>
+            </li>
+        </ul>
 
         <template v-for="group in completeGroups">
             <ExpandableList :title="group.title" :cssClass="group.cssClass">
@@ -83,6 +103,135 @@
     </div>
 </template>
 
+<style scoped>
+.tab-item {
+    width: 159px;
+    height: 75px;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    opacity: 1;
+    top: 0px;
+    left: 0px;
+    overflow: hidden;
+    margin-top: 18px;
+}
+
+.tab-item.active {
+    height: 85px;
+    margin-top: 8px;
+    padding-top: 18px;
+}
+
+.tab-content {
+    margin-top: 10px;
+    margin-bottom: 20px;
+    background-color: #fff;
+}
+
+.wi-complete-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 20px 0 0px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    list-style: none;
+    border-bottom: 1px solid #d9d9d9;
+    gap: 4px;
+}
+
+.wi-complete-tab {
+    position: relative;
+    cursor: pointer;
+    padding: 8px 14px 10px;
+    font-size: 14px;
+    line-height: 1.2;
+    background: #f5f5f7;
+    border: 1px solid #d9d9d9;
+    border-bottom: none;
+    border-radius: 6px 6px 0 0;
+    color: #555;
+    align-items: center;
+    gap: 6px;
+    transition: background .15s ease, color .15s ease;
+}
+
+.wi-complete-tab:hover:not(.active) {
+    background: #ebebee;
+}
+
+.wi-complete-tab.active {
+    background: #fff;
+    color: #222;
+    font-weight: 600;
+    box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.06);
+}
+
+.wi-complete-tab.active::before {
+    content: '';
+    margin: 10px 5px;
+    position: absolute;
+    top: -5px;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: currentColor;
+    /* indicator inherits text color */
+    border-radius: 5px;
+}
+
+/* Color mappings based on cssClass */
+.wi-complete-tab.errors {
+    color: #DB3913;
+}
+
+.wi-complete-tab.unanswered {
+    color: #2878BE;
+}
+
+.wi-complete-tab.critical-rule-errors {
+    color: #DB3913;
+}
+
+.tab-item.disabled {
+    color: #949494;
+}
+
+
+/* Fallback default already defined as #555 in base */
+
+.wi-complete-tab .tab-title {
+    display: inline-block;
+    width: 130px;
+    font-family: Roboto;
+    font-weight: Medium;
+    font-size: 14px;
+    opacity: 1;
+    text-align: left;
+}
+
+.wi-complete-tab .tab-count {
+    font-family: Roboto;
+    font-weight: Black;
+    font-size: 18px;
+    opacity: 1;
+    text-align: left;
+}
+
+.wi-complete-tab.active .tab-count {}
+
+@media (max-width: 720px) {
+    .wi-complete-tabs {
+        gap: 2px;
+    }
+
+    .wi-complete-tab {
+        font-size: 13px;
+        padding: 6px 10px 8px;
+    }
+}
+</style>
+
 <script lang="js">
 import modal from '@/shared/modal'
 import SectionProgress from './SectionLoadProgress'
@@ -99,6 +248,7 @@ export default {
             comment: '',
             switchToWeb: false,
             wasCriticalityInfoLoaded: false,
+            activeCompleteGroupIndex: null,
         }
     },
     beforeMount() {
@@ -106,6 +256,11 @@ export default {
         this.fetchCompleteInfo()
     },
     watch: {
+        completeGroups(newVal) {
+            if (this.activeCompleteGroupIndex === null && Array.isArray(newVal) && newVal.length > 0) {
+                this.activeCompleteGroupIndex = 0
+            }
+        },
         $route(to, from) {
             this.fetchCompleteInfo()
         },
@@ -130,39 +285,32 @@ export default {
         completeGroups() {
             let groups = []
 
-            if (this.criticalityInfo?.unansweredCriticalQuestions.length > 0) {
-                groups.push({
-                    title: this.$t('WebInterviewUI.Complete_CriticalUnansweredQuestions', { count: this.moreThen30(this.criticalityInfo.unansweredCriticalQuestions.length) }),
-                    items: this.criticalityInfo.unansweredCriticalQuestions,
-                    cssClass: 'errors'
-                })
-            }
+            const criticalFailed = this.criticalityInfo?.failedCriticalRules || []
+            const criticalUnanswered = this.criticalityInfo?.unansweredCriticalQuestions || []
+            const critical = criticalFailed.concat(criticalUnanswered)
+            groups.push({
+                title: this.$t('WebInterviewUI.Complete_CriticalErrors', { count: this.moreThen30(critical.length) }),
+                items: critical,
+                cssClass: 'errors'
+            })
 
-            if (this.criticalityInfo?.failedCriticalRules.length > 0) {
-                groups.push({
-                    title: this.$t('WebInterviewUI.Complete_FailedCriticalRules', { count: this.moreThen30(this.criticalityInfo.failedCriticalRules.length) }),
-                    items: this.criticalityInfo.failedCriticalRules,
-                    cssClass: 'critical-rule-errors'
-                })
-            }
+            groups.push({
+                title: this.$t('WebInterviewUI.Complete_QuestionsWithErrors', { count: this.moreThen30(this.completeInfo.errorsCount) }),
+                items: this.completeInfo.entitiesWithError,
+                cssClass: 'errors'
+            })
 
-            if (this.completeInfo.unansweredCount > 0) {
-                groups.push({
-                    title: this.$t('WebInterviewUI.Complete_UnansweredQuestions', { count: this.moreThen30(this.completeInfo.unansweredCount) }),
-                    items: this.completeInfo.unansweredQuestions,
-                    cssClass: 'unanswered'
-                })
-            }
-
-            if (this.completeInfo.errorsCount > 0) {
-                groups.push({
-                    title: this.$t('WebInterviewUI.Complete_QuestionsWithErrors', { count: this.moreThen30(this.completeInfo.errorsCount) }),
-                    items: this.completeInfo.entitiesWithError,
-                    cssClass: 'errors'
-                })
-            }
+            groups.push({
+                title: this.$t('WebInterviewUI.Complete_UnansweredQuestions', { count: this.moreThen30(this.completeInfo.unansweredCount) }),
+                items: this.completeInfo.unansweredQuestions,
+                cssClass: 'unanswered'
+            })
 
             return groups;
+        },
+        activeGroup() {
+            const active = this.completeGroups[this.activeCompleteGroupIndex]
+            return active || { items: [] }
         },
         doesSupportCriticality() {
             return this.$store.state.webinterview.doesSupportCriticality == true
@@ -255,6 +403,13 @@ export default {
         },
         doesShowCompleteComment() {
             return !this.switchToWeb
+        },
+        overallProgressPercent() {
+            const answered = this.completeInfo?.answeredCount || 0
+            const unanswered = this.completeInfo?.unansweredCount || 0
+            const total = answered + unanswered
+            if (total === 0) return 0
+            return Math.round((answered / total) * 100)
         }
     },
     methods: {
@@ -331,7 +486,14 @@ export default {
             if (value >= 30)
                 return '30+'
             return value + ''
-        }
+        },
+
+        setActive(index) {
+            const group = this.completeGroups[index]
+            if (!group) return
+            if (!Array.isArray(group.items) || group.items.length === 0) return
+            this.activeCompleteGroupIndex = index
+        },
     },
 }
 
