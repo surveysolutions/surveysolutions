@@ -8,7 +8,7 @@ using WB.Core.SharedKernels.Configs;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 
-namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
+namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories;
 
 public abstract class InterviewFileStorage: IInterviewFileStorage
 {
@@ -49,8 +49,10 @@ public abstract class InterviewFileStorage: IInterviewFileStorage
                     new InterviewBinaryDataDescriptor(
                         interviewId, 
                         fileSystemAccessor.GetFileName(fileName),
-                        ContentType,
-                        () => Task.FromResult(fileSystemAccessor.ReadAllBytes(fileName)))).ToList();
+                        GetContentType(fileName),
+                        () => Task.FromResult(fileSystemAccessor.ReadAllBytes(fileName)),
+                        null))
+            .ToList();
         return Task.FromResult(interviewBinaryDataDescriptors);
     }
 
@@ -100,5 +102,5 @@ public abstract class InterviewFileStorage: IInterviewFileStorage
     }
 
     protected abstract string GetPathToInterviewDirectory(Guid interviewId, string baseDirectory);
-    protected abstract string ContentType { get; }
+    protected abstract string GetContentType(string filename);
 }

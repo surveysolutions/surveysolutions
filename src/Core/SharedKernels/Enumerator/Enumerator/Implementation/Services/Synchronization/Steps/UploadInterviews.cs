@@ -20,7 +20,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
     public abstract class UploadInterviews : SynchronizationStep
     {
         private readonly IInterviewerInterviewAccessor interviewFactory;
-        private readonly IPlainStorage<InterviewMultimediaView> interviewMultimediaViewStorage;
         private readonly IImageFileStorage imagesStorage;
         private readonly IAudioFileStorage audioFileStorage;
         private readonly IAudioAuditFileStorage audioAuditFileStorage;
@@ -28,7 +27,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
         private readonly IPrincipal principal;
 
         protected UploadInterviews(IInterviewerInterviewAccessor interviewFactory,
-            IPlainStorage<InterviewMultimediaView> interviewMultimediaViewStorage,
             ILogger logger,
             IImageFileStorage imagesStorage,
             IAudioFileStorage audioFileStorage,
@@ -39,7 +37,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             int sortOrder) : base(sortOrder, synchronizationService, logger)
         {
             this.interviewFactory = interviewFactory ?? throw new ArgumentNullException(nameof(interviewFactory));
-            this.interviewMultimediaViewStorage = interviewMultimediaViewStorage ?? throw new ArgumentNullException(nameof(interviewMultimediaViewStorage));
             this.imagesStorage = imagesStorage ?? throw new ArgumentNullException(nameof(imagesStorage));
             this.audioFileStorage = audioFileStorage ?? throw new ArgumentNullException(nameof(audioFileStorage));
             this.audioAuditFileStorage = audioAuditFileStorage;
@@ -189,18 +186,17 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             IProgress<SyncProgressInfo> progress,
             CancellationToken cancellationToken)
         {
-            var imageViews = this.interviewMultimediaViewStorage.Where(image => image.InterviewId == interview.InterviewId);
+            var imageViews = await this.imagesStorage.GetBinaryFilesForInterview(interview.InterviewId);
             var transferProgress = progress.AsTransferReport();
 
             foreach (var imageView in imageViews)
             {
-                if (uploadState.ImagesFilesNames.Contains(imageView.FileName)) continue;
-
                 cancellationToken.ThrowIfCancellationRequested();
 
                 var fileContent = await this.imagesStorage.GetInterviewBinaryDataAsync(interview.InterviewId, imageView.FileName);
                 var hash = GetMd5Cache(fileContent);
-                if (uploadState.ImageQuestionsFilesMd5?.Contains(hash) ?? false) continue;
+                var remoteImage = uploadState.ImagesFiles?.FirstOrDefault(f => f.FileName == imageView.FileName && f.Md5 == hash);
+                if (remoteImage != null) continue;
 
                 cancellationToken.ThrowIfCancellationRequested();
 
@@ -212,10 +208,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     cancellationToken);
 
                 if (interview.Status == InterviewStatus.Completed)
-                {
-                    this.interviewMultimediaViewStorage.Remove(imageView.Id);
                     await this.imagesStorage.RemoveInterviewBinaryData(interview.InterviewId, imageView.FileName);
-                }
             }
         }
         
@@ -228,13 +221,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
             foreach (var auditFile in auditFiles)
             {
-                if (uploadState.AudioFilesNames.Contains(auditFile.FileName)) continue;
-
                 cancellationToken.ThrowIfCancellationRequested();
 
                 var fileData = await auditFile.GetData();
                 var hash = GetMd5Cache(fileData);
-                if (uploadState.AudioAuditFilesMd5?.Contains(hash) ?? false) continue;
+                var remoteAudioAudit = uploadState.AudioAuditFiles?.FirstOrDefault(f => f.FileName == auditFile.FileName && f.Md5 == hash);
+                if (remoteAudioAudit != null) continue;
 
                 cancellationToken.ThrowIfCancellationRequested();
 
@@ -260,13 +252,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
             foreach (var audioFile in audioFiles)
             {
-                if (uploadState.AudioFilesNames.Contains(audioFile.FileName)) continue;
-
                 cancellationToken.ThrowIfCancellationRequested();
                 
                 var fileData = await audioFile.GetData();
                 var hash = GetMd5Cache(fileData);
-                if (uploadState.AudioQuestionsFilesMd5?.Contains(hash) ?? false) continue;
+                var remoteAudio = uploadState.AudioFiles?.FirstOrDefault(f => f.FileName == audioFile.FileName && f.Md5 == hash);
+                if (remoteAudio != null) continue;
 
                 cancellationToken.ThrowIfCancellationRequested();
 
