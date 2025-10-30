@@ -45,7 +45,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             var clone = Source.Clone();
             
             clone.GetEntitiesByType<TextQuestion>()
-                .ForEach(x => x.Mask = macrosSubstitutionService.InlineMacros(x.Mask, clone.Macros.Values));
+                .ForEach(x => x.Mask = 
+                    x.Mask != null 
+                        ? macrosSubstitutionService.InlineMacros(x.Mask, clone.Macros.Values) 
+                        : null);
             
             if (compileQuestionnaireId.HasValue)
             {
