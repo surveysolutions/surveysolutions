@@ -5,6 +5,12 @@ import { fetch } from './store.fetch.js'
 import mutations from './store.mutations'
 import sidebar from './store.sidebar'
 import routeParams from '../../shared/stores/store.routeParams.js'
+import browserLocalStore from '../../shared/localStorage'
+
+// Load showVariables preference from localStorage
+const localStore = new browserLocalStore()
+const savedShowVariables = localStore.getItem('webinterview_showVariables')
+const initialShowVariables = savedShowVariables === 'true'
 
 const store =
     safeStore({
@@ -26,7 +32,7 @@ const store =
             interviewCompleted: false,
             interviewShutdown: false,
             interviewCannotBeChanged: false,
-            showVariables: false,
+            showVariables: initialShowVariables,
         },
         actions,
         mutations,
