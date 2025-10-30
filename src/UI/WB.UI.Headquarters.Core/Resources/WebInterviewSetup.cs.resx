@@ -264,4 +264,7 @@
   <data name="WebInterviewUserMessages_WelcomeText_Descr" xml:space="preserve">
     <value>Uvítací text záhlaví na úvodní stránce</value>
   </data>
+  <data name="AllowTranscriptDownloading" xml:space="preserve">
+      <value>Povolit stažení přepisu rozhovoru po odeslání</value>
+  </data>
 </root>

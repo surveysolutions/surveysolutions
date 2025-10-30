@@ -240,4 +240,7 @@
   <data name="WebInterviewUserMessages_WelcomeText_Descr" xml:space="preserve">
     <value>Teksti i kreut të mirëseardhjes në faqen e parë </value>
   </data>
+  <data name="AllowTranscriptDownloading" xml:space="preserve">
+      <value>Lejo shkarkimin e transkriptit të intervistës pas dorëzimit</value>
+  </data>
 </root>

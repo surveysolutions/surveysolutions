@@ -264,4 +264,7 @@
   <data name="WebInterviewUserMessages_WelcomeText_Descr" xml:space="preserve">
     <value>Привітальний текст заголовка на першій сторінці</value>
   </data>
+  <data name="AllowTranscriptDownloading" xml:space="preserve">
+      <value>Дозволити завантаження транскрипту інтерв'ю після подання</value>
+  </data>
 </root>
