@@ -120,5 +120,7 @@ export default {
     },
     SHOW_VARIABLES(state, { value }) {
         state.showVariables = value
+        const store = new browserLocalStore()
+        store.setItem('webinterview_showVariables', value.toString())
     },
 }
