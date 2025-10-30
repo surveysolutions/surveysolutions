@@ -121,7 +121,6 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
             return Ok();
         }
 
-
         public class UpdateAdditionalSettingsModel
         {
             public bool SpamProtection { get; set; } 
@@ -131,6 +130,7 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
             public bool EmailOnComplete { get; set; }
             public bool AttachAnswersInEmail { get; set; }
             public bool AllowSwitchToCawiForInterviewer { get;set; }
+            public bool? AllowTranscriptDownloading { get;set; }        
         }
 
         [ValidateAntiForgeryToken]
@@ -153,7 +153,8 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
             config.EmailOnComplete = updateModel.EmailOnComplete;
             config.AttachAnswersInEmail = updateModel.AttachAnswersInEmail;
             config.AllowSwitchToCawiForInterviewer = updateModel.AllowSwitchToCawiForInterviewer;
-
+            config.AllowTranscriptDownloading = updateModel.AllowTranscriptDownloading ?? true;            
+            
             this.webInterviewConfigProvider.Store(questionnaireIdentity, config);
 
             return Ok();

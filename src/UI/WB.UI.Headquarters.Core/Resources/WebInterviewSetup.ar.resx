@@ -265,4 +265,7 @@
 <data name="WebInterviewUserMessages_LinkWelcome_Descr" xml:space="preserve">
   <value>نص الترحيب المعروض في صفحة الهبوط لرابط المقابلة عبر الويب</value>
 </data>
+    <data name="AllowTranscriptDownloading" xml:space="preserve">
+        <value>السماح بتحميل نص المقابلة بعد الإرسال</value>
+    </data>
 </root>

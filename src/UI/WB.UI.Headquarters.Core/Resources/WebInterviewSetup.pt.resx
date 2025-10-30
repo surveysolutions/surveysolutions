@@ -264,4 +264,7 @@
   <data name="WebInterviewUserMessages_LinkWelcome_Descr" xml:space="preserve">
     <value>Texto de boas-vindas do cabeçalho na página de destino do link da entrevista na web</value>
   </data>
+  <data name="AllowTranscriptDownloading" xml:space="preserve">
+      <value>Permitir download da transcrição da entrevista após o envio</value>
+  </data>
 </root>
