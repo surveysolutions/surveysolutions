@@ -4,14 +4,11 @@ using System.Linq;
 using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
-using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.UI.Designer.Api.WebTester;
@@ -28,6 +25,7 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
         private readonly IQuestionnaireCompilationVersionService questionnaireCompilationVersionService;
         private readonly IQuestionnaireVerifier questionnaireVerifier;
         private readonly IQuestionnaireCacheStorage questionnaireCacheStorage;
+        private readonly IMacrosSubstitutionService macrosSubstitutionService;
 
         public QuestionnairePackageComposer(IExpressionProcessorGenerator expressionProcessorGenerator,
             DesignerDbContext dbContext,
@@ -36,7 +34,8 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
             IDesignerEngineVersionService engineVersionService,
             IQuestionnaireCompilationVersionService questionnaireCompilationVersionService,
             IQuestionnaireVerifier questionnaireVerifier,
-            IQuestionnaireCacheStorage questionnaireCacheStorage)
+            IQuestionnaireCacheStorage questionnaireCacheStorage,
+            IMacrosSubstitutionService macrosSubstitutionService)
         {
             this.expressionProcessorGenerator = expressionProcessorGenerator;
             this.dbContext = dbContext;
@@ -46,6 +45,7 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
             this.questionnaireCompilationVersionService = questionnaireCompilationVersionService;
             this.questionnaireVerifier = questionnaireVerifier;
             this.questionnaireCacheStorage = questionnaireCacheStorage;
+            this.macrosSubstitutionService = macrosSubstitutionService;
         }
 
 
@@ -101,7 +101,7 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
             if (verificationResult.Any(x => x.MessageLevel != VerificationMessageLevel.Warning))
                 throw new ComposeException();
 
-            var questionnaire = questionnaireView.GetClientReadyClone();
+            var questionnaire = questionnaireView.GetClientReadyDocument(macrosSubstitutionService);
             var readOnlyQuestionnaireDocument = new ReadOnlyQuestionnaireDocumentWithCache(questionnaire);
             questionnaire.ExpressionsPlayOrder = this.expressionsPlayOrderProvider.GetExpressionsPlayOrder(readOnlyQuestionnaireDocument);
 

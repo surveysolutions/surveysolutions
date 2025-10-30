@@ -37,7 +37,8 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
         private readonly IExpressionsPlayOrderProvider expressionsPlayOrderProvider;
         private readonly IQuestionnaireCompilationVersionService questionnaireCompilationVersionService;
         private readonly IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService;
-        
+        private readonly IMacrosSubstitutionService macrosSubstitutionService;
+
         public HQQuestionnairesController(
             IQuestionnaireViewFactory questionnaireViewFactory,
             IQuestionnaireVerifier questionnaireVerifier,
@@ -49,7 +50,8 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
             DesignerDbContext listItemStorage,
             IExpressionsPlayOrderProvider expressionsPlayOrderProvider,
             IQuestionnaireCompilationVersionService questionnaireCompilationVersionService,
-            IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService)
+            IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService,
+            IMacrosSubstitutionService macrosSubstitutionService)
         {
             this.questionnaireViewFactory = questionnaireViewFactory;
             this.questionnaireVerifier = questionnaireVerifier;
@@ -62,6 +64,7 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
             this.expressionsPlayOrderProvider = expressionsPlayOrderProvider;
             this.questionnaireCompilationVersionService = questionnaireCompilationVersionService;
             this.questionnaireHistoryVersionsService = questionnaireHistoryVersionsService;
+            this.macrosSubstitutionService = macrosSubstitutionService;
         }
 
         [HttpGet]
@@ -164,7 +167,7 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
                 return this.ErrorWithReasonPhraseForHQ(StatusCodes.Status426UpgradeRequired, message);
             }
 
-            var questionnaire = questionnaireView.Source.Clone();
+            var questionnaire = questionnaireView.GetClientReadyDocument(macrosSubstitutionService);
 
             var userAgent = Request.Headers["User-Agent"].FirstOrDefault();
             questionnaire.Revision = await this.questionnaireHistoryVersionsService
