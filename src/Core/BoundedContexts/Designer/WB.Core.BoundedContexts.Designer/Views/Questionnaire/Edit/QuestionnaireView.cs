@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using Main.Core.Documents;
+using Main.Core.Entities.SubEntities.Question;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
@@ -9,7 +11,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
     {
         private readonly Guid? compileQuestionnaireId;
 
-        public QuestionnaireView(QuestionnaireDocument doc, IEnumerable<SharedPersonView> sharedPersons, Guid? compileQuestionnaireId = null)
+        public QuestionnaireView(QuestionnaireDocument doc, IEnumerable<SharedPersonView> sharedPersons, 
+            Guid? compileQuestionnaireId = null)
         {
             this.compileQuestionnaireId = compileQuestionnaireId;
             this.Source = doc;
@@ -37,9 +40,13 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             return clone;
         }
 
-        public QuestionnaireDocument GetClientReadyClone()
+        public QuestionnaireDocument GetClientReadyDocument(IMacrosSubstitutionService macrosSubstitutionService)
         {
             var clone = Source.Clone();
+            
+            clone.GetEntitiesByType<TextQuestion>()
+                .ForEach(x => x.Mask = macrosSubstitutionService.InlineMacros(x.Mask, clone.Macros.Values));
+            
             if (compileQuestionnaireId.HasValue)
             {
                 clone.PublicKey = compileQuestionnaireId.Value;
