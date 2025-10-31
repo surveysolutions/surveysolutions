@@ -631,6 +631,14 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             where T: QuestionReference, new()
         {
             var titleText = Constants.HtmlRemovalRegex.Replace(interview.GetTitleText(identity), string.Empty);
+            var validationMessage = interview.GetFailedValidationMessages(identity, null)?.LastOrDefault();
+            var errorText = string.IsNullOrEmpty(validationMessage) 
+                ? null 
+                : Constants.HtmlRemovalRegex.Replace(validationMessage, string.Empty);
+            var commentOriginal = interview.GetQuestionComments(identity)?.LastOrDefault()?.Comment;
+            var comment = string.IsNullOrWhiteSpace(commentOriginal)
+                ? null
+                : Constants.HtmlRemovalRegex.Replace(commentOriginal, string.Empty);
             var isPrefilled = interview.IsQuestionPrefilled(identity);
             var parentId = interviewEntityFactory.GetUIParent(interview, questionnaire, identity);
             return new T
@@ -638,7 +646,9 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                 Id = identity.ToString(),
                 ParentId = parentId.ToString(),
                 Title = titleText,
-                IsPrefilled = isPrefilled
+                IsPrefilled = isPrefilled,
+                Error = errorText,
+                Comment = comment
             };
         }
 
@@ -657,7 +667,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             var commentedQuestions = allCommented.Take(30).ToArray();
 
             var entitiesWithComments = commentedQuestions.Select(identity => 
-                GetQuestionReference<EntityWithComment>(interview, questionnaire, identity)).ToArray();
+                GetQuestionReference<QuestionReference>(interview, questionnaire, identity)).ToArray();
 
             var coverInfo = new CoverInfo
             {

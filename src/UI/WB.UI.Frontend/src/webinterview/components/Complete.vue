@@ -24,15 +24,27 @@
             </div>
         </div>
 
-        <ul class="wrapper-info wi-complete-tabs" role="tablist">
-            <li v-for="(completeGroup, idx) in completeGroups" :key="idx" class="tab-item"
-                :class="['wi-complete-tab', completeGroup.cssClass, { active: idx === activeCompleteGroupIndex, disabled: !(completeGroup.items?.length > 0) }]"
+        <ul class="wrapper-info complete-tabs" role="tablist">
+            <li v-for="(completeGroup, idx) in completeGroups" :key="idx"
+                :class="['tab-item', completeGroup.cssClass, { active: idx === activeCompleteGroupIndex, disabled: !(completeGroup.items?.length > 0) }]"
                 role="presentation" @click.stop="setActive(idx)">
                 <div class="tab-count">{{
                     moreThen30(completeGroup.items.length) }}</div>
                 <div class="tab-title" v-dompurify-html="completeGroup.title"></div>
             </li>
         </ul>
+
+        <div class="tab-content wrapper-info list-unstyled marked-questions" :class="activeGroup.cssClass">
+            <div class="tab-content-item" v-for="item in activeGroup.items" :key="item.id" @click="navigateTo(item)">
+                <a class="item-title" v-if="item.parentId || item.isPrefilled" href="javascript:void(0);"
+                    v-dompurify-html="item.title"></a>
+                <div class="item-title" v-else v-dompurify-html="item.title"></div>
+
+                <div class="item-error" v-if="item.error" v-dompurify-html="item.error"></div>
+                <div class="item-comment" v-if="item.comment" v-dompurify-html="item.comment"></div>
+            </div>
+        </div>
+
 
         <ul class="tab-content wrapper-info list-unstyled marked-questions">
             <li v-for="item in activeGroup.items" :key="item.id">
@@ -104,18 +116,38 @@
 </template>
 
 <style scoped>
+.complete-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 20px 0 0px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    list-style: none;
+    border-bottom: 1px solid #d9d9d9;
+    gap: 4px;
+}
+
 .tab-item {
     width: 159px;
     height: 75px;
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-size: cover;
     opacity: 1;
-    top: 0px;
-    left: 0px;
     overflow: hidden;
     margin-top: 18px;
+
+    position: relative;
+    cursor: pointer;
+    padding: 8px 14px 10px;
+    font-size: 14px;
+    line-height: 1.2;
+    border: 1px solid #d9d9d9;
+    border-bottom: none;
+    border-radius: 6px 6px 0 0;
+    color: #555;
+    align-items: center;
+    gap: 6px;
+    transition: background .15s ease, color .15s ease;
 }
+
 
 .tab-item.active {
     height: 85px;
@@ -129,45 +161,18 @@
     background-color: #fff;
 }
 
-.wi-complete-tabs {
-    display: flex;
-    flex-wrap: wrap;
-    margin: 20px 0 0px;
-    padding-top: 0px;
-    padding-bottom: 0px;
-    list-style: none;
-    border-bottom: 1px solid #d9d9d9;
-    gap: 4px;
-}
-
-.wi-complete-tab {
-    position: relative;
-    cursor: pointer;
-    padding: 8px 14px 10px;
-    font-size: 14px;
-    line-height: 1.2;
-    background: #f5f5f7;
-    border: 1px solid #d9d9d9;
-    border-bottom: none;
-    border-radius: 6px 6px 0 0;
-    color: #555;
-    align-items: center;
-    gap: 6px;
-    transition: background .15s ease, color .15s ease;
-}
-
-.wi-complete-tab:hover:not(.active) {
+.tab-item:hover:not(.active) {
     background: #ebebee;
 }
 
-.wi-complete-tab.active {
+.tab-item.active {
     background: #fff;
     color: #222;
     font-weight: 600;
     box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.06);
 }
 
-.wi-complete-tab.active::before {
+.tab-item.active::before {
     content: '';
     margin: 10px 5px;
     position: absolute;
@@ -176,20 +181,18 @@
     right: 0;
     height: 5px;
     background: currentColor;
-    /* indicator inherits text color */
     border-radius: 5px;
 }
 
-/* Color mappings based on cssClass */
-.wi-complete-tab.errors {
+.tab-item.errors {
     color: #DB3913;
 }
 
-.wi-complete-tab.unanswered {
+.tab-item.unanswered {
     color: #2878BE;
 }
 
-.wi-complete-tab.critical-rule-errors {
+.tab-item.critical-rule-errors {
     color: #DB3913;
 }
 
@@ -197,10 +200,7 @@
     color: #949494;
 }
 
-
-/* Fallback default already defined as #555 in base */
-
-.wi-complete-tab .tab-title {
+.tab-item .tab-title {
     display: inline-block;
     width: 130px;
     font-family: Roboto;
@@ -210,7 +210,7 @@
     text-align: left;
 }
 
-.wi-complete-tab .tab-count {
+.tab-item .tab-count {
     font-family: Roboto;
     font-weight: Black;
     font-size: 18px;
@@ -218,17 +218,69 @@
     text-align: left;
 }
 
-.wi-complete-tab.active .tab-count {}
 
-@media (max-width: 720px) {
-    .wi-complete-tabs {
-        gap: 2px;
-    }
+.tab-content .tab-content-item {
+    padding: 10px 15px;
+    margin: 4px;
+    opacity: 1;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+}
 
-    .wi-complete-tab {
-        font-size: 13px;
-        padding: 6px 10px 8px;
-    }
+.tab-content-item .item-title {
+    color: rgba(0, 0, 0, 1);
+    font-family: Roboto;
+    font-weight: Bold;
+    font-size: 14px;
+    opacity: 1;
+    text-align: left;
+}
+
+.tab-content-item .item-error {
+    color: rgba(219, 57, 18, 1);
+    font-family: Roboto;
+    font-weight: Regular;
+    font-size: 14px;
+    opacity: 1;
+    text-align: left;
+}
+
+.tab-content-item .item-comment {
+    color: rgba(0, 0, 0, 1);
+    font-family: Roboto;
+    font-weight: Regular;
+    font-size: 14px;
+    opacity: 1;
+    text-align: left;
+}
+
+/* Left colored stripe based on active group type */
+.tab-content-item {
+    position: relative;
+    padding-left: 20px;
+}
+
+.tab-content.errors .tab-content-item::before,
+.tab-content.critical-rule-errors .tab-content-item::before {
+    background: #DB3913;
+}
+
+.tab-content.unanswered .tab-content-item::before {
+    background: #2878BE;
+}
+
+.tab-content .tab-content-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 5px;
+    height: 100%;
+    border-radius: 4px 0 0 4px;
 }
 </style>
 
