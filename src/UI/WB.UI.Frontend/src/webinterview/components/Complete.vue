@@ -45,27 +45,6 @@
             </div>
         </div>
 
-
-        <ul class="tab-content wrapper-info list-unstyled marked-questions">
-            <li v-for="item in activeGroup.items" :key="item.id">
-                <a v-if="item.parentId || item.isPrefilled" href="javascript:void(0);" @click="navigateTo(item)"
-                    v-dompurify-html="item.title"></a>
-                <span v-else v-dompurify-html="item.title"></span>
-            </li>
-        </ul>
-
-        <template v-for="group in completeGroups">
-            <ExpandableList :title="group.title" :cssClass="group.cssClass">
-                <ul class="list-unstyled marked-questions">
-                    <li v-for="item in group.items" :key="item.id">
-                        <a v-if="item.parentId || item.isPrefilled" href="javascript:void(0);" @click="navigateTo(item)"
-                            v-dompurify-html="item.title"></a>
-                        <span v-else v-dompurify-html="item.title"></span>
-                    </li>
-                </ul>
-            </ExpandableList>
-        </template>
-
         <div class="wrapper-info">
             <div class="container-info">
                 <label class="info-block gray-uppercase" for="comment-for-supervisor">
@@ -155,12 +134,6 @@
     padding-top: 18px;
 }
 
-.tab-content {
-    margin-top: 10px;
-    margin-bottom: 20px;
-    background-color: #fff;
-}
-
 .tab-item:hover:not(.active) {
     background: #ebebee;
 }
@@ -218,6 +191,11 @@
     text-align: left;
 }
 
+.tab-content {
+    margin-top: 0px;
+    margin-bottom: 20px;
+    background-color: #fff;
+}
 
 .tab-content .tab-content-item {
     padding: 10px 15px;
@@ -229,6 +207,7 @@
     border-bottom-right-radius: 4px;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
     overflow: hidden;
+    cursor: pointer;
 }
 
 .tab-content-item .item-title {
@@ -287,13 +266,11 @@
 <script lang="js">
 import modal from '@/shared/modal'
 import SectionProgress from './SectionLoadProgress'
-import ExpandableList from '../../hqapp/components/ExpandableList.vue';
 
 export default {
     name: 'complete-view',
     components: {
         SectionLoadingProgress: SectionProgress,
-        ExpandableList: ExpandableList,
     },
     data() {
         return {
