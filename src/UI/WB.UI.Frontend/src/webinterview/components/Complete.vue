@@ -7,24 +7,22 @@
         </div>
         <div class="wrapper-info">
             <div class="container-info">
-                <h2>{{ $t('WebInterviewUI.CompleteAbout') }}</h2>
-                <h2>{{ $store.state.webinterview.interviewKey }}</h2>
+                <h2
+                    v-dompurify-html="$t('WebInterviewUI.CompleteReviewSubmit', { key: $store.state.webinterview.interviewKey })">
+                </h2>
             </div>
         </div>
 
 
-        <div class="wrapper-info" v-if="completeGroups.length > 0">
+        <div class="wrapper-info" v-if="!hasAnyIssue">
             <div class="container-info info-block">
                 <div class="gray-uppercase">
-                    {{ $t('WebInterviewUI.CompleteInterviewStatus') }}
-                </div>
-                <div class="gray-uppercase" v-if="hasCriticalIssues">
-                    {{ $t('WebInterviewUI.CompleteNoteCommentCriticality') }}
+                    {{ $t('WebInterviewUI.Complete_AllGood') }}
                 </div>
             </div>
         </div>
 
-        <ul class="wrapper-info complete-tabs" role="tablist">
+        <ul class="wrapper-info complete-tabs" v-else role="tablist">
             <li v-for="(completeGroup, idx) in completeGroups" :key="idx"
                 :class="['tab-item', completeGroup.cssClass, { active: idx === activeCompleteGroupIndex, disabled: !(completeGroup.items?.length > 0) }]"
                 role="presentation" @click.stop="setActive(idx)">
@@ -40,8 +38,11 @@
                     v-dompurify-html="item.title"></a>
                 <div class="item-title" v-else v-dompurify-html="item.title"></div>
 
-                <div class="item-error" v-if="item.error" v-dompurify-html="item.error"></div>
-                <div class="item-comment" v-if="item.comment" v-dompurify-html="item.comment"></div>
+                <div class="item-error" v-if="item.error"
+                    v-dompurify-html="$t('WebInterviewUI.Complete_Error') + ' ' + item.error"></div>
+                <div class="item-comment" v-if="item.comment"
+                    v-dompurify-html="$t('WebInterviewUI.Complete_LastComment') + ' ' + item.comment">
+                </div>
             </div>
         </div>
 
@@ -78,6 +79,7 @@
             </div>
         </div>
         <div class="wrapper-info">
+            <div class="submit-info" v-dompurify-html="$t('WebInterviewUI.Complete_SubmitInfo')"></div>
             <div class="container-info">
                 <a href="javascript:void(0);" id="btnComplete" class="btn btn-lg" v-bind:class="{
                     'btn-success': isAllAnswered,
@@ -95,15 +97,26 @@
 </template>
 
 <style scoped>
+.submit-info {
+    color: #343434;
+    font-family: Roboto;
+    font-weight: Regular;
+    font-size: 13px;
+    opacity: 1;
+    padding-bottom: 16px;
+}
+
+.wrapper-info {
+    border-bottom: none;
+}
+
 .complete-tabs {
     display: flex;
     flex-wrap: wrap;
-    margin: 20px 0 0px;
     padding-top: 0px;
     padding-bottom: 0px;
     list-style: none;
-    border-bottom: 1px solid #d9d9d9;
-    gap: 4px;
+    border-bottom: 1px solid #000000;
 }
 
 .tab-item {
@@ -118,7 +131,7 @@
     padding: 8px 14px 10px;
     font-size: 14px;
     line-height: 1.2;
-    border: 1px solid #d9d9d9;
+    border: 1px solid #000000;
     border-bottom: none;
     border-radius: 6px 6px 0 0;
     color: #555;
@@ -195,6 +208,7 @@
     margin-top: 0px;
     margin-bottom: 20px;
     background-color: #fff;
+    border-bottom: 1px solid #000000;
 }
 
 .tab-content .tab-content-item {
@@ -318,19 +332,19 @@ export default {
             const criticalUnanswered = this.criticalityInfo?.unansweredCriticalQuestions || []
             const critical = criticalFailed.concat(criticalUnanswered)
             groups.push({
-                title: this.$t('WebInterviewUI.Complete_CriticalErrors', { count: this.moreThen30(critical.length) }),
+                title: this.$t('WebInterviewUI.Complete_Tab_CriticalErrors'),
                 items: critical,
                 cssClass: 'errors'
             })
 
             groups.push({
-                title: this.$t('WebInterviewUI.Complete_QuestionsWithErrors', { count: this.moreThen30(this.completeInfo.errorsCount) }),
+                title: this.$t('WebInterviewUI.Complete_Tab_QuestionsWithErrors'),
                 items: this.completeInfo.entitiesWithError,
                 cssClass: 'errors'
             })
 
             groups.push({
-                title: this.$t('WebInterviewUI.Complete_UnansweredQuestions', { count: this.moreThen30(this.completeInfo.unansweredCount) }),
+                title: this.$t('WebInterviewUI.Complete_Tab_UnansweredQuestions'),
                 items: this.completeInfo.unansweredQuestions,
                 cssClass: 'unanswered'
             })
@@ -439,7 +453,10 @@ export default {
             const total = answered + unanswered
             if (total === 0) return 0
             return Math.round((answered / total) * 100)
-        }
+        },
+        hasAnyIssue() {
+            return this.hasErrors || this.hasUnansweredQuestions || this.hasCriticalIssues
+        },
     },
     methods: {
         fetchCompleteInfo() {
