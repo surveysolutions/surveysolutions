@@ -490,4 +490,43 @@ Požádejte o pomoc svého garanta.</value>
     <data name="Complete_QuestionsWithErrors" xml:space="preserve">
     <value>Otázky s chybami: {{count}}</value>
   </data>
+  <data name="CompleteReviewSubmit" xml:space="preserve">
+    <value>Zkontrolovat a odeslat &lt;br /&gt;
+Rozhovor {{key}}</value>
+  </data>
+  <data name="Complete_Tab_CriticalErrors" xml:space="preserve">
+    <value>Kritické &lt;br /&gt;
+Chyby</value>
+  </data>
+  <data name="Complete_Tab_QuestionsWithErrors" xml:space="preserve">
+    <value>Otázky &lt;br /&gt;
+s chybami</value>
+  </data>
+  <data name="Complete_Tab_UnansweredQuestions" xml:space="preserve">
+    <value>Nezodpovězené &lt;br /&gt;
+Otázky</value>
+  </data>
+  <data name="Complete_AllGood" xml:space="preserve">
+    <value>Všechny povinné otázky zodpovězeny &lt;br /&gt;
+Nebyly zjištěny žádné chyby</value>
+  </data>
+  <data name="Complete_AndMore" xml:space="preserve">
+    <value>a ještě {{count}}</value>
+  </data>
+  <data name="Complete_NoteIsRequired" xml:space="preserve">
+    <value>Poznámka je nutná pro odeslání rozhovoru</value>
+  </data>
+  <data name="Complete_Required" xml:space="preserve">
+    <value>Povinné</value>
+  </data>
+  <data name="Complete_Error" xml:space="preserve">
+    <value>Chyba:</value>
+  </data>
+  <data name="Complete_LastComment" xml:space="preserve">
+    <value>Poslední komentář:</value>
+  </data>
+  <data name="Complete_SubmitInfo" xml:space="preserve">
+    <value>Po odeslání bude tento rozhovor uzamčen a nelze jej upravovat. &lt;br /&gt;
+Ujistěte se, že všechny informace jsou správné.</value>
+  </data>
 </root>

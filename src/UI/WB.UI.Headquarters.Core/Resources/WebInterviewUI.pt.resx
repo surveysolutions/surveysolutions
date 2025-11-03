@@ -558,4 +558,43 @@ Entre em contato com o suporte para obter assistência.</value>
   <data name="Complete_QuestionsWithErrors" xml:space="preserve">
     <value>Perguntas com erros: {{count}}</value>
   </data>
+  <data name="CompleteReviewSubmit" xml:space="preserve">
+    <value>Revisar e Enviar &lt;br /&gt;
+Entrevista {{key}}</value>
+  </data>
+  <data name="Complete_Tab_CriticalErrors" xml:space="preserve">
+    <value>Erros &lt;br /&gt;
+Críticos</value>
+  </data>
+  <data name="Complete_Tab_QuestionsWithErrors" xml:space="preserve">
+    <value>Perguntas &lt;br /&gt;
+com erros</value>
+  </data>
+  <data name="Complete_Tab_UnansweredQuestions" xml:space="preserve">
+    <value>Perguntas &lt;br /&gt;
+sem resposta</value>
+  </data>
+  <data name="Complete_AllGood" xml:space="preserve">
+    <value>Todas as perguntas obrigatórias respondidas &lt;br /&gt;
+Nenhum erro detectado</value>
+  </data>
+  <data name="Complete_AndMore" xml:space="preserve">
+    <value>e mais {{count}}</value>
+  </data>
+  <data name="Complete_NoteIsRequired" xml:space="preserve">
+    <value>É necessária uma nota para enviar a entrevista</value>
+  </data>
+  <data name="Complete_Required" xml:space="preserve">
+    <value>Obrigatório</value>
+  </data>
+  <data name="Complete_Error" xml:space="preserve">
+    <value>Erro:</value>
+  </data>
+  <data name="Complete_LastComment" xml:space="preserve">
+    <value>Último comentário:</value>
+  </data>
+  <data name="Complete_SubmitInfo" xml:space="preserve">
+    <value>Após o envio, esta entrevista será bloqueada e não poderá ser editada. &lt;br /&gt;
+Certifique-se de que todas as informações estão corretas.</value>
+  </data>
 </root>

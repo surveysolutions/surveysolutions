@@ -546,4 +546,43 @@
     <data name="UnansweredQuestions" xml:space="preserve">
   <value>الأسئلة التي لم تتم الإجابة عنها:</value>
 </data>
+  <data name="CompleteReviewSubmit" xml:space="preserve">
+    <value>مراجعة وإرسال &lt;br /&gt;
+المقابلة {{key}}</value>
+  </data>
+  <data name="Complete_Tab_CriticalErrors" xml:space="preserve">
+    <value>أخطاء &lt;br /&gt;
+حرجة</value>
+  </data>
+  <data name="Complete_Tab_QuestionsWithErrors" xml:space="preserve">
+    <value>أسئلة &lt;br /&gt;
+تحتوي على أخطاء</value>
+  </data>
+  <data name="Complete_Tab_UnansweredQuestions" xml:space="preserve">
+    <value>أسئلة &lt;br /&gt;
+بلا إجابة</value>
+  </data>
+  <data name="Complete_AllGood" xml:space="preserve">
+    <value>جميع الأسئلة المطلوبة أجيب عليها &lt;br /&gt;
+لم يتم اكتشاف أخطاء</value>
+  </data>
+  <data name="Complete_AndMore" xml:space="preserve">
+    <value>و {{count}} أخرى</value>
+  </data>
+  <data name="Complete_NoteIsRequired" xml:space="preserve">
+    <value>ملاحظة مطلوبة لإرسال المقابلة</value>
+  </data>
+  <data name="Complete_Required" xml:space="preserve">
+    <value>مطلوب</value>
+  </data>
+  <data name="Complete_Error" xml:space="preserve">
+    <value>خطأ:</value>
+  </data>
+  <data name="Complete_LastComment" xml:space="preserve">
+    <value>آخر تعليق:</value>
+  </data>
+  <data name="Complete_SubmitInfo" xml:space="preserve">
+    <value>بعد الإرسال ستُقفل هذه المقابلة ولن يمكن تعديلها. &lt;br /&gt;
+يرجى التأكد من أن كل المعلومات صحيحة.</value>
+  </data>
 </root>
