@@ -183,9 +183,6 @@
   <data name="Complete" xml:space="preserve">
     <value>დასრულება</value>
   </data>
-  <data name="CompleteAbout" xml:space="preserve">
-    <value>თქვენ აპირებთ ამ გასაუბრების დასრულებას</value>
-  </data>
   <data name="CompleteErrors" xml:space="preserve">
     <value>კითხვები შეცდომებით:</value>
   </data>

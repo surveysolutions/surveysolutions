@@ -67,9 +67,6 @@
   <data name="Complete" xml:space="preserve">
     <value>Uzamknout</value>
   </data>
-  <data name="CompleteAbout" xml:space="preserve">
-    <value>Chystáte se dokončit tento rozhovor</value>
-  </data>
   <data name="CoverSupervisorNote" xml:space="preserve">
     <value>Poznámka od garanta:</value>
   </data>
@@ -473,10 +470,6 @@ Požádejte o pomoc svého garanta.</value>
 </data>
     <data name="CompleteCriticalityWarnConfirmation" xml:space="preserve">
   <value>Prosím potvrďte, že chcete odeslat tento rozhovor s kritickými problémy.</value>
-</data>
-    
-  <data name="CompleteInterviewStatus" xml:space="preserve">
-    <value>Problémy s rozhovorem:</value>
 </data>
     <data name="Complete_CriticalUnansweredQuestions" xml:space="preserve">
     <value>Kritické nezodpovězené otázky: {{count}}</value>

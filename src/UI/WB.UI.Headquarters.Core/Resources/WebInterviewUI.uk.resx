@@ -198,9 +198,6 @@
   <data name="Complete" xml:space="preserve">
     <value>Завершено</value>
   </data>
-  <data name="CompleteAbout" xml:space="preserve">
-    <value>Ви наближаєтеся до завершення інтерв'ю</value>
-  </data>
   <data name="CompleteErrors" xml:space="preserve">
     <value>Питання з помилками:</value>
   </data>

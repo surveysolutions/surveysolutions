@@ -189,9 +189,6 @@
   <data name="Complete" xml:space="preserve">
     <value>Përfundoi</value>
   </data>
-  <data name="CompleteAbout" xml:space="preserve">
-    <value>Ju jeni pranë përfundimit të kësaj interviste </value>
-  </data>
   <data name="CompleteErrors" xml:space="preserve">
     <value>Pyetje me gabime:</value>
   </data>
