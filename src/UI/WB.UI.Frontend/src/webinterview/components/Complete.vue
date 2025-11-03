@@ -301,7 +301,8 @@ export default {
     watch: {
         completeGroups(newVal) {
             if (this.activeCompleteGroupIndex === null && Array.isArray(newVal) && newVal.length > 0) {
-                this.activeCompleteGroupIndex = 0
+                const firstWithItemsIndex = newVal.findIndex(g => Array.isArray(g.items) && g.items.length > 0)
+                this.activeCompleteGroupIndex = firstWithItemsIndex >= 0 ? firstWithItemsIndex : 0
             }
         },
         $route(to, from) {
