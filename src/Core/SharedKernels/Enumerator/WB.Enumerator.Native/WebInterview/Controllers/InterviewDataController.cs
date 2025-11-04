@@ -30,6 +30,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         private readonly IQuestionnaireSettings questionnaireSettings;
 
         protected abstract bool IncludeVariables { get; }
+        protected abstract bool IncludeNonInterviewerQuestions { get; }
 
         public InterviewDataController(IQuestionnaireStorage questionnaireRepository,
             IStatefulInterviewRepository statefulInterviewRepository,
@@ -287,7 +288,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             {
                 return IsReviewMode()
                     ? statefulInterview.GetUnderlyingEntitiesForReview(identity)
-                    : statefulInterview.GetUnderlyingInterviewerEntities(identity, IncludeVariables);
+                    : statefulInterview.GetUnderlyingInterviewerEntities(identity, IncludeVariables, IncludeNonInterviewerQuestions);
             }
 
             List<Identity> groupIds = new List<Identity>();
