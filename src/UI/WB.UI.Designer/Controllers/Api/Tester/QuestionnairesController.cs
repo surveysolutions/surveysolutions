@@ -34,7 +34,7 @@ namespace WB.UI.Designer.Controllers.Api.Tester
         private readonly IExpressionsPlayOrderProvider expressionsPlayOrderProvider;
         private readonly IQuestionnaireCompilationVersionService questionnaireCompilationVersionService;
         private readonly ISerializer serializer;
-        private readonly IMacrosSubstitutionService macrosSubstitutionService;
+        private readonly IQuestionnaireDocumentTransformer questionnaireDocumentTransformer;
 
         public QuestionnairesController(
             IQuestionnaireViewFactory questionnaireViewFactory,
@@ -45,7 +45,7 @@ namespace WB.UI.Designer.Controllers.Api.Tester
             IExpressionsPlayOrderProvider expressionsPlayOrderProvider, 
             IQuestionnaireCompilationVersionService questionnaireCompilationVersionService, 
             ISerializer serializer,
-            IMacrosSubstitutionService macrosSubstitutionService)
+            IQuestionnaireDocumentTransformer questionnaireDocumentTransformer)
         {
             this.questionnaireViewFactory = questionnaireViewFactory;
             this.questionnaireVerifier = questionnaireVerifier;
@@ -55,7 +55,7 @@ namespace WB.UI.Designer.Controllers.Api.Tester
             this.expressionsPlayOrderProvider = expressionsPlayOrderProvider;
             this.questionnaireCompilationVersionService = questionnaireCompilationVersionService;
             this.serializer = serializer;
-            this.macrosSubstitutionService = macrosSubstitutionService;
+            this.questionnaireDocumentTransformer = questionnaireDocumentTransformer;
         }
 
         [QuestionnairePermissions]
@@ -92,7 +92,8 @@ namespace WB.UI.Designer.Controllers.Api.Tester
                 return StatusCode(StatusCodes.Status412PreconditionFailed);
             }
 
-            var questionnaire = questionnaireView.GetClientReadyDocument(macrosSubstitutionService);
+            var questionnaire = questionnaireView.GetClientReadyDocument();
+            questionnaireDocumentTransformer.TransformDocument(questionnaire);
             var readOnlyQuestionnaireDocument = new ReadOnlyQuestionnaireDocumentWithCache(questionnaire);
             questionnaire.ExpressionsPlayOrder = this.expressionsPlayOrderProvider.GetExpressionsPlayOrder(readOnlyQuestionnaireDocument);
             questionnaire.DependencyGraph = this.expressionsPlayOrderProvider.GetDependencyGraph(readOnlyQuestionnaireDocument);

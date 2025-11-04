@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.Designer.Api.Headquarters.QuestionnairesControllerTests
                 questionnaireCompilationVersionService: questionnaireCompilationVersionService ??
                                                         Mock.Of<IQuestionnaireCompilationVersionService>(),
                 questionnaireHistoryVersionsService: Mock.Of<IQuestionnaireHistoryVersionsService>(),
-                macrosSubstitutionService: Mock.Of<IMacrosSubstitutionService>());
+                questionnaireDocumentTransformer: Mock.Of<IQuestionnaireDocumentTransformer>());
 
             return hqQuestionnairesController;
         }

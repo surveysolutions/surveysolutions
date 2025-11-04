@@ -40,15 +40,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             return clone;
         }
 
-        public QuestionnaireDocument GetClientReadyDocument(IMacrosSubstitutionService macrosSubstitutionService)
+        public QuestionnaireDocument GetClientReadyDocument()
         {
             var clone = Source.Clone();
-            
-            clone.GetEntitiesByType<TextQuestion>()
-                .ForEach(x => x.Mask = 
-                    x.Mask != null 
-                        ? macrosSubstitutionService.InlineMacros(x.Mask, clone.Macros.Values) 
-                        : null);
             
             if (compileQuestionnaireId.HasValue)
             {

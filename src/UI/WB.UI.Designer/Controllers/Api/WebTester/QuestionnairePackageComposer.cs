@@ -25,7 +25,7 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
         private readonly IQuestionnaireCompilationVersionService questionnaireCompilationVersionService;
         private readonly IQuestionnaireVerifier questionnaireVerifier;
         private readonly IQuestionnaireCacheStorage questionnaireCacheStorage;
-        private readonly IMacrosSubstitutionService macrosSubstitutionService;
+        private readonly IQuestionnaireDocumentTransformer questionnaireDocumentTransformer;
 
         public QuestionnairePackageComposer(IExpressionProcessorGenerator expressionProcessorGenerator,
             DesignerDbContext dbContext,
@@ -35,7 +35,7 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
             IQuestionnaireCompilationVersionService questionnaireCompilationVersionService,
             IQuestionnaireVerifier questionnaireVerifier,
             IQuestionnaireCacheStorage questionnaireCacheStorage,
-            IMacrosSubstitutionService macrosSubstitutionService)
+            IQuestionnaireDocumentTransformer questionnaireDocumentTransformer)
         {
             this.expressionProcessorGenerator = expressionProcessorGenerator;
             this.dbContext = dbContext;
@@ -45,7 +45,7 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
             this.questionnaireCompilationVersionService = questionnaireCompilationVersionService;
             this.questionnaireVerifier = questionnaireVerifier;
             this.questionnaireCacheStorage = questionnaireCacheStorage;
-            this.macrosSubstitutionService = macrosSubstitutionService;
+            this.questionnaireDocumentTransformer = questionnaireDocumentTransformer;
         }
 
 
@@ -101,7 +101,9 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
             if (verificationResult.Any(x => x.MessageLevel != VerificationMessageLevel.Warning))
                 throw new ComposeException();
 
-            var questionnaire = questionnaireView.GetClientReadyDocument(macrosSubstitutionService);
+            var questionnaire = questionnaireView.GetClientReadyDocument();
+            questionnaireDocumentTransformer.TransformDocument(questionnaire);
+            
             var readOnlyQuestionnaireDocument = new ReadOnlyQuestionnaireDocumentWithCache(questionnaire);
             questionnaire.ExpressionsPlayOrder = this.expressionsPlayOrderProvider.GetExpressionsPlayOrder(readOnlyQuestionnaireDocument);
 
