@@ -16,7 +16,7 @@ using WB.Enumerator.Native.WebInterview.Models;
 
 namespace WB.Enumerator.Native.WebInterview.Services
 {
-    public class WebInterviewInterviewEntityFactory : IWebInterviewInterviewEntityFactory
+    public abstract class WebInterviewInterviewEntityFactory : IWebInterviewInterviewEntityFactory
     {
         private readonly IMapper autoMapper;
         private readonly IEnumeratorGroupStateCalculationStrategy enumeratorGroupStateCalculationStrategy;
