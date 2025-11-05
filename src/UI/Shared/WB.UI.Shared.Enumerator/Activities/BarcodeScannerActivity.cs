@@ -31,17 +31,7 @@ namespace WB.UI.Shared.Enumerator.Activities
             SetContentView(Resource.Layout.barcode_scanner);
 
             previewView = FindViewById<PreviewView>(Resource.Id.previewView);
-            var cancelButton = FindViewById<Button>(Resource.Id.cancelButton);
             
-            if (cancelButton != null)
-            {
-                cancelButton.Click += (_, _) =>
-                {
-                    QRBarcodeScanService.SetResult(null);
-                    Finish();
-                };
-            }
-
             // Initialize ML Kit barcode scanner - scan all formats
             var options = new BarcodeScannerOptions.Builder()
                 .SetBarcodeFormats(
