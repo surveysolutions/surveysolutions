@@ -10,6 +10,7 @@ using Xamarin.Google.MLKit.Vision.Common;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.UI.Shared.Enumerator.Services.Internals;
 using Java.Util.Concurrent;
+using Xamarin.Google.MLKit.Vision.Barcode.Common;
 
 namespace WB.UI.Shared.Enumerator.Activities
 {
@@ -43,7 +44,21 @@ namespace WB.UI.Shared.Enumerator.Activities
 
             // Initialize ML Kit barcode scanner - scan all formats
             var options = new BarcodeScannerOptions.Builder()
-                .SetBarcodeFormats(-1) // -1 means all formats
+                .SetBarcodeFormats(
+                    Barcode.FormatQrCode,      // QR codes
+                    Barcode.FormatEan13,       // EAN-13
+                    Barcode.FormatEan8,        // EAN-8
+                    Barcode.FormatUpcA,        // UPC-A
+                    Barcode.FormatUpcE,        // UPC-E
+                    Barcode.FormatCode128,     // Code-128
+                    Barcode.FormatCode39,      // Code-39
+                    Barcode.FormatCode93,      // Code-93
+                    Barcode.FormatCodabar,     // Codabar
+                    Barcode.FormatDataMatrix,  // Data Matrix
+                    Barcode.FormatPdf417,      // PDF417
+                    Barcode.FormatAztec        // Aztec
+                )
+
                 .Build();
             
             barcodeScanner = BarcodeScanning.GetClient(options);
@@ -88,6 +103,7 @@ namespace WB.UI.Shared.Enumerator.Activities
 
             // Preview use case - let CameraX choose optimal settings
             var preview = new Preview.Builder()
+                .SetTargetResolution(new Android.Util.Size(1280, 960)) // 4:3 aspect ratio
                 .Build();
             var surfaceProvider = previewView.SurfaceProvider;
             if (surfaceProvider != null)

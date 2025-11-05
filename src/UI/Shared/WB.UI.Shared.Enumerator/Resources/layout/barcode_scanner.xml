@@ -9,26 +9,21 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <TextView
-        android:id="@+id/scanInstructions"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="32dp"
-        android:text="Scan a barcode"
-        android:textColor="#FFFFFF"
-        android:textSize="18sp"
-        android:background="#80000000"
-        android:padding="12dp" />
+    <View
+            android:id="@+id/scanLine"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_centerInParent="true"
+            android:background="#FF0000" /> 
 
-    <Button
-        android:id="@+id/cancelButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="32dp"
-        android:text="Cancel" />
+<!--    <Button-->
+<!--        android:id="@+id/cancelButton"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_alignParentBottom="true"-->
+<!--        android:layout_centerHorizontal="true"-->
+<!--        android:layout_marginBottom="32dp"-->
+<!--        android:text="Cancel" />-->
 
 </RelativeLayout>
 
