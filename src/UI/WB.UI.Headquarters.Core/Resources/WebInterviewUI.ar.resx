@@ -465,12 +465,6 @@
   <data name="WebTesterSessionOverMessage" xml:space="preserve">
     <value>يرجى إغلاق هذه الصفحة. يمكنك فتح واحدة جديدة من خلال العودة إلى موقع المصمم</value>
   </data>
-    <data name="HideVariables" xml:space="preserve">
-    <value>إخفاء المتغيرات</value>
-  </data>
-    <data name="ShowVariables" xml:space="preserve">
-    <value>عرض المتغيرات</value>
-  </data>      
   <data name="ShowResolved" xml:space="preserve">
     <value>عرض المحلولة</value>
   </data>

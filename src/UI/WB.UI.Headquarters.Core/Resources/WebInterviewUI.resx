@@ -479,12 +479,6 @@ Contact support for assistance.</value>
   <data name="EmailLink_EmailResumeLink" xml:space="preserve">
     <value>Resume link</value>
   </data>
-  <data name="HideVariables" xml:space="preserve">
-    <value>Hide variables</value>
-  </data>
-  <data name="ShowVariables" xml:space="preserve">
-    <value>Show variables</value>
-  </data>
   <data name="TurnOffDevMode" xml:space="preserve">
     <value>Switch off Developer Mode</value>
   </data>

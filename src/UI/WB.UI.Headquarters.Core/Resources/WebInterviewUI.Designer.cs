@@ -747,18 +747,6 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
-        public static string HideVariables {
-            get {
-                return ResourceManager.GetString("HideVariables", resourceCulture);
-            }
-        }
-        
-        public static string ShowVariables {
-            get {
-                return ResourceManager.GetString("ShowVariables", resourceCulture);
-            }
-        }
-        
         public static string TurnOffDevMode {
             get {
                 return ResourceManager.GetString("TurnOffDevMode", resourceCulture);

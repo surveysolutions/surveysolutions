@@ -479,12 +479,6 @@ Entre em contato com o suporte para obter assistência.</value>
   <data name="EmailLink_EmailResumeLink" xml:space="preserve">
     <value>Link de retomada</value>
   </data>
-  <data name="HideVariables" xml:space="preserve">
-    <value>Ocultar variáveis</value>
-  </data>
-  <data name="ShowVariables" xml:space="preserve">
-    <value>Mostrar variáveis</value>
-  </data>
   <data name="Interview_Questions_RemoveRowFromRosterMessage" xml:space="preserve">
     <value>Tem certeza de que deseja remover a lista relacionada '{{rosterTitle}}'?</value>
   </data>
