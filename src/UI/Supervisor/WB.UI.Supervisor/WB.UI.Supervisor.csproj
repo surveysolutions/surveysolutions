@@ -247,9 +247,6 @@
       <PackageReference Include="Xamarin.AndroidX.Camera.View">
           <Version>1.4.1.1</Version>
       </PackageReference>
-      <PackageReference Include="Xamarin.GooglePlayServices.MLKit.BarcodeScanning">
-      <Version>118.2.0</Version>
-    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Migrations\Workspace" />

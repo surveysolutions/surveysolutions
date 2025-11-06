@@ -1,16 +1,14 @@
 using Android.Content.PM;
-using Android.Runtime;
 using AndroidX.AppCompat.App;
 using AndroidX.Camera.Core;
 using AndroidX.Camera.Lifecycle;
 using AndroidX.Camera.View;
 using AndroidX.Core.Content;
-using Xamarin.Google.MLKit.Vision.BarCode;
-using Xamarin.Google.MLKit.Vision.Common;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.UI.Shared.Enumerator.Services.Internals;
 using Java.Util.Concurrent;
-using Xamarin.Google.MLKit.Vision.Barcode.Common;
+using ZXing;
+using AndroidX.Camera.Core.ResolutionSelector;
 
 namespace WB.UI.Shared.Enumerator.Activities
 {
@@ -22,7 +20,6 @@ namespace WB.UI.Shared.Enumerator.Activities
     {
         private PreviewView previewView;
         private ProcessCameraProvider cameraProvider;
-        private IBarcodeScanner barcodeScanner;
         private bool isScanning = true;
 
         protected override void OnCreate(Bundle savedInstanceState)
@@ -31,29 +28,6 @@ namespace WB.UI.Shared.Enumerator.Activities
             SetContentView(Resource.Layout.barcode_scanner);
 
             previewView = FindViewById<PreviewView>(Resource.Id.previewView);
-            
-            // Initialize ML Kit barcode scanner - scan all formats
-            var options = new BarcodeScannerOptions.Builder()
-                .SetBarcodeFormats(
-                    // Barcode.FormatQrCode,      // QR codes
-                    // Barcode.FormatEan13,       // EAN-13
-                    // Barcode.FormatEan8,        // EAN-8
-                    // Barcode.FormatUpcA,        // UPC-A
-                    // Barcode.FormatUpcE,        // UPC-E
-                    // Barcode.FormatCode128,     // Code-128
-                    // Barcode.FormatItf,         // ITF (Interleaved 2 of 5)
-                    // Barcode.FormatCode39,      // Code-39
-                    // Barcode.FormatCode93,      // Code-93
-                    // Barcode.FormatCodabar,     // Codabar
-                    // Barcode.FormatDataMatrix,  // Data Matrix
-                    // Barcode.FormatPdf417,      // PDF417
-                    // Barcode.FormatAztec        // Aztec
-                    Barcode.FormatAllFormats
-                )
-
-                .Build();
-            
-            barcodeScanner = BarcodeScanning.GetClient(options);
 
             StartCamera();
         }
@@ -81,6 +55,12 @@ namespace WB.UI.Shared.Enumerator.Activities
             }), ContextCompat.GetMainExecutor(this));
         }
 
+        private IExecutorService analysisExecutor;
+        private BarcodeAnalyzer analyzer;
+        private Preview preview;
+        private ImageAnalysis imageAnalysis;
+        private CameraSelector cameraSelector;
+        
         private void BindCameraUseCases()
         {
             if (cameraProvider == null) return;
@@ -89,13 +69,19 @@ namespace WB.UI.Shared.Enumerator.Activities
             cameraProvider.UnbindAll();
 
             // Select back camera
-            var cameraSelector = new CameraSelector.Builder()
+            cameraSelector = new CameraSelector.Builder()
                 .RequireLensFacing(CameraSelector.LensFacingBack)
                 .Build();
 
-            // Preview use case - let CameraX choose optimal settings
-            var preview = new Preview.Builder()
-                .SetTargetResolution(new Android.Util.Size(1280, 960)) // 4:3 aspect ratio
+            var resolutionSelector = new ResolutionSelector.Builder()
+                .SetResolutionStrategy(new ResolutionStrategy(new Android.Util.Size(1280, 960), 
+                    ResolutionStrategy.FallbackRuleClosestHigherThenLower))
+                .Build();
+            
+            // Preview use case - keep decent quality for user
+            preview?.Dispose();
+            preview = new Preview.Builder()
+                .SetResolutionSelector(resolutionSelector) // Lower resolution for speed
                 .Build();
             var surfaceProvider = previewView.SurfaceProvider;
             if (surfaceProvider != null)
@@ -103,14 +89,22 @@ namespace WB.UI.Shared.Enumerator.Activities
                 preview.SetSurfaceProvider(ContextCompat.GetMainExecutor(this), surfaceProvider);
             }
 
-            // Image analysis use case for barcode scanning with higher resolution
-            var imageAnalysis = new ImageAnalysis.Builder()
-                .SetTargetResolution(new Android.Util.Size(1280, 960)) // 4:3 aspect ratio
+            // Image analysis use case - use lower resolution for faster processing
+            imageAnalysis?.Dispose();
+            imageAnalysis = new ImageAnalysis.Builder()
+                .SetOutputImageFormat(ImageAnalysis.OutputImageFormatRgba8888)
+                .SetResolutionSelector(resolutionSelector) // Lower resolution for speed
                 .SetBackpressureStrategy(ImageAnalysis.StrategyKeepOnlyLatest)
                 .Build();
 
-            var analyzer = new BarcodeAnalyzer(this);
-            imageAnalysis.SetAnalyzer(ContextCompat.GetMainExecutor(this), analyzer);
+            analyzer?.Dispose();
+            analyzer = new BarcodeAnalyzer(this); 
+            
+            // Shutdown old executor if exists
+            analysisExecutor?.Shutdown();
+            analysisExecutor?.Dispose();
+            analysisExecutor = Java.Util.Concurrent.Executors.NewSingleThreadExecutor();
+            imageAnalysis.SetAnalyzer(analysisExecutor, analyzer);
 
             // Bind use cases to camera
             cameraProvider.BindToLifecycle(this, cameraSelector, preview, imageAnalysis);
@@ -118,7 +112,7 @@ namespace WB.UI.Shared.Enumerator.Activities
 
         private void OnBarcodeDetected(string code, byte[] rawBytes)
         {
-            if (!isScanning) return;
+            if (!isScanning || IsFinishing || IsDestroyed) return;
             
             isScanning = false;
             RunOnUiThread(() =>
@@ -132,141 +126,248 @@ namespace WB.UI.Shared.Enumerator.Activities
             });
         }
 
+        protected override void OnPause()
+        {
+            base.OnPause();
+            // Stop scanning when going to background
+            isScanning = false;
+            cameraProvider?.UnbindAll();
+        }
+
+        protected override void OnResume()
+        {
+            base.OnResume();
+            // Resume scanning when coming back
+            if (cameraProvider != null && !IsFinishing && !IsDestroyed)
+            {
+                isScanning = true;
+                BindCameraUseCases();
+            }
+        }
+        
         protected override void OnDestroy()
         {
-            base.OnDestroy();
-            barcodeScanner?.Close();
+            isScanning = false;
+
+            imageAnalysis?.ClearAnalyzer();
             cameraProvider?.UnbindAll();
+
+            analyzer?.Dispose();
+            analyzer = null;
+
+            imageAnalysis?.Dispose();
+            imageAnalysis = null;
+
+            analysisExecutor?.Shutdown();
+            try
+            {
+                if (!analysisExecutor?.AwaitTermination(5, Java.Util.Concurrent.TimeUnit.Seconds) ?? false)
+                {
+                    analysisExecutor?.ShutdownNow();
+                }
+            }
+            catch { }
+
+            analysisExecutor?.Dispose();
+            analysisExecutor = null;
+
+            cameraSelector?.Dispose();
+            cameraSelector = null;
+
+            cameraProvider?.Dispose();
+            cameraProvider = null;
+
+            preview?.Dispose();
+            preview = null;
+            
+            previewView?.Dispose();
+            previewView = null;
+
+            base.OnDestroy();
         }
 
         private class BarcodeAnalyzer : Java.Lang.Object, ImageAnalysis.IAnalyzer
         {
-            private readonly BarcodeScannerActivity activity;
-            private bool isProcessing;
+            private readonly WeakReference<BarcodeScannerActivity> activityRef;
+            private volatile bool isProcessing;
+            private readonly BarcodeReaderGeneric reader;
+            private long lastProcessTime;
+            private const long MIN_FRAME_INTERVAL_MS = 100; // Process max 10 frames per second
 
             public BarcodeAnalyzer(BarcodeScannerActivity activity)
             {
-                this.activity = activity;
+                this.activityRef = new WeakReference<BarcodeScannerActivity>(activity);
+                this.reader = new BarcodeReaderGeneric
+                {
+                    AutoRotate = false, // Disable for performance - handle rotation differently if needed
+                    TryInverted = false, // Disable for performance
+                    Options = new ZXing.Common.DecodingOptions
+                    {
+                        TryHarder = true, 
+                        PossibleFormats = new List<BarcodeFormat>
+                        {
+                            //all formats
+                            BarcodeFormat.AZTEC,
+                            BarcodeFormat.CODABAR,
+                            BarcodeFormat.CODE_39,
+                            BarcodeFormat.CODE_93,
+                            BarcodeFormat.CODE_128,
+                            BarcodeFormat.DATA_MATRIX,
+                            BarcodeFormat.EAN_8,
+                            BarcodeFormat.EAN_13,
+                            BarcodeFormat.ITF,
+                            BarcodeFormat.MAXICODE,
+                            BarcodeFormat.PDF_417,
+                            BarcodeFormat.QR_CODE,
+                            BarcodeFormat.RSS_14,
+                            BarcodeFormat.RSS_EXPANDED,
+                            BarcodeFormat.UPC_A,
+                            BarcodeFormat.UPC_E,
+                            BarcodeFormat.UPC_EAN_EXTENSION,
+                            BarcodeFormat.MSI,
+                            BarcodeFormat.PLESSEY,
+                            BarcodeFormat.IMB
+                        }
+                    }
+                };
             }
 
             public void Analyze(IImageProxy imageProxy)
             {
-                if (isProcessing || !activity.isScanning)
+                if (!activityRef.TryGetTarget(out var activity) || !activity.isScanning)
+                {
+                    imageProxy.Close();
+                    return;
+                }
+                
+                // Throttle frame processing
+                var currentTime = Java.Lang.JavaSystem.CurrentTimeMillis();
+                if (isProcessing || !activity.isScanning || (currentTime - lastProcessTime) < MIN_FRAME_INTERVAL_MS)
                 {
                     imageProxy.Close();
                     return;
                 }
 
+                lastProcessTime = currentTime;
                 isProcessing = true;
 
+                PlanarYUVLuminanceSource luminanceSource = null;
                 try
                 {
-                    var mediaImage = imageProxy.Image;
-                    if (mediaImage != null)
+                    luminanceSource = CreateLuminanceSource(imageProxy);
+                    if (luminanceSource != null)
                     {
-                        var inputImage = InputImage.FromMediaImage(mediaImage, imageProxy.ImageInfo.RotationDegrees);
-                        
-                        activity.barcodeScanner.Process(inputImage)
-                            .AddOnSuccessListener(new SuccessListener(activity, imageProxy, () => isProcessing = false))
-                            .AddOnFailureListener(new FailureListener(imageProxy, () => isProcessing = false));
-                    }
-                    else
-                    {
-                        imageProxy.Close();
-                        isProcessing = false;
+                        var result = reader.Decode(luminanceSource);
+                        if (result != null)
+                        {
+                            activity.OnBarcodeDetected(result.Text, result.RawBytes);
+                        }
                     }
                 }
-                catch
+                catch (Exception ex)
                 {
+                    // Log or handle exception if needed
+                    System.Diagnostics.Debug.WriteLine($"Barcode scanning error: {ex.Message}");
+                }
+                finally
+                {
+                    luminanceSource = null;
                     imageProxy.Close();
                     isProcessing = false;
                 }
             }
-        }
 
-        private class SuccessListener : Java.Lang.Object, Android.Gms.Tasks.IOnSuccessListener
-        {
-            private readonly BarcodeScannerActivity activity;
-            private readonly IImageProxy imageProxy;
-            private readonly Action onComplete;
-
-            public SuccessListener(BarcodeScannerActivity activity, IImageProxy imageProxy, Action onComplete)
+            private PlanarYUVLuminanceSource CreateLuminanceSource(IImageProxy imageProxy)
             {
-                this.activity = activity;
-                this.imageProxy = imageProxy;
-                this.onComplete = onComplete;
-            }
-
-            public void OnSuccess(Java.Lang.Object result)
-            {
+                Android.Media.Image image = null;
+                Android.Media.Image.Plane[] planes = null;
+                Java.Nio.ByteBuffer yBuffer = null;
                 try
                 {
-                    // Try different ways to access the list
-                    Java.Util.IList barcodes = null;
+                    image = imageProxy.Image;
+                    if (image == null)
+                        return null;
+
+                    planes = image.GetPlanes();
+                    if (planes == null || planes.Length == 0)
+                        return null;
+
+                    var yPlane = planes[0];
+                    yBuffer = yPlane.Buffer;
+                    if (yBuffer == null)
+                        return null;
+
+                    var width = imageProxy.Width;
+                    var height = imageProxy.Height;
+                    var rowStride = yPlane.RowStride;
+                    var pixelStride = yPlane.PixelStride;
                     
-                    // First try: direct cast to IList
-                    barcodes = result as Java.Util.IList;
+                    // Get Y plane data (luminance)
+                    var ySize = yBuffer.Remaining();
+                    var yData = new byte[ySize];
+                    yBuffer.Get(yData);
                     
-                    // Second try: if result is ArrayList, cast to ArrayList first
-                    if (barcodes == null && result is Java.Util.ArrayList)
+                    // Use center crop for better performance - focus on center 80% of image
+                    var cropWidth = (int)(width * 0.8);
+                    var cropHeight = (int)(height * 0.8);
+                    var left = (width - cropWidth) / 2;
+                    var top = (height - cropHeight) / 2;
+                    
+                    // If the Y plane is tightly packed (pixelStride == 1), we can use it directly
+                    if (pixelStride == 1)
                     {
-                        var arrayList = (Java.Util.ArrayList)result;
-                        barcodes = arrayList;
+                        return new PlanarYUVLuminanceSource(
+                            yData,
+                            rowStride,
+                            height,
+                            left,
+                            top,
+                            cropWidth,
+                            cropHeight,
+                            false);
                     }
-                    
-                    // Third try: use JavaCast extension method
-                    if (barcodes == null && result != null)
+                    else
                     {
-                        try
+                        // Need to repack the data if not tightly packed (rare case)
+                        var repackedData = new byte[width * height];
+                        for (int row = 0; row < height; row++)
                         {
-                            barcodes = result.JavaCast<Java.Util.IList>();
-                        }
-                        catch { /* ignore if JavaCast fails */ }
-                    }
-                    
-                    if (barcodes != null && barcodes.Size() > 0)
-                    {
-                        var firstBarcode = barcodes.Get(0);
-                        
-                        // Try to get RawValue property using reflection since the type isn't resolved
-                        var rawValueProp = firstBarcode?.GetType().GetProperty("RawValue");
-                        var rawBytesMethod = firstBarcode?.GetType().GetMethod("GetRawBytes");
-                        
-                        if (rawValueProp != null && rawBytesMethod != null)
-                        {
-                            var code = rawValueProp.GetValue(firstBarcode) as string;
-                            var rawBytes = rawBytesMethod.Invoke(firstBarcode, null) as byte[];
-                            
-                            if (!string.IsNullOrEmpty(code))
+                            for (int col = 0; col < width; col++)
                             {
-                                activity.OnBarcodeDetected(code, rawBytes);
+                                repackedData[row * width + col] = yData[row * rowStride + col * pixelStride];
                             }
                         }
+                        
+                        return new PlanarYUVLuminanceSource(
+                            repackedData,
+                            width,
+                            height,
+                            left,
+                            top,
+                            cropWidth,
+                            cropHeight,
+                            false);
                     }
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Image conversion error: {ex.Message}");
+                    return null;
                 }
                 finally
                 {
-                    imageProxy.Close();
-                    onComplete?.Invoke();
+                    yBuffer?.Dispose();
+    
+                    if (planes != null)
+                    {
+                        foreach (var plane in planes)
+                        {
+                            plane?.Dispose();
+                        }
+                    }
+    
+                    image?.Dispose();
                 }
-            }
-        }
-
-        private class FailureListener : Java.Lang.Object, Android.Gms.Tasks.IOnFailureListener
-        {
-            private readonly IImageProxy imageProxy;
-            private readonly Action onComplete;
-
-            public FailureListener(IImageProxy imageProxy, Action onComplete)
-            {
-                this.imageProxy = imageProxy;
-                this.onComplete = onComplete;
-            }
-
-            public void OnFailure(Java.Lang.Exception e)
-            {
-                imageProxy.Close();
-                onComplete?.Invoke();
             }
         }
     }

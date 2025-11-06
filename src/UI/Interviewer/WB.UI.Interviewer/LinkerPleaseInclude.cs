@@ -12,8 +12,6 @@ using AndroidX.RecyclerView.Widget;
 using MvvmCross.DroidX.RecyclerView;
 using MvvmCross.IoC;
 using MvvmCross.Views;
-using Xamarin.Google.MLKit.Vision.BarCode;
-using Xamarin.Google.MLKit.Vision.Common;
 using WB.Core.Infrastructure.HttpServices.HttpClient;
 using WB.Core.SharedKernels.DataCollection.ExpressionStorage;
 using WB.Core.SharedKernels.Enumerator.Utils;
@@ -181,18 +179,6 @@ namespace WB.UI.LinkerInclusion
             vh.ItemView.LongClick += (sender, args) => { };
             list.ItemsSource = null;
             list.Click += (sender, args) => { };
-        }
-        
-        public void Include(Xamarin.Google.MLKit.Vision.Barcode.Common.Barcode barcode)
-        {
-            var rawValue = barcode.RawValue;
-            var format = barcode.Format;
-            var valueType = barcode.ValueType;
-        }
-        public void Include(Xamarin.Google.MLKit.Vision.Common.InputImage image)
-        {
-            var rawValue = image.BitmapInternal;
-            var format = image.MediaImage;
         }
     }
 }
