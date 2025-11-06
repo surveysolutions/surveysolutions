@@ -35,19 +35,20 @@ namespace WB.UI.Shared.Enumerator.Activities
             // Initialize ML Kit barcode scanner - scan all formats
             var options = new BarcodeScannerOptions.Builder()
                 .SetBarcodeFormats(
-                    Barcode.FormatQrCode,      // QR codes
-                    Barcode.FormatEan13,       // EAN-13
-                    Barcode.FormatEan8,        // EAN-8
-                    Barcode.FormatUpcA,        // UPC-A
-                    Barcode.FormatUpcE,        // UPC-E
-                    Barcode.FormatCode128,     // Code-128
-                    Barcode.FormatItf,         // ITF (Interleaved 2 of 5)
-                    Barcode.FormatCode39,      // Code-39
-                    Barcode.FormatCode93,      // Code-93
-                    Barcode.FormatCodabar,     // Codabar
-                    Barcode.FormatDataMatrix,  // Data Matrix
-                    Barcode.FormatPdf417,      // PDF417
-                    Barcode.FormatAztec        // Aztec
+                    // Barcode.FormatQrCode,      // QR codes
+                    // Barcode.FormatEan13,       // EAN-13
+                    // Barcode.FormatEan8,        // EAN-8
+                    // Barcode.FormatUpcA,        // UPC-A
+                    // Barcode.FormatUpcE,        // UPC-E
+                    // Barcode.FormatCode128,     // Code-128
+                    // Barcode.FormatItf,         // ITF (Interleaved 2 of 5)
+                    // Barcode.FormatCode39,      // Code-39
+                    // Barcode.FormatCode93,      // Code-93
+                    // Barcode.FormatCodabar,     // Codabar
+                    // Barcode.FormatDataMatrix,  // Data Matrix
+                    // Barcode.FormatPdf417,      // PDF417
+                    // Barcode.FormatAztec        // Aztec
+                    Barcode.FormatAllFormats
                 )
 
                 .Build();
