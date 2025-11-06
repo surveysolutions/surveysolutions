@@ -41,6 +41,7 @@ namespace WB.UI.Shared.Enumerator.Activities
                     Barcode.FormatUpcA,        // UPC-A
                     Barcode.FormatUpcE,        // UPC-E
                     Barcode.FormatCode128,     // Code-128
+                    Barcode.FormatItf,         // ITF (Interleaved 2 of 5)
                     Barcode.FormatCode39,      // Code-39
                     Barcode.FormatCode93,      // Code-93
                     Barcode.FormatCodabar,     // Codabar
