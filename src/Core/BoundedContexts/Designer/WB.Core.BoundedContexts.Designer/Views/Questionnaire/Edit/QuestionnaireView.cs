@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Main.Core.Documents;
-using Main.Core.Entities.SubEntities.Question;
-using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit

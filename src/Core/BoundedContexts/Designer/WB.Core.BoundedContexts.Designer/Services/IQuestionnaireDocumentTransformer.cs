@@ -1,6 +1,9 @@
 using Main.Core.Documents;
 
-public interface IQuestionnaireDocumentTransformer
+namespace WB.Core.BoundedContexts.Designer.Services
 {
-    QuestionnaireDocument TransformDocument(QuestionnaireDocument document);
+    public interface IQuestionnaireDocumentTransformer
+    {
+        QuestionnaireDocument TransformDocument(QuestionnaireDocument document);
+    }
 }

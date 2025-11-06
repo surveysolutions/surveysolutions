@@ -10,8 +10,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
         private readonly IMacrosSubstitutionService macrosSubstitutionService;
         
         public MacrosSubstitutionQuestionnaireDocumentTransformer(
-            IMacrosSubstitutionService macrosSubstitutionService,
-            Guid? compileQuestionnaireId = null)
+            IMacrosSubstitutionService macrosSubstitutionService)
         {
             this.macrosSubstitutionService = macrosSubstitutionService;
         }
