@@ -16,14 +16,14 @@ using WB.Enumerator.Native.WebInterview.Models;
 
 namespace WB.Enumerator.Native.WebInterview.Services
 {
-    public abstract class WebInterviewInterviewEntityFactory : IWebInterviewInterviewEntityFactory
+    public class WebInterviewInterviewEntityFactory : IWebInterviewInterviewEntityFactory
     {
         private readonly IMapper autoMapper;
         private readonly IEnumeratorGroupStateCalculationStrategy enumeratorGroupStateCalculationStrategy;
         private readonly ISupervisorGroupStateCalculationStrategy supervisorGroupStateCalculationStrategy;
         private readonly IWebNavigationService webNavigationService;
         private readonly ISubstitutionTextFactory substitutionTextFactory;
-        private static readonly Regex HtmlRemovalRegex = new Regex(Constants.HtmlRemovalPattern, RegexOptions.Compiled);
+        protected static readonly Regex HtmlRemovalRegex = new Regex(Constants.HtmlRemovalPattern, RegexOptions.Compiled);
 
         public WebInterviewInterviewEntityFactory(IMapper autoMapper,
             IEnumeratorGroupStateCalculationStrategy enumeratorGroupStateCalculationStrategy,
@@ -117,7 +117,8 @@ namespace WB.Enumerator.Native.WebInterview.Services
             return result;
         }
 
-        public InterviewEntity GetEntityDetails(string id, IStatefulInterview callerInterview, IQuestionnaire questionnaire, bool isReviewMode)
+        public InterviewEntity GetEntityDetails(string id, IStatefulInterview callerInterview, IQuestionnaire questionnaire, 
+            bool isReviewMode, bool includeVariableName = false)
         {
             var identity = Identity.Parse(id);
 
@@ -340,6 +341,9 @@ namespace WB.Enumerator.Native.WebInterview.Services
 
                 result.Instructions = this.webNavigationService.MakeNavigationLinks(result.Instructions, identity, questionnaire, callerInterview, webLinksVirtualDirectory);
                 result.Title = this.webNavigationService.MakeNavigationLinks(result.Title, identity, questionnaire, callerInterview, webLinksVirtualDirectory);
+                
+                if (includeVariableName)
+                    result.Name = HtmlRemovalRegex.Replace(question.VariableName, string.Empty);
 
                 return result;
             }

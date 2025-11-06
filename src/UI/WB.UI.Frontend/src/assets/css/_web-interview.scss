@@ -1352,6 +1352,14 @@
 
 .webtester {
 
+    .supervisor:before {
+        display: none;
+    }
+
+    .open-disigner {
+        padding-right: 10px;
+    }
+
     .question.supervisor,
     .variable.section-variable {
         background-color: #FFFFE3;

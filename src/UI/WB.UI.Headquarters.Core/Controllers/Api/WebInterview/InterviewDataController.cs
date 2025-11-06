@@ -51,6 +51,7 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
         
         protected override bool IncludeVariables => false;
         protected override bool IncludeNonInterviewerQuestions => false;
+        protected override bool IncludeVariableName => false;
 
         protected override bool IsReviewMode() =>
             this.authorizedUser.CanConductInterviewReview() && this.Request.Headers.ContainsKey(@"review");
