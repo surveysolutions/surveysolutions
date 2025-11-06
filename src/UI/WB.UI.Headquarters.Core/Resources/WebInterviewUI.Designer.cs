@@ -759,6 +759,18 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
+        public static string TurnOffDevMode {
+            get {
+                return ResourceManager.GetString("TurnOffDevMode", resourceCulture);
+            }
+        }
+        
+        public static string TurnOnDevMode {
+            get {
+                return ResourceManager.GetString("TurnOnDevMode", resourceCulture);
+            }
+        }
+        
         public static string Interview_Questions_RemoveRowFromRosterMessage {
             get {
                 return ResourceManager.GetString("Interview_Questions_RemoveRowFromRosterMessage", resourceCulture);
