@@ -41,10 +41,10 @@ export default {
         answerTextQuestion() {
             this.sendAnswer(() => {
                 const target = $(this.$refs.input)
-                const answer = target.val()
+                const answer = target.val()?.trim()
 
                 if (this.handleEmptyAnswer(answer)) {
-                    target.value = ''
+                    target.value = this.$me.answer || ''
                     return
                 }
 
