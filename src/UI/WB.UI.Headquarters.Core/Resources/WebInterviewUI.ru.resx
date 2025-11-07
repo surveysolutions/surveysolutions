@@ -542,4 +542,10 @@ Oбратитесь в тех. поддержку за помощью</value>
   <data name="Complete_QuestionsWithErrors" xml:space="preserve">
       <value>Вопросы с ошибками: {{count}}</value>
   </data>
+  <data name="TurnOffDevMode" xml:space="preserve">
+    <value>Выключить режим разработчика</value>
+  </data>
+  <data name="TurnOnDevMode" xml:space="preserve">
+    <value>Включить режим разработчика</value>
+  </data>
 </root>

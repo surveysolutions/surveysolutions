@@ -378,4 +378,10 @@
   <data name="Yes" xml:space="preserve">
     <value>დიახ</value>
   </data>
+  <data name="TurnOffDevMode" xml:space="preserve">
+    <value>გამორთეთ დეველოპერის რეჟიმი</value>
+  </data>
+  <data name="TurnOnDevMode" xml:space="preserve">
+    <value>ჩართეთ დეველოპერის რეჟიმი</value>
+  </data>
 </root>

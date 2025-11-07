@@ -484,4 +484,10 @@ Požádejte o pomoc svého garanta.</value>
     <data name="Complete_QuestionsWithErrors" xml:space="preserve">
     <value>Otázky s chybami: {{count}}</value>
   </data>
+  <data name="TurnOffDevMode" xml:space="preserve">
+    <value>Vypnout režim vývojáře</value>
+  </data>
+  <data name="TurnOnDevMode" xml:space="preserve">
+    <value>Zapnout režim vývojáře</value>
+  </data>
 </root>

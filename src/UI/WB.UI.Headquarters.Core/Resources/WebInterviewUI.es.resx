@@ -556,4 +556,10 @@
   <data name="Complete_QuestionsWithErrors" xml:space="preserve">
     <value>Preguntas con errores: {{count}}</value>
   </data>
+  <data name="TurnOffDevMode" xml:space="preserve">
+    <value>Desactivar modo de desarrollador</value>
+  </data>
+  <data name="TurnOnDevMode" xml:space="preserve">
+    <value>Activar modo de desarrollador</value>
+  </data>
 </root>

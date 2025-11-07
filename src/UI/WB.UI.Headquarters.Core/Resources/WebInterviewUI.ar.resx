@@ -540,4 +540,10 @@
     <data name="UnansweredQuestions" xml:space="preserve">
   <value>الأسئلة التي لم تتم الإجابة عنها:</value>
 </data>
+  <data name="TurnOffDevMode" xml:space="preserve">
+    <value>إيقاف وضع المطور</value>
+  </data>
+  <data name="TurnOnDevMode" xml:space="preserve">
+    <value>تشغيل وضع المطور</value>
+  </data>
 </root>

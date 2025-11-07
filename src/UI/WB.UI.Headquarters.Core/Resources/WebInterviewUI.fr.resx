@@ -552,4 +552,10 @@ Veuillez contacter l'équipe de support pour obtenir de l'aide.</value>
   <data name="Complete_QuestionsWithErrors" xml:space="preserve">
     <value>Questions avec erreurs : {{count}}</value>
   </data>
+  <data name="TurnOffDevMode" xml:space="preserve">
+    <value>Désactiver le mode développeur</value>
+  </data>
+  <data name="TurnOnDevMode" xml:space="preserve">
+    <value>Activer le mode développeur</value>
+  </data>
 </root>
