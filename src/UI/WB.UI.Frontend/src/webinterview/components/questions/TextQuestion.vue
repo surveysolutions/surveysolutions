@@ -49,10 +49,10 @@ export default {
         answerTextQuestion() {
             this.sendAnswer(() => {
                 const target = this.$refs.input || this.$refs.inputTextArea;
-                const answer = target.value
+                const answer = target.value?.trim()
 
                 if (this.handleEmptyAnswer(answer)) {
-                    target.value = ''
+                    target.value = this.$me.answer || ''
                     return
                 }
 
