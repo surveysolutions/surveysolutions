@@ -94,7 +94,7 @@
             }
 
             function floatTo16BitPCM(output, offset, input) {
-                for (var i = 0; i < input.length; i++ , offset += 2) {
+                for (var i = 0; i < input.length; i++, offset += 2) {
                     var s = Math.max(-1, Math.min(1, input[i]))
                     output.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7FFF, true)
                 }
@@ -158,8 +158,10 @@
         var recording = false,
             currCallback
 
+
         this.node.onaudioprocess = function (e) {
             if (!recording) return
+
             worker.postMessage({
                 command: 'record',
                 buffer: [
@@ -168,6 +170,7 @@
                 ],
             })
         }
+
 
         this.configure = function (cfg) {
             for (var prop in cfg) {
@@ -183,6 +186,7 @@
 
         this.stop = function () {
             recording = false
+
         }
 
         this.clear = function () {
@@ -198,6 +202,7 @@
             currCallback = cb || config.callback
             type = type || config.type || 'audio/wav'
             if (!currCallback) throw new Error('Callback not set')
+
             worker.postMessage({
                 command: 'exportWAV',
                 type: type,
@@ -221,6 +226,13 @@ if (!window.AudioRecorder) {
     var AudioRecorder = function () {
         var self = {}
         var recorder = null
+        var mediaRecorder = null
+        var mediaStream = null
+        var audioChunks = []
+        var canceled = false
+        var useAACCompression = false
+        var recordingStartTime = null
+
         var analyserSettings = {
             сontext: null,
             node: null,
@@ -230,6 +242,25 @@ if (!window.AudioRecorder) {
         }
 
         var config = {}
+
+        // Check for AAC codec support
+        function isAACSupported() {
+            if (!window.MediaRecorder) {
+                return false
+            }
+            var mimeTypes = [
+                'audio/aac',
+                'audio/mp4;codecs=mp4a.40.2', // AAC-LC
+                'audio/mp4',
+                'audio/webm;codecs=opus' // Opus as fallback
+            ]
+            for (var i = 0; i < mimeTypes.length; i++) {
+                if (MediaRecorder.isTypeSupported(mimeTypes[i])) {
+                    return mimeTypes[i]
+                }
+            }
+            return false
+        }
 
         var settings = {
             audio: {
@@ -246,6 +277,49 @@ if (!window.AudioRecorder) {
         var audioContext
 
         var successCallback = function (stream) {
+            mediaStream = stream
+
+            // Check if we can use AAC compression with MediaRecorder
+            var supportedMimeType = isAACSupported()
+            useAACCompression = supportedMimeType !== false
+
+            if (useAACCompression) {
+
+                try {
+                    mediaRecorder = new MediaRecorder(stream, {
+                        mimeType: supportedMimeType,
+                        audioBitsPerSecond: 128000 // 128 kbps for good quality
+                    })
+
+                    mediaRecorder.ondataavailable = function (event) {
+                        if (event.data.size > 0 && !canceled) {
+                            audioChunks.push(event.data)
+                        }
+                    }
+
+                    mediaRecorder.onstop = function () {
+                        if (audioChunks.length > 0 && !canceled) {
+                            var duration = (Date.now() - recordingStartTime) / 1000
+                            var blob = new Blob(audioChunks, { type: supportedMimeType })
+
+                            var audioURL = window.URL.createObjectURL(blob)
+                            var audio = new Audio(audioURL)
+                            audio.onloadedmetadata = function () {
+                                var calculatedDuration = audio.duration
+                                if (calculatedDuration === Infinity) {
+                                    // Firefox bug: duration is Infinity for blobs
+                                    calculatedDuration = duration
+                                }
+                                config.doneCallback(blob, duration)
+                                audioChunks = []
+                            }
+                        }
+                    }
+                } catch (e) {
+                    console.warn('Failed to initialize MediaRecorder, falling back to WAV:', e)
+                    useAACCompression = false
+                }
+            }
 
             audioContext = new (window.AudioContext || window.webkitAudioContext)()
             var inputPoint = audioContext.createGain()
@@ -259,7 +333,10 @@ if (!window.AudioRecorder) {
             analyserSettings.node.fftSize = 2048
             inputPoint.connect(analyserSettings.node)
 
-            recorder = new window.Recorder(inputPoint)
+            // Only create Recorder if not using AAC compression
+            if (!useAACCompression) {
+                recorder = new window.Recorder(inputPoint)
+            }
 
             var zeroGain = audioContext.createGain()
             zeroGain.gain.value = 0.0
@@ -280,9 +357,14 @@ if (!window.AudioRecorder) {
         function doneEncoding(blob) {
             var audioURL = window.URL.createObjectURL(blob)
             var audio = new Audio(audioURL)
-            audio.onloadedmetadata = function(){
-                var duration = audio.duration
-                config.doneCallback(blob, duration)
+            audio.onloadedmetadata = function () {
+                let calculatedDuration = audio.duration
+                if (calculatedDuration === Infinity) {
+                    // Firefox bug: duration is Infinity for blobs
+                    calculatedDuration = (Date.now() - recordingStartTime) / 1000
+                }
+
+                config.doneCallback(blob, calculatedDuration)
             }
         }
 
@@ -335,50 +417,96 @@ if (!window.AudioRecorder) {
         }
 
         self.start = function () {
-            if (!recorder)
-                return
-
-            recorder.clear()
-            recorder.record()
-            config.startRecordingCallback()
+            canceled = false
+            if (useAACCompression && mediaRecorder) {
+                audioChunks = []
+                mediaRecorder.start()
+                recordingStartTime = Date.now()
+                config.startRecordingCallback()
+            } else if (recorder) {
+                recorder.clear()
+                recorder.record()
+                recordingStartTime = Date.now()
+                config.startRecordingCallback()
+            }
+            else
+                throw new Error('Error starting audio recording: no recorder available')
         }
 
         self.stop = function () {
-            if (!recorder)
-                return
+            canceled = false
+            if (useAACCompression && mediaRecorder && mediaRecorder.state !== 'inactive') {
+                mediaRecorder.stop()
+            } else if (recorder) {
+                recorder.stop()
+                recorder.getBuffers(gotBuffers)
+            }
 
-            recorder.stop()
-            recorder.getBuffers(gotBuffers)
+            // Stop all media stream tracks to release microphone
+            if (mediaStream) {
+                mediaStream.getTracks().forEach(function (track) {
+                    track.stop()
+                })
+                mediaStream = null
+            }
 
             cancelAnalyserUpdates()
         }
 
         self.cancel = function () {
-            recorder.stop()
+            canceled = true
+            if (useAACCompression && mediaRecorder && mediaRecorder.state !== 'inactive') {
+                audioChunks = []
+                mediaRecorder.stop()
+            } else if (recorder) {
+                recorder.stop()
+                recorder.clear()
+            }
+
+            // Stop all media stream tracks to release microphone
+            if (mediaStream) {
+                mediaStream.getTracks().forEach(function (track) {
+                    track.stop()
+                })
+                mediaStream = null
+            }
+
             cancelAnalyserUpdates()
-            recorder.clear()
         }
 
         self.initAudio = function (configuration) {
             config = configuration
-            if (!navigator.getUserMedia)
-                navigator.getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia
-            if (!navigator.cancelAnimationFrame)
-                navigator.cancelAnimationFrame = navigator.webkitCancelAnimationFrame || navigator.mozCancelAnimationFrame
-            if (!navigator.requestAnimationFrame)
-                navigator.requestAnimationFrame = navigator.webkitRequestAnimationFrame || navigator.mozRequestAnimationFrame
 
-            if (!navigator.getUserMedia) {
-                config.errorCallback()
+            // Check for modern API first
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                // Use modern Promise-based API
+                navigator.mediaDevices.getUserMedia(settings)
+                    .then(successCallback)
+                    .catch(config.errorCallback)
+            } else {
+                // Fallback for very old browsers
+                var getUserMedia = navigator.getUserMedia ||
+                    navigator.webkitGetUserMedia ||
+                    navigator.mozGetUserMedia
+
+                if (getUserMedia) {
+                    getUserMedia.call(navigator, settings, successCallback, config.errorCallback)
+                } else {
+                    config.errorCallback(new Error('getUserMedia is not supported'))
+                }
             }
-            else {
-                navigator.getUserMedia(settings, successCallback, config.errorCallback)
+        }
+
+        // Expose compression info for debugging
+        self.getCompressionInfo = function () {
+            return {
+                usingCompression: useAACCompression,
+                codec: useAACCompression && mediaRecorder ? mediaRecorder.mimeType : 'audio/wav'
             }
         }
 
         return self
     }
-
 
     window.AudioRecorder = AudioRecorder
 }

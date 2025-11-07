@@ -66,19 +66,28 @@ namespace WB.UI.Headquarters.Controllers
                 await using var ms = new MemoryStream();
 
                 await file.CopyToAsync(ms);
-
                 byte[] bytes = ms.ToArray();
 
-                var audioInfo = await this.audioProcessingService.CompressAudioFileAsync(bytes);
-
-                var fileName = $@"{question.VariableName}__{questionIdentity.RosterVector}.m4a";
-
-                audioFileStorage.StoreInterviewBinaryData(id, fileName, audioInfo.Binary, audioInfo.MimeType);
-
-                var audioDuration = audioInfo.Duration == TimeSpan.Zero 
-                    ? (Double.TryParse(duration, out var dur) ? TimeSpan.FromSeconds(dur) : TimeSpan.Zero)
-                    : audioInfo.Duration;
-
+                string contentType = file.ContentType;
+                
+                var fileName = $@"{question.VariableName}__{questionIdentity.RosterVector}.aac";
+                
+                var audioDuration = TimeSpan.Zero;
+                if(contentType is "audio/wav" or "audio/x-wav")
+                {
+                    var audioInfo = await this.audioProcessingService.CompressAudioFileAsync(bytes, contentType);
+                    audioFileStorage.StoreInterviewBinaryData(id, fileName, audioInfo.Binary, audioInfo.MimeType); 
+                    audioDuration = audioInfo.Duration == TimeSpan.Zero 
+                        ? (Double.TryParse(duration, out var dur) ? TimeSpan.FromSeconds(dur) : TimeSpan.Zero)
+                        : audioInfo.Duration;
+                }
+                else
+                {
+                    audioFileStorage.StoreInterviewBinaryData(id, fileName, bytes, file.ContentType);
+                    audioDuration = (Double.TryParse(duration, out var dur)
+                        ? TimeSpan.FromSeconds(dur)
+                        : TimeSpan.Zero);
+                }
                 var command = new AnswerAudioQuestionCommand(interview.Id,
                     interview.CurrentResponsibleId, questionIdentity.Id, questionIdentity.RosterVector,
                     fileName, 
