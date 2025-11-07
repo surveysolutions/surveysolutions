@@ -1,4 +1,5 @@
 import { createVuetify } from 'vuetify';
+import { aliases, mdi } from 'vuetify/iconsets/mdi';
 import i18nInstance from './localization';
 
 const myCustomLightTheme = {
@@ -15,6 +16,13 @@ const vuetify = createVuetify({
         themes: {
             myCustomLightTheme
         }
+    },
+    icons: {
+        defaultSet: 'mdi',
+        aliases,
+        sets: {
+            mdi,
+        },
     },
     locale: {
         t: (key, ...params) => i18nInstance.t(key, params)

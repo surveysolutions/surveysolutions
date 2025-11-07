@@ -20,7 +20,9 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <NoWarn>1701;1702;</NoWarn>
   </PropertyGroup>
-
+    <PropertyGroup>
+        <NoWarn>$(NoWarn);NU1900</NoWarn>
+    </PropertyGroup>
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'WB.UI.Designer.Manage' " />
   <ItemGroup>
     <Content Update="**\*.json" CopyToPublishDirectory="Never" />
@@ -58,8 +60,6 @@
     <PackageReference Include="System.Security.Cryptography.Xml" Version="9.0.5" />
     <PackageReference Include="System.Text.Json" Version="9.0.5" />
     <PackageReference Include="VueCliMiddleware" Version="6.0.0" />
-  </ItemGroup>
-  <ItemGroup Condition=" '$(Configuration)' == 'Debug' ">
     <PackageReference Include="Yarp.ReverseProxy" Version="2.3.0" />
   </ItemGroup>
   <ItemGroup>

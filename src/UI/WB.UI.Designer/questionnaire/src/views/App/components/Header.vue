@@ -12,50 +12,53 @@
                     <a class="btn" :href="sanitizeUrl('/questionnaire/questionnairehistory/' + questionnaireId)"
                         target="_blank" rel="noopener"
                         v-if="questionnaire.hasViewerAdminRights || questionnaire.isSharedWithUser">{{
-                        $t('QuestionnaireEditor.History') }}</a>
+                            $t('QuestionnaireEditor.History') }}</a>
                     <button class="btn" @click="showDownloadPdf()">
                         {{ $t('QuestionnaireEditor.DownloadPdf') }}
                     </button>
+                    <button class="btn" @click="showChat()">
+                        {{ $t('QuestionnaireEditor.Chat', 'AI Chat') }}
+                    </button>
                     <a class="btn" v-if="questionnaire.hasViewerAdminRights" @click="saveAsQuestionnaire"
                         target="_blank" rel="noopener">{{
-                        $t('QuestionnaireEditor.SaveAs') }}</a>
+                            $t('QuestionnaireEditor.SaveAs') }}</a>
 
                     <a class="btn" v-if="questionnaire.questionnaireRevision || questionnaire.isReadOnlyForUser"
                         :href="sanitizeUrl('/questionnaire/clone/' + questionnaire.questionnaireId + (questionnaire.questionnaireRevision ? '$' + questionnaire.questionnaireRevision : ''))"
                         target="_blank" rel="noopener">{{ $t('QuestionnaireEditor.CopyTo') }}</a>
                     <button class="btn" v-if="questionnaire.hasViewerAdminRights || !questionnaire.isReadOnlyForUser"
                         :disabled="!questionnaire.hasViewerAdminRights &&
-                        !questionnaire.isSharedWithUser" @click="showShareInfo()">
+                            !questionnaire.isSharedWithUser" @click="showShareInfo()">
                         {{ $t('QuestionnaireEditor.Settings') }}
                     </button>
 
                     <div class="btn-group" v-if="currentUser.isAuthenticated">
                         <a class="btn btn-default" style="margin-right: 0px;">{{
-                        $t('QuestionnaireEditor.HellowMessageBtn', {
-                            currentUserName: currentUser.userName
-                        })
-                    }}</a>
+                            $t('QuestionnaireEditor.HellowMessageBtn', {
+                                currentUserName: currentUser.userName
+                            })
+                        }}</a>
                         <a class="btn btn-default" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="caret"></span>
                             <span class="sr-only">{{
-                            $t('QuestionnaireEditor.ToggleDropdown')
-                        }}</span>
+                                $t('QuestionnaireEditor.ToggleDropdown')
+                            }}</span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-right">
                             <li>
                                 <a href="/identity/account/manage">{{
-                            $t('QuestionnaireEditor.ManageAccount')
-                        }}</a>
+                                    $t('QuestionnaireEditor.ManageAccount')
+                                }}</a>
                             </li>
                             <li>
                                 <a href="/identity/account/manage/changepassword">{{
-                            $t('QuestionnaireEditor.ChangePassword')
-                        }}</a>
+                                    $t('QuestionnaireEditor.ChangePassword')
+                                }}</a>
                             </li>
                             <li>
                                 <a href="/identity/account/logout">{{
-                            $t('QuestionnaireEditor.LogOut')
-                        }}</a>
+                                    $t('QuestionnaireEditor.LogOut')
+                                }}</a>
                             </li>
                         </ul>
                     </div>
@@ -63,7 +66,7 @@
                         $t('QuestionnaireEditor.Login') }}</a>
                     <a class="btn" href="/identity/account/register" type="button"
                         v-if="!currentUser.isAuthenticated">{{
-                        $t('QuestionnaireEditor.Register') }}</a>
+                            $t('QuestionnaireEditor.Register') }}</a>
                 </div>
             </div>
             <div class="questionnarie-title" style="margin-right: 0!important;">
@@ -74,12 +77,12 @@
                     <div class="questionnarie-title-buttons" style="display: inline-block!important;">
                         <span class="text-muted" id="questionnaireStats">
                             {{
-                        $t('QuestionnaireEditor.QuestionnaireSummary', {
-                            questionsCount: questionnaire.questionsCount,
-                            groupsCount: questionnaire.groupsCount,
-                            rostersCount: questionnaire.rostersCount
-                        })
-                    }}
+                                $t('QuestionnaireEditor.QuestionnaireSummary', {
+                                    questionsCount: questionnaire.questionsCount,
+                                    groupsCount: questionnaire.groupsCount,
+                                    rostersCount: questionnaire.rostersCount
+                                })
+                            }}
                         </span>
                         <button id="verification-button" type="button" class="btn" @click="verify()"
                             v-if="questionnaire.questionnaireRevision === null">
@@ -87,29 +90,29 @@
                         </button>
                         <span v-if="warningsCount != null && errorsCount != null">
                             <span v-if="warningsCount + errorsCount > 0" class="error-message v-hide" :class="{
-                        'no-errors': errorsCount == 0
-                    }">
+                                'no-errors': errorsCount == 0
+                            }">
                                 <a href="javascript:void(0);" @click="showVerificationErrors()">
                                     {{
-                        $t(
-                            'QuestionnaireEditor.ErrorsCounter',
-                            {
-                                count: errorsCount
-                            }
-                        )
-                    }}
+                                        $t(
+                                            'QuestionnaireEditor.ErrorsCounter',
+                                            {
+                                                count: errorsCount
+                                            }
+                                        )
+                                    }}
                                 </a>
                             </span>
                             <span v-if="warningsCount > 0" class="warning-message v-hide">
                                 <a href="javascript:void(0);" @click="showVerificationWarnings()">
                                     {{
-                        $t(
-                            'QuestionnaireEditor.WarningsCounter',
-                            {
-                                count: warningsCount
-                            }
-                        )
-                    }}
+                                        $t(
+                                            'QuestionnaireEditor.WarningsCounter',
+                                            {
+                                                count: warningsCount
+                                            }
+                                        )
+                                    }}
                                 </a>
                             </span>
                             <span class="text-success" v-if="warningsCount + errorsCount === 0">
@@ -123,18 +126,18 @@
                         <span class="error-message strong" v-if="questionnaire.isReadOnlyForUser">
                             {{ $t('QuestionnaireEditor.ReadOnly') }}&nbsp;</span>
                         <button id="webtest-btn" type="button" class="btn" v-if="questionnaire.webTestAvailable &&
-                        questionnaire.questionnaireRevision === null
+                            questionnaire.questionnaireRevision === null
                         " @click="webTest()">
                             {{ $t('QuestionnaireEditor.Test') }}
                         </button>
                         <span class="error-message strong"
                             v-if="questionnaire.previewRevision !== null && questionnaire.previewRevision !== undefined">{{
-                        $t(
-                            'QuestionnaireEditor.Preview',
-                            {
-                            revision: questionnaire.previewRevision
-                            }
-                            )
+                                $t(
+                                    'QuestionnaireEditor.Preview',
+                                    {
+                                        revision: questionnaire.previewRevision
+                                    }
+                                )
                             }}</span>
                     </div>
                 </div>
@@ -150,12 +153,14 @@
     <VerificationDialog ref="verificationDialog" :questionnaireId="questionnaireId" />
     <SharedInfoDialog ref="sharedInfoDialog" :questionnaireId="questionnaireId" />
     <DownloadPDFDialog ref="downloadPDFDialog" :questionnaireId="questionnaireId" />
+    <ChatDialog v-model="chatDialogOpen" />
 </template>
 
 <script>
 import VerificationDialog from './VerificationDialog.vue';
 import SharedInfoDialog from './SharedInfoDialog.vue';
 import DownloadPDFDialog from './DownloadPDFDialog.vue';
+import ChatDialog from './ChatDialog.vue';
 import { useMagicKeys } from '@vueuse/core';
 
 import { useVerificationStore } from '../../../stores/verification';
@@ -169,7 +174,8 @@ export default {
     components: {
         VerificationDialog,
         SharedInfoDialog,
-        DownloadPDFDialog
+        DownloadPDFDialog,
+        ChatDialog
     },
     inject: ['questionnaire', 'currentUser'],
     props: {
@@ -184,6 +190,7 @@ export default {
         const verificationDialog = ref(null);
         const sharedInfoDialog = ref(null);
         const downloadPDFDialog = ref(null);
+        const chatDialogOpen = ref(false);
 
         const { ctrl_b } = useMagicKeys({
             passive: false,
@@ -198,6 +205,7 @@ export default {
             verificationDialog,
             sharedInfoDialog,
             downloadPDFDialog,
+            chatDialogOpen,
             ctrl_b
         };
     },
@@ -233,6 +241,9 @@ export default {
         },
         showDownloadPdf() {
             this.downloadPDFDialog.open();
+        },
+        showChat() {
+            this.chatDialogOpen = true;
         },
         saveAsQuestionnaire() {
             window.location = '/api/hq/backup/package/' + this.questionnaireId

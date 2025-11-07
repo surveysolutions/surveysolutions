@@ -255,6 +255,10 @@ namespace WB.UI.Designer
             services.Configure<QuestionnaireHistorySettings>(Configuration.GetSection("QuestionnaireHistorySettings"));
             services.Configure<WebTesterSettings>(Configuration.GetSection("WebTester"));
 
+            // Configure YARP reverse proxy for OpenAI
+            services.AddReverseProxy()
+                .LoadFromConfig(Configuration.GetSection("ReverseProxy"));
+
             aspCoreKernel = new AspCoreKernel(services);
 
             aspCoreKernel.Load(
@@ -362,6 +366,8 @@ namespace WB.UI.Designer
                     pattern: "{controller=QuestionnaireList}/{action=Index}/{id?}");
                
                 routes.MapRazorPages();
+                
+                routes.MapReverseProxy();
             });
             
             if (aspCoreKernel == null) return;

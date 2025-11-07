@@ -9,6 +9,9 @@ import I18NextVue from 'i18next-vue';
 import { vuetify } from './plugins/vuetify';
 import { setupErrorHandler } from './plugins/errorHandler';
 
+// Import Material Design Icons
+import '@mdi/font/css/materialdesignicons.css';
+
 //import '../../questionnaire/content/markup.less';
 //import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap';
