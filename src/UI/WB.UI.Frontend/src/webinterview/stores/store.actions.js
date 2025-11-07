@@ -244,8 +244,8 @@ export default {
             try {
                 commit('SET_LOADING_PROGRESS', true)
 
-                const showVariables = rootState.webinterview.showVariables || false
-                const section = await api.get('getFullSectionInfo', { sectionId: id, includeVariables: showVariables })
+                const isDevMode = rootState.webinterview.isDevMode || false
+                const section = await api.get('getFullSectionInfo', { sectionId: id, includeVariables: isDevMode })
 
                 const isCover = id === undefined || id == config.coverPageId
                 if (isCover) {
@@ -360,7 +360,7 @@ export default {
         return hubApi.changeSection(to, from)
     },
 
-    setShowVariables({ commit, rootState }, { value }) {
-        commit('SHOW_VARIABLES', { value: value })
+    setDevMode({ commit, rootState }, { value }) {
+        commit('DEV_MODE', { value: value })
     },
 }

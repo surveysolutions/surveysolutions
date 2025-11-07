@@ -118,7 +118,7 @@ export default {
         else
             store.remove(`${interviewId}_lastSection`)
     },
-    SHOW_VARIABLES(state, { value }) {
-        state.showVariables = value
+    DEV_MODE(state, { value }) {
+        state.isDevMode = value
     },
 }
