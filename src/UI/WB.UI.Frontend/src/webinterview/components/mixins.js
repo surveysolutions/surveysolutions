@@ -111,7 +111,7 @@ export const entityDetails = {
         },
 
         handleEmptyAnswer(answer) {
-            const newAnswer = answer === undefined || answer === null || answer === '' || answer.trim() === '' ? null : answer
+            const newAnswer = answer === undefined || answer === null || answer === '' || (typeof answer === 'string' && answer.trim() === '') ? null : answer
             const currentAnswer = this.$me.answer === undefined || this.$me.answer === null || this.$me.answer === '' ? null : this.$me.answer
 
             if (newAnswer === currentAnswer) {
