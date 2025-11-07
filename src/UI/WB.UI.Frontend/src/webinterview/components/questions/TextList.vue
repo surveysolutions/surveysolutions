@@ -96,6 +96,7 @@ export default {
             if (item.text == text) return
 
             if (!text || text.trim() === item.text) {
+                target.val(item.text)
                 return
             }
 
