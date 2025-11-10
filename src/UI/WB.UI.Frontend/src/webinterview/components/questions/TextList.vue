@@ -95,17 +95,19 @@ export default {
 
             if (item.text == text) return
 
-            if (!text || text.trim() === item.text) {
+            const newValue = text?.trim() || ''
+
+            if (newValue === item.text) {
                 target.val(item.text)
                 return
             }
 
-            if (!text.trim()) {
+            if (!newValue) {
                 this.confirmAndRemoveRow(index)
                 return
             }
 
-            item.text = text
+            item.text = newValue
             this.$store.dispatch('answerTextListQuestion', { identity: this.id, rows: this.$me.rows })
         },
         addRow(evnt) {
