@@ -117,6 +117,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             var listItem = sender as TextListItemViewModel;
 
+            await DeleteListItem(listItem);
+        }
+
+        private async Task DeleteListItem(TextListItemViewModel listItem)
+        {
             if (listItem == null)
                 return;
 
@@ -125,6 +130,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 var message = UIResources.Interview_Questions_RemoveRowFromRosterMessage.FormatString(listItem.Title);
                 if (!(await this.userInteractionService.ConfirmAsync(message)))
                 {
+                    var title = GetOptionTitleByValue(listItem.Value);
+                    if (title != null)
+                        listItem.Title = title;
                     return;
                 }
             }
@@ -135,6 +143,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             await mainThreadAsyncDispatcher.ExecuteOnMainThreadAsync(() => this.Answers.Remove(listItem));
 
             await this.SaveAnswers();
+        }
+        
+        private string GetOptionTitleByValue(decimal value)
+        {
+            var interview = this.interviewRepository.GetOrThrow(this.interviewId);
+            var textListQuestion = interview.GetTextListQuestion(this.Identity);
+            if (textListQuestion.IsAnswered())
+            {
+                var answerRow = textListQuestion.GetAnswer()
+                    .Rows.FirstOrDefault(row => row.Value == value);
+                return answerRow?.Text;
+            }
+
+            return null;
         }
 
         private IMvxAsyncCommand<string> AddListItem => new MvxAsyncCommand<string>(AddListItemCmd);
@@ -160,7 +182,22 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.addNewItemViewModel.Text = string.Empty;
         }
 
-        private async void ListItemEdited(object sender, EventArgs eventArgs) => await this.SaveAnswers();
+        private async void ListItemEdited(object sender, EventArgs eventArgs)
+        {
+            var listItem = sender as TextListItemViewModel;
+
+            if (listItem == null)
+                return;
+
+            if (string.IsNullOrWhiteSpace(listItem.Title?.Trim()))
+                await this.DeleteListItem(listItem);
+            else
+            {
+                if (listItem.Title?.Trim() != GetOptionTitleByValue(listItem.Value))
+                    await this.SaveAnswers();
+                listItem.Title = GetOptionTitleByValue(listItem.Value);
+            }
+        }
 
         private async Task SaveAnswers()
         {
@@ -174,7 +211,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 return;
             }
 
-            var answers = answerViewModels.Select(x => new Tuple<decimal, string>(x.Value, x.Title)).ToArray();
+            var answers = answerViewModels
+                .Select(x => new Tuple<decimal, string>(x.Value, x.Title?.Trim())).ToArray();
 
             var command = new AnswerTextListQuestionCommand(
                 interviewId: Guid.Parse(this.interviewId),
