@@ -22,10 +22,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         ICompositeQuestion,
         IDisposable
     {
-        public IQuestionStateViewModel QuestionState
-        {
-            get { return this.questionState; }
-        }
+        public IQuestionStateViewModel QuestionState => this.questionState;
 
         public QuestionInstructionViewModel InstructionViewModel { get; set; }
         public AnsweringViewModel Answering { get; private set; }
@@ -33,21 +30,26 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private bool isInProgress;
         public bool IsInProgress
         {
-            get { return this.isInProgress; }
-            set { this.isInProgress = value; this.RaisePropertyChanged(); }
+            get => this.isInProgress;
+            set 
+            { 
+                this.isInProgress = value; 
+                this.RaisePropertyChanged(); 
+                this.saveAnswerCommand?.RaiseCanExecuteChanged();
+            }
         }
 
         private string answer;
         public string Answer
         {
-            get { return this.answer; }
+            get => this.answer;
             set { this.answer = value; this.RaisePropertyChanged(); }
         }
 
-        private ICommand saveAnswerCommand;
+        private MvxAsyncCommand saveAnswerCommand;
         public ICommand SaveAnswerCommand
         {
-            get { return this.saveAnswerCommand ?? (this.saveAnswerCommand = new MvxAsyncCommand(this.SaveAnswer, () => !this.IsInProgress)); }
+            get { return this.saveAnswerCommand ??= new MvxAsyncCommand(this.SaveAnswer, () => !this.IsInProgress); }
         }
 
         private readonly Guid userId;

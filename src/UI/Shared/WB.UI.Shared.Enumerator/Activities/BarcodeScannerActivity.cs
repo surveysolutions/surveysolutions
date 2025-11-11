@@ -145,6 +145,12 @@ namespace WB.UI.Shared.Enumerator.Activities
             }
         }
         
+        public override void OnBackPressed()
+        {
+            QRBarcodeScanService.SetResult(null);
+            base.OnBackPressed();
+        }
+        
         protected override void OnDestroy()
         {
             isScanning = false;
