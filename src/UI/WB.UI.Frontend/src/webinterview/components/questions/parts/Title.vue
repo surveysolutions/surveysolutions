@@ -17,7 +17,7 @@ export default {
                 return;
 
             const questionnaireId = this.$config.questionnaireId
-            const entityId = this.$me.id
+            const entityId = this.$me.id.split('_')[0]
             const url = `${this.$config.designerUrl}/q/details/${questionnaireId}/entity/${entityId}`
             window.open(url, '_blank')
         },

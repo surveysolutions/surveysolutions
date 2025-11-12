@@ -30,7 +30,8 @@ export default {
     fetchEntity: batchedAction(async ({ commit, dispatch, rootState }, ids) => {
         const sectionId = rootState.route.params.sectionId || null
         const elementIds = uniq(map(ids, 'id'))
-        const details = await api.get('getEntitiesDetails', { sectionId: sectionId, ids: elementIds })
+        const isDevMode = rootState.webinterview.isDevMode || false
+        const details = await api.get('getEntitiesDetails', { sectionId: sectionId, ids: elementIds, includeVariables: isDevMode })
         dispatch('fetch', { ids, done: true })
 
         commit('SET_ENTITIES_DETAILS', {
@@ -174,7 +175,8 @@ export default {
     },
 
     // called by server side. refresh
-    refreshEntities({ state, dispatch, getters }, questions) {
+    refreshEntities({ state, dispatch, getters, rootState }, questions) {
+        
         questions.forEach(id => {
             if (state.entityDetails[id]) { // do not fetch entity that is no in the visible list
                 dispatch('fetchEntity', { id, source: 'server' })
