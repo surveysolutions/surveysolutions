@@ -5,12 +5,10 @@ import { fetch } from './store.fetch.js'
 import mutations from './store.mutations'
 import sidebar from './store.sidebar'
 import routeParams from '../../shared/stores/store.routeParams.js'
-import browserLocalStore from '../../shared/localStorage'
+import { getShowVariables } from './showVariablesPreference'
 
 // Load showVariables preference from localStorage
-const localStore = new browserLocalStore()
-const savedShowVariables = localStore.getItem('webinterview_showVariables')
-const initialShowVariables = savedShowVariables === 'true'
+const initialShowVariables = getShowVariables()
 
 const store =
     safeStore({

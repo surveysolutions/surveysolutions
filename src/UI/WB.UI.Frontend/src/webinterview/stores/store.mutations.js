@@ -1,5 +1,6 @@
 import { forEach, differenceBy } from 'lodash'
 import browserLocalStore from '~/shared/localStorage'
+import { setShowVariables as saveShowVariables } from './showVariablesPreference'
 
 export default {
     SET_ENTITIES_DETAILS(state, { entities, lastActivityTimestamp }) {
@@ -120,7 +121,6 @@ export default {
     },
     SHOW_VARIABLES(state, { value }) {
         state.showVariables = value
-        const store = new browserLocalStore()
-        store.setItem('webinterview_showVariables', value.toString())
+        saveShowVariables(value)
     },
 }
