@@ -492,8 +492,7 @@ Rozhovor {{key}}</value>
 Chyby</value>
   </data>
   <data name="Complete_Tab_QuestionsWithErrors" xml:space="preserve">
-    <value>Otázky &lt;br /&gt;
-s chybami</value>
+    <value>Chyby</value>
   </data>
   <data name="Complete_Tab_UnansweredQuestions" xml:space="preserve">
     <value>Nezodpovězené &lt;br /&gt;

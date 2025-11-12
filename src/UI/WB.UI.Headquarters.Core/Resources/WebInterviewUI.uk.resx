@@ -509,8 +509,7 @@
 Помилки</value>
   </data>
   <data name="Complete_Tab_QuestionsWithErrors" xml:space="preserve">
-    <value>Питання &lt;br /&gt;
-з помилками</value>
+    <value>Помилки</value>
   </data>
   <data name="Complete_Tab_UnansweredQuestions" xml:space="preserve">
     <value>Без відповіді &lt;br /&gt;

@@ -384,8 +384,7 @@
 შეცდომები</value>
   </data>
   <data name="Complete_Tab_QuestionsWithErrors" xml:space="preserve">
-    <value>შეცდომებიანი &lt;br /&gt;
-კითხვები</value>
+    <value>შეცდომები</value>
   </data>
   <data name="Complete_Tab_UnansweredQuestions" xml:space="preserve">
     <value>უპასუხოდ &lt;br /&gt;

@@ -551,8 +551,7 @@ Oбратитесь в тех. поддержку за помощью</value>
 ошибки</value>
   </data>
   <data name="Complete_Tab_QuestionsWithErrors" xml:space="preserve">
-    <value>Вопросы &lt;br /&gt;
-с ошибками</value>
+    <value>Ошибки</value>
   </data>
   <data name="Complete_Tab_UnansweredQuestions" xml:space="preserve">
     <value>Вопросы &lt;br /&gt;

@@ -477,8 +477,7 @@ Intervistë {{key}}</value>
 Gabime</value>
   </data>
   <data name="Complete_Tab_QuestionsWithErrors" xml:space="preserve">
-    <value>Pyetje &lt;br /&gt;
-me gabime</value>
+    <value>Gabime</value>
   </data>
   <data name="Complete_Tab_UnansweredQuestions" xml:space="preserve">
     <value>Pyetje &lt;br /&gt;

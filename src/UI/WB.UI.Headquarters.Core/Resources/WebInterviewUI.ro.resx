@@ -497,8 +497,7 @@ Interviu {{key}}</value>
 Critice</value>
   </data>
   <data name="Complete_Tab_QuestionsWithErrors" xml:space="preserve">
-    <value>Întrebări &lt;br /&gt;
-cu erori</value>
+    <value>Erori</value>
   </data>
   <data name="Complete_Tab_UnansweredQuestions" xml:space="preserve">
     <value>Întrebări &lt;br /&gt;

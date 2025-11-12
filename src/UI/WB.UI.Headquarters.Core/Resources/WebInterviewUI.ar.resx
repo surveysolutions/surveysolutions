@@ -549,8 +549,7 @@
 حرجة</value>
   </data>
   <data name="Complete_Tab_QuestionsWithErrors" xml:space="preserve">
-    <value>أسئلة &lt;br /&gt;
-تحتوي على أخطاء</value>
+    <value>أخطاء</value>
   </data>
   <data name="Complete_Tab_UnansweredQuestions" xml:space="preserve">
     <value>أسئلة &lt;br /&gt;

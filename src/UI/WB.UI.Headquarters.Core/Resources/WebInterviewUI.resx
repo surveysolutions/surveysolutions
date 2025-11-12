@@ -337,8 +337,7 @@ Interview {{key}}</value>
 Errors</value>
   </data>
   <data name="Complete_Tab_QuestionsWithErrors" xml:space="preserve">
-      <value>Questions &lt;br /&gt;
-with errors</value>
+      <value>Errors</value>
   </data>
   <data name="Complete_Tab_UnansweredQuestions" xml:space="preserve">
       <value>Unanswered &lt;br /&gt;

@@ -561,8 +561,7 @@ Entrevista {{key}}</value>
 Críticos</value>
   </data>
   <data name="Complete_Tab_QuestionsWithErrors" xml:space="preserve">
-    <value>Perguntas &lt;br /&gt;
-com erros</value>
+    <value>Erros</value>
   </data>
   <data name="Complete_Tab_UnansweredQuestions" xml:space="preserve">
     <value>Perguntas &lt;br /&gt;

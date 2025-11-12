@@ -431,8 +431,7 @@
 错误</value>
   </data>
   <data name="Complete_Tab_QuestionsWithErrors" xml:space="preserve">
-    <value>有错误的 &lt;br /&gt;
-问题</value>
+    <value>错误</value>
   </data>
   <data name="Complete_Tab_UnansweredQuestions" xml:space="preserve">
     <value>未作答的 &lt;br /&gt;
