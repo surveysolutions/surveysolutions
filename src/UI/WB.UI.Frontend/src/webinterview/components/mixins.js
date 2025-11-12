@@ -16,6 +16,17 @@ export const entityPartial = {
         },
     },
     props: ['id'],
+    methods: {
+        openDesigner() {
+            if (!this.$config.inWebTesterMode)
+                return
+
+            const questionnaireId = this.$config.questionnaireId
+            const entityId = this.$me.id.split('_')[0]
+            const url = `${this.$config.designerUrl}/q/details/${questionnaireId}/entity/${entityId}`
+            window.open(url, '_blank')
+        },
+    },
 }
 
 // Questions
@@ -124,6 +135,16 @@ export const entityDetails = {
             }
 
             return false
+        },
+
+        openDesigner() {
+            if (!this.$config.inWebTesterMode)
+                return
+
+            const questionnaireId = this.$config.questionnaireId
+            const entityId = this.$me.id.split('_')[0]
+            const url = `${this.$config.designerUrl}/q/details/${questionnaireId}/entity/${entityId}`
+            window.open(url, '_blank')
         },
     },
 }
