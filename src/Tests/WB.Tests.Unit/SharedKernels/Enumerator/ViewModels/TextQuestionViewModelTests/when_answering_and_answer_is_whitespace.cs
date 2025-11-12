@@ -34,8 +34,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextQuestionViewMode
             model.ValueChangeCommand.Execute(" ");
         }
 
-        [NUnit.Framework.Test] public void should_mark_question_as_invalid_with_message () =>
-            ValidityModelMock.Verify(x => x.MarkAnswerAsNotSavedWithMessage("Answer should not be empty"), Times.Once);
+        [NUnit.Framework.Test] public void should_send_remove_answer_aommand () =>
+            AnsweringViewModelMock.Verify(x => x.SendQuestionCommandAsync(Moq.It.IsAny<RemoveAnswerCommand>()), Times.Once);
 
         [NUnit.Framework.Test] public void should_not_send_answer_command () =>
             AnsweringViewModelMock.Verify(x => x.SendQuestionCommandAsync(Moq.It.IsAny<AnswerTextQuestionCommand>()), Times.Never);
