@@ -147,7 +147,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         
         private string GetOptionTitleByValue(decimal value)
         {
-            var interview = this.interviewRepository.GetOrThrow(this.interviewId);
+            var interview = this.interviewRepository.Get(this.interviewId);
             var textListQuestion = interview.GetTextListQuestion(this.Identity);
             if (textListQuestion.IsAnswered())
             {
