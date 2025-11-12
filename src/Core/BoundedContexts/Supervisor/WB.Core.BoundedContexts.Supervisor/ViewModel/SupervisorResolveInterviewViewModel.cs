@@ -96,19 +96,23 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 
             var interviewView = this.interviews.GetById(interviewId);
             this.receivedByInterviewerTabletAt = interviewView.ReceivedByInterviewerAtUtc;
-            
-            this.TopFailedCriticalRules = this.entitiesListViewModelFactory.GetTopFailedCriticalRulesFromState(interviewId, navigationState).ToList();
+
+            var topFailedCriticalRulesFromState = this.entitiesListViewModelFactory.GetTopFailedCriticalRulesFromState(interviewId, navigationState);
+            this.TopFailedCriticalRules = topFailedCriticalRulesFromState.Entities.ToList();
             if (TopFailedCriticalRules.Count > 0)
             {
                 var tabViewModel = Tabs.First(t => t.TabContent == CompleteTabContent.CriticalError);
                 tabViewModel.Items.AddRange(TopFailedCriticalRules);
+                tabViewModel.Total += topFailedCriticalRulesFromState.Total;
             }
-            
-            this.TopUnansweredCriticalQuestions = this.entitiesListViewModelFactory.GetTopUnansweredCriticalQuestions(interviewId, navigationState).ToList();
+
+            var topUnansweredCriticalQuestions = this.entitiesListViewModelFactory.GetTopUnansweredCriticalQuestions(interviewId, navigationState);
+            this.TopUnansweredCriticalQuestions = topUnansweredCriticalQuestions.Entities.ToList();
             if (TopUnansweredCriticalQuestions.Count > 0)
             {
                 var tabViewModel = Tabs.First(t => t.TabContent == CompleteTabContent.CriticalError);
                 tabViewModel.Items.AddRange(TopUnansweredCriticalQuestions);
+                tabViewModel.Total += topUnansweredCriticalQuestions.Total;
             }
             
             IsLoading = false;
