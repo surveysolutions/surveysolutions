@@ -477,12 +477,6 @@
   <data name="EmailLink_EmailResumeLink" xml:space="preserve">
     <value>Enlace de reanudación</value>
   </data>
-  <data name="HideVariables" xml:space="preserve">
-    <value>Ocultar variables</value>
-  </data>
-  <data name="ShowVariables" xml:space="preserve">
-    <value>Mostrar variables</value>
-  </data>
   <data name="Interview_Questions_RemoveRowFromRosterMessage" xml:space="preserve">
     <value>¿Está seguro de que desea eliminar la lista relacionada '{{rosterTitle}}'?</value>
   </data>
