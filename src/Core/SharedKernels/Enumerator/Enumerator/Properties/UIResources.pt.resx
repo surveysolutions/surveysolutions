@@ -980,8 +980,7 @@ Entrevista {0}</value>
 críticos</value>
 </data>
   <data name="Interview_Complete_Tab_Title_WithErrors" xml:space="preserve">
-    <value>Perguntas
-com erros</value>
+    <value>Erros</value>
 </data>
   <data name="Interview_Complete_Tab_Title_Unanswered" xml:space="preserve">
     <value>Perguntas

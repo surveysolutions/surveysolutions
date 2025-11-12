@@ -979,8 +979,7 @@
 حرجة</value>
 </data>
   <data name="Interview_Complete_Tab_Title_WithErrors" xml:space="preserve">
-    <value>أسئلة
-بها أخطاء</value>
+    <value>أخطاء</value>
 </data>
   <data name="Interview_Complete_Tab_Title_Unanswered" xml:space="preserve">
     <value>أسئلة

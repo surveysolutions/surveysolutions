@@ -919,8 +919,7 @@ Rozhovor {0}</value>
 chyby</value>
 </data>
     <data name="Interview_Complete_Tab_Title_WithErrors" xml:space="preserve">
-    <value>Otázky
-s chybami</value>
+    <value>Chyby</value>
 </data>
     <data name="Interview_Complete_Tab_Title_Unanswered" xml:space="preserve">
     <value>Nezodpovězené

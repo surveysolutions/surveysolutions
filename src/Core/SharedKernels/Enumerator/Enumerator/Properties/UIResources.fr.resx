@@ -979,8 +979,7 @@ Entretien {0}</value>
 critiques</value>
 </data>
   <data name="Interview_Complete_Tab_Title_WithErrors" xml:space="preserve">
-    <value>Questions
-avec erreurs</value>
+    <value>Erreurs</value>
 </data>
   <data name="Interview_Complete_Tab_Title_Unanswered" xml:space="preserve">
     <value>Questions

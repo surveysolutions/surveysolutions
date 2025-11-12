@@ -979,8 +979,7 @@ No errors detected</value>
 errors</value>
   </data>
   <data name="Interview_Complete_Tab_Title_WithErrors" xml:space="preserve">
-    <value>Questions
-with errors</value>
+    <value>Errors</value>
   </data>
   <data name="Interview_Complete_Tab_Title_Unanswered" xml:space="preserve">
     <value>Unanswered
