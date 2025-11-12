@@ -300,9 +300,22 @@ export default {
     },
     watch: {
         completeGroups(newVal) {
-            if (this.activeCompleteGroupIndex === null && Array.isArray(newVal) && newVal.length > 0) {
-                const firstWithItemsIndex = newVal.findIndex(g => Array.isArray(g.items) && g.items.length > 0)
-                this.activeCompleteGroupIndex = firstWithItemsIndex >= 0 ? firstWithItemsIndex : 0
+            if (Array.isArray(newVal) && newVal.length > 0) {
+                let targetIndex = null;
+
+                for (let i = 0; i < newVal.length; i++) {
+                    const group = newVal[i];
+                    if (Array.isArray(group.items) && group.items.length > 0) {
+                        targetIndex = i;
+                        break;
+                    }
+                }
+
+                if (targetIndex !== null && (this.activeCompleteGroupIndex === null || this.shouldUpdateActiveTab(newVal))) {
+                    this.activeCompleteGroupIndex = targetIndex;
+                } else if (this.activeCompleteGroupIndex === null) {
+                    this.activeCompleteGroupIndex = 0;
+                }
             }
         },
         $route(to, from) {
@@ -540,6 +553,20 @@ export default {
             if (!group) return
             if (!Array.isArray(group.items) || group.items.length === 0) return
             this.activeCompleteGroupIndex = index
+        },
+
+        shouldUpdateActiveTab(newGroups) {
+            if (!Array.isArray(newGroups) || newGroups.length === 0) return false;
+
+            const criticalErrorsGroup = newGroups[0];
+
+            if (Array.isArray(criticalErrorsGroup.items) &&
+                criticalErrorsGroup.items.length > 0 &&
+                this.activeCompleteGroupIndex !== 0) {
+                return true;
+            }
+
+            return false;
         },
     },
 }
