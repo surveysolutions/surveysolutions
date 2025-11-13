@@ -117,6 +117,7 @@
     padding-bottom: 0px;
     list-style: none;
     border-bottom: 1px solid #000000;
+    margin-bottom: 0px;
 }
 
 .tab-item {
@@ -156,6 +157,7 @@
     color: #222;
     font-weight: 600;
     box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.06);
+    bottom: -1px;
 }
 
 .tab-item.active::before {
