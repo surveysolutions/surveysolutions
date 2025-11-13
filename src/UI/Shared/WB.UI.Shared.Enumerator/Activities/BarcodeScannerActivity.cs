@@ -9,6 +9,7 @@ using WB.UI.Shared.Enumerator.Services.Internals;
 using Java.Util.Concurrent;
 using ZXing;
 using AndroidX.Camera.Core.ResolutionSelector;
+using WB.Core.SharedKernels.Enumerator.Properties;
 
 namespace WB.UI.Shared.Enumerator.Activities
 {
@@ -44,13 +45,13 @@ namespace WB.UI.Shared.Enumerator.Activities
                 }
                 catch (ExecutionException ex)
                 {
-                    var message = ex.Message ?? "Unknown error";
-                    Toast.MakeText(this, "Error starting camera: " + message, ToastLength.Long)?.Show();
+                    var message = ex.Message ?? UIResources.BarcodeScanner_Error_UnknownError;
+                    Toast.MakeText(this, UIResources.BarcodeScanner_Error_StartingCamera + message, ToastLength.Long)?.Show();
                 }
                 catch (Java.Lang.InterruptedException ex)
                 {
-                    var message = ex.Message ?? "Interrupted";
-                    Toast.MakeText(this, "Error starting camera: " + message, ToastLength.Long)?.Show();
+                    var message = ex.Message ?? UIResources.BarcodeScanner_Error_Interrupted;
+                    Toast.MakeText(this, UIResources.BarcodeScanner_Error_StartingCamera + message, ToastLength.Long)?.Show();
                 }
             }), ContextCompat.GetMainExecutor(this));
         }

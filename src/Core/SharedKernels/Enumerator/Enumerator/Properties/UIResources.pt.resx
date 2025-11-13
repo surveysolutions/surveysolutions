@@ -958,4 +958,13 @@ Você pode criar ou editar seus questionários no Survey Solutions Designer</val
     <data name="MenuItem_Title_ZoomGeoTracking" xml:space="preserve">
       <value>Ampliar para os registros de rastreamento</value>
     </data>
+  <data name="BarcodeScanner_Error_UnknownError" xml:space="preserve">
+    <value>Erro desconhecido</value>
+  </data>
+  <data name="BarcodeScanner_Error_StartingCamera" xml:space="preserve">
+    <value>Erro ao iniciar a câmera: </value>
+  </data>
+  <data name="BarcodeScanner_Error_Interrupted" xml:space="preserve">
+    <value>Interrompido</value>
+  </data>
 </root>

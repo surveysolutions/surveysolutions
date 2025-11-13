@@ -290,6 +290,15 @@
   <data name="Interview_Questions_QrBarcode_SaveAnswer" xml:space="preserve">
     <value>Натисніть, щоб зчитати штрих-код</value>
   </data>
+  <data name="BarcodeScanner_Error_UnknownError" xml:space="preserve">
+    <value>Невідома помилка</value>
+  </data>
+  <data name="BarcodeScanner_Error_StartingCamera" xml:space="preserve">
+    <value>Помилка запуску камери: </value>
+  </data>
+  <data name="BarcodeScanner_Error_Interrupted" xml:space="preserve">
+    <value>Перервано</value>
+  </data>
   <data name="Interview_Questions_RemoveRowFromRosterMessage" xml:space="preserve">
     <value>Ви впевнені, що хочете видалити пов'язаний ростер '{0}' з кожного пов'язаного ростеру?</value>
   </data>
