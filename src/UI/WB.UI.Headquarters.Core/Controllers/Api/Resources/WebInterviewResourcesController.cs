@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Storage;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
@@ -141,8 +142,9 @@ namespace WB.UI.Headquarters.Controllers.Api.Resources
             var resultFile = fullSize
                 ? file
                 : this.imageProcessingService.ResizeImage(file, 200, 1920);
+            var contentType = ContentTypeHelper.GetImageContentType(fileName);
 
-            return this.BinaryResponseMessageWithEtag(resultFile);
+            return this.BinaryResponseMessageWithEtag(resultFile, contentType);
         }
         
         [HttpGet]
