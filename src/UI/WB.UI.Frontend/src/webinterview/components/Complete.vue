@@ -83,12 +83,15 @@
         <div class="wrapper-info">
             <div class="submit-info" v-dompurify-html="$t('WebInterviewUI.Complete_SubmitInfo')"></div>
             <div class="container-info">
-                <a href="javascript:void(0);" id="btnComplete" class="btn btn-lg" v-bind:class="{
+                <a href="javascript:void(0);" id="btnComplete" class="btn btn-lg btn-with-icon" v-bind:class="{
                     'btn-success': isAllAnswered,
                     'btn-primary': hasUnansweredQuestions,
                     'btn-danger': hasErrors,
                     'disabled': !isCompletionPermitted,
-                }" @click="completeInterview">{{ competeButtonTitle }}</a>
+                }" @click="completeInterview">
+                    <span class="btn-icon"></span>
+                    {{ competeButtonTitle }}
+                </a>
                 <div class="info-block gray-uppercase" v-if="doesShowCompleteComment" style="margin-top:10px;">{{
                     completeButtionComment }}
                 </div>
@@ -276,6 +279,46 @@
     width: 5px;
     height: 100%;
     border-radius: 4px 0 0 4px;
+}
+
+/* Button with icon styles */
+.btn-with-icon {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+}
+
+.btn-icon {
+    width: 18px;
+    height: 18px;
+    display: inline-block;
+    flex-shrink: 0;
+}
+
+.btn-with-icon:not(.disabled) .btn-icon {
+    background-image: url("data:image/svg+xml,%3Csvg width='17' height='17' viewBox='0 0 17 17' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M15.5 3.5L8.74999 9.75L5.5 6.5' stroke='white' stroke-width='2' stroke-miterlimit='10' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M15.9819 9.02093C15.873 10.5842 15.2773 12.0742 14.2782 13.2815C13.2791 14.4888 11.927 15.3528 10.4117 15.7523C8.89637 16.1517 7.294 16.0665 5.82962 15.5085C4.36524 14.9505 3.11241 13.9479 2.2471 12.6414C1.38178 11.3349 0.947437 9.79016 1.00507 8.22415C1.06271 6.65813 1.60943 5.1495 2.56845 3.91015C3.52747 2.67079 4.85062 1.76296 6.35205 1.31416C7.85348 0.865359 9.45779 0.898134 10.9396 1.40788' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.btn-with-icon.disabled .btn-icon {
+    background-image: url("data:image/svg+xml,%3Csvg width='15' height='19' viewBox='0 0 15 19' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='1' y='7' width='13' height='11' rx='2' stroke='white' stroke-width='2'/%3E%3Cpath d='M4 4.5C4 2.567 5.567 1 7.5 1V1C9.433 1 11 2.567 11 4.5V7H4V4.5Z' stroke='white' stroke-width='2'/%3E%3Crect x='6' y='11' width='3' height='3' rx='1.5' fill='white'/%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.btn-success .btn-icon,
+.btn-primary .btn-icon,
+.btn-danger .btn-icon {
+    filter: brightness(0) invert(1);
+}
+
+.btn-with-icon.disabled .btn-icon {
+    filter: brightness(0) invert(1);
+    opacity: 0.5;
 }
 </style>
 
