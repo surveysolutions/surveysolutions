@@ -49,7 +49,9 @@
         <div class="wrapper-info">
             <div class="container-info">
                 <label class="info-block gray-uppercase" for="comment-for-supervisor">
-                    {{ noteToSupervisor }}
+                    {{ noteToSupervisor }} <template v-if="hasCriticalIssues && criticalityLevel == 'Warn'">
+                        ({{ $t('WebInterviewUI.Complete_Required') }})
+                    </template>
                 </label>
                 <div class="field">
                     <textarea class="field-to-fill" id="comment-for-supervisor" v-autosize
