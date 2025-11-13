@@ -99,8 +99,7 @@
 <style scoped>
 .submit-info {
     color: #343434;
-    font-family: Roboto;
-    font-weight: Regular;
+    font-family: RobotoRegular;
     font-size: 13px;
     opacity: 1;
     padding-bottom: 16px;
@@ -191,7 +190,7 @@
 .tab-item .tab-title {
     display: inline-block;
     width: 130px;
-    font-family: Roboto;
+    font-family: RobotoLight;
     font-weight: Medium;
     font-size: 14px;
     opacity: 1;
@@ -199,7 +198,7 @@
 }
 
 .tab-item .tab-count {
-    font-family: Roboto;
+    font-family: RobotoRegular;
     font-weight: Black;
     font-size: 18px;
     opacity: 1;
@@ -228,7 +227,7 @@
 
 .tab-content-item .item-title {
     color: rgba(0, 0, 0, 1);
-    font-family: Roboto;
+    font-family: RobotoRegular;
     font-weight: Bold;
     font-size: 14px;
     opacity: 1;
@@ -237,8 +236,7 @@
 
 .tab-content-item .item-error {
     color: rgba(219, 57, 18, 1);
-    font-family: Roboto;
-    font-weight: Regular;
+    font-family: RobotoRegular;
     font-size: 14px;
     opacity: 1;
     text-align: left;
@@ -246,8 +244,7 @@
 
 .tab-content-item .item-comment {
     color: rgba(0, 0, 0, 1);
-    font-family: Roboto;
-    font-weight: Regular;
+    font-family: RobotoRegular;
     font-size: 14px;
     opacity: 1;
     text-align: left;
