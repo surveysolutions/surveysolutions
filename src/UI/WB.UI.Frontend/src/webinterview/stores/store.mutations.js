@@ -1,5 +1,6 @@
 import { forEach, differenceBy } from 'lodash'
 import browserLocalStore from '~/shared/localStorage'
+import { setShowVariables as saveShowVariables } from './showVariablesPreference'
 
 export default {
     SET_ENTITIES_DETAILS(state, { entities, lastActivityTimestamp }) {
@@ -112,13 +113,14 @@ export default {
         state.interviewCompleted = true
     },
     CURRENT_SECTION(_, { interviewId, sectionId }) {
-        const store = new browserLocalStore()
+
         if (sectionId)
-            store.setItem(`${interviewId}_lastSection`, sectionId)
+            browserLocalStore.setItem(`${interviewId}_lastSection`, sectionId)
         else
-            store.remove(`${interviewId}_lastSection`)
+            browserLocalStore.remove(`${interviewId}_lastSection`)
     },
     SHOW_VARIABLES(state, { value }) {
         state.showVariables = value
+        saveShowVariables(value)
     },
 }
