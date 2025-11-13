@@ -8,7 +8,7 @@
 <script lang="js">
 
 import http from '~/webinterview/api/http'
-import localStorage from '~/shared/localStorage'
+import browserLocalStore from '~/shared/localStorage'
 import { defineAsyncComponent } from 'vue';
 
 export default {
@@ -76,3 +76,4 @@ export default {
     },
 }
 </script>
+
