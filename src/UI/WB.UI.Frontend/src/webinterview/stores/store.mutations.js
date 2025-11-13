@@ -113,11 +113,11 @@ export default {
         state.interviewCompleted = true
     },
     CURRENT_SECTION(_, { interviewId, sectionId }) {
-        const store = new browserLocalStore()
+
         if (sectionId)
-            store.setItem(`${interviewId}_lastSection`, sectionId)
+            browserLocalStore.setItem(`${interviewId}_lastSection`, sectionId)
         else
-            store.remove(`${interviewId}_lastSection`)
+            browserLocalStore.remove(`${interviewId}_lastSection`)
     },
     SHOW_VARIABLES(state, { value }) {
         state.showVariables = value
