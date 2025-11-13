@@ -255,6 +255,7 @@
 .tab-content-item {
     position: relative;
     padding-left: 20px;
+    max-width: 540px;
 }
 
 .tab-content.errors .tab-content-item::before,
