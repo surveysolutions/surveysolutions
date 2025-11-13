@@ -635,11 +635,12 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             var errorText = string.IsNullOrEmpty(validationMessage) 
                 ? null 
                 : Constants.HtmlRemovalRegex.Replace(validationMessage, string.Empty);
-            var commentOriginal = interview.GetQuestionComments(identity)?.LastOrDefault()?.Comment;
+            var question = interview.GetQuestion(identity);
+            var commentOriginal = question != null ? interview.GetQuestionComments(identity)?.LastOrDefault()?.Comment : null;
             var comment = string.IsNullOrWhiteSpace(commentOriginal)
                 ? null
                 : Constants.HtmlRemovalRegex.Replace(commentOriginal, string.Empty);
-            var isPrefilled = interview.IsQuestionPrefilled(identity);
+            var isPrefilled = question?.IsPrefilled ?? false;
             var parentId = interviewEntityFactory.GetUIParent(interview, questionnaire, identity);
             return new T
             {

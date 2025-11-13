@@ -354,13 +354,13 @@ export default {
 
             groups.push({
                 title: this.$t('WebInterviewUI.Complete_Tab_QuestionsWithErrors'),
-                items: this.completeInfo.entitiesWithError,
+                items: this.completeInfo?.entitiesWithError,
                 cssClass: 'errors'
             })
 
             groups.push({
                 title: this.$t('WebInterviewUI.Complete_Tab_UnansweredQuestions'),
-                items: this.completeInfo.unansweredQuestions,
+                items: this.completeInfo?.unansweredQuestions,
                 cssClass: 'unanswered'
             })
 
