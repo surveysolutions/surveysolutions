@@ -1,7 +1,7 @@
 <template>
     <h5>
-        <a class="open-disigner" v-if="this.$config.inWebTesterMode && $me.name" href="#" @click="openDesigner"
-            v-dompurify-html="'[' + $me.name + ']'"></a>
+        <a class="open-designer" v-if="this.$config.inWebTesterMode && $me.name" href="javascript:void(0);"
+            @click="openDesigner" v-dompurify-html="'[' + $me.name + ']'"></a>
         <span v-dateTimeFormatting v-linkToRoute v-dompurify-html="$me.title"></span>
     </h5>
 </template>

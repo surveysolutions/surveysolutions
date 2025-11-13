@@ -1,7 +1,24 @@
 import { getLocationHash } from '~/shared/helpers'
 
+const designerMixin = {
+    methods: {
+        openDesigner() {
+            if (!this.$config.inWebTesterMode) {
+                return
+            }
+
+            const { questionnaireId, designerUrl } = this.$config
+            const entityId = this.$me.id.split('_')[0]
+            const url = `${designerUrl}/q/details/${questionnaireId}/entity/${entityId}`
+
+            window.open(url, '_blank')
+        },
+    },
+}
+
 // Validation, Title, RemoveAnswer, Instruction, Attachment, etc...
 export const entityPartial = {
+    mixins: [designerMixin],
     computed: {
         $me() {
             const id = this.id || this.$parent.$parent.id
@@ -15,22 +32,12 @@ export const entityPartial = {
             }
         },
     },
-    props: ['id'],
-    methods: {
-        openDesigner() {
-            if (!this.$config.inWebTesterMode)
-                return
-
-            const questionnaireId = this.$config.questionnaireId
-            const entityId = this.$me.id.split('_')[0]
-            const url = `${this.$config.designerUrl}/q/details/${questionnaireId}/entity/${entityId}`
-            window.open(url, '_blank')
-        },
-    },
+    props: ['id']
 }
 
 // Questions
 export const entityDetails = {
+    mixins: [designerMixin],
     computed: {
         $me() {
             let result = null
@@ -135,16 +142,6 @@ export const entityDetails = {
             }
 
             return false
-        },
-
-        openDesigner() {
-            if (!this.$config.inWebTesterMode)
-                return
-
-            const questionnaireId = this.$config.questionnaireId
-            const entityId = this.$me.id.split('_')[0]
-            const url = `${this.$config.designerUrl}/q/details/${questionnaireId}/entity/${entityId}`
-            window.open(url, '_blank')
         },
     },
 }

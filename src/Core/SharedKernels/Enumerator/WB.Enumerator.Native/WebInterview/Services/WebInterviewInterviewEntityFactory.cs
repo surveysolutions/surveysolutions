@@ -445,7 +445,8 @@ namespace WB.Enumerator.Native.WebInterview.Services
                                 EntityType = GetEntityType(qIdentity, questionnaire, callerInterview, isReviewMode, includeVariables: false).ToString(),
                                 Options = questionnaire.IsMatrixRoster(identity.Id)
                                     ? questionnaire.GetOptionsForQuestion(questionId, null, null, new int[0]).ToArray()
-                                    : null
+                                    : null,
+                                Name = includeVariableName? questionnaire.GetQuestionVariableName(questionId) : null
                             };
                         }).ToArray(),
                     Instances = tableRosterInstances

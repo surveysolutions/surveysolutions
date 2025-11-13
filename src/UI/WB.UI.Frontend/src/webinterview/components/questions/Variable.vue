@@ -3,7 +3,7 @@
         <div class="question-editor">
             <div>
                 <h5>
-                    <a class="open-disigner" v-if="this.$config.inWebTesterMode && $me.name" href="#"
+                    <a class="open-designer" v-if="this.$config.inWebTesterMode && $me.name" href="javascript:void(0);"
                         @click="openDesigner" v-dompurify-html="'[' + $me.name + ']'"></a>
                     <span v-dateTimeFormatting v-linkToRoute v-dompurify-html="$me.title"></span>
                 </h5>

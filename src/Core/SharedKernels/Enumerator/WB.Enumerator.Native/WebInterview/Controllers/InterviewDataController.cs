@@ -332,11 +332,13 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
 
             var details = GetEntitiesDetails(interviewId, entities.Select(e => e.Identity).ToArray(), sectionId);
 
-            return new SectionData
+            var section = new SectionData
             {
                 Entities = entities,
                 Details = details
             };
+
+            return section;
         }
 
         public virtual ButtonState GetNavigationButtonState(Guid interviewId, string sectionId, string id, IQuestionnaire questionnaire = null)
