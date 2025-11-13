@@ -39,6 +39,13 @@ namespace WB.UI.Shared.Enumerator.Activities
             viewPager = view.FindViewById<ViewPager2>(Resource.Id.viewPager);
             viewPager.OffscreenPageLimit = 2;
             viewPager.UserInputEnabled = false;
+            
+            var recyclerView = (RecyclerView)viewPager.GetChildAt(0);
+            if (recyclerView != null)
+            {
+                recyclerView.SetItemAnimator(null);
+                recyclerView.OverScrollMode = OverScrollMode.Never;
+            }
 
             SetupTabs();
             RegisterPageChangeCallback();
