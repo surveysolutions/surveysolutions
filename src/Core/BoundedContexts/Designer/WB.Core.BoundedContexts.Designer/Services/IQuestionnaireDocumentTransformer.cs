@@ -4,6 +4,6 @@ namespace WB.Core.BoundedContexts.Designer.Services
 {
     public interface IQuestionnaireDocumentTransformer
     {
-        QuestionnaireDocument TransformDocument(QuestionnaireDocument document);
+        QuestionnaireDocument TransformInPlace(QuestionnaireDocument document);
     }
 }

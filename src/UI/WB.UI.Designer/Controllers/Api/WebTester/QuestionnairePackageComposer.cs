@@ -102,7 +102,7 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
                 throw new ComposeException();
 
             var questionnaire = questionnaireView.GetClientReadyDocument();
-            questionnaireDocumentTransformer.TransformDocument(questionnaire);
+            questionnaireDocumentTransformer.TransformInPlace(questionnaire);
             
             var readOnlyQuestionnaireDocument = new ReadOnlyQuestionnaireDocumentWithCache(questionnaire);
             questionnaire.ExpressionsPlayOrder = this.expressionsPlayOrderProvider.GetExpressionsPlayOrder(readOnlyQuestionnaireDocument);

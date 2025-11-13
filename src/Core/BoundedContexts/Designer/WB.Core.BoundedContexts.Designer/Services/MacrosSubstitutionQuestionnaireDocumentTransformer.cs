@@ -15,7 +15,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
             this.macrosSubstitutionService = macrosSubstitutionService;
         }
 
-        public QuestionnaireDocument TransformDocument(QuestionnaireDocument document)
+        public QuestionnaireDocument TransformInPlace(QuestionnaireDocument document)
         {
             document.GetEntitiesByType<TextQuestion>()
                 .ForEach(x => x.Mask =

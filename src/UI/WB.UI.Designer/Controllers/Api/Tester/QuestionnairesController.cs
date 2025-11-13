@@ -93,7 +93,7 @@ namespace WB.UI.Designer.Controllers.Api.Tester
             }
 
             var questionnaire = questionnaireView.GetClientReadyDocument();
-            questionnaireDocumentTransformer.TransformDocument(questionnaire);
+            questionnaireDocumentTransformer.TransformInPlace(questionnaire);
             var readOnlyQuestionnaireDocument = new ReadOnlyQuestionnaireDocumentWithCache(questionnaire);
             questionnaire.ExpressionsPlayOrder = this.expressionsPlayOrderProvider.GetExpressionsPlayOrder(readOnlyQuestionnaireDocument);
             questionnaire.DependencyGraph = this.expressionsPlayOrderProvider.GetDependencyGraph(readOnlyQuestionnaireDocument);

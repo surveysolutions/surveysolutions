@@ -168,7 +168,7 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
             }
 
             var questionnaire = questionnaireView.Source.Clone();
-            questionnaireDocumentTransformer.TransformDocument(questionnaire);
+            questionnaireDocumentTransformer.TransformInPlace(questionnaire);
 
             var userAgent = Request.Headers["User-Agent"].FirstOrDefault();
             questionnaire.Revision = await this.questionnaireHistoryVersionsService
