@@ -26,6 +26,7 @@
     </div>
 </template>
 
+
 <style scoped>
 .md-editor-container {
     border: 1px solid #ddd;
@@ -272,10 +273,21 @@ export default {
             this.editor.chain().focus().toggleOrderedList().run()
         },
         addImage() {
-            const url = window.prompt('Enter image URL:')
-            if (url) {
-                this.editor.chain().focus().setImage({ src: url }).run()
+            const input = document.createElement('input')
+            input.type = 'file'
+            input.accept = 'image/*'
+            input.onchange = (e) => {
+                const file = e.target.files[0]
+                if (file) {
+                    const reader = new FileReader()
+                    reader.onload = (event) => {
+                        const base64 = event.target.result
+                        this.editor.chain().focus().setImage({ src: base64 }).run()
+                    }
+                    reader.readAsDataURL(file)
+                }
             }
+            input.click()
         },
         addLink() {
             const url = window.prompt('Enter link URL:')
