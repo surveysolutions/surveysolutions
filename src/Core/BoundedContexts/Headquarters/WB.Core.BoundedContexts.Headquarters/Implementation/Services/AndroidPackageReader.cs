@@ -17,6 +17,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         {
             byte[] manifestData = null;
 
+            var size = fileStream.Length;
+
             using (ZipArchive zip = new ZipArchive(fileStream))
             {
                 var allFound = 0;
@@ -49,7 +51,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             return new AndroidPackageInfo
             {
                 BuildNumber = string.IsNullOrEmpty(versionCode) ? (int?)null : int.Parse(versionCode),
-                VersionString = versionString
+                VersionString = versionString,
+                Size = size,
             };
         }
         

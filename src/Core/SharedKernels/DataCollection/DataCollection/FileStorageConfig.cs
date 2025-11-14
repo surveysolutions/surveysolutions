@@ -2,7 +2,7 @@
 using System;
 using System.IO;
 
-namespace WB.Core.SharedKernels.DataCollection
+namespace WB.Core.SharedKernels.Configs
 {
     public class FileStorageConfig
     {
@@ -23,8 +23,8 @@ namespace WB.Core.SharedKernels.DataCollection
             if (StorageProviderType != null) return StorageProviderType.Value;
 
             storageType = AppData.StartsWith("s3://", StringComparison.OrdinalIgnoreCase) 
-                ? DataCollection.StorageProviderType.AmazonS3 
-                : DataCollection.StorageProviderType.FileSystem;
+                ? Configs.StorageProviderType.AmazonS3 
+                : Configs.StorageProviderType.FileSystem;
 
             return storageType.Value;
         }

@@ -265,4 +265,7 @@
   <data name="WebInterviewUserMessages_LinkWelcome_Descr" xml:space="preserve">
     <value>Header welcome text on web interview link landing page</value>
   </data>
+  <data name="AllowTranscriptDownloading" xml:space="preserve">
+    <value>Allow downloading interview transcript after submission</value>
+  </data>
 </root>

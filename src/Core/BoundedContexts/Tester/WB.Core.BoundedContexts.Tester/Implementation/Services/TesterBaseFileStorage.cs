@@ -31,7 +31,8 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
 
         public byte[] GetInterviewBinaryData(Guid interviewId, string fileName)
         {
-            var filePath = this.GetPathToFile(fileName);
+            var fileNameWithoutPath = fileSystemAccessor.GetFileName(fileName);
+            var filePath = this.GetPathToFile(fileNameWithoutPath);
 
             return !fileSystemAccessor.IsFileExists(filePath) ? null : fileSystemAccessor.ReadAllBytes(filePath);
         }
@@ -77,6 +78,8 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
 
         private string GetPathToFile(string fileName)
         {
+            if (fileSystemAccessor.IsInvalidFileName(fileName))
+                throw new ArgumentException("Invalid file name", nameof(fileName));
             return this.fileSystemAccessor.CombinePath(this.GetPathToInterviewDirectory(), fileName);
         }
 

@@ -6,6 +6,7 @@ on:
       - 'src/**'
 
   pull_request:
+  workflow_dispatch: # manual run
 
 concurrency: 
   group: ${{ github.ref }}
@@ -58,7 +59,7 @@ jobs:
       fail-fast: false
     env:
       PG_USER: postgres
-      PG_PASSWORD: P@$$w0rd
+      PG_PASSWORD: PasswordForTests123
 
     services:
       postgres:
@@ -86,24 +87,25 @@ jobs:
 
       - name: Headquarters tests
         run: |
-          echo "[ConnectionStrings]\nTestConnection=\"${{ env.DB_CONN }}Database=postgres;CommandTimeout=60;\"" > appsettings.ini
+          printf "[ConnectionStrings]\nTestConnection=\"${DB_CONN}Database=postgres;CommandTimeout=60;\"\n" > src/Tests/WB.Tests.Integration/appsettings.cloud.ini
           dotnet test src/Tests/WB.Tests.Integration \
             --collect:"XPlat Code Coverage" \
             -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
       - name: Designer tests
         run: |
-          echo "[ConnectionSettings]\nTestConnectionStringFormat=\"${{ env.DB_CONN }}Database=testdb_{0};CommandTimeout=60;\"" > appsettings.ini
+          printf "[ConnectionSettings]\nTestConnectionStringFormat=\"${DB_CONN}Database=testdb_{0};CommandTimeout=60;\"\n" > src/Tests/WB.Tests.Integration.Designer/appsettings.cloud.ini
           dotnet test src/Tests/WB.Tests.Integration.Designer \
             --collect:"XPlat Code Coverage" \
             -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
       - name: Export service tests
         run: |
+          echo "{ \"ConnectionStrings\": { \"DefaultConnection\": \"${DB_CONN}Database=export_service_tests;\" }}" > src/Services/Export/WB.Services.Export.Tests/appsettings.cloud.json
           dotnet test src/Services/Export/WB.Services.Export.Tests \
             --collect:"XPlat Code Coverage" \
             -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
       - name: Scheduler service tests
         run: |
-          echo "{ \"ConnectionStrings\": { \"DefaultConnection\": \"${{ env.DB_CONN }}Database=export_service_tests;\" }}" > appsettings.json
+          echo "{ \"ConnectionStrings\": { \"DefaultConnection\": \"${DB_CONN}Database=export_service_tests;\" }}" > src/Services/Core/WB.Services.Scheduler.Tests/appsettings.cloud.json
           dotnet test src/Services/Core/WB.Services.Scheduler.Tests \
             --collect:"XPlat Code Coverage" \
             -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover

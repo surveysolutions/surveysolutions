@@ -1187,8 +1187,11 @@
   <data name="ExcludeEsriTitle" xml:space="preserve">
     <value>استبعاد دعم خرائط ESRI</value>
   </data>
+  <data name="IncludeEsriTitle" xml:space="preserve">
+    <value>تضمين وظيفة الخرائط</value>
+  </data>
   <data name="GetEsriExtraDescription" xml:space="preserve">
-    <value>ستزيد وظيفة GIS بشكل كبير من حجم التطبيق ووقت التنزيل. اتبع تعليمات المشرف الخاص بك حول أي إصدار من تطبيق المحاور (مع أو بدون خرائط) مطلوب لمهمتك.</value>
+    <value>ستؤدي وظيفة الخرائط إلى زيادة كبيرة في حجم التطبيق ووقت التنزيل. اتبع تعليمات المشرف الخاص بك بخصوص الإصدار المطلوب من تطبيق المحاور (مع أو بدون خرائط) لمهمتك.</value>
   </data>
   <data name="Filters_Assignment" xml:space="preserve">
     <value>التكليف</value>
@@ -1508,6 +1511,9 @@
   </data>
   <data name="Admin_InterviewPackages_ProcessingDate" xml:space="preserve">
     <value>تاريخ المعالجة</value>
+  </data>
+  <data name="DownloadPage_Size" xml:space="preserve">
+    <value>الحجم</value>
   </data>
   <data name="Admin_InterviewPackages_PackageSize" xml:space="preserve">
     <value>الحجم</value>

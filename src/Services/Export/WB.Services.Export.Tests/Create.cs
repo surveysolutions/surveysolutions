@@ -517,7 +517,7 @@ namespace WB.Services.Export.Tests
         }
 
 
-        public static TenantDbContext NpgsqlTenantDbContext(string databaseName = null, string tenantName = null)
+        public static TenantDbContext NpgsqlTenantDbContext(string connectionString, string tenantName = null)
         {
             var options = new DbContextOptionsBuilder<TenantDbContext>().Options;
             var dbContext = new TenantDbContext(
@@ -526,7 +526,8 @@ namespace WB.Services.Export.Tests
                     tenantName ?? "none", TenantInfo.DefaultWorkspace
                 )),
                 Mock.Of<IOptions<DbConnectionSettings>>(x => x.Value == new DbConnectionSettings()
-                {DefaultConnection = "Server=127.0.0.1;Port=5432;User Id=postgres;Password=P@$$w0rd;Database=export_service_tests;"
+                {
+                    DefaultConnection = connectionString
                 }),
                 options);
 

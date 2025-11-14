@@ -14,6 +14,7 @@ using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.Configs;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Tests.Abc;

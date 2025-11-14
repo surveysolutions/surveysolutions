@@ -495,7 +495,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
                     var newText = translation.GetCategoriesText(categories.Id, categoriesItem.Id, categoriesItem.ParentId);
                     if (string.IsNullOrWhiteSpace(newText))
-                        throw new QuestionnaireException(DomainExceptionType.TranslationIsNotFull, ExceptionMessages.TranslationIsNotFull);
+                        throw new QuestionnaireException(DomainExceptionType.TranslationIsNotFull, string.Format(ExceptionMessages.CategoryTranslationIsNotFull, categories.Name));
 
                     newCategoryItems.Add(new CategoriesRow()
                     {

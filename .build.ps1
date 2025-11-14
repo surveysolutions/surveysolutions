@@ -250,6 +250,22 @@ task frontend {
         npm ci
         npm run build
     }
+
+    $deps = npm list --all --json | ConvertFrom-Json
+
+    function Walk-Deps($node) {
+        if ($node.PSObject.Properties.Name -contains "dependencies") {
+            foreach ($d in $node.dependencies.PSObject.Properties) {
+                "$($d.Name)@$($d.Value.version)"
+                Walk-Deps $d.Value
+            }
+        }
+    }
+
+    $list = Walk-Deps $deps | Sort-Object -Unique
+    # $list | Out-File -FilePath deps.txt -Encoding utf8
+    $list | ForEach-Object { Write-Host $_ }
+    
 	"Finishing frontend task" | Out-Host
 }
 

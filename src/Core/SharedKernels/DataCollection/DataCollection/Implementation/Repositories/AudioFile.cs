@@ -14,7 +14,5 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
         public virtual byte[] Data { get; set; }
 
         public virtual string ContentType { get; set; }
-
-        public static string GetFileId(Guid interviewId, string fileName) => $"{interviewId}#{fileName}";
     }
 }

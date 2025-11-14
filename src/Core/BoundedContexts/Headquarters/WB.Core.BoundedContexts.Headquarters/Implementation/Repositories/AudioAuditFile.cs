@@ -1,7 +1,7 @@
 ﻿using System;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
-namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
+namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
 {
     public class AudioAuditFile : IView
     {
@@ -14,7 +14,5 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
         public virtual byte[] Data { get; set; }
 
         public virtual string ContentType { get; set; }
-
-        public static string GetFileId(Guid interviewId, string fileName) => $"{interviewId}#{fileName}";
     }
 }

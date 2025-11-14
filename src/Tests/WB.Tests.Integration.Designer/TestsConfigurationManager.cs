@@ -11,6 +11,7 @@ namespace WB.Tests.Integration
         {
             Config = new ConfigurationBuilder()
                 .AddIniFile("appsettings.ini")
+                .AddIniFile("appsettings.cloud.ini", true)
                 .AddIniFile($"appsettings.{Environment.MachineName.ToLower()}.ini", true)
                 .Build();
         }

@@ -1,7 +1,7 @@
 import { i18n } from '../plugins/localization';
 import { nextTick } from 'vue';
 import { defer, isNull, isUndefined, findIndex, debounce } from 'lodash';
-import { filterXSS } from 'xss';
+import DOMPurify from 'dompurify';
 import moment from 'moment';
 
 import ace from 'ace-builds';
@@ -70,9 +70,9 @@ export function focusout(name) {
 
 export function sanitize(input) {
     if (input) {
-        var html = filterXSS(input, {
-            whiteList: [], // empty, means filter out all tags
-            stripIgnoreTag: true // filter out all HTML not in the whilelist
+        var html = DOMPurify.sanitize(input, {
+            ALLOWED_TAGS: [], // empty, means filter out all tags (equivalent to whiteList: [])
+            KEEP_CONTENT: true // keeps text content while removing tags
         });
         return html;
     }

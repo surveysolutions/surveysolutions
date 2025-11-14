@@ -170,14 +170,23 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
         public Dictionary<string, long> GetFileNamesAndSizesFromArchive(Stream inputStream)
         {
             var result = new Dictionary<string, long>();
-
-            using var zip = new ZipArchive(inputStream, ZipArchiveMode.Read, true);
-            foreach (var zipEntry in zip.Entries)
-            {
-                if (zipEntry.IsDirectory()) continue;
-                result.Add(zipEntry.FullName, zipEntry.Length);
-            }
+            string destDirectory = Path.GetFullPath(Path.GetTempPath());
             
+            using var zip = new ZipArchive(inputStream, ZipArchiveMode.Read, true);
+            foreach (var entry in zip.Entries)
+            {
+                if (entry.IsDirectory()) continue;
+
+                var entryFullName = entry.FullName;
+                string destFileName = Path.GetFullPath(Path.Combine(destDirectory, entryFullName));
+                string fullDestDirPath = Path.GetFullPath(destDirectory + Path.DirectorySeparatorChar);
+                if (!destFileName.StartsWith(fullDestDirPath)) {
+                    throw new System.InvalidOperationException("Entry is outside the target dir: " + destFileName);
+                }
+                
+                result.Add(entryFullName, entry.Length);
+            }
+
             return result;
         }
 

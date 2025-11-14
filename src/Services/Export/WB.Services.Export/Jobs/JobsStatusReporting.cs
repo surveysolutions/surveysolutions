@@ -34,6 +34,8 @@ namespace WB.Services.Export.Jobs
         private readonly IExternalArtifactsStorage externalArtifactsStorage;
         private readonly IDataExportFileAccessor exportFileAccessor;
         private readonly ITenantContext tenantContext;
+        
+        private const int MaxRecordsLimit = 100;
 
         public JobsStatusReporting(IDataExportProcessesService dataExportProcessesService,
             IFileBasedExportedDataAccessor fileBasedExportedDataAccessor,
@@ -102,10 +104,12 @@ namespace WB.Services.Export.Jobs
 
             var filteredViews = allViews.AsEnumerable();
             
+            var recordsLimit = limit.HasValue? Math.Min(limit.Value, MaxRecordsLimit) : MaxRecordsLimit;
+            
             if (offset.HasValue)
                 filteredViews = filteredViews.Skip(offset.Value);
-            if (limit.HasValue)
-                filteredViews = filteredViews.Take(limit.Value);
+            
+            filteredViews = filteredViews.Take(recordsLimit);
 
             return filteredViews;
         }

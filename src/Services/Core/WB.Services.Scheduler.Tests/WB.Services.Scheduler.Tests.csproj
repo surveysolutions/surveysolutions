@@ -10,6 +10,7 @@
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
         <Content Include="appsettings.*.json" CopyToPublishDirectory="Never">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <DependentUpon>appsettings.json</DependentUpon>
         </Content>
     </ItemGroup>

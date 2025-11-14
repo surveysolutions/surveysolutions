@@ -16,7 +16,7 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
             AggregateRootCacheExpirationSettings settings = null)
         {
             this.memoryCache = memoryCache;
-            Expiration = settings?.Expiration ?? TimeSpan.FromMinutes(5);
+            Expiration = settings?.Expiration ?? TimeSpan.FromMinutes(25);
             MaxCacheExpiration = settings?.MaxCacheExpiration ?? MaxCachePeriod;
         }
 

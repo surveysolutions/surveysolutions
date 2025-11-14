@@ -39,11 +39,21 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(forbiddenClassesUsed, Is.Empty);
         }
 
-        [TestCase("Activator.CreateInstance(typeof(AccessViolationException))", "System.Activator")]
+        [TestCase("Activator.CreateInstance(AccessViolationException)", "System.Activator")]
         [TestCase("Environment.Exit(1)", "System.Environment")]
         [TestCase("GC.Collect()", "System.GC")]
         [TestCase("var t = new System.Threading.SemaphoreSlim(0, 3)", "System.Threading.SemaphoreSlim")]
         [TestCase("num2_float.Value.ToString(\"N\", new System.Globalization.CultureInfo(\"hi-IN\"))", "System.Globalization.CultureInfo")]
+        //[TestCase("var p =System.Diagnostics.Process.Start(\"test\")", "System.Diagnostics.Process")]
+        //[TestCase("Diagnostics.Process.Start(\"test\")", "System.Diagnostics.Process")]
+        [TestCase("System.Type.GetType(\"test\")", "System.Type")]
+        [TestCase("5.GetType().ToString()", "System.Type")]
+        [TestCase("typeof(System.DateTime)", "System.Type")]
+        [TestCase("typeof(DateTime)", "System.Type")]
+        [TestCase("new Type(\"test\")", "System.Type")]
+        [TestCase("System.IO.Path.Combine(\"test\", \"test\")", "System.IO.Path")]
+        [TestCase("System.Reflection.Assembly.GetExecutingAssembly()", "System.Reflection.Assembly")]
+        [TestCase("dynamic t = new object()", "dynamic")]
         public void should_not_allow_usage_of_dangerous_classes(string codeToCheck, string expectedClassName)
         {
             string code = string.Format(TestClassToCompile, codeToCheck);
@@ -60,7 +70,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
         
         [TestCase("new System.Assembly")]
         [TestCase("new System.List()")]
-        public void should_allow_usage_of_same_classes(string codeToCheck)
+        public void should_allow_usage_of_class(string codeToCheck)
         {
             string code = string.Format(TestClassToCompile, codeToCheck);
             var syntaxTree = SyntaxFactory.ParseSyntaxTree(code);

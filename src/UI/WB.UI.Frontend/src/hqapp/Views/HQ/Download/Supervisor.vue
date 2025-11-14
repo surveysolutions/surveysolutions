@@ -20,17 +20,15 @@
                             <div class="hq-apps-wrapper">
                                 <h2>{{ $t('Pages.DownloadSupervisorPage_Welcome') }}</h2>
                                 <div class="form-actions">
-                                    <a :href="model.apkUrl"
-                                        class="get-supervisor-app">
+                                    <a :href="model.apkUrl" class="get-supervisor-app">
                                         <span>{{ $t('Pages.GetLatestSupervisorApp') }}</span>
-                                        <span class="version">{{ $t('Pages.DownloadPage_Version') + ' ' + model.supervisorVersion }}</span>
+                                        <span class="version">{{ $t('Pages.DownloadPage_Version') + ' ' +
+                                            model.supervisorVersion }}</span>
+                                        <span v-if="supervisorSize" class="version">{{ $t('Pages.DownloadPage_Size') +
+                                            ' ' + formattedSupervisorSize }}</span>
                                     </a>
-                                    <img v-if="model.supportQRCodeGeneration"
-                                        id="download-qr"
-                                        alt="QR Code"
-                                        width="250"
-                                        height="250"
-                                        :src="model.apkQRUrl" />
+                                    <img v-if="model.supportQRCodeGeneration" id="download-qr" class="download-qr"
+                                        alt="QR Code" width="250" height="250" :src="model.apkQRUrl" />
                                 </div>
                             </div>
                         </div>
@@ -43,10 +41,11 @@
 
 <script>
 
+import { humanFileSize } from '~/shared/helpers'
+
 export default {
     data() {
         return {
-            smallApkSelected: true,
         }
     },
     methods: {
@@ -58,26 +57,11 @@ export default {
         supportQRCodeGeneration() {
             return this.model.supportQRCodeGeneration
         },
-        qrApkUrl() {
-            if (this.smallApkSelected) {
-                return this.model.smallApkQRUrl
-            } else {
-                return this.model.fullApkQRUrl
-            }
+        supervisorSize() {
+            return this.model.supervisorApkSize
         },
-        apkUrl() {
-            if (this.smallApkSelected) {
-                return this.model.smallApkUrl
-            } else {
-                return this.model.fullApkUrl
-            }
-        },
-        interviewerVersion() {
-            if (this.smallApkSelected) {
-                return this.model.smallApkVersion
-            } else {
-                return this.model.fullApkVersion
-            }
+        formattedSupervisorSize() {
+            return this.supervisorSize ? humanFileSize(this.supervisorSize) : ''
         },
     },
 }

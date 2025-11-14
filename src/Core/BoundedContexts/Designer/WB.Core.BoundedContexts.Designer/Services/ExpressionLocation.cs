@@ -29,6 +29,13 @@ namespace WB.Core.BoundedContexts.Designer.Services
         public ExpressionLocation(string? stringValue)
         {
             if (stringValue == null) throw new ArgumentNullException(nameof(stringValue));
+
+            if (stringValue.Length == 0)
+            {
+                ItemType = ExpressionLocationItemType.Questionnaire;
+                ExpressionType = ExpressionLocationType.General;
+                return;
+            }
             
             string[] expressionLocation = stringValue.Split(':');
             if (expressionLocation.Length != 3 && expressionLocation.Length != 4)

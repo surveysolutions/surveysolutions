@@ -125,6 +125,9 @@ namespace WB.UI.Headquarters.Controllers.Api
         [RequestFormLimits(MultipartBodyLengthLimit = 500 * 1024 * 1024)]
         public async Task<JsonMapResponse> Upload(IFormFile file)
         {
+            if (file == null || file.Length == 0)
+                throw new ArgumentNullException(nameof(file), "Map archive is empty");
+            
             var response = new JsonMapResponse();
 
             await using var stream = file.OpenReadStream();

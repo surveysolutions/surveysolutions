@@ -15,8 +15,7 @@ namespace WB.Services.Export.Infrastructure
         public TenantDbContext CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<TenantDbContext>();
-            optionsBuilder.UseNpgsql(
-                "Server=127.0.0.1;Port=5432;User Id=postgres;Password=P@$$w0rd;Database=ExportService_Factory;");
+            optionsBuilder.UseNpgsql("...");
 
             var tenantInfo = new TenantInfo
             (
@@ -26,7 +25,7 @@ namespace WB.Services.Export.Infrastructure
             );
             var connectionSettings = Options.Create(new DbConnectionSettings
             {
-                DefaultConnection = "Server=127.0.0.1;Port=5432;User Id=postgres;Password=P@$$w0rd;Database=ExportService_Factory;"
+                DefaultConnection = "..."
             });
             var tenantContext = new TenantContext(null, tenantInfo);
             

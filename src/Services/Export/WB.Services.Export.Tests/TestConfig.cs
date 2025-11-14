@@ -10,6 +10,7 @@ namespace WB.Services.Export.Tests
             return Environment.GetEnvironmentVariable("TEST_DB") ??
                    new ConfigurationBuilder()
                        .AddJsonFile($@"appsettings.json", true)
+                       .AddJsonFile($@"appsettings.cloud.json", true)
                        .AddJsonFile($"appsettings.{Environment.MachineName}.json", true)
                        .Build()
                        .GetConnectionString("DefaultConnection");

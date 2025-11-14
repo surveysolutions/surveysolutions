@@ -428,4 +428,7 @@
   <data name="TranslationIsNotFull" xml:space="preserve">
     <value>Перевод неполный и не включает все необходимые тексты для каждого элемента</value>
   </data>
+  <data name="CategoryTranslationIsNotFull" xml:space="preserve">
+    <value>Перевод категории «{0}» неполный и не включает текст всех вариантов</value>
+  </data>
 </root>

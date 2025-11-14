@@ -141,15 +141,18 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Messages
 
     public class UploadInterviewImageRequest : ICommunicationMessage
     {
+        public Guid UserId { get; set; }
         public PostFileApiView InterviewImage { get; set; }
     }
     public class UploadInterviewAudioRequest : ICommunicationMessage
     {
+        public Guid UserId { get; set; }
         public PostFileApiView InterviewAudio { get; set; }
     }
 
     public class UploadInterviewAudioAuditRequest : ICommunicationMessage
     {
+        public Guid UserId { get; set; }
         public PostFileApiView InterviewAudio { get; set; }
     }
 

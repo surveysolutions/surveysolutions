@@ -253,22 +253,22 @@
     <value>U krye</value>
   </data>
   <data name="EmailLink_EmailResumeLink" xml:space="preserve">
-    <value>Adresa e vazhdimit të email-it</value>
+    <value>Lidhje për të vazhduar</value>
   </data>
   <data name="EmailLink_Header" xml:space="preserve">
-    <value>Vendosni adresën e email-it </value>
+    <value>Lidhje për të vazhduar</value>
   </data>
   <data name="EmailLink_InvalidEmail" xml:space="preserve">
     <value>{{email}} është adresë email-i e pavlefshme </value>
   </data>
   <data name="EmailLink_Message" xml:space="preserve">
-    <value>Do t’ju dërgojmë një mesazh me adresën për të vazhduar me intervistën, nëse ju duhet të vazhdoni më vonë.</value>
+    <value>Kjo lidhje ju lejon të vazhdoni intervistën më vonë.</value>
   </data>
   <data name="EmailLink_Placeholder" xml:space="preserve">
     <value>Vendosni email-in</value>
   </data>
   <data name="EmailLink_ResumeAnyTime" xml:space="preserve">
-    <value>Anulojeni tani dhe vazhdoni me intervistën. Dhe mund ta dërgoni më vonë, duke klikuar “Adresën për vazhdimin e email-it' në menunë në krye     </value>
+    <value>Mund të krijoni një lidhje për të vazhduar intervistën. Kjo lidhje e përhershme mund të ruhet dhe të përdoret më vonë.</value>
   </data>
   <data name="EnterDate" xml:space="preserve">
     <value>Vendos datën</value>

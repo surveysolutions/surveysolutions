@@ -5,5 +5,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
         public int? BuildNumber { get; set; }
 
         public string VersionString { get; set; }
+        public long? Size { get; set; }
     }
 }

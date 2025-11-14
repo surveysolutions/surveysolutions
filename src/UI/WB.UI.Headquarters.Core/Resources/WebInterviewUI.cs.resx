@@ -223,22 +223,22 @@ Požádejte o pomoc svého garanta.</value>
     <value>Hotovo</value>
   </data>
   <data name="EmailLink_EmailResumeLink" xml:space="preserve">
-    <value>E-mailový odkaz pro pokračování</value>
+    <value>Odkaz pro pokračování</value>
   </data>
   <data name="EmailLink_Header" xml:space="preserve">
-    <value>Vložte svou e-mailovou adresu</value>
+    <value>Odkaz pro obnovení</value>
   </data>
   <data name="EmailLink_InvalidEmail" xml:space="preserve">
     <value>{{email}} není platná e-mailová adresa</value>
   </data>
   <data name="EmailLink_Message" xml:space="preserve">
-    <value>Pokud budete chtít pokračovat později, zašleme vám zprávu s odkazem na obnovení rozhovoru.</value>
+    <value>Tento odkaz slouží k obnovení rozhovoru, pokud potřebujete pokračovat později.</value>
   </data>
   <data name="EmailLink_Placeholder" xml:space="preserve">
     <value>Zadejte email</value>
   </data>
   <data name="EmailLink_ResumeAnyTime" xml:space="preserve">
-    <value>Nyní můžete zrušit a pokračovat v rozhovoru. A můžete jej odeslat později kliknutím na e-mailový odkaz pro pokračování v horním menu.</value>
+    <value>Můžete vytvořit odkaz pro pokračování v rozhovoru. Tento trvalý odkaz lze uložit a použít později.</value>
   </data>
   <data name="EnterDate" xml:space="preserve">
     <value>Zadejte datum</value>
@@ -480,14 +480,14 @@ Požádejte o pomoc svého garanta.</value>
 </data>
     <data name="Complete_CriticalUnansweredQuestions" xml:space="preserve">
     <value>Kritické nezodpovězené otázky: {{count}}</value>
-</data>
+  </data>
     <data name="Complete_FailedCriticalRules" xml:space="preserve">
     <value>Nesplněná kritická pravidla: {{count}}</value>
-</data>
+  </data>
     <data name="Complete_UnansweredQuestions" xml:space="preserve">
     <value>Nezodpovězené otázky: {{count}}</value>
-</data>
+  </data>
     <data name="Complete_QuestionsWithErrors" xml:space="preserve">
     <value>Otázky s chybami: {{count}}</value>
-</data>
+  </data>
 </root>

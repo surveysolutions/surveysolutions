@@ -7,9 +7,11 @@ namespace WB.UI.Headquarters.Models.WebInterview
     {
         public string Id { get; set; }
         public Dictionary<WebInterviewUserMessages, string> CustomMessages { get; set; }
-        public string AskForEmail { get; set; }
+        public string IsResumeLinkAvailable { get; set; }
         public string CoverPageId { get; set; }
         public bool MayBeSwitchedToWebMode { get; set; }
         public string WebInterviewUrl { get; set; }
+        public string ContinueLink { get; set; }
+        public bool? AllowTranscriptDownloading { get; set; }
     }
 }

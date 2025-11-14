@@ -243,6 +243,18 @@
   <data name="Done" xml:space="preserve">
     <value>已完成</value>
   </data>
+  <data name="EmailLink_EmailResumeLink" xml:space="preserve">
+    <value>恢复链接</value>
+  </data>
+  <data name="EmailLink_Header" xml:space="preserve">
+    <value>继续链接</value>
+  </data>
+  <data name="EmailLink_Message" xml:space="preserve">
+    <value>此链接可用于稍后继续访谈。</value>
+  </data>
+  <data name="EmailLink_ResumeAnyTime" xml:space="preserve">
+    <value>您可以创建一个链接以继续访谈。此永久链接可以保存并在以后使用。</value>
+  </data>
   <data name="EnterDate" xml:space="preserve">
     <value>输入日期</value>
   </data>

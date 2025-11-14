@@ -8,6 +8,7 @@ using Microsoft.Extensions.Options;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.Configs;
 using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.UI.Headquarters.Services.Maps;

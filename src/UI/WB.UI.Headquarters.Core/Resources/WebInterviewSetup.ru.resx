@@ -265,4 +265,7 @@
   <data name="WebInterviewUserMessages_LinkWelcome_Descr" xml:space="preserve">
     <value>Заголовок страницы </value>
   </data>
+  <data name="AllowTranscriptDownloading" xml:space="preserve">
+      <value>Разрешить скачивание транскрипта интервью после отправки</value>
+  </data>
 </root>

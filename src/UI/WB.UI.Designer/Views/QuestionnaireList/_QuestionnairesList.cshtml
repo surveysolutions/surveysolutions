@@ -77,10 +77,11 @@
                             var itemId = listViewModel.Id;
                             var itemType = listViewModel.GetLabel();
                             var itemName = Uri.EscapeDataString(listViewModel.GetName());
+                            var pdfGenerateUrl = Url.Action("generatePdf", "Pdf", routevalues.AddArea("Pdf"));
                             var pdfDownloadUrl = Url.Action("downloadPdf", "Pdf", routevalues.AddArea("Pdf"));
                             var htmlDownloadUrl = Url.Action("PrintPreview", "Pdf", routevalues.AddArea("Pdf"));
                             var pdfStatusUrl = Url.Action("statusPdf", "Pdf", routevalues.AddArea("Pdf"));
-                            var pdfRetryUrl = Url.Action("Retry", "Pdf", routevalues.AddArea("Pdf"));
+                            var pdfRetryUrl = Url.Action("retry", "Pdf", routevalues.AddArea("Pdf"));
                             var getLanguagesUrl = Url.Action("GetLanguages", "Questionnaire", routevalues);
                             var openActionName = listViewModel.IsFolder ? "Public" : "Details";
                             var iconCssClass = listViewModel.IsFolder ? "tree-icon folder-closed" : "tree-icon";
@@ -124,7 +125,7 @@
                                                             {
                                                                 <li class="divider"></li>
                                                                 <li>
-                                                                    <a href="#mExportPdf" onclick='questionnaireActionModel.exportItemAsPdf("@itemId", "@itemType", "@itemName", "@pdfDownloadUrl", "@pdfStatusUrl", "@pdfRetryUrl", "@getLanguagesUrl")' data-bs-toggle="modal">@QuestionnaireController.ExportAsPDF</a>
+                                                                    <a href="#mExportPdf" onclick='questionnaireActionModel.exportItemAsPdf("@itemId", "@itemType", "@itemName", "@pdfGenerateUrl", "@pdfDownloadUrl", "@pdfStatusUrl", "@pdfRetryUrl", "@getLanguagesUrl")' data-bs-toggle="modal">@QuestionnaireController.ExportAsPDF</a>
                                                                 </li>
                                                             }
                                                             if (actionModel.CanExportToHtml)

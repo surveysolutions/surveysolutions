@@ -264,4 +264,7 @@
   <data name="WebInterviewUserMessages_LinkWelcome_Descr" xml:space="preserve">
     <value>Texte de bienvenue de l'en-tête sur la page de destination du lien de l'entretien Web</value>
   </data>
+  <data name="AllowTranscriptDownloading" xml:space="preserve">
+      <value>Autoriser le téléchargement de la transcription de l'entretien après la soumission</value>
+  </data>
 </root>

@@ -31,13 +31,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             var generatedEvaluator = this.GenerateProcessorStateClasses(package, targetVersion);
             List<MetadataReference> referencedPortableAssemblies = this.compilerSettingsProvider.GetAssembliesToReference();
 
-            EmitResult emitedResult = this.codeCompiler.TryGenerateAssemblyAsStringAndEmitResult(
+            var emitedResult = this.codeCompiler.TryGenerateAssemblyAsStringAndEmitResult(
                 package.QuestionnaireDocument.PublicKey, 
                 generatedEvaluator, 
                 referencedPortableAssemblies,
                 out generatedAssembly);
 
-            return new GenerationResult(emitedResult.Success, emitedResult.Diagnostics);
+            return emitedResult;
         }
 
         public Dictionary<string, string> GenerateProcessorStateClasses(QuestionnaireCodeGenerationPackage package, int targetVersion, bool inSingleFile = false)

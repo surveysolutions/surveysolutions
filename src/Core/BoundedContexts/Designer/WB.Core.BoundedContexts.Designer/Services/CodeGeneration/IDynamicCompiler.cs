@@ -7,7 +7,7 @@ namespace WB.Core.BoundedContexts.Designer.Services.CodeGeneration
 {
     public interface IDynamicCompiler
     {
-        EmitResult TryGenerateAssemblyAsStringAndEmitResult(
+        GenerationResult TryGenerateAssemblyAsStringAndEmitResult(
             Guid templateId,
             Dictionary<string, string> generatedClasses,
             IEnumerable<MetadataReference> referencedPortableAssemblies,

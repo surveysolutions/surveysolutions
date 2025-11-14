@@ -373,19 +373,19 @@
     <value>تم استلام المقابلة من الباحث ولا يمكن تعديلها</value>
   </data>
   <data name="EmailLink_Header" xml:space="preserve">
-    <value>أدخل عنوان بريدك الالكتروني</value>
+    <value>رابط الاستئناف</value>
   </data>
   <data name="EmailLink_Message" xml:space="preserve">
-    <value>سنرسل لك رسالة تحتوي على رابط لاستئناف المقابلة إذا كنت تريد المتابعة لاحقًا</value>
+    <value>هذا الرابط لاستئناف المقابلة إذا كنت بحاجة إلى المتابعة لاحقًا</value>
   </data>
   <data name="EmailLink_ResumeAnyTime" xml:space="preserve">
-    <value>يمكنك الإلغاء الآن والمضي قدماً في المقابلة. ويمكنك إرسالها لاحقًا عن طريق النقر فوق عنصر "رابط استئناف البريد الإلكتروني" في القائمة العلوية.</value>
+    <value>يمكنك إنشاء رابط لمتابعة المقابلة. يمكن حفظ هذا الرابط الدائم واستخدامه لاحقًا.</value>
   </data>
   <data name="EmailLink_Placeholder" xml:space="preserve">
     <value>أدخل البريد الإلكتروني</value>
   </data>
   <data name="EmailLink_EmailResumeLink" xml:space="preserve">
-    <value>رابط استئناف البريد الإلكتروني</value>
+    <value>رابط الاستئناف</value>
   </data>
   <data name="AreaRecord" xml:space="preserve">
     <value>تحرير المنطقة</value>

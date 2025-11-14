@@ -47,7 +47,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             var translationName = string.IsNullOrEmpty(translationFile.TranslationName)
                 ? "New translation"
                 : translationFile.TranslationName;
-            var filename = this.fileSystemAccessor.MakeValidFileName($"[{translationName}]{translationFile.QuestionnaireTitle}");
+            var filename = this.fileSystemAccessor.MakeValidFileName($"{{{translationName}}}{translationFile.QuestionnaireTitle}");
 
             return File(translationFile.ContentAsExcelFile, mediaType, $"{filename}.{fileExtension}");
         }

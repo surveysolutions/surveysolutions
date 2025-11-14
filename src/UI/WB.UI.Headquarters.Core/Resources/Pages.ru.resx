@@ -1137,8 +1137,11 @@
   <data name="ExcludeEsriTitle" xml:space="preserve">
     <value> Отключить поддержку карт ESRI</value>
   </data>
+  <data name="IncludeEsriTitle" xml:space="preserve">
+    <value>Включить функциональность карт</value>
+  </data>
   <data name="GetEsriExtraDescription" xml:space="preserve">
-      <value>Функциональность ГИС значительно увеличит размер приложения и время загрузки. Следуйте инструкциям вашего руководителя относительно того, какая версия приложения Interviewer (с картами или без) необходима для вашей задачи.</value>
+    <value>Функциональность карт значительно увеличит размер приложения и время загрузки. Следуйте указаниям вашего руководителя, какая версия приложения Интервьюер (с картами или без них) требуется для вашей задачи.</value>
   </data>
   <data name="StatusDuration" xml:space="preserve">
     <value>Длительность статусов</value>
@@ -1497,6 +1500,10 @@
   <data name="Admin_InterviewPackages_ProcessingDate" xml:space="preserve">
     <value>Дата обработки</value>
     <comment>Дата обработки</comment>
+  </data>
+  <data name="DownloadPage_Size" xml:space="preserve">
+    <value>Размер</value>
+    <comment>Размер</comment>
   </data>
   <data name="Admin_InterviewPackages_PackageSize" xml:space="preserve">
     <value>Размер</value>

@@ -140,4 +140,12 @@
   <data name="Retry" xml:space="preserve">
     <value>Повторная попытка экспорта в формате PDF.</value>
   </data>
+  <data name="NotFound" xml:space="preserve">
+    <value>Запрашиваемое задание не найдено. 
+Пожалуйста, попробуйте еще раз.</value>
+  </data>
+  <data name="PdfLimitReached" xml:space="preserve">
+    <value>Вы уже отправили {0} запросов на создание PDF-документов для ваших анкет.
+Пожалуйста, попробуйте позже.</value>
+  </data>
 </root>

@@ -26,7 +26,6 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Models.Api;
 using WB.UI.Headquarters.Resources;
-using WebInterviewSettings = WB.Core.BoundedContexts.Headquarters.DataExport.Security.WebInterviewSettings;
 
 namespace WB.UI.Headquarters.Controllers.Api
 {
@@ -62,11 +61,6 @@ namespace WB.UI.Headquarters.Controllers.Api
             public int GeographyQuestionPeriodInSeconds { get; set; }
         }
 
-        public class WebInterviewSettingsModel
-        {
-            public bool AllowEmails { get; set; }
-        }
-
         public class ProfileSettingsModel
         {
             public bool AllowInterviewerUpdateProfile { get; set; }
@@ -86,7 +80,6 @@ namespace WB.UI.Headquarters.Controllers.Api
         private readonly IPlainKeyValueStorage<GlobalNotice> appSettingsStorage;
         private readonly IPlainKeyValueStorage<EmailProviderSettings> emailProviderSettingsStorage;
         private readonly IPlainKeyValueStorage<InterviewerSettings> interviewerSettingsStorage;
-        private readonly IPlainKeyValueStorage<WebInterviewSettings> webInterviewSettingsStorage;
         private readonly IExportSettings exportSettings;
 
         private readonly IEmailService emailService;
@@ -100,7 +93,6 @@ namespace WB.UI.Headquarters.Controllers.Api
             IPlainKeyValueStorage<InterviewerSettings> interviewerSettingsStorage, 
             IPlainKeyValueStorage<EmailProviderSettings> emailProviderSettingsStorage,
             IPlainKeyValueStorage<ProfileSettings> profileSettingsStorage,
-            IPlainKeyValueStorage<WebInterviewSettings> webInterviewSettingsStorage,
             IEmailService emailService, 
             ISystemLog auditLog, 
             ISystemLogViewFactory systemLogViewFactory,
@@ -115,8 +107,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             this.emailProviderSettingsStorage = emailProviderSettingsStorage ?? throw new ArgumentNullException(nameof(emailProviderSettingsStorage));
             this.profileSettingsStorage = profileSettingsStorage ?? throw new ArgumentNullException(nameof(profileSettingsStorage));
             
-            this.webInterviewSettingsStorage = webInterviewSettingsStorage ??
-                                               throw new ArgumentNullException(nameof(webInterviewSettingsStorage));
+            
             this.emailService = emailService ?? throw new ArgumentNullException(nameof(emailService));
             this.auditLog = auditLog ?? throw new ArgumentNullException(nameof(auditLog));
             this.emailRenderer = emailRenderer ?? throw new ArgumentNullException(nameof(emailRenderer));
@@ -159,7 +150,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                 GeographyQuestionPeriodInSeconds = interviewerSettings.GetGeographyQuestionPeriodInSeconds(),
                 EsriApiKey = interviewerSettings.GetEsriApiKey(),
                 GlobalNotice = this.appSettingsStorage.GetById(AppSetting.GlobalNoticeKey)?.Message,
-                AllowEmails = this.webInterviewSettingsStorage.GetById(AppSetting.WebInterviewSettings)?.AllowEmails ?? false,
+                
                 AllowInterviewerUpdateProfile = this.profileSettingsStorage.GetById(AppSetting.ProfileSettings)?.AllowInterviewerUpdateProfile ?? false,
                 ExportSettings = new ExportSettingsModel(this.exportSettings.GetEncryptionSettings(),
                     exportSettings.GetExportRetentionSettings())
@@ -222,22 +213,6 @@ namespace WB.UI.Headquarters.Controllers.Api
             });
 
             return Ok(new {sucess = true});
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult WebInterviewSettings([FromBody] WebInterviewSettingsModel message)
-        {
-            if (!ModelState.IsValid) return this.BadRequest();
-            
-            this.webInterviewSettingsStorage.Store(
-                new WebInterviewSettings
-                {
-                    AllowEmails = message.AllowEmails
-                },
-                AppSetting.WebInterviewSettings);
-
-            return Ok();
         }
         
         [HttpPost]

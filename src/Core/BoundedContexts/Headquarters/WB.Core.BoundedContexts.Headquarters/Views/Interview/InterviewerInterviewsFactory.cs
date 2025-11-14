@@ -52,7 +52,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                         x.WasRejectedBySupervisor, 
                         ReceivedByInterviewer = x.ReceivedByInterviewerAtUtc.HasValue,
                         x.ResponsibleId,
-                        x.InterviewMode
+                        x.InterviewMode,
+                        x.ResponsibleRole,
+                        x.Status,
+                        x.SupervisorId,
                     })
                     .ToList());
 
@@ -74,6 +77,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     QuestionnaireIdentity = QuestionnaireIdentity.Parse(interview.QuestionnaireIdentity),
                     IsRejected = interview.WasRejectedBySupervisor,
                     ResponsibleId = interview.ResponsibleId,
+                    ResponsibleRole = interview.ResponsibleRole,
+                    Status = interview.Status,
+                    SupervisorId = interview.SupervisorId,
                     IsReceivedByInterviewer = interview.ReceivedByInterviewer,
                     LastEventSequence = eventStore.GetMaxEventSequenceWithAnyOfSpecifiedTypes(interview.InterviewId, EventsThatAssignInterviewToResponsibleProvider.GetTypeNames()),
                     LastEventId = eventStore.GetLastEventId(interview.InterviewId),
@@ -150,6 +156,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                         x.ResponsibleId,
                         ReceivedByInterviewer = x.ReceivedByInterviewerAtUtc.HasValue,
                         Mode = x.InterviewMode,
+                        x.ResponsibleRole,
+                        x.Status,
+                        x.SupervisorId,
                     })
                     .ToList());
 
@@ -176,6 +185,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     LastEventSequence = eventStore.GetMaxEventSequenceWithAnyOfSpecifiedTypes(interview.InterviewId, EventsThatAssignInterviewToResponsibleProvider.GetTypeNames()),
                     LastEventId = eventStore.GetLastEventId(interview.InterviewId),
                     Mode = interview.Mode,
+                    ResponsibleRole = interview.ResponsibleRole,
+                    Status = interview.Status,
+                    SupervisorId = interview.SupervisorId,
                 }).ToList();
 
             return filteredInterviews;
@@ -192,7 +204,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 QuestionnaireIdentity = QuestionnaireIdentity.Parse(interview.QuestionnaireIdentity),
                 IsRejected = interview.Status == InterviewStatus.RejectedBySupervisor,
                 ResponsibleId = interview.ResponsibleId,
-                Mode = interview.InterviewMode
+                Mode = interview.InterviewMode,
+                Status = interview.Status,
+                ResponsibleRole = interview.ResponsibleRole,
+                SupervisorId = interview.SupervisorId,
             });
         }
     }

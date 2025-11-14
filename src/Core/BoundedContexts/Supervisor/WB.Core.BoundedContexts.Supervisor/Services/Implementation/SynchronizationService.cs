@@ -25,6 +25,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
         protected string InterviewersController => string.Concat(ApplicationUrl, "/interviewers");
         protected string ExceptionsController => string.Concat(ApplicationUrl, "/interviewerExceptions");
         protected string BrokenInterviewPackagesController => string.Concat(ApplicationUrl, "/brokenInterviews");
+        protected string BrokenImagePackagesController => string.Concat(ApplicationUrl, "/brokenImage");
+        protected string BrokenAudioPackagesController => string.Concat(ApplicationUrl, "/brokenAudio");
+        protected string BrokenAudioAuditPackagesController => string.Concat(ApplicationUrl, "/brokenAudioAudit");
         protected string InterviewerTabletInfosController => string.Concat(ApplicationUrl, "/interviewerTabletInfos");
         protected string InterviewerStatisticsController => string.Concat(ApplicationUrl, "/interviewerStatistics");
         protected string GetListOfDeletedQuestionnairesController => string.Concat(ApplicationUrl, "/deletedQuestionnairesList");
@@ -59,6 +62,33 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
             return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
                 url: this.BrokenInterviewPackagesController,
                 request: brokenInterviewPackage,
+                credentials: this.restCredentials,
+                token: token));
+        }
+
+        public Task UploadBrokenImagePackageAsync(BrokenImagePackageApiView brokenImagePackage, CancellationToken token = default)
+        {
+            return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
+                url: this.BrokenImagePackagesController,
+                request: brokenImagePackage,
+                credentials: this.restCredentials,
+                token: token));
+        }
+
+        public Task UploadBrokenAudioPackageAsync(BrokenAudioPackageApiView brokenAudioPackage, CancellationToken token = default)
+        {
+            return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
+                url: this.BrokenAudioPackagesController,
+                request: brokenAudioPackage,
+                credentials: this.restCredentials,
+                token: token));
+        }
+
+        public Task UploadBrokenAudioAuditPackageAsync(BrokenAudioAuditPackageApiView brokenAudioAuditPackage, CancellationToken token = default)
+        {
+            return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
+                url: this.BrokenAudioAuditPackagesController,
+                request: brokenAudioAuditPackage,
                 credentials: this.restCredentials,
                 token: token));
         }

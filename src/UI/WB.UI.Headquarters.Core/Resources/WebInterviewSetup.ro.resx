@@ -255,4 +255,7 @@
   <data name="EmailOnComplete" xml:space="preserve">
     <value>Trimiteți e-mail după finalizarea interviului web</value>
   </data>
+  <data name="AllowTranscriptDownloading" xml:space="preserve">
+      <value>Permite descărcarea transcrierii interviului după trimitere</value>
+  </data>
 </root>

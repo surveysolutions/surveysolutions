@@ -460,13 +460,13 @@
     <value>La reproducción de multimedia no es compatible con su navegador. Puede descargarlo en su lugar.</value>
   </data>
   <data name="EmailLink_Header" xml:space="preserve">
-    <value>Ingrese su dirección de correo electrónico</value>
+    <value>Enlace para reanudar</value>
   </data>
   <data name="EmailLink_Message" xml:space="preserve">
-    <value>Le enviaremos un mensaje con el enlace para reanudar la entrevista si necesita continuar más tarde.</value>
+    <value>Este enlace permite reanudar la entrevista si necesita continuar más tarde.</value>
   </data>
   <data name="EmailLink_ResumeAnyTime" xml:space="preserve">
-    <value>Puede cancelar ahora y continuar con la entrevista. Y puede enviarlo más tarde haciendo clic en el elemento 'Enlace de reanudación por correo electrónico' en el menú superior.</value>
+    <value>Puede crear un enlace para continuar la entrevista. Este enlace permanente puede guardarse y usarse más tarde.</value>
   </data>
   <data name="EmailLink_Placeholder" xml:space="preserve">
     <value>Ingrese correo electrónico</value>
@@ -475,7 +475,7 @@
     <value>{{email}} es una dirección de correo electrónico no válida</value>
   </data>
   <data name="EmailLink_EmailResumeLink" xml:space="preserve">
-    <value>Enlace de reanudación por correo electrónico</value>
+    <value>Enlace de reanudación</value>
   </data>
   <data name="HideVariables" xml:space="preserve">
     <value>Ocultar variables</value>

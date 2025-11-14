@@ -123,8 +123,8 @@ namespace WB.UI.Shared.Extensions.Services
                         await new Basemap(BasemapStyle.ArcGISImagery).LoadAsync();
                         return new Basemap(BasemapStyle.ArcGISImagery);
                     case MapType.OnlineOpenStreetMap:
-                        await new Basemap(BasemapStyle.OSMStandard).LoadAsync();
-                        return new Basemap(BasemapStyle.OSMStandard);
+                        await new Basemap(BasemapStyle.OpenOSMStyle).LoadAsync();
+                        return new Basemap(BasemapStyle.OpenOSMStyle);
                 }
             }
             catch (Exception e)

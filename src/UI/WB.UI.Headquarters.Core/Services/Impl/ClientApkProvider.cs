@@ -140,7 +140,7 @@ namespace WB.UI.Headquarters.Services.Impl
             {
                 if (Uri.TryCreate(apkClientsFolder, UriKind.Absolute, out Uri uri) && !uri.IsFile)
                 {
-                    var version = await GetApplicationVersionFromRemoteServer(uri, appName);
+                    var version = await GetApplicationInfoFromRemoteServer(uri, appName);
                     return version?.BuildNumber;
                 }
 
@@ -150,7 +150,7 @@ namespace WB.UI.Headquarters.Services.Impl
             return this.androidPackageReader.Read(pathToInterviewerApp).BuildNumber;
         }
 
-        private async Task<AndroidPackageInfo> GetApplicationVersionFromRemoteServer(Uri remoteUri, string appName)
+        private async Task<AndroidPackageInfo> GetApplicationInfoFromRemoteServer(Uri remoteUri, string appName)
         {
             HttpClient apkClient = httpClientFactory.CreateClient("apks");
             try
@@ -198,7 +198,7 @@ namespace WB.UI.Headquarters.Services.Impl
             {
                 if (Uri.TryCreate(apkClientsFolder, UriKind.Absolute, out Uri uri) && !uri.IsFile)
                 {
-                    var version = await GetApplicationVersionFromRemoteServer(uri, appName);
+                    var version = await GetApplicationInfoFromRemoteServer(uri, appName);
                     return version?.VersionString;
                 }
                 
@@ -206,6 +206,26 @@ namespace WB.UI.Headquarters.Services.Impl
             }
 
             return this.androidPackageReader.Read(pathToInterviewerApp).VersionString;
+        }
+
+        public async Task<long?> GetApplicationSize(string appName)
+        {
+            var apkClientsFolder = ApkClientsFolder();
+            string pathToInterviewerApp = this.fileSystemAccessor.CombinePath(
+                apkClientsFolder, appName);
+
+            if (!this.fileSystemAccessor.IsFileExists(pathToInterviewerApp))
+            {
+                if (Uri.TryCreate(apkClientsFolder, UriKind.Absolute, out Uri uri) && !uri.IsFile)
+                {
+                    var version = await GetApplicationInfoFromRemoteServer(uri, appName);
+                    return version?.Size;
+                }
+                
+                return null;
+            }
+
+            return fileSystemAccessor.GetFileSize(pathToInterviewerApp);
         }
 
         public string ApkClientsFolder()

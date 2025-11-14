@@ -74,9 +74,14 @@ namespace WB.Core.SharedKernels.Enumerator
             registry.BindAsSingleton<ISynchronizationCompleteSource, SynchronizationCompleteSource>();
             registry.Bind<IGeoTrackingSynchronizer, DummyGeoTrackingSynchronizer>();
 
-            registry.Bind<IAudioFileStorage, InterviewerAudioFileStorage>();
-            registry.Bind<IImageFileStorage, InterviewerImageFileStorage>();
-            registry.Bind<IAudioAuditFileStorage, InterviewerAudioAuditFileStorage>();
+            registry.Bind<IBrokenAudioFileStorage, TabletBrokenAudioFileStorage>();
+            registry.Bind<IBrokenImageFileStorage, TabletBrokenImageFileStorage>();
+            registry.Bind<IBrokenAudioAuditFileStorage, TabletBrokenAudioAuditFileStorage>();
+
+            registry.Bind<IAudioFileStorage, TabletAudioFileStorage>();
+            registry.Bind<IImageFileStorage, TabletImageFileStorage>();
+            registry.Bind<IAudioAuditFileStorage, TabletAudioAuditFileStorage>();
+            
             registry.Bind<IAuditLogService, EnumeratorAuditLogService>();
             registry.Bind<IServiceProvider, MvxServiceProvider>();
             registry.Bind<IMigrationRunner, MigrationRunner>();

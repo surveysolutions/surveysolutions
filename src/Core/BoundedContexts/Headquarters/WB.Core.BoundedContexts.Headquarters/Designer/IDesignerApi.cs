@@ -44,11 +44,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Designer
         [Get("/api/hq/v3/questionnaires")]
         Task<PagedQuestionnaireCommunicationPackage> GetQuestionnairesList([Query] DesignerQuestionnairesListFilter filter);
 
+
         [Get("/pdf/status/{questionnaireId}")]
-        Task <PdfStatus> GetPdfStatus(Guid questionnaireId, [Query] Guid? translation = null);
+        Task <PdfStatus> GetHtmlStatus(Guid questionnaireId, [Query] Guid? translation = null);
 
         [Get("/pdf/download/{questionnaireId}")]
-        Task<RestFile> DownloadPdf(Guid questionnaireId, [Query] Guid? translation = null);
+        Task<RestFile> DownloadHtml(Guid questionnaireId, [Query] Guid? translation = null);
 
         [Get("/api/hq/categories/{questionnaireId}/{categoryId}")]
         Task<List<CategoriesItem>> GetReusableCategories(Guid questionnaireId, Guid categoryId);
