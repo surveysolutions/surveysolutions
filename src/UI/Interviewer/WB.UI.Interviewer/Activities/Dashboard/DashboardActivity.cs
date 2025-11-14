@@ -15,6 +15,7 @@
  using WB.UI.Interviewer.CustomControls;
  using WB.UI.Shared.Enumerator.Activities;
  using WB.UI.Shared.Enumerator.Activities.Dashboard;
+ using WB.UI.Shared.Enumerator.CustomControls;
  using WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation;
  using WB.UI.Shared.Enumerator.Services;
  using WB.UI.Shared.Enumerator.Services.Notifications;

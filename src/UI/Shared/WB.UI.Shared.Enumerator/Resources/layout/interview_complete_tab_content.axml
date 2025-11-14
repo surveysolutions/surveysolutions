@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" 
+              xmlns:local="http://schemas.android.com/apk/res-auto"
+              style="@style/Interview_Complete_Tab_Content"
+              android:id="@+id/tabContentLinearLayout"
+              android:background="#FFFFFF"
+              android:paddingTop="24dp"
+              android:paddingBottom="24dp"
+              android:orientation="vertical"
+              local:MvxBind="Click ToggleCommand">
+    <MvxRecyclerView android:id="@+id/recyclerView"
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:layout_marginLeft="@dimen/Interview_Entity_margin_left"
+                     android:layout_marginRight="@dimen/Interview_Entity_margin_left"
+                     android:clipToPadding="false"
+                     android:animateLayoutChanges="false"
+                     android:nestedScrollingEnabled="false"
+                     hasFixedSize="false"
+                     local:MvxItemTemplate="@layout/interview_complete_child_item"
+                     local:MvxBind="ItemsSource Items">
+    </MvxRecyclerView>
+    <TextView
+            android:id="@+id/tab_content_more_label"
+            android:layout_width="match_parent"
+            style="@style/Interview_Complete_Tab_Content_More_label"
+            local:MvxBind="Text MoreCount; Visible ShowMore;"
+    />
+</LinearLayout>

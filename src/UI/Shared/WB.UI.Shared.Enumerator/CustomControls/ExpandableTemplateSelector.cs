@@ -13,9 +13,9 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 
 namespace WB.UI.Shared.Enumerator.CustomControls;
 
-public class ExpandableTemplateSelector : IMvxTemplateSelector
+public class ExpandableTemplateSelector<T> : IMvxTemplateSelector
 {
-    private static readonly Type ParentType = typeof(CompleteGroup);
+    private static readonly Type ParentType = typeof(T);
     private static readonly Type ChildtType = typeof(EntityWithErrorsViewModel);
 
     public int GetItemViewType(object forItemObject)
