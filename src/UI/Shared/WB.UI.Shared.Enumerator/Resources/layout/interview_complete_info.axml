@@ -38,8 +38,8 @@
                 tabGravity="start"
                 tabMode="scrollable"
                 local:tabIndicatorColor="@android:color/white"
-                local:tabIndicatorHeight="4dp"
-                 />
+                local:tabIndicatorHeight="4dp"/>
+        
         <View style="@style/Interview_Complete_Divider"
               android:layout_width ="@dimen/Interview_Entity_margin_left"
               android:layout_gravity="bottom" />
@@ -49,7 +49,7 @@
     
     <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/viewPager"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             local:MvxBind="Visible Not(IsAllOk);" />
     

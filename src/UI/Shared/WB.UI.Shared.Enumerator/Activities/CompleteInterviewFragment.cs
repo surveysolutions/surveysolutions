@@ -309,8 +309,20 @@ namespace WB.UI.Shared.Enumerator.Activities
             {
                 if (viewPager == null) return;
                 int currentItem = viewPager.CurrentItem;
-                var currentViewGroup = viewPager.GetChildAt(0) as ViewGroup; 
-                var currentView = currentViewGroup?.GetChildAt(currentItem);
+                
+                // Get the RecyclerView that ViewPager2 uses internally
+                var recyclerView2 = viewPager.GetChildAt(0) as RecyclerView;
+                if (recyclerView2 == null) return;
+                
+                // Find the ViewHolder for the current item
+                var viewHolder = recyclerView2.FindViewHolderForAdapterPosition(currentItem);
+                if (viewHolder == null)
+                {
+                    viewPager.PostDelayed(RecalculateRecyclerViewHeight, 50);
+                    return;
+                }
+                
+                var currentView = viewHolder.ItemView;
                 var recyclerView = currentView?.FindViewById<MvxRecyclerView>(Resource.Id.recyclerView);
                 if (recyclerView == null || recyclerView.Visibility != ViewStates.Visible)
                 {
