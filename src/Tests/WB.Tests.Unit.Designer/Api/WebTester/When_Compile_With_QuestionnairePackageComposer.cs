@@ -44,7 +44,10 @@ namespace WB.Tests.Unit.Designer.Api.WebTester
                 .Returns(questionnaireView);
 
             fixture.Register<IQuestionnaireCacheStorage>(() => new QuestionnaireCacheStorage(new MemoryCache(Options.Create(new MemoryCacheOptions()))));
-
+            
+            fixture.Register<IQuestionnaireDocumentTransformer>(()=> new MacrosSubstitutionQuestionnaireDocumentTransformer(
+                fixture.Freeze<Mock<IMacrosSubstitutionService>>().Object));
+            
             fixture.Register<DesignerDbContext>(() =>
             {
                 var inMemoryDbContext = Create.InMemoryDbContext();
