@@ -3,7 +3,8 @@
         <div v-if="editor" class="editor-toolbar">
             <div class="dropdown">
                 <button type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                    :class="{ active: isActive.heading }" title="Heading">
+                    :class="{ active: isActive.heading }" :aria-pressed="isActive.heading" aria-label="Heading"
+                    title="Heading">
                     <span class="glyphicon glyphicon-header"></span>
                 </button>
                 <ul class="dropdown-menu">
@@ -27,24 +28,27 @@
                         </a></li>
                 </ul>
             </div>
-            <button type="button" @click="toggleBold" :class="{ active: isActive.bold }" title="Bold">
+            <button type="button" @click="toggleBold" :class="{ active: isActive.bold }" :aria-pressed="isActive.bold"
+                aria-label="Bold" title="Bold">
                 <span class="glyphicon glyphicon-bold"></span>
             </button>
-            <button type="button" @click="toggleItalic" :class="{ active: isActive.italic }" title="Italic">
+            <button type="button" @click="toggleItalic" :class="{ active: isActive.italic }"
+                :aria-pressed="isActive.italic" aria-label="Italic" title="Italic">
                 <span class="glyphicon glyphicon-italic"></span>
             </button>
             <button type="button" @click="toggleBulletList" :class="{ active: isActive.bulletList }"
-                title="Bullet List">
+                :aria-pressed="isActive.bulletList" aria-label="Bullet List" title="Bullet List">
                 <span class="glyphicon glyphicon-list"></span>
             </button>
             <button type="button" @click="toggleOrderedList" :class="{ active: isActive.orderedList }"
-                title="Ordered List">
+                :aria-pressed="isActive.orderedList" aria-label="Ordered List" title="Ordered List">
                 <span class="glyphicon glyphicon-sort-by-order"></span>
             </button>
-            <button type="button" @click="addImage" title="Insert Image">
+            <button type="button" @click="addImage" aria-label="Insert Image" title="Insert Image">
                 <span class="glyphicon glyphicon-picture"></span>
             </button>
-            <button type="button" @click="openLinkModal" :class="{ active: isActive.link }" title="Insert Link">
+            <button type="button" @click="openLinkModal" :class="{ active: isActive.link }"
+                :aria-pressed="isActive.link" aria-label="Insert Link" title="Insert Link">
                 <span class="glyphicon glyphicon-link"></span>
             </button>
         </div>
@@ -82,6 +86,42 @@
             </div>
         </div>
         <div class="modal-backdrop in" :style="{ display: showLinkModal ? 'block' : 'none' }"></div>
+
+        <!-- Image Modal -->
+        <div class="modal fade" :class="{ in: showImageModal }" tabindex="-1" role="dialog"
+            :style="{ display: showImageModal ? 'block' : 'none' }">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" @click="closeImageModal" aria-label="Close">
+                            <span aria-hidden="true"></span>
+                        </button>
+                        <h4 class="modal-title">Insert Image</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="imageFile">Image File</label>
+                            <input type="file" id="imageFile" @change="handleImageFileChange" class="form-control"
+                                accept="image/*" />
+                            <small class="help-block" v-if="imagePreview">Preview:</small>
+                            <img v-if="imagePreview" :src="imagePreview" alt="Preview"
+                                style="max-width: 100%; max-height: 200px; margin-top: 10px;" />
+                        </div>
+                        <div class="form-group">
+                            <label for="imageDescription">Description (Alt Text)</label>
+                            <input type="text" id="imageDescription" v-model="imageDescription" class="form-control"
+                                placeholder="Enter image description" @keyup.enter="isImageFormValid && applyImage()" />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success" @click="applyImage"
+                            :disabled="!isImageFormValid">OK</button>
+                        <button type="button" class="btn btn-link" @click="closeImageModal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-backdrop in" :style="{ display: showImageModal ? 'block' : 'none' }"></div>
     </div>
 </template>
 
@@ -295,7 +335,11 @@ export default {
             },
             showLinkModal: false,
             linkUrl: '',
-            linkText: ''
+            linkText: '',
+            showImageModal: false,
+            imageFile: null,
+            imagePreview: '',
+            imageDescription: ''
         }
     },
     mounted() {
@@ -322,6 +366,9 @@ export default {
     computed: {
         isLinkFormValid() {
             return this.linkText.trim() !== '' && this.linkUrl.trim() !== ''
+        },
+        isImageFormValid() {
+            return this.imageFile !== null || this.imagePreview !== ''
         }
     },
     expose: ['refresh'],
@@ -422,21 +469,54 @@ export default {
             this.editor.chain().focus().toggleOrderedList().run()
         },
         addImage() {
-            const input = document.createElement('input')
-            input.type = 'file'
-            input.accept = 'image/*'
-            input.onchange = (e) => {
-                const file = e.target.files[0]
-                if (file) {
-                    const reader = new FileReader()
-                    reader.onload = (event) => {
-                        const base64 = event.target.result
-                        this.editor.chain().focus().setImage({ src: base64 }).run()
-                    }
-                    reader.readAsDataURL(file)
+            this.openImageModal()
+        },
+        openImageModal() {
+            this.showImageModal = true
+            this.imageFile = null
+            this.imagePreview = ''
+            this.imageDescription = ''
+            this.$nextTick(() => {
+                const input = document.getElementById('imageFile')
+                if (input) input.focus()
+            })
+        },
+        closeImageModal() {
+            this.showImageModal = false
+            this.imageFile = null
+            this.imagePreview = ''
+            this.imageDescription = ''
+        },
+        handleImageFileChange(event) {
+            const file = event.target.files[0]
+            if (file) {
+                this.imageFile = file
+                const reader = new FileReader()
+                reader.onload = (e) => {
+                    this.imagePreview = e.target.result
                 }
+                reader.readAsDataURL(file)
+            } else {
+                this.imageFile = null
+                this.imagePreview = ''
             }
-            input.click()
+        },
+        applyImage() {
+            if (!this.imagePreview) {
+                this.closeImageModal()
+                return
+            }
+
+            const imageAttrs = {
+                src: this.imagePreview
+            }
+
+            if (this.imageDescription.trim()) {
+                imageAttrs.alt = this.imageDescription.trim()
+            }
+
+            this.editor.chain().focus().setImage(imageAttrs).run()
+            this.closeImageModal()
         },
         openLinkModal() {
             const { from, to } = this.editor.state.selection
