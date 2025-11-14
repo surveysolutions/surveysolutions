@@ -1,14 +1,14 @@
 import { getLocationHash } from '~/shared/helpers'
 
-const designerMixin = {
+export const designerMixin = {
     methods: {
-        openDesigner() {
+        openDesigner(id) {
             if (!this.$config.inWebTesterMode) {
                 return
             }
 
             const { questionnaireId, designerUrl } = this.$config
-            const entityId = this.$me.id.split('_')[0]
+            const entityId = id.split('_')[0]
             const url = `${designerUrl}/q/details/${questionnaireId}/entity/${entityId}`
 
             window.open(url, '_blank')

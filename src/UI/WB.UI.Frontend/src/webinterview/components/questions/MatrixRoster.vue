@@ -3,7 +3,7 @@
         <div class="question-editor">
             <h5>
                 <a class="open-designer" v-if="this.$config.inWebTesterMode && name" href="javascript:void(0);"
-                    @click="openDesigner" v-dompurify-html="'[' + name + ']'"></a>
+                    @click="openDesigner($me.id)" v-dompurify-html="'[' + name + ']'"></a>
                 <span v-dateTimeFormatting v-dompurify-html="title"></span>
             </h5>
             <div class="information-block instruction" v-if="instructions">

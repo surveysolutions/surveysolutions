@@ -3,9 +3,10 @@
         <div class="ag-cell-label-container" v-bind:class="{ 'has-instruction': hasInstructions }">
             <div class="ag-header-cell-label">
 
-                <a class="open-designer" v-if="this.$config.inWebTesterMode && name" href="javascript:void(0);"
-                    @click="openDesigner" v-dompurify-html="'[' + name + ']'"></a>
-                <span class="ag-header-cell-text" v-dompurify-html="title"></span>
+                <a class="open-designer" style="word-break: break-all;" v-if="this.$config.inWebTesterMode && name"
+                    href="javascript:void(0);" @click="openDesigner(questionId)"
+                    v-dompurify-html="'[' + name + ']'"></a>
+                <span class="ag-header-cell-text" style="word-break: break-all;" v-dompurify-html="title"></span>
             </div>
         </div>
         <template v-slot:popover>
@@ -18,8 +19,10 @@
 
 <script lang="js">
 import { find } from 'lodash'
+import { designerMixin } from '../mixins'
 export default {
     name: 'TableRoster_QuestionTitle',
+    mixins: [designerMixin],
 
     data() {
         return {
