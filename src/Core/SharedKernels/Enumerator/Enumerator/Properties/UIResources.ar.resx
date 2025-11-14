@@ -240,6 +240,15 @@
     <data name="Interview_Questions_QrBarcode_SaveAnswer" xml:space="preserve">
     <value>اضغط لأخذ الباركود</value>
 </data>
+  <data name="BarcodeScanner_Error_UnknownError" xml:space="preserve">
+    <value>خطأ غير معروف</value>
+  </data>
+  <data name="BarcodeScanner_Error_StartingCamera" xml:space="preserve">
+    <value>خطأ في بدء تشغيل الكاميرا: </value>
+  </data>
+  <data name="BarcodeScanner_Error_Interrupted" xml:space="preserve">
+    <value>متقطع</value>
+  </data>
     <data name="Interview_Questions_Area_SaveAnswer" xml:space="preserve">
     <value>اضغط للإجابة</value>
 </data>

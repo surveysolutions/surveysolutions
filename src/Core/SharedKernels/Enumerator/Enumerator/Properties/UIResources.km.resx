@@ -298,6 +298,15 @@
   <data name="Interview_Questions_QrBarcode_SaveAnswer" xml:space="preserve">
     <value>យករូបbarcode</value>
   </data>
+  <data name="BarcodeScanner_Error_UnknownError" xml:space="preserve">
+    <value>កំហុសមិនស្គាល់</value>
+  </data>
+  <data name="BarcodeScanner_Error_StartingCamera" xml:space="preserve">
+    <value>កំហុសក្នុងការចាប់ផ្តើមកាមេរ៉ា៖ </value>
+  </data>
+  <data name="BarcodeScanner_Error_Interrupted" xml:space="preserve">
+    <value>ផ្អាក</value>
+  </data>
   <data name="Interviewer_ApplicationName" xml:space="preserve">
     <value>អ្នកសម្ភាសន៍ Survey Solutions</value>
   </data>

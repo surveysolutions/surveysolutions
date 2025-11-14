@@ -291,6 +291,24 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
             }
         }
         
+        public static string BarcodeScanner_Error_UnknownError {
+            get {
+                return ResourceManager.GetString("BarcodeScanner_Error_UnknownError", resourceCulture);
+            }
+        }
+        
+        public static string BarcodeScanner_Error_StartingCamera {
+            get {
+                return ResourceManager.GetString("BarcodeScanner_Error_StartingCamera", resourceCulture);
+            }
+        }
+        
+        public static string BarcodeScanner_Error_Interrupted {
+            get {
+                return ResourceManager.GetString("BarcodeScanner_Error_Interrupted", resourceCulture);
+            }
+        }
+        
         public static string Interview_Questions_Area_SaveAnswer {
             get {
                 return ResourceManager.GetString("Interview_Questions_Area_SaveAnswer", resourceCulture);

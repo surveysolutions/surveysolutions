@@ -181,6 +181,15 @@
 <data name="Interview_Questions_QrBarcode_SaveAnswer" xml:space="preserve">
     <value>Nhấn để chụp mã vạch</value>
 </data>
+  <data name="BarcodeScanner_Error_UnknownError" xml:space="preserve">
+    <value>Lỗi không xác định</value>
+  </data>
+  <data name="BarcodeScanner_Error_StartingCamera" xml:space="preserve">
+    <value>Lỗi khởi động máy ảnh: </value>
+  </data>
+  <data name="BarcodeScanner_Error_Interrupted" xml:space="preserve">
+    <value>Bị gián đoạn</value>
+  </data>
 <data name="Interview_Questions_Area_SaveAnswer" xml:space="preserve">
     <value>Nhấn để trả lời</value>
 </data>

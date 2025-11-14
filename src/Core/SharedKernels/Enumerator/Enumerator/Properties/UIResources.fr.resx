@@ -240,6 +240,15 @@
   <data name="Interview_Questions_QrBarcode_SaveAnswer" xml:space="preserve">
     <value>Appuyez pour scanner le code-barres</value>
   </data>
+  <data name="BarcodeScanner_Error_UnknownError" xml:space="preserve">
+    <value>Erreur inconnue</value>
+  </data>
+  <data name="BarcodeScanner_Error_StartingCamera" xml:space="preserve">
+    <value>Erreur de démarrage de la caméra : </value>
+  </data>
+  <data name="BarcodeScanner_Error_Interrupted" xml:space="preserve">
+    <value>Interrompu</value>
+  </data>
   <data name="Interview_Questions_Area_SaveAnswer" xml:space="preserve">
     <value>Appuyez pour répondre</value>
   </data>

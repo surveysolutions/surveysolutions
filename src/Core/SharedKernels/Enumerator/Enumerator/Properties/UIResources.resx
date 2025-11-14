@@ -240,6 +240,15 @@
   <data name="Interview_Questions_QrBarcode_SaveAnswer" xml:space="preserve">
     <value>Tap to take barcode</value>
   </data>
+  <data name="BarcodeScanner_Error_UnknownError" xml:space="preserve">
+    <value>Unknown error</value>
+  </data>
+  <data name="BarcodeScanner_Error_StartingCamera" xml:space="preserve">
+    <value>Error starting camera: </value>
+  </data>
+  <data name="BarcodeScanner_Error_Interrupted" xml:space="preserve">
+    <value>Interrupted</value>
+  </data>
   <data name="Interview_Questions_Area_SaveAnswer" xml:space="preserve">
     <value>Tap to answer</value>
   </data>

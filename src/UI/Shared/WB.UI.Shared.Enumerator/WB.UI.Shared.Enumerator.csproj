@@ -183,8 +183,17 @@
     <PackageReference Include="Xamarin.GooglePlayServices.Nearby">
       <Version>119.3.0.5</Version>
     </PackageReference>
-    <PackageReference Include="ZXing.Net.Mobile">
-      <Version>3.0.0-beta5</Version>
+    <PackageReference Include="Xamarin.AndroidX.Camera.Camera2">
+      <Version>1.4.1.1</Version>
+    </PackageReference>
+    <PackageReference Include="Xamarin.AndroidX.Camera.Core">
+      <Version>1.4.1.1</Version>
+    </PackageReference>
+    <PackageReference Include="Xamarin.AndroidX.Camera.Lifecycle">
+      <Version>1.4.1.1</Version>
+    </PackageReference>
+    <PackageReference Include="Xamarin.AndroidX.Camera.View">
+      <Version>1.4.1.1</Version>
     </PackageReference>
     <PackageReference Include="MvvmCross.DroidX.RecyclerView">
       <Version>9.4.0</Version>
@@ -195,6 +204,7 @@
     <PackageReference Include="Xamarin.AndroidX.VectorDrawable">
       <Version>1.2.0.8</Version>
     </PackageReference>
+    <PackageReference Include="ZXing.Net" Version="0.16.11" />
   </ItemGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
