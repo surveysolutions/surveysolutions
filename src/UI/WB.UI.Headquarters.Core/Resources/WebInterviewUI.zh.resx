@@ -425,4 +425,10 @@
   <data name="NumberCannotBeLessThanProtected" xml:space="preserve">
     <value>输入的值不能小于受保护的答案</value>
   </data>
+  <data name="TurnOffDevMode" xml:space="preserve">
+    <value>关闭开发者模式</value>
+  </data>
+  <data name="TurnOnDevMode" xml:space="preserve">
+    <value>开启开发者模式</value>
+  </data>
 </root>

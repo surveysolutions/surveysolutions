@@ -471,4 +471,10 @@
   <data name="Yes" xml:space="preserve">
     <value>Po</value>
   </data>
+  <data name="TurnOffDevMode" xml:space="preserve">
+    <value>Çaktivizo modalitetin e zhvilluesit</value>
+  </data>
+  <data name="TurnOnDevMode" xml:space="preserve">
+    <value>Aktivizo modalitetin e zhvilluesit</value>
+  </data>
 </root>

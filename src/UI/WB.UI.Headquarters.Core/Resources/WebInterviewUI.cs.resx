@@ -441,12 +441,6 @@ Požádejte o pomoc svého garanta.</value>
   <data name="AssignmentLimitError" xml:space="preserve">
     <value>Z této žádnaky nelze vytvořit více rozhovorů</value>
   </data>
-  <data name="HideVariables" xml:space="preserve">
-    <value>Skrýt proměnné</value>
-  </data>
-  <data name="ShowVariables" xml:space="preserve">
-    <value>Zobrazit proměnné</value>
-  </data>
     <data name="CriticalQuestionErrors" xml:space="preserve">
   <value>Vyžadují odpovědi na tyto otázky:</value>
 </data>
@@ -489,5 +483,11 @@ Požádejte o pomoc svého garanta.</value>
   </data>
     <data name="Complete_QuestionsWithErrors" xml:space="preserve">
     <value>Otázky s chybami: {{count}}</value>
+  </data>
+  <data name="TurnOffDevMode" xml:space="preserve">
+    <value>Vypnout režim vývojáře</value>
+  </data>
+  <data name="TurnOnDevMode" xml:space="preserve">
+    <value>Zapnout režim vývojáře</value>
   </data>
 </root>

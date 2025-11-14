@@ -479,11 +479,11 @@ Contact support for assistance.</value>
   <data name="EmailLink_EmailResumeLink" xml:space="preserve">
     <value>Resume link</value>
   </data>
-  <data name="HideVariables" xml:space="preserve">
-    <value>Hide variables</value>
+  <data name="TurnOffDevMode" xml:space="preserve">
+    <value>Switch off Developer Mode</value>
   </data>
-  <data name="ShowVariables" xml:space="preserve">
-    <value>Show variables</value>
+  <data name="TurnOnDevMode" xml:space="preserve">
+    <value>Switch on Developer Mode</value>
   </data>
   <data name="Interview_Questions_RemoveRowFromRosterMessage" xml:space="preserve">
     <value>Are you sure you want to remove related roster '{{rosterTitle}}'?</value>

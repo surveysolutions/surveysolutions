@@ -1351,6 +1351,16 @@
 }
 
 .webtester {
+
+    .supervisor:before {
+        display: none;
+    }
+
+    .open-designer {
+        padding-right: 10px;
+    }
+
+    .question.supervisor,
     .variable.section-variable {
         background-color: #FFFFE3;
     }
