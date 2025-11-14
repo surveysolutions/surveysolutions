@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using Microsoft.Extensions.Options;
 using Moq;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Repositories;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Configs;
 using WB.Core.SharedKernels.DataCollection;
