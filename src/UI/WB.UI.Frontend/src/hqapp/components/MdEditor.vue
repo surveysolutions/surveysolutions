@@ -1,28 +1,87 @@
 <template>
     <div class="md-editor-container">
         <div v-if="editor" class="editor-toolbar">
-            <button type="button" @click="setHeading(1)" :class="{ active: isActive.h1 }">
-                H1
+            <div class="dropdown">
+                <button type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                    :class="{ active: isActive.heading }" title="Heading">
+                    <span class="glyphicon glyphicon-header"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a href="javascript:void(0);" @click="setHeading(1)">
+                            <h1>Heading 1</h1>
+                        </a></li>
+                    <li><a href="javascript:void(0);" @click="setHeading(2)">
+                            <h2>Heading 2</h2>
+                        </a></li>
+                    <li><a href="javascript:void(0);" @click="setHeading(3)">
+                            <h3>Heading 3</h3>
+                        </a></li>
+                    <li><a href="javascript:void(0);" @click="setHeading(4)">
+                            <h4>Heading 4</h4>
+                        </a></li>
+                    <li><a href="javascript:void(0);" @click="setHeading(5)">
+                            <h5>Heading 5</h5>
+                        </a></li>
+                    <li><a href="javascript:void(0);" @click="setHeading(6)">
+                            <h6>Heading 6</h6>
+                        </a></li>
+                </ul>
+            </div>
+            <button type="button" @click="toggleBold" :class="{ active: isActive.bold }" title="Bold">
+                <span class="glyphicon glyphicon-bold"></span>
             </button>
-            <button type="button" @click="setHeading(2)" :class="{ active: isActive.h2 }">
-                H2
+            <button type="button" @click="toggleItalic" :class="{ active: isActive.italic }" title="Italic">
+                <span class="glyphicon glyphicon-italic"></span>
             </button>
-            <button type="button" @click="toggleBold" :class="{ active: isActive.bold }">
-                <strong>B</strong>
+            <button type="button" @click="toggleBulletList" :class="{ active: isActive.bulletList }"
+                title="Bullet List">
+                <span class="glyphicon glyphicon-list"></span>
             </button>
-            <button type="button" @click="toggleItalic" :class="{ active: isActive.italic }">
-                <em>I</em>
+            <button type="button" @click="toggleOrderedList" :class="{ active: isActive.orderedList }"
+                title="Ordered List">
+                <span class="glyphicon glyphicon-sort-by-order"></span>
             </button>
-            <button type="button" @click="toggleBulletList" :class="{ active: isActive.bulletList }">
-                • List
+            <button type="button" @click="addImage" title="Insert Image">
+                <span class="glyphicon glyphicon-picture"></span>
             </button>
-            <button type="button" @click="toggleOrderedList" :class="{ active: isActive.orderedList }">
-                1. List
+            <button type="button" @click="openLinkModal" :class="{ active: isActive.link }" title="Insert Link">
+                <span class="glyphicon glyphicon-link"></span>
             </button>
-            <button type="button" @click="addImage">Image</button>
-            <button type="button" @click="addLink" :class="{ active: isActive.link }">Link</button>
         </div>
         <div ref="editorElement" class="editor-content"></div>
+
+        <!-- Link Modal -->
+        <div class="modal fade" :class="{ in: showLinkModal }" tabindex="-1" role="dialog"
+            :style="{ display: showLinkModal ? 'block' : 'none' }">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" @click="closeLinkModal" aria-label="Close">
+                            <span aria-hidden="true"></span>
+                        </button>
+                        <h4 class="modal-title">{{ isActive.link ? 'Edit Link' : 'Add Link' }}</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="linkText">Link Text</label>
+                            <input type="text" id="linkText" v-model="linkText" class="form-control"
+                                placeholder="Enter link text" @keyup.enter="isLinkFormValid && applyLink()" />
+                        </div>
+                        <div class="form-group">
+                            <label for="linkUrl">URL</label>
+                            <input type="text" id="linkUrl" v-model="linkUrl" class="form-control"
+                                placeholder="https://example.com" @keyup.enter="isLinkFormValid && applyLink()" />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success" @click="applyLink"
+                            :disabled="!isLinkFormValid">OK</button>
+                        <button type="button" class="btn btn-link" @click="closeLinkModal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-backdrop in" :style="{ display: showLinkModal ? 'block' : 'none' }"></div>
     </div>
 </template>
 
@@ -42,6 +101,10 @@
     flex-wrap: wrap;
 }
 
+.editor-toolbar .dropdown {
+    position: relative;
+}
+
 .editor-toolbar button {
     padding: 6px 12px;
     border: 1px solid #ccc;
@@ -59,6 +122,86 @@
     background-color: #007bff;
     color: white;
     border-color: #0056b3;
+}
+
+.editor-toolbar .dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    min-width: 160px;
+    padding: 5px 0;
+    margin: 2px 0 0;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+    list-style: none;
+}
+
+.editor-toolbar .dropdown.show .dropdown-menu,
+.editor-toolbar .dropdown-menu.show {
+    display: block;
+}
+
+.editor-toolbar .dropdown-menu li {
+    margin: 0;
+    padding: 0;
+}
+
+.editor-toolbar .dropdown-menu li a {
+    display: block;
+    padding: 8px 20px;
+    clear: both;
+    font-weight: normal;
+    line-height: 1.42857143;
+    color: #333;
+    white-space: nowrap;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.editor-toolbar .dropdown-menu li a:hover,
+.editor-toolbar .dropdown-menu li a:focus {
+    background-color: #f5f5f5;
+    color: #262626;
+}
+
+.editor-toolbar .dropdown-menu li a h1,
+.editor-toolbar .dropdown-menu li a h2,
+.editor-toolbar .dropdown-menu li a h3,
+.editor-toolbar .dropdown-menu li a h4,
+.editor-toolbar .dropdown-menu li a h5,
+.editor-toolbar .dropdown-menu li a h6 {
+    margin: 0;
+    padding: 0;
+    font-weight: bold;
+    line-height: 1.42857143;
+}
+
+.editor-toolbar .dropdown-menu li a h1 {
+    font-size: 2em;
+}
+
+.editor-toolbar .dropdown-menu li a h2 {
+    font-size: 1.5em;
+}
+
+.editor-toolbar .dropdown-menu li a h3 {
+    font-size: 1.17em;
+}
+
+.editor-toolbar .dropdown-menu li a h4 {
+    font-size: 1em;
+}
+
+.editor-toolbar .dropdown-menu li a h5 {
+    font-size: 0.83em;
+}
+
+.editor-toolbar .dropdown-menu li a h6 {
+    font-size: 0.67em;
 }
 
 .editor-content {
@@ -143,14 +286,16 @@ export default {
             editor: null,
             isUpdating: false,
             isActive: {
-                h1: false,
-                h2: false,
+                heading: false,
                 bold: false,
                 italic: false,
                 bulletList: false,
                 orderedList: false,
                 link: false
-            }
+            },
+            showLinkModal: false,
+            linkUrl: '',
+            linkText: ''
         }
     },
     mounted() {
@@ -172,6 +317,11 @@ export default {
             if (currentContent !== processedValue) {
                 this.setEditorContent(processedValue)
             }
+        }
+    },
+    computed: {
+        isLinkFormValid() {
+            return this.linkText.trim() !== '' && this.linkUrl.trim() !== ''
         }
     },
     expose: ['refresh'],
@@ -223,8 +373,7 @@ export default {
             if (!editor) return
 
             this.isActive = {
-                h1: editor.isActive('heading', { level: 1 }),
-                h2: editor.isActive('heading', { level: 2 }),
+                heading: editor.isActive('heading'),
                 bold: editor.isActive('bold'),
                 italic: editor.isActive('italic'),
                 bulletList: editor.isActive('bulletList'),
@@ -289,13 +438,55 @@ export default {
             }
             input.click()
         },
-        addLink() {
-            const url = window.prompt('Enter link URL:')
-            if (url) {
-                this.editor.chain().focus().setLink({ href: url }).run()
-            } else if (this.editor.isActive('link')) {
-                this.editor.chain().focus().unsetLink().run()
+        openLinkModal() {
+            const { from, to } = this.editor.state.selection
+            const selectedText = this.editor.state.doc.textBetween(from, to, '')
+
+            if (this.editor.isActive('link')) {
+                // Editing existing link
+                this.linkUrl = this.editor.getAttributes('link').href || ''
+                this.linkText = selectedText
+            } else {
+                // Creating new link
+                this.linkUrl = ''
+                this.linkText = selectedText
             }
+
+            this.showLinkModal = true
+            this.$nextTick(() => {
+                const input = this.linkText ? document.getElementById('linkUrl') : document.getElementById('linkText')
+                if (input) input.focus()
+            })
+        },
+        closeLinkModal() {
+            this.showLinkModal = false
+            this.linkUrl = ''
+            this.linkText = ''
+        },
+        applyLink() {
+            if (!this.linkUrl) {
+                this.closeLinkModal()
+                return
+            }
+
+            const { from, to } = this.editor.state.selection
+
+            if (this.linkText) {
+                // Replace selection with link text and apply link
+                this.editor
+                    .chain()
+                    .focus()
+                    .deleteSelection()
+                    .insertContent(this.linkText)
+                    .setTextSelection({ from, to: from + this.linkText.length })
+                    .setLink({ href: this.linkUrl })
+                    .run()
+            } else {
+                // Just apply link to existing selection
+                this.editor.chain().focus().setLink({ href: this.linkUrl }).run()
+            }
+
+            this.closeLinkModal()
         },
         refresh() {
             setTimeout(() => {
