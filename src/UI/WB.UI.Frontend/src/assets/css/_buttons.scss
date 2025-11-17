@@ -13,7 +13,8 @@
         border-color: #d7d7d7 !important;
         color: $gray_light !important;
         cursor: not-allowed;
-        @include stripe-gradient(#d7d7d7, #fff);
+        background-color: $gray-highlight-font !important;
+        // @include stripe-gradient(#d7d7d7, #fff);
 
         &.btn-clear {
             background: none;
