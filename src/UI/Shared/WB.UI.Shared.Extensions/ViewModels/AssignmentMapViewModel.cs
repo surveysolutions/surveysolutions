@@ -583,7 +583,11 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
 
             var existedLayer = this.MapView.Map.OperationalLayers.FirstOrDefault(l => l.Name == featureCollectionLayer.Name);
             if (existedLayer != null)
-            this.MapView.Map.OperationalLayers.Remove(existedLayer);
+            {
+                this.MapView.Map.OperationalLayers.Remove(existedLayer);
+                // Invalidate the current track feature since we're recreating the layer
+                this.currentTrackFeature = null;
+            }
         
             this.MapView.Map.OperationalLayers.Add(featureCollectionLayer);
 
@@ -653,10 +657,22 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
 
                 updatedTrackFeature.Geometry = polyline;
 
-                if (currentTrackFeature.FeatureTable?.GeometryType == GeometryType.Point)
-                    await featureCollectionTables[1].DeleteFeatureAsync(currentTrackFeature);
-                else
-                    await featureCollectionTables[0].DeleteFeatureAsync(currentTrackFeature);
+                // Only delete if the feature reference is still valid
+                if (currentTrackFeature != null && currentTrackFeature.FeatureTable != null)
+                {
+                    try
+                    {
+                        if (currentTrackFeature.FeatureTable.GeometryType == GeometryType.Point)
+                            await featureCollectionTables[1].DeleteFeatureAsync(currentTrackFeature);
+                        else
+                            await featureCollectionTables[0].DeleteFeatureAsync(currentTrackFeature);
+                    }
+                    catch (ArcGISRuntimeException ex) when (ex.Message.Contains("not found"))
+                    {
+                        // Feature already deleted (e.g., layer was recreated), safe to ignore
+                        logger.Debug("Feature already deleted during geo-tracking update", ex);
+                    }
+                }
 
                 await geoTrackingPolylineFeatureCollectionTable.AddFeatureAsync(updatedTrackFeature);
 
