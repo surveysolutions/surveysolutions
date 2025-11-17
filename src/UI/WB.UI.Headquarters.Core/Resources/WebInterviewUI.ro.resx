@@ -491,4 +491,10 @@ Contactați echipa de suport pentru asistență.</value>
   <data name="NotCalculated" xml:space="preserve">
     <value>Necalculat</value>
   </data>
+  <data name="TurnOffDevMode" xml:space="preserve">
+    <value>Dezactivați modul dezvoltator</value>
+  </data>
+  <data name="TurnOnDevMode" xml:space="preserve">
+    <value>Activați modul dezvoltator</value>
+  </data>
 </root>
