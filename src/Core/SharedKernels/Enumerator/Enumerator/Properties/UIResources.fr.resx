@@ -972,7 +972,7 @@ Aucune erreur détectée</value>
 Entretien {0}</value>
 </data>
   <data name="Interview_Submit_interview_Button" xml:space="preserve">
-    <value>Soumettre l’entretien</value>
+    <value>Terminer</value>
 </data>
   <data name="Interview_Complete_Tab_Title_Critical" xml:space="preserve">
     <value>Erreurs

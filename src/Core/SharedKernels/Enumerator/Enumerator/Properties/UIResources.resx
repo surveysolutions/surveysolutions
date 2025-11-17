@@ -354,7 +354,7 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
     <value>Complete</value>
   </data>
   <data name="Interview_Submit_interview_Button" xml:space="preserve">
-    <value>Submit Interview</value>
+    <value>Complete</value>
   </data>
   <data name="Interview_Complete_Consequences_Instrunction" xml:space="preserve">
     <value>After you finish this interview it will be marked as completed and will be uploaded to supervisor during your next synchronization</value>

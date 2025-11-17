@@ -969,7 +969,7 @@ No se detectaron errores</value>
 Entrevista {0}</value>
   </data>
   <data name="Interview_Submit_interview_Button" xml:space="preserve">
-    <value>Enviar entrevista</value>
+    <value>Completar</value>
   </data>
   <data name="Interview_Complete_Tab_Title_Critical" xml:space="preserve">
     <value>Errores

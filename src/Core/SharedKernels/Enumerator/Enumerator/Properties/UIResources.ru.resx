@@ -975,7 +975,7 @@
 Интервью {0}</value>
   </data>
   <data name="Interview_Submit_interview_Button" xml:space="preserve">
-    <value>Отправить интервью</value>
+    <value>Завершить</value>
   </data>
   <data name="Interview_Complete_Tab_Title_Critical" xml:space="preserve">
     <value>Критические

@@ -912,7 +912,7 @@ Nebyly zjištěny žádné chyby</value>
 Rozhovor {0}</value>
 </data>
     <data name="Interview_Submit_interview_Button" xml:space="preserve">
-    <value>Odeslat rozhovor</value>
+    <value>Uzamknout</value>
 </data>
     <data name="Interview_Complete_Tab_Title_Critical" xml:space="preserve">
     <value>Kritické
