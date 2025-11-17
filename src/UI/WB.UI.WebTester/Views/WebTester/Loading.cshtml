@@ -8,25 +8,10 @@
         window.CONFIG.splashScreen = true;
     </script>
     
-    <style>
-        @@font-face {
-            font-family: 'ThrobberFont';
-            src: url('/img/throbber-font.ttf') format('truetype');
-        }
-        .throbber-container {
-            font-family: 'ThrobberFont', sans-serif;
-            font-size: 240px;
-            text-align: center;
-            padding: 20px;
-            user-select: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-    </style>
-    
-    <div class="throbber-container" id="throbber"></div>
+    <div class="webtester">
+        <div class="throbber-container" id="throbber">
+        </div>
+    </div>
     
     <script>
         (function() {
@@ -73,5 +58,3 @@
         checkStatus();
     </script>
 }
-
-

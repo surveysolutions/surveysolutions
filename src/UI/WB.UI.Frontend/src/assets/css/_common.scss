@@ -4,7 +4,11 @@
 @include fontface(RobotoLight);
 @include fontface(RobotoBold);
 @include fontface(TrebuchetMSBold);
-@include fontface(throbber-font);
+
+@font-face {
+    font-family: 'ThrobberFont';
+    src: url('#{$assetsPath}/fonts/throbber-font.ttf') format('truetype');
+}
 
 input[type=number] {
     -moz-appearance: textfield;
