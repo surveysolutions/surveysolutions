@@ -25,6 +25,7 @@
         "@tiptap/extension-image": "^3.10.5",
         "@tiptap/extension-link": "^3.10.5",
         "@tiptap/starter-kit": "^3.10.5",
+        "@tiptap/vue-3": "^3.10.5",
         "@vee-validate/i18n": "^4.15.0",
         "@vee-validate/rules": "^4.15.0",
         "@vue/apollo-option": "^4.2.0",

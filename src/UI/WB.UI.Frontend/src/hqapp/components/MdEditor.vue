@@ -52,7 +52,7 @@
                 <span class="glyphicon glyphicon-link"></span>
             </button>
         </div>
-        <div ref="editorElement" class="editor-content"></div>
+        <textarea ref="textarea" @input="onInput" class="markdown-editor"></textarea>
 
         <!-- Link Modal -->
         <div class="modal fade" :class="{ in: showLinkModal }" tabindex="-1" role="dialog"
@@ -244,76 +244,25 @@
     font-size: 0.67em;
 }
 
-.editor-content {
+.markdown-editor {
+    width: 100%;
     min-height: 300px;
+    border: none;
     padding: 12px;
-}
-
-:deep(.ProseMirror) {
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', monospace;
+    font-size: 14px;
+    line-height: 1.5;
+    resize: vertical;
     outline: none;
-    min-height: 300px;
 }
 
-:deep(.ProseMirror p) {
-    margin: 0 0 1em 0;
-}
-
-:deep(.ProseMirror h1),
-:deep(.ProseMirror h2),
-:deep(.ProseMirror h3),
-:deep(.ProseMirror h4),
-:deep(.ProseMirror h5),
-:deep(.ProseMirror h6) {
-    margin-top: 1.5em;
-    margin-bottom: 0.5em;
-    font-weight: bold;
-}
-
-:deep(.ProseMirror h1) {
-    font-size: 2em;
-}
-
-:deep(.ProseMirror h2) {
-    font-size: 1.5em;
-}
-
-:deep(.ProseMirror h3) {
-    font-size: 1.17em;
-}
-
-:deep(.ProseMirror ul),
-:deep(.ProseMirror ol) {
-    padding-left: 2em;
-    margin: 1em 0;
-}
-
-:deep(.ProseMirror img) {
-    max-width: 100%;
-    height: auto;
-}
-
-:deep(.ProseMirror a) {
-    color: #007bff;
-    text-decoration: underline;
-}
-
-:deep(.ProseMirror strong) {
-    font-weight: bold;
-}
-
-:deep(.ProseMirror em) {
-    font-style: italic;
+.markdown-editor:focus {
+    outline: none;
 }
 </style>
 
 <script>
-import { Editor } from '@tiptap/core'
-import StarterKit from '@tiptap/starter-kit'
-import Image from '@tiptap/extension-image'
-import Link from '@tiptap/extension-link'
-import { Markdown } from 'tiptap-markdown'
 import { escape, unescape } from 'lodash'
-import { markRaw } from 'vue'
 
 export default {
     emits: ['input', 'update:modelValue'],
@@ -323,8 +272,8 @@ export default {
     },
     data() {
         return {
-            editor: null,
-            isUpdating: false,
+            content: '',
+            editor: true, // Keep for v-if in template
             isActive: {
                 heading: false,
                 bold: false,
@@ -343,23 +292,31 @@ export default {
         }
     },
     mounted() {
-        this.initializeEditor()
-    },
-    unmounted() {
-        if (this.editor) {
-            this.editor.destroy()
-            this.editor = null
+        let val = this.modelValue
+        if (this.supportHtml != true) {
+            val = unescape(val)
         }
+        this.content = val
+        this.$refs.textarea.value = val
     },
     watch: {
         modelValue(newValue) {
-            if (this.isUpdating || !this.editor) return
-
-            let processedValue = this.supportHtml ? newValue : unescape(newValue)
-            const currentContent = this.getEditorContent()
-
-            if (currentContent !== processedValue) {
-                this.setEditorContent(processedValue)
+            let val = newValue
+            if (this.supportHtml != true) {
+                val = unescape(val)
+            }
+            if (val !== this.content) {
+                const textarea = this.$refs.textarea
+                if (textarea) {
+                    const cursorPos = textarea.selectionStart
+                    this.content = val
+                    textarea.value = val
+                    this.$nextTick(() => {
+                        textarea.setSelectionRange(cursorPos, cursorPos)
+                    })
+                } else {
+                    this.content = val
+                }
             }
         }
     },
@@ -373,100 +330,120 @@ export default {
     },
     expose: ['refresh'],
     methods: {
-        initializeEditor() {
-            let initialContent = this.modelValue
-            if (!this.supportHtml) {
-                initialContent = unescape(initialContent)
+        onInput() {
+            const textarea = this.$refs.textarea
+            this.content = textarea.value
+            let markDown = this.content
+
+            if (this.supportHtml != true) {
+                markDown = escape(markDown)
             }
 
-            this.editor = markRaw(new Editor({
-                element: this.$refs.editorElement,
-                extensions: [
-                    StarterKit.configure({
-                        heading: {
-                            levels: [1, 2, 3, 4, 5, 6]
-                        }
-                    }),
-                    Image,
-                    Link.configure({
-                        openOnClick: false,
-                        HTMLAttributes: {
-                            target: '_blank',
-                            rel: 'noopener noreferrer'
-                        }
-                    }),
-                    Markdown.configure({
-                        html: true,
-                        transformPastedText: true,
-                        transformCopiedText: false,
-                    })
-                ],
-                content: initialContent,
-                onUpdate: () => {
-                    this.handleContentChange()
-                },
-                onSelectionUpdate: ({ editor }) => {
-                    this.updateActiveStates(editor)
-                },
-                onFocus: ({ editor }) => {
-                    this.updateActiveStates(editor)
-                }
-            }))
-
-            // Initial state
-            this.updateActiveStates(this.editor)
-        },
-        updateActiveStates(editor) {
-            if (!editor) return
-
-            this.isActive = {
-                heading: editor.isActive('heading'),
-                bold: editor.isActive('bold'),
-                italic: editor.isActive('italic'),
-                bulletList: editor.isActive('bulletList'),
-                orderedList: editor.isActive('orderedList'),
-                link: editor.isActive('link')
+            if (this.modelValue != markDown) {
+                this.$emit('input', markDown)
+                this.$emit('update:modelValue', markDown)
             }
         },
-        getEditorContent() {
-            if (!this.editor) return ''
-            return this.editor.storage.markdown.getMarkdown()
-        },
-        setEditorContent(content) {
-            if (!this.editor) return
-            this.editor.commands.setContent(content, false)
-        },
-        handleContentChange() {
-            if (!this.editor) return
-
-            this.isUpdating = true
-            let content = this.getEditorContent()
-
-            if (!this.supportHtml) {
-                content = escape(content)
+        getSelection() {
+            const textarea = this.$refs.textarea
+            return {
+                start: textarea.selectionStart,
+                end: textarea.selectionEnd,
+                text: textarea.value.substring(textarea.selectionStart, textarea.selectionEnd)
             }
+        },
+        insertAtCursor(text, cursorOffset = text.length) {
+            const textarea = this.$refs.textarea
+            const start = textarea.selectionStart
+            const end = textarea.selectionEnd
+            const before = textarea.value.substring(0, start)
+            const after = textarea.value.substring(end)
 
-            this.$emit('update:modelValue', content)
-            this.$emit('input', content)
+            const newValue = before + text + after
+            const newCursorPos = start + cursorOffset
+            textarea.value = newValue
+            this.content = newValue
+            textarea.setSelectionRange(newCursorPos, newCursorPos)
+            this.onInput()
+        },
+        wrapSelection(prefix, suffix) {
+            const textarea = this.$refs.textarea
+            const selection = this.getSelection()
 
-            this.$nextTick(() => {
-                this.isUpdating = false
-            })
+            if (selection.text) {
+                const before = textarea.value.substring(0, selection.start)
+                const after = textarea.value.substring(selection.end)
+                const newValue = before + prefix + selection.text + suffix + after
+                const newStart = selection.start + prefix.length
+                const newEnd = selection.end + prefix.length
+                textarea.value = newValue
+                this.content = newValue
+                textarea.setSelectionRange(newStart, newEnd)
+                this.onInput()
+            } else {
+                const placeholder = 'text'
+                this.insertAtCursor(prefix + placeholder + suffix, prefix.length + placeholder.length)
+            }
+        },
+        insertMarkdown(prefix, suffix) {
+            const textarea = this.$refs.textarea
+            const start = textarea.selectionStart
+            const lineStart = textarea.value.lastIndexOf('\n', start - 1) + 1
+            const before = textarea.value.substring(0, lineStart)
+            const after = textarea.value.substring(lineStart)
+
+            const newValue = before + prefix + after
+            const newCursorPos = lineStart + prefix.length
+            textarea.value = newValue
+            this.content = newValue
+            textarea.setSelectionRange(newCursorPos, newCursorPos)
+            this.onInput()
+        },
+        insertList(prefix) {
+            const selection = this.getSelection()
+            const textarea = this.$refs.textarea
+
+            if (selection.text.includes('\n')) {
+                // Multi-line selection
+                const lines = selection.text.split('\n')
+                const formatted = lines.map(line => line.trim() ? prefix + line : line).join('\n')
+                const before = textarea.value.substring(0, selection.start)
+                const after = textarea.value.substring(selection.end)
+                const newValue = before + formatted + after
+                const newEnd = selection.start + formatted.length
+                textarea.value = newValue
+                this.content = newValue
+                textarea.setSelectionRange(selection.start, newEnd)
+                this.onInput()
+            } else {
+                // Single line
+                const start = textarea.selectionStart
+                const lineStart = textarea.value.lastIndexOf('\n', start - 1) + 1
+                const before = textarea.value.substring(0, lineStart)
+                const after = textarea.value.substring(lineStart)
+                const newValue = before + prefix + after
+                const newCursorPos = lineStart + prefix.length
+                textarea.value = newValue
+                this.content = newValue
+                textarea.setSelectionRange(newCursorPos, newCursorPos)
+                this.onInput()
+            }
         },
         setHeading(level) {
-            this.editor.chain().focus().toggleHeading({ level }).run()
+            const prefix = '#'.repeat(level) + ' '
+            this.insertMarkdown(prefix, '')
         },
         toggleBold() {
-            this.editor.chain().focus().toggleBold().run()
+            this.wrapSelection('**', '**')
         },
         toggleItalic() {
-            this.editor.chain().focus().toggleItalic().run()
+            this.wrapSelection('*', '*')
         },
         toggleBulletList() {
-            this.editor.chain().focus().toggleBulletList().run()
+            this.insertList('- ')
         },
         toggleOrderedList() {
-            this.editor.chain().focus().toggleOrderedList().run()
+            this.insertList('1. ')
         },
         addImage() {
             this.openImageModal()
@@ -507,30 +484,15 @@ export default {
                 return
             }
 
-            const imageAttrs = {
-                src: this.imagePreview
-            }
-
-            if (this.imageDescription.trim()) {
-                imageAttrs.alt = this.imageDescription.trim()
-            }
-
-            this.editor.chain().focus().setImage(imageAttrs).run()
+            const altText = this.imageDescription.trim() || 'image'
+            const markdown = `![${altText}](${this.imagePreview})`
+            this.insertAtCursor(markdown)
             this.closeImageModal()
         },
         openLinkModal() {
-            const { from, to } = this.editor.state.selection
-            const selectedText = this.editor.state.doc.textBetween(from, to, '')
-
-            if (this.editor.isActive('link')) {
-                // Editing existing link
-                this.linkUrl = this.editor.getAttributes('link').href || ''
-                this.linkText = selectedText
-            } else {
-                // Creating new link
-                this.linkUrl = ''
-                this.linkText = selectedText
-            }
+            const selection = this.getSelection()
+            this.linkText = selection.text
+            this.linkUrl = ''
 
             this.showLinkModal = true
             this.$nextTick(() => {
@@ -549,30 +511,26 @@ export default {
                 return
             }
 
-            const { from, to } = this.editor.state.selection
+            const selection = this.getSelection()
+            const linkText = this.linkText || 'link text'
+            const markdown = `[${linkText}](${this.linkUrl})`
 
-            if (this.linkText) {
-                // Replace selection with link text and apply link
-                this.editor
-                    .chain()
-                    .focus()
-                    .deleteSelection()
-                    .insertContent(this.linkText)
-                    .setTextSelection({ from, to: from + this.linkText.length })
-                    .setLink({ href: this.linkUrl })
-                    .run()
-            } else {
-                // Just apply link to existing selection
-                this.editor.chain().focus().setLink({ href: this.linkUrl }).run()
-            }
+            const textarea = this.$refs.textarea
+            const before = textarea.value.substring(0, selection.start)
+            const after = textarea.value.substring(selection.end)
+            const newValue = before + markdown + after
+            const newCursorPos = selection.start + markdown.length
+            textarea.value = newValue
+            this.content = newValue
+            textarea.setSelectionRange(newCursorPos, newCursorPos)
+            this.onInput()
 
             this.closeLinkModal()
         },
         refresh() {
             setTimeout(() => {
-                if (this.editor) {
-                    this.editor.commands.focus('start')
-                }
+                this.$refs.textarea.focus()
+                this.$refs.textarea.setSelectionRange(0, 0)
             }, 100)
         }
     }
