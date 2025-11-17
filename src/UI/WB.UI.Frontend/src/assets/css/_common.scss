@@ -4,6 +4,7 @@
 @include fontface(RobotoLight);
 @include fontface(RobotoBold);
 @include fontface(TrebuchetMSBold);
+@include fontface(throbber-font);
 
 input[type=number] {
     -moz-appearance: textfield;
