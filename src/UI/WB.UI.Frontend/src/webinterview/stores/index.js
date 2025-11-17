@@ -5,10 +5,10 @@ import { fetch } from './store.fetch.js'
 import mutations from './store.mutations'
 import sidebar from './store.sidebar'
 import routeParams from '../../shared/stores/store.routeParams.js'
-import { getShowVariables } from './showVariablesPreference'
+import { getDevModeSetting } from './showVariablesPreference'
 
 // Load showVariables preference from localStorage
-const initialShowVariables = getShowVariables()
+const initialIsDevMode = getDevModeSetting()
 
 const store =
     safeStore({
@@ -30,7 +30,7 @@ const store =
             interviewCompleted: false,
             interviewShutdown: false,
             interviewCannotBeChanged: false,
-            showVariables: initialShowVariables,
+            isDevMode: initialIsDevMode,
         },
         actions,
         mutations,

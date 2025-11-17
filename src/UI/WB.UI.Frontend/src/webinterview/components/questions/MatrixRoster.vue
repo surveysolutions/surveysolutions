@@ -1,7 +1,11 @@
 <template>
     <div class="question table-view scroller" :id="hash" v-if="rowData.length > 0">
         <div class="question-editor">
-            <h5 v-dateTimeFormatting v-dompurify-html="title"></h5>
+            <h5>
+                <a class="open-designer" v-if="this.$config.inWebTesterMode && name" href="javascript:void(0);"
+                    @click="openDesigner($me.id)" v-dompurify-html="'[' + name + ']'"></a>
+                <span v-dateTimeFormatting v-dompurify-html="title"></span>
+            </h5>
             <div class="information-block instruction" v-if="instructions">
                 <p v-dateTimeFormatting v-dompurify-html="instructions"></p>
             </div>
@@ -43,6 +47,7 @@ export default {
             countOfInstances: 0,
             title: null,
             instructions: null,
+            name: null,
         }
     },
 
@@ -72,6 +77,8 @@ export default {
             wrapText: true,
         }
 
+        this.name = this.$me.questions.length > 0 ? this.$me.questions[0].name : null
+
         this.initQuestionAsColumns()
         this.initQuestionsInRows()
     },
@@ -92,9 +99,13 @@ export default {
                 this.$me.questions.length > 0
                     ? this.$me.questions[0].instruction
                     : null
+            this.name = this.$me.questions.length > 0 ? this.$me.questions[0].name : null
         },
         ['$me.title']() {
             this.title = this.$me.title
+        },
+        ['$config.inWebTesterMode']() {
+            this.name = this.$me.questions.length > 0 ? this.$me.questions[0].name : null
         },
     },
 

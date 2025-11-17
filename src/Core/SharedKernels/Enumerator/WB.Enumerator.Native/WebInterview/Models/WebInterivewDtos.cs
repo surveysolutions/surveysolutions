@@ -304,6 +304,7 @@ namespace WB.Enumerator.Native.WebInterview.Models
         public string Title { get; set; }
         public string EntityType { get; set; }
         public string Instruction { get; set; }
+        public string Name { get; set; }
     }
 
     public class TableOrMatrixRosterQuestionReference : RosterQuestionReference
