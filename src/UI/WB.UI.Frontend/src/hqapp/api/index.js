@@ -497,7 +497,8 @@ class WebInterviewSettingsApi {
         singleResponse,
         emailOnComplete,
         attachAnswersInEmail,
-        allowSwitchToCawiForInterviewer) {
+        allowSwitchToCawiForInterviewer,
+        allowTranscriptDownloading) {
         var url = `${this.base}/${questionnaireId}/additionalSettings`
         return this.http(
             {
@@ -510,7 +511,8 @@ class WebInterviewSettingsApi {
                     singleResponse: singleResponse,
                     emailOnComplete: emailOnComplete,
                     attachAnswersInEmail: attachAnswersInEmail,
-                    allowSwitchToCawiForInterviewer: allowSwitchToCawiForInterviewer
+                    allowSwitchToCawiForInterviewer: allowSwitchToCawiForInterviewer,
+                    allowTranscriptDownloading: allowTranscriptDownloading
                 },
                 headers: { 'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie() },
             })

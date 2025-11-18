@@ -30,6 +30,8 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         private readonly IQuestionnaireSettings questionnaireSettings;
 
         protected abstract bool IncludeVariables { get; }
+        protected abstract bool IncludeNonInterviewerQuestions { get; }
+        protected abstract bool IncludeVariableName { get; }
 
         public InterviewDataController(IQuestionnaireStorage questionnaireRepository,
             IStatefulInterviewRepository statefulInterviewRepository,
@@ -287,7 +289,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             {
                 return IsReviewMode()
                     ? statefulInterview.GetUnderlyingEntitiesForReview(identity)
-                    : statefulInterview.GetUnderlyingInterviewerEntities(identity, IncludeVariables);
+                    : statefulInterview.GetUnderlyingInterviewerEntities(identity, IncludeVariables, IncludeNonInterviewerQuestions);
             }
 
             List<Identity> groupIds = new List<Identity>();
@@ -330,11 +332,13 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
 
             var details = GetEntitiesDetails(interviewId, entities.Select(e => e.Identity).ToArray(), sectionId);
 
-            return new SectionData
+            var section = new SectionData
             {
                 Entities = entities,
                 Details = details
             };
+
+            return section;
         }
 
         public virtual ButtonState GetNavigationButtonState(Guid interviewId, string sectionId, string id, IQuestionnaire questionnaire = null)
@@ -527,7 +531,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                     continue;
                 }
 
-                var interviewEntity = this.interviewEntityFactory.GetEntityDetails(id, callerInterview, questionnaire, isReviewMode);
+                var interviewEntity = this.interviewEntityFactory.GetEntityDetails(id, callerInterview, questionnaire, isReviewMode, IncludeVariableName);
                 interviewEntities.Add(interviewEntity);
 
                 if (interviewEntity is RosterEntity tableRoster)
@@ -537,7 +541,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                         var childQuestions = callerInterview.GetChildQuestions(Identity.Parse(tableRosterInstance.Id));
                         foreach (var childQuestion in childQuestions)
                         {
-                            var question = this.interviewEntityFactory.GetEntityDetails(childQuestion.ToString(), callerInterview, questionnaire, isReviewMode);
+                            var question = this.interviewEntityFactory.GetEntityDetails(childQuestion.ToString(), callerInterview, questionnaire, isReviewMode, IncludeVariableName);
                             interviewEntities.Add(question);
                         }
                     }
