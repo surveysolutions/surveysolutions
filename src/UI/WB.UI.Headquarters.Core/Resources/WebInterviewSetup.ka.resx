@@ -159,4 +159,7 @@
   <data name="WebInterviewUserMessages_Invitation_Descr" xml:space="preserve">
     <value>მოსაწვევი მიმართვა რომელიც საწყის გვერდზე იქნება ნაჩვენები. %QUESTIONNAIRE% კითხვარის სათაურით ჩანაცვლდება</value>
   </data>
+  <data name="AllowTranscriptDownloading" xml:space="preserve">
+      <value>ინტერვიუს ტრანსკრიპტის ჩამოტვირთვის ნებართვა გაგზავნის შემდეგ</value>
+  </data>
 </root>

@@ -244,6 +244,7 @@ namespace WB.UI.Headquarters.Controllers
                 IsResumeLinkAvailable = isResumeLinkAvailable,
                 CustomMessages = webInterviewConfig.CustomMessages,
                 MayBeSwitchedToWebMode = config.Started && config.AllowSwitchToCawiForInterviewer && (interview.Mode != InterviewMode.CAWI),
+                AllowTranscriptDownloading = config.AllowTranscriptDownloading,
                 WebInterviewUrl = RenderWebInterviewUri(assignmentId, interview.Id),
                 ContinueLink = continueLink,
             };
@@ -1012,7 +1013,8 @@ namespace WB.UI.Headquarters.Controllers
             }
 
             var hasAccess = HttpContext.Session.HasAccessToWebInterviewAfterComplete(interview);
-            var pdfUrl = hasAccess
+            
+            var pdfUrl = hasAccess && webInterviewConfig.AllowTranscriptDownloading != false
                 ? Url.Action("Pdf", "InterviewsPublicApi", new{ id = interview.Id })
                 : null;
             
