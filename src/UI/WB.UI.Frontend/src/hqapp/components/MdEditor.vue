@@ -68,12 +68,12 @@
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="linkText">Link Text</label>
-                            <input type="text" id="linkText" v-model="linkText" class="form-control"
+                            <input type="text" id="linkText" ref="linkText" v-model="linkText" class="form-control"
                                 placeholder="Enter link text" @keyup.enter="isLinkFormValid && applyLink()" />
                         </div>
                         <div class="form-group">
                             <label for="linkUrl">URL</label>
-                            <input type="text" id="linkUrl" v-model="linkUrl" class="form-control"
+                            <input type="text" id="linkUrl" ref="linkUrl" v-model="linkUrl" class="form-control"
                                 placeholder="https://example.com" @keyup.enter="isLinkFormValid && applyLink()" />
                         </div>
                     </div>
@@ -101,8 +101,8 @@
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="imageFile">Image File</label>
-                            <input type="file" id="imageFile" @change="handleImageFileChange" class="form-control"
-                                accept="image/*" />
+                            <input type="file" id="imageFile" ref="imageFile" @change="handleImageFileChange"
+                                class="form-control" accept="image/*" />
                             <small class="help-block" v-if="imagePreview">Preview:</small>
                             <img v-if="imagePreview" :src="imagePreview" alt="Preview"
                                 style="max-width: 100%; max-height: 200px; margin-top: 10px;" />
@@ -454,7 +454,7 @@ export default {
             this.imagePreview = ''
             this.imageDescription = ''
             this.$nextTick(() => {
-                const input = document.getElementById('imageFile')
+                const input = this.$refs.imageFile
                 if (input) input.focus()
             })
         },
@@ -496,7 +496,7 @@ export default {
 
             this.showLinkModal = true
             this.$nextTick(() => {
-                const input = this.linkText ? document.getElementById('linkUrl') : document.getElementById('linkText')
+                const input = this.linkText ? this.$refs.linkUrl : this.$refs.linkText
                 if (input) input.focus()
             })
         },
