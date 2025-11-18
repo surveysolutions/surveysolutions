@@ -201,6 +201,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 
         public QuantityByResponsibleReportView Load(QuantityByInterviewersReportInputModel input)
         {
+            // Capture these values before creating lambdas
+            var questionnaireId = input.QuestionnaireId;
+            var questionnaireVersion = input.QuestionnaireVersion;
+            var supervisorId = input.SupervisorId;
+            
             if (this.IsCompleteReportRequested(input.InterviewStatuses))
             {
                 return this.Load(
@@ -213,7 +218,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                 page: input.Page,
                 pageSize: input.PageSize,
                 queryInterviewStatusesByDateRange: (from, to) => 
-                    this.QueryCompleteStatusesExcludingRestarts(input.QuestionnaireId, input.QuestionnaireVersion, from, to).Where(u => u.SupervisorId == input.SupervisorId),
+                    this.QueryCompleteStatusesExcludingRestarts(questionnaireId, questionnaireVersion, from, to).Where(u => u.SupervisorId == supervisorId),
                 selectUserId: u => u.InterviewerId.Value,
                 selectUserAndTimestamp: i => new UserAndTimestamp() { UserId = i.InterviewerId, UserName = i.InterviewerName, Timestamp = i.EndStatusTimestamp });
             }
@@ -234,6 +239,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 
         public QuantityByResponsibleReportView Load(QuantityBySupervisorsReportInputModel input)
         {
+            // Capture these values before creating lambdas
+            var questionnaireId = input.QuestionnaireId;
+            var questionnaireVersion = input.QuestionnaireVersion;
+            
             if (this.IsCompleteReportRequested(input.InterviewStatuses))
             {
                 return this.Load(
@@ -245,7 +254,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                  columnCount: input.ColumnCount,
                  page: input.Page,
                  pageSize: input.PageSize,
-                 queryInterviewStatusesByDateRange: (from, to) => this.QueryCompleteStatusesExcludingRestarts(input.QuestionnaireId, input.QuestionnaireVersion, from, to),
+                 queryInterviewStatusesByDateRange: (from, to) => this.QueryCompleteStatusesExcludingRestarts(questionnaireId, questionnaireVersion, from, to),
                  selectUserId: u => u.SupervisorId.Value,
                  selectUserAndTimestamp: i => new UserAndTimestamp() { UserId = i.SupervisorId, UserName = i.SupervisorName, Timestamp = i.EndStatusTimestamp });
             }
