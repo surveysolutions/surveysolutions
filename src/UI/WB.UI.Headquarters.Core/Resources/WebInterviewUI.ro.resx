@@ -130,7 +130,7 @@
     <value>Click pentru înregistrare audio</value>
   </data>
   <data name="AudioInitializationFailed" xml:space="preserve">
-    <value>Iniƫializarea înregistrarii audio a eşuat</value>
+    <value>Iniƫializarea înregistrării audio a eşuat</value>
   </data>
   <data name="AudioRecording" xml:space="preserve">
     <value>Înregistrare audio</value>
@@ -414,22 +414,22 @@ Contactați echipa de suport pentru asistență.</value>
     <value>La răspunsul anterior</value>
   </data>
   <data name="EmailLink_EmailResumeLink" xml:space="preserve">
-    <value>Link de reluare prin e-mail</value>
+    <value>Link de reluare</value>
   </data>
   <data name="EmailLink_Header" xml:space="preserve">
-    <value>Introduceți adresa de e-mail</value>
+    <value>Link pentru reluare</value>
   </data>
   <data name="EmailLink_InvalidEmail" xml:space="preserve">
     <value>{{email}} este o adresă de e-mail incorectă</value>
   </data>
   <data name="EmailLink_Message" xml:space="preserve">
-    <value>Vă vom trimite un mesaj cu linkul pentru a relua interviul dacă trebuie să continuați mai târziu.</value>
+    <value>Acest link vă permite să reluați interviul dacă trebuie să continuați mai târziu.</value>
   </data>
   <data name="EmailLink_Placeholder" xml:space="preserve">
     <value>Introduceți adresa de email</value>
   </data>
   <data name="EmailLink_ResumeAnyTime" xml:space="preserve">
-    <value>Puteți anula acum și continua cu interviul. Și îl puteți trimite mai târziu făcând clic pe elementul 'Trimiteți prin e-mail linkul de reluare' din meniul de sus.</value>
+    <value>Puteți crea un link pentru a continua interviul. Acest link permanent poate fi salvat și folosit mai târziu.</value>
   </data>
   <data name="EnterPassword" xml:space="preserve">
     <value>introducere parolă</value>
@@ -490,5 +490,11 @@ Contactați echipa de suport pentru asistență.</value>
   </data>
   <data name="NotCalculated" xml:space="preserve">
     <value>Necalculat</value>
+  </data>
+  <data name="TurnOffDevMode" xml:space="preserve">
+    <value>Dezactivați modul dezvoltator</value>
+  </data>
+  <data name="TurnOnDevMode" xml:space="preserve">
+    <value>Activați modul dezvoltator</value>
   </data>
 </root>

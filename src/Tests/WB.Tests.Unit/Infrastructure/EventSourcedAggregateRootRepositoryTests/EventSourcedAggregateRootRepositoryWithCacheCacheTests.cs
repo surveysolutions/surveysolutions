@@ -79,9 +79,10 @@ namespace WB.Tests.Unit.Infrastructure.EventSourcedAggregateRootRepositoryTests
             {
                 eventSourcedRepository.GetLatest(typeof(IEventSourcedAggregateRoot), aggregateId);
             }
-            foreach (var aggregateId in aggregateIds.Reverse())
+
+            for (int i = aggregateIds.Length - 1; i >= 0; i--)
             {
-                eventSourcedRepository.GetLatest(typeof(IEventSourcedAggregateRoot), aggregateId);
+                eventSourcedRepository.GetLatest(typeof(IEventSourcedAggregateRoot), aggregateIds[i]);
             }
 
             // assert

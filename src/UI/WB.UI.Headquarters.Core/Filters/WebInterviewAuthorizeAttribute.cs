@@ -11,7 +11,6 @@ namespace WB.UI.Headquarters.Filters
     public class WebInterviewAuthorizeAttribute : ActionFilterAttribute
     {
         public string InterviewIdQueryString { get; set; }
-        
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             var interviewId = string.IsNullOrWhiteSpace(InterviewIdQueryString)

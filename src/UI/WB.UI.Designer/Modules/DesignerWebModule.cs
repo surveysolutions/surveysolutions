@@ -12,8 +12,9 @@ using WB.Core.Infrastructure.Modularity;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Infrastructure.Native.Storage;
 using WB.UI.Designer.Api.WebTester;
+using WB.UI.Designer.Areas.Pdf.Services;
+using WB.UI.Designer.Areas.Pdf.Utils;
 using WB.UI.Designer.Code;
-using WB.UI.Designer.Code.ImportExport;
 using WB.UI.Designer.Controllers.Api.WebTester;
 using WB.UI.Designer.Services;
 using WB.UI.Designer.Services.AttachmentPreview;
@@ -36,6 +37,10 @@ namespace WB.UI.Designer.Modules
             registry.BindAsSingleton<IQuestionnaireCacheStorage, QuestionnaireCacheStorage>();
             registry.Bind<IArchiveUtils, ZipArchiveUtils>();
 
+            registry.Bind<IPdfService, PdfService>();
+            registry.BindAsSingleton<IPdfRender, PdfRender>();
+            registry.BindAsSingleton<IPdfQuery, PdfQuery>();
+            
             registry.Bind<IQuestionnaireSearchStorage, QuestionnaireSearchStorage>();
             registry.Bind<IClassificationsStorage, ClassificationsStorage>();
             registry.BindAsSingleton<IWebTesterService, WebTesterService>();          

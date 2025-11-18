@@ -90,5 +90,12 @@ namespace WB.UI.WebTester.Controllers
             evictionNotify.Evict(interviewId);
             return Ok();
         }
+
+        [HttpPost]
+        [Route("prepareCompleteInterview")]
+        public override IActionResult PrepareCompleteInterview(Guid interviewId)
+        {
+            return Ok();
+        }
     }
 }

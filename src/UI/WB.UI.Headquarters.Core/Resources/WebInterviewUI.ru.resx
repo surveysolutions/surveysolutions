@@ -450,13 +450,13 @@ Oбратитесь в тех. поддержку за помощью</value>
     <value>Воспроизведение мультимедиа не поддерживается вашим браузером. Вы можете скачать файл.</value>
   </data>
   <data name="EmailLink_Header" xml:space="preserve">
-    <value>Введите свой e-mail.</value>
+    <value>Cсылка для продолжения</value>
   </data>
   <data name="EmailLink_ResumeAnyTime" xml:space="preserve">
-    <value>Вы можете закрыть это окно сейчас и продолжить отвечать на вопросы. Отправить ссылку для продолжения интервью вы можете в любой момент, нажав на 'Отправить ссылку для продолжения' в верхнем меню.</value>
+    <value>Вы можете создать ссылку для продолжения интервью. Эта постоянная ссылка может быть сохранена и использована позже.</value>
   </data>
   <data name="EmailLink_Message" xml:space="preserve">
-    <value>Мы отправим вас сообщение с ссылкой для продолжения интервью, если вы захотите продолжить позже.</value>
+    <value>Ссылка для продолжения интервью, если вы захотите продолжить позже.</value>
   </data>
   <data name="EmailLink_Placeholder" xml:space="preserve">
     <value>Введите e-mail</value>
@@ -465,13 +465,7 @@ Oбратитесь в тех. поддержку за помощью</value>
     <value>{{email}} неверный e-mail</value>
   </data>
   <data name="EmailLink_EmailResumeLink" xml:space="preserve">
-    <value>Отправить ссылку для продолжения</value>
-  </data>
-  <data name="HideVariables" xml:space="preserve">
-    <value>Спрятать переменные</value>
-  </data>
-  <data name="ShowVariables" xml:space="preserve">
-    <value>Показать переменные</value>
+    <value>Cсылка для продолжения</value>
   </data>
   <data name="Interview_Questions_RemoveRowFromRosterMessage" xml:space="preserve">
     <value>Вы уверены, что хотите удалить строку '{{rosterTitle}}' у зависимых списков?</value>
@@ -547,5 +541,11 @@ Oбратитесь в тех. поддержку за помощью</value>
   </data>
   <data name="Complete_QuestionsWithErrors" xml:space="preserve">
       <value>Вопросы с ошибками: {{count}}</value>
+  </data>
+  <data name="TurnOffDevMode" xml:space="preserve">
+    <value>Выключить режим разработчика</value>
+  </data>
+  <data name="TurnOnDevMode" xml:space="preserve">
+    <value>Включить режим разработчика</value>
   </data>
 </root>

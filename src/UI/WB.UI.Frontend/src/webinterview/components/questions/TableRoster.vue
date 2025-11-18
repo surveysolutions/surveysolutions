@@ -109,6 +109,7 @@ export default {
                             title: question.title,
                             instruction: question.instruction,
                             questionId: question.id,
+                            name: question.name,
                         },
                         field: question.id,
                         cellRenderer: 'TableRoster_ViewAnswer',

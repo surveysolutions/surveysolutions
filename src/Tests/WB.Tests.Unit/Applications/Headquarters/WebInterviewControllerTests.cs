@@ -112,7 +112,6 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 Mock.Of<INativeReadSideStorage<InterviewSummary>>(),
                 Mock.Of<IInvitationMailingService>(),
                 Mock.Of<IPlainKeyValueStorage<EmailProviderSettings>>(),
-                Mock.Of<IPlainKeyValueStorage<WebInterviewSettings>>(),
                 Mock.Of<IOptions<RecaptchaSettings>>(),
                 Mock.Of<IOptions<CaptchaConfig>>(),
                 Mock.Of<IServiceLocator>(),

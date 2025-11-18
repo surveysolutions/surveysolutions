@@ -1,5 +1,6 @@
+import { reactive } from 'vue'
 
-export const config = window.CONFIG
+export const config = reactive(window.CONFIG || {})
 
 /*  the Plugin */
 export default Object.assign(window.CONFIG || {}, {

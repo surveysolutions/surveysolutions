@@ -372,13 +372,36 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         {
             if (disposed) return;
             
-            this.ReleaseAudioRecorder();
+            lock (this.lockObject)
+            {
+                this.ReleaseAudioRecorder();
 
-            // audio service is a singleton and can be disposed by activity lifecycle
-            // this is a temp fix. Either AudioService shouldn't be a singleton, either should not be disposed or affected by elements with short lifecycle       
-            //this.mediaPlayer.Dispose();
+                try
+                {
+                    if (this.mediaPlayer.IsPlaying)
+                    {
+                        this.mediaPlayer.Stop();
+                    }
+                    this.mediaPlayer.Reset();
+                    this.mediaPlayer.Release();
+                    this.mediaPlayer.Dispose();
+                }
+                catch (Exception ex)
+                {
+                    this.logger?.Warn($"Error disposing MediaPlayer: {ex.Message}");
+                }
+                
+                try
+                {
+                    this.fileSystemAccessor.DeleteFile(this.tempFileName);
+                }
+                catch
+                {
+                    // Ignore cleanup errors
+                }
 
-            this.disposed = true;
+                this.disposed = true;
+            }
         }
 
         protected virtual void OnOnPlaybackCompleted(PlaybackCompletedEventArgs e)

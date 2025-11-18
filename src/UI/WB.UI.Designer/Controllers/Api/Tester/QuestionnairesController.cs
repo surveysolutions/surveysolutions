@@ -15,13 +15,10 @@ using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.UI.Designer.Controllers.Api.Designer;
-using WB.UI.Designer.Controllers.Api.WebTester;
-using WB.UI.Designer.Extensions;
 
 namespace WB.UI.Designer.Controllers.Api.Tester
 {
@@ -37,6 +34,7 @@ namespace WB.UI.Designer.Controllers.Api.Tester
         private readonly IExpressionsPlayOrderProvider expressionsPlayOrderProvider;
         private readonly IQuestionnaireCompilationVersionService questionnaireCompilationVersionService;
         private readonly ISerializer serializer;
+        private readonly IQuestionnaireDocumentTransformer questionnaireDocumentTransformer;
 
         public QuestionnairesController(
             IQuestionnaireViewFactory questionnaireViewFactory,
@@ -46,7 +44,8 @@ namespace WB.UI.Designer.Controllers.Api.Tester
             IDesignerEngineVersionService engineVersionService, 
             IExpressionsPlayOrderProvider expressionsPlayOrderProvider, 
             IQuestionnaireCompilationVersionService questionnaireCompilationVersionService, 
-            ISerializer serializer)
+            ISerializer serializer,
+            IQuestionnaireDocumentTransformer questionnaireDocumentTransformer)
         {
             this.questionnaireViewFactory = questionnaireViewFactory;
             this.questionnaireVerifier = questionnaireVerifier;
@@ -56,6 +55,7 @@ namespace WB.UI.Designer.Controllers.Api.Tester
             this.expressionsPlayOrderProvider = expressionsPlayOrderProvider;
             this.questionnaireCompilationVersionService = questionnaireCompilationVersionService;
             this.serializer = serializer;
+            this.questionnaireDocumentTransformer = questionnaireDocumentTransformer;
         }
 
         [QuestionnairePermissions]
@@ -92,7 +92,8 @@ namespace WB.UI.Designer.Controllers.Api.Tester
                 return StatusCode(StatusCodes.Status412PreconditionFailed);
             }
 
-            var questionnaire = questionnaireView.GetClientReadyClone();
+            var questionnaire = questionnaireView.GetClientReadyDocument();
+            questionnaireDocumentTransformer.TransformInPlace(questionnaire);
             var readOnlyQuestionnaireDocument = new ReadOnlyQuestionnaireDocumentWithCache(questionnaire);
             questionnaire.ExpressionsPlayOrder = this.expressionsPlayOrderProvider.GetExpressionsPlayOrder(readOnlyQuestionnaireDocument);
             questionnaire.DependencyGraph = this.expressionsPlayOrderProvider.GetDependencyGraph(readOnlyQuestionnaireDocument);
