@@ -18,7 +18,7 @@
     <PackageReference Include="Autofac" Version="8.3.0" />
     <PackageReference Include="Castle.Core" Version="5.2.1" />
     <PackageReference Include="Iesi.Collections" Version="4.1.1" />
-    <PackageReference Include="NHibernate" Version="5.5.2" />
+    <PackageReference Include="NHibernate" Version="5.6.0" />
     <PackageReference Include="Refit" Version="8.0.0" />
     <PackageReference Include="reCAPTCHA.AspNetCore" Version="2.2.5" />
     <PackageReference Include="SixLabors.ImageSharp" Version="3.1.11" />
