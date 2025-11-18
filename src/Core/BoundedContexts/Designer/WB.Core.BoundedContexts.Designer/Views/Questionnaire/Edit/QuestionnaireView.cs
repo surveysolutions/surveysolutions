@@ -9,7 +9,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
     {
         private readonly Guid? compileQuestionnaireId;
 
-        public QuestionnaireView(QuestionnaireDocument doc, IEnumerable<SharedPersonView> sharedPersons, Guid? compileQuestionnaireId = null)
+        public QuestionnaireView(QuestionnaireDocument doc, IEnumerable<SharedPersonView> sharedPersons, 
+            Guid? compileQuestionnaireId = null)
         {
             this.compileQuestionnaireId = compileQuestionnaireId;
             this.Source = doc;
@@ -37,9 +38,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             return clone;
         }
 
-        public QuestionnaireDocument GetClientReadyClone()
+        public QuestionnaireDocument GetClientReadyDocument()
         {
             var clone = Source.Clone();
+            
             if (compileQuestionnaireId.HasValue)
             {
                 clone.PublicKey = compileQuestionnaireId.Value;

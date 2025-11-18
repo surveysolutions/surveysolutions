@@ -15,14 +15,18 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
     {
         private readonly IPlainStorage<SuperivsorReceivedPackageLogEntry, int> receivedPackagesLog;
         private readonly IAudioFileStorage audioFileStorage;
+        private readonly IAudioAuditFileStorage audioAuditFileStorage;
         private readonly IImageFileStorage imageFileStorage;
 
         public SupervisorInterviewUploadStateHandler(
                 IPlainStorage<SuperivsorReceivedPackageLogEntry, int> receivedPackagesLog,
-                IAudioFileStorage audioFileStorage, IImageFileStorage imageFileStorage)
+                IAudioFileStorage audioFileStorage, 
+                IAudioAuditFileStorage audioAuditFileStorage, 
+                IImageFileStorage imageFileStorage)
         {
             this.receivedPackagesLog = receivedPackagesLog;
             this.audioFileStorage = audioFileStorage;
+            this.audioAuditFileStorage = audioAuditFileStorage;
             this.imageFileStorage = imageFileStorage;
         }
 

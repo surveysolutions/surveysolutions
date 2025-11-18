@@ -37,15 +37,19 @@ export default {
                 localizationFile = config.locale.locales['en']
             }
 
-            if(localizationFile == null){
+            if (localizationFile == null) {
                 throw 'Cannot find default EN localization in CONFIG: ' + JSON.stringify(config.locale.locales.to)
             }
 
             return await axios.get(resolve('hqapp/dist', localizationFile))
         },
 
-        audioRecordUri(interviewId, filename) {
-            return config.audioGet + `?interviewId=${interviewId}&filename=${filename}`
+        audioRecordUri(interviewId, filename, updatedAt) {
+            var link = config.audioGet + `?interviewId=${interviewId}&filename=${filename}`
+            if (updatedAt != null) {
+                link += `&updatedAt=${updatedAt}`
+            }
+            return link
         },
     },
 }

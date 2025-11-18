@@ -199,7 +199,7 @@
     <value>Завершено</value>
   </data>
   <data name="CompleteAbout" xml:space="preserve">
-    <value>Ви наближаєтесь до завершення інтерв'ю</value>
+    <value>Ви наближаєтеся до завершення інтерв'ю</value>
   </data>
   <data name="CompleteErrors" xml:space="preserve">
     <value>Питання з помилками:</value>
@@ -264,22 +264,22 @@
     <value>Зроблено.</value>
   </data>
   <data name="EmailLink_EmailResumeLink" xml:space="preserve">
-    <value>Посилання на резюме на електронну пошту</value>
+    <value>Посилання на продовження</value>
   </data>
   <data name="EmailLink_Header" xml:space="preserve">
-    <value>Введіть свою електронну адресу</value>
+    <value>Посилання на продовження</value>
   </data>
   <data name="EmailLink_InvalidEmail" xml:space="preserve">
     <value>{{email}} - невірна адреса електронної пошти</value>
   </data>
   <data name="EmailLink_Message" xml:space="preserve">
-    <value>Ми надішлемо вам повідомлення з посиланням для продовження інтерв'ю, якщо вам потрібно буде продовжити пізніше.</value>
+    <value>Посилання для продовження інтерв'ю, якщо вам потрібно буде продовжити пізніше.</value>
   </data>
   <data name="EmailLink_Placeholder" xml:space="preserve">
     <value>Введіть електронну пошту</value>
   </data>
   <data name="EmailLink_ResumeAnyTime" xml:space="preserve">
-    <value>Ви можете скасувати зараз і продовжити інтерв'ю. Ви можете надіслати пізніше, натиснувши на пункт "Надіслати посилання для продовження на електронну пошту" у верхньому меню.</value>
+    <value>Ви можете зробити посилання для продовження інтерв'ю. Це постійне посилання може бути збрережене і використано пізніше.</value>
   </data>
   <data name="EnterDate" xml:space="preserve">
     <value>Введіть дату</value>
@@ -502,5 +502,11 @@
   </data>
   <data name="Yes" xml:space="preserve">
     <value>Так</value>
+  </data>
+  <data name="TurnOffDevMode" xml:space="preserve">
+    <value>Вимкнути режим розробника</value>
+  </data>
+  <data name="TurnOnDevMode" xml:space="preserve">
+    <value>Увімкнути режим розробника</value>
   </data>
 </root>

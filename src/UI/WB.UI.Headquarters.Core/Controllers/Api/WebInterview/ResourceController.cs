@@ -4,6 +4,8 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Repositories;
+using WB.Core.BoundedContexts.Headquarters.Storage;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
@@ -49,7 +51,9 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
                         Assembly.GetExecutingAssembly()
                             .GetManifestResourceStream("WB.UI.Headquarters.Content.img.no_image_found.jpg"),
                         "image/jpeg", "no_image_found.jpg");
-            return this.File(file, "image/jpeg", fileName);
+            
+            var contentType = ContentTypeHelper.GetImageContentType(fileName);
+            return this.File(file, contentType, fileName);
         }
 
         [Authorize(Roles = "Administrator, Headquarter, Supervisor")]

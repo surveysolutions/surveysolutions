@@ -108,7 +108,8 @@ namespace WB.UI.Headquarters.Controllers.Services.Export
 
             if (file == null) return NotFound();
 
-            return File(await file.GetData(), file.ContentType);
+            var bytes = await file.GetData();
+            return File(bytes, file.ContentType);
         }
 
         [Route("api/export/v1/questionnaire/{id}/audioAudit")]

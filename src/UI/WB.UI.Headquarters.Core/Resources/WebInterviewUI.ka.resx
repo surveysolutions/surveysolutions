@@ -237,6 +237,18 @@
   <data name="Done" xml:space="preserve">
     <value>შესრულებულია</value>
   </data>
+  <data name="EmailLink_Header" xml:space="preserve">
+    <value>გაგრძელების ბმული</value>
+  </data>
+  <data name="EmailLink_EmailResumeLink" xml:space="preserve">
+    <value>გაგრძელების ბმული</value>
+  </data>
+  <data name="EmailLink_Message" xml:space="preserve">
+    <value>ეს ბმული საშუალებას გაძლევთ გააგრძელოთ ინტერვიუ მოგვიანებით.</value>
+  </data>
+  <data name="EmailLink_ResumeAnyTime" xml:space="preserve">
+    <value>შეგიძლიათ შექმნათ ბმული ინტერვიუს გასაგრძელებლად. ეს მუდმივი ბმული შეიძლება შეინახოთ და გამოიყენოთ მოგვიანებით.</value>
+  </data>
   <data name="EnterDate" xml:space="preserve">
     <value>შეიყვანეთ თარიღი</value>
   </data>
@@ -365,5 +377,11 @@
   </data>
   <data name="Yes" xml:space="preserve">
     <value>დიახ</value>
+  </data>
+  <data name="TurnOffDevMode" xml:space="preserve">
+    <value>გამორთეთ დეველოპერის რეჟიმი</value>
+  </data>
+  <data name="TurnOnDevMode" xml:space="preserve">
+    <value>ჩართეთ დეველოპერის რეჟიმი</value>
   </data>
 </root>

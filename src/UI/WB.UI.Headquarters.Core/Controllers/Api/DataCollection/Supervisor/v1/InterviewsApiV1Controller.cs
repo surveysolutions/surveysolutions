@@ -37,7 +37,10 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
             IHeadquartersEventStore eventStore,
             IUserToDeviceService userToDeviceService,
             IWebHostEnvironment webHostEnvironment,
-            IImageProcessingService imageProcessingService) 
+            IImageProcessingService imageProcessingService,
+            IBrokenImageFileStorage brokenImageFileStorage,
+            IBrokenAudioFileStorage brokenAudioFileStorage,
+            IBrokenAudioAuditFileStorage brokenAudioAuditFileStorage) 
             : base(imageFileStorage,
                 audioFileStorage,
                 authorizedUser,
@@ -50,7 +53,10 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
                 audioAuditFileStorage,
                 userToDeviceService,
                 webHostEnvironment,
-                imageProcessingService)
+                imageProcessingService, 
+                brokenImageFileStorage, 
+                brokenAudioFileStorage, 
+                brokenAudioAuditFileStorage)
         {
         }
 

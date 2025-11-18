@@ -8,6 +8,7 @@ function ItemViewModel() {
     self.itemId = '';
     self.itemName = '';
     self.itemType = '';
+    self.pdfGenerateUrl = '';
     self.pdfStatusUrl = '';
     self.selectedTransalation = null;
     self.selectedTransalationHtml = null;
@@ -38,6 +39,7 @@ function ItemViewModel() {
         id,
         type,
         name,
+        pdfGenerateUrl,
         pdfDownloadUrl,
         pdfStatusUrl,
         pdfRetryUrl,
@@ -51,6 +53,7 @@ function ItemViewModel() {
         self.pdfDownloadUrl = pdfDownloadUrl;
         self.pdfRetryUrl = pdfRetryUrl;
         self.getLanguagesUrl = getLanguagesUrl;
+        self.pdfGenerateUrl = pdfGenerateUrl;
 
         self.setPdfMessage('');
 
@@ -146,12 +149,55 @@ function ItemViewModel() {
     };
 
     self.retryPdfExport = function () {
-        $.post(self.pdfRetryUrl, {
-            id: self.itemId,
-            translation: self.selectedTransalation,
-        });
         $('#pdfRetryGenerate').hide();
         self.setPdfMessage('Retrying export as PDF.');
+        
+        $.ajax({
+            url: self.pdfRetryUrl,
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                translation: self.selectedTransalation
+            }),
+            headers: { 'X-CSRF-TOKEN': getCsrfCookie() },
+        }).done(function(result) {
+            self.processPdfResponseAndCheckStatusIfNeed(result, self.selectedTransalation);
+        }).fail(function(xhr, status, error) {
+            self.pdfStatusUrl = '';
+            self.showStandardErrorMessage();
+        });
+    };
+
+    self.showStandardErrorMessage = function() {
+        self.setPdfMessage(
+            'Unexpected error occurred.\r\nPlease contact support@mysurvey.solutions if problem persists.'
+        );
+    };
+
+    self.processPdfResponseAndCheckStatusIfNeed = function(result, translation) {
+        if (result && result.message != null) {
+            self.setPdfMessage(result.message);
+            
+            if (result.readyForDownload === true) {
+                $('#pdfDownloadButton').unbind('click');
+                $('#pdfDownloadButton').click(function () {
+                    self.pdfStatusUrl = '';
+                    window.location =
+                        self.pdfDownloadUrl +
+                        '?translation=' +
+                        translation;
+                    $('#pdfCancelButton').click();
+                });
+                $('#pdfDownloadButton').show();
+            } else if (result.canRetry) {
+                $('#pdfDownloadButton').hide();
+                $('#pdfRetryGenerate').show();
+            } else {
+                self.updateExportPdfStatusNeverending(translation);
+            }
+        } else {
+            self.setPdfMessage(self.getStandardErrorMessage());
+        }
     };
 
     self.updateExportPdfStatus = function (translationId) {
@@ -165,48 +211,21 @@ function ItemViewModel() {
                 encodeURIComponent(translationId),
             cache: false,
         })
-            .done(function (result) {
-                if (result.message != null) {
-                    self.setPdfMessage(result.message);
-                } else {
-                    self.setPdfMessage(
-                        'Unexpected server response.\r\nPlease contact support@mysurvey.solutions if problem persists.'
-                    );
-                }
-                if (result.readyForDownload == true) {
-                    $('#pdfDownloadButton').unbind('click');
-                    $('#pdfDownloadButton').click(function () {
-                        self.pdfStatusUrl = '';
-                        window.location =
-                            self.pdfDownloadUrl +
-                            '?translation=' +
-                            translationId;
-                        $('#pdfCancelButton').click();
-                    });
-                    $('#pdfDownloadButton').show();
-                }
-                if (result.canRetry) {
-                    $('#pdfRetryGenerate').show();
-                } else {
-                    $('#pdfRetryGenerate').hide();
-                }
-            })
-            .fail(function (xhr, status, error) {
-                self.pdfStatusUrl = '';
-                self.setPdfMessage(
-                    'Unexpected error occurred.\r\nPlease contact support@mysurvey.solutions if problem persists.'
-                );
-            });
+        .done(function (result) {
+            self.processPdfResponseAndCheckStatusIfNeed(result, translationId);
+        })
+        .fail(function (xhr, status, error) {
+            self.pdfStatusUrl = '';
+            self.showStandardErrorMessage();
+        });
     };
 
     self.updateExportPdfStatusNeverending = function (translation) {
-        $.when(self.updateExportPdfStatus(translation)).done(function () {
-            if (!self.ExportDialogClosed) {
-                setTimeout(function () {
-                    self.updateExportPdfStatusNeverending(translation);
-                }, 1500);
-            }
-        });
+        if (self.ExportDialogClosed) return;
+
+        setTimeout(function () {
+            self.updateExportPdfStatus(translation);
+        }, 1000);
     };
 
     self.setPdfMessage = function (message) {
@@ -235,9 +254,7 @@ function ItemViewModel() {
             })
             .fail(function (xhr, status, error) {
                 self.pdfStatusUrl = '';
-                self.setPdfMessage(
-                    'Unexpected error occurred.\r\nPlease contact support@mysurvey.solutions if problem persists.'
-                );
+                self.showStandardErrorMessage();
             });
     };
 
@@ -276,7 +293,20 @@ function ItemViewModel() {
         $('#startPdf').hide();
         $('#export-pdf-modal-status').show();
 
-        self.updateExportPdfStatusNeverending(translation);
+        $.ajax({
+            url: self.pdfGenerateUrl,
+            method: 'POST',
+            data: {
+                id: self.itemId,
+                translation: translation
+            },
+            headers: { 'X-CSRF-TOKEN': getCsrfCookie() },
+        }).done(function(result) {
+            self.processPdfResponseAndCheckStatusIfNeed(result, translation);
+        }).fail(function(xhr, status, error) {
+            self.pdfStatusUrl = '';
+            self.showStandardErrorMessage();
+        });
 
         $('.close-pdf-dialog').unbind('click');
         $('.close-pdf-dialog').click(function (evn) {

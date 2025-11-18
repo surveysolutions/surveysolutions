@@ -33,7 +33,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Invitations
             this.promoterService = promoterService;
             this.tokenGenerator = tokenGenerator;
         }
-        
+
+        public Invitation GetInvitationForPublicLinkOrNull(Assignment assignment, string interviewId)
+        {
+            var invitationFromDb = invitationStorage.Query(i => i.Where(inv =>
+                inv.AssignmentId == assignment.Id && inv.InterviewId == interviewId)).FirstOrDefault();
+
+            return invitationFromDb;
+        }
+
         public int GetOrCreateInvitationForPublicLink(Assignment assignment, string interviewId)
         {
             var invitationFromDb = invitationStorage.Query(i => i.Where(inv =>

@@ -462,13 +462,13 @@ Entre em contato com o suporte para obter assistência.</value>
     <value>A reprodução de multimídia não é suportada pelo seu navegador. Você pode baixá-lo em vez disso.</value>
   </data>
   <data name="EmailLink_Header" xml:space="preserve">
-    <value>Digite seu endereço de e-mail</value>
+    <value>Link para retomar</value>
   </data>
   <data name="EmailLink_Message" xml:space="preserve">
-    <value>Enviaremos uma mensagem com o link para retomar a entrevista, caso precise continuar mais tarde.</value>
+    <value>Este link permite retomar a entrevista caso precise continuar mais tarde.</value>
   </data>
   <data name="EmailLink_ResumeAnyTime" xml:space="preserve">
-    <value>Você pode cancelar agora e continuar com a entrevista. E você pode enviá-lo mais tarde clicando no item 'Link de reenvio de e-mail' no menu superior.</value>
+    <value>Você pode criar um link para continuar a entrevista. Este link permanente pode ser salvo e usado mais tarde.</value>
   </data>
   <data name="EmailLink_Placeholder" xml:space="preserve">
     <value>Digite o e-mail</value>
@@ -477,13 +477,7 @@ Entre em contato com o suporte para obter assistência.</value>
     <value>{{email}} é um endereço de e-mail inválido</value>
   </data>
   <data name="EmailLink_EmailResumeLink" xml:space="preserve">
-    <value>Link de reenvio de e-mail</value>
-  </data>
-  <data name="HideVariables" xml:space="preserve">
-    <value>Ocultar variáveis</value>
-  </data>
-  <data name="ShowVariables" xml:space="preserve">
-    <value>Mostrar variáveis</value>
+    <value>Link de retomada</value>
   </data>
   <data name="Interview_Questions_RemoveRowFromRosterMessage" xml:space="preserve">
     <value>Tem certeza de que deseja remover a lista relacionada '{{rosterTitle}}'?</value>
@@ -557,5 +551,11 @@ Entre em contato com o suporte para obter assistência.</value>
   </data>
   <data name="Complete_QuestionsWithErrors" xml:space="preserve">
     <value>Perguntas com erros: {{count}}</value>
+  </data>
+  <data name="TurnOffDevMode" xml:space="preserve">
+    <value>Desativar modo de desenvolvedor</value>
+  </data>
+  <data name="TurnOnDevMode" xml:space="preserve">
+    <value>Ativar modo de desenvolvedor</value>
   </data>
 </root>

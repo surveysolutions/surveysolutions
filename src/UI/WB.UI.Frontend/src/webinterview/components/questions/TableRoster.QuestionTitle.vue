@@ -2,7 +2,11 @@
     <popover class="w-100 d-block" :enable="hasInstructions" trigger="hover-focus" append-to="body">
         <div class="ag-cell-label-container" v-bind:class="{ 'has-instruction': hasInstructions }">
             <div class="ag-header-cell-label">
-                <span class="ag-header-cell-text" v-dompurify-html="title"></span>
+
+                <a class="open-designer" style="word-break: break-all;" v-if="this.$config.inWebTesterMode && name"
+                    href="javascript:void(0);" @click="openDesigner(questionId)"
+                    v-dompurify-html="'[' + name + ']'"></a>
+                <span class="ag-header-cell-text" style="word-break: break-all;" v-dompurify-html="title"></span>
             </div>
         </div>
         <template v-slot:popover>
@@ -15,8 +19,10 @@
 
 <script lang="js">
 import { find } from 'lodash'
+import { designerMixin } from '../mixins'
 export default {
     name: 'TableRoster_QuestionTitle',
+    mixins: [designerMixin],
 
     data() {
         return {
@@ -24,6 +30,7 @@ export default {
             instruction: null,
             hasInstructions: false,
             questionId: null,
+            name: null,
         }
     },
     computed: {
@@ -37,13 +44,23 @@ export default {
         this.title = this.params.title
         this.instruction = this.params.instruction
         this.hasInstructions = this.instruction != undefined && this.instruction != null && this.instruction != ''
+        this.name = this.params.name
     },
     watch: {
         ['params.context.componentParent.$me.questions']() {
             var self = this
             var question = find(self.params.context.componentParent.$me.questions, function (o) { return o.id == self.questionId })
-            if (question !== undefined)
+            if (question !== undefined) {
                 this.instruction = question.instruction
+                this.name = question.name
+            }
+        },
+        ['$config.inWebTesterMode']() {
+            var self = this
+            var question = find(self.params.context.componentParent.$me.questions, function (o) { return o.id == self.questionId })
+            if (question !== undefined) {
+                this.name = question.name
+            }
         },
     },
 }

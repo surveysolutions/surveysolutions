@@ -192,13 +192,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
             foreach (var imageView in imageViews)
             {
-                if (uploadState.ImagesFilesNames.Contains(imageView.FileName)) continue;
-
                 cancellationToken.ThrowIfCancellationRequested();
 
                 var fileContent = await this.imagesStorage.GetInterviewBinaryDataAsync(interview.InterviewId, imageView.FileName);
                 var hash = GetMd5Cache(fileContent);
-                if (uploadState.ImageQuestionsFilesMd5?.Contains(hash) ?? false) continue;
+                var remoteImage = uploadState.ImagesFiles?.FirstOrDefault(f => f.FileName == imageView.FileName && f.Md5 == hash);
+                if (remoteImage != null) continue;
 
                 cancellationToken.ThrowIfCancellationRequested();
 
@@ -223,13 +222,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
             foreach (var auditFile in auditFiles)
             {
-                if (uploadState.AudioFilesNames.Contains(auditFile.FileName)) continue;
-
                 cancellationToken.ThrowIfCancellationRequested();
 
                 var fileData = await auditFile.GetData();
                 var hash = GetMd5Cache(fileData);
-                if (uploadState.AudioAuditFilesMd5?.Contains(hash) ?? false) continue;
+                var remoteAudioAudit = uploadState.AudioAuditFiles?.FirstOrDefault(f => f.FileName == auditFile.FileName && f.Md5 == hash);
+                if (remoteAudioAudit != null) continue;
 
                 cancellationToken.ThrowIfCancellationRequested();
 
@@ -255,13 +253,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
             foreach (var audioFile in audioFiles)
             {
-                if (uploadState.AudioFilesNames.Contains(audioFile.FileName)) continue;
-
                 cancellationToken.ThrowIfCancellationRequested();
                 
                 var fileData = await audioFile.GetData();
-                var hash = CheckSumHelper.GetMd5Cache(fileData).ToLowerInvariant();
-                if (uploadState.AudioQuestionsFilesMd5?.Contains(hash) ?? false) continue;
+                var hash = CheckSumHelper.GetMd5Cache(fileData).ToLowerInvariant();                var remoteAudio = uploadState.AudioFiles?.FirstOrDefault(f => f.FileName == audioFile.FileName && f.Md5 == hash);
+                if (remoteAudio != null) continue;
 
                 cancellationToken.ThrowIfCancellationRequested();
 

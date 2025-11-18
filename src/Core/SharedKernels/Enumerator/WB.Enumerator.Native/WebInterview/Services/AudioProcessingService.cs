@@ -11,8 +11,8 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using WB.Core.SharedKernels.Configs;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Infrastructure.Native.Monitoring;
+using WB.Infrastructure.Native.Utils;
 
 namespace WB.Enumerator.Native.WebInterview.Services
 {
@@ -21,7 +21,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
         private readonly ILogger<AudioProcessingService> logger;
         private readonly IOptions<FileStorageConfig> fileStorageConfig;
         const string pathInAppDataForFfmpeg = "FFmpeg";
-        private const string MimeType = @"audio/m4a";
+        private const string MimeType = @"audio/aac";
         private readonly Task audioProcessor;
 
         public AudioProcessingService(ILogger<AudioProcessingService> logger,
@@ -38,18 +38,18 @@ namespace WB.Enumerator.Native.WebInterview.Services
         }
 
 
-        public Task<AudioFileInformation> CompressAudioFileAsync(byte[] bytes)
+        public Task<AudioFileInformation> CompressAudioFileAsync(byte[] bytes, string mimeType)
         {
             var tcs = new TaskCompletionSource<AudioFileInformation>();
-            audioCompressionQueue.Add((tcs, bytes));
+            audioCompressionQueue.Add((tcs, bytes, mimeType));
             audioFilesInQueue.Inc();
             return tcs.Task;
         }
-
-        private async Task<AudioFileInformation> CompressData(byte[] audio)
+        
+        private async Task<AudioFileInformation> CompressData(byte[] audio, string mimeType)
         {
             var destFile = Path.ChangeExtension(Path.Combine(TempFilesFolder, "resultAudio"), ".aac");
-            var sourceFile = Path.ChangeExtension(Path.Combine(TempFilesFolder, "incomingAudio"), ".wav");
+            var sourceFile = Path.ChangeExtension(Path.Combine(TempFilesFolder, "incomingAudio"), ".tmp");
             var audioResult = new AudioFileInformation();
 
             try
@@ -106,9 +106,12 @@ namespace WB.Enumerator.Native.WebInterview.Services
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Error on compress audio");
-
-                audioResult.MimeType = @"audio/wav";
+                if (ex is NonZeroExitCodeException nex)
+                    logger.LogError(nex, "Error on compress audio: {ErrorOutput}", nex.ErrorOutput);
+                else
+                    logger.LogError(ex, "Error on compress audio");
+                
+                audioResult.MimeType = mimeType;
                 audioResult.Binary = audio;
                 audioResult.Duration = TimeSpan.FromSeconds(0);
 
@@ -123,8 +126,8 @@ namespace WB.Enumerator.Native.WebInterview.Services
             }
         }
 
-        private readonly BlockingCollection<(TaskCompletionSource<AudioFileInformation> task, byte[] bytes)> audioCompressionQueue
-            = new BlockingCollection<(TaskCompletionSource<AudioFileInformation>, byte[])>();
+        private readonly BlockingCollection<(TaskCompletionSource<AudioFileInformation> task, byte[] bytes, string mimeType)> audioCompressionQueue
+            = new BlockingCollection<(TaskCompletionSource<AudioFileInformation>, byte[], string mimeType)>();
 
         private async Task AudioCompressionQueueProcessor()
         {
@@ -139,7 +142,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 {
                     sw.Restart();
                     
-                    var result = await CompressData(job.bytes);
+                    var result = await CompressData(job.bytes, job.mimeType).ConfigureAwait(false);
 
                     string resultHash = CalculateHash(result.Binary);
                     result.Hash = resultHash;
