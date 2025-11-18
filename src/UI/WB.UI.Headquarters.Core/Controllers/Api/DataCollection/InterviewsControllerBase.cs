@@ -22,6 +22,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Helpers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
@@ -211,10 +212,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             if (fileContent == null)
                 return null;
 
-            using var crypto = MD5.Create();
-            var hash = crypto.ComputeHash(fileContent);
-            var hashString = BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
-            return hashString;
+            return CheckSumHelper.GetMd5Cache(fileContent).ToLowerInvariant();
         }
 
         protected IActionResult DetailsV3(Guid id)

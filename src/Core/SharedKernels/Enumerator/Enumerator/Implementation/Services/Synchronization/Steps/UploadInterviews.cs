@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.DataCollection.Helpers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.WebApi;
@@ -259,7 +260,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 cancellationToken.ThrowIfCancellationRequested();
                 
                 var fileData = await audioFile.GetData();
-                var hash = GetMd5Cache(fileData);
+                var hash = CheckSumHelper.GetMd5Cache(fileData).ToLowerInvariant();
                 if (uploadState.AudioQuestionsFilesMd5?.Contains(hash) ?? false) continue;
 
                 cancellationToken.ThrowIfCancellationRequested();
@@ -276,15 +277,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     await this.audioFileStorage.RemoveInterviewBinaryData(audioFile.InterviewId, audioFile.FileName);
             }
         }
-
-        private static string GetMd5Cache(byte[] content)
-        {
-            using var crypto = MD5.Create();
-            var hash = crypto.ComputeHash(content);
-            var hashString = BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
-            return hashString;
-        }
-
 
         protected abstract IReadOnlyCollection<InterviewView> GetInterviewsForUpload();
     }
