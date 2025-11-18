@@ -34,8 +34,17 @@
                 currentIndex = (currentIndex + 1) % charCodes.length;
             }
             
-            setInterval(rotateChar, 50);
+            var intervalId = setInterval(rotateChar, 50);
             
+            // Clear interval when page unloads
+            window.addEventListener('beforeunload', function() {
+                clearInterval(intervalId);
+            });
+            
+            // Expose cleanup function globally so it can be called before navigation
+            window.clearThrobber = function() {
+                clearInterval(intervalId);
+            };
         })();
     </script>
 }
@@ -45,10 +54,15 @@
             var xhr = new XMLHttpRequest();
             xhr.onreadystatechange = function() {
                 if (xhr.readyState == XMLHttpRequest.DONE) {
-                    if (xhr.responseText != "Loading")
-                        window.location = '@Html.Raw(Url.Content("~/WebTester/Loading/" + Model?.Id))'
-                    else
-                        setTimeout(function() { checkStatus() }, 30 * 1000);
+                    if (xhr.responseText != "Loading") {
+                        // Clear throbber interval before navigation
+                        if (window.clearThrobber) {
+                            window.clearThrobber();
+                        }
+                        window.location = '@Html.Raw(Url.Content("~/WebTester/Loading/" + Model?.Id))';
+                    } else {
+                        setTimeout(function() { checkStatus() }, 5 * 1000);
+                    }
                 }
             }
             xhr.open('GET', '@Url.Action("GetStatus", "WebTester", new {id = Model?.Id})', true);
