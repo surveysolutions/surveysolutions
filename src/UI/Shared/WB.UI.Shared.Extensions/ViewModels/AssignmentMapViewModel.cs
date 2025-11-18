@@ -510,6 +510,8 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
             return;
         if(isDrawingGeoTracking)
             return;
+        if(assignment == null)
+            return;
         
         try
         {
