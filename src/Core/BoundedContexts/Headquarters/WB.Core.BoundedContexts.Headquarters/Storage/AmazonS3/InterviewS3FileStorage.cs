@@ -11,7 +11,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3;
 public abstract class InterviewS3FileStorage : IInterviewFileStorage
 {
     private readonly IExternalFileStorage externalFileStorage;
-    protected readonly IFileSystemAccessor fileSystemAccessor;
+    private readonly IFileSystemAccessor fileSystemAccessor;
 
     public InterviewS3FileStorage(IExternalFileStorage externalFileStorage, IFileSystemAccessor fileSystemAccessor)
     {
@@ -42,7 +42,7 @@ public abstract class InterviewS3FileStorage : IInterviewFileStorage
 
     protected abstract string GetInterviewDirectoryPath(Guid interviewId);
 
-    protected abstract string ContentType(string filename);
+    protected abstract string GetContentType(string filename);
     
     public async Task RemoveAllBinaryDataForInterviewsAsync(List<Guid> interviewIds)
     {
@@ -60,7 +60,7 @@ public abstract class InterviewS3FileStorage : IInterviewFileStorage
         return files.Select(file =>
         {
             var filename = file.Path.Substring(prefix.Length);
-            return new InterviewBinaryDataDescriptor(interviewId, filename, ContentType(filename),
+            return new InterviewBinaryDataDescriptor(interviewId, filename, GetContentType(filename),
                 () => this.GetInterviewBinaryDataAsync(interviewId, filename));
         }).ToList();
     }

@@ -21,7 +21,7 @@ public class BrokenAudioAuditInterviewS3FileStorage : InterviewS3FileStorage, IA
     }
     
     protected override string GetInterviewDirectoryPath(Guid interviewId) => $"{AudioAuditS3Folder}{interviewId.FormatGuid()}";
-    protected override string ContentType(string filename) => ContentTypeHelper.GetAudioContentType(filename);
+    protected override string GetContentType(string filename) => ContentTypeHelper.GetAudioContentType(filename);
 
     public Task<InterviewBinaryDataDescriptor> FirstOrDefaultAsync()
     {
