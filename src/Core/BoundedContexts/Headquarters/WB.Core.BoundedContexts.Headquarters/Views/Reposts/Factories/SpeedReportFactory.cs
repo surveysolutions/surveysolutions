@@ -143,12 +143,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                 var query = _;
                 if (questionnaireId.HasValue)
                 {
-                    query = query.Where(x => x.QuestionnaireId == questionnaireId);
+                    var qId = questionnaireId.Value;
+                    query = query.Where(x => x.QuestionnaireId == qId);
                 }
 
                 if (questionnaireVersion.HasValue)
                 {
-                    query = query.Where(x => x.QuestionnaireVersion == questionnaireVersion);
+                    var qVersion = questionnaireVersion.Value;
+                    query = query.Where(x => x.QuestionnaireVersion == qVersion);
                 }
 
                 return query
@@ -172,12 +174,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                 var query = _;
                 if (questionnaireId.HasValue)
                 {
-                    query = query.Where(x => x.QuestionnaireId == questionnaireId);
+                    var qId = questionnaireId.Value;
+                    query = query.Where(x => x.QuestionnaireId == qId);
                 }
 
                 if (questionnaireVersion.HasValue)
                 {
-                    query = query.Where(x => x.QuestionnaireVersion == questionnaireVersion);
+                    var qVersion = questionnaireVersion.Value;
+                    query = query.Where(x => x.QuestionnaireVersion == qVersion);
                 }
 
                 return query
@@ -202,12 +206,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                 var query = _;
                 if (questionnaireId.HasValue)
                 {
-                    query = query.Where(x => x.QuestionnaireId == questionnaireId);
+                    var qId = questionnaireId.Value;
+                    query = query.Where(x => x.QuestionnaireId == qId);
                 }
 
                 if (questionnaireVersion.HasValue)
                 {
-                    query = query.Where(x => x.QuestionnaireVersion == questionnaireVersion);
+                    var qVersion = questionnaireVersion.Value;
+                    query = query.Where(x => x.QuestionnaireVersion == qVersion);
                 }
 
                 return query
