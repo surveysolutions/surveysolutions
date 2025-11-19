@@ -63,35 +63,10 @@ namespace WB.UI.Shared.Enumerator.Activities
 
         internal void OnPageChangedFromCallback()
         {
-            UpdateTabViews();
+            UpdateTabIndicator();
             viewPager?.Post(RecalculateRecyclerViewHeight);
         }
 
-        public class TabConfigurationStrategy2(CompleteInterviewViewModel viewModel)
-            : Java.Lang.Object, TabLayoutMediator.ITabConfigurationStrategy
-        {
-            private CompleteInterviewViewModel viewModel = viewModel;
-
-            public void OnConfigureTab(TabLayout.Tab tab, int position)
-            {
-                var tabVm = (TabViewModel)viewModel.Tabs[position];
-                tab.SetText(tabVm.Title);
-
-                if (!tabVm.IsEnabled)
-                {
-                    tab.View.Enabled = false;
-                    tab.View.Alpha = 0.4f;
-                }
-            }
-
-            protected override void Dispose(bool disposing)
-            {
-                this.viewModel = null;
-                
-                base.Dispose(disposing);
-            }
-        }
-        
         public class TabConfigurationStrategy : Java.Lang.Object, TabLayoutMediator.ITabConfigurationStrategy
         {
             private readonly IMvxAndroidBindingContext bindingContext;
@@ -107,11 +82,6 @@ namespace WB.UI.Shared.Enumerator.Activities
             {
                 var vm = tabs[position];
                 
-                //var inflater = Mvx.IoCProvider.Resolve<LayoutInflater>();
-
-                //var inflater = LayoutInflater.From(tab.View.Context);
-                //var view = inflater.Inflate(Resource.Layout.interview_complete_tab_item, null);
-                //var view = this.BindingInflate(Resource.Layout.interview_complete_tab_item, null);
                 var view = bindingContext.BindingInflate(Resource.Layout.interview_complete_tab_item, null);
 
                 var countView = view.FindViewById<TextView>(Resource.Id.tab_count);
@@ -130,11 +100,6 @@ namespace WB.UI.Shared.Enumerator.Activities
                 indicator.BackgroundTintList = ColorStateList.ValueOf(color);
 
                 tab.SetCustomView(view);
-                
-                //bindingContext.DataContext = vm;
-
-                //view.DataContext = vm;
-                //view.ViewModel = vm;
             }
         }
 
@@ -157,7 +122,7 @@ namespace WB.UI.Shared.Enumerator.Activities
                     viewPager.Post(() => viewPager.SetCurrentItem(viewPager.CurrentItem, false));
                     return;
                 }
-                UpdateTabViews();
+                UpdateTabIndicator();
             };
             
             int firstNonEmptyIndex = tabsViewModels.FindIndex(t => t.IsEnabled);
@@ -168,38 +133,18 @@ namespace WB.UI.Shared.Enumerator.Activities
                     if (firstNonEmptyIndex < viewModel.Tabs.Count)
                     {
                         viewPager.SetCurrentItem(firstNonEmptyIndex, false);
-                        UpdateTabViews();
+                        UpdateTabIndicator();
                         RecalculateRecyclerViewHeight();
                     }
                 });
             }
             else
             {
-                UpdateTabViews();
+                UpdateTabIndicator();
             }
         }
         
-        private View CreateTabView(string title, string count, bool isSelected)
-        {
-            var inflater = LayoutInflater.From(this.Context);
-            var view = inflater.Inflate(Resource.Layout.interview_complete_tab_item, null);
-
-            var countView = view.FindViewById<TextView>(Resource.Id.tab_count);
-            var titleView = view.FindViewById<TextView>(Resource.Id.tab_title);
-
-            countView.Text = count;
-            titleView.Text = title;
-
-            if (isSelected)
-            {
-                //countView.SetTextColor(ContextCompat.GetColor(this.Context, Resource.Color.material_blue_grey_800));
-                //titleView.SetTextColor(ContextCompat.GetColor(this.Context, Resource.Color.material_blue_grey_800));
-            }
-
-            return view;
-        }
-
-        private void UpdateTabViews()
+        private void UpdateTabIndicator()
         {
             for (int i = 0; i < tabLayout.TabCount; i++)
             {
@@ -209,38 +154,13 @@ namespace WB.UI.Shared.Enumerator.Activities
 
                 if (view == null) continue;
 
-                var countView = view.FindViewById<TextView>(Resource.Id.tab_count);
-                var titleView = view.FindViewById<TextView>(Resource.Id.tab_title);
                 var indicator = view.FindViewById<View>(Resource.Id.tab_indicator);
-
-                // var colorResInt = TabContentToColorConverter.GetColor((TabViewModel)ViewModel.Tabs[i]);
-                // var colorInt = ContextCompat.GetColor(Context, colorResInt);
-                // var color = new Android.Graphics.Color(colorInt);
-                // countView?.SetTextColor(color);
-                // titleView?.SetTextColor(color);
-                // indicator?.SetBackgroundColor(color);
-
-                // var colorInt = ContextCompat.GetColor(Context, isSelected ? Resource.Color.material_blue_grey_800 : Resource.Color.disabledTextColor);
-                // var color =  new Android.Graphics.Color(colorInt);
-                // countView?.SetTextColor(color);
-                // titleView?.SetTextColor(color);
                 indicator.Visibility = isSelected ? ViewStates.Visible : ViewStates.Invisible;
 
                 view.Selected = isSelected;
             }
         }
         
-        public override void OnViewCreated(View view, Bundle savedInstanceState)
-        {
-            base.OnViewCreated(view, savedInstanceState);
-            
-            // recyclerView = view.FindViewById<MvxRecyclerView>(Resource.Id.tv_Complete_Groups);
-            // recyclerView.SetLayoutManager(new MvxGuardedLinearLayoutManager(Context));
-            // recyclerView.SetItemAnimator(null);
-            
-            //ViewModel.CompleteGroups.CollectionChanged += AdjustRecyclerViewHeight;
-        }
-
         private int CalculateTotalHeight(MvxRecyclerView recyclerView)
         {
             int totalHeight = 0;
@@ -279,28 +199,6 @@ namespace WB.UI.Shared.Enumerator.Activities
                 return scrollRange; 
             }
             return CalculateTotalHeight(recyclerView);
-        }
-
-        private int GetVisibleRecyclerHeight(MvxRecyclerView recyclerView)
-        {
-            int childCount = recyclerView.ChildCount;
-            if (childCount == 0) return 0;
-            int minTop = int.MaxValue;
-            int maxBottom = 0;
-            for (int i = 0; i < childCount; i++)
-            {
-                var child = recyclerView.GetChildAt(i);
-                if (child == null) continue;
-                int top = child.Top;
-                int bottom = child.Bottom;
-                if (top < minTop) minTop = top;
-                if (bottom > maxBottom) maxBottom = bottom;
-            }
-            if (minTop == int.MaxValue) return 0;
-            int visibleHeight = (maxBottom - minTop) + recyclerView.PaddingTop + recyclerView.PaddingBottom;
-            if (recyclerView.LayoutParameters is ViewGroup.MarginLayoutParams lp)
-                visibleHeight += lp.TopMargin + lp.BottomMargin;
-            return visibleHeight;
         }
 
         private void RecalculateRecyclerViewHeight()
