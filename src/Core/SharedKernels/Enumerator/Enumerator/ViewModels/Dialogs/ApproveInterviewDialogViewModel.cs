@@ -43,10 +43,12 @@ public class ApproveInterviewDialogViewModel : ActionDialogViewModel<ApproveInte
 
     public override bool ShowResponsibles => false;
 
-    public override bool CanApply => true;
-
     protected override async Task ApplyAsync()
     {
+        if (!this.CanApply) 
+            return;
+        this.CanApply = false;
+        
         try
         {
             var interviewId = this.CreateParameter.InterviewId;
