@@ -1,15 +1,20 @@
 ﻿using Android.Graphics;
 using Android.Views;
 using AndroidX.Core.Content;
+using MvvmCross;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings
 {
     public class DashboardStatusBarColorByDashboardGroupTypeBinding : BaseBinding<ViewGroup, DashboardGroupType>
     {
+        private readonly ILogger logger;
+
         public DashboardStatusBarColorByDashboardGroupTypeBinding(ViewGroup androidControl)
             : base(androidControl)
         {
+            this.logger = Mvx.IoCProvider.Resolve<ILoggerProvider>().GetFor<DashboardStatusBarColorByDashboardGroupTypeBinding>();
         }
 
         protected override void SetValueToView(ViewGroup target, DashboardGroupType value)
@@ -45,7 +50,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             });
         }
 
-        private static void SetBackgroundColor(ViewGroup target, int colorResourceId)
+        private void SetBackgroundColor(ViewGroup target, int colorResourceId)
         {
             try
             {
@@ -62,9 +67,17 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
                     }
                 }
             }
-            catch
+            catch (ObjectDisposedException ex)
             {
-                // Silently fail if context is no longer valid
+                logger.Warn($"Cannot set status bar color - context or window is disposed. Color resource: {colorResourceId}", ex);
+            }
+            catch (InvalidOperationException ex)
+            {
+                logger.Warn($"Cannot set status bar color - invalid operation. Color resource: {colorResourceId}", ex);
+            }
+            catch (Exception ex)
+            {
+                logger.Error($"Unexpected error setting status bar color. Color resource: {colorResourceId}", ex);
             }
         }
     }
