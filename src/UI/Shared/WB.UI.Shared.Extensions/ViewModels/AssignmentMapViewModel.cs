@@ -672,7 +672,7 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
                     catch (ArcGISRuntimeException ex)
                     {
                         // Feature already deleted (e.g., layer was recreated), safe to ignore
-                        logger.Debug("Feature already deleted during geo-tracking update", ex);
+                        logger.Error("Feature already deleted during geo-tracking update", ex);
                     }
                 }
 
