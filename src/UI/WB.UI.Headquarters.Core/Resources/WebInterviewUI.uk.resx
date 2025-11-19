@@ -503,4 +503,10 @@
   <data name="Yes" xml:space="preserve">
     <value>Так</value>
   </data>
+  <data name="TurnOffDevMode" xml:space="preserve">
+    <value>Вимкнути режим розробника</value>
+  </data>
+  <data name="TurnOnDevMode" xml:space="preserve">
+    <value>Увімкнути режим розробника</value>
+  </data>
 </root>

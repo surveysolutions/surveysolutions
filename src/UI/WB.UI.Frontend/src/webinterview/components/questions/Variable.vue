@@ -2,7 +2,11 @@
     <div class="question static-text variable" :class="variableClass" v-if="!$me.isLoading" :id="hash">
         <div class="question-editor">
             <div>
-                <h5 v-dateTimeFormatting v-linkToRoute v-dompurify-html="title"></h5>
+                <h5>
+                    <a class="open-designer" v-if="this.$config.inWebTesterMode && $me.name" href="javascript:void(0);"
+                        @click="openDesigner($me.id)" v-dompurify-html="'[' + $me.name + ']'"></a>
+                    <span v-dateTimeFormatting v-linkToRoute v-dompurify-html="title"></span>
+                </h5>
             </div>
         </div>
     </div>
