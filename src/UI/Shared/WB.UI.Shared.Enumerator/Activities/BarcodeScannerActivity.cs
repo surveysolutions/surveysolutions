@@ -9,6 +9,8 @@ using WB.UI.Shared.Enumerator.Services.Internals;
 using Java.Util.Concurrent;
 using ZXing;
 using AndroidX.Camera.Core.ResolutionSelector;
+using MvvmCross;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator.Properties;
 
 namespace WB.UI.Shared.Enumerator.Activities
@@ -65,10 +67,7 @@ namespace WB.UI.Shared.Enumerator.Activities
         private void BindCameraUseCases()
         {
             if (cameraProvider == null) return;
-
-            // Unbind all use cases before rebinding
-            cameraProvider.UnbindAll();
-
+            
             // Select back camera
             cameraSelector = new CameraSelector.Builder()
                 .RequireLensFacing(CameraSelector.LensFacingBack)
@@ -274,7 +273,8 @@ namespace WB.UI.Shared.Enumerator.Activities
                 catch (Exception ex)
                 {
                     // Log or handle exception if needed
-                    System.Diagnostics.Debug.WriteLine($"Barcode scanning error: {ex.Message}");
+                    Mvx.IoCProvider.Resolve<ILoggerProvider>().GetForType(this.GetType()).Warn("Barcode scanning error", ex);
+                    
                 }
                 finally
                 {
@@ -358,7 +358,7 @@ namespace WB.UI.Shared.Enumerator.Activities
                 }
                 catch (Exception ex)
                 {
-                    System.Diagnostics.Debug.WriteLine($"Image conversion error: {ex.Message}");
+                    Mvx.IoCProvider.Resolve<ILoggerProvider>().GetForType(this.GetType()).Warn("Image conversion error", ex);
                     return null;
                 }
                 finally
