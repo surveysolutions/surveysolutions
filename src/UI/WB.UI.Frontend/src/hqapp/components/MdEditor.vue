@@ -1,6 +1,6 @@
 <template>
     <div class="md-editor-container">
-        <div v-if="editor" class="editor-toolbar">
+        <div class="editor-toolbar">
             <div class="dropdown">
                 <button type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
                     :class="{ active: isActive.heading }" :aria-pressed="isActive.heading" aria-label="Heading"
@@ -273,7 +273,6 @@ export default {
     data() {
         return {
             content: '',
-            editor: true, // Keep for v-if in template
             isActive: {
                 heading: false,
                 bold: false,
@@ -356,48 +355,89 @@ export default {
             const textarea = this.$refs.textarea
             const start = textarea.selectionStart
             const end = textarea.selectionEnd
-            const before = textarea.value.substring(0, start)
-            const after = textarea.value.substring(end)
 
-            const newValue = before + text + after
+            textarea.focus()
+
+            // Use document.execCommand to maintain undo history
+            if (document.execCommand) {
+                document.execCommand('insertText', false, text)
+            } else {
+                // Fallback for browsers that don't support execCommand
+                const before = textarea.value.substring(0, start)
+                const after = textarea.value.substring(end)
+                textarea.value = before + text + after
+                this.content = textarea.value
+            }
+
             const newCursorPos = start + cursorOffset
-            textarea.value = newValue
-            this.content = newValue
             textarea.setSelectionRange(newCursorPos, newCursorPos)
-            this.onInput()
+
+            // Trigger input event manually if needed
+            if (!document.execCommand) {
+                this.onInput()
+            }
         },
         wrapSelection(prefix, suffix) {
             const textarea = this.$refs.textarea
             const selection = this.getSelection()
 
+            textarea.focus()
+
             if (selection.text) {
-                const before = textarea.value.substring(0, selection.start)
-                const after = textarea.value.substring(selection.end)
-                const newValue = before + prefix + selection.text + suffix + after
+                // Replace selected text with wrapped version
+                const wrappedText = prefix + selection.text + suffix
+
+                if (document.execCommand) {
+                    document.execCommand('insertText', false, wrappedText)
+                } else {
+                    const before = textarea.value.substring(0, selection.start)
+                    const after = textarea.value.substring(selection.end)
+                    textarea.value = before + wrappedText + after
+                    this.content = textarea.value
+                    this.onInput()
+                }
+
                 const newStart = selection.start + prefix.length
-                const newEnd = selection.end + prefix.length
-                textarea.value = newValue
-                this.content = newValue
+                const newEnd = selection.start + prefix.length + selection.text.length
                 textarea.setSelectionRange(newStart, newEnd)
-                this.onInput()
             } else {
                 const placeholder = 'text'
-                this.insertAtCursor(prefix + placeholder + suffix, prefix.length + placeholder.length)
+                const wrappedText = prefix + placeholder + suffix
+
+                if (document.execCommand) {
+                    document.execCommand('insertText', false, wrappedText)
+                } else {
+                    const before = textarea.value.substring(0, selection.start)
+                    const after = textarea.value.substring(selection.end)
+                    textarea.value = before + wrappedText + after
+                    this.content = textarea.value
+                    this.onInput()
+                }
+
+                const newPos = selection.start + prefix.length + placeholder.length
+                textarea.setSelectionRange(newPos, newPos)
             }
         },
         insertMarkdown(prefix, suffix) {
             const textarea = this.$refs.textarea
             const start = textarea.selectionStart
             const lineStart = textarea.value.lastIndexOf('\n', start - 1) + 1
-            const before = textarea.value.substring(0, lineStart)
-            const after = textarea.value.substring(lineStart)
 
-            const newValue = before + prefix + after
+            textarea.focus()
+            textarea.setSelectionRange(lineStart, lineStart)
+
+            if (document.execCommand) {
+                document.execCommand('insertText', false, prefix)
+            } else {
+                const before = textarea.value.substring(0, lineStart)
+                const after = textarea.value.substring(lineStart)
+                textarea.value = before + prefix + after
+                this.content = textarea.value
+                this.onInput()
+            }
+
             const newCursorPos = lineStart + prefix.length
-            textarea.value = newValue
-            this.content = newValue
             textarea.setSelectionRange(newCursorPos, newCursorPos)
-            this.onInput()
         },
         insertList(prefix, isOrdered = false) {
             const selection = this.getSelection()
@@ -412,14 +452,21 @@ export default {
                 } else {
                     formatted = lines.map(line => line.trim() ? prefix + line : line).join('\n')
                 }
-                const before = textarea.value.substring(0, selection.start)
-                const after = textarea.value.substring(selection.end)
-                const newValue = before + formatted + after
+
+                textarea.focus()
+
+                if (document.execCommand) {
+                    document.execCommand('insertText', false, formatted)
+                } else {
+                    const before = textarea.value.substring(0, selection.start)
+                    const after = textarea.value.substring(selection.end)
+                    textarea.value = before + formatted + after
+                    this.content = textarea.value
+                    this.onInput()
+                }
+
                 const newEnd = selection.start + formatted.length
-                textarea.value = newValue
-                this.content = newValue
                 textarea.setSelectionRange(selection.start, newEnd)
-                this.onInput()
             } else {
                 // Single line - find the next number if ordered list
                 let actualPrefix = prefix
@@ -446,14 +493,22 @@ export default {
 
                 const start = textarea.selectionStart
                 const lineStart = textarea.value.lastIndexOf('\n', start - 1) + 1
-                const before = textarea.value.substring(0, lineStart)
-                const after = textarea.value.substring(lineStart)
-                const newValue = before + actualPrefix + after
+
+                textarea.focus()
+                textarea.setSelectionRange(lineStart, lineStart)
+
+                if (document.execCommand) {
+                    document.execCommand('insertText', false, actualPrefix)
+                } else {
+                    const before = textarea.value.substring(0, lineStart)
+                    const after = textarea.value.substring(lineStart)
+                    textarea.value = before + actualPrefix + after
+                    this.content = textarea.value
+                    this.onInput()
+                }
+
                 const newCursorPos = lineStart + actualPrefix.length
-                textarea.value = newValue
-                this.content = newValue
                 textarea.setSelectionRange(newCursorPos, newCursorPos)
-                this.onInput()
             }
         },
         setHeading(level) {
@@ -543,14 +598,20 @@ export default {
             const markdown = `[${linkText}](${this.linkUrl})`
 
             const textarea = this.$refs.textarea
-            const before = textarea.value.substring(0, selection.start)
-            const after = textarea.value.substring(selection.end)
-            const newValue = before + markdown + after
+            textarea.focus()
+
+            if (document.execCommand) {
+                document.execCommand('insertText', false, markdown)
+            } else {
+                const before = textarea.value.substring(0, selection.start)
+                const after = textarea.value.substring(selection.end)
+                textarea.value = before + markdown + after
+                this.content = textarea.value
+                this.onInput()
+            }
+
             const newCursorPos = selection.start + markdown.length
-            textarea.value = newValue
-            this.content = newValue
             textarea.setSelectionRange(newCursorPos, newCursorPos)
-            this.onInput()
 
             this.closeLinkModal()
         },
