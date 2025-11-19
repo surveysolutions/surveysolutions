@@ -2,7 +2,6 @@ import { defineConfig } from 'vite';
 import path from 'path';
 import vue from '@vitejs/plugin-vue'
 import LocalizationPlugin from './tools/vite-plugin-localization'
-import { rimrafSync } from 'rimraf';
 import fs from 'fs';
 import { ViteFilemanager } from 'filemanager-plugin';
 import saveSelectedFilesPlugin from './tools/saveSelectedFilesPlugin.cjs';
@@ -179,7 +178,7 @@ export default defineConfig(({ mode, command }) => {
     //const outDir = path.join(hqDist, "wwwroot");
 
     if (isServe && mode != 'test') {
-        rimrafSync(outDir);
+        fs.rmSync(outDir, { recursive: true, force: true });
         fs.mkdirSync(outDir);
     }
 
