@@ -240,8 +240,15 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             SetStatus(ConnectionStatus.Sync, dataInfo.ToString());
         }
 
-        protected override string GetDeviceIdentification() => 
-            this.Principal.CurrentUserIdentity.UserId.FormatGuid() + this.Principal.CurrentUserIdentity.Workspace;
+        protected override string GetDeviceIdentification()
+        {
+            if (this.Principal?.CurrentUserIdentity == null)
+            {
+                return string.Empty;
+            }
+    
+            return this.Principal.CurrentUserIdentity.UserId.FormatGuid() + this.Principal.CurrentUserIdentity.Workspace;
+        }
 
         public IMvxCommand CancelCommand => new MvxCommand(() => { });
 

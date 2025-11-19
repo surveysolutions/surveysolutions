@@ -161,7 +161,9 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
         {
             this.OnDeviceFound(name);
 
-            var interviewerName = this.Principal.CurrentUserIdentity.Name;
+            var interviewerName = this.Principal?.CurrentUserIdentity?.Name;
+            if(interviewerName == null)
+                return;
 
             NearbyStatus connectionStatus = null;
             try
