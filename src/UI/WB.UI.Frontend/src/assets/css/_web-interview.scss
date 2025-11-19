@@ -1364,4 +1364,16 @@
     .variable.section-variable {
         background-color: #FFFFE3;
     }
+
+    .throbber-container {
+        font-family: 'ThrobberFont', sans-serif;
+        font-size: 240px;
+        text-align: center;
+        padding: 20px;
+        user-select: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
 }
