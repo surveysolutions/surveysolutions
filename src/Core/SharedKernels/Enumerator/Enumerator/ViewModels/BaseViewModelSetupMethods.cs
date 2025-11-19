@@ -8,7 +8,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
     {
         public static void CheckAuthentication(bool isAuthenticationRequired, IPrincipal principal, IViewModelNavigationService navigationService)
         {
-            if (isAuthenticationRequired && !principal.IsAuthenticated)
+            if (isAuthenticationRequired && (principal == null || !principal.IsAuthenticated))
             {
                 navigationService.NavigateToSplashScreen();
             }
@@ -16,7 +16,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         public static void SaveStateToBundle(IPrincipal principal, IMvxBundle bundle)
         {
-            if (principal?.IsAuthenticated ?? false)
+            if (bundle != null && (principal?.IsAuthenticated ?? false))
             {
                 bundle.Data["userName"] = principal.CurrentUserIdentity.Name;
                 bundle.Data["workspace"] = principal.CurrentUserIdentity.Workspace ?? string.Empty;
@@ -26,11 +26,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         public static void ReloadStateFromBundle(IPrincipal principal, IMvxBundle bundle)
         {
-            if (bundle.Data.ContainsKey("userId") && !principal.IsAuthenticated)
+            if (bundle != null && bundle.Data.ContainsKey("userId") && !principal.IsAuthenticated)
             {
                 principal.SignIn(bundle.Data["userId"], true);
             }
         }
     }
 }
+
 
