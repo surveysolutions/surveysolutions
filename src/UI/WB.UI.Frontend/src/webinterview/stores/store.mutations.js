@@ -1,6 +1,6 @@
 import { forEach, differenceBy } from 'lodash'
 import browserLocalStore from '~/shared/localStorage'
-import { setShowVariables as saveShowVariables } from './showVariablesPreference'
+import { setDevModeSetting } from './showVariablesPreference'
 
 export default {
     SET_ENTITIES_DETAILS(state, { entities, lastActivityTimestamp }) {
@@ -119,8 +119,8 @@ export default {
         else
             browserLocalStore.remove(`${interviewId}_lastSection`)
     },
-    SHOW_VARIABLES(state, { value }) {
-        state.showVariables = value
-        saveShowVariables(value)
+    DEV_MODE(state, { value }) {
+        state.isDevMode = value
+        setDevModeSetting(value)
     },
 }

@@ -465,12 +465,6 @@
   <data name="WebTesterSessionOverMessage" xml:space="preserve">
     <value>يرجى إغلاق هذه الصفحة. يمكنك فتح واحدة جديدة من خلال العودة إلى موقع المصمم</value>
   </data>
-    <data name="HideVariables" xml:space="preserve">
-    <value>إخفاء المتغيرات</value>
-  </data>
-    <data name="ShowVariables" xml:space="preserve">
-    <value>عرض المتغيرات</value>
-  </data>      
   <data name="ShowResolved" xml:space="preserve">
     <value>عرض المحلولة</value>
   </data>
@@ -546,4 +540,10 @@
     <data name="UnansweredQuestions" xml:space="preserve">
   <value>الأسئلة التي لم تتم الإجابة عنها:</value>
 </data>
+  <data name="TurnOffDevMode" xml:space="preserve">
+    <value>إيقاف وضع المطور</value>
+  </data>
+  <data name="TurnOnDevMode" xml:space="preserve">
+    <value>تشغيل وضع المطور</value>
+  </data>
 </root>
