@@ -108,7 +108,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         private void SetStatus(ConnectionStatus connectionStatus, string details = null)
         {
             var newLine = Environment.NewLine;
-            this.ProgressTitle = $"{(this.isInitialized ? this.GetServiceName() : string.Empty)}{newLine}{connectionStatus.ToString()}{newLine}{details ?? String.Empty}";
+            this.ProgressTitle = $"{(this.isInitialized ? this.GetServiceNameOrNull() : string.Empty)}{newLine}{connectionStatus.ToString()}{newLine}{details ?? String.Empty}";
         }
 
         protected override void OnConnectionError(string errorMessage, ConnectionStatusCode errorCode)
@@ -221,7 +221,12 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 
             SetStatus(ConnectionStatus.StartAdvertising, $"Starting advertising");
 
-            var serviceName = this.GetServiceName();
+            var serviceName = this.GetServiceNameOrNull();
+            if (serviceName == null)
+            {
+                SetStatus(ConnectionStatus.Error, "Cannot get service name");
+                return;
+            }
             try
             {
                 await this.nearbyConnection.StartAdvertisingAsync(serviceName, this.Principal.CurrentUserIdentity.Name,
@@ -240,11 +245,11 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             SetStatus(ConnectionStatus.Sync, dataInfo.ToString());
         }
 
-        protected override string GetDeviceIdentification()
+        protected override string GetDeviceIdentificationOrNull()
         {
             if (this.Principal?.CurrentUserIdentity == null)
             {
-                return string.Empty;
+                return null;
             }
     
             return this.Principal.CurrentUserIdentity.UserId.FormatGuid() + this.Principal.CurrentUserIdentity.Workspace;
@@ -259,3 +264,4 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         }
     }
 }
+
