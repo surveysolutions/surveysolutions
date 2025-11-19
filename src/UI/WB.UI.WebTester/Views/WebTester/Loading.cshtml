@@ -14,6 +14,7 @@
     </div>
     
     <script>
+        const ANIMATION_INTERVAL = 50;
         (function() {
             var throbber = document.getElementById('throbber');
             var currentIndex = 0;
@@ -34,7 +35,7 @@
                 currentIndex = (currentIndex + 1) % charCodes.length;
             }
             
-            var intervalId = setInterval(rotateChar, 50);
+            var intervalId = setInterval(rotateChar, ANIMATION_INTERVAL);
             
             // Clear interval when page unloads
             window.addEventListener('beforeunload', function() {
@@ -50,6 +51,7 @@
 }
 @section footer{
     <script>
+        const CHECK_INTERVAL = 3*1000;
         function checkStatus() {
             var xhr = new XMLHttpRequest();
             xhr.onreadystatechange = function() {
@@ -61,7 +63,7 @@
                         }
                         window.location = '@Html.Raw(Url.Content("~/WebTester/Loading/" + Model?.Id))';
                     } else {
-                        setTimeout(function() { checkStatus() }, 5 * 1000);
+                        setTimeout(function() { checkStatus() }, CHECK_INTERVAL);
                     }
                 }
             }
