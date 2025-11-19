@@ -216,14 +216,14 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
 
         protected abstract void OnConnectionError(string errorMessage, ConnectionStatusCode errorCode);
 
-        protected string GetServiceName()
+        protected string GetServiceNameOrNull()
         {
             //var normalizedEndpoint = new Uri(this.settings.Endpoint).ToString().TrimEnd('/').ToLower();
 
-            return this.GetDeviceIdentification();
+            return this.GetDeviceIdentificationOrNull();
         }
 
-        protected abstract string GetDeviceIdentification();
+        protected abstract string GetDeviceIdentificationOrNull();
 
         public override void Dispose()
         {
@@ -233,3 +233,4 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
         }
     }
 }
+
