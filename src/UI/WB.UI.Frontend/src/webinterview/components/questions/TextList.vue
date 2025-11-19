@@ -117,8 +117,8 @@ export default {
             let text = target.val()
 
             if (!text || !text.trim()) {
-                this.$refs.inputTextArea.val = undefined
-                target.val(undefined)
+                this.$refs.inputTextArea.value = ''
+                target.val('')
                 return
             }
 
@@ -130,8 +130,8 @@ export default {
 
             this.$store.dispatch('answerTextListQuestion', { identity: this.id, rows: this.$me.rows })
 
-            this.$refs.inputTextArea.val = undefined
-            target.val(undefined)
+            this.$refs.inputTextArea.value = ''
+            target.val('')
 
             setTimeout(() => {
                 target.focus()
