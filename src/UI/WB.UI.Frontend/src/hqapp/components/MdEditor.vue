@@ -399,14 +399,19 @@ export default {
             textarea.setSelectionRange(newCursorPos, newCursorPos)
             this.onInput()
         },
-        insertList(prefix) {
+        insertList(prefix, isOrdered = false) {
             const selection = this.getSelection()
             const textarea = this.$refs.textarea
 
             if (selection.text.includes('\n')) {
                 // Multi-line selection
                 const lines = selection.text.split('\n')
-                const formatted = lines.map(line => line.trim() ? prefix + line : line).join('\n')
+                let formatted
+                if (isOrdered) {
+                    formatted = lines.map((line, index) => line.trim() ? `${index + 1}. ${line}` : line).join('\n')
+                } else {
+                    formatted = lines.map(line => line.trim() ? prefix + line : line).join('\n')
+                }
                 const before = textarea.value.substring(0, selection.start)
                 const after = textarea.value.substring(selection.end)
                 const newValue = before + formatted + after
@@ -416,13 +421,35 @@ export default {
                 textarea.setSelectionRange(selection.start, newEnd)
                 this.onInput()
             } else {
-                // Single line
+                // Single line - find the next number if ordered list
+                let actualPrefix = prefix
+                if (isOrdered) {
+                    const start = textarea.selectionStart
+                    const lineStart = textarea.value.lastIndexOf('\n', start - 1) + 1
+                    const beforeLine = textarea.value.substring(0, lineStart)
+                    const lines = beforeLine.split('\n')
+
+                    // Look backwards to find the last ordered list item
+                    let lastNumber = 0
+                    for (let i = lines.length - 1; i >= 0; i--) {
+                        const match = lines[i].match(/^(\d+)\.\s/)
+                        if (match) {
+                            lastNumber = parseInt(match[1])
+                            break
+                        } else if (lines[i].trim() !== '') {
+                            // Hit a non-empty, non-list line - stop looking
+                            break
+                        }
+                    }
+                    actualPrefix = `${lastNumber + 1}. `
+                }
+
                 const start = textarea.selectionStart
                 const lineStart = textarea.value.lastIndexOf('\n', start - 1) + 1
                 const before = textarea.value.substring(0, lineStart)
                 const after = textarea.value.substring(lineStart)
-                const newValue = before + prefix + after
-                const newCursorPos = lineStart + prefix.length
+                const newValue = before + actualPrefix + after
+                const newCursorPos = lineStart + actualPrefix.length
                 textarea.value = newValue
                 this.content = newValue
                 textarea.setSelectionRange(newCursorPos, newCursorPos)
@@ -440,10 +467,10 @@ export default {
             this.wrapSelection('*', '*')
         },
         toggleBulletList() {
-            this.insertList('- ')
+            this.insertList('- ', false)
         },
         toggleOrderedList() {
-            this.insertList('1. ')
+            this.insertList('1. ', true)
         },
         addImage() {
             this.openImageModal()
