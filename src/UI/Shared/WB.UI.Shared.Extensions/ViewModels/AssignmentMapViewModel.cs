@@ -669,7 +669,7 @@ public class AssignmentMapViewModel: MarkersMapInteractionViewModel<AssignmentMa
                         else
                             await featureCollectionTables[0].DeleteFeatureAsync(currentTrackFeature);
                     }
-                    catch (ArcGISRuntimeException ex) when (ex.Message.Contains("not found"))
+                    catch (ArcGISRuntimeException ex)
                     {
                         // Feature already deleted (e.g., layer was recreated), safe to ignore
                         logger.Debug("Feature already deleted during geo-tracking update", ex);
