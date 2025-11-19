@@ -513,7 +513,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         private void StopDiscovery() => this.nearbyConnection.StopDiscovery();
 
-        protected override string GetDeviceIdentification() =>
+        protected override string GetDeviceIdentificationOrNull() =>
             ((InterviewerIdentity)this.principal.CurrentUserIdentity).SupervisorId.FormatGuid() + CurrentWorkspace;
 
         public void ShowSynchronizationError(string error)
@@ -632,3 +632,4 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         public Guid InterviewId { get; set; }
     }
 }
+
