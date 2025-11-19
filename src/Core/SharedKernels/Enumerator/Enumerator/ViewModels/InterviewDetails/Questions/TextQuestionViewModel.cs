@@ -154,7 +154,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             if(string.IsNullOrWhiteSpace(text))
             {
-                await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.Interview_Question_Text_Empty);
+                await RemoveAnswer();
                 return;
             }
 
