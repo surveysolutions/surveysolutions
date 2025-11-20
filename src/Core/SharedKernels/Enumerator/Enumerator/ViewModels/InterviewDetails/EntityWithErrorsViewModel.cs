@@ -17,8 +17,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.NavigationState = navigationState;
             this.entityIdentity = entityIdentity;
             this.entityTitle = title;
-            this.Comment = title;
-            this.Error = title;
             this.Comment = comment;
             this.Error = error;
             this.IsError = true;
@@ -46,10 +44,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             return viewModel;
         }
 
-        public static EntityWithErrorsViewModel InitError(string title)
+        public static EntityWithErrorsViewModel InitError(string error)
         {
             var viewModel = new EntityWithErrorsViewModel();
-            viewModel.Init(null, null, null, title, null);
+            viewModel.Init(null, null, null, error, null);
             return viewModel;
         }
 
