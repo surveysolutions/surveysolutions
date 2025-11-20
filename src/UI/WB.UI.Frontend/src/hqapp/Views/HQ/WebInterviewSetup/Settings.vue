@@ -753,7 +753,6 @@ export default {
                         ? defaultText
                         : customText
 
-                message = escape(message)
                 return {
                     value: key,
                     text: message,
@@ -967,7 +966,6 @@ export default {
         },
         previewMessage(emailTemplate) {
             var text = this.previewText(emailTemplate.message)
-            text = escape(text)
 
             if (!this.isMessageSupportedInterviewData(emailTemplate)) return text
 
