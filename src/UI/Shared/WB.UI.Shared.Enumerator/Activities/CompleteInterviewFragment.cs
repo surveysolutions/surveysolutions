@@ -23,7 +23,10 @@ namespace WB.UI.Shared.Enumerator.Activities
             recyclerView.SetLayoutManager(new MvxGuardedLinearLayoutManager(Context));
             recyclerView.SetItemAnimator(null);
             
-            ViewModel.CompleteGroups.CollectionChanged += AdjustRecyclerViewHeight;
+            if (ViewModel?.CompleteGroups != null)
+            {
+                ViewModel.CompleteGroups.CollectionChanged += AdjustRecyclerViewHeight;
+            }
         }
 
         private int MeasureItemHeight(View view)
