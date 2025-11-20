@@ -26,8 +26,7 @@
             <li v-for="(completeGroup, idx) in completeGroups" :key="idx"
                 :class="['tab-item', completeGroup.cssClass, { active: idx === activeCompleteGroupIndex, disabled: !(completeGroup.items?.length > 0) }]"
                 role="presentation" @click.stop="setActive(idx)">
-                <div class="tab-count">{{
-                    moreThen30(completeGroup.items.length) }}</div>
+                <div class="tab-count">{{ completeGroup.total }}</div>
                 <div class="tab-title" v-dompurify-html="completeGroup.title"></div>
             </li>
         </ul>
@@ -393,18 +392,21 @@ export default {
             groups.push({
                 title: this.$t('WebInterviewUI.Complete_Tab_CriticalErrors'),
                 items: critical,
+                total: critical.length,
                 cssClass: 'errors'
             })
 
             groups.push({
                 title: this.$t('WebInterviewUI.Complete_Tab_QuestionsWithErrors'),
                 items: this.completeInfo?.entitiesWithError,
+                total: this.completeInfo?.errorsCount,
                 cssClass: 'errors'
             })
 
             groups.push({
                 title: this.$t('WebInterviewUI.Complete_Tab_UnansweredQuestions'),
                 items: this.completeInfo?.unansweredQuestions,
+                total: this.completeInfo?.unansweredCount,
                 cssClass: 'unanswered'
             })
 
@@ -585,12 +587,6 @@ export default {
             }
 
             this.$router.push(navigateToEntity)
-        },
-
-        moreThen30(value) {
-            if (value >= 30)
-                return '30+'
-            return value + ''
         },
 
         setActive(index) {
