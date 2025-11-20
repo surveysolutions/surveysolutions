@@ -108,11 +108,7 @@ namespace WB.UI.Shared.Enumerator.Activities
                     // Ensure UI updates happen on the main thread
                     tab.View?.Post(() =>
                     {
-                        if (args.PropertyName == nameof(vm.IsEnabled))
-                        {
-                            tab.View.Enabled = vm.IsEnabled;
-                        }
-                        else if (args.PropertyName == nameof(vm.Count))
+                        if (args.PropertyName == nameof(vm.Total))
                         {
                             countView.Text = vm.Count;
                             var newColorResInt = TabContentToColorConverter.GetColor(vm);

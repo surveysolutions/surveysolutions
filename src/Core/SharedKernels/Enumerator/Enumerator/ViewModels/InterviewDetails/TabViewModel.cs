@@ -26,9 +26,6 @@ public class TabViewModel : BaseViewModel
             {
                 total = value;
                 RaisePropertyChanged(() => Total);
-                RaisePropertyChanged(() => ShowMore);
-                RaisePropertyChanged(() => MoreCount);
-                RaisePropertyChanged(() => Count);
             }
         }
     }

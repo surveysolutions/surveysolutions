@@ -635,7 +635,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             where T: QuestionReference, new()
         {
             var titleText = Constants.HtmlRemovalRegex.Replace(interview.GetTitleText(identity), string.Empty);
-            var validationMessage = interview.GetFailedValidationMessages(identity, null)?.LastOrDefault();
+            var validationMessage = interview.GetFailedValidationMessages(identity, null)?.FirstOrDefault();
             var errorText = string.IsNullOrEmpty(validationMessage) 
                 ? null 
                 : Constants.HtmlRemovalRegex.Replace(validationMessage, string.Empty);
