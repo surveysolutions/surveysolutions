@@ -31,8 +31,6 @@ public class TabsPagerAdapter(Context context, AndroidX.Fragment.App.FragmentMan
         return fragment;
     }
     
-    protected virtual string FragmentJavaName(Type fragmentType)
-    {
-        return "wb.ui.enumerator.activities.interview.CompleteTabContentFragment"; 
-    }
+    protected virtual string FragmentJavaName(Type fragmentType) 
+        => Java.Lang.Class.FromType(fragmentType).Name;
 }

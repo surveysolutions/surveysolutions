@@ -56,9 +56,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.questionnaireViewRepository = questionnaireViewRepository;
             this.userInteractionService = userInteractionService;
             this.questionnaireSettings = questionnaireSettings;
-
-            TopUnansweredCriticalQuestions = new List<EntityWithErrorsViewModel>();
-            TopFailedCriticalRules = new List<EntityWithErrorsViewModel>();
         }
         public override void Configure(string interviewUid, NavigationState navigationState)
         {
@@ -136,29 +133,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             return base.CloseInterviewAfterComplete(switchInterviewToCawiMode);
         }
 
-        public override void Dispose()
-        {
-            if (TopUnansweredCriticalQuestions != null)
-            {
-                var viewModels = TopUnansweredCriticalQuestions.ToArray();
-                foreach (var viewModel in viewModels)
-                {
-                    viewModel?.DisposeIfDisposable();
-                }
-            }
-
-            if (TopFailedCriticalRules != null)
-            {
-                var errors = TopFailedCriticalRules.ToArray();
-                foreach (var errorsViewModel in errors)
-                {
-                    errorsViewModel?.DisposeIfDisposable();
-                }
-            }
-            
-            base.Dispose();
-        }
-        
         public override bool RequestWebInterview
         {
             get => base.RequestWebInterview;

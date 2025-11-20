@@ -98,21 +98,21 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             this.receivedByInterviewerTabletAt = interviewView.ReceivedByInterviewerAtUtc;
 
             var topFailedCriticalRulesFromState = this.entitiesListViewModelFactory.GetTopFailedCriticalRulesFromState(interviewId, navigationState);
-            this.TopFailedCriticalRules = topFailedCriticalRulesFromState.Entities.ToList();
-            if (TopFailedCriticalRules.Count > 0)
+            var topFailedCriticalRules = topFailedCriticalRulesFromState.Entities.ToList();
+            if (topFailedCriticalRules.Count > 0)
             {
                 var tabViewModel = Tabs.First(t => t.TabContent == CompleteTabContent.CriticalError);
-                tabViewModel.Items.AddRange(TopFailedCriticalRules);
+                tabViewModel.Items.AddRange(topFailedCriticalRules);
                 tabViewModel.Total += topFailedCriticalRulesFromState.Total;
             }
 
-            var topUnansweredCriticalQuestions = this.entitiesListViewModelFactory.GetTopUnansweredCriticalQuestions(interviewId, navigationState);
-            this.TopUnansweredCriticalQuestions = topUnansweredCriticalQuestions.Entities.ToList();
-            if (TopUnansweredCriticalQuestions.Count > 0)
+            var topUnansweredCriticalQuestionsInfo = this.entitiesListViewModelFactory.GetTopUnansweredCriticalQuestions(interviewId, navigationState);
+            var topUnansweredCriticalQuestions = topUnansweredCriticalQuestionsInfo.Entities.ToList();
+            if (topUnansweredCriticalQuestions.Count > 0)
             {
                 var tabViewModel = Tabs.First(t => t.TabContent == CompleteTabContent.CriticalError);
-                tabViewModel.Items.AddRange(TopUnansweredCriticalQuestions);
-                tabViewModel.Total += topUnansweredCriticalQuestions.Total;
+                tabViewModel.Items.AddRange(topUnansweredCriticalQuestions);
+                tabViewModel.Total += topUnansweredCriticalQuestionsInfo.Total;
             }
             
             IsLoading = false;
@@ -201,19 +201,5 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         private Task SelectInterviewer() =>
             viewModelNavigationService.NavigateToAsync<SelectResponsibleForAssignmentViewModel, SelectResponsibleForAssignmentArgs>(
                     new SelectResponsibleForAssignmentArgs(this.InterviewId));
-        
-        public override void Dispose()
-        {
-            if (TopFailedCriticalRules != null)
-            {
-                var errors = TopFailedCriticalRules.ToArray();
-                foreach (var errorsViewModel in errors)
-                {
-                    errorsViewModel?.DisposeIfDisposable();
-                }
-            }
-            
-            base.Dispose();
-        }
     }
 }
