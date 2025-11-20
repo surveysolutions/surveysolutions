@@ -43,6 +43,8 @@
                     v-dompurify-html="$t('WebInterviewUI.Complete_LastComment') + ' ' + item.comment">
                 </div>
             </div>
+
+            <div class="and-more" v-if="activeGroup.total > 30">{{ $t('WebInterviewUI.Complete_AndMore', { count: activeGroup.total - 30 }) }}</div>
         </div>
 
         <div class="wrapper-info">
@@ -318,6 +320,15 @@
 .btn-with-icon.disabled .btn-icon {
     filter: brightness(0) invert(1);
     opacity: 0.5;
+}
+
+.and-more {
+    color: #333;
+    font-family: RobotoRegular;
+    font-size: 14px;
+    opacity: 0.5;
+    padding-top: 17px;
+    padding-left: 19px;
 }
 </style>
 
