@@ -43,7 +43,7 @@
                 </div>
             </div>
 
-            <div class="and-more" v-if="activeGroup.total > 30">{{ $t('WebInterviewUI.Complete_AndMore', { count: activeGroup.total - 30 }) }}</div>
+            <div class="and-more" v-if="activeGroup.total > activeGroup.items.length">{{ $t('WebInterviewUI.Complete_AndMore', { count: activeGroup.total - activeGroup.items.length }) }}</div>
         </div>
 
         <div class="wrapper-info">
