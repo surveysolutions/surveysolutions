@@ -101,6 +101,30 @@ namespace WB.UI.Shared.Enumerator.Activities
                 indicator.BackgroundTintList = ColorStateList.ValueOf(color);
 
                 tab.SetCustomView(view);
+                
+                // Subscribe to property changes to update tab state dynamically
+                vm.PropertyChanged += (sender, args) =>
+                {
+                    // Ensure UI updates happen on the main thread
+                    tab.View?.Post(() =>
+                    {
+                        if (args.PropertyName == nameof(vm.IsEnabled))
+                        {
+                            tab.View.Enabled = vm.IsEnabled;
+                        }
+                        else if (args.PropertyName == nameof(vm.Count))
+                        {
+                            countView.Text = vm.Count;
+                            var newColorResInt = TabContentToColorConverter.GetColor(vm);
+                            var newColorInt = ContextCompat.GetColor(tab.View.Context, newColorResInt);
+                            var newColor = new Android.Graphics.Color(newColorInt);
+                            countView?.SetTextColor(newColor);
+                            titleView?.SetTextColor(newColor);
+                            indicator.BackgroundTintList = ColorStateList.ValueOf(newColor);
+                            tab.View.Enabled = vm.IsEnabled;
+                        }
+                    });
+                };
             }
         }
 
@@ -149,11 +173,13 @@ namespace WB.UI.Shared.Enumerator.Activities
         {
             for (int i = 0; i < tabLayout.TabCount; i++)
             {
-                var tab = tabLayout.GetTabAt(i);
+                TabLayout.Tab tab = tabLayout.GetTabAt(i);
                 var isSelected = tab?.IsSelected ?? false;
                 var view = tab?.CustomView;
 
                 if (view == null) continue;
+
+                if (ViewModel != null) tab.View.Enabled = ViewModel.Tabs[i].IsEnabled;
 
                 var indicator = view.FindViewById<View>(Resource.Id.tab_indicator);
                 indicator.Visibility = isSelected ? ViewStates.Visible : ViewStates.Invisible;

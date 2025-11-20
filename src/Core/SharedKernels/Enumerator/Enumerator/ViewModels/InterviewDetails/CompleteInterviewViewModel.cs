@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross;
@@ -31,7 +32,23 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public ObservableRangeCollection<EntityWithErrorsViewModel> Items { get; set; } = new();
         
         public string Count => Items.Count > 0 ? $"{Total}" : "No";
-        public int Total { get; set; }
+        
+        private int total;
+        public int Total
+        {
+            get => total;
+            set
+            {
+                if (total != value)
+                {
+                    total = value;
+                    RaisePropertyChanged(() => Total);
+                    RaisePropertyChanged(() => ShowMore);
+                    RaisePropertyChanged(() => MoreCount);
+                    RaisePropertyChanged(() => Count);
+                }
+            }
+        }
     }
     
     public enum CompleteTabContent
