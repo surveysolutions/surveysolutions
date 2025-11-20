@@ -319,7 +319,7 @@
 }
 
 .btn-with-icon.disabled .btn-icon {
-    filter: brightness(0) invert(1);
+    filter: brightness(0) invert(0.4);
     opacity: 0.5;
 }
 
