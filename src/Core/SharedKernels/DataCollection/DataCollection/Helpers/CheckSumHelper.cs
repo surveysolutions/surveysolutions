@@ -10,7 +10,7 @@ public static class CheckSumHelper
         using var crypto = MD5.Create();
         var hash = crypto.ComputeHash(content);
         var hashString = BitConverter.ToString(hash).Replace("-", "");
-        return hashString;
+        return hashString.ToLowerInvariant();
     }
     
     public static string GetSha1Cache(byte[] content)

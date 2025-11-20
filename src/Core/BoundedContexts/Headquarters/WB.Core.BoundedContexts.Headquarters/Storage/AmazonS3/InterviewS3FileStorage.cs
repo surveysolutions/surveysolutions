@@ -61,7 +61,7 @@ public abstract class InterviewS3FileStorage : IInterviewFileStorage
         {
             var filename = file.Path.Substring(prefix.Length);
             return new InterviewBinaryDataDescriptor(interviewId, filename, GetContentType(filename),
-                () => this.GetInterviewBinaryDataAsync(interviewId, filename));
+                () => this.GetInterviewBinaryDataAsync(interviewId, filename), null);
         }).ToList();
     }
 

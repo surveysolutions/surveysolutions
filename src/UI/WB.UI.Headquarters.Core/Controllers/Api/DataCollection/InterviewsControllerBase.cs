@@ -246,7 +246,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             if (fileContent == null)
                 return null;
 
-            return CheckSumHelper.GetMd5Cache(fileContent).ToLowerInvariant();
+            return CheckSumHelper.GetMd5Cache(fileContent);
         }
 
         protected IActionResult DetailsV3(Guid id)
