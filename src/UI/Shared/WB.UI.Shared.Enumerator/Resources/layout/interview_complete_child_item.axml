@@ -13,8 +13,8 @@
           android:layout_height="match_parent"
           android:layout_gravity="center_vertical"
           local:MvxBind="BackgroundStyle CompleteItemToColor(.)"
-          android:background="@drawable/complete_item_status_error" />
-           />
+          android:background="@drawable/complete_item_status_error" 
+    />
     
     <LinearLayout
             android:layout_width="match_parent"
@@ -30,7 +30,8 @@
                 style="@style/Interview_Complete_Screen_Statistics_Label"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                local:MvxBind="HtmlWithLinks MakeMarkdownLinksExecutable(EntityTitle, .); Visibility Visibility(EntityTitle);" />        
+                local:MvxBind="HtmlWithLinks MakeMarkdownLinksExecutable(EntityTitle, .); Visibility Visibility(EntityTitle);"
+        />        
         <TextView
                 style="@style/Interview_Complete_Screen_Statistics_Error"
                 android:layout_width="match_parent"
