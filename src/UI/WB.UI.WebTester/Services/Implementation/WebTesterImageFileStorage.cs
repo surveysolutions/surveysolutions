@@ -40,7 +40,7 @@ namespace WB.UI.WebTester.Services.Implementation
         {
             var interviewBinaryDataDescriptors = this.mediaStorage.GetArea(interviewId).Select(x =>
                     new InterviewBinaryDataDescriptor(interviewId, x.Filename, x.MimeType,
-                        () => Task.FromResult(x.Data)))
+                        () => Task.FromResult(x.Data), null))
                 .ToList();
             return Task.FromResult(interviewBinaryDataDescriptors);
         }

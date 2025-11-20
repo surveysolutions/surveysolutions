@@ -26,6 +26,7 @@ public class BrokenAudioAuditMetadataView : IFileMetadataView, IPlainStorageEnti
     public string FileId { get; set; }
     public string FileName { get; set; }
     public string ContentType { get; set; }
+    public string Md5 { get; set; }
 }
 
 public class BrokenAudioAuditFileView : IFileView, IPlainStorageEntity
