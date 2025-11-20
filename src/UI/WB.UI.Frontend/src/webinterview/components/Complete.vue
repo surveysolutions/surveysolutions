@@ -191,6 +191,8 @@
 
 .tab-item.disabled {
     color: #949494;
+    cursor: initial;
+    pointer-events: none;
 }
 
 .tab-item .tab-title {
