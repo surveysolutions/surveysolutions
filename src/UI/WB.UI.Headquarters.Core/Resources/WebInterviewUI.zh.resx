@@ -460,4 +460,9 @@
     <value>提交后，此访谈将被锁定且无法编辑。 &lt;br /&gt;
 请确保所有信息正确。</value>
   </data>
-</root>
+    <data name="TurnOffDevMode" xml:space="preserve">
+    <value>关闭开发者模式</value>
+  </data>
+  <data name="TurnOnDevMode" xml:space="preserve">
+    <value>开启开发者模式</value>
+  </data></root>

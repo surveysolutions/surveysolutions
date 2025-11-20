@@ -413,4 +413,9 @@
     <value>გაგზავნის შემდეგ ინტერვიუ დაიბლოკება და ვეღარ შეიცვლება. &lt;br /&gt;
 დარწმუნდით რომ ინფორმაცია სწორია.</value>
   </data>
-</root>
+    <data name="TurnOffDevMode" xml:space="preserve">
+    <value>გამორთეთ დეველოპერის რეჟიმი</value>
+  </data>
+  <data name="TurnOnDevMode" xml:space="preserve">
+    <value>ჩართეთ დეველოპერის რეჟიმი</value>
+  </data></root>

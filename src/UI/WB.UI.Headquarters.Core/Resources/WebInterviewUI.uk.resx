@@ -538,4 +538,10 @@
     <value>Після надсилання інтерв'ю буде заблоковано і його не можна буде змінити. &lt;br /&gt;
 Переконайтеся, що вся інформація правильна.</value>
   </data>
+    <data name="TurnOffDevMode" xml:space="preserve">
+    <value>Вимкнути режим розробника</value>
+  </data>
+  <data name="TurnOnDevMode" xml:space="preserve">
+    <value>Увімкнути режим розробника</value>
+  </data>
 </root>

@@ -986,4 +986,12 @@ críticos</value>
     <value>Perguntas
 sem resposta</value>
 </data>
-</root>
+  <data name="BarcodeScanner_Error_UnknownError" xml:space="preserve">
+    <value>Erro desconhecido</value>
+  </data>
+  <data name="BarcodeScanner_Error_StartingCamera" xml:space="preserve">
+    <value>Erro ao iniciar a câmera: </value>
+  </data>
+  <data name="BarcodeScanner_Error_Interrupted" xml:space="preserve">
+    <value>Interrompido</value>
+  </data></root>

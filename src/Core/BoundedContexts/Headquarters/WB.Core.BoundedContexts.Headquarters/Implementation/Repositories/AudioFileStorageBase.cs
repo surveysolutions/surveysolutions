@@ -6,7 +6,7 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 
-namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
+namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories;
 
 public abstract class AudioFileStorageBase<T> : IAudioFileStorage 
     where T : AudioFile, new()

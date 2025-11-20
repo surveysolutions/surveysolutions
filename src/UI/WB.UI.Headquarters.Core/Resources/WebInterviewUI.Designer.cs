@@ -807,15 +807,15 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
-        public static string HideVariables {
+        public static string TurnOffDevMode {
             get {
-                return ResourceManager.GetString("HideVariables", resourceCulture);
+                return ResourceManager.GetString("TurnOffDevMode", resourceCulture);
             }
         }
         
-        public static string ShowVariables {
+        public static string TurnOnDevMode {
             get {
-                return ResourceManager.GetString("ShowVariables", resourceCulture);
+                return ResourceManager.GetString("TurnOnDevMode", resourceCulture);
             }
         }
         

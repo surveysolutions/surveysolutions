@@ -219,6 +219,15 @@
   <data name="Interview_Questions_QrBarcode_SaveAnswer" xml:space="preserve">
     <value>Отсканировать штрих-код</value>
   </data>
+  <data name="BarcodeScanner_Error_UnknownError" xml:space="preserve">
+    <value>Неизвестная ошибка</value>
+  </data>
+  <data name="BarcodeScanner_Error_StartingCamera" xml:space="preserve">
+    <value>Ошибка запуска камеры: </value>
+  </data>
+  <data name="BarcodeScanner_Error_Interrupted" xml:space="preserve">
+    <value>Прервано</value>
+  </data>
   <data name="Interview_Question_Integer_ParsingError" xml:space="preserve">
     <value>Введенное значение не может быть интерпретировано как целое число</value>
   </data>

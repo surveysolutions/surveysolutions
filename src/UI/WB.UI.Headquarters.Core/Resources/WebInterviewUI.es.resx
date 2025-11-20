@@ -474,12 +474,6 @@
   <data name="EmailLink_EmailResumeLink" xml:space="preserve">
     <value>Enlace de reanudación</value>
   </data>
-  <data name="HideVariables" xml:space="preserve">
-    <value>Ocultar variables</value>
-  </data>
-  <data name="ShowVariables" xml:space="preserve">
-    <value>Mostrar variables</value>
-  </data>
   <data name="Interview_Questions_RemoveRowFromRosterMessage" xml:space="preserve">
     <value>¿Está seguro de que desea eliminar la lista relacionada '{{rosterTitle}}'?</value>
   </data>
@@ -588,4 +582,9 @@ No se detectaron errores</value>
     <value>Una vez enviada, esta entrevista quedará bloqueada y no podrá editarse. &lt;br /&gt;
 Asegúrese de que toda la información sea correcta.</value>
   </data>
-</root>
+    <data name="TurnOffDevMode" xml:space="preserve">
+    <value>Desactivar modo de desarrollador</value>
+  </data>
+  <data name="TurnOnDevMode" xml:space="preserve">
+    <value>Activar modo de desarrollador</value>
+  </data></root>

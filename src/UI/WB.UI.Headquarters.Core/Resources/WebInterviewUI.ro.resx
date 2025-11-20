@@ -526,4 +526,9 @@ Nicio eroare detectată</value>
     <value>După trimitere, acest interviu va fi blocat și nu va putea fi editat. &lt;br /&gt;
 Vă rugăm să vă asigurați că toate informațiile sunt corecte.</value>
   </data>
-</root>
+    <data name="TurnOffDevMode" xml:space="preserve">
+    <value>Dezactivați modul dezvoltator</value>
+  </data>
+  <data name="TurnOnDevMode" xml:space="preserve">
+    <value>Activați modul dezvoltator</value>
+  </data></root>

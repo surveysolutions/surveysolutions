@@ -8,7 +8,7 @@
 <script lang="js">
 
 import http from '~/webinterview/api/http'
-import localStorage from '~/shared/localStorage'
+import browserLocalStore from '~/shared/localStorage'
 import { defineAsyncComponent } from 'vue';
 
 export default {
@@ -52,7 +52,7 @@ export default {
         connected() {
             this.$store.dispatch('loadInterview')
             this.$store.dispatch('getLanguageInfo')
-            const lastVisitedSection = new localStorage().getItem(`${this.interviewId}_lastSection`)
+            const lastVisitedSection = browserLocalStore.getItem(`${this.interviewId}_lastSection`)
 
             if (lastVisitedSection && lastVisitedSection != this.$route.params.sectionId) {
                 // there might be navigations from inside of interview. Do not reopen previous section in such case
@@ -76,3 +76,4 @@ export default {
     },
 }
 </script>
+

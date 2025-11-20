@@ -506,4 +506,9 @@ Nuk u gjetën gabime</value>
     <value>Pas dërgimit, kjo intervistë do të bllokohet dhe s'mund të editohet. &lt;br /&gt;
 Sigurohuni që gjithë informacioni është korrekt.</value>
   </data>
-</root>
+    <data name="TurnOffDevMode" xml:space="preserve">
+    <value>Çaktivizo modalitetin e zhvilluesit</value>
+  </data>
+  <data name="TurnOnDevMode" xml:space="preserve">
+    <value>Aktivizo modalitetin e zhvilluesit</value>
+  </data></root>

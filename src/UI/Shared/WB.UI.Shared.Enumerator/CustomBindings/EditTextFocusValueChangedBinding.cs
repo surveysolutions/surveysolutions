@@ -35,6 +35,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
         private ICommand command;
         private string oldEditTextValue;
+        private bool isProcessingCommand;
 
         private IDisposable focusChangeSubscription;
         private IDisposable editorActionSubscription;
@@ -70,7 +71,11 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
                 }
                 else
                 {
-                    this.TrySendAnswerTextQuestionCommand();
+                    if (!this.isProcessingCommand)
+                    {
+                        this.TrySendAnswerTextQuestionCommand();
+                    }
+                    this.isProcessingCommand = false;
                     this.HideKeyboard(this.Target);
                 }
             }
@@ -85,6 +90,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
             e.Handled = true;
 
+            this.isProcessingCommand = true;
             this.TrySendAnswerTextQuestionCommand();
             this.HideKeyboard(this.Target);
         }
@@ -112,11 +118,21 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
             var newValue = this.Target.Text;
             var fixCommand = this.command;
+            var previousValue = this.oldEditTextValue;
+            
+            this.oldEditTextValue = newValue;
 
             this.Target.Post(new InnerRunnable( 
                 () => {
-                    fixCommand.Execute(newValue);
-                    this.oldEditTextValue = newValue;
+                    try
+                    {
+                        fixCommand.Execute(newValue);
+                    }
+                    catch
+                    {
+                        this.oldEditTextValue = previousValue;
+                        throw;
+                    }
                 }));
         }
 

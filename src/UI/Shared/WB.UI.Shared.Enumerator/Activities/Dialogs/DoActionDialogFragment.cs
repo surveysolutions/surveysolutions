@@ -2,10 +2,12 @@
 using Android.Graphics.Drawables;
 using Android.Views;
 using MvvmCross.Platforms.Android.Binding.BindingContext;
+using MvvmCross.Platforms.Android.Presenters.Attributes;
 using MvvmCross.Platforms.Android.Views.Fragments;
 
 namespace WB.UI.Shared.Enumerator.Activities.Dialogs;
 
+[MvxDialogFragmentPresentation]
 public class DoActionDialogFragment : MvxDialogFragment
 {
     protected int ViewResourceId => Resource.Layout.do_action_dialog;
@@ -24,3 +26,4 @@ public class DoActionDialogFragment : MvxDialogFragment
         return this.BindingInflate(ViewResourceId, container, false);
     }
 }
+

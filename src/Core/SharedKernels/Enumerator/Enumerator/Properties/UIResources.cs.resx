@@ -426,6 +426,15 @@ Musíte vytvořit nebo upravit Vaše dotazníky v aplikaci Designer</value>
   <data name="Interview_Questions_QrBarcode_SaveAnswer" xml:space="preserve">
     <value>Klepnutím pořídíte čárový kód</value>
   </data>
+  <data name="BarcodeScanner_Error_UnknownError" xml:space="preserve">
+    <value>Neznámá chyba</value>
+  </data>
+  <data name="BarcodeScanner_Error_StartingCamera" xml:space="preserve">
+    <value>Chyba při spuštění kamery: </value>
+  </data>
+  <data name="BarcodeScanner_Error_Interrupted" xml:space="preserve">
+    <value>Přerušeno</value>
+  </data>
   <data name="Interview_Questions_RemoveRowFromRosterListMessage" xml:space="preserve">
     <value>Opravdu chcete smazat tyto seznamy (rostery)?</value>
   </data>
