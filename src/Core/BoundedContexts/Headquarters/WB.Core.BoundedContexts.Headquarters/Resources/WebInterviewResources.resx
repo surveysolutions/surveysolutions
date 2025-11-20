@@ -131,7 +131,7 @@
     <value>You have been invited to take a part in the following survey: "%QUESTIONNAIRE%"</value>
   </data>
   <data name="NoteForSupervisor" xml:space="preserve">
-      <value>Note to a supervisor</value>
+      <value>Comment</value>
   </data>
   <data name="Resume_InvitationText" xml:space="preserve">
     <value>You can navigate to interview in the following survey: "%QUESTIONNAIRE%"</value>
