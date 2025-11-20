@@ -26,7 +26,7 @@
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            local:MvxBind="Visible Not(IsAllOk);">
+            local:MvxBind="Visible And(Not(IsLoading), Not(IsAllOk));">
 
         <View style="@style/Interview_Complete_Divider"
               android:layout_gravity="bottom"
@@ -51,7 +51,7 @@
             android:id="@+id/viewPager"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            local:MvxBind="Visible Not(IsAllOk);" />
+            local:MvxBind="Visible And(Not(IsLoading), Not(IsAllOk));" />
     
     <View style="@style/Interview_Complete_Divider" />
 
