@@ -28,7 +28,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public string MoreCount => string.Format(UIResources.Interview_Complete_MoreCountString, Total - Items.Count);
         public string Title { get; set; }
         public CompleteTabContent TabContent { get; set; }
-        public List<EntityWithErrorsViewModel> Items { get; set; } = new();
+        public ObservableRangeCollection<EntityWithErrorsViewModel> Items { get; set; } = new();
         
         public string Count => Items.Count > 0 ? $"{Total}" : "No";
         public int Total { get; set; }
@@ -128,26 +128,26 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             var entitiesWithErrors = topEntitiesWithErrors.Entities.ToList();
             this.EntitiesWithErrorsDescription = UIResources.Interview_Complete_Entities_With_Errors + " " + MoreThan(this.ErrorsCount);
 
-            this.Tabs = new CompositeCollection<TabViewModel>();
+            this.Tabs = new List<TabViewModel>();
 
             Tabs.Add(new TabViewModel()
             {
                 Title  = UIResources.Interview_Complete_Tab_Title_Critical,
-                Items = new List<EntityWithErrorsViewModel>(),// entitiesWithErrors,
+                Items = new(),
                 TabContent = CompleteTabContent.CriticalError,
                 Total = 0,
             });
             Tabs.Add(new TabViewModel()
             {
                 Title  = UIResources.Interview_Complete_Tab_Title_WithErrors,
-                Items = entitiesWithErrors,
+                Items = new(entitiesWithErrors),
                 TabContent = CompleteTabContent.Error,
                 Total = topEntitiesWithErrors.Total,
             });
             Tabs.Add(new TabViewModel()
             {
                 Title  = UIResources.Interview_Complete_Tab_Title_Unanswered,
-                Items = unansweredQuestions,
+                Items = new(unansweredQuestions),
                 TabContent = CompleteTabContent.Unanswered,
                 Total = topUnansweredQuestions.Total,
             });
@@ -157,7 +157,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.CompleteButtonComment = UIResources.Interview_Complete_Consequences_Instrunction;
         }
         
-        public CompositeCollection<TabViewModel> Tabs { get; set; }
+        public List<TabViewModel> Tabs { get; set; }
         
         public int AnsweredCount { get; set; }
 
@@ -253,9 +253,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             set => SetProperty(ref hasCriticalIssues, value);
         }
         
-        public int UnansweredCriticalQuestionsCount => TopUnansweredCriticalQuestions.Count;
-        public int FailedCriticalRulesCount => TopFailedCriticalRules.Count;
-
         protected virtual bool CalculateIsCompletionAllowed()
         {
             return true;
@@ -281,7 +278,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 tabViewModel.Total += topUnansweredCriticalQuestions.Total;
             }
             
-            HasCriticalIssues = UnansweredCriticalQuestionsCount > 0 || FailedCriticalRulesCount > 0;
+            HasCriticalIssues = TopUnansweredCriticalQuestions.Count > 0 || TopFailedCriticalRules.Count > 0;
 
             if (HasCriticalIssues)
             {
@@ -359,7 +356,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             isDisposed = true;
             
             Name?.Dispose();
-            Tabs?.Dispose();
             InterviewState?.DisposeIfDisposable();
             
             base.Dispose();

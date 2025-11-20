@@ -15,6 +15,7 @@ using MvvmCross.Binding.BindingContext;
 using MvvmCross.DroidX.RecyclerView;
 using MvvmCross.Platforms.Android.Binding.BindingContext;
 using MvvmCross.Platforms.Android.Views.Fragments;
+using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.UI.Shared.Enumerator.Converters;
@@ -106,7 +107,7 @@ namespace WB.UI.Shared.Enumerator.Activities
         private void SetupTabs()
         {
             var viewModel = ViewModel;
-            var tabsViewModels = viewModel.Tabs.ToList();
+            var tabsViewModels = viewModel.Tabs;
             var adapter = new TabsPagerAdapter(this.Context, this.ChildFragmentManager, this.Lifecycle, tabsViewModels);
             viewPager.Adapter = adapter;
 
