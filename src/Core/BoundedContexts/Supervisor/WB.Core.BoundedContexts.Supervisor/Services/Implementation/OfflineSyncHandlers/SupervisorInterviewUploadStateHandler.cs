@@ -43,14 +43,33 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
                      x.LastEventId == request.Check.LastEventId &&
                      x.LastEventTimestamp == request.Check.LastEventTimeStamp).Count;
             
+            var audioAuditFiles = await this.audioAuditFileStorage.GetBinaryFilesForInterview(request.InterviewId);
+            var audioAuditNames = audioAuditFiles
+                .Where(x => x.Md5 != null)
+                .Select(bf => new FileInfoUploadState(bf.FileName, bf.Md5))
+                .ToList();
+            
+            var audioFiles = await this.audioFileStorage.GetBinaryFilesForInterview(request.InterviewId);
+            var audioNames = audioFiles
+                .Where(x => x.Md5 != null)
+                .Select(bf => new FileInfoUploadState(bf.FileName, bf.Md5))
+                .ToList();
+            
+            var images = await this.imageFileStorage.GetBinaryFilesForInterview(request.InterviewId);
+            var imagesNames = images
+                .Where(x => x.Md5 != null)
+                .Select(bf => new FileInfoUploadState(bf.FileName, bf.Md5))
+                .ToList();
+
             return new GetInterviewUploadStateResponse
             {
                 InterviewId = request.InterviewId,
                 UploadState = new InterviewUploadState
                 {
                     IsEventsUploaded = existingReceivedPackageLog > 0,
-                    AudioFilesNames = new(),
-                    ImagesFilesNames = new(),
+                    AudioFiles = audioNames,
+                    AudioAuditFiles = audioAuditNames,
+                    ImagesFiles = imagesNames,
                 }
             };
         }
