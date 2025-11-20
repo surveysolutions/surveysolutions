@@ -454,8 +454,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         protected override async Task OnStartDiscovery()
         {
+            var serviceNameOrNull = this.GetServiceNameOrNull();
+            if (serviceNameOrNull == null)
+            {
+                this.OnConnectionError("Cannot get service name", ConnectionStatusCode.StatusEndpointUnknown);
+                return;
+            }
+            
             var discoveryStatus = await this.nearbyConnection.StartDiscoveryAsync(
-                this.GetServiceName(), cancellationTokenSource.Token);
+                serviceNameOrNull, cancellationTokenSource.Token);
 
             if (!discoveryStatus.IsSuccess)
                 this.OnConnectionError(discoveryStatus.StatusMessage, discoveryStatus.Status);
