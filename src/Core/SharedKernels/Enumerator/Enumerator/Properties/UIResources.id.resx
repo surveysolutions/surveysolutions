@@ -293,6 +293,15 @@ Anda dapat membuat atau menyunting kuesioner Anda pada Desainer Survey Solutions
   <data name="Interview_Questions_QrBarcode_SaveAnswer" xml:space="preserve">
     <value>Tekan untuk mengambil kode batang</value>
   </data>
+  <data name="BarcodeScanner_Error_UnknownError" xml:space="preserve">
+    <value>Kesalahan tidak diketahui</value>
+  </data>
+  <data name="BarcodeScanner_Error_StartingCamera" xml:space="preserve">
+    <value>Kesalahan memulai kamera: </value>
+  </data>
+  <data name="BarcodeScanner_Error_Interrupted" xml:space="preserve">
+    <value>Terganggu</value>
+  </data>
   <data name="Interviewer_ApplicationName" xml:space="preserve">
     <value>Pewawancara Survey Solutions</value>
   </data>

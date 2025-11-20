@@ -291,6 +291,15 @@
     <data name="Interview_Questions_QrBarcode_SaveAnswer" xml:space="preserve">
     <value>Pulse para leer código de barras</value>
   </data>
+  <data name="BarcodeScanner_Error_UnknownError" xml:space="preserve">
+    <value>Error desconocido</value>
+  </data>
+  <data name="BarcodeScanner_Error_StartingCamera" xml:space="preserve">
+    <value>Error al iniciar la cámara: </value>
+  </data>
+  <data name="BarcodeScanner_Error_Interrupted" xml:space="preserve">
+    <value>Interrumpido</value>
+  </data>
     <data name="Interviewer_ApplicationName" xml:space="preserve">
     <value>Entrevistador de Survey Solutions</value>
   </data>
