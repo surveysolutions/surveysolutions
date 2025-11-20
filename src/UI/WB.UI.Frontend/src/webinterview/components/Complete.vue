@@ -16,8 +16,7 @@
 
         <div class="wrapper-info" v-if="!hasAnyIssue">
             <div class="container-info info-block">
-                <div class="gray-uppercase">
-                    {{ $t('WebInterviewUI.Complete_AllGood') }}
+                <div class="gray-uppercase" v-dompurify-html="$t('WebInterviewUI.Complete_AllGood')">
                 </div>
             </div>
         </div>
