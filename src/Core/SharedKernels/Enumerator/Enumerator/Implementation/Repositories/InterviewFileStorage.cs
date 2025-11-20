@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.DataCollection.Helpers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
@@ -102,10 +103,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
             if (fileContent == null)
                 return null;
 
-            using var crypto = MD5.Create();
-            var hash = crypto.ComputeHash(fileContent);
-            var hashString = BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
-            return hashString;
+            return CheckSumHelper.GetMd5Cache(fileContent);
         }
         
         public Task RemoveInterviewBinaryData(Guid interviewId, string fileName)
