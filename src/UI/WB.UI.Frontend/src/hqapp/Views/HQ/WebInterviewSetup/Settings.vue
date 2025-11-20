@@ -622,7 +622,6 @@
 <script>
 import { marked } from 'marked'
 import { map, isNil } from 'lodash'
-import { escape } from 'lodash'
 import emitter from '~/shared/emitter';
 
 import { Form, Field, ErrorMessage } from 'vee-validate'
