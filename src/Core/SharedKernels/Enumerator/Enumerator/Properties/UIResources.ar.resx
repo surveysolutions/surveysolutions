@@ -980,9 +980,6 @@
     <value>مراجعة وإرسال
 المقابلة {0}</value>
 </data>
-  <data name="Interview_Submit_interview_Button" xml:space="preserve">
-    <value>اكتمال</value>
-</data>
   <data name="Interview_Complete_Tab_Title_Critical" xml:space="preserve">
     <value>أخطاء
 حرجة</value>

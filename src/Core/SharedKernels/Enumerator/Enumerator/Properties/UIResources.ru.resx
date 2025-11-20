@@ -983,9 +983,6 @@
     <value>Проверка и отправка
 Интервью {0}</value>
   </data>
-  <data name="Interview_Submit_interview_Button" xml:space="preserve">
-    <value>Завершить</value>
-  </data>
   <data name="Interview_Complete_Tab_Title_Critical" xml:space="preserve">
     <value>Критические
 ошибки</value>

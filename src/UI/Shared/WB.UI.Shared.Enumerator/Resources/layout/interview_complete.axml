@@ -70,7 +70,7 @@
                 local:iconGravity="textStart"
                 local:iconTint="?attr/colorOnPrimary"
                 local:MvxBind="HideKeyboardOnClick .;
-                                Text Localization('Interview_Submit_interview_Button'); 
+                                Text Localization('Interview_Complete_Button'); 
                                 Click CompleteInterviewCommand;
                                 ButtonGroupStyle CompleteStatus;" />
         

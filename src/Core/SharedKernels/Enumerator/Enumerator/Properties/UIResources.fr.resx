@@ -980,9 +980,6 @@ Aucune erreur détectée</value>
     <value>Vérifier et soumettre
 Entretien {0}</value>
 </data>
-  <data name="Interview_Submit_interview_Button" xml:space="preserve">
-    <value>Terminer</value>
-</data>
   <data name="Interview_Complete_Tab_Title_Critical" xml:space="preserve">
     <value>Erreurs
 critiques</value>

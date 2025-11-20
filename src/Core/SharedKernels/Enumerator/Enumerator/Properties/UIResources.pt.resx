@@ -972,9 +972,6 @@ Nenhum erro detectado</value>
     <value>Revisar e enviar
 Entrevista {0}</value>
 </data>
-  <data name="Interview_Submit_interview_Button" xml:space="preserve">
-    <value>Concluir</value>
-</data>
   <data name="Interview_Complete_Tab_Title_Critical" xml:space="preserve">
     <value>Erros
 críticos</value>
@@ -994,4 +991,5 @@ sem resposta</value>
   </data>
   <data name="BarcodeScanner_Error_Interrupted" xml:space="preserve">
     <value>Interrompido</value>
-  </data></root>
+  </data>
+</root>
