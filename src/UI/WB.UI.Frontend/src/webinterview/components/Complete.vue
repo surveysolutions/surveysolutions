@@ -43,7 +43,7 @@
                 </div>
             </div>
 
-            <div class="and-more" v-if="activeGroup.total > activeGroup.items.length">{{ $t('WebInterviewUI.Complete_AndMore', { count: activeGroup.total - activeGroup.items.length }) }}</div>
+            <div class="and-more" v-if="moreCount > 0">{{ $t('WebInterviewUI.Complete_AndMore', { count: moreCount }) }}</div>
         </div>
 
         <div class="wrapper-info">
@@ -529,6 +529,12 @@ export default {
         },
         hasAnyIssue() {
             return this.hasErrors || this.hasUnansweredQuestions || this.hasCriticalIssues
+        },
+        moreCount() {
+            const activeGroup = this.activeGroup;
+            if (!activeGroup) return 0;
+            const displayedItemsCount = activeGroup.items ? activeGroup.items.length : 0;
+            return activeGroup.total - displayedItemsCount;
         },
     },
     methods: {

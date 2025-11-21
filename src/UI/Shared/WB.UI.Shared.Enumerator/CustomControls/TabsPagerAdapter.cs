@@ -17,7 +17,8 @@ public class TabsPagerAdapter(Context context, AndroidX.Fragment.App.FragmentMan
 
     public override AndroidX.Fragment.App.Fragment CreateFragment(int position)
     {
-        if (position < 0 || position > tabs.Count - 1) return null;
+        if (position < 0 || position > tabs.Count - 1) 
+            throw new ArgumentOutOfRangeException(nameof(position));
             
         var bundle = new Bundle();
         bundle.PutInt("number", position);

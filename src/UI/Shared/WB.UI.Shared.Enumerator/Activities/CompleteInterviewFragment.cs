@@ -105,7 +105,7 @@ namespace WB.UI.Shared.Enumerator.Activities
                     // Ensure UI updates happen on the main thread
                     tab.View?.Post(() =>
                     {
-                        if (args.PropertyName == nameof(vm.Total))
+                        if (string.IsNullOrEmpty(args.PropertyName) || args.PropertyName == nameof(vm.Total))
                             SetTabStyles();
                     });
                 };
