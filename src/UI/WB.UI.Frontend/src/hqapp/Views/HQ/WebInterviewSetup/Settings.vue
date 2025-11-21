@@ -622,7 +622,6 @@
 <script>
 import { marked } from 'marked'
 import { map, isNil } from 'lodash'
-import { escape } from 'lodash'
 import emitter from '~/shared/emitter';
 
 import { Form, Field, ErrorMessage } from 'vee-validate'
@@ -753,7 +752,6 @@ export default {
                         ? defaultText
                         : customText
 
-                message = escape(message)
                 return {
                     value: key,
                     text: message,
@@ -967,7 +965,6 @@ export default {
         },
         previewMessage(emailTemplate) {
             var text = this.previewText(emailTemplate.message)
-            text = escape(text)
 
             if (!this.isMessageSupportedInterviewData(emailTemplate)) return text
 

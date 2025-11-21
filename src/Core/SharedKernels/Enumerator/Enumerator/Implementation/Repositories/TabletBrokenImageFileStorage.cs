@@ -28,6 +28,7 @@ public class BrokenImageMetadataView : IFileMetadataView, IPlainStorageEntity
     public string FileId { get; set; }
     public string FileName { get; set; }
     public string ContentType { get; set; }
+    public string Md5 { get; set; }
 }
 
 public class BrokenImageFileView : IFileView, IPlainStorageEntity

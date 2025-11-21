@@ -362,9 +362,9 @@ namespace WB.Tests.Abc.TestFactories
             return string.Concat(Enumerable.Repeat(result, (int) Math.Ceiling(length / (double) result.Length))).Substring(0, 32);
         }
 
-        public InterviewBinaryDataDescriptor InterviewBinaryDataDescriptor(Guid? interviewId = null, string fileName = null)
+        public InterviewBinaryDataDescriptor InterviewBinaryDataDescriptor(Guid? interviewId = null, string fileName = null, string md5 = null)
             => new InterviewBinaryDataDescriptor(interviewId ?? Guid.NewGuid(), fileName ?? "test.jpeg", null, 
-                () => Task.FromResult(Array.Empty<byte>()));
+                () => Task.FromResult(Array.Empty<byte>()), md5);
 
         public InterviewCommentedStatus InterviewCommentedStatus(
             InterviewExportedAction status = InterviewExportedAction.ApprovedBySupervisor,
@@ -2549,19 +2549,17 @@ namespace WB.Tests.Abc.TestFactories
         public InterviewUploadState InterviewUploadState(
             Guid responsibleId,
             bool isEventsUploaded = false,
-            HashSet<string> imagesQuestionsMd5 = null,
-            HashSet<string> audioQuestionsFilesMd5 = null,
-            HashSet<string> audioAuditFilesMd5 = null
+            List<FileInfoUploadState> imagesQuestions = null,
+            List<FileInfoUploadState> audioQuestionsFiles = null,
+            List<FileInfoUploadState> audioAuditFiles = null
             )
         {
             return new InterviewUploadState()
             {
                 IsEventsUploaded = isEventsUploaded,
-                ImagesFilesNames = new HashSet<string>(),
-                AudioFilesNames = new HashSet<string>(),
-                ImageQuestionsFilesMd5 = imagesQuestionsMd5 ?? new HashSet<string>(),
-                AudioQuestionsFilesMd5 = audioQuestionsFilesMd5 ?? new HashSet<string>(),
-                AudioAuditFilesMd5 = audioAuditFilesMd5 ?? new HashSet<string>(),
+                ImagesFiles = imagesQuestions ?? new List<FileInfoUploadState>(),
+                AudioFiles = audioQuestionsFiles ?? new List<FileInfoUploadState>(),
+                AudioAuditFiles = audioAuditFiles ?? new List<FileInfoUploadState>(),
                 ResponsibleId = responsibleId,
             };
         }
