@@ -178,9 +178,13 @@ namespace WB.UI.Designer.Controllers
                 });
             }
 
-            return (User.IsAdmin() || this.UserHasAccessToEditOrViewQuestionnaire(id))
-                ? RedirectPermanent($"/q/details/{id}")
-                : this.LackOfPermits();
+            if (User.IsAdmin() || this.UserHasAccessToEditOrViewQuestionnaire(id))
+            {
+                var newId = id.QuestionnaireId.FormatGuid() + (id.Version.HasValue ? $"${id.Version.Value}" : "");
+                return RedirectPermanent($"/q/details/{newId}");
+            }
+            
+            return LackOfPermits();
         }
 
         [Authorize]

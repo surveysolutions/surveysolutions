@@ -22,6 +22,13 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
             Directory.Move(pathToDir, newPathToDir);
         }
 
+        public char[] GetInvalidFileNameChars() => Path.GetInvalidFileNameChars();
+
+        public bool IsInvalidFileName(string filename)
+        {
+            return filename.IndexOfAny(GetInvalidFileNameChars()) >= 0 ||
+                   filename != GetFileName(filename);
+        }
 
         public long GetFileSize(string filePath) => this.IsFileExists(filePath) ? new FileInfo(filePath).Length : -1;
 

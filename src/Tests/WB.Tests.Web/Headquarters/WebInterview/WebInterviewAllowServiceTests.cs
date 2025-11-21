@@ -1,5 +1,6 @@
 using System;
 using Main.Core.Entities.SubEntities;
+using Microsoft.AspNetCore.Http;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -30,7 +31,7 @@ namespace WB.Tests.Web.Headquarters.WebInterview
         private Mock<IStatefulInterviewRepository> statefulInterviewRepo;
         private StatefulInterview interview;
         private Mock<IUserViewFactory> usersRepositoryMock;
-        
+        private IHttpContextAccessor contextAccessor;
 
         [SetUp]
         public void Setup()
@@ -41,13 +42,18 @@ namespace WB.Tests.Web.Headquarters.WebInterview
             authorizedUserMock = new Mock<IAuthorizedUser>();
             prototypeService = new Mock<IAggregateRootPrototypeService>();
             usersRepositoryMock = new Mock<IUserViewFactory>();
+            
+            contextAccessor = Mock.Of<IHttpContextAccessor>(rrr => rrr.HttpContext == new DefaultHttpContext(){
+                Session = Mock.Of<ISession>()
+            });
 
             var interviewAllowService = new WebInterviewAllowService(
                 statefulInterviewRepo.Object,
                 webInterviewConfigProvider,
                 authorizedUserMock.Object, 
                 prototypeService.Object,
-                usersRepositoryMock.Object);
+                usersRepositoryMock.Object,
+                contextAccessor);
             webInterviewAllowService = interviewAllowService;
         }
 

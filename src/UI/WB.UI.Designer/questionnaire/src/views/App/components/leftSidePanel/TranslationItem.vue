@@ -21,12 +21,12 @@
                         </button>
                         <button type="button" class="btn lighter-hover" @click.self="cancel()">{{
                             $t('QuestionnaireEditor.Cancel')
-                            }}</button>
+                        }}</button>
                     </div>
 
                     <span class="default-label" v-if="translation.isDefault">{{
                         $t('QuestionnaireEditor.Default')
-                        }}</span>
+                    }}</span>
 
                     <button type="button" class="btn btn-default" v-if="!isReadOnlyForUser"
                         v-show="translation.isDefault && !translation.isOriginalTranslation"
@@ -143,15 +143,32 @@ export default {
 
             var maxNameLength = 32;
 
-            var suspectedTranslations = translation.meta.fileName.match(/[^[\]]+(?=])/g);
-
-            if (suspectedTranslations && suspectedTranslations.length > 0)
-                translation.name = suspectedTranslations[0];
+            var match = this.matchFirstBalancedBraces(translation.meta.fileName);
+            if (match && match.length > 1) {
+                translation.name = match;
+            }
             else
                 translation.name = translation.meta.fileName.replace(/\.[^/.]+$/, "");
 
             var fileNameLength = translation.name.length;
             translation.name = translation.name.substring(0, fileNameLength < maxNameLength ? fileNameLength : maxNameLength);
+        },
+
+        matchFirstBalancedBraces(str) {
+            let stack = [];
+            let start = -1;
+            for (let i = 0; i < str.length; i++) {
+                if (str[i] === '{') {
+                    if (stack.length === 0) start = i;
+                    stack.push('{');
+                } else if (str[i] === '}') {
+                    stack.pop();
+                    if (stack.length === 0) {
+                        return str.slice(start + 1, i); // return the content inside the first balanced braces
+                    }
+                }
+            }
+            return null;
         },
 
         async saveTranslation() {

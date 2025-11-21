@@ -13,6 +13,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.Synchronization.MetaInfo;
 using WB.UI.Headquarters.Controllers.Api.DataCollection.Interviewer.v2;
+using WB.UI.Shared.Web.Services;
 
 namespace WB.Tests.Web.Headquarters.Controllers.InterviewerInterviewsControllerTests.v2
 {
@@ -41,7 +42,11 @@ namespace WB.Tests.Web.Headquarters.Controllers.InterviewerInterviewsControllerT
                 eventStore: Mock.Of<IHeadquartersEventStore>(),
                 audioAuditFileStorage: audioAuditFileStorage ?? Mock.Of<IAudioAuditFileStorage>(),
                 userToDeviceService: Mock.Of<IUserToDeviceService>(),
-                webHostEnvironment: Mock.Of<IWebHostEnvironment>());
+                webHostEnvironment: Mock.Of<IWebHostEnvironment>(),
+                imageProcessingService: Mock.Of<IImageProcessingService>(),
+                brokenImageFileStorage: Mock.Of<IBrokenImageFileStorage>(),
+                brokenAudioFileStorage: Mock.Of<IBrokenAudioFileStorage>(),
+                brokenAudioAuditFileStorage: Mock.Of<IBrokenAudioAuditFileStorage>());
 
             var httpContext = new DefaultHttpContext(); // or mock a `HttpContext`
 

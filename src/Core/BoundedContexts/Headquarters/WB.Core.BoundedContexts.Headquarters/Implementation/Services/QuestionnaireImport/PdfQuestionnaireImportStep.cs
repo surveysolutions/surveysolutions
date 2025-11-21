@@ -45,26 +45,26 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 progress.Report(currentPercent);
             }
 
-            await RequestToGeneratePdf(IncrementProgress);
-            await DownloadPdf(IncrementProgress);
+            await RequestToGenerateHtml(IncrementProgress);
+            await DownloadHtml(IncrementProgress);
             progress.Report(100);
         }
 
-        private async Task RequestToGeneratePdf(Action incrementProgress)
+        private async Task RequestToGenerateHtml(Action incrementProgress)
         {
             this.logger.Info($"Requesting pdf generator to start working for questionnaire {questionnaire.PublicKey}");
 
-            await designerApi.GetPdfStatus(questionnaireIdentity.QuestionnaireId);
+            await designerApi.GetHtmlStatus(questionnaireIdentity.QuestionnaireId);
             incrementProgress.Invoke();
 
             foreach (var questionnaireTranslation in questionnaire.Translations)
             {
-                await designerApi.GetPdfStatus(questionnaire.PublicKey, questionnaireTranslation.Id);
+                await designerApi.GetHtmlStatus(questionnaire.PublicKey, questionnaireTranslation.Id);
                 incrementProgress.Invoke();
             }
         }
 
-        private async Task DownloadPdf(Action incrementProgress)
+        private async Task DownloadHtml(Action incrementProgress)
         {
             logger.Verbose($"DownloadPdf: {questionnaire.Title}({questionnaire.PublicKey} rev.{questionnaire.Revision})");
 
@@ -75,15 +75,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             await pdfRetry.ExecuteAsync(async () =>
             {
                 this.logger.Trace($"Waiting for pdf to be ready {questionnaireIdentity}");
-                return await designerApi.GetPdfStatus(questionnaireIdentity.QuestionnaireId);
+                return await designerApi.GetHtmlStatus(questionnaireIdentity.QuestionnaireId);
             });
 
             this.logger.Info("Loading pdf for default language");
 
-            var pdfFile = await designerApi.DownloadPdf(questionnaireIdentity.QuestionnaireId);
+            var htmlFile = await designerApi.DownloadHtml(questionnaireIdentity.QuestionnaireId);
             incrementProgress.Invoke();
 
-            pdfFiles.Add(questionnaireIdentity.ToString(), new QuestionnairePdf { Content = pdfFile.Content });
+            pdfFiles.Add(questionnaireIdentity.ToString(), new QuestionnairePdf { Content = htmlFile.Content });
 
             this.logger.Debug($"PDF for questionnaire stored {questionnaireIdentity}");
 
@@ -95,10 +95,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 {
                     this.logger.Trace($"Waiting for pdf to be ready {questionnaireIdentity}");
 
-                    return await designerApi.GetPdfStatus(questionnaireIdentity.QuestionnaireId, translation.Id);
+                    return await designerApi.GetHtmlStatus(questionnaireIdentity.QuestionnaireId, translation.Id);
                 });
 
-                var pdfTranslated = await designerApi.DownloadPdf(questionnaireIdentity.QuestionnaireId, translation.Id);
+                var pdfTranslated = await designerApi.DownloadHtml(questionnaireIdentity.QuestionnaireId, translation.Id);
                 incrementProgress.Invoke();
 
                 pdfFiles.Add($"{translation.Id.FormatGuid()}_{questionnaireIdentity}", new QuestionnairePdf { Content = pdfTranslated.Content });

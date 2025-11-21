@@ -328,9 +328,6 @@
   <data name="Complete" xml:space="preserve">
     <value>Compléter</value>
   </data>
-  <data name="CompleteAbout" xml:space="preserve">
-    <value>Vous êtes sur le point de compléter cette interview</value>
-  </data>
   <data name="CompleteQuestionsStatus" xml:space="preserve">
     <value>Statut des questions :</value>
   </data>
@@ -462,13 +459,13 @@ Veuillez contacter l'équipe de support pour obtenir de l'aide.</value>
     <value>La lecture multimédia n'est pas prise en charge par votre navigateur. Vous pouvez le télécharger à la place.</value>
   </data>
   <data name="EmailLink_Header" xml:space="preserve">
-    <value>Entrez votre adresse e-mail</value>
+    <value>Lien pour reprendre</value>
   </data>
   <data name="EmailLink_Message" xml:space="preserve">
-    <value>Nous vous enverrons un message avec le lien pour reprendre l'entretien si vous devez continuer plus tard.</value>
+    <value>Ce lien permet de reprendre l'entretien si vous devez continuer plus tard.</value>
   </data>
   <data name="EmailLink_ResumeAnyTime" xml:space="preserve">
-    <value>Vous pouvez annuler maintenant et continuer l'entretien. Et vous pouvez l'envoyer plus tard en cliquant sur l'élément 'Lien de reprise par e-mail' dans le menu supérieur.</value>
+    <value>Vous pouvez créer un lien pour continuer l'entretien. Ce lien permanent peut être enregistré et utilisé plus tard.</value>
   </data>
   <data name="EmailLink_Placeholder" xml:space="preserve">
     <value>Entrez l'e-mail</value>
@@ -477,13 +474,7 @@ Veuillez contacter l'équipe de support pour obtenir de l'aide.</value>
     <value>{{email}} est une adresse e-mail invalide</value>
   </data>
   <data name="EmailLink_EmailResumeLink" xml:space="preserve">
-    <value>Lien de reprise par e-mail</value>
-  </data>
-  <data name="HideVariables" xml:space="preserve">
-    <value>Masquer les variables</value>
-  </data>
-  <data name="ShowVariables" xml:space="preserve">
-    <value>Afficher les variables</value>
+    <value>Lien de reprise</value>
   </data>
   <data name="Interview_Questions_RemoveRowFromRosterMessage" xml:space="preserve">
     <value>Êtes-vous sûr de vouloir supprimer la liste associée '{{rosterTitle}}'?</value>
@@ -543,9 +534,6 @@ Veuillez contacter l'équipe de support pour obtenir de l'aide.</value>
   <data name="AssignmentLimitError" xml:space="preserve">
     <value>Vous ne pouvez pas créer plus d'entretiens à partir de cette affectation</value>
   </data>
-  <data name="CompleteInterviewStatus" xml:space="preserve">
-    <value>Problèmes d'entretien :</value>
-  </data>
   <data name="Complete_CriticalUnansweredQuestions" xml:space="preserve">
     <value>Questions critiques sans réponse : {{count}}</value>
   </data>
@@ -558,4 +546,47 @@ Veuillez contacter l'équipe de support pour obtenir de l'aide.</value>
   <data name="Complete_QuestionsWithErrors" xml:space="preserve">
     <value>Questions avec erreurs : {{count}}</value>
   </data>
-</root>
+  <data name="CompleteReviewSubmit" xml:space="preserve">
+    <value>Revoir et envoyer &lt;br /&gt;
+Interview {{key}}</value>
+  </data>
+  <data name="Complete_Tab_CriticalErrors" xml:space="preserve">
+    <value>Critiques &lt;br /&gt;
+Erreurs</value>
+  </data>
+  <data name="Complete_Tab_QuestionsWithErrors" xml:space="preserve">
+    <value>Erreurs</value>
+  </data>
+  <data name="Complete_Tab_UnansweredQuestions" xml:space="preserve">
+    <value>Questions &lt;br /&gt;
+sans réponse</value>
+  </data>
+  <data name="Complete_AllGood" xml:space="preserve">
+    <value>Toutes les questions obligatoires ont une réponse &lt;br /&gt;
+Aucune erreur détectée</value>
+  </data>
+  <data name="Complete_AndMore" xml:space="preserve">
+    <value>et {{count}} de plus</value>
+  </data>
+  <data name="Complete_NoteIsRequired" xml:space="preserve">
+    <value>Une note est requise pour soumettre l'interview</value>
+  </data>
+  <data name="Complete_Required" xml:space="preserve">
+    <value>Obligatoire</value>
+  </data>
+  <data name="Complete_Error" xml:space="preserve">
+    <value>Erreur :</value>
+  </data>
+  <data name="Complete_LastComment" xml:space="preserve">
+    <value>Dernier commentaire :</value>
+  </data>
+  <data name="Complete_SubmitInfo" xml:space="preserve">
+    <value>Une fois envoyée, cette interview sera verrouillée et ne pourra plus être modifiée. &lt;br /&gt;
+Veuillez vérifier que toutes les informations sont correctes.</value>
+  </data>
+    <data name="TurnOffDevMode" xml:space="preserve">
+    <value>Désactiver le mode développeur</value>
+  </data>
+  <data name="TurnOnDevMode" xml:space="preserve">
+    <value>Activer le mode développeur</value>
+  </data></root>

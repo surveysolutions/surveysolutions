@@ -130,7 +130,7 @@
     <value>Click pentru înregistrare audio</value>
   </data>
   <data name="AudioInitializationFailed" xml:space="preserve">
-    <value>Iniƫializarea înregistrarii audio a eşuat</value>
+    <value>Iniƫializarea înregistrării audio a eşuat</value>
   </data>
   <data name="AudioRecording" xml:space="preserve">
     <value>Înregistrare audio</value>
@@ -188,9 +188,6 @@
   </data>
   <data name="Complete" xml:space="preserve">
     <value>Finalizat</value>
-  </data>
-  <data name="CompleteAbout" xml:space="preserve">
-    <value>Sunteți pe punctul de a încheia acest interviu</value>
   </data>
   <data name="CompleteErrors" xml:space="preserve">
     <value>Întrebări cu erori:</value>
@@ -414,22 +411,22 @@ Contactați echipa de suport pentru asistență.</value>
     <value>La răspunsul anterior</value>
   </data>
   <data name="EmailLink_EmailResumeLink" xml:space="preserve">
-    <value>Link de reluare prin e-mail</value>
+    <value>Link de reluare</value>
   </data>
   <data name="EmailLink_Header" xml:space="preserve">
-    <value>Introduceți adresa de e-mail</value>
+    <value>Link pentru reluare</value>
   </data>
   <data name="EmailLink_InvalidEmail" xml:space="preserve">
     <value>{{email}} este o adresă de e-mail incorectă</value>
   </data>
   <data name="EmailLink_Message" xml:space="preserve">
-    <value>Vă vom trimite un mesaj cu linkul pentru a relua interviul dacă trebuie să continuați mai târziu.</value>
+    <value>Acest link vă permite să reluați interviul dacă trebuie să continuați mai târziu.</value>
   </data>
   <data name="EmailLink_Placeholder" xml:space="preserve">
     <value>Introduceți adresa de email</value>
   </data>
   <data name="EmailLink_ResumeAnyTime" xml:space="preserve">
-    <value>Puteți anula acum și continua cu interviul. Și îl puteți trimite mai târziu făcând clic pe elementul 'Trimiteți prin e-mail linkul de reluare' din meniul de sus.</value>
+    <value>Puteți crea un link pentru a continua interviul. Acest link permanent poate fi salvat și folosit mai târziu.</value>
   </data>
   <data name="EnterPassword" xml:space="preserve">
     <value>introducere parolă</value>
@@ -491,4 +488,47 @@ Contactați echipa de suport pentru asistență.</value>
   <data name="NotCalculated" xml:space="preserve">
     <value>Necalculat</value>
   </data>
-</root>
+  <data name="CompleteReviewSubmit" xml:space="preserve">
+    <value>Revizuire &amp; Trimitere &lt;br /&gt;
+Interviu {{key}}</value>
+  </data>
+  <data name="Complete_Tab_CriticalErrors" xml:space="preserve">
+    <value>Erori &lt;br /&gt;
+Critice</value>
+  </data>
+  <data name="Complete_Tab_QuestionsWithErrors" xml:space="preserve">
+    <value>Erori</value>
+  </data>
+  <data name="Complete_Tab_UnansweredQuestions" xml:space="preserve">
+    <value>Întrebări &lt;br /&gt;
+fără răspuns</value>
+  </data>
+  <data name="Complete_AllGood" xml:space="preserve">
+    <value>Toate întrebările obligatorii au fost răspunse &lt;br /&gt;
+Nicio eroare detectată</value>
+  </data>
+  <data name="Complete_AndMore" xml:space="preserve">
+    <value>și încă {{count}}</value>
+  </data>
+  <data name="Complete_NoteIsRequired" xml:space="preserve">
+    <value>Este necesară o notă pentru a trimite interviul</value>
+  </data>
+  <data name="Complete_Required" xml:space="preserve">
+    <value>Obligatoriu</value>
+  </data>
+  <data name="Complete_Error" xml:space="preserve">
+    <value>Eroare:</value>
+  </data>
+  <data name="Complete_LastComment" xml:space="preserve">
+    <value>Ultimul comentariu:</value>
+  </data>
+  <data name="Complete_SubmitInfo" xml:space="preserve">
+    <value>După trimitere, acest interviu va fi blocat și nu va putea fi editat. &lt;br /&gt;
+Vă rugăm să vă asigurați că toate informațiile sunt corecte.</value>
+  </data>
+    <data name="TurnOffDevMode" xml:space="preserve">
+    <value>Dezactivați modul dezvoltator</value>
+  </data>
+  <data name="TurnOnDevMode" xml:space="preserve">
+    <value>Activați modul dezvoltator</value>
+  </data></root>

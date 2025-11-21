@@ -183,9 +183,6 @@
   <data name="Complete" xml:space="preserve">
     <value>مكتمل</value>
   </data>
-  <data name="CompleteAbout" xml:space="preserve">
-    <value>أنت على وشك إكمال هذه المقابلة</value>
-  </data>
   <data name="CompleteErrors" xml:space="preserve">
     <value>الأسئلة التي تنطوي على أخطاء: </value>
   </data>
@@ -373,19 +370,19 @@
     <value>تم استلام المقابلة من الباحث ولا يمكن تعديلها</value>
   </data>
   <data name="EmailLink_Header" xml:space="preserve">
-    <value>أدخل عنوان بريدك الالكتروني</value>
+    <value>رابط الاستئناف</value>
   </data>
   <data name="EmailLink_Message" xml:space="preserve">
-    <value>سنرسل لك رسالة تحتوي على رابط لاستئناف المقابلة إذا كنت تريد المتابعة لاحقًا</value>
+    <value>هذا الرابط لاستئناف المقابلة إذا كنت بحاجة إلى المتابعة لاحقًا</value>
   </data>
   <data name="EmailLink_ResumeAnyTime" xml:space="preserve">
-    <value>يمكنك الإلغاء الآن والمضي قدماً في المقابلة. ويمكنك إرسالها لاحقًا عن طريق النقر فوق عنصر "رابط استئناف البريد الإلكتروني" في القائمة العلوية.</value>
+    <value>يمكنك إنشاء رابط لمتابعة المقابلة. يمكن حفظ هذا الرابط الدائم واستخدامه لاحقًا.</value>
   </data>
   <data name="EmailLink_Placeholder" xml:space="preserve">
     <value>أدخل البريد الإلكتروني</value>
   </data>
   <data name="EmailLink_EmailResumeLink" xml:space="preserve">
-    <value>رابط استئناف البريد الإلكتروني</value>
+    <value>رابط الاستئناف</value>
   </data>
   <data name="AreaRecord" xml:space="preserve">
     <value>تحرير المنطقة</value>
@@ -465,12 +462,6 @@
   <data name="WebTesterSessionOverMessage" xml:space="preserve">
     <value>يرجى إغلاق هذه الصفحة. يمكنك فتح واحدة جديدة من خلال العودة إلى موقع المصمم</value>
   </data>
-    <data name="HideVariables" xml:space="preserve">
-    <value>إخفاء المتغيرات</value>
-  </data>
-    <data name="ShowVariables" xml:space="preserve">
-    <value>عرض المتغيرات</value>
-  </data>      
   <data name="ShowResolved" xml:space="preserve">
     <value>عرض المحلولة</value>
   </data>
@@ -491,9 +482,6 @@
   </data>
     <data name="AssignmentLimitError" xml:space="preserve">
     <value>لا يمكنك إنشاء المزيد من المقابلات من هذا التعيين</value>
-  </data>
-    <data name="CompleteInterviewStatus" xml:space="preserve">
-    <value>مشكلات المقابلة:</value>
   </data>
     <data name="Complete_CriticalUnansweredQuestions" xml:space="preserve">
     <value>الأسئلة الحرجة التي لم تتم الإجابة عنها: {{count}}</value>
@@ -546,4 +534,47 @@
     <data name="UnansweredQuestions" xml:space="preserve">
   <value>الأسئلة التي لم تتم الإجابة عنها:</value>
 </data>
-</root>
+  <data name="CompleteReviewSubmit" xml:space="preserve">
+    <value>مراجعة وإرسال &lt;br /&gt;
+المقابلة {{key}}</value>
+  </data>
+  <data name="Complete_Tab_CriticalErrors" xml:space="preserve">
+    <value>أخطاء &lt;br /&gt;
+حرجة</value>
+  </data>
+  <data name="Complete_Tab_QuestionsWithErrors" xml:space="preserve">
+    <value>أخطاء</value>
+  </data>
+  <data name="Complete_Tab_UnansweredQuestions" xml:space="preserve">
+    <value>أسئلة &lt;br /&gt;
+بلا إجابة</value>
+  </data>
+  <data name="Complete_AllGood" xml:space="preserve">
+    <value>جميع الأسئلة المطلوبة أجيب عليها &lt;br /&gt;
+لم يتم اكتشاف أخطاء</value>
+  </data>
+  <data name="Complete_AndMore" xml:space="preserve">
+    <value>و {{count}} أخرى</value>
+  </data>
+  <data name="Complete_NoteIsRequired" xml:space="preserve">
+    <value>ملاحظة مطلوبة لإرسال المقابلة</value>
+  </data>
+  <data name="Complete_Required" xml:space="preserve">
+    <value>مطلوب</value>
+  </data>
+  <data name="Complete_Error" xml:space="preserve">
+    <value>خطأ:</value>
+  </data>
+  <data name="Complete_LastComment" xml:space="preserve">
+    <value>آخر تعليق:</value>
+  </data>
+  <data name="Complete_SubmitInfo" xml:space="preserve">
+    <value>بعد الإرسال ستُقفل هذه المقابلة ولن يمكن تعديلها. &lt;br /&gt;
+يرجى التأكد من أن كل المعلومات صحيحة.</value>
+  </data>
+  <data name="TurnOffDevMode" xml:space="preserve">
+    <value>إيقاف وضع المطور</value>
+  </data>
+  <data name="TurnOnDevMode" xml:space="preserve">
+    <value>تشغيل وضع المطور</value>
+  </data></root>

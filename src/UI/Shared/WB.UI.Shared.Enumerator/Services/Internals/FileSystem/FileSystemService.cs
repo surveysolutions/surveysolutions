@@ -225,5 +225,12 @@ namespace WB.UI.Shared.Enumerator.Services.Internals.FileSystem
         {
             Directory.Move(pathToDir, newPathToDir);
         }
+
+        public char[] GetInvalidFileNameChars() => Path.GetInvalidFileNameChars();
+        public bool IsInvalidFileName(string filename)
+        {
+            return filename.IndexOfAny(GetInvalidFileNameChars()) >= 0 ||
+                   filename != GetFileName(filename);
+        }
     }
 }

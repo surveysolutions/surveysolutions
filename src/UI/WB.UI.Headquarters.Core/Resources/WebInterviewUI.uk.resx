@@ -198,9 +198,6 @@
   <data name="Complete" xml:space="preserve">
     <value>Завершено</value>
   </data>
-  <data name="CompleteAbout" xml:space="preserve">
-    <value>Ви наближаєтесь до завершення інтерв'ю</value>
-  </data>
   <data name="CompleteErrors" xml:space="preserve">
     <value>Питання з помилками:</value>
   </data>
@@ -264,22 +261,22 @@
     <value>Зроблено.</value>
   </data>
   <data name="EmailLink_EmailResumeLink" xml:space="preserve">
-    <value>Посилання на резюме на електронну пошту</value>
+    <value>Посилання на продовження</value>
   </data>
   <data name="EmailLink_Header" xml:space="preserve">
-    <value>Введіть свою електронну адресу</value>
+    <value>Посилання на продовження</value>
   </data>
   <data name="EmailLink_InvalidEmail" xml:space="preserve">
     <value>{{email}} - невірна адреса електронної пошти</value>
   </data>
   <data name="EmailLink_Message" xml:space="preserve">
-    <value>Ми надішлемо вам повідомлення з посиланням для продовження інтерв'ю, якщо вам потрібно буде продовжити пізніше.</value>
+    <value>Посилання для продовження інтерв'ю, якщо вам потрібно буде продовжити пізніше.</value>
   </data>
   <data name="EmailLink_Placeholder" xml:space="preserve">
     <value>Введіть електронну пошту</value>
   </data>
   <data name="EmailLink_ResumeAnyTime" xml:space="preserve">
-    <value>Ви можете скасувати зараз і продовжити інтерв'ю. Ви можете надіслати пізніше, натиснувши на пункт "Надіслати посилання для продовження на електронну пошту" у верхньому меню.</value>
+    <value>Ви можете зробити посилання для продовження інтерв'ю. Це постійне посилання може бути збрережене і використано пізніше.</value>
   </data>
   <data name="EnterDate" xml:space="preserve">
     <value>Введіть дату</value>
@@ -502,5 +499,49 @@
   </data>
   <data name="Yes" xml:space="preserve">
     <value>Так</value>
+  </data>
+  <data name="CompleteReviewSubmit" xml:space="preserve">
+    <value>Перегляд і Надсилання &lt;br /&gt;
+Інтерв'ю {{key}}</value>
+  </data>
+  <data name="Complete_Tab_CriticalErrors" xml:space="preserve">
+    <value>Критичні &lt;br /&gt;
+Помилки</value>
+  </data>
+  <data name="Complete_Tab_QuestionsWithErrors" xml:space="preserve">
+    <value>Помилки</value>
+  </data>
+  <data name="Complete_Tab_UnansweredQuestions" xml:space="preserve">
+    <value>Без відповіді &lt;br /&gt;
+Питання</value>
+  </data>
+  <data name="Complete_AllGood" xml:space="preserve">
+    <value>Усі обов'язкові питання мають відповіді &lt;br /&gt;
+Помилок не виявлено</value>
+  </data>
+  <data name="Complete_AndMore" xml:space="preserve">
+    <value>та ще {{count}}</value>
+  </data>
+  <data name="Complete_NoteIsRequired" xml:space="preserve">
+    <value>Для надсилання інтерв'ю потрібна примітка</value>
+  </data>
+  <data name="Complete_Required" xml:space="preserve">
+    <value>Обов'язкове</value>
+  </data>
+  <data name="Complete_Error" xml:space="preserve">
+    <value>Помилка:</value>
+  </data>
+  <data name="Complete_LastComment" xml:space="preserve">
+    <value>Останній коментар:</value>
+  </data>
+  <data name="Complete_SubmitInfo" xml:space="preserve">
+    <value>Після надсилання інтерв'ю буде заблоковано і його не можна буде змінити. &lt;br /&gt;
+Переконайтеся, що вся інформація правильна.</value>
+  </data>
+    <data name="TurnOffDevMode" xml:space="preserve">
+    <value>Вимкнути режим розробника</value>
+  </data>
+  <data name="TurnOnDevMode" xml:space="preserve">
+    <value>Увімкнути режим розробника</value>
   </data>
 </root>

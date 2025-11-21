@@ -572,6 +572,10 @@ a.disabled {
     @extend .get-mobile-app;
 }
 
+.download-qr {
+    margin-bottom: 20px;
+}
+
 .btn-horizontal-hamburger {
     display: inline-block;
     position: relative;
@@ -627,13 +631,14 @@ a.disabled {
     color: #FD8900;
 }
 
-.btn-assignment {    
+.btn-assignment {
     color: $white;
     background-color: $assignment-color;
     border-color: $assignment-color;
+
     &:hover,
     &:focus,
-    &:active{
-        color: $white;        
+    &:active {
+        color: $white;
     }
 }

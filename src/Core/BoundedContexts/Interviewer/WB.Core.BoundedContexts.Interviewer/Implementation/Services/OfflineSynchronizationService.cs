@@ -102,6 +102,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         {
             return this.syncClient.SendAsync(new UploadInterviewImageRequest
             {
+                UserId = this.principal.CurrentUserIdentity.UserId,
                 InterviewImage = new PostFileApiView()
                 {
                     FileName = fileName,
@@ -116,6 +117,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         {
             return this.syncClient.SendAsync(new UploadInterviewAudioRequest
             {
+                UserId = this.principal.CurrentUserIdentity.UserId,
                 InterviewAudio = new PostFileApiView()
                 {
                     FileName = fileName,
@@ -131,6 +133,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         {
             return this.syncClient.SendAsync(new UploadInterviewAudioAuditRequest
             {
+                UserId = this.principal.CurrentUserIdentity.UserId,
                 InterviewAudio = new PostFileApiView()
                 {
                     FileName = fileName,

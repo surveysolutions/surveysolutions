@@ -1,0 +1,135 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Cryptography;
+using System.Threading.Tasks;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.DataCollection.Helpers;
+using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.Views;
+
+namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
+{
+    public abstract class InterviewFileStorage<TMetadataView, TFileView> : IInterviewFileStorage
+        where TMetadataView : class, IFileMetadataView, IPlainStorageEntity, new()
+        where TFileView : class, IFileView, IPlainStorageEntity, new()
+    {
+        protected readonly IPlainStorage<TMetadataView> fileMetadataViewStorage;
+        protected readonly IPlainStorage<TFileView> fileViewStorage;
+        protected readonly IEncryptionService encryptionService;
+
+        protected InterviewFileStorage(
+            IPlainStorage<TMetadataView> fileMetadataViewStorage,
+            IPlainStorage<TFileView> fileViewStorage,
+            IEncryptionService encryptionService)
+        {
+            this.fileMetadataViewStorage = fileMetadataViewStorage;
+            this.fileViewStorage = fileViewStorage;
+            this.encryptionService = encryptionService;
+        }
+
+        public Task<byte[]> GetInterviewBinaryDataAsync(Guid interviewId, string fileName) 
+            => Task.FromResult(this.GetInterviewBinaryData(interviewId, fileName));
+
+        public byte[] GetInterviewBinaryData(Guid interviewId, string fileName)
+        {
+            var metadataView = this.fileMetadataViewStorage.FirstOrDefault(metadata =>
+                metadata.InterviewId == interviewId && metadata.FileName == fileName);
+
+            return metadataView == null ? null : this.GetFileById(metadataView.FileId);
+        }
+
+        public Task<List<InterviewBinaryDataDescriptor>> GetBinaryFilesForInterview(Guid interviewId)
+        {
+            var metadataViews = this.fileMetadataViewStorage.Where(metadata => metadata.InterviewId == interviewId);
+            var interviewBinaryDataDescriptors = metadataViews.Select(m =>
+                new InterviewBinaryDataDescriptor(
+                    m.InterviewId,
+                    m.FileName,
+                    m.ContentType,
+                    () => Task.FromResult(this.GetFileById(m.FileId)),
+                    m.Md5
+                )
+            ).ToList();
+            return Task.FromResult(interviewBinaryDataDescriptors);
+        }
+        
+        public void StoreInterviewBinaryData(Guid interviewId, string fileName, byte[] data, string contentType)
+        {
+            var encryptedData = this.encryptionService.Encrypt(data);
+            var metadataView = this.fileMetadataViewStorage.FirstOrDefault(metadata => metadata.InterviewId == interviewId && metadata.FileName == fileName);
+            string md5 = GetMd5Cache(data);
+
+            if (metadataView == null)
+            {
+                string fileId = Guid.NewGuid().FormatGuid();
+                
+                this.fileViewStorage.Store(new TFileView
+                {
+                    Id = fileId,
+                    File = encryptedData,
+                });
+
+                this.fileMetadataViewStorage.Store(new TMetadataView
+                {
+                    Id = Guid.NewGuid().FormatGuid(),
+                    InterviewId = interviewId,
+                    FileId = fileId,
+                    FileName = fileName,
+                    ContentType = contentType,
+                    Md5 = md5
+                });
+            }
+            else
+            {
+                this.fileViewStorage.Store(new TFileView
+                {
+                    Id = metadataView.FileId,
+                    File = encryptedData,
+                });
+
+                metadataView.Md5 = md5;
+                metadataView.ContentType = contentType;
+                
+                this.fileMetadataViewStorage.Store(metadataView);
+            }
+        }
+        
+        private static string GetMd5Cache(byte[] fileContent)
+        { 
+            if (fileContent == null)
+                return null;
+
+            return CheckSumHelper.GetMd5Cache(fileContent);
+        }
+        
+        public Task RemoveInterviewBinaryData(Guid interviewId, string fileName)
+        {
+            var metadataView = GetMetadata(interviewId, fileName);
+
+            if (metadataView != null)
+            {
+                this.fileViewStorage.Remove(metadataView.FileId);
+                this.fileMetadataViewStorage.Remove(metadataView.Id);
+            }
+
+            return Task.CompletedTask;
+        }
+
+        private TMetadataView GetMetadata(Guid interviewId, string fileName)
+        {
+            return this.fileMetadataViewStorage
+                .FirstOrDefault(metadata => metadata.InterviewId == interviewId && metadata.FileName == fileName);
+        }
+
+        protected byte[] GetFileById(string fileId)
+        {
+            var fileView = this.fileViewStorage.GetById(fileId);
+
+            return fileView == null ? null : this.encryptionService.Decrypt(fileView.File);
+        }
+    }
+}

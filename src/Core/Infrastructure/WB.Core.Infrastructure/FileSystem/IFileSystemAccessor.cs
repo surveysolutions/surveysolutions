@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace WB.Core.Infrastructure.FileSystem
@@ -34,8 +35,9 @@ namespace WB.Core.Infrastructure.FileSystem
         string[] GetFilesInDirectory(string pathToDirectory, string pattern, bool searchInSubdirectories = false);
 
         void WriteAllText(string pathToFile, string content);
+        Task WriteAllTextAsync(string pathToFile, string content);
         void WriteAllBytes(string pathToFile, byte[] content);
-        Task WriteAllBytesAsync(string pathToFile, byte[] content);
+        Task WriteAllBytesAsync(string pathToFile, byte[] content, CancellationToken token = default);
         byte[] ReadHash(string pathToFile);
         byte[] ReadHash(Stream fileContent);
         bool IsHashValid(byte[] fileContent, byte[] hash);
@@ -50,5 +52,7 @@ namespace WB.Core.Infrastructure.FileSystem
 
         void MoveFile(string pathToFile, string newPathToFile);
         void MoveDirectory(string pathToDir, string newPathToDir);
+        char[] GetInvalidFileNameChars();
+        bool IsInvalidFileName(string filename);
     }
 }

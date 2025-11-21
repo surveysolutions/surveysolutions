@@ -426,6 +426,15 @@ Musíte vytvořit nebo upravit Vaše dotazníky v aplikaci Designer</value>
   <data name="Interview_Questions_QrBarcode_SaveAnswer" xml:space="preserve">
     <value>Klepnutím pořídíte čárový kód</value>
   </data>
+  <data name="BarcodeScanner_Error_UnknownError" xml:space="preserve">
+    <value>Neznámá chyba</value>
+  </data>
+  <data name="BarcodeScanner_Error_StartingCamera" xml:space="preserve">
+    <value>Chyba při spuštění kamery: </value>
+  </data>
+  <data name="BarcodeScanner_Error_Interrupted" xml:space="preserve">
+    <value>Přerušeno</value>
+  </data>
   <data name="Interview_Questions_RemoveRowFromRosterListMessage" xml:space="preserve">
     <value>Opravdu chcete smazat tyto seznamy (rostery)?</value>
   </data>
@@ -896,5 +905,30 @@ Musíte vytvořit nebo upravit Vaše dotazníky v aplikaci Designer</value>
 </data>
     <data name="SelectMapTitle" xml:space="preserve">
   <value>Vyberte mapu:</value>
+</data>
+    <data name="Interview_Complete_Instruction" xml:space="preserve">
+    <value>Po odeslání bude tento rozhovor uzamčen a nebude možné jej upravit. Ujistěte se, že všechny údaje jsou správné.</value>
+</data>
+    <data name="Interview_Complete_MoreCountString" xml:space="preserve">
+    <value>a další {0}</value>
+</data>
+    <data name="Interview_Complete_Success_Text" xml:space="preserve">
+    <value>Všechny povinné otázky zodpovězeny
+Nebyly zjištěny žádné chyby</value>
+</data>
+    <data name="Interview_Complete_Title" xml:space="preserve">
+    <value>Zkontrolovat a odeslat
+Rozhovor {0}</value>
+</data>
+    <data name="Interview_Complete_Tab_Title_Critical" xml:space="preserve">
+    <value>Kritické
+chyby</value>
+</data>
+    <data name="Interview_Complete_Tab_Title_WithErrors" xml:space="preserve">
+    <value>Chyby</value>
+</data>
+    <data name="Interview_Complete_Tab_Title_Unanswered" xml:space="preserve">
+    <value>Nezodpovězené
+otázky</value>
 </data>
 </root>

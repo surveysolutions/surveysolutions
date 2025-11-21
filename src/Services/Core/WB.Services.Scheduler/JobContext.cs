@@ -61,8 +61,7 @@ namespace WB.Services.Scheduler
         public JobContext CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<JobContext>();
-            optionsBuilder.UseNpgsql(
-                "Server=127.0.0.1;Port=5432;User Id=postgres;Password=P@$$w0rd;Database=ExportService;");
+            optionsBuilder.UseNpgsql("...");
 
             return new JobContext(optionsBuilder.Options, Options.Create(new JobSettings
             {

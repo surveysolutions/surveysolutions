@@ -135,4 +135,12 @@
   <data name="Retry" xml:space="preserve">
     <value>Po riprovon eksportimin si PDF.</value>
   </data>
+  <data name="NotFound" xml:space="preserve">
+    <value>Detyra e kërkuar nuk është gjetur. 
+Ju lutemi provoni përsëri.</value>
+  </data>
+  <data name="PdfLimitReached" xml:space="preserve">
+    <value>Ju tashmë keni dërguar {0} kërkesa për të krijuar dokumente PDF për pyetësorët tuaj.
+Ju lutemi provoni përsëri më vonë.</value>
+  </data>
 </root>

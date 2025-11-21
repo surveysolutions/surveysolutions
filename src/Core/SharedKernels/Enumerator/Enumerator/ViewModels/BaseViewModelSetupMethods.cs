@@ -8,7 +8,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
     {
         public static void CheckAuthentication(bool isAuthenticationRequired, IPrincipal principal, IViewModelNavigationService navigationService)
         {
-            if (isAuthenticationRequired && !principal.IsAuthenticated)
+            if (isAuthenticationRequired && (principal == null || !principal.IsAuthenticated))
             {
                 navigationService.NavigateToSplashScreen();
             }
@@ -16,18 +16,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         public static void SaveStateToBundle(IPrincipal principal, IMvxBundle bundle)
         {
-            if (principal?.IsAuthenticated ?? false)
+            if (bundle != null && (principal?.IsAuthenticated ?? false))
             {
                 bundle.Data["userName"] = principal.CurrentUserIdentity.Name;
-                bundle.Data["passwordHash"] = principal.CurrentUserIdentity.PasswordHash;
+                bundle.Data["workspace"] = principal.CurrentUserIdentity.Workspace ?? string.Empty;
+                bundle.Data["userId"] = principal.CurrentUserIdentity.Id;
             }
         }
 
         public static void ReloadStateFromBundle(IPrincipal principal, IMvxBundle bundle)
         {
-            if (bundle.Data.ContainsKey("userName") && !principal.IsAuthenticated)
+            if (bundle != null && bundle.Data.ContainsKey("userId") && !principal.IsAuthenticated)
             {
-                principal.SignInWithHash(bundle.Data["userName"], bundle.Data["passwordHash"], true);
+                principal.SignIn(bundle.Data["userId"], true);
             }
         }
     }

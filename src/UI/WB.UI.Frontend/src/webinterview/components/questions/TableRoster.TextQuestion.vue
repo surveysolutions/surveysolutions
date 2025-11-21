@@ -41,14 +41,10 @@ export default {
         answerTextQuestion() {
             this.sendAnswer(() => {
                 const target = $(this.$refs.input)
-                const answer = target.val()
-
-                if (!answer || answer.trim() === '') {
-                    this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.TextRequired'), answer)
-                    return
-                }
+                const answer = target.val()?.trim()
 
                 if (this.handleEmptyAnswer(answer)) {
+                    target.value = this.$me.answer || ''
                     return
                 }
 

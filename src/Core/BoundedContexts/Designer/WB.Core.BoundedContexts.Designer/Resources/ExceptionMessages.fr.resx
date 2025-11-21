@@ -417,4 +417,7 @@
   <data name="TranslationIsNotFull" xml:space="preserve">
     <value>La traduction est incomplète et n’inclut pas tous les textes requis pour chaque élément</value>
   </data>
+  <data name="CategoryTranslationIsNotFull" xml:space="preserve">
+    <value>La traduction de la catégorie «{0}» est incomplète et n’inclut pas tous les textes des options</value>
+  </data>
 </root>

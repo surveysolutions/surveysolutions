@@ -18,6 +18,7 @@ using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Services;
+using WB.Core.SharedKernels.Configs;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
@@ -86,7 +87,7 @@ namespace WB.UI.WebTester
                 registry.BindAsSingleton(type, type);
             }
 
-            registry.Bind<IWebInterviewInterviewEntityFactory, WebInterviewInterviewEntityFactory>();
+            registry.Bind<IWebInterviewInterviewEntityFactory, WebTesterWebInterviewInterviewEntityFactory>();
             registry.Bind<IWebNavigationService, WebNavigationService>();
 
             registry.BindToMethod<IOptions<FileStorageConfig>>(sp =>

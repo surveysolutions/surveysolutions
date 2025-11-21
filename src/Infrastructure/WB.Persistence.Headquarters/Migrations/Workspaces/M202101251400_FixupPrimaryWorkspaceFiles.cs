@@ -1,6 +1,7 @@
 using System.IO;
 using FluentMigrator;
 using Microsoft.Extensions.Configuration;
+using WB.Core.SharedKernels.Configs;
 using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Persistence.Headquarters.Migrations.Workspaces
