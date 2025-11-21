@@ -30,7 +30,8 @@
 
         <View style="@style/Interview_Complete_Divider"
               android:layout_gravity="bottom"
-              android:layout_width ="@dimen/Interview_Entity_margin_left"/>
+              android:layout_width="0dp"
+              android:layout_weight="1"/>
 
         <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tabLayout"
@@ -41,7 +42,8 @@
                 local:tabIndicatorHeight="4dp"/>
         
         <View style="@style/Interview_Complete_Divider"
-              android:layout_width ="@dimen/Interview_Entity_margin_left"
+              android:layout_width="0dp"
+              android:layout_weight="1"
               android:layout_gravity="bottom" />
         
     </LinearLayout>

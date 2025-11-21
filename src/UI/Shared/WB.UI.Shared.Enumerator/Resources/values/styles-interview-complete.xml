@@ -145,8 +145,7 @@
         <item name="tabIndicatorFullWidth">false</item>
         <item name="tabIndicatorHeight">10dp</item>
         <item name="tabIndicatorColor">@android:color/holo_red_dark</item>
-        <item name="android:layout_weight">1</item>
-        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">@dimen/interview_complete_tab_height</item>
         <item name="android:minHeight">@dimen/interview_complete_tab_height</item>
     </style>
