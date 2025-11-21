@@ -401,10 +401,12 @@ export default {
             const criticalFailed = this.criticalityInfo?.failedCriticalRules || []
             const criticalUnanswered = this.criticalityInfo?.unansweredCriticalQuestions || []
             const critical = criticalFailed.concat(criticalUnanswered)
+            const criticalTotal = (this.criticalityInfo?.failedCriticalRulesTotal || 0)
+                                + (this.criticalityInfo?.unansweredCriticalQuestionsTotal || 0);
             groups.push({
                 title: this.$t('WebInterviewUI.Complete_Tab_CriticalErrors'),
                 items: critical,
-                total: critical.length,
+                total: criticalTotal,
                 cssClass: 'errors'
             })
 

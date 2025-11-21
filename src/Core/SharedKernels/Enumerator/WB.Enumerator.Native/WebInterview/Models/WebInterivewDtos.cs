@@ -421,6 +421,8 @@ namespace WB.Enumerator.Native.WebInterview.Models
     {
         public CriticalRuleResult[] FailedCriticalRules { get; set; } = [];
         public CriticalQuestionCheck[] UnansweredCriticalQuestions { get; set; } = [];
+        public int FailedCriticalRulesTotal { get; set; }
+        public int UnansweredCriticalQuestionsTotal { get; set; }
     }
 
 }
