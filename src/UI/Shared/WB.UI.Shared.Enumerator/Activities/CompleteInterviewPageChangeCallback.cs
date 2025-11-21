@@ -7,11 +7,11 @@ namespace WB.UI.Shared.Enumerator.Activities
     [Register("wb.ui.enumerator.activities.interview.CompleteInterviewPageChangeCallback")]
     public class CompleteInterviewPageChangeCallback : ViewPager2.OnPageChangeCallback
     {
-        private CompleteInterviewFragment fragment;
+        private WeakReference<CompleteInterviewFragment> fragment;
 
         public CompleteInterviewPageChangeCallback(CompleteInterviewFragment fragment)
         {
-            this.fragment = fragment;
+            this.fragment = new WeakReference<CompleteInterviewFragment>(fragment);
         }
 
         // Constructor for JNI (because [Register])
@@ -21,7 +21,8 @@ namespace WB.UI.Shared.Enumerator.Activities
 
         public override void OnPageSelected(int position)
         {
-            fragment?.OnPageChangedFromCallback();
+            if (this.fragment.TryGetTarget(out var fragmentObj))
+                fragmentObj?.OnPageChangedFromCallback();
         }
 
         protected override void Dispose(bool disposing)

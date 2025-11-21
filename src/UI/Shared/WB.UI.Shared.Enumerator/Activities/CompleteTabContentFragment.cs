@@ -23,12 +23,6 @@ namespace WB.UI.Shared.Enumerator.Activities
 
         private MvxRecyclerView recyclerView;
         
-        /*public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-        {
-            var view = inflater.Inflate(ViewResourceId, container, false);
-            return view;
-        }*/
-        
         public override void OnViewCreated(View view, Bundle savedInstanceState)
         {
             base.OnViewCreated(view, savedInstanceState);

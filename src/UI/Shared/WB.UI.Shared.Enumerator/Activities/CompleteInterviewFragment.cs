@@ -32,6 +32,7 @@ namespace WB.UI.Shared.Enumerator.Activities
         private TabLayout tabLayout;
         private ViewPager2 viewPager;
         private ViewPager2.OnPageChangeCallback pageChangeCallback;
+        private TabConfigurationStrategy tabConfigurationStrategy;
 
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
@@ -72,6 +73,7 @@ namespace WB.UI.Shared.Enumerator.Activities
         {
             private readonly IMvxAndroidBindingContext bindingContext;
             private readonly IList<TabViewModel> tabs;
+            private readonly Dictionary<int, PropertyChangedEventHandler> eventHandlers = new Dictionary<int, PropertyChangedEventHandler>();
 
             public TabConfigurationStrategy(IMvxAndroidBindingContext bindingContext, IList<TabViewModel> tabs)
             {
@@ -89,38 +91,53 @@ namespace WB.UI.Shared.Enumerator.Activities
                 var titleView = view.FindViewById<TextView>(Resource.Id.tab_title);
                 var indicator = view.FindViewById<View>(Resource.Id.tab_indicator);
 
-                countView.Text = vm.Count; 
-                titleView.Text = vm.Title; 
-                tab.View.Enabled = vm.IsEnabled;
+                void SetTabStyles()
+                {
+                    countView.Text = vm.Count; 
+                    titleView.Text = vm.Title; 
+                    tab.View.Enabled = vm.IsEnabled;
 
-                var colorResInt = TabContentToColorConverter.GetColor(vm);
-                var colorInt = ContextCompat.GetColor(tab.View.Context, colorResInt);
-                var color = new Android.Graphics.Color(colorInt);
-                countView?.SetTextColor(color);
-                titleView?.SetTextColor(color);
-                indicator.BackgroundTintList = ColorStateList.ValueOf(color);
+                    var colorResInt = TabContentToColorConverter.GetColor(vm);
+                    var colorInt = ContextCompat.GetColor(tab.View.Context, colorResInt);
+                    var color = new Android.Graphics.Color(colorInt);
+                    countView?.SetTextColor(color);
+                    titleView?.SetTextColor(color);
+                    indicator.BackgroundTintList = ColorStateList.ValueOf(color);
+                }
+
+                SetTabStyles();
 
                 tab.SetCustomView(view);
                 
                 // Subscribe to property changes to update tab state dynamically
-                vm.PropertyChanged += (sender, args) =>
+                PropertyChangedEventHandler handler = (sender, args) =>
                 {
                     // Ensure UI updates happen on the main thread
                     tab.View?.Post(() =>
                     {
                         if (args.PropertyName == nameof(vm.Total))
-                        {
-                            countView.Text = vm.Count;
-                            var newColorResInt = TabContentToColorConverter.GetColor(vm);
-                            var newColorInt = ContextCompat.GetColor(tab.View.Context, newColorResInt);
-                            var newColor = new Android.Graphics.Color(newColorInt);
-                            countView?.SetTextColor(newColor);
-                            titleView?.SetTextColor(newColor);
-                            indicator.BackgroundTintList = ColorStateList.ValueOf(newColor);
-                            tab.View.Enabled = vm.IsEnabled;
-                        }
+                            SetTabStyles();
                     });
                 };
+                
+                vm.PropertyChanged += handler;
+                eventHandlers[position] = handler;
+            }
+
+            protected override void Dispose(bool disposing)
+            {
+                foreach (var kvp in eventHandlers)
+                {
+                    var position = kvp.Key;
+                    var handler = kvp.Value;
+                    if (position < tabs.Count)
+                    {
+                        tabs[position].PropertyChanged -= handler;
+                    }
+                }
+                eventHandlers.Clear();
+
+                base.Dispose(disposing);
             }
         }
 
@@ -131,7 +148,7 @@ namespace WB.UI.Shared.Enumerator.Activities
             var adapter = new TabsPagerAdapter(this.Context, this.ChildFragmentManager, this.Lifecycle, tabsViewModels);
             viewPager.Adapter = adapter;
 
-            var tabConfigurationStrategy = new TabConfigurationStrategy((IMvxAndroidBindingContext)this.BindingContext, tabsViewModels);
+            tabConfigurationStrategy = new TabConfigurationStrategy((IMvxAndroidBindingContext)this.BindingContext, tabsViewModels);
             var tabLayoutMediator = new TabLayoutMediator(tabLayout, viewPager, tabConfigurationStrategy);
             tabLayoutMediator.Attach();
 
@@ -304,10 +321,16 @@ namespace WB.UI.Shared.Enumerator.Activities
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing && viewPager != null && pageChangeCallback != null)
+            if (disposing)
             {
-                viewPager.UnregisterOnPageChangeCallback(pageChangeCallback);
-                pageChangeCallback = null;
+                if (viewPager != null && pageChangeCallback != null)
+                {
+                    viewPager.UnregisterOnPageChangeCallback(pageChangeCallback);
+                    pageChangeCallback = null;
+                }
+                
+                tabConfigurationStrategy?.Dispose();
+                tabConfigurationStrategy = null;
             }
             base.Dispose(disposing);
         }
