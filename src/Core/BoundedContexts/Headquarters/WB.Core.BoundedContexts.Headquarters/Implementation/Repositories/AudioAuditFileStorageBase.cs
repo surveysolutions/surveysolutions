@@ -39,7 +39,8 @@ public abstract class AudioAuditFileStorageBase<T> : AudioAuditStorageBase
                 interviewId,
                 file.FileName,
                 file.ContentType,
-                () => GetInterviewBinaryDataAsync(interviewId, file.FileName)
+                () => GetInterviewBinaryDataAsync(interviewId, file.FileName),
+                null
             )).ToList();
 
         return Task.FromResult(interviewBinaryDataDescriptors);

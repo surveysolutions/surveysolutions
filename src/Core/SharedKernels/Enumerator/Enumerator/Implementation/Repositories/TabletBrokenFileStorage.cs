@@ -33,7 +33,8 @@ public abstract class TabletBrokenFileStorage<TMetadataView, TFileView> :
                 metadataView.InterviewId,
                 metadataView.FileName,
                 metadataView.ContentType,
-                () => Task.FromResult(this.GetFileById(metadataView.FileId))
+                () => Task.FromResult(this.GetFileById(metadataView.FileId)),
+                metadataView.Md5
             );
         return Task.FromResult(interviewBinaryDataDescriptor);
     }

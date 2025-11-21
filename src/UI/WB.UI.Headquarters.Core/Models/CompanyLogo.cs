@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Security.Cryptography;
 using WB.Core.BoundedContexts.Headquarters.Views;
+using WB.Core.SharedKernels.DataCollection.Helpers;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 
 namespace WB.UI.Headquarters.Models.CompanyLogo
@@ -12,10 +13,7 @@ namespace WB.UI.Headquarters.Models.CompanyLogo
 
         public string GetEtagValue()
         {
-            using var hasher = SHA1.Create();
-            var computeHash = hasher.ComputeHash(this.Logo);
-            string hash = BitConverter.ToString(computeHash).Replace("-", "");
-            return hash;
+            return CheckSumHelper.GetSha1Cache(this.Logo);
         }
     }
 }
