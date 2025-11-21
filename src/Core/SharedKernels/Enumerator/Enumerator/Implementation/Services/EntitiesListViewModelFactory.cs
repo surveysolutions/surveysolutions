@@ -87,7 +87,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 using (var title = this.dynamicTextViewModelFactory.CreateDynamicTextViewModel())
                 {
                     title.InitAsStatic(criticalRuleMessage);
-                    entityWithErrorsViewModel.Init(null, null, null, title.PlainText, navigationState);
+                    entityWithErrorsViewModel.Init(entityIdentity: null, title: null, comment: null, error: title.PlainText, navigationState: navigationState);
                     entityWithErrorsViewModel.IsError = true;
                     entityWithErrorsViewModel.AllowInnerLinks(interviewId, Identity.Create(interview.Id, RosterVector.Empty));
                 }

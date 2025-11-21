@@ -1,26 +1,16 @@
-﻿using System.Collections.Specialized;
-using System.ComponentModel;
-using Android.Content;
+﻿using System.ComponentModel;
 using Android.Content.Res;
 using Android.Runtime;
 using Android.Views;
 using AndroidX.Core.Content;
-using AndroidX.Fragment.App;
 using AndroidX.RecyclerView.Widget;
-using AndroidX.ViewPager2.Adapter;
 using AndroidX.ViewPager2.Widget;
 using Google.Android.Material.Tabs;
-using MvvmCross;
-using MvvmCross.Binding.BindingContext;
 using MvvmCross.DroidX.RecyclerView;
 using MvvmCross.Platforms.Android.Binding.BindingContext;
-using MvvmCross.Platforms.Android.Views.Fragments;
-using WB.Core.SharedKernels.Enumerator.Utils;
-using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.UI.Shared.Enumerator.Converters;
 using WB.UI.Shared.Enumerator.CustomControls;
-using Fragment = Android.App.Fragment;
 
 namespace WB.UI.Shared.Enumerator.Activities
 {

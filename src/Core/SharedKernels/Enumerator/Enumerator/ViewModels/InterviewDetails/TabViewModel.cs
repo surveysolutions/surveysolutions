@@ -14,7 +14,7 @@ public class TabViewModel : BaseViewModel
     public CompleteTabContent TabContent { get; set; }
     public ObservableRangeCollection<EntityWithErrorsViewModel> Items { get; set; } = new();
         
-    public string Count => Items.Count > 0 ? $"{Total}" : "No";
+    public string Count => Items.Count > 0 ? $"{Total}" : UIResources.Interview_Complete_No;
         
     private int total;
     public int Total
