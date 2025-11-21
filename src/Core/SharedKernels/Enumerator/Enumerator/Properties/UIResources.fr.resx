@@ -966,4 +966,29 @@ Vous pouvez créer ou modifier vos questionnaires dans Survey Solutions Designer
   <data name="SelectMapTitle" xml:space="preserve">
       <value>Sélectionnez une carte:</value>
   </data>
+  <data name="Interview_Complete_Instruction" xml:space="preserve">
+    <value>Une fois soumis, cet entretien sera verrouillé et ne pourra pas être modifié. Veuillez vous assurer que toutes les informations sont correctes.</value>
+</data>
+  <data name="Interview_Complete_MoreCountString" xml:space="preserve">
+    <value>et {0} de plus</value>
+</data>
+  <data name="Interview_Complete_Success_Text" xml:space="preserve">
+    <value>Toutes les questions obligatoires ont été répondues
+Aucune erreur détectée</value>
+</data>
+  <data name="Interview_Complete_Title" xml:space="preserve">
+    <value>Vérifier et soumettre
+Entretien {0}</value>
+</data>
+  <data name="Interview_Complete_Tab_Title_Critical" xml:space="preserve">
+    <value>Erreurs
+critiques</value>
+</data>
+  <data name="Interview_Complete_Tab_Title_WithErrors" xml:space="preserve">
+    <value>Erreurs</value>
+</data>
+  <data name="Interview_Complete_Tab_Title_Unanswered" xml:space="preserve">
+    <value>Questions
+sans réponse</value>
+</data>
 </root>

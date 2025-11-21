@@ -67,9 +67,6 @@
   <data name="Complete" xml:space="preserve">
     <value>Uzamknout</value>
   </data>
-  <data name="CompleteAbout" xml:space="preserve">
-    <value>Chystáte se dokončit tento rozhovor</value>
-  </data>
   <data name="CoverSupervisorNote" xml:space="preserve">
     <value>Poznámka od garanta:</value>
   </data>
@@ -468,10 +465,6 @@ Požádejte o pomoc svého garanta.</value>
     <data name="CompleteCriticalityWarnConfirmation" xml:space="preserve">
   <value>Prosím potvrďte, že chcete odeslat tento rozhovor s kritickými problémy.</value>
 </data>
-    
-  <data name="CompleteInterviewStatus" xml:space="preserve">
-    <value>Problémy s rozhovorem:</value>
-</data>
     <data name="Complete_CriticalUnansweredQuestions" xml:space="preserve">
     <value>Kritické nezodpovězené otázky: {{count}}</value>
   </data>
@@ -483,6 +476,44 @@ Požádejte o pomoc svého garanta.</value>
   </data>
     <data name="Complete_QuestionsWithErrors" xml:space="preserve">
     <value>Otázky s chybami: {{count}}</value>
+  </data>
+  <data name="CompleteReviewSubmit" xml:space="preserve">
+    <value>Zkontrolovat a odeslat &lt;br /&gt;
+Rozhovor {{key}}</value>
+  </data>
+  <data name="Complete_Tab_CriticalErrors" xml:space="preserve">
+    <value>Kritické &lt;br /&gt;
+Chyby</value>
+  </data>
+  <data name="Complete_Tab_QuestionsWithErrors" xml:space="preserve">
+    <value>Chyby</value>
+  </data>
+  <data name="Complete_Tab_UnansweredQuestions" xml:space="preserve">
+    <value>Nezodpovězené &lt;br /&gt;
+Otázky</value>
+  </data>
+  <data name="Complete_AllGood" xml:space="preserve">
+    <value>Všechny povinné otázky zodpovězeny &lt;br /&gt;
+Nebyly zjištěny žádné chyby</value>
+  </data>
+  <data name="Complete_AndMore" xml:space="preserve">
+    <value>a ještě {{count}}</value>
+  </data>
+  <data name="Complete_NoteIsRequired" xml:space="preserve">
+    <value>Poznámka je nutná pro odeslání rozhovoru</value>
+  </data>
+  <data name="Complete_Required" xml:space="preserve">
+    <value>Povinné</value>
+  </data>
+  <data name="Complete_Error" xml:space="preserve">
+    <value>Chyba:</value>
+  </data>
+  <data name="Complete_LastComment" xml:space="preserve">
+    <value>Poslední komentář:</value>
+  </data>
+  <data name="Complete_SubmitInfo" xml:space="preserve">
+    <value>Po odeslání bude tento rozhovor uzamčen a nelze jej upravovat. &lt;br /&gt;
+Ujistěte se, že všechny informace jsou správné.</value>
   </data>
   <data name="TurnOffDevMode" xml:space="preserve">
     <value>Vypnout režim vývojáře</value>

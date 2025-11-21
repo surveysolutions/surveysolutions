@@ -82,6 +82,7 @@ export default {
         state.coverInfo = coverInfo
     },
     SET_COMPLETE_INFO(state, completeInfo) {
+        state.criticalityInfo = null;
         state['completeInfo'] = completeInfo
 
         if (state.criticalityLevel && completeInfo.criticalityLevel != state.criticalityLevel)

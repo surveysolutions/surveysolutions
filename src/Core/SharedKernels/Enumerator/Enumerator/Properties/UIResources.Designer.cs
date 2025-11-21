@@ -1629,6 +1629,12 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
             }
         }
         
+        public static string Interview_Complete_Instruction {
+            get {
+                return ResourceManager.GetString("Interview_Complete_Instruction", resourceCulture);
+            }
+        }
+        
         public static string Loading {
             get {
                 return ResourceManager.GetString("Loading", resourceCulture);
@@ -1734,6 +1740,42 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string SelectShapefileTitle {
             get {
                 return ResourceManager.GetString("SelectShapefileTitle", resourceCulture);
+            }
+        }
+        
+        public static string Interview_Complete_Title {
+            get {
+                return ResourceManager.GetString("Interview_Complete_Title", resourceCulture);
+            }
+        }
+        
+        public static string Interview_Complete_Success_Text {
+            get {
+                return ResourceManager.GetString("Interview_Complete_Success_Text", resourceCulture);
+            }
+        }
+        
+        public static string Interview_Complete_MoreCountString {
+            get {
+                return ResourceManager.GetString("Interview_Complete_MoreCountString", resourceCulture);
+            }
+        }
+        
+        public static string Interview_Complete_Tab_Title_Critical {
+            get {
+                return ResourceManager.GetString("Interview_Complete_Tab_Title_Critical", resourceCulture);
+            }
+        }
+        
+        public static string Interview_Complete_Tab_Title_WithErrors {
+            get {
+                return ResourceManager.GetString("Interview_Complete_Tab_Title_WithErrors", resourceCulture);
+            }
+        }
+        
+        public static string Interview_Complete_Tab_Title_Unanswered {
+            get {
+                return ResourceManager.GetString("Interview_Complete_Tab_Title_Unanswered", resourceCulture);
             }
         }
     }

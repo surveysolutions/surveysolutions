@@ -5,7 +5,7 @@ using MvvmCross.Platforms.Android.Views.Fragments;
 using MvvmCross.ViewModels;
 using Fragment = AndroidX.Fragment.App.Fragment;
 
-namespace WB.UI.Interviewer.CustomControls
+namespace WB.UI.Shared.Enumerator.CustomControls
 {
     //Waiting for release of ViewPager2 v 1.1.x
     public class MvxFragmentStateAdapter : FragmentStateAdapter

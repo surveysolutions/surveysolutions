@@ -189,9 +189,6 @@
   <data name="Complete" xml:space="preserve">
     <value>完成</value>
   </data>
-  <data name="CompleteAbout" xml:space="preserve">
-    <value>即将完成这个访谈</value>
-  </data>
   <data name="CompleteErrors" xml:space="preserve">
     <value>有错误的问题：</value>
   </data>
@@ -425,10 +422,47 @@
   <data name="NumberCannotBeLessThanProtected" xml:space="preserve">
     <value>输入的值不能小于受保护的答案</value>
   </data>
-  <data name="TurnOffDevMode" xml:space="preserve">
+  <data name="CompleteReviewSubmit" xml:space="preserve">
+    <value>审阅并提交 &lt;br /&gt;
+访谈 {{key}}</value>
+  </data>
+  <data name="Complete_Tab_CriticalErrors" xml:space="preserve">
+    <value>严重 &lt;br /&gt;
+错误</value>
+  </data>
+  <data name="Complete_Tab_QuestionsWithErrors" xml:space="preserve">
+    <value>错误</value>
+  </data>
+  <data name="Complete_Tab_UnansweredQuestions" xml:space="preserve">
+    <value>未作答的 &lt;br /&gt;
+问题</value>
+  </data>
+  <data name="Complete_AllGood" xml:space="preserve">
+    <value>所有必答问题均已回答 &lt;br /&gt;
+未发现错误</value>
+  </data>
+  <data name="Complete_AndMore" xml:space="preserve">
+    <value>以及另外 {{count}} 个</value>
+  </data>
+  <data name="Complete_NoteIsRequired" xml:space="preserve">
+    <value>提交访谈需要备注</value>
+  </data>
+  <data name="Complete_Required" xml:space="preserve">
+    <value>必填</value>
+  </data>
+  <data name="Complete_Error" xml:space="preserve">
+    <value>错误：</value>
+  </data>
+  <data name="Complete_LastComment" xml:space="preserve">
+    <value>最后评论：</value>
+  </data>
+  <data name="Complete_SubmitInfo" xml:space="preserve">
+    <value>提交后，此访谈将被锁定且无法编辑。 &lt;br /&gt;
+请确保所有信息正确。</value>
+  </data>
+    <data name="TurnOffDevMode" xml:space="preserve">
     <value>关闭开发者模式</value>
   </data>
   <data name="TurnOnDevMode" xml:space="preserve">
     <value>开启开发者模式</value>
-  </data>
-</root>
+  </data></root>

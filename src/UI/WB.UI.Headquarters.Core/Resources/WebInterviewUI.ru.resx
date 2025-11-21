@@ -378,9 +378,6 @@
   <data name="WebInterview" xml:space="preserve">
     <value>Веб интервью</value>
   </data>
-  <data name="CompleteAbout" xml:space="preserve">
-    <value>Вы на финальной стадии работы с интервью</value>
-  </data>
   <data name="GPSNotAvailable" xml:space="preserve">
     <value>Ваш Браузер не поддерживает получение местоположения через Geolocation API</value>
   </data>
@@ -527,9 +524,6 @@ Oбратитесь в тех. поддержку за помощью</value>
   <data name="AssignmentLimitError" xml:space="preserve">
     <value>Вы не можите создать интервью из этого задания</value>
   </data>
-  <data name="CompleteInterviewStatus" xml:space="preserve">
-      <value>Замечания по интервью:</value>
-  </data>
   <data name="Complete_CriticalUnansweredQuestions" xml:space="preserve">
       <value>Критические вопросы без ответов: {{count}}</value>
   </data>
@@ -542,10 +536,47 @@ Oбратитесь в тех. поддержку за помощью</value>
   <data name="Complete_QuestionsWithErrors" xml:space="preserve">
       <value>Вопросы с ошибками: {{count}}</value>
   </data>
-  <data name="TurnOffDevMode" xml:space="preserve">
+  <data name="CompleteReviewSubmit" xml:space="preserve">
+    <value>Проверить и отправить &lt;br /&gt;
+интервью {{key}}</value>
+  </data>
+  <data name="Complete_Tab_CriticalErrors" xml:space="preserve">
+    <value>Критические &lt;br /&gt;
+ошибки</value>
+  </data>
+  <data name="Complete_Tab_QuestionsWithErrors" xml:space="preserve">
+    <value>Ошибки</value>
+  </data>
+  <data name="Complete_Tab_UnansweredQuestions" xml:space="preserve">
+    <value>Вопросы &lt;br /&gt;
+без ответа</value>
+  </data>
+  <data name="Complete_AllGood" xml:space="preserve">
+    <value>Все обязательные вопросы отвечены &lt;br /&gt;
+Ошибок не обнаружено</value>
+  </data>
+  <data name="Complete_AndMore" xml:space="preserve">
+    <value>и ещё {{count}}</value>
+  </data>
+  <data name="Complete_NoteIsRequired" xml:space="preserve">
+    <value>Для отправки интервью требуется комментарий</value>
+  </data>
+  <data name="Complete_Required" xml:space="preserve">
+    <value>Обязательный</value>
+  </data>
+  <data name="Complete_Error" xml:space="preserve">
+    <value>Ошибка:</value>
+  </data>
+  <data name="Complete_LastComment" xml:space="preserve">
+    <value>Последний комментарий:</value>
+  </data>
+  <data name="Complete_SubmitInfo" xml:space="preserve">
+    <value>После отправки интервью будет заблокировано и не сможет быть изменено. &lt;br /&gt;
+Пожалуйста убедитесь, что вся информация корректна.</value>
+  </data>
+   <data name="TurnOffDevMode" xml:space="preserve">
     <value>Выключить режим разработчика</value>
   </data>
   <data name="TurnOnDevMode" xml:space="preserve">
     <value>Включить режим разработчика</value>
-  </data>
-</root>
+  </data></root>
