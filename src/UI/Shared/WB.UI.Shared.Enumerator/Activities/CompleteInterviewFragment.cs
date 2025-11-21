@@ -63,12 +63,40 @@ namespace WB.UI.Shared.Enumerator.Activities
         {
             private readonly IMvxAndroidBindingContext bindingContext;
             private readonly IList<TabViewModel> tabs;
-            private readonly Dictionary<int, PropertyChangedEventHandler> eventHandlers = new Dictionary<int, PropertyChangedEventHandler>();
+            private readonly Dictionary<int, PropertyChangedEventHandler> eventHandlers = new();
+            private readonly Action onTabSelected;
+            private readonly Func<int> getCurrentPosition;
+            private TabLayout tabLayout;
+            private EventHandler<TabLayout.TabSelectedEventArgs> tabSelectedHandler;
 
-            public TabConfigurationStrategy(IMvxAndroidBindingContext bindingContext, IList<TabViewModel> tabs)
+            public TabConfigurationStrategy(
+                IMvxAndroidBindingContext bindingContext, 
+                IList<TabViewModel> tabs,
+                Action onTabSelected,
+                Func<int> getCurrentPosition)
             {
                 this.bindingContext = bindingContext;
                 this.tabs = tabs;
+                this.onTabSelected = onTabSelected;
+                this.getCurrentPosition = getCurrentPosition;
+            }
+
+            public void AttachTabSelectionHandler(TabLayout tabLayout, ViewPager2 viewPager)
+            {
+                this.tabLayout = tabLayout;
+
+                tabSelectedHandler = (s, e) =>
+                {
+                    var position = e.Tab.Position;
+                    if (!tabs[position].IsEnabled)
+                    {
+                        viewPager.Post(() => viewPager.SetCurrentItem(getCurrentPosition(), false));
+                        return;
+                    }
+                    onTabSelected?.Invoke();
+                };
+
+                tabLayout.TabSelected += tabSelectedHandler;
             }
 
             public void OnConfigureTab(TabLayout.Tab tab, int position)
@@ -116,16 +144,27 @@ namespace WB.UI.Shared.Enumerator.Activities
 
             protected override void Dispose(bool disposing)
             {
-                foreach (var kvp in eventHandlers)
+                if (disposing)
                 {
-                    var position = kvp.Key;
-                    var handler = kvp.Value;
-                    if (position < tabs.Count)
+                    // Unsubscribe from TabSelected event
+                    if (tabLayout != null && tabSelectedHandler != null)
                     {
-                        tabs[position].PropertyChanged -= handler;
+                        tabLayout.TabSelected -= tabSelectedHandler;
+                        tabSelectedHandler = null;
                     }
+
+                    // Unsubscribe from property changes
+                    foreach (var kvp in eventHandlers)
+                    {
+                        var position = kvp.Key;
+                        var handler = kvp.Value;
+                        if (position < tabs.Count)
+                        {
+                            tabs[position].PropertyChanged -= handler;
+                        }
+                    }
+                    eventHandlers.Clear();
                 }
-                eventHandlers.Clear();
 
                 base.Dispose(disposing);
             }
@@ -138,20 +177,16 @@ namespace WB.UI.Shared.Enumerator.Activities
             var adapter = new TabsPagerAdapter(this.Context, this.ChildFragmentManager, this.Lifecycle, tabsViewModels);
             viewPager.Adapter = adapter;
 
-            tabConfigurationStrategy = new TabConfigurationStrategy((IMvxAndroidBindingContext)this.BindingContext, tabsViewModels);
+            tabConfigurationStrategy = new TabConfigurationStrategy(
+                (IMvxAndroidBindingContext)this.BindingContext, 
+                tabsViewModels,
+                UpdateTabIndicator,
+                () => viewPager.CurrentItem);
+            
             var tabLayoutMediator = new TabLayoutMediator(tabLayout, viewPager, tabConfigurationStrategy);
             tabLayoutMediator.Attach();
-
-            tabLayout.TabSelected += (s, e) =>
-            {
-                var position = e.Tab.Position;
-                if (!((TabViewModel)viewModel.Tabs[position]).IsEnabled)
-                {
-                    viewPager.Post(() => viewPager.SetCurrentItem(viewPager.CurrentItem, false));
-                    return;
-                }
-                UpdateTabIndicator();
-            };
+            
+            tabConfigurationStrategy.AttachTabSelectionHandler(tabLayout, viewPager);
             
             int firstNonEmptyIndex = tabsViewModels.FindIndex(t => t.IsEnabled);
             if (firstNonEmptyIndex > 0)
