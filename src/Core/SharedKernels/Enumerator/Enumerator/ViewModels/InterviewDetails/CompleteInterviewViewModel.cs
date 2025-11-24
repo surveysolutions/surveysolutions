@@ -192,7 +192,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         }
 
         public string CommentLabel { get; protected set; }
-        public string CompleteButtonComment { get; protected set; }
+
+        public string CompleteButtonComment
+        {
+            get => completeButtonComment;
+            protected set
+            {
+                if (value == completeButtonComment) return;
+                completeButtonComment = value;
+                RaisePropertyChanged(() => CompleteButtonComment);
+            }
+        }
 
         private bool wasThisInterviewCompleted = false;
         public bool WasThisInterviewCompleted
@@ -222,6 +232,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private bool isCompletionAllowed;
         
         private bool hasCriticalIssues;
+        private string completeButtonComment;
+
         public bool HasCriticalIssues
         {
             get => hasCriticalIssues;
