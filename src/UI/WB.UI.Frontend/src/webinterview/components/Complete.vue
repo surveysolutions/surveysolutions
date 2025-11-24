@@ -31,7 +31,8 @@
         </ul>
 
         <div v-if="hasAnyIssue" class="tab-content wrapper-info list-unstyled marked-questions" :class="activeGroup.cssClass">
-            <div class="tab-content-item" v-for="item in activeGroup.items" :key="item.id" @click="navigateTo(item)">
+            <div class="tab-content-item" v-for="item in activeGroup.items" :key="item.id" @click="navigateTo(item)"
+                :class="{ 'critical-rule': item.type === 'critical-rule' }">
                 <a class="item-title" v-if="item.parentId || item.isPrefilled" href="javascript:void(0);"
                     v-dompurify-html="item.title"></a>
                 <div class="item-title" v-else v-dompurify-html="item.title"></div>
@@ -232,6 +233,10 @@
     cursor: pointer;
 }
 
+.tab-content .tab-content-item.critical-rule {
+    cursor: default;
+}
+
 .tab-content-item .item-title {
     color: rgba(0, 0, 0, 1);
     font-family: RobotoRegular;
@@ -398,9 +403,9 @@ export default {
         completeGroups() {
             let groups = []
 
-            const criticalFailed = this.criticalityInfo?.failedCriticalRules || []
+            const criticalFailedRules = (this.criticalityInfo?.failedCriticalRules || []).map(rule => ({ ...rule, type: 'critical-rule' }))
             const criticalUnanswered = this.criticalityInfo?.unansweredCriticalQuestions || []
-            const critical = criticalFailed.concat(criticalUnanswered)
+            const critical = criticalFailedRules.concat(criticalUnanswered)
             const criticalTotal = (this.criticalityInfo?.failedCriticalRulesTotal || 0)
                                 + (this.criticalityInfo?.unansweredCriticalQuestionsTotal || 0);
             groups.push({
