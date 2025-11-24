@@ -47,7 +47,7 @@
             <div class="and-more" v-if="moreCount > 0">{{ $t('WebInterviewUI.Complete_AndMore', { count: moreCount }) }}</div>
         </div>
 
-        <div class="wrapper-info">
+        <div class="wrapper-info note-supervisor">
             <div class="container-info">
                 <label class="info-block gray-uppercase" for="comment-for-supervisor">
                     {{ noteToSupervisor }} <template v-if="hasCriticalIssues && criticalityLevel == 'Warn'">
@@ -215,9 +215,8 @@
 
 .tab-content {
     margin-top: 0px;
-    margin-bottom: 20px;
+    margin-bottom: 0px;
     background-color: #fff;
-    border-bottom: 1px solid #000000;
 }
 
 .tab-content .tab-content-item {
@@ -287,6 +286,13 @@
     height: 100%;
     border-radius: 4px 0 0 4px;
 }
+
+.note-supervisor {
+    border-top: 1px solid #000000;
+    padding-top: 40px;
+    margin-top: 0px;
+}
+
 
 /* Button with icon styles */
 .btn-with-icon {
