@@ -93,7 +93,8 @@ export default {
         modelValue: {
             type: Boolean,
             default: false
-        }
+        },
+        questionnaireId: { type: String, required: true }
     },
     setup(props, { emit }) {
         const isOpen = ref(props.modelValue)
@@ -103,7 +104,7 @@ export default {
         const messagesContainer = ref(null)
 
         // Initialize OpenAI composable
-        const { sendMessage: sendToOpenAI, createSystemMessage } = useAssistant()
+        const { sendMessage: sendToAssistant, createSystemMessage } = useAssistant()
 
         // Watch for prop changes
         watch(() => props.modelValue, (newVal) => {
@@ -166,7 +167,7 @@ export default {
 
             try {
                 // Call OpenAI API with conversation history
-                const response = await callOpenAI(messageText)
+                const response = await callAssistant(messageText, props.questionnaireId)
 
                 const assistantMessage = {
                     id: Date.now() + 1,
@@ -194,19 +195,9 @@ export default {
             }
         }
 
-        // OpenAI API call with conversation context
-        const callOpenAI = async (userMessage) => {
-            // Create system message with Survey Solutions context
-            const systemMessage = createSystemMessage(
-                'You are a helpful AI assistant specialized in Survey Solutions questionnaire design. ' +
-                'You help users with questionnaire structure, question types, validation rules, conditional logic, ' +
-                'roster design, variable naming conventions, and best practices for survey creation. ' +
-                'Provide clear, actionable advice and examples when possible. ' +
-                'Keep responses concise but informative.'
-            )
+        const callAssistant = async (userMessage, questionnaireId) => {
 
-            // Build conversation history including system message
-            const conversationHistory = [systemMessage]
+            const conversationHistory = []
 
             // Add previous messages from the current conversation
             messages.value.forEach(msg => {
@@ -222,11 +213,9 @@ export default {
                 content: userMessage
             })
 
-            // Call OpenAI API
-            return await sendToOpenAI(conversationHistory, {
-                model: 'gpt-3.5-turbo',
-                maxTokens: 800,
-                temperature: 0.7
+            // Call Assistant API
+            return await sendToAssistant(conversationHistory, {
+                questionnaireId: questionnaireId
             })
         }
 

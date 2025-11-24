@@ -42,23 +42,23 @@
                             <span class="caret"></span>
                             <span class="sr-only">{{
                                 $t('QuestionnaireEditor.ToggleDropdown')
-                            }}</span>
+                                }}</span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-right">
                             <li>
                                 <a href="/identity/account/manage">{{
                                     $t('QuestionnaireEditor.ManageAccount')
-                                }}</a>
+                                    }}</a>
                             </li>
                             <li>
                                 <a href="/identity/account/manage/changepassword">{{
                                     $t('QuestionnaireEditor.ChangePassword')
-                                }}</a>
+                                    }}</a>
                             </li>
                             <li>
                                 <a href="/identity/account/logout">{{
                                     $t('QuestionnaireEditor.LogOut')
-                                }}</a>
+                                    }}</a>
                             </li>
                         </ul>
                     </div>
@@ -153,7 +153,7 @@
     <VerificationDialog ref="verificationDialog" :questionnaireId="questionnaireId" />
     <SharedInfoDialog ref="sharedInfoDialog" :questionnaireId="questionnaireId" />
     <DownloadPDFDialog ref="downloadPDFDialog" :questionnaireId="questionnaireId" />
-    <ChatDialog v-model="chatDialogOpen" />
+    <ChatDialog v-model="chatDialogOpen" :questionnaireId="questionnaireId" />
 </template>
 
 <script>

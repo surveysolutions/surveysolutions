@@ -362,8 +362,6 @@ namespace WB.UI.Designer
                     pattern: "{controller=QuestionnaireList}/{action=Index}/{id?}");
                
                 routes.MapRazorPages();
-                
-                routes.MapReverseProxy();
             });
             
             if (aspCoreKernel == null) return;

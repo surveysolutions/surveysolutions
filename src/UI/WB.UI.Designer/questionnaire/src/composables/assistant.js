@@ -9,13 +9,7 @@ export const useAssistant = () => {
   const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms))
   
   const sendMessage = async (messages, options = {}) => {
-    const {
-      model = process.env.VUE_APP_OPENAI_MODEL || 'gpt-3.5-turbo',
-      maxTokens = parseInt(process.env.VUE_APP_OPENAI_MAX_TOKENS) || 500,
-      temperature = 0.7,
-      retries = 3
-    } = options
-    
+        
     // Rate limiting: Ensure minimum interval between requests
     const now = Date.now()
     const timeSinceLastRequest = now - lastRequestTime
@@ -33,6 +27,7 @@ export const useAssistant = () => {
               role: msg.role,
               content: msg.content
             })),
+            qiestionnaireId: options.questionnaireId || null 
           },
           {
             // headers: {
