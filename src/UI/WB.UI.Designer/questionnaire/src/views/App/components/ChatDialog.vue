@@ -84,7 +84,7 @@
 
 <script>
 import { ref, nextTick, watch } from 'vue'
-import { useOpenAI } from '../../../composables/useOpenAI'
+import { useAssistant } from '../../../composables/assistant'
 
 export default {
     name: 'ChatDialog',
@@ -103,7 +103,7 @@ export default {
         const messagesContainer = ref(null)
 
         // Initialize OpenAI composable
-        const { sendMessage: sendToOpenAI, createSystemMessage } = useOpenAI()
+        const { sendMessage: sendToOpenAI, createSystemMessage } = useAssistant()
 
         // Watch for prop changes
         watch(() => props.modelValue, (newVal) => {

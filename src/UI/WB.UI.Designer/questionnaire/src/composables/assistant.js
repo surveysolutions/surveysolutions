@@ -1,12 +1,6 @@
 import axios from 'axios'
 
-export const useOpenAI = () => {
-  // Get API key from environment variables only - never hardcode it
-  const apiKey = 'your-api-key-here' || process.env.VUE_APP_OPENAI_API_KEY
-  
-  if (!apiKey) {
-    throw new Error('OpenAI API key is not configured. Please set VUE_APP_OPENAI_API_KEY in your environment variables.')
-  }
+export const useAssistant = () => {  
   
   // Rate limiting: Track requests to avoid hitting limits
   let lastRequestTime = 0
@@ -33,21 +27,18 @@ export const useOpenAI = () => {
     for (let attempt = 1; attempt <= retries; attempt++) {
       try {
         const response = await axios.post(
-          'https://api.openai.com/v1/chat/completions',
-          {
-            model,
+          '/api/assistance',
+          {            
             messages: messages.map(msg => ({
               role: msg.role,
               content: msg.content
             })),
-            max_tokens: maxTokens,
-            temperature
           },
           {
-            headers: {
-              'Authorization': `Bearer ${apiKey}`,
-              'Content-Type': 'application/json'
-            },
+            // headers: {
+            //   'Authorization': `Bearer ${apiKey}`,
+            //   'Content-Type': 'application/json'
+            // },
             timeout: 30000 // 30 second timeout
           }
         )

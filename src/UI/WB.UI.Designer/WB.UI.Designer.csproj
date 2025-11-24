@@ -60,6 +60,8 @@
     <PackageReference Include="System.Security.Cryptography.Xml" Version="9.0.5" />
     <PackageReference Include="System.Text.Json" Version="9.0.5" />
     <PackageReference Include="VueCliMiddleware" Version="6.0.0" />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(Configuration)' == 'Debug' ">
     <PackageReference Include="Yarp.ReverseProxy" Version="2.3.0" />
   </ItemGroup>
   <ItemGroup>
