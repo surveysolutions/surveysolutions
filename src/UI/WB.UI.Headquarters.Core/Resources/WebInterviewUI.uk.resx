@@ -198,9 +198,6 @@
   <data name="Complete" xml:space="preserve">
     <value>Завершено</value>
   </data>
-  <data name="CompleteAbout" xml:space="preserve">
-    <value>Ви наближаєтеся до завершення інтерв'ю</value>
-  </data>
   <data name="CompleteErrors" xml:space="preserve">
     <value>Питання з помилками:</value>
   </data>
@@ -502,5 +499,49 @@
   </data>
   <data name="Yes" xml:space="preserve">
     <value>Так</value>
+  </data>
+  <data name="CompleteReviewSubmit" xml:space="preserve">
+    <value>Перегляд і Надсилання &lt;br /&gt;
+Інтерв'ю {{key}}</value>
+  </data>
+  <data name="Complete_Tab_CriticalErrors" xml:space="preserve">
+    <value>Критичні &lt;br /&gt;
+Помилки</value>
+  </data>
+  <data name="Complete_Tab_QuestionsWithErrors" xml:space="preserve">
+    <value>Помилки</value>
+  </data>
+  <data name="Complete_Tab_UnansweredQuestions" xml:space="preserve">
+    <value>Без відповіді &lt;br /&gt;
+Питання</value>
+  </data>
+  <data name="Complete_AllGood" xml:space="preserve">
+    <value>Усі обов'язкові питання мають відповіді &lt;br /&gt;
+Помилок не виявлено</value>
+  </data>
+  <data name="Complete_AndMore" xml:space="preserve">
+    <value>та ще {{count}}</value>
+  </data>
+  <data name="Complete_NoteIsRequired" xml:space="preserve">
+    <value>Для надсилання інтерв'ю потрібна примітка</value>
+  </data>
+  <data name="Complete_Required" xml:space="preserve">
+    <value>Обов'язкове</value>
+  </data>
+  <data name="Complete_Error" xml:space="preserve">
+    <value>Помилка:</value>
+  </data>
+  <data name="Complete_LastComment" xml:space="preserve">
+    <value>Останній коментар:</value>
+  </data>
+  <data name="Complete_SubmitInfo" xml:space="preserve">
+    <value>Після надсилання інтерв'ю буде заблоковано і його не можна буде змінити. &lt;br /&gt;
+Переконайтеся, що вся інформація правильна.</value>
+  </data>
+    <data name="TurnOffDevMode" xml:space="preserve">
+    <value>Вимкнути режим розробника</value>
+  </data>
+  <data name="TurnOnDevMode" xml:space="preserve">
+    <value>Увімкнути режим розробника</value>
   </data>
 </root>

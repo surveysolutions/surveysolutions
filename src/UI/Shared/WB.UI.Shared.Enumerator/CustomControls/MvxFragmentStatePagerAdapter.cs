@@ -6,7 +6,7 @@ using MvvmCross.Platforms.Android.Views.Fragments;
 using MvvmCross.ViewModels;
 using Object = Java.Lang.Object;
 
-namespace WB.UI.Interviewer.CustomControls
+namespace WB.UI.Shared.Enumerator.CustomControls
 {
     public class MvxFragmentStatePagerAdapter : FragmentStatePagerAdapter
     {

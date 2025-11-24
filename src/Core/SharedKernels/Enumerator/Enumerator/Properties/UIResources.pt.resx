@@ -958,4 +958,38 @@ Você pode criar ou editar seus questionários no Survey Solutions Designer</val
     <data name="MenuItem_Title_ZoomGeoTracking" xml:space="preserve">
       <value>Ampliar para os registros de rastreamento</value>
     </data>
+  <data name="Interview_Complete_Instruction" xml:space="preserve">
+    <value>Uma vez enviado, esta entrevista será bloqueada e não poderá ser editada. Verifique se todas as informações estão corretas.</value>
+</data>
+  <data name="Interview_Complete_MoreCountString" xml:space="preserve">
+    <value>e mais {0}</value>
+</data>
+  <data name="Interview_Complete_Success_Text" xml:space="preserve">
+    <value>Todas as perguntas obrigatórias foram respondidas
+Nenhum erro detectado</value>
+</data>
+  <data name="Interview_Complete_Title" xml:space="preserve">
+    <value>Revisar e enviar
+Entrevista {0}</value>
+</data>
+  <data name="Interview_Complete_Tab_Title_Critical" xml:space="preserve">
+    <value>Erros
+críticos</value>
+</data>
+  <data name="Interview_Complete_Tab_Title_WithErrors" xml:space="preserve">
+    <value>Erros</value>
+</data>
+  <data name="Interview_Complete_Tab_Title_Unanswered" xml:space="preserve">
+    <value>Perguntas
+sem resposta</value>
+</data>
+  <data name="BarcodeScanner_Error_UnknownError" xml:space="preserve">
+    <value>Erro desconhecido</value>
+  </data>
+  <data name="BarcodeScanner_Error_StartingCamera" xml:space="preserve">
+    <value>Erro ao iniciar a câmera: </value>
+  </data>
+  <data name="BarcodeScanner_Error_Interrupted" xml:space="preserve">
+    <value>Interrompido</value>
+  </data>
 </root>

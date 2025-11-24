@@ -120,7 +120,7 @@
     <color name="interviewStatusBarDisabled">#474747</color>
     <color name="assignmentsStatusBar">#8C59DE</color>
 
-    <color name="complete_screen_title_text">#747474</color>
+    <color name="complete_screen_title_text">#000000</color>
     <color name="complete_screen_statistics_border">#dadada</color>
     <color name="complete_screen_statistics_answered_color">#2a81cb</color>
     <color name="complete_screen_statistics_unanswered_color">#2a81cb</color>
@@ -128,6 +128,9 @@
     <color name="complete_screen_statistics_neutral_color">#9a9a9a</color>
     <color name="complete_screen_statistics_web_interview_link_color">#000000</color>
     <color name="complete_screen_statistics_group_background">#f2f2f2</color>
+    
+    <color name="complete_screen_statistics_label">#000000</color>
+    <color name="complete_screen_statistics_error">#DB3913</color>
 
     <color name="interview_question_yes_no">#36AEE5</color>
     <color name="interview_question_yesno_selected_text">#3f3f3f</color>

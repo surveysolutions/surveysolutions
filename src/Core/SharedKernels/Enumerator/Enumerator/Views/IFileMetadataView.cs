@@ -10,5 +10,6 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         string FileId { get; set; }
         string FileName { get; set; }
         string ContentType { get; set; }
+        string Md5 { get; set; }
     }
 }

@@ -183,9 +183,6 @@
   <data name="Complete" xml:space="preserve">
     <value>დასრულება</value>
   </data>
-  <data name="CompleteAbout" xml:space="preserve">
-    <value>თქვენ აპირებთ ამ გასაუბრების დასრულებას</value>
-  </data>
   <data name="CompleteErrors" xml:space="preserve">
     <value>კითხვები შეცდომებით:</value>
   </data>
@@ -378,4 +375,47 @@
   <data name="Yes" xml:space="preserve">
     <value>დიახ</value>
   </data>
-</root>
+  <data name="CompleteReviewSubmit" xml:space="preserve">
+    <value>გადახედვა და გაგზავნა &lt;br /&gt;
+ინტერვიუ {{key}}</value>
+  </data>
+  <data name="Complete_Tab_CriticalErrors" xml:space="preserve">
+    <value>კრიტიკული &lt;br /&gt;
+შეცდომები</value>
+  </data>
+  <data name="Complete_Tab_QuestionsWithErrors" xml:space="preserve">
+    <value>შეცდომები</value>
+  </data>
+  <data name="Complete_Tab_UnansweredQuestions" xml:space="preserve">
+    <value>უპასუხოდ &lt;br /&gt;
+დარჩენილი კითხვები</value>
+  </data>
+  <data name="Complete_AllGood" xml:space="preserve">
+    <value>ყველა სავალდებულო კითხვას გაეცა პასუხი &lt;br /&gt;
+შეცდომები არ გამოვლენილა</value>
+  </data>
+  <data name="Complete_AndMore" xml:space="preserve">
+    <value>და კიდევ {{count}}</value>
+  </data>
+  <data name="Complete_NoteIsRequired" xml:space="preserve">
+    <value>ინტერვიუს გაგზავნამდე საჭიროა შენიშვნა</value>
+  </data>
+  <data name="Complete_Required" xml:space="preserve">
+    <value>სავალდებულო</value>
+  </data>
+  <data name="Complete_Error" xml:space="preserve">
+    <value>შეცდომა:</value>
+  </data>
+  <data name="Complete_LastComment" xml:space="preserve">
+    <value>ბოლო კომენტარი:</value>
+  </data>
+  <data name="Complete_SubmitInfo" xml:space="preserve">
+    <value>გაგზავნის შემდეგ ინტერვიუ დაიბლოკება და ვეღარ შეიცვლება. &lt;br /&gt;
+დარწმუნდით რომ ინფორმაცია სწორია.</value>
+  </data>
+    <data name="TurnOffDevMode" xml:space="preserve">
+    <value>გამორთეთ დეველოპერის რეჟიმი</value>
+  </data>
+  <data name="TurnOnDevMode" xml:space="preserve">
+    <value>ჩართეთ დეველოპერის რეჟიმი</value>
+  </data></root>

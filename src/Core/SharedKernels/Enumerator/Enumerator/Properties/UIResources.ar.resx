@@ -240,6 +240,15 @@
     <data name="Interview_Questions_QrBarcode_SaveAnswer" xml:space="preserve">
     <value>اضغط لأخذ الباركود</value>
 </data>
+  <data name="BarcodeScanner_Error_UnknownError" xml:space="preserve">
+    <value>خطأ غير معروف</value>
+  </data>
+  <data name="BarcodeScanner_Error_StartingCamera" xml:space="preserve">
+    <value>خطأ في بدء تشغيل الكاميرا: </value>
+  </data>
+  <data name="BarcodeScanner_Error_Interrupted" xml:space="preserve">
+    <value>متقطع</value>
+  </data>
     <data name="Interview_Questions_Area_SaveAnswer" xml:space="preserve">
     <value>اضغط للإجابة</value>
 </data>
@@ -956,5 +965,30 @@
 </data>
     <data name="SelectShapefileTitle" xml:space="preserve">
   <value>اختر الحدود:</value>
+</data>
+  <data name="Interview_Complete_Instruction" xml:space="preserve">
+    <value>بمجرد الإرسال، سيتم قفل هذه المقابلة ولن يمكن تعديلها. يرجى التأكد من صحة جميع المعلومات.</value>
+</data>
+  <data name="Interview_Complete_MoreCountString" xml:space="preserve">
+    <value>و {0} أخرى</value>
+</data>
+  <data name="Interview_Complete_Success_Text" xml:space="preserve">
+    <value>تمت الإجابة على جميع الأسئلة المطلوبة
+لم يتم الكشف عن أي أخطاء</value>
+</data>
+  <data name="Interview_Complete_Title" xml:space="preserve">
+    <value>مراجعة وإرسال
+المقابلة {0}</value>
+</data>
+  <data name="Interview_Complete_Tab_Title_Critical" xml:space="preserve">
+    <value>أخطاء
+حرجة</value>
+</data>
+  <data name="Interview_Complete_Tab_Title_WithErrors" xml:space="preserve">
+    <value>أخطاء</value>
+</data>
+  <data name="Interview_Complete_Tab_Title_Unanswered" xml:space="preserve">
+    <value>أسئلة
+بدون إجابة</value>
 </data>
 </root>

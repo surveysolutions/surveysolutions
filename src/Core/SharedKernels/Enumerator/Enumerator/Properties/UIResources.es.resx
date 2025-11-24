@@ -291,6 +291,15 @@
     <data name="Interview_Questions_QrBarcode_SaveAnswer" xml:space="preserve">
     <value>Pulse para leer código de barras</value>
   </data>
+  <data name="BarcodeScanner_Error_UnknownError" xml:space="preserve">
+    <value>Error desconocido</value>
+  </data>
+  <data name="BarcodeScanner_Error_StartingCamera" xml:space="preserve">
+    <value>Error al iniciar la cámara: </value>
+  </data>
+  <data name="BarcodeScanner_Error_Interrupted" xml:space="preserve">
+    <value>Interrumpido</value>
+  </data>
     <data name="Interviewer_ApplicationName" xml:space="preserve">
     <value>Entrevistador de Survey Solutions</value>
   </data>
@@ -954,4 +963,29 @@
     <data name="PasswordMatchError" xml:space="preserve">
         <value>La contraseña debe ser la misma</value>
     </data>
+  <data name="Interview_Complete_Instruction" xml:space="preserve">
+    <value>Una vez enviado, esta entrevista se bloqueará y no podrá editarse. Por favor, asegúrese de que toda la información sea correcta.</value>
+  </data>
+  <data name="Interview_Complete_MoreCountString" xml:space="preserve">
+    <value>y {0} más</value>
+  </data>
+  <data name="Interview_Complete_Success_Text" xml:space="preserve">
+    <value>Todas las preguntas obligatorias respondidas
+No se detectaron errores</value>
+  </data>
+  <data name="Interview_Complete_Title" xml:space="preserve">
+    <value>Revisar y enviar
+Entrevista {0}</value>
+  </data>
+  <data name="Interview_Complete_Tab_Title_Critical" xml:space="preserve">
+    <value>Errores
+críticos</value>
+  </data>
+  <data name="Interview_Complete_Tab_Title_WithErrors" xml:space="preserve">
+    <value>Errores</value>
+  </data>
+  <data name="Interview_Complete_Tab_Title_Unanswered" xml:space="preserve">
+    <value>Preguntas
+sin respuesta</value>
+  </data>
 </root>

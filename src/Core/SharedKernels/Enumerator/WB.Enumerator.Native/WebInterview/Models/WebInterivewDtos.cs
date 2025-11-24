@@ -304,6 +304,7 @@ namespace WB.Enumerator.Native.WebInterview.Models
         public string Title { get; set; }
         public string EntityType { get; set; }
         public string Instruction { get; set; }
+        public string Name { get; set; }
     }
 
     public class TableOrMatrixRosterQuestionReference : RosterQuestionReference
@@ -381,23 +382,23 @@ namespace WB.Enumerator.Native.WebInterview.Models
         public CoverInfo()
         {
             this.IdentifyingEntities = new List<IdentifyingEntity>();
-            this.EntitiesWithComments = new EntityWithComment[0];
+            this.EntitiesWithComments = [];
         }
 
         public List<IdentifyingEntity> IdentifyingEntities { get; set; }
-        public EntityWithComment[] EntitiesWithComments { get; set; }
+        public QuestionReference[] EntitiesWithComments { get; set; }
         public int CommentedQuestionsCount { get; set; }
         public string SupervisorRejectComment { get; set; }
         public string Title { get; set; }
     }
-
-    public class EntityWithComment : QuestionReference { }
-
+    
     public class QuestionReference
     {
         public string Id { get; set; }
         public string ParentId { get; set; }
         public string Title { get; set; }
+        public string Error { get; set; }
+        public string Comment { get; set; }
         public bool IsPrefilled { get; set; }
     }
 

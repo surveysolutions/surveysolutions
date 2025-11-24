@@ -22,6 +22,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Helpers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -204,41 +205,39 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             var doesEventsExists = this.packagesService.IsPackageDuplicated(eventStreamSignatureTag);
 
             // KP-12038 media files are not updated if interviewer changes them after reject
-            var imageNames = new HashSet<string>(); 
-            var audioNames = new HashSet<string>();
-
-            var imagesQuestionsMd5 = (await GetMd5Caches(await this.imageFileStorage.GetBinaryFilesForInterview(id)));
-            var audioQuestionsFilesMd5 = (await GetMd5Caches(await this.audioFileStorage.GetBinaryFilesForInterview(id)));
-            var audioAuditFilesMd5 = (await GetMd5Caches(await this.audioAuditFileStorage.GetBinaryFilesForInterview(id)));
+            var imagesQuestionsMd5 = (await GetFileInfoCaches(await this.imageFileStorage.GetBinaryFilesForInterview(id)));
+            var audioQuestionsFilesMd5 = (await GetFileInfoCaches(await this.audioFileStorage.GetBinaryFilesForInterview(id)));
+            var audioAuditFilesMd5 = (await GetFileInfoCaches(await this.audioAuditFileStorage.GetBinaryFilesForInterview(id)));
 
             var interview = interviewsFactory.GetInterviewsByIds(new [] { id }).SingleOrDefault();
 
             return new InterviewUploadState
             {
                 IsEventsUploaded = doesEventsExists,
-                ImagesFilesNames = imageNames,
-                AudioFilesNames = audioNames,
-                ImageQuestionsFilesMd5 = imagesQuestionsMd5,
-                AudioQuestionsFilesMd5 = audioQuestionsFilesMd5,
-                AudioAuditFilesMd5 = audioAuditFilesMd5,
+                ImageQuestionsFilesMd5 = imagesQuestionsMd5.Select(i => i.Md5).ToHashSet(),
+                AudioQuestionsFilesMd5 = audioQuestionsFilesMd5.Select(i => i.Md5).ToHashSet(),
+                AudioAuditFilesMd5 = audioAuditFilesMd5.Select(i => i.Md5).ToHashSet(),
+                ImagesFiles = imagesQuestionsMd5,
+                AudioFiles = audioQuestionsFilesMd5,
+                AudioAuditFiles = audioAuditFilesMd5,
                 ResponsibleId = interview?.ResponsibleId,
                 IsReceivedByInterviewer = interview?.IsReceivedByInterviewer ?? false,
                 Mode = interview?.Mode ?? InterviewMode.Unknown
             };
         }
 
-        private static async Task<HashSet<string>> GetMd5Caches(List<InterviewBinaryDataDescriptor> descriptors)
+        private static async Task<List<FileInfoUploadState>> GetFileInfoCaches(List<InterviewBinaryDataDescriptor> descriptors)
         {
-            List<string> caches = new List<string>(descriptors.Count);
+            List<FileInfoUploadState> caches = new List<FileInfoUploadState>(descriptors.Count);
 
             foreach (var descriptor in descriptors)
             {
                 var md5 = await GetMd5Cache(descriptor);
                 if (md5 != null)
-                    caches.Add(md5);
+                    caches.Add(new FileInfoUploadState(descriptor.FileName, md5));
             }
 
-            return caches.ToHashSet();
+            return caches;
         }
 
         private static async Task<string> GetMd5Cache(InterviewBinaryDataDescriptor descriptor)
@@ -247,10 +246,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             if (fileContent == null)
                 return null;
 
-            using var crypto = MD5.Create();
-            var hash = crypto.ComputeHash(fileContent);
-            var hashString = BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
-            return hashString;
+            return CheckSumHelper.GetMd5Cache(fileContent);
         }
 
         protected IActionResult DetailsV3(Guid id)
