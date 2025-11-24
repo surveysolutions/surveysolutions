@@ -119,6 +119,7 @@
     <style name="Interview_Complete_Success_Text" parent="Interview_Question_Title_Base">
         <item name="android:textSize">@dimen/textsize_16</item>
         <item name="android:textColor">@color/group_completed</item>
+        <item name="android:layout_marginBottom">@dimen/interview_complete_success_text_margin_bottom</item>
     </style>
 
     <style name="Interview_Complete_Screen_Statistics_Label" parent="Interview_Complete_Base">
