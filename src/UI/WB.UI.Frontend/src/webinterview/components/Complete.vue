@@ -16,7 +16,7 @@
 
         <div class="wrapper-info" v-if="!hasAnyIssue">
             <div class="container-info info-block">
-                <div class="gray-uppercase" v-dompurify-html="$t('WebInterviewUI.Complete_AllGood')">
+                <div class="gray-uppercase success-text" v-dompurify-html="$t('WebInterviewUI.Complete_AllGood')">
                 </div>
             </div>
         </div>
@@ -30,7 +30,7 @@
             </li>
         </ul>
 
-        <div class="tab-content wrapper-info list-unstyled marked-questions" :class="activeGroup.cssClass">
+        <div v-if="hasAnyIssue" class="tab-content wrapper-info list-unstyled marked-questions" :class="activeGroup.cssClass">
             <div class="tab-content-item" v-for="item in activeGroup.items" :key="item.id" @click="navigateTo(item)">
                 <a class="item-title" v-if="item.parentId || item.isPrefilled" href="javascript:void(0);"
                     v-dompurify-html="item.title"></a>
