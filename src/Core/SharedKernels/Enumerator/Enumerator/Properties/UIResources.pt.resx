@@ -357,7 +357,7 @@ Você pode criar ou editar seus questionários no Survey Solutions Designer</val
     <value>Depois de concluir esta entrevista, ela será marcada como concluída e será enviada ao supervisor durante a próxima sincronização</value>
   </data>
   <data name="Interview_Complete_CriticalIssues_Instrunction" xml:space="preserve">
-    <value>Este botão está desativado porque a submissão de entrevistas com problemas críticos não é permitida</value>
+    <value>Para ativar o botão, por favor resolva os problemas críticos</value>
   </data>
   <data name="Interview_Complete_Errors" xml:space="preserve">
     <value>Erro(s)</value>
@@ -378,7 +378,7 @@ Você pode criar ou editar seus questionários no Survey Solutions Designer</val
     <value>Por favor, confirme que deseja enviar esta entrevista com problemas críticos.</value>
   </data>
   <data name="Interview_Complete_Note_For_Supervisor_with_Criticality" xml:space="preserve">
-    <value>Este botão permanece desativado até que você especifique um comentário para os problemas críticos acima</value>
+    <value>Para ativar o botão, por favor resolva os problemas críticos ou forneça uma explicação na caixa de comentário acima</value>
   </data>
   <data name="Interview_Complete_Questions_Status" xml:space="preserve">
     <value>Status das perguntas</value>
