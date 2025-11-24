@@ -59,6 +59,7 @@
 
     <LinearLayout style="@style/Interview_Question" 
                   android:orientation="vertical"
+                  android:layout_marginRight="@dimen/Interview_Entity_margin_left"
                   local:MvxBind="Visible Not(IsLoading)">
         <TextView
           style="@style/Interview_Complete_Note"
