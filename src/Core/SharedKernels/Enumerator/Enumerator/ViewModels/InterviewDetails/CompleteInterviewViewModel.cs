@@ -129,7 +129,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             this.Comment = lastCompletionComments.Get(this.InterviewId);
             this.CommentLabel = UIResources.Interview_Complete_Note_For_Supervisor;
-            this.CompleteButtonComment = UIResources.Interview_Complete_Consequences_Instrunction;
         }
         
         public List<TabViewModel> Tabs { get; set; }
