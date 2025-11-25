@@ -34,7 +34,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             IStatefulInterview interview = this.interviewRepository.Get(interviewId);
             var entitiesInInterview = interview.GetInvalidEntitiesInInterview().ToList();
             var total = entitiesInInterview.Count;
-            Identity[] invalidEntities = entitiesInInterview.GetRange(0, Math.Min(this.maxNumberOfEntities, entitiesInInterview.Count)).ToArray();
+            Identity[] invalidEntities = entitiesInInterview.Take(this.maxNumberOfEntities).ToArray();
             return new EntitiesListViewModelFactoryResult(
                 this.EntityWithErrorsViewModels<EntityWithErrorsViewModel>(interviewId, navigationState, invalidEntities, interview),
                 total
