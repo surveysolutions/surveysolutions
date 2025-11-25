@@ -101,31 +101,9 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 return BadRequest("System messages are not allowed from the client.");
             }
             
-            // Load system prompt from embedded resource
-            string systemPrompt;
-            try
-            {
-                var assembly = Assembly.GetExecutingAssembly();
-                var resourceName = "WB.UI.Designer.Resources.AssistantSystemPrompt.txt";
-                
-                await using var stream = assembly.GetManifestResourceStream(resourceName);
-                if (stream == null)
-                {
-                    throw new FileNotFoundException($"Embedded resource '{resourceName}' not found.");
-                }
-                
-                using var reader = new StreamReader(stream);
-                systemPrompt = await reader.ReadToEndAsync();
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Failed to load system prompt from embedded resources");
-                systemPrompt = "You are a helpful AI assistant specialized in Survey Solutions questionnaire design.";
-            }
-            
-            messages.Insert(0, new Message { Role = "system", Content = systemPrompt });
+            var systemPrompt = await GetSystemPrompt();
 
-            //Supply questionnaire context if provided
+            messages.Insert(0, new Message { Role = "system", Content = systemPrompt });
             
             var payloadObj = new {
                 model = modelSettings.ModelName,
@@ -161,6 +139,32 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 logger.LogError(ex, ex.Message);
                 return StatusCode(406, "Error communicating with the AI model service. Try again later.");
             }
+        }
+
+        private async Task<string> GetSystemPrompt()
+        {
+            string systemPrompt;
+            try
+            {
+                var assembly = Assembly.GetExecutingAssembly();
+                var resourceName = "WB.UI.Designer.Resources.AssistantSystemPrompt.txt";
+                
+                await using var stream = assembly.GetManifestResourceStream(resourceName);
+                if (stream == null)
+                {
+                    throw new FileNotFoundException($"Embedded resource '{resourceName}' not found.");
+                }
+                
+                using var reader = new StreamReader(stream);
+                systemPrompt = await reader.ReadToEndAsync();
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Failed to load system prompt from embedded resources");
+                systemPrompt = "You are a helpful AI assistant specialized in Survey Solutions questionnaire design.";
+            }
+
+            return systemPrompt;
         }
     }
     
