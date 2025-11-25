@@ -258,11 +258,6 @@ namespace WB.UI.Shared.Enumerator.Activities
 
         private int GetRecyclerContentHeight(MvxRecyclerView recyclerView)
         {
-            int scrollRange = recyclerView.ComputeVerticalScrollRange();
-            if (scrollRange > 0)
-            {
-                return scrollRange; 
-            }
             return CalculateTotalHeight(recyclerView);
         }
 
