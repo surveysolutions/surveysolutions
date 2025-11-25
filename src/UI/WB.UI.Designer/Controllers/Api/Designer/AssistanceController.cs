@@ -9,6 +9,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Net.Http;
 using Microsoft.Extensions.Logging;
+using WB.Core.BoundedContexts.Designer.Assistant;
 
 namespace WB.UI.Designer.Controllers.Api.Designer
 {
@@ -20,16 +21,20 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         private readonly IConfiguration configuration;
         private readonly IModelSettings modelSettings;
         private readonly ILogger<AssistanceController> logger;
+
+        private readonly IQuestionnaireContextProvider questionnaireContextProvider;
         //private readonly IQuestionnaireContextProvider questionnaireContextProvider;
 
         public AssistanceController(IConfiguration configuration, 
             //IQuestionnaireContextProvider questionnaireContextProvider,
-            ILogger<AssistanceController> logger)
+            ILogger<AssistanceController> logger,
+            IQuestionnaireContextProvider questionnaireContextProvider)
         {
             this.configuration = configuration;
             //this.questionnaireContextProvider = questionnaireContextProvider;
             this.logger = logger;
-            
+            this.questionnaireContextProvider = questionnaireContextProvider;
+
             // Switch between OpenAIModelSettings and LlamaModelSettings as needed
             // Example: this.modelSettings = new OpenAIModelSettings(configuration);
             this.modelSettings = new Llama32ModelSettings();
@@ -103,6 +108,9 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                     return BadRequest("Either 'messages' or 'prompt' must be provided.");
                 }
             }
+            
+            if (!Guid.TryParse(request.QuestionnaireId, out var questionnaireId))
+                return  BadRequest("Either 'questionnaireId' must be provided.");
 
             // Reject any system messages from the client
             if (messages.Any(m => m.Role != null && m.Role.Trim().ToLower() == "system"))
@@ -111,8 +119,15 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             }
             
             var systemPrompt = await GetSystemPrompt();
-
+            
+            var questionnaireJson = questionnaireContextProvider.GetQuestionnaireContext(questionnaireId);
+            if (!string.IsNullOrWhiteSpace(questionnaireJson))
+            {
+                systemPrompt += "\n\nCurrent questionnaire context:\n" + questionnaireJson;
+            }
+            
             messages.Insert(0, new Message { Role = "system", Content = systemPrompt });
+
             
             var payloadObj = new {
                 model = modelSettings.ModelName,

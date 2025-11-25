@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using AutoMapper;
 using Serilog.Extensions.Logging;
+using WB.Core.BoundedContexts.Designer.Assistant;
 using WB.Core.BoundedContexts.Designer.Classifications;
 using WB.Core.BoundedContexts.Designer.ImportExport;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Search;
@@ -42,6 +43,7 @@ namespace WB.UI.Designer.Modules
             registry.BindAsSingleton<IPdfQuery, PdfQuery>();
             
             registry.Bind<IQuestionnaireSearchStorage, QuestionnaireSearchStorage>();
+            registry.Bind<IQuestionnaireContextProvider, QuestionnaireContextProvider>();
             registry.Bind<IClassificationsStorage, ClassificationsStorage>();
             registry.BindAsSingleton<IWebTesterService, WebTesterService>();          
             registry.BindAsSingleton<ILoggerProvider, SerilogLoggerProvider>();   

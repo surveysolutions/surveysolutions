@@ -1,34 +1,27 @@
+using System;
+using Main.Core.Documents;
+using Newtonsoft.Json;
+using WB.Core.BoundedContexts.Designer.ImportExport;
+using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.Infrastructure.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
+
 namespace WB.Core.BoundedContexts.Designer.Assistant;
 
-public class QuestionnaireContextProvider : IQuestionnaireContextProvider
+public class QuestionnaireContextProvider(IDesignerQuestionnaireStorage questionnaireStorage, 
+    IImportExportQuestionnaireMapper importExportQuestionnaireMapper) 
+    : IQuestionnaireContextProvider
 {
-    public string GetQuestionnaireContext(string questionnaireId)
+    public string GetQuestionnaireContext(Guid questionnaireId)
     {
-        //Class generation
-        //could be too large for complex questionnaires
-        //some referenced entities could be missing
-            
-        //var questionnaire = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
-        // var questionnaire = this.GetQuestionnaire(id).Source;
-        // var supervisorVersion = version ?? this.engineVersionService.LatestSupportedVersion;
-        // var package = generationPackageFactory.Generate(questionnaire);
-        // var generated = this.expressionProcessorGenerator.GenerateProcessorStateClasses(package, supervisorVersion, inSingleFile: true);
-        //
-        // var resultBuilder = new StringBuilder();
-        //
-        // foreach (KeyValuePair<string, string> keyValuePair in generated)
-        // {
-        //     resultBuilder.AppendLine(string.Format("//{0}", keyValuePair.Key));
-        //     resultBuilder.AppendLine(keyValuePair.Value);
-        // }
-            
-            
-        //Consider location of assistant call as a context to extract relevant parts of questionnaire
-        //traverse questionnaire structure to the root and extract relevant parts
-        //current code generation is lacking the description of entities like question texts
-            
-        // Placeholder implementation
-        return $"Context for questionnaire {questionnaireId}";
-            
+        var questionnaireDocument = questionnaireStorage.Get(questionnaireId);
+        if (questionnaireDocument == null)
+            throw new ArgumentException($"Questionnaire with id {questionnaireId} not found");
+        
+        var questionnaire = importExportQuestionnaireMapper.Map(questionnaireDocument);
+        var json = JsonConvert.SerializeObject(questionnaire);
+
+        return $"Context for questionnaire: {json}";
     }
 }
