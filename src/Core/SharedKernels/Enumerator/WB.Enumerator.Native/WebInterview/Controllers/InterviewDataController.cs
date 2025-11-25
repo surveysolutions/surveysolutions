@@ -139,7 +139,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             var allUnansweredCriticalQuestions = interview.GetAllUnansweredCriticalQuestions().ToList();
             var unansweredCriticalQuestions = allUnansweredCriticalQuestions
                 .Select(identity => GetQuestionReference<CriticalQuestionCheck>(interview, questionnaire, identity))
-                .Take(count - failedCriticalRules.Length)
+                .Take(Math.Max(0, count - failedCriticalRules.Length))
                 .ToArray();
 
             return new CriticalityCheckResult()
