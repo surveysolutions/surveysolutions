@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Net.Http;
 using Microsoft.Extensions.Logging;
@@ -17,7 +19,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
     {
         private readonly IConfiguration configuration;
         private readonly IModelSettings modelSettings;
-        private ILogger<AssistanceController> logger;
+        private readonly ILogger<AssistanceController> logger;
         //private readonly IQuestionnaireContextProvider questionnaireContextProvider;
 
         public AssistanceController(IConfiguration configuration, 
@@ -67,8 +69,8 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
         public class LlamaModelSettings : IModelSettings
         {
-            public string ModelName { get; set; } = "llama3.2";
-            public string ApiUrl { get; set; } = "http://localhost:11434/v1/chat/completions";
+            public string ModelName { get; set; } = "llama-3.2-3b-instruct";
+            public string ApiUrl { get; set; } = "http://localhost:1234/v1/chat/completions";
             public string? ApiKey { get; set; } = "";
         }
 
@@ -99,15 +101,29 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 return BadRequest("System messages are not allowed from the client.");
             }
             
-            messages.Insert(0, new Message { Role = "system", Content =
-                "You are a helpful AI assistant specialized in Survey Solutions questionnaire design. "
-                + "Only provide advice related to questionnaire structure, question types, validation rules, conditional logic, roster design, variable naming conventions, and best practices for survey creation. "
-                + "Do not provide or generate any sensitive, private, or personally identifiable information. "
-                + "Refuse any requests for legal, medical, financial, or other advice outside your domain. "
-                + "Do not assist with or generate content that is harmful, unethical, or violates privacy, copyright, or Survey Solutions policies. "
-                + "Never impersonate users, staff, or other entities. "
-                + "Provide clear, actionable advice and examples when possible. "
-                + "Keep responses concise but informative." });
+            // Load system prompt from embedded resource
+            string systemPrompt;
+            try
+            {
+                var assembly = Assembly.GetExecutingAssembly();
+                var resourceName = "WB.UI.Designer.Resources.AssistantSystemPrompt.txt";
+                
+                await using var stream = assembly.GetManifestResourceStream(resourceName);
+                if (stream == null)
+                {
+                    throw new FileNotFoundException($"Embedded resource '{resourceName}' not found.");
+                }
+                
+                using var reader = new StreamReader(stream);
+                systemPrompt = await reader.ReadToEndAsync();
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Failed to load system prompt from embedded resources");
+                systemPrompt = "You are a helpful AI assistant specialized in Survey Solutions questionnaire design.";
+            }
+            
+            messages.Insert(0, new Message { Role = "system", Content = systemPrompt });
 
             //Supply questionnaire context if provided
             
