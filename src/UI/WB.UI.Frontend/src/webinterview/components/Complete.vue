@@ -16,7 +16,7 @@
 
         <div class="wrapper-info" v-if="!hasAnyIssue">
             <div class="container-info info-block">
-                <div class="gray-uppercase" v-dompurify-html="$t('WebInterviewUI.Complete_AllGood')">
+                <div class="gray-uppercase success-text" v-dompurify-html="$t('WebInterviewUI.Complete_AllGood')">
                 </div>
             </div>
         </div>
@@ -30,8 +30,9 @@
             </li>
         </ul>
 
-        <div class="tab-content wrapper-info list-unstyled marked-questions" :class="activeGroup.cssClass">
-            <div class="tab-content-item" v-for="item in activeGroup.items" :key="item.id" @click="navigateTo(item)">
+        <div v-if="hasAnyIssue" class="tab-content wrapper-info list-unstyled marked-questions" :class="activeGroup.cssClass">
+            <div class="tab-content-item" v-for="item in activeGroup.items" :key="item.id" @click="navigateTo(item)"
+                :class="{ 'critical-rule': item.type === 'critical-rule' }">
                 <a class="item-title" v-if="item.parentId || item.isPrefilled" href="javascript:void(0);"
                     v-dompurify-html="item.title"></a>
                 <div class="item-title" v-else v-dompurify-html="item.title"></div>
@@ -46,7 +47,7 @@
             <div class="and-more" v-if="moreCount > 0">{{ $t('WebInterviewUI.Complete_AndMore', { count: moreCount }) }}</div>
         </div>
 
-        <div class="wrapper-info">
+        <div class="wrapper-info note-supervisor">
             <div class="container-info">
                 <label class="info-block gray-uppercase" for="comment-for-supervisor">
                     {{ noteToSupervisor }} <template v-if="hasCriticalIssues && criticalityLevel == 'Warn'">
@@ -214,9 +215,8 @@
 
 .tab-content {
     margin-top: 0px;
-    margin-bottom: 20px;
+    margin-bottom: 0px;
     background-color: #fff;
-    border-bottom: 1px solid #000000;
 }
 
 .tab-content .tab-content-item {
@@ -230,6 +230,10 @@
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
     overflow: hidden;
     cursor: pointer;
+}
+
+.tab-content .tab-content-item.critical-rule {
+    cursor: default;
 }
 
 .tab-content-item .item-title {
@@ -282,6 +286,13 @@
     height: 100%;
     border-radius: 4px 0 0 4px;
 }
+
+.note-supervisor {
+    border-top: 1px solid #000000;
+    padding-top: 40px;
+    margin-top: 0px;
+}
+
 
 /* Button with icon styles */
 .btn-with-icon {
@@ -398,13 +409,15 @@ export default {
         completeGroups() {
             let groups = []
 
-            const criticalFailed = this.criticalityInfo?.failedCriticalRules || []
+            const criticalFailedRules = (this.criticalityInfo?.failedCriticalRules || []).map(rule => ({ ...rule, type: 'critical-rule' }))
             const criticalUnanswered = this.criticalityInfo?.unansweredCriticalQuestions || []
-            const critical = criticalFailed.concat(criticalUnanswered)
+            const critical = criticalFailedRules.concat(criticalUnanswered)
+            const criticalTotal = (this.criticalityInfo?.failedCriticalRulesTotal || 0)
+                                + (this.criticalityInfo?.unansweredCriticalQuestionsTotal || 0);
             groups.push({
                 title: this.$t('WebInterviewUI.Complete_Tab_CriticalErrors'),
                 items: critical,
-                total: critical.length,
+                total: criticalTotal,
                 cssClass: 'errors'
             })
 

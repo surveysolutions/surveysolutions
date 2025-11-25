@@ -366,7 +366,7 @@ Vous pouvez créer ou modifier vos questionnaires dans Survey Solutions Designer
     <value>Après avoir terminé cet entretien, il sera marqué comme complété et sera téléchargé vers le superviseur lors de votre prochaine synchronisation</value>
   </data>
   <data name="Interview_Complete_CriticalIssues_Instrunction" xml:space="preserve">
-    <value>Ce bouton est désactivé car la soumission des entretiens avec des problèmes critiques n'est pas autorisée</value>
+    <value>Pour activer le bouton, veuillez résoudre les problèmes critiques</value>
   </data>
   <data name="Interview_Complete_Errors" xml:space="preserve">
     <value>Erreur(s)</value>
@@ -387,7 +387,7 @@ Vous pouvez créer ou modifier vos questionnaires dans Survey Solutions Designer
     <value>Veuillez confirmer que vous souhaitez soumettre cet entretien avec des problèmes critiques.</value>
   </data>
   <data name="Interview_Complete_Note_For_Supervisor_with_Criticality" xml:space="preserve">
-    <value>Ce bouton reste désactivé jusqu'à ce que vous spécifiiez un commentaire pour les problèmes critiques ci-dessus</value>
+    <value>Pour activer le bouton, veuillez résoudre les problèmes critiques ou fournir une explication dans la boîte de commentaire ci-dessus</value>
   </data>
   <data name="Interview_Complete_Questions_Status" xml:space="preserve">
     <value>Statut des questions</value>

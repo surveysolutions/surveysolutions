@@ -366,7 +366,7 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
     <value>After you finish this interview it will be marked as completed and will be uploaded to supervisor during your next synchronization</value>
   </data>
   <data name="Interview_Complete_CriticalIssues_Instrunction" xml:space="preserve">
-    <value>This button is disabled because submission of interviews with critical issues is not allowed</value>
+    <value>To activate the button, please resolve the critical issues</value>
   </data>
   <data name="Interview_Complete_Errors" xml:space="preserve">
     <value>Error(s)</value>
@@ -387,7 +387,7 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
     <value>Please confirm you want to submit this interview with critical issues.</value>
   </data>
   <data name="Interview_Complete_Note_For_Supervisor_with_Criticality" xml:space="preserve">
-    <value>This button remains disabled until you specify a comment for the critical issues above</value>
+    <value>To activate the button, please resolve the critical issues or provide an explanation in the comment box above</value>
   </data>
   <data name="Interview_Complete_Questions_Status" xml:space="preserve">
     <value>Questions status</value>

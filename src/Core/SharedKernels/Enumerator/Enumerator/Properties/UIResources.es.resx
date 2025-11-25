@@ -736,7 +736,7 @@
         <value>Mis</value>
     </data>
     <data name="Interview_Complete_CriticalIssues_Instrunction" xml:space="preserve">
-        <value>Este botón está deshabilitado porque no se permite la presentación de entrevistas con problemas críticos</value>
+        <value>Para activar el botón, por favor resuelva los problemas críticos</value>
     </data>
     <data name="Adjust" xml:space="preserve">
         <value>Ajustar</value>
@@ -910,7 +910,7 @@
         <value>No</value>
     </data>
     <data name="Interview_Complete_Note_For_Supervisor_with_Criticality" xml:space="preserve">
-        <value>Este botón permanecerá deshabilitado hasta que especifique un comentario para los problemas críticos anteriores.</value>
+        <value>Para activar el botón, por favor resuelva los problemas críticos o proporcione una explicación en el cuadro de comentarios arriba</value>
     </data>
     <data name="Interview_Complete_SwitchTo_WebMode_Checkbox" xml:space="preserve">
         <value>Cambiar la entrevista al modo web</value>

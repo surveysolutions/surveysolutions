@@ -3,6 +3,10 @@
   <dimen name="Interview_Complete_Group_left_offset">46dp</dimen>
   <dimen name="Interview_Complete_Item_left_offset">69dp</dimen>
   <dimen name="interview_complete_tab_height">70dp</dimen>
+  <dimen name="interview_complete_success_text_margin_bottom">35dp</dimen>
+  <dimen name="Interview_Complete_Tab_width">160dp</dimen>
+  <dimen name="Interview_Complete_Tab_height">110dp</dimen>
+  <dimen name="Interview_Complete_Tab_text_width">90dp</dimen>
 
   <dimen name="Interview_Entity_margin_left">44dp</dimen>
   <dimen name="Interview_Entity_margin_right">44dp</dimen>
