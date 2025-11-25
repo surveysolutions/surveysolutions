@@ -151,6 +151,8 @@
         <item name="tabIndicatorHeight">10dp</item>
         <item name="tabIndicatorColor">@android:color/holo_red_dark</item>
         <item name="android:layout_width">wrap_content</item>
+        <item name="tabMode">fixed</item>
+        <item name="tabGravity">fill</item>
         <item name="android:layout_height">@dimen/interview_complete_tab_height</item>
         <item name="android:minHeight">@dimen/interview_complete_tab_height</item>
     </style>
@@ -182,10 +184,10 @@
     </style>
 
     <style name="Interview_Complete_Tab_Container" parent="Interview_Complete_Base">
-        <item name="android:layout_width">@dimen/Interview_Complete_Tab_width</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/Interview_Complete_Tab_height</item>
         <item name="android:orientation">vertical</item>
-        <item name="android:gravity">start</item>
+        <item name="android:gravity">fill</item>
     </style>
     
     <style name="Interview_Complete_Tab_Count" parent="Interview_Complete_Base">
