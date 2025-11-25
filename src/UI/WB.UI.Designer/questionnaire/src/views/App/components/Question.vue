@@ -127,6 +127,11 @@
                         <help link="hideIfDisabled" />
                     </label>
 
+                    <button class="btn" @click="showChat()">
+                        {{ $t('QuestionnaireEditor.Chat', 'AI Chat') }}
+                    </button>
+                    <ChatDialog v-model="chatDialogOpen" :questionnaireId="questionnaireId" :entityId="questionId"
+                        :area="'condition'" />
                     <ExpressionEditor id="edit-question-enablement-condition"
                         v-model="activeQuestion.enablementCondition" mode="expression" />
                 </div>
@@ -263,6 +268,9 @@ import TextQuestion from './parts/TextQuestion.vue'
 import { useMagicKeys } from '@vueuse/core';
 import emitter from '../../../services/emitter';
 
+import ChatDialog from './ChatDialog.vue';
+import { ref, computed } from 'vue';
+
 export default {
     name: 'Question',
     components: {
@@ -281,6 +289,7 @@ export default {
         SingleOptionQuestion,
         TextListQuestion,
         TextQuestion,
+        ChatDialog,
     },
     inject: ['questionnaire', 'currentChapter'],
     props: {
@@ -298,7 +307,7 @@ export default {
             openEditor: null,
 
             showInstruction: null,
-            showEnablingConditions: null,
+            showEnablingConditions: null
         }
     },
     watch: {
@@ -331,6 +340,7 @@ export default {
     setup() {
         const questionStore = useQuestionStore();
         const commentsStore = useCommentsStore();
+        const chatDialogOpen = ref(false);
 
         commentsStore.registerEntityInfoProvider(function () {
             const initial = questionStore.getInitialQuestion;
@@ -351,7 +361,7 @@ export default {
         });
 
         return {
-            questionStore, commentsStore, ctrl_s
+            questionStore, commentsStore, ctrl_s, chatDialogOpen
         };
     },
     async beforeMount() {
@@ -694,6 +704,10 @@ export default {
             this.openEditor = id
 
             window.open(url, "", "scrollbars=yes, center=yes, modal=yes, width=960, height=745, top=" + (screen.height - 745) / 4 + ", left= " + (screen.width - 960) / 2, true);
+        },
+
+        showChat() {
+            this.chatDialogOpen = true;
         },
     }
 }

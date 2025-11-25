@@ -32,7 +32,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             
             // Switch between OpenAIModelSettings and LlamaModelSettings as needed
             // Example: this.modelSettings = new OpenAIModelSettings(configuration);
-            this.modelSettings = new LlamaModelSettings();
+            this.modelSettings = new Llama32ModelSettings();
         }
 
         public class Message
@@ -46,6 +46,8 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             public string Prompt { get; set; } = string.Empty;
             public List<Message> Messages { get; set; } = new List<Message>();
             public string QuestionnaireId { get; set; } = string.Empty;
+            public string EntityId { get; set; } = string.Empty;
+            public string Area { get; set; } = string.Empty;
         }
 
         public interface IModelSettings
@@ -74,6 +76,13 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             public string? ApiKey { get; set; } = "";
         }
 
+        public class Llama32ModelSettings : IModelSettings
+        {
+            public string ModelName { get; set; } = "llama3.2";
+            public string ApiUrl { get; set; } = "http://localhost:11434/v1/chat/completions";
+            public string? ApiKey { get; set; } = "";
+        }
+        
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] AssistanceRequest request)
         {

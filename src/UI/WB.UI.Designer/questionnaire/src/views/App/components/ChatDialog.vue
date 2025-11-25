@@ -94,7 +94,9 @@ export default {
             type: Boolean,
             default: false
         },
-        questionnaireId: { type: String, required: true }
+        questionnaireId: { type: String, required: true },
+        entityId: { type: String, required: false },
+        area: { type: String, required: false }
     },
     setup(props, { emit }) {
         const isOpen = ref(props.modelValue)
@@ -166,8 +168,8 @@ export default {
             await scrollToBottom()
 
             try {
-                // Call OpenAI API with conversation history
-                const response = await callAssistant(messageText, props.questionnaireId)
+                // Call Assistant with conversation history
+                const response = await callAssistant(messageText, props.questionnaireId, props.entityId, props.area)
 
                 const assistantMessage = {
                     id: Date.now() + 1,
@@ -195,7 +197,7 @@ export default {
             }
         }
 
-        const callAssistant = async (userMessage, questionnaireId) => {
+        const callAssistant = async (userMessage, questionnaireId, entityId, area) => {
 
             const conversationHistory = []
 
@@ -215,11 +217,11 @@ export default {
 
             // Call Assistant API
             return await sendToAssistant(conversationHistory, {
-                questionnaireId: questionnaireId
+                questionnaireId: questionnaireId,
+                entityId: entityId,
+                area: area
             })
         }
-
-
 
         return {
             isOpen,
@@ -241,6 +243,11 @@ export default {
 .chat-container {
     display: flex;
     flex-direction: column;
+}
+
+.chat-container .v-card-title {
+    display: flex !important;
+    justify-content: space-between !important;
 }
 
 .chat-messages {
