@@ -9,6 +9,7 @@ export const useAssistant = () => {
   const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms))
   
   const sendMessage = async (messages, options = {}) => {
+    const retries = 3
         
     // Rate limiting: Ensure minimum interval between requests
     const now = Date.now()
@@ -40,10 +41,10 @@ export const useAssistant = () => {
         
         return response.data.choices[0].message.content
       } catch (error) {
-        console.error(`OpenAI API Error (attempt ${attempt}/${retries}):`, error.response?.data || error.message)
+        console.error(`Assistant Error (attempt ${attempt}/${retries}):`, error.response?.data || error.message)
         
         if (error.response?.status === 401) {
-          throw new Error('Invalid API key. Please check your OpenAI API key.')
+          throw new Error('Not authorized.')
         } else if (error.response?.status === 429) {
           // Rate limit exceeded - implement exponential backoff
           if (attempt < retries) {
@@ -68,19 +69,14 @@ export const useAssistant = () => {
             await delay(backoffDelay)
             continue
           } else {
-            throw new Error('OpenAI service is temporarily unavailable. Please try again later.')
+            throw new Error('Assistant service is temporarily unavailable. Please try again later.')
           }
         } else {
-          throw new Error(`Failed to connect to OpenAI: ${error.message}`)
+          throw new Error(`Failed to connect to Assistant: ${error.message}`)
         }
       }
     }
   }
-  
-  const createSystemMessage = (content) => ({
-    role: 'system',
-    content
-  })
   
   const createUserMessage = (content) => ({
     role: 'user',
@@ -94,32 +90,8 @@ export const useAssistant = () => {
   
   return {
     sendMessage,
-    createSystemMessage,
+    
     createUserMessage,
     createAssistantMessage
   }
 }
-
-// Example usage in your ChatDialog component:
-/*
-import { useOpenAI } from '@/composables/useOpenAI'
-
-// In your setup function:
-const { sendMessage, createSystemMessage } = useOpenAI()
-
-// When sending a message:
-const callOpenAI = async (userMessage) => {
-  const systemMessage = createSystemMessage(
-    'You are a helpful assistant for Survey Solutions questionnaire design. ' +
-    'Help users with questionnaire structure, question types, validation rules, and best practices.'
-  )
-  
-  const conversationHistory = [systemMessage, ...messages.value]
-  conversationHistory.push({
-    role: 'user',
-    content: userMessage
-  })
-  
-  return await sendMessage(conversationHistory)
-}
-*/

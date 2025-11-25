@@ -103,8 +103,8 @@ export default {
         const isLoading = ref(false)
         const messagesContainer = ref(null)
 
-        // Initialize OpenAI composable
-        const { sendMessage: sendToAssistant, createSystemMessage } = useAssistant()
+        // Initialize Assistant
+        const { sendMessage: sendToAssistant } = useAssistant()
 
         // Watch for prop changes
         watch(() => props.modelValue, (newVal) => {
