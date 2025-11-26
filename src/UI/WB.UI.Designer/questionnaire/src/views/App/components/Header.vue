@@ -42,23 +42,23 @@
                             <span class="caret"></span>
                             <span class="sr-only">{{
                                 $t('QuestionnaireEditor.ToggleDropdown')
-                                }}</span>
+                            }}</span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-right">
                             <li>
                                 <a href="/identity/account/manage">{{
                                     $t('QuestionnaireEditor.ManageAccount')
-                                    }}</a>
+                                }}</a>
                             </li>
                             <li>
                                 <a href="/identity/account/manage/changepassword">{{
                                     $t('QuestionnaireEditor.ChangePassword')
-                                    }}</a>
+                                }}</a>
                             </li>
                             <li>
                                 <a href="/identity/account/logout">{{
                                     $t('QuestionnaireEditor.LogOut')
-                                    }}</a>
+                                }}</a>
                             </li>
                         </ul>
                     </div>
@@ -153,17 +153,16 @@
     <VerificationDialog ref="verificationDialog" :questionnaireId="questionnaireId" />
     <SharedInfoDialog ref="sharedInfoDialog" :questionnaireId="questionnaireId" />
     <DownloadPDFDialog ref="downloadPDFDialog" :questionnaireId="questionnaireId" />
-    <ChatDialog v-model="chatDialogOpen" :questionnaireId="questionnaireId" />
 </template>
 
 <script>
 import VerificationDialog from './VerificationDialog.vue';
 import SharedInfoDialog from './SharedInfoDialog.vue';
 import DownloadPDFDialog from './DownloadPDFDialog.vue';
-import ChatDialog from './ChatDialog.vue';
 import { useMagicKeys } from '@vueuse/core';
 
 import { useVerificationStore } from '../../../stores/verification';
+import { useChatStore } from '../../../stores/chat';
 import WebTesterApi from '../../../api/webTester';
 import { ref, computed } from 'vue';
 
@@ -174,8 +173,7 @@ export default {
     components: {
         VerificationDialog,
         SharedInfoDialog,
-        DownloadPDFDialog,
-        ChatDialog
+        DownloadPDFDialog
     },
     inject: ['questionnaire', 'currentUser'],
     props: {
@@ -186,11 +184,11 @@ export default {
     },
     setup(props) {
         const verificationStore = useVerificationStore();
+        const chatStore = useChatStore();
 
         const verificationDialog = ref(null);
         const sharedInfoDialog = ref(null);
         const downloadPDFDialog = ref(null);
-        const chatDialogOpen = ref(false);
 
         const { ctrl_b } = useMagicKeys({
             passive: false,
@@ -202,10 +200,10 @@ export default {
 
         return {
             verificationStore,
+            chatStore,
             verificationDialog,
             sharedInfoDialog,
             downloadPDFDialog,
-            chatDialogOpen,
             ctrl_b
         };
     },
@@ -243,7 +241,9 @@ export default {
             this.downloadPDFDialog.open();
         },
         showChat() {
-            this.chatDialogOpen = true;
+            this.chatStore.open({
+                questionnaireId: this.questionnaireId
+            });
         },
         saveAsQuestionnaire() {
             window.location = '/api/hq/backup/package/' + this.questionnaireId

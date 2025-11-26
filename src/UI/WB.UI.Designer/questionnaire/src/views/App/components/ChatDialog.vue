@@ -116,6 +116,11 @@ export default {
         // Watch for dialog changes
         watch(isOpen, (newVal) => {
             emit('update:modelValue', newVal)
+            // Reset chat history when dialog is opened
+            if (newVal) {
+                messages.value = []
+                currentMessage.value = ''
+            }
         })
 
         const open = () => {

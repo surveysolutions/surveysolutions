@@ -127,11 +127,9 @@
                         <help link="hideIfDisabled" />
                     </label>
 
-                    <button class="btn" @click="showChat()">
+                    <button type="button" class="btn" @click="showChat()">
                         {{ $t('QuestionnaireEditor.Chat', 'AI Chat') }}
                     </button>
-                    <ChatDialog v-model="chatDialogOpen" :questionnaireId="questionnaireId" :entityId="questionId"
-                        :area="'condition'" />
                     <ExpressionEditor id="edit-question-enablement-condition"
                         v-model="activeQuestion.enablementCondition" mode="expression" />
                 </div>
@@ -268,7 +266,7 @@ import TextQuestion from './parts/TextQuestion.vue'
 import { useMagicKeys } from '@vueuse/core';
 import emitter from '../../../services/emitter';
 
-import ChatDialog from './ChatDialog.vue';
+import { useChatStore } from '../../../stores/chat';
 import { ref, computed } from 'vue';
 
 export default {
@@ -289,7 +287,6 @@ export default {
         SingleOptionQuestion,
         TextListQuestion,
         TextQuestion,
-        ChatDialog,
     },
     inject: ['questionnaire', 'currentChapter'],
     props: {
@@ -340,7 +337,7 @@ export default {
     setup() {
         const questionStore = useQuestionStore();
         const commentsStore = useCommentsStore();
-        const chatDialogOpen = ref(false);
+        const chatStore = useChatStore();
 
         commentsStore.registerEntityInfoProvider(function () {
             const initial = questionStore.getInitialQuestion;
@@ -361,7 +358,7 @@ export default {
         });
 
         return {
-            questionStore, commentsStore, ctrl_s, chatDialogOpen
+            questionStore, commentsStore, chatStore, ctrl_s
         };
     },
     async beforeMount() {
@@ -707,7 +704,11 @@ export default {
         },
 
         showChat() {
-            this.chatDialogOpen = true;
+            this.chatStore.open({
+                questionnaireId: this.questionnaireId,
+                entityId: this.questionId,
+                area: 'condition'
+            });
         },
     }
 }
