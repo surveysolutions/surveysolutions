@@ -2,7 +2,7 @@
     <div class="web-interview-page">
         <div class="row-element mb-20">
             <h2>{{ $config.model.welcomeText }}</h2>
-            <p class="" v-if="$config.model.description" v-dompurify-html="description">
+            <p v-if="$config.model.description" v-dompurify-html="description">
             </p>
         </div>
         <StartOrResumeForm :buttonTitle="$config.model.startNewButton"
