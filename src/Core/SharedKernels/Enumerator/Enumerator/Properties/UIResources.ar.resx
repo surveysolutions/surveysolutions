@@ -366,7 +366,7 @@
     <value>بعد الانتهاء من هذا الاستبيان سيتم وضع علامة عليه كمكتمل وسيتم تحميله إلى المشرف أثناء المزامنة التالية</value>
 </data>
     <data name="Interview_Complete_CriticalIssues_Instrunction" xml:space="preserve">
-    <value>تم تعطيل هذا الزر لأن إرسال الاستبيانات ذات القضايا الحرجة غير مسموح به</value>
+    <value>لتفعيل الزر، يرجى حل القضايا الحرجة</value>
 </data>
     <data name="Interview_Complete_Errors" xml:space="preserve">
     <value>خطأ(أخطاء)</value>
@@ -387,7 +387,7 @@
     <value>يرجى تأكيد أنك تريد إرسال هذا الاستبيان مع القضايا الحرجة.</value>
 </data>
     <data name="Interview_Complete_Note_For_Supervisor_with_Criticality" xml:space="preserve">
-    <value>يبقى هذا الزر معطلاً حتى تحدد تعليقًا على القضايا الحرجة أعلاه</value>
+    <value>لتفعيل الزر، يرجى حل القضايا الحرجة أو تقديم توضيح في مربع التعليق أعلاه</value>
 </data>
     <data name="Interview_Complete_Questions_Status" xml:space="preserve">
     <value>حالة الأسئلة</value>

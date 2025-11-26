@@ -72,7 +72,7 @@
         "eslint-config-prettier": "^9.1.0",
         "eslint-plugin-vue": "^9.27.0",
         "fast-glob": "^3.3.3",
-        "filemanager-plugin": "2.9.0",
+        "filemanager-plugin": "2.8.2",
         "jest": "^30.2.0",
         "npm-force-resolutions": "0.0.6",
         "prettier": "3.0.0",

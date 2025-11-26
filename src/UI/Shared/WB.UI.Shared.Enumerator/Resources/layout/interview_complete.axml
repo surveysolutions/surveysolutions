@@ -75,7 +75,7 @@
                                 ButtonGroupStyle CompleteStatus;" />
         
         <TextView
-                style="@style/Interview_Complete_Screen_Text"
+                style="@style/Interview_Complete_Screen_Text_Upper"
                 android:id="@+id/tv_Complete_Instruction"
                 local:MvxBind="Text CompleteButtonComment; Visible Not(RequestWebInterview)" />
     </LinearLayout>
