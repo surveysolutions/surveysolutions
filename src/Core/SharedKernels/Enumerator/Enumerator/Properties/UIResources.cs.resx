@@ -832,7 +832,7 @@ Musíte vytvořit nebo upravit Vaše dotazníky v aplikaci Designer</value>
   <value>Vyberte hranice:</value>
 </data>
     <data name="Interview_Complete_CriticalIssues_Instrunction" xml:space="preserve">
-  <value>Toto tlačítko je deaktivováno, protože odesílání rozhovorů s kritickými problémy není povoleno</value>
+  <value>Pro aktivaci tlačítka prosím vyřešte kritické problémy</value>
 </data>
     <data name="Interview_Complete_CriticalityIssuesDescription" xml:space="preserve">
   <value>Vyřešte problémy zodpovězením kritických otázek a ujistěte se, že odpovědi splňují kritická pravidla</value>
@@ -847,7 +847,7 @@ Musíte vytvořit nebo upravit Vaše dotazníky v aplikaci Designer</value>
   <value>Problémy s rozhovorem:</value>
 </data>
     <data name="Interview_Complete_Note_For_Supervisor_with_Criticality" xml:space="preserve">
-  <value>Toto tlačítko zůstane deaktivováno, dokud neuvedete komentář k výše uvedeným kritickým problémům</value>
+  <value>Pro aktivaci tlačítka prosím vyřešte kritické problémy nebo poskytněte vysvětlení v poli komentářů výše</value>
 </data>
     <data name="Interview_Complete_WithWarningCriticality" xml:space="preserve">
   <value>Potvrďte prosím, že chcete odeslat tento rozhovor s kritickými problémy.</value>

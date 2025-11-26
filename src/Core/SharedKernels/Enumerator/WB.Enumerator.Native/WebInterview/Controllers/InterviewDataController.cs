@@ -122,12 +122,8 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             
             var questionnaire = questionnaireRepository.GetQuestionnaireOrThrow(interview.QuestionnaireIdentity, interview.Language);
 
-            var unansweredCriticalQuestions = interview.GetAllUnansweredCriticalQuestions()
-                .Select(identity => GetQuestionReference<CriticalQuestionCheck>(interview, questionnaire, identity))
-                .Take(count)
-                .ToArray();
-
-            var failedCriticalRules = interview.CollectInvalidCriticalRules()
+            var collectInvalidCriticalRules = interview.CollectInvalidCriticalRules().ToList();
+            var failedCriticalRules = collectInvalidCriticalRules
                 .Select(ruleId =>
                 {
                     var message = interviewEntityFactory.GetCriticalRuleMessage(ruleId, interview, questionnaire, IsReviewMode());
@@ -140,10 +136,18 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                 .Take(count)
                 .ToArray();
 
+            var allUnansweredCriticalQuestions = interview.GetAllUnansweredCriticalQuestions().ToList();
+            var unansweredCriticalQuestions = allUnansweredCriticalQuestions
+                .Select(identity => GetQuestionReference<CriticalQuestionCheck>(interview, questionnaire, identity))
+                .Take(count - failedCriticalRules.Length)
+                .ToArray();
+
             return new CriticalityCheckResult()
             {
                 FailedCriticalRules = failedCriticalRules,
-                UnansweredCriticalQuestions = unansweredCriticalQuestions
+                FailedCriticalRulesTotal = collectInvalidCriticalRules.Count,
+                UnansweredCriticalQuestions = unansweredCriticalQuestions,
+                UnansweredCriticalQuestionsTotal = allUnansweredCriticalQuestions.Count
             };
         }
 

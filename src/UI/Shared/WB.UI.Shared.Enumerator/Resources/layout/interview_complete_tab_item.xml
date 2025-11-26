@@ -20,14 +20,14 @@
 
     <TextView
             android:id="@+id/tab_count"
-            android:layout_width="200dp"
+            android:layout_width="@dimen/Interview_Complete_Tab_text_width"
             style="@style/Interview_Complete_Tab_Count"
             local:MvxBind="Text Count; Color TabContentToColor(.)"
             />
 
     <TextView
             android:id="@+id/tab_title"
-            android:layout_width="200dp"
+            android:layout_width="@dimen/Interview_Complete_Tab_text_width"
             style="@style/Interview_Complete_Tab_Title"
             local:MvxBind="Text Title; Color TabContentToColor(.)"
     />
