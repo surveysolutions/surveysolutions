@@ -1,6 +1,6 @@
 <template>
 
-    <div class="centered-box-table">
+    <div class="centered-box-table web-interview-page">
         <h2>{{ $config.model.webSurveyHeader }}</h2>
         <div class="additional-info-block">
             <p v-dompurify-html="finishInterviewHtml">
@@ -21,8 +21,8 @@
                 </li>
                 <li v-if="$config.model.pdfUrl">
                     <a id="btn_Print" class="btn btn-link gray-action-unit" v-bind:href="this.$config.model.pdfUrl"
-                        target="_blank" :title="$t('WebInterview.DownloadAnswersHint')"
-                        download>{{ $t("WebInterview.DownloadAnswers") }}</a>
+                        target="_blank" :title="$t('WebInterview.DownloadAnswersHint')" download>{{
+                            $t("WebInterview.DownloadAnswers") }}</a>
                 </li>
             </ul>
         </div>

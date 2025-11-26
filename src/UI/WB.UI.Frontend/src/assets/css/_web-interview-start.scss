@@ -1,111 +1,146 @@
-html body.dynamic-content{
-	height: 100%;
-	.footer{
-		position: static;
-		bottom: auto;
-	}
-}
-.start-web-interview{
-	display: table;
+html body.dynamic-content {
     height: 100%;
-	width: 100%;
-	.container-wrapper{
-		display: table-cell;
-		vertical-align: middle;
-	}
-	.two-columns-form{
-		font-size: 16px;
-		line-height: 18px;
-		display: table;
-		transform: none;
-		position: static;
-		margin: 0 auto;
-		p{
-			margin-bottom: 20px;
-		}
-		.additional-info-block{
-			font-size: 15px;
-			line-height: 17px;
-			max-width: 350px;
-			margin-bottom: 40px;
-			&:last-child{
-				margin-bottom: 0;
-			}
-		}
-		.g-recaptcha{
-			max-width: 350px;
-		}
-		.form-actions{
-			margin-top: 20px;
-			margin-bottom: 20px;
-		}
-		.left-column,
-		.right-column{
-			display: table-cell;
-			vertical-align: middle;
-		}
-		 .left-column{
-		 	padding-top: 20px;
-		 	padding-bottom: 20px;
-		 	text-align: right;
-		 	.default-logo{
-		 		display: inline-block;
-		 		margin-bottom: 20px;
-		 	}
-		 	.additional-info-block{
-		 		color: $gray-text;
-		 		max-width: 100%;
-		 		margin-bottom: 0;
-		 		a{
-		 			color: inherit;
-					text-decoration: none;
-		 		}
-		 	}
-		 }
-	}
-}
-div.no-cookies{
-	display: none;
-	max-width: 1200px;
-	margin: 10px auto;
-	padding: 10px;
-	color: #b20000;
-	box-shadow: 9px 9px 3px rgba(0, 0, 0, 0.1), 0 0 3px #323232;
-}
-body.no-cookies{
-	div.no-cookies{
-		display: block;
-	}
-}
-@media (max-width: $screen-md-min){
-	div.no-cookies{
-    	margin: 25px 20px;
+
+    .footer {
+        position: static;
+        bottom: auto;
     }
 }
-@media (max-width: $screen-sm-min){
-	.start-web-interview{
-		padding-left: 20px;
-		padding-right: 15px;
-		.two-columns-form{
-			.left-column{
-				display: none;
-			}
-			.right-column .centered-box-table{
-				text-align: left;
-				h2, p, .form-actions{
-					max-width: 350px;
-				}
-			}
-		}
-	    .additional-info-block, h2, p, .form-actions{
-	    	margin-left: auto;
-	    	margin-right: auto;
-	    }
-		.g-recaptcha{
-			margin: 0 auto;
-		}
-	}
-	div.no-cookies{
-    	margin: 10px 20px;
+
+.web-interview-page {
+    p {
+        white-space: pre-line;
+    }
+}
+
+.start-web-interview {
+    display: table;
+    height: 100%;
+    width: 100%;
+
+    .container-wrapper {
+        display: table-cell;
+        vertical-align: middle;
+    }
+
+    .two-columns-form {
+        font-size: 16px;
+        line-height: 18px;
+        display: table;
+        transform: none;
+        position: static;
+        margin: 0 auto;
+
+        p {
+            margin-bottom: 20px;
+        }
+
+        .additional-info-block {
+            font-size: 15px;
+            line-height: 17px;
+            max-width: 350px;
+            margin-bottom: 40px;
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+
+        .g-recaptcha {
+            max-width: 350px;
+        }
+
+        .form-actions {
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .left-column,
+        .right-column {
+            display: table-cell;
+            vertical-align: middle;
+        }
+
+        .left-column {
+            padding-top: 20px;
+            padding-bottom: 20px;
+            text-align: right;
+
+            .default-logo {
+                display: inline-block;
+                margin-bottom: 20px;
+            }
+
+            .additional-info-block {
+                color: $gray-text;
+                max-width: 100%;
+                margin-bottom: 0;
+
+                a {
+                    color: inherit;
+                    text-decoration: none;
+                }
+            }
+        }
+    }
+}
+
+div.no-cookies {
+    display: none;
+    max-width: 1200px;
+    margin: 10px auto;
+    padding: 10px;
+    color: #b20000;
+    box-shadow: 9px 9px 3px rgba(0, 0, 0, 0.1), 0 0 3px #323232;
+}
+
+body.no-cookies {
+    div.no-cookies {
+        display: block;
+    }
+}
+
+@media (max-width: $screen-md-min) {
+    div.no-cookies {
+        margin: 25px 20px;
+    }
+}
+
+@media (max-width: $screen-sm-min) {
+    .start-web-interview {
+        padding-left: 20px;
+        padding-right: 15px;
+
+        .two-columns-form {
+            .left-column {
+                display: none;
+            }
+
+            .right-column .centered-box-table {
+                text-align: left;
+
+                h2,
+                p,
+                .form-actions {
+                    max-width: 350px;
+                }
+            }
+        }
+
+        .additional-info-block,
+        h2,
+        p,
+        .form-actions {
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .g-recaptcha {
+            margin: 0 auto;
+        }
+    }
+
+    div.no-cookies {
+        margin: 10px 20px;
     }
 }
