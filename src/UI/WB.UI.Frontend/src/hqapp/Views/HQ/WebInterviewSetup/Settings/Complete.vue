@@ -63,7 +63,7 @@
                             <div class="text-example">
                                 <div class="row-element mb-20">
                                     <div class="h2">
-                                        {{ $t('WebInterviewUI.CompleteAbout') }}
+                                        {{ $t('WebInterviewUI.CompleteReviewSubmit') }}
                                     </div>
                                 </div>
                                 <div class="row-element mb-40">

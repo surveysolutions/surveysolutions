@@ -7,12 +7,13 @@
         </div>
         <div class="wrapper-info">
             <div class="container-info">
-                <h2
-                    v-dompurify-html="$t('WebInterviewUI.CompleteReviewSubmit', { key: $store.state.webinterview.interviewKey })">
+                <h2 v-dompurify-html="$t('WebInterviewUI.CompleteReviewSubmit')">
                 </h2>
+                <h3
+                    v-dompurify-html="$t('WebInterviewUI.CompleteReviewSubmitInterview', { key: $store.state.webinterview.interviewKey })">
+                </h3>
             </div>
         </div>
-
 
         <div class="wrapper-info" v-if="!hasAnyIssue">
             <div class="container-info info-block">
