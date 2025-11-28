@@ -1,23 +1,22 @@
-import axios from 'axios'
+import axios from 'axios';
 
 export const useAssistant = () => {
-  
     // Rate limiting: Track requests to avoid hitting limits
-  let lastRequestTime = 0
-  const MIN_REQUEST_INTERVAL = 1000 // 1 second between requests
+    let lastRequestTime = 0;
+    const MIN_REQUEST_INTERVAL = 1000; // 1 second between requests
 
-  const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms))
+    const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
     const sendMessage = async (messages, options = {}) => {
-    const retries = 3
+        const retries = 3;
 
         // Rate limiting: Ensure minimum interval between requests
-    const now = Date.now()
-    const timeSinceLastRequest = now - lastRequestTime
+        const now = Date.now();
+        const timeSinceLastRequest = now - lastRequestTime;
         if (timeSinceLastRequest < MIN_REQUEST_INTERVAL) {
-      await delay(MIN_REQUEST_INTERVAL - timeSinceLastRequest)
+            await delay(MIN_REQUEST_INTERVAL - timeSinceLastRequest);
         }
-    lastRequestTime = Date.now()
+        lastRequestTime = Date.now();
 
         for (let attempt = 1; attempt <= retries; attempt++) {
             try {
@@ -28,7 +27,8 @@ export const useAssistant = () => {
                             role: msg.role,
                             content: msg.content
                         })),
-                        questionnaireId: options.questionnaireId || null
+                        questionnaireId: options.questionnaireId || null,
+                        entityId: 'dea78efe7363e55a47e15e5bc9e9a7f5' //options.entityId || null
                     },
                     {
                         // headers: {
@@ -37,61 +37,83 @@ export const useAssistant = () => {
                         // },
                         timeout: 30000 // 30 second timeout
                     }
-        )
+                );
 
-        return response.data.choices[0].message.content
+                return response.data.choices[0].message.content;
             } catch (error) {
-        console.error(`Assistant Error (attempt ${attempt}/${retries}):`, error.response?.data || error.message)
+                console.error(
+                    `Assistant Error (attempt ${attempt}/${retries}):`,
+                    error.response?.data || error.message
+                );
 
                 if (error.response?.status === 401) {
-          throw new Error('Not authorized.')
+                    throw new Error('Not authorized.');
                 } else if (error.response?.status === 429) {
                     // Rate limit exceeded - implement exponential backoff
                     if (attempt < retries) {
-            const backoffDelay = Math.min(1000 * Math.pow(2, attempt - 1), 10000) // Max 10 seconds
-            console.log(`Rate limit exceeded. Retrying in ${backoffDelay}ms...`)
-            await delay(backoffDelay)
-            continue
+                        const backoffDelay = Math.min(
+                            1000 * Math.pow(2, attempt - 1),
+                            10000
+                        ); // Max 10 seconds
+                        console.log(
+                            `Rate limit exceeded. Retrying in ${backoffDelay}ms...`
+                        );
+                        await delay(backoffDelay);
+                        continue;
                     } else {
-            throw new Error('Rate limit exceeded. Please check your OpenAI plan limits and try again later.')
+                        throw new Error(
+                            'Rate limit exceeded. Please check your OpenAI plan limits and try again later.'
+                        );
                     }
                 } else if (error.response?.status === 400) {
-          throw new Error('Invalid request. Please check your message format.')
+                    throw new Error(
+                        'Invalid request. Please check your message format.'
+                    );
                 } else if (error.response?.status === 403) {
-          throw new Error('Access denied. Your API key may not have the required permissions.')
+                    throw new Error(
+                        'Access denied. Your API key may not have the required permissions.'
+                    );
                 } else if (error.response?.status === 404) {
-          throw new Error(`Model "${model}" not found. Please check if you have access to this model.`)
+                    throw new Error(
+                        `Model "${model}" not found. Please check if you have access to this model.`
+                    );
                 } else if (error.response?.status >= 500) {
                     // Server error - retry
                     if (attempt < retries) {
-            const backoffDelay = Math.min(2000 * attempt, 10000)
-            console.log(`Server error. Retrying in ${backoffDelay}ms...`)
-            await delay(backoffDelay)
-            continue
+                        const backoffDelay = Math.min(2000 * attempt, 10000);
+                        console.log(
+                            `Server error. Retrying in ${backoffDelay}ms...`
+                        );
+                        await delay(backoffDelay);
+                        continue;
                     } else {
-            throw new Error('Assistant service is temporarily unavailable. Please try again later.')
+                        throw new Error(
+                            'Assistant service is temporarily unavailable. Please try again later.'
+                        );
                     }
                 } else {
-          throw new Error(`Failed to connect to Assistant: ${error.message}`)
-        }
+                    throw new Error(
+                        `Failed to connect to Assistant: ${error.message}`
+                    );
                 }
             }
         }
+    };
 
-  const createUserMessage = (content) => ({
+    const createUserMessage = content => ({
         role: 'user',
         content
-  })
+    });
 
-  const createAssistantMessage = (content) => ({
+    const createAssistantMessage = content => ({
         role: 'assistant',
         content
-  })
+    });
 
     return {
         sendMessage,
 
         createUserMessage,
         createAssistantMessage
-  }
-}
+    };
+};

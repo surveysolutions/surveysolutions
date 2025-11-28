@@ -4,5 +4,5 @@ namespace WB.Core.BoundedContexts.Designer.Assistant;
 
 public interface IQuestionnaireContextProvider
 {
-    string GetQuestionnaireContext(Guid questionnaireId);
+    string GetQuestionnaireContext(Guid questionnaireId, Guid entityId);
 }

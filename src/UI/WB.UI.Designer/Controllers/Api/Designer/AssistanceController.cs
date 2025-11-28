@@ -37,7 +37,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
             // Switch between OpenAIModelSettings and LlamaModelSettings as needed
             // Example: this.modelSettings = new OpenAIModelSettings(configuration);
-            this.modelSettings = new Llama32ModelSettings();
+            this.modelSettings = new LlamaModelSettings();
         }
 
         public class Message
@@ -50,8 +50,8 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         {
             public string Prompt { get; set; } = string.Empty;
             public List<Message> Messages { get; set; } = new List<Message>();
-            public string QuestionnaireId { get; set; } = string.Empty;
-            public string EntityId { get; set; } = string.Empty;
+            public Guid? QuestionnaireId { get; set; }
+            public Guid? EntityId { get; set; }
             public string Area { get; set; } = string.Empty;
         }
 
@@ -94,33 +94,32 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             if (modelSettings is OpenAIModelSettings && string.IsNullOrWhiteSpace(modelSettings.ApiKey))
                 return BadRequest("OpenAI API key is not configured.");
 
-            var messages = request.Messages;
-            if (messages == null || messages.Count == 0)
-            {
-                if (!string.IsNullOrWhiteSpace(request.Prompt))
-                {
-                    messages = new List<Message> {
-                        new Message { Role = "user", Content = request.Prompt }
-                    };
-                }
-                else
-                {
-                    return BadRequest("Either 'messages' or 'prompt' must be provided.");
-                }
-            }
-            
-            if (!Guid.TryParse(request.QuestionnaireId, out var questionnaireId))
+            if (!request.QuestionnaireId.HasValue)
                 return  BadRequest("Either 'questionnaireId' must be provided.");
+            if (!request.EntityId.HasValue)
+                return  BadRequest("Either 'entityId' must be provided.");
 
+            var messages = request.Messages;
             // Reject any system messages from the client
             if (messages.Any(m => m.Role != null && m.Role.Trim().ToLower() == "system"))
             {
                 return BadRequest("System messages are not allowed from the client.");
             }
+
+            if (messages.Count == 0)
+            {
+                if (string.IsNullOrWhiteSpace(request.Prompt))
+                    return BadRequest("Either 'messages' or 'prompt' must be provided.");
+
+                messages = new List<Message>
+                {
+                    new Message { Role = "user", Content = request.Prompt }
+                };
+            }
             
             var systemPrompt = await GetSystemPrompt();
             
-            var questionnaireJson = questionnaireContextProvider.GetQuestionnaireContext(questionnaireId);
+            var questionnaireJson = questionnaireContextProvider.GetQuestionnaireContext(request.QuestionnaireId.Value, request.EntityId.Value);
             if (!string.IsNullOrWhiteSpace(questionnaireJson))
             {
                 systemPrompt += "\n\nCurrent questionnaire context:\n" + questionnaireJson;

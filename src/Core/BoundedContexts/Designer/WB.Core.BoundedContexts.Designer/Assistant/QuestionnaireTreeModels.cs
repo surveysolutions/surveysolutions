@@ -8,5 +8,6 @@ public class QuestionnaireTreeNode
     public string Title { get; set; } = string.Empty;
     public string Type { get; set; } = string.Empty;
     public List<QuestionnaireTreeNode>? Children { get; set; }
+    public bool HasOmittedChildren { get; set; }
 }
 
