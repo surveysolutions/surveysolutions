@@ -76,7 +76,6 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
     <EmbeddedResource Include="Code\ImportExport\QuestionnaireSchema.json" />
-    <EmbeddedResource Include="Resources\AssistantSystemPrompt.txt" />
   </ItemGroup>
 
   <ItemGroup>

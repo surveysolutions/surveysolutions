@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Net.Http;
 using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Designer.Assistant;
+using WB.Core.BoundedContexts.Designer.Assistant.Settings;
 
 namespace WB.UI.Designer.Controllers.Api.Designer
 {
@@ -23,17 +24,21 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         private readonly ILogger<AssistanceController> logger;
 
         private readonly IQuestionnaireContextProvider questionnaireContextProvider;
+
+        private readonly IQuestionnaireAssistant questionnaireAssistant;
         //private readonly IQuestionnaireContextProvider questionnaireContextProvider;
 
         public AssistanceController(IConfiguration configuration, 
             //IQuestionnaireContextProvider questionnaireContextProvider,
             ILogger<AssistanceController> logger,
-            IQuestionnaireContextProvider questionnaireContextProvider)
+            IQuestionnaireContextProvider questionnaireContextProvider,
+            IQuestionnaireAssistant questionnaireAssistant)
         {
             this.configuration = configuration;
             //this.questionnaireContextProvider = questionnaireContextProvider;
             this.logger = logger;
             this.questionnaireContextProvider = questionnaireContextProvider;
+            this.questionnaireAssistant = questionnaireAssistant;
 
             // Switch between OpenAIModelSettings and LlamaModelSettings as needed
             // Example: this.modelSettings = new OpenAIModelSettings(configuration);
@@ -55,39 +60,6 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             public string Area { get; set; } = string.Empty;
         }
 
-        public interface IModelSettings
-        {
-            string ModelName { get; set; }
-            string ApiUrl { get; set; }
-            string? ApiKey { get; set; }
-        }
-
-        public class OpenAIModelSettings : IModelSettings
-        {
-            public string ModelName { get; set; } = "gpt-3.5-turbo";
-            public string ApiUrl { get; set; } = "https://api.openai.com/v1/chat/completions";
-            public string? ApiKey { get; set; }
-
-            public OpenAIModelSettings(IConfiguration configuration)
-            {
-                ApiKey = configuration["OpenAI:ApiKey"];
-            }
-        }
-
-        public class LlamaModelSettings : IModelSettings
-        {
-            public string ModelName { get; set; } = "llama-3.2-3b-instruct";
-            public string ApiUrl { get; set; } = "http://localhost:1234/v1/chat/completions";
-            public string? ApiKey { get; set; } = "";
-        }
-
-        public class Llama32ModelSettings : IModelSettings
-        {
-            public string ModelName { get; set; } = "llama3.2";
-            public string ApiUrl { get; set; } = "http://localhost:11434/v1/chat/completions";
-            public string? ApiKey { get; set; } = "";
-        }
-        
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] AssistanceRequest request)
         {
@@ -98,64 +70,15 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 return  BadRequest("Either 'questionnaireId' must be provided.");
             if (!request.EntityId.HasValue)
                 return  BadRequest("Either 'entityId' must be provided.");
-
-            var messages = request.Messages;
-            // Reject any system messages from the client
-            if (messages.Any(m => m.Role != null && m.Role.Trim().ToLower() == "system"))
-            {
-                return BadRequest("System messages are not allowed from the client.");
-            }
-
-            if (messages.Count == 0)
-            {
-                if (string.IsNullOrWhiteSpace(request.Prompt))
-                    return BadRequest("Either 'messages' or 'prompt' must be provided.");
-
-                messages = new List<Message>
-                {
-                    new Message { Role = "user", Content = request.Prompt }
-                };
-            }
             
-            var systemPrompt = await GetSystemPrompt();
-            
-            var questionnaireJson = questionnaireContextProvider.GetQuestionnaireContext(request.QuestionnaireId.Value, request.EntityId.Value);
-            if (!string.IsNullOrWhiteSpace(questionnaireJson))
-            {
-                systemPrompt += "\n\nCurrent questionnaire context:\n" + questionnaireJson;
-            }
-            
-            messages.Insert(0, new Message { Role = "system", Content = systemPrompt });
-
-            
-            var payloadObj = new {
-                model = modelSettings.ModelName,
-                messages = messages.Select(m => new { role = m.Role, content = m.Content }).ToList(),
-                max_tokens = 700,
-                temperature = 0.7,
-            };
-
-            var requestMessage = new HttpRequestMessage(HttpMethod.Post, modelSettings.ApiUrl)
-            {
-                Content = new StringContent(System.Text.Json.JsonSerializer.Serialize(payloadObj), System.Text.Encoding.UTF8, "application/json")
-            };
-            if (!string.IsNullOrWhiteSpace(modelSettings.ApiKey))
-            {
-                requestMessage.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", modelSettings.ApiKey);
-            }
-
             try
             {
-                using (var httpClient = new HttpClient())
-                {
-                    var response = await httpClient.SendAsync(requestMessage);
-                    var responseBody = await response.Content.ReadAsStringAsync();
-                    if (!response.IsSuccessStatusCode)
-                    {
-                        return StatusCode((int)response.StatusCode, responseBody);
-                    }
-                    return Ok(responseBody);
-                }
+                var response = await questionnaireAssistant.GetResponseAsync(new AssistantRequest(
+                    request.QuestionnaireId.Value, request.EntityId.Value, request.Prompt,
+                    request.Messages.Select(m => new AssistantMessage(m.Role, m.Content)).ToList()
+                ));
+
+                return Ok(response.Answer);
             }
             catch (Exception ex)
             {
@@ -164,30 +87,6 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             }
         }
 
-        private async Task<string> GetSystemPrompt()
-        {
-            string systemPrompt;
-            try
-            {
-                var assembly = Assembly.GetExecutingAssembly();
-                var resourceName = "WB.UI.Designer.Resources.AssistantSystemPrompt.txt";
-                
-                await using var stream = assembly.GetManifestResourceStream(resourceName);
-                if (stream == null)
-                {
-                    throw new FileNotFoundException($"Embedded resource '{resourceName}' not found.");
-                }
-                
-                using var reader = new StreamReader(stream);
-                systemPrompt = await reader.ReadToEndAsync();
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Failed to load system prompt from embedded resources");
-                systemPrompt = "You are a helpful AI assistant specialized in Survey Solutions questionnaire design.";
-            }
-
-            return systemPrompt;
-        }
+        
     }
 }
