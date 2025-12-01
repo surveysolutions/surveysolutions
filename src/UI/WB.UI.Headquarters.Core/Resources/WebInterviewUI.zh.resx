@@ -423,8 +423,7 @@
     <value>输入的值不能小于受保护的答案</value>
   </data>
   <data name="CompleteReviewSubmit" xml:space="preserve">
-    <value>审阅并提交 &lt;br /&gt;
-访谈 {{key}}</value>
+      <value>审阅并提交</value>
   </data>
   <data name="Complete_Tab_CriticalErrors" xml:space="preserve">
     <value>严重 &lt;br /&gt;
@@ -465,4 +464,8 @@
   </data>
   <data name="TurnOnDevMode" xml:space="preserve">
     <value>开启开发者模式</value>
-  </data></root>
+  </data>
+  <data name="CompleteReviewSubmitInterview" xml:space="preserve">
+      <value>访谈 {{key}}</value>
+  </data>
+</root>

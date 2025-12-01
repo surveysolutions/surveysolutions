@@ -956,5 +956,11 @@ namespace WB.UI.Headquarters.Resources {
                 return ResourceManager.GetString("Complete_QuestionsWithErrors", resourceCulture);
             }
         }
+        
+        public static string CompleteReviewSubmitInterview {
+            get {
+                return ResourceManager.GetString("CompleteReviewSubmitInterview", resourceCulture);
+            }
+        }
     }
 }

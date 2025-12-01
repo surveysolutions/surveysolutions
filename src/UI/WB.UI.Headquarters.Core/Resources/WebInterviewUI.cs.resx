@@ -477,10 +477,9 @@ Požádejte o pomoc svého garanta.</value>
     <data name="Complete_QuestionsWithErrors" xml:space="preserve">
     <value>Otázky s chybami: {{count}}</value>
   </data>
-  <data name="CompleteReviewSubmit" xml:space="preserve">
-    <value>Zkontrolovat a odeslat &lt;br /&gt;
-Rozhovor {{key}}</value>
-  </data>
+    <data name="CompleteReviewSubmit" xml:space="preserve">
+        <value>Zkontrolovat a odeslat</value>
+    </data>
   <data name="Complete_Tab_CriticalErrors" xml:space="preserve">
     <value>Kritické &lt;br /&gt;
 Chyby</value>
@@ -521,4 +520,7 @@ Ujistěte se, že všechny informace jsou správné.</value>
   <data name="TurnOnDevMode" xml:space="preserve">
     <value>Zapnout režim vývojáře</value>
   </data>
+    <data name="CompleteReviewSubmitInterview" xml:space="preserve">
+        <value>Rozhovor {{key}}</value>
+    </data>
 </root>

@@ -7,12 +7,13 @@
         </div>
         <div class="wrapper-info">
             <div class="container-info">
-                <h2
-                    v-dompurify-html="$t('WebInterviewUI.CompleteReviewSubmit', { key: $store.state.webinterview.interviewKey })">
+                <h2 v-dompurify-html="$t('WebInterviewUI.CompleteReviewSubmit')">
                 </h2>
+                <h3
+                    v-dompurify-html="$t('WebInterviewUI.CompleteReviewSubmitInterview', { key: $store.state.webinterview.interviewKey })">
+                </h3>
             </div>
         </div>
-
 
         <div class="wrapper-info" v-if="!hasAnyIssue">
             <div class="container-info info-block">
@@ -30,7 +31,8 @@
             </li>
         </ul>
 
-        <div v-if="hasAnyIssue" class="tab-content wrapper-info list-unstyled marked-questions" :class="activeGroup.cssClass">
+        <div v-if="hasAnyIssue" class="tab-content wrapper-info list-unstyled marked-questions"
+            :class="activeGroup.cssClass">
             <div class="tab-content-item" v-for="item in activeGroup.items" :key="item.id" @click="navigateTo(item)"
                 :class="{ 'critical-rule': item.type === 'critical-rule' }">
                 <a class="item-title" v-if="item.parentId || item.isPrefilled" href="javascript:void(0);"
@@ -44,7 +46,8 @@
                 </div>
             </div>
 
-            <div class="and-more" v-if="moreCount > 0">{{ $t('WebInterviewUI.Complete_AndMore', { count: moreCount }) }}</div>
+            <div class="and-more" v-if="moreCount > 0">{{ $t('WebInterviewUI.Complete_AndMore', { count: moreCount }) }}
+            </div>
         </div>
 
         <div class="wrapper-info note-supervisor">
@@ -291,6 +294,7 @@
     border-top: 1px solid #000000;
     padding-top: 40px;
     margin-top: 0px;
+    white-space: pre-line;
 }
 
 
@@ -413,7 +417,7 @@ export default {
             const criticalUnanswered = this.criticalityInfo?.unansweredCriticalQuestions || []
             const critical = criticalFailedRules.concat(criticalUnanswered)
             const criticalTotal = (this.criticalityInfo?.failedCriticalRulesTotal || 0)
-                                + (this.criticalityInfo?.unansweredCriticalQuestionsTotal || 0);
+                + (this.criticalityInfo?.unansweredCriticalQuestionsTotal || 0);
             groups.push({
                 title: this.$t('WebInterviewUI.Complete_Tab_CriticalErrors'),
                 items: critical,
