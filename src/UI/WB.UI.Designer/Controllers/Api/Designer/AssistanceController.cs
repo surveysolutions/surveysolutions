@@ -3,11 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
-using System.Net.Http;
 using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Designer.Assistant;
 using WB.Core.BoundedContexts.Designer.Assistant.Settings;
@@ -74,7 +71,9 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             try
             {
                 var response = await questionnaireAssistant.GetResponseAsync(new AssistantRequest(
-                    request.QuestionnaireId.Value, request.EntityId.Value, request.Prompt,
+                    request.QuestionnaireId.Value, 
+                    request.EntityId.Value, 
+                    request.Prompt,
                     request.Messages.Select(m => new AssistantMessage(m.Role, m.Content)).ToList()
                 ));
 

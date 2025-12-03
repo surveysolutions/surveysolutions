@@ -14,8 +14,10 @@ namespace WB.Core.BoundedContexts.Designer.Assistant;
 public class QuestionnaireContextProvider(IDesignerQuestionnaireStorage questionnaireStorage) 
     : IQuestionnaireContextProvider
 {
-    public string GetQuestionnaireContext(Guid questionnaireId, Guid entityId)
+    public string GetQuestionnaireContext(Guid questionnaireId, Guid entityId, List<string>? loadGroups = null)
     {
+        loadGroups ??= new List<string>();
+        
         var questionnaireDocument = questionnaireStorage.Get(questionnaireId);
         if (questionnaireDocument == null)
             throw new ArgumentException($"Questionnaire with id {questionnaireId} not found");
@@ -23,14 +25,14 @@ public class QuestionnaireContextProvider(IDesignerQuestionnaireStorage question
         // Build path to target entity
         var pathToEntity = FindPathToEntity(questionnaireDocument, entityId);
         
-        var simplifiedTree = BuildOptimizedTree(questionnaireDocument, pathToEntity, entityId);
+        var simplifiedTree = BuildOptimizedTree(questionnaireDocument, pathToEntity, entityId, loadGroups);
         var json = JsonConvert.SerializeObject(simplifiedTree, Formatting.Indented);
 
         return $"Context for questionnaire: {json}";
     }
 
     private QuestionnaireTreeNode BuildOptimizedTree(QuestionnaireDocument document, 
-        List<Guid> pathToEntity, Guid targetEntityId)
+        List<Guid> pathToEntity, Guid targetEntityId, List<string> loadGroups)
     {
         var node = new QuestionnaireTreeNode
         {
@@ -45,7 +47,7 @@ public class QuestionnaireContextProvider(IDesignerQuestionnaireStorage question
 
         if (relevantChildren.Any())
         {
-            node.Children = BuildOptimizedChildren(relevantChildren, pathToEntity, targetEntityId, 0);
+            node.Children = BuildOptimizedChildren(relevantChildren, pathToEntity, targetEntityId, 0, loadGroups);
             node.HasOmittedChildren = relevantChildren.Count > (node.Children?.Count ?? 0);
         }
 
@@ -56,7 +58,8 @@ public class QuestionnaireContextProvider(IDesignerQuestionnaireStorage question
         List<IComposite> children, 
         List<Guid> pathToEntity, 
         Guid targetEntityId,
-        int currentDepth)
+        int currentDepth,
+        List<string> loadGroups)
     {
         var result = new List<QuestionnaireTreeNode>();
         
@@ -68,16 +71,21 @@ public class QuestionnaireContextProvider(IDesignerQuestionnaireStorage question
             var isTargetSibling = pathToEntity.Any() && pathToEntity.Last() != childId && 
                                   children.Any(c => c.PublicKey == pathToEntity.Last());
             
-            var shouldInclude = currentDepth == 0 || isInPath || isTarget || 
+            // Проверяем, запрошена ли эта группа для загрузки
+            var isRequestedForLoad = !string.IsNullOrEmpty(child.VariableName) && 
+                                     loadGroups.Contains(child.VariableName);
+            
+            var shouldInclude = currentDepth == 0 || isInPath || isTarget || isRequestedForLoad ||
                                (isTargetSibling && pathToEntity.Count > 0 && 
                                 children.Any(c => c.PublicKey == pathToEntity[^1]));
             
             if (shouldInclude)
             {
-                var includeChildren = isInPath || isTarget;
+                // Включаем детей для нод на пути, целевой ноды или запрошенных групп
+                var includeChildren = isInPath || isTarget || isRequestedForLoad;
                 
                 var treeNode = BuildOptimizedNode(child, pathToEntity, targetEntityId, currentDepth + 1, 
-                    includeChildren);
+                    includeChildren, loadGroups);
                 if (treeNode != null)
                 {
                     result.Add(treeNode);
@@ -92,7 +100,8 @@ public class QuestionnaireContextProvider(IDesignerQuestionnaireStorage question
         List<Guid> pathToEntity, 
         Guid targetEntityId,
         int currentDepth,
-        bool includeChildren)
+        bool includeChildren,
+        List<string> loadGroups)
     {
         // Skip StaticText nodes
         if (node is StaticText)
@@ -115,7 +124,7 @@ public class QuestionnaireContextProvider(IDesignerQuestionnaireStorage question
             
             if (includeChildren && relevantChildren.Any())
             {
-                treeNode.Children = BuildOptimizedChildren(relevantChildren, pathToEntity, targetEntityId, currentDepth);
+                treeNode.Children = BuildOptimizedChildren(relevantChildren, pathToEntity, targetEntityId, currentDepth, loadGroups);
                 treeNode.HasOmittedChildren = relevantChildren.Count > (treeNode.Children?.Count ?? 0);
             }
             else if (relevantChildren.Any())
