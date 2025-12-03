@@ -77,7 +77,11 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                     request.Messages.Select(m => new AssistantMessage(m.Role, m.Content)).ToList()
                 ));
 
-                return Ok(response.Answer);
+                return Ok(new
+                {
+                    response.Expression,
+                    response.Message
+                });
             }
             catch (Exception ex)
             {

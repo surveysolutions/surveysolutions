@@ -39,7 +39,7 @@ export const useAssistant = () => {
                     }
                 );
 
-                return response.data.choices[0].message.content;
+                return response.data.expression || response.data.message;
             } catch (error) {
                 console.error(
                     `Assistant Error (attempt ${attempt}/${retries}):`,
