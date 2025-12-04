@@ -512,7 +512,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 .Concat(this.GetEnabledInvalidQuestions().Where(question => question.IsInterviewer)
                     .Select(question => question.Identity));
 
-        public IEnumerable<Identity> GetInvalidEntitiesInInterviewForSupervisor()
+        private IEnumerable<Identity> GetInvalidEntitiesInInterviewForSupervisor()
             => this.GetEnabledInvalidStaticTexts()
                 .Concat(this.GetEnabledInvalidQuestions().Where(question => question.IsInterviewer || question.IsSupervisors)
                     .Select(question => question.Identity));

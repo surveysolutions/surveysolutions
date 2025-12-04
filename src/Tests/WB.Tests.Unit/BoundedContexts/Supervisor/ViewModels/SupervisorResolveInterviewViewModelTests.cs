@@ -235,7 +235,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
             var defaultResult = new EntitiesListViewModelFactoryResult(Enumerable.Empty<EntityWithErrorsViewModel>(), 0);
             
             return Mock.Of<IEntitiesListViewModelFactory>(x =>
-                x.GetTopEntitiesWithErrors(It.IsAny<string>(), It.IsAny<NavigationState>(), It.IsAny<bool>()) == defaultResult &&
+                x.GetTopEntitiesWithErrors(It.IsAny<string>(), It.IsAny<NavigationState>()) == defaultResult &&
                 x.GetTopUnansweredQuestions(It.IsAny<string>(), It.IsAny<NavigationState>(), It.IsAny<bool>()) == defaultResult &&
                 x.GetTopEntitiesWithComments(It.IsAny<string>(), It.IsAny<NavigationState>()) == defaultResult &&
                 x.GetTopUnansweredCriticalQuestions(It.IsAny<string>(), It.IsAny<NavigationState>()) == defaultResult &&

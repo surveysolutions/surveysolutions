@@ -99,7 +99,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             var unansweredQuestions = topUnansweredQuestions.Entities.ToList();
 
             this.ErrorsCount = InterviewState.InvalidAnswersCount;
-            var topEntitiesWithErrors = this.entitiesListViewModelFactory.GetTopEntitiesWithErrors(interviewId, navigationState, forSupervisor);
+            var topEntitiesWithErrors = this.entitiesListViewModelFactory.GetTopEntitiesWithErrors(interviewId, navigationState);
             var entitiesWithErrors = topEntitiesWithErrors.Entities.ToList();
             this.EntitiesWithErrorsDescription = UIResources.Interview_Complete_Entities_With_Errors + " " + MoreThan(this.ErrorsCount);
 

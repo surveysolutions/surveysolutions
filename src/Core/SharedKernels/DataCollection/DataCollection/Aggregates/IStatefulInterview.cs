@@ -152,8 +152,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         IEnumerable<Identity> GetInvalidEntitiesInInterview();
 
-        IEnumerable<Identity> GetInvalidEntitiesInInterviewForSupervisor();
-
         bool IsFirstEntityBeforeSecond(Identity first, Identity second);
 
         List<CategoricalOption> GetTopFilteredOptionsForQuestion(Identity question, int? parentQuestionValue, string filter, int sliceSize, int[] excludedOptionIds);
