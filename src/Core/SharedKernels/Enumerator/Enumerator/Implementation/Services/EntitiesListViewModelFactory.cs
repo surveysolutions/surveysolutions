@@ -29,10 +29,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             this.dynamicTextViewModelFactory = dynamicTextViewModelFactory;
         }
 
-        public EntitiesListViewModelFactoryResult GetTopEntitiesWithErrors(string interviewId, NavigationState navigationState)
+        public EntitiesListViewModelFactoryResult GetTopEntitiesWithErrors(string interviewId, NavigationState navigationState, bool forSupervisor)
         {
             IStatefulInterview interview = this.interviewRepository.Get(interviewId);
-            var entitiesInInterview = interview.GetInvalidEntitiesInInterview().ToList();
+            var entitiesInInterview = forSupervisor 
+                ? interview.GetInvalidEntitiesInInterviewForSupervisor().ToList()
+                : interview.GetInvalidEntitiesInInterview().ToList();
             var total = entitiesInInterview.Count;
             Identity[] invalidEntities = entitiesInInterview.Take(this.maxNumberOfEntities).ToArray();
             return new EntitiesListViewModelFactoryResult(
