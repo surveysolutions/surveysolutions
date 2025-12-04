@@ -256,8 +256,13 @@ namespace WB.UI.Shared.Extensions.ViewModels
                 var sPoint = GeometryEngine.Project(e.Position, shapeExtent.SpatialReference);
                 if (GeometryEngine.Contains(shapeExtent, sPoint))
                 {
-                    var featureLayer = (FeatureLayer)shapeLayer;
-                    var shapefileFeatureTable = (ShapefileFeatureTable)featureLayer?.FeatureTable;
+                    // Add type checking before casting
+                    if (!(shapeLayer is FeatureLayer featureLayer))
+                        return;
+                    
+                    if (!(featureLayer.FeatureTable is ShapefileFeatureTable shapefileFeatureTable))
+                        return;
+                    
                     var labelFieldIndex = shapefileFeatureTable.Fields.ToList().FindIndex(f => 
                         string.Compare(f.Name, "label", StringComparison.OrdinalIgnoreCase) == 0);
                     

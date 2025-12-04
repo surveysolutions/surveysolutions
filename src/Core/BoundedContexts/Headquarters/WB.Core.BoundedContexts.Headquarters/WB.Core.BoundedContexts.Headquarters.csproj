@@ -60,6 +60,7 @@
     <PackageReference Include="Iesi.Collections" Version="4.1.1" />
     <PackageReference Include="MediatR" Version="12.5.0" />
     <PackageReference Include="MailKit" Version="4.12.1" />
+    <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.3.0" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="9.0.5" />
     <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="9.0.5" />

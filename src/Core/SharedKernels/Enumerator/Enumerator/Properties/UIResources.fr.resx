@@ -240,6 +240,15 @@
   <data name="Interview_Questions_QrBarcode_SaveAnswer" xml:space="preserve">
     <value>Appuyez pour scanner le code-barres</value>
   </data>
+  <data name="BarcodeScanner_Error_UnknownError" xml:space="preserve">
+    <value>Erreur inconnue</value>
+  </data>
+  <data name="BarcodeScanner_Error_StartingCamera" xml:space="preserve">
+    <value>Erreur de démarrage de la caméra : </value>
+  </data>
+  <data name="BarcodeScanner_Error_Interrupted" xml:space="preserve">
+    <value>Interrompu</value>
+  </data>
   <data name="Interview_Questions_Area_SaveAnswer" xml:space="preserve">
     <value>Appuyez pour répondre</value>
   </data>
@@ -357,7 +366,7 @@ Vous pouvez créer ou modifier vos questionnaires dans Survey Solutions Designer
     <value>Après avoir terminé cet entretien, il sera marqué comme complété et sera téléchargé vers le superviseur lors de votre prochaine synchronisation</value>
   </data>
   <data name="Interview_Complete_CriticalIssues_Instrunction" xml:space="preserve">
-    <value>Ce bouton est désactivé car la soumission des entretiens avec des problèmes critiques n'est pas autorisée</value>
+    <value>Pour activer le bouton, veuillez résoudre les problèmes critiques</value>
   </data>
   <data name="Interview_Complete_Errors" xml:space="preserve">
     <value>Erreur(s)</value>
@@ -378,7 +387,7 @@ Vous pouvez créer ou modifier vos questionnaires dans Survey Solutions Designer
     <value>Veuillez confirmer que vous souhaitez soumettre cet entretien avec des problèmes critiques.</value>
   </data>
   <data name="Interview_Complete_Note_For_Supervisor_with_Criticality" xml:space="preserve">
-    <value>Ce bouton reste désactivé jusqu'à ce que vous spécifiiez un commentaire pour les problèmes critiques ci-dessus</value>
+    <value>Pour activer le bouton, veuillez résoudre les problèmes critiques ou fournir une explication dans la boîte de commentaire ci-dessus</value>
   </data>
   <data name="Interview_Complete_Questions_Status" xml:space="preserve">
     <value>Statut des questions</value>
@@ -957,4 +966,29 @@ Vous pouvez créer ou modifier vos questionnaires dans Survey Solutions Designer
   <data name="SelectMapTitle" xml:space="preserve">
       <value>Sélectionnez une carte:</value>
   </data>
+  <data name="Interview_Complete_Instruction" xml:space="preserve">
+    <value>Une fois soumis, cet entretien sera verrouillé et ne pourra pas être modifié. Veuillez vous assurer que toutes les informations sont correctes.</value>
+</data>
+  <data name="Interview_Complete_MoreCountString" xml:space="preserve">
+    <value>et {0} de plus</value>
+</data>
+  <data name="Interview_Complete_Success_Text" xml:space="preserve">
+    <value>Toutes les questions obligatoires ont été répondues
+Aucune erreur détectée</value>
+</data>
+  <data name="Interview_Complete_Title" xml:space="preserve">
+    <value>Vérifier et soumettre
+Entretien {0}</value>
+</data>
+  <data name="Interview_Complete_Tab_Title_Critical" xml:space="preserve">
+    <value>Erreurs
+critiques</value>
+</data>
+  <data name="Interview_Complete_Tab_Title_WithErrors" xml:space="preserve">
+    <value>Erreurs</value>
+</data>
+  <data name="Interview_Complete_Tab_Title_Unanswered" xml:space="preserve">
+    <value>Questions
+sans réponse</value>
+</data>
 </root>

@@ -29,32 +29,52 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             this.dynamicTextViewModelFactory = dynamicTextViewModelFactory;
         }
 
-        public IEnumerable<EntityWithErrorsViewModel> GetTopEntitiesWithErrors(string interviewId, NavigationState navigationState)
+        public EntitiesListViewModelFactoryResult GetTopEntitiesWithErrors(string interviewId, NavigationState navigationState)
         {
             IStatefulInterview interview = this.interviewRepository.Get(interviewId);
-            Identity[] invalidEntities = interview.GetInvalidEntitiesInInterview().Take(this.maxNumberOfEntities).ToArray();
-            return this.EntityWithErrorsViewModels<EntityWithErrorsViewModel>(interviewId, navigationState, invalidEntities, interview);
+            var entitiesInInterview = interview.GetInvalidEntitiesInInterview().ToList();
+            var total = entitiesInInterview.Count;
+            Identity[] invalidEntities = entitiesInInterview.Take(this.maxNumberOfEntities).ToArray();
+            return new EntitiesListViewModelFactoryResult(
+                this.EntityWithErrorsViewModels<EntityWithErrorsViewModel>(interviewId, navigationState, invalidEntities, interview),
+                total
+                );
         }
 
-        public IEnumerable<EntityWithErrorsViewModel> GetTopUnansweredQuestions(string interviewId, NavigationState navigationState, bool forSupervisor)
+        public EntitiesListViewModelFactoryResult GetTopUnansweredQuestions(string interviewId, NavigationState navigationState, bool forSupervisor)
         {
             IStatefulInterview interview = this.interviewRepository.Get(interviewId);
-            Identity[] invalidEntities = interview.GetAllUnansweredQuestions(forSupervisor).Take(this.maxNumberOfEntities).ToArray();
-            return this.EntityWithErrorsViewModels<EntityWithErrorsViewModel>(interviewId, navigationState, invalidEntities, interview, false);
+            var allUnansweredQuestions = interview.GetAllUnansweredQuestions(forSupervisor).ToList();
+            var total = allUnansweredQuestions.Count;
+            Identity[] invalidEntities = allUnansweredQuestions.Take(this.maxNumberOfEntities).ToArray();
+            return new EntitiesListViewModelFactoryResult(
+                this.EntityWithErrorsViewModels<EntityWithErrorsViewModel>(interviewId, navigationState, invalidEntities, interview, false),
+                total
+                );
         }
 
-        public IEnumerable<EntityWithCommentsViewModel> GetTopEntitiesWithComments(string interviewId, NavigationState navigationState)
+        public EntitiesListViewModelFactoryResult GetTopEntitiesWithComments(string interviewId, NavigationState navigationState)
         {
             IStatefulInterview interview = this.interviewRepository.Get(interviewId);
-            Identity[] commentedBySupervisorEntities = interview.GetCommentedBySupervisorQuestionsVisibleToInterviewer().Take(this.maxNumberOfEntities).ToArray();
-            return this.EntityWithErrorsViewModels<EntityWithCommentsViewModel>(interviewId, navigationState, commentedBySupervisorEntities, interview);
+            var commentedBySupervisorQuestions = interview.GetCommentedBySupervisorQuestionsVisibleToInterviewer().ToList();
+            var total = commentedBySupervisorQuestions.Count;
+            Identity[] commentedBySupervisorEntities = commentedBySupervisorQuestions.Take(this.maxNumberOfEntities).ToArray();
+            return new EntitiesListViewModelFactoryResult(
+                this.EntityWithErrorsViewModels<EntityWithErrorsViewModel>(interviewId, navigationState, commentedBySupervisorEntities, interview),
+                total
+                );
         }
 
-        public IEnumerable<EntityWithErrorsViewModel> GetTopUnansweredCriticalQuestions(string interviewId, NavigationState navigationState)
+        public EntitiesListViewModelFactoryResult GetTopUnansweredCriticalQuestions(string interviewId, NavigationState navigationState)
         {
             IStatefulInterview interview = this.interviewRepository.GetOrThrow(interviewId);
-            Identity[] invalidEntities = interview.GetAllUnansweredCriticalQuestions().Take(this.maxNumberOfEntities).ToArray();
-            return this.EntityWithErrorsViewModels<EntityWithErrorsViewModel>(interviewId, navigationState, invalidEntities, interview);
+            var criticalQuestions = interview.GetAllUnansweredCriticalQuestions().ToList();
+            var total = criticalQuestions.Count;
+            Identity[] invalidEntities = criticalQuestions.Take(this.maxNumberOfEntities).ToArray();
+            return new EntitiesListViewModelFactoryResult(
+                this.EntityWithErrorsViewModels<EntityWithErrorsViewModel>(interviewId, navigationState, invalidEntities, interview),
+                total
+                );
         }
         
         private IEnumerable<EntityWithErrorsViewModel> GetFailedCriticalRules(IStatefulInterview interview, NavigationState navigationState, Guid[] ids)
@@ -71,7 +91,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 using (var title = this.dynamicTextViewModelFactory.CreateDynamicTextViewModel())
                 {
                     title.InitAsStatic(criticalRuleMessage);
-                    entityWithErrorsViewModel.Init(null, title.PlainText, navigationState);
+                    entityWithErrorsViewModel.Init(entityIdentity: null, title: null, comment: null, error: title.PlainText, navigationState: navigationState);
                     entityWithErrorsViewModel.IsError = true;
                     entityWithErrorsViewModel.AllowInnerLinks(interviewId, Identity.Create(interview.Id, RosterVector.Empty));
                 }
@@ -81,20 +101,28 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             return criticalRules;
         }
         
-        public IEnumerable<EntityWithErrorsViewModel> GetTopFailedCriticalRules(string interviewId, NavigationState navigationState)
+        public EntitiesListViewModelFactoryResult GetTopFailedCriticalRules(string interviewId, NavigationState navigationState)
         {
             IStatefulInterview interview = this.interviewRepository.GetOrThrow(interviewId);
-            Guid[] ids = interview.CollectInvalidCriticalRules().Take(this.maxNumberOfEntities).ToArray();
+            var criticalRules = interview.CollectInvalidCriticalRules().ToList();
+            var total = criticalRules.Count;
+            Guid[] ids = criticalRules.Take(this.maxNumberOfEntities).ToArray();
 
-            return GetFailedCriticalRules(interview, navigationState,ids);
+            return new EntitiesListViewModelFactoryResult(
+                GetFailedCriticalRules(interview, navigationState, ids),
+                total);
         }
 
-        public IEnumerable<EntityWithErrorsViewModel> GetTopFailedCriticalRulesFromState(string interviewId, NavigationState navigationState)
+        public EntitiesListViewModelFactoryResult GetTopFailedCriticalRulesFromState(string interviewId, NavigationState navigationState)
         {
             IStatefulInterview interview = this.interviewRepository.GetOrThrow(interviewId);
-            Guid[] ids = interview.GetFailedCriticalRules().Take(this.maxNumberOfEntities).ToArray();
+            var failedCriticalRules = interview.GetFailedCriticalRules().ToList();
+            var total = failedCriticalRules.Count;
+            Guid[] ids = failedCriticalRules.Take(this.maxNumberOfEntities).ToArray();
 
-            return GetFailedCriticalRules(interview, navigationState, ids);
+            return new EntitiesListViewModelFactoryResult(
+                GetFailedCriticalRules(interview, navigationState, ids),
+                total);
         }
 
         private IEnumerable<T> EntityWithErrorsViewModels<T>(string interviewId, NavigationState navigationState,
@@ -113,7 +141,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 using (var title = this.dynamicTextViewModelFactory.CreateDynamicTextViewModel())
                 {
                     title.Init(interviewId, invalidEntity);
-                    entityWithErrorsViewModel.Init(navigationIdentity, title.PlainText, navigationState);
+
+                    var question = interview.GetQuestion(invalidEntity);
+                    var comment = question?.AnswerComments.LastOrDefault()?.Comment;
+                    var error = interview.GetFailedValidationMessages(invalidEntity, null).FirstOrDefault();
+                    entityWithErrorsViewModel.Init(navigationIdentity, title.PlainText, comment, error, navigationState);
                     entityWithErrorsViewModel.IsError = isError;
                 }
 

@@ -49,14 +49,10 @@ export default {
         answerTextQuestion() {
             this.sendAnswer(() => {
                 const target = this.$refs.input || this.$refs.inputTextArea;
-                const answer = target.value
-
-                if (!answer || answer.trim() === '') {
-                    this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.TextRequired'), answer)
-                    return
-                }
+                const answer = target.value?.trim()
 
                 if (this.handleEmptyAnswer(answer)) {
+                    target.value = this.$me.answer || ''
                     return
                 }
 

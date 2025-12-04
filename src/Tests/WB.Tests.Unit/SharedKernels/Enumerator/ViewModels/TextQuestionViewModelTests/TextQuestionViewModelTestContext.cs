@@ -72,9 +72,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextQuestionViewMode
 
         protected static Mock<IViewModelEventRegistry> EventRegistry;
 
-        protected static readonly string interviewId = "Some interviewId";
+        protected static readonly string interviewId = Id.g1.ToString();
 
-        protected static readonly string questionnaireId = "Questionnaire Id";
+        protected static readonly string questionnaireId = Id.g2.ToString();
 
         protected static Guid interviewGuid = Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
 

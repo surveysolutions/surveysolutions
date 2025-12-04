@@ -328,8 +328,42 @@
   <data name="Complete" xml:space="preserve">
     <value>Complete</value>
   </data>
-  <data name="CompleteAbout" xml:space="preserve">
-    <value>You are about to complete this interview</value>
+  <data name="CompleteReviewSubmit" xml:space="preserve">
+      <value>Review &amp; Submit</value>
+  </data>
+  <data name="Complete_Tab_CriticalErrors" xml:space="preserve">
+      <value>Critical &lt;br /&gt;
+Errors</value>
+  </data>
+  <data name="Complete_Tab_QuestionsWithErrors" xml:space="preserve">
+      <value>Errors</value>
+  </data>
+  <data name="Complete_Tab_UnansweredQuestions" xml:space="preserve">
+      <value>Unanswered &lt;br /&gt;
+Questions</value>
+  </data>
+  <data name="Complete_AllGood" xml:space="preserve">
+      <value>All required questions answered &lt;br /&gt;
+No errors detected</value>
+  </data>
+  <data name="Complete_AndMore" xml:space="preserve">
+      <value>and {{count}} more</value>
+  </data>
+  <data name="Complete_NoteIsRequired" xml:space="preserve">
+      <value>Note is required to submit interview</value>
+  </data>
+  <data name="Complete_Required" xml:space="preserve">
+      <value>Required</value>
+  </data>
+  <data name="Complete_Error" xml:space="preserve">
+      <value>Error:</value>
+  </data>
+  <data name="Complete_LastComment" xml:space="preserve">
+      <value>Last Comment:</value>
+  </data>
+  <data name="Complete_SubmitInfo" xml:space="preserve">
+      <value>Once submitted, this interview will be locked and cannot be edited. &lt;br /&gt;
+Please make sure all information is correct.</value>
   </data>
   <data name="CompleteQuestionsStatus" xml:space="preserve">
     <value>Questions status:</value>
@@ -479,11 +513,11 @@ Contact support for assistance.</value>
   <data name="EmailLink_EmailResumeLink" xml:space="preserve">
     <value>Resume link</value>
   </data>
-  <data name="HideVariables" xml:space="preserve">
-    <value>Hide variables</value>
+  <data name="TurnOffDevMode" xml:space="preserve">
+    <value>Switch off Developer Mode</value>
   </data>
-  <data name="ShowVariables" xml:space="preserve">
-    <value>Show variables</value>
+  <data name="TurnOnDevMode" xml:space="preserve">
+    <value>Switch on Developer Mode</value>
   </data>
   <data name="Interview_Questions_RemoveRowFromRosterMessage" xml:space="preserve">
     <value>Are you sure you want to remove related roster '{{rosterTitle}}'?</value>
@@ -543,9 +577,6 @@ Contact support for assistance.</value>
   <data name="AssignmentLimitError" xml:space="preserve">
     <value>You cannot create more interviews from this assignment</value>
   </data>
-  <data name="CompleteInterviewStatus" xml:space="preserve">
-      <value>Interview issues:</value>
-  </data>
   <data name="Complete_CriticalUnansweredQuestions" xml:space="preserve">
       <value>Critical unanswered questions: {{count}}</value>
   </data>
@@ -557,5 +588,8 @@ Contact support for assistance.</value>
   </data>
   <data name="Complete_QuestionsWithErrors" xml:space="preserve">
       <value>Questions with errors: {{count}}</value>
+  </data>
+  <data name="CompleteReviewSubmitInterview" xml:space="preserve">
+      <value>Interview {{key}}</value>
   </data>
 </root>

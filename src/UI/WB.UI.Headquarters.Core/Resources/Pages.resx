@@ -1175,7 +1175,7 @@
     <value>Installation instructions</value>
   </data>
   <data name="DownloadPage_Title" xml:space="preserve">
-    <value>The Computer-assisted Personal Interview technology developed by the World Bank.</value>
+    <value>The Computer-Assisted Personal Interview technology developed by the World Bank.</value>
   </data>
   <data name="DownloadPage_Welcome" xml:space="preserve">
     <value>Welcome to Survey Solutions Interviewer download page</value>
@@ -1191,6 +1191,9 @@
   </data>
   <data name="DownloadPage_Version" xml:space="preserve">
     <value>Version</value>
+  </data>
+  <data name="DownloadPage_Size" xml:space="preserve">
+    <value>Size</value>
   </data>
   <data name="AreaQestion_Area" xml:space="preserve">
     <value>Area</value>
@@ -1246,8 +1249,11 @@
   <data name="ExcludeEsriTitle" xml:space="preserve">
     <value>Exclude ESRI Map support</value>
   </data>
+  <data name="IncludeEsriTitle" xml:space="preserve">
+    <value>Include mapping functionality</value>
+  </data>
   <data name="GetEsriExtraDescription" xml:space="preserve">
-      <value>GIS functionality will significantly increase application size and download time. Follow the instruction of your supervisor as to which version of the Interviewer application (with or without maps) is needed for your task.</value>
+      <value>Mapping functionality will significantly increase application size and download time. Follow the instruction of your supervisor as to which version of the Interviewer application (with or without maps) is needed for your task.</value>
   </data>
   <data name="Filters_Assignment" xml:space="preserve">
     <value>Assignment</value>

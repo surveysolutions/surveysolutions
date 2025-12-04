@@ -30,8 +30,8 @@
         android:orientation="vertical"
         android:layout_marginTop="@dimen/Interview_Group_margin_top"
         local:MvxBind="Visible And(RequestWebInterview, Not(IsLoading))">
-      <View
-          style="@style/Interview_Entity_Divider" />
+        <View
+                style="@style/Interview_Complete_Divider" />
 
       <TextView
           style="@style/Interview_Complete_Screen_Text"
@@ -56,18 +56,28 @@
         android:layout_marginTop="@dimen/Interview_Group_margin_top"
         local:MvxBind="Visible Not(IsLoading)">
 
-      <Button
-              android:id="@+id/Complete_CompleteBtn"
-              style="@style/Button_Success"
-              local:MvxBind="HideKeyboardOnClick .; 
-                          Click CompleteInterviewCommand; 
-                          Text Localization('Interview_Complete_Button'); 
-                          ButtonGroupStyle CompleteStatus; 
-                          " />
-      <TextView
-          style="@style/Interview_Complete_Screen_Text"
-          android:id="@+id/tv_Complete_Instruction"
-          local:MvxBind="Text CompleteButtonComment; Visible Not(RequestWebInterview)" />
+        <TextView
+                style="@style/Interview_Complete_Screen_Text"
+                android:id="@+id/tv_Complete_Instruction"
+                local:MvxBind="Text Localization('Interview_Complete_Instruction');"  />
+
+        <com.google.android.material.button.MaterialButton
+                android:id="@+id/Complete_CompleteBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAllCaps="false"
+                local:icon="@drawable/complete_icon"
+                local:iconGravity="textStart"
+                local:iconTint="?attr/colorOnPrimary"
+                local:MvxBind="HideKeyboardOnClick .;
+                                Text Localization('Interview_Complete_Button'); 
+                                Click CompleteInterviewCommand;
+                                ButtonGroupStyle CompleteStatus;" />
+        
+        <TextView
+                style="@style/Interview_Complete_Screen_Text_Upper"
+                android:id="@+id/tv_Complete_Instruction"
+                local:MvxBind="Text CompleteButtonComment; Visible Not(RequestWebInterview)" />
     </LinearLayout>
 
   </LinearLayout>

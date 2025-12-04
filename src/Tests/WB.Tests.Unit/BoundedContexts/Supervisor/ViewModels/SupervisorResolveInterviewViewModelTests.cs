@@ -26,6 +26,7 @@ using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 using WB.Core.SharedKernels.Enumerator.Views;
@@ -229,6 +230,21 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
             viewModel.Reject.CanExecute().Should().BeFalse();
         }
 
+        private IEntitiesListViewModelFactory CreateDefaultEntitiesListViewModelFactory()
+        {
+            var defaultResult = new EntitiesListViewModelFactoryResult(Enumerable.Empty<EntityWithErrorsViewModel>(), 0);
+            
+            return Mock.Of<IEntitiesListViewModelFactory>(x =>
+                x.GetTopEntitiesWithErrors(It.IsAny<string>(), It.IsAny<NavigationState>()) == defaultResult &&
+                x.GetTopUnansweredQuestions(It.IsAny<string>(), It.IsAny<NavigationState>(), It.IsAny<bool>()) == defaultResult &&
+                x.GetTopEntitiesWithComments(It.IsAny<string>(), It.IsAny<NavigationState>()) == defaultResult &&
+                x.GetTopUnansweredCriticalQuestions(It.IsAny<string>(), It.IsAny<NavigationState>()) == defaultResult &&
+                x.GetTopFailedCriticalRules(It.IsAny<string>(), It.IsAny<NavigationState>()) == defaultResult &&
+                x.GetTopFailedCriticalRulesFromState(It.IsAny<string>(), It.IsAny<NavigationState>()) == defaultResult &&
+                x.MaxNumberOfEntities == 10
+            );
+        }
+
         private SupervisorResolveInterviewViewModel CreateViewModel(IViewModelNavigationService viewModelNavigationService = null,
             ICommandService commandService = null,
             IPrincipal principal = null,
@@ -256,12 +272,15 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
             var interviewRepositoryImpl = interviewRepository ??
                                           Abc.SetUp.StatefulInterviewRepository(
                                               Create.AggregateRoot.StatefulInterview(interviewId: InterviewId));
+            
+            var defaultEntitiesFactory = entitiesListViewModelFactory ?? CreateDefaultEntitiesListViewModelFactory();
+            
             return new SupervisorResolveInterviewViewModel(
                 commandService ?? Create.Service.CommandService(),
                 principal ?? Mock.Of<IPrincipal>(x => x.IsAuthenticated == true && x.CurrentUserIdentity == Mock.Of<IUserIdentity>(y => y.UserId == Id.gA)),
                 interviewRepositoryImpl,
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
-                entitiesListViewModelFactory ?? Mock.Of<IEntitiesListViewModelFactory>(),
+                defaultEntitiesFactory,
                 lastCompletionComments ?? Mock.Of<ILastCompletionComments>(),
                 interviewState ?? new InterviewStateViewModel(
                     interviewRepositoryImpl,

@@ -56,9 +56,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.questionnaireViewRepository = questionnaireViewRepository;
             this.userInteractionService = userInteractionService;
             this.questionnaireSettings = questionnaireSettings;
-
-            TopUnansweredCriticalQuestions = new List<EntityWithErrorsViewModel>();
-            TopFailedCriticalRules = new List<EntityWithErrorsViewModel>();
         }
         public override void Configure(string interviewUid, NavigationState navigationState)
         {
@@ -70,9 +67,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             RunConfiguration(interviewUid, navigationState);
             
             var interviewKey = interview.GetInterviewKey()?.ToString();
-            this.CompleteScreenTitle = string.IsNullOrEmpty(interviewKey)
-                ? UIResources.Interview_Complete_Screen_Description
-                : string.Format(UIResources.Interview_Complete_Screen_DescriptionWithInterviewKey, interviewKey);
+            this.CompleteScreenTitle = string.Format(UIResources.Interview_Complete_Title, interviewKey);
 
             var questionnaireView = questionnaireViewRepository.GetById(interview.QuestionnaireIdentity.ToString());
             if (questionnaireView.WebModeAllowed && interviewerSettings.WebInterviewUriTemplate != null && interview.GetAssignmentId() != null)
@@ -138,29 +133,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             return base.CloseInterviewAfterComplete(switchInterviewToCawiMode);
         }
 
-        public override void Dispose()
-        {
-            if (TopUnansweredCriticalQuestions != null)
-            {
-                var viewModels = TopUnansweredCriticalQuestions.ToArray();
-                foreach (var viewModel in viewModels)
-                {
-                    viewModel?.DisposeIfDisposable();
-                }
-            }
-
-            if (TopFailedCriticalRules != null)
-            {
-                var errors = TopFailedCriticalRules.ToArray();
-                foreach (var errorsViewModel in errors)
-                {
-                    errorsViewModel?.DisposeIfDisposable();
-                }
-            }
-            
-            base.Dispose();
-        }
-        
         public override bool RequestWebInterview
         {
             get => base.RequestWebInterview;

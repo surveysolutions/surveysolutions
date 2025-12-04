@@ -37,7 +37,8 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
         private readonly IExpressionsPlayOrderProvider expressionsPlayOrderProvider;
         private readonly IQuestionnaireCompilationVersionService questionnaireCompilationVersionService;
         private readonly IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService;
-        
+        private readonly IQuestionnaireDocumentTransformer questionnaireDocumentTransformer;
+
         public HQQuestionnairesController(
             IQuestionnaireViewFactory questionnaireViewFactory,
             IQuestionnaireVerifier questionnaireVerifier,
@@ -49,7 +50,8 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
             DesignerDbContext listItemStorage,
             IExpressionsPlayOrderProvider expressionsPlayOrderProvider,
             IQuestionnaireCompilationVersionService questionnaireCompilationVersionService,
-            IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService)
+            IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService,
+            IQuestionnaireDocumentTransformer questionnaireDocumentTransformer)
         {
             this.questionnaireViewFactory = questionnaireViewFactory;
             this.questionnaireVerifier = questionnaireVerifier;
@@ -62,6 +64,7 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
             this.expressionsPlayOrderProvider = expressionsPlayOrderProvider;
             this.questionnaireCompilationVersionService = questionnaireCompilationVersionService;
             this.questionnaireHistoryVersionsService = questionnaireHistoryVersionsService;
+            this.questionnaireDocumentTransformer = questionnaireDocumentTransformer;
         }
 
         [HttpGet]
@@ -165,6 +168,7 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
             }
 
             var questionnaire = questionnaireView.Source.Clone();
+            questionnaireDocumentTransformer.TransformInPlace(questionnaire);
 
             var userAgent = Request.Headers["User-Agent"].FirstOrDefault();
             questionnaire.Revision = await this.questionnaireHistoryVersionsService

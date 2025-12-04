@@ -1,7 +1,24 @@
 import { getLocationHash } from '~/shared/helpers'
 
+export const designerMixin = {
+    methods: {
+        openDesigner(id) {
+            if (!this.$config.inWebTesterMode) {
+                return
+            }
+
+            const { questionnaireId, designerUrl } = this.$config
+            const entityId = id.split('_')[0]
+            const url = `${designerUrl}/q/details/${questionnaireId}/entity/${entityId}`
+
+            window.open(url, '_blank')
+        },
+    },
+}
+
 // Validation, Title, RemoveAnswer, Instruction, Attachment, etc...
 export const entityPartial = {
+    mixins: [designerMixin],
     computed: {
         $me() {
             const id = this.id || this.$parent.$parent.id
@@ -15,11 +32,12 @@ export const entityPartial = {
             }
         },
     },
-    props: ['id'],
+    props: ['id']
 }
 
 // Questions
 export const entityDetails = {
+    mixins: [designerMixin],
     computed: {
         $me() {
             let result = null

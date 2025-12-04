@@ -468,6 +468,15 @@
   <data name="Interview_Questions_QrBarcode_SaveAnswer" xml:space="preserve">
     <value>Trokit për të marrë barkodin </value>
   </data>
+  <data name="BarcodeScanner_Error_UnknownError" xml:space="preserve">
+    <value>Gabim i panjohur</value>
+  </data>
+  <data name="BarcodeScanner_Error_StartingCamera" xml:space="preserve">
+    <value>Gabim në nisjen e kamerës: </value>
+  </data>
+  <data name="BarcodeScanner_Error_Interrupted" xml:space="preserve">
+    <value>Ndërprerë</value>
+  </data>
   <data name="Interview_Questions_RemoveRowFromRosterListMessage" xml:space="preserve">
     <value>Jeni të sigurt që doni të hiqni rosterat përkatës?</value>
   </data>

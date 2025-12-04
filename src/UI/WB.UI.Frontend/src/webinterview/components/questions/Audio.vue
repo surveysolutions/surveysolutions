@@ -9,13 +9,13 @@
                     <ul class="block-with-data list-unstyled">
                         <li :id="answerHolderId">{{ $t("WebInterviewUI.AudioRecordingDuration", {
                             humanizedLength:
-                            humanizedLength, formattedLength
-                            }) }}</li>
+                                humanizedLength, formattedLength
+                        }) }}</li>
                     </ul>
                     <wb-remove-answer />
                 </div>
                 <div v-if="$me.isAnswered" class="action-btn-holder time-question">
-                    <audio controls preload="auto" style="width:300px" :src="audioRecordPath">
+                    <audio controls preload="auto" style="width:100%" :src="audioRecordPath">
                     </audio>
                 </div>
                 <wb-lock />
@@ -95,15 +95,19 @@ export default {
             return `audio_dialog_${this.$me.id}`
         },
         audioRecordPath() {
-            return api.resources.audioRecordUri(this.interviewId, this.$me.filename) + '#' + this.$me.updatedAt.getTime()
+            return api.resources.audioRecordUri(this.interviewId, this.$me.filename, this.$me.updatedAt.getTime())
+
         },
         formattedLength() {
             if (this.$me.isAnswered) {
-                var d = moment.utc(this.$me.answer)
+                // Floor to full seconds (remove milliseconds)
+                const fullSecondsMs = Math.floor(this.$me.answer / 1000) * 1000
+                var d = moment.utc(fullSecondsMs)
                 return d.format('mm:ss')
             }
             return ''
         },
+
         humanizedLength() {
             if (this.$me.isAnswered) {
                 return moment.duration(this.$me.answer, 'milliseconds').humanize()
@@ -156,7 +160,9 @@ export default {
                         self.stopwatchInterval = setInterval(self.updateTimer, 31)
                         self.maxDurationInterval = setInterval(self.stopRecording, self.maxDuration)
                     },
-                    errorCallback: (e) => {
+                    errorCallback: (error, stack) => {
+                        console.error('An error occurred in a child component:', error);
+                        console.error('Stack trace:', stack);
                         self.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.AudioInitializationFailed'))
                         this.closeModal()
                     },

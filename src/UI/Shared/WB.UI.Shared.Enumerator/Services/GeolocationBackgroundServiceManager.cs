@@ -61,7 +61,9 @@ public class GeolocationBackgroundServiceManager : IGeolocationBackgroundService
         if (e.Location.Accuracy > accuracyInMeters)
             return;
 
-        foreach (var geolocationListener in listeners.Values)
+        // Create a snapshot to avoid collection modification during enumeration
+        var listenersCopy = listeners.Values.ToArray();
+        foreach (var geolocationListener in listenersCopy)
         {
             await geolocationListener.OnGpsLocationChanged(e.Location, serviceConnection.Service);
         }

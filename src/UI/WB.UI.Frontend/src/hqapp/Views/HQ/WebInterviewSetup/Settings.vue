@@ -537,6 +537,20 @@
                                     </label>
                                 </Field>
                             </div>
+                            <div class="form-group mb-20">
+                                <Field v-slot="{ field }" name="allowTranscriptDownloading"
+                                    :value="allowTranscriptDownloadingEnabled">
+                                    <input class="checkbox-filter" v-bind="field" v-validate="''"
+                                        name="allowTranscriptDownloading" data-vv-name="allowTranscriptDownloading"
+                                        id="allowTranscriptDownloading" type="checkbox"
+                                        v-model="allowTranscriptDownloadingEnabled" />
+                                    <label for="allowTranscriptDownloading">
+                                        <span class="tick"></span>{{
+                                            $t('WebInterviewSetup.AllowTranscriptDownloading')
+                                        }}
+                                    </label>
+                                </Field>
+                            </div>
                             <div class="notification-block mb-20">
                                 <Field v-slot="{ field }" name="reminderAfterDaysIfNoResponse"
                                     :value="reminderAfterDaysIfNoResponse" rules="required">
@@ -608,7 +622,6 @@
 <script>
 import { marked } from 'marked'
 import { map, isNil } from 'lodash'
-import { escape } from 'lodash'
 import emitter from '~/shared/emitter';
 
 import { Form, Field, ErrorMessage } from 'vee-validate'
@@ -639,6 +652,7 @@ export default {
             emailOnCompleteIsEnabled: false,
             attachAnswersInEmailIsEnabled: false,
             allowSwitchToCawiForInterviewerEnabled: false,
+            allowTranscriptDownloadingEnabled: false,
             started: false,
             reminderAfterDaysIfNoResponse: 3,
             reminderAfterDaysIfPartialResponse: 3,
@@ -663,6 +677,8 @@ export default {
         self.attachAnswersInEmailIsEnabled = this.$config.model.attachAnswersInEmail
         self.allowSwitchToCawiForInterviewerEnabled =
             this.$config.model.allowSwitchToCawiForInterviewer
+        self.allowTranscriptDownloadingEnabled =
+            this.$config.model.allowTranscriptDownloading
         self.reminderAfterDaysIfNoResponse =
             this.$config.model.reminderAfterDaysIfNoResponse
         self.reminderAfterDaysIfPartialResponse =
@@ -678,6 +694,8 @@ export default {
             this.$config.model.attachAnswersInEmail
         self.cancelAllowSwitchToCawiForInterviewerEnabled =
             this.$config.model.allowSwitchToCawiForInterviewer
+        self.cancelAllowTranscriptDownloadingEnabled =
+            this.$config.model.allowTranscriptDownloading
         self.logoUrl = this.$config.model.logoUrl
         self.hasLogo = this.$config.model.hasLogo
 
@@ -734,7 +752,6 @@ export default {
                         ? defaultText
                         : customText
 
-                message = escape(message)
                 return {
                     value: key,
                     text: message,
@@ -888,7 +905,8 @@ export default {
                 this.singleResponseIsEnabled,
                 this.emailOnCompleteIsEnabled,
                 this.attachAnswersInEmailIsEnabled,
-                this.allowSwitchToCawiForInterviewerEnabled
+                this.allowSwitchToCawiForInterviewerEnabled,
+                this.allowTranscriptDownloadingEnabled
             )
                 .then(function (response) {
                     self.cancelSpamProtectionIsEnabled = self.spamProtectionIsEnabled
@@ -902,6 +920,8 @@ export default {
                         self.attachAnswersInEmailIsEnabled
                     self.cancelAllowSwitchToCawiForInterviewerEnabled =
                         self.allowSwitchToCawiForInterviewerEnabled
+                    self.cancelAllowTranscriptDownloadingEnabled =
+                        self.allowTranscriptDownloadingEnabled
                     //self.$validator.reset('additionalSettings')
                     const form = self.$refs.additionalSettings
                     form.resetForm({ values: form.values })
@@ -926,6 +946,9 @@ export default {
             this.allowSwitchToCawiForInterviewerEnabled =
                 this.cancelAllowSwitchToCawiForInterviewerEnabled
 
+            this.allowTranscriptDownloadingEnabled =
+                this.cancelAllowTranscriptDownloadingEnabled
+
             const form = this.$refs.additionalSettings
             form.resetForm()
         },
@@ -942,7 +965,6 @@ export default {
         },
         previewMessage(emailTemplate) {
             var text = this.previewText(emailTemplate.message)
-            text = escape(text)
 
             if (!this.isMessageSupportedInterviewData(emailTemplate)) return text
 

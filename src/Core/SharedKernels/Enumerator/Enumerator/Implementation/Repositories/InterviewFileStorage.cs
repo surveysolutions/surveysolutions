@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.DataCollection.Helpers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
@@ -48,7 +50,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
                     m.InterviewId,
                     m.FileName,
                     m.ContentType,
-                    () => Task.FromResult(this.GetFileById(m.FileId))
+                    () => Task.FromResult(this.GetFileById(m.FileId)),
+                    m.Md5
                 )
             ).ToList();
             return Task.FromResult(interviewBinaryDataDescriptors);
@@ -58,14 +61,16 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
         {
             var encryptedData = this.encryptionService.Encrypt(data);
             var metadataView = this.fileMetadataViewStorage.FirstOrDefault(metadata => metadata.InterviewId == interviewId && metadata.FileName == fileName);
+            string md5 = GetMd5Cache(data);
 
             if (metadataView == null)
             {
                 string fileId = Guid.NewGuid().FormatGuid();
+                
                 this.fileViewStorage.Store(new TFileView
                 {
                     Id = fileId,
-                    File = encryptedData
+                    File = encryptedData,
                 });
 
                 this.fileMetadataViewStorage.Store(new TMetadataView
@@ -74,7 +79,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
                     InterviewId = interviewId,
                     FileId = fileId,
                     FileName = fileName,
-                    ContentType = contentType
+                    ContentType = contentType,
+                    Md5 = md5
                 });
             }
             else
@@ -82,9 +88,22 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
                 this.fileViewStorage.Store(new TFileView
                 {
                     Id = metadataView.FileId,
-                    File = encryptedData
+                    File = encryptedData,
                 });
+
+                metadataView.Md5 = md5;
+                metadataView.ContentType = contentType;
+                
+                this.fileMetadataViewStorage.Store(metadataView);
             }
+        }
+        
+        private static string GetMd5Cache(byte[] fileContent)
+        { 
+            if (fileContent == null)
+                return null;
+
+            return CheckSumHelper.GetMd5Cache(fileContent);
         }
         
         public Task RemoveInterviewBinaryData(Guid interviewId, string fileName)

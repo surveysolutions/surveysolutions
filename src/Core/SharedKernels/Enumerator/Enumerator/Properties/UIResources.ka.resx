@@ -404,6 +404,15 @@
   <data name="Interview_Questions_QrBarcode_SaveAnswer" xml:space="preserve">
     <value>barcode-ის გადასაღებად დააჭირეთ</value>
   </data>
+  <data name="BarcodeScanner_Error_UnknownError" xml:space="preserve">
+    <value>უცნობი შეცდომა</value>
+  </data>
+  <data name="BarcodeScanner_Error_StartingCamera" xml:space="preserve">
+    <value>კამერის გაშვების შეცდომა: </value>
+  </data>
+  <data name="BarcodeScanner_Error_Interrupted" xml:space="preserve">
+    <value>შეწყვეტილი</value>
+  </data>
   <data name="Interview_Questions_Timestamp_SaveAnswer" xml:space="preserve">
     <value>მიმდინარე დროის ჩასაწერად დააჭირეთ</value>
   </data>

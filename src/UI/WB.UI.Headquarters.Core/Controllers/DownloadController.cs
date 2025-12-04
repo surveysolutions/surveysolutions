@@ -36,6 +36,8 @@ namespace WB.UI.Headquarters.Controllers
                 FullApkQRUrl = qRCodeHelper.GetQRCodeAsBase64StringSrc(pathService.GetAbsolutePath(fullApkUrl), 250, 250),
                 SmallApkUrl = smallApkUrl,
                 FullApkUrl = fullApkUrl,
+                SmallApkSize = await clientApkProvider.GetApplicationSize(ClientApkInfo.InterviewerFileName),
+                FullApkSize = await clientApkProvider.GetApplicationSize(ClientApkInfo.InterviewerExtendedFileName),
                 SmallApkVersion = await clientApkProvider.GetApplicationVersionString(ClientApkInfo.InterviewerFileName),
                 FullApkVersion = await clientApkProvider.GetApplicationVersionString(ClientApkInfo.InterviewerExtendedFileName),
             });
@@ -49,7 +51,8 @@ namespace WB.UI.Headquarters.Controllers
                 SupportQRCodeGeneration = qRCodeHelper.SupportQRCodeGeneration(),
                 ApkQRUrl = qRCodeHelper.GetQRCodeAsBase64StringSrc(pathService.GetAbsolutePath(apkUrl), 250, 250),
                 ApkUrl = apkUrl,
-                SupervisorVersion = await clientApkProvider.GetApplicationVersionString(ClientApkInfo.SupervisorFileName)
+                SupervisorVersion = await clientApkProvider.GetApplicationVersionString(ClientApkInfo.SupervisorFileName),
+                SupervisorApkSize = await clientApkProvider.GetApplicationSize(ClientApkInfo.SupervisorFileName),
             });
         }
     }

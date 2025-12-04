@@ -2187,6 +2187,12 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
+        public static string DownloadPage_Size {
+            get {
+                return ResourceManager.GetString("DownloadPage_Size", resourceCulture);
+            }
+        }
+        
         public static string AreaQestion_Area {
             get {
                 return ResourceManager.GetString("AreaQestion_Area", resourceCulture);
@@ -2292,6 +2298,12 @@ namespace WB.UI.Headquarters.Resources {
         public static string ExcludeEsriTitle {
             get {
                 return ResourceManager.GetString("ExcludeEsriTitle", resourceCulture);
+            }
+        }
+        
+        public static string IncludeEsriTitle {
+            get {
+                return ResourceManager.GetString("IncludeEsriTitle", resourceCulture);
             }
         }
         

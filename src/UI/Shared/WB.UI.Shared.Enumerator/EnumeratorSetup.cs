@@ -161,7 +161,7 @@ namespace WB.UI.Shared.Enumerator
             registry.AddOrOverwrite("InterviewStatusToColor", new InterviewStatusToColorConverter());
             registry.AddOrOverwrite("InterviewStatusToDrawable", new InterviewStatusToDrawableConverter());
             registry.AddOrOverwrite("InterviewStatusToButton", new InterviewStatusToButtonConverter());
-            registry.AddOrOverwrite("CompleteGroupToColor", new CompleteGroupToColorConverter());
+            registry.AddOrOverwrite("TabContentToColor", new TabContentToColorConverter());
             registry.AddOrOverwrite("CompleteItemToColor", new CompleteItemToColorConverter());
             registry.AddOrOverwrite("IsCoverVariableToColor", new IsCoverVariableToColorConverter());
             registry.AddOrOverwrite("SynchronizationStatusToDrawable", new SynchronizationStatusToDrawableConverter());

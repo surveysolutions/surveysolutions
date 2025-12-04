@@ -19,7 +19,7 @@ namespace WB.UI.WebTester.Controllers
         {
         }
 
-        protected override bool IncludeVariables
+        private bool IsDevMode
         {
             get
             {
@@ -28,6 +28,11 @@ namespace WB.UI.WebTester.Controllers
             }
         }
 
+        protected override bool IncludeVariables => IsDevMode;
+        protected override bool IncludeNonInterviewerQuestions => IsDevMode;
+        protected override bool IncludeVariableName => IsDevMode;
+
+        
         [HttpGet]
         [Route("getLanguageInfo")]
         public override LanguageInfo GetLanguageInfo(Guid interviewId) => base.GetLanguageInfo(interviewId);

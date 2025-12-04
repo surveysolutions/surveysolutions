@@ -189,4 +189,7 @@
   <data name="WebInterviewUserMessages_WelcomeText_Descr" xml:space="preserve">
     <value>首页上的标题欢迎文字</value>
   </data>
+  <data name="AllowTranscriptDownloading" xml:space="preserve">
+      <value>允许提交后下载访谈记录</value>
+  </data>
 </root>

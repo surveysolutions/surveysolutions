@@ -35,6 +35,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionView
             var userIdentity = Mock.Of<IUserIdentity>(_ => _.UserId == userId);
             var principal = Mock.Of<IPrincipal>(_ => _.CurrentUserIdentity == userIdentity && _.IsAuthenticated == true);
 
+            AnsweringViewModelMock.Setup(x => x.SendQuestionCommandAsync(It.IsAny<AnswerTextListQuestionCommand>()))
+                .Callback(() =>
+                {
+                    savedAnswers.Rows[editedItemIndex].Text = newListItemTitle;
+                });
+
             listModel = CreateTextListQuestionViewModel(
                 QuestionStateMock.Object,
                 AnsweringViewModelMock.Object,

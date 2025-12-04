@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.Mvc;
+using WB.Core.SharedKernels.DataCollection.Helpers;
 
 
 namespace WB.UI.Shared.Web.Modules
@@ -21,9 +22,7 @@ namespace WB.UI.Shared.Web.Modules
 
         public static string GetEtagValue(this byte[] bytes)
         {
-            using var hasher = SHA1.Create();
-            var computeHash = hasher.ComputeHash(bytes);
-            return BitConverter.ToString(computeHash).Replace("-", "");
+            return CheckSumHelper.GetSha1Cache(bytes);
         }
     }
 }

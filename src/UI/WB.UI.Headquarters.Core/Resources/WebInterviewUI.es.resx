@@ -328,9 +328,6 @@
   <data name="Complete" xml:space="preserve">
     <value>Completar</value>
   </data>
-  <data name="CompleteAbout" xml:space="preserve">
-    <value>Estás a punto de completar esta entrevista</value>
-  </data>
   <data name="CompleteQuestionsStatus" xml:space="preserve">
     <value>Estado de las preguntas:</value>
   </data>
@@ -477,12 +474,6 @@
   <data name="EmailLink_EmailResumeLink" xml:space="preserve">
     <value>Enlace de reanudación</value>
   </data>
-  <data name="HideVariables" xml:space="preserve">
-    <value>Ocultar variables</value>
-  </data>
-  <data name="ShowVariables" xml:space="preserve">
-    <value>Mostrar variables</value>
-  </data>
   <data name="Interview_Questions_RemoveRowFromRosterMessage" xml:space="preserve">
     <value>¿Está seguro de que desea eliminar la lista relacionada '{{rosterTitle}}'?</value>
   </data>
@@ -541,9 +532,6 @@
   <data name="AssignmentLimitError" xml:space="preserve">
     <value>No puede crear más entrevistas a partir de esta asignación</value>
   </data>
-  <data name="CompleteInterviewStatus" xml:space="preserve">
-    <value>Problemas en la entrevista:</value>
-  </data>
   <data name="Complete_CriticalUnansweredQuestions" xml:space="preserve">
     <value>Preguntas críticas sin respuesta: {{count}}</value>
   </data>
@@ -555,5 +543,51 @@
   </data>
   <data name="Complete_QuestionsWithErrors" xml:space="preserve">
     <value>Preguntas con errores: {{count}}</value>
+  </data>
+  <data name="CompleteReviewSubmit" xml:space="preserve">
+      <value>Revisar y Enviar</value>
+  </data>
+  <data name="Complete_Tab_CriticalErrors" xml:space="preserve">
+    <value>Errores &lt;br /&gt;
+Críticos</value>
+  </data>
+  <data name="Complete_Tab_QuestionsWithErrors" xml:space="preserve">
+    <value>Errores</value>
+  </data>
+  <data name="Complete_Tab_UnansweredQuestions" xml:space="preserve">
+    <value>Preguntas &lt;br /&gt;
+sin respuesta</value>
+  </data>
+  <data name="Complete_AllGood" xml:space="preserve">
+    <value>Todas las preguntas obligatorias respondidas &lt;br /&gt;
+No se detectaron errores</value>
+  </data>
+  <data name="Complete_AndMore" xml:space="preserve">
+    <value>y {{count}} más</value>
+  </data>
+  <data name="Complete_NoteIsRequired" xml:space="preserve">
+    <value>Se requiere una nota para enviar la entrevista</value>
+  </data>
+  <data name="Complete_Required" xml:space="preserve">
+    <value>Obligatorio</value>
+  </data>
+  <data name="Complete_Error" xml:space="preserve">
+    <value>Error:</value>
+  </data>
+  <data name="Complete_LastComment" xml:space="preserve">
+    <value>Último comentario:</value>
+  </data>
+  <data name="Complete_SubmitInfo" xml:space="preserve">
+    <value>Una vez enviada, esta entrevista quedará bloqueada y no podrá editarse. &lt;br /&gt;
+Asegúrese de que toda la información sea correcta.</value>
+  </data>
+    <data name="TurnOffDevMode" xml:space="preserve">
+    <value>Desactivar modo de desarrollador</value>
+  </data>
+  <data name="TurnOnDevMode" xml:space="preserve">
+    <value>Activar modo de desarrollador</value>
+  </data>
+  <data name="CompleteReviewSubmitInterview" xml:space="preserve">
+      <value>Entrevista {{key}}</value>
   </data>
 </root>

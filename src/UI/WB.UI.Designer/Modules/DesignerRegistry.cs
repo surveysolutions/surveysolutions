@@ -26,6 +26,7 @@ namespace WB.UI.Designer.Modules
             registry.Bind<IVerificationErrorsMapper, VerificationErrorsMapper>();
             registry.Bind<IDynamicCompiler, RoslynCompiler>();
             registry.Bind<IMacrosSubstitutionService, MacrosSubstitutionService>();
+            registry.Bind<IQuestionnaireDocumentTransformer,MacrosSubstitutionQuestionnaireDocumentTransformer>();
             registry.Bind<IExpressionProcessorGenerator, QuestionnaireExpressionProcessorGenerator>();
             registry.Bind<IExpressionsGraphProvider, ExpressionsGraphProvider>();
             registry.Bind<IExpressionsPlayOrderProvider, ExpressionsPlayOrderProvider>();

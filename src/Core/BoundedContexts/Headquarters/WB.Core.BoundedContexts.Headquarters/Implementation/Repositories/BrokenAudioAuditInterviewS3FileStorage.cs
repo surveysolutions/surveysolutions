@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using WB.Core.BoundedContexts.Headquarters.Storage;
 using WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
@@ -20,7 +21,7 @@ public class BrokenAudioAuditInterviewS3FileStorage : InterviewS3FileStorage, IA
     }
     
     protected override string GetInterviewDirectoryPath(Guid interviewId) => $"{AudioAuditS3Folder}{interviewId.FormatGuid()}";
-    protected override string ContentType => "audio/mp4";
+    protected override string GetContentType(string filename) => ContentTypeHelper.GetAudioContentType(filename);
 
     public Task<InterviewBinaryDataDescriptor> FirstOrDefaultAsync()
     {

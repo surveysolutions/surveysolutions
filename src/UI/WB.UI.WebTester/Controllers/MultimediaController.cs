@@ -64,7 +64,8 @@ namespace WB.UI.WebTester.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Audio(string id, [FromForm] string questionId, [FromForm] IFormFile file)
+        public async Task<ActionResult> Audio(string id, [FromForm] string questionId,
+            [FromForm] string duration, [FromForm] IFormFile file)
         {
             var interview = this.statefulInterviewRepository.Get(id);
 
@@ -85,19 +86,33 @@ namespace WB.UI.WebTester.Controllers
             {
                 await using var ms = new MemoryStream();
                 await file.CopyToAsync(ms);
-
                 byte[] bytes = ms.ToArray();
-
-                var audioFile = await audioProcessingService.CompressAudioFileAsync(bytes);
-
-                var fileName = $@"{question.VariableName}__{questionIdentity.RosterVector}.m4a";
-
-                var entity = new  MultimediaFile(fileName, audioFile.Binary, audioFile.Duration, audioFile.MimeType);
-                mediaStorage.Store(entity, fileName, interview.Id);
+                string contentType = file.ContentType;
+                var fileName = $@"{question.VariableName}__{questionIdentity.RosterVector}.aac";
+                
+                var audioDuration = TimeSpan.Zero;
+                if(contentType is "audio/wav" or "audio/x-wav")
+                {
+                    var audioFile = await this.audioProcessingService.CompressAudioFileAsync(bytes, contentType);
+                    
+                    audioDuration = audioFile.Duration == TimeSpan.Zero 
+                        ? (Double.TryParse(duration, out var dur) ? TimeSpan.FromSeconds(dur) : TimeSpan.Zero)
+                        : audioFile.Duration;
+                    
+                    var entity = new  MultimediaFile(fileName, audioFile.Binary, audioDuration, audioFile.MimeType);
+                    mediaStorage.Store(entity, fileName, interview.Id);
+                }
+                else
+                {
+                    audioDuration = (Double.TryParse(duration, out var dur)
+                        ? TimeSpan.FromSeconds(dur)
+                        : TimeSpan.Zero);
+                    mediaStorage.Store(new  MultimediaFile(fileName, bytes, audioDuration, contentType), fileName, interview.Id);
+                }
 
                 var command = new AnswerAudioQuestionCommand(interview.Id,
                     interview.CurrentResponsibleId, questionIdentity.Id, questionIdentity.RosterVector,
-                    fileName, audioFile.Duration);
+                    fileName, audioDuration);
 
                 this.commandService.Execute(command);
             }

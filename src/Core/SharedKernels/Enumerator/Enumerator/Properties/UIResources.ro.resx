@@ -419,6 +419,15 @@ Puteți crea sau edita chestionare utilizând Survey Solutions Designer</value>
   <data name="Interview_Questions_QrBarcode_SaveAnswer" xml:space="preserve">
     <value>Apăsați pentru a prelua codul de bare</value>
   </data>
+  <data name="BarcodeScanner_Error_UnknownError" xml:space="preserve">
+    <value>Eroare necunoscută</value>
+  </data>
+  <data name="BarcodeScanner_Error_StartingCamera" xml:space="preserve">
+    <value>Eroare la pornirea camerei: </value>
+  </data>
+  <data name="BarcodeScanner_Error_Interrupted" xml:space="preserve">
+    <value>Întrerupt</value>
+  </data>
   <data name="Interview_Questions_Timestamp_SaveAnswer" xml:space="preserve">
     <value>Apăsați pentru a înregistra timpul curent</value>
   </data>
