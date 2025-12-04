@@ -251,7 +251,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             if (topFailedCriticalRules.Count > 0)
             {
                 var tabViewModel = Tabs.First(t => t.TabContent == CompleteTabContent.CriticalError);
-                tabViewModel.Items.AddRange(topFailedCriticalRules);
+                var takeCount = Math.Max(0, entitiesListViewModelFactory.MaxNumberOfEntities - tabViewModel.Items.Count);
+                tabViewModel.Items.AddRange(topFailedCriticalRules.Take(takeCount));
                 tabViewModel.Total += topFailedCriticalRulesInfo.Total;
             }
 
@@ -260,7 +261,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             if (topUnansweredCriticalQuestions.Count > 0)
             {
                 var tabViewModel = Tabs.First(t => t.TabContent == CompleteTabContent.CriticalError);
-                tabViewModel.Items.AddRange(topUnansweredCriticalQuestions);
+                var takeCount = Math.Max(0, entitiesListViewModelFactory.MaxNumberOfEntities - tabViewModel.Items.Count);
+                tabViewModel.Items.AddRange(topUnansweredCriticalQuestions.Take(takeCount));
                 tabViewModel.Total += topUnansweredCriticalQuestionsInfo.Total;
             }
             
