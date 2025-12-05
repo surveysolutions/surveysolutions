@@ -1,85 +1,96 @@
 <template>
-    <v-dialog v-model="isOpen" max-width="800" persistent class="chat-dialog">
-        <v-card class="chat-container" height="700">
-            <v-card-title class="d-flex justify-space-between align-center pa-4">
-                <div class="d-flex align-center">
-                    <v-icon class="mr-2" color="primary">mdi-chat</v-icon>
-                    <span>AI Assistant</span>
-                </div>
-                <v-btn icon="mdi-close" variant="text" size="small" @click="close" />
-            </v-card-title>
+    <teleport to="body">
+        <div v-if="isOpen" class="modal chat-dialog dragAndDrop fade ng-scope ng-isolate-scope in" role="dialog"
+            style="z-index: 1050; display: block;" v-dragAndDrop>
+            <div class="modal-dialog" style="max-width: 800px;">
+                <div class="modal-content">
+                    <v-card class="chat-container" height="700" style="margin: 0;">
+                        <v-card-title class="d-flex justify-space-between align-center pa-4 handle"
+                            style="cursor: move;">
+                            <div class="d-flex align-center">
+                                <v-icon class="mr-2" color="primary">mdi-chat</v-icon>
+                                <span>AI Assistant</span>
+                            </div>
+                            <v-btn icon="mdi-close" variant="text" size="small" @click="close" />
+                        </v-card-title>
 
-            <v-divider />
+                        <v-divider />
 
-            <!-- Chat Messages -->
-            <v-card-text class="chat-messages pa-0" ref="messagesContainer" style="height: 500px; overflow-y: auto;">
-                <div class="pa-4">
-                    <div v-if="messages.length === 0" class="text-center text-grey-darken-1 mt-8">
-                        <v-icon size="48" class="mb-4">mdi-chat-outline</v-icon>
-                        <p>{{ $t('Chat.WelcomeMessage', 'Start a conversation with the AI assistant') }}</p>
-                    </div>
+                        <!-- Chat Messages -->
+                        <v-card-text class="chat-messages pa-0" ref="messagesContainer"
+                            style="height: 500px; overflow-y: auto;">
+                            <div class="pa-4">
+                                <div v-if="messages.length === 0" class="text-center text-grey-darken-1 mt-8">
+                                    <v-icon size="48" class="mb-4">mdi-chat-outline</v-icon>
+                                    <p>{{ $t('Chat.WelcomeMessage', 'Start a conversation with the AI assistant') }}</p>
+                                </div>
 
-                    <div v-for="message in messages" :key="message.id" class="mb-4">
-                        <div :class="[
-                            'message-bubble',
-                            message.role === 'user' ? 'user-message' : 'assistant-message'
-                        ]">
-                            <div class="d-flex align-start">
-                                <v-avatar :color="message.role === 'user' ? 'primary' : 'grey-lighten-2'" size="32"
-                                    class="mr-3">
-                                    <v-icon :color="message.role === 'user' ? 'white' : 'grey-darken-2'">
-                                        {{ message.role === 'user' ? 'mdi-account' : 'mdi-robot' }}
-                                    </v-icon>
-                                </v-avatar>
-                                <div class="flex-grow-1">
-                                    <div class="message-content">
-                                        <p class="mb-1" v-html="formatMessage(message.content)"></p>
-                                        <small class="text-grey-darken-1">
-                                            {{ formatTime(message.timestamp) }}
-                                        </small>
+                                <div v-for="message in messages" :key="message.id" class="mb-4">
+                                    <div :class="[
+                                        'message-bubble',
+                                        message.role === 'user' ? 'user-message' : 'assistant-message'
+                                    ]">
+                                        <div class="d-flex align-start">
+                                            <v-avatar :color="message.role === 'user' ? 'primary' : 'grey-lighten-2'"
+                                                size="32" class="mr-3">
+                                                <v-icon :color="message.role === 'user' ? 'white' : 'grey-darken-2'">
+                                                    {{ message.role === 'user' ? 'mdi-account' : 'mdi-robot' }}
+                                                </v-icon>
+                                            </v-avatar>
+                                            <div class="flex-grow-1">
+                                                <div class="message-content">
+                                                    <p class="mb-1" v-html="formatMessage(message.content)"></p>
+                                                    <small class="text-grey-darken-1">
+                                                        {{ formatTime(message.timestamp) }}
+                                                    </small>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
 
-                    <!-- Typing Indicator -->
-                    <div v-if="isLoading" class="mb-4">
-                        <div class="message-bubble assistant-message">
-                            <div class="d-flex align-start">
-                                <v-avatar color="grey-lighten-2" size="32" class="mr-3">
-                                    <v-icon color="grey-darken-2">mdi-robot</v-icon>
-                                </v-avatar>
-                                <div class="flex-grow-1">
-                                    <div class="message-content">
-                                        <div class="typing-indicator">
-                                            <span></span>
-                                            <span></span>
-                                            <span></span>
+                                <!-- Typing Indicator -->
+                                <div v-if="isLoading" class="mb-4">
+                                    <div class="message-bubble assistant-message">
+                                        <div class="d-flex align-start">
+                                            <v-avatar color="grey-lighten-2" size="32" class="mr-3">
+                                                <v-icon color="grey-darken-2">mdi-robot</v-icon>
+                                            </v-avatar>
+                                            <div class="flex-grow-1">
+                                                <div class="message-content">
+                                                    <div class="typing-indicator">
+                                                        <span></span>
+                                                        <span></span>
+                                                        <span></span>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
+                        </v-card-text>
+
+                        <v-divider />
+
+                        <!-- Input Area -->
+                        <v-card-actions class="pa-4">
+                            <v-text-field v-model="currentMessage"
+                                :placeholder="$t('Chat.TypeMessage', 'Type your message...')" variant="outlined"
+                                density="comfortable" hide-details @keyup.enter="sendMessage" :disabled="isLoading"
+                                class="flex-grow-1">
+                                <template v-slot:append-inner>
+                                    <v-btn icon="mdi-send" variant="text" color="primary" size="small"
+                                        @click="sendMessage" :disabled="!currentMessage.trim() || isLoading" />
+                                </template>
+                            </v-text-field>
+                        </v-card-actions>
+                    </v-card>
                 </div>
-            </v-card-text>
-
-            <v-divider />
-
-            <!-- Input Area -->
-            <v-card-actions class="pa-4">
-                <v-text-field v-model="currentMessage" :placeholder="$t('Chat.TypeMessage', 'Type your message...')"
-                    variant="outlined" density="comfortable" hide-details @keyup.enter="sendMessage"
-                    :disabled="isLoading" class="flex-grow-1">
-                    <template v-slot:append-inner>
-                        <v-btn icon="mdi-send" variant="text" color="primary" size="small" @click="sendMessage"
-                            :disabled="!currentMessage.trim() || isLoading" />
-                    </template>
-                </v-text-field>
-            </v-card-actions>
-        </v-card>
-    </v-dialog>
+            </div>
+        </div>
+        <div v-if="isOpen" class="modal-backdrop fade ng-scope in" style="z-index: 1040;" @click="close"></div>
+    </teleport>
 </template>
 
 <script>
@@ -240,23 +251,34 @@ export default {
 </script>
 
 <style scoped>
+.chat-dialog {
+    font-size: 14px;
+}
+
 .chat-container {
     display: flex;
     flex-direction: column;
+    font-size: 14px;
 }
 
 .chat-container .v-card-title {
     display: flex !important;
     justify-content: space-between !important;
+    font-size: 16px;
 }
 
 .chat-messages {
     flex: 1;
     overflow-y: auto;
+    font-size: 14px;
 }
 
 .message-bubble {
     margin-bottom: 16px;
+}
+
+.message-bubble p {
+    font-size: 14px;
 }
 
 .user-message .message-content {
@@ -265,6 +287,7 @@ export default {
     padding: 12px 16px;
     border-radius: 18px;
     border-bottom-right-radius: 4px;
+    font-size: 14px;
 }
 
 .assistant-message .message-content {
@@ -273,6 +296,7 @@ export default {
     padding: 12px 16px;
     border-radius: 18px;
     border-bottom-left-radius: 4px;
+    font-size: 14px;
 }
 
 .typing-indicator {
@@ -314,17 +338,30 @@ export default {
     }
 }
 
-.chat-dialog .v-dialog {
-    margin: 24px;
+.chat-dialog {
+    position: fixed;
+}
+
+.chat-dialog .modal-dialog {
+    margin: 24px auto;
 }
 
 @media (max-width: 600px) {
-    .chat-dialog .v-dialog {
-        margin: 12px;
+    .chat-dialog .modal-dialog {
+        margin: 12px auto;
     }
 
     .chat-container {
         height: calc(100vh - 24px) !important;
     }
+}
+
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
 }
 </style>
