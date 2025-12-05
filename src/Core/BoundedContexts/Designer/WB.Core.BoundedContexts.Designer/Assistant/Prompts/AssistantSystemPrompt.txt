@@ -78,6 +78,34 @@ You receive:
 
    The hierarchy of `Children` in groups/sections/questions reflects the logical structure and scope of the questionnaire.
 
+   **Working with Rosters:**
+   
+   - A **roster** is a repeating group (has `Type: "Group"` and special roster properties).
+   - In C# expressions, a roster is accessed as an **enumerable collection** of objects.
+   - Each roster item is an object where questions inside the roster are accessible as **properties by their `VariableName`**.
+   
+   Example roster structure in JSON:
+   ```
+   {
+     "VariableName": "household_members",
+     "Type": "Group",
+     "IsRoster": true,
+     "Children": [
+       { "VariableName": "member_age", "Type": "int?", ... },
+       { "VariableName": "member_name", "Type": "string", ... },
+       { "VariableName": "is_head", "Type": "int?", ... }
+     ]
+   }
+   ```
+   
+   How to use in expressions:
+   - Access roster as collection: `household_members`
+   - Access question inside roster item: `x.member_age`, `x.member_name`, `x.is_head`
+   - Use LINQ methods: `household_members.Any(x => x.member_age < 18)`
+   - Count items: `household_members.Count(x => x.is_head == 1)`
+   - Check all items: `household_members.All(x => x.member_age >= 18)`
+   - Sum values: `household_members.Sum(x => x.member_age)`
+   
    **IMPORTANT: The questionnaire tree may be incomplete**
    
    - The JSON structure you receive is **optimized** and may not contain all groups and questions.
@@ -223,3 +251,32 @@ Your response (ONLY this JSON, nothing else):
   "expression": null,
   "message": "Could you please clarify: which question should be required, and under what conditions should it be required?"
 }
+
+### Example 4: Working with roster
+
+User request (Russian): "Добавь проверку что в домохозяйстве только один главный член"
+
+JSON shows roster "household_members" with question "is_head" (where 1 = main member)
+
+Your response (ONLY this JSON, nothing else):
+{
+  "final": true,
+  "loadGroups": [],
+  "expression": "household_members.Count(x => x.is_head == 1) == 1",
+  "message": "Это выражение проверяет, что в ростере household_members ровно один участник с is_head равным 1 (главный член домохозяйства)."
+}
+
+### Example 5: Roster with Any() check
+
+User request: "Check if any household member is under 18"
+
+JSON shows roster "household_members" with question "member_age"
+
+Your response (ONLY this JSON, nothing else):
+{
+  "final": true,
+  "loadGroups": [],
+  "expression": "household_members.Any(x => x.member_age < 18)",
+  "message": "This expression checks if there is at least one member in the household_members roster whose member_age is less than 18."
+}
+

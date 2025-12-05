@@ -28,24 +28,18 @@ public class QuestionnaireAssistant(
         
         // Reject any system messages from the client
         if (conversationMessages.Any(m => m.Role != null && m.Role.Trim().ToLower() == "system"))
-        {
             throw new ArgumentException("System messages are not allowed from the client.");
-        }
 
-        if (conversationMessages.Count == 0)
-        {
-            if (string.IsNullOrWhiteSpace(request.Prompt))
-                throw new ArgumentException("Either 'messages' or 'prompt' must be provided.");
+        if (string.IsNullOrWhiteSpace(request.Prompt))
+            throw new ArgumentException("Either 'messages' or 'prompt' must be provided.");
 
-            conversationMessages.Add(new AssistantMessage("user", request.Prompt));
-        }
 
         const int maxAttempts = 30;
         for (int attempt = 1; attempt <= maxAttempts; attempt++)
         {
             logger.LogInformation($"AI Assistant attempt {attempt}/{maxAttempts}. Loaded groups: {string.Join(", ", allLoadedGroups)}");
             
-            var result = await MakeAiRequestAsync(request.QuestionnaireId, request.EntityId, 
+            var result = await MakeAiRequestAsync(request.QuestionnaireId, request.EntityId, request.Prompt,
                 conversationMessages, allLoadedGroups);
             
             if (result.Final)
@@ -87,26 +81,27 @@ public class QuestionnaireAssistant(
     private async Task<AssistantResult> MakeAiRequestAsync(
         Guid questionnaireId,
         Guid entityId,
+        string userPrompt,
         List<AssistantMessage> conversationMessages,
         List<string> loadedGroups)
     {
         var systemPrompt = await GetSystemPrompt();
+        var messages = new List<AssistantMessage> { new AssistantMessage("system", systemPrompt) };
+        messages.AddRange(conversationMessages);
         
         var questionnaireJson = questionnaireContextProvider.GetQuestionnaireContext(
             questionnaireId, 
             entityId, 
             loadedGroups);
-        if (!string.IsNullOrWhiteSpace(questionnaireJson))
-        {
-            systemPrompt += "\n\nCurrent questionnaire context:\n" + questionnaireJson;
-        }
-        
-        var messages = new List<AssistantMessage> { new AssistantMessage("system", systemPrompt) };
-        messages.AddRange(conversationMessages);
+
+        conversationMessages.Add(new AssistantMessage("user", userPrompt));
+
+        var userPromptWithQuestionnaire = userPrompt + "\n\nCurrent questionnaire context:\n" + questionnaireJson;
+        messages.Add(new AssistantMessage("user", userPromptWithQuestionnaire));
 
         var payloadObj = new {
             model = modelSettings.ModelName,
-            messages = messages.Select(m => new { role = m.Role, content = m.Content }).ToList(),
+            messages = messages,
             max_tokens = 700,
             temperature = 0.7,
         };
