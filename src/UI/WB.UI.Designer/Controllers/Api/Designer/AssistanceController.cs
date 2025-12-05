@@ -58,9 +58,6 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] AssistanceRequest request)
         {
-            if (modelSettings is OpenAIModelSettings && string.IsNullOrWhiteSpace(modelSettings.ApiKey))
-                return BadRequest("OpenAI API key is not configured.");
-
             if (!request.QuestionnaireId.HasValue)
                 return  BadRequest("Either 'questionnaireId' must be provided.");
             if (!request.EntityId.HasValue)
@@ -73,7 +70,8 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                     request.EntityId.Value, 
                     request.Prompt,
                     request.Messages.Select(m => new AssistantMessage(m.Role, m.Content)).ToList()
-                ));
+                ),
+                this.modelSettings);
 
                 return Ok(new
                 {

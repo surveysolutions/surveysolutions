@@ -15,14 +15,9 @@ public class QuestionnaireAssistant(
     ILogger<QuestionnaireAssistant> logger) 
     : IQuestionnaireAssistant
 {
-    IModelSettings modelSettings = new LlamaModelSettings();
     
-    
-    public async Task<AssistantResult> GetResponseAsync(AssistantRequest request)
+    public async Task<AssistantResult> GetResponseAsync(AssistantRequest request, IModelSettings modelSettings)
     {
-        if (modelSettings is OpenAIModelSettings && string.IsNullOrWhiteSpace(modelSettings.ApiKey))
-            throw new ArgumentException("OpenAI API key is not configured.");
-        
         var allLoadedGroups = new List<string>();
         var conversationMessages = new List<AssistantMessage>(request.Messages);
         
@@ -39,7 +34,7 @@ public class QuestionnaireAssistant(
         {
             logger.LogInformation($"AI Assistant attempt {attempt}/{maxAttempts}. Loaded groups: {string.Join(", ", allLoadedGroups)}");
             
-            var result = await MakeAiRequestAsync(request.QuestionnaireId, request.EntityId, request.Prompt,
+            var result = await MakeAiRequestAsync(modelSettings, request.QuestionnaireId, request.EntityId, request.Prompt,
                 conversationMessages, allLoadedGroups);
             
             if (result.Final)
@@ -79,6 +74,7 @@ public class QuestionnaireAssistant(
     }
     
     private async Task<AssistantResult> MakeAiRequestAsync(
+        IModelSettings modelSettings,
         Guid questionnaireId,
         Guid entityId,
         string userPrompt,
