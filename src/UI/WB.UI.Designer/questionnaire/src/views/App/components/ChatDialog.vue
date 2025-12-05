@@ -94,6 +94,7 @@ export default {
             type: Boolean,
             default: false
         },
+
         questionnaireId: { type: String, required: true },
         entityId: { type: String, required: false },
         area: { type: String, required: false }
@@ -206,7 +207,7 @@ export default {
 
             const conversationHistory = []
 
-            // Add previous messages from the current conversation
+            // Add previous messages from the current conversation (exclude the current message)
             messages.value.forEach(msg => {
                 conversationHistory.push({
                     role: msg.role,
@@ -214,14 +215,8 @@ export default {
                 })
             })
 
-            // Add the current user message
-            conversationHistory.push({
-                role: 'user',
-                content: userMessage
-            })
-
-            // Call Assistant API
-            return await sendToAssistant(conversationHistory, {
+            // Call Assistant API with userMessage as a separate parameter
+            return await sendToAssistant(userMessage, conversationHistory, {
                 questionnaireId: questionnaireId,
                 entityId: entityId,
                 area: area

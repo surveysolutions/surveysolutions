@@ -1,3 +1,4 @@
+using System.Threading;
 using Microsoft.Extensions.Configuration;
 
 namespace WB.Core.BoundedContexts.Designer.Assistant.Settings;
@@ -10,28 +11,16 @@ public interface IModelSettings
     string? ApiKey { get; set; }
 }
 
-public class OpenAIModelSettings : IModelSettings
+public class AssistantModelSettings : IModelSettings
 {
-    public string ModelName { get; set; } = "gpt-3.5-turbo";
-    public string ApiUrl { get; set; } = "https://api.openai.com/v1/chat/completions";
+    public string ModelName { get; set; } 
+    public string ApiUrl { get; set; } 
     public string? ApiKey { get; set; }
 
-    public OpenAIModelSettings(IConfiguration configuration)
+    public AssistantModelSettings(IConfiguration configuration)
     {
-        ApiKey = configuration["OpenAI:ApiKey"];
+        ApiKey = configuration["AssistantApi:ApiKey"];
+        ApiUrl = configuration["AssistantApi:ApiUrl"] ?? throw new System.ArgumentNullException("AssistantApi:ApiUrl");
+        ModelName = configuration["AssistantApi:ModelName"]?? throw new System.ArgumentNullException("AssistantApi:ModelName");
     }
-}
-
-public class LlamaModelSettings : IModelSettings
-{
-    public string ModelName { get; set; } = "llama-3.2-3b-instruct";
-    public string ApiUrl { get; set; } = "http://localhost:1234/v1/chat/completions";
-    public string? ApiKey { get; set; } = "";
-}
-
-public class Llama32ModelSettings : IModelSettings
-{
-    public string ModelName { get; set; } = "llama3.2";
-    public string ApiUrl { get; set; } = "http://localhost:11434/v1/chat/completions";
-    public string? ApiKey { get; set; } = "";
 }

@@ -36,10 +36,8 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             this.logger = logger;
             this.questionnaireContextProvider = questionnaireContextProvider;
             this.questionnaireAssistant = questionnaireAssistant;
-
-            // Switch between OpenAIModelSettings and LlamaModelSettings as needed
-            // Example: this.modelSettings = new OpenAIModelSettings(configuration);
-            this.modelSettings = new LlamaModelSettings();
+             
+            this.modelSettings = new AssistantModelSettings(configuration);
         }
 
         public class Message

@@ -7,7 +7,7 @@ export const useAssistant = () => {
 
     const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-    const sendMessage = async (messages, options = {}) => {
+    const sendMessage = async (prompt, messages, options = {}) => {
         const retries = 3;
 
         // Rate limiting: Ensure minimum interval between requests
@@ -27,6 +27,7 @@ export const useAssistant = () => {
                             role: msg.role,
                             content: msg.content
                         })),
+                        prompt: prompt,
                         questionnaireId: options.questionnaireId || null,
                         entityId: 'dea78efe7363e55a47e15e5bc9e9a7f5' //options.entityId || null
                     },

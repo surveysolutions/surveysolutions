@@ -42,23 +42,23 @@
                             <span class="caret"></span>
                             <span class="sr-only">{{
                                 $t('QuestionnaireEditor.ToggleDropdown')
-                            }}</span>
+                                }}</span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-right">
                             <li>
                                 <a href="/identity/account/manage">{{
                                     $t('QuestionnaireEditor.ManageAccount')
-                                }}</a>
+                                    }}</a>
                             </li>
                             <li>
                                 <a href="/identity/account/manage/changepassword">{{
                                     $t('QuestionnaireEditor.ChangePassword')
-                                }}</a>
+                                    }}</a>
                             </li>
                             <li>
                                 <a href="/identity/account/logout">{{
                                     $t('QuestionnaireEditor.LogOut')
-                                }}</a>
+                                    }}</a>
                             </li>
                         </ul>
                     </div>
@@ -165,6 +165,7 @@ import { useVerificationStore } from '../../../stores/verification';
 import { useChatStore } from '../../../stores/chat';
 import WebTesterApi from '../../../api/webTester';
 import { ref, computed } from 'vue';
+import { useRoute } from 'vue-router';
 
 import { sanitizeUrl } from '@braintree/sanitize-url';
 
@@ -185,6 +186,7 @@ export default {
     setup(props) {
         const verificationStore = useVerificationStore();
         const chatStore = useChatStore();
+        const route = useRoute();
 
         const verificationDialog = ref(null);
         const sharedInfoDialog = ref(null);
@@ -204,7 +206,8 @@ export default {
             verificationDialog,
             sharedInfoDialog,
             downloadPDFDialog,
-            ctrl_b
+            ctrl_b,
+            route
         };
     },
     mounted() {
@@ -242,7 +245,8 @@ export default {
         },
         showChat() {
             this.chatStore.open({
-                questionnaireId: this.questionnaireId
+                questionnaireId: this.questionnaireId,
+                entityId: this.route.params.entityId || null,
             });
         },
         saveAsQuestionnaire() {
