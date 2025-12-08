@@ -29,13 +29,9 @@ export const useAssistant = () => {
                         })),
                         prompt: prompt,
                         questionnaireId: options.questionnaireId || null,
-                        entityId: 'dea78efe7363e55a47e15e5bc9e9a7f5' //options.entityId || null
+                        entityId: options.entityId || null
                     },
-                    {
-                        // headers: {
-                        //   'Authorization': `Bearer ${apiKey}`,
-                        //   'Content-Type': 'application/json'
-                        // },
+                    {                        
                         timeout: 30000 // 30 second timeout
                     }
                 );
