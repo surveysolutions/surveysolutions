@@ -111,7 +111,7 @@ export default {
                 'mark': this.highlight,
                 'disabled-question': this.disabled,
                 'with-flag': this.hasFlag,
-                'supervisor': this.question.isForSupervisor
+                'supervisor-question': this.question.isForSupervisor
             }, this.questionDivCssClassName]
         },
         questionEditorClass() {
