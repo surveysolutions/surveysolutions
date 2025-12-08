@@ -587,7 +587,7 @@ a.supervisor {
         top: 2px;
         margin-right: 3px;
         @include size(11px, 14px);
-        2 background: transparent url("#{$assetsPath}/img/icon-supervisor.png") no-repeat;
+        background: transparent url("#{$assetsPath}/img/icon-supervisor.png") no-repeat;
         @include image-2x("#{$assetsPath}/img/icon-supervisor2k.png", 11px, 14px);
         background-size: 11px 14px;
     }*/
