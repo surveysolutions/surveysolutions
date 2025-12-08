@@ -189,9 +189,6 @@
   <data name="Complete" xml:space="preserve">
     <value>Finalizat</value>
   </data>
-  <data name="CompleteAbout" xml:space="preserve">
-    <value>Sunteți pe punctul de a încheia acest interviu</value>
-  </data>
   <data name="CompleteErrors" xml:space="preserve">
     <value>Întrebări cu erori:</value>
   </data>
@@ -490,5 +487,51 @@ Contactați echipa de suport pentru asistență.</value>
   </data>
   <data name="NotCalculated" xml:space="preserve">
     <value>Necalculat</value>
+  </data>
+  <data name="CompleteReviewSubmit" xml:space="preserve">
+      <value>Revizuire &amp; Trimitere</value>
+  </data>
+  <data name="Complete_Tab_CriticalErrors" xml:space="preserve">
+    <value>Erori &lt;br /&gt;
+Critice</value>
+  </data>
+  <data name="Complete_Tab_QuestionsWithErrors" xml:space="preserve">
+    <value>Erori</value>
+  </data>
+  <data name="Complete_Tab_UnansweredQuestions" xml:space="preserve">
+    <value>Întrebări &lt;br /&gt;
+fără răspuns</value>
+  </data>
+  <data name="Complete_AllGood" xml:space="preserve">
+    <value>Toate întrebările obligatorii au fost răspunse &lt;br /&gt;
+Nicio eroare detectată</value>
+  </data>
+  <data name="Complete_AndMore" xml:space="preserve">
+    <value>și încă {{count}}</value>
+  </data>
+  <data name="Complete_NoteIsRequired" xml:space="preserve">
+    <value>Este necesară o notă pentru a trimite interviul</value>
+  </data>
+  <data name="Complete_Required" xml:space="preserve">
+    <value>Obligatoriu</value>
+  </data>
+  <data name="Complete_Error" xml:space="preserve">
+    <value>Eroare:</value>
+  </data>
+  <data name="Complete_LastComment" xml:space="preserve">
+    <value>Ultimul comentariu:</value>
+  </data>
+  <data name="Complete_SubmitInfo" xml:space="preserve">
+    <value>După trimitere, acest interviu va fi blocat și nu va putea fi editat. &lt;br /&gt;
+Vă rugăm să vă asigurați că toate informațiile sunt corecte.</value>
+  </data>
+    <data name="TurnOffDevMode" xml:space="preserve">
+    <value>Dezactivați modul dezvoltator</value>
+  </data>
+  <data name="TurnOnDevMode" xml:space="preserve">
+    <value>Activați modul dezvoltator</value>
+  </data>
+  <data name="CompleteReviewSubmitInterview" xml:space="preserve">
+      <value>Interviu {{key}}</value>
   </data>
 </root>

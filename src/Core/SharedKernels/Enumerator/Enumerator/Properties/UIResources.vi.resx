@@ -181,6 +181,15 @@
 <data name="Interview_Questions_QrBarcode_SaveAnswer" xml:space="preserve">
     <value>Nhấn để chụp mã vạch</value>
 </data>
+  <data name="BarcodeScanner_Error_UnknownError" xml:space="preserve">
+    <value>Lỗi không xác định</value>
+  </data>
+  <data name="BarcodeScanner_Error_StartingCamera" xml:space="preserve">
+    <value>Lỗi khởi động máy ảnh: </value>
+  </data>
+  <data name="BarcodeScanner_Error_Interrupted" xml:space="preserve">
+    <value>Bị gián đoạn</value>
+  </data>
 <data name="Interview_Questions_Area_SaveAnswer" xml:space="preserve">
     <value>Nhấn để trả lời</value>
 </data>
@@ -298,7 +307,7 @@
       <value>Sau khi bạn hoàn thành cuộc phỏng vấn này, nó sẽ được đánh dấu là đã hoàn thành và sẽ được tải lên giám sát viên trong lần đồng bộ tiếp theo của bạn</value>
   </data>
   <data name="Interview_Complete_CriticalIssues_Instrunction" xml:space="preserve">
-      <value>Nút này bị vô hiệu hóa vì không cho phép gửi các cuộc phỏng vấn có vấn đề nghiêm trọng</value>
+      <value>Để kích hoạt nút, vui lòng giải quyết các vấn đề nghiêm trọng</value>
   </data>
   <data name="Interview_Complete_Errors" xml:space="preserve">
       <value>Lỗi</value>
@@ -319,7 +328,7 @@
       <value>Vui lòng xác nhận bạn muốn gửi cuộc phỏng vấn này với các vấn đề nghiêm trọng.</value>
   </data>
   <data name="Interview_Complete_Note_For_Supervisor_with_Criticality" xml:space="preserve">
-      <value>Nút này vẫn bị vô hiệu hóa cho đến khi bạn chỉ định một bình luận cho các vấn đề nghiêm trọng ở trên</value>
+      <value>Để kích hoạt nút, vui lòng giải quyết các vấn đề nghiêm trọng hoặc cung cấp giải thích trong hộp bình luận ở trên</value>
   </data>
   <data name="Interview_Complete_Questions_Status" xml:space="preserve">
       <value>Trạng thái câu hỏi</value>

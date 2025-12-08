@@ -1,4 +1,4 @@
-export default class {
+class BrowserLocalStore {
     constructor() {
         this.store = window.localStorage
     }
@@ -37,3 +37,5 @@ export default class {
         }
     }
 }
+
+export default new BrowserLocalStore()

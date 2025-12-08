@@ -10,6 +10,7 @@ namespace WB.UI.Headquarters.Services
         Task<IActionResult> GetPatchFileAsHttpResponse(HttpRequest request, string fileName);
         Task<int?> GetApplicationBuildNumber(string appName);
         Task<string> GetApplicationVersionString(string appName);
+        Task<long?> GetApplicationSize(string appName);
         
         string ApkClientsFolder();
     }

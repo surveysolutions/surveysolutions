@@ -453,9 +453,69 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
-        public static string CompleteAbout {
+        public static string CompleteReviewSubmit {
             get {
-                return ResourceManager.GetString("CompleteAbout", resourceCulture);
+                return ResourceManager.GetString("CompleteReviewSubmit", resourceCulture);
+            }
+        }
+        
+        public static string Complete_Tab_CriticalErrors {
+            get {
+                return ResourceManager.GetString("Complete_Tab_CriticalErrors", resourceCulture);
+            }
+        }
+        
+        public static string Complete_Tab_QuestionsWithErrors {
+            get {
+                return ResourceManager.GetString("Complete_Tab_QuestionsWithErrors", resourceCulture);
+            }
+        }
+        
+        public static string Complete_Tab_UnansweredQuestions {
+            get {
+                return ResourceManager.GetString("Complete_Tab_UnansweredQuestions", resourceCulture);
+            }
+        }
+        
+        public static string Complete_AllGood {
+            get {
+                return ResourceManager.GetString("Complete_AllGood", resourceCulture);
+            }
+        }
+        
+        public static string Complete_AndMore {
+            get {
+                return ResourceManager.GetString("Complete_AndMore", resourceCulture);
+            }
+        }
+        
+        public static string Complete_NoteIsRequired {
+            get {
+                return ResourceManager.GetString("Complete_NoteIsRequired", resourceCulture);
+            }
+        }
+        
+        public static string Complete_Required {
+            get {
+                return ResourceManager.GetString("Complete_Required", resourceCulture);
+            }
+        }
+        
+        public static string Complete_Error {
+            get {
+                return ResourceManager.GetString("Complete_Error", resourceCulture);
+            }
+        }
+        
+        public static string Complete_LastComment {
+            get {
+                return ResourceManager.GetString("Complete_LastComment", resourceCulture);
+            }
+        }
+        
+        public static string Complete_SubmitInfo {
+            get {
+                return ResourceManager.GetString("Complete_SubmitInfo", resourceCulture);
             }
         }
         
@@ -747,15 +807,15 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
-        public static string HideVariables {
+        public static string TurnOffDevMode {
             get {
-                return ResourceManager.GetString("HideVariables", resourceCulture);
+                return ResourceManager.GetString("TurnOffDevMode", resourceCulture);
             }
         }
         
-        public static string ShowVariables {
+        public static string TurnOnDevMode {
             get {
-                return ResourceManager.GetString("ShowVariables", resourceCulture);
+                return ResourceManager.GetString("TurnOnDevMode", resourceCulture);
             }
         }
         
@@ -873,12 +933,6 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
-        public static string CompleteInterviewStatus {
-            get {
-                return ResourceManager.GetString("CompleteInterviewStatus", resourceCulture);
-            }
-        }
-        
         public static string Complete_CriticalUnansweredQuestions {
             get {
                 return ResourceManager.GetString("Complete_CriticalUnansweredQuestions", resourceCulture);
@@ -900,6 +954,12 @@ namespace WB.UI.Headquarters.Resources {
         public static string Complete_QuestionsWithErrors {
             get {
                 return ResourceManager.GetString("Complete_QuestionsWithErrors", resourceCulture);
+            }
+        }
+        
+        public static string CompleteReviewSubmitInterview {
+            get {
+                return ResourceManager.GetString("CompleteReviewSubmitInterview", resourceCulture);
             }
         }
     }

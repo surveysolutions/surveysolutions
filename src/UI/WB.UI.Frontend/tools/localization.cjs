@@ -3,7 +3,6 @@ import fs from 'fs'
 import path from 'path'
 import crypto from 'crypto'
 import xmldoc from 'xmldoc'
-import { rimrafSync } from 'rimraf'
 
 module.exports = class LocalizationBuilder {
     constructor(options) {
@@ -34,7 +33,8 @@ module.exports = class LocalizationBuilder {
     writeFiles(destination, folder, namespaces) {
         const response = {};
         const destinationFolder = path.join(destination, folder);
-        rimrafSync(destinationFolder);
+        fs.rmSync(destinationFolder, { recursive: true, force: true });
+        //rimrafSync(destinationFolder);
 
         Object.keys(this.localeInfo).forEach(language => {
             const locale = this.localeInfo[language];

@@ -62,13 +62,14 @@ Other files
         {
             var fileName = fileInArchive.Key;
             var mapExtension = fileSystemAccessor.GetFileExtension(fileName);
-            var mapName = fileSystemAccessor.GetFileNameWithoutExtension(fileName);
+            var filwNameWithExtension = fileSystemAccessor.GetFileName(fileName);
+            var mapName = fileSystemAccessor.GetFileNameWithoutExtension(filwNameWithExtension);
 
             if (permittedMapFileExtensions.Contains(mapExtension))
             {
                 result.Maps.Add(new MapFiles() 
                 { 
-                    Name = fileName,
+                    Name = mapName,
                     Files = new List<MapFile>() { new() { Name = fileName, Size = fileInArchive.Value } }, 
                     Size = fileInArchive.Value 
                 });

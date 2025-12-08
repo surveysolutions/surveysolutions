@@ -2,12 +2,17 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
        xmlns:local="http://schemas.android.com/apk/res-auto">
     <TextView
-          style="@style/Interview_Question_Title"
+          style="@style/Interview_Complete_Title"
           android:layout_marginLeft="@dimen/Interview_Entity_margin_left"
           android:id="@+id/tv_Complete_Screen_Title"
           local:MvxBind="Text CompleteScreenTitle;" />
 
-    <View style="@style/Interview_Entity_Divider" />
+    <TextView
+            style="@style/Interview_Complete_Success_Text"
+            android:layout_marginLeft="@dimen/Interview_Entity_margin_left"
+            android:id="@+id/tv_Complete_Screen_Title_Success_Text"
+            local:MvxBind="Text Localization('Interview_Complete_Success_Text'); Visible And(Not(IsLoading), IsAllOk);" />
+
 
     <ProgressBar
             android:visibility="visible"
@@ -15,40 +20,67 @@
             style="@style/LoadingProgressIndicator"
             android:layout_marginBottom="@dimen/Interview_Entity_margin_vertical"
             local:MvxBind="IndeterminateMode true; Visible IsLoading" />
-
-    <LinearLayout style="@style/Interview_Question" 
-                  android:orientation="vertical"
-                  local:MvxBind="Visible And(Not(IsLoading), HasCompleteGroups)">
-        <LinearLayout style="@style/Interview_Question_Header">
-            <TextView style="@style/Interview_Complete_Screen_Text"
-                      android:id="@+id/tv_Complete_Questions_Status"
-                      local:MvxBind="Text Localization('Interview_Complete_Interview_Status')" />
-
-            <TextView
-                    style="@style/Interview_Complete_Screen_Text"
-                    android:id="@+id/tv_Complete_CriticalityNote"
-                    local:MvxBind="Text Localization('Interview_Complete_CriticalityIssuesDescription');
-                        Visible HasCriticalIssues" />
-        </LinearLayout>
-    </LinearLayout>
     
-    <MvxRecyclerView
-            android:id="@+id/tv_Complete_Groups"
+
+    <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:animateLayoutChanges="false"
-            android:nestedScrollingEnabled="false"
-            hasFixedSize="false"
-            local:MvxTemplateSelector="WB.UI.Shared.Enumerator.CustomControls.ExpandableTemplateSelector, WB.UI.Shared.Enumerator"
-            local:MvxBind="ItemsSource CompleteGroups; Visible Not(IsLoading)" />
+            local:MvxBind="Visible And(Not(IsLoading), Not(IsAllOk));">
 
-    <View style="@style/Interview_Entity_Divider" />
+        <View style="@style/Interview_Complete_Divider"
+              android:layout_gravity="bottom"
+              android:layout_width="@dimen/Interview_Entity_margin_left"
+              />
+
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                local:MvxBind="Visible And(Not(IsLoading), Not(IsAllOk));">
+
+            <View style="@style/Interview_Complete_Divider"
+                  android:layout_gravity="bottom"
+                  android:layout_width="0dp"
+                  android:layout_weight="1"/>
+
+            <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/tabLayout"
+                    style="@style/CompleteTabLayout"
+                    local:tabGravity="fill"
+                    local:tabMode="fixed"
+                    local:tabIndicatorColor="@android:color/white"
+                    local:tabIndicatorHeight="4dp"/>
+
+            <View style="@style/Interview_Complete_Divider"
+                  android:layout_width="0dp"
+                  android:layout_weight="1"
+                  android:layout_gravity="bottom" />
+
+        </LinearLayout>
+        
+        <View style="@style/Interview_Complete_Divider"
+              android:layout_width="@dimen/Interview_Entity_margin_left"
+              android:layout_gravity="bottom" />
+        
+    </LinearLayout>
+
+    
+    <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/viewPager"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            local:MvxBind="Visible And(Not(IsLoading), Not(IsAllOk));" />
+    
+    <View style="@style/Interview_Complete_Divider" />
 
     <LinearLayout style="@style/Interview_Question" 
                   android:orientation="vertical"
+                  android:layout_marginRight="@dimen/Interview_Entity_margin_left"
                   local:MvxBind="Visible Not(IsLoading)">
         <TextView
-          style="@style/Interview_Complete_Screen_Text"
+          style="@style/Interview_Complete_Note"
           android:id="@+id/tv_Complete_NoteToSupervisorTxt"
           local:MvxBind="Text CommentLabel" />
         <EditText

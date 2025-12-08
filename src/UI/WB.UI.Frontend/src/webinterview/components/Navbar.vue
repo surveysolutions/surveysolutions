@@ -57,12 +57,12 @@
                                 $t('WebInterviewUI.EmailLink_EmailResumeLink') }}</a>
                     </li>
                     <li v-if="this.$config.inWebTesterMode">
-                        <button v-if="includeVariables" type="button" class="btn btn-default btn-link btn-icon"
-                            @click="hideVariables" :title="$t('WebInterviewUI.HideVariables')">
+                        <button v-if="inDevMode" type="button" class="btn btn-default btn-link btn-icon"
+                            @click="turnOffDevMode" :title="$t('WebInterviewUI.TurnOffDevMode')">
                             <span class="glyphicon glyphicon-check"></span>
                         </button>
-                        <button v-if="!includeVariables" type="button" class="btn btn-default btn-link btn-icon"
-                            @click="showVariables" :title="$t('WebInterviewUI.ShowVariables')">
+                        <button v-if="!inDevMode" type="button" class="btn btn-default btn-link btn-icon"
+                            @click="turnOnDevMode" :title="$t('WebInterviewUI.TurnOnDevMode')">
                             <span class="glyphicon glyphicon-unchecked"></span>
                         </button>
                     </li>
@@ -165,8 +165,8 @@
         <!-- /.container-fluid -->
 
         <teleport to="body">
-            <div ref="emailPersonalLinkModalRef" class="modal fade" id="emailPersonalLinkModal" tabindex="-1"
-                role="dialog">
+            <div v-if="isResumeLinkAvailable" ref="emailPersonalLinkModalRef" class="modal fade"
+                aria-label="personal-link-modal" id="emailPersonalLinkModal" tabindex="-1" role="dialog">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -273,8 +273,8 @@ export default {
         getScenarioUrl() {
             return this.$config.getScenarioUrl
         },
-        includeVariables() {
-            return this.$store.state.webinterview.showVariables || false;
+        inDevMode() {
+            return this.$store.state.webinterview.isDevMode || false;
         },
     },
     methods: {
@@ -322,12 +322,12 @@ export default {
         reloadQuestionnaire() {
             window.location = this.$config.reloadQuestionnaireUrl
         },
-        showVariables() {
-            this.$store.dispatch('setShowVariables', { value: true })
+        turnOnDevMode() {
+            this.$store.dispatch('setDevMode', { value: true })
             this.$store.dispatch('fetchSectionEntities')
         },
-        hideVariables() {
-            this.$store.dispatch('setShowVariables', { value: false })
+        turnOffDevMode() {
+            this.$store.dispatch('setDevMode', { value: false })
             this.$store.dispatch('fetchSectionEntities')
         },
         async showSaveScenario() {

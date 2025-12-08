@@ -4,8 +4,9 @@ using MvvmCross;
 using MvvmCross.Commands;
 using MvvmCross.Navigation;
 using MvvmCross.Plugin.Messenger;
-using MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services;
+using WB.Core.GenericSubdomains.Portable.Tasks;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
@@ -24,14 +25,18 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
 
         protected readonly IPrincipal Principal;
         private MvxSubscriptionToken messengerSubscription;
+        protected readonly IViewModelNavigationService ViewModelNavigationService;
 
-        public DashboardMenuViewModel(IDashboardItemsAccessor dashboardItemsAccessor, IPrincipal principal)
+        
+        public DashboardMenuViewModel(IDashboardItemsAccessor dashboardItemsAccessor, IPrincipal principal,
+            IViewModelNavigationService viewModelNavigationService)
         {
             this.messenger = Mvx.IoCProvider.GetSingleton<IMvxMessenger>();
             MvxNavigationService = Mvx.IoCProvider.Resolve<IMvxNavigationService>();;
             this.dashboardItemsAccessor = dashboardItemsAccessor;
 
             this.Principal = principal ?? throw new ArgumentNullException(nameof(principal));
+            this.ViewModelNavigationService = viewModelNavigationService ?? throw new ArgumentNullException(nameof(viewModelNavigationService));
         }
 
         public override async Task Initialize()
@@ -59,6 +64,13 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
             this.OutboxItemsCount = dashboardItemsAccessor.OutboxCount();
             this.SentToInterviewerCount = dashboardItemsAccessor.SentToInterviewerCount();
 
+            //could be recovered from saved state, but for simplicity we just navigate to login if not authenticated
+            if (!this.Principal.IsAuthenticated)
+            {
+                this.ViewModelNavigationService.NavigateToLoginAsync().WaitAndUnwrapException();
+                return;
+            }
+            
             this.UserName = Principal.CurrentUserIdentity.Name;
             this.UserEmail = Principal.CurrentUserIdentity.Email;
         }

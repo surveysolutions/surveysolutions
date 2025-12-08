@@ -1,10 +1,12 @@
 using System.Threading.Tasks;
+using Android.App;
+using Android.Content;
 using MvvmCross;
 using MvvmCross.Platforms.Android;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.UI.Shared.Enumerator.Activities;
 using Xamarin.Essentials;
-using ZXing.Mobile;
 
 namespace WB.UI.Shared.Enumerator.Services.Internals
 {
@@ -12,6 +14,7 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
     {
         private readonly IMvxAndroidCurrentTopActivity androidCurrentTopActivity;
         private readonly IPermissionsService permissions;
+        private static TaskCompletionSource<QRBarcodeScanResult> scanTaskCompletionSource;
 
         public QRBarcodeScanService(IPermissionsService permissions)
         {
@@ -23,11 +26,20 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
         {
             await this.permissions.AssureHasPermissionOrThrow<Permissions.Camera>().ConfigureAwait(false);
             
-            MobileBarcodeScanner.Initialize(this.androidCurrentTopActivity.Activity.Application);
-            var scanner = new MobileBarcodeScanner();
-            var result = await scanner.Scan();
+            scanTaskCompletionSource = new TaskCompletionSource<QRBarcodeScanResult>();
 
-            return result != null ? new QRBarcodeScanResult() { Code = result.Text, RawBytes = result.RawBytes} : null;
+            var activity = this.androidCurrentTopActivity.Activity;
+            var intent = new Intent(activity, typeof(BarcodeScannerActivity));
+            
+            activity.StartActivity(intent);
+
+            var result = await scanTaskCompletionSource.Task;
+            return result;
+        }
+
+        public static void SetResult(QRBarcodeScanResult result)
+        {
+            scanTaskCompletionSource?.TrySetResult(result);
         }
     }
 }

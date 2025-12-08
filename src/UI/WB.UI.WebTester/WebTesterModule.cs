@@ -87,7 +87,7 @@ namespace WB.UI.WebTester
                 registry.BindAsSingleton(type, type);
             }
 
-            registry.Bind<IWebInterviewInterviewEntityFactory, WebInterviewInterviewEntityFactory>();
+            registry.Bind<IWebInterviewInterviewEntityFactory, WebTesterWebInterviewInterviewEntityFactory>();
             registry.Bind<IWebNavigationService, WebNavigationService>();
 
             registry.BindToMethod<IOptions<FileStorageConfig>>(sp =>

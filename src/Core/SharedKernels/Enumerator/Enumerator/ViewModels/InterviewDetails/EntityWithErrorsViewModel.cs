@@ -6,20 +6,24 @@ using WB.Core.SharedKernels.Enumerator.Utils;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
-    public abstract class ListEntityViewModel : BaseViewModel
+    public class EntityWithErrorsViewModel : MvxViewModel, IInterviewEntity
     {
-        public abstract void Init(NavigationIdentity entityIdentity, string title, NavigationState navigationState);
-    }
-
-    public class EntityWithErrorsViewModel : ListEntityViewModel, IInterviewEntity
-    {
-        public override void Init(NavigationIdentity entityIdentity, string title, NavigationState navigationState)
+        public void Init(NavigationIdentity entityIdentity, 
+            string title, 
+            string comment, 
+            string error, 
+            NavigationState navigationState)
         {
             this.NavigationState = navigationState;
             this.entityIdentity = entityIdentity;
             this.entityTitle = title;
+            this.Comment = comment;
+            this.Error = error;
             this.IsError = true;
         }
+
+        public string Comment { get; private set; }
+        public string Error { get; private set; }
 
         private string entityTitle;
         private NavigationIdentity entityIdentity;
@@ -35,15 +39,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public static EntityWithErrorsViewModel InitTitle(string title)
         {
             var viewModel = new EntityWithErrorsViewModel();
-            viewModel.Init(null, title, null);
+            viewModel.Init(null, title, null, null, null);
             viewModel.IsError = false;
             return viewModel;
         }
 
-        public static EntityWithErrorsViewModel InitError(string title)
+        public static EntityWithErrorsViewModel InitError(string error)
         {
             var viewModel = new EntityWithErrorsViewModel();
-            viewModel.Init(null, title, null);
+            viewModel.Init(null, null, null, error, null);
             return viewModel;
         }
 
@@ -57,59 +61,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.Identity = identity;
         }
     }
-
-    public class EntityWithCommentsViewModel : EntityWithErrorsViewModel
-    {
-    }    
     
-    public class CompleteGroup : MvxViewModel
-    {
-        private readonly IObservableCollection<MvxViewModel> items;
-        private bool expanded;
-        public CompositeCollection<MvxViewModel> Items { get; set; } = new CompositeCollection<MvxViewModel>();
-
-        public CompleteGroup()
-        {
-        }
-
-        public CompleteGroup(IEnumerable<EntityWithErrorsViewModel> items) : base()
-        {
-            this.items = new CovariantObservableCollection<MvxViewModel>(items);
-        }
-
-        public int AllCount { get; set; }
-        public CompleteGroupContent GroupContent { get; set; }
-
-        public bool HasChildren => AllCount > 0;
-
-        public bool Expanded
-        {
-            get => expanded;
-            set
-            {
-                if (value == expanded) return;
-                expanded = value;
-                RaisePropertyChanged(() => Expanded);
-            }
-        }
-
-        public string Title { get; set; }
-
-        public IMvxCommand ToggleCommand => new MvxCommand(() => this.Toggle());
-        public void Toggle()
-        {
-            Expanded = !Expanded;
-            
-            if (Expanded)
-            {
-                Items.AddCollection(items);
-            }
-            else
-            {
-                Items.RemoveCollection(items);
-            }
-        }
-    }
+    
+    
     
     public enum CompleteGroupContent
     {

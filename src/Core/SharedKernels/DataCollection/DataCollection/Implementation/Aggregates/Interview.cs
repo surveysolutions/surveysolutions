@@ -2334,7 +2334,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 : optionTitle;
         }
 
-        public IEnumerable<Identity> GetUnderlyingInterviewerEntities(Identity sectionId = null, bool includeVariables = false)
+        public IEnumerable<Identity> GetUnderlyingInterviewerEntities(Identity sectionId = null
+            , bool includeVariables = false, bool includeNonInterviewerQuestions = false)
         {
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
             var targetList = sectionId != null
@@ -2345,7 +2346,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IEnumerable<IInterviewTreeNode> result = sectionId != null && questionnaire.IsCoverPage(sectionId.Id)
                 ? targetList
                 : targetList.Except(x =>
-                (questionnaire.IsQuestion(x.Identity.Id) && !questionnaire.IsInterviewerQuestion(x.Identity.Id))
+                (questionnaire.IsQuestion(x.Identity.Id) && !(questionnaire.IsInterviewerQuestion(x.Identity.Id) || includeNonInterviewerQuestions))
                 || (!includeVariables && questionnaire.IsVariable(x.Identity.Id))
             );
 

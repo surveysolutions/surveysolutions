@@ -1,5 +1,6 @@
 import { forEach, differenceBy } from 'lodash'
 import browserLocalStore from '~/shared/localStorage'
+import { setDevModeSetting } from './showVariablesPreference'
 
 export default {
     SET_ENTITIES_DETAILS(state, { entities, lastActivityTimestamp }) {
@@ -81,6 +82,7 @@ export default {
         state.coverInfo = coverInfo
     },
     SET_COMPLETE_INFO(state, completeInfo) {
+        state.criticalityInfo = null;
         state['completeInfo'] = completeInfo
 
         if (state.criticalityLevel && completeInfo.criticalityLevel != state.criticalityLevel)
@@ -112,13 +114,14 @@ export default {
         state.interviewCompleted = true
     },
     CURRENT_SECTION(_, { interviewId, sectionId }) {
-        const store = new browserLocalStore()
+
         if (sectionId)
-            store.setItem(`${interviewId}_lastSection`, sectionId)
+            browserLocalStore.setItem(`${interviewId}_lastSection`, sectionId)
         else
-            store.remove(`${interviewId}_lastSection`)
+            browserLocalStore.remove(`${interviewId}_lastSection`)
     },
-    SHOW_VARIABLES(state, { value }) {
-        state.showVariables = value
+    DEV_MODE(state, { value }) {
+        state.isDevMode = value
+        setDevModeSetting(value)
     },
 }

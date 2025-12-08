@@ -49,7 +49,9 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
                     interviewId, 
                     this.fileSystemAccessor.GetFileName(filePath),
                     null,
-                    () => Task.FromResult(this.fileSystemAccessor.ReadAllBytes(filePath)))).ToList();
+                    () => Task.FromResult(this.fileSystemAccessor.ReadAllBytes(filePath)),
+                    null))
+                .ToList();
             return Task.FromResult(interviewBinaryDataDescriptors);
         }
 

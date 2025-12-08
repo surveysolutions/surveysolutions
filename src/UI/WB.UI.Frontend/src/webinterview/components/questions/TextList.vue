@@ -95,16 +95,19 @@ export default {
 
             if (item.text == text) return
 
-            if (!text || text.trim() === item.text) {
+            const newValue = text?.trim() || ''
+
+            if (newValue === item.text) {
+                target.val(item.text)
                 return
             }
 
-            if (!text.trim()) {
+            if (!newValue) {
                 this.confirmAndRemoveRow(index)
                 return
             }
 
-            item.text = text
+            item.text = newValue
             this.$store.dispatch('answerTextListQuestion', { identity: this.id, rows: this.$me.rows })
         },
         addRow(evnt) {
@@ -113,7 +116,11 @@ export default {
             const target = $(evnt.target)
             let text = target.val()
 
-            if (!text || !text.trim()) return
+            if (!text || !text.trim()) {
+                this.$refs.inputTextArea.value = ''
+                target.val('')
+                return
+            }
 
             let newRowValue = 1
             if (this.$me.rows != undefined && this.$me.rows.length > 0)
@@ -123,8 +130,8 @@ export default {
 
             this.$store.dispatch('answerTextListQuestion', { identity: this.id, rows: this.$me.rows })
 
-            this.$refs.inputTextArea.val = undefined
-            target.val(undefined)
+            this.$refs.inputTextArea.value = ''
+            target.val('')
 
             setTimeout(() => {
                 target.focus()

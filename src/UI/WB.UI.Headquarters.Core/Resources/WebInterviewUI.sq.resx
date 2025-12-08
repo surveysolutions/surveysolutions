@@ -189,9 +189,6 @@
   <data name="Complete" xml:space="preserve">
     <value>Përfundoi</value>
   </data>
-  <data name="CompleteAbout" xml:space="preserve">
-    <value>Ju jeni pranë përfundimit të kësaj interviste </value>
-  </data>
   <data name="CompleteErrors" xml:space="preserve">
     <value>Pyetje me gabime:</value>
   </data>
@@ -470,5 +467,51 @@
   </data>
   <data name="Yes" xml:space="preserve">
     <value>Po</value>
+  </data>
+  <data name="CompleteReviewSubmit" xml:space="preserve">
+      <value>Rishiko dhe Dërgo</value>
+  </data>
+  <data name="Complete_Tab_CriticalErrors" xml:space="preserve">
+    <value>Kritike &lt;br /&gt;
+Gabime</value>
+  </data>
+  <data name="Complete_Tab_QuestionsWithErrors" xml:space="preserve">
+    <value>Gabime</value>
+  </data>
+  <data name="Complete_Tab_UnansweredQuestions" xml:space="preserve">
+    <value>Pyetje &lt;br /&gt;
+pa përgjigje</value>
+  </data>
+  <data name="Complete_AllGood" xml:space="preserve">
+    <value>Të gjitha pyetjet e detyrueshme u përgjigjën &lt;br /&gt;
+Nuk u gjetën gabime</value>
+  </data>
+  <data name="Complete_AndMore" xml:space="preserve">
+    <value>dhe {{count}} të tjera</value>
+  </data>
+  <data name="Complete_NoteIsRequired" xml:space="preserve">
+    <value>Kërkohet shënim për të dërguar intervistën</value>
+  </data>
+  <data name="Complete_Required" xml:space="preserve">
+    <value>E detyrueshme</value>
+  </data>
+  <data name="Complete_Error" xml:space="preserve">
+    <value>Gabim:</value>
+  </data>
+  <data name="Complete_LastComment" xml:space="preserve">
+    <value>Komenti i fundit:</value>
+  </data>
+  <data name="Complete_SubmitInfo" xml:space="preserve">
+    <value>Pas dërgimit, kjo intervistë do të bllokohet dhe s'mund të editohet. &lt;br /&gt;
+Sigurohuni që gjithë informacioni është korrekt.</value>
+  </data>
+    <data name="TurnOffDevMode" xml:space="preserve">
+    <value>Çaktivizo modalitetin e zhvilluesit</value>
+  </data>
+  <data name="TurnOnDevMode" xml:space="preserve">
+    <value>Aktivizo modalitetin e zhvilluesit</value>
+  </data>
+  <data name="CompleteReviewSubmitInterview" xml:space="preserve">
+      <value>Intervistë {{key}}</value>
   </data>
 </root>
