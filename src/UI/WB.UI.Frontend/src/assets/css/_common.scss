@@ -580,7 +580,7 @@ a.supervisor {
     padding-left: 5px;
     white-space: nowrap;
 
-    /*&:before {
+    &:before {
         display: inline-block;
         content: "";
         position: relative;
@@ -590,7 +590,7 @@ a.supervisor {
         background: transparent url("#{$assetsPath}/img/icon-supervisor.png") no-repeat;
         @include image-2x("#{$assetsPath}/img/icon-supervisor2k.png", 11px, 14px);
         background-size: 11px 14px;
-    }*/
+    }
 }
 
 .screen-small-resolution {
