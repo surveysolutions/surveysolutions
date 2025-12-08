@@ -69,7 +69,7 @@ Other files
             {
                 result.Maps.Add(new MapFiles() 
                 { 
-                    Name = mapName,
+                    Name = filwNameWithExtension,
                     Files = new List<MapFile>() { new() { Name = fileName, Size = fileInArchive.Value } }, 
                     Size = fileInArchive.Value 
                 });
