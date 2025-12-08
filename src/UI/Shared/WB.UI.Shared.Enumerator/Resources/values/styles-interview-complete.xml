@@ -136,6 +136,7 @@
     <style name="Interview_Complete_Screen_Statistics_Comment" parent="Interview_Complete_Base">
         <item name="android:textSize">@dimen/textsize_14</item>
         <item name="android:textColor">@color/complete_screen_statistics_label</item>
+        <item name="android:textStyle">italic</item>
     </style>
 
     <style name="Interview_Submit_Button" parent="Button_Success">

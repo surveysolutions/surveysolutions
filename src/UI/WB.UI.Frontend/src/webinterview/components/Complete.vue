@@ -39,10 +39,8 @@
                     v-dompurify-html="item.title"></a>
                 <div class="item-title" v-else v-dompurify-html="item.title"></div>
 
-                <div class="item-error" v-if="item.error"
-                    v-dompurify-html="$t('WebInterviewUI.Complete_Error') + ' ' + item.error"></div>
-                <div class="item-comment" v-if="item.comment"
-                    v-dompurify-html="$t('WebInterviewUI.Complete_LastComment') + ' ' + item.comment">
+                <div class="item-error" v-if="item.error" v-dompurify-html="item.error"></div>
+                <div class="item-comment" v-if="item.comment" v-dompurify-html="item.comment">
                 </div>
             </div>
 
@@ -262,6 +260,7 @@
     font-size: 14px;
     opacity: 1;
     text-align: left;
+    font-style: italic;
 }
 
 /* Left colored stripe based on active group type */
