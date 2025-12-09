@@ -501,8 +501,7 @@
     <value>Так</value>
   </data>
   <data name="CompleteReviewSubmit" xml:space="preserve">
-    <value>Перегляд і Надсилання &lt;br /&gt;
-Інтерв'ю {{key}}</value>
+      <value>Перегляд і надсилання</value>
   </data>
   <data name="Complete_Tab_CriticalErrors" xml:space="preserve">
     <value>Критичні &lt;br /&gt;
@@ -543,5 +542,8 @@
   </data>
   <data name="TurnOnDevMode" xml:space="preserve">
     <value>Увімкнути режим розробника</value>
+  </data>
+  <data name="CompleteReviewSubmitInterview" xml:space="preserve">
+      <value>Інтерв'ю {{key}}</value>
   </data>
 </root>

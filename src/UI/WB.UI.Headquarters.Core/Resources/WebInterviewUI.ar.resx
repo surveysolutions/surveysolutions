@@ -535,8 +535,7 @@
   <value>الأسئلة التي لم تتم الإجابة عنها:</value>
 </data>
   <data name="CompleteReviewSubmit" xml:space="preserve">
-    <value>مراجعة وإرسال &lt;br /&gt;
-المقابلة {{key}}</value>
+      <value>مراجعة وإرسال</value>
   </data>
   <data name="Complete_Tab_CriticalErrors" xml:space="preserve">
     <value>أخطاء &lt;br /&gt;
@@ -577,4 +576,8 @@
   </data>
   <data name="TurnOnDevMode" xml:space="preserve">
     <value>تشغيل وضع المطور</value>
-  </data></root>
+  </data>
+  <data name="CompleteReviewSubmitInterview" xml:space="preserve">
+      <value>المقابلة {{key}}</value>
+  </data>
+</root>
