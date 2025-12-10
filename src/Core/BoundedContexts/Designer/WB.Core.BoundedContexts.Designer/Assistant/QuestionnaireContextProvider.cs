@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Designer.CodeGenerationV2;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Designer.Assistant;
@@ -30,7 +31,8 @@ public class QuestionnaireContextProvider(IDesignerQuestionnaireStorage question
         var entity = questionnaireDocument.Find<IComposite>(entityId);
         if (entity != null)
         {
-            result = result + $"context (entity name):'{entity.VariableName}'";
+            var entityName = !string.IsNullOrEmpty(entity.VariableName) ? entity.VariableName : entity.GetTitle();
+            result += $"{Environment.NewLine} context (entity name):'{entityName}'";
         }
 
         // Build path to target entity
@@ -39,7 +41,7 @@ public class QuestionnaireContextProvider(IDesignerQuestionnaireStorage question
         var simplifiedTree = BuildOptimizedTree(questionnaireDocument, pathToEntity, entityId, loadGroups);
         var json = JsonConvert.SerializeObject(simplifiedTree, Formatting.Indented);
 
-        result = result + $"context (questionnaire):{json}";
+        result += $"{Environment.NewLine} context (questionnaire):{json}";
         
         return result;
     }
