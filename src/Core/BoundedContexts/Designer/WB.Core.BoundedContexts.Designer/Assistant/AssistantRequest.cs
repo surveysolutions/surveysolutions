@@ -9,4 +9,4 @@ public record AssistantRequest(
     string Prompt, 
     List<AssistantMessage> Messages);
 
-public record AssistantMessage(string Role, string Content);
+public record AssistantMessage(string role, string content);
