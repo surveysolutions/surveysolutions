@@ -97,7 +97,7 @@ public class QuestionnaireAssistant(
 
         var payloadObj = new {
             model = modelSettings.ModelName,
-            messages = messages,
+            messages = messages.Select(m => new { role = m.Role, content = m.Content }).ToList(),
             max_tokens = 700,
             temperature = 0.7,
         };

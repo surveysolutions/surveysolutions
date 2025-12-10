@@ -68,8 +68,8 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 var response = await questionnaireAssistant.GetResponseAsync(new AssistantRequest(
                     request.QuestionnaireId.Value, 
                     request.EntityId.Value, 
-                    request.Prompt,
-                    request.Messages.Select(m => new AssistantMessage(m.Role, m.Content)).ToList()
+                    !string.IsNullOrWhiteSpace(request.Prompt) ? request.Prompt : request.Messages.Last().Content,
+                    request.Messages.SkipLast(1).Select(m => new AssistantMessage(m.Role, m.Content)).ToList()
                 ),
                 this.modelSettings);
 
