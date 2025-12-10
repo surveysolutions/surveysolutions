@@ -1,15 +1,15 @@
 <template>
     <router-view></router-view>
-    <GlobalChat />
+    <!-- <GlobalChat /> -->
 </template>
 
 <script>
-import GlobalChat from './components/GlobalChat.vue';
+//import GlobalChat from './components/GlobalChat.vue';
 
 export default {
     name: 'App',
     components: {
-        GlobalChat
+        //GlobalChat
     }
 };
 </script>
