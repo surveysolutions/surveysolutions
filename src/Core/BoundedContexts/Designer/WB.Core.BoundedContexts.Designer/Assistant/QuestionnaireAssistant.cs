@@ -22,7 +22,7 @@ public class QuestionnaireAssistant(
         var conversationMessages = new List<AssistantMessage>(request.Messages);
         
         // Reject any system messages from the client
-        if (conversationMessages.Any(m => m.Role != null && m.Role.Trim().ToLower() == "system"))
+        if (conversationMessages.Any(m => m.role != null && m.role.Trim().ToLower() == "system"))
             throw new ArgumentException("System messages are not allowed from the client.");
 
         if (string.IsNullOrWhiteSpace(request.Prompt))
@@ -97,7 +97,7 @@ public class QuestionnaireAssistant(
 
         var payloadObj = new {
             model = modelSettings.ModelName,
-            messages = messages.Select(m => new { role = m.Role, content = m.Content }).ToList(),
+            messages = messages,
             max_tokens = 700,
             temperature = 0.7,
         };
