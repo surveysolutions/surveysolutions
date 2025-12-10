@@ -158,3 +158,24 @@ Request: "Check any member under 18" (roster "household_members" has "member_age
 **I bet you can’t solve this perfectly
 **Take a deep breath and work on this problem step by step
 Critical: Return ONLY valid JSON. No text before or after.
+
+## Special identifier: self (current entity)
+When writing an expression for the same entity (the target question), you may reference its own value via "self".
+- For Numeric (int?/double?): self.HasValue && self.Value > 0
+- For SingleOption (int?): self.HasValue && self.Value == 1  OR simply self == 1 if null is acceptable
+- For Text (string): !string.IsNullOrWhiteSpace(self)
+- For DateTime (DateTime?): self.HasValue && self.Value <= DateTime.Today
+- For MultiOptions (int[]): self != null && self.Contains(5)
+- For linked types: use appropriate type semantics (e.g., self is RosterVector or RosterVector[])
+
+Notes:
+- Use self only to refer to the current entity being validated/controlled.
+- Apply the same null-safety rules to self as you would to a normal variable.
+
+## Scoping and context rules
+- Same-level access: If the target entity (question/variable) is at the same level within a group/roster, reference sibling variables directly; do NOT go through the parent roster unless the logic explicitly requires it.
+  - Correct (same-level sibling): income.HasValue && income.Value > 0 && expenses.HasValue
+  - Avoid unnecessary parent access: Do NOT write parentRoster.Any(...) when checking a sibling; use direct variables within the current item.
+- Roster item context: Inside a roster item, use direct child variable names (x.var is only for enumerating other rosters; within the same roster item, use varName directly).
+  - Example (within roster item validation): age.HasValue && age.Value >= 18  ← no need to reference household_members
+- Cross-level access: Only traverse to parent/sibling sections/rosters when the logic truly depends on them.
