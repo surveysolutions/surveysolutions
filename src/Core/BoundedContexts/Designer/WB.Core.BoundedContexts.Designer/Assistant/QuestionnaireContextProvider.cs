@@ -6,12 +6,15 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Newtonsoft.Json;
+using WB.Core.BoundedContexts.Designer.CodeGenerationV2;
+using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Designer.Assistant;
 
-public class QuestionnaireContextProvider(IDesignerQuestionnaireStorage questionnaireStorage) 
+public class QuestionnaireContextProvider(IDesignerQuestionnaireStorage questionnaireStorage,
+    IQuestionTypeToCSharpTypeMapper questionTypeToCSharpTypeMapper) 
     : IQuestionnaireContextProvider
 {
     public string GetQuestionnaireContext(Guid questionnaireId, Guid entityId, List<string>? loadGroups = null)
@@ -47,7 +50,8 @@ public class QuestionnaireContextProvider(IDesignerQuestionnaireStorage question
 
         if (relevantChildren.Any())
         {
-            node.Children = BuildOptimizedChildren(relevantChildren, pathToEntity, targetEntityId, 0, loadGroups);
+            node.Children = BuildOptimizedChildren(relevantChildren, pathToEntity, targetEntityId, 0, loadGroups,
+                new ReadOnlyQuestionnaireDocument(document));
             node.HasOmittedChildren = relevantChildren.Count > (node.Children?.Count ?? 0);
         }
 
@@ -59,7 +63,8 @@ public class QuestionnaireContextProvider(IDesignerQuestionnaireStorage question
         List<Guid> pathToEntity, 
         Guid targetEntityId,
         int currentDepth,
-        List<string> loadGroups)
+        List<string> loadGroups,
+        ReadOnlyQuestionnaireDocument questionnaireDocument)
     {
         var result = new List<QuestionnaireTreeNode>();
         
@@ -71,7 +76,6 @@ public class QuestionnaireContextProvider(IDesignerQuestionnaireStorage question
             var isTargetSibling = pathToEntity.Any() && pathToEntity.Last() != childId && 
                                   children.Any(c => c.PublicKey == pathToEntity.Last());
             
-            // Проверяем, запрошена ли эта группа для загрузки
             var isRequestedForLoad = !string.IsNullOrEmpty(child.VariableName) && 
                                      loadGroups.Contains(child.VariableName);
             
@@ -81,11 +85,10 @@ public class QuestionnaireContextProvider(IDesignerQuestionnaireStorage question
             
             if (shouldInclude)
             {
-                // Включаем детей для нод на пути, целевой ноды или запрошенных групп
                 var includeChildren = isInPath || isTarget || isRequestedForLoad;
                 
                 var treeNode = BuildOptimizedNode(child, pathToEntity, targetEntityId, currentDepth + 1, 
-                    includeChildren, loadGroups);
+                    includeChildren, loadGroups, questionnaireDocument);
                 if (treeNode != null)
                 {
                     result.Add(treeNode);
@@ -101,7 +104,8 @@ public class QuestionnaireContextProvider(IDesignerQuestionnaireStorage question
         Guid targetEntityId,
         int currentDepth,
         bool includeChildren,
-        List<string> loadGroups)
+        List<string> loadGroups,
+        ReadOnlyQuestionnaireDocument questionnaireDocument)
     {
         // Skip StaticText nodes
         if (node is StaticText)
@@ -110,7 +114,7 @@ public class QuestionnaireContextProvider(IDesignerQuestionnaireStorage question
         var treeNode = new QuestionnaireTreeNode
         {
             VariableName = node.VariableName,
-            Type = GetNodeType(node)
+            Type = GetNodeType(node,questionnaireDocument)
         };
 
         // Add title based on node type
@@ -124,7 +128,7 @@ public class QuestionnaireContextProvider(IDesignerQuestionnaireStorage question
             
             if (includeChildren && relevantChildren.Any())
             {
-                treeNode.Children = BuildOptimizedChildren(relevantChildren, pathToEntity, targetEntityId, currentDepth, loadGroups);
+                treeNode.Children = BuildOptimizedChildren(relevantChildren, pathToEntity, targetEntityId, currentDepth, loadGroups, questionnaireDocument);
                 treeNode.HasOmittedChildren = relevantChildren.Count > (treeNode.Children?.Count ?? 0);
             }
             else if (relevantChildren.Any())
@@ -172,35 +176,20 @@ public class QuestionnaireContextProvider(IDesignerQuestionnaireStorage question
         return false;
     }
 
-    private string GetNodeType(IComposite node)
+    private string GetNodeType(IComposite node, ReadOnlyQuestionnaireDocument questionnaireDocument)
     {
         return node switch
         {
             Group g when g.IsRoster => "Roster",
             Group => "Group",
-            IQuestion q => MapQuestionTypeToCSharpType(q),
+            IQuestion q => MapQuestionTypeToCSharpType(q, questionnaireDocument),
             Variable => "Variable",
             _ => node.GetType().Name
         };
     }
 
-    private static string MapQuestionTypeToCSharpType(IQuestion question)
+    private string MapQuestionTypeToCSharpType(IQuestion question, ReadOnlyQuestionnaireDocument questionnaireDocument)
     {
-        var questionType = question.QuestionType;
-        return questionType switch
-        {
-            QuestionType.Text => "string",
-            QuestionType.Numeric => (question as INumericQuestion)?.IsInteger == true ? "int?" : "double?",
-            QuestionType.DateTime => "DateTime?",
-            QuestionType.SingleOption => "int?",
-            QuestionType.MultyOption => "int[]",
-            QuestionType.GpsCoordinates => "GeoPosition",
-            QuestionType.TextList => "string[]",
-            QuestionType.QRBarcode => "string",
-            QuestionType.Multimedia => "string",
-            QuestionType.Area => "Area",
-            QuestionType.Audio => "string",
-            _ => throw new ArgumentOutOfRangeException(nameof(questionType), questionType, null)
-        };
+        return questionTypeToCSharpTypeMapper.GetQuestionType(question, questionnaireDocument);
     }
 }
