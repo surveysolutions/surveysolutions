@@ -16,19 +16,29 @@ public class QuestionnaireContextProvider(IDesignerQuestionnaireStorage question
 {
     public string GetQuestionnaireContext(Guid questionnaireId, Guid entityId, List<string>? loadGroups = null)
     {
+        string result = string.Empty;
+        
         loadGroups ??= new List<string>();
         
         var questionnaireDocument = questionnaireStorage.Get(questionnaireId);
         if (questionnaireDocument == null)
             throw new ArgumentException($"Questionnaire with id {questionnaireId} not found");
         
+        var entity = questionnaireDocument.Find<IComposite>(entityId);
+        if (entity != null)
+        {
+            result = result + $"context (entity name):'{entity.VariableName}'";
+        }
+
         // Build path to target entity
         var pathToEntity = FindPathToEntity(questionnaireDocument, entityId);
         
         var simplifiedTree = BuildOptimizedTree(questionnaireDocument, pathToEntity, entityId, loadGroups);
         var json = JsonConvert.SerializeObject(simplifiedTree, Formatting.Indented);
 
-        return $"Context for questionnaire: {json}";
+        result = result + $"context (questionnaire):{json}";
+        
+        return result;
     }
 
     private QuestionnaireTreeNode BuildOptimizedTree(QuestionnaireDocument document, 

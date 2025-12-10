@@ -90,7 +90,7 @@ public class QuestionnaireAssistant(
             entityId, 
             loadedGroups);
 
-        conversationMessages.Add(new AssistantMessage("user", userPrompt));
+        //conversationMessages.Add(new AssistantMessage("user", userPrompt));
 
         var userPromptWithQuestionnaire = userPrompt + "\n\nCurrent questionnaire context:\n" + questionnaireJson;
         messages.Add(new AssistantMessage("user", userPromptWithQuestionnaire));
