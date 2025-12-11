@@ -1,5 +1,5 @@
 <template>
-    <v-card class="chat-container" height="100%" style="margin: 0; border-radius: 0;">
+    <v-card class="chat-container" style="margin: 0; border-radius: 0;">
         <v-card-title class="d-flex justify-space-between align-center pa-4">
             <div class="d-flex align-center">
                 <v-icon class="mr-2" color="primary">mdi-chat</v-icon>
@@ -219,13 +219,8 @@ export default {
     display: flex;
     flex-direction: column;
     font-size: 14px;
-    position: fixed;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    width: 16.666667%;
-    /* col-xs-2 */
-    z-index: 100;
+    height: 100%;
+    width: 100%;
 }
 
 .chat-container .v-card-title {
