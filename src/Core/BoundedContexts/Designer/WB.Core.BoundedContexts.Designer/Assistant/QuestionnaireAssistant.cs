@@ -15,27 +15,26 @@ public class QuestionnaireAssistant(
     ILogger<QuestionnaireAssistant> logger) 
     : IQuestionnaireAssistant
 {
-    
     public async Task<AssistantResult> GetResponseAsync(AssistantRequest request, IModelSettings modelSettings)
     {
-        var allLoadedGroups = new List<string>();
+        // Track requested groups without duplicates and with case-insensitive matching
+        var loadedGroups = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         var conversationMessages = new List<AssistantMessage>(request.Messages);
         
         // Reject any system messages from the client
-        if (conversationMessages.Any(m => m.role != null && m.role.Trim().ToLower() == "system"))
+        if (conversationMessages.Any(m => m.role.Trim().ToLower() == "system"))
             throw new ArgumentException("System messages are not allowed from the client.");
 
         if (string.IsNullOrWhiteSpace(request.Prompt))
             throw new ArgumentException("Either 'messages' or 'prompt' must be provided.");
 
-
         const int maxAttempts = 30;
         for (int attempt = 1; attempt <= maxAttempts; attempt++)
         {
-            logger.LogInformation($"AI Assistant attempt {attempt}/{maxAttempts}. Loaded groups: {string.Join(", ", allLoadedGroups)}");
+            logger.LogInformation($"AI Assistant attempt {attempt}/{maxAttempts}. Loaded groups: {string.Join(", ", loadedGroups)}");
             
             var result = await MakeAiRequestAsync(modelSettings, request.QuestionnaireId, request.EntityId, request.Prompt,
-                conversationMessages, allLoadedGroups);
+                conversationMessages, loadedGroups.ToList());
             
             if (result.Final)
             {
@@ -45,19 +44,21 @@ public class QuestionnaireAssistant(
             
             if (result.LoadGroups.Any())
             {
-                var newGroups = result.LoadGroups.Where(g => !allLoadedGroups.Contains(g)).ToList();
-                if (!newGroups.Any())
+                // Add only new groups
+                var newGroups = result.LoadGroups.Where(g => !loadedGroups.Contains(g)).ToList();
+                if (newGroups.Count == 0)
                 {
                     logger.LogWarning("AI requested groups that are already loaded. Breaking the loop.");
                     result.Final = true;
                     return result;
                 }
                 
-                allLoadedGroups.AddRange(newGroups);
+                foreach (var g in newGroups)
+                    loadedGroups.Add(g);
                 
+                // Keep conversation context tight
                 conversationMessages.Add(new AssistantMessage("assistant", result.Message));
-                conversationMessages.Add(new AssistantMessage("user", 
-                    $"Here are the requested groups: {string.Join(", ", newGroups)}. Please continue."));
+                conversationMessages.Add(new AssistantMessage("user", $"Here are the requested groups: {string.Join(", ", newGroups)}. Please continue."));
                 
                 logger.LogInformation($"Loading additional groups: {string.Join(", ", newGroups)}");
             }
@@ -90,14 +91,13 @@ public class QuestionnaireAssistant(
             entityId, 
             loadedGroups);
 
-        //conversationMessages.Add(new AssistantMessage("user", userPrompt));
-
+        // Append the prompt with current questionnaire context
         var userPromptWithQuestionnaire = userPrompt + "\n\nCurrent questionnaire context:\n" + questionnaireJson;
         messages.Add(new AssistantMessage("user", userPromptWithQuestionnaire));
 
         var payloadObj = new {
             model = modelSettings.ModelName,
-            messages = messages,
+            messages,
             max_tokens = 700,
             temperature = 0.7,
         };
@@ -113,27 +113,25 @@ public class QuestionnaireAssistant(
 
         try
         {
-            using (var httpClient = new HttpClient())
+            using var httpClient = new HttpClient();
+            var response = await httpClient.SendAsync(requestMessage);
+            var responseBody = await response.Content.ReadAsStringAsync();
+            if (!response.IsSuccessStatusCode)
             {
-                var response = await httpClient.SendAsync(requestMessage);
-                var responseBody = await response.Content.ReadAsStringAsync();
-                if (!response.IsSuccessStatusCode)
-                {
-                    throw new ArgumentException(responseBody);
-                }
-                
-                // Parse the AI response and extract the assistant's message
-                var aiResponse = ParseAiResponse(responseBody);
-                
-                return new AssistantResult() 
-                { 
-                    Answer = responseBody,
-                    Final = aiResponse?.Final ?? true,
-                    LoadGroups = aiResponse?.LoadGroups ?? new List<string>(),
-                    Expression = aiResponse?.Expression,
-                    Message = aiResponse?.Message ?? string.Empty
-                };
+                throw new ArgumentException(responseBody);
             }
+            
+            // Parse the AI response and extract the assistant's message
+            var aiResponse = ParseAiResponse(responseBody);
+            
+            return new AssistantResult() 
+            { 
+                Answer = responseBody,
+                Final = aiResponse?.Final ?? true,
+                LoadGroups = aiResponse?.LoadGroups ?? new List<string>(),
+                Expression = aiResponse?.Expression,
+                Message = aiResponse?.Message ?? string.Empty
+            };
         }
         catch (Exception ex)
         {
@@ -146,7 +144,6 @@ public class QuestionnaireAssistant(
     {
         try
         {
-            // Parse the OpenAI/LLaMA API response format
             using var doc = System.Text.Json.JsonDocument.Parse(responseBody);
             
             if (!doc.RootElement.TryGetProperty("choices", out var choices) || 
@@ -171,10 +168,8 @@ public class QuestionnaireAssistant(
                 return null;
             }
 
-            // Try to extract JSON from the message content
             var jsonContent = ExtractJsonFromMessage(messageContent);
             
-            // Try to parse the structured response
             try
             {
                 var aiResponse = System.Text.Json.JsonSerializer.Deserialize<AssistantAiResponse>(
@@ -192,11 +187,9 @@ public class QuestionnaireAssistant(
             }
             catch (System.Text.Json.JsonException)
             {
-                // AI didn't return proper JSON structure, treat as unstructured response
                 logger.LogWarning("AI returned unstructured response (not JSON). Treating as final response.");
             }
             
-            // Fallback: AI didn't follow the JSON format, return a final response with the message
             return new AssistantAiResponse
             {
                 Final = true,
@@ -250,7 +243,6 @@ public class QuestionnaireAssistant(
         var startIndex = trimmed.IndexOf('{');
         if (startIndex >= 0)
         {
-            // Find matching closing brace
             var braceCount = 0;
             var endIndex = -1;
             
@@ -276,14 +268,12 @@ public class QuestionnaireAssistant(
             }
         }
         
-        // No JSON found, return as-is
         logger.LogDebug("No JSON structure found in message, returning as-is");
         return trimmed;
     }
     
     private async Task<string> GetSystemPrompt()
     {
-        string systemPrompt;
         try
         {
             var assembly = Assembly.GetExecutingAssembly();
@@ -291,19 +281,15 @@ public class QuestionnaireAssistant(
                 
             await using var stream = assembly.GetManifestResourceStream(resourceName);
             if (stream == null)
-            {
                 throw new FileNotFoundException($"Embedded resource '{resourceName}' not found.");
-            }
                 
             using var reader = new StreamReader(stream);
-            systemPrompt = await reader.ReadToEndAsync();
+            return await reader.ReadToEndAsync();
         }
         catch (Exception ex)
         {
             logger.LogError(ex, "Failed to load system prompt from embedded resources");
-            systemPrompt = "You are a helpful AI assistant specialized in Survey Solutions questionnaire design.";
+            return "You are a helpful AI assistant specialized in Survey Solutions questionnaire design.";
         }
-
-        return systemPrompt;
     }
 }

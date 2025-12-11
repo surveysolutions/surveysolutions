@@ -4,7 +4,6 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Designer.CodeGenerationV2;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
@@ -38,7 +37,10 @@ public class QuestionnaireContextProvider(IDesignerQuestionnaireStorage question
         // Build path to target entity
         var pathToEntity = FindPathToEntity(questionnaireDocument, entityId);
         
-        var simplifiedTree = BuildOptimizedTree(questionnaireDocument, pathToEntity, entityId, loadGroups);
+        // Precompute requested groups and their ancestor chain to ensure off-path branches are included
+        var (requestedGroupIds, requestedAncestors) = FindRequestedGroupsWithAncestors(questionnaireDocument, loadGroups);
+        
+        var simplifiedTree = BuildOptimizedTree(questionnaireDocument, pathToEntity, entityId, requestedGroupIds, requestedAncestors);
         var json = JsonConvert.SerializeObject(simplifiedTree, Formatting.Indented);
 
         result += $"{Environment.NewLine} context (questionnaire):{json}";
@@ -47,7 +49,7 @@ public class QuestionnaireContextProvider(IDesignerQuestionnaireStorage question
     }
 
     private QuestionnaireTreeNode BuildOptimizedTree(QuestionnaireDocument document, 
-        List<Guid> pathToEntity, Guid targetEntityId, List<string> loadGroups)
+        List<Guid> pathToEntity, Guid targetEntityId, HashSet<Guid> requestedGroupIds, HashSet<Guid> requestedAncestors)
     {
         var node = new QuestionnaireTreeNode
         {
@@ -62,7 +64,8 @@ public class QuestionnaireContextProvider(IDesignerQuestionnaireStorage question
 
         if (relevantChildren.Any())
         {
-            node.Children = BuildOptimizedChildren(relevantChildren, pathToEntity, targetEntityId, 0, loadGroups,
+            node.Children = BuildOptimizedChildren(relevantChildren, pathToEntity, targetEntityId, 0,
+                requestedGroupIds, requestedAncestors,
                 new ReadOnlyQuestionnaireDocument(document));
             node.HasOmittedChildren = relevantChildren.Count > (node.Children?.Count ?? 0);
         }
@@ -75,8 +78,10 @@ public class QuestionnaireContextProvider(IDesignerQuestionnaireStorage question
         List<Guid> pathToEntity, 
         Guid targetEntityId,
         int currentDepth,
-        List<string> loadGroups,
-        ReadOnlyQuestionnaireDocument questionnaireDocument)
+        HashSet<Guid> requestedGroupIds,
+        HashSet<Guid> requestedAncestors,
+        ReadOnlyQuestionnaireDocument questionnaireDocument,
+        bool forceFullExpansion = false)
     {
         var result = new List<QuestionnaireTreeNode>();
         
@@ -88,19 +93,32 @@ public class QuestionnaireContextProvider(IDesignerQuestionnaireStorage question
             var isTargetSibling = pathToEntity.Any() && pathToEntity.Last() != childId && 
                                   children.Any(c => c.PublicKey == pathToEntity.Last());
             
-            var isRequestedForLoad = !string.IsNullOrEmpty(child.VariableName) && 
-                                     loadGroups.Contains(child.VariableName);
+            var isRequestedGroup = requestedGroupIds.Contains(childId);
+            var isRequestedAncestor = requestedAncestors.Contains(childId);
             
-            var shouldInclude = currentDepth == 0 || isInPath || isTarget || isRequestedForLoad ||
+            // If we are forcing full expansion of this subtree, include all children regardless of path/request
+            var shouldInclude = forceFullExpansion || currentDepth == 0 || isInPath || isTarget || isRequestedGroup || isRequestedAncestor ||
                                (isTargetSibling && pathToEntity.Count > 0 && 
                                 children.Any(c => c.PublicKey == pathToEntity[^1]));
             
             if (shouldInclude)
             {
-                var includeChildren = isInPath || isTarget || isRequestedForLoad;
+                // Include children if forceFullExpansion OR this node is along any included branch
+                var includeChildren = forceFullExpansion || isInPath || isTarget || isRequestedGroup || isRequestedAncestor;
+                
+                // Force include if this composite's variable name directly matches any requested group name (case-insensitive)
+                if (!includeChildren && child is Group g && !string.IsNullOrEmpty(g.VariableName))
+                {
+                    includeChildren = _requestedGroupNames?.Contains(g.VariableName.ToLowerInvariant()) == true;
+                }
+                
+                // If this specific node is explicitly requested by name or id, propagate full expansion to its subtree
+                var propagateFullExpansion = forceFullExpansion || isRequestedGroup ||
+                    (child is Group g2 && !string.IsNullOrEmpty(g2.VariableName) &&
+                     _requestedGroupNames?.Contains(g2.VariableName.ToLowerInvariant()) == true);
                 
                 var treeNode = BuildOptimizedNode(child, pathToEntity, targetEntityId, currentDepth + 1, 
-                    includeChildren, loadGroups, questionnaireDocument);
+                    includeChildren, requestedGroupIds, requestedAncestors, questionnaireDocument, propagateFullExpansion);
                 if (treeNode != null)
                 {
                     result.Add(treeNode);
@@ -116,8 +134,10 @@ public class QuestionnaireContextProvider(IDesignerQuestionnaireStorage question
         Guid targetEntityId,
         int currentDepth,
         bool includeChildren,
-        List<string> loadGroups,
-        ReadOnlyQuestionnaireDocument questionnaireDocument)
+        HashSet<Guid> requestedGroupIds,
+        HashSet<Guid> requestedAncestors,
+        ReadOnlyQuestionnaireDocument questionnaireDocument,
+        bool forceFullExpansion = false)
     {
         // Skip StaticText nodes
         if (node is StaticText)
@@ -138,9 +158,15 @@ public class QuestionnaireContextProvider(IDesignerQuestionnaireStorage question
                 .Where(child => child is not StaticText)
                 .ToList();
             
-            if (includeChildren && relevantChildren.Any())
+            // If this group's variable name is explicitly requested, force expansion
+            var isExplicitlyRequestedByName = !string.IsNullOrEmpty(group.VariableName) &&
+                                              _requestedGroupNames?.Contains(group.VariableName.ToLowerInvariant()) == true;
+            var expandChildren = forceFullExpansion || includeChildren || isExplicitlyRequestedByName;
+            
+            if (expandChildren && relevantChildren.Any())
             {
-                treeNode.Children = BuildOptimizedChildren(relevantChildren, pathToEntity, targetEntityId, currentDepth, loadGroups, questionnaireDocument);
+                treeNode.Children = BuildOptimizedChildren(relevantChildren, pathToEntity, targetEntityId, currentDepth, 
+                    requestedGroupIds, requestedAncestors, questionnaireDocument, forceFullExpansion || isExplicitlyRequestedByName);
                 treeNode.HasOmittedChildren = relevantChildren.Count > (treeNode.Children?.Count ?? 0);
             }
             else if (relevantChildren.Any())
@@ -204,4 +230,59 @@ public class QuestionnaireContextProvider(IDesignerQuestionnaireStorage question
     {
         return questionTypeToCSharpTypeMapper.GetQuestionType(question, questionnaireDocument);
     }
+
+    // Find all groups by variable names in loadGroups and collect their ancestor chain up to the questionnaire root
+    private (HashSet<Guid> requestedGroupIds, HashSet<Guid> requestedAncestors) FindRequestedGroupsWithAncestors(
+        QuestionnaireDocument document, List<string> loadGroups)
+    {
+        var requestedGroupIds = new HashSet<Guid>();
+        var requestedAncestors = new HashSet<Guid>();
+        
+        // If there are no requested groups, nothing to collect
+        if (loadGroups.Count == 0)
+            return (requestedGroupIds, requestedAncestors);
+        
+        // Normalize requested names to lowercase for case-insensitive matching
+        _requestedGroupNames = new HashSet<string>(loadGroups.Select(n => n.Trim().ToLowerInvariant()));
+        
+        // DFS: track path stack to add ancestors when we hit a requested group
+        var pathStack = new Stack<IComposite>();
+        
+        void Dfs(IEnumerable<IComposite> children)
+        {
+            foreach (var child in children)
+            {
+                pathStack.Push(child);
+                
+                if (child is Group g)
+                {
+                    // If this group's variable name is requested, mark it and all ancestors
+                    if (!string.IsNullOrEmpty(g.VariableName) && _requestedGroupNames.Contains(g.VariableName.ToLowerInvariant()))
+                    {
+                        requestedGroupIds.Add(g.PublicKey);
+                        foreach (var ancestor in pathStack)
+                        {
+                            requestedAncestors.Add(ancestor.PublicKey);
+                        }
+                    }
+                    
+                    // Continue traversal
+                    Dfs(g.Children);
+                }
+                else if (child is IQuestion || child is Variable)
+                {
+                    // no-op, still need to maintain stack for ancestor tracking
+                }
+                
+                pathStack.Pop();
+            }
+        }
+        
+        Dfs(document.Children);
+        
+        return (requestedGroupIds, requestedAncestors);
+    }
+    
+    // Holds normalized requested group names for direct variable-name matching during traversal
+    private HashSet<string>? _requestedGroupNames;
 }
