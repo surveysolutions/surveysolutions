@@ -108,7 +108,10 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
                     if (typeof(T) == typeof(QuestionnaireDocument)) return typeof(StoredQuestionnaireDocument);
 
                     var attribute = Attribute.GetCustomAttribute(typeof(T), typeof(StoredInAttribute));
-                    if (attribute == null) throw new Exception("Attribute was not found");
+                    if (attribute == null)
+                    {
+                        throw new Exception("Attribute for storage was not found");
+                    }
                     
                     StoredInAttribute storedInAttribute = (StoredInAttribute)attribute;
                     queryType = storedInAttribute.StoredIn;
