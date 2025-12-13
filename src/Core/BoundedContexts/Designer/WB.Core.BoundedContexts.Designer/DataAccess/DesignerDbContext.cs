@@ -81,7 +81,8 @@ namespace WB.Core.BoundedContexts.Designer.DataAccess
             builder.Entity<DesignerIdentityUser>(x => x.Property(p => p.PasswordSalt).HasColumnName("PasswordSalt"));
             builder.Entity<DesignerIdentityUser>(x => x.Property(p => p.CanImportOnHq).HasColumnName("CanImportOnHq"));
             builder.Entity<DesignerIdentityUser>(x => x.Property(p => p.CreatedAtUtc).HasColumnName("CreatedAtUtc"));
-
+            builder.Entity<DesignerIdentityUser>(x => x.Property(p => p.AssistantEnabled).HasColumnName("AssistantEnabled"));
+            
             builder.ApplyConfiguration(new QuestionnaireListViewItemTypeConfig());
             builder.ApplyConfiguration(new QuestionnaireListViewFolderTypeConfig());
             builder.ApplyConfiguration(new SharedPersonsTypeConfig());

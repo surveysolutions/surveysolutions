@@ -12,6 +12,8 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
         public virtual DateTime CreatedAtUtc { get; set; }
 
         public virtual string? PendingEmail { get; set; }
+        
+        public virtual bool? AssistantEnabled { get; set; }
     }
 
     public class DesignerIdentityRole : IdentityRole<Guid>

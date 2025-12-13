@@ -5,10 +5,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Designer.Assistant;
 using WB.Core.BoundedContexts.Designer.Assistant.Settings;
 using WB.Core.BoundedContexts.Designer.Implementation;
+using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.UI.Designer.Controllers.Api.Designer
@@ -21,6 +23,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         private readonly IConfiguration configuration;
         private readonly IModelSettings modelSettings;
         private readonly ILogger<AssistanceController> logger;
+        private readonly UserManager<DesignerIdentityUser> userManager;
 
         private readonly IQuestionnaireContextProvider questionnaireContextProvider;
         private readonly IPlainKeyValueStorage<AssistantSettings> appSettingsStorage;
@@ -32,7 +35,8 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             ILogger<AssistanceController> logger,
             IQuestionnaireContextProvider questionnaireContextProvider,
             IQuestionnaireAssistant questionnaireAssistant,
-            IPlainKeyValueStorage<AssistantSettings> appSettingsStorage)
+            IPlainKeyValueStorage<AssistantSettings> appSettingsStorage,
+            UserManager<DesignerIdentityUser> userManager)
         {
             this.configuration = configuration;
             //this.questionnaireContextProvider = questionnaireContextProvider;
@@ -42,6 +46,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
              
             this.modelSettings = new AssistantModelSettings(configuration);
             this.appSettingsStorage = appSettingsStorage;
+            this.userManager = userManager;
         }
 
         public class Message
@@ -64,10 +69,15 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         {
             var setting = appSettingsStorage.GetById(AssistantSettings.AssistantSettingsKey);
             
+            var user = await userManager.GetUserAsync(User);
+                
             //check if AI assistant is enabled for current user
-            if(setting == null || !setting.IsEnabled || !setting.IsAvailableToAllUsers)
+            if(setting == null || !setting.IsEnabled )
                 return  StatusCode(406, "AI assistant is not enabled.");
             
+            if(setting.IsAvailableToAllUsers != true && user?.AssistantEnabled != true)
+                return  StatusCode(406, "AI assistant is not enabled.");
+
             if (!request.QuestionnaireId.HasValue)
                 return  BadRequest("Either 'questionnaireId' must be provided.");
             if (!request.EntityId.HasValue)

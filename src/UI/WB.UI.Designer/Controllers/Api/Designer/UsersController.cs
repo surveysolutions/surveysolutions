@@ -34,7 +34,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 UserName = User.GetUserNameOrNull(),
                 Email = user?.Email,
                 IsAuthenticated = isAuthenticated,
-                AIAvailable = isAuthenticated && settings != null && settings.IsEnabled && settings.IsAvailableToAllUsers
+                AIAvailable = isAuthenticated && settings != null && settings.IsEnabled && (settings.IsAvailableToAllUsers || user?.AssistantEnabled == true)
                 //check if AI assistant is enabled for current user
             };
             return Ok(response);
