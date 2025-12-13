@@ -78,7 +78,7 @@ namespace WB.UI.Designer.Areas.Admin.Pages
                     CanOpen = false,
                     CanDelete = false,
                     CanPreview = canEdit,
-                    CanImportOnHq = identityUser.CanImportOnHq,
+                    AssistantEnabled = identityUser.AssistantEnabled ?? false,
                     FullName = fullName
                 };
                 retVal.Add(uiItem);
@@ -121,8 +121,8 @@ namespace WB.UI.Designer.Areas.Admin.Pages
         [Display(Name = "Lockout end")]
         public TimeSpan? LockoutEnd { get; set; }
         
-        [Display(Name = "Can import on HQ")]
-        public bool CanImportOnHq { get; set; }
+        [Display(Name = "Assistant Enabled")]
+        public bool AssistantEnabled { get; set; }
 
         [Display(Name = "Name", Order = 1)]
         [Default]
