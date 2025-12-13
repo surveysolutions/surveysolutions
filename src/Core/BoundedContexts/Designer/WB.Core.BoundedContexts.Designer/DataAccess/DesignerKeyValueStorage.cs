@@ -110,7 +110,7 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider
                     var attribute = Attribute.GetCustomAttribute(typeof(T), typeof(StoredInAttribute));
                     if (attribute == null)
                     {
-                        throw new Exception("Attribute for storage was not found");
+                        throw new Exception($"Attribute for storage was not found for type {typeof(T).Name}");
                     }
                     
                     StoredInAttribute storedInAttribute = (StoredInAttribute)attribute;
