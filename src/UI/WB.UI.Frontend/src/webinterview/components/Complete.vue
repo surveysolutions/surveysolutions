@@ -25,7 +25,7 @@
         <ul class="wrapper-info complete-tabs" v-else role="tablist">
             <li v-for="(completeGroup, idx) in completeGroups" :key="idx"
                 :class="['tab-item', completeGroup.cssClass, { active: idx === activeCompleteGroupIndex, disabled: !(completeGroup.items?.length > 0) }]"
-                role="presentation" @click.stop="setActive(idx)">
+                :aria-label="completeGroup.ariaLabel" role="presentation" @click.stop="setActive(idx)">
                 <div class="tab-count">{{ completeGroup.total }}</div>
                 <div class="tab-title" v-dompurify-html="completeGroup.title"></div>
             </li>
@@ -421,21 +421,24 @@ export default {
                 title: this.$t('WebInterviewUI.Complete_Tab_CriticalErrors'),
                 items: critical,
                 total: criticalTotal,
-                cssClass: 'errors'
+                cssClass: 'errors',
+                ariaLabel: 'Critical errors tab'
             })
 
             groups.push({
                 title: this.$t('WebInterviewUI.Complete_Tab_QuestionsWithErrors'),
                 items: this.completeInfo?.entitiesWithError,
                 total: this.completeInfo?.errorsCount,
-                cssClass: 'errors'
+                cssClass: 'errors',
+                ariaLabel: 'Errors tab'
             })
 
             groups.push({
                 title: this.$t('WebInterviewUI.Complete_Tab_UnansweredQuestions'),
                 items: this.completeInfo?.unansweredQuestions,
                 total: this.completeInfo?.unansweredCount,
-                cssClass: 'unanswered'
+                cssClass: 'unanswered',
+                ariaLabel: 'Unanswered questions tab'
             })
 
             return groups;
