@@ -7,7 +7,7 @@
         {
             <div class="panel-heading panel-warning">
                 @Html.Raw(string.Format(Users.ObserverDisclaimerFormat, User.Identity.Name))
-                <a asp-action="ReturnToObserver" asp-controller="Account">@Users.ClickToReturn</a>
+                <a href="/Account/ReturnToObserver">@Users.ClickToReturn</a>
             </div>
         }
         @if (ViewBag.GlobalNotice != null)

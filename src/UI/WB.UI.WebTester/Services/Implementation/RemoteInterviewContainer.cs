@@ -107,9 +107,8 @@ namespace WB.UI.WebTester.Services.Implementation
                     {
                         commandHandler.Invoke(command, statefulInterview);
                     }
-                    catch (Exception)
+                    catch (InterviewException)
                     {
-                        statefulInterview.DropChangedTree();
                         statefulInterview.DiscardChanges();
                         throw;
                     }
