@@ -103,7 +103,10 @@
     </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
+
+@import '../../assets/css/_variables.scss';
+
 .submit-info {
     color: #343434;
     font-family: RobotoRegular;
@@ -179,15 +182,15 @@
 }
 
 .tab-item.errors {
-    color: #DB3913;
+    color: $red_error;
 }
 
 .tab-item.unanswered {
-    color: #2878BE;
+    color: $blue;
 }
 
 .tab-item.critical-rule-errors {
-    color: #DB3913;
+    color: $red_error;
 }
 
 .tab-item.disabled {
@@ -238,7 +241,7 @@
 }
 
 .tab-content-item .item-title {
-    color: rgba(0, 0, 0, 1);
+    color: $gray_text;
     font-family: RobotoRegular;
     font-weight: Bold;
     font-size: 14px;
@@ -247,7 +250,7 @@
 }
 
 .tab-content-item .item-error {
-    color: rgba(219, 57, 18, 1);
+    color: $red_error;
     font-family: RobotoRegular;
     font-size: 14px;
     opacity: 1;
@@ -255,7 +258,7 @@
 }
 
 .tab-content-item .item-comment {
-    color: rgba(0, 0, 0, 1);
+    color: $gray_text;
     font-family: RobotoRegular;
     font-size: 14px;
     opacity: 1;
@@ -272,11 +275,11 @@
 
 .tab-content.errors .tab-content-item::before,
 .tab-content.critical-rule-errors .tab-content-item::before {
-    background: #DB3913;
+    background: $red_error;
 }
 
 .tab-content.unanswered .tab-content-item::before {
-    background: #2878BE;
+    background: $blue;
 }
 
 .tab-content .tab-content-item::before {
