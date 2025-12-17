@@ -67,7 +67,7 @@ namespace Ncqrs.Domain
             this.changes.Clear();
         }
 
-        public void DiscardChanges()
+        public virtual void DiscardChanges()
         {
             this.changes.Clear();
         }
