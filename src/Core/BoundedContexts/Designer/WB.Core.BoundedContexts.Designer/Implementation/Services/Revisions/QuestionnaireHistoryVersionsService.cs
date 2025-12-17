@@ -203,7 +203,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Revisions
             QuestionnaireDocument questionnaireDocument,
             string? userAgent,
             Guid userId,
-            string? instanceId)
+            string? instanceId = null)
         {
             var meta = FromUserAgent(userAgent);
             meta.Hq.InstanceId = instanceId;
