@@ -38,7 +38,6 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         private readonly ISystemLog systemLog;
         private readonly IWorkspaceContextAccessor workspaceContextAccessor;
         private readonly IWorkspacesStorage workspaces;
-        private readonly IAuthorizedUser authorizedUser;
 
         private const int MaxPageSize = 100;
 
@@ -49,8 +48,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             IUnitOfWork unitOfWork,
             ISystemLog systemLog,
             IWorkspaceContextAccessor workspaceContextAccessor,
-            IWorkspacesStorage workspaces,
-            IAuthorizedUser authorizedUser)
+            IWorkspacesStorage workspaces)
         {
             this.usersFactory = usersFactory;
             this.archiveService = archiveService;
@@ -60,7 +58,6 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             this.systemLog = systemLog;
             this.workspaceContextAccessor = workspaceContextAccessor;
             this.workspaces = workspaces;
-            this.authorizedUser = authorizedUser;
         }
 
         /// <summary>
