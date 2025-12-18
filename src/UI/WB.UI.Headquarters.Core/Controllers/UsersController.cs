@@ -1144,7 +1144,8 @@ namespace WB.UI.Headquarters.Controllers
 
             // Headquarters can manage supervisors and interviewers
             if (this.authorizedUser.IsHeadquarter 
-                && (user.IsInRole(UserRoles.Supervisor) || user.IsInRole(UserRoles.Interviewer)))
+                && (user.IsInRole(UserRoles.Supervisor) || user.IsInRole(UserRoles.Interviewer))
+                && user.Workspaces.Any(x => this.authorizedUser.Workspaces.Contains(x.Workspace.Name)))
                 return true;
 
             // Supervisors can manage their interviewers
