@@ -98,13 +98,20 @@ namespace WB.UI.WebTester.Services.Implementation
             {
                 if (state == State.Teardown) throw new InterviewException("Interview deleted", InterviewDomainExceptionType.InterviewHardDeleted);
                 {
-                    Action<ICommand, IAggregateRoot> commandHandler =
-                        CommandRegistry.GetCommandHandler(command);
+                    Action<ICommand, IAggregateRoot> commandHandler = CommandRegistry.GetCommandHandler(command);
 
                     if(statefulInterview == null)
                         throw new InvalidOperationException("StatefulInterview must not be null.");
 
-                    commandHandler.Invoke(command, statefulInterview);
+                    try
+                    {
+                        commandHandler.Invoke(command, statefulInterview);
+                    }
+                    catch (InterviewException)
+                    {
+                        statefulInterview.DiscardChanges();
+                        throw;
+                    }
 
                     var eventStream = new UncommittedEventStream(null, statefulInterview.GetUnCommittedChanges());
                     statefulInterview.MarkChangesAsCommitted();

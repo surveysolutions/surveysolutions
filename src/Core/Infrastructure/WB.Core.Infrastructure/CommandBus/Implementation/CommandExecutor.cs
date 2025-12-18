@@ -141,6 +141,11 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
                 aggregateRootCache.EvictAggregateRoot(aggregateId);
                 throw;
             }
+            catch (Exception)
+            {
+                aggregate.DiscardChanges();
+                throw;
+            }
 
             if (!aggregate.HasUncommittedChanges())
                 return;
