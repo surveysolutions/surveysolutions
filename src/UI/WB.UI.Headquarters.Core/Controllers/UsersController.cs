@@ -1159,13 +1159,15 @@ namespace WB.UI.Headquarters.Controllers
 
         private bool HasPermissionsToChangeUserPassword(HqUser user)
         {
-            // Own password can always be changed
+            // Own password can always be changed (except interviewers need special permission)
             if (user.Id == this.authorizedUser.Id)
-                return true;
+                return !this.authorizedUser.IsInterviewer 
+                       || (this.profileSettingsStorage.GetById(AppSetting.ProfileSettings)?.AllowInterviewerUpdateProfile ?? false);
 
             // Only administrators and headquarters can change other users' passwords
+            //Admin can change password for any user except other admins
             if (this.authorizedUser.IsAdministrator)
-                return true;
+                return !user.IsInRole(UserRoles.Administrator);
 
             // Headquarters can change passwords for supervisors/interviewers in their workspaces
             if (this.authorizedUser.IsHeadquarter
