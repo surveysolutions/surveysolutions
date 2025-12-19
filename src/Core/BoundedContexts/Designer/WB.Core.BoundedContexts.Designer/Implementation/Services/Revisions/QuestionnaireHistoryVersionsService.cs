@@ -202,9 +202,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Revisions
         public async Task<int> TrackQuestionnaireImportAsync(
             QuestionnaireDocument questionnaireDocument,
             string? userAgent,
-            Guid userId)
+            Guid userId,
+            string? instanceId = null)
         {
             var meta = FromUserAgent(userAgent);
+            meta.Hq.InstanceId = instanceId;
 
             var command = new ImportQuestionnaireToHq(userId, meta, questionnaireDocument);
             commandService.Execute(command);
