@@ -136,21 +136,24 @@ namespace WB.Tests.Unit.Designer.Services
             var key = "test_key";
             var userId = Id.g1;
             var taskExecuted = false;
+            var tcs = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
             
             Func<PdfGenerationProgress, CancellationToken, Task> runGeneration = async (progress, token) =>  
             {
                 taskExecuted = true;
                 await Task.Delay(10, token);
                 progress.Finish();
+                tcs.TrySetResult(true);
             };
             
             // Act
             var progress = this.pdfQuery.GetOrAdd(userId, key, runGeneration);
             
-            // Allow worker thread to process the job
-            await Task.Delay(100);
+            // Wait deterministically for completion (with timeout safeguard)
+            var completed = await Task.WhenAny(tcs.Task, Task.Delay(5000)) == tcs.Task;
             
             // Assert
+            Assert.That(completed, Is.True, "Job should complete within timeout");
             Assert.That(taskExecuted, Is.True, "Job should have been executed");
             Assert.That(progress.Status, Is.EqualTo(PdfGenerationStatus.Finished), "Progress should be marked as finished");
         }
@@ -161,21 +164,36 @@ namespace WB.Tests.Unit.Designer.Services
             // Arrange
             var key = "test_key";
             var userId = Id.g1;
+            var tcs = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
             
             Func<PdfGenerationProgress, CancellationToken, Task> runGeneration = async (progress, token) =>  
             {
                 await Task.Delay(10, token);
+                tcs.TrySetResult(true);
                 throw new Exception("Test exception");
             };
             
             // Act
             var progress = this.pdfQuery.GetOrAdd(userId, key, runGeneration);
             
-            // Allow worker thread to process the job
-            await Task.Delay(100);
+            // Wait deterministically for worker to process the job (with timeout)
+            var processed = await Task.WhenAny(tcs.Task, Task.Delay(5000)) == tcs.Task;
+            Assert.That(processed, Is.True, "Job should be processed within timeout");
+
+            // Now wait until the worker catches the exception and marks progress as Failed
+            var failed = false;
+            for (int i = 0; i < 200; i++) // up to ~2s
+            {
+                if (progress.Status == PdfGenerationStatus.Failed)
+                {
+                    failed = true;
+                    break;
+                }
+                await Task.Delay(10);
+            }
             
             // Assert
-            Assert.That(progress.Status, Is.EqualTo(PdfGenerationStatus.Failed), "Progress should be marked as failed");
+            Assert.That(failed, Is.True, "Progress should be marked as failed");
         }
     }
 }
