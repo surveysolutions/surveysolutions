@@ -14,7 +14,7 @@ public class UploadPackageAnalyzerTests
     private class FakeFileSystemAccessor : IFileSystemAccessor
     {
         public string CombinePath(string path1, string path2) => Path.Combine(path1, path2);
-        public string CombinePath(params string[] pathes) => Path.Combine(pathes);
+        public string CombinePath(params string[] paths) => Path.Combine(paths);
         public string GetFileName(string filePath) => Path.GetFileName(filePath);
         public string GetFileNameWithoutExtension(string filePath) => Path.GetFileNameWithoutExtension(filePath);
         public string GetFileExtension(string filePath) => Path.GetExtension(filePath)?.ToLowerInvariant();
