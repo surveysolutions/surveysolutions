@@ -45,7 +45,7 @@ public class UploadPackageAnalyzerTests
         public bool IsHashValid(byte[] fileContent, byte[] hash) => true;
         public byte[] ReadAllBytes(string pathToFile, long? start = null, long? length = null) => new byte[0];
         public string ReadAllText(string pathToFile) => string.Empty;
-        public void CopyFileOrDirectory(string sourceDir, string targetDir, bool overrideAll = false, string[] fileExtentionsFilter = null) {}
+        public void CopyFileOrDirectory(string sourceDir, string targetDir, bool overrideAll = false, string[] fileExtensionsFilter = null) {}
         public void MarkFileAsReadonly(string pathToFile) {}
         public string ChangeExtension(string path1, string newExtension) => Path.ChangeExtension(path1, newExtension);
         public void MoveFile(string pathToFile, string newPathToFile) {}
