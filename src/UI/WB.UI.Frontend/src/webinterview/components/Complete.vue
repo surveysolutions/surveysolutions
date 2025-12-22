@@ -25,7 +25,7 @@
         <ul class="wrapper-info complete-tabs" v-else role="tablist">
             <li v-for="(completeGroup, idx) in completeGroups" :key="idx"
                 :class="['tab-item', completeGroup.cssClass, { active: idx === activeCompleteGroupIndex, disabled: !(completeGroup.items?.length > 0) }]"
-                role="presentation" @click.stop="setActive(idx)">
+                :aria-label="completeGroup.ariaLabel" role="presentation" @click.stop="setActive(idx)">
                 <div class="tab-count">{{ completeGroup.total }}</div>
                 <div class="tab-title" v-dompurify-html="completeGroup.title"></div>
             </li>
@@ -103,7 +103,10 @@
     </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
+
+@import '../../assets/css/_variables.scss';
+
 .submit-info {
     color: #343434;
     font-family: RobotoRegular;
@@ -179,15 +182,15 @@
 }
 
 .tab-item.errors {
-    color: #DB3913;
+    color: $red_error;
 }
 
 .tab-item.unanswered {
-    color: #2878BE;
+    color: $blue;
 }
 
 .tab-item.critical-rule-errors {
-    color: #DB3913;
+    color: $red_error;
 }
 
 .tab-item.disabled {
@@ -238,7 +241,7 @@
 }
 
 .tab-content-item .item-title {
-    color: rgba(0, 0, 0, 1);
+    color: $gray_text;
     font-family: RobotoRegular;
     font-weight: Bold;
     font-size: 14px;
@@ -247,7 +250,7 @@
 }
 
 .tab-content-item .item-error {
-    color: rgba(219, 57, 18, 1);
+    color: $red_error;
     font-family: RobotoRegular;
     font-size: 14px;
     opacity: 1;
@@ -255,7 +258,7 @@
 }
 
 .tab-content-item .item-comment {
-    color: rgba(0, 0, 0, 1);
+    color: $gray_text;
     font-family: RobotoRegular;
     font-size: 14px;
     opacity: 1;
@@ -272,11 +275,11 @@
 
 .tab-content.errors .tab-content-item::before,
 .tab-content.critical-rule-errors .tab-content-item::before {
-    background: #DB3913;
+    background: $red_error;
 }
 
 .tab-content.unanswered .tab-content-item::before {
-    background: #2878BE;
+    background: $blue;
 }
 
 .tab-content .tab-content-item::before {
@@ -421,21 +424,24 @@ export default {
                 title: this.$t('WebInterviewUI.Complete_Tab_CriticalErrors'),
                 items: critical,
                 total: criticalTotal,
-                cssClass: 'errors'
+                cssClass: 'errors',
+                ariaLabel: 'Critical errors tab'
             })
 
             groups.push({
                 title: this.$t('WebInterviewUI.Complete_Tab_QuestionsWithErrors'),
                 items: this.completeInfo?.entitiesWithError,
                 total: this.completeInfo?.errorsCount,
-                cssClass: 'errors'
+                cssClass: 'errors',
+                ariaLabel: 'Errors tab'
             })
 
             groups.push({
                 title: this.$t('WebInterviewUI.Complete_Tab_UnansweredQuestions'),
                 items: this.completeInfo?.unansweredQuestions,
                 total: this.completeInfo?.unansweredCount,
-                cssClass: 'unanswered'
+                cssClass: 'unanswered',
+                ariaLabel: 'Unanswered questions tab'
             })
 
             return groups;
