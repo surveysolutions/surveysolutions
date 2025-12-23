@@ -169,8 +169,8 @@ namespace WB.Tests.Unit.Designer.Services
             Func<PdfGenerationProgress, CancellationToken, Task> runGeneration = async (progress, token) =>  
             {
                 await Task.Delay(10, token);
-                tcs.TrySetResult(true);
-                throw new Exception("Test exception");
+                try { throw new Exception("Test exception"); }
+                finally { tcs.TrySetResult(true); }
             };
             
             // Act
@@ -181,19 +181,13 @@ namespace WB.Tests.Unit.Designer.Services
             Assert.That(processed, Is.True, "Job should be processed within timeout");
 
             // Now wait until the worker catches the exception and marks progress as Failed
-            var failed = false;
-            for (int i = 0; i < 200; i++) // up to ~2s
-            {
-                if (progress.Status == PdfGenerationStatus.Failed)
-                {
-                    failed = true;
-                    break;
-                }
+            var failedWithinTimeout = false;
+            for (int i = 0; i < 200 && progress.Status != PdfGenerationStatus.Failed; i++)
                 await Task.Delay(10);
-            }
+            failedWithinTimeout = progress.Status == PdfGenerationStatus.Failed;
             
             // Assert
-            Assert.That(failed, Is.True, "Progress should be marked as failed");
+            Assert.That(failedWithinTimeout, Is.True, "Progress should be marked as failed");
         }
     }
 }
