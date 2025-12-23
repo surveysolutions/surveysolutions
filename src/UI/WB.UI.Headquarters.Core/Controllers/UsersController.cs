@@ -667,7 +667,7 @@ namespace WB.UI.Headquarters.Controllers
             var userToUpdate = await this.userManager.FindByIdAsync(model.UserId.FormatGuid());
             if (userToUpdate == null) return NotFound("User not found");
             
-            if (!(HasPermissionsToManageUser(userToUpdate) && HasPermissionsToChangeUserPassword(userToUpdate))) 
+            if (!HasPermissionsToChangeUserPassword(userToUpdate)) 
                 return StatusCode(StatusCodes.Status403Forbidden, new
                 {
                     Message = "Action is not permitted"
