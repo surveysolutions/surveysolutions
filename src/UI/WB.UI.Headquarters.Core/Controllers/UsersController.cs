@@ -155,7 +155,6 @@ namespace WB.UI.Headquarters.Controllers
             var user = await this.userManager.FindByIdAsync((id ?? this.authorizedUser.Id).FormatGuid());
             if (user == null) return NotFound("User not found");
 
-            if (!HasPermissionsToManageUser(user)) return this.Forbid();
             if (!HasPermissionsToChangeUserPassword(user)) return this.Forbid();
 
             return View(await GetUserInfo(user));
@@ -1159,10 +1158,8 @@ namespace WB.UI.Headquarters.Controllers
 
         private bool HasPermissionsToChangeUserPassword(HqUser user)
         {
-            // Own password can always be changed (except interviewers need special permission)
             if (user.Id == this.authorizedUser.Id)
-                return !this.authorizedUser.IsInterviewer 
-                       || (this.profileSettingsStorage.GetById(AppSetting.ProfileSettings)?.AllowInterviewerUpdateProfile ?? false);
+                return true;
 
             // Only administrators and headquarters can change other users' passwords
             //Admin can change password for any user except other admins
