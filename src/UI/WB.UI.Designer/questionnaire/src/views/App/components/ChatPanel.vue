@@ -117,6 +117,10 @@ export default {
         const clearHistory = () => {
             messages.value = [];
             currentMessage.value = '';
+
+            if (typeof chatStore.clearHistory === 'function') {
+                chatStore.clearHistory();
+            }
         };
 
         const scrollToBottom = async () => {
