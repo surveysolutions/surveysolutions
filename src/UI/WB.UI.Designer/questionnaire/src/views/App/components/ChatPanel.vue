@@ -5,7 +5,11 @@
                 <v-icon class="mr-2" color="primary">mdi-chat</v-icon>
                 <span>AI Assistant</span>
             </div>
-            <v-btn icon="mdi-close" variant="text" size="small" @click="close" />
+            <div class="d-flex align-center">
+                <v-btn icon="mdi-delete-sweep" variant="text" size="small" @click="clearHistory"
+                    :disabled="messages.length === 0" :title="$t('Chat.ClearHistory', 'Clear history')" />
+                <v-btn icon="mdi-close" variant="text" size="small" @click="close" />
+            </div>
         </v-card-title>
 
         <v-divider />
@@ -110,6 +114,15 @@ export default {
             chatStore.close();
         };
 
+        const clearHistory = () => {
+            messages.value = [];
+            currentMessage.value = '';
+
+            if (typeof chatStore.clearHistory === 'function') {
+                chatStore.clearHistory();
+            }
+        };
+
         const scrollToBottom = async () => {
             await nextTick();
             if (messagesContainer.value) {
@@ -171,7 +184,8 @@ export default {
                     id: Date.now() + 1,
                     role: 'assistant',
                     content: error.message || 'Sorry, I encountered an error. Please try again.',
-                    timestamp: Date.now()
+                    timestamp: Date.now(),
+                    isError: true
                 };
 
                 messages.value.push(errorMessage);
@@ -184,12 +198,14 @@ export default {
         const callAssistant = async (userMessage, questionnaireId, entityId, area) => {
             const conversationHistory = [];
 
-            // Add previous messages from the current conversation (exclude the current message)
+            // Add previous messages from the current conversation (exclude error messages)
             messages.value.forEach(msg => {
-                conversationHistory.push({
-                    role: msg.role,
-                    content: msg.content
-                });
+                if (!msg.isError) {
+                    conversationHistory.push({
+                        role: msg.role,
+                        content: msg.content
+                    });
+                }
             });
 
             // Call Assistant API with userMessage as a separate parameter
@@ -201,6 +217,7 @@ export default {
         };
 
         return {
+            clearHistory,
             messages,
             currentMessage,
             isLoading,

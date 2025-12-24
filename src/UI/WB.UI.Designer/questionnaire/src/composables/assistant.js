@@ -32,7 +32,7 @@ export const useAssistant = () => {
                         entityId: options.entityId || null
                     },
                     {                        
-                        timeout: 30000 // 30 second timeout
+                        timeout: 60000 // 60 second timeout
                     }
                 );
 
