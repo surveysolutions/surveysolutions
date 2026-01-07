@@ -196,7 +196,10 @@
     <value>Eroare de dependență</value>
   </data>
   <data name="PLU0011Description" xml:space="preserve">
-    <value>Pentru utilizatorii cu rol de supervizor, coloana “supervisor” trebuie să fie necompletată</value>
+    <value>Pentru utilizatorii cu rol de supervizor, coloana 'supervisor' trebuie să fie necompletată</value>
+  </data>
+  <data name="PLU0011Recomendation" xml:space="preserve">
+    <value>Eliminați valoarea coloanei 'supervisor'</value>
   </data>
   <data name="PLU0012" xml:space="preserve">
     <value>Numele complet are lungimea incorectă</value>

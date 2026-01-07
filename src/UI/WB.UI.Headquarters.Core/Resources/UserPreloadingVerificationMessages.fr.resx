@@ -232,7 +232,7 @@
     <value>Vérifier la valeur pour le chef d'équipe</value>
   </data>
   <data name="PLU0011Recomendation" xml:space="preserve">
-    <value>Fournir une valeur pour le chef d'équipe</value>
+    <value>Supprimez la valeur du champ 'supervisor'</value>
   </data>
   <data name="PLU0012Recomendation" xml:space="preserve">
     <value>Il ne devrait pas dépasser 100 caractères.</value>
