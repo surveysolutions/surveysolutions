@@ -181,7 +181,7 @@ RUN apk add --no-cache \
     zlib \
     icu-libs \ 
     icu-data-full \
-    gdal \
+    gdal-tools \
     curl \
     fontconfig \
     binutils \
