@@ -179,11 +179,8 @@ RUN apk add --no-cache \
     libssl3 \
     libstdc++ \
     zlib \
-    \
     icu-libs \ 
     icu-data-full \
-    \    
-    gdal \
     gdal-tools \
     curl \
     fontconfig \
