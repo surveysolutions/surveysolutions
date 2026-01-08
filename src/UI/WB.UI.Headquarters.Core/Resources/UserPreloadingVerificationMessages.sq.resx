@@ -198,6 +198,9 @@
   <data name="PLU0011Description" xml:space="preserve">
     <value>Kolona e supervizorit duhet të jetë bosh për rolin e supervizorit</value>
   </data>
+  <data name="PLU0011Recomendation" xml:space="preserve">
+      <value>Hiqni vlerën në kolonën “supervisor“</value>
+  </data>
   <data name="PLU0012" xml:space="preserve">
     <value>Gjatësi e gabuar e emrit të plotë </value>
   </data>

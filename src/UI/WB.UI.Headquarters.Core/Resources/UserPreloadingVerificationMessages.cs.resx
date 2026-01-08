@@ -313,6 +313,6 @@
         <value>Ověřte hodnotu pro supervizora</value>
     </data>
     <data name="PLU0011Recomendation" xml:space="preserve">
-        <value>Poskytněte hodnotu pro supervizora</value>
+        <value>Odstraňte hodnotu pole 'supervisor'</value>
     </data>
 </root>
