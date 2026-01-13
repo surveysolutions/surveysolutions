@@ -79,7 +79,7 @@ namespace WB.Core.BoundedContexts.Designer.DataAccess
             builder.HasDefaultSchema("plainstore");
 
             builder.Entity<DesignerIdentityUser>(x => x.Property(p => p.PasswordSalt).HasColumnName("PasswordSalt"));
-            builder.Entity<DesignerIdentityUser>(x => x.Property(p => p.CanImportOnHq).HasColumnName("CanImportOnHq"));
+            
             builder.Entity<DesignerIdentityUser>(x => x.Property(p => p.CreatedAtUtc).HasColumnName("CreatedAtUtc"));
             builder.Entity<DesignerIdentityUser>(x => x.Property(p => p.AssistantEnabled).HasColumnName("AssistantEnabled"));
             
