@@ -53,8 +53,8 @@ namespace WB.UI.Designer.Areas.Admin.Pages
             [Display(Name = "Is Locked Out", Order = 7)]
             public bool IsLockedOut { get; set; }
 
-            [Display(Name = "Can import on HQ", Order = 5)]
-            public bool CanImportOnHq { get; set; }
+            [Display(Name = "Assistant Enabled", Order = 5)]
+            public bool AssistantEnabled { get; set; }
 
             [Display(Name = "Last Password Changed Date", Order = 10)]
             public string? LastPasswordChangedDate { get; set; }
@@ -108,7 +108,7 @@ namespace WB.UI.Designer.Areas.Admin.Pages
                 Email = account.Email,
                 IsApproved = account.EmailConfirmed,
                 IsLockedOut = account.LockoutEnd.HasValue && account.LockoutEnd.Value >= DateTimeOffset.UtcNow ,
-                CanImportOnHq = account.CanImportOnHq,
+                AssistantEnabled = account.AssistantEnabled ?? false,
                 UserName = account.UserName ?? String.Empty,
                 OwnedQuestionnaires = ownedQuestionnaires,
                 SharedQuestionnaires = sharedQuestionnaires,

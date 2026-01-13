@@ -5,9 +5,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Designer.Assistant;
 using WB.Core.BoundedContexts.Designer.Assistant.Settings;
+using WB.Core.BoundedContexts.Designer.Implementation;
+using WB.Core.BoundedContexts.Designer.MembershipProvider;
+using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.UI.Designer.Controllers.Api.Designer
 {
@@ -19,9 +23,10 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         private readonly IConfiguration configuration;
         private readonly IModelSettings modelSettings;
         private readonly ILogger<AssistanceController> logger;
+        private readonly UserManager<DesignerIdentityUser> userManager;
 
         private readonly IQuestionnaireContextProvider questionnaireContextProvider;
-
+        private readonly IPlainKeyValueStorage<AssistantSettings> appSettingsStorage;
         private readonly IQuestionnaireAssistant questionnaireAssistant;
         //private readonly IQuestionnaireContextProvider questionnaireContextProvider;
 
@@ -29,7 +34,9 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             //IQuestionnaireContextProvider questionnaireContextProvider,
             ILogger<AssistanceController> logger,
             IQuestionnaireContextProvider questionnaireContextProvider,
-            IQuestionnaireAssistant questionnaireAssistant)
+            IQuestionnaireAssistant questionnaireAssistant,
+            IPlainKeyValueStorage<AssistantSettings> appSettingsStorage,
+            UserManager<DesignerIdentityUser> userManager)
         {
             this.configuration = configuration;
             //this.questionnaireContextProvider = questionnaireContextProvider;
@@ -38,6 +45,8 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             this.questionnaireAssistant = questionnaireAssistant;
              
             this.modelSettings = new AssistantModelSettings(configuration);
+            this.appSettingsStorage = appSettingsStorage;
+            this.userManager = userManager;
         }
 
         public class Message
@@ -58,6 +67,17 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] AssistanceRequest request)
         {
+            var setting = appSettingsStorage.GetById(AssistantSettings.AssistantSettingsKey);
+            
+            var user = await userManager.GetUserAsync(User);
+                
+            //check if AI assistant is enabled for current user
+            if(setting == null || !setting.IsEnabled )
+                return  StatusCode(406, "AI assistant is not enabled.");
+            
+            if(setting.IsAvailableToAllUsers != true && user?.AssistantEnabled != true)
+                return  StatusCode(406, "AI assistant is not enabled.");
+
             if (!request.QuestionnaireId.HasValue)
                 return  BadRequest("Either 'questionnaireId' must be provided.");
             if (!request.EntityId.HasValue)
@@ -85,7 +105,5 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 return StatusCode(406, "Error communicating with the AI model service. Try again later.");
             }
         }
-
-        
     }
 }

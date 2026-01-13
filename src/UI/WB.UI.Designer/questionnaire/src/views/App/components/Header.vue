@@ -4,6 +4,9 @@
         <div class="header-line">
             <div class="header-menu">
                 <div class="buttons">
+                    <button v-if="currentUser.aiAvailable" class="btn" @click="showChat()">
+                        {{ $t('QuestionnaireEditor.AIAssistant', 'AI') }}
+                    </button>
                     <a class="btn" href="http://support.mysurvey.solutions/designer" target="_blank" rel="noopener">{{
                         $t('QuestionnaireEditor.Help') }}</a>
                     <a class="btn" href="https://forum.mysurvey.solutions" target="_blank" rel="noopener">{{
@@ -15,9 +18,6 @@
                             $t('QuestionnaireEditor.History') }}</a>
                     <button class="btn" @click="showDownloadPdf()">
                         {{ $t('QuestionnaireEditor.DownloadPdf') }}
-                    </button>
-                    <button class="btn" @click="showChat()">
-                        {{ $t('QuestionnaireEditor.Chat', 'AI Chat') }}
                     </button>
                     <a class="btn" v-if="questionnaire.hasViewerAdminRights" @click="saveAsQuestionnaire"
                         target="_blank" rel="noopener">{{
@@ -212,6 +212,10 @@ export default {
     },
     mounted() {
         this.$emitter.on('showShareInfo', this.showShareInfo);
+
+        if (!this.currentUser.aiAvailable) {
+            this.chatStore.close();
+        }
     },
     unmounted() {
         this.$emitter.off('showShareInfo', this.showShareInfo);
