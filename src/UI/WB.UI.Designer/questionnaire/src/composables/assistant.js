@@ -20,19 +20,19 @@ export const useAssistant = () => {
 
         for (let attempt = 1; attempt <= retries; attempt++) {
             try {
+                const questionnaireId = options.questionnaireId || null;
                 const response = await axios.post(
-                    '/api/assistance',
+                    `/api/assistance/${questionnaireId}`,
                     {
                         messages: messages.map(msg => ({
                             role: msg.role,
                             content: msg.content
                         })),
                         prompt: prompt,
-                        questionnaireId: options.questionnaireId || null,
                         entityId: options.entityId || null
                     },
-                    {                        
-                        timeout: 60000 // 60 second timeout
+                    {
+                        timeout: 3 * 60 * 1000 // 3 minute timeout
                     }
                 );
 

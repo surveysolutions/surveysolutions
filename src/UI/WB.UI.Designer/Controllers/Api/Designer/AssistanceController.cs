@@ -17,6 +17,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 {
     [Authorize]
     [ApiController]
+    [QuestionnairePermissions]
     [Route("api/[controller]")]
     public class AssistanceController : ControllerBase
     {
@@ -59,13 +60,13 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         {
             public string Prompt { get; set; } = string.Empty;
             public List<Message> Messages { get; set; } = new List<Message>();
-            public Guid? QuestionnaireId { get; set; }
             public Guid? EntityId { get; set; }
             public string Area { get; set; } = string.Empty;
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] AssistanceRequest request)
+        [Route("{id}")]
+        public async Task<IActionResult> Post(Guid id, [FromBody] AssistanceRequest request)
         {
             var setting = appSettingsStorage.GetById(AssistantSettings.AssistantSettingsKey);
             
@@ -78,7 +79,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             if(setting.IsAvailableToAllUsers != true && user?.AssistantEnabled != true)
                 return  StatusCode(406, "AI assistant is not enabled.");
 
-            if (!request.QuestionnaireId.HasValue)
+            if (id == Guid.Empty)
                 return  BadRequest("Either 'questionnaireId' must be provided.");
             if (!request.EntityId.HasValue)
                 return  BadRequest("Either 'entityId' must be provided.");
@@ -86,7 +87,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             try
             {
                 var response = await questionnaireAssistant.GetResponseAsync(new AssistantRequest(
-                    request.QuestionnaireId.Value, 
+                    id, 
                     request.EntityId.Value, 
                     !string.IsNullOrWhiteSpace(request.Prompt) ? request.Prompt : request.Messages.Last().Content,
                     request.Messages.SkipLast(1).Select(m => new AssistantMessage(m.Role, m.Content)).ToList()
