@@ -2,7 +2,7 @@ ARG DOTNET_VERSION=9.0
 ARG DOTNET_CA_PATCH=
 ARG VERSION=21.01
 ARG INFO_VERSION=21.01
-ARG FONTS="NotoSans-hinted.zip;NotoSansMyanmar-hinted.zip"
+ARG FONTS="Noto_Sans"
 ARG NODE=22
 
 FROM node:${NODE} as designer_js
@@ -86,8 +86,8 @@ RUN apt-get update && apt-get install unzip -y --no-install-recommends
 ARG FONTS
 ENV FONTS_LIST=$FONTS
 RUN [ "/bin/bash" ,"-c", "export IFS=\";\"; for FONT in $FONTS_LIST; \
-    do wget -P /raw_fonts https://noto-website-2.storage.googleapis.com/pkgs/$FONT \
-    && cd /raw_fonts && unzip -o $FONT ; done"]
+    do wget -P /raw_fonts https://fonts.google.com/download?family=Noto%20Sans \
+    && cd /raw_fonts && unzip -o Noto_Sans.zip ; done"]
 
 FROM mcr.microsoft.com/dotnet/aspnet:${DOTNET_VERSION}
 
@@ -101,7 +101,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends libc6-dev xvfb 
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-COPY --from=fonts /raw_fonts /usr/share/fonts
+COPY --from=fonts /raw_fonts/static /usr/share/fonts
 
 RUN fc-cache -f -v
 

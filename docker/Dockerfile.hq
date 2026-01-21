@@ -3,7 +3,7 @@ ARG VERSION=21.01
 ARG INFO_VERSION=21.01
 ARG NODE=22
 ARG APK_FILES=build
-ARG FONTS="NotoSans-hinted.zip;NotoSansMyanmar-hinted.zip"
+ARG FONTS="Noto_Sans"
 ARG PLATFORM=amd64
 #amd64 #linux/arm64
 
@@ -162,8 +162,8 @@ ARG FONTS
 ENV FONTS_LIST=$FONTS
 RUN mkdir -p /raw_fonts
 RUN [ "/bin/ash" ,"-c", "export IFS=\";\"; for FONT in $FONTS_LIST; \
-   do wget -P /raw_fonts https://noto-website-2.storage.googleapis.com/pkgs/$FONT \
-   && cd /raw_fonts && unzip -o $FONT ; done"]
+   do wget -P /raw_fonts https://fonts.google.com/download?family=Noto%20Sans \
+   && cd /raw_fonts && unzip -o Noto_Sans.zip ; done"]
 
 # Building runtime 
 FROM mcr.microsoft.com/dotnet/aspnet:${DOTNET_VERSION}-alpine3.23
@@ -190,7 +190,7 @@ RUN apk add --no-cache \
     binutils \
     && rm -rf /var/cache/apk/*
 
-COPY --from=fonts_source /raw_fonts /usr/share/fonts
+COPY --from=fonts_source /raw_fonts/static /usr/share/fonts
 
 LABEL org.opencontainers.image.title="Headquaters All in One"
 LABEL org.opencontainers.image.description="Survey Solutions Headquarters with Export Service"
