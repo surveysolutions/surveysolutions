@@ -162,8 +162,8 @@ ARG FONTS
 ENV FONTS_LIST=$FONTS
 RUN mkdir -p /raw_fonts
 RUN [ "/bin/ash" ,"-c", "export IFS=\";\"; for FONT in $FONTS_LIST; \
-   do wget -P /raw_fonts https://fonts.google.com/download?family=Noto%20Sans \
-   && cd /raw_fonts && unzip -o Noto_Sans.zip ; done"]
+   do wget -O Noto_Sans.zip https://fonts.google.com/download?family=Noto%20Sans \
+   && unzip -d -o /raw_fonts Noto_Sans.zip ; done"]
 
 # Building runtime 
 FROM mcr.microsoft.com/dotnet/aspnet:${DOTNET_VERSION}-alpine3.23

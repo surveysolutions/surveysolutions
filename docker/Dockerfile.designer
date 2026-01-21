@@ -83,11 +83,11 @@ RUN dotnet publish src/UI/WB.UI.Designer --no-restore \
 FROM mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION} as fonts
 RUN apt-get update && apt-get install unzip -y --no-install-recommends
 
-ARG FONTS
-ENV FONTS_LIST=$FONTS
-RUN [ "/bin/bash" ,"-c", "export IFS=\";\"; for FONT in $FONTS_LIST; \
-    do wget -P /raw_fonts https://fonts.google.com/download?family=Noto%20Sans \
-    && cd /raw_fonts && unzip -o Noto_Sans.zip ; done"]
+#ARG FONTS
+#ENV FONTS_LIST=$FONTS
+#RUN [ "/bin/bash" ,"-c", "export IFS=\";\"; for FONT in $FONTS_LIST; \
+#    do wget -P /raw_fonts https://fonts.google.com/download?family=Noto%20Sans \
+#    && cd /raw_fonts && unzip -o Noto_Sans.zip ; done"]
 
 FROM mcr.microsoft.com/dotnet/aspnet:${DOTNET_VERSION}
 
@@ -101,7 +101,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends libc6-dev xvfb 
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-COPY --from=fonts /raw_fonts/static /usr/share/fonts
+#COPY --from=fonts /raw_fonts/static /usr/share/fonts
 
 RUN fc-cache -f -v
 
