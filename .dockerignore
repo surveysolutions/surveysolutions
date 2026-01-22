@@ -3,6 +3,7 @@
 !/build
 !/libs
 !/artifacts
+!/installer
 **/.classpath
 **/.dockerignore
 **/.env
