@@ -165,7 +165,7 @@ RUN apk add --no-cache --virtual unzip
 ##   do wget -O Noto_Sans.zip https://fonts.google.com/download?family=Noto%20Sans \
 ##   && unzip -d -o /raw_fonts Noto_Sans.zip ; done"]
 
-COPY --from=fonts_source /installer/src/SurveySolutionsProduct/Fonts /usr/share/fonts
+COPY /installer/src/SurveySolutionsProduct/Fonts /usr/share/fonts
 
 # Building runtime 
 FROM mcr.microsoft.com/dotnet/aspnet:${DOTNET_VERSION}-alpine3.23
