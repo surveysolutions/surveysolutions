@@ -4,6 +4,9 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
@@ -86,18 +89,41 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             
             try
             {
-                var response = await questionnaireAssistant.GetResponseAsync(new AssistantRequest(
-                    id, 
-                    request.EntityId.Value, 
-                    !string.IsNullOrWhiteSpace(request.Prompt) ? request.Prompt : request.Messages.Last().Content,
-                    request.Messages.SkipLast(1).Select(m => new AssistantMessage(m.Role, m.Content)).ToList()
-                ),
-                this.modelSettings);
+                var assistantAddress = configuration["Providers:Assistant:AssistantAddress"];
+                if (string.IsNullOrWhiteSpace(assistantAddress))
+                {
+                    return StatusCode(500, "Assistant service address is not configured.");
+                }
+
+                var httpClient = new HttpClient();
+                
+                var proxyRequest = new
+                {
+                    QuestionnaireId = id,
+                    EntityId = request.EntityId.Value,
+                    Prompt = !string.IsNullOrWhiteSpace(request.Prompt) ? request.Prompt : request.Messages.Last().Content,
+                    Messages = request.Messages.SkipLast(1).Select(m => new { m.Role, m.Content }).ToList()
+                };
+
+                var jsonContent = JsonSerializer.Serialize(proxyRequest);
+                var httpContent = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+                var httpResponse = await httpClient.PostAsync(assistantAddress, httpContent);
+                
+                if (!httpResponse.IsSuccessStatusCode)
+                {
+                    var errorContent = await httpResponse.Content.ReadAsStringAsync();
+                    logger.LogError("Assistant service returned error: {StatusCode} - {Content}", httpResponse.StatusCode, errorContent);
+                    return StatusCode((int)httpResponse.StatusCode, "Error from assistant service.");
+                }
+
+                var responseContent = await httpResponse.Content.ReadAsStringAsync();
+                var responseData = JsonSerializer.Deserialize<JsonElement>(responseContent);
 
                 return Ok(new
                 {
-                    response.Expression,
-                    response.Message
+                    Expression = responseData.TryGetProperty("expression", out var expr) ? expr.GetString() : null,
+                    Message = responseData.TryGetProperty("message", out var msg) ? msg.GetString() : null
                 });
             }
             catch (Exception ex)
