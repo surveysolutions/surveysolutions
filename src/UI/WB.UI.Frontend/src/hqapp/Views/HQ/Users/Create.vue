@@ -38,7 +38,7 @@
                     <form-group :label="$t('FieldsAndValidations.UserNameFieldName')" :error="modelState['UserName']"
                         :mandatory="true">
                         <TextInput v-model.trim="userName" :haserror="modelState['UserName'] !== undefined"
-                            id="UserName" />
+                            id="UserName" maxlength="15" />
                     </form-group>
                     <form-group v-if="isInterviewer" :label="$t('Pages.Interviewers_SupervisorTitle')"
                         :error="modelState['SupervisorId']" :mandatory="true">
@@ -172,6 +172,9 @@ export default {
     },
     watch: {
         userName: function (val) {
+            if (val && val.length > 15) {
+                this.userName = val.substring(0, 15)
+            }
             delete this.modelState['UserName']
         },
         personName: function (val) {
