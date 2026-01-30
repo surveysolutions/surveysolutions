@@ -64,9 +64,9 @@ namespace WB.UI.Designer.Controllers.Api.Assistant
         
         [HttpGet]
         [Route("{id}/category/{categoryId}")]
-        public IActionResult GetCategory(Guid id, Guid categoryId)
+        public IActionResult GetCategory(QuestionnaireRevision id, Guid categoryId)
         {
-            var categories = this.reusableCategoriesService.GetCategoriesById(id, categoryId);
+            var categories = this.reusableCategoriesService.GetCategoriesById(id.QuestionnaireId, categoryId);
             if (categories == null) return NotFound();
 
             var result = JsonConvert.SerializeObject(categories, Formatting.None, new JsonSerializerSettings

@@ -15,6 +15,7 @@ using WB.Core.BoundedContexts.Designer.Assistant.Settings;
 using WB.Core.BoundedContexts.Designer.Implementation;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.UI.Designer.Code;
 
 namespace WB.UI.Designer.Controllers.Api.Designer
 {
@@ -28,6 +29,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         private readonly IModelSettings modelSettings;
         private readonly ILogger<AssistanceController> logger;
         private readonly UserManager<DesignerIdentityUser> userManager;
+        private readonly IQuestionnaireHelper questionnaireHelper;
 
         private readonly IQuestionnaireContextProvider questionnaireContextProvider;
         private readonly IPlainKeyValueStorage<AssistantSettings> appSettingsStorage;
@@ -40,7 +42,8 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             IQuestionnaireContextProvider questionnaireContextProvider,
             IQuestionnaireAssistant questionnaireAssistant,
             IPlainKeyValueStorage<AssistantSettings> appSettingsStorage,
-            UserManager<DesignerIdentityUser> userManager)
+            UserManager<DesignerIdentityUser> userManager,
+            IQuestionnaireHelper questionnaireHelper)
         {
             this.configuration = configuration;
             //this.questionnaireContextProvider = questionnaireContextProvider;
@@ -51,6 +54,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             this.modelSettings = new AssistantModelSettings(configuration);
             this.appSettingsStorage = appSettingsStorage;
             this.userManager = userManager;
+            this.questionnaireHelper = questionnaireHelper;
         }
 
         public class Message
@@ -86,7 +90,9 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 return  BadRequest("Either 'questionnaireId' must be provided.");
             if (!request.EntityId.HasValue)
                 return  BadRequest("Either 'entityId' must be provided.");
-            
+
+            var questionnaireRevision = questionnaireHelper.GetLastRevision(id);
+
             try
             {
                 var assistantAddress = configuration["Providers:Assistant:AssistantAddress"];
@@ -99,7 +105,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 
                 var proxyRequest = new
                 {
-                    QuestionnaireId = id,
+                    QuestionnaireId = $"{questionnaireRevision.QuestionnaireId}${questionnaireRevision.Version}",
                     EntityId = request.EntityId.Value,
                     Prompt = !string.IsNullOrWhiteSpace(request.Prompt) ? request.Prompt : request.Messages.Last().Content,
                     Messages = request.Messages.SkipLast(1).Select(m => new { m.Role, m.Content }).ToList()

@@ -168,15 +168,22 @@ namespace WB.UI.Designer.Code
                 CreatedBy = GlobalHelper.EmptyString
             };
 
-
-        public Stream? GetBackupPackageForQuestionnaire(Guid id, out string questionnaireFileName)
+        public QuestionnaireRevision GetLastRevision(Guid id)
         {
             var maxSequenceByQuestionnaire = this.questionnaireChangeItemStorage.QuestionnaireChangeRecords
                 .Where(y => y.QuestionnaireId == id.FormatGuid())
                 .Select(y => (int?)y.Sequence)
                 .Max() ?? 0;
 
-            var questionnaireRevision = new QuestionnaireRevision(id, version: maxSequenceByQuestionnaire);
+            return new QuestionnaireRevision(id, version: maxSequenceByQuestionnaire);
+        }
+
+        public Stream? GetBackupPackageForQuestionnaire(Guid id, out string questionnaireFileName)
+        {
+            var questionnaireRevision = GetLastRevision(id);
+            if (!questionnaireRevision.Version.HasValue)
+                throw new ArgumentException("Cannot find questionnaire revision for id " + id);
+            
             var questionnaireView = questionnaireViewFactory.Load(questionnaireRevision);
             if (questionnaireView == null)
             {
@@ -185,7 +192,7 @@ namespace WB.UI.Designer.Code
             }
 
             questionnaireFileName = fileSystemAccessor.MakeValidFileName(questionnaireView.Title);
-            questionnaireView.Source.Revision = maxSequenceByQuestionnaire;
+            questionnaireView.Source.Revision = questionnaireRevision.Version.Value;
             
             var questionnaireDocument = questionnaireView.Source;
             string questionnaireJson = this.serializer.Serialize(questionnaireDocument);
