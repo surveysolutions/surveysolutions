@@ -16,6 +16,7 @@ using WB.Core.BoundedContexts.Designer.Implementation;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.UI.Designer.Code;
+using WB.UI.Designer.Services;
 
 namespace WB.UI.Designer.Controllers.Api.Designer
 {
@@ -30,6 +31,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         private readonly ILogger<AssistanceController> logger;
         private readonly UserManager<DesignerIdentityUser> userManager;
         private readonly IQuestionnaireHelper questionnaireHelper;
+        private readonly IJwtTokenService jwtTokenService;
 
         private readonly IQuestionnaireContextProvider questionnaireContextProvider;
         private readonly IPlainKeyValueStorage<AssistantSettings> appSettingsStorage;
@@ -43,7 +45,8 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             IQuestionnaireAssistant questionnaireAssistant,
             IPlainKeyValueStorage<AssistantSettings> appSettingsStorage,
             UserManager<DesignerIdentityUser> userManager,
-            IQuestionnaireHelper questionnaireHelper)
+            IQuestionnaireHelper questionnaireHelper,
+            IJwtTokenService jwtTokenService)
         {
             this.configuration = configuration;
             //this.questionnaireContextProvider = questionnaireContextProvider;
@@ -55,6 +58,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             this.appSettingsStorage = appSettingsStorage;
             this.userManager = userManager;
             this.questionnaireHelper = questionnaireHelper;
+            this.jwtTokenService = jwtTokenService;
         }
 
         public class Message
@@ -102,6 +106,12 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 }
 
                 var httpClient = new HttpClient();
+                
+                if (user != null)
+                {
+                    var jwtToken = jwtTokenService.GenerateToken(user);
+                    httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + jwtToken);
+                }
                 
                 var proxyRequest = new
                 {

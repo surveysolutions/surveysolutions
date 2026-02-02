@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
@@ -28,6 +30,7 @@ using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
+using WB.UI.Designer.Services;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.DependencyInjection;
 using WB.Core.Infrastructure.Versions;
@@ -43,7 +46,6 @@ using WB.UI.Designer.Filters;
 using WB.UI.Designer.Implementation.Services;
 using WB.UI.Designer.Models;
 using WB.UI.Designer.Modules;
-using WB.UI.Designer.Services;
 using WB.UI.Designer.Services.Restore;
 using WB.UI.Shared.Web.Authentication;
 using WB.UI.Shared.Web.Diagnostics;
@@ -136,12 +138,17 @@ namespace WB.UI.Designer
                     sharedOptions.DefaultScheme = "boc";
                     sharedOptions.DefaultChallengeScheme = "boc";
                 })
-                .AddPolicyScheme("boc", "Basic or cookie", options =>
+                .AddPolicyScheme("boc", "Basic or cookie or JWT", options =>
                 {
                     options.ForwardDefaultSelector = context =>
                     {
-                        if (context.Request.Headers.ContainsKey("Authorization"))
+                        var authHeader = context.Request.Headers["Authorization"].ToString();
+                        if (!string.IsNullOrEmpty(authHeader))
                         {
+                            if (authHeader.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
+                            {
+                                return JwtBearerDefaults.AuthenticationScheme;
+                            }
                             return "basic";
                         }
 
@@ -149,7 +156,25 @@ namespace WB.UI.Designer
                     };
                 })
                 .AddScheme<BasicAuthenticationSchemeOptions, BasicAuthenticationHandler>("basic",
-                    opts => { opts.Realm = "mysurvey.solutions"; });
+                    opts => { opts.Realm = "mysurvey.solutions"; })
+                .AddJwtBearer(options =>
+                {
+                    var secretKey = Configuration["Providers:Assistant:JwtSecretKey"];
+                    if (!string.IsNullOrWhiteSpace(secretKey))
+                    {
+                        options.TokenValidationParameters = new TokenValidationParameters
+                        {
+                            ValidateIssuer = true,
+                            ValidateAudience = true,
+                            ValidateLifetime = true,
+                            ValidateIssuerSigningKey = true,
+                            ValidIssuer = Configuration["Providers:Assistant:JwtIssuer"] ?? "WB.Designer",
+                            ValidAudience = Configuration["Providers:Assistant:JwtAudience"] ?? "WB.AssistantService",
+                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey)),
+                            ClockSkew = TimeSpan.FromMinutes(5)
+                        };
+                    }
+                });
             
             services.AddAuthorization(options =>
             {

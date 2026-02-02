@@ -17,8 +17,7 @@ using WB.UI.Designer.Controllers.Api.Designer;
 
 namespace WB.UI.Designer.Controllers.Api.Assistant
 {
-    //TODO:Improve Authorization, Token based
-    //[Authorize]
+    [Authorize]
     [Route("api/v1/assistant/questionnaires")]
     public class QuestionnairesController : Controller
     {
@@ -40,7 +39,7 @@ namespace WB.UI.Designer.Controllers.Api.Assistant
             this.reusableCategoriesService = reusableCategoriesService;
         }
         
-        //[QuestionnairePermissions]
+        [QuestionnairePermissions]
         [HttpGet]
         [Route("{id}")]
         public IActionResult Get(QuestionnaireRevision id)
