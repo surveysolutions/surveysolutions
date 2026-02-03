@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text.RegularExpressions;
@@ -172,6 +173,60 @@ namespace WB.UI.Designer
                             ValidAudience = Configuration["Providers:Assistant:JwtAudience"] ?? "WB.AssistantService",
                             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey)),
                             ClockSkew = TimeSpan.FromMinutes(5)
+                        };
+                        
+                        options.Events = new JwtBearerEvents
+                        {
+                            OnAuthenticationFailed = context =>
+                            {
+                                if (context.Exception is SecurityTokenExpiredException)
+                                {
+                                    context.Response.Headers.Append("X-Token-Expired", "true");
+                                    context.Response.Headers.Append("X-Token-Error", "Token has expired");
+                                }
+                                else if (context.Exception is SecurityTokenInvalidSignatureException)
+                                {
+                                    context.Response.Headers.Append("X-Token-Error", "Invalid token signature");
+                                }
+                                else if (context.Exception is SecurityTokenInvalidIssuerException)
+                                {
+                                    context.Response.Headers.Append("X-Token-Error", "Invalid token issuer");
+                                }
+                                else if (context.Exception is SecurityTokenInvalidAudienceException)
+                                {
+                                    context.Response.Headers.Append("X-Token-Error", "Invalid token audience");
+                                }
+                                else
+                                {
+                                    context.Response.Headers.Append("X-Token-Error", context.Exception.Message);
+                                }
+                                return Task.CompletedTask;
+                            },
+                            OnChallenge = context =>
+                            {
+                                context.HandleResponse();
+                                context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                                context.Response.ContentType = "application/json";
+                                
+                                var errorMessage = context.AuthenticateFailure?.Message ?? "Unauthorized";
+                                if (context.AuthenticateFailure is SecurityTokenExpiredException)
+                                {
+                                    errorMessage = "JWT token has expired. Please generate a new token.";
+                                }
+                                else if (context.AuthenticateFailure is SecurityTokenInvalidSignatureException)
+                                {
+                                    errorMessage = "JWT token has invalid signature.";
+                                }
+                                
+                                var result = JsonSerializer.Serialize(new
+                                {
+                                    error = "Unauthorized",
+                                    message = errorMessage,
+                                    timestamp = DateTime.UtcNow
+                                });
+                                
+                                return context.Response.WriteAsync(result);
+                            }
                         };
                     }
                 });
