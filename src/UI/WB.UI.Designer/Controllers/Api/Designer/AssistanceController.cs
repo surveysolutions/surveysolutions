@@ -107,6 +107,12 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
                 var httpClient = new HttpClient();
                 
+                var apiKey = configuration["Providers:Assistant:ApiKey"];
+                if (!string.IsNullOrWhiteSpace(apiKey))
+                {
+                    httpClient.DefaultRequestHeaders.Add("X-Client-Api-Key", apiKey);
+                }
+                
                 if (user != null)
                 {
                     var jwtToken = jwtTokenService.GenerateToken(user);
