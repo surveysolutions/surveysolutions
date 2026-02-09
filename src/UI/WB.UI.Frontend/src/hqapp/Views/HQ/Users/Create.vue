@@ -38,7 +38,7 @@
                     <form-group :label="$t('FieldsAndValidations.UserNameFieldName')" :error="modelState['UserName']"
                         :mandatory="true">
                         <TextInput v-model.trim="userName" :haserror="modelState['UserName'] !== undefined"
-                            id="UserName" />
+                            id="UserName" :maxlength="usernameMaxLength" />
                     </form-group>
                     <form-group v-if="isInterviewer" :label="$t('Pages.Interviewers_SupervisorTitle')"
                         :error="modelState['SupervisorId']" :mandatory="true">
@@ -123,6 +123,7 @@ export default {
             supervisor: null,
             workspace: null,
             role: null,
+            usernameMaxLength: 15,
         }
     },
     computed: {
@@ -172,6 +173,9 @@ export default {
     },
     watch: {
         userName: function (val) {
+            if (val && val.length > this.usernameMaxLength) {
+                this.userName = val.substring(0, this.usernameMaxLength)
+            }
             delete this.modelState['UserName']
         },
         personName: function (val) {
