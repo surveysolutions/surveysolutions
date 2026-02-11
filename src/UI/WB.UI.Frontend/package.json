@@ -25,7 +25,7 @@
         "@vee-validate/rules": "^4.15.0",
         "@vue/apollo-option": "^4.2.0",
         "autonumeric": "^4.10.5",
-        "axios": "^1.13.2",
+        "axios": "^1.13.5",
         "bootstrap": "^5.3.3",
         "bootstrap-select": "^1.13.18",
         "chart.js": "^4.4.7",
