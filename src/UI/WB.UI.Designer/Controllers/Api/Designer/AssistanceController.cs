@@ -17,6 +17,7 @@ using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Services;
+using Newtonsoft.Json.Linq;
 
 namespace WB.UI.Designer.Controllers.Api.Designer
 {
@@ -142,10 +143,19 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 var responseContent = await httpResponse.Content.ReadAsStringAsync();
                 var responseData = JsonSerializer.Deserialize<JsonElement>(responseContent);
 
+                JToken? metaToken = null;
+                if (responseData.TryGetProperty("meta", out var meta))
+                {
+                    // This controller uses Newtonsoft.Json for MVC serialization (see Startup.AddNewtonsoftJson).
+                    // JToken doesn't have the self-referencing Parent loop that System.Text.Json.Nodes has.
+                    metaToken = JToken.Parse(meta.GetRawText());
+                }
+
                 return Ok(new
                 {
                     Expression = responseData.TryGetProperty("expression", out var expr) ? expr.GetString() : null,
-                    Message = responseData.TryGetProperty("message", out var msg) ? msg.GetString() : null
+                    Message = responseData.TryGetProperty("message", out var msg) ? msg.GetString() : null,
+                    Meta = metaToken
                 });
             }
             catch (Exception ex)
