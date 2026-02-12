@@ -4,7 +4,7 @@
         <div class="header-line">
             <div class="header-menu">
                 <div class="buttons">
-                    <button v-if="currentUser.aiAvailable" class="btn" @click="showChat()">
+                    <button v-if="aiAvailable" class="btn" @click="showChat()">
                         {{ $t('QuestionnaireEditor.AIAssistant', 'AI') }}
                     </button>
                     <a class="btn" href="http://support.mysurvey.solutions/designer" target="_blank" rel="noopener">{{
@@ -238,6 +238,10 @@ export default {
         savedAtTimestamp() {
             const time = this.verificationStore.status.time;
             return this.$t('QuestionnaireEditor.SavedAtTimestamp', { dateTime: time })
+        },
+        aiAvailable() {
+            return this.currentUser.aiAvailable &&
+                !this.questionnaire.isReadOnlyForUser;
         }
     },
     methods: {
