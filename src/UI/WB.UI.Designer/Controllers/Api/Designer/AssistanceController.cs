@@ -107,15 +107,18 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 }
 
                 var httpClient = new HttpClient();
-                
+
                 var apiKey = configuration["Providers:Assistant:ApiKey"];
                 if (!string.IsNullOrWhiteSpace(apiKey))
                 {
                     httpClient.DefaultRequestHeaders.Add("X-Client-Api-Key", apiKey);
                 }
-                
+
                 if (user != null)
                 {
+                    // forward user id explicitly for downstream auditing/rate-limiting
+                    httpClient.DefaultRequestHeaders.Add("X-User-Id", user.Id.ToString());
+
                     var jwtToken = jwtTokenService.GenerateToken(user);
                     httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + jwtToken);
                 }
