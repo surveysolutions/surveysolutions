@@ -158,13 +158,6 @@ COPY ${APK_FILES}/*.apk /apk/
 FROM --platform=${PLATFORM} mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION}-alpine3.23 AS fonts_source
 RUN apk add --no-cache --virtual unzip
 
-##ARG FONTS
-##ENV FONTS_LIST=$FONTS
-##RUN mkdir -p /raw_fonts
-##RUN [ "/bin/ash" ,"-c", "export IFS=\";\"; for FONT in $FONTS_LIST; \
-##   do wget -O Noto_Sans.zip https://fonts.google.com/download?family=Noto%20Sans \
-##   && unzip -d -o /raw_fonts Noto_Sans.zip ; done"]
-
 COPY installer/src/SurveySolutionsProduct/Fonts /usr/share/fonts
 
 # Building runtime 
