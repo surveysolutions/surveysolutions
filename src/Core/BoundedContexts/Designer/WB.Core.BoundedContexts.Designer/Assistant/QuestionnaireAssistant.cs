@@ -98,8 +98,8 @@ public class QuestionnaireAssistant(
         var payloadObj = new {
             model = modelSettings.ModelName,
             messages,
-            max_tokens = 700,
-            temperature = 0.7,
+            //max_tokens = 700,
+            //temperature = 0.7,
         };
 
         var requestMessage = new HttpRequestMessage(HttpMethod.Post, modelSettings.ApiUrl)

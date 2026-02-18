@@ -25,7 +25,7 @@
                                     <p>{{ $t('Chat.WelcomeMessage', 'Start a conversation with the AI assistant') }}</p>
                                 </div>
 
-                                <div v-for="message in messages" :key="message.id" class="mb-4">
+                                <div v-for="(message, index) in messages" :key="message.id" class="mb-4">
                                     <div :class="[
                                         'message-bubble',
                                         message.role === 'user' ? 'user-message' : 'assistant-message'
@@ -40,9 +40,25 @@
                                             <div class="flex-grow-1">
                                                 <div class="message-content">
                                                     <p class="mb-1" v-html="formatMessage(message.content)"></p>
-                                                    <small class="text-grey-darken-1">
-                                                        {{ formatTime(message.timestamp) }}
-                                                    </small>
+                                                    <div class="d-flex align-center justify-space-between">
+                                                        <small class="text-grey-darken-1">
+                                                            {{ formatTime(message.timestamp) }}
+                                                        </small>
+
+                                                        <div v-if="message.role === 'assistant' && !message.isError"
+                                                            class="d-flex align-center">
+                                                            <v-btn variant="text" size="x-small"
+                                                                :icon="getMessageReaction(message) === 1 ? 'mdi-thumb-up' : 'mdi-thumb-up-outline'"
+                                                                :color="getMessageReaction(message) === 1 ? 'primary' : undefined"
+                                                                @click="setReaction(message, index, 1)"
+                                                                :title="getMessageReaction(message) === 1 ? $t('Chat.Unlike', 'Unlike') : $t('Chat.Like', 'Like')" />
+                                                            <v-btn variant="text" size="x-small"
+                                                                :icon="getMessageReaction(message) === -1 ? 'mdi-thumb-down' : 'mdi-thumb-down-outline'"
+                                                                :color="getMessageReaction(message) === -1 ? 'error' : undefined"
+                                                                @click="setReaction(message, index, -1)"
+                                                                :title="getMessageReaction(message) === -1 ? $t('Chat.Undislike', 'Remove dislike') : $t('Chat.Dislike', 'Dislike')" />
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -118,7 +134,7 @@ export default {
         const messagesContainer = ref(null)
 
         // Initialize Assistant
-        const { sendMessage: sendToAssistant } = useAssistant()
+        const { sendMessage: sendToAssistant, sendReaction: sendAssistantReaction } = useAssistant()
 
         // Watch for prop changes
         watch(() => props.modelValue, (newVal) => {
@@ -192,7 +208,8 @@ export default {
                     id: Date.now() + 1,
                     role: 'assistant',
                     content: response,
-                    timestamp: Date.now()
+                    timestamp: Date.now(),
+                    reaction: 0
                 }
 
                 messages.value.push(assistantMessage)
@@ -204,7 +221,9 @@ export default {
                     id: Date.now() + 1,
                     role: 'assistant',
                     content: error.message || 'Sorry, I encountered an error. Please try again.',
-                    timestamp: Date.now()
+                    timestamp: Date.now(),
+                    isError: true,
+                    reaction: 0
                 }
 
                 messages.value.push(errorMessage)
@@ -234,6 +253,50 @@ export default {
             })
         }
 
+        const findPromptForAssistantMessage = (assistantIndex) => {
+            for (let i = assistantIndex - 1; i >= 0; i--) {
+                const msg = messages.value[i]
+                if (msg && msg.role === 'user') return msg.content || ''
+            }
+            return ''
+        }
+
+        const getMessageReaction = (message) => {
+            if (!message) return 0
+            if (typeof message.reaction === 'number') return message.reaction
+            if (message.isLiked === true) return 1
+            if (message.isDisliked === true) return -1
+            return 0
+        }
+
+        const setReaction = async (message, index, reactionValue) => {
+            if (!message || message.role !== 'assistant' || message.isError) return
+
+            const previous = getMessageReaction(message)
+            const next = previous === reactionValue ? 0 : reactionValue
+
+            message.reaction = next
+            message.isLiked = next === 1
+            message.isDisliked = next === -1
+
+            try {
+                await sendAssistantReaction(props.questionnaireId, {
+                    entityId: props.entityId || null,
+                    area: props.area || null,
+                    clientMessageId: message.id,
+                    clientTimestamp: message.timestamp,
+                    prompt: findPromptForAssistantMessage(index),
+                    assistantResponse: message.content,
+                    reaction: next
+                })
+            } catch (error) {
+                console.error('Error sending assistant reaction:', error)
+                message.reaction = previous
+                message.isLiked = previous === 1
+                message.isDisliked = previous === -1
+            }
+        }
+
         return {
             isOpen,
             messages,
@@ -243,6 +306,8 @@ export default {
             open,
             close,
             sendMessage,
+            getMessageReaction,
+            setReaction,
             formatMessage,
             formatTime
         }

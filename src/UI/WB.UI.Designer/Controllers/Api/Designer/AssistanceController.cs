@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Security.Cryptography;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Designer.Assistant;
@@ -39,7 +40,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         private readonly IQuestionnaireAssistant questionnaireAssistant;
         //private readonly IQuestionnaireContextProvider questionnaireContextProvider;
 
-        public AssistanceController(IConfiguration configuration, 
+        public AssistanceController(IConfiguration configuration,
             //IQuestionnaireContextProvider questionnaireContextProvider,
             ILogger<AssistanceController> logger,
             IQuestionnaireContextProvider questionnaireContextProvider,
@@ -54,7 +55,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             this.logger = logger;
             this.questionnaireContextProvider = questionnaireContextProvider;
             this.questionnaireAssistant = questionnaireAssistant;
-             
+
             this.modelSettings = new AssistantModelSettings(configuration);
             this.appSettingsStorage = appSettingsStorage;
             this.userManager = userManager;
@@ -76,25 +77,35 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             public string Area { get; set; } = string.Empty;
         }
 
+        public class AssistanceReactionRequest
+        {
+            public Guid? EntityId { get; set; }
+            public long? ClientMessageId { get; set; }
+            public long? ClientTimestamp { get; set; }
+            public string Prompt { get; set; } = string.Empty;
+            public string AssistantResponse { get; set; } = string.Empty;
+            public int Reaction { get; set; }
+        }
+
         [HttpPost]
         [Route("{id}")]
         public async Task<IActionResult> Post(Guid id, [FromBody] AssistanceRequest request)
         {
             var setting = appSettingsStorage.GetById(AssistantSettings.AssistantSettingsKey);
-            
+
             var user = await userManager.GetUserAsync(User);
-                
+
             //check if AI assistant is enabled for current user
-            if(setting == null || !setting.IsEnabled )
-                return  StatusCode(406, "AI assistant is not enabled.");
-            
-            if(setting.IsAvailableToAllUsers != true && user?.AssistantEnabled != true)
-                return  StatusCode(406, "AI assistant is not enabled.");
+            if (setting == null || !setting.IsEnabled)
+                return StatusCode(406, "AI assistant is not enabled.");
+
+            if (setting.IsAvailableToAllUsers != true && user?.AssistantEnabled != true)
+                return StatusCode(406, "AI assistant is not enabled.");
 
             if (id == Guid.Empty)
-                return  BadRequest("Either 'questionnaireId' must be provided.");
+                return BadRequest("Either 'questionnaireId' must be provided.");
             if (!request.EntityId.HasValue)
-                return  BadRequest("Either 'entityId' must be provided.");
+                return BadRequest("Either 'entityId' must be provided.");
 
             var questionnaireRevision = questionnaireHelper.GetLastRevision(id);
 
@@ -122,7 +133,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                     var jwtToken = jwtTokenService.GenerateToken(user);
                     httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + jwtToken);
                 }
-                
+
                 var proxyRequest = new
                 {
                     QuestionnaireId = $"{questionnaireRevision.QuestionnaireId}${questionnaireRevision.Version}",
@@ -135,7 +146,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 var httpContent = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
                 var httpResponse = await httpClient.PostAsync(assistantAddress, httpContent);
-                
+
                 if (!httpResponse.IsSuccessStatusCode)
                 {
                     var errorContent = await httpResponse.Content.ReadAsStringAsync();
@@ -166,6 +177,58 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 logger.LogError(ex, ex.Message);
                 return StatusCode(406, "Error communicating with the AI model service. Try again later.");
             }
+        }
+
+
+        [HttpPost]
+        [Route("{id}/reaction")]
+        public async Task<IActionResult> Reaction(Guid id, [FromBody] AssistanceReactionRequest request)
+        {
+            var setting = appSettingsStorage.GetById(AssistantSettings.AssistantSettingsKey);
+            var user = await userManager.GetUserAsync(User);
+
+            if (setting == null || !setting.IsEnabled)
+                return StatusCode(406, "AI assistant is not enabled.");
+
+            if (setting.IsAvailableToAllUsers != true && user?.AssistantEnabled != true)
+                return StatusCode(406, "AI assistant is not enabled.");
+
+            if (id == Guid.Empty)
+                return BadRequest("Either 'questionnaireId' must be provided.");
+            if (!request.EntityId.HasValue)
+                return BadRequest("Either 'entityId' must be provided.");
+            if (string.IsNullOrWhiteSpace(request.AssistantResponse))
+                return BadRequest("'assistantResponse' must be provided.");
+
+            if (request.Reaction < -1 || request.Reaction > 1)
+                return BadRequest("'reaction' must be -1, 0 or 1.");
+
+            var questionnaireRevision = questionnaireHelper.GetLastRevision(id);
+
+            // We don't persist reactions here yet; we log it for downstream collection.
+            // Hash is used to avoid dumping full answer text into logs.
+            var assistantResponseHash = Convert.ToHexString(
+                SHA256.HashData(Encoding.UTF8.GetBytes(request.AssistantResponse))
+            );
+
+            var promptHash = string.IsNullOrWhiteSpace(request.Prompt)
+                ? null
+                : Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(request.Prompt)));
+
+            logger.LogInformation(
+                "Assistant reaction: userId={UserId} questionnaire={QuestionnaireId}${Version} entityId={EntityId} reaction={Reaction} clientMsgId={ClientMessageId} clientTs={ClientTimestamp} promptHash={PromptHash} responseHash={ResponseHash}",
+                user?.Id,
+                questionnaireRevision.QuestionnaireId,
+                questionnaireRevision.Version,
+                request.EntityId,
+                request.Reaction,
+                request.ClientMessageId,
+                request.ClientTimestamp,
+                promptHash,
+                assistantResponseHash
+            );
+
+            return Ok();
         }
     }
 }
