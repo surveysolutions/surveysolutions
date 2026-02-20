@@ -181,6 +181,12 @@ export default {
             })
         }
 
+        const extractAssistantCallId = (meta) => {
+            const raw = meta?.callLogId ?? meta?.CallLogId ?? null
+            const numeric = raw != null ? Number(raw) : null
+            return Number.isFinite(numeric) && numeric > 0 ? numeric : null
+        }
+
         const sendMessage = async () => {
             if (!currentMessage.value.trim()) return
 
@@ -202,14 +208,18 @@ export default {
 
             try {
                 // Call Assistant with conversation history
-                const response = await callAssistant(messageText, props.questionnaireId, props.entityId, props.area)
+                const assistantResult = await callAssistant(messageText, props.questionnaireId, props.entityId, props.area)
+                const responseText = typeof assistantResult === 'string' ? assistantResult : assistantResult?.text
+                const responseMeta = typeof assistantResult === 'object' ? assistantResult?.meta : null
+                const assistantCallId = extractAssistantCallId(responseMeta)
 
                 const assistantMessage = {
                     id: Date.now() + 1,
                     role: 'assistant',
-                    content: response,
+                    content: responseText,
                     timestamp: Date.now(),
-                    reaction: 0
+                    reaction: 0,
+                    assistantCallId: assistantCallId
                 }
 
                 messages.value.push(assistantMessage)
@@ -280,6 +290,10 @@ export default {
             message.isDisliked = next === -1
 
             try {
+                const assistantCallId = message.assistantCallId
+                if (!assistantCallId) throw new Error('assistantCallId is missing')
+
+                const providerReaction = next === 1 ? 1 : next === -1 ? 2 : 0
                 await sendAssistantReaction(props.questionnaireId, {
                     entityId: props.entityId || null,
                     area: props.area || null,
@@ -287,7 +301,9 @@ export default {
                     clientTimestamp: message.timestamp,
                     prompt: findPromptForAssistantMessage(index),
                     assistantResponse: message.content,
-                    reaction: next
+                    assistantCallId: assistantCallId,
+                    reaction: providerReaction,
+                    comment: null
                 })
             } catch (error) {
                 console.error('Error sending assistant reaction:', error)

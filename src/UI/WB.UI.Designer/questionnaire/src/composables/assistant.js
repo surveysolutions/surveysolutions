@@ -36,7 +36,18 @@ export const useAssistant = () => {
                     },
                 );
 
-                return response.data.expression || response.data.message;
+                const data = response.data || {};
+                const text =
+                    data.expression ??
+                    data.Expression ??
+                    data.answer ??
+                    data.Answer ??
+                    data.message ??
+                    data.Message ??
+                    '';
+                const meta = data.meta ?? data.Meta ?? null;
+
+                return { text, meta };
             } catch (error) {
                 console.error(
                     `Assistant Error (attempt ${attempt}/${retries}):`,

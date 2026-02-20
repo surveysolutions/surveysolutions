@@ -84,7 +84,25 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             public long? ClientTimestamp { get; set; }
             public string Prompt { get; set; } = string.Empty;
             public string AssistantResponse { get; set; } = string.Empty;
-            public int Reaction { get; set; }
+            public long? AssistantCallId { get; set; }
+            public AssistantResponseReaction Reaction { get; set; }
+            public string? Comment { get; set; }
+        }
+
+        public enum AssistantResponseReaction
+        {
+            None = 0,
+            Like = 1,
+            Dislike = 2
+        }
+
+        public record ReactionRequest(AssistantResponseReaction Reaction, string? Comment = null);
+
+        public class AssistanceResponse
+        {
+            public string Expression { get; set; } = string.Empty;
+            public string Message { get; set; } = string.Empty;
+            public JToken? Meta { get; set; }
         }
 
         [HttpPost]
@@ -157,6 +175,12 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 var responseContent = await httpResponse.Content.ReadAsStringAsync();
                 var responseData = JsonSerializer.Deserialize<JsonElement>(responseContent);
 
+                long? callLogId = null;
+                if (responseData.TryGetProperty("callLogId", out var callLogIdProperty) && callLogIdProperty.TryGetInt64(out var parsedCallLogId))
+                {
+                    callLogId = parsedCallLogId;
+                }
+
                 JToken? metaToken = null;
                 if (responseData.TryGetProperty("meta", out var meta))
                 {
@@ -165,10 +189,31 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                     metaToken = JToken.Parse(meta.GetRawText());
                 }
 
+                if (callLogId.HasValue)
+                {
+                    if (metaToken is not JObject metaObject)
+                    {
+                        metaObject = new JObject();
+                        metaToken = metaObject;
+                    }
+
+                    metaObject["callLogId"] = callLogId.Value;
+                }
+
+                string? expression = null;
+                if (responseData.TryGetProperty("expression", out var expr)) expression = expr.GetString();
+                else if (responseData.TryGetProperty("Expression", out var expr2)) expression = expr2.GetString();
+
+                string? message = null;
+                if (responseData.TryGetProperty("message", out var msg)) message = msg.GetString();
+                else if (responseData.TryGetProperty("Message", out var msg2)) message = msg2.GetString();
+                else if (responseData.TryGetProperty("answer", out var ans)) message = ans.GetString();
+                else if (responseData.TryGetProperty("Answer", out var ans2)) message = ans2.GetString();
+
                 return Ok(new
                 {
-                    Expression = responseData.TryGetProperty("expression", out var expr) ? expr.GetString() : null,
-                    Message = responseData.TryGetProperty("message", out var msg) ? msg.GetString() : null,
+                    Expression = expression,
+                    Message = message,
                     Meta = metaToken
                 });
             }
@@ -200,8 +245,11 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             if (string.IsNullOrWhiteSpace(request.AssistantResponse))
                 return BadRequest("'assistantResponse' must be provided.");
 
-            if (request.Reaction < -1 || request.Reaction > 1)
-                return BadRequest("'reaction' must be -1, 0 or 1.");
+            if (!request.AssistantCallId.HasValue || request.AssistantCallId.Value <= 0)
+                return BadRequest("'assistantCallId' must be provided.");
+
+            if (!Enum.IsDefined(typeof(AssistantResponseReaction), request.Reaction))
+                return BadRequest("'reaction' must be 0 (None), 1 (Like) or 2 (Dislike).");
 
             var questionnaireRevision = questionnaireHelper.GetLastRevision(id);
 
@@ -216,17 +264,61 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 : Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(request.Prompt)));
 
             logger.LogInformation(
-                "Assistant reaction: userId={UserId} questionnaire={QuestionnaireId}${Version} entityId={EntityId} reaction={Reaction} clientMsgId={ClientMessageId} clientTs={ClientTimestamp} promptHash={PromptHash} responseHash={ResponseHash}",
+                "Assistant reaction: userId={UserId} questionnaire={QuestionnaireId}${Version} entityId={EntityId} reaction={Reaction} assistantCallId={AssistantCallId} clientMsgId={ClientMessageId} clientTs={ClientTimestamp} promptHash={PromptHash} responseHash={ResponseHash}",
                 user?.Id,
                 questionnaireRevision.QuestionnaireId,
                 questionnaireRevision.Version,
                 request.EntityId,
                 request.Reaction,
+                request.AssistantCallId,
                 request.ClientMessageId,
                 request.ClientTimestamp,
                 promptHash,
                 assistantResponseHash
             );
+
+            try
+            {
+                var assistantBaseAddress = configuration["Providers:Assistant:AssistantAddress"];
+                if (string.IsNullOrWhiteSpace(assistantBaseAddress))
+                    return StatusCode(500, "Assistant service address is not configured.");
+
+                // For reaction we call provider API directly.
+                // AssistantAddress may be configured either as full chat endpoint or as base URL.
+                // We normalize it here to base URL and append the reaction route.
+                var baseUri = new Uri(assistantBaseAddress, UriKind.Absolute);
+                var reactionUri = new Uri(baseUri, $"/api/v1/AssistantCalls/{request.AssistantCallId.Value}/reaction");
+
+                using var httpClient = new HttpClient();
+
+                var apiKey = configuration["Providers:Assistant:ApiKey"];
+                if (!string.IsNullOrWhiteSpace(apiKey))
+                    httpClient.DefaultRequestHeaders.Add("X-Client-Api-Key", apiKey);
+
+                if (user != null)
+                {
+                    httpClient.DefaultRequestHeaders.Add("X-User-Id", user.Id.ToString());
+                    var jwtToken = jwtTokenService.GenerateToken(user);
+                    httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + jwtToken);
+                }
+
+                var providerRequest = new ReactionRequest(request.Reaction, request.Comment);
+                var jsonContent = JsonSerializer.Serialize(providerRequest);
+                using var httpContent = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+                var httpResponse = await httpClient.PostAsync(reactionUri, httpContent);
+                if (!httpResponse.IsSuccessStatusCode)
+                {
+                    var errorContent = await httpResponse.Content.ReadAsStringAsync();
+                    logger.LogError("Assistant reaction endpoint returned error: {StatusCode} - {Content}", httpResponse.StatusCode, errorContent);
+                    return StatusCode((int)httpResponse.StatusCode, "Error from assistant service.");
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, ex.Message);
+                // Don't fail the UI action hard just because reaction collecting is down.
+            }
 
             return Ok();
         }
