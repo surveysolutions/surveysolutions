@@ -79,7 +79,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Code\ImportExport\QuestionnaireSchema.json" />
     <EmbeddedResource Update="Resources\Assistant.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Assistant.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
