@@ -308,6 +308,10 @@ export default {
     font-size: 16px;
 }
 
+.chat-container :deep(.v-field--appended) {
+    padding-inline-end: 0px !important;
+}
+
 .chat-messages {
     flex: 1;
     overflow-y: auto;
