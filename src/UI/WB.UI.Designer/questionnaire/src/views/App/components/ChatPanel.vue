@@ -98,6 +98,30 @@
                 </template>
             </v-text-field>
         </v-card-actions>
+
+        <v-dialog v-model="isDislikeDialogOpen" max-width="560">
+            <v-card>
+                <v-card-title class="text-h6">
+                    {{ $t('Chat.DislikeCommentTitle', 'Add a comment') }}
+                </v-card-title>
+                <v-card-text>
+                    <div class="text-body-2 mb-2">
+                        {{ $t('Chat.DislikeCommentHint', 'What was wrong with this answer?') }}
+                    </div>
+                    <v-textarea v-model="dislikeComment" variant="outlined" density="comfortable" auto-grow
+                        :placeholder="$t('Chat.DislikeCommentPlaceholder', 'Write a short comment (optional)')" />
+                </v-card-text>
+                <v-card-actions>
+                    <v-spacer />
+                    <v-btn variant="text" @click="cancelDislikeComment">
+                        {{ $t('Chat.Cancel', 'Cancel') }}
+                    </v-btn>
+                    <v-btn color="primary" variant="text" @click="confirmDislikeComment">
+                        {{ $t('Chat.Send', 'Send') }}
+                    </v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
     </v-card>
 </template>
 
@@ -114,6 +138,10 @@ export default {
         const currentMessage = ref('');
         const isLoading = ref(false);
         const messagesContainer = ref(null);
+
+        const isDislikeDialogOpen = ref(false);
+        const dislikeComment = ref('');
+        const pendingDislike = ref(null);
 
         // Initialize Assistant
         const { sendMessage: sendToAssistant, sendReaction: sendAssistantReaction } = useAssistant();
@@ -239,12 +267,7 @@ export default {
             return 0;
         };
 
-        const setReaction = async (message, index, reactionValue) => {
-            if (!message || message.role !== 'assistant' || message.isError) return;
-
-            const previous = getMessageReaction(message);
-            const next = previous === reactionValue ? 0 : reactionValue;
-
+        const applyReaction = async ({ message, index, previous, next, comment }) => {
             message.reaction = next;
             message.isLiked = next === 1;
             message.isDisliked = next === -1;
@@ -262,7 +285,7 @@ export default {
                     assistantResponse: message.content,
                     assistantCallId: assistantCallId,
                     reaction: providerReaction,
-                    comment: null
+                    comment: next === -1 ? (comment || null) : null
                 });
             } catch (error) {
                 console.error('Error sending assistant reaction:', error);
@@ -270,6 +293,44 @@ export default {
                 message.isLiked = previous === 1;
                 message.isDisliked = previous === -1;
             }
+        };
+
+        const setReaction = async (message, index, reactionValue) => {
+            if (!message || message.role !== 'assistant' || message.isError) return;
+
+            const previous = getMessageReaction(message);
+            const next = previous === reactionValue ? 0 : reactionValue;
+
+            // If user is setting a negative reaction, ask for a comment first.
+            if (next === -1 && previous !== -1) {
+                pendingDislike.value = { message, index, previous, next };
+                dislikeComment.value = '';
+                isDislikeDialogOpen.value = true;
+                return;
+            }
+
+            await applyReaction({ message, index, previous, next, comment: null });
+        };
+
+        const cancelDislikeComment = () => {
+            pendingDislike.value = null;
+            dislikeComment.value = '';
+            isDislikeDialogOpen.value = false;
+        };
+
+        const confirmDislikeComment = async () => {
+            const pending = pendingDislike.value;
+            pendingDislike.value = null;
+            isDislikeDialogOpen.value = false;
+
+            if (!pending) {
+                dislikeComment.value = '';
+                return;
+            }
+
+            const comment = dislikeComment.value;
+            dislikeComment.value = '';
+            await applyReaction({ ...pending, comment });
         };
 
         const callAssistant = async (userMessage, questionnaireId, entityId, area) => {
@@ -303,6 +364,10 @@ export default {
             sendMessage,
             getMessageReaction,
             setReaction,
+            isDislikeDialogOpen,
+            dislikeComment,
+            cancelDislikeComment,
+            confirmDislikeComment,
             formatMessage,
             formatTime
         };
