@@ -31,7 +31,7 @@
         <value>Dislike</value>
     </data>
     <data name="Undislike" xml:space="preserve">
-        <value>Undislike</value>
+        <value>Undo dislike</value>
     </data>
     <data name="TypeMessage" xml:space="preserve">
         <value>Type your message...</value>
