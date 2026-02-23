@@ -78,6 +78,10 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
     <EmbeddedResource Include="Code\ImportExport\QuestionnaireSchema.json" />
+    <EmbeddedResource Update="Resources\Assistant.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Assistant.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>
@@ -117,6 +121,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>QuestionnaireEditor.resx</DependentUpon>
       <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Update="Resources\Assistant.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Assistant.resx</DependentUpon>
     </Compile>
   </ItemGroup>
 
