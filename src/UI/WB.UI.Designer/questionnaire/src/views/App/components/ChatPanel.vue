@@ -6,7 +6,8 @@
             </div>
             <div class="d-flex align-center">
                 <v-btn icon="mdi-delete-sweep" variant="text" size="medium" @click="clearHistory"
-                    :disabled="messages.length === 0" :title="$t('Assistant.ClearHistory', 'Clear history')" />
+                    :disabled="messages.length === 0" :title="$t('Assistant.ClearHistory', 'Clear history')"
+                    style="padding-right: 10px;" />
                 <v-btn icon="mdi-close" variant="text" size="medium" @click="close" />
             </div>
         </v-card-title>
