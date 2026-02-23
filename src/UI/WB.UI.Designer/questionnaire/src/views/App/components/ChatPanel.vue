@@ -77,8 +77,8 @@
         <!-- Input Area -->
         <v-card-actions class="pa-4">
             <v-textarea v-model="currentMessage" :placeholder="$t('Assistant.TypeMessage', 'Type your message...')"
-                variant="outlined" density="comfortable" hide-details @keyup.enter="handleEnter" :disabled="isLoading"
-                class="flex-grow-1" maxlength="2000" rows="2">
+                variant="outlined" density="comfortable" hide-details @keyup.enter.prevent="handleEnter"
+                :disabled="isLoading" class="flex-grow-1" maxlength="2000" rows="2">
                 <!-- <template v-slot:append-inner>
                     <v-btn icon="mdi-send" variant="text" color="primary" size="medium" @click="sendMessage"
                         :disabled="!currentMessage.trim() || isLoading" />
