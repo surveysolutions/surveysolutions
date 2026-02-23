@@ -128,7 +128,8 @@ export default {
         const scrollToBottom = async () => {
             await nextTick();
             if (messagesContainer.value) {
-                messagesContainer.value.scrollTop = messagesContainer.value.scrollHeight;
+                const element = messagesContainer.value.$el || messagesContainer.value;
+                element.scrollTop = element.scrollHeight;
             }
         };
 
