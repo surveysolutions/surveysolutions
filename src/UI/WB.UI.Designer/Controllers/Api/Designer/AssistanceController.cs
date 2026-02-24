@@ -75,6 +75,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             public List<Message> Messages { get; set; } = new List<Message>();
             public Guid? EntityId { get; set; }
             public string Area { get; set; } = string.Empty;
+            public Guid? ConversationId { get; set; }
         }
 
         public class AssistanceReactionRequest
@@ -103,6 +104,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             public string Expression { get; set; } = string.Empty;
             public string Message { get; set; } = string.Empty;
             public JToken? Meta { get; set; }
+            public Guid? ConversationId { get; set; }
         }
 
         [HttpPost]
@@ -157,7 +159,8 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                     QuestionnaireId = $"{questionnaireRevision.QuestionnaireId}${questionnaireRevision.Version}",
                     EntityId = request.EntityId.Value,
                     Prompt = !string.IsNullOrWhiteSpace(request.Prompt) ? request.Prompt : request.Messages.Last().Content,
-                    Messages = request.Messages.SkipLast(1).Select(m => new { m.Role, m.Content }).ToList()
+                    Messages = request.Messages.SkipLast(1).Select(m => new { m.Role, m.Content }).ToList(),
+                    conversationId = request.ConversationId
                 };
 
                 var jsonContent = JsonSerializer.Serialize(proxyRequest);
@@ -210,11 +213,20 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 else if (responseData.TryGetProperty("answer", out var ans)) message = ans.GetString();
                 else if (responseData.TryGetProperty("Answer", out var ans2)) message = ans2.GetString();
 
+                Guid? conversationId = null;
+                if (responseData.TryGetProperty("conversationId", out var conv)
+                    && conv.ValueKind == JsonValueKind.String
+                    && Guid.TryParse(conv.GetString(), out var parsedConv))
+                {
+                    conversationId = parsedConv;
+                }
+
                 return Ok(new
                 {
                     Expression = expression,
                     Message = message,
-                    Meta = metaToken
+                    Meta = metaToken,
+                    conversationId = conversationId
                 });
             }
             catch (Exception ex)

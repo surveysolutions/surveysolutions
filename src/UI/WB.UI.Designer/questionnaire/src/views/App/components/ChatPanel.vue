@@ -139,6 +139,8 @@ export default {
         const isLoading = ref(false);
         const messagesContainer = ref(null);
 
+        const conversationId = ref(null);
+
         const isDislikeDialogOpen = ref(false);
         const dislikeComment = ref('');
         const pendingDislike = ref(null);
@@ -151,6 +153,7 @@ export default {
             if (newVal) {
                 messages.value = [];
                 currentMessage.value = '';
+                conversationId.value = null;
             }
         });
 
@@ -161,6 +164,7 @@ export default {
         const clearHistory = () => {
             messages.value = [];
             currentMessage.value = '';
+            conversationId.value = null;
 
             if (typeof chatStore.clearHistory === 'function') {
                 chatStore.clearHistory();
@@ -219,6 +223,8 @@ export default {
                 const assistantResult = await callAssistant(messageText, chatStore.questionnaireId, chatStore.entityId, chatStore.area);
                 const responseText = typeof assistantResult === 'string' ? assistantResult : assistantResult?.text;
                 const responseMeta = typeof assistantResult === 'object' ? assistantResult?.meta : null;
+                const nextConversationId = typeof assistantResult === 'object' ? assistantResult?.conversationId : null;
+                if (nextConversationId) conversationId.value = nextConversationId;
                 const assistantCallId = extractAssistantCallId(responseMeta);
 
                 const assistantMessage = {
@@ -350,7 +356,8 @@ export default {
             return await sendToAssistant(userMessage, conversationHistory, {
                 questionnaireId: questionnaireId,
                 entityId: entityId,
-                area: area
+                area: area,
+                conversationId: conversationId.value
             });
         };
 

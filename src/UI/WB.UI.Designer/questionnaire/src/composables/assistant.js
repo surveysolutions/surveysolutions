@@ -30,6 +30,7 @@ export const useAssistant = () => {
                         })),
                         prompt: prompt,
                         entityId: options.entityId || null,
+                        conversationId: options.conversationId || null,
                     },
                     {
                         timeout: 3 * 60 * 1000, // 3 minute timeout
@@ -46,8 +47,9 @@ export const useAssistant = () => {
                     data.Message ??
                     '';
                 const meta = data.meta ?? data.Meta ?? null;
+                const conversationId = data.conversationId ?? null;
 
-                return { text, meta };
+                return { text, meta, conversationId };
             } catch (error) {
                 console.error(
                     `Assistant Error (attempt ${attempt}/${retries}):`,
