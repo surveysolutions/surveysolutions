@@ -2,17 +2,17 @@
     <v-card class="chat-container" style="margin: 0; border-radius: 0;">
         <v-card-title class="d-flex justify-space-between align-center pa-4">
             <div class="d-flex align-center">
-                <v-icon class="mr-2" color="primary">mdi-chat</v-icon>
-                <span>AI Assistant</span>
+                <span>{{ $t('Assistant.Title', 'AI Assistant') }}</span>
             </div>
             <div class="d-flex align-center">
-                <v-btn icon="mdi-delete-sweep" variant="text" size="small" @click="clearHistory"
-                    :disabled="messages.length === 0" :title="$t('Chat.ClearHistory', 'Clear history')" />
-                <v-btn icon="mdi-close" variant="text" size="small" @click="close" />
+                <v-btn icon="mdi-delete-sweep" variant="text" size="medium" @click="clearHistory"
+                    :disabled="messages.length === 0" :title="$t('Assistant.ClearHistory', 'Clear history')"
+                    style="padding-right: 10px;" />
+                <v-btn icon="mdi-close" variant="text" size="medium" @click="close" />
             </div>
         </v-card-title>
 
-        <v-divider />
+        <v-divider style="margin: 0;" />
 
         <!-- Chat Messages -->
         <v-card-text class="chat-messages pa-0" ref="messagesContainer"
@@ -20,7 +20,7 @@
             <div class="pa-4">
                 <div v-if="messages.length === 0" class="text-center text-grey-darken-1 mt-8">
                     <v-icon size="48" class="mb-4">mdi-chat-outline</v-icon>
-                    <p>{{ $t('Chat.WelcomeMessage', 'Start a conversation with the AI assistant') }}</p>
+                    <p>{{ $t('Assistant.WelcomeMessage', 'Start a conversation with the AI assistant') }}</p>
                 </div>
 
                 <div v-for="(message, index) in messages" :key="message.id" class="mb-4">
@@ -29,32 +29,22 @@
                         message.role === 'user' ? 'user-message' : 'assistant-message'
                     ]">
                         <div class="d-flex align-start">
-                            <v-avatar :color="message.role === 'user' ? 'primary' : 'grey-lighten-2'" size="32"
-                                class="mr-3">
-                                <v-icon :color="message.role === 'user' ? 'white' : 'grey-darken-2'">
-                                    {{ message.role === 'user' ? 'mdi-account' : 'mdi-robot' }}
-                                </v-icon>
-                            </v-avatar>
                             <div class="flex-grow-1">
                                 <div class="message-content">
                                     <p class="mb-1" v-html="formatMessage(message.content)"></p>
                                     <div class="d-flex align-center justify-space-between">
-                                        <small class="text-grey-darken-1">
-                                            {{ formatTime(message.timestamp) }}
-                                        </small>
-
                                         <div v-if="message.role === 'assistant' && !message.isError"
                                             class="d-flex align-center">
                                             <v-btn variant="text" size="x-small"
                                                 :icon="getMessageReaction(message) === 1 ? 'mdi-thumb-up' : 'mdi-thumb-up-outline'"
                                                 :color="getMessageReaction(message) === 1 ? 'primary' : undefined"
                                                 @click="setReaction(message, index, 1)"
-                                                :title="getMessageReaction(message) === 1 ? $t('Chat.Unlike', 'Unlike') : $t('Chat.Like', 'Like')" />
+                                                :title="getMessageReaction(message) === 1 ? $t('Assistant.Unlike', 'Unlike') : $t('Assistant.Like', 'Like')" />
                                             <v-btn variant="text" size="x-small"
                                                 :icon="getMessageReaction(message) === -1 ? 'mdi-thumb-down' : 'mdi-thumb-down-outline'"
                                                 :color="getMessageReaction(message) === -1 ? 'error' : undefined"
                                                 @click="setReaction(message, index, -1)"
-                                                :title="getMessageReaction(message) === -1 ? $t('Chat.Undislike', 'Remove dislike') : $t('Chat.Dislike', 'Dislike')" />
+                                                :title="getMessageReaction(message) === -1 ? $t('Assistant.Undislike', 'Remove dislike') : $t('Assistant.Dislike', 'Dislike')" />
                                         </div>
                                     </div>
                                 </div>
@@ -67,9 +57,6 @@
                 <div v-if="isLoading" class="mb-4">
                     <div class="message-bubble assistant-message">
                         <div class="d-flex align-start">
-                            <v-avatar color="grey-lighten-2" size="32" class="mr-3">
-                                <v-icon color="grey-darken-2">mdi-robot</v-icon>
-                            </v-avatar>
                             <div class="flex-grow-1">
                                 <div class="message-content">
                                     <div class="typing-indicator">
@@ -85,18 +72,18 @@
             </div>
         </v-card-text>
 
-        <v-divider />
+        <v-divider style="margin: 0;" />
 
         <!-- Input Area -->
         <v-card-actions class="pa-4">
-            <v-text-field v-model="currentMessage" :placeholder="$t('Chat.TypeMessage', 'Type your message...')"
-                variant="outlined" density="comfortable" hide-details @keyup.enter="sendMessage" :disabled="isLoading"
-                class="flex-grow-1">
-                <template v-slot:append-inner>
-                    <v-btn icon="mdi-send" variant="text" color="primary" size="small" @click="sendMessage"
+            <v-textarea v-model="currentMessage" :placeholder="$t('Assistant.TypeMessage', 'Type your message...')"
+                variant="outlined" density="comfortable" hide-details @keyup.enter.prevent="handleEnter"
+                :disabled="isLoading" class="flex-grow-1" maxlength="2000" rows="2">
+                <!-- <template v-slot:append-inner>
+                    <v-btn icon="mdi-send" variant="text" color="primary" size="medium" @click="sendMessage"
                         :disabled="!currentMessage.trim() || isLoading" />
-                </template>
-            </v-text-field>
+                </template> -->
+            </v-textarea>
         </v-card-actions>
 
         <v-dialog v-model="isDislikeDialogOpen" max-width="560">
@@ -174,7 +161,8 @@ export default {
         const scrollToBottom = async () => {
             await nextTick();
             if (messagesContainer.value) {
-                messagesContainer.value.scrollTop = messagesContainer.value.scrollHeight;
+                const element = messagesContainer.value.$el || messagesContainer.value;
+                element.scrollTop = element.scrollHeight;
             }
         };
 
@@ -255,6 +243,16 @@ export default {
             } finally {
                 isLoading.value = false;
             }
+        };
+
+        const handleEnter = (event) => {
+            if (event.shiftKey) {
+                // Allow default behavior for Shift+Enter (new line)
+                return;
+            }
+            // Prevent default and send message on Enter
+            event.preventDefault();
+            sendMessage();
         };
 
         const findPromptForAssistantMessage = (assistantIndex) => {
@@ -369,6 +367,7 @@ export default {
             messagesContainer,
             close,
             sendMessage,
+            handleEnter,
             getMessageReaction,
             setReaction,
             isDislikeDialogOpen,
@@ -397,6 +396,10 @@ export default {
     font-size: 16px;
 }
 
+.chat-container :deep(.v-field--appended) {
+    padding-inline-end: 0px !important;
+}
+
 .chat-messages {
     flex: 1;
     overflow-y: auto;
@@ -407,8 +410,18 @@ export default {
     margin-bottom: 16px;
 }
 
+.message-bubble.user-message {
+    justify-content: flex-end;
+    display: flex;
+}
+
+.message-bubble.assistant-message {
+    justify-content: flex-start;
+}
+
 .message-bubble p {
     font-size: 14px;
+    margin: 0;
 }
 
 .user-message .message-content {
@@ -416,7 +429,7 @@ export default {
     color: white;
     padding: 12px 16px;
     border-radius: 18px;
-    border-bottom-right-radius: 4px;
+    border-top-right-radius: 4px;
     font-size: 14px;
 }
 
@@ -425,7 +438,6 @@ export default {
     color: rgb(var(--v-theme-on-surface-variant));
     padding: 12px 16px;
     border-radius: 18px;
-    border-bottom-left-radius: 4px;
     font-size: 14px;
 }
 
@@ -451,6 +463,10 @@ export default {
 
 .typing-indicator span:nth-child(2) {
     animation-delay: -0.16s;
+}
+
+.v-card-actions {
+    padding-bottom: 10px !important;
 }
 
 @keyframes typing {
