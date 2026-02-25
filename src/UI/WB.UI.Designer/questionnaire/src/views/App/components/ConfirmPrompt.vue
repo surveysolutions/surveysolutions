@@ -12,7 +12,15 @@
                             {{ header || $t('QuestionnaireEditor.ModalConfirm') }}
                         </h3>
                     </div>
-                    <div class="modal-body" v-dompurify-html="title">
+                    <div class="modal-body">
+                        <div v-dompurify-html="title" style="display: contents;"></div>
+
+                        <div class="form-group" style="margin-top: 10px;">
+                            <label v-if="inputLabel" class="control-label">{{ inputLabel }}</label>
+                            <textarea class="form-control" v-model="inputValue" :placeholder="inputPlaceholder"
+                                :rows="inputRows"></textarea>
+                            <div v-if="inputHint" class="help-block">{{ inputHint }}</div>
+                        </div>
                     </div>
                     <div class="modal-footer" v-if="!noControls">
                         <button class="btn btn-primary btn-lg" v-if="!isReadOnly" @click="ok()">
@@ -38,8 +46,8 @@
 <script>
 import event from '../../../plugins/events';
 
-const confirmDialog = {
-    name: 'Confirm',
+const confirmPromptDialog = {
+    name: 'ConfirmPrompt',
     data() {
         return {
             title: { type: String, required: true },
@@ -50,14 +58,21 @@ const confirmDialog = {
             callback: { type: Function, required: false },
             noControls: { type: Boolean, required: false },
             isAlert: { type: Boolean, required: false, default: false },
+
+            inputValue: '',
+            inputLabel: null,
+            inputPlaceholder: null,
+            inputHint: null,
+            inputRows: 4,
+
             isOpen: false
         };
     },
     mounted() {
-        event.on('open', params => {
+        event.on('openPrompt', params => {
             this.open(params);
         });
-        event.on('close', () => {
+        event.on('closePrompt', () => {
             this.cancel();
         });
     },
@@ -71,20 +86,44 @@ const confirmDialog = {
             this.isAlert = params.isAlert || false;
             this.callback = params.callback;
             this.noControls = params.noControls || false;
+
+            this.inputValue = params.inputValue || '';
+            this.inputLabel = params.inputLabel || null;
+            this.inputPlaceholder = params.inputPlaceholder || null;
+            this.inputHint = params.inputHint || null;
+            this.inputRows = params.inputRows || 4;
+
             this.isOpen = true;
         },
         cancel() {
-            if (this.callback)
-                this.callback(false);
+            const callback = this.callback;
+            const value = this.inputValue;
+
             this.isOpen = false;
+            this.inputValue = '';
+
+            if (callback)
+                callback(false, value);
         },
         ok() {
-            if (this.callback)
-                this.callback(true);
+            const callback = this.callback;
+            const value = this.inputValue;
+
             this.isOpen = false;
+            this.inputValue = '';
+
+            if (callback)
+                callback(true, value);
         }
     }
 };
 
-export default confirmDialog;
+export default confirmPromptDialog;
 </script>
+
+<style scoped>
+.confirm-window textarea.form-control {
+    height: auto !important;
+    min-height: 6em;
+}
+</style>

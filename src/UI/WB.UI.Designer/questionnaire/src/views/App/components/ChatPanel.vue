@@ -86,40 +86,18 @@
             </v-textarea>
         </v-card-actions>
 
-        <v-dialog v-model="isDislikeDialogOpen" max-width="560">
-            <v-card>
-                <v-card-title class="text-h6">
-                    {{ $t('Chat.DislikeCommentTitle', 'Add a comment') }}
-                </v-card-title>
-                <v-card-text>
-                    <div class="text-body-2 mb-2">
-                        {{ $t('Chat.DislikeCommentHint', 'What was wrong with this answer?') }}
-                    </div>
-                    <v-textarea v-model="dislikeComment" variant="outlined" density="comfortable" auto-grow
-                        :placeholder="$t('Chat.DislikeCommentPlaceholder', 'Write a short comment (optional)')" />
-                </v-card-text>
-                <v-card-actions>
-                    <v-spacer />
-                    <v-btn variant="text" @click="cancelDislikeComment">
-                        {{ $t('Chat.Cancel', 'Cancel') }}
-                    </v-btn>
-                    <v-btn color="primary" variant="text" @click="confirmDislikeComment">
-                        {{ $t('Chat.Send', 'Send') }}
-                    </v-btn>
-                </v-card-actions>
-            </v-card>
-        </v-dialog>
     </v-card>
 </template>
 
 <script>
-import { ref, nextTick, watch } from 'vue';
+import { ref, nextTick, watch, getCurrentInstance } from 'vue';
 import { useChatStore } from '../../../stores/chat';
 import { useAssistant } from '../../../composables/assistant';
 
 export default {
     name: 'ChatPanel',
     setup() {
+        const vm = getCurrentInstance()?.proxy;
         const chatStore = useChatStore();
         const messages = ref([]);
         const currentMessage = ref('');
@@ -128,12 +106,56 @@ export default {
 
         const conversationId = ref(null);
 
-        const isDislikeDialogOpen = ref(false);
-        const dislikeComment = ref('');
-        const pendingDislike = ref(null);
-
         // Initialize Assistant
         const { sendMessage: sendToAssistant, sendReaction: sendAssistantReaction } = useAssistant();
+
+        const promptUnlikeComment = () => {
+            return new Promise(resolve => {
+                const confirmPrompt = vm?.$confirmPrompt;
+                if (typeof confirmPrompt !== 'function') {
+                    resolve({ confirmed: true, comment: '' });
+                    return;
+                }
+
+                confirmPrompt({
+                    header: vm?.$t?.('Assistant.Unlike', 'Unlike') || 'Unlike',
+                    title: vm?.$t?.('Assistant.UnlikeCommentTitle', 'Add a comment') || 'Add a comment',
+                    okButtonTitle: vm?.$t?.('QuestionnaireEditor.OK', 'OK') || 'OK',
+                    cancelButtonTitle: vm?.$t?.('QuestionnaireEditor.Cancel', 'Cancel') || 'Cancel',
+                    inputPlaceholder: vm?.$t?.('Assistant.UnlikeCommentPlaceholder', 'Write a short comment (optional)')
+                        || 'Write a short comment (optional)',
+                    callback: (confirmed, value) => {
+                        const comment = typeof value === 'string' ? value : '';
+                        resolve({ confirmed: !!confirmed, comment });
+                    }
+                });
+            });
+        };
+
+        const promptDislikeComment = () => {
+            return new Promise(resolve => {
+                const confirmPrompt = vm?.$confirmPrompt;
+                if (typeof confirmPrompt !== 'function') {
+                    resolve({ confirmed: true, comment: '' });
+                    return;
+                }
+
+                confirmPrompt({
+                    header: vm?.$t?.('Assistant.Dislike', 'Dislike') || 'Dislike',
+                    title: vm?.$t?.('Chat.DislikeCommentTitle', 'Add a comment') || 'Add a comment',
+                    okButtonTitle: vm?.$t?.('Chat.Send', 'Send') || 'Send',
+                    cancelButtonTitle: vm?.$t?.('Chat.Cancel', 'Cancel') || 'Cancel',
+                    inputPlaceholder: vm?.$t?.('Chat.DislikeCommentPlaceholder', 'Write a short comment (optional)')
+                        || 'Write a short comment (optional)',
+                    inputHint: vm?.$t?.('Chat.DislikeCommentHint', 'What was wrong with this answer?')
+                        || 'What was wrong with this answer?',
+                    callback: (confirmed, value) => {
+                        const comment = typeof value === 'string' ? value : '';
+                        resolve({ confirmed: !!confirmed, comment });
+                    }
+                });
+            });
+        };
 
         // Reset chat history when panel is opened
         watch(() => chatStore.isOpen, (newVal) => {
@@ -289,7 +311,7 @@ export default {
                     assistantResponse: message.content,
                     assistantCallId: assistantCallId,
                     reaction: providerReaction,
-                    comment: next === -1 ? (comment || null) : null
+                    comment: comment || null
                 });
             } catch (error) {
                 console.error('Error sending assistant reaction:', error);
@@ -305,36 +327,23 @@ export default {
             const previous = getMessageReaction(message);
             const next = previous === reactionValue ? 0 : reactionValue;
 
-            // If user is setting a negative reaction, ask for a comment first.
+            // If user removes a positive reaction, ask for a comment via $confirm.
+            if (previous === 1 && next === 0 && reactionValue === 1) {
+                const { confirmed, comment } = await promptUnlikeComment();
+                if (!confirmed) return;
+                await applyReaction({ message, index, previous, next, comment });
+                return;
+            }
+
+            // If user sets a negative reaction, ask for a comment in confirm-styled prompt.
             if (next === -1 && previous !== -1) {
-                pendingDislike.value = { message, index, previous, next };
-                dislikeComment.value = '';
-                isDislikeDialogOpen.value = true;
+                const { confirmed, comment } = await promptDislikeComment();
+                if (!confirmed) return;
+                await applyReaction({ message, index, previous, next, comment });
                 return;
             }
 
             await applyReaction({ message, index, previous, next, comment: null });
-        };
-
-        const cancelDislikeComment = () => {
-            pendingDislike.value = null;
-            dislikeComment.value = '';
-            isDislikeDialogOpen.value = false;
-        };
-
-        const confirmDislikeComment = async () => {
-            const pending = pendingDislike.value;
-            pendingDislike.value = null;
-            isDislikeDialogOpen.value = false;
-
-            if (!pending) {
-                dislikeComment.value = '';
-                return;
-            }
-
-            const comment = dislikeComment.value;
-            dislikeComment.value = '';
-            await applyReaction({ ...pending, comment });
         };
 
         const callAssistant = async (userMessage, questionnaireId, entityId, area) => {
@@ -370,10 +379,6 @@ export default {
             handleEnter,
             getMessageReaction,
             setReaction,
-            isDislikeDialogOpen,
-            dislikeComment,
-            cancelDislikeComment,
-            confirmDislikeComment,
             formatMessage,
             formatTime
         };
