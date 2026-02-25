@@ -35,16 +35,20 @@
                                     <div class="d-flex align-center justify-space-between">
                                         <div v-if="message.role === 'assistant' && !message.isError"
                                             class="d-flex align-center">
-                                            <v-btn variant="text" size="x-small"
-                                                :icon="getMessageReaction(message) === 1 ? 'mdi-thumb-up' : 'mdi-thumb-up-outline'"
-                                                :color="getMessageReaction(message) === 1 ? 'primary' : undefined"
+                                            <v-btn variant="text" size="x-small" icon
+                                                :color="getMessageReaction(message) === 1 ? 'success' : undefined"
                                                 @click="setReaction(message, index, 1)"
-                                                :title="getMessageReaction(message) === 1 ? $t('Assistant.Unlike', 'Unlike') : $t('Assistant.Like', 'Like')" />
-                                            <v-btn variant="text" size="x-small"
-                                                :icon="getMessageReaction(message) === -1 ? 'mdi-thumb-down' : 'mdi-thumb-down-outline'"
+                                                :title="getMessageReaction(message) === 1 ? $t('Assistant.Unlike', 'Unlike') : $t('Assistant.Like', 'Like')">
+                                                <v-icon :size="24">{{ getMessageReaction(message) === 1 ? 'mdi-thumb-up'
+                                                    : 'mdi-thumb-up-outline' }}</v-icon>
+                                            </v-btn>
+                                            <v-btn variant="text" size="x-small" icon
                                                 :color="getMessageReaction(message) === -1 ? 'error' : undefined"
                                                 @click="setReaction(message, index, -1)"
-                                                :title="getMessageReaction(message) === -1 ? $t('Assistant.Undislike', 'Remove dislike') : $t('Assistant.Dislike', 'Dislike')" />
+                                                :title="getMessageReaction(message) === -1 ? $t('Assistant.Undislike', 'Remove dislike') : $t('Assistant.Dislike', 'Dislike')">
+                                                <v-icon :size="24">{{ getMessageReaction(message) === -1 ?
+                                                    'mdi-thumb-down' : 'mdi-thumb-down-outline' }}</v-icon>
+                                            </v-btn>
                                         </div>
                                     </div>
                                 </div>
