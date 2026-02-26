@@ -11,8 +11,6 @@ using System.Threading.Tasks;
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
-using WB.Core.BoundedContexts.Designer.Assistant;
-using WB.Core.BoundedContexts.Designer.Assistant.Settings;
 using WB.Core.BoundedContexts.Designer.Implementation;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.Infrastructure.PlainStorage;
@@ -29,34 +27,21 @@ namespace WB.UI.Designer.Controllers.Api.Designer
     public class AssistanceController : ControllerBase
     {
         private readonly IConfiguration configuration;
-        private readonly IModelSettings modelSettings;
         private readonly ILogger<AssistanceController> logger;
         private readonly UserManager<DesignerIdentityUser> userManager;
         private readonly IQuestionnaireHelper questionnaireHelper;
         private readonly IJwtTokenService jwtTokenService;
-
-        private readonly IQuestionnaireContextProvider questionnaireContextProvider;
         private readonly IPlainKeyValueStorage<AssistantSettings> appSettingsStorage;
-        private readonly IQuestionnaireAssistant questionnaireAssistant;
-        //private readonly IQuestionnaireContextProvider questionnaireContextProvider;
 
         public AssistanceController(IConfiguration configuration,
-            //IQuestionnaireContextProvider questionnaireContextProvider,
             ILogger<AssistanceController> logger,
-            IQuestionnaireContextProvider questionnaireContextProvider,
-            IQuestionnaireAssistant questionnaireAssistant,
             IPlainKeyValueStorage<AssistantSettings> appSettingsStorage,
             UserManager<DesignerIdentityUser> userManager,
             IQuestionnaireHelper questionnaireHelper,
             IJwtTokenService jwtTokenService)
         {
             this.configuration = configuration;
-            //this.questionnaireContextProvider = questionnaireContextProvider;
             this.logger = logger;
-            this.questionnaireContextProvider = questionnaireContextProvider;
-            this.questionnaireAssistant = questionnaireAssistant;
-
-            this.modelSettings = new AssistantModelSettings(configuration);
             this.appSettingsStorage = appSettingsStorage;
             this.userManager = userManager;
             this.questionnaireHelper = questionnaireHelper;
@@ -74,7 +59,6 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             public string Prompt { get; set; } = string.Empty;
             public List<Message> Messages { get; set; } = new List<Message>();
             public Guid? EntityId { get; set; }
-            public string Area { get; set; } = string.Empty;
         }
 
         public class AssistanceReactionRequest
