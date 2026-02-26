@@ -76,7 +76,7 @@
         "jest": "^30.2.0",
         "npm-force-resolutions": "0.0.6",
         "prettier": "3.0.0",
-        "rollup": "4.32.0",
+        "rollup": "4.59.0",
         "sass": "^1.85.0",
         "terser": "^5.37.0",
         "test-exclude": "^7.0.1",
