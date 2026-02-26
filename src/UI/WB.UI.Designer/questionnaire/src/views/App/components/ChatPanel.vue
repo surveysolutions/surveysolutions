@@ -35,7 +35,7 @@
                                     <div class="d-flex align-center justify-space-between">
                                         <div v-if="message.role === 'assistant' && !message.isError"
                                             class="d-flex align-center">
-                                            <v-btn variant="text" size="x-small" icon
+                                            <v-btn variant="text" size="x-small" icon class="reaction-btn reaction-like"
                                                 :color="getMessageReaction(message) === 1 ? 'success' : undefined"
                                                 @click="setReaction(message, index, 1)"
                                                 :title="getMessageReaction(message) === 1 ? $t('Assistant.Unlike', 'Unlike') : $t('Assistant.Like', 'Like')">
@@ -43,6 +43,7 @@
                                                     : 'mdi-thumb-up-outline' }}</v-icon>
                                             </v-btn>
                                             <v-btn variant="text" size="x-small" icon
+                                                class="reaction-btn reaction-dislike"
                                                 :color="getMessageReaction(message) === -1 ? 'error' : undefined"
                                                 @click="setReaction(message, index, -1)"
                                                 :title="getMessageReaction(message) === -1 ? $t('Assistant.Undislike', 'Remove dislike') : $t('Assistant.Dislike', 'Dislike')">
@@ -476,6 +477,28 @@ export default {
 
 .v-card-actions {
     padding-bottom: 10px !important;
+}
+
+/* Remove Vuetify "text button" hover/focus overlay for like/dislike buttons. */
+.chat-container :deep(.reaction-btn:hover .v-btn__overlay),
+.chat-container :deep(.reaction-btn:focus-visible .v-btn__overlay),
+.chat-container :deep(.reaction-btn:hover .v-btn__underlay),
+.chat-container :deep(.reaction-btn:focus-visible .v-btn__underlay) {
+    opacity: 0 !important;
+}
+
+.chat-container :deep(.reaction-btn:hover) {
+    background-color: transparent !important;
+}
+
+.chat-container :deep(.reaction-like:hover .v-icon),
+.chat-container :deep(.reaction-like:focus-visible .v-icon) {
+    color: rgb(var(--v-theme-success)) !important;
+}
+
+.chat-container :deep(.reaction-dislike:hover .v-icon),
+.chat-container :deep(.reaction-dislike:focus-visible .v-icon) {
+    color: rgb(var(--v-theme-error)) !important;
 }
 
 @keyframes typing {
