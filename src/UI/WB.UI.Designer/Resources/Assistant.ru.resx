@@ -30,8 +30,29 @@
     <data name="Dislike" xml:space="preserve">
         <value>Не нравится</value>
     </data>
+    <data name="Unhelpful" xml:space="preserve">
+        <value>Не помогло</value>
+    </data>
     <data name="Undislike" xml:space="preserve">
         <value>Убрать дизлайк</value>
+    </data>
+    <data name="DislikeCommentTitle" xml:space="preserve">
+        <value>Добавить комментарий</value>
+    </data>
+    <data name="DislikeCommentPlaceholder" xml:space="preserve">
+        <value>Напишите короткий комментарий (необязательно)</value>
+    </data>
+    <data name="DislikeCommentHint" xml:space="preserve">
+        <value>Что было не так в этом ответе?</value>
+    </data>
+    <data name="Send" xml:space="preserve">
+        <value>Отправить</value>
+    </data>
+    <data name="UnlikeCommentTitle" xml:space="preserve">
+        <value>Добавить комментарий</value>
+    </data>
+    <data name="UnlikeCommentPlaceholder" xml:space="preserve">
+        <value>Напишите короткий комментарий (необязательно)</value>
     </data>
     <data name="TypeMessage" xml:space="preserve">
         <value>Введите ваше сообщение...</value>

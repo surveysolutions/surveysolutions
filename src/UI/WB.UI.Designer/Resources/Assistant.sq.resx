@@ -24,8 +24,29 @@
     <data name="Unlike" xml:space="preserve">
         <value>Hiq pëlqimin</value>
     </data>
+    <data name="Unhelpful" xml:space="preserve">
+        <value>Nuk ndihmoi</value>
+    </data>
     <data name="Like" xml:space="preserve">
         <value>Pëlqej</value>
+    </data>
+    <data name="DislikeCommentTitle" xml:space="preserve">
+        <value>Shto një koment</value>
+    </data>
+    <data name="DislikeCommentPlaceholder" xml:space="preserve">
+        <value>Shkruani një koment të shkurtër (opsional)</value>
+    </data>
+    <data name="DislikeCommentHint" xml:space="preserve">
+        <value>Çfarë ishte gabim me këtë përgjigje?</value>
+    </data>
+    <data name="Send" xml:space="preserve">
+        <value>Dërgo</value>
+    </data>
+    <data name="UnlikeCommentTitle" xml:space="preserve">
+        <value>Shto një koment</value>
+    </data>
+    <data name="UnlikeCommentPlaceholder" xml:space="preserve">
+        <value>Shkruani një koment të shkurtër (opsional)</value>
     </data>
     <data name="Dislike" xml:space="preserve">
         <value>Nuk pëlqej</value>

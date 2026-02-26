@@ -24,8 +24,29 @@
     <data name="Unlike" xml:space="preserve">
         <value>Прибрати вподобання</value>
     </data>
+    <data name="Unhelpful" xml:space="preserve">
+        <value>Не допомогло</value>
+    </data>
     <data name="Like" xml:space="preserve">
         <value>Подобається</value>
+    </data>
+    <data name="DislikeCommentTitle" xml:space="preserve">
+        <value>Додати коментар</value>
+    </data>
+    <data name="DislikeCommentPlaceholder" xml:space="preserve">
+        <value>Напишіть короткий коментар (необов’язково)</value>
+    </data>
+    <data name="DislikeCommentHint" xml:space="preserve">
+        <value>Що було не так у цій відповіді?</value>
+    </data>
+    <data name="Send" xml:space="preserve">
+        <value>Надіслати</value>
+    </data>
+    <data name="UnlikeCommentTitle" xml:space="preserve">
+        <value>Додати коментар</value>
+    </data>
+    <data name="UnlikeCommentPlaceholder" xml:space="preserve">
+        <value>Напишіть короткий коментар (необов’язково)</value>
     </data>
     <data name="Dislike" xml:space="preserve">
         <value>Не подобається</value>

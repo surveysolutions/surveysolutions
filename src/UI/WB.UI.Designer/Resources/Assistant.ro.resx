@@ -24,8 +24,29 @@
     <data name="Unlike" xml:space="preserve">
         <value>Anulează aprecierea</value>
     </data>
+    <data name="Unhelpful" xml:space="preserve">
+        <value>Nu a fost util</value>
+    </data>
     <data name="Like" xml:space="preserve">
         <value>Apreciază</value>
+    </data>
+    <data name="DislikeCommentTitle" xml:space="preserve">
+        <value>Adăugați un comentariu</value>
+    </data>
+    <data name="DislikeCommentPlaceholder" xml:space="preserve">
+        <value>Scrieți un comentariu scurt (opțional)</value>
+    </data>
+    <data name="DislikeCommentHint" xml:space="preserve">
+        <value>Ce a fost în neregulă cu acest răspuns?</value>
+    </data>
+    <data name="Send" xml:space="preserve">
+        <value>Trimite</value>
+    </data>
+    <data name="UnlikeCommentTitle" xml:space="preserve">
+        <value>Adăugați un comentariu</value>
+    </data>
+    <data name="UnlikeCommentPlaceholder" xml:space="preserve">
+        <value>Scrieți un comentariu scurt (opțional)</value>
     </data>
     <data name="Dislike" xml:space="preserve">
         <value>Nu îmi place</value>

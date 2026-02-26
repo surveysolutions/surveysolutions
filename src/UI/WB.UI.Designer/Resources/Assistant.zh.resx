@@ -30,8 +30,29 @@
     <data name="Dislike" xml:space="preserve">
         <value>不喜欢</value>
     </data>
+    <data name="Unhelpful" xml:space="preserve">
+        <value>没有帮助</value>
+    </data>
     <data name="Undislike" xml:space="preserve">
         <value>取消不喜欢</value>
+    </data>
+    <data name="DislikeCommentTitle" xml:space="preserve">
+        <value>添加评论</value>
+    </data>
+    <data name="DislikeCommentPlaceholder" xml:space="preserve">
+        <value>写一条简短评论（可选）</value>
+    </data>
+    <data name="DislikeCommentHint" xml:space="preserve">
+        <value>这个回答哪里不对？</value>
+    </data>
+    <data name="Send" xml:space="preserve">
+        <value>发送</value>
+    </data>
+    <data name="UnlikeCommentTitle" xml:space="preserve">
+        <value>添加评论</value>
+    </data>
+    <data name="UnlikeCommentPlaceholder" xml:space="preserve">
+        <value>写一条简短评论（可选）</value>
     </data>
     <data name="TypeMessage" xml:space="preserve">
         <value>输入您的消息...</value>

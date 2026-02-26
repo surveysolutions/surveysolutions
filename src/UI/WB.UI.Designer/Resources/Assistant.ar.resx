@@ -30,8 +30,29 @@
     <data name="Dislike" xml:space="preserve">
         <value>عدم الإعجاب</value>
     </data>
+    <data name="Unhelpful" xml:space="preserve">
+        <value>غير مفيد</value>
+    </data>
     <data name="Undislike" xml:space="preserve">
         <value>إلغاء عدم الإعجاب</value>
+    </data>
+    <data name="DislikeCommentTitle" xml:space="preserve">
+        <value>أضف تعليقًا</value>
+    </data>
+    <data name="DislikeCommentPlaceholder" xml:space="preserve">
+        <value>اكتب تعليقًا قصيرًا (اختياريًا)</value>
+    </data>
+    <data name="DislikeCommentHint" xml:space="preserve">
+        <value>ما الخطأ في هذا الجواب؟</value>
+    </data>
+    <data name="Send" xml:space="preserve">
+        <value>إرسال</value>
+    </data>
+    <data name="UnlikeCommentTitle" xml:space="preserve">
+        <value>أضف تعليقًا</value>
+    </data>
+    <data name="UnlikeCommentPlaceholder" xml:space="preserve">
+        <value>اكتب تعليقًا قصيرًا (اختياريًا)</value>
     </data>
     <data name="TypeMessage" xml:space="preserve">
         <value>اكتب رسالتك...</value>

@@ -146,13 +146,13 @@ export default {
                 }
 
                 confirmPrompt({
-                    header: vm?.$t?.('Assistant.Dislike', 'Dislike') || 'Dislike',
-                    title: vm?.$t?.('Chat.DislikeCommentTitle', 'Add a comment') || 'Add a comment',
-                    okButtonTitle: vm?.$t?.('Chat.Send', 'Send') || 'Send',
-                    cancelButtonTitle: vm?.$t?.('Chat.Cancel', 'Cancel') || 'Cancel',
-                    inputPlaceholder: vm?.$t?.('Chat.DislikeCommentPlaceholder', 'Write a short comment (optional)')
+                    header: vm?.$t?.('Assistant.Unhelpful', 'Unhelpful') || 'Unhelpful',
+                    title: vm?.$t?.('Assistant.DislikeCommentTitle', 'Add a comment') || 'Add a comment',
+                    okButtonTitle: vm?.$t?.('Assistant.Send', 'Send') || 'Send',
+                    cancelButtonTitle: vm?.$t?.('QuestionnaireEditor.Cancel', 'Cancel') || 'Cancel',
+                    inputPlaceholder: vm?.$t?.('Assistant.DislikeCommentPlaceholder', 'Write a short comment (optional)')
                         || 'Write a short comment (optional)',
-                    inputHint: vm?.$t?.('Chat.DislikeCommentHint', 'What was wrong with this answer?')
+                    inputHint: vm?.$t?.('Assistant.DislikeCommentHint', 'What was wrong with this answer?')
                         || 'What was wrong with this answer?',
                     callback: (confirmed, value) => {
                         const comment = typeof value === 'string' ? value : '';
