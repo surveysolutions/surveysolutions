@@ -2,11 +2,11 @@
     <v-card class="chat-container" style="margin: 0; border-radius: 0;">
         <v-card-title class="d-flex justify-space-between align-center pa-4">
             <div class="d-flex align-center">
-                <span>{{ $t('Assistant.Title', 'AI Assistant') }}</span>
+                <span>{{ $t('Assistant.Title') }}</span>
             </div>
             <div class="d-flex align-center">
                 <v-btn icon="mdi-delete-sweep" variant="text" size="medium" @click="clearHistory"
-                    :disabled="messages.length === 0" :title="$t('Assistant.ClearHistory', 'Clear history')"
+                    :disabled="messages.length === 0" :title="$t('Assistant.ClearHistory')"
                     style="padding-right: 10px;" />
                 <v-btn icon="mdi-close" variant="text" size="medium" @click="close" />
             </div>
@@ -20,7 +20,7 @@
             <div class="pa-4">
                 <div v-if="messages.length === 0" class="text-center text-grey-darken-1 mt-8">
                     <v-icon size="48" class="mb-4">mdi-chat-outline</v-icon>
-                    <p>{{ $t('Assistant.WelcomeMessage', 'Start a conversation with the AI assistant') }}</p>
+                    <p>{{ $t('Assistant.WelcomeMessage') }}</p>
                 </div>
 
                 <div v-for="(message, index) in messages" :key="message.id" class="mb-4">
@@ -38,7 +38,7 @@
                                             <v-btn variant="text" size="x-small" icon class="reaction-btn reaction-like"
                                                 :color="getMessageReaction(message) === 1 ? 'success' : undefined"
                                                 @click="setReaction(message, index, 1)"
-                                                :title="getMessageReaction(message) === 1 ? $t('Assistant.Unlike', 'Unlike') : $t('Assistant.Like', 'Like')">
+                                                :title="getMessageReaction(message) === 1 ? $t('Assistant.Unlike') : $t('Assistant.Like')">
                                                 <v-icon :size="24">{{ getMessageReaction(message) === 1 ? 'mdi-thumb-up'
                                                     : 'mdi-thumb-up-outline' }}</v-icon>
                                             </v-btn>
@@ -46,7 +46,7 @@
                                                 class="reaction-btn reaction-dislike"
                                                 :color="getMessageReaction(message) === -1 ? 'error' : undefined"
                                                 @click="setReaction(message, index, -1)"
-                                                :title="getMessageReaction(message) === -1 ? $t('Assistant.Undislike', 'Remove dislike') : $t('Assistant.Dislike', 'Dislike')">
+                                                :title="getMessageReaction(message) === -1 ? $t('Assistant.Undislike') : $t('Assistant.Dislike')">
                                                 <v-icon :size="24">{{ getMessageReaction(message) === -1 ?
                                                     'mdi-thumb-down' : 'mdi-thumb-down-outline' }}</v-icon>
                                             </v-btn>
@@ -81,9 +81,9 @@
 
         <!-- Input Area -->
         <v-card-actions class="pa-4">
-            <v-textarea v-model="currentMessage" :placeholder="$t('Assistant.TypeMessage', 'Type your message...')"
-                variant="outlined" density="comfortable" hide-details @keyup.enter.prevent="handleEnter"
-                :disabled="isLoading" class="flex-grow-1" maxlength="2000" rows="2">
+            <v-textarea v-model="currentMessage" :placeholder="$t('Assistant.TypeMessage')" variant="outlined"
+                density="comfortable" hide-details @keyup.enter.prevent="handleEnter" :disabled="isLoading"
+                class="flex-grow-1" maxlength="2000" rows="2">
                 <!-- <template v-slot:append-inner>
                     <v-btn icon="mdi-send" variant="text" color="primary" size="medium" @click="sendMessage"
                         :disabled="!currentMessage.trim() || isLoading" />
@@ -123,12 +123,11 @@ export default {
                 }
 
                 confirmPrompt({
-                    header: vm?.$t?.('Assistant.Unlike', 'Unlike') || 'Unlike',
-                    title: vm?.$t?.('Assistant.UnlikeCommentTitle', 'Add a comment') || 'Add a comment',
-                    okButtonTitle: vm?.$t?.('QuestionnaireEditor.OK', 'OK') || 'OK',
-                    cancelButtonTitle: vm?.$t?.('QuestionnaireEditor.Cancel', 'Cancel') || 'Cancel',
-                    inputPlaceholder: vm?.$t?.('Assistant.UnlikeCommentPlaceholder', 'Write a short comment (optional)')
-                        || 'Write a short comment (optional)',
+                    header: vm?.$t?.('Assistant.Unlike'),
+                    title: vm?.$t?.('Assistant.UnlikeCommentTitle'),
+                    okButtonTitle: vm?.$t?.('QuestionnaireEditor.OK'),
+                    cancelButtonTitle: vm?.$t?.('QuestionnaireEditor.Cancel'),
+                    inputPlaceholder: vm?.$t?.('Assistant.UnlikeCommentPlaceholder'),
                     callback: (confirmed, value) => {
                         const comment = typeof value === 'string' ? value : '';
                         resolve({ confirmed: !!confirmed, comment });
@@ -146,14 +145,12 @@ export default {
                 }
 
                 confirmPrompt({
-                    header: vm?.$t?.('Assistant.Unhelpful', 'Unhelpful') || 'Unhelpful',
-                    title: vm?.$t?.('Assistant.DislikeCommentTitle', 'Add a comment') || 'Add a comment',
-                    okButtonTitle: vm?.$t?.('Assistant.Send', 'Send') || 'Send',
-                    cancelButtonTitle: vm?.$t?.('QuestionnaireEditor.Cancel', 'Cancel') || 'Cancel',
-                    inputPlaceholder: vm?.$t?.('Assistant.DislikeCommentPlaceholder', 'Write a short comment (optional)')
-                        || 'Write a short comment (optional)',
-                    inputHint: vm?.$t?.('Assistant.DislikeCommentHint', 'What was wrong with this answer?')
-                        || 'What was wrong with this answer?',
+                    header: vm?.$t?.('Assistant.Unhelpful'),
+                    title: vm?.$t?.('Assistant.DislikeCommentTitle'),
+                    okButtonTitle: vm?.$t?.('Assistant.Send'),
+                    cancelButtonTitle: vm?.$t?.('QuestionnaireEditor.Cancel'),
+                    inputPlaceholder: vm?.$t?.('Assistant.DislikeCommentPlaceholder'),
+                    inputHint: vm?.$t?.('Assistant.DislikeCommentHint'),
                     callback: (confirmed, value) => {
                         const comment = typeof value === 'string' ? value : '';
                         resolve({ confirmed: !!confirmed, comment });
