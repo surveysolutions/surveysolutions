@@ -146,11 +146,10 @@ export default {
 
                 confirmPrompt({
                     header: vm?.$t?.('Assistant.Unhelpful'),
-                    title: vm?.$t?.('Assistant.DislikeCommentTitle'),
+                    title: vm?.$t?.('Assistant.DislikeCommentHint'),
                     okButtonTitle: vm?.$t?.('Assistant.Send'),
                     cancelButtonTitle: vm?.$t?.('QuestionnaireEditor.Cancel'),
                     inputPlaceholder: vm?.$t?.('Assistant.DislikeCommentPlaceholder'),
-                    inputHint: vm?.$t?.('Assistant.DislikeCommentHint'),
                     callback: (confirmed, value) => {
                         const comment = typeof value === 'string' ? value : '';
                         resolve({ confirmed: !!confirmed, comment });

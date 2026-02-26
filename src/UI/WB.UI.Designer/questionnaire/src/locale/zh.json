@@ -649,5 +649,22 @@
     "Classifications": "Classifications",
     "SaveAs": "Save as",
     "CloneDeletedWarning": "You are creating a copy of deleted questionnaire. Some parts might be lost."
+  },
+  "Assistant": {
+    "ClearHistory": "清除历史",
+    "Unlike": "取消喜欢",
+    "Like": "喜欢",
+    "Dislike": "不喜欢",
+    "Unhelpful": "没有帮助",
+    "Undislike": "取消不喜欢",
+    "DislikeCommentTitle": "添加评论",
+    "DislikeCommentPlaceholder": "写一条简短评论（可选）",
+    "DislikeCommentHint": "这个回答哪里不对？",
+    "Send": "发送",
+    "UnlikeCommentTitle": "添加评论",
+    "UnlikeCommentPlaceholder": "写一条简短评论（可选）",
+    "TypeMessage": "输入您的消息...",
+    "Title": "AI助手",
+    "WelcomeMessage": "开始与AI助手对话"
   }
 }

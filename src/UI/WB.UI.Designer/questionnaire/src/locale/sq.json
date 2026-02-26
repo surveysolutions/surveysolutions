@@ -649,5 +649,22 @@
     "ExcelOrTabFilesOnly": "Only Excel or tab-separated values files are accepted",
     "SaveAs": "Save as",
     "CloneDeletedWarning": "You are creating a copy of deleted questionnaire. Some parts might be lost."
+  },
+  "Assistant": {
+    "ClearHistory": "Pastro historinë",
+    "Unlike": "Hiq pëlqimin",
+    "Unhelpful": "Nuk ndihmoi",
+    "Like": "Pëlqej",
+    "DislikeCommentTitle": "Shto një koment",
+    "DislikeCommentPlaceholder": "Shkruani një koment të shkurtër (opsional)",
+    "DislikeCommentHint": "Çfarë ishte gabim me këtë përgjigje?",
+    "Send": "Dërgo",
+    "UnlikeCommentTitle": "Shto një koment",
+    "UnlikeCommentPlaceholder": "Shkruani një koment të shkurtër (opsional)",
+    "Dislike": "Nuk pëlqej",
+    "Undislike": "Hiq mospëlqimin",
+    "TypeMessage": "Shkruani mesazhin tuaj...",
+    "Title": "Asistenti AI",
+    "WelcomeMessage": "Filloni një bisedë me asistentin AI"
   }
 }

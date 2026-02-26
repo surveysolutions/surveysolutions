@@ -649,5 +649,22 @@
     "Classifications": "Classifications",
     "SaveAs": "Enregistrer sous",
     "CloneDeletedWarning": "Vous créez une copie d'un questionnaire supprimé. Certaines parties pourraient être perdues."
+  },
+  "Assistant": {
+    "ClearHistory": "Effacer l'historique",
+    "Unlike": "Ne plus aimer",
+    "Like": "J'aime",
+    "Dislike": "Je n'aime pas",
+    "Unhelpful": "Peu utile",
+    "Undislike": "Annuler je n'aime pas",
+    "DislikeCommentTitle": "Ajouter un commentaire",
+    "DislikeCommentPlaceholder": "Écrivez un court commentaire (facultatif)",
+    "DislikeCommentHint": "Qu'est-ce qui n'allait pas dans cette réponse ?",
+    "Send": "Envoyer",
+    "UnlikeCommentTitle": "Ajouter un commentaire",
+    "UnlikeCommentPlaceholder": "Écrivez un court commentaire (facultatif)",
+    "TypeMessage": "Tapez votre message...",
+    "Title": "Assistant IA",
+    "WelcomeMessage": "Commencez une conversation avec l'assistant IA"
   }
 }

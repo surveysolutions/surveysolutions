@@ -649,5 +649,22 @@
     "Classifications": "Classificações",
     "SaveAs": "Salvar como",
     "CloneDeletedWarning": "Você está criando uma cópia de um questionário excluído. Algumas partes podem ser perdidas."
+  },
+  "Assistant": {
+    "ClearHistory": "Limpar histórico",
+    "Unlike": "Remover curtida",
+    "Unhelpful": "Não ajudou",
+    "Like": "Curtir",
+    "DislikeCommentTitle": "Adicionar um comentário",
+    "DislikeCommentPlaceholder": "Escreva um comentário curto (opcional)",
+    "DislikeCommentHint": "O que estava errado nesta resposta?",
+    "Send": "Enviar",
+    "UnlikeCommentTitle": "Adicionar um comentário",
+    "UnlikeCommentPlaceholder": "Escreva um comentário curto (opcional)",
+    "Dislike": "Não curtir",
+    "Undislike": "Remover não curtir",
+    "TypeMessage": "Digite sua mensagem...",
+    "Title": "Assistente de IA",
+    "WelcomeMessage": "Inicie uma conversa com o assistente de IA"
   }
 }

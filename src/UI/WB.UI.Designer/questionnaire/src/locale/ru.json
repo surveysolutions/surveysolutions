@@ -649,5 +649,22 @@
     "ControlPanel": "Панель управления",
     "SaveAs": "Сохранить как",
     "CloneDeletedWarning": "Вы копируете удаленный опросник. Некоторые компоненты могут быть утеряны."
+  },
+  "Assistant": {
+    "ClearHistory": "Очистить историю",
+    "Unlike": "Убрать лайк",
+    "Like": "Нравится",
+    "Dislike": "Не нравится",
+    "Unhelpful": "Не помогло",
+    "Undislike": "Убрать дизлайк",
+    "DislikeCommentTitle": "Добавить комментарий",
+    "DislikeCommentPlaceholder": "Напишите короткий комментарий (необязательно)",
+    "DislikeCommentHint": "Что было не так в этом ответе?",
+    "Send": "Отправить",
+    "UnlikeCommentTitle": "Добавить комментарий",
+    "UnlikeCommentPlaceholder": "Напишите короткий комментарий (необязательно)",
+    "TypeMessage": "Введите ваше сообщение...",
+    "Title": "ИИ Помощник",
+    "WelcomeMessage": "Начните разговор с ИИ помощником"
   }
 }

@@ -649,5 +649,22 @@
     "Classifications": "Classifications",
     "SaveAs": "Save as",
     "CloneDeletedWarning": "You are creating a copy of deleted questionnaire. Some parts might be lost."
+  },
+  "Assistant": {
+    "ClearHistory": "Clear history",
+    "Unlike": "Unlike",
+    "Like": "Like",
+    "Dislike": "Dislike",
+    "Unhelpful": "Unhelpful",
+    "Undislike": "Undo dislike",
+    "DislikeCommentTitle": "Add a comment",
+    "DislikeCommentPlaceholder": "Write a short comment (optional)",
+    "DislikeCommentHint": "What was wrong with this answer?",
+    "Send": "Send",
+    "UnlikeCommentTitle": "Add a comment",
+    "UnlikeCommentPlaceholder": "Write a short comment (optional)",
+    "TypeMessage": "Type your message...",
+    "Title": "AI Assistant",
+    "WelcomeMessage": "Start a conversation with the AI assistant"
   }
 }
