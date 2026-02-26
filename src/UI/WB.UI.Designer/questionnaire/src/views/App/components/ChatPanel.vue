@@ -114,28 +114,6 @@ export default {
         // Initialize Assistant
         const { sendMessage: sendToAssistant, sendReaction: sendAssistantReaction } = useAssistant();
 
-        const promptUnlikeComment = () => {
-            return new Promise(resolve => {
-                const confirmPrompt = vm?.$confirmPrompt;
-                if (typeof confirmPrompt !== 'function') {
-                    resolve({ confirmed: true, comment: '' });
-                    return;
-                }
-
-                confirmPrompt({
-                    header: vm?.$t?.('Assistant.Unlike'),
-                    title: vm?.$t?.('Assistant.UnlikeCommentTitle'),
-                    okButtonTitle: vm?.$t?.('QuestionnaireEditor.OK'),
-                    cancelButtonTitle: vm?.$t?.('QuestionnaireEditor.Cancel'),
-                    inputPlaceholder: vm?.$t?.('Assistant.UnlikeCommentPlaceholder'),
-                    callback: (confirmed, value) => {
-                        const comment = typeof value === 'string' ? value : '';
-                        resolve({ confirmed: !!confirmed, comment });
-                    }
-                });
-            });
-        };
-
         const promptDislikeComment = () => {
             return new Promise(resolve => {
                 const confirmPrompt = vm?.$confirmPrompt;
@@ -145,11 +123,11 @@ export default {
                 }
 
                 confirmPrompt({
-                    header: vm?.$t?.('Assistant.Unhelpful'),
+                    header: vm?.$t?.('Assistant.Unlike'),
                     title: vm?.$t?.('Assistant.DislikeCommentHint'),
                     okButtonTitle: vm?.$t?.('Assistant.Send'),
                     cancelButtonTitle: vm?.$t?.('QuestionnaireEditor.Cancel'),
-                    inputPlaceholder: vm?.$t?.('Assistant.DislikeCommentPlaceholder'),
+                    inputPlaceholder: vm?.$t?.('Assistant.UnlikeCommentPlaceholder'),
                     callback: (confirmed, value) => {
                         const comment = typeof value === 'string' ? value : '';
                         resolve({ confirmed: !!confirmed, comment });
@@ -328,15 +306,6 @@ export default {
             const previous = getMessageReaction(message);
             const next = previous === reactionValue ? 0 : reactionValue;
 
-            // If user removes a positive reaction, ask for a comment via $confirm.
-            if (previous === 1 && next === 0 && reactionValue === 1) {
-                const { confirmed, comment } = await promptUnlikeComment();
-                if (!confirmed) return;
-                await applyReaction({ message, index, previous, next, comment });
-                return;
-            }
-
-            // If user sets a negative reaction, ask for a comment in confirm-styled prompt.
             if (next === -1 && previous !== -1) {
                 const { confirmed, comment } = await promptDislikeComment();
                 if (!confirmed) return;
