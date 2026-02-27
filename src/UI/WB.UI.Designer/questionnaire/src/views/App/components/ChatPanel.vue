@@ -118,7 +118,7 @@ export default {
             return new Promise(resolve => {
                 const confirmPrompt = vm?.$confirmPrompt;
                 if (typeof confirmPrompt !== 'function') {
-                    resolve({ confirmed: true, comment: '' });
+                    resolve({ confirmed: false, comment: '' });
                     return;
                 }
 
@@ -307,9 +307,14 @@ export default {
             const next = previous === reactionValue ? 0 : reactionValue;
 
             if (next === -1 && previous !== -1) {
+                // Send negative reaction immediately, then prompt for optional feedback.
+                await applyReaction({ message, index, previous, next, comment: null });
+
                 const { confirmed, comment } = await promptDislikeComment();
-                if (!confirmed) return;
-                await applyReaction({ message, index, previous, next, comment });
+                if (confirmed) {
+                    // Re-send same negative reaction with the user's comment (if any).
+                    await applyReaction({ message, index, previous: -1, next: -1, comment });
+                }
                 return;
             }
 
