@@ -123,7 +123,7 @@ export default {
                 }
 
                 confirmPrompt({
-                    header: vm?.$t?.('Assistant.Unlike'),
+                    header: vm?.$t?.('Assistant.SendFeedback'),
                     title: vm?.$t?.('Assistant.DislikeCommentHint'),
                     okButtonTitle: vm?.$t?.('Assistant.Send'),
                     cancelButtonTitle: vm?.$t?.('QuestionnaireEditor.Cancel'),

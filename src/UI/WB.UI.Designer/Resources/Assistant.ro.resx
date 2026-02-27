@@ -42,6 +42,9 @@
     <data name="Send" xml:space="preserve">
         <value>Trimite</value>
     </data>
+    <data name="SendFeedback" xml:space="preserve">
+        <value>Trimite feedback</value>
+    </data>
     <data name="UnlikeCommentTitle" xml:space="preserve">
         <value>Adăugați un comentariu</value>
     </data>

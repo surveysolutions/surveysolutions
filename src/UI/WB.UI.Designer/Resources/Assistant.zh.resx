@@ -48,6 +48,9 @@
     <data name="Send" xml:space="preserve">
         <value>发送</value>
     </data>
+    <data name="SendFeedback" xml:space="preserve">
+        <value>发送反馈</value>
+    </data>
     <data name="UnlikeCommentTitle" xml:space="preserve">
         <value>添加评论</value>
     </data>

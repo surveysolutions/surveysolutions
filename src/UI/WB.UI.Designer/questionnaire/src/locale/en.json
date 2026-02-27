@@ -661,6 +661,7 @@
     "DislikeCommentPlaceholder": "Write a short comment (optional)",
     "DislikeCommentHint": "What was wrong with this answer?",
     "Send": "Send",
+    "SendFeedback": "Send feedback",
     "UnlikeCommentTitle": "Add a comment",
     "UnlikeCommentPlaceholder": "Write a short comment (optional)",
     "TypeMessage": "Type your message...",

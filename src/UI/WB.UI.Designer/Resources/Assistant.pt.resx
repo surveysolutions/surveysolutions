@@ -42,6 +42,9 @@
     <data name="Send" xml:space="preserve">
         <value>Enviar</value>
     </data>
+    <data name="SendFeedback" xml:space="preserve">
+        <value>Enviar feedback</value>
+    </data>
     <data name="UnlikeCommentTitle" xml:space="preserve">
         <value>Adicionar um comentário</value>
     </data>

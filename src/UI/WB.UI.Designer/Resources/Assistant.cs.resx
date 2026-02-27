@@ -42,6 +42,9 @@
     <data name="Send" xml:space="preserve">
         <value>Odeslat</value>
     </data>
+    <data name="SendFeedback" xml:space="preserve">
+        <value>Odeslat zpětnou vazbu</value>
+    </data>
     <data name="UnlikeCommentTitle" xml:space="preserve">
         <value>Přidat komentář</value>
     </data>

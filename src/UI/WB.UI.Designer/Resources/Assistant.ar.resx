@@ -48,6 +48,9 @@
     <data name="Send" xml:space="preserve">
         <value>إرسال</value>
     </data>
+    <data name="SendFeedback" xml:space="preserve">
+        <value>إرسال ملاحظات</value>
+    </data>
     <data name="UnlikeCommentTitle" xml:space="preserve">
         <value>أضف تعليقًا</value>
     </data>
