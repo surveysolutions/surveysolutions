@@ -5,10 +5,11 @@
                 <span>{{ $t('Assistant.Title') }}</span>
             </div>
             <div class="d-flex align-center">
-                <v-btn icon="mdi-delete-sweep" variant="text" size="medium" @click="clearHistory"
-                    :disabled="messages.length === 0" :title="$t('Assistant.ClearHistory')"
+                <v-btn icon="mdi-delete-sweep" variant="text" size="medium" class="header-action-btn header-clear"
+                    @click="clearHistory" :disabled="messages.length === 0" :title="$t('Assistant.ClearHistory')"
                     style="padding-right: 10px;" />
-                <v-btn icon="mdi-close" variant="text" size="medium" @click="close" />
+                <v-btn icon="mdi-close" variant="text" size="medium" class="header-action-btn header-close"
+                    @click="close" />
             </div>
         </v-card-title>
 
@@ -460,6 +461,28 @@ export default {
 
 .chat-container :deep(.reaction-btn:hover) {
     background-color: transparent !important;
+}
+
+/* Make header action buttons behave like reaction buttons on hover/focus. */
+.chat-container :deep(.header-action-btn:hover .v-btn__overlay),
+.chat-container :deep(.header-action-btn:focus-visible .v-btn__overlay),
+.chat-container :deep(.header-action-btn:hover .v-btn__underlay),
+.chat-container :deep(.header-action-btn:focus-visible .v-btn__underlay) {
+    opacity: 0 !important;
+}
+
+.chat-container :deep(.header-action-btn:hover) {
+    background-color: transparent !important;
+}
+
+.chat-container :deep(.header-clear:hover .v-icon),
+.chat-container :deep(.header-clear:focus-visible .v-icon) {
+    color: rgb(var(--v-theme-error)) !important;
+}
+
+.chat-container :deep(.header-close:hover .v-icon),
+.chat-container :deep(.header-close:focus-visible .v-icon) {
+    color: rgb(var(--v-theme-error)) !important;
 }
 
 .chat-container :deep(.reaction-like:hover .v-icon),
