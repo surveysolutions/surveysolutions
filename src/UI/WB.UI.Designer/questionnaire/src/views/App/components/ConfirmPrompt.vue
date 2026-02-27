@@ -4,9 +4,11 @@
             class="modal confirm-window fade ng-scope ng-isolate-scope in" role="dialog" index="0" animate="animate"
             tabindex="-1" uib-modal-animation-class="fade" modal-in-class="in" modal-animation="true"
             style="z-index: 1050; display: block;">
-            <div class="modal-dialog ">
+            <div class="modal-dialog" ref="dialog" :style="dialogStyle">
                 <div class="modal-content" uib-modal-transclude="">
-                    <div class="modal-header">
+                    <div class="modal-header" :class="{ 'is-draggable': draggable }" @pointerdown="onHeaderPointerDown"
+                        @pointermove="onHeaderPointerMove" @pointerup="onHeaderPointerUp"
+                        @pointercancel="onHeaderPointerUp">
                         <button class="close" @click="cancel()" aria-hidden="true" type="button"></button>
                         <h3 class="modal-title">
                             {{ header || $t('QuestionnaireEditor.ModalConfirm') }}
@@ -65,6 +67,10 @@ const confirmPromptDialog = {
             inputHint: null,
             inputRows: 4,
 
+            draggable: false,
+            dialogStyle: null,
+            dragState: null,
+
             isOpen: false
         };
     },
@@ -93,7 +99,29 @@ const confirmPromptDialog = {
             this.inputHint = params.inputHint || null;
             this.inputRows = params.inputRows || 4;
 
+            this.draggable = !!params.draggable;
+            this.dialogStyle = null;
+            this.dragState = null;
+
             this.isOpen = true;
+
+            if (this.draggable) {
+                this.$nextTick(() => {
+                    const dialog = this.$refs.dialog;
+                    if (!dialog || typeof dialog.getBoundingClientRect !== 'function') return;
+
+                    const rect = dialog.getBoundingClientRect();
+                    const left = Math.max(0, Math.round((window.innerWidth - rect.width) / 2));
+                    const top = Math.max(0, Math.round((window.innerHeight - rect.height) / 3));
+
+                    this.dialogStyle = {
+                        position: 'fixed',
+                        left: `${left}px`,
+                        top: `${top}px`,
+                        margin: '0'
+                    };
+                });
+            }
         },
         cancel() {
             const callback = this.callback;
@@ -114,6 +142,67 @@ const confirmPromptDialog = {
 
             if (callback)
                 callback(true, value);
+        },
+        onHeaderPointerDown(event) {
+            if (!this.draggable) return;
+            if (!event || event.button !== 0) return;
+            if (event.target && typeof event.target.closest === 'function' && event.target.closest('button.close')) return;
+
+            const dialog = this.$refs.dialog;
+            if (!dialog || typeof dialog.getBoundingClientRect !== 'function') return;
+
+            const rect = dialog.getBoundingClientRect();
+            const offsetX = event.clientX - rect.left;
+            const offsetY = event.clientY - rect.top;
+
+            this.dragState = { pointerId: event.pointerId, offsetX, offsetY };
+
+            // Ensure the dialog is positioned so dragging updates are effective.
+            this.dialogStyle = {
+                position: 'fixed',
+                left: `${Math.round(rect.left)}px`,
+                top: `${Math.round(rect.top)}px`,
+                margin: '0'
+            };
+
+            try {
+                event.currentTarget?.setPointerCapture?.(event.pointerId);
+            } catch {
+                // Ignore if pointer capture is not supported.
+            }
+
+            event.preventDefault();
+        },
+        onHeaderPointerMove(event) {
+            if (!this.draggable) return;
+            if (!this.dragState || event.pointerId !== this.dragState.pointerId) return;
+
+            const dialog = this.$refs.dialog;
+            if (!dialog) return;
+
+            const width = dialog.offsetWidth || 0;
+            const height = dialog.offsetHeight || 0;
+
+            let left = event.clientX - this.dragState.offsetX;
+            let top = event.clientY - this.dragState.offsetY;
+
+            const maxLeft = Math.max(0, window.innerWidth - width);
+            const maxTop = Math.max(0, window.innerHeight - height);
+
+            left = Math.min(Math.max(0, left), maxLeft);
+            top = Math.min(Math.max(0, top), maxTop);
+
+            this.dialogStyle = {
+                position: 'fixed',
+                left: `${Math.round(left)}px`,
+                top: `${Math.round(top)}px`,
+                margin: '0'
+            };
+        },
+        onHeaderPointerUp(event) {
+            if (!this.draggable) return;
+            if (!this.dragState || event.pointerId !== this.dragState.pointerId) return;
+            this.dragState = null;
         }
     }
 };
@@ -125,5 +214,10 @@ export default confirmPromptDialog;
 .confirm-window textarea.form-control {
     height: auto !important;
     min-height: 6em;
+}
+
+.modal-header.is-draggable {
+    cursor: move;
+    user-select: none;
 }
 </style>

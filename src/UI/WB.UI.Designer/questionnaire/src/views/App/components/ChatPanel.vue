@@ -128,6 +128,7 @@ export default {
                     okButtonTitle: vm?.$t?.('Assistant.Send'),
                     cancelButtonTitle: vm?.$t?.('QuestionnaireEditor.Cancel'),
                     inputPlaceholder: vm?.$t?.('Assistant.UnlikeCommentPlaceholder'),
+                    draggable: true,
                     callback: (confirmed, value) => {
                         const comment = typeof value === 'string' ? value : '';
                         resolve({ confirmed: !!confirmed, comment });
