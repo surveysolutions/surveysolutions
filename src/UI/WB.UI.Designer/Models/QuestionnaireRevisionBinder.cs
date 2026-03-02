@@ -78,10 +78,10 @@ namespace WB.UI.Designer.Models
             {
                 QuestionnaireChangeRecord? history;
                 if (int.TryParse(parts[1], out sequence))
-                    {
-                        history = await db.QuestionnaireChangeRecords.SingleOrDefaultAsync(r =>
-                            r.QuestionnaireId == questionnaireId.FormatGuid() && r.Sequence == sequence);
-                    }
+                {
+                    history = await db.QuestionnaireChangeRecords.SingleOrDefaultAsync(r =>
+                        r.QuestionnaireId == questionnaireId.FormatGuid() && r.Sequence == sequence);
+                }
                 else
                 {
                     history = await db.QuestionnaireChangeRecords.SingleOrDefaultAsync(r => r.QuestionnaireChangeRecordId.StartsWith(parts[1]));

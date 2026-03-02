@@ -128,7 +128,7 @@ export default {
                     title: vm?.$t?.('Assistant.DislikeCommentHint'),
                     okButtonTitle: vm?.$t?.('Assistant.Send'),
                     cancelButtonTitle: vm?.$t?.('QuestionnaireEditor.Cancel'),
-                    inputPlaceholder: vm?.$t?.('Assistant.UnlikeCommentPlaceholder'),
+                    inputPlaceholder: vm?.$t?.('Assistant.DislikeCommentPlaceholder'),
                     draggable: true,
                     callback: (confirmed, value) => {
                         const comment = typeof value === 'string' ? value : '';
