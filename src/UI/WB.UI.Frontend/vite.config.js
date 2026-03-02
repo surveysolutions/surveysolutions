@@ -262,6 +262,15 @@ export default defineConfig(({ mode, command }) => {
             saveSelectedFilesPlugin({
                 filesToSave: pagesTargets
             }),
+            // 1. 'options' hook: clean + copy page sources and locale resources
+            {
+                name: 'clean-before-build',
+                options() {
+                    for (const dir of clearBeforeBuild) {
+                        fs.rmSync(dir, { recursive: true, force: true })
+                    }
+                }
+            },
             copy({
                 targets: pagesSources.concat(resourcesTargets).map(i => ({
                     src: i.source,
@@ -272,15 +281,6 @@ export default defineConfig(({ mode, command }) => {
                 copyOnce: false,
                 verbose: false,
             }),
-            // 1. 'options' hook: clean + copy page sources and locale resources
-            {
-                name: 'clean-before-build',
-                options() {
-                    for (const dir of clearBeforeBuild) {
-                        fs.rmSync(dir, { recursive: true, force: true })
-                    }
-                }
-            },
             // 2. 'writeBundle' hook: copy locale resources
             copy({
                 targets: resourcesTargets.map(i => ({
