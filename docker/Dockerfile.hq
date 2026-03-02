@@ -186,7 +186,7 @@ RUN apk add --no-cache \
 
 COPY --from=fonts_source /usr/share/fonts /usr/share/fonts
 
-LABEL org.opencontainers.image.title="Headquaters All in One"
+LABEL org.opencontainers.image.title="Headquarters All in One"
 LABEL org.opencontainers.image.description="Survey Solutions Headquarters with Export Service"
 
 COPY --from=builder hq /app
