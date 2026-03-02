@@ -1,12 +1,12 @@
 import path from 'path';
 import { defineConfig } from 'vite';
 import inject from '@rollup/plugin-inject';
-import { ViteFilemanager } from 'filemanager-plugin';
 import Vue from '@vitejs/plugin-vue';
 import Vuetify from 'vite-plugin-vuetify';
 import LocalizationPlugin from './questionnaire/tools/vite-plugin-localization';
 import { normalizePath } from 'vite';
 import fs from 'fs';
+import { globSync } from 'glob';
 
 const baseDir = path.resolve(__dirname, './');
 const join = path.join.bind(path, baseDir);
@@ -197,7 +197,45 @@ for (var attr in pages) {
 inputPages.questionnare = path.join(baseDir, 'questionnaire/src/main.js')
 //inputPages.questionnare = path.join(baseDir, 'questionnaire/index.html')
 
-
+function fileManagerPlugin({ sources, targets, cleanDirs }) {
+    return {
+        name: 'file-manager',
+        options() {
+            // Delete outDir before build
+            for (const dir of cleanDirs?.before ?? []) {
+                fs.rmSync(dir, { recursive: true, force: true });
+            }
+            // Copy template sources
+            for (const item of sources ?? []) {
+                const files = globSync(item.source);
+                fs.mkdirSync(item.destination, { recursive: true });
+                for (const file of files) {
+                    const dest = path.join(item.destination, item.name ?? path.basename(file));                    
+                    //console.log(`Copying file from ${file} to ${dest}`);
+                    fs.copyFileSync(file, dest);
+                }
+            }
+        },
+        closeBundle() {
+            // Copy targets and assets
+            for (const item of targets ?? []) {
+                const files = globSync(item.source);
+                fs.mkdirSync(item.destination, { recursive: true });
+                for (const file of files) {
+                    const dest = path.join(item.destination, item.name ?? path.basename(file));
+                    if (fs.existsSync(file)) {
+                        //console.log(`Copying file from ${file} to ${dest}`);
+                        fs.copyFileSync(file, dest);
+                    }
+                }
+            }
+            // Cleanup temp dirs
+            for (const dir of cleanDirs?.after ?? []) {
+                fs.rmSync(dir, { recursive: true, force: true });
+            }
+        },
+    };
+};
 
 export default defineConfig(({ mode, command }) => {
 
@@ -246,34 +284,13 @@ export default defineConfig(({ mode, command }) => {
                     ]
                 }
             }),
-            ViteFilemanager({
-                customHooks: [
-                    {
-                        hookName: 'options',
-                        commands: {
-                            del: {
-                                items: [outDir],
-                            },
-                            copy: { items: pagesSources },
-                        },
-                    },
-                    {
-                        hookName: 'closeBundle',
-                        commands: {
-                            copy: {
-                                items: pagesTargets.concat(fileTargets),
-                            },
-                            del: {
-                                items: ['./.templates', outDir + '/.templates'],
-                            },
-                        },
-                    },
-                ],
-                options: {
-                    parallel: 1,
-                    //log: 'all',
-                    log: 'error',
+            fileManagerPlugin({
+                cleanDirs: {
+                    before: [outDir],
+                    after: ['./.templates', outDir + '/.templates'],
                 },
+                sources: pagesSources,
+                targets: pagesTargets.concat(fileTargets),
             }),
             {
                 name: 'CopyManifest'
