@@ -18,6 +18,7 @@ using WB.UI.Designer.Code;
 using WB.UI.Designer.Services;
 using Newtonsoft.Json.Linq;
 using System.Threading;
+using WB.UI.Designer.Extensions;
 
 namespace WB.UI.Designer.Controllers.Api.Designer
 {
@@ -27,7 +28,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
     [Route("api/[controller]")]
     public class AssistanceController : ControllerBase
     {
-        private const string AssistantProviderHttpClientName = "AssistantProvider";
+        private const string AssistantProviderHttpClientName = AssistantProviderHttpClientExtensions.AssistantProviderHttpClientName;
 
         private readonly IConfiguration configuration;
         private readonly ILogger<AssistanceController> logger;
