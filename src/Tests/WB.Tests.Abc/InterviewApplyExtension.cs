@@ -28,7 +28,7 @@ namespace WB.Tests.Abc
 
             method.Invoke(interview, new[] { @event });
 
-            interview.DropChangedTree();
+            interview.DiscardChanges();
         }
     }
 }

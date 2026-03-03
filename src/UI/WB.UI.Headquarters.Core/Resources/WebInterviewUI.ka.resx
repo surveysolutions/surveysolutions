@@ -376,8 +376,7 @@
     <value>დიახ</value>
   </data>
   <data name="CompleteReviewSubmit" xml:space="preserve">
-    <value>გადახედვა და გაგზავნა &lt;br /&gt;
-ინტერვიუ {{key}}</value>
+      <value>გადახედვა და გაგზავნა</value>
   </data>
   <data name="Complete_Tab_CriticalErrors" xml:space="preserve">
     <value>კრიტიკული &lt;br /&gt;
@@ -418,4 +417,8 @@
   </data>
   <data name="TurnOnDevMode" xml:space="preserve">
     <value>ჩართეთ დეველოპერის რეჟიმი</value>
-  </data></root>
+  </data>
+  <data name="CompleteReviewSubmitInterview" xml:space="preserve">
+      <value>ინტერვიუ {{key}}</value>
+  </data>
+</root>

@@ -36,6 +36,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         private readonly IArchiveUtils archiveUtils;
         private readonly IDesignerUserCredentials designerUserCredentials;
         private readonly IRootScopeExecutor inScopeExecutor;
+        private readonly IPlainStorageAccessor<ServerSettings> tenantSettings;
 
         public QuestionnaireImportService(
             IStringCompressor zipUtils,
@@ -45,7 +46,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             IAssignmentsUpgradeService assignmentsUpgradeService, 
             IArchiveUtils archiveUtils,
             IDesignerUserCredentials designerUserCredentials,
-            IRootScopeExecutor inScopeExecutor)
+            IRootScopeExecutor inScopeExecutor,
+            IPlainStorageAccessor<ServerSettings> tenantSettings)
         {
             this.zipUtils = zipUtils;
             this.logger = logger;
@@ -55,6 +57,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             this.archiveUtils = archiveUtils;
             this.designerUserCredentials = designerUserCredentials;
             this.inScopeExecutor = inScopeExecutor;
+            this.tenantSettings = tenantSettings;
         }
 
         public QuestionnaireImportResult GetStatus(Guid processId)
@@ -203,7 +206,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
                 var minSupported = supportedVersionProvider.GetMinVerstionSupportedByInterviewer();
                 var supportedVersion = supportedVersionProvider.GetSupportedQuestionnaireVersion();
-                var questionnairePackage = await designerApi.GetQuestionnaire(questionnaireImportResult.Identity.QuestionnaireId, supportedVersion, minSupported);
+                var tenantId = await tenantSettings.GetByIdAsync(ServerSettings.PublicTenantIdKey);
+                var questionnairePackage = await designerApi.GetQuestionnaire(questionnaireImportResult.Identity.QuestionnaireId, 
+                    supportedVersion, minSupported, tenantId?.Value);
                 QuestionnaireDocument questionnaire = this.zipUtils.DecompressString<QuestionnaireDocument>(questionnairePackage.Questionnaire);
 
                 questionnaireImportResult.Status = QuestionnaireImportStatus.Progress;

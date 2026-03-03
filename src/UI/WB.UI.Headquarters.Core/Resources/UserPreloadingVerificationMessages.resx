@@ -232,7 +232,7 @@
       <value>Verify value for supervisor</value>
   </data>
   <data name="PLU0011Recomendation" xml:space="preserve">
-      <value>Provide value fro supervisor</value>
+      <value>Remove the supervisor value</value>
   </data>
   <data name="PLU0012Recomendation" xml:space="preserve">
     <value>It should not contain more than 100 characters</value>

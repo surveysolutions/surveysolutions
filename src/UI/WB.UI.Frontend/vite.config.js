@@ -3,7 +3,7 @@ import path from 'path';
 import vue from '@vitejs/plugin-vue'
 import LocalizationPlugin from './tools/vite-plugin-localization'
 import fs from 'fs';
-import { ViteFilemanager } from 'filemanager-plugin';
+import copy from 'rollup-plugin-copy'
 import saveSelectedFilesPlugin from './tools/saveSelectedFilesPlugin.cjs';
 import { normalizePath } from 'vite';
 
@@ -262,51 +262,61 @@ export default defineConfig(({ mode, command }) => {
             saveSelectedFilesPlugin({
                 filesToSave: pagesTargets
             }),
-            /*viteStaticCopy({
-                targets: allTargets
-            }),*/
-            ViteFilemanager({
-                customHooks: [
-                    {
-                        hookName: 'options',
-                        commands: {
-                            del: {
-                                items: clearBeforeBuild
-                            },
-                            copy: { items: pagesSources.concat(resourcesTargets) },
-                        }
-                    },
-                    /*{
-                        hookName: 'buildEnd',
-                        commands: {
-                            copy: { items: resourcesTargets },
-                        }
-                    },*/
-                    {
-                        hookName: 'writeBundle',
-                        commands: {
-                            copy: { items: resourcesTargets },
-                        }
-                    },
-                    {
-                        hookName: 'closeBundle',
-                        commands: {
-                            copy: { items: isServe ? [] : pagesTargets.concat(fileTargets) },
-                        }
-                    },
-                    /*{
-                        hookName: 'handleHotUpdate',
-                        commands: {
-                            copy: { items: pagesTargets.concat(fileTargets) },
-                        }
-                    }*/
-                ],
-
-                options: {
-                    parallel: 1,
-                    //log: 'all'
-                    log: 'error'
+            // 1. 'options' hook: clean + copy page sources and locale resources
+            {
+                name: 'clean-before-build',
+                options() {
+                    for (const dir of clearBeforeBuild) {
+                        fs.rmSync(dir, { recursive: true, force: true })
+                    }
                 }
+            },
+            copy({
+                targets: pagesSources.concat(resourcesTargets).map(i => {
+                    const target = {
+                        src: i.source,
+                        dest: path.resolve(__dirname, i.destination),
+                    };
+                    if (typeof i.isFlat === 'boolean') {
+                        target.flatten = i.isFlat;
+                    }
+                    if (i.name !== undefined && i.name !== null) {
+                        target.rename = i.name;
+                    }
+                    return target;
+                }),
+                hook: 'options',
+                copyOnce: false,
+                verbose: false,
+            }),
+            // 2. 'writeBundle' hook: copy locale resources
+            copy({
+                targets: resourcesTargets.map(i => {
+                    const target = {
+                        src: i.source,
+                        dest: path.resolve(__dirname, i.destination),
+                    };
+                    if (typeof i.isFlat === 'boolean') {
+                        target.flatten = i.isFlat;
+                    }
+                    return target;
+                }),
+                hook: 'writeBundle',
+                copyOnce: false,
+                verbose: false,
+            }),
+
+            // 3. 'closeBundle' hook: copy pages and file targets
+            copy({
+                targets: isServe ? [] : pagesTargets.concat(fileTargets).map(i => ({
+                    src: i.source,
+                    dest: path.resolve(__dirname, i.destination),
+                    ...(i.name ? { rename: i.name } : {}),
+                    ...(i.isFlat === false ? { flatten: false } : {})
+                })),
+                hook: 'closeBundle',
+                copyOnce: false,
+                verbose: false,
             }),
             LocalizationPlugin({
                 patterns: resxFiles,
@@ -314,14 +324,6 @@ export default defineConfig(({ mode, command }) => {
                 locales: locales,
                 noHash: isDevMode
             }),
-            /*mpaPlugin({
-                pages: pages
-            }),*/
-            /*createHtmlPlugin({
-                minify: false,
-                pages: pagesArray
-            })*/
-            //eslintPlugin()
         ],
         /*define: {
             global: {},
