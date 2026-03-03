@@ -311,7 +311,8 @@ export default defineConfig(({ mode, command }) => {
                 targets: isServe ? [] : pagesTargets.concat(fileTargets).map(i => ({
                     src: i.source,
                     dest: path.resolve(__dirname, i.destination),
-                    ...(i.name ? { rename: i.name } : {})
+                    ...(i.name ? { rename: i.name } : {}),
+                    ...(i.isFlat === false ? { flatten: false } : {})
                 })),
                 hook: 'closeBundle',
                 copyOnce: false,
