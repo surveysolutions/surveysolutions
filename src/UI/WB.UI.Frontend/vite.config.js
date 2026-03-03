@@ -272,21 +272,35 @@ export default defineConfig(({ mode, command }) => {
                 }
             },
             copy({
-                targets: pagesSources.concat(resourcesTargets).map(i => ({
-                    src: i.source,
-                    dest: path.resolve(__dirname, i.destination),
-                    rename: i.name
-                })),
+                targets: pagesSources.concat(resourcesTargets).map(i => {
+                    const target = {
+                        src: i.source,
+                        dest: path.resolve(__dirname, i.destination),
+                    };
+                    if (typeof i.isFlat === 'boolean') {
+                        target.flatten = i.isFlat;
+                    }
+                    if (i.name !== undefined && i.name !== null) {
+                        target.rename = i.name;
+                    }
+                    return target;
+                }),
                 hook: 'options',
                 copyOnce: false,
                 verbose: false,
             }),
             // 2. 'writeBundle' hook: copy locale resources
             copy({
-                targets: resourcesTargets.map(i => ({
-                    src: i.source,
-                    dest: path.resolve(__dirname, i.destination),
-                })),
+                targets: resourcesTargets.map(i => {
+                    const target = {
+                        src: i.source,
+                        dest: path.resolve(__dirname, i.destination),
+                    };
+                    if (typeof i.isFlat === 'boolean') {
+                        target.flatten = i.isFlat;
+                    }
+                    return target;
+                }),
                 hook: 'writeBundle',
                 copyOnce: false,
                 verbose: false,
