@@ -3,7 +3,6 @@ import path from 'path';
 import vue from '@vitejs/plugin-vue'
 import LocalizationPlugin from './tools/vite-plugin-localization'
 import fs from 'fs';
-import copy from 'rollup-plugin-copy'
 import { globSync } from 'glob'
 import saveSelectedFilesPlugin from './tools/saveSelectedFilesPlugin.cjs';
 import { normalizePath } from 'vite';
@@ -166,7 +165,7 @@ function copyTargets(targets) {
     for (const target of targets) {
 
         const sources = globSync(normalizePath(target.src));
-        console.log(`Copying from ${target.src}, sources:`, sources);
+        //console.log(`Copying from ${target.src}, sources:`, sources);
 
         // Derive base dir from glob pattern (everything before first wildcard)
         const srcBase = target.src.split(/[*{]/)[0].replace(/[/\\]$/, '');
@@ -336,7 +335,7 @@ export default defineConfig(({ mode, command }) => {
                         ...(i.name ? { rename: i.name } : {}),
                         ...(i.isFlat === false ? { flatten: false } : {})
                     }));
-                    console.log(`=========copy closeBundle, targets:`, targets);
+                    //console.log(`=========copy closeBundle, targets:`, targets);
                     copyTargets(targets);
                 }
             },
