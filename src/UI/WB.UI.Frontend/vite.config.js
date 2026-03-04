@@ -328,6 +328,7 @@ export default defineConfig(({ mode, command }) => {
             {
                 name: 'copy-files-closeBundle',
                 closeBundle() {
+                    //console.log(`=========copy closeBundle is called`);
                     if (isServe) return;
                     const targets = pagesTargets.concat(fileTargets).map(i => ({
                         src: i.source,
