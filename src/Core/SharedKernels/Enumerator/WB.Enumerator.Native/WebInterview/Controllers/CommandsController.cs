@@ -45,6 +45,9 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
 
         public virtual IActionResult ChangeLanguage(Guid interviewId, ChangeLanguageRequest request)
         {
+            if (request == null)
+                return BadRequest("Request body cannot be null");
+            
             this.commandService.Execute(new SwitchTranslation(interviewId, request.Language, this.GetCommandResponsibleId(interviewId)));
             return Ok();
         }
@@ -58,9 +61,16 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         {
             public T Answer { get; set; }
         }
+        
+        
 
         public virtual IActionResult AnswerTextQuestion(Guid interviewId, [FromBody] AnswerRequest<string> answerRequest)
         {
+            if (answerRequest == null)
+                return BadRequest("Request body cannot be null");
+            if (string.IsNullOrEmpty(answerRequest.Identity))
+                return BadRequest("Identity is required");
+
             var identity = Identity.Parse(answerRequest.Identity);
             this.ExecuteQuestionCommand(new AnswerTextQuestionCommand(interviewId,
                 this.GetCommandResponsibleId(interviewId), identity.Id, identity.RosterVector, answerRequest.Answer));
@@ -69,6 +79,11 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
 
         public virtual IActionResult AnswerTextListQuestion(Guid interviewId, [FromBody] AnswerRequest<TextListAnswerRowDto[]> answerRequest)
         {
+            if (answerRequest == null)
+                return BadRequest("Request body cannot be null");
+            if (string.IsNullOrEmpty(answerRequest.Identity))
+                return BadRequest("Identity is required");
+
             var identity = Identity.Parse(answerRequest.Identity);
             this.ExecuteQuestionCommand(new AnswerTextListQuestionCommand(interviewId,
                 this.GetCommandResponsibleId(interviewId), 
@@ -79,6 +94,11 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
 
         public virtual IActionResult AnswerGpsQuestion(Guid interviewId, [FromBody] AnswerRequest<GpsAnswer> answerRequest)
         {
+            if (answerRequest == null)
+                return BadRequest("Request body cannot be null");
+            if (string.IsNullOrEmpty(answerRequest.Identity))
+                return BadRequest("Identity is required");
+
             var identity = Identity.Parse(answerRequest.Identity);
             this.ExecuteQuestionCommand(new AnswerGeoLocationQuestionCommand(interviewId,
                 this.GetCommandResponsibleId(interviewId), identity.Id, identity.RosterVector, answerRequest.Answer.Latitude, answerRequest.Answer.Longitude,
@@ -88,6 +108,11 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
 
         public virtual IActionResult AnswerDateQuestion(Guid interviewId, [FromBody] AnswerRequest<DateTime> answerRequest)
         {
+            if (answerRequest == null)
+                return BadRequest("Request body cannot be null");
+            if (string.IsNullOrEmpty(answerRequest.Identity))
+                return BadRequest("Identity is required");
+
             var identity = Identity.Parse(answerRequest.Identity);
             this.ExecuteQuestionCommand(new AnswerDateTimeQuestionCommand(interviewId,
                 this.GetCommandResponsibleId(interviewId), identity.Id, identity.RosterVector, answerRequest.Answer));
@@ -96,6 +121,11 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
 
         public virtual IActionResult AnswerSingleOptionQuestion(Guid interviewId, [FromBody] AnswerRequest<int> answerRequest)
         {
+            if (answerRequest == null)
+                return BadRequest("Request body cannot be null");
+            if (string.IsNullOrEmpty(answerRequest.Identity))
+                return BadRequest("Identity is required");
+
             var identity = Identity.Parse(answerRequest.Identity);
             this.ExecuteQuestionCommand(new AnswerSingleOptionQuestionCommand(interviewId, GetCommandResponsibleId(interviewId),
                 identity.Id, identity.RosterVector, answerRequest.Answer));
@@ -105,6 +135,11 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
         public virtual IActionResult AnswerLinkedSingleOptionQuestion(Guid interviewId, [FromBody] AnswerRequest<decimal[]> answerRequest)
         {
+            if (answerRequest == null)
+                return BadRequest("Request body cannot be null");
+            if (string.IsNullOrEmpty(answerRequest.Identity))
+                return BadRequest("Identity is required");
+
             var identity = Identity.Parse(answerRequest.Identity);
             this.ExecuteQuestionCommand(new AnswerSingleOptionLinkedQuestionCommand(interviewId, GetCommandResponsibleId(interviewId),
                 identity.Id, identity.RosterVector, answerRequest.Answer));
@@ -114,6 +149,11 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
         public virtual IActionResult AnswerLinkedMultiOptionQuestion(Guid interviewId, [FromBody] AnswerRequest<decimal[][]> answerRequest)
         {
+            if (answerRequest == null)
+                return BadRequest("Request body cannot be null");
+            if (string.IsNullOrEmpty(answerRequest.Identity))
+                return BadRequest("Identity is required");
+
             var identity = Identity.Parse(answerRequest.Identity);
             this.ExecuteQuestionCommand(new AnswerMultipleOptionsLinkedQuestionCommand(interviewId, GetCommandResponsibleId(interviewId),
                 identity.Id, identity.RosterVector, answerRequest.Answer.Select(x => new RosterVector(x)).ToArray()));
@@ -122,6 +162,11 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
 
         public virtual IActionResult AnswerMultiOptionQuestion(Guid interviewId, [FromBody] AnswerRequest<int[]> answerRequest)
         {
+            if (answerRequest == null)
+                return BadRequest("Request body cannot be null");
+            if (string.IsNullOrEmpty(answerRequest.Identity))
+                return BadRequest("Identity is required");
+
             var identity = Identity.Parse(answerRequest.Identity);
             this.ExecuteQuestionCommand(new AnswerMultipleOptionsQuestionCommand(interviewId, GetCommandResponsibleId(interviewId),
                 identity.Id, identity.RosterVector, answerRequest.Answer));
@@ -130,6 +175,11 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
 
         public virtual IActionResult AnswerYesNoQuestion(Guid interviewId, [FromBody] AnswerRequest<InterviewYesNoAnswer[]> answerRequest)
         {
+            if (answerRequest == null)
+                return BadRequest("Request body cannot be null");
+            if (string.IsNullOrEmpty(answerRequest.Identity))
+                return BadRequest("Identity is required");
+
             var identity = Identity.Parse(answerRequest.Identity);
             var answer = answerRequest.Answer.Select(a => new AnsweredYesNoOption(a.Value, a.Yes)).ToArray();
             this.ExecuteQuestionCommand(new AnswerYesNoQuestion(interviewId, GetCommandResponsibleId(interviewId),
@@ -139,6 +189,11 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
 
         public virtual IActionResult AnswerIntegerQuestion(Guid interviewId, [FromBody] AnswerRequest<int> answerRequest)
         {
+            if (answerRequest == null)
+                return BadRequest("Request body cannot be null");
+            if (string.IsNullOrEmpty(answerRequest.Identity))
+                return BadRequest("Identity is required");
+
             var identity = Identity.Parse(answerRequest.Identity);
             this.ExecuteQuestionCommand(new AnswerNumericIntegerQuestionCommand(interviewId, this.GetCommandResponsibleId(interviewId), identity.Id, identity.RosterVector, answerRequest.Answer));
             return Ok();
@@ -147,6 +202,11 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
         public virtual IActionResult AnswerDoubleQuestion(Guid interviewId, [FromBody] AnswerRequest<double> answerRequest)
         {
+            if (answerRequest == null)
+                return BadRequest("Request body cannot be null");
+            if (string.IsNullOrEmpty(answerRequest.Identity))
+                return BadRequest("Identity is required");
+
             var identity = Identity.Parse(answerRequest.Identity);
             this.ExecuteQuestionCommand(new AnswerNumericRealQuestionCommand(interviewId, this.GetCommandResponsibleId(interviewId), identity.Id, identity.RosterVector, answerRequest.Answer));
             return Ok();
@@ -155,6 +215,11 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
         public virtual IActionResult AnswerQRBarcodeQuestion(Guid interviewId, [FromBody] AnswerRequest<string> answerRequest)
         {
+            if (answerRequest == null)
+                return BadRequest("Request body cannot be null");
+            if (string.IsNullOrEmpty(answerRequest.Identity))
+                return BadRequest("Identity is required");
+
             var identity = Identity.Parse(answerRequest.Identity);
             this.ExecuteQuestionCommand(new AnswerQRBarcodeQuestionCommand(interviewId,
                 this.GetCommandResponsibleId(interviewId), identity.Id, identity.RosterVector, answerRequest.Answer));
@@ -168,6 +233,12 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         [ObservingNotAllowed]
         public virtual IActionResult RemoveAnswer(Guid interviewId, RemoveAnswerRequest request)
         {
+            if (request == null)
+                return BadRequest("Request body cannot be null");
+
+            if (string.IsNullOrEmpty(request.Identity))
+                return BadRequest("Identity is required");
+            
             Identity identity = Identity.Parse(request.Identity);
 
             try
@@ -211,6 +282,12 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
         public virtual IActionResult SendNewComment(Guid interviewId, NewCommentRequest request)
         {
+            if (request == null)
+                return BadRequest("Request body cannot be null");
+
+            if (string.IsNullOrEmpty(request.Identity))
+                return BadRequest("Identity is required");
+            
             var identity = Identity.Parse(request.Identity);
             var command = new CommentAnswerCommand(interviewId, this.GetCommandResponsibleId(interviewId), identity.Id, identity.RosterVector, request.Comment);
 
