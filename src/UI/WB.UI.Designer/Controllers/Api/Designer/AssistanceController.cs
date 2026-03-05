@@ -65,7 +65,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         public class AssistanceRequest
         {
             public string Prompt { get; set; } = string.Empty;
-            public List<Message> Messages { get; set; } = new List<Message>();
+            public List<Message>? Messages { get; set; }
             public Guid? EntityId { get; set; }
             public Guid? ConversationId { get; set; }
         }
@@ -112,6 +112,15 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             if (!request.EntityId.HasValue)
                 return BadRequest("Either 'entityId' must be provided.");
 
+            var hasPrompt = !string.IsNullOrWhiteSpace(request.Prompt);
+            var hasMessages = request.Messages != null && request.Messages.Count > 0;
+            if (!hasPrompt && !hasMessages)
+                return BadRequest("Either 'prompt' must be provided or 'messages' must contain at least one item.");
+
+            var promptToSend = hasPrompt
+                ? request.Prompt
+                : request.Messages!.Last().Content;
+
             var questionnaireRevision = questionnaireHelper.GetLastRevision(id);
 
             try
@@ -139,8 +148,13 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 {
                     QuestionnaireId = $"{questionnaireRevision.QuestionnaireId}${questionnaireRevision.Version}",
                     EntityId = request.EntityId.Value,
-                    Prompt = !string.IsNullOrWhiteSpace(request.Prompt) ? request.Prompt : request.Messages.Last().Content,
-                    Messages = request.Messages.SkipLast(1).Select(m => new { m.Role, m.Content }).ToList(),
+                    Prompt = promptToSend,
+                    Messages = request.Messages == null
+                        ? new List<object>()
+                        : request.Messages.Take(Math.Max(0, request.Messages.Count - 1))
+                            .Select(m => new { m.Role, m.Content })
+                            .Cast<object>()
+                            .ToList(),
                     conversationId = request.ConversationId
                 };
 

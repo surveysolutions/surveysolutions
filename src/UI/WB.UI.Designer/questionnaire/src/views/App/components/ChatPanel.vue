@@ -34,7 +34,7 @@
                                 <div class="message-content">
                                     <p class="mb-1" v-html="formatMessage(message.content)"></p>
                                     <div class="d-flex align-center justify-space-between">
-                                        <div v-if="message.role === 'assistant' && !message.isError"
+                                        <div v-if="message.role === 'assistant' && !message.isError && !!message.assistantCallId"
                                             class="d-flex align-center">
                                             <v-btn variant="text" size="x-small" icon class="reaction-btn reaction-like"
                                                 :color="getMessageReaction(message) === 1 ? 'success' : undefined"
