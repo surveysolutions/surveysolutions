@@ -3,7 +3,7 @@ import path from 'path';
 import vue from '@vitejs/plugin-vue'
 import LocalizationPlugin from './tools/vite-plugin-localization'
 import fs from 'fs';
-import copy from 'rollup-plugin-copy'
+import { globSync } from 'glob'
 import saveSelectedFilesPlugin from './tools/saveSelectedFilesPlugin.cjs';
 import { normalizePath } from 'vite';
 
@@ -155,11 +155,40 @@ for (var attr in pages) {
 //const allTargets = pagesTargets.concat(fileTargets).map(i => { return { src: i.source, dest: i.destination } })
 const allTargets = fileTargets.map(i => { return { src: i.source, dest: path.resolve(__dirname, i.destination) } })
 
-const clearBeforeBuild = fileTargets.map(i => path.resolve(__dirname, i.destination))
+let clearBeforeBuild = fileTargets.map(i => path.resolve(__dirname, i.destination))
 //const clearBeforeBuild = []
 //clearBeforeBuild.concat(fileTargets.map(i => path.resolve(__dirname, i.destination)))
-//clearBeforeBuild.concat(resourcesTargets.map(i => path.resolve(__dirname, i.destination)))
+clearBeforeBuild = clearBeforeBuild.concat(resourcesTargets.map(i => path.resolve(__dirname, i.destination)))
 clearBeforeBuild.push('./dist')
+
+function copyTargets(targets) {
+    for (const target of targets) {
+
+        const sources = globSync(normalizePath(target.src));
+        //console.log(`Copying from ${target.src}, sources:`, sources);
+
+        // Derive base dir from glob pattern (everything before first wildcard)
+        const srcBase = target.src.split(/[*{]/)[0].replace(/[/\\]$/, '');
+
+        for (const src of sources) {
+            const destDir = path.resolve(__dirname, target.dest);
+
+            let destFile;
+            if (target.flatten === false) {
+                // Preserve folder structure relative to srcBase
+                const relativePath = path.relative(srcBase, src);
+                destFile = path.join(destDir, target.rename ?? relativePath);
+            } else {
+                // Flatten: just use filename
+                destFile = path.join(destDir, target.rename ?? path.basename(src));
+            }
+
+            fs.mkdirSync(path.dirname(destFile), { recursive: true });
+            //console.log(`Copying ${src} -> ${destFile}, target.isFlat: ${target.isFlat}`);
+            fs.copyFileSync(src, destFile);
+        }
+    }
+}
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode, command }) => {
@@ -262,62 +291,54 @@ export default defineConfig(({ mode, command }) => {
             saveSelectedFilesPlugin({
                 filesToSave: pagesTargets
             }),
-            // 1. 'options' hook: clean + copy page sources and locale resources
+            // 1. 'options' hook: clean + copy page sources
             {
                 name: 'clean-before-build',
                 options() {
                     for (const dir of clearBeforeBuild) {
-                        fs.rmSync(dir, { recursive: true, force: true })
+                        fs.rmSync(dir, { recursive: true, force: true });
                     }
+                    // copy page templates and locale resources
+                    const targets = pagesSources.concat(resourcesTargets).map(i => ({
+                        src: i.source,
+                        dest: path.resolve(__dirname, i.destination),
+                        ...(i.name ? { rename: i.name } : {}),
+                        ...(typeof i.isFlat === 'boolean' ? { flatten: i.isFlat } : {})
+                    }));
+                    // console.log(`=========copy options, targets:`, targets);
+                    copyTargets(targets);
                 }
             },
-            copy({
-                targets: pagesSources.concat(resourcesTargets).map(i => {
-                    const target = {
-                        src: i.source,
-                        dest: path.resolve(__dirname, i.destination),
-                    };
-                    if (typeof i.isFlat === 'boolean') {
-                        target.flatten = i.isFlat;
-                    }
-                    if (i.name !== undefined && i.name !== null) {
-                        target.rename = i.name;
-                    }
-                    return target;
-                }),
-                hook: 'options',
-                copyOnce: false,
-                verbose: false,
-            }),
+
             // 2. 'writeBundle' hook: copy locale resources
-            copy({
-                targets: resourcesTargets.map(i => {
-                    const target = {
+            {
+                name: 'copy-locale-writeBundle',
+                writeBundle() {
+                    const targets = resourcesTargets.map(i => ({
                         src: i.source,
                         dest: path.resolve(__dirname, i.destination),
-                    };
-                    if (typeof i.isFlat === 'boolean') {
-                        target.flatten = i.isFlat;
-                    }
-                    return target;
-                }),
-                hook: 'writeBundle',
-                copyOnce: false,
-                verbose: false,
-            }),
+                        ...(typeof i.isFlat === 'boolean' ? { flatten: i.isFlat } : {})
+                    }));
+                    //console.log(`=========copy writeBundle, targets:`, targets);
+                    copyTargets(targets);
+                }
+            },
 
             // 3. 'closeBundle' hook: copy pages and file targets
-            copy({
-                targets: isServe ? [] : pagesTargets.concat(fileTargets).map(i => ({
-                    src: i.source,
-                    dest: path.resolve(__dirname, i.destination),
-                    ...(i.name ? { rename: i.name } : {}),
-                    ...(i.isFlat === false ? { flatten: false } : {})
-                })),
-                hook: 'closeBundle',
-                copyOnce: false,
-                verbose: false,
-            }),
+            {
+                name: 'copy-files-closeBundle',
+                closeBundle() {
+                    if (isServe) return;
+                    const targets = pagesTargets.concat(fileTargets).map(i => ({
+                        src: i.source,
+                        dest: path.resolve(__dirname, i.destination),
+                        ...(i.name ? { rename: i.name } : {}),
+                        ...(i.isFlat === false ? { flatten: false } : {})
+                    }));
+                    //console.log(`=========copy closeBundle, targets:`, targets);
+                    copyTargets(targets);
+                }
+            },
             LocalizationPlugin({
                 patterns: resxFiles,
                 destination: "./.resources",
