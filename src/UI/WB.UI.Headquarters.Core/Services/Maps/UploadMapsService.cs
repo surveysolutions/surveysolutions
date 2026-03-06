@@ -97,7 +97,7 @@ class UploadMapsService : IUploadMapsService
                 }
                 catch (Exception e)
                 {
-                    logger.LogError($"Error on maps import map {map.Name}", e);
+                    logger.LogError($"Error on maps import. '{map.Name}' map. {e.Message}");
                     invalidMaps.Add(new Tuple<string, Exception>(map.Name, e));
                 }
             }
