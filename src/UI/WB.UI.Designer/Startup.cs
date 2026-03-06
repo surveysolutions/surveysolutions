@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
@@ -28,6 +31,7 @@ using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
+using WB.UI.Designer.Services;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.DependencyInjection;
 using WB.Core.Infrastructure.Versions;
@@ -43,7 +47,6 @@ using WB.UI.Designer.Filters;
 using WB.UI.Designer.Implementation.Services;
 using WB.UI.Designer.Models;
 using WB.UI.Designer.Modules;
-using WB.UI.Designer.Services;
 using WB.UI.Designer.Services.Restore;
 using WB.UI.Shared.Web.Authentication;
 using WB.UI.Shared.Web.Diagnostics;
@@ -136,12 +139,17 @@ namespace WB.UI.Designer
                     sharedOptions.DefaultScheme = "boc";
                     sharedOptions.DefaultChallengeScheme = "boc";
                 })
-                .AddPolicyScheme("boc", "Basic or cookie", options =>
+                .AddPolicyScheme("boc", "Basic or cookie or JWT", options =>
                 {
                     options.ForwardDefaultSelector = context =>
                     {
-                        if (context.Request.Headers.ContainsKey("Authorization"))
+                        var authHeader = context.Request.Headers["Authorization"].ToString();
+                        if (!string.IsNullOrEmpty(authHeader))
                         {
+                            if (authHeader.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
+                            {
+                                return JwtBearerDefaults.AuthenticationScheme;
+                            }
                             return "basic";
                         }
 
@@ -149,7 +157,79 @@ namespace WB.UI.Designer
                     };
                 })
                 .AddScheme<BasicAuthenticationSchemeOptions, BasicAuthenticationHandler>("basic",
-                    opts => { opts.Realm = "mysurvey.solutions"; });
+                    opts => { opts.Realm = "mysurvey.solutions"; })
+                .AddJwtBearer(options =>
+                {
+                    var secretKey = Configuration["Providers:Assistant:JwtSecretKey"];
+                    if (!string.IsNullOrWhiteSpace(secretKey))
+                    {
+                        options.TokenValidationParameters = new TokenValidationParameters
+                        {
+                            ValidateIssuer = true,
+                            ValidateAudience = true,
+                            ValidateLifetime = true,
+                            ValidateIssuerSigningKey = true,
+                            ValidIssuer = Configuration["Providers:Assistant:JwtIssuer"] ?? "WB.Designer",
+                            ValidAudience = Configuration["Providers:Assistant:JwtAudience"] ?? "WB.AssistantService",
+                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey)),
+                            ClockSkew = TimeSpan.FromMinutes(5)
+                        };
+                        
+                        options.Events = new JwtBearerEvents
+                        {
+                            OnAuthenticationFailed = context =>
+                            {
+                                if (context.Exception is SecurityTokenExpiredException)
+                                {
+                                    context.Response.Headers.Append("X-Token-Expired", "true");
+                                    context.Response.Headers.Append("X-Token-Error", "Token has expired");
+                                }
+                                else if (context.Exception is SecurityTokenInvalidSignatureException)
+                                {
+                                    context.Response.Headers.Append("X-Token-Error", "Invalid token signature");
+                                }
+                                else if (context.Exception is SecurityTokenInvalidIssuerException)
+                                {
+                                    context.Response.Headers.Append("X-Token-Error", "Invalid token issuer");
+                                }
+                                else if (context.Exception is SecurityTokenInvalidAudienceException)
+                                {
+                                    context.Response.Headers.Append("X-Token-Error", "Invalid token audience");
+                                }
+                                else
+                                {
+                                    context.Response.Headers.Append("X-Token-Error", context.Exception.Message);
+                                }
+                                return Task.CompletedTask;
+                            },
+                            OnChallenge = context =>
+                            {
+                                context.HandleResponse();
+                                context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                                context.Response.ContentType = "application/json";
+                                
+                                var errorMessage = context.AuthenticateFailure?.Message ?? "Unauthorized";
+                                if (context.AuthenticateFailure is SecurityTokenExpiredException)
+                                {
+                                    errorMessage = "JWT token has expired. Please generate a new token.";
+                                }
+                                else if (context.AuthenticateFailure is SecurityTokenInvalidSignatureException)
+                                {
+                                    errorMessage = "JWT token has invalid signature.";
+                                }
+                                
+                                var result = JsonSerializer.Serialize(new
+                                {
+                                    error = "Unauthorized",
+                                    message = errorMessage,
+                                    timestamp = DateTime.UtcNow
+                                });
+                                
+                                return context.Response.WriteAsync(result);
+                            }
+                        };
+                    }
+                });
             
             services.AddAuthorization(options =>
             {

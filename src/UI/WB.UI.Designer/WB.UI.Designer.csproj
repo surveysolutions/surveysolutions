@@ -20,7 +20,9 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <NoWarn>1701;1702;</NoWarn>
   </PropertyGroup>
-
+    <PropertyGroup>
+        <NoWarn>$(NoWarn);NU1900</NoWarn>
+    </PropertyGroup>
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'WB.UI.Designer.Manage' " />
   <ItemGroup>
     <Content Update="**\*.json" CopyToPublishDirectory="Never" />
@@ -41,6 +43,7 @@
     <PackageReference Include="SkiaSharp.QrCode" Version="0.7.0" />
     <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.20071.2" />
     <PackageReference Include="FluentMigrator.Runner" Version="7.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="9.0.5" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.9" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
@@ -55,6 +58,7 @@
     <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="9.0.5" />
     <PackageReference Include="System.Data.SqlClient" Version="4.9.0" />
     <PackageReference Include="System.Drawing.Common" Version="9.0.5" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.15.0" />
     <PackageReference Include="System.Security.Cryptography.Xml" Version="9.0.5" />
     <PackageReference Include="System.Text.Json" Version="9.0.5" />
     <PackageReference Include="VueCliMiddleware" Version="6.0.0" />
@@ -74,6 +78,10 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
     <EmbeddedResource Include="Code\ImportExport\QuestionnaireSchema.json" />
+    <EmbeddedResource Update="Resources\Assistant.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Assistant.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>
@@ -113,6 +121,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>QuestionnaireEditor.resx</DependentUpon>
       <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Update="Resources\Assistant.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Assistant.resx</DependentUpon>
     </Compile>
   </ItemGroup>
 
