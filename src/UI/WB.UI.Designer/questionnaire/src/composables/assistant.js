@@ -33,11 +33,17 @@ export const useAssistant = () => {
                     },
                     {
                         timeout: 3 * 60 * 1000, // 3 minute timeout
+                        signal: options.signal || null,
                     },
                 );
 
                 return response.data.expression || response.data.message;
             } catch (error) {
+                // Re-throw abort errors immediately without retrying
+                if (error.name === 'AbortError' || error.name === 'CanceledError' || error.code === 'ERR_CANCELED') {
+                    throw error;
+                }
+
                 console.error(
                     `Assistant Error (attempt ${attempt}/${retries}):`,
                     error.response?.data || error.message,

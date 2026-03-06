@@ -76,14 +76,22 @@
 
         <!-- Input Area -->
         <v-card-actions class="pa-4">
-            <v-textarea v-model="currentMessage" :placeholder="$t('Assistant.TypeMessage', 'Type your message...')"
-                variant="outlined" density="comfortable" hide-details @keyup.enter.prevent="handleEnter"
-                :disabled="isLoading" class="flex-grow-1" maxlength="2000" rows="2">
-                <!-- <template v-slot:append-inner>
-                    <v-btn icon="mdi-send" variant="text" color="primary" size="medium" @click="sendMessage"
-                        :disabled="!currentMessage.trim() || isLoading" />
-                </template> -->
-            </v-textarea>
+            <div class="editor pseudo-form-control">
+                <v-textarea v-model="currentMessage" :placeholder="$t('Assistant.TypeMessage', 'Type your message...')"
+                    variant="plain" density="comfortable" hide-details @keyup.enter.prevent="handleEnter"
+                    :disabled="isLoading" class="flex-grow-1" maxlength="2000" rows="3">
+                    <template #append>
+                        <div @click.stop style="pointer-events: all;">
+                            <v-btn v-if="isLoading" icon="mdi-stop-circle" variant="text" size="medium" color="error"
+                                @click.stop="stopRequest" :disabled="false"
+                                :title="$t('Assistant.StopRequest', 'Stop request')" />
+                            <v-btn v-else icon="mdi-send" variant="text" size="medium" color="primary"
+                                @click="sendMessage" :disabled="!currentMessage.trim()"
+                                :title="$t('Assistant.Send', 'Send')" />
+                        </div>
+                    </template>
+                </v-textarea>
+            </div>
         </v-card-actions>
     </v-card>
 </template>
@@ -149,6 +157,17 @@ export default {
             });
         };
 
+        const abortController = ref(null);
+
+        const stopRequest = () => {
+            const controller = abortController.value;
+            if (controller) {
+                controller.abort('User stopped the request');
+                abortController.value = null;
+                isLoading.value = false;
+            }
+        };
+
         const sendMessage = async () => {
             if (!currentMessage.value.trim()) return;
 
@@ -169,8 +188,15 @@ export default {
             await scrollToBottom();
 
             try {
+                abortController.value = new AbortController();
+
                 // Call Assistant with conversation history
-                const response = await callAssistant(messageText, chatStore.questionnaireId, chatStore.entityId, chatStore.area);
+                const response = await callAssistant(
+                    messageText,
+                    chatStore.questionnaireId,
+                    chatStore.entityId,
+                    chatStore.area,
+                    abortController.value.signal);
 
                 const assistantMessage = {
                     id: Date.now() + 1,
@@ -183,20 +209,26 @@ export default {
                 messages.value.push(assistantMessage);
                 await scrollToBottom();
             } catch (error) {
-                console.error('Error sending message:', error);
 
-                const errorMessage = {
-                    id: Date.now() + 1,
-                    role: 'assistant',
-                    content: error.message || 'Sorry, I encountered an error. Please try again.',
-                    timestamp: Date.now(),
-                    isError: true,
-                    reaction: 0
-                };
+                if (error.name === 'AbortError' || error.message === 'User stopped the request') {
+                    //do nothing
+                } else {
+                    console.error('Error sending message:', error);
 
-                messages.value.push(errorMessage);
-                await scrollToBottom();
+                    const errorMessage = {
+                        id: Date.now() + 1,
+                        role: 'assistant',
+                        content: error.message || 'Sorry, I encountered an error. Please try again.',
+                        timestamp: Date.now(),
+                        isError: true,
+                        reaction: 0
+                    };
+
+                    messages.value.push(errorMessage);
+                    await scrollToBottom();
+                }
             } finally {
+                abortController.value = null;
                 isLoading.value = false;
             }
         };
@@ -255,7 +287,7 @@ export default {
             }
         };
 
-        const callAssistant = async (userMessage, questionnaireId, entityId, area) => {
+        const callAssistant = async (userMessage, questionnaireId, entityId, area, signal) => {
             const conversationHistory = [];
 
             // Add previous messages from the current conversation (exclude error messages)
@@ -272,7 +304,8 @@ export default {
             return await sendToAssistant(userMessage, conversationHistory, {
                 questionnaireId: questionnaireId,
                 entityId: entityId,
-                area: area
+                area: area,
+                signal: signal
             });
         };
 
@@ -288,7 +321,8 @@ export default {
             getMessageReaction,
             setReaction,
             formatMessage,
-            formatTime
+            formatTime,
+            stopRequest
         };
     }
 };
@@ -298,6 +332,7 @@ export default {
 .chat-container {
     display: flex;
     flex-direction: column;
+    padding-top: 10px;
     font-size: 14px;
     height: 100%;
     width: 100%;
@@ -311,6 +346,30 @@ export default {
 
 .chat-container :deep(.v-field--appended) {
     padding-inline-end: 0px !important;
+}
+
+.chat-container :deep(.v-btn:hover > .v-btn__overlay) {
+    opacity: 0 !important;
+}
+
+.chat-container :deep(textarea) {
+    padding-top: 8px;
+    padding-left: 10px;
+    resize: none;
+    border: none;
+}
+
+.chat-container .editor {
+    flex: 1;
+}
+
+.chat-container :deep(.v-input__append) {
+    align-items: flex-end !important;
+    padding-bottom: 4px !important;
+    margin-inline-start: 0px !important;
+    font-size: 16px !important;
+
+    opacity: 1 !important;
 }
 
 .chat-messages {
@@ -379,7 +438,7 @@ export default {
 }
 
 .v-card-actions {
-    padding-bottom: 10px !important;
+    padding: 1rem;
 }
 
 @keyframes typing {
