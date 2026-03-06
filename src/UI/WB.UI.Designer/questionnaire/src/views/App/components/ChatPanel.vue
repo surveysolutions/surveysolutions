@@ -92,11 +92,17 @@
 import { ref, nextTick, watch } from 'vue';
 import { useChatStore } from '../../../stores/chat';
 import { useAssistant } from '../../../composables/assistant';
+import { useTreeStore } from '../../../stores/tree';
+import hljs from 'highlight.js/lib/core';
+import csharp from 'highlight.js/lib/languages/csharp';
+import DOMPurify from 'dompurify';
+hljs.registerLanguage('csharp', csharp);
 
 export default {
     name: 'ChatPanel',
     setup() {
         const chatStore = useChatStore();
+        const treeStore = useTreeStore();
         const messages = ref([]);
         const currentMessage = ref('');
         const isLoading = ref(false);
@@ -135,11 +141,71 @@ export default {
         };
 
         const formatMessage = (content) => {
-            // Simple formatting for line breaks and basic markdown
-            return content
-                .replace(/\n/g, '<br>')
+            const variableNames = treeStore.getVariableNames.variableNamesTokens
+                ? treeStore.getVariableNames.variableNamesTokens.split('|').filter(Boolean)
+                : [];
+
+            const highlightCode = (code, language) => {
+                let highlighted;
+                try {
+                    highlighted = hljs.highlight(code.trim(), { language }).value;
+                } catch {
+                    highlighted = hljs.highlight(code.trim(), { language: 'csharp' }).value;
+                }
+                return wrapVariables(highlighted, variableNames);
+            };
+
+            // Wrap known questionnaire variable names in text nodes (not inside HTML tags)
+            const wrapVariables = (html, variables) => {
+                if (!variables.length) return html;
+                const pattern = new RegExp(`\\b(${variables.map(v => v.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})\\b`, 'g');
+                return html.replace(/>([^<]*)</g, (match, text) => {
+                    return '>' + text.replace(pattern, '<span class="hljs-variable">$1</span>') + '<';
+                });
+            };
+
+            // Extract fenced code blocks first
+            const codeBlocks = [];
+            let result = content.replace(/```(\w*)\n?([\s\S]*?)```/g, (_, lang, code) => {
+                const language = lang || 'csharp';
+                const highlighted = highlightCode(code, language);
+                const idx = codeBlocks.length;
+                codeBlocks.push(
+                    `<pre class="chat-code-block"><code class="hljs language-${language}">${highlighted}</code></pre>`
+                );
+                return `CODEBLOCK${idx}PLACEHOLDER`;
+            });
+
+            // Extract inline code blocks
+            const inlineBlocks = [];
+            result = result.replace(/`([^`\n]+)`/g, (_, code) => {
+                const highlighted = wrapVariables(
+                    hljs.highlight(code, { language: 'csharp' }).value,
+                    variableNames
+                );
+                const idx = inlineBlocks.length;
+                inlineBlocks.push(`<code class="chat-code-inline hljs">${highlighted}</code>`);
+                return `INLINEBLOCK${idx}PLACEHOLDER`;
+            });
+
+            // Sanitize plain text
+            result = DOMPurify.sanitize(result, { ALLOWED_TAGS: [], KEEP_CONTENT: true });
+
+            // Basic markdown
+            result = result
                 .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                .replace(/\*(.*?)\*/g, '<em>$1</em>');
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                .replace(/\n/g, '<br>');
+
+            // Restore code blocks
+            inlineBlocks.forEach((block, i) => {
+                result = result.replace(`INLINEBLOCK${i}PLACEHOLDER`, block);
+            });
+            codeBlocks.forEach((block, i) => {
+                result = result.replace(`CODEBLOCK${i}PLACEHOLDER`, block);
+            });
+
+            return result;
         };
 
         const formatTime = (timestamp) => {
@@ -395,5 +461,71 @@ export default {
         transform: scale(1);
         opacity: 1;
     }
+}
+
+.chat-code-block {
+    margin: 8px 0;
+    border-radius: 6px;
+    overflow-x: auto;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.chat-code-block code {
+    display: block;
+    padding: 12px 14px;
+    white-space: pre;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+}
+
+.chat-code-inline {
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-size: 12px;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+}
+
+/* Ace github theme token colors */
+:deep(.hljs) {
+    background: #f6f8fa;
+    color: #000;
+    border-radius: 4px;
+}
+
+:deep(.hljs-keyword),
+:deep(.hljs-selector-tag),
+:deep(.hljs-literal.hljs-boolean) {
+    font-weight: bold;
+}
+
+:deep(.hljs-string),
+:deep(.hljs-attr) {
+    color: #D14;
+}
+
+:deep(.hljs-number),
+:deep(.hljs-literal) {
+    color: #099;
+}
+
+:deep(.hljs-comment) {
+    color: #998;
+    font-style: italic;
+}
+
+:deep(.hljs-built_in),
+:deep(.hljs-title.function_),
+:deep(.hljs-variable.language_) {
+    color: #0086B3;
+}
+
+:deep(.hljs-title.class_),
+:deep(.hljs-type) {
+    color: teal;
+}
+
+:deep(.hljs-variable) {
+    color: teal;
+    font-weight: 600;
 }
 </style>
