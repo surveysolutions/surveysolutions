@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             var interview = CreateInterview(questionnaire);
 
-            interview.Apply(Create.Event.QuestionsMarkedAsReadonly( DateTime.Now,new[]{Create.Identity(Id.g1)}));
+            interview.Apply(Create.Event.QuestionsMarkedAsReadonly(DateTimeOffset.Now, Create.Identity(Id.g1)));
 
             TestDelegate act = () => interview.AnswerNumericIntegerQuestion(Create.Command.AnswerNumericIntegerQuestionCommand(questionId: Id.g1));
 
