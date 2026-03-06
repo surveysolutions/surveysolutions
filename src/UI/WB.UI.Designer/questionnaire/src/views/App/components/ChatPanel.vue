@@ -163,8 +163,9 @@ export default {
             const controller = abortController.value;
             if (controller) {
                 controller.abort('User stopped the request');
-                abortController.value = null;
-                isLoading.value = false;
+                // Do NOT reset isLoading/abortController here.
+                // Let the in-flight sendMessage's finally block handle cleanup,
+                // so a new request started before finally runs isn't clobbered.
             }
         };
 
@@ -187,16 +188,17 @@ export default {
 
             await scrollToBottom();
 
-            try {
-                abortController.value = new AbortController();
+            const controller = new AbortController();
+            abortController.value = controller;
 
+            try {
                 // Call Assistant with conversation history
                 const response = await callAssistant(
                     messageText,
                     chatStore.questionnaireId,
                     chatStore.entityId,
                     chatStore.area,
-                    abortController.value.signal);
+                    controller.signal);  // use local ref, not abortController.value
 
                 const assistantMessage = {
                     id: Date.now() + 1,
@@ -210,7 +212,8 @@ export default {
                 await scrollToBottom();
             } catch (error) {
 
-                if (error.name === 'AbortError' || error.message === 'User stopped the request') {
+                if (error.name === 'AbortError' || error.message === 'User stopped the request'
+                    || error.name === 'CanceledError' || error.code === 'ERR_CANCELED') {
                     //do nothing
                 } else {
                     console.error('Error sending message:', error);
@@ -228,8 +231,12 @@ export default {
                     await scrollToBottom();
                 }
             } finally {
-                abortController.value = null;
-                isLoading.value = false;
+                // Only reset state if this controller is still the active one.
+                // If the user already started a new request, leave their state alone.
+                if (abortController.value === controller) {
+                    abortController.value = null;
+                    isLoading.value = false;
+                }
             }
         };
 
