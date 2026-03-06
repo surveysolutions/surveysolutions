@@ -1133,7 +1133,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             new InterviewQuestionInvariants(questionIdentity, questionnaire, this.Tree, questionOptionsRepository)
                 .RequireQuestionExists()
-                .RequireQuestionEnabled();
+                .RequireQuestionIsEnabledAndNotReadOnly();
 
             var targetQuestion = this.Tree.GetQuestion(questionIdentity);
             if (targetQuestion.HasProtectedAnswer())
