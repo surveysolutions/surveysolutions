@@ -649,5 +649,23 @@
     "Classifications": "التصنيفات",
     "SaveAs": "حفظ باسم",
     "CloneDeletedWarning": "أنت تقوم بإنشاء نسخة من استبيان محذوف. قد يتم فقدان بعض الأجزاء."
+  },
+  "Assistant": {
+    "ClearHistory": "مسح السجل",
+    "Unlike": "إلغاء الإعجاب",
+    "Like": "إعجاب",
+    "Dislike": "عدم الإعجاب",
+    "Unhelpful": "غير مفيد",
+    "Undislike": "إلغاء عدم الإعجاب",
+    "DislikeCommentTitle": "أضف تعليقًا",
+    "DislikeCommentPlaceholder": "اكتب تعليقًا قصيرًا (اختياريًا)",
+    "DislikeCommentHint": "ما الخطأ في هذا الجواب؟",
+    "Send": "إرسال",
+    "SendFeedback": "إرسال ملاحظات",
+    "UnlikeCommentTitle": "أضف تعليقًا",
+    "UnlikeCommentPlaceholder": "اكتب تعليقًا قصيرًا (اختياريًا)",
+    "TypeMessage": "اكتب رسالتك...",
+    "Title": "مساعد الذكاء الاصطناعي",
+    "WelcomeMessage": "ابدأ محادثة مع مساعد الذكاء الاصطناعي"
   }
 }

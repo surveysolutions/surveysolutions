@@ -1,17 +1,20 @@
-import Confirm from '../views/App/components/Confirm.vue';
+import ConfirmPrompt from '../views/App/components/ConfirmPrompt.vue';
 import event from './events';
 
 export default {
     install: (app, args = {}) => {
-        app.component(args.componentName || 'confirm-dialog', Confirm);
+        app.component(
+            args.componentName || 'confirm-prompt-dialog',
+            ConfirmPrompt,
+        );
 
-        const confirm = params => {
+        const confirmPrompt = (params) => {
             if (typeof params != 'object' || Array.isArray(params)) {
                 let caughtType = typeof params;
                 if (Array.isArray(params)) caughtType = 'array';
 
                 throw new Error(
-                    `Options type must be an object. Caught: ${caughtType}. Expected: object`
+                    `Options type must be an object. Caught: ${caughtType}. Expected: object`,
                 );
             }
 
@@ -25,16 +28,15 @@ export default {
                         `Callback type must be a function. Caught: ${callbackType}. Expected: function`,
                     );
                 }
-                event.emit('open', params);
+                event.emit('openPrompt', params);
             }
         };
 
-        confirm.close = () => {
-            event.emit('close');
+        confirmPrompt.close = () => {
+            event.emit('closePrompt');
         };
 
-        app.config.globalProperties.$confirm = confirm;
-
-        app['$confirm'] = confirm;
-    }
+        app.config.globalProperties.$confirmPrompt = confirmPrompt;
+        app['$confirmPrompt'] = confirmPrompt;
+    },
 };

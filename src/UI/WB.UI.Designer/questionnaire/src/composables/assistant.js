@@ -30,13 +30,26 @@ export const useAssistant = () => {
                         })),
                         prompt: prompt,
                         entityId: options.entityId || null,
+                        conversationId: options.conversationId || null,
                     },
                     {
                         timeout: 3 * 60 * 1000, // 3 minute timeout
                     },
                 );
 
-                return response.data.expression || response.data.message;
+                const data = response.data || {};
+                const text =
+                    data.expression ??
+                    data.Expression ??
+                    data.answer ??
+                    data.Answer ??
+                    data.message ??
+                    data.Message ??
+                    '';
+                const meta = data.meta ?? data.Meta ?? null;
+                const conversationId = data.conversationId ?? null;
+
+                return { text, meta, conversationId };
             } catch (error) {
                 console.error(
                     `Assistant Error (attempt ${attempt}/${retries}):`,
