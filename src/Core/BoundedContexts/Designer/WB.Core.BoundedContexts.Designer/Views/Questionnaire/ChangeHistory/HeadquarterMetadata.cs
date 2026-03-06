@@ -9,5 +9,7 @@
         public string? ImporterLogin { get; set; }
         public long   QuestionnaireVersion { get; set; }
         public float  TimeZoneMinutesOffset { get; set; }
+        
+        public string? InstanceId { get; set; }
     }
 }

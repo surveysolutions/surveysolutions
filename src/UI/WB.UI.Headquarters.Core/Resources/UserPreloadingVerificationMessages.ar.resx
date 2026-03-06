@@ -232,7 +232,7 @@
   <value>تحقق من قيمة المشرف</value>
 </data>
 <data name="PLU0011Recomendation" xml:space="preserve">
-  <value>توفير قيمة للمشرف</value>
+  <value>إزالة قيمة المشرف</value>
 </data>
 <data name="PLU0012Recomendation" xml:space="preserve">
   <value>يجب ألا يحتوي على أكثر من 100 حرف</value>

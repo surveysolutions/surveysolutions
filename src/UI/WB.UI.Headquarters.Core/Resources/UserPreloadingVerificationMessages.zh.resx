@@ -207,6 +207,9 @@
   <data name="PLU0011Description" xml:space="preserve">
     <value>督导员角色的Supervisor一列应为空</value>
   </data>
+  <data name="PLU0011Recomendation" xml:space="preserve">
+      <value>删除 'supervisor' 的值</value>
+  </data>
   <data name="PLU0012Description" xml:space="preserve">
     <value>全名“{0}”的格式错误</value>
   </data>

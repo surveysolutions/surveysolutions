@@ -3,7 +3,7 @@ ARG VERSION=21.01
 ARG INFO_VERSION=21.01
 ARG NODE=22
 ARG APK_FILES=build
-ARG FONTS="NotoSans-hinted.zip;NotoSansMyanmar-hinted.zip"
+
 ARG PLATFORM=amd64
 #amd64 #linux/arm64
 
@@ -35,7 +35,7 @@ COPY [ "src/Core/BoundedContexts/Headquarters/WB.Core.BoundedContexts.Headquarte
 RUN NODE_OPTIONS="--max-old-space-size=3072" npm run build -- -- --package
 
 # Building export
-FROM --platform=${PLATFORM} mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION}-alpine3.22 AS export_builder
+FROM --platform=${PLATFORM} mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION}-alpine3.23 AS export_builder
 ARG VERSION
 ARG INFO_VERSION
 
@@ -81,7 +81,7 @@ RUN dotnet publish src/Services/Export/WB.Services.Export.Host \
     -c Release -o /export -p:Version="${VERSION}" -p:InformationalVersion="${INFO_VERSION}"
 
 # Building HQ 
-FROM --platform=${PLATFORM} mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION}-alpine3.22 AS builder
+FROM --platform=${PLATFORM} mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION}-alpine3.23 AS builder
 ARG VERSION
 ARG INFO_VERSION
 
@@ -150,23 +150,17 @@ RUN dotnet publish src/UI/WB.UI.Headquarters.Core \
     -c Release -o /hq -p:Version="${VERSION}" -p:InformationalVersion="${INFO_VERSION}"
 
 # Copy APK files if any
-FROM --platform=${PLATFORM} mcr.microsoft.com/dotnet/aspnet:${DOTNET_VERSION}-alpine3.22 AS apks
+FROM --platform=${PLATFORM} mcr.microsoft.com/dotnet/aspnet:${DOTNET_VERSION}-alpine3.23 AS apks
 ARG APK_FILES
 COPY ${APK_FILES}/*.apk /apk/
 
 # include noto font into image
-FROM --platform=${PLATFORM} mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION}-alpine3.22 AS fonts_source
-RUN apk add --no-cache --virtual unzip
+FROM --platform=${PLATFORM} mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION}-alpine3.23 AS fonts_source
 
-ARG FONTS
-ENV FONTS_LIST=$FONTS
-RUN mkdir -p /raw_fonts
-RUN [ "/bin/ash" ,"-c", "export IFS=\";\"; for FONT in $FONTS_LIST; \
-   do wget -P /raw_fonts https://noto-website-2.storage.googleapis.com/pkgs/$FONT \
-   && cd /raw_fonts && unzip -o $FONT ; done"]
+COPY installer/src/SurveySolutionsProduct/Fonts /usr/share/fonts
 
 # Building runtime 
-FROM mcr.microsoft.com/dotnet/aspnet:${DOTNET_VERSION}-alpine3.22
+FROM mcr.microsoft.com/dotnet/aspnet:${DOTNET_VERSION}-alpine3.23
 ENV DOTNET_RUNNING_IN_CONTAINER=true
 ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
 
@@ -190,9 +184,9 @@ RUN apk add --no-cache \
     binutils \
     && rm -rf /var/cache/apk/*
 
-COPY --from=fonts_source /raw_fonts /usr/share/fonts
+COPY --from=fonts_source /usr/share/fonts /usr/share/fonts
 
-LABEL org.opencontainers.image.title="Headquaters All in One"
+LABEL org.opencontainers.image.title="Headquarters All in One"
 LABEL org.opencontainers.image.description="Survey Solutions Headquarters with Export Service"
 
 COPY --from=builder hq /app

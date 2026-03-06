@@ -179,7 +179,7 @@ namespace WB.UI.Headquarters.Controllers.Api
 
             foreach (var kv in configuration.AsEnumerable(true))
             {
-                if (kv.Key == "ConnectionStrings:DefaultConnection" || kv.Key == "ConnectionString")
+                if (kv.Key.Contains("connectionstring", StringComparison.OrdinalIgnoreCase))
                 {
                     AddConfig(kv.Key, RemovePasswordFromConnectionString(kv.Value));
                     continue;
@@ -199,7 +199,7 @@ namespace WB.UI.Headquarters.Controllers.Api
 
         public async Task<ActionResult<SortedList<string, KeyValuePair<string, string>>>> Jobs()
         {
-            //get all Quartz schedulled tasks
+            //get all Quartz scheduled tasks
             var scheduler = await this.schedulerFactory.GetScheduler();
             //get all registered Quartz triggers
             var triggers = await scheduler.GetTriggerKeys(GroupMatcher<TriggerKey>.AnyGroup());
@@ -216,7 +216,9 @@ namespace WB.UI.Headquarters.Controllers.Api
         }
 
         private static string RemovePasswordFromConnectionString(string connectionString)
-            => ConnectionStringPasswordRegex.Replace(connectionString, "Password=*****;");
+            => String.IsNullOrEmpty(connectionString) 
+                ? connectionString 
+                :ConnectionStringPasswordRegex.Replace(connectionString, "Password=*****;");
 
         public IActionResult Download(string id)
         {

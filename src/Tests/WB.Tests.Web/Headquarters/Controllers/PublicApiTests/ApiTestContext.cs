@@ -54,7 +54,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
                 Mock.Of<IUnitOfWork>(),
                 Mock.Of<ISystemLog>(),
                 workspaceContextAccessor ?? Mock.Of<IWorkspaceContextAccessor>(),
-                Mock.Of<IWorkspacesStorage>());
+                Mock.Of<IWorkspacesStorage>(),
+                Mock.Of<IAuthorizedUser>());
         }
 
         protected static QuestionnairesPublicApiController CreateQuestionnairesController(

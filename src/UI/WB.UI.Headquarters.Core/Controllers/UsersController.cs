@@ -593,6 +593,9 @@ namespace WB.UI.Headquarters.Controllers
             if (this.authorizedUser.IsHeadquarter && !new[] {UserRoles.Supervisor, UserRoles.Interviewer}.Contains(role))
                 return Forbid();
 
+            if (role == UserRoles.Administrator)
+                return Forbid();
+            
             if (role == UserRoles.Interviewer && !model.SupervisorId.HasValue)
                 this.ModelState.AddModelError(nameof(CreateUserModel.SupervisorId), FieldsAndValidations.RequiredSupervisorErrorMessage);
 
@@ -663,7 +666,7 @@ namespace WB.UI.Headquarters.Controllers
 
             var userToUpdate = await this.userManager.FindByIdAsync(model.UserId.FormatGuid());
             if (userToUpdate == null) return NotFound("User not found");
-
+            
             if (!HasPermissionsToChangeUserPassword(userToUpdate)) 
                 return StatusCode(StatusCodes.Status403Forbidden, new
                 {
@@ -1127,22 +1130,27 @@ namespace WB.UI.Headquarters.Controllers
 
         private bool HasPermissionsToManageUser(HqUser user)
         {
+            // Own profile can always be managed (except interviewers need special permission)
+            if (user.Id == this.authorizedUser.Id)
+            {
+                return !this.authorizedUser.IsInterviewer 
+                       || (this.profileSettingsStorage.GetById(AppSetting.ProfileSettings)?.AllowInterviewerUpdateProfile ?? false);
+            }
+
+            // Administrators can manage all users
             if (this.authorizedUser.IsAdministrator)
                 return true;
 
-            if (this.authorizedUser.IsHeadquarter && (user.Id == this.authorizedUser.Id  || user.IsInRole(UserRoles.Supervisor) || user.IsInRole(UserRoles.Interviewer)))
+            // Headquarters can manage supervisors and interviewers
+            if (this.authorizedUser.IsHeadquarter 
+                && (user.IsInRole(UserRoles.Supervisor) || user.IsInRole(UserRoles.Interviewer))
+                && user.Workspaces.Any(x => this.authorizedUser.Workspaces.Contains(x.Workspace.Name)))
                 return true;
 
+            // Supervisors can manage their interviewers
             if (this.authorizedUser.IsSupervisor 
-                && (user.Id == this.authorizedUser.Id || (user.IsInRole(UserRoles.Interviewer) && user.Workspaces.Any(u => u.Supervisor?.Id == this.authorizedUser.Id))))
-                return true;
-
-            if (this.authorizedUser.IsInterviewer 
-                && user.Id == this.authorizedUser.Id
-                && (this.profileSettingsStorage.GetById(AppSetting.ProfileSettings)?.AllowInterviewerUpdateProfile ?? false))
-                return true;
-
-            if (this.authorizedUser.IsObserver && user.Id == this.authorizedUser.Id)
+                && user.IsInRole(UserRoles.Interviewer) 
+                && user.Workspaces.Any(u => u.Supervisor?.Id == this.authorizedUser.Id))
                 return true;
 
             return false;
@@ -1150,27 +1158,18 @@ namespace WB.UI.Headquarters.Controllers
 
         private bool HasPermissionsToChangeUserPassword(HqUser user)
         {
+            if (user.Id == this.authorizedUser.Id)
+                return true;
+
+            // Only administrators and headquarters can change other users' passwords
+            //Admin can change password for any user except other admins
             if (this.authorizedUser.IsAdministrator)
-                return true;
+                return !user.IsInRole(UserRoles.Administrator);
 
-            if (this.authorizedUser.IsHeadquarter)
-            {
-                if (user.Id == this.authorizedUser.Id)
-                    return true;
-
-                if(user.Workspaces.All(x => this.authorizedUser.Workspaces.Contains(x.Workspace.Name)))
-                    return true;
-
-                return false;
-            }
-
-            if (this.authorizedUser.IsSupervisor && user.Id == this.authorizedUser.Id)
-                return true;
-
-            if (this.authorizedUser.IsInterviewer && user.Id == this.authorizedUser.Id)
-                return true;
-
-            if (this.authorizedUser.IsObserver && user.Id == this.authorizedUser.Id)
+            // Headquarters can change passwords for supervisors/interviewers in their workspaces
+            if (this.authorizedUser.IsHeadquarter
+                && (user.IsInRole(UserRoles.Supervisor) || user.IsInRole(UserRoles.Interviewer))
+                && user.Workspaces.All(x => this.authorizedUser.Workspaces.Contains(x.Workspace.Name)))
                 return true;
 
             return false;

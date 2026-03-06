@@ -21,7 +21,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Designer
         Task<QuestionnaireCommunicationPackage> GetQuestionnaire(
             Guid id,
             int clientQuestionnaireContentVersion,
-            [Query] int? minSupportedQuestionnaireVersion);
+            [Query] int? minSupportedQuestionnaireVersion,
+            [Query] string instanceId);
 
         [Get("/api/hq/attachment/{contentId}")]
         Task<RestFile> DownloadQuestionnaireAttachment(string contentId, [Query] Guid attachmentId);

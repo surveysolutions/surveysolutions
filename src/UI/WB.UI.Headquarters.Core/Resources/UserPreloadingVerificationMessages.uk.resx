@@ -198,6 +198,9 @@
   <data name="PLU0011Description" xml:space="preserve">
     <value>Колонка "supervisor" повинна бути порожньою для ролі супервізора</value>
   </data>
+  <data name="PLU0011Recomendation" xml:space="preserve">
+      <value>Видаліть значення поля "supervisor"</value>
+  </data>
   <data name="PLU0012" xml:space="preserve">
     <value>Неправильна довжина повного імені</value>
   </data>

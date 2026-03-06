@@ -103,7 +103,9 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
 
         [HttpGet]
         [Route("{id:Guid}")]
-        public async Task<IActionResult> Get(Guid id, int clientQuestionnaireContentVersion, [FromQuery]int? minSupportedQuestionnaireVersion = null)
+        public async Task<IActionResult> Get(Guid id, int clientQuestionnaireContentVersion, 
+            [FromQuery]int? minSupportedQuestionnaireVersion = null,
+            [FromQuery]string? instanceId = null)
         {
             QuestionnaireView? questionnaireView = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
 
@@ -172,7 +174,7 @@ namespace WB.UI.Designer.Controllers.Api.Headquarters
 
             var userAgent = Request.Headers["User-Agent"].FirstOrDefault();
             questionnaire.Revision = await this.questionnaireHistoryVersionsService
-                .TrackQuestionnaireImportAsync(questionnaire, userAgent, User.GetId());
+                .TrackQuestionnaireImportAsync(questionnaire, userAgent, User.GetId(), instanceId);
 
             questionnaire.IsUsingExpressionStorage = versionToCompileAssembly > 19;
             var readOnlyQuestionnaireDocument = new ReadOnlyQuestionnaireDocumentWithCache(questionnaireView.Source);

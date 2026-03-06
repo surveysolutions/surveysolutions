@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -232,7 +232,7 @@
     <value>Corrigir supervisor</value>
   </data>
   <data name="PLU0011Recomendation" xml:space="preserve">
-    <value>Fornecer valor para supervisor</value>
+    <value>Remova o valor do supervisor</value>
   </data>
   <data name="PLU0012Recomendation" xml:space="preserve">
     <value>Não deve conter mais de 100 caracteres</value>

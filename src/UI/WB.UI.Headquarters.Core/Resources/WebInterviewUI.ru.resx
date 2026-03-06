@@ -537,8 +537,7 @@ Oбратитесь в тех. поддержку за помощью</value>
       <value>Вопросы с ошибками: {{count}}</value>
   </data>
   <data name="CompleteReviewSubmit" xml:space="preserve">
-    <value>Проверить и отправить &lt;br /&gt;
-интервью {{key}}</value>
+      <value>Проверить и отправить</value>
   </data>
   <data name="Complete_Tab_CriticalErrors" xml:space="preserve">
     <value>Критические &lt;br /&gt;
@@ -579,4 +578,8 @@ Oбратитесь в тех. поддержку за помощью</value>
   </data>
   <data name="TurnOnDevMode" xml:space="preserve">
     <value>Включить режим разработчика</value>
-  </data></root>
+  </data>
+  <data name="CompleteReviewSubmitInterview" xml:space="preserve">
+      <value>Интервью {{key}}</value>
+  </data>
+</root>

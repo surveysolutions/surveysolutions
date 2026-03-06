@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Sourcing;
 
@@ -10,5 +9,6 @@ namespace WB.Core.Infrastructure.Aggregates
         bool HasUncommittedChanges();
         List<UncommittedEvent> GetUnCommittedChanges();
         void MarkChangesAsCommitted();
+        void DiscardChanges();
     }
 }

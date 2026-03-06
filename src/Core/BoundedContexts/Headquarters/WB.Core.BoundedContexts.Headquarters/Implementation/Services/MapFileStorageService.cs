@@ -106,7 +106,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 }
                 else
                 {
-                    tempFile = this.fileSystemAccessor.CombinePath(mapsDirectory, mapFiles.Name);
+                    tempFile = this.fileSystemAccessor.CombinePath(mapsDirectory, mapFiles.Files.First().Name);
                 }
 
                 var mapName = mapFiles.IsShapeFile ? mapFiles.Name + ".shp" : mapFiles.Name; 

@@ -547,8 +547,7 @@ Entre em contato com o suporte para obter assistência.</value>
     <value>Perguntas com erros: {{count}}</value>
   </data>
   <data name="CompleteReviewSubmit" xml:space="preserve">
-    <value>Revisar e Enviar &lt;br /&gt;
-Entrevista {{key}}</value>
+      <value>Revisar e Enviar</value>
   </data>
   <data name="Complete_Tab_CriticalErrors" xml:space="preserve">
     <value>Erros &lt;br /&gt;
@@ -589,5 +588,8 @@ Certifique-se de que todas as informações estão corretas.</value>
   </data>
   <data name="TurnOnDevMode" xml:space="preserve">
     <value>Ativar modo de desenvolvedor</value>
+  </data>
+  <data name="CompleteReviewSubmitInterview" xml:space="preserve">
+      <value>Entrevista {{key}}</value>
   </data>
 </root>

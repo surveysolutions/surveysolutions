@@ -545,8 +545,7 @@
     <value>Preguntas con errores: {{count}}</value>
   </data>
   <data name="CompleteReviewSubmit" xml:space="preserve">
-    <value>Revisar y Enviar &lt;br /&gt;
-Entrevista {{key}}</value>
+      <value>Revisar y Enviar</value>
   </data>
   <data name="Complete_Tab_CriticalErrors" xml:space="preserve">
     <value>Errores &lt;br /&gt;
@@ -587,4 +586,8 @@ Asegúrese de que toda la información sea correcta.</value>
   </data>
   <data name="TurnOnDevMode" xml:space="preserve">
     <value>Activar modo de desarrollador</value>
-  </data></root>
+  </data>
+  <data name="CompleteReviewSubmitInterview" xml:space="preserve">
+      <value>Entrevista {{key}}</value>
+  </data>
+</root>

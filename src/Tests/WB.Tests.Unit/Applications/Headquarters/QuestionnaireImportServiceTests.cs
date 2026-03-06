@@ -10,6 +10,7 @@ using NHibernate;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Designer;
+using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable;
@@ -44,7 +45,8 @@ namespace WB.Tests.Unit.Applications.Headquarters
 
             var rest = new Mock<IDesignerApi>();
 
-            rest.Setup(s => s.GetQuestionnaire(It.IsAny<Guid>(), It.IsAny<int>(), It.IsAny<int?>()))
+            rest.Setup(s => s.GetQuestionnaire(It.IsAny<Guid>(), It.IsAny<int>(),
+                    It.IsAny<int?>(),It.IsAny<string>()))
             .Throws(new RestException(exprectedErrorMessageFromServer, HttpStatusCode.ExpectationFailed));
 
             var service = CreateIQuestionnaireImportService(
@@ -65,7 +67,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
 
             var rest = new Mock<IDesignerApi>();
 
-            rest.Setup(s => s.GetQuestionnaire(It.IsAny<Guid>(), It.IsAny<int>(), It.IsAny<int?>()))
+            rest.Setup(s => s.GetQuestionnaire(It.IsAny<Guid>(), It.IsAny<int>(), It.IsAny<int?>(),It.IsAny<string>()))
                 .Throws(new RestException(""));
 
             var service = CreateIQuestionnaireImportService(supportedVersionProvider: versionProvider, 
@@ -213,7 +215,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
         private void SetupGetQuestionnaire(Mock<IDesignerApi> designerApi, QuestionnaireCommunicationPackage package = null)
         {
             designerApi
-                .Setup(d => d.GetQuestionnaire(It.IsAny<Guid>(), It.IsAny<int>(), It.IsAny<int?>()))
+                .Setup(d => d.GetQuestionnaire(It.IsAny<Guid>(), It.IsAny<int>(), It.IsAny<int?>(),It.IsAny<string>()))
                 .Returns(Task.FromResult(package ?? new QuestionnaireCommunicationPackage(String.Empty,string.Empty, 0, false)));
 
             designerApi
@@ -333,7 +335,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
             var designerApi = new Mock<IDesignerApi>();
 
             designerApi
-                .Setup(d => d.GetQuestionnaire(It.IsAny<Guid>(), It.IsAny<int>(), It.IsAny<int?>()))
+                .Setup(d => d.GetQuestionnaire(It.IsAny<Guid>(), It.IsAny<int>(), It.IsAny<int?>(),It.IsAny<string>()))
                 .Throws(new RestException(someFaultReason, statusCode: HttpStatusCode.Unauthorized));
             
             var importService = CreateIQuestionnaireImportService(
@@ -433,7 +435,8 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 Mock.Of<IAssignmentsUpgradeService>(),
                 archiveUtils ?? Mock.Of<IArchiveUtils>(),
                 Mock.Of<IDesignerUserCredentials>(),
-                executor);
+                executor,
+                Mock.Of<IPlainStorageAccessor<ServerSettings>>());
 
             serviceLocatorNestedMock.Setup(x => x.GetInstance<IQuestionnaireImportService>()).Returns(questionnaireImportService);
             serviceLocatorNestedMock.Setup(x => x.GetInstance<IPlainKeyValueStorage<QuestionnaireLookupTable>>())

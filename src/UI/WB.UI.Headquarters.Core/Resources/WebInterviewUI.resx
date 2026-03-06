@@ -329,8 +329,7 @@
     <value>Complete</value>
   </data>
   <data name="CompleteReviewSubmit" xml:space="preserve">
-      <value>Review &amp; Submit &lt;br /&gt;
-Interview {{key}}</value>
+      <value>Review &amp; Submit</value>
   </data>
   <data name="Complete_Tab_CriticalErrors" xml:space="preserve">
       <value>Critical &lt;br /&gt;
@@ -589,5 +588,8 @@ Contact support for assistance.</value>
   </data>
   <data name="Complete_QuestionsWithErrors" xml:space="preserve">
       <value>Questions with errors: {{count}}</value>
+  </data>
+  <data name="CompleteReviewSubmitInterview" xml:space="preserve">
+      <value>Interview {{key}}</value>
   </data>
 </root>
