@@ -180,13 +180,12 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                     callLogId = parsedCallLogId;
                 }
 
-                JsonElement? metaToken = null;
+                JToken? metaToken = null;
                 if (responseData.TryGetProperty("meta", out var meta))
                 {
                     // This controller uses Newtonsoft.Json for MVC serialization (see Startup.AddNewtonsoftJson).
                     // JToken doesn't have the self-referencing Parent loop that System.Text.Json.Nodes has.
-                    using var doc = JsonDocument.Parse(meta.GetRawText());
-                    metaToken = doc.RootElement.Clone();
+                    metaToken = JToken.Parse(meta.GetRawText());
                 }
 
                 string? expression = null;
