@@ -482,10 +482,7 @@ export default {
 }
 
 .assistant-message .message-content {
-    background-color: rgb(var(--v-theme-surface-variant));
-    color: rgb(var(--v-theme-on-surface-variant));
-    padding: 12px 16px;
-    border-radius: 18px;
+    padding: 4px 0;
     font-size: 14px;
 }
 
