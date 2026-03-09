@@ -182,46 +182,85 @@ export default {
 
             const highlightCode = (code, language) => {
                 let highlighted;
+                let actualLanguage = language;
                 try {
                     highlighted = hljs.highlight(code.trim(), { language }).value;
                 } catch {
+                    actualLanguage = 'csharp';
                     highlighted = hljs.highlight(code.trim(), { language: 'csharp' }).value;
                 }
-                return wrapVariables(highlighted, variableNames);
+                return { highlighted: wrapVariables(highlighted, variableNames), actualLanguage };
             };
 
-            // Wrap known questionnaire variable names in text nodes (not inside HTML tags)
+            // Wrap known questionnaire variable names only in bare text nodes
+            // (not inside already-classified hljs token spans), using DOM traversal.
             const wrapVariables = (html, variables) => {
                 if (!variables.length) return html;
                 const pattern = new RegExp(`\\b(${variables.map(v => v.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})\\b`, 'g');
-                return html.replace(/>([^<]*)</g, (match, text) => {
-                    return '>' + text.replace(pattern, '<span class="hljs-variable">$1</span>') + '<';
-                });
+
+                const container = document.createElement('div');
+                container.innerHTML = html;
+
+                const walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT);
+                const textNodes = [];
+                let node;
+                while ((node = walker.nextNode())) {
+                    // Only process bare text nodes — skip any already inside an hljs token span
+                    const parentClass = node.parentElement?.className || '';
+                    if (!parentClass.includes('hljs-')) {
+                        textNodes.push(node);
+                    }
+                }
+
+                for (const textNode of textNodes) {
+                    const text = textNode.nodeValue;
+                    pattern.lastIndex = 0;
+                    if (!pattern.test(text)) continue;
+
+                    pattern.lastIndex = 0;
+                    const fragment = document.createDocumentFragment();
+                    let lastIndex = 0;
+                    let match;
+                    while ((match = pattern.exec(text)) !== null) {
+                        if (match.index > lastIndex) {
+                            fragment.appendChild(document.createTextNode(text.slice(lastIndex, match.index)));
+                        }
+                        const span = document.createElement('span');
+                        span.className = 'hljs-variable';
+                        span.textContent = match[1];
+                        fragment.appendChild(span);
+                        lastIndex = match.index + match[0].length;
+                    }
+                    if (lastIndex < text.length) {
+                        fragment.appendChild(document.createTextNode(text.slice(lastIndex)));
+                    }
+                    textNode.parentNode.replaceChild(fragment, textNode);
+                }
+
+                return container.innerHTML;
             };
 
             // Extract fenced code blocks first
+            const nonce = Math.random().toString(36).slice(2);
             const codeBlocks = [];
             let result = content.replace(/```(\w*)\n?([\s\S]*?)```/g, (_, lang, code) => {
                 const language = lang || 'csharp';
-                const highlighted = highlightCode(code, language);
+                const { highlighted, actualLanguage } = highlightCode(code, language);
                 const idx = codeBlocks.length;
                 const encoded = encodeURIComponent(code.trim());
                 codeBlocks.push(
                     `<div class="chat-code-wrapper">` +
                     `<button class="chat-copy-btn" data-copy="${encoded}" title="Copy"><span class="mdi mdi-content-copy"></span></button>` +
-                    `<pre class="chat-code-block"><code class="hljs language-${language}">${highlighted}</code></pre>` +
+                    `<pre class="chat-code-block"><code class="hljs language-${actualLanguage}">${highlighted}</code></pre>` +
                     `</div>`
                 );
-                return `CODEBLOCK${idx}PLACEHOLDER`;
+                return `\x00C${nonce}${idx}\x00`;
             });
 
             // Extract inline code blocks
             const inlineBlocks = [];
             result = result.replace(/`([^`\n]+)`/g, (_, code) => {
-                const highlighted = wrapVariables(
-                    hljs.highlight(code, { language: 'csharp' }).value,
-                    variableNames
-                );
+                const { highlighted } = highlightCode(code, 'csharp');
                 const encoded = encodeURIComponent(code);
                 const idx = inlineBlocks.length;
                 inlineBlocks.push(
@@ -230,7 +269,7 @@ export default {
                     `<button class="chat-copy-btn chat-copy-inline" data-copy="${encoded}" title="Copy"><span class="mdi mdi-content-copy"></span></button>` +
                     `</span>`
                 );
-                return `INLINEBLOCK${idx}PLACEHOLDER`;
+                return `\x00I${nonce}${idx}\x00`;
             });
 
             // Sanitize plain text
@@ -242,12 +281,12 @@ export default {
                 .replace(/\*(.*?)\*/g, '<em>$1</em>')
                 .replace(/\n/g, '<br>');
 
-            // Restore code blocks
+            // Restore code blocks using exact sentinel strings
             inlineBlocks.forEach((block, i) => {
-                result = result.replace(`INLINEBLOCK${i}PLACEHOLDER`, block);
+                result = result.split(`\x00I${nonce}${i}\x00`).join(block);
             });
             codeBlocks.forEach((block, i) => {
-                result = result.replace(`CODEBLOCK${i}PLACEHOLDER`, block);
+                result = result.split(`\x00C${nonce}${i}\x00`).join(block);
             });
 
             return result;
