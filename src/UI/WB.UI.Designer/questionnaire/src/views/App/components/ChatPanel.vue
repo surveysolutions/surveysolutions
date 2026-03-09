@@ -16,7 +16,7 @@
         <v-divider style="margin: 0;" />
 
         <!-- Chat Messages -->
-        <v-card-text class="chat-messages pa-0" ref="messagesContainer"
+        <v-card-text class="chat-messages pa-0" ref="messagesContainer" @click="handleCodeCopy"
             style="height: calc(100vh - 200px); overflow-y: auto;">
             <div class="pa-4">
                 <div v-if="messages.length === 0" class="text-center text-grey-darken-1 mt-8">
@@ -205,8 +205,12 @@ export default {
                 const language = lang || 'csharp';
                 const highlighted = highlightCode(code, language);
                 const idx = codeBlocks.length;
+                const encoded = encodeURIComponent(code.trim());
                 codeBlocks.push(
-                    `<pre class="chat-code-block"><code class="hljs language-${language}">${highlighted}</code></pre>`
+                    `<div class="chat-code-wrapper">` +
+                    `<button class="chat-copy-btn" data-copy="${encoded}" title="Copy"><span class="mdi mdi-content-copy"></span></button>` +
+                    `<pre class="chat-code-block"><code class="hljs language-${language}">${highlighted}</code></pre>` +
+                    `</div>`
                 );
                 return `CODEBLOCK${idx}PLACEHOLDER`;
             });
@@ -218,8 +222,14 @@ export default {
                     hljs.highlight(code, { language: 'csharp' }).value,
                     variableNames
                 );
+                const encoded = encodeURIComponent(code);
                 const idx = inlineBlocks.length;
-                inlineBlocks.push(`<code class="chat-code-inline hljs">${highlighted}</code>`);
+                inlineBlocks.push(
+                    `<span class="chat-inline-wrapper">` +
+                    `<code class="chat-code-inline hljs">${highlighted}</code>` +
+                    `<button class="chat-copy-btn chat-copy-inline" data-copy="${encoded}" title="Copy"><span class="mdi mdi-content-copy"></span></button>` +
+                    `</span>`
+                );
                 return `INLINEBLOCK${idx}PLACEHOLDER`;
             });
 
@@ -241,6 +251,19 @@ export default {
             });
 
             return result;
+        };
+
+        const handleCodeCopy = (event) => {
+            const btn = event.target.closest('.chat-copy-btn');
+            if (!btn) return;
+            const code = decodeURIComponent(btn.dataset.copy || '');
+            navigator.clipboard.writeText(code).then(() => {
+                const icon = btn.querySelector('.mdi');
+                if (icon) {
+                    icon.classList.replace('mdi-content-copy', 'mdi-check');
+                    setTimeout(() => icon.classList.replace('mdi-check', 'mdi-content-copy'), 1500);
+                }
+            });
         };
 
         const formatTime = (timestamp) => {
@@ -423,7 +446,8 @@ export default {
             getMessageReaction,
             setReaction,
             formatMessage,
-            formatTime
+            formatTime,
+            handleCodeCopy
         };
     }
 };
@@ -579,6 +603,61 @@ export default {
     overflow-x: auto;
     font-size: 12px;
     line-height: 1.5;
+}
+
+:deep(.chat-code-wrapper) {
+    position: relative;
+}
+
+:deep(.chat-inline-wrapper) {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+}
+
+:deep(.chat-copy-btn) {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid #d0d7de;
+    border-radius: 4px;
+    padding: 1px 4px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.15s;
+    line-height: 1;
+    font-size: 11px;
+    color: #57606a;
+}
+
+:deep(.chat-copy-inline) {
+    position: static;
+    background: transparent;
+    border: none;
+    padding: 0;
+    font-size: 10px;
+    color: #57606a;
+    opacity: 0;
+    transition: opacity 0.15s;
+}
+
+:deep(.chat-inline-wrapper:hover .chat-copy-inline) {
+    opacity: 0.7;
+}
+
+:deep(.chat-copy-inline:hover) {
+    opacity: 1 !important;
+}
+
+:deep(.chat-code-wrapper:hover .chat-copy-btn) {
+    opacity: 1;
+}
+
+:deep(.chat-copy-btn:hover) {
+    background: #f3f4f6;
+    color: #24292f;
 }
 
 .chat-code-block code {
