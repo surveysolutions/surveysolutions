@@ -48,8 +48,9 @@ export const useAssistant = () => {
                     '';
                 const meta = data.meta ?? data.Meta ?? null;
                 const conversationId = data.conversationId ?? null;
+                const callLogId = data.callLogId ?? data.CallLogId ?? null;
 
-                return { text, meta, conversationId };
+                return { text, meta, conversationId, callLogId };
             } catch (error) {
                 console.error(
                     `Assistant Error (attempt ${attempt}/${retries}):`,

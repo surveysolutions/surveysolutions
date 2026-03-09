@@ -180,23 +180,13 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                     callLogId = parsedCallLogId;
                 }
 
-                JToken? metaToken = null;
+                JsonElement? metaToken = null;
                 if (responseData.TryGetProperty("meta", out var meta))
                 {
                     // This controller uses Newtonsoft.Json for MVC serialization (see Startup.AddNewtonsoftJson).
                     // JToken doesn't have the self-referencing Parent loop that System.Text.Json.Nodes has.
-                    metaToken = JToken.Parse(meta.GetRawText());
-                }
-
-                if (callLogId.HasValue)
-                {
-                    if (metaToken is not JObject metaObject)
-                    {
-                        metaObject = new JObject();
-                        metaToken = metaObject;
-                    }
-
-                    metaObject["callLogId"] = callLogId.Value;
+                    using var doc = JsonDocument.Parse(meta.GetRawText());
+                    metaToken = doc.RootElement.Clone();
                 }
 
                 string? expression = null;
@@ -218,7 +208,8 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                     Expression = expression,
                     Message = message,
                     Meta = metaToken,
-                    conversationId = conversationId
+                    conversationId = conversationId,
+                    callLogId = callLogId
                 });
             }
             catch (OperationCanceledException)

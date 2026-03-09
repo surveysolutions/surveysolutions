@@ -312,8 +312,7 @@ export default {
             });
         };
 
-        const extractAssistantCallId = (meta) => {
-            const raw = meta?.callLogId ?? meta?.CallLogId ?? null;
+        const extractAssistantCallId = (raw) => {
             const numeric = raw != null ? Number(raw) : null;
             return Number.isFinite(numeric) && numeric > 0 ? numeric : null;
         };
@@ -341,10 +340,9 @@ export default {
                 // Call Assistant with conversation history
                 const assistantResult = await callAssistant(messageText, chatStore.questionnaireId, chatStore.entityId, chatStore.area);
                 const responseText = typeof assistantResult === 'string' ? assistantResult : assistantResult?.text;
-                const responseMeta = typeof assistantResult === 'object' ? assistantResult?.meta : null;
                 const nextConversationId = typeof assistantResult === 'object' ? assistantResult?.conversationId : null;
                 if (nextConversationId) conversationId.value = nextConversationId;
-                const assistantCallId = extractAssistantCallId(responseMeta);
+                const assistantCallId = extractAssistantCallId(assistantResult?.callLogId);
 
                 const assistantMessage = {
                     id: Date.now() + 1,
