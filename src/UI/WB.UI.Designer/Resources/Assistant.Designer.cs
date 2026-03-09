@@ -14,7 +14,7 @@ namespace WB.UI.Designer.Resources {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Assistant {
+    public class Assistant {
         
         private static System.Resources.ResourceManager resourceMan;
         
@@ -25,7 +25,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static System.Resources.ResourceManager ResourceManager {
+        public static System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.Equals(null, resourceMan)) {
                     System.Resources.ResourceManager temp = new System.Resources.ResourceManager("WB.UI.Designer.Resources.Assistant", typeof(Assistant).Assembly);
@@ -36,7 +36,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static System.Globalization.CultureInfo Culture {
+        public static System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -45,49 +45,97 @@ namespace WB.UI.Designer.Resources {
             }
         }
         
-        internal static string ClearHistory {
+        public static string ClearHistory {
             get {
                 return ResourceManager.GetString("ClearHistory", resourceCulture);
             }
         }
         
-        internal static string Unlike {
+        public static string Unlike {
             get {
                 return ResourceManager.GetString("Unlike", resourceCulture);
             }
         }
         
-        internal static string Like {
+        public static string Like {
             get {
                 return ResourceManager.GetString("Like", resourceCulture);
             }
         }
         
-        internal static string Dislike {
+        public static string Dislike {
             get {
                 return ResourceManager.GetString("Dislike", resourceCulture);
             }
         }
         
-        internal static string Undislike {
+        public static string Unhelpful {
+            get {
+                return ResourceManager.GetString("Unhelpful", resourceCulture);
+            }
+        }
+        
+        public static string Undislike {
             get {
                 return ResourceManager.GetString("Undislike", resourceCulture);
             }
         }
         
-        internal static string TypeMessage {
+        public static string DislikeCommentTitle {
+            get {
+                return ResourceManager.GetString("DislikeCommentTitle", resourceCulture);
+            }
+        }
+        
+        public static string DislikeCommentPlaceholder {
+            get {
+                return ResourceManager.GetString("DislikeCommentPlaceholder", resourceCulture);
+            }
+        }
+        
+        public static string DislikeCommentHint {
+            get {
+                return ResourceManager.GetString("DislikeCommentHint", resourceCulture);
+            }
+        }
+        
+        public static string Send {
+            get {
+                return ResourceManager.GetString("Send", resourceCulture);
+            }
+        }
+        
+        public static string SendFeedback {
+            get {
+                return ResourceManager.GetString("SendFeedback", resourceCulture);
+            }
+        }
+        
+        public static string UnlikeCommentTitle {
+            get {
+                return ResourceManager.GetString("UnlikeCommentTitle", resourceCulture);
+            }
+        }
+        
+        public static string UnlikeCommentPlaceholder {
+            get {
+                return ResourceManager.GetString("UnlikeCommentPlaceholder", resourceCulture);
+            }
+        }
+        
+        public static string TypeMessage {
             get {
                 return ResourceManager.GetString("TypeMessage", resourceCulture);
             }
         }
         
-        internal static string Title {
+        public static string Title {
             get {
                 return ResourceManager.GetString("Title", resourceCulture);
             }
         }
         
-        internal static string WelcomeMessage {
+        public static string WelcomeMessage {
             get {
                 return ResourceManager.GetString("WelcomeMessage", resourceCulture);
             }

@@ -649,5 +649,23 @@
     "Untitled": "Neoznačený",
     "You": "ty",
     "CloneDeletedWarning": "Vytváříte kopii smazaného dotazníku. Některé části mohou být ztraceny."
+  },
+  "Assistant": {
+    "ClearHistory": "Vymazat historii",
+    "Unlike": "Zrušit líbí se mi",
+    "Unhelpful": "Nepomohlo",
+    "Like": "Líbí se mi",
+    "DislikeCommentTitle": "Přidat komentář",
+    "DislikeCommentPlaceholder": "Napište krátký komentář (nepovinné)",
+    "DislikeCommentHint": "Co bylo na této odpovědi špatně?",
+    "Send": "Odeslat",
+    "SendFeedback": "Odeslat zpětnou vazbu",
+    "UnlikeCommentTitle": "Přidat komentář",
+    "UnlikeCommentPlaceholder": "Napište krátký komentář (nepovinné)",
+    "Dislike": "Nelíbí se mi",
+    "Undislike": "Zrušit nelíbí se mi",
+    "TypeMessage": "Napište svou zprávu...",
+    "Title": "AI Asistent",
+    "WelcomeMessage": "Začněte konverzaci s AI asistentem"
   }
 }

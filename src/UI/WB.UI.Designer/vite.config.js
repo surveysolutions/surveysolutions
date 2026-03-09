@@ -20,14 +20,14 @@ const pages = {
             'Areas',
             'Identity',
             'Pages',
-            'Layout.Account.cshtml'
+            'Layout.Account.cshtml',
         ),
         template: path.join(
             baseDir,
             'Areas',
             'Identity',
             'Pages',
-            'Layout.Account.Template.cshtml'
+            'Layout.Account.Template.cshtml',
         ),
     },
     folders: {
@@ -37,7 +37,7 @@ const pages = {
             'Admin',
             'Views',
             'PublicFolders',
-            'Index.cshtml'
+            'Index.cshtml',
         ),
         template: path.join(
             baseDir,
@@ -45,7 +45,7 @@ const pages = {
             'Admin',
             'Views',
             'PublicFolders',
-            'Index.Template.cshtml'
+            'Index.Template.cshtml',
         ),
     },
     editform: {
@@ -55,7 +55,7 @@ const pages = {
             'Admin',
             'Views',
             'ControlPanel',
-            'MakeAdmin.cshtml'
+            'MakeAdmin.cshtml',
         ),
         template: path.join(
             baseDir,
@@ -63,17 +63,17 @@ const pages = {
             'Admin',
             'Views',
             'ControlPanel',
-            'MakeAdmin.Template.cshtml'
+            'MakeAdmin.Template.cshtml',
         ),
     },
     foldersScript: {
         filename: path.join(
             baseDir,
-            'Views/QuestionnaireList/_FoldersScript.cshtml'
+            'Views/QuestionnaireList/_FoldersScript.cshtml',
         ),
         template: path.join(
             baseDir,
-            'Views/QuestionnaireList/_FoldersScript.Template.cshtml'
+            'Views/QuestionnaireList/_FoldersScript.Template.cshtml',
         ),
     },
     sharedLayout: {
@@ -84,17 +84,17 @@ const pages = {
         filename: path.join(baseDir, 'Views/Error/Layout.Error.cshtml'),
         template: path.join(
             baseDir,
-            'Views/Error/Layout.Error.Template.cshtml'
+            'Views/Error/Layout.Error.Template.cshtml',
         ),
     },
     controlPanel: {
         filename: path.join(
             baseDir,
-            'Areas/Admin/Views/Shared/Layout.ControlPanel.cshtml'
+            'Areas/Admin/Views/Shared/Layout.ControlPanel.cshtml',
         ),
         template: path.join(
             baseDir,
-            'Areas/Admin/Views/Shared/Layout.ControlPanel.Template.cshtml'
+            'Areas/Admin/Views/Shared/Layout.ControlPanel.Template.cshtml',
         ),
     },
     pdf: {
@@ -194,7 +194,7 @@ for (var attr in pages) {
     inputPages[attr] = templateHtmlPath;
 }
 
-inputPages.questionnare = path.join(baseDir, 'questionnaire/src/main.js')
+inputPages.questionnare = path.join(baseDir, 'questionnaire/src/main.js');
 //inputPages.questionnare = path.join(baseDir, 'questionnaire/index.html')
 
 function fileManagerPlugin({ sources, targets, cleanDirs }) {
@@ -238,7 +238,6 @@ function fileManagerPlugin({ sources, targets, cleanDirs }) {
 };
 
 export default defineConfig(({ mode, command }) => {
-
     const isDevMode = mode === 'development';
     const isProdMode = !isDevMode;
 
@@ -246,7 +245,7 @@ export default defineConfig(({ mode, command }) => {
     const base = command == 'serve' ? '/.vite/' : '/';
 
     if (command == 'serve' && mode != 'test') {
-        fs.rmSync(destinationFolder, { recursive: true, force: true });        
+        fs.rmSync(destinationFolder, { recursive: true, force: true });
         fs.mkdirSync(outDir);
     }
 
@@ -262,27 +261,26 @@ export default defineConfig(({ mode, command }) => {
                 noHash: true,
                 inline: true,
                 patterns: [
-                    normalizePath(join('./Resources/QuestionnaireEditor.resx')),
                     normalizePath(
-                        join('./Resources/QuestionnaireEditor.*.resx')
-                    ),
-                    normalizePath(join('./Resources/AccountResources.resx')),
-                    normalizePath(join('./Resources/AccountResources.*.resx')),
-                    normalizePath(
-                        join('./Resources/QuestionnaireController.resx')
+                        join('./Resources/QuestionnaireEditor(.*)?.resx'),
                     ),
                     normalizePath(
-                        join('./Resources/QuestionnaireController.*.resx')
+                        join('./Resources/AccountResources(.*)?.resx'),
                     ),
+                    normalizePath(
+                        join('./Resources/QuestionnaireController(.*)?.resx'),
+                    ),
+                    normalizePath(join('./Resources/Assistant(.*)?.resx')),
                 ],
                 destination: './questionnaire/src/locale',
                 locales: {
                     '.': [
                         'QuestionnaireEditor',
                         'AccountResources',
-                        'QuestionnaireController'
-                    ]
-                }
+                        'QuestionnaireController',
+                        'Assistant',
+                    ],
+                },
             }),
             fileManagerPlugin({
                 cleanDirs: {
@@ -293,8 +291,8 @@ export default defineConfig(({ mode, command }) => {
                 targets: pagesTargets.concat(fileTargets),
             }),
             {
-                name: 'CopyManifest'
-            }
+                name: 'CopyManifest',
+            },
         ],
         css: {
             preprocessorOptions: {

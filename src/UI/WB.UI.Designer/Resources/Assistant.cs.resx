@@ -24,8 +24,32 @@
     <data name="Unlike" xml:space="preserve">
         <value>Zrušit líbí se mi</value>
     </data>
+    <data name="Unhelpful" xml:space="preserve">
+        <value>Nepomohlo</value>
+    </data>
     <data name="Like" xml:space="preserve">
         <value>Líbí se mi</value>
+    </data>
+    <data name="DislikeCommentTitle" xml:space="preserve">
+        <value>Přidat komentář</value>
+    </data>
+    <data name="DislikeCommentPlaceholder" xml:space="preserve">
+        <value>Napište krátký komentář (nepovinné)</value>
+    </data>
+    <data name="DislikeCommentHint" xml:space="preserve">
+        <value>Co bylo na této odpovědi špatně?</value>
+    </data>
+    <data name="Send" xml:space="preserve">
+        <value>Odeslat</value>
+    </data>
+    <data name="SendFeedback" xml:space="preserve">
+        <value>Odeslat zpětnou vazbu</value>
+    </data>
+    <data name="UnlikeCommentTitle" xml:space="preserve">
+        <value>Přidat komentář</value>
+    </data>
+    <data name="UnlikeCommentPlaceholder" xml:space="preserve">
+        <value>Napište krátký komentář (nepovinné)</value>
     </data>
     <data name="Dislike" xml:space="preserve">
         <value>Nelíbí se mi</value>
