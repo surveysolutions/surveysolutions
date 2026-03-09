@@ -5,8 +5,10 @@ import i18nInstance from './localization';
 const myCustomLightTheme = {
     dark: false,
     colors: {
-        primary: '2a81cb'
-    }
+        primary: '2a81cb',
+        success: '2fc507',
+        error: 'd20426',
+    },
 };
 
 // Import Vuetify
@@ -14,8 +16,8 @@ const vuetify = createVuetify({
     theme: {
         defaultTheme: 'myCustomLightTheme',
         themes: {
-            myCustomLightTheme
-        }
+            myCustomLightTheme,
+        },
     },
     icons: {
         defaultSet: 'mdi',
@@ -25,8 +27,8 @@ const vuetify = createVuetify({
         },
     },
     locale: {
-        t: (key, ...params) => i18nInstance.t(key, params)
-    }
+        t: (key, ...params) => i18nInstance.t(key, params),
+    },
 });
 
 export { vuetify };

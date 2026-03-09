@@ -97,9 +97,14 @@ namespace WB.UI.Designer.Models
                     revision = Guid.Parse(history.QuestionnaireChangeRecordId);
                     sequence = history.Sequence;
                 }
-            } 
+            }
+            else if (parts.Length > 2)
+            {
+                bindingContext.Result = ModelBindingResult.Failed();
+                return;
+            }
 
-            bindingContext.Result = ModelBindingResult.Success(new QuestionnaireRevision(questionnaireId, revision, revision != null? (int?)sequence : null));
+            bindingContext.Result = ModelBindingResult.Success(new QuestionnaireRevision(questionnaireId, revision, revision != null ? sequence : (int?)null));
         }
     }
 

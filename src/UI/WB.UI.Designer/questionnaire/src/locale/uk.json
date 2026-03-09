@@ -649,5 +649,23 @@
     "Untitled": "Без назви",
     "You": "ти",
     "CloneDeletedWarning": "You are creating a copy of deleted questionnaire. Some parts might be lost."
+  },
+  "Assistant": {
+    "ClearHistory": "Очистити історію",
+    "Unlike": "Прибрати вподобання",
+    "Unhelpful": "Не допомогло",
+    "Like": "Подобається",
+    "DislikeCommentTitle": "Додати коментар",
+    "DislikeCommentPlaceholder": "Напишіть короткий коментар (необов’язково)",
+    "DislikeCommentHint": "Що було не так у цій відповіді?",
+    "Send": "Надіслати",
+    "SendFeedback": "Надіслати відгук",
+    "UnlikeCommentTitle": "Додати коментар",
+    "UnlikeCommentPlaceholder": "Напишіть короткий коментар (необов’язково)",
+    "Dislike": "Не подобається",
+    "Undislike": "Прибрати невподобання",
+    "TypeMessage": "Введіть ваше повідомлення...",
+    "Title": "ШІ Помічник",
+    "WelcomeMessage": "Почніть розмову з ШІ помічником"
   }
 }

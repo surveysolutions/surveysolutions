@@ -649,5 +649,23 @@
     "ExcelOrTabFilesOnly": "Only Excel or tab-separated values files are accepted",
     "SaveAs": "Save as",
     "CloneDeletedWarning": "You are creating a copy of deleted questionnaire. Some parts might be lost."
+  },
+  "Assistant": {
+    "ClearHistory": "Șterge istoricul",
+    "Unlike": "Anulează aprecierea",
+    "Unhelpful": "Nu a fost util",
+    "Like": "Apreciază",
+    "DislikeCommentTitle": "Adăugați un comentariu",
+    "DislikeCommentPlaceholder": "Scrieți un comentariu scurt (opțional)",
+    "DislikeCommentHint": "Ce a fost în neregulă cu acest răspuns?",
+    "Send": "Trimite",
+    "SendFeedback": "Trimite feedback",
+    "UnlikeCommentTitle": "Adăugați un comentariu",
+    "UnlikeCommentPlaceholder": "Scrieți un comentariu scurt (opțional)",
+    "Dislike": "Nu îmi place",
+    "Undislike": "Anulează nu îmi place",
+    "TypeMessage": "Tastați mesajul dumneavoastră...",
+    "Title": "Asistent IA",
+    "WelcomeMessage": "Începeți o conversație cu asistentul IA"
   }
 }
