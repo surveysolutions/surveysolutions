@@ -99,6 +99,8 @@ import { ref, nextTick, watch } from 'vue';
 import { useChatStore } from '../../../stores/chat';
 import { useAssistant } from '../../../composables/assistant';
 
+const USER_STOPPED_REQUEST = 'User stopped the request';
+
 export default {
     name: 'ChatPanel',
     setup() {
