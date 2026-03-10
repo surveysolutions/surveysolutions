@@ -46,7 +46,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         public virtual IActionResult ChangeLanguage(Guid interviewId, ChangeLanguageRequest request)
         {
             if (request == null)
-                return BadRequest("Request body cannot be null");
+                return BadRequest(new { errorMessage = "Request body cannot be null" });
             
             this.commandService.Execute(new SwitchTranslation(interviewId, request.Language, this.GetCommandResponsibleId(interviewId)));
             return Ok();
@@ -90,13 +90,34 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         }
         
         protected bool TryGetValidationError<T>(AnswerRequest<T> request, out IActionResult error)
+            where T : class
             => TryGetValidationError(request, out error, out _);
+
         protected bool TryGetValidationError<T>(AnswerRequest<T> request, out IActionResult error, out Identity identity)
+            where T : class
         {
-            
             if (TryGetValidationError((AnswerRequest)request, out error, out identity))
                 return true;
-            
+
+            if (request.Answer == null)
+            {
+                error = BadRequest(new { errorMessage = "Answer is required" });
+                return true;
+            }
+            error = null;
+            return false;
+        }
+
+        protected bool TryGetValidationError<T>(AnswerRequest<T?> request, out IActionResult error)
+            where T : struct
+            => TryGetValidationError(request, out error, out _);
+
+        protected bool TryGetValidationError<T>(AnswerRequest<T?> request, out IActionResult error, out Identity identity)
+            where T : struct
+        {
+            if (TryGetValidationError((AnswerRequest)request, out error, out identity))
+                return true;
+
             if (request.Answer == null)
             {
                 error = BadRequest(new { errorMessage = "Answer is required" });
@@ -136,21 +157,21 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             return Ok();
         }
 
-        public virtual IActionResult AnswerDateQuestion(Guid interviewId, [FromBody] AnswerRequest<DateTime> answerRequest)
+        public virtual IActionResult AnswerDateQuestion(Guid interviewId, [FromBody] AnswerRequest<DateTime?> answerRequest)
         {
             if (TryGetValidationError(answerRequest, out var error, out var identity)) return error;
 
             this.ExecuteQuestionCommand(new AnswerDateTimeQuestionCommand(interviewId,
-                this.GetCommandResponsibleId(interviewId), identity.Id, identity.RosterVector, answerRequest.Answer));
+                this.GetCommandResponsibleId(interviewId), identity.Id, identity.RosterVector, answerRequest.Answer.Value));
             return Ok();
         }
 
-        public virtual IActionResult AnswerSingleOptionQuestion(Guid interviewId, [FromBody] AnswerRequest<int> answerRequest)
+        public virtual IActionResult AnswerSingleOptionQuestion(Guid interviewId, [FromBody] AnswerRequest<int?> answerRequest)
         {
             if (TryGetValidationError(answerRequest, out var error, out var identity)) return error;
 
             this.ExecuteQuestionCommand(new AnswerSingleOptionQuestionCommand(interviewId, GetCommandResponsibleId(interviewId),
-                identity.Id, identity.RosterVector, answerRequest.Answer));
+                identity.Id, identity.RosterVector, answerRequest.Answer.Value));
             return Ok();
         }
 
@@ -193,20 +214,20 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             return Ok();
         }
 
-        public virtual IActionResult AnswerIntegerQuestion(Guid interviewId, [FromBody] AnswerRequest<int> answerRequest)
+        public virtual IActionResult AnswerIntegerQuestion(Guid interviewId, [FromBody] AnswerRequest<int?> answerRequest)
         {
             if (TryGetValidationError(answerRequest, out var error, out var identity)) return error;
 
-            this.ExecuteQuestionCommand(new AnswerNumericIntegerQuestionCommand(interviewId, this.GetCommandResponsibleId(interviewId), identity.Id, identity.RosterVector, answerRequest.Answer));
+            this.ExecuteQuestionCommand(new AnswerNumericIntegerQuestionCommand(interviewId, this.GetCommandResponsibleId(interviewId), identity.Id, identity.RosterVector, answerRequest.Answer.Value));
             return Ok();
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
-        public virtual IActionResult AnswerDoubleQuestion(Guid interviewId, [FromBody] AnswerRequest<double> answerRequest)
+        public virtual IActionResult AnswerDoubleQuestion(Guid interviewId, [FromBody] AnswerRequest<double?> answerRequest)
         {
             if (TryGetValidationError(answerRequest, out var error, out var identity)) return error;
 
-            this.ExecuteQuestionCommand(new AnswerNumericRealQuestionCommand(interviewId, this.GetCommandResponsibleId(interviewId), identity.Id, identity.RosterVector, answerRequest.Answer));
+            this.ExecuteQuestionCommand(new AnswerNumericRealQuestionCommand(interviewId, this.GetCommandResponsibleId(interviewId), identity.Id, identity.RosterVector, answerRequest.Answer.Value));
             return Ok();
         }
 
