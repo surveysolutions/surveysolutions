@@ -103,7 +103,7 @@ class UploadMapsService : IUploadMapsService
             }
 
             if (invalidMaps.Count > 0)
-                result.Errors.AddRange(invalidMaps.Select(x => String.Format(Resources.Maps.MapLoadingInvalidFile, x.Item1, x.Item2.GetType())).ToList());
+                result.Errors.AddRange(invalidMaps.Select(x => String.Format(Resources.Maps.MapLoadingInvalidFile, x.Item1, x.Item2.GetType().Name)).ToList());
             else
                 result.IsSuccess = true;
         }

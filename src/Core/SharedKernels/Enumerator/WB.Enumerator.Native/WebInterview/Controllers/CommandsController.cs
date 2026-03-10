@@ -74,7 +74,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                 error = BadRequest(new {errorMessage = "Request body cannot be null"});
                 return true;
             }
-            if (string.IsNullOrEmpty(request.Identity))
+            if (string.IsNullOrWhiteSpace(request.Identity))
             {
                 error = BadRequest(new {errorMessage = "Identity is required"});
                 return true;
@@ -85,6 +85,23 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
                 return true;
             }
 
+            error = null;
+            return false;
+        }
+        
+        protected bool TryGetValidationError<T>(AnswerRequest<T> request, out IActionResult error)
+            => TryGetValidationError(request, out error, out _);
+        protected bool TryGetValidationError<T>(AnswerRequest<T> request, out IActionResult error, out Identity identity)
+        {
+            
+            if (TryGetValidationError((AnswerRequest)request, out error, out identity))
+                return true;
+            
+            if (request.Answer == null)
+            {
+                error = BadRequest(new { errorMessage = "Answer is required" });
+                return true;
+            }
             error = null;
             return false;
         }
