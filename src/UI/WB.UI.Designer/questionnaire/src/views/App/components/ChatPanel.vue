@@ -188,11 +188,12 @@ export default {
             const highlightCode = (code, language) => {
                 let highlighted;
                 let actualLanguage = language;
+                const codeForHighlight = code.replace(/\n$/, '');
                 try {
-                    highlighted = hljs.highlight(code.trim(), { language }).value;
+                    highlighted = hljs.highlight(codeForHighlight, { language }).value;
                 } catch {
                     actualLanguage = 'csharp';
-                    highlighted = hljs.highlight(code.trim(), { language: 'csharp' }).value;
+                    highlighted = hljs.highlight(codeForHighlight, { language: 'csharp' }).value;
                 }
                 return { highlighted: wrapVariables(highlighted, variableNames), actualLanguage };
             };
@@ -252,7 +253,7 @@ export default {
                 const language = lang || 'csharp';
                 const { highlighted, actualLanguage } = highlightCode(code, language);
                 const idx = codeBlocks.length;
-                const encoded = encodeURIComponent(code.trim());
+                const encoded = encodeURIComponent(code.replace(/\n$/, ''));
                 codeBlocks.push(
                     `<div class="chat-code-wrapper">` +
                     `<button type="button" class="chat-copy-btn" data-copy="${encoded}" title="Copy" aria-label="Copy code"><span class="mdi mdi-content-copy" aria-hidden="true"></span></button>` +
@@ -662,7 +663,7 @@ export default {
     }
 }
 
-.chat-code-block {
+:deep(.chat-code-block) {
     margin: 8px 0;
     border-radius: 6px;
     overflow-x: auto;
@@ -708,15 +709,18 @@ export default {
     transition: opacity 0.15s;
 }
 
-:deep(.chat-inline-wrapper:hover .chat-copy-inline) {
+:deep(.chat-inline-wrapper:hover .chat-copy-inline),
+:deep(.chat-inline-wrapper:focus-within .chat-copy-inline) {
     opacity: 0.7;
 }
 
-:deep(.chat-copy-inline:hover) {
+:deep(.chat-copy-inline:hover),
+:deep(.chat-copy-inline:focus-visible) {
     opacity: 1 !important;
 }
 
-:deep(.chat-code-wrapper:hover .chat-copy-btn) {
+:deep(.chat-code-wrapper:hover .chat-copy-btn),
+:deep(.chat-code-wrapper:focus-within .chat-copy-btn) {
     opacity: 1;
 }
 
@@ -725,14 +729,14 @@ export default {
     color: #24292f;
 }
 
-.chat-code-block code {
+:deep(.chat-code-block code) {
     display: block;
     padding: 12px 14px;
     white-space: pre;
     font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
 }
 
-.chat-code-inline {
+:deep(.chat-code-inline) {
     padding: 1px 5px;
     border-radius: 3px;
     font-size: 12px;
