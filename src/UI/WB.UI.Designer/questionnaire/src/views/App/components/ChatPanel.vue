@@ -32,7 +32,7 @@
                         <div class="d-flex align-start">
                             <div class="flex-grow-1">
                                 <div class="message-content">
-                                    <div class="message-body" v-html="getFormattedContent(message)"></div>
+                                    <div class="message-body" v-html="formattedContentMap.get(message.id)"></div>
                                     <div class="d-flex align-center justify-space-between">
                                         <div v-if="message.role === 'assistant' && !message.isError && !!message.assistantCallId"
                                             class="d-flex align-center">
@@ -96,7 +96,7 @@
 </template>
 
 <script>
-import { ref, nextTick, watch, getCurrentInstance } from 'vue';
+import { ref, computed, nextTick, watch, getCurrentInstance } from 'vue';
 import { useChatStore } from '../../../stores/chat';
 import { useAssistant } from '../../../composables/assistant';
 import { useTreeStore } from '../../../stores/tree';
@@ -117,9 +117,6 @@ export default {
         const messagesContainer = ref(null);
 
         const conversationId = ref(null);
-        // Cache of formatted message HTML, keyed by `${message.id}:${variableNamesTokens}`.
-        // Avoids re-running syntax highlighting / DOM traversal / DOMPurify on every render.
-        const formattedCache = new Map();
 
         // Initialize Assistant
         const { sendMessage: sendToAssistant, sendReaction: sendAssistantReaction } = useAssistant();
@@ -153,7 +150,6 @@ export default {
                 messages.value = [];
                 currentMessage.value = '';
                 conversationId.value = null;
-                formattedCache.clear();
             }
         });
 
@@ -165,7 +161,6 @@ export default {
             messages.value = [];
             currentMessage.value = '';
             conversationId.value = null;
-            formattedCache.clear();
 
             if (typeof chatStore.clearHistory === 'function') {
                 chatStore.clearHistory();
@@ -298,16 +293,31 @@ export default {
             return result;
         };
 
-        // Returns cached formatted HTML for a message, computing it only when the
-        // content or the set of questionnaire variable names has changed.
-        const getFormattedContent = (message) => {
+        // Computed map of message id → formatted HTML.
+        // Vue tracks both `messages` and `variableNamesTokens` as dependencies, so it
+        // re-evaluates automatically whenever either changes. An inner Map reuses
+        // previously computed HTML for messages whose content hasn't changed.
+        const renderCache = new Map();
+        const formattedContentMap = computed(() => {
             const tokens = treeStore.getVariableNames.variableNamesTokens || '';
-            const key = `${message.id}:${tokens}`;
-            if (!formattedCache.has(key)) {
-                formattedCache.set(key, formatMessage(message.content));
+            const result = new Map();
+            messages.value.forEach(msg => {
+                const key = `${msg.id}:${tokens}`;
+                if (!renderCache.has(key)) {
+                    const html = msg.role === 'user'
+                        ? DOMPurify.sanitize(msg.content, { ALLOWED_TAGS: [], KEEP_CONTENT: true })
+                        : formatMessage(msg.content);
+                    renderCache.set(key, html);
+                }
+                result.set(msg.id, renderCache.get(key));
+            });
+            // Evict entries that no longer correspond to any current message.
+            const activeKeys = new Set(messages.value.map(m => `${m.id}:${tokens}`));
+            for (const k of renderCache.keys()) {
+                if (!activeKeys.has(k)) renderCache.delete(k);
             }
-            return formattedCache.get(key);
-        };
+            return result;
+        });
 
         const handleCodeCopy = (event) => {
             if (!(event.target instanceof Element)) return;
@@ -506,7 +516,7 @@ export default {
             handleEnter,
             getMessageReaction,
             setReaction,
-            getFormattedContent,
+            formattedContentMap,
             formatTime,
             handleCodeCopy
         };
