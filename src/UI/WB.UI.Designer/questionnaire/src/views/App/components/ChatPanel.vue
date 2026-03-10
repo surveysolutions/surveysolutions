@@ -32,7 +32,7 @@
                         <div class="d-flex align-start">
                             <div class="flex-grow-1">
                                 <div class="message-content">
-                                    <p class="mb-1" v-html="formatMessage(message.content)"></p>
+                                    <p class="mb-1" v-html="getFormattedContent(message)"></p>
                                     <div class="d-flex align-center justify-space-between">
                                         <div v-if="message.role === 'assistant' && !message.isError && !!message.assistantCallId"
                                             class="d-flex align-center">
@@ -117,6 +117,9 @@ export default {
         const messagesContainer = ref(null);
 
         const conversationId = ref(null);
+        // Cache of formatted message HTML, keyed by `${message.id}:${variableNamesTokens}`.
+        // Avoids re-running syntax highlighting / DOM traversal / DOMPurify on every render.
+        const formattedCache = new Map();
 
         // Initialize Assistant
         const { sendMessage: sendToAssistant, sendReaction: sendAssistantReaction } = useAssistant();
@@ -150,6 +153,7 @@ export default {
                 messages.value = [];
                 currentMessage.value = '';
                 conversationId.value = null;
+                formattedCache.clear();
             }
         });
 
@@ -161,6 +165,7 @@ export default {
             messages.value = [];
             currentMessage.value = '';
             conversationId.value = null;
+            formattedCache.clear();
 
             if (typeof chatStore.clearHistory === 'function') {
                 chatStore.clearHistory();
@@ -250,11 +255,11 @@ export default {
                 const encoded = encodeURIComponent(code.trim());
                 codeBlocks.push(
                     `<div class="chat-code-wrapper">` +
-                    `<button class="chat-copy-btn" data-copy="${encoded}" title="Copy"><span class="mdi mdi-content-copy"></span></button>` +
+                    `<button type="button" class="chat-copy-btn" data-copy="${encoded}" title="Copy" aria-label="Copy code"><span class="mdi mdi-content-copy" aria-hidden="true"></span></button>` +
                     `<pre class="chat-code-block"><code class="hljs language-${actualLanguage}">${highlighted}</code></pre>` +
                     `</div>`
                 );
-                return `\x00C${nonce}${idx}\x00`;
+                return `__CODEBLOCK_${nonce}_${idx}__`;
             });
 
             // Extract inline code blocks
@@ -266,10 +271,10 @@ export default {
                 inlineBlocks.push(
                     `<span class="chat-inline-wrapper">` +
                     `<code class="chat-code-inline hljs">${highlighted}</code>` +
-                    `<button class="chat-copy-btn chat-copy-inline" data-copy="${encoded}" title="Copy"><span class="mdi mdi-content-copy"></span></button>` +
+                    `<button type="button" class="chat-copy-btn chat-copy-inline" data-copy="${encoded}" title="Copy" aria-label="Copy code"><span class="mdi mdi-content-copy" aria-hidden="true"></span></button>` +
                     `</span>`
                 );
-                return `\x00I${nonce}${idx}\x00`;
+                return `__INLINECODE_${nonce}_${idx}__`;
             });
 
             // Sanitize plain text
@@ -283,13 +288,24 @@ export default {
 
             // Restore code blocks using exact sentinel strings
             inlineBlocks.forEach((block, i) => {
-                result = result.split(`\x00I${nonce}${i}\x00`).join(block);
+                result = result.split(`__INLINECODE_${nonce}_${i}__`).join(block);
             });
             codeBlocks.forEach((block, i) => {
-                result = result.split(`\x00C${nonce}${i}\x00`).join(block);
+                result = result.split(`__CODEBLOCK_${nonce}_${i}__`).join(block);
             });
 
             return result;
+        };
+
+        // Returns cached formatted HTML for a message, computing it only when the
+        // content or the set of questionnaire variable names has changed.
+        const getFormattedContent = (message) => {
+            const tokens = treeStore.getVariableNames.variableNamesTokens || '';
+            const key = `${message.id}:${tokens}`;
+            if (!formattedCache.has(key)) {
+                formattedCache.set(key, formatMessage(message.content));
+            }
+            return formattedCache.get(key);
         };
 
         const handleCodeCopy = (event) => {
@@ -301,6 +317,12 @@ export default {
                 if (icon) {
                     icon.classList.replace('mdi-content-copy', 'mdi-check');
                     setTimeout(() => icon.classList.replace('mdi-check', 'mdi-content-copy'), 1500);
+                }
+            }).catch(() => {
+                const icon = btn.querySelector('.mdi');
+                if (icon) {
+                    icon.classList.replace('mdi-content-copy', 'mdi-alert-circle-outline');
+                    setTimeout(() => icon.classList.replace('mdi-alert-circle-outline', 'mdi-content-copy'), 2000);
                 }
             });
         };
@@ -482,7 +504,7 @@ export default {
             handleEnter,
             getMessageReaction,
             setReaction,
-            formatMessage,
+            getFormattedContent,
             formatTime,
             handleCodeCopy
         };
