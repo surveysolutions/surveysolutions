@@ -32,7 +32,7 @@
                         <div class="d-flex align-start">
                             <div class="flex-grow-1">
                                 <div class="message-content">
-                                    <p class="mb-1" v-html="getFormattedContent(message)"></p>
+                                    <div class="message-body" v-html="getFormattedContent(message)"></div>
                                     <div class="d-flex align-center justify-space-between">
                                         <div v-if="message.role === 'assistant' && !message.isError && !!message.assistantCallId"
                                             class="d-flex align-center">
@@ -309,6 +309,7 @@ export default {
         };
 
         const handleCodeCopy = (event) => {
+            if (!(event.target instanceof Element)) return;
             const btn = event.target.closest('.chat-copy-btn');
             if (!btn) return;
             const code = decodeURIComponent(btn.dataset.copy || '');
@@ -553,6 +554,11 @@ export default {
 .message-bubble p {
     font-size: 14px;
     margin: 0;
+}
+
+.message-body {
+    font-size: 14px;
+    margin-bottom: 4px;
 }
 
 .user-message .message-content {
