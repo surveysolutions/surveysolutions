@@ -61,75 +61,23 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         {
             public T Answer { get; set; }
         }
-
-        protected bool TryGetValidationError(AnswerRequest request, out IActionResult error)
-            => TryGetValidationError(request, out error, out _);
-
-        protected bool TryGetValidationError(AnswerRequest request, out IActionResult error, out Identity identity)
+        
+        protected bool TryGetIdentity(AnswerRequest request, out Identity identity)
         {
             identity = null;
 
-            if (request == null)
+            if (request == null || string.IsNullOrWhiteSpace(request.Identity))
             {
-                error = BadRequest(new {errorMessage = "Request body cannot be null"});
-                return true;
+                return false;
             }
-            if (string.IsNullOrWhiteSpace(request.Identity))
-            {
-                error = BadRequest(new {errorMessage = "Identity is required"});
-                return true;
-            }
-            if (!Identity.TryParse(request.Identity, out identity))
-            {
-                error = BadRequest(new {errorMessage = $"Identity '{request.Identity}' is not in a valid format"});
-                return true;
-            }
-
-            error = null;
-            return false;
-        }
-        
-        protected bool TryGetValidationError<T>(AnswerRequest<T> request, out IActionResult error)
-            where T : class
-            => TryGetValidationError(request, out error, out _);
-
-        protected bool TryGetValidationError<T>(AnswerRequest<T> request, out IActionResult error, out Identity identity)
-            where T : class
-        {
-            if (TryGetValidationError((AnswerRequest)request, out error, out identity))
-                return true;
-
-            if (request.Answer == null)
-            {
-                error = BadRequest(new { errorMessage = "Answer is required" });
-                return true;
-            }
-            error = null;
-            return false;
-        }
-
-        protected bool TryGetValidationError<T>(AnswerRequest<T?> request, out IActionResult error)
-            where T : struct
-            => TryGetValidationError(request, out error, out _);
-
-        protected bool TryGetValidationError<T>(AnswerRequest<T?> request, out IActionResult error, out Identity identity)
-            where T : struct
-        {
-            if (TryGetValidationError((AnswerRequest)request, out error, out identity))
-                return true;
-
-            if (request.Answer == null)
-            {
-                error = BadRequest(new { errorMessage = "Answer is required" });
-                return true;
-            }
-            error = null;
-            return false;
+            
+            return Identity.TryParse(request.Identity, out identity);
         }
 
         public virtual IActionResult AnswerTextQuestion(Guid interviewId, [FromBody] AnswerRequest<string> answerRequest)
         {
-            if (TryGetValidationError(answerRequest, out var error, out var identity)) return error;
+            if (!TryGetIdentity(answerRequest, out var identity)) 
+                return BadRequest(new { errorMessage = "Request body cannot be null" });
 
             this.ExecuteQuestionCommand(new AnswerTextQuestionCommand(interviewId,
                 this.GetCommandResponsibleId(interviewId), identity.Id, identity.RosterVector, answerRequest.Answer));
@@ -138,7 +86,8 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
 
         public virtual IActionResult AnswerTextListQuestion(Guid interviewId, [FromBody] AnswerRequest<TextListAnswerRowDto[]> answerRequest)
         {
-            if (TryGetValidationError(answerRequest, out var error, out var identity)) return error;
+            if (!TryGetIdentity(answerRequest, out var identity)) 
+                return BadRequest(new { errorMessage = "Request body cannot be null" });
 
             this.ExecuteQuestionCommand(new AnswerTextListQuestionCommand(interviewId,
                 this.GetCommandResponsibleId(interviewId), 
@@ -149,7 +98,8 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
 
         public virtual IActionResult AnswerGpsQuestion(Guid interviewId, [FromBody] AnswerRequest<GpsAnswer> answerRequest)
         {
-            if (TryGetValidationError(answerRequest, out var error, out var identity)) return error;
+            if (!TryGetIdentity(answerRequest, out var identity)) 
+                return BadRequest(new { errorMessage = "Request body cannot be null" });
 
             this.ExecuteQuestionCommand(new AnswerGeoLocationQuestionCommand(interviewId,
                 this.GetCommandResponsibleId(interviewId), identity.Id, identity.RosterVector, answerRequest.Answer.Latitude, answerRequest.Answer.Longitude,
@@ -159,7 +109,8 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
 
         public virtual IActionResult AnswerDateQuestion(Guid interviewId, [FromBody] AnswerRequest<DateTime?> answerRequest)
         {
-            if (TryGetValidationError(answerRequest, out var error, out var identity)) return error;
+            if (!TryGetIdentity(answerRequest, out var identity)) 
+                return BadRequest(new { errorMessage = "Request body cannot be null" });
 
             this.ExecuteQuestionCommand(new AnswerDateTimeQuestionCommand(interviewId,
                 this.GetCommandResponsibleId(interviewId), identity.Id, identity.RosterVector, answerRequest.Answer.Value));
@@ -168,7 +119,8 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
 
         public virtual IActionResult AnswerSingleOptionQuestion(Guid interviewId, [FromBody] AnswerRequest<int?> answerRequest)
         {
-            if (TryGetValidationError(answerRequest, out var error, out var identity)) return error;
+            if (!TryGetIdentity(answerRequest, out var identity)) 
+                return BadRequest(new { errorMessage = "Request body cannot be null" });
 
             this.ExecuteQuestionCommand(new AnswerSingleOptionQuestionCommand(interviewId, GetCommandResponsibleId(interviewId),
                 identity.Id, identity.RosterVector, answerRequest.Answer.Value));
@@ -178,7 +130,8 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
         public virtual IActionResult AnswerLinkedSingleOptionQuestion(Guid interviewId, [FromBody] AnswerRequest<decimal[]> answerRequest)
         {
-            if (TryGetValidationError(answerRequest, out var error, out var identity)) return error;
+            if (!TryGetIdentity(answerRequest, out var identity)) 
+                return BadRequest(new { errorMessage = "Request body cannot be null" });
 
             this.ExecuteQuestionCommand(new AnswerSingleOptionLinkedQuestionCommand(interviewId, GetCommandResponsibleId(interviewId),
                 identity.Id, identity.RosterVector, answerRequest.Answer));
@@ -188,7 +141,8 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
         public virtual IActionResult AnswerLinkedMultiOptionQuestion(Guid interviewId, [FromBody] AnswerRequest<decimal[][]> answerRequest)
         {
-            if (TryGetValidationError(answerRequest, out var error, out var identity)) return error;
+            if (!TryGetIdentity(answerRequest, out var identity)) 
+                return BadRequest(new { errorMessage = "Request body cannot be null" });
 
             this.ExecuteQuestionCommand(new AnswerMultipleOptionsLinkedQuestionCommand(interviewId, GetCommandResponsibleId(interviewId),
                 identity.Id, identity.RosterVector, answerRequest.Answer.Select(x => new RosterVector(x)).ToArray()));
@@ -197,7 +151,8 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
 
         public virtual IActionResult AnswerMultiOptionQuestion(Guid interviewId, [FromBody] AnswerRequest<int[]> answerRequest)
         {
-            if (TryGetValidationError(answerRequest, out var error, out var identity)) return error;
+            if (!TryGetIdentity(answerRequest, out var identity)) 
+                return BadRequest(new { errorMessage = "Request body cannot be null" });
 
             this.ExecuteQuestionCommand(new AnswerMultipleOptionsQuestionCommand(interviewId, GetCommandResponsibleId(interviewId),
                 identity.Id, identity.RosterVector, answerRequest.Answer));
@@ -206,7 +161,8 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
 
         public virtual IActionResult AnswerYesNoQuestion(Guid interviewId, [FromBody] AnswerRequest<InterviewYesNoAnswer[]> answerRequest)
         {
-            if (TryGetValidationError(answerRequest, out var error, out var identity)) return error;
+            if (!TryGetIdentity(answerRequest, out var identity)) 
+                return BadRequest(new { errorMessage = "Request body cannot be null" });
 
             var answer = answerRequest.Answer.Select(a => new AnsweredYesNoOption(a.Value, a.Yes)).ToArray();
             this.ExecuteQuestionCommand(new AnswerYesNoQuestion(interviewId, GetCommandResponsibleId(interviewId),
@@ -216,7 +172,8 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
 
         public virtual IActionResult AnswerIntegerQuestion(Guid interviewId, [FromBody] AnswerRequest<int?> answerRequest)
         {
-            if (TryGetValidationError(answerRequest, out var error, out var identity)) return error;
+            if (!TryGetIdentity(answerRequest, out var identity)) 
+                return BadRequest(new { errorMessage = "Request body cannot be null" });
 
             this.ExecuteQuestionCommand(new AnswerNumericIntegerQuestionCommand(interviewId, this.GetCommandResponsibleId(interviewId), identity.Id, identity.RosterVector, answerRequest.Answer.Value));
             return Ok();
@@ -225,7 +182,8 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
         public virtual IActionResult AnswerDoubleQuestion(Guid interviewId, [FromBody] AnswerRequest<double?> answerRequest)
         {
-            if (TryGetValidationError(answerRequest, out var error, out var identity)) return error;
+            if (!TryGetIdentity(answerRequest, out var identity)) 
+                return BadRequest(new { errorMessage = "Request body cannot be null" });
 
             this.ExecuteQuestionCommand(new AnswerNumericRealQuestionCommand(interviewId, this.GetCommandResponsibleId(interviewId), identity.Id, identity.RosterVector, answerRequest.Answer.Value));
             return Ok();
@@ -234,7 +192,8 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
         public virtual IActionResult AnswerQRBarcodeQuestion(Guid interviewId, [FromBody] AnswerRequest<string> answerRequest)
         {
-            if (TryGetValidationError(answerRequest, out var error, out var identity)) return error;
+            if (!TryGetIdentity(answerRequest, out var identity)) 
+                return BadRequest(new { errorMessage = "Request body cannot be null" });
 
             this.ExecuteQuestionCommand(new AnswerQRBarcodeQuestionCommand(interviewId,
                 this.GetCommandResponsibleId(interviewId), identity.Id, identity.RosterVector, answerRequest.Answer));
@@ -248,7 +207,8 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         [ObservingNotAllowed]
         public virtual IActionResult RemoveAnswer(Guid interviewId, RemoveAnswerRequest request)
         {
-            if (TryGetValidationError(request, out var error, out var identity)) return error;
+            if (TryGetIdentity(request, out var identity)) 
+                return BadRequest(new { errorMessage = "Invalid request" });
 
             try
             {
@@ -291,7 +251,8 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
         public virtual IActionResult SendNewComment(Guid interviewId, NewCommentRequest request)
         {
-            if (TryGetValidationError(request, out var error, out var identity)) return error;
+            if (TryGetIdentity(request, out var identity)) 
+                return BadRequest(new { errorMessage = "Request body cannot be null" });
 
             var command = new CommentAnswerCommand(interviewId, this.GetCommandResponsibleId(interviewId), identity.Id, identity.RosterVector, request.Comment);
 
