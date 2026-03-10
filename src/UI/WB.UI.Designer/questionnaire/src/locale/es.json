@@ -649,5 +649,23 @@
     "ExcelOrTabFilesOnly": "Solo se aceptan archivos de Excel o valores separados por tabulaciones",
     "RestoreQuestionnaireDocument": "Restaurar documento del cuestionario (antiguo)",
     "SaveAs": "Guardar como"
+  },
+  "Assistant": {
+    "ClearHistory": "Borrar historial",
+    "Unlike": "Ya no me gusta",
+    "Unhelpful": "No fue útil",
+    "Like": "Me gusta",
+    "DislikeCommentTitle": "Añadir un comentario",
+    "DislikeCommentPlaceholder": "Escriba un comentario breve (opcional)",
+    "DislikeCommentHint": "¿Qué estuvo mal en esta respuesta?",
+    "Send": "Enviar",
+    "SendFeedback": "Enviar comentarios",
+    "UnlikeCommentTitle": "Añadir un comentario",
+    "UnlikeCommentPlaceholder": "Escriba un comentario breve (opcional)",
+    "Dislike": "No me gusta",
+    "Undislike": "Deshacer no me gusta",
+    "TypeMessage": "Escribe tu mensaje...",
+    "Title": "Asistente de IA",
+    "WelcomeMessage": "Inicia una conversación con el asistente de IA"
   }
 }

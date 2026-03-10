@@ -2,13 +2,14 @@
     <v-card class="chat-container" style="margin: 0; border-radius: 0;">
         <v-card-title class="d-flex justify-space-between align-center pa-4">
             <div class="d-flex align-center">
-                <span>{{ $t('Assistant.Title', 'AI Assistant') }}</span>
+                <span>{{ $t('Assistant.Title') }}</span>
             </div>
             <div class="d-flex align-center">
-                <v-btn icon="mdi-delete-sweep" variant="text" size="medium" @click="clearHistory"
-                    :disabled="messages.length === 0" :title="$t('Assistant.ClearHistory', 'Clear history')"
+                <v-btn icon="mdi-delete-sweep" variant="text" size="medium" class="header-action-btn header-clear"
+                    @click="clearHistory" :disabled="messages.length === 0" :title="$t('Assistant.ClearHistory')"
                     style="padding-right: 10px;" />
-                <v-btn icon="mdi-close" variant="text" size="medium" @click="close" />
+                <v-btn icon="mdi-close" variant="text" size="medium" class="header-action-btn header-close"
+                    @click="close" />
             </div>
         </v-card-title>
 
@@ -20,7 +21,7 @@
             <div class="pa-4">
                 <div v-if="messages.length === 0" class="text-center text-grey-darken-1 mt-8">
                     <v-icon size="48" class="mb-4">mdi-chat-outline</v-icon>
-                    <p>{{ $t('Assistant.WelcomeMessage', 'Start a conversation with the AI assistant') }}</p>
+                    <p>{{ $t('Assistant.WelcomeMessage') }}</p>
                 </div>
 
                 <div v-for="(message, index) in messages" :key="message.id" class="mb-4">
@@ -33,18 +34,23 @@
                                 <div class="message-content">
                                     <p class="mb-1" v-html="formatMessage(message.content)"></p>
                                     <div class="d-flex align-center justify-space-between">
-                                        <div v-if="message.role === 'assistant' && !message.isError"
+                                        <div v-if="message.role === 'assistant' && !message.isError && !!message.assistantCallId"
                                             class="d-flex align-center">
-                                            <v-btn variant="text" size="x-small"
-                                                :icon="getMessageReaction(message) === 1 ? 'mdi-thumb-up' : 'mdi-thumb-up-outline'"
-                                                :color="getMessageReaction(message) === 1 ? 'primary' : undefined"
+                                            <v-btn variant="text" size="x-small" icon class="reaction-btn reaction-like"
+                                                :color="getMessageReaction(message) === 1 ? 'success' : undefined"
                                                 @click="setReaction(message, index, 1)"
-                                                :title="getMessageReaction(message) === 1 ? $t('Assistant.Unlike', 'Unlike') : $t('Assistant.Like', 'Like')" />
-                                            <v-btn variant="text" size="x-small"
-                                                :icon="getMessageReaction(message) === -1 ? 'mdi-thumb-down' : 'mdi-thumb-down-outline'"
+                                                :title="getMessageReaction(message) === 1 ? $t('Assistant.Unlike') : $t('Assistant.Like')">
+                                                <v-icon :size="24">{{ getMessageReaction(message) === 1 ? 'mdi-thumb-up'
+                                                    : 'mdi-thumb-up-outline' }}</v-icon>
+                                            </v-btn>
+                                            <v-btn variant="text" size="x-small" icon
+                                                class="reaction-btn reaction-dislike"
                                                 :color="getMessageReaction(message) === -1 ? 'error' : undefined"
                                                 @click="setReaction(message, index, -1)"
-                                                :title="getMessageReaction(message) === -1 ? $t('Assistant.Undislike', 'Remove dislike') : $t('Assistant.Dislike', 'Dislike')" />
+                                                :title="getMessageReaction(message) === -1 ? $t('Assistant.Undislike') : $t('Assistant.Dislike')">
+                                                <v-icon :size="24">{{ getMessageReaction(message) === -1 ?
+                                                    'mdi-thumb-down' : 'mdi-thumb-down-outline' }}</v-icon>
+                                            </v-btn>
                                         </div>
                                     </div>
                                 </div>
@@ -91,11 +97,12 @@
                 </v-textarea>
             </div>
         </v-card-actions>
+
     </v-card>
 </template>
 
 <script>
-import { ref, nextTick, watch } from 'vue';
+import { ref, nextTick, watch, getCurrentInstance } from 'vue';
 import { useChatStore } from '../../../stores/chat';
 import { useAssistant } from '../../../composables/assistant';
 
@@ -104,20 +111,47 @@ const USER_STOPPED_REQUEST = 'User stopped the request';
 export default {
     name: 'ChatPanel',
     setup() {
+        const vm = getCurrentInstance()?.proxy;
         const chatStore = useChatStore();
         const messages = ref([]);
         const currentMessage = ref('');
         const isLoading = ref(false);
         const messagesContainer = ref(null);
 
+        const conversationId = ref(null);
+
         // Initialize Assistant
         const { sendMessage: sendToAssistant, sendReaction: sendAssistantReaction } = useAssistant();
+
+        const promptDislikeComment = () => {
+            return new Promise(resolve => {
+                const confirmPrompt = vm?.$confirmPrompt;
+                if (typeof confirmPrompt !== 'function') {
+                    resolve({ confirmed: false, comment: '' });
+                    return;
+                }
+
+                confirmPrompt({
+                    header: vm?.$t?.('Assistant.SendFeedback'),
+                    title: vm?.$t?.('Assistant.DislikeCommentHint'),
+                    okButtonTitle: vm?.$t?.('Assistant.Send'),
+                    cancelButtonTitle: vm?.$t?.('QuestionnaireEditor.Cancel'),
+                    inputPlaceholder: vm?.$t?.('Assistant.DislikeCommentPlaceholder'),
+                    draggable: true,
+                    callback: (confirmed, value) => {
+                        const comment = typeof value === 'string' ? value : '';
+                        resolve({ confirmed: !!confirmed, comment });
+                    }
+                });
+            });
+        };
 
         // Reset chat history when panel is opened
         watch(() => chatStore.isOpen, (newVal) => {
             if (newVal) {
                 messages.value = [];
                 currentMessage.value = '';
+                conversationId.value = null;
             }
         });
 
@@ -128,6 +162,7 @@ export default {
         const clearHistory = () => {
             messages.value = [];
             currentMessage.value = '';
+            conversationId.value = null;
 
             if (typeof chatStore.clearHistory === 'function') {
                 chatStore.clearHistory();
@@ -168,6 +203,11 @@ export default {
                 // so a new request started before finally runs isn't clobbered.
             }
         };
+        const extractAssistantCallId = (meta) => {
+            const raw = meta?.callLogId ?? meta?.CallLogId ?? null;
+            const numeric = raw != null ? Number(raw) : null;
+            return Number.isFinite(numeric) && numeric > 0 ? numeric : null;
+        };
 
         const sendMessage = async () => {
             if (!currentMessage.value.trim()) return;
@@ -193,19 +233,20 @@ export default {
 
             try {
                 // Call Assistant with conversation history
-                const response = await callAssistant(
-                    messageText,
-                    chatStore.questionnaireId,
-                    chatStore.entityId,
-                    chatStore.area,
-                    controller.signal);  // use local ref, not abortController.value
+                const assistantResult = await callAssistant(messageText, chatStore.questionnaireId, chatStore.entityId, chatStore.area, controller.signal);
+                const responseText = typeof assistantResult === 'string' ? assistantResult : assistantResult?.text;
+                const responseMeta = typeof assistantResult === 'object' ? assistantResult?.meta : null;
+                const nextConversationId = typeof assistantResult === 'object' ? assistantResult?.conversationId : null;
+                if (nextConversationId) conversationId.value = nextConversationId;
+                const assistantCallId = extractAssistantCallId(responseMeta);
 
                 const assistantMessage = {
                     id: Date.now() + 1,
                     role: 'assistant',
-                    content: response,
+                    content: responseText,
                     timestamp: Date.now(),
-                    reaction: 0
+                    reaction: 0,
+                    assistantCallId: assistantCallId
                 };
 
                 messages.value.push(assistantMessage);
@@ -266,25 +307,25 @@ export default {
             return 0;
         };
 
-        const setReaction = async (message, index, reactionValue) => {
-            if (!message || message.role !== 'assistant' || message.isError) return;
-
-            const previous = getMessageReaction(message);
-            const next = previous === reactionValue ? 0 : reactionValue;
-
+        const applyReaction = async ({ message, index, previous, next, comment }) => {
             message.reaction = next;
             message.isLiked = next === 1;
             message.isDisliked = next === -1;
 
             try {
+                const assistantCallId = message.assistantCallId;
+                if (!assistantCallId) throw new Error('assistantCallId is missing');
+
+                const providerReaction = next === 1 ? 1 : next === -1 ? 2 : 0;
                 await sendAssistantReaction(chatStore.questionnaireId, {
                     entityId: chatStore.entityId,
-                    area: chatStore.area,
                     clientMessageId: message.id,
                     clientTimestamp: message.timestamp,
                     prompt: findPromptForAssistantMessage(index),
                     assistantResponse: message.content,
-                    reaction: next
+                    assistantCallId: assistantCallId,
+                    reaction: providerReaction,
+                    comment: comment || null
                 });
             } catch (error) {
                 console.error('Error sending assistant reaction:', error);
@@ -292,6 +333,27 @@ export default {
                 message.isLiked = previous === 1;
                 message.isDisliked = previous === -1;
             }
+        };
+
+        const setReaction = async (message, index, reactionValue) => {
+            if (!message || message.role !== 'assistant' || message.isError) return;
+
+            const previous = getMessageReaction(message);
+            const next = previous === reactionValue ? 0 : reactionValue;
+
+            if (next === -1 && previous !== -1) {
+                // Send negative reaction immediately, then prompt for optional feedback.
+                await applyReaction({ message, index, previous, next, comment: null });
+
+                const { confirmed, comment } = await promptDislikeComment();
+                if (confirmed) {
+                    // Re-send same negative reaction with the user's comment (if any).
+                    await applyReaction({ message, index, previous: -1, next: -1, comment });
+                }
+                return;
+            }
+
+            await applyReaction({ message, index, previous, next, comment: null });
         };
 
         const callAssistant = async (userMessage, questionnaireId, entityId, area, signal) => {
@@ -312,6 +374,7 @@ export default {
                 questionnaireId: questionnaireId,
                 entityId: entityId,
                 area: area,
+                conversationId: conversationId.value,
                 signal: signal
             });
         };
@@ -446,6 +509,50 @@ export default {
 
 .v-card-actions {
     padding: 1rem;
+}
+
+/* Remove Vuetify "text button" hover/focus overlay for like/dislike buttons. */
+.chat-container :deep(.reaction-btn:hover .v-btn__overlay),
+.chat-container :deep(.reaction-btn:focus-visible .v-btn__overlay),
+.chat-container :deep(.reaction-btn:hover .v-btn__underlay),
+.chat-container :deep(.reaction-btn:focus-visible .v-btn__underlay) {
+    opacity: 0 !important;
+}
+
+.chat-container :deep(.reaction-btn:hover) {
+    background-color: transparent !important;
+}
+
+/* Make header action buttons behave like reaction buttons on hover/focus. */
+.chat-container :deep(.header-action-btn:hover .v-btn__overlay),
+.chat-container :deep(.header-action-btn:focus-visible .v-btn__overlay),
+.chat-container :deep(.header-action-btn:hover .v-btn__underlay),
+.chat-container :deep(.header-action-btn:focus-visible .v-btn__underlay) {
+    opacity: 0 !important;
+}
+
+.chat-container :deep(.header-action-btn:hover) {
+    background-color: transparent !important;
+}
+
+.chat-container :deep(.header-clear:hover .v-icon),
+.chat-container :deep(.header-clear:focus-visible .v-icon) {
+    color: rgb(var(--v-theme-error)) !important;
+}
+
+.chat-container :deep(.header-close:hover .v-icon),
+.chat-container :deep(.header-close:focus-visible .v-icon) {
+    color: rgb(var(--v-theme-error)) !important;
+}
+
+.chat-container :deep(.reaction-like:hover .v-icon),
+.chat-container :deep(.reaction-like:focus-visible .v-icon) {
+    color: rgb(var(--v-theme-success)) !important;
+}
+
+.chat-container :deep(.reaction-dislike:hover .v-icon),
+.chat-container :deep(.reaction-dislike:focus-visible .v-icon) {
+    color: rgb(var(--v-theme-error)) !important;
 }
 
 @keyframes typing {

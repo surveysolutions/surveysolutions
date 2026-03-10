@@ -24,8 +24,32 @@
     <data name="Unlike" xml:space="preserve">
         <value>Remover curtida</value>
     </data>
+    <data name="Unhelpful" xml:space="preserve">
+        <value>Não ajudou</value>
+    </data>
     <data name="Like" xml:space="preserve">
         <value>Curtir</value>
+    </data>
+    <data name="DislikeCommentTitle" xml:space="preserve">
+        <value>Adicionar um comentário</value>
+    </data>
+    <data name="DislikeCommentPlaceholder" xml:space="preserve">
+        <value>Escreva um comentário curto (opcional)</value>
+    </data>
+    <data name="DislikeCommentHint" xml:space="preserve">
+        <value>O que estava errado nesta resposta?</value>
+    </data>
+    <data name="Send" xml:space="preserve">
+        <value>Enviar</value>
+    </data>
+    <data name="SendFeedback" xml:space="preserve">
+        <value>Enviar feedback</value>
+    </data>
+    <data name="UnlikeCommentTitle" xml:space="preserve">
+        <value>Adicionar um comentário</value>
+    </data>
+    <data name="UnlikeCommentPlaceholder" xml:space="preserve">
+        <value>Escreva um comentário curto (opcional)</value>
     </data>
     <data name="Dislike" xml:space="preserve">
         <value>Não curtir</value>

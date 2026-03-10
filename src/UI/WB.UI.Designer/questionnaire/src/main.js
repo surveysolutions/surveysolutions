@@ -17,6 +17,7 @@ import '@mdi/font/css/materialdesignicons.css';
 import 'bootstrap';
 
 import ConfirmDialog from './plugins/confirm';
+import ConfirmPromptDialog from './plugins/confirmPrompt';
 
 import { PerfectScrollbarPlugin } from 'vue3-perfect-scrollbar';
 import 'vue3-perfect-scrollbar/style.css';
@@ -61,18 +62,21 @@ const options = {
     transition: {
         speed: '0.2s',
         opacity: '0.6s',
-        termination: 300
+        termination: 300,
     },
     autoRevert: true,
     location: 'top',
     inverse: false,
-    autoFinish: false
+    autoFinish: false,
 };
 
 vue.use(VueProgressBar, options);
 
 vue.use(ConfirmDialog);
 vue.component('confirm-dialog', ConfirmDialog.default);
+
+vue.use(ConfirmPromptDialog);
+vue.component('confirm-prompt-dialog', ConfirmPromptDialog.default);
 
 directives(vue);
 

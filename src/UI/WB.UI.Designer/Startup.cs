@@ -52,6 +52,7 @@ using WB.UI.Shared.Web.Authentication;
 using WB.UI.Shared.Web.Diagnostics;
 using WB.UI.Shared.Web.Exceptions;
 using WB.UI.Shared.Web.Services;
+using WB.UI.Designer.Extensions;
 using SameSiteMode = Microsoft.AspNetCore.Http.SameSiteMode;
 
 namespace WB.UI.Designer
@@ -290,6 +291,9 @@ namespace WB.UI.Designer
             });
 
             services.AddDatabaseStoredExceptional(hostingEnvironment, Configuration);
+
+            // Centralized HTTP client configuration for the Assistant provider.
+            services.AddAssistantProviderHttpClient(Configuration);
 
             services.AddTransient<IQuestionnaireRestoreService, QuestionnaireRestoreService>();
             services.AddTransient<IQuestionnaireImportService, QuestionnaireImportService>();
