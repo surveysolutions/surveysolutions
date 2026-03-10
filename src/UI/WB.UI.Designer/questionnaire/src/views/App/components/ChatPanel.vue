@@ -77,17 +77,15 @@
         <!-- Input Area -->
         <v-card-actions class="pa-4">
             <div class="editor pseudo-form-control">
-                <v-textarea v-model="currentMessage" :placeholder="$t('Assistant.TypeMessage', 'Type your message...')"
-                    variant="plain" density="comfortable" hide-details @keyup.enter.prevent="handleEnter"
-                    :disabled="isLoading" class="flex-grow-1" maxlength="2000" rows="3">
+                <v-textarea v-model="currentMessage" :placeholder="$t('Assistant.TypeMessage')" variant="plain"
+                    density="comfortable" hide-details @keydown.enter="handleEnter" :disabled="isLoading"
+                    class="flex-grow-1" maxlength="2000" rows="3">
                     <template #append>
                         <div @click.stop style="pointer-events: all;">
                             <v-btn v-if="isLoading" icon="mdi-stop-circle" variant="text" size="medium" color="error"
-                                @click.stop="stopRequest" :disabled="false"
-                                :title="$t('Assistant.StopRequest', 'Stop request')" />
+                                @click.stop="stopRequest" :disabled="false" :title="$t('Assistant.StopRequest')" />
                             <v-btn v-else icon="mdi-send" variant="text" size="medium" color="primary"
-                                @click="sendMessage" :disabled="!currentMessage.trim()"
-                                :title="$t('Assistant.Send', 'Send')" />
+                                @click="sendMessage" :disabled="!currentMessage.trim()" :title="$t('Assistant.Send')" />
                         </div>
                     </template>
                 </v-textarea>
@@ -162,7 +160,7 @@ export default {
         const stopRequest = () => {
             const controller = abortController.value;
             if (controller) {
-                controller.abort('User stopped the request');
+                controller.abort(USER_STOPPED_REQUEST);  // was: 'User stopped the request'
                 // Do NOT reset isLoading/abortController here.
                 // Let the in-flight sendMessage's finally block handle cleanup,
                 // so a new request started before finally runs isn't clobbered.
@@ -212,7 +210,7 @@ export default {
                 await scrollToBottom();
             } catch (error) {
 
-                if (error.name === 'AbortError' || error.message === 'User stopped the request'
+                if (error.name === 'AbortError' || error.message === USER_STOPPED_REQUEST  // was: 'User stopped the request'
                     || error.name === 'CanceledError' || error.code === 'ERR_CANCELED') {
                     //do nothing
                 } else {
@@ -221,7 +219,7 @@ export default {
                     const errorMessage = {
                         id: Date.now() + 1,
                         role: 'assistant',
-                        content: error.message || 'Sorry, I encountered an error. Please try again.',
+                        content: error.message,
                         timestamp: Date.now(),
                         isError: true,
                         reaction: 0
