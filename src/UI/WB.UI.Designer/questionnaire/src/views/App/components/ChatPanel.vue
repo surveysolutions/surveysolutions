@@ -183,7 +183,8 @@ export default {
             const names = tokens.split('|').filter(Boolean);
             if (!names.length) return null;
             return new RegExp(
-                `\\b(${names.map(v => v.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})\\b`, 'g'
+                `(?<![A-Za-z0-9_$@])(${names.map(v => v.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})(?![A-Za-z0-9_$@])`,
+                'g'
             );
         });
 
