@@ -319,9 +319,7 @@ export default {
             messages.value.forEach(msg => {
                 const key = `${msg.id}:${tokens}`;
                 if (!renderCache.has(key)) {
-                    const html = msg.role === 'user'
-                        ? DOMPurify.sanitize(msg.content, { ALLOWED_TAGS: [], KEEP_CONTENT: true })
-                        : formatMessage(msg.content);
+                    const html = formatMessage(msg.content);
                     renderCache.set(key, html);
                 }
                 result.set(msg.id, renderCache.get(key));
