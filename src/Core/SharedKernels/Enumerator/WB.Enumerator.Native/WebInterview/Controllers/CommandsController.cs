@@ -143,6 +143,9 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         {
             if (!TryGetIdentity(answerRequest, out var identity)) 
                 return BadRequest(new { errorMessage = InvalidRequestMessage });
+            
+            if (answerRequest.Answer == null)
+                return BadRequest(new { errorMessage = AnswerCannotBeNull });
 
             this.ExecuteQuestionCommand(new AnswerSingleOptionLinkedQuestionCommand(interviewId, GetCommandResponsibleId(interviewId),
                 identity.Id, identity.RosterVector, answerRequest.Answer));
@@ -157,6 +160,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
 
             if (answerRequest.Answer == null)
                 return BadRequest(new { errorMessage = AnswerCannotBeNull });
+            
             this.ExecuteQuestionCommand(new AnswerMultipleOptionsLinkedQuestionCommand(interviewId, GetCommandResponsibleId(interviewId),
                 identity.Id, identity.RosterVector, answerRequest.Answer.Select(x => new RosterVector(x)).ToArray()));
             return Ok();
@@ -169,6 +173,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
 
             if (answerRequest.Answer == null)
                 return BadRequest(new { errorMessage = AnswerCannotBeNull });
+            
             this.ExecuteQuestionCommand(new AnswerMultipleOptionsQuestionCommand(interviewId, GetCommandResponsibleId(interviewId),
                 identity.Id, identity.RosterVector, answerRequest.Answer));
             return Ok();
