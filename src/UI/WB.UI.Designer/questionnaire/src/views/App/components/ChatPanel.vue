@@ -175,11 +175,68 @@ export default {
             }
         };
 
-        const formatMessage = (content) => {
-            const variableNames = treeStore.getVariableNames.variableNamesTokens
-                ? treeStore.getVariableNames.variableNamesTokens.split('|').filter(Boolean)
-                : [];
+        // Regex for questionnaire variable names — rebuilt only when variableNamesTokens changes,
+        // not on every formatMessage call or per-code-block invocation of wrapVariables.
+        const variablePattern = computed(() => {
+            const tokens = treeStore.getVariableNames.variableNamesTokens;
+            if (!tokens) return null;
+            const names = tokens.split('|').filter(Boolean);
+            if (!names.length) return null;
+            return new RegExp(
+                `\\b(${names.map(v => v.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})\\b`, 'g'
+            );
+        });
 
+        // Wrap known questionnaire variable names only in bare text nodes
+        // (not inside already-classified hljs token spans), using DOM traversal.
+        const wrapVariables = (html) => {
+            const pattern = variablePattern.value;
+            if (!pattern) return html;
+            pattern.lastIndex = 0;
+
+            const container = document.createElement('div');
+            container.innerHTML = html;
+
+            const walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT);
+            const textNodes = [];
+            let node;
+            while ((node = walker.nextNode())) {
+                // Only process bare text nodes — skip any already inside an hljs token span
+                const parentClass = node.parentElement?.className || '';
+                if (!parentClass.includes('hljs-')) {
+                    textNodes.push(node);
+                }
+            }
+
+            for (const textNode of textNodes) {
+                const text = textNode.nodeValue;
+                pattern.lastIndex = 0;
+                if (!pattern.test(text)) continue;
+
+                pattern.lastIndex = 0;
+                const fragment = document.createDocumentFragment();
+                let lastIndex = 0;
+                let match;
+                while ((match = pattern.exec(text)) !== null) {
+                    if (match.index > lastIndex) {
+                        fragment.appendChild(document.createTextNode(text.slice(lastIndex, match.index)));
+                    }
+                    const span = document.createElement('span');
+                    span.className = 'hljs-variable';
+                    span.textContent = match[1];
+                    fragment.appendChild(span);
+                    lastIndex = match.index + match[0].length;
+                }
+                if (lastIndex < text.length) {
+                    fragment.appendChild(document.createTextNode(text.slice(lastIndex)));
+                }
+                textNode.parentNode.replaceChild(fragment, textNode);
+            }
+
+            return container.innerHTML;
+        };
+
+        const formatMessage = (content) => {
             const highlightCode = (code, language) => {
                 let highlighted;
                 let actualLanguage = language;
@@ -190,55 +247,7 @@ export default {
                     actualLanguage = 'csharp';
                     highlighted = hljs.highlight(codeForHighlight, { language: 'csharp' }).value;
                 }
-                return { highlighted: wrapVariables(highlighted, variableNames), actualLanguage };
-            };
-
-            // Wrap known questionnaire variable names only in bare text nodes
-            // (not inside already-classified hljs token spans), using DOM traversal.
-            const wrapVariables = (html, variables) => {
-                if (!variables.length) return html;
-                const pattern = new RegExp(`\\b(${variables.map(v => v.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})\\b`, 'g');
-
-                const container = document.createElement('div');
-                container.innerHTML = html;
-
-                const walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT);
-                const textNodes = [];
-                let node;
-                while ((node = walker.nextNode())) {
-                    // Only process bare text nodes — skip any already inside an hljs token span
-                    const parentClass = node.parentElement?.className || '';
-                    if (!parentClass.includes('hljs-')) {
-                        textNodes.push(node);
-                    }
-                }
-
-                for (const textNode of textNodes) {
-                    const text = textNode.nodeValue;
-                    pattern.lastIndex = 0;
-                    if (!pattern.test(text)) continue;
-
-                    pattern.lastIndex = 0;
-                    const fragment = document.createDocumentFragment();
-                    let lastIndex = 0;
-                    let match;
-                    while ((match = pattern.exec(text)) !== null) {
-                        if (match.index > lastIndex) {
-                            fragment.appendChild(document.createTextNode(text.slice(lastIndex, match.index)));
-                        }
-                        const span = document.createElement('span');
-                        span.className = 'hljs-variable';
-                        span.textContent = match[1];
-                        fragment.appendChild(span);
-                        lastIndex = match.index + match[0].length;
-                    }
-                    if (lastIndex < text.length) {
-                        fragment.appendChild(document.createTextNode(text.slice(lastIndex)));
-                    }
-                    textNode.parentNode.replaceChild(fragment, textNode);
-                }
-
-                return container.innerHTML;
+                return { highlighted: wrapVariables(highlighted), actualLanguage };
             };
 
             // Extract fenced code blocks first
@@ -290,7 +299,12 @@ export default {
                 result = result.split(`__CODEBLOCK_${nonce}_${i}__`).join(block);
             });
 
-            return result;
+            // Final sanitization with explicit allowlist — defense-in-depth after
+            // hljs output and hand-built wrapper HTML are merged back in.
+            return DOMPurify.sanitize(result, {
+                ALLOWED_TAGS: ['div', 'pre', 'code', 'span', 'button', 'br', 'strong', 'em'],
+                ALLOWED_ATTR: ['class', 'type', 'title', 'aria-label', 'aria-hidden', 'data-copy'],
+            });
         };
 
         // Computed map of message id → formatted HTML.
