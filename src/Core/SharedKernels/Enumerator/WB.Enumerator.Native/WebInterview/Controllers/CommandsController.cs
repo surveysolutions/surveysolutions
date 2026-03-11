@@ -181,6 +181,8 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
 
             if (answerRequest.Answer == null)
                 return BadRequest(new { errorMessage = AnswerCannotBeNull });
+            if (answerRequest.Answer == null)
+                return BadRequest(new { errorMessage = AnswerCannotBeNull });
 
             var answer = answerRequest.Answer.Select(a => new AnsweredYesNoOption(a.Value, a.Yes)).ToArray();
             this.ExecuteQuestionCommand(new AnswerYesNoQuestion(interviewId, GetCommandResponsibleId(interviewId),
