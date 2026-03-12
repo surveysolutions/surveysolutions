@@ -97,13 +97,13 @@ class UploadMapsService : IUploadMapsService
                 }
                 catch (Exception e)
                 {
-                    logger.LogError($"Error on maps import map {map.Name}", e);
+                    logger.LogError(e, $"Error on maps import. '{map.Name}' map.");
                     invalidMaps.Add(new Tuple<string, Exception>(map.Name, e));
                 }
             }
 
             if (invalidMaps.Count > 0)
-                result.Errors.AddRange(invalidMaps.Select(x => String.Format(Resources.Maps.MapLoadingInvalidFile, x.Item1, x.Item2.Message)).ToList());
+                result.Errors.AddRange(invalidMaps.Select(x => String.Format(Resources.Maps.MapLoadingInvalidFile, x.Item1, x.Item2.GetType().Name)).ToList());
             else
                 result.IsSuccess = true;
         }
