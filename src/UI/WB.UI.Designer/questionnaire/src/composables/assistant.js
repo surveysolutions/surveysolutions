@@ -57,17 +57,12 @@ export const useAssistant = () => {
 
                 const data = response.data || {};
                 const text =
-                    data.expression ??
-                    data.Expression ??
-                    data.answer ??
-                    data.Answer ??
-                    data.message ??
-                    data.Message ??
-                    '';
+                    data.expression ?? data.answer ?? data.message ?? '';
                 const meta = data.meta ?? data.Meta ?? null;
                 const conversationId = data.conversationId ?? null;
+                const callLogId = data.callLogId ?? null;
 
-                return { text, meta, conversationId };
+                return { text, meta, conversationId, callLogId };
             } catch (error) {
                 // Re-throw abort errors immediately without retrying
                 if (error.name === 'AbortError' || error.name === 'CanceledError' || error.code === 'ERR_CANCELED') {
