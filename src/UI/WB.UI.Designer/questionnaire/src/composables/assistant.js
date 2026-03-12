@@ -7,6 +7,38 @@ export const useAssistant = () => {
 
     const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+    const createAbortError = (signal) => {
+        if (signal && 'reason' in signal && signal.reason != null) {
+            if (signal.reason instanceof Error) {
+                return signal.reason;
+            }
+            const reasonMessage = typeof signal.reason === 'string' ? signal.reason : 'Aborted';
+            const error = new Error(reasonMessage);
+            error.name = 'AbortError';
+            return error;
+        }
+        const error = new Error('Aborted');
+        error.name = 'AbortError';
+        return error;
+    };
+
+    const abortAwareDelay = (ms, signal) => {
+        if (!signal) return delay(ms);
+        if (signal.aborted) return Promise.reject(createAbortError(signal));
+        return new Promise((resolve, reject) => {
+            let timer;
+            const onAbort = () => {
+                clearTimeout(timer);
+                reject(createAbortError(signal));
+            };
+            signal.addEventListener('abort', onAbort, { once: true });
+            timer = setTimeout(() => {
+                signal.removeEventListener('abort', onAbort);
+                resolve();
+            }, ms);
+        });
+    };
+
     const sendMessage = async (prompt, messages, options = {}) => {
         const retries = 3;
 
@@ -14,7 +46,7 @@ export const useAssistant = () => {
         const now = Date.now();
         const timeSinceLastRequest = now - lastRequestTime;
         if (timeSinceLastRequest < MIN_REQUEST_INTERVAL) {
-            await delay(MIN_REQUEST_INTERVAL - timeSinceLastRequest);
+            await abortAwareDelay(MIN_REQUEST_INTERVAL - timeSinceLastRequest, options.signal);
         }
         lastRequestTime = Date.now();
 
@@ -34,6 +66,7 @@ export const useAssistant = () => {
                     },
                     {
                         timeout: 3 * 60 * 1000, // 3 minute timeout
+                        signal: options.signal || null,
                     },
                 );
 
@@ -46,6 +79,11 @@ export const useAssistant = () => {
 
                 return { text, meta, conversationId, callLogId };
             } catch (error) {
+                // Re-throw abort errors immediately without retrying
+                if (error.name === 'AbortError' || error.name === 'CanceledError' || error.code === 'ERR_CANCELED') {
+                    throw error;
+                }
+
                 console.error(
                     `Assistant Error (attempt ${attempt}/${retries}):`,
                     error.response?.data || error.message,
@@ -63,7 +101,7 @@ export const useAssistant = () => {
                         console.log(
                             `Rate limit exceeded. Retrying in ${backoffDelay}ms...`,
                         );
-                        await delay(backoffDelay);
+                        await abortAwareDelay(backoffDelay, options.signal);
                         continue;
                     } else {
                         throw new Error(
@@ -89,7 +127,7 @@ export const useAssistant = () => {
                         console.log(
                             `Server error. Retrying in ${backoffDelay}ms...`,
                         );
-                        await delay(backoffDelay);
+                        await abortAwareDelay(backoffDelay, options.signal);
                         continue;
                     } else {
                         throw new Error(
