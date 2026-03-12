@@ -188,17 +188,6 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                     metaToken = JToken.Parse(meta.GetRawText());
                 }
 
-                if (callLogId.HasValue)
-                {
-                    if (metaToken is not JObject metaObject)
-                    {
-                        metaObject = new JObject();
-                        metaToken = metaObject;
-                    }
-
-                    metaObject["callLogId"] = callLogId.Value;
-                }
-
                 string? expression = null;
                 if (responseData.TryGetProperty("expression", out var expr)) expression = expr.GetString();
 
@@ -218,7 +207,8 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                     Expression = expression,
                     Message = message,
                     Meta = metaToken,
-                    conversationId = conversationId
+                    conversationId = conversationId,
+                    callLogId = callLogId
                 });
             }
             catch (OperationCanceledException)
