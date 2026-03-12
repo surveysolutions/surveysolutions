@@ -7,14 +7,29 @@ export const useAssistant = () => {
 
     const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+    const createAbortError = (signal) => {
+        if (signal && 'reason' in signal && signal.reason != null) {
+            if (signal.reason instanceof Error) {
+                return signal.reason;
+            }
+            const reasonMessage = typeof signal.reason === 'string' ? signal.reason : 'Aborted';
+            const error = new Error(reasonMessage);
+            error.name = 'AbortError';
+            return error;
+        }
+        const error = new Error('Aborted');
+        error.name = 'AbortError';
+        return error;
+    };
+
     const abortAwareDelay = (ms, signal) => {
         if (!signal) return delay(ms);
-        if (signal.aborted) return Promise.reject(new DOMException('Aborted', 'AbortError'));
+        if (signal.aborted) return Promise.reject(createAbortError(signal));
         return new Promise((resolve, reject) => {
             let timer;
             const onAbort = () => {
                 clearTimeout(timer);
-                reject(new DOMException('Aborted', 'AbortError'));
+                reject(createAbortError(signal));
             };
             signal.addEventListener('abort', onAbort, { once: true });
             timer = setTimeout(() => {
