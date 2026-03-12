@@ -379,7 +379,7 @@ export default {
             }
         };
         const extractAssistantCallId = (meta) => {
-            const numeric = raw != null ? Number(raw) : null;
+            const numeric = meta != null ? Number(meta) : null;
             return Number.isFinite(numeric) && numeric > 0 ? numeric : null;
         };
 
