@@ -126,7 +126,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 var session = this.unitOfWork.Session;
                 var existingMap = await session.GetAsync<MapBrowseItem>(mapItem.Id);
                 if (existingMap != null)
-                    existingMap.UpdateFrom(mapItem);
+                    existingMap.UpdateFrom(mapItem, session);
                 else
                     session.Save(mapItem);
                 return mapItem;

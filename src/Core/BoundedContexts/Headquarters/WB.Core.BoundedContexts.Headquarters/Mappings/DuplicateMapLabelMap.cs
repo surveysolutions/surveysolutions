@@ -20,6 +20,10 @@ public class DuplicateMapLabelMap : ClassMapping<DuplicateMapLabel>
             ptp.Update(false);
         });
             
-        ManyToOne(x => x.Map, mtm => mtm.Column("map"));
+        ManyToOne(x => x.Map, mtm =>
+        {
+            mtm.Column("map");
+            mtm.NotNullable(true);
+        });
     }
 }
