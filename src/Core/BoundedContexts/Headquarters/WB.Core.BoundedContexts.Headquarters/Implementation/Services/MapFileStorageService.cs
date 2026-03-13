@@ -304,12 +304,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                         item.ShapesCount = shapefileReader.RecordCount;
                         
                         int? labelIndexOf = null;
+                        string labelColumnTitle = null;
 
                         for (int i = 0; i < shapefileReader.Fields.Count; i++)
                         {
-                            if (shapefileReader.Fields[i].Name == LabelFieldName)
+                            if (string.Equals(shapefileReader.Fields[i].Name, LabelFieldName, StringComparison.InvariantCultureIgnoreCase))
                             {
                                 labelIndexOf = i + 1;
+                                labelColumnTitle = shapefileReader.Fields[i].Name;
                                 break;
                             }
                         }
@@ -340,11 +342,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
                             if (labelIndexOf.HasValue)
                             {
-                                var labelValue = readFeature.Attributes[LabelFieldName].ToString();
+                                var labelValue = readFeature.Attributes[labelColumnTitle].ToString();
 
                                 if (!string.IsNullOrWhiteSpace(labelValue))
                                 {
-                                    attribs.Add(LabelFieldName, labelValue);
+                                    attribs.Add(labelColumnTitle, labelValue);
 
                                     if (!checkOnUnique.Add(labelValue))
                                     {

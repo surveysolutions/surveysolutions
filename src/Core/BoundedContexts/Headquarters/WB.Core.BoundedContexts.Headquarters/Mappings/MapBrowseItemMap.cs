@@ -48,8 +48,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
                 {
                     collection.Key(key => key.Column("map"));
                     collection.Cascade(Cascade.All | Cascade.DeleteOrphans);
-                    
-                    collection.Inverse(true);
                 },
                 rel => rel.OneToMany());
         }
