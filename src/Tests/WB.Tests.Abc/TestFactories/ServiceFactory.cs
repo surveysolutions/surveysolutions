@@ -1294,7 +1294,8 @@ namespace WB.Tests.Abc.TestFactories
              geospatialConfig ?? Mock.Of<IOptions<GeospatialConfig>>(),
              authorizedUser ?? Mock.Of<IAuthorizedUser>(),
              Mock.Of<ILogger<MapFileStorageService>>(),
-             Mock.Of<IPlainStorageAccessor<DuplicateMapLabel>>()); 
+             Mock.Of<IUnitOfWork>()
+             ); 
         }
 
         public ResponsibleAssignmentValidator WebModeResponsibleAssignmentValidator(IUserViewFactory userViewFactory = null)

@@ -31,6 +31,7 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Configs;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Utils;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
@@ -38,8 +39,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
     public class MapFileStorageService : IMapStorageService
     {
         private readonly IPlainStorageAccessor<MapBrowseItem> mapPlainStorageAccessor;
-        private readonly IPlainStorageAccessor<DuplicateMapLabel> duplicateMapLabelPlainStorageAccessor;
         private readonly IPlainStorageAccessor<UserMap> userMapsStorage;
+        private readonly IUnitOfWork unitOfWork;
         private readonly ISerializer serializer;
         private readonly IUserRepository userStorage;
         private readonly IExternalFileStorage externalFileStorage;
@@ -67,7 +68,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             IOptions<GeospatialConfig> geospatialConfig,
             IAuthorizedUser authorizedUser,
             ILogger<MapFileStorageService> logger, 
-            IPlainStorageAccessor<DuplicateMapLabel> duplicateMapLabelPlainStorageAccessor)
+            IUnitOfWork unitOfWork)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.archiveUtils = archiveUtils;
@@ -75,12 +76,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             this.userMapsStorage = userMapsStorage;
             this.serializer = serializer;
             this.userStorage = userStorage;
-
             this.externalFileStorage = externalFileStorage;
             this.authorizedUser = authorizedUser;
             this.logger = logger;
-            this.duplicateMapLabelPlainStorageAccessor = duplicateMapLabelPlainStorageAccessor;
             this.geospatialConfig = geospatialConfig;
+            this.unitOfWork = unitOfWork;
 
             this.mapsFolderPath = fileSystemAccessor.CombinePath(fileStorageConfig.Value.TempData, MapsFolderName);
             if (!fileSystemAccessor.IsDirectoryExists(this.mapsFolderPath))
@@ -123,9 +123,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     fileSystemAccessor.MoveFile(tempFile, targetFile);
                 }
 
-                this.duplicateMapLabelPlainStorageAccessor.Remove(l => l.Where(d => d.Map.Id == mapItem.Id));
-                this.mapPlainStorageAccessor.Store(mapItem, mapItem.Id);
-                this.duplicateMapLabelPlainStorageAccessor.Store(mapItem.DuplicateLabels);
+                var session = this.unitOfWork.Session;
+                var existingMap = await session.GetAsync<MapBrowseItem>(mapItem.Id);
+                if (existingMap != null)
+                    existingMap.UpdateFrom(mapItem);
+                else
+                    session.Save(mapItem);
                 return mapItem;
             }
             catch
