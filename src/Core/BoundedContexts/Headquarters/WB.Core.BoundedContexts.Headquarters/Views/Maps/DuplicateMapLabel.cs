@@ -6,6 +6,7 @@ public class DuplicateMapLabel
     public virtual string Label { get; set; }
     public virtual int Count { get; set; }
     public virtual MapBrowseItem Map { get; set; }
+    public virtual string MapId { get; protected set; }
         
     protected bool Equals(DuplicateMapLabel other) => Id == other.Id;
     public override bool Equals(object obj)

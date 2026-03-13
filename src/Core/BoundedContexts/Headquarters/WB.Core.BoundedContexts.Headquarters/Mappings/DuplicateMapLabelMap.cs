@@ -13,6 +13,12 @@ public class DuplicateMapLabelMap : ClassMapping<DuplicateMapLabel>
         Id(x => x.Id, IdMapper => IdMapper.Generator(Generators.HighLow));
         Property(x => x.Label, ptp => ptp.NotNullable(true));
         Property(x => x.Count, ptp => ptp.NotNullable(true));
+        Property(x => x.MapId, ptp =>
+        {
+            ptp.Column("map");
+            ptp.Insert(false);
+            ptp.Update(false);
+        });
             
         ManyToOne(x => x.Map, mtm => mtm.Column("map"));
     }
