@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using NHibernate;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Maps
 {
@@ -33,7 +32,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Maps
         public virtual bool IsPreviewGeoJson { get; set; }
         public virtual ICollection<DuplicateMapLabel> DuplicateLabels { get; set; }
 
-        public virtual void UpdateFrom(MapBrowseItem source, ISession session)
+        public virtual void UpdateFrom(MapBrowseItem source)
         {
             Size = source.Size;
             FileName = source.FileName;
@@ -51,10 +50,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Maps
             GeoJson = source.GeoJson;
             IsPreviewGeoJson = source.IsPreviewGeoJson;
 
-            foreach (var label in DuplicateLabels)
-                session.Delete(label);
             DuplicateLabels.Clear();
-
             foreach (var label in source.DuplicateLabels)
             {
                 label.Map = this;

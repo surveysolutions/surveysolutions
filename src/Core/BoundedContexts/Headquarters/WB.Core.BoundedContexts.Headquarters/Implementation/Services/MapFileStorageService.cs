@@ -17,6 +17,7 @@ using NetTopologySuite.IO.Esri;
 using NetTopologySuite.Operation.Union;
 using NetTopologySuite.Simplify;
 using Newtonsoft.Json;
+using NHibernate;
 using NHibernate.Linq;
 using WB.Core.BoundedContexts.Headquarters.Maps;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
@@ -40,6 +41,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
     {
         private readonly IPlainStorageAccessor<MapBrowseItem> mapPlainStorageAccessor;
         private readonly IPlainStorageAccessor<UserMap> userMapsStorage;
+        private readonly IPlainStorageAccessor<DuplicateMapLabel> duplicateMapLabelStorage;
         private readonly IUnitOfWork unitOfWork;
         private readonly ISerializer serializer;
         private readonly IUserRepository userStorage;
@@ -62,6 +64,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             IArchiveUtils archiveUtils,
             IPlainStorageAccessor<MapBrowseItem> mapPlainStorageAccessor,
             IPlainStorageAccessor<UserMap> userMapsStorage,
+            IPlainStorageAccessor<DuplicateMapLabel> duplicateMapLabelStorage,
             ISerializer serializer,
             IUserRepository userStorage,
             IExternalFileStorage externalFileStorage,
@@ -74,6 +77,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             this.archiveUtils = archiveUtils;
             this.mapPlainStorageAccessor = mapPlainStorageAccessor;
             this.userMapsStorage = userMapsStorage;
+            this.duplicateMapLabelStorage = duplicateMapLabelStorage;
             this.serializer = serializer;
             this.userStorage = userStorage;
             this.externalFileStorage = externalFileStorage;
@@ -126,9 +130,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 var session = this.unitOfWork.Session;
                 var existingMap = await session.GetAsync<MapBrowseItem>(mapItem.Id);
                 if (existingMap != null)
-                    existingMap.UpdateFrom(mapItem, session);
+                {
+                    if (existingMap.DuplicateLabels.Count > 0)
+                        duplicateMapLabelStorage.Remove(existingMap.DuplicateLabels);
+                    existingMap.UpdateFrom(mapItem);
+                }
                 else
-                    session.Save(mapItem);
+                    await session.SaveAsync(mapItem);
                 return mapItem;
             }
             catch
