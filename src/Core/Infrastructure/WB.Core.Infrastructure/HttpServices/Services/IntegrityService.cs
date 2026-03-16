@@ -12,7 +12,7 @@ public class IntegrityService : IIntegrityService
     public void ValidateResponseHeadersAndThrow(HttpResponseHeaders headers)
     {
             if (!headers.Contains(XSurveySolutions) 
-                || headers.GetValues(XSurveySolutions).All(v => v != HeaderValue)))
+                || headers.GetValues(XSurveySolutions).All(v => v != HeaderValue))
             {                
                 throw new RestException("Communication error: error response from server. Please contact your administrator.");
             }
