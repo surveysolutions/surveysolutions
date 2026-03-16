@@ -18,6 +18,7 @@ using WB.UI.Designer.Code;
 using WB.UI.Designer.Services;
 using Newtonsoft.Json.Linq;
 using System.Threading;
+using System.ComponentModel.DataAnnotations;
 using WB.UI.Designer.Extensions;
 
 namespace WB.UI.Designer.Controllers.Api.Designer
@@ -79,6 +80,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             public string AssistantResponse { get; set; } = string.Empty;
             public long? AssistantCallId { get; set; }
             public AssistantResponseReaction Reaction { get; set; }
+            [StringLength(2000)]
             public string? Comment { get; set; }
         }
 

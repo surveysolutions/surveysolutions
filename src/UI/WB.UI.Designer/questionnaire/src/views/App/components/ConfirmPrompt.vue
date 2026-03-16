@@ -20,7 +20,7 @@
                         <div class="form-group" style="margin-top: 10px;">
                             <label v-if="inputLabel" class="control-label">{{ inputLabel }}</label>
                             <textarea class="form-control" v-model="inputValue" :placeholder="inputPlaceholder"
-                                :rows="inputRows"></textarea>
+                                :rows="inputRows" :maxlength="inputMaxLength || undefined"></textarea>
                             <div v-if="inputHint" class="help-block">{{ inputHint }}</div>
                         </div>
                     </div>
@@ -66,6 +66,7 @@ const confirmPromptDialog = {
             inputPlaceholder: null,
             inputHint: null,
             inputRows: 4,
+            inputMaxLength: null,
 
             draggable: false,
             dialogStyle: null,
@@ -98,6 +99,7 @@ const confirmPromptDialog = {
             this.inputPlaceholder = params.inputPlaceholder || null;
             this.inputHint = params.inputHint || null;
             this.inputRows = params.inputRows || 4;
+            this.inputMaxLength = params.inputMaxLength || null;
 
             this.draggable = !!params.draggable;
             this.dialogStyle = null;
