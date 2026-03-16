@@ -21,11 +21,11 @@
     <data name="ClearHistory" xml:space="preserve">
         <value>Clear history</value>
     </data>
-    <data name="Unlike" xml:space="preserve">
-        <value>Unlike</value>
+    <data name="NotHelpful" xml:space="preserve">
+        <value>Not helpful</value>
     </data>
-    <data name="Like" xml:space="preserve">
-        <value>Like</value>
+    <data name="Helpful" xml:space="preserve">
+        <value>Helpful</value>
     </data>
     <data name="Dislike" xml:space="preserve">
         <value>Dislike</value>
@@ -33,16 +33,16 @@
     <data name="Unhelpful" xml:space="preserve">
         <value>Unhelpful</value>
     </data>
-    <data name="Undislike" xml:space="preserve">
-        <value>Undo dislike</value>
+    <data name="NotUnhelpful" xml:space="preserve">
+        <value>Not unhelpful</value>
     </data>
-    <data name="DislikeCommentTitle" xml:space="preserve">
+    <data name="UnhelpfulCommentTitle" xml:space="preserve">
         <value>Add a comment</value>
     </data>
-    <data name="DislikeCommentPlaceholder" xml:space="preserve">
+    <data name="UnhelpfulCommentPlaceholder" xml:space="preserve">
         <value>Write a short comment (optional)</value>
     </data>
-    <data name="DislikeCommentHint" xml:space="preserve">
+    <data name="UnhelpfulCommentHint" xml:space="preserve">
         <value>What was wrong with this answer?</value>
     </data>
     <data name="Send" xml:space="preserve">
@@ -51,10 +51,10 @@
     <data name="SendFeedback" xml:space="preserve">
         <value>Send feedback</value>
     </data>
-    <data name="UnlikeCommentTitle" xml:space="preserve">
+    <data name="NotHelpfulCommentTitle" xml:space="preserve">
         <value>Add a comment</value>
     </data>
-    <data name="UnlikeCommentPlaceholder" xml:space="preserve">
+    <data name="NotHelpfulCommentPlaceholder" xml:space="preserve">
         <value>Write a short comment (optional)</value>
     </data>
     <data name="TypeMessage" xml:space="preserve">

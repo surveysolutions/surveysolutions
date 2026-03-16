@@ -21,22 +21,22 @@
     <data name="ClearHistory" xml:space="preserve">
         <value>Șterge istoricul</value>
     </data>
-    <data name="Unlike" xml:space="preserve">
+    <data name="NotHelpful" xml:space="preserve">
         <value>Anulează aprecierea</value>
     </data>
     <data name="Unhelpful" xml:space="preserve">
         <value>Nu a fost util</value>
     </data>
-    <data name="Like" xml:space="preserve">
+    <data name="Helpful" xml:space="preserve">
         <value>Apreciază</value>
     </data>
-    <data name="DislikeCommentTitle" xml:space="preserve">
+    <data name="UnhelpfulCommentTitle" xml:space="preserve">
         <value>Adăugați un comentariu</value>
     </data>
-    <data name="DislikeCommentPlaceholder" xml:space="preserve">
+    <data name="UnhelpfulCommentPlaceholder" xml:space="preserve">
         <value>Scrieți un comentariu scurt (opțional)</value>
     </data>
-    <data name="DislikeCommentHint" xml:space="preserve">
+    <data name="UnhelpfulCommentHint" xml:space="preserve">
         <value>Ce a fost în neregulă cu acest răspuns?</value>
     </data>
     <data name="Send" xml:space="preserve">
@@ -45,16 +45,16 @@
     <data name="SendFeedback" xml:space="preserve">
         <value>Trimite feedback</value>
     </data>
-    <data name="UnlikeCommentTitle" xml:space="preserve">
+    <data name="NotHelpfulCommentTitle" xml:space="preserve">
         <value>Adăugați un comentariu</value>
     </data>
-    <data name="UnlikeCommentPlaceholder" xml:space="preserve">
+    <data name="NotHelpfulCommentPlaceholder" xml:space="preserve">
         <value>Scrieți un comentariu scurt (opțional)</value>
     </data>
     <data name="Dislike" xml:space="preserve">
         <value>Nu îmi place</value>
     </data>
-    <data name="Undislike" xml:space="preserve">
+    <data name="NotUnhelpful" xml:space="preserve">
         <value>Anulează nu îmi place</value>
     </data>
     <data name="TypeMessage" xml:space="preserve">

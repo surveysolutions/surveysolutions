@@ -87,12 +87,12 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         public enum AssistantResponseReaction
         {
             None = 0,
-            Like = 1,
-            Dislike = 2
+            Helpful = 1,
+            Unhelpful = 2
         }
 
         public record ReactionRequest(AssistantResponseReaction Reaction, string? Comment = null);
-        
+
 
         [HttpPost]
         [Route("{id}")]
@@ -250,7 +250,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 return BadRequest("'assistantCallId' must be provided.");
 
             if (!Enum.IsDefined(typeof(AssistantResponseReaction), request.Reaction))
-                return BadRequest("'reaction' must be 0 (None), 1 (Like) or 2 (Dislike).");
+                return BadRequest("'reaction' must be 0 (None), 1 (Helpful) or 2 (Unhelpful).");
 
             var questionnaireRevision = questionnaireHelper.GetLastRevision(id);
 

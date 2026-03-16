@@ -21,10 +21,10 @@
     <data name="ClearHistory" xml:space="preserve">
         <value>Очистить историю</value>
     </data>
-    <data name="Unlike" xml:space="preserve">
+    <data name="NotHelpful" xml:space="preserve">
         <value>Убрать лайк</value>
     </data>
-    <data name="Like" xml:space="preserve">
+    <data name="Helpful" xml:space="preserve">
         <value>Нравится</value>
     </data>
     <data name="Dislike" xml:space="preserve">
@@ -33,16 +33,16 @@
     <data name="Unhelpful" xml:space="preserve">
         <value>Не помогло</value>
     </data>
-    <data name="Undislike" xml:space="preserve">
+    <data name="NotUnhelpful" xml:space="preserve">
         <value>Убрать дизлайк</value>
     </data>
-    <data name="DislikeCommentTitle" xml:space="preserve">
+    <data name="UnhelpfulCommentTitle" xml:space="preserve">
         <value>Добавить комментарий</value>
     </data>
-    <data name="DislikeCommentPlaceholder" xml:space="preserve">
+    <data name="UnhelpfulCommentPlaceholder" xml:space="preserve">
         <value>Напишите короткий комментарий (необязательно)</value>
     </data>
-    <data name="DislikeCommentHint" xml:space="preserve">
+    <data name="UnhelpfulCommentHint" xml:space="preserve">
         <value>Что было не так в этом ответе?</value>
     </data>
     <data name="Send" xml:space="preserve">
@@ -51,10 +51,10 @@
     <data name="SendFeedback" xml:space="preserve">
         <value>Отправить отзыв</value>
     </data>
-    <data name="UnlikeCommentTitle" xml:space="preserve">
+    <data name="NotHelpfulCommentTitle" xml:space="preserve">
         <value>Добавить комментарий</value>
     </data>
-    <data name="UnlikeCommentPlaceholder" xml:space="preserve">
+    <data name="NotHelpfulCommentPlaceholder" xml:space="preserve">
         <value>Напишите короткий комментарий (необязательно)</value>
     </data>
     <data name="TypeMessage" xml:space="preserve">

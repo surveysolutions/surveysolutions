@@ -21,10 +21,10 @@
     <data name="ClearHistory" xml:space="preserve">
         <value>مسح السجل</value>
     </data>
-    <data name="Unlike" xml:space="preserve">
+    <data name="NotHelpful" xml:space="preserve">
         <value>إلغاء الإعجاب</value>
     </data>
-    <data name="Like" xml:space="preserve">
+    <data name="Helpful" xml:space="preserve">
         <value>إعجاب</value>
     </data>
     <data name="Dislike" xml:space="preserve">
@@ -33,16 +33,16 @@
     <data name="Unhelpful" xml:space="preserve">
         <value>غير مفيد</value>
     </data>
-    <data name="Undislike" xml:space="preserve">
+    <data name="NotUnhelpful" xml:space="preserve">
         <value>إلغاء عدم الإعجاب</value>
     </data>
-    <data name="DislikeCommentTitle" xml:space="preserve">
+    <data name="UnhelpfulCommentTitle" xml:space="preserve">
         <value>أضف تعليقًا</value>
     </data>
-    <data name="DislikeCommentPlaceholder" xml:space="preserve">
+    <data name="UnhelpfulCommentPlaceholder" xml:space="preserve">
         <value>اكتب تعليقًا قصيرًا (اختياريًا)</value>
     </data>
-    <data name="DislikeCommentHint" xml:space="preserve">
+    <data name="UnhelpfulCommentHint" xml:space="preserve">
         <value>ما الخطأ في هذا الجواب؟</value>
     </data>
     <data name="Send" xml:space="preserve">
@@ -51,10 +51,10 @@
     <data name="SendFeedback" xml:space="preserve">
         <value>إرسال ملاحظات</value>
     </data>
-    <data name="UnlikeCommentTitle" xml:space="preserve">
+    <data name="NotHelpfulCommentTitle" xml:space="preserve">
         <value>أضف تعليقًا</value>
     </data>
-    <data name="UnlikeCommentPlaceholder" xml:space="preserve">
+    <data name="NotHelpfulCommentPlaceholder" xml:space="preserve">
         <value>اكتب تعليقًا قصيرًا (اختياريًا)</value>
     </data>
     <data name="TypeMessage" xml:space="preserve">

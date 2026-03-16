@@ -21,22 +21,22 @@
     <data name="ClearHistory" xml:space="preserve">
         <value>Limpar histórico</value>
     </data>
-    <data name="Unlike" xml:space="preserve">
+    <data name="NotHelpful" xml:space="preserve">
         <value>Remover curtida</value>
     </data>
     <data name="Unhelpful" xml:space="preserve">
         <value>Não ajudou</value>
     </data>
-    <data name="Like" xml:space="preserve">
+    <data name="Helpful" xml:space="preserve">
         <value>Curtir</value>
     </data>
-    <data name="DislikeCommentTitle" xml:space="preserve">
+    <data name="UnhelpfulCommentTitle" xml:space="preserve">
         <value>Adicionar um comentário</value>
     </data>
-    <data name="DislikeCommentPlaceholder" xml:space="preserve">
+    <data name="UnhelpfulCommentPlaceholder" xml:space="preserve">
         <value>Escreva um comentário curto (opcional)</value>
     </data>
-    <data name="DislikeCommentHint" xml:space="preserve">
+    <data name="UnhelpfulCommentHint" xml:space="preserve">
         <value>O que estava errado nesta resposta?</value>
     </data>
     <data name="Send" xml:space="preserve">
@@ -45,16 +45,16 @@
     <data name="SendFeedback" xml:space="preserve">
         <value>Enviar feedback</value>
     </data>
-    <data name="UnlikeCommentTitle" xml:space="preserve">
+    <data name="NotHelpfulCommentTitle" xml:space="preserve">
         <value>Adicionar um comentário</value>
     </data>
-    <data name="UnlikeCommentPlaceholder" xml:space="preserve">
+    <data name="NotHelpfulCommentPlaceholder" xml:space="preserve">
         <value>Escreva um comentário curto (opcional)</value>
     </data>
     <data name="Dislike" xml:space="preserve">
         <value>Não curtir</value>
     </data>
-    <data name="Undislike" xml:space="preserve">
+    <data name="NotUnhelpful" xml:space="preserve">
         <value>Remover não curtir</value>
     </data>
     <data name="TypeMessage" xml:space="preserve">

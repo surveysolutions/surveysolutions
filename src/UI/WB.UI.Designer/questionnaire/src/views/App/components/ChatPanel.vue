@@ -36,18 +36,19 @@
                                     <div class="d-flex align-center justify-space-between">
                                         <div v-if="message.role === 'assistant' && !message.isError && !!message.assistantCallId"
                                             class="d-flex align-center">
-                                            <v-btn variant="text" size="x-small" icon class="reaction-btn reaction-like"
+                                            <v-btn variant="text" size="x-small" icon
+                                                class="reaction-btn reaction-helpful"
                                                 :color="getMessageReaction(message) === 1 ? 'success' : undefined"
                                                 @click="setReaction(message, index, 1)"
-                                                :title="getMessageReaction(message) === 1 ? $t('Assistant.Unlike') : $t('Assistant.Like')">
+                                                :title="getMessageReaction(message) === 1 ? $t('Assistant.NotHelpful') : $t('Assistant.Helpful')">
                                                 <v-icon :size="24">{{ getMessageReaction(message) === 1 ? 'mdi-thumb-up'
                                                     : 'mdi-thumb-up-outline' }}</v-icon>
                                             </v-btn>
                                             <v-btn variant="text" size="x-small" icon
-                                                class="reaction-btn reaction-dislike"
+                                                class="reaction-btn reaction-unhelpful"
                                                 :color="getMessageReaction(message) === -1 ? 'error' : undefined"
                                                 @click="setReaction(message, index, -1)"
-                                                :title="getMessageReaction(message) === -1 ? $t('Assistant.Undislike') : $t('Assistant.Dislike')">
+                                                :title="getMessageReaction(message) === -1 ? $t('Assistant.NotUnhelpful') : $t('Assistant.Unhelpful')">
                                                 <v-icon :size="24">{{ getMessageReaction(message) === -1 ?
                                                     'mdi-thumb-down' : 'mdi-thumb-down-outline' }}</v-icon>
                                             </v-btn>
@@ -129,7 +130,7 @@ export default {
         // Initialize Assistant
         const { sendMessage: sendToAssistant, sendReaction: sendAssistantReaction } = useAssistant();
 
-        const promptDislikeComment = () => {
+        const promptUnhelpfulComment = () => {
             return new Promise(resolve => {
                 const confirmPrompt = vm?.$confirmPrompt;
                 if (typeof confirmPrompt !== 'function') {
@@ -139,10 +140,10 @@ export default {
 
                 confirmPrompt({
                     header: vm?.$t?.('Assistant.SendFeedback'),
-                    title: vm?.$t?.('Assistant.DislikeCommentHint'),
+                    title: vm?.$t?.('Assistant.UnhelpfulCommentHint'),
                     okButtonTitle: vm?.$t?.('Assistant.Send'),
                     cancelButtonTitle: vm?.$t?.('QuestionnaireEditor.Cancel'),
-                    inputPlaceholder: vm?.$t?.('Assistant.DislikeCommentPlaceholder'),
+                    inputPlaceholder: vm?.$t?.('Assistant.UnhelpfulCommentPlaceholder'),
                     inputMaxLength: 2000,
                     draggable: true,
                     callback: (confirmed, value) => {
@@ -476,15 +477,15 @@ export default {
         const getMessageReaction = (message) => {
             if (!message) return 0;
             if (typeof message.reaction === 'number') return message.reaction;
-            if (message.isLiked === true) return 1;
-            if (message.isDisliked === true) return -1;
+            if (message.isHelpful === true) return 1;
+            if (message.isUnhelpful === true) return -1;
             return 0;
         };
 
         const applyReaction = async ({ message, index, previous, next, comment }) => {
             message.reaction = next;
-            message.isLiked = next === 1;
-            message.isDisliked = next === -1;
+            message.isHelpful = next === 1;
+            message.isUnhelpful = next === -1;
 
             try {
                 const assistantCallId = message.assistantCallId;
@@ -504,8 +505,8 @@ export default {
             } catch (error) {
                 console.error('Error sending assistant reaction:', error);
                 message.reaction = previous;
-                message.isLiked = previous === 1;
-                message.isDisliked = previous === -1;
+                message.isHelpful = previous === 1;
+                message.isUnhelpful = previous === -1;
             }
         };
 
@@ -519,7 +520,7 @@ export default {
                 // Send negative reaction immediately, then prompt for optional feedback.
                 await applyReaction({ message, index, previous, next, comment: null });
 
-                const { confirmed, comment } = await promptDislikeComment();
+                const { confirmed, comment } = await promptUnhelpfulComment();
                 if (confirmed) {
                     // Re-send same negative reaction with the user's comment (if any).
                     await applyReaction({ message, index, previous: -1, next: -1, comment });
@@ -688,7 +689,7 @@ export default {
     padding: 1rem;
 }
 
-/* Remove Vuetify "text button" hover/focus overlay for like/dislike buttons. */
+/* Remove Vuetify "text button" hover/focus overlay for helpful/unhelpful buttons. */
 .chat-container :deep(.reaction-btn:hover .v-btn__overlay),
 .chat-container :deep(.reaction-btn:focus-visible .v-btn__overlay),
 .chat-container :deep(.reaction-btn:hover .v-btn__underlay),
@@ -722,13 +723,13 @@ export default {
     color: rgb(var(--v-theme-error)) !important;
 }
 
-.chat-container :deep(.reaction-like:hover .v-icon),
-.chat-container :deep(.reaction-like:focus-visible .v-icon) {
+.chat-container :deep(.reaction-helpful:hover .v-icon),
+.chat-container :deep(.reaction-helpful:focus-visible .v-icon) {
     color: rgb(var(--v-theme-success)) !important;
 }
 
-.chat-container :deep(.reaction-dislike:hover .v-icon),
-.chat-container :deep(.reaction-dislike:focus-visible .v-icon) {
+.chat-container :deep(.reaction-unhelpful:hover .v-icon),
+.chat-container :deep(.reaction-unhelpful:focus-visible .v-icon) {
     color: rgb(var(--v-theme-error)) !important;
 }
 
