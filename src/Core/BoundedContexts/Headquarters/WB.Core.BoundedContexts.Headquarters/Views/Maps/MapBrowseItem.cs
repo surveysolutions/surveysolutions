@@ -8,7 +8,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Maps
         public MapBrowseItem()
         {
             this.Users = new HashSet<UserMap>();
-            this.DuplicateLabels = new List<DuplicateMapLabel>();
         }
         public virtual string Id { get; set; }
 
@@ -30,7 +29,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Maps
         public virtual string GeoJson { get; set; }
         public virtual bool HasGeoJson => !string.IsNullOrEmpty(GeoJson);
         public virtual bool IsPreviewGeoJson { get; set; }
-        public virtual ICollection<DuplicateMapLabel> DuplicateLabels { get; set; }
+        public virtual bool? HasDuplicateLabels { get; set; }
 
         public virtual void UpdateFrom(MapBrowseItem source)
         {
@@ -49,13 +48,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Maps
             ShapesCount = source.ShapesCount;
             GeoJson = source.GeoJson;
             IsPreviewGeoJson = source.IsPreviewGeoJson;
-
-            DuplicateLabels.Clear();
-            foreach (var label in source.DuplicateLabels)
-            {
-                label.Map = this;
-                DuplicateLabels.Add(label);
-            }
         }
     }
 }

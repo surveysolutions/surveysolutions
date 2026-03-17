@@ -32,6 +32,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Property(x => x.ShapeType);
             Property(x => x.GeoJson, m => m.Lazy(true));
             Property(x => x.IsPreviewGeoJson);
+            Property(x => x.HasDuplicateLabels);
             
             Set(x => x.Users,
                 collection =>
@@ -39,15 +40,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
                     collection.Key(key => key.Column("map"));
                     collection.Cascade(Cascade.All | Cascade.DeleteOrphans);
                     
-                    collection.Inverse(true);
-                },
-                rel => rel.OneToMany());
-
-            Set(x => x.DuplicateLabels,
-                collection =>
-                {
-                    collection.Key(key => key.Column("map"));
-                    collection.Cascade(Cascade.All | Cascade.DeleteOrphans);
                     collection.Inverse(true);
                 },
                 rel => rel.OneToMany());

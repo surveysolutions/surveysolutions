@@ -130,11 +130,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 var session = this.unitOfWork.Session;
                 var existingMap = await session.GetAsync<MapBrowseItem>(mapItem.Id);
                 if (existingMap != null)
-                {
-                    if (existingMap.DuplicateLabels.Count > 0)
-                        duplicateMapLabelStorage.Remove(existingMap.DuplicateLabels);
                     existingMap.UpdateFrom(mapItem);
-                }
                 else
                     await session.SaveAsync(mapItem);
                 return mapItem;
@@ -345,13 +341,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                         
                         FeatureCollection fc = new FeatureCollection();
                         HashSet<string> checkOnUnique = new HashSet<string>();
-                        Dictionary<string, int> duplicateLabels = new Dictionary<string, int>();
+                        bool hasDuplicates = false;
 
                         while (shapefileReader.Read(out bool deleted, out var readFeature))
                         {
                             AttributesTable attribs = new AttributesTable();
 
-                            if (labelIndexOf.HasValue)
+                            if (!hasDuplicates || labelIndexOf.HasValue)
                             {
                                 var labelValue = readFeature.Attributes[labelColumnTitle].ToString();
 
@@ -361,8 +357,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
                                     if (!checkOnUnique.Add(labelValue))
                                     {
-                                        if (!duplicateLabels.TryAdd(labelValue, 2))
-                                            duplicateLabels[labelValue] += 1;
+                                        hasDuplicates = true;
                                     }
                                 }
                             }
@@ -375,16 +370,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                         if (fc.Count == 0)
                             throw new ArgumentException($"Can't read any coordinates from {mapFile.Name}.shp file");
 
-                        item.DuplicateLabels.Clear();
-                        foreach (var duplicateLabel in duplicateLabels)
-                        {
-                            item.DuplicateLabels.Add(new DuplicateMapLabel()
-                            {
-                                Label = duplicateLabel.Key,
-                                Count = duplicateLabel.Value,
-                                Map = item,
-                            });
-                        }
+                        item.HasDuplicateLabels = hasDuplicates;
 
                         var json = GetGeoJson(fc);
                         var byteCount = Encoding.Unicode.GetByteCount(json);

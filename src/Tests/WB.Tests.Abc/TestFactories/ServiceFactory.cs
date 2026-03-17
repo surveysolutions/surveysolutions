@@ -1288,6 +1288,7 @@ namespace WB.Tests.Abc.TestFactories
              archiveUtils ?? Create.Service.ArchiveUtils(),
              mapsStorage ?? new TestPlainStorage<MapBrowseItem>(),
              userMapsStorage ?? new TestPlainStorage<UserMap>(),
+             new TestPlainStorage<DuplicateMapLabel>(),
              serializer ?? Create.Service.NewtonJsonSerializer(),
              userStorage ?? Create.Storage.UserRepository(),
              externalFileStorage ?? Mock.Of<IExternalFileStorage>(),
