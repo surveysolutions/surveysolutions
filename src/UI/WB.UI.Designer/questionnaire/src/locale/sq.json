@@ -652,20 +652,21 @@
   },
   "Assistant": {
     "ClearHistory": "Pastro historinë",
-    "Unlike": "Hiq pëlqimin",
+    "NotHelpful": "Hiq pëlqimin",
     "Unhelpful": "Nuk ndihmoi",
-    "Like": "Pëlqej",
-    "DislikeCommentTitle": "Shto një koment",
-    "DislikeCommentPlaceholder": "Shkruani një koment të shkurtër (opsional)",
-    "DislikeCommentHint": "Çfarë ishte gabim me këtë përgjigje?",
+    "Helpful": "Pëlqej",
+    "UnhelpfulCommentTitle": "Shto një koment",
+    "UnhelpfulCommentPlaceholder": "Shkruani një koment të shkurtër (opsional)",
+    "UnhelpfulCommentHint": "Çfarë ishte gabim me këtë përgjigje?",
     "Send": "Dërgo",
     "SendFeedback": "Dërgo komente",
-    "UnlikeCommentTitle": "Shto një koment",
-    "UnlikeCommentPlaceholder": "Shkruani një koment të shkurtër (opsional)",
+    "NotHelpfulCommentTitle": "Shto një koment",
+    "NotHelpfulCommentPlaceholder": "Shkruani një koment të shkurtër (opsional)",
     "Dislike": "Nuk pëlqej",
-    "Undislike": "Hiq mospëlqimin",
+    "NotUnhelpful": "Hiq mospëlqimin",
     "TypeMessage": "Shkruani mesazhin tuaj...",
     "Title": "Asistenti AI",
-    "WelcomeMessage": "Filloni një bisedë me asistentin AI"
+    "WelcomeMessage": "Filloni një bisedë me asistentin AI",
+    "Disclaimer": "Ky përmbajtje u prodhua nga një sistem AI i automatizuar dhe nuk përbën informacion autoritar ose të verifikuar. Mund të përmbajë gabime ose lëshime. Përdoruesit janë përgjegjës për rishikimin, validimin dhe ushtrimin e gjykimit para përdorimit."
   }
 }

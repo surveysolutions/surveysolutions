@@ -66,4 +66,7 @@
     <data name="WelcomeMessage" xml:space="preserve">
         <value>Începeți o conversație cu asistentul IA</value>
     </data>
+    <data name="Disclaimer" xml:space="preserve">
+        <value>Acest conținut a fost produs de un sistem AI automatizat și nu constituie informații autorizate sau verificate. Poate conține erori sau omisiuni. Utilizatorii sunt responsabili pentru revizuire, validare și exercitarea judecății înainte de utilizare.</value>
+    </data>
 </root>

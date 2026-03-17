@@ -652,20 +652,21 @@
   },
   "Assistant": {
     "ClearHistory": "Vymazat historii",
-    "Unlike": "Zrušit líbí se mi",
+    "NotHelpful": "Zrušit líbí se mi",
     "Unhelpful": "Nepomohlo",
-    "Like": "Líbí se mi",
-    "DislikeCommentTitle": "Přidat komentář",
-    "DislikeCommentPlaceholder": "Napište krátký komentář (nepovinné)",
-    "DislikeCommentHint": "Co bylo na této odpovědi špatně?",
+    "Helpful": "Líbí se mi",
+    "UnhelpfulCommentTitle": "Přidat komentář",
+    "UnhelpfulCommentPlaceholder": "Napište krátký komentář (nepovinné)",
+    "UnhelpfulCommentHint": "Co bylo na této odpovědi špatně?",
     "Send": "Odeslat",
     "SendFeedback": "Odeslat zpětnou vazbu",
-    "UnlikeCommentTitle": "Přidat komentář",
-    "UnlikeCommentPlaceholder": "Napište krátký komentář (nepovinné)",
+    "NotHelpfulCommentTitle": "Přidat komentář",
+    "NotHelpfulCommentPlaceholder": "Napište krátký komentář (nepovinné)",
     "Dislike": "Nelíbí se mi",
-    "Undislike": "Zrušit nelíbí se mi",
+    "NotUnhelpful": "Zrušit nelíbí se mi",
     "TypeMessage": "Napište svou zprávu...",
     "Title": "AI Asistent",
-    "WelcomeMessage": "Začněte konverzaci s AI asistentem"
+    "WelcomeMessage": "Začněte konverzaci s AI asistentem",
+    "Disclaimer": "Tento obsah byl vytvořen automatizovaným systémem AI a nepředstavuje autoritativní ani ověřené informace. Může obsahovat chyby nebo opomenutí. Uživatelé jsou odpovědní za přezkoumání, ověření a uplatnění vlastního úsudku před použitím."
   }
 }

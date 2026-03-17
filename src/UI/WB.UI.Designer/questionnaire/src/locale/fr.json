@@ -652,20 +652,21 @@
   },
   "Assistant": {
     "ClearHistory": "Effacer l'historique",
-    "Unlike": "Ne plus aimer",
-    "Like": "J'aime",
+    "NotHelpful": "Ne plus aimer",
+    "Helpful": "J'aime",
     "Dislike": "Je n'aime pas",
     "Unhelpful": "Peu utile",
-    "Undislike": "Annuler je n'aime pas",
-    "DislikeCommentTitle": "Ajouter un commentaire",
-    "DislikeCommentPlaceholder": "Écrivez un court commentaire (facultatif)",
-    "DislikeCommentHint": "Qu'est-ce qui n'allait pas dans cette réponse ?",
+    "NotUnhelpful": "Annuler je n'aime pas",
+    "UnhelpfulCommentTitle": "Ajouter un commentaire",
+    "UnhelpfulCommentPlaceholder": "Écrivez un court commentaire (facultatif)",
+    "UnhelpfulCommentHint": "Qu'est-ce qui n'allait pas dans cette réponse ?",
     "Send": "Envoyer",
     "SendFeedback": "Envoyer un retour",
-    "UnlikeCommentTitle": "Ajouter un commentaire",
-    "UnlikeCommentPlaceholder": "Écrivez un court commentaire (facultatif)",
+    "NotHelpfulCommentTitle": "Ajouter un commentaire",
+    "NotHelpfulCommentPlaceholder": "Écrivez un court commentaire (facultatif)",
     "TypeMessage": "Tapez votre message...",
     "Title": "Assistant IA",
-    "WelcomeMessage": "Commencez une conversation avec l'assistant IA"
+    "WelcomeMessage": "Commencez une conversation avec l'assistant IA",
+    "Disclaimer": "Ce contenu a été produit par un système d'IA automatisé et ne constitue pas une information faisant autorité ou vérifiée. Il peut contenir des erreurs ou des omissions. Les utilisateurs sont responsables de l'examen, de la validation et du jugement avant utilisation."
   }
 }

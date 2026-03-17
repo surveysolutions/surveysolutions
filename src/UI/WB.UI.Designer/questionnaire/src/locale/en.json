@@ -652,20 +652,21 @@
   },
   "Assistant": {
     "ClearHistory": "Clear history",
-    "Unlike": "Unlike",
-    "Like": "Like",
+    "NotHelpful": "Not helpful",
+    "Helpful": "Helpful",
     "Dislike": "Dislike",
     "Unhelpful": "Unhelpful",
-    "Undislike": "Undo dislike",
-    "DislikeCommentTitle": "Add a comment",
-    "DislikeCommentPlaceholder": "Write a short comment (optional)",
-    "DislikeCommentHint": "What was wrong with this answer?",
+    "NotUnhelpful": "Not unhelpful",
+    "UnhelpfulCommentTitle": "Add a comment",
+    "UnhelpfulCommentPlaceholder": "Write a short comment (optional)",
+    "UnhelpfulCommentHint": "What was wrong with this answer?",
     "Send": "Send",
     "SendFeedback": "Send feedback",
-    "UnlikeCommentTitle": "Add a comment",
-    "UnlikeCommentPlaceholder": "Write a short comment (optional)",
+    "NotHelpfulCommentTitle": "Add a comment",
+    "NotHelpfulCommentPlaceholder": "Write a short comment (optional)",
     "TypeMessage": "Type your message...",
     "Title": "AI Assistant",
-    "WelcomeMessage": "Start a conversation with the AI assistant"
+    "WelcomeMessage": "Start a conversation with the AI assistant",
+    "Disclaimer": "This content was produced by an automated AI system and does not constitute authoritative or verified information. It may contain errors or omissions. Users are responsible for reviewing, validating, and exercising judgment before use."
   }
 }

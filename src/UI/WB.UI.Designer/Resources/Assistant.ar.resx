@@ -66,4 +66,7 @@
     <data name="WelcomeMessage" xml:space="preserve">
         <value>ابدأ محادثة مع مساعد الذكاء الاصطناعي</value>
     </data>
+    <data name="Disclaimer" xml:space="preserve">
+        <value>تم إنتاج هذا المحتوى بواسطة نظام ذكاء اصطناعي آلي ولا يشكل معلومات موثوقة أو مؤكدة. قد يحتوي على أخطاء أو إغفالات. يتحمل المستخدمون مسؤولية المراجعة والتحقق وإعمال الحكم قبل الاستخدام.</value>
+    </data>
 </root>

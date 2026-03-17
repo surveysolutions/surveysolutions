@@ -99,6 +99,11 @@
             </div>
         </v-card-actions>
 
+        <!-- Disclaimer -->
+        <div class="chat-disclaimer">
+            {{ $t('Assistant.Disclaimer') }}
+        </div>
+
     </v-card>
 </template>
 
@@ -870,5 +875,15 @@ export default {
 :deep(.hljs-variable) {
     color: teal;
     font-weight: 600;
+}
+
+.chat-disclaimer {
+    padding: 6px 16px 8px;
+    font-size: 11px;
+    line-height: 1.4;
+    color: rgba(var(--v-theme-on-surface), 0.5);
+    background-color: rgb(var(--v-theme-surface));
+    border-top: 1px solid rgba(var(--v-theme-on-surface), 0.1);
+    flex-shrink: 0;
 }
 </style>

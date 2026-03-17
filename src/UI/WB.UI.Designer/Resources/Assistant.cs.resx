@@ -66,4 +66,7 @@
     <data name="WelcomeMessage" xml:space="preserve">
         <value>Začněte konverzaci s AI asistentem</value>
     </data>
+    <data name="Disclaimer" xml:space="preserve">
+        <value>Tento obsah byl vytvořen automatizovaným systémem AI a nepředstavuje autoritativní ani ověřené informace. Může obsahovat chyby nebo opomenutí. Uživatelé jsou odpovědní za přezkoumání, ověření a uplatnění vlastního úsudku před použitím.</value>
+    </data>
 </root>

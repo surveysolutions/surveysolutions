@@ -652,20 +652,21 @@
   },
   "Assistant": {
     "ClearHistory": "مسح السجل",
-    "Unlike": "إلغاء الإعجاب",
-    "Like": "إعجاب",
+    "NotHelpful": "إلغاء الإعجاب",
+    "Helpful": "إعجاب",
     "Dislike": "عدم الإعجاب",
     "Unhelpful": "غير مفيد",
-    "Undislike": "إلغاء عدم الإعجاب",
-    "DislikeCommentTitle": "أضف تعليقًا",
-    "DislikeCommentPlaceholder": "اكتب تعليقًا قصيرًا (اختياريًا)",
-    "DislikeCommentHint": "ما الخطأ في هذا الجواب؟",
+    "NotUnhelpful": "إلغاء عدم الإعجاب",
+    "UnhelpfulCommentTitle": "أضف تعليقًا",
+    "UnhelpfulCommentPlaceholder": "اكتب تعليقًا قصيرًا (اختياريًا)",
+    "UnhelpfulCommentHint": "ما الخطأ في هذا الجواب؟",
     "Send": "إرسال",
     "SendFeedback": "إرسال ملاحظات",
-    "UnlikeCommentTitle": "أضف تعليقًا",
-    "UnlikeCommentPlaceholder": "اكتب تعليقًا قصيرًا (اختياريًا)",
+    "NotHelpfulCommentTitle": "أضف تعليقًا",
+    "NotHelpfulCommentPlaceholder": "اكتب تعليقًا قصيرًا (اختياريًا)",
     "TypeMessage": "اكتب رسالتك...",
     "Title": "مساعد الذكاء الاصطناعي",
-    "WelcomeMessage": "ابدأ محادثة مع مساعد الذكاء الاصطناعي"
+    "WelcomeMessage": "ابدأ محادثة مع مساعد الذكاء الاصطناعي",
+    "Disclaimer": "تم إنتاج هذا المحتوى بواسطة نظام ذكاء اصطناعي آلي ولا يشكل معلومات موثوقة أو مؤكدة. قد يحتوي على أخطاء أو إغفالات. يتحمل المستخدمون مسؤولية المراجعة والتحقق وإعمال الحكم قبل الاستخدام."
   }
 }

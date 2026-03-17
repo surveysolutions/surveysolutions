@@ -652,20 +652,21 @@
   },
   "Assistant": {
     "ClearHistory": "Borrar historial",
-    "Unlike": "Ya no me gusta",
+    "NotHelpful": "Ya no me gusta",
     "Unhelpful": "No fue útil",
-    "Like": "Me gusta",
-    "DislikeCommentTitle": "Añadir un comentario",
-    "DislikeCommentPlaceholder": "Escriba un comentario breve (opcional)",
-    "DislikeCommentHint": "¿Qué estuvo mal en esta respuesta?",
+    "Helpful": "Me gusta",
+    "UnhelpfulCommentTitle": "Añadir un comentario",
+    "UnhelpfulCommentPlaceholder": "Escriba un comentario breve (opcional)",
+    "UnhelpfulCommentHint": "¿Qué estuvo mal en esta respuesta?",
     "Send": "Enviar",
     "SendFeedback": "Enviar comentarios",
-    "UnlikeCommentTitle": "Añadir un comentario",
-    "UnlikeCommentPlaceholder": "Escriba un comentario breve (opcional)",
+    "NotHelpfulCommentTitle": "Añadir un comentario",
+    "NotHelpfulCommentPlaceholder": "Escriba un comentario breve (opcional)",
     "Dislike": "No me gusta",
-    "Undislike": "Deshacer no me gusta",
+    "NotUnhelpful": "Deshacer no me gusta",
     "TypeMessage": "Escribe tu mensaje...",
     "Title": "Asistente de IA",
-    "WelcomeMessage": "Inicia una conversación con el asistente de IA"
+    "WelcomeMessage": "Inicia una conversación con el asistente de IA",
+    "Disclaimer": "Este contenido fue producido por un sistema de IA automatizado y no constituye información autorizada o verificada. Puede contener errores u omisiones. Los usuarios son responsables de revisar, validar y ejercer su criterio antes de su uso."
   }
 }
