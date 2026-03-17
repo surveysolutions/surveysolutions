@@ -298,7 +298,7 @@ namespace WB.UI.Headquarters
             services.AddSignalR().AddNewtonsoftJsonProtocol();
 
             services.AddHttpContextAccessor();
-            services.AddAutoMapper(typeof(Startup));
+            services.AddAutoMapper(cfg => { }, typeof(Startup));
 
             services.Configure<CookiePolicyOptions>(options =>
             {
