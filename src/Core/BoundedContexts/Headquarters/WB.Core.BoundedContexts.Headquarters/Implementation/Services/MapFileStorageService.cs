@@ -41,7 +41,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
     {
         private readonly IPlainStorageAccessor<MapBrowseItem> mapPlainStorageAccessor;
         private readonly IPlainStorageAccessor<UserMap> userMapsStorage;
-        private readonly IUnitOfWork unitOfWork;
         private readonly ISerializer serializer;
         private readonly IUserRepository userStorage;
         private readonly IExternalFileStorage externalFileStorage;
@@ -68,8 +67,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             IExternalFileStorage externalFileStorage,
             IOptions<GeospatialConfig> geospatialConfig,
             IAuthorizedUser authorizedUser,
-            ILogger<MapFileStorageService> logger, 
-            IUnitOfWork unitOfWork)
+            ILogger<MapFileStorageService> logger)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.archiveUtils = archiveUtils;
@@ -81,7 +79,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             this.authorizedUser = authorizedUser;
             this.logger = logger;
             this.geospatialConfig = geospatialConfig;
-            this.unitOfWork = unitOfWork;
 
             this.mapsFolderPath = fileSystemAccessor.CombinePath(fileStorageConfig.Value.TempData, MapsFolderName);
             if (!fileSystemAccessor.IsDirectoryExists(this.mapsFolderPath))
@@ -123,13 +120,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     var targetFile = this.fileSystemAccessor.CombinePath(this.mapsFolderPath, mapName);
                     fileSystemAccessor.MoveFile(tempFile, targetFile);
                 }
-
-                var session = this.unitOfWork.Session;
-                var existingMap = await session.GetAsync<MapBrowseItem>(mapItem.Id);
-                if (existingMap != null)
-                    existingMap.UpdateFrom(mapItem);
-                else
-                    await session.SaveAsync(mapItem);
+                
+                this.mapPlainStorageAccessor.Store(mapItem, mapItem.Id);
+                
                 return mapItem;
             }
             catch
