@@ -11,6 +11,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using Microsoft.Extensions.Logging.Abstractions;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
 using NSubstitute;
@@ -1049,7 +1050,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
             var mapper = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile(new QuestionnaireAutoMapperProfile());
-            }).CreateMapper();
+            }, new NullLoggerFactory()).CreateMapper();
 
             var service = new ImportExportQuestionnaireMapper(mapper);
             var questionnaire = service.Map(questionnaireDocument);

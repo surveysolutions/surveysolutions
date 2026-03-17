@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
+using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable;
@@ -166,7 +167,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services
                     cfg.AddProfile(new WebInterviewAutoMapProfile());
                     cfg.AddProfile(new AssignmentProfile());
                     cfg.AddProfile(new AssignmentsPublicApiMapProfile());
-                }).CreateMapper(),
+                }, new NullLoggerFactory()).CreateMapper(),
                 Create.Service.EnumeratorGroupGroupStateCalculationStrategy(),
                 Create.Service.SupervisorGroupStateCalculationStrategy(),
                 Mock.Of<IWebNavigationService>(),

@@ -4,6 +4,7 @@ using AutoMapper;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -190,7 +191,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
             return new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile(new WebInterviewAutoMapProfile());
-            }).CreateMapper();
+            }, new NullLoggerFactory()).CreateMapper();
         }
 
         private InterviewDataController CreateInterviewDataController(IStatefulInterview statefulInterview,
