@@ -16,7 +16,7 @@ namespace WB.Persistence.Headquarters.Migrations.Workspace
                     WHERE d.map = m.id
                 )
                 WHERE m.has_duplicate_labels IS NULL
-                  AND m.id ILIKE '%.shp';";
+                  AND lower(m.id) LIKE '%.shp';";
             Execute.Sql(migrateSql);
             
             
