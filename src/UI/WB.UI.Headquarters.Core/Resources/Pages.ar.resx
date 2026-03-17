@@ -1319,6 +1319,15 @@
   <data name="MapList_Updated" xml:space="preserve">
     <value>تم التحديث في</value>
   </data>
+  <data name="MapList_HasDuplicateLabels" xml:space="preserve">
+    <value>يحتوي على تسميات مكررة</value>
+  </data>
+  <data name="MapList_Yes" xml:space="preserve">
+    <value>نعم</value>
+  </data>
+  <data name="MapList_No" xml:space="preserve">
+    <value>لا</value>
+  </data>
   <data name="MapLinking_DescriptionTitle" xml:space="preserve">
     <value>إدارة روابط خرائط المستخدم</value>
   </data>

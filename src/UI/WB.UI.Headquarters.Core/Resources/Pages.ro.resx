@@ -894,6 +894,15 @@
   <data name="MapList_Updated" xml:space="preserve">
     <value>Actualizat la</value>
   </data>
+  <data name="MapList_HasDuplicateLabels" xml:space="preserve">
+    <value>Are etichete duplicate</value>
+  </data>
+  <data name="MapList_Yes" xml:space="preserve">
+    <value>Da</value>
+  </data>
+  <data name="MapList_No" xml:space="preserve">
+    <value>Nu</value>
+  </data>
   <data name="MapList_Upload" xml:space="preserve">
     <value>Încărcați fișierul .zip</value>
   </data>

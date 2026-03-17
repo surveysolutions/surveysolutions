@@ -54,7 +54,8 @@ const query = gql`query MapsList($workspace: String!, $order: [MapsSort!], $skip
     nodes {
       fileName
       importDateUtc
-      size
+      size,
+      hasDuplicateLabels
     }
   }
 }`
@@ -233,6 +234,18 @@ export default {
                                 .utc(data)
                                 .local()
                                 .format(DateFormats.dateTimeInList)
+                        },
+                    },
+                    {
+                        data: 'hasDuplicateLabels',
+                        name: 'HasDuplicateLabels',
+                        class: 'boolean',
+                        title: this.$t('Pages.MapList_HasDuplicateLabels'),
+                        render(data) {
+                            if (data === null || data === undefined) {
+                                return ''
+                            }
+                            return data ? self.$t('Pages.MapList_Yes') : self.$t('Pages.MapList_No')
                         },
                     },
                 ],
