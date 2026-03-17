@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using AutoMapper;
+using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -23,7 +24,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
             {
                 c.AddProfile<AssignmentsPublicApiMapProfile>();
                 c.ConstructServicesUsing(t => this.ServiceMock[t]);
-            });
+            }, new NullLoggerFactory());
 
             mapper = mapConfig.CreateMapper();
 
