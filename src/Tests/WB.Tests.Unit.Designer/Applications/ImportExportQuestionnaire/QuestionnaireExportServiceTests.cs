@@ -9,6 +9,7 @@ using ApprovalTests.Reporters.TestFrameworks;
 using AutoMapper;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.ImportExport;
@@ -58,7 +59,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
             var mapper = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile(new QuestionnaireAutoMapperProfile());
-            }).CreateMapper();
+            }, new NullLoggerFactory()).CreateMapper();
 
             var service = new QuestionnaireExportService(questionnaireViewFactory,
                 Mock.Of<IAttachmentService>(),

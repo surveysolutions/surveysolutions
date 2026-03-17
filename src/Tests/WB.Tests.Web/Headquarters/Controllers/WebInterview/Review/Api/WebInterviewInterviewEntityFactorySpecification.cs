@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using AutoMapper;
 using Main.Core.Documents;
+using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -48,7 +49,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api
             var autoMapperConfig = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile(new WebInterviewAutoMapProfile());
-            });
+            }, new NullLoggerFactory());
 
             authorizedUserMock = new Mock<IAuthorizedUser>();
 

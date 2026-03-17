@@ -73,7 +73,7 @@ namespace WB.UI.Headquarters
                 cfg.AddProfile(new AssignmentsPublicApiMapProfile());
                 cfg.AddProfile(new WorkspacePublicApiMapProfile());
                 cfg.ConstructServicesUsing(_.Get);
-            }).CreateMapper());
+            }, _.Get<Microsoft.Extensions.Logging.ILoggerFactory>()).CreateMapper());
 
             var captchaSection = this.configuration.CaptchaOptionsSection();
 

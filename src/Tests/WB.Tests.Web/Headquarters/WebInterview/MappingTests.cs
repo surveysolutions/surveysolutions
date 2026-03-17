@@ -1,6 +1,7 @@
 ﻿using System;
 using AutoMapper;
 using Main.Core.Entities.SubEntities;
+using Microsoft.Extensions.Logging.Abstractions;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
@@ -19,7 +20,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
             var autoMapperConfig = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile(new WebInterviewAutoMapProfile());
-            });
+            }, new NullLoggerFactory());
 
             mapper = autoMapperConfig.CreateMapper();
         }
