@@ -1,8 +1,5 @@
 ﻿using System.ComponentModel;
-using System.Data;
-using DocumentFormat.OpenXml.Drawing.Charts;
 using FluentMigrator;
-using FluentMigrator.Postgres;
 
 namespace WB.Persistence.Headquarters.Migrations.Workspace
 {
@@ -18,7 +15,8 @@ namespace WB.Persistence.Headquarters.Migrations.Workspace
                     FROM duplicatemaplabels d
                     WHERE d.map = m.id
                 )
-                WHERE m.has_duplicate_labels IS NULL;";
+                WHERE m.has_duplicate_labels IS NULL
+                  AND m.id ILIKE '%.shp';";
             Execute.Sql(migrateSql);
             
             
