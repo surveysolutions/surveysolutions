@@ -22,7 +22,7 @@
         <value>Clear history</value>
     </data>
     <data name="NotHelpful" xml:space="preserve">
-        <value>Not helpful</value>
+        <value>Undo</value>
     </data>
     <data name="Helpful" xml:space="preserve">
         <value>Helpful</value>
@@ -34,7 +34,7 @@
         <value>Unhelpful</value>
     </data>
     <data name="NotUnhelpful" xml:space="preserve">
-        <value>Not unhelpful</value>
+        <value>Undo</value>
     </data>
     <data name="UnhelpfulCommentTitle" xml:space="preserve">
         <value>Add a comment</value>

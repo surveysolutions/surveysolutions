@@ -22,7 +22,7 @@
         <value>Borrar historial</value>
     </data>
     <data name="NotHelpful" xml:space="preserve">
-        <value>Ya no me gusta</value>
+        <value>Deshacer</value>
     </data>
     <data name="Unhelpful" xml:space="preserve">
         <value>No fue útil</value>
@@ -55,7 +55,7 @@
         <value>No me gusta</value>
     </data>
     <data name="NotUnhelpful" xml:space="preserve">
-        <value>Deshacer no me gusta</value>
+        <value>Deshacer</value>
     </data>
     <data name="TypeMessage" xml:space="preserve">
         <value>Escribe tu mensaje...</value>

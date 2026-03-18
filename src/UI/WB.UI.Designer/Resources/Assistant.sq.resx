@@ -22,7 +22,7 @@
         <value>Pastro historinë</value>
     </data>
     <data name="NotHelpful" xml:space="preserve">
-        <value>Hiq pëlqimin</value>
+        <value>Zhbëj</value>
     </data>
     <data name="Unhelpful" xml:space="preserve">
         <value>Nuk ndihmoi</value>
@@ -55,7 +55,7 @@
         <value>Nuk pëlqej</value>
     </data>
     <data name="NotUnhelpful" xml:space="preserve">
-        <value>Hiq mospëlqimin</value>
+        <value>Zhbëj</value>
     </data>
     <data name="TypeMessage" xml:space="preserve">
         <value>Shkruani mesazhin tuaj...</value>

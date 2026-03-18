@@ -22,7 +22,7 @@
         <value>Vymazat historii</value>
     </data>
     <data name="NotHelpful" xml:space="preserve">
-        <value>Zrušit líbí se mi</value>
+        <value>Zpět</value>
     </data>
     <data name="Unhelpful" xml:space="preserve">
         <value>Nepomohlo</value>
@@ -55,7 +55,7 @@
         <value>Nelíbí se mi</value>
     </data>
     <data name="NotUnhelpful" xml:space="preserve">
-        <value>Zrušit nelíbí se mi</value>
+        <value>Zpět</value>
     </data>
     <data name="TypeMessage" xml:space="preserve">
         <value>Napište svou zprávu...</value>

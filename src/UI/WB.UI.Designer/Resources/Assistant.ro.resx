@@ -22,7 +22,7 @@
         <value>Șterge istoricul</value>
     </data>
     <data name="NotHelpful" xml:space="preserve">
-        <value>Anulează aprecierea</value>
+        <value>Anulează</value>
     </data>
     <data name="Unhelpful" xml:space="preserve">
         <value>Nu a fost util</value>
@@ -55,7 +55,7 @@
         <value>Nu îmi place</value>
     </data>
     <data name="NotUnhelpful" xml:space="preserve">
-        <value>Anulează nu îmi place</value>
+        <value>Anulează</value>
     </data>
     <data name="TypeMessage" xml:space="preserve">
         <value>Tastați mesajul dumneavoastră...</value>

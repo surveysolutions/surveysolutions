@@ -22,7 +22,7 @@
         <value>Очистить историю</value>
     </data>
     <data name="NotHelpful" xml:space="preserve">
-        <value>Убрать лайк</value>
+        <value>Отменить</value>
     </data>
     <data name="Helpful" xml:space="preserve">
         <value>Нравится</value>
@@ -34,7 +34,7 @@
         <value>Не помогло</value>
     </data>
     <data name="NotUnhelpful" xml:space="preserve">
-        <value>Убрать дизлайк</value>
+        <value>Отменить</value>
     </data>
     <data name="UnhelpfulCommentTitle" xml:space="preserve">
         <value>Добавить комментарий</value>

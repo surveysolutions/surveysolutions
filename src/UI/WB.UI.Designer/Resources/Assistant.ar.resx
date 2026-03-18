@@ -22,7 +22,7 @@
         <value>مسح السجل</value>
     </data>
     <data name="NotHelpful" xml:space="preserve">
-        <value>إلغاء الإعجاب</value>
+        <value>تراجع</value>
     </data>
     <data name="Helpful" xml:space="preserve">
         <value>إعجاب</value>
@@ -34,7 +34,7 @@
         <value>غير مفيد</value>
     </data>
     <data name="NotUnhelpful" xml:space="preserve">
-        <value>إلغاء عدم الإعجاب</value>
+        <value>تراجع</value>
     </data>
     <data name="UnhelpfulCommentTitle" xml:space="preserve">
         <value>أضف تعليقًا</value>

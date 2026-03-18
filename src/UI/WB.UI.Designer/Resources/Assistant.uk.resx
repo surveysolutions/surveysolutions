@@ -22,7 +22,7 @@
         <value>Очистити історію</value>
     </data>
     <data name="NotHelpful" xml:space="preserve">
-        <value>Прибрати вподобання</value>
+        <value>Скасувати</value>
     </data>
     <data name="Unhelpful" xml:space="preserve">
         <value>Не допомогло</value>
@@ -55,7 +55,7 @@
         <value>Не подобається</value>
     </data>
     <data name="NotUnhelpful" xml:space="preserve">
-        <value>Прибрати невподобання</value>
+        <value>Скасувати</value>
     </data>
     <data name="TypeMessage" xml:space="preserve">
         <value>Введіть ваше повідомлення...</value>

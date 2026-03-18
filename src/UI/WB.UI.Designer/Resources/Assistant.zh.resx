@@ -22,7 +22,7 @@
         <value>清除历史</value>
     </data>
     <data name="NotHelpful" xml:space="preserve">
-        <value>取消喜欢</value>
+        <value>撤销</value>
     </data>
     <data name="Helpful" xml:space="preserve">
         <value>喜欢</value>
@@ -34,7 +34,7 @@
         <value>没有帮助</value>
     </data>
     <data name="NotUnhelpful" xml:space="preserve">
-        <value>取消不喜欢</value>
+        <value>撤销</value>
     </data>
     <data name="UnhelpfulCommentTitle" xml:space="preserve">
         <value>添加评论</value>

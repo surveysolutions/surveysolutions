@@ -22,7 +22,7 @@
         <value>Effacer l'historique</value>
     </data>
     <data name="NotHelpful" xml:space="preserve">
-        <value>Ne plus aimer</value>
+        <value>Annuler</value>
     </data>
     <data name="Helpful" xml:space="preserve">
         <value>J'aime</value>
@@ -34,7 +34,7 @@
         <value>Peu utile</value>
     </data>
     <data name="NotUnhelpful" xml:space="preserve">
-        <value>Annuler je n'aime pas</value>
+        <value>Annuler</value>
     </data>
     <data name="UnhelpfulCommentTitle" xml:space="preserve">
         <value>Ajouter un commentaire</value>

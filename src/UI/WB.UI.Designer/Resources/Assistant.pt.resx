@@ -22,7 +22,7 @@
         <value>Limpar histórico</value>
     </data>
     <data name="NotHelpful" xml:space="preserve">
-        <value>Remover curtida</value>
+        <value>Desfazer</value>
     </data>
     <data name="Unhelpful" xml:space="preserve">
         <value>Não ajudou</value>
@@ -55,7 +55,7 @@
         <value>Não curtir</value>
     </data>
     <data name="NotUnhelpful" xml:space="preserve">
-        <value>Remover não curtir</value>
+        <value>Desfazer</value>
     </data>
     <data name="TypeMessage" xml:space="preserve">
         <value>Digite sua mensagem...</value>
