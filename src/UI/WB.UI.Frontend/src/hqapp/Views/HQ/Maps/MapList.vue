@@ -54,7 +54,7 @@ const query = gql`query MapsList($workspace: String!, $order: [MapsSort!], $skip
     nodes {
       fileName
       importDateUtc
-      size,
+      size
       hasDuplicateLabels
     }
   }
