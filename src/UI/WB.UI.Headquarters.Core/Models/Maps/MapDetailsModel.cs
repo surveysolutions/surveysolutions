@@ -2,7 +2,6 @@
 
 namespace WB.UI.Headquarters.Models.Maps
 {
-{
     public class MapDetailsModel
     {
         public string Id { get; set; }
