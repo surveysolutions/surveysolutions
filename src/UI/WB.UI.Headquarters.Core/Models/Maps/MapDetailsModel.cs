@@ -1,7 +1,7 @@
 ﻿using System;
-using WB.Core.BoundedContexts.Headquarters.Views.Maps;
 
 namespace WB.UI.Headquarters.Models.Maps
+{
 {
     public class MapDetailsModel
     {
@@ -36,11 +36,5 @@ namespace WB.UI.Headquarters.Models.Maps
         {
             public string Users { get; set; }
         }
-    }
-
-    public class DuplicateLabelModel
-    {
-        public string Label { get; set; }
-        public int Count { get; set; }
     }
 }

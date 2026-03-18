@@ -1,8 +1,5 @@
 ﻿using System.ComponentModel;
-using System.Data;
-using DocumentFormat.OpenXml.Drawing.Charts;
 using FluentMigrator;
-using FluentMigrator.Postgres;
 
 namespace WB.Persistence.Headquarters.Migrations.Workspace
 {
