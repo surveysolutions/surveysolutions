@@ -331,6 +331,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
                         while (shapefileReader.Read(out bool deleted, out var readFeature))
                         {
+                            if (deleted)
+                                continue;
+                            
                             AttributesTable attribs = new AttributesTable();
 
                             if (!hasDuplicates && labelColumnTitle != null && readFeature.Attributes.Exists(labelColumnTitle))
