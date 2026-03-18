@@ -336,7 +336,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                             
                             AttributesTable attribs = new AttributesTable();
 
-                            if (!hasDuplicates && labelColumnTitle != null && readFeature.Attributes.Exists(labelColumnTitle))
+                            if (labelColumnTitle != null && readFeature.Attributes.Exists(labelColumnTitle))
                             {
                                 var labelValue = readFeature.Attributes[labelColumnTitle].ToString();
 
@@ -344,7 +344,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                                 {
                                     attribs.Add(LabelFieldName, labelValue);
 
-                                    if (!checkOnUnique.Add(labelValue))
+                                    if (!hasDuplicates && !checkOnUnique.Add(labelValue))
                                     {
                                         hasDuplicates = true;
                                     }
