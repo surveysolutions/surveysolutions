@@ -30,7 +30,6 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Configs;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Utils;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
