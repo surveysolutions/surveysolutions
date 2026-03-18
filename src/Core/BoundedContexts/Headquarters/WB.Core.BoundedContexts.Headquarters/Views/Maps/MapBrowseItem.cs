@@ -48,6 +48,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Maps
             ShapesCount = source.ShapesCount;
             GeoJson = source.GeoJson;
             IsPreviewGeoJson = source.IsPreviewGeoJson;
+            HasDuplicateLabels = source.HasDuplicateLabels;
         }
     }
 }
