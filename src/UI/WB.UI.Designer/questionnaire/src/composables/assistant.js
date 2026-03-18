@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { i18n } from '../plugins/localization';
 
 export const useAssistant = () => {
     // Rate limiting: Track requests to avoid hitting limits
@@ -12,7 +13,8 @@ export const useAssistant = () => {
             if (signal.reason instanceof Error) {
                 return signal.reason;
             }
-            const reasonMessage = typeof signal.reason === 'string' ? signal.reason : 'Aborted';
+            const reasonMessage =
+                typeof signal.reason === 'string' ? signal.reason : 'Aborted';
             const error = new Error(reasonMessage);
             error.name = 'AbortError';
             return error;
@@ -46,7 +48,10 @@ export const useAssistant = () => {
         const now = Date.now();
         const timeSinceLastRequest = now - lastRequestTime;
         if (timeSinceLastRequest < MIN_REQUEST_INTERVAL) {
-            await abortAwareDelay(MIN_REQUEST_INTERVAL - timeSinceLastRequest, options.signal);
+            await abortAwareDelay(
+                MIN_REQUEST_INTERVAL - timeSinceLastRequest,
+                options.signal,
+            );
         }
         lastRequestTime = Date.now();
 
@@ -80,7 +85,11 @@ export const useAssistant = () => {
                 return { text, meta, conversationId, callLogId };
             } catch (error) {
                 // Re-throw abort errors immediately without retrying
-                if (error.name === 'AbortError' || error.name === 'CanceledError' || error.code === 'ERR_CANCELED') {
+                if (
+                    error.name === 'AbortError' ||
+                    error.name === 'CanceledError' ||
+                    error.code === 'ERR_CANCELED'
+                ) {
                     throw error;
                 }
 
@@ -135,9 +144,8 @@ export const useAssistant = () => {
                         );
                     }
                 } else {
-                    throw new Error(
-                        `Failed to connect to Assistant: ${error.message}`,
-                    );
+                    const err = new Error(i18n.t('Assistant.ConnectionError'));
+                    throw err;
                 }
             }
         }

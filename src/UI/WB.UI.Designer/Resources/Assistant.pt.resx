@@ -69,4 +69,7 @@
     <data name="Disclaimer" xml:space="preserve">
         <value>Este conteúdo foi produzido por um sistema de IA automatizado e não constitui informação autoritativa ou verificada. Pode conter erros ou omissões. Os utilizadores são responsáveis por rever, validar e exercer julgamento antes de usar.</value>
     </data>
+    <data name="ConnectionError" xml:space="preserve">
+        <value>Falha ao conectar ao assistente.</value>
+    </data>
 </root>

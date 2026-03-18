@@ -69,4 +69,7 @@
     <data name="Disclaimer" xml:space="preserve">
         <value>Acest conținut a fost produs de un sistem AI automatizat și nu constituie informații autorizate sau verificate. Poate conține erori sau omisiuni. Utilizatorii sunt responsabili pentru revizuire, validare și exercitarea judecății înainte de utilizare.</value>
     </data>
+    <data name="ConnectionError" xml:space="preserve">
+        <value>Conectarea la asistent a eșuat.</value>
+    </data>
 </root>

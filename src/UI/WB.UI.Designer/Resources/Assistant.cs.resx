@@ -69,4 +69,7 @@
     <data name="Disclaimer" xml:space="preserve">
         <value>Tento obsah byl vytvořen automatizovaným systémem AI a nepředstavuje autoritativní ani ověřené informace. Může obsahovat chyby nebo opomenutí. Uživatelé jsou odpovědní za přezkoumání, ověření a uplatnění vlastního úsudku před použitím.</value>
     </data>
+    <data name="ConnectionError" xml:space="preserve">
+        <value>Připojení k asistentovi se nezdařilo.</value>
+    </data>
 </root>

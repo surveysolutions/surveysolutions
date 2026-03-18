@@ -69,4 +69,7 @@
     <data name="Disclaimer" xml:space="preserve">
         <value>تم إنتاج هذا المحتوى بواسطة نظام ذكاء اصطناعي آلي ولا يشكل معلومات موثوقة أو مؤكدة. قد يحتوي على أخطاء أو إغفالات. يتحمل المستخدمون مسؤولية المراجعة والتحقق وإعمال الحكم قبل الاستخدام.</value>
     </data>
+    <data name="ConnectionError" xml:space="preserve">
+        <value>فشل الاتصال بالمساعد.</value>
+    </data>
 </root>

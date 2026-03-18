@@ -667,6 +667,7 @@
     "TypeMessage": "Digite sua mensagem...",
     "Title": "Assistente de IA",
     "WelcomeMessage": "Inicie uma conversa com o assistente de IA. As suas mensagens podem ser utilizadas para melhorar o produto. Não partilhe informações sensíveis ou pessoais neste chat.",
-    "Disclaimer": "Este conteúdo foi produzido por um sistema de IA automatizado e não constitui informação autoritativa ou verificada. Pode conter erros ou omissões. Os utilizadores são responsáveis por rever, validar e exercer julgamento antes de usar."
+    "Disclaimer": "Este conteúdo foi produzido por um sistema de IA automatizado e não constitui informação autoritativa ou verificada. Pode conter erros ou omissões. Os utilizadores são responsáveis por rever, validar e exercer julgamento antes de usar.",
+    "ConnectionError": "Falha ao conectar ao assistente."
   }
 }
