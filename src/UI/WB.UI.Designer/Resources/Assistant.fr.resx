@@ -64,7 +64,7 @@
         <value>Assistant IA</value>
     </data>
     <data name="WelcomeMessage" xml:space="preserve">
-        <value>Commencez une conversation avec l'assistant IA</value>
+        <value>Commencez une conversation avec l'assistant IA. Vos messages peuvent être utilisés pour améliorer le produit. Ne partagez pas d'informations sensibles ou personnelles dans ce chat.</value>
     </data>
     <data name="Disclaimer" xml:space="preserve">
         <value>Ce contenu a été produit par un système d'IA automatisé et ne constitue pas une information faisant autorité ou vérifiée. Il peut contenir des erreurs ou des omissions. Les utilisateurs sont responsables de l'examen, de la validation et du jugement avant utilisation.</value>

@@ -666,7 +666,7 @@
     "NotUnhelpful": "Hiq mospëlqimin",
     "TypeMessage": "Shkruani mesazhin tuaj...",
     "Title": "Asistenti AI",
-    "WelcomeMessage": "Filloni një bisedë me asistentin AI",
+    "WelcomeMessage": "Filloni një bisedë me asistentin AI. Mesazhet tuaja mund të përdoren për të përmirësuar produktin. Mos ndani informacione të ndjeshme ose personale në këtë chat.",
     "Disclaimer": "Ky përmbajtje u prodhua nga një sistem AI i automatizuar dhe nuk përbën informacion autoritar ose të verifikuar. Mund të përmbajë gabime ose lëshime. Përdoruesit janë përgjegjës për rishikimin, validimin dhe ushtrimin e gjykimit para përdorimit."
   }
 }

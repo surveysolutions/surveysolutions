@@ -666,7 +666,7 @@
     "NotUnhelpful": "Anulează nu îmi place",
     "TypeMessage": "Tastați mesajul dumneavoastră...",
     "Title": "Asistent IA",
-    "WelcomeMessage": "Începeți o conversație cu asistentul IA",
+    "WelcomeMessage": "Începeți o conversație cu asistentul IA. Mesajele dvs. pot fi utilizate pentru îmbunătățirea produsului. Nu partajați informații sensibile sau personale în acest chat.",
     "Disclaimer": "Acest conținut a fost produs de un sistem AI automatizat și nu constituie informații autorizate sau verificate. Poate conține erori sau omisiuni. Utilizatorii sunt responsabili pentru revizuire, validare și exercitarea judecății înainte de utilizare."
   }
 }

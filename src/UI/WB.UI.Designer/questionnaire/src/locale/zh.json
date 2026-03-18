@@ -666,7 +666,7 @@
     "NotHelpfulCommentPlaceholder": "写一条简短评论（可选）",
     "TypeMessage": "输入您的消息...",
     "Title": "AI助手",
-    "WelcomeMessage": "开始与AI助手对话",
+    "WelcomeMessage": "开始与AI助手对话。您的消息可能用于改进产品。请勿在此聊天中分享敏感或个人信息。",
     "Disclaimer": "本内容由自动化AI系统生成，不构成权威性或经过验证的信息。可能包含错误或遗漏。用户在使用前有责任进行审查、验证并做出合理判断。"
   }
 }

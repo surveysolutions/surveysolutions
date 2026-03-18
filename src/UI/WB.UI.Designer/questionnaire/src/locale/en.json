@@ -666,7 +666,7 @@
     "NotHelpfulCommentPlaceholder": "Write a short comment (optional)",
     "TypeMessage": "Type your message...",
     "Title": "AI Assistant",
-    "WelcomeMessage": "Start a conversation with the AI assistant",
+    "WelcomeMessage": "Start a conversation with the AI assistant. Your messages may be used to improve the product. Do not share sensitive or personal information in this chat.",
     "Disclaimer": "This content was produced by an automated AI system and does not constitute authoritative or verified information. It may contain errors or omissions. Users are responsible for reviewing, validating, and exercising judgment before use."
   }
 }

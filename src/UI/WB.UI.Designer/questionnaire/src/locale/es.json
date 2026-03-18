@@ -666,7 +666,7 @@
     "NotUnhelpful": "Deshacer no me gusta",
     "TypeMessage": "Escribe tu mensaje...",
     "Title": "Asistente de IA",
-    "WelcomeMessage": "Inicia una conversación con el asistente de IA",
+    "WelcomeMessage": "Inicia una conversación con el asistente de IA. Tus mensajes pueden utilizarse para mejorar el producto. No compartas información sensible o personal en este chat.",
     "Disclaimer": "Este contenido fue producido por un sistema de IA automatizado y no constituye información autorizada o verificada. Puede contener errores u omisiones. Los usuarios son responsables de revisar, validar y ejercer su criterio antes de su uso."
   }
 }
