@@ -17,6 +17,7 @@ using NetTopologySuite.IO.Esri;
 using NetTopologySuite.Operation.Union;
 using NetTopologySuite.Simplify;
 using Newtonsoft.Json;
+using NHibernate.Linq;
 using WB.Core.BoundedContexts.Headquarters.Maps;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
