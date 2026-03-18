@@ -298,14 +298,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                         item.Wkid = 4326;  //geographic coordinates Wgs84
                         item.ShapesCount = shapefileReader.RecordCount;
                         
-                        int? labelIndexOf = null;
                         string labelColumnTitle = null;
 
                         for (int i = 0; i < shapefileReader.Fields.Count; i++)
                         {
                             if (string.Equals(shapefileReader.Fields[i].Name, LabelFieldName, StringComparison.InvariantCultureIgnoreCase))
                             {
-                                labelIndexOf = i + 1;
                                 labelColumnTitle = shapefileReader.Fields[i].Name;
                                 break;
                             }
@@ -335,7 +333,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                         {
                             AttributesTable attribs = new AttributesTable();
 
-                            if (!hasDuplicates && labelIndexOf.HasValue)
+                            if (!hasDuplicates && labelColumnTitle != null && readFeature.Attributes.Exists(labelColumnTitle))
                             {
                                 var labelValue = readFeature.Attributes[labelColumnTitle].ToString();
 
