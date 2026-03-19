@@ -149,6 +149,7 @@ export default {
                     okButtonTitle: vm?.$t?.('Assistant.Send'),
                     cancelButtonTitle: vm?.$t?.('QuestionnaireEditor.Cancel'),
                     inputPlaceholder: vm?.$t?.('Assistant.UnhelpfulCommentPlaceholder'),
+                    inputRows: 8,
                     inputMaxLength: 2000,
                     draggable: true,
                     callback: (confirmed, value) => {
