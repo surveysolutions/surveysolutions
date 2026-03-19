@@ -20,7 +20,8 @@
                         <div class="form-group" style="margin-top: 10px;">
                             <label v-if="inputLabel" class="control-label">{{ inputLabel }}</label>
                             <textarea class="form-control" v-model="inputValue" :placeholder="inputPlaceholder"
-                                :rows="inputRows" :maxlength="inputMaxLength || undefined"></textarea>
+                                :rows="inputRows" :maxlength="inputMaxLength || undefined"
+                                style="resize: none;"></textarea>
                             <div v-if="inputHint" class="help-block">{{ inputHint }}</div>
                         </div>
                     </div>
