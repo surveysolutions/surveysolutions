@@ -652,7 +652,7 @@
   },
   "Assistant": {
     "ClearHistory": "Borrar historial",
-    "NotHelpful": "Ya no me gusta",
+    "NotHelpful": "Deshacer",
     "Unhelpful": "No fue útil",
     "Helpful": "Me gusta",
     "UnhelpfulCommentTitle": "Añadir un comentario",
@@ -663,7 +663,7 @@
     "NotHelpfulCommentTitle": "Añadir un comentario",
     "NotHelpfulCommentPlaceholder": "Escriba un comentario breve (opcional)",
     "Dislike": "No me gusta",
-    "NotUnhelpful": "Deshacer no me gusta",
+    "NotUnhelpful": "Deshacer",
     "TypeMessage": "Escribe tu mensaje...",
     "Title": "Asistente de IA",
     "WelcomeMessage": "Inicia una conversación con el asistente de IA. Tus mensajes pueden utilizarse para mejorar el producto. No compartas información sensible o personal en este chat.",

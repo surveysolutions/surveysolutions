@@ -652,7 +652,7 @@
   },
   "Assistant": {
     "ClearHistory": "Pastro historinë",
-    "NotHelpful": "Hiq pëlqimin",
+    "NotHelpful": "Zhbëj",
     "Unhelpful": "Nuk ndihmoi",
     "Helpful": "Pëlqej",
     "UnhelpfulCommentTitle": "Shto një koment",
@@ -663,7 +663,7 @@
     "NotHelpfulCommentTitle": "Shto një koment",
     "NotHelpfulCommentPlaceholder": "Shkruani një koment të shkurtër (opsional)",
     "Dislike": "Nuk pëlqej",
-    "NotUnhelpful": "Hiq mospëlqimin",
+    "NotUnhelpful": "Zhbëj",
     "TypeMessage": "Shkruani mesazhin tuaj...",
     "Title": "Asistenti AI",
     "WelcomeMessage": "Filloni një bisedë me asistentin AI. Mesazhet tuaja mund të përdoren për të përmirësuar produktin. Mos ndani informacione të ndjeshme ose personale në këtë chat.",

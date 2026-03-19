@@ -652,7 +652,7 @@
   },
   "Assistant": {
     "ClearHistory": "Vymazat historii",
-    "NotHelpful": "Zrušit líbí se mi",
+    "NotHelpful": "Zpět",
     "Unhelpful": "Nepomohlo",
     "Helpful": "Líbí se mi",
     "UnhelpfulCommentTitle": "Přidat komentář",
@@ -663,11 +663,11 @@
     "NotHelpfulCommentTitle": "Přidat komentář",
     "NotHelpfulCommentPlaceholder": "Napište krátký komentář (nepovinné)",
     "Dislike": "Nelíbí se mi",
-    "NotUnhelpful": "Zrušit nelíbí se mi",
+    "NotUnhelpful": "Zpět",
     "TypeMessage": "Napište svou zprávu...",
     "Title": "AI Asistent",
     "WelcomeMessage": "Začněte konverzaci s AI asistentem. Vaše zprávy mohou být použity ke zlepšení produktu. Nesdílejte citlivé nebo osobní informace v tomto chatu.",
-    "Disclaimer": "Tento obsah byl vytvořen automatizovaným systémem AI a nepředstavuje autoritativní ani ověřené informace. Může obsahovat chyby nebo opomenutí. Uživatelé jsou odpovĞdní za přezkoumání, ověření a uplatnění vlastního úsudku před použitím.",
+    "Disclaimer": "Tento obsah byl vytvořen automatizovaným systémem AI a nepředstavuje autoritativní ani ověřené informace. Může obsahovat chyby nebo opomenutí. Uživatelé jsou odpovědní za přezkoumání, ověření a uplatnění vlastního úsudku před použitím.",
     "ConnectionError": "Připojení k asistentovi se nezdařilo."
   }
 }

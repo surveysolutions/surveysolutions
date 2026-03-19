@@ -652,11 +652,11 @@
   },
   "Assistant": {
     "ClearHistory": "清除历史",
-    "NotHelpful": "取消喜欢",
+    "NotHelpful": "撤销",
     "Helpful": "喜欢",
     "Dislike": "不喜欢",
     "Unhelpful": "没有帮助",
-    "NotUnhelpful": "取消不喜欢",
+    "NotUnhelpful": "撤销",
     "UnhelpfulCommentTitle": "添加评论",
     "UnhelpfulCommentPlaceholder": "写一条简短评论（可选）",
     "UnhelpfulCommentHint": "这个回答哪里不对？",
