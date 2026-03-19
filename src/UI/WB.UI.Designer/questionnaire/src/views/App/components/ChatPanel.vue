@@ -7,7 +7,7 @@
             <div class="d-flex align-center">
                 <v-btn icon="mdi-delete-sweep" variant="text" size="medium" class="header-action-btn header-clear"
                     @click="clearHistory" :disabled="messages.length === 0" :title="$t('Assistant.ClearHistory')"
-                    style="padding-right: 10px;" />
+                    :ripple="false" style="padding-right: 10px;" />
                 <v-btn icon="mdi-close" variant="text" size="medium" class="header-action-btn header-close"
                     @click="close" />
             </div>
