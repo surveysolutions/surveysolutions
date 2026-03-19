@@ -311,18 +311,21 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                         
                         CoordinateTransformationFilter coordinateTransformationFilter = null;
                         var projection = shapefileReader.Projection;
-                        var sourceProjectionInfo = ProjectionInfo.FromEsriString(projection);
-                        if (!sourceProjectionInfo.IsLatLon)
+                        if (projection != null)
                         {
-                            var target = KnownCoordinateSystems.Geographic.World.WGS1984;
-                            coordinateTransformationFilter = new CoordinateTransformationFilter(sourceProjectionInfo, target);
+                            var sourceProjectionInfo = ProjectionInfo.FromEsriString(projection);
+                            if (!sourceProjectionInfo.IsLatLon)
+                            {
+                                var target = KnownCoordinateSystems.Geographic.World.WGS1984;
+                                coordinateTransformationFilter = new CoordinateTransformationFilter(sourceProjectionInfo, target);
 
-                            var minHeaderCoordinate = coordinateTransformationFilter.Transform(headerBounds.MinX, headerBounds.MinY);
-                            item.XMinVal = minHeaderCoordinate.X;
-                            item.YMinVal = minHeaderCoordinate.Y;
-                            var maxHeaderCoordinate = coordinateTransformationFilter.Transform(headerBounds.MaxX, headerBounds.MaxY);
-                            item.XMaxVal = maxHeaderCoordinate.X;
-                            item.YMaxVal = maxHeaderCoordinate.Y;
+                                var minHeaderCoordinate = coordinateTransformationFilter.Transform(headerBounds.MinX, headerBounds.MinY);
+                                item.XMinVal = minHeaderCoordinate.X;
+                                item.YMinVal = minHeaderCoordinate.Y;
+                                var maxHeaderCoordinate = coordinateTransformationFilter.Transform(headerBounds.MaxX, headerBounds.MaxY);
+                                item.XMaxVal = maxHeaderCoordinate.X;
+                                item.YMaxVal = maxHeaderCoordinate.Y;
+                            }
                         }
                         
                         FeatureCollection fc = new FeatureCollection();
