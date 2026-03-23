@@ -9,7 +9,7 @@ namespace WB.Persistence.Headquarters.Migrations.Workspace
     {
         public override void Up()
         {
-            var migrateSql = $@" UPDATE mapbrowseitems m
+            var migrateSql = @" UPDATE mapbrowseitems m
                 SET has_duplicate_labels = EXISTS (
                     SELECT 1
                     FROM duplicatemaplabels d
