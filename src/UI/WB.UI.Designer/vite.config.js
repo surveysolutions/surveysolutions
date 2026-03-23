@@ -201,35 +201,29 @@ function fileManagerPlugin({ sources, targets, cleanDirs }) {
     return {
         name: 'file-manager',
         options() {
-            // Delete outDir before build
             for (const dir of cleanDirs?.before ?? []) {
                 fs.rmSync(dir, { recursive: true, force: true });
             }
-            // Copy template sources
             for (const item of sources ?? []) {
-                const files = globSync(item.source);
+                const files = globSync(normalizePath(item.source)); // <-- normalize
                 fs.mkdirSync(item.destination, { recursive: true });
                 for (const file of files) {
-                    const dest = path.join(item.destination, item.name ?? path.basename(file));                    
-                    //console.log(`Copying file from ${file} to ${dest}`);
+                    const dest = path.join(item.destination, item.name ?? path.basename(file));
                     fs.copyFileSync(file, dest);
                 }
             }
         },
         closeBundle() {
-            // Copy targets and assets
             for (const item of targets ?? []) {
-                const files = globSync(item.source);
+                const files = globSync(normalizePath(item.source)); // <-- normalize
                 fs.mkdirSync(item.destination, { recursive: true });
                 for (const file of files) {
                     const dest = path.join(item.destination, item.name ?? path.basename(file));
                     if (fs.existsSync(file)) {
-                        //console.log(`Copying file from ${file} to ${dest}`);
                         fs.copyFileSync(file, dest);
                     }
                 }
             }
-            // Cleanup temp dirs
             for (const dir of cleanDirs?.after ?? []) {
                 fs.rmSync(dir, { recursive: true, force: true });
             }
