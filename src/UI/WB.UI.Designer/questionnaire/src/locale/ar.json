@@ -652,11 +652,11 @@
   },
   "Assistant": {
     "ClearHistory": "مسح السجل",
-    "NotHelpful": "إلغاء الإعجاب",
+    "NotHelpful": "تراجع",
     "Helpful": "إعجاب",
     "Dislike": "عدم الإعجاب",
     "Unhelpful": "غير مفيد",
-    "NotUnhelpful": "إلغاء عدم الإعجاب",
+    "NotUnhelpful": "تراجع",
     "UnhelpfulCommentTitle": "أضف تعليقًا",
     "UnhelpfulCommentPlaceholder": "اكتب تعليقًا قصيرًا (اختياريًا)",
     "UnhelpfulCommentHint": "ما الخطأ في هذا الجواب؟",

@@ -652,11 +652,11 @@
   },
   "Assistant": {
     "ClearHistory": "Очистить историю",
-    "NotHelpful": "Убрать лайк",
+    "NotHelpful": "Отменить",
     "Helpful": "Нравится",
     "Dislike": "Не нравится",
     "Unhelpful": "Не помогло",
-    "NotUnhelpful": "Убрать дизлайк",
+    "NotUnhelpful": "Отменить",
     "UnhelpfulCommentTitle": "Добавить комментарий",
     "UnhelpfulCommentPlaceholder": "Напишите короткий комментарий (необязательно)",
     "UnhelpfulCommentHint": "Что было не так в этом ответе?",

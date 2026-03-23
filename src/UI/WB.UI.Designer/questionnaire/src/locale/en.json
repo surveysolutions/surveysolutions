@@ -652,11 +652,11 @@
   },
   "Assistant": {
     "ClearHistory": "Clear history",
-    "NotHelpful": "Not helpful",
+    "NotHelpful": "Undo",
     "Helpful": "Helpful",
     "Dislike": "Dislike",
     "Unhelpful": "Unhelpful",
-    "NotUnhelpful": "Not unhelpful",
+    "NotUnhelpful": "Undo",
     "UnhelpfulCommentTitle": "Add a comment",
     "UnhelpfulCommentPlaceholder": "Write a short comment (optional)",
     "UnhelpfulCommentHint": "What was wrong with this answer?",
