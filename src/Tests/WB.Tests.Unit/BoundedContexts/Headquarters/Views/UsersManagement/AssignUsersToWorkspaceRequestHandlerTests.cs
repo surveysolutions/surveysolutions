@@ -208,9 +208,10 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Views.UsersManagement
                     UserIds = new[] { Id.g1 }
                 }));
 
-            // No error about SupervisorId in Remove mode
-            Assert.That(modelState["Workspaces"]?.Errors.Any(e => e.ErrorMessage.Contains("SupervisorId")),
-                Is.Not.True);
+            // No validation errors expected in Remove mode for this setup
+            Assert.That(modelState.IsValid, Is.True);
+            Assert.That(modelState["Workspaces"], Is.Not.Null);
+            Assert.That(modelState["Workspaces"].Errors, Is.Empty);
         }
 
         [Test]
