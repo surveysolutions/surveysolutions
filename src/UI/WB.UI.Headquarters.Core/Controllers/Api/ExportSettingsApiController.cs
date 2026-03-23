@@ -51,7 +51,8 @@ namespace WB.UI.Headquarters.Controllers.Api
         public ExportSettingsModel ExportSettings()
         {
             ExportSettingsModel model = new ExportSettingsModel(this.exportSettings.GetEncryptionSettings(),
-                exportSettings.GetExportRetentionSettings());
+                exportSettings.GetExportRetentionSettings(),
+                exportSettings.GetGeographyExportFormat());
             return model;
         }
 
@@ -267,6 +268,22 @@ namespace WB.UI.Headquarters.Controllers.Api
             //exportServiceApi calls to delete old exports
             await exportServiceApi.RunRetentionPolicy(exportRetentionSettings.CountToKeep ,exportRetentionSettings.DaysToKeep);
             
+            return Ok(new {sucess = true});
+        }
+
+        public class GeographyExportFormatModel
+        {
+            public GeographyExportFormat GeographyExportFormat { get; set; }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult SetGeographyExportFormat([FromBody] GeographyExportFormatModel model)
+        {
+            if (!ModelState.IsValid)
+                return Ok(new {sucess = false});
+
+            exportSettings.SetGeographyExportFormat(model.GeographyExportFormat);
             return Ok(new {sucess = true});
         }
     }

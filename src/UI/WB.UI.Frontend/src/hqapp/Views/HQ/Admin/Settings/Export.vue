@@ -145,6 +145,34 @@
         </div>
         <div class="row contain-input" data-suso="settings-page">
             <div class="col-sm-9">
+                <h2>{{ $t('Settings.GeographyExportFormat_Title') }}</h2>
+                <p>{{ $t('Settings.GeographyExportFormat_Description') }}</p>
+            </div>
+            <div class="col-sm-9">
+                <div class="block-filter">
+                    <div class="form-group">
+                        <label>
+                            <input type="radio" v-model="geographyFormatModel" :value="1" @change="saveGeographyFormat" />
+                            {{ $t('Settings.GeographyExportFormat_Wkt') }}
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="radio" v-model="geographyFormatModel" :value="2" @change="saveGeographyFormat" />
+                            {{ $t('Settings.GeographyExportFormat_GeoJson') }}
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="radio" v-model="geographyFormatModel" :value="0" @change="saveGeographyFormat" />
+                            {{ $t('Settings.GeographyExportFormat_Legacy') }}
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row contain-input" data-suso="settings-page">
+            <div class="col-sm-9">
                 <h2>{{ $t('Settings.ClearExportCache_Title') }}</h2>
                 <p>{{ $t('Settings.ClearExportCache_Description') }}</p>
             </div>
@@ -213,6 +241,7 @@ export default {
         retentionLimitQuantity: Number,
         retentionLimitInDaysCancel: Number,
         retentionLimitQuantityCancel: Number,
+        geographyExportFormat: Number,
     },
     emits: [
         'update:encryptionEnabled',
@@ -222,6 +251,7 @@ export default {
         'update:retentionLimitQuantity',
         'update:retentionLimitInDaysCancel',
         'update:retentionLimitQuantityCancel',
+        'update:geographyExportFormat',
     ],
     components: {
         Form,
@@ -283,6 +313,14 @@ export default {
             },
             set(value) {
                 this.$emit('update:retentionLimitQuantityCancel', value)
+            }
+        },
+        geographyFormatModel: {
+            get() {
+                return this.geographyExportFormat
+            },
+            set(value) {
+                this.$emit('update:geographyExportFormat', value)
             }
         },
     },
@@ -526,6 +564,11 @@ export default {
         },
         cancelInCountLimit() {
             this.inCountLimitModel = this.inCountLimitCancelModel
+        },
+        saveGeographyFormat() {
+            nextTick(() => {
+                this.$hq.ExportSettings.setGeographyExportFormat(this.geographyFormatModel)
+            })
         },
         noAction() {
             // Do nothing

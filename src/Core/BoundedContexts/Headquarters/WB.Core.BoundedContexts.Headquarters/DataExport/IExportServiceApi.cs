@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Refit;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
@@ -32,7 +33,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport
             ExternalStorageType? storageType,
             Guid? translationId,
             bool? includeMeta,
-            bool? paradataReduced);
+            bool? paradataReduced,
+            GeographyExportFormat? geographyExportFormat);
 
         [Get("/api/v1/job/status")]
         Task<DataExportStatusView> GetDataExportStatusForQuestionnaireAsync(

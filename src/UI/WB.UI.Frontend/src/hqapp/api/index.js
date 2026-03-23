@@ -621,6 +621,15 @@ class ExportSettings {
                 headers: { 'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie() },
             })
     }
+
+    setGeographyExportFormat(geographyExportFormat) {
+        return this.http({
+            method: 'post',
+            url: `${this.base}/SetGeographyExportFormat`,
+            headers: { 'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie() },
+            data: { geographyExportFormat: geographyExportFormat }
+        })
+    }
 }
 
 // var $webInterviewSettingsUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "AdminSettings", action = "WebInterviewSettings" })';
