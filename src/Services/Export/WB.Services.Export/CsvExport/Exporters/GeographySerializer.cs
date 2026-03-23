@@ -10,6 +10,7 @@ namespace WB.Services.Export.CsvExport.Exporters
     public static class GeographySerializer
     {
         private const double EarthRadiusMeters = 6378137.0;
+        private const double CoordinateEqualityTolerance = 1e-10;
 
         /// <summary>
         /// Serializes a geography answer according to the specified export format.
@@ -245,7 +246,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             if (ring.Count < 2) return ring;
             var first = ring[0];
             var last = ring[ring.Count - 1];
-            if (Math.Abs(first.x - last.x) > 1e-10 || Math.Abs(first.y - last.y) > 1e-10)
+            if (Math.Abs(first.x - last.x) > CoordinateEqualityTolerance || Math.Abs(first.y - last.y) > CoordinateEqualityTolerance)
             {
                 var closed = new List<(double x, double y)>(ring) { first };
                 return closed;
