@@ -96,12 +96,10 @@ export default {
                 return
             }
 
+            const self = this;
+
             const statusupdater = this.updateStatus
             const reloader = this.reload
-            const uploadingMessage = this.$t('Pages.Map_Uploading')
-            const uploadingErrorMessage = this.$t('Pages.Map_UploadingError')
-            const uploadingSuccess = this.$t('Pages.Map_UploadingSuccess')
-            const uploadingFileTooBig = this.$t('Pages.Map_UploadingFileTooBig')
 
             const fd = new FormData()
             var fileToUpload = this.$refs.uploader.files[0]
@@ -109,7 +107,7 @@ export default {
             var filesize = ((fileToUpload.size / 1024) / 1024).toFixed(4)
 
             if (filesize >= 1024) {
-                statusupdater(uploadingFileTooBig)
+                statusupdater(self.$t('Pages.Map_UploadingFileTooBig'))
                 return
             }
 
@@ -120,7 +118,12 @@ export default {
                 xhr() {
                     const xhr = $.ajaxSettings.xhr()
                     xhr.upload.onprogress = (e) => {
-                        statusupdater(uploadingMessage + ' ' + parseInt((e.loaded / e.total) * 100) + '%')
+                        const progress = parseInt((e.loaded / e.total) * 100)
+                        if (progress === 100) {
+                            statusupdater(self.$t('Common.Processing'))
+                        } else {
+                            statusupdater(self.$t('Pages.Map_Uploading') + ' ' + progress + '%')
+                        }
                     }
                     return xhr
                 },
@@ -130,13 +133,13 @@ export default {
                 type: 'POST',
                 success: function (data) {
                     if (!data.isSuccess)
-                        statusupdater(uploadingErrorMessage, data.errors)
+                        statusupdater(self.$t('Pages.Map_UploadingError'), data.errors)
                     else
-                        statusupdater(uploadingSuccess)
+                        statusupdater(self.$t('Pages.Map_UploadingSuccess'))
                     reloader()
                 },
                 error: function (err) {
-                    statusupdater(uploadingErrorMessage)
+                    statusupdater(self.$t('Pages.Map_UploadingError'))
                 },
             })
             this.$refs.uploader.value = ''
@@ -239,7 +242,7 @@ export default {
                     {
                         data: 'hasDuplicateLabels',
                         name: 'HasDuplicateLabels',
-                        class: 'boolean',
+                        class: 'parameters',
                         title: this.$t('Pages.MapList_HasDuplicateLabels'),
                         render(data) {
                             if (data === null || data === undefined) {
