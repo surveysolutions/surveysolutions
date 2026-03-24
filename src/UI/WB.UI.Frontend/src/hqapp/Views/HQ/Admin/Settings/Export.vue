@@ -151,12 +151,11 @@
             <div class="col-sm-9">
                 <div class="block-filter">
                     <div class="form-group">
-                        <select v-model="geographyFormatModel" class="form-control" @change="saveGeographyFormat"
-                            style="max-width: 300px">
-                            <option :value="1">{{ $t('Settings.GeographyExportFormat_Wkt') }}</option>
-                            <option :value="2">{{ $t('Settings.GeographyExportFormat_GeoJson') }}</option>
-                            <option :value="0">{{ $t('Settings.GeographyExportFormat_Legacy') }}</option>
-                        </select>
+                        <Select v-model="geographyFormatModel" :options="[
+                            { id: 1, value: $t('Settings.GeographyExportFormat_Wkt') },
+                            { id: 2, value: $t('Settings.GeographyExportFormat_GeoJson') },
+                            { id: 0, value: $t('Settings.GeographyExportFormat_Legacy') },
+                        ]" @change="saveGeographyFormat" />
                     </div>
                 </div>
             </div>
