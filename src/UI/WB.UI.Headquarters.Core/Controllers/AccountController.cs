@@ -134,6 +134,7 @@ namespace WB.UI.Headquarters.Controllers
                 {
                     this.ModelState.AddModelError(nameof(model.UserName), ErrorMessages.ApiUserIsNotAllowedToSignIn);
                 }
+            }
             else
             {
                 this.ModelState.AddModelError("InvalidCredentials", ErrorMessages.IncorrectUserNameOrPassword);
