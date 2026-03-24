@@ -319,8 +319,12 @@ namespace WB.UI.Headquarters.Controllers
                 return  NotFound();
 
             var user = await this.signInManager.UserManager.FindByNameAsync(personName);
-            if (user == null || !user.Roles.Any() || !ObservableRoles.Contains(user.Roles.First().Id))
-               return NotFound();
+            if (user == null)
+                return NotFound();
+
+            var firstRole = user.Roles.FirstOrDefault();
+            if (firstRole == null || !ObservableRoles.Contains(firstRole.Id))
+                return NotFound();
 
             //do not forget pass current user to display you are observing
             await this.SignInAsObserverAsync(personName);
