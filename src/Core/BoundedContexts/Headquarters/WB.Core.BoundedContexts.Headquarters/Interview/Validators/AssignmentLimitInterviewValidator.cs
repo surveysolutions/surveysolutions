@@ -50,15 +50,38 @@ public class AssignmentLimitInterviewValidator:
     {
         if (assignmentId is null)
             return;
-        
-        var assignment = assignmentsService.GetAssignmentWithUpgradeLock(assignmentId.Value);
-        if (assignment.WebMode != true)
+
+        // Fast unlocked pre-check.
+        // Avoids the serializing FOR UPDATE lock for the vast majority of requests.
+        var assignment = assignmentsService.GetAssignment(assignmentId.Value);
+
+        if (assignment == null || assignment.WebMode != true)
             return;
-        
-        if (assignment.InterviewsNeeded is null or > 0)
+
+        // Unlimited assignments never need the lock.
+        if (assignment.InterviewsNeeded is null)
+            return;
+
+        // Already over limit — throw immediately, no lock needed.
+        if (assignment.InterviewsNeeded <= 0)
+        {
+            cache.Evict(interviewId);
+            throw new InterviewException(CommandValidatorsMessages.AssignmentLimitReached,
+                InterviewDomainExceptionType.AssignmentLimitReached);
+        }
+
+        // Plenty of slots remaining — concurrent creation is safe, skip the lock.
+        if (assignment.InterviewsNeeded > 3)
+            return;
+
+        // 3 and less slot left: acquire FOR UPDATE and re-read to authoritatively
+        // serialize the last slot against concurrent requests.
+        var lockedAssignment = assignmentsService.GetAssignmentWithUpgradeLock(assignmentId.Value);
+        if (lockedAssignment.InterviewsNeeded is null or > 0)
             return;
 
         cache.Evict(interviewId);
-        throw new InterviewException(CommandValidatorsMessages.AssignmentLimitReached, InterviewDomainExceptionType.AssignmentLimitReached);
+        throw new InterviewException(CommandValidatorsMessages.AssignmentLimitReached,
+            InterviewDomainExceptionType.AssignmentLimitReached);
     }
 }
