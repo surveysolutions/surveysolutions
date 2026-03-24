@@ -151,11 +151,10 @@
             <div class="col-sm-9">
                 <div class="block-filter">
                     <div class="form-group">
-                        <Select v-model="geographyFormatModel" :options="[
-                            { id: 1, value: $t('Settings.GeographyExportFormat_Wkt') },
-                            { id: 2, value: $t('Settings.GeographyExportFormat_GeoJson') },
-                            { id: 0, value: $t('Settings.GeographyExportFormat_Legacy') },
-                        ]" @change="saveGeographyFormat" />
+                        <Typeahead control-id="geographyExportFormat" noSearch noClear
+                            :values="geographyFormatOptions"
+                            :value="geographyFormatValue"
+                            @selected="onGeographyFormatSelected" />
                     </div>
                 </div>
             </div>
@@ -304,13 +303,16 @@ export default {
                 this.$emit('update:retentionLimitQuantityCancel', value)
             }
         },
-        geographyFormatModel: {
-            get() {
-                return this.geographyExportFormat
-            },
-            set(value) {
-                this.$emit('update:geographyExportFormat', value)
-            }
+        geographyFormatOptions() {
+            return [
+                { key: 1, value: this.$t('Settings.GeographyExportFormat_Wkt') },
+                { key: 2, value: this.$t('Settings.GeographyExportFormat_GeoJson') },
+                { key: 0, value: this.$t('Settings.GeographyExportFormat_Legacy') },
+            ]
+        },
+        geographyFormatValue() {
+            const format = this.geographyExportFormat
+            return this.geographyFormatOptions.find(o => o.key === format) || null
         },
     },
     data() {
@@ -554,10 +556,13 @@ export default {
         cancelInCountLimit() {
             this.inCountLimitModel = this.inCountLimitCancelModel
         },
-        saveGeographyFormat() {
-            nextTick(() => {
-                this.$hq.ExportSettings.setGeographyExportFormat(this.geographyFormatModel)
-            })
+        onGeographyFormatSelected(item) {
+            if (item != null) {
+                this.$emit('update:geographyExportFormat', item.key)
+                nextTick(() => {
+                    this.$hq.ExportSettings.setGeographyExportFormat(item.key)
+                })
+            }
         },
         noAction() {
             // Do nothing

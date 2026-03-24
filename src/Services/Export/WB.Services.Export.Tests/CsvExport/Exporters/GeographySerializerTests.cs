@@ -16,35 +16,43 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
     [TestOf(typeof(GeographySerializer))]
     public class GeographySerializerTests
     {
+        private IGeographySerializer serializer = null!;
+
+        [SetUp]
+        public void SetUp()
+        {
+            serializer = new GeographySerializer();
+        }
+
         // ── Null / empty ────────────────────────────────────────────────────────
 
         [Test]
         public void Null_area_returns_empty_for_legacy()
-            => Assert.That(GeographySerializer.Serialize(null, GeometryType.Point, GeographyExportFormat.Legacy), Is.EqualTo(string.Empty));
+            => Assert.That(serializer.Serialize(null, GeometryType.Point, GeographyExportFormat.Legacy), Is.EqualTo(string.Empty));
 
         [Test]
         public void Null_area_returns_empty_for_wkt()
-            => Assert.That(GeographySerializer.Serialize(null, GeometryType.Point, GeographyExportFormat.Wkt), Is.EqualTo(string.Empty));
+            => Assert.That(serializer.Serialize(null, GeometryType.Point, GeographyExportFormat.Wkt), Is.EqualTo(string.Empty));
 
         [Test]
         public void Null_geometry_type_falls_back_to_legacy_coordinates()
         {
             var area = new Area { Coordinates = "10.5,48.2" };
-            Assert.That(GeographySerializer.Serialize(area, null, GeographyExportFormat.Wkt), Is.EqualTo("10.5,48.2"));
+            Assert.That(serializer.Serialize(area, null, GeographyExportFormat.Wkt), Is.EqualTo("10.5,48.2"));
         }
 
         [Test]
         public void Empty_coordinates_returns_empty()
         {
             var area = new Area { Coordinates = string.Empty };
-            Assert.That(GeographySerializer.Serialize(area, GeometryType.Point, GeographyExportFormat.Wkt), Is.EqualTo(string.Empty));
+            Assert.That(serializer.Serialize(area, GeometryType.Point, GeographyExportFormat.Wkt), Is.EqualTo(string.Empty));
         }
 
         [Test]
         public void Invalid_coordinates_falls_back_to_legacy_coordinates()
         {
             var area = new Area { Coordinates = "not-valid" };
-            Assert.That(GeographySerializer.Serialize(area, GeometryType.Point, GeographyExportFormat.Wkt), Is.EqualTo("not-valid"));
+            Assert.That(serializer.Serialize(area, GeometryType.Point, GeographyExportFormat.Wkt), Is.EqualTo("not-valid"));
         }
 
         // ── Legacy ──────────────────────────────────────────────────────────────
@@ -53,7 +61,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
         public void Legacy_format_returns_coordinates_string()
         {
             var area = new Area { Coordinates = "1.5,2.5;3.5,4.5" };
-            Assert.That(GeographySerializer.Serialize(area, GeometryType.Polygon, GeographyExportFormat.Legacy), Is.EqualTo("1.5,2.5;3.5,4.5"));
+            Assert.That(serializer.Serialize(area, GeometryType.Polygon, GeographyExportFormat.Legacy), Is.EqualTo("1.5,2.5;3.5,4.5"));
         }
 
         // ── WKT – Point ─────────────────────────────────────────────────────────
@@ -62,7 +70,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
         public void Wkt_point()
         {
             var area = new Area { Coordinates = "10.5,48.2" };
-            Assert.That(GeographySerializer.Serialize(area, GeometryType.Point, GeographyExportFormat.Wkt),
+            Assert.That(serializer.Serialize(area, GeometryType.Point, GeographyExportFormat.Wkt),
                 Is.EqualTo("POINT(10.5 48.2)"));
         }
 
@@ -72,7 +80,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
         public void Wkt_multipoint()
         {
             var area = new Area { Coordinates = "10.5,48.2;11,49" };
-            Assert.That(GeographySerializer.Serialize(area, GeometryType.Multipoint, GeographyExportFormat.Wkt),
+            Assert.That(serializer.Serialize(area, GeometryType.Multipoint, GeographyExportFormat.Wkt),
                 Is.EqualTo("MULTIPOINT((10.5 48.2),(11 49))"));
         }
 
@@ -82,7 +90,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
         public void Wkt_linestring()
         {
             var area = new Area { Coordinates = "10,48;11,49;12,50" };
-            Assert.That(GeographySerializer.Serialize(area, GeometryType.Polyline, GeographyExportFormat.Wkt),
+            Assert.That(serializer.Serialize(area, GeometryType.Polyline, GeographyExportFormat.Wkt),
                 Is.EqualTo("LINESTRING(10 48,11 49,12 50)"));
         }
 
@@ -92,7 +100,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
         public void Wkt_polygon_already_closed()
         {
             var area = new Area { Coordinates = "10,48;11,48;11,49;10,48" };
-            Assert.That(GeographySerializer.Serialize(area, GeometryType.Polygon, GeographyExportFormat.Wkt),
+            Assert.That(serializer.Serialize(area, GeometryType.Polygon, GeographyExportFormat.Wkt),
                 Is.EqualTo("POLYGON((10 48,11 48,11 49,10 48))"));
         }
 
@@ -100,7 +108,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
         public void Wkt_polygon_unclosed_gets_closed()
         {
             var area = new Area { Coordinates = "10,48;11,48;11,49" };
-            Assert.That(GeographySerializer.Serialize(area, GeometryType.Polygon, GeographyExportFormat.Wkt),
+            Assert.That(serializer.Serialize(area, GeometryType.Polygon, GeographyExportFormat.Wkt),
                 Is.EqualTo("POLYGON((10 48,11 48,11 49,10 48))"));
         }
 
@@ -110,7 +118,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
         public void GeoJson_point()
         {
             var area = new Area { Coordinates = "10.5,48.2" };
-            Assert.That(GeographySerializer.Serialize(area, GeometryType.Point, GeographyExportFormat.GeoJson),
+            Assert.That(serializer.Serialize(area, GeometryType.Point, GeographyExportFormat.GeoJson),
                 Is.EqualTo("{\"type\":\"Point\",\"coordinates\":[10.5,48.2]}"));
         }
 
@@ -120,7 +128,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
         public void GeoJson_multipoint()
         {
             var area = new Area { Coordinates = "10.5,48.2;11,49" };
-            Assert.That(GeographySerializer.Serialize(area, GeometryType.Multipoint, GeographyExportFormat.GeoJson),
+            Assert.That(serializer.Serialize(area, GeometryType.Multipoint, GeographyExportFormat.GeoJson),
                 Is.EqualTo("{\"type\":\"MultiPoint\",\"coordinates\":[[10.5,48.2],[11,49]]}"));
         }
 
@@ -130,7 +138,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
         public void GeoJson_linestring()
         {
             var area = new Area { Coordinates = "10,48;11,49" };
-            Assert.That(GeographySerializer.Serialize(area, GeometryType.Polyline, GeographyExportFormat.GeoJson),
+            Assert.That(serializer.Serialize(area, GeometryType.Polyline, GeographyExportFormat.GeoJson),
                 Is.EqualTo("{\"type\":\"LineString\",\"coordinates\":[[10,48],[11,49]]}"));
         }
 
@@ -140,7 +148,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
         public void GeoJson_polygon_already_closed()
         {
             var area = new Area { Coordinates = "10,48;11,48;11,49;10,48" };
-            Assert.That(GeographySerializer.Serialize(area, GeometryType.Polygon, GeographyExportFormat.GeoJson),
+            Assert.That(serializer.Serialize(area, GeometryType.Polygon, GeographyExportFormat.GeoJson),
                 Is.EqualTo("{\"type\":\"Polygon\",\"coordinates\":[[[10,48],[11,48],[11,49],[10,48]]]}"));
         }
 
@@ -148,7 +156,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
         public void GeoJson_polygon_unclosed_gets_closed()
         {
             var area = new Area { Coordinates = "10,48;11,48;11,49" };
-            Assert.That(GeographySerializer.Serialize(area, GeometryType.Polygon, GeographyExportFormat.GeoJson),
+            Assert.That(serializer.Serialize(area, GeometryType.Polygon, GeographyExportFormat.GeoJson),
                 Is.EqualTo("{\"type\":\"Polygon\",\"coordinates\":[[[10,48],[11,48],[11,49],[10,48]]]}"));
         }
     }

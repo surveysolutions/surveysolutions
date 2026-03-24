@@ -7,7 +7,7 @@ using WB.Services.Export.Questionnaire;
 
 namespace WB.Services.Export.CsvExport.Exporters
 {
-    public static class GeographySerializer
+    public class GeographySerializer : IGeographySerializer
     {
         private const double CoordinateEqualityTolerance = 1e-10;
 
@@ -18,7 +18,7 @@ namespace WB.Services.Export.CsvExport.Exporters
         /// The geometry type (Point/Polyline/Polygon/Multipoint) comes from the questionnaire question definition.
         /// Falls back to the legacy coordinates string when input is invalid or empty.
         /// </summary>
-        public static string Serialize(Area? area, GeometryType? geometryType, GeographyExportFormat format)
+        public string Serialize(Area? area, GeometryType? geometryType, GeographyExportFormat format)
         {
             if (area == null)
                 return string.Empty;
@@ -51,13 +51,13 @@ namespace WB.Services.Export.CsvExport.Exporters
         /// Parses semicolon-separated "lon,lat" pairs from the Coordinates string.
         /// Returns null on parse failure; empty array for empty/whitespace input.
         /// </summary>
-        private static (double lon, double lat)[]? ParseCoordinates(string? coordinates)
+        private static GeoCoordinate[]? ParseCoordinates(string? coordinates)
         {
             if (string.IsNullOrWhiteSpace(coordinates))
-                return Array.Empty<(double, double)>();
+                return Array.Empty<GeoCoordinate>();
 
             var parts = coordinates.Split(';');
-            var result = new (double lon, double lat)[parts.Length];
+            var result = new GeoCoordinate[parts.Length];
             for (int i = 0; i < parts.Length; i++)
             {
                 var xy = parts[i].Split(',');
@@ -67,24 +67,24 @@ namespace WB.Services.Export.CsvExport.Exporters
                     return null;
                 if (!double.TryParse(xy[1], NumberStyles.Float, CultureInfo.InvariantCulture, out double lat))
                     return null;
-                result[i] = (lon, lat);
+                result[i] = new GeoCoordinate(lon, lat);
             }
             return result;
         }
 
-        private static string FormatWktCoord(double lon, double lat)
-            => lon.ToString("G", CultureInfo.InvariantCulture) + " " + lat.ToString("G", CultureInfo.InvariantCulture);
+        private static string FormatWktCoord(GeoCoordinate c)
+            => c.Lon.ToString("G", CultureInfo.InvariantCulture) + " " + c.Lat.ToString("G", CultureInfo.InvariantCulture);
 
-        private static string FormatGeoJsonCoord(double lon, double lat)
-            => lon.ToString("G", CultureInfo.InvariantCulture) + "," + lat.ToString("G", CultureInfo.InvariantCulture);
+        private static string FormatGeoJsonCoord(GeoCoordinate c)
+            => c.Lon.ToString("G", CultureInfo.InvariantCulture) + "," + c.Lat.ToString("G", CultureInfo.InvariantCulture);
 
-        private static string ToWkt(GeometryType geometryType, (double lon, double lat)[] coords)
+        private static string ToWkt(GeometryType geometryType, GeoCoordinate[] coords)
         {
             switch (geometryType)
             {
                 case GeometryType.Point:
                     if (coords.Length < 1) return string.Empty;
-                    return $"POINT({FormatWktCoord(coords[0].lon, coords[0].lat)})";
+                    return $"POINT({FormatWktCoord(coords[0])})";
 
                 case GeometryType.Multipoint:
                     if (coords.Length == 0) return string.Empty;
@@ -93,7 +93,7 @@ namespace WB.Services.Export.CsvExport.Exporters
                     {
                         if (i > 0) mpSb.Append(',');
                         mpSb.Append('(');
-                        mpSb.Append(FormatWktCoord(coords[i].lon, coords[i].lat));
+                        mpSb.Append(FormatWktCoord(coords[i]));
                         mpSb.Append(')');
                     }
                     mpSb.Append(')');
@@ -112,13 +112,13 @@ namespace WB.Services.Export.CsvExport.Exporters
             }
         }
 
-        private static string ToGeoJson(GeometryType geometryType, (double lon, double lat)[] coords)
+        private static string ToGeoJson(GeometryType geometryType, GeoCoordinate[] coords)
         {
             switch (geometryType)
             {
                 case GeometryType.Point:
                     if (coords.Length < 1) return string.Empty;
-                    return $"{{\"type\":\"Point\",\"coordinates\":[{FormatGeoJsonCoord(coords[0].lon, coords[0].lat)}]}}";
+                    return $"{{\"type\":\"Point\",\"coordinates\":[{FormatGeoJsonCoord(coords[0])}]}}";
 
                 case GeometryType.Multipoint:
                     if (coords.Length == 0) return string.Empty;
@@ -126,7 +126,7 @@ namespace WB.Services.Export.CsvExport.Exporters
                     for (int i = 0; i < coords.Length; i++)
                     {
                         if (i > 0) mpSb.Append(',');
-                        mpSb.Append($"[{FormatGeoJsonCoord(coords[i].lon, coords[i].lat)}]");
+                        mpSb.Append($"[{FormatGeoJsonCoord(coords[i])}]");
                     }
                     mpSb.Append("]}");
                     return mpSb.ToString();
@@ -144,35 +144,35 @@ namespace WB.Services.Export.CsvExport.Exporters
             }
         }
 
-        private static string FormatWktCoordList((double lon, double lat)[] points)
+        private static string FormatWktCoordList(GeoCoordinate[] points)
         {
             var parts = new string[points.Length];
             for (int i = 0; i < points.Length; i++)
-                parts[i] = FormatWktCoord(points[i].lon, points[i].lat);
+                parts[i] = FormatWktCoord(points[i]);
             return string.Join(",", parts);
         }
 
-        private static string FormatGeoJsonCoordArray((double lon, double lat)[] points)
+        private static string FormatGeoJsonCoordArray(GeoCoordinate[] points)
         {
             var sb = new StringBuilder("[");
             for (int i = 0; i < points.Length; i++)
             {
                 if (i > 0) sb.Append(',');
-                sb.Append($"[{FormatGeoJsonCoord(points[i].lon, points[i].lat)}]");
+                sb.Append($"[{FormatGeoJsonCoord(points[i])}]");
             }
             sb.Append(']');
             return sb.ToString();
         }
 
-        private static (double lon, double lat)[] EnsureClosed((double lon, double lat)[] ring)
+        private static GeoCoordinate[] EnsureClosed(GeoCoordinate[] ring)
         {
             if (ring.Length < 2) return ring;
             var first = ring[0];
             var last = ring[ring.Length - 1];
-            if (Math.Abs(first.lon - last.lon) > CoordinateEqualityTolerance ||
-                Math.Abs(first.lat - last.lat) > CoordinateEqualityTolerance)
+            if (Math.Abs(first.Lon - last.Lon) > CoordinateEqualityTolerance ||
+                Math.Abs(first.Lat - last.Lat) > CoordinateEqualityTolerance)
             {
-                var closed = new (double lon, double lat)[ring.Length + 1];
+                var closed = new GeoCoordinate[ring.Length + 1];
                 Array.Copy(ring, closed, ring.Length);
                 closed[ring.Length] = first;
                 return closed;

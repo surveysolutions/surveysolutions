@@ -13,6 +13,13 @@ namespace WB.Services.Export.CsvExport.Exporters
     {
         private static readonly CultureInfo ExportCulture = CultureInfo.InvariantCulture;
 
+        private readonly IGeographySerializer geographySerializer;
+
+        public ExportQuestionService(IGeographySerializer geographySerializer)
+        {
+            this.geographySerializer = geographySerializer;
+        }
+
         public string[] GetExportedQuestion(InterviewEntity? question, ExportedQuestionHeaderItem header,
             GeographyExportFormat geographyExportFormat = GeographyExportFormat.Wkt)
         {
@@ -85,7 +92,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             {
                 return new[]
                 {
-                    GeographySerializer.Serialize(areaQuestion, header.GeometryType, geographyExportFormat),
+                    geographySerializer.Serialize(areaQuestion, header.GeometryType, geographyExportFormat),
                     areaQuestion.AreaSize?.ToString(ExportCulture) ?? string.Empty,
                     areaQuestion.Length?.ToString(ExportCulture) ?? string.Empty,
                     areaQuestion.NumberOfPoints?.ToString(ExportCulture) ?? string.Empty,

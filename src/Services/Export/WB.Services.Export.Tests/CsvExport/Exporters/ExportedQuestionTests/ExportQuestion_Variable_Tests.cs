@@ -24,7 +24,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters.ExportedQuestionTests
                 VariableType = variableType,
             };
 
-            var exportService = new ExportQuestionService();
+            var exportService = new ExportQuestionService(new GeographySerializer());
 
             var exportedVariable = exportService.GetExportedVariable(variable, headerItem, false);
 
@@ -44,7 +44,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters.ExportedQuestionTests
                 VariableType = variableType,
             };
 
-            var exportService = new ExportQuestionService();
+            var exportService = new ExportQuestionService(new GeographySerializer());
 
             var exportedVariable = exportService.GetExportedVariable(variable, headerItem, true);
 
@@ -62,7 +62,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters.ExportedQuestionTests
                 VariableType = VariableType.Double
             };
 
-            var exportService = new ExportQuestionService();
+            var exportService = new ExportQuestionService(new GeographySerializer());
 
             var exportedVariable = exportService.GetExportedVariable(variable, headerItem, false);
 
@@ -79,7 +79,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters.ExportedQuestionTests
                 VariableType = VariableType.DateTime
             };
 
-            var exportService = new ExportQuestionService();
+            var exportService = new ExportQuestionService(new GeographySerializer());
 
             var exportedVariable = exportService.GetExportedVariable(dateTime, headerItem, false);
 
@@ -100,7 +100,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters.ExportedQuestionTests
                 VariableType = variableType,
             };
 
-            var exportService = new ExportQuestionService();
+            var exportService = new ExportQuestionService(new GeographySerializer());
 
             var exportedVariable = exportService.GetExportedVariable(variable, headerItem, false);
 
