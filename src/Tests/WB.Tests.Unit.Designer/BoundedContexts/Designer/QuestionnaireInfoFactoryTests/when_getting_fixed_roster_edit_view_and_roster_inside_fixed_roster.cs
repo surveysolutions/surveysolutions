@@ -14,7 +14,7 @@ using WB.Core.GenericSubdomains.Portable;
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFactoryTests
 {
     // Regression test for: Source question does not show up in the dropdown in nested roster
-    // https://github.com/surveysolutions/surveysolutions/issues/XXXX
+    // https://github.com/surveysolutions/surveysolutions/issues/4235
     // Scenario:
     //   1. Fixed roster `roster1`
     //   2. Numeric integer question `num` inside `roster1`
