@@ -76,9 +76,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             var assignment = this.assignmentsAccessor.Query(_ => _.Where(a => a.Id == id)).SingleOrDefault();
             if (assignment == null) return null;
 
-            if (this.sessionProvider.Session == null)
-                throw new InvalidOperationException("Session is not available. Upgrade lock cannot be acquired.");
-
             // Acquire a row-level write lock (SELECT ... FOR UPDATE) and reload entity state
             // to prevent concurrent creation of interviews for size-limited CAWI assignments.
             this.sessionProvider.Session.Refresh(assignment, LockMode.Upgrade);

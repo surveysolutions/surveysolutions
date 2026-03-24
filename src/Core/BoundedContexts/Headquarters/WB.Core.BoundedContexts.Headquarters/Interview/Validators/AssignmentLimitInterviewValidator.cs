@@ -77,7 +77,7 @@ public class AssignmentLimitInterviewValidator:
         // 3 and less slot left: acquire FOR UPDATE and re-read to authoritatively
         // serialize the last slot against concurrent requests.
         var lockedAssignment = assignmentsService.GetAssignmentWithUpgradeLock(assignmentId.Value);
-        if (lockedAssignment.InterviewsNeeded is null or > 0)
+        if (lockedAssignment == null || lockedAssignment.InterviewsNeeded is null or > 0)
             return;
 
         cache.Evict(interviewId);
