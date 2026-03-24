@@ -99,20 +99,21 @@ namespace WB.UI.Headquarters.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> LogOn(LogOnModel model, string returnUrl)
         {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-            
             this.ViewBag.ActivePage = MenuItem.Logon;
             this.ViewBag.HasCompanyLogo = this.appSettingsStorage.GetById(CompanyLogo.CompanyLogoStorageKey) != null;
             returnUrl = !string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl)
                 ? returnUrl
                 : null;
-            
+            this.ViewBag.ReturnUrl = returnUrl;
+
             var isCaptchaRequired = this.captchaService.ShouldShowCaptcha(model.UserName);
             model.RequireCaptcha = isCaptchaRequired;
-            
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
             if (isCaptchaRequired && !await this.captchaProvider.IsCaptchaValid(Request))
             {
                 this.ModelState.AddModelError("InvalidCaptcha", ErrorMessages.PleaseFillCaptcha);
@@ -133,7 +134,6 @@ namespace WB.UI.Headquarters.Controllers
                 {
                     this.ModelState.AddModelError(nameof(model.UserName), ErrorMessages.ApiUserIsNotAllowedToSignIn);
                 }
-            }
             else
             {
                 this.ModelState.AddModelError("InvalidCredentials", ErrorMessages.IncorrectUserNameOrPassword);
