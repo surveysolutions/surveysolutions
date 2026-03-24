@@ -151,22 +151,12 @@
             <div class="col-sm-9">
                 <div class="block-filter">
                     <div class="form-group">
-                        <label>
-                            <input type="radio" v-model="geographyFormatModel" :value="1" @change="saveGeographyFormat" />
-                            {{ $t('Settings.GeographyExportFormat_Wkt') }}
-                        </label>
-                    </div>
-                    <div class="form-group">
-                        <label>
-                            <input type="radio" v-model="geographyFormatModel" :value="2" @change="saveGeographyFormat" />
-                            {{ $t('Settings.GeographyExportFormat_GeoJson') }}
-                        </label>
-                    </div>
-                    <div class="form-group">
-                        <label>
-                            <input type="radio" v-model="geographyFormatModel" :value="0" @change="saveGeographyFormat" />
-                            {{ $t('Settings.GeographyExportFormat_Legacy') }}
-                        </label>
+                        <select v-model="geographyFormatModel" class="form-control" @change="saveGeographyFormat"
+                            style="max-width: 300px">
+                            <option :value="1">{{ $t('Settings.GeographyExportFormat_Wkt') }}</option>
+                            <option :value="2">{{ $t('Settings.GeographyExportFormat_GeoJson') }}</option>
+                            <option :value="0">{{ $t('Settings.GeographyExportFormat_Legacy') }}</option>
+                        </select>
                     </div>
                 </div>
             </div>

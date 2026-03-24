@@ -85,7 +85,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             {
                 return new[]
                 {
-                    GeographySerializer.Serialize(areaQuestion.Geometry, areaQuestion.Coordinates, geographyExportFormat),
+                    GeographySerializer.Serialize(areaQuestion, geographyExportFormat),
                     areaQuestion.AreaSize?.ToString(ExportCulture) ?? string.Empty,
                     areaQuestion.Length?.ToString(ExportCulture) ?? string.Empty,
                     areaQuestion.NumberOfPoints?.ToString(ExportCulture) ?? string.Empty,
