@@ -7,7 +7,9 @@ import _ from 'lodash';
 export const useRosterStore = defineStore('roster', {
     state: () => ({
         roster: {},
-        initialRoster: {}
+        initialRoster: {},
+        questionnaireId: null,
+        rosterId: null
     }),
     getters: {
         getRoster: state => state.roster,
@@ -19,6 +21,7 @@ export const useRosterStore = defineStore('roster', {
             emitter.on('rosterUpdated', this.rosterUpdated);
             emitter.on('rosterDeleted', this.rosterDeleted);
             emitter.on('questionDeleted', this.questionDeleted);
+            emitter.on('questionAdded', this.questionAdded);
         },
         rosterUpdated(payload) {
             if (this.roster.itemId === payload.roster.itemId) {
@@ -37,7 +40,20 @@ export const useRosterStore = defineStore('roster', {
             //notLinkedMultiOptionQuestions
             //numericIntegerTitles
         },
+        async questionAdded(payload) {
+            if (!this.questionnaireId || !this.rosterId) return;
+
+            const data = await getRoster(this.questionnaireId, this.rosterId);
+            if (!data) return;
+
+            this.roster.numericIntegerQuestions = data.numericIntegerQuestions;
+            this.roster.numericIntegerTitles = data.numericIntegerTitles;
+            this.roster.textListsQuestions = data.textListsQuestions;
+            this.roster.notLinkedMultiOptionQuestions = data.notLinkedMultiOptionQuestions;
+        },
         async fetchRosterData(questionnaireId, rosterId) {
+            this.questionnaireId = questionnaireId;
+            this.rosterId = rosterId;
             const data = await getRoster(questionnaireId, rosterId);
             this.setRosterData(data);
         },
@@ -50,6 +66,8 @@ export const useRosterStore = defineStore('roster', {
         clear() {
             this.roster = {};
             this.initialRoster = {};
+            this.questionnaireId = null;
+            this.rosterId = null;
         },
 
         discardChanges() {
