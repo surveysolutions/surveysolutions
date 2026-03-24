@@ -133,10 +133,10 @@
     <value>დაშიფვრის ექსპორტი</value>
   </data>
   <data name="GeographyExportFormat_Title" xml:space="preserve">
-    <value>Geography export format</value>
+    <value>გეოგრაფიის ექსპორტის ფორმატი</value>
   </data>
   <data name="GeographyExportFormat_Description" xml:space="preserve">
-    <value>Select how geography (area) question answers are exported.</value>
+    <value>აირჩიეთ გეოგრაფიული (ტერიტორია) კითხვებზე პასუხების ექსპორტის ფორმატი.</value>
   </data>
   <data name="GeographyExportFormat_Wkt" xml:space="preserve">
     <value>WKT (Well-Known Text)</value>
@@ -145,7 +145,7 @@
     <value>GeoJSON</value>
   </data>
   <data name="GeographyExportFormat_Legacy" xml:space="preserve">
-    <value>Legacy (serialized coordinates)</value>
+    <value>მემკვიდრეობა (სერიალიზებული კოორდინატები)</value>
   </data>
   <data name="ExportEncryptionSettings" xml:space="preserve">
     <value>დაშიფვრის ექსპორტის პარამეტრები</value>

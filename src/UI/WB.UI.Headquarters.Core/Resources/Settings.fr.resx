@@ -121,10 +121,10 @@
     <value>Exporter le cryptage</value>
   </data>
   <data name="GeographyExportFormat_Title" xml:space="preserve">
-    <value>Geography export format</value>
+    <value>Format d'exportation géographique</value>
   </data>
   <data name="GeographyExportFormat_Description" xml:space="preserve">
-    <value>Select how geography (area) question answers are exported.</value>
+    <value>Sélectionnez le format d'exportation des réponses aux questions géographiques (zone).</value>
   </data>
   <data name="GeographyExportFormat_Wkt" xml:space="preserve">
     <value>WKT (Well-Known Text)</value>
@@ -133,7 +133,7 @@
     <value>GeoJSON</value>
   </data>
   <data name="GeographyExportFormat_Legacy" xml:space="preserve">
-    <value>Legacy (serialized coordinates)</value>
+    <value>Héritage (coordonnées sérialisées)</value>
   </data>
   <data name="ClearExportCache_Title" xml:space="preserve">
     <value>Effacer le cache d'exportation</value>

@@ -1,49 +1,24 @@
 using System;
 using System.Globalization;
 using System.Text;
-using Newtonsoft.Json;
 using WB.Services.Export.Interview.Entities;
 using WB.Services.Export.Models;
+using WB.Services.Export.Questionnaire;
 
 namespace WB.Services.Export.CsvExport.Exporters
 {
-    /// <summary>
-    /// Esri JSON geometry model. Used for geometry type and structure detection only.
-    /// Actual WGS84 coordinates are sourced from <see cref="Area.Coordinates"/>.
-    /// </summary>
-    public class EsriGeometry
-    {
-        [JsonProperty("x")]
-        public double? X { get; set; }
-
-        [JsonProperty("y")]
-        public double? Y { get; set; }
-
-        /// <summary>Points array for Multipoint. Each element is [x, y, ...].</summary>
-        [JsonProperty("points")]
-        public double[][]? Points { get; set; }
-
-        /// <summary>Paths array for Polyline. Each path is an array of [x, y, ...] points.</summary>
-        [JsonProperty("paths")]
-        public double[][][]? Paths { get; set; }
-
-        /// <summary>Rings array for Polygon. Each ring is an array of [x, y, ...] points.</summary>
-        [JsonProperty("rings")]
-        public double[][][]? Rings { get; set; }
-    }
-
     public static class GeographySerializer
     {
         private const double CoordinateEqualityTolerance = 1e-10;
 
         /// <summary>
         /// Serializes a geography answer according to the specified export format.
-        /// WGS84 coordinates are sourced from <paramref name="area"/>.Coordinates
-        /// (semicolon-separated "lon,lat" pairs); <paramref name="area"/>.Geometry (Esri JSON)
-        /// is used only for geometry type and structure.
+        /// WGS84 coordinates are parsed from <paramref name="area"/>.Coordinates
+        /// (semicolon-separated "lon,lat" pairs produced by GeometryHelper.GetProjectedCoordinates).
+        /// The geometry type (Point/Polyline/Polygon/Multipoint) comes from the questionnaire question definition.
         /// Falls back to the legacy coordinates string when input is invalid or empty.
         /// </summary>
-        public static string Serialize(Area? area, GeographyExportFormat format)
+        public static string Serialize(Area? area, GeometryType? geometryType, GeographyExportFormat format)
         {
             if (area == null)
                 return string.Empty;
@@ -55,28 +30,21 @@ namespace WB.Services.Export.CsvExport.Exporters
             if (coords == null || coords.Length == 0)
                 return area.Coordinates ?? string.Empty;
 
-            if (!string.IsNullOrWhiteSpace(area.Geometry))
+            if (geometryType == null)
+                return area.Coordinates ?? string.Empty;
+
+            try
             {
-                try
-                {
-                    var geometry = JsonConvert.DeserializeObject<EsriGeometry>(area.Geometry);
-                    if (geometry != null)
-                    {
-                        var result = format == GeographyExportFormat.Wkt
-                            ? ToWkt(geometry, coords)
-                            : ToGeoJson(geometry, coords);
+                var result = format == GeographyExportFormat.Wkt
+                    ? ToWkt(geometryType.Value, coords)
+                    : ToGeoJson(geometryType.Value, coords);
 
-                        if (!string.IsNullOrEmpty(result))
-                            return result;
-                    }
-                }
-                catch
-                {
-                    // fall through to legacy
-                }
+                return string.IsNullOrEmpty(result) ? (area.Coordinates ?? string.Empty) : result;
             }
-
-            return area.Coordinates ?? string.Empty;
+            catch
+            {
+                return area.Coordinates ?? string.Empty;
+            }
         }
 
         /// <summary>
@@ -110,187 +78,73 @@ namespace WB.Services.Export.CsvExport.Exporters
         private static string FormatGeoJsonCoord(double lon, double lat)
             => lon.ToString("G", CultureInfo.InvariantCulture) + "," + lat.ToString("G", CultureInfo.InvariantCulture);
 
-        private static string ToWkt(EsriGeometry geometry, (double lon, double lat)[] coords)
+        private static string ToWkt(GeometryType geometryType, (double lon, double lat)[] coords)
         {
-            // Point
-            if (geometry.X.HasValue && geometry.Y.HasValue)
+            switch (geometryType)
             {
-                if (coords.Length < 1) return string.Empty;
-                return $"POINT({FormatWktCoord(coords[0].lon, coords[0].lat)})";
-            }
+                case GeometryType.Point:
+                    if (coords.Length < 1) return string.Empty;
+                    return $"POINT({FormatWktCoord(coords[0].lon, coords[0].lat)})";
 
-            // Multipoint
-            if (geometry.Points != null)
-            {
-                if (coords.Length == 0) return string.Empty;
-                var sb = new StringBuilder("MULTIPOINT(");
-                for (int i = 0; i < coords.Length; i++)
-                {
-                    if (i > 0) sb.Append(',');
-                    sb.Append('(');
-                    sb.Append(FormatWktCoord(coords[i].lon, coords[i].lat));
-                    sb.Append(')');
-                }
-                sb.Append(')');
-                return sb.ToString();
-            }
-
-            // Polyline
-            if (geometry.Paths is { Length: > 0 })
-            {
-                var pathCoords = SplitByPartCounts(coords, geometry.Paths);
-                if (pathCoords == null) return string.Empty;
-
-                if (pathCoords.Length == 1)
-                {
-                    return "LINESTRING(" + FormatWktRing(pathCoords[0]) + ")";
-                }
-                else
-                {
-                    var sb = new StringBuilder("MULTILINESTRING(");
-                    for (int i = 0; i < pathCoords.Length; i++)
+                case GeometryType.Multipoint:
+                    if (coords.Length == 0) return string.Empty;
+                    var mpSb = new StringBuilder("MULTIPOINT(");
+                    for (int i = 0; i < coords.Length; i++)
                     {
-                        if (i > 0) sb.Append(',');
-                        sb.Append('(');
-                        sb.Append(FormatWktRing(pathCoords[i]));
-                        sb.Append(')');
+                        if (i > 0) mpSb.Append(',');
+                        mpSb.Append('(');
+                        mpSb.Append(FormatWktCoord(coords[i].lon, coords[i].lat));
+                        mpSb.Append(')');
                     }
-                    sb.Append(')');
-                    return sb.ToString();
-                }
+                    mpSb.Append(')');
+                    return mpSb.ToString();
+
+                case GeometryType.Polyline:
+                    if (coords.Length == 0) return string.Empty;
+                    return "LINESTRING(" + FormatWktCoordList(coords) + ")";
+
+                case GeometryType.Polygon:
+                    if (coords.Length < 2) return string.Empty;
+                    return "POLYGON((" + FormatWktCoordList(EnsureClosed(coords)) + "))";
+
+                default:
+                    return string.Empty;
             }
-
-            // Polygon
-            if (geometry.Rings is { Length: > 0 })
-            {
-                var ringCoords = SplitByPartCounts(coords, geometry.Rings);
-                if (ringCoords == null) return string.Empty;
-
-                if (ringCoords.Length == 1)
-                {
-                    return "POLYGON((" + FormatWktRing(EnsureClosed(ringCoords[0])) + "))";
-                }
-                else
-                {
-                    var sb = new StringBuilder("MULTIPOLYGON(");
-                    for (int i = 0; i < ringCoords.Length; i++)
-                    {
-                        if (i > 0) sb.Append(',');
-                        sb.Append("((");
-                        sb.Append(FormatWktRing(EnsureClosed(ringCoords[i])));
-                        sb.Append("))");
-                    }
-                    sb.Append(')');
-                    return sb.ToString();
-                }
-            }
-
-            return string.Empty;
         }
 
-        private static string ToGeoJson(EsriGeometry geometry, (double lon, double lat)[] coords)
+        private static string ToGeoJson(GeometryType geometryType, (double lon, double lat)[] coords)
         {
-            // Point
-            if (geometry.X.HasValue && geometry.Y.HasValue)
+            switch (geometryType)
             {
-                if (coords.Length < 1) return string.Empty;
-                return $"{{\"type\":\"Point\",\"coordinates\":[{FormatGeoJsonCoord(coords[0].lon, coords[0].lat)}]}}";
-            }
+                case GeometryType.Point:
+                    if (coords.Length < 1) return string.Empty;
+                    return $"{{\"type\":\"Point\",\"coordinates\":[{FormatGeoJsonCoord(coords[0].lon, coords[0].lat)}]}}";
 
-            // Multipoint
-            if (geometry.Points != null)
-            {
-                if (coords.Length == 0) return string.Empty;
-                var sb = new StringBuilder("{\"type\":\"MultiPoint\",\"coordinates\":[");
-                for (int i = 0; i < coords.Length; i++)
-                {
-                    if (i > 0) sb.Append(',');
-                    sb.Append($"[{FormatGeoJsonCoord(coords[i].lon, coords[i].lat)}]");
-                }
-                sb.Append("]}");
-                return sb.ToString();
-            }
-
-            // Polyline
-            if (geometry.Paths is { Length: > 0 })
-            {
-                var pathCoords = SplitByPartCounts(coords, geometry.Paths);
-                if (pathCoords == null) return string.Empty;
-
-                if (pathCoords.Length == 1)
-                {
-                    return "{\"type\":\"LineString\",\"coordinates\":" + FormatGeoJsonRing(pathCoords[0]) + "}";
-                }
-                else
-                {
-                    var sb = new StringBuilder("{\"type\":\"MultiLineString\",\"coordinates\":[");
-                    for (int i = 0; i < pathCoords.Length; i++)
+                case GeometryType.Multipoint:
+                    if (coords.Length == 0) return string.Empty;
+                    var mpSb = new StringBuilder("{\"type\":\"MultiPoint\",\"coordinates\":[");
+                    for (int i = 0; i < coords.Length; i++)
                     {
-                        if (i > 0) sb.Append(',');
-                        sb.Append(FormatGeoJsonRing(pathCoords[i]));
+                        if (i > 0) mpSb.Append(',');
+                        mpSb.Append($"[{FormatGeoJsonCoord(coords[i].lon, coords[i].lat)}]");
                     }
-                    sb.Append("]}");
-                    return sb.ToString();
-                }
+                    mpSb.Append("]}");
+                    return mpSb.ToString();
+
+                case GeometryType.Polyline:
+                    if (coords.Length == 0) return string.Empty;
+                    return "{\"type\":\"LineString\",\"coordinates\":" + FormatGeoJsonCoordArray(coords) + "}";
+
+                case GeometryType.Polygon:
+                    if (coords.Length < 2) return string.Empty;
+                    return "{\"type\":\"Polygon\",\"coordinates\":[" + FormatGeoJsonCoordArray(EnsureClosed(coords)) + "]}";
+
+                default:
+                    return string.Empty;
             }
-
-            // Polygon
-            if (geometry.Rings is { Length: > 0 })
-            {
-                var ringCoords = SplitByPartCounts(coords, geometry.Rings);
-                if (ringCoords == null) return string.Empty;
-
-                if (ringCoords.Length == 1)
-                {
-                    return "{\"type\":\"Polygon\",\"coordinates\":[" + FormatGeoJsonRing(EnsureClosed(ringCoords[0])) + "]}";
-                }
-                else
-                {
-                    var sb = new StringBuilder("{\"type\":\"MultiPolygon\",\"coordinates\":[");
-                    for (int i = 0; i < ringCoords.Length; i++)
-                    {
-                        if (i > 0) sb.Append(',');
-                        sb.Append('[');
-                        sb.Append(FormatGeoJsonRing(EnsureClosed(ringCoords[i])));
-                        sb.Append(']');
-                    }
-                    sb.Append("]}");
-                    return sb.ToString();
-                }
-            }
-
-            return string.Empty;
         }
 
-        /// <summary>
-        /// Splits flat WGS84 coordinate array into segments using point counts from Esri JSON parts
-        /// (rings or paths). Returns null if total count doesn't match the flat coordinate count.
-        /// </summary>
-        private static (double lon, double lat)[][]? SplitByPartCounts(
-            (double lon, double lat)[] coords,
-            double[][][] parts)
-        {
-            int total = 0;
-            foreach (var part in parts)
-                total += part.Length;
-
-            if (total != coords.Length)
-                return null;
-
-            var result = new (double lon, double lat)[parts.Length][];
-            int offset = 0;
-            for (int i = 0; i < parts.Length; i++)
-            {
-                int count = parts[i].Length;
-                var segment = new (double lon, double lat)[count];
-                Array.Copy(coords, offset, segment, 0, count);
-                result[i] = segment;
-                offset += count;
-            }
-            return result;
-        }
-
-        private static string FormatWktRing((double lon, double lat)[] points)
+        private static string FormatWktCoordList((double lon, double lat)[] points)
         {
             var parts = new string[points.Length];
             for (int i = 0; i < points.Length; i++)
@@ -298,7 +152,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             return string.Join(",", parts);
         }
 
-        private static string FormatGeoJsonRing((double lon, double lat)[] points)
+        private static string FormatGeoJsonCoordArray((double lon, double lat)[] points)
         {
             var sb = new StringBuilder("[");
             for (int i = 0; i < points.Length; i++)

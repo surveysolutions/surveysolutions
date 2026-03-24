@@ -121,10 +121,10 @@
     <value>Шифровать экспортируемые данные</value>
   </data>
   <data name="GeographyExportFormat_Title" xml:space="preserve">
-    <value>Geography export format</value>
+    <value>Формат экспорта географии</value>
   </data>
   <data name="GeographyExportFormat_Description" xml:space="preserve">
-    <value>Select how geography (area) question answers are exported.</value>
+    <value>Выберите формат экспорта ответов на вопросы о географии (области).</value>
   </data>
   <data name="GeographyExportFormat_Wkt" xml:space="preserve">
     <value>WKT (Well-Known Text)</value>
@@ -133,7 +133,7 @@
     <value>GeoJSON</value>
   </data>
   <data name="GeographyExportFormat_Legacy" xml:space="preserve">
-    <value>Legacy (serialized coordinates)</value>
+    <value>Устаревший (сериализованные координаты)</value>
   </data>
   <data name="ClearExportCache_Title" xml:space="preserve">
     <value>Удалить экспортный кэш</value>
