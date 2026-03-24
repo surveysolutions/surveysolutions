@@ -74,11 +74,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
         public void should_return_grouped_list_of_text_list_questions_containing_list() =>
             result.TextListsQuestions.Should().Contain(x => x.Id == listId.FormatGuid());
 
-        private static IQuestion GetQuestion(Guid questionId)
-        {
-            return questionnaireView.Find<IQuestion>(questionId);
-        }
-
         private static QuestionnaireInfoFactory factory;
         private static NewEditRosterView result;
         private static QuestionnaireDocument questionnaireView;
