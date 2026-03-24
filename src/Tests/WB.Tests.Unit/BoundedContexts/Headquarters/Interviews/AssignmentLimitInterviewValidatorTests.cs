@@ -122,17 +122,26 @@ public class AssignmentLimitInterviewValidatorTests
     [Test]
     public void when_one_slot_left_and_lock_reveals_slot_taken_should_throw()
     {
-        // Pre-lock read: 1 slot remaining (race condition scenario)
-        var assignmentBeforeLock = Create.Entity.Assignment(id: 9, quantity: 1, webMode: true);
-
-        // Post-lock read: slot was taken by a concurrent request (InterviewsNeeded == 0)
-        var assignmentAfterLock = Create.Entity.Assignment(id: 9, quantity: 1, webMode: true,
-            interviewSummary: new InterviewSummary[] { Create.Entity.InterviewSummary(Guid.NewGuid()) });
+        // Single assignment instance to mimic NHibernate 1st-level cache behavior.
+        // Pre-lock read: 1 slot remaining (race condition scenario).
+        var assignment = Create.Entity.Assignment(
+            id: 9,
+            quantity: 1,
+            webMode: true,
+            interviewSummary: Array.Empty<InterviewSummary>());
 
         var mockAssignmentsService = new Mock<IAssignmentsService>();
-        mockAssignmentsService.Setup(s => s.GetAssignment(9)).Returns(assignmentBeforeLock);
-        mockAssignmentsService.Setup(s => s.GetAssignmentWithUpgradeLock(9)).Returns(assignmentAfterLock);
 
+        // First read (without lock) returns the assignment with 1 slot remaining.
+        mockAssignmentsService.Setup(s => s.GetAssignment(9)).Returns(assignment);
+
+        // Second read (with upgrade lock) returns the same instance, but with the last slot taken.
+        mockAssignmentsService.Setup(s => s.GetAssignmentWithUpgradeLock(9))
+            .Returns(() =>
+            {
+                assignment.InterviewSummaries = new[] { Create.Entity.InterviewSummary(Guid.NewGuid()) };
+                return assignment;
+            });
         var validator = Create.Service.AssignmentLimitInterviewValidator(
             mockAssignmentsService.Object,
             Mock.Of<IAggregateRootPrototypeService>());
