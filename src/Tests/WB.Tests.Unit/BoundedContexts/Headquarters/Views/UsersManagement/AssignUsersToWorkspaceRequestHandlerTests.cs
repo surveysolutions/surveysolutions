@@ -162,6 +162,62 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Views.UsersManagement
         }
         
         [Test]
+        public async Task should_return_error_when_interviewer_assigned_workspace_without_supervisor_id()
+        {
+            StoreWorkspaces(Create.Entity.Workspace("abra"));
+            Users = new[] { Create.Entity.HqUser(Id.g1, role: UserRoles.Interviewer) };
+
+            await Subject.Handle(new AssignWorkspacesToUserModelRequest(modelState,
+                new AssignWorkspacesToUserModel
+                {
+                    Workspaces = new[] { new AssignWorkspaceInfo("abra") }, // no SupervisorId
+                    UserIds = new[] { Id.g1 }
+                }));
+
+            Assert.That(modelState, Has.Property(nameof(ModelStateDictionary.IsValid)).EqualTo(false));
+            Assert.That(modelState["Workspaces"].Errors.Any(e => e.ErrorMessage.Contains("SupervisorId")), Is.True);
+        }
+
+        [Test]
+        public async Task should_not_return_error_when_interviewer_assigned_workspace_with_supervisor_id()
+        {
+            StoreWorkspaces(Create.Entity.Workspace("abra"));
+            Users = new[] { Create.Entity.HqUser(Id.g1, role: UserRoles.Interviewer) };
+
+            await Subject.Handle(new AssignWorkspacesToUserModelRequest(modelState,
+                new AssignWorkspacesToUserModel
+                {
+                    Workspaces = new[] { new AssignWorkspaceInfo("abra", Id.g2) },
+                    UserIds = new[] { Id.g1 }
+                }));
+
+            Assert.That(modelState, Has.Property(nameof(ModelStateDictionary.IsValid)).EqualTo(true));
+        }
+
+        [Test]
+        public async Task should_not_return_error_when_interviewer_removes_workspace_without_supervisor_id()
+        {
+            StoreWorkspaces(Create.Entity.Workspace("abra"));
+            Users = new[] { Create.Entity.HqUser(Id.g1, role: UserRoles.Interviewer) };
+
+            await Subject.Handle(new AssignWorkspacesToUserModelRequest(modelState,
+                new AssignWorkspacesToUserModel
+                {
+                    Mode = AssignWorkspacesMode.Remove,
+                    Workspaces = new[] { new AssignWorkspaceInfo("abra") }, // no SupervisorId - OK for Remove
+                    UserIds = new[] { Id.g1 }
+                }));
+
+            // No validation errors expected in Remove mode for this setup
+            Assert.That(modelState.IsValid, Is.True);
+            Assert.That(modelState["Workspaces"], Is.Null);
+                        
+            var workspacesEntry = modelState["Workspaces"];
+            if (workspacesEntry != null)
+                Assert.That(workspacesEntry.Errors, Is.Empty);
+        }
+
+        [Test]
         public async Task should_assign_workspaces_replacing_existing()
         {
             StoreWorkspaces(Create.Entity.Workspace("puckl"), 

@@ -86,6 +86,14 @@ namespace WB.UI.Headquarters.Code.Workspaces
                         "Only headquarter, supervisor, interviewer, observer or api user workspaces can be edited");
                 }
 
+                if (user.IsInRole(UserRoles.Interviewer)
+                    && model.Mode != AssignWorkspacesMode.Remove
+                    && dbWorkspaces.Any(w => !w.SupervisorId.HasValue))
+                {
+                    ModelState.AddModelError(nameof(model.Workspaces),
+                        "SupervisorId is required for each workspace when assigning to an interviewer");
+                }
+
                 if (ModelState.IsValid)
                 {
                     try
