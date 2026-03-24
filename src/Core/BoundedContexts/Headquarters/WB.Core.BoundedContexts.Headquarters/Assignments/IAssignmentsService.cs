@@ -15,6 +15,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         
         Assignment GetAssignment(int id);
 
+        Assignment GetAssignmentWithUpgradeLock(int id);
+
         Assignment GetAssignmentByAggregateRootId(Guid id);
 
         List<Assignment> GetAssignmentsReadyForWebInterview(QuestionnaireIdentity questionnaireId);

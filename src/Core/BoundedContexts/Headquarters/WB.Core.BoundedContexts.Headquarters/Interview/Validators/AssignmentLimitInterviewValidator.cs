@@ -51,7 +51,7 @@ public class AssignmentLimitInterviewValidator:
         if (assignmentId is null)
             return;
         
-        var assignment = assignmentsService.GetAssignment(assignmentId.Value);
+        var assignment = assignmentsService.GetAssignmentWithUpgradeLock(assignmentId.Value);
         if (assignment.WebMode != true)
             return;
         
