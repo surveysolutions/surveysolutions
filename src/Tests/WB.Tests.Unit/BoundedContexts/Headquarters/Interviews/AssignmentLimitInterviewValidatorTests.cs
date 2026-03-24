@@ -139,7 +139,7 @@ public class AssignmentLimitInterviewValidatorTests
         mockAssignmentsService.Setup(s => s.GetAssignmentWithUpgradeLock(9))
             .Returns(() =>
             {
-                assignment.InterviewSummaries = new[] { Create.Entity.InterviewSummary(Guid.NewGuid()) };
+                assignment.AsDynamic().InterviewSummaries = new[] { Create.Entity.InterviewSummary(Guid.NewGuid()) };
                 return assignment;
             });
         var validator = Create.Service.AssignmentLimitInterviewValidator(
