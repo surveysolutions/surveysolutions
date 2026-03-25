@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:element name="root" msdata:IsDataSet="true">
+            
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="ClearHistory" xml:space="preserve">
+        <value>Pastro historinë</value>
+    </data>
+    <data name="NotHelpful" xml:space="preserve">
+        <value>Zhbëj</value>
+    </data>
+    <data name="Unhelpful" xml:space="preserve">
+        <value>Nuk ndihmoi</value>
+    </data>
+    <data name="Helpful" xml:space="preserve">
+        <value>Pëlqej</value>
+    </data>
+    <data name="UnhelpfulCommentTitle" xml:space="preserve">
+        <value>Shto një koment</value>
+    </data>
+    <data name="UnhelpfulCommentPlaceholder" xml:space="preserve">
+        <value>Shkruani një koment të shkurtër (opsional)</value>
+    </data>
+    <data name="UnhelpfulCommentHint" xml:space="preserve">
+        <value>Çfarë ishte gabim me këtë përgjigje?</value>
+    </data>
+    <data name="Send" xml:space="preserve">
+        <value>Dërgo</value>
+    </data>
+    <data name="SendFeedback" xml:space="preserve">
+        <value>Dërgo komente</value>
+    </data>
+    <data name="NotHelpfulCommentTitle" xml:space="preserve">
+        <value>Shto një koment</value>
+    </data>
+    <data name="NotHelpfulCommentPlaceholder" xml:space="preserve">
+        <value>Shkruani një koment të shkurtër (opsional)</value>
+    </data>
+    <data name="Dislike" xml:space="preserve">
+        <value>Nuk pëlqej</value>
+    </data>
+    <data name="NotUnhelpful" xml:space="preserve">
+        <value>Zhbëj</value>
+    </data>
+    <data name="TypeMessage" xml:space="preserve">
+        <value>Shkruani mesazhin tuaj...</value>
+    </data>
+    <data name="Title" xml:space="preserve">
+        <value>Asistenti AI</value>
+    </data>
+    <data name="WelcomeMessage" xml:space="preserve">
+        <value>Filloni një bisedë me asistentin AI. Mesazhet tuaja mund të përdoren për të përmirësuar produktin. Mos ndani informacione të ndjeshme ose personale në këtë chat.</value>
+    </data>
+    <data name="Disclaimer" xml:space="preserve">
+        <value>Ky përmbajtje u prodhua nga një sistem AI i automatizuar dhe nuk përbën informacion autoritar ose të verifikuar. Mund të përmbajë gabime ose lëshime. Përdoruesit janë përgjegjës për rishikimin, validimin dhe ushtrimin e gjykimit para përdorimit.</value>
+    </data>
+    <data name="ConnectionError" xml:space="preserve">
+        <value>Lidhja me asistentin dështoi.</value>
+    </data>
+</root>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:element name="root" msdata:IsDataSet="true">
+            
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="ClearHistory" xml:space="preserve">
+        <value>Șterge istoricul</value>
+    </data>
+    <data name="NotHelpful" xml:space="preserve">
+        <value>Anulează</value>
+    </data>
+    <data name="Unhelpful" xml:space="preserve">
+        <value>Nu a fost util</value>
+    </data>
+    <data name="Helpful" xml:space="preserve">
+        <value>Apreciază</value>
+    </data>
+    <data name="UnhelpfulCommentTitle" xml:space="preserve">
+        <value>Adăugați un comentariu</value>
+    </data>
+    <data name="UnhelpfulCommentPlaceholder" xml:space="preserve">
+        <value>Scrieți un comentariu scurt (opțional)</value>
+    </data>
+    <data name="UnhelpfulCommentHint" xml:space="preserve">
+        <value>Ce a fost în neregulă cu acest răspuns?</value>
+    </data>
+    <data name="Send" xml:space="preserve">
+        <value>Trimite</value>
+    </data>
+    <data name="SendFeedback" xml:space="preserve">
+        <value>Trimite feedback</value>
+    </data>
+    <data name="NotHelpfulCommentTitle" xml:space="preserve">
+        <value>Adăugați un comentariu</value>
+    </data>
+    <data name="NotHelpfulCommentPlaceholder" xml:space="preserve">
+        <value>Scrieți un comentariu scurt (opțional)</value>
+    </data>
+    <data name="Dislike" xml:space="preserve">
+        <value>Nu îmi place</value>
+    </data>
+    <data name="NotUnhelpful" xml:space="preserve">
+        <value>Anulează</value>
+    </data>
+    <data name="TypeMessage" xml:space="preserve">
+        <value>Tastați mesajul dumneavoastră...</value>
+    </data>
+    <data name="Title" xml:space="preserve">
+        <value>Asistent IA</value>
+    </data>
+    <data name="WelcomeMessage" xml:space="preserve">
+        <value>Începeți o conversație cu asistentul IA. Mesajele dvs. pot fi utilizate pentru îmbunătățirea produsului. Nu partajați informații sensibile sau personale în acest chat.</value>
+    </data>
+    <data name="Disclaimer" xml:space="preserve">
+        <value>Acest conținut a fost produs de un sistem AI automatizat și nu constituie informații autorizate sau verificate. Poate conține erori sau omisiuni. Utilizatorii sunt responsabili pentru revizuire, validare și exercitarea judecății înainte de utilizare.</value>
+    </data>
+    <data name="ConnectionError" xml:space="preserve">
+        <value>Conectarea la asistent a eșuat.</value>
+    </data>
+</root>

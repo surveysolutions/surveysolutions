@@ -649,5 +649,25 @@
     "ExcelOrTabFilesOnly": "Only Excel or tab-separated values files are accepted",
     "SaveAs": "Save as",
     "CloneDeletedWarning": "You are creating a copy of deleted questionnaire. Some parts might be lost."
+  },
+  "Assistant": {
+    "ClearHistory": "Șterge istoricul",
+    "NotHelpful": "Anulează",
+    "Unhelpful": "Nu a fost util",
+    "Helpful": "Apreciază",
+    "UnhelpfulCommentTitle": "Adăugați un comentariu",
+    "UnhelpfulCommentPlaceholder": "Scrieți un comentariu scurt (opțional)",
+    "UnhelpfulCommentHint": "Ce a fost în neregulă cu acest răspuns?",
+    "Send": "Trimite",
+    "SendFeedback": "Trimite feedback",
+    "NotHelpfulCommentTitle": "Adăugați un comentariu",
+    "NotHelpfulCommentPlaceholder": "Scrieți un comentariu scurt (opțional)",
+    "Dislike": "Nu îmi place",
+    "NotUnhelpful": "Anulează",
+    "TypeMessage": "Tastați mesajul dumneavoastră...",
+    "Title": "Asistent IA",
+    "WelcomeMessage": "Începeți o conversație cu asistentul IA. Mesajele dvs. pot fi utilizate pentru îmbunătățirea produsului. Nu partajați informații sensibile sau personale în acest chat.",
+    "Disclaimer": "Acest conținut a fost produs de un sistem AI automatizat și nu constituie informații autorizate sau verificate. Poate conține erori sau omisiuni. Utilizatorii sunt responsabili pentru revizuire, validare și exercitarea judecății înainte de utilizare.",
+    "ConnectionError": "Conectarea la asistent a eșuat."
   }
 }

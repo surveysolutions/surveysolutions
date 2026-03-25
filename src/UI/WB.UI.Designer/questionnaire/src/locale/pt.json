@@ -649,5 +649,25 @@
     "Classifications": "Classificações",
     "SaveAs": "Salvar como",
     "CloneDeletedWarning": "Você está criando uma cópia de um questionário excluído. Algumas partes podem ser perdidas."
+  },
+  "Assistant": {
+    "ClearHistory": "Limpar histórico",
+    "NotHelpful": "Desfazer",
+    "Unhelpful": "Não ajudou",
+    "Helpful": "Curtir",
+    "UnhelpfulCommentTitle": "Adicionar um comentário",
+    "UnhelpfulCommentPlaceholder": "Escreva um comentário curto (opcional)",
+    "UnhelpfulCommentHint": "O que estava errado nesta resposta?",
+    "Send": "Enviar",
+    "SendFeedback": "Enviar feedback",
+    "NotHelpfulCommentTitle": "Adicionar um comentário",
+    "NotHelpfulCommentPlaceholder": "Escreva um comentário curto (opcional)",
+    "Dislike": "Não curtir",
+    "NotUnhelpful": "Desfazer",
+    "TypeMessage": "Digite sua mensagem...",
+    "Title": "Assistente de IA",
+    "WelcomeMessage": "Inicie uma conversa com o assistente de IA. As suas mensagens podem ser utilizadas para melhorar o produto. Não partilhe informações sensíveis ou pessoais neste chat.",
+    "Disclaimer": "Este conteúdo foi produzido por um sistema de IA automatizado e não constitui informação autoritativa ou verificada. Pode conter erros ou omissões. Os utilizadores são responsáveis por rever, validar e exercer julgamento antes de usar.",
+    "ConnectionError": "Falha ao conectar ao assistente."
   }
 }

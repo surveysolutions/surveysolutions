@@ -50,7 +50,7 @@ namespace WB.UI.Designer.Areas.Admin.Pages
             [Display(Name = "Is Locked Out", Order = 4)]
             public bool IsLockedOut { get; set; }
 
-            public bool CanImportOnHq { get; set; }
+            public bool AssistantEnabled { get; set; }
 
             [Display(Name = "User name", Order = 1)]
             public string UserName { get; set; } = String.Empty;
@@ -71,7 +71,7 @@ namespace WB.UI.Designer.Areas.Admin.Pages
                 Email = user.Email,
                 IsApproved = user.EmailConfirmed,
                 IsLockedOut = user.LockoutEnd.HasValue && user.LockoutEnd.Value >= DateTimeOffset.UtcNow,
-                CanImportOnHq = user.CanImportOnHq,
+                AssistantEnabled = user.AssistantEnabled ?? false,
                 UserName = user.UserName ?? String.Empty,
                 FullName = await userManager.GetFullName(id)
             };
@@ -101,7 +101,7 @@ namespace WB.UI.Designer.Areas.Admin.Pages
 
                 //user.LockoutEnabled = Input.IsLockedOut;
                 user.LockoutEnd = Input.IsLockedOut ? DateTimeOffset.MaxValue : (DateTimeOffset?)null;
-                user.CanImportOnHq = Input.CanImportOnHq;
+                user.AssistantEnabled = Input.AssistantEnabled;
 
                 var claims = await userManager.GetClaimsAsync(user);
                 var existingFullName = claims.FirstOrDefault(x => x.Type == ClaimTypes.Name);

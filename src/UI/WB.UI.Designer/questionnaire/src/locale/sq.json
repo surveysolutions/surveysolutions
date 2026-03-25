@@ -649,5 +649,25 @@
     "ExcelOrTabFilesOnly": "Only Excel or tab-separated values files are accepted",
     "SaveAs": "Save as",
     "CloneDeletedWarning": "You are creating a copy of deleted questionnaire. Some parts might be lost."
+  },
+  "Assistant": {
+    "ClearHistory": "Pastro historinë",
+    "NotHelpful": "Zhbëj",
+    "Unhelpful": "Nuk ndihmoi",
+    "Helpful": "Pëlqej",
+    "UnhelpfulCommentTitle": "Shto një koment",
+    "UnhelpfulCommentPlaceholder": "Shkruani një koment të shkurtër (opsional)",
+    "UnhelpfulCommentHint": "Çfarë ishte gabim me këtë përgjigje?",
+    "Send": "Dërgo",
+    "SendFeedback": "Dërgo komente",
+    "NotHelpfulCommentTitle": "Shto një koment",
+    "NotHelpfulCommentPlaceholder": "Shkruani një koment të shkurtër (opsional)",
+    "Dislike": "Nuk pëlqej",
+    "NotUnhelpful": "Zhbëj",
+    "TypeMessage": "Shkruani mesazhin tuaj...",
+    "Title": "Asistenti AI",
+    "WelcomeMessage": "Filloni një bisedë me asistentin AI. Mesazhet tuaja mund të përdoren për të përmirësuar produktin. Mos ndani informacione të ndjeshme ose personale në këtë chat.",
+    "Disclaimer": "Ky përmbajtje u prodhua nga një sistem AI i automatizuar dhe nuk përbën informacion autoritar ose të verifikuar. Mund të përmbajë gabime ose lëshime. Përdoruesit janë përgjegjës për rishikimin, validimin dhe ushtrimin e gjykimit para përdorimit.",
+    "ConnectionError": "Lidhja me asistentin dështoi."
   }
 }

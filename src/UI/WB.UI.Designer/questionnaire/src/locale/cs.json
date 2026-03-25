@@ -649,5 +649,25 @@
     "Untitled": "Neoznačený",
     "You": "ty",
     "CloneDeletedWarning": "Vytváříte kopii smazaného dotazníku. Některé části mohou být ztraceny."
+  },
+  "Assistant": {
+    "ClearHistory": "Vymazat historii",
+    "NotHelpful": "Zpět",
+    "Unhelpful": "Nepomohlo",
+    "Helpful": "Líbí se mi",
+    "UnhelpfulCommentTitle": "Přidat komentář",
+    "UnhelpfulCommentPlaceholder": "Napište krátký komentář (nepovinné)",
+    "UnhelpfulCommentHint": "Co bylo na této odpovědi špatně?",
+    "Send": "Odeslat",
+    "SendFeedback": "Odeslat zpětnou vazbu",
+    "NotHelpfulCommentTitle": "Přidat komentář",
+    "NotHelpfulCommentPlaceholder": "Napište krátký komentář (nepovinné)",
+    "Dislike": "Nelíbí se mi",
+    "NotUnhelpful": "Zpět",
+    "TypeMessage": "Napište svou zprávu...",
+    "Title": "AI Asistent",
+    "WelcomeMessage": "Začněte konverzaci s AI asistentem. Vaše zprávy mohou být použity ke zlepšení produktu. Nesdílejte citlivé nebo osobní informace v tomto chatu.",
+    "Disclaimer": "Tento obsah byl vytvořen automatizovaným systémem AI a nepředstavuje autoritativní ani ověřené informace. Může obsahovat chyby nebo opomenutí. Uživatelé jsou odpovědní za přezkoumání, ověření a uplatnění vlastního úsudku před použitím.",
+    "ConnectionError": "Připojení k asistentovi se nezdařilo."
   }
 }

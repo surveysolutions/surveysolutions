@@ -8,12 +8,17 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using WB.Core.BoundedContexts.Designer.Views;
 using StackExchange.Exceptional;
+using WB.Core.BoundedContexts.Designer.DataAccess;
+using WB.Core.BoundedContexts.Designer.Implementation;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Versions;
 using WB.UI.Designer.Code.ImportExport;
 using WB.UI.Designer.Extensions;
+using WB.UI.Designer.Filters;
 using WB.UI.Designer.Models.ControlPanel;
 
 namespace WB.UI.Designer.Areas.Admin.Controllers
@@ -27,19 +32,25 @@ namespace WB.UI.Designer.Areas.Admin.Controllers
         private readonly IQuestionnaireCompilationVersionService questionnaireCompilationVersionService;
         private readonly IProductVersion productVersion;
         private readonly IProductVersionHistory productVersionHistory;
+        private readonly IPlainKeyValueStorage<AssistantSettings> appSettingsStorage;
+        private readonly DesignerDbContext dbContext;
 
         public ControlPanelController(
             UserManager<DesignerIdentityUser> users,
             IConfiguration configuration, 
             IQuestionnaireCompilationVersionService questionnaireCompilationVersionService,
             IProductVersion productVersion,
-            IProductVersionHistory productVersionHistory)
+            IProductVersionHistory productVersionHistory,
+            IPlainKeyValueStorage<AssistantSettings> appSettingsStorage,
+            DesignerDbContext dbContext)
         {
             this.users = users;
             this.configuration = configuration;
             this.questionnaireCompilationVersionService = questionnaireCompilationVersionService;
             this.productVersion = productVersion;
             this.productVersionHistory = productVersionHistory;
+            this.appSettingsStorage = appSettingsStorage;
+            this.dbContext = dbContext;
         }
 
         public ActionResult Settings()
@@ -50,7 +61,19 @@ namespace WB.UI.Designer.Areas.Admin.Controllers
         public ActionResult Versions() => this.View();
 
         public ActionResult MakeAdmin() => this.View();
+        
+        [AntiForgeryFilter]
+        public ActionResult AssistantSettings()
+        {
+            var settings = this.appSettingsStorage.GetById(AppSetting.AssistantSettingsKey);
 
+            return this.View(new AssistantSettingsModel
+            {
+                IsEnabled = settings?.IsEnabled ?? false,
+                IsAvailableToAllUsers = settings?.IsAvailableToAllUsers ?? false
+
+            });
+        }
         public ActionResult ThrowException(string message = "Use query argument 'message' to display custom message") =>
             throw new ArgumentException(message);
 
@@ -121,7 +144,26 @@ namespace WB.UI.Designer.Areas.Admin.Controllers
             }
             return this.View("CompilationVersionsViews/EditCompilationVersion", model);
         }
-        
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult AssistantSettings(AssistantSettingsModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var settings = new AssistantSettings
+                {
+                    IsEnabled = model.IsEnabled,
+                    IsAvailableToAllUsers = model.IsAvailableToAllUsers
+                };
+                this.appSettingsStorage.Store(settings, AppSetting.AssistantSettingsKey);
+                dbContext.SaveChanges();
+                this.Success("Assistant settings successfully updated");
+            }
+            
+            return this.RedirectToAction("AssistantSettings");
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> MakeAdmin(MakeAdminViewModel model)

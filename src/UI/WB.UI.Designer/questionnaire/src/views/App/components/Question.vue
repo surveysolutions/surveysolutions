@@ -270,7 +270,6 @@ export default {
         ExpressionEditor,
         Breadcrumbs,
         Help,
-
         AreaQuestion,
         DateTimeQuestion,
         GpsCoordinatesQuestion,
@@ -298,7 +297,7 @@ export default {
             openEditor: null,
 
             showInstruction: null,
-            showEnablingConditions: null,
+            showEnablingConditions: null
         }
     },
     watch: {
