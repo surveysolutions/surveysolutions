@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { map } from 'lodash'
+import { validateServerHeader } from '~/shared/serverValidator'
 
 class QuestionnaireApi {
     constructor(questionnaireId, version, http) {
@@ -761,6 +762,16 @@ class HqApiClient {
         this.http = axios.create({
             baseURL: basePath,
         })
+        this.http.interceptors.response.use(
+            function (response) {
+                validateServerHeader(response)
+                return response
+            },
+            function (error) {
+                if (error.response) validateServerHeader(error.response)
+                return Promise.reject(error)
+            }
+        )
     }
 
     Questionnaire(questionnaireId, version) {

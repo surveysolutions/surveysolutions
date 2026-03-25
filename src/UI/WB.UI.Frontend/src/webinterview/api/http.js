@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { config } from '~/shared/config'
+import { validateServerHeader } from '~/shared/serverValidator'
 
 let api = {};
 
@@ -26,9 +27,11 @@ const httpPlugin = {
 
         // Add a response interceptor
         http.interceptors.response.use(function (response) {
+            validateServerHeader(response)
             store.dispatch('fetchProgress', -1)
             return response
         }, function (error) {
+            if (error.response) validateServerHeader(error.response)
             store.dispatch('fetchProgress', -1)
             // Any status codes that falls outside the range of 2xx cause this function to trigger
             // Do something with response error
