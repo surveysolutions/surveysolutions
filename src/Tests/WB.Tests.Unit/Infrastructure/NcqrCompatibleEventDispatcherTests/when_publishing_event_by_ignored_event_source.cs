@@ -27,10 +27,8 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
             var serviceLocator = Mock.Of<IServiceLocator>(x =>
                 x.GetInstance(typeof(TestDenormalzier)) == secondEventHandlerMock.Object);
 
-            var prototype = Create.Service.MockOfAggregatePrototypeService(PrototypeType.Temporary);
-
             var ncqrCompatibleEventDispatcher = CreateNcqrCompatibleEventDispatcher(null, 
-                serviceLocator, denormalizerRegistry, prototype);
+                serviceLocator, denormalizerRegistry);
 
             // Act
             ncqrCompatibleEventDispatcher.Publish(new[] { Create.Fake.PublishableEvent(eventSourceId: ignoredEventSource) });
@@ -66,11 +64,9 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
             var serviceLocator = Mock.Of<IServiceLocator>(x =>
                 x.GetInstance(typeof(CustomHandler)) == customHandler);
 
-            var prototype = Create.Service.MockOfAggregatePrototypeService(PrototypeType.Temporary);
             var ncqrCompatibleEventDispatcher = CreateNcqrCompatibleEventDispatcher(
                 serviceLocator: serviceLocator, 
-                denormalizerRegistry: denormalizerRegistry, 
-                prototypeService: prototype);
+                denormalizerRegistry: denormalizerRegistry);
 
             // Act
             ncqrCompatibleEventDispatcher.Publish(new[] { Create.PublishedEvent.InterviewCreated(interviewId: ignoredEventSource) });
