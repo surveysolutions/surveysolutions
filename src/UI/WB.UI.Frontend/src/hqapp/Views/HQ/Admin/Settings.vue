@@ -110,7 +110,7 @@ export default {
             retentionLimitQuantity: null,
             retentionLimitInDaysCancel: null,
             retentionLimitQuantityCancel: null,
-            geographyExportFormat: 1,
+            geographyExportFormat: 'Wkt',
         }
     },
     async beforeMount() {
@@ -143,7 +143,7 @@ export default {
             this.retentionLimitQuantity = workspaceSettings.data.exportSettings.retentionLimitQuantity
             this.retentionLimitInDaysCancel = workspaceSettings.data.exportSettings.retentionLimitInDays
             this.retentionLimitQuantityCancel = workspaceSettings.data.exportSettings.retentionLimitQuantity
-            this.geographyExportFormat = workspaceSettings.data.exportSettings.geographyExportFormat ?? 1
+            this.geographyExportFormat = workspaceSettings.data.exportSettings.geographyExportFormat ?? 'Wkt'
         },
 
         setPageActive(titleType, messageType) {

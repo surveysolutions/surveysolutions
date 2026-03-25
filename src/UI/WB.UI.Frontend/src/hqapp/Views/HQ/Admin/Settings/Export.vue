@@ -229,7 +229,7 @@ export default {
         retentionLimitQuantity: Number,
         retentionLimitInDaysCancel: Number,
         retentionLimitQuantityCancel: Number,
-        geographyExportFormat: Number,
+        geographyExportFormat: String,
     },
     emits: [
         'update:encryptionEnabled',
@@ -305,9 +305,9 @@ export default {
         },
         geographyFormatOptions() {
             return [
-                { key: 1, value: this.$t('Settings.GeographyExportFormat_Wkt') },
-                { key: 2, value: this.$t('Settings.GeographyExportFormat_GeoJson') },
-                { key: 0, value: this.$t('Settings.GeographyExportFormat_Legacy') },
+                { key: 'Wkt', value: this.$t('Settings.GeographyExportFormat_Wkt') },
+                { key: 'GeoJson', value: this.$t('Settings.GeographyExportFormat_GeoJson') },
+                { key: 'Legacy', value: this.$t('Settings.GeographyExportFormat_Legacy') },
             ]
         },
         geographyFormatValue() {
