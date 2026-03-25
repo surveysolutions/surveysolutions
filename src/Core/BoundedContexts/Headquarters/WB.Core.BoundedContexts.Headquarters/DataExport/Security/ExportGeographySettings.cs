@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Headquarters.Views;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Security
@@ -13,6 +14,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Security
             Format = format;
         }
 
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Include)]
         public GeographyExportFormat Format { get; set; } = GeographyExportFormat.Wkt;
     }
 }
