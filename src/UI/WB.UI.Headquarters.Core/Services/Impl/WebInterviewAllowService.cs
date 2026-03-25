@@ -20,7 +20,6 @@ namespace WB.UI.Headquarters.Services.Impl
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
         private readonly IAuthorizedUser authorizedUser;
-        private readonly IAggregateRootPrototypeService prototypeService;
         private readonly IUserViewFactory usersRepository;
         private readonly IHttpContextAccessor contextAccessor;
 
@@ -36,28 +35,18 @@ namespace WB.UI.Headquarters.Services.Impl
             IStatefulInterviewRepository statefulInterviewRepository,
             IWebInterviewConfigProvider webInterviewConfigProvider,
             IAuthorizedUser authorizedUser,
-            IAggregateRootPrototypeService prototypeService,
             IUserViewFactory usersRepository,
             IHttpContextAccessor contextAccessor)
         {
             this.statefulInterviewRepository = statefulInterviewRepository;
             this.webInterviewConfigProvider = webInterviewConfigProvider;
             this.authorizedUser = authorizedUser;
-            this.prototypeService = prototypeService;
             this.usersRepository = usersRepository;
             this.contextAccessor = contextAccessor;
         }
 
         public void CheckWebInterviewAccessPermissions(string interviewId)
         {
-            if (Guid.TryParse(interviewId, out var id))
-            {
-                if (this.prototypeService.IsPrototype(id))
-                {
-                    return;
-                }
-            }
-
             var interview = statefulInterviewRepository.Get(interviewId);
 
             if (interview == null)

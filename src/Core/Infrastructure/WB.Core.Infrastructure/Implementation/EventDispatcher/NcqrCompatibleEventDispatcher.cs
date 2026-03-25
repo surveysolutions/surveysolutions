@@ -27,7 +27,6 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
         private readonly IEventStore eventStore;
         private readonly IInMemoryEventStore inMemoryEventStore;
         private readonly IDenormalizerRegistry denormalizerRegistry;
-        private readonly IAggregateRootPrototypeService prototypeService;
 
         public NcqrCompatibleEventDispatcher(
             IServiceLocator serviceLocator,
@@ -35,8 +34,7 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
             ILogger logger,
             IEventStore eventStore,
             IInMemoryEventStore inMemoryEventStore,
-            IDenormalizerRegistry denormalizerRegistry,
-            IAggregateRootPrototypeService prototypeService)
+            IDenormalizerRegistry denormalizerRegistry)
         {
             this.eventBusSettings = eventBusSettings;
             this.logger = logger;
@@ -44,7 +42,6 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
             this.eventStore = eventStore;
             this.inMemoryEventStore = inMemoryEventStore;
             this.denormalizerRegistry = denormalizerRegistry;
-            this.prototypeService = prototypeService;
             this.serviceLocator = serviceLocator;
         }
 
@@ -61,14 +58,6 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
 
             foreach (var functionalEventHandler in denormalizerRegistry.FunctionalDenormalizers)
             {
-                if (this.prototypeService.IsPrototype(firstEventSourceId))
-                {
-                    if (functionalEventHandler.GetCustomAttribute<ReceivesPrototypeEventsAttribute>() == null)
-                    {
-                        continue;
-                    }
-                }
-
                 var handler = (IFunctionalEventHandler)this.serviceLocator.GetInstance(functionalEventHandler);
 
                 try
@@ -115,15 +104,8 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
                             continue;
                         }
 
-                        bool isPrototype = this.prototypeService.IsPrototype(publishableEvent.EventSourceId);
-
                         var eventType = publishableEvent.Payload.GetType();
                         var eventHandlerMethod = denormalizerRegistry.HandlerMethod(handler, eventType);
-
-                        if (isPrototype && !eventHandlerMethod.ReceivesIgnoredEvents)
-                        {
-                            continue;
-                        }
 
                         var publishedEventClosedType = typeof(PublishedEvent<>).MakeGenericType(eventType);
                         var publishedEvent = Activator.CreateInstance(publishedEventClosedType, publishableEvent);
@@ -184,10 +166,6 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
         public IReadOnlyCollection<CommittedEvent> CommitUncommittedEvents(IEventSourcedAggregateRoot aggregateRoot, string origin)
         {
             var eventStream = new UncommittedEventStream(origin, aggregateRoot.GetUnCommittedChanges());
-            if (this.prototypeService.IsPrototype(aggregateRoot.EventSourceId))
-            {
-                return this.inMemoryEventStore.Store(eventStream);
-            }
 
             return this.eventStore.Store(eventStream);
         }

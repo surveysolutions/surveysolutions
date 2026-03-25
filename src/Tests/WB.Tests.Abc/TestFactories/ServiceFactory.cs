@@ -148,9 +148,7 @@ namespace WB.Tests.Abc.TestFactories
             IServiceLocator serviceLocator = null,
             IAggregateLock aggregateLock = null,
             IEventStore eventStore = null,
-            IAggregateRootCache aggregateRootCacheCleaner = null,
-            IAggregateRootPrototypeService prototypeService = null,
-            IAggregateRootPrototypePromoterService promoterService = null)
+            IAggregateRootCache aggregateRootCacheCleaner = null)
         {
             var locatorMock = 
                 serviceLocator != null ?
@@ -165,10 +163,8 @@ namespace WB.Tests.Abc.TestFactories
                     serviceLocator: locatorMock.Object,
                     plainRepository: plainRepository ?? Mock.Of<IPlainAggregateRootRepository>(),
                     aggregateRootCache: aggregateRootCacheCleaner ?? Create.Storage.NewAggregateRootCache(),
-                    commandsMonitoring: Mock.Of<ICommandsMonitoring>(),
-                    promoterService: promoterService ?? Mock.Of<IAggregateRootPrototypePromoterService>(),
-                    prototypeService: prototypeService 
-                                      ?? Mock.Of<IAggregateRootPrototypeService>(a => a.GetPrototypeType(It.IsAny<Guid>()) == null)));
+                    commandsMonitoring: Mock.Of<ICommandsMonitoring>()
+                    ));
 
             return new CommandService(serviceLocator: locatorMock.Object, aggregateLock: aggregateLock ?? Stub.Lock());
         }
@@ -247,7 +243,6 @@ namespace WB.Tests.Abc.TestFactories
             => new EventSourcedAggregateRootRepositoryWithWebCache(
                 eventStore ?? Mock.Of<IEventStore>(x => x.GetLastEventSequence(It.IsAny<Guid>()) == 0),
                 Create.Storage.InMemoryEventStore(),
-                Create.Service.MockOfAggregatePrototypeService(), 
                 repository ?? Mock.Of<IDomainRepository>(),
                 Create.Service.ServiceLocatorService(),
                 new AggregateLock(),
@@ -339,21 +334,14 @@ namespace WB.Tests.Abc.TestFactories
         public NcqrCompatibleEventDispatcher NcqrCompatibleEventDispatcher(EventBusSettings eventBusSettings = null,
             ILogger logger = null,
             IServiceLocator serviceLocator = null,
-            WB.Core.Infrastructure.Implementation.EventDispatcher.IDenormalizerRegistry denormalizerRegistry = null,
-            IAggregateRootPrototypeService prototypeService = null)
+            WB.Core.Infrastructure.Implementation.EventDispatcher.IDenormalizerRegistry denormalizerRegistry = null)
             => new NcqrCompatibleEventDispatcher(
                 eventStore: Mock.Of<IEventStore>(),
                 inMemoryEventStore: Mock.Of<IInMemoryEventStore>(),
                 serviceLocator: serviceLocator ?? Mock.Of<IServiceLocator>(),
                 eventBusSettings: eventBusSettings ?? Create.Entity.EventBusSettings(),
                 logger: logger ?? Mock.Of<ILogger>(),
-                denormalizerRegistry: denormalizerRegistry ?? Create.Service.DenormalizerRegistryNative(),
-                prototypeService: prototypeService ?? Create.Service.MockOfAggregatePrototypeService());
-
-        public IAggregateRootPrototypeService MockOfAggregatePrototypeService(PrototypeType? type = null)
-        {
-            return Mock.Of<IAggregateRootPrototypeService>(s => s.GetPrototypeType(It.IsAny<Guid>()) == type);
-        }
+                denormalizerRegistry: denormalizerRegistry ?? Create.Service.DenormalizerRegistryNative());
 
         public QuestionnaireKeyValueStorage QuestionnaireKeyValueStorage(
             IPlainStorage<QuestionnaireDocumentView> questionnaireDocumentViewRepository = null)
@@ -1116,13 +1104,10 @@ namespace WB.Tests.Abc.TestFactories
 
         public IInvitationService InvitationService(
             IPlainStorageAccessor<Invitation> invitations = null,
-            IPlainKeyValueStorage<InvitationDistributionStatus> invitationDistributionStatuses = null,
-            IAggregateRootPrototypePromoterService promoter = null
-            )
+            IPlainKeyValueStorage<InvitationDistributionStatus> invitationDistributionStatuses = null)
         {
             var service = new InvitationService(invitations ?? new TestPlainStorage<Invitation>(),
                 invitationDistributionStatuses ?? new InMemoryKeyValueStorage<InvitationDistributionStatus>(),
-                promoter ?? Mock.Of<IAggregateRootPrototypePromoterService>(),
                 Create.Service.TokenGenerator());
             return service;
         }
@@ -1137,7 +1122,6 @@ namespace WB.Tests.Abc.TestFactories
 
             var service = new InvitationService(accessor,
                 Mock.Of<IPlainKeyValueStorage<InvitationDistributionStatus>>(),
-                Mock.Of<IAggregateRootPrototypePromoterService>(),
                 Mock.Of<ITokenGenerator>());
             return service;
         }
@@ -1323,11 +1307,10 @@ namespace WB.Tests.Abc.TestFactories
                                                                Stub<IPlainStorageAccessor<QuestionnaireBrowseItem>>.WithNotEmptyValues);
         }
 
-        public AssignmentLimitInterviewValidator AssignmentLimitInterviewValidator(IAssignmentsService assignmentsService,
-            IAggregateRootPrototypeService prototypeService)
+        public AssignmentLimitInterviewValidator AssignmentLimitInterviewValidator(IAssignmentsService assignmentsService)
         {
             var cache = Create.Storage.NewAggregateRootCache();
-            return new AssignmentLimitInterviewValidator(assignmentsService, prototypeService, cache);
+            return new AssignmentLimitInterviewValidator(assignmentsService, cache);
         }
 
         public QuestionnaireTranslator QuestionnaireTranslator()

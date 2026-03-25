@@ -20,17 +20,14 @@ namespace WB.UI.Headquarters.Controllers
         private readonly ICommandService commandService;
         private readonly IAuthorizedUser authorizedUser;
         private readonly IQuestionnaireExporter questionnaireExporter;
-        private readonly IAggregateRootPrototypeService prototypeService;
 
         public HQController(ICommandService commandService,
             IAuthorizedUser authorizedUser,
-            IQuestionnaireExporter questionnaireExporter,
-            IAggregateRootPrototypeService prototypeService)
+            IQuestionnaireExporter questionnaireExporter)
         {
             this.commandService = commandService;
             this.authorizedUser = authorizedUser;
             this.questionnaireExporter = questionnaireExporter;
-            this.prototypeService = prototypeService;
         }
 
         public IActionResult Index()
@@ -56,7 +53,6 @@ namespace WB.UI.Headquarters.Controllers
                 return NotFound(id);
             
             var newInterviewId = Guid.NewGuid();
-            this.prototypeService.MarkAsPrototype(newInterviewId, PrototypeType.Permanent);
 
             var command = new CreateTemporaryInterviewCommand(newInterviewId, this.authorizedUser.Id, identity);
 
@@ -79,9 +75,6 @@ namespace WB.UI.Headquarters.Controllers
             if(!Guid.TryParse(id, out Guid parsedId))
                 return NotFound();
             
-            if (this.prototypeService.GetPrototypeType(parsedId) != PrototypeType.Permanent)
-                return NotFound();
-
             return this.View(new
             {
                 id = id,

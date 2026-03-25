@@ -19,8 +19,6 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
         private readonly IPlainAggregateRootRepository plainRepository;
         private readonly IAggregateRootCache aggregateRootCache;
         private readonly ICommandsMonitoring commandsMonitoring;
-        private readonly IAggregateRootPrototypePromoterService promoterService;
-        private readonly IAggregateRootPrototypeService prototypeService;
 
         public CommandExecutor(
             IEventSourcedAggregateRootRepository eventSourcedRepository,
@@ -28,9 +26,7 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             IServiceLocator serviceLocator,
             IPlainAggregateRootRepository plainRepository,
             IAggregateRootCache aggregateRootCache,
-            ICommandsMonitoring commandsMonitoring,
-            IAggregateRootPrototypePromoterService promoterService,
-            IAggregateRootPrototypeService prototypeService)
+            ICommandsMonitoring commandsMonitoring)
         {
             this.eventSourcedRepository = eventSourcedRepository;
             this.eventBus = eventBus;
@@ -38,8 +34,6 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             this.plainRepository = plainRepository;
             this.aggregateRootCache = aggregateRootCache;
             this.commandsMonitoring = commandsMonitoring;
-            this.promoterService = promoterService;
-            this.prototypeService = prototypeService;
         }
 
         public void ExecuteCommand(ICommand command, string origin, CancellationToken cancellationToken, Guid aggregateId)
@@ -98,8 +92,6 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
 
             cancellationToken.ThrowIfCancellationRequested();
 
-            bool mustPromotePrototype = false;
-
             if (aggregate == null)
             {
                 if (!CommandRegistry.IsInitializer(command))
@@ -109,10 +101,6 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
 
                 aggregate = (IEventSourcedAggregateRoot)this.serviceLocator.GetInstance(aggregateType);
                 aggregate.SetId(aggregateId);
-            }
-            else if (prototypeService.IsPrototype(aggregateId))
-            {
-                mustPromotePrototype = true;
             }
 
             cancellationToken.ThrowIfCancellationRequested();
@@ -157,11 +145,6 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             try
             {
                 this.eventBus.PublishCommittedEvents(committedEvents);
-
-                if (mustPromotePrototype)
-                {
-                    promoterService.MaterializePrototypeIfRequired(aggregateId);
-                }
 
                 foreach (Action<IAggregateRoot, ICommand> postProcessor in postProcessors)
                 {

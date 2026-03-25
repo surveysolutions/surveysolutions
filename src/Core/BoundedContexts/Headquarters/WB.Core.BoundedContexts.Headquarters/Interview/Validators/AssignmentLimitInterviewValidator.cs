@@ -18,15 +18,12 @@ public class AssignmentLimitInterviewValidator:
     ICommandValidator<StatefulInterview, InterviewCommand>
 {
     private readonly IAssignmentsService assignmentsService;
-    private readonly IAggregateRootPrototypeService prototypeService;
     private readonly IAggregateRootCache cache;
 
     public AssignmentLimitInterviewValidator(IAssignmentsService assignmentsService,
-        IAggregateRootPrototypeService prototypeService,
         IAggregateRootCache cache)
     {
         this.assignmentsService = assignmentsService;
-        this.prototypeService = prototypeService;
         this.cache = cache;
     }
 
@@ -40,10 +37,6 @@ public class AssignmentLimitInterviewValidator:
     {
         if (aggregate.Mode != InterviewMode.CAWI)
             return;
-        
-        var prototypeType = prototypeService.GetPrototypeType(command.InterviewId);
-        if (prototypeType == PrototypeType.Temporary)
-            CheckAssignmentLimitAndThrow(aggregate.GetAssignmentId(), command.InterviewId);
     }
     
     private void CheckAssignmentLimitAndThrow(int? assignmentId, Guid interviewId)

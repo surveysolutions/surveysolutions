@@ -38,7 +38,6 @@ namespace WB.Tests.Unit.Infrastructure.Native
 
             var repo = new EventSourcedAggregateRootRepositoryWithWebCache(eventStore.Object,
                 Create.Storage.InMemoryEventStore(),
-                Create.Service.MockOfAggregatePrototypeService(),  
                 domainRepo.Object,
                 ServiceLocator.Current,
                 new Stub.StubAggregateLock(), 
@@ -78,11 +77,8 @@ namespace WB.Tests.Unit.Infrastructure.Native
             domainRepositoryMock.Setup(x => x.Load(typeof(IEventSourcedAggregateRoot), aggregateRootId, committedEvents))
                 .Returns(aggregateFromInMemoryEvents);
 
-            var prototypeService = Mock.Of<IAggregateRootPrototypeService>(s => s.GetPrototypeType(aggregateRootId) == PrototypeType.Permanent);
-
             var repository = GetRepository(inMemoryEventStore: inMemoryEventStoreMock.Object,
-                domainRepository: domainRepositoryMock.Object,
-                prototypeService: prototypeService);
+                domainRepository: domainRepositoryMock.Object);
         
             // Act
             var aggregate = repository.GetLatest(typeof(IEventSourcedAggregateRoot), aggregateRootId);
@@ -95,8 +91,7 @@ namespace WB.Tests.Unit.Infrastructure.Native
             EventBusSettings eventBusSettings = null,
             IDomainRepository domainRepository = null,
             IEventStore eventStore = null,
-            IInMemoryEventStore inMemoryEventStore = null,
-            IAggregateRootPrototypeService prototypeService = null)
+            IInMemoryEventStore inMemoryEventStore = null)
         {
             return new EventSourcedAggregateRootRepositoryWithWebCache(
                 eventStore: eventStore ?? Mock.Of<IEventStore>(),
@@ -105,7 +100,6 @@ namespace WB.Tests.Unit.Infrastructure.Native
                 serviceLocator: ServiceLocator.Current,
                 aggregateLock: new Stub.StubAggregateLock(),
                 memoryCache: Create.Storage.NewAggregateRootCache(),
-                prototypeService: prototypeService ?? Create.Service.MockOfAggregatePrototypeService(),
                 schedulerOptions: Options.Create(new SchedulerConfig()));
         }
     }

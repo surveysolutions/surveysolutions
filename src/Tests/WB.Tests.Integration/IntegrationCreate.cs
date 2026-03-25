@@ -291,9 +291,7 @@ namespace WB.Tests.Integration
                     serviceLocator: locatorMock.Object,
                     plainRepository: Mock.Of<IPlainAggregateRootRepository>(),
                     aggregateRootCache: Create.Storage.NewAggregateRootCache(),
-                    commandsMonitoring: Mock.Of<ICommandsMonitoring>(),
-                    prototypeService: Create.Service.MockOfAggregatePrototypeService(),
-                    promoterService: Mock.Of<IAggregateRootPrototypePromoterService>()
+                    commandsMonitoring: Mock.Of<ICommandsMonitoring>()
                     ));
 
             return new SequentialCommandService(serviceLocator: locatorMock.Object, aggregateLock: Stub.Lock());

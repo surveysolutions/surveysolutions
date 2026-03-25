@@ -15,14 +15,12 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
         protected static NcqrCompatibleEventDispatcher CreateNcqrCompatibleEventDispatcher(
             EventBusSettings eventBusSettings = null, 
             IServiceLocator serviceLocator = null,
-            IDenormalizerRegistry denormalizerRegistry = null,
-            IAggregateRootPrototypeService prototypeService = null)
+            IDenormalizerRegistry denormalizerRegistry = null)
         {
             return Create.Service.NcqrCompatibleEventDispatcher(
                 eventBusSettings: eventBusSettings ?? new EventBusSettings(), 
                 serviceLocator: serviceLocator,
-                denormalizerRegistry: denormalizerRegistry,
-                prototypeService: prototypeService);
+                denormalizerRegistry: denormalizerRegistry);
         }
 
         protected static IPublishableEvent CreatePublishableEvent(Guid? eventSourceId = null, IEvent evnt = null)

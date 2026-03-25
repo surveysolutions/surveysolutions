@@ -23,15 +23,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using reCAPTCHA.AspNetCore;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
-using WB.Core.BoundedContexts.Headquarters.EmailProviders;
 using WB.Core.BoundedContexts.Headquarters.Invitations;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects;
-using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Storage;
@@ -71,7 +67,6 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IOptions<RecaptchaSettings> recaptchaSettings;
         private readonly IOptions<CaptchaConfig> captchaConfig;
         private readonly IServiceLocator serviceLocator;
-        private readonly IAggregateRootPrototypeService prototypeService;
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
 
         private const string CaptchaCompletedKey = "CaptchaCompletedKey";
@@ -131,7 +126,6 @@ namespace WB.UI.Headquarters.Controllers
             IOptions<RecaptchaSettings> recaptchaSettings,
             IOptions<CaptchaConfig> captchaConfig,
             IServiceLocator serviceLocator,
-            IAggregateRootPrototypeService prototypeService, 
             IQuestionnaireStorage questionnaireStorage, 
             IInScopeExecutor inScopeExecutor,
             IMemoryCache memoryCache,
@@ -153,7 +147,6 @@ namespace WB.UI.Headquarters.Controllers
             this.recaptchaSettings = recaptchaSettings;
             this.captchaConfig = captchaConfig;
             this.serviceLocator = serviceLocator;
-            this.prototypeService = prototypeService;
             this.questionnaireStorage = questionnaireStorage;
             this.inScopeExecutor = inScopeExecutor;
             this.memoryCache = memoryCache;
@@ -373,14 +366,6 @@ namespace WB.UI.Headquarters.Controllers
             if (interviewId == null || !Guid.TryParse(interviewId, out var aggregateId))
                 return this.Json(new { link = string.Empty });
             
-            inScopeExecutor.Execute(serviceLocator =>
-            {
-                var promoterServiceLocal =
-                    serviceLocator.GetInstance<IAggregateRootPrototypePromoterService>();
-                promoterServiceLocal.MaterializePrototypeIfRequired(aggregateId);
-            });
-
-
             var assignmentId = interviewSummary.GetById(data.InterviewId)?.AssignmentId ?? 0;
             var assignment = assignments.GetAssignment(assignmentId);
 
@@ -853,8 +838,7 @@ namespace WB.UI.Headquarters.Controllers
 
             var interviewId = Guid.NewGuid();
             var interviewKey = this.keyGenerator.Get();
-            this.prototypeService.MarkAsPrototype(interviewId, PrototypeType.Temporary);
-
+            
             var createInterviewCommand = new CreateInterview(
                 interviewId,
                 responsible.PublicKey,

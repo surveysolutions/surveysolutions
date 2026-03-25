@@ -19,7 +19,6 @@ namespace WB.Infrastructure.Native.Storage
     {
         private readonly IEventStore eventStore;
         private readonly IInMemoryEventStore inMemoryEventStore;
-        private readonly IAggregateRootPrototypeService prototypeService;
         private readonly IServiceLocator serviceLocator;
         private readonly IAggregateLock aggregateLock;
         private readonly IAggregateRootCache memoryCache;
@@ -29,7 +28,6 @@ namespace WB.Infrastructure.Native.Storage
         public EventSourcedAggregateRootRepositoryWithWebCache(
             IEventStore eventStore,
             IInMemoryEventStore inMemoryEventStore,
-            IAggregateRootPrototypeService prototypeService,
             IDomainRepository repository,
             IServiceLocator serviceLocator,
             IAggregateLock aggregateLock,
@@ -39,7 +37,6 @@ namespace WB.Infrastructure.Native.Storage
         {
             this.eventStore = eventStore;
             this.inMemoryEventStore = inMemoryEventStore;
-            this.prototypeService = prototypeService;
             this.serviceLocator = serviceLocator;
             this.aggregateLock = aggregateLock;
             this.memoryCache = memoryCache;
@@ -61,15 +58,7 @@ namespace WB.Infrastructure.Native.Storage
                     return aggregateRoot;
                 }
 
-                if (this.prototypeService.IsPrototype(aggregateId))
-                {
-                    var events = this.inMemoryEventStore.Read(aggregateId, 0);
-                    aggregateRoot = repository.Load(aggregateType, aggregateId, events);
-                }
-                else
-                {
-                    aggregateRoot = base.GetLatest(aggregateType, aggregateId, progress, cancellationToken);
-                }
+                aggregateRoot = base.GetLatest(aggregateType, aggregateId, progress, cancellationToken);
 
                 if (aggregateRoot != null)
                 {
@@ -94,8 +83,6 @@ namespace WB.Infrastructure.Native.Storage
 
             if (this.schedulerOptions.Value.IsClustered)
             {
-                if (!this.prototypeService.IsPrototype(aggregateId))
-                {
                     if (!dirtyChecked.Contains(aggregateId))
                     {
                         dbContainsNewEvents = eventStore.IsDirty(aggregateId, aggregateRoot.Version);
@@ -105,7 +92,6 @@ namespace WB.Infrastructure.Native.Storage
                             dirtyChecked.Add(aggregateId);
                         }
                     }
-                }
             }
 
             bool isDirty = aggregateRoot.HasUncommittedChanges() || dbContainsNewEvents;

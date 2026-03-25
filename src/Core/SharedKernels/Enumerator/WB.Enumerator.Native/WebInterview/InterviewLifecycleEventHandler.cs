@@ -309,20 +309,14 @@ namespace WB.Enumerator.Native.WebInterview
 
         public InterviewLifecycle Update(InterviewLifecycle cycle, IPublishedEvent<TranslationSwitched> evnt)
         {
-            if (!evnt.IsPrototype())
-            {
-                cycle.ReloadInterview(evnt.EventSourceId);
-            }
-
+            cycle.ReloadInterview(evnt.EventSourceId);
+            
             return cycle;
         }
 
         public InterviewLifecycle Update(InterviewLifecycle cycle, IPublishedEvent<InterviewerAssigned> evnt)
         {
-            if (!evnt.IsPrototype())
-            {
-                cycle.ReloadInterview(evnt.EventSourceId);
-            }
+            cycle.ReloadInterview(evnt.EventSourceId);
 
             return cycle;
         }
@@ -347,7 +341,7 @@ namespace WB.Enumerator.Native.WebInterview
 
         public InterviewLifecycle Update(InterviewLifecycle cycle, IPublishedEvent<InterviewStatusChanged> evnt)
         {
-            if (!evnt.IsPrototype() && evnt.Payload.Status != InterviewStatus.Completed)
+            if (evnt.Payload.Status != InterviewStatus.Completed)
             {
                 cycle.ReloadInterview(evnt.EventSourceId);
             }
@@ -392,12 +386,7 @@ namespace WB.Enumerator.Native.WebInterview
 
         public InterviewLifecycle Update(InterviewLifecycle cycle, IPublishedEvent<InterviewModeChanged> @event)
         {
-            if (!@event.IsPrototype())
-            {
-                return cycle.FinishInterview(@event.EventSourceId);
-            }
-
-            return cycle;
+            return cycle.FinishInterview(@event.EventSourceId);
         }
     }
 }

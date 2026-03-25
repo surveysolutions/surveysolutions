@@ -27,7 +27,6 @@ namespace WB.Tests.Web.Headquarters.WebInterview
         private IWebInterviewConfigProvider webInterviewConfigProvider;
         private WebInterviewConfig webInterviewConfig;
         private Mock<IAuthorizedUser> authorizedUserMock;
-        private Mock<IAggregateRootPrototypeService> prototypeService;
         private Mock<IStatefulInterviewRepository> statefulInterviewRepo;
         private StatefulInterview interview;
         private Mock<IUserViewFactory> usersRepositoryMock;
@@ -40,7 +39,6 @@ namespace WB.Tests.Web.Headquarters.WebInterview
             webInterviewConfig = new WebInterviewConfig();
             webInterviewConfigProvider = Mock.Of<IWebInterviewConfigProvider>(tmp => tmp.Get(It.IsAny<QuestionnaireIdentity>()) == webInterviewConfig);
             authorizedUserMock = new Mock<IAuthorizedUser>();
-            prototypeService = new Mock<IAggregateRootPrototypeService>();
             usersRepositoryMock = new Mock<IUserViewFactory>();
             
             contextAccessor = Mock.Of<IHttpContextAccessor>(rrr => rrr.HttpContext == new DefaultHttpContext(){
@@ -51,7 +49,6 @@ namespace WB.Tests.Web.Headquarters.WebInterview
                 statefulInterviewRepo.Object,
                 webInterviewConfigProvider,
                 authorizedUserMock.Object, 
-                prototypeService.Object,
                 usersRepositoryMock.Object,
                 contextAccessor);
             webInterviewAllowService = interviewAllowService;
@@ -219,8 +216,6 @@ namespace WB.Tests.Web.Headquarters.WebInterview
             this.authorizedUserMock.Setup(x => x.Id).Returns(Id.g1);
             this.authorizedUserMock.Setup(x => x.IsAuthenticated).Returns(true);
             this.authorizedUserMock.Setup(x => x.IsHeadquarter).Returns(true);
-
-            this.prototypeService.Setup(p => p.GetPrototypeType(It.IsAny<Guid>())).Returns(PrototypeType.Temporary);
 
             // Act
             Assert.DoesNotThrow(Act);

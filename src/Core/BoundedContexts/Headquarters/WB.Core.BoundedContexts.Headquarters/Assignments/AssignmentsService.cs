@@ -80,7 +80,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             // to prevent concurrent creation of interviews for size-limited CAWI assignments.
             this.sessionProvider.Session.Refresh(assignment, LockMode.Upgrade);
 
-            return assignment;
+            // Evict the entity (and all of its registered collections) from the session.
+            // The reloaded entity gets a brand-new PersistentSet with cachedSize = -1,
+            // so the first .Count call will issue a fresh SELECT COUNT(*) and see
+            // any interviews committed by the concurrent transaction that just released the lock.
+            this.sessionProvider.Session.Evict(assignment);
+            return this.assignmentsAccessor.Query(_ => _.Where(a => a.Id == id)).SingleOrDefault();
         }
 
         public Assignment GetAssignmentByAggregateRootId(Guid id)

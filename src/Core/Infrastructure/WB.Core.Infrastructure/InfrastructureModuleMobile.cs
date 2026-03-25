@@ -24,8 +24,6 @@ namespace WB.Core.Infrastructure
             registry.BindAsSingleton<ICommandsMonitoring, TraceCommandsMonitoring>();
             registry.BindAsSingleton<IDenormalizerRegistry, DenormalizerRegistry>();
             registry.Bind<ICommandExecutor, CommandExecutor>();
-            registry.Bind<IAggregateRootPrototypeService, DummyAggregateRootPrototypeService>();
-            registry.Bind<IAggregateRootPrototypePromoterService, DummyAggregateRootPrototypePromoterService>();
         }
     }
 }

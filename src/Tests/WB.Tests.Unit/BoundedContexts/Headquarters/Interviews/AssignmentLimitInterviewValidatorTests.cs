@@ -32,10 +32,8 @@ public class AssignmentLimitInterviewValidatorTests
                     Create.Entity.InterviewSummary(Guid.NewGuid()),
                 })
             );
-        var prototypeService = Mock.Of<IAggregateRootPrototypeService>(s => 
-            s.GetPrototypeType(Id.g3) == PrototypeType.Permanent);
 
-        var validator = Create.Service.AssignmentLimitInterviewValidator(assignmentService, prototypeService);
+        var validator = Create.Service.AssignmentLimitInterviewValidator(assignmentService);
 
         TestDelegate act = () => validator.Validate(null, Create.Command.CreateInterview(userId: Id.gA, assignmentId: 3, interviewMode: InterviewMode.CAWI));
 
@@ -59,10 +57,9 @@ public class AssignmentLimitInterviewValidatorTests
                     Create.Entity.InterviewSummary(Guid.NewGuid()),
                 })
             );
-        var prototypeService = Mock.Of<IAggregateRootPrototypeService>(s => 
-            s.GetPrototypeType(Id.g7) == PrototypeType.Temporary);
+        
 
-        var validator = Create.Service.AssignmentLimitInterviewValidator(assignmentService, prototypeService);
+        var validator = Create.Service.AssignmentLimitInterviewValidator(assignmentService);
 
         var statefulInterview = Create.AggregateRoot.StatefulInterview(Id.g7);
         statefulInterview.Apply(Create.Event.InterviewCreated(assignmentId: 3));
@@ -87,8 +84,7 @@ public class AssignmentLimitInterviewValidatorTests
         mockAssignmentsService.Setup(s => s.GetAssignmentWithUpgradeLock(7)).Returns(assignment);
 
         var validator = Create.Service.AssignmentLimitInterviewValidator(
-            mockAssignmentsService.Object,
-            Mock.Of<IAggregateRootPrototypeService>());
+            mockAssignmentsService.Object);
 
         // Act — should not throw because there is still 1 slot left after the lock is acquired
         Assert.DoesNotThrow(() =>
@@ -108,8 +104,7 @@ public class AssignmentLimitInterviewValidatorTests
         mockAssignmentsService.Setup(s => s.GetAssignment(8)).Returns(assignment);
 
         var validator = Create.Service.AssignmentLimitInterviewValidator(
-            mockAssignmentsService.Object,
-            Mock.Of<IAggregateRootPrototypeService>());
+            mockAssignmentsService.Object);
 
         // Act — should not throw
         Assert.DoesNotThrow(() =>
@@ -139,12 +134,11 @@ public class AssignmentLimitInterviewValidatorTests
         mockAssignmentsService.Setup(s => s.GetAssignmentWithUpgradeLock(9))
             .Returns(() =>
             {
-                assignment.AsDynamic().InterviewSummaries = new[] { Create.Entity.InterviewSummary(Guid.NewGuid()) };
+                assignment.InterviewSummaries = new[] { Create.Entity.InterviewSummary(Guid.NewGuid()) };
                 return assignment;
             });
         var validator = Create.Service.AssignmentLimitInterviewValidator(
-            mockAssignmentsService.Object,
-            Mock.Of<IAggregateRootPrototypeService>());
+            mockAssignmentsService.Object);
 
         TestDelegate act = () =>
             validator.Validate(null, Create.Command.CreateInterview(userId: Id.gA, assignmentId: 9, interviewMode: InterviewMode.CAWI));

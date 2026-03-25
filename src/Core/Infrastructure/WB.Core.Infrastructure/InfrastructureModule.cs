@@ -23,8 +23,6 @@ namespace WB.Core.Infrastructure
             registry.Bind<ICommandExecutor, CommandExecutor>();
             registry.Bind<IPlainAggregateRootRepository, PlainAggregateRootRepository>();
             registry.Bind<IAggregateRootCache, AggregateRootCache>();
-            registry.Bind<IAggregateRootPrototypeService, AggregateRootPrototypeService>();
-            registry.Bind<IAggregateRootPrototypePromoterService, AggregateRootPrototypePromoterService>();
             registry.BindAsSingleton<IDenormalizerRegistry, DenormalizerRegistry>();
             registry.Bind<IInScopeExecutor, NoScopeInScopeExecutor>();
         }
