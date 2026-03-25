@@ -51,15 +51,15 @@ namespace WB.UI.Designer.Resources {
             }
         }
         
-        public static string Unlike {
+        public static string NotHelpful {
             get {
-                return ResourceManager.GetString("Unlike", resourceCulture);
+                return ResourceManager.GetString("NotHelpful", resourceCulture);
             }
         }
         
-        public static string Like {
+        public static string Helpful {
             get {
-                return ResourceManager.GetString("Like", resourceCulture);
+                return ResourceManager.GetString("Helpful", resourceCulture);
             }
         }
         
@@ -75,27 +75,27 @@ namespace WB.UI.Designer.Resources {
             }
         }
         
-        public static string Undislike {
+        public static string NotUnhelpful {
             get {
-                return ResourceManager.GetString("Undislike", resourceCulture);
+                return ResourceManager.GetString("NotUnhelpful", resourceCulture);
             }
         }
         
-        public static string DislikeCommentTitle {
+        public static string UnhelpfulCommentTitle {
             get {
-                return ResourceManager.GetString("DislikeCommentTitle", resourceCulture);
+                return ResourceManager.GetString("UnhelpfulCommentTitle", resourceCulture);
             }
         }
         
-        public static string DislikeCommentPlaceholder {
+        public static string UnhelpfulCommentPlaceholder {
             get {
-                return ResourceManager.GetString("DislikeCommentPlaceholder", resourceCulture);
+                return ResourceManager.GetString("UnhelpfulCommentPlaceholder", resourceCulture);
             }
         }
         
-        public static string DislikeCommentHint {
+        public static string UnhelpfulCommentHint {
             get {
-                return ResourceManager.GetString("DislikeCommentHint", resourceCulture);
+                return ResourceManager.GetString("UnhelpfulCommentHint", resourceCulture);
             }
         }
         
@@ -111,15 +111,15 @@ namespace WB.UI.Designer.Resources {
             }
         }
         
-        public static string UnlikeCommentTitle {
+        public static string NotHelpfulCommentTitle {
             get {
-                return ResourceManager.GetString("UnlikeCommentTitle", resourceCulture);
+                return ResourceManager.GetString("NotHelpfulCommentTitle", resourceCulture);
             }
         }
         
-        public static string UnlikeCommentPlaceholder {
+        public static string NotHelpfulCommentPlaceholder {
             get {
-                return ResourceManager.GetString("UnlikeCommentPlaceholder", resourceCulture);
+                return ResourceManager.GetString("NotHelpfulCommentPlaceholder", resourceCulture);
             }
         }
         
@@ -138,6 +138,18 @@ namespace WB.UI.Designer.Resources {
         public static string WelcomeMessage {
             get {
                 return ResourceManager.GetString("WelcomeMessage", resourceCulture);
+            }
+        }
+        
+        public static string Disclaimer {
+            get {
+                return ResourceManager.GetString("Disclaimer", resourceCulture);
+            }
+        }
+        
+        public static string ConnectionError {
+            get {
+                return ResourceManager.GetString("ConnectionError", resourceCulture);
             }
         }
     }
