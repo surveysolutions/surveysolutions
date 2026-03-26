@@ -37,14 +37,14 @@
                                         <div v-if="message.role === 'assistant' && !message.isError && !!message.assistantCallId"
                                             class="d-flex align-center">
                                             <v-btn variant="text" size="x-small" icon
-                                                class="reaction-btn reaction-helpful"
+                                                class="reaction-btn reaction-helpful" :ripple="false"
                                                 :color="getMessageReaction(message) === 1 ? 'success' : undefined"
                                                 @click="setReaction(message, index, 1)"
                                                 :title="getMessageReaction(message) === 1 ? $t('Assistant.NotHelpful') : $t('Assistant.Helpful')">
                                                 <v-icon :size="24">{{ getMessageReaction(message) === 1 ? 'mdi-thumb-up'
                                                     : 'mdi-thumb-up-outline' }}</v-icon>
                                             </v-btn>
-                                            <v-btn variant="text" size="x-small" icon
+                                            <v-btn variant="text" size="x-small" icon :ripple="false"
                                                 class="reaction-btn reaction-unhelpful"
                                                 :color="getMessageReaction(message) === -1 ? 'error' : undefined"
                                                 @click="setReaction(message, index, -1)"
