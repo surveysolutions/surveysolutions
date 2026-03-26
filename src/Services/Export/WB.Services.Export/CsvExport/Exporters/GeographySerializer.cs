@@ -31,7 +31,7 @@ namespace WB.Services.Export.CsvExport.Exporters
                 return area.Coordinates ?? string.Empty;
 
             if (geometryType == null)
-                return area.Coordinates ?? string.Empty;
+                throw new InvalidOperationException("GeometryType must be specified for WKT/GeoJSON export.");
 
             try
             {

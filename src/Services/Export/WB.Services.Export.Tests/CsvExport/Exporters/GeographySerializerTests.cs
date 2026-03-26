@@ -1,3 +1,4 @@
+using System;
 using NUnit.Framework;
 using WB.Services.Export.CsvExport.Exporters;
 using WB.Services.Export.Interview.Entities;
@@ -35,10 +36,10 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             => Assert.That(serializer.Serialize(null, GeometryType.Point, GeographyExportFormat.Wkt), Is.EqualTo(string.Empty));
 
         [Test]
-        public void Null_geometry_type_falls_back_to_legacy_coordinates()
+        public void Null_geometry_type_throws_exception()
         {
             var area = new Area { Coordinates = "10.5,48.2" };
-            Assert.That(serializer.Serialize(area, null, GeographyExportFormat.Wkt), Is.EqualTo("10.5,48.2"));
+            Assert.Throws<InvalidOperationException>(() => serializer.Serialize(area, null, GeographyExportFormat.Wkt));
         }
 
         [Test]
