@@ -276,7 +276,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         public class GeographyExportFormatModel
         {
             [Required]
-            public GeographyExportFormat GeographyExportFormat { get; set; }
+            public GeographyExportFormat GeographyExportFormat { get; set; } = GeographyExportFormat.Wkt;
         }
 
         [HttpPost]
