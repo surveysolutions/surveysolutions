@@ -104,7 +104,7 @@ namespace WB.Services.Export.CsvExport.Exporters
                     return "LINESTRING(" + FormatWktCoordList(coords) + ")";
 
                 case GeometryType.Polygon:
-                    if (coords.Length < 2) return string.Empty;
+                    if (coords.Length < 3) return string.Empty;
                     return "POLYGON((" + FormatWktCoordList(EnsureClosed(coords)) + "))";
 
                 default:
@@ -136,7 +136,7 @@ namespace WB.Services.Export.CsvExport.Exporters
                     return "{\"type\":\"LineString\",\"coordinates\":" + FormatGeoJsonCoordArray(coords) + "}";
 
                 case GeometryType.Polygon:
-                    if (coords.Length < 2) return string.Empty;
+                    if (coords.Length < 3) return string.Empty;
                     return "{\"type\":\"Polygon\",\"coordinates\":[" + FormatGeoJsonCoordArray(EnsureClosed(coords)) + "]}";
 
                 default:

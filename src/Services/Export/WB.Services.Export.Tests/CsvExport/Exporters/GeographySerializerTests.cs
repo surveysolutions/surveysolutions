@@ -112,6 +112,14 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
                 Is.EqualTo("POLYGON((10 48,11 48,11 49,10 48))"));
         }
 
+        [Test]
+        public void Wkt_polygon_with_fewer_than_3_coords_falls_back_to_legacy()
+        {
+            var area = new Area { Coordinates = "10,48;11,48" };
+            Assert.That(serializer.Serialize(area, GeometryType.Polygon, GeographyExportFormat.Wkt),
+                Is.EqualTo("10,48;11,48"));
+        }
+
         // ── GeoJSON – Point ─────────────────────────────────────────────────────
 
         [Test]
@@ -158,6 +166,14 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             var area = new Area { Coordinates = "10,48;11,48;11,49" };
             Assert.That(serializer.Serialize(area, GeometryType.Polygon, GeographyExportFormat.GeoJson),
                 Is.EqualTo("{\"type\":\"Polygon\",\"coordinates\":[[[10,48],[11,48],[11,49],[10,48]]]}"));
+        }
+
+        [Test]
+        public void GeoJson_polygon_with_fewer_than_3_coords_falls_back_to_legacy()
+        {
+            var area = new Area { Coordinates = "10,48;11,48" };
+            Assert.That(serializer.Serialize(area, GeometryType.Polygon, GeographyExportFormat.GeoJson),
+                Is.EqualTo("10,48;11,48"));
         }
     }
 }
