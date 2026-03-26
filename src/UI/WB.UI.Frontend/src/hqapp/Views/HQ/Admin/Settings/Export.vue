@@ -149,7 +149,7 @@
                 <p>{{ $t('Settings.GeographyExportFormat_Description') }}</p>
             </div>
             <div class="col-sm-9">
-                <div class="block-filter">
+                <div class="block-filter" style="padding-left: 30px">
                     <div class="form-group">
                         <Typeahead control-id="geographyExportFormat" noSearch noClear
                             :values="geographyFormatOptions"
