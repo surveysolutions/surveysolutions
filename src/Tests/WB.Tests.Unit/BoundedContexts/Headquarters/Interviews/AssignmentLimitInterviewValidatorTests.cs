@@ -65,7 +65,8 @@ public class AssignmentLimitInterviewValidatorTests
         statefulInterview.Apply(Create.Event.InterviewCreated(assignmentId: 3));
         statefulInterview.ChangeInterviewMode(Id.g1, DateTimeOffset.Now, InterviewMode.CAWI);
 
-        TestDelegate act = () => validator.Validate(statefulInterview, Create.Command.AnswerTextQuestionCommand(userId: Id.gA, interviewId: Id.g7, answer: "ttt" ));
+        TestDelegate act = () => validator.Validate(statefulInterview, 
+            Create.Command.AnswerTextQuestionCommand(userId: Id.gA, interviewId: Id.g7, answer: "ttt" ));
 
         Assert.That(act, Throws.Exception.InstanceOf<InterviewException>()
             .With.Message.EqualTo(CommandValidatorsMessages.AssignmentLimitReached)

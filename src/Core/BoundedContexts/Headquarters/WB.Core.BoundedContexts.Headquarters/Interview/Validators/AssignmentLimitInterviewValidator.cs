@@ -37,6 +37,8 @@ public class AssignmentLimitInterviewValidator:
     {
         if (aggregate.Mode != InterviewMode.CAWI)
             return;
+        
+        CheckAssignmentLimitAndThrow(aggregate.GetAssignmentId(), command.InterviewId);
     }
     
     private void CheckAssignmentLimitAndThrow(int? assignmentId, Guid interviewId)

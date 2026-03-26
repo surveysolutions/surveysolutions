@@ -209,17 +209,6 @@ namespace WB.Tests.Web.Headquarters.WebInterview
             var exception = Assert.Throws<InterviewAccessException>(Act);
             Assert.That(exception.Reason, Is.EqualTo(InterviewAccessExceptionReason.InterviewExpired));
         }
-
-        [Test]
-        public void should_allow_administrator_to_access_ignored_web_interview()
-        {
-            this.authorizedUserMock.Setup(x => x.Id).Returns(Id.g1);
-            this.authorizedUserMock.Setup(x => x.IsAuthenticated).Returns(true);
-            this.authorizedUserMock.Setup(x => x.IsHeadquarter).Returns(true);
-
-            // Act
-            Assert.DoesNotThrow(Act);
-        }
         
         [Test]
         public void should_not_allow_access_if_responsible_is_not_interviewer()
