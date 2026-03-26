@@ -100,7 +100,7 @@ namespace WB.Services.Export.CsvExport.Exporters
                     return mpSb.ToString();
 
                 case GeometryType.Polyline:
-                    if (coords.Length == 0) return string.Empty;
+                    if (coords.Length < 2) return string.Empty;
                     return "LINESTRING(" + FormatWktCoordList(coords) + ")";
 
                 case GeometryType.Polygon:
@@ -132,7 +132,7 @@ namespace WB.Services.Export.CsvExport.Exporters
                     return mpSb.ToString();
 
                 case GeometryType.Polyline:
-                    if (coords.Length == 0) return string.Empty;
+                    if (coords.Length < 2) return string.Empty;
                     return "{\"type\":\"LineString\",\"coordinates\":" + FormatGeoJsonCoordArray(coords) + "}";
 
                 case GeometryType.Polygon:

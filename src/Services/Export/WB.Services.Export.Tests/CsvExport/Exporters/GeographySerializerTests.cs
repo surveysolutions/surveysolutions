@@ -94,6 +94,14 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
                 Is.EqualTo("LINESTRING(10 48,11 49,12 50)"));
         }
 
+        [Test]
+        public void Wkt_linestring_with_fewer_than_2_coords_falls_back_to_legacy()
+        {
+            var area = new Area { Coordinates = "10,48" };
+            Assert.That(serializer.Serialize(area, GeometryType.Polyline, GeographyExportFormat.Wkt),
+                Is.EqualTo("10,48"));
+        }
+
         // ── WKT – Polygon ───────────────────────────────────────────────────────
 
         [Test]
@@ -148,6 +156,14 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             var area = new Area { Coordinates = "10,48;11,49" };
             Assert.That(serializer.Serialize(area, GeometryType.Polyline, GeographyExportFormat.GeoJson),
                 Is.EqualTo("{\"type\":\"LineString\",\"coordinates\":[[10,48],[11,49]]}"));
+        }
+
+        [Test]
+        public void GeoJson_linestring_with_fewer_than_2_coords_falls_back_to_legacy()
+        {
+            var area = new Area { Coordinates = "10,48" };
+            Assert.That(serializer.Serialize(area, GeometryType.Polyline, GeographyExportFormat.GeoJson),
+                Is.EqualTo("10,48"));
         }
 
         // ── GeoJSON – Polygon ───────────────────────────────────────────────────
