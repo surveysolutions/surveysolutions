@@ -108,6 +108,8 @@ namespace WB.UI.Tester.Infrastructure.Internals.Settings
             }
         }
 
+        public bool CommunicationIntegrityValidationIgnore => false;
+
         public double GpsDesiredAccuracy
         {
             get

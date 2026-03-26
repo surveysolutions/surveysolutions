@@ -83,6 +83,7 @@ namespace WB.UI.Supervisor.Services.Implementation
         public override int EventChunkSize => this.CurrentSettings.EventChunkSize.GetValueOrDefault(Application.Context.Resources?.GetInteger(Resource.Integer.EventChunkSize) ?? 1000);
         public override double GpsDesiredAccuracy => throw new NotImplementedException();
         public override bool VibrateOnError => false;
+        public override bool CommunicationIntegrityValidationIgnore => false;
         public override bool ShowLocationOnMap => this.currentSettings.ShowLocationOnMap;
 
         public override int GpsReceiveTimeoutSec => throw new NotImplementedException();

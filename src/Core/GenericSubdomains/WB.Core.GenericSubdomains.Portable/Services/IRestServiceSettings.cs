@@ -10,5 +10,6 @@ namespace WB.Core.GenericSubdomains.Portable.Services
         bool AcceptUnsignedSslCertificate { get;  }
         string UserAgent { get; }
         int MaxDegreeOfParallelism { get; }
+        bool CommunicationIntegrityValidationIgnore { get; }
     }
 }
