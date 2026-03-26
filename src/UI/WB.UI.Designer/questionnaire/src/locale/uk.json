@@ -488,6 +488,7 @@
     "ManageAccount": "Керування обліковим записом",
     "ShowList": "Відобразити списком",
     "QuestionIsCritical": "Це критичне питання",
+    "AIAssistant": "ШІ",
     "SideBarCriticalityConditionExpression": "Critical condition",
     "SideBarCriticalityConditionsCounter": "{{count}} Critical rule:",
     "SideBarCriticalityConditionsCounter_other": "{{count}} Critical rules:",

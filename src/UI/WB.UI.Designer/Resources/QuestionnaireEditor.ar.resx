@@ -1607,4 +1607,7 @@
   <data name="SwitchToTranslationConfirm" xml:space="preserve">
     <value>سيؤدي التبديل إلى تغيير لغة عرض الاستبيان. يجب أن تحتوي الترجمة على نص لجميع العناصر.</value>
   </data>
+  <data name="AIAssistant" xml:space="preserve">
+      <value>ذكاء اصطناعي</value>
+  </data>
 </root>

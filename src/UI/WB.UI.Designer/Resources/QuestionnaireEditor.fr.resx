@@ -1665,4 +1665,7 @@ Vous avez entré une entrée invalide. Chaque ligne doit suivre le format : "Tit
   <data name="SwitchToTranslationConfirm" xml:space="preserve">
     <value>Passer à changera la langue d’affichage du questionnaire. La traduction doit inclure un texte pour tous les éléments.</value>
 </data>
+  <data name="AIAssistant" xml:space="preserve">
+      <value>IA</value>
+  </data>
 </root>

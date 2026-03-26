@@ -513,7 +513,8 @@
     "SideBarShowDescription": "přidat popis",
     "AttachmentSizeIsTooBig": "Příloha je příliš velká. Maximální velikost: {{size}}",
     "SwitchTo": "Přepnout na",
-    "SwitchToTranslationConfirm": "Přepnutím se změní jazyk zobrazení dotazníku. Překlad musí obsahovat text pro všechny prvky."
+    "SwitchToTranslationConfirm": "Přepnutím se změní jazyk zobrazení dotazníku. Překlad musí obsahovat text pro všechny prvky.",
+    "AIAssistant": "AI"
   },
   "AccountResources": {
     "AccountInfoUpdated": "Informace o účtu byly úspěšně aktualizovány",

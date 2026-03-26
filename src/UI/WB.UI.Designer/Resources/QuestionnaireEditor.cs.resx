@@ -1665,4 +1665,7 @@ Zadali jste neplatný vstup. Každý řádek by měl mít formát: "Název... Pa
   <data name="SwitchToTranslationConfirm" xml:space="preserve">
     <value>Přepnutím se změní jazyk zobrazení dotazníku. Překlad musí obsahovat text pro všechny prvky.</value>
   </data>
+  <data name="AIAssistant" xml:space="preserve">
+      <value>AI</value>
+  </data>
 </root>

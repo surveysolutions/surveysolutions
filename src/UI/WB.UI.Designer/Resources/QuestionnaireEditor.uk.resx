@@ -1586,4 +1586,7 @@
   <data name="QuestionIsCritical" xml:space="preserve">
       <value>Це критичне питання</value>
   </data>
+  <data name="AIAssistant" xml:space="preserve">
+      <value>ШІ</value>
+  </data>
 </root>

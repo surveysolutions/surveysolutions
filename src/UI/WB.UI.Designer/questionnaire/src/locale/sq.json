@@ -368,6 +368,7 @@
     "WarningsCounter": "{{count}} paralajmërim",
     "WarningsCounter_other": "{{count}} paralajmërime",
     "ManageAccount": "Menaxho llogarinë",
+    "AIAssistant": "AI",
     "SaveAs": "Save as",
     "CopyTo": "Copy to",
     "ReadOnlyQuestion": "It is readonly question. You cannot edit it.",

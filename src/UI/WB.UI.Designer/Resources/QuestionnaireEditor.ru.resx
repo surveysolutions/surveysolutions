@@ -1683,4 +1683,7 @@
   <data name="SwitchToTranslationConfirm" xml:space="preserve">
     <value>Переключить на изменит язык отображения опросника. Перевод должен содержать текст для всех элементов.</value>
 </data>
+  <data name="AIAssistant" xml:space="preserve">
+      <value>ИИ</value>
+  </data>
 </root>

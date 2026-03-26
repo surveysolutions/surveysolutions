@@ -1667,4 +1667,7 @@ You entered an invalid input. Each line should follow the format: "Title...Paren
   <data name="SwitchToTranslationConfirm" xml:space="preserve">
     <value>Switch To will change the display language of the questionnaire. The translation must include text for all elements.</value>
   </data>
+  <data name="AIAssistant" xml:space="preserve">
+      <value>AI</value>
+  </data>
 </root>

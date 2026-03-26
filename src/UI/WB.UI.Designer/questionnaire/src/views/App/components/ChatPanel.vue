@@ -9,7 +9,7 @@
                     @click="clearHistory" :disabled="messages.length === 0" :title="$t('Assistant.ClearHistory')"
                     :ripple="false" style="padding-right: 10px;" />
                 <v-btn icon="mdi-close" variant="text" size="medium" class="header-action-btn header-close"
-                    @click="close" />
+                    @click="close" :ripple="false" />
             </div>
         </v-card-title>
 
@@ -90,8 +90,9 @@
                     <template #append>
                         <div @click.stop style="pointer-events: all;">
                             <v-btn v-if="isLoading" icon="mdi-stop-circle" variant="text" size="medium" color="error"
-                                @click.stop="stopRequest" :disabled="false" :title="$t('Assistant.StopRequest')" />
-                            <v-btn v-else icon="mdi-send" variant="text" size="medium" color="primary"
+                                @click.stop="stopRequest" :ripple="false" :disabled="false"
+                                :title="$t('Assistant.StopRequest')" />
+                            <v-btn v-else icon="mdi-send" :ripple="false" variant="text" size="medium" color="primary"
                                 @click="sendMessage" :disabled="!currentMessage.trim()" :title="$t('Assistant.Send')" />
                         </div>
                     </template>
@@ -611,6 +612,11 @@ export default {
     border: none;
 }
 
+.chat-container :deep(.v-field__input) {
+    mask-image: none !important;
+    -webkit-mask-image: none !important;
+}
+
 .chat-container .editor {
     flex: 1;
 }
@@ -677,7 +683,7 @@ export default {
 .typing-indicator span {
     height: 8px;
     width: 8px;
-    background-color: rgb(var(--v-theme-on-surface-variant));
+    background-color: rgba(var(--v-theme-on-surface), 0.45);
     border-radius: 50%;
     display: inline-block;
     animation: typing 1.4s infinite ease-in-out;

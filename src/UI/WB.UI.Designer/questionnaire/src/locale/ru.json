@@ -504,6 +504,7 @@
     "AttachmentSizeIsTooBig": "Размер вложения слишком большой. Максимальный размер: {{size}}",
     "SwitchTo": "Переключить на",
     "SwitchToTranslationConfirm": "Переключить на изменит язык отображения опросника. Перевод должен содержать текст для всех элементов.",
+    "AIAssistant": "ИИ",
     "ErrorsCounter_other": "{{count}} errors",
     "SideBarAttachmentsCounter_other": "{{count}} Files Attachments ({{bytes}} total)",
     "SideBarLookupTablesCounter_other": "{{count}} Lookup Tables:",
