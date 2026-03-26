@@ -47,7 +47,6 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
                 s.GetAssignmentByAggregateRootId(It.IsAny<Guid>()) == assignment);
             var assignmentFactory = Create.Service.AssignmentFactory(commandService.Object, assignmentsService);
 
-
             var sl = Mock.Of<IServiceLocator>(x => x.GetInstance<IAssignmentsService>() == assignmentsStorage.Object);
             var scopeExecutor = Create.Service.InScopeExecutor(sl);
             

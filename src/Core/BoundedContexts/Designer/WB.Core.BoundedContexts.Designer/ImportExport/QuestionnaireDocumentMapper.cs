@@ -330,8 +330,12 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
         {
             var dst = new Models.Question.AreaQuestion
             {
-                GeometryType = q.Properties != null ? (Models.Question.GeometryType?)(int)q.Properties.GeometryType.GetValueOrDefault() : null,
-                GeometryInputMode = q.Properties != null ? (Models.Question.GeometryInputMode?)(int)q.Properties.GeometryInputMode.GetValueOrDefault() : null,
+                GeometryType = q.Properties != null && q.Properties.GeometryType.HasValue 
+                    ? (Models.Question.GeometryType?)(int)q.Properties.GeometryType.Value 
+                    : null,
+                GeometryInputMode = q.Properties != null && q.Properties.GeometryInputMode.HasValue 
+                    ? (Models.Question.GeometryInputMode?)(int)q.Properties.GeometryInputMode.Value 
+                    : null,
                 GeometryOverlapDetection = q.Properties?.GeometryOverlapDetection
             };
             MapAbstractQuestionToModel(q, dst, idToVarMap);
@@ -501,8 +505,8 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
             var group = new Group(coverPage.Title, children)
             {
                 PublicKey = publicKey,
-                VariableName = coverPage.VariableName ?? string.Empty,
-                ConditionExpression = string.Empty
+                VariableName = coverPage.VariableName!,
+                ConditionExpression = null!
             };
             return group;
         }
@@ -549,8 +553,8 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
             var group = new Group(modelGroup.Title, children)
             {
                 PublicKey = publicKey,
-                VariableName = modelGroup.VariableName ?? string.Empty,
-                ConditionExpression = modelGroup.ConditionExpression ?? string.Empty,
+                VariableName = modelGroup.VariableName!,
+                ConditionExpression = modelGroup.ConditionExpression!,
                 HideIfDisabled = modelGroup.HideIfDisabled
             };
             return group;
@@ -571,8 +575,8 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
             var group = new Group(roster.Title, children)
             {
                 PublicKey = publicKey,
-                VariableName = roster.VariableName ?? string.Empty,
-                ConditionExpression = roster.ConditionExpression ?? string.Empty,
+                VariableName = roster.VariableName!,
+                ConditionExpression = roster.ConditionExpression!,
                 HideIfDisabled = roster.HideIfDisabled,
                 IsRoster = true,
                 CustomRosterTitle = customRosterTitle,
@@ -593,7 +597,7 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
             var staticText = new StaticText(
                 publicKey,
                 src.Text,
-                src.ConditionExpression ?? string.Empty,
+                src.ConditionExpression!,
                 src.HideIfDisabled,
                 src.ValidationConditions?.Select(MapValidationConditionFromModel).ToList(),
                 src.AttachmentName,
@@ -608,7 +612,7 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
             var variable = new QuestionnaireEntities.Variable(publicKey, null)
             {
                 Name = src.VariableName ?? string.Empty,
-                Label = src.Label ?? string.Empty,
+                Label = src.Label!,
                 Expression = src.Expression ?? string.Empty,
                 DoNotExport = src.DoNotExport,
                 Type = (QuestionnaireEntities.VariableType)(int)src.VariableType
@@ -621,7 +625,7 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
             dst.PublicKey = GetIdOrGenerate(src.VariableName, src.Id, varToIdMap);
             dst.StataExportCaption = src.VariableName ?? string.Empty;
             dst.Comments = src.Comments;
-            dst.ConditionExpression = src.ConditionExpression ?? string.Empty;
+            dst.ConditionExpression = src.ConditionExpression!;
             dst.HideIfDisabled = src.HideIfDisabled;
             dst.Instructions = src.Instructions;
             dst.QuestionScope = (Main.Core.Entities.SubEntities.QuestionScope)(int)src.QuestionScope;

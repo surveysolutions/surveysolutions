@@ -214,8 +214,8 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
             );
             questionnaireDocument.Attachments = new List<Attachment>()
             {
-                new Attachment() { Name = "attach #1", AttachmentId = Guid.NewGuid()/*, ContentId = "content1"*/},
-                new Attachment() { Name = "attach #2", AttachmentId = Guid.NewGuid()/*, ContentId = "content2"*/},
+                new Attachment() { Name = "attach #1", AttachmentId = Guid.NewGuid(), ContentId = "attachment1.jpeg"},
+                new Attachment() { Name = "attach #2", AttachmentId = Guid.NewGuid(), ContentId = "attachment2.png"},
             };
 
             var newQuestionnaire = DoImportExportQuestionnaire(questionnaireDocument, out var errors, q =>

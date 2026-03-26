@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Main.Core.Entities.SubEntities;
@@ -180,8 +181,9 @@ namespace WB.Enumerator.Native.WebInterview.Models
         {
             var result = new InterviewTextListQuestion();
             ApplyBaseEntity(result, question);
-            result.Rows = question.GetAsInterviewTreeTextListQuestion().GetAnswer().Rows
-                .Select(r => new TextListAnswerRowDto { Value = r.Value, Text = r.Text }).ToList();
+            result.Rows = question.GetAsInterviewTreeTextListQuestion().GetAnswer()?.Rows
+                ?.Select(r => new TextListAnswerRowDto { Value = r.Value, Text = r.Text }).ToList()
+                ?? new List<TextListAnswerRowDto>();
             return result;
         }
 
