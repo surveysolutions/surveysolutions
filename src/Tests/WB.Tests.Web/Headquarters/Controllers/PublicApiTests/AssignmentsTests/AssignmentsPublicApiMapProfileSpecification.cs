@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using AutoMapper;
-using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -20,20 +18,11 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
         [OneTimeSetUp]
         public void OneTimeSetup()
         {
-            var mapConfig = new MapperConfiguration(c =>
-            {
-                c.AddProfile<AssignmentsPublicApiMapProfile>();
-                c.ConstructServicesUsing(t => this.ServiceMock[t]);
-            }, new NullLoggerFactory());
-
-            mapper = mapConfig.CreateMapper();
-
             Context();
 
             this.storageMock = new Mock<IQuestionnaireStorage>();
             storageMock.Setup(s => s.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()))
                 .Returns(Questionnaire);
-            ServiceMock.Add(typeof(IQuestionnaireStorage), this.storageMock.Object);
             Because();
         }
 
@@ -42,9 +31,6 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
         public abstract void Because();
 
         protected Mock<IQuestionnaireStorage> storageMock;
-        protected Dictionary<Type, object> ServiceMock = new Dictionary<Type, object>();
-
-        protected IMapper mapper;
 
         protected IQuestionnaire Questionnaire { get; set; } = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(Id.g1,
             children: new[]

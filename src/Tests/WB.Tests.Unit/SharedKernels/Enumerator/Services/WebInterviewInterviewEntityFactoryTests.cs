@@ -1,7 +1,5 @@
-﻿using AutoMapper;
-using Main.Core.Documents;
+﻿using Main.Core.Documents;
 using Main.Core.Entities.Composite;
-using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable;
@@ -10,8 +8,6 @@ using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Models;
 using WB.Enumerator.Native.WebInterview.Services;
 using WB.Tests.Abc;
-using WB.UI.Headquarters.Controllers.Api.PublicApi;
-using WB.UI.Headquarters.Models.Api;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.Services
 {
@@ -162,12 +158,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services
 
         private WebInterviewInterviewEntityFactory CreateWebInterviewInterviewEntityFactory() =>
             new WebInterviewInterviewEntityFactory(
-                new MapperConfiguration(cfg =>
-                {
-                    cfg.AddProfile(new WebInterviewAutoMapProfile());
-                    cfg.AddProfile(new AssignmentProfile());
-                    cfg.AddProfile(new AssignmentsPublicApiMapProfile());
-                }, new NullLoggerFactory()).CreateMapper(),
                 Create.Service.EnumeratorGroupGroupStateCalculationStrategy(),
                 Create.Service.SupervisorGroupStateCalculationStrategy(),
                 Mock.Of<IWebNavigationService>(),

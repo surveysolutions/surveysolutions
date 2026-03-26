@@ -6,7 +6,6 @@ using System.Linq;
 using System.Net.Mime;
 using System.Net;
 using System.Threading.Tasks;
-using AutoMapper;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -47,7 +46,6 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
     {
         private readonly IAssignmentsService assignmentsStorage;
         private readonly IAssignmentViewFactory assignmentViewFactory;
-        private readonly IMapper mapper;
         private readonly IUserRepository userManager;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly ISystemLog auditLog;
@@ -65,7 +63,6 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         public AssignmentsController(
             IAssignmentViewFactory assignmentViewFactory,
             IAssignmentsService assignmentsStorage,
-            IMapper mapper,
             IUserRepository userManager,
             IQuestionnaireStorage questionnaireStorage,
             ISystemLog auditLog,
@@ -82,7 +79,6 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         {
             this.assignmentViewFactory = assignmentViewFactory;
             this.assignmentsStorage = assignmentsStorage;
-            this.mapper = mapper;
             this.userManager = userManager;
             this.questionnaireStorage = questionnaireStorage;
             this.auditLog = auditLog;
@@ -115,7 +111,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(assignment.QuestionnaireId, null);
 
-            var result = this.mapper.Map<FullAssignmentDetails>(assignment, o => o.Items["questionnaire"] = questionnaire);
+            var result = AssignmentsPublicApiMapper.ToFullAssignmentDetails(assignment, questionnaire);
             return result;
         }
 
@@ -162,7 +158,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 
                 var listView = new AssignmentsListView(result.Page, result.PageSize, result.TotalCount, filter.Order);
 
-                listView.Assignments = this.mapper.Map<List<AssignmentViewItem>>(result.Items);
+                listView.Assignments = AssignmentsPublicApiMapper.ToAssignmentViewItemList(result.Items);
                 return listView;
             }
             catch (NotSupportedException)
@@ -284,7 +280,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 
             var result = new CreateAssignmentResult
             {
-                Assignment = mapper.Map<AssignmentDetails>(assignment)
+                Assignment = AssignmentsPublicApiMapper.ToAssignmentDetails(assignment)
             };
 
             if (assignment?.WebMode == true)
@@ -380,7 +376,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                     var assignmentsService = sl.GetInstance<IAssignmentsService>();
                     var assignment = assignmentsService.GetAssignment(id);
 
-                    return this.mapper.Map<AssignmentDetails>(assignment);;
+                    return AssignmentsPublicApiMapper.ToAssignmentDetails(assignment);
                 });
             return updatedDetails;
         }

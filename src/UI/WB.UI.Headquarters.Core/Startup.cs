@@ -8,7 +8,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Anemonis.AspNetCore.RequestDecompression;
 using Autofac;
-using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -298,7 +297,6 @@ namespace WB.UI.Headquarters
             services.AddSignalR().AddNewtonsoftJsonProtocol();
 
             services.AddHttpContextAccessor();
-            services.AddAutoMapper(cfg => { }, typeof(Startup));
 
             services.Configure<CookiePolicyOptions>(options =>
             {

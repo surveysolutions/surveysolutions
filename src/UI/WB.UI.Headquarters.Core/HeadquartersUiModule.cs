@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using AutoMapper;
 using Microsoft.Extensions.Configuration;
 using reCAPTCHA.AspNetCore;
 using WB.Core.BoundedContexts.Headquarters.PdfInterview;
@@ -65,15 +64,6 @@ namespace WB.UI.Headquarters
             registry.Bind<IPdfInterviewGenerator, PdfInterviewGenerator>();
             registry.Bind<IWebInterviewTimezoneSetter, WebInterviewTimezoneSetter>();
             registry.Bind<ITokenProvider, TokenProvider>();
-
-            registry.BindToConstant<IMapper>(_ => new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile(new WebInterviewAutoMapProfile());
-                cfg.AddProfile(new AssignmentProfile());
-                cfg.AddProfile(new AssignmentsPublicApiMapProfile());
-                cfg.AddProfile(new WorkspacePublicApiMapProfile());
-                cfg.ConstructServicesUsing(_.Get);
-            }, _.Get<Microsoft.Extensions.Logging.ILoggerFactory>()).CreateMapper());
 
             var captchaSection = this.configuration.CaptchaOptionsSection();
 

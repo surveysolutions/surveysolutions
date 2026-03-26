@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using AutoMapper;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
@@ -18,20 +17,18 @@ namespace WB.Enumerator.Native.WebInterview.Services
 {
     public class WebInterviewInterviewEntityFactory : IWebInterviewInterviewEntityFactory
     {
-        private readonly IMapper autoMapper;
         private readonly IEnumeratorGroupStateCalculationStrategy enumeratorGroupStateCalculationStrategy;
         private readonly ISupervisorGroupStateCalculationStrategy supervisorGroupStateCalculationStrategy;
         private readonly IWebNavigationService webNavigationService;
         private readonly ISubstitutionTextFactory substitutionTextFactory;
         protected static readonly Regex HtmlRemovalRegex = new Regex(Constants.HtmlRemovalPattern, RegexOptions.Compiled);
 
-        public WebInterviewInterviewEntityFactory(IMapper autoMapper,
+        public WebInterviewInterviewEntityFactory(
             IEnumeratorGroupStateCalculationStrategy enumeratorGroupStateCalculationStrategy,
             ISupervisorGroupStateCalculationStrategy supervisorGroupStateCalculationStrategy,
             IWebNavigationService webNavigationService,
             ISubstitutionTextFactory substitutionTextFactory)
         {
-            this.autoMapper = autoMapper;
             this.enumeratorGroupStateCalculationStrategy = enumeratorGroupStateCalculationStrategy;
             this.supervisorGroupStateCalculationStrategy = supervisorGroupStateCalculationStrategy;
             this.webNavigationService = webNavigationService;
@@ -90,27 +87,16 @@ namespace WB.Enumerator.Native.WebInterview.Services
 
                 foreach (var child in children)
                 {
-                    var sidebar = this.autoMapper.Map<InterviewTreeGroup, SidebarPanel>(child, SidebarMapOptions);
+                    var sidebar = child.ToSidebarPanel();
                     sidebar.HasCustomRosterTitle = questionnaire.HasCustomRosterTitle(child.Identity.Id);
+                    sidebar.Status = this.CalculateSimpleStatus(child, isReviewMode, interview, questionnaire);
+                    this.ApplyValidity(sidebar.Validity, sidebar.Status);
+                    sidebar.Collapsed = !visibleSections.Contains(child.Identity);
+                    sidebar.Current = visibleSections.Contains(child.Identity);
+                    sidebar.HasChildren = child.Children.OfType<InterviewTreeGroup>().Any(IsSectionVisible);
+                    sidebar.IsDisabled = child.IsDisabled();
 
                     result.Groups.Add(sidebar);
-                }
-
-                void SidebarMapOptions(IMappingOperationOptions<InterviewTreeGroup, SidebarPanel> opts)
-                {
-                    opts.AfterMap((g, sidebarPanel) =>
-                    {
-                        if(g == null)
-                            return;
-
-                        sidebarPanel.Status = this.CalculateSimpleStatus(g, isReviewMode, interview, questionnaire);
-
-                        this.ApplyValidity(sidebarPanel.Validity, sidebarPanel.Status);
-                        sidebarPanel.Collapsed = !visibleSections.Contains(g.Identity);
-                        sidebarPanel.Current = visibleSections.Contains(g.Identity);
-                        sidebarPanel.HasChildren = g.Children.OfType<InterviewTreeGroup>().Any(IsSectionVisible);
-                        sidebarPanel.IsDisabled = g.IsDisabled();
-                    });
                 }
             }
 
@@ -135,11 +121,11 @@ namespace WB.Enumerator.Native.WebInterview.Services
                     case InterviewQuestionType.SingleFixedOption:
                         if (questionnaire.IsQuestionFilteredCombobox(identity.Id))
                         {
-                            result = this.Map<InterviewFilteredQuestion>(question);
+                            result = question.ToFilteredQuestion();
                         }
                         else
                         {
-                            var singleOptionQuestion = this.Map<InterviewSingleOptionQuestion>(question);
+                            var singleOptionQuestion = question.ToSingleOptionQuestion();
                             singleOptionQuestion.Options = callerInterview.GetTopFilteredOptionsForQuestion(identity, null, null, 200, null);
                             result = singleOptionQuestion;
                         }
@@ -154,37 +140,38 @@ namespace WB.Enumerator.Native.WebInterview.Services
                                 var parentCascadingQuestion = question.GetAsInterviewTreeCascadingQuestion().GetCascadingParentQuestion();
                                 if (parentCascadingQuestion.IsAnswered())
                                 {
-                                    result = this.Map<InterviewSingleOptionQuestion>(question, res =>
-                                        {
-                                            res.Options = callerInterview.GetTopFilteredOptionsForQuestion(identity, parentCascadingQuestion.GetAnswer().SelectedValue, null, threshold, null);
-                                        });
+                                    var singleQ = question.ToSingleOptionQuestion();
+                                    singleQ.Options = callerInterview.GetTopFilteredOptionsForQuestion(identity, parentCascadingQuestion.GetAnswer().SelectedValue, null, threshold, null);
+                                    result = singleQ;
                                     break;
                                 }
                             }
                         }
 
-                        result = this.Map<InterviewFilteredQuestion>(question);
+                        result = question.ToFilteredQuestion();
                         break;
                     case InterviewQuestionType.SingleLinkedToList:
-                        result = this.Map<InterviewSingleOptionQuestion>(question, res =>
                         {
-                            res.Options = GetOptionsLinkedToListQuestion(callerInterview, identity, question).ToList();
-                            res.RenderAsCombobox = questionnaire.IsQuestionFilteredCombobox(identity.Id);
-                        });
+                            var singleQ = question.ToSingleOptionQuestion();
+                            singleQ.Options = GetOptionsLinkedToListQuestion(callerInterview, identity, question).ToList();
+                            singleQ.RenderAsCombobox = questionnaire.IsQuestionFilteredCombobox(identity.Id);
+                            result = singleQ;
+                        }
                         break;
                     case InterviewQuestionType.Text:
                         {
-                            result = this.autoMapper.Map<InterviewTextQuestion>(question);
+                            var textQ = question.ToTextQuestion();
                             var textQuestionMask = questionnaire.GetTextQuestionMask(identity.Id);
                             if (!string.IsNullOrEmpty(textQuestionMask))
                             {
-                                ((InterviewTextQuestion)result).Mask = textQuestionMask;
+                                textQ.Mask = textQuestionMask;
                             }
+                            result = textQ;
                         }
                         break;
                     case InterviewQuestionType.Integer:
                         {
-                            var interviewIntegerQuestion = this.autoMapper.Map<InterviewIntegerQuestion>(question);
+                            var interviewIntegerQuestion = question.ToIntegerQuestion();
                             var callerQuestionnaire = questionnaire;
 
                             interviewIntegerQuestion.UseFormatting = callerQuestionnaire.ShouldUseFormatting(identity.Id);
@@ -211,7 +198,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                         break;
                     case InterviewQuestionType.Double:
                         {
-                            var interviewDoubleQuestion = this.autoMapper.Map<InterviewDoubleQuestion>(question);
+                            var interviewDoubleQuestion = question.ToDoubleQuestion();
                             var callerQuestionnaire = questionnaire;
                             interviewDoubleQuestion.CountOfDecimalPlaces = callerQuestionnaire.GetCountOfDecimalPlacesAllowedByQuestion(identity.Id);
                             interviewDoubleQuestion.UseFormatting = callerQuestionnaire.ShouldUseFormatting(identity.Id);
@@ -223,7 +210,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                         {
                             var callerQuestionnaire = questionnaire;
 
-                            var typedResult = this.autoMapper.Map<InterviewMutliOptionQuestion>(question);
+                            var typedResult = question.ToMultiOptionQuestion();
 
                             var allOptions = questionnaire.GetCategoricalMultiOptionsByValues(question.Identity.Id,
                                     typedResult.Answer).ToList();
@@ -249,32 +236,34 @@ namespace WB.Enumerator.Native.WebInterview.Services
                         }
                         break;
                     case InterviewQuestionType.MultiLinkedOption:
-                        result = this.Map<InterviewLinkedMultiQuestion>(question, res =>
                         {
-                            res.Options = GetLinkedOptionsForLinkedQuestion(callerInterview, identity, question.AsLinked.Options).ToList();
-                            res.Ordered = questionnaire.ShouldQuestionRecordAnswersOrder(identity.Id);
-                            res.MaxSelectedAnswersCount = questionnaire.GetMaxSelectedAnswerOptions(identity.Id);
-                        });
+                            var linkedMultiQ = question.ToLinkedMultiQuestion();
+                            linkedMultiQ.Options = GetLinkedOptionsForLinkedQuestion(callerInterview, identity, question.AsLinked.Options).ToList();
+                            linkedMultiQ.Ordered = questionnaire.ShouldQuestionRecordAnswersOrder(identity.Id);
+                            linkedMultiQ.MaxSelectedAnswersCount = questionnaire.GetMaxSelectedAnswerOptions(identity.Id);
+                            result = linkedMultiQ;
+                        }
                         break;
                     case InterviewQuestionType.MultiLinkedToList:
-                        result = this.Map<InterviewMutliOptionQuestion>(question, res =>
                         {
-                            res.Options = GetOptionsLinkedToListQuestion(callerInterview, identity, question).ToList();
+                            var multiQ = question.ToMultiOptionQuestion();
+                            multiQ.Options = GetOptionsLinkedToListQuestion(callerInterview, identity, question).ToList();
                             var callerQuestionnaire = questionnaire;
-                            res.Ordered = callerQuestionnaire.ShouldQuestionRecordAnswersOrder(identity.Id);
-                            res.MaxSelectedAnswersCount = questionnaire.GetMaxSelectedAnswerOptions(identity.Id);
-                        });
+                            multiQ.Ordered = callerQuestionnaire.ShouldQuestionRecordAnswersOrder(identity.Id);
+                            multiQ.MaxSelectedAnswersCount = questionnaire.GetMaxSelectedAnswerOptions(identity.Id);
+                            result = multiQ;
+                        }
                         break;
                     case InterviewQuestionType.DateTime:
-                        result = this.Map<InterviewDateQuestion>(question, res =>
                         {
-                            res.DefaultDate = questionnaire.GetDefaultDateForDateQuestion(identity.Id);
-                        });
+                            var dateQ = question.ToDateQuestion();
+                            dateQ.DefaultDate = questionnaire.GetDefaultDateForDateQuestion(identity.Id);
+                            result = dateQ;
+                        }
                         break;
                     case InterviewQuestionType.TextList:
                         {
-                            result = this.autoMapper.Map<InterviewTextListQuestion>(question);
-                            var typedResult = (InterviewTextListQuestion)result;
+                            var typedResult = question.ToTextListQuestion();
                             var callerQuestionnaire = questionnaire;
                             typedResult.MaxAnswersCount = callerQuestionnaire.GetMaxSelectedAnswerOptions(identity.Id) ?? 200;
                             typedResult.IsRosterSize = callerQuestionnaire.IsRosterSizeQuestion(identity.Id);
@@ -282,11 +271,12 @@ namespace WB.Enumerator.Native.WebInterview.Services
                             {
                                 textListAnswerRowDto.IsProtected = question.IsAnswerProtected(textListAnswerRowDto.Value);
                             }
+                            result = typedResult;
                         }
                         break;
                     case InterviewQuestionType.YesNo:
                         {
-                            var interviewYesNoQuestion = this.autoMapper.Map<InterviewYesNoQuestion>(question);
+                            var interviewYesNoQuestion = question.ToYesNoQuestion();
                             var options = callerInterview.GetTopFilteredOptionsForQuestion(identity, null, null, 200, null);
                             interviewYesNoQuestion.Options = options;
                             var callerQuestionnaire = questionnaire;
@@ -302,34 +292,36 @@ namespace WB.Enumerator.Native.WebInterview.Services
                         }
                         break;
                     case InterviewQuestionType.Gps:
-                        result = this.autoMapper.Map<InterviewGpsQuestion>(question);
+                        result = question.ToGpsQuestion();
                         break;
                     case InterviewQuestionType.SingleLinkedOption:
-                        result = this.Map<InterviewLinkedSingleQuestion>(question, res =>
                         {
-                            res.Options = GetLinkedOptionsForLinkedQuestion(callerInterview, identity, question.AsLinked.Options).ToList();
-                            res.RenderAsCombobox = questionnaire.IsQuestionFilteredCombobox(identity.Id);
-                        });
+                            var linkedSingleQ = question.ToLinkedSingleQuestion();
+                            linkedSingleQ.Options = GetLinkedOptionsForLinkedQuestion(callerInterview, identity, question.AsLinked.Options).ToList();
+                            linkedSingleQ.RenderAsCombobox = questionnaire.IsQuestionFilteredCombobox(identity.Id);
+                            result = linkedSingleQ;
+                        }
                         break;
 
                     case InterviewQuestionType.Multimedia:
-                        result = this.Map<InterviewMultimediaQuestion>(question);
+                        result = question.ToMultimediaQuestion();
                         break;
                     case InterviewQuestionType.QRBarcode:
-                        result = this.autoMapper.Map<InterviewBarcodeQuestion>(question);
+                        result = question.ToBarcodeQuestion();
                         break;
                     case InterviewQuestionType.Audio:
-                        result = this.autoMapper.Map<InterviewAudioQuestion>(question);
+                        result = question.ToAudioQuestion();
                         break;
                     default:
-                        result = this.Map<StubEntity>(question);
+                        result = question.ToStubEntity();
                         break;
                     case InterviewQuestionType.Area:
-                        result = this.Map<InterviewAreaQuestion>(question, res =>
-                            {
-                                res.Type = questionnaire.GetQuestionGeometryType(identity.Id);
-                                res.Mode = questionnaire.GetQuestionGeometryMode(identity.Id);
-                            });
+                        {
+                            var areaQ = question.ToAreaQuestion();
+                            areaQ.Type = questionnaire.GetQuestionGeometryType(identity.Id);
+                            areaQ.Mode = questionnaire.GetQuestionGeometryMode(identity.Id);
+                            result = areaQ;
+                        }
                         break;
                 }
 
@@ -351,7 +343,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
             InterviewTreeStaticText staticText = callerInterview.GetStaticText(identity);
             if (staticText != null)
             {
-                InterviewStaticText result = this.autoMapper.Map<InterviewTreeStaticText, InterviewStaticText>(staticText);
+                InterviewStaticText result = staticText.ToStaticText();
 
                 var attachment = callerInterview.GetAttachmentForEntity(identity);
                 if(attachment != null)
@@ -370,7 +362,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
             var variable = callerInterview.GetVariable(identity);
             if (variable != null)
             {
-                var result = this.autoMapper.Map<InterviewTreeVariable, InterviewVariable>(variable);
+                var result = variable.ToVariable();
                 result.Title = questionnaire.GetVariableLabel(identity.Id);
                 result.Name = questionnaire.GetVariableName(identity.Id);
                 return result;
@@ -379,7 +371,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
             InterviewTreeGroup group = callerInterview.GetGroup(identity);
             if (group != null)
             {
-                var result = this.autoMapper.Map<InterviewGroupOrRosterInstance>(group);
+                var result = group.ToGroupOrRosterInstance();
 
                 result.HasCustomRosterTitle = questionnaire.HasCustomRosterTitle(group.Identity.Id);
                 this.ApplyDisablement(result, identity, questionnaire);
@@ -459,18 +451,12 @@ namespace WB.Enumerator.Native.WebInterview.Services
         private InterviewGroupOrRosterInstance GetRosterInstanceEntity(IStatefulInterview callerInterview, IQuestionnaire questionnaire,
             bool isReviewMode, InterviewTreeRoster roster, Identity identity)
         {
-            var result = this.autoMapper.Map<InterviewGroupOrRosterInstance>(roster);
+            var result = roster.ToGroupOrRosterInstance();
 
             this.ApplyDisablement(result, identity, questionnaire);
             this.ApplyGroupStateData(result, roster, callerInterview, isReviewMode, questionnaire);
             this.ApplyValidity(result.Validity, result.Status);
             return result;
-        }
-
-        private T Map<T>(InterviewTreeQuestion question, Action<T> afterMap = null)
-        {
-            return this.autoMapper.Map<InterviewTreeQuestion, T>(question,
-                opts => opts.AfterMap((treeQuestion, target) => afterMap?.Invoke(target)));
         }
 
         private void PutValidationMessages(Validity validity, IStatefulInterview callerInterview, Identity identity,

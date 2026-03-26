@@ -4,14 +4,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using AutoMapper;
+
 using FluentAssertions;
 using FluentAssertions.Equivalency;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using Microsoft.Extensions.Logging.Abstractions;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
 using NSubstitute;
@@ -1047,12 +1046,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
 
         private QuestionnaireDocument DoImportExportQuestionnaire(QuestionnaireDocument questionnaireDocument, out IList<string> errors, Action<Questionnaire> postMappingChanges = null)
         {
-            var mapper = new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile(new QuestionnaireAutoMapperProfile());
-            }, new NullLoggerFactory()).CreateMapper();
-
-            var service = new ImportExportQuestionnaireMapper(mapper);
+            var service = new ImportExportQuestionnaireMapper();
             var questionnaire = service.Map(questionnaireDocument);
             postMappingChanges?.Invoke(questionnaire);
             var json = new QuestionnaireSerializer().Serialize(questionnaire);

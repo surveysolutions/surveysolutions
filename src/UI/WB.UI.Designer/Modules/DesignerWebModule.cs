@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog.Extensions.Logging;
 using WB.Core.BoundedContexts.Designer.Classifications;
@@ -52,12 +51,6 @@ namespace WB.UI.Designer.Modules
             registry.Bind<ITranslationImportExportService, TranslationImportExportService>();   
             registry.Bind<ICategoriesImportExportService, CategoriesImportExportService>();   
             registry.BindAsSingleton<IAttachmentPreviewHelper, AttachmentPreviewHelper>();   
-            
-            registry.BindToConstant<IMapper>(context => new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile(new QuestionnaireAutoMapperProfile());
-                cfg.ConstructServicesUsing(context.GetService);
-            }, context.GetService<Microsoft.Extensions.Logging.ILoggerFactory>()).CreateMapper());
         }
 
         public Task InitAsync(IServiceLocator serviceLocator, UnderConstructionInfo status)

@@ -7,9 +7,7 @@ using ApprovalTests;
 using ApprovalTests.Namers;
 using ApprovalTests.Reporters;
 using ApprovalTests.Reporters.TestFrameworks;
-using AutoMapper;
 using Main.Core.Documents;
-using Microsoft.Extensions.Logging.Abstractions;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
 using Newtonsoft.Json.Schema.Generation;
@@ -79,12 +77,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
 
         private static async Task<ICollection<ValidationError>> Validate(QuestionnaireDocument questionnaireDocument)
         {
-            var mapper = new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile(new QuestionnaireAutoMapperProfile());
-            }, new NullLoggerFactory()).CreateMapper();
-
-            var importExportQuestionnaireService = new ImportExportQuestionnaireMapper(mapper);
+            var importExportQuestionnaireService = new ImportExportQuestionnaireMapper();
             var questionnaire = importExportQuestionnaireService.Map(questionnaireDocument);
             var json = new QuestionnaireSerializer().Serialize(questionnaire);
 

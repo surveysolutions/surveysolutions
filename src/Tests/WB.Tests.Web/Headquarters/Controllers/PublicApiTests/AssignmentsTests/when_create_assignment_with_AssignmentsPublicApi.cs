@@ -132,12 +132,6 @@ namespace WB.Tests.Web.Headquarters.Controllers.PublicApiTests.AssignmentsTests
 
             var assignment = Abc.Create.Entity.Assignment(1, qid);
 
-            this.mapper
-                .Setup(m => m.Map(It.IsAny<CreateAssignmentApiRequest>(), It.IsAny<Assignment>()))
-                .Returns(assignment);
-            this.mapper
-                .Setup(m => m.Map<AssignmentDetails>(It.IsAny<Assignment>()))
-                .Returns(new AssignmentDetails());
 
             var result = this.controller.Create(new CreateAssignmentApiRequest
             {
@@ -161,12 +155,6 @@ namespace WB.Tests.Web.Headquarters.Controllers.PublicApiTests.AssignmentsTests
 
             var assignment = Abc.Create.Entity.Assignment(1, qid);
 
-            this.mapper
-                .Setup(m => m.Map(It.IsAny<CreateAssignmentApiRequest>(), It.IsAny<Assignment>()))
-                .Returns(assignment);
-            this.mapper
-                .Setup(m => m.Map<AssignmentDetails>(It.IsAny<Assignment>()))
-                .Returns(new AssignmentDetails());
 
             var result = this.controller.Create(new CreateAssignmentApiRequest
             {
@@ -293,9 +281,6 @@ namespace WB.Tests.Web.Headquarters.Controllers.PublicApiTests.AssignmentsTests
                     })
                 }));
             
-            this.mapper
-                .Setup(m => m.Map<AssignmentDetails>(It.IsAny<Assignment>()))
-                .Returns(new AssignmentDetails());
 
             var result = this.controller.Create(new CreateAssignmentApiRequest
             {
@@ -528,9 +513,6 @@ namespace WB.Tests.Web.Headquarters.Controllers.PublicApiTests.AssignmentsTests
                     })
                 }));
             
-            this.mapper
-                .Setup(m => m.Map<AssignmentDetails>(It.IsAny<Assignment>()))
-                .Returns(new AssignmentDetails());
 
             var result = this.controller.Create(new CreateAssignmentApiRequest
             {
