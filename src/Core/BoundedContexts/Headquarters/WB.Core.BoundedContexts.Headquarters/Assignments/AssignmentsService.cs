@@ -74,6 +74,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         public Assignment GetAssignmentWithUpgradeLock(int id)
         {
             var assignment = this.assignmentsAccessor.Query(_ => _.Where(a => a.Id == id)).SingleOrDefault();
+            return GetAssignmentWithUpgradeLock(assignment);
+        }
+
+        public Assignment GetAssignmentWithUpgradeLock(Assignment assignment)
+        {
             if (assignment == null) return null;
 
             // Acquire a row-level write lock (SELECT ... FOR UPDATE) and reload entity state

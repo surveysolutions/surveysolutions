@@ -76,5 +76,35 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             Assert.That(result.Id, Is.EqualTo(5));
             mockSession.Verify(s => s.Refresh(assignment, LockMode.Upgrade), Times.Once);
         }
+
+        [Test]
+        public void when_getting_assignment_with_upgrade_lock_by_entity_acquires_row_level_lock()
+        {
+            var assignment = Create.Entity.Assignment(id: 5, quantity: 1, webMode: true);
+
+            var mockSession = new Mock<ISession>();
+            var mockUnitOfWork = Mock.Of<IUnitOfWork>(x => x.Session == mockSession.Object);
+
+            var service = new AssignmentsService(
+                new TestInMemoryWriter<Assignment, Guid>(),
+                Mock.Of<IInterviewAnswerSerializer>(),
+                mockUnitOfWork,
+                Mock.Of<IAuthorizedUser>());
+
+            var result = service.GetAssignmentWithUpgradeLock(assignment);
+
+            Assert.That(result, Is.SameAs(assignment));
+            mockSession.Verify(s => s.Refresh(assignment, LockMode.Upgrade), Times.Once);
+        }
+
+        [Test]
+        public void when_getting_assignment_with_upgrade_lock_by_null_entity_returns_null()
+        {
+            var service = Create.Service.AssignmentService();
+
+            var result = service.GetAssignmentWithUpgradeLock(null as Assignment);
+
+            Assert.That(result, Is.Null);
+        }
     }
 }

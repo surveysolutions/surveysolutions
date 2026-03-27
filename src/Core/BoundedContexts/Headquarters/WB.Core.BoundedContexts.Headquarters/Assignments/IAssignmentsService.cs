@@ -15,7 +15,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         
         Assignment GetAssignment(int id);
 
+        /// <summary>
+        /// Convenience overload for callers that do not yet hold a reference to the entity.
+        /// Prefer <see cref="GetAssignmentWithUpgradeLock(Assignment)"/> when the entity is
+        /// already loaded in the same session to avoid a redundant DB round-trip.
+        /// </summary>
         Assignment GetAssignmentWithUpgradeLock(int id);
+
+        /// <summary>
+        /// Issues SELECT … FOR UPDATE against the row and refreshes the entity state through
+        /// NHibernate's <c>Session.Refresh</c>, bypassing the L1 identity-map so concurrent
+        /// changes are visible. Use this overload when <paramref name="assignment"/> is already
+        /// loaded in the current session to save one DB round-trip.
+        /// </summary>
+        Assignment GetAssignmentWithUpgradeLock(Assignment assignment);
 
         Assignment GetAssignmentByAggregateRootId(Guid id);
 

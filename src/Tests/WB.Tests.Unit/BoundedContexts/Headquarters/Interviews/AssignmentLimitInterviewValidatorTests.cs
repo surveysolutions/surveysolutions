@@ -84,7 +84,7 @@ public class AssignmentLimitInterviewValidatorTests
 
         var mockAssignmentsService = new Mock<IAssignmentsService>();
         mockAssignmentsService.Setup(s => s.GetAssignment(7)).Returns(assignment);
-        mockAssignmentsService.Setup(s => s.GetAssignmentWithUpgradeLock(7)).Returns(assignment);
+        mockAssignmentsService.Setup(s => s.GetAssignmentWithUpgradeLock(assignment)).Returns(assignment);
 
         var validator = Create.Service.AssignmentLimitInterviewValidator(
             mockAssignmentsService.Object,
@@ -94,7 +94,7 @@ public class AssignmentLimitInterviewValidatorTests
         Assert.DoesNotThrow(() =>
             validator.Validate(null, Create.Command.CreateInterview(userId: Id.gA, assignmentId: 7, interviewMode: InterviewMode.CAWI)));
 
-        mockAssignmentsService.Verify(s => s.GetAssignmentWithUpgradeLock(7), Times.Once,
+        mockAssignmentsService.Verify(s => s.GetAssignmentWithUpgradeLock(assignment), Times.Once,
             "Upgrade lock must be acquired when InterviewsNeeded <= 3");
     }
 
@@ -115,7 +115,7 @@ public class AssignmentLimitInterviewValidatorTests
         Assert.DoesNotThrow(() =>
             validator.Validate(null, Create.Command.CreateInterview(userId: Id.gA, assignmentId: 8, interviewMode: InterviewMode.CAWI)));
 
-        mockAssignmentsService.Verify(s => s.GetAssignmentWithUpgradeLock(It.IsAny<int>()), Times.Never,
+        mockAssignmentsService.Verify(s => s.GetAssignmentWithUpgradeLock(It.IsAny<Assignment>()), Times.Never,
             "Upgrade lock must not be acquired when InterviewsNeeded > 3");
     }
 
@@ -136,7 +136,7 @@ public class AssignmentLimitInterviewValidatorTests
         mockAssignmentsService.Setup(s => s.GetAssignment(9)).Returns(assignment);
 
         // Second read (with upgrade lock) returns the same instance, but with the last slot taken.
-        mockAssignmentsService.Setup(s => s.GetAssignmentWithUpgradeLock(9))
+        mockAssignmentsService.Setup(s => s.GetAssignmentWithUpgradeLock(assignment))
             .Returns(() =>
             {
                 assignment.InterviewSummaries.Clear();
