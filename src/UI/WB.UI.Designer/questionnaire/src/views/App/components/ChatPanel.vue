@@ -9,7 +9,7 @@
                     @click="clearHistory" :disabled="messages.length === 0" :title="$t('Assistant.ClearHistory')"
                     :ripple="false" style="padding-right: 10px;" />
                 <v-btn icon="mdi-close" variant="text" size="medium" class="header-action-btn header-close"
-                    @click="close" :ripple="false" />
+                    @click="close" :ripple="false" :title="$t('Assistant.Close')" />
             </div>
         </v-card-title>
 
