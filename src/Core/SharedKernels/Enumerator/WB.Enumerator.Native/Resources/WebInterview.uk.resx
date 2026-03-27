@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AssignmentLimitReached" xml:space="preserve">
-    <value>Ми збірали всі інтерв'ю в цьому дослідженні.</value>
+    <value>Ми зібрали всі інтерв'ю в цьому дослідженні.</value>
   </data>
   <data name="Complete" xml:space="preserve">
     <value>Завершено</value>
