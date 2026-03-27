@@ -14,6 +14,7 @@
     <WarningLevel>3</WarningLevel>
     <NoWarn>1701;1702;1705;618;1030</NoWarn>
     <WarningsAsErrors />
+    <WarningsNotAsErrors>NU1903</WarningsNotAsErrors>
   </PropertyGroup>
   <ItemGroup>
     <!--Assemblies that are referenced during conditions assembly compilation-->
