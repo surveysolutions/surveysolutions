@@ -3,6 +3,7 @@ using System.Linq;
 using AutoMapper;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable;
@@ -89,7 +90,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api.GetGro
             var mapper = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile(new WebInterviewAutoMapProfile());
-            }).CreateMapper();
+            }, new NullLoggerFactory()).CreateMapper();
             var enumeratorGroupStateCalculationStrategy = Mock.Of<IEnumeratorGroupStateCalculationStrategy>();
             var supervisorGroupStateCalculationStrategy = Mock.Of<ISupervisorGroupStateCalculationStrategy>();
             return new WebInterviewInterviewEntityFactory(mapper, 

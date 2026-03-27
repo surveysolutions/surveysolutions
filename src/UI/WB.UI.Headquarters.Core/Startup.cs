@@ -294,11 +294,11 @@ namespace WB.UI.Headquarters
                 Configuration.GetConnectionString("DefaultConnection"));
 
             services.AddResponseCaching();
-            services.AddResponseCompression();
+            
             services.AddSignalR().AddNewtonsoftJsonProtocol();
 
             services.AddHttpContextAccessor();
-            services.AddAutoMapper(typeof(Startup));
+            services.AddAutoMapper(cfg => { }, typeof(Startup));
 
             services.Configure<CookiePolicyOptions>(options =>
             {
@@ -410,16 +410,15 @@ namespace WB.UI.Headquarters
             {
                 options.EnableForHttps = true;
                 options.Providers.Add<GzipCompressionProvider>();
-            });
-
-            services.AddRequestDecompression(o => { o.Providers.Add<GzipDecompressionProvider>(); });
-
-            services.AddResponseCompression(options =>
-            {
-                options.EnableForHttps = true;
                 options.Providers.Add<BrotliCompressionProvider>();
             });
 
+            services.AddRequestDecompression(o =>
+            {
+                o.Providers.Add<GzipDecompressionProvider>();
+                o.Providers.Add<BrotliDecompressionProvider>();
+            });
+            
             services.AddAntiforgery(options => options.HeaderName = "X-CSRF-TOKEN");
             services.AddAppMetrics();
 
@@ -449,6 +448,10 @@ namespace WB.UI.Headquarters
                 }
             });
 
+            //resolve ambiguity
+            RequestDecompressionApplicationBuilderExtensions.UseRequestDecompression(app);
+            app.UseResponseCompression();
+            
             app.UseRequestLocalization(opt =>
             {
                 opt.ApplyCurrentCultureToResponseHeaders = true;
@@ -503,11 +506,6 @@ namespace WB.UI.Headquarters
 
             app.UseSwagger();
             app.UseSession();
-            app.UseResponseCompression();
-
-            //resolve ambiguity
-            RequestDecompressionApplicationBuilderExtensions.UseRequestDecompression(app);
-            //app.UseRequestDecompression();
 
             app.UseHqSwaggerUI();
 

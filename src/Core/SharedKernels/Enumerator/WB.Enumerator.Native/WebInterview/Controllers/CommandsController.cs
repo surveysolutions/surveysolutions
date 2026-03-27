@@ -18,6 +18,8 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
     [HandleCommandError]
     public abstract class CommandsController : ControllerBase
     {
+        private const string InvalidRequestMessage = "Invalid request";
+        private const string AnswerCannotBeNull = "Answer cannot be null";
         protected readonly ICommandService commandService;
         protected readonly IImageFileStorage imageFileStorage;
         protected readonly IAudioFileStorage audioFileStorage;
@@ -45,6 +47,9 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
 
         public virtual IActionResult ChangeLanguage(Guid interviewId, ChangeLanguageRequest request)
         {
+            if (request == null)
+                return BadRequest(new { errorMessage = InvalidRequestMessage });
+            
             this.commandService.Execute(new SwitchTranslation(interviewId, request.Language, this.GetCommandResponsibleId(interviewId)));
             return Ok();
         }
@@ -58,10 +63,24 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         {
             public T Answer { get; set; }
         }
+        
+        protected bool TryGetIdentity(AnswerRequest request, out Identity identity)
+        {
+            identity = null;
+
+            if (request == null || string.IsNullOrWhiteSpace(request.Identity))
+            {
+                return false;
+            }
+            
+            return Identity.TryParse(request.Identity, out identity);
+        }
 
         public virtual IActionResult AnswerTextQuestion(Guid interviewId, [FromBody] AnswerRequest<string> answerRequest)
         {
-            var identity = Identity.Parse(answerRequest.Identity);
+            if (!TryGetIdentity(answerRequest, out var identity)) 
+                return BadRequest(new { errorMessage = InvalidRequestMessage });
+
             this.ExecuteQuestionCommand(new AnswerTextQuestionCommand(interviewId,
                 this.GetCommandResponsibleId(interviewId), identity.Id, identity.RosterVector, answerRequest.Answer));
             return Ok();
@@ -69,7 +88,12 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
 
         public virtual IActionResult AnswerTextListQuestion(Guid interviewId, [FromBody] AnswerRequest<TextListAnswerRowDto[]> answerRequest)
         {
-            var identity = Identity.Parse(answerRequest.Identity);
+            if (!TryGetIdentity(answerRequest, out var identity)) 
+                return BadRequest(new { errorMessage = InvalidRequestMessage });
+            
+            if (answerRequest.Answer == null)
+                return BadRequest(new { errorMessage = AnswerCannotBeNull });
+
             this.ExecuteQuestionCommand(new AnswerTextListQuestionCommand(interviewId,
                 this.GetCommandResponsibleId(interviewId), 
                 identity.Id, identity.RosterVector, 
@@ -79,33 +103,53 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
 
         public virtual IActionResult AnswerGpsQuestion(Guid interviewId, [FromBody] AnswerRequest<GpsAnswer> answerRequest)
         {
-            var identity = Identity.Parse(answerRequest.Identity);
+            if (!TryGetIdentity(answerRequest, out var identity)) 
+                return BadRequest(new { errorMessage = InvalidRequestMessage });
+            
+            if (answerRequest.Answer == null)
+                return BadRequest(new { errorMessage = AnswerCannotBeNull });
+
             this.ExecuteQuestionCommand(new AnswerGeoLocationQuestionCommand(interviewId,
                 this.GetCommandResponsibleId(interviewId), identity.Id, identity.RosterVector, answerRequest.Answer.Latitude, answerRequest.Answer.Longitude,
                 answerRequest.Answer.Accuracy ?? 0, answerRequest.Answer.Altitude ?? 0, DateTimeOffset.FromUnixTimeMilliseconds(answerRequest.Answer.Timestamp ?? 0)));
             return Ok();
         }
 
-        public virtual IActionResult AnswerDateQuestion(Guid interviewId, [FromBody] AnswerRequest<DateTime> answerRequest)
+        public virtual IActionResult AnswerDateQuestion(Guid interviewId, [FromBody] AnswerRequest<DateTime?> answerRequest)
         {
-            var identity = Identity.Parse(answerRequest.Identity);
+            if (!TryGetIdentity(answerRequest, out var identity)) 
+                return BadRequest(new { errorMessage = InvalidRequestMessage });
+            
+            if (!answerRequest.Answer.HasValue)
+                return BadRequest(new { errorMessage = AnswerCannotBeNull });
+
             this.ExecuteQuestionCommand(new AnswerDateTimeQuestionCommand(interviewId,
-                this.GetCommandResponsibleId(interviewId), identity.Id, identity.RosterVector, answerRequest.Answer));
+                this.GetCommandResponsibleId(interviewId), identity.Id, identity.RosterVector, answerRequest.Answer.Value));
             return Ok();
         }
 
-        public virtual IActionResult AnswerSingleOptionQuestion(Guid interviewId, [FromBody] AnswerRequest<int> answerRequest)
+        public virtual IActionResult AnswerSingleOptionQuestion(Guid interviewId, [FromBody] AnswerRequest<int?> answerRequest)
         {
-            var identity = Identity.Parse(answerRequest.Identity);
+            if (!TryGetIdentity(answerRequest, out var identity)) 
+                return BadRequest(new { errorMessage = InvalidRequestMessage });
+            
+            if (!answerRequest.Answer.HasValue)
+                return BadRequest(new { errorMessage = AnswerCannotBeNull });
+
             this.ExecuteQuestionCommand(new AnswerSingleOptionQuestionCommand(interviewId, GetCommandResponsibleId(interviewId),
-                identity.Id, identity.RosterVector, answerRequest.Answer));
+                identity.Id, identity.RosterVector, answerRequest.Answer.Value));
             return Ok();
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
         public virtual IActionResult AnswerLinkedSingleOptionQuestion(Guid interviewId, [FromBody] AnswerRequest<decimal[]> answerRequest)
         {
-            var identity = Identity.Parse(answerRequest.Identity);
+            if (!TryGetIdentity(answerRequest, out var identity)) 
+                return BadRequest(new { errorMessage = InvalidRequestMessage });
+            
+            if (answerRequest.Answer == null)
+                return BadRequest(new { errorMessage = AnswerCannotBeNull });
+
             this.ExecuteQuestionCommand(new AnswerSingleOptionLinkedQuestionCommand(interviewId, GetCommandResponsibleId(interviewId),
                 identity.Id, identity.RosterVector, answerRequest.Answer));
             return Ok();
@@ -114,7 +158,12 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
         public virtual IActionResult AnswerLinkedMultiOptionQuestion(Guid interviewId, [FromBody] AnswerRequest<decimal[][]> answerRequest)
         {
-            var identity = Identity.Parse(answerRequest.Identity);
+            if (!TryGetIdentity(answerRequest, out var identity)) 
+                return BadRequest(new { errorMessage = InvalidRequestMessage });
+
+            if (answerRequest.Answer == null)
+                return BadRequest(new { errorMessage = AnswerCannotBeNull });
+            
             this.ExecuteQuestionCommand(new AnswerMultipleOptionsLinkedQuestionCommand(interviewId, GetCommandResponsibleId(interviewId),
                 identity.Id, identity.RosterVector, answerRequest.Answer.Select(x => new RosterVector(x)).ToArray()));
             return Ok();
@@ -122,7 +171,12 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
 
         public virtual IActionResult AnswerMultiOptionQuestion(Guid interviewId, [FromBody] AnswerRequest<int[]> answerRequest)
         {
-            var identity = Identity.Parse(answerRequest.Identity);
+            if (!TryGetIdentity(answerRequest, out var identity)) 
+                return BadRequest(new { errorMessage = InvalidRequestMessage });
+
+            if (answerRequest.Answer == null)
+                return BadRequest(new { errorMessage = AnswerCannotBeNull });
+            
             this.ExecuteQuestionCommand(new AnswerMultipleOptionsQuestionCommand(interviewId, GetCommandResponsibleId(interviewId),
                 identity.Id, identity.RosterVector, answerRequest.Answer));
             return Ok();
@@ -130,32 +184,49 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
 
         public virtual IActionResult AnswerYesNoQuestion(Guid interviewId, [FromBody] AnswerRequest<InterviewYesNoAnswer[]> answerRequest)
         {
-            var identity = Identity.Parse(answerRequest.Identity);
+            if (!TryGetIdentity(answerRequest, out var identity)) 
+                return BadRequest(new { errorMessage = InvalidRequestMessage });
+
+            if (answerRequest.Answer == null)
+                return BadRequest(new { errorMessage = AnswerCannotBeNull });
+            
             var answer = answerRequest.Answer.Select(a => new AnsweredYesNoOption(a.Value, a.Yes)).ToArray();
             this.ExecuteQuestionCommand(new AnswerYesNoQuestion(interviewId, GetCommandResponsibleId(interviewId),
                 identity.Id, identity.RosterVector, answer));
             return Ok();
         }
 
-        public virtual IActionResult AnswerIntegerQuestion(Guid interviewId, [FromBody] AnswerRequest<int> answerRequest)
+        public virtual IActionResult AnswerIntegerQuestion(Guid interviewId, [FromBody] AnswerRequest<int?> answerRequest)
         {
-            var identity = Identity.Parse(answerRequest.Identity);
-            this.ExecuteQuestionCommand(new AnswerNumericIntegerQuestionCommand(interviewId, this.GetCommandResponsibleId(interviewId), identity.Id, identity.RosterVector, answerRequest.Answer));
+            if (!TryGetIdentity(answerRequest, out var identity)) 
+                return BadRequest(new { errorMessage = InvalidRequestMessage });
+            
+            if (!answerRequest.Answer.HasValue)
+                return BadRequest(new { errorMessage = AnswerCannotBeNull });
+
+            this.ExecuteQuestionCommand(new AnswerNumericIntegerQuestionCommand(interviewId, this.GetCommandResponsibleId(interviewId), identity.Id, identity.RosterVector, answerRequest.Answer.Value));
             return Ok();
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
-        public virtual IActionResult AnswerDoubleQuestion(Guid interviewId, [FromBody] AnswerRequest<double> answerRequest)
+        public virtual IActionResult AnswerDoubleQuestion(Guid interviewId, [FromBody] AnswerRequest<double?> answerRequest)
         {
-            var identity = Identity.Parse(answerRequest.Identity);
-            this.ExecuteQuestionCommand(new AnswerNumericRealQuestionCommand(interviewId, this.GetCommandResponsibleId(interviewId), identity.Id, identity.RosterVector, answerRequest.Answer));
+            if (!TryGetIdentity(answerRequest, out var identity)) 
+                return BadRequest(new { errorMessage = InvalidRequestMessage });
+            
+            if (!answerRequest.Answer.HasValue)
+                return BadRequest(new { errorMessage = AnswerCannotBeNull });
+
+            this.ExecuteQuestionCommand(new AnswerNumericRealQuestionCommand(interviewId, this.GetCommandResponsibleId(interviewId), identity.Id, identity.RosterVector, answerRequest.Answer.Value));
             return Ok();
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
         public virtual IActionResult AnswerQRBarcodeQuestion(Guid interviewId, [FromBody] AnswerRequest<string> answerRequest)
         {
-            var identity = Identity.Parse(answerRequest.Identity);
+            if (!TryGetIdentity(answerRequest, out var identity)) 
+                return BadRequest(new { errorMessage = InvalidRequestMessage });
+
             this.ExecuteQuestionCommand(new AnswerQRBarcodeQuestionCommand(interviewId,
                 this.GetCommandResponsibleId(interviewId), identity.Id, identity.RosterVector, answerRequest.Answer));
             return Ok();
@@ -168,7 +239,8 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         [ObservingNotAllowed]
         public virtual IActionResult RemoveAnswer(Guid interviewId, RemoveAnswerRequest request)
         {
-            Identity identity = Identity.Parse(request.Identity);
+            if (!TryGetIdentity(request, out var identity)) 
+                return BadRequest(new { errorMessage = InvalidRequestMessage });
 
             try
             {
@@ -211,7 +283,9 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
         public virtual IActionResult SendNewComment(Guid interviewId, NewCommentRequest request)
         {
-            var identity = Identity.Parse(request.Identity);
+            if (!TryGetIdentity(request, out var identity)) 
+                return BadRequest(new { errorMessage = InvalidRequestMessage });
+
             var command = new CommentAnswerCommand(interviewId, this.GetCommandResponsibleId(interviewId), identity.Id, identity.RosterVector, request.Comment);
 
             this.commandService.Execute(command);

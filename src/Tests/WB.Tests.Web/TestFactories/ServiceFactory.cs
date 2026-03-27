@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -97,7 +98,7 @@ namespace WB.Tests.Web.TestFactories
             var autoMapperConfig = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile(new WebInterviewAutoMapProfile());
-            });
+            }, new NullLoggerFactory());
 
             return new HqWebInterviewInterviewEntityFactory(autoMapperConfig.CreateMapper(),
                 authorizedUser ?? Mock.Of<IAuthorizedUser>(),

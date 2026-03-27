@@ -97,11 +97,11 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
 
         [HttpPost]
         [Route("answerDateQuestion")]
-        public override IActionResult AnswerDateQuestion(Guid interviewId, [FromBody] AnswerRequest<DateTime> answerRequest) => base.AnswerDateQuestion(interviewId, answerRequest);
+        public override IActionResult AnswerDateQuestion(Guid interviewId, [FromBody] AnswerRequest<DateTime?> answerRequest) => base.AnswerDateQuestion(interviewId, answerRequest);
 
         [HttpPost]
         [Route("answerSingleOptionQuestion")]
-        public override IActionResult AnswerSingleOptionQuestion(Guid interviewId, [FromBody] AnswerRequest<int> answerRequest) => base.AnswerSingleOptionQuestion(interviewId, answerRequest);
+        public override IActionResult AnswerSingleOptionQuestion(Guid interviewId, [FromBody] AnswerRequest<int?> answerRequest) => base.AnswerSingleOptionQuestion(interviewId, answerRequest);
 
         [HttpPost]
         [Route("answerLinkedSingleOptionQuestion")]
@@ -121,11 +121,11 @@ namespace WB.UI.Headquarters.Controllers.Api.WebInterview
 
         [HttpPost]
         [Route("answerIntegerQuestion")]
-        public override IActionResult AnswerIntegerQuestion(Guid interviewId, [FromBody] AnswerRequest<int> answerRequest) => base.AnswerIntegerQuestion(interviewId, answerRequest);
+        public override IActionResult AnswerIntegerQuestion(Guid interviewId, [FromBody] AnswerRequest<int?> answerRequest) => base.AnswerIntegerQuestion(interviewId, answerRequest);
 
         [HttpPost]
         [Route("answerDoubleQuestion")]
-        public override IActionResult AnswerDoubleQuestion(Guid interviewId, [FromBody] AnswerRequest<double> answerRequest) => base.AnswerDoubleQuestion(interviewId, answerRequest);
+        public override IActionResult AnswerDoubleQuestion(Guid interviewId, [FromBody] AnswerRequest<double?> answerRequest) => base.AnswerDoubleQuestion(interviewId, answerRequest);
 
         [HttpPost]
         [Route("answerQRBarcodeQuestion")]

@@ -9,6 +9,7 @@ using ApprovalTests.Reporters;
 using ApprovalTests.Reporters.TestFrameworks;
 using AutoMapper;
 using Main.Core.Documents;
+using Microsoft.Extensions.Logging.Abstractions;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
 using Newtonsoft.Json.Schema.Generation;
@@ -81,7 +82,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
             var mapper = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile(new QuestionnaireAutoMapperProfile());
-            }).CreateMapper();
+            }, new NullLoggerFactory()).CreateMapper();
 
             var importExportQuestionnaireService = new ImportExportQuestionnaireMapper(mapper);
             var questionnaire = importExportQuestionnaireService.Map(questionnaireDocument);
