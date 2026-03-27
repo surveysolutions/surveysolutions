@@ -103,7 +103,7 @@ namespace WB.UI.WebTester
             registry.BindToMethodInSingletonScope(context => new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile(new WebInterviewAutoMapProfile());
-            }, context.Get<Microsoft.Extensions.Logging.ILoggerFactory>()).CreateMapper());
+            }).CreateMapper());
 
             registry.BindToConstant(() => JsonSerializer.Create(new JsonSerializerSettings
             {
