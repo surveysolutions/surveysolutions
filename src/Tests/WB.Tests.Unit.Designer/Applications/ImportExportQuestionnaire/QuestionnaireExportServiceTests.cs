@@ -6,10 +6,8 @@ using ApprovalTests;
 using ApprovalTests.Namers;
 using ApprovalTests.Reporters;
 using ApprovalTests.Reporters.TestFrameworks;
-using AutoMapper;
 using Main.Core.Entities.SubEntities;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.ImportExport;
@@ -56,11 +54,6 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
         private static QuestionnaireExportService CreateQuestionnaireExportService(
             IQuestionnaireViewFactory questionnaireViewFactory)
         {
-            var mapper = new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile(new QuestionnaireAutoMapperProfile());
-            }, new NullLoggerFactory()).CreateMapper();
-
             var service = new QuestionnaireExportService(questionnaireViewFactory,
                 Mock.Of<IAttachmentService>(),
                 Mock.Of<ILookupTableService>(),
@@ -69,7 +62,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
                 Mock.Of<ILogger<QuestionnaireExportService>>(),
                 new FileSystemIOAccessor(),
                 Create.InMemoryDbContext(),
-                new ImportExportQuestionnaireMapper(mapper),
+                new ImportExportQuestionnaireMapper(),
                 new QuestionnaireSerializer());
             return service;
         }

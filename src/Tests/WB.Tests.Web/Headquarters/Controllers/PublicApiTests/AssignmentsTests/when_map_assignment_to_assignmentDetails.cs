@@ -6,6 +6,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Tests.Abc;
 using WB.UI.Headquarters.API.PublicApi.Models;
+using WB.UI.Headquarters.Controllers.Api.PublicApi;
 using It = Moq.It;
 
 namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTests
@@ -40,7 +41,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
 
         public override void Because()
         {
-            this.AssignmentDetails = this.mapper.Map<AssignmentDetails>(this.Assignment);
+            this.AssignmentDetails = AssignmentsPublicApiMapper.ToAssignmentDetails(this.Assignment);
         }
 
         [Test]

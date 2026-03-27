@@ -3,7 +3,6 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
 using Main.Core.Documents;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -31,7 +30,6 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
 
         protected Mock<IAssignmentsService> assignmentsStorage;
         protected Mock<IAssignmentViewFactory> assignmentViewFactory;
-        protected Mock<IMapper> mapper;
         protected Mock<IUserRepository> userManager;
         protected Mock<IQuestionnaireStorage> questionnaireStorage;
         protected Mock<ILogger> logger;
@@ -49,14 +47,12 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
                 s.GetAssignmentByAggregateRootId(It.IsAny<Guid>()) == assignment);
             var assignmentFactory = Create.Service.AssignmentFactory(commandService.Object, assignmentsService);
 
-
             var sl = Mock.Of<IServiceLocator>(x => x.GetInstance<IAssignmentsService>() == assignmentsStorage.Object);
             var scopeExecutor = Create.Service.InScopeExecutor(sl);
             
             this.controller = new AssignmentsController(
                 this.assignmentViewFactory.Object,
                 this.assignmentsStorage.Object,
-                this.mapper.Object,
                 this.userManager.Object,
                 this.questionnaireStorage.Object,
                 Mock.Of<ISystemLog>(),
@@ -84,7 +80,6 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
         {
             this.assignmentsStorage = new Mock<IAssignmentsService>();
             this.assignmentViewFactory = new Mock<IAssignmentViewFactory>();
-            this.mapper = new Mock<IMapper>();
             this.userManager = new Mock<IUserRepository>();
             this.questionnaireStorage = new Mock<IQuestionnaireStorage>();
             this.logger = new Mock<ILogger>();

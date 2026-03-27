@@ -1,7 +1,5 @@
 ﻿using System;
-using AutoMapper;
 using Main.Core.Entities.SubEntities;
-using Microsoft.Extensions.Logging.Abstractions;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
@@ -12,19 +10,6 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
 {
     public class MappingToDtoTests
     {
-        private IMapper mapper;
-
-        [OneTimeSetUp]
-        public void Setup()
-        {
-            var autoMapperConfig = new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile(new WebInterviewAutoMapProfile());
-            }, new NullLoggerFactory());
-
-            mapper = autoMapperConfig.CreateMapper();
-        }
-
         [Test]
         public void should_be_able_to_map_TextList_questions()
         {
@@ -35,7 +20,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
                 new TextListAnswerRow(1, "test")
             }), new DateTime(2018, 10, 31));
 
-            var dto = this.mapper.Map<InterviewTextListQuestion>(question);
+            var dto = question.ToTextListQuestion();
 
             Assert.That(dto.Rows, Has.Count.EqualTo(2));
             Assert.That(dto.Rows[0].Text, Is.EqualTo("test"));

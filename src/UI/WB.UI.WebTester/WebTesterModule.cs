@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using AutoMapper;
 using Main.Core.Documents;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
@@ -99,11 +98,6 @@ namespace WB.UI.WebTester
                 
                 return Options.Create(fileStorageConfig);
             });
-
-            registry.BindToMethodInSingletonScope(context => new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile(new WebInterviewAutoMapProfile());
-            }, context.Get<Microsoft.Extensions.Logging.ILoggerFactory>()).CreateMapper());
 
             registry.BindToConstant(() => JsonSerializer.Create(new JsonSerializerSettings
             {

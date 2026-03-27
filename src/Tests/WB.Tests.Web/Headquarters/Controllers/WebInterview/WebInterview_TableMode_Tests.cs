@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Linq;
-using AutoMapper;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
-using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -108,8 +106,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
                 })
             });
             var statefulInterview = SetUp.StatefulInterview(questionnaireDocument);
-            var mapper = SetupMapper();
-            var webInterview = CreateInterviewDataController(statefulInterview, questionnaireDocument, mapper);
+            var webInterview = CreateInterviewDataController(statefulInterview, questionnaireDocument);
             var ids = Identity.Create(rosterId, RosterVector.Empty).ToString().ToEnumerable().ToArray();
 
             var entities = webInterview.GetEntitiesDetails(statefulInterview.Id, ids, null);
@@ -186,20 +183,12 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
             Assert.That(coverInfo.EntitiesWithComments.Single().ParentId, Is.EqualTo(groupId.FormatGuid()));
         }
 
-        private IMapper SetupMapper()
-        {
-            return new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile(new WebInterviewAutoMapProfile());
-            }, new NullLoggerFactory()).CreateMapper();
-        }
-
         private InterviewDataController CreateInterviewDataController(IStatefulInterview statefulInterview,
-            QuestionnaireDocument questionnaireDocument, IMapper autoMapper = null)
+            QuestionnaireDocument questionnaireDocument)
         {
             var statefulInterviewRepository = Create.Fake.StatefulInterviewRepositoryWith(statefulInterview);
             var questionnaireStorage = SetUp.QuestionnaireRepositoryWithOneQuestionnaire(Create.Entity.PlainQuestionnaire(questionnaireDocument));
-            var webInterviewInterviewEntityFactory = Web.Create.Service.WebInterviewInterviewEntityFactory(autoMapper: autoMapper);
+            var webInterviewInterviewEntityFactory = Web.Create.Service.WebInterviewInterviewEntityFactory();
 
             var controller = new InterviewDataController(questionnaireStorage,
                 statefulInterviewRepository,

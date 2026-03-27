@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using AutoMapper;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -59,12 +58,11 @@ namespace WB.Tests.Web.TestFactories
                 Mock.Of<IWebInterviewInterviewEntityFactory>());
         }
 
-        public IWebInterviewInterviewEntityFactory WebInterviewInterviewEntityFactory(IMapper autoMapper = null,
+        public IWebInterviewInterviewEntityFactory WebInterviewInterviewEntityFactory(
             IEnumeratorGroupStateCalculationStrategy enumeratorGroupStateCalculationStrategy = null,
             ISupervisorGroupStateCalculationStrategy supervisorGroupStateCalculationStrategy = null)
         {
             return new WebInterviewInterviewEntityFactory(
-                autoMapper ?? Mock.Of<IMapper>(),
                 enumeratorGroupStateCalculationStrategy ?? Mock.Of<IEnumeratorGroupStateCalculationStrategy>(),
                 supervisorGroupStateCalculationStrategy ?? Mock.Of<ISupervisorGroupStateCalculationStrategy>(),
                 Mock.Of<IWebNavigationService>(),
@@ -95,12 +93,7 @@ namespace WB.Tests.Web.TestFactories
         public HqWebInterviewInterviewEntityFactory HqWebInterviewInterviewEntityFactory(
             IAuthorizedUser authorizedUser = null)
         {
-            var autoMapperConfig = new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile(new WebInterviewAutoMapProfile());
-            }, new NullLoggerFactory());
-
-            return new HqWebInterviewInterviewEntityFactory(autoMapperConfig.CreateMapper(),
+            return new HqWebInterviewInterviewEntityFactory(
                 authorizedUser ?? Mock.Of<IAuthorizedUser>(),
                 new EnumeratorGroupGroupStateCalculationStrategy(),
                 new SupervisorGroupStateCalculationStrategy(),
