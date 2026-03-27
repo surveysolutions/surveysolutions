@@ -597,7 +597,7 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
             var staticText = new StaticText(
                 publicKey,
                 src.Text,
-                src.ConditionExpression!,
+                src.ConditionExpression ?? string.Empty,
                 src.HideIfDisabled,
                 src.ValidationConditions?.Select(MapValidationConditionFromModel).ToList(),
                 src.AttachmentName,

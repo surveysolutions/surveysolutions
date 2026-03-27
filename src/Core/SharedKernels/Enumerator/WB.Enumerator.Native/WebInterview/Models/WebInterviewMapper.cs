@@ -120,7 +120,8 @@ namespace WB.Enumerator.Native.WebInterview.Models
         {
             var result = new InterviewLinkedMultiQuestion();
             ApplyBaseEntity(result, question);
-            result.Answer = question.GetAsInterviewTreeMultiLinkedToRosterQuestion().GetAnswer().CheckedValues.ToArray();
+            result.Answer = question.GetAsInterviewTreeMultiLinkedToRosterQuestion().GetAnswer()?.CheckedValues.ToArray()
+                ?? Array.Empty<RosterVector>();
             return result;
         }
 
@@ -129,8 +130,10 @@ namespace WB.Enumerator.Native.WebInterview.Models
             var result = new InterviewMutliOptionQuestion();
             ApplyBaseEntity(result, question);
             result.Answer = question.IsLinkedToListQuestion
-                ? question.GetAsInterviewTreeMultiOptionLinkedToListQuestion().GetAnswer().CheckedValues.ToArray()
-                : question.GetAsInterviewTreeMultiOptionQuestion().GetAnswer().CheckedValues.ToArray();
+                ? question.GetAsInterviewTreeMultiOptionLinkedToListQuestion().GetAnswer()?.CheckedValues.ToArray()
+                    ?? Array.Empty<int>()
+                : question.GetAsInterviewTreeMultiOptionQuestion().GetAnswer()?.CheckedValues.ToArray()
+                    ?? Array.Empty<int>();
             return result;
         }
 
@@ -138,8 +141,9 @@ namespace WB.Enumerator.Native.WebInterview.Models
         {
             var result = new InterviewYesNoQuestion();
             ApplyBaseEntity(result, question);
-            result.Answer = question.GetAsInterviewTreeYesNoQuestion().GetAnswer().CheckedOptions
-                .Select(o => new InterviewYesNoAnswer { Value = o.Value, Yes = o.Yes }).ToArray();
+            result.Answer = question.GetAsInterviewTreeYesNoQuestion().GetAnswer()?.CheckedOptions
+                ?.Select(o => new InterviewYesNoAnswer { Value = o.Value, Yes = o.Yes }).ToArray()
+                ?? Array.Empty<InterviewYesNoAnswer>();
             return result;
         }
 
@@ -191,7 +195,10 @@ namespace WB.Enumerator.Native.WebInterview.Models
         {
             var result = new InterviewGpsQuestion();
             ApplyBaseEntity(result, question);
-            result.Answer = ToGpsAnswer(question.GetAsInterviewTreeGpsQuestion().GetAnswer().Value);
+            if (question.IsAnswered())
+            {
+                result.Answer = ToGpsAnswer(question.GetAsInterviewTreeGpsQuestion().GetAnswer().Value);
+            }
             return result;
         }
 

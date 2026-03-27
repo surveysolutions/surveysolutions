@@ -277,6 +277,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 assignmentToImport, questionnaire, this.authorizedUser.Id);
 
             var assignment = this.assignmentsStorage.GetAssignment(assignmentId);
+            if (assignment == null)
+                return StatusCode(StatusCodes.Status500InternalServerError, "Assignment was created but could not be retrieved.");
 
             var result = new CreateAssignmentResult
             {

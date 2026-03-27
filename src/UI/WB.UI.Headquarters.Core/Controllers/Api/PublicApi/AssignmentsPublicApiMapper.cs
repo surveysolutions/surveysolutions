@@ -82,7 +82,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 Variable = source.Variable,
                 Identity = source.Identity?.ToString()
             };
-            item.Variable = GetVariableName(item.Variable, source.Identity?.ToString(), questionnaire);
+            item.Variable = GetVariableName(item.Variable, source.Identity?.Id.ToString(), questionnaire);
             return item;
         }
 
