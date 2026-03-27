@@ -13,6 +13,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.DenormalizerStorage;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Assignment;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Tests.Abc;
 
@@ -286,6 +287,87 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             upgradeServiceMock.Verify(x => x.ReportProgress(processId, It.Is<AssignmentUpgradeProgressDetails>(
                 p => p.Status == AssignmentUpgradeStatus.Cancelled
                 )));
+        }
+
+        [Test]
+        public void when_responsible_user_not_found_during_upgrade_Should_report_assignment_as_error_and_not_retry()
+        {
+            var migrateFrom = Create.Entity.QuestionnaireIdentity(Id.g1, 1);
+            var migrateTo = Create.Entity.QuestionnaireIdentity(Id.g2, 2);
+            var migratedAssignmentId = 45;
+
+            var assignmentsStorage = new InMemoryReadSideRepositoryAccessor<Assignment, Guid>();
+            var assignmentToMigrate = Create.Entity.Assignment(id: migratedAssignmentId,
+                publicKey: Id.g7,
+                quantity: 1,
+                questionnaireIdentity: migrateFrom);
+            assignmentsStorage.Store(assignmentToMigrate, Id.g7);
+
+            var questionnaires = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(migrateTo.QuestionnaireId,
+                questionnaireVersion: migrateTo.Version);
+
+            var commandService = new Mock<ICommandService>();
+            commandService.Setup(cs => cs.Execute(It.IsAny<CreateAssignment>(), null))
+                .Throws(new AssignmentException("Responsible not found", AssignmentDomainExceptionType.InvalidResponsible));
+
+            var upgradeServiceMock = new Mock<IAssignmentsUpgradeService>();
+            var assignmentsService = Create.Service.AssignmentsService(assignmentsStorage);
+            var service = Create.Service.AssignmentsUpgrader(
+                assignments: assignmentsService,
+                questionnaireStorage: questionnaires,
+                commandService: commandService.Object,
+                upgradeService: upgradeServiceMock.Object);
+
+            // Act - should not throw
+            Assert.DoesNotThrow(() =>
+                service.Upgrade(new AssignmentsUpgradeProcess(Id.g1, Guid.NewGuid(), migrateFrom, migrateTo)));
+
+            // Assert - process should be reported as Done (not Error), with one error entry
+            upgradeServiceMock.Verify(x => x.ReportProgress(Id.g1, It.Is<AssignmentUpgradeProgressDetails>(
+                p => p.Status == AssignmentUpgradeStatus.Done &&
+                     p.AssignmentsMigratedWithErrorCount == 1
+            )));
+        }
+
+        [Test]
+        public void when_cawi_assignment_has_non_interviewer_responsible_Should_report_assignment_as_error_and_not_retry()
+        {
+            var migrateFrom = Create.Entity.QuestionnaireIdentity(Id.g1, 1);
+            var migrateTo = Create.Entity.QuestionnaireIdentity(Id.g2, 2);
+            var migratedAssignmentId = 45;
+
+            var assignmentsStorage = new InMemoryReadSideRepositoryAccessor<Assignment, Guid>();
+            var assignmentToMigrate = Create.Entity.Assignment(id: migratedAssignmentId,
+                publicKey: Id.g7,
+                quantity: 1,
+                questionnaireIdentity: migrateFrom,
+                webMode: true);
+            assignmentsStorage.Store(assignmentToMigrate, Id.g7);
+
+            var questionnaires = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(migrateTo.QuestionnaireId,
+                questionnaireVersion: migrateTo.Version);
+
+            var commandService = new Mock<ICommandService>();
+            commandService.Setup(cs => cs.Execute(It.IsAny<CreateAssignment>(), null))
+                .Throws(new AssignmentException("Web mode assignment should be on interviewer", AssignmentDomainExceptionType.InvalidResponsible));
+
+            var upgradeServiceMock = new Mock<IAssignmentsUpgradeService>();
+            var assignmentsService = Create.Service.AssignmentsService(assignmentsStorage);
+            var service = Create.Service.AssignmentsUpgrader(
+                assignments: assignmentsService,
+                questionnaireStorage: questionnaires,
+                commandService: commandService.Object,
+                upgradeService: upgradeServiceMock.Object);
+
+            // Act - should not throw
+            Assert.DoesNotThrow(() =>
+                service.Upgrade(new AssignmentsUpgradeProcess(Id.g1, Guid.NewGuid(), migrateFrom, migrateTo)));
+
+            // Assert - process should be reported as Done (not Error), with one error entry
+            upgradeServiceMock.Verify(x => x.ReportProgress(Id.g1, It.Is<AssignmentUpgradeProgressDetails>(
+                p => p.Status == AssignmentUpgradeStatus.Done &&
+                     p.AssignmentsMigratedWithErrorCount == 1
+            )));
         }
     }
 }

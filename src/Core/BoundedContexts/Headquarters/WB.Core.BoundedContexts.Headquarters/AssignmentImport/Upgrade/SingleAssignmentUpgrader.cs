@@ -8,6 +8,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.Domain;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Assignment;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
@@ -46,23 +47,30 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
                         targetQuestionnaire);
                 if (assignmentVerification == null)
                 {
-                    var newAssignment = assignmentFactory.CreateAssignment(
-                        userId,
-                        migrateTo,
-                        oldAssignment.ResponsibleId,
-                        oldAssignment.InterviewsNeeded,
-                        oldAssignment.Email,
-                        oldAssignment.Password,
-                        oldAssignment.WebMode,
-                        oldAssignment.AudioRecording,
-                        oldAssignment.Answers.ToList(),
-                        oldAssignment.ProtectedVariables,
-                        oldAssignment.Comments,
-                        oldAssignment.TargetArea,
-                        assignmentId);
+                    try
+                    {
+                        var newAssignment = assignmentFactory.CreateAssignment(
+                            userId,
+                            migrateTo,
+                            oldAssignment.ResponsibleId,
+                            oldAssignment.InterviewsNeeded,
+                            oldAssignment.Email,
+                            oldAssignment.Password,
+                            oldAssignment.WebMode,
+                            oldAssignment.AudioRecording,
+                            oldAssignment.Answers.ToList(),
+                            oldAssignment.ProtectedVariables,
+                            oldAssignment.Comments,
+                            oldAssignment.TargetArea,
+                            assignmentId);
 
-                    invitationService.MigrateInvitationToNewAssignment(assignmentId, newAssignment.Id);
-                    commandService.Execute(new UpgradeAssignmentCommand(oldAssignment.PublicKey, userId, oldAssignment.QuestionnaireId));
+                        invitationService.MigrateInvitationToNewAssignment(assignmentId, newAssignment.Id);
+                        commandService.Execute(new UpgradeAssignmentCommand(oldAssignment.PublicKey, userId, oldAssignment.QuestionnaireId));
+                    }
+                    catch (AssignmentException e)
+                    {
+                        throw new AssignmentUpgradeException(e.Message, e);
+                    }
                 }
                 else
                 {
