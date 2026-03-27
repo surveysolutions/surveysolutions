@@ -1251,6 +1251,15 @@
   <data name="MapList_Updated" xml:space="preserve">
     <value>Upraveno dne</value>
   </data>
+  <data name="MapList_HasDuplicateLabels" xml:space="preserve">
+    <value>Má duplicitní popisky</value>
+  </data>
+  <data name="MapList_Yes" xml:space="preserve">
+    <value>Ano</value>
+  </data>
+  <data name="MapList_No" xml:space="preserve">
+    <value>Ne</value>
+  </data>
   <data name="MapList_UploadDescriptionExtra" xml:space="preserve">
     <value>Poznámka: Soubory se stejným názvem budou přepsány.</value>
   </data>

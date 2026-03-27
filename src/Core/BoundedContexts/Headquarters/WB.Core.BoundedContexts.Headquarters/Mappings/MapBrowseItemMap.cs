@@ -32,18 +32,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Property(x => x.ShapeType);
             Property(x => x.GeoJson, m => m.Lazy(true));
             Property(x => x.IsPreviewGeoJson);
+            Property(x => x.HasDuplicateLabels,  pm =>
+            {
+                pm.Type<BooleanType>();
+                pm.Column("has_duplicate_labels");
+            });
             
             Set(x => x.Users,
-                collection =>
-                {
-                    collection.Key(key => key.Column("map"));
-                    collection.Cascade(Cascade.All | Cascade.DeleteOrphans);
-                    
-                    collection.Inverse(true);
-                },
-                rel => rel.OneToMany());
-
-            Set(x => x.DuplicateLabels,
                 collection =>
                 {
                     collection.Key(key => key.Column("map"));

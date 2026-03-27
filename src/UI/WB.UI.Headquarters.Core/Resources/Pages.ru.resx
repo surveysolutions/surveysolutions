@@ -1284,6 +1284,15 @@
   <data name="MapList_Updated" xml:space="preserve">
     <value>Обновлено</value>
   </data>
+  <data name="MapList_HasDuplicateLabels" xml:space="preserve">
+    <value>Есть дубликаты меток</value>
+  </data>
+  <data name="MapList_Yes" xml:space="preserve">
+    <value>Да</value>
+  </data>
+  <data name="MapList_No" xml:space="preserve">
+    <value>Нет</value>
+  </data>
   <data name="MapLinking_DescriptionTitle" xml:space="preserve">
     <value>Назначение карт на пользователей</value>
   </data>

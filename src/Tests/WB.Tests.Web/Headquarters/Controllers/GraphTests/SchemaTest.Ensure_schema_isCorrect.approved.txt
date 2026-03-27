@@ -221,6 +221,7 @@ type Map {
   minScale: Float!
   shapeType: String
   shapesCount: Int
+  hasDuplicateLabels: Boolean
 }
 
 type MapReport {
@@ -503,6 +504,7 @@ input MapsSort {
   fileName: SortEnumType @cost(weight: "10")
   importDateUtc: SortEnumType @cost(weight: "10")
   size: SortEnumType @cost(weight: "10")
+  hasDuplicateLabels: SortEnumType @cost(weight: "10")
 }
 
 input NullableOfQuestionScopeOperationFilterInput {

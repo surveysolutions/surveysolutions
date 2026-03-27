@@ -29,6 +29,10 @@
                                 {{ $t("Pages.MapDetails_UploadedBy") }}:</strong> <span>{{ $config.model.uploadedBy
                                 }}</span>
                         </li>
+                        <li v-if="$config.model.showDuplicateLabelsWarning" class="text-danger">
+                            <strong>{{ $t("Pages.MapList_HasDuplicateLabels") }}: </strong>
+                            <span>{{ $t("Pages.MapList_Yes") }}</span>
+                        </li>
                     </ul>
                 </FilterBlock>
 

@@ -38,7 +38,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
     public class MapFileStorageService : IMapStorageService
     {
         private readonly IPlainStorageAccessor<MapBrowseItem> mapPlainStorageAccessor;
-        private readonly IPlainStorageAccessor<DuplicateMapLabel> duplicateMapLabelPlainStorageAccessor;
         private readonly IPlainStorageAccessor<UserMap> userMapsStorage;
         private readonly ISerializer serializer;
         private readonly IUserRepository userStorage;
@@ -66,8 +65,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             IExternalFileStorage externalFileStorage,
             IOptions<GeospatialConfig> geospatialConfig,
             IAuthorizedUser authorizedUser,
-            ILogger<MapFileStorageService> logger, 
-            IPlainStorageAccessor<DuplicateMapLabel> duplicateMapLabelPlainStorageAccessor)
+            ILogger<MapFileStorageService> logger)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.archiveUtils = archiveUtils;
@@ -75,11 +73,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             this.userMapsStorage = userMapsStorage;
             this.serializer = serializer;
             this.userStorage = userStorage;
-
             this.externalFileStorage = externalFileStorage;
             this.authorizedUser = authorizedUser;
             this.logger = logger;
-            this.duplicateMapLabelPlainStorageAccessor = duplicateMapLabelPlainStorageAccessor;
             this.geospatialConfig = geospatialConfig;
 
             this.mapsFolderPath = fileSystemAccessor.CombinePath(fileStorageConfig.Value.TempData, MapsFolderName);
@@ -122,10 +118,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     var targetFile = this.fileSystemAccessor.CombinePath(this.mapsFolderPath, mapName);
                     fileSystemAccessor.MoveFile(tempFile, targetFile);
                 }
-
-                this.duplicateMapLabelPlainStorageAccessor.Remove(l => l.Where(d => d.Map.Id == mapItem.Id));
+                
                 this.mapPlainStorageAccessor.Store(mapItem, mapItem.Id);
-                this.duplicateMapLabelPlainStorageAccessor.Store(mapItem.DuplicateLabels);
+                
                 return mapItem;
             }
             catch
@@ -303,53 +298,58 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                         item.Wkid = 4326;  //geographic coordinates Wgs84
                         item.ShapesCount = shapefileReader.RecordCount;
                         
-                        int? labelIndexOf = null;
+                        string labelColumnTitle = null;
 
                         for (int i = 0; i < shapefileReader.Fields.Count; i++)
                         {
-                            if (shapefileReader.Fields[i].Name == LabelFieldName)
+                            if (string.Equals(shapefileReader.Fields[i].Name, LabelFieldName, StringComparison.InvariantCultureIgnoreCase))
                             {
-                                labelIndexOf = i + 1;
+                                labelColumnTitle = shapefileReader.Fields[i].Name;
                                 break;
                             }
                         }
                         
                         CoordinateTransformationFilter coordinateTransformationFilter = null;
                         var projection = shapefileReader.Projection;
-                        var sourceProjectionInfo = ProjectionInfo.FromEsriString(projection);
-                        if (!sourceProjectionInfo.IsLatLon)
+                        if (projection != null)
                         {
-                            var target = KnownCoordinateSystems.Geographic.World.WGS1984;
-                            coordinateTransformationFilter = new CoordinateTransformationFilter(sourceProjectionInfo, target);
+                            var sourceProjectionInfo = ProjectionInfo.FromEsriString(projection);
+                            if (!sourceProjectionInfo.IsLatLon)
+                            {
+                                var target = KnownCoordinateSystems.Geographic.World.WGS1984;
+                                coordinateTransformationFilter = new CoordinateTransformationFilter(sourceProjectionInfo, target);
 
-                            var minHeaderCoordinate = coordinateTransformationFilter.Transform(headerBounds.MinX, headerBounds.MinY);
-                            item.XMinVal = minHeaderCoordinate.X;
-                            item.YMinVal = minHeaderCoordinate.Y;
-                            var maxHeaderCoordinate = coordinateTransformationFilter.Transform(headerBounds.MaxX, headerBounds.MaxY);
-                            item.XMaxVal = maxHeaderCoordinate.X;
-                            item.YMaxVal = maxHeaderCoordinate.Y;
+                                var minHeaderCoordinate = coordinateTransformationFilter.Transform(headerBounds.MinX, headerBounds.MinY);
+                                item.XMinVal = minHeaderCoordinate.X;
+                                item.YMinVal = minHeaderCoordinate.Y;
+                                var maxHeaderCoordinate = coordinateTransformationFilter.Transform(headerBounds.MaxX, headerBounds.MaxY);
+                                item.XMaxVal = maxHeaderCoordinate.X;
+                                item.YMaxVal = maxHeaderCoordinate.Y;
+                            }
                         }
                         
                         FeatureCollection fc = new FeatureCollection();
                         HashSet<string> checkOnUnique = new HashSet<string>();
-                        Dictionary<string, int> duplicateLabels = new Dictionary<string, int>();
+                        bool hasDuplicates = false;
 
                         while (shapefileReader.Read(out bool deleted, out var readFeature))
                         {
+                            if (deleted)
+                                continue;
+                            
                             AttributesTable attribs = new AttributesTable();
 
-                            if (labelIndexOf.HasValue)
+                            if (labelColumnTitle != null && readFeature.Attributes.Exists(labelColumnTitle))
                             {
-                                var labelValue = readFeature.Attributes[LabelFieldName].ToString();
+                                var labelValue = readFeature.Attributes[labelColumnTitle].ToString();
 
                                 if (!string.IsNullOrWhiteSpace(labelValue))
                                 {
                                     attribs.Add(LabelFieldName, labelValue);
 
-                                    if (!checkOnUnique.Add(labelValue))
+                                    if (!hasDuplicates && !checkOnUnique.Add(labelValue))
                                     {
-                                        if (!duplicateLabels.TryAdd(labelValue, 2))
-                                            duplicateLabels[labelValue] += 1;
+                                        hasDuplicates = true;
                                     }
                                 }
                             }
@@ -362,16 +362,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                         if (fc.Count == 0)
                             throw new ArgumentException($"Can't read any coordinates from {mapFile.Name}.shp file");
 
-                        item.DuplicateLabels.Clear();
-                        foreach (var duplicateLabel in duplicateLabels)
-                        {
-                            item.DuplicateLabels.Add(new DuplicateMapLabel()
-                            {
-                                Label = duplicateLabel.Key,
-                                Count = duplicateLabel.Value,
-                                Map = item,
-                            });
-                        }
+                        item.HasDuplicateLabels = hasDuplicates;
 
                         var json = GetGeoJson(fc);
                         var byteCount = Encoding.Unicode.GetByteCount(json);

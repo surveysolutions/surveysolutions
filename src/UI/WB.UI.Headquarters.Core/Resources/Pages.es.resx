@@ -1378,6 +1378,15 @@
   <data name="MapList_Updated" xml:space="preserve">
     <value>Actualizado en</value>
   </data>
+  <data name="MapList_HasDuplicateLabels" xml:space="preserve">
+    <value>Tiene etiquetas duplicadas</value>
+  </data>
+  <data name="MapList_Yes" xml:space="preserve">
+    <value>Sí</value>
+  </data>
+  <data name="MapList_No" xml:space="preserve">
+    <value>No</value>
+  </data>
   <data name="MapLinking_DescriptionTitle" xml:space="preserve">
     <value>Gestionar enlaces de mapas de usuarios</value>
   </data>

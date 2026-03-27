@@ -1,11 +1,22 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
+using Microsoft.Extensions.Options;
 using Moq;
+using NetTopologySuite.Features;
+using NetTopologySuite.Geometries;
+using NetTopologySuite.IO.Esri;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
+using WB.Core.BoundedContexts.Headquarters.Maps;
+using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.Maps;
+using WB.Core.SharedKernels.Configs;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
 
@@ -143,5 +154,102 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Implementation.Services
             var storedUserMap = userMapStorage.Query(_ => _.FirstOrDefault(um => um.UserName == userNameFromTeam));
             Assert.That(storedUserMap, Is.Null);
         }
+
+        [Test]
+        public async Task SaveOrUpdateMapAsync_when_shapefile_has_duplicate_label_values_HasDuplicateLabels_is_true()
+        {
+            var tempBase = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N"));
+            var mapsDirectory = Path.Combine(tempBase, "source");
+            var storageDirectory = Path.Combine(tempBase, "storage");
+            Directory.CreateDirectory(mapsDirectory);
+            Directory.CreateDirectory(storageDirectory);
+
+            try
+            {
+                const string mapName = "testmap";
+                WriteShapefileWithLabels(mapsDirectory, mapName, new[] { "region1", "region1", "region2" });
+
+                var mapStorage = new TestPlainStorage<MapBrowseItem>();
+                var service = Create.Service.MapFileStorageService(
+                    mapsStorage: mapStorage,
+                    fileStorageConfig: Options.Create(new FileStorageConfig { TempData = storageDirectory }),
+                    geospatialConfig: Options.Create(new GeospatialConfig())
+                );
+
+                // Act
+                var result = await service.SaveOrUpdateMapAsync(BuildShapeMapFiles(mapName), mapsDirectory);
+
+                // Assert
+                Assert.That(result.HasDuplicateLabels, Is.True);
+            }
+            finally
+            {
+                Directory.Delete(tempBase, true);
+            }
+        }
+
+        [Test]
+        public async Task SaveOrUpdateMapAsync_when_shapefile_has_unique_label_values_HasDuplicateLabels_is_false()
+        {
+            var tempBase = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N"));
+            var mapsDirectory = Path.Combine(tempBase, "source");
+            var storageDirectory = Path.Combine(tempBase, "storage");
+            Directory.CreateDirectory(mapsDirectory);
+            Directory.CreateDirectory(storageDirectory);
+
+            try
+            {
+                const string mapName = "testmap";
+                WriteShapefileWithLabels(mapsDirectory, mapName, new[] { "region1", "region2", "region3" });
+
+                var mapStorage = new TestPlainStorage<MapBrowseItem>();
+                var service = Create.Service.MapFileStorageService(
+                    mapsStorage: mapStorage,
+                    fileStorageConfig: Options.Create(new FileStorageConfig { TempData = storageDirectory }),
+                    geospatialConfig: Options.Create(new GeospatialConfig())
+                );
+
+                // Act
+                var result = await service.SaveOrUpdateMapAsync(BuildShapeMapFiles(mapName), mapsDirectory);
+
+                // Assert
+                Assert.That(result.HasDuplicateLabels, Is.False);
+            }
+            finally
+            {
+                Directory.Delete(tempBase, true);
+            }
+        }
+
+        /// <summary>
+        /// Writes a minimal point shapefile whose "label" attribute contains the supplied values.
+        /// Produces the .shp / .shx / .dbf triad that MapFileStorageService reads via Shapefile.OpenRead.
+        /// </summary>
+        private static void WriteShapefileWithLabels(string directory, string name, string[] labels)
+        {
+            var features = labels
+                .Select((label, i) =>
+                {
+                    var point = new Point(new Coordinate(i, i));
+                    var attrs = new AttributesTable { { "label", label } };
+                    return (IFeature)new Feature(point, attrs);
+                })
+                .ToList();
+
+            Shapefile.WriteAllFeatures(features, Path.Combine(directory, name + ".shp"));
+        }
+
+        private static MapFiles BuildShapeMapFiles(string mapName) => new MapFiles
+        {
+            Name = mapName,
+            IsShapeFile = true,
+            Size = 0,
+            Files = new List<MapFile>
+            {
+                new MapFile { Name = mapName + ".shp" },
+                new MapFile { Name = mapName + ".shx" },
+                new MapFile { Name = mapName + ".dbf" },
+            }
+        };
     }
 }
