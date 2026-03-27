@@ -55,10 +55,18 @@ export const useRosterStore = defineStore('roster', {
                     return;
                 }
 
-                this.roster.numericIntegerQuestions = data.numericIntegerQuestions;
-                this.roster.numericIntegerTitles = data.numericIntegerTitles;
-                this.roster.textListsQuestions = data.textListsQuestions;
-                this.roster.notLinkedMultiOptionQuestions = data.notLinkedMultiOptionQuestions;
+                const wasDirty = this.getIsDirty;
+
+                if (!wasDirty) {
+                    // No user changes yet: refresh both roster and initialRoster to keep them in sync
+                    this.setRosterData(data);
+                } else {
+                    // User has unsaved changes: only update question-list fields on the working copy
+                    this.roster.numericIntegerQuestions = data.numericIntegerQuestions;
+                    this.roster.numericIntegerTitles = data.numericIntegerTitles;
+                    this.roster.textListsQuestions = data.textListsQuestions;
+                    this.roster.notLinkedMultiOptionQuestions = data.notLinkedMultiOptionQuestions;
+                }
             } catch (error) {
                 // Swallow error to prevent unhandled promise rejections from async event handler
             }
