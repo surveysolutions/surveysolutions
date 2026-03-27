@@ -300,7 +300,7 @@
     "HelpExpression": "Une expression logique qui est calculée en fonction des réponses aux autres questions.",
     "HelpFixedTitles": "Le nombre d'éléments détermine la taille de la liste. Chaque élément de la liste correspond à un titre de la ligne de la liste. Chaque élément de la liste doit être placé sur une ligne distincte.",
     "HelpHideIfDisabled": "Par défaut, un élément désactivé est grisé. Cocher cette option masquera une question ou une section désactivée sur une tablette.",
-    "HelpRosterDisplayMode": "Sous-section - les questions de la liste sont affichées derrière les boutons correspondant aux instances de la liste.\r\nMode plat - les questions de la liste sont affichées au même niveau séparées par des en-têtes correspondant aux instances de la liste.\r\nTable - les questions de la liste sont affichées au même niveau sous forme de lignes et de colonnes de la table.\r\nMatrice - une question catégorielle de la liste est affichée sous forme de matrice.\r\nLes vues Table et Matrice sont uniquement prises en charge dans l'enquête Web, la tablette revient au mode 'Sous-section'.",
+    "HelpRosterDisplayMode": "Sous-section - les questions de la liste sont affichées derrière les boutons correspondant aux instances de la liste.\nMode plat - les questions de la liste sont affichées au même niveau séparées par des en-têtes correspondant aux instances de la liste.\nTable - les questions de la liste sont affichées au même niveau sous forme de lignes et de colonnes de la table.\nMatrice - une question catégorielle de la liste est affichée sous forme de matrice.\nLes vues Table et Matrice sont uniquement prises en charge dans l'enquête Web, la tablette revient au mode 'Sous-section'.",
     "HelpHideInstructions": "Par défaut, un texte d'instruction est affiché sur une tablette. Cocher cette option n'affichera que la première ligne des instructions. Appuyer sur cette ligne affichera le texte complet.",
     "HelpInstruction": "Texte d'instruction qui sera attaché à la question.",
     "HelpIsTimestamp": "Cette option permet à l'utilisateur de tamponner l'heure actuelle sur la tablette",
@@ -498,7 +498,7 @@
     "CommunicationError": "Erreur réseau",
     "SideBarCategoriesAddNew": "Ajouter de nouvelles catégories",
     "RowAdded": "Ligne ajoutée",
-    "OptionsCascadingListError": "\r\nVous avez entré une entrée invalide. Chaque ligne doit suivre le format : \"Titre...ValeurParente/Valeur[...Nom de la pièce jointe]\". 'Valeur' et 'ValeurParente' doivent être des nombres entiers. 'Titre' doit être une chaîne alphanumérique. 'Nom de la pièce jointe' est facultatif. Aucune ligne vide n'est autorisée.",
+    "OptionsCascadingListError": "\nVous avez entré une entrée invalide. Chaque ligne doit suivre le format : \"Titre...ValeurParente/Valeur[...Nom de la pièce jointe]\". 'Valeur' et 'ValeurParente' doivent être des nombres entiers. 'Titre' doit être une chaîne alphanumérique. 'Nom de la pièce jointe' est facultatif. Aucune ligne vide n'est autorisée.",
     "ShowParentValues": "Afficher les valeurs parentes",
     "HideParentValues": "Masquer les valeurs parentes",
     "AddEnablingCondition": "Ajouter une condition d'activation",
@@ -513,7 +513,8 @@
     "HelpCriticalityConditionMessage": "Ce message est affiché lorsque la condition critique est évaluée à \"Faux\" ou qu'une exception se produit lors de l'évaluation de l'expression. Le message peut utiliser des hyperliens et la substitution de texte.",
     "AttachmentSizeIsTooBig": "La taille de la pièce jointe est trop grande. Taille maximale : {{size}}",
     "SwitchTo": "Passer à",
-    "SwitchToTranslationConfirm": "Passer à changera la langue d’affichage du questionnaire. La traduction doit inclure un texte pour tous les éléments."
+    "SwitchToTranslationConfirm": "Passer à changera la langue d’affichage du questionnaire. La traduction doit inclure un texte pour tous les éléments.",
+    "AIAssistant": "IA"
   },
   "AccountResources": {
     "AllRights": "Tout droit reservé",

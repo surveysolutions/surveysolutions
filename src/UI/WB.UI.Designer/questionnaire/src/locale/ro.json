@@ -449,6 +449,7 @@
     "TableView": "Vizualizare în tabel",
     "ValidationIntValue": "Valoarea este prea mare",
     "ManageAccount": "Gestionați contul",
+    "AIAssistant": "IA",
     "CopyTo": "Copy to",
     "SideBarCriticalityConditionExpression": "Critical condition",
     "SideBarCriticalityConditionsCounter": "{{count}} Critical rule:",

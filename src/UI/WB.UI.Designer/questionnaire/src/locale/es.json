@@ -462,7 +462,7 @@
     "Login": "Iniciar sesión",
     "No": "No",
     "NewItem": "Nuevo elemento",
-    "OptionsCascadingListError": "\r\nIngresaste una entrada no válida. Cada línea debe seguir el formato: \"Título...ValorPadre/Valor[...Nombre del adjunto]\". 'Valor' y 'ValorPadre' deben ser un número entero. 'Título' debe ser una cadena alfanumérica. 'Nombre del adjunto' es opcional. No se permiten líneas vacías.",
+    "OptionsCascadingListError": "\nIngresaste una entrada no válida. Cada línea debe seguir el formato: \"Título...ValorPadre/Valor[...Nombre del adjunto]\". 'Valor' y 'ValorPadre' deben ser un número entero. 'Título' debe ser una cadena alfanumérica. 'Nombre del adjunto' es opcional. No se permiten líneas vacías.",
     "OptionsSizeLimit": "Máximo {max_rows} filas permitidas",
     "OptionsUploadRevert": "Annuler les modifications",
     "PublicAccessDescriptionSettings": "Les questionnaires publics sont visibles par tous les utilisateurs ayant un compte dans ce système en mode lecture seule.",
@@ -513,7 +513,8 @@
     "SideBarTab": "Tab",
     "AttachmentSizeIsTooBig": "El tamaño del archivo adjunto es demasiado grande. Tamaño máximo: {{size}}",
     "SwitchTo": "Cambiar a",
-    "SwitchToTranslationConfirm": "Cambiar a modificará el idioma de visualización del cuestionario. La traducción debe incluir texto para todos los elementos."
+    "SwitchToTranslationConfirm": "Cambiar a modificará el idioma de visualización del cuestionario. La traducción debe incluir texto para todos los elementos.",
+    "AIAssistant": "IA"
   },
   "AccountResources": {
     "AllRights": "Todos los derechos reservados",

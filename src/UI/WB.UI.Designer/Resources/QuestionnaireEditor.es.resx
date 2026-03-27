@@ -1667,4 +1667,7 @@ Ingresaste una entrada no válida. Cada línea debe seguir el formato: "Título.
   <data name="SwitchToTranslationConfirm" xml:space="preserve">
     <value>Cambiar a modificará el idioma de visualización del cuestionario. La traducción debe incluir texto para todos los elementos.</value>
 </data>
+  <data name="AIAssistant" xml:space="preserve">
+      <value>IA</value>
+  </data>
 </root>
