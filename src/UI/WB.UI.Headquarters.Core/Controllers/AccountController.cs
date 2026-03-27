@@ -104,10 +104,16 @@ namespace WB.UI.Headquarters.Controllers
             returnUrl = !string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl)
                 ? returnUrl
                 : null;
-            
+            this.ViewBag.ReturnUrl = returnUrl;
+
             var isCaptchaRequired = this.captchaService.ShouldShowCaptcha(model.UserName);
             model.RequireCaptcha = isCaptchaRequired;
-            
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
             if (isCaptchaRequired && !await this.captchaProvider.IsCaptchaValid(Request))
             {
                 this.ModelState.AddModelError("InvalidCaptcha", ErrorMessages.PleaseFillCaptcha);
@@ -119,10 +125,19 @@ namespace WB.UI.Headquarters.Controllers
             if (model.UserName != null)
             {
                 user = await userManager.FindByNameAsync(model.UserName);
-                if (user?.IsInRole(UserRoles.ApiUser) == true)
+
+                if (user == null)
+                {
+                    this.ModelState.AddModelError("InvalidCredentials", ErrorMessages.IncorrectUserNameOrPassword);
+                }
+                else if (user.IsInRole(UserRoles.ApiUser) == true)
                 {
                     this.ModelState.AddModelError(nameof(model.UserName), ErrorMessages.ApiUserIsNotAllowedToSignIn);
                 }
+            }
+            else
+            {
+                this.ModelState.AddModelError("InvalidCredentials", ErrorMessages.IncorrectUserNameOrPassword);
             }
 
             if (!ModelState.IsValid)
@@ -135,7 +150,7 @@ namespace WB.UI.Headquarters.Controllers
             {
                 this.captchaService.ResetFailedLogin(model.UserName);
 
-                if (user!.PasswordChangeRequired)
+                if (user.PasswordChangeRequired)
                 {
                     var controllerName = nameof(UsersController);
                     var actionName = nameof(UsersController.ChangePassword);
@@ -284,10 +299,14 @@ namespace WB.UI.Headquarters.Controllers
                 return NotFound();
 
             var observerName = User.FindFirst(AuthorizedUser.ObserverClaimType)?.Value;
-            var observer = await this.signInManager.UserManager.FindByNameAsync(observerName);
 
             await this.signInManager.SignOutAsync();
-            await this.signInManager.SignInAsync(observer, true);
+
+            if (observerName == null) return this.Redirect("~/");
+            
+            var observer = await this.signInManager.UserManager.FindByNameAsync(observerName);
+            if (observer != null)
+                await this.signInManager.SignInAsync(observer, true);
 
             return this.Redirect("~/");
         }
@@ -301,8 +320,12 @@ namespace WB.UI.Headquarters.Controllers
                 return  NotFound();
 
             var user = await this.signInManager.UserManager.FindByNameAsync(personName);
-            if (user == null || !ObservableRoles.Contains(user.Roles.First().Id))
-               return NotFound();
+            if (user == null)
+                return NotFound();
+
+            var firstRole = user.Roles.FirstOrDefault();
+            if (firstRole == null || !ObservableRoles.Contains(firstRole.Id))
+                return NotFound();
 
             //do not forget pass current user to display you are observing
             await this.SignInAsObserverAsync(personName);
@@ -322,25 +345,28 @@ namespace WB.UI.Headquarters.Controllers
                 // ignoring attempt to sign in
                 return;
             }
-
+            
             var userToObserve = await this.signInManager.UserManager.FindByNameAsync(userName);
 
-            userToObserve.Claims.Add(new HqUserClaim
+            if (userToObserve != null)
             {
-                UserId = userToObserve.Id,
-                ClaimType = AuthorizedUser.ObserverClaimType,
-                ClaimValue = authorizedUser.UserName
-            });
+                userToObserve.Claims.Add(new HqUserClaim
+                {
+                    UserId = userToObserve.Id,
+                    ClaimType = AuthorizedUser.ObserverClaimType,
+                    ClaimValue = authorizedUser.UserName
+                });
 
-            userToObserve.Claims.Add(new HqUserClaim
-            {
-                UserId = userToObserve.Id,
-                ClaimType = ClaimTypes.Role,
-                ClaimValue = Enum.GetName(typeof(UserRoles), UserRoles.Observer)
-            });
+                userToObserve.Claims.Add(new HqUserClaim
+                {
+                    UserId = userToObserve.Id,
+                    ClaimType = ClaimTypes.Role,
+                    ClaimValue = Enum.GetName(typeof(UserRoles), UserRoles.Observer)
+                });
 
-            await this.signInManager.SignOutAsync();
-            await this.signInManager.SignInAsync(userToObserve, true);
+                await this.signInManager.SignOutAsync();
+                await this.signInManager.SignInAsync(userToObserve, true);
+            }
         }
     }
 }

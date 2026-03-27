@@ -58,6 +58,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users
 
         public override async Task<HqUser> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken = new CancellationToken())
         {
+            if (string.IsNullOrEmpty(normalizedUserName)) return null;
             var user = await this.Users.Where(x => x.UserName.ToUpper() == normalizedUserName.ToUpper())
                 .SingleOrDefaultAsync(cancellationToken: cancellationToken);
             return user;
