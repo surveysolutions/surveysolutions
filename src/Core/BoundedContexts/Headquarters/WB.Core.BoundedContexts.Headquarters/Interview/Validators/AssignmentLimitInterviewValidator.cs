@@ -76,7 +76,7 @@ public class AssignmentLimitInterviewValidator:
         if (assignment.InterviewsNeeded > RequiredInterviewsThreshold)
             return;
 
-        // 3 and less slot left: acquire FOR UPDATE and re-read to authoritatively
+        // 3 or fewer slots left: acquire FOR UPDATE and re-read to authoritatively
         // serialize the last slot against concurrent requests.
         // Pass the already-loaded entity to skip the redundant lookup round-trip.
         var lockedAssignment = assignmentsService.GetAssignmentWithUpgradeLock(assignment);
