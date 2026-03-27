@@ -7,7 +7,9 @@ import _ from 'lodash';
 export const useRosterStore = defineStore('roster', {
     state: () => ({
         roster: {},
-        initialRoster: {}
+        initialRoster: {},
+        questionnaireId: null,
+        rosterId: null
     }),
     getters: {
         getRoster: state => state.roster,
@@ -19,6 +21,7 @@ export const useRosterStore = defineStore('roster', {
             emitter.on('rosterUpdated', this.rosterUpdated);
             emitter.on('rosterDeleted', this.rosterDeleted);
             emitter.on('questionDeleted', this.questionDeleted);
+            emitter.on('questionAdded', _.debounce(payload => this.questionAdded(payload), 300));
         },
         rosterUpdated(payload) {
             if (this.roster.itemId === payload.roster.itemId) {
@@ -37,7 +40,40 @@ export const useRosterStore = defineStore('roster', {
             //notLinkedMultiOptionQuestions
             //numericIntegerTitles
         },
+        async questionAdded(payload) {
+            if (!this.questionnaireId || !this.rosterId) return;
+
+            const currentQuestionnaireId = this.questionnaireId;
+            const currentRosterId = this.rosterId;
+
+            try {
+                const data = await getRoster(currentQuestionnaireId, currentRosterId);
+                if (!data) return;
+
+                // Ensure store has not been cleared or changed to another roster/questionnaire
+                if (this.questionnaireId !== currentQuestionnaireId || this.rosterId !== currentRosterId) {
+                    return;
+                }
+
+                const wasDirty = this.getIsDirty;
+
+                if (!wasDirty) {
+                    // No user changes yet: refresh both roster and initialRoster to keep them in sync
+                    this.setRosterData(data);
+                } else {
+                    // User has unsaved changes: only update question-list fields on the working copy
+                    this.roster.numericIntegerQuestions = data.numericIntegerQuestions;
+                    this.roster.numericIntegerTitles = data.numericIntegerTitles;
+                    this.roster.textListsQuestions = data.textListsQuestions;
+                    this.roster.notLinkedMultiOptionQuestions = data.notLinkedMultiOptionQuestions;
+                }
+            } catch (error) {
+                // Swallow error to prevent unhandled promise rejections from async event handler
+            }
+        },
         async fetchRosterData(questionnaireId, rosterId) {
+            this.questionnaireId = questionnaireId;
+            this.rosterId = rosterId;
             const data = await getRoster(questionnaireId, rosterId);
             this.setRosterData(data);
         },
@@ -50,6 +86,8 @@ export const useRosterStore = defineStore('roster', {
         clear() {
             this.roster = {};
             this.initialRoster = {};
+            this.questionnaireId = null;
+            this.rosterId = null;
         },
 
         discardChanges() {
