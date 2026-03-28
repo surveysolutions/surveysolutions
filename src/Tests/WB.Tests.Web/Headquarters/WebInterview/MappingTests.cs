@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
             var autoMapperConfig = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile(new WebInterviewAutoMapProfile());
-            }, new NullLoggerFactory());
+            });
 
             mapper = autoMapperConfig.CreateMapper();
         }
