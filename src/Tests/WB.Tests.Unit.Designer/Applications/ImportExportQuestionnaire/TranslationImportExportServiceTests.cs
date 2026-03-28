@@ -109,7 +109,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
             var mapper = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile(new QuestionnaireAutoMapperProfile());
-            }, new NullLoggerFactory()).CreateMapper();
+            }).CreateMapper();
 
             return new TranslationImportExportService(
                 dbContext,

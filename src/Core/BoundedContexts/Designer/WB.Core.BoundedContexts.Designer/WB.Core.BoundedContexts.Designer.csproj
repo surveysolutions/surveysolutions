@@ -14,6 +14,7 @@
     <WarningLevel>3</WarningLevel>
     <NoWarn>1701;1702;1705;618;1030</NoWarn>
     <WarningsAsErrors />
+    <WarningsNotAsErrors>NU1903</WarningsNotAsErrors>
   </PropertyGroup>
   <ItemGroup>
     <!--Assemblies that are referenced during conditions assembly compilation-->
@@ -31,7 +32,7 @@
     <EmbeddedResource Include="$(NugetPackageRoot)\system.threading\4.3.0\ref\netstandard1.3\System.Threading.dll" Visible="false" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="16.1.1" />
+    <PackageReference Include="AutoMapper" Version="14.0.0" />
     <PackageReference Include="CsvHelper" Version="33.0.1" />
     <PackageReference Include="ClosedXML" Version="0.102.3" />
     <PackageReference Include="Dapper" Version="2.1.66" />
