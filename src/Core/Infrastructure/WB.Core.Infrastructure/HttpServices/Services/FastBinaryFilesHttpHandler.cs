@@ -20,6 +20,7 @@ namespace WB.Core.Infrastructure.HttpServices.Services
         private readonly IRestServiceSettings restServiceSettings;
         private readonly IHttpStatistician httpStatistician;
         private readonly ILogger logger;
+        private readonly IIntegrityService integrityService;
 
         private const int ChunkSize = 1024 * 1024; // 1Mb chunk
 
@@ -27,12 +28,15 @@ namespace WB.Core.Infrastructure.HttpServices.Services
             IHttpClientFactory httpClientFactory,
             IRestServiceSettings restServiceSettings,
             IHttpStatistician httpStatistician,
-            ILogger logger)
+            ILogger logger,
+            IIntegrityService integrityService)
         {
             this.httpClientFactory = httpClientFactory;
             this.restServiceSettings = restServiceSettings;
             this.httpStatistician = httpStatistician;
             this.logger = logger;
+            
+            this.integrityService = integrityService;
         }
 
         public static bool SupportRangeRequests(HttpResponseMessage response)
@@ -106,7 +110,15 @@ namespace WB.Core.Infrastructure.HttpServices.Services
                         {
                             logger.Warn($"Downloader#{id}: Retry due to exception: {e.Message}", e);
                         })
-                        .ExecuteAsync(() => httpClient.SendAsync(rangeRequest, HttpCompletionOption.ResponseHeadersRead, token))
+                        .ExecuteAsync(() =>
+                        {
+                                var responseResult = httpClient.SendAsync(rangeRequest, HttpCompletionOption.ResponseHeadersRead,
+                                token);
+                                
+                                integrityService.ValidateResponseHeadersAndThrow(responseResult.Result.Headers);
+                                
+                                return responseResult;
+                        })
                         .ConfigureAwait(false);
 
                     // fastest way to read whole response without allocating byte[] twice.

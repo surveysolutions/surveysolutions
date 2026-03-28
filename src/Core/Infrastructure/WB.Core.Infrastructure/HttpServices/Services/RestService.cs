@@ -33,6 +33,7 @@ namespace WB.Core.Infrastructure.HttpServices.Services
         private readonly IHttpClientFactory httpClientFactory;
         private readonly IFastBinaryFilesHttpHandler fileDownloader;
         private ILogger logger;
+        private readonly IIntegrityService integrityService;
 
         public RestService(
             IRestServiceSettings restServiceSettings,
@@ -42,7 +43,8 @@ namespace WB.Core.Infrastructure.HttpServices.Services
             IHttpStatistician httpStatistician,
             IHttpClientFactory httpClientFactory, 
             IFastBinaryFilesHttpHandler fileDownloader,
-            ILogger logger)
+            ILogger logger,
+            IIntegrityService integrityService)
         {
             this.restServiceSettings = restServiceSettings;
             this.networkService = networkService;
@@ -52,6 +54,7 @@ namespace WB.Core.Infrastructure.HttpServices.Services
             this.httpClientFactory = httpClientFactory;
             this.fileDownloader = fileDownloader;
             this.logger = logger;
+            this.integrityService = integrityService;
         }
 
         private Task<ExecuteRequestResult> ExecuteRequestAsync(
@@ -153,6 +156,8 @@ namespace WB.Core.Infrastructure.HttpServices.Services
                         .ConfigureAwait(false);
                 this.logger.Debug($"Executed web request url: {request.RequestUri}, response code: {httpResponseMessage.StatusCode}");
 
+                integrityService.ValidateResponseHeadersAndThrow(httpResponseMessage.Headers);
+                
                 if (httpResponseMessage.IsSuccessStatusCode
                     || httpResponseMessage.StatusCode == HttpStatusCode.NotModified
                     || httpResponseMessage.StatusCode == HttpStatusCode.NoContent)

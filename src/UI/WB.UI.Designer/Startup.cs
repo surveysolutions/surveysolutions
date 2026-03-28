@@ -48,6 +48,7 @@ using WB.UI.Designer.Services.Restore;
 using WB.UI.Shared.Web.Authentication;
 using WB.UI.Shared.Web.Diagnostics;
 using WB.UI.Shared.Web.Exceptions;
+using WB.UI.Shared.Web.Integrity;
 using WB.UI.Shared.Web.Services;
 using SameSiteMode = Microsoft.AspNetCore.Http.SameSiteMode;
 
@@ -274,6 +275,7 @@ namespace WB.UI.Designer
         {
             app.UseViteForwarder();
             app.UseExceptional();
+            app.UseIntegrityHelper();
 
             if (!env.IsDevelopment())
             {

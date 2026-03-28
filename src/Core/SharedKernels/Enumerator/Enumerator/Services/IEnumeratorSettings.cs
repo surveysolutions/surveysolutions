@@ -17,6 +17,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services
         int GpsReceiveTimeoutSec { get; }
         double GpsDesiredAccuracy { get; }
         bool VibrateOnError { get; }
+        
         bool ShowVariables { get; }
         bool ShowLocationOnMap { get; }
         bool ShowAnswerTime { get; }
