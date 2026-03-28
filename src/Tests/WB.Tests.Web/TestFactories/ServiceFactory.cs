@@ -98,7 +98,7 @@ namespace WB.Tests.Web.TestFactories
             var autoMapperConfig = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile(new WebInterviewAutoMapProfile());
-            }, new NullLoggerFactory());
+            });
 
             return new HqWebInterviewInterviewEntityFactory(autoMapperConfig.CreateMapper(),
                 authorizedUser ?? Mock.Of<IAuthorizedUser>(),
