@@ -153,7 +153,8 @@ namespace WB.UI.Headquarters.Controllers.Api
                 
                 AllowInterviewerUpdateProfile = this.profileSettingsStorage.GetById(AppSetting.ProfileSettings)?.AllowInterviewerUpdateProfile ?? false,
                 ExportSettings = new ExportSettingsModel(this.exportSettings.GetEncryptionSettings(),
-                    exportSettings.GetExportRetentionSettings())
+                    exportSettings.GetExportRetentionSettings(),
+                    exportSettings.GetGeographyExportFormat())
             };
         }
 

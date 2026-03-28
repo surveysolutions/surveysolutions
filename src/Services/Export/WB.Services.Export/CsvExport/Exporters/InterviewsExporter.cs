@@ -12,6 +12,7 @@ using Microsoft.Extensions.Options;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Interview.Entities;
+using WB.Services.Export.Models;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Services;
 using WB.Services.Infrastructure;
@@ -53,11 +54,12 @@ namespace WB.Services.Export.CsvExport.Exporters
             List<InterviewToExport> interviewsToExport,
             string basePath,
             ExportProgress progress,
-            CancellationToken cancellationToken)
+            CancellationToken cancellationToken,
+            GeographyExportFormat geographyExportFormat = GeographyExportFormat.Wkt)
         {
             Stopwatch stopwatch = Stopwatch.StartNew();
 
-            await this.DoExportAsync(tenant, questionnaireExportStructure, questionnaire, basePath, interviewsToExport, progress, cancellationToken);
+            await this.DoExportAsync(tenant, questionnaireExportStructure, questionnaire, basePath, interviewsToExport, progress, cancellationToken, geographyExportFormat);
             stopwatch.Stop();
             this.logger.LogInformation("Export of {interviewsCount:N0} interview datas for questionnaire" +
                     " {questionnaireId} finised. Took {elapsed:c} to complete",
@@ -70,10 +72,11 @@ namespace WB.Services.Export.CsvExport.Exporters
             string basePath,
             List<InterviewToExport> interviewIdsToExport,
             ExportProgress progress,
-            CancellationToken cancellationToken)
+            CancellationToken cancellationToken,
+            GeographyExportFormat geographyExportFormat = GeographyExportFormat.Wkt)
         {
             this.CreateDataSchemaForInterviewsInTabular(questionnaireExportStructure, basePath);
-            return this.ExportInterviewsAsync(tenant, interviewIdsToExport, basePath, questionnaireExportStructure, questionnaire, progress, cancellationToken);
+            return this.ExportInterviewsAsync(tenant, interviewIdsToExport, basePath, questionnaireExportStructure, questionnaire, progress, cancellationToken, geographyExportFormat);
         }
 
         private void CreateDataSchemaForInterviewsInTabular(QuestionnaireExportStructure questionnaireExportStructure, string basePath)
@@ -121,7 +124,8 @@ namespace WB.Services.Export.CsvExport.Exporters
             QuestionnaireExportStructure questionnaireExportStructure,
             QuestionnaireDocument questionnaire,
             ExportProgress progress,
-            CancellationToken cancellationToken)
+            CancellationToken cancellationToken,
+            GeographyExportFormat geographyExportFormat = GeographyExportFormat.Wkt)
         {
             long totalInterviewsProcessed = 0;
             
@@ -146,7 +150,8 @@ namespace WB.Services.Export.CsvExport.Exporters
                         interviewEntitiesLookup[interviewToExport.Id].ToList(),
                         questionnaireExportStructure,
                         questionnaire,
-                        basePath);
+                        basePath,
+                        geographyExportFormat);
 
                     lock (exportBulk)
                     {
@@ -211,7 +216,8 @@ namespace WB.Services.Export.CsvExport.Exporters
         private readonly Stopwatch exportProcessingStopwatch = new Stopwatch();
 
         private InterviewExportedDataRecord ExportSingleInterview(InterviewToExport interviewToExport,
-            List<InterviewEntity> interview, QuestionnaireExportStructure exportStructure, QuestionnaireDocument questionnaire, string basePath)
+            List<InterviewEntity> interview, QuestionnaireExportStructure exportStructure, QuestionnaireDocument questionnaire, string basePath,
+            GeographyExportFormat geographyExportFormat = GeographyExportFormat.Wkt)
         {
             exportProcessingStopwatch.Start();
             List<string[]> errors = errorsExporter.Export(exportStructure, questionnaire, interview, basePath, interviewToExport.Key);
@@ -227,7 +233,7 @@ namespace WB.Services.Export.CsvExport.Exporters
                 AssignmentId = interviewToExport.AssignmentId,
                 ErrorsCount = errorsCount
             };
-            InterviewDataExportView interviewDataExportView = CreateInterviewDataExportView(exportStructure, interviewData, questionnaire);
+            InterviewDataExportView interviewDataExportView = CreateInterviewDataExportView(exportStructure, interviewData, questionnaire, geographyExportFormat);
             InterviewExportedDataRecord exportedData = this.CreateInterviewExportedData(interviewDataExportView, interviewToExport);
             var dataFileSeparator = ExportFileSettings.DataFileSeparator.ToString();
             exportedData.Data[InterviewErrorsExporter.FileName] = errors.Select(x => string.Join(dataFileSeparator, x.Select(v => v?.Replace(dataFileSeparator, "")))).ToArray();
@@ -236,13 +242,14 @@ namespace WB.Services.Export.CsvExport.Exporters
         }
 
         public InterviewDataExportView CreateInterviewDataExportView(QuestionnaireExportStructure exportStructure,
-            InterviewData interview, QuestionnaireDocument questionnaire)
+            InterviewData interview, QuestionnaireDocument questionnaire,
+            GeographyExportFormat geographyExportFormat = GeographyExportFormat.Wkt)
         {
             var interviewDataExportLevelViews = new List<InterviewDataExportLevelView>();
 
             foreach (var exportStructureForLevel in exportStructure.HeaderToLevelMap.Values)
             {
-                var interviewDataExportRecords = this.BuildRecordsForHeader(interview, exportStructureForLevel, questionnaire);
+                var interviewDataExportRecords = this.BuildRecordsForHeader(interview, exportStructureForLevel, questionnaire, geographyExportFormat);
 
                 var interviewDataExportLevelView = new InterviewDataExportLevelView(
                     exportStructureForLevel.LevelScopeVector,
@@ -256,7 +263,8 @@ namespace WB.Services.Export.CsvExport.Exporters
         }
 
         private InterviewDataExportRecord[] BuildRecordsForHeader(InterviewData interview,
-            HeaderStructureForLevel headerStructureForLevel, QuestionnaireDocument questionnaire)
+            HeaderStructureForLevel headerStructureForLevel, QuestionnaireDocument questionnaire,
+            GeographyExportFormat geographyExportFormat = GeographyExportFormat.Wkt)
         {
             var dataRecords = new List<InterviewDataExportRecord>();
 
@@ -296,7 +304,7 @@ namespace WB.Services.Export.CsvExport.Exporters
                     };
                 }
 
-                string[][] questionAnswersForExport = this.GetExportValues(dataByLevel, headerStructureForLevel);
+                string[][] questionAnswersForExport = this.GetExportValues(dataByLevel, headerStructureForLevel, geographyExportFormat);
 
                 dataRecords.Add(new InterviewDataExportRecord(recordId,
                     referenceValues,
@@ -308,7 +316,8 @@ namespace WB.Services.Export.CsvExport.Exporters
             return dataRecords.ToArray();
         }
 
-        private string[][] GetExportValues(InterviewLevel interviewLevel, HeaderStructureForLevel headerStructureForLevel)
+        private string[][] GetExportValues(InterviewLevel interviewLevel, HeaderStructureForLevel headerStructureForLevel,
+            GeographyExportFormat geographyExportFormat = GeographyExportFormat.Wkt)
         {
             var result = new List<string[]>();
             foreach (var headerItem in headerStructureForLevel.HeaderItems.Values)
@@ -321,7 +330,7 @@ namespace WB.Services.Export.CsvExport.Exporters
                     var question = interviewLevel.QuestionsSearchCache.ContainsKey(headerItem.PublicKey)
                         ? interviewLevel.QuestionsSearchCache[headerItem.PublicKey]
                         : null;
-                    var exportedQuestion = exportQuestionService.GetExportedQuestion(question, questionHeaderItem);
+                    var exportedQuestion = exportQuestionService.GetExportedQuestion(question, questionHeaderItem, geographyExportFormat);
                     result.Add(exportedQuestion);
                 }
                 else if (variableHeaderItem != null)

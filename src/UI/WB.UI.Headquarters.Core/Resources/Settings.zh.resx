@@ -123,6 +123,21 @@
   <data name="ExportEncryption_Title" xml:space="preserve">
     <value>导出加密</value>
   </data>
+  <data name="GeographyExportFormat_Title" xml:space="preserve">
+    <value>地理导出格式</value>
+  </data>
+  <data name="GeographyExportFormat_Description" xml:space="preserve">
+    <value>选择地理（区域）问题答案的导出格式。</value>
+  </data>
+  <data name="GeographyExportFormat_Wkt" xml:space="preserve">
+    <value>WKT（通用文本）</value>
+  </data>
+  <data name="GeographyExportFormat_GeoJson" xml:space="preserve">
+    <value>GeoJSON</value>
+  </data>
+  <data name="GeographyExportFormat_Legacy" xml:space="preserve">
+    <value>传统格式（序列化坐标）</value>
+  </data>
   <data name="ExportEncryptionSettings" xml:space="preserve">
     <value>导出加密设置</value>
   </data>

@@ -51,7 +51,8 @@ namespace WB.UI.Headquarters.Controllers.Api
         public ExportSettingsModel ExportSettings()
         {
             ExportSettingsModel model = new ExportSettingsModel(this.exportSettings.GetEncryptionSettings(),
-                exportSettings.GetExportRetentionSettings());
+                exportSettings.GetExportRetentionSettings(),
+                exportSettings.GetGeographyExportFormat());
             return model;
         }
 
@@ -72,7 +73,8 @@ namespace WB.UI.Headquarters.Controllers.Api
 
             this.auditLog.ExportEncryptionChanged(changeSettingsState.EnableState);
             var newExportSettingsModel = new ExportSettingsModel(this.exportSettings.GetEncryptionSettings(),
-                exportSettings.GetExportRetentionSettings());
+                exportSettings.GetExportRetentionSettings(),
+                exportSettings.GetGeographyExportFormat());
             return newExportSettingsModel;
         }
 
@@ -94,7 +96,8 @@ namespace WB.UI.Headquarters.Controllers.Api
             this.logger.LogInformation("Export settings were changed by {User}. Encryption password was changed.", new {User = base.User.Identity.Name});
 
             var newExportSettingsModel = new ExportSettingsModel(this.exportSettings.GetEncryptionSettings(),
-                exportSettings.GetExportRetentionSettings());
+                exportSettings.GetExportRetentionSettings(),
+                exportSettings.GetGeographyExportFormat());
             return newExportSettingsModel;
         }
         
@@ -267,6 +270,26 @@ namespace WB.UI.Headquarters.Controllers.Api
             //exportServiceApi calls to delete old exports
             await exportServiceApi.RunRetentionPolicy(exportRetentionSettings.CountToKeep ,exportRetentionSettings.DaysToKeep);
             
+            return Ok(new {sucess = true});
+        }
+
+        public class GeographyExportFormatModel
+        {
+            [Required]
+            public GeographyExportFormat GeographyExportFormat { get; set; } = GeographyExportFormat.Wkt;
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult SetGeographyExportFormat([FromBody] GeographyExportFormatModel model)
+        {
+            if (!ModelState.IsValid)
+                return Ok(new {sucess = false});
+
+            if (!Enum.IsDefined(typeof(GeographyExportFormat), model.GeographyExportFormat))
+                return BadRequest(new { message = "Invalid geography export format value." });
+
+            exportSettings.SetGeographyExportFormat(model.GeographyExportFormat);
             return Ok(new {sucess = true});
         }
     }

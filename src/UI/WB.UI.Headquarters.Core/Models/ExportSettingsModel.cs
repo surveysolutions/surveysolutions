@@ -6,7 +6,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
     {
         public ExportSettingsModel(){}
 
-        public ExportSettingsModel(ExportEncryptionSettings exportEncryptionSettings, ExportRetentionSettings exportRetentionSettings = null)
+        public ExportSettingsModel(ExportEncryptionSettings exportEncryptionSettings, 
+            ExportRetentionSettings exportRetentionSettings = null,
+            GeographyExportFormat geographyExportFormat = GeographyExportFormat.Wkt)
         {
             if(exportEncryptionSettings != null)
             {
@@ -20,6 +22,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
                 this.RetentionLimitInDays = exportRetentionSettings.DaysToKeep;
                 this.RetentionLimitQuantity = exportRetentionSettings.CountToKeep;
             }
+
+            this.GeographyExportFormat = geographyExportFormat;
         } 
         
         public bool IsEnabled { get; set; } = false;
@@ -30,5 +34,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
         public int? RetentionLimitInDays { get; set; }
 
         public int? RetentionLimitQuantity { get; set; }
+
+        public GeographyExportFormat GeographyExportFormat { get; set; } = GeographyExportFormat.Wkt;
     }
 }

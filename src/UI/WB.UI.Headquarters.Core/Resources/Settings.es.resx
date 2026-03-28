@@ -120,6 +120,21 @@
   <data name="ExportEncryption_Title" xml:space="preserve">
     <value>Exportar cifrado</value>
   </data>
+  <data name="GeographyExportFormat_Title" xml:space="preserve">
+    <value>Formato de exportación geográfica</value>
+  </data>
+  <data name="GeographyExportFormat_Description" xml:space="preserve">
+    <value>Seleccione cómo se exportan las respuestas de las preguntas geográficas (área).</value>
+  </data>
+  <data name="GeographyExportFormat_Wkt" xml:space="preserve">
+    <value>WKT (texto conocido)</value>
+  </data>
+  <data name="GeographyExportFormat_GeoJson" xml:space="preserve">
+    <value>GeoJSON</value>
+  </data>
+  <data name="GeographyExportFormat_Legacy" xml:space="preserve">
+    <value>Heredado (coordenadas serializadas)</value>
+  </data>
   <data name="ClearExportCache_Title" xml:space="preserve">
     <value>Limpiar caché de exportación</value>
   </data>

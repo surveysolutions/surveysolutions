@@ -145,6 +145,22 @@
         </div>
         <div class="row contain-input" data-suso="settings-page">
             <div class="col-sm-9">
+                <h2>{{ $t('Settings.GeographyExportFormat_Title') }}</h2>
+                <p>{{ $t('Settings.GeographyExportFormat_Description') }}</p>
+            </div>
+            <div class="col-sm-9">
+                <div class="block-filter" style="padding-left: 30px">
+                    <div class="form-group">
+                        <Typeahead control-id="geographyExportFormat" noSearch noClear
+                            :values="geographyFormatOptions"
+                            :value="geographyFormatValue"
+                            @selected="onGeographyFormatSelected" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row contain-input" data-suso="settings-page">
+            <div class="col-sm-9">
                 <h2>{{ $t('Settings.ClearExportCache_Title') }}</h2>
                 <p>{{ $t('Settings.ClearExportCache_Description') }}</p>
             </div>
@@ -213,6 +229,7 @@ export default {
         retentionLimitQuantity: Number,
         retentionLimitInDaysCancel: Number,
         retentionLimitQuantityCancel: Number,
+        geographyExportFormat: String,
     },
     emits: [
         'update:encryptionEnabled',
@@ -222,6 +239,7 @@ export default {
         'update:retentionLimitQuantity',
         'update:retentionLimitInDaysCancel',
         'update:retentionLimitQuantityCancel',
+        'update:geographyExportFormat',
     ],
     components: {
         Form,
@@ -284,6 +302,17 @@ export default {
             set(value) {
                 this.$emit('update:retentionLimitQuantityCancel', value)
             }
+        },
+        geographyFormatOptions() {
+            return [
+                { key: 'Wkt', value: this.$t('Settings.GeographyExportFormat_Wkt') },
+                { key: 'GeoJson', value: this.$t('Settings.GeographyExportFormat_GeoJson') },
+                { key: 'Legacy', value: this.$t('Settings.GeographyExportFormat_Legacy') },
+            ]
+        },
+        geographyFormatValue() {
+            const format = this.geographyExportFormat
+            return this.geographyFormatOptions.find(o => o.key === format) || null
         },
     },
     data() {
@@ -526,6 +555,14 @@ export default {
         },
         cancelInCountLimit() {
             this.inCountLimitModel = this.inCountLimitCancelModel
+        },
+        onGeographyFormatSelected(item) {
+            if (item != null) {
+                this.$emit('update:geographyExportFormat', item.key)
+                nextTick(() => {
+                    this.$hq.ExportSettings.setGeographyExportFormat(item.key)
+                })
+            }
         },
         noAction() {
             // Do nothing
