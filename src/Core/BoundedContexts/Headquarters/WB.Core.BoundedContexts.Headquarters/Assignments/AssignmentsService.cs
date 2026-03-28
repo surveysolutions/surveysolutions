@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using Main.Core.Entities.SubEntities;
+using NHibernate;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -68,6 +69,23 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         {
             var assignment = this.assignmentsAccessor.Query(_ => _.Where(a => a.Id == id));
             return assignment.SingleOrDefault();
+        }
+
+        public Assignment GetAssignmentWithUpgradeLock(int id)
+        {
+            var assignment = this.assignmentsAccessor.Query(_ => _.Where(a => a.Id == id)).SingleOrDefault();
+            return GetAssignmentWithUpgradeLock(assignment);
+        }
+
+        public Assignment GetAssignmentWithUpgradeLock(Assignment assignment)
+        {
+            if (assignment == null) return null;
+
+            // Acquire a row-level write lock (SELECT ... FOR UPDATE) and reload entity state
+            // to prevent concurrent creation of interviews for size-limited CAWI assignments.
+            this.sessionProvider.Session.Refresh(assignment, LockMode.Upgrade);
+
+            return assignment;
         }
 
         public Assignment GetAssignmentByAggregateRootId(Guid id)

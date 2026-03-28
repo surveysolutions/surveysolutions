@@ -853,7 +853,6 @@ namespace WB.UI.Headquarters.Controllers
 
             var interviewId = Guid.NewGuid();
             var interviewKey = this.keyGenerator.Get();
-            this.prototypeService.MarkAsPrototype(interviewId, PrototypeType.Temporary);
 
             var createInterviewCommand = new CreateInterview(
                 interviewId,
