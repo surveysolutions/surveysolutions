@@ -461,15 +461,28 @@ namespace WB.UI.Designer.Controllers
                 anonymousQuestionnaire = new AnonymousQuestionnaire()
                     { QuestionnaireId = id, AnonymousQuestionnaireId = Guid.NewGuid(), IsActive = isActive, GeneratedAtUtc = DateTime.UtcNow };
                 dbContext.AnonymousQuestionnaires.Add(anonymousQuestionnaire);
-                await dbContext.SaveChangesAsync();
+            }
+            else
+            {
+                anonymousQuestionnaire.IsActive = isActive;
+                dbContext.AnonymousQuestionnaires.Update(anonymousQuestionnaire);
             }
 
-            anonymousQuestionnaire.IsActive = isActive;
-            dbContext.AnonymousQuestionnaires.Update(anonymousQuestionnaire);
             await dbContext.SaveChangesAsync();
 
             if (isActive)
-                await SendAnonymousSharingEmailAsync(id, anonymousQuestionnaire.AnonymousQuestionnaireId);
+            {
+                try
+                {
+                    await SendAnonymousSharingEmailAsync(id, anonymousQuestionnaire.AnonymousQuestionnaireId);
+                }
+                catch (Exception ex)
+                {
+                    // Email notification failure should not break the main operation.
+                    // SMTP may be misconfigured or unavailable in some environments.
+                    logger.LogError(ex, "Failed to send anonymous sharing notification email for questionnaire {QuestionnaireId}", id);
+                }
+            }
             
             return Json(new
             {
@@ -493,7 +506,16 @@ namespace WB.UI.Designer.Controllers
             await dbContext.AnonymousQuestionnaires.AddAsync(anonymousQuestionnaire);
             await dbContext.SaveChangesAsync();
 
-            await SendAnonymousSharingEmailAsync(id, anonymousQuestionnaire.AnonymousQuestionnaireId);
+            try
+            {
+                await SendAnonymousSharingEmailAsync(id, anonymousQuestionnaire.AnonymousQuestionnaireId);
+            }
+            catch (Exception ex)
+            {
+                // Email notification failure should not break the main operation.
+                // SMTP may be misconfigured or unavailable in some environments.
+                logger.LogError(ex, "Failed to send anonymous sharing notification email for questionnaire {QuestionnaireId}", id);
+            }
             
             return Json(new
             {
