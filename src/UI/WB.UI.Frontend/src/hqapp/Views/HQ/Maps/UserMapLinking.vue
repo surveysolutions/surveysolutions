@@ -36,7 +36,7 @@
                         </div>
                         <div class="info-block" v-if="actionsAlowed">
                             <div ref="status">
-                                <p>{{ statusMessage }}</p>
+                                <p :class="{'text-danger': isError}">{{ statusMessage }}</p>
                             </div>
                         </div>
                         <div>
@@ -54,6 +54,7 @@ export default {
     data: function () {
         return {
             statusMessage: '',
+            isError: false,
         }
     },
     mounted() { },
@@ -85,6 +86,8 @@ export default {
 
             var self = this
 
+            self.isError = false
+
             $.ajax({
                 url: this.$config.model.uploadUrl,
                 xhr() {
@@ -103,6 +106,7 @@ export default {
                     self.$refs.uploader.value = ''
                 },
                 error: function (error) {
+                    self.isError = true
                     statusupdater(uploadingErrorMessage)
                 },
             })
