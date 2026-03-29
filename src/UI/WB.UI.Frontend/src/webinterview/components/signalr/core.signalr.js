@@ -68,6 +68,19 @@ export default {
             this.$store.dispatch('finishInterview')
         })
 
+        connection.onreconnecting(() => {
+            this.$store.dispatch('tryingToReconnect', true)
+        })
+
+        connection.onreconnected(() => {
+            this.$store.dispatch('tryingToReconnect', false)
+            this.$emit('reconnected')
+        })
+
+        connection.onclose(() => {
+            this.$store.dispatch('disconnected')
+        })
+
         connection.start()
             .then(() => this.$emit('connected'))
             .catch(err => console.log(err))

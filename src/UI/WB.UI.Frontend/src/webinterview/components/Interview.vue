@@ -1,6 +1,6 @@
 <template>
     <div>
-        <signalr @connected="connected" :interviewId="interviewId" :mode="mode" />
+        <signalr @connected="connected" @reconnected="reconnected" :interviewId="interviewId" :mode="mode" />
         <router-view />
     </div>
 </template>
@@ -72,6 +72,13 @@ export default {
             }
 
             this.$emit('connected')
+        },
+
+        reconnected() {
+            this.changeSection(this.$route.params.sectionId)
+                .catch(err => console.error('Failed to re-register section after reconnect:', err))
+            this.$store.dispatch('fetchSectionEntities')
+            this.$store.dispatch('refreshSectionState')
         },
     },
 }

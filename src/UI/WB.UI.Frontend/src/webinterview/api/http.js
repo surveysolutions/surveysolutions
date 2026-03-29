@@ -62,14 +62,19 @@ const httpPlugin = {
                     store.dispatch('fetch', { id, done: true })
                 }
                 else {
-                    if (err.response.status === 400
+                    if (err.response != null
+                        && err.response.status === 400
                         && err.response.data != null
                         && err.response.data.errorMessage != null) {
                         err.message = err.response.data.errorMessage
                         store.dispatch('UNHANDLED_ERROR', err)
                     }
-                    else {
+                    else if (err.response != null) {
                         store.dispatch('UNHANDLED_ERROR', err)
+                    } else {
+                        // Network error (offline) - log for debugging but don't show user error
+                        // SignalR reconnection callbacks handle the user-facing offline state
+                        console.error('Network error (possibly offline):', err.message)
                     }
                 }
             }
