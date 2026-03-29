@@ -22,6 +22,8 @@ namespace WB.UI.Supervisor.Activities
     {
         public ServiceBinder<MapDownloadBackgroundService> Binder { get; set; }
 
+        private SyncServiceConnection<MapDownloadBackgroundService> serviceConnection;
+
         protected override int ViewResourceId
         {
             get { return Resource.Layout.maps; }
@@ -44,7 +46,19 @@ namespace WB.UI.Supervisor.Activities
         protected override void OnStart()
         {
             base.OnStart();
-            this.BindService(new Intent(this, typeof(MapDownloadBackgroundService)), new SyncServiceConnection<MapDownloadBackgroundService>(this), Bind.AutoCreate);
+            this.serviceConnection = new SyncServiceConnection<MapDownloadBackgroundService>(this);
+            this.BindService(new Intent(this, typeof(MapDownloadBackgroundService)), this.serviceConnection, Bind.AutoCreate);
+        }
+
+        protected override void OnStop()
+        {
+            base.OnStop();
+            if (this.serviceConnection != null)
+            {
+                this.UnbindService(this.serviceConnection);
+                this.serviceConnection = null;
+                this.Binder = null;
+            }
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)
@@ -91,8 +105,12 @@ namespace WB.UI.Supervisor.Activities
         }
 
 
-        public void StartSync() => this.Binder.GetService().SyncMaps();
+        public void StartSync()
+        {
+            this.StartService(new Intent(this, typeof(MapDownloadBackgroundService)));
+            this.Binder.GetService().SyncMaps();
+        }
 
-        public MapSyncProgressStatus CurrentProgress => this.Binder.GetService().CurrentProgress;
+        public MapSyncProgressStatus CurrentProgress => this.Binder?.GetService().CurrentProgress;
     }
 }

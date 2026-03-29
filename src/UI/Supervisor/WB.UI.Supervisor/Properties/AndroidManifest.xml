@@ -15,6 +15,11 @@
 		
 		<meta-data android:name="com.google.android.geo.API_KEY" android:value="@string/google_maps_api_key" />
         <meta-data android:name="firebase_crashlytics_collection_enabled" android:value="@bool/com_crashlytics_android_active" />
+        <service
+                android:name="WB.UI.Shared.Enumerator.Services.MapDownloadBackgroundService"
+                android:enabled="true"
+                android:exported="false"
+                android:foregroundServiceType="dataSync" />
 	</application>
 	
 	<uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30" />
@@ -37,6 +42,8 @@
 	<uses-permission android:name="android.permission.RECORD_AUDIO" />
 	<uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
 	<uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+	<uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+	<uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
 
 	<uses-feature android:name="android.hardware.location" android:required="false" />
 	<uses-feature android:name="android.hardware.location.gps" android:required="false" />
