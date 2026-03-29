@@ -4,6 +4,11 @@
             <h3>
                 <span>{{ $t('QuestionnaireEditor.SideBarLookupTablesCounter', { count: lookupTables.length }) }}</span>
             </h3>
+            <div class="button-holder">
+                <input type="button" class="btn lighter-hover" v-if="!isReadOnlyForUser"
+                    :value="$t('QuestionnaireEditor.SideBarLookupTableAdd')"
+                    @click="addNewLookupTable()">
+            </div>
             <div class="empty-list" v-show="lookupTables.length === 0">
                 <p>{{ $t('QuestionnaireEditor.SideBarLookupEmptyLine1') }}</p>
                 <p>{{ $t('QuestionnaireEditor.SideBarLookupEmptyLine2') }}</p>
@@ -16,11 +21,6 @@
                     </li>
                 </ul>
             </form>
-            <div class="button-holder">
-                <input type="button" class="btn lighter-hover" v-if="!isReadOnlyForUser"
-                    :value="$t('QuestionnaireEditor.SideBarLookupTableAdd')" value="Add new Lookup table"
-                    @click="addNewLookupTable()">
-            </div>
         </perfect-scrollbar>
     </div>
 </template>

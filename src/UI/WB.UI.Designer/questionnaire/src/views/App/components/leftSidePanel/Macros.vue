@@ -8,6 +8,10 @@
                     }) }}
                 </span>
             </h3>
+            <div class="button-holder">
+                <input type="button" class="btn lighter-hover" v-if="!isReadOnlyForUser"
+                    :value="$t('QuestionnaireEditor.SideBarAddMacro')" @click="addNewMacro()">
+            </div>
             <div class="empty-list" v-if="macros.length == 0">
                 <p>{{ $t('QuestionnaireEditor.SideBarMacroEmptyLine1') }} </p>
                 <p>{{ $t('QuestionnaireEditor.SideBarMacroEmptyLine2') }}</p>
@@ -50,10 +54,6 @@
                     </div>
                 </li>
             </ul>
-            <div class="button-holder">
-                <input type="button" class="btn lighter-hover" v-if="!isReadOnlyForUser"
-                    :value="$t('QuestionnaireEditor.SideBarAddMacro')" @click="addNewMacro()">
-            </div>
         </perfect-scrollbar>
     </div>
 </template>

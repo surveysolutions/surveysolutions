@@ -417,6 +417,7 @@
     "SideBarScenarioEmptyLine1": "Використовуйте цю вкладку для перегляду сценаріїв.",
     "SideBarScenarioEmptyLine2": "Сценарій - це знімок стану тестера, ви можете зберегти його на Web-Tester, натиснувши кнопку \"Зберегти сценарій\".",
     "SideBarScenarioName": "назва сценарію",
+    "SideBarScenarioRecordNew": "Записати новий сценарій",
     "SideBarScenarioTitle": "Сценарії",
     "SideBarSectionsCounter": "{{count}} Розділ:",
     "SideBarSectionsCounter_other": "{{count}} Розділи:",

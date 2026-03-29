@@ -417,6 +417,7 @@
     "SideBarScenarioEmptyLine1": "Tato karta slouží k zobrazení scénářů.",
     "SideBarScenarioEmptyLine2": "Scénář je snímek stavu testeru, který můžete uložit na testeru kliknutím na tlačítko \"Uložit scénář\".",
     "SideBarScenarioName": "Název scénáře",
+    "SideBarScenarioRecordNew": "Zaznamenat nový scénář",
     "SideBarScenarioTitle": "Scénáře",
     "SideBarSectionsCounter": "{{count}} Oddíl:",
     "SideBarSectionsCounter_other": "{{count}} Sekce:",

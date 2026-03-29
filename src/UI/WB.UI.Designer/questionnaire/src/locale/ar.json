@@ -74,6 +74,7 @@
     "SideBarScenarioEmptyLine1": "استخدم هذا التبويب لعرض السيناريوهات الخاصة بك.",
     "SideBarScenarioEmptyLine2": "السيناريو هو لقطة لحالة المختبر، يمكنك حفظها على المختبر بالنقر على زر \"حفظ السيناريو\".",
     "SideBarScenarioName": "عنوان السيناريو",
+    "SideBarScenarioRecordNew": "تسجيل سيناريو جديد",
     "SideBarSectionsCounter": "{{count}} قسم:",
     "SideBarSectionsCounter_other": "{{count}} أقسام:",
     "SideBarTranslationDownloadXlsx": "تنزيل xlsx",

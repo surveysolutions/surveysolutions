@@ -2,7 +2,18 @@
     <div class="translations">
         <perfect-scrollbar class="scroller">
             <h3>{{ $t('QuestionnaireEditor.SideBarTranslationsCounter', { count: translations.length + 1 }) }}</h3>
+            <div class="button-holder">
+                <p>
+                    <input type="button" :value="$t('QuestionnaireEditor.SideBarTranslationsUploadNew')"
+                        @click.stop="openFileDialog()" class="btn lighter-hover"
+                        ngf-select v-if="!isReadOnlyForUser" capture />
 
+                    <file-upload ref="upload" v-if="!isReadOnlyForUser" :input-id="'tfunew'" v-model="file"
+                        :size="10 * 1024 * 1024" :drop="false" :drop-directory="false" @input-file="createAndUploadFile"
+                        accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,.txt,.tsv,.tab">
+                    </file-upload>
+                </p>
+            </div>
             <div class="empty-list" v-show="translations.length == 0">
                 <p>{{ $t('QuestionnaireEditor.SideBarTranslationsEmptyLine1') }}</p>
                 <p>{{ $t('QuestionnaireEditor.SideBarTranslationsEmptyLine2') }}</p>
@@ -24,16 +35,6 @@
                     <a class="btn btn-default" :href="downloadTemplateUrl" target="_blank" rel="noopener">
                         {{ $t('QuestionnaireEditor.SideBarTranslationGetTemplateLinkTextXlsx') }}
                     </a>
-                </p>
-                <p>
-                    <input type="button" :value="$t('QuestionnaireEditor.SideBarTranslationsUploadNew')"
-                        @click.stop="openFileDialog()" value="Upload new categories" class="btn lighter-hover"
-                        ngf-select v-if="!isReadOnlyForUser" capture />
-
-                    <file-upload ref="upload" v-if="!isReadOnlyForUser" :input-id="'tfunew'" v-model="file"
-                        :size="10 * 1024 * 1024" :drop="false" :drop-directory="false" @input-file="createAndUploadFile"
-                        accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,.txt,.tsv,.tab">
-                    </file-upload>
                 </p>
             </div>
         </perfect-scrollbar>

@@ -412,6 +412,7 @@
     "SideBarScenarioEmptyLine1": "Utilice esta pestaña para ver sus escenarios.",
     "SideBarScenarioEmptyLine2": "Un escenario es una instantánea del estado del probador, puede guardarlo en el probador haciendo clic en el botón \"Guardar escenario\".",
     "SideBarScenarioName": "título del escenario",
+    "SideBarScenarioRecordNew": "Grabar nuevo escenario",
     "SideBarScenarioTitle": "Escenarios",
     "SourceOfCategories": "Fuente de categorías",
     "Test": "Prueba",

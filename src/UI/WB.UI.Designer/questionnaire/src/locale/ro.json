@@ -367,6 +367,7 @@
     "SideBarScenarioEmptyLine1": "Utilizați această filă pentru a vizualiza scenariile dvs.",
     "SideBarScenarioEmptyLine2": "Un scenariu este un instantaneu al stării testerului, îl puteți salva pe tester făcând clic pe butonul „Salvare scenariu”.",
     "SideBarScenarioName": "titlul scenariului",
+    "SideBarScenarioRecordNew": "Înregistrați un scenariu nou",
     "SideBarScenarioTitle": "Scenarii",
     "SideBarSectionsCounter": "{{count}} Secțiune:",
     "SideBarSectionsCounter_other": "{{count}} Secțiuni:",
