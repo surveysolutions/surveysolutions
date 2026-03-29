@@ -27,6 +27,10 @@ export const useHotkeysStore = defineStore('hotkeys', {
             {
                 keys: ['Ctrl + b'],
                 description: i18n.t('QuestionnaireEditor.Compile')
+            },
+            {
+                keys: ['Ctrl + t'],
+                description: i18n.t('QuestionnaireEditor.HotkeysTest')
             }
             // {
             //     keys: ['Shift + Alt + x'],

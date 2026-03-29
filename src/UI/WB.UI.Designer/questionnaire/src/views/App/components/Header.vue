@@ -193,12 +193,21 @@ export default {
             },
         })
 
+        const { ctrl_t } = useMagicKeys({
+            passive: false,
+            onEventFired(e) {
+                if (e.ctrlKey && e.key === 't' && e.type === 'keydown')
+                    e.preventDefault()
+            },
+        })
+
         return {
             verificationStore,
             verificationDialog,
             sharedInfoDialog,
             downloadPDFDialog,
-            ctrl_b
+            ctrl_b,
+            ctrl_t
         };
     },
     mounted() {
@@ -211,6 +220,10 @@ export default {
         ctrl_b: function (v) {
             if (v)
                 this.verify();
+        },
+        ctrl_t: function (v) {
+            if (v && this.questionnaire.webTestAvailable && !this.questionnaire.questionnaireRevision)
+                this.webTest();
         }
     },
     computed: {
