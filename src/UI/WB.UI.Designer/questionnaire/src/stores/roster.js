@@ -62,10 +62,17 @@ export const useRosterStore = defineStore('roster', {
                     this.setRosterData(data);
                 } else {
                     // User has unsaved changes: only update question-list fields on the working copy
+                    const sizeQuestionIdChanged =
+                        this.roster.rosterSizeNumericQuestionId !== this.initialRoster.rosterSizeNumericQuestionId;
+
                     this.roster.numericIntegerQuestions = data.numericIntegerQuestions;
-                    this.roster.numericIntegerTitles = data.numericIntegerTitles;
                     this.roster.textListsQuestions = data.textListsQuestions;
                     this.roster.notLinkedMultiOptionQuestions = data.notLinkedMultiOptionQuestions;
+
+                    // Only refresh numericIntegerTitles when rosterSizeNumericQuestionId has not been modified.
+                    if (!sizeQuestionIdChanged) {
+                        this.roster.numericIntegerTitles = data.numericIntegerTitles;
+                    }
                 }
             } catch (error) {
                 // Log the error to aid diagnostics, but do not rethrow to avoid unhandled rejections
