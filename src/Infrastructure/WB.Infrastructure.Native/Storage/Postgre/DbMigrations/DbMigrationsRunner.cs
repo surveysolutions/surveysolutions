@@ -1,10 +1,15 @@
-﻿using FluentMigrator.Runner;
+﻿using System.Linq;
+using System.Reflection;
+using Dapper;
+using FluentMigrator;
+using FluentMigrator.Runner;
 using FluentMigrator.Runner.Initialization;
 using FluentMigrator.Runner.Processors;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Npgsql;
+using WB.Core.Infrastructure.Exceptions;
 using WB.Infrastructure.Native.Utils;
 
 namespace WB.Infrastructure.Native.Storage.Postgre.DbMigrations
@@ -20,6 +25,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre.DbMigrations
             npgConnBuilder.SearchPath = schemaName;
             npgConnBuilder.SetApplicationPostfix("migrations");
             npgConnBuilder.Pooling = false;
+
+            CheckDatabaseNotNewerThanApp(npgConnBuilder, schemaName, dbUpgradeSettings);
 
             var serviceCollection = new ServiceCollection();
             if (loggerProvider != null)
@@ -66,6 +73,47 @@ namespace WB.Infrastructure.Native.Storage.Postgre.DbMigrations
 
             // Execute the migrations
             runner.MigrateUp();
+        }
+
+        private static void CheckDatabaseNotNewerThanApp(NpgsqlConnectionStringBuilder connectionStringBuilder,
+            string schemaName, DbUpgradeSettings dbUpgradeSettings)
+        {
+            long maxAppVersion = GetMaxMigrationVersion(dbUpgradeSettings);
+            if (maxAppVersion == 0) return;
+
+            using var connection = new NpgsqlConnection(connectionStringBuilder.ConnectionString);
+            connection.Open();
+
+            bool tableExists = connection.ExecuteScalar<bool>(
+                "SELECT EXISTS (SELECT FROM information_schema.tables WHERE table_schema = @schema AND table_name = 'VersionInfo')",
+                new { schema = schemaName });
+
+            if (!tableExists) return;
+
+            long? maxDbVersion = connection.ExecuteScalar<long?>(
+                $"SELECT MAX(\"Version\") FROM \"{schemaName}\".\"VersionInfo\"");
+
+            if (maxDbVersion.HasValue && maxDbVersion.Value > maxAppVersion)
+            {
+                throw new InitializationException(Subsystem.Database,
+                    $"Database schema '{schemaName}' has been created or updated by a newer version of Survey Solutions. " +
+                    $"The database contains migration version {maxDbVersion.Value}, but this application only supports up to version {maxAppVersion}. " +
+                    "Please upgrade Survey Solutions to a newer version to use this database.");
+            }
+        }
+
+        private static long GetMaxMigrationVersion(DbUpgradeSettings dbUpgradeSettings)
+        {
+            string ns = dbUpgradeSettings.MigrationsNamespace;
+            return dbUpgradeSettings.MigrationsAssembly
+                .GetTypes()
+                .Where(t => t.Namespace != null
+                            && (t.Namespace == ns || (ns != null && t.Namespace.StartsWith(ns + "."))))
+                .Select(t => t.GetCustomAttribute<MigrationAttribute>())
+                .Where(a => a != null)
+                .Select(a => a!.Version)
+                .DefaultIfEmpty(0)
+                .Max();
         }
     }
 

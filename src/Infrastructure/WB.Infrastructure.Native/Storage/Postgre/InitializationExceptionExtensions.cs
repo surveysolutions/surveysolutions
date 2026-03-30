@@ -26,6 +26,12 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                 };
             }
             
+            if (e is InitializationException ie && ie.Subsystem == Subsystem.Database)
+            {
+                ie.Data["ConnectionString"] = ConnectionStringPasswordRegex.Replace(connectionString, "Password=*****;");
+                return ie;
+            }
+
             if (e is PostgresException pe)
             {
                 // assume all other errors as transient
