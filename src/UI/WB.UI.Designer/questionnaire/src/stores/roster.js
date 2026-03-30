@@ -68,7 +68,17 @@ export const useRosterStore = defineStore('roster', {
                     this.roster.notLinkedMultiOptionQuestions = data.notLinkedMultiOptionQuestions;
                 }
             } catch (error) {
-                // Swallow error to prevent unhandled promise rejections from async event handler
+                // Log the error to aid diagnostics, but do not rethrow to avoid unhandled rejections
+                // from this async event handler.
+                // eslint-disable-next-line no-console
+                console.warn(
+                    'Failed to refresh roster questions in questionAdded handler:',
+                    {
+                        questionnaireId: currentQuestionnaireId,
+                        rosterId: currentRosterId,
+                        error
+                    }
+                );
             }
         },
         async fetchRosterData(questionnaireId, rosterId) {
