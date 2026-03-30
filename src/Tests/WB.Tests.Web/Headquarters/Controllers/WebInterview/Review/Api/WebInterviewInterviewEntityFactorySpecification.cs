@@ -49,7 +49,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api
             var autoMapperConfig = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile(new WebInterviewAutoMapProfile());
-            }, new NullLoggerFactory());
+            });
 
             authorizedUserMock = new Mock<IAuthorizedUser>();
 

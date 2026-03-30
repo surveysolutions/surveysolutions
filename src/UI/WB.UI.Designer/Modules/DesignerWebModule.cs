@@ -57,7 +57,7 @@ namespace WB.UI.Designer.Modules
             {
                 cfg.AddProfile(new QuestionnaireAutoMapperProfile());
                 cfg.ConstructServicesUsing(context.GetService);
-            }, context.GetService<Microsoft.Extensions.Logging.ILoggerFactory>()).CreateMapper());
+            }).CreateMapper());
         }
 
         public Task InitAsync(IServiceLocator serviceLocator, UnderConstructionInfo status)

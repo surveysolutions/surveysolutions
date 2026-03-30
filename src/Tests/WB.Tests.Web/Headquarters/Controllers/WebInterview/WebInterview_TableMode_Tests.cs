@@ -191,7 +191,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
             return new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile(new WebInterviewAutoMapProfile());
-            }, new NullLoggerFactory()).CreateMapper();
+            }).CreateMapper();
         }
 
         private InterviewDataController CreateInterviewDataController(IStatefulInterview statefulInterview,

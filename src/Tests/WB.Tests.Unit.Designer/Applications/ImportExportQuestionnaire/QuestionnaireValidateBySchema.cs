@@ -82,7 +82,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
             var mapper = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile(new QuestionnaireAutoMapperProfile());
-            }, new NullLoggerFactory()).CreateMapper();
+            }).CreateMapper();
 
             var importExportQuestionnaireService = new ImportExportQuestionnaireMapper(mapper);
             var questionnaire = importExportQuestionnaireService.Map(questionnaireDocument);

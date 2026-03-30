@@ -167,7 +167,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services
                     cfg.AddProfile(new WebInterviewAutoMapProfile());
                     cfg.AddProfile(new AssignmentProfile());
                     cfg.AddProfile(new AssignmentsPublicApiMapProfile());
-                }, new NullLoggerFactory()).CreateMapper(),
+                }).CreateMapper(),
                 Create.Service.EnumeratorGroupGroupStateCalculationStrategy(),
                 Create.Service.SupervisorGroupStateCalculationStrategy(),
                 Mock.Of<IWebNavigationService>(),
