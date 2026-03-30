@@ -1133,6 +1133,9 @@ Les vues Table et Matrice sont uniquement prises en charge dans l'enquête Web, 
   <data name="HotkeysSearch" xml:space="preserve">
     <value>Rechercher des sous-sections et des questions dans la section</value>
   </data>
+  <data name="HotkeysTest" xml:space="preserve">
+    <value>Tester le questionnaire dans WebTester</value>
+  </data>
   <data name="MultipleDependencies" xml:space="preserve">
     <value>Une ou plusieurs questions/sous-sections dépendent de</value>
   </data>

@@ -477,6 +477,9 @@
   <data name="HotkeysSearch" xml:space="preserve">
     <value>Kërko nënrubrika dhe pyetje në rubrikë</value>
   </data>
+  <data name="HotkeysTest" xml:space="preserve">
+    <value>Testo pyetësorin në WebTester</value>
+  </data>
   <data name="HotkeysShortcuts" xml:space="preserve">
     <value>Tastiera e shkurtoreve</value>
   </data>

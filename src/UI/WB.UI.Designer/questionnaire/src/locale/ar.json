@@ -337,6 +337,7 @@
     "HotkeysOpenSection": "فتح القسم",
     "HotkeysPrint": "طباعة",
     "HotkeysSearch": "البحث عن الأقسام الفرعية والأسئلة في القسم",
+    "HotkeysTest": "اختبر الاستبيان في WebTester",
     "MultipleDependencies": "يعتمد على سؤال أو أكثر / قسم فرعي",
     "NoPermissions": "ليس لديك أذونات لتغيير هذا الاستبيان",
     "NotAnImage": "الملف المختار ليس صورة",
