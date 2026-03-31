@@ -97,10 +97,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             if (!string.IsNullOrWhiteSpace(input.SearchBy))
             {
                 var searchLowerCase = input.SearchBy.ToLower();
-                items = items.Where(x => x.Key.StartsWith(searchLowerCase) || 
-                                         x.ClientKey.StartsWith(searchLowerCase) || 
-                                         x.IdentifyEntitiesValues.Any(a => a.Value.ToLower().StartsWith(searchLowerCase) && a.Identifying) ||
-                                         x.ResponsibleName.ToLower().StartsWith(searchLowerCase)
+                items = items.Where(x => x.Key.Contains(searchLowerCase) || 
+                                         x.ClientKey.Contains(searchLowerCase) || 
+                                         x.IdentifyEntitiesValues.Any(a => a.Value.ToLower().Contains(searchLowerCase) && a.Identifying) ||
+                                         x.ResponsibleName.ToLower().Contains(searchLowerCase)
                                          );
             }
             
