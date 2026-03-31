@@ -6,6 +6,7 @@ import { notice, error } from './notificationService';
 import { i18n } from '../plugins/localization';
 
 const api = mande('/' /*, globalOptions*/);
+const loginUrl = '/Identity/Account/Login';
 
 export function getSilently(url, queryParams) {
     return getImpl(url, queryParams, true);
@@ -260,6 +261,11 @@ function processResponseErrorOrThrow(errorResp) {
     if (!errorResp.response) {
         error(i18n.t('QuestionnaireEditor.RequestFailedUnexpectedly'));
         throw errorResp;
+    }
+
+    if (errorResp.response.status === 401) {
+        window.location = loginUrl;
+        return;
     }
 
     if (
