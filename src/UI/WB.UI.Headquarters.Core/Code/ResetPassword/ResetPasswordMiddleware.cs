@@ -19,7 +19,7 @@ namespace WB.UI.Headquarters.Code.ResetPassword
         {
             var authorizedUser = context.RequestServices.GetRequiredService<IAuthorizedUser>();
 
-            if (authorizedUser != null && authorizedUser.PasswordChangeRequired)
+            if (authorizedUser != null && authorizedUser.PasswordChangeRequired && !authorizedUser.IsObserving)
             {
                 if (context.Request.Path.StartsWithSegments("/graphql"))
                 {
