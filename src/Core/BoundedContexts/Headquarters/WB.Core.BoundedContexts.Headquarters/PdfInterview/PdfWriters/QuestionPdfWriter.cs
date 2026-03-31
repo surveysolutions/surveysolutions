@@ -105,7 +105,7 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview.PdfWriters
                     {
                         paragraph.AddWrapFormattedText(PdfInterviewRes.AreaQestion_Area, PdfStyles.QuestionTitle);
                         paragraph.AddTab();
-                        paragraph.AddWrapFormattedText(areaAnswer.AreaSize.FormatDouble(2), answerStyle, textColor);
+                        paragraph.AddWrapFormattedText(areaAnswer.AreaSize.FormatDouble(3), answerStyle, textColor);
                         paragraph.AddWrapFormattedText(" " + PdfInterviewRes.AreaQestion_AreaUnitMeter, PdfStyles.QuestionTitle, textColor);
                         paragraph.AddLineBreak();
                     }
@@ -113,7 +113,7 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview.PdfWriters
                     {
                         paragraph.AddWrapFormattedText(PdfInterviewRes.AreaQestion_Length, PdfStyles.QuestionTitle);
                         paragraph.AddTab();
-                        paragraph.AddWrapFormattedText(areaAnswer.Length.FormatDouble(2), answerStyle, textColor);
+                        paragraph.AddWrapFormattedText(areaAnswer.Length.FormatDouble(3), answerStyle, textColor);
                         paragraph.AddWrapFormattedText(" " + PdfInterviewRes.AreaQestion_AreaMeter, PdfStyles.QuestionTitle, textColor);
                         paragraph.AddLineBreak();
                     }
@@ -139,7 +139,32 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview.PdfWriters
                         paragraph.AddLineBreak();
                     }
 
-                    paragraph.AddWrapFormattedText(areaAnswer.ToString(), answerStyle, textColor);
+                    if (!string.IsNullOrEmpty(areaAnswer.Coordinates))
+                    {
+                        paragraph.AddWrapFormattedText(PdfInterviewRes.AreaQestion_Coordinates + ":", PdfStyles.QuestionTitle, textColor);
+                        paragraph.AddLineBreak();
+                        paragraph.AddWrapFormattedText($"  {PdfInterviewRes.AreaQestion_Latitude}  {PdfInterviewRes.AreaQestion_Longitude}", PdfStyles.QuestionTitle, textColor);
+                        paragraph.AddLineBreak();
+
+                        var coordinatePairs = areaAnswer.Coordinates.Split(';');
+                        for (int i = 0; i < coordinatePairs.Length; i++)
+                        {
+                            var parts = coordinatePairs[i].Split(',');
+                            if (parts.Length >= 2
+                                && double.TryParse(parts[0], System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var longitude)
+                                && double.TryParse(parts[1], System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var latitude))
+                            {
+                                paragraph.AddWrapFormattedText(
+                                    $"  {i + 1}  {latitude.ToString("F6", System.Globalization.CultureInfo.InvariantCulture)}, {longitude.ToString("F6", System.Globalization.CultureInfo.InvariantCulture)}",
+                                    answerStyle, textColor);
+                            }
+                            else
+                            {
+                                paragraph.AddWrapFormattedText($"  {i + 1}  {coordinatePairs[i]}", answerStyle, textColor);
+                            }
+                            paragraph.AddLineBreak();
+                        }
+                    }
                 }
                 else if (question.IsGps)
                 {
