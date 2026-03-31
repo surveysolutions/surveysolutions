@@ -1,23 +1,18 @@
-import axios from 'axios';
+import { mande } from 'mande';
 
-axios.defaults.headers.common['Content-Type'] = 'application/json';
+const api = mande('/');
 
 class OptionsApi {
     async getCategoryOptions(questionnaireRev, categoriesId) {
-        var params = qs({ categoriesId });
-
-        const response = await axios.get(
-            `/questionnaire/GetCategoryOptions/${questionnaireRev}?${params}`
-        );
-        return response.data;
+        return await api.get(`questionnaire/GetCategoryOptions/${questionnaireRev}`, {
+            query: { categoriesId }
+        });
     }
 
     async getOptions(questionnaireRev, questionId, cascading) {
-        var params = qs({ questionnaireRev, questionId, cascading });
-        const response = await axios.get(
-            `/questionnaire/GetOptions/${questionnaireRev}?${params}`
-        );
-        return response.data;
+        return await api.get(`questionnaire/GetOptions/${questionnaireRev}`, {
+            query: { questionnaireRev, questionId, cascading }
+        });
     }
 
     async applyOptions(
@@ -27,21 +22,11 @@ class OptionsApi {
         isCascading,
         isCategory
     ) {
-        var params = qs({
-            questionnaireRev,
-            entityId,
-            isCascading,
-            isCategory
-        });
-
-        const response = await axios.post(
-            `/questionnaire/applyoptions/${questionnaireRev}?${params}`,
-            {
-                categories
-            }
+        return await api.post(
+            `questionnaire/applyoptions/${questionnaireRev}`,
+            { categories },
+            { query: { questionnaireRev, entityId, isCascading, isCategory } }
         );
-
-        return response.data;
     }
 
     getExportOptionsAsTabUri(
@@ -75,19 +60,14 @@ class OptionsApi {
     }
 
     async resetOptions() {
-        await axios.post('/questionnaire/ResetOptions');
+        await api.post('questionnaire/ResetOptions');
     }
 
     async uploadCategory(file) {
         const formData = new FormData();
-
         formData.append('csvFile', file);
-
-        return await axios.post(`/questionnaire/EditCategories`, formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
-        });
+        const uploadApi = mande('/questionnaire/EditCategories', { headers: { 'Content-Type': null } });
+        return await uploadApi.post(formData);
     }
 
     async uploadOptions(questionnaire, question, file) {
@@ -95,12 +75,8 @@ class OptionsApi {
         formData.append('id', questionnaire);
         formData.append('questionId', question);
         formData.append('csvFile', file);
-
-        return await axios.post('/questionnaire/EditOptions', formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
-        });
+        const uploadApi = mande('/questionnaire/EditOptions', { headers: { 'Content-Type': null } });
+        return await uploadApi.post(formData);
     }
 }
 

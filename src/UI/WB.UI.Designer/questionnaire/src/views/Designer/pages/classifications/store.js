@@ -1,5 +1,5 @@
 ﻿import { createStore } from 'vuex';
-import axios from 'axios';
+import { mande } from 'mande';
 
 const routes = {
     userInfo: 'user',
@@ -15,35 +15,19 @@ const routes = {
     updateCategories: 'classification/{0}/categories'
 };
 
-const $http = axios.create({
-    baseURL: './api/classifications'
-});
+const $http = mande('/api/classifications');
 
-// Add a request interceptor
-$http.interceptors.request.use(
-    function(config) {
-        store.commit('start_loading');
-        return config;
-    },
-    function(error) {
+async function request(fn) {
+    store.commit('start_loading');
+    try {
+        const result = await fn();
         store.commit('finish_loading');
-        console.log(error);
-        return Promise.reject(error);
+        return result;
+    } catch (err) {
+        store.commit('finish_loading');
+        throw err;
     }
-);
-
-// Add a response interceptor
-$http.interceptors.response.use(
-    function(response) {
-        store.commit('finish_loading');
-        return response;
-    },
-    function(error) {
-        store.commit('finish_loading');
-        console.log(error);
-        return Promise.reject(error);
-    }
-);
+}
 
 const store = createStore({
     state() {
@@ -140,8 +124,8 @@ const store = createStore({
     },
     actions: {
         getUserInfo(context) {
-            $http.get(routes.userInfo, {}).then(response => {
-                context.commit('updateUserInfo', response.data);
+            request(() => $http.get(routes.userInfo)).then(response => {
+                context.commit('updateUserInfo', response);
             });
         },
         updateCategory(context, changes) {
@@ -154,22 +138,23 @@ const store = createStore({
             context.commit('addCategory', category);
         },
         updateCategories(context, classificationId) {
-            $http
-                .post(
+            request(() =>
+                $http.post(
                     routes.updateCategories.format(classificationId),
                     context.state.categories
                 )
-                .then(function() {
-                    context.commit('updateCategories');
-                });
+            ).then(function() {
+                context.commit('updateCategories');
+            });
         },
         addGroup(context, group) {
             context.commit('addGroup', group);
         },
         updateGroup(context, group) {
-            (group.isNew
-                ? $http.post(routes.createGroup, group)
-                : $http.patch(routes.updateGroup.format(group.id), group)
+            request(() =>
+                group.isNew
+                    ? $http.post(routes.createGroup, group)
+                    : $http.patch(routes.updateGroup.format(group.id), group)
             ).then(function() {
                 context.commit('updateGroup', group);
             });
@@ -180,12 +165,12 @@ const store = createStore({
                 context.commit('deleteGroup', index);
                 context.dispatch('selectGroup', 0);
             } else {
-                $http
-                    .delete(routes.deleteGroup.format(group.id))
-                    .then(function() {
-                        context.commit('deleteGroup', index);
-                        context.dispatch('selectGroup', 0);
-                    });
+                request(() =>
+                    $http.delete(routes.deleteGroup.format(group.id))
+                ).then(function() {
+                    context.commit('deleteGroup', index);
+                    context.dispatch('selectGroup', 0);
+                });
             }
         },
         selectGroup(context, index) {
@@ -200,12 +185,13 @@ const store = createStore({
             context.commit('addClassification', classification);
         },
         updateClassification(context, classification) {
-            (classification.isNew
-                ? $http.post(routes.createClassification, classification)
-                : $http.patch(
-                      routes.updateClassification.format(classification.id),
-                      classification
-                  )
+            request(() =>
+                classification.isNew
+                    ? $http.post(routes.createClassification, classification)
+                    : $http.patch(
+                          routes.updateClassification.format(classification.id),
+                          classification
+                      )
             ).then(function() {
                 context.commit('updateClassification', classification);
             });
@@ -216,14 +202,14 @@ const store = createStore({
                 context.commit('deleteClassification', index);
                 context.dispatch('selectClassification', 0);
             } else {
-                $http
-                    .delete(
+                request(() =>
+                    $http.delete(
                         routes.deleteClassification.format(classification.id)
                     )
-                    .then(function() {
-                        context.commit('deleteClassification', index);
-                        context.dispatch('selectClassification', 0);
-                    });
+                ).then(function() {
+                    context.commit('deleteClassification', index);
+                    context.dispatch('selectClassification', 0);
+                });
             }
         },
         selectClassification(context, index) {
@@ -237,8 +223,8 @@ const store = createStore({
 
         loadGroups: function(context) {
             var url = routes.groups;
-            return $http.get(url, {}).then(function(response) {
-                context.commit('groups_loaded', response.data);
+            return request(() => $http.get(url)).then(function(response) {
+                context.commit('groups_loaded', response);
                 if (context.state.groups.length > 0) {
                     context.dispatch('selectGroup', 0);
                 }
@@ -247,19 +233,19 @@ const store = createStore({
         loadClassifications: function(context, groupId) {
             var url = routes.classifications;
 
-            return $http
-                .get(url, { params: { groupId: groupId } })
-                .then(function(response) {
-                    context.commit('classifications_loaded', response.data);
-                    if (context.state.classifications.length > 0) {
-                        context.dispatch('selectClassification', 0);
-                    }
-                });
+            return request(() =>
+                $http.get(url, { query: { groupId: groupId } })
+            ).then(function(response) {
+                context.commit('classifications_loaded', response);
+                if (context.state.classifications.length > 0) {
+                    context.dispatch('selectClassification', 0);
+                }
+            });
         },
         loadCategories: function(context, classificationId) {
             var url = routes.categories.format(classificationId);
-            return $http.get(url, {}).then(function(response) {
-                var categories = response.data;
+            return request(() => $http.get(url)).then(function(response) {
+                var categories = response;
                 context.commit('categories_loaded', categories);
             });
         }

@@ -315,8 +315,8 @@ export default {
                     file
                 );
 
-            this.errors = apiResponse.data.errors;
-            this.categories = apiResponse.data.options || [];
+            this.errors = apiResponse.errors;
+            this.categories = apiResponse.options || [];
             this.file = null;
             this.snacks.fileUploaded = true;
 
