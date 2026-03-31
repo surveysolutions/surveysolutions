@@ -28,6 +28,8 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Refit;
 using Serilog;
+using Serilog.Events;
+using WB.Core.Infrastructure.Modularity;
 using Vite.Extensions.AspNetCore;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
@@ -478,7 +480,25 @@ namespace WB.UI.Headquarters
 
             app.UseUnderConstruction();
 
-            app.UseSerilogRequestLogging(o => o.Logger = app.ApplicationServices.GetService<ILogger>());
+            var underConstructionInfo = app.ApplicationServices.GetRequiredService<UnderConstructionInfo>();
+            app.UseSerilogRequestLogging(o =>
+            {
+                o.Logger = app.ApplicationServices.GetService<ILogger>();
+                o.GetLevel = (ctx, elapsed, ex) =>
+                {
+                    if (ex == null
+                        && ctx.Response.StatusCode == StatusCodes.Status503ServiceUnavailable
+                        && underConstructionInfo.Status != UnderConstructionStatus.Finished
+                        && underConstructionInfo.Status != UnderConstructionStatus.Error)
+                    {
+                        return LogEventLevel.Warning;
+                    }
+
+                    return ex != null || ctx.Response.StatusCode > 499
+                        ? LogEventLevel.Error
+                        : LogEventLevel.Information;
+                };
+            });
             
             app.UseWorkspaces();
 
