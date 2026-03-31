@@ -111,7 +111,7 @@ export default {
                 'mark': this.highlight,
                 'disabled-question': this.disabled,
                 'with-flag': this.hasFlag,
-                'supervisor-question': this.question.isForSupervisor
+                'supervisor-question': this.question.isForSupervisor && !this.$store.getters.isReviewMode
             }, this.questionDivCssClassName]
         },
         questionEditorClass() {
@@ -119,7 +119,7 @@ export default {
                 answered: this.question.isAnswered && !this.noAnswer,
                 readonly: !this.question.acceptAnswer,
                 'has-error': !this.question.validity.isValid,
-                'for-supervisor': this.question.isForSupervisor,
+                'for-supervisor': this.question.isForSupervisor && !this.$store.getters.isReviewMode,
             }, this.questionCssClassName]
         },
         validityMessages() {
