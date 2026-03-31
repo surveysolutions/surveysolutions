@@ -9,7 +9,6 @@
         "dev": "vite build --mode development",
         "test": "jest",
         "hot": "vite",
-        "preinstall": "npx npm-force-resolutions",
         "lint": "eslint --ext .js,.vue --ignore-path .gitignore --fix src",
         "format": "prettier .  --write"
     },
@@ -73,7 +72,6 @@
         "eslint-plugin-vue": "^10.8.0",
         "fast-glob": "^3.3.3",
         "jest": "^30.2.0",
-        "npm-force-resolutions": "0.0.6",
         "prettier": "3.0.0",
         "rollup": "4.59.0",
         "rollup-plugin-copy": "^3.5.0",
@@ -130,7 +128,7 @@
             "/locale//.resources/"
         ]
     },
-    "resolutions": {
+    "overrides": {
         "@apollo/client": "3.7.9",
         "@babel/traverse": ">=7.23.3",
         "@types/ejs": "3.1.8",
