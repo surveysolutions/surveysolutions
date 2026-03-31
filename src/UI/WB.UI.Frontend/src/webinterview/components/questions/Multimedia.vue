@@ -60,6 +60,11 @@ export default {
         '$me.answer'() {
             this.uploadingImage = null
         },
+        '$me.validity.errorMessage'(val) {
+            if (val) {
+                this.uploadingImage = null
+            }
+        },
     },
 
     methods: {

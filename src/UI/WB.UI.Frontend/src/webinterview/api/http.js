@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { config } from '~/shared/config'
+import { $t } from '~/shared/plugins/locale'
 
 let api = {};
 
@@ -122,18 +123,22 @@ const httpPlugin = {
                     fd.append('duration', duration)
                 dispatch('uploadProgress', { id, now: 0, total: 100 })
 
-                await axios.post(url + '/' + interviewId, fd, {
-                    onUploadProgress(ev) {
-                        var entity = state.webinterview.entityDetails[id]
-                        if (entity != undefined) {
-                            dispatch('uploadProgress', {
-                                id,
-                                now: ev.loaded,
-                                total: ev.total,
-                            })
-                        }
-                    },
-                })
+                try {
+                    await axios.post(url + '/' + interviewId, fd, {
+                        onUploadProgress(ev) {
+                            var entity = state.webinterview.entityDetails[id]
+                            if (entity != undefined) {
+                                dispatch('uploadProgress', {
+                                    id,
+                                    now: ev.loaded,
+                                    total: ev.total,
+                                })
+                            }
+                        },
+                    })
+                } catch (err) {
+                    dispatch('setAnswerAsNotSaved', { id, message: $t('WebInterviewUI.CommunicationError') })
+                }
             },
         }
 
