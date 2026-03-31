@@ -62,15 +62,19 @@ const httpPlugin = {
                     store.dispatch('fetch', { id, done: true })
                 }
                 else {
-                    if (err.response.status === 400
+                    if (err.response != null
+                        && err.response.status === 400
                         && err.response.data != null
                         && err.response.data.errorMessage != null) {
                         err.message = err.response.data.errorMessage
                         store.dispatch('UNHANDLED_ERROR', err)
                     }
-                    else {
+                    else if (err.response != null) {
                         store.dispatch('UNHANDLED_ERROR', err)
                     }
+                    // Network errors (err.response is null/undefined) are silently ignored here
+                    // because the SignalR connection's onclose handler will detect the network loss
+                    // and show the disconnection dialog. State will be refreshed on reconnection.
                 }
             }
         }

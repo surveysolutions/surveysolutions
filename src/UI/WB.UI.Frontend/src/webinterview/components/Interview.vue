@@ -1,6 +1,6 @@
 <template>
     <div>
-        <signalr @connected="connected" :interviewId="interviewId" :mode="mode" />
+        <signalr @connected="connected" @reconnected="reconnected" :interviewId="interviewId" :mode="mode" />
         <router-view />
     </div>
 </template>
@@ -71,6 +71,11 @@ export default {
                 this.changeSection(this.$route.params.sectionId)
             }
 
+            this.$emit('connected')
+        },
+
+        reconnected() {
+            this.$store.dispatch('reconnected')
             this.$emit('connected')
         },
     },

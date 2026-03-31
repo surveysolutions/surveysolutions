@@ -1,6 +1,7 @@
 import * as toastr from 'toastr'
 import modal from '@/shared/modal'
 import { $t } from '~/shared/plugins/locale'
+import { hubApi } from '../components/signalr/core.signalr'
 
 const connectionStore = {
     state: {
@@ -16,8 +17,8 @@ const connectionStore = {
         tryingToReconnect({ commit }, isReconnecting) {
             commit('IS_RECONNECTING', isReconnecting)
         },
-        disconnected({ state, commit }) {
-            if (state.isReconnecting && !state.isDisconnected) {
+        disconnected({ state, commit, dispatch }) {
+            if (!state.isDisconnected) {
                 commit('IS_DISCONNECTED', true)
 
                 modal.dialog({
@@ -26,7 +27,24 @@ const connectionStore = {
                     onEscape: false,
                     closeButton: false,
                     buttons: {
-                        ok: {
+                        tryAgain: {
+                            label: $t('WebInterviewUI.TryAgain'),
+                            className: 'btn-primary',
+                            callback: () => {
+                                commit('IS_DISCONNECTED', false)
+                                commit('IS_RECONNECTING', true)
+                                hubApi.reconnect()
+                                    .then(() => {
+                                        commit('IS_RECONNECTING', false)
+                                        dispatch('refreshSectionState')
+                                    })
+                                    .catch(() => {
+                                        commit('IS_RECONNECTING', false)
+                                        dispatch('disconnected')
+                                    })
+                            },
+                        },
+                        reload: {
                             label: $t('WebInterviewUI.Reload'),
                             className: 'btn-success',
                             callback: () => {
@@ -36,6 +54,11 @@ const connectionStore = {
                     },
                 })
             }
+        },
+        reconnected({ commit, dispatch }) {
+            commit('IS_RECONNECTING', false)
+            commit('IS_DISCONNECTED', false)
+            dispatch('refreshSectionState')
         },
     },
     mutations: {

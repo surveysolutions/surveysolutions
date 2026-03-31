@@ -9,6 +9,9 @@ export const hubApi = {
     stop() {
         return connection.stop()
     },
+    reconnect() {
+        return connection.start()
+    },
 }
 
 export default {
@@ -66,6 +69,19 @@ export default {
 
         connection.on('finishInterview', () => {
             this.$store.dispatch('finishInterview')
+        })
+
+        connection.onreconnecting(() => {
+            this.$store.dispatch('tryingToReconnect', true)
+        })
+
+        connection.onreconnected(() => {
+            this.$store.dispatch('tryingToReconnect', false)
+            this.$emit('reconnected')
+        })
+
+        connection.onclose(() => {
+            this.$store.dispatch('disconnected')
         })
 
         connection.start()
