@@ -206,5 +206,11 @@ namespace WB.UI.Designer.Resources {
                 return ResourceManager.GetString("ServiceUnavailable", resourceCulture);
             }
         }
+        
+        public static string Retry {
+            get {
+                return ResourceManager.GetString("Retry", resourceCulture);
+            }
+        }
     }
 }

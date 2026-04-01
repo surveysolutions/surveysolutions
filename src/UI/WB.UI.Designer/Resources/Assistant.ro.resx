@@ -99,4 +99,7 @@
     <data name="ServiceUnavailable" xml:space="preserve">
         <value>Serviciul de asistent este temporar indisponibil. Vă rugăm să încercați din nou mai târziu.</value>
     </data>
+    <data name="Retry" xml:space="preserve">
+        <value>Retry</value>
+    </data>
 </root>

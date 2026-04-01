@@ -678,6 +678,7 @@
     "InvalidRequest": "Requête invalide. Veuillez vérifier le format de votre message.",
     "AccessDenied": "Accès refusé. Votre clé API n'a peut-être pas les autorisations requises.",
     "ModelNotFound": "Modèle d'assistant introuvable. Veuillez vérifier si vous avez accès au modèle configuré.",
-    "ServiceUnavailable": "Le service d'assistant est temporairement indisponible. Veuillez réessayer plus tard."
+    "ServiceUnavailable": "Le service d'assistant est temporairement indisponible. Veuillez réessayer plus tard.",
+    "Retry": "Retry"
   }
 }

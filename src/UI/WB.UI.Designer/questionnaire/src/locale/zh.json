@@ -678,6 +678,7 @@
     "InvalidRequest": "无效请求。请检查您的消息格式。",
     "AccessDenied": "访问被拒绝。您的API密钥可能没有所需权限。",
     "ModelNotFound": "未找到助手模型。请检查您是否有权访问配置的模型。",
-    "ServiceUnavailable": "助手服务暂时不可用。请稍后重试。"
+    "ServiceUnavailable": "助手服务暂时不可用。请稍后重试。",
+    "Retry": "Retry"
   }
 }

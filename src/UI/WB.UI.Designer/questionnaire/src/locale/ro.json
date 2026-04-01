@@ -678,6 +678,7 @@
     "InvalidRequest": "Cerere invalidă. Vă rugăm să verificați formatul mesajului.",
     "AccessDenied": "Acces refuzat. Cheia dvs. API poate să nu aibă permisiunile necesare.",
     "ModelNotFound": "Modelul asistentului nu a fost găsit. Vă rugăm să verificați dacă aveți acces la modelul configurat.",
-    "ServiceUnavailable": "Serviciul de asistent este temporar indisponibil. Vă rugăm să încercați din nou mai târziu."
+    "ServiceUnavailable": "Serviciul de asistent este temporar indisponibil. Vă rugăm să încercați din nou mai târziu.",
+    "Retry": "Retry"
   }
 }

@@ -53,6 +53,16 @@
                                                     'mdi-thumb-down' : 'mdi-thumb-down-outline' }}</v-icon>
                                             </v-btn>
                                         </div>
+                                        <div v-if="message.role === 'assistant' && message.isError && message.failedPrompt"
+                                            class="d-flex align-center mt-1">
+                                            <v-btn variant="text" size="x-small" :ripple="false"
+                                                class="retry-btn" prepend-icon="mdi-refresh"
+                                                @click="retryMessage(message)"
+                                                :disabled="isLoading"
+                                                :title="$t('Assistant.Retry')">
+                                                {{ $t('Assistant.Retry') }}
+                                            </v-btn>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -394,21 +404,7 @@ export default {
             return Number.isFinite(numeric) && numeric > 0 ? numeric : null;
         };
 
-        const sendMessage = async () => {
-            if (!currentMessage.value.trim()) return;
-
-            // Add user message
-            const userMessage = {
-                id: Date.now(),
-                role: 'user',
-                content: currentMessage.value,
-                timestamp: Date.now()
-            };
-
-            messages.value.push(userMessage);
-
-            const messageText = currentMessage.value;
-            currentMessage.value = '';
+        const sendMessageCore = async (messageText) => {
             isLoading.value = true;
 
             await scrollToBottom();
@@ -437,7 +433,7 @@ export default {
                 await scrollToBottom();
             } catch (error) {
 
-                if (error.name === 'AbortError' || error.message === USER_STOPPED_REQUEST  // was: 'User stopped the request'
+                if (error.name === 'AbortError' || error.message === USER_STOPPED_REQUEST
                     || error.name === 'CanceledError' || error.code === 'ERR_CANCELED') {
                     //do nothing
                 } else {
@@ -447,7 +443,8 @@ export default {
                         content: error.message,
                         timestamp: Date.now(),
                         isError: true,
-                        reaction: 0
+                        reaction: 0,
+                        failedPrompt: messageText
                     };
 
                     messages.value.push(errorMessage);
@@ -461,6 +458,36 @@ export default {
                     isLoading.value = false;
                 }
             }
+        };
+
+        const sendMessage = async () => {
+            if (!currentMessage.value.trim()) return;
+
+            // Add user message
+            const userMessage = {
+                id: Date.now(),
+                role: 'user',
+                content: currentMessage.value,
+                timestamp: Date.now()
+            };
+
+            messages.value.push(userMessage);
+
+            const messageText = currentMessage.value;
+            currentMessage.value = '';
+
+            await sendMessageCore(messageText);
+        };
+
+        const retryMessage = async (errorMessage) => {
+            const failedPrompt = errorMessage.failedPrompt;
+            if (!failedPrompt) return;
+
+            // Remove the error message so the user sees the original conversation
+            const idx = messages.value.findIndex(m => m.id === errorMessage.id);
+            if (idx !== -1) messages.value.splice(idx, 1);
+
+            await sendMessageCore(failedPrompt);
         };
 
         const handleEnter = (event) => {
@@ -568,6 +595,7 @@ export default {
             messagesContainer,
             close,
             sendMessage,
+            retryMessage,
             handleEnter,
             getMessageReaction,
             setReaction,
@@ -709,6 +737,18 @@ export default {
 }
 
 .chat-container :deep(.reaction-btn:hover) {
+    background-color: transparent !important;
+}
+
+/* Retry button styling */
+.chat-container :deep(.retry-btn:hover .v-btn__overlay),
+.chat-container :deep(.retry-btn:focus-visible .v-btn__overlay),
+.chat-container :deep(.retry-btn:hover .v-btn__underlay),
+.chat-container :deep(.retry-btn:focus-visible .v-btn__underlay) {
+    opacity: 0 !important;
+}
+
+.chat-container :deep(.retry-btn:hover) {
     background-color: transparent !important;
 }
 

@@ -99,4 +99,7 @@
     <data name="ServiceUnavailable" xml:space="preserve">
         <value>Assistant service is temporarily unavailable. Please try again later.</value>
     </data>
+    <data name="Retry" xml:space="preserve">
+        <value>Retry</value>
+    </data>
 </root>
