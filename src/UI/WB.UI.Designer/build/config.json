@@ -164,7 +164,6 @@
                 "node_modules/vue/dist/vue.js",
                 "node_modules/vuex/dist/vuex.js",
                 "node_modules/vee-validate/dist/vee-validate.js",
-                "node_modules/axios/dist/axios.js",
                 "node_modules/jquery-contextmenu/dist/jquery.contextMenu.js",
                 "node_modules/jquery.ui.position/jquery-ui.js",
                 "node_modules/lodash/lodash.js"
