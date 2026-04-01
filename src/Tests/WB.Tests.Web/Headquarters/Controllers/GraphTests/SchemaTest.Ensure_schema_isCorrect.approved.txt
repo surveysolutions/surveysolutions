@@ -102,6 +102,7 @@ type HeadquartersQuery {
   questions("Workspace name" workspace: String! = "primary" "Questionnaire id" id: UUID! "Questionnaire version" version: Long! "Questionnaire language" language: String where: QuestionFilter @cost(weight: "10")): [Entity] @authorize @cost(weight: "10")
   questionnaireItems("Workspace name" workspace: String! = "primary" "Questionnaire id" id: UUID! "Questionnaire version" version: Long! "Questionnaire language" language: String where: QuestionnaireItemsFilter @cost(weight: "10")): [QuestionnaireItem] @authorize @cost(weight: "10")
   viewer: Viewer @authorize
+  "Gets a list of user accounts with their attributes. This query is accessible only to users in the role administrator."
   users(skip: Int take: Int order: [UsersSortInput!] @cost(weight: "10") where: UsersFilterInput @cost(weight: "10")): Users @authorize(roles: [ "Administrator" ]) @cost(weight: "10")
   mapReport("Workspace name" workspace: String! = "primary" "Questionnaire id" questionnaireId: UUID! "Questionnaire version" questionnaireVersion: Long "Variable name for question" variable: String "Zoom level" zoom: Int! "Visible area width" clientMapWidth: Int! "East coordinate" east: Float! "West coordinate" west: Float! "North coordinate" north: Float! "South coordinate" south: Float! where: MapReportFilter @cost(weight: "10")): MapReportHolder @authorize @cost(weight: "10")
 }
