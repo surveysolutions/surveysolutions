@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
+using WB.Core.BoundedContexts.Headquarters.QuartzIntegration;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Dto;
 using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Tasks;
@@ -16,6 +17,7 @@ using WB.Enumerator.Native.WebInterview;
 namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Jobs
 {
     [DisallowConcurrentExecution]
+    [RetryFailedJob]
     internal class AssignmentsVerificationJob : IJob
     {
         private readonly ILogger logger;
@@ -98,6 +100,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Jobs
             catch (Exception ex)
             {
                 this.logger.Error($"Assignments verification job: FAILED. Reason: {ex.Message} ", ex);
+                throw;
             }
         }
     }

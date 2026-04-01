@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Factories;
+using WB.Core.BoundedContexts.Headquarters.QuartzIntegration;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Dto;
 using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services;
@@ -18,8 +19,11 @@ using WB.Enumerator.Native.WebInterview;
 namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Jobs
 {
     [DisallowConcurrentExecution]
+    [RetryFailedJob]
     internal class AssignmentsImportJob : IJob
     {
+        private const int MaxImportAttempts = 3;
+
         private readonly IServiceLocator serviceLocator;
         private readonly ILogger logger;
         private readonly IAssignmentsImportService assignmentsImportService;
@@ -42,48 +46,50 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Jobs
 
         public async Task Execute(IJobExecutionContext context)
         {
-            try
-            {
-                var sampleImportSettings = serviceLocator.GetInstance<SampleImportSettings>();
+            var sampleImportSettings = serviceLocator.GetInstance<SampleImportSettings>();
 
-                AssignmentsImportStatus importProcessStatus = assignmentsImportService.GetImportStatus();
-                if (importProcessStatus?.ProcessStatus != AssignmentsImportProcessStatus.Import)
-                    return;
+            AssignmentsImportStatus importProcessStatus = assignmentsImportService.GetImportStatus();
+            if (importProcessStatus?.ProcessStatus != AssignmentsImportProcessStatus.Import)
+                return;
 
-                var allAssignmentIds = assignmentsImportService.GetAllAssignmentIdsToImport();
-                
-                importProcessStatus = assignmentsImportService.GetImportStatus();
-                if (importProcessStatus.ProcessStatus != AssignmentsImportProcessStatus.Import)
-                    return;
+            var allAssignmentIds = assignmentsImportService.GetAllAssignmentIdsToImport();
 
-                var userManager = serviceLocator.GetInstance<IUserRepository>();
-                var responsibleId = (await userManager
-                    .FindByNameAsync(importProcessStatus.ResponsibleName).ConfigureAwait(false)).Id;
+            importProcessStatus = assignmentsImportService.GetImportStatus();
+            if (importProcessStatus.ProcessStatus != AssignmentsImportProcessStatus.Import)
+                return;
 
-                this.logger.Debug("Assignments import job: Started");
-                var sw = new Stopwatch();
-                sw.Start();
+            var userManager = serviceLocator.GetInstance<IUserRepository>();
+            var responsibleId = (await userManager
+                .FindByNameAsync(importProcessStatus.ResponsibleName).ConfigureAwait(false)).Id;
 
-                int? lastImportedAssignmentId = null;
-                int? firstImportedAssignmentId = null;
+            this.logger.Debug("Assignments import job: Started");
+            var sw = new Stopwatch();
+            sw.Start();
 
-                Parallel.ForEach(allAssignmentIds,
-                    new ParallelOptions { MaxDegreeOfParallelism = sampleImportSettings.InterviewsImportParallelTasksLimit },
-                    assignmentId =>
+            int? lastImportedAssignmentId = null;
+            int? firstImportedAssignmentId = null;
+
+            Parallel.ForEach(allAssignmentIds,
+                new ParallelOptions { MaxDegreeOfParallelism = sampleImportSettings.InterviewsImportParallelTasksLimit },
+                assignmentId =>
+                {
+                    Exception lastException = null;
+
+                    for (int attempt = 0; attempt < MaxImportAttempts; attempt++)
                     {
-                        inScopeExecutor.Execute((serviceLocatorLocal) =>
+                        try
                         {
-                            var threadImportAssignmentsService = serviceLocatorLocal.GetInstance<IAssignmentsImportService>();
-
-                            var questionnaire = serviceLocatorLocal.GetInstance<IQuestionnaireStorage>().GetQuestionnaire(importProcessStatus.QuestionnaireIdentity, null);
-                            if (questionnaire == null)
+                            inScopeExecutor.Execute((serviceLocatorLocal) =>
                             {
-                                threadImportAssignmentsService.RemoveAssignmentToImport(assignmentId);
-                                return;
-                            }
+                                var threadImportAssignmentsService = serviceLocatorLocal.GetInstance<IAssignmentsImportService>();
 
-                            try
-                            {
+                                var questionnaire = serviceLocatorLocal.GetInstance<IQuestionnaireStorage>().GetQuestionnaire(importProcessStatus.QuestionnaireIdentity, null);
+                                if (questionnaire == null)
+                                {
+                                    threadImportAssignmentsService.RemoveAssignmentToImport(assignmentId);
+                                    return;
+                                }
+
                                 var newAssignmentId = threadImportAssignmentsService.ImportAssignment(assignmentId,
                                     importProcessStatus.AssignedTo, questionnaire, responsibleId);
 
@@ -93,37 +99,44 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Jobs
                                     lastImportedAssignmentId = newAssignmentId;
 
                                 threadImportAssignmentsService.RemoveAssignmentToImport(assignmentId);
-                            }
-                            catch (Exception ex)
+                            });
+
+                            lastException = null;
+                            break;
+                        }
+                        catch (Exception ex)
+                        {
+                            lastException = ex;
+
+                            if (attempt < MaxImportAttempts - 1)
                             {
-                                this.logger.Error($"Assignment import error. Reason: {ex.Message} ", ex);
-                                threadImportAssignmentsService.SetVerifiedToAssignment(assignmentId, ex.Message);
+                                this.logger.Warn($"Assignment {assignmentId} import attempt {attempt + 1} failed. Retrying. Reason: {ex.Message}");
+                                Thread.Sleep(TimeSpan.FromSeconds(Math.Pow(2, attempt)));
                             }
-                            
-                        });
-                    });
+                        }
+                    }
 
-                inScopeExecutor.Execute((serviceLocatorLocal) =>
-                    serviceLocatorLocal.GetInstance<IAssignmentsImportService>()
-                        .SetImportProcessStatus(AssignmentsImportProcessStatus.ImportCompleted));
+                    if (lastException != null)
+                    {
+                        this.logger.Error($"Assignment {assignmentId} import failed after {MaxImportAttempts} attempts. Reason: {lastException.Message}", lastException);
+                        inScopeExecutor.Execute((serviceLocatorLocal) =>
+                            serviceLocatorLocal.GetInstance<IAssignmentsImportService>()
+                                .SetVerifiedToAssignment(assignmentId, lastException.Message));
+                    }
+                });
 
-                var questionnaireTitle = this.questionnaireBrowseViewFactory.GetById(importProcessStatus.QuestionnaireIdentity).Title;
-                var questionnaireVersion = importProcessStatus.QuestionnaireIdentity.Version;
+            inScopeExecutor.Execute((serviceLocatorLocal) =>
+                serviceLocatorLocal.GetInstance<IAssignmentsImportService>()
+                    .SetImportProcessStatus(AssignmentsImportProcessStatus.ImportCompleted));
 
-                this.systemLog.AssignmentsImported(importProcessStatus.TotalCount, questionnaireTitle,
-                    questionnaireVersion, firstImportedAssignmentId ?? 0, lastImportedAssignmentId ?? firstImportedAssignmentId ?? 0, importProcessStatus.ResponsibleName);
-                
-                sw.Stop();
-                this.logger.Debug($"Assignments import job: Finished. Elapsed time: {sw.Elapsed}");
-            }
-            catch (Exception ex)
-            {
-                this.logger.Error($"Assignments import job: FAILED. Reason: {ex.Message} ", ex);
+            var questionnaireTitle = this.questionnaireBrowseViewFactory.GetById(importProcessStatus.QuestionnaireIdentity).Title;
+            var questionnaireVersion = importProcessStatus.QuestionnaireIdentity.Version;
 
-                inScopeExecutor.Execute((serviceLocatorLocal) =>
-                    serviceLocatorLocal.GetInstance<IAssignmentsImportService>()
-                        .SetImportProcessStatus(AssignmentsImportProcessStatus.ImportCompleted));
-            }
+            this.systemLog.AssignmentsImported(importProcessStatus.TotalCount, questionnaireTitle,
+                questionnaireVersion, firstImportedAssignmentId ?? 0, lastImportedAssignmentId ?? firstImportedAssignmentId ?? 0, importProcessStatus.ResponsibleName);
+
+            sw.Stop();
+            this.logger.Debug($"Assignments import job: Finished. Elapsed time: {sw.Elapsed}");
         }
     }
 }
