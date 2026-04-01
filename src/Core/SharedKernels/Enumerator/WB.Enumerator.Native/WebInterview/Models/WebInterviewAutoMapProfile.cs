@@ -13,7 +13,7 @@ namespace WB.Enumerator.Native.WebInterview.Models
         public WebInterviewAutoMapProfile()
         {
             this.CreateMap<InterviewTreeQuestion, Validity>()
-                .ForMember(x => x.IsValid, opts => opts.MapFrom(x => x.IsValid));
+                .ForMember(x => x.IsValid, opts => opts.MapFrom(x => !x.IsAnswered() || x.IsValid));
 
             this.CreateMap<InterviewTreeQuestion, GenericQuestion>()
                 .ForMember(x => x.Id, opts => opts.MapFrom(x => x.Identity))
