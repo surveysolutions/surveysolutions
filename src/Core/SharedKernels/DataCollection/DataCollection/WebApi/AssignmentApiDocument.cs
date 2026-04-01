@@ -61,5 +61,8 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
         
         [JsonProperty("area")]
         public string TargetArea { get; set; }
+
+        [JsonProperty("comment")]
+        public string Comments { get; set; }
     }
 }
