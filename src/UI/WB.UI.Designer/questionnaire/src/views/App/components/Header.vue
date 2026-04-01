@@ -185,19 +185,14 @@ export default {
         const sharedInfoDialog = ref(null);
         const downloadPDFDialog = ref(null);
 
-        const { ctrl_b } = useMagicKeys({
+        const { ctrl_b, ctrl_t } = useMagicKeys({
             passive: false,
             onEventFired(e) {
-                if (e.ctrlKey && e.key === 'b' && e.type === 'keydown')
-                    e.preventDefault()
-            },
-        })
-
-        const { ctrl_t } = useMagicKeys({
-            passive: false,
-            onEventFired(e) {
-                if (e.ctrlKey && e.key === 't' && e.type === 'keydown')
-                    e.preventDefault()
+                if (e.ctrlKey && e.type === 'keydown') {
+                    const key = e.key?.toLowerCase()
+                    if (key === 'b' || key === 't')
+                        e.preventDefault()
+                }
             },
         })
 
@@ -222,7 +217,7 @@ export default {
                 this.verify();
         },
         ctrl_t: function (v) {
-            if (v && this.questionnaire.webTestAvailable && !this.questionnaire.questionnaireRevision)
+            if (v && this.questionnaire.webTestAvailable && this.questionnaire.questionnaireRevision === null)
                 this.webTest();
         }
     },
