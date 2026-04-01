@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Factories;
+using WB.Core.BoundedContexts.Headquarters.QuartzIntegration;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Dto;
 using WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Services;
@@ -18,8 +19,10 @@ using WB.Enumerator.Native.WebInterview;
 namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Jobs
 {
     [DisallowConcurrentExecution]
+    [RetryFailedJob]
     internal class AssignmentsImportJob : IJob
     {
+        private const int MaxImportRetries = 3;
         private readonly IServiceLocator serviceLocator;
         private readonly ILogger logger;
         private readonly IAssignmentsImportService assignmentsImportService;
@@ -82,22 +85,36 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Jobs
                                 return;
                             }
 
-                            try
+                            Exception lastImportException = null;
+                            for (int attempt = 0; attempt < MaxImportRetries; attempt++)
                             {
-                                var newAssignmentId = threadImportAssignmentsService.ImportAssignment(assignmentId,
-                                    importProcessStatus.AssignedTo, questionnaire, responsibleId);
+                                try
+                                {
+                                    var newAssignmentId = threadImportAssignmentsService.ImportAssignment(assignmentId,
+                                        importProcessStatus.AssignedTo, questionnaire, responsibleId);
 
-                                if (!firstImportedAssignmentId.HasValue)
-                                    firstImportedAssignmentId = newAssignmentId;
-                                else
-                                    lastImportedAssignmentId = newAssignmentId;
+                                    if (!firstImportedAssignmentId.HasValue)
+                                        firstImportedAssignmentId = newAssignmentId;
+                                    else
+                                        lastImportedAssignmentId = newAssignmentId;
 
-                                threadImportAssignmentsService.RemoveAssignmentToImport(assignmentId);
+                                    threadImportAssignmentsService.RemoveAssignmentToImport(assignmentId);
+                                    lastImportException = null;
+                                    break;
+                                }
+                                catch (Exception ex)
+                                {
+                                    lastImportException = ex;
+                                    this.logger.Warn($"Assignment import error on attempt {attempt + 1}/{MaxImportRetries}. Reason: {ex.Message}", ex);
+                                    if (attempt < MaxImportRetries - 1)
+                                        Thread.Sleep(TimeSpan.FromSeconds(Math.Min(Math.Pow(2, attempt), 10)));
+                                }
                             }
-                            catch (Exception ex)
+
+                            if (lastImportException != null)
                             {
-                                this.logger.Error($"Assignment import error. Reason: {ex.Message} ", ex);
-                                threadImportAssignmentsService.SetVerifiedToAssignment(assignmentId, ex.Message);
+                                this.logger.Error($"Assignment import failed after {MaxImportRetries} attempts. Reason: {lastImportException.Message}", lastImportException);
+                                threadImportAssignmentsService.SetVerifiedToAssignment(assignmentId, lastImportException.Message);
                             }
                             
                         });
@@ -119,10 +136,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Users.UserPreloading.Jobs
             catch (Exception ex)
             {
                 this.logger.Error($"Assignments import job: FAILED. Reason: {ex.Message} ", ex);
-
-                inScopeExecutor.Execute((serviceLocatorLocal) =>
-                    serviceLocatorLocal.GetInstance<IAssignmentsImportService>()
-                        .SetImportProcessStatus(AssignmentsImportProcessStatus.ImportCompleted));
+                throw;
             }
         }
     }
