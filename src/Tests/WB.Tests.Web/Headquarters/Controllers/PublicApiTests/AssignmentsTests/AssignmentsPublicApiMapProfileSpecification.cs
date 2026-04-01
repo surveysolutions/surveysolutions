@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
             {
                 c.AddProfile<AssignmentsPublicApiMapProfile>();
                 c.ConstructServicesUsing(t => this.ServiceMock[t]);
-            }, new NullLoggerFactory());
+            });
 
             mapper = mapConfig.CreateMapper();
 
