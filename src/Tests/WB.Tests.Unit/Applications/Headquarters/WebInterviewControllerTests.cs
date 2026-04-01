@@ -115,7 +115,6 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 Mock.Of<IOptions<RecaptchaSettings>>(),
                 Mock.Of<IOptions<CaptchaConfig>>(),
                 Mock.Of<IServiceLocator>(),
-                Mock.Of<IAggregateRootPrototypeService>(),
                 Mock.Of<IQuestionnaireStorage>(),
                 Mock.Of<IInScopeExecutor>(),
                 memoryCache.Object,
