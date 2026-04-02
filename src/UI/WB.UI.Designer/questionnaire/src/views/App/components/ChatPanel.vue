@@ -856,7 +856,7 @@ export default {
     white-space: pre-wrap;
     overflow-wrap: anywhere;
     word-break: normal;
-    overflow-x: auto;
+    font-size: 16px;
     font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
 }
 
