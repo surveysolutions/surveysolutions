@@ -74,14 +74,16 @@ const confirmDialog = {
             this.isOpen = true;
         },
         cancel() {
-            if (this.callback)
-                this.callback(false);
+            const callback = this.callback;
             this.isOpen = false;
+            if (callback)
+                callback(false);
         },
         ok() {
-            if (this.callback)
-                this.callback(true);
+            const callback = this.callback;
             this.isOpen = false;
+            if (callback)
+                callback(true);
         }
     }
 };
