@@ -505,8 +505,8 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
             var group = new Group(coverPage.Title, children)
             {
                 PublicKey = publicKey,
-                VariableName = coverPage.VariableName!,
-                ConditionExpression = null!
+                VariableName = coverPage.VariableName ?? string.Empty,
+                ConditionExpression = string.Empty
             };
             return group;
         }
@@ -553,8 +553,8 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
             var group = new Group(modelGroup.Title, children)
             {
                 PublicKey = publicKey,
-                VariableName = modelGroup.VariableName!,
-                ConditionExpression = modelGroup.ConditionExpression!,
+                VariableName = modelGroup.VariableName ?? string.Empty,
+                ConditionExpression = modelGroup.ConditionExpression ?? string.Empty,
                 HideIfDisabled = modelGroup.HideIfDisabled
             };
             return group;
@@ -575,8 +575,8 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
             var group = new Group(roster.Title, children)
             {
                 PublicKey = publicKey,
-                VariableName = roster.VariableName!,
-                ConditionExpression = roster.ConditionExpression!,
+                VariableName = roster.VariableName ?? string.Empty,
+                ConditionExpression = roster.ConditionExpression ?? string.Empty,
                 HideIfDisabled = roster.HideIfDisabled,
                 IsRoster = true,
                 CustomRosterTitle = customRosterTitle,

@@ -92,7 +92,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
             questionnaireDocument.CoverPageSectionId = coverPageSectionId;
             questionnaireDocument.Children = new List<IComposite>()
             {
-                new Group() { PublicKey = coverPageSectionId, ConditionExpression = null, VariableName = "cover" },
+                new Group() { PublicKey = coverPageSectionId, ConditionExpression = string.Empty, VariableName = "cover" },
                 new Group() { ConditionExpression = "true", VariableName = "chapter" }
             }.ToReadOnlyCollection();
 
@@ -110,7 +110,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
             questionnaireDocument.CoverPageSectionId = coverPageSectionId;
             questionnaireDocument.Children = new List<IComposite>()
             {
-                new Group() { PublicKey = coverPageSectionId, ConditionExpression = null, VariableName = "cover"},
+                new Group() { PublicKey = coverPageSectionId, ConditionExpression = string.Empty, VariableName = "cover"},
                 new Group() { ConditionExpression = "true", VariableName = "chapter" },
             }.ToReadOnlyCollection();
 
@@ -409,7 +409,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportExportQuestionnaire
             );
             var cover = (Group)questionnaireDocument.Children[0];
             cover.VariableName = "cover";
-            cover.ConditionExpression = null!;
+            cover.ConditionExpression = string.Empty;
             questionnaireDocument.Add(Create.Chapter(), null);
 
 

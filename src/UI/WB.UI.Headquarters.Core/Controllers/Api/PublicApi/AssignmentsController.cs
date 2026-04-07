@@ -377,6 +377,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 {
                     var assignmentsService = sl.GetInstance<IAssignmentsService>();
                     var assignment = assignmentsService.GetAssignment(id);
+                    if (assignment == null)
+                        throw new InvalidOperationException($"Assignment {id} could not be retrieved after update.");
 
                     return AssignmentsPublicApiMapper.ToAssignmentDetails(assignment);
                 });

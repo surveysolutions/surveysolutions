@@ -35,7 +35,7 @@ namespace WB.Core.SharedKernels.Questionnaire.Documents
             var conditions = (entity as IConditional)?.ConditionExpression.ToEnumerable() ?? Enumerable.Empty<string>();
 
             return validations.Concat(conditions)
-                .Where(expression => expression != null)!;
+                .Where(expression => !string.IsNullOrEmpty(expression))!;
         }
 
         public static IEnumerable<IQuestionnaireEntity> GetDescendants(this IGroup group)

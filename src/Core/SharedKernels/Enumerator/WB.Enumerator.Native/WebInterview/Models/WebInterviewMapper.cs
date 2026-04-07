@@ -207,8 +207,11 @@ namespace WB.Enumerator.Native.WebInterview.Models
             var result = new InterviewMultimediaQuestion();
             ApplyBaseEntity(result, question);
             var answer = question.GetAsInterviewTreeMultimediaQuestion().GetAnswer();
-            result.AnswerTimeUtc = answer.AnswerTimeUtc;
-            result.Answer = $@"?interviewId={question.Tree.InterviewId}&questionId={question.Identity}&filename={answer.FileName}";
+            if (answer != null)
+            {
+                result.AnswerTimeUtc = answer.AnswerTimeUtc;
+                result.Answer = $@"?interviewId={question.Tree.InterviewId}&questionId={question.Identity}&filename={answer.FileName}";
+            }
             return result;
         }
 
@@ -274,7 +277,13 @@ namespace WB.Enumerator.Native.WebInterview.Models
         private static InterviewGeometryAnswer ToGeometryAnswer(Area area) => new InterviewGeometryAnswer
         {
             SelectedPoints = area.Coordinates.Split(';').Select(x =>
-                new GeoLocation(double.Parse(x.Split(',')[1]), double.Parse(x.Split(',')[0]), 0, 0)).ToArray(),
+            {
+                var parts = x.Split(',');
+                return new GeoLocation(
+                    double.Parse(parts[1], System.Globalization.CultureInfo.InvariantCulture),
+                    double.Parse(parts[0], System.Globalization.CultureInfo.InvariantCulture),
+                    0, 0);
+            }).ToArray(),
             Length = area.Length,
             Area = area.AreaSize,
             RequestedAccuracy = area.RequestedAccuracy,
