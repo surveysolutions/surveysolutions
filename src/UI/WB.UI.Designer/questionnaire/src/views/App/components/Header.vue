@@ -185,12 +185,12 @@ export default {
         const sharedInfoDialog = ref(null);
         const downloadPDFDialog = ref(null);
 
-        const { ctrl_b, ctrl_t } = useMagicKeys({
+        const { ctrl_b, ctrl_e } = useMagicKeys({
             passive: false,
             onEventFired(e) {
                 if (e.ctrlKey && e.type === 'keydown') {
                     const key = e.key?.toLowerCase()
-                    if (key === 'b' || key === 't')
+                    if (key === 'b' || key === 'e')
                         e.preventDefault()
                 }
             },
@@ -202,7 +202,7 @@ export default {
             sharedInfoDialog,
             downloadPDFDialog,
             ctrl_b,
-            ctrl_t
+            ctrl_e
         };
     },
     mounted() {
@@ -216,7 +216,7 @@ export default {
             if (v)
                 this.verify();
         },
-        ctrl_t: function (v) {
+        ctrl_e: function (v) {
             if (v && this.questionnaire.webTestAvailable && this.questionnaire.questionnaireRevision === null)
                 this.webTest();
         }
