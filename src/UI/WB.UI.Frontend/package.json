@@ -80,7 +80,7 @@
         "sass": "^1.85.0",
         "terser": "^5.37.0",
         "test-exclude": "^7.0.1",
-        "vite": "6.4.1",
+        "vite": "6.4.2",
         "xmldoc": "^1.1.2"
     },
     "prettier": {
