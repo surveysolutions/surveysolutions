@@ -449,7 +449,10 @@ namespace WB.UI.Headquarters.Controllers
             {
                 RememberCaptchaFilled(invitation.InterviewId);
                 HttpContext.Session.SaveWebInterviewAccessForCurrentUser(invitation.InterviewId);
-                return this.Redirect(GenerateUrl("Cover", invitation.InterviewId));
+                var existingInterview = this.statefulInterviewRepository.Get(invitation.InterviewId);
+                return this.Redirect(existingInterview != null
+                    ? GetInterviewResumeUrl(invitation.InterviewId, existingInterview)
+                    : GenerateUrl("Cover", invitation.InterviewId));
             }
 
             var requestInterviewIdCookie = Request.Cookies[$"InterviewId-{assignment.Id}"];
@@ -459,7 +462,8 @@ namespace WB.UI.Headquarters.Controllers
             {
                 //interview could be deleted
                 //if no answers were given
-                if (this.statefulInterviewRepository.Get(pendingInterviewId.FormatGuid()) != null)
+                var pendingInterview = this.statefulInterviewRepository.Get(pendingInterviewId.FormatGuid());
+                if (pendingInterview != null)
                 {
                     if (invitation.InterviewId != null)
                     {
@@ -467,7 +471,7 @@ namespace WB.UI.Headquarters.Controllers
                         HttpContext.Session.SaveWebInterviewAccessForCurrentUser(invitation.InterviewId);
                     }
 
-                    return this.Redirect(GenerateUrl("Cover", pendingInterviewId.FormatGuid()));
+                    return this.Redirect(GetInterviewResumeUrl(pendingInterviewId.FormatGuid(), pendingInterview));
                 }
             }
 
@@ -656,7 +660,7 @@ namespace WB.UI.Headquarters.Controllers
                 return Redirect(returnUrl);
             }
 
-            return Redirect(GenerateUrl(@"Cover", id));
+            return Redirect(GetInterviewResumeUrl(id, interview));
         }
 
         [WebInterviewAuthorize]
@@ -761,7 +765,7 @@ namespace WB.UI.Headquarters.Controllers
                 return Redirect(returnUrl);
             }
 
-            return Redirect(GenerateUrl(@"Cover", id));
+            return Redirect(GetInterviewResumeUrl(id, interview));
         }
 
         [Route("Link/{assignmentId:int}/{interviewId:Guid}")]
@@ -1043,6 +1047,17 @@ namespace WB.UI.Headquarters.Controllers
                     : GenerateUrl(@"Section", id, section.Identity.ToString());
 
             return Redirect(uri);
+        }
+
+        private string GetInterviewResumeUrl(string interviewId, IStatefulInterview interview)
+        {
+            var lastSection = interview.GetLastAnsweredEligibleSection();
+            if (lastSection != null)
+            {
+                return GenerateUrl(@"Section", interviewId, lastSection.ToString());
+            }
+
+            return GenerateUrl(@"Cover", interviewId);
         }
 
         private bool IsAuthorizedUser(Guid responsibleId)

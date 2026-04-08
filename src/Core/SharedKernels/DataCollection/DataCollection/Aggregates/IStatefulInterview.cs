@@ -223,5 +223,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         string GetCriticalRuleMessage(Guid criticalityConditionId);
 
         IEnumerable<Guid> GetFailedCriticalRules();
+        
+        Identity GetLastAnsweredEligibleSection();
     }
 }

@@ -1125,6 +1125,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return this.properties.FailedCriticalRules;
         }
 
+        public Identity GetLastAnsweredEligibleSection()
+        {
+            var lastAnsweredQuestion = this.Tree.GetAllNodesInEnumeratorOrder()
+                .OfType<InterviewTreeQuestion>()
+                .Where(q => !q.IsDisabled() && !q.IsHidden && !q.IsSupervisors && !q.IsPrefilled && q.IsAnswered())
+                .LastOrDefault();
+
+            return lastAnsweredQuestion?.Parents
+                .OfType<InterviewTreeSection>()
+                .FirstOrDefault()
+                ?.Identity;
+        }
+
         private void Apply(InterviewPaused @event)
         {
             this.properties.LastPaused = @event.OriginDate;
