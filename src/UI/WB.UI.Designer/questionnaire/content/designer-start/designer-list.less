@@ -30,7 +30,7 @@ body {
     }
 
     a {
-        color: #727d84;
+        color: @designer-list-sidebar-color;
         font-size: 18px;
         line-height: 20px;
         font-weight: bold;
@@ -44,7 +44,7 @@ body {
 
     .logo {
         padding-right: 5px;
-        border-right: 2px solid #727d84;
+        border-right: 2px solid @designer-list-sidebar-color;
     }
 
     .navbar-text {
@@ -216,7 +216,7 @@ table.table-header {
     cursor: default;
     border-top: 1px solid #dddddd;
     border-left: 13px solid @designer-editor-mediumblue-bg-color;
-    border-bottom: 2px solid #b1b5b8;
+    border-bottom: 2px solid @designer-list-bottom-border-color;
     margin: 0;
     .trebuchet12b();
     color: @pagination-active-color;
@@ -275,7 +275,7 @@ table.table-content {
 
             &.email {
                 .georgia14I();
-                color: #cbcbcb;
+                color: @designer-list-inactive-color;
 
                 strong {
                     color: @tooltip-color;
@@ -290,7 +290,7 @@ table.table-content {
         }
 
         &:last-child {
-            border-bottom: 1px solid #e2e3e4;
+            border-bottom: 1px solid @designer-list-item-border-color;
         }
 
         &:hover {
@@ -386,10 +386,10 @@ table#questionnaire-table-content {
         &:hover {
             td {
                 &:first-child {
-                    color: #1c76c3;
+                    color: @designer-list-link-color;
 
                     span.summary {
-                        color: #788792;
+                        color: @designer-list-muted-text-color;
                     }
                 }
 
@@ -544,7 +544,7 @@ table.table-content {
         font-weight: normal;
 
         small {
-            color: #bfd8ed;
+            color: @light-blue-hint-color;
         }
     }
 
@@ -570,7 +570,7 @@ table.table-content {
         }
 
         input {
-            border-color: #f0d8d8;
+            border-color: @designer-list-error-border-color;
         }
     }
 
@@ -598,7 +598,7 @@ table.table-content {
     font: 14px/16px Arial, Helvetica, sans-serif;
     border: 1px solid @designer-editor-lightblue-bg-color;
     text-transform: none;
-    color: #555;
+    color: @questionnarie-question-editor-color;
     height: 42px;
     letter-spacing: normal;
     overflow: hidden;
@@ -616,7 +616,7 @@ table.table-content {
     right: 10px;
     width: 0;
     height: 0;
-    border-top: 12px solid #a6a8a9;
+    border-top: 12px solid @designer-muted-color;
     border-right: 7px solid transparent;
     border-left: 7px solid transparent;
     border-bottom: none;
@@ -624,7 +624,7 @@ table.table-content {
 
 .start-pdf-generation .dropdown.open .dropdown-toggle:after {
     border-top: none;
-    border-bottom: 12px solid #a6a8a9;
+    border-bottom: 12px solid @designer-muted-color;
 }
 
 .start-pdf-generation .dropdown .dropdown-menu {
@@ -634,7 +634,7 @@ table.table-content {
 .start-pdf-generation .dropdown .dropdown-menu>li>a {
     display: block;
     padding: 7px 20px;
-    color: #6b6b6b;
+    color: @designer-list-text-color;
     word-wrap: break-word;
     overflow-wrap: break-word;
     white-space: pre-wrap;
@@ -660,7 +660,7 @@ table.table-content {
     padding: 14px 10px;
     background: transparent;
     border: 1px solid @designer-editor-lightblue-bg-color;
-    color: #555;
+    color: @questionnarie-question-editor-color;
     float: left;
     border-radius: 0 5px 5px 0;
     position: relative;
@@ -670,7 +670,7 @@ table.table-content {
 .start-pdf-generation .btn-default:hover,
 .start-pdf-generation .btn-default:focus,
 .start-pdf-generation .btn-default:active {
-    background-color: #f3f3f3;
+    background-color: @designer-list-alt-bg-color;
     color: #000;
 }
 
@@ -682,7 +682,7 @@ table.table-content {
 
 .folder-tree .fancytree-expander {
     margin: 8px 5px 8px 0;
-    color: #a6a8a9;
+    color: @designer-muted-color;
 }
 
 .folder-tree span.fancytree-node span.fancytree-expander:hover,
@@ -734,7 +734,7 @@ table.table-content {
     font: 18px/20px "Roboto-Bold";
     padding: 5px 10px;
     margin: 0;
-    color: #4d4d4d;
+    color: @designer-list-dark-text-color;
     border: none;
     word-wrap: break-word;
     overflow-wrap: break-word;
@@ -751,7 +751,7 @@ table.table-content {
 .folder-tree .fancytree-plain.fancytree-container span.fancytree-node.fancytree-active span.fancytree-title {
     background-color: transparent;
     text-decoration: underline;
-    color: #4d4d4d;
+    color: @designer-list-dark-text-color;
 }
 
 .folder-tree .fancytree-plain.fancytree-container span.fancytree-title:hover {

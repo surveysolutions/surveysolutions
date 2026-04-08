@@ -33,7 +33,7 @@
             font: 14px/16px Arial,Helvetica,sans-serif;
             border: 1px solid @designer-editor-lightblue-bg-color;
             text-transform: none;
-            color: #555;
+            color: @questionnarie-question-editor-color;
             height: 42px;
             letter-spacing: normal;
             overflow: hidden;
@@ -50,7 +50,7 @@
                 right: 10px;
                 width: 0;
                 height: 0;
-                border-top: 12px solid #a6a8a9;
+                border-top: 12px solid @designer-muted-color;
                 border-right: 7px solid transparent;
                 border-left: 7px solid transparent;
                 border-bottom: none;
@@ -84,7 +84,7 @@
             border: 1px solid @designer-editor-lightblue-bg-color;
             border-right: none;
             box-shadow: none;
-            color: #555;
+            color: @questionnarie-question-editor-color;
             height: 42px;            
             width: 100%;
 
@@ -125,7 +125,7 @@
 
     .group-summary {
         font: 12px/14px Arial,Helvetica,sans-serif;
-        color: #a6a8a9;
+        color: @designer-muted-color;
         margin-bottom: 5px;
     }
 
@@ -147,7 +147,7 @@
         &:hover,
         &:focus,
         &:active {
-            border-color: #d7e4ee;
+            border-color: @panel-light-border-color;
 
             .add-button {
                 visibility: visible;

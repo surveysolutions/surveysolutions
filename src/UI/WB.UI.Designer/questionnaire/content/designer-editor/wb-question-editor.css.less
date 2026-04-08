@@ -36,7 +36,7 @@ input#edit-question-title, input#edit-group-title {
         display: block;
         font-family: "Lucida Console", Monaco, monospace;
         font-size: 14px;
-        color: #5d5d5d;
+        color: @designer-secondary-text-color;
     }
 
     .linked-roster-source {
@@ -122,7 +122,7 @@ input#edit-question-title, input#edit-group-title {
             }
 
             &:hover {
-                background-color: #f1f2f3;
+                background-color: @panel-light-bg-color;
             }
         }
     }
@@ -188,11 +188,11 @@ input#edit-question-title, input#edit-group-title {
             }
 
             &:hover {
-                background: #f1f2f3;
+                background: @panel-light-bg-color;
                 border-radius: 4px;
 
                 .var-block {
-                    background-color: #f1f2f3;
+                    background-color: @panel-light-bg-color;
 
                     &:before {
                         @w: 75px;
@@ -300,7 +300,7 @@ input#edit-question-title, input#edit-group-title {
             }
             input.border-right {
               border: 2px solid #fff;
-              border-right-color: #f1f2f3;
+              border-right-color: @panel-light-bg-color;
             }
         }
     }
@@ -325,7 +325,7 @@ input#edit-question-title, input#edit-group-title {
 
         input.wb-checkbox + label {
             .lucida-console-font();
-            color: #5d5d5d;
+            color: @designer-secondary-text-color;
             font-size: 14px;
         }
     }
@@ -380,7 +380,7 @@ input#edit-question-title, input#edit-group-title {
     }
 
      &.validation-group {
-         background: #f1f2f3;
+         background: @panel-light-bg-color;
          padding: 16px;
          border-radius: 4px;
          margin-bottom: 4px;
@@ -395,7 +395,7 @@ input#edit-question-title, input#edit-group-title {
     .btn-group button.dropdown-toggle {
         padding: 10px 40px 10px 10px;
         background-color: #ffffff;
-        border: 2px solid #cccccc;
+        border: 2px solid @input-border-color;
         text-transform: none;
         text-align: left;
         min-height: 37px;
@@ -420,7 +420,7 @@ input#edit-question-title, input#edit-group-title {
 .dropdown-with-fixed-width {
     padding: 10px 40px 10px 10px;
     background-color: #ffffff;
-    border: 2px solid #cccccc;
+    border: 2px solid @input-border-color;
     text-transform: none;
     text-align: left;
     min-height: 37px;
@@ -437,13 +437,13 @@ input#edit-question-title, input#edit-group-title {
 
 
     .help-bracket {
-        color: #bfd8ed;
+        color: @light-blue-hint-color;
     }
 
     .edit-question-note {
         font-family: "Helvetica Neue","Helvetica",Arial,sans-serif;
         font-size: 14px;
-        color: #c1c7cb;
+        color: @light-grey;
     }
 
     .roster-type-specific-block,
@@ -478,6 +478,6 @@ input#edit-question-title, input#edit-group-title {
 
     #static-text-editor {
         #edit-static-attachment-name {
-            color: #e004c9;
+            color: @designer-accent-color;
         }
     }
