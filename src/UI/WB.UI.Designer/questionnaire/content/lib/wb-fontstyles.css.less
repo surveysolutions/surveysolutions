@@ -19,7 +19,7 @@
 }
 
 .breadcrumbs-fontstyle(@color) when(@color='blue') {
-  color: @designer-editor-breadcrumbs-color-blue;
+  color: @common-blue-color;
 }
 
 .breadcrumbs-fontstyle(@color) when(@color='gray') {
@@ -35,7 +35,7 @@
 .questionnarie-title-span-gray-fontstyle() {
   .lucida-console-font();
   font-size: 14px;
-  color: @designer-editor-title-span-color;
+  color: @designer-editor-mediumblue-bg-color;
 }
 
 .questionnarie-title-span-error-fontstyle() {
@@ -46,19 +46,19 @@
 
   > a {
     text-decoration: underline;
-    color: @error-message-link-color;
+    color: @common-red-color;
   }
 }
 
 .questionnarie-title-span-success-fontstyle() {
   .lucida-console-font();
   font-size: 16px;
-  color: @success-message-color;
+  color: @common-green-color;
 
   > em {
     .georgia-font();
     font-size: 14px;
-    color: @designer-editor-title-span-color;
+    color: @designer-editor-mediumblue-bg-color;
   }
 }
 
@@ -89,7 +89,7 @@
   &, > a {
     .arial-font();
     font-size: 16px;
-    color: @designer-editor-chapter-list-color;
+    color: @designer-editor-title-color;
   }
 }
 
@@ -103,7 +103,7 @@
   &, > a {
     .arial-font();
     font-size: 16px;
-    color: @questionnarie-question-list-item-color;
+    color: @designer-editor-title-color;
   }
 }
 
@@ -163,7 +163,7 @@
   font-size: 14px;
   font-style: italic;
   font-weight: normal;
-  color: @verify-popup-color;
+  color: @questionnarie-question-editor-color;
   line-height: 22px;
 }
 

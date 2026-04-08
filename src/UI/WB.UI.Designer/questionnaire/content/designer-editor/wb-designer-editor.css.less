@@ -322,7 +322,7 @@
     @lookup-panel-padding-left: 20px;
     @lookup-panel-table-item-bg: #fff;
     @lookup-accent-color: @designer-accent-color;
-    @lookup-border-color: @designer-panel-border-color;
+    @lookup-border-color: @designer-editor-lightblue-bg-color;
     @lookup-drop-box-color: @designer-drop-box-color;
 
     .lookup-tables {
@@ -462,11 +462,11 @@
     @attachments-panel-padding-left: 20px;
     @attachments-panel-table-item-bg: #fff;
     @attachments-accent-color: @designer-accent-color;
-    @attachments-border-color: @designer-panel-border-color;
+    @attachments-border-color: @designer-editor-lightblue-bg-color;
     @attachments-drop-box-color: @designer-drop-box-color;
     @attachments-preview-width: 156px;
     @attachments-preview-height: 140px;
-    @attachments-meta-color: @designer-meta-text-color;
+    @attachments-meta-color: @designer-editor-title-span-dark-color;
 
     .categories {
         height: 100%;
@@ -566,11 +566,11 @@
     @attachments-panel-padding-left: 20px;
     @attachments-panel-table-item-bg: #fff;
     @attachments-accent-color: @designer-accent-color;
-    @attachments-border-color: @designer-panel-border-color;
+    @attachments-border-color: @designer-editor-lightblue-bg-color;
     @attachments-drop-box-color: @designer-drop-box-color;
     @attachments-preview-width: 156px;
     @attachments-preview-height: 140px;
-    @attachments-meta-color: @designer-meta-text-color;
+    @attachments-meta-color: @designer-editor-title-span-dark-color;
 
     .translations {
         height: 100%;
@@ -675,11 +675,11 @@
     @attachments-panel-padding-left: 20px;
     @attachments-panel-table-item-bg: #fff;
     @attachments-accent-color: @designer-accent-color;
-    @attachments-border-color: @designer-panel-border-color;
+    @attachments-border-color: @designer-editor-lightblue-bg-color;
     @attachments-drop-box-color: @designer-drop-box-color;
     @attachments-preview-width: 156px;
     @attachments-preview-height: 140px;
-    @attachments-meta-color: @designer-meta-text-color;
+    @attachments-meta-color: @designer-editor-title-span-dark-color;
 
     .attachments {
         height: 100%;
@@ -866,7 +866,7 @@
     @macroses-panel-padding-left: 20px;
     @macroses-panel-macros-bg: #fff;
 
-    @macroses-border-color: @designer-panel-border-color;
+    @macroses-border-color: @designer-editor-lightblue-bg-color;
     @macroses-decription-color: @designer-drop-box-color;
 
     .macroses {
@@ -1019,13 +1019,13 @@
         border-radius: 4px;
         padding-left: 18px;
         white-space: nowrap;
-        height: @verification-item-height;
+        height: @questionnaire-tree-item-height;
         .arial-font();
         font-size: 16px;
         background: #fff;
         position: relative;
         display: block;
-        color: @questionnarie-question-list-item-color;
+        color: @designer-editor-title-color;
 
         span {
             display: inline-block;
@@ -1040,7 +1040,7 @@
         .title {
             display: block;
             padding-left: 29px;
-            line-height: @verification-item-height - 2px;
+            line-height: @questionnaire-tree-item-height - 2px;
             overflow: hidden;
         }
 
@@ -1049,7 +1049,7 @@
             right: 0;
             padding-right: 16px;
             top: 6px;
-            background: @verification-item-bg-color;
+            background: @panel-light-bg-color;
         }
 
         .variable {
@@ -1105,7 +1105,7 @@
         }
 
         .comment {
-            background: @verification-item-bg-color;
+            background: @panel-light-bg-color;
 
             .author {
                 margin-right: 10px;
@@ -1116,7 +1116,7 @@
 
             .date {
                 font-family: Georgia, serif;
-                color: @designer-meta-text-color;
+                color: @designer-editor-title-span-dark-color;
                 font-style: italic;
             }
 
@@ -1230,23 +1230,23 @@
                         color: @error-message-color;
 
                         >a {
-                            color: @error-message-link-color;
+                            color: @common-red-color;
                         }
 
                         &.no-errors {
-                            color: @designer-editor-title-span-color;
+                            color: @designer-editor-mediumblue-bg-color;
 
                             >a {
-                                color: @designer-editor-title-span-color;
+                                color: @designer-editor-mediumblue-bg-color;
                             }
                         }
                     }
 
                     span.warning-message {
-                        color: @warning-message-color;
+                        color: @common-blue-color;
 
                         >a {
-                            color: @warning-message-link-color;
+                            color: @common-blue-color;
                         }
                     }
 
@@ -1319,7 +1319,7 @@
                         button {
                             margin-left: 5px;
                             margin-right: 5px;
-                            background-color: @tree-item-border-color;
+                            background-color: @common-light-pale-blue-color;
                         }
 
                         p {
@@ -1341,7 +1341,7 @@
             }
 
             .chapter-level-buttons {
-                border-top: 2px solid @tree-item-border-color;
+                border-top: 2px solid @common-light-pale-blue-color;
                 margin-top: 2px;
                 padding: 8px 24px 30px 18px;
 
@@ -1493,7 +1493,7 @@
 
         .date {
             font-family: Georgia, serif;
-            color: @designer-meta-text-color;
+            color: @designer-editor-title-span-dark-color;
             font-style: italic;
         }
 
@@ -1511,14 +1511,14 @@
 
 .highlighted-add {
     border-radius: 4px 4px 0 0;
-    background-color: @questionnarie-question-list-item-hover-color;
+    background-color: @common-light-pale-blue-color;
 
     .item {
         .item-body {
             border-bottom-color: @questionnaire-item-border-when-highlighted;
 
             .qname-block {
-                background-color: @questionnarie-question-list-item-hover-color;
+                background-color: @common-light-pale-blue-color;
 
                 &:before {
                     #gradient>.horizontal(rgba(237, 239, 241, 0.0), rgba(237, 239, 241, 1.0));
@@ -1696,7 +1696,7 @@ li.chapter-panel-item {
     line-height: @chapter-title-height;
     overflow: hidden;
     z-index: 5;
-    border-bottom: 2px solid @tree-item-border-color;
+    border-bottom: 2px solid @common-light-pale-blue-color;
 
     &.selected {
         background: @questionnarie-question-list-item-selected-color;
@@ -1716,7 +1716,7 @@ li.chapter-panel-item {
 
     .chapter-title-text {
         white-space: nowrap;
-        color: @designer-editor-chapter-list-color;
+        color: @designer-editor-title-color;
         text-decoration: none;
         display: block;
         width: 100%;
@@ -1893,7 +1893,7 @@ li.chapter-panel-item {
     .item-body {
         height: @questionnaire-tree-item-height;
         line-height: @questionnaire-tree-item-height - 2px;
-        border-bottom: 2px solid @tree-item-border-color;
+        border-bottom: 2px solid @common-light-pale-blue-color;
         position: relative;
         padding-left: 29px;
         outline: none;
@@ -1951,7 +1951,7 @@ li.chapter-panel-item {
             right: 0;
             top: 0;
             height: ~"calc(100% - 2px)";
-            background-color: @questionnarie-question-list-item-bg-color;
+            background-color: @designer-editor-lightblue-bg-color;
             .questionnarie-question-list-item-qname-fontstyle();
             text-transform: none;
             max-width: 240px;
@@ -2086,13 +2086,13 @@ li.chapter-panel-item {
         top: -2px;
         height: @questionnaire-tree-item-height;
         z-index: 499;
-        background-color: @questionnarie-question-list-item-hover-color;
+        background-color: @common-light-pale-blue-color;
 
         .handler {
             background-image: url(../i/question-item-dots.png);
             background-repeat: no-repeat;
             background-position: 5px center;
-            background-color: @questionnarie-question-list-item-hover-color;
+            background-color: @common-light-pale-blue-color;
         }
 
         .item-body {
@@ -2105,7 +2105,7 @@ li.chapter-panel-item {
         }
 
         .qname-block {
-            background-color: @questionnarie-question-list-item-hover-color;
+            background-color: @common-light-pale-blue-color;
 
             &:before {
                 #gradient>.horizontal(rgba(237, 239, 241, 0.0), rgba(237, 239, 241, 1.0));
