@@ -29,7 +29,7 @@
 
 
 .bootstrap-select .dropdown-menu {
-    border: 2px solid #dbdfe2;
+    border: 2px solid @designer-editor-lightblue-bg-color;
     top: -4px;
 }
 
@@ -77,7 +77,7 @@
         }
         .arial-font();
         font-size: 16px;
-        color: #3f3f3f;
+        color: @designer-editor-title-color;
         &[disabled] {
           color: #bbb;
         }
@@ -86,14 +86,14 @@
           text-decoration: none;
 
           &:not([disabled]) {
-            color: #2a81cb;
+            color: @common-blue-color;
           }
         }
 
         > small {
           .trebuchet-font();
           font-size: 12px;
-          color: #9ca4aa;
+          color: @designer-editor-title-span-dark-color;
         }
       }
     }
@@ -101,7 +101,7 @@
 }
 
 .dropdown-menu > li > a:hover {
-  color: #2a81cb;
+  color: @common-blue-color;
   text-decoration: none;
   outline: 0;
   background-color: #ffffff;

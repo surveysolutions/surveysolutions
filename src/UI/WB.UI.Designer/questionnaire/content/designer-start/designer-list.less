@@ -2,6 +2,7 @@
 @import "bootstrap-override";
 @import "custom-fonts";
 @import (reference) "font-styles";
+@import (reference) "../lib/wb-vars.css.less";
 @import "inputs";
 
 @header-height: 80px;
@@ -89,7 +90,7 @@ body {
                 display: flex;
                 width: 100%;
                 border: none;
-                border-left: 13px solid #bcc3c8;
+                border-left: 13px solid @designer-editor-mediumblue-bg-color;
 
                 &>li {
                     margin-top: @header-height - @nav-tab-height;
@@ -181,7 +182,7 @@ body {
 
 
 div#table-message {
-    background: #edeff0;
+    background: @inline-button-bg-color;
     position: relative;
     border-bottom: 1px solid #dddddd;
 
@@ -214,7 +215,7 @@ div#table-message {
 table.table-header {
     cursor: default;
     border-top: 1px solid #dddddd;
-    border-left: 13px solid #bcc3c8;
+    border-left: 13px solid @designer-editor-mediumblue-bg-color;
     border-bottom: 2px solid #b1b5b8;
     margin: 0;
     .trebuchet12b();
@@ -377,7 +378,7 @@ table#questionnaire-table-content {
             &:first-child {
                 span.summary {
                     .lucidaC14();
-                    color: #b9c3ca;
+                    color: @designer-editor-title-span-color;
                 }
             }
         }
@@ -405,7 +406,7 @@ table#questionnaire-table-content {
                 &:first-child {
 
                     span.summary {
-                        color: #b9c3ca;
+                        color: @designer-editor-title-span-color;
                     }
 
                     &:hover {
@@ -455,7 +456,7 @@ table.table-content {
     }
 
     .btn {
-        border: 1px solid #dbdfe2;
+        border: 1px solid @designer-editor-lightblue-bg-color;
     }
 
     #txtFilter {
@@ -490,7 +491,7 @@ table.table-content {
     padding: 3px 15px 0;
     border-top: 1px solid #ddd;
     margin: 0;
-    border-left: 13px solid #dbdfe2;
+    border-left: 13px solid @designer-editor-lightblue-bg-color;
     position: absolute;
     top: 0;
     left: 0;
@@ -595,7 +596,7 @@ table.table-content {
     float: left;
     text-align: left;
     font: 14px/16px Arial, Helvetica, sans-serif;
-    border: 1px solid #dbdfe2;
+    border: 1px solid @designer-editor-lightblue-bg-color;
     text-transform: none;
     color: #555;
     height: 42px;
@@ -658,7 +659,7 @@ table.table-content {
 .start-pdf-generation .btn-default {
     padding: 14px 10px;
     background: transparent;
-    border: 1px solid #dbdfe2;
+    border: 1px solid @designer-editor-lightblue-bg-color;
     color: #555;
     float: left;
     border-radius: 0 5px 5px 0;
@@ -764,7 +765,7 @@ table.table-content {
     border-radius: 0;
     margin-bottom: 0;
     padding-left: 55px;
-    border-left: 13px solid #bcc3c8;
+    border-left: 13px solid @designer-editor-mediumblue-bg-color;
 }
 
 .public-questionnaires-breadcrumb li {

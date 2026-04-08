@@ -64,7 +64,7 @@
 }
 
 @selected-panel-bg-color: #e5e8ea;
-@selected-panel-border-color: #dbdfe2;
+@selected-panel-border-color: @designer-editor-lightblue-bg-color;
 @selected-panel-grey-color: #7e898f;
 @leftpanel-accent-color: #e004c9;
 @leftpanel-icons-sprite: url('../i/designer-left-icons-5.svg');
@@ -168,7 +168,7 @@
             }
 
             &:hover {
-                background-color: #dbdfe2;
+                background-color: @designer-editor-lightblue-bg-color;
             }
 
             &.unfolded {
@@ -1095,7 +1095,7 @@
 
             li {
                 padding: 0 10px 0 20px;
-                border-bottom: 2px solid #dbdfe2;
+                border-bottom: 2px solid @designer-editor-lightblue-bg-color;
             }
 
             li:last-of-type {
@@ -1105,7 +1105,7 @@
         }
 
         .show-more {
-            color: #2a81cb;
+            color: @common-blue-color;
             padding-left: 20px;
             font-weight: bold;
             font-family: "Trebuchet MS", Helvetica, sans-serif;
@@ -1328,7 +1328,7 @@
                         button {
                             margin-left: 5px;
                             margin-right: 5px;
-                            background-color: #edeff1;
+                            background-color: @tree-item-border-color;
                         }
 
                         p {
@@ -1472,7 +1472,7 @@
 .comments-editor {
     height: 50%;
     padding: 0;
-    border-top: 2px solid #dbdfe2;
+    border-top: 2px solid @designer-editor-lightblue-bg-color;
 
     form {
         width: 100%;
@@ -1488,7 +1488,7 @@
     .comment {
         background: @questionnarie-question-specific-block-color;
         padding: 5px 17px;
-        border-bottom: 2px solid #dbdfe2;
+        border-bottom: 2px solid @designer-editor-lightblue-bg-color;
 
         &.isResolved {
             background: transparent;
