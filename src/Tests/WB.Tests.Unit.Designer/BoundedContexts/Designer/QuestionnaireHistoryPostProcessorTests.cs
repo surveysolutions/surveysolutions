@@ -71,6 +71,86 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
         }
 
         [Test]
+        public void When_CloneQuestionnaire_Then_resulting_questionnaire_document_should_contain_cloned_questionnaire_content()
+        {
+            // arrange
+            Guid clonedQuestionnaireId = Id.g1;
+            Guid sourceQuestionnaireId = Id.g2;
+            Guid responsibleId = Id.g3;
+            Guid questionnaireOwner = Id.g4;
+            string ownerName = "owner";
+
+            DesignerDbContext dbContext = Create.InMemoryDbContext();
+            dbContext.Users.Add(new DesignerIdentityUser { Id = questionnaireOwner, UserName = ownerName });
+            dbContext.SaveChanges();
+
+            var sourceDocument = Create.QuestionnaireDocument(sourceQuestionnaireId, userId: questionnaireOwner);
+            var clonedDocument = Create.QuestionnaireDocument(clonedQuestionnaireId, userId: questionnaireOwner);
+
+            var questionnaire = Create.Questionnaire();
+            questionnaire.Initialize(clonedQuestionnaireId, clonedDocument, Enumerable.Empty<SharedPerson>());
+
+            var command = new CloneQuestionnaire(clonedQuestionnaireId, "Cloned Title", responsibleId, true, sourceDocument);
+
+            var historyPostProcessor = Create.HistoryPostProcessor(dbContext, Create.QuestionnireHistoryVersionsService(dbContext));
+
+            // act
+            historyPostProcessor.Process(questionnaire, command);
+            dbContext.SaveChanges();
+
+            // assert
+            var questionnaireHistoryItem = dbContext.QuestionnaireChangeRecords.First(historyItem =>
+                    historyItem.QuestionnaireId == clonedQuestionnaireId.FormatGuid());
+
+            Assert.That(questionnaireHistoryItem.ResultingQuestionnaireDocument, Is.Not.Null);
+
+            var serializer = new EntitySerializer<QuestionnaireDocument>();
+            var deserializedDocument = serializer.Deserialize(questionnaireHistoryItem.ResultingQuestionnaireDocument);
+            Assert.That(deserializedDocument.PublicKey, Is.EqualTo(clonedQuestionnaireId));
+        }
+
+        [Test]
+        public void When_CloneQuestionnaire_Then_reference_to_source_questionnaire_should_be_saved()
+        {
+            // arrange
+            Guid clonedQuestionnaireId = Id.g1;
+            Guid sourceQuestionnaireId = Id.g2;
+            Guid responsibleId = Id.g3;
+            Guid questionnaireOwner = Id.g4;
+            string ownerName = "owner";
+            string sourceTitle = "Source Questionnaire";
+
+            DesignerDbContext dbContext = Create.InMemoryDbContext();
+            dbContext.Users.Add(new DesignerIdentityUser { Id = questionnaireOwner, UserName = ownerName });
+            dbContext.SaveChanges();
+
+            var sourceDocument = Create.QuestionnaireDocument(sourceQuestionnaireId, userId: questionnaireOwner);
+            sourceDocument.Title = sourceTitle;
+            var clonedDocument = Create.QuestionnaireDocument(clonedQuestionnaireId, userId: questionnaireOwner);
+
+            var questionnaire = Create.Questionnaire();
+            questionnaire.Initialize(clonedQuestionnaireId, clonedDocument, Enumerable.Empty<SharedPerson>());
+
+            var command = new CloneQuestionnaire(clonedQuestionnaireId, "Cloned Title", responsibleId, true, sourceDocument);
+
+            var historyPostProcessor = Create.HistoryPostProcessor(dbContext, Create.QuestionnireHistoryVersionsService(dbContext));
+
+            // act
+            historyPostProcessor.Process(questionnaire, command);
+            dbContext.SaveChanges();
+
+            // assert
+            var questionnaireHistoryItem = dbContext.QuestionnaireChangeRecords.First(historyItem =>
+                    historyItem.QuestionnaireId == clonedQuestionnaireId.FormatGuid());
+
+            Assert.That(questionnaireHistoryItem.References, Has.Count.EqualTo(1));
+            var sourceReference = questionnaireHistoryItem.References.Single();
+            Assert.That(sourceReference.ReferenceType, Is.EqualTo(QuestionnaireItemType.Questionnaire));
+            Assert.That(sourceReference.ReferenceId, Is.EqualTo(sourceQuestionnaireId));
+            Assert.That(sourceReference.ReferenceTitle, Is.EqualTo(sourceTitle));
+        }
+
+        [Test]
         public void When_CreateQuestionnaire_Then_new_history_item_should_be_added_with_specified_parameters()
         {
             // arrange
