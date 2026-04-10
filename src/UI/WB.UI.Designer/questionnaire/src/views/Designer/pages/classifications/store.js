@@ -60,7 +60,7 @@ export const useClassificationsStore = defineStore('classifications', {
             this.isAdmin = info.isAdmin;
         },
         updateCategory(changes) {
-            var category = this.categories[changes.index];
+            let category = this.categories[changes.index];
             category.title = changes.title;
             category.value = changes.value;
         },
@@ -81,12 +81,12 @@ export const useClassificationsStore = defineStore('classifications', {
             await (group.isNew
                 ? http.post(routes.createGroup, group)
                 : http.patch(routes.updateGroup.format(group.id), group));
-            var g = this.groups[group.index];
+            let g = this.groups[group.index];
             g.title = group.title;
             g.isNew = false;
         },
         async deleteGroup(index) {
-            var group = this.groups[index] || {};
+            let group = this.groups[index] || {};
             if (group.isNew) {
                 this.groups.splice(index, 1);
                 this.selectGroup(0);
