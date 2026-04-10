@@ -167,7 +167,7 @@ import WebTesterApi from '../../../api/webTester';
 import { ref, computed } from 'vue';
 import { useRoute } from 'vue-router';
 
-import { sanitizeUrl } from '@braintree/sanitize-url';
+import { sanitizeUrl } from '../../../utils/sanitizeUrl';
 
 export default {
     name: 'QuestionnaireHeader',
