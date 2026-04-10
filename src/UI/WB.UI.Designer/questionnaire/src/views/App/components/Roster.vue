@@ -69,10 +69,10 @@
                                         href="javascript:void(0);">
                                         <div>
                                             <i :class="['dropdown-icon', 'icon-' + breadCrumb.type]"></i>
-                                            <span v-dompurify-html="breadCrumb.title"></span>
+                                            <span v-sanitize-html="breadCrumb.title"></span>
                                         </div>
                                         <div class="var-block">
-                                            <span class="var-name" v-dompurify-html="breadCrumb.varName"></span>
+                                            <span class="var-name" v-sanitize-html="breadCrumb.varName"></span>
                                         </div>
                                     </a>
                                 </li>
@@ -109,10 +109,10 @@
                                         href="javascript:void(0);">
                                         <div>
                                             <i class="dropdown-icon" :class="['icon-' + breadCrumb.type]"></i>
-                                            <span v-dompurify-html="breadCrumb.title"></span>
+                                            <span v-sanitize-html="breadCrumb.title"></span>
                                         </div>
                                         <div class="var-block">
-                                            <span class="var-name" v-dompurify-html="breadCrumb.varName"></span>
+                                            <span class="var-name" v-sanitize-html="breadCrumb.varName"></span>
                                         </div>
                                     </a>
                                 </li>
@@ -149,10 +149,10 @@
                                         href="javascript:void(0);">
                                         <div>
                                             <i class="dropdown-icon" :class="['icon-' + breadCrumb.type]"></i>
-                                            <span v-dompurify-html="breadCrumb.title"></span>
+                                            <span v-sanitize-html="breadCrumb.title"></span>
                                         </div>
                                         <div class="var-block">
-                                            <span class="var-name" v-dompurify-html="breadCrumb.varName"></span>
+                                            <span class="var-name" v-sanitize-html="breadCrumb.varName"></span>
                                         </div>
                                     </a>
                                 </li>
@@ -254,10 +254,10 @@
                                         href="javascript:void(0);">
                                         <div>
                                             <i :class="['dropdown-icon', 'icon-' + breadCrumb.type]"></i>
-                                            <span v-dompurify-html="breadCrumb.title"></span>
+                                            <span v-sanitize-html="breadCrumb.title"></span>
                                         </div>
                                         <div class="var-block">
-                                            <span class="var-name" v-dompurify-html="breadCrumb.varName"></span>
+                                            <span class="var-name" v-sanitize-html="breadCrumb.varName"></span>
                                         </div>
                                     </a>
                                 </li>

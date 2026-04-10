@@ -35,7 +35,7 @@
                     <h4 class="ui-pnotify-title" style="display: none;">
                         {{ props.item.title }}
                     </h4>
-                    <div class="ui-pnotify-text" aria-role="alert" v-dompurify-html="props.item.text"></div>
+                    <div class="ui-pnotify-text" aria-role="alert" v-sanitize-html="props.item.text"></div>
                     <div class="ui-pnotify-action-bar"
                         style="margin-top: 5px; clear: both; text-align: right; display: none;"></div>
                 </div>

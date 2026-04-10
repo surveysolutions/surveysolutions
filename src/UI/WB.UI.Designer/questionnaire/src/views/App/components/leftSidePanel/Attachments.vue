@@ -36,7 +36,7 @@
                     </a>
                 </p>
                 <p
-                    v-dompurify-html="$t('QuestionnaireEditor.SideBarAttachmentsEmptyLine3', { name: variableNameHtml })" />
+                    v-sanitize-html="$t('QuestionnaireEditor.SideBarAttachmentsEmptyLine3', { name: variableNameHtml })" />
             </div>
             <form role="form" name="attachmentsForm" novalidate>
                 <div class="attachment-list">

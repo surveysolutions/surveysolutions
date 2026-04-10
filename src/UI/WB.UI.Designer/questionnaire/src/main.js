@@ -3,7 +3,6 @@ import { createPinia } from 'pinia';
 import App from './App.vue';
 import router from './router';
 import VueProgressBar from '@aacassandra/vue3-progressbar';
-import VueDOMPurifyHTML from 'vue-dompurify-html';
 import i18next from './plugins/localization';
 import I18NextVue from 'i18next-vue';
 import { vuetify } from './plugins/vuetify';
@@ -51,7 +50,6 @@ vue.use(I18NextVue, { i18next });
 //vue.use(uiv);
 vue.use(vuetify); //reqired by options component. consider either remove or use.
 vue.use(PerfectScrollbarPlugin);
-vue.use(VueDOMPurifyHTML);
 vue.component('file-upload', VueUploadComponent);
 vue.use(Notifications);
 

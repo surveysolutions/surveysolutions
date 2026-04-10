@@ -58,7 +58,7 @@
                                                     :class="['icon-' + typeOfMessageToBeShown]"></span>
                                                 <span class="title" v-sanitize-html="reference.title"></span>
                                                 <span class="variable"
-                                                    v-dompurify-html="reference.variable || '&nbsp;'">&nbsp;</span>
+                                                    v-sanitize-html="reference.variable || '&nbsp;'">&nbsp;</span>
                                             </a>
                                         </li>
                                     </template>
