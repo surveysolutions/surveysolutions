@@ -50,10 +50,20 @@ export const useAssistant = () => {
             return { signal: controller.signal, clear: () => {} };
         }
         const timer = setTimeout(() => controller.abort(), ms);
+        let onAbort;
         if (signal) {
-            signal.addEventListener('abort', () => controller.abort(signal.reason), { once: true });
+            onAbort = () => controller.abort(signal.reason);
+            signal.addEventListener('abort', onAbort, { once: true });
         }
-        return { signal: controller.signal, clear: () => clearTimeout(timer) };
+        return {
+            signal: controller.signal,
+            clear: () => {
+                clearTimeout(timer);
+                if (signal && onAbort) {
+                    signal.removeEventListener('abort', onAbort);
+                }
+            },
+        };
     };
 
     const sendMessage = async (prompt, messages, options = {}) => {
