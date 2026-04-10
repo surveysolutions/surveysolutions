@@ -2,7 +2,9 @@ import { i18n } from '../plugins/localization';
 import { nextTick } from 'vue';
 import { defer, isNull, isUndefined, findIndex, debounce } from 'lodash';
 import DOMPurify from 'dompurify';
-import moment from 'moment';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc);
 
 import ace from 'ace-builds';
 
@@ -222,17 +224,11 @@ export const DateFormats = {
 };
 
 export function formatDateTime(utcDateTime) {
-    return moment //(utcDateTime)
-        .utc(utcDateTime)
-        .local()
-        .format(DateFormats.dateTime);
+    return dayjs.utc(utcDateTime).local().format(DateFormats.dateTime);
 }
 
 export function formatDate(utcDate) {
-    return moment
-        .utc(utcDate)
-        .local()
-        .format(DateFormats.date);
+    return dayjs.utc(utcDate).local().format(DateFormats.date);
 }
 
 export function getItemIndexByIdFromParentItemsList(parent, id) {

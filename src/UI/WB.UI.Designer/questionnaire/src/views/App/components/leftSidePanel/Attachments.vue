@@ -52,7 +52,11 @@
 <script>
 
 import _ from 'lodash';
-import moment from 'moment';
+import dayjs from 'dayjs';
+import duration from 'dayjs/plugin/duration';
+import relativeTime from 'dayjs/plugin/relativeTime';
+dayjs.extend(duration);
+dayjs.extend(relativeTime);
 import { newGuid } from '../../../../helpers/guid';
 import { notice } from '../../../../services/notificationService';
 import AttachmentItem from './AttachmentItem.vue';
@@ -91,7 +95,7 @@ export default {
             return formatBytes(bytes);
         },
         formatSeconds(seconds) {
-            return moment.duration(seconds).humanize();
+            return dayjs.duration(seconds).humanize();
         },
         estimatedLoadingTime() {
             return Math.floor(this.totalSize() / this.benchmarkDownloadSpeed);

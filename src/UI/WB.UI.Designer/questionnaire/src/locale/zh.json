@@ -229,7 +229,7 @@
     "SideBarAttachmentsEstimate": "东部标准时间：导入时间：{{timeString}}速度为{{downloadSpeed}}Kb/s (EDGE)",
     "SideBarAttachmentsTitle": "附件",
     "SideBarAttachmentsUpload": "上传新文件",
-    "SideBarAttachmentUploaded": "最近上传：{{-lastUpdate, MMMM DD[,] YYYY [at] k:mm}}",
+    "SideBarAttachmentUploaded": "最近上传：{{-lastUpdate, MMMM DD[,] YYYY [at] H:mm}}",
     "SideBarCommentsCounter": "{{count}}个评论：",
     "SideBarCommentsCounter_other": "{{count}}个评论：",
     "SideBarCommentsTitle": "注释",

@@ -258,7 +258,7 @@
     "SideBarAttachmentsEstimate": "Koha e vlerësuar e ngarkimit: {{timeString}} me {{downloadSpeed}}Kb/s (EDGE)",
     "SideBarAttachmentsTitle": "Bashkëlidhjet",
     "SideBarAttachmentsUpload": "Ngarko të ri",
-    "SideBarAttachmentUploaded": "ngarkuar: {{-lastUpdate, MMMM DD[,] YYYY [at] k:mm}}",
+    "SideBarAttachmentUploaded": "ngarkuar: {{-lastUpdate, MMMM DD[,] YYYY [at] H:mm}}",
     "SideBarCommentsCounter": "{{count}} Varg komentesh:",
     "SideBarCommentsCounter_other": "{{count}} Vargje komentesh:",
     "SideBarCommentsTitle": "Komente",

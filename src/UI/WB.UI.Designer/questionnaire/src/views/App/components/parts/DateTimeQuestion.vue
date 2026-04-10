@@ -13,15 +13,12 @@
                 <!--input id="dt-default-date" type="text" jqdatepicker v-model="activeQuestion.defaultDate"
                     class="form-control small-date-input" /-->
 
-                <DatePicker 
-                    @dayclick="
-                        (_, event) => {
-                            event.target.blur();
-                        }
-                    "
-                    v-model="activeQuestion.defaultDate" :popover="{ visibility: 'click' }" :hide-time-header="true"
-                    timezone="UTC"
-                    >
+                <DatePicker @dayclick="
+                    (_, event) => {
+                        event.target.blur();
+                    }
+                " v-model="activeQuestion.defaultDate" :popover="{ visibility: 'click' }" :hide-time-header="true"
+                    timezone="UTC">
                     <template #default="{ inputValue, inputEvents, togglePopover }">
                         <div class="date-wrapper">
                             <input id="dt-default-date" type="search" :value="formatedDate" v-on="inputEvents"
@@ -72,7 +69,9 @@
 import { DatePicker } from 'v-calendar';
 import 'v-calendar/style.css';
 
-import moment from 'moment';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc);
 
 import Help from './../Help.vue'
 
@@ -94,7 +93,7 @@ export default {
         formatedDate() {
             const date = this.activeQuestion.defaultDate;
             if (date)
-                return moment.utc(date).format('YYYY-MM-DD');
+                return dayjs.utc(date).format('YYYY-MM-DD');
             return null;
         }
     }

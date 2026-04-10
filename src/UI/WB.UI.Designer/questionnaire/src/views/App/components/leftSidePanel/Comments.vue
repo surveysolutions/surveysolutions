@@ -13,12 +13,12 @@
                 <li class="comment-thread" v-for="commentThread in commentThreads">
 
                     <router-link class="reference-item" :id="commentThread.entity.itemId" :to="{
-                    name: commentThread.entity.type.toLowerCase(),
-                    params: {
-                        entityId: commentThread.entity.itemId,
-                        chapterId: commentThread.entity.chapterId,
-                    }
-                }">
+                        name: commentThread.entity.type.toLowerCase(),
+                        params: {
+                            entityId: commentThread.entity.itemId,
+                            chapterId: commentThread.entity.chapterId,
+                        }
+                    }">
                         <span v-if="commentThread.entity.type == 'Question'" class="icon"
                             :class="commentThread.entity.questionType"></span>
                         <span
@@ -42,11 +42,11 @@
                                 @click="commentThread.resolvedAreExpanded = !commentThread.resolvedAreExpanded">
                                 <span v-if="!commentThread.resolvedAreExpanded">
                                     {{ $t('QuestionnaireEditor.ViewResolvedCommentsCounter', {
-                    count: commentThread.resolvedComments.length
-                }) }}
+                                        count: commentThread.resolvedComments.length
+                                    }) }}
                                 </span>
                                 <span v-if="commentThread.resolvedAreExpanded">{{
-                    $t('QuestionnaireEditor.HideResolvedComments') }}</span>
+                                    $t('QuestionnaireEditor.HideResolvedComments') }}</span>
                             </a>
                             <ul v-if="commentThread.resolvedAreExpanded">
                                 <li class="comment" :class="{ resolved: comment.isResolved }"
@@ -68,7 +68,9 @@
 import { getCommentThreads } from '../../../../services/commentsService';
 import { sanitize } from '../../../../services/utilityService';
 import _ from 'lodash';
-import moment from 'moment';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc);
 
 export default {
     name: 'Comments',
@@ -126,7 +128,7 @@ export default {
                 commentThread.resolvedAreExpanded = false;
 
                 _.forEach(commentThread.comments, function (comment) {
-                    comment.date = moment.utc(comment.date)
+                    comment.date = dayjs.utc(comment.date)
                     comment.isResolved = !_.isNull(comment.resolveDate || null);
                 });
 

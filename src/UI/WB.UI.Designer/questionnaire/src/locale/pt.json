@@ -138,7 +138,7 @@
     "SideBarMetadataFunding": "Financiamento:",
     "SideBarMetadataQuestionnaireAccess": "Acesso ao questionário",
     "SideBarMetadataAgreeToMakeThisQuestionnairePublic": "Concordo em tornar este questionário público",
-    "SideBarAttachmentUploaded": "carregado: {{-lastUpdate, MMMM DD[,] YYYY [at] k:mm}}",
+    "SideBarAttachmentUploaded": "carregado: {{-lastUpdate, MMMM DD[,] YYYY [at] H:mm}}",
     "SideBarLookupTitle": "Tabelas de consulta",
     "SideBarMacroTitle": "Macros",
     "SideBarScenarioTitle": "Cenários",

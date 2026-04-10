@@ -4,9 +4,11 @@ import PerfectScrollbar from 'perfect-scrollbar';
 
 window.jQuery = window.$ = $;
 
-import moment from '/node_modules/moment/min/moment-with-locales';
-//import moment from 'moment';
-window.moment = moment;
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import localizedFormat from 'dayjs/plugin/localizedFormat';
+dayjs.extend(utc);
+dayjs.extend(localizedFormat);
 
 import '/node_modules/perfect-scrollbar/css/perfect-scrollbar.css';
 import '/questionnaire/content/designer-start/bootstrap-custom.less';
@@ -23,17 +25,10 @@ $(function () {
         );
     }
 
-    if (window.moment) {
-        moment.locale('@CultureInfo.CurrentUICulture');
-
-        $('time').each(function () {
-            var me = $(this);
-            var date = me.attr('datetime') || me.attr('time');
-            var momentDate = moment
-                .utc(date)
-                .local()
-                .format('MMM DD, YYYY HH:mm');
-            me.text(momentDate);
-        });
-    }
+    $('time').each(function () {
+        var me = $(this);
+        var date = me.attr('datetime') || me.attr('time');
+        var formatted = dayjs.utc(date).local().format('MMM DD, YYYY HH:mm');
+        me.text(formatted);
+    });
 });

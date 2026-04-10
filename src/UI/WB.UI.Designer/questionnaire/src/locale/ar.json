@@ -138,7 +138,7 @@
     "SideBarMetadataFunding": "التمويل:",
     "SideBarMetadataQuestionnaireAccess": "الوصول إلى الاستبيان",
     "SideBarMetadataAgreeToMakeThisQuestionnairePublic": "الموافقة على جعل هذا الاستبيان عامًا",
-    "SideBarAttachmentUploaded": "تم التحميل: {{-lastUpdate, MMMM DD[,] YYYY [at] k:mm}}",
+    "SideBarAttachmentUploaded": "تم التحميل: {{-lastUpdate, MMMM DD[,] YYYY [at] H:mm}}",
     "SideBarLookupTitle": "جداول البحث",
     "SideBarMacroTitle": "الماكرو",
     "SideBarScenarioTitle": "السيناريوهات",

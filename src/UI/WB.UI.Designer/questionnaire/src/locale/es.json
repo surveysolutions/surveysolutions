@@ -201,7 +201,7 @@
     "SideBarAttachmentsEstimate": "Tiempo estimado de carga: {{timeString}} a {{downloadSpeed}}Kb/s (EDGE)",
     "SideBarAttachmentsTitle": "Adjuntos",
     "SideBarAttachmentsUpload": "Cargar nuevo",
-    "SideBarAttachmentUploaded": "cargado: {{-lastUpdate, MMMM DD[,] YYYY [at] k:mm}}",
+    "SideBarAttachmentUploaded": "cargado: {{-lastUpdate, MMMM DD[,] YYYY [at] H:mm}}",
     "SideBarLookupEmptyLine1": "Use esta pestaña para definir tablas de búsqueda",
     "SideBarLookupEmptyLine2": "Una tabla de búsqueda proporciona información de referencia que puede ser consultada a través de una clave para ser utilizada en condiciones habilitantes y expresiones de validación.",
     "SideBarLookupEmptyLine3": "Una tabla de búsqueda consiste en un nombre y el archivo de búsqueda, que puede contener múltiples columnas de valores numéricos delimitados por tabuladores.",
