@@ -113,9 +113,9 @@
                 <div class="start-box" v-if="showStartScreen">
                     <p>{{ $t('QuestionnaireEditor.EmptySectionLine1') }}</p>
                     <p>
-                        <span v-sanitize-html="emptySectionHtmlLine1"> </span>
+                        <span v-html="emptySectionHtmlLine1"> </span>
                         <br />
-                        <span v-sanitize-html="emptySectionHtmlLine3">
+                        <span v-html="emptySectionHtmlLine3">
                             <span class="left-panel-glyph"></span>
                         </span>
                     </p>
@@ -123,7 +123,7 @@
                     <p>
                         <span>{{ $t('QuestionnaireEditor.EmptySectionLine4') }}</span>
                         <br />
-                        <span v-sanitize-html="emptySectionHtmlLine2"></span>
+                        <span v-html="emptySectionHtmlLine2"></span>
                     </p>
                 </div>
             </div>
