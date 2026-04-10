@@ -1,5 +1,7 @@
-import axios from 'axios';
+import { mande } from 'mande';
 import { i18n } from '../plugins/localization';
+
+const api = mande('/');
 
 export const useAssistant = () => {
     // Rate limiting: Track requests to avoid hitting limits
@@ -41,6 +43,19 @@ export const useAssistant = () => {
         });
     };
 
+    const withTimeout = (ms, signal) => {
+        const controller = new AbortController();
+        if (signal?.aborted) {
+            controller.abort(signal.reason);
+            return { signal: controller.signal, clear: () => {} };
+        }
+        const timer = setTimeout(() => controller.abort(), ms);
+        if (signal) {
+            signal.addEventListener('abort', () => controller.abort(signal.reason), { once: true });
+        }
+        return { signal: controller.signal, clear: () => clearTimeout(timer) };
+    };
+
     const sendMessage = async (prompt, messages, options = {}) => {
         const retries = 3;
 
@@ -56,9 +71,10 @@ export const useAssistant = () => {
         lastRequestTime = Date.now();
 
         for (let attempt = 1; attempt <= retries; attempt++) {
+            const { signal: timeoutSignal, clear } = withTimeout(3 * 60 * 1000, options.signal);
             try {
                 const questionnaireId = options.questionnaireId || null;
-                const response = await axios.post(
+                const data = await api.post(
                     `/api/assistance/${questionnaireId}`,
                     {
                         messages: messages.map((msg) => ({
@@ -69,13 +85,10 @@ export const useAssistant = () => {
                         entityId: options.entityId || null,
                         conversationId: options.conversationId || null,
                     },
-                    {
-                        timeout: 3 * 60 * 1000, // 3 minute timeout
-                        signal: options.signal || null,
-                    },
-                );
+                    { signal: timeoutSignal },
+                ) || {};
+                clear();
 
-                const data = response.data || {};
                 const text =
                     data.expression ?? data.answer ?? data.message ?? '';
                 const meta = data.meta ?? data.Meta ?? null;
@@ -84,12 +97,9 @@ export const useAssistant = () => {
 
                 return { text, meta, conversationId, callLogId };
             } catch (error) {
+                clear();
                 // Re-throw abort errors immediately without retrying
-                if (
-                    error.name === 'AbortError' ||
-                    error.name === 'CanceledError' ||
-                    error.code === 'ERR_CANCELED'
-                ) {
+                if (error.name === 'AbortError') {
                     throw error;
                 }
 
@@ -135,13 +145,16 @@ export const useAssistant = () => {
     const sendReaction = async (questionnaireId, reaction) => {
         if (!questionnaireId) throw new Error('questionnaireId is required');
 
-        await axios.post(
-            `/api/assistance/${questionnaireId}/reaction`,
-            reaction,
-            {
-                timeout: 30 * 1000,
-            },
-        );
+        const { signal: timeoutSignal, clear } = withTimeout(30 * 1000, undefined);
+        try {
+            await api.post(
+                `/api/assistance/${questionnaireId}/reaction`,
+                reaction,
+                { signal: timeoutSignal },
+            );
+        } finally {
+            clear();
+        }
     };
 
     const createUserMessage = (content) => ({

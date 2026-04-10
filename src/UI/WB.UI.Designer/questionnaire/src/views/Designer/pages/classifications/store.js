@@ -1,5 +1,5 @@
 ﻿import { defineStore } from 'pinia';
-import axios from 'axios';
+import { mande } from 'mande';
 
 const routes = {
     userInfo: 'user',
@@ -15,35 +15,27 @@ const routes = {
     updateCategories: 'classification/{0}/categories'
 };
 
-const $http = axios.create({
-    baseURL: './api/classifications'
-});
+const $http = mande('/api/classifications');
 
-// Add a request interceptor
-$http.interceptors.request.use(
-    function(config) {
-        useClassificationsStore().isLoading = true;
-        return config;
-    },
-    function(error) {
+async function withLoading(fn) {
+    useClassificationsStore().isLoading = true;
+    try {
+        const result = await fn();
+        useClassificationsStore().isLoading = false;
+        return result;
+    } catch (error) {
         useClassificationsStore().isLoading = false;
         console.log(error);
-        return Promise.reject(error);
+        throw error;
     }
-);
+}
 
-// Add a response interceptor
-$http.interceptors.response.use(
-    function(response) {
-        useClassificationsStore().isLoading = false;
-        return response;
-    },
-    function(error) {
-        useClassificationsStore().isLoading = false;
-        console.log(error);
-        return Promise.reject(error);
-    }
-);
+const http = {
+    get: (url, opts) => withLoading(() => $http.get(url, opts)),
+    post: (url, data, opts) => withLoading(() => $http.post(url, data, opts)),
+    patch: (url, data, opts) => withLoading(() => $http.patch(url, data, opts)),
+    delete: (url, opts) => withLoading(() => $http.delete(url, opts)),
+};
 
 export const useClassificationsStore = defineStore('classifications', {
     state() {
@@ -61,8 +53,8 @@ export const useClassificationsStore = defineStore('classifications', {
     },
     actions: {
         async getUserInfo() {
-            const response = await $http.get(routes.userInfo);
-            const info = response.data;
+            const response = await http.get(routes.userInfo);
+            const info = response;
             this.userId = info.userId;
             this.userName = info.userName;
             this.isAdmin = info.isAdmin;
@@ -79,7 +71,7 @@ export const useClassificationsStore = defineStore('classifications', {
             this.categories.push(category);
         },
         async updateCategories(classificationId) {
-            await $http.post(routes.updateCategories.format(classificationId), this.categories);
+            await http.post(routes.updateCategories.format(classificationId), this.categories);
             this.activeClassification.count = this.categories.length;
         },
         addGroup(group) {
@@ -87,8 +79,8 @@ export const useClassificationsStore = defineStore('classifications', {
         },
         async updateGroup(group) {
             await (group.isNew
-                ? $http.post(routes.createGroup, group)
-                : $http.patch(routes.updateGroup.format(group.id), group));
+                ? http.post(routes.createGroup, group)
+                : http.patch(routes.updateGroup.format(group.id), group));
             var g = this.groups[group.index];
             g.title = group.title;
             g.isNew = false;
@@ -99,7 +91,7 @@ export const useClassificationsStore = defineStore('classifications', {
                 this.groups.splice(index, 1);
                 this.selectGroup(0);
             } else {
-                await $http.delete(routes.deleteGroup.format(group.id));
+                await http.delete(routes.deleteGroup.format(group.id));
                 this.groups.splice(index, 1);
                 this.selectGroup(0);
             }
@@ -123,8 +115,8 @@ export const useClassificationsStore = defineStore('classifications', {
         },
         async updateClassification(classification) {
             await (classification.isNew
-                ? $http.post(routes.createClassification, classification)
-                : $http.patch(routes.updateClassification.format(classification.id), classification));
+                ? http.post(routes.createClassification, classification)
+                : http.patch(routes.updateClassification.format(classification.id), classification));
             var g = this.classifications[classification.index];
             g.title = classification.title;
             g.isNew = false;
@@ -136,7 +128,7 @@ export const useClassificationsStore = defineStore('classifications', {
                 this.activeGroup.count--;
                 this.selectClassification(0);
             } else {
-                await $http.delete(routes.deleteClassification.format(classification.id));
+                await http.delete(routes.deleteClassification.format(classification.id));
                 this.classifications.splice(index, 1);
                 this.activeGroup.count--;
                 this.selectClassification(0);
@@ -154,8 +146,8 @@ export const useClassificationsStore = defineStore('classifications', {
                 this.loadCategories(this.classifications[index].id);
         },
         async loadGroups() {
-            const response = await $http.get(routes.groups);
-            this.groups = response.data;
+            const response = await http.get(routes.groups);
+            this.groups = response;
             this.classifications = [];
             this.categories = [];
             if (this.groups.length > 0) {
@@ -163,16 +155,16 @@ export const useClassificationsStore = defineStore('classifications', {
             }
         },
         async loadClassifications(groupId) {
-            const response = await $http.get(routes.classifications, { params: { groupId: groupId } });
-            this.classifications = response.data;
+            const response = await http.get(routes.classifications, { query: { groupId: groupId } });
+            this.classifications = response;
             this.categories = [];
             if (this.classifications.length > 0) {
                 this.selectClassification(0);
             }
         },
         async loadCategories(classificationId) {
-            const response = await $http.get(routes.categories.format(classificationId));
-            this.categories = response.data;
+            const response = await http.get(routes.categories.format(classificationId));
+            this.categories = response;
         }
     }
 });
