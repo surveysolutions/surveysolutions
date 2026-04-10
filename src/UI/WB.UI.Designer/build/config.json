@@ -111,7 +111,6 @@
         {
             "name": "list",
             "inputFiles": [
-                "node_modules/jquery-mousewheel/jquery.mousewheel.js",
                 "node_modules/perfect-scrollbar/dist/js/perfect-scrollbar.jquery.js",
                 "node_modules/dompurify/dist/purify.js",
                 "Scripts/custom/common.js",

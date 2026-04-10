@@ -1,6 +1,5 @@
 import $ from 'jquery';
 
-import '/node_modules/jquery-mousewheel/jquery.mousewheel.js';
 import PerfectScrollbar from 'perfect-scrollbar';
 
 window.jQuery = window.$ = $;
