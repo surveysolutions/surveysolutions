@@ -9,7 +9,8 @@
             <router-view name="leftSidePanel"></router-view>
             <router-view />
         </section>
-        <vue-progress-bar></vue-progress-bar>
+        <v-progress-linear :active="progressStore.getIsRunning" indeterminate color="#29d" height="3"
+            style="position:fixed;top:0;left:0;right:0;z-index:9999" />
     </div>
     <div id="loading-logo" v-if="isActionRunning"></div>
     <confirm-dialog></confirm-dialog>
@@ -174,7 +175,6 @@ export default {
         }
     },
     mounted() {
-        this.$Progress.finish();
     },
     computed: {
         questionnaire() {
@@ -190,14 +190,6 @@ export default {
             return this.hotkeysStore.getHotkeys;
         },
         isActionRunning() {
-            var progress = this.$Progress;
-            if (progress) {
-                this.$nextTick(() => {
-                    if (this.progressStore.getIsRunning) progress.start();
-                    else progress.finish();
-                });
-            }
-
             return this.progressStore.getIsRunning || false;
         },
         isCover() {

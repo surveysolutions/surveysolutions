@@ -2,7 +2,6 @@ import { createApp } from 'vue';
 import { createPinia } from 'pinia';
 import App from './App.vue';
 import router from './router';
-import VueProgressBar from '@aacassandra/vue3-progressbar';
 import i18next from './plugins/localization';
 import I18NextVue from 'i18next-vue';
 import { vuetify } from './plugins/vuetify';
@@ -52,23 +51,6 @@ vue.use(vuetify); //reqired by options component. consider either remove or use.
 vue.use(PerfectScrollbarPlugin);
 vue.component('file-upload', VueUploadComponent);
 vue.use(Notifications);
-
-const options = {
-    color: '#29d',
-    failedColor: '#874b4b',
-    thickness: '3px',
-    transition: {
-        speed: '0.2s',
-        opacity: '0.6s',
-        termination: 300,
-    },
-    autoRevert: true,
-    location: 'top',
-    inverse: false,
-    autoFinish: false,
-};
-
-vue.use(VueProgressBar, options);
 
 vue.use(ConfirmDialog);
 vue.component('confirm-dialog', ConfirmDialog.default);
