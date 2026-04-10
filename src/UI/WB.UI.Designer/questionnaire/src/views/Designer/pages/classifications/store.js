@@ -25,7 +25,6 @@ async function withLoading(fn) {
         return result;
     } catch (error) {
         useClassificationsStore().isLoading = false;
-        console.log(error);
         throw error;
     }
 }
