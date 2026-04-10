@@ -40,7 +40,6 @@
         "axios": "1.13.6",
         "bootstrap": "^5.3.3",
         "bootstrap-less": "^3.3.8",
-        "bootstrap-select": "^1.13.18",
         "dompurify": "^3.3.2",
         "highlight.js": "^11.11.1",
         "i18next-browser-languagedetector": "^8.0.2",
