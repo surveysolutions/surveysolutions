@@ -117,12 +117,12 @@ export const useClassificationsStore = defineStore('classifications', {
             await (classification.isNew
                 ? http.post(routes.createClassification, classification)
                 : http.patch(routes.updateClassification.format(classification.id), classification));
-            var g = this.classifications[classification.index];
+            let g = this.classifications[classification.index];
             g.title = classification.title;
             g.isNew = false;
         },
         async deleteClassification(index) {
-            var classification = this.classifications[index] || {};
+            let classification = this.classifications[index] || {};
             if (classification.isNew) {
                 this.classifications.splice(index, 1);
                 this.activeGroup.count--;
