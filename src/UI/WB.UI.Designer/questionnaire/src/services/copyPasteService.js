@@ -5,7 +5,14 @@ import { ref, computed } from 'vue';
 
 function getCookie(name) {
     const match = document.cookie.match(new RegExp('(?:^|; )' + name + '=([^;]*)'));
-    return match ? JSON.parse(decodeURIComponent(match[1])) : null;
+    if (!match) return null;
+
+    try {
+        return JSON.parse(decodeURIComponent(match[1]));
+    } catch {
+        removeCookie(name);
+        return null;
+    }
 }
 
 function setCookie(name, value, days) {
