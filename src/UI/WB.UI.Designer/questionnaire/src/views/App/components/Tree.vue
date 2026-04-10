@@ -169,6 +169,7 @@ import Help from './Help.vue';
 
 import { migrateToNewVersion } from '../../../services/questionnaireService'
 import { useKeyShortcut } from '../../../composables/useKeyShortcut';
+import { sanitizeMarkup } from '../../../services/utilityService';
 
 export default {
     name: 'Tree',
@@ -310,15 +311,15 @@ export default {
         emptySectionHtmlLine1() {
             var emptySectionAddQuestion = "<button class='btn' disabled type='button'>" + this.$t('QuestionnaireEditor.AddQuestion') + " </button>";
             var emptySectionAddSubsectionHtml = "<button class=\"btn\" disabled type=\"button\">" + this.$t('QuestionnaireEditor.AddSubsection') + " </button>";
-            return this.$t('QuestionnaireEditor.EmptySectionLine2', { addQuestionBtn: emptySectionAddQuestion, addSubsectionBtn: emptySectionAddSubsectionHtml });
+            return sanitizeMarkup(this.$t('QuestionnaireEditor.EmptySectionLine2', { addQuestionBtn: emptySectionAddQuestion, addSubsectionBtn: emptySectionAddSubsectionHtml }));
         },
         emptySectionHtmlLine2() {
             var emptySectionSettingsHtml = "<button class=\"btn\" type=\"button\" disabled>" + this.$t('QuestionnaireEditor.Settings') + " </button>";
-            return this.$t('QuestionnaireEditor.EmptySectionLine5', { settingsBtn: emptySectionSettingsHtml });
+            return sanitizeMarkup(this.$t('QuestionnaireEditor.EmptySectionLine5', { settingsBtn: emptySectionSettingsHtml }));
         },
         emptySectionHtmlLine3() {
             const panel = '<span class="left-panel-glyph"></span>';
-            return this.$t('QuestionnaireEditor.EmptySectionLine3', { panel: panel });
+            return sanitizeMarkup(this.$t('QuestionnaireEditor.EmptySectionLine3', { panel: panel }));
         }
     },
 

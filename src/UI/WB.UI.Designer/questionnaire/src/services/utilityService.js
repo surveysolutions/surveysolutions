@@ -81,6 +81,16 @@ export function sanitize(input) {
     return input || '';
 }
 
+export function sanitizeMarkup(input) {
+    if (input) {
+        return DOMPurify.sanitize(input, {
+            ALLOWED_TAGS: ['button', 'span'],
+            ALLOWED_ATTR: ['class', 'type', 'disabled']
+        });
+    }
+    return input || '';
+}
+
 export function trimText(text) {
     return sanitize(text).substring(0, 50) + (text.length > 50 ? '...' : '');
 }
