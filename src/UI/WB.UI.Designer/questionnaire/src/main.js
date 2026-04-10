@@ -1,4 +1,4 @@
-import { createApp } from 'vue';
+import { createApp, reactive } from 'vue';
 import { createPinia } from 'pinia';
 import App from './App.vue';
 import router from './router';
@@ -36,11 +36,19 @@ pinia.use(({ store }) => {
     }
 });
 
+const legacyStore = reactive({
+    state: {
+        userName: '',
+        isAdmin: false,
+    },
+});
+
 const vue = createApp(App);
 
 setupErrorHandler(vue);
 
 vue.config.globalProperties.$emitter = emitter;
+vue.config.globalProperties.$store = legacyStore;
 
 vue.use(router);
 vue.use(pinia);
