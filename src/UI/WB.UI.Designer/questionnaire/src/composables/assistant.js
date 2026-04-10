@@ -105,22 +105,16 @@ export const useAssistant = () => {
                         await abortAwareDelay(backoffDelay, options.signal);
                         continue;
                     } else {
-                        throw new Error(
-                            i18n.t('Assistant.RateLimitExceeded'),
-                        );
+                        throw new Error(i18n.t('Assistant.RateLimitExceeded'));
                     }
                 } else if (error.response?.status === 400) {
-                    throw new Error(
-                        i18n.t('Assistant.InvalidRequest'),
-                    );
+                    throw new Error(i18n.t('Assistant.InvalidRequest'));
                 } else if (error.response?.status === 403) {
-                    throw new Error(
-                        i18n.t('Assistant.AccessDenied'),
-                    );
+                    throw new Error(i18n.t('Assistant.AccessDenied'));
                 } else if (error.response?.status === 404) {
-                    throw new Error(
-                        i18n.t('Assistant.ModelNotFound'),
-                    );
+                    throw new Error(i18n.t('Assistant.ModelNotFound'));
+                } else if (error.response?.status === 422) {
+                    throw new Error(i18n.t('Assistant.ServiceUnavailable'));
                 } else if (error.response?.status >= 500) {
                     // Server error - retry
                     if (attempt < retries) {
@@ -128,9 +122,7 @@ export const useAssistant = () => {
                         await abortAwareDelay(backoffDelay, options.signal);
                         continue;
                     } else {
-                        throw new Error(
-                            i18n.t('Assistant.ServiceUnavailable'),
-                        );
+                        throw new Error(i18n.t('Assistant.ServiceUnavailable'));
                     }
                 } else {
                     const err = new Error(i18n.t('Assistant.ConnectionError'));
