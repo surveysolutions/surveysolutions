@@ -1,8 +1,25 @@
 import { commandCall } from './apiService';
 import emitter from './emitter';
 import { newGuid } from '../helpers/guid';
-import { useCookies } from 'vue3-cookies';
 import { ref, computed } from 'vue';
+
+function getCookie(name) {
+    const match = document.cookie.match(new RegExp('(?:^|; )' + name + '=([^;]*)'));
+    return match ? JSON.parse(decodeURIComponent(match[1])) : null;
+}
+
+function setCookie(name, value, days) {
+    const expires = new Date(Date.now() + days * 864e5).toUTCString();
+    document.cookie = `${name}=${encodeURIComponent(JSON.stringify(value))}; expires=${expires}; path=/`;
+}
+
+function removeCookie(name) {
+    document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`;
+}
+
+function hasCookie(name) {
+    return document.cookie.split(';').some(c => c.trim().startsWith(name + '='));
+}
 
 const readyToPaste = ref(null);
 
@@ -12,14 +29,11 @@ export const canPaste = computed(() => {
         return readyToPaste.value;
     }
 
-    const cookies = useCookies();
-    readyToPaste.value = cookies.cookies.isKey('itemToCopy');
+    readyToPaste.value = hasCookie('itemToCopy');
     return readyToPaste.value;
 });
 
 export function copyItem(questionnaireId, item) {
-    const cookies = useCookies();
-
     var itemIdToCopy = item.itemId;
 
     var itemToCopyType = (item.itemType === 'Group' && item.isRoster === true) ? 'Roster' : item.itemType;
@@ -30,16 +44,14 @@ export function copyItem(questionnaireId, item) {
         itemType: itemToCopyType
     };
 
-    cookies.cookies.remove('itemToCopy');
-    cookies.cookies.set('itemToCopy', itemToCopy, { expires: 7 });
+    removeCookie('itemToCopy');
+    setCookie('itemToCopy', itemToCopy, 7);
 
     readyToPaste.value = true;
 }
 
 export async function pasteItemInto(questionnaireId, parentId) {
-    const cookies = useCookies();
-
-    var itemToCopy = cookies.cookies.get('itemToCopy');
+    var itemToCopy = getCookie('itemToCopy');
     if (!itemToCopy) return;
 
     const newId = newGuid();
@@ -59,9 +71,7 @@ export async function pasteItemInto(questionnaireId, parentId) {
 }
 
 export async function pasteItemAfter(questionnaireId, afterNodeId) {
-    const cookies = useCookies();
-
-    var itemToCopy = cookies.cookies.get('itemToCopy');
+    var itemToCopy = getCookie('itemToCopy');
     if (!itemToCopy) return;
 
     const newId = newGuid();
