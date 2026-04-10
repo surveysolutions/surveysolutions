@@ -42,23 +42,23 @@
                             <span class="caret"></span>
                             <span class="sr-only">{{
                                 $t('QuestionnaireEditor.ToggleDropdown')
-                            }}</span>
+                                }}</span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-right">
                             <li>
                                 <a href="/identity/account/manage">{{
                                     $t('QuestionnaireEditor.ManageAccount')
-                                }}</a>
+                                    }}</a>
                             </li>
                             <li>
                                 <a href="/identity/account/manage/changepassword">{{
                                     $t('QuestionnaireEditor.ChangePassword')
-                                }}</a>
+                                    }}</a>
                             </li>
                             <li>
                                 <a href="/identity/account/logout">{{
                                     $t('QuestionnaireEditor.LogOut')
-                                }}</a>
+                                    }}</a>
                             </li>
                         </ul>
                     </div>
@@ -159,7 +159,7 @@
 import VerificationDialog from './VerificationDialog.vue';
 import SharedInfoDialog from './SharedInfoDialog.vue';
 import DownloadPDFDialog from './DownloadPDFDialog.vue';
-import { useMagicKeys } from '@vueuse/core';
+import { useKeyShortcut } from '../../../composables/useKeyShortcut';
 
 import { useVerificationStore } from '../../../stores/verification';
 import { useChatStore } from '../../../stores/chat';
@@ -192,13 +192,7 @@ export default {
         const sharedInfoDialog = ref(null);
         const downloadPDFDialog = ref(null);
 
-        const { ctrl_b } = useMagicKeys({
-            passive: false,
-            onEventFired(e) {
-                if (e.ctrlKey && e.key === 'b' && e.type === 'keydown')
-                    e.preventDefault()
-            },
-        })
+        const ctrl_b = useKeyShortcut(e => e.ctrlKey && e.key === 'b');
 
         return {
             verificationStore,

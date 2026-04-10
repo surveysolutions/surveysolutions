@@ -203,8 +203,6 @@ import CriticalityConditions from './leftSidePanel/CriticalityConditions.vue';
 
 import { setFocusIn } from '../../../services/utilityService'
 
-import { useMagicKeys } from '@vueuse/core';
-
 export default {
     name: 'LeftSidePanel',
     components: {
@@ -226,16 +224,6 @@ export default {
     data() {
         return {
             openPanel: null,//'categories',
-        };
-    },
-    setup(props) {
-
-        const keys = useMagicKeys();
-        const arrowLeft = keys['arrowleft'];
-        const arrowRight = keys['arrowright'];
-
-        return {
-            arrowLeft, arrowRight
         };
     },
     mounted() {
@@ -303,17 +291,6 @@ export default {
         isUnfoldedCategories() { return this.openPanel == 'categories' },
         isUnfoldedCriticalityConditions() { return this.openPanel == 'criticalityconditions' },
     },
-    watch: {
-        arrowLeft: function (value) {
-            // if (value)
-            //     this.unfoldChapters();
-        },
-        arrowRight: function (value) {
-            // if (value)
-            //     this.foldChapters();
-        }
-    },
-
     methods: {
         foldback() {
             this.openPanel = null;

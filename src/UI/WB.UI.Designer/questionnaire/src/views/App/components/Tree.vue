@@ -15,8 +15,9 @@
                         :title="$t('QuestionnaireEditor.Search')"></span>
                     <input id="chapterSearch" type="text" v-model="search.searchText" focus-on-out="focusSearch"
                         hotkey="{esc: hideSearch}" hotkey-allow-in="INPUT" />
-                    <span class="input-group-addon glyphicon glyphicon-option-horizontal pointer" style="padding-top:10px;"
-                        @click="showFindReplaceDialog()" :title="$t('QuestionnaireEditor.FindReplaceTitle')"></span>
+                    <span class="input-group-addon glyphicon glyphicon-option-horizontal pointer"
+                        style="padding-top:10px;" @click="showFindReplaceDialog()"
+                        :title="$t('QuestionnaireEditor.FindReplaceTitle')"></span>
                 </div>
                 <button @click.stop="hideSearch()" type="button" :title="$t('QuestionnaireEditor.Cancel')"></button>
             </div>
@@ -167,7 +168,7 @@ import { canPaste, pasteItemInto } from '../../../services/copyPasteService'
 import Help from './Help.vue';
 
 import { migrateToNewVersion } from '../../../services/questionnaireService'
-import { useMagicKeys } from '@vueuse/core';
+import { useKeyShortcut } from '../../../composables/useKeyShortcut';
 
 export default {
     name: 'Tree',
@@ -218,21 +219,9 @@ export default {
         const treeStore = useTreeStore();
         const searchDialog = ref(null);
 
-        const { ctrl_f } = useMagicKeys({
-            passive: false,
-            onEventFired(e) {
-                if (e.ctrlKey && e.key === 'f' && e.type === 'keydown')
-                    e.preventDefault()
-            },
-        })
+        const ctrl_f = useKeyShortcut(e => e.ctrlKey && e.key === 'f');
 
-        const { ctrl_h } = useMagicKeys({
-            passive: false,
-            onEventFired(e) {
-                if (e.ctrlKey && e.key === 'h' && e.type === 'keydown')
-                    e.preventDefault()
-            },
-        })
+        const ctrl_h = useKeyShortcut(e => e.ctrlKey && e.key === 'h');
 
         return {
             treeStore,

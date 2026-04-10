@@ -91,7 +91,7 @@ import { useTreeStore } from '../stores/tree';
 import { useUserStore } from '../stores/user';
 import { useHotkeysStore } from '../stores/hotkeys';
 import { useUnsavedChanges } from '../stores/unsavedChanges';
-import { useMagicKeys } from '@vueuse/core';
+import { useKeyShortcut } from '../composables/useKeyShortcut';
 
 import '../../content/external/angular-block-ui.css';
 import '../../content/external/hotkeys.css';
@@ -129,29 +129,12 @@ export default {
         const hotkeysStore = useHotkeysStore();
         const unsavedChanges = useUnsavedChanges();
 
-        const { shift_question } = useMagicKeys({
-            aliasMap: {
-                question: '?',
-            },
-            passive: false,
-            onEventFired(e) {
-                if (e.shiftKey && e.key === '?' && e.type === 'keydown') {
-                    //workaround for the issue with useMagicKeys useActiveElement      
-                    if (!(document.activeElement?.tagName.toUpperCase() == 'INPUT'
-                        || document.activeElement?.tagName.toUpperCase() == 'TEXTAREA')) {
-                        e.preventDefault();
-                    }
-                }
-            },
-        })
+        const shift_question = useKeyShortcut(e =>
+            e.shiftKey && e.key === '?' &&
+            !['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName.toUpperCase())
+        );
 
-        const { ctrl_p } = useMagicKeys({
-            passive: false,
-            onEventFired(e) {
-                if (e.ctrlKey && e.key === 'p' && e.type === 'keydown')
-                    e.preventDefault()
-            },
-        })
+        const ctrl_p = useKeyShortcut(e => e.ctrlKey && e.key === 'p');
 
         return {
             questionnaireStore,
