@@ -1,5 +1,3 @@
-import { createPopper } from '@popperjs/core';
-
 // Global state to track the active menu
 const activeMenu = {
     current: null,
@@ -14,7 +12,6 @@ const activeMenu = {
 const contextmenu = app => {
     app.directive('contextmenu', {
         mounted(el, binding) {
-            let popperInstance = null;
             const menuId = binding.value;
             const menu = document.getElementById(menuId);
 
@@ -60,14 +57,6 @@ const contextmenu = app => {
                     menu.style.top = `${mouseY}px`;
                     menu.style.left = `${mouseX}px`;
 
-                    if (!popperInstance) {
-                        popperInstance = createPopper(menu, {
-                            placement: 'bottom-start'
-                        });
-                    }
-
-                    popperInstance.update();
-
                     const menuItems =
                         menuItemClass === 'a'
                             ? menu.querySelectorAll('a')
@@ -97,11 +86,6 @@ const contextmenu = app => {
                     item.removeEventListener('click', hideMenu);
                 });
 
-                if (popperInstance) {
-                    popperInstance.destroy();
-                    popperInstance = null;
-                }
-
                 activeMenu.current = null;
             };
 
@@ -112,13 +96,13 @@ const contextmenu = app => {
                 }
             });
 
-            el._contextMenu = { el, menu, popperInstance, showMenu, hideMenu };
+            el._contextMenu = { el, menu, showMenu, hideMenu };
         },
         unmounted(el) {
             if (!el._contextMenu)
                 return
 
-            let { menu, popperInstance, showMenu, hideMenu } = el._contextMenu;
+            let { menu, showMenu, hideMenu } = el._contextMenu;
             el.removeEventListener('contextmenu', showMenu);
             document.removeEventListener('click', hideMenu);
 
@@ -131,9 +115,6 @@ const contextmenu = app => {
                 item.removeEventListener('click', hideMenu);
             });
 
-            if (popperInstance) {
-                popperInstance.destroy();
-            }
         }
     });
 };
