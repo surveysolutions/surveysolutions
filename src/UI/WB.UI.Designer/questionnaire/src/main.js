@@ -81,8 +81,6 @@ vue.component('confirm-prompt-dialog', ConfirmPromptDialog.default);
 directives(vue);
 
 import './views/Designer/pages/classifications/validationRules';
-import store from './views/Designer/pages/classifications/store';
-vue.use(store);
 
 // Run!
 router.isReady().then(() => {

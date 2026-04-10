@@ -1,4 +1,4 @@
-﻿import { createStore } from 'vuex';
+﻿import { defineStore } from 'pinia';
 import axios from 'axios';
 
 const routes = {
@@ -22,11 +22,11 @@ const $http = axios.create({
 // Add a request interceptor
 $http.interceptors.request.use(
     function(config) {
-        store.commit('start_loading');
+        useClassificationsStore().isLoading = true;
         return config;
     },
     function(error) {
-        store.commit('finish_loading');
+        useClassificationsStore().isLoading = false;
         console.log(error);
         return Promise.reject(error);
     }
@@ -35,17 +35,17 @@ $http.interceptors.request.use(
 // Add a response interceptor
 $http.interceptors.response.use(
     function(response) {
-        store.commit('finish_loading');
+        useClassificationsStore().isLoading = false;
         return response;
     },
     function(error) {
-        store.commit('finish_loading');
+        useClassificationsStore().isLoading = false;
         console.log(error);
         return Promise.reject(error);
     }
 );
 
-const store = createStore({
+export const useClassificationsStore = defineStore('classifications', {
     state() {
         return {
             isLoading: false,
@@ -59,211 +59,122 @@ const store = createStore({
             isAdmin: false
         };
     },
-    mutations: {
-        start_loading: function(state) {
-            state.isLoading = true;
+    actions: {
+        async getUserInfo() {
+            const response = await $http.get(routes.userInfo);
+            const info = response.data;
+            this.userId = info.userId;
+            this.userName = info.userName;
+            this.isAdmin = info.isAdmin;
         },
-        finish_loading: function(state) {
-            state.isLoading = false;
-        },
-        groups_loaded: function(state, groups) {
-            state.groups = groups;
-            state.classifications = [];
-            state.categories = [];
-        },
-        classifications_loaded: function(state, classifications) {
-            state.classifications = classifications;
-            state.categories = [];
-        },
-        categories_loaded: function(state, categories) {
-            state.categories = categories;
-        },
-        addGroup: function(state, group) {
-            state.groups.push(group);
-        },
-        updateGroup: function(state, group) {
-            var g = state.groups[group.index];
-            g.title = group.title;
-            g.isNew = false;
-        },
-        deleteGroup: function(state, index) {
-            state.groups.splice(index, 1);
-        },
-        selectGroup: function(state, index) {
-            state.activeGroup.isActive = false;
-            if (state.groups.length > 0) {
-                state.activeGroup = state.groups[index];
-                state.activeGroup.isActive = true;
-                state.activeClassification.isActive = false;
-                state.activeClassification = {};
-            } else state.activeGroup = {};
-        },
-        selectClassification: function(state, index) {
-            state.activeClassification.isActive = false;
-            if (state.classifications.length > 0) {
-                state.activeClassification = state.classifications[index];
-                state.activeClassification.isActive = true;
-            } else state.activeClassification = {};
-        },
-        addClassification: function(state, classification) {
-            state.classifications.push(classification);
-            state.activeGroup.count++;
-        },
-        addCategory: function(state, category) {
-            state.categories.push(category);
-        },
-        updateClassification: function(state, classification) {
-            var g = state.classifications[classification.index];
-            g.title = classification.title;
-            g.isNew = false;
-        },
-        deleteClassification: function(state, index) {
-            state.classifications.splice(index, 1);
-            state.activeGroup.count--;
-        },
-        updateCategories: function(state) {
-            state.activeClassification.count = state.categories.length;
-        },
-        deleteCategory: function(state, index) {
-            state.categories.splice(index, 1);
-        },
-        updateCategory: function(state, changes) {
-            var category = state.categories[changes.index];
+        updateCategory(changes) {
+            var category = this.categories[changes.index];
             category.title = changes.title;
             category.value = changes.value;
         },
-        updateUserInfo: function(state, info) {
-            state.userId = info.userId;
-            state.userName = info.userName;
-            state.isAdmin = info.isAdmin;
-        }
-    },
-    actions: {
-        getUserInfo(context) {
-            $http.get(routes.userInfo, {}).then(response => {
-                context.commit('updateUserInfo', response.data);
-            });
+        deleteCategory(index) {
+            this.categories.splice(index, 1);
         },
-        updateCategory(context, changes) {
-            context.commit('updateCategory', changes);
+        addCategory(category) {
+            this.categories.push(category);
         },
-        deleteCategory(context, index) {
-            context.commit('deleteCategory', index);
+        async updateCategories(classificationId) {
+            await $http.post(routes.updateCategories.format(classificationId), this.categories);
+            this.activeClassification.count = this.categories.length;
         },
-        addCategory(context, category) {
-            context.commit('addCategory', category);
+        addGroup(group) {
+            this.groups.push(group);
         },
-        updateCategories(context, classificationId) {
-            $http
-                .post(
-                    routes.updateCategories.format(classificationId),
-                    context.state.categories
-                )
-                .then(function() {
-                    context.commit('updateCategories');
-                });
-        },
-        addGroup(context, group) {
-            context.commit('addGroup', group);
-        },
-        updateGroup(context, group) {
-            (group.isNew
+        async updateGroup(group) {
+            await (group.isNew
                 ? $http.post(routes.createGroup, group)
-                : $http.patch(routes.updateGroup.format(group.id), group)
-            ).then(function() {
-                context.commit('updateGroup', group);
-            });
+                : $http.patch(routes.updateGroup.format(group.id), group));
+            var g = this.groups[group.index];
+            g.title = group.title;
+            g.isNew = false;
         },
-        deleteGroup(context, index) {
-            var group = context.state.groups[index] || {};
+        async deleteGroup(index) {
+            var group = this.groups[index] || {};
             if (group.isNew) {
-                context.commit('deleteGroup', index);
-                context.dispatch('selectGroup', 0);
+                this.groups.splice(index, 1);
+                this.selectGroup(0);
             } else {
-                $http
-                    .delete(routes.deleteGroup.format(group.id))
-                    .then(function() {
-                        context.commit('deleteGroup', index);
-                        context.dispatch('selectGroup', 0);
-                    });
+                await $http.delete(routes.deleteGroup.format(group.id));
+                this.groups.splice(index, 1);
+                this.selectGroup(0);
             }
         },
-        selectGroup(context, index) {
-            context.commit('selectGroup', index);
-            if (context.state.groups.length > 0)
-                context.dispatch(
-                    'loadClassifications',
-                    context.state.groups[index].id
-                );
+        selectGroup(index) {
+            this.activeGroup.isActive = false;
+            if (this.groups.length > 0) {
+                this.activeGroup = this.groups[index];
+                this.activeGroup.isActive = true;
+                this.activeClassification.isActive = false;
+                this.activeClassification = {};
+            } else {
+                this.activeGroup = {};
+            }
+            if (this.groups.length > 0)
+                this.loadClassifications(this.groups[index].id);
         },
-        addClassification(context, classification) {
-            context.commit('addClassification', classification);
+        addClassification(classification) {
+            this.classifications.push(classification);
+            this.activeGroup.count++;
         },
-        updateClassification(context, classification) {
-            (classification.isNew
+        async updateClassification(classification) {
+            await (classification.isNew
                 ? $http.post(routes.createClassification, classification)
-                : $http.patch(
-                      routes.updateClassification.format(classification.id),
-                      classification
-                  )
-            ).then(function() {
-                context.commit('updateClassification', classification);
-            });
+                : $http.patch(routes.updateClassification.format(classification.id), classification));
+            var g = this.classifications[classification.index];
+            g.title = classification.title;
+            g.isNew = false;
         },
-        deleteClassification(context, index) {
-            var classification = context.state.classifications[index] || {};
+        async deleteClassification(index) {
+            var classification = this.classifications[index] || {};
             if (classification.isNew) {
-                context.commit('deleteClassification', index);
-                context.dispatch('selectClassification', 0);
+                this.classifications.splice(index, 1);
+                this.activeGroup.count--;
+                this.selectClassification(0);
             } else {
-                $http
-                    .delete(
-                        routes.deleteClassification.format(classification.id)
-                    )
-                    .then(function() {
-                        context.commit('deleteClassification', index);
-                        context.dispatch('selectClassification', 0);
-                    });
+                await $http.delete(routes.deleteClassification.format(classification.id));
+                this.classifications.splice(index, 1);
+                this.activeGroup.count--;
+                this.selectClassification(0);
             }
         },
-        selectClassification(context, index) {
-            context.commit('selectClassification', index);
-            if (context.state.classifications.length > 0)
-                context.dispatch(
-                    'loadCategories',
-                    context.state.classifications[index].id
-                );
+        selectClassification(index) {
+            this.activeClassification.isActive = false;
+            if (this.classifications.length > 0) {
+                this.activeClassification = this.classifications[index];
+                this.activeClassification.isActive = true;
+            } else {
+                this.activeClassification = {};
+            }
+            if (this.classifications.length > 0)
+                this.loadCategories(this.classifications[index].id);
         },
-
-        loadGroups: function(context) {
-            var url = routes.groups;
-            return $http.get(url, {}).then(function(response) {
-                context.commit('groups_loaded', response.data);
-                if (context.state.groups.length > 0) {
-                    context.dispatch('selectGroup', 0);
-                }
-            });
+        async loadGroups() {
+            const response = await $http.get(routes.groups);
+            this.groups = response.data;
+            this.classifications = [];
+            this.categories = [];
+            if (this.groups.length > 0) {
+                this.selectGroup(0);
+            }
         },
-        loadClassifications: function(context, groupId) {
-            var url = routes.classifications;
-
-            return $http
-                .get(url, { params: { groupId: groupId } })
-                .then(function(response) {
-                    context.commit('classifications_loaded', response.data);
-                    if (context.state.classifications.length > 0) {
-                        context.dispatch('selectClassification', 0);
-                    }
-                });
+        async loadClassifications(groupId) {
+            const response = await $http.get(routes.classifications, { params: { groupId: groupId } });
+            this.classifications = response.data;
+            this.categories = [];
+            if (this.classifications.length > 0) {
+                this.selectClassification(0);
+            }
         },
-        loadCategories: function(context, classificationId) {
-            var url = routes.categories.format(classificationId);
-            return $http.get(url, {}).then(function(response) {
-                var categories = response.data;
-                context.commit('categories_loaded', categories);
-            });
+        async loadCategories(classificationId) {
+            const response = await $http.get(routes.categories.format(classificationId));
+            this.categories = response.data;
         }
     }
 });
 
-export default store;
+export default useClassificationsStore;
