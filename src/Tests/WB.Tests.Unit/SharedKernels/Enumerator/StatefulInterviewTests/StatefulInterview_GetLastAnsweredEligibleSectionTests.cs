@@ -102,13 +102,14 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         }
 
         [Test]
-        public void when_questions_answered_in_multiple_sections_should_return_section_of_last_answered()
+        public void when_questions_answered_in_multiple_sections_should_return_section_of_chronologically_last_answered()
         {
             var section1Id = Guid.Parse("11111111111111111111111111111111");
             var section2Id = Guid.Parse("22222222222222222222222222222222");
             var question1Id = Guid.Parse("33333333333333333333333333333333");
             var question2Id = Guid.Parse("44444444444444444444444444444444");
             var userId = Guid.Parse("55555555555555555555555555555555");
+            var t0 = new DateTime(2024, 1, 1, 10, 0, 0, DateTimeKind.Utc);
 
             var questionnaire = Create.Entity.QuestionnaireDocument(null, null,
                 Create.Entity.Group(groupId: section1Id, children: new[] { Create.Entity.TextQuestion(question1Id) }),
@@ -116,13 +117,40 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             );
 
             var interview = SetUp.StatefulInterview(questionnaire);
-            interview.AnswerTextQuestion(userId, question1Id, RosterVector.Empty, DateTime.UtcNow, "answer1");
-            interview.AnswerTextQuestion(userId, question2Id, RosterVector.Empty, DateTime.UtcNow, "answer2");
+            interview.AnswerTextQuestion(userId, question1Id, RosterVector.Empty, t0, "answer1");
+            interview.AnswerTextQuestion(userId, question2Id, RosterVector.Empty, t0.AddMinutes(1), "answer2");
 
             var result = interview.GetLastAnsweredEligibleSection();
 
             result.Should().NotBeNull();
             result.Id.Should().Be(section2Id);
+        }
+
+        [Test]
+        public void when_earlier_section_answered_later_should_return_earlier_section()
+        {
+            var section1Id = Guid.Parse("11111111111111111111111111111111");
+            var section2Id = Guid.Parse("22222222222222222222222222222222");
+            var question1Id = Guid.Parse("33333333333333333333333333333333");
+            var question2Id = Guid.Parse("44444444444444444444444444444444");
+            var userId = Guid.Parse("55555555555555555555555555555555");
+            var t0 = new DateTime(2024, 1, 1, 10, 0, 0, DateTimeKind.Utc);
+
+            var questionnaire = Create.Entity.QuestionnaireDocument(null, null,
+                Create.Entity.Group(groupId: section1Id, children: new[] { Create.Entity.TextQuestion(question1Id) }),
+                Create.Entity.Group(groupId: section2Id, children: new[] { Create.Entity.TextQuestion(question2Id) })
+            );
+
+            var interview = SetUp.StatefulInterview(questionnaire);
+            // section2's question answered first, then section1's question answered later
+            interview.AnswerTextQuestion(userId, question2Id, RosterVector.Empty, t0, "answer2");
+            interview.AnswerTextQuestion(userId, question1Id, RosterVector.Empty, t0.AddMinutes(1), "answer1");
+
+            var result = interview.GetLastAnsweredEligibleSection();
+
+            result.Should().NotBeNull();
+            // section1 was answered most recently, even though it appears first in the questionnaire
+            result.Id.Should().Be(section1Id);
         }
 
         [Test]

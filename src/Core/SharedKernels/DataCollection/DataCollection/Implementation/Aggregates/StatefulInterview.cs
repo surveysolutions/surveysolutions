@@ -1130,7 +1130,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var lastAnsweredQuestion = this.Tree.GetAllNodesInEnumeratorOrder()
                 .OfType<InterviewTreeQuestion>()
                 .Where(q => !q.IsDisabled() && !q.IsHidden && !q.IsSupervisors && !q.IsPrefilled && q.IsAnswered())
-                .LastOrDefault();
+                .MaxBy(q => q.AnswerTime ?? DateTimeOffset.MinValue);
 
             return lastAnsweredQuestion?.Parents
                 .OfType<InterviewTreeSection>()
