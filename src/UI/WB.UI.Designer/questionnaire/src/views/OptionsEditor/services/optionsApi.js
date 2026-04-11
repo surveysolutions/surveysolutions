@@ -76,11 +76,11 @@ class OptionsApi {
 
     async uploadCategory(file) {
         const formData = new FormData();
-
         formData.append('csvFile', file);
 
-        return await mande('/questionnaire/EditCategories', { headers: { 'Content-Type': null } })
-            .post(formData);
+        const response = await fetch('/questionnaire/EditCategories', { method: 'POST', body: formData });
+        if (!response.ok) throw await response.json().catch(() => new Error(`${response.status}: ${response.statusText}`));
+        return response.json();
     }
 
     async uploadOptions(questionnaire, question, file) {
@@ -89,8 +89,9 @@ class OptionsApi {
         formData.append('questionId', question);
         formData.append('csvFile', file);
 
-        return await mande('/questionnaire/EditOptions', { headers: { 'Content-Type': null } })
-            .post(formData);
+        const response = await fetch('/questionnaire/EditOptions', { method: 'POST', body: formData });
+        if (!response.ok) throw await response.json().catch(() => new Error(`${response.status}: ${response.statusText}`));
+        return response.json();
     }
 }
 

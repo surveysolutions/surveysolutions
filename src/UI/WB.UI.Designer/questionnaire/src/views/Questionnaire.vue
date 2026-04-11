@@ -132,7 +132,7 @@ export default {
 
         const shift_question = useKeyShortcut(e =>
             e.shiftKey && e.key === '?' &&
-            !['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName.toUpperCase())
+            !['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName?.toUpperCase() ?? '')
         );
 
         const ctrl_p = useKeyShortcut(e => e.ctrlKey && e.key === 'p');
