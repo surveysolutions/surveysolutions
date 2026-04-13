@@ -19,7 +19,7 @@
 }
 
 .breadcrumbs-fontstyle(@color) when(@color='blue') {
-  color: @common-blue-color;
+  color: @primary-color;
 }
 
 .breadcrumbs-fontstyle(@color) when(@color='gray') {
@@ -46,14 +46,14 @@
 
   > a {
     text-decoration: underline;
-    color: @common-red-color;
+    color: @error-color;
   }
 }
 
 .questionnarie-title-span-success-fontstyle() {
   .lucida-console-font();
   font-size: 16px;
-  color: @common-green-color;
+  color: @success-color;
 
   > em {
     .georgia-font();
@@ -172,7 +172,7 @@
   font-weight: bold;
   font-size: 12px;
   line-height: 30px;
-  color: @common-blue-color;
+  color: @primary-color;
   text-transform: uppercase;
   letter-spacing: 0.1em;
 }
@@ -184,7 +184,7 @@
 
     > a {
     text-decoration: underline;
-    color: @common-blue-color;
+    color: @primary-color;
     cursor: pointer;
   }
 }

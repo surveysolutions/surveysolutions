@@ -1,20 +1,20 @@
 .btn {
   padding: 5px 6px;  
   border: none;
-  background-color: @common-light-pale-blue-color;
+  background-color: @neutral-bg-color;
   font-style: normal;
-  &:hover { background-color: darken(@common-light-pale-blue-color, 5%); }
+  &:hover { background-color: darken(@neutral-bg-color, 5%); }
   &.lighter-hover {
-    &:hover { background-color: lighten(@common-light-pale-blue-color, 5%); }
+    &:hover { background-color: lighten(@neutral-bg-color, 5%); }
   }
   border-radius: 3px;
   //vertical-align: text-bottom;
-  color: @common-blue-color;
+  color: @primary-color;
 
   .inline-button-fontstyle();
 
   &.error {
-    color: @common-red-color;
+    color: @error-color;
   }
 
   &[disabled] {
@@ -24,9 +24,9 @@
   }
 
   &.btn-danger {
-    background-color: @common-red-color;
+    background-color: @error-color;
     color: #fff;
-    &:hover { background-color: @common-dark-red-color; }
+    &:hover { background-color: @error-dark-color; }
   }
 }
 
@@ -48,11 +48,11 @@
 }
 
 .btn-primary {
-  background-color: @common-green-color;
-  &:hover { background-color: darken(@common-green-color, 5%); }
+  background-color: @success-color;
+  &:hover { background-color: darken(@success-color, 5%); }
   &:active { 
-    background-color: darken(@common-green-color, 5%); 
-    &:hover { background-color: darken(@common-green-color, 5%); }
+    background-color: darken(@success-color, 5%); 
+    &:hover { background-color: darken(@success-color, 5%); }
   }
   .inline-button-fontstyle();
   text-transform: uppercase;
