@@ -37,6 +37,7 @@
     <PackageReference Include="Microsoft.Playwright" Version="1.52.0" />
     <PackageReference Include="Newtonsoft.Json.Schema" Version="3.0.16" />
     <PackageReference Include="NJsonSchema" Version="10.9.0" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.8" />
     <PackageReference Include="SkiaSharp" Version="3.116.1" />
     <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="3.116.1" />
     <PackageReference Include="SkiaSharp.NativeAssets.Linux.NoDependencies" Version="3.116.1" />
