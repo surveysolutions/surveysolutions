@@ -222,6 +222,13 @@
   <data name="ConnectionLostMessage" xml:space="preserve">
     <value>Будь ласка, перезавантажте сторінку, щоб відновити з'єднання і продовжити інтерв'ю.</value>
   </data>
+  <data name="Reconnecting" xml:space="preserve">
+    <value>З'єднання втрачено. Виконується спроба відновлення з'єднання…</value>
+  </data>
+  <data name="ReconnectAttempt" xml:space="preserve">
+    <value>Спроба {{count}}</value>
+    <comment>Do not translate parts inside {{}}: {{count}}</comment>
+  </data>
   <data name="ConnectionLostTitle" xml:space="preserve">
     <value>Втрачено з'єднання з сервером.</value>
   </data>
@@ -253,6 +260,12 @@
   </data>
   <data name="DecimalTooBig" xml:space="preserve">
     <value>Введене значення занадто велике. Допускається менше 15 цифр</value>
+  </data>
+  <data name="InvalidServerResponseMessage" xml:space="preserve">
+    <value>Сервер не повернув очікуваний ідентифікаційний заголовок. Можливо, ви підключені через проксі-сервер або до невірного сервера. Будь ласка, перезавантажте сторінку.</value>
+  </data>
+  <data name="InvalidServerResponseTitle" xml:space="preserve">
+    <value>Неправильна відповідь сервера</value>
   </data>
   <data name="Disconnected" xml:space="preserve">
     <value>Відключено</value>

@@ -1469,4 +1469,7 @@ Vizualizările Tabel și Matrice sunt acceptate numai în sondajul web, pentru c
   <data name="ManageAccount" xml:space="preserve">
       <value>Gestionați contul</value>
   </data>
+  <data name="AIAssistant" xml:space="preserve">
+      <value>IA</value>
+  </data>
 </root>

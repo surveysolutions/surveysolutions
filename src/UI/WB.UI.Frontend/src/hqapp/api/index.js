@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { map } from 'lodash'
+import { validateServerHeader } from '~/shared/serverValidator'
 
 class QuestionnaireApi {
     constructor(questionnaireId, version, http) {
@@ -621,6 +622,15 @@ class ExportSettings {
                 headers: { 'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie() },
             })
     }
+
+    setGeographyExportFormat(geographyExportFormat) {
+        return this.http({
+            method: 'post',
+            url: `${this.base}/SetGeographyExportFormat`,
+            headers: { 'X-CSRF-TOKEN': new HttpUtil().getCsrfCookie() },
+            data: { geographyExportFormat: geographyExportFormat }
+        })
+    }
 }
 
 // var $webInterviewSettingsUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "AdminSettings", action = "WebInterviewSettings" })';
@@ -761,6 +771,16 @@ class HqApiClient {
         this.http = axios.create({
             baseURL: basePath,
         })
+        this.http.interceptors.response.use(
+            function (response) {
+                validateServerHeader(response)
+                return response
+            },
+            function (error) {
+                if (error.response) validateServerHeader(error.response)
+                return Promise.reject(error)
+            }
+        )
     }
 
     Questionnaire(questionnaireId, version) {
