@@ -79,7 +79,10 @@ class OptionsApi {
         formData.append('csvFile', file);
 
         const response = await fetch('/questionnaire/EditCategories', { method: 'POST', body: formData });
-        if (!response.ok) throw await response.json().catch(() => new Error(`${response.status}: ${response.statusText}`));
+        if (!response.ok) {
+            const body = await response.json().catch(() => null);
+            throw Object.assign(new Error(`${response.status}: ${response.statusText}`), { body });
+        }
         return response.json();
     }
 
@@ -90,7 +93,10 @@ class OptionsApi {
         formData.append('csvFile', file);
 
         const response = await fetch('/questionnaire/EditOptions', { method: 'POST', body: formData });
-        if (!response.ok) throw await response.json().catch(() => new Error(`${response.status}: ${response.statusText}`));
+        if (!response.ok) {
+            const body = await response.json().catch(() => null);
+            throw Object.assign(new Error(`${response.status}: ${response.statusText}`), { body });
+        }
         return response.json();
     }
 }

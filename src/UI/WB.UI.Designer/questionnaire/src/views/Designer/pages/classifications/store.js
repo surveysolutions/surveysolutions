@@ -17,25 +17,6 @@ const routes = {
 
 const $http = mande('/api/classifications');
 
-async function withLoading(fn) {
-    useClassificationsStore().isLoading = true;
-    try {
-        const result = await fn();
-        useClassificationsStore().isLoading = false;
-        return result;
-    } catch (error) {
-        useClassificationsStore().isLoading = false;
-        throw error;
-    }
-}
-
-const http = {
-    get: (url, opts) => withLoading(() => $http.get(url, opts)),
-    post: (url, data, opts) => withLoading(() => $http.post(url, data, opts)),
-    patch: (url, data, opts) => withLoading(() => $http.patch(url, data, opts)),
-    delete: (url, opts) => withLoading(() => $http.delete(url, opts)),
-};
-
 export const useClassificationsStore = defineStore('classifications', {
     state() {
         return {
@@ -51,9 +32,16 @@ export const useClassificationsStore = defineStore('classifications', {
         };
     },
     actions: {
+        async withLoading(fn) {
+            this.isLoading = true;
+            try {
+                return await fn();
+            } finally {
+                this.isLoading = false;
+            }
+        },
         async getUserInfo() {
-            const response = await http.get(routes.userInfo);
-            const info = response;
+            const info = await this.withLoading(() => $http.get(routes.userInfo));
             this.userId = info.userId;
             this.userName = info.userName;
             this.isAdmin = info.isAdmin;
@@ -70,16 +58,16 @@ export const useClassificationsStore = defineStore('classifications', {
             this.categories.push(category);
         },
         async updateCategories(classificationId) {
-            await http.post(routes.updateCategories.format(classificationId), this.categories);
+            await this.withLoading(() => $http.post(routes.updateCategories.format(classificationId), this.categories));
             this.activeClassification.count = this.categories.length;
         },
         addGroup(group) {
             this.groups.push(group);
         },
         async updateGroup(group) {
-            await (group.isNew
-                ? http.post(routes.createGroup, group)
-                : http.patch(routes.updateGroup.format(group.id), group));
+            await this.withLoading(() => group.isNew
+                ? $http.post(routes.createGroup, group)
+                : $http.patch(routes.updateGroup.format(group.id), group));
             let g = this.groups[group.index];
             g.title = group.title;
             g.isNew = false;
@@ -90,7 +78,7 @@ export const useClassificationsStore = defineStore('classifications', {
                 this.groups.splice(index, 1);
                 this.selectGroup(0);
             } else {
-                await http.delete(routes.deleteGroup.format(group.id));
+                await this.withLoading(() => $http.delete(routes.deleteGroup.format(group.id)));
                 this.groups.splice(index, 1);
                 this.selectGroup(0);
             }
@@ -113,9 +101,9 @@ export const useClassificationsStore = defineStore('classifications', {
             this.activeGroup.count++;
         },
         async updateClassification(classification) {
-            await (classification.isNew
-                ? http.post(routes.createClassification, classification)
-                : http.patch(routes.updateClassification.format(classification.id), classification));
+            await this.withLoading(() => classification.isNew
+                ? $http.post(routes.createClassification, classification)
+                : $http.patch(routes.updateClassification.format(classification.id), classification));
             let g = this.classifications[classification.index];
             g.title = classification.title;
             g.isNew = false;
@@ -127,7 +115,7 @@ export const useClassificationsStore = defineStore('classifications', {
                 this.activeGroup.count--;
                 this.selectClassification(0);
             } else {
-                await http.delete(routes.deleteClassification.format(classification.id));
+                await this.withLoading(() => $http.delete(routes.deleteClassification.format(classification.id)));
                 this.classifications.splice(index, 1);
                 this.activeGroup.count--;
                 this.selectClassification(0);
@@ -145,7 +133,7 @@ export const useClassificationsStore = defineStore('classifications', {
                 this.loadCategories(this.classifications[index].id);
         },
         async loadGroups() {
-            const response = await http.get(routes.groups);
+            const response = await this.withLoading(() => $http.get(routes.groups));
             this.groups = response;
             this.classifications = [];
             this.categories = [];
@@ -154,7 +142,7 @@ export const useClassificationsStore = defineStore('classifications', {
             }
         },
         async loadClassifications(groupId) {
-            const response = await http.get(routes.classifications, { query: { groupId: groupId } });
+            const response = await this.withLoading(() => $http.get(routes.classifications, { query: { groupId: groupId } }));
             this.classifications = response;
             this.categories = [];
             if (this.classifications.length > 0) {
@@ -162,7 +150,7 @@ export const useClassificationsStore = defineStore('classifications', {
             }
         },
         async loadCategories(classificationId) {
-            const response = await http.get(routes.categories.format(classificationId));
+            const response = await this.withLoading(() => $http.get(routes.categories.format(classificationId)));
             this.categories = response;
         }
     }

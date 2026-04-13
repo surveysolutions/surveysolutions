@@ -36,7 +36,7 @@
                     </a>
                 </p>
                 <p
-                    v-sanitize-html="$t('QuestionnaireEditor.SideBarAttachmentsEmptyLine3', { name: variableNameHtml })" />
+                    v-html="sanitizeMarkup($t('QuestionnaireEditor.SideBarAttachmentsEmptyLine3', { name: variableNameHtml }))" />
             </div>
             <form role="form" name="attachmentsForm" novalidate>
                 <div class="attachment-list">
@@ -60,7 +60,7 @@ dayjs.extend(relativeTime);
 import { newGuid } from '../../../../helpers/guid';
 import { notice } from '../../../../services/notificationService';
 import AttachmentItem from './AttachmentItem.vue';
-import { formatBytes } from '../../../../services/utilityService';
+import { formatBytes, sanitizeMarkup } from '../../../../services/utilityService';
 import { updateAttachment } from '../../../../services/attachmentsService';
 
 export default {
@@ -87,6 +87,9 @@ export default {
         },
     },
     methods: {
+        sanitizeMarkup(input) {
+            return sanitizeMarkup(input);
+        },
         openFileDialog() {
             const fu = this.$refs.upload
             fu.$el.querySelector("#" + fu.inputId).click()
