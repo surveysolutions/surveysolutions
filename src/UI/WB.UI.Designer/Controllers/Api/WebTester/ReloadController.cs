@@ -42,27 +42,18 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
             if (questionnaireView == null)
                 return NotFound();
 
-            string jwtToken;
-            var userId = User.GetIdOrNull();
-            if (userId.HasValue)
-            {
-                var user = await userManager.FindByIdAsync(userId.Value.ToString());
-                if (user != null)
-                {
-                    jwtToken = jwtTokenService.GenerateWebTesterToken(user, id.QuestionnaireId);
-                }
-                else
-                {
-                    jwtToken = jwtTokenService.GenerateAnonymousWebTesterToken(id.QuestionnaireId);
-                }
-            }
-            else
-            {
-                jwtToken = jwtTokenService.GenerateAnonymousWebTesterToken(id.QuestionnaireId);
-            }
-
+            var jwtToken = await GenerateWebTesterJwtAsync(id.QuestionnaireId);
             string url = $"{webTesterSettings.BaseUri}/{id.QuestionnaireId}?sid={interviewId}&jwt={Uri.EscapeDataString(jwtToken)}";
             return Redirect(url);
+        }
+
+        private async Task<string> GenerateWebTesterJwtAsync(Guid questionnaireId)
+        {
+            var userId = User.GetIdOrNull();
+            DesignerIdentityUser? user = userId.HasValue
+                ? await userManager.FindByIdAsync(userId.Value.ToString())
+                : null;
+            return jwtTokenService.GenerateWebTesterToken(user, questionnaireId);
         }
 
         private bool ValidateAccessPermissions(QuestionnaireView questionnaireView)

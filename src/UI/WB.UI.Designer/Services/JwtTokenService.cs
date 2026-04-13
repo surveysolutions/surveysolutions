@@ -12,8 +12,7 @@ namespace WB.UI.Designer.Services
     public interface IJwtTokenService
     {
         string GenerateToken(DesignerIdentityUser user);
-        string GenerateWebTesterToken(DesignerIdentityUser user, Guid questionnaireId);
-        string GenerateAnonymousWebTesterToken(Guid questionnaireId);
+        string GenerateWebTesterToken(DesignerIdentityUser? user, Guid questionnaireId);
     }
 
     public class JwtTokenService : IJwtTokenService
@@ -42,9 +41,6 @@ namespace WB.UI.Designer.Services
             if (expirationMinutes == 0)
                 expirationMinutes = 30; // default 30 minutes
 
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
-            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-
             var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
@@ -56,18 +52,10 @@ namespace WB.UI.Designer.Services
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
-            var token = new JwtSecurityToken(
-                issuer: issuer,
-                audience: audience,
-                claims: claims,
-                expires: DateTime.UtcNow.AddMinutes(expirationMinutes),
-                signingCredentials: credentials
-            );
-
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            return CreateJwtToken(secretKey, issuer, audience, expirationMinutes, claims);
         }
 
-        public string GenerateWebTesterToken(DesignerIdentityUser user, Guid questionnaireId)
+        public string GenerateWebTesterToken(DesignerIdentityUser? user, Guid questionnaireId)
         {
             var secretKey = configuration["Providers:Assistant:JwtSecretKey"];
             if (string.IsNullOrWhiteSpace(secretKey))
@@ -80,55 +68,32 @@ namespace WB.UI.Designer.Services
             if (expirationMinutes == 0)
                 expirationMinutes = 60; // default 60 minutes for web tester sessions
 
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
-            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-
             var claims = new List<Claim>
             {
-                new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-                new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName ?? string.Empty),
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Name, user.UserName ?? string.Empty),
                 new Claim(QuestionnaireIdClaimType, questionnaireId.ToString()),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
-            var token = new JwtSecurityToken(
-                issuer: issuer,
-                audience: WebTesterAudience,
-                claims: claims,
-                expires: DateTime.UtcNow.AddMinutes(expirationMinutes),
-                signingCredentials: credentials
-            );
-
-            return new JwtSecurityTokenHandler().WriteToken(token);
-        }
-
-        public string GenerateAnonymousWebTesterToken(Guid questionnaireId)
-        {
-            var secretKey = configuration["Providers:Assistant:JwtSecretKey"];
-            if (string.IsNullOrWhiteSpace(secretKey))
+            if (user != null)
             {
-                throw new InvalidOperationException("JWT secret key is not configured");
+                claims.Add(new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()));
+                claims.Add(new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName ?? string.Empty));
+                claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()));
+                claims.Add(new Claim(ClaimTypes.Name, user.UserName ?? string.Empty));
             }
 
-            var issuer = configuration["Providers:Assistant:JwtIssuer"] ?? "WB.Designer";
-            var expirationMinutes = configuration.GetValue<int>("WebTester:JwtExpirationMinutes");
-            if (expirationMinutes == 0)
-                expirationMinutes = 60;
+            return CreateJwtToken(secretKey, issuer, WebTesterAudience, expirationMinutes, claims);
+        }
 
+        private static string CreateJwtToken(string secretKey, string issuer, string audience,
+            int expirationMinutes, IEnumerable<Claim> claims)
+        {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-            var claims = new List<Claim>
-            {
-                new Claim(QuestionnaireIdClaimType, questionnaireId.ToString()),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-            };
-
             var token = new JwtSecurityToken(
                 issuer: issuer,
-                audience: WebTesterAudience,
+                audience: audience,
                 claims: claims,
                 expires: DateTime.UtcNow.AddMinutes(expirationMinutes),
                 signingCredentials: credentials

@@ -229,26 +229,17 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         [Route("WebTest/{id:guid}")]
         public async Task<string> WebTest(Guid id)
         {
-            string jwtToken;
-            var userId = User.GetIdOrNull();
-            if (userId.HasValue)
-            {
-                var user = await userManager.FindByIdAsync(userId.Value.ToString());
-                if (user != null)
-                {
-                    jwtToken = jwtTokenService.GenerateWebTesterToken(user, id);
-                }
-                else
-                {
-                    jwtToken = jwtTokenService.GenerateAnonymousWebTesterToken(id);
-                }
-            }
-            else
-            {
-                jwtToken = jwtTokenService.GenerateAnonymousWebTesterToken(id);
-            }
-
+            var jwtToken = await GenerateWebTesterJwtAsync(id);
             return $"{webTesterSettings.Value.BaseUri}/{id}?jwt={Uri.EscapeDataString(jwtToken)}";
+        }
+
+        private async Task<string> GenerateWebTesterJwtAsync(Guid questionnaireId)
+        {
+            var userId = User.GetIdOrNull();
+            DesignerIdentityUser? user = userId.HasValue
+                ? await userManager.FindByIdAsync(userId.Value.ToString())
+                : null;
+            return jwtTokenService.GenerateWebTesterToken(user, questionnaireId);
         }
 
         [HttpGet]
