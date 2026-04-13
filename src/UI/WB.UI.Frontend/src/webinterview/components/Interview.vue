@@ -1,6 +1,7 @@
 <template>
     <div>
         <signalr @connected="connected" :interviewId="interviewId" :mode="mode" />
+        <reconnecting-banner />
         <router-view />
     </div>
 </template>
@@ -23,6 +24,7 @@ export default {
 
     components: {
         signalr: defineAsyncComponent(() => import('./signalr/core.signalr')),
+        ReconnectingBanner: defineAsyncComponent(() => import('./ReconnectingBanner.vue')),
     },
 
     beforeMount() {
@@ -76,4 +78,3 @@ export default {
     },
 }
 </script>
-

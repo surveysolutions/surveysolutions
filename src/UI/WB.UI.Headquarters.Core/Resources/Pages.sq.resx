@@ -951,6 +951,9 @@
   <data name="MapList_Updated" xml:space="preserve">
     <value>Përditësuar më</value>
   </data>
+  <data name="MapList_HasDuplicateLabels" xml:space="preserve">
+    <value>Ka etiketa të dyfishta</value>
+  </data>
   <data name="MapList_Upload" xml:space="preserve">
     <value>Përditëso skedarin .zip</value>
   </data>
