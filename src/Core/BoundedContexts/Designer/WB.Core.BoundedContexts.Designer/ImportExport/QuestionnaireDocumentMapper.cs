@@ -612,7 +612,7 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
             var variable = new QuestionnaireEntities.Variable(publicKey, null)
             {
                 Name = src.VariableName ?? string.Empty,
-                Label = src.Label!,
+                Label = src.Label ?? string.Empty,
                 Expression = src.Expression ?? string.Empty,
                 DoNotExport = src.DoNotExport,
                 Type = (QuestionnaireEntities.VariableType)(int)src.VariableType
@@ -625,7 +625,7 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
             dst.PublicKey = GetIdOrGenerate(src.VariableName, src.Id, varToIdMap);
             dst.StataExportCaption = src.VariableName ?? string.Empty;
             dst.Comments = src.Comments;
-            dst.ConditionExpression = src.ConditionExpression!;
+            dst.ConditionExpression = src.ConditionExpression ?? string.Empty;
             dst.HideIfDisabled = src.HideIfDisabled;
             dst.Instructions = src.Instructions;
             dst.QuestionScope = (Main.Core.Entities.SubEntities.QuestionScope)(int)src.QuestionScope;

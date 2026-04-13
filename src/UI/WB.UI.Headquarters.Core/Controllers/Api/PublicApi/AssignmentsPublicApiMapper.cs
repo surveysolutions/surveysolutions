@@ -47,8 +47,17 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             result.Quantity = assignment.Quantity;
             result.QuestionnaireId = assignment.QuestionnaireId.ToString();
             result.InterviewsCount = assignment.InterviewSummaries.Count;
+            result.ResponsibleId = assignment.ResponsibleId;
             result.ResponsibleName = assignment.Responsible.Name;
             result.IsAudioRecordingEnabled = assignment.AudioRecording;
+            result.Archived = assignment.Archived;
+            result.CreatedAtUtc = assignment.CreatedAtUtc;
+            result.UpdatedAtUtc = assignment.UpdatedAtUtc;
+            result.ReceivedByTabletAtUtc = assignment.ReceivedByTabletAtUtc;
+            result.Email = assignment.Email;
+            result.Password = assignment.Password;
+            result.TargetArea = assignment.TargetArea;
+            result.WebMode = assignment.WebMode;
         }
 
         private static InterviewAnswer ToInterviewAnswer(AggregateInterviewAnswer source, IQuestionnaire? questionnaire)
@@ -98,7 +107,11 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             UpdatedAtUtc = row.UpdatedAtUtc,
             ReceivedByTabletAtUtc = row.ReceivedByTabletAtUtc,
             Archived = row.Archived,
-            IsAudioRecordingEnabled = row.IsAudioRecordingEnabled
+            IsAudioRecordingEnabled = row.IsAudioRecordingEnabled,
+            Email = row.Email,
+            Password = row.Password,
+            TargetArea = row.TargetArea,
+            WebMode = row.WebMode
         };
 
         private static string? GetVariableName(string? value, string? identity, IQuestionnaire? questionnaire)
