@@ -1,13 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using WB.Core.BoundedContexts.Designer;
 using WB.Core.BoundedContexts.Designer.AnonymousQuestionnaires;
 using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
+using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
@@ -35,7 +38,8 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         private readonly IQuestionnaireViewFactory questionnaireViewFactory;
         private readonly IChapterInfoViewFactory chapterInfoViewFactory;
         private readonly IQuestionnaireInfoViewFactory questionnaireInfoViewFactory;
-        private readonly IWebTesterService webTesterService;
+        private readonly IJwtTokenService jwtTokenService;
+        private readonly UserManager<DesignerIdentityUser> userManager;
         private readonly DesignerDbContext dbContext;
         private const int MaxCountOfOptionForFilteredCombobox = 200;
         public const int MaxVerificationErrorsOrWarnings = 100;
@@ -47,7 +51,8 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             IVerificationErrorsMapper verificationErrorsMapper,
             IQuestionnaireInfoFactory questionnaireInfoFactory,
             IOptions<WebTesterSettings> webTesterSettings,
-            IWebTesterService webTesterService,
+            IJwtTokenService jwtTokenService,
+            UserManager<DesignerIdentityUser> userManager,
             DesignerDbContext dbContext)
         {
             this.chapterInfoViewFactory = chapterInfoViewFactory;
@@ -57,7 +62,8 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             this.verificationErrorsMapper = verificationErrorsMapper;
             this.questionnaireInfoFactory = questionnaireInfoFactory;
             this.webTesterSettings = webTesterSettings;
-            this.webTesterService = webTesterService;
+            this.jwtTokenService = jwtTokenService;
+            this.userManager = userManager;
             this.dbContext = dbContext;
         }
 
@@ -221,10 +227,28 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
         [HttpGet]
         [Route("WebTest/{id:guid}")]
-        public string WebTest(Guid id)
+        public async Task<string> WebTest(Guid id)
         {
-            var token = this.webTesterService.CreateTestQuestionnaire(id);
-            return $"{webTesterSettings.Value.BaseUri}/{token}";
+            string jwtToken;
+            var userId = User.GetIdOrNull();
+            if (userId.HasValue)
+            {
+                var user = await userManager.FindByIdAsync(userId.Value.ToString());
+                if (user != null)
+                {
+                    jwtToken = jwtTokenService.GenerateWebTesterToken(user, id);
+                }
+                else
+                {
+                    jwtToken = jwtTokenService.GenerateAnonymousWebTesterToken(id);
+                }
+            }
+            else
+            {
+                jwtToken = jwtTokenService.GenerateAnonymousWebTesterToken(id);
+            }
+
+            return $"{webTesterSettings.Value.BaseUri}/{id}?jwt={Uri.EscapeDataString(jwtToken)}";
         }
 
         [HttpGet]

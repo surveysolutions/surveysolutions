@@ -24,25 +24,33 @@ namespace WB.UI.WebTester.Controllers
         private readonly IEvictionNotifier evictionService;
         private readonly IImportQuestionnaireAndCreateInterviewService interviewFactory;
         private readonly IOptions<TesterConfiguration> testerConfig;
+        private readonly IWebTesterJwtStore jwtStore;
 
         public WebTesterController(
             IStatefulInterviewRepository statefulInterviewRepository,
             IEvictionNotifier evictionService,
             IImportQuestionnaireAndCreateInterviewService interviewFactory,
-            IOptions<TesterConfiguration> testerConfig)
+            IOptions<TesterConfiguration> testerConfig,
+            IWebTesterJwtStore jwtStore)
         {
             this.statefulInterviewRepository = statefulInterviewRepository ?? throw new ArgumentNullException(nameof(statefulInterviewRepository));
             this.evictionService = evictionService;
             this.interviewFactory = interviewFactory;
             this.testerConfig = testerConfig;
+            this.jwtStore = jwtStore ?? throw new ArgumentNullException(nameof(jwtStore));
         }
 
         [Route("Run/{id:Guid}")]
-        public IActionResult Run(Guid id, Guid? sid, int? scenarioId = null)
+        public IActionResult Run(Guid id, Guid? sid, int? scenarioId = null, [FromQuery] string? jwt = null)
         {
             if (this.statefulInterviewRepository.Get(id.FormatGuid()) != null)
             {
                 evictionService.Evict(id);
+            }
+
+            if (!string.IsNullOrEmpty(jwt))
+            {
+                jwtStore.StoreToken(id, jwt);
             }
             
             var key = interviewFactory.StartImportQuestionnaireAndCreateInterview(id, sid, scenarioId);

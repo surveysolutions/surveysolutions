@@ -12,10 +12,15 @@ namespace WB.UI.Designer.Services
     public interface IJwtTokenService
     {
         string GenerateToken(DesignerIdentityUser user);
+        string GenerateWebTesterToken(DesignerIdentityUser user, Guid questionnaireId);
+        string GenerateAnonymousWebTesterToken(Guid questionnaireId);
     }
 
     public class JwtTokenService : IJwtTokenService
     {
+        public const string WebTesterAudience = "WB.WebTester";
+        public const string QuestionnaireIdClaimType = "questionnaire_id";
+
         private readonly IConfiguration configuration;
 
         public JwtTokenService(IConfiguration configuration)
@@ -54,6 +59,76 @@ namespace WB.UI.Designer.Services
             var token = new JwtSecurityToken(
                 issuer: issuer,
                 audience: audience,
+                claims: claims,
+                expires: DateTime.UtcNow.AddMinutes(expirationMinutes),
+                signingCredentials: credentials
+            );
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        public string GenerateWebTesterToken(DesignerIdentityUser user, Guid questionnaireId)
+        {
+            var secretKey = configuration["Providers:Assistant:JwtSecretKey"];
+            if (string.IsNullOrWhiteSpace(secretKey))
+            {
+                throw new InvalidOperationException("JWT secret key is not configured");
+            }
+
+            var issuer = configuration["Providers:Assistant:JwtIssuer"] ?? "WB.Designer";
+            var expirationMinutes = configuration.GetValue<int>("WebTester:JwtExpirationMinutes");
+            if (expirationMinutes == 0)
+                expirationMinutes = 60; // default 60 minutes for web tester sessions
+
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+            var claims = new List<Claim>
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+                new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName ?? string.Empty),
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Name, user.UserName ?? string.Empty),
+                new Claim(QuestionnaireIdClaimType, questionnaireId.ToString()),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            };
+
+            var token = new JwtSecurityToken(
+                issuer: issuer,
+                audience: WebTesterAudience,
+                claims: claims,
+                expires: DateTime.UtcNow.AddMinutes(expirationMinutes),
+                signingCredentials: credentials
+            );
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        public string GenerateAnonymousWebTesterToken(Guid questionnaireId)
+        {
+            var secretKey = configuration["Providers:Assistant:JwtSecretKey"];
+            if (string.IsNullOrWhiteSpace(secretKey))
+            {
+                throw new InvalidOperationException("JWT secret key is not configured");
+            }
+
+            var issuer = configuration["Providers:Assistant:JwtIssuer"] ?? "WB.Designer";
+            var expirationMinutes = configuration.GetValue<int>("WebTester:JwtExpirationMinutes");
+            if (expirationMinutes == 0)
+                expirationMinutes = 60;
+
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+            var claims = new List<Claim>
+            {
+                new Claim(QuestionnaireIdClaimType, questionnaireId.ToString()),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            };
+
+            var token = new JwtSecurityToken(
+                issuer: issuer,
+                audience: WebTesterAudience,
                 claims: claims,
                 expires: DateTime.UtcNow.AddMinutes(expirationMinutes),
                 signingCredentials: credentials

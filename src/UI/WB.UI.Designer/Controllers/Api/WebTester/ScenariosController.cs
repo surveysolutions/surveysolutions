@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WB.Core.BoundedContexts.Designer.DataAccess;
@@ -16,12 +18,10 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
     public class ScenariosController : ControllerBase
     {
         private readonly DesignerDbContext dbContext;
-        private readonly IWebTesterService webTesterService;
 
-        public ScenariosController(DesignerDbContext dbContext, IWebTesterService webTesterService)
+        public ScenariosController(DesignerDbContext dbContext)
         {
             this.dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
-            this.webTesterService = webTesterService ?? throw new ArgumentNullException(nameof(webTesterService));
         }
 
         [Route("{id:Guid}")]
@@ -67,23 +67,30 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
             return Ok(scenarios);
         }
 
-        [Route("{token}/{scenarioId:int}")]
-        public async Task<IActionResult> Get(string token, int scenarioId)
+        [Route("{questionnaireId:Guid}/{scenarioId:int}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [HttpGet]
+        public async Task<IActionResult> GetForWebTester(Guid questionnaireId, int scenarioId)
         {
-            var questionnaire = this.webTesterService.GetQuestionnaire(token);
-            if (questionnaire == null) return Forbid("Token expired");
+            var tokenQuestionnaire = User.FindFirst(JwtTokenService.QuestionnaireIdClaimType);
+            if (tokenQuestionnaire == null || !Guid.TryParse(tokenQuestionnaire.Value, out var tokenQuestionnaireId)
+                || tokenQuestionnaireId != questionnaireId)
+            {
+                return Forbid();
+            }
 
             StoredScenario? scenario = await this.dbContext.Scenarios.FindAsync(scenarioId);
             if (scenario == null)
                 return NotFound(new {Message = "Scenario not found"});
-            if (questionnaire != scenario.QuestionnaireId)
+
+            if (questionnaireId != scenario.QuestionnaireId)
             {
                 var anonymousQuestionnaire = this.dbContext.AnonymousQuestionnaires
-                    .FirstOrDefault(a => a.AnonymousQuestionnaireId == questionnaire 
+                    .FirstOrDefault(a => a.AnonymousQuestionnaireId == questionnaireId 
                                          && a.QuestionnaireId == scenario.QuestionnaireId 
                                          && a.IsActive == true);
                 if (anonymousQuestionnaire == null)
-                    return Forbid("Scenario from other questionnaire");
+                    return Forbid();
 
                 scenario.QuestionnaireId = anonymousQuestionnaire.AnonymousQuestionnaireId;
             }

@@ -186,7 +186,11 @@ namespace WB.UI.Designer
                         ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
                         ValidIssuer = Configuration["Providers:Assistant:JwtIssuer"] ?? "WB.Designer",
-                        ValidAudience = Configuration["Providers:Assistant:JwtAudience"] ?? "WB.AssistantService",
+                        ValidAudiences = new[]
+                        {
+                            Configuration["Providers:Assistant:JwtAudience"] ?? "WB.AssistantService",
+                            JwtTokenService.WebTesterAudience
+                        },
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecretKey!)),
                         ClockSkew = TimeSpan.FromMinutes(5)
                     };

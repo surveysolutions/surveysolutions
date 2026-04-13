@@ -60,7 +60,7 @@ namespace WB.UI.WebTester
             registry.Bind<IImportQuestionnaireAndCreateInterviewService, ImportQuestionnaireAndCreateInterviewService>();
 
             registry.BindAsSingleton<IEvictionObservable, IEvictionNotifier, TokenEviction>();
-
+            registry.BindAsSingleton<IWebTesterJwtStore, WebTesterJwtStore>();
             registry.Bind<IEnumeratorGroupStateCalculationStrategy, EnumeratorGroupGroupStateCalculationStrategy>();
             registry.Bind<ISupervisorGroupStateCalculationStrategy, SupervisorGroupStateCalculationStrategy>();
             registry.BindAsSingleton<IEventSourcedAggregateRootRepository, EventSourcedAggregateRootRepositoryWithWebCache>();

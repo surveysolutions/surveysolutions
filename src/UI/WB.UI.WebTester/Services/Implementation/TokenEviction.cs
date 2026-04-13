@@ -13,11 +13,13 @@ namespace WB.UI.WebTester.Services.Implementation
         private readonly IAppdomainsPerInterviewManager appdomainsPerInterviewManager;
         private readonly IQuestionnaireImportService questionnaireImportService;
         private readonly ICacheStorage<List<ICommand>, Guid> executedCommandsStorage;
+        private readonly IWebTesterJwtStore jwtStore;
 
         public TokenEviction(IWebInterviewInvoker webInterviewNotification,
             IAppdomainsPerInterviewManager appdomainsPerInterviewManager,
             IQuestionnaireImportService questionnaireImportService, 
-            ICacheStorage<List<ICommand>, Guid> executedCommandsStorage)
+            ICacheStorage<List<ICommand>, Guid> executedCommandsStorage,
+            IWebTesterJwtStore jwtStore)
         {
             this.subject = new Subject<Guid>();
 
@@ -25,6 +27,7 @@ namespace WB.UI.WebTester.Services.Implementation
             this.appdomainsPerInterviewManager = appdomainsPerInterviewManager;
             this.questionnaireImportService = questionnaireImportService;
             this.executedCommandsStorage = executedCommandsStorage;
+            this.jwtStore = jwtStore;
         }
         
         public void Evict(Guid token)
@@ -35,6 +38,7 @@ namespace WB.UI.WebTester.Services.Implementation
             appdomainsPerInterviewManager.TearDown(token);
             questionnaireImportService.RemoveQuestionnaire(token);
             executedCommandsStorage.Remove(token);
+            jwtStore.Remove(token);
         }
 
         public IDisposable Subscribe(Action<Guid> action)

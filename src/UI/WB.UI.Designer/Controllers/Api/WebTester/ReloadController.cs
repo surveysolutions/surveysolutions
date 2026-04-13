@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using WB.Core.BoundedContexts.Designer;
+using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.UI.Designer.Controllers.Api.Designer;
@@ -16,28 +19,49 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
     {
         private readonly WebTesterSettings webTesterSettings;
         private readonly IQuestionnaireViewFactory questionnaireViewFactory;
-        private readonly IWebTesterService webTesterService;
+        private readonly IJwtTokenService jwtTokenService;
+        private readonly UserManager<DesignerIdentityUser> userManager;
 
         public WebTesterReloadController(
             IOptions<WebTesterSettings> webTesterSettings, 
             IQuestionnaireViewFactory questionnaireViewFactory,
-            IWebTesterService webTesterService)
+            IJwtTokenService jwtTokenService,
+            UserManager<DesignerIdentityUser> userManager)
         {
             this.webTesterSettings = webTesterSettings.Value;
             this.questionnaireViewFactory = questionnaireViewFactory;
-            this.webTesterService = webTesterService;
+            this.jwtTokenService = jwtTokenService;
+            this.userManager = userManager;
         }
 
         [QuestionnairePermissions]
         [AuthorizeOrAnonymousQuestionnaire]
-        public ActionResult Index(QuestionnaireRevision id, string interviewId)
+        public async Task<ActionResult> Index(QuestionnaireRevision id, string interviewId)
         {
             var questionnaireView = this.questionnaireViewFactory.Load(id);
             if (questionnaireView == null)
                 return NotFound();
-            
-            var token = this.webTesterService.CreateTestQuestionnaire(id.QuestionnaireId);
-            string url = $"{webTesterSettings.BaseUri}/{token}?sid=" + interviewId;
+
+            string jwtToken;
+            var userId = User.GetIdOrNull();
+            if (userId.HasValue)
+            {
+                var user = await userManager.FindByIdAsync(userId.Value.ToString());
+                if (user != null)
+                {
+                    jwtToken = jwtTokenService.GenerateWebTesterToken(user, id.QuestionnaireId);
+                }
+                else
+                {
+                    jwtToken = jwtTokenService.GenerateAnonymousWebTesterToken(id.QuestionnaireId);
+                }
+            }
+            else
+            {
+                jwtToken = jwtTokenService.GenerateAnonymousWebTesterToken(id.QuestionnaireId);
+            }
+
+            string url = $"{webTesterSettings.BaseUri}/{id.QuestionnaireId}?sid={interviewId}&jwt={Uri.EscapeDataString(jwtToken)}";
             return Redirect(url);
         }
 

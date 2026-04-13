@@ -10,28 +10,28 @@ namespace WB.UI.WebTester.Services
 {
     public interface IDesignerWebTesterApi
     {
-        [Get("/api/webtester/{token}/info")]
-        Task<QuestionnaireLiteInfo> GetQuestionnaireInfoAsync(string token);
+        [Get("/api/webtester/{questionnaireId}/info")]
+        Task<QuestionnaireLiteInfo> GetQuestionnaireInfoAsync(string questionnaireId, [Header("Authorization")] string authorization);
 
-        [Get("/api/webtester/{token}/questionnaire")]
-        Task<Questionnaire> GetQuestionnaireAsync(string token);
+        [Get("/api/webtester/{questionnaireId}/questionnaire")]
+        Task<Questionnaire> GetQuestionnaireAsync(string questionnaireId, [Header("Authorization")] string authorization);
 
-        [Get("/api/webtester/{token}/attachment/{attachmentContentId}")]
-        Task<AttachmentContent> GetAttachmentContentAsync(string token, string attachmentContentId);
+        [Get("/api/webtester/{questionnaireId}/attachment/{attachmentContentId}")]
+        Task<AttachmentContent> GetAttachmentContentAsync(string questionnaireId, string attachmentContentId, [Header("Authorization")] string authorization);
 
-        [Get("/api/webtester/{token}/translations")]
-        Task<List<TranslationDto>> GetTranslationsAsync(string token);
+        [Get("/api/webtester/{questionnaireId}/translations")]
+        Task<List<TranslationDto>> GetTranslationsAsync(string questionnaireId, [Header("Authorization")] string authorization);
 
-        [Get("/api/webtester/{token}/categories")]
-        Task<List<CategoriesDto>> GetCategoriesAsync(string token);
+        [Get("/api/webtester/{questionnaireId}/categories")]
+        Task<List<CategoriesDto>> GetCategoriesAsync(string questionnaireId, [Header("Authorization")] string authorization);
 
-        [Get("/api/webtester/Scenarios/{token}/{scenarioId}")]
-        Task<ApiResponse<string>> GetScenario(string token, int scenarioId);
+        [Get("/api/webtester/Scenarios/{questionnaireId}/{scenarioId}")]
+        Task<ApiResponse<string>> GetScenario(string questionnaireId, int scenarioId, [Header("Authorization")] string authorization);
 
         [Get("/.hc")]
         Task<string> HealthCheck();
         
-        [Get("/api/webtester/{token}/settings")]
-        Task<QuestionnaireSettings> GetQuestionnaireSettingsAsync(string token);
+        [Get("/api/webtester/{questionnaireId}/settings")]
+        Task<QuestionnaireSettings> GetQuestionnaireSettingsAsync(string questionnaireId, [Header("Authorization")] string authorization);
     }
 }

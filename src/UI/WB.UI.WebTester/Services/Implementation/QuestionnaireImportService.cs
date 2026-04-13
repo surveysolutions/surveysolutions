@@ -26,6 +26,7 @@ namespace WB.UI.WebTester.Services.Implementation
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentStorage;
         private readonly ICacheStorage<QuestionnaireAttachment, string> attachmentsStorage;
         private readonly IReusableCategoriesStorage categoriesManagementService;
+        private readonly IWebTesterJwtStore jwtStore;
 
         private static long version;
 
@@ -36,7 +37,8 @@ namespace WB.UI.WebTester.Services.Implementation
             ITranslationManagementService translationManagementService,
             IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentStorage,
             ICacheStorage<QuestionnaireAttachment, string> attachmentsStorage,
-            IReusableCategoriesStorage categoriesManagementService)
+            IReusableCategoriesStorage categoriesManagementService,
+            IWebTesterJwtStore jwtStore)
         {
             this.questionnaireStorage = questionnaireStorage ?? throw new ArgumentNullException(nameof(questionnaireStorage));
             this.webTesterApi = webTesterApi ?? throw new ArgumentNullException(nameof(webTesterApi));
@@ -45,6 +47,7 @@ namespace WB.UI.WebTester.Services.Implementation
             this.questionnaireDocumentStorage = questionnaireDocumentStorage ?? throw new ArgumentNullException(nameof(questionnaireDocumentStorage));
             this.attachmentsStorage = attachmentsStorage ?? throw new ArgumentNullException(nameof(attachmentsStorage));
             this.categoriesManagementService = categoriesManagementService ?? throw new ArgumentNullException(nameof(categoriesManagementService));
+            this.jwtStore = jwtStore ?? throw new ArgumentNullException(nameof(jwtStore));
         }
 
         private ConcurrentDictionary<Guid, QuestionnaireIdentity> TokenToQuestionnaireMap { get; } 
@@ -70,22 +73,25 @@ namespace WB.UI.WebTester.Services.Implementation
 
         public async Task<QuestionnaireIdentity> ImportQuestionnaire(Guid designerToken)
         {
-            var questionnaire = await webTesterApi.GetQuestionnaireAsync(designerToken.ToString());
+            var jwt = jwtStore.GetToken(designerToken);
+            var authorization = jwt != null ? $"Bearer {jwt}" : string.Empty;
+
+            var questionnaire = await webTesterApi.GetQuestionnaireAsync(designerToken.ToString(), authorization);
 
             var questionnaireIdentity = new QuestionnaireIdentity(questionnaire.Document.PublicKey, Interlocked.Increment(ref version));
 
-            var translations = await webTesterApi.GetTranslationsAsync(designerToken.ToString());
+            var translations = await webTesterApi.GetTranslationsAsync(designerToken.ToString(), authorization);
 
             var attachments = new List<QuestionnaireAttachment>();
 
             foreach (Attachment documentAttachment in questionnaire.Document.Attachments)
             {
-                var content = await webTesterApi.GetAttachmentContentAsync(designerToken.ToString(), documentAttachment.ContentId);
+                var content = await webTesterApi.GetAttachmentContentAsync(designerToken.ToString(), documentAttachment.ContentId, authorization);
                 
                 attachments.Add(new QuestionnaireAttachment(documentAttachment.AttachmentId, content));
             }
 
-            var categories = await webTesterApi.GetCategoriesAsync(designerToken.ToString());
+            var categories = await webTesterApi.GetCategoriesAsync(designerToken.ToString(), authorization);
 
             lock (tokensLock)
             {
@@ -124,7 +130,7 @@ namespace WB.UI.WebTester.Services.Implementation
                 }));
             }
             
-            var settings = await webTesterApi.GetQuestionnaireSettingsAsync(designerToken.ToString());
+            var settings = await webTesterApi.GetQuestionnaireSettingsAsync(designerToken.ToString(), authorization);
 
             this.appdomainsPerInterviewManager.SetupForInterview(designerToken,
                 questionnaireIdentity,
