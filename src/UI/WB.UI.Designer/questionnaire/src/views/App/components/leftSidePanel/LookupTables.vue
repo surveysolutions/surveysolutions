@@ -4,8 +4,8 @@
             <h3>
                 <span>{{ $t('QuestionnaireEditor.SideBarLookupTablesCounter', { count: lookupTables.length }) }}</span>
             </h3>
-            <div class="button-holder">
-                <input type="button" class="btn lighter-hover" v-if="!isReadOnlyForUser"
+            <div class="button-holder" v-if="!isReadOnlyForUser">
+                <input type="button" class="btn lighter-hover"
                     :value="$t('QuestionnaireEditor.SideBarLookupTableAdd')"
                     @click="addNewLookupTable()">
             </div>

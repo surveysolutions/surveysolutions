@@ -2,13 +2,13 @@
     <div class="translations">
         <perfect-scrollbar class="scroller">
             <h3>{{ $t('QuestionnaireEditor.SideBarTranslationsCounter', { count: translations.length + 1 }) }}</h3>
-            <div class="button-holder">
+            <div class="button-holder" v-if="!isReadOnlyForUser">
                 <p>
                     <input type="button" :value="$t('QuestionnaireEditor.SideBarTranslationsUploadNew')"
                         @click.stop="openFileDialog()" class="btn lighter-hover"
-                        ngf-select v-if="!isReadOnlyForUser" capture />
+                        ngf-select capture />
 
-                    <file-upload ref="upload" v-if="!isReadOnlyForUser" :input-id="'tfunew'" v-model="file"
+                    <file-upload ref="upload" :input-id="'tfunew'" v-model="file"
                         :size="10 * 1024 * 1024" :drop="false" :drop-directory="false" @input-file="createAndUploadFile"
                         accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,.txt,.tsv,.tab">
                     </file-upload>

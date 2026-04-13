@@ -368,6 +368,7 @@
     "SideBarScenarioEmptyLine2": "A scenario is a snapshot of tester state, you can save it on tester by click on button \"Save Scenario\".",
     "SideBarScenarioName": "scenario title",
     "SideBarScenarioRecordNew": "Record New Scenario",
+    "PopupBlocked": "Unable to open window. Please allow pop-ups in your browser and try again.",
     "SideBarDownload": "Download:",
     "SideBarXlsx": "Xlsx",
     "SideBarTab": "Tab",

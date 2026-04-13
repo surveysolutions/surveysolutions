@@ -75,6 +75,7 @@
     "SideBarScenarioEmptyLine2": "Un scénario est un instantané de l'état du testeur, vous pouvez l'enregistrer sur le testeur en cliquant sur le bouton \"Enregistrer le scénario\".",
     "SideBarScenarioName": "titre du scénario",
     "SideBarScenarioRecordNew": "Enregistrer un nouveau scénario",
+    "PopupBlocked": "Impossible d'ouvrir la fenêtre. Veuillez autoriser les fenêtres contextuelles dans votre navigateur et réessayer.",
     "SideBarSectionsCounter": "{{count}} Section:",
     "SideBarSectionsCounter_other": "{{count}} Sections:",
     "SideBarTranslationDownloadXlsx": "Télécharger xlsx",

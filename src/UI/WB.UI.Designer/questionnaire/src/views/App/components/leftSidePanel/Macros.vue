@@ -8,8 +8,8 @@
                     }) }}
                 </span>
             </h3>
-            <div class="button-holder">
-                <input type="button" class="btn lighter-hover" v-if="!isReadOnlyForUser"
+            <div class="button-holder" v-if="!isReadOnlyForUser">
+                <input type="button" class="btn lighter-hover"
                     :value="$t('QuestionnaireEditor.SideBarAddMacro')" @click="addNewMacro()">
             </div>
             <div class="empty-list" v-if="macros.length == 0">

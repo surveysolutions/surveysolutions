@@ -4,8 +4,8 @@
             <h3>
                 <span>{{ $t('QuestionnaireEditor.SideBarScenarioCounter', { count: scenarios.length }) }}</span>
             </h3>
-            <div class="button-holder">
-                <input type="button" class="btn lighter-hover" v-if="!isReadOnlyForUser"
+            <div class="button-holder" v-if="!isReadOnlyForUser">
+                <input type="button" class="btn lighter-hover"
                     :value="$t('QuestionnaireEditor.SideBarScenarioRecordNew')" @click="recordNewScenario()">
             </div>
             <div class="empty-list" v-show="scenarios.length == 0">
@@ -28,6 +28,7 @@
 import ScenarioItem from './ScenarioItem.vue';
 import { useQuestionnaireStore } from '../../../../stores/questionnaire';
 import { runScenario } from '../../../../services/scenariosService';
+import { notice } from '../../../../services/notificationService';
 
 export default {
     name: 'Scenarios',
@@ -59,7 +60,11 @@ export default {
     },
     methods: {
         async recordNewScenario() {
-            await runScenario(this.questionnaireId);
+            try {
+                await runScenario(this.questionnaireId);
+            } catch {
+                notice(this.$t('QuestionnaireEditor.PopupBlocked'));
+            }
         },
     }
 }

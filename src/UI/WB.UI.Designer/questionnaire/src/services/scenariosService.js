@@ -30,6 +30,10 @@ export async function deleteScenario(questionnaireId, scenarioId) {
 export async function runScenario(questionnaireId, scenarioId) {
     var webTesterWindow = window.open('about:blank', '_blank');
 
+    if (!webTesterWindow) {
+        throw new Error('popup_blocked');
+    }
+
     var webTestUrl = await get('/api/questionnaire/webTest/' + questionnaireId);
 
     if (!isUndefined(scenarioId)) {

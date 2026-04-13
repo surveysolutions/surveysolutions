@@ -437,6 +437,7 @@
     "SideBarScenarioTitle": "Сценарии",
     "SideBarScenarioName": "заголовок сценария",
     "SideBarScenarioRecordNew": "Запись нового сценария",
+    "PopupBlocked": "Невозможно открыть окно. Разрешите всплывающие окна в вашем браузере и попробуйте снова.",
     "Run": "Выполнить",
     "View": "Просмотреть",
     "ScenarioDetails": "Сценарий",

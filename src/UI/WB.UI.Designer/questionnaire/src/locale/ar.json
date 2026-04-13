@@ -75,6 +75,7 @@
     "SideBarScenarioEmptyLine2": "السيناريو هو لقطة لحالة المختبر، يمكنك حفظها على المختبر بالنقر على زر \"حفظ السيناريو\".",
     "SideBarScenarioName": "عنوان السيناريو",
     "SideBarScenarioRecordNew": "تسجيل سيناريو جديد",
+    "PopupBlocked": "تعذر فتح النافذة. يرجى السماح بالنوافذ المنبثقة في متصفحك والمحاولة مرة أخرى.",
     "SideBarSectionsCounter": "{{count}} قسم:",
     "SideBarSectionsCounter_other": "{{count}} أقسام:",
     "SideBarTranslationDownloadXlsx": "تنزيل xlsx",
