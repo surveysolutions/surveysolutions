@@ -1,4 +1,5 @@
 <template>
+
     <div class="questionnaire-tree-holder col-xs-6">
         <div class="chapter-title" :class="{ selected: chapterId === selectedItemId }" @click.stop="
             $router.push({
@@ -113,9 +114,9 @@
                 <div class="start-box" v-if="showStartScreen">
                     <p>{{ $t('QuestionnaireEditor.EmptySectionLine1') }}</p>
                     <p>
-                        <span v-html="emptySectionHtmlLine1"> </span>
+                        <span v-sanitize-html="emptySectionHtmlLine1"> </span>
                         <br />
-                        <span v-html="emptySectionHtmlLine3">
+                        <span v-sanitize-html="emptySectionHtmlLine3">
                             <span class="left-panel-glyph"></span>
                         </span>
                     </p>
@@ -123,7 +124,7 @@
                     <p>
                         <span>{{ $t('QuestionnaireEditor.EmptySectionLine4') }}</span>
                         <br />
-                        <span v-html="emptySectionHtmlLine2"></span>
+                        <span v-sanitize-html="emptySectionHtmlLine2"></span>
                     </p>
                 </div>
             </div>
@@ -169,7 +170,6 @@ import Help from './Help.vue';
 
 import { migrateToNewVersion } from '../../../services/questionnaireService'
 import { useKeyShortcut } from '../../../composables/useKeyShortcut';
-import { sanitizeMarkup } from '../../../services/utilityService';
 
 export default {
     name: 'Tree',
@@ -311,15 +311,16 @@ export default {
         emptySectionHtmlLine1() {
             var emptySectionAddQuestion = "<button class='btn' disabled type='button'>" + this.$t('QuestionnaireEditor.AddQuestion') + " </button>";
             var emptySectionAddSubsectionHtml = "<button class=\"btn\" disabled type=\"button\">" + this.$t('QuestionnaireEditor.AddSubsection') + " </button>";
-            return sanitizeMarkup(this.$t('QuestionnaireEditor.EmptySectionLine2', { addQuestionBtn: emptySectionAddQuestion, addSubsectionBtn: emptySectionAddSubsectionHtml }));
+            return this.$t('QuestionnaireEditor.EmptySectionLine2', { addQuestionBtn: emptySectionAddQuestion, addSubsectionBtn: emptySectionAddSubsectionHtml });
         },
         emptySectionHtmlLine2() {
             var emptySectionSettingsHtml = "<button class=\"btn\" type=\"button\" disabled>" + this.$t('QuestionnaireEditor.Settings') + " </button>";
-            return sanitizeMarkup(this.$t('QuestionnaireEditor.EmptySectionLine5', { settingsBtn: emptySectionSettingsHtml }));
+            return this.$t('QuestionnaireEditor.EmptySectionLine5', { settingsBtn: emptySectionSettingsHtml });
         },
         emptySectionHtmlLine3() {
             const panel = '<span class="left-panel-glyph"></span>';
-            return sanitizeMarkup(this.$t('QuestionnaireEditor.EmptySectionLine3', { panel: panel }));
+            return this.$t('QuestionnaireEditor.EmptySectionLine3', { panel: panel });
+
         }
     },
 
