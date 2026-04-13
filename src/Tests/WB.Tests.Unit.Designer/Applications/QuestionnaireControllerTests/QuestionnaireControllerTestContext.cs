@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -43,7 +44,10 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
             ILogger<QuestionnaireController> logger = null,
             IQuestionnaireInfoFactory questionnaireInfoFactory = null,
             ICategoricalOptionsImportService categoricalOptionsImportService = null,
-            DesignerDbContext dbContext = null)
+            DesignerDbContext dbContext = null,
+            IEmailSender emailSender = null,
+            IViewRenderService viewRenderService = null,
+            UserManager<DesignerIdentityUser> userManager = null)
         {
             var questionnaireController = new QuestionnaireController(
                 questionnaireViewFactory ?? Mock.Of<IQuestionnaireViewFactory>(),
@@ -58,9 +62,9 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
                 commandService ?? Mock.Of<ICommandService>(),
                 dbContext ?? Create.InMemoryDbContext(),
                 reusableCategoriesService: Mock.Of<IReusableCategoriesService>(),
-                Mock.Of<IEmailSender>(),
-                Mock.Of<IViewRenderService>(),
-                null!,
+                emailSender ?? Mock.Of<IEmailSender>(),
+                viewRenderService ?? Mock.Of<IViewRenderService>(),
+                userManager!,
                 Mock.Of<ITagHelperComponentManager>(),
                 Mock.Of<IWebHostEnvironment>(),
                 Mock.Of<IOptions<ViteTagOptions>>(),
@@ -75,6 +79,17 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
 
             questionnaireController.TempData = new TempDataDictionary(questionnaireController.ControllerContext.HttpContext, Mock.Of<ITempDataProvider>());
             return questionnaireController;
+        }
+
+        internal static UserManager<DesignerIdentityUser> CreateUserManager(DesignerIdentityUser returnUser = null)
+        {
+            var store = new Mock<IUserStore<DesignerIdentityUser>>();
+            var userManagerMock = new Mock<UserManager<DesignerIdentityUser>>(
+                store.Object, null, null, null, null, null, null, null, null);
+            userManagerMock
+                .Setup(m => m.GetUserAsync(It.IsAny<ClaimsPrincipal>()))
+                .ReturnsAsync(returnUser);
+            return userManagerMock.Object;
         }
 
         protected static Stream GenerateStreamFromString(string s)

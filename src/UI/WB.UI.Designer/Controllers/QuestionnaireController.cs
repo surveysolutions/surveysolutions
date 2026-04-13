@@ -465,24 +465,12 @@ namespace WB.UI.Designer.Controllers
             else
             {
                 anonymousQuestionnaire.IsActive = isActive;
-                dbContext.AnonymousQuestionnaires.Update(anonymousQuestionnaire);
             }
 
             await dbContext.SaveChangesAsync();
 
             if (isActive)
-            {
-                try
-                {
-                    await SendAnonymousSharingEmailAsync(id, anonymousQuestionnaire.AnonymousQuestionnaireId);
-                }
-                catch (Exception ex)
-                {
-                    // Email notification failure should not break the main operation.
-                    // SMTP may be misconfigured or unavailable in some environments.
-                    logger.LogError(ex, "Failed to send anonymous sharing notification email for questionnaire {QuestionnaireId}", id);
-                }
-            }
+                await TrySendAnonymousSharingEmailAsync(id, anonymousQuestionnaire.AnonymousQuestionnaireId);
             
             return Json(new
             {
@@ -498,7 +486,10 @@ namespace WB.UI.Designer.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RegenerateAnonymousQuestionnaireLink(Guid id)
         {
-            var existedRecord = dbContext.AnonymousQuestionnaires.First(a => a.QuestionnaireId == id);
+            var existedRecord = dbContext.AnonymousQuestionnaires.FirstOrDefault(a => a.QuestionnaireId == id);
+            if (existedRecord == null)
+                return NotFound();
+
             dbContext.Remove(existedRecord);
            
             var anonymousQuestionnaire = new AnonymousQuestionnaire()
@@ -506,16 +497,7 @@ namespace WB.UI.Designer.Controllers
             await dbContext.AnonymousQuestionnaires.AddAsync(anonymousQuestionnaire);
             await dbContext.SaveChangesAsync();
 
-            try
-            {
-                await SendAnonymousSharingEmailAsync(id, anonymousQuestionnaire.AnonymousQuestionnaireId);
-            }
-            catch (Exception ex)
-            {
-                // Email notification failure should not break the main operation.
-                // SMTP may be misconfigured or unavailable in some environments.
-                logger.LogError(ex, "Failed to send anonymous sharing notification email for questionnaire {QuestionnaireId}", id);
-            }
+            await TrySendAnonymousSharingEmailAsync(id, anonymousQuestionnaire.AnonymousQuestionnaireId);
             
             return Json(new
             {
@@ -523,6 +505,20 @@ namespace WB.UI.Designer.Controllers
                 IsActive = true,
                 GeneratedAtUtc = anonymousQuestionnaire.GeneratedAtUtc,
             });
+        }
+
+        private async Task TrySendAnonymousSharingEmailAsync(Guid id, Guid anonymousQuestionnaireId)
+        {
+            try
+            {
+                await SendAnonymousSharingEmailAsync(id, anonymousQuestionnaireId);
+            }
+            catch (Exception ex)
+            {
+                // Email notification failure should not break the main operation.
+                // SMTP may be misconfigured or unavailable in some environments.
+                logger.LogError(ex, "Failed to send anonymous sharing notification email for questionnaire {QuestionnaireId}", id);
+            }
         }
 
         private async Task SendAnonymousSharingEmailAsync(Guid id, Guid anonymousQuestionnaireId)
