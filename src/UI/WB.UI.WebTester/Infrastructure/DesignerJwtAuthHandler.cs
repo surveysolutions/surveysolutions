@@ -12,9 +12,9 @@ namespace WB.UI.WebTester.Infrastructure
     {
         private readonly IWebTesterJwtStore jwtStore;
 
-        // Matches /api/webtester/{questionnaireId}/...
+        // Matches the standard 8-4-4-4-12 GUID format in /api/webtester/{questionnaireId}/...
         private static readonly Regex QuestionnaireIdPattern =
-            new Regex(@"/api/webtester/([0-9a-fA-F\-]{36})",
+            new Regex(@"/api/webtester/([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})",
                 RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public DesignerJwtAuthHandler(IWebTesterJwtStore jwtStore)
