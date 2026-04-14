@@ -111,6 +111,18 @@ namespace WB.UI.Headquarters.Resources {
             }
         }
         
+        public static string Reconnecting {
+            get {
+                return ResourceManager.GetString("Reconnecting", resourceCulture);
+            }
+        }
+        
+        public static string ReconnectAttempt {
+            get {
+                return ResourceManager.GetString("ReconnectAttempt", resourceCulture);
+            }
+        }
+        
         public static string CommentAdd {
             get {
                 return ResourceManager.GetString("CommentAdd", resourceCulture);

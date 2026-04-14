@@ -67,7 +67,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(questionnaireHistoryItem.TargetItemType, Is.EqualTo(QuestionnaireItemType.Questionnaire));
             Assert.That(questionnaireHistoryItem.TargetItemId, Is.EqualTo(questionnaireId));
             Assert.That(questionnaireHistoryItem.TargetItemTitle, Is.EqualTo(command.Title));
-            Assert.That(questionnaireHistoryItem.ResultingQuestionnaireDocument, Is.Null);
+            Assert.That(questionnaireHistoryItem.ResultingQuestionnaireDocument, Is.Not.Null);
         }
 
         [Test]

@@ -1158,4 +1158,7 @@
   <data name="ManageAccount" xml:space="preserve">
       <value>管理账号</value>
   </data>
+  <data name="AIAssistant" xml:space="preserve">
+      <value>AI</value>
+  </data>
 </root>

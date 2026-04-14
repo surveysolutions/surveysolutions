@@ -1221,4 +1221,7 @@
   <data name="ManageAccount" xml:space="preserve">
       <value>Menaxho llogarinë</value>
   </data>
+  <data name="AIAssistant" xml:space="preserve">
+      <value>AI</value>
+  </data>
 </root>

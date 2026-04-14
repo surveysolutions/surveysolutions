@@ -52,6 +52,8 @@ namespace WB.Services.Export.Questionnaire
 
         public string Instructions { get; set; } = String.Empty;
 
+        public QuestionProperties? Properties { get; set; }
+
         private string? columnName;
         public string ColumnName
         {

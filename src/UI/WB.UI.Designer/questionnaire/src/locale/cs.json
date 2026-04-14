@@ -513,7 +513,8 @@
     "SideBarShowDescription": "přidat popis",
     "AttachmentSizeIsTooBig": "Příloha je příliš velká. Maximální velikost: {{size}}",
     "SwitchTo": "Přepnout na",
-    "SwitchToTranslationConfirm": "Přepnutím se změní jazyk zobrazení dotazníku. Překlad musí obsahovat text pro všechny prvky."
+    "SwitchToTranslationConfirm": "Přepnutím se změní jazyk zobrazení dotazníku. Překlad musí obsahovat text pro všechny prvky.",
+    "AIAssistant": "AI"
   },
   "AccountResources": {
     "AccountInfoUpdated": "Informace o účtu byly úspěšně aktualizovány",
@@ -649,5 +650,35 @@
     "Untitled": "Neoznačený",
     "You": "ty",
     "CloneDeletedWarning": "Vytváříte kopii smazaného dotazníku. Některé části mohou být ztraceny."
+  },
+  "Assistant": {
+    "ClearHistory": "Vymazat historii",
+    "NotHelpful": "Zpět",
+    "Unhelpful": "Nepomohlo",
+    "Helpful": "Líbí se mi",
+    "UnhelpfulCommentTitle": "Přidat komentář",
+    "UnhelpfulCommentPlaceholder": "Napište krátký komentář (nepovinné)",
+    "UnhelpfulCommentHint": "Co bylo na této odpovědi špatně?",
+    "Send": "Odeslat",
+    "SendFeedback": "Odeslat zpětnou vazbu",
+    "NotHelpfulCommentTitle": "Přidat komentář",
+    "NotHelpfulCommentPlaceholder": "Napište krátký komentář (nepovinné)",
+    "Dislike": "Nelíbí se mi",
+    "NotUnhelpful": "Zpět",
+    "TypeMessage": "Napište svou zprávu...",
+    "Title": "AI Asistent",
+    "WelcomeMessage": "Začněte konverzaci s AI asistentem. Vaše zprávy mohou být použity ke zlepšení produktu. Nesdílejte citlivé nebo osobní informace v tomto chatu.",
+    "Disclaimer": "Tento obsah byl vytvořen automatizovaným systémem AI a nepředstavuje autoritativní ani ověřené informace. Může obsahovat chyby nebo opomenutí. Uživatelé jsou odpovědní za přezkoumání, ověření a uplatnění vlastního úsudku před použitím.",
+    "DisclaimerLabel": "Obsah generovaný umělou inteligencí",
+    "ConnectionError": "Připojení k asistentovi se nezdařilo.",
+    "RateLimitExceeded": "Byl překročen limit požadavků. Zkuste to prosím znovu později.",
+    "StopRequest": "Zastavit",
+    "Copy": "Kopírovat",
+    "CopyCode": "Kopírovat kód",
+    "NotAuthorized": "Neautorizováno.",
+    "InvalidRequest": "Neplatný požadavek. Zkontrolujte formát zprávy.",
+    "AccessDenied": "Přístup odepřen. Váš API klíč nemusí mít potřebná oprávnění.",
+    "ModelNotFound": "Model asistenta nebyl nalezen. Zkontrolujte, zda máte přístup ke konfigurovanému modelu.",
+    "ServiceUnavailable": "Služba asistenta je dočasně nedostupná. Zkuste to prosím znovu později."
   }
 }
