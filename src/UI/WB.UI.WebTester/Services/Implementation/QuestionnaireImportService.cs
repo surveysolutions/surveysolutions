@@ -14,7 +14,6 @@ using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Enumerator.Native.Questionnaire;
 using WB.Infrastructure.Native.Questionnaire;
 using WB.UI.WebTester.Controllers;
-using WB.UI.WebTester.Infrastructure;
 
 namespace WB.UI.WebTester.Services.Implementation
 {
@@ -71,8 +70,6 @@ namespace WB.UI.WebTester.Services.Implementation
 
         public async Task<QuestionnaireIdentity> ImportQuestionnaire(Guid designerToken)
         {
-            using var _ = WebTesterApiContext.Use(designerToken);
-
             var questionnaire = await webTesterApi.GetQuestionnaireAsync(designerToken.ToString());
 
             var questionnaireIdentity = new QuestionnaireIdentity(questionnaire.Document.PublicKey, Interlocked.Increment(ref version));

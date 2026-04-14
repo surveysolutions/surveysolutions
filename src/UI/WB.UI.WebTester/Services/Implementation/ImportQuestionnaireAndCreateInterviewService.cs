@@ -96,6 +96,7 @@ namespace WB.UI.WebTester.Services.Implementation
         private async Task<CreationResult> ImportQuestionnaireAndCreateInterview(Guid designerToken,
             Guid? originalInterviewId, int? scenarioId)
         {
+            using var _ = WebTesterApiContext.Use(designerToken);
             try
             {
                 var questionnaire = await ImportQuestionnaireAndCreateInterview(designerToken);
@@ -141,7 +142,6 @@ namespace WB.UI.WebTester.Services.Implementation
 
         public async Task<CreationResult> ApplyScenario(QuestionnaireIdentity questionnaireIdentity, Guid designerToken, int scenarioId)
         {
-            using var _ = WebTesterApiContext.Use(designerToken);
             var scenarioSerialized = await this.webTesterApi.GetScenario(designerToken.ToString(), scenarioId);
             if(scenarioSerialized.StatusCode == HttpStatusCode.NotFound || scenarioSerialized.Content == null)
                 return CreationResult.EmptyCreated;
