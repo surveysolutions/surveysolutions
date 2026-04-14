@@ -31,7 +31,6 @@ namespace WB.UI.WebTester.Services.Implementation
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IScenarioSerializer serializer;
         private readonly IAggregateRootCache aggregateRootCache;
-        private readonly IWebTesterJwtStore jwtStore;
         
         public ImportQuestionnaireAndCreateInterviewService(ICacheStorage<List<InterviewCommand>, Guid> executedCommandsStorage,
             ICommandService commandService,
@@ -43,8 +42,7 @@ namespace WB.UI.WebTester.Services.Implementation
             IQuestionnaireStorage questionnaireStorage,
             IScenarioSerializer serializer,
             IAggregateRootCache aggregateRootCache,
-            ICacheStorage<string, CreationResult> cacheStorage,
-            IWebTesterJwtStore jwtStore)
+            ICacheStorage<string, CreationResult> cacheStorage)
         {
             this.executedCommandsStorage = executedCommandsStorage ?? throw new ArgumentNullException(nameof(executedCommandsStorage));
             this.commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
@@ -56,7 +54,6 @@ namespace WB.UI.WebTester.Services.Implementation
             this.questionnaireStorage = questionnaireStorage ?? throw new ArgumentNullException(nameof(questionnaireStorage));
             this.serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
             this.aggregateRootCache = aggregateRootCache ?? throw new ArgumentNullException(nameof(aggregateRootCache));
-            this.jwtStore = jwtStore ?? throw new ArgumentNullException(nameof(jwtStore));
         }
 
         private static ConcurrentDictionary<Guid, CreationResult> statuses =
@@ -144,9 +141,7 @@ namespace WB.UI.WebTester.Services.Implementation
 
         public async Task<CreationResult> ApplyScenario(QuestionnaireIdentity questionnaireIdentity, Guid designerToken, int scenarioId)
         {
-            var jwt = jwtStore.GetToken(designerToken);
-            var authorization = jwt != null ? $"Bearer {jwt}" : string.Empty;
-            var scenarioSerialized = await this.webTesterApi.GetScenario(designerToken.ToString(), scenarioId, authorization);
+            var scenarioSerialized = await this.webTesterApi.GetScenario(designerToken.ToString(), scenarioId);
             if(scenarioSerialized.StatusCode == HttpStatusCode.NotFound || scenarioSerialized.Content == null)
                 return CreationResult.EmptyCreated;
             

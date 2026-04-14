@@ -11,27 +11,27 @@ namespace WB.UI.WebTester.Services
     public interface IDesignerWebTesterApi
     {
         [Get("/api/webtester/{questionnaireId}/info")]
-        Task<QuestionnaireLiteInfo> GetQuestionnaireInfoAsync(string questionnaireId, [Header("Authorization")] string authorization);
+        Task<QuestionnaireLiteInfo> GetQuestionnaireInfoAsync(string questionnaireId);
 
         [Get("/api/webtester/{questionnaireId}/questionnaire")]
-        Task<Questionnaire> GetQuestionnaireAsync(string questionnaireId, [Header("Authorization")] string authorization);
+        Task<Questionnaire> GetQuestionnaireAsync(string questionnaireId);
 
         [Get("/api/webtester/{questionnaireId}/attachment/{attachmentContentId}")]
-        Task<AttachmentContent> GetAttachmentContentAsync(string questionnaireId, string attachmentContentId, [Header("Authorization")] string authorization);
+        Task<AttachmentContent> GetAttachmentContentAsync(string questionnaireId, string attachmentContentId);
 
         [Get("/api/webtester/{questionnaireId}/translations")]
-        Task<List<TranslationDto>> GetTranslationsAsync(string questionnaireId, [Header("Authorization")] string authorization);
+        Task<List<TranslationDto>> GetTranslationsAsync(string questionnaireId);
 
         [Get("/api/webtester/{questionnaireId}/categories")]
-        Task<List<CategoriesDto>> GetCategoriesAsync(string questionnaireId, [Header("Authorization")] string authorization);
+        Task<List<CategoriesDto>> GetCategoriesAsync(string questionnaireId);
 
         [Get("/api/webtester/Scenarios/{questionnaireId}/{scenarioId}")]
-        Task<ApiResponse<string>> GetScenario(string questionnaireId, int scenarioId, [Header("Authorization")] string authorization);
+        Task<ApiResponse<string>> GetScenario(string questionnaireId, int scenarioId);
 
         [Get("/.hc")]
         Task<string> HealthCheck();
         
         [Get("/api/webtester/{questionnaireId}/settings")]
-        Task<QuestionnaireSettings> GetQuestionnaireSettingsAsync(string questionnaireId, [Header("Authorization")] string authorization);
+        Task<QuestionnaireSettings> GetQuestionnaireSettingsAsync(string questionnaireId);
     }
 }

@@ -74,11 +74,13 @@ namespace WB.UI.WebTester
                 //.AddCheck<DesignerConnectionCheck>("designer-connection")
                 ;
 
+            services.AddTransient<DesignerJwtAuthHandler>();
             services.AddHttpClientWithConfigurator<IDesignerWebTesterApi, DesignerApiConfigurator>(
                     new RefitSettings
                     {
                         ContentSerializer = ContentSerializer
                     })
+                .AddHttpMessageHandler<DesignerJwtAuthHandler>()
 #if DEBUG
            .ConfigurePrimaryHttpMessageHandler(() =>
                new HttpClientHandler

@@ -227,14 +227,15 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
         [HttpGet]
         [Route("WebTest/{id:guid}")]
-        public async Task<string> WebTest(Guid id)
+        public async Task<IActionResult> WebTest(Guid id)
         {
             var userId = User.GetIdOrNull();
             DesignerIdentityUser? user = userId.HasValue
                 ? await userManager.FindByIdAsync(userId.Value.ToString())
                 : null;
             var jwtToken = webTesterService.CreateTestQuestionnaire(id, user);
-            return $"{webTesterSettings.Value.BaseUri}/{id}?jwt={Uri.EscapeDataString(jwtToken)}";
+            Response.Headers["X-WebTester-Token"] = jwtToken;
+            return Ok($"{webTesterSettings.Value.BaseUri}/{id}");
         }
 
         [HttpGet]
