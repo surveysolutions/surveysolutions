@@ -873,4 +873,7 @@
   <data name="Warning" xml:space="preserve">
     <value>Paralajmërim</value>
   </data>
+  <data name="CommunicationIntegrityFailed" xml:space="preserve">
+    <value>Përgjigjja e marre duket të mos vijë nga shërbimi Survey Solutions. Kjo zakonisht shkaktohet nga një proxy rrjeti, firewall ose gateway sigurie që kap lidhjen. Ju lutemi kontrolloni lidhjen tuaj të rrjetit ose kontaktoni mbështetjen e TI.</value>
+  </data>
 </root>

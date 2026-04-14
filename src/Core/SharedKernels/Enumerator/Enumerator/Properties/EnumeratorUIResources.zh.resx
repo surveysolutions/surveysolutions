@@ -845,4 +845,7 @@
   <data name="UpdatingQuestionnaires" xml:space="preserve">
     <value>正在更新问卷</value>
   </data>
+  <data name="CommunicationIntegrityFailed" xml:space="preserve">
+    <value>收到的响应似乎并非来自 Survey Solutions 服务器。通常这是由网络代理、防火墙或安全网关拦截连接导致的。请检查您的网络连接或联系 IT 支持。</value>
+  </data>
 </root>

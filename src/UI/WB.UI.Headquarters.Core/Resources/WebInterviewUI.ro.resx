@@ -213,6 +213,13 @@
   <data name="ConnectionLostMessage" xml:space="preserve">
     <value>Reîncărcați pagina pentru a restabili conexiunea și continuați acest interviu.</value>
   </data>
+  <data name="Reconnecting" xml:space="preserve">
+    <value>Conexiunea a fost pierdută. Se încearcă reconectarea…</value>
+  </data>
+  <data name="ReconnectAttempt" xml:space="preserve">
+    <value>Tentativă {{count}}</value>
+    <comment>Do not translate parts inside {{}}: {{count}}</comment>
+  </data>
   <data name="ConnectionLostTitle" xml:space="preserve">
     <value>S-a întrerupt conexiunea cu serverul.</value>
   </data>
@@ -244,6 +251,12 @@ Contactați echipa de suport pentru asistență.</value>
   </data>
   <data name="DecimalTooBig" xml:space="preserve">
     <value>Valoarea introdusă este prea mare. Sunt permise mai puțin de 15 cifre</value>
+  </data>
+  <data name="InvalidServerResponseMessage" xml:space="preserve">
+    <value>Serverul nu a returnat antetul de identificare așteptat. Este posibil să fiți conectat printr-un proxy sau la un server incorect. Vă rugăm să reîncărcați pagina.</value>
+  </data>
+  <data name="InvalidServerResponseTitle" xml:space="preserve">
+    <value>Răspuns de server invalid</value>
   </data>
   <data name="Disconnected" xml:space="preserve">
     <value>Deconectat</value>

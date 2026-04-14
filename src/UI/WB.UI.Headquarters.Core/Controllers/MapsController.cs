@@ -127,11 +127,7 @@ namespace WB.UI.Headquarters.Controllers
                     ShapeType = map.ShapeType,
                     ShapesCount = map.ShapesCount,
                     DeleteMapUserLinkUrl = Url.Action("DeleteMapUser", "MapsApi"),
-                    DuplicateMapLabels = map.DuplicateLabels?.Select(l => new DuplicateLabelModel()
-                    {
-                        Label = l.Label,
-                        Count = l.Count
-                    }).ToArray() ?? Array.Empty<DuplicateLabelModel>(),
+                    ShowDuplicateLabelsWarning = map.HasDuplicateLabels ?? false,
                     IsPreviewGeoJson = map.IsPreviewGeoJson,
                     IsObserving = authorizedUser.IsObserving,
                 };

@@ -3128,5 +3128,11 @@ namespace WB.UI.Designer.Resources {
                 return ResourceManager.GetString("SwitchToTranslationConfirm", resourceCulture);
             }
         }
+        
+        public static string AIAssistant {
+            get {
+                return ResourceManager.GetString("AIAssistant", resourceCulture);
+            }
+        }
     }
 }
