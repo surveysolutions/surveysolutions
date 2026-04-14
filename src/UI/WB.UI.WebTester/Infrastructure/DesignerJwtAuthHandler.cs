@@ -19,7 +19,7 @@ namespace WB.UI.WebTester.Infrastructure
         protected override async Task<HttpResponseMessage> SendAsync(
             HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            var questionnaireId = WebTesterApiContext.Current;
+            var questionnaireId = ExtractQuestionnaireId(request.RequestUri);
             if (questionnaireId.HasValue)
             {
                 var jwt = jwtStore.GetToken(questionnaireId.Value);
@@ -30,6 +30,17 @@ namespace WB.UI.WebTester.Infrastructure
             }
 
             return await base.SendAsync(request, cancellationToken);
+        }
+
+        private static Guid? ExtractQuestionnaireId(Uri? uri)
+        {
+            if (uri == null) return null;
+            foreach (var segment in uri.Segments)
+            {
+                if (Guid.TryParse(segment.Trim('/'), out var guid))
+                    return guid;
+            }
+            return null;
         }
     }
 }

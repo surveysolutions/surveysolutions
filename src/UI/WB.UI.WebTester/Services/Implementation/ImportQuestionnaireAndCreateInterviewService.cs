@@ -96,7 +96,6 @@ namespace WB.UI.WebTester.Services.Implementation
         private async Task<CreationResult> ImportQuestionnaireAndCreateInterview(Guid designerToken,
             Guid? originalInterviewId, int? scenarioId)
         {
-            using var _ = WebTesterApiContext.Use(designerToken);
             try
             {
                 var questionnaire = await ImportQuestionnaireAndCreateInterview(designerToken);
