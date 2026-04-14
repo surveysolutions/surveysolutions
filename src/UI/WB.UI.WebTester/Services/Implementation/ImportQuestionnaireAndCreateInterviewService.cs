@@ -141,6 +141,7 @@ namespace WB.UI.WebTester.Services.Implementation
 
         public async Task<CreationResult> ApplyScenario(QuestionnaireIdentity questionnaireIdentity, Guid designerToken, int scenarioId)
         {
+            using var _ = WebTesterApiContext.Use(designerToken);
             var scenarioSerialized = await this.webTesterApi.GetScenario(designerToken.ToString(), scenarioId);
             if(scenarioSerialized.StatusCode == HttpStatusCode.NotFound || scenarioSerialized.Content == null)
                 return CreationResult.EmptyCreated;
