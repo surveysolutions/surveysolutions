@@ -19,18 +19,18 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
     {
         private readonly WebTesterSettings webTesterSettings;
         private readonly IQuestionnaireViewFactory questionnaireViewFactory;
-        private readonly IJwtTokenService jwtTokenService;
+        private readonly IWebTesterService webTesterService;
         private readonly UserManager<DesignerIdentityUser> userManager;
 
         public WebTesterReloadController(
             IOptions<WebTesterSettings> webTesterSettings, 
             IQuestionnaireViewFactory questionnaireViewFactory,
-            IJwtTokenService jwtTokenService,
+            IWebTesterService webTesterService,
             UserManager<DesignerIdentityUser> userManager)
         {
             this.webTesterSettings = webTesterSettings.Value;
             this.questionnaireViewFactory = questionnaireViewFactory;
-            this.jwtTokenService = jwtTokenService;
+            this.webTesterService = webTesterService;
             this.userManager = userManager;
         }
 
@@ -42,18 +42,13 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
             if (questionnaireView == null)
                 return NotFound();
 
-            var jwtToken = await GenerateWebTesterJwtAsync(id.QuestionnaireId);
-            string url = $"{webTesterSettings.BaseUri}/{id.QuestionnaireId}?sid={interviewId}&jwt={Uri.EscapeDataString(jwtToken)}";
-            return Redirect(url);
-        }
-
-        private async Task<string> GenerateWebTesterJwtAsync(Guid questionnaireId)
-        {
             var userId = User.GetIdOrNull();
             DesignerIdentityUser? user = userId.HasValue
                 ? await userManager.FindByIdAsync(userId.Value.ToString())
                 : null;
-            return jwtTokenService.GenerateWebTesterToken(user, questionnaireId);
+            var jwtToken = webTesterService.CreateTestQuestionnaire(id.QuestionnaireId, user);
+            string url = $"{webTesterSettings.BaseUri}/{id.QuestionnaireId}?sid={interviewId}&jwt={Uri.EscapeDataString(jwtToken)}";
+            return Redirect(url);
         }
 
         private bool ValidateAccessPermissions(QuestionnaireView questionnaireView)

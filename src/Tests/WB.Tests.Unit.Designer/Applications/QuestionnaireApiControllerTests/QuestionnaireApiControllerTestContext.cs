@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
             IQuestionnaireVerifier questionnaireVerifier = null,
             IVerificationErrorsMapper verificationErrorsMapper = null,
             IQuestionnaireInfoFactory questionnaireInfoFactory = null,
-            IJwtTokenService jwtTokenService = null)
+            IWebTesterService webTesterService = null)
         {
             var userStore = new Mock<IUserStore<DesignerIdentityUser>>();
             var userManager = new Mock<UserManager<DesignerIdentityUser>>(
@@ -47,7 +47,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
                 verificationErrorsMapper ?? Mock.Of<IVerificationErrorsMapper>(),
                 questionnaireInfoFactory ?? Mock.Of<IQuestionnaireInfoFactory>(),
                 Mock.Of<IOptions<WebTesterSettings>>(),
-                jwtTokenService ?? Mock.Of<IJwtTokenService>(),
+                webTesterService ?? Mock.Of<IWebTesterService>(),
                 userManager.Object,
                 Mock.Of<DesignerDbContext>());
 

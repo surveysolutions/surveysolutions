@@ -38,7 +38,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         private readonly IQuestionnaireViewFactory questionnaireViewFactory;
         private readonly IChapterInfoViewFactory chapterInfoViewFactory;
         private readonly IQuestionnaireInfoViewFactory questionnaireInfoViewFactory;
-        private readonly IJwtTokenService jwtTokenService;
+        private readonly IWebTesterService webTesterService;
         private readonly UserManager<DesignerIdentityUser> userManager;
         private readonly DesignerDbContext dbContext;
         private const int MaxCountOfOptionForFilteredCombobox = 200;
@@ -51,7 +51,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             IVerificationErrorsMapper verificationErrorsMapper,
             IQuestionnaireInfoFactory questionnaireInfoFactory,
             IOptions<WebTesterSettings> webTesterSettings,
-            IJwtTokenService jwtTokenService,
+            IWebTesterService webTesterService,
             UserManager<DesignerIdentityUser> userManager,
             DesignerDbContext dbContext)
         {
@@ -62,7 +62,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             this.verificationErrorsMapper = verificationErrorsMapper;
             this.questionnaireInfoFactory = questionnaireInfoFactory;
             this.webTesterSettings = webTesterSettings;
-            this.jwtTokenService = jwtTokenService;
+            this.webTesterService = webTesterService;
             this.userManager = userManager;
             this.dbContext = dbContext;
         }
@@ -229,17 +229,12 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         [Route("WebTest/{id:guid}")]
         public async Task<string> WebTest(Guid id)
         {
-            var jwtToken = await GenerateWebTesterJwtAsync(id);
-            return $"{webTesterSettings.Value.BaseUri}/{id}?jwt={Uri.EscapeDataString(jwtToken)}";
-        }
-
-        private async Task<string> GenerateWebTesterJwtAsync(Guid questionnaireId)
-        {
             var userId = User.GetIdOrNull();
             DesignerIdentityUser? user = userId.HasValue
                 ? await userManager.FindByIdAsync(userId.Value.ToString())
                 : null;
-            return jwtTokenService.GenerateWebTesterToken(user, questionnaireId);
+            var jwtToken = webTesterService.CreateTestQuestionnaire(id, user);
+            return $"{webTesterSettings.Value.BaseUri}/{id}?jwt={Uri.EscapeDataString(jwtToken)}";
         }
 
         [HttpGet]
