@@ -5,6 +5,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -25,41 +26,82 @@ namespace WB.UI.WebTester.Controllers
         private readonly IImportQuestionnaireAndCreateInterviewService interviewFactory;
         private readonly IOptions<TesterConfiguration> testerConfig;
         private readonly IWebTesterJwtStore jwtStore;
+        private readonly ICodeExchangeClient codeExchangeClient;
+        private readonly IUserContextStore userContextStore;
+        private readonly ILogger<WebTesterController> logger;
 
         public WebTesterController(
             IStatefulInterviewRepository statefulInterviewRepository,
             IEvictionNotifier evictionService,
             IImportQuestionnaireAndCreateInterviewService interviewFactory,
             IOptions<TesterConfiguration> testerConfig,
-            IWebTesterJwtStore jwtStore)
+            IWebTesterJwtStore jwtStore,
+            ICodeExchangeClient codeExchangeClient,
+            IUserContextStore userContextStore,
+            ILogger<WebTesterController> logger)
         {
             this.statefulInterviewRepository = statefulInterviewRepository ?? throw new ArgumentNullException(nameof(statefulInterviewRepository));
             this.evictionService = evictionService;
             this.interviewFactory = interviewFactory;
             this.testerConfig = testerConfig;
             this.jwtStore = jwtStore ?? throw new ArgumentNullException(nameof(jwtStore));
+            this.codeExchangeClient = codeExchangeClient ?? throw new ArgumentNullException(nameof(codeExchangeClient));
+            this.userContextStore = userContextStore ?? throw new ArgumentNullException(nameof(userContextStore));
+            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         [Route("Run/{id:Guid}")]
-        public IActionResult Run(Guid id, Guid? sid, int? scenarioId = null, [FromQuery] string? jwt = null)
+        public async Task<IActionResult> Run(Guid id, Guid? sid, int? scenarioId = null,
+            [FromQuery] string? code = null)
         {
             if (this.statefulInterviewRepository.Get(id.FormatGuid()) != null)
             {
                 evictionService.Evict(id);
             }
 
-            if (!string.IsNullOrEmpty(jwt))
+            // Exchange one-time code for delegated JWT (backend-to-backend)
+            if (!string.IsNullOrWhiteSpace(code))
             {
-                jwtStore.StoreToken(id, jwt);
+                var exchangeResult = await codeExchangeClient.ExchangeAsync(code);
+                if (exchangeResult != null)
+                {
+                    jwtStore.StoreToken(id, exchangeResult.AccessToken);
+                    userContextStore.Store(id, new RequestUserContext
+                    {
+                        UserId         = exchangeResult.UserId,
+                        CorrelationId  = exchangeResult.CorrelationId,
+                        DelegatedToken = exchangeResult.AccessToken
+                    });
+
+                    logger.LogInformation(
+                        "Session started. UserId={UserId}, CorrelationId={CorrelationId}, " +
+                        "QuestionnaireId={QuestionnaireId}, TraceId={TraceId}, ServiceName=WB.WebTester",
+                        exchangeResult.UserId ?? "anonymous",
+                        exchangeResult.CorrelationId,
+                        id,
+                        HttpContext.TraceIdentifier);
+                }
+                else
+                {
+                    // Exchange failed — no JWT available, Designer API calls will be rejected.
+                    // Redirect to an error page rather than starting an import that will fail with 401.
+                    logger.LogError(
+                        "Code exchange returned no result — cannot start interview. " +
+                        "QuestionnaireId={QuestionnaireId}, TraceId={TraceId}. " +
+                        "Check that Designer is reachable and WebTester:ServiceApiKey matches.",
+                        id, HttpContext.TraceIdentifier);
+                    return this.RedirectToAction("QuestionnaireWithErrors", "Error");
+                }
             }
-            
+
             var key = interviewFactory.StartImportQuestionnaireAndCreateInterview(id, sid, scenarioId);
             return this.View(new InterviewPageModel
             {
                 Id = key.ToString(),
             });
         }
-        
+
+
         [Route("Status/{id:Guid}")]
         public IActionResult GetStatus(Guid id)
         {

@@ -29,6 +29,7 @@ using WB.UI.Shared.Web.LoggingIntegration;
 using WB.UI.Shared.Web.Versions;
 using WB.UI.WebTester.Infrastructure;
 using WB.UI.WebTester.Services;
+using WB.UI.WebTester.Services.Implementation;
 
 namespace WB.UI.WebTester
 {
@@ -75,6 +76,8 @@ namespace WB.UI.WebTester
                 ;
 
             services.AddTransient<DesignerJwtAuthHandler>();
+            services.AddTransient<ICodeExchangeClient, CodeExchangeClient>();
+            services.AddScoped<IUserContextAccessor, UserContextAccessor>();
             services.AddHttpClientWithConfigurator<IDesignerWebTesterApi, DesignerApiConfigurator>(
                     new RefitSettings
                     {
@@ -162,6 +165,10 @@ namespace WB.UI.WebTester
             });
 
             app.UseRouting();
+
+            // Enriches log scope with UserId/CorrelationId/TraceId for every request.
+            // Must be after UseRouting so route values (id) are available.
+            app.UseMiddleware<UserContextMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {

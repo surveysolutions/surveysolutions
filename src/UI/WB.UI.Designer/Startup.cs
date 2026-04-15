@@ -200,7 +200,9 @@ namespace WB.UI.Designer
                         ValidAudiences = new[]
                         {
                             Configuration["Providers:Assistant:JwtAudience"] ?? "WB.AssistantService",
-                            JwtTokenService.WebTesterAudience
+                            JwtTokenService.WebTesterAudience,
+                            // Delegated JWTs issued for B→A calls use aud="WB.Designer"
+                            DelegatedTokenService.DelegatedAudience
                         },
                         IssuerSigningKeys = signingKeys,
                         ClockSkew = TimeSpan.FromMinutes(5)
@@ -372,6 +374,7 @@ namespace WB.UI.Designer
             services.Configure<PdfSettings>(Configuration.GetSection("Pdf"));
             services.Configure<QuestionnaireHistorySettings>(Configuration.GetSection("QuestionnaireHistorySettings"));
             services.Configure<WebTesterSettings>(Configuration.GetSection("WebTester"));
+
 
             aspCoreKernel = new AspCoreKernel(services);
 

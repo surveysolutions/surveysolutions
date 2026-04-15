@@ -233,9 +233,17 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             DesignerIdentityUser? user = userId.HasValue
                 ? await userManager.FindByIdAsync(userId.Value.ToString())
                 : null;
-            var jwtToken = webTesterService.CreateTestQuestionnaire(id, user);
-            Response.Headers["X-WebTester-Token"] = jwtToken;
-            return Ok($"{webTesterSettings.Value.BaseUri}/{id}");
+
+            var correlationId = Guid.NewGuid().ToString("N");
+
+            // Returns a one-time code in the URL — JWT never leaves the server.
+            var code = await webTesterService.CreateOneTimeCodeAsync(
+                id,
+                user?.Id.ToString(),
+                correlationId);
+
+            var redirectUrl = $"{webTesterSettings.Value.BaseUri}/{id}?code={Uri.EscapeDataString(code)}";
+            return Ok(redirectUrl);
         }
 
         [HttpGet]

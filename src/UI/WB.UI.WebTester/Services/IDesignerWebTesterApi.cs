@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Refit;
 using WB.Core.SharedKernels.Questionnaire.Api;
@@ -30,8 +31,19 @@ namespace WB.UI.WebTester.Services
 
         [Get("/.hc")]
         Task<string> HealthCheck();
-        
+
         [Get("/api/webtester/{questionnaireId}/settings")]
         Task<QuestionnaireSettings> GetQuestionnaireSettingsAsync(string questionnaireId);
+
+        /// <summary>
+        /// Backend-to-backend: exchanges a one-time code for a delegated JWT.
+        /// Authenticated via X-Service-Name / X-Service-Key headers.
+        /// </summary>
+        [Post("/api/internal/auth/exchange")]
+        Task<ExchangeCodeResponse> ExchangeCodeAsync(
+            [Body] ExchangeCodeRequest request,
+            [Header("X-Service-Name")] string serviceName,
+            [Header("X-Service-Key")] string serviceKey,
+            CancellationToken cancellationToken = default);
     }
 }
