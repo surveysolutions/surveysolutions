@@ -46,7 +46,7 @@ namespace WB.UI.Designer.Services
                 Code            = code,
                 UserId          = userId,
                 CorrelationId   = correlationId,
-                TargetService   = "WB.WebTester",
+                TargetService   = WebTesterConstants.ServiceName,
                 QuestionnaireId = questionnaireId,
                 CreatedAt       = now,
                 ExpiresAt       = now.AddSeconds(ttl),

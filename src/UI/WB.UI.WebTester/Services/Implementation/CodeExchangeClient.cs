@@ -41,7 +41,7 @@ namespace WB.UI.WebTester.Services.Implementation
             try
             {
                 var result = await designerApi.ExchangeCodeAsync(
-                    new ExchangeCodeRequest { Code = code, ServiceName = serviceName },
+                    new ExchangeCodeRequest { Code = code },
                     serviceName,
                     serviceKey,
                     ct);

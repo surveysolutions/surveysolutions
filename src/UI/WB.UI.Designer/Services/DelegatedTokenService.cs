@@ -9,19 +9,6 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace WB.UI.Designer.Services
 {
-    public class DelegatedTokenRequest
-    {
-        public string? UserId { get; init; }
-        public string CorrelationId { get; init; } = "";
-        public Guid QuestionnaireId { get; init; }
-        public string AuthorizedParty { get; init; } = "WB.WebTester";
-        public string Scope { get; init; } = "webtester";
-    }
-
-    public interface IDelegatedTokenService
-    {
-        string CreateDelegatedToken(DelegatedTokenRequest request);
-    }
 
     /// <summary>
     /// Issues a short-lived delegated JWT for Service B (WebTester) → Service A (Designer) backend calls.

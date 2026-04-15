@@ -4,28 +4,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using WB.UI.Designer.Models;
 using WB.UI.Designer.Services;
 
 namespace WB.UI.Designer.Controllers.Api.Internal
 {
-    // --- Request / Response models ---
-
-    public class ExchangeCodeRequest
-    {
-        public string Code { get; set; } = "";
-        public string ServiceName { get; set; } = "";
-    }
-
-    public class ExchangeCodeResponse
-    {
-        public string AccessToken { get; set; } = "";
-        public int ExpiresIn { get; set; }
-        public string? UserId { get; set; }
-        public string CorrelationId { get; set; } = "";
-        public string QuestionnaireId { get; set; } = "";
-    }
-
-    // --- Controller ---
 
     /// <summary>
     /// Backend-to-backend endpoint: WebTester exchanges a one-time code for a

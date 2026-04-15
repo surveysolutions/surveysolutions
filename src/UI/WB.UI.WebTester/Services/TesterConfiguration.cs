@@ -11,6 +11,6 @@
         public string? ServiceApiKey { get; set; }
 
         /// <summary>Service identifier sent to Designer on the exchange call. Default: WB.WebTester.</summary>
-        public string? ServiceName { get; set; } = "WB.WebTester";
+        public string? ServiceName { get; set; } = WebTesterConstants.ServiceName;
     }
 }
