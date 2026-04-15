@@ -204,6 +204,13 @@
   <data name="ConnectionLostMessage" xml:space="preserve">
     <value>يرجى إعادة تحميل الصفحة لإقامة الاتصال من جديد ومواصلة هذه المقابلة.</value>
   </data>
+  <data name="Reconnecting" xml:space="preserve">
+    <value>انقطع الاتصال. جارٍ محاولة إعادة الاتصال…</value>
+  </data>
+  <data name="ReconnectAttempt" xml:space="preserve">
+    <value>المحاولة {{count}}</value>
+    <comment>Do not translate parts inside {{}}: {{count}}</comment>
+  </data>
   <data name="ConnectionLostTitle" xml:space="preserve">
     <value>تم فقدان الاتصال بالخادم. </value>
   </data>
@@ -227,6 +234,12 @@
   </data>
   <data name="DecimalTooBig" xml:space="preserve">
     <value>القيمة التي تم إدخالها كبيرة جدا. تم السماح بأقل من 15 رقما</value>
+  </data>
+  <data name="InvalidServerResponseMessage" xml:space="preserve">
+    <value>لم يُرجع الخادم رأس التعريف المتوقع. ربما أنت متصل بخادم وكيل أو خادم غير صحيح. يرجى إعادة تحميل الصفحة.</value>
+  </data>
+  <data name="InvalidServerResponseTitle" xml:space="preserve">
+    <value>استجابة خادم غير صالحة</value>
   </data>
   <data name="Disconnected" xml:space="preserve">
     <value>انقطع الاتصال</value>

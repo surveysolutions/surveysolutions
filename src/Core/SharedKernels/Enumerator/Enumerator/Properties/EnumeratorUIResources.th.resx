@@ -435,4 +435,7 @@
   <data name="NotSupportedServerSyncProtocolVersion" xml:space="preserve">
       <value>ตรวจพบเวอร์ชันที่เข้ากันไม่ได้ โปรดติดต่อหัวหน้าของคุณเพื่อแก้ไขปัญหา</value>
   </data>
+  <data name="CommunicationIntegrityFailed" xml:space="preserve">
+    <value>การตอบกลับที่ได้รับดูเหมือนไม่มาจากเซิร์ฟเวอร์ Survey Solutions โดยปกติสถานะนี้เกิดจากพร็อกซีเครือข่าย ไฟร์วอลล์ หรือเกตเวย์ความปลอดภัยที่ดักจับการเชื่อมต่อ กรุณาตรวจสอบการเชื่อมต่อเครือข่ายหรือ ติดต่อฝ่ายไอทีของคุณ</value>
+  </data>
 </root>

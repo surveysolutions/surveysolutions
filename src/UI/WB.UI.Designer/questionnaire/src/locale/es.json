@@ -513,7 +513,8 @@
     "SideBarTab": "Tab",
     "AttachmentSizeIsTooBig": "El tamaño del archivo adjunto es demasiado grande. Tamaño máximo: {{size}}",
     "SwitchTo": "Cambiar a",
-    "SwitchToTranslationConfirm": "Cambiar a modificará el idioma de visualización del cuestionario. La traducción debe incluir texto para todos los elementos."
+    "SwitchToTranslationConfirm": "Cambiar a modificará el idioma de visualización del cuestionario. La traducción debe incluir texto para todos los elementos.",
+    "AIAssistant": "IA"
   },
   "AccountResources": {
     "AllRights": "Todos los derechos reservados",
@@ -649,5 +650,35 @@
     "ExcelOrTabFilesOnly": "Solo se aceptan archivos de Excel o valores separados por tabulaciones",
     "RestoreQuestionnaireDocument": "Restaurar documento del cuestionario (antiguo)",
     "SaveAs": "Guardar como"
+  },
+  "Assistant": {
+    "ClearHistory": "Borrar historial",
+    "NotHelpful": "Deshacer",
+    "Unhelpful": "No fue útil",
+    "Helpful": "Me gusta",
+    "UnhelpfulCommentTitle": "Añadir un comentario",
+    "UnhelpfulCommentPlaceholder": "Escriba un comentario breve (opcional)",
+    "UnhelpfulCommentHint": "¿Qué estuvo mal en esta respuesta?",
+    "Send": "Enviar",
+    "SendFeedback": "Enviar comentarios",
+    "NotHelpfulCommentTitle": "Añadir un comentario",
+    "NotHelpfulCommentPlaceholder": "Escriba un comentario breve (opcional)",
+    "Dislike": "No me gusta",
+    "NotUnhelpful": "Deshacer",
+    "TypeMessage": "Escribe tu mensaje...",
+    "Title": "Asistente de IA",
+    "WelcomeMessage": "Inicia una conversación con el asistente de IA. Tus mensajes pueden utilizarse para mejorar el producto. No compartas información sensible o personal en este chat.",
+    "Disclaimer": "Este contenido fue producido por un sistema de IA automatizado y no constituye información autorizada o verificada. Puede contener errores u omisiones. Los usuarios son responsables de revisar, validar y ejercer su criterio antes de su uso.",
+    "DisclaimerLabel": "Contenido generado por IA",
+    "ConnectionError": "No se pudo conectar con el asistente.",
+    "RateLimitExceeded": "Límite de solicitudes excedido. Por favor, inténtelo de nuevo más tarde.",
+    "StopRequest": "Detener",
+    "Copy": "Copiar",
+    "CopyCode": "Copiar código",
+    "NotAuthorized": "No autorizado.",
+    "InvalidRequest": "Solicitud no válida. Por favor, compruebe el formato de su mensaje.",
+    "AccessDenied": "Acceso denegado. Es posible que su clave API no tenga los permisos necesarios.",
+    "ModelNotFound": "Modelo de asistente no encontrado. Por favor, compruebe si tiene acceso al modelo configurado.",
+    "ServiceUnavailable": "El servicio de asistente no está disponible temporalmente. Por favor, inténtelo de nuevo más tarde."
   }
 }

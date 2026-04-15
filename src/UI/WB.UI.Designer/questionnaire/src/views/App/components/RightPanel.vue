@@ -1,10 +1,12 @@
 <template>
-    <div class="question-editor col-xs-6" :class="{ commenting: isCommentsBlockVisible }" ui-view>
-        <router-view />
-    </div>
+    <div class="editor-panel">
+        <div class="question-editor" :class="{ commenting: isCommentsBlockVisible }" ui-view>
+            <router-view />
+        </div>
 
-    <div class="comments-editor col-xs-6" :class="{ hidden: !isCommentsBlockVisible }" ui-view="comments">
-        <router-view name="comments"></router-view>>
+        <div class="comments-editor" :class="{ hidden: !isCommentsBlockVisible }" ui-view="comments">
+            <router-view name="comments"></router-view>
+        </div>
     </div>
 </template>
 

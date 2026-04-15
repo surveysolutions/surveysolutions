@@ -976,4 +976,7 @@ Il apparaîtra sur l'appareil de l'enquêteur après la prochaine synchronisatio
     <data name="Synchronization_UploadGeoTracking" xml:space="preserve">
         <value>Télécharger les informations de géo-suivi</value>
     </data>
+  <data name="CommunicationIntegrityFailed" xml:space="preserve">
+    <value>La réponse reçue ne semble pas provenir du serveur Survey Solutions. Cela est généralement causé par un proxy réseau, un pare-feu ou une passerelle de sécurité interceptant la connexion. Veuillez vérifier votre connexion réseau ou contacter le support informatique.</value>
+  </data>
 </root>
