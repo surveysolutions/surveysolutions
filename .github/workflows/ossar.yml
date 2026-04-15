@@ -1,11 +1,6 @@
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
-
 # This workflow integrates a collection of open source static analysis tools
 # with GitHub code scanning. For documentation, or to provide feedback, visit
-# https://github.com/github/ossar-action
+# https://aka.ms/MicrosoftSecurityDevOps
 name: OSSAR
 
 on:
@@ -22,8 +17,6 @@ permissions:
 
 jobs:
   OSSAR-Scan:
-    # OSSAR runs on windows-latest.
-    # ubuntu-latest and macos-latest support coming soon
     permissions:
       contents: read # for actions/checkout to fetch code
       security-events: write # for github/codeql-action/upload-sarif to upload SARIF results
@@ -36,27 +29,21 @@ jobs:
         git config --system core.longpaths true
         New-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem" `
           -Name "LongPathsEnabled" -Value 1 -PropertyType DWORD -Force
-          
+
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    # Ensure a compatible version of dotnet is installed.
-    # The [Microsoft Security Code Analysis CLI](https://aka.ms/mscadocs) is built with dotnet v3.1.201.
-    # A version greater than or equal to v3.1.201 of dotnet must be installed on the agent in order to run this action.
-    # GitHub hosted runners already have a compatible version of dotnet installed and this step may be skipped.
-    # For self-hosted runners, ensure dotnet version 3.1.201 or later is installed by including this action:
-    # - name: Install .NET
-    #   uses: actions/setup-dotnet@v4
-    #   with:
-    #     dotnet-version: '3.1.x'
-
       # Run open source static analysis tools
-    - name: Run OSSAR
-      uses: github/ossar-action@v1
-      id: ossar
+      # binskim is excluded because it requires compiled binaries (.dll/.exe)
+      # which are not available in a source-only checkout.
+    - name: Run Microsoft Security DevOps
+      uses: microsoft/security-devops-action@v1
+      id: msdo
+      with:
+        tools: eslint,templateanalyzer,trivy
 
       # Upload results to the Security tab
-    - name: Upload OSSAR results
+    - name: Upload MSDO results
       uses: github/codeql-action/upload-sarif@v3
       with:
-        sarif_file: ${{ steps.ossar.outputs.sarifFile }}
+        sarif_file: ${{ steps.msdo.outputs.sarifFile }}

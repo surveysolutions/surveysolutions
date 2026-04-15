@@ -10,5 +10,6 @@ namespace WB.Core.Infrastructure.HttpServices.HttpClient
         InvalidUrl,
         UnacceptableCertificate,
         ServerErrorResponse,
+        CommunicationIntegrityValidationFailed
     }
 }
