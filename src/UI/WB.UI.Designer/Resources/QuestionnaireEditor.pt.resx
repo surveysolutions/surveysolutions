@@ -1606,4 +1606,7 @@
   <data name="SwitchToTranslationConfirm" xml:space="preserve">
     <value>Alterar para mudará o idioma de exibição do questionário. A tradução deve incluir texto para todos os elementos.</value>
   </data>
+  <data name="AIAssistant" xml:space="preserve">
+      <value>IA</value>
+  </data>
 </root>

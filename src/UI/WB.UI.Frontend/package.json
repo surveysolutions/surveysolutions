@@ -42,7 +42,7 @@
         "jquery-contextmenu": "^2.9.2",
         "jquery-highlight": "^3.4.0",
         "jquery-mask-plugin": "^1.14.16",
-        "lodash": "^4.17.23",
+        "lodash": "^4.18.1",
         "marked": "^15.0.6",
         "mitt": "^3.0.1",
         "moment": "^2.29.4",
@@ -80,7 +80,7 @@
         "sass": "^1.85.0",
         "terser": "^5.37.0",
         "test-exclude": "^7.0.1",
-        "vite": "6.4.1",
+        "vite": "6.4.2",
         "xmldoc": "^1.1.2"
     },
     "prettier": {

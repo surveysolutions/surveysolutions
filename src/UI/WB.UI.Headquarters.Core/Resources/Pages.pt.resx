@@ -1378,6 +1378,9 @@
   <data name="MapList_Updated" xml:space="preserve">
     <value>Atualizado em</value>
   </data>
+  <data name="MapList_HasDuplicateLabels" xml:space="preserve">
+    <value>Tem rótulos duplicados</value>
+  </data>
   <data name="MapLinking_DescriptionTitle" xml:space="preserve">
     <value>Gerenciar links de mapa de usuário</value>
   </data>
