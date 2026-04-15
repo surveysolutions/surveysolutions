@@ -89,22 +89,24 @@ const contextmenu = app => {
                 activeMenu.current = null;
             };
 
-            el.addEventListener('contextmenu', showMenu);
-            document.addEventListener('click', event => {
+            const onDocumentClick = event => {
                 if (!menu.contains(event.target)) {
                     hideMenu();
                 }
-            });
+            };
 
-            el._contextMenu = { el, menu, showMenu, hideMenu };
+            el.addEventListener('contextmenu', showMenu);
+            document.addEventListener('click', onDocumentClick);
+
+            el._contextMenu = { el, menu, showMenu, hideMenu, onDocumentClick };
         },
         unmounted(el) {
             if (!el._contextMenu)
                 return
 
-            let { menu, showMenu, hideMenu } = el._contextMenu;
+            let { menu, showMenu, hideMenu, onDocumentClick } = el._contextMenu;
             el.removeEventListener('contextmenu', showMenu);
-            document.removeEventListener('click', hideMenu);
+            document.removeEventListener('click', onDocumentClick);
 
             const menuItemClass = el.getAttribute('menu-item-class') || 'a';
             const menuItems =
