@@ -136,9 +136,10 @@ namespace WB.UI.Designer
             services.AddHealthChecks()
                 .AddCheck<DatabaseConnectionCheck>("database");
 
-            // Read the JWT secret key once; all JWT-related registration is gated on its presence.
+            // Read JWT secret keys; JWT is enabled when at least one key is configured.
             var jwtSecretKey = Configuration["Providers:Assistant:JwtSecretKey"];
-            var jwtEnabled = !string.IsNullOrWhiteSpace(jwtSecretKey);
+            var webTesterJwtSecretKey = Configuration["WebTester:JwtSecretKey"];
+            var jwtEnabled = !string.IsNullOrWhiteSpace(jwtSecretKey) || !string.IsNullOrWhiteSpace(webTesterJwtSecretKey);
 
             var authBuilder = services
                 .AddAuthentication(sharedOptions =>
@@ -174,9 +175,19 @@ namespace WB.UI.Designer
             // causing unpredictable accept/reject behaviour.
             if (jwtEnabled)
             {
-                if (jwtSecretKey is { Length: < 32 })
+                // Only validate length when the key is actually provided (non-empty).
+                if (!string.IsNullOrWhiteSpace(jwtSecretKey) && jwtSecretKey.Length < 32)
                     throw new InvalidOperationException("JWT secret key is too short.");
-                
+                if (!string.IsNullOrWhiteSpace(webTesterJwtSecretKey) && webTesterJwtSecretKey.Length < 32)
+                    throw new InvalidOperationException("WebTester JWT secret key is too short.");
+
+                // Collect all configured signing keys so tokens from either source are accepted.
+                var signingKeys = new List<SecurityKey>();
+                if (!string.IsNullOrWhiteSpace(jwtSecretKey))
+                    signingKeys.Add(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecretKey)));
+                if (!string.IsNullOrWhiteSpace(webTesterJwtSecretKey))
+                    signingKeys.Add(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(webTesterJwtSecretKey)));
+
                 authBuilder.AddJwtBearer(options =>
                 {
                     options.TokenValidationParameters = new TokenValidationParameters
@@ -191,7 +202,7 @@ namespace WB.UI.Designer
                             Configuration["Providers:Assistant:JwtAudience"] ?? "WB.AssistantService",
                             JwtTokenService.WebTesterAudience
                         },
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecretKey!)),
+                        IssuerSigningKeys = signingKeys,
                         ClockSkew = TimeSpan.FromMinutes(5)
                     };
 

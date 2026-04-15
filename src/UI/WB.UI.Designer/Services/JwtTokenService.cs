@@ -57,10 +57,13 @@ namespace WB.UI.Designer.Services
 
         public string GenerateWebTesterToken(DesignerIdentityUser? user, Guid questionnaireId)
         {
-            var secretKey = configuration["Providers:Assistant:JwtSecretKey"];
+            var secretKey = configuration["WebTester:JwtSecretKey"];
+            if (string.IsNullOrWhiteSpace(secretKey))
+                secretKey = configuration["Providers:Assistant:JwtSecretKey"];
             if (string.IsNullOrWhiteSpace(secretKey))
             {
-                throw new InvalidOperationException("JWT secret key is not configured");
+                throw new InvalidOperationException("JWT secret key is not configured. " +
+                    "Set WebTester:JwtSecretKey (or Providers:Assistant:JwtSecretKey) in configuration.");
             }
 
             var issuer = configuration["Providers:Assistant:JwtIssuer"] ?? "WB.Designer";
