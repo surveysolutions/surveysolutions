@@ -21,6 +21,14 @@ namespace WB.UI.Designer.Services
             this.codeStore = codeStore;
             this.settings = settings.Value;
             this.logger = logger;
+
+            if (string.IsNullOrWhiteSpace(this.settings.ServiceApiKey))
+            {
+                logger.LogWarning(
+                    "WebTester:ServiceApiKey is not configured — " +
+                    "service-to-service key validation is disabled. " +
+                    "Configure WebTester:ServiceApiKey in both Designer and WebTester for production.");
+            }
         }
 
         public async Task<string> CreateOneTimeCodeAsync(

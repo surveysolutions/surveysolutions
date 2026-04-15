@@ -1,7 +1,6 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using WB.Core.BoundedContexts.Designer.MembershipProvider;
 
 namespace WB.UI.Designer.Services
 {

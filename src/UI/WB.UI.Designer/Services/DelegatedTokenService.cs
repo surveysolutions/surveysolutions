@@ -32,29 +32,32 @@ namespace WB.UI.Designer.Services
         public const string DelegatedAudience = "WB.Designer";
 
         private readonly WebTesterSettings settings;
-        private readonly IConfiguration configuration;
+        private readonly SigningCredentials signingCredentials;
+        private readonly string issuer;
 
         public DelegatedTokenService(IOptions<WebTesterSettings> settings, IConfiguration configuration)
         {
             this.settings = settings.Value;
-            this.configuration = configuration;
-        }
 
-        public string CreateDelegatedToken(DelegatedTokenRequest request)
-        {
             var secretKey = configuration["WebTester:JwtSecretKey"];
             if (string.IsNullOrWhiteSpace(secretKey))
                 secretKey = configuration["Providers:Assistant:JwtSecretKey"];
             if (string.IsNullOrWhiteSpace(secretKey))
                 throw new InvalidOperationException("JWT secret key is not configured.");
 
+            issuer = configuration["Providers:Assistant:JwtIssuer"] ?? "WB.Designer";
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
+            signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+        }
+
+        public string CreateDelegatedToken(DelegatedTokenRequest request)
+        {
             var expirationMinutes = settings.DelegatedJwtExpirationMinutes > 0
                 ? settings.DelegatedJwtExpirationMinutes
                 : 10;
 
             var now = DateTime.UtcNow;
             var jti = Guid.NewGuid().ToString();
-            var issuer = configuration["Providers:Assistant:JwtIssuer"] ?? "WB.Designer";
 
             var claims = new List<Claim>
             {
@@ -71,16 +74,13 @@ namespace WB.UI.Designer.Services
                 claims.Add(new Claim(ClaimTypes.NameIdentifier, request.UserId));
             }
 
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
-            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-
             var token = new JwtSecurityToken(
                 issuer: issuer,
                 audience: DelegatedAudience,
                 claims: claims,
                 notBefore: now,
                 expires: now.AddMinutes(expirationMinutes),
-                signingCredentials: credentials);
+                signingCredentials: signingCredentials);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }

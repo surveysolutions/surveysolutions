@@ -50,6 +50,7 @@ namespace WB.UI.WebTester.Controllers
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
+        [HttpGet]
         [Route("Run/{id:Guid}")]
         public async Task<IActionResult> Run(Guid id, Guid? sid, int? scenarioId = null,
             [FromQuery] string? code = null)
@@ -62,6 +63,15 @@ namespace WB.UI.WebTester.Controllers
             // Exchange one-time code for delegated JWT (backend-to-backend)
             if (!string.IsNullOrWhiteSpace(code))
             {
+                // Sanity-check: a valid base64url-encoded 32-byte code is ~43 chars
+                if (code.Length > 200)
+                {
+                    logger.LogWarning(
+                        "Rejected suspiciously long code parameter. Length={Length}, " +
+                        "QuestionnaireId={QuestionnaireId}",
+                        code.Length, id);
+                    return this.RedirectToAction("QuestionnaireWithErrors", "Error");
+                }
                 var exchangeResult = await codeExchangeClient.ExchangeAsync(code);
                 if (exchangeResult != null)
                 {

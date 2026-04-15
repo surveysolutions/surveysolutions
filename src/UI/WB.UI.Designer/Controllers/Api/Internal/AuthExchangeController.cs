@@ -151,15 +151,9 @@ namespace WB.UI.Designer.Controllers.Api.Internal
         private bool IsValidServiceCredentials(string serviceName, string serviceKey)
         {
             // If no ServiceApiKey is configured, skip key validation (dev / single-machine mode).
-            // Log a warning so operators know to configure it for production.
+            // The startup warning is logged by WebTesterService; no per-request log here.
             if (string.IsNullOrWhiteSpace(settings.ServiceApiKey))
-            {
-                logger.LogWarning(
-                    "WebTester:ServiceApiKey is not configured — " +
-                    "service-to-service key validation is disabled. " +
-                    "Set WebTester:ServiceApiKey in both Designer and WebTester for production.");
                 return !string.IsNullOrWhiteSpace(serviceName);
-            }
 
             return !string.IsNullOrWhiteSpace(serviceName)
                 && string.Equals(serviceKey, settings.ServiceApiKey, StringComparison.Ordinal);

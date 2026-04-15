@@ -52,6 +52,10 @@ namespace WB.UI.WebTester.Services.Implementation
 
                 return result;
             }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
             catch (Exception ex)
             {
                 logger.LogError(ex,
