@@ -114,7 +114,6 @@
                 "node_modules/perfect-scrollbar/dist/js/perfect-scrollbar.jquery.js",
                 "node_modules/dompurify/dist/purify.js",
                 "Scripts/custom/common.js",
-                "node_modules/moment/min/moment-with-locales.js",
                 "node_modules/perfect-scrollbar/dist/css/perfect-scrollbar.css",
                 "questionnaire/content/designer-start/bootstrap-custom.less",
                 "Styles/designer-list.less"
