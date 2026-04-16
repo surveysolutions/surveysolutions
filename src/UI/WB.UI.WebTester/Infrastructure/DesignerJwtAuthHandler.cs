@@ -27,21 +27,19 @@ namespace WB.UI.WebTester.Infrastructure
                 var jwt = jwtStore.GetToken(questionnaireId.Value);
                 if (jwt != null)
                 {
-   
-                        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
-                    }
-
-                    var ctx = userContextStore.Get(questionnaireId);
-                    if (!string.IsNullOrEmpty(ctx?.CorrelationId))
-                    {
-                        request.Headers.TryAddWithoutValidation("X-Correlation-Id", ctx.CorrelationId);
-                    }
-                    if (!string.IsNullOrEmpty(ctx?.UserId))
-                    {
-                        request.Headers.TryAddWithoutValidation("X-User-Id", ctx.UserId);
-                    }
+                    request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
                 }
-            
+
+                var ctx = userContextStore.Get(questionnaireId.Value);
+                if (!string.IsNullOrEmpty(ctx?.CorrelationId))
+                {
+                    request.Headers.TryAddWithoutValidation("X-Correlation-Id", ctx.CorrelationId);
+                }
+                if (!string.IsNullOrEmpty(ctx?.UserId))
+                {
+                    request.Headers.TryAddWithoutValidation("X-User-Id", ctx.UserId);
+                }
+            }
 
             return await base.SendAsync(request, cancellationToken);
         }
