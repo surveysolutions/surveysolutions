@@ -40,18 +40,20 @@ const contextmenu = app => {
                 }
 
                 requestAnimationFrame(() => {
-                    let mouseX = event.clientX;
-                    let mouseY = event.clientY;
+                    let mouseX = event.pageX;
+                    let mouseY = event.pageY;
 
                     const menuWidth = menu.scrollWidth;
                     const menuHeight = menu.scrollHeight;
+                    const maxX = window.scrollX + window.innerWidth - menuWidth;
+                    const maxY = window.scrollY + window.innerHeight - menuHeight;
 
-                    if (mouseX + menuWidth > window.innerWidth) {
-                        mouseX = window.innerWidth - menuWidth;
+                    if (mouseX > maxX) {
+                        mouseX = maxX;
                     }
 
-                    if (mouseY + menuHeight > window.innerHeight) {
-                        mouseY = window.innerHeight - menuHeight;
+                    if (mouseY > maxY) {
+                        mouseY = maxY;
                     }
 
                     menu.style.top = `${mouseY}px`;
