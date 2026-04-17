@@ -139,7 +139,7 @@
     "SideBarMetadataFunding": "Funding:",
     "SideBarMetadataQuestionnaireAccess": "Questionnaire access",
     "SideBarMetadataAgreeToMakeThisQuestionnairePublic": "Agree to make this questionnaire public",
-    "SideBarAttachmentUploaded": "uploaded: {{-lastUpdate, MMMM DD[,] YYYY [at] H:mm}}",
+    "SideBarAttachmentUploaded": "uploaded: {{-lastUpdate, MMMM DD[,] YYYY [at] k:mm}}",
     "SideBarLookupTitle": "Lookup tables",
     "SideBarMacroTitle": "Macros",
     "SideBarScenarioTitle": "Scenarios",

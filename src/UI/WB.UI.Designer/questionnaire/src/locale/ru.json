@@ -80,7 +80,7 @@
     "SideBarAttachmentDetailsResolution": "{{width}} × {{height}}px",
     "SideBarAttachmentDetailsSize": "размер: {{size}}",
     "SideBarAttachmentsTitle": "Вложения",
-    "SideBarAttachmentUploaded": "загружено: {{-lastUpdate, MMMM DD[,] YYYY [в] H:mm}}",
+    "SideBarAttachmentUploaded": "загружено: {{-lastUpdate, MMMM DD[,] YYYY [в] k:mm}}",
     "SideBarLookupTitle": "Справочные таблицы",
     "SideBarMacroTitle": "Макросы",
     "SideBarSectionsTitle": "Секции",

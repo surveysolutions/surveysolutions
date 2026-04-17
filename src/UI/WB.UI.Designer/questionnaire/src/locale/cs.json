@@ -346,7 +346,7 @@
     "SideBarAttachmentsEstimate": "Odhadovaná doba načítání: {{timeString}} na {{downloadSpeed}}Kb/s (EDGE)",
     "SideBarAttachmentsTitle": "Přílohy",
     "SideBarAttachmentsUpload": "Nahrát nový",
-    "SideBarAttachmentUploaded": "Nahráno: {{-lastUpdate, MMMM DD[,] YYYY [at] H:mm}}",
+    "SideBarAttachmentUploaded": "Nahráno: {{-lastUpdate, MMMM DD[,] YYYY [at] k:mm}}",
     "SideBarCategoriesAddNew": "Přidat novou kategorii",
     "SideBarCategoriesCounter": "{{count}} Kategorie",
     "SideBarCategoriesEmptyLine1": "Tato karta slouží ke správě opakovaně použitelných kategorií.",

@@ -299,7 +299,7 @@
     "SideBarAttachmentsEstimate": "Timpul de încărcare estimat: {{timeString}} la {{downloadSpeed}} Kb/s (EDGE)",
     "SideBarAttachmentsTitle": "Atașamente",
     "SideBarAttachmentsUpload": "Încarcă",
-    "SideBarAttachmentUploaded": "încărcat: {{-lastUpdate, MMMM DD [,] YYYY [la] H:mm}}",
+    "SideBarAttachmentUploaded": "încărcat: {{-lastUpdate, MMMM DD [,] YYYY [la] k:mm}}",
     "SideBarCategoriesCounter": "{{count}} Variante de răspuns",
     "SideBarCategoriesEmptyLine1": "Utilizați această filă pentru a gestiona variantele de răspuns reutilizabile.",
     "SideBarCategoriesEmptyLine2": "Puteți descărca și încărca variante de răspuns.",

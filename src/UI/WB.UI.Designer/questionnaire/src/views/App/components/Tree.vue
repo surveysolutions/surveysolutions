@@ -114,17 +114,15 @@
                 <div class="start-box" v-if="showStartScreen">
                     <p>{{ $t('QuestionnaireEditor.EmptySectionLine1') }}</p>
                     <p>
-                        <span v-sanitize-html="emptySectionHtmlLine1"> </span>
+                        <span v-html="sanitizeMarkup(emptySectionHtmlLine1)"> </span>
                         <br />
-                        <span v-sanitize-html="emptySectionHtmlLine3">
-                            <span class="left-panel-glyph"></span>
-                        </span>
+                        <span v-html="sanitizeMarkup(emptySectionHtmlLine3)"></span>
                     </p>
 
                     <p>
                         <span>{{ $t('QuestionnaireEditor.EmptySectionLine4') }}</span>
                         <br />
-                        <span v-sanitize-html="emptySectionHtmlLine2"></span>
+                        <span v-html="sanitizeMarkup(emptySectionHtmlLine2)"></span>
                     </p>
                 </div>
             </div>
@@ -170,6 +168,7 @@ import Help from './Help.vue';
 
 import { migrateToNewVersion } from '../../../services/questionnaireService'
 import { useKeyShortcut } from '../../../composables/useKeyShortcut';
+import { sanitizeMarkup } from '../../../services/utilityService';
 
 export default {
     name: 'Tree',
@@ -325,6 +324,9 @@ export default {
     },
 
     methods: {
+        sanitizeMarkup(input) {
+            return sanitizeMarkup(input);
+        },
         async fetch() {
             await this.treeStore.fetchTree(
                 this.questionnaireId,
