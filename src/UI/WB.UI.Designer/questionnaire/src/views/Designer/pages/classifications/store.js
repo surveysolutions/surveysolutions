@@ -1,5 +1,6 @@
-﻿import { defineStore } from 'pinia';
+import { defineStore } from 'pinia';
 import { mande } from 'mande';
+import '../../../../extensions/string';
 
 const routes = {
     userInfo: 'user',
@@ -17,7 +18,7 @@ const routes = {
 
 const $http = mande('/api/classifications');
 
-export const useClassificationsStore = defineStore('classifications', {
+export const useClassificationsStore = defineStore('classifications',{
     state() {
         return {
             isLoading: false,
@@ -94,7 +95,7 @@ export const useClassificationsStore = defineStore('classifications', {
                 this.activeGroup = {};
             }
             if (this.groups.length > 0)
-                this.loadClassifications(this.groups[index].id);
+                this.loadClassifications(this.groups[index].id).catch(console.error);
         },
         addClassification(classification) {
             this.classifications.push(classification);
@@ -130,7 +131,7 @@ export const useClassificationsStore = defineStore('classifications', {
                 this.activeClassification = {};
             }
             if (this.classifications.length > 0)
-                this.loadCategories(this.classifications[index].id);
+                this.loadCategories(this.classifications[index].id).catch(console.error);
         },
         async loadGroups() {
             const response = await this.withLoading(() => $http.get(routes.groups));

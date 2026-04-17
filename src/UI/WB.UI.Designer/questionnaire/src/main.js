@@ -28,6 +28,9 @@ import './extensions';
 import directives from './directives/';
 
 import emitter from './services/emitter';
+import { installServerGuards } from './services/serverGuard';
+
+installServerGuards({ page: true, fetch: true });
 
 const pinia = createPinia();
 pinia.use(({ store }) => {

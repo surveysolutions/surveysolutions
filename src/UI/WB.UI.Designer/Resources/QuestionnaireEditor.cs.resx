@@ -918,6 +918,11 @@ Zadali jste neplatný vstup. Každý řádek by měl mít formát: "Název... Pa
   <data name="RequestFailedUnexpectedly" xml:space="preserve">
     <value>Požadavek se neočekávaně nezdařil.</value>
   </data>
+  <data name="ApplicationNotAvailable" xml:space="preserve">
+    <value>Požadavek nelze dokončit. Přijatá odpověď nevypadá, že pochází ze serveru Survey Solutions.
+To je obvykle způsobeno síťovým proxy serverem, firewallem nebo bezpečnostní bránou, která zachytává připojení.
+Zkontrolujte prosím své síťové připojení nebo se obraťte na vaši IT podporu.</value>
+  </data>
   <data name="RequiredField" xml:space="preserve">
     <value>Povinné pole</value>
   </data>

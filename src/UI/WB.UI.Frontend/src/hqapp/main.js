@@ -8,6 +8,7 @@ import '../assets/css/markup-specific.scss'
 
 import { createApp } from 'vue'
 import App from './App.vue';
+import { validatePageLoad } from '~/shared/serverValidator'
 
 const vue = createApp(App)
 
@@ -17,6 +18,10 @@ setupErrorHandler(vue);
 import Vuei18n from '~/shared/plugins/locale'
 import { browserLanguage } from '~/shared/helpers'
 const i18n = Vuei18n.initialize(browserLanguage, vue)
+// validatePageLoad is called after i18n is initialized to ensure $t() is available
+// when the HEAD/GET response arrives and the error modal may need to be rendered.
+// The global axios interceptor is installed by vue.use(http) below — no duplicate needed here.
+validatePageLoad()
 
 //plugin registration in Vue
 import http from '~/shared/plugins/http'
