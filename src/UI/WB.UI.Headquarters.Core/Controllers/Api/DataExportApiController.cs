@@ -238,6 +238,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             long jobId = 0;
             try
             {
+                var geographyExportFormat = this.exportSettings.GetGeographyExportFormat();
                 DataExportUpdateRequestResult result = await this.exportServiceApi.RequestUpdate(
                     questionnaireBrowseItem.Id,
                     format,
@@ -250,7 +251,8 @@ namespace WB.UI.Headquarters.Controllers.Api
                     externalStorageType,
                     translation,
                     includeMeta,
-                    paradataReduced);
+                    paradataReduced,
+                    geographyExportFormat);
 
                 jobId = result?.JobId ?? 0;
 

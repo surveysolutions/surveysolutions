@@ -204,6 +204,13 @@
   <data name="ConnectionLostMessage" xml:space="preserve">
     <value>გთხოვთ, განაახლოთ გვერდი რომ აღადგინოთ კავშირი და გააგრძელოთ ეს ინტერვიუ.</value>
   </data>
+  <data name="Reconnecting" xml:space="preserve">
+    <value>კავშირი დაიკარგა. მიმდინარეობს ხელახლა დაკავშირების მცდელობა…</value>
+  </data>
+  <data name="ReconnectAttempt" xml:space="preserve">
+    <value>მცდელობა {{count}}</value>
+    <comment>Do not translate parts inside {{}}: {{count}}</comment>
+  </data>
   <data name="ConnectionLostTitle" xml:space="preserve">
     <value>სერვერთან კავშირი დაიკარგა</value>
   </data>
@@ -227,6 +234,12 @@
   </data>
   <data name="DecimalTooBig" xml:space="preserve">
     <value>შეტანილი მნიშვნელობა უფრო დიდია. ნებადართულია მხოლოდ 15 ციფრი</value>
+  </data>
+  <data name="InvalidServerResponseMessage" xml:space="preserve">
+    <value>სერვერმა არ დაბრუნა მოსალოდნელი საიდენტიფიკაციო სათაური. შესაძლოა, თქვენ დაკავშირებული ხართ მარიონეტულ სერვერთან ან არასწორ სერვერთან. გთხოვთ, განაახლოთ გვერდი.</value>
+  </data>
+  <data name="InvalidServerResponseTitle" xml:space="preserve">
+    <value>სერვერის არასწორი პასუხი</value>
   </data>
   <data name="Disconnected" xml:space="preserve">
     <value>კავშირდაკარგული</value>

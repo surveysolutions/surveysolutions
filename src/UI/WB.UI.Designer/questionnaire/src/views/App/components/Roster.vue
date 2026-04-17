@@ -447,6 +447,9 @@ export default {
     mounted() {
         this.scrollTo();
     },
+    beforeUnmount() {
+        this.rosterStore.clear();
+    },
     computed: {
         activeRoster() {
             return this.rosterStore.getRoster;
