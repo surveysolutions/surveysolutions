@@ -16,31 +16,16 @@
                 :search="search">
             </search-section-result>
 
-            <infinite-loading ref="loader" v-if="searchResultsAreVisible" @infinite="infiniteHandler" :distance="250">
-                <template #complete>
-                    <span slot="no-more"></span>
-                </template>
-            </infinite-loading>
+            <div ref="sentinel"></div>
         </div>
     </aside>
 </template>
 
-<style lang="css">
-.v3-infinite-loading div {
-    text-align: center;
-}
-</style>
-
 <script>
-import InfiniteLoading from "v3-infinite-loading";
-import "v3-infinite-loading/lib/style.css";
 import SearchSectionResult from './components/SearchSectionResult'
 
 export default {
-    components: {
-        SearchSectionResult,
-        InfiniteLoading
-    },
+    components: { SearchSectionResult },
 
     methods: {
         hideSearchResults() {
@@ -48,16 +33,14 @@ export default {
             this.$store.dispatch('hideSearchResults')
         },
 
-        async infiniteHandler($state) {
-            const self = this
-
-            await this.$store.dispatch('fetchSearchResults')
-
-            if (self.searchResult.skip >= self.searchResult.count) {
-                $state.complete()
-            }
-            else {
-                $state.loaded()
+        async loadMore() {
+            if (this._loading) return
+            if (this.searchResult.skip >= this.searchResult.count) return
+            this._loading = true
+            try {
+                await this.$store.dispatch('fetchSearchResults')
+            } finally {
+                this._loading = false
             }
         },
     },
@@ -73,17 +56,28 @@ export default {
     },
 
     watch: {
-        'searchResult.count'() {
-            if (this.$refs.loader != null) {
-                //this.$refs.loader.$emit('$InfiniteLoading:reset')
+        searchResultsAreVisible(val) {
+            if (val) {
+                this.$nextTick(() => {
+                    this._observer?.unobserve(this.$refs.sentinel)
+                    this._observer?.observe(this.$refs.sentinel)
+                })
             }
         },
     },
 
     mounted() {
+        this._observer = new IntersectionObserver(([entry]) => {
+            if (entry.isIntersecting) this.loadMore()
+        }, { rootMargin: '250px' })
         this.$nextTick(() => {
             this.$store.dispatch('fetchSearchResults')
+            this._observer.observe(this.$refs.sentinel)
         })
+    },
+
+    beforeUnmount() {
+        this._observer?.disconnect()
     },
 }
 </script>
