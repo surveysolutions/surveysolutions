@@ -41,9 +41,6 @@ vue.component('ProfileLayout', ProfileLayout)
 
 import './compatibility.js'
 
-import PortalVue from 'portal-vue'
-vue.use(PortalVue)
-
 import VueDOMPurifyHTML from 'vue-dompurify-html';
 vue.use(VueDOMPurifyHTML)
 
@@ -90,8 +87,6 @@ vue.use(router)
 import { registerGlobalComponents } from '~/webinterview/componentsRegistry'
 registerGlobalComponents(vue, { router, store })
 
-import { pageTitle } from 'vue-page-title'
-vue.use(pageTitle)
 
 vue.config.globalProperties.$eventHub = vue
 

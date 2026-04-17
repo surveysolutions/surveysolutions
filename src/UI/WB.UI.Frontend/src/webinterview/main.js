@@ -13,9 +13,6 @@ vue.use(VueDOMPurifyHTML)
 import config from '~/shared/config'
 vue.use(config)
 
-import PortalVue from 'portal-vue'
-vue.use(PortalVue)
-
 import Bootstrap5Popover from '~/shared/components/Bootstrap5Popover.vue'
 vue.component('popover', Bootstrap5Popover)
 

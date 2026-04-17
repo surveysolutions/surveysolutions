@@ -2,7 +2,7 @@
     <div :class="wrapperClasses" ref="triggerElement" @mouseenter="onTriggerMouseEnter"
         @mouseleave="onTriggerMouseLeave" @focusin="onTriggerFocus" @focusout="onTriggerBlur">
         <slot></slot>
-        <portal v-if="enable && isVisible" :to="portalTarget">
+        <Teleport v-if="enable && isVisible" :to="teleportTarget">
             <div class="popover bs5-popover show" :style="popoverStyle" @mouseenter="onPopoverMouseEnter"
                 @mouseleave="onPopoverMouseLeave" ref="popoverElement">
                 <div :class="`popover-arrow arrow-${placement}`" :style="arrowStyle"></div>
@@ -10,19 +10,14 @@
                     <slot name="popover"></slot>
                 </div>
             </div>
-        </portal>
+        </Teleport>
     </div>
 </template>
 
 <script>
-import { Portal } from 'portal-vue'
-
 export default {
     name: 'Bootstrap5Popover',
     inheritAttrs: false,
-    components: {
-        Portal
-    },
     props: {
         trigger: {
             type: String,
@@ -54,7 +49,7 @@ export default {
         wrapperClasses() {
             return this.$attrs.class || ''
         },
-        portalTarget() {
+        teleportTarget() {
             return this.appendTo === 'body' ? 'body' : this.appendTo
         }
     },
