@@ -38,10 +38,21 @@ export default {
             if (this.searchResult.skip >= this.searchResult.count) return
             this._loading = true
             try {
-                await this.$store.dispatch('fetchSearchResults')
+                do {
+                    await this.$store.dispatch('fetchSearchResults')
+                    await this.$nextTick()
+                } while (this.searchResult.skip < this.searchResult.count && this.isSentinelInLoadingRange())
             } finally {
                 this._loading = false
             }
+        },
+        isSentinelInLoadingRange() {
+            if (!this.$refs.sentinel) return false
+
+            const margin = 250
+            const rect = this.$refs.sentinel.getBoundingClientRect()
+
+            return rect.top <= window.innerHeight + margin && rect.bottom >= -margin
         },
     },
 
