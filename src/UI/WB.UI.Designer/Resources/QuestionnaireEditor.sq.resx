@@ -714,6 +714,11 @@
   <data name="RequestFailedUnexpectedly" xml:space="preserve">
     <value>Kërkesa dështoi papritur.</value>
   </data>
+  <data name="ApplicationNotAvailable" xml:space="preserve">
+    <value>Nuk mund të plotësohet kërkesa. Përgjigja e marrë nuk duket të vijë nga serveri i Survey Solutions.
+Kjo zakonisht shkaktohet nga një proxy rrjeti, mur zjarri ose portë sigurie që ndërhyn në lidhje.
+Ju lutemi kontrolloni lidhjen tuaj të rrjetit ose kontaktoni mbështetjen tuaj IT.</value>
+  </data>
   <data name="RosterAddItem" xml:space="preserve">
     <value>Shto objekt</value>
   </data>

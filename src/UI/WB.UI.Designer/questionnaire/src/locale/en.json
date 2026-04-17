@@ -384,6 +384,7 @@
     "PleaseWait": "Please wait...",
     "EntryWasNotFound": "Entry was not found in questionnaire, please select another.",
     "RequestFailedUnexpectedly": "Request failed unexpectedly.",
+    "ApplicationNotAvailable": "Unable to complete the request. The response received does not appear to come from the Survey Solutions server.\r\nThis is usually caused by a network proxy, firewall, or security gateway intercepting the connection.\r\nPlease check your network connection or contact your IT support.",
     "IncorrectRosterTitle": "Incorrect roster title question",
     "SelectedInvalidItem": "Selected invalid item. Fix it.",
     "SelectItemFromTheList": "Select item from the list",
