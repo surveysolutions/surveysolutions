@@ -228,7 +228,8 @@ export default {
             searchDialog,
             ctrl_f,
             ctrl_h,
-            canPaste
+            canPaste,
+            sanitizeMarkup
         };
     },
     async beforeMount() {
@@ -324,9 +325,6 @@ export default {
     },
 
     methods: {
-        sanitizeMarkup(input) {
-            return sanitizeMarkup(input);
-        },
         async fetch() {
             await this.treeStore.fetchTree(
                 this.questionnaireId,
