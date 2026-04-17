@@ -168,6 +168,7 @@
         "shelljs": ">=0.8.5",
         "svgo": ">=2.8.0",
         "trim-newlines": ">=3.0.1",
+        "test-exclude": "^7.0.1",
         "ts-node": "10.8.0",
         "vue-jest": ">=3.0.7",
         "ua-parser-js": "1.0.33",
