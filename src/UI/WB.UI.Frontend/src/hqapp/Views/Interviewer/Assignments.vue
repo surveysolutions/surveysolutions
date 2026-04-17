@@ -28,8 +28,8 @@
                         @click="updateCalendarEvent">
                         {{ $t("Common.Save") }}</button>
                     <button type="button" class="btn btn-link" data-bs-dismiss="modal" role="cancel">{{
-        $t("Common.Cancel")
-    }}</button>
+                        $t("Common.Cancel")
+                        }}</button>
                     <button type="button" class="btn btn-danger pull-right" role="delete" v-if="calendarEventId != null"
                         @click="deleteCalendarEvent">
                         {{ $t("Common.Delete") }}</button>
@@ -45,8 +45,8 @@ import { updateCalendarEvent, addAssignmentCalendarEvent, deleteCalendarEvent } 
 import moment from 'moment-timezone'
 import { map, join, escape } from 'lodash'
 
-import _sanitizeHtml from 'sanitize-html'
-const sanitizeHtml = text => _sanitizeHtml(text, { allowedTags: [], allowedAttributes: [] })
+import DOMPurify from 'dompurify'
+const sanitizeHtml = text => DOMPurify.sanitize(text, { ALLOWED_TAGS: [], ALLOWED_ATTR: [] })
 
 export default {
     data() {
