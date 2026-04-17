@@ -47,8 +47,8 @@ vue.use(PortalVue)
 import VueDOMPurifyHTML from 'vue-dompurify-html';
 vue.use(VueDOMPurifyHTML)
 
-import { Popover } from 'uiv'
-vue.component('popover', Popover)
+import Bootstrap5Popover from '~/shared/components/Bootstrap5Popover.vue'
+vue.component('popover', Bootstrap5Popover)
 
 import './validate.js'
 
