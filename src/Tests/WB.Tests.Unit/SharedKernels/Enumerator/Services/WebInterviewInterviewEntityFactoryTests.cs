@@ -160,6 +160,40 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services
             Assert.That(sidebar.Groups.Find(x=>x.Id == questionnaireDocument.CoverPageSectionId.FormatGuid()), Is.Not.Null);
         }
 
+        [Test]
+        public void When_question_is_unanswered_but_has_stale_invalid_state_Then_entity_details_should_show_as_valid()
+        {
+            // arrange
+            var questionId = Id.g1;
+            var sectionId = Id.g2;
+
+            var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                sectionId,
+                children: Create.Entity.TextQuestion(questionId, validationExpression: "self != \"bad\""));
+
+            var questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument);
+            var interview = Abc.SetUp.StatefulInterview(questionnaireDocument);
+
+            // simulate question being answered and declared invalid
+            interview.Apply(Create.Event.TextQuestionAnswered(questionId, RosterVector.Empty, "bad"));
+            interview.Apply(Create.Event.AnswerDeclaredInvalid(Identity.Create(questionId, RosterVector.Empty), new[] { 0 }));
+
+            // simulate answer being removed (question becomes unanswered) but invalid state is stale
+            interview.Apply(Create.Event.AnswersRemoved(Identity.Create(questionId, RosterVector.Empty)));
+
+            var factory = this.CreateWebInterviewInterviewEntityFactory();
+
+            // act
+            var entityDetails = factory.GetEntityDetails(
+                Identity.Create(questionId, RosterVector.Empty).ToString(),
+                interview, questionnaire, false) as GenericQuestion;
+
+            // assert
+            Assert.That(entityDetails, Is.Not.Null);
+            Assert.That(entityDetails.Validity.IsValid, Is.True, "Unanswered question should be shown as valid");
+            Assert.That(entityDetails.Validity.Messages, Is.Empty, "Unanswered question should have no validation messages");
+        }
+
         private WebInterviewInterviewEntityFactory CreateWebInterviewInterviewEntityFactory() =>
             new WebInterviewInterviewEntityFactory(
                 new MapperConfiguration(cfg =>

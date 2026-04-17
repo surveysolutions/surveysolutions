@@ -476,11 +476,15 @@ namespace WB.Enumerator.Native.WebInterview.Services
         private void PutValidationMessages(Validity validity, IStatefulInterview callerInterview, Identity identity,
             IQuestionnaire questionnaire, bool isReview)
         {
-            validity.Messages = callerInterview.GetFailedValidationMessages(identity, Resources.WebInterview.Error)
-                .Select(x => this.webNavigationService.MakeNavigationLinks(x, identity, questionnaire, callerInterview, WebLinksVirtualDirectory(isReview))).ToArray();
+            validity.Messages = callerInterview.IsEntityValid(identity)
+                ? Array.Empty<string>()
+                : callerInterview.GetFailedValidationMessages(identity, Resources.WebInterview.Error)
+                    .Select(x => this.webNavigationService.MakeNavigationLinks(x, identity, questionnaire, callerInterview, WebLinksVirtualDirectory(isReview))).ToArray();
 
-            validity.Warnings = callerInterview.GetFailedWarningMessages(identity, Resources.WebInterview.Warning)
-                .Select(x => this.webNavigationService.MakeNavigationLinks(x, identity, questionnaire, callerInterview, WebLinksVirtualDirectory(isReview))).ToArray();
+            validity.Warnings = callerInterview.IsEntityPlausible(identity)
+                ? Array.Empty<string>()
+                : callerInterview.GetFailedWarningMessages(identity, Resources.WebInterview.Warning)
+                    .Select(x => this.webNavigationService.MakeNavigationLinks(x, identity, questionnaire, callerInterview, WebLinksVirtualDirectory(isReview))).ToArray();
         }
 
         private void ApplyDisablement(InterviewEntity result, Identity identity, IQuestionnaire questionnaire)
