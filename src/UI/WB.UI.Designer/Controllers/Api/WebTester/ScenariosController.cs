@@ -7,13 +7,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.Scenarios;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
-using WB.UI.Designer.Controllers.Api.Designer;
 using WB.UI.Designer.Services;
 
 namespace WB.UI.Designer.Controllers.Api.WebTester
 {
     [Route("api/webtester/Scenarios")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class ScenariosController : ControllerBase
     {
         private readonly DesignerDbContext dbContext;
@@ -23,19 +22,22 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
             this.dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
         }
 
-        [Route("{id}")]
-        [Authorize]
-        [QuestionnairePermissions(write: true)]
+        [Route("{id:Guid}")]
         [HttpPost]
-        public async Task<IActionResult> Post(QuestionnaireRevision id, [FromBody]PostScenarioModel model)
+        public async Task<IActionResult> Post(Guid id, [FromBody]PostScenarioModel model)
         {
+            var tokenQuestionnaire = User.FindFirst(JwtTokenService.QuestionnaireIdClaimType);
+            if (tokenQuestionnaire == null || !Guid.TryParse(tokenQuestionnaire.Value, out var tokenQuestionnaireId)
+                || tokenQuestionnaireId != id)
+                return Forbid();
+
             var existingScenario = await this.dbContext.Scenarios.FindAsync(model.ScenarioId);
             if (existingScenario == null)
             {
                 var newScenario = new StoredScenario
                 {
-                    QuestionnaireId = id.QuestionnaireId, 
-                    Steps = model.ScenarioText ?? "", 
+                    QuestionnaireId = id,
+                    Steps = model.ScenarioText ?? "",
                     Title = model.ScenarioTitle ?? "New scenario"
                 };
                 await this.dbContext.Scenarios.AddAsync(newScenario);
@@ -44,19 +46,26 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
             {
                 existingScenario.Steps = model.ScenarioText ?? "";
             }
-            
+
             await this.dbContext.SaveChangesAsync();
 
             return Ok();
         }
 
-        [Route("{id}")]
-        [Authorize]
-        [QuestionnairePermissions]
+        [Route("{questionnaireId:Guid}")]
         [HttpGet]
-        public async Task<IActionResult> Get(QuestionnaireRevision id)
+        public async Task<IActionResult> Get(Guid questionnaireId)
         {
-            var qId = id.OriginalQuestionnaireId ?? id.QuestionnaireId;
+            var tokenQuestionnaire = User.FindFirst(JwtTokenService.QuestionnaireIdClaimType);
+            if (tokenQuestionnaire == null || !Guid.TryParse(tokenQuestionnaire.Value, out var tokenQuestionnaireId)
+                || tokenQuestionnaireId != questionnaireId)
+                return Forbid();
+
+            var qId = questionnaireId;
+            var anonymousQuestionnaire = this.dbContext.AnonymousQuestionnaires
+                .FirstOrDefault(a => a.AnonymousQuestionnaireId == questionnaireId && a.IsActive == true);
+            if (anonymousQuestionnaire != null)
+                qId = anonymousQuestionnaire.QuestionnaireId;
 
             var scenarios = await this.dbContext.Scenarios.Where(x => x.QuestionnaireId == qId)
                                                           .OrderBy(x => x.Title)
@@ -70,26 +79,23 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
         }
 
         [Route("{questionnaireId:Guid}/{scenarioId:int}")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet]
         public async Task<IActionResult> GetForWebTester(Guid questionnaireId, int scenarioId)
         {
             var tokenQuestionnaire = User.FindFirst(JwtTokenService.QuestionnaireIdClaimType);
             if (tokenQuestionnaire == null || !Guid.TryParse(tokenQuestionnaire.Value, out var tokenQuestionnaireId)
                 || tokenQuestionnaireId != questionnaireId)
-            {
                 return Forbid();
-            }
 
             StoredScenario? scenario = await this.dbContext.Scenarios.FindAsync(scenarioId);
             if (scenario == null)
-                return NotFound(new {Message = "Scenario not found"});
+                return NotFound(new { Message = "Scenario not found" });
 
             if (questionnaireId != scenario.QuestionnaireId)
             {
                 var anonymousQuestionnaire = this.dbContext.AnonymousQuestionnaires
-                    .FirstOrDefault(a => a.AnonymousQuestionnaireId == questionnaireId 
-                                         && a.QuestionnaireId == scenario.QuestionnaireId 
+                    .FirstOrDefault(a => a.AnonymousQuestionnaireId == questionnaireId
+                                         && a.QuestionnaireId == scenario.QuestionnaireId
                                          && a.IsActive == true);
                 if (anonymousQuestionnaire == null)
                     return Forbid();
