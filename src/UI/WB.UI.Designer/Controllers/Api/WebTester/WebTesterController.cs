@@ -22,6 +22,7 @@ using WB.Core.SharedKernels.Questionnaire.Api;
 using WB.Core.SharedKernels.Questionnaire.Categories;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.UI.Designer.Api.WebTester;
+using WB.UI.Designer.Controllers.Api.Designer;
 using WB.UI.Designer.Services;
 
 namespace WB.UI.Designer.Controllers.Api.WebTester
@@ -129,6 +130,7 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
         }
 
         [Route("{questionnaireId:Guid}/attachment/{attachmentContentId}")]
+        [QuestionnairePermissions]
         [HttpGet]
         public IActionResult AttachmentContentAsync(Guid questionnaireId, string attachmentContentId)
         {
@@ -142,6 +144,13 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
             {
                 return NotFound();
             }
+
+            // IDOR guard: verify the requested attachment belongs to this questionnaire
+            var questionnaireAttachments = this.attachmentService.GetAttachmentsByQuestionnaire(qId);
+            var attachmentBelongsToQuestionnaire = questionnaireAttachments
+                .Any(a => string.Equals(a.ContentId, attachmentContentId, StringComparison.OrdinalIgnoreCase));
+            if (!attachmentBelongsToQuestionnaire)
+                return Forbid();
 
             var attachmentContent = this.attachmentService.GetContent(attachmentContentId);
 
