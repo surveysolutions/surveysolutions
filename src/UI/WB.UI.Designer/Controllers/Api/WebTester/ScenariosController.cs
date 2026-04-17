@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.Scenarios;
+using WB.UI.Designer.Controllers.Api.Designer;
 using WB.UI.Designer.Services;
 
 namespace WB.UI.Designer.Controllers.Api.WebTester
@@ -23,6 +24,7 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
         }
 
         [Route("{id:Guid}")]
+        [QuestionnairePermissions(write: true)]
         [HttpPost]
         public async Task<IActionResult> Post(Guid id, [FromBody]PostScenarioModel model)
         {
@@ -52,18 +54,19 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
             return Ok();
         }
 
-        [Route("{questionnaireId:Guid}")]
+        [Route("{id:Guid}")]
+        [QuestionnairePermissions]
         [HttpGet]
-        public async Task<IActionResult> Get(Guid questionnaireId)
+        public async Task<IActionResult> Get(Guid id)
         {
             var tokenQuestionnaire = User.FindFirst(JwtTokenService.QuestionnaireIdClaimType);
             if (tokenQuestionnaire == null || !Guid.TryParse(tokenQuestionnaire.Value, out var tokenQuestionnaireId)
-                || tokenQuestionnaireId != questionnaireId)
+                || tokenQuestionnaireId != id)
                 return Forbid();
 
-            var qId = questionnaireId;
+            var qId = id;
             var anonymousQuestionnaire = this.dbContext.AnonymousQuestionnaires
-                .FirstOrDefault(a => a.AnonymousQuestionnaireId == questionnaireId && a.IsActive == true);
+                .FirstOrDefault(a => a.AnonymousQuestionnaireId == id && a.IsActive == true);
             if (anonymousQuestionnaire != null)
                 qId = anonymousQuestionnaire.QuestionnaireId;
 
