@@ -1271,6 +1271,11 @@ Les vues Table et Matrice sont uniquement prises en charge dans l'enquête Web, 
   <data name="RequestFailedUnexpectedly" xml:space="preserve">
     <value>La demande a échoué de manière inattendue.</value>
   </data>
+  <data name="ApplicationNotAvailable" xml:space="preserve">
+    <value>Impossible de compléter la demande. La réponse reçue ne semble pas provenir du serveur Survey Solutions.
+Cela est généralement causé par un proxy réseau, un pare-feu ou une passerelle de sécurité qui intercepte la connexion.
+Veuillez vérifier votre connexion réseau ou contacter votre support informatique.</value>
+  </data>
   <data name="IncorrectRosterTitle" xml:space="preserve">
     <value>Titre de liste incorrect</value>
   </data>

@@ -199,6 +199,7 @@
     "Recompile": "Ripërpilo",
     "ReplaceOptionsConfirmation": "Jeni të sigurt që doni të zëvendësoni kategoritë ekzistuese për pyetjen \"{{trimmedTitle}}\"?",
     "RequestFailedUnexpectedly": "Kërkesa dështoi papritur.",
+    "ApplicationNotAvailable": "Nuk mund të plotësohet kërkesa. Përgjigja e marrë nuk duket të vijë nga serveri i Survey Solutions.\r\nKjo zakonisht shkaktohet nga një proxy rrjeti, mur zjarri ose portë sigurie që ndërhyn në lidhje.\r\nJu lutemi kontrolloni lidhjen tuaj të rrjetit ose kontaktoni mbështetjen tuaj IT.",
     "RosterAddItem": "Shto objekt",
     "RosterName": "Emërtimi i rosterit",
     "RosterSource": "Burimi i rosterit",

@@ -1214,6 +1214,11 @@
   <data name="RequestFailedUnexpectedly" xml:space="preserve">
     <value>فشل الطلب بشكل غير متوقع.</value>
   </data>
+  <data name="ApplicationNotAvailable" xml:space="preserve">
+    <value>تعذّر إتمام الطلب. يبدو أن الاستجابة المُستلمة لا تأتي من خادم Survey Solutions.
+عادةً ما يكون ذلك بسبب وكيل شبكة، أو جدار حماية، أو بوابة أمان تعترض الاتصال.
+يُرجى التحقق من اتصالك بالشبكة أو التواصل مع فريق دعم تقنية المعلومات لديك.</value>
+  </data>
   <data name="IncorrectRosterTitle" xml:space="preserve">
     <value>عنوان القائمة غير صحيح</value>
   </data>

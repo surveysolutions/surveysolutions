@@ -227,6 +227,7 @@
     "Recompile": "Recompilare",
     "ReplaceOptionsConfirmation": "Sigur doriți să înlocuiți variante de răspuns existente pentru întrebarea „{{trimmedTitle}}”?",
     "RequestFailedUnexpectedly": "Solicitarea a eșuat în mod neașteptat.",
+    "ApplicationNotAvailable": "Solicitarea nu poate fi finalizată. Răspunsul primit nu pare să provină de la serverul Survey Solutions.\nAceasta este de obicei cauzată de un proxy de rețea, un firewall sau un gateway de securitate care interceptează conexiunea.\nVă rugăm să verificați conexiunea la rețea sau să contactați suportul IT.",
     "RetryExportPDF": "Reîncercați exportul în format PDF",
     "ReusableCategories": "Variante de răspuns reutilizabile",
     "RosterAddItem": "Adăugare element",

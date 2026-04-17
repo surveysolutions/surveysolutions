@@ -642,6 +642,11 @@
   <data name="RequestFailedUnexpectedly" xml:space="preserve">
     <value>请求意外失败</value>
   </data>
+  <data name="ApplicationNotAvailable" xml:space="preserve">
+    <value>无法完成请求。收到的响应似乎不是来自 Survey Solutions 服务器。
+这通常是由于网络代理、防火墙或安全网关拦截了连接所致。
+请检查您的网络连接或联系您的 IT 支持人员。</value>
+  </data>
   <data name="RosterAddItem" xml:space="preserve">
     <value>添加项目</value>
   </data>

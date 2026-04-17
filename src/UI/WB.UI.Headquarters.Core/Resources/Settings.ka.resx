@@ -136,7 +136,7 @@
     <value>გეოგრაფიის ექსპორტის ფორმატი</value>
   </data>
   <data name="GeographyExportFormat_Description" xml:space="preserve">
-    <value>აირჩიეთ გეოგრაფიული (ტერიტორია) კითხვებზე პასუხების ექსპორტის ფორმატი.</value>
+    <value>აირჩიეთ, როგორ უნდა იყოს ფორმატირებული პასუხები გეოგრაფიის კითხვებისთვის.</value>
   </data>
   <data name="GeographyExportFormat_Wkt" xml:space="preserve">
     <value>WKT (Well-Known Text)</value>
@@ -145,7 +145,7 @@
     <value>GeoJSON</value>
   </data>
   <data name="GeographyExportFormat_ArrayOfCoordinates" xml:space="preserve">
-    <value>კოორდინატთა მასივი</value>
+    <value>Survey Solutions გეომეტრიის სტრიქონი</value>
   </data>
   <data name="ExportEncryptionSettings" xml:space="preserve">
     <value>დაშიფვრის ექსპორტის პარამეტრები</value>
