@@ -26,8 +26,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre.DbMigrations
             npgConnBuilder.SetApplicationPostfix("migrations");
             npgConnBuilder.Pooling = false;
 
-            CheckDatabaseNotNewerThanApp(npgConnBuilder, schemaName, dbUpgradeSettings);
-
             var serviceCollection = new ServiceCollection();
             if (loggerProvider != null)
             {
@@ -70,6 +68,10 @@ namespace WB.Infrastructure.Native.Storage.Postgre.DbMigrations
             // Instantiate the runner
             var runner = scope.ServiceProvider.GetRequiredService<IMigrationRunner>();
             using var migrationLock = new MigrationLock(npgConnBuilder, false);
+
+            // Check after acquiring the lock to avoid a race where another instance
+            // migrates to a newer version between the check and MigrateUp().
+            CheckDatabaseNotNewerThanApp(npgConnBuilder, schemaName, dbUpgradeSettings);
 
             // Execute the migrations
             runner.MigrateUp();

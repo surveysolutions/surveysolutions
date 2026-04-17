@@ -11,6 +11,9 @@ namespace WB.Infrastructure.Native.Storage.Postgre
     {
         private static readonly Regex ConnectionStringPasswordRegex =
             new Regex("password=([^;]*);", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+        // Replacement string that masks the password value; not a real credential. // NOSONAR
+        private const string PasswordMask = "Password=*****;"; // NOSONAR
         
         public static InitializationException AsInitializationException(this Exception e, string connectionString)
         {
@@ -21,14 +24,14 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                     IsTransient = isTransient,
                     Data =
                     {
-                        ["ConnectionString"] = ConnectionStringPasswordRegex.Replace(connectionString, "Password=*****;")
+                        ["ConnectionString"] = ConnectionStringPasswordRegex.Replace(connectionString, PasswordMask)
                     }
                 };
             }
             
             if (e is InitializationException ie && ie.Subsystem == Subsystem.Database)
             {
-                ie.Data["ConnectionString"] = ConnectionStringPasswordRegex.Replace(connectionString, "Password=*****;");
+                ie.Data["ConnectionString"] = ConnectionStringPasswordRegex.Replace(connectionString, PasswordMask);
                 return ie;
             }
 
