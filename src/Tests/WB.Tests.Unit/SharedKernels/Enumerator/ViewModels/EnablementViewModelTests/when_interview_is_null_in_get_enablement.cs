@@ -7,6 +7,7 @@ using MvvmCross.Views;
 using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Tests.Abc;
@@ -36,7 +37,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.EnablementViewModelT
             var interviewRepositoryMock = new Mock<IStatefulInterviewRepository>();
             interviewRepositoryMock.SetupSequence(r => r.Get(It.IsAny<string>()))
                 .Returns(interview)
-                .Returns((WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.StatefulInterview)null);
+                .Returns(default(IStatefulInterview));
 
             var navigationServiceMock = new Mock<IViewModelNavigationService>();
 

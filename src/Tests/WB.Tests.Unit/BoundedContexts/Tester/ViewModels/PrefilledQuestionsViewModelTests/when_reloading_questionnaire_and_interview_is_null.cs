@@ -4,6 +4,7 @@ using FluentAssertions;
 using Moq;
 using MvvmCross.Commands;
 using NUnit.Framework;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Utils;
@@ -19,8 +20,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.PrefilledQuestionsView
             string interviewId = "11111111111111111111111111111111";
 
             var interviewRepositoryMock = new Mock<IStatefulInterviewRepository>();
-            interviewRepositoryMock.Setup(r => r.Get(interviewId)).Returns(
-                (WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.StatefulInterview)null);
+            interviewRepositoryMock.Setup(r => r.Get(interviewId)).Returns(default(IStatefulInterview));
 
             var navigationServiceMock = new Mock<IViewModelNavigationService>();
             navigationServiceMock
@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.PrefilledQuestionsView
             viewModel.Prepare(new InterviewViewModelArgs { InterviewId = interviewId });
 
             // Simulate viewmodel having been previously initialized (PrefilledQuestions is set)
-            viewModel.PrefilledQuestions = new CompositeCollection<WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.ICompositeEntity>();
+            viewModel.PrefilledQuestions = new CompositeCollection<ICompositeEntity>();
 
             // Act
             await viewModel.ReloadQuestionnaireCommand.ExecuteAsync();
