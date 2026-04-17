@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WB.Core.BoundedContexts.Designer.DataAccess;
-using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.Core.BoundedContexts.Designer.Scenarios;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.UI.Designer.Controllers.Api.Designer;
@@ -24,17 +23,18 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
             this.dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
         }
 
-        [Route("{id:Guid}")]
-        [QuestionnairePermissions(true)]
+        [Route("{id}")]
+        [Authorize]
+        [QuestionnairePermissions(write: true)]
         [HttpPost]
-        public async Task<IActionResult> Post(Guid id, [FromBody]PostScenarioModel model)
+        public async Task<IActionResult> Post(QuestionnaireRevision id, [FromBody]PostScenarioModel model)
         {
             var existingScenario = await this.dbContext.Scenarios.FindAsync(model.ScenarioId);
             if (existingScenario == null)
             {
                 var newScenario = new StoredScenario
                 {
-                    QuestionnaireId = id, 
+                    QuestionnaireId = id.QuestionnaireId, 
                     Steps = model.ScenarioText ?? "", 
                     Title = model.ScenarioTitle ?? "New scenario"
                 };
@@ -51,11 +51,13 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
         }
 
         [Route("{id}")]
+        [Authorize]
         [QuestionnairePermissions]
         [HttpGet]
         public async Task<IActionResult> Get(QuestionnaireRevision id)
         {
             var qId = id.OriginalQuestionnaireId ?? id.QuestionnaireId;
+
             var scenarios = await this.dbContext.Scenarios.Where(x => x.QuestionnaireId == qId)
                                                           .OrderBy(x => x.Title)
                                                           .Select(x => new

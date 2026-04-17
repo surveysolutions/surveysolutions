@@ -190,7 +190,7 @@ namespace WB.UI.WebTester.Controllers
                 $"{designerUrl}/WebTesterReload/Index/{interview.QuestionnaireIdentity.QuestionnaireId}?interviewId={id}";
 
             var saveScenarioDesignerUrl = questionnaire.CanSaveScenario
-                ? $"{designerUrl}/api/WebTester/Scenarios/{interview.QuestionnaireIdentity.QuestionnaireId}"
+                ? Url.Content($"~/api/ScenariosProxy/{interview.QuestionnaireIdentity.QuestionnaireId}")
                 : null;
                 
             var interviewPageModel = new InterviewPageModel

@@ -9,6 +9,19 @@ using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 
 namespace WB.UI.WebTester.Services
 {
+    public class WebTesterScenarioItem
+    {
+        public string Title { get; set; } = "";
+        public int Id { get; set; }
+    }
+
+    public class SaveScenarioRequest
+    {
+        public string? ScenarioText { get; set; }
+        public int? ScenarioId { get; set; }
+        public string? ScenarioTitle { get; set; }
+    }
+
     public interface IDesignerWebTesterApi
     {
         [Get("/api/webtester/{questionnaireId}/info")]
@@ -28,6 +41,12 @@ namespace WB.UI.WebTester.Services
 
         [Get("/api/webtester/Scenarios/{questionnaireId}/{scenarioId}")]
         Task<ApiResponse<string>> GetScenario(string questionnaireId, int scenarioId);
+
+        [Get("/api/webtester/Scenarios/{questionnaireId}")]
+        Task<List<WebTesterScenarioItem>> GetScenariosListAsync(string questionnaireId);
+
+        [Post("/api/webtester/Scenarios/{questionnaireId}")]
+        Task<IApiResponse> SaveScenarioAsync(string questionnaireId, [Body] SaveScenarioRequest model);
 
         [Get("/.hc")]
         Task<string> HealthCheck();
