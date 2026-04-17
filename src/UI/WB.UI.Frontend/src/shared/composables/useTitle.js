@@ -1,5 +1,5 @@
-import { watchEffect, toRef } from 'vue'
+import { watchEffect, unref } from 'vue'
 
 export function useTitle(title) {
-    watchEffect(() => { document.title = toRef(title).value ?? document.title })
+    watchEffect(() => { document.title = unref(title) ?? document.title })
 }

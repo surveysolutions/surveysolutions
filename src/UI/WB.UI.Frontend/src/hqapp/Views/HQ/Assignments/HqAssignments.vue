@@ -525,7 +525,6 @@ export default {
                     info: false,
                 },
                 sDom: 'fr<"table-with-scroll"t>ip',
-                searchHighlight: true,
             }
 
             return tableOptions

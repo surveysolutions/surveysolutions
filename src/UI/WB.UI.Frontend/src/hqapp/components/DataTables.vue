@@ -201,7 +201,6 @@ export default {
                     },
                 },
                 orderMulti: this.multiorder,
-                searchHighlight: true,
                 pagingType: this.pagingType,
                 lengthChange: false, // do not show page size selector
                 pageLength: this.pageLength, // page size
