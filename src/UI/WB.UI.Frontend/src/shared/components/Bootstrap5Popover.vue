@@ -42,7 +42,8 @@ export default {
             isHovering: false,
             isFocused: false,
             popoverStyle: {},
-            arrowStyle: {}
+            arrowStyle: {},
+            hasPositionListeners: false
         }
     },
     computed: {
@@ -56,9 +57,12 @@ export default {
     watch: {
         enable(newVal) {
             if (!newVal) {
-                this.isVisible = false
+                this.hidePopover()
             }
         }
+    },
+    beforeUnmount() {
+        this.removePositionListeners()
     },
     methods: {
         onTriggerMouseEnter() {
@@ -94,11 +98,27 @@ export default {
             if (!this.enable) return
             this.isVisible = true
             this.$nextTick(() => {
+                this.addPositionListeners()
                 this.updatePosition()
             })
         },
         hidePopover() {
             this.isVisible = false
+            this.removePositionListeners()
+        },
+        addPositionListeners() {
+            if (this.hasPositionListeners) return
+
+            window.addEventListener('scroll', this.updatePosition, true)
+            window.addEventListener('resize', this.updatePosition)
+            this.hasPositionListeners = true
+        },
+        removePositionListeners() {
+            if (!this.hasPositionListeners) return
+
+            window.removeEventListener('scroll', this.updatePosition, true)
+            window.removeEventListener('resize', this.updatePosition)
+            this.hasPositionListeners = false
         },
         updatePosition() {
             if (!this.$refs.triggerElement || !this.$refs.popoverElement) return
