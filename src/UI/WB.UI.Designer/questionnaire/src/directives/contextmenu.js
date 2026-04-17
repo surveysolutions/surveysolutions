@@ -40,19 +40,28 @@ const contextmenu = app => {
                 }
 
                 requestAnimationFrame(() => {
-                    let mouseX = event.pageX;
-                    let mouseY = event.pageY;
+                    const isFixedPositioned =
+                        window.getComputedStyle(menu).position === 'fixed';
+
+                    let mouseX = isFixedPositioned ? event.clientX : event.pageX;
+                    let mouseY = isFixedPositioned ? event.clientY : event.pageY;
 
                     const menuWidth = menu.scrollWidth;
                     const menuHeight = menu.scrollHeight;
-                    const maxX = window.scrollX + window.innerWidth - menuWidth;
-                    const maxY = window.scrollY + window.innerHeight - menuHeight;
+                    const minX = isFixedPositioned ? 0 : window.scrollX;
+                    const minY = isFixedPositioned ? 0 : window.scrollY;
+                    const maxX = (isFixedPositioned ? window.innerWidth : window.scrollX + window.innerWidth) - menuWidth;
+                    const maxY = (isFixedPositioned ? window.innerHeight : window.scrollY + window.innerHeight) - menuHeight;
 
-                    if (mouseX > maxX) {
+                    if (mouseX < minX) {
+                        mouseX = minX;
+                    } else if (mouseX > maxX) {
                         mouseX = maxX;
                     }
 
-                    if (mouseY > maxY) {
+                    if (mouseY < minY) {
+                        mouseY = minY;
+                    } else if (mouseY > maxY) {
                         mouseY = maxY;
                     }
 
