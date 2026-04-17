@@ -39,7 +39,6 @@
         "i18next": "^24.2.1",
         "jquery": "^3.7.1",
         "jquery-contextmenu": "^2.9.2",
-        "jquery-highlight": "^3.4.0",
         "jquery-mask-plugin": "^1.14.16",
         "lodash": "^4.18.1",
         "marked": "^15.0.6",

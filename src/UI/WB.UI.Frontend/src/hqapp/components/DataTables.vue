@@ -42,7 +42,6 @@ DataTable.use(DataTablesLib)
 
 import 'jquery-contextmenu'
 import 'jquery-contextmenu/dist/jquery.contextMenu.css'
-import 'jquery-highlight'
 import './datatable.plugins'
 import { template, debounce, includes, without, assign } from 'lodash'
 
