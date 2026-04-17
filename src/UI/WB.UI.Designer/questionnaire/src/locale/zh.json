@@ -175,6 +175,7 @@
     "ReadOnly": "只读模式",
     "Recompile": "重现编译",
     "RequestFailedUnexpectedly": "请求意外失败",
+    "ApplicationNotAvailable": "无法完成请求。收到的响应似乎不是来自 Survey Solutions 服务器。\r\n这通常是由于网络代理、防火墙或安全网关拦截了连接所致。\r\n请检查您的网络连接或联系您的 IT 支持人员。",
     "RosterAddItem": "添加项目",
     "RosterName": "二维表名称",
     "RosterSource": "二维表源",
