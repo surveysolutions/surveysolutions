@@ -383,6 +383,7 @@
     "PleaseWait": "Por favor, aguarde...",
     "EntryWasNotFound": "A entrada não foi encontrada no questionário, por favor selecione outra.",
     "RequestFailedUnexpectedly": "A solicitação falhou inesperadamente.",
+    "ApplicationNotAvailable": "Não é possível concluir a solicitação. A resposta recebida não parece ser proveniente do servidor do Survey Solutions.\nIsso geralmente é causado por um proxy de rede, firewall ou gateway de segurança interceptando a conexão.\nPor favor, verifique sua conexão de rede ou entre em contato com o suporte de TI.",
     "IncorrectRosterTitle": "Título da lista incorreto",
     "SelectedInvalidItem": "Item inválido selecionado. Corrija-o.",
     "SelectItemFromTheList": "Selecione um item da lista",
