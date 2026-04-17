@@ -37,10 +37,14 @@ export default {
             if (this._loading) return
             if (this.searchResult.skip >= this.searchResult.count) return
             this._loading = true
+            let previousSkip = this.searchResult.skip
             try {
                 do {
                     await this.$store.dispatch('fetchSearchResults')
                     await this.$nextTick()
+
+                    if (this.searchResult.skip <= previousSkip) break
+                    previousSkip = this.searchResult.skip
                 } while (this.searchResult.skip < this.searchResult.count && this.isSentinelInLoadingRange())
             } finally {
                 this._loading = false
