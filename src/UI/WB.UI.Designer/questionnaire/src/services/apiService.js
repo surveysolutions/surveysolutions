@@ -265,7 +265,7 @@ function processResponseErrorOrThrow(errorResp) {
 
     if (errorResp.response.status === 401) {
         window.location = loginUrl;
-        return;
+        throw errorResp;
     }
 
     if (
