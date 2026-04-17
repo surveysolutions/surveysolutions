@@ -11,9 +11,11 @@ using WB.Services.Export.CsvExport.Exporters;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Interview.Entities;
+using WB.Services.Export.Models;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Questionnaire.Services;
 using WB.Services.Export.Services;
+using WB.Services.Export.Services.Processing;
 using WB.Services.Infrastructure;
 
 namespace WB.Services.Export.Tests.CsvExport.Exporters
@@ -68,7 +70,9 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             var exporter = Create.InterviewsExporter(csvWriter, interviewFactory.Object);
 
             //act
-            await exporter.ExportAsync(Create.Tenant(), questionnaireExportStructure, questionnaire, interviewIdsToExport, "", 
+            await exporter.ExportAsync(
+                new ExportSettings(DataExportFormat.Tabular, new QuestionnaireId(questionnaireExportStructure.QuestionnaireId), Create.Tenant()),
+                questionnaireExportStructure, questionnaire, interviewIdsToExport, "",
                 new ExportProgress(), CancellationToken.None);
 
             //assert

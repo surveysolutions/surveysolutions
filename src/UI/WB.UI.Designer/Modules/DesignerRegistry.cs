@@ -34,6 +34,7 @@ namespace WB.UI.Designer.Modules
             registry.Bind<ICommentsService, CommentsService>();
             registry.Bind<IPdfFactory, PdfFactory>();
             registry.Bind<ICommandsMonitoring, TraceCommandsMonitoring>();
+            registry.Bind<IJwtTokenService, JwtTokenService>();
         }
 
         public Task InitAsync(IServiceLocator serviceLocator, UnderConstructionInfo status)

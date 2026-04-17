@@ -17,6 +17,8 @@ public class AssignmentLimitInterviewValidator:
     ICommandValidator<StatefulInterview, CreateInterview>,
     ICommandValidator<StatefulInterview, InterviewCommand>
 {
+    private const int RequiredInterviewsThreshold = 3;
+    
     private readonly IAssignmentsService assignmentsService;
     private readonly IAggregateRootPrototypeService prototypeService;
     private readonly IAggregateRootCache cache;
@@ -50,15 +52,39 @@ public class AssignmentLimitInterviewValidator:
     {
         if (assignmentId is null)
             return;
-        
+
+        // Fast unlocked pre-check.
+        // Avoids the serializing FOR UPDATE lock for the vast majority of requests.
         var assignment = assignmentsService.GetAssignment(assignmentId.Value);
-        if (assignment.WebMode != true)
+
+        if (assignment == null || assignment.WebMode != true)
             return;
-        
-        if (assignment.InterviewsNeeded is null or > 0)
+
+        // Unlimited assignments never need the lock.
+        if (assignment.InterviewsNeeded is null)
+            return;
+
+        // Already over limit — throw immediately, no lock needed.
+        if (assignment.InterviewsNeeded <= 0)
+        {
+            cache.Evict(interviewId);
+            throw new InterviewException(CommandValidatorsMessages.AssignmentLimitReached,
+                InterviewDomainExceptionType.AssignmentLimitReached);
+        }
+
+        // Plenty of slots remaining — concurrent creation is safe, skip the lock.
+        if (assignment.InterviewsNeeded > RequiredInterviewsThreshold)
+            return;
+
+        // 3 or fewer slots left: acquire FOR UPDATE and re-read to authoritatively
+        // serialize the last slot against concurrent requests.
+        // Pass the already-loaded entity to skip the redundant lookup round-trip.
+        var lockedAssignment = assignmentsService.GetAssignmentWithUpgradeLock(assignment);
+        if (lockedAssignment == null || lockedAssignment.InterviewsNeeded is null or > 0)
             return;
 
         cache.Evict(interviewId);
-        throw new InterviewException(CommandValidatorsMessages.AssignmentLimitReached, InterviewDomainExceptionType.AssignmentLimitReached);
+        throw new InterviewException(CommandValidatorsMessages.AssignmentLimitReached,
+            InterviewDomainExceptionType.AssignmentLimitReached);
     }
 }

@@ -213,6 +213,13 @@
   <data name="ConnectionLostMessage" xml:space="preserve">
     <value>Ju lutemi ringarkoni faqen për t’u rilidhur dhe për të vijuar këtë intervistë.</value>
   </data>
+  <data name="Reconnecting" xml:space="preserve">
+    <value>Lidhja u shkëput. Po përpiqemi të rilidhemi…</value>
+  </data>
+  <data name="ReconnectAttempt" xml:space="preserve">
+    <value>Tentativë {{count}}</value>
+    <comment>Do not translate parts inside {{}}: {{count}}</comment>
+  </data>
   <data name="ConnectionLostTitle" xml:space="preserve">
     <value>Lidhja me rrjetin u shkëput.</value>
   </data>
@@ -242,6 +249,12 @@
   </data>
   <data name="DecimalTooBig" xml:space="preserve">
     <value>Vlera e vendosur është shumë e gjatë. Lejohet me më pak se 15 shifra</value>
+  </data>
+  <data name="InvalidServerResponseMessage" xml:space="preserve">
+    <value>Serveri nuk ktheu kokën e identifikimit të pritshme. Mund të jeni lidhur me një server ndërmjetës ose me serverin e gabuar. Ju lutemi rifreskoni faqen.</value>
+  </data>
+  <data name="InvalidServerResponseTitle" xml:space="preserve">
+    <value>Përgjigje e pavlefshme e serverit</value>
   </data>
   <data name="Disconnected" xml:space="preserve">
     <value>I shkëputur</value>
