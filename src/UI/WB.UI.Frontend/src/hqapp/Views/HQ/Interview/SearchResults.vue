@@ -38,17 +38,28 @@ export default {
             if (this.searchResult.skip >= this.searchResult.count) return
             this._loading = true
             let previousSkip = this.searchResult.skip
+            let autoLoadIterations = 0
+            const maxAutoLoadIterations = 5
             try {
                 do {
                     await this.$store.dispatch('fetchSearchResults')
-                    await this.$nextTick()
+                    await this.waitForRenderAndLayout()
+                    autoLoadIterations += 1
 
                     if (this.searchResult.skip <= previousSkip) break
                     previousSkip = this.searchResult.skip
-                } while (this.searchResult.skip < this.searchResult.count && this.isSentinelInLoadingRange())
+                } while (
+                    autoLoadIterations < maxAutoLoadIterations
+                    && this.searchResult.skip < this.searchResult.count
+                    && this.isSentinelInLoadingRange()
+                )
             } finally {
                 this._loading = false
             }
+        },
+        async waitForRenderAndLayout() {
+            await this.$nextTick()
+            await new Promise(resolve => requestAnimationFrame(resolve))
         },
         isSentinelInLoadingRange() {
             if (!this.$refs.sentinel) return false
