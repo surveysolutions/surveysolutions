@@ -450,6 +450,7 @@ namespace WB.UI.Designer.Controllers
         
         [Authorize]
         [HttpPost]
+        [QuestionnairePermissions(true)]
         [Route("questionnaire/updateAnonymousQuestionnaireSettings/{id}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateAnonymousQuestionnaireSettings(Guid id, [FromBody] UpdateAnonymousQuestionnaireSettingsModel postModel)
@@ -482,6 +483,7 @@ namespace WB.UI.Designer.Controllers
 
         [Authorize]
         [HttpPost]
+        [QuestionnairePermissions(true)]
         [Route("questionnaire/regenerateAnonymousQuestionnaireLink/{id}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RegenerateAnonymousQuestionnaireLink(Guid id)

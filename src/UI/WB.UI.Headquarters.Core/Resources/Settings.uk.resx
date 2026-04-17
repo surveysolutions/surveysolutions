@@ -268,7 +268,7 @@
     <value>Формат експорту географії</value>
   </data>
   <data name="GeographyExportFormat_Description" xml:space="preserve">
-    <value>Оберіть формат експорту відповідей на географічні (площинні) запитання.</value>
+    <value>Оберіть, як мають бути відформатовані відповіді для географічних запитань.</value>
   </data>
   <data name="GeographyExportFormat_Wkt" xml:space="preserve">
     <value>WKT (Well-Known Text)</value>
@@ -277,7 +277,7 @@
     <value>GeoJSON</value>
   </data>
   <data name="GeographyExportFormat_ArrayOfCoordinates" xml:space="preserve">
-    <value>Масив координат</value>
+    <value>Рядок геометрії Survey Solutions</value>
   </data>
   <data name="ExportEncryptionSettings" xml:space="preserve">
     <value>Налаштування шифрування експорту </value>

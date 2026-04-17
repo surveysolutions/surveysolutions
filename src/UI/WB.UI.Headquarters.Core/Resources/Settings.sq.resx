@@ -244,7 +244,7 @@
     <value>Formati i eksportit gjeografik</value>
   </data>
   <data name="GeographyExportFormat_Description" xml:space="preserve">
-    <value>Zgjidhni si eksportohen përgjigjet e pyetjeve gjeografike (zonë).</value>
+    <value>Zgjidhni si duhet të formatohen përgjigjet për pyetjet gjeografike.</value>
   </data>
   <data name="GeographyExportFormat_Wkt" xml:space="preserve">
     <value>WKT (tekst i njohur)</value>
@@ -253,7 +253,7 @@
     <value>GeoJSON</value>
   </data>
   <data name="GeographyExportFormat_ArrayOfCoordinates" xml:space="preserve">
-    <value>Grup koordinatash</value>
+    <value>Varg gjeometrie Survey Solutions</value>
   </data>
   <data name="ExportEncryptionSettings" xml:space="preserve">
     <value>Cilësimet për kodimin e eksportimit </value>
