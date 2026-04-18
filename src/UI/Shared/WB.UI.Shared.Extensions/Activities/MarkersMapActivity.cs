@@ -45,6 +45,19 @@ namespace WB.UI.Shared.Extensions.Activities
                 nameof(this.ViewModel.MapView.GeoViewTapped),
                 this.ViewModel.OnMapViewTapped);
         }
+        
+        protected override void OnPause()
+        {
+            this.ViewModel?.MapView?.DismissCallout();
+            this.ViewModel?.MapView?.Pause();
+            base.OnPause();
+        }
+
+        protected override void OnResume()
+        {
+            base.OnResume();
+            this.ViewModel?.MapView?.Resume();
+        }
 
         private void ConfigureCarousel()
         {
