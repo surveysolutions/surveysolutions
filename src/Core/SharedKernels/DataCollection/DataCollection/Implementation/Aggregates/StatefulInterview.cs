@@ -1009,6 +1009,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void Resume(ResumeInterviewCommand command)
         {
             DateTimeOffset? lastResume = this.properties.LastResumed;
+            if (!lastResume.HasValue 
+                && this.properties.LastAnswerDate.HasValue
+                && command.OriginDate - this.properties.LastAnswerDate < pauseResumeQuiteWindow)
+            {
+                return;
+            }
+
             if (lastResume.HasValue)
             {
                 if (command.OriginDate - lastResume < pauseResumeQuiteWindow)

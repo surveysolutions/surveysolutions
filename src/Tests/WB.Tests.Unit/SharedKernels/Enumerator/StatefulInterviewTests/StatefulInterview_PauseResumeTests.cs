@@ -46,6 +46,29 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             events.ShouldNotContainEvent<InterviewPaused>();
             events.ShouldNotContainEvent<InterviewResumed>();
         }
+        
+        [Test]
+        public void when_resume_arrives_within_quite_window_after_answer_and_interview_was_not_resumed_Should_not_publish_event()
+        {
+            var questionId = Id.g1;
+            var interviewId = Id.gA;
+            var answerDate = new DateTimeOffset(2010, 1, 20, 1, 1, 1, new TimeSpan());
+            var resumeDate = answerDate.AddSeconds(10);
+
+            var interview = Create.AggregateRoot.StatefulInterview(
+                interviewId: interviewId,
+                questionnaire: Create.Entity.QuestionnaireDocumentWithOneQuestion(questionId));
+            
+            interview.AnswerTextQuestion(Id.gC, questionId, RosterVector.Empty, answerDate, "text");
+            
+            // Act
+            using var events = new EventContext(); 
+            interview.Resume(Create.Command.ResumeInterview(interviewId, resumeDate));
+
+            // Assert
+            events.ShouldNotContainEvent<InterviewPaused>();
+            events.ShouldNotContainEvent<InterviewResumed>();
+        }
 
         [Test]
         public void when_interview_is_completed_Should_raise_interview_paused()
