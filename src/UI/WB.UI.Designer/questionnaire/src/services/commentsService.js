@@ -1,9 +1,6 @@
 import { get, patch, del, post, commandCall } from './apiService';
 import emitter from './emitter';
 import _ from 'lodash';
-import dayjs from 'dayjs';
-import localizedFormat from 'dayjs/plugin/localizedFormat';
-dayjs.extend(localizedFormat);
 import { newGuid } from '../helpers/guid';
 
 export async function getComments(questionnaireId, entityId) {
@@ -60,7 +57,7 @@ export async function postComment(
         emitter.emit('commentAdded', {
             entityId: entityId,
             comment: comment,
-            date: dayjs().format('LLL'),
+            date: new Date().toISOString(),
             id: id,
             userName: userName,
             userEmail: userEmail,

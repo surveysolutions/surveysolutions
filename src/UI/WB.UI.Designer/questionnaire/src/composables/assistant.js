@@ -108,9 +108,21 @@ export const useAssistant = () => {
                 return { text, meta, conversationId, callLogId };
             } catch (error) {
                 clear();
-                // Re-throw abort errors immediately without retrying
+                // Re-throw abort errors immediately without retrying only
+                // if the user's own signal was aborted (user cancellation).
+                // Internal timeouts are retryable.
                 if (error.name === 'AbortError') {
-                    throw error;
+                    if (options.signal?.aborted) {
+                        throw error;
+                    }
+                    // Internal timeout — treat like a transient failure and retry
+                    if (attempt < retries) {
+                        const backoffDelay = Math.min(2000 * attempt, 10000);
+                        await abortAwareDelay(backoffDelay, options.signal);
+                        continue;
+                    } else {
+                        throw new Error(i18n.t('Assistant.ConnectionError'));
+                    }
                 }
 
                 if (error.response?.status === 401) {
