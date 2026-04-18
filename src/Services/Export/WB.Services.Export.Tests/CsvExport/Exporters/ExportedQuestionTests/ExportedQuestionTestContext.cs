@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Extensions.Logging.Abstractions;
 using WB.Services.Export.CsvExport.Exporters;
 using WB.Services.Export.Events.Interview;
 using WB.Services.Export.Interview;
@@ -102,7 +103,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters.ExportedQuestionTests
                     break;
             }
 
-            return new ExportQuestionService().GetExportedQuestion(interviewQuestion, headerItem);
+            return new ExportQuestionService(new GeographySerializer(NullLogger<GeographySerializer>.Instance)).GetExportedQuestion(interviewQuestion, headerItem);
         }
 
         public static string[] CreateFilledExportedQuestion(QuestionType questionType,

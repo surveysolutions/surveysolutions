@@ -24,6 +24,7 @@ using WB.Infrastructure.AspNetCore;
 using WB.Infrastructure.Native.Storage;
 using WB.UI.Shared.Web.Controllers;
 using WB.UI.Shared.Web.Diagnostics;
+using WB.UI.Shared.Web.Integrity;
 using WB.UI.Shared.Web.LoggingIntegration;
 using WB.UI.Shared.Web.Versions;
 using WB.UI.WebTester.Infrastructure;
@@ -116,6 +117,8 @@ namespace WB.UI.WebTester
             var initTask = autofacKernel.InitAsync(true);
             initTask.Wait(TimeSpan.FromSeconds(5));
 
+            app.UseIntegrityHelper();
+            
             if (!env.IsDevelopment())
             {
                 app.UseStatusCodePagesWithReExecute("/error/{0}");
