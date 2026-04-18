@@ -110,8 +110,7 @@ class UploadMapsService : IUploadMapsService
         catch (OutOfMemoryException e)
         {
             logger.LogCritical(e, "Out of memory on maps import");
-            result.Errors.Add(Resources.Maps.MapsLoadingError);
-            return result;
+            throw;
         }
         catch (Exception e)
         {

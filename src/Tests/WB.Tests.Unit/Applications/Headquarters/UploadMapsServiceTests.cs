@@ -60,7 +60,7 @@ public class UploadMapsServiceTests
     }
     
     [Test]
-    public async Task when_map_import_throws_out_of_memory_should_log_critical_and_return_error()
+    public void when_map_import_throws_out_of_memory_should_log_critical_and_rethrow()
     {
         var stream = Stream.Null;
         var uploadPackageAnalyzer = Mock.Of<IUploadPackageAnalyzer>(u =>
@@ -78,10 +78,8 @@ public class UploadMapsServiceTests
         var logger = new TestLogger<UploadMapsService>();
         var service = CreateUploadMapsService(uploadPackageAnalyzer, mapStorageService.Object, logger);
 
-        var upload = await service.Upload("filename.zip", stream);
-
-        Assert.That(upload.IsSuccess, Is.False);
-        Assert.That(upload.Errors, Has.Exactly(1).EqualTo(WB.UI.Headquarters.Resources.Maps.MapsLoadingError));
+        Assert.That(async () => await service.Upload("filename.zip", stream),
+            Throws.TypeOf<OutOfMemoryException>());
         Assert.That(logger.LogEntries.Exists(x =>
             x.LogLevel == LogLevel.Critical &&
             x.Exception is OutOfMemoryException &&
