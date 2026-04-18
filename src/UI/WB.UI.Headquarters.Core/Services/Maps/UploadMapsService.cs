@@ -95,12 +95,7 @@ class UploadMapsService : IUploadMapsService
                     var saved = await mapStorageService.SaveOrUpdateMapAsync(map, mapsInTempDirectory).ConfigureAwait(false);
                     result.Maps.Add(saved);
                 }
-                catch (OutOfMemoryException e)
-                {
-                    logger.LogCritical(e, "Out of memory on maps import. '{MapName}' map.", map.Name);
-                    throw;
-                }
-                catch (Exception e)
+                catch (Exception e) when (e is not OutOfMemoryException)
                 {
                     logger.LogError(e, "Error on maps import. '{MapName}' map.", map.Name);
                     invalidMaps.Add(new Tuple<string, Exception>(map.Name, e));
