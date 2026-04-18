@@ -145,7 +145,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
                 if (mapView == null || geometryEditor == null || mapSpatialReference == null)
                 {
-                    logger.Warn("Unable to start geometry editor because map view or geometry editor is not initialized.");
+                    logger.Warn("Unable to start geometry editor because MapView, GeometryEditor, or map SpatialReference is not initialized.");
                     return;
                 }
 
@@ -165,11 +165,11 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
                 await DrawNeighborsAsync(this.Geometry).ConfigureAwait(false);
 
-                var result = await GetGeometry().ConfigureAwait(false);
+                var result = await GetGeometry(geometryEditor).ConfigureAwait(false);
 
                 var position = mapView.LocationDisplay?.Location?.Position;
                 double? distanceToEditor = null;
-                if (position != null)
+                if (position != null && result != null)
                 {
                     var point = GeometryEngine.Project(position, mapSpatialReference);
                     distanceToEditor = GeometryEngine.Distance(result, point);
@@ -401,11 +401,9 @@ namespace WB.UI.Shared.Extensions.ViewModels
             UpdateWarningMessage(overlappingTitles);
         }
 
-        private async Task<Geometry> GetGeometry()
+        private async Task<Geometry> GetGeometry(GeometryEditor geometryEditor)
         {
             Geometry geometry = Geometry;
-            var geometryEditor = this.MapView?.GeometryEditor;
-            if (geometryEditor == null) return geometry;
             
             switch (RequestedGeometryType)
             {
@@ -432,10 +430,15 @@ namespace WB.UI.Shared.Extensions.ViewModels
                         IsGeometryLengthVisible = false;
                         IsGeometryAreaVisible = false;
 
-                        if (geometryEditor.Tool?.Style != null)
+                        var style = geometryEditor.Tool?.Style;
+                        if (style != null)
                         {
-                            geometryEditor.Tool.Style.MidVertexSymbol = null;
-                            geometryEditor.Tool.Style.LineSymbol = null;
+                            style.MidVertexSymbol = null;
+                            style.LineSymbol = null;
+                        }
+                        else
+                        {
+                            logger.Warn("Geometry editor style is not initialized for multipoint editing.");
                         }
 
                         return geometry == null 
