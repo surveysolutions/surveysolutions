@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.Serialization;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
@@ -569,7 +570,7 @@ namespace Main.Core.Documents
             this.Translations.ForEach(x => doc.Translations.Add(x.Clone()));
 
             doc.Categories = new List<Categories>();
-            this.Categories.ForEach(x => doc.Categories.Add(x.Clone()));
+            this.Categories.OfType<Categories>().ForEach(x => doc.Categories.Add(x.Clone()));
 
             doc.CriticalRules = new List<CriticalRule>();
             this.CriticalRules.ForEach(x => doc.CriticalRules.Add(x.Clone()));
@@ -578,6 +579,12 @@ namespace Main.Core.Documents
                 doc.EntitiesIdMap = new Dictionary<Guid, int>(this.EntitiesIdMap);
 
             return doc;
+        }
+
+        [OnDeserialized]
+        private void OnDeserialized(StreamingContext context)
+        {
+            this.Categories = (this.Categories ?? new List<Categories>()).OfType<Categories>().ToList();
         }
     }
 }
