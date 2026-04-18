@@ -570,7 +570,10 @@ namespace Main.Core.Documents
             this.Translations.ForEach(x => doc.Translations.Add(x.Clone()));
 
             doc.Categories = new List<Categories>();
-            this.Categories.OfType<Categories>().ForEach(x => doc.Categories.Add(x.Clone()));
+            foreach (var category in this.Categories.Where(category => category != null))
+            {
+                doc.Categories.Add(category.Clone());
+            }
 
             doc.CriticalRules = new List<CriticalRule>();
             this.CriticalRules.ForEach(x => doc.CriticalRules.Add(x.Clone()));
@@ -584,7 +587,7 @@ namespace Main.Core.Documents
         [OnDeserialized]
         private void OnDeserialized(StreamingContext context)
         {
-            this.Categories = (this.Categories ?? new List<Categories>()).OfType<Categories>().ToList();
+            this.Categories = (this.Categories ?? new List<Categories>()).Where(category => category != null).ToList();
         }
     }
 }

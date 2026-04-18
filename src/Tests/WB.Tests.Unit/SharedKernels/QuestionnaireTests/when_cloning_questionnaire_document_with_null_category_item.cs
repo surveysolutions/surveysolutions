@@ -7,6 +7,7 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.QuestionnaireTests
 {
+    [TestOf(typeof(QuestionnaireDocument))]
     internal class when_cloning_questionnaire_document_with_null_category_item
     {
         [OneTimeSetUp]
@@ -16,6 +17,8 @@ namespace WB.Tests.Unit.SharedKernels.QuestionnaireTests
             questionnaire.Categories = new List<Categories>
             {
                 new Categories { Id = Id.g1, Name = "Category 1" },
+                null,
+                new Categories { Id = Id.g2, Name = "Category 2" },
                 null
             };
 
@@ -25,8 +28,9 @@ namespace WB.Tests.Unit.SharedKernels.QuestionnaireTests
         [Test]
         public void should_remove_null_item_from_categories_list()
         {
-            clonedQuestionnaire.Categories.Should().ContainSingle();
+            clonedQuestionnaire.Categories.Should().HaveCount(2);
             clonedQuestionnaire.Categories[0].Id.Should().Be(Id.g1);
+            clonedQuestionnaire.Categories[1].Id.Should().Be(Id.g2);
         }
 
         private static QuestionnaireDocument clonedQuestionnaire;
