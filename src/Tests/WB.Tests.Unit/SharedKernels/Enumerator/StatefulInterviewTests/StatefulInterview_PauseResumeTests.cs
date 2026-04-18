@@ -48,7 +48,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         }
         
         [Test]
-        public void when_resume_arrives_within_quite_window_after_answer_and_interview_was_not_resumed_Should_not_publish_event()
+        public void when_resume_arrives_after_answer_and_interview_was_not_resumed_Should_publish_missing_pause_and_resume_events()
         {
             var questionId = Id.g1;
             var interviewId = Id.gA;
@@ -66,8 +66,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             interview.Resume(Create.Command.ResumeInterview(interviewId, resumeDate));
 
             // Assert
-            events.ShouldNotContainEvent<InterviewPaused>();
-            events.ShouldNotContainEvent<InterviewResumed>();
+            events.ShouldContainEvent<InterviewPaused>(x => x.OriginDate.Value.UtcDateTime == answerDate.UtcDateTime);
+            events.ShouldContainEvent<InterviewResumed>(x => x.OriginDate.Value.UtcDateTime == resumeDate.UtcDateTime);
         }
 
         [Test]

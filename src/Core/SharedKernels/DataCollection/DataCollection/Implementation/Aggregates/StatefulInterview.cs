@@ -1009,13 +1009,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void Resume(ResumeInterviewCommand command)
         {
             DateTimeOffset? lastResume = this.properties.LastResumed;
-            if (!lastResume.HasValue 
-                && this.properties.LastAnswerDate.HasValue
-                && command.OriginDate - this.properties.LastAnswerDate < pauseResumeQuiteWindow)
-            {
-                return;
-            }
-
             if (lastResume.HasValue)
             {
                 if (command.OriginDate - lastResume < pauseResumeQuiteWindow)
@@ -1032,6 +1025,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 }
 
                 if (this.properties.LastAnswerDate > closePreviousNonClosedSessionDate)
+                {
+                    closePreviousNonClosedSessionDate = this.properties.LastAnswerDate.Value;
+                }
+
+                ApplyEvent(new InterviewPaused(command.UserId, closePreviousNonClosedSessionDate));
+            }
+            else if (this.properties.LastAnswerDate.HasValue)
+            {
+                DateTimeOffset closePreviousNonClosedSessionDate = command.OriginDate;
+
+                if (this.properties.LastAnswerDate < closePreviousNonClosedSessionDate)
                 {
                     closePreviousNonClosedSessionDate = this.properties.LastAnswerDate.Value;
                 }
