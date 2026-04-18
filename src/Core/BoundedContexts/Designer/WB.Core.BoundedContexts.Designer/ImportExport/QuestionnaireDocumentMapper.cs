@@ -918,8 +918,11 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
         {
             if (variableName == null || variableName.Trim().IsNullOrEmpty())
                 return null;
-            if (!varToIdMap.TryGetValue(variableName, out var id))
-                return null;
+            var normalizedVariableName = variableName.Trim();
+            if (!varToIdMap.TryGetValue(normalizedVariableName, out var id))
+                throw new InvalidOperationException(
+                    $"Unable to resolve variable reference '{normalizedVariableName}' while mapping questionnaire document. " +
+                    "The referenced variable name was not found in the variable-to-id map.");
             return id;
         }
 

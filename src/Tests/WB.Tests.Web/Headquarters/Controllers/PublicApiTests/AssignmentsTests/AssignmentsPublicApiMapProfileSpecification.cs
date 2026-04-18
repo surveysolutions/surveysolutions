@@ -13,7 +13,7 @@ using It = Moq.It;
 
 namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTests
 {
-    public abstract class AssignmentsPublicApiMapProfileSpecification
+    public abstract class AssignmentsPublicApiMapperSpecification
     {
         [OneTimeSetUp]
         public void OneTimeSetup()

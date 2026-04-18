@@ -11,7 +11,7 @@ using It = Moq.It;
 
 namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTests
 {
-    public class when_map_assignment_to_assignmentDetails : AssignmentsPublicApiMapProfileSpecification
+    public class when_map_assignment_to_assignmentDetails : AssignmentsPublicApiMapperSpecification
     {
         protected Assignment Assignment { get; set; }
         protected AssignmentDetails AssignmentDetails { get; set; }
