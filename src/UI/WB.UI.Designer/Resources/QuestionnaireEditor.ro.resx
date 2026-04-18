@@ -803,6 +803,11 @@ Vizualizările Tabel și Matrice sunt acceptate numai în sondajul web, pentru c
   <data name="RequestFailedUnexpectedly" xml:space="preserve">
     <value>Solicitarea a eșuat în mod neașteptat.</value>
   </data>
+  <data name="ApplicationNotAvailable" xml:space="preserve">
+    <value>Solicitarea nu poate fi finalizată. Răspunsul primit nu pare să provină de la serverul Survey Solutions.
+Aceasta este de obicei cauzată de un proxy de rețea, un firewall sau un gateway de securitate care interceptează conexiunea.
+Vă rugăm să verificați conexiunea la rețea sau să contactați suportul IT.</value>
+  </data>
   <data name="RetryExportPDF" xml:space="preserve">
     <value>Reîncercați exportul în format PDF</value>
   </data>
@@ -1468,5 +1473,8 @@ Vizualizările Tabel și Matrice sunt acceptate numai în sondajul web, pentru c
   </data>
   <data name="ManageAccount" xml:space="preserve">
       <value>Gestionați contul</value>
+  </data>
+  <data name="AIAssistant" xml:space="preserve">
+      <value>IA</value>
   </data>
 </root>

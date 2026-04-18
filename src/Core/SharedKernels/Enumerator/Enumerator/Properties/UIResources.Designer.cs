@@ -825,6 +825,18 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
             }
         }
         
+        public static string Prefs_CommunicationIntegrityValidationIgnoreTitle {
+            get {
+                return ResourceManager.GetString("Prefs_CommunicationIntegrityValidationIgnoreTitle", resourceCulture);
+            }
+        }
+        
+        public static string Prefs_CommunicationIntegrityValidationIgnoreSummary {
+            get {
+                return ResourceManager.GetString("Prefs_CommunicationIntegrityValidationIgnoreSummary", resourceCulture);
+            }
+        }
+        
         public static string Interview_Cover_Screen_Title {
             get {
                 return ResourceManager.GetString("Interview_Cover_Screen_Title", resourceCulture);

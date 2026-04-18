@@ -270,7 +270,6 @@ export default {
         ExpressionEditor,
         Breadcrumbs,
         Help,
-
         AreaQuestion,
         DateTimeQuestion,
         GpsCoordinatesQuestion,

@@ -509,6 +509,12 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="Prefs_VibrateOnErrorTitle" xml:space="preserve">
     <value>Vibrate when invalid answer is given</value>
   </data>
+  <data name="Prefs_CommunicationIntegrityValidationIgnoreTitle" xml:space="preserve">
+    <value>Ignore communication integrity validation</value>
+  </data>
+  <data name="Prefs_CommunicationIntegrityValidationIgnoreSummary" xml:space="preserve">
+    <value>When enabled, communication integrity validation errors will be ignored</value>
+  </data>
   <data name="Interview_Cover_Screen_Title" xml:space="preserve">
     <value>Cover</value>
   </data>
