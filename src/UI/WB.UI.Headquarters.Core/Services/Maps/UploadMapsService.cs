@@ -95,6 +95,11 @@ class UploadMapsService : IUploadMapsService
                     var saved = await mapStorageService.SaveOrUpdateMapAsync(map, mapsInTempDirectory).ConfigureAwait(false);
                     result.Maps.Add(saved);
                 }
+                catch (OutOfMemoryException e)
+                {
+                    logger.LogCritical(e, "Out of memory on maps import. '{MapName}' map.", map.Name);
+                    throw;
+                }
                 catch (Exception e)
                 {
                     logger.LogError(e, "Error on maps import. '{MapName}' map.", map.Name);
@@ -106,6 +111,12 @@ class UploadMapsService : IUploadMapsService
                 result.Errors.AddRange(invalidMaps.Select(x => String.Format(Resources.Maps.MapLoadingInvalidFile, x.Item1, x.Item2.GetType().Name)).ToList());
             else
                 result.IsSuccess = true;
+        }
+        catch (OutOfMemoryException e)
+        {
+            logger.LogCritical(e, "Out of memory on maps import");
+            result.Errors.Add(Resources.Maps.MapsLoadingError);
+            return result;
         }
         catch (Exception e)
         {

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -57,18 +58,70 @@ public class UploadMapsServiceTests
 
         Assert.That(upload.IsSuccess, Is.False);
     }
+    
+    [Test]
+    public async Task when_map_import_throws_out_of_memory_should_log_critical_and_return_error()
+    {
+        var stream = Stream.Null;
+        var uploadPackageAnalyzer = Mock.Of<IUploadPackageAnalyzer>(u =>
+            u.Analyze(stream) == new AnalyzeResult
+            {
+                IsValid = true,
+                Maps = new List<MapFiles> { new() { Name = "map1.tpk", Files = new List<MapFile>() } }
+            });
+        
+        var mapStorageService = new Mock<IMapStorageService>();
+        mapStorageService
+            .Setup(s => s.SaveOrUpdateMapAsync(It.IsAny<MapFiles>(), It.IsAny<string>()))
+            .ThrowsAsync(new OutOfMemoryException("OOM during map save"));
+
+        var logger = new TestLogger<UploadMapsService>();
+        var service = CreateUploadMapsService(uploadPackageAnalyzer, mapStorageService.Object, logger);
+
+        var upload = await service.Upload("filename.zip", stream);
+
+        Assert.That(upload.IsSuccess, Is.False);
+        Assert.That(upload.Errors, Has.Exactly(1).EqualTo(WB.UI.Headquarters.Resources.Maps.MapsLoadingError));
+        Assert.That(logger.LogEntries.Exists(x =>
+            x.LogLevel == LogLevel.Critical &&
+            x.Exception is OutOfMemoryException &&
+            x.Message.Contains("Out of memory on maps import")), Is.True);
+    }
 
 
     private IUploadMapsService CreateUploadMapsService(IUploadPackageAnalyzer uploadPackageAnalyzer = null,
-        IMapStorageService mapStorageService = null)
+        IMapStorageService mapStorageService = null,
+        ILogger<UploadMapsService> logger = null)
     {
         return new UploadMapsService(
             Mock.Of<IFileSystemAccessor>(f => f.GetFileExtension(It.IsAny<string>()) == ".zip"),
             uploadPackageAnalyzer ?? Mock.Of<IUploadPackageAnalyzer>(),
-            new NullLogger<UploadMapsService>(),
+            logger ?? new NullLogger<UploadMapsService>(),
             Mock.Of<IArchiveUtils>(),
             mapStorageService ?? Mock.Of<IMapStorageService>(),
             Mock.Of<IOptions<FileStorageConfig>>(o => o.Value == new FileStorageConfig()),
             Mock.Of<IMapFilesValidator>());
+    }
+
+    private class TestLogger<T> : ILogger<T>
+    {
+        public readonly List<LogEntry> LogEntries = new();
+        
+        public IDisposable BeginScope<TState>(TState state) => NullScope.Instance;
+        public bool IsEnabled(LogLevel logLevel) => true;
+
+        public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception,
+            Func<TState, Exception, string> formatter)
+        {
+            LogEntries.Add(new LogEntry(logLevel, formatter(state, exception), exception));
+        }
+    }
+
+    private record LogEntry(LogLevel LogLevel, string Message, Exception Exception);
+
+    private class NullScope : IDisposable
+    {
+        public static readonly NullScope Instance = new();
+        public void Dispose() { }
     }
 }
