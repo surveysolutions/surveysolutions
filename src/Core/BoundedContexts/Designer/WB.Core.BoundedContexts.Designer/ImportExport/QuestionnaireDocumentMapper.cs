@@ -911,7 +911,9 @@ namespace WB.Core.BoundedContexts.Designer.ImportExport
                 return id.Value;
             if (variableName == null || variableName.Trim().IsNullOrEmpty())
                 return Guid.NewGuid();
-            return varToIdMap[variableName];
+            if (varToIdMap.TryGetValue(variableName.Trim(), out var mappedId))
+                return mappedId;
+            return Guid.NewGuid();
         }
 
         private static Guid? GetId(string? variableName, Dictionary<string, Guid> varToIdMap)
