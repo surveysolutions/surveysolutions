@@ -49,16 +49,9 @@ namespace WB.UI.Shared.Extensions.Activities
         protected override void OnPause()
         {
             this.ViewModel?.MapView?.DismissCallout();
-            this.ViewModel?.MapView?.Pause();
             base.OnPause();
         }
-
-        protected override void OnResume()
-        {
-            base.OnResume();
-            this.ViewModel?.MapView?.Resume();
-        }
-
+        
         private void ConfigureCarousel()
         {
             var viewPager = this.FindViewById<ViewPager2>(Resource.Id.carousel_view_pager);
