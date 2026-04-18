@@ -1030,4 +1030,7 @@ hoặc liên hệ với giám sát viên của bạn
     <data name="AssigmentMap_GeoTrackingReminder" xml:space="preserve">
     <value>Bạn đã sử dụng Định vị địa lý hoặc Định vị địa lý khi tạo cuộc phỏng vấn. Vui lòng bật lại nếu bạn muốn sử dụng nó.</value>
   </data>
+    <data name="CommunicationIntegrityFailed" xml:space="preserve">
+    <value>Phản hồi nhận được dường như không đến từ máy chủ Survey Solutions. Điều này thường do proxy mạng, tường lửa hoặc cổng bảo mật chặn kết nối. Vui lòng kiểm tra kết nối mạng hoặc liên hệ với bộ phận hỗ trợ CNTT.</value>
+  </data>
 </root>
