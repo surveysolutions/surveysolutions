@@ -8,7 +8,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Anemonis.AspNetCore.RequestDecompression;
 using Autofac;
-using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
@@ -17,7 +16,6 @@ using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Formatters;
-using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -74,6 +72,7 @@ using WB.UI.Headquarters.Services.Impl;
 using WB.UI.Headquarters.Services.Quartz;
 using WB.UI.Shared.Web.Diagnostics;
 using WB.UI.Shared.Web.Exceptions;
+using WB.UI.Shared.Web.Integrity;
 using WB.UI.Shared.Web.LoggingIntegration;
 using WB.UI.Shared.Web.Mappings;
 using WB.UI.Shared.Web.UnderConstruction;
@@ -425,9 +424,10 @@ namespace WB.UI.Headquarters
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseIntegrityHelper();
+            
             app.UseViteForwarder();
             app.UseForwardedHeaders();
-
             app.UseExceptional();
 
             if (!env.IsDevelopment())

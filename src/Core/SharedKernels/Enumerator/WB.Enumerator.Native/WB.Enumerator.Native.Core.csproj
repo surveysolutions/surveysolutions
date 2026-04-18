@@ -12,6 +12,7 @@
     <RootNamespace>WB.Enumerator.Native</RootNamespace>
     <NoWarn>1701;1702;1705;612;618;1030</NoWarn>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
   </PropertyGroup>

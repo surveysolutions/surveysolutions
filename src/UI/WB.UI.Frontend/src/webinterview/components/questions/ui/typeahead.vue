@@ -27,6 +27,7 @@ import { escape, escapeRegExp } from 'lodash'
 
 export default {
     name: 'wb-typeahead',
+    emits: ['input'],
     props: {
         value: {
             type: Object,

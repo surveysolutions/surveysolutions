@@ -74,15 +74,17 @@ namespace WB.Core.BoundedContexts.Designer.Comments
             dbContext.CommentInstances.RemoveRange(commentsForEntity);
         }
 
-        public async Task DeleteCommentAsync(Guid id)
+        public async Task DeleteCommentAsync(Guid id, Guid questionnaireId)
         {
-            var commentInstance = await dbContext.CommentInstances.FindAsync(id);
+            var commentInstance = await dbContext.CommentInstances
+                .FirstOrDefaultAsync(x => x.Id == id && x.QuestionnaireId == questionnaireId);
             if (commentInstance != null) dbContext.CommentInstances.Remove(commentInstance);
         }
 
-        public async Task ResolveCommentAsync(Guid commentId)
+        public async Task ResolveCommentAsync(Guid commentId, Guid questionnaireId)
         {
-            var comment = await dbContext.CommentInstances.FindAsync(commentId);
+            var comment = await dbContext.CommentInstances
+                .FirstOrDefaultAsync(x => x.Id == commentId && x.QuestionnaireId == questionnaireId);
             if (comment == null) throw new InvalidOperationException("Comment was not found");
             
             comment.ResolveDate = DateTime.UtcNow;

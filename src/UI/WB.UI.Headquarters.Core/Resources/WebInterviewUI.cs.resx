@@ -184,6 +184,13 @@
   <data name="ConnectionLostMessage" xml:space="preserve">
     <value>Znovu načtěte stránku pro obnovení připojení a pokračování v tomto rozhovoru.</value>
   </data>
+  <data name="Reconnecting" xml:space="preserve">
+    <value>Spojení ztraceno. Probíhá pokus o opětovné připojení…</value>
+  </data>
+  <data name="ReconnectAttempt" xml:space="preserve">
+    <value>Pokus {{count}}</value>
+    <comment>Do not translate parts inside {{}}: {{count}}</comment>
+  </data>
   <data name="ConnectionLostTitle" xml:space="preserve">
     <value>Připojení k serveru je ztraceno.</value>
   </data>
@@ -212,6 +219,12 @@ Požádejte o pomoc svého garanta.</value>
   </data>
   <data name="DecimalTooBig" xml:space="preserve">
     <value>Zadaná hodnota je příliš velká. Je povoleno méně než 15 číslic</value>
+  </data>
+  <data name="InvalidServerResponseMessage" xml:space="preserve">
+    <value>Server nevrátil očekávanou identifikační hlavičku. Možná jste připojeni přes proxy nebo na nesprávný server. Prosím, znovu načtěte stránku.</value>
+  </data>
+  <data name="InvalidServerResponseTitle" xml:space="preserve">
+    <value>Neplatná odpověď serveru</value>
   </data>
   <data name="Disconnected" xml:space="preserve">
     <value>Odpojeno</value>

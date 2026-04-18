@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.Views.SystemLog;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Domain;
@@ -135,6 +136,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
         {
             this.Append(LogEntryType.RetentionPolicyDaysToKeepChanged, "Retention policy days to keep", "changed",
                 $"{(count == null ? "empty" : count)}");
+        }
+
+        public void GeographyExportFormatChanged(GeographyExportFormat format)
+        {
+            this.Append(LogEntryType.GeographyExportFormatChanged, "Geography export format", "changed",
+                format.ToString());
         }
         
         public void UserMovedToAnotherTeam(string interviewerName, string newSupervisorName,

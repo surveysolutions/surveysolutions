@@ -464,6 +464,12 @@
   <data name="Prefs_VibrateOnErrorTitle" xml:space="preserve">
     <value>Вибрировать когда дан не валидный ответ</value>
   </data>
+  <data name="Prefs_CommunicationIntegrityValidationIgnoreTitle" xml:space="preserve">
+    <value>Игнорировать проверку целостности соединения</value>
+  </data>
+  <data name="Prefs_CommunicationIntegrityValidationIgnoreSummary" xml:space="preserve">
+    <value>Если включено, ошибки проверки целостности соединения будут игнорироваться</value>
+  </data>
   <data name="Interview_Question_Text_Empty" xml:space="preserve">
     <value>Ответ не может быть пустым</value>
   </data>
