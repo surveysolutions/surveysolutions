@@ -71,7 +71,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EmailProviders
                     }
 
                     await client.SendAsync(message);
-                    return message.MessageId;
+                    return message.MessageId ?? string.Empty;
                 }
                 catch (AggregateException ae)
                 {
