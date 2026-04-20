@@ -1276,6 +1276,11 @@ Table and Matrix views are supported only in Web survey, tablet falls back to 'S
   <data name="RequestFailedUnexpectedly" xml:space="preserve">
     <value>Request failed unexpectedly.</value>
   </data>
+  <data name="ApplicationNotAvailable" xml:space="preserve">
+    <value>Unable to complete the request. The response received does not appear to come from the Survey Solutions server.
+This is usually caused by a network proxy, firewall, or security gateway intercepting the connection.
+Please check your network connection or contact your IT support.</value>
+  </data>
   <data name="IncorrectRosterTitle" xml:space="preserve">
     <value>Incorrect roster title question</value>
   </data>
