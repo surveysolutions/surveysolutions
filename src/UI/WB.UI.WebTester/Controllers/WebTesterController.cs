@@ -19,6 +19,7 @@ using WB.UI.WebTester.Services.Implementation;
 namespace WB.UI.WebTester.Controllers
 {
     [Route("WebTester")]
+    [WebTesterSessionAuthorize]
     public class WebTesterController : Controller
     {
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
@@ -28,6 +29,7 @@ namespace WB.UI.WebTester.Controllers
         private readonly IWebTesterJwtStore jwtStore;
         private readonly ICodeExchangeClient codeExchangeClient;
         private readonly IUserContextStore userContextStore;
+        private readonly IWebTesterSessionService sessionService;
         private readonly ILogger<WebTesterController> logger;
 
         public WebTesterController(
@@ -38,6 +40,7 @@ namespace WB.UI.WebTester.Controllers
             IWebTesterJwtStore jwtStore,
             ICodeExchangeClient codeExchangeClient,
             IUserContextStore userContextStore,
+            IWebTesterSessionService sessionService,
             ILogger<WebTesterController> logger)
         {
             this.statefulInterviewRepository = statefulInterviewRepository ?? throw new ArgumentNullException(nameof(statefulInterviewRepository));
@@ -47,11 +50,13 @@ namespace WB.UI.WebTester.Controllers
             this.jwtStore = jwtStore ?? throw new ArgumentNullException(nameof(jwtStore));
             this.codeExchangeClient = codeExchangeClient ?? throw new ArgumentNullException(nameof(codeExchangeClient));
             this.userContextStore = userContextStore ?? throw new ArgumentNullException(nameof(userContextStore));
+            this.sessionService = sessionService ?? throw new ArgumentNullException(nameof(sessionService));
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         [HttpGet]
         [Route("Run/{id:Guid}")]
+        [SkipWebTesterSessionAuthorize]
         public async Task<IActionResult> Run(Guid id, Guid? sid, int? scenarioId = null,
             [FromQuery] string? code = null)
         {
@@ -82,6 +87,7 @@ namespace WB.UI.WebTester.Controllers
                         CorrelationId  = exchangeResult.CorrelationId,
                         DelegatedToken = exchangeResult.AccessToken
                     });
+                    sessionService.AuthorizeQuestionnaire(HttpContext.Session, id);
 
                     logger.LogInformation(
                         "Session started. UserId={UserId}, CorrelationId={CorrelationId}, " +

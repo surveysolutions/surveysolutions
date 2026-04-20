@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using WB.UI.WebTester.Infrastructure;
 using WB.UI.WebTester.Services;
 
 namespace WB.UI.WebTester.Controllers
@@ -10,6 +11,7 @@ namespace WB.UI.WebTester.Controllers
     /// The browser never contacts Designer directly for scenarios.
     /// </summary>
     [Route("api/ScenariosProxy")]
+    [WebTesterSessionAuthorize]
     public class ScenariosProxyController : ControllerBase
     {
         private readonly IDesignerWebTesterApi designerApi;
@@ -40,4 +42,3 @@ namespace WB.UI.WebTester.Controllers
         }
     }
 }
-
