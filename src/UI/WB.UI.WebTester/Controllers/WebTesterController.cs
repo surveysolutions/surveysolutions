@@ -54,16 +54,40 @@ namespace WB.UI.WebTester.Controllers
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
+        /// <summary>
+        /// Entry point for a WebTester session. Implements the <b>one-time code exchange flow</b>:
+        /// the browser arrives here with <c>?code=&lt;one-time-code&gt;</c> issued by Designer's
+        /// <c>GET /api/questionnaire/WebTest/{id}</c>. The code is exchanged <b>server-to-server</b>
+        /// for a short-lived delegated JWT that is stored in <see cref="IWebTesterJwtStore"/> and
+        /// never returned to the browser.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// A fresh <c>interviewId</c> (<see cref="Guid.NewGuid"/>) is generated on every run so
+        /// that concurrent test sessions for the same questionnaire (different browser tabs or
+        /// different users) each receive an isolated interview aggregate and JWT — they can no
+        /// longer evict or overwrite each other.
+        /// </para>
+        /// <para>Subsequent browser requests (interview pages, scenario proxy) are authorised via the
+        /// per-<c>interviewId</c> ASP.NET Session entry written by
+        /// <see cref="IWebTesterSessionService.AuthorizeQuestionnaire"/> during the exchange.</para>
+        /// <para>
+        /// If <paramref name="code"/> is absent the request is still permitted <b>only</b> when the
+        /// browser session already holds a valid session entry AND the JWT has not yet expired in the
+        /// store (e.g., browser refresh). Otherwise the request is redirected to an error page.
+        /// </para>
+        /// <para>
+        /// <b>Note:</b> there is no <c>?jwt=</c> query parameter and no <c>X-WebTester-Token</c>
+        /// response header — those patterns belonged to an earlier design and are not used.
+        /// </para>
+        /// </remarks>
         [HttpGet]
-        [Route("Run/{id:Guid}")]
+        [Route("Run/{questionnaireId:Guid}")]
         [SkipWebTesterSessionAuthorize]
-        public async Task<IActionResult> Run(Guid id, Guid? sid, int? scenarioId = null,
+        public async Task<IActionResult> Run(Guid questionnaireId, Guid? sid, int? scenarioId = null,
             [FromQuery] string? code = null)
         {
-            if (this.statefulInterviewRepository.Get(id.FormatGuid()) != null)
-            {
-                evictionService.Evict(id);
-            }
+            Guid interviewId;
 
             // Exchange one-time code for delegated JWT (backend-to-backend)
             if (!string.IsNullOrWhiteSpace(code))
@@ -74,30 +98,12 @@ namespace WB.UI.WebTester.Controllers
                     logger.LogWarning(
                         "Rejected suspiciously long code parameter. Length={Length}, " +
                         "QuestionnaireId={QuestionnaireId}",
-                        code.Length, id);
+                        code.Length, questionnaireId);
                     return this.RedirectToAction("QuestionnaireWithErrors", "Error");
                 }
-                var exchangeResult = await codeExchangeClient.ExchangeAsync(code);
-                if (exchangeResult != null)
-                {
-                    jwtStore.StoreToken(id, exchangeResult.AccessToken, TimeSpan.FromSeconds(exchangeResult.ExpiresIn));
-                    userContextStore.Store(id, new RequestUserContext
-                    {
-                        UserId         = exchangeResult.UserId,
-                        CorrelationId  = exchangeResult.CorrelationId,
-                        DelegatedToken = exchangeResult.AccessToken
-                    });
-                    sessionService.AuthorizeQuestionnaire(HttpContext.Session, id);
 
-                    logger.LogInformation(
-                        "Session started. UserId={UserId}, CorrelationId={CorrelationId}, " +
-                        "QuestionnaireId={QuestionnaireId}, TraceId={TraceId}, ServiceName=WB.WebTester",
-                        exchangeResult.UserId ?? "anonymous",
-                        exchangeResult.CorrelationId,
-                        id,
-                        HttpContext.TraceIdentifier);
-                }
-                else
+                var exchangeResult = await codeExchangeClient.ExchangeAsync(code);
+                if (exchangeResult == null)
                 {
                     // Exchange failed — no JWT available, Designer API calls will be rejected.
                     // Redirect to an error page rather than starting an import that will fail with 401.
@@ -105,17 +111,54 @@ namespace WB.UI.WebTester.Controllers
                         "Code exchange returned no result — cannot start interview. " +
                         "QuestionnaireId={QuestionnaireId}, TraceId={TraceId}. " +
                         "Check that Designer is reachable and WebTester:ServiceApiKey matches.",
-                        id, HttpContext.TraceIdentifier);
+                        questionnaireId, HttpContext.TraceIdentifier);
                     return this.RedirectToAction("QuestionnaireWithErrors", "Error");
                 }
+
+                // Generate a unique interviewId for this run so concurrent sessions
+                // for the same questionnaire don't collide.
+                interviewId = Guid.NewGuid();
+
+                // If this browser session previously had a run for this questionnaire,
+                // evict the old interview now so memory is reclaimed immediately rather
+                // than waiting for JWT TTL expiry.
+                var previousInterviewId = sessionService.GetInterviewId(HttpContext.Session, questionnaireId);
+                if (previousInterviewId.HasValue
+                    && statefulInterviewRepository.Get(previousInterviewId.Value.FormatGuid()) != null)
+                {
+                    evictionService.Evict(previousInterviewId.Value);
+                }
+
+                jwtStore.StoreToken(interviewId, exchangeResult.AccessToken,
+                    TimeSpan.FromSeconds(exchangeResult.ExpiresIn));
+                userContextStore.Store(interviewId, new RequestUserContext
+                {
+                    UserId         = exchangeResult.UserId,
+                    CorrelationId  = exchangeResult.CorrelationId,
+                    DelegatedToken = exchangeResult.AccessToken
+                });
+                sessionService.AuthorizeQuestionnaire(HttpContext.Session, interviewId, questionnaireId);
+
+                logger.LogInformation(
+                    "Session started. UserId={UserId}, CorrelationId={CorrelationId}, " +
+                    "QuestionnaireId={QuestionnaireId}, InterviewId={InterviewId}, " +
+                    "TraceId={TraceId}, ServiceName=WB.WebTester",
+                    exchangeResult.UserId ?? "anonymous",
+                    exchangeResult.CorrelationId,
+                    questionnaireId,
+                    interviewId,
+                    HttpContext.TraceIdentifier);
             }
             else
             {
                 // No code provided — only allowed if this browser session already holds a valid
                 // authorization AND the delegated JWT is still alive in the store (not expired).
                 // If either is missing, starting the import would trigger 401s from Designer.
-                bool sessionOk = sessionService.IsAuthorized(HttpContext.Session, id);
-                bool tokenOk   = jwtStore.GetToken(id) != null;
+                var existingInterviewId = sessionService.GetInterviewId(HttpContext.Session, questionnaireId);
+                bool sessionOk = existingInterviewId.HasValue
+                    && sessionService.IsAuthorized(HttpContext.Session, existingInterviewId.Value);
+                bool tokenOk = existingInterviewId.HasValue
+                    && jwtStore.GetToken(existingInterviewId.Value) != null;
 
                 if (!sessionOk || !tokenOk)
                 {
@@ -123,15 +166,24 @@ namespace WB.UI.WebTester.Controllers
                         "Run called without code and no active session/token. " +
                         "SessionOk={SessionOk}, TokenOk={TokenOk}, " +
                         "QuestionnaireId={QuestionnaireId}, TraceId={TraceId}",
-                        sessionOk, tokenOk, id, HttpContext.TraceIdentifier);
+                        sessionOk, tokenOk, questionnaireId, HttpContext.TraceIdentifier);
                     return this.RedirectToAction("QuestionnaireWithErrors", "Error");
                 }
+
+                // Reuse the existing interviewId for this refresh.
+                interviewId = existingInterviewId!.Value;
             }
 
-            var key = interviewFactory.StartImportQuestionnaireAndCreateInterview(id, sid, scenarioId);
+            // Make interviewId available to DesignerJwtAuthHandler for the background import Task.
+            // AsyncLocal flows into child tasks, so the whole import chain will carry this value.
+            DesignerJwtContext.InterviewId = interviewId;
+
+            interviewFactory.StartImportQuestionnaireAndCreateInterview(
+                questionnaireId, interviewId, sid, scenarioId);
+
             return this.View(new InterviewPageModel
             {
-                Id = key.ToString(),
+                Id = interviewId.ToString(),
             });
         }
 

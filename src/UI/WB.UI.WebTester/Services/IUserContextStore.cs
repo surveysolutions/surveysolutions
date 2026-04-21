@@ -4,9 +4,8 @@ namespace WB.UI.WebTester.Services
 {
     public interface IUserContextStore
     {
-        void Store(Guid questionnaireId, RequestUserContext context);
-        RequestUserContext? Get(Guid questionnaireId);
-        void Remove(Guid questionnaireId);
+        void Store(Guid interviewId, RequestUserContext context);
+        RequestUserContext? Get(Guid interviewId);
+        void Remove(Guid interviewId);
     }
 }
-

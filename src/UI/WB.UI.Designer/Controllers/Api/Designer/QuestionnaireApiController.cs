@@ -225,6 +225,32 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             ));
         }
 
+        /// <summary>
+        /// Initiates a WebTester session for the specified questionnaire using a
+        /// <b>one-time code exchange flow</b>. The JWT never reaches the browser.
+        /// </summary>
+        /// <remarks>
+        /// <para><b>Flow:</b></para>
+        /// <list type="number">
+        ///   <item>Designer creates a short-lived, single-use code scoped to the questionnaire and user.</item>
+        ///   <item>Returns a WebTester URL of the form <c>{BaseUri}/{id}?code=&lt;code&gt;</c>.</item>
+        ///   <item>The browser is navigated to that URL (client-side redirect, not a server redirect).</item>
+        ///   <item>WebTester's <c>Run</c> action receives the code, calls Designer's
+        ///         <c>POST /api/internal/auth/exchange</c> <b>server-to-server</b>, and receives
+        ///         a short-lived delegated JWT.</item>
+        ///   <item>The JWT is stored server-side in <c>IWebTesterJwtStore</c> and attached to
+        ///         outbound Designer API calls — it is never exposed to the browser.</item>
+        /// </list>
+        /// <para>
+        /// <b>Note:</b> this endpoint does NOT return an <c>X-WebTester-Token</c> header,
+        /// and the frontend does NOT append <c>?jwt=</c> to the URL.
+        /// Those patterns belong to an earlier design and are no longer used.
+        /// </para>
+        /// </remarks>
+        /// <returns>
+        /// <c>200 OK</c> with the WebTester redirect URL as a plain string,
+        /// e.g. <c>https://webtester.example.com/{id}?code=&lt;one-time-code&gt;</c>.
+        /// </returns>
         [HttpGet]
         [Route("WebTest/{id:guid}")]
         public async Task<IActionResult> WebTest(Guid id)

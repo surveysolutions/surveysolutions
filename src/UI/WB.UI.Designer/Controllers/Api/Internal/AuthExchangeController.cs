@@ -1,4 +1,6 @@
 using System;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -20,7 +22,15 @@ namespace WB.UI.Designer.Controllers.Api.Internal
     public class AuthExchangeController : ControllerBase
     {
         private const string ServiceNameHeader = "X-Service-Name";
-        private const string ServiceKeyHeader = "X-Service-Key";
+        private const string ServiceKeyHeader  = "X-Service-Key";
+
+        /// <summary>
+        /// The only service identity that is authorised to call the exchange endpoint.
+        /// Checked with an ordinal, case-insensitive comparison so that casing
+        /// differences in configuration files do not accidentally open the door to
+        /// unrelated service names.
+        /// </summary>
+        public const string ExpectedServiceName = "WB.WebTester";
 
         private readonly IOneTimeCodeStore codeStore;
         private readonly IDelegatedTokenService delegatedTokenService;
@@ -141,8 +151,22 @@ namespace WB.UI.Designer.Controllers.Api.Internal
                 return false;
             }
 
-            return !string.IsNullOrWhiteSpace(serviceName)
-                && string.Equals(serviceKey, settings.ServiceApiKey, StringComparison.Ordinal);
+            // Bind the presented service name to the single authorised identity so that
+            // a valid key cannot be reused by an unrelated future service.
+            if (!string.Equals(serviceName, ExpectedServiceName, StringComparison.OrdinalIgnoreCase))
+            {
+                logger.LogWarning(
+                    "Exchange rejected: unexpected service name. " +
+                    "Expected={Expected}, Got={Got}",
+                    ExpectedServiceName, serviceName);
+                return false;
+            }
+
+            // Constant-time byte comparison to prevent timing side-channels that
+            // could otherwise be used to brute-force the shared secret one byte at a time.
+            var expectedBytes  = Encoding.UTF8.GetBytes(settings.ServiceApiKey);
+            var presentedBytes = Encoding.UTF8.GetBytes(serviceKey);
+            return CryptographicOperations.FixedTimeEquals(expectedBytes, presentedBytes);
         }
     }
 }
