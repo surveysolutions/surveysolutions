@@ -124,7 +124,7 @@
     <value>Format d'exportation géographique</value>
   </data>
   <data name="GeographyExportFormat_Description" xml:space="preserve">
-    <value>Sélectionnez le format d'exportation des réponses aux questions géographiques (zone).</value>
+    <value>Choisissez comment les réponses doivent être mises en forme pour les questions géographiques.</value>
   </data>
   <data name="GeographyExportFormat_Wkt" xml:space="preserve">
     <value>WKT (Well-Known Text)</value>
@@ -133,7 +133,7 @@
     <value>GeoJSON</value>
   </data>
   <data name="GeographyExportFormat_ArrayOfCoordinates" xml:space="preserve">
-    <value>Tableau de coordonnées</value>
+    <value>Chaîne de géométrie de Survey Solutions</value>
   </data>
   <data name="ClearExportCache_Title" xml:space="preserve">
     <value>Effacer le cache d'exportation</value>

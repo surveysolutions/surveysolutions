@@ -116,12 +116,19 @@ namespace WB.UI.Designer.Controllers.Api.Designer
 
         [Authorize]
         [HttpPatch]
+        [QuestionnairePermissions(true)]
         [Route("comment/resolve/{commentId:Guid}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ResolveComment(Guid id, Guid commentId)
         {
-
-            await commentsService.ResolveCommentAsync(commentId);
+            try
+            {
+                await commentsService.ResolveCommentAsync(commentId, id);
+            }
+            catch (InvalidOperationException)
+            {
+                return NotFound();
+            }
             await dbContext.SaveChangesAsync();
             return Ok();
         }
@@ -129,10 +136,11 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         [Authorize]
         [HttpDelete]
         [ValidateAntiForgeryToken]
+        [QuestionnairePermissions(true)]
         [Route("comment/{commentId:Guid}")]
         public async Task<IActionResult> DeleteComment(Guid id, Guid commentId)
         {
-            await commentsService.DeleteCommentAsync(commentId);
+            await commentsService.DeleteCommentAsync(commentId, id);
             await dbContext.SaveChangesAsync();
             return Ok();
         }

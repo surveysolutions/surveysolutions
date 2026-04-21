@@ -45,9 +45,19 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
         private void HandleClick(object sender, EventArgs e)
         {
-            IMvxAndroidCurrentTopActivity topActivity = Mvx.IoCProvider.Resolve<IMvxAndroidCurrentTopActivity>();
+            if (Mvx.IoCProvider == null)
+                return;
+
+            if (!Mvx.IoCProvider.TryResolve(out IMvxAndroidCurrentTopActivity topActivity))
+                return;
+
             var activity = topActivity.Activity;
-            var view = (View) sender;
+            if (activity == null)
+                return;
+
+            var view = sender as View;
+            if (view == null)
+                return;
 
             activity.RemoveFocusFromEditText();
             activity.HideKeyboard(view.WindowToken);
