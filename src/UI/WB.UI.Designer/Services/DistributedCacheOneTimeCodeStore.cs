@@ -68,46 +68,42 @@ namespace WB.UI.Designer.Services
             if (!localUsedCodes.TryAdd(code, 1))
                 return false;
 
-            // Layer 2: distributed sentinel — reject if another replica already marked the code.
-            // Not atomic with IDistributedCache (see class-level note), but reduces the cross-replica
-            // window to the round-trip time of a single cache read.
-            if (await cache.GetStringAsync(UsedKey(code), ct) != null)
+            try
             {
-                // Undo the local entry so future legitimate retries after a failed exchange
-                // are not blocked forever within this process lifetime.
-                localUsedCodes.TryRemove(code, out _);
-                return false;
-            }
+                // Layer 2: distributed sentinel — reject if another replica already marked the code.
+                // Not atomic with IDistributedCache (see class-level note), but reduces the cross-replica
+                // window to the round-trip time of a single cache read.
+                if (await cache.GetStringAsync(UsedKey(code), ct) != null)
+                    return false;
 
-            var json = await cache.GetStringAsync(DataKey(code), ct);
-            if (json == null)
+                var json = await cache.GetStringAsync(DataKey(code), ct);
+                if (json == null)
+                    return false;
+
+                var entity = JsonSerializer.Deserialize<OneTimeCodeEntity>(json);
+                if (entity == null || entity.Used)
+                    return false;
+
+                // Grace period: keep entries visible after use so a late GetAsync
+                // (e.g. for audit logging) still returns the full entity.
+                var usedTtl = entity.ExpiresAt - DateTime.UtcNow + TimeSpan.FromMinutes(10);
+                if (usedTtl <= TimeSpan.Zero) usedTtl = TimeSpan.FromMinutes(10);
+                var opts = new DistributedCacheEntryOptions { AbsoluteExpirationRelativeToNow = usedTtl };
+
+                // Write sentinel before updating entity so other replicas observe "used" as early
+                // as possible, minimising the cross-replica window.
+                await cache.SetStringAsync(UsedKey(code), "1", opts, ct);
+
+                entity.Used = true;
+                entity.UsedAt = usedAtUtc;
+                await cache.SetStringAsync(DataKey(code), JsonSerializer.Serialize(entity), opts, ct);
+
+                return true;
+            }
+            finally
             {
                 localUsedCodes.TryRemove(code, out _);
-                return false;
             }
-
-            var entity = JsonSerializer.Deserialize<OneTimeCodeEntity>(json);
-            if (entity == null || entity.Used)
-            {
-                localUsedCodes.TryRemove(code, out _);
-                return false;
-            }
-
-            // Grace period: keep entries visible after use so a late GetAsync
-            // (e.g. for audit logging) still returns the full entity.
-            var usedTtl = entity.ExpiresAt - DateTime.UtcNow + TimeSpan.FromMinutes(10);
-            if (usedTtl <= TimeSpan.Zero) usedTtl = TimeSpan.FromMinutes(10);
-            var opts = new DistributedCacheEntryOptions { AbsoluteExpirationRelativeToNow = usedTtl };
-
-            // Write sentinel before updating entity so other replicas observe "used" as early
-            // as possible, minimising the cross-replica window.
-            await cache.SetStringAsync(UsedKey(code), "1", opts, ct);
-
-            entity.Used = true;
-            entity.UsedAt = usedAtUtc;
-            await cache.SetStringAsync(DataKey(code), JsonSerializer.Serialize(entity), opts, ct);
-
-            return true;
         }
     }
 }
