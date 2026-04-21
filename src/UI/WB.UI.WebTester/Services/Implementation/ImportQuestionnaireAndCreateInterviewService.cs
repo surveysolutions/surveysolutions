@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Refit;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
@@ -31,6 +32,7 @@ namespace WB.UI.WebTester.Services.Implementation
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IScenarioSerializer serializer;
         private readonly IAggregateRootCache aggregateRootCache;
+        private readonly ILogger<ImportQuestionnaireAndCreateInterviewService> logger;
 
         public ImportQuestionnaireAndCreateInterviewService(
             ICacheStorage<List<InterviewCommand>, Guid> executedCommandsStorage,
@@ -42,7 +44,8 @@ namespace WB.UI.WebTester.Services.Implementation
             IScenarioService scenarioService,
             IQuestionnaireStorage questionnaireStorage,
             IScenarioSerializer serializer,
-            IAggregateRootCache aggregateRootCache)
+            IAggregateRootCache aggregateRootCache,
+            ILogger<ImportQuestionnaireAndCreateInterviewService> logger)
         {
             this.executedCommandsStorage = executedCommandsStorage ?? throw new ArgumentNullException(nameof(executedCommandsStorage));
             this.commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
@@ -54,6 +57,7 @@ namespace WB.UI.WebTester.Services.Implementation
             this.questionnaireStorage = questionnaireStorage ?? throw new ArgumentNullException(nameof(questionnaireStorage));
             this.serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
             this.aggregateRootCache = aggregateRootCache ?? throw new ArgumentNullException(nameof(aggregateRootCache));
+            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         // Keyed by interviewId (unique per run).
@@ -65,17 +69,38 @@ namespace WB.UI.WebTester.Services.Implementation
             Guid? originalInterviewId,
             int? scenarioId)
         {
-            if (statuses.TryGetValue(interviewId, out _))
+            // TryAdd is a single atomic operation on ConcurrentDictionary — only one caller can
+            // insert the Loading sentinel for a given interviewId. Any concurrent caller that
+            // loses the race finds the key already present and returns without launching a
+            // second import task, closing the check-then-act window.
+            if (!statuses.TryAdd(interviewId, CreationResult.Loading))
                 return interviewId;
 
-            statuses[interviewId] = CreationResult.Loading;
 
             var task = ImportAndCreate(questionnaireId, interviewId, originalInterviewId, scenarioId);
             task.ContinueWith(t =>
             {
-                statuses[interviewId] = t.IsFaulted || t.IsCanceled
-                    ? CreationResult.Error
-                    : t.Result;
+                if (t.IsFaulted)
+                {
+                    // Observe the exception to prevent UnobservedTaskException from firing.
+                    // Flatten AggregateException so the log entry shows the root cause directly.
+                    var ex = t.Exception!.Flatten().InnerException ?? t.Exception;
+                    logger.LogError(ex,
+                        "Background import faulted. InterviewId={InterviewId}, QuestionnaireId={QuestionnaireId}",
+                        interviewId, questionnaireId);
+                    statuses[interviewId] = CreationResult.Error;
+                }
+                else if (t.IsCanceled)
+                {
+                    logger.LogWarning(
+                        "Background import was canceled. InterviewId={InterviewId}, QuestionnaireId={QuestionnaireId}",
+                        interviewId, questionnaireId);
+                    statuses[interviewId] = CreationResult.Error;
+                }
+                else
+                {
+                    statuses[interviewId] = t.Result;
+                }
             }, TaskContinuationOptions.ExecuteSynchronously);
 
             return interviewId;

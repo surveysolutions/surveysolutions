@@ -19,6 +19,10 @@ namespace WB.UI.WebTester.Infrastructure
     ///   <item>Route arg named <c>"questionnaireId"</c> → reverse session lookup
     ///         (<c>IWebTesterSessionService.GetInterviewId</c>) — used by ScenariosProxy.</item>
     /// </list>
+    /// Both the session flag (<c>auth:{interviewId}</c>) <b>and</b> the presence of a live
+    /// delegated JWT in <see cref="IWebTesterJwtStore"/> must be valid.  If the JWT has expired
+    /// the filter returns <c>401 Unauthorized</c> so the browser can re-trigger the code exchange
+    /// rather than receiving a confusing <c>401</c> from an outbound Designer API call later.
     /// Once resolved and verified, sets <see cref="DesignerJwtContext.InterviewId"/> so that
     /// <see cref="DesignerJwtAuthHandler"/> can attach the correct delegated JWT to outbound calls.
     /// </para>
@@ -46,6 +50,17 @@ namespace WB.UI.WebTester.Infrastructure
             if (!sessionService.IsAuthorized(session, interviewId.Value))
             {
                 context.Result = new StatusCodeResult(StatusCodes.Status403Forbidden);
+                return;
+            }
+
+            // Verify that the delegated JWT is still alive. If it has expired the session flag
+            // is now stale — return 401 so the client knows it must start a fresh exchange rather
+            // than silently sending requests that will fail with 401 on outbound Designer API calls.
+            var jwtStore = context.HttpContext.RequestServices
+                .GetRequiredService<IWebTesterJwtStore>();
+            if (jwtStore.GetToken(interviewId.Value) == null)
+            {
+                context.Result = new StatusCodeResult(StatusCodes.Status401Unauthorized);
                 return;
             }
 
@@ -88,3 +103,4 @@ namespace WB.UI.WebTester.Infrastructure
     [AttributeUsage(AttributeTargets.Method)]
     public sealed class SkipWebTesterSessionAuthorizeAttribute : Attribute { }
 }
+
