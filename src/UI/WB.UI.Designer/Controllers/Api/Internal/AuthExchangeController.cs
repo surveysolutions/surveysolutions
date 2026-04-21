@@ -162,9 +162,19 @@ namespace WB.UI.Designer.Controllers.Api.Internal
                 return false;
             }
 
+            if (string.IsNullOrEmpty(serviceKey))
+                return false;
+
+            // Reject impossible candidates before allocating a byte[] for the presented
+            // header value. This avoids large attacker-controlled allocations while
+            // preserving the constant-time comparison for equal-length candidates.
+            var expectedBytes = Encoding.UTF8.GetBytes(settings.ServiceApiKey);
+            var presentedByteCount = Encoding.UTF8.GetByteCount(serviceKey);
+            if (presentedByteCount != expectedBytes.Length)
+                return false;
+
             // Constant-time byte comparison to prevent timing side-channels that
             // could otherwise be used to brute-force the shared secret one byte at a time.
-            var expectedBytes  = Encoding.UTF8.GetBytes(settings.ServiceApiKey);
             var presentedBytes = Encoding.UTF8.GetBytes(serviceKey);
             return CryptographicOperations.FixedTimeEquals(expectedBytes, presentedBytes);
         }
