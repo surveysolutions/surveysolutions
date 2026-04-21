@@ -120,13 +120,14 @@ namespace WB.UI.WebTester.Controllers
                 interviewId = Guid.NewGuid();
 
                 // If this browser session previously had a run for this questionnaire,
-                // evict the old interview now so memory is reclaimed immediately rather
-                // than waiting for JWT TTL expiry.
+                // evict the old interview and revoke its session auth entry so stale
+                // auth:{interviewId} keys don't accumulate in the session store.
                 var previousInterviewId = sessionService.GetInterviewId(HttpContext.Session, questionnaireId);
-                if (previousInterviewId.HasValue
-                    && statefulInterviewRepository.Get(previousInterviewId.Value.FormatGuid()) != null)
+                if (previousInterviewId.HasValue)
                 {
-                    evictionService.Evict(previousInterviewId.Value);
+                    sessionService.RevokeQuestionnaire(HttpContext.Session, previousInterviewId.Value, questionnaireId);
+                    if (statefulInterviewRepository.Get(previousInterviewId.Value.FormatGuid()) != null)
+                        evictionService.Evict(previousInterviewId.Value);
                 }
 
                 jwtStore.StoreToken(interviewId, exchangeResult.AccessToken,

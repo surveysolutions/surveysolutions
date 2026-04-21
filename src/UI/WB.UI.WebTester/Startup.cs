@@ -77,7 +77,6 @@ namespace WB.UI.WebTester
 
             services.AddTransient<DesignerJwtAuthHandler>();
             services.AddTransient<ICodeExchangeClient, CodeExchangeClient>();
-            services.AddScoped<IUserContextAccessor, UserContextAccessor>();
             services.AddSingleton<IWebTesterSessionService, WebTesterSessionService>();
             services.AddHttpClientWithConfigurator<IDesignerWebTesterApi, DesignerApiConfigurator>(
                     new RefitSettings

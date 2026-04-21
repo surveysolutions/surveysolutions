@@ -42,8 +42,7 @@ namespace WB.UI.WebTester.Services.Implementation
             IScenarioService scenarioService,
             IQuestionnaireStorage questionnaireStorage,
             IScenarioSerializer serializer,
-            IAggregateRootCache aggregateRootCache,
-            ICacheStorage<string, CreationResult> cacheStorage)
+            IAggregateRootCache aggregateRootCache)
         {
             this.executedCommandsStorage = executedCommandsStorage ?? throw new ArgumentNullException(nameof(executedCommandsStorage));
             this.commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
@@ -72,21 +71,24 @@ namespace WB.UI.WebTester.Services.Implementation
             statuses[interviewId] = CreationResult.Loading;
 
             var task = ImportAndCreate(questionnaireId, interviewId, originalInterviewId, scenarioId);
-            task.ContinueWith(result => statuses[interviewId] = result.Result);
+            task.ContinueWith(t =>
+            {
+                statuses[interviewId] = t.IsFaulted || t.IsCanceled
+                    ? CreationResult.Error
+                    : t.Result;
+            }, TaskContinuationOptions.ExecuteSynchronously);
 
             return interviewId;
         }
 
         public CreationResult? GetStatus(Guid interviewId)
         {
-            statuses.TryGetValue(interviewId, out var result);
-            return result == default ? null : result;
+            return statuses.TryGetValue(interviewId, out var result) ? result : null;
         }
 
         public CreationResult? RemoveStatus(Guid interviewId)
         {
-            statuses.TryRemove(interviewId, out var result);
-            return result == default ? null : result;
+            return statuses.TryRemove(interviewId, out var result) ? result : null;
         }
 
         private async Task<CreationResult> ImportAndCreate(

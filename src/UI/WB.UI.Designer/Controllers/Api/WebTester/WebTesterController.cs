@@ -130,7 +130,6 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
         }
 
         [Route("{questionnaireId:Guid}/attachment/{attachmentContentId}")]
-        [QuestionnairePermissions]
         [HttpGet]
         public IActionResult AttachmentContentAsync(Guid questionnaireId, string attachmentContentId)
         {
