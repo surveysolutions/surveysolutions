@@ -15,5 +15,8 @@ namespace WB.UI.WebTester.Services.Implementation
             store.TryGetValue(questionnaireId, out var ctx);
             return ctx;
         }
+
+        public void Remove(Guid questionnaireId)
+            => store.TryRemove(questionnaireId, out _);
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -201,8 +202,9 @@ namespace WB.UI.Designer
                         {
                             Configuration["Providers:Assistant:JwtAudience"] ?? "WB.AssistantService",
                             JwtTokenService.WebTesterAudience,
-                            // Delegated JWTs issued for B→A calls use aud="WB.Designer"
-                            DelegatedTokenService.DelegatedAudience
+                            // DelegatedTokenService.DelegatedAudience is intentionally NOT listed here.
+                            // Delegated WebTester tokens are only accepted by the dedicated
+                            // "webtester-delegated" scheme below to prevent token confusion.
                         },
                         IssuerSigningKeys = signingKeys,
                         ClockSkew = TimeSpan.FromMinutes(5)
@@ -263,6 +265,37 @@ namespace WB.UI.Designer
                             });
 
                             return context.Response.WriteAsync(result);
+                        }
+                    };
+                });
+
+                // Isolated scheme for delegated WebTester → Designer backend tokens.
+                // Accepts ONLY tokens with aud="WB.Designer" AND azp="WB.WebTester".
+                // This prevents delegated tokens from being used against any other endpoint.
+                authBuilder.AddJwtBearer(DelegatedTokenService.DelegatedScheme, options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = Configuration["Providers:Assistant:JwtIssuer"] ?? "WB.Designer",
+                        ValidAudience = DelegatedTokenService.DelegatedAudience,
+                        IssuerSigningKeys = signingKeys,
+                        ClockSkew = TimeSpan.FromMinutes(5)
+                    };
+
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnTokenValidated = context =>
+                        {
+                            var azp = context.Principal?.FindFirstValue("azp");
+                            if (azp != WebTesterConstants.ServiceName)
+                            {
+                                context.Fail($"Delegated token must have azp={WebTesterConstants.ServiceName}.");
+                            }
+                            return Task.CompletedTask;
                         }
                     };
                 });
@@ -374,6 +407,19 @@ namespace WB.UI.Designer
             services.Configure<PdfSettings>(Configuration.GetSection("Pdf"));
             services.Configure<QuestionnaireHistorySettings>(Configuration.GetSection("QuestionnaireHistorySettings"));
             services.Configure<WebTesterSettings>(Configuration.GetSection("WebTester"));
+
+            // Fail fast: in non-development environments the service-to-service key is mandatory.
+            // Without it the /api/internal/auth/exchange endpoint is unauthenticated and any party
+            // that obtains a one-time code (e.g. from the browser URL) can exchange it for a
+            // delegated JWT. Configure WebTester:ServiceApiKey in both Designer and WebTester.
+            if (!hostingEnvironment.IsDevelopment())
+            {
+                var serviceApiKey = Configuration["WebTester:ServiceApiKey"];
+                if (string.IsNullOrWhiteSpace(serviceApiKey))
+                    throw new InvalidOperationException(
+                        "WebTester:ServiceApiKey must be configured in non-development environments. " +
+                        "Set it in appsettings.json or via the WEBTESTER__SERVICEAPIKEY environment variable.");
+            }
 
 
             aspCoreKernel = new AspCoreKernel(services);

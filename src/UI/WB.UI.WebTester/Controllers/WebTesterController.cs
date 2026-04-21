@@ -80,7 +80,7 @@ namespace WB.UI.WebTester.Controllers
                 var exchangeResult = await codeExchangeClient.ExchangeAsync(code);
                 if (exchangeResult != null)
                 {
-                    jwtStore.StoreToken(id, exchangeResult.AccessToken);
+                    jwtStore.StoreToken(id, exchangeResult.AccessToken, TimeSpan.FromSeconds(exchangeResult.ExpiresIn));
                     userContextStore.Store(id, new RequestUserContext
                     {
                         UserId         = exchangeResult.UserId,
@@ -106,6 +106,24 @@ namespace WB.UI.WebTester.Controllers
                         "QuestionnaireId={QuestionnaireId}, TraceId={TraceId}. " +
                         "Check that Designer is reachable and WebTester:ServiceApiKey matches.",
                         id, HttpContext.TraceIdentifier);
+                    return this.RedirectToAction("QuestionnaireWithErrors", "Error");
+                }
+            }
+            else
+            {
+                // No code provided — only allowed if this browser session already holds a valid
+                // authorization AND the delegated JWT is still alive in the store (not expired).
+                // If either is missing, starting the import would trigger 401s from Designer.
+                bool sessionOk = sessionService.IsAuthorized(HttpContext.Session, id);
+                bool tokenOk   = jwtStore.GetToken(id) != null;
+
+                if (!sessionOk || !tokenOk)
+                {
+                    logger.LogWarning(
+                        "Run called without code and no active session/token. " +
+                        "SessionOk={SessionOk}, TokenOk={TokenOk}, " +
+                        "QuestionnaireId={QuestionnaireId}, TraceId={TraceId}",
+                        sessionOk, tokenOk, id, HttpContext.TraceIdentifier);
                     return this.RedirectToAction("QuestionnaireWithErrors", "Error");
                 }
             }

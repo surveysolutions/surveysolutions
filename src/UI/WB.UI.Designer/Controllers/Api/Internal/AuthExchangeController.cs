@@ -133,10 +133,13 @@ namespace WB.UI.Designer.Controllers.Api.Internal
 
         private bool IsValidServiceCredentials(string serviceName, string serviceKey)
         {
-            // If no ServiceApiKey is configured, skip key validation (dev / single-machine mode).
-            // The startup warning is logged by WebTesterService; no per-request log here.
             if (string.IsNullOrWhiteSpace(settings.ServiceApiKey))
-                return !string.IsNullOrWhiteSpace(serviceName);
+            {
+                logger.LogError(
+                    "Exchange rejected: WebTester:ServiceApiKey is not configured. " +
+                    "ServiceName={ServiceName}", serviceName);
+                return false;
+            }
 
             return !string.IsNullOrWhiteSpace(serviceName)
                 && string.Equals(serviceKey, settings.ServiceApiKey, StringComparison.Ordinal);

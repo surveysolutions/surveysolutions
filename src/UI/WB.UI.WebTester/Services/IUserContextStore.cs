@@ -6,6 +6,7 @@ namespace WB.UI.WebTester.Services
     {
         void Store(Guid questionnaireId, RequestUserContext context);
         RequestUserContext? Get(Guid questionnaireId);
+        void Remove(Guid questionnaireId);
     }
 }
 

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +12,7 @@ using WB.UI.Designer.Services;
 namespace WB.UI.Designer.Controllers.Api.WebTester
 {
     [Route("api/webtester/Scenarios")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(AuthenticationSchemes = DelegatedTokenService.DelegatedScheme)]
     public class ScenariosController : ControllerBase
     {
         private readonly DesignerDbContext dbContext;

@@ -44,7 +44,7 @@ namespace WB.UI.Designer.Modules
             
             registry.Bind<IQuestionnaireSearchStorage, QuestionnaireSearchStorage>();
             registry.Bind<IClassificationsStorage, ClassificationsStorage>();
-            registry.BindAsSingleton<IOneTimeCodeStore, InMemoryOneTimeCodeStore>();
+            registry.BindAsSingleton<IOneTimeCodeStore, DistributedCacheOneTimeCodeStore>();
             registry.Bind<IDelegatedTokenService, DelegatedTokenService>();
             registry.Bind<IWebTesterService, WebTesterService>();
             registry.BindAsSingleton<ILoggerProvider, SerilogLoggerProvider>();   

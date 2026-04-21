@@ -6,7 +6,6 @@ namespace WB.UI.WebTester.Services.Implementation
     public class WebTesterJwtStore : IWebTesterJwtStore
     {
         private readonly IMemoryCache memoryCache;
-        private static readonly TimeSpan DefaultExpiration = TimeSpan.FromMinutes(90);
 
         public WebTesterJwtStore(IMemoryCache memoryCache)
         {
@@ -15,13 +14,19 @@ namespace WB.UI.WebTester.Services.Implementation
 
         private static string CacheKey(Guid interviewId) => $"jwt-store:{interviewId}";
 
-        public void StoreToken(Guid interviewId, string jwt)
+        public void StoreToken(Guid interviewId, string jwt, TimeSpan expiresIn)
         {
-            var entryOptions = new MemoryCacheEntryOptions
+            // Subtract a small safety margin so the cached entry expires slightly
+            // before the JWT itself — prevents sending a token that is valid now
+            // but will be rejected by Designer within the same round-trip.
+            var safeExpiry = expiresIn - TimeSpan.FromSeconds(30);
+            if (safeExpiry <= TimeSpan.Zero)
+                safeExpiry = expiresIn; // token is already very short-lived; use as-is
+
+            memoryCache.Set(CacheKey(interviewId), jwt, new MemoryCacheEntryOptions
             {
-                AbsoluteExpirationRelativeToNow = DefaultExpiration
-            };
-            memoryCache.Set(CacheKey(interviewId), jwt, entryOptions);
+                AbsoluteExpirationRelativeToNow = safeExpiry
+            });
         }
 
         public string? GetToken(Guid interviewId)

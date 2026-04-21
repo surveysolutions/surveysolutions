@@ -18,6 +18,9 @@ namespace WB.UI.Designer.Services
     {
         public const string DelegatedAudience = "WB.Designer";
 
+        /// <summary>Authentication scheme used exclusively by WebTester delegated-token endpoints.</summary>
+        public const string DelegatedScheme = "webtester-delegated";
+
         private readonly WebTesterSettings settings;
         private readonly SigningCredentials signingCredentials;
         private readonly string issuer;
@@ -30,7 +33,9 @@ namespace WB.UI.Designer.Services
             if (string.IsNullOrWhiteSpace(secretKey))
                 secretKey = configuration["Providers:Assistant:JwtSecretKey"];
             if (string.IsNullOrWhiteSpace(secretKey))
-                throw new InvalidOperationException("JWT secret key is not configured.");
+                throw new InvalidOperationException(
+                    "JWT secret key is not configured. " +
+                    "Set WebTester:JwtSecretKey or Providers:Assistant:JwtSecretKey.");
 
             issuer = configuration["Providers:Assistant:JwtIssuer"] ?? "WB.Designer";
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));

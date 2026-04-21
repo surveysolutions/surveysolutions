@@ -25,9 +25,9 @@ namespace WB.UI.Designer.Services
             if (string.IsNullOrWhiteSpace(this.settings.ServiceApiKey))
             {
                 logger.LogWarning(
-                    "WebTester:ServiceApiKey is not configured — " +
-                    "service-to-service key validation is disabled. " +
-                    "Configure WebTester:ServiceApiKey in both Designer and WebTester for production.");
+                    "WebTester:ServiceApiKey is not configured. " +
+                    "The /api/internal/auth/exchange endpoint will reject all requests. " +
+                    "Set WebTester:ServiceApiKey in both Designer and WebTester to enable the integration.");
             }
         }
 

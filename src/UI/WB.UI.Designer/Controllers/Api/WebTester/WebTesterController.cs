@@ -28,7 +28,7 @@ using WB.UI.Designer.Services;
 namespace WB.UI.Designer.Controllers.Api.WebTester
 {
     [Route("api/webtester")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(AuthenticationSchemes = DelegatedTokenService.DelegatedScheme)]
     public class WebTesterController : ControllerBase
     {
         private readonly IQuestionnairePackageComposer questionnairePackageComposer;
