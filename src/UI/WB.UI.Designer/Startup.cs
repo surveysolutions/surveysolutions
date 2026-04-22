@@ -151,10 +151,18 @@ namespace WB.UI.Designer
                     options.ForwardDefaultSelector = context =>
                     {
                         var authHeader = context.Request.Headers["Authorization"].ToString();
-                        // Bearer tokens are handled exclusively by the dedicated authentication
-                        // schemes ("assistant", "webtester-delegated") declared on individual
-                        // endpoints. They are NOT forwarded here so that a JWT token cannot
-                        // accidentally authenticate against endpoints that rely on the shared scheme.
+
+                        // Bearer tokens for the AI-Assistant back-channel: forward to the dedicated
+                        // JWT scheme so that endpoints annotated with plain [Authorize] (no explicit
+                        // AuthenticationSchemes) are reachable by assistant service calls without
+                        // needing to add AuthenticationSchemes to every action.
+                        // Note: WebTester-delegated endpoints specify AuthenticationSchemes =
+                        // DelegatedTokenService.DelegatedScheme explicitly and therefore never pass
+                        // through this selector.
+                        if (!string.IsNullOrEmpty(authHeader)
+                            && authHeader.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
+                            return JwtTokenService.AssistantScheme;
+
                         if (!string.IsNullOrEmpty(authHeader)
                             && authHeader.StartsWith("Basic ", StringComparison.OrdinalIgnoreCase))
                             return "basic";

@@ -157,7 +157,7 @@ namespace WB.UI.WebTester.Controllers
                 {
                     UserId        = exchangeResult.UserId,
                     CorrelationId = exchangeResult.CorrelationId
-                });
+                }, TimeSpan.FromSeconds(exchangeResult.ExpiresIn));
                 sessionService.AuthorizeQuestionnaire(HttpContext.Session, interviewId, questionnaireId);
 
                 logger.LogInformation(
