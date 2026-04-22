@@ -395,9 +395,9 @@ namespace WB.UI.Designer
             services.Configure<WebTesterSettings>(Configuration.GetSection("WebTester"));
 
             // Fail fast: in non-development environments the service-to-service key is mandatory.
-            // Without it the /api/internal/auth/exchange endpoint is unauthenticated and any party
-            // that obtains a one-time code (e.g. from the browser URL) can exchange it for a
-            // delegated JWT. Configure WebTester:ServiceApiKey in both Designer and WebTester.
+            // The auth exchange flow depends on matching WebTester:ServiceApiKey values in Designer
+            // and WebTester. If the key is missing, exchange requests are rejected; configure it in
+            // both applications to keep the integration functional outside development.
             if (!hostingEnvironment.IsDevelopment())
             {
                 var serviceApiKey = Configuration["WebTester:ServiceApiKey"];
