@@ -193,6 +193,14 @@ namespace WB.UI.WebTester.Controllers
 
                 // Reuse the existing interviewId for this refresh.
                 interviewId = existingInterviewId!.Value;
+
+                // If the interview aggregate is already loaded in memory the previous import
+                // completed successfully (Loading() removed the status entry after it finished).
+                // Return the view immediately — no new import is needed and starting one would
+                // call commandService.Execute(CreateInterview) with the same interviewId again,
+                // which either fails or corrupts the existing aggregate.
+                if (statefulInterviewRepository.Get(interviewId.FormatGuid()) != null)
+                    return this.View(new InterviewPageModel { Id = interviewId.ToString() });
             }
 
             // Make interviewId available to DesignerJwtAuthHandler for the background import Task.
