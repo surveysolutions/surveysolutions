@@ -301,7 +301,7 @@ namespace WB.UI.Designer
                     OnTokenValidated = context =>
                     {
                         var azp = context.Principal?.FindFirstValue("azp");
-                        if (azp != WebTesterConstants.ServiceName)
+                        if (!string.Equals(azp, WebTesterConstants.ServiceName, StringComparison.OrdinalIgnoreCase))
                             context.Fail($"Delegated token must have azp={WebTesterConstants.ServiceName}.");
                         return Task.CompletedTask;
                     }
