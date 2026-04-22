@@ -115,6 +115,22 @@ namespace WB.UI.WebTester.Controllers
                     return this.RedirectToAction("QuestionnaireWithErrors", "Error");
                 }
 
+                // Verify the code was issued for this exact questionnaire.
+                // A mismatch means the code was created for a different questionnaire (or is
+                // reused/replayed), so Designer would later reject API calls due to a claim/route
+                // mismatch.  Abort before writing any state so no JWT, user context, or session
+                // entry is stored for a session that would inevitably fail.
+                if (!Guid.TryParse(exchangeResult.QuestionnaireId, out var tokenQuestionnaireId)
+                    || tokenQuestionnaireId != questionnaireId)
+                {
+                    logger.LogWarning(
+                        "Code exchange returned a mismatched QuestionnaireId — aborting run. " +
+                        "RouteQuestionnaireId={RouteQuestionnaireId}, " +
+                        "TokenQuestionnaireId={TokenQuestionnaireId}, TraceId={TraceId}",
+                        questionnaireId, exchangeResult.QuestionnaireId, HttpContext.TraceIdentifier);
+                    return this.RedirectToAction("QuestionnaireWithErrors", "Error");
+                }
+
                 // Generate a unique interviewId for this run so concurrent sessions
                 // for the same questionnaire don't collide.
                 interviewId = Guid.NewGuid();
@@ -180,10 +196,22 @@ namespace WB.UI.WebTester.Controllers
 
             // Make interviewId available to DesignerJwtAuthHandler for the background import Task.
             // AsyncLocal flows into child tasks, so the whole import chain will carry this value.
+            // The finally block clears the ambient value after the Task has been started:
+            // StartImportQuestionnaireAndCreateInterview captures an ExecutionContext snapshot
+            // at Task-creation time, so the clear does not affect the running import but does
+            // prevent the value from leaking into any subsequent work on this execution context
+            // (this action uses [SkipWebTesterSessionAuthorize] so the filter that normally
+            // clears DesignerJwtContext.InterviewId on result-executed does not run here).
             DesignerJwtContext.InterviewId = interviewId;
-
-            interviewFactory.StartImportQuestionnaireAndCreateInterview(
-                questionnaireId, interviewId, sid, scenarioId);
+            try
+            {
+                interviewFactory.StartImportQuestionnaireAndCreateInterview(
+                    questionnaireId, interviewId, sid, scenarioId);
+            }
+            finally
+            {
+                DesignerJwtContext.InterviewId = null;
+            }
 
             return this.View(new InterviewPageModel
             {

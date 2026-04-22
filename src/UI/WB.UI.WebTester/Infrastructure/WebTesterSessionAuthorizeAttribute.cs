@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -30,11 +31,23 @@ namespace WB.UI.WebTester.Infrastructure
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public class WebTesterSessionAuthorizeAttribute : ActionFilterAttribute
     {
-        public override void OnActionExecuting(ActionExecutingContext context)
+        /// <summary>
+        /// Validates the session and delegated JWT, sets
+        /// <see cref="DesignerJwtContext.InterviewId"/> for the duration of the action, then
+        /// <b>always</b> clears it in a <c>finally</c> block — even when the action throws or
+        /// is short-circuited by an exception handler — so the AsyncLocal value can never leak
+        /// into unrelated requests or background work that reuses the same ExecutionContext.
+        /// </summary>
+        public override async Task OnActionExecutionAsync(
+            ActionExecutingContext context,
+            ActionExecutionDelegate next)
         {
             if (context.ActionDescriptor.EndpointMetadata
                     .OfType<SkipWebTesterSessionAuthorizeAttribute>().Any())
+            {
+                await next();
                 return;
+            }
 
             var session = context.HttpContext.Session;
             var sessionService = context.HttpContext.RequestServices
@@ -65,22 +78,19 @@ namespace WB.UI.WebTester.Infrastructure
             }
 
             // Make the resolved interviewId available to DesignerJwtAuthHandler
-            // and UserContextMiddleware via AsyncLocal for the duration of this request.
-            // OnResultExecuted clears it so the value cannot leak into subsequent work
-            // on the same ExecutionContext.
+            // and UserContextMiddleware via AsyncLocal for the duration of the action.
+            // The finally block guarantees the value is cleared even when the action throws
+            // or an exception filter short-circuits result execution, preventing cross-request
+            // leakage into any subsequent work scheduled on the same ExecutionContext.
             DesignerJwtContext.InterviewId = interviewId;
-        }
-
-        /// <summary>
-        /// Always clears the ambient <see cref="DesignerJwtContext.InterviewId"/> after the
-        /// response has been written (including error/short-circuit paths via action result).
-        /// This prevents the AsyncLocal value from leaking into unrelated requests or
-        /// background work that might reuse the same ExecutionContext.
-        /// </summary>
-        public override void OnResultExecuted(ResultExecutedContext context)
-        {
-            DesignerJwtContext.InterviewId = null;
-            base.OnResultExecuted(context);
+            try
+            {
+                await next();
+            }
+            finally
+            {
+                DesignerJwtContext.InterviewId = null;
+            }
         }
 
         private static Guid? ResolveInterviewId(
