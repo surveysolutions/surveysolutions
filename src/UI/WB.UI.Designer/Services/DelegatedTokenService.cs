@@ -31,11 +31,9 @@ namespace WB.UI.Designer.Services
 
             var secretKey = configuration["WebTester:JwtSecretKey"];
             if (string.IsNullOrWhiteSpace(secretKey))
-                secretKey = configuration["Providers:Assistant:JwtSecretKey"];
-            if (string.IsNullOrWhiteSpace(secretKey))
                 throw new InvalidOperationException(
                     "JWT secret key is not configured. " +
-                    "Set WebTester:JwtSecretKey or Providers:Assistant:JwtSecretKey.");
+                    "Set WebTester:JwtSecretKey.");
 
             issuer = configuration["Providers:Assistant:JwtIssuer"] ?? "WB.Designer";
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
