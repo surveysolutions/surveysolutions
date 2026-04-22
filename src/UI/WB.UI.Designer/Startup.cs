@@ -147,22 +147,18 @@ namespace WB.UI.Designer
                     sharedOptions.DefaultScheme = "boc";
                     sharedOptions.DefaultChallengeScheme = "boc";
                 })
-                .AddPolicyScheme("boc", "Basic or cookie or JWT", options =>
+                .AddPolicyScheme("boc", "Basic or cookie", options =>
                 {
                     options.ForwardDefaultSelector = context =>
                     {
                         var authHeader = context.Request.Headers["Authorization"].ToString();
-                        if (!string.IsNullOrEmpty(authHeader))
-                        {
-                            // Only forward to the JWT handler when the secret key is configured;
-                            // otherwise fall through to basic auth so Bearer tokens are rejected
-                            // rather than being handled with no validation rules.
-                            if (jwtEnabled && authHeader.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
-                            {
-                                return JwtBearerDefaults.AuthenticationScheme;
-                            }
+                        // Bearer tokens are handled exclusively by the dedicated authentication
+                        // schemes ("assistant", "webtester-delegated") declared on individual
+                        // endpoints. They are NOT forwarded here so that a JWT token cannot
+                        // accidentally authenticate against endpoints that rely on the shared scheme.
+                        if (!string.IsNullOrEmpty(authHeader)
+                            && authHeader.StartsWith("Basic ", StringComparison.OrdinalIgnoreCase))
                             return "basic";
-                        }
 
                         return IdentityConstants.ApplicationScheme;
                     };
@@ -181,108 +177,102 @@ namespace WB.UI.Designer
                 if (!string.IsNullOrWhiteSpace(webTesterJwtSecretKey) && webTesterJwtSecretKey.Length < 32)
                     throw new InvalidOperationException("WebTester JWT secret key is too short.");
 
-                // Collect all configured signing keys so tokens from either source are accepted.
+                // Signing keys used by the WebTester delegated scheme (accepts tokens from either source).
                 var signingKeys = new List<SecurityKey>();
                 if (!string.IsNullOrWhiteSpace(jwtSecretKey))
                     signingKeys.Add(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecretKey)));
                 if (!string.IsNullOrWhiteSpace(webTesterJwtSecretKey))
                     signingKeys.Add(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(webTesterJwtSecretKey)));
 
-                authBuilder.AddJwtBearer(options =>
+                var jwtIssuer = Configuration["Providers:Assistant:JwtIssuer"] ?? "WB.Designer";
+
+                // ── Isolated scheme: AI Assistant back-channel calls ───────────────────────────
+                // Validates tokens with aud="WB.AssistantService" signed by Providers:Assistant:JwtSecretKey.
+                // Applied explicitly on /api/v1/assistant/* endpoints only.
+                // Assistant tokens cannot authenticate any other endpoint.
+                if (!string.IsNullOrWhiteSpace(jwtSecretKey))
                 {
-                    options.TokenValidationParameters = new TokenValidationParameters
+                    var assistantAudience = Configuration["Providers:Assistant:JwtAudience"] ?? "WB.AssistantService";
+                    var assistantKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecretKey));
+
+                    authBuilder.AddJwtBearer(JwtTokenService.AssistantScheme, options =>
                     {
-                        ValidateIssuer = true,
-                        ValidateAudience = true,
-                        ValidateLifetime = true,
-                        ValidateIssuerSigningKey = true,
-                        ValidIssuer = Configuration["Providers:Assistant:JwtIssuer"] ?? "WB.Designer",
-                        ValidAudiences = new[]
+                        options.TokenValidationParameters = new TokenValidationParameters
                         {
-                            Configuration["Providers:Assistant:JwtAudience"] ?? "WB.AssistantService",
-                            JwtTokenService.WebTesterAudience,
-                            // DelegatedTokenService.DelegatedAudience is intentionally NOT listed here.
-                            // Delegated WebTester tokens are only accepted by the dedicated
-                            // "webtester-delegated" scheme below to prevent token confusion.
-                        },
-                        IssuerSigningKeys = signingKeys,
-                        ClockSkew = TimeSpan.FromMinutes(5)
-                    };
+                            ValidateIssuer           = true,
+                            ValidateAudience         = true,
+                            ValidateLifetime         = true,
+                            ValidateIssuerSigningKey = true,
+                            ValidIssuer              = jwtIssuer,
+                            ValidAudience            = assistantAudience,
+                            IssuerSigningKey         = assistantKey,
+                            ClockSkew                = TimeSpan.FromMinutes(5)
+                        };
 
-                    options.Events = new JwtBearerEvents
-                    {
-                        OnAuthenticationFailed = context =>
+                        options.Events = new JwtBearerEvents
                         {
-                            if (context.Exception is SecurityTokenExpiredException)
+                            OnAuthenticationFailed = context =>
                             {
-                                context.Response.Headers.Append("X-Token-Expired", "true");
-                                context.Response.Headers.Append("X-Token-Error", "Token has expired");
-                            }
-                            else if (context.Exception is SecurityTokenInvalidSignatureException)
+                                if (context.Exception is SecurityTokenExpiredException)
+                                {
+                                    context.Response.Headers.Append("X-Token-Expired", "true");
+                                    context.Response.Headers.Append("X-Token-Error", "Token has expired");
+                                }
+                                else if (context.Exception is SecurityTokenInvalidSignatureException)
+                                    context.Response.Headers.Append("X-Token-Error", "Invalid token signature");
+                                else if (context.Exception is SecurityTokenInvalidIssuerException)
+                                    context.Response.Headers.Append("X-Token-Error", "Invalid token issuer");
+                                else if (context.Exception is SecurityTokenInvalidAudienceException)
+                                    context.Response.Headers.Append("X-Token-Error", "Invalid token audience");
+                                else
+                                {
+                                    context.HttpContext.RequestServices
+                                        .GetRequiredService<ILoggerFactory>()
+                                        .CreateLogger("JwtAuthentication")
+                                        .LogWarning(context.Exception, "Assistant JWT authentication failed.");
+                                    context.Response.Headers.Append("X-Token-Error", "Token validation failed");
+                                }
+                                return Task.CompletedTask;
+                            },
+                            OnChallenge = context =>
                             {
-                                context.Response.Headers.Append("X-Token-Error", "Invalid token signature");
-                            }
-                            else if (context.Exception is SecurityTokenInvalidIssuerException)
-                            {
-                                context.Response.Headers.Append("X-Token-Error", "Invalid token issuer");
-                            }
-                            else if (context.Exception is SecurityTokenInvalidAudienceException)
-                            {
-                                context.Response.Headers.Append("X-Token-Error", "Invalid token audience");
-                            }
-                            else
-                            {
-                                var logger = context.HttpContext.RequestServices
-                                    .GetRequiredService<ILoggerFactory>()
-                                    .CreateLogger("JwtAuthentication");
-                                logger.LogWarning(context.Exception, "JWT authentication failed.");
-                                context.Response.Headers.Append("X-Token-Error", "Token validation failed");
-                            }
-                            return Task.CompletedTask;
-                        },
-                        OnChallenge = context =>
-                        {
-                            context.HandleResponse();
-                            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-                            context.Response.ContentType = "application/json";
+                                context.HandleResponse();
+                                context.Response.StatusCode  = StatusCodes.Status401Unauthorized;
+                                context.Response.ContentType = "application/json";
 
-                            var errorMessage = context.AuthenticateFailure?.Message ?? "Unauthorized";
-                            if (context.AuthenticateFailure is SecurityTokenExpiredException)
-                            {
-                                errorMessage = "JWT token has expired. Please generate a new token.";
+                                var errorMessage = context.AuthenticateFailure?.Message ?? "Unauthorized";
+                                if (context.AuthenticateFailure is SecurityTokenExpiredException)
+                                    errorMessage = "JWT token has expired. Please generate a new token.";
+                                else if (context.AuthenticateFailure is SecurityTokenInvalidSignatureException)
+                                    errorMessage = "JWT token has invalid signature.";
+
+                                var result = JsonSerializer.Serialize(new
+                                {
+                                    error     = "Unauthorized",
+                                    message   = errorMessage,
+                                    timestamp = DateTime.UtcNow
+                                });
+                                return context.Response.WriteAsync(result);
                             }
-                            else if (context.AuthenticateFailure is SecurityTokenInvalidSignatureException)
-                            {
-                                errorMessage = "JWT token has invalid signature.";
-                            }
+                        };
+                    });
+                }
 
-                            var result = JsonSerializer.Serialize(new
-                            {
-                                error = "Unauthorized",
-                                message = errorMessage,
-                                timestamp = DateTime.UtcNow
-                            });
-
-                            return context.Response.WriteAsync(result);
-                        }
-                    };
-                });
-
-                // Isolated scheme for delegated WebTester → Designer backend tokens.
+                // ── Isolated scheme: WebTester delegated back-channel calls ───────────────────
                 // Accepts ONLY tokens with aud="WB.Designer" AND azp="WB.WebTester".
-                // This prevents delegated tokens from being used against any other endpoint.
+                // Applied explicitly on /api/webtester/* endpoints only.
                 authBuilder.AddJwtBearer(DelegatedTokenService.DelegatedScheme, options =>
                 {
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
-                        ValidateIssuer = true,
-                        ValidateAudience = true,
-                        ValidateLifetime = true,
+                        ValidateIssuer           = true,
+                        ValidateAudience         = true,
+                        ValidateLifetime         = true,
                         ValidateIssuerSigningKey = true,
-                        ValidIssuer = Configuration["Providers:Assistant:JwtIssuer"] ?? "WB.Designer",
-                        ValidAudience = DelegatedTokenService.DelegatedAudience,
-                        IssuerSigningKeys = signingKeys,
-                        ClockSkew = TimeSpan.FromMinutes(5)
+                        ValidIssuer              = jwtIssuer,
+                        ValidAudience            = DelegatedTokenService.DelegatedAudience,
+                        IssuerSigningKeys         = signingKeys,
+                        ClockSkew                = TimeSpan.FromMinutes(5)
                     };
 
                     options.Events = new JwtBearerEvents
@@ -291,9 +281,7 @@ namespace WB.UI.Designer
                         {
                             var azp = context.Principal?.FindFirstValue("azp");
                             if (azp != WebTesterConstants.ServiceName)
-                            {
                                 context.Fail($"Delegated token must have azp={WebTesterConstants.ServiceName}.");
-                            }
                             return Task.CompletedTask;
                         }
                     };

@@ -122,10 +122,14 @@ namespace WB.UI.WebTester.Controllers
                 // If this browser session previously had a run for this questionnaire,
                 // evict the old interview and revoke its session auth entry so stale
                 // auth:{interviewId} keys don't accumulate in the session store.
+                // JWT and user context are always cleaned up regardless of whether the
+                // interview aggregate is still in memory (they have no TTL of their own).
                 var previousInterviewId = sessionService.GetInterviewId(HttpContext.Session, questionnaireId);
                 if (previousInterviewId.HasValue)
                 {
                     sessionService.RevokeQuestionnaire(HttpContext.Session, previousInterviewId.Value, questionnaireId);
+                    jwtStore.Remove(previousInterviewId.Value);
+                    userContextStore.Remove(previousInterviewId.Value);
                     if (statefulInterviewRepository.Get(previousInterviewId.Value.FormatGuid()) != null)
                         evictionService.Evict(previousInterviewId.Value);
                 }
@@ -134,9 +138,8 @@ namespace WB.UI.WebTester.Controllers
                     TimeSpan.FromSeconds(exchangeResult.ExpiresIn));
                 userContextStore.Store(interviewId, new RequestUserContext
                 {
-                    UserId         = exchangeResult.UserId,
-                    CorrelationId  = exchangeResult.CorrelationId,
-                    DelegatedToken = exchangeResult.AccessToken
+                    UserId        = exchangeResult.UserId,
+                    CorrelationId = exchangeResult.CorrelationId
                 });
                 sessionService.AuthorizeQuestionnaire(HttpContext.Session, interviewId, questionnaireId);
 
