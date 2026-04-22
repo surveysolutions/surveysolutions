@@ -917,6 +917,11 @@
   <data name="RequestFailedUnexpectedly" xml:space="preserve">
     <value>Запит несподівано завершився невдало.</value>
   </data>
+  <data name="ApplicationNotAvailable" xml:space="preserve">
+    <value>Неможливо виконати запит. Отримана відповідь, здається, не надходить із сервера Survey Solutions.
+Зазвичай це спричинено мережевим проксі-сервером, брандмауером або шлюзом безпеки, що перехоплює з'єднання.
+Будь ласка, перевірте підключення до мережі або зверніться до служби підтримки IT.</value>
+  </data>
   <data name="RequiredField" xml:space="preserve">
     <value>Обов'язкове поле</value>
   </data>
@@ -1585,5 +1590,8 @@
   </data>
   <data name="QuestionIsCritical" xml:space="preserve">
       <value>Це критичне питання</value>
+  </data>
+  <data name="AIAssistant" xml:space="preserve">
+      <value>ШІ</value>
   </data>
 </root>

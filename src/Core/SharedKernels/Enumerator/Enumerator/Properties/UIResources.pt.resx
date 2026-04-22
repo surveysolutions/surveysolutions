@@ -500,6 +500,12 @@ Você pode criar ou editar seus questionários no Survey Solutions Designer</val
   <data name="Prefs_VibrateOnErrorTitle" xml:space="preserve">
     <value>Vibrar quando uma resposta inválida for dada</value>
   </data>
+  <data name="Prefs_CommunicationIntegrityValidationIgnoreTitle" xml:space="preserve">
+    <value>Ignorar validação de integridade de comunicação</value>
+  </data>
+  <data name="Prefs_CommunicationIntegrityValidationIgnoreSummary" xml:space="preserve">
+    <value>Se habilitado, os erros de validação de integridade de comunicação serão ignorados</value>
+  </data>
   <data name="Interview_Cover_Screen_Title" xml:space="preserve">
     <value>Capa</value>
   </data>

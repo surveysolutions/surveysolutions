@@ -133,7 +133,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                 this.appSettingsStorage.Store(globalNotice, GlobalNotice.GlobalNoticeKey);
             }
 
-            return Ok(new {sucess = true});
+            return Ok(new {success = true});
         }
 
         [HttpGet]
@@ -153,7 +153,8 @@ namespace WB.UI.Headquarters.Controllers.Api
                 
                 AllowInterviewerUpdateProfile = this.profileSettingsStorage.GetById(AppSetting.ProfileSettings)?.AllowInterviewerUpdateProfile ?? false,
                 ExportSettings = new ExportSettingsModel(this.exportSettings.GetEncryptionSettings(),
-                    exportSettings.GetExportRetentionSettings())
+                    exportSettings.GetExportRetentionSettings(),
+                    exportSettings.GetGeographyExportFormat())
             };
         }
 
@@ -162,7 +163,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         public IActionResult InterviewerSettings([FromBody] InterviewerSettingsModel message)
         {
             if (!ModelState.IsValid)
-                return Ok(new {sucess = false});
+                return Ok(new {success = false});
 
             UpdateInterviewerSettings(settings =>
             {
@@ -171,7 +172,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                 settings.PartialSynchronizationEnabled = message.PartialSynchronizationEnabled;
             });
 
-            return Ok(new {sucess = true});
+            return Ok(new {success = true});
         }
 
         private void UpdateInterviewerSettings(Action<InterviewerSettings> updateAction)
@@ -190,14 +191,14 @@ namespace WB.UI.Headquarters.Controllers.Api
         public IActionResult InterviewerGeographyQuestionAccuracyInMeters([FromBody] InterviewerGeographyQuestionAccuracyInMetersModel message)
         {
             if (!ModelState.IsValid)
-                return Ok(new {sucess = false});
+                return Ok(new {success = false});
 
             UpdateInterviewerSettings(settings =>
             {
                 settings.GeographyQuestionAccuracyInMeters = message.GeographyQuestionAccuracyInMeters;
             });
 
-            return Ok(new {sucess = true});
+            return Ok(new {success = true});
         }
 
         [HttpPost]
@@ -205,14 +206,14 @@ namespace WB.UI.Headquarters.Controllers.Api
         public IActionResult InterviewerGeographyQuestionPeriodInSeconds([FromBody] InterviewerGeographyQuestionPeriodInSecondsModel message)
         {
             if (!ModelState.IsValid)
-                return Ok(new {sucess = false});
+                return Ok(new {success = false});
 
             UpdateInterviewerSettings(settings =>
             {
                 settings.GeographyQuestionPeriodInSeconds = message.GeographyQuestionPeriodInSeconds;
             });
 
-            return Ok(new {sucess = true});
+            return Ok(new {success = true});
         }
         
         [HttpPost]
@@ -228,7 +229,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                 },
                 AppSetting.ProfileSettings);
 
-            return Ok(new {sucess = true});
+            return Ok(new {success = true});
         }
 
         
@@ -238,7 +239,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         {
             if (!ModelState.IsValid) return this.BadRequest();
             if (RegionEndpoint.EnumerableAllRegions.All(r => r.SystemName != settings.AwsRegion))
-                return Ok(new {sucess = false, error = Settings.EmailProvider_AwsRegion_Unknown });
+                return Ok(new {success = false, error = Settings.EmailProvider_AwsRegion_Unknown });
             
             var currentsSettings = this.emailProviderSettingsStorage.GetById(AppSetting.EmailProviderSettings);
             this.emailProviderSettingsStorage.Store(settings, AppSetting.EmailProviderSettings);
@@ -248,7 +249,7 @@ namespace WB.UI.Headquarters.Controllers.Api
                 auditLog.EmailProviderWasChanged((currentsSettings?.Provider ?? EmailProvider.None).ToString(), settings.Provider.ToString());
             }
 
-            return Ok(new {sucess = true});
+            return Ok(new {success = true});
         }
         
         [HttpPost]
@@ -256,7 +257,7 @@ namespace WB.UI.Headquarters.Controllers.Api
         public IActionResult UpdateEsriApiKey([FromBody]EsriApiKeyModel key)
         {
             if (!ModelState.IsValid)
-                return Ok(new {sucess = false});
+                return Ok(new {success = false});
 
             UpdateInterviewerSettings(settings =>
             {
@@ -265,7 +266,7 @@ namespace WB.UI.Headquarters.Controllers.Api
             
             this.auditLog.EsriApiKeyChanged(String.IsNullOrEmpty(key.EsriApiKey));
 
-            return Ok(new {sucess = true});
+            return Ok(new {success = true});
         }
 
         [HttpGet]

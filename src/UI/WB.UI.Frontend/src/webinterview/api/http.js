@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { config } from '~/shared/config'
+import { installAxiosInterceptors } from '~/shared/serverValidator'
 
 let api = {};
 
@@ -25,6 +26,7 @@ const httpPlugin = {
         })
 
         // Add a response interceptor
+        installAxiosInterceptors(http)
         http.interceptors.response.use(function (response) {
             store.dispatch('fetchProgress', -1)
             return response
@@ -34,6 +36,7 @@ const httpPlugin = {
             // Do something with response error
             return Promise.reject(error)
         })
+        installAxiosInterceptors(axios)
 
         // if (!Object.prototype.hasOwnProperty.call(app, '$api')) {
         //     app.$api = {}
@@ -122,18 +125,22 @@ const httpPlugin = {
                     fd.append('duration', duration)
                 dispatch('uploadProgress', { id, now: 0, total: 100 })
 
-                await axios.post(url + '/' + interviewId, fd, {
-                    onUploadProgress(ev) {
-                        var entity = state.webinterview.entityDetails[id]
-                        if (entity != undefined) {
-                            dispatch('uploadProgress', {
-                                id,
-                                now: ev.loaded,
-                                total: ev.total,
-                            })
-                        }
-                    },
-                })
+                try {
+                    await axios.post(url + '/' + interviewId, fd, {
+                        onUploadProgress(ev) {
+                            var entity = state.webinterview.entityDetails[id]
+                            if (entity != undefined) {
+                                dispatch('uploadProgress', {
+                                    id,
+                                    now: ev.loaded,
+                                    total: ev.total,
+                                })
+                            }
+                        },
+                    })
+                } catch (error) {
+                    throw error
+                }
             },
         }
 

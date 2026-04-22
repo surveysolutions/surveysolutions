@@ -126,6 +126,9 @@
   <data name="AccountIsNotApprovedOnServer" xml:space="preserve">
     <value>Su cuenta no está aprobada. Por favor, póngase en contacto con su supervisor.</value>
   </data>
+  <data name="CommunicationIntegrityFailed" xml:space="preserve">
+    <value>La respuesta recibida no parece provenir del servidor de Survey Solutions. Esto suele ser causado por un proxy de red, firewall o pasarela de seguridad que intercepta la conexión. Por favor, compruebe su conexión de red o contacte con el soporte de TI.</value>
+  </data>
   <data name="ApplicationIncompatibleWithServer" xml:space="preserve">
     <value>Su aplicación no es compatible con el servidor. Actualice la aplicación del entrevistador.</value>
   </data>
