@@ -78,8 +78,8 @@ export default {
         }
     },
     created() {
-        this.store.getUserInfo();
-        this.store.loadGroups();
+        this.store.getUserInfo().catch(console.error);
+        this.store.loadGroups().catch(console.error);
     },
     watch: {
         activeGroup: function (val) {
