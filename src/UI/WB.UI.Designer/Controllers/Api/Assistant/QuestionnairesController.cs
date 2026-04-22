@@ -18,7 +18,7 @@ using WB.UI.Designer.Services;
 
 namespace WB.UI.Designer.Controllers.Api.Assistant
 {
-    [Authorize(AuthenticationSchemes = JwtTokenService.AssistantScheme)]
+    [Authorize]
     [QuestionnairePermissions]
     [Route("api/v1/assistant/questionnaires")]
     public class QuestionnairesController : Controller
