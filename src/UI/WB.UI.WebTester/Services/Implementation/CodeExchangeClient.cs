@@ -33,6 +33,18 @@ namespace WB.UI.WebTester.Services.Implementation
             var serviceName = cfg.ServiceName ?? "WB.WebTester";
             var serviceKey  = cfg.ServiceApiKey ?? "";
 
+            // Guard: an empty key would cause Designer to reject every exchange with 401.
+            // Fail here with a clear message rather than letting the error surface as a
+            // confusing "code exchange failed" redirect on the user-facing side.
+            if (string.IsNullOrWhiteSpace(serviceKey))
+            {
+                logger.LogError(
+                    "Code exchange aborted: ServiceApiKey is not configured. " +
+                    "Every exchange will be rejected by Designer. " +
+                    "Set ServiceApiKey in appsettings.json.");
+                return null;
+            }
+
             // Log only code length — never log the secret value itself.
             logger.LogInformation(
                 "Initiating code exchange. CodeLength={CodeLength}, ServiceName={ServiceName}",

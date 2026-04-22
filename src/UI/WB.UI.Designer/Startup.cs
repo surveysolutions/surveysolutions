@@ -194,7 +194,7 @@ namespace WB.UI.Designer
             if (!hostingEnvironment.IsDevelopment() && string.IsNullOrWhiteSpace(webTesterJwtSecretKey))
                 throw new InvalidOperationException(
                     "WebTester:JwtSecretKey must be configured in non-development environments. " +
-                    "Set it in appsettings.json or via the WEBTESTER__JWTSECRETKEY environment variable.");
+                    "Set it in appsettings.json.");
 
             var jwtIssuer = Configuration["Providers:Assistant:JwtIssuer"] ?? "WB.Designer";
 
@@ -425,7 +425,7 @@ namespace WB.UI.Designer
                 if (string.IsNullOrWhiteSpace(serviceApiKey))
                     throw new InvalidOperationException(
                         "WebTester:ServiceApiKey must be configured in non-development environments. " +
-                        "Set it in appsettings.json or via the WEBTESTER__SERVICEAPIKEY environment variable.");
+                        "Set it in appsettings.json.");
             }
 
 
