@@ -92,8 +92,9 @@ namespace WB.UI.WebTester.Controllers
             // Exchange one-time code for delegated JWT (backend-to-backend)
             if (!string.IsNullOrWhiteSpace(code))
             {
-                // Sanity-check: a valid base64url-encoded 32-byte code is ~43 chars
-                if (code.Length > 200)
+                // Sanity-check: a valid base64url-encoded 32-byte code is 43 chars;
+                // 128 matches the ceiling enforced by Designer's exchange endpoint.
+                if (code.Length > 128)
                 {
                     logger.LogWarning(
                         "Rejected suspiciously long code parameter. Length={Length}, " +
