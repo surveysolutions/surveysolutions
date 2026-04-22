@@ -25,6 +25,13 @@ namespace WB.UI.Designer.Controllers.Api.Internal
         private const string ServiceKeyHeader  = "X-Service-Key";
 
         /// <summary>
+        /// Hard ceiling on accepted code length.  Legitimate codes are 43-character
+        /// base64url strings; 128 gives room for future changes while still bounding
+        /// the size of attacker-supplied input before it reaches the cache.
+        /// </summary>
+        private const int MaxCodeLength = 128;
+
+        /// <summary>
         /// The only service identity that is authorised to call the exchange endpoint.
         /// Checked with an ordinal, case-insensitive comparison so that casing
         /// differences in configuration files do not accidentally open the door to
@@ -66,9 +73,17 @@ namespace WB.UI.Designer.Controllers.Api.Internal
                 return Unauthorized(new { error = "Invalid service credentials" });
             }
 
-            // 2. Basic input validation
+            // 2. Basic input validation — length and charset are checked before the
+            //    code is used as a cache key so that over-large or malformed values
+            //    are rejected cheaply without stressing the backing store.
             if (string.IsNullOrWhiteSpace(request.Code))
                 return BadRequest(new { error = "Code is required" });
+
+            if (request.Code.Length > MaxCodeLength)
+                return BadRequest(new { error = $"Code must not exceed {MaxCodeLength} characters" });
+
+            if (!IsValidCodeFormat(request.Code))
+                return BadRequest(new { error = "Code contains invalid characters" });
 
             // 3. Look up code
             var entity = await codeStore.GetAsync(request.Code, ct);
@@ -139,6 +154,25 @@ namespace WB.UI.Designer.Controllers.Api.Internal
                 CorrelationId   = entity.CorrelationId,
                 QuestionnaireId = entity.QuestionnaireId.ToString()
             });
+        }
+
+        /// <summary>
+        /// Returns true when every character in <paramref name="code"/> belongs to the
+        /// base64url alphabet (A-Z a-z 0-9 _ -), i.e. exactly the characters produced
+        /// by <see cref="WebTesterService.GenerateSecureCode"/>.  No heap allocation;
+        /// iterates the string once.
+        /// </summary>
+        private static bool IsValidCodeFormat(string code)
+        {
+            foreach (var ch in code)
+            {
+                if (!((ch >= 'A' && ch <= 'Z') ||
+                      (ch >= 'a' && ch <= 'z') ||
+                      (ch >= '0' && ch <= '9') ||
+                      ch == '-' || ch == '_'))
+                    return false;
+            }
+            return true;
         }
 
         private bool IsValidServiceCredentials(string serviceName, string serviceKey)

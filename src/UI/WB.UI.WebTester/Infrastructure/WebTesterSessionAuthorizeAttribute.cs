@@ -65,8 +65,22 @@ namespace WB.UI.WebTester.Infrastructure
             }
 
             // Make the resolved interviewId available to DesignerJwtAuthHandler
-            // and UserContextMiddleware via AsyncLocal.
+            // and UserContextMiddleware via AsyncLocal for the duration of this request.
+            // OnResultExecuted clears it so the value cannot leak into subsequent work
+            // on the same ExecutionContext.
             DesignerJwtContext.InterviewId = interviewId;
+        }
+
+        /// <summary>
+        /// Always clears the ambient <see cref="DesignerJwtContext.InterviewId"/> after the
+        /// response has been written (including error/short-circuit paths via action result).
+        /// This prevents the AsyncLocal value from leaking into unrelated requests or
+        /// background work that might reuse the same ExecutionContext.
+        /// </summary>
+        public override void OnResultExecuted(ResultExecutedContext context)
+        {
+            DesignerJwtContext.InterviewId = null;
+            base.OnResultExecuted(context);
         }
 
         private static Guid? ResolveInterviewId(

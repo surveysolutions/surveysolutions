@@ -15,13 +15,15 @@ namespace WB.UI.WebTester.Services.Implementation
         private readonly ICacheStorage<List<ICommand>, Guid> executedCommandsStorage;
         private readonly IWebTesterJwtStore jwtStore;
         private readonly IUserContextStore userContextStore;
+        private readonly IImportQuestionnaireAndCreateInterviewService importService;
 
         public TokenEviction(IWebInterviewInvoker webInterviewNotification,
             IAppdomainsPerInterviewManager appdomainsPerInterviewManager,
             IQuestionnaireImportService questionnaireImportService, 
             ICacheStorage<List<ICommand>, Guid> executedCommandsStorage,
             IWebTesterJwtStore jwtStore,
-            IUserContextStore userContextStore)
+            IUserContextStore userContextStore,
+            IImportQuestionnaireAndCreateInterviewService importService)
         {
             this.subject = new Subject<Guid>();
 
@@ -31,6 +33,7 @@ namespace WB.UI.WebTester.Services.Implementation
             this.executedCommandsStorage = executedCommandsStorage;
             this.jwtStore = jwtStore;
             this.userContextStore = userContextStore;
+            this.importService = importService;
         }
         
         public void Evict(Guid token)
@@ -43,6 +46,9 @@ namespace WB.UI.WebTester.Services.Implementation
             executedCommandsStorage.Remove(token);
             jwtStore.Remove(token);
             userContextStore.Remove(token);
+            // Remove the creation-status entry so abandoned / error runs
+            // don't accumulate indefinitely in the static dictionary.
+            importService.RemoveStatus(token);
         }
 
         public IDisposable Subscribe(Action<Guid> action)
