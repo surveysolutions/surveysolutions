@@ -45,6 +45,9 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
 
         public virtual async Task<IActionResult> GetMapContent(string id)
         {
+            if (string.IsNullOrEmpty(id))
+                return NotFound();
+
             var fileName = fileSystemAccessor.GetFileName(id);
             MapBrowseItem map = await mapPlainStorageAccessor.GetByIdAsync(fileName);
             if (map == null)
