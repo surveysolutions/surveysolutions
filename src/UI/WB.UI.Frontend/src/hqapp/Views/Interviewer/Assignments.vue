@@ -205,6 +205,20 @@ export default {
                     },
                 },
                 {
+                    data: 'receivedByTabletAtUtc',
+                    name: 'ReceivedByTabletAtUtc',
+                    title: this.$t('Assignments.ReceivedByTablet'),
+                    searchable: false,
+                    render(data) {
+                        if (data)
+                            return moment
+                                .utc(data)
+                                .local()
+                                .format(DateFormats.dateTimeInList)
+                        return self.$t('Common.No')
+                    },
+                },
+                {
                     data: 'comments',
                     name: 'Comments',
                     title: this.$t('Assignments.DetailsComments'),
