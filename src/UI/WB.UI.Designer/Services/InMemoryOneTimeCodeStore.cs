@@ -31,12 +31,16 @@ namespace WB.UI.Designer.Services
         {
             store.TryGetValue(code, out var entity);
 
-            // Lazy eviction: remove entries that are well past their expiry.
-            if (entity != null && entity.UsedAt.HasValue
-                && entity.UsedAt.Value < DateTime.UtcNow.AddMinutes(-10))
+            var now = DateTime.UtcNow;
+
+            // Lazy eviction: remove expired entries and entries that were used well past their expiry.
+            if (entity != null
+                && (now > entity.ExpiresAt
+                    || (entity.UsedAt.HasValue && entity.UsedAt.Value < now.AddMinutes(-10))))
             {
                 store.TryRemove(code, out _);
                 usedSet.TryRemove(code, out _);
+                entity = null;
             }
 
             return Task.FromResult(entity);
