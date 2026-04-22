@@ -188,13 +188,12 @@ namespace WB.UI.Designer
             if (!string.IsNullOrWhiteSpace(webTesterJwtSecretKey) && webTesterJwtSecretKey.Length < 32)
                 throw new InvalidOperationException("WebTester JWT secret key is too short.");
 
-            // Fail fast in non-development when the WebTester delegated key is absent.
+            // Fail fast when the WebTester delegated key is absent.
             // Without it every call to /api/webtester/* returns 401, making the integration
             // completely non-functional.
-            if (!hostingEnvironment.IsDevelopment() && string.IsNullOrWhiteSpace(webTesterJwtSecretKey))
+            if (string.IsNullOrWhiteSpace(webTesterJwtSecretKey))
                 throw new InvalidOperationException(
-                    "WebTester:JwtSecretKey must be configured in non-development environments. " +
-                    "Set it in appsettings.json.");
+                    "WebTester:JwtSecretKey must be configured. Set it in appsettings.json.");
 
             var jwtIssuer = Configuration["Providers:Assistant:JwtIssuer"] ?? "WB.Designer";
 
@@ -415,18 +414,14 @@ namespace WB.UI.Designer
             services.Configure<QuestionnaireHistorySettings>(Configuration.GetSection("QuestionnaireHistorySettings"));
             services.Configure<WebTesterSettings>(Configuration.GetSection("WebTester"));
 
-            // Fail fast: in non-development environments the service-to-service key is mandatory.
+            // Fail fast: the service-to-service key is mandatory.
             // The auth exchange flow depends on matching WebTester:ServiceApiKey values in Designer
             // and WebTester. If the key is missing, exchange requests are rejected; configure it in
-            // both applications to keep the integration functional outside development.
-            if (!hostingEnvironment.IsDevelopment())
-            {
-                var serviceApiKey = Configuration["WebTester:ServiceApiKey"];
-                if (string.IsNullOrWhiteSpace(serviceApiKey))
-                    throw new InvalidOperationException(
-                        "WebTester:ServiceApiKey must be configured in non-development environments. " +
-                        "Set it in appsettings.json.");
-            }
+            // both applications to keep the integration functional.
+            var serviceApiKey = Configuration["WebTester:ServiceApiKey"];
+            if (string.IsNullOrWhiteSpace(serviceApiKey))
+                throw new InvalidOperationException(
+                    "WebTester:ServiceApiKey must be configured. Set it in appsettings.json.");
 
 
             aspCoreKernel = new AspCoreKernel(services);

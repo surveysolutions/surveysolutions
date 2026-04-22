@@ -71,14 +71,12 @@ namespace WB.UI.WebTester
             services.Configure<TesterConfiguration>(this.Configuration);
             services.AddHttpContextAccessor();
 
-            // Fail fast: the service-to-service key is mandatory in non-development
-            // environments. Without it every code exchange is rejected by Designer,
-            // making the entire WebTester integration non-functional.
+            // Fail fast: the service-to-service key is mandatory. Without it every code
+            // exchange is rejected by Designer, making the entire WebTester integration non-functional.
             var serviceApiKey = Configuration["ServiceApiKey"];
             if (string.IsNullOrWhiteSpace(serviceApiKey))
                 throw new InvalidOperationException(
-                    "ServiceApiKey must be configured in non-development environments. " +
-                    "Set it in appsettings.json. " +
+                    "ServiceApiKey must be configured. Set it in appsettings.json. " +
                     "Its value must match WebTester:ServiceApiKey in Designer.");
 
             services.AddHealthChecks()
