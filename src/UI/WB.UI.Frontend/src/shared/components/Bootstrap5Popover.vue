@@ -43,7 +43,8 @@ export default {
             isFocused: false,
             popoverStyle: {},
             arrowStyle: {},
-            hasPositionListeners: false
+            hasPositionListeners: false,
+            hideTimeoutId: null
         }
     },
     computed: {
@@ -62,17 +63,19 @@ export default {
         }
     },
     beforeUnmount() {
+        this.clearHideTimer()
         this.removePositionListeners()
     },
     methods: {
         onTriggerMouseEnter() {
+            this.clearHideTimer()
             this.isHovering = true
             this.showPopover()
         },
         onTriggerMouseLeave() {
             this.isHovering = false
             if (!this.isFocused) {
-                this.hidePopover()
+                this.scheduleHidePopover()
             }
         },
         onTriggerFocus() {
@@ -86,13 +89,28 @@ export default {
             }
         },
         onPopoverMouseEnter() {
+            this.clearHideTimer()
             this.isHovering = true
         },
         onPopoverMouseLeave() {
             this.isHovering = false
             if (!this.isFocused) {
-                this.hidePopover()
+                this.scheduleHidePopover()
             }
+        },
+        clearHideTimer() {
+            if (this.hideTimeoutId !== null) {
+                clearTimeout(this.hideTimeoutId)
+                this.hideTimeoutId = null
+            }
+        },
+        scheduleHidePopover() {
+            this.clearHideTimer()
+            this.hideTimeoutId = setTimeout(() => {
+                if (!this.isFocused && !this.isHovering) {
+                    this.hidePopover()
+                }
+            }, 100)
         },
         showPopover() {
             if (!this.enable) return
@@ -103,6 +121,7 @@ export default {
             })
         },
         hidePopover() {
+            this.clearHideTimer()
             this.isVisible = false
             this.removePositionListeners()
         },
