@@ -238,6 +238,7 @@ namespace WB.Enumerator.Native.WebInterview.Models
                 Id = group.Identity.ToString(),
                 Title = group.Title.BrowserReadyText,
                 IsDisabled = group.IsDisabled(),
+                RosterTitle = group is InterviewTreeRoster roster ? roster.RosterTitle : null,
                 IsRoster = group is InterviewTreeRoster
             };
 
