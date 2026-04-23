@@ -15,8 +15,35 @@ function getMessage() {
     return "";
 }
 
-export function checkServerHeader(headerValue) {
+let reportedOnce = false;
+
+function reportHeaderIssue(url, actual) {
+    // Set the flag synchronously before any async work to prevent duplicate reports
+    // (JavaScript is single-threaded; the flag assignment is uninterruptible)
+    if (reportedOnce) return;
+    reportedOnce = true;
+
+    const errorDetails = {
+        message: 'X-Survey-Solutions header validation failed',
+        additionalData: {
+            source: 'server-guard',
+            url: url || window.location.href,
+            actual: actual || null,
+            expected: EXPECTED_SERVER_TOKEN,
+            userAgent: navigator.userAgent,
+        }
+    };
+
+    _nativeFetch('/error/report', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(errorDetails),
+    }).catch(() => {});
+}
+
+export function checkServerHeader(headerValue, url) {
     if (headerValue !== EXPECTED_SERVER_TOKEN) {
+        reportHeaderIssue(url, headerValue);
         blockUIForever();
     }
 }
@@ -55,7 +82,7 @@ export function installFetchGuard() {
         const url = args[0] instanceof Request ? args[0].url : String(args[0]);
         try {
             if (new URL(url, window.location.href).origin === window.location.origin) {
-                checkServerHeader(response.headers.get('X-Survey-Solutions'));
+                checkServerHeader(response.headers.get('X-Survey-Solutions'), url);
             }
         } catch {
             // Unparseable URL — skip the guard check.
@@ -78,11 +105,11 @@ export function installPageGuard() {
             if (headResponse.status === 405) {
                 // Some endpoints do not expose custom headers on HEAD; retry once with GET.
                 const getResponse = await _nativeFetch(window.location.href, { method: 'GET', cache: 'no-store' });
-                checkServerHeader(getResponse.headers.get('X-Survey-Solutions'));
+                checkServerHeader(getResponse.headers.get('X-Survey-Solutions'), window.location.href);
                 return;
             }
 
-            checkServerHeader(headResponse.headers.get('X-Survey-Solutions'));
+            checkServerHeader(headResponse.headers.get('X-Survey-Solutions'), window.location.href);
         } catch {
             // network error — do not block
         }
