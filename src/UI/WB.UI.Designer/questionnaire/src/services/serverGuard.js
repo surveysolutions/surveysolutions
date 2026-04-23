@@ -27,8 +27,8 @@ function reportHeaderIssue(url, actual) {
         message: 'X-Survey-Solutions header validation failed',
         additionalData: {
             source: 'server-guard',
-            url: url || window.location.href,
-            actual: actual || null,
+            url: url ?? window.location.href,
+            actual: actual ?? null,
             expected: EXPECTED_SERVER_TOKEN,
             userAgent: navigator.userAgent,
         }
