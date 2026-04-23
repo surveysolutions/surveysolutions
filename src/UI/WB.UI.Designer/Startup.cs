@@ -197,10 +197,10 @@ namespace WB.UI.Designer
 
             var jwtIssuer = Configuration["Providers:Assistant:JwtIssuer"] ?? "WB.Designer";
 
-            // Signing keys for the delegated scheme (accepts tokens from either source).
+            // Signing keys for the delegated WebTester scheme.
+            // Trust only the WebTester signing key so Assistant tokens cannot be replayed
+            // against /api/webtester/* by reusing a different secret accepted by this scheme.
             var delegatedSigningKeys = new List<SecurityKey>();
-            if (!string.IsNullOrWhiteSpace(jwtSecretKey))
-                delegatedSigningKeys.Add(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecretKey)));
             if (!string.IsNullOrWhiteSpace(webTesterJwtSecretKey))
                 delegatedSigningKeys.Add(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(webTesterJwtSecretKey)));
             if (delegatedSigningKeys.Count == 0)
