@@ -24,6 +24,7 @@ namespace WB.UI.Interviewer.Activities
         public ServiceBinder<MapDownloadBackgroundService> Binder { get; set; }
 
         private SyncServiceConnection<MapDownloadBackgroundService> serviceConnection;
+        private bool isBound;
 
         protected override int ViewResourceId
         {
@@ -48,15 +49,16 @@ namespace WB.UI.Interviewer.Activities
         {
             base.OnStart();
             this.serviceConnection = new SyncServiceConnection<MapDownloadBackgroundService>(this);
-            this.BindService(new Intent(this, typeof(MapDownloadBackgroundService)), this.serviceConnection, Bind.AutoCreate);
+            this.isBound = this.BindService(new Intent(this, typeof(MapDownloadBackgroundService)), this.serviceConnection, Bind.AutoCreate);
         }
 
         protected override void OnStop()
         {
             base.OnStop();
-            if (this.serviceConnection != null)
+            if (this.isBound)
             {
                 this.UnbindService(this.serviceConnection);
+                this.isBound = false;
                 this.serviceConnection = null;
                 this.Binder = null;
             }
@@ -107,6 +109,7 @@ namespace WB.UI.Interviewer.Activities
 
         public void StartSync()
         {
+            if (this.Binder == null) return;
             this.StartService(new Intent(this, typeof(MapDownloadBackgroundService)));
             this.Binder.GetService().SyncMaps();
         }
