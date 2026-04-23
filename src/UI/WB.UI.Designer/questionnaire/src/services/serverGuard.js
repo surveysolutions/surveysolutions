@@ -79,10 +79,12 @@ export function installFetchGuard() {
     const originalFetch = window.fetch;
     window.fetch = async function (...args) {
         const response = await originalFetch.apply(this, args);
-        const url = args[0] instanceof Request ? args[0].url : String(args[0]);
+        const requestUrl = args[0] instanceof Request ? args[0].url : String(args[0]);
+        // Use response.url to capture the final URL after any redirects
+        const responseUrl = response.url || requestUrl;
         try {
-            if (new URL(url, window.location.href).origin === window.location.origin) {
-                checkServerHeader(response.headers.get('X-Survey-Solutions'), url);
+            if (new URL(requestUrl, window.location.href).origin === window.location.origin) {
+                checkServerHeader(response.headers.get('X-Survey-Solutions'), responseUrl);
             }
         } catch {
             // Unparseable URL — skip the guard check.
