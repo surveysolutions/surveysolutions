@@ -1,4 +1,5 @@
 import { mande } from 'mande';
+import { uploadFormData } from '../../../services/apiService';
 
 const api = mande('/');
 
@@ -77,15 +78,7 @@ class OptionsApi {
     async uploadCategory(file) {
         const formData = new FormData();
         formData.append('csvFile', file);
-
-        const response = await fetch('/questionnaire/EditCategories', { method: 'POST', body: formData });
-        if (!response.ok) {
-            const body = await response.json().catch(() => null);
-            const err = Object.assign(new Error(`${response.status}: ${response.statusText}`), { body });
-            console.error('uploadCategory failed:', err);
-            throw err;
-        }
-        return response.json();
+        return uploadFormData('/questionnaire/EditCategories', formData);
     }
 
     async uploadOptions(questionnaire, question, file) {
@@ -93,15 +86,7 @@ class OptionsApi {
         formData.append('id', questionnaire);
         formData.append('questionId', question);
         formData.append('csvFile', file);
-
-        const response = await fetch('/questionnaire/EditOptions', { method: 'POST', body: formData });
-        if (!response.ok) {
-            const body = await response.json().catch(() => null);
-            const err = Object.assign(new Error(`${response.status}: ${response.statusText}`), { body });
-            console.error('uploadOptions failed:', err);
-            throw err;
-        }
-        return response.json();
+        return uploadFormData('/questionnaire/EditOptions', formData);
     }
 }
 
