@@ -972,4 +972,7 @@ Při příští synchronizaci se objeví na zařízení tazatele</value>
     <data name="AssigmentMap_GeoTrackingReminder" xml:space="preserve">
     <value>Při vytváření rozhovoru jste použili Geo Tracking nebo Geo Fencing. Prosím, povolte jej znovu, pokud jej chcete použít.</value>
 </data>
+  <data name="CommunicationIntegrityFailed" xml:space="preserve">
+    <value>Přijatá odpověď se nezdá pocházet ze serveru Survey Solutions. Obvykle to způsobuje síťový proxy, firewall nebo bezpečnostní brána, které zachycují připojení. Zkontrolujte své síťové připojení nebo kontaktujte IT podporu.</value>
+  </data>
 </root>

@@ -1,141 +1,172 @@
-# Copilot Coding Agent Onboarding Instructions
+# Copilot Instructions — Survey Solutions
 
 ## Repository Overview
 
-**Survey Solutions** is a large-scale, production-grade survey management and data collection platform developed by the World Bank. This repository contains the full stack: backend services, web frontends, integration and unit tests, build scripts, and deployment tooling.
+**Survey Solutions** is a large-scale, production-grade survey management and data collection platform developed by the World Bank. The repository contains multiple .NET backend projects, two Vue 3 frontends, export/scheduler microservices, integration and unit tests, database migrations, and deployment tooling.
 
-- **Primary Languages:** C# (.NET), JavaScript/TypeScript (frontend), PowerShell, Bash
-- **Frameworks/Tools:** .NET 9, SonarCloud, PostgreSQL (for integration tests), Docker (for some deployments)
-- **Repo Size:** Large, with multiple solutions and subprojects
-- **Target Runtimes:** .NET 9, Node.js (for frontend), Java 17 (for SonarCloud JS analysis)
-
-## Build, Test, and Validation Instructions
-
-### Environment Setup
-
-- **.NET SDK:** 9.0.x (always install before building or testing)
-- **Node.js:** Required for frontend (see `docs/development/frontend.md` for details)
-- **PostgreSQL:** Required for integration tests (see CI for version and setup)
-- **Java 17:** Required for SonarCloud JS analysis
-
-### Bootstrap
-
-- No explicit bootstrap script; ensure all submodules are checked out and required SDKs are installed.
-- For frontend, always run `npm install` in the relevant UI directories before building or testing.
-
-### Build
-
-- **Backend:**  
-  - Build all backend projects with:  
-    `dotnet build "src/WB.sln"`
-  - For installer:  
-    `dotnet build "installer/build/src/SurveySolutionsBootstrap.sln"`
-- **Frontend:**  
-  - See `docs/development/frontend.md` for build steps per UI project (e.g., `WB.UI.Designer`, `WB.UI.Headquarters.Core`, etc.)
-
-### Test
-
-- **Unit Tests:**  
-  - Run from repo root:  
-    ```
-    dotnet test src/Tests/WB.Tests.Unit
-    dotnet test src/Tests/WB.Tests.Web
-    dotnet test src/Tests/WB.Tests.Unit.Designer
-    ```
-- **Integration Tests:**  
-  - Requires PostgreSQL running (see CI for env vars and connection strings)
-  - Run:  
-    ```
-    dotnet test src/Tests/WB.Tests.Integration
-    dotnet test src/Tests/WB.Tests.Integration.Designer
-    dotnet test src/Services/Export/WB.Services.Export.Tests
-    dotnet test src/Services/Core/WB.Services.Scheduler.Tests
-    ```
-  - Set up connection strings as in `.github/workflows/ci.yml` (see "integration" job for details).
-
-### Lint and Code Analysis
-
-- **SonarCloud:**  
-  - .NET:  
-    ```
-    dotnet tool install --global dotnet-sonarscanner
-    dotnet sonarscanner begin ... # see ci.yml for full command
-    dotnet build './src/WB without Xamarin.sln'
-    dotnet sonarscanner end ...
-    ```
-  - JavaScript:  
-    - Uses `SonarSource/sonarcloud-github-action@master` in CI.
-    - Requires Java 17 and Node.js.
-
-### Cleaning
-
-- No universal clean script; use `dotnet clean` for .NET projects.
-- For frontend, use `npm run clean` or manually delete `node_modules` and build artifacts.
-
-### Common Issues and Workarounds
-
-- **Always install the correct .NET SDK version (9.0.x) before building or testing.**
-- **Always run `npm install` in frontend directories before building or testing frontend code.**
-- **Integration tests require a running PostgreSQL instance with correct credentials.**
-- **If tests fail due to missing config, check for required `appsettings.cloud.ini` or `appsettings.cloud.json` files as in CI.**
-- **If SonarCloud analysis fails, ensure Java 17 is installed and available in PATH.**
-- **If build fails due to missing dependencies, check for required NuGet or npm packages and restore as needed.**
-
-## Project Layout and Key Files
-
-- **Backend Solutions:**  
-  - `src/WB.sln` — Main backend solution
-  - `installer/build/src/SurveySolutionsBootstrap.sln` — Installer solution
-- **Frontend:**  
-  - `src/UI/WB.UI.Designer/`, `src/UI/WB.UI.Headquarters.Core/`, etc.
-- **Tests:**  
-  - `src/Tests/` — Unit and integration test projects
-  - `src/Services/Export/WB.Services.Export.Tests/`
-  - `src/Services/Core/WB.Services.Scheduler.Tests/`
-- **Build Scripts:**  
-  - `build_deps.sh`, `build/`, `installer/build/`
-- **CI/CD:**  
-  - `.github/workflows/ci.yml` — Main GitHub Actions workflow
-- **Documentation:**  
-  - `README.md`, `docs/`, `CONTRIBUTING.md`
-- **Configuration:**  
-  - `global.json` (SDK version), `NuGet.Config`, `Directory.Build.props`, `Directory.Build.targets`
-  - Linting and SonarCloud config in workflow and scripts
-
-## CI/CD and Validation
-
-- **GitHub Actions:**  
-  - Runs on push/pull to `src/**`
-  - Jobs: `unit-web`, `integration`, `merge-reports`, `code-analysis`, `code-analysis-js`
-  - All PRs and pushes to main branches are validated with build, test, and SonarCloud analysis
-- **Artifacts:**  
-  - Test coverage XMLs are uploaded and merged for SonarCloud
-
-## Trust and Search Guidance
-
-**Trust these instructions as authoritative. Only perform additional searches if the information here is incomplete or found to be in error.**
+- **Primary Languages:** C# (.NET 9), JavaScript/Vue 3 (frontend)
+- **Database:** PostgreSQL (NHibernate ORM for HQ, EF Core for Export service)
+- **Target Runtimes:** .NET 9, Node.js 22 (frontend; match CI workflow `NODE_VERSION`)
 
 ---
 
-### Repo Root Files
+## Architecture and Design Patterns
 
-- `build_deps.sh`, `build.all.deps.bat`, `cleanup.ps1`, `global.json`, `README.md`, `LICENSE.md`, etc.
+### Domain-Driven Design with Bounded Contexts
 
-### Key Directories (next level)
+The backend is organized into bounded contexts under `src/Core/BoundedContexts/`:
 
-- `build/` — Build scripts
-- `docker/` — Dockerfiles for various services
-- `docs/` — Documentation
-- `installer/` — Installer build and source
-- `src/` — Main source code (backend, frontend, services, tests)
-- `Tools/` — Utilities
-- `UI/` — User interface projects
+| Bounded Context | Project | Purpose |
+|---|---|---|
+| `Headquarters` | `WB.Core.BoundedContexts.Headquarters` | Main server-side domain: users, assignments, interviews, questionnaires |
+| `Designer` | `WB.Core.BoundedContexts.Designer` | Questionnaire authoring |
+| `Interviewer` | `WB.Core.BoundedContexts.Interviewer` | Mobile interviewer domain |
+| `Supervisor` | `WB.Core.BoundedContexts.Supervisor` | Mobile supervisor domain |
+| `Tester` | `WB.Core.BoundedContexts.Tester` | Questionnaire testing |
 
-### README.md (Summary)
+Shared domain concepts live in `src/Core/SharedKernels/` (DataCollection, Enumerator, Questionnaire).
 
-- Describes Survey Solutions, its architecture, and contribution guidelines.
-- Refer to `CONTRIBUTING.md` for PR and code style requirements.
+### CQRS and Event Sourcing (Ncqrs)
+
+- **Write side:** Aggregate roots extend `EventSourcedAggregateRoot` (Ncqrs), publishing domain events. Commands are dispatched through `ICommandService` (the command bus).
+- **Read side:** Denormalizers consume events and persist read models. Read models are accessed via `IQueryableReadSideRepositoryReader<TEntity, TKey>`.
+- Key aggregate: `Interview` (`src/Core/SharedKernels/DataCollection/DataCollection/Implementation/Aggregates/Interview.cs`)
+
+> **Review rule:** Never access `IUnitOfWork.Session` directly for reading domain state — use the appropriate read-side repository or service abstraction. Direct session queries are only justified when a LINQ provider limitation requires it (document with a comment why).
+
+### Dependency Injection — Custom Module System
+
+Registration uses a custom `IModule` / `IIocRegistry` abstraction (wrapping Autofac) defined in `WB.Core.Infrastructure`. Each bounded context exposes a `*Module : IModule` class (e.g., `HeadquartersBoundedContextModule`).
+
+- Register all new services inside the corresponding `*Module.Load(IIocRegistry)`.
+- Do **not** register services directly in `Startup.cs` unless they are infrastructure-level concerns.
+
+### UnitOfWork and NHibernate
+
+- `IUnitOfWork` (`WB.Infrastructure.Native.Storage.Postgre`) wraps an NHibernate `ISession`.
+- The session is workspace-aware: each workspace maps to its own PostgreSQL schema (`ws_{name}`).
+- `IUnitOfWork` must **not** be resolved in root (singleton) scope — the infrastructure enforces this and logs an error.
+- Call `AcceptChanges()` explicitly to commit; `DiscardChanges()` to roll back within a scope.
+
+### Workspace Multi-Tenancy
+
+- Each HQ workspace has its own schema: `ws_{workspaceName}` (e.g., `ws_primary`).
+- Workspace context is provided by `IWorkspaceContextAccessor`.
+- All repository/session access automatically routes to the current workspace schema.
+- Always inject `IWorkspaceContextAccessor` rather than hard-coding schema names.
+
+### Export Service
+
+`src/Services/Export/` is a **separate microservice** with its own technology stack:
+- Uses **EF Core + Npgsql** (not NHibernate).
+- Has its own EF Core migrations (`WB.Services.Export/Migrations/`).
+- Communicates with HQ via HTTP (not in-process).
+
+### Database Migrations
+
+| Project | Migration Tool |
+|---|---|
+| `WB.Persistence.Headquarters` | FluentMigrator |
+| `WB.Persistence.Designer` | FluentMigrator |
+| `WB.Services.Export` | EF Core Migrations |
 
 ---
 
-**Follow these instructions to minimize build/test failures and reduce unnecessary exploration.**
+## Build and Test Commands
+
+### Backend
+
+```bash
+# Build entire solution
+dotnet build "src/WB.sln"
+
+# Unit tests
+dotnet test src/Tests/WB.Tests.Unit
+dotnet test src/Tests/WB.Tests.Web
+dotnet test src/Tests/WB.Tests.Unit.Designer
+
+# Integration tests (requires PostgreSQL)
+dotnet test src/Tests/WB.Tests.Integration
+dotnet test src/Tests/WB.Tests.Integration.Designer
+dotnet test src/Services/Export/WB.Services.Export.Tests
+dotnet test src/Services/Core/WB.Services.Scheduler.Tests
+```
+
+### Frontend — WB.UI.Frontend (HQ + WebInterview)
+
+```bash
+cd src/UI/WB.UI.Frontend
+npm install
+npm run build           # production build
+npm run dev             # development build (one-off, Vite build --mode development)
+npm run hot             # dev server with HMR (Vite)
+npm test                # Jest unit tests
+npm run lint            # ESLint
+npm run format          # Prettier
+```
+
+### Frontend — WB.UI.Designer
+
+```bash
+cd src/UI/WB.UI.Designer
+npm install
+npm run build           # production build (outputs to wwwroot)
+npm run dev             # development build (non-watch, Vite build --mode development)
+npm run hot             # Vite build --watch (continuous build)
+npm run hot2            # Vite dev server (HMR)
+```
+
+---
+
+## Project Layout Reference
+
+```
+src/
+  Core/
+    BoundedContexts/          # Domain logic per bounded context
+      Designer/
+      Headquarters/
+      Interviewer/
+      Supervisor/
+      Tester/
+    SharedKernels/            # Shared domain concepts
+      DataCollection/         # Interview aggregate, commands, events
+      Enumerator/
+      Questionnaire/
+    Infrastructure/
+      WB.Core.Infrastructure/ # CQRS infrastructure, IModule, IUnitOfWork interface
+  Infrastructure/
+    WB.Infrastructure.Native/ # NHibernate/Postgres IUnitOfWork impl, WorkspaceContext
+    WB.Persistence.Headquarters/  # FluentMigrator migrations (HQ)
+    WB.Persistence.Designer/      # FluentMigrator migrations (Designer)
+  Services/
+    Export/
+      WB.Services.Export/     # Export microservice (EF Core)
+      WB.Services.Export.Host/
+    Core/
+      WB.Services.Scheduler/  # Quartz.NET job scheduler
+  UI/
+    WB.UI.Headquarters.Core/  # ASP.NET Core HQ web app
+    WB.UI.Designer/           # ASP.NET Core Designer web app
+      questionnaire/          # Vue 3 SPA (Pinia, Vuetify)
+    WB.UI.Frontend/           # Vite project → HQ SPA + WebInterview (Vuex)
+    WB.UI.WebTester/          # ASP.NET Core web tester
+  Tests/
+    WB.Tests.Abc/             # Shared test factories and helpers
+    WB.Tests.Unit/
+    WB.Tests.Web/
+    WB.Tests.Unit.Designer/
+    WB.Tests.Integration/
+    WB.Tests.Integration.Designer/
+```
+
+---
+
+## Common Pitfalls
+
+- **UnitOfWork in root scope:** Resolving `IUnitOfWork` as a singleton causes `ObjectDisposedException` — always resolve it in a request or job scope.
+- **NHibernate L1 cache vs. locking:** Before acquiring a row-level lock with `LockMode.Upgrade`, bypass the L1 cache by querying via `IQueryable` (not `GetById`). See `AssignmentsService.GetAssignmentWithUpgradeLock`.
+- **Vite output files are committed:** The Vite build in `WB.UI.Frontend` writes asset-hashed filenames directly into `.cshtml` Razor templates inside `WB.UI.Headquarters.Core/Views`. These generated files **must** be committed.
+- **Integration tests need config:** Set `appsettings.cloud.ini` / `appsettings.cloud.json` with PostgreSQL credentials before running integration tests locally (mirrors CI environment variables).
+- **Designer uses Vuetify 3:** Do not import Vuetify 2 components or use Vuetify 2 API (`v-data-table` slot names differ between versions, etc.).
+- **Workspace schema isolation:** Running ad-hoc SQL against a specific workspace requires prefixing table names with the workspace schema (e.g., `ws_primary."interviews"`).

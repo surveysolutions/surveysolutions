@@ -219,6 +219,9 @@
   <data name="AccountIsNotApprovedOnServer" xml:space="preserve">
     <value>Ваша учетная запись не подтверждена. Обратитесь к Вашему супервизору.</value>
   </data>
+  <data name="CommunicationIntegrityFailed" xml:space="preserve">
+    <value>Полученный ответ не выглядит исходящим с сервера Survey Solutions. Обычно это вызвано перехватом соединения сетевым прокси, брандмауэром или шлюзом безопасности. Пожалуйста, проверьте сетевое соединение или обратитесь в службу ИТ-поддержки.</value>
+  </data>
   <data name="ApplicationIncompatibleWithServer" xml:space="preserve">
     <value>Ваше приложение не совместимо с приложением супервизора. Обновите Ваше приложение Interviewer.</value>
   </data>
