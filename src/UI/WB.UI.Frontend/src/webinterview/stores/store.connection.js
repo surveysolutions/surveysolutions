@@ -1,4 +1,3 @@
-import * as toastr from 'toastr'
 import modal from '@/shared/modal'
 import { $t } from '~/shared/plugins/locale'
 
@@ -6,18 +5,23 @@ const connectionStore = {
     state: {
         isReconnecting: false,
         isDisconnected: false,
+        reconnectAttemptCount: 0,
+        reconnectElapsedMs: 0,
     },
     actions: {
-        connectionSlow() {
-            toastr.warning($t('WebInterviewUI.SlowConnection'), $t('WebInterviewUI.Network'), {
-                preventDuplicates: true,
-            })
+        reconnectAttempt({ commit }, { count, elapsedMs }) {
+            commit('SET_RECONNECT_ATTEMPT', { count, elapsedMs })
         },
         tryingToReconnect({ commit }, isReconnecting) {
             commit('IS_RECONNECTING', isReconnecting)
+            if (!isReconnecting) {
+                commit('SET_RECONNECT_ATTEMPT', { count: 0, elapsedMs: 0 })
+            }
         },
         disconnected({ state, commit }) {
-            if (state.isReconnecting && !state.isDisconnected) {
+            commit('IS_RECONNECTING', false)
+            commit('SET_RECONNECT_ATTEMPT', { count: 0, elapsedMs: 0 })
+            if (!state.isDisconnected) {
                 commit('IS_DISCONNECTED', true)
 
                 modal.dialog({
@@ -44,6 +48,10 @@ const connectionStore = {
         },
         IS_DISCONNECTED(state, isDisconnected) {
             state.isDisconnected = isDisconnected
+        },
+        SET_RECONNECT_ATTEMPT(state, { count, elapsedMs }) {
+            state.reconnectAttemptCount = count
+            state.reconnectElapsedMs = elapsedMs
         },
     },
 }

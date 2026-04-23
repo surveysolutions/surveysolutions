@@ -365,6 +365,10 @@ export default {
             this.$refs.assignModal.modal({ keyboard: false })
         },
 
+        newResponsibleSelected(newValue) {
+            this.newResponsibleId = newValue
+        },
+
         async sendAssignAssignment() {
             await this.$hq.Assignments.assignResponsible(
                 this.selectedTooltip.assignmentId,

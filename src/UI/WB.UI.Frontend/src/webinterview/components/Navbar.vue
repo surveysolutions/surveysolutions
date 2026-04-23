@@ -305,8 +305,7 @@ export default {
                     }
                 }
             }).catch(function (error) {
-                if (error && error.response)
-                    self.$errorHandler(error, self)
+                self.$errorHandler(error, self)
             })
         },
 

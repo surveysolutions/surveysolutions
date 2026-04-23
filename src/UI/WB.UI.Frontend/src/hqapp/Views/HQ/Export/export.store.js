@@ -75,15 +75,19 @@ export default {
             const chunks = chunk(ids, 20)
 
             for (let i = 0; i < chunks.length; i++) {
-                const response = await axios.post(api.exportStatusUrl, chunks[i])
+                try {
+                    const response = await axios.post(api.exportStatusUrl, chunks[i])
 
-                if (response.data == null) {
-                    return
+                    if (response.data == null) {
+                        return
+                    }
+
+                    response.data.forEach(job => {
+                        commit('UPDATE_JOB', job)
+                    })
+                } catch (error) {
+                    throw error
                 }
-
-                response.data.forEach(job => {
-                    commit('UPDATE_JOB', job)
-                })
             }
 
             commit('SET_SERVICE_INITALIZED')
