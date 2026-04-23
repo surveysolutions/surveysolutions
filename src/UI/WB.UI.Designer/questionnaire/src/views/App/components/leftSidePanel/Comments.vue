@@ -69,8 +69,6 @@ import { getCommentThreads } from '../../../../services/commentsService';
 import { sanitize } from '../../../../services/utilityService';
 import _ from 'lodash';
 import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-dayjs.extend(utc);
 
 export default {
     name: 'Comments',

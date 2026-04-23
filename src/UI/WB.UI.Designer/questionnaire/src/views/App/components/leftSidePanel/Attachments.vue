@@ -53,10 +53,6 @@
 
 import _ from 'lodash';
 import dayjs from 'dayjs';
-import duration from 'dayjs/plugin/duration';
-import relativeTime from 'dayjs/plugin/relativeTime';
-dayjs.extend(duration);
-dayjs.extend(relativeTime);
 import { newGuid } from '../../../../helpers/guid';
 import { notice } from '../../../../services/notificationService';
 import AttachmentItem from './AttachmentItem.vue';

@@ -1,6 +1,9 @@
 import { defineStore } from 'pinia';
 import { mande } from 'mande';
 import '../../../../extensions/string';
+import { installServerGuards } from '../../../../services/serverGuard';
+
+installServerGuards({ fetch: true });
 
 const routes = {
     userInfo: 'user',

@@ -3,8 +3,6 @@ import { nextTick } from 'vue';
 import { defer, isNull, isUndefined, findIndex, debounce } from 'lodash';
 import DOMPurify from 'dompurify';
 import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-dayjs.extend(utc);
 
 import ace from 'ace-builds';
 

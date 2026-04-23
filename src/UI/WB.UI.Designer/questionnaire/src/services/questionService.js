@@ -2,8 +2,6 @@ import { get, commandCall } from '../services/apiService';
 import emitter from './emitter';
 import _ from 'lodash';
 import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-dayjs.extend(utc);
 import { getItemIndexByIdFromParentItemsList } from './utilityService';
 import { newGuid } from '../helpers/guid';
 import { i18n } from '../plugins/localization';

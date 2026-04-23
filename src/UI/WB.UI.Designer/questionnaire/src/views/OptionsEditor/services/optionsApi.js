@@ -81,7 +81,9 @@ class OptionsApi {
         const response = await fetch('/questionnaire/EditCategories', { method: 'POST', body: formData });
         if (!response.ok) {
             const body = await response.json().catch(() => null);
-            throw Object.assign(new Error(`${response.status}: ${response.statusText}`), { body });
+            const err = Object.assign(new Error(`${response.status}: ${response.statusText}`), { body });
+            console.error('uploadCategory failed:', err);
+            throw err;
         }
         return response.json();
     }
@@ -95,7 +97,9 @@ class OptionsApi {
         const response = await fetch('/questionnaire/EditOptions', { method: 'POST', body: formData });
         if (!response.ok) {
             const body = await response.json().catch(() => null);
-            throw Object.assign(new Error(`${response.status}: ${response.statusText}`), { body });
+            const err = Object.assign(new Error(`${response.status}: ${response.statusText}`), { body });
+            console.error('uploadOptions failed:', err);
+            throw err;
         }
         return response.json();
     }

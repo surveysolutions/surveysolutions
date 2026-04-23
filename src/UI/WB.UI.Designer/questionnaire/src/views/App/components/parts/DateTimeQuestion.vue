@@ -70,8 +70,6 @@ import { DatePicker } from 'v-calendar';
 import 'v-calendar/style.css';
 
 import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-dayjs.extend(utc);
 
 import Help from './../Help.vue'
 

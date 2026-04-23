@@ -2,32 +2,7 @@ import { commandCall } from './apiService';
 import emitter from './emitter';
 import { newGuid } from '../helpers/guid';
 import { ref, computed } from 'vue';
-
-function getCookie(name) {
-    const match = document.cookie.match(new RegExp('(?:^|; )' + name + '=([^;]*)'));
-    if (!match) return null;
-
-    try {
-        return JSON.parse(decodeURIComponent(match[1]));
-    } catch {
-        removeCookie(name);
-        return null;
-    }
-}
-
-function setCookie(name, value, days) {
-    const expires = new Date(Date.now() + days * 864e5).toUTCString();
-    document.cookie = `${name}=${encodeURIComponent(JSON.stringify(value))}; expires=${expires}; path=/`;
-}
-
-function removeCookie(name) {
-    document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`;
-}
-
-function hasCookie(name) {
-    return document.cookie.split(';').some(c => c.trim().startsWith(name + '='));
-}
-
+import { getCookie, setCookie, removeCookie, hasCookie } from '../helpers/cookies';
 const readyToPaste = ref(null);
 
 export const canPaste = computed(() => {

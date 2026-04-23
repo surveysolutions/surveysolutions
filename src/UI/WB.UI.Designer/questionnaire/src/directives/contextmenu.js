@@ -50,8 +50,8 @@ const contextmenu = app => {
                     const menuHeight = menu.scrollHeight;
                     const minX = isFixedPositioned ? 0 : window.scrollX;
                     const minY = isFixedPositioned ? 0 : window.scrollY;
-                    const maxX = (isFixedPositioned ? window.innerWidth : window.scrollX + window.innerWidth) - menuWidth;
-                    const maxY = (isFixedPositioned ? window.innerHeight : window.scrollY + window.innerHeight) - menuHeight;
+                    const maxX = Math.max(minX, (isFixedPositioned ? window.innerWidth : window.scrollX + window.innerWidth) - menuWidth);
+                    const maxY = Math.max(minY, (isFixedPositioned ? window.innerHeight : window.scrollY + window.innerHeight) - menuHeight);
 
                     if (mouseX < minX) {
                         mouseX = minX;

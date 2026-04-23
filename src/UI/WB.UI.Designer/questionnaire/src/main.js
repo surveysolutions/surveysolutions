@@ -6,6 +6,7 @@ import i18next from './plugins/localization';
 import I18NextVue from 'i18next-vue';
 import { vuetify } from './plugins/vuetify';
 import { setupErrorHandler } from './plugins/errorHandler';
+import './plugins/dayjs';
 
 // Import Material Design Icons
 import '@mdi/font/css/materialdesignicons.css';

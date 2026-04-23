@@ -3,8 +3,6 @@ import _ from 'lodash';
 import { getComments, postComment } from '../services/commentsService';
 import emitter from '../services/emitter';
 import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-dayjs.extend(utc);
 
 export const useCommentsStore = defineStore('comments', {
     state: () => ({
