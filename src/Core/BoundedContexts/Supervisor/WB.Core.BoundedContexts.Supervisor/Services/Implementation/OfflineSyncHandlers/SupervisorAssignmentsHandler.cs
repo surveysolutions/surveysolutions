@@ -48,7 +48,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
                     Quantity = assignmentDocument.Quantity.HasValue ? assignmentDocument.Quantity - assignmentDocument.CreatedInterviewsCount : assignmentDocument.Quantity,
                     QuestionnaireId = QuestionnaireIdentity.Parse(assignmentDocument.QuestionnaireId),
                     IsAudioRecordingEnabled = assignmentDocument.IsAudioRecordingEnabled,
-                    TargetArea = assignmentDocument.TargetArea
+                    TargetArea = assignmentDocument.TargetArea,
+                    Comments = assignmentDocument.Comments
                 }).ToList()
             };
             return Task.FromResult(result);

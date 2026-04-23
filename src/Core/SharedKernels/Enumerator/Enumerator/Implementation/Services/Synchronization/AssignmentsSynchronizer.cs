@@ -144,6 +144,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             }
 
             local.IsAudioRecordingEnabled = remote.IsAudioRecordingEnabled;
+            local.Comments = remote.Comments;
 
             var interviewsCount =
                 this.interviewViewRepository.Count(x => x.FromHqSyncDateTime == null && x.Assignment == local.Id);
