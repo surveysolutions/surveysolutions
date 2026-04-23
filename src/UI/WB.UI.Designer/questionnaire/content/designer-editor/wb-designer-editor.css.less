@@ -1096,7 +1096,7 @@
         }
 
         .show-more {
-            color: @primary-color;
+            color: @primary-link-color;
             padding-left: 20px;
             font-weight: bold;
             font-family: "Trebuchet MS", Helvetica, sans-serif;
@@ -1230,7 +1230,7 @@
                         color: @error-message-color;
 
                         >a {
-                            color: @error-color;
+                            color: @error-button-color;
                         }
 
                         &.no-errors {
@@ -1243,10 +1243,10 @@
                     }
 
                     span.warning-message {
-                        color: @primary-color;
+                        color: @primary-link-color;
 
                         >a {
-                            color: @primary-color;
+                            color: @primary-link-color;
                         }
                     }
 
@@ -1319,7 +1319,7 @@
                         button {
                             margin-left: 5px;
                             margin-right: 5px;
-                            background-color: @neutral-bg-color;
+                            background-color: @neutral-button-bg-color;
                         }
 
                         p {
@@ -1341,7 +1341,7 @@
             }
 
             .chapter-level-buttons {
-                border-top: 2px solid @neutral-bg-color;
+                border-top: 2px solid @neutral-button-bg-color;
                 margin-top: 2px;
                 padding: 8px 24px 30px 18px;
 
@@ -1510,14 +1510,14 @@
 
 .highlighted-add {
     border-radius: 4px 4px 0 0;
-    background-color: @neutral-bg-color;
+    background-color: @neutral-button-bg-color;
 
     .item {
         .item-body {
             border-bottom-color: @questionnaire-item-border-when-highlighted;
 
             .qname-block {
-                background-color: @neutral-bg-color;
+                background-color: @neutral-button-bg-color;
 
                 &:before {
                     #gradient>.horizontal(rgba(237, 239, 241, 0.0), rgba(237, 239, 241, 1.0));
@@ -1695,7 +1695,7 @@ li.chapter-panel-item {
     line-height: @chapter-title-height;
     overflow: hidden;
     z-index: 5;
-    border-bottom: 2px solid @neutral-bg-color;
+    border-bottom: 2px solid @neutral-button-bg-color;
 
     &.selected {
         background: @questionnarie-question-list-item-selected-color;
@@ -1892,7 +1892,7 @@ li.chapter-panel-item {
     .item-body {
         height: @questionnaire-tree-item-height;
         line-height: @questionnaire-tree-item-height - 2px;
-        border-bottom: 2px solid @neutral-bg-color;
+        border-bottom: 2px solid @neutral-button-bg-color;
         position: relative;
         padding-left: 29px;
         outline: none;
@@ -2085,13 +2085,13 @@ li.chapter-panel-item {
         top: -2px;
         height: @questionnaire-tree-item-height;
         z-index: 499;
-        background-color: @neutral-bg-color;
+        background-color: @neutral-button-bg-color;
 
         .handler {
             background-image: url(../i/question-item-dots.png);
             background-repeat: no-repeat;
             background-position: 5px center;
-            background-color: @neutral-bg-color;
+            background-color: @neutral-button-bg-color;
         }
 
         .item-body {
@@ -2104,7 +2104,7 @@ li.chapter-panel-item {
         }
 
         .qname-block {
-            background-color: @neutral-bg-color;
+            background-color: @neutral-button-bg-color;
 
             &:before {
                 #gradient>.horizontal(rgba(237, 239, 241, 0.0), rgba(237, 239, 241, 1.0));
@@ -2142,7 +2142,7 @@ li.chapter-panel-item {
             width: 5px;
             bottom: 2px;
             z-index: 6;
-            border-left: 3px solid @primary-color;
+            border-left: 3px solid @primary-link-color;
         }
     }
 }
