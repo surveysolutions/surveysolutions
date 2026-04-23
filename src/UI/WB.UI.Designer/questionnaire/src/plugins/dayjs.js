@@ -23,10 +23,14 @@ import 'dayjs/locale/sq';
 import 'dayjs/locale/uk';
 import 'dayjs/locale/zh';
 
-// Mirror the locale detection used in plugins/localization.js so dayjs
-// format tokens like MMM/MMMM render in the user's language.
-const userLang = navigator.language || navigator.userLanguage || 'en';
-const userLocale = userLang.split('-')[0];
+// Prefer the UI language from <html lang> so dayjs stays aligned with the
+// rest of the application, and only fall back to the browser language when
+// no explicit UI language is available.
+const uiLang = document.documentElement.lang
+    || navigator.language
+    || navigator.userLanguage
+    || 'en';
+const userLocale = uiLang.split('-')[0];
 dayjs.locale(userLocale);
 
 export default dayjs;
