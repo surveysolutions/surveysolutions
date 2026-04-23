@@ -227,6 +227,9 @@ export default {
         };
     },
     mounted() {
+        this._onKeyDown = this.handleKeyDown.bind(this);
+        document.addEventListener('keydown', this._onKeyDown);
+
         this.$emitter.on('openChaptersList', this.setChaptersPanel);
         this.$emitter.on('openCategoriesList', this.setCategoriesPanel);
         this.$emitter.on('openLookupTables', this.setLookupTablesPanel);
@@ -252,6 +255,8 @@ export default {
         this.$emitter.on('verifing', this.closeOpenPanelIfAny);
     },
     unmounted() {
+        document.removeEventListener('keydown', this._onKeyDown);
+
         this.$emitter.off('openChaptersList', this.setChaptersPanel);
         this.$emitter.off('openCategoriesList', this.setCategoriesPanel);
         this.$emitter.off('openLookupTables', this.setLookupTablesPanel);
@@ -292,6 +297,18 @@ export default {
         isUnfoldedCriticalityConditions() { return this.openPanel == 'criticalityconditions' },
     },
     methods: {
+        handleKeyDown(event) {
+            const tag = event.target.tagName;
+            if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || event.target.isContentEditable) {
+                return;
+            }
+            if (event.key === 'ArrowLeft') {
+                this.unfoldChapters();
+            } else if (event.key === 'ArrowRight') {
+                this.foldChapters();
+            }
+        },
+
         foldback() {
             this.openPanel = null;
         },
