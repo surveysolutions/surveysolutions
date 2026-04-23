@@ -88,12 +88,10 @@ namespace WB.Tests.Unit.Designer.Services
         [Test]
         public void Throws_when_secret_key_is_missing()
         {
-            var svc = new DelegatedTokenService(
-                Options.Create(new WebTesterSettings()),
-                new ConfigurationBuilder().Build());
             Assert.Throws<InvalidOperationException>(() =>
-                svc.CreateDelegatedToken(new DelegatedTokenRequest
-                    { CorrelationId = "c", QuestionnaireId = Id.g1 }));
+                new DelegatedTokenService(
+                    Options.Create(new WebTesterSettings()),
+                    new ConfigurationBuilder().Build()));
         }
 
         // --- Integration: flow tests ---
@@ -152,8 +150,9 @@ namespace WB.Tests.Unit.Designer.Services
                 CreatedAt = DateTime.UtcNow.AddMinutes(-5),
                 ExpiresAt = DateTime.UtcNow.AddMinutes(-4)
             });
+            // InMemoryOneTimeCodeStore lazily evicts expired entries on read
             var fetched = await store.GetAsync("expired");
-            Assert.That(DateTime.UtcNow > fetched!.ExpiresAt, Is.True, "code should be expired");
+            Assert.That(fetched, Is.Null, "expired code should be evicted on read");
         }
 
         [Test]
