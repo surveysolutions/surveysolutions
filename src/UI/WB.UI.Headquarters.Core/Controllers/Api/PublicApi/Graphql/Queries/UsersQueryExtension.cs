@@ -28,6 +28,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.Graphql.Queries
                     UserRoles.Headquarter.ToString(),
                     UserRoles.ApiUser.ToString()*/)
                 .Name("users")
+				.Description("Gets a list of user accounts with their attributes. This query is accessible only to users in the role administrator.")
                 .Type<ListType<UserType>>()
                 .UseSimplePaging<UserType, HqUser>()
                 .UseSorting<UsersSortInputType>()

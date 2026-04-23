@@ -636,6 +636,12 @@ Musíte vytvořit nebo upravit Vaše dotazníky v aplikaci Designer</value>
   <data name="Prefs_VibrateOnErrorTitle" xml:space="preserve">
     <value>Vibrace při zadání neplatné hodnoty</value>
   </data>
+  <data name="Prefs_CommunicationIntegrityValidationIgnoreTitle" xml:space="preserve">
+    <value>Ignorovat ověření integrity komunikace</value>
+  </data>
+  <data name="Prefs_CommunicationIntegrityValidationIgnoreSummary" xml:space="preserve">
+    <value>Pokud je povoleno, chyby ověření integrity komunikace budou ignorovány</value>
+  </data>
   <data name="RealQuestion_Hint" xml:space="preserve">
     <value>Klepnutím zadejte číslo</value>
   </data>

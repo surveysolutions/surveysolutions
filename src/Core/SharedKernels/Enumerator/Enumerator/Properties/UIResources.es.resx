@@ -543,6 +543,12 @@
     <data name="Prefs_VibrateOnErrorTitle" xml:space="preserve">
     <value>Vibración cuando se introduzca una respuesta inválida</value>
   </data>
+    <data name="Prefs_CommunicationIntegrityValidationIgnoreTitle" xml:space="preserve">
+    <value>Ignorar la validación de integridad de comunicación</value>
+  </data>
+    <data name="Prefs_CommunicationIntegrityValidationIgnoreSummary" xml:space="preserve">
+    <value>Si está habilitado, los errores de validación de integridad de comunicación serán ignorados</value>
+  </data>
     <data name="VariableEmptyValue" xml:space="preserve">
     <value>&lt;vacío&gt;</value>
   </data>

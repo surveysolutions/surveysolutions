@@ -13,7 +13,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls;
 public class TabsPagerAdapter(Context context, AndroidX.Fragment.App.FragmentManager fm, 
     AndroidX.Lifecycle.Lifecycle lifecycle, IList<TabViewModel> tabs) : FragmentStateAdapter(fm, lifecycle)
 {
-    public override int ItemCount => tabs.Count;
+    public override int ItemCount => tabs?.Count ?? 0;
 
     public override AndroidX.Fragment.App.Fragment CreateFragment(int position)
     {

@@ -1,0 +1,39 @@
+﻿@model WB.UI.Designer.Models.ControlPanel.AssistantSettingsModel
+@{
+    Layout = "Layout.ControlPanel";
+    ViewBag.Title = "Control Panel: Assistant";
+}
+
+<h1 class="page-header">Assistant settings</h1>
+
+<form method="post">
+    @Html.AntiForgeryToken()
+    <fieldset class="form-horizontal">
+        
+        <div class="form-group">
+            @Html.LabelFor(x => x.IsEnabled, new { @class = "col-sm-2 control-label" })
+            <div class="col-sm-2">
+                @Html.CheckBoxFor(x => x.IsEnabled)
+            </div>
+            <div class="col-sm-4">
+                @Html.ValidationMessageFor(x => x.IsEnabled, null, new { @class = "help-block" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(x => x.IsAvailableToAllUsers, new { @class = "col-sm-2 control-label" })
+            <div class="col-sm-2">
+                @Html.CheckBoxFor(x => x.IsAvailableToAllUsers)
+            </div>
+            <div class="col-sm-4">
+                @Html.ValidationMessageFor(x => x.IsAvailableToAllUsers, null, new { @class = "help-block" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2">
+                <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+        </div>
+    </fieldset>
+</form>
+
+
