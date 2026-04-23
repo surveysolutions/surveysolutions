@@ -38,6 +38,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
 
             var controller = CreateQuestionnaireController(
                 dbContext: dbContext,
+                questionnaireViewFactory: CreateQuestionnaireViewFactory(),
                 emailSender: throwingEmailSender.Object,
                 viewRenderService: throwingViewRenderService.Object,
                 userManager: userManager);
@@ -53,11 +54,28 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
         }
 
         [Test]
+        public async Task UpdateAnonymousQuestionnaireSettings_when_questionnaire_not_found_returns_not_found()
+        {
+            var questionnaireId = Guid.NewGuid();
+            var dbContext = Create.InMemoryDbContext();
+
+            var controller = CreateQuestionnaireController(dbContext: dbContext);
+
+            var result = await controller.UpdateAnonymousQuestionnaireSettings(
+                questionnaireId,
+                new QuestionnaireController.UpdateAnonymousQuestionnaireSettingsModel { IsActive = true });
+
+            Assert.That(result, Is.InstanceOf<NotFoundResult>(), "Should return NotFound when questionnaire does not exist");
+        }
+
+        [Test]
         public async Task UpdateAnonymousQuestionnaireSettings_when_enabling_creates_new_record_in_db()
         {
             var questionnaireId = Guid.NewGuid();
             var dbContext = Create.InMemoryDbContext();
-            var controller = CreateQuestionnaireController(dbContext: dbContext);
+            var controller = CreateQuestionnaireController(
+                dbContext: dbContext,
+                questionnaireViewFactory: CreateQuestionnaireViewFactory());
 
             var result = await controller.UpdateAnonymousQuestionnaireSettings(
                 questionnaireId,
@@ -84,7 +102,9 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
                 GeneratedAtUtc = DateTime.UtcNow
             });
             await dbContext.SaveChangesAsync();
-            var controller = CreateQuestionnaireController(dbContext: dbContext);
+            var controller = CreateQuestionnaireController(
+                dbContext: dbContext,
+                questionnaireViewFactory: CreateQuestionnaireViewFactory());
 
             var result = await controller.UpdateAnonymousQuestionnaireSettings(
                 questionnaireId,
@@ -120,6 +140,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
 
             var controller = CreateQuestionnaireController(
                 dbContext: dbContext,
+                questionnaireViewFactory: CreateQuestionnaireViewFactory(),
                 emailSender: throwingEmailSender.Object,
                 userManager: userManager);
 

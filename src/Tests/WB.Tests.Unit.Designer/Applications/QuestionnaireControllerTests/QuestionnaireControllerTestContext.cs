@@ -81,6 +81,16 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
             return questionnaireController;
         }
 
+        internal static IQuestionnaireViewFactory CreateQuestionnaireViewFactory()
+        {
+            var factory = new Mock<IQuestionnaireViewFactory>();
+            factory.Setup(f => f.Load(It.IsAny<QuestionnaireViewInputModel>()))
+                   .Returns(Create.QuestionnaireView());
+            factory.Setup(f => f.Load(It.IsAny<QuestionnaireRevision>()))
+                   .Returns(Create.QuestionnaireView());
+            return factory.Object;
+        }
+
         internal static UserManager<DesignerIdentityUser> CreateUserManager(DesignerIdentityUser returnUser = null)
         {
             var store = new Mock<IUserStore<DesignerIdentityUser>>();

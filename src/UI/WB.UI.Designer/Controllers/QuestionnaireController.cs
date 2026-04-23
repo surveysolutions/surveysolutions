@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
@@ -47,6 +48,7 @@ namespace WB.UI.Designer.Controllers
     [QuestionnairePermissions]
     public partial class QuestionnaireController : QControllerBase
     {
+        private const int AnonymousSharingEmailTimeoutSeconds = 30;
         public class QuestionnaireCloneModel
         {
             [Key]
@@ -455,6 +457,10 @@ namespace WB.UI.Designer.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateAnonymousQuestionnaireSettings(Guid id, [FromBody] UpdateAnonymousQuestionnaireSettingsModel postModel)
         {
+            var questionnaireView = GetQuestionnaireView(id);
+            if (questionnaireView == null)
+                return NotFound();
+
             bool isActive = postModel.IsActive;
             var anonymousQuestionnaire = dbContext.AnonymousQuestionnaires.FirstOrDefault(a => a.QuestionnaireId == id);
             if (anonymousQuestionnaire == null)
@@ -471,7 +477,7 @@ namespace WB.UI.Designer.Controllers
             await dbContext.SaveChangesAsync();
 
             if (isActive)
-                await TrySendAnonymousSharingEmailAsync(id, anonymousQuestionnaire.AnonymousQuestionnaireId);
+                await TrySendAnonymousSharingEmailAsync(id, anonymousQuestionnaire.AnonymousQuestionnaireId, questionnaireView);
             
             return Json(new
             {
@@ -499,7 +505,7 @@ namespace WB.UI.Designer.Controllers
             await dbContext.AnonymousQuestionnaires.AddAsync(anonymousQuestionnaire);
             await dbContext.SaveChangesAsync();
 
-            await TrySendAnonymousSharingEmailAsync(id, anonymousQuestionnaire.AnonymousQuestionnaireId);
+            await TrySendAnonymousSharingEmailAsync(id, anonymousQuestionnaire.AnonymousQuestionnaireId, questionnaireView: null);
             
             return Json(new
             {
@@ -509,11 +515,16 @@ namespace WB.UI.Designer.Controllers
             });
         }
 
-        private async Task TrySendAnonymousSharingEmailAsync(Guid id, Guid anonymousQuestionnaireId)
+        private async Task TrySendAnonymousSharingEmailAsync(Guid id, Guid anonymousQuestionnaireId, QuestionnaireView? questionnaireView)
         {
             try
             {
-                await SendAnonymousSharingEmailAsync(id, anonymousQuestionnaireId);
+                using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(AnonymousSharingEmailTimeoutSeconds));
+                await SendAnonymousSharingEmailAsync(id, anonymousQuestionnaireId, questionnaireView).WaitAsync(cts.Token);
+            }
+            catch (OperationCanceledException)
+            {
+                logger.LogWarning("Anonymous sharing email notification timed out for questionnaire {QuestionnaireId}", id);
             }
             catch (Exception ex)
             {
@@ -523,21 +534,27 @@ namespace WB.UI.Designer.Controllers
             }
         }
 
-        private async Task SendAnonymousSharingEmailAsync(Guid id, Guid anonymousQuestionnaireId)
+        private async Task SendAnonymousSharingEmailAsync(Guid id, Guid anonymousQuestionnaireId, QuestionnaireView? questionnaireView)
         {
             var user = await this.users.GetUserAsync(User);
             if(user?.Email == null)
                 return;
             
-            var questionnaireView = GetQuestionnaireView(id);
+            questionnaireView ??= GetQuestionnaireView(id);
             if (questionnaireView == null)
-                throw new ArgumentException($"Questionnaire not found {id}");
+            {
+                logger.LogWarning("Anonymous sharing email skipped: questionnaire {QuestionnaireId} not found", id);
+                return;
+            }
             
             var userName = User.GetUserName();
             var questionnaire = questionnaireView.Title;
             var sharingLink = Url.Action("Details", "Q", new { id = anonymousQuestionnaireId }, Request.Scheme);
             if (sharingLink == null)
-                throw new ArgumentNullException("sharingLink is null");
+            {
+                logger.LogWarning("Anonymous sharing email skipped: could not generate sharing link for questionnaire {QuestionnaireId}", id);
+                return;
+            }
 
             var model = new AnonymousSharingEmailModel(userName, sharingLink, questionnaire);
 
