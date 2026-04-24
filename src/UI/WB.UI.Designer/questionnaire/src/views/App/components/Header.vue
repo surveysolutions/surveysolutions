@@ -164,7 +164,7 @@ import { useMagicKeys } from '@vueuse/core';
 import { useVerificationStore } from '../../../stores/verification';
 import { useChatStore } from '../../../stores/chat';
 import WebTesterApi from '../../../api/webTester';
-import { ref, computed } from 'vue';
+import { ref, computed, inject } from 'vue';
 import { useRoute } from 'vue-router';
 
 import { sanitizeUrl } from '@braintree/sanitize-url';
@@ -187,6 +187,7 @@ export default {
         const verificationStore = useVerificationStore();
         const chatStore = useChatStore();
         const route = useRoute();
+        const questionnaire = inject('questionnaire');
 
         const verificationDialog = ref(null);
         const sharedInfoDialog = ref(null);
@@ -197,7 +198,9 @@ export default {
             onEventFired(e) {
                 if (e.ctrlKey && e.type === 'keydown') {
                     const key = e.key?.toLowerCase()
-                    if (key === 'b' || key === 'e')
+                    if (key === 'b')
+                        e.preventDefault()
+                    else if (key === 'e' && questionnaire.webTestAvailable && questionnaire.questionnaireRevision === null)
                         e.preventDefault()
                 }
             },
