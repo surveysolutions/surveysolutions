@@ -62,7 +62,18 @@ namespace WB.UI.WebTester.Controllers
         public IActionResult Loading(Guid id)
         {
             var status = interviewFactory.GetStatus(id);
-            if (status is null or CreationResult.Loading)
+            if (status == null)
+            {
+                var existingInterview = statefulInterviewRepository.Get(id.FormatGuid()) as WebTesterStatefulInterview;
+                if (existingInterview?.Questionnaire.IsCoverPageSupported ?? false)
+                    return this.Redirect($"~/WebTester/Interview/{id.FormatGuid()}/Section/{existingInterview?.Questionnaire.CoverPageSectionId.FormatGuid()}");
+                else if (existingInterview != null)
+                    return this.Redirect($"~/WebTester/Interview/{id.FormatGuid()}/Cover");
+
+                return this.NotFound();
+            }
+
+            if (status == CreationResult.Loading)
             {
                 return this.View("Loading", new InterviewPageModel
                 {
