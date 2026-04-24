@@ -62,7 +62,7 @@ namespace WB.UI.WebTester.Controllers
         public IActionResult Loading(Guid id)
         {
             var status = interviewFactory.GetStatus(id);
-            if (status == CreationResult.Loading)
+            if (status is null or CreationResult.Loading)
             {
                 return this.View("Loading", new InterviewPageModel
                 {
@@ -72,7 +72,7 @@ namespace WB.UI.WebTester.Controllers
 
             interviewFactory.RemoveStatus(id);
             
-            if (status is null or CreationResult.Error)
+            if (status == CreationResult.Error)
             {
                 return this.RedirectToAction("QuestionnaireWithErrors", "Error");
             }
