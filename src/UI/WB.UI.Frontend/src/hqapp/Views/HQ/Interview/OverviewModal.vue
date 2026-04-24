@@ -116,13 +116,17 @@ export default {
 
             this._observer?.disconnect()
             this.$nextTick(() => {
+                const sentinel = this.$refs.sentinel
+                if (!sentinel) return
+
+                const observerRoot = sentinel.closest('.modal-body')
                 this._observer = new IntersectionObserver(([entry]) => {
                     if (entry.isIntersecting) this.loadMore()
                 }, {
-                    root: this.$refs.modal.$refs.modal,
+                    root: observerRoot,
                     rootMargin: '1000px',
                 })
-                this._observer.observe(this.$refs.sentinel)
+                this._observer.observe(sentinel)
             })
         },
 
