@@ -72,12 +72,13 @@ namespace WB.UI.WebTester.Controllers
                         var questionnaire = existingInterview.Questionnaire;
                         if (questionnaire.IsCoverPageSupported)
                             return this.Redirect($"~/WebTester/Interview/{id.FormatGuid()}/Section/{questionnaire.CoverPageSectionId.FormatGuid()}");
+                        return this.Redirect($"~/WebTester/Interview/{id.FormatGuid()}/Cover");
                     }
                     catch (InvalidOperationException)
                     {
-                        // questionnaire was evicted from storage; fall back to the cover redirect
+                        // questionnaire was evicted from storage; the interview cannot be rendered
+                        return this.NotFound();
                     }
-                    return this.Redirect($"~/WebTester/Interview/{id.FormatGuid()}/Cover");
                 }
 
                 return this.NotFound();
