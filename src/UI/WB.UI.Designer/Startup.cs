@@ -193,7 +193,7 @@ namespace WB.UI.Designer
             // completely non-functional.
             if (string.IsNullOrWhiteSpace(webTesterJwtSecretKey))
                 throw new InvalidOperationException(
-                    "WebTester:JwtSecretKey must be configured. Set it in appsettings.json.");
+                    "WebTester:JwtSecretKey must be configured. Set it in application configuration (for example, appsettings.ini).");
 
             var jwtIssuer = Configuration["Providers:Assistant:JwtIssuer"] ?? "WB.Designer";
 
