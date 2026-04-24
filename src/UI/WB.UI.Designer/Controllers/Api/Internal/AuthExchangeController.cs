@@ -63,9 +63,9 @@ namespace WB.UI.Designer.Controllers.Api.Internal
             [FromHeader(Name = ServiceKeyHeader)]  string? serviceKey,
             CancellationToken ct)
         {
-            // 1. Authenticate Service B
-            serviceName ??= string.Empty;
-            serviceKey  ??= string.Empty;
+            // 1. Authenticate Service B — reject immediately when headers are absent
+            if (string.IsNullOrEmpty(serviceName) || string.IsNullOrEmpty(serviceKey))
+                return Unauthorized(new { error = "Invalid service credentials" });
 
             if (!IsValidServiceCredentials(serviceName, serviceKey))
             {
