@@ -27,6 +27,7 @@ using WB.UI.Designer.Services;
 
 namespace WB.UI.Designer.Controllers.Api.WebTester
 {
+    [ApiController]
     [Route("api/webtester")]
     [Authorize(AuthenticationSchemes = DelegatedTokenService.DelegatedScheme)]
     public class WebTesterController : ControllerBase

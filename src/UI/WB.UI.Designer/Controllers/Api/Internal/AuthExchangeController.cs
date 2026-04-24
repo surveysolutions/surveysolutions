@@ -59,11 +59,13 @@ namespace WB.UI.Designer.Controllers.Api.Internal
         [HttpPost("exchange")]
         public async Task<IActionResult> Exchange(
             [FromBody] ExchangeCodeRequest request,
+            [FromHeader(Name = ServiceNameHeader)] string? serviceName,
+            [FromHeader(Name = ServiceKeyHeader)]  string? serviceKey,
             CancellationToken ct)
         {
             // 1. Authenticate Service B
-            var serviceName = Request.Headers[ServiceNameHeader].ToString();
-            var serviceKey  = Request.Headers[ServiceKeyHeader].ToString();
+            serviceName ??= string.Empty;
+            serviceKey  ??= string.Empty;
 
             if (!IsValidServiceCredentials(serviceName, serviceKey))
             {
