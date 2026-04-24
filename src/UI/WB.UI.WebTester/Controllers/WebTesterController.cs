@@ -66,20 +66,7 @@ namespace WB.UI.WebTester.Controllers
             {
                 var existingInterview = statefulInterviewRepository.Get(id.FormatGuid()) as WebTesterStatefulInterview;
                 if (existingInterview != null)
-                {
-                    try
-                    {
-                        var questionnaire = existingInterview.Questionnaire;
-                        if (questionnaire.IsCoverPageSupported)
-                            return this.Redirect($"~/WebTester/Interview/{id.FormatGuid()}/Section/{questionnaire.CoverPageSectionId.FormatGuid()}");
-                        return this.Redirect($"~/WebTester/Interview/{id.FormatGuid()}/Cover");
-                    }
-                    catch (InvalidOperationException)
-                    {
-                        // questionnaire was evicted from storage; the interview cannot be rendered
-                        return this.NotFound();
-                    }
-                }
+                    return RedirectToInterview(id, existingInterview);
 
                 return this.NotFound();
             }
@@ -108,10 +95,10 @@ namespace WB.UI.WebTester.Controllers
             }
             
             var interview = statefulInterviewRepository.Get(id.FormatGuid()) as WebTesterStatefulInterview;
-            if (interview?.Questionnaire.IsCoverPageSupported ?? false)
-                return this.Redirect($"~/WebTester/Interview/{id.FormatGuid()}/Section/{interview?.Questionnaire.CoverPageSectionId.FormatGuid()}");
-            else
-                return this.Redirect($"~/WebTester/Interview/{id.FormatGuid()}/Cover");
+            if (interview != null)
+                return RedirectToInterview(id, interview);
+
+            return this.NotFound();
         }
 
         [Route("Interview/{id}")]
@@ -131,6 +118,22 @@ namespace WB.UI.WebTester.Controllers
             catch (ApiException e) when (e.StatusCode == HttpStatusCode.NotFound)
             {
                 return StatusCode(StatusCodes.Status404NotFound, string.Empty);
+            }
+        }
+
+        private IActionResult RedirectToInterview(Guid id, WebTesterStatefulInterview interview)
+        {
+            try
+            {
+                var questionnaire = interview.Questionnaire;
+                if (questionnaire.IsCoverPageSupported)
+                    return this.Redirect($"~/WebTester/Interview/{id.FormatGuid()}/Section/{questionnaire.CoverPageSectionId.FormatGuid()}");
+                return this.Redirect($"~/WebTester/Interview/{id.FormatGuid()}/Cover");
+            }
+            catch (InvalidOperationException)
+            {
+                // questionnaire was evicted from storage; the interview cannot be rendered
+                return this.NotFound();
             }
         }
 
