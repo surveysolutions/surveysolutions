@@ -46,7 +46,22 @@ namespace WB.UI.WebTester.Infrastructure
                 {
                     if (httpContext.Request.RouteValues.TryGetValue("id", out var idValue)
                             && Guid.TryParse(idValue as string ?? idValue?.ToString(), out var routeId))
+                    {
                         interviewId = routeId;
+                    }
+                }
+
+                // For routes that only carry questionnaireId (e.g. /api/ScenariosProxy/{questionnaireId}),
+                // resolve the interviewId via the session reverse-mapping so log enrichment still works.
+                if (interviewId == null)
+                {
+                    if (httpContext.Request.RouteValues.TryGetValue("questionnaireId", out var qIdValue)
+                            && Guid.TryParse(qIdValue as string ?? qIdValue?.ToString(), out var questionnaireId))
+                    {
+                        var sessionService = httpContext.RequestServices.GetService<IWebTesterSessionService>();
+                        if (sessionService != null && httpContext.Session.IsAvailable)
+                            interviewId = sessionService.GetInterviewId(httpContext.Session, questionnaireId);
+                    }
                 }
 
                 if (interviewId.HasValue)
