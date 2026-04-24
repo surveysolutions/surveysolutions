@@ -179,14 +179,25 @@ namespace WB.UI.Designer.Controllers.Api.Internal
 
         private bool IsValidServiceCredentials(string serviceName, string serviceKey)
         {
+            const int minimumServiceApiKeyLength = 32;
+
             if (string.IsNullOrWhiteSpace(settings.ServiceApiKey))
             {
                 logger.LogError(
-                    "Exchange rejected: WebTester:ServiceApiKey is not configured. " +
+                    "Exchange failed: WebTester:ServiceApiKey is not configured. " +
                     "ServiceName={ServiceName}", serviceName);
-                return false;
+                throw new InvalidOperationException("WebTester:ServiceApiKey must be configured.");
             }
 
+            if (settings.ServiceApiKey.Length < minimumServiceApiKeyLength)
+            {
+                logger.LogError(
+                    "Exchange failed: WebTester:ServiceApiKey is shorter than the required minimum length of {MinimumLength}. " +
+                    "ConfiguredLength={ConfiguredLength}, ServiceName={ServiceName}",
+                    minimumServiceApiKeyLength, settings.ServiceApiKey.Length, serviceName);
+                throw new InvalidOperationException(
+                    $"WebTester:ServiceApiKey must be at least {minimumServiceApiKeyLength} characters long.");
+            }
             // Bind the presented service name to the single authorised identity so that
             // a valid key cannot be reused by an unrelated future service.
             if (!string.Equals(serviceName, ExpectedServiceName, StringComparison.OrdinalIgnoreCase))
