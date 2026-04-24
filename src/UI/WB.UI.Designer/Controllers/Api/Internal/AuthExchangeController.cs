@@ -3,6 +3,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -16,9 +17,12 @@ namespace WB.UI.Designer.Controllers.Api.Internal
     /// Backend-to-backend endpoint: WebTester exchanges a one-time code for a
     /// short-lived delegated JWT it can use to call Designer's /api/webtester/* endpoints.
     /// The browser never sees this exchange.
+    /// Service authentication is enforced inside the action via X-Service-Name / X-Service-Key
+    /// header validation with constant-time comparison.
     /// </summary>
     [Route("api/internal/auth")]
     [ApiController]
+    [AllowAnonymous]
     public class AuthExchangeController : ControllerBase
     {
         private const string ServiceNameHeader = "X-Service-Name";

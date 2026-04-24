@@ -82,7 +82,7 @@ namespace WB.UI.Designer.Services
 
                 // Layer 2: PostgreSQL atomic guard.
                 // INSERT … ON CONFLICT DO NOTHING returns 1 affected row only for the first caller.
-                bool inserted = await TryInsertUsedCodeAsync(code, usedAtUtc, ct);
+                bool inserted = await TryInsertUsedCodeAsync(code, usedAtUtc, entity.ExpiresAt, ct);
                 if (!inserted)
                     return false;
 
@@ -106,16 +106,17 @@ namespace WB.UI.Designer.Services
             }
         }
 
-        private async Task<bool> TryInsertUsedCodeAsync(string code, DateTime usedAtUtc, CancellationToken ct)
+        private async Task<bool> TryInsertUsedCodeAsync(string code, DateTime usedAtUtc, DateTime expiresAtUtc, CancellationToken ct)
         {
             await using var connection = new NpgsqlConnection(connectionString);
             await connection.OpenAsync(ct);
 
             await using var cmd = connection.CreateCommand();
             cmd.CommandText =
-                "INSERT INTO used_one_time_codes (code, used_at) VALUES ($1, $2) ON CONFLICT DO NOTHING";
+                "INSERT INTO used_one_time_codes (code, used_at, expires_at) VALUES ($1, $2, $3) ON CONFLICT DO NOTHING";
             cmd.Parameters.Add(new NpgsqlParameter { Value = code });
             cmd.Parameters.Add(new NpgsqlParameter { Value = usedAtUtc });
+            cmd.Parameters.Add(new NpgsqlParameter { Value = expiresAtUtc });
 
             var affected = await cmd.ExecuteNonQueryAsync(ct);
             return affected == 1;
@@ -137,7 +138,7 @@ namespace WB.UI.Designer.Services
                 await connection.OpenAsync();
 
                 await using var cmd = connection.CreateCommand();
-                cmd.CommandText = "DELETE FROM used_one_time_codes WHERE used_at < $1";
+                cmd.CommandText = "DELETE FROM used_one_time_codes WHERE expires_at < $1";
                 cmd.Parameters.Add(new NpgsqlParameter { Value = DateTime.UtcNow.AddHours(-1) });
                 await cmd.ExecuteNonQueryAsync();
             }

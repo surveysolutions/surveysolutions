@@ -33,8 +33,11 @@ namespace WB.UI.WebTester.Controllers
         /// <summary>Saves (create or update) a scenario for the given questionnaire (proxied to Designer).</summary>
         [HttpPost]
         [Route("{questionnaireId:Guid}")]
-        public async Task<IActionResult> Save(Guid questionnaireId, [FromBody] SaveScenarioRequest model)
+        public async Task<IActionResult> Save(Guid questionnaireId, [FromBody] SaveScenarioRequest? model)
         {
+            if (model == null)
+                return BadRequest(new { error = "Request body is required" });
+
             var response = await designerApi.SaveScenarioAsync(questionnaireId.ToString(), model);
             if (!response.IsSuccessStatusCode)
                 return StatusCode((int)response.StatusCode);

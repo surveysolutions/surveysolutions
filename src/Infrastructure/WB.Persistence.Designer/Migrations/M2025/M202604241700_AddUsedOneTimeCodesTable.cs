@@ -8,8 +8,13 @@ namespace WB.UI.Designer.Migrations.PlainStore
         public override void Up()
         {
             Create.Table("used_one_time_codes")
-                .WithColumn("code").AsString(64).PrimaryKey()
-                .WithColumn("used_at").AsDateTimeOffset().NotNullable();
+                .WithColumn("code").AsString(128).PrimaryKey()
+                .WithColumn("used_at").AsDateTimeOffset().NotNullable()
+                .WithColumn("expires_at").AsDateTimeOffset().NotNullable();
+
+            Create.Index("ix_used_one_time_codes_expires_at")
+                .OnTable("used_one_time_codes")
+                .OnColumn("expires_at");
         }
     }
 }
