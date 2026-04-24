@@ -136,20 +136,17 @@ namespace WB.UI.WebTester.Controllers
                 // for the same questionnaire don't collide.
                 interviewId = Guid.NewGuid();
 
-                // If this browser session previously had a run for this questionnaire,
-                // evict the old interview and revoke its session auth entry so stale
-                // auth:{interviewId} keys don't accumulate in the session store.
-                // JWT and user context are always cleaned up regardless of whether the
-                // interview aggregate is still in memory (they have no TTL of their own).
-                var previousInterviewId = sessionService.GetInterviewId(HttpContext.Session, questionnaireId);
-                if (previousInterviewId.HasValue)
-                {
-                    sessionService.RevokeQuestionnaire(HttpContext.Session, previousInterviewId.Value, questionnaireId);
-                    jwtStore.Remove(previousInterviewId.Value);
-                    userContextStore.Remove(previousInterviewId.Value);
-                    if (statefulInterviewRepository.Get(previousInterviewId.Value.FormatGuid()) != null)
-                        evictionService.Evict(previousInterviewId.Value);
-                }
+                // Do NOT revoke any previous run's JWT, user context, or session auth entry.
+                // A prior browser tab for the same questionnaire may still be active and would
+                // lose authorization if we removed its auth:{oldInterviewId} key or evicted its
+                // JWT.  Each run has an independent interviewId, JWT, and auth entry — they
+                // coexist safely and expire via their natural TTL.
+                //
+                // AuthorizeQuestionnaire (below) overwrites the reverse mapping
+                // (qiid:{questionnaireId} → interviewId) so that questionnaire-only routes
+                // (e.g. ScenariosProxy) resolve to the newest run.  Older tabs' direct
+                // interviewId-based routes (Interview, Status, Loading) continue working
+                // because their auth:{interviewId} entry and JWT are unaffected.
 
                 jwtStore.StoreToken(interviewId, exchangeResult.AccessToken,
                     TimeSpan.FromSeconds(exchangeResult.ExpiresIn));

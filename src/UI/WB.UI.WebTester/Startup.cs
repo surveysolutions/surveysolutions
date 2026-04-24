@@ -76,7 +76,8 @@ namespace WB.UI.WebTester
             var serviceApiKey = Configuration["ServiceApiKey"];
             if (string.IsNullOrWhiteSpace(serviceApiKey))
                 throw new InvalidOperationException(
-                    "ServiceApiKey must be configured. Set it in appsettings.json. " +
+                    "ServiceApiKey must be configured. Set it in application configuration " +
+                    "(for example, appsettings.ini or environment variables). " +
                     "Its value must match WebTester:ServiceApiKey in Designer.");
 
             services.AddHealthChecks()
