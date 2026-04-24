@@ -65,10 +65,20 @@ namespace WB.UI.WebTester.Controllers
             if (status == null)
             {
                 var existingInterview = statefulInterviewRepository.Get(id.FormatGuid()) as WebTesterStatefulInterview;
-                if (existingInterview?.Questionnaire.IsCoverPageSupported ?? false)
-                    return this.Redirect($"~/WebTester/Interview/{id.FormatGuid()}/Section/{existingInterview?.Questionnaire.CoverPageSectionId.FormatGuid()}");
-                else if (existingInterview != null)
+                if (existingInterview != null)
+                {
+                    try
+                    {
+                        var questionnaire = existingInterview.Questionnaire;
+                        if (questionnaire.IsCoverPageSupported)
+                            return this.Redirect($"~/WebTester/Interview/{id.FormatGuid()}/Section/{questionnaire.CoverPageSectionId.FormatGuid()}");
+                    }
+                    catch (InvalidOperationException)
+                    {
+                        // questionnaire was evicted from storage; fall back to the cover redirect
+                    }
                     return this.Redirect($"~/WebTester/Interview/{id.FormatGuid()}/Cover");
+                }
 
                 return this.NotFound();
             }
