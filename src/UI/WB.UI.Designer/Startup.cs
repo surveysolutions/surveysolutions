@@ -421,7 +421,7 @@ namespace WB.UI.Designer
             var serviceApiKey = Configuration["WebTester:ServiceApiKey"];
             if (string.IsNullOrWhiteSpace(serviceApiKey))
                 throw new InvalidOperationException(
-                    "WebTester:ServiceApiKey must be configured. Set it in appsettings.json.");
+                    "WebTester:ServiceApiKey must be configured. Set it in appsettings.ini or via environment variables.");
 
 
             aspCoreKernel = new AspCoreKernel(services);
