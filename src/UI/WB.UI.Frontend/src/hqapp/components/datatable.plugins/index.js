@@ -1,1 +1,2 @@
 import './conditionalPaging'
+import './searchHighlight'

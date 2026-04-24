@@ -1,24 +1,7 @@
-﻿/*! SearchHighlight for DataTables v1.0.1
- * 2014 SpryMedia Ltd - datatables.net/license
- */
-
-/**
- * @summary     SearchHighlight
- * @description Search term highlighter for DataTables
- * @version     1.0.1
- * @file        dataTables.searchHighlight.js
- * @author      SpryMedia Ltd (www.sprymedia.co.uk)
- * @contact     www.sprymedia.co.uk/contact
- * @copyright   Copyright 2014 SpryMedia Ltd.
- *
- * License      MIT - http://datatables.net/license/mit
- *
- * This feature plug-in for DataTables will highlight search terms in the
- * DataTable as they are entered into the main search input element, or via the
- * `search()` API method.
- *
- * It depends upon the jQuery Highlight plug-in by Bartek Szopka:
- * 	  http://bartaz.github.io/sandbox.js/jquery.highlight.js
+﻿/**
+ * SearchHighlight for DataTables
+ * Based on the original SpryMedia plugin, rewritten to use vanilla JS
+ * instead of the jquery-highlight dependency.
  *
  * Search highlighting in DataTables can be enabled by:
  *
@@ -28,29 +11,73 @@
  * * Setting the `searchHighlight` parameter to be true in the DataTables
  *   defaults (thus causing all tables to have this feature) - i.e.
  *   `$.fn.dataTable.defaults.searchHighlight = true`.
- *
- * For more detailed information please see:
- *     http://datatables.net/blog/2014-10-22
  */
 
 (function (window, document, $) {
 
+    function highlightText(container, terms, className) {
+        unhighlightText(container, className)
+        var filtered = terms.filter(function (t) { return t.length > 0 })
+        if (!filtered.length) return
 
-    function highlight(body, table) {
-        // Removing the old highlighting first
-        body.unhighlight()
+        var escaped = filtered.map(function (t) {
+            return t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+        })
+        var regex = new RegExp('(' + escaped.join('|') + ')', 'gi')
 
-        // Don't highlight the "not found" row, so we get the rows using the api
-        if (table.rows({ filter: 'applied' }).data().length) {
-            table.columns().every(function () {
-                var column = this
-                column.nodes().flatten().to$().unhighlight({ className: 'column_highlight' })
-                column.nodes().flatten().to$().highlight($.trim(column.search()).split(/\s+/), { className: 'column_highlight' })
-            })
-            body.highlight($.trim(table.search()).split(/\s+/))
+        var walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT)
+        var nodes = []
+        while (walker.nextNode()) nodes.push(walker.currentNode)
+
+        for (var i = 0; i < nodes.length; i++) {
+            var node = nodes[i]
+            if (!regex.test(node.nodeValue)) { regex.lastIndex = 0; continue }
+            regex.lastIndex = 0
+
+            var frag = document.createDocumentFragment()
+            var last = 0, match
+            while ((match = regex.exec(node.nodeValue))) {
+                if (match.index > last) {
+                    frag.appendChild(document.createTextNode(node.nodeValue.slice(last, match.index)))
+                }
+                var mark = document.createElement('span')
+                mark.className = className || 'highlight'
+                mark.textContent = match[0]
+                frag.appendChild(mark)
+                last = regex.lastIndex
+            }
+            if (last < node.nodeValue.length) {
+                frag.appendChild(document.createTextNode(node.nodeValue.slice(last)))
+            }
+            node.parentNode.replaceChild(frag, node)
         }
     }
 
+    function unhighlightText(container, className) {
+        var cls = className || 'highlight'
+        var spans = container.querySelectorAll('span.' + cls)
+        for (var i = 0; i < spans.length; i++) {
+            var el = spans[i]
+            el.replaceWith(document.createTextNode(el.textContent))
+        }
+        container.normalize()
+    }
+
+    function highlight(body, table) {
+        unhighlightText(body)
+
+        if (table.rows({ filter: 'applied' }).data().length) {
+            table.columns().every(function () {
+                var column = this
+                var columnNodes = column.nodes().flatten().to$()
+                columnNodes.each(function () {
+                    unhighlightText(this, 'column_highlight')
+                    highlightText(this, $.trim(column.search()).split(/\s+/), 'column_highlight')
+                })
+            })
+            highlightText(body, $.trim(table.search()).split(/\s+/))
+        }
+    }
 
     // Listen for DataTables initialisations
     $(document).on('init.dt.dth', function (e, settings) {
@@ -59,7 +86,7 @@
         }
 
         var table = new $.fn.dataTable.Api(settings)
-        var body = $(table.table().body())
+        var body = table.table().body()
 
         if (
             $(table.table().node()).hasClass('searchHighlight') || // table has class
@@ -71,16 +98,13 @@
                     highlight(body, table)
                 })
                 .on('destroy', function () {
-                    // Remove event handler
                     table.off('draw.dt.dth column-visibility.dt.dth column-reorder.dt.dth')
                 })
 
-            // initial highlight for state saved conditions and initial states
             if (table.search()) {
                 highlight(body, table)
             }
         }
     })
-
 
 })(window, document, window.jQuery)

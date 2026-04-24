@@ -206,6 +206,7 @@ export default {
                 pageLength: this.pageLength, // page size
                 dom: 'frtp',
                 conditionalPaging: true,
+                searchHighlight: true,
                 paging: !this.noPaging,
                 searching: !this.noSearch,
                 autoWidth: false
