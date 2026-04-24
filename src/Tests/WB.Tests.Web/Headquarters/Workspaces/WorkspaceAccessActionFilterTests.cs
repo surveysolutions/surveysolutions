@@ -358,6 +358,30 @@ namespace WB.Tests.Web.Headquarters.Workspaces
             ClassicAssert.Null(context.Result);
         }
 
+        [Test]
+        public void admin_workspace_should_allow_api_v1_users()
+        {
+            CurrentWorkspace = Workspace.Admin.AsContext();
+            Role = UserRoles.Administrator;
+            RequestPath = "/api/v1/users";
+
+            var context = Act();
+
+            ClassicAssert.Null(context.Result);
+        }
+
+        [Test]
+        public void admin_workspace_should_allow_account_path_case_insensitive()
+        {
+            CurrentWorkspace = Workspace.Admin.AsContext();
+            Role = UserRoles.Administrator;
+            RequestPath = "/ACCOUNT/Login";
+
+            var context = Act();
+
+            ClassicAssert.Null(context.Result);
+        }
+
         private AuthorizationFilterContext Act()
         {
             var sut = CreateSut();

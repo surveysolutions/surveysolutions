@@ -104,14 +104,14 @@ namespace WB.UI.Headquarters.Code.Workspaces
         // preventing workspace-specific HQ pages from being served under /administration.
         internal static readonly string[] AdministrationWorkspaceAllowedPaths =
         {
-            "/Account",
-            "/Administration",
-            "/Workspaces",
-            "/Users",
-            "/Profile",
-            "/error",
-            "/api/v1/workspaces",
-            "/api/v1/users",
+            "/Account",          // login, logout, 2FA, password change
+            "/Administration",   // server diagnostics (AdministrationController)
+            "/Workspaces",       // workspace management UI (WorkspacesController)
+            "/Users",            // user management UI
+            "/Profile",          // user profile pages
+            "/error",            // error pages served by the error handler
+            "/api/v1/workspaces", // workspace management REST API (WorkspacesPublicApiController)
+            "/api/v1/users",     // user management REST API
         };
     }
 }
