@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -32,6 +31,7 @@ namespace WB.UI.WebTester.Services.Implementation
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IScenarioSerializer serializer;
         private readonly IAggregateRootCache aggregateRootCache;
+        private readonly IImportStatusStore statusStore;
         private readonly ILogger<ImportQuestionnaireAndCreateInterviewService> logger;
 
         public ImportQuestionnaireAndCreateInterviewService(
@@ -45,6 +45,7 @@ namespace WB.UI.WebTester.Services.Implementation
             IQuestionnaireStorage questionnaireStorage,
             IScenarioSerializer serializer,
             IAggregateRootCache aggregateRootCache,
+            IImportStatusStore statusStore,
             ILogger<ImportQuestionnaireAndCreateInterviewService> logger)
         {
             this.executedCommandsStorage = executedCommandsStorage ?? throw new ArgumentNullException(nameof(executedCommandsStorage));
@@ -57,11 +58,9 @@ namespace WB.UI.WebTester.Services.Implementation
             this.questionnaireStorage = questionnaireStorage ?? throw new ArgumentNullException(nameof(questionnaireStorage));
             this.serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
             this.aggregateRootCache = aggregateRootCache ?? throw new ArgumentNullException(nameof(aggregateRootCache));
+            this.statusStore = statusStore ?? throw new ArgumentNullException(nameof(statusStore));
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
-
-        // Keyed by interviewId (unique per run).
-        private static readonly ConcurrentDictionary<Guid, CreationResult> statuses = new();
 
         public Guid StartImportQuestionnaireAndCreateInterview(
             Guid questionnaireId,
@@ -69,11 +68,11 @@ namespace WB.UI.WebTester.Services.Implementation
             Guid? originalInterviewId,
             int? scenarioId)
         {
-            // TryAdd is a single atomic operation on ConcurrentDictionary — only one caller can
+            // TryInitialize is a single atomic operation — only one caller can
             // insert the Loading sentinel for a given interviewId. Any concurrent caller that
             // loses the race finds the key already present and returns without launching a
             // second import task, closing the check-then-act window.
-            if (!statuses.TryAdd(interviewId, CreationResult.Loading))
+            if (!statusStore.TryInitialize(interviewId))
                 return interviewId;
 
 
@@ -88,18 +87,18 @@ namespace WB.UI.WebTester.Services.Implementation
                     logger.LogError(ex,
                         "Background import faulted. InterviewId={InterviewId}, QuestionnaireId={QuestionnaireId}",
                         interviewId, questionnaireId);
-                    statuses[interviewId] = CreationResult.Error;
+                    statusStore.Set(interviewId, CreationResult.Error);
                 }
                 else if (t.IsCanceled)
                 {
                     logger.LogWarning(
                         "Background import was canceled. InterviewId={InterviewId}, QuestionnaireId={QuestionnaireId}",
                         interviewId, questionnaireId);
-                    statuses[interviewId] = CreationResult.Error;
+                    statusStore.Set(interviewId, CreationResult.Error);
                 }
                 else
                 {
-                    statuses[interviewId] = t.Result;
+                    statusStore.Set(interviewId, t.Result);
                 }
             }, TaskContinuationOptions.ExecuteSynchronously);
 
@@ -108,12 +107,12 @@ namespace WB.UI.WebTester.Services.Implementation
 
         public CreationResult? GetStatus(Guid interviewId)
         {
-            return statuses.TryGetValue(interviewId, out var result) ? result : null;
+            return statusStore.Get(interviewId);
         }
 
         public CreationResult? RemoveStatus(Guid interviewId)
         {
-            return statuses.TryRemove(interviewId, out var result) ? result : null;
+            return statusStore.Remove(interviewId);
         }
 
         private async Task<CreationResult> ImportAndCreate(

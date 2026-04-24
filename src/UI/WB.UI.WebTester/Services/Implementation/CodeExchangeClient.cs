@@ -41,7 +41,7 @@ namespace WB.UI.WebTester.Services.Implementation
                 logger.LogError(
                     "Code exchange aborted: ServiceApiKey is not configured. " +
                     "Every exchange will be rejected by Designer. " +
-                    "Set ServiceApiKey in appsettings.json.");
+                    "Set ServiceApiKey in appsettings.ini or via environment variables.");
                 return null;
             }
 

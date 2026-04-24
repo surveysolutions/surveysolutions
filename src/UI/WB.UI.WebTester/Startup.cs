@@ -71,13 +71,15 @@ namespace WB.UI.WebTester
             services.Configure<TesterConfiguration>(this.Configuration);
             services.AddHttpContextAccessor();
 
-            // Fail fast: the service-to-service key is mandatory. Without it every code
-            // exchange is rejected by Designer, making the entire WebTester integration non-functional.
+            // Warn at startup if the service-to-service key is not configured. Without it every
+            // code exchange will be rejected by Designer, making WebTester integration non-functional.
+            // We allow startup so that local/dev environments work without requiring a key, but
+            // exchange requests will fail at runtime with a clear error via CodeExchangeClient.
             var serviceApiKey = Configuration["ServiceApiKey"];
             if (string.IsNullOrWhiteSpace(serviceApiKey))
-                throw new InvalidOperationException(
-                    "ServiceApiKey must be configured. Set it in application configuration " +
-                    "(for example, appsettings.ini or environment variables). " +
+                Log.Warning(
+                    "ServiceApiKey is not configured. Code exchange with Designer will fail. " +
+                    "Set it in appsettings.ini or via environment variables. " +
                     "Its value must match WebTester:ServiceApiKey in Designer.");
 
             services.AddHealthChecks()
