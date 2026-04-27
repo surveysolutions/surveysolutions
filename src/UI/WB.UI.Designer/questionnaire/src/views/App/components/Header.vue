@@ -193,14 +193,14 @@ export default {
         const sharedInfoDialog = ref(null);
         const downloadPDFDialog = ref(null);
 
-        const { ctrl_b, ctrl_e } = useMagicKeys({
+        const { ctrl_b, ctrl_i } = useMagicKeys({
             passive: false,
             onEventFired(e) {
                 if (e.ctrlKey && e.type === 'keydown') {
                     const key = e.key?.toLowerCase()
                     if (key === 'b')
                         e.preventDefault()
-                    else if (key === 'e' && questionnaire.webTestAvailable && questionnaire.questionnaireRevision === null)
+                    else if (key === 'i' && questionnaire.webTestAvailable && questionnaire.questionnaireRevision === null)
                         e.preventDefault()
                 }
             },
@@ -213,7 +213,7 @@ export default {
             sharedInfoDialog,
             downloadPDFDialog,
             ctrl_b,
-            ctrl_e,
+            ctrl_i,
             route
         };
     },
@@ -232,7 +232,7 @@ export default {
             if (v)
                 this.verify();
         },
-        ctrl_e: function (v) {
+        ctrl_i: function (v) {
             if (v && this.questionnaire.webTestAvailable && this.questionnaire.questionnaireRevision === null)
                 this.webTest();
         }

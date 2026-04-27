@@ -29,7 +29,7 @@ export const useHotkeysStore = defineStore('hotkeys', {
                 description: i18n.t('QuestionnaireEditor.Compile')
             },
             {
-                keys: ['Ctrl + e'],
+                keys: ['Ctrl + i'],
                 description: i18n.t('QuestionnaireEditor.HotkeysTest')
             }
             // {
