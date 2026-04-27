@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using Dapper;
 using FluentMigrator;
@@ -92,8 +94,9 @@ namespace WB.Infrastructure.Native.Storage.Postgre.DbMigrations
 
             if (!tableExists) return;
 
+            var quotedSchemaName = new NpgsqlCommandBuilder().QuoteIdentifier(schemaName);
             long? maxDbVersion = connection.ExecuteScalar<long?>(
-                $"SELECT MAX(\"Version\") FROM \"{schemaName}\".\"VersionInfo\"");
+                $"SELECT MAX(\"Version\") FROM {quotedSchemaName}.\"VersionInfo\"");
 
             if (maxDbVersion.HasValue && maxDbVersion.Value > maxAppVersion)
             {
@@ -107,8 +110,17 @@ namespace WB.Infrastructure.Native.Storage.Postgre.DbMigrations
         private static long GetMaxMigrationVersion(DbUpgradeSettings dbUpgradeSettings)
         {
             string ns = dbUpgradeSettings.MigrationsNamespace;
-            return dbUpgradeSettings.MigrationsAssembly
-                .GetTypes()
+            IEnumerable<Type> types;
+            try
+            {
+                types = dbUpgradeSettings.MigrationsAssembly.GetTypes();
+            }
+            catch (ReflectionTypeLoadException ex)
+            {
+                types = ex.Types.OfType<Type>();
+            }
+
+            return types
                 .Where(t => t.Namespace != null
                             && (t.Namespace == ns || (ns != null && t.Namespace.StartsWith(ns + "."))))
                 .Select(t => t.GetCustomAttribute<MigrationAttribute>())
