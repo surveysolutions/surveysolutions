@@ -26,7 +26,7 @@ namespace WB.Tests.Web.Headquarters.ResetPassword
             await middleware.Invoke(httpContext);
 
             httpContext.Response.StatusCode.Should().Be(StatusCodes.Status302Found);
-            httpContext.Response.Headers["Location"].ToString().Should().Be("/users/ChangePassword");
+            httpContext.Response.Headers["Location"].ToString().Should().Be("/ChangePassword");
         }
 
         [Test]
@@ -77,7 +77,10 @@ namespace WB.Tests.Web.Headquarters.ResetPassword
             if (passwordChangeRequired)
                 claims.Add(new Claim(AuthorizedUser.PasswordChangeRequiredType, "true"));
             if (isObserving)
+            {
                 claims.Add(new Claim(AuthorizedUser.ObserverClaimType, "some-observer"));
+                claims.Add(new Claim(ClaimTypes.Role, "Observer"));
+            }
 
             httpContext.User = new ClaimsPrincipal(new ClaimsIdentity(claims, "test"));
 

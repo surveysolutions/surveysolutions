@@ -19,7 +19,7 @@ namespace WB.UI.Headquarters.Code.ResetPassword
         {
             var authorizedUser = context.RequestServices.GetRequiredService<IAuthorizedUser>();
 
-            if (authorizedUser != null && authorizedUser.PasswordChangeRequired && !authorizedUser.IsObserving)
+            if (authorizedUser != null && authorizedUser.PasswordChangeRequired && !(authorizedUser.IsObserver && authorizedUser.IsObserving))
             {
                 if (context.Request.Path.StartsWithSegments("/graphql"))
                 {
@@ -35,7 +35,7 @@ namespace WB.UI.Headquarters.Code.ResetPassword
                     && !context.Request.Path.StartsWithSegments("/.hc")
                     && !context.Request.Path.StartsWithSegments("/api"))
                 {
-                    context.Response.Redirect("/users/ChangePassword");
+                    context.Response.Redirect("/ChangePassword");
                     return Task.CompletedTask;
                 }
             }
