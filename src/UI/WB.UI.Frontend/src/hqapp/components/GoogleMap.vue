@@ -516,6 +516,7 @@ export default {
                 minZoom: 3,
                 scaleControl: true,
                 streetViewControl: false,
+                ...(this.$config.googleMapsMapId ? { mapId: this.$config.googleMapsMapId } : {}),
             }
         },
 
