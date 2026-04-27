@@ -27,6 +27,12 @@ export async function deleteScenario(questionnaireId, scenarioId) {
     return response;
 }
 
+export function isPopupBlockedError(error) {
+    return error === 'popup_blocked'
+        || error?.code === 'popup_blocked'
+        || error?.name === 'popup_blocked';
+}
+
 export async function runScenario(questionnaireId, scenarioId) {
     var webTesterWindow = window.open('about:blank', '_blank');
 

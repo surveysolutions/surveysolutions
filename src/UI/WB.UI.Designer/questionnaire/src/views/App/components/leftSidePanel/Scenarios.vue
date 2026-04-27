@@ -27,7 +27,7 @@
 
 import ScenarioItem from './ScenarioItem.vue';
 import { useQuestionnaireStore } from '../../../../stores/questionnaire';
-import { runScenario } from '../../../../services/scenariosService';
+import { runScenario, isPopupBlockedError } from '../../../../services/scenariosService';
 import { notice } from '../../../../services/notificationService';
 
 export default {
@@ -59,16 +59,11 @@ export default {
         },
     },
     methods: {
-        isPopupBlockedError(error) {
-            return error === 'popup_blocked'
-                || error?.code === 'popup_blocked'
-                || error?.name === 'popup_blocked';
-        },
         async recordNewScenario() {
             try {
                 await runScenario(this.questionnaireId);
             } catch (error) {
-                if (this.isPopupBlockedError(error)) {
+                if (isPopupBlockedError(error)) {
                     notice(this.$t('QuestionnaireEditor.PopupBlocked'));
                     return;
                 }

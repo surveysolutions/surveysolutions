@@ -26,7 +26,7 @@
 <script>
 
 import { createQuestionForDeleteConfirmationPopup } from '../../../../services/utilityService'
-import { deleteScenario, updateScenario, runScenario } from '../../../../services/scenariosService'
+import { deleteScenario, updateScenario, runScenario, isPopupBlockedError } from '../../../../services/scenariosService'
 import { notice } from '../../../../services/notificationService'
 import ScenarioEditor from './ScenarioEditor.vue';
 
@@ -59,7 +59,7 @@ export default {
             try {
                 await runScenario(this.questionnaireId, this.scenario.id);
             } catch (error) {
-                if (error === 'popup_blocked' || error?.code === 'popup_blocked' || error?.name === 'popup_blocked') {
+                if (isPopupBlockedError(error)) {
                     notice(this.$t('QuestionnaireEditor.PopupBlocked'));
                     return;
                 }
