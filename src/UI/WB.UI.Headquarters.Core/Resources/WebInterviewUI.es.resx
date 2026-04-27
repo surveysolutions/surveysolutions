@@ -199,6 +199,9 @@
   <data name="AnswerWasNotSaved" xml:space="preserve">
     <value>La respuesta no se guardó</value>
   </data>
+  <data name="CommunicationError" xml:space="preserve">
+    <value>Communication error</value>
+  </data>
   <data name="NotCalculated" xml:space="preserve">
     <value>No calculado</value>
   </data>

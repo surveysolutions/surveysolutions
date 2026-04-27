@@ -128,16 +128,19 @@ const httpPlugin = {
                         onUploadProgress(ev) {
                             var entity = state.webinterview.entityDetails[id]
                             if (entity != undefined) {
+                                const total = ev.total == null ? 100 : ev.total
                                 dispatch('uploadProgress', {
                                     id,
                                     now: ev.loaded,
-                                    total: ev.total,
+                                    total: total,
                                 })
                             }
                         },
                     })
                 } catch (err) {
                     dispatch('setAnswerAsNotSaved', { id, message: $t('WebInterviewUI.CommunicationError') })
+                } finally {
+                    dispatch('uploadProgress', { id, now: 0, total: 0 })
                 }
             },
         }

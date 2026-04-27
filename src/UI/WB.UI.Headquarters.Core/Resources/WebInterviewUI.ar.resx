@@ -123,6 +123,9 @@
   <data name="AnswerWasNotSaved" xml:space="preserve">
     <value>لم يتم حفظ الإجابة</value>
   </data>
+  <data name="CommunicationError" xml:space="preserve">
+    <value>Communication error</value>
+  </data>
   <data name="AudioClickRecord" xml:space="preserve">
     <value>أنقر للقيام بتسجيل صوتي</value>
   </data>

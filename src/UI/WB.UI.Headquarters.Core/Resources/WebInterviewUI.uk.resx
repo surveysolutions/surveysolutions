@@ -126,6 +126,9 @@
   <data name="AnswerWasNotSaved" xml:space="preserve">
     <value>Відповідь не збережено</value>
   </data>
+  <data name="CommunicationError" xml:space="preserve">
+    <value>Communication error</value>
+  </data>
   <data name="AreaRecord" xml:space="preserve">
     <value>Область редагування</value>
   </data>
