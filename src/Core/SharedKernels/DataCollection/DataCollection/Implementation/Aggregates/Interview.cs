@@ -319,22 +319,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 foreach (var failedValidationCondition in @event.FailedValidationConditions)
                 {
                     if (failedValidationCondition.Value?.Count > 0)
-                        this.Tree.GetQuestion(failedValidationCondition.Key).MarkInvalid(failedValidationCondition.Value);
+                        this.Tree.GetQuestion(failedValidationCondition.Key)?.MarkInvalid(failedValidationCondition.Value);
                     else
-                        this.Tree.GetQuestion(failedValidationCondition.Key).MarkInvalid();
+                        this.Tree.GetQuestion(failedValidationCondition.Key)?.MarkInvalid();
                 }
             }
             else //handling of old events
             {
                 foreach (var invalidQuestionIdentity in @event.Questions)
-                    this.Tree.GetQuestion(invalidQuestionIdentity).MarkInvalid();
+                    this.Tree.GetQuestion(invalidQuestionIdentity)?.MarkInvalid();
             }
         }
 
         protected virtual void Apply(StaticTextsDeclaredValid @event)
         {
             foreach (var staticTextIdentity in @event.StaticTexts)
-                this.Tree.GetStaticText(staticTextIdentity).MarkValid();
+                this.Tree.GetStaticText(staticTextIdentity)?.MarkValid();
         }
 
         protected virtual void Apply(StaticTextsDeclaredInvalid @event)
@@ -342,7 +342,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var staticTextsConditions = @event.GetFailedValidationConditionsDictionary();
 
             foreach (var staticTextIdentity in staticTextsConditions.Keys)
-                this.Tree.GetStaticText(staticTextIdentity).MarkInvalid(staticTextsConditions[staticTextIdentity]);
+                this.Tree.GetStaticText(staticTextIdentity)?.MarkInvalid(staticTextsConditions[staticTextIdentity]);
         }
 
         protected virtual void Apply(AnswersDeclaredPlausible @event)
@@ -356,13 +356,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var questionsConditions = @event.GetFailedValidationConditionsDictionary();
 
             foreach (var questionIdentity in questionsConditions.Keys)
-                this.Tree.GetQuestion(questionIdentity).MarkImplausible(questionsConditions[questionIdentity]);
+                this.Tree.GetQuestion(questionIdentity)?.MarkImplausible(questionsConditions[questionIdentity]);
         }
 
         protected virtual void Apply(StaticTextsDeclaredPlausible @event)
         {
             foreach (var staticTextIdentity in @event.StaticTexts)
-                this.Tree.GetStaticText(staticTextIdentity).MarkPlausible();
+                this.Tree.GetStaticText(staticTextIdentity)?.MarkPlausible();
         }
 
         protected virtual void Apply(StaticTextsDeclaredImplausible @event)
@@ -370,7 +370,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var staticTextsConditions = @event.GetFailedValidationConditionsDictionary();
 
             foreach (var staticTextIdentity in staticTextsConditions.Keys)
-                this.Tree.GetStaticText(staticTextIdentity).MarkImplausible(staticTextsConditions[staticTextIdentity]);
+                this.Tree.GetStaticText(staticTextIdentity)?.MarkImplausible(staticTextsConditions[staticTextIdentity]);
         }
 
         public void Apply(LinkedOptionsChanged @event)
@@ -388,7 +388,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         protected virtual void Apply(GroupsDisabled @event)
         {
             foreach (var groupIdentity in @event.Groups)
-                this.Tree.GetGroup(groupIdentity).Disable();
+                this.Tree.GetGroup(groupIdentity)?.Disable();
         }
 
         protected virtual void Apply(GroupsEnabled @event)
@@ -400,7 +400,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         protected virtual void Apply(VariablesDisabled @event)
         {
             foreach (var variableIdentity in @event.Variables)
-                this.Tree.GetVariable(variableIdentity).Disable();
+                this.Tree.GetVariable(variableIdentity)?.Disable();
         }
 
         protected virtual void Apply(VariablesEnabled @event)
@@ -420,7 +420,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         protected virtual void Apply(QuestionsDisabled @event)
         {
             foreach (var questionIdentity in @event.Questions)
-                this.Tree.GetQuestion(questionIdentity).Disable();
+                this.Tree.GetQuestion(questionIdentity)?.Disable();
         }
 
         protected virtual void Apply(QuestionsEnabled @event)
@@ -450,7 +450,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         protected virtual void Apply(StaticTextsDisabled @event)
         {
             foreach (var staticTextIdentity in @event.StaticTexts)
-                this.Tree.GetStaticText(staticTextIdentity).Disable();
+                this.Tree.GetStaticText(staticTextIdentity)?.Disable();
         }
 
         protected virtual void Apply(AnswerCommentResolved @event)
