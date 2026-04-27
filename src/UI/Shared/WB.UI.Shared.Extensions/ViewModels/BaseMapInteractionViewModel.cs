@@ -271,7 +271,6 @@ namespace WB.UI.Shared.Extensions.ViewModels
                     var features = await shapefileFeatureTable.QueryFeaturesAsync(new QueryParameters()
                     {
                         Geometry = sPoint,
-                        
                     }).ConfigureAwait(false);
                     var featuresField = features.Fields[labelFieldIndex];
                     var featuresFieldName = featuresField.Name;
