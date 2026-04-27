@@ -265,6 +265,7 @@
     "RegenerateQuestionnaireSharingLink": "Znovu vygenerovat odkaz",
     "ReplaceOptionsConfirmation": "Opravdu chcete nahradit existující kategorie pro otázku \"{{trimmedTitle}}\"?",
     "RequestFailedUnexpectedly": "Požadavek se neočekávaně nezdařil.",
+    "ApplicationNotAvailable": "Požadavek nelze dokončit. Přijatá odpověď nevypadá, že pochází ze serveru Survey Solutions.\nTo je obvykle způsobeno síťovým proxy serverem, firewallem nebo bezpečnostní bránou, která zachytává připojení.\nZkontrolujte prosím své síťové připojení nebo se obraťte na vaši IT podporu.",
     "RequiredField": "Povinné pole",
     "RetryExportPDF": "Opakujte export ve formátu PDF",
     "ReusableCategories": "Opakovaně použitelné kategorie",

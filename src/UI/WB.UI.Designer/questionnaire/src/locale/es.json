@@ -154,6 +154,7 @@
     "ReadOnly": "Solo lectura",
     "Recompile": "Recompilar",
     "RequestFailedUnexpectedly": "La petición ha fallado inesperadamente",
+    "ApplicationNotAvailable": "No se puede completar la solicitud. La respuesta recibida no parece provenir del servidor de Survey Solutions.\r\nEsto se debe generalmente a un proxy de red, firewall o pasarela de seguridad que intercepta la conexión.\r\nPor favor, compruebe su conexión de red o póngase en contacto con el soporte de TI.",
     "RosterAddItem": "Adicionar ítem",
     "RosterName": "Nombre de lista",
     "RosterSource": "Fuente de lista",

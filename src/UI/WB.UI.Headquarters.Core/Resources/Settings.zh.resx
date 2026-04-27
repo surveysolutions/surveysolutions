@@ -127,7 +127,7 @@
     <value>地理导出格式</value>
   </data>
   <data name="GeographyExportFormat_Description" xml:space="preserve">
-    <value>选择地理（区域）问题答案的导出格式。</value>
+    <value>选择地理问题的答案应如何格式化。</value>
   </data>
   <data name="GeographyExportFormat_Wkt" xml:space="preserve">
     <value>WKT（通用文本）</value>
@@ -136,7 +136,7 @@
     <value>GeoJSON</value>
   </data>
   <data name="GeographyExportFormat_ArrayOfCoordinates" xml:space="preserve">
-    <value>坐标数组</value>
+    <value>Survey Solutions 几何字符串</value>
   </data>
   <data name="ExportEncryptionSettings" xml:space="preserve">
     <value>导出加密设置</value>
