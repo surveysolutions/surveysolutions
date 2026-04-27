@@ -85,21 +85,32 @@ export default {
         searchResultsAreVisible(val) {
             if (val) {
                 this.$nextTick(() => {
-                    this._observer?.unobserve(this.$refs.sentinel)
-                    this._observer?.observe(this.$refs.sentinel)
+                    const sentinel = this.$refs.sentinel
+                    if (!sentinel) return
+                    this._observer?.unobserve(sentinel)
+                    this._observer?.observe(sentinel)
                 })
             }
         },
     },
 
-    mounted() {
+    async mounted() {
         this._observer = new IntersectionObserver(([entry]) => {
             if (entry.isIntersecting) this.loadMore()
         }, { rootMargin: '250px' })
-        this.$nextTick(() => {
-            this.$store.dispatch('fetchSearchResults')
-            this._observer.observe(this.$refs.sentinel)
-        })
+        await this.$nextTick()
+
+        const sentinel = this.$refs.sentinel
+        if (!sentinel) return
+
+        this._loading = true
+        try {
+            await this.$store.dispatch('fetchSearchResults')
+        } finally {
+            this._loading = false
+        }
+
+        this._observer.observe(sentinel)
     },
 
     beforeUnmount() {

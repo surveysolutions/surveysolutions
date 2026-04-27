@@ -950,6 +950,7 @@ export default {
                 },
                 dom: 'fritp',
                 sDom: 'rf<"table-with-scroll"t>ip',
+                searchHighlight: true,
             }
 
             return tableOptions
