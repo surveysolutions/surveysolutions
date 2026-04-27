@@ -68,6 +68,11 @@ export default {
             bigApkSelected: false,
         }
     },
+    mounted() {
+        // No API calls are made on this page, so we explicitly validate
+        // the X-Survey-Solutions response header via the interceptor-equipped $http instance.
+        this.$http.get('/.version').catch(() => {})
+    },
     methods: {
     },
     computed: {

@@ -36,7 +36,7 @@
                         </div>
                         <div class="info-block" v-if="actionsAlowed">
                             <div ref="status">
-                                <p>{{ statusMessage }}</p>
+                                <p :class="{'text-danger': isError}">{{ statusMessage }}</p>
                             </div>
                         </div>
                         <div>
@@ -54,6 +54,7 @@ export default {
     data: function () {
         return {
             statusMessage: '',
+            isError: false,
         }
     },
     mounted() { },
@@ -66,7 +67,8 @@ export default {
         },
     },
     methods: {
-        updateStatus(newMessage) {
+        updateStatus(newMessage, isError = false) {
+            this.isError = isError
             this.statusMessage = this.$t('Pages.Map_Status') + ': ' + newMessage
         },
         onFileChange(e) {
@@ -76,7 +78,7 @@ export default {
                 return
             }
 
-            const statusupdater = this.updateStatus
+            const statusupdater = this.updateStatus.bind(this)
             const uploadingMessage = this.$t('Pages.Map_Uploading')
             const uploadingErrorMessage = this.$t('Pages.Map_UploadingError')
 
@@ -103,7 +105,7 @@ export default {
                     self.$refs.uploader.value = ''
                 },
                 error: function (error) {
-                    statusupdater(uploadingErrorMessage)
+                    statusupdater(uploadingErrorMessage, true)
                 },
             })
         },

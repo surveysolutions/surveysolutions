@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { config } from '~/shared/config'
 import { $t } from '~/shared/plugins/locale'
+import { installAxiosInterceptors } from '~/shared/serverValidator'
 
 let api = {};
 
@@ -26,6 +27,7 @@ const httpPlugin = {
         })
 
         // Add a response interceptor
+        installAxiosInterceptors(http)
         http.interceptors.response.use(function (response) {
             store.dispatch('fetchProgress', -1)
             return response
@@ -35,6 +37,7 @@ const httpPlugin = {
             // Do something with response error
             return Promise.reject(error)
         })
+        installAxiosInterceptors(axios)
 
         // if (!Object.prototype.hasOwnProperty.call(app, '$api')) {
         //     app.$api = {}
