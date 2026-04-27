@@ -23,7 +23,6 @@ namespace WB.UI.WebTester.Controllers
     public class WebTesterController : Controller
     {
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
-        private readonly IEvictionNotifier evictionService;
         private readonly IImportQuestionnaireAndCreateInterviewService interviewFactory;
         private readonly IOptions<TesterConfiguration> testerConfig;
         private readonly IWebTesterJwtStore jwtStore;
@@ -34,7 +33,6 @@ namespace WB.UI.WebTester.Controllers
 
         public WebTesterController(
             IStatefulInterviewRepository statefulInterviewRepository,
-            IEvictionNotifier evictionService,
             IImportQuestionnaireAndCreateInterviewService interviewFactory,
             IOptions<TesterConfiguration> testerConfig,
             IWebTesterJwtStore jwtStore,
@@ -44,7 +42,6 @@ namespace WB.UI.WebTester.Controllers
             ILogger<WebTesterController> logger)
         {
             this.statefulInterviewRepository = statefulInterviewRepository ?? throw new ArgumentNullException(nameof(statefulInterviewRepository));
-            this.evictionService = evictionService;
             this.interviewFactory = interviewFactory;
             this.testerConfig = testerConfig;
             this.jwtStore = jwtStore ?? throw new ArgumentNullException(nameof(jwtStore));
