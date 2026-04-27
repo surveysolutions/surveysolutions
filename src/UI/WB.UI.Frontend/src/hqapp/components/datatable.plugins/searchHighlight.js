@@ -77,8 +77,8 @@
             })
             highlightText(body, globalTerms)
         } else {
+            unhighlightText(body)
             unhighlightText(body, 'column_highlight')
-            highlightText(body, [])
         }
     }
 
