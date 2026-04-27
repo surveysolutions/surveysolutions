@@ -1228,6 +1228,9 @@ Vă rugăm să verificați conexiunea la rețea sau să contactați suportul IT.
   <data name="SideBarScenarioName" xml:space="preserve">
     <value>titlul scenariului</value>
   </data>
+  <data name="SideBarScenarioRecordNew" xml:space="preserve">
+    <value>Record New Scenario</value>
+  </data>
   <data name="SideBarScenarioTitle" xml:space="preserve">
     <value>Scenarii</value>
   </data>
@@ -1416,6 +1419,9 @@ Vă rugăm să verificați conexiunea la rețea sau să contactați suportul IT.
   </data>
   <data name="CommunicationError" xml:space="preserve">
     <value>Eroare de rețea</value>
+  </data>
+  <data name="PopupBlocked" xml:space="preserve">
+    <value>Unable to open window. Please allow pop-ups in your browser and try again.</value>
   </data>
   <data name="DataChangesReverted" xml:space="preserve">
     <value>Schimbările de date au fost anulate</value>

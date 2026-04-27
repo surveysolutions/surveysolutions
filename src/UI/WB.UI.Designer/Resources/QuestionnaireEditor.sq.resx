@@ -1229,4 +1229,10 @@ Ju lutemi kontrolloni lidhjen tuaj të rrjetit ose kontaktoni mbështetjen tuaj 
   <data name="AIAssistant" xml:space="preserve">
       <value>AI</value>
   </data>
+  <data name="SideBarScenarioRecordNew" xml:space="preserve">
+    <value>Record New Scenario</value>
+  </data>
+  <data name="PopupBlocked" xml:space="preserve">
+    <value>Unable to open window. Please allow pop-ups in your browser and try again.</value>
+  </data>
 </root>

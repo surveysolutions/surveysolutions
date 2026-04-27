@@ -249,6 +249,9 @@
   <data name="CommunicationError" xml:space="preserve">
     <value>Chyba sítě</value>
   </data>
+  <data name="PopupBlocked" xml:space="preserve">
+    <value>Unable to open window. Please allow pop-ups in your browser and try again.</value>
+  </data>
   <data name="CompilationErrorsCounter" xml:space="preserve">
     <value>Byla nalezena chyba {{count}}</value>
   </data>
@@ -1378,6 +1381,9 @@ Zkontrolujte prosím své síťové připojení nebo se obraťte na vaši IT pod
   </data>
   <data name="SideBarScenarioName" xml:space="preserve">
     <value>Název scénáře</value>
+  </data>
+  <data name="SideBarScenarioRecordNew" xml:space="preserve">
+    <value>Record New Scenario</value>
   </data>
   <data name="SideBarScenarioTitle" xml:space="preserve">
     <value>Scénáře</value>

@@ -281,6 +281,9 @@
   <data name="SideBarScenarioName" xml:space="preserve">
     <value>título do cenário</value>
   </data>
+  <data name="SideBarScenarioRecordNew" xml:space="preserve">
+    <value>Record New Scenario</value>
+  </data>
   <data name="SideBarSectionsCounter" xml:space="preserve">
     <value>{{count}} Seção:</value>
   </data>
@@ -1555,6 +1558,9 @@ Por favor, verifique sua conexão de rede ou entre em contato com o suporte de T
   </data>
   <data name="CommunicationError" xml:space="preserve">
       <value>Erro de rede</value>
+  </data>
+  <data name="PopupBlocked" xml:space="preserve">
+    <value>Unable to open window. Please allow pop-ups in your browser and try again.</value>
   </data>
   <data name="SideBarCategoriesAddNew" xml:space="preserve">
       <value>Adicionar novas categorias</value>
