@@ -40,7 +40,7 @@ namespace WB.UI.Shared.Enumerator.Services
                             .WaitAndUnwrapException();
                         // do not pass cancellationToken, since it will always throw operation cancelled here
                     }
-                    catch (OperationCanceledException ec)
+                    catch (System.OperationCanceledException ec)
                     {
                         Mvx.IoCProvider!.Resolve<ILoggerProvider>()!.GetFor<MapDownloadBackgroundService>()
                             .Error(">!>Failed to sync maps (canceled)", ec);
