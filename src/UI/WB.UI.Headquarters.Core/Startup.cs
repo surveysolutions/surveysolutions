@@ -480,6 +480,15 @@ namespace WB.UI.Headquarters
             app.UseUnderConstruction();
 
             var underConstructionInfo = app.ApplicationServices.GetRequiredService<UnderConstructionInfo>();
+
+            // Capture under-construction status at the start of each request so logging
+            // can use the per-request value instead of reading mutable global state.
+            app.Use(async (context, next) =>
+            {
+                context.Items["UnderConstructionStatusAtRequestStart"] = underConstructionInfo.Status;
+                await next();
+            });
+
             app.UseSerilogRequestLogging(o =>
             {
                 o.Logger = app.ApplicationServices.GetService<ILogger>();
@@ -487,8 +496,10 @@ namespace WB.UI.Headquarters
                 {
                     if (ex == null
                         && ctx.Response.StatusCode == StatusCodes.Status503ServiceUnavailable
-                        && underConstructionInfo.Status != UnderConstructionStatus.Finished
-                        && underConstructionInfo.Status != UnderConstructionStatus.Error)
+                        && ctx.Items.TryGetValue("UnderConstructionStatusAtRequestStart", out var statusObj)
+                        && statusObj is UnderConstructionStatus statusAtRequestStart
+                        && statusAtRequestStart != UnderConstructionStatus.Finished
+                        && statusAtRequestStart != UnderConstructionStatus.Error)
                     {
                         return LogEventLevel.Warning;
                     }
