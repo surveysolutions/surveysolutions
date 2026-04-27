@@ -34,7 +34,7 @@ namespace WB.UI.WebTester.Controllers
         {
             var questionnaireId = sessionService.GetQuestionnaireId(HttpContext.Session, id);
             if (questionnaireId == null)
-                return NotFound(new { error = "Interview not found in session" });
+                return NotFound(new { error = "Interview session expired or not authorized" });
 
             var scenarios = await designerApi.GetScenariosListAsync(questionnaireId.Value.ToString());
             return Ok(scenarios);
@@ -50,7 +50,7 @@ namespace WB.UI.WebTester.Controllers
 
             var questionnaireId = sessionService.GetQuestionnaireId(HttpContext.Session, id);
             if (questionnaireId == null)
-                return NotFound(new { error = "Interview not found in session" });
+                return NotFound(new { error = "Interview session expired or not authorized" });
 
             var response = await designerApi.SaveScenarioAsync(questionnaireId.Value.ToString(), model);
             if (!response.IsSuccessStatusCode)
