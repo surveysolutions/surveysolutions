@@ -11,7 +11,7 @@
         "@rollup/plugin-inject": "^5.0.5",
         "@vitejs/plugin-vue": "5.2.4",
         "glob": "^13.0.6",
-        "globby": "^14.0.2",
+        "globby": "^16.2.0",
         "less": "^4.2.0",
         "less-loader": "^12.2.0",
         "postcss": "^8.4.39",
@@ -77,6 +77,9 @@
         "vue3-perfect-scrollbar": "^2.0.0",
         "vuetify": "^3.7.11",
         "vuex": "^4.1.0"
+    },
+    "engines": {
+        "node": ">=22"
     },
     "overrides": {
         "@babel/runtime": ">=7.26.10",
