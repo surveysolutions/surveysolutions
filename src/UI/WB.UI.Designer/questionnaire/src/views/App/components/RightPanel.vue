@@ -1,5 +1,5 @@
 <template>
-    <div class="editor-panel">
+    <div class="editor-panel col-xs-6" style="min-width: 680px;">
         <div class="question-editor" :class="{ commenting: isCommentsBlockVisible }" ui-view>
             <router-view />
         </div>

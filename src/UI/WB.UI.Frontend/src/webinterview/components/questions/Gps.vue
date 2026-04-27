@@ -136,21 +136,29 @@ export default {
                 title: self.$t('WebInterviewUI.PickLocation'),
                 message: '<div id="locationPicker"><div id="map_canvas"></div></div>',
                 size: 'large',
-                onShow: () => {
+                onShow: async () => {
                     self.pickedLocation = null
                     var latlng = new google.maps.LatLng(-34.397, 150.644)
+                    const hasMapId = !!self.$config.googleMapsMapId
 
                     var mapOptions =
                     {
                         zoom: 14,
                         center: latlng,
                         streetViewControl: false,
+                        ...(hasMapId ? { mapId: self.$config.googleMapsMapId } : {}),
                     }
 
                     var canvas = document.getElementById('map_canvas');
                     canvas.style.height = '400px';
 
-                    const map = new google.maps.Map(canvas, mapOptions)
+                    const { Map } = await google.maps.importLibrary("maps")
+                    let AdvancedMarkerElement = null
+                    if (hasMapId) {
+                        const markerLib = await google.maps.importLibrary("marker")
+                        AdvancedMarkerElement = markerLib.AdvancedMarkerElement
+                    }
+                    const map = new Map(canvas, mapOptions)
 
                     if (navigator.geolocation) {
                         navigator.geolocation.getCurrentPosition((position) => {
@@ -165,8 +173,8 @@ export default {
                     google.maps.event.addListener(map, 'click', function (event) {
                         placeMarker(event.latLng)
                         self.pickedLocation = {
-                            latitude: pushpin.position.lat(),
-                            longitude: pushpin.position.lng(),
+                            latitude: event.latLng.lat(),
+                            longitude: event.latLng.lng(),
                         }
                         if (event.placeId) {
                             event.stop() // prevent showing information about place
@@ -174,14 +182,24 @@ export default {
                     })
 
                     function placeMarker(location) {
-                        if (pushpin == null) {
-                            pushpin = new google.maps.Marker({
-                                position: location,
-                                map: map,
-                            })
-                        }
-                        else {
-                            pushpin.setPosition(location)
+                        if (pushpin === null) {
+                            if (AdvancedMarkerElement) {
+                                pushpin = new AdvancedMarkerElement({
+                                    position: location,
+                                    map: map,
+                                })
+                            } else {
+                                pushpin = new google.maps.Marker({
+                                    position: location,
+                                    map: map,
+                                })
+                            }
+                        } else {
+                            if (AdvancedMarkerElement) {
+                                pushpin.position = location
+                            } else {
+                                pushpin.setPosition(location)
+                            }
                         }
                     }
                 },
