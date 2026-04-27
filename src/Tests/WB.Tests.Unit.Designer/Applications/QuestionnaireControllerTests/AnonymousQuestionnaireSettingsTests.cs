@@ -42,6 +42,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
                 emailSender: throwingEmailSender.Object,
                 viewRenderService: throwingViewRenderService.Object,
                 userManager: userManager);
+            controller.Url = CreateUrlHelper();
 
             var result = await controller.UpdateAnonymousQuestionnaireSettings(
                 questionnaireId,
@@ -51,6 +52,9 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
             var json = result as JsonResult;
             var isActive = json!.Value!.GetType().GetProperty("IsActive")?.GetValue(json.Value);
             Assert.That(isActive, Is.True);
+            throwingViewRenderService.Verify(
+                v => v.RenderToStringAsync(It.IsAny<string>(), It.IsAny<object>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Microsoft.AspNetCore.Routing.RouteData>()),
+                Times.Once, "View render should have been called, confirming the email path was exercised");
         }
 
         [Test]
@@ -135,6 +139,11 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
                 .Setup(s => s.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .ThrowsAsync(new Exception("SMTP connection failed"));
 
+            var viewRenderService = new Mock<IViewRenderService>();
+            viewRenderService
+                .Setup(v => v.RenderToStringAsync(It.IsAny<string>(), It.IsAny<object>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Microsoft.AspNetCore.Routing.RouteData>()))
+                .ReturnsAsync("<html>email body</html>");
+
             var user = new DesignerIdentityUser { Email = "test@example.com", UserName = "testuser" };
             var userManager = CreateUserManager(returnUser: user);
 
@@ -142,11 +151,16 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
                 dbContext: dbContext,
                 questionnaireViewFactory: CreateQuestionnaireViewFactory(),
                 emailSender: throwingEmailSender.Object,
+                viewRenderService: viewRenderService.Object,
                 userManager: userManager);
+            controller.Url = CreateUrlHelper();
 
             var result = await controller.RegenerateAnonymousQuestionnaireLink(questionnaireId);
 
             Assert.That(result, Is.InstanceOf<JsonResult>(), "Should return JsonResult, not an error response");
+            throwingEmailSender.Verify(
+                s => s.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()),
+                Times.Once, "Email sender should have been called, confirming the email path was exercised");
         }
 
         [Test]

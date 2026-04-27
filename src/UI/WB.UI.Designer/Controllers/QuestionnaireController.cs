@@ -519,8 +519,13 @@ namespace WB.UI.Designer.Controllers
         {
             try
             {
-                using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(AnonymousSharingEmailTimeoutSeconds));
+                using var cts = CancellationTokenSource.CreateLinkedTokenSource(HttpContext.RequestAborted);
+                cts.CancelAfter(TimeSpan.FromSeconds(AnonymousSharingEmailTimeoutSeconds));
                 await SendAnonymousSharingEmailAsync(id, anonymousQuestionnaireId, questionnaireView).WaitAsync(cts.Token);
+            }
+            catch (OperationCanceledException) when (HttpContext.RequestAborted.IsCancellationRequested)
+            {
+                // Client disconnected; no need to log.
             }
             catch (OperationCanceledException)
             {

@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Razor.TagHelpers;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
@@ -64,7 +65,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
                 reusableCategoriesService: Mock.Of<IReusableCategoriesService>(),
                 emailSender ?? Mock.Of<IEmailSender>(),
                 viewRenderService ?? Mock.Of<IViewRenderService>(),
-                userManager!,
+                userManager ?? CreateUserManager(),
                 Mock.Of<ITagHelperComponentManager>(),
                 Mock.Of<IWebHostEnvironment>(),
                 Mock.Of<IOptions<ViteTagOptions>>(),
@@ -73,12 +74,23 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
             {
                 HttpContext = new DefaultHttpContext
                 {
-                    Session = new MockHttpSession()
+                    Session = new MockHttpSession(),
+                    User = new ClaimsPrincipal(new ClaimsIdentity(new[]
+                    {
+                        new Claim(ClaimTypes.Name, "testuser")
+                    }))
                 }
             };
 
             questionnaireController.TempData = new TempDataDictionary(questionnaireController.ControllerContext.HttpContext, Mock.Of<ITempDataProvider>());
             return questionnaireController;
+        }
+
+        internal static IUrlHelper CreateUrlHelper(string returnUrl = "https://example.com/share")
+        {
+            var urlHelper = new Mock<IUrlHelper>();
+            urlHelper.Setup(u => u.Action(It.IsAny<UrlActionContext>())).Returns(returnUrl);
+            return urlHelper.Object;
         }
 
         internal static IQuestionnaireViewFactory CreateQuestionnaireViewFactory()
