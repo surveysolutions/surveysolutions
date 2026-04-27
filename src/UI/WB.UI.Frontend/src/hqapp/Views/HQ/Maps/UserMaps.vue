@@ -21,15 +21,9 @@
 </template>
 
 <script>
-import { map, join } from 'lodash'
+import { map, join, escape } from 'lodash'
 
 export default {
-    data: function () {
-        return {
-            statusMessage: '',
-            errorList: [],
-        }
-    },
     mounted() {
         if (this.$refs.table) {
             this.$refs.table.reload()
@@ -41,9 +35,6 @@ export default {
         },
     },
     computed: {
-        config() {
-            return this.$config.model
-        },
         tableOptions() {
             var self = this
             return {
@@ -73,7 +64,7 @@ export default {
                                     'Maps/Details?mapname=' +
                                     encodeURIComponent(fileName) +
                                     '\'>' +
-                                    fileName +
+                                    escape(fileName) +
                                     '</a>'
                                 )
                             })
