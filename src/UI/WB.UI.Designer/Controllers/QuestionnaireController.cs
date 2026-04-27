@@ -517,19 +517,47 @@ namespace WB.UI.Designer.Controllers
 
         private async Task TrySendAnonymousSharingEmailAsync(Guid id, Guid anonymousQuestionnaireId, QuestionnaireView? questionnaireView)
         {
+            var requestAborted = HttpContext.RequestAborted;
+            var sendTask = SendAnonymousSharingEmailAsync(id, anonymousQuestionnaireId, questionnaireView);
+
             try
             {
-                using var cts = CancellationTokenSource.CreateLinkedTokenSource(HttpContext.RequestAborted);
-                cts.CancelAfter(TimeSpan.FromSeconds(AnonymousSharingEmailTimeoutSeconds));
-                await SendAnonymousSharingEmailAsync(id, anonymousQuestionnaireId, questionnaireView).WaitAsync(cts.Token);
+                using var timeoutCts = CancellationTokenSource.CreateLinkedTokenSource(requestAborted);
+                timeoutCts.CancelAfter(TimeSpan.FromSeconds(AnonymousSharingEmailTimeoutSeconds));
+
+                var completedTask = await Task.WhenAny(
+                    sendTask,
+                    Task.Delay(Timeout.InfiniteTimeSpan, timeoutCts.Token));
+
+                if (completedTask == sendTask)
+                {
+                    // Propagate any exception from the send task into the catch blocks below.
+                    await sendTask;
+                    return;
+                }
+
+                if (requestAborted.IsCancellationRequested)
+                {
+                    // Client disconnected; no need to log.
+                    return;
+                }
+
+                // Timeout: the send task may still be running. Attach a fault-observing
+                // continuation so any eventual exception is logged and not left unobserved.
+                _ = sendTask.ContinueWith(
+                    t => logger.LogError(
+                        t.Exception,
+                        "Failed to send anonymous sharing notification email for questionnaire {QuestionnaireId} after timeout",
+                        id),
+                    CancellationToken.None,
+                    TaskContinuationOptions.OnlyOnFaulted | TaskContinuationOptions.ExecuteSynchronously,
+                    TaskScheduler.Default);
+
+                logger.LogWarning("Anonymous sharing email notification timed out for questionnaire {QuestionnaireId}", id);
             }
-            catch (OperationCanceledException) when (HttpContext.RequestAborted.IsCancellationRequested)
+            catch (OperationCanceledException) when (requestAborted.IsCancellationRequested)
             {
                 // Client disconnected; no need to log.
-            }
-            catch (OperationCanceledException)
-            {
-                logger.LogWarning("Anonymous sharing email notification timed out for questionnaire {QuestionnaireId}", id);
             }
             catch (Exception ex)
             {
