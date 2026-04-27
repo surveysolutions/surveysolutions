@@ -1,7 +1,5 @@
 ﻿using AutoMapper;
-using Main.Core.Documents;
 using Main.Core.Entities.Composite;
-using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable;
