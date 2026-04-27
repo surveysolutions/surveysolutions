@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
@@ -28,7 +29,7 @@ namespace WB.Tests.Unit.Designer.Services
             string? serviceApiKey = null,
             int delegatedJwtMinutes = 10)
         {
-            codeStore ??= new InMemoryOneTimeCodeStore();
+            codeStore ??= new InMemoryOneTimeCodeStore(new MemoryCache(Options.Create(new MemoryCacheOptions())));
             tokenService ??= Mock.Of<IDelegatedTokenService>(
                 s => s.CreateDelegatedToken(It.IsAny<DelegatedTokenRequest>()) == "test-jwt-token");
 
@@ -66,7 +67,7 @@ namespace WB.Tests.Unit.Designer.Services
         [Test]
         public async Task when_valid_credentials_and_code_should_return_ok_with_token()
         {
-            var store = new InMemoryOneTimeCodeStore();
+            var store = new InMemoryOneTimeCodeStore(new MemoryCache(Options.Create(new MemoryCacheOptions())));
             await SaveValidCode(store, "validcode123", Id.g1);
 
             var controller = CreateController(codeStore: store);
@@ -223,7 +224,7 @@ namespace WB.Tests.Unit.Designer.Services
         [Test]
         public async Task when_expired_code_should_return_410_gone()
         {
-            var store = new InMemoryOneTimeCodeStore();
+            var store = new InMemoryOneTimeCodeStore(new MemoryCache(Options.Create(new MemoryCacheOptions())));
             var now = DateTime.UtcNow;
             await store.SaveAsync(new OneTimeCodeEntity
             {
@@ -265,7 +266,7 @@ namespace WB.Tests.Unit.Designer.Services
         [Test]
         public async Task when_code_for_different_service_should_return_403()
         {
-            var store = new InMemoryOneTimeCodeStore();
+            var store = new InMemoryOneTimeCodeStore(new MemoryCache(Options.Create(new MemoryCacheOptions())));
             await SaveValidCode(store, "svcmismatch", Id.g1, targetService: "WB.OtherService");
 
             var controller = CreateController(codeStore: store);
@@ -283,7 +284,7 @@ namespace WB.Tests.Unit.Designer.Services
         [Test]
         public async Task when_code_already_used_should_return_conflict()
         {
-            var store = new InMemoryOneTimeCodeStore();
+            var store = new InMemoryOneTimeCodeStore(new MemoryCache(Options.Create(new MemoryCacheOptions())));
             await SaveValidCode(store, "usedonce", Id.g1);
 
             var controller = CreateController(codeStore: store);
@@ -327,7 +328,7 @@ namespace WB.Tests.Unit.Designer.Services
         [Test]
         public async Task when_service_name_case_insensitive_should_accept()
         {
-            var store = new InMemoryOneTimeCodeStore();
+            var store = new InMemoryOneTimeCodeStore(new MemoryCache(Options.Create(new MemoryCacheOptions())));
             await SaveValidCode(store, "casetest", Id.g1);
 
             var controller = CreateController(codeStore: store);

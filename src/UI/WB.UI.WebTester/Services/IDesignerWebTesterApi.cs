@@ -43,7 +43,7 @@ namespace WB.UI.WebTester.Services
         Task<ApiResponse<string>> GetScenario(string questionnaireId, int scenarioId);
 
         [Get("/api/webtester/Scenarios/{questionnaireId}")]
-        Task<List<WebTesterScenarioItem>> GetScenariosListAsync(string questionnaireId);
+        Task<IApiResponse<List<WebTesterScenarioItem>>> GetScenariosListAsync(string questionnaireId);
 
         [Post("/api/webtester/Scenarios/{questionnaireId}")]
         Task<IApiResponse> SaveScenarioAsync(string questionnaireId, [Body] SaveScenarioRequest model);

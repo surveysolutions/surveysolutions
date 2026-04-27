@@ -1,6 +1,7 @@
 ﻿#nullable enable
 using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
@@ -17,7 +18,7 @@ namespace WB.Tests.Unit.Designer.Services
             IOneTimeCodeStore? store = null,
             int codeTtlSeconds = 60)
         {
-            store ??= new InMemoryOneTimeCodeStore();
+            store ??= new InMemoryOneTimeCodeStore(new MemoryCache(Options.Create(new MemoryCacheOptions())));
             var settings = Options.Create(new WebTesterSettings { CodeTtlSeconds = codeTtlSeconds });
             var logger = Mock.Of<ILogger<WebTesterService>>();
             return new WebTesterService(store, settings, logger);
@@ -34,7 +35,7 @@ namespace WB.Tests.Unit.Designer.Services
         [Test]
         public async Task CreateOneTimeCode_stores_entity_in_store()
         {
-            var store = new InMemoryOneTimeCodeStore();
+            var store = new InMemoryOneTimeCodeStore(new MemoryCache(Options.Create(new MemoryCacheOptions())));
             var svc = CreateService(store);
 
             var code = await svc.CreateOneTimeCodeAsync(Id.g1, "user1", "corr1");
@@ -60,7 +61,7 @@ namespace WB.Tests.Unit.Designer.Services
         [Test]
         public async Task CreateOneTimeCode_sets_expiry_from_ttl_config()
         {
-            var store2 = new InMemoryOneTimeCodeStore();
+            var store2 = new InMemoryOneTimeCodeStore(new MemoryCache(Options.Create(new MemoryCacheOptions())));
             var svc2   = CreateService(store2, codeTtlSeconds: 30);
             var before = DateTime.UtcNow;
             var code = await svc2.CreateOneTimeCodeAsync(Id.g1, null, "c");
@@ -73,7 +74,7 @@ namespace WB.Tests.Unit.Designer.Services
         [Test]
         public async Task CreateOneTimeCode_accepts_null_userId_for_anonymous_sessions()
         {
-            var store = new InMemoryOneTimeCodeStore();
+            var store = new InMemoryOneTimeCodeStore(new MemoryCache(Options.Create(new MemoryCacheOptions())));
             var svc = CreateService(store);
             var code = await svc.CreateOneTimeCodeAsync(Id.g1, null, "corr");
             var entity = await store.GetAsync(code);

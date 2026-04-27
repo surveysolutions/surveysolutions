@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using NUnit.Framework;
@@ -15,6 +16,9 @@ namespace WB.Tests.Unit.Designer.Services
     public class DelegatedTokenServiceTests
     {
         private const string TestSecret = "test-secret-key-at-least-32-chars!!";
+
+        private static InMemoryOneTimeCodeStore MakeStore()
+            => new InMemoryOneTimeCodeStore(new MemoryCache(Options.Create(new MemoryCacheOptions())));
 
         private static DelegatedTokenService Svc(int exp = 10)
         {
@@ -99,7 +103,7 @@ namespace WB.Tests.Unit.Designer.Services
         [Test]
         public async Task HappyPath_full_exchange_flow()
         {
-            var store = new InMemoryOneTimeCodeStore();
+            var store = MakeStore();
             var now   = DateTime.UtcNow;
             var entity = new OneTimeCodeEntity
             {
@@ -126,7 +130,7 @@ namespace WB.Tests.Unit.Designer.Services
         [Test]
         public async Task Rejects_second_use_of_same_code()
         {
-            var store = new InMemoryOneTimeCodeStore();
+            var store = MakeStore();
             await store.SaveAsync(new OneTimeCodeEntity
             {
                 Code = "once", UserId = "u", CorrelationId = "c",
@@ -142,7 +146,7 @@ namespace WB.Tests.Unit.Designer.Services
         [Test]
         public async Task Detects_expired_code()
         {
-            var store = new InMemoryOneTimeCodeStore();
+            var store = MakeStore();
             await store.SaveAsync(new OneTimeCodeEntity
             {
                 Code = "expired", UserId = "u", CorrelationId = "c",
@@ -150,15 +154,15 @@ namespace WB.Tests.Unit.Designer.Services
                 CreatedAt = DateTime.UtcNow.AddMinutes(-5),
                 ExpiresAt = DateTime.UtcNow.AddMinutes(-4)
             });
-            // InMemoryOneTimeCodeStore lazily evicts expired entries on read
+            // SaveAsync skips storing already-expired entries — GetAsync returns null immediately
             var fetched = await store.GetAsync("expired");
-            Assert.That(fetched, Is.Null, "expired code should be evicted on read");
+            Assert.That(fetched, Is.Null, "expired code should not be stored");
         }
 
         [Test]
         public async Task Rejects_code_for_wrong_target_service()
         {
-            var store = new InMemoryOneTimeCodeStore();
+            var store = MakeStore();
             await store.SaveAsync(new OneTimeCodeEntity
             {
                 Code = "xsvc", UserId = "u", CorrelationId = "c",

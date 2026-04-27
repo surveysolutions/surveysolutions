@@ -36,8 +36,10 @@ namespace WB.UI.WebTester.Controllers
             if (questionnaireId == null)
                 return NotFound(new { error = "Interview session expired or not authorized" });
 
-            var scenarios = await designerApi.GetScenariosListAsync(questionnaireId.Value.ToString());
-            return Ok(scenarios);
+            var response = await designerApi.GetScenariosListAsync(questionnaireId.Value.ToString());
+            if (!response.IsSuccessStatusCode)
+                return StatusCode((int)response.StatusCode);
+            return Ok(response.Content);
         }
 
         /// <summary>Saves (create or update) a scenario for the given interview's questionnaire (proxied to Designer).</summary>

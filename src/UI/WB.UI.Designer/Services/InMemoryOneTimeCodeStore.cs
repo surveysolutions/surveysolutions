@@ -1,60 +1,78 @@
 using System;
-using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Memory;
+
 namespace WB.UI.Designer.Services
 {
     /// <summary>
-    /// In-memory implementation of <see cref="IOneTimeCodeStore"/>.
-    /// TryMarkAsUsedAsync uses ConcurrentDictionary.TryAdd which is atomic,
-    /// guaranteeing exactly-once semantics under concurrent load.
+    /// In-memory implementation of <see cref="IOneTimeCodeStore"/> backed by <see cref="IMemoryCache"/>.
+    /// Entries expire automatically via cache TTL — no background cleanup or lazy eviction required.
+    /// <see cref="TryMarkAsUsedAsync"/> is atomic within a single process (lock on code string);
+    /// for multi-replica deployments use a Redis/SQL-backed store.
     /// </summary>
-    /// <remarks>
-    /// WARNING: suitable only for a single-process deployment.
-    /// For multi-replica production deployments use a Redis or SQL-backed implementation.
-    /// Expired entries are lazily evicted on read; for high-throughput scenarios
-    /// consider adding a periodic background cleanup via IHostedService.
-    /// </remarks>
     public class InMemoryOneTimeCodeStore : IOneTimeCodeStore
     {
-        private readonly ConcurrentDictionary<string, OneTimeCodeEntity> store = new();
-        // Separate "used" set — TryAdd gives atomic CAS semantics.
-        private readonly ConcurrentDictionary<string, byte> usedSet = new();
+        private static readonly TimeSpan UsedSentinelTtl = TimeSpan.FromMinutes(10);
+
+        private readonly IMemoryCache cache;
+
+        public InMemoryOneTimeCodeStore(IMemoryCache cache)
+        {
+            this.cache = cache ?? throw new ArgumentNullException(nameof(cache));
+        }
+
+        private static string DataKey(string code) => "otc:data:" + code;
+        private static string UsedKey(string code) => "otc:used:" + code;
 
         public Task SaveAsync(OneTimeCodeEntity entity, CancellationToken ct = default)
         {
-            store[entity.Code] = entity;
+            var ttl = entity.ExpiresAt - DateTime.UtcNow;
+            if (ttl <= TimeSpan.Zero)
+                return Task.CompletedTask; // already expired — do not store
+
+            cache.Set(DataKey(entity.Code), entity,
+                new MemoryCacheEntryOptions { AbsoluteExpirationRelativeToNow = ttl });
+
             return Task.CompletedTask;
         }
 
         public Task<OneTimeCodeEntity?> GetAsync(string code, CancellationToken ct = default)
         {
-            store.TryGetValue(code, out var entity);
-
-            var now = DateTime.UtcNow;
-
-            // Lazy eviction: remove expired entries and entries that were used well past their expiry.
-            if (entity != null
-                && (now > entity.ExpiresAt
-                    || (entity.UsedAt.HasValue && entity.UsedAt.Value < now.AddMinutes(-10))))
-            {
-                store.TryRemove(code, out _);
-                usedSet.TryRemove(code, out _);
-                entity = null;
-            }
-
+            cache.TryGetValue(DataKey(code), out OneTimeCodeEntity? entity);
             return Task.FromResult(entity);
         }
+
         public Task<bool> TryMarkAsUsedAsync(string code, DateTime usedAtUtc, CancellationToken ct = default)
         {
-            if (!store.TryGetValue(code, out var entity))
-                return Task.FromResult(false);
-            // TryAdd is atomic: only the FIRST caller succeeds.
-            if (!usedSet.TryAdd(code, 0))
-                return Task.FromResult(false);
-            entity.Used = true;
-            entity.UsedAt = usedAtUtc;
-            return Task.FromResult(true);
+            // Lock on an interned string derived from the code to serialise concurrent callers
+            // for the same code while not blocking callers for different codes.
+            lock (string.Intern("otc:lock:" + code))
+            {
+                // Reject if already marked used.
+                if (cache.TryGetValue(UsedKey(code), out _))
+                    return Task.FromResult(false);
+
+                if (!cache.TryGetValue(DataKey(code), out OneTimeCodeEntity? entity) || entity == null)
+                    return Task.FromResult(false);
+
+                if (entity.Used)
+                    return Task.FromResult(false);
+
+                entity.Used   = true;
+                entity.UsedAt = usedAtUtc;
+
+                // Remove the data entry immediately — it will never be needed again after a
+                // successful exchange, and this reclaims memory without waiting for TTL expiry.
+                cache.Remove(DataKey(code));
+
+                // Keep a short-lived sentinel so a late duplicate call (within the grace window)
+                // is still rejected rather than returning "not found → false" ambiguously.
+                cache.Set(UsedKey(code), true,
+                    new MemoryCacheEntryOptions { AbsoluteExpirationRelativeToNow = UsedSentinelTtl });
+
+                return Task.FromResult(true);
+            }
         }
     }
 }
