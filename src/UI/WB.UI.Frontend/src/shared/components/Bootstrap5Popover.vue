@@ -1,6 +1,6 @@
 <template>
     <div :class="wrapperClasses" ref="triggerElement" @mouseenter="onTriggerMouseEnter"
-        @mouseleave="onTriggerMouseLeave" @focusin="onTriggerFocus" @focusout="onTriggerBlur">
+        @mouseleave="onTriggerMouseLeave" @focusin="onTriggerFocus" @focusout="onTriggerBlur" @click="onTriggerClick">
         <slot></slot>
         <Teleport v-if="enable && isVisible" :to="teleportTarget">
             <div class="popover bs5-popover show" :style="popoverStyle" @mouseenter="onPopoverMouseEnter"
@@ -53,6 +53,21 @@ export default {
         },
         teleportTarget() {
             return this.appendTo === 'body' ? 'body' : this.appendTo
+        },
+        triggerTokens() {
+            return this.trigger
+                .toLowerCase()
+                .split(/[\s-]+/)
+                .filter(Boolean)
+        },
+        hasHoverTrigger() {
+            return this.triggerTokens.includes('hover')
+        },
+        hasFocusTrigger() {
+            return this.triggerTokens.includes('focus')
+        },
+        hasClickTrigger() {
+            return this.triggerTokens.includes('click')
         }
     },
     watch: {
@@ -68,24 +83,36 @@ export default {
     },
     methods: {
         onTriggerMouseEnter() {
+            if (!this.hasHoverTrigger) return
             this.clearHideTimer()
             this.isHovering = true
             this.showPopover()
         },
         onTriggerMouseLeave() {
+            if (!this.hasHoverTrigger) return
             this.isHovering = false
             if (!this.isFocused) {
                 this.scheduleHidePopover()
             }
         },
         onTriggerFocus() {
+            if (!this.hasFocusTrigger) return
             this.isFocused = true
             this.showPopover()
         },
         onTriggerBlur() {
+            if (!this.hasFocusTrigger) return
             this.isFocused = false
             if (!this.isHovering) {
                 this.hidePopover()
+            }
+        },
+        onTriggerClick() {
+            if (!this.hasClickTrigger) return
+            if (this.isVisible) {
+                this.hidePopover()
+            } else {
+                this.showPopover()
             }
         },
         onPopoverMouseEnter() {

@@ -64,18 +64,21 @@
     }
 
     function highlight(body, table) {
-        unhighlightText(body)
+        var globalTerms = $.trim(table.search()).split(/\s+/)
+        var hasAppliedRows = table.rows({ filter: 'applied' }).data().length
 
-        if (table.rows({ filter: 'applied' }).data().length) {
+        if (hasAppliedRows) {
             table.columns().every(function () {
                 var column = this
                 var columnNodes = column.nodes().flatten().to$()
                 columnNodes.each(function () {
-                    unhighlightText(this, 'column_highlight')
                     highlightText(this, $.trim(column.search()).split(/\s+/), 'column_highlight')
                 })
             })
-            highlightText(body, $.trim(table.search()).split(/\s+/))
+            highlightText(body, globalTerms)
+        } else {
+            unhighlightText(body, 'column_highlight')
+            highlightText(body, [])
         }
     }
 
