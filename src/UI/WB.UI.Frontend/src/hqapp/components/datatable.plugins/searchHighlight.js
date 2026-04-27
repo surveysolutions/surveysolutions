@@ -16,7 +16,6 @@
 (function (window, document, $) {
 
     function highlightText(container, terms, className) {
-        unhighlightText(container, className)
         var filtered = terms.filter(function (t) { return t.length > 0 })
         if (!filtered.length) return
 
@@ -72,9 +71,11 @@
                 var column = this
                 var columnNodes = column.nodes().flatten().to$()
                 columnNodes.each(function () {
+                    unhighlightText(this, 'column_highlight')
                     highlightText(this, $.trim(column.search()).split(/\s+/), 'column_highlight')
                 })
             })
+            unhighlightText(body)
             highlightText(body, globalTerms)
         } else {
             unhighlightText(body)
