@@ -31,7 +31,9 @@ export async function runScenario(questionnaireId, scenarioId) {
     var webTesterWindow = window.open('about:blank', '_blank');
 
     if (!webTesterWindow) {
-        throw new Error('popup_blocked');
+        const err = new Error('popup_blocked');
+        err.code = 'popup_blocked';
+        throw err;
     }
 
     var webTestUrl = await get('/api/questionnaire/webTest/' + questionnaireId);

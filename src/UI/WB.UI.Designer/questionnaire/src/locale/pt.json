@@ -74,8 +74,6 @@
     "SideBarScenarioEmptyLine1": "Use esta aba para visualizar seus cenários.",
     "SideBarScenarioEmptyLine2": "Um cenário é um instantâneo do estado do testador, você pode salvá-lo no testador clicando no botão \"Salvar Cenário\".",
     "SideBarScenarioName": "título do cenário",
-    "SideBarScenarioRecordNew": "Gravar novo cenário",
-    "PopupBlocked": "Não foi possível abrir a janela. Por favor, permita pop-ups no seu navegador e tente novamente.",
     "SideBarSectionsCounter": "{{count}} Seção:",
     "SideBarSectionsCounter_other": "{{count}} Seções:",
     "SideBarTranslationDownloadXlsx": "Baixar xlsx",

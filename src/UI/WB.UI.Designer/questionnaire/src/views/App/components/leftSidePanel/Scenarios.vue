@@ -59,11 +59,20 @@ export default {
         },
     },
     methods: {
+        isPopupBlockedError(error) {
+            return error === 'popup_blocked'
+                || error?.code === 'popup_blocked'
+                || error?.name === 'popup_blocked';
+        },
         async recordNewScenario() {
             try {
                 await runScenario(this.questionnaireId);
-            } catch {
-                notice(this.$t('QuestionnaireEditor.PopupBlocked'));
+            } catch (error) {
+                if (this.isPopupBlockedError(error)) {
+                    notice(this.$t('QuestionnaireEditor.PopupBlocked'));
+                    return;
+                }
+                notice(error?.message || this.$t('QuestionnaireEditor.CommunicationError'));
             }
         },
     }
