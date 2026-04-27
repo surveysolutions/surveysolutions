@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Linq;
 using AutoMapper;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
-using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable;
@@ -840,6 +840,425 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services
 
             //assert
             Assert.That(result, Is.EqualTo(expectedText));
+        }
+
+        #endregion
+
+        #region AutoMapper mapping tests
+
+        [Test]
+        public void When_GetEntityDetails_maps_answered_text_question_Then_Answer_is_correctly_mapped()
+        {
+            //arrange
+            var questionId = Id.g1;
+            var userId = Id.g9;
+            var expectedAnswer = "hello world";
+            var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                Create.Entity.TextQuestion(questionId));
+            var questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument);
+            var interview = Abc.SetUp.StatefulInterview(questionnaireDocument);
+            interview.AnswerTextQuestion(userId, questionId, RosterVector.Empty, DateTimeOffset.UtcNow, expectedAnswer);
+            var factory = this.CreateWebInterviewInterviewEntityFactory();
+
+            //act
+            var result = factory.GetEntityDetails(Identity.Create(questionId, RosterVector.Empty).ToString(), interview, questionnaire, false)
+                as InterviewTextQuestion;
+
+            //assert
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.Answer, Is.EqualTo(expectedAnswer));
+            Assert.That(result.IsAnswered, Is.True);
+        }
+
+        [Test]
+        public void When_GetEntityDetails_maps_answered_integer_question_Then_Answer_is_correctly_mapped()
+        {
+            //arrange
+            var questionId = Id.g1;
+            var userId = Id.g9;
+            const int expectedAnswer = 42;
+            var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                Create.Entity.NumericIntegerQuestion(questionId));
+            var questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument);
+            var interview = Abc.SetUp.StatefulInterview(questionnaireDocument);
+            interview.AnswerNumericIntegerQuestion(userId, questionId, RosterVector.Empty, DateTimeOffset.UtcNow, expectedAnswer);
+            var factory = this.CreateWebInterviewInterviewEntityFactory();
+
+            //act
+            var result = factory.GetEntityDetails(Identity.Create(questionId, RosterVector.Empty).ToString(), interview, questionnaire, false)
+                as InterviewIntegerQuestion;
+
+            //assert
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.Answer, Is.EqualTo(expectedAnswer));
+            Assert.That(result.IsAnswered, Is.True);
+        }
+
+        [Test]
+        public void When_GetEntityDetails_maps_answered_double_question_Then_Answer_is_correctly_mapped()
+        {
+            //arrange
+            var questionId = Id.g1;
+            var userId = Id.g9;
+            const double expectedAnswer = 3.14;
+            var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                Create.Entity.NumericRealQuestion(questionId));
+            var questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument);
+            var interview = Abc.SetUp.StatefulInterview(questionnaireDocument);
+            interview.AnswerNumericRealQuestion(userId, questionId, RosterVector.Empty, DateTimeOffset.UtcNow, expectedAnswer);
+            var factory = this.CreateWebInterviewInterviewEntityFactory();
+
+            //act
+            var result = factory.GetEntityDetails(Identity.Create(questionId, RosterVector.Empty).ToString(), interview, questionnaire, false)
+                as InterviewDoubleQuestion;
+
+            //assert
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.Answer, Is.EqualTo(expectedAnswer).Within(0.0001));
+            Assert.That(result.IsAnswered, Is.True);
+        }
+
+        [Test]
+        public void When_GetEntityDetails_maps_answered_datetime_question_Then_Answer_is_correctly_mapped()
+        {
+            //arrange
+            var questionId = Id.g1;
+            var userId = Id.g9;
+            var expectedAnswer = new DateTime(2024, 5, 15, 10, 30, 0, DateTimeKind.Utc);
+            var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                Create.Entity.DateTimeQuestion(questionId: questionId));
+            var questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument);
+            var interview = Abc.SetUp.StatefulInterview(questionnaireDocument);
+            interview.AnswerDateTimeQuestion(userId, questionId, RosterVector.Empty, DateTimeOffset.UtcNow, expectedAnswer);
+            var factory = this.CreateWebInterviewInterviewEntityFactory();
+
+            //act
+            var result = factory.GetEntityDetails(Identity.Create(questionId, RosterVector.Empty).ToString(), interview, questionnaire, false)
+                as InterviewDateQuestion;
+
+            //assert
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.Answer, Is.EqualTo(expectedAnswer));
+            Assert.That(result.IsAnswered, Is.True);
+        }
+
+        [Test]
+        public void When_GetEntityDetails_maps_single_option_question_Then_Answer_is_correctly_mapped()
+        {
+            //arrange
+            var questionId = Id.g1;
+            var userId = Id.g9;
+            const int selectedValue = 2;
+            var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                Create.Entity.SingleQuestion(questionId, options: new System.Collections.Generic.List<Main.Core.Entities.SubEntities.Answer>
+                {
+                    new Main.Core.Entities.SubEntities.Answer { AnswerValue = "1", AnswerText = "Option 1" },
+                    new Main.Core.Entities.SubEntities.Answer { AnswerValue = "2", AnswerText = "Option 2" },
+                }));
+            var questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument);
+            var interview = Abc.SetUp.StatefulInterview(questionnaireDocument);
+            interview.AnswerSingleOptionQuestion(userId, questionId, RosterVector.Empty, DateTimeOffset.UtcNow, selectedValue);
+            var factory = this.CreateWebInterviewInterviewEntityFactory();
+
+            //act
+            var result = factory.GetEntityDetails(Identity.Create(questionId, RosterVector.Empty).ToString(), interview, questionnaire, false)
+                as InterviewSingleOptionQuestion;
+
+            //assert
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.Answer, Is.EqualTo(selectedValue));
+            Assert.That(result.IsAnswered, Is.True);
+        }
+
+        [Test]
+        public void When_GetEntityDetails_maps_multi_option_question_Then_Answer_contains_selected_values()
+        {
+            //arrange
+            var questionId = Id.g1;
+            var userId = Id.g9;
+            var selectedValues = new[] { 1, 3 };
+            var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                Create.Entity.MultipleOptionsQuestion(questionId, textAnswers: new[]
+                {
+                    Create.Entity.Option(1, "Option 1"),
+                    Create.Entity.Option(2, "Option 2"),
+                    Create.Entity.Option(3, "Option 3"),
+                }));
+            var questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument);
+            var interview = Abc.SetUp.StatefulInterview(questionnaireDocument);
+            interview.AnswerMultipleOptionsQuestion(userId, questionId, RosterVector.Empty, DateTimeOffset.UtcNow, selectedValues);
+            var factory = this.CreateWebInterviewInterviewEntityFactory();
+
+            //act
+            var result = factory.GetEntityDetails(Identity.Create(questionId, RosterVector.Empty).ToString(), interview, questionnaire, false)
+                as InterviewMutliOptionQuestion;
+
+            //assert
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.Answer, Is.EquivalentTo(selectedValues));
+            Assert.That(result.IsAnswered, Is.True);
+        }
+
+        [Test]
+        public void When_GetEntityDetails_maps_yesno_question_Then_Answer_contains_yes_no_values()
+        {
+            //arrange
+            var questionId = Id.g1;
+            var userId = Id.g9;
+            var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                Create.Entity.MultipleOptionsQuestion(questionId, isYesNo: true, textAnswers: new[]
+                {
+                    Create.Entity.Option(1, "Option 1"),
+                    Create.Entity.Option(2, "Option 2"),
+                }));
+            var questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument);
+            var interview = Abc.SetUp.StatefulInterview(questionnaireDocument);
+            interview.AnswerYesNoQuestion(new WB.Core.SharedKernels.DataCollection.Commands.Interview.AnswerYesNoQuestion(
+                interview.Id, userId, questionId, RosterVector.Empty,
+                new[]
+                {
+                    new WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos.AnsweredYesNoOption(1, true),
+                    new WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos.AnsweredYesNoOption(2, false),
+                }));
+            var factory = this.CreateWebInterviewInterviewEntityFactory();
+
+            //act
+            var result = factory.GetEntityDetails(Identity.Create(questionId, RosterVector.Empty).ToString(), interview, questionnaire, false)
+                as InterviewYesNoQuestion;
+
+            //assert
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.Answer, Has.Length.EqualTo(2));
+            Assert.That(result.Answer.Single(a => a.Value == 1).Yes, Is.True);
+            Assert.That(result.Answer.Single(a => a.Value == 2).Yes, Is.False);
+            Assert.That(result.IsAnswered, Is.True);
+        }
+
+        [Test]
+        public void When_GetEntityDetails_maps_textlist_question_Then_Rows_contain_answers()
+        {
+            //arrange
+            var questionId = Id.g1;
+            var userId = Id.g9;
+            var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                Create.Entity.TextListQuestion(questionId));
+            var questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument);
+            var interview = Abc.SetUp.StatefulInterview(questionnaireDocument);
+            interview.AnswerTextListQuestion(userId, questionId, RosterVector.Empty, DateTimeOffset.UtcNow,
+                new[] { new Tuple<decimal, string>(1, "Row One"), new Tuple<decimal, string>(2, "Row Two") });
+            var factory = this.CreateWebInterviewInterviewEntityFactory();
+
+            //act
+            var result = factory.GetEntityDetails(Identity.Create(questionId, RosterVector.Empty).ToString(), interview, questionnaire, false)
+                as InterviewTextListQuestion;
+
+            //assert
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.Rows, Has.Count.EqualTo(2));
+            Assert.That(result.Rows[0].Text, Is.EqualTo("Row One"));
+            Assert.That(result.Rows[1].Text, Is.EqualTo("Row Two"));
+            Assert.That(result.IsAnswered, Is.True);
+        }
+
+        [Test]
+        public void When_GetEntityDetails_maps_gps_question_Then_Answer_contains_coordinates()
+        {
+            //arrange
+            var questionId = Id.g1;
+            var userId = Id.g9;
+            const double latitude = 51.5074;
+            const double longitude = -0.1278;
+            const double accuracy = 5.0;
+            var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                Create.Entity.GpsCoordinateQuestion(questionId: questionId));
+            var questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument);
+            var interview = Abc.SetUp.StatefulInterview(questionnaireDocument);
+            interview.AnswerGeoLocationQuestion(userId, questionId, RosterVector.Empty, DateTimeOffset.UtcNow,
+                latitude, longitude, accuracy, altitude: 0, timestamp: DateTimeOffset.UtcNow);
+            var factory = this.CreateWebInterviewInterviewEntityFactory();
+
+            //act
+            var result = factory.GetEntityDetails(Identity.Create(questionId, RosterVector.Empty).ToString(), interview, questionnaire, false)
+                as InterviewGpsQuestion;
+
+            //assert
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.Answer, Is.Not.Null);
+            Assert.That(result.Answer.Latitude, Is.EqualTo(latitude).Within(0.0001));
+            Assert.That(result.Answer.Longitude, Is.EqualTo(longitude).Within(0.0001));
+            Assert.That(result.IsAnswered, Is.True);
+        }
+
+        [Test]
+        public void When_GetEntityDetails_maps_qrbarcode_question_Then_Answer_is_correctly_mapped()
+        {
+            //arrange
+            var questionId = Id.g1;
+            var userId = Id.g9;
+            const string expectedAnswer = "BARCODE-12345";
+            var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                Create.Entity.QRBarcodeQuestion(questionId: questionId));
+            var questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument);
+            var interview = Abc.SetUp.StatefulInterview(questionnaireDocument);
+            interview.AnswerQRBarcodeQuestion(userId, questionId, RosterVector.Empty, DateTimeOffset.UtcNow, expectedAnswer);
+            var factory = this.CreateWebInterviewInterviewEntityFactory();
+
+            //act
+            var result = factory.GetEntityDetails(Identity.Create(questionId, RosterVector.Empty).ToString(), interview, questionnaire, false)
+                as InterviewBarcodeQuestion;
+
+            //assert
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.Answer, Is.EqualTo(expectedAnswer));
+            Assert.That(result.IsAnswered, Is.True);
+        }
+
+        [Test]
+        public void When_GetEntityDetails_maps_generic_question_fields_Then_Id_and_IsDisabled_are_correctly_mapped()
+        {
+            //arrange
+            var questionId = Id.g1;
+            var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                Create.Entity.TextQuestion(questionId));
+            var questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument);
+            var interview = Abc.SetUp.StatefulInterview(questionnaireDocument);
+            var factory = this.CreateWebInterviewInterviewEntityFactory();
+            var identity = Identity.Create(questionId, RosterVector.Empty);
+
+            //act
+            var result = factory.GetEntityDetails(identity.ToString(), interview, questionnaire, false);
+
+            //assert
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.Id, Is.EqualTo(identity.ToString()));
+            Assert.That(result.IsDisabled, Is.False);
+        }
+
+        [Test]
+        public void When_GetEntityDetails_maps_roster_Then_IsRoster_and_RosterTitle_are_correctly_mapped()
+        {
+            //arrange
+            var chapterId = Id.g1;
+            var rosterId = Id.g2;
+            var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(chapterId,
+                Create.Entity.Roster(rosterId: rosterId,
+                    fixedTitles: new[] { "Item 1" },
+                    rosterSizeSourceType: Main.Core.Entities.SubEntities.RosterSizeSourceType.FixedTitles));
+            var questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument);
+            var interview = Abc.SetUp.StatefulInterview(questionnaireDocument);
+            var factory = this.CreateWebInterviewInterviewEntityFactory();
+            var rosterIdentity = Identity.Create(rosterId, Create.RosterVector(0));
+
+            //act
+            var result = factory.GetEntityDetails(rosterIdentity.ToString(), interview, questionnaire, false)
+                as InterviewGroupOrRosterInstance;
+
+            //assert
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.IsRoster, Is.True);
+        }
+
+        [Test]
+        public void When_GetEntityDetails_maps_group_Then_IsRoster_is_false()
+        {
+            //arrange
+            var chapterId = Id.g1;
+            var groupId = Id.g2;
+            var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(chapterId,
+                Create.Entity.Group(groupId));
+            var questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument);
+            var interview = Abc.SetUp.StatefulInterview(questionnaireDocument);
+            var factory = this.CreateWebInterviewInterviewEntityFactory();
+
+            //act
+            var result = factory.GetEntityDetails(Identity.Create(groupId, RosterVector.Empty).ToString(), interview, questionnaire, false)
+                as InterviewGroupOrRosterInstance;
+
+            //assert
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.IsRoster, Is.False);
+        }
+
+        [Test]
+        public void When_GetEntityDetails_for_unanswered_text_question_Then_Answer_is_null_and_IsAnswered_is_false()
+        {
+            //arrange
+            var questionId = Id.g1;
+            var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                Create.Entity.TextQuestion(questionId));
+            var questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument);
+            var interview = Abc.SetUp.StatefulInterview(questionnaireDocument);
+            var factory = this.CreateWebInterviewInterviewEntityFactory();
+
+            //act
+            var result = factory.GetEntityDetails(Identity.Create(questionId, RosterVector.Empty).ToString(), interview, questionnaire, false)
+                as InterviewTextQuestion;
+
+            //assert
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.Answer, Is.Null);
+            Assert.That(result.IsAnswered, Is.False);
+        }
+
+        [Test]
+        public void When_GetEntityDetails_for_unanswered_integer_question_Then_Answer_is_null_and_IsAnswered_is_false()
+        {
+            //arrange
+            var questionId = Id.g1;
+            var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                Create.Entity.NumericIntegerQuestion(questionId));
+            var questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument);
+            var interview = Abc.SetUp.StatefulInterview(questionnaireDocument);
+            var factory = this.CreateWebInterviewInterviewEntityFactory();
+
+            //act
+            var result = factory.GetEntityDetails(Identity.Create(questionId, RosterVector.Empty).ToString(), interview, questionnaire, false)
+                as InterviewIntegerQuestion;
+
+            //assert
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.Answer, Is.Null);
+            Assert.That(result.IsAnswered, Is.False);
+        }
+
+        [Test]
+        public void When_GetEntityDetails_maps_disabled_question_Then_IsDisabled_is_true()
+        {
+            //arrange
+            var questionId = Id.g1;
+            var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                Create.Entity.TextQuestion(questionId));
+            var questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument);
+            var interview = Abc.SetUp.StatefulInterview(questionnaireDocument);
+            interview.Apply(Create.Event.QuestionsDisabled(new[] { Identity.Create(questionId, RosterVector.Empty) }));
+            var factory = this.CreateWebInterviewInterviewEntityFactory();
+
+            //act
+            var result = factory.GetEntityDetails(Identity.Create(questionId, RosterVector.Empty).ToString(), interview, questionnaire, false);
+
+            //assert
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.IsDisabled, Is.True);
+        }
+
+        [Test]
+        public void When_GetEntityDetails_maps_integer_question_with_useFormatting_Then_UseFormatting_is_correctly_mapped()
+        {
+            //arrange
+            var questionId = Id.g1;
+            var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                Create.Entity.NumericIntegerQuestion(questionId, useFormatting: true));
+            var questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument);
+            var interview = Abc.SetUp.StatefulInterview(questionnaireDocument);
+            var factory = this.CreateWebInterviewInterviewEntityFactory();
+
+            //act
+            var result = factory.GetEntityDetails(Identity.Create(questionId, RosterVector.Empty).ToString(), interview, questionnaire, false)
+                as InterviewIntegerQuestion;
+
+            //assert
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.UseFormatting, Is.True);
         }
 
         #endregion
