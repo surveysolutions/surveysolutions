@@ -12,6 +12,6 @@ namespace WB.UI.Designer.Services
         public int CodeTtlSeconds { get; set; } = 60;
 
         /// <summary>TTL for the delegated JWT issued to WebTester in minutes. Default: 10.</summary>
-        public int DelegatedJwtExpirationMinutes { get; set; } = 10;
+        public int DelegatedJwtExpirationMinutes { get; set; } = 480;
     }
 }
