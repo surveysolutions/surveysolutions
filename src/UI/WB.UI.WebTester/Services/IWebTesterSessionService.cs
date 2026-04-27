@@ -7,9 +7,9 @@ namespace WB.UI.WebTester.Services
     {
         /// <summary>
         /// Records that <paramref name="interviewId"/> (unique per run) is authorised in this
-        /// browser session and stores a reverse mapping
-        /// <c>questionnaireId → interviewId</c> so that routes which only carry
-        /// <paramref name="questionnaireId"/> (e.g. ScenariosProxy) can still find the right key.
+        /// browser session and stores bidirectional mappings:
+        /// <c>questionnaireId → interviewId</c> and <c>interviewId → questionnaireId</c>
+        /// so that routes carrying either identifier can resolve the other.
         /// </summary>
         void AuthorizeQuestionnaire(ISession session, Guid interviewId, Guid questionnaireId);
 
@@ -24,5 +24,11 @@ namespace WB.UI.WebTester.Services
         /// browser session, or <c>null</c> when no authorised run exists for that questionnaire.
         /// </summary>
         Guid? GetInterviewId(ISession session, Guid questionnaireId);
+
+        /// <summary>
+        /// Returns the <c>questionnaireId</c> stored for <paramref name="interviewId"/> in this
+        /// browser session, or <c>null</c> when no authorised run exists for that interview.
+        /// </summary>
+        Guid? GetQuestionnaireId(ISession session, Guid interviewId);
     }
 }

@@ -28,9 +28,7 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
         [HttpPost]
         public async Task<IActionResult> Post(Guid id, [FromBody]PostScenarioModel model)
         {
-            var tokenQuestionnaire = User.FindFirst(JwtTokenService.QuestionnaireIdClaimType);
-            if (tokenQuestionnaire == null || !Guid.TryParse(tokenQuestionnaire.Value, out var tokenQuestionnaireId)
-                || tokenQuestionnaireId != id)
+            if (!User.HasMatchingQuestionnaireId(id))
                 return Forbid();
 
             var existingScenario = await this.dbContext.Scenarios.FindAsync(model.ScenarioId);
@@ -59,9 +57,7 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
         [HttpGet]
         public async Task<IActionResult> Get(Guid id)
         {
-            var tokenQuestionnaire = User.FindFirst(JwtTokenService.QuestionnaireIdClaimType);
-            if (tokenQuestionnaire == null || !Guid.TryParse(tokenQuestionnaire.Value, out var tokenQuestionnaireId)
-                || tokenQuestionnaireId != id)
+            if (!User.HasMatchingQuestionnaireId(id))
                 return Forbid();
 
             var qId = id;
@@ -85,9 +81,7 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
         [HttpGet]
         public async Task<IActionResult> GetForWebTester(Guid questionnaireId, int scenarioId)
         {
-            var tokenQuestionnaire = User.FindFirst(JwtTokenService.QuestionnaireIdClaimType);
-            if (tokenQuestionnaire == null || !Guid.TryParse(tokenQuestionnaire.Value, out var tokenQuestionnaireId)
-                || tokenQuestionnaireId != questionnaireId)
+            if (!User.HasMatchingQuestionnaireId(questionnaireId))
                 return Forbid();
 
             StoredScenario? scenario = await this.dbContext.Scenarios.FindAsync(scenarioId);

@@ -53,20 +53,11 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
             this.serializer = serializer;
         }
 
-        private Guid? GetQuestionnaireIdFromToken()
-        {
-            var claim = User.FindFirst(JwtTokenService.QuestionnaireIdClaimType);
-            if (claim == null || !Guid.TryParse(claim.Value, out var questionnaireId))
-                return null;
-            return questionnaireId;
-        }
-
         [Route("{questionnaireId:Guid}/info")]
         [HttpGet]
         public IActionResult Info(Guid questionnaireId)
         {
-            var tokenQuestionnaireId = GetQuestionnaireIdFromToken();
-            if (tokenQuestionnaireId == null || tokenQuestionnaireId.Value != questionnaireId)
+            if (!User.HasMatchingQuestionnaireId(questionnaireId))
                 return Forbid();
 
             var questionnaireView = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(questionnaireId));
@@ -86,8 +77,7 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
         [HttpGet]
         public IActionResult Settings(Guid questionnaireId)
         {
-            var tokenQuestionnaireId = GetQuestionnaireIdFromToken();
-            if (tokenQuestionnaireId == null || tokenQuestionnaireId.Value != questionnaireId)
+            if (!User.HasMatchingQuestionnaireId(questionnaireId))
                 return Forbid();
             
             var anonymousQuestionnaire = this.designerDbContext.AnonymousQuestionnaires.FirstOrDefault(a =>
@@ -103,8 +93,7 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
         [HttpGet]
         public IActionResult QuestionnaireAsync(Guid questionnaireId)
         {
-            var tokenQuestionnaireId = GetQuestionnaireIdFromToken();
-            if (tokenQuestionnaireId == null || tokenQuestionnaireId.Value != questionnaireId)
+            if (!User.HasMatchingQuestionnaireId(questionnaireId))
                 return Forbid();
 
             try
@@ -134,8 +123,7 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
         [HttpGet]
         public IActionResult AttachmentContentAsync(Guid questionnaireId, string attachmentContentId)
         {
-            var tokenQuestionnaireId = GetQuestionnaireIdFromToken();
-            if (tokenQuestionnaireId == null || tokenQuestionnaireId.Value != questionnaireId)
+            if (!User.HasMatchingQuestionnaireId(questionnaireId))
                 return Forbid();
 
             var qId = GetOriginalQuestionnaireId(questionnaireId);
@@ -170,8 +158,7 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
         [HttpGet]
         public IActionResult TranslationsAsync(Guid questionnaireId)
         {
-            var tokenQuestionnaireId = GetQuestionnaireIdFromToken();
-            if (tokenQuestionnaireId == null || tokenQuestionnaireId.Value != questionnaireId)
+            if (!User.HasMatchingQuestionnaireId(questionnaireId))
                 return Forbid();
 
             var qId = GetOriginalQuestionnaireId(questionnaireId);
@@ -199,8 +186,7 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
         [HttpGet]
         public IActionResult CategoriesAsync(Guid questionnaireId)
         {
-            var tokenQuestionnaireId = GetQuestionnaireIdFromToken();
-            if (tokenQuestionnaireId == null || tokenQuestionnaireId.Value != questionnaireId)
+            if (!User.HasMatchingQuestionnaireId(questionnaireId))
                 return Forbid();
 
             var qId = GetOriginalQuestionnaireId(questionnaireId);

@@ -304,7 +304,7 @@ namespace WB.UI.WebTester.Controllers
                 $"{designerUrl}/WebTesterReload/Index/{interview.QuestionnaireIdentity.QuestionnaireId}?interviewId={id}";
 
             var saveScenarioDesignerUrl = questionnaire.CanSaveScenario
-                ? Url.Content($"~/api/ScenariosProxy/{interview.QuestionnaireIdentity.QuestionnaireId}")
+                ? Url.Content($"~/api/ScenariosProxy/{id}")
                 : null;
                 
             var interviewPageModel = new InterviewPageModel
