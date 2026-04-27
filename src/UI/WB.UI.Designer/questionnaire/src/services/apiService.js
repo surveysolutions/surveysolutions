@@ -264,8 +264,9 @@ function processResponseErrorOrThrow(errorResp) {
     }
 
     if (errorResp.response.status === 401) {
-        window.location = loginUrl;
-        throw errorResp;
+        const returnUrl = encodeURIComponent(window.location.pathname + window.location.search);
+        window.location.replace(`${loginUrl}?returnUrl=${returnUrl}`);
+        return new Promise(() => {});
     }
 
     if (
