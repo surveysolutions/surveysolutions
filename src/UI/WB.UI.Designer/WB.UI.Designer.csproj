@@ -42,6 +42,7 @@
     <PackageReference Include="SkiaSharp.NativeAssets.Linux.NoDependencies" Version="3.116.1" />
     <PackageReference Include="SkiaSharp.QrCode" Version="0.7.0" />
     <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.20071.2" />
+    <PackageReference Include="System.Drawing.Common" Version="9.0.4" />
     <PackageReference Include="FluentMigrator.Runner" Version="7.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="9.0.5" />
