@@ -200,7 +200,7 @@ export default {
                     const key = e.key?.toLowerCase()
                     if (key === 'b')
                         e.preventDefault()
-                    else if (key === 'i' && questionnaire.webTestAvailable && questionnaire.questionnaireRevision === null)
+                    else if (key === 'i' && questionnaire.value?.webTestAvailable && questionnaire.value?.questionnaireRevision === null)
                         e.preventDefault()
                 }
             },
