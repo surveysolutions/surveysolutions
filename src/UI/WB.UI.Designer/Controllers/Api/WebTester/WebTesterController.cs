@@ -85,7 +85,7 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
 
             return Ok(new QuestionnaireSettings
             {
-                IsAnonymousMode = anonymousQuestionnaire == null
+                IsAnonymousMode = anonymousQuestionnaire != null
             });
         }
 
