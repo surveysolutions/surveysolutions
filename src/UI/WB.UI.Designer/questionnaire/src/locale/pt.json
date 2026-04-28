@@ -383,6 +383,7 @@
     "PleaseWait": "Por favor, aguarde...",
     "EntryWasNotFound": "A entrada não foi encontrada no questionário, por favor selecione outra.",
     "RequestFailedUnexpectedly": "A solicitação falhou inesperadamente.",
+    "ApplicationNotAvailable": "Não é possível concluir a solicitação. A resposta recebida não parece ser proveniente do servidor do Survey Solutions.\nIsso geralmente é causado por um proxy de rede, firewall ou gateway de segurança interceptando a conexão.\nPor favor, verifique sua conexão de rede ou entre em contato com o suporte de TI.",
     "IncorrectRosterTitle": "Título da lista incorreto",
     "SelectedInvalidItem": "Item inválido selecionado. Corrija-o.",
     "SelectItemFromTheList": "Selecione um item da lista",
@@ -513,7 +514,8 @@
     "HelpCriticalityConditionMessage": "Esta mensagem é exibida quando a condição crítica avalia como \"Falso\" ou ocorre uma exceção durante a avaliação da expressão. A mensagem pode utilizar hiperlinks e substituição de texto.",
     "AttachmentSizeIsTooBig": "O tamanho do anexo é muito grande. Tamanho máximo: {{size}}",
     "SwitchTo": "Alterar para",
-    "SwitchToTranslationConfirm": "Alterar para mudará o idioma de exibição do questionário. A tradução deve incluir texto para todos os elementos."
+    "SwitchToTranslationConfirm": "Alterar para mudará o idioma de exibição do questionário. A tradução deve incluir texto para todos os elementos.",
+    "AIAssistant": "IA"
   },
   "AccountResources": {
     "AllRights": "Todos os direitos reservados.",
@@ -649,5 +651,35 @@
     "Classifications": "Classificações",
     "SaveAs": "Salvar como",
     "CloneDeletedWarning": "Você está criando uma cópia de um questionário excluído. Algumas partes podem ser perdidas."
+  },
+  "Assistant": {
+    "ClearHistory": "Limpar histórico",
+    "NotHelpful": "Desfazer",
+    "Unhelpful": "Não ajudou",
+    "Helpful": "Curtir",
+    "UnhelpfulCommentTitle": "Adicionar um comentário",
+    "UnhelpfulCommentPlaceholder": "Escreva um comentário curto (opcional)",
+    "UnhelpfulCommentHint": "O que estava errado nesta resposta?",
+    "Send": "Enviar",
+    "SendFeedback": "Enviar feedback",
+    "NotHelpfulCommentTitle": "Adicionar um comentário",
+    "NotHelpfulCommentPlaceholder": "Escreva um comentário curto (opcional)",
+    "Dislike": "Não curtir",
+    "NotUnhelpful": "Desfazer",
+    "TypeMessage": "Digite sua mensagem...",
+    "Title": "Assistente de IA",
+    "WelcomeMessage": "Inicie uma conversa com o assistente de IA. As suas mensagens podem ser utilizadas para melhorar o produto. Não partilhe informações sensíveis ou pessoais neste chat.",
+    "Disclaimer": "Este conteúdo foi produzido por um sistema de IA automatizado e não constitui informação autoritativa ou verificada. Pode conter erros ou omissões. Os utilizadores são responsáveis por rever, validar e exercer julgamento antes de usar.",
+    "DisclaimerLabel": "Conteúdo gerado por IA",
+    "ConnectionError": "Falha ao conectar ao assistente.",
+    "RateLimitExceeded": "Limite de solicitações excedido. Por favor, tente novamente mais tarde.",
+    "StopRequest": "Parar",
+    "Copy": "Copiar",
+    "CopyCode": "Copiar código",
+    "NotAuthorized": "Não autorizado.",
+    "InvalidRequest": "Requisição inválida. Por favor, verifique o formato da sua mensagem.",
+    "AccessDenied": "Acesso negado. Sua chave de API pode não ter as permissões necessárias.",
+    "ModelNotFound": "Modelo do assistente não encontrado. Por favor, verifique se você tem acesso ao modelo configurado.",
+    "ServiceUnavailable": "O serviço de assistente está temporariamente indisponível. Por favor, tente novamente mais tarde."
   }
 }

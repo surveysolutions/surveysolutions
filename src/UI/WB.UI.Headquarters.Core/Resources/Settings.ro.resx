@@ -132,6 +132,21 @@
   <data name="ExportEncryption_Title" xml:space="preserve">
     <value>Criptare export</value>
   </data>
+  <data name="GeographyExportFormat_Title" xml:space="preserve">
+    <value>Format de export geografic</value>
+  </data>
+  <data name="GeographyExportFormat_Description" xml:space="preserve">
+    <value>Selectați cum ar trebui să fie formatate răspunsurile pentru întrebările geografice.</value>
+  </data>
+  <data name="GeographyExportFormat_Wkt" xml:space="preserve">
+    <value>WKT (Well-Known Text)</value>
+  </data>
+  <data name="GeographyExportFormat_GeoJson" xml:space="preserve">
+    <value>GeoJSON</value>
+  </data>
+  <data name="GeographyExportFormat_ArrayOfCoordinates" xml:space="preserve">
+    <value>Șir de geometrie Survey Solutions</value>
+  </data>
   <data name="ExportEncryptionSettings" xml:space="preserve">
     <value>Exportați setările de criptare</value>
   </data>

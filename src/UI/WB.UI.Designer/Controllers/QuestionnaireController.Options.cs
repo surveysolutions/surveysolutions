@@ -19,7 +19,7 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.GenericSubdomains.Portable;
-using WB.UI.Designer.Code.Vue;
+using WB.UI.Designer.Controllers.Api.Designer;
 
 namespace WB.UI.Designer.Controllers
 {
@@ -287,6 +287,7 @@ namespace WB.UI.Designer.Controllers
         }
 
         [HttpPost]
+        [QuestionnairePermissions(true)]
         public async Task<IActionResult?> ApplyOptions(QuestionnaireRevision id, Guid entityId,
             bool isCascading, bool isCategory,
             [FromBody] UpdateCategoriesModel? categoriesModel)

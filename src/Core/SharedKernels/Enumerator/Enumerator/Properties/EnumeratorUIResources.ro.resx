@@ -952,4 +952,7 @@ Va apărea pe dispozitivul Anchetator după următoarea sincronizare </value>
   <data name="TransferringCalendarEvents" xml:space="preserve">
     <value>Transferarea evenimentelor calendar</value>
   </data>
+  <data name="CommunicationIntegrityFailed" xml:space="preserve">
+    <value>Răspunsul primit pare să nu provină de la serverul Survey Solutions. De obicei acest lucru este cauzat de un proxy de rețea, firewall sau un gateway de securitate care interceptează conexiunea. Vă rugăm să verificați conexiunea de rețea sau contactați asistența IT.</value>
+  </data>
   </root>

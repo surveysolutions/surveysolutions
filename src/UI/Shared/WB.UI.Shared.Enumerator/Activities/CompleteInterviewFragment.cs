@@ -23,6 +23,7 @@ namespace WB.UI.Shared.Enumerator.Activities
         private ViewPager2 viewPager;
         private ViewPager2.OnPageChangeCallback pageChangeCallback;
         private TabConfigurationStrategy tabConfigurationStrategy;
+        private TabLayoutMediator tabLayoutMediator;
 
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
@@ -39,11 +40,25 @@ namespace WB.UI.Shared.Enumerator.Activities
                 recyclerView.OverScrollMode = OverScrollMode.Never;
             }
 
-            SetupTabs();
+            SetupTabsIfNeeded();
             RegisterPageChangeCallback();
             viewPager.Post(RecalculateRecyclerViewHeight);
 
             return view;
+        }
+
+        public override void OnResume()
+        {
+            base.OnResume();
+            if (View == null || IsDetached)
+                return;
+            SetupTabsIfNeeded();
+        }
+
+        public override void OnDestroyView()
+        {
+            CleanupViewResources();
+            base.OnDestroyView();
         }
 
         private void RegisterPageChangeCallback()
@@ -170,41 +185,58 @@ namespace WB.UI.Shared.Enumerator.Activities
             }
         }
 
-        private void SetupTabs()
+        private void SetupTabsIfNeeded()
         {
-            var viewModel = ViewModel;
-            var tabsViewModels = viewModel.Tabs;
+            if (viewPager != null && viewPager.Adapter != null)
+                return;
+
+            TrySetupTabs();
+        }
+
+        private bool TrySetupTabs()
+        {
+            var currentViewPager = viewPager;
+            if (currentViewPager == null)
+                return false;
+
+            var tabsViewModels = ViewModel?.Tabs;
+            if (tabsViewModels == null)
+                return false;
             var adapter = new TabsPagerAdapter(this.Context, this.ChildFragmentManager, this.Lifecycle, tabsViewModels);
-            viewPager.Adapter = adapter;
+            currentViewPager.Adapter = adapter;
 
             tabConfigurationStrategy = new TabConfigurationStrategy(
                 (IMvxAndroidBindingContext)this.BindingContext, 
                 tabsViewModels,
                 UpdateTabIndicator,
-                () => viewPager.CurrentItem);
-            
-            var tabLayoutMediator = new TabLayoutMediator(tabLayout, viewPager, tabConfigurationStrategy);
+                () => currentViewPager.CurrentItem);
+             
+            tabLayoutMediator = new TabLayoutMediator(tabLayout, currentViewPager, tabConfigurationStrategy);
             tabLayoutMediator.Attach();
-            
-            tabConfigurationStrategy.AttachTabSelectionHandler(tabLayout, viewPager);
+             
+            tabConfigurationStrategy.AttachTabSelectionHandler(tabLayout, currentViewPager);
             
             int firstNonEmptyIndex = tabsViewModels.FindIndex(t => t.IsEnabled);
             if (firstNonEmptyIndex > 0)
             {
-                viewPager.Post(() =>
+                currentViewPager.Post(() =>
                 {
-                    if (firstNonEmptyIndex < viewModel.Tabs.Count)
-                    {
-                        viewPager.SetCurrentItem(firstNonEmptyIndex, false);
-                        UpdateTabIndicator();
-                        RecalculateRecyclerViewHeight();
-                    }
+                    if (View == null || IsDetached)
+                        return;
+                    if (firstNonEmptyIndex >= tabsViewModels.Count)
+                        return;
+
+                    currentViewPager.SetCurrentItem(firstNonEmptyIndex, false);
+                    UpdateTabIndicator();
+                    RecalculateRecyclerViewHeight();
                 });
             }
             else
             {
                 UpdateTabIndicator();
             }
+
+            return true;
         }
         
         private void UpdateTabIndicator()
@@ -343,16 +375,28 @@ namespace WB.UI.Shared.Enumerator.Activities
         {
             if (disposing)
             {
-                if (viewPager != null && pageChangeCallback != null)
-                {
-                    viewPager.UnregisterOnPageChangeCallback(pageChangeCallback);
-                    pageChangeCallback = null;
-                }
-                
-                tabConfigurationStrategy?.Dispose();
-                tabConfigurationStrategy = null;
+                CleanupViewResources();
             }
             base.Dispose(disposing);
+        }
+
+        private void CleanupViewResources()
+        {
+            if (viewPager != null)
+                viewPager.Adapter = null;
+
+            if (viewPager != null && pageChangeCallback != null)
+            {
+                viewPager.UnregisterOnPageChangeCallback(pageChangeCallback);
+                pageChangeCallback.Dispose();
+                pageChangeCallback = null;
+            }
+
+            tabLayoutMediator?.Dispose();
+            tabLayoutMediator = null;
+
+            tabConfigurationStrategy?.Dispose();
+            tabConfigurationStrategy = null;
         }
     }
 }

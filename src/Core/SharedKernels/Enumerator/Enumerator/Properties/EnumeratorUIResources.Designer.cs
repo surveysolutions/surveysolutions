@@ -1856,5 +1856,11 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
                 return ResourceManager.GetString("AssigmentMap_GeoTrackingReminder", resourceCulture);
             }
         }
+        
+        public static string CommunicationIntegrityFailed {
+            get {
+                return ResourceManager.GetString("CommunicationIntegrityFailed", resourceCulture);
+            }
+        }
     }
 }

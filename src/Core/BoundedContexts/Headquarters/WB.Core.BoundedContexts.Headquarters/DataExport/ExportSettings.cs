@@ -12,17 +12,20 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport
     {
         private readonly IPlainKeyValueStorage<ExportEncryptionSettings> appSettingsStorage;
         private readonly IPlainKeyValueStorage<ExportRetentionSettings> exportRetentionSettingsStorage;
+        private readonly IPlainKeyValueStorage<ExportGeographySettings> exportGeographySettingsStorage;
         private readonly IMemoryCache settingCache;
         private readonly string exportencryptionsettings = ExportEncryptionSettings.EncryptionSettingId;
 
         public ExportSettings(
             IPlainKeyValueStorage<ExportEncryptionSettings> appSettingsStorage,
             IPlainKeyValueStorage<ExportRetentionSettings> exportRetentionSettingsStorage,
+            IPlainKeyValueStorage<ExportGeographySettings> exportGeographySettingsStorage,
             IMemoryCache memoryCache)
         {
             this.appSettingsStorage = appSettingsStorage;
             this.settingCache = memoryCache;
             this.exportRetentionSettingsStorage = exportRetentionSettingsStorage;
+            this.exportGeographySettingsStorage = exportGeographySettingsStorage;
         }
 
         public bool EncryptionEnforced()
@@ -112,6 +115,26 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport
             this.exportRetentionSettingsStorage.Store(setting, ExportRetentionSettings.ExportRetentionSettingsKey);
             
             settingCache.Remove(ExportRetentionSettings.ExportRetentionSettingsKey);
+        }
+
+        public GeographyExportFormat GetGeographyExportFormat()
+        {
+            var setting = this.settingCache.GetOrCreate(ExportGeographySettings.ExportGeographySettingsKey, cache =>
+            {
+                cache.SlidingExpiration = TimeSpan.FromMinutes(5);
+                return this.exportGeographySettingsStorage.GetById(ExportGeographySettings.ExportGeographySettingsKey);
+            });
+
+            return setting?.Format ?? GeographyExportFormat.Wkt;
+        }
+
+        public void SetGeographyExportFormat(GeographyExportFormat format)
+        {
+            var setting = this.exportGeographySettingsStorage.GetById(ExportGeographySettings.ExportGeographySettingsKey)
+                          ?? new ExportGeographySettings();
+            setting.Format = format;
+            this.exportGeographySettingsStorage.Store(setting, ExportGeographySettings.ExportGeographySettingsKey);
+            settingCache.Remove(ExportGeographySettings.ExportGeographySettingsKey);
         }
     }
 }

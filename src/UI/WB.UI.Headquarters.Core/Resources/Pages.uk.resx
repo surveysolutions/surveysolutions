@@ -1257,6 +1257,9 @@
   <data name="MapList_Updated" xml:space="preserve">
       <value>Оновлено</value>
   </data>
+  <data name="MapList_HasDuplicateLabels" xml:space="preserve">
+      <value>Має дублікати міток</value>
+  </data>
   <data name="MapList_Upload" xml:space="preserve">
     <value>Завантажити .zip файл</value>
   </data>
