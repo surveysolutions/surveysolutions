@@ -86,15 +86,17 @@
         <v-card-actions class="pa-4">
             <div class="editor pseudo-form-control">
                 <v-textarea v-model="currentMessage" :placeholder="$t('Assistant.TypeMessage')" variant="plain"
-                    density="comfortable" hide-details @keydown.enter="handleEnter" :disabled="isLoading"
-                    class="flex-grow-1" maxlength="2000" rows="3">
+                    density="comfortable" :hide-details="!isTruncated"
+                    :error-messages="isTruncated ? [$t('Assistant.MessageTooLong')] : []"
+                    @keydown.enter="handleEnter" @paste="handlePaste" :disabled="isLoading"
+                    class="flex-grow-1" :maxlength="MAX_MESSAGE_LENGTH" rows="3">
                     <template #append>
                         <div @click.stop style="pointer-events: all;">
                             <v-btn v-if="isLoading" icon="mdi-stop-circle" variant="text" size="medium" color="error"
                                 @click.stop="stopRequest" :ripple="false" :disabled="false"
                                 :title="$t('Assistant.StopRequest')" />
                             <v-btn v-else icon="mdi-send" :ripple="false" variant="text" size="medium" color="primary"
-                                @click="sendMessage" :disabled="!currentMessage.trim()" :title="$t('Assistant.Send')" />
+                                @click="sendMessage" :disabled="!canSend" :title="$t('Assistant.Send')" />
                         </div>
                     </template>
                 </v-textarea>
@@ -125,6 +127,7 @@ import DOMPurify from 'dompurify';
 hljs.registerLanguage('csharp', csharp);
 
 const USER_STOPPED_REQUEST = 'User stopped the request';
+const MAX_MESSAGE_LENGTH = 2000;
 
 export default {
     name: 'ChatPanel',
@@ -135,6 +138,7 @@ export default {
         const messages = ref([]);
         const currentMessage = ref('');
         const isLoading = ref(false);
+        const isTruncated = ref(false);
         const messagesContainer = ref(null);
 
         const conversationId = ref(null);
@@ -173,8 +177,17 @@ export default {
                 messages.value = [];
                 currentMessage.value = '';
                 conversationId.value = null;
+                isTruncated.value = false;
             }
         });
+
+        watch(currentMessage, (newVal) => {
+            if (isTruncated.value && newVal.length < MAX_MESSAGE_LENGTH) {
+                isTruncated.value = false;
+            }
+        });
+
+        const canSend = computed(() => !!currentMessage.value.trim() && !isTruncated.value);
 
         const close = () => {
             chatStore.close();
@@ -184,9 +197,22 @@ export default {
             messages.value = [];
             currentMessage.value = '';
             conversationId.value = null;
+            isTruncated.value = false;
 
             if (typeof chatStore.clearHistory === 'function') {
                 chatStore.clearHistory();
+            }
+        };
+
+        const handlePaste = (event) => {
+            const pastedText = event.clipboardData?.getData('text') || '';
+            const textarea = event.target;
+            const selStart = typeof textarea.selectionStart === 'number' ? textarea.selectionStart : currentMessage.value.length;
+            const selEnd = typeof textarea.selectionEnd === 'number' ? textarea.selectionEnd : currentMessage.value.length;
+            const current = currentMessage.value;
+            const resultText = current.substring(0, selStart) + pastedText + current.substring(selEnd);
+            if (resultText.length > MAX_MESSAGE_LENGTH) {
+                isTruncated.value = true;
             }
         };
 
@@ -421,7 +447,7 @@ export default {
         };
 
         const sendMessage = async () => {
-            if (!currentMessage.value.trim()) return;
+            if (!canSend.value) return;
 
             // Add user message
             const userMessage = {
@@ -596,6 +622,9 @@ export default {
             messages,
             currentMessage,
             isLoading,
+            isTruncated,
+            canSend,
+            MAX_MESSAGE_LENGTH,
             messagesContainer,
             disclaimerRef,
             close,
@@ -606,6 +635,7 @@ export default {
             formattedContentMap,
             formatTime,
             handleCodeCopy,
+            handlePaste,
             stopRequest
         };
     }
