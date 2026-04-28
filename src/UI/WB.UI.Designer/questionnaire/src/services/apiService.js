@@ -52,7 +52,7 @@ function getImpl(url, queryParams, silent = false, responseAs = 'json') {
                     blockUI.stop();
                     progressStore.stop();
                 }
-                processResponseErrorOrThrow(error);
+                return processResponseErrorOrThrow(error);
             });
     }
 
@@ -73,7 +73,7 @@ function getImpl(url, queryParams, silent = false, responseAs = 'json') {
                 blockUI.stop();
                 progressStore.stop();
             }
-            processResponseErrorOrThrow(error);
+            return processResponseErrorOrThrow(error);
         });
 }
 
@@ -111,7 +111,7 @@ export function post(url, params) {
             blockUI.stop();
             progressStore.stop();
 
-            processResponseErrorOrThrow(error);
+            return processResponseErrorOrThrow(error);
         });
 }
 
@@ -135,7 +135,7 @@ export function patch(url, params) {
             blockUI.stop();
             progressStore.stop();
 
-            processResponseErrorOrThrow(error);
+            return processResponseErrorOrThrow(error);
         });
 }
 
@@ -159,7 +159,7 @@ export function put(url, params) {
             blockUI.stop();
             progressStore.stop();
 
-            processResponseErrorOrThrow(error);
+            return processResponseErrorOrThrow(error);
         });
 }
 
@@ -181,7 +181,7 @@ export function del(url) {
             blockUI.stop();
             progressStore.stop();
 
-            processResponseErrorOrThrow(error);
+            return processResponseErrorOrThrow(error);
         });
 }
 
@@ -224,7 +224,7 @@ export function upload(url, file, command, fileName) {
             blockUI.stop();
             progressStore.stop();
 
-            processResponseErrorOrThrow(error);
+            return processResponseErrorOrThrow(error);
         });
 }
 
