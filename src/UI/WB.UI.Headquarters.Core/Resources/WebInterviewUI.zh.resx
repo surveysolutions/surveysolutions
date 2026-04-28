@@ -124,7 +124,7 @@
     <value>答案未保存</value>
   </data>
   <data name="CommunicationError" xml:space="preserve">
-    <value>Communication error</value>
+    <value>通信错误</value>
   </data>
   <data name="AreaRecord" xml:space="preserve">
     <value>编辑区域</value>

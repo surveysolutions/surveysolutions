@@ -141,9 +141,13 @@ const httpPlugin = {
                         },
                     })
                 } catch (err) {
-                    dispatch('setAnswerAsNotSaved', { id, message: $t('WebInterviewUI.CommunicationError') })
+                    if (state.webinterview.entityDetails[id] != undefined) {
+                        dispatch('setAnswerAsNotSaved', { id, message: $t('WebInterviewUI.CommunicationError') })
+                    }
                 } finally {
-                    dispatch('uploadProgress', { id, now: 0, total: 0 })
+                    if (state.webinterview.entityDetails[id] != undefined) {
+                        dispatch('uploadProgress', { id, now: 0, total: 0 })
+                    }
                 }
             },
         }
