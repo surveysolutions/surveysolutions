@@ -680,6 +680,7 @@
     "InvalidRequest": "Invalid request. Please check your message format.",
     "AccessDenied": "Access denied. Your API key may not have the required permissions.",
     "ModelNotFound": "Assistant model not found. Please check if you have access to the configured model.",
-    "ServiceUnavailable": "Assistant service is temporarily unavailable. Please try again later."
+    "ServiceUnavailable": "Assistant service is temporarily unavailable. Please try again later.",
+    "MessageTooLong": "Message is too long and was truncated. Please shorten it before sending."
   }
 }
