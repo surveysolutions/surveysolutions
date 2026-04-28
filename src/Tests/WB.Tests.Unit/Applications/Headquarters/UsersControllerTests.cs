@@ -16,6 +16,7 @@ using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Users.UserProfile;
+using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.Workspaces;
 using WB.Core.GenericSubdomains.Portable;
@@ -1135,6 +1136,77 @@ namespace WB.Tests.Unit.Applications.Headquarters
 
         #endregion
 
+        #region Manage Tests
+
+        [Test]
+        public async Task Manage_WhenInterviewerViewsOwnProfile_AndProfileSettingsIsNull_ShouldReturnForbid()
+        {
+            // Regression test: interviewer accessing /users/Manage where profileSettings.GetById returns null
+            // (after the fix, the AppSetting fallback reads from ws_primary which may have no row;
+            // before the fix, the workspaces schema had no profilesettings table and threw an exception → 500).
+            var userId = Guid.NewGuid();
+
+            var user = Mock.Of<HqUser>(u => u.Id == userId);
+            var authorizedUser = Mock.Of<IAuthorizedUser>(u => u.Id == userId && u.IsInterviewer == true);
+            var profileSettingsStorage = Mock.Of<IPlainKeyValueStorage<ProfileSettings>>(
+                s => s.GetById(AppSetting.ProfileSettings) == null);
+
+            var userStore = CreateUserManagerMockForManage(user, userId);
+            var userManager = CreateHqUserManager(userStore);
+            var controller = CreateControllerForManage(
+                userManager: userManager,
+                authorizedUser: authorizedUser,
+                profileSettingsStorage: profileSettingsStorage);
+
+            var result = await controller.Manage();
+
+            Assert.That(result, Is.InstanceOf<ForbidResult>());
+        }
+
+        [Test]
+        public async Task Manage_WhenInterviewerViewsOwnProfile_AndProfileUpdateNotAllowed_ShouldReturnForbid()
+        {
+            var userId = Guid.NewGuid();
+
+            var user = Mock.Of<HqUser>(u => u.Id == userId);
+            var authorizedUser = Mock.Of<IAuthorizedUser>(u => u.Id == userId && u.IsInterviewer == true);
+            var profileSettingsStorage = Mock.Of<IPlainKeyValueStorage<ProfileSettings>>(
+                s => s.GetById(AppSetting.ProfileSettings) == new ProfileSettings { AllowInterviewerUpdateProfile = false });
+
+            var userStore = CreateUserManagerMockForManage(user, userId);
+            var userManager = CreateHqUserManager(userStore);
+            var controller = CreateControllerForManage(
+                userManager: userManager,
+                authorizedUser: authorizedUser,
+                profileSettingsStorage: profileSettingsStorage);
+
+            var result = await controller.Manage();
+
+            Assert.That(result, Is.InstanceOf<ForbidResult>());
+        }
+
+        [Test]
+        public async Task Manage_WhenInterviewerViewsAnotherUsersProfile_ShouldReturnForbid()
+        {
+            var userId = Guid.NewGuid();
+            var otherUserId = Guid.NewGuid();
+
+            var otherUser = Mock.Of<HqUser>(u => u.Id == otherUserId);
+            var authorizedUser = Mock.Of<IAuthorizedUser>(u => u.Id == userId && u.IsInterviewer == true);
+
+            var userStore = CreateUserManagerMockForManage(otherUser, otherUserId);
+            var userManager = CreateHqUserManager(userStore);
+            var controller = CreateControllerForManage(
+                userManager: userManager,
+                authorizedUser: authorizedUser);
+
+            var result = await controller.Manage(otherUserId);
+
+            Assert.That(result, Is.InstanceOf<ForbidResult>());
+        }
+
+        #endregion
+
         #region Helper Methods for CreateUser Tests
 
         private UsersController CreateControllerForCreateUser(
@@ -1211,6 +1283,42 @@ namespace WB.Tests.Unit.Applications.Headquarters
             storage.Setup(s => s.GetByIdAsync(workspaceId))
                 .ReturnsAsync(workspace);
             return storage.Object;
+        }
+
+        #endregion
+
+        #region Helper Methods for Manage Tests
+
+        private UsersController CreateControllerForManage(
+            HqUserManager userManager = null,
+            IAuthorizedUser authorizedUser = null,
+            IPlainKeyValueStorage<ProfileSettings> profileSettingsStorage = null)
+        {
+            var controller = new UsersController(
+                authorizedUser ?? Mock.Of<IAuthorizedUser>(),
+                userManager ?? CreateHqUserManager(CreateUserManagerMockForManage(null, Guid.Empty)),
+                profileSettingsStorage ?? Mock.Of<IPlainKeyValueStorage<ProfileSettings>>(),
+                Mock.Of<UrlEncoder>(),
+                Mock.Of<IOptions<HeadquartersConfig>>(),
+                Mock.Of<IWorkspacesStorage>(),
+                Mock.Of<ITokenProvider>(),
+                new UsersManagementSettings(null));
+            controller.ControllerContext.HttpContext = Mock.Of<HttpContext>(c =>
+                c.Session == new MockHttpSession()
+                && c.Request == Mock.Of<HttpRequest>(r => r.Cookies == Mock.Of<IRequestCookieCollection>())
+                && c.Response == Mock.Of<HttpResponse>(r => r.Cookies == Mock.Of<IResponseCookies>()));
+            controller.Url = Mock.Of<IUrlHelper>(x => x.Action(It.IsAny<UrlActionContext>()) == "url");
+            return controller;
+        }
+
+        private IUserStore<HqUser> CreateUserManagerMockForManage(HqUser user, Guid userId)
+        {
+            var userStore = new Mock<IUserStore<HqUser>>();
+            userStore.As<IUserPasswordStore<HqUser>>();
+            userStore.Setup(u => u.FindByIdAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync((string id, CancellationToken _) =>
+                    user != null && id == userId.FormatGuid() ? user : null);
+            return userStore.Object;
         }
 
         #endregion
