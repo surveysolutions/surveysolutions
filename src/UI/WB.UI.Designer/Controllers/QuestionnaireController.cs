@@ -538,7 +538,13 @@ namespace WB.UI.Designer.Controllers
 
                 if (requestAborted.IsCancellationRequested)
                 {
-                    // Client disconnected; no need to log.
+                    // Client disconnected; no need to log, but still observe any eventual fault
+                    // so the task does not become an unobserved task exception.
+                    _ = sendTask.ContinueWith(
+                        t => _ = t.Exception,
+                        CancellationToken.None,
+                        TaskContinuationOptions.OnlyOnFaulted | TaskContinuationOptions.ExecuteSynchronously,
+                        TaskScheduler.Default);
                     return;
                 }
 
