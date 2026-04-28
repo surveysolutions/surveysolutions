@@ -680,6 +680,7 @@
     "InvalidRequest": "Neplatný požadavek. Zkontrolujte formát zprávy.",
     "AccessDenied": "Přístup odepřen. Váš API klíč nemusí mít potřebná oprávnění.",
     "ModelNotFound": "Model asistenta nebyl nalezen. Zkontrolujte, zda máte přístup ke konfigurovanému modelu.",
-    "ServiceUnavailable": "Služba asistenta je dočasně nedostupná. Zkuste to prosím znovu později."
+    "ServiceUnavailable": "Služba asistenta je dočasně nedostupná. Zkuste to prosím znovu později.",
+    "MessageTooLong": "Zpráva je příliš dlouhá a byla zkrácena. Před odesláním ji prosím zkraťte."
   }
 }
