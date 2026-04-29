@@ -680,6 +680,7 @@
     "InvalidRequest": "Requisição inválida. Por favor, verifique o formato da sua mensagem.",
     "AccessDenied": "Acesso negado. Sua chave de API pode não ter as permissões necessárias.",
     "ModelNotFound": "Modelo do assistente não encontrado. Por favor, verifique se você tem acesso ao modelo configurado.",
-    "ServiceUnavailable": "O serviço de assistente está temporariamente indisponível. Por favor, tente novamente mais tarde."
+    "ServiceUnavailable": "O serviço de assistente está temporariamente indisponível. Por favor, tente novamente mais tarde.",
+    "MessageTooLong": "A mensagem é muito longa e foi truncada. Por favor, encurte-a antes de enviar."
   }
 }
