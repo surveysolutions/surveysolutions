@@ -515,11 +515,7 @@
     "AttachmentSizeIsTooBig": "O tamanho do anexo é muito grande. Tamanho máximo: {{size}}",
     "SwitchTo": "Alterar para",
     "SwitchToTranslationConfirm": "Alterar para mudará o idioma de exibição do questionário. A tradução deve incluir texto para todos os elementos.",
-    "AIAssistant": "IA",
-    "SideBarAttachmentsUploadZip": "Upload ZIP",
-    "SideBarAttachmentsZipProcessed": "{{count}} image(s) uploaded from ZIP file",
-    "SideBarAttachmentsZipNoImages": "No supported images found in the ZIP file",
-    "SideBarAttachmentsZipOnly": "Only ZIP files are accepted for bulk image upload"
+    "AIAssistant": "IA"
   },
   "AccountResources": {
     "AllRights": "Todos os direitos reservados.",
