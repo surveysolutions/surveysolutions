@@ -135,19 +135,20 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
         private async Task StartEditingGeometry()
         {
+            var mapView = this.MapView;
+            var geometryEditor = mapView?.GeometryEditor;
+            var mapSpatialReference = mapView?.Map?.SpatialReference;
+
+            if (mapView == null || geometryEditor == null || mapSpatialReference == null)
+            {
+                logger.Warn("Unable to start geometry editor because MapView, GeometryEditor, or map SpatialReference is not initialized.");
+                return;
+            }
+
             this.IsEditing = true;
 
             try
             {
-                var mapView = this.MapView;
-                var geometryEditor = mapView?.GeometryEditor;
-                var mapSpatialReference = mapView?.Map?.SpatialReference;
-
-                if (mapView == null || geometryEditor == null || mapSpatialReference == null)
-                {
-                    logger.Warn("Unable to start geometry editor because MapView, GeometryEditor, or map SpatialReference is not initialized.");
-                    return;
-                }
 
                 geometryEditor.PropertyChanged += GeometryChangedHandler;
 
