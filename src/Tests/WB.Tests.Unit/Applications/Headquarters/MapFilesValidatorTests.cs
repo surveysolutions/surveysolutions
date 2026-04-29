@@ -130,7 +130,7 @@ public class MapFilesValidatorTests
                 {
                     IsShapeFile = false,
                     Name = longMapName,
-                    Files = new List<MapFile>() { MapFile(longMapName + ".tif") }
+                    Files = new List<MapFile>() { MapFile("map.tif") }
                 },
             }
         };
@@ -156,7 +156,7 @@ public class MapFilesValidatorTests
                 {
                     IsShapeFile = false,
                     Name = mapName,
-                    Files = new List<MapFile>() { MapFile(mapName + ".tif") }
+                    Files = new List<MapFile>() { MapFile("map.tif") }
                 },
             }
         };

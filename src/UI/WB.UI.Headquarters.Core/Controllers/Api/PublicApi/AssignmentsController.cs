@@ -469,7 +469,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             if (targetArea != null && targetArea.Length > MapFilesValidator.MapFileNameLengthLimit)
             {
                 return StatusCode(StatusCodes.Status406NotAcceptable,
-                    string.Format(Resources.Maps.MapFileNameTooLong, targetArea, MapFilesValidator.MapFileNameLengthLimit));
+                    string.Format(WB.UI.Headquarters.Resources.Maps.MapFileNameTooLong, targetArea, MapFilesValidator.MapFileNameLengthLimit));
             }
 
             commandService.Execute(

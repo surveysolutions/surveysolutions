@@ -168,4 +168,7 @@
   <data name="UploadMapsSummaryFormat" xml:space="preserve">
     <value>{0} harta u përpunuan, nga të cilat {1} skedarë të pavlefshëm hartash</value>
   </data>
+  <data name="MapFileNameTooLong" xml:space="preserve">
+    <value>Emri i skedarit '{0}' tejkalon gjatësinë maksimale të lejuar prej {1} karakteresh.</value>
+  </data>
 </root>
