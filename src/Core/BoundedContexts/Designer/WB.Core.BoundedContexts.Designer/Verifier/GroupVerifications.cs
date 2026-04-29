@@ -187,7 +187,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
         private static bool FlatModeGroupHasMoreThanAllowedEntities(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
             => group.DisplayMode == RosterDisplayMode.Flat 
-               && group.Children.Count(x => x is IStaticText || x is IQuestion) > MaxUIEntitiesInPlainModeGroup;
+               && group.Children.Count(x => x is IStaticText || (x is IQuestion q && q.QuestionScope != QuestionScope.Hidden)) > MaxUIEntitiesInPlainModeGroup;
 
         private static bool FlatModeGroupContainsNestedGroup(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
             => group.DisplayMode == RosterDisplayMode.Flat && group.Children.Any(composite =>
