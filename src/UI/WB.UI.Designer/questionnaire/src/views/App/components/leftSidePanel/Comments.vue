@@ -87,7 +87,9 @@ export default {
     },
     computed: {
         unresolvedCount() {
-            return this.commentThreads.reduce((sum, thread) => sum + thread.comments.length, 0);
+            return this.commentThreads.reduce(
+                (sum, thread) => sum + thread.comments.filter(c => !c.resolveDate).length, 0
+            );
         }
     },
     watch: {
