@@ -120,14 +120,14 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
             var eventType = @event.Payload.GetType();
             var eventSourceId = @event.EventSourceId.ToString("N");
 
-            List<IViewModelEventHandler> result = null;
+            HashSet<IViewModelEventHandler> result = null;
 
             // Always include non-entity-specific handlers (old behavior)
             if (this.eventTypes.TryGetValue(eventType, out var byInterview) &&
                 byInterview.TryGetValue(eventSourceId, out var globalHandlers) &&
                 globalHandlers.Count > 0)
             {
-                result = new List<IViewModelEventHandler>(globalHandlers);
+                result = new HashSet<IViewModelEventHandler>(globalHandlers);
             }
 
             // Additionally include entity-specific handlers for affected entities
@@ -140,9 +140,9 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
                     if (byEntity.TryGetValue(entityId.ToString(), out var entityHandlers) && entityHandlers.Count > 0)
                     {
                         if (result == null)
-                            result = new List<IViewModelEventHandler>(entityHandlers);
+                            result = new HashSet<IViewModelEventHandler>(entityHandlers);
                         else
-                            result.AddRange(entityHandlers);
+                            result.UnionWith(entityHandlers);
                     }
                 }
             }
