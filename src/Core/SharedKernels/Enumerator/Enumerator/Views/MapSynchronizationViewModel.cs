@@ -95,8 +95,16 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         private void CancelSynchronizaion()
         {
             this.IsSynchronizationInfoShowed = false;
-            if (this.synchronizationCancellationTokenSource != null && !this.synchronizationCancellationTokenSource.IsCancellationRequested)
-                this.synchronizationCancellationTokenSource.Cancel();
+            try
+            {
+                if (this.synchronizationCancellationTokenSource != null &&
+                    !this.synchronizationCancellationTokenSource.IsCancellationRequested)
+                    this.synchronizationCancellationTokenSource.Cancel();
+            }
+            catch (ObjectDisposedException)
+            {
+                // CTS was already disposed by the service after sync completed normally
+            }
         }
 
         public void Init()
@@ -138,6 +146,7 @@ namespace WB.Core.SharedKernels.Enumerator.Views
 
                 if (!syncProgressInfo.IsRunning)
                 {
+                    this.synchronizationCancellationTokenSource = null;
                     this.OnSyncCompleted();
                 }
             });

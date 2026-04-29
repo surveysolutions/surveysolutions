@@ -21,10 +21,26 @@ namespace WB.UI.Interviewer.Activities
         Exported = false)]
     public class MapsActivity : BaseActivity<MapsViewModel>, ISyncBgService<MapSyncProgressStatus>, ISyncServiceHost<MapDownloadBackgroundService>
     {
-        public ServiceBinder<MapDownloadBackgroundService> Binder { get; set; }
+        private ServiceBinder<MapDownloadBackgroundService> binder;
+        public ServiceBinder<MapDownloadBackgroundService> Binder
+        {
+            get => this.binder;
+            set
+            {
+                this.binder = value;
+                if (this.binder != null && this.pendingSyncRequest)
+                {
+                    this.pendingSyncRequest = false;
+                    this.StartService(new Intent(this, typeof(MapDownloadBackgroundService)));
+                    this.binder.GetService().SyncMaps();
+                    this.ViewModel?.Synchronization?.Init();
+                }
+            }
+        }
 
         private SyncServiceConnection<MapDownloadBackgroundService> serviceConnection;
         private bool isBound;
+        private bool pendingSyncRequest;
 
         protected override int ViewResourceId
         {
@@ -55,6 +71,7 @@ namespace WB.UI.Interviewer.Activities
         protected override void OnStop()
         {
             base.OnStop();
+            this.pendingSyncRequest = false;
             if (this.isBound)
             {
                 this.UnbindService(this.serviceConnection);
@@ -109,7 +126,11 @@ namespace WB.UI.Interviewer.Activities
 
         public void StartSync()
         {
-            if (this.Binder == null) return;
+            if (this.Binder == null)
+            {
+                this.pendingSyncRequest = true;
+                return;
+            }
             this.StartService(new Intent(this, typeof(MapDownloadBackgroundService)));
             this.Binder.GetService().SyncMaps();
         }
