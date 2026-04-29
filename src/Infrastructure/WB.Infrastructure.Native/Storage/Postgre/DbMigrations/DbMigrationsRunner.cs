@@ -83,7 +83,13 @@ namespace WB.Infrastructure.Native.Storage.Postgre.DbMigrations
             string schemaName, DbUpgradeSettings dbUpgradeSettings)
         {
             long maxAppVersion = GetMaxMigrationVersion(dbUpgradeSettings);
-            if (maxAppVersion == 0) return;
+            if (maxAppVersion == 0)
+            {
+                throw new InitializationException(Subsystem.Database,
+                    $"Unable to determine the maximum supported database migration version for schema '{schemaName}'. " +
+                    $"No migrations were discovered in assembly '{dbUpgradeSettings.MigrationsAssembly.FullName}' " +
+                    $"under namespace '{dbUpgradeSettings.MigrationsNamespace}'. Refusing to start because the database may have been migrated by a newer version of Survey Solutions.");
+            }
 
             using var connection = new NpgsqlConnection(connectionStringBuilder.ConnectionString);
             connection.Open();
