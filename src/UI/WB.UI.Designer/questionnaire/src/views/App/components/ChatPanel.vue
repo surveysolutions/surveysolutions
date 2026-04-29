@@ -211,9 +211,7 @@ export default {
             const selEnd = typeof textarea.selectionEnd === 'number' ? textarea.selectionEnd : currentMessage.value.length;
             const current = currentMessage.value;
             const resultText = current.substring(0, selStart) + pastedText + current.substring(selEnd);
-            if (resultText.length > MAX_MESSAGE_LENGTH) {
-                isTruncated.value = true;
-            }
+            isTruncated.value = resultText.length > MAX_MESSAGE_LENGTH;
         };
 
         const scrollToBottom = async () => {
