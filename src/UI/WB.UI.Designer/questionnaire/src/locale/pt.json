@@ -518,7 +518,8 @@
     "AIAssistant": "IA",
     "SideBarAttachmentsUploadZip": "Upload ZIP",
     "SideBarAttachmentsZipProcessed": "{{count}} image(s) uploaded from ZIP file",
-    "SideBarAttachmentsZipNoImages": "No supported images found in the ZIP file"
+    "SideBarAttachmentsZipNoImages": "No supported images found in the ZIP file",
+    "SideBarAttachmentsZipOnly": "Only ZIP files are accepted for bulk image upload"
   },
   "AccountResources": {
     "AllRights": "Todos os direitos reservados.",

@@ -107,6 +107,12 @@ export default {
                 return;
             }
 
+            if (!file.name.toLowerCase().endsWith('.zip')) {
+                notice(this.$t('QuestionnaireEditor.SideBarAttachmentsZipOnly'));
+                event.target.value = '';
+                return;
+            }
+
             try {
                 const result = await uploadZipAttachments(this.questionnaireId, file);
 
