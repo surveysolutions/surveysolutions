@@ -517,8 +517,34 @@ namespace WB.UI.Designer.Controllers
 
         private async Task TrySendAnonymousSharingEmailAsync(Guid id, Guid anonymousQuestionnaireId, QuestionnaireView? questionnaireView)
         {
+            // Resolve all request-scoped data eagerly before launching the email task.
+            // This ensures the background task does not access HttpContext or request-scoped
+            // services after the action returns (e.g. on timeout).
+            var user = await this.users.GetUserAsync(User);
+            if (user?.Email == null)
+                return;
+
+            questionnaireView ??= GetQuestionnaireView(id);
+            if (questionnaireView == null)
+            {
+                logger.LogWarning("Anonymous sharing email skipped: questionnaire {QuestionnaireId} not found", id);
+                return;
+            }
+
+            var userName = User.GetUserName();
+            var questionnaireTitle = questionnaireView.Title;
+            var sharingLink = Url.Action("Details", "Q", new { id = anonymousQuestionnaireId }, Request.Scheme);
+            if (sharingLink == null)
+            {
+                logger.LogWarning("Anonymous sharing email skipped: could not generate sharing link for questionnaire {QuestionnaireId}", id);
+                return;
+            }
+
             var requestAborted = HttpContext.RequestAborted;
-            var sendTask = SendAnonymousSharingEmailAsync(id, anonymousQuestionnaireId, questionnaireView);
+            // Only Razor rendering and SMTP send are potentially long-running and are launched
+            // as a timed task. They do not use request-scoped services: ViewRenderService
+            // creates its own DefaultHttpContext, and MailSender uses only singleton options.
+            var sendTask = SendEmailAsync(user.Email, userName, sharingLink, questionnaireTitle);
 
             try
             {
@@ -573,34 +599,11 @@ namespace WB.UI.Designer.Controllers
             }
         }
 
-        private async Task SendAnonymousSharingEmailAsync(Guid id, Guid anonymousQuestionnaireId, QuestionnaireView? questionnaireView)
+        private async Task SendEmailAsync(string userEmail, string userName, string sharingLink, string questionnaireTitle)
         {
-            var user = await this.users.GetUserAsync(User);
-            if(user?.Email == null)
-                return;
-            
-            questionnaireView ??= GetQuestionnaireView(id);
-            if (questionnaireView == null)
-            {
-                logger.LogWarning("Anonymous sharing email skipped: questionnaire {QuestionnaireId} not found", id);
-                return;
-            }
-            
-            var userName = User.GetUserName();
-            var questionnaire = questionnaireView.Title;
-            var sharingLink = Url.Action("Details", "Q", new { id = anonymousQuestionnaireId }, Request.Scheme);
-            if (sharingLink == null)
-            {
-                logger.LogWarning("Anonymous sharing email skipped: could not generate sharing link for questionnaire {QuestionnaireId}", id);
-                return;
-            }
-
-            var model = new AnonymousSharingEmailModel(userName, sharingLink, questionnaire);
-
+            var model = new AnonymousSharingEmailModel(userName, sharingLink, questionnaireTitle);
             var messageBody = await viewRenderService.RenderToStringAsync("Emails/AnonymousSharingEmail", model);
-
-            
-            await emailSender.SendEmailAsync(user.Email,
+            await emailSender.SendEmailAsync(userEmail,
                 NotificationResources.SystemMailer_AnonymousSharingEmail_Subject,
                 messageBody);
         }
