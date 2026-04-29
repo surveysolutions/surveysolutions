@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Main.Core.Documents;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -23,6 +25,7 @@ using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Questionnaire.Categories;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.UI.Designer.Code.Implementation;
 using WB.UI.Designer.Controllers.Api.Designer;
 using WB.UI.Shared.Web.CommandDeserialization;
@@ -43,7 +46,8 @@ namespace WB.Tests.Unit.Designer.Api.Designer
             IAttachmentService attachmentService = null,
             IDesignerTranslationService translationsService = null,
             IReusableCategoriesService reusableCategoriesService = null,
-            IFileSystemAccessor fileSystemAccessor = null)
+            IFileSystemAccessor fileSystemAccessor = null,
+            IDesignerQuestionnaireStorage questionnaireStorage = null)
         {
             var controller = new CommandController(
                 commandService ?? Mock.Of<ICommandService>(),
@@ -54,7 +58,8 @@ namespace WB.Tests.Unit.Designer.Api.Designer
                 attachmentService ?? Mock.Of<IAttachmentService>(),
                 translationsService ?? Mock.Of<IDesignerTranslationService>(),
                 reusableCategoriesService ?? Mock.Of<IReusableCategoriesService>(),
-                fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>());
+                fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
+                questionnaireStorage ?? Mock.Of<IDesignerQuestionnaireStorage>());
 
             controller.ControllerContext = new ControllerContext
             {
@@ -773,10 +778,325 @@ namespace WB.Tests.Unit.Designer.Api.Designer
         }
 
         #endregion
+
+        #region UploadAttachmentsFromZip
+
+        [Test]
+        public async Task UploadAttachmentsFromZip_null_file_returns_406()
+        {
+            var controller = CreateController();
+            var model = new CommandController.ZipAttachmentUploadModel
+            {
+                File = null,
+                QuestionnaireId = Guid.NewGuid()
+            };
+
+            var result = await controller.UploadAttachmentsFromZip(model);
+
+            Assert.That(StatusCodeOf(result), Is.EqualTo((int)HttpStatusCode.NotAcceptable));
+        }
+
+        [Test]
+        public async Task UploadAttachmentsFromZip_non_zip_file_returns_406()
+        {
+            var controller = CreateController();
+            var mockFile = CreateMockFormFile("images.tar.gz", "application/gzip");
+            var model = new CommandController.ZipAttachmentUploadModel
+            {
+                File = mockFile.Object,
+                QuestionnaireId = Guid.NewGuid()
+            };
+
+            var result = await controller.UploadAttachmentsFromZip(model);
+
+            Assert.That(StatusCodeOf(result), Is.EqualTo((int)HttpStatusCode.NotAcceptable));
+        }
+
+        [Test]
+        public async Task UploadAttachmentsFromZip_questionnaire_not_found_returns_404()
+        {
+            var questionnaireId = Guid.NewGuid();
+            var questionnaireStorage = new Mock<IDesignerQuestionnaireStorage>();
+            questionnaireStorage.Setup(s => s.Get(questionnaireId)).Returns((QuestionnaireDocument)null);
+
+            var controller = CreateController(questionnaireStorage: questionnaireStorage.Object);
+            var zipFile = CreateMockZipFormFile("archive.zip", new[] { ("image.png", new byte[] { 1, 2, 3 }) });
+            var model = new CommandController.ZipAttachmentUploadModel
+            {
+                File = zipFile,
+                QuestionnaireId = questionnaireId
+            };
+
+            var result = await controller.UploadAttachmentsFromZip(model);
+
+            Assert.That(result, Is.InstanceOf<NotFoundResult>());
+        }
+
+        [Test]
+        public async Task UploadAttachmentsFromZip_with_valid_image_creates_attachment_and_returns_count()
+        {
+            var questionnaireId = Guid.NewGuid();
+            var questionnaire = new QuestionnaireDocument
+            {
+                PublicKey = questionnaireId,
+                Attachments = new List<Attachment>()
+            };
+
+            var questionnaireStorage = new Mock<IDesignerQuestionnaireStorage>();
+            questionnaireStorage.Setup(s => s.Get(questionnaireId)).Returns(questionnaire);
+
+            var attachmentService = new Mock<IAttachmentService>();
+            attachmentService.Setup(s => s.CreateAttachmentContentId(It.IsAny<byte[]>())).Returns("content-id-123");
+
+            var imageBytes = CreateMinimalPngBytes();
+            var zipFile = CreateMockZipFormFile("archive.zip", new[] { ("photo.png", imageBytes) });
+
+            var controller = CreateController(
+                questionnaireStorage: questionnaireStorage.Object,
+                attachmentService: attachmentService.Object);
+
+            var model = new CommandController.ZipAttachmentUploadModel
+            {
+                File = zipFile,
+                QuestionnaireId = questionnaireId
+            };
+
+            var result = await controller.UploadAttachmentsFromZip(model);
+
+            Assert.That(result, Is.InstanceOf<OkObjectResult>());
+            var value = ((OkObjectResult)result).Value!;
+            var processedCount = (int)value.GetType().GetProperty("processedCount")!.GetValue(value)!;
+            Assert.That(processedCount, Is.EqualTo(1));
+
+            attachmentService.Verify(s =>
+                s.SaveContent("content-id-123", "image/png", It.IsAny<byte[]>()), Times.Once);
+            attachmentService.Verify(s =>
+                s.SaveMeta(It.IsAny<Guid>(), questionnaireId, "content-id-123", "photo.png"), Times.Once);
+        }
+
+        [Test]
+        public async Task UploadAttachmentsFromZip_skips_non_image_files_in_zip()
+        {
+            var questionnaireId = Guid.NewGuid();
+            var questionnaire = new QuestionnaireDocument
+            {
+                PublicKey = questionnaireId,
+                Attachments = new List<Attachment>()
+            };
+
+            var questionnaireStorage = new Mock<IDesignerQuestionnaireStorage>();
+            questionnaireStorage.Setup(s => s.Get(questionnaireId)).Returns(questionnaire);
+
+            var attachmentService = new Mock<IAttachmentService>();
+            attachmentService.Setup(s => s.CreateAttachmentContentId(It.IsAny<byte[]>())).Returns("cid");
+
+            var zipFile = CreateMockZipFormFile("archive.zip", new[]
+            {
+                ("readme.txt", new byte[] { 1 }),
+                ("data.csv", new byte[] { 2 }),
+                ("photo.jpg", CreateMinimalPngBytes())
+            });
+
+            var controller = CreateController(
+                questionnaireStorage: questionnaireStorage.Object,
+                attachmentService: attachmentService.Object);
+
+            var model = new CommandController.ZipAttachmentUploadModel
+            {
+                File = zipFile,
+                QuestionnaireId = questionnaireId
+            };
+
+            var result = await controller.UploadAttachmentsFromZip(model);
+
+            Assert.That(result, Is.InstanceOf<OkObjectResult>());
+            var value = ((OkObjectResult)result).Value!;
+            var processedCount = (int)value.GetType().GetProperty("processedCount")!.GetValue(value)!;
+            Assert.That(processedCount, Is.EqualTo(1));
+            attachmentService.Verify(s => s.SaveContent(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<byte[]>()), Times.Once);
+        }
+
+        [Test]
+        public async Task UploadAttachmentsFromZip_updates_existing_attachment_when_name_matches()
+        {
+            var questionnaireId = Guid.NewGuid();
+            var existingAttachmentId = Guid.NewGuid();
+            var questionnaire = new QuestionnaireDocument
+            {
+                PublicKey = questionnaireId,
+                Attachments = new List<Attachment>
+                {
+                    new Attachment { AttachmentId = existingAttachmentId, Name = "photo", ContentId = "old-cid" }
+                }
+            };
+
+            var questionnaireStorage = new Mock<IDesignerQuestionnaireStorage>();
+            questionnaireStorage.Setup(s => s.Get(questionnaireId)).Returns(questionnaire);
+
+            var attachmentService = new Mock<IAttachmentService>();
+            attachmentService.Setup(s => s.CreateAttachmentContentId(It.IsAny<byte[]>())).Returns("new-cid");
+
+            Guid? capturedOldId = null;
+            var commandService = new Mock<ICommandService>();
+            commandService
+                .Setup(s => s.Execute(It.IsAny<AddOrUpdateAttachment>(), It.IsAny<string>()))
+                .Callback<ICommand, string>((cmd, _) =>
+                {
+                    if (cmd is AddOrUpdateAttachment aou)
+                        capturedOldId = aou.OldAttachmentId;
+                });
+
+            var zipFile = CreateMockZipFormFile("archive.zip", new[] { ("photo.png", CreateMinimalPngBytes()) });
+
+            var controller = CreateController(
+                questionnaireStorage: questionnaireStorage.Object,
+                attachmentService: attachmentService.Object,
+                commandService: commandService.Object);
+
+            var model = new CommandController.ZipAttachmentUploadModel
+            {
+                File = zipFile,
+                QuestionnaireId = questionnaireId
+            };
+
+            await controller.UploadAttachmentsFromZip(model);
+
+            Assert.That(capturedOldId, Is.EqualTo(existingAttachmentId));
+        }
+
+        [Test]
+        public async Task UploadAttachmentsFromZip_sanitizes_attachment_name()
+        {
+            var questionnaireId = Guid.NewGuid();
+            var questionnaire = new QuestionnaireDocument
+            {
+                PublicKey = questionnaireId,
+                Attachments = new List<Attachment>()
+            };
+
+            var questionnaireStorage = new Mock<IDesignerQuestionnaireStorage>();
+            questionnaireStorage.Setup(s => s.Get(questionnaireId)).Returns(questionnaire);
+
+            var attachmentService = new Mock<IAttachmentService>();
+            attachmentService.Setup(s => s.CreateAttachmentContentId(It.IsAny<byte[]>())).Returns("cid");
+
+            string capturedName = null;
+            var commandService = new Mock<ICommandService>();
+            commandService
+                .Setup(s => s.Execute(It.IsAny<AddOrUpdateAttachment>(), It.IsAny<string>()))
+                .Callback<ICommand, string>((cmd, _) =>
+                {
+                    if (cmd is AddOrUpdateAttachment aou)
+                        capturedName = aou.AttachmentName;
+                });
+
+            var zipFile = CreateMockZipFormFile("archive.zip",
+                new[] { ("my photo with spaces.png", CreateMinimalPngBytes()) });
+
+            var controller = CreateController(
+                questionnaireStorage: questionnaireStorage.Object,
+                attachmentService: attachmentService.Object,
+                commandService: commandService.Object);
+
+            var model = new CommandController.ZipAttachmentUploadModel
+            {
+                File = zipFile,
+                QuestionnaireId = questionnaireId
+            };
+
+            await controller.UploadAttachmentsFromZip(model);
+
+            Assert.That(capturedName, Is.EqualTo("my_photo_with_spaces"));
+        }
+
+        [Test]
+        public async Task UploadAttachmentsFromZip_truncates_attachment_name_to_32_chars()
+        {
+            var questionnaireId = Guid.NewGuid();
+            var questionnaire = new QuestionnaireDocument
+            {
+                PublicKey = questionnaireId,
+                Attachments = new List<Attachment>()
+            };
+
+            var questionnaireStorage = new Mock<IDesignerQuestionnaireStorage>();
+            questionnaireStorage.Setup(s => s.Get(questionnaireId)).Returns(questionnaire);
+
+            var attachmentService = new Mock<IAttachmentService>();
+            attachmentService.Setup(s => s.CreateAttachmentContentId(It.IsAny<byte[]>())).Returns("cid");
+
+            string capturedName = null;
+            var commandService = new Mock<ICommandService>();
+            commandService
+                .Setup(s => s.Execute(It.IsAny<AddOrUpdateAttachment>(), It.IsAny<string>()))
+                .Callback<ICommand, string>((cmd, _) =>
+                {
+                    if (cmd is AddOrUpdateAttachment aou)
+                        capturedName = aou.AttachmentName;
+                });
+
+            var longName = new string('a', 40); // 40 chars > 32
+            var zipFile = CreateMockZipFormFile("archive.zip",
+                new[] { ($"{longName}.png", CreateMinimalPngBytes()) });
+
+            var controller = CreateController(
+                questionnaireStorage: questionnaireStorage.Object,
+                attachmentService: attachmentService.Object,
+                commandService: commandService.Object);
+
+            var model = new CommandController.ZipAttachmentUploadModel
+            {
+                File = zipFile,
+                QuestionnaireId = questionnaireId
+            };
+
+            await controller.UploadAttachmentsFromZip(model);
+
+            Assert.That(capturedName!.Length, Is.EqualTo(32));
+        }
+
+        private static IFormFile CreateMockZipFormFile(string fileName,
+            IEnumerable<(string entryName, byte[] content)> entries)
+        {
+            var ms = new MemoryStream();
+            using (var archive = new ZipArchive(ms, ZipArchiveMode.Create, leaveOpen: true))
+            {
+                foreach (var (entryName, content) in entries)
+                {
+                    var entry = archive.CreateEntry(entryName);
+                    using var entryStream = entry.Open();
+                    entryStream.Write(content, 0, content.Length);
+                }
+            }
+            ms.Position = 0;
+
+            var mockFile = new Mock<IFormFile>();
+            mockFile.Setup(f => f.FileName).Returns(fileName);
+            mockFile.Setup(f => f.ContentType).Returns("application/zip");
+            mockFile.Setup(f => f.OpenReadStream()).Returns(ms);
+            return mockFile.Object;
+        }
+
+        private static byte[] CreateMinimalPngBytes()
+        {
+            // Minimal valid 1x1 PNG
+            return new byte[]
+            {
+                0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A, // PNG signature
+                0x00, 0x00, 0x00, 0x0D, 0x49, 0x48, 0x44, 0x52, // IHDR chunk length + type
+                0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, // width=1, height=1
+                0x08, 0x02, 0x00, 0x00, 0x00, 0x90, 0x77, 0x53, // bit depth=8, color type=2, crc
+                0xDE, 0x00, 0x00, 0x00, 0x0C, 0x49, 0x44, 0x41, // IDAT chunk
+                0x54, 0x08, 0xD7, 0x63, 0xF8, 0xCF, 0xC0, 0x00, // IDAT data
+                0x00, 0x00, 0x02, 0x00, 0x01, 0xE2, 0x21, 0xBC, // IDAT crc
+                0x33, 0x00, 0x00, 0x00, 0x00, 0x49, 0x45, 0x4E, // IEND chunk
+                0x44, 0xAE, 0x42, 0x60, 0x82              // IEND crc
+            };
+        }
+
+        #endregion
     }
 }
-
-
 
 
 

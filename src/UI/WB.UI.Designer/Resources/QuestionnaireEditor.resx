@@ -223,6 +223,18 @@
   <data name="SideBarAttachmentsUpload" xml:space="preserve">
     <value>Upload new</value>
   </data>
+  <data name="SideBarAttachmentsUploadZip" xml:space="preserve">
+    <value>Upload ZIP</value>
+  </data>
+  <data name="SideBarAttachmentsZipProcessed" xml:space="preserve">
+    <value>{{count}} image(s) uploaded from ZIP file</value>
+  </data>
+  <data name="SideBarAttachmentsZipNoImages" xml:space="preserve">
+    <value>No supported images found in the ZIP file</value>
+  </data>
+  <data name="SideBarAttachmentsZipOnly" xml:space="preserve">
+    <value>Only ZIP files are accepted for bulk image upload</value>
+  </data>
   <data name="SideBarLookupEmptyLine1" xml:space="preserve">
     <value>Use this tab to define lookup tables.</value>
   </data>

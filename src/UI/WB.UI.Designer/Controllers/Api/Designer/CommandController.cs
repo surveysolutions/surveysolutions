@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -62,6 +63,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         private readonly IDesignerTranslationService translationsService;
         private readonly IReusableCategoriesService reusableCategoriesService;
         private readonly IFileSystemAccessor fileSystemAccessor;
+        private readonly IDesignerQuestionnaireStorage questionnaireStorage;
 
         // Get the default form options so that we can use them to set the default limits for
         // request body data
@@ -79,7 +81,8 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             IAttachmentService attachmentService,
             IDesignerTranslationService translationsService,
             IReusableCategoriesService reusableCategoriesService,
-            IFileSystemAccessor fileSystemAccessor)
+            IFileSystemAccessor fileSystemAccessor,
+            IDesignerQuestionnaireStorage questionnaireStorage)
         {
             this.logger = logger;
             this.commandInflater = commandPreprocessor;
@@ -90,6 +93,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             this.translationsService = translationsService;
             this.reusableCategoriesService = reusableCategoriesService;
             this.fileSystemAccessor = fileSystemAccessor;
+            this.questionnaireStorage = questionnaireStorage;
         }
 
         public class AttachmentModel
@@ -97,6 +101,12 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             public IFormFile? File { get; set; }
             public string FileName { get; set; } = string.Empty;
             public string? Command { get; set; }
+        }
+
+        public class ZipAttachmentUploadModel
+        {
+            public IFormFile? File { get; set; }
+            public Guid QuestionnaireId { get; set; }
         }
 
         [Route("~/api/command/attachment")]
@@ -167,7 +177,138 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             return updateAttachment;
         }
 
-        [Route("~/api/command/updateLookupTable")]
+        [Route("~/api/command/attachment/zip")]
+        [HttpPost]
+        public async Task<IActionResult> UploadAttachmentsFromZip([FromForm] ZipAttachmentUploadModel model)
+        {
+            if (model.File == null)
+                return this.Error((int)HttpStatusCode.NotAcceptable, "No file provided");
+
+            if (!Path.GetExtension(model.File.FileName).Equals(".zip", StringComparison.OrdinalIgnoreCase))
+                return this.Error((int)HttpStatusCode.NotAcceptable, ExceptionMessages.Attachments_zip_only);
+
+            var questionnaire = this.questionnaireStorage.Get(model.QuestionnaireId);
+            if (questionnaire == null)
+                return NotFound();
+
+            var existingAttachmentsByName = questionnaire.Attachments
+                .Where(a => !string.IsNullOrEmpty(a.Name))
+                .GroupBy(a => a.Name.ToLowerInvariant())
+                .ToDictionary(g => g.Key, g => g.First().AttachmentId);
+
+            const long maxEntrySize = 100L * 1024 * 1024;
+            var processedCount = 0;
+            var errors = new List<string>();
+
+            using var zipStream = model.File.OpenReadStream();
+            using var archive = new ZipArchive(zipStream, ZipArchiveMode.Read);
+
+            foreach (var entry in archive.Entries)
+            {
+                if (string.IsNullOrEmpty(entry.Name)) continue;
+
+                var entryExtension = Path.GetExtension(entry.Name).ToLowerInvariant();
+                var contentType = GetImageContentType(entryExtension);
+                if (contentType == null) continue;
+
+                if (entry.Length > maxEntrySize)
+                {
+                    errors.Add($"{entry.Name}: file is too large (max 100 MB)");
+                    continue;
+                }
+
+                try
+                {
+                    byte[] fileContent;
+                    using (var entryStream = entry.Open())
+                    using (var ms = new MemoryStream())
+                    {
+                        await entryStream.CopyToAsync(ms);
+                        fileContent = ms.ToArray();
+                    }
+
+                    var contentId = this.attachmentService.CreateAttachmentContentId(fileContent);
+                    this.attachmentService.SaveContent(contentId, contentType, fileContent);
+
+                    var rawName = SanitizeAttachmentName(Path.GetFileNameWithoutExtension(entry.Name));
+                    var attachmentName = rawName.Length > 32 ? rawName[..32] : rawName;
+
+                    var attachmentId = Guid.NewGuid();
+                    Guid? oldAttachmentId = null;
+
+                    if (existingAttachmentsByName.TryGetValue(attachmentName.ToLowerInvariant(), out var existingId))
+                    {
+                        oldAttachmentId = existingId;
+                    }
+
+                    this.attachmentService.SaveMeta(
+                        attachmentId: attachmentId,
+                        questionnaireId: model.QuestionnaireId,
+                        attachmentContentId: contentId,
+                        fileName: entry.Name);
+
+                    var zipCommand = new AddOrUpdateAttachment(
+                        questionnaireId: model.QuestionnaireId,
+                        attachmentId: attachmentId,
+                        responsibleId: Guid.Empty,
+                        attachmentName: attachmentName,
+                        attachmentContentId: contentId,
+                        oldAttachmentId: oldAttachmentId);
+
+                    var result = this.ProcessCommand(zipCommand);
+                    if (result.HasErrors)
+                    {
+                        errors.Add(entry.Name);
+                        continue;
+                    }
+
+                    existingAttachmentsByName[attachmentName.ToLowerInvariant()] = attachmentId;
+                    processedCount++;
+                }
+                catch (FormatException ex)
+                {
+                    errors.Add($"{entry.Name}: {ex.Message}");
+                }
+                catch (Exception ex)
+                {
+                    this.logger.LogError(ex, "Error processing zip entry {EntryName}", entry.Name);
+                    errors.Add($"{entry.Name}: {ex.Message}");
+                }
+            }
+
+            await dbContext.SaveChangesAsync();
+            return Ok(new { processedCount, errors });
+        }
+
+        private static string SanitizeAttachmentName(string name)
+        {
+            var invalidChars = Path.GetInvalidFileNameChars();
+            var sb = new StringBuilder(name.Length);
+            foreach (var c in name)
+            {
+                if (Array.IndexOf(invalidChars, c) >= 0 || c == ' ')
+                    sb.Append('_');
+                else
+                    sb.Append(c);
+            }
+            return sb.Length > 0 ? sb.ToString() : "_";
+        }
+
+        private static string? GetImageContentType(string extension)
+        {
+            return extension switch
+            {
+                ".jpg" or ".jpeg" => "image/jpeg",
+                ".png" => "image/png",
+                ".gif" => "image/gif",
+                ".bmp" => "image/bmp",
+                ".webp" => "image/webp",
+                ".tiff" or ".tif" => "image/tiff",
+                _ => null
+            };
+        }
+
+
         [HttpPost]
         public async Task<IActionResult> UpdateLookupTable()
         {

@@ -171,6 +171,9 @@
   <data name="Attachments_Unsupported_content" xml:space="preserve">
     <value>Uploaded content is not supported</value>
   </data>
+  <data name="Attachments_zip_only" xml:space="preserve">
+    <value>Only zip files are accepted for bulk upload</value>
+  </data>
   <data name="CantMoveSubsectionInWrongPosition" xml:space="preserve">
     <value>You can't move to sub-section {0} because it position {1} in not acceptable.</value>
   </data>
