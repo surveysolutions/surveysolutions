@@ -50,7 +50,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             var viewFactory = context.HttpContext.RequestServices.GetRequiredService<IQuestionnaireViewFactory>();
             var httpContextUser = context.HttpContext.User;
 
-            bool isApiRequest = context.HttpContext.Request.Path.StartsWithSegments("/api");
+            bool isApiRequest = context.HttpContext.Request.Path.StartsWithSegments("/api", StringComparison.OrdinalIgnoreCase);
 
             bool hasAnonymousAccess = viewFactory.IsAnonymousQuestionnaire(questionnaireRevision.QuestionnaireId, out var originQuestionnaireId);
             if (hasAnonymousAccess && originQuestionnaireId.HasValue && id is QuestionnaireRevision r)
@@ -83,7 +83,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             {
                 context.Result = isApiRequest
                     ? new JsonResult(new { message = ExceptionMessages.NoPremissionsToEditQuestionnaire })
-                        { StatusCode = StatusCodes.Status403Forbidden }
+                        { StatusCode = StatusCodes.Status401Unauthorized }
                     : new ChallengeResult();
                 return;
             }
