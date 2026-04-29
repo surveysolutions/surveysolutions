@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
@@ -111,6 +112,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
             questionnaire.UpdateCriticalRule(new UpdateCriticalRule(questionnaire.Id, criticalRuleId,
                 $"message {searchFor}", $"expression {searchFor}", $"description {searchFor}", responsibleId));
 
+            questionnaire.AddCriticalRule(new AddCriticalRule(questionnaire.Id, criticalRuleWithExpressionOnlyId, responsibleId));
+            questionnaire.UpdateCriticalRule(new UpdateCriticalRule(questionnaire.Id, criticalRuleWithExpressionOnlyId,
+                "no match here", $"expression only {searchFor}", "no match here", responsibleId));
+
             BecauseOf();
         }
 
@@ -173,13 +178,17 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
         [NUnit.Framework.Test] public void should_not_include_references_to_cascading_combobox_options () =>
             foundReferences.Should().NotContain(x => x.Id == cascadingQuestionId);
 
-        [NUnit.Framework.Test] public void should_find_text_in_critical_rule_expression () =>
+        [NUnit.Framework.Test] public void should_find_text_in_critical_rule_when_expression_matches () =>
+            foundReferences.Should().Contain(x => x.Id == criticalRuleWithExpressionOnlyId &&
+                                               x.Type == QuestionnaireVerificationReferenceType.CriticalRule);
+
+        [NUnit.Framework.Test] public void should_find_text_in_critical_rule_when_message_matches () =>
             foundReferences.Should().Contain(x => x.Id == criticalRuleId &&
                                                x.Type == QuestionnaireVerificationReferenceType.CriticalRule);
 
-        [NUnit.Framework.Test] public void should_find_text_in_critical_rule_message () =>
-            foundReferences.Should().Contain(x => x.Id == criticalRuleId &&
-                                               x.Type == QuestionnaireVerificationReferenceType.CriticalRule);
+        [NUnit.Framework.Test] public void should_not_yield_duplicate_references_for_critical_rule_matching_multiple_fields () =>
+            foundReferences.Count(x => x.Id == criticalRuleId &&
+                                       x.Type == QuestionnaireVerificationReferenceType.CriticalRule).Should().Be(1);
 
         static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         static Questionnaire questionnaire;
@@ -195,6 +204,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
         static readonly Guid macroId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
         static readonly Guid staticTextWithAttachmentId = Guid.Parse("66666666666666666666666666666666");
         static readonly Guid criticalRuleId = Guid.Parse("77777777777777777777777777777777");
+        static readonly Guid criticalRuleWithExpressionOnlyId = Guid.Parse("88888888888888888888888888888888");
 
         const string searchFor = "to_replace";
 

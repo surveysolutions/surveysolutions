@@ -140,15 +140,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
             foreach (var criticalRule in questionnaire.CriticalRules)
             {
-                if (MatchesSearchTerm(criticalRule.Expression, searchRegex))
-                {
-                    yield return QuestionnaireEntityReference.CreateForCriticalRule(criticalRule.Id);
-                }
-                if (MatchesSearchTerm(criticalRule.Message, searchRegex))
-                {
-                    yield return QuestionnaireEntityReference.CreateForCriticalRule(criticalRule.Id);
-                }
-                if (MatchesSearchTerm(criticalRule.Description, searchRegex))
+                if (MatchesSearchTerm(criticalRule.Expression, searchRegex)
+                    || MatchesSearchTerm(criticalRule.Message, searchRegex)
+                    || MatchesSearchTerm(criticalRule.Description, searchRegex))
                 {
                     yield return QuestionnaireEntityReference.CreateForCriticalRule(criticalRule.Id);
                 }
