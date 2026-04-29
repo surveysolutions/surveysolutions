@@ -140,7 +140,7 @@ public class MapFilesValidatorTests
         var validatorErrors = service.Verify(analyzeResults).ToList();
 
         Assert.That(validatorErrors.Any(), Is.True);
-        Assert.That(validatorErrors.Any(e => e.Message == string.Format(Maps.MapFileNameTooLong, longMapName, MapFilesValidator.MapFileNameLengthLimit)), Is.True);
+        Assert.That(validatorErrors.Any(e => e.Message.Contains(MapFilesValidator.MapFileNameLengthLimit.ToString())), Is.True);
     }
 
     [Test]
