@@ -97,9 +97,20 @@ namespace WB.UI.Shared.Enumerator.Services
         public override void OnDestroy()
         {
             var progress = this.CurrentProgress;
-            if (progress != null && !progress.CancellationTokenSource.IsCancellationRequested)
+            var cancellationTokenSource = progress?.CancellationTokenSource;
+
+            if (cancellationTokenSource != null)
             {
-                progress.CancellationTokenSource.Cancel();
+                try
+                {
+                    if (!cancellationTokenSource.IsCancellationRequested)
+                    {
+                        cancellationTokenSource.Cancel();
+                    }
+                }
+                catch (ObjectDisposedException)
+                {
+                }
             }
 
             base.OnDestroy();
