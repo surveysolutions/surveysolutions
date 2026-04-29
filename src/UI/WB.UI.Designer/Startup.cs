@@ -261,19 +261,9 @@ namespace WB.UI.Designer
             {
 		options.Cookie.Name = ".AspNetCore.Identity.Designer";
                 options.Events.OnRedirectToLogin = context =>
-                {
-                    var hasAcceptHeader = context.Request.Headers.TryGetValue(HeaderNames.Accept, out var accept);
-                    if (hasAcceptHeader && accept.ToString().Contains("application/json", StringComparison.OrdinalIgnoreCase) && context.Response.StatusCode == StatusCodes.Status200OK)
-                    {
-                        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-                    }
-                    else
-                    {
-                        context.Response.Redirect(context.RedirectUri);
-                    }
-
-                    return Task.CompletedTask;
-                };
+                    HandleCookieAuthRedirect(context.HttpContext, context.RedirectUri, StatusCodes.Status401Unauthorized);
+                options.Events.OnRedirectToAccessDenied = context =>
+                    HandleCookieAuthRedirect(context.HttpContext, context.RedirectUri, StatusCodes.Status403Forbidden);
             });
 
             services.AddAntiforgery(options => options.HeaderName = "X-CSRF-TOKEN");
@@ -474,6 +464,22 @@ namespace WB.UI.Designer
                 initTask.Wait();
             else
                 initTask.Wait(TimeSpan.FromSeconds(10));
+        }
+
+        private static Task HandleCookieAuthRedirect(HttpContext httpContext, string redirectUri, int statusCode)
+        {
+            var hasAcceptHeader = httpContext.Request.Headers.TryGetValue(HeaderNames.Accept, out var accept);
+            if (hasAcceptHeader && accept.ToString().Contains("application/json", StringComparison.OrdinalIgnoreCase)
+                && httpContext.Response.StatusCode == StatusCodes.Status200OK)
+            {
+                httpContext.Response.StatusCode = statusCode;
+            }
+            else
+            {
+                httpContext.Response.Redirect(redirectUri);
+            }
+
+            return Task.CompletedTask;
         }
     }
 }
