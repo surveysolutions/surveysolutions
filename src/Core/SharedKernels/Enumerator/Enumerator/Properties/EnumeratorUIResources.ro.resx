@@ -618,7 +618,7 @@ pentru instrucțiuni suplimentare</value>
     <value>Încărcare informații de audit</value>
   </data>
   <data name="Synchronization_Upload_CompletedAssignments_Text" xml:space="preserve">
-    <value>chestionare finalizate</value>
+    <value>interviuri finalizate</value>
   </data>
   <data name="Synchronization_Upload_Description_Format" xml:space="preserve">
     <value>{0} din {1} {2} efectuate</value>
