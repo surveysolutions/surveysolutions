@@ -322,7 +322,7 @@
     <value>การ Synchronize เสร็จสมบูรณ์</value>
   </data>
   <data name="Synchronization_Upload_CompletedAssignments_Text" xml:space="preserve">
-    <value>งานที่ได้รับมอบหมายเสร็จสมบูรณ์</value>
+    <value>การสัมภาษณ์ที่เสร็จสมบูรณ์</value>
   </data>
   <data name="Synchronization_Upload_Description_Format" xml:space="preserve">
     <value>{0} จาก {1} {2} เสร็จแล้ว</value>
