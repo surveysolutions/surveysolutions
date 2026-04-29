@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Designer.Classifications;
 using WB.Core.BoundedContexts.Designer.Commands;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Categories;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
@@ -70,6 +71,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             {
                 currentPasteItemIntoCommand.SourceDocument =
                     GetQuestionnaire(currentPasteItemIntoCommand.SourceQuestionnaireId);
+            }
+
+            if (command is CopyCategories copyCategoriesCommand)
+            {
+                GetQuestionnaire(copyCategoriesCommand.SourceQuestionnaireId);
             }
         }
 

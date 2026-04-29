@@ -41,6 +41,10 @@
                         value="ADD new category" class="btn lighter-hover" @click.stop="addNewCategory()"
                         v-if="!isReadOnlyForUser" />
                 </p>
+                <p v-if="!isReadOnlyForUser && hasClipboardCategories">
+                    <input type="button" :value="$t('QuestionnaireEditor.SideBarCategoriesPaste')"
+                        class="btn lighter-hover" @click.stop="pasteCategories()" />
+                </p>
                 <p>
                     <input type="button" :value="$t('QuestionnaireEditor.SideBarCategoriesUploadNew')"
                         @click.stop="openFileDialog()" value="Upload new categories" class="btn lighter-hover"
@@ -62,9 +66,11 @@ import CategoriesItem from './CategoriesItem.vue';
 
 import { newGuid } from '../../../../helpers/guid';
 import { isNull, isUndefined, some } from 'lodash'
-import { updateCategories } from '../../../../services/categoriesService'
+import { updateCategories, copyCategories } from '../../../../services/categoriesService'
 import { notice } from '../../../../services/notificationService';
 import moment from 'moment';
+
+const CATEGORIES_CLIPBOARD_KEY = 'categoriesClipboard';
 
 export default {
     name: 'Categories',
@@ -81,6 +87,7 @@ export default {
 
             downloadBaseUrl: '/categories',
             file: [],
+            clipboardCategories: null,
         }
     },
     mounted() {
@@ -89,19 +96,41 @@ export default {
         if ('BroadcastChannel' in window) {
             this.bcChannel = new BroadcastChannel("editcategory")
             this.bcChannel.onmessage = ev => {
-                console.log(ev.data)
                 if (ev.data === 'close#' + this.openEditor) {
                     window.location.reload();
                 }
             }
         }
+        this.refreshClipboard();
+        window.addEventListener('storage', this.onStorageChange);
+    },
+    beforeUnmount() {
+        window.removeEventListener('storage', this.onStorageChange);
     },
     computed: {
         categoriesList() {
             return this.questionnaire.categories;
         },
+        hasClipboardCategories() {
+            return this.clipboardCategories !== null;
+        },
     },
     methods: {
+
+        refreshClipboard() {
+            try {
+                const stored = localStorage.getItem(CATEGORIES_CLIPBOARD_KEY);
+                this.clipboardCategories = stored ? JSON.parse(stored) : null;
+            } catch (e) {
+                this.clipboardCategories = null;
+            }
+        },
+
+        onStorageChange(event) {
+            if (event.key === CATEGORIES_CLIPBOARD_KEY) {
+                this.refreshClipboard();
+            }
+        },
 
         openFileDialog() {
             const fu = this.$refs.upload
@@ -155,6 +184,17 @@ export default {
             };
 
             await updateCategories(this.questionnaireId, categories)
+        },
+
+        async pasteCategories() {
+            if (!this.clipboardCategories) return;
+
+            const { sourceQuestionnaireId, categoriesId, name } = this.clipboardCategories;
+            try {
+                await copyCategories(this.questionnaireId, sourceQuestionnaireId, categoriesId, name);
+            } catch (e) {
+                notice(this.$t('QuestionnaireEditor.SideBarCategoriesPasteFailed'));
+            }
         },
 
         editCategoriesOpen(event) {

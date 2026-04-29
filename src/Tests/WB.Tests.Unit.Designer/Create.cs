@@ -1901,6 +1901,11 @@ namespace WB.Tests.Unit.Designer
         public static DeleteCategories DeleteCategories(Guid questionnaireId, Guid responsibleId, Guid categoriesId) =>
             new DeleteCategories(questionnaireId, responsibleId, categoriesId);
 
+        public static CopyCategories CopyCategories(Guid targetQuestionnaireId, Guid responsibleId,
+            Guid sourceQuestionnaireId, Guid sourceCategoriesId, Guid? newCategoriesId = null, string name = null) =>
+            new CopyCategories(targetQuestionnaireId, responsibleId, sourceQuestionnaireId, sourceCategoriesId,
+                newCategoriesId ?? Guid.NewGuid(), name ?? "copied categories");
+
         public static CopyPastePreProcessor CopyPastePreProcessor(IReusableCategoriesService reusableCategoriesService) =>
             new CopyPastePreProcessor(reusableCategoriesService);
 

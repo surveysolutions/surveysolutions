@@ -41,3 +41,20 @@ export function deleteCategories(questionnaireId, categoriesId) {
         });
     });
 }
+
+export async function copyCategories(targetQuestionnaireId, sourceQuestionnaireId, sourceCategoriesId, name) {
+    const newCategoriesId = newGuid();
+    const command = {
+        questionnaireId: targetQuestionnaireId,
+        sourceQuestionnaireId: sourceQuestionnaireId,
+        sourceCategoriesId: sourceCategoriesId,
+        newCategoriesId: newCategoriesId,
+        name: name
+    };
+    await commandCall('CopyCategories', command);
+    emitter.emit('categoriesUpdated', {
+        categories: { categoriesId: newCategoriesId, name: name },
+        newId: null
+    });
+    return newCategoriesId;
+}

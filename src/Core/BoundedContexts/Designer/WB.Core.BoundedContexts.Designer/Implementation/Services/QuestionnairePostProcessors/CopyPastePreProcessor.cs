@@ -5,6 +5,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Categories;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Portable;
@@ -15,7 +16,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
 {
     internal class CopyPastePreProcessor :
         ICommandPreProcessor<Questionnaire, PasteAfter>,
-        ICommandPreProcessor<Questionnaire, PasteInto>
+        ICommandPreProcessor<Questionnaire, PasteInto>,
+        ICommandPreProcessor<Questionnaire, CopyCategories>
     {
         private readonly IReusableCategoriesService reusableCategoriesService;
 
@@ -29,6 +31,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
 
         public void Process(Questionnaire aggregate, PasteInto command)
             => this.CopyCategories(command.SourceDocument, command.SourceItemId, aggregate.Id);
+
+        public void Process(Questionnaire aggregate, CopyCategories command)
+        {
+            this.reusableCategoriesService.CloneCategories(
+                command.SourceQuestionnaireId,
+                command.SourceCategoriesId,
+                command.QuestionnaireId,
+                command.NewCategoriesId);
+        }
 
         private void CopyCategories(QuestionnaireDocument? sourceQuestionnaire, Guid sourceItemId, Guid targetQuestionnaireId)
         {
