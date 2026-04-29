@@ -64,6 +64,10 @@ namespace WB.UI.Headquarters.Services.Impl
                 throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewNotFound, 
                     Enumerator.Native.Resources.WebInterview.Error_NotFound);
 
+            // Cache the loaded interview so the filter can reuse it without a second DB round-trip.
+            if (contextAccessor.HttpContext != null)
+                contextAccessor.HttpContext.Items[IWebInterviewAllowService.CachedInterviewItemsKey] = interview;
+
             //finish page for anonymous for completed interview
             if ( (!this.authorizedUser.IsAuthenticated || this.authorizedUser.IsInterviewer) 
                  && interview.Status == InterviewStatus.Completed)

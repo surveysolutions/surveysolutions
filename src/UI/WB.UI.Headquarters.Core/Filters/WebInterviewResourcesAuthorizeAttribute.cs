@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Enumerator.Native.WebInterview;
 using WB.UI.Headquarters.API.WebInterview;
@@ -94,9 +95,17 @@ namespace WB.UI.Headquarters.Filters
             if (context.HttpContext.Session.IsPasswordVerifiedForInterview(interviewId))
                 return true;
 
-            var services = context.HttpContext.RequestServices;
-            var interviewRepository = services.GetRequiredService<IStatefulInterviewRepository>();
-            var interview = interviewRepository.Get(interviewId);
+            // Reuse the interview already loaded (and cached) by HasAccessToWebInterview to avoid
+            // an extra repository round-trip per resource request.
+            var interview = context.HttpContext.Items[IWebInterviewAllowService.CachedInterviewItemsKey]
+                as IStatefulInterview;
+
+            if (interview == null)
+            {
+                var services = context.HttpContext.RequestServices;
+                var interviewRepository = services.GetRequiredService<IStatefulInterviewRepository>();
+                interview = interviewRepository.Get(interviewId);
+            }
 
             // Fail-closed: if the interview cannot be loaded here, deny access
             if (interview == null) return false;
@@ -105,7 +114,7 @@ namespace WB.UI.Headquarters.Filters
             // Interviews without an assignment have no assignment password to check
             if (!assignmentId.HasValue) return true;
 
-            var assignmentsService = services.GetRequiredService<IAssignmentsService>();
+            var assignmentsService = context.HttpContext.RequestServices.GetRequiredService<IAssignmentsService>();
             var assignment = assignmentsService.GetAssignment(assignmentId.Value);
 
             // If no password is set on the assignment, access is not password-restricted
