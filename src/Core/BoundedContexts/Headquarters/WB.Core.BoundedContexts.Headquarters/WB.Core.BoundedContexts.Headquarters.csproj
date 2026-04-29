@@ -62,10 +62,10 @@
     <PackageReference Include="MailKit" Version="4.12.1" />
     <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.3.0" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="9.0.5" />
-    <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="9.0.5" />
+    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="10.0.6" />
+    <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="10.0.6" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="10.0.6" />
-    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="9.0.9" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="10.0.6" />
     <PackageReference Include="NetTopologySuite.IO.Esri.Shapefile" Version="1.2.0" />
     <PackageReference Include="NetTopologySuite.IO.GeoJSON" Version="4.0.0" />
     <PackageReference Include="NewId" Version="4.0.1" />
