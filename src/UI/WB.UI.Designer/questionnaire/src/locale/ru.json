@@ -515,7 +515,11 @@
     "WarningsCounter_other": "{{count}} warnings",
     "CompilationErrorsCounter_other": "{{count}} errors found",
     "CompilationWarningsCounter_other": "{{count}} warnings found",
-    "FindReplaceInAllFound_other": "in {{count}} found entities?"
+    "FindReplaceInAllFound_other": "in {{count}} found entities?",
+    "SideBarCategoriesCopy": "Copy",
+    "SideBarCategoriesCopied": "Categories copied to clipboard",
+    "SideBarCategoriesPaste": "Paste categories",
+    "SideBarCategoriesPasteFailed": "Failed to paste categories. Make sure you have access to the source questionnaire."
   },
   "AccountResources": {
     "AllRights": "Все права защищены.",

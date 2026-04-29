@@ -515,7 +515,11 @@
     "AttachmentSizeIsTooBig": "El tamaño del archivo adjunto es demasiado grande. Tamaño máximo: {{size}}",
     "SwitchTo": "Cambiar a",
     "SwitchToTranslationConfirm": "Cambiar a modificará el idioma de visualización del cuestionario. La traducción debe incluir texto para todos los elementos.",
-    "AIAssistant": "IA"
+    "AIAssistant": "IA",
+    "SideBarCategoriesCopy": "Copy",
+    "SideBarCategoriesCopied": "Categories copied to clipboard",
+    "SideBarCategoriesPaste": "Paste categories",
+    "SideBarCategoriesPasteFailed": "Failed to paste categories. Make sure you have access to the source questionnaire."
   },
   "AccountResources": {
     "AllRights": "Todos los derechos reservados",

@@ -515,7 +515,11 @@
     "AttachmentSizeIsTooBig": "La taille de la pièce jointe est trop grande. Taille maximale : {{size}}",
     "SwitchTo": "Passer à",
     "SwitchToTranslationConfirm": "Passer à changera la langue d’affichage du questionnaire. La traduction doit inclure un texte pour tous les éléments.",
-    "AIAssistant": "IA"
+    "AIAssistant": "IA",
+    "SideBarCategoriesCopy": "Copy",
+    "SideBarCategoriesCopied": "Categories copied to clipboard",
+    "SideBarCategoriesPaste": "Paste categories",
+    "SideBarCategoriesPasteFailed": "Failed to paste categories. Make sure you have access to the source questionnaire."
   },
   "AccountResources": {
     "AllRights": "Tout droit reservé",

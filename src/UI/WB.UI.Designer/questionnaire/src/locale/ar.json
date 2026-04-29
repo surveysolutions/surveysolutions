@@ -515,7 +515,11 @@
     "AttachmentSizeIsTooBig": "حجم المرفق كبير جدًا. الحد الأقصى: {{size}}",
     "SwitchTo": "التبديل إلى",
     "SwitchToTranslationConfirm": "سيؤدي التبديل إلى تغيير لغة عرض الاستبيان. يجب أن تحتوي الترجمة على نص لجميع العناصر.",
-    "AIAssistant": "ذكاء اصطناعي"
+    "AIAssistant": "ذكاء اصطناعي",
+    "SideBarCategoriesCopy": "Copy",
+    "SideBarCategoriesCopied": "Categories copied to clipboard",
+    "SideBarCategoriesPaste": "Paste categories",
+    "SideBarCategoriesPasteFailed": "Failed to paste categories. Make sure you have access to the source questionnaire."
   },
   "AccountResources": {
     "AllRights": "جميع الحقوق محفوظة.",
