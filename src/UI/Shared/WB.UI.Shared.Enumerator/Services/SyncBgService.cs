@@ -48,9 +48,7 @@ namespace WB.UI.Shared.Enumerator.Services
                     finally
                     {
                         this.isSyncRunning = false;
-                        var completedProgress = this.CurrentProgress;
                         this.CurrentProgress = null;
-                        completedProgress?.CancellationTokenSource.Dispose();
 
                         if (provider is IDisposable disposable)
                         {
