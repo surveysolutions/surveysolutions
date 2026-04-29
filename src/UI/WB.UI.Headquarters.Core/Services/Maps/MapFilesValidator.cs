@@ -24,6 +24,7 @@ public class MapFilesValidator : IMapFilesValidator
 {
     private readonly IFileSystemAccessor fileSystemAccessor;
     private const int MapFileSizeLimit = 512 * 1024 * 1024;
+    private const int MapFileNameLengthLimit = 1000;
 
     public MapFilesValidator(IFileSystemAccessor fileSystemAccessor)
     {
@@ -35,6 +36,7 @@ public class MapFilesValidator : IMapFilesValidator
         (Func<AnalyzeResult, IEnumerable<ValidatorError>>)CheckFileStructureForShapeFile,
         CheckFileSizeLimitForEachFile,
         CheckFileNamesOnInvalidChars,
+        CheckMapNameLength,
     };
     
     private static IEnumerable<ValidatorError> CheckFileStructureForShapeFile(AnalyzeResult analyzeResults)
@@ -79,6 +81,15 @@ public class MapFilesValidator : IMapFilesValidator
                 if (hasInvalidChar)
                     yield return new ValidatorError(string.Format(Resources.Maps.MapFileNameHasInvalidChars, mapFile.Name));
             }
+        }
+    }
+
+    private static IEnumerable<ValidatorError> CheckMapNameLength(AnalyzeResult analyzeResults)
+    {
+        foreach (var map in analyzeResults.Maps)
+        {
+            if (map.Name.Length > MapFileNameLengthLimit)
+                yield return new ValidatorError(string.Format(Resources.Maps.MapFileNameTooLong, map.Name, MapFileNameLengthLimit));
         }
     }
 

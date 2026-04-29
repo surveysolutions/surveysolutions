@@ -465,6 +465,11 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 return NotFound();
             }
 
+            if (targetArea != null && targetArea.Length > 1000)
+            {
+                return StatusCode(StatusCodes.Status406NotAcceptable, "Target area name exceeds the maximum allowed length of 1000 characters.");
+            }
+
             commandService.Execute(
                 new UpdateAssignmentTargetArea(assignment.PublicKey, authorizedUser.Id, targetArea, assignment.QuestionnaireId));
             this.auditLog.AssignmentTargetAreaChanged(id, targetArea);
