@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.CriticalRules;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
@@ -105,6 +106,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
                 $"attachment {searchFor}",
                 responsibleId,
                 null));
+
+            questionnaire.AddCriticalRule(new AddCriticalRule(questionnaire.Id, criticalRuleId, responsibleId));
+            questionnaire.UpdateCriticalRule(new UpdateCriticalRule(questionnaire.Id, criticalRuleId,
+                $"message {searchFor}", $"expression {searchFor}", $"description {searchFor}", responsibleId));
+
             BecauseOf();
         }
 
@@ -167,6 +173,14 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
         [NUnit.Framework.Test] public void should_not_include_references_to_cascading_combobox_options () =>
             foundReferences.Should().NotContain(x => x.Id == cascadingQuestionId);
 
+        [NUnit.Framework.Test] public void should_find_text_in_critical_rule_expression () =>
+            foundReferences.Should().Contain(x => x.Id == criticalRuleId &&
+                                               x.Type == QuestionnaireVerificationReferenceType.CriticalRule);
+
+        [NUnit.Framework.Test] public void should_find_text_in_critical_rule_message () =>
+            foundReferences.Should().Contain(x => x.Id == criticalRuleId &&
+                                               x.Type == QuestionnaireVerificationReferenceType.CriticalRule);
+
         static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         static Questionnaire questionnaire;
 
@@ -180,6 +194,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
         static readonly Guid groupId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
         static readonly Guid macroId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
         static readonly Guid staticTextWithAttachmentId = Guid.Parse("66666666666666666666666666666666");
+        static readonly Guid criticalRuleId = Guid.Parse("77777777777777777777777777777777");
 
         const string searchFor = "to_replace";
 

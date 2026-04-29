@@ -137,6 +137,22 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     yield return QuestionnaireEntityReference.CreateForMacro(macro.Key);
                 }
             }
+
+            foreach (var criticalRule in questionnaire.CriticalRules)
+            {
+                if (MatchesSearchTerm(criticalRule.Expression, searchRegex))
+                {
+                    yield return QuestionnaireEntityReference.CreateForCriticalRule(criticalRule.Id);
+                }
+                if (MatchesSearchTerm(criticalRule.Message, searchRegex))
+                {
+                    yield return QuestionnaireEntityReference.CreateForCriticalRule(criticalRule.Id);
+                }
+                if (MatchesSearchTerm(criticalRule.Description, searchRegex))
+                {
+                    yield return QuestionnaireEntityReference.CreateForCriticalRule(criticalRule.Id);
+                }
+            }
         }
 
         private static Regex BuildSearchRegex(string searchFor, bool matchCase, bool matchWholeWord, bool useRegex)
@@ -307,6 +323,30 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 {
                     affectedByReplaceEntries++;
                     macro.Content = ReplaceUsingSearchTerm(macro.Content, searchRegex, replaceWith);
+                }
+            }
+
+            foreach (var criticalRule in questionnaire.CriticalRules)
+            {
+                bool replacedAny = false;
+                if (MatchesSearchTerm(criticalRule.Expression, searchRegex))
+                {
+                    replacedAny = true;
+                    criticalRule.Expression = ReplaceUsingSearchTerm(criticalRule.Expression, searchRegex, replaceWith);
+                }
+                if (MatchesSearchTerm(criticalRule.Message, searchRegex))
+                {
+                    replacedAny = true;
+                    criticalRule.Message = ReplaceUsingSearchTerm(criticalRule.Message, searchRegex, replaceWith);
+                }
+                if (MatchesSearchTerm(criticalRule.Description, searchRegex))
+                {
+                    replacedAny = true;
+                    criticalRule.Description = ReplaceUsingSearchTerm(criticalRule.Description, searchRegex, replaceWith);
+                }
+                if (replacedAny)
+                {
+                    affectedByReplaceEntries++;
                 }
             }
 
