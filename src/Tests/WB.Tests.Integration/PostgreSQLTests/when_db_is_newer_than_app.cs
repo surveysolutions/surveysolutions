@@ -83,7 +83,7 @@ namespace WB.Tests.Integration.PostgreSQLTests
 
             act.Should().Throw<InitializationException>()
                 .WithMessage("*99999999999999*")
-                .WithMessage("*plainstore*");
+                .And.WithMessage("*plainstore*");
         }
 
         [OneTimeTearDown]
