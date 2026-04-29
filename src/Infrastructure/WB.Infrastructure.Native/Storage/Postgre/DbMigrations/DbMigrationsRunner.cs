@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -18,6 +19,11 @@ namespace WB.Infrastructure.Native.Storage.Postgre.DbMigrations
 {
     public static class DbMigrationsRunner
     {
+        // Cache reflection results per (assembly, namespace) so multi-workspace startup
+        // doesn't pay the cost of GetTypes() more than once per process.
+        private static readonly ConcurrentDictionary<(Assembly, string), long> MaxVersionCache =
+            new ConcurrentDictionary<(Assembly, string), long>();
+
         public static void MigrateToLatest(string connectionString, string schemaName,
             DbUpgradeSettings dbUpgradeSettings, ILoggerProvider loggerProvider = null, 
             IConfiguration configuration = null)
@@ -69,28 +75,24 @@ namespace WB.Infrastructure.Native.Storage.Postgre.DbMigrations
             using var scope = serviceProvider.CreateScope();
             // Instantiate the runner
             var runner = scope.ServiceProvider.GetRequiredService<IMigrationRunner>();
+
+            // Compute the app's max migration version before acquiring the lock to
+            // minimise lock-hold time; result is cached for subsequent workspaces.
+            long maxAppVersion = GetMaxMigrationVersion(dbUpgradeSettings);
+
             using var migrationLock = new MigrationLock(npgConnBuilder, false);
 
             // Check after acquiring the lock to avoid a race where another instance
             // migrates to a newer version between the check and MigrateUp().
-            CheckDatabaseNotNewerThanApp(npgConnBuilder, schemaName, dbUpgradeSettings);
+            CheckDatabaseNotNewerThanApp(npgConnBuilder, schemaName, maxAppVersion);
 
             // Execute the migrations
             runner.MigrateUp();
         }
 
         private static void CheckDatabaseNotNewerThanApp(NpgsqlConnectionStringBuilder connectionStringBuilder,
-            string schemaName, DbUpgradeSettings dbUpgradeSettings)
+            string schemaName, long maxAppVersion)
         {
-            long maxAppVersion = GetMaxMigrationVersion(dbUpgradeSettings);
-            if (maxAppVersion == 0)
-            {
-                throw new InitializationException(Subsystem.Database,
-                    $"Unable to determine the maximum supported database migration version for schema '{schemaName}'. " +
-                    $"No migrations were discovered in assembly '{dbUpgradeSettings.MigrationsAssembly.FullName}' " +
-                    $"under namespace '{dbUpgradeSettings.MigrationsNamespace}'. Refusing to start because the database may have been migrated by a newer version of Survey Solutions.");
-            }
-
             using var connection = new NpgsqlConnection(connectionStringBuilder.ConnectionString);
             connection.Open();
 
@@ -115,25 +117,38 @@ namespace WB.Infrastructure.Native.Storage.Postgre.DbMigrations
 
         private static long GetMaxMigrationVersion(DbUpgradeSettings dbUpgradeSettings)
         {
-            string ns = dbUpgradeSettings.MigrationsNamespace;
-            IEnumerable<Type> types;
-            try
+            var cacheKey = (dbUpgradeSettings.MigrationsAssembly, dbUpgradeSettings.MigrationsNamespace ?? string.Empty);
+            return MaxVersionCache.GetOrAdd(cacheKey, ((Assembly assembly, string ns) key) =>
             {
-                types = dbUpgradeSettings.MigrationsAssembly.GetTypes();
-            }
-            catch (ReflectionTypeLoadException ex)
-            {
-                types = ex.Types.OfType<Type>();
-            }
+                IEnumerable<Type> types;
+                try
+                {
+                    types = key.assembly.GetTypes();
+                }
+                catch (ReflectionTypeLoadException ex)
+                {
+                    types = ex.Types.OfType<Type>();
+                }
 
-            return types
-                .Where(t => t.Namespace != null
-                            && (t.Namespace == ns || (ns != null && t.Namespace.StartsWith(ns + "."))))
-                .Select(t => t.GetCustomAttribute<MigrationAttribute>())
-                .Where(a => a != null)
-                .Select(a => a!.Version)
-                .DefaultIfEmpty(0)
-                .Max();
+                long version = types
+                    .Where(t => t.Namespace != null
+                                && (t.Namespace == key.ns || (!string.IsNullOrEmpty(key.ns) && t.Namespace.StartsWith(key.ns + "."))))
+                    .Select(t => t.GetCustomAttribute<MigrationAttribute>())
+                    .Where(a => a != null)
+                    .Select(a => a!.Version)
+                    .DefaultIfEmpty(0)
+                    .Max();
+
+                if (version == 0)
+                {
+                    var ns = string.IsNullOrEmpty(key.ns) ? "(root namespace)" : key.ns;
+                    throw new InitializationException(Subsystem.Database,
+                        $"No migrations were discovered in assembly '{key.assembly.FullName}' " +
+                        $"under namespace '{ns}'. Refusing to start because the database may have been migrated by a newer version of Survey Solutions.");
+                }
+
+                return version;
+            });
         }
     }
 
