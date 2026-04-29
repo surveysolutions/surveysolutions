@@ -174,13 +174,17 @@ namespace WB.UI.Designer
                 .AddScheme<BasicAuthenticationSchemeOptions, BasicAuthenticationHandler>("basic",
                     opts => { opts.Realm = "mysurvey.solutions"; });
 
-            // Both JWT schemes are registered unconditionally so that any endpoint annotated
-            // with [Authorize(AuthenticationSchemes = "...")] always resolves to a registered
-            // handler and returns 401 — not a 500 caused by an unknown scheme — even when the
-            // corresponding key is absent (e.g. optional integrations disabled in development).
-            // When a key is missing a 32-byte all-zeros placeholder is used: it is a valid
-            // HMAC-SHA256 key, but no real token can be signed with it, so validation always
-            // fails with a clean 401.
+            // JWT scheme registration policy:
+            //
+            //   WebTester:JwtSecretKey  — REQUIRED. Fail fast at startup if absent; without it
+            //                             every /api/webtester/* call returns 401 and the whole
+            //                             code-exchange integration is non-functional.
+            //
+            //   Providers:Assistant:JwtSecretKey — OPTIONAL. When absent the assistant scheme is
+            //                             still registered but uses a 32-byte all-zeros placeholder
+            //                             key that no real token can be signed with, so all
+            //                             /api/v1/assistant/* requests fail with a clean 401
+            //                             instead of a 500 caused by an unknown scheme name.
 
             // Validate lengths for any key that is actually provided.
             if (!string.IsNullOrWhiteSpace(jwtSecretKey) && jwtSecretKey.Length < 32)
@@ -189,8 +193,6 @@ namespace WB.UI.Designer
                 throw new InvalidOperationException("WebTester JWT secret key is too short.");
 
             // Fail fast when the WebTester delegated key is absent.
-            // Without it every call to /api/webtester/* returns 401, making the integration
-            // completely non-functional.
             if (string.IsNullOrWhiteSpace(webTesterJwtSecretKey))
                 throw new InvalidOperationException(
                     "WebTester:JwtSecretKey must be configured. Set it in application configuration (for example, appsettings.ini).");
@@ -200,11 +202,11 @@ namespace WB.UI.Designer
             // Signing keys for the delegated WebTester scheme.
             // Trust only the WebTester signing key so Assistant tokens cannot be replayed
             // against /api/webtester/* by reusing a different secret accepted by this scheme.
-            var delegatedSigningKeys = new List<SecurityKey>();
-            if (!string.IsNullOrWhiteSpace(webTesterJwtSecretKey))
-                delegatedSigningKeys.Add(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(webTesterJwtSecretKey)));
-            if (delegatedSigningKeys.Count == 0)
-                delegatedSigningKeys.Add(new SymmetricSecurityKey(new byte[32])); // placeholder — never matches
+            // webTesterJwtSecretKey is guaranteed non-empty by the fail-fast above.
+            var delegatedSigningKeys = new List<SecurityKey>
+            {
+                new SymmetricSecurityKey(Encoding.UTF8.GetBytes(webTesterJwtSecretKey))
+            };
 
             // ── Isolated scheme: AI Assistant back-channel calls ───────────────────────────
             // Validates tokens with aud="WB.AssistantService" signed by Providers:Assistant:JwtSecretKey.

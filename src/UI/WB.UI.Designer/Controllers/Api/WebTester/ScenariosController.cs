@@ -31,12 +31,22 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
             if (!User.HasMatchingQuestionnaireId(id))
                 return Forbid();
 
-            var existingScenario = await this.dbContext.Scenarios.FindAsync(model.ScenarioId);
+            // Resolve the effective questionnaire ID (anonymous questionnaire mapping).
+            var effectiveId = id;
+            var anonymousQuestionnaire = this.dbContext.AnonymousQuestionnaires
+                .FirstOrDefault(a => a.AnonymousQuestionnaireId == id && a.IsActive == true);
+            if (anonymousQuestionnaire != null)
+                effectiveId = anonymousQuestionnaire.QuestionnaireId;
+
+            var existingScenario = model.ScenarioId.HasValue
+                ? await this.dbContext.Scenarios.FindAsync(model.ScenarioId.Value)
+                : null;
+
             if (existingScenario == null)
             {
                 var newScenario = new StoredScenario
                 {
-                    QuestionnaireId = id,
+                    QuestionnaireId = effectiveId,
                     Steps = model.ScenarioText ?? "",
                     Title = model.ScenarioTitle ?? "New scenario"
                 };
@@ -44,6 +54,12 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
             }
             else
             {
+                // IDOR guard: the scenario must belong to the questionnaire from the route.
+                // Without this check a delegated token for questionnaire A could overwrite
+                // a scenario from questionnaire B by supplying its ScenarioId.
+                if (existingScenario.QuestionnaireId != effectiveId)
+                    return Forbid();
+
                 existingScenario.Steps = model.ScenarioText ?? "";
             }
 
@@ -96,8 +112,6 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
                                          && a.IsActive == true);
                 if (anonymousQuestionnaire == null)
                     return Forbid();
-
-                scenario.QuestionnaireId = anonymousQuestionnaire.AnonymousQuestionnaireId;
             }
 
             return Ok(scenario.Steps);
