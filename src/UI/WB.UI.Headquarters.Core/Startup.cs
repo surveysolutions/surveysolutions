@@ -477,12 +477,12 @@ namespace WB.UI.Headquarters
                 };
             });
 
-            app.UseUnderConstruction();
-
             var underConstructionInfo = app.ApplicationServices.GetRequiredService<UnderConstructionInfo>();
 
             // Capture under-construction status at the start of each request so logging
             // can use the per-request value instead of reading mutable global state.
+            // Must run before UseUnderConstruction() so the captured status matches the
+            // decision made by UnderConstructionMiddleware for this request.
             app.Use(async (context, next) =>
             {
                 context.Items["UnderConstructionStatusAtRequestStart"] = underConstructionInfo.Status;
@@ -509,6 +509,8 @@ namespace WB.UI.Headquarters
                         : LogEventLevel.Information;
                 };
             });
+
+            app.UseUnderConstruction();
             
             app.UseWorkspaces();
 
