@@ -114,7 +114,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
             this.isInterviewReadyToLoad = false;
             try
             {
-                Logger.Warn($"Open Interview {this.interview.InterviewId} (key: {this.interview.InterviewKey}, assignment: {this.interview.Assignment}) at {DateTime.Now}");
+                Logger.Warn($"Open Interview {this.interview.InterviewId} (key: {this.interview.InterviewKey}, assignment: {this.interview.Assignment}) at {DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture)}");
                 await viewModelNavigationService.NavigateToAsync<LoadingInterviewViewModel, LoadingViewModelArg>(
                     new LoadingViewModelArg
                     {

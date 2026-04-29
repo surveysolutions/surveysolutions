@@ -139,7 +139,7 @@ namespace WB.UI.Shared.Enumerator.Services
                                                          $"AcceptUnsignedSslCertificate: {this.AcceptUnsignedSslCertificate} {Environment.NewLine}" +
                                                          $"BufferSize: {this.BufferSize} {Environment.NewLine}" +
                                                          $"Timeout: {this.Timeout} {Environment.NewLine}" +
-                                                         $"CurrentDateTime: {DateTime.Now} {Environment.NewLine}" +
+                                                         $"CurrentDateTime: {DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture)} {Environment.NewLine}" +
                                                          $"EventChunkSize: {this.EventChunkSize} {Environment.NewLine}" +
                                                          this.GetExternalInformation();
 

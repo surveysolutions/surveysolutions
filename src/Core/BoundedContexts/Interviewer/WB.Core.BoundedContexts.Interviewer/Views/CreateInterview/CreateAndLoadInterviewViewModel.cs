@@ -168,7 +168,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.CreateInterview
                 
                 var formatGuid = interviewId.FormatGuid();
                 this.lastCreatedInterviewStorage.Store(formatGuid);
-                logger.Warn($"Created interview {interviewId} from assignment {assignment.Id}({assignment.Title}) at {DateTime.Now}");
+                logger.Warn($"Created interview {interviewId} from assignment {assignment.Id}({assignment.Title}) at {DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture)}");
                 auditLogService.Write(new CreateInterviewAuditLogEntity(interviewId, assignment.Id, assignment.Title, interviewKey.ToString()));
 
                 return interviewId;

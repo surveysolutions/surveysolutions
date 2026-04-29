@@ -312,7 +312,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
                 return;
             }
 
-            Logger.Warn($"Remove Interview {this.interview.InterviewId} (key: {this.interview.InterviewKey}, assignment: {this.interview.Assignment}) at {DateTime.Now}");
+            Logger.Warn($"Remove Interview {this.interview.InterviewId} (key: {this.interview.InterviewKey}, assignment: {this.interview.Assignment}) at {DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture)}");
             this.InterviewerInterviewFactory.RemoveInterview(this.interview.InterviewId);
             auditLogService.Write(new DeleteInterviewAuditLogEntity(this.interview.InterviewId, this.interview.InterviewKey, this.interview.Assignment));
             
@@ -337,7 +337,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
                     }
                 }
 
-                Logger.Warn($"Open Interview {this.interview.InterviewId} (key: {this.interview.InterviewKey}, assignment: {this.interview.Assignment}) at {DateTime.Now}");
+                Logger.Warn($"Open Interview {this.interview.InterviewId} (key: {this.interview.InterviewKey}, assignment: {this.interview.Assignment}) at {DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture)}");
                 await this.ViewModelNavigationService.NavigateToAsync<LoadingInterviewViewModel, LoadingViewModelArg>(
                     new LoadingViewModelArg
                     {
