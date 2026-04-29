@@ -69,6 +69,10 @@ export const entityDetails = {
         acceptAnswer() {
             return this.$me.acceptAnswer
         },
+
+        isDevMode() {
+            return this.$store.state.webinterview.isDevMode || false
+        },
     },
 
     props:

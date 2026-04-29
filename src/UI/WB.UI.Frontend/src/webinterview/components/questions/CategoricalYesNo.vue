@@ -25,7 +25,10 @@
                         <label :for="$me.id + '_' + option.value + '_no'">
                             <span class="tick"></span>
                         </label>
-                        <span>{{ option.title }}</span>
+                        <span>
+                            <span v-if="isDevMode" class="option-value-code">[{{ option.value }}]</span>
+                            {{ option.title }}
+                        </span>
                         <button type="submit" v-if="$me.acceptAnswer && !isProtected(option.value)"
                             class="btn btn-link btn-clear" @click="clearAnswer(option.value)"
                             :id="`btn_${$me.id}_removeAnswer_opt_${option.value}`">
