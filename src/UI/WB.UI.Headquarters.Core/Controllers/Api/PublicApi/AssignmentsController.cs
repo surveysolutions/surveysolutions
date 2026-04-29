@@ -36,6 +36,7 @@ using WB.Infrastructure.Native.Storage.Postgre;
 using WB.UI.Headquarters.API.PublicApi.Models;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Resources;
+using WB.UI.Headquarters.Services.Maps;
 using WB.UI.Shared.Web.Exceptions;
 
 namespace WB.UI.Headquarters.Controllers.Api.PublicApi
@@ -465,9 +466,10 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                 return NotFound();
             }
 
-            if (targetArea != null && targetArea.Length > 1000)
+            if (targetArea != null && targetArea.Length > MapFilesValidator.MapFileNameLengthLimit)
             {
-                return StatusCode(StatusCodes.Status406NotAcceptable, "Target area name exceeds the maximum allowed length of 1000 characters.");
+                return StatusCode(StatusCodes.Status406NotAcceptable,
+                    string.Format(Resources.Maps.MapFileNameTooLong, targetArea, MapFilesValidator.MapFileNameLengthLimit));
             }
 
             commandService.Execute(

@@ -140,7 +140,7 @@ public class MapFilesValidatorTests
         var validatorErrors = service.Verify(analyzeResults).ToList();
 
         Assert.That(validatorErrors.Any(), Is.True);
-        Assert.That(validatorErrors.Any(e => e.Message == string.Format(Maps.MapFileNameTooLong, longMapName, 1000)), Is.True);
+        Assert.That(validatorErrors.Any(e => e.Message == string.Format(Maps.MapFileNameTooLong, longMapName, MapFilesValidator.MapFileNameLengthLimit)), Is.True);
     }
 
     [Test]
@@ -165,7 +165,7 @@ public class MapFilesValidatorTests
 
         var validatorErrors = service.Verify(analyzeResults).ToList();
 
-        Assert.That(validatorErrors.Any(e => e.Message.Contains("exceeds")), Is.False);
+        Assert.That(validatorErrors, Is.Empty);
     }
 
     private MapFile MapFile(string name, int size = 5000) => new MapFile() { Name = name, Size = size };

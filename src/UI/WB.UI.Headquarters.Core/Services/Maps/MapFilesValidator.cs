@@ -24,7 +24,7 @@ public class MapFilesValidator : IMapFilesValidator
 {
     private readonly IFileSystemAccessor fileSystemAccessor;
     private const int MapFileSizeLimit = 512 * 1024 * 1024;
-    private const int MapFileNameLengthLimit = 1000;
+    public const int MapFileNameLengthLimit = 1000;
 
     public MapFilesValidator(IFileSystemAccessor fileSystemAccessor)
     {
