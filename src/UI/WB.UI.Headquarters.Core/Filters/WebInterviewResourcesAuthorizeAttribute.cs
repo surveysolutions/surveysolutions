@@ -97,8 +97,8 @@ namespace WB.UI.Headquarters.Filters
 
             // Reuse the interview already loaded (and cached) by HasAccessToWebInterview to avoid
             // an extra repository round-trip per resource request.
-            var interview = context.HttpContext.Items[IWebInterviewAllowService.CachedInterviewItemsKey]
-                as IStatefulInterview;
+            context.HttpContext.Items.TryGetValue(IWebInterviewAllowService.CachedInterviewItemsKey, out var cachedItem);
+            var interview = cachedItem as IStatefulInterview;
 
             if (interview == null)
             {
