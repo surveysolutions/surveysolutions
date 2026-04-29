@@ -22,13 +22,14 @@ export function resolveComment(questionnaireId, commentId, entityId) {
     });
 }
 
-export function deleteComment(questionnaireId, commentId, entityId) {
+export function deleteComment(questionnaireId, commentId, entityId, resolveDate) {
     return del(
         'questionnaire/' + questionnaireId + '/comment/' + commentId
     ).then(response => {
         emitter.emit('commentDeleted', {
             id: commentId,
-            entityId: entityId
+            entityId: entityId,
+            resolveDate: resolveDate || null
         });
     });
 }

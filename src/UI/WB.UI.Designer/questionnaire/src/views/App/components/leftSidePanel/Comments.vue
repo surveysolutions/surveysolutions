@@ -67,6 +67,7 @@
 <script>
 import { getCommentThreads } from '../../../../services/commentsService';
 import { sanitize } from '../../../../services/utilityService';
+import { useCommentThreadsStore } from '../../../../stores/commentThreads';
 import _ from 'lodash';
 import moment from 'moment';
 
@@ -75,9 +76,25 @@ export default {
     props: {
         questionnaireId: { type: String, required: true },
     },
+    setup() {
+        const commentThreadsStore = useCommentThreadsStore();
+        return { commentThreadsStore };
+    },
     data() {
         return {
             commentThreads: [],
+        }
+    },
+    computed: {
+        unresolvedCount() {
+            return this.commentThreads.reduce(
+                (sum, thread) => sum + thread.comments.filter(c => !c.resolveDate).length, 0
+            );
+        }
+    },
+    watch: {
+        unresolvedCount(value) {
+            this.commentThreadsStore.setUnresolvedCount(value);
         }
     },
     async beforeMount() {

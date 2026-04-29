@@ -157,7 +157,9 @@
             <li>
                 <a class="left-menu-comments" v-if="!questionnaire.isReadOnlyForUser"
                     :class="{ unfolded: isUnfoldedComments }" @click="unfoldComments();"
-                    :title="$t('QuestionnaireEditor.SideBarCommentsTitle')"></a>
+                    :title="$t('QuestionnaireEditor.SideBarCommentsTitle')">
+                    <span v-if="unresolvedCommentsCount > 0" class="comments-badge">{{ unresolvedCommentsCount }}</span>
+                </a>
             </li>
             <li>
                 <a class="left-menu-criticality-conditions" :class="{ unfolded: isUnfoldedCriticalityConditions }"
@@ -202,6 +204,7 @@ import Translations from './leftSidePanel/Translations.vue'
 import CriticalityConditions from './leftSidePanel/CriticalityConditions.vue';
 
 import { setFocusIn } from '../../../services/utilityService'
+import { useCommentThreadsStore } from '../../../stores/commentThreads';
 
 import { useMagicKeys } from '@vueuse/core';
 
@@ -234,8 +237,10 @@ export default {
         const arrowLeft = keys['arrowleft'];
         const arrowRight = keys['arrowright'];
 
+        const commentThreadsStore = useCommentThreadsStore();
+
         return {
-            arrowLeft, arrowRight
+            arrowLeft, arrowRight, commentThreadsStore
         };
     },
     mounted() {
@@ -262,6 +267,11 @@ export default {
         this.$emitter.on('closeCriticalityConditions', this.closeAllPanel);
 
         this.$emitter.on('verifing', this.closeOpenPanelIfAny);
+
+        if (!this.questionnaire.isReadOnlyForUser) {
+            this.commentThreadsStore.initializeCount(this.questionnaireId);
+            this.commentThreadsStore.setupListeners();
+        }
     },
     unmounted() {
         this.$emitter.off('openChaptersList', this.setChaptersPanel);
@@ -287,6 +297,8 @@ export default {
         this.$emitter.off('closeCriticalityConditions', this.closeAllPanel);
 
         this.$emitter.off('verifing', this.closeOpenPanelIfAny);
+
+        this.commentThreadsStore.teardownListeners();
     },
     computed: {
         isFolded() {
@@ -302,6 +314,9 @@ export default {
         isUnfoldedComments() { return this.openPanel == 'comments' },
         isUnfoldedCategories() { return this.openPanel == 'categories' },
         isUnfoldedCriticalityConditions() { return this.openPanel == 'criticalityconditions' },
+        unresolvedCommentsCount() {
+            return this.commentThreadsStore.getUnresolvedCount;
+        },
     },
     watch: {
         arrowLeft: function (value) {

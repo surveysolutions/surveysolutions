@@ -140,10 +140,29 @@
             }
 
             &.left-menu-comments {
+                position: relative;
                 background-image: @leftpanel-icons-sprite;
                 background-size: 100%;
                 background-position: 0 -@leftpanel-icon-height*7;
                 background-repeat: no-repeat;
+
+                .comments-badge {
+                    position: absolute;
+                    top: 6px;
+                    right: 3px;
+                    min-width: 18px;
+                    height: 18px;
+                    padding: 0 4px;
+                    border-radius: 9px;
+                    background-color: #e55353;
+                    color: #fff;
+                    font-size: 10px;
+                    font-weight: bold;
+                    line-height: 18px;
+                    text-align: center;
+                    pointer-events: none;
+                    box-sizing: border-box;
+                }
             }
 
             &.left-menu-criticality-conditions {
