@@ -1034,4 +1034,7 @@ Aparecerá no dispositivo do entrevistador após a próxima sincronização</val
     <data name="AssigmentMap_GeoTrackingReminder" xml:space="preserve">
         <value>Você usou Geo Tracking ou Geo Fencing ao criar uma entrevista. Por favor, ative-o novamente se quiser usá-lo.</value>
     </data>
+  <data name="CommunicationIntegrityFailed" xml:space="preserve">
+    <value>A resposta recebida parece não vir do servidor Survey Solutions. Normalmente isto é causado por um proxy de rede, firewall ou gateway de segurança que intercepta a ligação. Verifique a sua ligação de rede ou contacte o suporte de TI.</value>
+  </data>
 </root>

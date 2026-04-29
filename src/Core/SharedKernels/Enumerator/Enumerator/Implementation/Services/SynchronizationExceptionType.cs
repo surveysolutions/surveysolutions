@@ -26,5 +26,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         ShouldChangePassword,
         WorkspaceAccessDisabledReason,
         RelinkError,
+        CommunicationIntegrityValidationFailed
     }
 }

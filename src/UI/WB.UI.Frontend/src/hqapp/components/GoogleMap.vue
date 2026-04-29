@@ -365,6 +365,10 @@ export default {
             this.$refs.assignModal.modal({ keyboard: false })
         },
 
+        newResponsibleSelected(newValue) {
+            this.newResponsibleId = newValue
+        },
+
         async sendAssignAssignment() {
             await this.$hq.Assignments.assignResponsible(
                 this.selectedTooltip.assignmentId,
@@ -512,6 +516,7 @@ export default {
                 minZoom: 3,
                 scaleControl: true,
                 streetViewControl: false,
+                ...(this.$config.googleMapsMapId ? { mapId: this.$config.googleMapsMapId } : {}),
             }
         },
 
