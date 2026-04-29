@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Enumerator.Native.WebInterview;
 using WB.UI.Headquarters.API.WebInterview;
@@ -28,8 +29,10 @@ namespace WB.UI.Headquarters.Filters
                 return;
             }
 
-            // Check review mode first: authenticated users with review permissions bypass password verification
-            if (HasAccessInReviewMode(context, interviewId, out _))
+            // Check review mode first: only for authenticated users who can conduct interview reviews.
+            // This avoids an unnecessary DB lookup for anonymous respondents.
+            var authorizedUser = context.HttpContext.RequestServices.GetRequiredService<IAuthorizedUser>();
+            if (authorizedUser.CanConductInterviewReview() && HasAccessInReviewMode(context, interviewId, out _))
                 return;
 
             // Fall back to web interview access + password verification for regular respondents
@@ -65,10 +68,16 @@ namespace WB.UI.Headquarters.Filters
 
         private static bool HasAccessInReviewMode(ActionExecutingContext context, string interviewId, out InterviewAccessException interviewAccessException)
         {
+            if (!Guid.TryParse(interviewId, out var interviewGuid))
+            {
+                interviewAccessException = null;
+                return false;
+            }
+
             try
             {
                 var services = context.HttpContext.RequestServices;
-                services.GetRequiredService<IReviewAllowedService>().CheckIfAllowed(Guid.Parse(interviewId));
+                services.GetRequiredService<IReviewAllowedService>().CheckIfAllowed(interviewGuid);
                 interviewAccessException = null;
                 return true;
             }
