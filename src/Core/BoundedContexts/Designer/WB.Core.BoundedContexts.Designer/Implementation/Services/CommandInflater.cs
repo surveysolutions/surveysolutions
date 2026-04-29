@@ -75,6 +75,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
             if (command is CopyCategories copyCategoriesCommand)
             {
+                // Only validate read access to the source questionnaire; return value is not needed
                 GetQuestionnaire(copyCategoriesCommand.SourceQuestionnaireId);
             }
         }
