@@ -21,6 +21,13 @@
                     class="btn btn-default btn-lg pull-left" :class="{ 'btn-primary': !isReadOnlyForUser }"
                     v-if="!isReadOnlyForUser" capture />
 
+                <input type="button" :value="$t('QuestionnaireEditor.SideBarAttachmentsUploadZip')"
+                    @click.stop="openZipFileDialog()"
+                    class="btn btn-default btn-lg pull-left"
+                    v-if="!isReadOnlyForUser" />
+
+                <input type="file" ref="zipInput" accept=".zip" @change="handleZipUpload" style="display:none" />
+
                 <file-upload ref="upload" v-if="!isReadOnlyForUser" :input-id="'tfunew'" v-model="file"
                     :size="maxFileSize" :drop="false" :drop-directory="false" @input-file="createAndUploadFile"
                     @input-filter="inputFilter" accept=".pdf,image/*,video/*,audio/*">
@@ -57,7 +64,7 @@ import { newGuid } from '../../../../helpers/guid';
 import { notice } from '../../../../services/notificationService';
 import AttachmentItem from './AttachmentItem.vue';
 import { formatBytes } from '../../../../services/utilityService';
-import { updateAttachment } from '../../../../services/attachmentsService';
+import { updateAttachment, uploadZipAttachments } from '../../../../services/attachmentsService';
 
 export default {
     name: 'Attachments',
@@ -86,6 +93,38 @@ export default {
         openFileDialog() {
             const fu = this.$refs.upload
             fu.$el.querySelector("#" + fu.inputId).click()
+        },
+        openZipFileDialog() {
+            this.$refs.zipInput.click();
+        },
+        async handleZipUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            if (this.isReadOnlyForUser) {
+                notice(this.$t('QuestionnaireEditor.NoPermissions'));
+                event.target.value = '';
+                return;
+            }
+
+            try {
+                const result = await uploadZipAttachments(this.questionnaireId, file);
+
+                if (result.processedCount > 0) {
+                    notice(this.$t('QuestionnaireEditor.SideBarAttachmentsZipProcessed', { count: result.processedCount }));
+                    await this.questionnaire.fetchQuestionnaireInfo(this.questionnaireId);
+                } else if (!result.errors || result.errors.length === 0) {
+                    notice(this.$t('QuestionnaireEditor.SideBarAttachmentsZipNoImages'));
+                }
+
+                if (result.errors && result.errors.length > 0) {
+                    result.errors.forEach(err => notice(err));
+                }
+            } catch (e) {
+                // errors handled by apiService processResponseErrorOrThrow
+            }
+
+            event.target.value = '';
         },
         formatBytes(bytes) {
             return formatBytes(bytes);

@@ -1,6 +1,9 @@
 import { upload, commandCall } from './apiService';
 import emitter from './emitter';
 import { newGuid } from '../helpers/guid';
+import { mande } from 'mande';
+import { useBlockUIStore } from '../stores/blockUI';
+import { useProgressStore } from '../stores/progress';
 
 export async function updateAttachment(
     questionnaireId,
@@ -49,4 +52,29 @@ export function deleteAttachment(questionnaireId, attachmentId) {
             id: attachmentId
         });
     });
+}
+
+export async function uploadZipAttachments(questionnaireId, file) {
+    const progressStore = useProgressStore();
+    const blockUI = useBlockUIStore();
+
+    progressStore.start();
+    blockUI.start();
+
+    const api = mande('/api/command/attachment/zip', { headers: { 'Content-Type': null } });
+
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('questionnaireId', questionnaireId);
+
+    try {
+        const response = await api.post(formData);
+        blockUI.stop();
+        progressStore.stop();
+        return response;
+    } catch (error) {
+        blockUI.stop();
+        progressStore.stop();
+        throw error;
+    }
 }

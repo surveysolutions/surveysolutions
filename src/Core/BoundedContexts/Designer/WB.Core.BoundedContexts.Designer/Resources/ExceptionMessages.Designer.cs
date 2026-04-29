@@ -153,6 +153,12 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
             }
         }
         
+        public static string Attachments_zip_only {
+            get {
+                return ResourceManager.GetString("Attachments_zip_only", resourceCulture);
+            }
+        }
+        
         public static string CantMoveSubsectionInWrongPosition {
             get {
                 return ResourceManager.GetString("CantMoveSubsectionInWrongPosition", resourceCulture);

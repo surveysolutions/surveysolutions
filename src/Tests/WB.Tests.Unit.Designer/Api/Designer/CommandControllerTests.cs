@@ -43,7 +43,8 @@ namespace WB.Tests.Unit.Designer.Api.Designer
             IAttachmentService attachmentService = null,
             IDesignerTranslationService translationsService = null,
             IReusableCategoriesService reusableCategoriesService = null,
-            IFileSystemAccessor fileSystemAccessor = null)
+            IFileSystemAccessor fileSystemAccessor = null,
+            IDesignerQuestionnaireStorage questionnaireStorage = null)
         {
             var controller = new CommandController(
                 commandService ?? Mock.Of<ICommandService>(),
@@ -54,7 +55,8 @@ namespace WB.Tests.Unit.Designer.Api.Designer
                 attachmentService ?? Mock.Of<IAttachmentService>(),
                 translationsService ?? Mock.Of<IDesignerTranslationService>(),
                 reusableCategoriesService ?? Mock.Of<IReusableCategoriesService>(),
-                fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>());
+                fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
+                questionnaireStorage ?? Mock.Of<IDesignerQuestionnaireStorage>());
 
             controller.ControllerContext = new ControllerContext
             {
