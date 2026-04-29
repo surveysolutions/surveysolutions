@@ -196,6 +196,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 .GroupBy(a => a.Name.ToLowerInvariant())
                 .ToDictionary(g => g.Key, g => g.First().AttachmentId);
 
+            const long maxEntrySize = 100L * 1024 * 1024;
             var processedCount = 0;
             var errors = new List<string>();
 
@@ -210,6 +211,12 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 var contentType = GetImageContentType(entryExtension);
                 if (contentType == null) continue;
 
+                if (entry.Length > maxEntrySize)
+                {
+                    errors.Add($"{entry.Name}: file is too large (max 100 MB)");
+                    continue;
+                }
+
                 try
                 {
                     byte[] fileContent;
@@ -223,8 +230,8 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                     var contentId = this.attachmentService.CreateAttachmentContentId(fileContent);
                     this.attachmentService.SaveContent(contentId, contentType, fileContent);
 
-                    var rawName = Path.GetFileNameWithoutExtension(entry.Name);
-                    var attachmentName = rawName.Replace(' ', '_').Substring(0, Math.Min(rawName.Length, 32));
+                    var rawName = SanitizeAttachmentName(Path.GetFileNameWithoutExtension(entry.Name));
+                    var attachmentName = rawName.Length > 32 ? rawName[..32] : rawName;
 
                     var attachmentId = Guid.NewGuid();
                     Guid? oldAttachmentId = null;
@@ -243,7 +250,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                     var zipCommand = new AddOrUpdateAttachment(
                         questionnaireId: model.QuestionnaireId,
                         attachmentId: attachmentId,
-                        responsibleId: Guid.NewGuid(),
+                        responsibleId: Guid.Empty,
                         attachmentName: attachmentName,
                         attachmentContentId: contentId,
                         oldAttachmentId: oldAttachmentId);
@@ -262,10 +269,29 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                 {
                     errors.Add($"{entry.Name}: {ex.Message}");
                 }
+                catch (Exception ex)
+                {
+                    this.logger.LogError(ex, "Error processing zip entry {EntryName}", entry.Name);
+                    errors.Add($"{entry.Name}: {ex.Message}");
+                }
             }
 
             await dbContext.SaveChangesAsync();
             return Ok(new { processedCount, errors });
+        }
+
+        private static string SanitizeAttachmentName(string name)
+        {
+            var invalidChars = Path.GetInvalidFileNameChars();
+            var sb = new StringBuilder(name.Length);
+            foreach (var c in name)
+            {
+                if (Array.IndexOf(invalidChars, c) >= 0 || c == ' ')
+                    sb.Append('_');
+                else
+                    sb.Append(c);
+            }
+            return sb.Length > 0 ? sb.ToString() : "_";
         }
 
         private static string? GetImageContentType(string extension)
