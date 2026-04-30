@@ -1305,5 +1305,73 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(state.GroupsState.ContainsKey(sourceGroupId), Is.False);
         }
 
+        [Test]
+        public void When_AnonymousSharing_enabled_Then_history_item_should_be_added_with_AnonymousSharingEnabled_action_type()
+        {
+            // arrange
+            Guid questionnaireId = Id.g1;
+            Guid responsibleId = Id.g2;
+            string userName = "responsible";
+            string questionnaireTitle = "My Questionnaire";
+
+            var dbContext = Create.InMemoryDbContext();
+            var historyVersionsService = Create.QuestionnireHistoryVersionsService(dbContext);
+
+            // act
+            historyVersionsService.AddQuestionnaireChangeItem(
+                questionnaireId,
+                responsibleId,
+                userName,
+                QuestionnaireActionType.AnonymousSharingEnabled,
+                QuestionnaireItemType.Questionnaire,
+                questionnaireId,
+                questionnaireTitle,
+                null, null, null, null);
+
+            // assert
+            var historyItem = dbContext.QuestionnaireChangeRecords.First(h => h.QuestionnaireId == questionnaireId.FormatGuid());
+
+            Assert.That(historyItem, Is.Not.Null);
+            Assert.That(historyItem.ActionType, Is.EqualTo(QuestionnaireActionType.AnonymousSharingEnabled));
+            Assert.That(historyItem.TargetItemType, Is.EqualTo(QuestionnaireItemType.Questionnaire));
+            Assert.That(historyItem.TargetItemTitle, Is.EqualTo(questionnaireTitle));
+            Assert.That(historyItem.UserId, Is.EqualTo(responsibleId));
+            Assert.That(historyItem.UserName, Is.EqualTo(userName));
+        }
+
+        [Test]
+        public void When_AnonymousSharing_disabled_Then_history_item_should_be_added_with_AnonymousSharingDisabled_action_type()
+        {
+            // arrange
+            Guid questionnaireId = Id.g1;
+            Guid responsibleId = Id.g2;
+            string userName = "responsible";
+            string questionnaireTitle = "My Questionnaire";
+
+            var dbContext = Create.InMemoryDbContext();
+            var historyVersionsService = Create.QuestionnireHistoryVersionsService(dbContext);
+
+            // act
+            historyVersionsService.AddQuestionnaireChangeItem(
+                questionnaireId,
+                responsibleId,
+                userName,
+                QuestionnaireActionType.AnonymousSharingDisabled,
+                QuestionnaireItemType.Questionnaire,
+                questionnaireId,
+                questionnaireTitle,
+                null, null, null, null);
+
+            // assert
+            var historyItem = dbContext.QuestionnaireChangeRecords.First(h => h.QuestionnaireId == questionnaireId.FormatGuid());
+
+            Assert.That(historyItem, Is.Not.Null);
+            Assert.That(historyItem.ActionType, Is.EqualTo(QuestionnaireActionType.AnonymousSharingDisabled));
+            Assert.That(historyItem.TargetItemType, Is.EqualTo(QuestionnaireItemType.Questionnaire));
+            Assert.That(historyItem.TargetItemTitle, Is.EqualTo(questionnaireTitle));
+            Assert.That(historyItem.UserId, Is.EqualTo(responsibleId));
+            Assert.That(historyItem.UserName, Is.EqualTo(userName));
+        }
+
     }
 }

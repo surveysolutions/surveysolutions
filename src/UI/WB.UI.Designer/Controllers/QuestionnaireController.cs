@@ -469,6 +469,21 @@ namespace WB.UI.Designer.Controllers
             dbContext.AnonymousQuestionnaires.Update(anonymousQuestionnaire);
             await dbContext.SaveChangesAsync();
 
+            var questionnaireView = GetQuestionnaireView(id);
+            var questionnaireTitle = questionnaireView?.Title ?? string.Empty;
+            var actionType = isActive
+                ? QuestionnaireActionType.AnonymousSharingEnabled
+                : QuestionnaireActionType.AnonymousSharingDisabled;
+            questionnaireHistoryVersionsService.AddQuestionnaireChangeItem(
+                id,
+                User.GetId(),
+                User.GetUserName(),
+                actionType,
+                QuestionnaireItemType.Questionnaire,
+                id,
+                questionnaireTitle,
+                null, null, null, null);
+
             if (isActive)
                 await SendAnonymousSharingEmailAsync(id, anonymousQuestionnaire.AnonymousQuestionnaireId);
             
