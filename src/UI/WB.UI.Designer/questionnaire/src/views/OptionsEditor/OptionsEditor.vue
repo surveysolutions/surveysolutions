@@ -91,6 +91,7 @@ import CategoryStrings from './components/OptionItemsAsStrings.vue';
 import { optionsApi } from './services';
 import 'vuetify/styles';
 import { isEqual, cloneDeep } from 'lodash';
+import { useKeyShortcut } from '../../composables/useKeyShortcut';
 
 export default {
     name: 'CategoriesEditor',
@@ -105,6 +106,19 @@ export default {
         id: { type: String, required: true },
         isCategory: { type: Boolean, required: false },
         cascading: { type: Boolean, required: false, default: false }
+    },
+
+    setup() {
+        const ctrl_s = useKeyShortcut(e => e.ctrlKey && e.key === 's');
+        return { ctrl_s };
+    },
+
+    watch: {
+        ctrl_s: function (v) {
+            if (v) {
+                this.apply();
+            }
+        }
     },
 
     data() {
