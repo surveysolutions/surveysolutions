@@ -390,13 +390,66 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             },
             new QuestionnaireContentVersion
             {
-                Version = ApiVersion.MaxQuestionnaireVersion, 
+                Version = 36, 
                 NewFeatures = new []
                 {
                     new QuestionnaireFeature
                     (
                         hasQuestionnaire : questionnaire => questionnaire.Find<NumericQuestion>(q => q is { IsInteger: false, CountOfDecimalPlaces: 0 } ).Any(),
                         description : "Decimal question with zero decimal places"
+                    )
+                }
+            },
+            new QuestionnaireContentVersion
+            {
+                Version = ApiVersion.MaxQuestionnaireVersion,
+                NewFeatures = new []
+                {
+                    new QuestionnaireFeature
+                    (
+                        hasQuestionnaire: questionnaire =>
+                        {
+                            var gpsQuestions = questionnaire.Find<GpsCoordinateQuestion>().ToList();
+                            if (!gpsQuestions.Any()) return false;
+
+                            var gpsTimestampRefs = gpsQuestions.Select(x => $"{x.VariableName}.Timestamp").ToList();
+                            gpsTimestampRefs.Add("self.Timestamp");
+
+                            bool IsUsedInExpression(string? itemToCheck)
+                            {
+                                if (string.IsNullOrWhiteSpace(itemToCheck)) return false;
+                                var expressionTrimmed = itemToCheck
+                                    .Replace("\r", "")
+                                    .Replace("\n", "")
+                                    .Replace(" ", "");
+                                return gpsTimestampRefs.Any(r => expressionTrimmed.Contains(r));
+                            }
+
+                            foreach (var composite in questionnaire.Find<IComposite>())
+                            {
+                                if (composite is IConditional conditional
+                                    && IsUsedInExpression(conditional.ConditionExpression))
+                                    return true;
+
+                                if (composite is IValidatable validatable)
+                                {
+                                    foreach (var validationExpression in validatable.ValidationConditions.Select(x => x.Expression))
+                                    {
+                                        if (IsUsedInExpression(validationExpression))
+                                            return true;
+                                    }
+                                }
+
+                                if (composite is IQuestion question)
+                                {
+                                    if (IsUsedInExpression(question.LinkedFilterExpression)
+                                        || IsUsedInExpression(question.Properties?.OptionsFilterExpression))
+                                        return true;
+                                }
+                            }
+                            return false;
+                        },
+                        description: "GPS question timestamp is used in expressions"
                     )
                 }
             },
