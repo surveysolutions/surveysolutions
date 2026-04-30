@@ -1,5 +1,7 @@
-import axios from 'axios';
+import { mande } from 'mande';
 import { i18n } from '../plugins/localization';
+
+const api = mande('/');
 
 export const useAssistant = () => {
     // Rate limiting: Track requests to avoid hitting limits
@@ -41,6 +43,29 @@ export const useAssistant = () => {
         });
     };
 
+    const withTimeout = (ms, signal) => {
+        const controller = new AbortController();
+        if (signal?.aborted) {
+            controller.abort(signal.reason);
+            return { signal: controller.signal, clear: () => {} };
+        }
+        const timer = setTimeout(() => controller.abort(), ms);
+        let onAbort;
+        if (signal) {
+            onAbort = () => controller.abort(signal.reason);
+            signal.addEventListener('abort', onAbort, { once: true });
+        }
+        return {
+            signal: controller.signal,
+            clear: () => {
+                clearTimeout(timer);
+                if (signal && onAbort) {
+                    signal.removeEventListener('abort', onAbort);
+                }
+            },
+        };
+    };
+
     const sendMessage = async (prompt, messages, options = {}) => {
         const retries = 3;
 
@@ -56,9 +81,10 @@ export const useAssistant = () => {
         lastRequestTime = Date.now();
 
         for (let attempt = 1; attempt <= retries; attempt++) {
+            const { signal: timeoutSignal, clear } = withTimeout(3 * 60 * 1000, options.signal);
             try {
                 const questionnaireId = options.questionnaireId || null;
-                const response = await axios.post(
+                const data = await api.post(
                     `/api/assistance/${questionnaireId}`,
                     {
                         messages: messages.map((msg) => ({
@@ -69,13 +95,10 @@ export const useAssistant = () => {
                         entityId: options.entityId || null,
                         conversationId: options.conversationId || null,
                     },
-                    {
-                        timeout: 3 * 60 * 1000, // 3 minute timeout
-                        signal: options.signal || null,
-                    },
-                );
+                    { signal: timeoutSignal },
+                ) || {};
+                clear();
 
-                const data = response.data || {};
                 const text =
                     data.expression ?? data.answer ?? data.message ?? '';
                 const meta = data.meta ?? data.Meta ?? null;
@@ -84,13 +107,22 @@ export const useAssistant = () => {
 
                 return { text, meta, conversationId, callLogId };
             } catch (error) {
-                // Re-throw abort errors immediately without retrying
-                if (
-                    error.name === 'AbortError' ||
-                    error.name === 'CanceledError' ||
-                    error.code === 'ERR_CANCELED'
-                ) {
-                    throw error;
+                clear();
+                // Re-throw abort errors immediately without retrying only
+                // if the user's own signal was aborted (user cancellation).
+                // Internal timeouts are retryable.
+                if (error.name === 'AbortError') {
+                    if (options.signal?.aborted) {
+                        throw error;
+                    }
+                    // Internal timeout — treat like a transient failure and retry
+                    if (attempt < retries) {
+                        const backoffDelay = Math.min(2000 * attempt, 10000);
+                        await abortAwareDelay(backoffDelay, options.signal);
+                        continue;
+                    } else {
+                        throw new Error(i18n.t('Assistant.ConnectionError'));
+                    }
                 }
 
                 if (error.response?.status === 401) {
@@ -135,13 +167,16 @@ export const useAssistant = () => {
     const sendReaction = async (questionnaireId, reaction) => {
         if (!questionnaireId) throw new Error('questionnaireId is required');
 
-        await axios.post(
-            `/api/assistance/${questionnaireId}/reaction`,
-            reaction,
-            {
-                timeout: 30 * 1000,
-            },
-        );
+        const { signal: timeoutSignal, clear } = withTimeout(30 * 1000, undefined);
+        try {
+            await api.post(
+                `/api/assistance/${questionnaireId}/reaction`,
+                reaction,
+                { signal: timeoutSignal },
+            );
+        } finally {
+            clear();
+        }
     };
 
     const createUserMessage = (content) => ({
