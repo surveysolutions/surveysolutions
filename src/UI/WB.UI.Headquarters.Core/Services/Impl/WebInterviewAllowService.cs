@@ -54,6 +54,10 @@ namespace WB.UI.Headquarters.Services.Impl
             {
                 if (this.prototypeService.IsPrototype(id))
                 {
+                    // Mark that access was granted via the prototype path so that downstream
+                    // filter steps (e.g. password verification) know they can skip all checks.
+                    if (contextAccessor.HttpContext != null)
+                        contextAccessor.HttpContext.Items[IWebInterviewAllowService.PrototypeAccessGrantedKey] = true;
                     return;
                 }
             }

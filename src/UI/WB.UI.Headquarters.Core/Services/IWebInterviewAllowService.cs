@@ -12,6 +12,13 @@ namespace WB.UI.Headquarters.API.WebInterview
         /// </summary>
         public const string CachedInterviewItemsKey = "WebInterviewAllowService.CachedInterview";
 
+        /// <summary>
+        /// Key set in <c>HttpContext.Items</c> when access was granted via the prototype fast-path
+        /// (before any interview entity is loaded). Presence of this key signals that password
+        /// verification should be skipped — prototypes have no assignment password.
+        /// </summary>
+        public const string PrototypeAccessGrantedKey = "WebInterviewAllowService.PrototypeAccessGranted";
+
         void CheckWebInterviewAccessPermissions(string interviewId);
     }
 }

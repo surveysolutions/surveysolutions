@@ -95,6 +95,11 @@ namespace WB.UI.Headquarters.Filters
             if (context.HttpContext.Session.IsPasswordVerifiedForInterview(interviewId))
                 return true;
 
+            // Prototype interviews have no assignment password — access was already granted by the
+            // allow-service's prototype fast-path before loading any interview entity.
+            if (context.HttpContext.Items.ContainsKey(IWebInterviewAllowService.PrototypeAccessGrantedKey))
+                return true;
+
             // Reuse the interview already loaded (and cached) by HasAccessToWebInterview to avoid
             // an extra repository round-trip per resource request.
             context.HttpContext.Items.TryGetValue(IWebInterviewAllowService.CachedInterviewItemsKey, out var cachedItem);
