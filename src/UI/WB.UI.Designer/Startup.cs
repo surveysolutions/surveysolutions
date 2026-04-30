@@ -418,14 +418,19 @@ namespace WB.UI.Designer
             services.Configure<QuestionnaireHistorySettings>(Configuration.GetSection("QuestionnaireHistorySettings"));
             services.Configure<WebTesterSettings>(Configuration.GetSection("WebTester"));
 
-            // Fail fast: the service-to-service key is mandatory.
+            // Fail fast: the service-to-service key is mandatory and must satisfy the
+            // minimum length expected by the auth exchange flow.
             // The auth exchange flow depends on matching WebTester:ServiceApiKey values in Designer
-            // and WebTester. If the key is missing, exchange requests are rejected; configure it in
+            // and WebTester. If the key is missing or too short, exchange requests fail; configure it in
             // both applications to keep the integration functional.
+            const int minimumServiceApiKeyLength = 32;
             var serviceApiKey = Configuration["WebTester:ServiceApiKey"];
             if (string.IsNullOrWhiteSpace(serviceApiKey))
                 throw new InvalidOperationException(
                     "WebTester:ServiceApiKey must be configured. Set it in appsettings.ini or via environment variables.");
+            if (serviceApiKey.Length < minimumServiceApiKeyLength)
+                throw new InvalidOperationException(
+                    $"WebTester:ServiceApiKey must be at least {minimumServiceApiKeyLength} characters long.");
 
 
             aspCoreKernel = new AspCoreKernel(services);
