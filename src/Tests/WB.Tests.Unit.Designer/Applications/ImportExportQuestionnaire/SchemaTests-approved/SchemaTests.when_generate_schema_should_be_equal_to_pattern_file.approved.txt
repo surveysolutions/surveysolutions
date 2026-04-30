@@ -1,4 +1,4 @@
-{
+﻿{
   "$schema": "http://json-schema.org/draft-04/schema#",
   "title": "Questionnaire",
   "type": "object",
@@ -945,6 +945,9 @@
         },
         "FileName": {
           "type": "string"
+        },
+        "Description": {
+          "type": "string"
         }
       }
     },
@@ -1022,6 +1025,9 @@
           "type": "string"
         },
         "FileName": {
+          "type": "string"
+        },
+        "Description": {
           "type": "string"
         }
       }

@@ -247,6 +247,9 @@
   <data name="SideBarLookupTableName" xml:space="preserve">
     <value>table name</value>
   </data>
+  <data name="SideBarLookupTableDescription" xml:space="preserve">
+    <value>description</value>
+  </data>
   <data name="SideBarLookupTablesCounter" xml:space="preserve">
     <value>{{count}} Lookup Table:</value>
   </data>
@@ -372,6 +375,9 @@
   </data>
   <data name="SideBarCategoriesName" xml:space="preserve">
     <value>name of categories</value>
+  </data>
+  <data name="SideBarCategoriesDescription" xml:space="preserve">
+    <value>description</value>
   </data>
   <data name="SideBarTranslationsCounter" xml:space="preserve">
     <value>{{count}} Translation</value>

@@ -213,7 +213,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 
             return categories == null
                 ? null
-                : new CategoriesView(categoriesId: categories.Id.FormatGuid(), categories.Name);
+                : new CategoriesView(categoriesId: categories.Id.FormatGuid(), categories.Name, categories.Description);
         }
 
 
