@@ -278,7 +278,7 @@
                                                     </button>
                                                     <button v-if="isReminderTemplate(emailTemplate)"
                                                         type="button"
-                                                        :disabled="!started || null"
+                                                        :disabled="!started"
                                                         @click="sendRemindersNow(emailTemplate)"
                                                         :title="$t('WebInterviewSettings.SendNowTooltip', { reminderType: emailTemplate.buttonTitle })"
                                                         class="btn btn-md btn-warning">
