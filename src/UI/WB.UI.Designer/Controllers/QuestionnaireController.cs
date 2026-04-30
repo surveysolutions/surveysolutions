@@ -525,10 +525,16 @@ namespace WB.UI.Designer.Controllers
 
             var messageBody = await viewRenderService.RenderToStringAsync("Emails/AnonymousSharingEmail", model);
 
-            
-            await emailSender.SendEmailAsync(user.Email,
-                NotificationResources.SystemMailer_AnonymousSharingEmail_Subject,
-                messageBody);
+            try
+            {
+                await emailSender.SendEmailAsync(user.Email,
+                    NotificationResources.SystemMailer_AnonymousSharingEmail_Subject,
+                    messageBody);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Failed to send anonymous sharing email to user {UserId}", user.Id);
+            }
         }
 
         [Authorize]
