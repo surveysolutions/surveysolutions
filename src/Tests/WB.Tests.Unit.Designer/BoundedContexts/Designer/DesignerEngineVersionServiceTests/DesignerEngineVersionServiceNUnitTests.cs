@@ -362,5 +362,24 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DesignerEngineVersionS
 
             Assert.That(contentVersion, Is.EqualTo(37));
         }
+        [Test]
+        public void should_return_37_when_gps_self_timestamp_is_used_in_its_own_validation()
+        {
+            QuestionnaireDocument questionnaire = Create.QuestionnaireDocumentWithOneChapter(children:
+                new IComposite[]{
+                    Create.Question(questionType: QuestionType.GpsCoordinates,
+                        variable: "gps",
+                        validationConditions: new ValidationCondition[]
+                        {
+                            new ValidationCondition("self.Timestamp > DateTime.UtcNow", "test")
+                        }),
+                });
+
+            var service = this.CreateDesignerEngineVersionService();
+
+            var contentVersion = service.GetQuestionnaireContentVersion(questionnaire);
+
+            Assert.That(contentVersion, Is.EqualTo(37));
+        }
     }
 }

@@ -413,15 +413,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                             if (!gpsQuestions.Any()) return false;
 
                             var gpsTimestampRefs = gpsQuestions.Select(x => $"{x.VariableName}.Timestamp").ToList();
-                            gpsTimestampRefs.Add("self.Timestamp");
+                            var gpsQuestionIds = gpsQuestions.Select(x => x.PublicKey).ToHashSet();
 
-                            bool IsUsedInExpression(string? itemToCheck)
+                            bool IsUsedInExpression(string? itemToCheck, bool isSelfContext = false)
                             {
                                 if (string.IsNullOrWhiteSpace(itemToCheck)) return false;
                                 var expressionTrimmed = itemToCheck
                                     .Replace("\r", "")
                                     .Replace("\n", "")
                                     .Replace(" ", "");
+                                if (isSelfContext && expressionTrimmed.Contains("self.Timestamp"))
+                                    return true;
                                 return gpsTimestampRefs.Any(r => expressionTrimmed.Contains(r));
                             }
 
@@ -431,11 +433,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                                     && IsUsedInExpression(conditional.ConditionExpression))
                                     return true;
 
+                                bool isGpsQuestion = composite is GpsCoordinateQuestion
+                                    && gpsQuestionIds.Contains(((GpsCoordinateQuestion)composite).PublicKey);
+
                                 if (composite is IValidatable validatable)
                                 {
                                     foreach (var validationExpression in validatable.ValidationConditions.Select(x => x.Expression))
                                     {
-                                        if (IsUsedInExpression(validationExpression))
+                                        if (IsUsedInExpression(validationExpression, isSelfContext: isGpsQuestion))
                                             return true;
                                     }
                                 }
