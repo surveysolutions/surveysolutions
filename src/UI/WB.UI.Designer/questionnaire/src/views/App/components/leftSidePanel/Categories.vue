@@ -29,11 +29,11 @@
                     <span>{{ $t('QuestionnaireEditor.SideBarTranslationGetTemplate') }}</span>
 
                     <a class="btn btn-default" :href="downloadBaseUrl + '/template'" target="_blank" rel="noopener">{{
-            $t('QuestionnaireEditor.SideBarXlsx') }}
+                        $t('QuestionnaireEditor.SideBarXlsx') }}
                     </a>
                     <a class="btn btn-default" :href="downloadBaseUrl + '/templateTab'" target="_blank"
                         rel="noopener">{{
-            $t('QuestionnaireEditor.SideBarTab') }}
+                            $t('QuestionnaireEditor.SideBarTab') }}
                     </a>
                 </p>
                 <p>
@@ -64,7 +64,7 @@ import { newGuid } from '../../../../helpers/guid';
 import { isNull, isUndefined, some } from 'lodash'
 import { updateCategories } from '../../../../services/categoriesService'
 import { notice } from '../../../../services/notificationService';
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 export default {
     name: 'Categories',
@@ -128,7 +128,7 @@ export default {
 
             categories.meta = {};
             categories.meta.fileName = file.name;
-            categories.meta.lastUpdated = moment();
+            categories.meta.lastUpdated = dayjs();
 
             const suspectedCategories = categories.meta.fileName.match(/[^[\]]+(?=])/g);
 
