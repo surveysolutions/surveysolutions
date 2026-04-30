@@ -1,8 +1,10 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
+using System.Linq;
 using System.Net;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.HttpServices.Services;
 using WB.Core.SharedKernels.DataCollection.Services;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities
@@ -66,7 +68,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                     var isDisabled = treeEntity.IsDisabled();
                     if (isDisabled && treeEntity is InterviewTreeRoster interviewTreeRoster)
                     {
-                        plainSubstitutionResult = interviewTreeRoster.RosterTitle;
+                        plainSubstitutionResult = GetRosterServiceVariableValue(substitution.Name, interviewTreeRoster) 
+                                                  ?? interviewTreeRoster.RosterTitle;
                         browserSubstitutionResult = plainSubstitutionResult;
                     }
                     else if (!isDisabled)
@@ -74,7 +77,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                         switch (treeEntity)
                         {
                             case InterviewTreeRoster roster:
-                                plainSubstitutionResult = roster.RosterTitle;
+                                plainSubstitutionResult = GetRosterServiceVariableValue(substitution.Name, roster)
+                                                          ?? roster.RosterTitle;
                                 browserSubstitutionResult = plainSubstitutionResult;
                                 break;
 
@@ -137,6 +141,24 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
             Text = plainTextReplaced;
             BrowserReadyText = browserTextReplaced;
+        }
+
+        private static string GetRosterServiceVariableValue(string variableName, InterviewTreeRoster roster)
+        {
+            switch (variableName)
+            {
+                case SubstitutionService.RowCodeVariableName:
+                case SubstitutionService.RowCodeVariableNameAt:
+                    return roster.Identity.RosterVector.Last().ToString(CultureInfo.InvariantCulture);
+                case SubstitutionService.RowIndexVariableName:
+                case SubstitutionService.RowIndexVariableNameAt:
+                    return roster.SortIndex.ToString(CultureInfo.InvariantCulture);
+                case SubstitutionService.RowNameVariableName:
+                case SubstitutionService.RowNameVariableNameAt:
+                    return roster.RosterTitle;
+                default:
+                    return null;
+            }
         }
 
         public override string ToString() => this.Text;
