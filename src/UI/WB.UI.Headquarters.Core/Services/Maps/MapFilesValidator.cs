@@ -89,7 +89,10 @@ public class MapFilesValidator : IMapFilesValidator
         foreach (var map in analyzeResults.Maps)
         {
             if (map.Name.Length > MapFileNameLengthLimit)
-                yield return new ValidatorError(string.Format(Resources.Maps.MapFileNameTooLong, map.Name, MapFileNameLengthLimit));
+            {
+                var truncatedName = map.Name.Length > 100 ? map.Name.Substring(0, 100) + "…" : map.Name;
+                yield return new ValidatorError(string.Format(Resources.Maps.MapFileNameTooLong, truncatedName, MapFileNameLengthLimit));
+            }
         }
     }
 

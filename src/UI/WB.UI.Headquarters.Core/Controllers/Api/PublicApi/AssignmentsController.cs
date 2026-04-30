@@ -468,8 +468,9 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
 
             if (targetArea != null && targetArea.Length > MapFilesValidator.MapFileNameLengthLimit)
             {
+                var truncatedName = targetArea.Length > 100 ? targetArea.Substring(0, 100) + "…" : targetArea;
                 return StatusCode(StatusCodes.Status406NotAcceptable,
-                    string.Format(WB.UI.Headquarters.Resources.Maps.MapFileNameTooLong, targetArea, MapFilesValidator.MapFileNameLengthLimit));
+                    string.Format(WB.UI.Headquarters.Resources.Maps.MapFileNameTooLong, truncatedName, MapFilesValidator.MapFileNameLengthLimit));
             }
 
             commandService.Execute(
