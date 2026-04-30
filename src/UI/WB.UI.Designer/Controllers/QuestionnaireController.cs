@@ -456,6 +456,10 @@ namespace WB.UI.Designer.Controllers
         public async Task<IActionResult> UpdateAnonymousQuestionnaireSettings(Guid id, [FromBody] UpdateAnonymousQuestionnaireSettingsModel postModel)
         {
             bool isActive = postModel.IsActive;
+
+            var questionnaireView = GetQuestionnaireView(id);
+            var questionnaireTitle = questionnaireView?.Title ?? string.Empty;
+
             var anonymousQuestionnaire = dbContext.AnonymousQuestionnaires.FirstOrDefault(a => a.QuestionnaireId == id);
             if (anonymousQuestionnaire == null)
             {
@@ -469,8 +473,6 @@ namespace WB.UI.Designer.Controllers
             dbContext.AnonymousQuestionnaires.Update(anonymousQuestionnaire);
             await dbContext.SaveChangesAsync();
 
-            var questionnaireView = GetQuestionnaireView(id);
-            var questionnaireTitle = questionnaireView?.Title ?? string.Empty;
             var actionType = isActive
                 ? QuestionnaireActionType.AnonymousSharingEnabled
                 : QuestionnaireActionType.AnonymousSharingDisabled;
