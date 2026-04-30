@@ -176,8 +176,8 @@ namespace WB.Services.Export
         {
             logger.LogDebug("Compressing directory {directory} into {archiveName} (tar.gz)", exportTempDirectoryPath, archiveName);
             using var archiveFile = File.Create(archiveName);
-            await using var gzipStream = new GZipStream(archiveFile, CompressionLevel.Optimal, leaveOpen: true);
-            await using var tarWriter = new TarWriter(gzipStream, TarEntryFormat.Gnu, leaveOpen: true);
+            await using var gzipStream = new GZipStream(archiveFile, CompressionLevel.Optimal);
+            await using var tarWriter = new TarWriter(gzipStream, TarEntryFormat.Gnu);
 
             var files = Directory.EnumerateFiles(exportTempDirectoryPath, "*.*", SearchOption.AllDirectories).ToList();
             var total = files.Count;
@@ -189,6 +189,13 @@ namespace WB.Services.Export
 
                 var entryName = Path.GetRelativePath(exportTempDirectoryPath, file)
                     .Replace(Path.DirectorySeparatorChar, '/');
+
+                // Guard against paths outside the export directory (should not happen, but defensive)
+                if (entryName.StartsWith(".."))
+                {
+                    logger.LogWarning("Skipping file outside export directory: {file}", file);
+                    continue;
+                }
 
                 await tarWriter.WriteEntryAsync(file, entryName, token);
 

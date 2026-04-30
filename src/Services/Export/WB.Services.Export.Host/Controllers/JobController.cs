@@ -78,7 +78,7 @@ namespace WB.Services.Export.Host.Controllers
 
         [HttpPut]
         [Route("api/v1/job/generate")]
-        public async Task<DataExportUpdateRequestResult> RequestUpdate(
+        public async Task<ActionResult<DataExportUpdateRequestResult>> RequestUpdate(
             string questionnaireId,
             DataExportFormat format,
             InterviewStatus? status,
@@ -94,6 +94,9 @@ namespace WB.Services.Export.Host.Controllers
             GeographyExportFormat? geographyExportFormat,
             ExportFileFormat? exportFileFormat)
         {
+            if (exportFileFormat == ExportFileFormat.TarGz && !string.IsNullOrEmpty(archivePassword))
+                return BadRequest("TAR.GZ format does not support password protection. Use ZIP format when encryption is required.");
+
             var args = new DataExportProcessArgs(new ExportSettings
             (
                 tenant: tenantContext.Tenant,
