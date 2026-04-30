@@ -1,19 +1,30 @@
 <template>
     <div :class="{ 'pseudo-form-control': focusable === 'true' }" ref="editorHolder" aceEditor>
-        <v-ace-editor ref="editor" v-model:value="editorValue" @init="editorInit" theme="github"
-            :lang="mode !== 'substitutions' ? 'csharp' : 'text'" :options="{
-        minLines: 1,
-        maxLines: 300,
-        fontSize: 16,
-        highlightActiveLine: false,
-        indentedSoftWrap: false,
-        printMargin: mode !== 'substitutions',
-        showLineNumbers: false,
-        showGutter: false,
-        useWorker: true,
-        wrap: true,
-        placeholder: this.placeholder,
-    }" />
+        <textarea v-if="mode === 'substitutions'"
+            ref="textareaEditor"
+            v-model="editorValue"
+            spellcheck="true"
+            class="substitution-editor"
+            :placeholder="placeholder || ''"
+            rows="1"
+            @focus="onTextareaFocus"
+            @blur="onTextareaBlur"
+            @input="onTextareaInput"
+        ></textarea>
+        <v-ace-editor v-else ref="editor" v-model:value="editorValue" @init="editorInit" theme="github"
+            lang="csharp" :options="{
+            minLines: 1,
+            maxLines: 300,
+            fontSize: 16,
+            highlightActiveLine: false,
+            indentedSoftWrap: false,
+            printMargin: true,
+            showLineNumbers: false,
+            showGutter: false,
+            useWorker: true,
+            wrap: true,
+            placeholder: this.placeholder,
+        }" />
     </div>
 </template>
 
@@ -63,13 +74,48 @@ export default {
             }
         }
     },
+    watch: {
+        modelValue(newValue) {
+            if (this.mode === 'substitutions') {
+                this.$nextTick(() => {
+                    // Only resize if value changed externally (i.e., not from user typing
+                    // which is already handled by onTextareaInput)
+                    const ta = this.$refs.textareaEditor;
+                    if (ta && ta.value !== newValue) {
+                        this.resizeTextarea();
+                    }
+                });
+            }
+        }
+    },
     mounted() {
         this.$emitter.on('variablesRecalculated', this.variablesRecalculated);
+        if (this.mode === 'substitutions') {
+            this.$nextTick(() => {
+                this.resizeTextarea();
+            });
+        }
     },
     unmounted() {
         this.$emitter.off('variablesRecalculated', this.variablesRecalculated);
     },
     methods: {
+        onTextareaFocus() {
+            this.$refs.editorHolder.classList.add('focused');
+        },
+        onTextareaBlur() {
+            this.$refs.editorHolder.classList.remove('focused');
+        },
+        onTextareaInput() {
+            this.resizeTextarea();
+        },
+        resizeTextarea() {
+            const ta = this.$refs.textareaEditor;
+            if (ta) {
+                ta.style.height = 'auto';
+                ta.style.height = ta.scrollHeight + 'px';
+            }
+        },
         onModeChanged(e, session) {
             var self = this;
             if (session.$mode.$id !== 'ace/mode/csharp') return;
@@ -140,50 +186,30 @@ export default {
 
             var session = editor.getSession();
 
-            //extend text mode with substitutions
-            //text is a default mode
-            if (this.mode === 'substitutions') {
-                var rules = session.$mode.$highlightRules.getRules();
-                for (var stateName in rules) {
-                    if (Object.prototype.hasOwnProperty.call(rules, stateName)) {
-                        rules[stateName].unshift({
-                            token: 'support.variable',
-                            regex: '\%[a-zA-Z][_a-zA-Z0-9]{0,31}\%'
-                        });
-                    }
-                }
+            //do not subscribe if it's already updated
+            if (!session.$mode.hasBeenUpdated)
+                session.on("changeMode", this.onModeChanged);
 
-                session.$mode.$tokenizer = null;
-                session.bgTokenizer.setTokenizer(session.$mode.getTokenizer());
-                session.bgTokenizer.start(0);
-            }
-            else if (self.mode !== 'substitutions') {
+            //TODO: for linked add "@current"
+            ace.config.loadModule('ace/ext/language_tools', function () {
+                var variablesCompletor =
+                {
+                    getCompletions: function (editor, session, pos, prefix, callback) {
+                        var variables = self.treeStore.getVariableNames.getCompletions();
+                        callback(null, variables);
+                    },
 
-                //do not subscribe if it's already updated
-                if (!session.$mode.hasBeenUpdated)
-                    session.on("changeMode", this.onModeChanged);
+                    identifierRegexps: [/[@a-zA-Z_0-9\$\-\u00A2-\uFFFF]/]
+                };
 
-                //TODO: for linked add "@current"
-                ace.config.loadModule('ace/ext/language_tools', function () {
-                    var variablesCompletor =
-                    {
-                        getCompletions: function (editor, session, pos, prefix, callback) {
-                            var variables = self.treeStore.getVariableNames.getCompletions();
-                            callback(null, variables);
-                        },
+                setCompleters([variablesCompletor]);
 
-                        identifierRegexps: [/[@a-zA-Z_0-9\$\-\u00A2-\uFFFF]/]
-                    };
-
-                    setCompleters([variablesCompletor]);
-
-                    editor.setOptions({
-                        enableBasicAutocompletion: true,
-                        enableSnippets: false,
-                        enableLiveAutocompletion: true
-                    });
+                editor.setOptions({
+                    enableBasicAutocompletion: true,
+                    enableSnippets: false,
+                    enableLiveAutocompletion: true
                 });
-            }
+            });
 
             var holderDiv = this.$refs.editorHolder;
             editor.on('focus', function () { holderDiv.classList.add('focused'); });
@@ -202,3 +228,21 @@ export default {
     }
 };
 </script>
+
+<style scoped>
+.substitution-editor {
+    display: block;
+    width: 100%;
+    min-height: 30px;
+    padding: 0 12px;
+    border: none;
+    outline: none;
+    resize: none;
+    overflow: hidden;
+    font-size: 16px;
+    font-family: inherit;
+    line-height: 1.5;
+    background: transparent;
+    box-sizing: border-box;
+}
+</style>
