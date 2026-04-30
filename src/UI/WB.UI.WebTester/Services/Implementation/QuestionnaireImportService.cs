@@ -66,7 +66,7 @@ namespace WB.UI.WebTester.Services.Implementation
                 translationManagementService.Delete(questionnaireId);
 
                 attachmentsStorage.RemoveArea(interviewId);
-                InterviewToQuestionnaireMap.Remove(interviewId, out _);
+                InterviewToQuestionnaireMap.TryRemove(interviewId, out _);
             }
         }
 

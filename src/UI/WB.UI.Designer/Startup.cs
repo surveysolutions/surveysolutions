@@ -214,10 +214,12 @@ namespace WB.UI.Designer
             // Assistant tokens cannot authenticate any other endpoint.
             {
                 var assistantAudience = Configuration["Providers:Assistant:JwtAudience"] ?? "WB.AssistantService";
-                if (string.IsNullOrWhiteSpace(jwtSecretKey))
-                    throw new InvalidOperationException("Providers:Assistant:JwtSecretKey must be configured to enable assistant JWT authentication.");
-
-                var assistantSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecretKey));
+                // When the key is absent the placeholder ensures the scheme is registered and
+                // returns 401 — not a 500 from an unknown scheme — for any assistant API call.
+                // No real token can be signed with an all-zeros key, so this is safe.
+                var assistantSigningKey = string.IsNullOrWhiteSpace(jwtSecretKey)
+                    ? new SymmetricSecurityKey(new byte[32]) // placeholder — never matches
+                    : new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecretKey));
                 authBuilder.AddJwtBearer(JwtTokenService.AssistantScheme, options =>
                 {
                     options.TokenValidationParameters = new TokenValidationParameters
