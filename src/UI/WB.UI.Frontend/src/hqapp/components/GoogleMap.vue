@@ -41,6 +41,11 @@
                 " click-method="openInterview">
                     {{ $t('Common.Open') }}
                 </button>
+                <button class="btn btn-sm btn-primary" v-if="model.userRole == 'Interviewer' &&
+                    selectedTooltip.status == 'Completed'
+                " click-method="reopenInterview">
+                    {{ $t('Pages.InterviewerHq_RestartInterview') }}
+                </button>
                 <button class="btn btn-sm btn-primary" v-if="canAssign" click-method="assignInterview">
                     {{ $t('Common.Assign') }}
                 </button>
@@ -171,6 +176,16 @@
             </div>
         </template>
     </ModalFrame>
+
+    <Confirm ref="reopenModal" id="reopenModal">
+        <div>
+            <label for="reopenInterviewComment">
+                {{ $t('Pages.InterviewerHq_RestartConfirm') }}:
+            </label>
+            <textarea class="form-control" rows="5" maxlength="200" name="reopenInterviewComment"
+                id="reopenInterviewComment" v-model="restart_comment"></textarea>
+        </div>
+    </Confirm>
 </template>
 
 <style scoped>
@@ -223,6 +238,7 @@ export default {
             newResponsibleId: null,
             isReassignReceivedByTablet: false,
             geoJsonFeatures: null,
+            restart_comment: '',
         }
     },
 
@@ -307,6 +323,31 @@ export default {
                 this.selectedTooltip.interviewId,
                 '_blank'
             )
+        },
+
+        reopenInterview() {
+            const self = this
+            self.$refs.reopenModal.promt(ok => {
+                if (ok) {
+                    const interviewId = self.selectedTooltip.interviewId
+                    $.post({
+                        url: self.$hq.basePath + 'InterviewerHq/RestartInterview/' + interviewId,
+                        data: { comment: self.restart_comment },
+                        headers: {
+                            'X-CSRF-TOKEN': self.$hq.Util.getCsrfCookie(),
+                        },
+                    }).done(function () {
+                        self.restart_comment = ''
+                        window.open(
+                            self.$hq.basePath + 'InterviewerHq/OpenInterview/' + interviewId,
+                            '_blank'
+                        )
+                        self.reloadMarkersInBounds()
+                    }).fail(function (err) {
+                        console.error('Failed to reopen interview', err)
+                    })
+                }
+            })
         },
 
         createInterview() {
