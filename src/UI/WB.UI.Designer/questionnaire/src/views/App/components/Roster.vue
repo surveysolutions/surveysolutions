@@ -69,10 +69,10 @@
                                         href="javascript:void(0);">
                                         <div>
                                             <i :class="['dropdown-icon', 'icon-' + breadCrumb.type]"></i>
-                                            <span v-dompurify-html="breadCrumb.title"></span>
+                                            <span v-sanitize-html="breadCrumb.title"></span>
                                         </div>
                                         <div class="var-block">
-                                            <span class="var-name" v-dompurify-html="breadCrumb.varName"></span>
+                                            <span class="var-name" v-sanitize-html="breadCrumb.varName"></span>
                                         </div>
                                     </a>
                                 </li>
@@ -109,10 +109,10 @@
                                         href="javascript:void(0);">
                                         <div>
                                             <i class="dropdown-icon" :class="['icon-' + breadCrumb.type]"></i>
-                                            <span v-dompurify-html="breadCrumb.title"></span>
+                                            <span v-sanitize-html="breadCrumb.title"></span>
                                         </div>
                                         <div class="var-block">
-                                            <span class="var-name" v-dompurify-html="breadCrumb.varName"></span>
+                                            <span class="var-name" v-sanitize-html="breadCrumb.varName"></span>
                                         </div>
                                     </a>
                                 </li>
@@ -149,10 +149,10 @@
                                         href="javascript:void(0);">
                                         <div>
                                             <i class="dropdown-icon" :class="['icon-' + breadCrumb.type]"></i>
-                                            <span v-dompurify-html="breadCrumb.title"></span>
+                                            <span v-sanitize-html="breadCrumb.title"></span>
                                         </div>
                                         <div class="var-block">
-                                            <span class="var-name" v-dompurify-html="breadCrumb.varName"></span>
+                                            <span class="var-name" v-sanitize-html="breadCrumb.varName"></span>
                                         </div>
                                     </a>
                                 </li>
@@ -218,7 +218,7 @@
                                     <p class="help-block ng-cloak"
                                         v-if="!stringifiedRosterTitlesValidity.valid && stringifiedRosterTitlesValidity.$error.maxOptionsCount">
                                         {{ $t('QuestionnaireEditor.EnteredMoreThanAllowed', {
-                                        max: fixedRosterLimit
+                                            max: fixedRosterLimit
                                         }) }}
                                     </p>
                                 </div>
@@ -236,8 +236,8 @@
                                     <span class="path">{{ selectedMultiQuestion.breadcrumbs }}</span>
                                     <span class="chosen-item"><i class="dropdown-icon"
                                             :class="['icon-' + selectedMultiQuestion.type]"></i>{{
-                                        selectedMultiQuestion.title
-                                        }}
+                                                selectedMultiQuestion.title
+                                            }}
                                         (<span class="var-name-line">{{ selectedMultiQuestion.varName }}</span>)
                                     </span>
                                 </span>
@@ -254,10 +254,10 @@
                                         href="javascript:void(0);">
                                         <div>
                                             <i :class="['dropdown-icon', 'icon-' + breadCrumb.type]"></i>
-                                            <span v-dompurify-html="breadCrumb.title"></span>
+                                            <span v-sanitize-html="breadCrumb.title"></span>
                                         </div>
                                         <div class="var-block">
-                                            <span class="var-name" v-dompurify-html="breadCrumb.varName"></span>
+                                            <span class="var-name" v-sanitize-html="breadCrumb.varName"></span>
                                         </div>
                                     </a>
                                 </li>
@@ -371,7 +371,7 @@ import { isInteger } from '../../../helpers/number';
 import { createQuestionForDeleteConfirmationPopup, focusElementByName } from '../../../services/utilityService'
 import { updateRoster, deleteRoster, getQuestionsEligibleForNumericRosterTitle } from '../../../services/rosterService'
 import { setFocusIn } from '../../../services/utilityService'
-import { useMagicKeys } from '@vueuse/core';
+import { useKeyShortcut } from '../../../composables/useKeyShortcut';
 
 export default {
     name: 'Roster',
@@ -429,13 +429,7 @@ export default {
             };
         });
 
-        const { ctrl_s } = useMagicKeys({
-            passive: false,
-            onEventFired(e) {
-                if (e.ctrlKey && e.key === 's' && e.type === 'keydown')
-                    e.preventDefault()
-            },
-        });
+        const ctrl_s = useKeyShortcut(e => e.ctrlKey && e.key === 's');
 
         return {
             rosterStore, commentsStore, ctrl_s
