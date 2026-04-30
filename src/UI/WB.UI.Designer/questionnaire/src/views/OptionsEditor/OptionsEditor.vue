@@ -4,28 +4,28 @@
             <v-container fluid>
                 <v-snackbar v-model="snacks.fileUploaded" location='top' color="success">{{
                     $t('QuestionnaireEditor.FileUploaded')
-                }}</v-snackbar>
+                    }}</v-snackbar>
                 <v-snackbar v-model="snacks.formReverted" location='top' color="success">{{
                     $t('QuestionnaireEditor.DataChangesReverted')
-                }}</v-snackbar>
+                    }}</v-snackbar>
                 <v-snackbar v-model="snacks.ajaxError" location='top' color="error">{{
                     $t('QuestionnaireEditor.CommunicationError')
-                }}</v-snackbar>
+                    }}</v-snackbar>
                 <v-row align="start" justify="center">
                     <v-col lg="10">
                         <v-card class="mx-4 elevation-12" min-width="680">
                             <v-toolbar dense dark color="primary">
                                 <v-toolbar-title v-if="options">{{
                                     formTitle
-                                }}</v-toolbar-title>
+                                    }}</v-toolbar-title>
                             </v-toolbar>
                             <v-tabs v-model="tab" color="primary" fixed-tabs grow>
                                 <v-tab value="table" :disabled="!stringsIsValid">{{
                                     $t('QuestionnaireEditor.TableView')
-                                }}</v-tab>
+                                    }}</v-tab>
                                 <v-tab value="strings">{{
                                     $t('QuestionnaireEditor.StringsView')
-                                }}</v-tab>
+                                    }}</v-tab>
                             </v-tabs>
                             <div v-if="errors.length > 0" class="alert alert-danger">
                                 <v-card-text>
@@ -57,10 +57,10 @@
                         :loading="submitting" @click="apply">{{ $t('QuestionnaireEditor.OptionsUploadApply') }}</v-btn>
                     <v-btn v-if="!readonly" :disabled="!isDirty" @click="resetChanges">{{
                         $t('QuestionnaireEditor.OptionsUploadRevert')
-                    }}</v-btn>
+                        }}</v-btn>
                     <v-btn v-if="readonly" @click="close">{{
                         $t('QuestionnaireEditor.Close')
-                    }}</v-btn>
+                        }}</v-btn>
                     <v-spacer />
 
                     <v-file-input v-if="!readonly" ref="file" v-model="file" class="pt-2"
@@ -315,8 +315,8 @@ export default {
                     file
                 );
 
-            this.errors = apiResponse.data.errors;
-            this.categories = apiResponse.data.options || [];
+            this.errors = apiResponse.errors;
+            this.categories = apiResponse.options || [];
             this.file = null;
             this.snacks.fileUploaded = true;
 
