@@ -21,7 +21,6 @@ namespace WB.UI.Designer.Controllers.Api.Internal
     /// header validation with constant-time comparison.
     /// </summary>
     [Route("api/internal/auth")]
-    [ApiController]
     [AllowAnonymous]
     public class AuthExchangeController : ControllerBase
     {
