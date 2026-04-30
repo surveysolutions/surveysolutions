@@ -48,20 +48,20 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireRepositor
         [Test]
         public void should_remove_null_items_before_storing_document()
         {
-            storedQuestionnaire.Should().NotBeNull();
-            storedQuestionnaire.Categories.Should().HaveCount(2);
-            storedQuestionnaire.Categories[0].Id.Should().Be(Id.g2);
-            storedQuestionnaire.Categories[1].Id.Should().Be(Id.g3);
+            this.storedQuestionnaire.Should().NotBeNull();
+            this.storedQuestionnaire.Categories.Should().HaveCount(2);
+            this.storedQuestionnaire.Categories[0].Id.Should().Be(Id.g2);
+            this.storedQuestionnaire.Categories[1].Id.Should().Be(Id.g3);
         }
 
         [Test]
         public void should_not_mutate_aggregate_document_categories()
         {
-            originalCategories.Should().HaveCount(3);
-            originalCategories.Should().Contain(category => category == null);
+            this.originalCategories.Should().HaveCount(3);
+            this.originalCategories.Should().Contain(category => category == null);
         }
 
-        private static List<Categories> originalCategories;
-        private static QuestionnaireDocument storedQuestionnaire;
+        private List<Categories> originalCategories;
+        private QuestionnaireDocument storedQuestionnaire;
     }
 }
