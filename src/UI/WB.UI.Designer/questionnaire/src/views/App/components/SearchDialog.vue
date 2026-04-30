@@ -145,9 +145,11 @@ export default {
     expose: ['open', 'close'],
     mounted() {
         this.$emitter.on('openMacrosList', this.openLeftPanel);
+        this.$emitter.on('openCriticalRules', this.openLeftPanel);
     },
     unmounted() {
         this.$emitter.off('openMacrosList', this.openLeftPanel);
+        this.$emitter.off('openCriticalRules', this.openLeftPanel);
     },
     methods: {
         close() {
@@ -208,7 +210,7 @@ export default {
             if (name === "macro") {
                 this.$emitter.emit("openMacrosList", { focusOn: reference.itemId });
             } else if (name === "criticalrule") {
-                this.$emitter.emit("openCriticalRules", {});
+                this.$emitter.emit("openCriticalRules", { focusOn: reference.itemId });
             } else {
                 this.$router.push({
                     name: name,

@@ -462,7 +462,12 @@ export default {
             this.setCriticalityConditionsPanel();
             this.$emitter.emit("openCriticalRules", {});
         },
-        setCriticalityConditionsPanel() { this.openPanel = 'criticalityconditions'; },
+        setCriticalityConditionsPanel(payload) {
+            this.openPanel = 'criticalityconditions';
+            if (payload && payload.focusOn) {
+                setFocusIn(payload.focusOn);
+            }
+        },
     }
 };
 </script>
