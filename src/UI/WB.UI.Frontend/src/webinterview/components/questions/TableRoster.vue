@@ -205,9 +205,11 @@ export default {
 
         autosizeRosterTitleColumn() {
             if (!this.gridApi) return
-            const pinnedHeaderText = this.$refs.tableRoster.$el.querySelector(
-                '.ag-pinned-left-header .ag-header-cell-text',
+            const pinnedHeaderLabel = this.$refs.tableRoster.$el.querySelector(
+                '.ag-pinned-left-header .ag-header-cell-label',
             )
+            if (!pinnedHeaderLabel) return
+            const pinnedHeaderText = pinnedHeaderLabel.querySelector('.ag-header-cell-text')
             if (!pinnedHeaderText) return
 
             // Temporarily disable wrapping to measure natural (unwrapped) text width
@@ -215,8 +217,12 @@ export default {
             const textWidth = pinnedHeaderText.offsetWidth
             pinnedHeaderText.style.whiteSpace = ''
 
-            // Add padding (15px left + 15px right from .ag-header-cell-label CSS)
-            const naturalWidth = textWidth + 30
+            // Add the label's horizontal padding to get the required column width
+            const labelStyle = window.getComputedStyle(pinnedHeaderLabel)
+            const padding =
+                parseFloat(labelStyle.paddingLeft) +
+                parseFloat(labelStyle.paddingRight)
+            const naturalWidth = textWidth + padding
             const MIN_WIDTH = 180
             if (naturalWidth > MIN_WIDTH) {
                 this.gridApi.setColumnWidths([
