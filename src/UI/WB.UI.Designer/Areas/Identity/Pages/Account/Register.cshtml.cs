@@ -135,9 +135,16 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
 
                     if (user.Email != null)
                     {
-                        await emailSender.SendEmailAsync(user.Email,
-                            NotificationResources.SystemMailer_ConfirmationEmail_Complete_Registration_Process,
-                            messageBody);
+                        try
+                        {
+                            await emailSender.SendEmailAsync(user.Email,
+                                NotificationResources.SystemMailer_ConfirmationEmail_Complete_Registration_Process,
+                                messageBody);
+                        }
+                        catch (Exception ex)
+                        {
+                            logger.LogError(ex, "Failed to send confirmation email to user {UserId}", user.Id);
+                        }
                     }
 
                     return RedirectToPage("RegisterStepTwo", new { returnUrl });

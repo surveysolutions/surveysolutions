@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.UI.Designer.CommonWeb;
 using WB.UI.Designer.Models;
@@ -19,14 +20,17 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
         private readonly UserManager<DesignerIdentityUser> users;
         private readonly IViewRenderService viewRenderingService;
         private readonly IEmailSender emailSender;
+        private readonly ILogger<ResendConfirmationLinkModel> logger;
 
         public ResendConfirmationLinkModel(UserManager<DesignerIdentityUser> users,
             IViewRenderService viewRenderingService, 
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            ILogger<ResendConfirmationLinkModel> logger)
         {
             this.users = users ?? throw new ArgumentNullException(nameof(users));
             this.viewRenderingService = viewRenderingService ?? throw new ArgumentNullException(nameof(viewRenderingService));
             this.emailSender = emailSender ?? throw new ArgumentNullException(nameof(emailSender));
+            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public async Task<IActionResult> OnGetAsync(string id)
@@ -53,9 +57,16 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
 
                 if (user.Email != null)
                 {
-                    await emailSender.SendEmailAsync(user.Email,
-                        NotificationResources.SystemMailer_ConfirmationEmail_Complete_Registration_Process,
-                        messageBody);
+                    try
+                    {
+                        await emailSender.SendEmailAsync(user.Email,
+                            NotificationResources.SystemMailer_ConfirmationEmail_Complete_Registration_Process,
+                            messageBody);
+                    }
+                    catch (Exception ex)
+                    {
+                        logger.LogError(ex, "Failed to resend confirmation email to user {UserId}", user.Id);
+                    }
                 }
             }
 

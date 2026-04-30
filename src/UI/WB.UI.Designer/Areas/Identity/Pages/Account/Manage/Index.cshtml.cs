@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Designer.MembershipProvider;
 using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Models;
@@ -23,17 +24,20 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account.Manage
         private readonly SignInManager<DesignerIdentityUser> _signInManager;
         private readonly IViewRenderService viewRenderService;
         private readonly IEmailSender emailSender;
+        private readonly ILogger<IndexModel> logger;
 
         public IndexModel(
             UserManager<DesignerIdentityUser> userManager,
             SignInManager<DesignerIdentityUser> signInManager,
             IViewRenderService viewRenderService,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            ILogger<IndexModel> logger)
         {
             this.userManager = userManager;
             _signInManager = signInManager;
             this.viewRenderService = viewRenderService;
             this.emailSender = emailSender;
+            this.logger = logger;
         }
 
         [TempData]
@@ -109,9 +113,19 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account.Manage
 
                 if (user.PendingEmail != null)
                 {
-                    await emailSender.SendEmailAsync(user.PendingEmail,
-                        NotificationResources.SystemMailer_ConfirmationEmail_Complete_Registration_Process,
-                        messageBody);
+                    try
+                    {
+                        await emailSender.SendEmailAsync(user.PendingEmail,
+                            NotificationResources.SystemMailer_ConfirmationEmail_Complete_Registration_Process,
+                            messageBody);
+                    }
+                    catch (Exception ex)
+                    {
+                        logger.LogError(ex, "Failed to send email change confirmation to user {UserId}", user.Id);
+                        user.PendingEmail = null;
+                        ErrorMessage = AccountResources.EmailSendFailed;
+                        return Page();
+                    }
                 }
 
                 StatusMessage = string.Format(AccountResources.EmailChangeShouldBeConfirmed, Input.Email);

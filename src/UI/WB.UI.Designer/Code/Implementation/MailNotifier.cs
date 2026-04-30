@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.Extensions.Logging;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views;
 using WB.Core.GenericSubdomains.Portable;
@@ -21,16 +22,19 @@ namespace WB.UI.Designer.Code.Implementation
         private readonly IViewRenderService renderingService;
         private readonly IActionContextAccessor contextAccessor;
         private readonly IUrlHelperFactory urlHelperFactory;
+        private readonly ILogger<MailNotifier> logger;
 
         public MailNotifier(IEmailSender mailer,
             IViewRenderService renderingService,
             IActionContextAccessor contextAccessor,
-            IUrlHelperFactory urlHelperFactory)
+            IUrlHelperFactory urlHelperFactory,
+            ILogger<MailNotifier> logger)
         {
             this.mailer = mailer;
             this.renderingService = renderingService;
             this.contextAccessor = contextAccessor;
             this.urlHelperFactory = urlHelperFactory;
+            this.logger = logger;
         }
 
         public void NotifyTargetPersonAboutShareChange(ShareChangeType shareChangeType,
@@ -66,11 +70,23 @@ namespace WB.UI.Designer.Code.Implementation
 
             var message = this.GetShareChangeNotificationEmail(sharingNotificationModel);
 
-            message.ContinueWith(s =>
+            message.ContinueWith(async s =>
             {
-                this.mailer.SendEmailAsync(email,
-                    NotificationResources.SystemMailer_GetShareNotificationEmail_Questionnaire_sharing_notification,
-                    message.Result);
+                if (s.IsFaulted)
+                {
+                    logger.LogError(s.Exception, "Failed to render share change notification email for {Email}", email);
+                    return;
+                }
+                try
+                {
+                    await this.mailer.SendEmailAsync(email,
+                        NotificationResources.SystemMailer_GetShareNotificationEmail_Questionnaire_sharing_notification,
+                        s.Result);
+                }
+                catch (Exception ex)
+                {
+                    logger.LogError(ex, "Failed to send share change notification email to {Email}", email);
+                }
             });
         }
 
@@ -96,11 +112,23 @@ namespace WB.UI.Designer.Code.Implementation
             };
             var message = this.GetOwnerShareChangeNotificationEmail(sharingNotificationModel);
 
-            message.ContinueWith((state) =>
+            message.ContinueWith(async s =>
             {
-                this.mailer.SendEmailAsync(email,
-                    NotificationResources.SystemMailer_GetShareNotificationEmail_Questionnaire_sharing_notification,
-                    message.Result);
+                if (s.IsFaulted)
+                {
+                    logger.LogError(s.Exception, "Failed to render owner share change notification email for {Email}", email);
+                    return;
+                }
+                try
+                {
+                    await this.mailer.SendEmailAsync(email,
+                        NotificationResources.SystemMailer_GetShareNotificationEmail_Questionnaire_sharing_notification,
+                        s.Result);
+                }
+                catch (Exception ex)
+                {
+                    logger.LogError(ex, "Failed to send owner share change notification email to {Email}", email);
+                }
             });
         }
 

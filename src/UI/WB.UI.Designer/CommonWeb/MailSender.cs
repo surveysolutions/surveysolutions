@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace WB.UI.Designer.CommonWeb
@@ -25,11 +26,13 @@ namespace WB.UI.Designer.CommonWeb
     {
         private readonly IOptions<MailSettings> settings;
         private readonly IWebHostEnvironment env;
+        private readonly ILogger<MailSender> logger;
 
-        public MailSender(IOptions<MailSettings> settings, IWebHostEnvironment env)
+        public MailSender(IOptions<MailSettings> settings, IWebHostEnvironment env, ILogger<MailSender> logger)
         {            
             this.settings = settings ?? throw new ArgumentNullException(nameof(settings));
             this.env = env;
+            this.logger = logger;
         }
 
         public async Task SendEmailAsync(string email, string subject, string htmlMessage)
@@ -78,7 +81,15 @@ namespace WB.UI.Designer.CommonWeb
                     IsBodyHtml = true
                 };
 
-                await client.SendMailAsync(message);
+                try
+                {
+                    await client.SendMailAsync(message);
+                }
+                catch (Exception ex)
+                {
+                    logger.LogError(ex, "Failed to send email to {Email} with subject '{Subject}'", email, subject);
+                    throw;
+                }
             }
         }
     }
