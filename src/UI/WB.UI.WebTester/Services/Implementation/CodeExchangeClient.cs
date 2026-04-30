@@ -30,7 +30,7 @@ namespace WB.UI.WebTester.Services.Implementation
         public async Task<ExchangeCodeResponse?> ExchangeAsync(string code, CancellationToken ct = default)
         {
             var cfg = config.Value;
-            var serviceName = cfg.ServiceName ?? "WB.WebTester";
+            var serviceName = string.IsNullOrWhiteSpace(cfg.ServiceName) ? "WB.WebTester" : cfg.ServiceName;
             var serviceKey  = cfg.ServiceApiKey ?? "";
 
             // Guard: an empty key would cause Designer to reject every exchange with 401.
