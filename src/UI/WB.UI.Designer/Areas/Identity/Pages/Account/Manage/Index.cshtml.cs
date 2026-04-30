@@ -123,6 +123,7 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account.Manage
                     {
                         logger.LogError(ex, "Failed to send email change confirmation to user {UserId}", user.Id);
                         user.PendingEmail = null;
+                        await this.userManager.UpdateAsync(user);
                         ErrorMessage = AccountResources.EmailSendFailed;
                         return Page();
                     }

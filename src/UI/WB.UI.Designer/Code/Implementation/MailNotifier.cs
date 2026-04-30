@@ -69,25 +69,8 @@ namespace WB.UI.Designer.Code.Implementation
             };
 
             var message = this.GetShareChangeNotificationEmail(sharingNotificationModel);
-
-            message.ContinueWith(async s =>
-            {
-                if (s.IsFaulted)
-                {
-                    logger.LogError(s.Exception, "Failed to render share change notification email for {Email}", email);
-                    return;
-                }
-                try
-                {
-                    await this.mailer.SendEmailAsync(email,
-                        NotificationResources.SystemMailer_GetShareNotificationEmail_Questionnaire_sharing_notification,
-                        s.Result);
-                }
-                catch (Exception ex)
-                {
-                    logger.LogError(ex, "Failed to send share change notification email to {Email}", email);
-                }
-            });
+            _ = SendEmailAfterRenderAsync(message, email,
+                NotificationResources.SystemMailer_GetShareNotificationEmail_Questionnaire_sharing_notification);
         }
 
         public void NotifyOwnerAboutShareChange(ShareChangeType shareChangeType, string email, string userName, string questionnaireId, string questionnaireTitle, ShareType shareType, string? actionPersonEmail, string sharedWithPersonEmail)
@@ -111,25 +94,21 @@ namespace WB.UI.Designer.Code.Implementation
                 QuestionnaireLink = urlHelper.Action("Details", "Q", new { id = questionnaireId }, "https")
             };
             var message = this.GetOwnerShareChangeNotificationEmail(sharingNotificationModel);
+            _ = SendEmailAfterRenderAsync(message, email,
+                NotificationResources.SystemMailer_GetShareNotificationEmail_Questionnaire_sharing_notification);
+        }
 
-            message.ContinueWith(async s =>
+        private async Task SendEmailAfterRenderAsync(Task<string> renderTask, string email, string subject)
+        {
+            try
             {
-                if (s.IsFaulted)
-                {
-                    logger.LogError(s.Exception, "Failed to render owner share change notification email for {Email}", email);
-                    return;
-                }
-                try
-                {
-                    await this.mailer.SendEmailAsync(email,
-                        NotificationResources.SystemMailer_GetShareNotificationEmail_Questionnaire_sharing_notification,
-                        s.Result);
-                }
-                catch (Exception ex)
-                {
-                    logger.LogError(ex, "Failed to send owner share change notification email to {Email}", email);
-                }
-            });
+                var body = await renderTask;
+                await this.mailer.SendEmailAsync(email, subject, body);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Failed to send notification email to {Email}", email);
+            }
         }
 
         public async Task<string> GetShareChangeNotificationEmail(SharingNotificationModel model)
