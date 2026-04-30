@@ -34,7 +34,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport
             Guid? translationId,
             bool? includeMeta,
             bool? paradataReduced,
-            GeographyExportFormat? geographyExportFormat);
+            GeographyExportFormat? geographyExportFormat,
+            ExportFileFormat? exportFileFormat);
 
         [Get("/api/v1/job/status")]
         Task<DataExportStatusView> GetDataExportStatusForQuestionnaireAsync(

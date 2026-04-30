@@ -486,4 +486,13 @@
     <data name="Validation_ToDateBeforeFrom" xml:space="preserve">
     <value>The "To" date must be greater than the "From" date.</value>
 </data>
+  <data name="ArchiveFormat_Title" xml:space="preserve">
+    <value>Archive format</value>
+  </data>
+  <data name="ArchiveFormat_Zip" xml:space="preserve">
+    <value>ZIP (default)</value>
+  </data>
+  <data name="ArchiveFormat_TarGz" xml:space="preserve">
+    <value>TAR.GZ (faster)</value>
+  </data>
 </root>

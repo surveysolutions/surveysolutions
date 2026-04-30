@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Formats.Tar;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -166,6 +167,35 @@ namespace WB.Services.Export
                         }
                     }
                 }
+            }
+        }
+
+        public async Task TarGzDirectoryAsync(string exportTempDirectoryPath, string archiveName,
+            IProgress<int> exportProgress,
+            CancellationToken token = default)
+        {
+            logger.LogDebug("Compressing directory {directory} into {archiveName} (tar.gz)", exportTempDirectoryPath, archiveName);
+            using var archiveFile = File.Create(archiveName);
+            await using var gzipStream = new GZipStream(archiveFile, CompressionLevel.Optimal, leaveOpen: true);
+            await using var tarWriter = new TarWriter(gzipStream, TarEntryFormat.Gnu, leaveOpen: true);
+
+            var files = Directory.EnumerateFiles(exportTempDirectoryPath, "*.*", SearchOption.AllDirectories).ToList();
+            var total = files.Count;
+            long added = 0;
+
+            foreach (var file in files)
+            {
+                token.ThrowIfCancellationRequested();
+
+                var entryName = file.Substring(exportTempDirectoryPath.Length + 1)
+                    .Replace(Path.DirectorySeparatorChar, '/');
+
+                await tarWriter.WriteEntryAsync(file, entryName, token);
+
+                logger.LogTrace("Adding file {file} into {archiveName}. Total: {added}", entryName, archiveName, added + 1);
+
+                added++;
+                exportProgress?.Report(added.PercentOf(total));
             }
         }
     }

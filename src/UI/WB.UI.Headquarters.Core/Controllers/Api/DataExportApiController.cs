@@ -210,7 +210,8 @@ namespace WB.UI.Headquarters.Controllers.Api
             DateTimeOffset? to = null,
             Guid? translationId = null,
             bool? includeMeta = null,
-            ParadataMode paradataMode = ParadataMode.All)
+            ParadataMode paradataMode = ParadataMode.All,
+            ExportFileFormat? exportFileFormat = null)
         {
             var questionnaireIdentity = new QuestionnaireIdentity(id, version);
 
@@ -219,7 +220,8 @@ namespace WB.UI.Headquarters.Controllers.Api
                 return NotFound("Questionnaire not found");
 
             return await RequestExportUpdateAsync(questionnaireBrowseItem, format, status, @from?.UtcDateTime, to?.UtcDateTime, 
-                translation: translationId, includeMeta: includeMeta, paradataReduced: paradataMode == ParadataMode.Reduced);
+                translation: translationId, includeMeta: includeMeta, paradataReduced: paradataMode == ParadataMode.Reduced,
+                exportFileFormat: exportFileFormat);
         }
 
         private async Task<ActionResult<long>> RequestExportUpdateAsync(
@@ -233,7 +235,8 @@ namespace WB.UI.Headquarters.Controllers.Api
             ExternalStorageType? externalStorageType = null,
             Guid? translation = null,
             bool? includeMeta = null,
-            bool paradataReduced = false)
+            bool paradataReduced = false,
+            ExportFileFormat? exportFileFormat = null)
         {
             long jobId = 0;
             try
@@ -252,7 +255,8 @@ namespace WB.UI.Headquarters.Controllers.Api
                     translation,
                     includeMeta,
                     paradataReduced,
-                    geographyExportFormat);
+                    geographyExportFormat,
+                    exportFileFormat);
 
                 jobId = result?.JobId ?? 0;
 

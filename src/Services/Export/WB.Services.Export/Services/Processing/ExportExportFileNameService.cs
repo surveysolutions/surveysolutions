@@ -93,8 +93,9 @@ namespace WB.Services.Export.Services.Processing
 
             string metaSuffix = exportSettings.IncludeMeta != false ? "" : "_no-meta";
             
+            var extension = exportSettings.ExportFileFormat == ExportFileFormat.TarGz ? ".tar.gz" : ".zip";
             var archiveName = $"{questionnaireNamePrefixOverride ?? exportSettings.QuestionnaireId.ToString()}_" +
-                              $"{exportSettings.ExportFormat}{pardataReduced}_{statusSuffix}{fromDatePrefix}{toDatePrefix}{translationName}{metaSuffix}.zip";
+                              $"{exportSettings.ExportFormat}{pardataReduced}_{statusSuffix}{fromDatePrefix}{toDatePrefix}{translationName}{metaSuffix}{extension}";
 
             return archiveName;
         }
