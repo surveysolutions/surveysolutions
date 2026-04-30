@@ -20,6 +20,7 @@ namespace WB.UI.Designer.Controllers.Api.Internal
     /// Service authentication is enforced inside the action via X-Service-Name / X-Service-Key
     /// header validation with constant-time comparison.
     /// </summary>
+    [ApiController]
     [Route("api/internal/auth")]
     [AllowAnonymous]
     public class AuthExchangeController : ControllerBase
