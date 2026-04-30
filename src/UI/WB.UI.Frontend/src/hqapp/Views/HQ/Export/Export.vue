@@ -318,7 +318,7 @@
                                     </label>
                                 </div>
                             </div>
-                            <div class="mb-30" v-if="dataDestination == 'zip' && questionnaireVersion">
+                            <div class="mb-30" v-if="isLocalDownload && questionnaireVersion">
                                 <h3>{{ $t('DataExport.ArchiveFormat_Title') }}</h3>
                                 <div class="radio-btn-row">
                                     <input class="radio-row" type="radio" name="archiveFormat" id="archiveFormatZip"
@@ -419,6 +419,7 @@ const dataFormatNum = {
     AudioAudit: 7,
 }
 const ExternalStorageType = { dropbox: 1, oneDrive: 2, googleDrive: 3 }
+const ArchiveFormatNum = { zip: 1, tarGz: 2 }
 
 export default {
     components: {
@@ -526,6 +527,9 @@ export default {
         isCustomDateRangeMode() {
             return this.dateRangeMode?.id == 'custom'
         },
+        isLocalDownload() {
+            return this.dataDestination == 'zip'
+        },
     },
 
     mounted() {
@@ -558,7 +562,7 @@ export default {
         },
 
         async queueExport() {
-            if (this.dataDestination != 'zip') {
+            if (!this.isLocalDownload) {
                 this.redirectToExternalStorage()
                 return
             }
@@ -755,7 +759,7 @@ export default {
             const status = (statusOption || { key: null }).key
             const tr = (translation || { key: null }).key
 
-            const archiveFormatNum = archiveFormat === 'tarGz' ? 2 : 1
+            const archiveFormatNum = ArchiveFormatNum[archiveFormat] ?? ArchiveFormatNum.zip
 
             return {
                 id: questionnaireId,

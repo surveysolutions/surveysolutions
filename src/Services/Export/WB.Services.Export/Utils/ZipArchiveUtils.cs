@@ -187,7 +187,7 @@ namespace WB.Services.Export
             {
                 token.ThrowIfCancellationRequested();
 
-                var entryName = file.Substring(exportTempDirectoryPath.Length + 1)
+                var entryName = Path.GetRelativePath(exportTempDirectoryPath, file)
                     .Replace(Path.DirectorySeparatorChar, '/');
 
                 await tarWriter.WriteEntryAsync(file, entryName, token);

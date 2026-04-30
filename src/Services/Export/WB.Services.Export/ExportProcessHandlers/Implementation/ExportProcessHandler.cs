@@ -106,6 +106,13 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
 
             if (state.Settings.ExportFileFormat == Services.Processing.ExportFileFormat.TarGz)
             {
+                if (!string.IsNullOrEmpty(state.ProcessArgs.ArchivePassword))
+                {
+                    throw new InvalidOperationException(
+                        "TAR.GZ format does not support password protection. " +
+                        "Please use ZIP format when encryption is required.");
+                }
+
                 await this.archiveUtils.TarGzDirectoryAsync(state.ExportTempFolder, state.ArchiveFilePath,
                     new Progress<int>((v) => state.Progress.Report(v)), cancellationToken);
             }
