@@ -321,6 +321,9 @@
   <data name="Variable_Move_To_Section" xml:space="preserve">
     <value>Variabli {0} u zhvendos te rubrika {1}</value>
   </data>
+  <data name="Variable_Update" xml:space="preserve">
+    <value>Variabli {0} u përditësua</value>
+  </data>
   <data name="Translation_Replace" xml:space="preserve">
     <value>Dokumenti u kalua në përkthimin {0}</value>
   </data>
