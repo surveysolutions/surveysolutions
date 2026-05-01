@@ -105,10 +105,10 @@ namespace WB.UI.Designer.Code
                     }
                     break;
                 case QuestionnaireActionType.AnonymousSharingEnabled:
-                    text = string.Format(QuestionnaireHistoryResources.AnonymousSharingEnabled, helper.Encode(record.TargetTitle));
+                    text = string.Format(QuestionnaireHistoryResources.AnonymousSharingEnabled, helper.Encode(record.TargetTitle ?? string.Empty));
                     break;
                 case QuestionnaireActionType.AnonymousSharingDisabled:
-                    text = string.Format(QuestionnaireHistoryResources.AnonymousSharingDisabled, helper.Encode(record.TargetTitle));
+                    text = string.Format(QuestionnaireHistoryResources.AnonymousSharingDisabled, helper.Encode(record.TargetTitle ?? string.Empty));
                     break;
                 case QuestionnaireActionType.ImportToHq:
                 {

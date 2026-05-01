@@ -469,7 +469,6 @@ namespace WB.UI.Designer.Controllers
             }
 
             anonymousQuestionnaire.IsActive = isActive;
-            dbContext.AnonymousQuestionnaires.Update(anonymousQuestionnaire);
 
             var actionType = isActive
                 ? QuestionnaireActionType.AnonymousSharingEnabled
