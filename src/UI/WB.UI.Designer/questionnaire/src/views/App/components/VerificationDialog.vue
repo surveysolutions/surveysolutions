@@ -2,7 +2,7 @@
     <div id="verification-modal" v-if="visible" :class="typeOfMessageToBeShown">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" @click="close()" aria-hidden="true"></button>
+                <button type="button" class="close" @click="close()" :aria-label="$t('QuestionnaireEditor.Close')"></button>
                 <h3 class="modal-title">
                     <span>{{ $t('QuestionnaireEditor.CompilationLabel') }}</span>
                     <span>&nbsp;</span>
