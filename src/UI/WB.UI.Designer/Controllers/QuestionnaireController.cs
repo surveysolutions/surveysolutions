@@ -466,17 +466,18 @@ namespace WB.UI.Designer.Controllers
                 anonymousQuestionnaire = new AnonymousQuestionnaire()
                     { QuestionnaireId = id, AnonymousQuestionnaireId = Guid.NewGuid(), IsActive = isActive, GeneratedAtUtc = DateTime.UtcNow };
                 dbContext.AnonymousQuestionnaires.Add(anonymousQuestionnaire);
-                await dbContext.SaveChangesAsync();
             }
 
             anonymousQuestionnaire.IsActive = isActive;
             dbContext.AnonymousQuestionnaires.Update(anonymousQuestionnaire);
-            await dbContext.SaveChangesAsync();
 
             var actionType = isActive
                 ? QuestionnaireActionType.AnonymousSharingEnabled
                 : QuestionnaireActionType.AnonymousSharingDisabled;
-            questionnaireHistoryVersionsService.AddQuestionnaireChangeItem(
+
+            await using var transaction = await dbContext.Database.BeginTransactionAsync();
+            await dbContext.SaveChangesAsync();
+            await questionnaireHistoryVersionsService.AddQuestionnaireChangeItemAsync(
                 id,
                 User.GetId(),
                 User.GetUserName(),
@@ -485,6 +486,7 @@ namespace WB.UI.Designer.Controllers
                 id,
                 questionnaireTitle,
                 null, null, null, null);
+            await transaction.CommitAsync();
 
             if (isActive)
                 await SendAnonymousSharingEmailAsync(id, anonymousQuestionnaire.AnonymousQuestionnaireId);
