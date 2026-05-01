@@ -203,7 +203,7 @@ export default {
             delete this.modelState['Role']
         },
         title: function (val) {
-            this.$title = val
+            document.title = val
         },
     },
     methods: {
