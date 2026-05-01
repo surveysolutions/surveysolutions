@@ -1,6 +1,6 @@
 import './jquery';
 import { Modal } from 'bootstrap';
-import sanitizeHtml from 'sanitize-html';
+import DOMPurify from 'dompurify';
 import { newGuid } from './guid';
 
 export default {
@@ -141,11 +141,10 @@ export default {
     },
 
     processText(message) {
-        return sanitizeHtml(message, {
-            allowedTags: ['b', 'i', 'strong', 'em', 'p', 'ul', 'li', 'br', 'div'],
-            allowedAttributes: {
-                div: ['id'] // Allow 'id' attribute for 'div' tags
-            }
+        const text = message == null ? '' : String(message);
+        return DOMPurify.sanitize(text, {
+            ALLOWED_TAGS: ['b', 'i', 'strong', 'em', 'p', 'ul', 'li', 'br', 'div'],
+            ALLOWED_ATTR: ['id']
         });
     }
 };
