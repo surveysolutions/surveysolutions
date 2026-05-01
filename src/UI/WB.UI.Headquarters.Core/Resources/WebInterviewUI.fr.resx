@@ -213,7 +213,7 @@
     <value>La réponse n'a pas été enregistrée</value>
   </data>
   <data name="CommunicationError" xml:space="preserve">
-    <value>Communication error</value>
+    <value>Erreur de communication</value>
   </data>
   <data name="NotCalculated" xml:space="preserve">
     <value>Non calculé</value>
