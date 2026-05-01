@@ -41,14 +41,11 @@ vue.component('ProfileLayout', ProfileLayout)
 
 import './compatibility.js'
 
-import PortalVue from 'portal-vue'
-vue.use(PortalVue)
-
 import VueDOMPurifyHTML from 'vue-dompurify-html';
 vue.use(VueDOMPurifyHTML)
 
-import { Popover } from 'uiv'
-vue.component('popover', Popover)
+import Bootstrap5Popover from '~/shared/components/Bootstrap5Popover.vue'
+vue.component('popover', Bootstrap5Popover)
 
 import './validate.js'
 
@@ -90,8 +87,6 @@ vue.use(router)
 import { registerGlobalComponents } from '~/webinterview/componentsRegistry'
 registerGlobalComponents(vue, { router, store })
 
-import { pageTitle } from 'vue-page-title'
-vue.use(pageTitle)
 
 vue.config.globalProperties.$eventHub = vue
 
