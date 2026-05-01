@@ -586,6 +586,7 @@
 
         b, strong {
             font-family: "RobotoBold";
+            font-weight: normal;
         }
 
         .static-text-image {
@@ -604,6 +605,10 @@
 
 .variable {
     @extend .static-text;
+
+    h5 {
+        font-family: "RobotoBold";
+    }
 }
 
 .ordered-question {
