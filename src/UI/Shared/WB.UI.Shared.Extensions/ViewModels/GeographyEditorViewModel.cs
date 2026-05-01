@@ -136,6 +136,7 @@ namespace WB.UI.Shared.Extensions.ViewModels
         private async Task StartEditingGeometry()
         {
             var mapView = this.MapView;
+            var mapView = this.MapView;
             var geometryEditor = mapView?.GeometryEditor;
             var mapSpatialReference = mapView?.Map?.SpatialReference;
 
@@ -149,7 +150,6 @@ namespace WB.UI.Shared.Extensions.ViewModels
 
             try
             {
-
                 geometryEditor.PropertyChanged += GeometryChangedHandler;
 
                 if (this.Geometry == null)
