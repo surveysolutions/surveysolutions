@@ -181,8 +181,9 @@ namespace WB.UI.Designer
             //                             code-exchange integration is non-functional.
             //
             //   Providers:Assistant:JwtSecretKey — OPTIONAL. When absent the assistant scheme is
-            //                             still registered but uses a 32-byte all-zeros placeholder
-            //                             key that no real token can be signed with, so all
+            //                             still registered but uses a random placeholder key
+            //                             (generated at startup via RandomNumberGenerator) that
+            //                             no attacker can predict or forge tokens with, so all
             //                             /api/v1/assistant/* requests fail with a clean 401
             //                             instead of a 500 caused by an unknown scheme name.
 
@@ -214,11 +215,14 @@ namespace WB.UI.Designer
             // Assistant tokens cannot authenticate any other endpoint.
             {
                 var assistantAudience = Configuration["Providers:Assistant:JwtAudience"] ?? "WB.AssistantService";
-                // When the key is absent the placeholder ensures the scheme is registered and
-                // returns 401 — not a 500 from an unknown scheme — for any assistant API call.
-                // No real token can be signed with an all-zeros key, so this is safe.
+                // When the key is absent, use a cryptographically random placeholder generated
+                // at startup. This guarantees the scheme is registered (so [Authorize(Schemes=...)]
+                // never causes a 500) while making it impossible for an attacker to forge a token:
+                // the placeholder value is unknown and changes with every process restart.
+                // Do NOT use a fixed value such as new byte[32] (all-zeros) here — that is a
+                // known, guessable key and would allow arbitrary token forgery.
                 var assistantSigningKey = string.IsNullOrWhiteSpace(jwtSecretKey)
-                    ? new SymmetricSecurityKey(new byte[32]) // placeholder — never matches
+                    ? new SymmetricSecurityKey(System.Security.Cryptography.RandomNumberGenerator.GetBytes(32))
                     : new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecretKey));
                 authBuilder.AddJwtBearer(JwtTokenService.AssistantScheme, options =>
                 {
