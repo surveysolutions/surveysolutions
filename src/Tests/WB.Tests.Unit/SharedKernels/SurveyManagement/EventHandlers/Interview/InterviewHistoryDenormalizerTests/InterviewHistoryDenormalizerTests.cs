@@ -115,7 +115,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
         }
 
         [Test]
-        public void when_InterviewCreated_without_assignment_id_should_not_include_assignment_parameter()
+        public void when_InterviewCreated_without_assignment_id_should_include_null_assignment_parameter()
         {
             var interviewId = Id.gA;
 
@@ -130,7 +130,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             PublishEventsOnOnInterviewExportedDataDenormalizer(events, interviewHistoryView, denormalizer);
 
             interviewHistoryView.Records[0].Action.Should().Be(InterviewHistoricalAction.InterviewCreated);
-            interviewHistoryView.Records[0].Parameters.Should().NotContainKey("assignment");
+            interviewHistoryView.Records[0].Parameters["assignment"].Should().BeNull();
         }
 
         [Test]
