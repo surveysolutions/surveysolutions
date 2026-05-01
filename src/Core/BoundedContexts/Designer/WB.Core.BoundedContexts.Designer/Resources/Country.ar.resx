@@ -209,7 +209,7 @@
     <value>جزر القمر</value>
   </data>
   <data name="CPV" xml:space="preserve">
-    <value>جمهورية كابو فيردي</value>
+    <value>كابو فيردي</value>
   </data>
   <data name="CRI" xml:space="preserve">
     <value>كوستاريكا</value>
@@ -227,7 +227,7 @@
     <value>قبرص</value>
   </data>
   <data name="CZE" xml:space="preserve">
-    <value>جمهورية التشيك</value>
+    <value>تشيكيا</value>
   </data>
   <data name="DEU" xml:space="preserve">
     <value>ألمانيا</value>
@@ -488,7 +488,7 @@
     <value>مارشال إيسلد.</value>
   </data>
   <data name="MKD" xml:space="preserve">
-    <value>مقدونيا, جمهورية مقدونيا اليوغوسلافية السابقة</value>
+    <value>مقدونيا الشمالية</value>
   </data>
   <data name="MLI" xml:space="preserve">
     <value>مالي</value>
@@ -662,7 +662,7 @@
     <value>سان مارينو</value>
   </data>
   <data name="SOM" xml:space="preserve">
-    <value>الصومال</value>
+    <value>جمهورية الصومال الفيدرالية</value>
   </data>
   <data name="SPM" xml:space="preserve">
     <value>سانت بيير وميكلون</value>
@@ -731,7 +731,7 @@
     <value>تونس</value>
   </data>
   <data name="TUR" xml:space="preserve">
-    <value>تركيا</value>
+    <value>Türkiye</value>
   </data>
   <data name="TUV" xml:space="preserve">
     <value>توفالو</value>

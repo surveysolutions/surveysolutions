@@ -227,7 +227,7 @@
       <value>塞浦路斯</value>
     </data>
     <data name="CZE" xml:space="preserve">
-      <value>捷克共和国</value>
+      <value>捷克</value>
     </data>
     <data name="DEU" xml:space="preserve">
       <value>德国</value>
@@ -488,7 +488,7 @@
       <value>马绍尔群岛</value>
     </data>
     <data name="MKD" xml:space="preserve">
-      <value>马其顿，前南斯拉夫</value>
+      <value>北马其顿</value>
     </data>
     <data name="MLI" xml:space="preserve">
       <value>马里</value>
@@ -662,7 +662,7 @@
       <value>圣马力诺</value>
     </data>
     <data name="SOM" xml:space="preserve">
-      <value>索马里</value>
+      <value>索马里联邦共和国</value>
     </data>
     <data name="SPM" xml:space="preserve">
       <value>圣皮埃尔和密克隆</value>
@@ -731,7 +731,7 @@
       <value>突尼斯</value>
     </data>
     <data name="TUR" xml:space="preserve">
-      <value>土耳其</value>
+      <value>Türkiye</value>
     </data>
     <data name="TUV" xml:space="preserve">
       <value>图瓦卢</value>

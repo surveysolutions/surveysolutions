@@ -209,7 +209,7 @@
     <value>Comores</value>
   </data>
   <data name="CPV" xml:space="preserve">
-    <value>República de Cabo Verde</value>
+    <value>Cabo Verde</value>
   </data>
   <data name="CRI" xml:space="preserve">
     <value>Costa Rica</value>
@@ -227,7 +227,7 @@
     <value>Chipre</value>
   </data>
   <data name="CZE" xml:space="preserve">
-    <value>República Tcheca</value>
+    <value>Tchéquia</value>
   </data>
   <data name="DEU" xml:space="preserve">
     <value>Alemanha</value>
@@ -488,7 +488,7 @@
     <value>Ilhas Marshall</value>
   </data>
   <data name="MKD" xml:space="preserve">
-    <value>Macedônia, ARJ</value>
+    <value>Macedônia do Norte</value>
   </data>
   <data name="MLI" xml:space="preserve">
     <value>Mali</value>
@@ -662,7 +662,7 @@
     <value>San Marino</value>
   </data>
   <data name="SOM" xml:space="preserve">
-    <value>Somália</value>
+    <value>República Federal da Somália</value>
   </data>
   <data name="SPM" xml:space="preserve">
     <value>São Pedro e Miquelon</value>
@@ -731,7 +731,7 @@
     <value>Tunísia</value>
   </data>
   <data name="TUR" xml:space="preserve">
-    <value>Turquia</value>
+    <value>Türkiye</value>
   </data>
   <data name="TUV" xml:space="preserve">
     <value>Tuvalu</value>
