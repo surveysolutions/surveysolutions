@@ -33,11 +33,14 @@ using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
+using WB.Core.BoundedContexts.Designer;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.Implementation;
+using WB.UI.Designer.Extensions;
 using WB.UI.Shared.Web.CommandDeserialization;
 using WB.UI.Shared.Web.Controllers;
 using QuestionnaireEditor = WB.UI.Designer.Resources.QuestionnaireEditor;
@@ -64,6 +67,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
         private readonly IReusableCategoriesService reusableCategoriesService;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IDesignerQuestionnaireStorage questionnaireStorage;
+        private readonly IQuestionnaireViewFactory questionnaireViewFactory;
 
         // Get the default form options so that we can use them to set the default limits for
         // request body data
@@ -82,7 +86,8 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             IDesignerTranslationService translationsService,
             IReusableCategoriesService reusableCategoriesService,
             IFileSystemAccessor fileSystemAccessor,
-            IDesignerQuestionnaireStorage questionnaireStorage)
+            IDesignerQuestionnaireStorage questionnaireStorage,
+            IQuestionnaireViewFactory questionnaireViewFactory)
         {
             this.logger = logger;
             this.commandInflater = commandPreprocessor;
@@ -94,6 +99,7 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             this.reusableCategoriesService = reusableCategoriesService;
             this.fileSystemAccessor = fileSystemAccessor;
             this.questionnaireStorage = questionnaireStorage;
+            this.questionnaireViewFactory = questionnaireViewFactory;
         }
 
         public class AttachmentModel
@@ -187,13 +193,19 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             if (!Path.GetExtension(model.File.FileName).Equals(".zip", StringComparison.OrdinalIgnoreCase))
                 return this.Error((int)HttpStatusCode.NotAcceptable, ExceptionMessages.Attachments_zip_only);
 
+            var userId = User.GetId();
+            bool hasWriteAccess = User.IsAdmin() ||
+                this.questionnaireViewFactory.HasUserChangeAccessToQuestionnaire(model.QuestionnaireId, userId);
+            if (!hasWriteAccess)
+                return this.Error(StatusCodes.Status403Forbidden, ExceptionMessages.NoPremissionsToEditQuestionnaire);
+
             var questionnaire = this.questionnaireStorage.Get(model.QuestionnaireId);
             if (questionnaire == null)
                 return NotFound();
 
             var existingAttachmentsByName = questionnaire.Attachments
                 .Where(a => !string.IsNullOrEmpty(a.Name))
-                .GroupBy(a => a.Name.ToLowerInvariant())
+                .GroupBy(a => NormalizeAttachmentName(a.Name).ToLowerInvariant())
                 .ToDictionary(g => g.Key, g => g.First().AttachmentId);
 
             const long maxEntrySize = 100L * 1024 * 1024;
@@ -201,83 +213,101 @@ namespace WB.UI.Designer.Controllers.Api.Designer
             var errors = new List<string>();
 
             using var zipStream = model.File.OpenReadStream();
-            using var archive = new ZipArchive(zipStream, ZipArchiveMode.Read);
-
-            foreach (var entry in archive.Entries)
+            ZipArchive archive;
+            try
             {
-                if (string.IsNullOrEmpty(entry.Name)) continue;
+                archive = new ZipArchive(zipStream, ZipArchiveMode.Read);
+            }
+            catch (InvalidDataException ex)
+            {
+                this.logger.LogWarning(ex, "Invalid or corrupted ZIP file uploaded");
+                return this.Error((int)HttpStatusCode.NotAcceptable, ExceptionMessages.Attachments_zip_only);
+            }
 
-                var entryExtension = Path.GetExtension(entry.Name).ToLowerInvariant();
-                var contentType = GetImageContentType(entryExtension);
-                if (contentType == null) continue;
-
-                if (entry.Length > maxEntrySize)
+            using (archive)
+            {
+                foreach (var entry in archive.Entries)
                 {
-                    errors.Add($"{entry.Name}: file is too large (max 100 MB)");
-                    continue;
-                }
+                    if (string.IsNullOrEmpty(entry.Name)) continue;
 
-                try
-                {
-                    byte[] fileContent;
-                    using (var entryStream = entry.Open())
-                    using (var ms = new MemoryStream())
+                    var entryExtension = Path.GetExtension(entry.Name).ToLowerInvariant();
+                    var contentType = GetImageContentType(entryExtension);
+                    if (contentType == null) continue;
+
+                    if (entry.Length > maxEntrySize)
                     {
-                        await entryStream.CopyToAsync(ms);
-                        fileContent = ms.ToArray();
-                    }
-
-                    var contentId = this.attachmentService.CreateAttachmentContentId(fileContent);
-                    this.attachmentService.SaveContent(contentId, contentType, fileContent);
-
-                    var rawName = SanitizeAttachmentName(Path.GetFileNameWithoutExtension(entry.Name));
-                    var attachmentName = rawName.Length > 32 ? rawName[..32] : rawName;
-
-                    var attachmentId = Guid.NewGuid();
-                    Guid? oldAttachmentId = null;
-
-                    if (existingAttachmentsByName.TryGetValue(attachmentName.ToLowerInvariant(), out var existingId))
-                    {
-                        oldAttachmentId = existingId;
-                    }
-
-                    this.attachmentService.SaveMeta(
-                        attachmentId: attachmentId,
-                        questionnaireId: model.QuestionnaireId,
-                        attachmentContentId: contentId,
-                        fileName: entry.Name);
-
-                    var zipCommand = new AddOrUpdateAttachment(
-                        questionnaireId: model.QuestionnaireId,
-                        attachmentId: attachmentId,
-                        responsibleId: Guid.Empty,
-                        attachmentName: attachmentName,
-                        attachmentContentId: contentId,
-                        oldAttachmentId: oldAttachmentId);
-
-                    var result = this.ProcessCommand(zipCommand);
-                    if (result.HasErrors)
-                    {
-                        errors.Add(entry.Name);
+                        errors.Add($"{entry.Name}: file is too large (max 100 MB)");
                         continue;
                     }
 
-                    existingAttachmentsByName[attachmentName.ToLowerInvariant()] = attachmentId;
-                    processedCount++;
-                }
-                catch (FormatException ex)
-                {
-                    errors.Add($"{entry.Name}: {ex.Message}");
-                }
-                catch (Exception ex)
-                {
-                    this.logger.LogError(ex, "Error processing zip entry {EntryName}", entry.Name);
-                    errors.Add($"{entry.Name}: {ex.Message}");
+                    try
+                    {
+                        byte[] fileContent;
+                        using (var entryStream = entry.Open())
+                        using (var ms = new MemoryStream())
+                        {
+                            await entryStream.CopyToAsync(ms);
+                            fileContent = ms.ToArray();
+                        }
+
+                        var contentId = this.attachmentService.CreateAttachmentContentId(fileContent);
+                        var attachmentName = NormalizeAttachmentName(Path.GetFileNameWithoutExtension(entry.Name));
+                        var attachmentId = Guid.NewGuid();
+                        Guid? oldAttachmentId = null;
+
+                        if (existingAttachmentsByName.TryGetValue(attachmentName.ToLowerInvariant(), out var existingId))
+                        {
+                            oldAttachmentId = existingId;
+                        }
+
+                        var zipCommand = new AddOrUpdateAttachment(
+                            questionnaireId: model.QuestionnaireId,
+                            attachmentId: attachmentId,
+                            responsibleId: Guid.Empty,
+                            attachmentName: attachmentName,
+                            attachmentContentId: contentId,
+                            oldAttachmentId: oldAttachmentId);
+
+                        var result = this.ProcessCommand(zipCommand);
+                        if (result.HasErrors)
+                        {
+                            errors.Add(entry.Name);
+                            continue;
+                        }
+
+                        this.attachmentService.SaveContent(contentId, contentType, fileContent);
+                        this.attachmentService.SaveMeta(
+                            attachmentId: attachmentId,
+                            questionnaireId: model.QuestionnaireId,
+                            attachmentContentId: contentId,
+                            fileName: entry.Name);
+
+                        existingAttachmentsByName[attachmentName.ToLowerInvariant()] = attachmentId;
+                        processedCount++;
+                    }
+                    catch (FormatException ex)
+                    {
+                        var safeEntryName = SanitizeForLog(entry.Name);
+                        this.logger.LogWarning(ex, "Format error processing zip entry {EntryName}", safeEntryName);
+                        errors.Add($"{entry.Name}: invalid image format");
+                    }
+                    catch (Exception ex)
+                    {
+                        var safeEntryName = SanitizeForLog(entry.Name);
+                        this.logger.LogError(ex, "Error processing zip entry {EntryName}", safeEntryName);
+                        errors.Add($"{entry.Name}: failed to process");
+                    }
                 }
             }
 
             await dbContext.SaveChangesAsync();
             return Ok(new { processedCount, errors });
+        }
+
+        private static string NormalizeAttachmentName(string name)
+        {
+            var sanitized = SanitizeAttachmentName(name);
+            return TruncateByRunes(sanitized, 32);
         }
 
         private static string SanitizeAttachmentName(string name)
@@ -292,6 +322,29 @@ namespace WB.UI.Designer.Controllers.Api.Designer
                     sb.Append(c);
             }
             return sb.Length > 0 ? sb.ToString() : "_";
+        }
+
+        private static string TruncateByRunes(string value, int maxRunes)
+        {
+            if (string.IsNullOrEmpty(value)) return value;
+            int count = 0;
+            int charIndex = 0;
+            foreach (var rune in value.EnumerateRunes())
+            {
+                if (count >= maxRunes) break;
+                charIndex += rune.Utf16SequenceLength;
+                count++;
+            }
+            return count >= maxRunes ? value[..charIndex] : value;
+        }
+
+        private static string SanitizeForLog(string name)
+        {
+            // Replace control characters to prevent log injection
+            var sb = new StringBuilder(name.Length);
+            foreach (var c in name)
+                sb.Append(char.IsControl(c) ? '_' : c);
+            return sb.ToString();
         }
 
         private static string? GetImageContentType(string extension)

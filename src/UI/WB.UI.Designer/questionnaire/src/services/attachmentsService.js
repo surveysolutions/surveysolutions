@@ -1,4 +1,4 @@
-import { upload, commandCall } from './apiService';
+import { upload, commandCall, processResponseErrorOrThrow } from './apiService';
 import emitter from './emitter';
 import { newGuid } from '../helpers/guid';
 import { mande } from 'mande';
@@ -75,6 +75,6 @@ export async function uploadZipAttachments(questionnaireId, file) {
     } catch (error) {
         blockUI.stop();
         progressStore.stop();
-        throw error;
+        processResponseErrorOrThrow(error);
     }
 }

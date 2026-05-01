@@ -22,6 +22,7 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations;
 using WB.Core.BoundedContexts.Designer.DataAccess;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Translations;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Questionnaire.Categories;
@@ -47,8 +48,14 @@ namespace WB.Tests.Unit.Designer.Api.Designer
             IDesignerTranslationService translationsService = null,
             IReusableCategoriesService reusableCategoriesService = null,
             IFileSystemAccessor fileSystemAccessor = null,
-            IDesignerQuestionnaireStorage questionnaireStorage = null)
+            IDesignerQuestionnaireStorage questionnaireStorage = null,
+            IQuestionnaireViewFactory questionnaireViewFactory = null)
         {
+            // Default view factory: always grant write access for tests that don't care about auth
+            var defaultViewFactory = new Mock<IQuestionnaireViewFactory>();
+            defaultViewFactory.Setup(vf => vf.HasUserChangeAccessToQuestionnaire(It.IsAny<Guid>(), It.IsAny<Guid>()))
+                .Returns(true);
+
             var controller = new CommandController(
                 commandService ?? Mock.Of<ICommandService>(),
                 dbContext ?? Create.InMemoryDbContext(),
@@ -59,12 +66,16 @@ namespace WB.Tests.Unit.Designer.Api.Designer
                 translationsService ?? Mock.Of<IDesignerTranslationService>(),
                 reusableCategoriesService ?? Mock.Of<IReusableCategoriesService>(),
                 fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
-                questionnaireStorage ?? Mock.Of<IDesignerQuestionnaireStorage>());
+                questionnaireStorage ?? Mock.Of<IDesignerQuestionnaireStorage>(),
+                questionnaireViewFactory ?? defaultViewFactory.Object);
 
             controller.ControllerContext = new ControllerContext
             {
                 HttpContext = new DefaultHttpContext()
             };
+
+            // Set up a default logged-in user for tests that exercise authenticated endpoints
+            controller.SetupLoggedInUser(Guid.NewGuid());
 
             return controller;
         }
@@ -1053,6 +1064,196 @@ namespace WB.Tests.Unit.Designer.Api.Designer
             await controller.UploadAttachmentsFromZip(model);
 
             Assert.That(capturedName!.Length, Is.EqualTo(32));
+        }
+
+        [Test]
+        public async Task UploadAttachmentsFromZip_no_write_access_returns_403()
+        {
+            var questionnaireId = Guid.NewGuid();
+            var viewFactory = new Mock<IQuestionnaireViewFactory>();
+            viewFactory.Setup(vf => vf.HasUserChangeAccessToQuestionnaire(questionnaireId, It.IsAny<Guid>()))
+                .Returns(false);
+
+            var zipFile = CreateMockZipFormFile("archive.zip", new[] { ("photo.png", CreateMinimalPngBytes()) });
+            var controller = CreateController(questionnaireViewFactory: viewFactory.Object);
+            var model = new CommandController.ZipAttachmentUploadModel
+            {
+                File = zipFile,
+                QuestionnaireId = questionnaireId
+            };
+
+            var result = await controller.UploadAttachmentsFromZip(model);
+
+            Assert.That(StatusCodeOf(result), Is.EqualTo(StatusCodes.Status403Forbidden));
+        }
+
+        [Test]
+        public async Task UploadAttachmentsFromZip_corrupted_zip_returns_406()
+        {
+            var questionnaireId = Guid.NewGuid();
+            var questionnaire = new QuestionnaireDocument
+            {
+                PublicKey = questionnaireId,
+                Attachments = new List<Attachment>()
+            };
+
+            var questionnaireStorage = new Mock<IDesignerQuestionnaireStorage>();
+            questionnaireStorage.Setup(s => s.Get(questionnaireId)).Returns(questionnaire);
+
+            // Provide a non-ZIP byte stream with a .zip extension
+            var mockFile = new Mock<IFormFile>();
+            mockFile.Setup(f => f.FileName).Returns("bad.zip");
+            mockFile.Setup(f => f.ContentType).Returns("application/zip");
+            mockFile.Setup(f => f.OpenReadStream()).Returns(new MemoryStream(new byte[] { 0x00, 0x01, 0x02 }));
+
+            var controller = CreateController(questionnaireStorage: questionnaireStorage.Object);
+            var model = new CommandController.ZipAttachmentUploadModel
+            {
+                File = mockFile.Object,
+                QuestionnaireId = questionnaireId
+            };
+
+            var result = await controller.UploadAttachmentsFromZip(model);
+
+            Assert.That(StatusCodeOf(result), Is.EqualTo((int)HttpStatusCode.NotAcceptable));
+        }
+
+        [Test]
+        public async Task UploadAttachmentsFromZip_saves_content_only_after_command_succeeds()
+        {
+            var questionnaireId = Guid.NewGuid();
+            var questionnaire = new QuestionnaireDocument
+            {
+                PublicKey = questionnaireId,
+                Attachments = new List<Attachment>()
+            };
+
+            var questionnaireStorage = new Mock<IDesignerQuestionnaireStorage>();
+            questionnaireStorage.Setup(s => s.Get(questionnaireId)).Returns(questionnaire);
+
+            var attachmentService = new Mock<IAttachmentService>();
+            attachmentService.Setup(s => s.CreateAttachmentContentId(It.IsAny<byte[]>())).Returns("cid");
+
+            // Command service throws on execute — simulates a command failure
+            var commandInflater = new Mock<ICommandInflater>();
+            commandInflater
+                .Setup(i => i.PrepareDeserializedCommandForExecution(It.IsAny<ICommand>()))
+                .Throws(new CommandInflaitingException(CommandInflatingExceptionType.Forbidden, "forbidden"));
+
+            var zipFile = CreateMockZipFormFile("archive.zip", new[] { ("photo.png", CreateMinimalPngBytes()) });
+            var controller = CreateController(
+                questionnaireStorage: questionnaireStorage.Object,
+                attachmentService: attachmentService.Object,
+                commandInflater: commandInflater.Object);
+
+            var model = new CommandController.ZipAttachmentUploadModel
+            {
+                File = zipFile,
+                QuestionnaireId = questionnaireId
+            };
+
+            var result = await controller.UploadAttachmentsFromZip(model);
+
+            // SaveContent and SaveMeta must NOT be called when command fails
+            attachmentService.Verify(s => s.SaveContent(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<byte[]>()), Times.Never);
+            attachmentService.Verify(s => s.SaveMeta(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+
+            Assert.That(result, Is.InstanceOf<OkObjectResult>());
+            var value = ((OkObjectResult)result).Value!;
+            var errors = (System.Collections.Generic.List<string>)value.GetType().GetProperty("errors")!.GetValue(value)!;
+            Assert.That(errors, Has.Count.EqualTo(1));
+        }
+
+        [Test]
+        public async Task UploadAttachmentsFromZip_lookup_uses_normalized_existing_name()
+        {
+            var questionnaireId = Guid.NewGuid();
+            var existingAttachmentId = Guid.NewGuid();
+            // Existing attachment name has spaces — after normalization becomes "my_photo"
+            var questionnaire = new QuestionnaireDocument
+            {
+                PublicKey = questionnaireId,
+                Attachments = new List<Attachment>
+                {
+                    new Attachment { AttachmentId = existingAttachmentId, Name = "my photo", ContentId = "old-cid" }
+                }
+            };
+
+            var questionnaireStorage = new Mock<IDesignerQuestionnaireStorage>();
+            questionnaireStorage.Setup(s => s.Get(questionnaireId)).Returns(questionnaire);
+
+            var attachmentService = new Mock<IAttachmentService>();
+            attachmentService.Setup(s => s.CreateAttachmentContentId(It.IsAny<byte[]>())).Returns("new-cid");
+
+            Guid? capturedOldId = null;
+            var commandService = new Mock<ICommandService>();
+            commandService
+                .Setup(s => s.Execute(It.IsAny<AddOrUpdateAttachment>(), It.IsAny<string>()))
+                .Callback<ICommand, string>((cmd, _) =>
+                {
+                    if (cmd is AddOrUpdateAttachment aou)
+                        capturedOldId = aou.OldAttachmentId;
+                });
+
+            // ZIP file contains "my_photo.png" which normalizes to "my_photo" — should match existing
+            var zipFile = CreateMockZipFormFile("archive.zip", new[] { ("my_photo.png", CreateMinimalPngBytes()) });
+            var controller = CreateController(
+                questionnaireStorage: questionnaireStorage.Object,
+                attachmentService: attachmentService.Object,
+                commandService: commandService.Object);
+
+            var model = new CommandController.ZipAttachmentUploadModel
+            {
+                File = zipFile,
+                QuestionnaireId = questionnaireId
+            };
+
+            await controller.UploadAttachmentsFromZip(model);
+
+            Assert.That(capturedOldId, Is.EqualTo(existingAttachmentId));
+        }
+
+        [Test]
+        public async Task UploadAttachmentsFromZip_admin_bypasses_view_factory_check()
+        {
+            var questionnaireId = Guid.NewGuid();
+            var questionnaire = new QuestionnaireDocument
+            {
+                PublicKey = questionnaireId,
+                Attachments = new List<Attachment>()
+            };
+
+            // View factory returns false — but admin should bypass this
+            var viewFactory = new Mock<IQuestionnaireViewFactory>();
+            viewFactory.Setup(vf => vf.HasUserChangeAccessToQuestionnaire(It.IsAny<Guid>(), It.IsAny<Guid>()))
+                .Returns(false);
+
+            var questionnaireStorage = new Mock<IDesignerQuestionnaireStorage>();
+            questionnaireStorage.Setup(s => s.Get(questionnaireId)).Returns(questionnaire);
+
+            var zipFile = CreateMockZipFormFile("archive.zip", new[] { ("photo.png", CreateMinimalPngBytes()) });
+            var controller = CreateController(
+                questionnaireStorage: questionnaireStorage.Object,
+                questionnaireViewFactory: viewFactory.Object);
+
+            // Set up as admin user (IsInRole("Administrator") returns true)
+            var adminIdentity = new System.Security.Claims.ClaimsIdentity(new[]
+            {
+                new System.Security.Claims.Claim(System.Security.Claims.ClaimTypes.NameIdentifier, Guid.NewGuid().ToString()),
+                new System.Security.Claims.Claim(System.Security.Claims.ClaimTypes.Role, "Administrator"),
+            }, "test");
+            controller.ControllerContext.HttpContext.User = new System.Security.Claims.ClaimsPrincipal(adminIdentity);
+
+            var model = new CommandController.ZipAttachmentUploadModel
+            {
+                File = zipFile,
+                QuestionnaireId = questionnaireId
+            };
+
+            var result = await controller.UploadAttachmentsFromZip(model);
+
+            // Admin should not be blocked by 403 — result should be Ok (questionnaire not found falls through to NotFound)
+            Assert.That(result, Is.InstanceOf<OkObjectResult>().Or.InstanceOf<NotFoundResult>());
         }
 
         private static IFormFile CreateMockZipFormFile(string fileName,

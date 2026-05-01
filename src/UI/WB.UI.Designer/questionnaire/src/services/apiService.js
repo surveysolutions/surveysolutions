@@ -256,7 +256,7 @@ function getCsrfCookie() {
     return '';
 }
 
-function processResponseErrorOrThrow(errorResp) {
+export function processResponseErrorOrThrow(errorResp) {
     if (!errorResp.response) {
         error(i18n.t('QuestionnaireEditor.RequestFailedUnexpectedly'));
         throw errorResp;
