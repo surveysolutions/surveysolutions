@@ -227,7 +227,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Revisions
                 UserId = responsibleId,
                 UserName = userName,
                 Timestamp = DateTime.UtcNow,
-                Sequence = maxSequenceByQuestionnaire + 1 ?? 0,
+                Sequence = (maxSequenceByQuestionnaire ?? -1) + 1,
                 ActionType = actionType,
                 TargetItemId = targetId,
                 TargetItemTitle = targetTitle,
