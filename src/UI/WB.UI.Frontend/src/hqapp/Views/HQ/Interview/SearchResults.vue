@@ -16,31 +16,16 @@
                 :search="search">
             </search-section-result>
 
-            <infinite-loading ref="loader" v-if="searchResultsAreVisible" @infinite="infiniteHandler" :distance="250">
-                <template #complete>
-                    <span slot="no-more"></span>
-                </template>
-            </infinite-loading>
+            <div ref="sentinel"></div>
         </div>
     </aside>
 </template>
 
-<style lang="css">
-.v3-infinite-loading div {
-    text-align: center;
-}
-</style>
-
 <script>
-import InfiniteLoading from "v3-infinite-loading";
-import "v3-infinite-loading/lib/style.css";
 import SearchSectionResult from './components/SearchSectionResult'
 
 export default {
-    components: {
-        SearchSectionResult,
-        InfiniteLoading
-    },
+    components: { SearchSectionResult },
 
     methods: {
         hideSearchResults() {
@@ -48,17 +33,41 @@ export default {
             this.$store.dispatch('hideSearchResults')
         },
 
-        async infiniteHandler($state) {
-            const self = this
+        async loadMore() {
+            if (this._loading) return
+            if (this.searchResult.skip >= this.searchResult.count) return
+            this._loading = true
+            let previousSkip = this.searchResult.skip
+            let autoLoadIterations = 0
+            const maxAutoLoadIterations = 5
+            try {
+                do {
+                    await this.$store.dispatch('fetchSearchResults')
+                    await this.waitForRenderAndLayout()
+                    autoLoadIterations += 1
 
-            await this.$store.dispatch('fetchSearchResults')
+                    if (this.searchResult.skip <= previousSkip) break
+                    previousSkip = this.searchResult.skip
+                } while (
+                    autoLoadIterations < maxAutoLoadIterations
+                    && this.searchResult.skip < this.searchResult.count
+                    && this.isSentinelInLoadingRange()
+                )
+            } finally {
+                this._loading = false
+            }
+        },
+        async waitForRenderAndLayout() {
+            await this.$nextTick()
+            await new Promise(resolve => requestAnimationFrame(resolve))
+        },
+        isSentinelInLoadingRange() {
+            if (!this.$refs.sentinel) return false
 
-            if (self.searchResult.skip >= self.searchResult.count) {
-                $state.complete()
-            }
-            else {
-                $state.loaded()
-            }
+            const margin = 250
+            const rect = this.$refs.sentinel.getBoundingClientRect()
+
+            return rect.top <= window.innerHeight + margin && rect.bottom >= -margin
         },
     },
 
@@ -73,17 +82,39 @@ export default {
     },
 
     watch: {
-        'searchResult.count'() {
-            if (this.$refs.loader != null) {
-                //this.$refs.loader.$emit('$InfiniteLoading:reset')
+        searchResultsAreVisible(val) {
+            if (val) {
+                this.$nextTick(() => {
+                    const sentinel = this.$refs.sentinel
+                    if (!sentinel) return
+                    this._observer?.unobserve(sentinel)
+                    this._observer?.observe(sentinel)
+                })
             }
         },
     },
 
-    mounted() {
-        this.$nextTick(() => {
-            this.$store.dispatch('fetchSearchResults')
-        })
+    async mounted() {
+        this._observer = new IntersectionObserver(([entry]) => {
+            if (entry.isIntersecting) this.loadMore()
+        }, { rootMargin: '250px' })
+        await this.$nextTick()
+
+        const sentinel = this.$refs.sentinel
+        if (!sentinel) return
+
+        this._loading = true
+        try {
+            await this.$store.dispatch('fetchSearchResults')
+        } finally {
+            this._loading = false
+        }
+
+        this._observer.observe(sentinel)
+    },
+
+    beforeUnmount() {
+        this._observer?.disconnect()
     },
 }
 </script>
