@@ -235,17 +235,15 @@ namespace WB.UI.Designer.Controllers
                     {
                         var sourceScenarios = dbContext.Scenarios
                             .Where(s => s.QuestionnaireId == model.QuestionnaireId)
-                            .ToList();
-
-                        foreach (var scenario in sourceScenarios)
-                        {
-                            dbContext.Scenarios.Add(new StoredScenario
+                            .Select(s => new StoredScenario
                             {
                                 QuestionnaireId = questionnaireId,
-                                Title = scenario.Title,
-                                Steps = scenario.Steps
-                            });
-                        }
+                                Title = s.Title,
+                                Steps = s.Steps
+                            })
+                            .ToList();
+
+                        dbContext.Scenarios.AddRange(sourceScenarios);
                     }
 
                     await dbContext.SaveChangesAsync();
