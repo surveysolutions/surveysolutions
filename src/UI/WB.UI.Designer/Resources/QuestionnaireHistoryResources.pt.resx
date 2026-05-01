@@ -307,4 +307,10 @@
   <data name="Translation_Replace" xml:space="preserve">
     <value>O documento foi alterado para a tradução {0}</value>
   </data>
+  <data name="AnonymousSharingEnabled" xml:space="preserve">
+    <value>O compartilhamento anônimo está ativado para {0}</value>
+  </data>
+  <data name="AnonymousSharingDisabled" xml:space="preserve">
+    <value>O compartilhamento anônimo está desativado para {0}</value>
+  </data>
 </root>

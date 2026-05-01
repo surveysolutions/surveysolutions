@@ -321,7 +321,13 @@
   <data name="Variable_Move_To_Section" xml:space="preserve">
     <value>Variabli {0} u zhvendos te rubrika {1}</value>
   </data>
-  <data name="Variable_Update" xml:space="preserve">
-    <value>Variabli {0} u përditësua</value>
+  <data name="Translation_Replace" xml:space="preserve">
+    <value>Dokumenti u kalua në përkthimin {0}</value>
+  </data>
+  <data name="AnonymousSharingEnabled" xml:space="preserve">
+    <value>Ndarja anonime është aktivizuar për {0}</value>
+  </data>
+  <data name="AnonymousSharingDisabled" xml:space="preserve">
+    <value>Ndarja anonime është çaktivizuar për {0}</value>
   </data>
 </root>

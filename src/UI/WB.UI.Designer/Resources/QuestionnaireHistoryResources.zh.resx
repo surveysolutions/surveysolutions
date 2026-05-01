@@ -321,7 +321,13 @@
   <data name="Variable_Move_To_Section" xml:space="preserve">
     <value>计算变量{0}已移至问卷模块{1}</value>
   </data>
-  <data name="Variable_Update" xml:space="preserve">
-    <value>计算变量{0}已添加</value>
+  <data name="Translation_Replace" xml:space="preserve">
+    <value>文档已切换到翻译{0}</value>
+  </data>
+  <data name="AnonymousSharingEnabled" xml:space="preserve">
+    <value>问卷{0}已开启匿名共享</value>
+  </data>
+  <data name="AnonymousSharingDisabled" xml:space="preserve">
+    <value>问卷{0}已关闭匿名共享</value>
   </data>
 </root>

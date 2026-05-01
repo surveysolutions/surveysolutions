@@ -351,7 +351,13 @@
   <data name="Variable_Move_To_Section" xml:space="preserve">
     <value>Змінну {0} переміщено до секції {1}</value>
   </data>
-  <data name="Variable_Update" xml:space="preserve">
-    <value>Оновлено змінну {0}</value>
+  <data name="Translation_Replace" xml:space="preserve">
+    <value>Документ переключено на переклад {0}</value>
+  </data>
+  <data name="AnonymousSharingEnabled" xml:space="preserve">
+    <value>Анонімний доступ увімкнено для {0}</value>
+  </data>
+  <data name="AnonymousSharingDisabled" xml:space="preserve">
+    <value>Анонімний доступ вимкнено для {0}</value>
   </data>
 </root>

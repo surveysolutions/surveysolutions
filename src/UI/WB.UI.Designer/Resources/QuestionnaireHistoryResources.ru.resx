@@ -374,4 +374,10 @@
   <data name="Translation_Replace" xml:space="preserve">
     <value>Документ переключён на перевод {0}</value>
   </data>
+  <data name="AnonymousSharingEnabled" xml:space="preserve">
+    <value>Анонимный доступ включён для {0}</value>
+  </data>
+  <data name="AnonymousSharingDisabled" xml:space="preserve">
+    <value>Анонимный доступ выключен для {0}</value>
+  </data>
 </root>
