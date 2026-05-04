@@ -1,12 +1,12 @@
 <template>
     <teleport to="body">
         <div v-if="isOpen" class="modal fade in categories-editor-modal" role="dialog"
-            tabindex="-1" style="z-index: 1050; display: block;">
+            tabindex="-1" aria-labelledby="categories-editor-modal-title" style="z-index: 1050; display: block;">
             <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" class="close" @click="close" aria-hidden="true"></button>
-                        <h3 class="modal-title" v-if="options">{{ formTitle }}</h3>
+                        <button type="button" class="close" aria-label="Close" @click="close"></button>
+                        <h3 class="modal-title" id="categories-editor-modal-title" v-if="options">{{ formTitle }}</h3>
                     </div>
                     <div class="modal-body categories-editor-modal-body">
                         <div v-if="errors.length > 0" class="alert alert-danger categories-editor-errors">
