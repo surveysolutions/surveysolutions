@@ -1,10 +1,6 @@
 <template>
     <div class="categories">
-        <div id="show-reload-details-promt" class="ng-cloak" v-show="shouldUserSeeReloadPromt">
-            <div class="inner">{{ $t('QuestionnaireEditor.QuestionToUpdateOptions') }} <a href="#"
-                    onclick="window.location.reload(true);">{{ $t('QuestionnaireEditor.QuestionClickReload') }}</a>
-            </div>
-        </div>
+        <categories-editor-modal ref="categoriesEditorModal" />
 
         <perfect-scrollbar class="scroller">
             <h3>{{ $t('QuestionnaireEditor.SideBarCategoriesCounter', { count: categoriesList.length }) }}</h3>
@@ -59,9 +55,10 @@
 <script>
 
 import CategoriesItem from './CategoriesItem.vue';
+import CategoriesEditorModal from './CategoriesEditorModal.vue';
 
 import { newGuid } from '../../../../helpers/guid';
-import { isNull, isUndefined, some } from 'lodash'
+import { isNull, isUndefined } from 'lodash'
 import { updateCategories } from '../../../../services/categoriesService'
 import { notice } from '../../../../services/notificationService';
 import dayjs from 'dayjs';
@@ -69,31 +66,14 @@ import dayjs from 'dayjs';
 export default {
     name: 'Categories',
     inject: ['questionnaire', 'isReadOnlyForUser'],
-    components: { CategoriesItem, },
+    components: { CategoriesItem, CategoriesEditorModal },
     props: {
         questionnaireId: { type: String, required: true },
     },
     data() {
         return {
-            shouldUserSeeReloadPromt: false,
-            openEditor: null,
-            bcChannel: null,
-
             downloadBaseUrl: '/categories',
             file: [],
-        }
-    },
-    mounted() {
-        // https://developer.mozilla.org/en-US/docs/Web/API/Broadcast_Channel_API
-        // Automatically reload window on popup close. If supported by browser
-        if ('BroadcastChannel' in window) {
-            this.bcChannel = new BroadcastChannel("editcategory")
-            this.bcChannel.onmessage = ev => {
-                console.log(ev.data)
-                if (ev.data === 'close#' + this.openEditor) {
-                    window.location.reload();
-                }
-            }
         }
     },
     computed: {
@@ -158,12 +138,7 @@ export default {
         },
 
         editCategoriesOpen(event) {
-            this.shouldUserSeeReloadPromt = true;
-            this.openEditor = event.categoriesId
-
-            window.open("/questionnaire/editcategories/" + this.questionnaireId + "?categoriesid=" + event.categoriesId,
-                "", "scrollbars=yes, center=yes, modal=yes, width=960, height=745, top=" + (screen.height - 745) / 4
-                + ", left= " + (screen.width - 960) / 2, true);
+            this.$refs.categoriesEditorModal.open(this.questionnaireId, event.categoriesId);
         }
     },
 }
