@@ -21,7 +21,10 @@ namespace WB.Services.Export.Assignment
         IEventHandler<AssignmentAudioRecordingChanged>,    
         IEventHandler<AssignmentWebModeChanged>,    
         IEventHandler<AssignmentQuantityChanged>,
-        IEventHandler<AssignmentTargetAreaChanged>
+        IEventHandler<AssignmentTargetAreaChanged>,
+        IEventHandler<AssignmentFinished>,
+        IEventHandler<AssignmentCompleted>,
+        IEventHandler<AssignmentReopened>
     {
         private readonly TenantDbContext dbContext;
 
@@ -130,7 +133,22 @@ namespace WB.Services.Export.Assignment
             assignment.TargetArea = @event.Event.TargetArea;
         }
 
-        private void AddRecord<T>(PublishedEvent<T> @event, AssignmentExportedAction action, 
+        public void Handle(PublishedEvent<AssignmentFinished> @event)
+        {
+            AddRecord(@event, AssignmentExportedAction.Finished, null, null, @event.Event.Comment);
+        }
+
+        public void Handle(PublishedEvent<AssignmentCompleted> @event)
+        {
+            AddRecord(@event, AssignmentExportedAction.Completed, null, null, @event.Event.Comment);
+        }
+
+        public void Handle(PublishedEvent<AssignmentReopened> @event)
+        {
+            AddRecord(@event, AssignmentExportedAction.Reopened, null, null, @event.Event.Comment);
+        }
+
+        private void AddRecord<T>(PublishedEvent<T> @event, AssignmentExportedAction action,
             string? oldValue, string? newValue, string? comment, int position = 1) 
             where T : AssignmentEvent
         {

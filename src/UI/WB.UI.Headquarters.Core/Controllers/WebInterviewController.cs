@@ -839,6 +839,10 @@ namespace WB.UI.Headquarters.Controllers
             if (!webInterviewConfig.Started)
                 throw new InvalidOperationException(@"Web interview is not started for this questionnaire");
 
+            if (assignment.Status != WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment.AssignmentStatus.Active)
+                throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired,
+                    Enumerator.Native.Resources.WebInterview.Error_InterviewExpired);
+
             var responsible = this.usersRepository.GetUser(assignment.ResponsibleId);
             
             if (responsible == null)

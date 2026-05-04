@@ -10,6 +10,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Infrastructure.Native.Fetching;
 using WB.Infrastructure.Native.Storage.Postgre;
@@ -330,6 +331,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                      x.QuestionnaireId.Version == questionnaireId.Version &&
                      x.Responsible.ReadonlyProfile.SupervisorId != null &&
                      !x.Archived &&
+                     x.Status == AssignmentStatus.Active &&
                      (x.Quantity == null || x.InterviewSummaries.Count < x.Quantity) &&
                      x.WebMode == true;
             return readyForWebInterviewAssignments;

@@ -12,6 +12,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Assignment;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment;
 
 namespace WB.Core.BoundedContexts.Headquarters.Assignments
 {
@@ -25,7 +26,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         IUpdateHandler<Assignment, AssignmentAudioRecordingChanged>,
         IUpdateHandler<Assignment, AssignmentQuantityChanged>,
         IUpdateHandler<Assignment, AssignmentTargetAreaChanged>,
-        IUpdateHandler<Assignment, AssignmentReceivedByTablet>
+        IUpdateHandler<Assignment, AssignmentReceivedByTablet>,
+        IUpdateHandler<Assignment, AssignmentFinished>,
+        IUpdateHandler<Assignment, AssignmentCompleted>,
+        IUpdateHandler<Assignment, AssignmentReopened>
     {
         private readonly IQuestionnaireStorage questionnaireStorage;
 
@@ -171,6 +175,24 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         public Assignment Update(Assignment state, IPublishedEvent<AssignmentDeleted> @event)
         {
             return null;
+        }
+
+        public Assignment Update(Assignment state, IPublishedEvent<AssignmentFinished> @event)
+        {
+            return UpdateAssignment(state, @event.Payload.OriginDate.UtcDateTime,
+                assignment => assignment.Status = AssignmentStatus.Finished);
+        }
+
+        public Assignment Update(Assignment state, IPublishedEvent<AssignmentCompleted> @event)
+        {
+            return UpdateAssignment(state, @event.Payload.OriginDate.UtcDateTime,
+                assignment => assignment.Status = AssignmentStatus.Completed);
+        }
+
+        public Assignment Update(Assignment state, IPublishedEvent<AssignmentReopened> @event)
+        {
+            return UpdateAssignment(state, @event.Payload.OriginDate.UtcDateTime,
+                assignment => assignment.Status = AssignmentStatus.Active);
         }
 
         private Assignment UpdateAssignment(Assignment assignment, DateTimeOffset dateTimeOffset, Action<Assignment> updater)

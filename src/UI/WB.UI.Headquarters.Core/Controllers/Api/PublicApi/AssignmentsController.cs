@@ -30,6 +30,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Assignment;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment;
 using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.UI.Headquarters.API.PublicApi.Models;
@@ -153,7 +154,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
                     Offset = filter.Offset,
                     SearchBy = filter.SearchBy,
                     ShowArchive = filter.ShowArchive,
-                    SupervisorId = filter.SupervisorId
+                    SupervisorId = filter.SupervisorId,
+                    Statuses = ParseStatuses(filter.Status)
                 });
 
                 var listView = new AssignmentsListView(result.Page, result.PageSize, result.TotalCount, filter.Order);
@@ -682,6 +684,65 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             AssignmentHistory result =
                 await this.assignmentViewFactory.LoadHistoryAsync(assignment.PublicKey, start, length);
             return result;
+        }
+
+        /// <summary>
+        /// Change assignment status
+        /// </summary>
+        /// <param name="id">Assignment id</param>
+        /// <param name="request">Status change request</param>
+        /// <response code="200">Assignment details with updated status</response>
+        /// <response code="400">Invalid request</response>
+        /// <response code="404">Assignment not found</response>
+        [HttpPost]
+        [Route("{id:int}/changeStatus")]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [Produces(MediaTypeNames.Application.Json)]
+        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Headquarter, UserRoles.Administrator, UserRoles.Supervisor)]
+        [ObservingNotAllowed]
+        public ActionResult<AssignmentDetails> ChangeStatus(int id, [FromBody] ChangeAssignmentStatusRequest request)
+        {
+            if (request == null || !ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var assignment = assignmentsStorage.GetAssignment(id);
+            if (assignment == null)
+                return NotFound();
+
+            switch (request.Status)
+            {
+                case AssignmentStatus.Active:
+                    commandService.Execute(new ReopenAssignment(assignment.PublicKey, authorizedUser.Id,
+                        assignment.QuestionnaireId, request.Comment));
+                    break;
+                case AssignmentStatus.Finished:
+                    commandService.Execute(new FinishAssignment(assignment.PublicKey, authorizedUser.Id,
+                        assignment.QuestionnaireId, request.Comment));
+                    break;
+                case AssignmentStatus.Completed:
+                    commandService.Execute(new CompleteAssignment(assignment.PublicKey, authorizedUser.Id,
+                        assignment.QuestionnaireId, request.Comment));
+                    break;
+                default:
+                    return BadRequest($"Unknown status: {request.Status}");
+            }
+
+            return GetUpdatedAssignment(id);
+        }
+
+        private static AssignmentStatus[]? ParseStatuses(string? statusFilter)
+        {
+            if (string.IsNullOrWhiteSpace(statusFilter))
+                return null;
+
+            var parts = statusFilter.Split(',', StringSplitOptions.RemoveEmptyEntries);
+            var result = new List<AssignmentStatus>();
+            foreach (var part in parts)
+            {
+                if (Enum.TryParse<AssignmentStatus>(part.Trim(), ignoreCase: true, out var status))
+                    result.Add(status);
+            }
+            return result.Count > 0 ? result.ToArray() : null;
         }
 
 

@@ -130,7 +130,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                         ReceivedByTabletAtUtc = x.ReceivedByTabletAtUtc,
                         Comments = x.Comments,
                         TargetArea = x.TargetArea,
-                        CalendarEvent = GetCalendarEventForAssignmentOrNull(x.Id)
+                        CalendarEvent = GetCalendarEventForAssignmentOrNull(x.Id),
+                        Status = x.Status
                     };
 
                     if (input.ShowQuestionnaireTitle)
@@ -283,6 +284,21 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                             w.WebMode
                         };
                         break;
+                    case AssignmentFinished f:
+                        historyItem.Action = AssignmentHistoryAction.Finished;
+                        if (!string.IsNullOrEmpty(f.Comment))
+                            historyItem.AdditionalData = new { f.Comment };
+                        break;
+                    case AssignmentCompleted c2:
+                        historyItem.Action = AssignmentHistoryAction.Completed;
+                        if (!string.IsNullOrEmpty(c2.Comment))
+                            historyItem.AdditionalData = new { c2.Comment };
+                        break;
+                    case AssignmentReopened ro:
+                        historyItem.Action = AssignmentHistoryAction.Reopened;
+                        if (!string.IsNullOrEmpty(ro.Comment))
+                            historyItem.AdditionalData = new { ro.Comment };
+                        break;
                 }
 
                 result.History.Add(historyItem);
@@ -425,6 +441,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             if (input.Id.HasValue)
             {
                 items = items.Where(x => x.Id == input.Id);
+            }
+
+            if (input.Statuses != null && input.Statuses.Length > 0)
+            {
+                items = items.Where(x => input.Statuses.Contains(x.Status));
             }
 
             return items;
