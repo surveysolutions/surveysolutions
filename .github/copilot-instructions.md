@@ -171,5 +171,5 @@ src/
 - **Designer uses Vuetify 3:** Do not import Vuetify 2 components or use Vuetify 2 API (`v-data-table` slot names differ between versions, etc.).
 - **Workspace schema isolation:** Running ad-hoc SQL against a specific workspace requires prefixing table names with the workspace schema (e.g., `ws_primary."interviews"`).
 - **All localization resources reside in .resx files, even for frontend, .json files are derivatives
-- **Building of the app makes changes in package-lock.json, other .json and .cshtml files. These changes not be committed.
-- **Most meaningfull C# code changes require unit tests.  
+- **Building of the apps makes changes in package-lock.json, other locale/[culture].json and *.cshtml files. These changes must not be committed.
+- **Most meaningfull C# code changes require new unit tests, especially if changed classes (or neighbouring classes) already have them.
