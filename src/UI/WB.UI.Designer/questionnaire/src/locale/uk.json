@@ -95,7 +95,6 @@
     "FindReplaceInAllFound_other": "в {{count}} знайдених сутностей?",
     "FindReplaceMatchCase": "Відповідно регістру",
     "FindReplaceMatchingLines": "Збігаються рядкі: {{count}}",
-    "FindReplaceCurrentMatch": "{{current}} / {{count}}",
     "FindReplaceMatchWord": "Збіг цілого слова",
     "FindReplaceNext": "Далі",
     "FindReplacePrevious": "Назад",

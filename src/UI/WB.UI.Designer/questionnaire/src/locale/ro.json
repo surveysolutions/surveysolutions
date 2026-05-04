@@ -76,7 +76,6 @@
     "FindReplaceInAllFound_other": "în {{count}} valori găsite ?",
     "FindReplaceMatchCase": "Potrivește capitalizarea",
     "FindReplaceMatchingLines": "Au fost găsite {{count}} linii",
-    "FindReplaceCurrentMatch": "{{current}} / {{count}}",
     "FindReplaceMatchWord": "Potrivește cuvântul întreg",
     "FindReplaceNext": "Următorul",
     "FindReplacePrevious": "Anterior",

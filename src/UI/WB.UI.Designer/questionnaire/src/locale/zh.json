@@ -54,7 +54,6 @@
     "FindReplaceInAllFound_other": "在{{count}}中找到实体？",
     "FindReplaceMatchCase": "匹配的个体",
     "FindReplaceMatchingLines": "匹配的行：{{count}}",
-    "FindReplaceCurrentMatch": "{{current}} / {{count}}",
     "FindReplaceMatchWord": "匹配整个词",
     "FindReplaceNext": "下一个",
     "FindReplacePrevious": "上一个",

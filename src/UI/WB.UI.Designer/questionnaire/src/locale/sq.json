@@ -67,7 +67,6 @@
     "FindReplaceInAllFound_other": "në {{count}} entitete të gjetura?",
     "FindReplaceMatchCase": "Përputh madhësinë e shkronjave",
     "FindReplaceMatchingLines": "Rreshta që përputhen: {{count}}",
-    "FindReplaceCurrentMatch": "{{current}} / {{count}}",
     "FindReplaceMatchWord": "Përputh të gjithë fjalën",
     "FindReplaceNext": "Pas",
     "FindReplacePrevious": "Para",

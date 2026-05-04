@@ -48,7 +48,6 @@
     "FindReplaceInAllFound_other": "Entidades encontradas en {{count}} ?",
     "FindReplaceMatchCase": "Que coincida con caso",
     "FindReplaceMatchingLines": "Que coincida con líneas:  {{count}}",
-    "FindReplaceCurrentMatch": "{{current}} / {{count}}",
     "FindReplaceMatchWord": "Que coincida con palabra",
     "FindReplaceNext": "Siguiente",
     "FindReplacePrevious": "Anterior",

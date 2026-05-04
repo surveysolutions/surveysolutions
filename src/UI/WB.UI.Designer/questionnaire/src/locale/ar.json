@@ -166,7 +166,6 @@
     "FindReplaceInAllFound": "في {{count}} كيان تم العثور عليه؟",
     "FindReplaceInAllFound_other": "في {{count}} كيانات تم العثور عليها؟",
     "FindReplaceMatchingLines": "الأسطر المطابقة: {{count}}",
-    "FindReplaceCurrentMatch": "{{current}} / {{count}}",
     "FindReplaceNext": "التالي",
     "FindReplacePrevious": "السابق",
     "FindReplaceReplaceAll": "استبدال الكل ({{count}})",
