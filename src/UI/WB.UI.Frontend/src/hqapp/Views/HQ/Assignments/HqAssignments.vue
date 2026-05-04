@@ -50,6 +50,11 @@
                     <Typeahead control-id="show_archived" noSearch noClear :values="ddlShowArchive" :value="showArchive"
                         v-on:selected="showArchiveSelected" />
                 </FilterBlock>
+
+                <FilterBlock :title="$t('Assignments.Status')">
+                    <Typeahead control-id="status_filter" noSearch noClear allowEmpty :values="ddlStatus" :value="status"
+                        v-on:selected="statusSelected" />
+                </FilterBlock>
             </Filters>
         </template>
 
@@ -243,6 +248,7 @@ export default {
             totalRows: 0,
             showArchive: null,
             receivedByTablet: null,
+            status: null,
             newResponsibleId: null,
             reassignComment: null,
             editedRowId: null,
@@ -298,6 +304,14 @@ export default {
             return [
                 { key: false, value: this.$t('Assignments.Active') },
                 { key: true, value: this.$t('Assignments.Archived') },
+            ]
+        },
+        ddlStatus() {
+            return [
+                { key: null, value: this.$t('Common.All') },
+                { key: 'Active', value: this.$t('Assignments.StatusActive') },
+                { key: 'Finished', value: this.$t('Assignments.StatusFinished') },
+                { key: 'Completed', value: this.$t('Assignments.StatusCompleted') },
             ]
         },
 
@@ -495,6 +509,21 @@ export default {
                         return data === false ? self.$t('Common.Capi') : self.$t('Common.Cawi')
                     },
                 },
+                {
+                    data: 'status',
+                    name: 'Status',
+                    title: this.$t('Assignments.Status'),
+                    searchable: false,
+                    orderable: false,
+                    render(data) {
+                        const statusMap = {
+                            'Active': self.$t('Assignments.StatusActive'),
+                            'Finished': self.$t('Assignments.StatusFinished'),
+                            'Completed': self.$t('Assignments.StatusCompleted'),
+                        }
+                        return statusMap[data] || data
+                    },
+                },
             ]
         },
 
@@ -547,6 +576,7 @@ export default {
             requestData.receivedByTablet = (this.receivedByTablet || {}).key
             requestData.teamId = this.teamId
             requestData.id = this.id
+            requestData.status = (this.status || {}).key
         },
 
         userSelected(newValue) {
@@ -568,6 +598,10 @@ export default {
 
         receivedByTabletSelected(newValue) {
             this.receivedByTablet = newValue
+        },
+
+        statusSelected(newValue) {
+            this.status = newValue
         },
 
         showArchiveSelected(newValue) {

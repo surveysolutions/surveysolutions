@@ -19,6 +19,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Assignment;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment;
 using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Sanitizer;
 using WB.UI.Headquarters.Code;
@@ -93,7 +94,8 @@ namespace WB.UI.Headquarters.Controllers.Api
                 UserRole = request.UserRole,
                 ReceivedByTablet = request.ReceivedByTablet,
                 SupervisorId = request.TeamId,
-                Id = request.Id
+                Id = request.Id,
+                Statuses = ParseStatuses(request.Status)
             };
             
             if (this.authorizedUser.IsSupervisor)
@@ -331,6 +333,8 @@ namespace WB.UI.Headquarters.Controllers.Api
             public AssignmentReceivedState ReceivedByTablet { get; set; }
 
             public int? Id { get; set; }
+            
+            public string Status { get; set; }
         }
         
         [HttpPost]
@@ -338,6 +342,21 @@ namespace WB.UI.Headquarters.Controllers.Api
         public AssignmentForMapPointView AssignmentMapPoint([FromBody]AssignmentForMapPointViewModel data)
         {
             return data == null ? null : GetAssignmentForMapPointView(data.AssignmentId);
+        }
+
+        private static AssignmentStatus[] ParseStatuses(string statusFilter)
+        {
+            if (string.IsNullOrWhiteSpace(statusFilter))
+                return null;
+
+            var parts = statusFilter.Split(',', StringSplitOptions.RemoveEmptyEntries);
+            var result = new List<AssignmentStatus>();
+            foreach (var part in parts)
+            {
+                if (Enum.TryParse<AssignmentStatus>(part.Trim(), ignoreCase: true, out var status))
+                    result.Add(status);
+            }
+            return result.Count > 0 ? result.ToArray() : null;
         }
 
         private AssignmentForMapPointView GetAssignmentForMapPointView(int assignmentId)

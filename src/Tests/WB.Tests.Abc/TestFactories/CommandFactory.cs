@@ -442,6 +442,21 @@ namespace WB.Tests.Abc.TestFactories
             return new UpdateAssignmentTargetArea(assignmentId ?? Guid.NewGuid(), userId ?? Guid.NewGuid(), targetAreaName, questionnaireIdentity ?? new QuestionnaireIdentity());
         }
 
+        public FinishAssignment FinishAssignment(Guid? assignmentId = null, Guid? userId = null, string comment = null, QuestionnaireIdentity questionnaireIdentity = null)
+        {
+            return new FinishAssignment(assignmentId ?? Guid.NewGuid(), userId ?? Guid.NewGuid(), questionnaireIdentity ?? new QuestionnaireIdentity(), comment);
+        }
+
+        public CompleteAssignment CompleteAssignment(Guid? assignmentId = null, Guid? userId = null, string comment = null, QuestionnaireIdentity questionnaireIdentity = null)
+        {
+            return new CompleteAssignment(assignmentId ?? Guid.NewGuid(), userId ?? Guid.NewGuid(), questionnaireIdentity ?? new QuestionnaireIdentity(), comment);
+        }
+
+        public ReopenAssignment ReopenAssignment(Guid? assignmentId = null, Guid? userId = null, string comment = null, QuestionnaireIdentity questionnaireIdentity = null)
+        {
+            return new ReopenAssignment(assignmentId ?? Guid.NewGuid(), userId ?? Guid.NewGuid(), questionnaireIdentity ?? new QuestionnaireIdentity(), comment);
+        }
+
         public UpgradeAssignmentCommand UpgradeAssignment()
         {
             return new UpgradeAssignmentCommand(Id.g1, Id.g2, new QuestionnaireIdentity());
