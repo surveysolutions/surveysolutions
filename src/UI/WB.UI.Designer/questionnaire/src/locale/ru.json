@@ -108,6 +108,7 @@
     "FindReplaceInAll": "Все",
     "FindReplaceInAllFound": "в найденном {{count}} объекте?",
     "FindReplaceMatchingLines": "Найденные строки: {{count}}",
+    "FindReplaceCurrentMatch": "{{current}} / {{count}}",
     "FindReplaceNext": "Следующее",
     "FindReplacePrevious": "Предыдущее",
     "FindReplaceReplaceAll": "Заменить все ({{count}})",

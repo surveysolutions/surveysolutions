@@ -95,6 +95,7 @@
     "FindReplaceInAllFound_other": "v {{count}} nalezených entitách?",
     "FindReplaceMatchCase": "Případ zápasu",
     "FindReplaceMatchingLines": "Odpovídající řádky: {{count}}",
+    "FindReplaceCurrentMatch": "{{current}} / {{count}}",
     "FindReplaceMatchWord": "Shoda celého slova",
     "FindReplaceNext": "Další",
     "FindReplacePrevious": "Předchozí",

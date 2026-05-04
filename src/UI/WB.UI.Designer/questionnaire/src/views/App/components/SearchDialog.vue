@@ -80,8 +80,12 @@
                     <div>
                         <div v-if="step == 'search'">
                             <p class="wb-label">
-                                {{ $t('QuestionnaireEditor.FindReplaceMatchingLines', { count: foundReferences.length })
-                                }}
+                                <span v-if="indexOfCurrentReference >= 0">
+                                    {{ $t('QuestionnaireEditor.FindReplaceCurrentMatch', { current: indexOfCurrentReference + 1, count: foundReferences.length }) }}
+                                </span>
+                                <span v-else>
+                                    {{ $t('QuestionnaireEditor.FindReplaceMatchingLines', { count: foundReferences.length }) }}
+                                </span>
                             </p>
                             <button type="button" class="btn btn-lg btn-primary"
                                 :disabled="searchForm.searchFor.length === 0" @click="findAll()">{{

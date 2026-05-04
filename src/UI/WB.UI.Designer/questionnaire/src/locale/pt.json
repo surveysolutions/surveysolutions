@@ -166,6 +166,7 @@
     "FindReplaceInAllFound": "em {{count}} entidade encontrada?",
     "FindReplaceInAllFound_other": "em {{count}} entidades encontradas?",
     "FindReplaceMatchingLines": "Linhas correspondentes: {{count}}",
+    "FindReplaceCurrentMatch": "{{current}} / {{count}}",
     "FindReplaceNext": "Próximo",
     "FindReplacePrevious": "Anterior",
     "FindReplaceReplaceAll": "Substituir tudo ({{count}})",
