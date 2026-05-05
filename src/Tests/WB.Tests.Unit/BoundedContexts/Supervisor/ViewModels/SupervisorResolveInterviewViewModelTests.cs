@@ -206,6 +206,44 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
         }
 
         [Test]
+        public void should_request_supervisor_scope_entities_with_errors_when_building_error_tab()
+        {
+            var interview = Mock.Of<IStatefulInterview>();
+            var interviewRepository = new Mock<IStatefulInterviewRepository>();
+            interviewRepository.Setup(x => x.Get(It.IsAny<string>())).Returns(interview);
+            interviewRepository.Setup(x => x.GetOrThrow(It.IsAny<string>())).Returns(interview);
+
+            var entitiesListViewModelFactory = new Mock<IEntitiesListViewModelFactory>();
+            var emptyResult = new EntitiesListViewModelFactoryResult(Enumerable.Empty<EntityWithErrorsViewModel>(), 0);
+            entitiesListViewModelFactory
+                .Setup(x => x.GetTopEntitiesWithErrors(It.IsAny<string>(), It.IsAny<NavigationState>(), It.IsAny<bool>()))
+                .Returns(emptyResult);
+            entitiesListViewModelFactory
+                .Setup(x => x.GetTopUnansweredQuestions(It.IsAny<string>(), It.IsAny<NavigationState>(), It.IsAny<bool>()))
+                .Returns(emptyResult);
+            entitiesListViewModelFactory
+                .Setup(x => x.GetTopFailedCriticalRulesFromState(It.IsAny<string>(), It.IsAny<NavigationState>()))
+                .Returns(emptyResult);
+            entitiesListViewModelFactory
+                .Setup(x => x.GetTopUnansweredCriticalQuestions(It.IsAny<string>(), It.IsAny<NavigationState>()))
+                .Returns(emptyResult);
+            entitiesListViewModelFactory.Setup(x => x.MaxNumberOfEntities).Returns(10);
+
+            var viewModel = CreateViewModel(
+                interviewRepository: interviewRepository.Object,
+                entitiesListViewModelFactory: entitiesListViewModelFactory.Object);
+
+            // Act
+            viewModel.Configure(Id.g1.FormatGuid(), Create.Other.NavigationState(interviewRepository.Object));
+
+            // Assert: GetTopEntitiesWithErrors is called with forSupervisor=true
+            entitiesListViewModelFactory.Verify(
+                x => x.GetTopEntitiesWithErrors(It.IsAny<string>(), It.IsAny<NavigationState>(), true),
+                Times.Once);
+        }
+
+
+        [Test]
         public void when_configure_and_interview_was_rejected_then_approve_and_reject_commands_should_not_be_executable()
         {
             var commandService = new Mock<ICommandService>();
@@ -235,7 +273,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
             var defaultResult = new EntitiesListViewModelFactoryResult(Enumerable.Empty<EntityWithErrorsViewModel>(), 0);
             
             return Mock.Of<IEntitiesListViewModelFactory>(x =>
-                x.GetTopEntitiesWithErrors(It.IsAny<string>(), It.IsAny<NavigationState>()) == defaultResult &&
+                x.GetTopEntitiesWithErrors(It.IsAny<string>(), It.IsAny<NavigationState>(), It.IsAny<bool>()) == defaultResult &&
                 x.GetTopUnansweredQuestions(It.IsAny<string>(), It.IsAny<NavigationState>(), It.IsAny<bool>()) == defaultResult &&
                 x.GetTopEntitiesWithComments(It.IsAny<string>(), It.IsAny<NavigationState>()) == defaultResult &&
                 x.GetTopUnansweredCriticalQuestions(It.IsAny<string>(), It.IsAny<NavigationState>()) == defaultResult &&
