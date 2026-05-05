@@ -233,7 +233,8 @@ namespace WB.UI.Designer.Controllers
 
                     if (model.IncludeScenarios)
                     {
-                        var sourceScenarios = dbContext.Scenarios
+                        var sourceScenarios = await dbContext.Scenarios
+                            .AsNoTracking()
                             .Where(s => s.QuestionnaireId == model.QuestionnaireId)
                             .Select(s => new StoredScenario
                             {
@@ -241,7 +242,7 @@ namespace WB.UI.Designer.Controllers
                                 Title = s.Title,
                                 Steps = s.Steps
                             })
-                            .ToList();
+                            .ToListAsync();
 
                         dbContext.Scenarios.AddRange(sourceScenarios);
                     }
