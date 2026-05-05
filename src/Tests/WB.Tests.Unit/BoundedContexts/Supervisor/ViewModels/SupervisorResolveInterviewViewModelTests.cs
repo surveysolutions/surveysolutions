@@ -187,14 +187,29 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
         {
             var interview = Mock.Of<IStatefulInterview>(
                 x => x.CountActiveAnsweredQuestionsInInterviewForSupervisor() == 3
-                     && x.CountInvalidEntitiesInInterviewForSupervisor() == 2 
                      && x.CountActiveQuestionsInInterviewForSupervisor() == 8
             );
             var interviewRepository = new Mock<IStatefulInterviewRepository>();
             interviewRepository.Setup(x => x.Get(It.IsAny<string>()))
                 .Returns(interview);
+            interviewRepository.Setup(x => x.GetOrThrow(It.IsAny<string>()))
+                .Returns(interview);
 
-            var viewModel = CreateViewModel(interviewRepository: interviewRepository.Object);
+            var defaultResult = new EntitiesListViewModelFactoryResult(Enumerable.Empty<EntityWithErrorsViewModel>(), 0);
+            var errorsResult = new EntitiesListViewModelFactoryResult(Enumerable.Empty<EntityWithErrorsViewModel>(), 2);
+            var entitiesListViewModelFactory = Mock.Of<IEntitiesListViewModelFactory>(x =>
+                x.GetTopEntitiesWithErrors(It.IsAny<string>(), It.IsAny<NavigationState>(), true) == errorsResult &&
+                x.GetTopUnansweredQuestions(It.IsAny<string>(), It.IsAny<NavigationState>(), It.IsAny<bool>()) == defaultResult &&
+                x.GetTopEntitiesWithComments(It.IsAny<string>(), It.IsAny<NavigationState>()) == defaultResult &&
+                x.GetTopUnansweredCriticalQuestions(It.IsAny<string>(), It.IsAny<NavigationState>()) == defaultResult &&
+                x.GetTopFailedCriticalRules(It.IsAny<string>(), It.IsAny<NavigationState>()) == defaultResult &&
+                x.GetTopFailedCriticalRulesFromState(It.IsAny<string>(), It.IsAny<NavigationState>()) == defaultResult &&
+                x.MaxNumberOfEntities == 10
+            );
+
+            var viewModel = CreateViewModel(
+                interviewRepository: interviewRepository.Object,
+                entitiesListViewModelFactory: entitiesListViewModelFactory);
 
             // Act
             viewModel.Configure(Id.g1.FormatGuid(), Create.Other.NavigationState(interviewRepository.Object));
@@ -208,6 +223,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
         [Test]
         public void should_request_supervisor_scope_entities_with_errors_when_building_error_tab()
         {
+            const int expectedErrorCount = 5;
             var interview = Mock.Of<IStatefulInterview>();
             var interviewRepository = new Mock<IStatefulInterviewRepository>();
             interviewRepository.Setup(x => x.Get(It.IsAny<string>())).Returns(interview);
@@ -215,9 +231,10 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
 
             var entitiesListViewModelFactory = new Mock<IEntitiesListViewModelFactory>();
             var emptyResult = new EntitiesListViewModelFactoryResult(Enumerable.Empty<EntityWithErrorsViewModel>(), 0);
+            var supervisorErrorsResult = new EntitiesListViewModelFactoryResult(Enumerable.Empty<EntityWithErrorsViewModel>(), expectedErrorCount);
             entitiesListViewModelFactory
-                .Setup(x => x.GetTopEntitiesWithErrors(It.IsAny<string>(), It.IsAny<NavigationState>(), It.IsAny<bool>()))
-                .Returns(emptyResult);
+                .Setup(x => x.GetTopEntitiesWithErrors(It.IsAny<string>(), It.IsAny<NavigationState>(), true))
+                .Returns(supervisorErrorsResult);
             entitiesListViewModelFactory
                 .Setup(x => x.GetTopUnansweredQuestions(It.IsAny<string>(), It.IsAny<NavigationState>(), It.IsAny<bool>()))
                 .Returns(emptyResult);
@@ -236,10 +253,11 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
             // Act
             viewModel.Configure(Id.g1.FormatGuid(), Create.Other.NavigationState(interviewRepository.Object));
 
-            // Assert: GetTopEntitiesWithErrors is called with forSupervisor=true
+            // Assert: GetTopEntitiesWithErrors is called with forSupervisor=true and ErrorsCount reflects supervisor scope
             entitiesListViewModelFactory.Verify(
                 x => x.GetTopEntitiesWithErrors(It.IsAny<string>(), It.IsAny<NavigationState>(), true),
                 Times.Once);
+            Assert.That(viewModel.ErrorsCount, Is.EqualTo(expectedErrorCount));
         }
 
 
