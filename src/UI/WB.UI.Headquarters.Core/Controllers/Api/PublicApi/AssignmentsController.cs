@@ -698,7 +698,7 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
         [Route("{id:int}/changeStatus")]
         [Consumes(MediaTypeNames.Application.Json)]
         [Produces(MediaTypeNames.Application.Json)]
-        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Headquarter, UserRoles.Administrator, UserRoles.Supervisor)]
+        [AuthorizeByRole(UserRoles.ApiUser, UserRoles.Headquarter, UserRoles.Administrator, UserRoles.Supervisor, UserRoles.Interviewer)]
         [ObservingNotAllowed]
         public ActionResult<AssignmentDetails> ChangeStatus(int id, [FromBody] ChangeAssignmentStatusRequest request)
         {
@@ -708,6 +708,10 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             var assignment = assignmentsStorage.GetAssignment(id);
             if (assignment == null)
                 return NotFound();
+
+            // Interviewers can only Finish (Active→Finished) or Reopen (Finished→Active)
+            if (authorizedUser.IsInterviewer && request.Status == AssignmentStatus.Completed)
+                return Forbid();
 
             switch (request.Status)
             {

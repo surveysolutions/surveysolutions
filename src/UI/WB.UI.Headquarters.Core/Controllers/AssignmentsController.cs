@@ -234,6 +234,7 @@ namespace WB.UI.Headquarters.Controllers
                 UpdatedAtUtc = assignment.UpdatedAtUtc,
                 WebMode = assignment.WebMode,
                 IsHeadquarters = this.currentUser.IsAdministrator || this.currentUser.IsHeadquarter,
+                Status = assignment.Status.ToString(),
                 Comments = assignment.Comments,
                 TargetArea = assignment.TargetArea,
                 IsArchived = assignment.Archived,
