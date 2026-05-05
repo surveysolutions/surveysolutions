@@ -83,6 +83,9 @@ namespace WB.UI.Shared.Enumerator.CustomControls
         public bool HasFragmentForViewModel(MvxViewModel viewModel) 
             => this.pagerItems.Any(x => x.ViewModel == viewModel);
 
+        public MvxViewModel GetViewModelForPosition(int position)
+            => position >= 0 && position < pagerItems.Count ? pagerItems[position].ViewModel : null;
+
         public void RemoveAllFragments()
         {
             for (var fragmentIndex = this.pagerItems.Count - 1; fragmentIndex >= 0; fragmentIndex--)
