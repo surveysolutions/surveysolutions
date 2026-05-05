@@ -569,7 +569,7 @@ export default {
             await this.$hq.Assignments.changeStatus(this.model.id, 'Completed', this.statusChangeComment)
             this.$refs.completeModal.hide()
             this.statusChangeComment = null
-            window.location.reload(true)
+            window.location.reload()
         },
 
         reopenSelected() {
@@ -581,7 +581,7 @@ export default {
             await this.$hq.Assignments.changeStatus(this.model.id, 'Active', this.statusChangeComment)
             this.$refs.reopenModal.hide()
             this.statusChangeComment = null
-            window.location.reload(true)
+            window.location.reload()
         },
 
         newResponsibleSelected(newValue) {
