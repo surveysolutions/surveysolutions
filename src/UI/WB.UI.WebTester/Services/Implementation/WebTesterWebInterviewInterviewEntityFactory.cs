@@ -1,4 +1,3 @@
-using AutoMapper;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Services;
@@ -10,7 +9,7 @@ namespace WB.UI.WebTester.Services.Implementation;
 
 public class WebTesterWebInterviewInterviewEntityFactory : WebInterviewInterviewEntityFactory
 {
-    public WebTesterWebInterviewInterviewEntityFactory(IMapper autoMapper, IEnumeratorGroupStateCalculationStrategy enumeratorGroupStateCalculationStrategy, ISupervisorGroupStateCalculationStrategy supervisorGroupStateCalculationStrategy, IWebNavigationService webNavigationService, ISubstitutionTextFactory substitutionTextFactory) : base(autoMapper, enumeratorGroupStateCalculationStrategy, supervisorGroupStateCalculationStrategy, webNavigationService, substitutionTextFactory)
+    public WebTesterWebInterviewInterviewEntityFactory(IEnumeratorGroupStateCalculationStrategy enumeratorGroupStateCalculationStrategy, ISupervisorGroupStateCalculationStrategy supervisorGroupStateCalculationStrategy, IWebNavigationService webNavigationService, ISubstitutionTextFactory substitutionTextFactory) : base(enumeratorGroupStateCalculationStrategy, supervisorGroupStateCalculationStrategy, webNavigationService, substitutionTextFactory)
     {
     }
 

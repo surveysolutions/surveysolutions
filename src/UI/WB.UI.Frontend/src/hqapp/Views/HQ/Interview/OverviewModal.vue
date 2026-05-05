@@ -8,12 +8,7 @@
 
         <OverviewItem v-for="item in items" :key="item.id" :item="item" @showAdditionalInfo="onShowAdditionalInfo" />
 
-        <infinite-loading ref="loader" v-if="overview.total > 0 && items.length > 0" @infinite="infiniteHandler"
-            :distance="1000">
-            <template #complete>
-                <span slot="no-more"></span>
-            </template>
-        </infinite-loading>
+        <div ref="sentinel"></div>
 
         <template v-slot:actions>
             <div>
@@ -70,17 +65,11 @@
 </style>
 
 <script>
-import InfiniteLoading from "v3-infinite-loading";
-import "v3-infinite-loading/lib/style.css";
-
 import OverviewItem from './components/OverviewItem'
 import { slice } from 'lodash'
 
 export default {
-    components: {
-        InfiniteLoading,
-        OverviewItem
-    },
+    components: { OverviewItem },
     data: function () {
         return {
             loaded: 100,
@@ -109,6 +98,7 @@ export default {
     methods: {
         hide() {
             document.removeEventListener('scroll', this.handleScroll)
+            this._observer?.disconnect()
             this.$refs.modal.hide()
             $('body').removeClass('overviewOpenned')
         },
@@ -123,19 +113,26 @@ export default {
             })
 
             $('body').addClass('overviewOpenned')
+
+            this._observer?.disconnect()
+            this.$nextTick(() => {
+                const sentinel = this.$refs.sentinel
+                if (!sentinel) return
+
+                const observerRoot = sentinel.closest('.modal-body')
+                this._observer = new IntersectionObserver(([entry]) => {
+                    if (entry.isIntersecting) this.loadMore()
+                }, {
+                    root: observerRoot,
+                    rootMargin: '1000px',
+                })
+                this._observer.observe(sentinel)
+            })
         },
 
-        infiniteHandler($state) {
-            const self = this
-
-            self.loaded += 500
-
-            if (self.overview.isLoaded && self.loaded >= self.overview.total) {
-                $state.complete()
-            }
-            else {
-                $state.loaded()
-            }
+        loadMore() {
+            if (this.overview.isLoaded && this.loaded >= this.overview.total) return
+            this.loaded += 500
         },
 
         handleScroll(args, a, b, c) {
