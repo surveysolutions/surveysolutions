@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using AutoMapper;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -16,12 +15,12 @@ namespace WB.UI.Headquarters.Services.Impl
     {
         private readonly IAuthorizedUser authorizedUser;
 
-        public HqWebInterviewInterviewEntityFactory(IMapper autoMapper,
+        public HqWebInterviewInterviewEntityFactory(
             IAuthorizedUser authorizedUser,
             IEnumeratorGroupStateCalculationStrategy enumeratorGroupStateCalculationStrategy,
             ISupervisorGroupStateCalculationStrategy supervisorGroupStateCalculationStrategy,
             IWebNavigationService webNavigationService,
-            ISubstitutionTextFactory substitutionTextFactory) : base(autoMapper,
+            ISubstitutionTextFactory substitutionTextFactory) : base(
             enumeratorGroupStateCalculationStrategy, supervisorGroupStateCalculationStrategy, webNavigationService,
             substitutionTextFactory)
         {
