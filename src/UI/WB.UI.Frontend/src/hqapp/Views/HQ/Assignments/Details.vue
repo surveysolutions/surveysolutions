@@ -665,7 +665,7 @@ export default {
                 await this.$hq.Assignments.changeStatus(this.model.id, status, this.statusChangeComment)
                 modalRef.hide()
                 this.statusChangeComment = null
-                window.location.reload(true)
+                window.location.reload()
             } catch (error) {
                 const msg = error?.response?.data?.message || error?.message || this.$t('Common.Error')
                 toastr.error(msg)
