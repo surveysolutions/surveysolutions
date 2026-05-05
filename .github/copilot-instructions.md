@@ -170,3 +170,6 @@ src/
 - **Integration tests need config:** Set `appsettings.cloud.ini` / `appsettings.cloud.json` with PostgreSQL credentials before running integration tests locally (mirrors CI environment variables).
 - **Designer uses Vuetify 3:** Do not import Vuetify 2 components or use Vuetify 2 API (`v-data-table` slot names differ between versions, etc.).
 - **Workspace schema isolation:** Running ad-hoc SQL against a specific workspace requires prefixing table names with the workspace schema (e.g., `ws_primary."interviews"`).
+- **All localization resources reside in .resx files:** Even for frontend, .json files are derivatives.
+- **Building of the apps makes changes:** package-lock.json, other locale/[culture].json and *.cshtml files. These changes must not be committed.
+- **Most meaningful C# code changes require new unit tests:** Especially if changed classes (or neighbouring classes) already have them.
