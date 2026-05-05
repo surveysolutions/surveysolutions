@@ -327,4 +327,7 @@
   <data name="You" xml:space="preserve">
     <value>ти</value>
   </data>
+  <data name="IncludeScenarios" xml:space="preserve">
+    <value>Включити сценарії</value>
+  </data>
 </root>

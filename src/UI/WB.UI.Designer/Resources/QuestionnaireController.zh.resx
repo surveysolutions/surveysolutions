@@ -312,4 +312,7 @@
   <data name="NotSupportedBrowserUsedDescr" xml:space="preserve">
     <value>你正在使用不被支持的IE浏览器。某些功能可能无法正常运行。</value>
   </data>
+  <data name="IncludeScenarios" xml:space="preserve">
+    <value>包含场景</value>
+  </data>
 </root>
