@@ -53,6 +53,7 @@ export default {
             return this.id + 'lbl'
         },
     },
+    emits: ['hidden'],
     expose: ['hide', 'modal'],
     methods: {
         hide() {
@@ -61,6 +62,7 @@ export default {
                 this.modalInstance?.dispose()
             })
             this.isOpen = false
+            this.$emit('hidden')
         },
         modal(params) {
             this.isOpen = true
