@@ -86,6 +86,16 @@
                                                 {{ $t('Assignments.Close') }}
                                             </a>
                                         </li>
+                                        <li v-if="(isHeadquarters || model.isSupervisor) && !isArchived">
+                                            <a href="#" @click="completeSelected">
+                                                {{ $t('Assignments.CompleteAssignment') }}
+                                            </a>
+                                        </li>
+                                        <li v-if="isHeadquarters || model.isSupervisor">
+                                            <a href="#" @click="reopenSelected">
+                                                {{ $t('Assignments.ReopenAssignment') }}
+                                            </a>
+                                        </li>
                                         <li v-if="isHeadquarters && !isArchived">
                                             <a href="#" @click="archiveSelected">
                                                 {{ $t('Assignments.Archive') }}
@@ -284,6 +294,51 @@
                     </template>
                 </ModalFrame>
 
+                <ModalFrame ref="completeModal" :title="$t('Assignments.CompleteAssignmentTitle')">
+                    <p>{{ $t('Assignments.CompleteAssignmentConfirmation', { count: 1 }) }}</p>
+                    <p class="text-warning">{{ $t('Assignments.CompleteOfflineWarning') }}</p>
+                    <form onsubmit="return false;">
+                        <div class="form-group">
+                            <label class="control-label">{{ $t('Assignments.ChangeStatusComment') }}</label>
+                            <textarea v-model="statusChangeComment"
+                                :placeholder="$t('Assignments.ChangeStatusComment')" rows="3" maxlength="500"
+                                class="form-control" />
+                        </div>
+                    </form>
+                    <template v-slot:actions>
+                        <div>
+                            <button type="button" class="btn btn-success" @click="complete">
+                                {{ $t('Assignments.CompleteAssignment') }}
+                            </button>
+                            <button type="button" class="btn btn-link" data-bs-dismiss="modal">
+                                {{ $t('Common.Cancel') }}
+                            </button>
+                        </div>
+                    </template>
+                </ModalFrame>
+
+                <ModalFrame ref="reopenModal" :title="$t('Assignments.ReopenAssignmentTitle')">
+                    <p>{{ $t('Assignments.ReopenAssignmentConfirmation', { count: 1 }) }}</p>
+                    <form onsubmit="return false;">
+                        <div class="form-group">
+                            <label class="control-label">{{ $t('Assignments.ChangeStatusComment') }}</label>
+                            <textarea v-model="statusChangeComment"
+                                :placeholder="$t('Assignments.ChangeStatusComment')" rows="3" maxlength="500"
+                                class="form-control" />
+                        </div>
+                    </form>
+                    <template v-slot:actions>
+                        <div>
+                            <button type="button" class="btn btn-info" @click="reopen">
+                                {{ $t('Assignments.ReopenAssignment') }}
+                            </button>
+                            <button type="button" class="btn btn-link" data-bs-dismiss="modal">
+                                {{ $t('Common.Cancel') }}
+                            </button>
+                        </div>
+                    </template>
+                </ModalFrame>
+
                 <ModalFrame ref="editAudioEnabledModal"
                     :title="$t('Assignments.ChangeAudioRecordingModalTitle', { id: model.id })">
                     <p>{{ $t('Assignments.AudioRecordingExplanation') }}</p>
@@ -398,7 +453,8 @@ export default {
 
             canEditQuantity: true,
 
-            editedAudioRecordingEnabled: null
+            editedAudioRecordingEnabled: null,
+            statusChangeComment: null,
         }
     },
     methods: {
@@ -501,6 +557,30 @@ export default {
                 this.model.id,
             ])
 
+            window.location.reload(true)
+        },
+
+        completeSelected() {
+            this.statusChangeComment = null
+            this.$refs.completeModal.modal({ keyboard: false })
+        },
+
+        async complete() {
+            await this.$hq.Assignments.changeStatus(this.model.id, 'Completed', this.statusChangeComment)
+            this.$refs.completeModal.hide()
+            this.statusChangeComment = null
+            window.location.reload(true)
+        },
+
+        reopenSelected() {
+            this.statusChangeComment = null
+            this.$refs.reopenModal.modal({ keyboard: false })
+        },
+
+        async reopen() {
+            await this.$hq.Assignments.changeStatus(this.model.id, 'Active', this.statusChangeComment)
+            this.$refs.reopenModal.hide()
+            this.statusChangeComment = null
             window.location.reload(true)
         },
 

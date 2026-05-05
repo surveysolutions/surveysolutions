@@ -85,6 +85,14 @@
                     <button class="btn btn-lg btn-danger" id="btnArchiveSelected"
                         v-if="!showArchive.key && config.isHeadquarter" @click="archiveSelected">{{
                             $t("Assignments.Archive") }}</button>
+
+                    <button class="btn btn-lg btn-success" id="btnCompleteSelected"
+                        v-if="!showArchive.key && (config.isHeadquarter || config.isSupervisor)"
+                        @click="completeSelected">{{ $t("Assignments.CompleteAssignment") }}</button>
+
+                    <button class="btn btn-lg btn-info" id="btnReopenSelected"
+                        v-if="config.isHeadquarter || config.isSupervisor"
+                        @click="reopenSelected">{{ $t("Assignments.ReopenAssignment") }}</button>
                 </div>
             </div>
         </DataTables>
@@ -214,6 +222,45 @@
             </div>
             </template>
         </ModalFrame> -->
+
+        <ModalFrame ref="completeModal" :title="$t('Assignments.CompleteAssignmentTitle')">
+            <p>{{ $t("Assignments.CompleteAssignmentConfirmation", { count: selectedRows.length }) }}</p>
+            <p class="text-warning">{{ $t("Assignments.CompleteOfflineWarning") }}</p>
+            <form onsubmit="return false;">
+                <div class="form-group">
+                    <label class="control-label">{{ $t("Assignments.ChangeStatusComment") }}</label>
+                    <textarea v-model="statusChangeComment" :placeholder="$t('Assignments.ChangeStatusComment')"
+                        rows="3" maxlength="500" class="form-control" />
+                </div>
+            </form>
+            <template v-slot:actions>
+                <div>
+                    <button type="button" class="btn btn-success" @click="complete">{{
+                        $t("Assignments.CompleteAssignment") }}</button>
+                    <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
+                        }}</button>
+                </div>
+            </template>
+        </ModalFrame>
+
+        <ModalFrame ref="reopenModal" :title="$t('Assignments.ReopenAssignmentTitle')">
+            <p>{{ $t("Assignments.ReopenAssignmentConfirmation", { count: selectedRows.length }) }}</p>
+            <form onsubmit="return false;">
+                <div class="form-group">
+                    <label class="control-label">{{ $t("Assignments.ChangeStatusComment") }}</label>
+                    <textarea v-model="statusChangeComment" :placeholder="$t('Assignments.ChangeStatusComment')"
+                        rows="3" maxlength="500" class="form-control" />
+                </div>
+            </form>
+            <template v-slot:actions>
+                <div>
+                    <button type="button" class="btn btn-info" @click="reopen">{{
+                        $t("Assignments.ReopenAssignment") }}</button>
+                    <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
+                        }}</button>
+                </div>
+            </template>
+        </ModalFrame>
     </HqLayout>
 </template>
 
@@ -256,6 +303,7 @@ export default {
             editedAudioRecordingEnabled: null,
             canEditQuantity: null,
             mode: null,
+            statusChangeComment: null,
         }
     },
 
@@ -516,12 +564,19 @@ export default {
                     searchable: false,
                     orderable: false,
                     render(data) {
-                        const statusMap = {
+                        const statusClasses = {
+                            'Active': 'label-primary',
+                            'Finished': 'label-warning',
+                            'Completed': 'label-success',
+                        }
+                        const statusLabels = {
                             'Active': self.$t('Assignments.StatusActive'),
                             'Finished': self.$t('Assignments.StatusFinished'),
                             'Completed': self.$t('Assignments.StatusCompleted'),
                         }
-                        return statusMap[data] || data
+                        const cls = statusClasses[data] || 'label-default'
+                        const label = statusLabels[data] || data
+                        return `<span class="label ${cls}">${label}</span>`
                     },
                 },
             ]
@@ -711,6 +766,48 @@ export default {
             this.$refs.assignModal.hide()
             this.newResponsibleId = null
             this.reassignComment = null
+            this.reloadTable()
+        },
+
+        completeSelected() {
+            this.statusChangeComment = null
+            this.$refs.completeModal.modal({ keyboard: false })
+        },
+
+        reopenSelected() {
+            this.statusChangeComment = null
+            this.$refs.reopenModal.modal({ keyboard: false })
+        },
+
+        async complete() {
+            const self = this
+            await Promise.all(
+                map(self.selectedRows, row => {
+                    return self.$hq.Assignments.changeStatus(row, 'Completed', self.statusChangeComment)
+                        .catch(error => {
+                            const msg = error.response?.data?.message || error.message
+                            if (msg) toastr.warning(msg)
+                        })
+                })
+            )
+            this.$refs.completeModal.hide()
+            this.statusChangeComment = null
+            this.reloadTable()
+        },
+
+        async reopen() {
+            const self = this
+            await Promise.all(
+                map(self.selectedRows, row => {
+                    return self.$hq.Assignments.changeStatus(row, 'Active', self.statusChangeComment)
+                        .catch(error => {
+                            const msg = error.response?.data?.message || error.message
+                            if (msg) toastr.warning(msg)
+                        })
+                })
+            )
+            this.$refs.reopenModal.hide()
+            this.statusChangeComment = null
             this.reloadTable()
         },
 

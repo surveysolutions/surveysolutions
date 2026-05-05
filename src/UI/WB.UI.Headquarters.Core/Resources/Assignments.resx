@@ -559,4 +559,52 @@
   <data name="EnterTargetArea" xml:space="preserve">
       <value>Enter Target area</value>
   </data>
+  <data name="Status" xml:space="preserve">
+      <value>Status</value>
+  </data>
+  <data name="StatusActive" xml:space="preserve">
+      <value>Active</value>
+  </data>
+  <data name="StatusFinished" xml:space="preserve">
+      <value>Finished</value>
+  </data>
+  <data name="StatusCompleted" xml:space="preserve">
+      <value>Completed</value>
+  </data>
+  <data name="CompleteAssignment" xml:space="preserve">
+      <value>Complete</value>
+  </data>
+  <data name="ReopenAssignment" xml:space="preserve">
+      <value>Reopen</value>
+  </data>
+  <data name="CompleteAssignmentTitle" xml:space="preserve">
+      <value>Complete Assignment</value>
+  </data>
+  <data name="ReopenAssignmentTitle" xml:space="preserve">
+      <value>Reopen Assignment</value>
+  </data>
+  <data name="CompleteAssignmentConfirmation" xml:space="preserve">
+      <value>Are you sure you want to complete {{count}} assignment(s)? Completed assignments cannot be further modified by interviewers.</value>
+  </data>
+  <data name="CompleteAssignmentConfirmation_other" xml:space="preserve">
+      <value>Are you sure you want to complete {{count}} assignments? Completed assignments cannot be further modified by interviewers.</value>
+  </data>
+  <data name="ReopenAssignmentConfirmation" xml:space="preserve">
+      <value>Are you sure you want to reopen {{count}} assignment(s)? Reopened assignments will become active again.</value>
+  </data>
+  <data name="ReopenAssignmentConfirmation_other" xml:space="preserve">
+      <value>Are you sure you want to reopen {{count}} assignments? Reopened assignments will become active again.</value>
+  </data>
+  <data name="CompleteOfflineWarning" xml:space="preserve">
+      <value>Warning: Assignments that have been downloaded to tablets will still be visible offline until the next synchronization.</value>
+  </data>
+  <data name="ChangeStatusComment" xml:space="preserve">
+      <value>Comment (optional)</value>
+  </data>
+  <data name="Tooltip_Filter_Status" xml:space="preserve">
+      <value>Filter assignments by status</value>
+  </data>
+  <data name="Action_StatusChanged" xml:space="preserve">
+      <value>Status changed</value>
+  </data>
 </root>
