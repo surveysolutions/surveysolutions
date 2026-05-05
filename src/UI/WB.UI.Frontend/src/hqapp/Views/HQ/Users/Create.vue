@@ -20,7 +20,7 @@
                     </p>
                 </div>
                 <div class="col-sm-12">
-                    <form-group :label="$t('Pages.UsersManage_WorkspacesFilterPlaceholder')"
+                    <form-group :label="$t('Pages.CreateUser_WorkspaceLabel')"
                         :error="modelState['Workspace']" :mandatory="true">
                         <div class="field form-control" :class="{ answered: workspace != null }"
                             style="padding:0 10px 0 0">
@@ -28,7 +28,7 @@
                                 :fetch-url="model.api.workspacesUrl" @selected="workspaceSelected"></Typeahead>
                         </div>
                     </form-group>
-                    <form-group :label="$t('Pages.UsersManage_RoleFilterPlaceholder')" :error="modelState['Role']"
+                    <form-group :label="$t('Pages.CreateUser_RoleLabel')" :error="modelState['Role']"
                         :mandatory="true">
                         <div class="field form-control" :class="{ answered: role != null }" style="padding:0 10px 0 0">
                             <Typeahead control-id="role" :value="role" :values="model.roles" @selected="roleSelected">
@@ -71,7 +71,8 @@
                     <div class="separate-line"></div>
                 </div>
                 <div class="col-sm-12">
-                    <h5 class="extra-margin-bottom" v-dompurify-html="$t('Pages.PublicSection')"></h5>
+                    <h5 v-dompurify-html="$t('Pages.PublicSection')"></h5>
+                    <p class="extra-margin-bottom">{{ $t('Pages.PublicSectionDescription') }}</p>
                     <form-group :label="$t('FieldsAndValidations.PersonNameFieldName')"
                         :error="modelState['PersonName']">
                         <TextInput v-model.trim="personName" :haserror="modelState['PersonName'] !== undefined"
@@ -166,9 +167,7 @@ export default {
             return '/users/UsersManagement'
         },
         title() {
-            if (this.role)
-                return `${this.$t('Pages.Create')} ${this.$t(`Roles.${this.role.key}`)}`
-            return this.$t('Pages.Create')
+            return this.$t('Pages.CreateUser')
         },
     },
     watch: {
