@@ -120,7 +120,7 @@ public class MapFilesValidatorTests
     [Test]
     public void when_validate_map_name_exceeds_length_limit()
     {
-        var longMapName = new string('a', 1001);
+        var longMapName = new string('a', 65);
         var analyzeResults = new AnalyzeResult()
         {
             IsValid = true,
@@ -146,7 +146,7 @@ public class MapFilesValidatorTests
     [Test]
     public void when_validate_map_name_within_length_limit()
     {
-        var mapName = new string('a', 1000);
+        var mapName = new string('a', 64);
         var analyzeResults = new AnalyzeResult()
         {
             IsValid = true,
