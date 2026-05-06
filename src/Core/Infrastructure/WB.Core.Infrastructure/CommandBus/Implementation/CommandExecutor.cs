@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 using Ncqrs.Domain;
+using Ncqrs.Eventing;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Aggregates;
@@ -85,93 +86,110 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             Action<ICommand, IAggregateRoot> commandHandler,
             CancellationToken cancellationToken)
         {
-            IEventSourcedAggregateRoot aggregate;
+            const int maxRetries = 3;
 
-            if (CommandRegistry.IsStateless(command))
+            for (int attempt = 0; ; attempt++)
             {
-                aggregate = this.eventSourcedRepository.GetStateless(aggregateType, aggregateId);
-            }
-            else
-            {
-                aggregate = this.eventSourcedRepository.GetLatest(aggregateType, aggregateId);
-            }
+                IEventSourcedAggregateRoot aggregate;
 
-            cancellationToken.ThrowIfCancellationRequested();
+                if (CommandRegistry.IsStateless(command))
+                {
+                    aggregate = this.eventSourcedRepository.GetStateless(aggregateType, aggregateId);
+                }
+                else
+                {
+                    aggregate = this.eventSourcedRepository.GetLatest(aggregateType, aggregateId);
+                }
 
-            bool mustPromotePrototype = false;
+                cancellationToken.ThrowIfCancellationRequested();
 
-            if (aggregate == null)
-            {
-                if (!CommandRegistry.IsInitializer(command))
-                    throw new CommandServiceException(
-                        $"Unable to execute not-constructing command {command.GetType().Name} " +
-                                $"because aggregate {aggregateId.FormatGuid()} does not exist.");
+                bool mustPromotePrototype = false;
 
-                aggregate = (IEventSourcedAggregateRoot)this.serviceLocator.GetInstance(aggregateType);
-                aggregate.SetId(aggregateId);
-            }
-            else if (prototypeService.IsPrototype(aggregateId))
-            {
-                mustPromotePrototype = true;
-            }
+                if (aggregate == null)
+                {
+                    if (!CommandRegistry.IsInitializer(command))
+                        throw new CommandServiceException(
+                            $"Unable to execute not-constructing command {command.GetType().Name} " +
+                                    $"because aggregate {aggregateId.FormatGuid()} does not exist.");
 
-            cancellationToken.ThrowIfCancellationRequested();
+                    aggregate = (IEventSourcedAggregateRoot)this.serviceLocator.GetInstance(aggregateType);
+                    aggregate.SetId(aggregateId);
+                }
+                else if (prototypeService.IsPrototype(aggregateId))
+                {
+                    mustPromotePrototype = true;
+                }
 
-            foreach (Action<IAggregateRoot, ICommand> validator in validators)
-            {
-                validator.Invoke(aggregate, command);
-            }
+                cancellationToken.ThrowIfCancellationRequested();
 
-            cancellationToken.ThrowIfCancellationRequested();
+                foreach (Action<IAggregateRoot, ICommand> validator in validators)
+                {
+                    validator.Invoke(aggregate, command);
+                }
 
-            foreach (Action<IAggregateRoot, ICommand> preProcessor in preProcessors)
-            {
-                preProcessor.Invoke(aggregate, command);
-            }
+                cancellationToken.ThrowIfCancellationRequested();
 
-            cancellationToken.ThrowIfCancellationRequested();
+                foreach (Action<IAggregateRoot, ICommand> preProcessor in preProcessors)
+                {
+                    preProcessor.Invoke(aggregate, command);
+                }
 
-            try
-            {
-                commandHandler.Invoke(command, aggregate);
-            }
-            catch (OnEventApplyException)
-            {
-                // evict AR only if exception occurred on event apply
-                aggregateRootCache.EvictAggregateRoot(aggregateId);
-                throw;
-            }
-            catch (Exception)
-            {
-                aggregate.DiscardChanges();
-                throw;
-            }
+                cancellationToken.ThrowIfCancellationRequested();
 
-            if (!aggregate.HasUncommittedChanges())
+                try
+                {
+                    commandHandler.Invoke(command, aggregate);
+                }
+                catch (OnEventApplyException)
+                {
+                    // evict AR only if exception occurred on event apply
+                    aggregateRootCache.EvictAggregateRoot(aggregateId);
+                    throw;
+                }
+                catch (Exception)
+                {
+                    aggregate.DiscardChanges();
+                    throw;
+                }
+
+                if (!aggregate.HasUncommittedChanges())
+                    return;
+
+                IReadOnlyCollection<CommittedEvent> committedEvents;
+                try
+                {
+                    committedEvents = this.eventBus.CommitUncommittedEvents(aggregate, origin);
+                }
+                catch (InvalidOperationException e) when (e.Message.Contains("Unexpected stream version") && attempt < maxRetries)
+                {
+                    aggregate.DiscardChanges();
+                    this.aggregateRootCache.EvictAggregateRoot(aggregateId);
+                    continue;
+                }
+
+                aggregate.MarkChangesAsCommitted();
+
+                try
+                {
+                    this.eventBus.PublishCommittedEvents(committedEvents);
+
+                    if (mustPromotePrototype)
+                    {
+                        promoterService.MaterializePrototypeIfRequired(aggregateId);
+                    }
+
+                    foreach (Action<IAggregateRoot, ICommand> postProcessor in postProcessors)
+                    {
+                        postProcessor.Invoke(aggregate, command);
+                    }
+                }
+                catch (Exception)
+                {
+                    aggregateRootCache.EvictAggregateRoot(aggregateId);
+                    throw;
+                }
+
                 return;
-
-            var committedEvents = this.eventBus.CommitUncommittedEvents(aggregate, origin);
-
-            aggregate.MarkChangesAsCommitted();
-
-            try
-            {
-                this.eventBus.PublishCommittedEvents(committedEvents);
-
-                if (mustPromotePrototype)
-                {
-                    promoterService.MaterializePrototypeIfRequired(aggregateId);
-                }
-
-                foreach (Action<IAggregateRoot, ICommand> postProcessor in postProcessors)
-                {
-                    postProcessor.Invoke(aggregate, command);
-                }
-            }
-            catch (Exception)
-            {
-                aggregateRootCache.EvictAggregateRoot(aggregateId);
-                throw;
             }
         }
 
