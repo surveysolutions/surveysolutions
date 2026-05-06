@@ -71,7 +71,7 @@ export const entityDetails = {
         },
 
         isDevMode() {
-            return this.$store.state.webinterview.isDevMode || false
+            return this.$config.inWebTesterMode && (this.$store.state.webinterview.isDevMode || false)
         },
     },
 
