@@ -717,3 +717,7 @@
 .modal.show.fade {
     opacity: 1;
 }
+
+.modal.show .modal-dialog {
+    transform: translate(0, 0);
+}
