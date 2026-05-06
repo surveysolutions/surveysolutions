@@ -106,7 +106,7 @@ export default {
 
             var filesize = ((fileToUpload.size / 1024) / 1024).toFixed(4)
 
-            if (filesize >= 1024) {
+            if (filesize >= 500) {
                 statusupdater(self.$t('Pages.Map_UploadingFileTooBig'))
                 return
             }
