@@ -78,7 +78,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             var result = new FileStreamResult(exportFileStream, "application/octet-stream")
             {
                 EnableRangeProcessing = true,
-                EntityTag = new EntityTagHeaderValue($"\"{map.Size}-{map.ImportDate?.Ticks ?? 0}\"")
+                EntityTag = new EntityTagHeaderValue($"\"{map.Id}-{map.Size}-{map.ImportDate?.Ticks ?? 0}\"")
             };
             return result;
         }

@@ -130,8 +130,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.MapSynchroniz
                         if (offset > 0 && !contentStreamResult.IsPartialContent)
                         {
                             logger.Info($"Server does not support range requests for map '{mapDescription.MapName}'. Restarting download from the beginning.");
-                            streamToSave.Seek(0, SeekOrigin.Begin);
-                            streamToSave.SetLength(0);
+                            if (streamToSave.CanSeek)
+                            {
+                                streamToSave.Seek(0, SeekOrigin.Begin);
+                                streamToSave.SetLength(0);
+                            }
                             offset = 0;
                             downloded = 0;
                         }
