@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Threading;
 using Ncqrs.Domain;
 using Ncqrs.Eventing;
+using Ncqrs.Eventing.Storage;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Aggregates;
@@ -88,7 +89,7 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
         {
             const int maxRetries = 3;
 
-            for (int attempt = 0; ; attempt++)
+            for (int attempt = 0; attempt <= maxRetries; attempt++)
             {
                 IEventSourcedAggregateRoot aggregate;
 
@@ -160,7 +161,7 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
                 {
                     committedEvents = this.eventBus.CommitUncommittedEvents(aggregate, origin);
                 }
-                catch (InvalidOperationException e) when (e.Message.Contains("Unexpected stream version") && attempt < maxRetries)
+                catch (AggregateConcurrencyException) when (attempt < maxRetries)
                 {
                     aggregate.DiscardChanges();
                     this.aggregateRootCache.EvictAggregateRoot(aggregateId);

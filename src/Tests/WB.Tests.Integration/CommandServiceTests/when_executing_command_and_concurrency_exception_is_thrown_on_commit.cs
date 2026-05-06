@@ -4,6 +4,7 @@ using FluentAssertions;
 using Moq;
 using Ncqrs.Domain;
 using Ncqrs.Eventing;
+using Ncqrs.Eventing.Storage;
 using NUnit.Framework;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
@@ -17,25 +18,25 @@ namespace WB.Tests.Integration.CommandServiceTests
     [NonParallelizable]
     public class when_executing_command_and_concurrency_exception_is_thrown_on_commit
     {
-        private class UpdateCommand : ICommand
+        private class ConcurrencyTestUpdateCommand : ICommand
         {
-            public UpdateCommand(Guid id) => CommandIdentifier = id;
+            public ConcurrencyTestUpdateCommand(Guid id) => CommandIdentifier = id;
             public Guid CommandIdentifier { get; }
         }
 
-        private class Updated : WB.Core.Infrastructure.EventBus.IEvent { }
+        private class ConcurrencyTestUpdated : WB.Core.Infrastructure.EventBus.IEvent { }
 
-        private class Aggregate : EventSourcedAggregateRoot
+        private class ConcurrencyTestAggregate : EventSourcedAggregateRoot
         {
             protected override void HandleEvent(object evnt) { }
 
             public void Update()
             {
-                this.ApplyEvent(new Updated());
+                this.ApplyEvent(new ConcurrencyTestUpdated());
             }
         }
 
-        private static Guid aggregateId = Guid.NewGuid();
+        private static Guid aggregateId;
         private static int commitAttempts;
         private static CommandService commandService;
         private static Exception thrownException;
@@ -43,15 +44,17 @@ namespace WB.Tests.Integration.CommandServiceTests
         [OneTimeSetUp]
         public void Context()
         {
+            aggregateId = Guid.NewGuid();
+
             CommandRegistry
-                .Setup<Aggregate>()
-                .Handles<UpdateCommand>(_ => aggregateId, (command, aggregate) => aggregate.Update());
+                .Setup<ConcurrencyTestAggregate>()
+                .Handles<ConcurrencyTestUpdateCommand>(_ => aggregateId, (command, aggregate) => aggregate.Update());
 
             commitAttempts = 0;
 
-            var aggregate = new Aggregate();
+            var aggregate = new ConcurrencyTestAggregate();
             var repository = Mock.Of<IEventSourcedAggregateRootRepository>(_ =>
-                _.GetLatest(typeof(Aggregate), aggregateId) == aggregate);
+                _.GetLatest(typeof(ConcurrencyTestAggregate), aggregateId) == aggregate);
 
             var eventBusMock = new Mock<ILiteEventBus>();
             eventBusMock
@@ -61,7 +64,7 @@ namespace WB.Tests.Integration.CommandServiceTests
                     commitAttempts++;
                     if (commitAttempts == 1)
                     {
-                        throw new InvalidOperationException(
+                        throw new AggregateConcurrencyException(
                             $"Unexpected stream version. Expected 1. EventSourceId: {aggregateId}");
                     }
 
@@ -73,7 +76,7 @@ namespace WB.Tests.Integration.CommandServiceTests
             thrownException = null;
             try
             {
-                commandService.Execute(new UpdateCommand(aggregateId), null);
+                commandService.Execute(new ConcurrencyTestUpdateCommand(aggregateId), null);
             }
             catch (Exception ex)
             {
