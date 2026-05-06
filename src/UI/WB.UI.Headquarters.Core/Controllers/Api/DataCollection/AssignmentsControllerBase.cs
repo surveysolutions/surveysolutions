@@ -11,6 +11,8 @@ using WB.Core.BoundedContexts.Headquarters.Users;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Assignment;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.UI.Headquarters.Code;
@@ -127,20 +129,20 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
             {
                 switch (request.Status)
                 {
-                    case WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment.AssignmentStatus.Finished:
+                    case AssignmentStatus.Finished:
                         commandService.Execute(new FinishAssignment(assignment.PublicKey, authorizedUserId, assignment.QuestionnaireId, request.Comment));
                         break;
-                    case WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment.AssignmentStatus.Completed:
+                    case AssignmentStatus.Completed:
                         commandService.Execute(new CompleteAssignment(assignment.PublicKey, authorizedUserId, assignment.QuestionnaireId, request.Comment));
                         break;
-                    case WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment.AssignmentStatus.Active:
+                    case AssignmentStatus.Active:
                         commandService.Execute(new ReopenAssignment(assignment.PublicKey, authorizedUserId, assignment.QuestionnaireId, request.Comment));
                         break;
                     default:
                         return BadRequest("Unknown status");
                 }
             }
-            catch (Exception e) when (e is WB.Core.SharedKernels.DataCollection.Exceptions.AssignmentException)
+            catch (AssignmentException e)
             {
                 return BadRequest(new { Message = e.Message });
             }

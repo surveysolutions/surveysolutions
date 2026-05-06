@@ -180,13 +180,15 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
             local.IsAudioRecordingEnabled = remote.IsAudioRecordingEnabled;
 
-            // Server status always overrides local status (server is authoritative)
+            // Server status always overrides local status (server is authoritative).
+            // Local status changes are best-effort: if the upload failed, the server's status
+            // returned in the next sync will be applied here.
             if (local.Status != remote.Status)
             {
                 this.logger.Debug($"Updating Status for assignment {local.Id}: local {local.Status} → server {remote.Status}");
                 local.Status = remote.Status;
             }
-            // Clear pending status comment after successful sync
+            // Clear pending status comment after sync — server is now authoritative
             local.StatusComment = null;
 
             var interviewsCount =

@@ -105,8 +105,9 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
                 return;
 
             Assignment.Status = AssignmentStatus.Completed;
-            // Use empty string (not null) to signal a pending upload with no comment
-            Assignment.StatusComment = comment.Trim().Length > 0 ? comment.Trim() : string.Empty;
+            var trimmedComment = comment.Trim();
+            // Non-null StatusComment signals a pending upload; empty string means "no comment entered"
+            Assignment.StatusComment = trimmedComment.Length > 0 ? trimmedComment : string.Empty;
             AssignmentsRepository.Store(Assignment);
 
             RaiseOnItemUpdated();
@@ -124,8 +125,9 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
                 return;
 
             Assignment.Status = AssignmentStatus.Active;
-            // Use empty string (not null) to signal a pending upload with no comment
-            Assignment.StatusComment = comment.Trim().Length > 0 ? comment.Trim() : string.Empty;
+            var trimmedComment = comment.Trim();
+            // Non-null StatusComment signals a pending upload; empty string means "no comment entered"
+            Assignment.StatusComment = trimmedComment.Length > 0 ? trimmedComment : string.Empty;
             AssignmentsRepository.Store(Assignment);
 
             RaiseOnItemUpdated();
