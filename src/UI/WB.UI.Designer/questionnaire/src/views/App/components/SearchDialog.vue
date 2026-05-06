@@ -156,6 +156,7 @@ export default {
     methods: {
         close() {
             this.visible = false;
+            this.indexOfCurrentReference = -1;
         },
         open() {
 
@@ -167,6 +168,7 @@ export default {
 
             this.step = 'search';
             this.foundReferences = [];
+            this.indexOfCurrentReference = -1;
 
             this.visible = true;
 
@@ -179,6 +181,7 @@ export default {
         backToSearch() {
             this.step = 'search';
             this.foundReferences.splice(0, this.foundReferences.length);
+            this.indexOfCurrentReference = -1;
         },
         confirmReplaceAll() {
             this.step = 'confirm';
