@@ -144,8 +144,9 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                && !IsSection(entity)
                && !((IGroup) entity).IsRoster;
 
-        private static bool NotSingleSectionWithLessThan5Questions(IGroup group)
+        private static bool NotSingleSectionWithLessThan5Questions(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
             => IsSection(group)
+               && !questionnaire.Questionnaire.IsCoverPage(group.PublicKey)
                && (group.GetParent() ?? throw new InvalidOperationException("Parent was not found.")).Children.Count > 1
                && group.GetDescendants().Count(Question) < 5;
 
