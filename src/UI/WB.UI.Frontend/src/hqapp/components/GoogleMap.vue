@@ -210,6 +210,7 @@ import routeSync from '~/shared/routeSync'
 import { Form, Field } from 'vee-validate'
 import moment from 'moment'
 import { DateFormats } from '~/shared/helpers'
+import * as toastr from 'toastr'
 
 export default {
     name: "MapWithMarkers",
@@ -330,6 +331,7 @@ export default {
             self.$refs.reopenModal.promt(ok => {
                 if (ok) {
                     const interviewId = self.selectedTooltip.interviewId
+                    const newTab = window.open('', '_blank')
                     $.post({
                         url: self.$hq.basePath + 'InterviewerHq/RestartInterview/' + interviewId,
                         data: { comment: self.restart_comment },
@@ -338,13 +340,17 @@ export default {
                         },
                     }).done(function () {
                         self.restart_comment = ''
-                        window.open(
-                            self.$hq.basePath + 'InterviewerHq/OpenInterview/' + interviewId,
-                            '_blank'
-                        )
+                        if (newTab) {
+                            newTab.location =
+                                self.$hq.basePath + 'InterviewerHq/OpenInterview/' + interviewId
+                        }
                         self.reloadMarkersInBounds()
                     }).fail(function (err) {
-                        console.error('Failed to reopen interview', err)
+                        if (newTab) newTab.close()
+                        toastr.error(
+                            (err && err.responseJSON && err.responseJSON.message) ||
+                                self.$t('Pages.GlobalSettings_UnhandledExceptionMessage')
+                        )
                     })
                 }
             })
