@@ -2,28 +2,16 @@
     <div>
         <OverviewItem v-for="item in items" :key="item.id" :item="item" @mount="registerItemToStick" />
 
-        <infinite-loading ref="loader" v-if="overview.total > 0 && items.length > 0" @infinite="infiniteHandler"
-            :distance="1000">
-            <template #complete>
-                <span slot="no-more"></span>
-            </template>
-        </infinite-loading>
+        <div ref="sentinel"></div>
     </div>
 </template>
 
 <script>
-import InfiniteLoading from "v3-infinite-loading";
-import "v3-infinite-loading/lib/style.css";
-
 import OverviewItem from './components/OverviewItem'
 import { slice, sortedIndexBy } from 'lodash'
 
 export default {
-    components:
-    {
-        InfiniteLoading,
-        OverviewItem
-    },
+    components: { OverviewItem },
 
     data() {
         return {
@@ -37,10 +25,15 @@ export default {
     mounted() {
         this.$store.dispatch('loadOverviewData')
         document.addEventListener('scroll', this.handleScroll)
+        this._observer = new IntersectionObserver(([entry]) => {
+            if (entry.isIntersecting) this.loadMore()
+        }, { rootMargin: '1000px' })
+        this.$nextTick(() => this._observer.observe(this.$refs.sentinel))
     },
 
-    destroyed() {
+    unmounted() {
         document.removeEventListener('scroll', this.handleScroll)
+        this._observer?.disconnect()
     },
 
     computed: {
@@ -78,17 +71,9 @@ export default {
             return el.offsetTop + el.clientHeight
         },
 
-        infiniteHandler($state) {
-            const self = this
-
-            self.loaded += 500
-
-            if (self.overview.isLoaded && self.loaded >= self.overview.total) {
-                $state.complete()
-            }
-            else {
-                $state.loaded()
-            }
+        loadMore() {
+            if (this.overview.isLoaded && this.loaded >= this.overview.total) return
+            this.loaded += 500
         },
 
         handleScroll(args, a, b, c) {
