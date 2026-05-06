@@ -103,8 +103,9 @@ export function createDeletePopup(message) {
 
 export function createQuestionForDeleteConfirmationPopup(title) {
     var trimmedTitle = trimText(title);
+    var plainTitle = DOMPurify.sanitize(trimmedTitle, { ALLOWED_TAGS: [], KEEP_CONTENT: true });
     var message = i18n.t('QuestionnaireEditor.DeleteConfirmQuestion', {
-        trimmedTitle: `<em>${trimmedTitle}</em>`,
+        trimmedTitle: `<em>${plainTitle}</em>`,
         interpolation: { escapeValue: false }
     });
     return {

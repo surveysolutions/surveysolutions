@@ -63,7 +63,7 @@
     "Delete": "Vymazat",
     "DeleteCommentConfirm": "Opravdu chcete odstranit komentář?",
     "DeleteConfirmCategories": "Opravdu chcete odstranit sadu kategorií \"{{trimmedTitle}}\"? Zdroj kategorií pro kategorické otázky na něm závislé bude změněn na uživatelem definované kategorie",
-    "DeleteConfirmQuestion": "Opravdu chcete odstranit {{trimmedTitle}}?",
+    "DeleteConfirmQuestion": "Opravdu chcete odstranit \"{{trimmedTitle}}\"?",
     "DeleteItemCofirm": "Opravdu chcete odstranit tuto položku?",
     "Download": "Stáhnout",
     "DownloadPdf": "Stáhnout PDF",

@@ -26,7 +26,7 @@
     "DefaultNewStaticText": "Nuevo texto estático",
     "DefaultNewSubsection": "Nueva subsección",
     "Delete": "Eliminar",
-    "DeleteConfirmQuestion": "Esta seguro de querer eliminar {{trimmedTitle}}?",
+    "DeleteConfirmQuestion": "Esta seguro de querer eliminar \"{{trimmedTitle}}\"?",
     "Download": "Descargar",
     "EmptySectionLine1": "Esta sección esta vacía",
     "EmptySectionLine2": "Puede comenzar utilizando los botones {{-addQuestionBtn}} y {{-addSubsectionBtn}}",

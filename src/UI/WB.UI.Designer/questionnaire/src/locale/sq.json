@@ -42,7 +42,7 @@
     "DefaultNewSubsection": "Nënrubrikë e re",
     "Delete": "Fshi",
     "DeleteCommentConfirm": "Jeni të sigurt që dëshironi të fshini komentin?",
-    "DeleteConfirmQuestion": "Jeni të sigurt që dëshironi të fshini {{trimmedTitle}}?",
+    "DeleteConfirmQuestion": "Jeni të sigurt që dëshironi të fshini \"{{trimmedTitle}}\"?",
     "Download": "Shkarko",
     "EditorAddComment": "Shto koment",
     "EditorHideComment": "Fshih komentet",

@@ -344,7 +344,7 @@
     "QuestionOpenEditorSaved": "Foi salvo com sucesso. A janela para upload de arquivo será aberta.",
     "SettingsShareEdit": "Editar",
     "SettingsShareView": "Visualizar",
-    "DeleteConfirmQuestion": "Tem certeza de que deseja excluir {{trimmedTitle}}?",
+    "DeleteConfirmQuestion": "Tem certeza de que deseja excluir \"{{trimmedTitle}}\"?",
     "DeleteConfirmCategories": "Tem certeza de que deseja excluir o conjunto de categorias \"{{trimmedTitle}}\"? A fonte das categorias para perguntas categóricas dependentes será alterada para categorias definidas pelo usuário",
     "UntitledQuestion": "Pergunta sem título",
     "TranslationsObtained": "Obtido {0} linha do arquivo de tradução",

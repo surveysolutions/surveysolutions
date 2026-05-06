@@ -266,7 +266,7 @@
     "SettingsShareEdit": "Редактировать",
     "SettingsShareView": "Просматривать",
     "SettingsQuestionnaireName": "Имя опросника:",
-    "DeleteConfirmQuestion": "Вы уверены,что хотите удалить {{trimmedTitle}}?",
+    "DeleteConfirmQuestion": "Вы уверены,что хотите удалить \"{{trimmedTitle}}\"?",
     "UntitledQuestion": "Вопрос без названия",
     "FindReplaceReplaceWith": "Заменить на:",
     "TranslationsObtained": "Получено {0} строка из файла с переводами",

@@ -49,7 +49,7 @@
     "Delete": "Șterge",
     "DeleteCommentConfirm": "Sigur doriți să ștergeți comentariul?",
     "DeleteConfirmCategories": "Sigur doriți să ștergeți setul de variante de răspuns \"{{trimmedTitle}}\"? Sursa variantelor de răspuns pentru întrebări categoriale dependente de aceasta va fi schimbată în variante de răspuns definite de utilizator",
-    "DeleteConfirmQuestion": "Sigur doriți să ștergeți {{trimmedTitle}}?",
+    "DeleteConfirmQuestion": "Sigur doriți să ștergeți \"{{trimmedTitle}}\"?",
     "Download": "Descarcă",
     "DownloadPdf": "Descărcați PDF",
     "EditorAddComment": "Adaugare comentariu",
