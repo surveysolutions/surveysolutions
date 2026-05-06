@@ -353,6 +353,21 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
         }
 
         [Test]
+        public void should_allow_variable_in_matrix_roster()
+        {
+            Create.QuestionnaireDocumentWithOneChapter(
+                Create.NumericIntegerQuestion(id: Id.g1),
+                Create.NumericRoster(rosterId: Id.g2, rosterSizeQuestionId: Id.g1, displayMode: RosterDisplayMode.Matrix,
+                    children: new IComposite[]
+                    {
+                        Create.Question(questionType: QuestionType.SingleOption),
+                        Create.Variable()
+                    })
+                )
+                .ExpectNoError("WB0297");
+        }
+
+        [Test]
         public void should_not_allow_static_text_in_matrix_roster()
         {
             Create.QuestionnaireDocumentWithOneChapter(
