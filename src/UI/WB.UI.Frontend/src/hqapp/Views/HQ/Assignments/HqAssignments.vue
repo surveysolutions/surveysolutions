@@ -219,8 +219,8 @@ import moment from 'moment'
 import { DateFormats } from '~/shared/helpers'
 import { RoleNames } from '~/shared/constants'
 
-import _sanitizeHtml from 'sanitize-html'
-const sanitizeHtml = text => _sanitizeHtml(text, { allowedTags: [], allowedAttributes: [] })
+import DOMPurify from 'dompurify'
+const sanitizeHtml = text => DOMPurify.sanitize(text, { ALLOWED_TAGS: [], ALLOWED_ATTR: [] })
 
 import { Form, Field, ErrorMessage } from 'vee-validate'
 
