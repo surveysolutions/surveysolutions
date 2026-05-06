@@ -1,0 +1,1203 @@
+{
+    "suites": [
+        {
+            "id": 600,
+            "title": "Assignment completion and approval workflow",
+            "description": "Test cases for the end-to-end lifecycle of an interview: from assignment creation through interviewer completion, supervisor review, and HQ/Admin final approval.",
+            "preconditions": null,
+            "suites": [
+                {
+                    "id": 601,
+                    "title": "Interviewer completes an interview",
+                    "description": "Covers the action of an interviewer submitting a completed interview from the mobile Interviewer application.",
+                    "preconditions": "1. A Headquarters user has created an assignment and assigned it to an interviewer.\n2. The interviewer has synchronized the app and the assignment is visible on their dashboard.\n3. The interviewer has opened/started the interview.",
+                    "suites": [],
+                    "cases": [
+                        {
+                            "id": 2800,
+                            "title": "Interviewer completes an interview with no issues",
+                            "description": "Verify that an interviewer can successfully complete an interview when all mandatory questions are answered and no validation errors exist.",
+                            "preconditions": "1. Interviewer has answered all mandatory questions.\n2. No validation errors are present.\n3. Interviewer navigates to the Complete screen.",
+                            "postconditions": "Interview status changes to 'Completed' and the interview is no longer available for editing by the interviewer.",
+                            "priority": "high",
+                            "severity": "critical",
+                            "type": "functional",
+                            "behavior": "undefined",
+                            "automation": "is-not-automated",
+                            "status": "actual",
+                            "is_flaky": "no",
+                            "layer": "e2e",
+                            "milestone": null,
+                            "custom_fields": [],
+                            "steps_type": "classic",
+                            "steps": [
+                                {
+                                    "position": 1,
+                                    "action": "Open the interview and navigate to the Complete screen (tap the Complete button or navigate to the last section).",
+                                    "expected_result": "Complete screen is displayed showing interview statistics (answered/unanswered question counts) and a green 'Complete' button.",
+                                    "data": "",
+                                    "steps": []
+                                },
+                                {
+                                    "position": 2,
+                                    "action": "Tap the 'Complete' button.",
+                                    "expected_result": "Interview is submitted successfully. The interviewer is returned to the dashboard. The interview card shows status 'Completed'.",
+                                    "data": "",
+                                    "steps": []
+                                },
+                                {
+                                    "position": 3,
+                                    "action": "Synchronize the app with the server.",
+                                    "expected_result": "The interview is sent to the server. On the HQ dashboard the interview appears in the interview list with status 'Completed'.",
+                                    "data": "",
+                                    "steps": []
+                                }
+                            ],
+                            "tags": ["interviewer", "complete", "workflow"],
+                            "params": [],
+                            "is_muted": "no"
+                        },
+                        {
+                            "id": 2801,
+                            "title": "Interviewer completes an interview with unanswered questions",
+                            "description": "Verify that an interviewer can complete an interview that still has unanswered non-mandatory questions, and that the Complete screen correctly reports the unanswered count.",
+                            "preconditions": "1. At least one non-mandatory question is intentionally left unanswered.\n2. No validation errors are present.\n3. Interviewer navigates to the Complete screen.",
+                            "postconditions": "Interview is submitted with status 'Completed'.",
+                            "priority": "medium",
+                            "severity": "major",
+                            "type": "functional",
+                            "behavior": "undefined",
+                            "automation": "is-not-automated",
+                            "status": "actual",
+                            "is_flaky": "no",
+                            "layer": "e2e",
+                            "milestone": null,
+                            "custom_fields": [],
+                            "steps_type": "classic",
+                            "steps": [
+                                {
+                                    "position": 1,
+                                    "action": "Navigate to the Complete screen.",
+                                    "expected_result": "Complete screen shows the correct number of unanswered questions under the 'Unanswered' tab. The 'Complete' button is available (blue/primary style).",
+                                    "data": "",
+                                    "steps": []
+                                },
+                                {
+                                    "position": 2,
+                                    "action": "Tap the 'Complete' button without answering the remaining optional questions.",
+                                    "expected_result": "Interview is submitted. Interviewer returns to dashboard. Interview card shows status 'Completed'.",
+                                    "data": "",
+                                    "steps": []
+                                }
+                            ],
+                            "tags": ["interviewer", "complete", "unanswered"],
+                            "params": [],
+                            "is_muted": "no"
+                        },
+                        {
+                            "id": 2802,
+                            "title": "Interviewer completes an interview with critical errors — confirmation required",
+                            "description": "Verify that when the questionnaire supports criticality and the interview has critical issues (unanswered critical questions or broken critical rules), the interviewer is shown a confirmation dialog before completing.",
+                            "preconditions": "1. The questionnaire has criticality support enabled.\n2. At least one critical issue (unanswered critical question or failed critical validation rule) exists.\n3. Interviewer navigates to the Complete screen.",
+                            "postconditions": "If confirmed, interview is submitted with status 'Completed'. If declined, interview remains open.",
+                            "priority": "high",
+                            "severity": "critical",
+                            "type": "functional",
+                            "behavior": "undefined",
+                            "automation": "is-not-automated",
+                            "status": "actual",
+                            "is_flaky": "no",
+                            "layer": "e2e",
+                            "milestone": null,
+                            "custom_fields": [],
+                            "steps_type": "classic",
+                            "steps": [
+                                {
+                                    "position": 1,
+                                    "action": "Navigate to the Complete screen.",
+                                    "expected_result": "Complete screen shows critical errors in the 'Critical errors' tab. The 'Complete' button is available (red/danger style).",
+                                    "data": "",
+                                    "steps": []
+                                },
+                                {
+                                    "position": 2,
+                                    "action": "Tap the 'Complete' button.",
+                                    "expected_result": "A confirmation dialog is displayed asking the interviewer to confirm completing with critical issues.",
+                                    "data": "",
+                                    "steps": []
+                                },
+                                {
+                                    "position": 3,
+                                    "action": "Tap 'No' on the confirmation dialog.",
+                                    "expected_result": "Dialog closes. Interviewer remains on the Complete screen. Interview is NOT submitted.",
+                                    "data": "",
+                                    "steps": []
+                                },
+                                {
+                                    "position": 4,
+                                    "action": "Tap the 'Complete' button again, then tap 'Yes' on the confirmation dialog.",
+                                    "expected_result": "Interview is submitted with status 'Completed'. Interviewer returns to dashboard.",
+                                    "data": "",
+                                    "steps": []
+                                }
+                            ],
+                            "tags": ["interviewer", "complete", "critical-errors", "criticality"],
+                            "params": [],
+                            "is_muted": "no"
+                        },
+                        {
+                            "id": 2803,
+                            "title": "Interviewer completes an interview with a comment",
+                            "description": "Verify that an interviewer can enter a completion comment, and that the comment is visible to the supervisor and HQ after submission.",
+                            "preconditions": "1. Interviewer has answered all required questions.\n2. Interviewer navigates to the Complete screen.",
+                            "postconditions": "Interview is submitted with the comment stored and visible in the interview history.",
+                            "priority": "medium",
+                            "severity": "normal",
+                            "type": "functional",
+                            "behavior": "undefined",
+                            "automation": "is-not-automated",
+                            "status": "actual",
+                            "is_flaky": "no",
+                            "layer": "e2e",
+                            "milestone": null,
+                            "custom_fields": [],
+                            "steps_type": "classic",
+                            "steps": [
+                                {
+                                    "position": 1,
+                                    "action": "Navigate to the Complete screen.",
+                                    "expected_result": "A comment text field is available on the Complete screen.",
+                                    "data": "",
+                                    "steps": []
+                                },
+                                {
+                                    "position": 2,
+                                    "action": "Enter a comment in the comment field, then tap 'Complete'.",
+                                    "expected_result": "Interview is submitted. Comment is saved.",
+                                    "data": "",
+                                    "steps": []
+                                },
+                                {
+                                    "position": 3,
+                                    "action": "Synchronize and log in as Supervisor. Open the completed interview.",
+                                    "expected_result": "The comment entered by the interviewer is visible in the interview details/history.",
+                                    "data": "",
+                                    "steps": []
+                                }
+                            ],
+                            "tags": ["interviewer", "complete", "comment"],
+                            "params": [],
+                            "is_muted": "no"
+                        }
+                    ]
+                },
+                {
+                    "id": 602,
+                    "title": "Supervisor reviews completed interviews",
+                    "description": "Covers supervisor actions — approve, reject, and assign — on interviews that have been completed by interviewers and synchronized to the server.",
+                    "preconditions": "1. At least one interview with status 'Completed' (or 'RejectedByHeadquarters') exists and is assigned to the supervisor's team.\n2. Supervisor is logged in to the Supervisor app or HQ web interface.",
+                    "suites": [],
+                    "cases": [
+                        {
+                            "id": 2810,
+                            "title": "Supervisor views completed interviews on dashboard",
+                            "description": "Verify that a supervisor can see completed interviews on their dashboard and they are correctly labeled.",
+                            "preconditions": "1. At least one interview with status 'Completed' belongs to the supervisor's team.\n2. Supervisor is logged in to the Supervisor app.",
+                            "postconditions": null,
+                            "priority": "medium",
+                            "severity": "normal",
+                            "type": "functional",
+                            "behavior": "undefined",
+                            "automation": "is-not-automated",
+                            "status": "actual",
+                            "is_flaky": "no",
+                            "layer": "e2e",
+                            "milestone": null,
+                            "custom_fields": [],
+                            "steps_type": "classic",
+                            "steps": [
+                                {
+                                    "position": 1,
+                                    "action": "Open the Supervisor app and navigate to the Interviews list.",
+                                    "expected_result": "Completed interviews are listed and show status 'Completed'. Actions 'Approve' and 'Reject' are available in the context menu for each completed interview.",
+                                    "data": "",
+                                    "steps": []
+                                },
+                                {
+                                    "position": 2,
+                                    "action": "Open a completed interview to review its content.",
+                                    "expected_result": "Interview opens in read-only mode. The supervisor can navigate through all sections and view all answers.",
+                                    "data": "",
+                                    "steps": []
+                                }
+                            ],
+                            "tags": ["supervisor", "dashboard", "completed"],
+                            "params": [],
+                            "is_muted": "no"
+                        },
+                        {
+                            "id": 2811,
+                            "title": "Supervisor approves a completed interview",
+                            "description": "Verify that a supervisor can approve a completed interview and the interview status changes to 'ApprovedBySupervisor'.",
+                            "preconditions": "1. An interview with status 'Completed' is assigned to the supervisor's team.\n2. Supervisor is logged in.",
+                            "postconditions": "Interview status changes to 'ApprovedBySupervisor'. Interview is no longer shown in the supervisor's active queue. HQ/Admin can see it as 'ApprovedBySupervisor'.",
+                            "priority": "high",
+                            "severity": "critical",
+                            "type": "functional",
+                            "behavior": "undefined",
+                            "automation": "is-not-automated",
+                            "status": "actual",
+                            "is_flaky": "no",
+                            "layer": "e2e",
+                            "milestone": null,
+                            "custom_fields": [],
+                            "steps_type": "classic",
+                            "steps": [
+                                {
+                                    "position": 1,
+                                    "action": "Navigate to the interviews list and find a completed interview. Tap the context menu and select 'Approve'.",
+                                    "expected_result": "An approval confirmation dialog is shown.",
+                                    "data": "",
+                                    "steps": []
+                                },
+                                {
+                                    "position": 2,
+                                    "action": "Optionally add a comment and confirm the approval.",
+                                    "expected_result": "Interview status changes to 'ApprovedBySupervisor'. The interview is removed from the active supervisor queue (or shown in 'ApprovedBySupervisor' filter).",
+                                    "data": "",
+                                    "steps": []
+                                },
+                                {
+                                    "position": 3,
+                                    "action": "On the HQ web interface, filter interviews by status 'ApprovedBySupervisor'.",
+                                    "expected_result": "The interview appears in the list with status 'ApprovedBySupervisor'. The HQ 'Approve' button is enabled for this interview.",
+                                    "data": "",
+                                    "steps": []
+                                }
+                            ],
+                            "tags": ["supervisor", "approve", "workflow"],
+                            "params": [],
+                            "is_muted": "no"
+                        },
+                        {
+                            "id": 2812,
+                            "title": "Supervisor rejects a completed interview back to the interviewer",
+                            "description": "Verify that a supervisor can reject a completed interview, and it is returned to the interviewer with a rejection comment.",
+                            "preconditions": "1. An interview with status 'Completed' is assigned to the supervisor's team.\n2. Supervisor is logged in.",
+                            "postconditions": "Interview status changes to 'RejectedBySupervisor'. The responsible interviewer receives the interview on their next sync for re-work.",
+                            "priority": "high",
+                            "severity": "critical",
+                            "type": "functional",
+                            "behavior": "undefined",
+                            "automation": "is-not-automated",
+                            "status": "actual",
+                            "is_flaky": "no",
+                            "layer": "e2e",
+                            "milestone": null,
+                            "custom_fields": [],
+                            "steps_type": "classic",
+                            "steps": [
+                                {
+                                    "position": 1,
+                                    "action": "Navigate to the interviews list and find a completed interview. Tap the context menu and select 'Reject'.",
+                                    "expected_result": "A rejection dialog is shown with a comment field.",
+                                    "data": "",
+                                    "steps": []
+                                },
+                                {
+                                    "position": 2,
+                                    "action": "Enter a rejection reason in the comment field and confirm the rejection.",
+                                    "expected_result": "Interview status changes to 'RejectedBySupervisor'. The rejection comment is saved.",
+                                    "data": "",
+                                    "steps": []
+                                },
+                                {
+                                    "position": 3,
+                                    "action": "Interviewer synchronizes their app.",
+                                    "expected_result": "The rejected interview appears on the interviewer's dashboard with status 'Rejected'. The supervisor's rejection comment is visible to the interviewer.",
+                                    "data": "",
+                                    "steps": []
+                                },
+                                {
+                                    "position": 4,
+                                    "action": "Interviewer makes the necessary corrections and re-completes the interview, then syncs again.",
+                                    "expected_result": "Interview status changes back to 'Completed' on the server. The supervisor can see it as 'Completed' and can act on it again.",
+                                    "data": "",
+                                    "steps": []
+                                }
+                            ],
+                            "tags": ["supervisor", "reject", "workflow"],
+                            "params": [],
+                            "is_muted": "no"
+                        },
+                        {
+                            "id": 2813,
+                            "title": "Supervisor approves an interview in RejectedByHeadquarters status",
+                            "description": "Verify that a supervisor can approve an interview that was rejected by HQ (sent back to the supervisor), changing its status to 'ApprovedBySupervisor'.",
+                            "preconditions": "1. An interview exists with status 'RejectedByHeadquarters'.\n2. The interview is visible to the supervisor.",
+                            "postconditions": "Interview status changes to 'ApprovedBySupervisor'.",
+                            "priority": "high",
+                            "severity": "major",
+                            "type": "functional",
+                            "behavior": "undefined",
+                            "automation": "is-not-automated",
+                            "status": "actual",
+                            "is_flaky": "no",
+                            "layer": "e2e",
+                            "milestone": null,
+                            "custom_fields": [],
+                            "steps_type": "classic",
+                            "steps": [
+                                {
+                                    "position": 1,
+                                    "action": "Find an interview with status 'RejectedByHeadquarters' in the interviews list. Check the available context menu actions.",
+                                    "expected_result": "'Approve' and 'Reject' actions are available in the context menu.",
+                                    "data": "",
+                                    "steps": []
+                                },
+                                {
+                                    "position": 2,
+                                    "action": "Tap 'Approve' and confirm.",
+                                    "expected_result": "Interview status changes to 'ApprovedBySupervisor'. It is available for final HQ approval.",
+                                    "data": "",
+                                    "steps": []
+                                }
+                            ],
+                            "tags": ["supervisor", "approve", "rejected-by-hq"],
+                            "params": [],
+                            "is_muted": "no"
+                        },
+                        {
+                            "id": 2814,
+                            "title": "Supervisor rejects an interview in RejectedByHeadquarters status",
+                            "description": "Verify that a supervisor can reject an interview that was rejected by HQ, sending it back to the interviewer.",
+                            "preconditions": "1. An interview exists with status 'RejectedByHeadquarters'.\n2. Supervisor is logged in.",
+                            "postconditions": "Interview status changes to 'RejectedBySupervisor'. The interview is sent back to the interviewer.",
+                            "priority": "medium",
+                            "severity": "major",
+                            "type": "functional",
+                            "behavior": "undefined",
+                            "automation": "is-not-automated",
+                            "status": "actual",
+                            "is_flaky": "no",
+                            "layer": "e2e",
+                            "milestone": null,
+                            "custom_fields": [],
+                            "steps_type": "classic",
+                            "steps": [
+                                {
+                                    "position": 1,
+                                    "action": "Find an interview with status 'RejectedByHeadquarters'. Open the context menu.",
+                                    "expected_result": "'Approve' and 'Reject' options are available.",
+                                    "data": "",
+                                    "steps": []
+                                },
+                                {
+                                    "position": 2,
+                                    "action": "Tap 'Reject', enter a comment, and confirm.",
+                                    "expected_result": "Interview status changes to 'RejectedBySupervisor'. The interview is pushed to the interviewer on next sync.",
+                                    "data": "",
+                                    "steps": []
+                                }
+                            ],
+                            "tags": ["supervisor", "reject", "rejected-by-hq"],
+                            "params": [],
+                            "is_muted": "no"
+                        }
+                    ]
+                },
+                {
+                    "id": 603,
+                    "title": "HQ/Admin approves and rejects interviews",
+                    "description": "Covers HQ/Administrator actions on interviews — final approval, rejection (to supervisor or to interviewer), and unapproval from the web interface.",
+                    "preconditions": "1. At least one interview exists with status 'Completed', 'ApprovedBySupervisor', or 'RejectedBySupervisor'.\n2. HQ or Admin user is logged in to the web interface.",
+                    "suites": [],
+                    "cases": [
+                        {
+                            "id": 2820,
+                            "title": "HQ approves a completed interview",
+                            "description": "Verify that an HQ user can approve an interview in 'Completed' status, changing it to 'ApprovedByHeadquarters'.",
+                            "preconditions": "1. An interview with status 'Completed' exists.\n2. HQ user is logged in.",
+                            "postconditions": "Interview status changes to 'ApprovedByHeadquarters'. The interview can no longer be rejected without unapproving first.",
+                            "priority": "high",
+                            "severity": "critical",
+                            "type": "functional",
+                            "behavior": "undefined",
+                            "automation": "is-not-automated",
+                            "status": "actual",
+                            "is_flaky": "no",
+                            "layer": "e2e",
+                            "milestone": null,
+                            "custom_fields": [],
+                            "steps_type": "classic",
+                            "steps": [
+                                {
+                                    "position": 1,
+                                    "action": "Open the Interviews list on the HQ web interface. Filter by status 'Completed'. Select the interview and click 'Approve'.",
+                                    "expected_result": "Confirmation dialog is shown.",
+                                    "data": "",
+                                    "steps": []
+                                },
+                                {
+                                    "position": 2,
+                                    "action": "Confirm the approval (optionally add a comment).",
+                                    "expected_result": "Interview status changes to 'ApprovedByHeadquarters'. The 'Approve' button is no longer available. The 'Unapprove' button appears.",
+                                    "data": "",
+                                    "steps": []
+                                }
+                            ],
+                            "tags": ["hq", "approve", "workflow"],
+                            "params": [],
+                            "is_muted": "no"
+                        },
+                        {
+                            "id": 2821,
+                            "title": "HQ approves a supervisor-approved interview",
+                            "description": "Verify that an HQ user can approve an interview in 'ApprovedBySupervisor' status.",
+                            "preconditions": "1. An interview with status 'ApprovedBySupervisor' exists.\n2. HQ user is logged in.",
+                            "postconditions": "Interview status changes to 'ApprovedByHeadquarters'.",
+                            "priority": "high",
+                            "severity": "critical",
+                            "type": "functional",
+                            "behavior": "undefined",
+                            "automation": "is-not-automated",
+                            "status": "actual",
+                            "is_flaky": "no",
+                            "layer": "e2e",
+                            "milestone": null,
+                            "custom_fields": [],
+                            "steps_type": "classic",
+                            "steps": [
+                                {
+                                    "position": 1,
+                                    "action": "Open the Interviews list. Filter by status 'ApprovedBySupervisor'. Select the interview and click 'Approve'.",
+                                    "expected_result": "Confirmation dialog is shown.",
+                                    "data": "",
+                                    "steps": []
+                                },
+                                {
+                                    "position": 2,
+                                    "action": "Confirm the approval.",
+                                    "expected_result": "Interview status changes to 'ApprovedByHeadquarters'.",
+                                    "data": "",
+                                    "steps": []
+                                }
+                            ],
+                            "tags": ["hq", "approve", "approved-by-supervisor"],
+                            "params": [],
+                            "is_muted": "no"
+                        },
+                        {
+                            "id": 2822,
+                            "title": "HQ approves an interview in RejectedBySupervisor status",
+                            "description": "Verify that an HQ user can approve an interview in 'RejectedBySupervisor' status (bypassing the supervisor), changing it directly to 'ApprovedByHeadquarters'.",
+                            "preconditions": "1. An interview with status 'RejectedBySupervisor' exists that has NOT yet been received by the interviewer (not downloaded).\n2. HQ user is logged in.",
+                            "postconditions": "Interview status changes to 'ApprovedByHeadquarters'.",
+                            "priority": "medium",
+                            "severity": "major",
+                            "type": "functional",
+                            "behavior": "undefined",
+                            "automation": "is-not-automated",
+                            "status": "actual",
+                            "is_flaky": "no",
+                            "layer": "e2e",
+                            "milestone": null,
+                            "custom_fields": [],
+                            "steps_type": "classic",
+                            "steps": [
+                                {
+                                    "position": 1,
+                                    "action": "Find an interview with status 'RejectedBySupervisor' that the interviewer has not yet received. Click 'Approve' on the interview detail page.",
+                                    "expected_result": "Confirmation dialog is shown. The 'Approve' button is enabled for this status.",
+                                    "data": "",
+                                    "steps": []
+                                },
+                                {
+                                    "position": 2,
+                                    "action": "Confirm the approval.",
+                                    "expected_result": "Interview status changes to 'ApprovedByHeadquarters'.",
+                                    "data": "",
+                                    "steps": []
+                                }
+                            ],
+                            "tags": ["hq", "approve", "rejected-by-supervisor"],
+                            "params": [],
+                            "is_muted": "no"
+                        },
+                        {
+                            "id": 2823,
+                            "title": "HQ rejects a completed interview to the original interviewer",
+                            "description": "Verify that an HQ user can reject a completed interview directly back to the original interviewer, bypassing the supervisor.",
+                            "preconditions": "1. An interview with status 'Completed' exists.\n2. HQ user is logged in.",
+                            "postconditions": "Interview status changes to 'RejectedBySupervisor'. The interview is sent back to the original interviewer.",
+                            "priority": "high",
+                            "severity": "critical",
+                            "type": "functional",
+                            "behavior": "undefined",
+                            "automation": "is-not-automated",
+                            "status": "actual",
+                            "is_flaky": "no",
+                            "layer": "e2e",
+                            "milestone": null,
+                            "custom_fields": [],
+                            "steps_type": "classic",
+                            "steps": [
+                                {
+                                    "position": 1,
+                                    "action": "Open a 'Completed' interview on the HQ web interface and click 'Reject'.",
+                                    "expected_result": "A rejection dialog is shown with options: reject to original responsible, or reject to a new responsible.",
+                                    "data": "",
+                                    "steps": []
+                                },
+                                {
+                                    "position": 2,
+                                    "action": "Select 'Reject to original responsible' and enter a rejection comment, then confirm.",
+                                    "expected_result": "Interview status changes to 'RejectedBySupervisor'. The interview is assigned back to the original interviewer. The rejection comment is visible.",
+                                    "data": "",
+                                    "steps": []
+                                },
+                                {
+                                    "position": 3,
+                                    "action": "Interviewer synchronizes the app.",
+                                    "expected_result": "The rejected interview appears on the interviewer's dashboard with status 'Rejected' and the HQ comment is visible.",
+                                    "data": "",
+                                    "steps": []
+                                }
+                            ],
+                            "tags": ["hq", "reject", "to-interviewer", "workflow"],
+                            "params": [],
+                            "is_muted": "no"
+                        },
+                        {
+                            "id": 2824,
+                            "title": "HQ rejects a completed interview to the supervisor",
+                            "description": "Verify that an HQ user can reject a completed interview to the supervisor's queue (RejectedByHeadquarters) instead of sending it directly back to the interviewer.",
+                            "preconditions": "1. An interview with status 'Completed' exists.\n2. HQ user is logged in.",
+                            "postconditions": "Interview status changes to 'RejectedByHeadquarters'. The supervisor sees it in their queue.",
+                            "priority": "high",
+                            "severity": "critical",
+                            "type": "functional",
+                            "behavior": "undefined",
+                            "automation": "is-not-automated",
+                            "status": "actual",
+                            "is_flaky": "no",
+                            "layer": "e2e",
+                            "milestone": null,
+                            "custom_fields": [],
+                            "steps_type": "classic",
+                            "steps": [
+                                {
+                                    "position": 1,
+                                    "action": "Open a 'Completed' interview on the HQ web interface and click 'Reject'.",
+                                    "expected_result": "A rejection dialog appears with options to select a responsible.",
+                                    "data": "",
+                                    "steps": []
+                                },
+                                {
+                                    "position": 2,
+                                    "action": "Select 'Reject to new responsible', choose the supervisor as the new responsible, enter a comment, and confirm.",
+                                    "expected_result": "Interview status changes to 'RejectedByHeadquarters'. The interview is assigned to the selected supervisor.",
+                                    "data": "",
+                                    "steps": []
+                                },
+                                {
+                                    "position": 3,
+                                    "action": "Log in as the supervisor and check the interviews list.",
+                                    "expected_result": "The interview with status 'RejectedByHeadquarters' appears in the supervisor's dashboard. The supervisor can approve or reject it.",
+                                    "data": "",
+                                    "steps": []
+                                }
+                            ],
+                            "tags": ["hq", "reject", "to-supervisor", "workflow"],
+                            "params": [],
+                            "is_muted": "no"
+                        },
+                        {
+                            "id": 2825,
+                            "title": "HQ rejects a supervisor-approved interview",
+                            "description": "Verify that an HQ user can reject an interview in 'ApprovedBySupervisor' status, sending it back for further review.",
+                            "preconditions": "1. An interview with status 'ApprovedBySupervisor' exists.\n2. HQ user is logged in.",
+                            "postconditions": "Interview status changes to 'RejectedByHeadquarters' or 'RejectedBySupervisor' depending on the target responsible.",
+                            "priority": "high",
+                            "severity": "major",
+                            "type": "functional",
+                            "behavior": "undefined",
+                            "automation": "is-not-automated",
+                            "status": "actual",
+                            "is_flaky": "no",
+                            "layer": "e2e",
+                            "milestone": null,
+                            "custom_fields": [],
+                            "steps_type": "classic",
+                            "steps": [
+                                {
+                                    "position": 1,
+                                    "action": "Find an interview with status 'ApprovedBySupervisor' and click 'Reject'.",
+                                    "expected_result": "Rejection dialog is shown with an option to select the target responsible.",
+                                    "data": "",
+                                    "steps": []
+                                },
+                                {
+                                    "position": 2,
+                                    "action": "Select reject to the supervisor and confirm with a comment.",
+                                    "expected_result": "Interview status changes to 'RejectedByHeadquarters'. The supervisor sees it in their queue.",
+                                    "data": "",
+                                    "steps": []
+                                }
+                            ],
+                            "tags": ["hq", "reject", "approved-by-supervisor"],
+                            "params": [],
+                            "is_muted": "no"
+                        },
+                        {
+                            "id": 2826,
+                            "title": "HQ unapproves an HQ-approved interview",
+                            "description": "Verify that an HQ user can unapprove an interview that has already been approved by HQ, reverting it to allow re-evaluation.",
+                            "preconditions": "1. An interview with status 'ApprovedByHeadquarters' exists.\n2. HQ user is logged in.",
+                            "postconditions": "Interview status reverts. The 'Approve' and 'Reject' buttons become available again.",
+                            "priority": "medium",
+                            "severity": "major",
+                            "type": "functional",
+                            "behavior": "undefined",
+                            "automation": "is-not-automated",
+                            "status": "actual",
+                            "is_flaky": "no",
+                            "layer": "e2e",
+                            "milestone": null,
+                            "custom_fields": [],
+                            "steps_type": "classic",
+                            "steps": [
+                                {
+                                    "position": 1,
+                                    "action": "Filter the interviews list by status 'ApprovedByHeadquarters'. Open an approved interview.",
+                                    "expected_result": "The 'Unapprove' button is visible. The 'Approve' and 'Reject' buttons are NOT available (already approved).",
+                                    "data": "",
+                                    "steps": []
+                                },
+                                {
+                                    "position": 2,
+                                    "action": "Click 'Unapprove' and confirm.",
+                                    "expected_result": "Interview status is no longer 'ApprovedByHeadquarters'. The 'Approve' and 'Reject' buttons become available. The 'Unapprove' button is no longer available.",
+                                    "data": "",
+                                    "steps": []
+                                }
+                            ],
+                            "tags": ["hq", "unapprove", "workflow"],
+                            "params": [],
+                            "is_muted": "no"
+                        },
+                        {
+                            "id": 2827,
+                            "title": "HQ cannot approve or reject an already HQ-approved interview",
+                            "description": "Verify that the Approve and Reject buttons are disabled/hidden for an interview that already has status 'ApprovedByHeadquarters'.",
+                            "preconditions": "1. An interview with status 'ApprovedByHeadquarters' exists.\n2. HQ user is logged in.",
+                            "postconditions": null,
+                            "priority": "medium",
+                            "severity": "normal",
+                            "type": "functional",
+                            "behavior": "negative",
+                            "automation": "is-not-automated",
+                            "status": "actual",
+                            "is_flaky": "no",
+                            "layer": "e2e",
+                            "milestone": null,
+                            "custom_fields": [],
+                            "steps_type": "classic",
+                            "steps": [
+                                {
+                                    "position": 1,
+                                    "action": "Open an interview with status 'ApprovedByHeadquarters' on the HQ web interface.",
+                                    "expected_result": "'Approve' and 'Reject' buttons are not available (hidden or disabled). Only 'Unapprove' is available.",
+                                    "data": "",
+                                    "steps": []
+                                }
+                            ],
+                            "tags": ["hq", "negative", "approved-by-hq"],
+                            "params": [],
+                            "is_muted": "no"
+                        },
+                        {
+                            "id": 2828,
+                            "title": "Supervisor cannot approve or reject an HQ-approved interview",
+                            "description": "Verify that a supervisor cannot approve or reject an interview that has been approved by HQ.",
+                            "preconditions": "1. An interview with status 'ApprovedByHeadquarters' exists.\n2. Supervisor is logged in.",
+                            "postconditions": null,
+                            "priority": "medium",
+                            "severity": "major",
+                            "type": "functional",
+                            "behavior": "negative",
+                            "automation": "is-not-automated",
+                            "status": "actual",
+                            "is_flaky": "no",
+                            "layer": "e2e",
+                            "milestone": null,
+                            "custom_fields": [],
+                            "steps_type": "classic",
+                            "steps": [
+                                {
+                                    "position": 1,
+                                    "action": "Log in as a Supervisor. Find an interview with status 'ApprovedByHeadquarters' in the interviews list.",
+                                    "expected_result": "'Approve' and 'Reject' actions are NOT available in the context menu. The interview is read-only.",
+                                    "data": "",
+                                    "steps": []
+                                }
+                            ],
+                            "tags": ["supervisor", "negative", "approved-by-hq"],
+                            "params": [],
+                            "is_muted": "no"
+                        }
+                    ]
+                },
+                {
+                    "id": 604,
+                    "title": "Bulk approve and reject operations",
+                    "description": "Covers bulk approve and reject actions performed on multiple interviews simultaneously from the HQ or Supervisor web interface.",
+                    "preconditions": "1. Multiple interviews in actionable statuses exist.\n2. HQ or Supervisor user is logged in to the web interface.",
+                    "suites": [],
+                    "cases": [
+                        {
+                            "id": 2830,
+                            "title": "Supervisor bulk approves multiple completed interviews",
+                            "description": "Verify that a supervisor can select and approve multiple completed interviews at once from the HQ web interface.",
+                            "preconditions": "1. Multiple interviews with status 'Completed' or 'RejectedByHeadquarters' exist and belong to the supervisor's team.\n2. Supervisor is logged in.",
+                            "postconditions": "All selected eligible interviews change status to 'ApprovedBySupervisor'.",
+                            "priority": "medium",
+                            "severity": "major",
+                            "type": "functional",
+                            "behavior": "undefined",
+                            "automation": "is-not-automated",
+                            "status": "actual",
+                            "is_flaky": "no",
+                            "layer": "e2e",
+                            "milestone": null,
+                            "custom_fields": [],
+                            "steps_type": "classic",
+                            "steps": [
+                                {
+                                    "position": 1,
+                                    "action": "Open the Interviews list on the HQ web interface (as Supervisor). Select multiple completed interviews using the checkboxes.",
+                                    "expected_result": "Selection checkboxes are available. 'Approve' and 'Reject' bulk action buttons appear in the toolbar.",
+                                    "data": "",
+                                    "steps": []
+                                },
+                                {
+                                    "position": 2,
+                                    "action": "Click the 'Approve' bulk action button. Confirm the approval dialog showing the count of interviews to be approved.",
+                                    "expected_result": "Confirmation dialog shows the number of interviews eligible for supervisor approval (status 'Completed' or 'RejectedByHeadquarters'). After confirmation, all eligible interviews change to 'ApprovedBySupervisor'.",
+                                    "data": "",
+                                    "steps": []
+                                },
+                                {
+                                    "position": 3,
+                                    "action": "Include an already-approved interview in the bulk selection and attempt to approve.",
+                                    "expected_result": "The approval dialog correctly shows only the count of interviews that CAN be approved. Interviews not eligible for approval are skipped without error.",
+                                    "data": "",
+                                    "steps": []
+                                }
+                            ],
+                            "tags": ["supervisor", "bulk-approve", "workflow"],
+                            "params": [],
+                            "is_muted": "no"
+                        },
+                        {
+                            "id": 2831,
+                            "title": "Supervisor bulk rejects multiple completed interviews",
+                            "description": "Verify that a supervisor can reject multiple completed interviews at once.",
+                            "preconditions": "1. Multiple interviews with status 'Completed' or 'RejectedByHeadquarters' exist.\n2. Supervisor is logged in.",
+                            "postconditions": "All selected eligible interviews change status to 'RejectedBySupervisor'.",
+                            "priority": "medium",
+                            "severity": "major",
+                            "type": "functional",
+                            "behavior": "undefined",
+                            "automation": "is-not-automated",
+                            "status": "actual",
+                            "is_flaky": "no",
+                            "layer": "e2e",
+                            "milestone": null,
+                            "custom_fields": [],
+                            "steps_type": "classic",
+                            "steps": [
+                                {
+                                    "position": 1,
+                                    "action": "Select multiple completed interviews and click the 'Reject' bulk action button.",
+                                    "expected_result": "A rejection dialog appears showing the number of interviews eligible for rejection and a comment field.",
+                                    "data": "",
+                                    "steps": []
+                                },
+                                {
+                                    "position": 2,
+                                    "action": "Enter a rejection reason and confirm.",
+                                    "expected_result": "All eligible interviews change status to 'RejectedBySupervisor'. The comment is applied to each rejected interview.",
+                                    "data": "",
+                                    "steps": []
+                                }
+                            ],
+                            "tags": ["supervisor", "bulk-reject", "workflow"],
+                            "params": [],
+                            "is_muted": "no"
+                        },
+                        {
+                            "id": 2832,
+                            "title": "HQ bulk approves multiple interviews",
+                            "description": "Verify that an HQ user can approve multiple interviews (Completed, ApprovedBySupervisor, RejectedBySupervisor) in a single bulk action.",
+                            "preconditions": "1. Multiple interviews exist with statuses 'Completed', 'ApprovedBySupervisor', and/or 'RejectedBySupervisor'.\n2. HQ user is logged in.",
+                            "postconditions": "All eligible interviews change status to 'ApprovedByHeadquarters'.",
+                            "priority": "medium",
+                            "severity": "major",
+                            "type": "functional",
+                            "behavior": "undefined",
+                            "automation": "is-not-automated",
+                            "status": "actual",
+                            "is_flaky": "no",
+                            "layer": "e2e",
+                            "milestone": null,
+                            "custom_fields": [],
+                            "steps_type": "classic",
+                            "steps": [
+                                {
+                                    "position": 1,
+                                    "action": "Select multiple interviews with a mix of statuses ('Completed', 'ApprovedBySupervisor', 'RejectedBySupervisor') and click 'Approve'.",
+                                    "expected_result": "Confirmation dialog shows the count of interviews eligible for HQ approval. Ineligible interviews (e.g., 'ApprovedByHeadquarters') are excluded from the count.",
+                                    "data": "",
+                                    "steps": []
+                                },
+                                {
+                                    "position": 2,
+                                    "action": "Confirm the approval.",
+                                    "expected_result": "All eligible interviews change to 'ApprovedByHeadquarters'. Ineligible ones remain unchanged.",
+                                    "data": "",
+                                    "steps": []
+                                }
+                            ],
+                            "tags": ["hq", "bulk-approve", "workflow"],
+                            "params": [],
+                            "is_muted": "no"
+                        },
+                        {
+                            "id": 2833,
+                            "title": "HQ bulk rejects multiple interviews to original responsible",
+                            "description": "Verify that an HQ user can reject multiple interviews in a bulk action, sending each back to their original responsible.",
+                            "preconditions": "1. Multiple interviews with statuses 'Completed' and/or 'ApprovedBySupervisor' exist.\n2. HQ user is logged in.",
+                            "postconditions": "All eligible interviews are rejected to their original responsible.",
+                            "priority": "medium",
+                            "severity": "major",
+                            "type": "functional",
+                            "behavior": "undefined",
+                            "automation": "is-not-automated",
+                            "status": "actual",
+                            "is_flaky": "no",
+                            "layer": "e2e",
+                            "milestone": null,
+                            "custom_fields": [],
+                            "steps_type": "classic",
+                            "steps": [
+                                {
+                                    "position": 1,
+                                    "action": "Select multiple interviews and click 'Reject'. Choose 'Reject to original responsible' option in the dialog.",
+                                    "expected_result": "Confirmation dialog shows the count of eligible interviews for HQ rejection. 'Reject to original responsible' option is selected.",
+                                    "data": "",
+                                    "steps": []
+                                },
+                                {
+                                    "position": 2,
+                                    "action": "Enter a rejection comment and confirm.",
+                                    "expected_result": "All eligible interviews are rejected. Each interview is assigned back to its original responsible. The rejection comment is applied to all.",
+                                    "data": "",
+                                    "steps": []
+                                }
+                            ],
+                            "tags": ["hq", "bulk-reject", "workflow"],
+                            "params": [],
+                            "is_muted": "no"
+                        },
+                        {
+                            "id": 2834,
+                            "title": "HQ bulk rejects multiple interviews to a new responsible",
+                            "description": "Verify that an HQ user can reject multiple interviews to a newly selected responsible person.",
+                            "preconditions": "1. Multiple interviews exist in rejectable statuses.\n2. HQ user is logged in.",
+                            "postconditions": "All eligible interviews are rejected and assigned to the new responsible.",
+                            "priority": "medium",
+                            "severity": "major",
+                            "type": "functional",
+                            "behavior": "undefined",
+                            "automation": "is-not-automated",
+                            "status": "actual",
+                            "is_flaky": "no",
+                            "layer": "e2e",
+                            "milestone": null,
+                            "custom_fields": [],
+                            "steps_type": "classic",
+                            "steps": [
+                                {
+                                    "position": 1,
+                                    "action": "Select multiple interviews and click 'Reject'. Select 'Reject to new responsible' and pick a different supervisor or interviewer from the dropdown.",
+                                    "expected_result": "The responsible dropdown shows available interviewers/supervisors.",
+                                    "data": "",
+                                    "steps": []
+                                },
+                                {
+                                    "position": 2,
+                                    "action": "Enter a rejection comment and confirm.",
+                                    "expected_result": "All eligible interviews are rejected and reassigned to the selected new responsible.",
+                                    "data": "",
+                                    "steps": []
+                                }
+                            ],
+                            "tags": ["hq", "bulk-reject", "reassign", "workflow"],
+                            "params": [],
+                            "is_muted": "no"
+                        }
+                    ]
+                },
+                {
+                    "id": 605,
+                    "title": "Assignment completion tracking",
+                    "description": "Covers how an assignment's completion status and remaining interview count are tracked as interviews are created, completed, and rejected.",
+                    "preconditions": "1. Headquarters has created an assignment.\n2. The assignment has been synchronized to the interviewer.",
+                    "suites": [],
+                    "cases": [
+                        {
+                            "id": 2840,
+                            "title": "Assignment with quantity=1 is marked complete after 1 interview is created",
+                            "description": "Verify that when an assignment has quantity=1 and one interview has been created from it, the assignment is flagged as completed and no more interviews can be started.",
+                            "preconditions": "1. An assignment with quantity=1 exists and is assigned to an interviewer.\n2. No interviews have been created from this assignment yet.",
+                            "postconditions": "Assignment is in 'Completed' state with 0 interviews needed.",
+                            "priority": "high",
+                            "severity": "critical",
+                            "type": "functional",
+                            "behavior": "undefined",
+                            "automation": "is-not-automated",
+                            "status": "actual",
+                            "is_flaky": "no",
+                            "layer": "e2e",
+                            "milestone": null,
+                            "custom_fields": [],
+                            "steps_type": "classic",
+                            "steps": [
+                                {
+                                    "position": 1,
+                                    "action": "On the interviewer app, find the assignment with quantity=1. Note the displayed remaining count.",
+                                    "expected_result": "Assignment shows 1 interview remaining.",
+                                    "data": "",
+                                    "steps": []
+                                },
+                                {
+                                    "position": 2,
+                                    "action": "Start a new interview from this assignment.",
+                                    "expected_result": "The assignment's remaining interview count decreases to 0. The assignment is no longer available for creating new interviews.",
+                                    "data": "",
+                                    "steps": []
+                                },
+                                {
+                                    "position": 3,
+                                    "action": "Complete the interview and synchronize.",
+                                    "expected_result": "On the HQ web interface, the assignment is shown as completed (InterviewsNeeded = 0).",
+                                    "data": "",
+                                    "steps": []
+                                }
+                            ],
+                            "tags": ["assignment", "quantity", "completion-tracking"],
+                            "params": [],
+                            "is_muted": "no"
+                        },
+                        {
+                            "id": 2841,
+                            "title": "Assignment with quantity=2 remains open after 1 interview is created",
+                            "description": "Verify that an assignment with quantity=2 remains available for creating another interview after the first interview is created.",
+                            "preconditions": "1. An assignment with quantity=2 is assigned to an interviewer.\n2. No interviews have been created yet.",
+                            "postconditions": "Assignment has 1 remaining interview slot.",
+                            "priority": "medium",
+                            "severity": "major",
+                            "type": "functional",
+                            "behavior": "undefined",
+                            "automation": "is-not-automated",
+                            "status": "actual",
+                            "is_flaky": "no",
+                            "layer": "e2e",
+                            "milestone": null,
+                            "custom_fields": [],
+                            "steps_type": "classic",
+                            "steps": [
+                                {
+                                    "position": 1,
+                                    "action": "On the interviewer app, find the assignment with quantity=2. Start a new interview from this assignment.",
+                                    "expected_result": "The assignment remaining count decreases to 1. The assignment is still visible and available for creating another interview.",
+                                    "data": "",
+                                    "steps": []
+                                },
+                                {
+                                    "position": 2,
+                                    "action": "Start a second interview from this assignment.",
+                                    "expected_result": "The assignment remaining count decreases to 0. The assignment is no longer available for creating new interviews.",
+                                    "data": "",
+                                    "steps": []
+                                }
+                            ],
+                            "tags": ["assignment", "quantity", "completion-tracking"],
+                            "params": [],
+                            "is_muted": "no"
+                        },
+                        {
+                            "id": 2842,
+                            "title": "Assignment with unlimited quantity never becomes complete",
+                            "description": "Verify that an assignment with no quantity limit (null/unlimited) never shows as completed and the interviewer can always create new interviews from it.",
+                            "preconditions": "1. An assignment with unlimited quantity (no quantity limit) is assigned to an interviewer.",
+                            "postconditions": null,
+                            "priority": "medium",
+                            "severity": "major",
+                            "type": "functional",
+                            "behavior": "undefined",
+                            "automation": "is-not-automated",
+                            "status": "actual",
+                            "is_flaky": "no",
+                            "layer": "e2e",
+                            "milestone": null,
+                            "custom_fields": [],
+                            "steps_type": "classic",
+                            "steps": [
+                                {
+                                    "position": 1,
+                                    "action": "Create several interviews from an unlimited assignment and complete them.",
+                                    "expected_result": "The assignment does not disappear or become completed after each interview. The assignment remains available on the interviewer's dashboard for creating additional interviews.",
+                                    "data": "",
+                                    "steps": []
+                                },
+                                {
+                                    "position": 2,
+                                    "action": "On the HQ web interface, check the assignment details.",
+                                    "expected_result": "The 'Interviews needed' field shows no limit/unlimited. The assignment is not marked as completed.",
+                                    "data": "",
+                                    "steps": []
+                                }
+                            ],
+                            "tags": ["assignment", "quantity", "unlimited"],
+                            "params": [],
+                            "is_muted": "no"
+                        },
+                        {
+                            "id": 2843,
+                            "title": "Rejected interview does not permanently consume an assignment slot",
+                            "description": "Verify that when a completed interview is rejected and re-completed from the same assignment, the assignment completion count is recalculated correctly and does not double-count.",
+                            "preconditions": "1. An assignment with quantity=1 exists and the interviewer has completed one interview from it.\n2. The interview has been synchronized to the server.",
+                            "postconditions": "Assignment completion count reflects the actual number of active interviews (not counting rejected and re-created ones as separate).",
+                            "priority": "high",
+                            "severity": "major",
+                            "type": "functional",
+                            "behavior": "undefined",
+                            "automation": "is-not-automated",
+                            "status": "actual",
+                            "is_flaky": "no",
+                            "layer": "e2e",
+                            "milestone": null,
+                            "custom_fields": [],
+                            "steps_type": "classic",
+                            "steps": [
+                                {
+                                    "position": 1,
+                                    "action": "Supervisor rejects the completed interview back to the interviewer.",
+                                    "expected_result": "Interview status is 'RejectedBySupervisor'. Assignment still shows 1 interview created (slot consumed). The interviewer can re-work the existing interview, not start a new one.",
+                                    "data": "",
+                                    "steps": []
+                                },
+                                {
+                                    "position": 2,
+                                    "action": "Interviewer re-completes the rejected interview and syncs.",
+                                    "expected_result": "Interview returns to 'Completed' status. The assignment still counts 1 interview used (not 2). Assignment remains completed/consumed (quantity=1, 1 interview created).",
+                                    "data": "",
+                                    "steps": []
+                                }
+                            ],
+                            "tags": ["assignment", "quantity", "rejection-reopen"],
+                            "params": [],
+                            "is_muted": "no"
+                        },
+                        {
+                            "id": 2844,
+                            "title": "HQ assignment details page shows correct interview counts",
+                            "description": "Verify that the assignment details page on the HQ web interface correctly shows the number of interviews created, completed, and approved against the assignment quantity.",
+                            "preconditions": "1. An assignment with a defined quantity has multiple interviews in various statuses.\n2. HQ user is logged in.",
+                            "postconditions": null,
+                            "priority": "medium",
+                            "severity": "normal",
+                            "type": "functional",
+                            "behavior": "undefined",
+                            "automation": "is-not-automated",
+                            "status": "actual",
+                            "is_flaky": "no",
+                            "layer": "e2e",
+                            "milestone": null,
+                            "custom_fields": [],
+                            "steps_type": "classic",
+                            "steps": [
+                                {
+                                    "position": 1,
+                                    "action": "Open the assignment details page on the HQ web interface for an assignment that has interviews in various statuses.",
+                                    "expected_result": "The assignment details page shows the total quantity, number of interviews created, and number of interviews remaining. Counts are consistent and accurate.",
+                                    "data": "",
+                                    "steps": []
+                                },
+                                {
+                                    "position": 2,
+                                    "action": "Click through to the list of interviews linked to this assignment.",
+                                    "expected_result": "A list of all interviews created from this assignment is shown with their individual statuses.",
+                                    "data": "",
+                                    "steps": []
+                                }
+                            ],
+                            "tags": ["assignment", "hq", "details"],
+                            "params": [],
+                            "is_muted": "no"
+                        }
+                    ]
+                },
+                {
+                    "id": 606,
+                    "title": "Observer cannot perform approval or rejection actions",
+                    "description": "Verify that a user with Observer role cannot approve, reject, or unapprove any interview, even if they can view them.",
+                    "preconditions": "1. An Observer user exists and is logged in.\n2. Interviews in various statuses exist.",
+                    "suites": [],
+                    "cases": [
+                        {
+                            "id": 2850,
+                            "title": "Observer cannot approve or reject interviews",
+                            "description": "Verify that the Observer role does not grant the ability to approve or reject interviews.",
+                            "preconditions": "1. Observer user is logged in.\n2. Interviews with actionable statuses (Completed, ApprovedBySupervisor) exist.",
+                            "postconditions": null,
+                            "priority": "high",
+                            "severity": "critical",
+                            "type": "functional",
+                            "behavior": "negative",
+                            "automation": "is-not-automated",
+                            "status": "actual",
+                            "is_flaky": "no",
+                            "layer": "e2e",
+                            "milestone": null,
+                            "custom_fields": [],
+                            "steps_type": "classic",
+                            "steps": [
+                                {
+                                    "position": 1,
+                                    "action": "Log in as an Observer and navigate to the Interviews list.",
+                                    "expected_result": "Observer can view the interviews list and open interviews, but 'Approve', 'Reject', and 'Unapprove' buttons are NOT available.",
+                                    "data": "",
+                                    "steps": []
+                                },
+                                {
+                                    "position": 2,
+                                    "action": "Attempt to call the approve API endpoint directly for an interview (e.g., via Postman or browser dev tools).",
+                                    "expected_result": "The API returns an authorization error (403 Forbidden or equivalent). No status change occurs.",
+                                    "data": "",
+                                    "steps": []
+                                }
+                            ],
+                            "tags": ["observer", "security", "negative"],
+                            "params": [],
+                            "is_muted": "no"
+                        }
+                    ]
+                }
+            ],
+            "cases": []
+        }
+    ]
+}
