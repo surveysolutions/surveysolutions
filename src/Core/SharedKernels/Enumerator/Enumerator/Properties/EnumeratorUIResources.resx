@@ -1040,4 +1040,7 @@ It will appear on interviewer device after next synchronization</value>
   <data name="CommunicationIntegrityFailed" xml:space="preserve">
       <value>The response received does not appear to come from the Survey Solutions server. This is usually caused by a network proxy, firewall, or security gateway intercepting the connection. Please check your network connection or contact your IT support.</value>
   </data>
+  <data name="Downgrade_ErrorMessage" xml:space="preserve">
+    <value>This version of the application is older than the previously installed version. Please reinstall the latest version of the application.</value>
+  </data>
 </root>

@@ -876,4 +876,7 @@
   <data name="CommunicationIntegrityFailed" xml:space="preserve">
     <value>Përgjigjja e marre duket të mos vijë nga shërbimi Survey Solutions. Kjo zakonisht shkaktohet nga një proxy rrjeti, firewall ose gateway sigurie që kap lidhjen. Ju lutemi kontrolloni lidhjen tuaj të rrjetit ose kontaktoni mbështetjen e TI.</value>
   </data>
+  <data name="Downgrade_ErrorMessage" xml:space="preserve">
+    <value>This version of the application is older than the previously installed version. Please reinstall the latest version of the application.</value>
+  </data>
 </root>
