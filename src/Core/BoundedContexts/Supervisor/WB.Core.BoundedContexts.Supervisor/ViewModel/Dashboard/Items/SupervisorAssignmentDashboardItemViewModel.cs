@@ -95,36 +95,34 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
         private async Task CompleteAssignmentAsync()
         {
             // Single dialog: shows warning message and optional comment field together
-            var comment = await userInteractionService.ConfirmWithTextInputAsync(
+            await ChangeAssignmentStatusAsync(
+                AssignmentStatus.Completed,
                 EnumeratorUIResources.Dashboard_CompleteAssignment_Message,
-                title: EnumeratorUIResources.Dashboard_CompleteAssignment_Title,
-                okButton: EnumeratorUIResources.Dashboard_CompleteAssignment,
-                cancelButton: UIResources.Cancel);
-
-            if (comment == null) // user cancelled
-                return;
-
-            Assignment.Status = AssignmentStatus.Completed;
-            var trimmedComment = comment.Trim();
-            // Non-null StatusComment signals a pending upload; empty string means "no comment entered"
-            Assignment.StatusComment = trimmedComment.Length > 0 ? trimmedComment : string.Empty;
-            AssignmentsRepository.Store(Assignment);
-
-            RaiseOnItemUpdated();
+                EnumeratorUIResources.Dashboard_CompleteAssignment_Title,
+                EnumeratorUIResources.Dashboard_CompleteAssignment);
         }
 
         private async Task ReopenAssignmentAsync()
         {
-            var comment = await userInteractionService.ConfirmWithTextInputAsync(
+            await ChangeAssignmentStatusAsync(
+                AssignmentStatus.Active,
                 string.Empty,
-                title: EnumeratorUIResources.Dashboard_ReopenAssignment_Title,
-                okButton: EnumeratorUIResources.Dashboard_Reopen,
+                EnumeratorUIResources.Dashboard_ReopenAssignment_Title,
+                EnumeratorUIResources.Dashboard_Reopen);
+        }
+
+        private async Task ChangeAssignmentStatusAsync(AssignmentStatus newStatus, string message, string title, string okButton)
+        {
+            var comment = await userInteractionService.ConfirmWithTextInputAsync(
+                message,
+                title: title,
+                okButton: okButton,
                 cancelButton: UIResources.Cancel);
 
             if (comment == null) // user cancelled
                 return;
 
-            Assignment.Status = AssignmentStatus.Active;
+            Assignment.Status = newStatus;
             var trimmedComment = comment.Trim();
             // Non-null StatusComment signals a pending upload; empty string means "no comment entered"
             Assignment.StatusComment = trimmedComment.Length > 0 ? trimmedComment : string.Empty;

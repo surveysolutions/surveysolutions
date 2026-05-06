@@ -120,8 +120,7 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
 
             var authorizedUserId = this.authorizedUser.Id;
             if (assignment.ResponsibleId != authorizedUserId &&
-                (assignment.Responsible == null ||
-                 assignment.Responsible.ReadonlyProfile.SupervisorId != authorizedUserId))
+                (assignment.Responsible?.ReadonlyProfile?.SupervisorId != authorizedUserId))
             {
                 return Forbid();
             }
