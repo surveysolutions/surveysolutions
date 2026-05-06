@@ -187,6 +187,21 @@ export default {
         open(questionnaireId, categoriesId) {
             this.questionnaireId = questionnaireId;
             this.categoriesId = categoriesId;
+            // Reset all state before showing so stale data from a previous session
+            // is never visible if the modal is reopened without closing first.
+            this.options = null;
+            this.categories = [];
+            this.initialCategories = [];
+            this.errors = [];
+            this.submitting = false;
+            this.ajax = false;
+            this.convert = false;
+            this.inEditMode = false;
+            this.readonly = true;
+            this.isCascadingCategory = false;
+            this.stringsIsValid = true;
+            this.stringsIsDirty = false;
+            this.tab = '';
             this.isOpen = true;
             this.reloadCategories();
         },
