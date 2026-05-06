@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -48,6 +49,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
         public virtual async Task SynchronizeAssignmentsAsync(IProgress<SyncProgressInfo> progress,
             SynchronizationStatistics statistics, CancellationToken cancellationToken)
         {
+            // Upload local status changes (Finished set by interviewer, Complete/Reopen by supervisor)
+            await UploadLocalStatusChangesAsync(cancellationToken);
+
             var remoteAssignments = await this.synchronizationService.GetAssignmentsAsync(cancellationToken);
             var localAssignments = this.assignmentsRepository.LoadAll();
 
@@ -99,6 +103,39 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             }
         }
 
+        private async Task UploadLocalStatusChangesAsync(CancellationToken cancellationToken)
+        {
+            var localAssignments = this.assignmentsRepository.LoadAll();
+            // Only upload assignments where status is not Active (i.e., Finished or Completed was set locally)
+            // StatusComment != null is used as the signal that a local status change is pending upload
+            var pendingChanges = localAssignments
+                .Where(a => a.StatusComment != null || a.Status != AssignmentStatus.Active)
+                .ToList();
+
+            foreach (var local in pendingChanges)
+            {
+                // Skip assignments whose status is Active with no comment – they were never changed locally
+                if (local.Status == AssignmentStatus.Active && local.StatusComment == null)
+                    continue;
+
+                try
+                {
+                    var change = new AssignmentStatusChangeApiView
+                    {
+                        Status = local.Status,
+                        Comment = local.StatusComment
+                    };
+                    await this.synchronizationService.ChangeAssignmentStatusAsync(local.Id, change, cancellationToken);
+                    this.logger.Debug($"Uploaded status change for assignment {local.Id}: {local.Status}");
+                }
+                catch (Exception ex)
+                {
+                    // Log but continue – server will send back the authoritative status
+                    this.logger.Warn($"Failed to upload status change for assignment {local.Id}: {ex.Message}");
+                }
+            }
+        }
+
         private async Task CreateAssignmentAsync(AssignmentApiView remoteItem, SynchronizationStatistics statistics,
             CancellationToken cancellationToken)
         {
@@ -106,6 +143,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(remoteItem.QuestionnaireId, null);
 
             var newAssignment = this.assignmentDocumentFromDtoBuilder.GetAssignmentDocument(remoteAssignment, questionnaire);
+            newAssignment.Status = remoteItem.Status;
             this.assignmentsRepository.Store(newAssignment);
 
             await this.synchronizationService.LogAssignmentAsHandledAsync(remoteItem.Id, cancellationToken);
@@ -144,6 +182,15 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             }
 
             local.IsAudioRecordingEnabled = remote.IsAudioRecordingEnabled;
+
+            // Server status always overrides local status (server is authoritative)
+            if (local.Status != remote.Status)
+            {
+                this.logger.Debug($"Updating Status for assignment {local.Id}: local {local.Status} → server {remote.Status}");
+                local.Status = remote.Status;
+            }
+            // Clear pending status comment after successful sync
+            local.StatusComment = null;
 
             var interviewsCount =
                 this.interviewViewRepository.Count(x => x.FromHqSyncDateTime == null && x.Assignment == local.Id);

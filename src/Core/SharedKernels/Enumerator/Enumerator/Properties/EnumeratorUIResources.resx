@@ -839,6 +839,30 @@ your next synchronization</value>
   <data name="Dashboard_Reopen" xml:space="preserve">
     <value>Reopen</value>
   </data>
+  <data name="Dashboard_FinishAssignment" xml:space="preserve">
+    <value>Finish assignment</value>
+  </data>
+  <data name="Dashboard_FinishAssignment_Title" xml:space="preserve">
+    <value>Finish assignment?</value>
+  </data>
+  <data name="Dashboard_FinishAssignment_Message" xml:space="preserve">
+    <value>Are you sure you have enumerated all eligible units for this assignment?</value>
+  </data>
+  <data name="Dashboard_ReopenAssignment_Title" xml:space="preserve">
+    <value>Reopen assignment?</value>
+  </data>
+  <data name="Dashboard_CompleteAssignment" xml:space="preserve">
+    <value>Complete assignment</value>
+  </data>
+  <data name="Dashboard_CompleteAssignment_Title" xml:space="preserve">
+    <value>Complete assignment?</value>
+  </data>
+  <data name="Dashboard_CompleteAssignment_Message" xml:space="preserve">
+    <value>Interviewers working offline may still continue data collection until synchronization. Such interviews will still be accepted.</value>
+  </data>
+  <data name="Dashboard_Assignment_Comment" xml:space="preserve">
+    <value>Comment (optional)</value>
+  </data>
   <data name="Dashboard_ShowLocation" xml:space="preserve">
     <value>Show location</value>
   </data>

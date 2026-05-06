@@ -1467,6 +1467,54 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
             }
         }
         
+        public static string Dashboard_FinishAssignment {
+            get {
+                return ResourceManager.GetString("Dashboard_FinishAssignment", resourceCulture);
+            }
+        }
+        
+        public static string Dashboard_FinishAssignment_Title {
+            get {
+                return ResourceManager.GetString("Dashboard_FinishAssignment_Title", resourceCulture);
+            }
+        }
+        
+        public static string Dashboard_FinishAssignment_Message {
+            get {
+                return ResourceManager.GetString("Dashboard_FinishAssignment_Message", resourceCulture);
+            }
+        }
+        
+        public static string Dashboard_ReopenAssignment_Title {
+            get {
+                return ResourceManager.GetString("Dashboard_ReopenAssignment_Title", resourceCulture);
+            }
+        }
+        
+        public static string Dashboard_CompleteAssignment {
+            get {
+                return ResourceManager.GetString("Dashboard_CompleteAssignment", resourceCulture);
+            }
+        }
+        
+        public static string Dashboard_CompleteAssignment_Title {
+            get {
+                return ResourceManager.GetString("Dashboard_CompleteAssignment_Title", resourceCulture);
+            }
+        }
+        
+        public static string Dashboard_CompleteAssignment_Message {
+            get {
+                return ResourceManager.GetString("Dashboard_CompleteAssignment_Message", resourceCulture);
+            }
+        }
+        
+        public static string Dashboard_Assignment_Comment {
+            get {
+                return ResourceManager.GetString("Dashboard_Assignment_Comment", resourceCulture);
+            }
+        }
+        
         public static string Dashboard_ShowLocation {
             get {
                 return ResourceManager.GetString("Dashboard_ShowLocation", resourceCulture);

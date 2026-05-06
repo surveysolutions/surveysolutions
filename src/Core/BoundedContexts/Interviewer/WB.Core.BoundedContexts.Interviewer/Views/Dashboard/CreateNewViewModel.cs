@@ -6,6 +6,7 @@ using MvvmCross.Commands;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -89,6 +90,18 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 var dashboardItem = this.viewModelFactory.GetNew<InterviewerAssignmentDashboardItemViewModel>();
                 dashboardItem.Init(assignment);
 
+                // Finished assignments: always show (so interviewer can Reopen)
+                if (assignment.Status == AssignmentStatus.Finished)
+                {
+                    yield return dashboardItem;
+                    continue;
+                }
+
+                // Completed assignments: hide from interviewer (no actions available)
+                if (assignment.Status == AssignmentStatus.Completed)
+                    continue;
+
+                // Active assignments: show if unlimited or interviews still needed
                 if (!dashboardItem.Quantity.HasValue || dashboardItem.InterviewsLeftByAssignmentCount > 0)
                 {
                     yield return dashboardItem;

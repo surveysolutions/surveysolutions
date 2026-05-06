@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using SQLite;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
 namespace WB.Core.SharedKernels.Enumerator.Views
@@ -51,6 +52,17 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         public DateTimeOffset? CalendarEvent { get; set; }
         public string CalendarEventTimezoneId { get; set; }
         public string CalendarEventComment { get; set; }
+
+        /// <summary>
+        /// Local assignment status (Active, Finished, Completed).
+        /// </summary>
+        public AssignmentStatus Status { get; set; } = AssignmentStatus.Active;
+
+        /// <summary>
+        /// Optional comment stored when interviewer/supervisor changes the assignment status locally.
+        /// Sent to server during synchronization.
+        /// </summary>
+        public string StatusComment { get; set; }
 
 
         public class AssignmentAnswer

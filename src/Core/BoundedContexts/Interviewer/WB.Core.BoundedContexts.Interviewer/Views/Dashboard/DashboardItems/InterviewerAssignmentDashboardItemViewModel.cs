@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using MvvmCross.Commands;
 using WB.Core.BoundedContexts.Interviewer.Views.CreateInterview;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -30,34 +31,103 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             Actions.Clear();
             
             BindLocationAction(Assignment.LocationQuestionId, Assignment.LocationLatitude, Assignment.LocationLongitude);
-            
-            Actions.Add(new ActionDefinition
-            {
-                Command = new MvxAsyncCommand(
-                    async () => { await CreateInterviewAsync(); },
-                    () => !Assignment.Quantity.HasValue ||
-                          Math.Max(val1: 0, val2: InterviewsLeftByAssignmentCount) > 0),
 
-                Label = EnumeratorUIResources.Dashboard_StartNewInterview
-            });
-            
-            Actions.Add(new ActionDefinition
+            switch (Assignment.Status)
             {
-                ActionType = ActionType.Context,
-                Command = new MvxAsyncCommand(this.SetCalendarEventAsync),
-                Label = Assignment.CalendarEvent.HasValue 
-                    ? EnumeratorUIResources.Dashboard_EditCalendarEvent
-                    : EnumeratorUIResources.Dashboard_AddCalendarEvent
-            });
+                case AssignmentStatus.Active:
+                    Actions.Add(new ActionDefinition
+                    {
+                        Command = new MvxAsyncCommand(
+                            async () => { await CreateInterviewAsync(); },
+                            () => !Assignment.Quantity.HasValue ||
+                                  Math.Max(val1: 0, val2: InterviewsLeftByAssignmentCount) > 0),
+                        Label = EnumeratorUIResources.Dashboard_StartNewInterview
+                    });
 
-            Actions.Add(new ActionDefinition
-            {
-                ActionType = ActionType.Context,
-                Command = new MvxCommand(this.RemoveCalendarEvent, () => Assignment.CalendarEvent.HasValue),
-                Label = EnumeratorUIResources.Dashboard_RemoveCalendarEvent
-            });
+                    Actions.Add(new ActionDefinition
+                    {
+                        ActionType = ActionType.Context,
+                        Command = new MvxAsyncCommand(this.SetCalendarEventAsync),
+                        Label = Assignment.CalendarEvent.HasValue 
+                            ? EnumeratorUIResources.Dashboard_EditCalendarEvent
+                            : EnumeratorUIResources.Dashboard_AddCalendarEvent
+                    });
+
+                    Actions.Add(new ActionDefinition
+                    {
+                        ActionType = ActionType.Context,
+                        Command = new MvxCommand(this.RemoveCalendarEvent, () => Assignment.CalendarEvent.HasValue),
+                        Label = EnumeratorUIResources.Dashboard_RemoveCalendarEvent
+                    });
+
+                    Actions.Add(new ActionDefinition
+                    {
+                        ActionType = ActionType.Context,
+                        Command = new MvxAsyncCommand(this.FinishAssignmentAsync),
+                        Label = EnumeratorUIResources.Dashboard_FinishAssignment
+                    });
+                    break;
+
+                case AssignmentStatus.Finished:
+                    Actions.Add(new ActionDefinition
+                    {
+                        ActionType = ActionType.Primary,
+                        Command = new MvxAsyncCommand(this.ReopenAssignmentAsync),
+                        Label = EnumeratorUIResources.Dashboard_Reopen
+                    });
+                    break;
+
+                case AssignmentStatus.Completed:
+                    // No actions available for completed assignments
+                    break;
+            }
 
             BindTargetAreaAction(Assignment.Id, Assignment.TargetArea);
+        }
+
+        private async Task FinishAssignmentAsync()
+        {
+            var confirmed = await userInteractionService.ConfirmAsync(
+                EnumeratorUIResources.Dashboard_FinishAssignment_Message,
+                title: EnumeratorUIResources.Dashboard_FinishAssignment_Title,
+                okButton: EnumeratorUIResources.Dashboard_FinishAssignment,
+                cancelButton: UIResources.Cancel);
+
+            if (!confirmed)
+                return;
+
+            var comment = await userInteractionService.ConfirmWithTextInputAsync(
+                EnumeratorUIResources.Dashboard_Assignment_Comment,
+                title: EnumeratorUIResources.Dashboard_FinishAssignment_Title,
+                okButton: EnumeratorUIResources.Dashboard_FinishAssignment,
+                cancelButton: UIResources.Cancel);
+
+            if (comment == null) // user cancelled the second dialog
+                return;
+
+            Assignment.Status = AssignmentStatus.Finished;
+            Assignment.StatusComment = string.IsNullOrWhiteSpace(comment) ? null : comment;
+            AssignmentsRepository.Store(Assignment);
+
+            RaiseOnItemUpdated();
+        }
+
+        private async Task ReopenAssignmentAsync()
+        {
+            var comment = await userInteractionService.ConfirmWithTextInputAsync(
+                EnumeratorUIResources.Dashboard_Assignment_Comment,
+                title: EnumeratorUIResources.Dashboard_ReopenAssignment_Title,
+                okButton: EnumeratorUIResources.Dashboard_Reopen,
+                cancelButton: UIResources.Cancel);
+
+            if (comment == null) // user cancelled
+                return;
+
+            Assignment.Status = AssignmentStatus.Active;
+            Assignment.StatusComment = string.IsNullOrWhiteSpace(comment) ? null : comment;
+            AssignmentsRepository.Store(Assignment);
+
+            RaiseOnItemUpdated();
         }
 
         private async Task CreateInterviewAsync()

@@ -346,6 +346,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return syncClient.SendAsync(new LogAssignmentAsHandledRequest { Id = id }, token);
         }
 
+        public Task ChangeAssignmentStatusAsync(int id, AssignmentStatusChangeApiView statusChange, CancellationToken token = default)
+        {
+            // Offline sync: status changes are handled by the server during the next online sync
+            // No-op for offline mode — the status is already stored locally in AssignmentDocument
+            return Task.CompletedTask;
+        }
+
         public async Task<string> GetPublicKeyForEncryptionAsync(CancellationToken token = default)
         {
             var response = await syncClient.SendAsync<GetPublicKeyForEncryptionRequest, GetPublicKeyForEncryptionResponse>(

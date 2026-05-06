@@ -76,7 +76,8 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
                     ResponsibleId = assignment.ResponsibleId,
                     ResponsibleName = assignment.Responsible.Name,
                     IsAudioRecordingEnabled = assignment.AudioRecording,
-                    TargetArea = assignment.TargetArea
+                    TargetArea = assignment.TargetArea,
+                    Status = assignment.Status
                 });
             }
 
@@ -102,6 +103,47 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
 
             commandService.Execute(
                 new MarkAssignmentAsReceivedByTablet(assignment.PublicKey, authorizedUserId, deviceId, assignment.QuestionnaireId));
+
+            return Ok();
+        }
+
+        public virtual IActionResult ChangeStatus(int id, [FromBody] AssignmentStatusChangeApiView request)
+        {
+            if (request == null)
+                return BadRequest();
+
+            var assignment = this.assignmentsService.GetAssignment(id);
+            if (assignment == null)
+                return NotFound("Assignment not found");
+
+            var authorizedUserId = this.authorizedUser.Id;
+            if (assignment.ResponsibleId != authorizedUserId &&
+                assignment.Responsible.ReadonlyProfile.SupervisorId != authorizedUserId)
+            {
+                return Forbid();
+            }
+
+            try
+            {
+                switch (request.Status)
+                {
+                    case WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment.AssignmentStatus.Finished:
+                        commandService.Execute(new FinishAssignment(assignment.PublicKey, authorizedUserId, assignment.QuestionnaireId, request.Comment));
+                        break;
+                    case WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment.AssignmentStatus.Completed:
+                        commandService.Execute(new CompleteAssignment(assignment.PublicKey, authorizedUserId, assignment.QuestionnaireId, request.Comment));
+                        break;
+                    case WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment.AssignmentStatus.Active:
+                        commandService.Execute(new ReopenAssignment(assignment.PublicKey, authorizedUserId, assignment.QuestionnaireId, request.Comment));
+                        break;
+                    default:
+                        return BadRequest("Unknown status");
+                }
+            }
+            catch (Exception e) when (e is WB.Core.SharedKernels.DataCollection.Exceptions.AssignmentException)
+            {
+                return BadRequest(new { Message = e.Message });
+            }
 
             return Ok();
         }
