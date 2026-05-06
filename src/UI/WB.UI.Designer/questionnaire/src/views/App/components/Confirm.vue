@@ -12,7 +12,7 @@
                             {{ header || $t('QuestionnaireEditor.ModalConfirm') }}
                         </h3>
                     </div>
-                    <div class="modal-body" v-dompurify-html="title">
+                    <div class="modal-body" v-sanitize-html="title">
                     </div>
                     <div class="modal-footer" v-if="!noControls">
                         <button :class="['btn', 'btn-lg', isDanger ? 'btn-danger' : 'btn-primary']" v-if="!isReadOnly"
