@@ -90,7 +90,7 @@
                     <button type="button" class="btn btn-success" v-bind:disabled="model.isObserving"
                         @click="changeExposedStatusSend">{{ $t("Common.Save") }}</button>
                     <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
-                        }}</button>
+                    }}</button>
                 </div>
             </template>
         </ModalFrame>
@@ -103,7 +103,7 @@
                     <button type="button" class="btn btn-danger" v-bind:disabled="model.isObserving"
                         @click="removeExposedVariable">{{ $t("Common.Remove") }}</button>
                     <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
-                        }}</button>
+                    }}</button>
                 </div>
             </template>
         </ModalFrame>
@@ -113,8 +113,8 @@
 
 <script>
 import { map } from 'lodash'
-import _sanitizeHtml from 'sanitize-html'
-const sanitizeHtml = text => _sanitizeHtml(text, { allowedTags: [], allowedAttributes: [] })
+import DOMPurify from 'dompurify'
+const sanitizeHtml = text => DOMPurify.sanitize(text, { ALLOWED_TAGS: [], ALLOWED_ATTR: [] })
 
 export default {
 
