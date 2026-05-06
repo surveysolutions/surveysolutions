@@ -1768,8 +1768,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 this.ApplyEvent(new InterviewRejected(userId, comment, originDate));
                 this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.RejectedBySupervisor, comment, previousStatus: this.properties.Status, originDate: originDate));
-                
-                this.ApplyEvent(new InterviewerAssigned(userId, null, originDate));
+
+                if (this.properties.InterviewerId.HasValue)
+                    this.ApplyEvent(new InterviewerAssigned(userId, null, originDate));
             }
             else
             {
