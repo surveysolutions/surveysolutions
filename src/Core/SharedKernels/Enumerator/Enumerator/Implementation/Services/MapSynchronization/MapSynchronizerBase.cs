@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -113,21 +114,31 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.MapSynchroniz
 
                 try
                 {
-                    long downloded = 0;
+                    var offset = this.mapService.GetTempMapOffset(mapDescription.MapName);
+                    long downloded = offset;
                     using (var streamToSave = this.mapService.GetTempMapSaveStream(mapDescription.MapName))
                     using (var contentStreamResult = await this.synchronizationService
-                        .GetMapContentStream(mapDescription.MapName, cancellationToken)
+                        .GetMapContentStream(mapDescription.MapName, cancellationToken, offset)
                         .ConfigureAwait(false))
                     {
                         if (cancellationToken.IsCancellationRequested)
                         {
                             cancellationToken.ThrowIfCancellationRequested();
                         }
+
+                        // If we requested a range but server returned full content (200 OK), reset the stream
+                        if (offset > 0 && !contentStreamResult.IsPartialContent)
+                        {
+                            streamToSave.Seek(0, SeekOrigin.Begin);
+                            streamToSave.SetLength(0);
+                            offset = 0;
+                            downloded = 0;
+                        }
                         
                         var buffer = new byte[1024];
                         var downloadProgressChangedEventArgs = new TransferProgress()
                         {
-                            TotalBytesToReceive = contentStreamResult.ContentLength
+                            TotalBytesToReceive = contentStreamResult.ContentLength + offset
                         };
 
                         int read;
@@ -145,7 +156,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.MapSynchroniz
 
                             if (contentStreamResult.ContentLength != null)
                                 downloadProgressChangedEventArgs.ProgressPercentage =
-                                    Math.Min(Math.Round((decimal)(100 * downloded) / contentStreamResult.ContentLength.Value), 100);
+                                    Math.Min(Math.Round((decimal)(100 * downloded) / (contentStreamResult.ContentLength.Value + offset)), 100);
 
                             downloadProgressChangedEventArgs.BytesReceived = downloded;
                             OnDownloadProgressChanged(downloadProgressChangedEventArgs);

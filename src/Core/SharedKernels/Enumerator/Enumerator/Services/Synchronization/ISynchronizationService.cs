@@ -57,7 +57,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Synchronization
         Task SendUnexpectedExceptionAsync(UnexpectedExceptionApiView exception, CancellationToken token);
 
         Task<List<MapView>> GetMapList(CancellationToken cancellationToken);
-        Task<RestStreamResult> GetMapContentStream(string mapName, CancellationToken cancellationToken);
+        Task<RestStreamResult> GetMapContentStream(string mapName, CancellationToken cancellationToken, long offset = 0);
 
         Task<bool> IsAutoUpdateEnabledAsync(CancellationToken token);
         Task UploadAuditLogEntityAsync(AuditLogEntitiesApiView auditLogEntity, CancellationToken cancellationToken);

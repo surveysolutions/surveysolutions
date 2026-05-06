@@ -315,14 +315,17 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 url: this.MapsController, token: cancellationToken, credentials: this.restCredentials));
         }
         
-        public Task<RestStreamResult> GetMapContentStream(string mapName, CancellationToken cancellationToken)
+        public Task<RestStreamResult> GetMapContentStream(string mapName, CancellationToken cancellationToken, long offset = 0)
         {
             return this.TryGetRestResponseOrThrowAsync(async () => 
                 await this.restService.GetResponseStreamAsync(
                     url: $"{this.MapsController}/details",
                     queryString: new {id = WebUtility.UrlEncode(mapName)},
                     token: cancellationToken,
-                    credentials: this.restCredentials).ConfigureAwait(false));
+                    credentials: this.restCredentials,
+                    customHeaders: offset > 0
+                        ? new Dictionary<string, string> { ["Range"] = $"bytes={offset}-" }
+                        : null).ConfigureAwait(false));
         }
 
         public Task<List<TranslationDto>> GetQuestionnaireTranslationAsync(QuestionnaireIdentity questionnaireIdentity, CancellationToken cancellationToken)

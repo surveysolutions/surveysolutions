@@ -10,6 +10,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services.MapService
         bool DoesMapExist(string mapName);
         MapDescription? PrepareAndGetDefaultMapOrNull();
         Stream GetTempMapSaveStream(string mapName);
+        long GetTempMapOffset(string mapName);
         void MoveTempMapToPermanent(string mapName);
 
         void RemoveMap(string mapName);

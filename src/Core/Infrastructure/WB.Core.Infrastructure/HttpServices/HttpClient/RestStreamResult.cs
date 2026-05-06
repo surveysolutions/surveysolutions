@@ -7,6 +7,7 @@ namespace WB.Core.Infrastructure.HttpServices.HttpClient
     {
         public Stream Stream { set; get; }
         public long? ContentLength { set; get; }
+        public bool IsPartialContent { get; set; }
 
         public void Dispose()
         {

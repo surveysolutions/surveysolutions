@@ -171,6 +171,14 @@ namespace WB.UI.Shared.Enumerator.Services
             return this.fileSystemAccessor.IsFileExists(filenameInCommonFolder);
         }
 
+        public long GetTempMapOffset(string mapName)
+        {
+            var tempFileName = GetTempFileName(mapName);
+            if (this.fileSystemAccessor.IsFileExists(tempFileName))
+                return this.fileSystemAccessor.GetFileSize(tempFileName);
+            return 0;
+        }
+
         public Stream GetTempMapSaveStream(string mapName)
         {
             if (!this.fileSystemAccessor.IsDirectoryExists(GetMapsLocationOrThrow()))
@@ -178,10 +186,7 @@ namespace WB.UI.Shared.Enumerator.Services
 
             var tempFileName = GetTempFileName(mapName);
 
-            if (this.fileSystemAccessor.IsFileExists(tempFileName))
-                this.fileSystemAccessor.DeleteFile(tempFileName);
-
-            return this.fileSystemAccessor.OpenOrCreateFile(tempFileName, false);
+            return this.fileSystemAccessor.OpenOrCreateFile(tempFileName, true);
         }
 
         public void MoveTempMapToPermanent(string mapName)
