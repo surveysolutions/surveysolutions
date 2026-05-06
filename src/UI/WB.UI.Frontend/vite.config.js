@@ -264,7 +264,6 @@ export default defineConfig(({ mode, command }) => {
         },
         transpile: [
             'autonumeric',
-            'vue-page-title',
             '@googlemaps/markerclusterer'
         ],
         //optimizeDeps: {

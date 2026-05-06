@@ -23,7 +23,8 @@
 <script>
 
 import { find } from 'lodash'
-import sanitizeHtml from 'sanitize-html'
+import DOMPurify from 'dompurify'
+const sanitizeHtml = text => DOMPurify.sanitize(text, { ALLOWED_TAGS: [], ALLOWED_ATTR: [] })
 
 export default {
     props: {
