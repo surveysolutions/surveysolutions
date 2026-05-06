@@ -208,15 +208,24 @@ export default {
                 this.$emit('change', [...this.conditions])
             }
         },
+        cloneQuery(value) {
+            if (value == null)
+                return value
+
+            if (typeof structuredClone === 'function')
+                return structuredClone(value)
+
+            return JSON.parse(JSON.stringify(value))
+        },
         saveExposedVariablesFilter() {
-            this.savedQuery = structuredClone(this.queryExposedVariables)
+            this.savedQuery = this.cloneQuery(this.queryExposedVariables)
             this.lastSavedQuery = this.transformQuery
             this.$emit('changeFilter', this.transformQuery)
             this.$refs.questionsExposedSelector.hide()
         },
 
         restoreQueryAfterCancel() {
-            this.queryExposedVariables = structuredClone(this.savedQuery)
+            this.queryExposedVariables = this.cloneQuery(this.savedQuery)
         },
 
         sanitizeHtml: sanitizeHtml,
