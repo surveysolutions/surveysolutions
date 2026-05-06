@@ -87,6 +87,8 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             Action<ICommand, IAggregateRoot> commandHandler,
             CancellationToken cancellationToken)
         {
+            // Retry up to 3 times to handle optimistic concurrency conflicts in multi-node environments.
+            // Each retry reloads the aggregate from the event store and re-executes the command.
             const int maxRetries = 3;
 
             for (int attempt = 0; attempt <= maxRetries; attempt++)

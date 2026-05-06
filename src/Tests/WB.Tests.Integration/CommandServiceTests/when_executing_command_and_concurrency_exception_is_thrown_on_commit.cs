@@ -11,9 +11,11 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.CommandBus.Implementation;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Tests.Abc;
+using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
 namespace WB.Tests.Integration.CommandServiceTests
 {
+    // [NonParallelizable] is required because CommandRegistry is a global static registry shared across tests.
     [TestFixture]
     [NonParallelizable]
     public class when_executing_command_and_concurrency_exception_is_thrown_on_commit
@@ -24,7 +26,7 @@ namespace WB.Tests.Integration.CommandServiceTests
             public Guid CommandIdentifier { get; }
         }
 
-        private class ConcurrencyTestUpdated : WB.Core.Infrastructure.EventBus.IEvent { }
+        private class ConcurrencyTestUpdated : IEvent { }
 
         private class ConcurrencyTestAggregate : EventSourcedAggregateRoot
         {
