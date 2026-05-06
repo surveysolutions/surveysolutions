@@ -31,7 +31,19 @@ import { registerStore } from './store'
 const store = registerStore(vue)
 
 import moment from 'moment'
-moment.locale(browserLanguage)
+import 'moment/locale/ar'
+import 'moment/locale/cs'
+import 'moment/locale/es'
+import 'moment/locale/fr'
+import 'moment/locale/id'
+import 'moment/locale/pt'
+import 'moment/locale/ro'
+import 'moment/locale/ru'
+import 'moment/locale/uk'
+import 'moment/locale/zh-cn'
+// moment uses 'zh-cn' for generic Chinese ('zh')
+const momentLocaleMap = { zh: 'zh-cn' }
+moment.locale(momentLocaleMap[browserLanguage] || browserLanguage)
 
 import { registerComponents } from './components'
 registerComponents(vue)
