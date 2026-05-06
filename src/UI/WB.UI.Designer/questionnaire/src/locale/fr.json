@@ -344,7 +344,7 @@
     "QuestionOpenEditorSaved": "Il a été enregistré avec succès. La fenêtre de téléchargement de fichier sera ouverte.",
     "SettingsShareEdit": "Modifier",
     "SettingsShareView": "Voir",
-    "DeleteConfirmQuestion": "Êtes-vous sûr de vouloir supprimer \"{{trimmedTitle}}\" ?",
+    "DeleteConfirmQuestion": "Êtes-vous sûr de vouloir supprimer {{trimmedTitle}} ?",
     "DeleteConfirmCategories": "Êtes-vous sûr de vouloir supprimer l'ensemble des catégories \"{{trimmedTitle}}\" ? La source des catégories pour les questions catégorielles dépendantes sera changée en catégories définies par l'utilisateur",
     "UntitledQuestion": "Question sans titre",
     "TranslationsObtained": "Obtenu {0} ligne du fichier de traduction",

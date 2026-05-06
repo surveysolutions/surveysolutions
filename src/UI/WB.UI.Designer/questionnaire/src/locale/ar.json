@@ -344,7 +344,7 @@
     "QuestionOpenEditorSaved": "تم الحفظ بنجاح. سيتم فتح نافذة لتحميل الملف.",
     "SettingsShareEdit": "تحرير",
     "SettingsShareView": "عرض",
-    "DeleteConfirmQuestion": "هل أنت متأكد أنك تريد حذف \"{{trimmedTitle}}\"؟",
+    "DeleteConfirmQuestion": "هل أنت متأكد أنك تريد حذف {{trimmedTitle}}؟",
     "DeleteConfirmCategories": "هل أنت متأكد أنك تريد حذف مجموعة الفئات \"{{trimmedTitle}}\"؟ سيتم تغيير مصدر الفئات للأسئلة التصنيفية المعتمدة عليها إلى فئات معرفة من قبل المستخدم",
     "UntitledQuestion": "سؤال بدون عنوان",
     "TranslationsObtained": "تم الحصول على {0} صف من ملف الترجمة",

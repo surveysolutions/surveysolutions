@@ -71,8 +71,8 @@ export function focusout(name) {
 export function sanitize(input) {
     if (input) {
         var html = DOMPurify.sanitize(input, {
-            ALLOWED_TAGS: [], // empty, means filter out all tags (equivalent to whiteList: [])
-            KEEP_CONTENT: true // keeps text content while removing tags
+            ALLOWED_TAGS: ['em'], // allow <em> for italic emphasis
+            KEEP_CONTENT: true // keeps text content while removing other tags
         });
         return html;
     }
@@ -104,7 +104,7 @@ export function createDeletePopup(message) {
 export function createQuestionForDeleteConfirmationPopup(title) {
     var trimmedTitle = trimText(title);
     var message = i18n.t('QuestionnaireEditor.DeleteConfirmQuestion', {
-        trimmedTitle: trimmedTitle,
+        trimmedTitle: `<em>${trimmedTitle}</em>`,
         interpolation: { escapeValue: false }
     });
     return {

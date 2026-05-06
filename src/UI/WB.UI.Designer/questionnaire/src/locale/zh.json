@@ -29,7 +29,7 @@
     "DefaultNewSubsection": "新问卷子块",
     "Delete": "删除",
     "DeleteCommentConfirm": "您确定要删除评论？",
-    "DeleteConfirmQuestion": "您确认删除“{{trimmedTitle}}”吗？",
+    "DeleteConfirmQuestion": "您确认删除{{trimmedTitle}}吗？",
     "Download": "下载",
     "EditorAddComment": "添加注释",
     "EditorHideComment": "隐藏注释",
