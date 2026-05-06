@@ -23,7 +23,7 @@ namespace WB.UI.Supervisor
         private readonly IMigrationRunner migrationRunner;
         private readonly IWorkspaceService workspaceService;
         private readonly ILifetimeScope lifetimeScope;
-        private readonly ISupervisorSettings deviceSettings;
+        private readonly ISupervisorSettings supervisorSettings;
         private bool downgradeDetected = false;
 
         public SupervisorAppStart(IMvxApplication application,
@@ -40,19 +40,19 @@ namespace WB.UI.Supervisor
             this.migrationRunner = migrationRunner;
             this.workspaceService = workspaceService;
             this.lifetimeScope = lifetimeScope;
-            this.deviceSettings = deviceSettings;
+            this.supervisorSettings = deviceSettings;
         }
 
         protected override Task<object> ApplicationStartup(object hint = null)
         {
             var logger = Mvx.IoCProvider.Resolve<ILoggerProvider>().GetFor<SupervisorAppStart>();
-            logger.Info($"Application started. Version: {this.deviceSettings.GetApplicationVersionName()}");
-            logger.Info($"Android Version: {this.deviceSettings.GetAndroidVersion()}");
-            logger.Info($"Google Play Services Version: {this.deviceSettings.GetGooglePlayServicesVersion()}");
-            logger.Info($"Disk: {this.deviceSettings.GetDiskInformation()}");
+            logger.Info($"Application started. Version: {this.supervisorSettings.GetApplicationVersionName()}");
+            logger.Info($"Android Version: {this.supervisorSettings.GetAndroidVersion()}");
+            logger.Info($"Google Play Services Version: {this.supervisorSettings.GetGooglePlayServicesVersion()}");
+            logger.Info($"Disk: {this.supervisorSettings.GetDiskInformation()}");
 
-            var currentVersionCode = this.deviceSettings.GetApplicationVersionCode();
-            var lastKnownVersionCode = this.deviceSettings.GetLastKnownAppVersionCode();
+            var currentVersionCode = this.supervisorSettings.GetApplicationVersionCode();
+            var lastKnownVersionCode = this.supervisorSettings.GetLastKnownAppVersionCode();
 
             if (lastKnownVersionCode.HasValue && currentVersionCode < lastKnownVersionCode.Value)
             {
@@ -61,7 +61,7 @@ namespace WB.UI.Supervisor
                 return base.ApplicationStartup(hint);
             }
 
-            this.deviceSettings.SetLastKnownAppVersionCode(currentVersionCode);
+            this.supervisorSettings.SetLastKnownAppVersionCode(currentVersionCode);
 
             this.migrationRunner.MigrateUp("Supervisor", this.GetType().Assembly, typeof(Encrypt_Data).Assembly);
 
