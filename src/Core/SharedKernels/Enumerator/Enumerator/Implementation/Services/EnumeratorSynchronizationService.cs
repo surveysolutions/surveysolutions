@@ -315,17 +315,24 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 url: this.MapsController, token: cancellationToken, credentials: this.restCredentials));
         }
         
-        public Task<RestStreamResult> GetMapContentStream(string mapName, CancellationToken cancellationToken, long offset = 0)
+        public Task<RestStreamResult> GetMapContentStream(string mapName, CancellationToken cancellationToken, long offset = 0, string ifRangeETag = null)
         {
-            return this.TryGetRestResponseOrThrowAsync(async () => 
-                await this.restService.GetResponseStreamAsync(
+            return this.TryGetRestResponseOrThrowAsync(async () =>
+            {
+                Dictionary<string, string> headers = null;
+                if (offset > 0)
+                {
+                    headers = new Dictionary<string, string> { ["Range"] = $"bytes={offset}-" };
+                    if (ifRangeETag != null)
+                        headers["If-Range"] = ifRangeETag;
+                }
+                return await this.restService.GetResponseStreamAsync(
                     url: $"{this.MapsController}/details",
                     queryString: new {id = WebUtility.UrlEncode(mapName)},
                     token: cancellationToken,
                     credentials: this.restCredentials,
-                    customHeaders: offset > 0
-                        ? new Dictionary<string, string> { ["Range"] = $"bytes={offset}-" }
-                        : null).ConfigureAwait(false));
+                    customHeaders: headers).ConfigureAwait(false);
+            });
         }
 
         public Task<List<TranslationDto>> GetQuestionnaireTranslationAsync(QuestionnaireIdentity questionnaireIdentity, CancellationToken cancellationToken)

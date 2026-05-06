@@ -11,6 +11,8 @@ namespace WB.Core.SharedKernels.Enumerator.Services.MapService
         MapDescription? PrepareAndGetDefaultMapOrNull();
         Stream GetTempMapSaveStream(string mapName);
         long GetTempMapOffset(string mapName);
+        void SaveTempMapETag(string mapName, string? etag);
+        string? GetTempMapETag(string mapName);
         void MoveTempMapToPermanent(string mapName);
 
         void RemoveMap(string mapName);
