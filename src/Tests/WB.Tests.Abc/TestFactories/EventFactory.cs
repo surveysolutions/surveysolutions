@@ -355,6 +355,16 @@ namespace WB.Tests.Abc.TestFactories
                 originDate ?? DateTimeOffset.Now,
                 answer ?? "answer");
 
+        public QRBarcodeQuestionAnswered QRBarcodeQuestionAnswered(
+            Guid? questionId = null, decimal[] rosterVector = null, string answer = null, Guid? userId = null, DateTimeOffset? originDate = null)
+            => new QRBarcodeQuestionAnswered(
+                userId ?? Guid.NewGuid(),
+                questionId ?? Guid.NewGuid(),
+                rosterVector ?? RosterVector.Empty,
+                originDate ?? DateTimeOffset.Now,
+                answer ?? "barcode");
+
+
         public AnswerCommented AnswerCommented(
             Guid? questionId = null, 
             decimal[] rosterVector = null, 
