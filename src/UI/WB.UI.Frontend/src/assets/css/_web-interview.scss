@@ -141,13 +141,9 @@
     @include transition(margin, 0.3s);
 
     .unit-title {
-        &.is_stuck {
-            z-index: 3;
-            top: 70px !important;
-        }
-
-        z-index: 1;
-        position: relative;
+        position: sticky;
+        top: 70px;
+        z-index: 3;
         background-color: $blue;
         padding: 20px 20px 15px 80px;
         color: $white;
@@ -1103,20 +1099,14 @@
         }
 
         .questionnaire {
-            .unit-title.is_stuck {
-                top: 60px !important;
+            .unit-title {
+                top: 60px;
             }
         }
     }
 
     .aside-menu {
         right: 0;
-    }
-
-    .questionnaire {
-        .unit-title.is_stuck {
-            top: 70px !important;
-        }
     }
 
     .modal-img {
