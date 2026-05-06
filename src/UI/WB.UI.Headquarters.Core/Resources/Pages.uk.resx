@@ -370,7 +370,13 @@
     <value>Створити адміністратора</value>
   </data>
   <data name="CreateUser" xml:space="preserve">
-    <value>Створити користувача</value>
+    <value>Створити обліковий запис користувача</value>
+  </data>
+  <data name="CreateUser_WorkspaceLabel" xml:space="preserve">
+    <value>Доступ до робочого простору</value>
+  </data>
+  <data name="CreateUser_RoleLabel" xml:space="preserve">
+    <value>Роль користувача</value>
   </data>
   <data name="DetailsQuestionPartialView_WriteCommentPlaceholder" xml:space="preserve">
     <value>Написати коментар...</value>
@@ -1381,7 +1387,10 @@
     <value>Супервізори</value>
   </data>
   <data name="PublicSection" xml:space="preserve">
-    <value>Особиста інформація (необов'язково) &lt;br&gt; буде видима лише користувачам Headquarters</value>
+    <value>Особиста інформація</value>
+  </data>
+  <data name="PublicSectionDescription" xml:space="preserve">
+    <value>(необов'язково, буде видима лише аутентифікованим користувачам).</value>
   </data>
   <data name="Questionnaire_Exposed_Variables" xml:space="preserve">
     <value>Змінні, що використовуються для звітів</value>
