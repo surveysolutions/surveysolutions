@@ -1,15 +1,16 @@
 <template>
     <div class="attachment">
-        <div v-if="localContentType === 'image' && thumbPath" class="image-zoom-box image-wrapper" :class="customCssClass">
+        <div v-if="localContentType === 'image' && thumbPath" class="image-zoom-box image-wrapper"
+            :class="customCssClass">
             <img :src="thumbPath" alt="custom photo" class="zoomImg" @load="imageLoaded" @click="showModal(true)"
                 :style="previewStyle" />
-            <portal to="body">
+            <Teleport to="body">
                 <div class="modal-img" v-if="modal" :style="modalView" @click="showModal(false)">
                     <span class="close-zoomming-img">×</span>
                     <img class="modal-img-content" :src="fullPath" alt />
                     <span class="caption"></span>
                 </div>
-            </portal>
+            </Teleport>
         </div>
         <div v-if="localContentType === 'audio'">
             <div class="instructions-wrapper">
@@ -19,7 +20,7 @@
             </div>
             <div>
                 <audio controls preload="auto" :src="contentUrl">{{ $t('WebInterviewUI.MultimediaNotSupported')
-                    }}</audio>
+                }}</audio>
             </div>
         </div>
         <div v-if="localContentType === 'video'">
@@ -30,7 +31,7 @@
             </div>
             <div>
                 <video controls preload="auto" style="width:300px" :src="contentUrl">{{
-            $t('WebInterviewUI.MultimediaNotSupported') }}</video>
+                    $t('WebInterviewUI.MultimediaNotSupported') }}</video>
             </div>
         </div>
         <div v-if="localContentType === 'pdf'">
