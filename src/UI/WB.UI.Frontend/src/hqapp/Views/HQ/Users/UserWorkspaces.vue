@@ -93,7 +93,7 @@ export default {
                             messages.push(...fieldErrors)
                         }
                     })
-                    this.errorMessage = messages.join(' ')
+                    this.errorMessage = messages.join('; ')
                 } else {
                     this.errorMessage = error?.response?.data?.title || error?.message
                 }
