@@ -107,6 +107,7 @@ export default {
             isOpen: false,
             questionnaireId: null,
             categoriesId: null,
+            sessionToken: 0,
 
             tab: '',
             categories: [],
@@ -187,6 +188,9 @@ export default {
         open(questionnaireId, categoriesId) {
             this.questionnaireId = questionnaireId;
             this.categoriesId = categoriesId;
+            // Increment session token so any in-flight requests from a previous open()
+            // will be ignored when they resolve.
+            this.sessionToken++;
             // Reset all state before showing so stale data from a previous session
             // is never visible if the modal is reopened without closing first.
             this.options = null;
@@ -207,6 +211,7 @@ export default {
         },
 
         close() {
+            this.sessionToken++;
             this.isOpen = false;
             this.options = null;
             this.categories = [];
@@ -231,12 +236,14 @@ export default {
                 return;
             }
             this.ajax = true;
+            const token = this.sessionToken;
 
             try {
                 const data = await optionsApi.getCategoryOptions(
                     this.questionnaireId,
                     this.categoriesId
                 );
+                if (token !== this.sessionToken) return;
                 this.categories = data.options;
                 this.initialCategories = cloneDeep(data.options);
                 this.readonly = data.isReadonly;
@@ -250,9 +257,12 @@ export default {
 
                 if (onDone) onDone.apply(this);
             } catch (e) {
+                if (token !== this.sessionToken) return;
                 this.errors = [this.$t('QuestionnaireEditor.CommunicationError')];
             } finally {
-                this.ajax = false;
+                if (token === this.sessionToken) {
+                    this.ajax = false;
+                }
             }
         },
 
@@ -267,8 +277,11 @@ export default {
             if (!file) return;
 
             this.errors = [];
+            const token = this.sessionToken;
 
             const apiResponse = await optionsApi.uploadCategory(file);
+
+            if (token !== this.sessionToken) return;
 
             this.errors = apiResponse.errors || [];
             this.categories = apiResponse.options || [];
@@ -298,6 +311,7 @@ export default {
             this.ajax = true;
             this.submitting = true;
             this.errors = [];
+            const token = this.sessionToken;
 
             optionsApi
                 .applyOptions(
@@ -308,6 +322,7 @@ export default {
                     true
                 )
                 .then(response => {
+                    if (token !== this.sessionToken) return;
                     if (response.isSuccess || response.IsSuccess) {
                         this.close();
                     } else {
@@ -316,8 +331,10 @@ export default {
                     }
                 })
                 .finally(() => {
-                    this.ajax = false;
-                    this.submitting = false;
+                    if (token === this.sessionToken) {
+                        this.ajax = false;
+                        this.submitting = false;
+                    }
                 });
         }
     }
