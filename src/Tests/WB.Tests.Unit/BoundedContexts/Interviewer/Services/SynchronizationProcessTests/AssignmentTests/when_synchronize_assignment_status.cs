@@ -108,6 +108,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 .AssignmentDocument(1, 10, 0, Create.Entity.QuestionnaireIdentity(Id.gA).ToString())
                 .Build();
             localAssignment.Status = AssignmentStatus.Finished;
+            // StatusComment is set to non-null to signal a pending upload (empty string = pending, no comment)
             localAssignment.StatusComment = "No more households";
 
             var assignmentsRepo = Create.Storage.AssignmentDocumentsInmemoryStorage();
@@ -142,6 +143,51 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             capturedChange.Should().NotBeNull();
             capturedChange.Status.Should().Be(AssignmentStatus.Finished);
             capturedChange.Comment.Should().Be("No more households");
+        }
+
+        [Test]
+        public async Task uploads_local_status_change_with_no_comment()
+        {
+            // Arrange: local assignment with Finished status but no comment
+            var localAssignment = Create.Entity
+                .AssignmentDocument(1, 10, 0, Create.Entity.QuestionnaireIdentity(Id.gA).ToString())
+                .Build();
+            localAssignment.Status = AssignmentStatus.Finished;
+            // Empty string signals "change pending, but no comment was entered"
+            localAssignment.StatusComment = string.Empty;
+
+            var assignmentsRepo = Create.Storage.AssignmentDocumentsInmemoryStorage();
+            assignmentsRepo.Store(new[] { localAssignment });
+
+            var remoteView = new AssignmentApiView
+            {
+                Id = 1,
+                Quantity = 10,
+                QuestionnaireId = Create.Entity.QuestionnaireIdentity(Id.gA),
+                Status = AssignmentStatus.Finished
+            };
+
+            AssignmentStatusChangeApiView capturedChange = null;
+            var syncService = new Mock<ISynchronizationService>();
+            syncService.Setup(s => s.GetAssignmentsAsync(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new List<AssignmentApiView> { remoteView });
+            syncService.Setup(s => s.ChangeAssignmentStatusAsync(1, It.IsAny<AssignmentStatusChangeApiView>(), It.IsAny<CancellationToken>()))
+                .Callback<int, AssignmentStatusChangeApiView, CancellationToken>((id, change, ct) => capturedChange = change)
+                .Returns(Task.CompletedTask);
+
+            var synchronizer = Create.Service.AssignmentsSynchronizer(
+                synchronizationService: syncService.Object,
+                assignmentsRepository: assignmentsRepo
+            );
+
+            // Act
+            await synchronizer.SynchronizeAssignmentsAsync(Mock.Of<IProgress<SyncProgressInfo>>(), new SynchronizationStatistics(), CancellationToken.None);
+
+            // Assert: status change was uploaded with null comment (empty string normalized to null)
+            syncService.Verify(s => s.ChangeAssignmentStatusAsync(1, It.IsAny<AssignmentStatusChangeApiView>(), It.IsAny<CancellationToken>()), Times.Once);
+            capturedChange.Should().NotBeNull();
+            capturedChange.Status.Should().Be(AssignmentStatus.Finished);
+            capturedChange.Comment.Should().BeNull("empty string comment is normalized to null before sending to server");
         }
 
         [Test]

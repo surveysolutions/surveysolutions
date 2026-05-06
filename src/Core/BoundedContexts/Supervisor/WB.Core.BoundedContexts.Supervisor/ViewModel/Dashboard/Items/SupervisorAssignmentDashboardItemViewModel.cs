@@ -94,17 +94,9 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
 
         private async Task CompleteAssignmentAsync()
         {
-            var confirmed = await userInteractionService.ConfirmAsync(
-                EnumeratorUIResources.Dashboard_CompleteAssignment_Message,
-                title: EnumeratorUIResources.Dashboard_CompleteAssignment_Title,
-                okButton: EnumeratorUIResources.Dashboard_CompleteAssignment,
-                cancelButton: UIResources.Cancel);
-
-            if (!confirmed)
-                return;
-
+            // Single dialog: shows warning message and optional comment field together
             var comment = await userInteractionService.ConfirmWithTextInputAsync(
-                EnumeratorUIResources.Dashboard_Assignment_Comment,
+                EnumeratorUIResources.Dashboard_CompleteAssignment_Message,
                 title: EnumeratorUIResources.Dashboard_CompleteAssignment_Title,
                 okButton: EnumeratorUIResources.Dashboard_CompleteAssignment,
                 cancelButton: UIResources.Cancel);
@@ -113,7 +105,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
                 return;
 
             Assignment.Status = AssignmentStatus.Completed;
-            Assignment.StatusComment = string.IsNullOrWhiteSpace(comment) ? null : comment;
+            // Use empty string (not null) to signal a pending upload with no comment
+            Assignment.StatusComment = comment.Trim().Length > 0 ? comment.Trim() : string.Empty;
             AssignmentsRepository.Store(Assignment);
 
             RaiseOnItemUpdated();
@@ -122,7 +115,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
         private async Task ReopenAssignmentAsync()
         {
             var comment = await userInteractionService.ConfirmWithTextInputAsync(
-                EnumeratorUIResources.Dashboard_Assignment_Comment,
+                string.Empty,
                 title: EnumeratorUIResources.Dashboard_ReopenAssignment_Title,
                 okButton: EnumeratorUIResources.Dashboard_Reopen,
                 cancelButton: UIResources.Cancel);
@@ -131,7 +124,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
                 return;
 
             Assignment.Status = AssignmentStatus.Active;
-            Assignment.StatusComment = string.IsNullOrWhiteSpace(comment) ? null : comment;
+            // Use empty string (not null) to signal a pending upload with no comment
+            Assignment.StatusComment = comment.Trim().Length > 0 ? comment.Trim() : string.Empty;
             AssignmentsRepository.Store(Assignment);
 
             RaiseOnItemUpdated();

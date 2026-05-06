@@ -106,24 +106,21 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
         private async Task UploadLocalStatusChangesAsync(CancellationToken cancellationToken)
         {
             var localAssignments = this.assignmentsRepository.LoadAll();
-            // Only upload assignments where status is not Active (i.e., Finished or Completed was set locally)
-            // StatusComment != null is used as the signal that a local status change is pending upload
+            // Only upload assignments that have a pending status change (indicated by StatusComment being set,
+            // or status being non-Active when the comment hasn't been cleared yet)
             var pendingChanges = localAssignments
-                .Where(a => a.StatusComment != null || a.Status != AssignmentStatus.Active)
+                .Where(a => a.StatusComment != null)
                 .ToList();
 
             foreach (var local in pendingChanges)
             {
-                // Skip assignments whose status is Active with no comment – they were never changed locally
-                if (local.Status == AssignmentStatus.Active && local.StatusComment == null)
-                    continue;
-
                 try
                 {
                     var change = new AssignmentStatusChangeApiView
                     {
                         Status = local.Status,
-                        Comment = local.StatusComment
+                        // Convert empty string back to null before sending to server
+                        Comment = string.IsNullOrEmpty(local.StatusComment) ? null : local.StatusComment
                     };
                     await this.synchronizationService.ChangeAssignmentStatusAsync(local.Id, change, cancellationToken);
                     this.logger.Debug($"Uploaded status change for assignment {local.Id}: {local.Status}");
