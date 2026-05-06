@@ -42,7 +42,6 @@ DataTable.use(DataTablesLib)
 
 import 'jquery-contextmenu'
 import 'jquery-contextmenu/dist/jquery.contextMenu.css'
-import 'jquery-highlight'
 import './datatable.plugins'
 import { template, debounce, includes, without, assign } from 'lodash'
 
@@ -202,12 +201,12 @@ export default {
                     },
                 },
                 orderMulti: this.multiorder,
-                searchHighlight: true,
                 pagingType: this.pagingType,
                 lengthChange: false, // do not show page size selector
                 pageLength: this.pageLength, // page size
                 dom: 'frtp',
                 conditionalPaging: true,
+                searchHighlight: true,
                 paging: !this.noPaging,
                 searching: !this.noSearch,
                 autoWidth: false
