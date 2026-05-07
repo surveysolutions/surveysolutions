@@ -238,8 +238,11 @@ export default {
         }
     },
     methods: {
-        webTest() {
-            WebTesterApi.run(this.questionnaireId);
+        async webTest() {
+            await this.verificationStore.fetchVerificationStatus(
+                this.questionnaireId
+            );
+            await WebTesterApi.run(this.questionnaireId);
         },
         showDownloadPdf() {
             this.downloadPDFDialog.open();
