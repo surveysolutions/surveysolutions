@@ -159,7 +159,7 @@ export default {
             };
         });
 
-        const ctrl_s = useKeyShortcut(e => e.ctrlKey && e.key === 's');
+        const ctrl_s = useKeyShortcut(e => e.ctrlKey && e.code === 'KeyS');
 
         return {
             groupStore, commentsStore, ctrl_s
