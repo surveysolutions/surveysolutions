@@ -528,7 +528,7 @@
     <value>სინქრონიზაცია წარმატებით შესრულდა</value>
   </data>
   <data name="Synchronization_Upload_CompletedAssignments_Text" xml:space="preserve">
-    <value>შესრულებული დავალებები</value>
+    <value>შესრულებული ინტერვიუები</value>
   </data>
   <data name="Synchronization_Upload_Description_Format" xml:space="preserve">
     <value>{1} {2} -დან {0} შესრულებულია</value>

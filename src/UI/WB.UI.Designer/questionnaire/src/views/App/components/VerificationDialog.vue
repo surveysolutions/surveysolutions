@@ -2,7 +2,7 @@
     <div id="verification-modal" v-if="visible" :class="typeOfMessageToBeShown">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" @click="close()" aria-hidden="true"></button>
+                <button type="button" class="close" @click="close()" :aria-label="$t('QuestionnaireEditor.Close')"></button>
                 <h3 class="modal-title">
                     <span>{{ $t('QuestionnaireEditor.CompilationLabel') }}</span>
                     <span>&nbsp;</span>
@@ -71,14 +71,6 @@
                     </div>
                 </perfect-scrollbar>
             </div>
-            <div class="modal-footer">
-                <button class="btn btn-link" id="verificationRecompile" @click="verify()">
-                    {{ $t('QuestionnaireEditor.Recompile') }}
-                </button>
-                <button class="btn btn-link" data-bs-dismiss="modal" @click="close()">
-                    {{ $t('QuestionnaireEditor.Close') }}
-                </button>
-            </div>
         </div>
     </div>
 </template>
@@ -129,19 +121,6 @@ export default {
         close() {
             this.disposeTooltips();
             this.visible = false;
-        },
-        async verify() {
-            await this.verificationStore.fetchVerificationStatus(
-                this.questionnaireId
-            );
-
-            const errorsCount = this.verificationStore.status.errors.length;
-            if (errorsCount == 0) {
-                this.close()
-            }
-            else (
-                this.initTooltips()
-            )
         },
         navigateTo(reference) {
             if (reference.type.toLowerCase() === "questionnaire") {
