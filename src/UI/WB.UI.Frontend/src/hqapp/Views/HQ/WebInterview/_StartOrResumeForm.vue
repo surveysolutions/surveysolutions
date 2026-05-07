@@ -15,10 +15,12 @@
                 </p>
             </div>
 
-            <div v-if="model.useCaptcha && model.recaptchaSiteKey && !model.serverUnderLoad" class="form-group">
+            <div v-if="model.useCaptcha && model.recaptchaSiteKey && !model.useRecaptchaV3 && !model.serverUnderLoad" class="form-group">
                 <vue-recaptcha v-if="model.useCaptcha" :sitekey="model.recaptchaSiteKey"
                     :loadRecaptchaScript="true"></vue-recaptcha>
             </div>
+            <input v-if="model.useCaptcha && model.useRecaptchaV3 && !model.serverUnderLoad"
+                name="g-recaptcha-response" type="hidden" :value="recaptchaV3Token" />
             <div v-if="model.useCaptcha && model.hostedCaptchaHtml && !model.serverUnderLoad"
                 v-dompurify-html="model.hostedCaptchaHtml" class="form-group">
             </div>
@@ -66,9 +68,46 @@ export default {
         buttonTitle: null,
         resumeButtonTitle: null,
     },
+    data() {
+        return {
+            recaptchaV3Token: '',
+        }
+    },
+    mounted() {
+        if (this.model.useCaptcha && this.model.useRecaptchaV3 && this.model.recaptchaSiteKey) {
+            this.loadRecaptchaV3()
+        }
+    },
     computed: {
         model() {
             return this.$config.model
+        },
+    },
+    methods: {
+        loadRecaptchaV3() {
+            const siteKey = this.model.recaptchaSiteKey
+            const existingScript = document.querySelector(`script[src*="recaptcha/api.js?render=${siteKey}"]`)
+            if (!existingScript) {
+                const script = document.createElement('script')
+                script.src = `https://www.google.com/recaptcha/api.js?render=${siteKey}`
+                script.onload = () => this.executeRecaptchaV3(siteKey)
+                document.head.appendChild(script)
+            } else {
+                this.executeRecaptchaV3(siteKey)
+            }
+        },
+        executeRecaptchaV3(siteKey) {
+            window.grecaptcha.ready(() => {
+                window.grecaptcha.execute(siteKey, { action: 'start' }).then(token => {
+                    this.recaptchaV3Token = token
+                    // Refresh the token every 90 seconds (v3 tokens expire after 2 minutes)
+                    setInterval(() => {
+                        window.grecaptcha.execute(siteKey, { action: 'start' }).then(t => {
+                            this.recaptchaV3Token = t
+                        })
+                    }, 90000)
+                })
+            })
         },
     },
 }

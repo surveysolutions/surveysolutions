@@ -323,6 +323,12 @@ namespace WB.UI.Designer
 
             services.Configure<CaptchaConfig>(Configuration.GetSection("Captcha"));
             services.Configure<RecaptchaSettings>(Configuration.GetSection("Captcha"));
+            services.PostConfigure<RecaptchaSettings>(settings =>
+            {
+                var captchaConfig = Configuration.GetSection("Captcha").Get<CaptchaConfig>() ?? new CaptchaConfig();
+                if (captchaConfig.CaptchaType == CaptchaProviderType.RecaptchaV3)
+                    settings.Version = "v3";
+            });
             services.AddTransient<IRecaptchaService, RecaptchaService>();
             services.AddTransient<IRecipientNotifier, MailNotifier>();
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();

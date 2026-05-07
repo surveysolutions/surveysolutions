@@ -64,7 +64,7 @@
                             if (this.Model.RequireCaptcha)
                             {
                                 <div class="form-group">
-                                    @if (captchaProvider is RecaptchaProvider)
+                                    @if (captchaProvider is RecaptchaProvider || captchaProvider is RecaptchaV3Provider)
                                     {
                                         @inject IOptions<RecaptchaSettings> RecaptchaSettings
                                         @Html.Recaptcha(RecaptchaSettings.Value)

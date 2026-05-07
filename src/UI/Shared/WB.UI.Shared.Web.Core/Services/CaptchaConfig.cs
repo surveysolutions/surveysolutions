@@ -5,10 +5,11 @@
         public int TimespanInMinutesCaptchaWillBeShownAfterFailedLoginAttempt { get; set; } = 5;
         public int CountOfFailedLoginAttemptsBeforeCaptcha { get; set; } = 5;
         public CaptchaProviderType CaptchaType { get; set; } = CaptchaProviderType.None;
+        public decimal RecaptchaV3MinimumScore { get; set; } = 0.5m;
     }
 
     public enum CaptchaProviderType
     {
-        None, Recaptcha, Hosted
+        None, Recaptcha, RecaptchaV3, Hosted
     }
 }

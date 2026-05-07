@@ -48,7 +48,8 @@
         </label>
     </div>
 
-    @if (Model.CaptchaOptions.Value.CaptchaType == CaptchaProviderType.Recaptcha)
+    @if (Model.CaptchaOptions.Value.CaptchaType == CaptchaProviderType.Recaptcha
+        || Model.CaptchaOptions.Value.CaptchaType == CaptchaProviderType.RecaptchaV3)
     {
         <div class="recaptcha">
             @Html.Recaptcha(CaptchaConfig.Value)

@@ -28,6 +28,7 @@ namespace WB.UI.Headquarters.Models.WebInterview
     public class StartOrResumeWebInterview
     {
         public string RecaptchaSiteKey { get; set; }
+        public bool UseRecaptchaV3 { get; set; }
         public string QuestionnaireTitle { get; set; }
         public bool UseCaptcha { get; set; }
         public bool ServerUnderLoad { get; set; } = false;

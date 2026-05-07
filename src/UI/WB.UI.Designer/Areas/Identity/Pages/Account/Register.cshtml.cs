@@ -91,10 +91,15 @@ namespace WB.UI.Designer.Areas.Identity.Pages.Account
                 : null;
             if (Input != null && ModelState.IsValid)
             {
-                if (this.CaptchaOptions.Value.CaptchaType == CaptchaProviderType.Recaptcha)
+                if (this.CaptchaOptions.Value.CaptchaType == CaptchaProviderType.Recaptcha
+                    || this.CaptchaOptions.Value.CaptchaType == CaptchaProviderType.RecaptchaV3)
                 {
                     var recaptcha = await this.recaptchaService.Validate(Request);
-                    if (!recaptcha.success)
+                    var isValid = recaptcha.success;
+                    if (isValid && this.CaptchaOptions.Value.CaptchaType == CaptchaProviderType.RecaptchaV3)
+                        isValid = recaptcha.score >= this.CaptchaOptions.Value.RecaptchaV3MinimumScore;
+
+                    if (!isValid)
                     {
                         this.ErrorMessage = ErrorMessages.You_did_not_type_the_verification_word_correctly;
                         return Page();

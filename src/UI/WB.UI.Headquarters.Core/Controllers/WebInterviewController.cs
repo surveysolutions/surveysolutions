@@ -966,7 +966,8 @@ namespace WB.UI.Headquarters.Controllers
                 IsPasswordInvalid = ViewData.ModelState.TryGetValue("InvalidPassword", out var invalidPassword) && invalidPassword.Errors.Any(),
                 SubmitUrl = Url.Action("Start", "WebInterview"),
                 UseCaptcha = webInterviewConfig.UseCaptcha,
-                RecaptchaSiteKey = webInterviewConfig.UseCaptcha && captchaConfig.Value.CaptchaType == CaptchaProviderType.Recaptcha ? recaptchaSettings.Value.SiteKey : null,
+                RecaptchaSiteKey = webInterviewConfig.UseCaptcha && (captchaConfig.Value.CaptchaType == CaptchaProviderType.Recaptcha || captchaConfig.Value.CaptchaType == CaptchaProviderType.RecaptchaV3) ? recaptchaSettings.Value.SiteKey : null,
+                UseRecaptchaV3 = captchaConfig.Value.CaptchaType == CaptchaProviderType.RecaptchaV3,
                 HostedCaptchaHtml = webInterviewConfig.UseCaptcha && captchaConfig.Value.CaptchaType == CaptchaProviderType.Hosted ? serviceLocator.GetInstance<IHostedCaptcha>().Render().Value : null,
             };
 

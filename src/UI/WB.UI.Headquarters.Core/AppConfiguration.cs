@@ -43,6 +43,12 @@ namespace WB.UI.Headquarters
             
             services.Configure<PreloadingConfig>(configuration.GetSection("PreLoading"));
             services.Configure<RecaptchaSettings>(configuration.CaptchaOptionsSection());
+            services.PostConfigure<RecaptchaSettings>(settings =>
+            {
+                var captchaConfig = configuration.CaptchaOptionsSection().Get<CaptchaConfig>() ?? new CaptchaConfig();
+                if (captchaConfig.CaptchaType == CaptchaProviderType.RecaptchaV3)
+                    settings.Version = "v3";
+            });
             services.Configure<SchedulerConfig>(configuration.GetSection("Scheduler"));
            
             services.Configure<GeospatialConfig>(configuration.GetSection("Geospatial"));
