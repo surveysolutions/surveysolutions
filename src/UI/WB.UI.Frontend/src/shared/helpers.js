@@ -13,7 +13,7 @@ export const DateFormats = {
 }
 
 export function formatUtcDate(date, format = DateFormats.dateTime) {
-    return date == null || date === ''
+    return date === null || date === undefined || date === ''
         ? ''
         : moment.utc(date).local().format(format)
 }

@@ -1,9 +1,9 @@
-process.env.TZ = 'America/New_York'
-
 let formatUtcDate
 let DateFormats
+const originalTimezone = process.env.TZ
 
 beforeAll(async () => {
+    process.env.TZ = 'America/New_York'
     global.window = {
         CONFIG: {
             locale: {
@@ -15,6 +15,11 @@ beforeAll(async () => {
     const helpers = await import('../../../src/shared/helpers.js')
     formatUtcDate = helpers.formatUtcDate
     DateFormats = helpers.DateFormats
+})
+
+afterAll(() => {
+    process.env.TZ = originalTimezone
+    delete global.window
 })
 
 describe('formatUtcDate', () => {
