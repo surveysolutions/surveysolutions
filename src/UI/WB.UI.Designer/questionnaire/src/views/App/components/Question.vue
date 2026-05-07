@@ -352,6 +352,7 @@ export default {
     },
     mounted() {
         this.scrollTo();
+        this.$emitter.on('saveCurrentEntityRequested', this.saveQuestion);
 
         // https://developer.mozilla.org/en-US/docs/Web/API/Broadcast_Channel_API
         // Automatically reload window on popup close. If supported by browser
@@ -364,6 +365,9 @@ export default {
                 }
             }
         }
+    },
+    beforeUnmount() {
+        this.$emitter.off('saveCurrentEntityRequested', this.saveQuestion);
     },
     computed: {
         currentQuestionScope() {

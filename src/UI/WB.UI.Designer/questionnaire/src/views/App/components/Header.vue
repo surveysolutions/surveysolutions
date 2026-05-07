@@ -170,6 +170,9 @@ import { useRoute } from 'vue-router';
 
 import { sanitizeUrl } from '../../../utils/sanitizeUrl';
 
+const pendingSaveWaitRetries = 50;
+const pendingSaveWaitDelayMs = 100;
+
 export default {
     name: 'QuestionnaireHeader',
     components: {
@@ -243,24 +246,29 @@ export default {
     methods: {
         async webTest() {
             const webTesterWindow = WebTesterApi.openWindow();
-            await this.savePendingChangesBeforeWebTest();
-            await WebTesterApi.run(this.questionnaireId, null, webTesterWindow);
+            try {
+                await this.savePendingChangesBeforeWebTest();
+                await WebTesterApi.run(this.questionnaireId, null, webTesterWindow);
+            } catch (e) {
+                webTesterWindow?.close();
+                throw e;
+            }
         },
         async savePendingChangesBeforeWebTest() {
-            const saveButtons = Array.from(
-                document.querySelectorAll('.btn.btn-lg.btn-primary:not([disabled])')
-            ).filter(button => button.offsetParent !== null);
-
-            if (saveButtons.length === 0) return;
-
-            saveButtons.forEach(button => button.click());
+            this.$emitter.emit('saveCurrentEntityRequested');
             await this.waitForPendingSaves();
         },
         async waitForPendingSaves() {
-            for (let i = 0; i < 50; i++) {
+            for (let i = 0; i < pendingSaveWaitRetries; i++) {
                 if (!this.progressStore.getIsRunning) return;
-                await new Promise(resolve => setTimeout(resolve, 100));
+                await new Promise(resolve =>
+                    setTimeout(resolve, pendingSaveWaitDelayMs)
+                );
             }
+
+            throw new Error(
+                'Saving questionnaire changes timed out before launching test. Please save manually and try again.'
+            );
         },
         showDownloadPdf() {
             this.downloadPDFDialog.open();
