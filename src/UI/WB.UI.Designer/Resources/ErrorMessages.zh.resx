@@ -235,7 +235,7 @@
     <value>您的问卷模板版本有问题。请联系support@mysurvey.solutions。</value>
   </data>
   <data name="You_did_not_type_the_verification_word_correctly" xml:space="preserve">
-    <value>验证码不正确。请重试。</value>
+    <value>您必须确认您不是机器人。请再试一次。</value>
   </data>
   <data name="Your_email_is_verified" xml:space="preserve">
     <value>问卷设计系统成功确认了您的电子邮箱。</value>

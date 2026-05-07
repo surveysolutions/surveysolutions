@@ -45,7 +45,7 @@
       <value>O nome de usuário ou a senha fornecida está incorreta. Por favor, reentre.</value>
     </data>
     <data name="You_did_not_type_the_verification_word_correctly" xml:space="preserve">
-      <value>A palavra de verificação está incorreta. Por favor, tente novamente.</value>
+      <value>Você deve confirmar que não é um robô. Por favor, tente novamente.</value>
     </data>
     <data name="EmptyUserNameOrPassword" xml:space="preserve">
       <value>Nome de usuário ou senha está vazio.</value>

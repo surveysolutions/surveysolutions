@@ -259,7 +259,7 @@
     <value>Виникла проблема з версією вашої анкети. Будь ласка, зверніться за адресою support@mysurvey.solutions.</value>
   </data>
   <data name="You_did_not_type_the_verification_word_correctly" xml:space="preserve">
-    <value>Неправильно введено перевірочне слово. Будь ласка, спробуйте ще раз.</value>
+    <value>Ви повинні підтвердити, що ви не робот. Будь ласка, спробуйте ще раз.</value>
   </data>
   <data name="Your_email_is_verified" xml:space="preserve">
     <value>Дизайнер успішно підтвердив ваш email.</value>

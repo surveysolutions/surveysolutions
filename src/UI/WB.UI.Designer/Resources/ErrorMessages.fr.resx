@@ -151,7 +151,7 @@
     <value>Le nom d'utilisateur ou le mot de passe fourni est incorrect. Veuillez saisir à nouveau.</value>
   </data>
   <data name="You_did_not_type_the_verification_word_correctly" xml:space="preserve">
-    <value>Le mot de vérification est incorrect. Veuillez réessayer.</value>
+    <value>Vous devez confirmer que vous n'êtes pas un robot. Veuillez réessayer.</value>
   </data>
   <data name="EmptyUserNameOrPassword" xml:space="preserve">
     <value>Le nom d'utilisateur ou le mot de passe est vide.</value>

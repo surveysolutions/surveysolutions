@@ -151,7 +151,7 @@
     <value>Неверное имя пользователя или пароль. Пожалуйста, повторите ввод.</value>
   </data>
   <data name="You_did_not_type_the_verification_word_correctly" xml:space="preserve">
-    <value>Проверочное слово неверно. Пожалуйста, попробуйте еще раз.</value>
+    <value>Вы должны подтвердить, что вы не робот. Пожалуйста, попробуйте еще раз.</value>
   </data>
   <data name="EmptyUserNameOrPassword" xml:space="preserve">
     <value>Имя пользователя или пароль пуст.</value>
