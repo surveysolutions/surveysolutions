@@ -12,6 +12,12 @@ export const DateFormats = {
     dateTimeInList: 'MMM DD, YYYY HH:mm',
 }
 
+export function formatUtcDate(date, format = DateFormats.dateTime) {
+    return date == null || date === ''
+        ? ''
+        : moment.utc(date).local().format(format)
+}
+
 export function humanFileSize(bytes, si) {
     var thresh = si ? 1000 : 1024
     if (Math.abs(bytes) < thresh) {
