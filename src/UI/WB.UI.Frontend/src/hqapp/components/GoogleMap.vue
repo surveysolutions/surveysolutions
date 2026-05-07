@@ -196,6 +196,8 @@ import { Form, Field } from 'vee-validate'
 import moment from 'moment'
 import { DateFormats } from '~/shared/helpers'
 
+const mapReloadSkipTimeoutMs = 500
+
 export default {
     name: "MapWithMarkers",
     mixins: [routeSync],
@@ -522,16 +524,15 @@ export default {
         },
 
         skipNextMapReload() {
-            this.isMapReloaded = true
-
             if (this.mapReloadSkipTimeoutId != null) {
                 clearTimeout(this.mapReloadSkipTimeoutId)
             }
 
+            this.isMapReloaded = true
             this.mapReloadSkipTimeoutId = setTimeout(() => {
                 this.isMapReloaded = false
                 this.mapReloadSkipTimeoutId = null
-            }, 500)
+            }, mapReloadSkipTimeoutMs)
         },
 
         async initializeMap() {
