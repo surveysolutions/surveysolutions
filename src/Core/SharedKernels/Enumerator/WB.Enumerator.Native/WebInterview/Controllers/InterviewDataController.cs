@@ -338,6 +338,8 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
 
             // Extract variable names into a separate dictionary so they are not
             // re-transmitted on every subsequent entity-detail refresh request.
+            // Name is cleared on each detail object because it is now managed via
+            // the returned VariableNames map on the client side.
             var variableNames = new Dictionary<string, string>();
             foreach (var detail in details)
             {
@@ -352,7 +354,7 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
             {
                 Entities = entities,
                 Details = details,
-                VariableNames = variableNames.Count > 0 ? variableNames : null
+                VariableNames = variableNames
             };
 
             return section;

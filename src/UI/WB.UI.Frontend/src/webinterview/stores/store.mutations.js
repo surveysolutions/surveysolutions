@@ -9,7 +9,7 @@ export default {
             if (entity != null) {
                 entity.updatedAt = new Date()
                 // Restore variable name from cache if not included in this update
-                if (!entity.name && state.variableNames[entity.id]) {
+                if (entity.name == null && state.variableNames[entity.id]) {
                     entity.name = state.variableNames[entity.id]
                 }
                 state.entityDetails[entity.id] = entity
