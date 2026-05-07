@@ -111,7 +111,11 @@ export default {
                     this.recaptchaV3Token = token
                     // Refresh the token every 90 seconds (v3 tokens expire after 2 minutes)
                     this.recaptchaV3IntervalId = setInterval(() => {
-                        if (!window.grecaptcha) return
+                        if (!window.grecaptcha) {
+                            clearInterval(this.recaptchaV3IntervalId)
+                            this.recaptchaV3IntervalId = null
+                            return
+                        }
                         window.grecaptcha.execute(siteKey, { action: 'start' }).then(t => {
                             this.recaptchaV3Token = t
                         }).catch(() => { /* Ignore token refresh failures */ })
