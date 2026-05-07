@@ -19,6 +19,8 @@ namespace WB.Core.Infrastructure.HttpServices.Services
 {
     public class RestService : IRestService
     {
+        private const char UrlPathDelimiter = '/';
+
         private class ResponseWithErrorMessage
         {
             public string Code { get; set; }
@@ -96,7 +98,10 @@ namespace WB.Core.Infrastructure.HttpServices.Services
             var linkedCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(requestTimeoutToken,
                 userCancellationToken ?? default);
 
-            var fullUrl = new Url(endpoint, (credentials?.Workspace ?? "") + "/" + url, queryString);
+            var fullUrl = new Url(endpoint, string.Join(UrlPathDelimiter,
+                new[] { credentials?.Workspace, url }
+                    .Where(pathPart => !string.IsNullOrWhiteSpace(pathPart))
+                    .Select(pathPart => pathPart.Trim(UrlPathDelimiter))), queryString);
 
             var request = new HttpRequestMessage()
             {
