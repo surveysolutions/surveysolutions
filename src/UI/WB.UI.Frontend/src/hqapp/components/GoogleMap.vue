@@ -753,6 +753,7 @@ export default {
                                             -30
                                         ),
                                     })
+                                    self.isMapReloaded = true
                                     self.infoWindow.open(self.map)
                                 })
                             } else {
@@ -783,6 +784,7 @@ export default {
                             self.infoWindow.setOptions({
                                 pixelOffset: new google.maps.Size(0, -30),
                             })
+                            self.isMapReloaded = true
                             self.infoWindow.open(self.map)
                         })
                     }
@@ -805,6 +807,7 @@ export default {
                         self.infoWindow.setOptions({
                             pixelOffset: new google.maps.Size(0, -30),
                         })
+                        self.isMapReloaded = true
                         self.infoWindow.open(self.map)
                     })
                 }
@@ -814,6 +817,7 @@ export default {
                     nextTick(function () {
                         self.infoWindow.setContent(label)
                         self.infoWindow.setPosition(event.latLng)
+                        self.isMapReloaded = true
                         self.infoWindow.open(self.map)
                     })
                 }
