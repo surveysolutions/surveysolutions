@@ -1074,6 +1074,9 @@
   <data name="HotkeysSearch" xml:space="preserve">
     <value>Pesquisar por subseções e perguntas na seção</value>
   </data>
+  <data name="HotkeysTest" xml:space="preserve">
+    <value>Testar questionário no WebTester</value>
+  </data>
   <data name="MultipleDependencies" xml:space="preserve">
     <value>Uma ou mais perguntas/subseções dependem de</value>
   </data>
