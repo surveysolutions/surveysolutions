@@ -389,7 +389,7 @@ hoặc liên hệ với giám sát viên của bạn
     <value>Đồng bộ hóa hoàn thành với lỗi</value>
   </data>
     <data name="Synchronization_Upload_CompletedAssignments_Text" xml:space="preserve">
-    <value>nhiệm vụ hoàn thành</value>
+    <value>cuộc phỏng vấn hoàn thành</value>
   </data>
     <data name="Synchronization_Upload_CalendarEvents_Text" xml:space="preserve">
     <value>sự kiện lịch</value>
