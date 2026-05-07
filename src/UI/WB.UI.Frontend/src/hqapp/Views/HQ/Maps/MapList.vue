@@ -46,6 +46,7 @@
 import { DateFormats, humanFileSize } from '~/shared/helpers'
 import moment from 'moment'
 import * as toastr from 'toastr'
+import { escape } from 'lodash'
 import gql from 'graphql-tag'
 const query = gql`query MapsList($workspace: String!, $order: [MapsSort!], $skip: Int, $take: Int, $where: MapsFilter) {
   maps(workspace: $workspace, order: $order, skip: $skip, take: $take, where: $where) {
@@ -212,16 +213,23 @@ export default {
                         data: 'fileName',
                         name: 'MapType',
                         class: 'parameters',
+                        width: '1%',
                         title: this.$t('Pages.MapList_MapType'),
                         render(data) {
-                            const icon_name = data.endsWith('.shp') ? 'shapefile_icon.svg' : 'map_icon.svg'
-                            return `<img src="/img/${icon_name}" width="20px"></img>`
+                            if (data.endsWith('.shp')) {
+                                const tooltip = escape(self.$t('Pages.MapList_ShapeFileTooltip'))
+                                return `<img src="/img/shapefile_icon.svg" width="20px" title="${tooltip}">`
+                            } else {
+                                const tooltip = escape(self.$t('Pages.MapList_MapFileTooltip'))
+                                return `<img src="/img/map_icon.svg" width="20px" title="${tooltip}">`
+                            }
                         },
                     },
                     {
                         data: 'size',
                         name: 'Size',
                         class: 'parameters',
+                        width: '1%',
                         title: this.$t('Pages.MapList_Size'),
                         render(data) {
                             return humanFileSize(data, false)
@@ -231,6 +239,7 @@ export default {
                         data: 'importDateUtc',
                         name: 'ImportDateUtc',
                         class: 'date',
+                        width: '1%',
                         title: this.$t('Pages.MapList_Updated'),
                         render(data) {
                             return moment
