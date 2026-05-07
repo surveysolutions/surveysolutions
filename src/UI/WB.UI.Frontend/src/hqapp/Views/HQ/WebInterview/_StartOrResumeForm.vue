@@ -98,26 +98,25 @@ export default {
                 const script = document.createElement('script')
                 script.src = `https://www.google.com/recaptcha/api.js?render=${siteKey}`
                 script.onload = () => this.executeRecaptchaV3(siteKey)
+                script.onerror = () => { /* Script failed to load — the form remains submittable without a token; the server will reject the request */ }
                 document.head.appendChild(script)
             } else {
                 this.executeRecaptchaV3(siteKey)
             }
         },
         executeRecaptchaV3(siteKey) {
+            if (!window.grecaptcha) return
             window.grecaptcha.ready(() => {
                 window.grecaptcha.execute(siteKey, { action: 'start' }).then(token => {
                     this.recaptchaV3Token = token
                     // Refresh the token every 90 seconds (v3 tokens expire after 2 minutes)
                     this.recaptchaV3IntervalId = setInterval(() => {
+                        if (!window.grecaptcha) return
                         window.grecaptcha.execute(siteKey, { action: 'start' }).then(t => {
                             this.recaptchaV3Token = t
-                        }).catch(err => {
-                            console.error('reCAPTCHA v3 token refresh failed:', err)
-                        })
+                        }).catch(() => { /* Ignore token refresh failures */ })
                     }, 90000)
-                }).catch(err => {
-                    console.error('reCAPTCHA v3 execute failed:', err)
-                })
+                }).catch(() => { /* Ignore token generation failures; the server will reject the request */ })
             })
         },
     },
