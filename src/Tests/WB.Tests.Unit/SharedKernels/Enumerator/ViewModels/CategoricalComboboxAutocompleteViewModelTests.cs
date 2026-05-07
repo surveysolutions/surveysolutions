@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -81,6 +82,36 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             // assert
             Assert.That(vm.AutoCompleteSuggestions.Count, Is.EqualTo(2));
             Assert.That(vm.AutoCompleteSuggestions.Select(x => x.Value), Is.EquivalentTo(new[] {2, 3}));
+        }
+
+        [Test]
+        public async Task when_FilterCommand_then_should_not_toggle_Loading_state()
+        {
+            // arrange
+            var autocompleteQuestionId = Guid.Parse("11111111111111111111111111111111");
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                Create.Entity.MultyOptionsQuestion(autocompleteQuestionId,
+                    new[]
+                    {
+                        Create.Entity.Answer("1", 1),
+                        Create.Entity.Answer("12", 2),
+                        Create.Entity.Answer("123", 3),
+                    }));
+
+            var interview = SetUp.StatefulInterview(questionnaire);
+            var filteredViewModel = Create.ViewModel.FilteredOptionsViewModel(Identity.Create(autocompleteQuestionId, RosterVector.Empty), questionnaire, interview);
+            var vm = Create.ViewModel.CategoricalComboboxAutocompleteViewModel(filteredViewModel);
+
+            var changedProperties = new List<string>();
+            vm.PropertyChanged += (_, args) => changedProperties.Add(args.PropertyName);
+
+            // act
+            await vm.FilterCommand.ExecuteAsync(string.Empty);
+            Thread.Sleep(1000);
+
+            // assert
+            Assert.That(changedProperties, Does.Not.Contain(nameof(CategoricalComboboxAutocompleteViewModel.Loading)));
+            Assert.That(vm.Loading, Is.False);
         }
     }
 }

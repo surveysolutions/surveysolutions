@@ -224,27 +224,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private List<OptionWithSearchTerm> GetSuggestions(string filter)
         {
-            try
-            {
-                Loading = true;
-                
-                List<CategoricalOption> filteredOptions = this.filteredOptionsViewModel.GetOptions(filter, this.excludedOptions, 20);
+            List<CategoricalOption> filteredOptions = this.filteredOptionsViewModel.GetOptions(filter, this.excludedOptions, 20);
 
-                var categoricalOptions = filteredOptions.Count == 1 && displaySelectedValue
-                    ? filteredOptions
-                    : filteredOptions.Where(x => !this.excludedOptions.Contains(x.Value));
+            var categoricalOptions = filteredOptions.Count == 1 && displaySelectedValue
+                ? filteredOptions
+                : filteredOptions.Where(x => !this.excludedOptions.Contains(x.Value));
 
-                var options = categoricalOptions
-                    .Where(m => !m.Title.IsNullOrEmpty())
-                    .Select(m => ToOptionWithSearchTerm(filter, m))
-                    .ToList();
+            var options = categoricalOptions
+                .Where(m => !m.Title.IsNullOrEmpty())
+                .Select(m => ToOptionWithSearchTerm(filter, m))
+                .ToList();
 
-                return options;
-            }
-            finally
-            {
-                Loading = false;
-            }
+            return options;
         }
 
         private static OptionWithSearchTerm ToOptionWithSearchTerm(string filter, CategoricalOption model)
