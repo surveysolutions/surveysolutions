@@ -1311,10 +1311,10 @@
     <value>النوع</value>
   </data>
   <data name="MapList_MapFileTooltip" xml:space="preserve">
-    <value>Map file</value>
+    <value>ملف خريطة</value>
   </data>
   <data name="MapList_ShapeFileTooltip" xml:space="preserve">
-    <value>Shape file</value>
+    <value>ملف شكل</value>
   </data>
   <data name="MapList_Name" xml:space="preserve">
     <value>الاسم</value>
