@@ -586,7 +586,7 @@
     <value>同步成功完成</value>
   </data>
   <data name="Synchronization_Upload_CompletedAssignments_Text" xml:space="preserve">
-    <value>已完成的任务</value>
+    <value>已完成的访谈</value>
   </data>
   <data name="Synchronization_Upload_Description_Format" xml:space="preserve">
     <value>{1}{2}中的{0}已完成</value>

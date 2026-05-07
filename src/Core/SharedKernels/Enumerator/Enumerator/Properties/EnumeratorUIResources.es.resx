@@ -322,7 +322,7 @@
     <value>Sincronización completada con éxito</value>
   </data>
   <data name="Synchronization_Upload_CompletedAssignments_Text" xml:space="preserve">
-    <value>tareas completadas</value>
+    <value>entrevistas completadas</value>
   </data>
   <data name="Synchronization_Upload_Description_Format" xml:space="preserve">
     <value>{0} de {1} {2} completados</value>

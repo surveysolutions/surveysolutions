@@ -733,7 +733,7 @@
     <value>Aplikacioni i supervizorit duhet të sinkronizohet.</value>
   </data>
   <data name="Synchronization_Upload_CompletedAssignments_Text" xml:space="preserve">
-    <value>detyra të përfunduara</value>
+    <value>intervista të përfunduara</value>
   </data>
   <data name="Synchronization_Upload_Description_Format" xml:space="preserve">
     <value>{0} nga {1} {2} u kryen</value>

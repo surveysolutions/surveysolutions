@@ -330,7 +330,7 @@
     <value>Синхронізацію успішно завершено</value>
   </data>
   <data name="Synchronization_Upload_CompletedAssignments_Text" xml:space="preserve">
-    <value>виконані завдання</value>
+    <value>виконані інтерв'ю</value>
   </data>
   <data name="Synchronization_Upload_Description_Format" xml:space="preserve">
     <value>{0} з {1} {2} зроблено</value>

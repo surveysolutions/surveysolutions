@@ -315,7 +315,7 @@ pour plus d'instructions</value>
     <value>Synchronisation terminée avec des erreurs</value>
   </data>
   <data name="Synchronization_Upload_CompletedAssignments_Text" xml:space="preserve">
-    <value>affectations achevées</value>
+    <value>entretiens achevés</value>
   </data>
   <data name="Synchronization_Upload_CalendarEvents_Text" xml:space="preserve">
     <value>événements du calendrier</value>
