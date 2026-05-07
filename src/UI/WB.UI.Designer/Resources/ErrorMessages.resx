@@ -151,7 +151,7 @@
     <value>The user name or password provided is incorrect. Please, reenter.</value>
   </data>
   <data name="You_did_not_type_the_verification_word_correctly" xml:space="preserve">
-    <value>Verification word is incorrect. Please try again.</value>
+    <value>You must confirm you are not a robot. Please try again.</value>
   </data>
   <data name="EmptyUserNameOrPassword" xml:space="preserve">
     <value>User name or password is empty.</value>
