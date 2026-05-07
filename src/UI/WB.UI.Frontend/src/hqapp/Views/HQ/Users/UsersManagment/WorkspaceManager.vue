@@ -56,7 +56,7 @@ export default {
             if (!search) return this.workspaces
 
             return filter(this.workspaces,
-                w => this.normalizeForSearch(`${w.key || ''}${w.value || ''}`).includes(search))
+                w => this.normalizeForSearch(`${w.key || ''} ${w.value || ''}`).includes(search))
         },
 
         selectedWorkspaces() {
@@ -74,7 +74,7 @@ export default {
 
     methods: {
         normalizeForSearch(value) {
-            return (value || '').toString().trim().toLocaleLowerCase()
+            return (value || '').toString().trim().toLowerCase()
         },
 
         reset() {
