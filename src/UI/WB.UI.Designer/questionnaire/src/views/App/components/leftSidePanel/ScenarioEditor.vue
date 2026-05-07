@@ -11,7 +11,7 @@
                         <button type="button" class="close" aria-hidden="true" @click="isOpen = false"></button>
                         <h3 class="modal-title">
                             <span>{{ $t('QuestionnaireEditor.ScenarioDetails') }}</span>:
-                            <span style="overflow: hidden;">{{ scenario.title }}</span>
+                            <em>{{ scenario.title }}</em>
                         </h3>
                     </div>
                     <div class="modal-body">
