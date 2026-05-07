@@ -336,10 +336,23 @@ namespace WB.Enumerator.Native.WebInterview.Controllers
 
             var details = GetEntitiesDetails(interviewId, entities.Select(e => e.Identity).ToArray(), sectionId);
 
+            // Extract variable names into a separate dictionary so they are not
+            // re-transmitted on every subsequent entity-detail refresh request.
+            var variableNames = new Dictionary<string, string>();
+            foreach (var detail in details)
+            {
+                if (detail?.Id != null && detail.Name != null)
+                {
+                    variableNames[detail.Id] = detail.Name;
+                    detail.Name = null;
+                }
+            }
+
             var section = new SectionData
             {
                 Entities = entities,
-                Details = details
+                Details = details,
+                VariableNames = variableNames.Count > 0 ? variableNames : null
             };
 
             return section;
