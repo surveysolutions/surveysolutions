@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.BoundedContexts.Headquarters.Designer;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -80,7 +81,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             bool includePdf, 
             bool shouldMigrateAssignments, 
             QuestionnaireIdentity migrateFrom,
-            CriticalityLevel? criticalityLevel)
+            CriticalityLevel? criticalityLevel,
+            bool copyWebInterviewSettings = false)
         {
             var userId = authorizedUser.Id;
             var userName = authorizedUser.UserName;
@@ -119,7 +121,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                         var questionnaireImportService = (QuestionnaireImportService)serviceLocatorLocal.GetInstance<IQuestionnaireImportService>();
                         var result = await questionnaireImportService.ImportImpl(designerCredentials, serviceLocatorLocal, userId, userName, 
                             questionnaireId, questionnaireImportResult, name, isCensusMode, comment, requestUrl, 
-                            shouldMigrateAssignments, migrateFrom, includePdf, criticalityLevel);
+                            shouldMigrateAssignments, migrateFrom, includePdf, criticalityLevel, copyWebInterviewSettings);
                         return result;
                     }
                     finally
@@ -169,7 +171,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             QuestionnaireImportResult questionnaireImportResult, string name, bool isCensusMode,
             string comment, string requestUrl, bool shouldMigrateAssignments, 
             QuestionnaireIdentity migrateFrom, bool includePdf = true,
-            CriticalityLevel? criticalityLevel = null)
+            CriticalityLevel? criticalityLevel = null, bool copyWebInterviewSettings = false)
         {
             var designerApi = serviceLocator.GetInstance<IDesignerApi>();
 
@@ -273,6 +275,32 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     questionnairePackage.HasCriticalityCheck,
                     criticalityLevel));
                 questionnaireProgress.Report(80);
+
+                if (copyWebInterviewSettings && questionnaireIdentity.Version > 1)
+                {
+                    var previousVersionIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireIdentity.Version - 1);
+                    var webInterviewConfigProvider = serviceLocator.GetInstance<IWebInterviewConfigProvider>();
+                    var previousConfig = webInterviewConfigProvider.Get(previousVersionIdentity);
+
+                    var newConfig = new WebInterviewConfig
+                    {
+                        QuestionnaireId = questionnaireIdentity,
+                        Started = false,
+                        UseCaptcha = previousConfig.UseCaptcha,
+                        SingleResponse = previousConfig.SingleResponse,
+                        EmailOnComplete = previousConfig.EmailOnComplete,
+                        AttachAnswersInEmail = previousConfig.AttachAnswersInEmail,
+                        AllowSwitchToCawiForInterviewer = previousConfig.AllowSwitchToCawiForInterviewer,
+                        AllowTranscriptDownloading = previousConfig.AllowTranscriptDownloading,
+                        ReminderAfterDaysIfNoResponse = previousConfig.ReminderAfterDaysIfNoResponse,
+                        ReminderAfterDaysIfPartialResponse = previousConfig.ReminderAfterDaysIfPartialResponse,
+                        CustomMessages = new Dictionary<WebInterviewUserMessages, string>(previousConfig.CustomMessages),
+                        EmailTemplates = new Dictionary<EmailTextTemplateType, EmailTextTemplate>(previousConfig.EmailTemplates),
+                    };
+
+                    webInterviewConfigProvider.Store(questionnaireIdentity, newConfig);
+                    logger.Verbose($"Copied web interview settings from version {previousVersionIdentity.Version} to {questionnaireIdentity.Version} for questionnaire {questionnaireId}");
+                }
 
                 logger.Verbose($"UpdateRevisionMetadata: {questionnaire.Title}({questionnaire.PublicKey} rev.{questionnaire.Revision})");
                 await designerApi.UpdateRevisionMetadata(questionnaire.PublicKey, questionnaire.Revision,
