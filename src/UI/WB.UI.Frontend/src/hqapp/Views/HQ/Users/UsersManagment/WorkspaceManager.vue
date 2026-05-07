@@ -52,8 +52,11 @@ export default {
 
     computed: {
         workspacesList() {
-            if (this.search == null || this.search == '') return this.workspaces
-            return filter(this.workspaces, w => (w.key + w.value).toLowerCase().indexOf(this.search.toLowerCase()) >= 0)
+            const search = this.normalizeForSearch(this.search)
+            if (!search) return this.workspaces
+
+            return filter(this.workspaces,
+                w => this.normalizeForSearch(`${w.key || ''}${w.value || ''}`).includes(search))
         },
 
         selectedWorkspaces() {
@@ -70,6 +73,10 @@ export default {
     },
 
     methods: {
+        normalizeForSearch(value) {
+            return (value || '').toString().trim().toLocaleLowerCase()
+        },
+
         reset() {
             this.selected = {}
             this.search = ''
