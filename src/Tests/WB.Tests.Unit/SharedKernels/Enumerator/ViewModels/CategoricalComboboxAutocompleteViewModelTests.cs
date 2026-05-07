@@ -1,7 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using MvvmCross.Base;
@@ -51,7 +50,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             var vm = Create.ViewModel.CategoricalComboboxAutocompleteViewModel(filteredViewModel);
             // act
             await vm.FilterCommand.ExecuteAsync("2");
-            Thread.Sleep(1000);
             // assert
             Assert.That(vm.AutoCompleteSuggestions.Count, Is.EqualTo(2));
             Assert.That(vm.AutoCompleteSuggestions.Select(x => x.Value), Is.EquivalentTo(new[] { 2, 3 }));
@@ -78,7 +76,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             vm.ExcludeOptions(excludedOptions);
             // act
             await vm.FilterCommand.ExecuteAsync("1");
-            Thread.Sleep(1000);
             // assert
             Assert.That(vm.AutoCompleteSuggestions.Count, Is.EqualTo(2));
             Assert.That(vm.AutoCompleteSuggestions.Select(x => x.Value), Is.EquivalentTo(new[] {2, 3}));
@@ -107,7 +104,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
 
             // act
             await vm.FilterCommand.ExecuteAsync(string.Empty);
-            Thread.Sleep(1000);
 
             // assert
             Assert.That(changedProperties, Does.Not.Contain(nameof(CategoricalComboboxAutocompleteViewModel.Loading)));
