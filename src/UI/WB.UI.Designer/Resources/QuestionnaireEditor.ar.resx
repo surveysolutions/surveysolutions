@@ -1075,6 +1075,9 @@
   <data name="HotkeysSearch" xml:space="preserve">
       <value>البحث عن الأقسام الفرعية والأسئلة في القسم</value>
   </data>
+  <data name="HotkeysTest" xml:space="preserve">
+      <value>اختبر الاستبيان في WebTester</value>
+  </data>
 
 <data name="MultipleDependencies" xml:space="preserve">
     <value>يعتمد على سؤال أو أكثر / قسم فرعي</value>
