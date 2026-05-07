@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Threading.Tasks;
 using Autofac;
 using MvvmCross;
@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -29,6 +30,7 @@ namespace WB.UI.Interviewer
         private readonly IAuditLogService auditLogService;
         private readonly IEnumeratorSettings enumeratorSettings;
         private readonly IDeviceSettings deviceSettings;
+        private bool downgradeDetected = false;
         
         public InterviewerAppStart(IMvxApplication application, 
             IAuditLogService auditLogService,
@@ -56,6 +58,18 @@ namespace WB.UI.Interviewer
             logger.Info($"Android Version: {this.deviceSettings.GetAndroidVersion()}");
             logger.Info($"Google Play Services Version: {this.deviceSettings.GetGooglePlayServicesVersion()}");
             logger.Info($"Disk: {this.deviceSettings.GetDiskInformation()}");
+
+            var currentVersionCode = this.deviceSettings.GetApplicationVersionCode();
+            var lastKnownVersionCode = this.enumeratorSettings.GetLastKnownAppVersionCode();
+
+            if (lastKnownVersionCode.HasValue && currentVersionCode < lastKnownVersionCode.Value)
+            {
+                logger.Error($"Downgrade detected. Current version: {currentVersionCode}, last known version: {lastKnownVersionCode.Value}");
+                downgradeDetected = true;
+                return base.ApplicationStartup(hint);
+            }
+
+            this.enumeratorSettings.SetLastKnownAppVersionCode(currentVersionCode);
 
             migrationRunner.MigrateUp("Interviewer", this.GetType().Assembly, typeof(Encrypt_Data).Assembly);
 
@@ -126,6 +140,15 @@ namespace WB.UI.Interviewer
         protected override async Task NavigateToFirstViewModel(object hint = null)
         {
             var viewModelNavigationService = Mvx.IoCProvider.Resolve<IViewModelNavigationService>();
+
+            if (downgradeDetected)
+            {
+                var userInteractionService = Mvx.IoCProvider.Resolve<IUserInteractionService>();
+                await userInteractionService.AlertAsync(EnumeratorUIResources.Downgrade_ErrorMessage);
+                viewModelNavigationService.CloseApplication();
+                return;
+            }
+
             var interviewerPrincipal = Mvx.IoCProvider.Resolve<IInterviewerPrincipal>();
             
             if (!interviewerPrincipal.DoesIdentityExist())

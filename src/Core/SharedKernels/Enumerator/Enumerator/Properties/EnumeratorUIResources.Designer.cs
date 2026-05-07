@@ -1862,5 +1862,11 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
                 return ResourceManager.GetString("CommunicationIntegrityFailed", resourceCulture);
             }
         }
+        
+        public static string Downgrade_ErrorMessage {
+            get {
+                return ResourceManager.GetString("Downgrade_ErrorMessage", resourceCulture);
+            }
+        }
     }
 }

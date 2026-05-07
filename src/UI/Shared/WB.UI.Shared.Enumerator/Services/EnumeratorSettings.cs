@@ -275,5 +275,10 @@ namespace WB.UI.Shared.Enumerator.Services
         }
 
         public bool SupportOfflineMaps => true;
+
+        public int? GetLastKnownAppVersionCode() => this.CurrentSettings.LastKnownAppVersionCode;
+
+        public void SetLastKnownAppVersionCode(int code) =>
+            this.SaveCurrentSettings(settings => settings.LastKnownAppVersionCode = code);
     }
 }

@@ -442,4 +442,7 @@ Silahkan masukkan password Anda yang diperbarui. Jika hal itu tidak menyelesaika
   <data name="CommunicationIntegrityFailed" xml:space="preserve">
     <value>Respons yang diterima tampaknya tidak berasal dari server Survey Solutions. Ini biasanya disebabkan oleh proxy jaringan, firewall, atau gateway keamanan yang mencegat koneksi. Periksa koneksi jaringan Anda atau hubungi dukungan TI.</value>
   </data>
+  <data name="Downgrade_ErrorMessage" xml:space="preserve">
+    <value>This version of the application is older than the previously installed version. Please reinstall the latest version of the application.</value>
+  </data>
 </root>
