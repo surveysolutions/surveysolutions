@@ -221,9 +221,27 @@
 
          private void UpdateTypeOfInterviewsViewModelProperty(int tabPosition)
          {
-             var fragment = (MvvmCross.Platforms.Android.Views.Fragments.MvxFragment)this.fragmentStateAdapter.CreateFragment(tabPosition);
-             var viewModel = (ListViewModel)fragment.ViewModel;
+             var viewModel = this.fragmentStateAdapter.GetViewModelForPosition(tabPosition) as ListViewModel;
+             if (viewModel == null) return;
              this.ViewModel.TypeOfInterviews = viewModel.DashboardType;
+         }
+
+         private void NavigateToTabByDashboardType(DashboardGroupType dashboardGroupType)
+         {
+             RunOnUiThread(() =>
+             {
+                 if (this.fragmentStateAdapter == null || this.viewPager == null) return;
+                 for (int i = 0; i < this.fragmentStateAdapter.ItemCount; i++)
+                 {
+                     var vm = this.fragmentStateAdapter.GetViewModelForPosition(i) as ListViewModel;
+                     if (vm?.DashboardType == dashboardGroupType)
+                     {
+                         if (this.viewPager.CurrentItem != i)
+                             this.viewPager.SetCurrentItem(i, true);
+                         return;
+                     }
+                 }
+             });
          }
 
          protected override void OnStart()
@@ -246,6 +264,10 @@
              if (e.PropertyName == nameof(ViewModel.SynchronizationWithHqEnabled))
              {
                  this.InvalidateOptionsMenu();
+             }
+             else if (e.PropertyName == nameof(ViewModel.TypeOfInterviews))
+             {
+                 this.NavigateToTabByDashboardType(this.ViewModel.TypeOfInterviews);
              }
          }
 
@@ -402,9 +424,12 @@
 
          protected override void OnDestroy()
          {
-             if(this.ViewModel!= null)
+             if(this.ViewModel != null)
+             {
                  this.ViewModel.OnOfflineSynchronizationStarted = null;
-            
+                 this.ViewModel.PropertyChanged -= OnPropertyChanged;
+             }
+             
              this.fragmentStateAdapter?.Dispose();
 
              base.OnDestroy();
