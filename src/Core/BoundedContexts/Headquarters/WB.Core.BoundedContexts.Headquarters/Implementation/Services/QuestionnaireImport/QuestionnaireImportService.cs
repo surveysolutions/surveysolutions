@@ -282,24 +282,31 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     var webInterviewConfigProvider = serviceLocator.GetInstance<IWebInterviewConfigProvider>();
                     var previousConfig = webInterviewConfigProvider.Get(previousVersionIdentity);
 
-                    var newConfig = new WebInterviewConfig
+                    if (previousConfig != null)
                     {
-                        QuestionnaireId = questionnaireIdentity,
-                        Started = false,
-                        UseCaptcha = previousConfig.UseCaptcha,
-                        SingleResponse = previousConfig.SingleResponse,
-                        EmailOnComplete = previousConfig.EmailOnComplete,
-                        AttachAnswersInEmail = previousConfig.AttachAnswersInEmail,
-                        AllowSwitchToCawiForInterviewer = previousConfig.AllowSwitchToCawiForInterviewer,
-                        AllowTranscriptDownloading = previousConfig.AllowTranscriptDownloading,
-                        ReminderAfterDaysIfNoResponse = previousConfig.ReminderAfterDaysIfNoResponse,
-                        ReminderAfterDaysIfPartialResponse = previousConfig.ReminderAfterDaysIfPartialResponse,
-                        CustomMessages = new Dictionary<WebInterviewUserMessages, string>(previousConfig.CustomMessages),
-                        EmailTemplates = new Dictionary<EmailTextTemplateType, EmailTextTemplate>(previousConfig.EmailTemplates),
-                    };
+                        var newConfig = new WebInterviewConfig
+                        {
+                            QuestionnaireId = questionnaireIdentity,
+                            Started = false,
+                            UseCaptcha = previousConfig.UseCaptcha,
+                            SingleResponse = previousConfig.SingleResponse,
+                            EmailOnComplete = previousConfig.EmailOnComplete,
+                            AttachAnswersInEmail = previousConfig.AttachAnswersInEmail,
+                            AllowSwitchToCawiForInterviewer = previousConfig.AllowSwitchToCawiForInterviewer,
+                            AllowTranscriptDownloading = previousConfig.AllowTranscriptDownloading,
+                            ReminderAfterDaysIfNoResponse = previousConfig.ReminderAfterDaysIfNoResponse,
+                            ReminderAfterDaysIfPartialResponse = previousConfig.ReminderAfterDaysIfPartialResponse,
+                            CustomMessages = previousConfig.CustomMessages != null
+                                ? new Dictionary<WebInterviewUserMessages, string>(previousConfig.CustomMessages)
+                                : new Dictionary<WebInterviewUserMessages, string>(),
+                            EmailTemplates = previousConfig.EmailTemplates != null
+                                ? new Dictionary<EmailTextTemplateType, EmailTextTemplate>(previousConfig.EmailTemplates)
+                                : new Dictionary<EmailTextTemplateType, EmailTextTemplate>(),
+                        };
 
-                    webInterviewConfigProvider.Store(questionnaireIdentity, newConfig);
-                    logger.Verbose($"Copied web interview settings from version {previousVersionIdentity.Version} to {questionnaireIdentity.Version} for questionnaire {questionnaireId}");
+                        webInterviewConfigProvider.Store(questionnaireIdentity, newConfig);
+                        logger.Verbose($"Copied web interview settings from version {previousVersionIdentity.Version} to {questionnaireIdentity.Version} for questionnaire {questionnaireId}");
+                    }
                 }
 
                 logger.Verbose($"UpdateRevisionMetadata: {questionnaire.Title}({questionnaire.PublicKey} rev.{questionnaire.Revision})");
