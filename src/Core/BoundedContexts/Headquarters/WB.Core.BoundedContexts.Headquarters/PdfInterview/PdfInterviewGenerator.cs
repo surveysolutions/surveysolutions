@@ -298,7 +298,7 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
                 section.PageSetup.LeftMargin = Unit.FromPoint(37);
                 section.PageSetup.RightMargin = Unit.FromPoint(33);
                 section.PageSetup.TopMargin = Unit.FromPoint(31);
-                section.PageSetup.BottomMargin = Unit.FromPoint(37);
+                section.PageSetup.BottomMargin = Unit.FromPoint(55);
                 
                 section.PageSetup.FooterDistance = Unit.FromPoint(16);
             }
@@ -337,32 +337,38 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
         {
             foreach (Section section in document.Sections)
             {
-                //section.Footers.Primary.Format.SpaceAfter = Unit.FromPoint(10);
-                //section.Footers.Primary.Format. SpaceBefore = Unit.FromPoint(10);
                 section.Footers.Primary.Format.LeftIndent = Unit.FromPoint(0);
                 section.Footers.Primary.Format.RightIndent = Unit.FromPoint(0);
-                section.Footers.Primary.Format.Borders.Top = new Border()
+
+                // Use a single-row table for the footer so that left/center/right items
+                // are rendered on the same line instead of stacking vertically.
+                // A4 content width = 595pt - leftMargin(37pt) - rightMargin(33pt) = 525pt
+                var footerTable = section.Footers.Primary.AddTable();
+                footerTable.Borders.Top = new Border()
                 {
                     Style = BorderStyle.DashLargeGap,
                     Width = Unit.FromPoint(1)
                 };
-                
-                Paragraph leftFooter = section.Footers.Primary.AddParagraph();
-                leftFooter.AddPageField();
-                leftFooter.AddText(PdfInterviewRes.PageOf);
-                leftFooter.AddNumPagesField();
-                leftFooter.Format.Font.Size = Unit.FromPoint(6);
-                leftFooter.Format.Alignment = ParagraphAlignment.Left;            
-                
-                Paragraph centerFooter = section.Footers.Primary.AddParagraph();
-                centerFooter.AddText(questionnaire.Title);
-                centerFooter.Format.Font.Size = Unit.FromPoint(6);
-                centerFooter.Format.Alignment = ParagraphAlignment.Center;            
+                footerTable.AddColumn(Unit.FromPoint(175));
+                footerTable.AddColumn(Unit.FromPoint(175));
+                footerTable.AddColumn(Unit.FromPoint(175));
 
-                Paragraph rightFooter = section.Footers.Primary.AddParagraph();
-                rightFooter.AddText(interview.GetInterviewKey().ToString());
-                rightFooter.Format.Font.Size = Unit.FromPoint(6);
-                rightFooter.Format.Alignment = ParagraphAlignment.Right;            
+                var footerRow = footerTable.AddRow();
+                footerRow.Format.Font.Size = Unit.FromPoint(6);
+
+                var leftParagraph = footerRow.Cells[0].AddParagraph();
+                leftParagraph.AddPageField();
+                leftParagraph.AddText(PdfInterviewRes.PageOf);
+                leftParagraph.AddNumPagesField();
+                leftParagraph.Format.Alignment = ParagraphAlignment.Left;
+
+                var centerParagraph = footerRow.Cells[1].AddParagraph();
+                centerParagraph.AddText(questionnaire.Title);
+                centerParagraph.Format.Alignment = ParagraphAlignment.Center;
+
+                var rightParagraph = footerRow.Cells[2].AddParagraph();
+                rightParagraph.AddText(interview.GetInterviewKey().ToString());
+                rightParagraph.Format.Alignment = ParagraphAlignment.Right;
             }
         }
 
