@@ -86,7 +86,7 @@ import moment from 'moment'
 import { DateFormats } from '~/shared/helpers'
 import gql from 'graphql-tag'
 import InterviewFilter from './InterviewFilter'
-import { find, filter, isEqual } from 'lodash'
+import { find, filter, isEqual, cloneDeep } from 'lodash'
 import DOMPurify from 'dompurify'
 const sanitizeHtml = text => DOMPurify.sanitize(text, { ALLOWED_TAGS: [], ALLOWED_ATTR: [] })
 
@@ -212,10 +212,7 @@ export default {
             if (value == null)
                 return value
 
-            if (typeof structuredClone === 'function')
-                return structuredClone(value)
-
-            return JSON.parse(JSON.stringify(value))
+            return cloneDeep(value)
         },
         saveExposedVariablesFilter() {
             this.savedQuery = this.cloneQuery(this.queryExposedVariables)
