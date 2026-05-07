@@ -192,7 +192,7 @@ export default {
         const sharedInfoDialog = ref(null);
         const downloadPDFDialog = ref(null);
 
-        const ctrl_b = useKeyShortcut(e => e.ctrlKey && e.key === 'b');
+        const ctrl_b = useKeyShortcut(e => e.ctrlKey && e.code === 'KeyB');
 
         return {
             verificationStore,
