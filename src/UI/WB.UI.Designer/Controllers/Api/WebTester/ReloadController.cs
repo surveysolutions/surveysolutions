@@ -1,7 +1,8 @@
-﻿using System;
+using System;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Options;
 using WB.Core.BoundedContexts.Designer;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
@@ -30,14 +31,21 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
 
         [QuestionnairePermissions]
         [AuthorizeOrAnonymousQuestionnaire]
-        public ActionResult Index(QuestionnaireRevision id, string interviewId)
+        public ActionResult Index(QuestionnaireRevision id, string interviewId, string? target = null, string? hash = null)
         {
             var questionnaireView = this.questionnaireViewFactory.Load(id);
             if (questionnaireView == null)
                 return NotFound();
             
             var token = this.webTesterService.CreateTestQuestionnaire(id.QuestionnaireId);
-            string url = $"{webTesterSettings.BaseUri}/{token}?sid=" + interviewId;
+            string url = QueryHelpers.AddQueryString($"{webTesterSettings.BaseUri}/{token}", "sid", interviewId);
+
+            if (!string.IsNullOrWhiteSpace(target))
+                url = QueryHelpers.AddQueryString(url, "target", target);
+
+            if (!string.IsNullOrWhiteSpace(hash))
+                url = QueryHelpers.AddQueryString(url, "hash", hash);
+
             return Redirect(url);
         }
 

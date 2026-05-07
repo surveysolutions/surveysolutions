@@ -59,14 +59,14 @@ namespace WB.UI.WebTester.Controllers
         }
         
         [Route("Loading/{id:Guid}")]
-        public IActionResult Loading(Guid id)
+        public IActionResult Loading(Guid id, string? target = null, string? hash = null)
         {
             var status = interviewFactory.GetStatus(id);
             if (status == null)
             {
                 var existingInterview = statefulInterviewRepository.Get(id.FormatGuid()) as WebTesterStatefulInterview;
                 if (existingInterview != null)
-                    return RedirectToInterview(id, existingInterview);
+                    return RedirectToInterview(id, existingInterview, target, hash);
 
                 return this.NotFound();
             }
@@ -93,10 +93,10 @@ namespace WB.UI.WebTester.Controllers
             {
                 TempData["Message"] = Common.ReloadInterviewErrorMessage;
             }
-            
+             
             var interview = statefulInterviewRepository.Get(id.FormatGuid()) as WebTesterStatefulInterview;
             if (interview != null)
-                return RedirectToInterview(id, interview);
+                return RedirectToInterview(id, interview, target, hash);
 
             return this.NotFound();
         }
@@ -121,20 +121,60 @@ namespace WB.UI.WebTester.Controllers
             }
         }
 
-        private IActionResult RedirectToInterview(Guid id, WebTesterStatefulInterview interview)
+        private IActionResult RedirectToInterview(Guid id, WebTesterStatefulInterview interview, string? target = null, string? hash = null)
         {
             try
             {
                 var questionnaire = interview.Questionnaire;
+                var interviewRoot = $"~/WebTester/Interview/{id.FormatGuid()}";
+                var requestedTarget = GetRequestedTarget(target);
+
+                if (requestedTarget != null)
+                    return this.Redirect($"{interviewRoot}{requestedTarget}{GetRequestedHash(hash)}");
+
                 if (questionnaire.IsCoverPageSupported)
-                    return this.Redirect($"~/WebTester/Interview/{id.FormatGuid()}/Section/{questionnaire.CoverPageSectionId.FormatGuid()}");
-                return this.Redirect($"~/WebTester/Interview/{id.FormatGuid()}/Cover");
+                    return this.Redirect($"{interviewRoot}/Section/{questionnaire.CoverPageSectionId.FormatGuid()}{GetRequestedHash(hash)}");
+                return this.Redirect($"{interviewRoot}/Cover{GetRequestedHash(hash)}");
             }
             catch (InvalidOperationException)
             {
                 // questionnaire was evicted from storage; the interview cannot be rendered
                 return this.NotFound();
             }
+        }
+
+        private static string? GetRequestedTarget(string? target)
+        {
+            if (string.IsNullOrWhiteSpace(target))
+                return null;
+
+            if (string.Equals(target, "/Cover", StringComparison.OrdinalIgnoreCase))
+                return "/Cover";
+
+            if (string.Equals(target, "/Complete", StringComparison.OrdinalIgnoreCase))
+                return "/Complete";
+
+            const string sectionPrefix = "/Section/";
+            if (!target.StartsWith(sectionPrefix, StringComparison.OrdinalIgnoreCase))
+                return null;
+
+            var sectionId = target.Substring(sectionPrefix.Length);
+            if (!Guid.TryParse(sectionId, out var parsedSectionId))
+                return null;
+
+            return $"{sectionPrefix}{parsedSectionId.FormatGuid()}";
+        }
+
+        private static string GetRequestedHash(string? hash)
+        {
+            if (string.IsNullOrWhiteSpace(hash))
+                return string.Empty;
+
+            var normalizedHash = hash.Trim().TrimStart('#');
+            if (string.IsNullOrWhiteSpace(normalizedHash))
+                return string.Empty;
+
+            return $"#{Uri.EscapeDataString(normalizedHash)}";
         }
 
         private InterviewPageModel? GetInterviewPageModel(string id)
