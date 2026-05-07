@@ -158,7 +158,7 @@ namespace WB.UI.WebTester.Controllers
             if (!target.StartsWith(sectionPrefix, StringComparison.OrdinalIgnoreCase))
                 return null;
 
-            var sectionId = target.Substring(sectionPrefix.Length);
+            var sectionId = target[sectionPrefix.Length..];
             if (!Guid.TryParse(sectionId, out var parsedSectionId))
                 return null;
 
@@ -170,11 +170,11 @@ namespace WB.UI.WebTester.Controllers
             if (string.IsNullOrWhiteSpace(hash))
                 return string.Empty;
 
-            var normalizedHash = hash.Trim().TrimStart('#');
-            if (string.IsNullOrWhiteSpace(normalizedHash))
+            var questionId = hash.Trim().TrimStart('#');
+            if (!Guid.TryParse(questionId, out var parsedQuestionId))
                 return string.Empty;
 
-            return $"#{Uri.EscapeDataString(normalizedHash)}";
+            return $"#{parsedQuestionId.FormatGuid()}";
         }
 
         private InterviewPageModel? GetInterviewPageModel(string id)

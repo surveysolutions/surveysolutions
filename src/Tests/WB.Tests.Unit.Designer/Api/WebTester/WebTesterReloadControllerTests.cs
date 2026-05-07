@@ -21,8 +21,8 @@ public class WebTesterReloadControllerTests
     {
         var questionnaireId = Guid.NewGuid();
         var interviewId = Guid.NewGuid().ToString();
-        var token = Guid.NewGuid();
-        var revision = new QuestionnaireRevision(questionnaireId, 1);
+        var token = Guid.NewGuid().ToString();
+        var revision = new QuestionnaireRevision(questionnaireId, version: 1);
         var questionnaireView = Create.QuestionnaireView();
 
         var questionnaireViewFactory = Mock.Of<IQuestionnaireViewFactory>(x => x.Load(revision) == questionnaireView);
@@ -44,8 +44,8 @@ public class WebTesterReloadControllerTests
     {
         var questionnaireId = Guid.NewGuid();
         var interviewId = Guid.NewGuid().ToString();
-        var token = Guid.NewGuid();
-        var revision = new QuestionnaireRevision(questionnaireId, 1);
+        var token = Guid.NewGuid().ToString();
+        var revision = new QuestionnaireRevision(questionnaireId, version: 1);
         var questionnaireView = Create.QuestionnaireView();
 
         var questionnaireViewFactory = Mock.Of<IQuestionnaireViewFactory>(x => x.Load(revision) == questionnaireView);

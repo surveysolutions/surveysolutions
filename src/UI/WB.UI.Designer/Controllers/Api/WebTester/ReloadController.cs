@@ -39,14 +39,50 @@ namespace WB.UI.Designer.Controllers.Api.WebTester
             
             var token = this.webTesterService.CreateTestQuestionnaire(id.QuestionnaireId);
             string url = QueryHelpers.AddQueryString($"{webTesterSettings.BaseUri}/{token}", "sid", interviewId);
+            var requestedTarget = GetRequestedTarget(target);
+            var requestedHash = GetRequestedHash(hash);
 
-            if (!string.IsNullOrWhiteSpace(target))
-                url = QueryHelpers.AddQueryString(url, "target", target);
+            if (requestedTarget != null)
+                url = QueryHelpers.AddQueryString(url, "target", requestedTarget);
 
-            if (!string.IsNullOrWhiteSpace(hash))
-                url = QueryHelpers.AddQueryString(url, "hash", hash);
+            if (requestedHash != null)
+                url = QueryHelpers.AddQueryString(url, "hash", requestedHash);
 
             return Redirect(url);
+        }
+
+        private static string? GetRequestedTarget(string? target)
+        {
+            if (string.IsNullOrWhiteSpace(target))
+                return null;
+
+            if (string.Equals(target, "/Cover", StringComparison.OrdinalIgnoreCase))
+                return "/Cover";
+
+            if (string.Equals(target, "/Complete", StringComparison.OrdinalIgnoreCase))
+                return "/Complete";
+
+            const string sectionPrefix = "/Section/";
+            if (!target.StartsWith(sectionPrefix, StringComparison.OrdinalIgnoreCase))
+                return null;
+
+            var sectionId = target[sectionPrefix.Length..];
+            if (!Guid.TryParse(sectionId, out var parsedSectionId))
+                return null;
+
+            return $"{sectionPrefix}{parsedSectionId:D}";
+        }
+
+        private static string? GetRequestedHash(string? hash)
+        {
+            if (string.IsNullOrWhiteSpace(hash))
+                return null;
+
+            var questionId = hash.Trim().TrimStart('#');
+            if (!Guid.TryParse(questionId, out var parsedQuestionId))
+                return null;
+
+            return $"#{parsedQuestionId:D}";
         }
 
         private bool ValidateAccessPermissions(QuestionnaireView questionnaireView)
