@@ -1437,7 +1437,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             new InterviewQuestionInvariants(new Identity(questionId, rosterVector), questionnaire, this.Tree, questionOptionsRepository)
                 .RequireQuestionExists();
 
-            this.ApplyEvent(new AnswerCommented(userId, questionId, rosterVector, originDate, comment?.Trim(), Guid.NewGuid()));
+            this.ApplyEvent(new AnswerCommented(userId, questionId, rosterVector, originDate, comment, Guid.NewGuid()));
         }
 
         public void ResolveComment(ResolveCommentAnswerCommand command)
