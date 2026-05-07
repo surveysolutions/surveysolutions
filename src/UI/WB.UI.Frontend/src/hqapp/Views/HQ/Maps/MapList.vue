@@ -218,10 +218,10 @@ export default {
                         render(data) {
                             if (data.endsWith('.shp')) {
                                 const tooltip = escape(self.$t('Pages.MapList_ShapeFileTooltip'))
-                                return `<img src="/img/shapefile_icon.svg" width="20px" title="${tooltip}">`
+                                return `<img src="/img/shapefile_icon.svg" width="20px" title="${tooltip}" alt="${tooltip}">`
                             } else {
                                 const tooltip = escape(self.$t('Pages.MapList_MapFileTooltip'))
-                                return `<img src="/img/map_icon.svg" width="20px" title="${tooltip}">`
+                                return `<img src="/img/map_icon.svg" width="20px" title="${tooltip}" alt="${tooltip}">`
                             }
                         },
                     },
