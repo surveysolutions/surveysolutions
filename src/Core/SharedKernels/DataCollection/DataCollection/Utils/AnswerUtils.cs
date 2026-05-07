@@ -91,11 +91,9 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
             {
                 return string.Join("|", (textListAnswers).Answers.Select(x => x.Answer));
             }
-            if (answer is Tuple<decimal, string>[])
+            if (answer is Tuple<decimal, string>[] textListTupleAnswers)
             {
-                var answers = answer as Tuple<decimal, string>[];
-                var selectedValues = answers.Select(x => x.Item1).ToArray();
-                return AnswerToString(selectedValues, answerOptionValue => answers.Single(x => x.Item1 == answerOptionValue).Item2);
+                return string.Join("|", textListTupleAnswers.Select(x => x.Item2));
             }
 
             return answer.ToString();

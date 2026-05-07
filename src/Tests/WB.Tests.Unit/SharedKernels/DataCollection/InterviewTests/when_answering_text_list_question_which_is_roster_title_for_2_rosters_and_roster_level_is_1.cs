@@ -81,9 +81,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             eventContext.GetEvents<RosterInstancesTitleChanged>()
                 .Should().OnlyContain(@event => @event.ChangedInstances.All(x => x.RosterInstance.RosterInstanceId == rosterVector.Last()));
 
-        [NUnit.Framework.Test] public void should_set_title_to_list_of_answers_divided_by_comma_with_space_in_all_RosterRowTitleChanged_events () =>
+        [NUnit.Framework.Test] public void should_set_title_to_list_of_answers_divided_by_pipe_in_all_RosterRowTitleChanged_events () =>
             eventContext.GetEvents<RosterInstancesTitleChanged>().SelectMany(@event => @event.ChangedInstances.Select(x => x.Title))
-                .Should().OnlyContain(title => title == "Answer 1, Answer 2, Answer 3");
+                .Should().OnlyContain(title => title == "Answer 1|Answer 2|Answer 3");
 
         private static EventContext eventContext;
         private static Interview interview;

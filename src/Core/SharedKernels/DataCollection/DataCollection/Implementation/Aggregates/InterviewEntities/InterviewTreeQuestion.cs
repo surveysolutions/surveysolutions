@@ -604,7 +604,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 var refListQuestion = this.Tree.GetTreeNodeByLevelOrNull(((InterviewTreeMultiOptionLinkedToListQuestion)this.InterviewQuestion).LinkedSourceId, Identity) as InterviewTreeQuestion;
                 var refListQuestionAllOptions = ((InterviewTreeTextListQuestion)refListQuestion?.InterviewQuestion)?.GetAnswer()?.Rows;
                 var refListOptions = refListQuestionAllOptions?.Where(x => multiToListAnswers?.Contains(x.Value) ?? false).ToArray();
-                return string.Join(", ", refListOptions.Select(o => o.Text));
+                return string.Join("|", refListOptions.Select(o => o.Text));
             }
 
             if (this.IsAudio)
