@@ -228,17 +228,20 @@
 
          private void NavigateToTabByDashboardType(DashboardGroupType dashboardGroupType)
          {
-             if (this.fragmentStateAdapter == null) return;
-             for (int i = 0; i < this.fragmentStateAdapter.ItemCount; i++)
+             RunOnUiThread(() =>
              {
-                 var vm = this.fragmentStateAdapter.GetViewModelForPosition(i) as ListViewModel;
-                 if (vm?.DashboardType == dashboardGroupType)
+                 if (this.fragmentStateAdapter == null || this.viewPager == null) return;
+                 for (int i = 0; i < this.fragmentStateAdapter.ItemCount; i++)
                  {
-                     if (this.viewPager.CurrentItem != i)
-                         this.viewPager.SetCurrentItem(i, true);
-                     return;
+                     var vm = this.fragmentStateAdapter.GetViewModelForPosition(i) as ListViewModel;
+                     if (vm?.DashboardType == dashboardGroupType)
+                     {
+                         if (this.viewPager.CurrentItem != i)
+                             this.viewPager.SetCurrentItem(i, true);
+                         return;
+                     }
                  }
-             }
+             });
          }
 
          protected override void OnStart()
@@ -421,9 +424,12 @@
 
          protected override void OnDestroy()
          {
-             if(this.ViewModel!= null)
+             if(this.ViewModel != null)
+             {
                  this.ViewModel.OnOfflineSynchronizationStarted = null;
-            
+                 this.ViewModel.PropertyChanged -= OnPropertyChanged;
+             }
+             
              this.fragmentStateAdapter?.Dispose();
 
              base.OnDestroy();
