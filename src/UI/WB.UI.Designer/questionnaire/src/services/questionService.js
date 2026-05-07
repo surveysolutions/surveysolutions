@@ -110,6 +110,7 @@ export function updateQuestion(
             command.maxValue = question.maxValue;
             command.useFormatting = question.useFormatting;
             command.options = question.options;
+            command.isNonNegative = question.isNonNegative !== undefined ? question.isNonNegative : true;
             break;
         case 'DateTime':
             command.isTimestamp = question.isTimestamp;

@@ -1382,6 +1382,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return multipleOptionsQuestion.YesNoView;
         }
 
+        public bool IsQuestionNonNegative(Guid questionId)
+        {
+            IQuestion question = this.GetQuestionOrThrow(questionId);
+
+            var numericQuestion = question as INumericQuestion;
+            if (numericQuestion == null)
+                return false;
+
+            return numericQuestion.IsNonNegative;
+        }
+
         public int? GetCountOfDecimalPlacesAllowedByQuestion(Guid questionId)
         {
             IQuestion question = this.GetQuestionOrThrow(questionId);

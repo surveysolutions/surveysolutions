@@ -4,7 +4,7 @@
             digitGroupSeparator: groupSeparator,
             decimalCharacter: decimalSeparator,
             decimalPlaces: 0,
-            minimumValue: '-2147483648',
+            minimumValue: $me.isNonNegative ? '0' : '-2147483648',
             maximumValue: '2147483647'
         }" />
 </template>
@@ -61,6 +61,11 @@ export default {
 
                 if (answer > 2147483647 || answer < -2147483648 || answer % 1 !== 0) {
                     this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.NumberCannotParse'), answer)
+                    return
+                }
+
+                if (this.$me.isNonNegative && answer < 0) {
+                    this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.NumberNonNegativeError'), answer)
                     return
                 }
 

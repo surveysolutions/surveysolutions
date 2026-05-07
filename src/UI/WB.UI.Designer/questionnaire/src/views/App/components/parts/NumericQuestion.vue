@@ -24,6 +24,15 @@
     <div class="row">
         <div class="col-md-6 inline-inputs">
             <div class="checkbox checkbox-in-column">
+                <input id="cb-is-non-negative" type="checkbox" class="wb-checkbox"
+                    v-model="activeQuestion.isNonNegative" />
+                <label for="cb-is-non-negative"><span></span>{{ $t('QuestionnaireEditor.QuestionNonNegative') }}</label>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 inline-inputs">
+            <div class="checkbox checkbox-in-column">
                 <input id="cb-use-formatting" type="checkbox" class="wb-checkbox"
                     v-model="activeQuestion.useFormatting" />
                 <label for="cb-use-formatting"><span></span>{{ $t('QuestionnaireEditor.QuestionUseSeparator') }}</label>

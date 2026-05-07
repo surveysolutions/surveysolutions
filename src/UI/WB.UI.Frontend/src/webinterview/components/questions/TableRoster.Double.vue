@@ -2,7 +2,7 @@
     <input type="text" autocomplete="off" inputmode="decimal" class="ag-cell-edit-input" ref="inputDouble"
         :placeholder="noAnswerWatermark" :title="noAnswerWatermark" :value="$me.answer" :disabled="!$me.acceptAnswer"
         v-numericFormatting="{
-            minimumValue: '-99999999999999.99999999999999',
+            minimumValue: $me.isNonNegative ? '0' : '-99999999999999.99999999999999',
             maximumValue: '99999999999999.99999999999999',
             digitGroupSeparator: groupSeparator,
             decimalCharacter: decimalSeparator,
@@ -69,6 +69,11 @@ export default {
 
                 if (answer > 999999999999999 || answer < -999999999999999) {
                     this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.DecimalCannotParse') + " '" + answer + "'")
+                    return
+                }
+
+                if (this.$me.isNonNegative && answer < 0) {
+                    this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.NumberNonNegativeError'), answer)
                     return
                 }
 

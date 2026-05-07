@@ -20,7 +20,8 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
             bool useFormatting,
             int? countOfDecimalPlaces,
             List<ValidationCondition> validationConditions,
-            Option[] options)
+            Option[] options,
+            bool isNonNegative = true)
             : base(
                  responsibleId: responsibleId, questionnaireId: questionnaireId, questionId: questionId, 
                  commonQuestionParameters: commonQuestionParameters,
@@ -32,6 +33,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
             Options = options;
             this.IsPreFilled = isPreFilled;
             this.Scope = scope;
+            this.IsNonNegative = isNonNegative;
         }
 
         public bool IsInteger { get; private set; }
@@ -43,5 +45,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
         public QuestionScope Scope { get; set; }
 
         public bool IsPreFilled { get; set; }
+
+        public bool IsNonNegative { get; private set; }
     }
 }
