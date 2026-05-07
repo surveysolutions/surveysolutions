@@ -1,5 +1,6 @@
 #nullable enable
 using System;
+using MvvmCross.Commands;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -28,4 +29,12 @@ public class PlayVideoViewModel : PlayMediaViewModel
                            StringComparison.OrdinalIgnoreCase);
         return isVideo;
     }
+
+    public IMvxAsyncCommand OpenFullScreenCommand => new MvxAsyncCommand(async () =>
+    {
+        if (InitValues == null) return;
+        var args = InitValues;
+        await ViewModelNavigationService.Close(this);
+        await ViewModelNavigationService.NavigateToAsync<PlayVideoFullScreenViewModel, PlayMediaViewModelArgs>(args);
+    });
 }
