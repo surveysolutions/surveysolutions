@@ -3,6 +3,7 @@ using System.Net.Http;
 using Microsoft.AspNetCore.Http;
 using Moq;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.SharedKernels.DataCollection.Commands.Assignment;
 using WB.Tests.Abc;
 
@@ -52,6 +53,30 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
                 x.Execute(It.Is<UpdateAssignmentQuantity>(c => c.Quantity == 1 && c.PublicKey == assignment.PublicKey), null),
                 Times.Once);
             Assert.That(httpResponseMessage, Has.Property(nameof(HttpResponseMessage.StatusCode)).EqualTo(StatusCodes.Status200OK));
+        }
+
+        [Test]
+        public void should_log_assignment_size_changed_in_audit_log_when_closing_via_post()
+        {
+            var assignment = Create.Entity.Assignment(id: 4, quantity: 5);
+            assignment.InterviewSummaries.Add(Create.Entity.InterviewSummary());
+            this.SetupAssignment(assignment);
+
+            this.controller.ClosePost(assignment.Id);
+
+            this.auditLog.Verify(x => x.AssignmentSizeChanged(assignment.Id, 1), Times.Once);
+        }
+
+        [Test]
+        public void should_log_assignment_size_changed_in_audit_log_when_closing_via_patch()
+        {
+            var assignment = Create.Entity.Assignment(id: 4, quantity: 5);
+            assignment.InterviewSummaries.Add(Create.Entity.InterviewSummary());
+            this.SetupAssignment(assignment);
+
+            this.controller.Close(assignment.Id);
+
+            this.auditLog.Verify(x => x.AssignmentSizeChanged(assignment.Id, 1), Times.Once);
         }
     }
 }

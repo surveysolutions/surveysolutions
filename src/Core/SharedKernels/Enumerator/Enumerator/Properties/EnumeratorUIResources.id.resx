@@ -324,7 +324,7 @@ untuk instruksi lebih lanjut</value>
     <value>Sinkronisasi berhasil diselesaikan</value>
   </data>
   <data name="Synchronization_Upload_CompletedAssignments_Text" xml:space="preserve">
-    <value>penugasan yang selesai</value>
+    <value>wawancara yang selesai</value>
   </data>
   <data name="Synchronization_Upload_Description_Format" xml:space="preserve">
     <value>{0} dari {1} {2} dikerjakan</value>
