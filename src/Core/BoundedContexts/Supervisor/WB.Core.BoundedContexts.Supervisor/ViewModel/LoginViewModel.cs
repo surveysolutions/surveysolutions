@@ -1,4 +1,5 @@
-﻿using WB.Core.BoundedContexts.Supervisor.Views;
+﻿using System;
+using WB.Core.BoundedContexts.Supervisor.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator.Repositories;
@@ -36,6 +37,15 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 
         public override string GetUserLastWorkspace()
             => this.supervisorsPlainStorage.FirstOrDefault().Workspace;
+
+        public override string GetUserPasswordHash()
+        {
+            var userName = this.UserName;
+            var supervisor = this.supervisorsPlainStorage.FirstOrDefault(x =>
+                string.Equals(x.Name, userName, StringComparison.OrdinalIgnoreCase));
+
+            return supervisor?.PasswordHash;
+        }
 
         public override void UpdateLocalUser(string userName, string token, string passwordHash)
         {

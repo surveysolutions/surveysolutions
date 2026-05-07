@@ -3,6 +3,9 @@ using Android.Content;
 using Android.Content.PM;
 using Android.OS;
 using Android.Views;
+using Android.Widget;
+using AndroidX.Biometric;
+using AndroidX.Core.Content;
 using AndroidX.AppCompat.Widget;
 using Java.Interop;
 using WB.Core.BoundedContexts.Supervisor.ViewModel;
@@ -19,6 +22,9 @@ namespace WB.UI.Supervisor.Activities
         Exported = false)]
     public class LoginActivity: BaseActivity<LoginViewModel>
     {
+        private BiometricPrompt biometricPrompt;
+        private BiometricPrompt.PromptInfo biometricPromptInfo;
+
         protected override int ViewResourceId => Resource.Layout.login;
 
         protected override void OnCreate(Bundle bundle)
@@ -27,6 +33,7 @@ namespace WB.UI.Supervisor.Activities
             var toolbar = this.FindViewById<Toolbar>(Resource.Id.toolbar);
             toolbar.Title = "";
             this.SetSupportActionBar(toolbar);
+            this.InitializeBiometricLogin();
         }
 
         protected override bool BackButtonCustomAction => true;
@@ -64,6 +71,47 @@ namespace WB.UI.Supervisor.Activities
         {
             this.ViewModel.Password = password;
             this.ViewModel.SignInCommand.ExecuteAsync();
+        }
+
+        private void InitializeBiometricLogin()
+        {
+            var biometricLoginButton = this.FindViewById<ImageButton>(Resource.Id.login_biometric_button);
+            if (biometricLoginButton == null)
+                return;
+
+            biometricLoginButton.Visibility = ViewStates.Gone;
+            biometricLoginButton.ContentDescription = EnumeratorUIResources.LoginText;
+
+            if (BiometricManager.From(this).CanAuthenticate() != BiometricManager.BiometricSuccess)
+                return;
+
+            this.biometricPrompt = new BiometricPrompt(this,
+                ContextCompat.GetMainExecutor(this),
+                new BiometricAuthenticationCallback(this.ViewModel));
+            this.biometricPromptInfo = new BiometricPrompt.PromptInfo.Builder()
+                .SetTitle(EnumeratorUIResources.LoginText)
+                .SetSubtitle(EnumeratorUIResources.PasswordHint)
+                .SetNegativeButtonText(EnumeratorUIResources.Cancel)
+                .Build();
+
+            biometricLoginButton.Visibility = ViewStates.Visible;
+            biometricLoginButton.Click += (sender, args) => this.biometricPrompt.Authenticate(this.biometricPromptInfo);
+        }
+
+        private sealed class BiometricAuthenticationCallback : BiometricPrompt.AuthenticationCallback
+        {
+            private readonly LoginViewModel viewModel;
+
+            public BiometricAuthenticationCallback(LoginViewModel viewModel)
+            {
+                this.viewModel = viewModel;
+            }
+
+            public override void OnAuthenticationSucceeded(BiometricPrompt.AuthenticationResult result)
+            {
+                base.OnAuthenticationSucceeded(result);
+                this.viewModel.SignInWithHashCommand.ExecuteAsync();
+            }
         }
     }
 }

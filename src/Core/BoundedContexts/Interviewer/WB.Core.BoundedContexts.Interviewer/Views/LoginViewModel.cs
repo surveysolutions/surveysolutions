@@ -35,7 +35,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         public override string? GetUserLastWorkspace() 
             => this.interviewerPrincipal.GetLastWorkspaceOrNull();
-        
+
+        public override string? GetUserPasswordHash()
+            => this.interviewerPrincipal.GetInterviewerByName(this.UserName)?.PasswordHash;
 
         public override void UpdateLocalUser(string userName, string token, string passwordHash)
         {

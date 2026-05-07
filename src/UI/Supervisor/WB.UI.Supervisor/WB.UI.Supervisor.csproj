@@ -232,6 +232,9 @@
     <PackageReference Include="Xamarin.AndroidX.AsyncLayoutInflater">
       <Version>1.1.0.3</Version>
     </PackageReference>
+    <PackageReference Include="Xamarin.AndroidX.Biometric">
+      <Version>1.1.0.32</Version>
+    </PackageReference>
     <PackageReference Include="Xamarin.AndroidX.VectorDrawable">
       <Version>1.2.0.8</Version>
     </PackageReference>
