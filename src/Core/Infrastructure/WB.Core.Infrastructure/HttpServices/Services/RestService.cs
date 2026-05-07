@@ -98,10 +98,7 @@ namespace WB.Core.Infrastructure.HttpServices.Services
             var linkedCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(requestTimeoutToken,
                 userCancellationToken ?? default);
 
-            var fullUrl = new Url(endpoint, string.Join(UrlPathDelimiter,
-                new[] { credentials?.Workspace, url }
-                    .Where(pathPart => !string.IsNullOrWhiteSpace(pathPart))
-                    .Select(pathPart => pathPart.Trim(UrlPathDelimiter))), queryString);
+            var fullUrl = new Url(endpoint, (credentials?.Workspace ?? string.Empty) + UrlPathDelimiter + url, queryString);
 
             var request = new HttpRequestMessage()
             {
