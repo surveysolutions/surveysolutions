@@ -4,8 +4,11 @@ const api = mande('/api/questionnaire' /*, globalOptions*/)
 
 class WebTesterApi{
 
-  async run(questionnaireId, scenarioId) {
-      var webTesterWindow = window.open("about:blank", '_blank');
+  openWindow() {
+      return window.open("about:blank", '_blank');
+  }
+
+  async run(questionnaireId, scenarioId, webTesterWindow = this.openWindow()) {
 
       const url = await api.get('webTest/' + questionnaireId)
       this.setLocation(webTesterWindow, url, scenarioId);

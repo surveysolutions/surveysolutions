@@ -163,6 +163,7 @@ import { useKeyShortcut } from '../../../composables/useKeyShortcut';
 
 import { useVerificationStore } from '../../../stores/verification';
 import { useChatStore } from '../../../stores/chat';
+import { useProgressStore } from '../../../stores/progress';
 import WebTesterApi from '../../../api/webTester';
 import { ref, computed } from 'vue';
 import { useRoute } from 'vue-router';
@@ -186,6 +187,7 @@ export default {
     setup(props) {
         const verificationStore = useVerificationStore();
         const chatStore = useChatStore();
+        const progressStore = useProgressStore();
         const route = useRoute();
 
         const verificationDialog = ref(null);
@@ -197,6 +199,7 @@ export default {
         return {
             verificationStore,
             chatStore,
+            progressStore,
             verificationDialog,
             sharedInfoDialog,
             downloadPDFDialog,
@@ -239,10 +242,25 @@ export default {
     },
     methods: {
         async webTest() {
-            await this.verificationStore.fetchVerificationStatus(
-                this.questionnaireId
-            );
-            await WebTesterApi.run(this.questionnaireId);
+            const webTesterWindow = WebTesterApi.openWindow();
+            await this.savePendingChangesBeforeWebTest();
+            await WebTesterApi.run(this.questionnaireId, null, webTesterWindow);
+        },
+        async savePendingChangesBeforeWebTest() {
+            const saveButtons = Array.from(
+                document.querySelectorAll('.btn.btn-lg.btn-primary:not([disabled])')
+            ).filter(button => button.offsetParent !== null);
+
+            if (saveButtons.length === 0) return;
+
+            saveButtons.forEach(button => button.click());
+            await this.waitForPendingSaves();
+        },
+        async waitForPendingSaves() {
+            for (let i = 0; i < 50; i++) {
+                if (!this.progressStore.getIsRunning) return;
+                await new Promise(resolve => setTimeout(resolve, 100));
+            }
         },
         showDownloadPdf() {
             this.downloadPDFDialog.open();
