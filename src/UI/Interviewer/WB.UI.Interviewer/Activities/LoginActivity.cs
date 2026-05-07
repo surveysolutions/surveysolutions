@@ -20,6 +20,7 @@ namespace WB.UI.Interviewer.Activities
         Exported = false)]
     public class LoginActivity : BaseActivity<LoginViewModel>
     {
+        private ImageButton biometricLoginButton;
         private BiometricPrompt biometricPrompt;
         private BiometricPrompt.PromptInfo biometricPromptInfo;
 
@@ -74,6 +75,18 @@ namespace WB.UI.Interviewer.Activities
             notificationsPublisher.CancelAllNotifications(this);
         }
         
+        protected override void OnDestroy()
+        {
+            if (this.biometricLoginButton != null)
+                this.biometricLoginButton.Click -= this.OnBiometricLoginClick;
+
+            this.biometricPrompt?.Dispose();
+            this.biometricPrompt = null;
+            this.biometricPromptInfo = null;
+
+            base.OnDestroy();
+        }
+
         [Export("FastLogin")]
         public void FastLogin(string password)
         {
@@ -83,14 +96,16 @@ namespace WB.UI.Interviewer.Activities
 
         private void InitializeBiometricLogin()
         {
-            var biometricLoginButton = this.FindViewById<ImageButton>(Resource.Id.login_biometric_button);
-            if (biometricLoginButton == null)
+            this.biometricLoginButton = this.FindViewById<ImageButton>(Resource.Id.login_biometric_button);
+            if (this.biometricLoginButton == null)
                 return;
 
-            biometricLoginButton.Visibility = ViewStates.Gone;
-            biometricLoginButton.ContentDescription = EnumeratorUIResources.LoginText;
+            this.biometricLoginButton.Visibility = ViewStates.Gone;
+            this.biometricLoginButton.ContentDescription = EnumeratorUIResources.LoginText;
 
-            if (BiometricManager.From(this).CanAuthenticate() != BiometricManager.BiometricSuccess)
+            var authenticators = BiometricManager.Authenticators.BiometricStrong;
+
+            if (BiometricManager.From(this).CanAuthenticate(authenticators) != BiometricManager.BiometricSuccess)
                 return;
 
             this.biometricPrompt = new BiometricPrompt(this,
@@ -102,8 +117,13 @@ namespace WB.UI.Interviewer.Activities
                 .SetNegativeButtonText(EnumeratorUIResources.Cancel)
                 .Build();
 
-            biometricLoginButton.Visibility = ViewStates.Visible;
-            biometricLoginButton.Click += (sender, args) => this.biometricPrompt.Authenticate(this.biometricPromptInfo);
+            this.biometricLoginButton.Visibility = ViewStates.Visible;
+            this.biometricLoginButton.Click += this.OnBiometricLoginClick;
+        }
+
+        private void OnBiometricLoginClick(object sender, EventArgs args)
+        {
+            this.biometricPrompt.Authenticate(this.biometricPromptInfo);
         }
 
         private sealed class BiometricAuthenticationCallback : BiometricPrompt.AuthenticationCallback

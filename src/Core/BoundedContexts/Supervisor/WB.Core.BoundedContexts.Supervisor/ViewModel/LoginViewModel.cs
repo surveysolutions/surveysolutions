@@ -49,7 +49,11 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 
         public override void UpdateLocalUser(string userName, string token, string passwordHash)
         {
-            var localSupervisor = this.supervisorsPlainStorage.FirstOrDefault(x => x.Name.ToLower() == userName.ToLower());
+            var localSupervisor = this.supervisorsPlainStorage.FirstOrDefault(x =>
+                string.Equals(x.Name, userName, StringComparison.OrdinalIgnoreCase));
+            if (localSupervisor == null)
+                throw new InvalidOperationException($"Supervisor with {userName} not found");
+
             localSupervisor.Token = token;
             localSupervisor.PasswordHash = passwordHash;
 

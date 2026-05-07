@@ -164,7 +164,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
             if (string.IsNullOrWhiteSpace(passwordHash))
             {
-                this.PasswordError = EnumeratorUIResources.Login_WrongPassword;
+                this.IsUserValid = false;
+                this.PasswordError = EnumeratorUIResources.Unauthorized;
                 return;
             }
 
