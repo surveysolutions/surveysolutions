@@ -43,7 +43,8 @@ public class ImageSharpSource<TPixel> : ImageSource where TPixel : unmanaged, IP
                 }));
             }
 
-            return FromImageSharpImage(image, format);
+            return (ImageSource.IImageSource)new ImageSharpSourceImpl<TPixel>(name, image, quality: null,
+                isTransparent: format is PngFormat);
         }
         catch
         {
