@@ -37,6 +37,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
         protected Mock<IAuthorizedUser> authorizedUser;
         protected Mock<IUserViewFactory> userViewFactory;
 
+        protected Mock<ISystemLog> auditLog;
+
         [SetUp]
         public virtual void Setup()
         {
@@ -55,7 +57,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
                 this.assignmentsStorage.Object,
                 this.userManager.Object,
                 this.questionnaireStorage.Object,
-                Mock.Of<ISystemLog>(),
+                this.auditLog.Object,
                 Create.Service.ImportDataVerifier(),
                 commandService.Object,
                 authorizedUser.Object,
@@ -86,6 +88,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
             this.commandService = new Mock<ICommandService>();
             this.authorizedUser = new Mock<IAuthorizedUser>();
             this.userViewFactory = new Mock<IUserViewFactory>();
+            this.auditLog = new Mock<ISystemLog>();
         }
 
         protected void SetupResponsibleUser(HqUser user)
