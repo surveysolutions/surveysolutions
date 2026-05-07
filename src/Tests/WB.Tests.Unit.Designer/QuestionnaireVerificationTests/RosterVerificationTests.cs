@@ -364,7 +364,8 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                         Create.Variable()
                     })
                 )
-                .ExpectNoError("WB0297");
+                .ExpectNoError("WB0297")
+                .AndNoError("WB0298");
         }
 
         [Test]
