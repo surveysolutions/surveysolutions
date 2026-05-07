@@ -1,107 +1,21 @@
 import { defineStore } from 'pinia';
 import { i18n } from '../plugins/localization';
 
+const hotkey = (keys, i18nKey) => ({
+    keys: Array.isArray(keys) ? keys : [keys],
+    description: i18n.t(`QuestionnaireEditor.${i18nKey}`)
+});
+
 export const useHotkeysStore = defineStore('hotkeys', {
     state: () => ({
         hotkeys: [
-            {
-                keys: ['?'],
-                description: i18n.t('QuestionnaireEditor.HotkeysShowHideHelp')
-            },
-            {
-                keys: ['Ctrl + s'],
-                description: i18n.t('QuestionnaireEditor.Save')
-            },
-            {
-                keys: ['Ctrl + f'],
-                description: i18n.t('QuestionnaireEditor.HotkeysSearch')
-            },
-            {
-                keys: ['Ctrl + h'],
-                description: i18n.t('QuestionnaireEditor.FindReplaceTitle')
-            },
-            {
-                keys: ['Ctrl + p'],
-                description: i18n.t('QuestionnaireEditor.HotkeysPrint')
-            },
-            {
-                keys: ['Ctrl + b'],
-                description: i18n.t('QuestionnaireEditor.Compile')
-            },
-            {
-                keys: ['Ctrl + i'],
-                description: i18n.t('QuestionnaireEditor.HotkeysTest')
-            }
-            // {
-            //     keys: ['Shift + Alt + x'],
-            //     description: i18n.t('QuestionnaireEditor.HotkeysFocusTree')
-            // },
-            // {
-            //     keys: ['Shift + Alt + e'],
-            //     description: i18n.t('QuestionnaireEditor.HotkeysFocusTitle')
-            // },
-            // {
-            //     keys: ['arrowleft'],
-            //     description: i18n.t('QuestionnaireEditor.HotkeysOpenSection')
-            // },
-            // {
-            //     keys: ['arrowright'],
-            //     description: i18n.t('QuestionnaireEditor.HotkeysHideSections')
-            // },
-            // {
-            //     keys: ['Ctrl + r'],
-            //     description: i18n.t('QuestionnaireEditor.HotkeysCloseScenarios')
-            // },
-            // {
-            //     keys: ['Ctrl + m'],
-            //     description: i18n.t('QuestionnaireEditor.HotkeysCloseMacros')
-            // },
-            // {
-            //     keys: ['Ctrl + l'],
-            //     description: i18n.t('QuestionnaireEditor.HotkeysCloseLookup')
-            // },
-            // {
-            //     keys: ['Ctrl + Shift + a'],
-            //     description: i18n.t(
-            //         'QuestionnaireEditor.HotkeysHideAttachments'
-            //     )
-            // },
-            // {
-            //     keys: ['Ctrl + Shift + t'],
-            //     description: i18n.t(
-            //         'QuestionnaireEditor.HotkeysCloseTranslations'
-            //     )
-            // },
-            // {
-            //     keys: ['Ctrl + Shift + c'],
-            //     description: i18n.t(
-            //         'QuestionnaireEditor.HotkeysCloseCategories'
-            //     )
-            // },
-            // {
-            //     keys: ['Ctrl + i'],
-            //     description: i18n.t('QuestionnaireEditor.HotkeysCloseMetadata')
-            // },
-            // {
-            //     keys: ['Ctrl + Alt + c'],
-            //     description: i18n.t('QuestionnaireEditor.HotkeysCloseComments')
-            // },
-            // {
-            //     keys: ['arrowdown'],
-            //     description: i18n.t(
-            //         'QuestionnaireEditor.HotkeysNavigateToSibling'
-            //     )
-            // },
-            // {
-            //     keys: ['arrowup'],
-            //     description: i18n.t(
-            //         'QuestionnaireEditor.HotkeysNavigateToPrevSibling'
-            //     )
-            // },
-            // {
-            //     keys: ['enter'],
-            //     description: i18n.t('QuestionnaireEditor.HotkeysOpenItem')
-            // }
+            hotkey('?',          'HotkeysShowHideHelp'),
+            hotkey('Ctrl + s',   'Save'),
+            hotkey('Ctrl + f',   'HotkeysSearch'),
+            hotkey('Ctrl + h',   'FindReplaceTitle'),
+            hotkey('Ctrl + p',   'HotkeysPrint'),
+            hotkey('Ctrl + b',   'Compile'),
+            hotkey('Ctrl + i',   'HotkeysTest')
         ]
     }),
     getters: {
