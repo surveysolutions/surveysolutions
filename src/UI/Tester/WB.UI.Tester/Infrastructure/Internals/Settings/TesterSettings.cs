@@ -194,5 +194,9 @@ namespace WB.UI.Tester.Infrastructure.Internals.Settings
         }
 
         public bool SupportOfflineMaps => false;
+
+        public int? GetLastKnownAppVersionCode() => null;
+
+        public void SetLastKnownAppVersionCode(int code) {}
     }
 }
