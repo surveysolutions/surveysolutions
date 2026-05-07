@@ -335,40 +335,45 @@ namespace WB.Core.BoundedContexts.Headquarters.PdfInterview
 
         private void WriteFooterToAllPages(Document document, IQuestionnaire questionnaire, IStatefulInterview interview)
         {
+            const int maxTitleLength = 80;
+            var title = questionnaire.Title.Length > maxTitleLength
+                ? string.Concat(questionnaire.Title.AsSpan(0, maxTitleLength - 1), "…")
+                : questionnaire.Title;
+            var interviewKey = interview.GetInterviewKey().ToString();
+
             foreach (Section section in document.Sections)
             {
                 section.Footers.Primary.Format.LeftIndent = Unit.FromPoint(0);
                 section.Footers.Primary.Format.RightIndent = Unit.FromPoint(0);
 
-                // Use a single-row table for the footer so that left/center/right items
-                // are rendered on the same line instead of stacking vertically.
-                // A4 content width = 595pt - leftMargin(37pt) - rightMargin(33pt) = 525pt
-                var footerTable = section.Footers.Primary.AddTable();
-                footerTable.Borders.Top = new Border()
+                // Compute content width from the section's actual page setup so the footer
+                // adapts correctly if page format or margins are changed in the future.
+                var contentWidth = section.PageSetup.PageWidth
+                    - section.PageSetup.LeftMargin
+                    - section.PageSetup.RightMargin;
+
+                // Use a single paragraph with tab stops so the footer is always exactly one
+                // line tall regardless of title length, preventing body/footer overlap.
+                // The title is also truncated above as a further safeguard.
+                var footerParagraph = section.Footers.Primary.AddParagraph();
+                footerParagraph.Format.Font.Size = Unit.FromPoint(6);
+                footerParagraph.Format.Borders.Top = new Border()
                 {
                     Style = BorderStyle.DashLargeGap,
                     Width = Unit.FromPoint(1)
                 };
-                footerTable.AddColumn(Unit.FromPoint(175));
-                footerTable.AddColumn(Unit.FromPoint(175));
-                footerTable.AddColumn(Unit.FromPoint(175));
+                footerParagraph.Format.TabStops.AddTabStop(contentWidth / 2.0, TabAlignment.Center);
+                footerParagraph.Format.TabStops.AddTabStop(contentWidth, TabAlignment.Right);
 
-                var footerRow = footerTable.AddRow();
-                footerRow.Format.Font.Size = Unit.FromPoint(6);
+                footerParagraph.AddPageField();
+                footerParagraph.AddText(PdfInterviewRes.PageOf);
+                footerParagraph.AddNumPagesField();
 
-                var leftParagraph = footerRow.Cells[0].AddParagraph();
-                leftParagraph.AddPageField();
-                leftParagraph.AddText(PdfInterviewRes.PageOf);
-                leftParagraph.AddNumPagesField();
-                leftParagraph.Format.Alignment = ParagraphAlignment.Left;
+                footerParagraph.AddTab();
+                footerParagraph.AddText(title);
 
-                var centerParagraph = footerRow.Cells[1].AddParagraph();
-                centerParagraph.AddText(questionnaire.Title);
-                centerParagraph.Format.Alignment = ParagraphAlignment.Center;
-
-                var rightParagraph = footerRow.Cells[2].AddParagraph();
-                rightParagraph.AddText(interview.GetInterviewKey().ToString());
-                rightParagraph.Format.Alignment = ParagraphAlignment.Right;
+                footerParagraph.AddTab();
+                footerParagraph.AddText(interviewKey);
             }
         }
 
