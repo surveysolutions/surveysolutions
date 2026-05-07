@@ -590,6 +590,10 @@ export default {
                 this.$refs.settigsForm.validate()
             }
         },
+        testEmailAddress: function () {
+            this.sendEmailResult = null
+            this.sendingErrors = []
+        },
     },
     methods: {
         noAction() {
