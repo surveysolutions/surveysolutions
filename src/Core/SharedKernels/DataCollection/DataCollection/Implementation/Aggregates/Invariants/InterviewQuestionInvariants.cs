@@ -684,16 +684,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
 
             if (answer < 0)
             {
-                throw new AnswerNotAcceptedException(
-                    $"Answer '{answer}' is not allowed because the question is set as non-negative")
+                if (this.Questionnaire.GetOptionForQuestionByOptionValue(this.QuestionId, (decimal)answer, null) == null)
                 {
-                    Data =
+                    throw new AnswerNotAcceptedException(
+                        $"Answer '{answer}' is not allowed because the question is set as non-negative")
                     {
-                        {ExceptionKeys.InterviewId, this.InterviewTree.InterviewId},
-                        {ExceptionKeys.QuestionId, this.QuestionIdentity.ToString()},
-                        {ExceptionKeys.ProvidedAnswerValue, answer}
-                    }
-                };
+                        Data =
+                        {
+                            {ExceptionKeys.InterviewId, this.InterviewTree.InterviewId},
+                            {ExceptionKeys.QuestionId, this.QuestionIdentity.ToString()},
+                            {ExceptionKeys.ProvidedAnswerValue, answer}
+                        }
+                    };
+                }
             }
 
             return this;

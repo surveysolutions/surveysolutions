@@ -177,14 +177,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 return;
             }
 
-            if (this.isNonNegativeQuestion && this.Answer < 0)
+            var answeredOrSelectedValue = Convert.ToDecimal(this.Answer.Value);
+            var isSpecialValue = specialValues.IsSpecialValueSelected(answeredOrSelectedValue);
+
+            if (this.isNonNegativeQuestion && this.Answer < 0 && !isSpecialValue)
             {
                 await this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.Interview_Question_Integer_NegativeAnswer);
                 return;
             }
 
-            var answeredOrSelectedValue = Convert.ToDecimal(this.Answer.Value);
-            await EnqueueSaveAnswer(answeredOrSelectedValue, specialValues.IsSpecialValueSelected(answeredOrSelectedValue));
+            await EnqueueSaveAnswer(answeredOrSelectedValue, isSpecialValue);
         }
 
         private async Task EnqueueSaveAnswer(decimal answeredOrSelectedValue, bool isSpecialValueSelected)
