@@ -71,11 +71,18 @@ export default {
     data() {
         return {
             recaptchaV3Token: '',
+            recaptchaV3IntervalId: null,
         }
     },
     mounted() {
         if (this.model.useCaptcha && this.model.useRecaptchaV3 && this.model.recaptchaSiteKey) {
             this.loadRecaptchaV3()
+        }
+    },
+    beforeUnmount() {
+        if (this.recaptchaV3IntervalId !== null) {
+            clearInterval(this.recaptchaV3IntervalId)
+            this.recaptchaV3IntervalId = null
         }
     },
     computed: {
@@ -101,11 +108,15 @@ export default {
                 window.grecaptcha.execute(siteKey, { action: 'start' }).then(token => {
                     this.recaptchaV3Token = token
                     // Refresh the token every 90 seconds (v3 tokens expire after 2 minutes)
-                    setInterval(() => {
+                    this.recaptchaV3IntervalId = setInterval(() => {
                         window.grecaptcha.execute(siteKey, { action: 'start' }).then(t => {
                             this.recaptchaV3Token = t
+                        }).catch(err => {
+                            console.error('reCAPTCHA v3 token refresh failed:', err)
                         })
                     }, 90000)
+                }).catch(err => {
+                    console.error('reCAPTCHA v3 execute failed:', err)
                 })
             })
         },
