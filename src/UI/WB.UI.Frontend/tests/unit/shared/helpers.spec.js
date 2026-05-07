@@ -1,3 +1,5 @@
+process.env.TZ = 'America/New_York'
+
 let formatUtcDate
 let DateFormats
 
