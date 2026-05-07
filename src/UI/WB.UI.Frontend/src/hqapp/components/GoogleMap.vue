@@ -215,6 +215,7 @@ export default {
             selectedTooltip: {},
             readyToUpdate: false,
             isMapReloaded: true,
+            mapReloadSkipTimeoutId: null,
             map: null,
             isLoading: false,
             totalMarkers: 0,
@@ -520,6 +521,19 @@ export default {
             }
         },
 
+        skipNextMapReload() {
+            this.isMapReloaded = true
+
+            if (this.mapReloadSkipTimeoutId != null) {
+                clearTimeout(this.mapReloadSkipTimeoutId)
+            }
+
+            this.mapReloadSkipTimeoutId = setTimeout(() => {
+                this.isMapReloaded = false
+                this.mapReloadSkipTimeoutId = null
+            }, 500)
+        },
+
         async initializeMap() {
             const self = this
 
@@ -537,6 +551,10 @@ export default {
                 // i.e. we don't want to load map data twice
                 if (this.isMapReloaded == true) {
                     this.isMapReloaded = false
+                    if (this.mapReloadSkipTimeoutId != null) {
+                        clearTimeout(this.mapReloadSkipTimeoutId)
+                        this.mapReloadSkipTimeoutId = null
+                    }
                     return
                 }
 
@@ -753,7 +771,7 @@ export default {
                                             -30
                                         ),
                                     })
-                                    self.isMapReloaded = true
+                                    self.skipNextMapReload()
                                     self.infoWindow.open(self.map)
                                 })
                             } else {
@@ -784,7 +802,7 @@ export default {
                             self.infoWindow.setOptions({
                                 pixelOffset: new google.maps.Size(0, -30),
                             })
-                            self.isMapReloaded = true
+                            self.skipNextMapReload()
                             self.infoWindow.open(self.map)
                         })
                     }
@@ -807,7 +825,7 @@ export default {
                         self.infoWindow.setOptions({
                             pixelOffset: new google.maps.Size(0, -30),
                         })
-                        self.isMapReloaded = true
+                        self.skipNextMapReload()
                         self.infoWindow.open(self.map)
                     })
                 }
@@ -817,7 +835,7 @@ export default {
                     nextTick(function () {
                         self.infoWindow.setContent(label)
                         self.infoWindow.setPosition(event.latLng)
-                        self.isMapReloaded = true
+                        self.skipNextMapReload()
                         self.infoWindow.open(self.map)
                     })
                 }
