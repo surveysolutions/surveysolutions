@@ -75,12 +75,12 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
                 });
             }
 
-            // Completed: supervisor can Reopen via context menu
+            // Completed: supervisor can Reopen — visible on card as a primary button
             if (Assignment.Status == AssignmentStatus.Completed)
             {
                 Actions.Add(new ActionDefinition
                 {
-                    ActionType = ActionType.Context,
+                    ActionType = ActionType.Primary,
                     Command = new MvxAsyncCommand(this.ReopenAssignmentAsync),
                     Label = EnumeratorUIResources.Dashboard_Reopen
                 });

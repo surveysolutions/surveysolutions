@@ -120,6 +120,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 };
                 await this.synchronizationService.ChangeAssignmentStatusAsync(local.Id, change, cancellationToken);
                 this.logger.Debug($"Uploaded status change for assignment {local.Id}: {local.Status}");
+                // Clear the pending-upload flag now that the upload succeeded
+                local.StatusChangedAtUtc = null;
+                this.assignmentsRepository.Store(local);
             }
         }
 
@@ -174,14 +177,16 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             // Server status always overrides local status (server is authoritative).
             // Local status changes are best-effort: if the upload failed, the server's status
             // returned in the next sync will be applied here.
+            // StatusComment and the pending-upload flag are only updated when the server
+            // actually reports a different status — if status hasn't changed the local pending
+            // change should be preserved so it is retried on the next sync.
             if (local.Status != remote.Status)
             {
                 this.logger.Debug($"Updating Status for assignment {local.Id}: local {local.Status} → server {remote.Status}");
                 local.Status = remote.Status;
+                local.StatusComment = remote.StatusComment;
+                local.StatusChangedAtUtc = null;
             }
-            // Always apply the server's status comment and clear the pending-upload flag
-            local.StatusComment = remote.StatusComment;
-            local.StatusChangedAtUtc = null;
 
             var interviewsCount =
                 this.interviewViewRepository.Count(x => x.FromHqSyncDateTime == null && x.Assignment == local.Id);
