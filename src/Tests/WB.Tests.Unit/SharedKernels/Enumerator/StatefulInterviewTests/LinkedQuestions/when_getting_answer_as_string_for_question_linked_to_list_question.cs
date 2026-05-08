@@ -74,10 +74,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.LinkedQu
             interview.AnswerMultipleOptionsQuestion(userId, this.linkedMultiOptionQuestionid, RosterVector.Empty, DateTime.Now, new int[] {1, 2});
 
             var answerAsString = this.interview.GetAnswerAsString(Create.Entity.Identity(this.linkedMultiOptionQuestionid));
-            Assert.That(answerAsString, Is.EqualTo("one|two"));
+            Assert.That(answerAsString, Is.EqualTo("one, two"));
 
             var question = this.interview.GetQuestion(Create.Entity.Identity(this.textWithSubstitutionOnMultiQuestionid));
-            Assert.That(question.Title.Text, Is.EqualTo("Result: one|two"));
+            Assert.That(question.Title.Text, Is.EqualTo("Result: one, two"));
         }
     }
 }
