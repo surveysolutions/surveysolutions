@@ -27,6 +27,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly ThrottlingViewModel throttlingModel;
         private readonly IMvxMainThreadAsyncDispatcher mvxMainThreadDispatcher;
         private const int LoadingIndicatorDelayInMilliseconds = 300;
+        private long suggestionsRequestId;
 
         private CancellationTokenSource loadSuggestionsToken = new CancellationTokenSource();
         
@@ -225,19 +226,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private List<OptionWithSearchTerm> GetSuggestions(string filter)
         {
-            var suggestionsLoaded = 0;
+            var currentRequestId = Interlocked.Increment(ref suggestionsRequestId);
             using var loadingIndicatorCancellation = new CancellationTokenSource();
-            var loadingTimer = new Timer(_ =>
-            {
-                if (Volatile.Read(ref suggestionsLoaded) == 1 || isDisposed || loadingIndicatorCancellation.IsCancellationRequested)
-                    return;
-
-                _ = mvxMainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
-                {
-                    if (Volatile.Read(ref suggestionsLoaded) == 0 && !isDisposed && !loadingIndicatorCancellation.IsCancellationRequested)
-                        Loading = true;
-                });
-            }, null, LoadingIndicatorDelayInMilliseconds, Timeout.Infinite);
+            _ = this.ShowLoadingIfSlowAsync(currentRequestId, loadingIndicatorCancellation.Token);
 
             try
             {
@@ -256,17 +247,32 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
             finally
             {
-                using var loadingTimerDisposed = new ManualResetEvent(false);
-                loadingTimer.Dispose(loadingTimerDisposed);
-                loadingTimerDisposed.WaitOne(TimeSpan.FromSeconds(1));
-
-                Interlocked.Exchange(ref suggestionsLoaded, 1);
                 loadingIndicatorCancellation.Cancel();
                 _ = mvxMainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
                 {
-                    if (!isDisposed)
+                    if (!isDisposed && currentRequestId == Volatile.Read(ref suggestionsRequestId))
                         Loading = false;
                 });
+            }
+        }
+
+        private async Task ShowLoadingIfSlowAsync(long requestId, CancellationToken cancellationToken)
+        {
+            try
+            {
+                await Task.Delay(LoadingIndicatorDelayInMilliseconds, cancellationToken);
+                await mvxMainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
+                {
+                    if (!isDisposed
+                        && !cancellationToken.IsCancellationRequested
+                        && requestId == Volatile.Read(ref suggestionsRequestId))
+                    {
+                        Loading = true;
+                    }
+                });
+            }
+            catch (OperationCanceledException)
+            {
             }
         }
 

@@ -120,7 +120,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             filteredViewModel.Setup(x => x.GetOptions(It.IsAny<string>(), It.IsAny<int[]>(), It.IsAny<int?>()))
                 .Returns(() =>
                 {
-                    Thread.Sleep(350);
+                    Thread.Sleep(320);
                     return new List<CategoricalOption>
                     {
                         Create.Entity.CategoricalQuestionOption(1, "option 1", null),
