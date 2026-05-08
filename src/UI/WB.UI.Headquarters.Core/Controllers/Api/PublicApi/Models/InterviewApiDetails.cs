@@ -30,7 +30,10 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
             if (question.IsMultiLinkedToList)
             {
                 var linkedToListQuestion = question.InterviewQuestion as InterviewTreeMultiOptionLinkedToListQuestion;
-                var multiToListAnswers = linkedToListQuestion?.GetAnswer()?.ToDecimals()?.ToHashSet();
+                var answer = linkedToListQuestion?.GetAnswer();
+                if (answer == null) return null;
+
+                var multiToListAnswers = answer.ToDecimals()?.ToHashSet();
                 var refListQuestion = question.Tree.GetTreeNodeByLevelOrNull(
                     linkedToListQuestion?.LinkedSourceId ?? Guid.Empty,
                     question.Identity) as InterviewTreeQuestion;
