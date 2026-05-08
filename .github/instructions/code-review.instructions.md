@@ -209,4 +209,4 @@ Exception: endpoints explicitly decorated `[IgnoreAntiforgeryToken]` (rare). Eve
 
 **Designer:** New routes must be registered centrally in `questionnaire/src/router/index.js`. Flag ad-hoc `router.addRoute(...)` calls in components.
 
-#Critical: If you are not 100% sure in the result, continue looking tor Logic, Security, and Performance issues repeiting review until you are sure for 100%!
+# Critical: If you are not 100% sure in the result, continue looking for Logic, Security, and Performance issues, repeating the review until you are sure for 100%!
