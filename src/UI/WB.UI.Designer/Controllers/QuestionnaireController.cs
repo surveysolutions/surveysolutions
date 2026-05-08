@@ -462,7 +462,7 @@ namespace WB.UI.Designer.Controllers
                 return NotFound();
 
             bool isActive = postModel.IsActive;
-            var anonymousQuestionnaire = dbContext.AnonymousQuestionnaires.FirstOrDefault(a => a.QuestionnaireId == id);
+            var anonymousQuestionnaire = await dbContext.AnonymousQuestionnaires.FirstOrDefaultAsync(a => a.QuestionnaireId == id);
             if (anonymousQuestionnaire == null)
             {
                 anonymousQuestionnaire = new AnonymousQuestionnaire()
@@ -494,7 +494,7 @@ namespace WB.UI.Designer.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RegenerateAnonymousQuestionnaireLink(Guid id)
         {
-            var existedRecord = dbContext.AnonymousQuestionnaires.FirstOrDefault(a => a.QuestionnaireId == id);
+            var existedRecord = await dbContext.AnonymousQuestionnaires.FirstOrDefaultAsync(a => a.QuestionnaireId == id);
             if (existedRecord == null)
                 return NotFound();
 

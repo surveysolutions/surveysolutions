@@ -19,6 +19,8 @@ namespace WB.UI.Designer.CommonWeb
         public bool EnableSSL { get; set; }
         public string PickupFolder { get; set; } = string.Empty;
         public bool UsePickupFolder { get; set; } = false;
+        /// <summary>Timeout in milliseconds for a single SMTP connection attempt. Default: 30 s.</summary>
+        public int Timeout { get; set; } = 30_000;
     }
 
     public class MailSender : IEmailSender
@@ -51,6 +53,7 @@ namespace WB.UI.Designer.CommonWeb
 
                 client.DeliveryMethod = SmtpDeliveryMethod.Network;
                 client.EnableSsl = config.EnableSSL;
+                client.Timeout = config.Timeout;
 
                 if (this.settings.Value.UsePickupFolder)
                 {
