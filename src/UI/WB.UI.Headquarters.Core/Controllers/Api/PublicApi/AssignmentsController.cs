@@ -709,9 +709,18 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi
             if (assignment == null)
                 return NotFound();
 
-            // Interviewers can only Finish (Active→Finished) or Reopen (Finished→Active)
-            if (authorizedUser.IsInterviewer && request.Status == AssignmentStatus.Completed)
-                return Forbid();
+            if (authorizedUser.IsInterviewer)
+            {
+                if (assignment.ResponsibleId != authorizedUser.Id)
+                    return Forbid();
+
+                var isAllowedInterviewerTransition =
+                    (request.Status == AssignmentStatus.Active && assignment.Status == AssignmentStatus.Finished) ||
+                    (request.Status == AssignmentStatus.Finished && assignment.Status == AssignmentStatus.Active);
+
+                if (!isAllowedInterviewerTransition)
+                    return Forbid();
+            }
 
             switch (request.Status)
             {
