@@ -258,7 +258,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 using var loadingTimerDisposed = new ManualResetEvent(false);
                 loadingTimer.Dispose(loadingTimerDisposed);
-                loadingTimerDisposed.WaitOne();
+                loadingTimerDisposed.WaitOne(TimeSpan.FromSeconds(1));
 
                 Interlocked.Exchange(ref suggestionsLoaded, 1);
                 loadingIndicatorCancellation.Cancel();
