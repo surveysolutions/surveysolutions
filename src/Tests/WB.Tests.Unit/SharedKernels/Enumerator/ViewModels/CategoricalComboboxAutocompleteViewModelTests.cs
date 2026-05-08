@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using MvvmCross.Base;
@@ -120,7 +119,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             filteredViewModel.Setup(x => x.GetOptions(It.IsAny<string>(), It.IsAny<int[]>(), It.IsAny<int?>()))
                 .Returns(() =>
                 {
-                    Thread.Sleep(350);
+                    Task.Delay(350).GetAwaiter().GetResult();
                     return new List<CategoricalOption>
                     {
                         Create.Entity.CategoricalQuestionOption(1, "option 1", null),

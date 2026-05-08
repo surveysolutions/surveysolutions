@@ -227,7 +227,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             var suggestionsLoaded = 0;
             using var loadingIndicatorCancellation = new CancellationTokenSource();
-            using var loadingTimer = new Timer(_ =>
+            var loadingTimer = new Timer(_ =>
             {
                 if (Volatile.Read(ref suggestionsLoaded) == 1 || isDisposed || loadingIndicatorCancellation.IsCancellationRequested)
                     return;
@@ -256,6 +256,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
             finally
             {
+                using var loadingTimerDisposed = new ManualResetEvent(false);
+                loadingTimer.Dispose(loadingTimerDisposed);
+                loadingTimerDisposed.WaitOne();
+
                 Interlocked.Exchange(ref suggestionsLoaded, 1);
                 loadingIndicatorCancellation.Cancel();
                 _ = mvxMainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
