@@ -94,10 +94,10 @@ namespace WB.UI.Shared.Enumerator.CustomControls
                         MeasureSpec.MakeMeasureSpec(sizeHeight, (MeasureSpecMode)modeHeight == MeasureSpecMode.Exactly ? MeasureSpecMode.AtMost : (MeasureSpecMode)modeHeight)
                 );
 
-                var lp = child.LayoutParameters as LayoutParams;
+                var lp = this.EnsureFlowLayoutLayoutParams(child);
 
-                var hSpacing = lp != null ? this.GetHorizontalSpacing(lp) : this.HorizontalSpacing;
-                var vSpacing = lp != null ? this.GetVerticalSpacing(lp) : this.VerticalSpacing;
+                var hSpacing = this.GetHorizontalSpacing(lp);
+                var vSpacing = this.GetVerticalSpacing(lp);
 
                 var childWidth = child.MeasuredWidth;
                 var childHeight = child.MeasuredHeight;
@@ -125,7 +125,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
                 var lineLength = lineLengthWithSpacing + childLength;
                 lineLengthWithSpacing = lineLength + spacingLength;
 
-                var newLine = (lp?.NewLine ?? false) || ((MeasureSpecMode)mode != MeasureSpecMode.Unspecified && lineLength > size);
+                var newLine = lp.NewLine || ((MeasureSpecMode)mode != MeasureSpecMode.Unspecified && lineLength > size);
                 if (newLine)
                 {
                     prevLinePosition = prevLinePosition + lineThicknessWithSpacing;
@@ -151,7 +151,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
                     posX = this.PaddingLeft + prevLinePosition;
                     posY = this.PaddingTop + lineLength - childHeight;
                 }
-                lp?.SetPosition(posX, posY);
+                lp.SetPosition(posX, posY);
 
                 controlMaxLength = Math.Max(controlMaxLength, lineLength);
                 controlMaxThickness = prevLinePosition + lineThickness;
@@ -195,14 +195,28 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             return hSpacing;
         }
 
+        private LayoutParams EnsureFlowLayoutLayoutParams(View child)
+        {
+            var lp = child.LayoutParameters as LayoutParams;
+            if (lp != null)
+            {
+                return lp;
+            }
+
+            lp = child.LayoutParameters != null
+                ? new LayoutParams(child.LayoutParameters)
+                : (LayoutParams)this.GenerateDefaultLayoutParams();
+            child.LayoutParameters = lp;
+            return lp;
+        }
+
         protected override void OnLayout(bool changed, int l, int t, int r, int b)
         {
             var count = this.ChildCount;
             for (var i = 0; i < count; i++)
             {
                 var child = this.GetChildAt(i);
-                var lp = child.LayoutParameters as LayoutParams;
-                if (lp == null) continue;
+                var lp = this.EnsureFlowLayoutLayoutParams(child);
                 child.Layout(lp.X, lp.Y, lp.X + child.MeasuredWidth, lp.Y + child.MeasuredHeight);
             }
         }
