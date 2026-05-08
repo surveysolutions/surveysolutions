@@ -165,7 +165,7 @@ import { useVerificationStore } from '../../../stores/verification';
 import { useChatStore } from '../../../stores/chat';
 import { useProgressStore } from '../../../stores/progress';
 import WebTesterApi from '../../../api/webTester';
-import { ref, computed } from 'vue';
+import { ref, computed, inject } from 'vue';
 import { useRoute } from 'vue-router';
 
 import { sanitizeUrl } from '../../../utils/sanitizeUrl';
@@ -192,12 +192,15 @@ export default {
         const chatStore = useChatStore();
         const progressStore = useProgressStore();
         const route = useRoute();
+        const questionnaire = inject('questionnaire');
 
         const verificationDialog = ref(null);
         const sharedInfoDialog = ref(null);
         const downloadPDFDialog = ref(null);
 
         const ctrl_b = useKeyShortcut(e => e.ctrlKey && e.key === 'b');
+        const ctrl_i = useKeyShortcut(e => e.ctrlKey && e.key === 'i' &&
+            questionnaire.value?.webTestAvailable && questionnaire.value?.questionnaireRevision === null);
 
         return {
             verificationStore,
@@ -207,6 +210,7 @@ export default {
             sharedInfoDialog,
             downloadPDFDialog,
             ctrl_b,
+            ctrl_i,
             route
         };
     },
@@ -224,6 +228,10 @@ export default {
         ctrl_b: function (v) {
             if (v)
                 this.verify();
+        },
+        ctrl_i: function (v) {
+            if (v && this.questionnaire.webTestAvailable && this.questionnaire.questionnaireRevision === null)
+                this.webTest();
         }
     },
     computed: {
