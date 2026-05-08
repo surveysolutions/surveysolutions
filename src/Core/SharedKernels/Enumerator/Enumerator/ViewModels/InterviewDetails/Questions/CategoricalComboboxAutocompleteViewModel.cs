@@ -226,14 +226,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private List<OptionWithSearchTerm> GetSuggestions(string filter)
         {
             var suggestionsLoaded = 0;
+            using var loadingIndicatorCancellation = new CancellationTokenSource();
             using var loadingTimer = new Timer(_ =>
             {
-                if (Volatile.Read(ref suggestionsLoaded) == 1 || isDisposed)
+                if (Volatile.Read(ref suggestionsLoaded) == 1 || isDisposed || loadingIndicatorCancellation.IsCancellationRequested)
                     return;
 
                 _ = mvxMainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
                 {
-                    if (Volatile.Read(ref suggestionsLoaded) == 0 && !isDisposed)
+                    if (Volatile.Read(ref suggestionsLoaded) == 0 && !isDisposed && !loadingIndicatorCancellation.IsCancellationRequested)
                         Loading = true;
                 });
             }, null, LoadingIndicatorDelayInMilliseconds, Timeout.Infinite);
@@ -256,6 +257,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             finally
             {
                 Interlocked.Exchange(ref suggestionsLoaded, 1);
+                loadingIndicatorCancellation.Cancel();
                 _ = mvxMainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
                 {
                     if (!isDisposed)
