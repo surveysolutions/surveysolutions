@@ -704,6 +704,7 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         [Route("Resume/{id:Guid}")]
         [WebInterviewAuthorize]
+        [TypeFilter(typeof(RedirectAntiforgeryValidationFailedResultFilter))]
         [AntiForgeryFilter]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ResumePost(string id, string password, string returnUrl)
