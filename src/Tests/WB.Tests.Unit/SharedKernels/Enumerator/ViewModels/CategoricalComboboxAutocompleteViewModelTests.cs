@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using MvvmCross.Base;
@@ -11,6 +12,7 @@ using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
@@ -107,6 +109,37 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
 
             // assert
             Assert.That(changedProperties, Does.Not.Contain(nameof(CategoricalComboboxAutocompleteViewModel.Loading)));
+            Assert.That(vm.Loading, Is.False);
+        }
+
+        [Test]
+        public async Task when_FilterCommand_and_options_loading_is_slow_then_should_toggle_Loading_state()
+        {
+            // arrange
+            var filteredViewModel = new Mock<FilteredOptionsViewModel>();
+            filteredViewModel.Setup(x => x.GetOptions(It.IsAny<string>(), It.IsAny<int[]>(), It.IsAny<int?>()))
+                .Returns(() =>
+                {
+                    Thread.Sleep(450);
+                    return new List<CategoricalOption>
+                    {
+                        Create.Entity.CategoricalQuestionOption(1, "option 1", null),
+                    };
+                });
+
+            var vm = Create.ViewModel.CategoricalComboboxAutocompleteViewModel(filteredViewModel.Object);
+            var loadingStates = new List<bool>();
+            vm.PropertyChanged += (_, args) =>
+            {
+                if (args.PropertyName == nameof(CategoricalComboboxAutocompleteViewModel.Loading))
+                    loadingStates.Add(vm.Loading);
+            };
+
+            // act
+            await vm.FilterCommand.ExecuteAsync("o");
+
+            // assert
+            Assert.That(loadingStates, Does.Contain(true));
             Assert.That(vm.Loading, Is.False);
         }
     }

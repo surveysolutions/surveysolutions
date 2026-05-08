@@ -26,6 +26,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly bool displaySelectedValue;
         private readonly ThrottlingViewModel throttlingModel;
         private readonly IMvxMainThreadAsyncDispatcher mvxMainThreadDispatcher;
+        private const int LoadingIndicatorDelayInMilliseconds = 300;
 
         private CancellationTokenSource loadSuggestionsToken = new CancellationTokenSource();
         
@@ -224,18 +225,43 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private List<OptionWithSearchTerm> GetSuggestions(string filter)
         {
-            List<CategoricalOption> filteredOptions = this.filteredOptionsViewModel.GetOptions(filter, this.excludedOptions, 20);
+            var suggestionsLoaded = 0;
+            using var loadingTimer = new Timer(_ =>
+            {
+                if (Volatile.Read(ref suggestionsLoaded) == 1 || isDisposed)
+                    return;
 
-            var categoricalOptions = filteredOptions.Count == 1 && displaySelectedValue
-                ? filteredOptions
-                : filteredOptions.Where(x => !this.excludedOptions.Contains(x.Value));
+                _ = mvxMainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
+                {
+                    if (Volatile.Read(ref suggestionsLoaded) == 0 && !isDisposed)
+                        Loading = true;
+                });
+            }, null, LoadingIndicatorDelayInMilliseconds, Timeout.Infinite);
 
-            var options = categoricalOptions
-                .Where(m => !m.Title.IsNullOrEmpty())
-                .Select(m => ToOptionWithSearchTerm(filter, m))
-                .ToList();
+            try
+            {
+                List<CategoricalOption> filteredOptions = this.filteredOptionsViewModel.GetOptions(filter, this.excludedOptions, 20);
 
-            return options;
+                var categoricalOptions = filteredOptions.Count == 1 && displaySelectedValue
+                    ? filteredOptions
+                    : filteredOptions.Where(x => !this.excludedOptions.Contains(x.Value));
+
+                var options = categoricalOptions
+                    .Where(m => !m.Title.IsNullOrEmpty())
+                    .Select(m => ToOptionWithSearchTerm(filter, m))
+                    .ToList();
+
+                return options;
+            }
+            finally
+            {
+                Interlocked.Exchange(ref suggestionsLoaded, 1);
+                _ = mvxMainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
+                {
+                    if (!isDisposed)
+                        Loading = false;
+                });
+            }
         }
 
         private static OptionWithSearchTerm ToOptionWithSearchTerm(string filter, CategoricalOption model)
