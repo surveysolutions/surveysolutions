@@ -253,6 +253,7 @@
     "GeometryOverlapDetection": "Détection de chevauchement",
     "QuestionDecimalPlaces": "Nombre de décimales",
     "QuestionInteger": "Entier",
+    "QuestionNonNegative": "Non-negative",
     "QuestionIsLinked": "Est lié",
     "QuestionMaxListCount": "Nombre maximum d'éléments de la liste",
     "QuestionMaxNumberOfAnswers": "Nombre maximum de réponses",

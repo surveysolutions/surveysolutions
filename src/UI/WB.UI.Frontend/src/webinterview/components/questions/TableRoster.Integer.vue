@@ -4,7 +4,7 @@
             digitGroupSeparator: groupSeparator,
             decimalCharacter: decimalSeparator,
             decimalPlaces: 0,
-            minimumValue: $me.isNonNegative ? '0' : '-2147483648',
+            minimumValue: ($me.isNonNegative && !hasNegativeSpecialValues) ? '0' : '-2147483648',
             maximumValue: '2147483647'
         }" />
 </template>
@@ -35,6 +35,9 @@ export default {
         decimalSeparator() {
             return getDecimalSeparator(this.$me)
         },
+        hasNegativeSpecialValues() {
+            return (this.$me.options || []).some(o => o.value < 0)
+        },
     },
     methods: {
 
@@ -64,7 +67,7 @@ export default {
                     return
                 }
 
-                if (this.$me.isNonNegative && answer < 0) {
+                if (this.$me.isNonNegative && answer < 0 && !this.isSpecialValue(answer)) {
                     this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.NumberNonNegativeError'), answer)
                     return
                 }
@@ -119,6 +122,12 @@ export default {
 
         isCancelBeforeStart() {
             return this.cancelBeforeStart
+        },
+
+        isSpecialValue(value) {
+            const options = this.$me.options || []
+            if (options.length === 0) return false
+            return options.some(o => o.value === value)
         },
 
         destroy() {

@@ -433,6 +433,9 @@
   <data name="NumberCannotBeLessThanProtected" xml:space="preserve">
     <value>لا يمكن أن تكون القيمة المدخلة أقل من الإجابة المحمية</value>
   </data>
+  <data name="NumberNonNegativeError" xml:space="preserve">
+    <value>Negative values are not allowed for this question</value>
+  </data>
   <data name="ReloadQuestionnaire" xml:space="preserve">
     <value>تحديث الاستبيان</value>
   </data>

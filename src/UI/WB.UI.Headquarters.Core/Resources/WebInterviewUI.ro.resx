@@ -327,6 +327,9 @@ Contactați echipa de suport pentru asistență.</value>
   <data name="NumberCannotBeLessThanProtected" xml:space="preserve">
     <value>Valoarea introdusă nu poate fi mai mică decât răspunsul protejat</value>
   </data>
+  <data name="NumberNonNegativeError" xml:space="preserve">
+    <value>Negative values are not allowed for this question</value>
+  </data>
   <data name="NumberCannotParse" xml:space="preserve">
     <value>Valoarea introdusă nu poate fi considerată ca valoare întregă</value>
   </data>

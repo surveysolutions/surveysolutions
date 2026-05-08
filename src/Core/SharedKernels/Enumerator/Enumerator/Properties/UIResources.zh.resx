@@ -366,6 +366,9 @@
   <data name="Interview_Question_Integer_NegativeRosterSizeAnswer" xml:space="preserve">
     <value>答案“{0}”不正确，因为本问题的答案将用于设置名单项目的数量，而给出的答案为负值。</value>
   </data>
+  <data name="Interview_Question_Integer_NegativeAnswer" xml:space="preserve">
+    <value>Negative values are not allowed for this question</value>
+  </data>
   <data name="Interview_Question_Integer_ParsingError" xml:space="preserve">
     <value>输入的数值不能被解析为整数值</value>
   </data>

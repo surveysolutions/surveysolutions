@@ -274,6 +274,9 @@
   <data name="Interview_Question_Integer_NegativeRosterSizeAnswer" xml:space="preserve">
     <value>ចំលើយ  '{0}'  គឺមិនត្រឹមត្រូវ ពីព្រោះ សំនួរប្រើទំហំចំនួន បញ្ជីរាយនាម និង បញ្ជាក់ពីចំលើយអវិជ្ជមាន។​</value>
   </data>
+  <data name="Interview_Question_Integer_NegativeAnswer" xml:space="preserve">
+    <value>Negative values are not allowed for this question</value>
+  </data>
   <data name="Interview_Question_Integer_ParsingError" xml:space="preserve">
     <value>វាយលេខ មិនអាចដកឃ្លាពីលេខគត់</value>
   </data>

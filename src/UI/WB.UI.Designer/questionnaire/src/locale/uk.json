@@ -233,6 +233,7 @@
     "QuestionHideInstruction": "Приховати інструкцію",
     "QuestionInstruction": "Інструкція",
     "QuestionInteger": "Ціле число",
+    "QuestionNonNegative": "Non-negative",
     "QuestionIsLinked": "пов'язане",
     "QuestionLinkedDescr": "Прив'язати до питання зі списку або питання з групи ростеру",
     "QuestionMaxListCount": "Максимальна кількість елементів списку",

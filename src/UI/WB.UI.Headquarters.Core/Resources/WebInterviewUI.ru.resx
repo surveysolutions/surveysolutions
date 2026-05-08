@@ -447,6 +447,9 @@ Oбратитесь в тех. поддержку за помощью</value>
   <data name="NumberCannotBeLessThanProtected" xml:space="preserve">
     <value>Введенное значение не может быть меньше чем защищенный ответ</value>
   </data>
+  <data name="NumberNonNegativeError" xml:space="preserve">
+    <value>Negative values are not allowed for this question</value>
+  </data>
   <data name="Interview_Overview_NotAnswered" xml:space="preserve">
     <value>Не отвечен</value>
   </data>

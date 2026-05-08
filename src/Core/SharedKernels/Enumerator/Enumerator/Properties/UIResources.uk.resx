@@ -314,6 +314,9 @@
   <data name="Interview_Question_Integer_NegativeRosterSizeAnswer" xml:space="preserve">
     <value>Відповідь '{0}' є неправильною, оскільки питання є питанням джерела ростеру, а вказана відповідь – від'ємне число</value>
   </data>
+  <data name="Interview_Question_Integer_NegativeAnswer" xml:space="preserve">
+    <value>Negative values are not allowed for this question</value>
+  </data>
   <data name="Interview_Question_Integer_ParsingError" xml:space="preserve">
     <value>Введене значення не може бути оброблено як ціле число</value>
   </data>

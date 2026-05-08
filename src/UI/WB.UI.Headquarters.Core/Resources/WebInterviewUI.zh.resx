@@ -435,6 +435,9 @@
   <data name="NumberCannotBeLessThanProtected" xml:space="preserve">
     <value>输入的值不能小于受保护的答案</value>
   </data>
+  <data name="NumberNonNegativeError" xml:space="preserve">
+    <value>Negative values are not allowed for this question</value>
+  </data>
   <data name="CompleteReviewSubmit" xml:space="preserve">
       <value>审阅并提交</value>
   </data>

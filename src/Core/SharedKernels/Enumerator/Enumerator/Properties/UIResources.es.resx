@@ -267,6 +267,9 @@
     <data name="Interview_Question_Integer_NegativeRosterSizeAnswer" xml:space="preserve">
     <value>Respuesta '{0}' es incorrecta porque la pregunta se utiliza como tamaño de la lista y la respuesta especificada es negativa</value>
   </data>
+  <data name="Interview_Question_Integer_NegativeAnswer" xml:space="preserve">
+    <value>Negative values are not allowed for this question</value>
+  </data>
     <data name="Interview_Question_Integer_ParsingError" xml:space="preserve">
     <value>Valor introducido no puede ser tratado como entero</value>
   </data>

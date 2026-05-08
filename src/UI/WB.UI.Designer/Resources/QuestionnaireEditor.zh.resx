@@ -570,6 +570,9 @@
   <data name="QuestionInteger" xml:space="preserve">
     <value>整数</value>
   </data>
+  <data name="QuestionNonNegative" xml:space="preserve">
+    <value>Non-negative</value>
+  </data>
   <data name="QuestionIsLinked" xml:space="preserve">
     <value>被关联</value>
   </data>

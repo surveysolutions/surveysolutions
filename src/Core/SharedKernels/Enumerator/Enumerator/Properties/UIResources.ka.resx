@@ -368,6 +368,9 @@
   <data name="Interview_Question_Integer_NegativeRosterSizeAnswer" xml:space="preserve">
     <value>პასუხი '{0}' არასწორია, რადგანაც კითხვა გამოიყენება როგორც როსტერის ზომა და აღნიშნული პასუხი უარყოფითია</value>
   </data>
+  <data name="Interview_Question_Integer_NegativeAnswer" xml:space="preserve">
+    <value>Negative values are not allowed for this question</value>
+  </data>
   <data name="Interview_Question_Integer_ParsingError" xml:space="preserve">
     <value>შეყვანილი მნიშვნელობა არ შეიძლება დაყოფილი იქნეს როგორც მთელი მნიშვნელობა</value>
   </data>

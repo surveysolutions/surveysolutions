@@ -2,7 +2,7 @@
     <input type="text" autocomplete="off" inputmode="decimal" class="ag-cell-edit-input" ref="inputDouble"
         :placeholder="noAnswerWatermark" :title="noAnswerWatermark" :value="$me.answer" :disabled="!$me.acceptAnswer"
         v-numericFormatting="{
-            minimumValue: $me.isNonNegative ? '0' : '-99999999999999.99999999999999',
+            minimumValue: ($me.isNonNegative && !hasNegativeSpecialValues) ? '0' : '-99999999999999.99999999999999',
             maximumValue: '99999999999999.99999999999999',
             digitGroupSeparator: groupSeparator,
             decimalCharacter: decimalSeparator,
@@ -42,6 +42,9 @@ export default {
         decimalPlacesCount() {
             return getDecimalPlacesCount(this.$me)
         },
+        hasNegativeSpecialValues() {
+            return (this.$me.options || []).some(o => o.value < 0)
+        },
     },
     methods: {
         saveAnswer() {
@@ -72,13 +75,19 @@ export default {
                     return
                 }
 
-                if (this.$me.isNonNegative && answer < 0) {
+                if (this.$me.isNonNegative && answer < 0 && !this.isSpecialValue(answer)) {
                     this.markAnswerAsNotSavedWithMessage(this.$t('WebInterviewUI.NumberNonNegativeError'), answer)
                     return
                 }
 
                 this.$store.dispatch('answerDoubleQuestion', { identity: this.id, answer: answer })
             })
+        },
+
+        isSpecialValue(value) {
+            const options = this.$me.options || []
+            if (options.length === 0) return false
+            return options.some(o => o.value === value)
         },
 
         isCancelBeforeStart() {

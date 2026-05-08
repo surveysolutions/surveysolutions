@@ -253,6 +253,7 @@
     "GeometryOverlapDetection": "Detecção de sobreposição",
     "QuestionDecimalPlaces": "Número de casas decimais",
     "QuestionInteger": "Inteiro",
+    "QuestionNonNegative": "Non-negative",
     "QuestionIsLinked": "Está vinculado",
     "QuestionMaxListCount": "Número máximo de elementos da lista",
     "QuestionMaxNumberOfAnswers": "Número máximo de respostas",

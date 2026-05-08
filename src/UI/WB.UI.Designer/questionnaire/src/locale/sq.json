@@ -170,6 +170,7 @@
     "QuestionHideInstruction": "Fshih udhëzimin",
     "QuestionInstruction": "Udhëzim",
     "QuestionInteger": "I plotë",
+    "QuestionNonNegative": "Non-negative",
     "QuestionIsLinked": "Është lidhur",
     "QuestionLinkedDescr": "Lidh me pyetjen e listës ose pyetjen nga grupi i rosterit ",
     "QuestionMaxListCount": "Numri maksimal i elementeve të listës ",
