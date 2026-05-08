@@ -83,6 +83,16 @@
                             $t("Assignments.Close")
                         }}</button>
 
+                    <button class="btn btn-lg btn-warning" id="btnCompleteSelected"
+                        v-if="(config.isHeadquarter || config.isSupervisor) && !showArchive.key"
+                        @click="bulkChangeStatus('Completed', 'completeModal')">{{
+                            $t("Assignments.Complete") }}</button>
+
+                    <button class="btn btn-lg btn-primary" id="btnReopenSelected"
+                        v-if="(config.isHeadquarter || config.isSupervisor) && !showArchive.key"
+                        @click="bulkChangeStatus('Active', 'reopenModal')">{{
+                            $t("Assignments.Reopen") }}</button>
+
                     <button class="btn btn-lg btn-danger" id="btnArchiveSelected"
                         v-if="!showArchive.key && config.isHeadquarter" @click="archiveSelected">{{
                             $t("Assignments.Archive") }}</button>
@@ -300,7 +310,7 @@ export default {
             editedAudioRecordingEnabled: null,
             canEditQuantity: null,
             mode: null,
-            statusChangeRowId: null,
+            statusChangeIds: [],
             statusChangeTargetStatus: null,
             statusChangeComment: null,
         }
@@ -910,7 +920,14 @@ export default {
         },
 
         openStatusChangeModal(rowId, targetStatus, modalRef) {
-            this.statusChangeRowId = rowId
+            this.statusChangeIds = [rowId]
+            this.statusChangeTargetStatus = targetStatus
+            this.statusChangeComment = null
+            this.$refs[modalRef].modal()
+        },
+
+        bulkChangeStatus(targetStatus, modalRef) {
+            this.statusChangeIds = [...this.selectedRows]
             this.statusChangeTargetStatus = targetStatus
             this.statusChangeComment = null
             this.$refs[modalRef].modal()
@@ -921,13 +938,17 @@ export default {
                 ? this.$refs.completeModal
                 : this.$refs.reopenModal
             try {
-                await this.$hq.Assignments.changeStatus(
-                    this.statusChangeRowId,
-                    this.statusChangeTargetStatus,
-                    this.statusChangeComment
+                await Promise.all(
+                    this.statusChangeIds.map(id =>
+                        this.$hq.Assignments.changeStatus(
+                            id,
+                            this.statusChangeTargetStatus,
+                            this.statusChangeComment
+                        )
+                    )
                 )
                 modalRef.hide()
-                this.statusChangeRowId = null
+                this.statusChangeIds = []
                 this.statusChangeTargetStatus = null
                 this.statusChangeComment = null
                 this.reloadTable()

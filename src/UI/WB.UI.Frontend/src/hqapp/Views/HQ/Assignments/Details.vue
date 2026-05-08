@@ -785,12 +785,12 @@ export default {
             return statusMap[this.model.status] || this.model.status
         },
         canComplete() {
-            if (!this.isHeadquarters) return false
+            if (!this.isHeadquarters && !this.model.isSupervisor) return false
             if (this.isArchived) return false
             return this.model.status === 'Active' || this.model.status === 'Finished'
         },
         canReopen() {
-            if (!this.isHeadquarters) return false
+            if (!this.isHeadquarters && !this.model.isSupervisor) return false
             if (this.isArchived) return false
             return this.model.status === 'Finished' || this.model.status === 'Completed'
         },
