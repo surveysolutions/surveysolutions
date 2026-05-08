@@ -158,9 +158,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private async Task SignInWithHash()
         {
             var userName = this.UserName;
-            var passwordHash = this.GetUserPasswordHash();
-
             this.logger.Trace($"Logging in {userName} with biometric authentication");
+
+            if (string.IsNullOrWhiteSpace(userName))
+            {
+                this.IsUserValid = false;
+                this.PasswordError = EnumeratorUIResources.Unauthorized;
+                return;
+            }
+
+            var passwordHash = this.GetUserPasswordHash();
 
             if (string.IsNullOrWhiteSpace(passwordHash))
             {

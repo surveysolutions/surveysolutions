@@ -12,6 +12,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
         [NUnit.Framework.OneTimeSetUp]
         public async Task context()
         {
+            ViewModelNavigationServiceMock.Reset();
+
             var passwordHasher = Mock.Of<IPasswordHasher>();
 
             var interviewer = CreateInterviewerIdentity(userName, userPasswordHash);
@@ -21,6 +23,12 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
             principal.Setup(x => x.DoesIdentityExist()).Returns(true);
             principal.Setup(x => x.GetExistingIdentityNameOrNull()).Returns(interviewer.Name);
             principal.Setup(x => x.GetInterviewerByName(userName)).Returns(interviewer);
+            ViewModelNavigationServiceMock
+                .Setup(x => x.NavigateToDashboardAsync(null))
+                .Returns(Task.FromResult(true));
+            ViewModelNavigationServiceMock
+                .Setup(x => x.Close(It.IsAny<LoginViewModel>()))
+                .Returns(Task.CompletedTask);
 
             viewModel = CreateLoginViewModel(
                 viewModelNavigationService: ViewModelNavigationServiceMock.Object,
@@ -29,13 +37,16 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
 
             await viewModel.Initialize();
             viewModel.UserName = userName;
-            BecauseOf();
+            await BecauseOf();
         }
 
-        public void BecauseOf() => viewModel.SignInWithHashCommand.Execute();
+        public Task BecauseOf() => viewModel.SignInWithHashCommand.ExecuteAsync();
 
         [NUnit.Framework.Test] public void should_navigate_to_dashboard() =>
             ViewModelNavigationServiceMock.Verify(x => x.NavigateToDashboardAsync(null), Times.Once);
+
+        [NUnit.Framework.Test] public void should_close_login_viewmodel() =>
+            ViewModelNavigationServiceMock.Verify(x => x.Close(viewModel), Times.Once);
 
         static LoginViewModel viewModel;
         private static readonly string userName = "Vasya";

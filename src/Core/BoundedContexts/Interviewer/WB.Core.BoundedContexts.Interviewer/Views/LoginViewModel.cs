@@ -37,7 +37,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             => this.interviewerPrincipal.GetLastWorkspaceOrNull();
 
         public override string? GetUserPasswordHash()
-            => this.interviewerPrincipal.GetInterviewerByName(this.UserName)?.PasswordHash;
+        {
+            if (string.IsNullOrWhiteSpace(this.UserName))
+                return null;
+
+            return this.interviewerPrincipal.GetInterviewerByName(this.UserName)?.PasswordHash;
+        }
 
         public override void UpdateLocalUser(string userName, string token, string passwordHash)
         {

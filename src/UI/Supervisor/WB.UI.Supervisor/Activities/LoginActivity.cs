@@ -95,6 +95,9 @@ namespace WB.UI.Supervisor.Activities
             this.biometricLoginButton.Visibility = ViewStates.Gone;
             this.biometricLoginButton.ContentDescription = EnumeratorUIResources.LoginText;
 
+            if (!this.ViewModel.HasUser())
+                return;
+
             var authenticators = BiometricManager.Authenticators.BiometricStrong;
 
             if (BiometricManager.From(this).CanAuthenticate(authenticators) != BiometricManager.BiometricSuccess)
@@ -106,6 +109,7 @@ namespace WB.UI.Supervisor.Activities
             this.biometricPromptInfo = new BiometricPrompt.PromptInfo.Builder()
                 .SetTitle(EnumeratorUIResources.LoginText)
                 .SetSubtitle(EnumeratorUIResources.PasswordHint)
+                .SetAllowedAuthenticators(authenticators)
                 .SetNegativeButtonText(EnumeratorUIResources.Cancel)
                 .Build();
 
