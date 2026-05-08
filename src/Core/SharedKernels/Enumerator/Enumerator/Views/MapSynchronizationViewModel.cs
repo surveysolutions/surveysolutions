@@ -83,6 +83,7 @@ namespace WB.Core.SharedKernels.Enumerator.Views
             }
         }
         private CancellationTokenSource synchronizationCancellationTokenSource;
+        private MapSyncProgressStatus subscribedProgress;
 
         public IMvxCommand CancelSynchronizationCommand => new MvxCommand(this.CancelSynchronizaion);
         public IMvxCommand HideSynchronizationCommand => new MvxCommand(this.HideSynchronizaion);
@@ -110,8 +111,18 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         public void Init()
         {
             var mapSyncProgressStatus = this.MapSyncBackgroundService?.CurrentProgress;
+            if (ReferenceEquals(mapSyncProgressStatus, this.subscribedProgress))
+                return;
+
+            if (this.subscribedProgress != null)
+            {
+                this.subscribedProgress.Progress.ProgressChanged -= ProgressOnProgressChanged;
+                this.subscribedProgress = null;
+            }
+
             if (mapSyncProgressStatus != null)
             {
+                this.subscribedProgress = mapSyncProgressStatus;
                 mapSyncProgressStatus.Progress.ProgressChanged += ProgressOnProgressChanged;
                 this.synchronizationCancellationTokenSource = mapSyncProgressStatus.CancellationTokenSource;
             }
@@ -128,6 +139,9 @@ namespace WB.Core.SharedKernels.Enumerator.Views
             var mapSyncProgressStatus = this.MapSyncBackgroundService.CurrentProgress;
             if (mapSyncProgressStatus != null)
             {
+                if (this.subscribedProgress != null)
+                    this.subscribedProgress.Progress.ProgressChanged -= ProgressOnProgressChanged;
+                this.subscribedProgress = mapSyncProgressStatus;
                 mapSyncProgressStatus.Progress.ProgressChanged += ProgressOnProgressChanged;
                 this.synchronizationCancellationTokenSource = mapSyncProgressStatus.CancellationTokenSource;
             }
@@ -146,6 +160,7 @@ namespace WB.Core.SharedKernels.Enumerator.Views
 
                 if (!syncProgressInfo.IsRunning)
                 {
+                    this.subscribedProgress = null;
                     this.synchronizationCancellationTokenSource = null;
                     this.OnSyncCompleted();
                 }

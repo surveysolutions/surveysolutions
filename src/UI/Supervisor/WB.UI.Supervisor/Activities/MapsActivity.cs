@@ -27,11 +27,13 @@ namespace WB.UI.Supervisor.Activities
             set
             {
                 this.binder = value;
-                if (this.binder != null && this.pendingSyncRequest)
+                if (this.binder != null)
                 {
-                    this.pendingSyncRequest = false;
-                    this.StartService(new Intent(this, typeof(MapDownloadBackgroundService)));
-                    this.binder.GetService().SyncMaps();
+                    if (this.pendingSyncRequest)
+                    {
+                        this.pendingSyncRequest = false;
+                        this.binder.GetService().SyncMaps();
+                    }
                     this.ViewModel?.Synchronization?.Init();
                 }
             }
@@ -70,7 +72,6 @@ namespace WB.UI.Supervisor.Activities
         protected override void OnStop()
         {
             base.OnStop();
-            this.pendingSyncRequest = false;
             if (this.isBound)
             {
                 this.UnbindService(this.serviceConnection);
@@ -126,12 +127,12 @@ namespace WB.UI.Supervisor.Activities
 
         public void StartSync()
         {
+            this.StartService(new Intent(this, typeof(MapDownloadBackgroundService)));
             if (this.Binder == null)
             {
                 this.pendingSyncRequest = true;
                 return;
             }
-            this.StartService(new Intent(this, typeof(MapDownloadBackgroundService)));
             this.Binder.GetService().SyncMaps();
         }
 
