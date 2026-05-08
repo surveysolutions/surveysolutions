@@ -1515,6 +1515,18 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
             }
         }
         
+        public static string Dashboard_Assignment_Status_Finished {
+            get {
+                return ResourceManager.GetString("Dashboard_Assignment_Status_Finished", resourceCulture);
+            }
+        }
+        
+        public static string Dashboard_Assignment_Status_Completed {
+            get {
+                return ResourceManager.GetString("Dashboard_Assignment_Status_Completed", resourceCulture);
+            }
+        }
+        
         public static string Dashboard_ShowLocation {
             get {
                 return ResourceManager.GetString("Dashboard_ShowLocation", resourceCulture);

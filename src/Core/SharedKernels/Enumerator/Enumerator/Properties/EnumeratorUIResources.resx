@@ -863,6 +863,12 @@ your next synchronization</value>
   <data name="Dashboard_Assignment_Comment" xml:space="preserve">
     <value>Comment (optional)</value>
   </data>
+  <data name="Dashboard_Assignment_Status_Finished" xml:space="preserve">
+    <value>Status: Finished</value>
+  </data>
+  <data name="Dashboard_Assignment_Status_Completed" xml:space="preserve">
+    <value>Status: Completed</value>
+  </data>
   <data name="Dashboard_ShowLocation" xml:space="preserve">
     <value>Show location</value>
   </data>
