@@ -42,13 +42,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             if (assignment == null)
                 return OkResponse.Task;
 
-            // Supervisor authority: only accept status changes from interviewers that don't downgrade
-            // (interviewer can Finish; supervisor can Complete or Reopen — supervisor wins on conflict)
             var newStatus = request.StatusChange?.Status ?? AssignmentStatus.Active;
 
-            // Apply the interviewer's status change only when the assignment is currently Active.
-            // If the supervisor has already Completed or Finished the assignment on this tablet,
-            // ignore the interviewer's change — supervisor overrides interviewer.
+            // Accept the interviewer's status change only when the assignment is currently Active.
+            // If the supervisor has already changed the assignment status (to Finished or Completed),
+            // ignore the interviewer's update — supervisor changes always take precedence.
             if (assignment.Status == AssignmentStatus.Active)
             {
                 assignment.Status = newStatus;
