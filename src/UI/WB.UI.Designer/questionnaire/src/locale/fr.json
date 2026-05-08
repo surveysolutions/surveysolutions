@@ -338,6 +338,7 @@
     "HotkeysOpenSection": "Ouvrir la section",
     "HotkeysPrint": "Imprimer",
     "HotkeysSearch": "Rechercher des sous-sections et des questions dans la section",
+    "HotkeysTest": "Tester le questionnaire dans WebTester",
     "MultipleDependencies": "Une ou plusieurs questions/sous-sections dépendent de",
     "NoPermissions": "Vous n'avez pas les permissions pour modifier ce questionnaire",
     "NotAnImage": "Le fichier choisi n'est pas une image",

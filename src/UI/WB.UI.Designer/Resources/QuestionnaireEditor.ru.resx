@@ -896,6 +896,9 @@
   <data name="HotkeysSearch" xml:space="preserve">
     <value>Поиск в подсекциях и вопросах в секции</value>
   </data>
+  <data name="HotkeysTest" xml:space="preserve">
+    <value>Тестировать анкету в WebTester</value>
+  </data>
   <data name="MultipleDependencies" xml:space="preserve">
     <value>Один или более вопросов/подсекций зависит от </value>
   </data>

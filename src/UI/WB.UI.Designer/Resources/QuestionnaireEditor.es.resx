@@ -396,6 +396,9 @@
   <data name="HotkeysSearch" xml:space="preserve">
     <value>Buscar subsecciones y preguntas en la sección</value>
   </data>
+  <data name="HotkeysTest" xml:space="preserve">
+    <value>Probar el cuestionario en WebTester</value>
+  </data>
   <data name="HotkeysShortcuts" xml:space="preserve">
     <value>Secuencias de teclado</value>
   </data>

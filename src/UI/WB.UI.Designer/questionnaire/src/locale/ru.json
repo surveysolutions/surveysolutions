@@ -258,6 +258,7 @@
     "HotkeysOpenSection": "Открыть секцию",
     "HotkeysPrint": "Печать",
     "HotkeysSearch": "Поиск в подсекциях и вопросах в секции",
+    "HotkeysTest": "Тестировать анкету в WebTester",
     "MultipleDependencies": "Один или более вопросов/подсекций зависит от ",
     "NoPermissions": "У вас не достаточно прав для изменения опросника",
     "NotAnImage": "Выбранный файн должен быть картинкой",
