@@ -205,7 +205,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
 
             lp = child.LayoutParameters != null
                 ? new LayoutParams(child.LayoutParameters)
-                : (LayoutParams)this.GenerateDefaultLayoutParams();
+                : new LayoutParams(ViewGroup.LayoutParams.WrapContent, ViewGroup.LayoutParams.WrapContent);
             child.LayoutParameters = lp;
             return lp;
         }
