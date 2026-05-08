@@ -626,6 +626,9 @@ Zobrazení tabulky a matice jsou podporována pouze ve webovém průzkumu, table
   <data name="HotkeysSearch" xml:space="preserve">
     <value>Vyhledávání podsekcí a otázek v sekci</value>
   </data>
+  <data name="HotkeysTest" xml:space="preserve">
+    <value>Testovat dotazník ve WebTesteru</value>
+  </data>
   <data name="HotkeysShortcuts" xml:space="preserve">
     <value>Klávesové zkratky</value>
   </data>

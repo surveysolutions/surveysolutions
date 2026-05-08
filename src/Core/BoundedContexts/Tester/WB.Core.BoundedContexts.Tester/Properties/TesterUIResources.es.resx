@@ -216,6 +216,9 @@
   <data name="Login_Error_EmptyName" xml:space="preserve">
     <value>Favor ingresar el usuario correcto</value>
   </data>
+  <data name="TesterLoginAccountHintText" xml:space="preserve">
+    <value>Inicie sesión en esta aplicación con las credenciales que creó en https://designer.mysurvey.solutions. Para registrar una nueva cuenta, visite el mismo sitio.</value>
+  </data>
   <data name="Prefs_ShowAnswerTime" xml:space="preserve">
     <value>Mostrar el tiempo transcurrido por respuesta</value>
   </data>
