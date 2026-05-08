@@ -926,6 +926,15 @@ export default {
                                 return data.DeviceId
                             case 'TargetAreaChanged':
                                 return escape(data.TargetArea)
+                            case 'Finished':
+                            case 'Completed':
+                            case 'Reopened':
+                                if (data && data.Comment) {
+                                    return self.$t('Assignments.Action_StatusChanged_Comment', {
+                                        comment: escape(data.Comment),
+                                    })
+                                }
+                                return ''
                         }
                         return ''
                     },
