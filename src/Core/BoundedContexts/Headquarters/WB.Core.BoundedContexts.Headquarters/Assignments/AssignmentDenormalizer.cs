@@ -180,19 +180,31 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         public Assignment Update(Assignment state, IPublishedEvent<AssignmentFinished> @event)
         {
             return UpdateAssignment(state, @event.Payload.OriginDate.UtcDateTime,
-                assignment => assignment.Status = AssignmentStatus.Finished);
+                assignment =>
+                {
+                    assignment.Status = AssignmentStatus.Finished;
+                    assignment.StatusComment = @event.Payload.Comment;
+                });
         }
 
         public Assignment Update(Assignment state, IPublishedEvent<AssignmentCompleted> @event)
         {
             return UpdateAssignment(state, @event.Payload.OriginDate.UtcDateTime,
-                assignment => assignment.Status = AssignmentStatus.Completed);
+                assignment =>
+                {
+                    assignment.Status = AssignmentStatus.Completed;
+                    assignment.StatusComment = @event.Payload.Comment;
+                });
         }
 
         public Assignment Update(Assignment state, IPublishedEvent<AssignmentReopened> @event)
         {
             return UpdateAssignment(state, @event.Payload.OriginDate.UtcDateTime,
-                assignment => assignment.Status = AssignmentStatus.Active);
+                assignment =>
+                {
+                    assignment.Status = AssignmentStatus.Active;
+                    assignment.StatusComment = @event.Payload.Comment;
+                });
         }
 
         private Assignment UpdateAssignment(Assignment assignment, DateTimeOffset dateTimeOffset, Action<Assignment> updater)

@@ -23,12 +23,13 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
         [Test]
         public async Task server_status_overrides_local_status()
         {
-            // Arrange: local has Finished, server returns Active
+            // Arrange: local has Finished (no pending upload), server returns Active
             var localAssignment = Create.Entity
                 .AssignmentDocument(1, 10, 0, Create.Entity.QuestionnaireIdentity(Id.gA).ToString())
                 .Build();
             localAssignment.Status = AssignmentStatus.Finished;
-            localAssignment.StatusComment = "some comment";
+            localAssignment.StatusComment = "server comment";
+            // No pending upload (StatusChangedAtUtc is null)
 
             var assignmentsRepo = Create.Storage.AssignmentDocumentsInmemoryStorage();
             assignmentsRepo.Store(new[] { localAssignment });
@@ -38,14 +39,13 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 Id = 1,
                 Quantity = 10,
                 QuestionnaireId = Create.Entity.QuestionnaireIdentity(Id.gA),
-                Status = AssignmentStatus.Active // server has Active
+                Status = AssignmentStatus.Active, // server has Active
+                StatusComment = null
             };
 
             var syncService = new Mock<ISynchronizationService>();
             syncService.Setup(s => s.GetAssignmentsAsync(It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new List<AssignmentApiView> { remoteView });
-            syncService.Setup(s => s.ChangeAssignmentStatusAsync(It.IsAny<int>(), It.IsAny<AssignmentStatusChangeApiView>(), It.IsAny<CancellationToken>()))
-                .Returns(Task.CompletedTask);
 
             var synchronizer = Create.Service.AssignmentsSynchronizer(
                 synchronizationService: syncService.Object,
@@ -58,13 +58,16 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             // Assert: local status should be overridden to Active by server
             var updated = assignmentsRepo.GetById(1);
             updated.Status.Should().Be(AssignmentStatus.Active);
-            updated.StatusComment.Should().BeNull("status comment should be cleared after successful sync");
+            updated.StatusComment.Should().BeNull("server sent null status comment");
+            updated.StatusChangedAtUtc.Should().BeNull("pending flag is cleared after sync");
+            // No upload should have been made since there was no pending change
+            syncService.Verify(s => s.ChangeAssignmentStatusAsync(It.IsAny<int>(), It.IsAny<AssignmentStatusChangeApiView>(), It.IsAny<CancellationToken>()), Times.Never);
         }
 
         [Test]
         public async Task server_completed_status_overrides_local_finished()
         {
-            // Arrange: local has Finished, server has Completed (e.g., supervisor completed it)
+            // Arrange: local has Finished (no pending upload), server has Completed (supervisor completed it)
             var localAssignment = Create.Entity
                 .AssignmentDocument(1, 10, 0, Create.Entity.QuestionnaireIdentity(Id.gA).ToString())
                 .Build();
@@ -78,14 +81,13 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 Id = 1,
                 Quantity = 10,
                 QuestionnaireId = Create.Entity.QuestionnaireIdentity(Id.gA),
-                Status = AssignmentStatus.Completed // supervisor completed it on server
+                Status = AssignmentStatus.Completed, // supervisor completed it on server
+                StatusComment = "Completed by supervisor"
             };
 
             var syncService = new Mock<ISynchronizationService>();
             syncService.Setup(s => s.GetAssignmentsAsync(It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new List<AssignmentApiView> { remoteView });
-            syncService.Setup(s => s.ChangeAssignmentStatusAsync(It.IsAny<int>(), It.IsAny<AssignmentStatusChangeApiView>(), It.IsAny<CancellationToken>()))
-                .Returns(Task.CompletedTask);
 
             var synchronizer = Create.Service.AssignmentsSynchronizer(
                 synchronizationService: syncService.Object,
@@ -98,18 +100,19 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             // Assert: server Completed wins over local Finished
             var updated = assignmentsRepo.GetById(1);
             updated.Status.Should().Be(AssignmentStatus.Completed);
+            updated.StatusComment.Should().Be("Completed by supervisor");
         }
 
         [Test]
         public async Task uploads_local_status_change_before_downloading()
         {
-            // Arrange: local assignment with Finished status + comment
+            // Arrange: local assignment with Finished status + comment (pending upload indicated by StatusChangedAtUtc)
             var localAssignment = Create.Entity
                 .AssignmentDocument(1, 10, 0, Create.Entity.QuestionnaireIdentity(Id.gA).ToString())
                 .Build();
             localAssignment.Status = AssignmentStatus.Finished;
-            // StatusComment is set to non-null to signal a pending upload (empty string = pending, no comment)
             localAssignment.StatusComment = "No more households";
+            localAssignment.StatusChangedAtUtc = DateTime.UtcNow;
 
             var assignmentsRepo = Create.Storage.AssignmentDocumentsInmemoryStorage();
             assignmentsRepo.Store(new[] { localAssignment });
@@ -119,7 +122,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 Id = 1,
                 Quantity = 10,
                 QuestionnaireId = Create.Entity.QuestionnaireIdentity(Id.gA),
-                Status = AssignmentStatus.Finished // server now reflects the change
+                Status = AssignmentStatus.Finished, // server now reflects the change
+                StatusComment = "No more households"
             };
 
             AssignmentStatusChangeApiView capturedChange = null;
@@ -143,18 +147,22 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             capturedChange.Should().NotBeNull();
             capturedChange.Status.Should().Be(AssignmentStatus.Finished);
             capturedChange.Comment.Should().Be("No more households");
+
+            // After sync, pending flag is cleared
+            var updated = assignmentsRepo.GetById(1);
+            updated.StatusChangedAtUtc.Should().BeNull();
         }
 
         [Test]
         public async Task uploads_local_status_change_with_no_comment()
         {
-            // Arrange: local assignment with Finished status but no comment
+            // Arrange: local assignment with Finished status but no comment (StatusChangedAtUtc set = pending)
             var localAssignment = Create.Entity
                 .AssignmentDocument(1, 10, 0, Create.Entity.QuestionnaireIdentity(Id.gA).ToString())
                 .Build();
             localAssignment.Status = AssignmentStatus.Finished;
-            // Empty string signals "change pending, but no comment was entered"
-            localAssignment.StatusComment = string.Empty;
+            localAssignment.StatusComment = null;
+            localAssignment.StatusChangedAtUtc = DateTime.UtcNow;
 
             var assignmentsRepo = Create.Storage.AssignmentDocumentsInmemoryStorage();
             assignmentsRepo.Store(new[] { localAssignment });
@@ -183,17 +191,17 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             // Act
             await synchronizer.SynchronizeAssignmentsAsync(Mock.Of<IProgress<SyncProgressInfo>>(), new SynchronizationStatistics(), CancellationToken.None);
 
-            // Assert: status change was uploaded with null comment (empty string normalized to null)
+            // Assert: status change was uploaded with null comment
             syncService.Verify(s => s.ChangeAssignmentStatusAsync(1, It.IsAny<AssignmentStatusChangeApiView>(), It.IsAny<CancellationToken>()), Times.Once);
             capturedChange.Should().NotBeNull();
             capturedChange.Status.Should().Be(AssignmentStatus.Finished);
-            capturedChange.Comment.Should().BeNull("empty string comment is normalized to null before sending to server");
+            capturedChange.Comment.Should().BeNull();
         }
 
         [Test]
-        public async Task new_assignment_from_server_gets_server_status()
+        public async Task new_assignment_from_server_gets_server_status_and_comment()
         {
-            // Arrange: no local assignments; server returns a Finished assignment
+            // Arrange: no local assignments; server returns a Finished assignment with comment
             var assignmentsRepo = Create.Storage.AssignmentDocumentsInmemoryStorage();
 
             var remoteView = new AssignmentApiView
@@ -201,8 +209,10 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 Id = 42,
                 Quantity = 5,
                 QuestionnaireId = Create.Entity.QuestionnaireIdentity(Id.gA),
-                Status = AssignmentStatus.Finished
+                Status = AssignmentStatus.Finished,
+                StatusComment = "All done"
             };
+            // remoteDoc is returned by GetAssignmentAsync — needed to populate assignment answers/details
             var remoteDoc = Create.Entity.AssignmentApiDocument(42, 5, Create.Entity.QuestionnaireIdentity(Id.gA)).Build();
 
             var questionnaireStorage = new Mock<WB.Core.SharedKernels.DataCollection.Repositories.IQuestionnaireStorage>();
@@ -226,10 +236,11 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             // Act
             await synchronizer.SynchronizeAssignmentsAsync(Mock.Of<IProgress<SyncProgressInfo>>(), new SynchronizationStatistics(), CancellationToken.None);
 
-            // Assert: new assignment has Finished status from server
+            // Assert: new assignment has Finished status and comment from server
             var created = assignmentsRepo.GetById(42);
             created.Should().NotBeNull();
             created.Status.Should().Be(AssignmentStatus.Finished);
+            created.StatusComment.Should().Be("All done");
         }
     }
 }

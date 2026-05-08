@@ -106,30 +106,20 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
         private async Task UploadLocalStatusChangesAsync(CancellationToken cancellationToken)
         {
             var localAssignments = this.assignmentsRepository.LoadAll();
-            // Only upload assignments that have a pending status change (indicated by StatusComment being set,
-            // or status being non-Active when the comment hasn't been cleared yet)
+            // Only upload assignments where a local status change is pending (tracked by StatusChangedAtUtc)
             var pendingChanges = localAssignments
-                .Where(a => a.StatusComment != null)
+                .Where(a => a.StatusChangedAtUtc.HasValue)
                 .ToList();
 
             foreach (var local in pendingChanges)
             {
-                try
+                var change = new AssignmentStatusChangeApiView
                 {
-                    var change = new AssignmentStatusChangeApiView
-                    {
-                        Status = local.Status,
-                        // Convert empty string back to null before sending to server
-                        Comment = string.IsNullOrEmpty(local.StatusComment) ? null : local.StatusComment
-                    };
-                    await this.synchronizationService.ChangeAssignmentStatusAsync(local.Id, change, cancellationToken);
-                    this.logger.Debug($"Uploaded status change for assignment {local.Id}: {local.Status}");
-                }
-                catch (Exception ex)
-                {
-                    // Log but continue – server will send back the authoritative status
-                    this.logger.Warn($"Failed to upload status change for assignment {local.Id}: {ex.Message}");
-                }
+                    Status = local.Status,
+                    Comment = local.StatusComment
+                };
+                await this.synchronizationService.ChangeAssignmentStatusAsync(local.Id, change, cancellationToken);
+                this.logger.Debug($"Uploaded status change for assignment {local.Id}: {local.Status}");
             }
         }
 
@@ -141,6 +131,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
             var newAssignment = this.assignmentDocumentFromDtoBuilder.GetAssignmentDocument(remoteAssignment, questionnaire);
             newAssignment.Status = remoteItem.Status;
+            newAssignment.StatusComment = remoteItem.StatusComment;
             this.assignmentsRepository.Store(newAssignment);
 
             await this.synchronizationService.LogAssignmentAsHandledAsync(remoteItem.Id, cancellationToken);
@@ -188,8 +179,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 this.logger.Debug($"Updating Status for assignment {local.Id}: local {local.Status} → server {remote.Status}");
                 local.Status = remote.Status;
             }
-            // Clear pending status comment after sync — server is now authoritative
-            local.StatusComment = null;
+            // Always apply the server's status comment and clear the pending-upload flag
+            local.StatusComment = remote.StatusComment;
+            local.StatusChangedAtUtc = null;
 
             var interviewsCount =
                 this.interviewViewRepository.Count(x => x.FromHqSyncDateTime == null && x.Assignment == local.Id);

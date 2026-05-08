@@ -117,8 +117,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
             Assignment.Status = newStatus;
             var trimmedComment = comment.Trim();
-            // Non-null StatusComment signals a pending upload; empty string means "no comment entered"
-            Assignment.StatusComment = trimmedComment.Length > 0 ? trimmedComment : string.Empty;
+            Assignment.StatusComment = trimmedComment.Length > 0 ? trimmedComment : null;
+            // Track the timestamp of the local change — used as pending-upload indicator
+            Assignment.StatusChangedAtUtc = DateTime.UtcNow;
             AssignmentsRepository.Store(Assignment);
 
             RaiseOnItemUpdated();

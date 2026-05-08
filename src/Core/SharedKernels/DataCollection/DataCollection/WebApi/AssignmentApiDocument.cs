@@ -65,6 +65,12 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
 
         [JsonProperty("status")]
         public AssignmentStatus Status { get; set; }
+
+        [JsonProperty("statusComment")]
+        public string StatusComment { get; set; }
+
+        [JsonProperty("updatedAt")]
+        public DateTime UpdatedAtUtc { get; set; }
     }
 
     public class AssignmentStatusChangeApiView

@@ -79,7 +79,9 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection
                     ResponsibleName = assignment.Responsible.Name,
                     IsAudioRecordingEnabled = assignment.AudioRecording,
                     TargetArea = assignment.TargetArea,
-                    Status = assignment.Status
+                    Status = assignment.Status,
+                    StatusComment = assignment.StatusComment,
+                    UpdatedAtUtc = assignment.UpdatedAtUtc
                 });
             }
 

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using MvvmCross.Commands;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment;
@@ -46,7 +47,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
                 Label = EnumeratorUIResources.Dashboard_Assign
             });
 
-            // Active: supervisor can Complete
+            // Active: supervisor can Complete via context menu
             if (Assignment.Status == AssignmentStatus.Active)
             {
                 Actions.Add(new ActionDefinition
@@ -57,24 +58,24 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
                 });
             }
 
-            // Finished: supervisor can Complete or Reopen
+            // Finished: supervisor can Complete or Reopen — both visible on card as primary actions
             if (Assignment.Status == AssignmentStatus.Finished)
             {
                 Actions.Add(new ActionDefinition
                 {
-                    ActionType = ActionType.Context,
+                    ActionType = ActionType.Primary,
                     Command = new MvxAsyncCommand(this.CompleteAssignmentAsync),
                     Label = EnumeratorUIResources.Dashboard_CompleteAssignment
                 });
                 Actions.Add(new ActionDefinition
                 {
-                    ActionType = ActionType.Context,
+                    ActionType = ActionType.Primary,
                     Command = new MvxAsyncCommand(this.ReopenAssignmentAsync),
                     Label = EnumeratorUIResources.Dashboard_Reopen
                 });
             }
 
-            // Completed: supervisor can only Reopen
+            // Completed: supervisor can Reopen via context menu
             if (Assignment.Status == AssignmentStatus.Completed)
             {
                 Actions.Add(new ActionDefinition
@@ -124,8 +125,9 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
 
             Assignment.Status = newStatus;
             var trimmedComment = comment.Trim();
-            // Non-null StatusComment signals a pending upload; empty string means "no comment entered"
-            Assignment.StatusComment = trimmedComment.Length > 0 ? trimmedComment : string.Empty;
+            Assignment.StatusComment = trimmedComment.Length > 0 ? trimmedComment : null;
+            // Track the timestamp of the local change — used as pending-upload indicator
+            Assignment.StatusChangedAtUtc = DateTime.UtcNow;
             AssignmentsRepository.Store(Assignment);
 
             RaiseOnItemUpdated();

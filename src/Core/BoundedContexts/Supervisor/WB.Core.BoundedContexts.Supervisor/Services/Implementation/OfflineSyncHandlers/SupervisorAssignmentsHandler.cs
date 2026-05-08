@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
@@ -24,6 +25,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             requestHandler.RegisterHandler<GetAssignmentRequest, GetAssignmentResponse>(GetAssignment);
             requestHandler.RegisterHandler<GetAssignmentsRequest, GetAssignmentsResponse>(GetAssignments);
             requestHandler.RegisterHandler<LogAssignmentAsHandledRequest, OkResponse>(LogAssignmentAsHandled);
+            requestHandler.RegisterHandler<ChangeAssignmentStatusRequest, OkResponse>(ChangeAssignmentStatus);
         }
 
         private Task<OkResponse> LogAssignmentAsHandled(LogAssignmentAsHandledRequest request)
@@ -31,6 +33,30 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             var assignment = this.assignmentDocumentsStorage.GetById(request.Id);
             assignment.ReceivedByInterviewerAt = DateTime.UtcNow;
             this.assignmentDocumentsStorage.Store(assignment);
+            return OkResponse.Task;
+        }
+
+        public Task<OkResponse> ChangeAssignmentStatus(ChangeAssignmentStatusRequest request)
+        {
+            var assignment = this.assignmentDocumentsStorage.GetById(request.Id);
+            if (assignment == null)
+                return OkResponse.Task;
+
+            // Supervisor authority: only accept status changes from interviewers that don't downgrade
+            // (interviewer can Finish; supervisor can Complete or Reopen — supervisor wins on conflict)
+            var newStatus = request.StatusChange?.Status ?? AssignmentStatus.Active;
+
+            // Apply the interviewer's status change only when the assignment is currently Active.
+            // If the supervisor has already Completed or Finished the assignment on this tablet,
+            // ignore the interviewer's change — supervisor overrides interviewer.
+            if (assignment.Status == AssignmentStatus.Active)
+            {
+                assignment.Status = newStatus;
+                assignment.StatusComment = request.StatusChange?.Comment;
+                assignment.StatusChangedAtUtc = DateTime.UtcNow;
+                this.assignmentDocumentsStorage.Store(assignment);
+            }
+
             return OkResponse.Task;
         }
 
@@ -48,7 +74,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
                     Quantity = assignmentDocument.Quantity.HasValue ? assignmentDocument.Quantity - assignmentDocument.CreatedInterviewsCount : assignmentDocument.Quantity,
                     QuestionnaireId = QuestionnaireIdentity.Parse(assignmentDocument.QuestionnaireId),
                     IsAudioRecordingEnabled = assignmentDocument.IsAudioRecordingEnabled,
-                    TargetArea = assignmentDocument.TargetArea
+                    TargetArea = assignmentDocument.TargetArea,
+                    Status = assignmentDocument.Status,
+                    StatusComment = assignmentDocument.StatusComment
                 }).ToList()
             };
             return Task.FromResult(result);

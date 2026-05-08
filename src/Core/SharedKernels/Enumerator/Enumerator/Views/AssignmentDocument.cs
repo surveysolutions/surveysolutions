@@ -59,10 +59,16 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         public AssignmentStatus Status { get; set; } = AssignmentStatus.Active;
 
         /// <summary>
-        /// Optional comment stored when interviewer/supervisor changes the assignment status locally.
-        /// Sent to server during synchronization.
+        /// Comment associated with the last status change, received from server or set locally.
         /// </summary>
         public string StatusComment { get; set; }
+
+        /// <summary>
+        /// UTC timestamp when the assignment status was last changed locally on the tablet.
+        /// A non-null value here means there is a pending upload to the server.
+        /// Cleared (set to null) after successful sync with server.
+        /// </summary>
+        public DateTime? StatusChangedAtUtc { get; set; }
 
 
         public class AssignmentAnswer
