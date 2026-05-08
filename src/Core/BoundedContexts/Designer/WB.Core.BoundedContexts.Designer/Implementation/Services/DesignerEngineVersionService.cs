@@ -402,7 +402,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             },
             new QuestionnaireContentVersion
             {
-                Version = ApiVersion.MaxQuestionnaireVersion,
+                Version = 37,
                 NewFeatures = new []
                 {
                     new QuestionnaireFeature
