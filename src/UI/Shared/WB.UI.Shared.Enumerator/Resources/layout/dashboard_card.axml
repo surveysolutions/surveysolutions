@@ -165,7 +165,7 @@
         style="@style/Dashboard_InterviewItem_SubTitle"
         app:layout_constraintLeft_toLeftOf="@+id/title"
         app:layout_constraintRight_toRightOf="@+id/right_guideline"
-        app:layout_constraintTop_toBottomOf="@+id/assignment_status_label" />
+        app:layout_constraintTop_toBottomOf="@+id/commentsFull" />
 
     <TextView
         android:id="@+id/assignment_status_comment"
@@ -176,7 +176,7 @@
         android:maxLines="2"
         app:layout_constraintLeft_toLeftOf="@+id/title"
         app:layout_constraintRight_toRightOf="@+id/right_guideline"
-        app:layout_constraintTop_toBottomOf="@+id/assignment_status_label_full" />
+        app:layout_constraintTop_toBottomOf="@+id/assignment_status_label" />
 
     <TextView
         android:id="@+id/assignment_status_comment_full"
@@ -186,7 +186,7 @@
         style="@style/Dashboard_InterviewItem_SubTitle"
         app:layout_constraintLeft_toLeftOf="@+id/title"
         app:layout_constraintRight_toRightOf="@+id/right_guideline"
-        app:layout_constraintTop_toBottomOf="@+id/assignment_status_comment" />
+        app:layout_constraintTop_toBottomOf="@+id/assignment_status_label_full" />
 
     <TextView android:id="@+id/assignmentId"
         app:MvxBind="Text AssignmentIdLabel"
