@@ -366,11 +366,10 @@ namespace WB.UI.Shared.Enumerator.CustomServices
                             return;
                         }
 
-                        var inflatedView = (LinearLayout)this.mvxCurrentTopActivity.Activity.LayoutInflater.Inflate(Resource.Layout.confirmation_password, null);
+                        var inflatedView = this.mvxCurrentTopActivity.Activity.LayoutInflater.Inflate(Resource.Layout.confirmation_password, null);
+                        inflatedView.FindViewById<TextView>(Resource.Id.changePasswordMessage).SetText(message.ToAndroidSpanned(), TextView.BufferType.Spannable);
                         EditText oldPasswordText = inflatedView.FindViewById<EditText>(Resource.Id.oldPasswordEditText);
-                        //oldPasswordText.InputType = InputTypes.ClassText | InputTypes.TextVariationPassword;
                         EditText passwordText = inflatedView.FindViewById<EditText>(Resource.Id.confirmationEditText);
-                        //passwordText.InputType = InputTypes.ClassText | InputTypes.TextVariationPassword;
                         EditText confirmPasswordText = inflatedView.FindViewById<EditText>(Resource.Id.reconfirmationEditText);
 
                         inflatedView.FindViewById<TextInputLayout>(Resource.Id.oldPasswordEditTextWrapper).Hint = UIResources.OldPasswordHint;
@@ -379,9 +378,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
                         var passError = inflatedView.FindViewById<TextInputLayout>(Resource.Id.confirmationEditTextWrapper);
                         var confirmPassError = inflatedView.FindViewById<TextInputLayout>(Resource.Id.reconfirmationEditTextWrapper);
                         confirmPassError.Hint = UIResources.ConfirmNewPasswordHint;
-                        //confirmPasswordText.InputType = InputTypes.ClassText | InputTypes.TextVariationPassword;
                         var dialogBuilder = new MaterialAlertDialogBuilder(this.mvxCurrentTopActivity.Activity)
-                            .SetMessage(message.ToAndroidSpanned())
                             .SetTitle(title.ToAndroidSpanned()).SetView(inflatedView)
                             .SetPositiveButton(okButton, (IDialogInterfaceOnClickListener)null)
                             .SetNegativeButton(cancelButton,
