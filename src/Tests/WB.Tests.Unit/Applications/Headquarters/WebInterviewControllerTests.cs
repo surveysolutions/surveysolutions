@@ -30,6 +30,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Infrastructure.Native.Storage;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Controllers;
+using WB.UI.Headquarters.Models.WebInterview;
 using WB.UI.Shared.Web.Captcha;
 using WB.UI.Shared.Web.Services;
 
@@ -62,6 +63,35 @@ namespace WB.Tests.Unit.Applications.Headquarters
             controller.Resume(interviewId, "returnUrl");
 
             Assert.That(controller.HttpContext.Session.Get<bool>($"WebInterview-{interviewId}"), Is.EqualTo(true));
+        }
+
+        [TestCase(CaptchaProviderType.Recaptcha, false)]
+        [TestCase(CaptchaProviderType.RecaptchaV3, true)]
+        public void when_start_interview_with_recaptcha_captcha_type_then_start_model_should_have_site_key_and_correct_v3_flag(
+            CaptchaProviderType captchaType, bool expectedUseV3)
+        {
+            const string siteKey = "test-site-key";
+            var controller = CreateControllerForCaptchaTest(captchaType, siteKey);
+
+            var result = controller.Start("invitation") as ViewResult;
+
+            var model = result?.Model as StartWebInterview;
+            Assert.That(model, Is.Not.Null);
+            Assert.That(model!.RecaptchaSiteKey, Is.EqualTo(siteKey));
+            Assert.That(model.UseRecaptchaV3, Is.EqualTo(expectedUseV3));
+        }
+
+        [Test]
+        public void when_start_interview_with_no_captcha_type_then_start_model_should_not_have_recaptcha_site_key()
+        {
+            var controller = CreateControllerForCaptchaTest(CaptchaProviderType.None, "test-site-key");
+
+            var result = controller.Start("invitation") as ViewResult;
+
+            var model = result?.Model as StartWebInterview;
+            Assert.That(model, Is.Not.Null);
+            Assert.That(model!.RecaptchaSiteKey, Is.Null);
+            Assert.That(model.UseRecaptchaV3, Is.False);
         }
 
         private WebInterviewController CreateController(int quantity, string interviewId)
@@ -135,5 +165,73 @@ namespace WB.Tests.Unit.Applications.Headquarters
 
             return controller;
         }
+
+        /// <summary>
+        /// Creates a controller for testing captcha-related start model fields.
+        /// Uses quantity=1 and UseCaptcha=true so the Start action renders the start page
+        /// (instead of auto-redirecting) and populates the model with captcha info.
+        /// </summary>
+        private WebInterviewController CreateControllerForCaptchaTest(
+            CaptchaProviderType captchaType,
+            string siteKey)
+        {
+            var assignment = Mock.Of<Assignment>(a =>
+                a.Id == 999
+                && a.WebMode == true
+                && a.Quantity == 1);
+
+            // No existing interview (InterviewId == null) so no early redirect
+            var invitation = Mock.Of<Invitation>(i =>
+                i.InterviewId == null
+                && i.Assignment == assignment
+                && i.IsWithAssignmentResolvedByPassword() == true);
+
+            var o = (object)invitation;
+            var memoryCache = new Mock<IMemoryCache>();
+            memoryCache.Setup(m => m.TryGetValue(It.IsAny<object>(), out o)).Returns(true);
+
+            // UseCaptcha = true causes the Start action to show the form (not redirect)
+            var webInterviewConfig = new WebInterviewConfig { Started = true, UseCaptcha = true };
+            var configProvider = Mock.Of<IWebInterviewConfigProvider>(c =>
+                c.Get(It.IsAny<QuestionnaireIdentity>()) == webInterviewConfig);
+
+            var questionnaire = Mock.Of<IQuestionnaire>(q => q.Title == "Test Questionnaire");
+            var questionnaireStorage = Mock.Of<IQuestionnaireStorage>(s =>
+                s.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == questionnaire);
+
+            var recaptchaSettings = Options.Create(new RecaptchaSettings { SiteKey = siteKey });
+            var captchaConfig = Options.Create(new CaptchaConfig { CaptchaType = captchaType });
+
+            var controller = new WebInterviewController(
+                Mock.Of<ICommandService>(),
+                configProvider,
+                Mock.Of<IStatefulInterviewRepository>(),
+                Mock.Of<IUserViewFactory>(),
+                Mock.Of<IInterviewUniqueKeyGenerator>(),
+                Mock.Of<ICaptchaProvider>(),
+                Mock.Of<IAssignmentsService>(),
+                Mock.Of<IInvitationService>(),
+                Mock.Of<INativeReadSideStorage<InterviewSummary>>(),
+                Mock.Of<IInvitationMailingService>(),
+                Mock.Of<IPlainKeyValueStorage<EmailProviderSettings>>(),
+                recaptchaSettings,
+                captchaConfig,
+                Mock.Of<IServiceLocator>(),
+                questionnaireStorage,
+                Mock.Of<IInScopeExecutor>(),
+                memoryCache.Object,
+                calendarEventService: Mock.Of<ICalendarEventService>(),
+                webInterviewConfigProvider: Mock.Of<IWebInterviewConfigProvider>(),
+                webInterviewLinkProvider: Mock.Of<IWebInterviewLinkProvider>());
+
+            controller.ControllerContext.HttpContext = Mock.Of<HttpContext>(c =>
+                c.Session == new MockHttpSession()
+                && c.Request == Mock.Of<HttpRequest>(r => r.Cookies == Mock.Of<IRequestCookieCollection>())
+                && c.Response == Mock.Of<HttpResponse>(r => r.Cookies == Mock.Of<IResponseCookies>()));
+            controller.Url = Mock.Of<IUrlHelper>(x => x.Action(It.IsAny<UrlActionContext>()) == "url");
+
+            return controller;
+        }
     }
 }
+
