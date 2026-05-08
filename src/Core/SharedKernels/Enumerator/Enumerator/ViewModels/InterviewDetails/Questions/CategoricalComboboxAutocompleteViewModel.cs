@@ -228,7 +228,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             var currentRequestId = Interlocked.Increment(ref suggestionsRequestId);
             using var loadingIndicatorCancellation = new CancellationTokenSource();
-            _ = this.ShowLoadingIfSlowAsync(currentRequestId, loadingIndicatorCancellation.Token);
+            _ = this.ShowLoadingIfSlowSafeAsync(currentRequestId, loadingIndicatorCancellation.Token);
 
             try
             {
@@ -248,30 +248,40 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             finally
             {
                 loadingIndicatorCancellation.Cancel();
-                _ = mvxMainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
-                {
-                    if (!isDisposed && currentRequestId == Volatile.Read(ref suggestionsRequestId))
-                        Loading = false;
-                });
+                _ = SetLoadingStateSafeAsync(false, currentRequestId);
             }
         }
 
-        private async Task ShowLoadingIfSlowAsync(long requestId, CancellationToken cancellationToken)
+        private async Task ShowLoadingIfSlowSafeAsync(long requestId, CancellationToken cancellationToken)
         {
             try
             {
                 await Task.Delay(LoadingIndicatorDelayInMilliseconds, cancellationToken);
+                await SetLoadingStateSafeAsync(true, requestId, cancellationToken);
+            }
+            catch (OperationCanceledException)
+            {
+            }
+            catch
+            {
+            }
+        }
+
+        private async Task SetLoadingStateSafeAsync(bool loadingState, long requestId, CancellationToken cancellationToken = default)
+        {
+            try
+            {
                 await mvxMainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
                 {
                     if (!isDisposed
                         && !cancellationToken.IsCancellationRequested
                         && requestId == Volatile.Read(ref suggestionsRequestId))
                     {
-                        Loading = true;
+                        Loading = loadingState;
                     }
                 });
             }
-            catch (OperationCanceledException)
+            catch
             {
             }
         }
