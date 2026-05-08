@@ -438,6 +438,9 @@
   <data name="HotkeysSearch" xml:space="preserve">
     <value>在这个问卷模块查找问卷子块或问题</value>
   </data>
+  <data name="HotkeysTest" xml:space="preserve">
+    <value>在WebTester中测试问卷</value>
+  </data>
   <data name="HotkeysShortcuts" xml:space="preserve">
     <value>键盘快捷键</value>
   </data>
