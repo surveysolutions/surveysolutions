@@ -136,5 +136,50 @@ namespace WB.Services.Export.Tests.Services.Processing
 
             Assert.That(fileNameForExportArchive, Is.EqualTo($"{questionnaire.QuestionnaireId}_Paradata_Reduced_Completed.zip"));
         }
+
+        [Test]
+        public async Task should_generate_tar_gz_file_name_when_tar_gz_format_selected()
+        {
+            long version = 45;
+            var questionnaire = Create.QuestionnaireDocument(
+                id: Id.g1,
+                version: version,
+                variableName: "var1");
+
+            var service = Create.ExportExportFileNameService(questionnaireStorage: Create.QuestionnaireStorage(questionnaire));
+
+            var fileNameForExportArchive = await service.GetFileNameForExportArchiveAsync(
+                new ExportSettings(
+                    tenant: new TenantInfo("http://test", ""),
+                    status: InterviewStatus.Completed,
+                    exportFormat: DataExportFormat.Tabular,
+                    questionnaireId: questionnaire.QuestionnaireId,
+                    exportFileFormat: ExportFileFormat.TarGz
+                ), questionnaire.VariableName);
+
+            Assert.That(fileNameForExportArchive, Is.EqualTo("var1_Tabular_Completed.tar.gz"));
+        }
+
+        [Test]
+        public async Task should_generate_zip_file_name_by_default()
+        {
+            long version = 45;
+            var questionnaire = Create.QuestionnaireDocument(
+                id: Id.g1,
+                version: version,
+                variableName: "var1");
+
+            var service = Create.ExportExportFileNameService(questionnaireStorage: Create.QuestionnaireStorage(questionnaire));
+
+            var fileNameForExportArchive = await service.GetFileNameForExportArchiveAsync(
+                new ExportSettings(
+                    tenant: new TenantInfo("http://test", ""),
+                    status: InterviewStatus.Completed,
+                    exportFormat: DataExportFormat.Tabular,
+                    questionnaireId: questionnaire.QuestionnaireId
+                ), questionnaire.VariableName);
+
+            Assert.That(fileNameForExportArchive, Is.EqualTo("var1_Tabular_Completed.zip"));
+        }
     }
 }

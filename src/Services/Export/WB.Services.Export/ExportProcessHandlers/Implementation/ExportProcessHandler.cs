@@ -104,8 +104,23 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
             // ReSharper disable once InconsistentlySynchronizedField
             this.dataExportProcessesService.ChangeStatusType(state.ProcessId, DataExportStatus.Compressing);
 
-            await this.archiveUtils.ZipDirectoryAsync(state.ExportTempFolder, state.ArchiveFilePath,
-                state.ProcessArgs.ArchivePassword, new Progress<int>((v) => state.Progress.Report(v)), cancellationToken);
+            if (state.Settings.ExportFileFormat == Services.Processing.ExportFileFormat.TarGz)
+            {
+                if (!string.IsNullOrEmpty(state.ProcessArgs.ArchivePassword))
+                {
+                    throw new InvalidOperationException(
+                        "TAR.GZ format does not support password protection. " +
+                        "Please use ZIP format when encryption is required.");
+                }
+
+                await this.archiveUtils.TarGzDirectoryAsync(state.ExportTempFolder, state.ArchiveFilePath,
+                    new Progress<int>((v) => state.Progress.Report(v)), cancellationToken);
+            }
+            else
+            {
+                await this.archiveUtils.ZipDirectoryAsync(state.ExportTempFolder, state.ArchiveFilePath,
+                    state.ProcessArgs.ArchivePassword, new Progress<int>((v) => state.Progress.Report(v)), cancellationToken);
+            }
         }
 
         private async Task PublishToArtifactStorage(ExportState state, CancellationToken cancellationToken)

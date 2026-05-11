@@ -31,5 +31,9 @@ namespace WB.Services.Infrastructure.FileSystem
             IProgress<int> exportProgress,
             CancellationToken token = default);
         void ZipFiles(string exportTempDirectoryPath, IEnumerable<string> files, string archiveFilePath, string password = "");
+
+        Task TarGzDirectoryAsync(string exportTempDirectoryPath, string archiveName,
+            IProgress<int> exportProgress,
+            CancellationToken token = default);
     }
 }

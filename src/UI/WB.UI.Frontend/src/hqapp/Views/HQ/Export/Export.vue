@@ -318,6 +318,29 @@
                                     </label>
                                 </div>
                             </div>
+                            <div class="mb-30" v-if="isLocalDownload && questionnaireVersion">
+                                <h3>{{ $t('DataExport.ArchiveFormat_Title') }}</h3>
+                                <div class="radio-btn-row">
+                                    <input class="radio-row" type="radio" name="archiveFormat" id="archiveFormatZip"
+                                        v-model="archiveFormat" value="zip" />
+                                    <label for="archiveFormatZip">
+                                        <span class="tick"></span>
+                                        <span class="format-data">
+                                            {{ $t('DataExport.ArchiveFormat_Zip') }}
+                                        </span>
+                                    </label>
+                                </div>
+                                <div class="radio-btn-row">
+                                    <input class="radio-row" type="radio" name="archiveFormat" id="archiveFormatTarGz"
+                                        v-model="archiveFormat" value="tarGz" />
+                                    <label for="archiveFormatTarGz">
+                                        <span class="tick"></span>
+                                        <span class="format-data">
+                                            {{ $t('DataExport.ArchiveFormat_TarGz') }}
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>
                             <div class="mb-30">
                                 <div class="structure-block">
                                     <button type="submit" class="btn btn-success">
@@ -396,6 +419,7 @@ const dataFormatNum = {
     AudioAudit: 7,
 }
 const ExternalStorageType = { dropbox: 1, oneDrive: 2, googleDrive: 3 }
+const ArchiveFormatNum = { zip: 1, tarGz: 2 }
 
 export default {
     components: {
@@ -410,6 +434,7 @@ export default {
             dataFormat: 'Tabular',
             includeMeta: 'True',
             dataDestination: 'zip',
+            archiveFormat: 'zip',
             questionnaireId: null,
             questionnaireVersion: null,
             questionnaireTranslation: null,
@@ -502,6 +527,9 @@ export default {
         isCustomDateRangeMode() {
             return this.dateRangeMode?.id == 'custom'
         },
+        isLocalDownload() {
+            return this.dataDestination == 'zip'
+        },
     },
 
     mounted() {
@@ -518,6 +546,7 @@ export default {
             this.dataFormat = 'Tabular'
             this.includeMeta = 'True'
             this.dataDestination = 'zip'
+            this.archiveFormat = 'zip'
             this.questionnaireId = null
             this.questionnaireVersion = null
             this.status = null
@@ -533,7 +562,7 @@ export default {
         },
 
         async queueExport() {
-            if (this.dataDestination != 'zip') {
+            if (!this.isLocalDownload) {
                 this.redirectToExternalStorage()
                 return
             }
@@ -554,7 +583,8 @@ export default {
                     this.dateRangeMode,
                     this.dateRangeFrom,
                     this.dateRangeTo,
-                    this.paradataMode
+                    this.paradataMode,
+                    this.archiveFormat
                 )
 
                 self.$store.dispatch('showProgress')
@@ -662,7 +692,8 @@ export default {
             dateRangeMode,
             dateRangeFrom,
             dateRangeTo,
-            paradataMode
+            paradataMode,
+            archiveFormat
         ) {
             const drMode = dateRangeMode?.id
 
@@ -728,6 +759,8 @@ export default {
             const status = (statusOption || { key: null }).key
             const tr = (translation || { key: null }).key
 
+            const archiveFormatNum = ArchiveFormatNum[archiveFormat] ?? ArchiveFormatNum.zip
+
             return {
                 id: questionnaireId,
                 version: questionnaireVersion,
@@ -737,7 +770,8 @@ export default {
                 includeMeta: includeMeta,
                 from: from,
                 to: to,
-                paradataMode: paradataMode
+                paradataMode: paradataMode,
+                exportFileFormat: archiveFormatNum
             }
         },
 

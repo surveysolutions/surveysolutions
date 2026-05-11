@@ -124,7 +124,8 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.v2
                 requestBody.TranslationId,
                 requestBody.IncludeMeta,
                 requestBody.ParadataReduced,
-                exportSettings.GetGeographyExportFormat());
+                exportSettings.GetGeographyExportFormat(),
+                (WB.Core.BoundedContexts.Headquarters.DataExport.Dtos.ExportFileFormat?) requestBody.ExportArchiveFormat);
 
             this.auditLog.ExportStared(
                 $@"{questionnaireBrowseItem.Title} v{questionnaireBrowseItem.Version} {requestBody.InterviewStatus.ToString() ?? ""}",
@@ -344,6 +345,11 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.v2
 
             public bool? IncludeMeta { get; set; }
             public bool? ParadataReduced { get; set; }
+            
+            /// <summary>
+            /// Archive format for the exported data. Defaults to Zip.
+            /// </summary>
+            public ExportArchiveFormat? ExportArchiveFormat { get; set; }
         }
 
         public class ExportProcess : CreateExportProcess
@@ -442,6 +448,14 @@ namespace WB.UI.Headquarters.Controllers.Api.PublicApi.v2
             Dropbox = 1,
             OneDrive = 2,
             GoogleDrive = 3
+        }
+
+        public enum ExportArchiveFormat
+        {
+            /// <summary>ZIP archive (default)</summary>
+            Zip = 1,
+            /// <summary>TAR archive with GZip compression (.tar.gz)</summary>
+            TarGz = 2,
         }
     }
 }
