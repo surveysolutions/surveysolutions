@@ -68,6 +68,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
         public virtual AssignmentStatus Status { get; set; } = AssignmentStatus.Active;
 
+        public virtual string StatusComment { get; set; }
+
 
         public virtual DateTime CreatedAtUtc { get; set; }
 

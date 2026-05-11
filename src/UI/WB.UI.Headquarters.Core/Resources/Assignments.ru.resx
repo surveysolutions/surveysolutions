@@ -548,6 +548,63 @@
   </data>
   <data name="TargetArea" xml:space="preserve">
       <value>Область назначения</value>
-  </data>  <data name="EnterTargetArea" xml:space="preserve">
+  </data>
+  <data name="EnterTargetArea" xml:space="preserve">
       <value>Введите область</value>
-  </data></root>
+  </data>
+
+  <data name="Status" xml:space="preserve">
+      <value>Статус</value>
+  </data>
+  <data name="StatusChangeComment" xml:space="preserve">
+      <value>Комментарий к изменению статуса</value>
+  </data>
+  <data name="StatusActive" xml:space="preserve">
+      <value>Активно</value>
+  </data>
+  <data name="StatusFinished" xml:space="preserve">
+      <value>Завершено</value>
+  </data>
+  <data name="StatusCompleted" xml:space="preserve">
+      <value>Выполнено</value>
+  </data>
+  <data name="FinishAssignmentTitle" xml:space="preserve">
+      <value>Завершить задание?</value>
+  </data>
+  <data name="FinishAssignmentMessage" xml:space="preserve">
+      <value>Вы уверены, что перечислили все подходящие единицы?</value>
+  </data>
+  <data name="CompleteAssignmentTitle" xml:space="preserve">
+      <value>Выполнить задание?</value>
+  </data>
+  <data name="CompleteAssignmentMessage" xml:space="preserve">
+      <value>Интервьюеры, работающие в автономном режиме, могут продолжать сбор данных до синхронизации. Такие интервью по-прежнему будут приняты.</value>
+  </data>
+  <data name="ReopenAssignmentTitle" xml:space="preserve">
+      <value>Открыть задание снова?</value>
+  </data>
+  <data name="Finish" xml:space="preserve">
+      <value>Завершить</value>
+  </data>
+  <data name="Complete" xml:space="preserve">
+      <value>Выполнить</value>
+  </data>
+  <data name="Reopen" xml:space="preserve">
+      <value>Открыть снова</value>
+  </data>
+  <data name="Action_StatusChanged" xml:space="preserve">
+      <value>Статус изменён на {{status}}</value>
+  </data>
+  <data name="Action_StatusChanged_Comment" xml:space="preserve">
+      <value>Комментарий: {{comment}}</value>
+  </data>
+  <data name="Action_Finished" xml:space="preserve">
+      <value>Завершено</value>
+  </data>
+  <data name="Action_Completed" xml:space="preserve">
+      <value>Выполнено</value>
+  </data>
+  <data name="Action_Reopened" xml:space="preserve">
+      <value>Открыто снова</value>
+  </data>
+</root>

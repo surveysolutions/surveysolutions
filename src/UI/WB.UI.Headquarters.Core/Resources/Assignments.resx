@@ -562,6 +562,9 @@
   <data name="Status" xml:space="preserve">
       <value>Status</value>
   </data>
+  <data name="StatusChangeComment" xml:space="preserve">
+      <value>Status comment</value>
+  </data>
   <data name="StatusActive" xml:space="preserve">
       <value>Active</value>
   </data>

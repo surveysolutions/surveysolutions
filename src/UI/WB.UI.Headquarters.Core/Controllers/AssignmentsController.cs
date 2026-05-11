@@ -236,6 +236,7 @@ namespace WB.UI.Headquarters.Controllers
                 IsHeadquarters = this.currentUser.IsAdministrator || this.currentUser.IsHeadquarter,
                 IsSupervisor = this.currentUser.IsSupervisor,
                 Status = assignment.Status.ToString(),
+                StatusComment = assignment.StatusComment,
                 Comments = assignment.Comments,
                 TargetArea = assignment.TargetArea,
                 IsArchived = assignment.Archived,

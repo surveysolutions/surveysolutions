@@ -240,6 +240,12 @@
                                 </td>
                                 <td>{{ assignmentStatus }}</td>
                             </tr>
+                            <tr v-if="model.statusComment">
+                                <td class="text-nowrap">
+                                    {{ $t('Assignments.StatusChangeComment') }}
+                                </td>
+                                <td>{{ model.statusComment }}</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
