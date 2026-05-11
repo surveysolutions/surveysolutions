@@ -51,5 +51,37 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
 
             viewFactory.Verify(vf => vf.Load(It.Is<AssignmentsInputModel>(v => v.ResponsibleId == Id.gA)), Times.Once);
         }
+
+        [Test]
+        public void should_not_filter_by_interviews_needed_when_authorized_user_is_interviewer()
+        {
+            var viewFactory = new Mock<IAssignmentViewFactory>();
+            viewFactory.Setup(vf => vf.Load(It.IsAny<AssignmentsInputModel>()))
+                .Returns(new AssignmentsWithoutIdentifingData());
+
+            var controller = new AssignmentsApiController(
+                viewFactory.Object,
+                Mock.Of<IAuthorizedUser>(au => au.IsInterviewer == true && au.Id == Id.gA),
+                Mock.Of<IAssignmentsService>(),
+                Mock.Of<IQuestionnaireStorage>(),
+                Mock.Of<ISystemLog>(),
+                new InMemoryPlainStorageAccessor<QuestionnaireBrowseItem>(),
+                Mock.Of<IInvitationService>(),
+                Mock.Of<IStatefulInterviewRepository>(),
+                Mock.Of<IAssignmentPasswordGenerator>(),
+                Mock.Of<ICommandService>(),
+                Mock.Of<IAssignmentFactory>(),
+                Mock.Of<IPlainStorageAccessor<GeoTrackingRecord>>()
+            );
+
+            controller.Get(new AssignmentsApiController.AssignmentsDataTableRequest
+            {
+                Search = new DataTableRequest.SearchInfo(),
+                Start = 0,
+                Length = 10,
+            });
+
+            viewFactory.Verify(vf => vf.Load(It.Is<AssignmentsInputModel>(v => v.OnlyWithInterviewsNeeded == false)), Times.Once);
+        }
     }
 }

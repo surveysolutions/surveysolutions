@@ -109,6 +109,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 PageSize = input.Limit,
                 Items = assignments.Select(x =>
                 {
+                    var interviewsCount = counts.FirstOrDefault(c => c.Key == x.Id)?.InterviewsCount ?? 0;
                     var row = new AssignmentRow
                     {
                         QuestionnaireId = x.QuestionnaireId,
@@ -117,7 +118,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                         UpdatedAtUtc = x.UpdatedAtUtc,
                         WebModeEnabledOnQuestionnaire = webConfigs.First(w => w.QuestionnaireId.Equals(x.QuestionnaireId)).Started,
                         Quantity = x.Quantity ?? -1,
-                        InterviewsCount = counts.FirstOrDefault(c => c.Key == x.Id)?.InterviewsCount ?? 0,
+                        InterviewsCount = interviewsCount,
                         Id = x.Id,
                         Archived = x.Archived,
                         Responsible = x.Responsible.Name,
@@ -130,7 +131,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                         ReceivedByTabletAtUtc = x.ReceivedByTabletAtUtc,
                         Comments = x.Comments,
                         TargetArea = x.TargetArea,
-                        CalendarEvent = GetCalendarEventForAssignmentOrNull(x.Id)
+                        CalendarEvent = GetCalendarEventForAssignmentOrNull(x.Id),
+                        IsFinished = x.Quantity.HasValue && x.Quantity.Value <= interviewsCount
                     };
 
                     if (input.ShowQuestionnaireTitle)

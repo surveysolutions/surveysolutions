@@ -103,7 +103,6 @@ namespace WB.UI.Headquarters.Controllers.Api
 
             if (isInterviewer)
             {
-                input.OnlyWithInterviewsNeeded = true;
                 input.SearchByFields = AssignmentsInputModel.SearchTypes.Id 
                     | AssignmentsInputModel.SearchTypes.IdentifyingQuestions
                     | AssignmentsInputModel.SearchTypes.QuestionnaireTitle;
