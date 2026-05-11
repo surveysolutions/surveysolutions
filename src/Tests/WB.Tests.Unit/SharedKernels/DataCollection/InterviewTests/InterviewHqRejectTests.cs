@@ -99,5 +99,42 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             eventContext.AssertThatContainsEvent<InterviewStatusChanged>();
             eventContext.AssertThatDoesNotContainEvent<SupervisorAssigned>();
         }
+
+        [Test]
+        public void When_Interview_in_status_Completed_without_interviewer_And_rejected_by_hq_to_supervisor_Then_InterviewerAssigned_should_not_be_raised()
+        {
+            // arrange
+            var interview = SetupInterview();
+            interview.Apply(Create.Event.SupervisorAssigned(supervisorId, supervisorId));
+            interview.Apply(Create.Event.InterviewStatusChanged(InterviewStatus.Completed));
+            SetupEventContext();
+
+            // act
+            interview.HqRejectInterviewToSupervisor(headquarterId, supervisorId, "comment", DateTimeOffset.Now);
+
+            // assert
+            eventContext.AssertThatContainsEvent<InterviewRejected>();
+            eventContext.AssertThatContainsEvent<InterviewStatusChanged>();
+            eventContext.AssertThatDoesNotContainEvent<InterviewerAssigned>();
+        }
+
+        [Test]
+        public void When_Interview_in_status_Completed_with_interviewer_And_rejected_by_hq_to_supervisor_Then_InterviewerAssigned_should_be_cleared()
+        {
+            // arrange
+            var interview = SetupInterview();
+            interview.Apply(Create.Event.SupervisorAssigned(supervisorId, supervisorId));
+            interview.Apply(Create.Event.InterviewerAssigned(supervisorId, interviewerId));
+            interview.Apply(Create.Event.InterviewStatusChanged(InterviewStatus.Completed));
+            SetupEventContext();
+
+            // act
+            interview.HqRejectInterviewToSupervisor(headquarterId, supervisorId, "comment", DateTimeOffset.Now);
+
+            // assert
+            eventContext.AssertThatContainsEvent<InterviewRejected>();
+            eventContext.AssertThatContainsEvent<InterviewStatusChanged>();
+            eventContext.AssertThatContainsEvent<InterviewerAssigned>();
+        }
     }
 }
