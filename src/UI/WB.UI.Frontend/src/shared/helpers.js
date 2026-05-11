@@ -28,6 +28,17 @@ export function humanFileSize(bytes, si) {
     return bytes.toFixed(1) + ' ' + units[u]
 }
 
+export function humanBitSpeed(bytesPerSecond) {
+    var bits = bytesPerSecond * 8
+    var units = ['bit/s', 'kbit/s', 'Mbit/s', 'Gbit/s', 'Tbit/s', 'Pbit/s']
+    var u = 0
+    while (bits >= 1000 && u < units.length - 1) {
+        bits /= 1000
+        u++
+    }
+    return bits.toFixed(1) + ' ' + units[u]
+}
+
 export function convertToLocal(startUtc, startTimezone) {
     return startUtc == null
         ? null

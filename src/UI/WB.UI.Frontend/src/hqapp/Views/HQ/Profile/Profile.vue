@@ -283,7 +283,7 @@
                         {{ this.fullModel.totalNumberOfFailedSynchronizations }}</li>
                     <li v-if="this.fullModel.averageSyncSpeedBytesPerSecond">
                         {{ $t('Pages.InterviewerProfile_AverageSyncSpeed') }}:
-                        <span v-dompurify-html="formatKb(this.fullModel.averageSyncSpeedBytesPerSecond)"></span>/s
+                        {{ formatBitSpeed(this.fullModel.averageSyncSpeedBytesPerSecond) }}
                     </li>
                     <li>
                         {{ $t('Pages.InterviewerProfile_TotalTrafficUsed') }}:
@@ -440,7 +440,7 @@ import { MarkerClusterer, Cluster, SuperClusterAlgorithm } from '@googlemaps/mar
 import { nextTick } from 'vue'
 import { Tooltip } from 'bootstrap'
 import * as toastr from 'toastr'
-import { DateFormats, humanFileSize } from '~/shared/helpers'
+import { DateFormats, humanFileSize, humanBitSpeed } from '~/shared/helpers'
 import moment from 'moment'
 import ConnectionStats from './ConnectionStats'
 
@@ -492,6 +492,9 @@ export default {
             var language =
                 (navigator.languages && navigator.languages[0]) || navigator.language || navigator.userLanguage
             return value.toLocaleString(language, { style: 'decimal', maximumFractionDigits: 0 }) + '&nbsp;' + this.$t('Pages.Kb')
+        },
+        formatBitSpeed(val) {
+            return humanBitSpeed(val)
         },
         ouputBytes(val) {
             return humanFileSize(val, false)

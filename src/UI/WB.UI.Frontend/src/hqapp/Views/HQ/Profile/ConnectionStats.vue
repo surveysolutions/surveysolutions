@@ -7,7 +7,7 @@
             <li>{{$t('Pages.InterviewerProfile_TotalSyncTime')}}: {{formatDuration(syncInfo.totalSyncDuration)}}</li>
             <li>
                 {{$t('Pages.InterviewerProfile_ConnectionSpeed')}}:
-                {{ouputBytes(syncInfo.totalConnectionSpeed)}}/s
+                {{outputBitSpeed(syncInfo.totalConnectionSpeed)}}
                 <text v-if="syncInfo.NetworkType == 'WIFI'">({{$t('Pages.InterviewerProfile_ConnectionWifiFormat', {networkType: syncInfo.NetworkType})}})</text>
                 <text v-else>({{$t('Pages.InterviewerProfile_ConnectionMobileFormat',
                                    {
@@ -27,7 +27,7 @@
 </template>
 <script>
 import moment from 'moment'
-import {DateFormats, humanFileSize} from '~/shared/helpers'
+import {DateFormats, humanBitSpeed, humanFileSize} from '~/shared/helpers'
 export default {
     props: {
         syncInfo: {
@@ -38,6 +38,9 @@ export default {
         },
     },
     methods: {
+        outputBitSpeed(val){
+            return humanBitSpeed(val)
+        },
         ouputBytes(val){
             return humanFileSize(val, false)
         },
