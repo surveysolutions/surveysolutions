@@ -148,8 +148,7 @@
     <value>شروط التثفية</value>
   </data>
   <data name="MissingCensusInterviews_Instructions" xml:space="preserve">
-    <value>لتحديد موقع المقابلة، يرجى تقديم اسم الباحث. &lt;br/&gt;
-
+    <value>لتحديد موقع المقابلة، يرجى تقديم اسم الباحث. &lt;br/&gt;
 حدد المقابلات والإطار الزمني لتضييق نتيجة البحث </value>
   </data>
   <data name="MissingCensusInterviews_MoreThanOneInterviewsFound_Message_Format" xml:space="preserve">

@@ -148,8 +148,7 @@
     <value>ფილტრის პირობები</value>
   </data>
   <data name="MissingCensusInterviews_Instructions" xml:space="preserve">
-    <value>ინტერვიუს მოსაძებნად, გთხოვთ, მოგვაწოდოთ კითხვარის დასახელება. &lt;br/&gt;
-
+    <value>ინტერვიუს მოსაძებნად, გთხოვთ, მოგვაწოდოთ კითხვარის დასახელება. &lt;br/&gt;
 აირჩიეთ ინტერვიუერი და ვადები თქვენი ძიების რეზულტატის შესამცირებლად</value>
   </data>
   <data name="MissingCensusInterviews_MoreThanOneInterviewsFound_Message_Format" xml:space="preserve">
