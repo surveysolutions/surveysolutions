@@ -140,7 +140,7 @@ export default {
         tableOptions() {
             return {
                 rowId: row => {
-                    return `row${row.id}`
+                    return `row_${row.id}`
                 },
                 deferLoading: 0,
                 order: [[5, 'desc']],
