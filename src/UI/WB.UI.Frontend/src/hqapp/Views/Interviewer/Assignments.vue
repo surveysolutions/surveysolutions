@@ -248,7 +248,7 @@ export default {
         },
 
         resetSelection() {
-            this.selectedRows.splice(0, this.selectedRows.length)
+            this.selectedRows.splice(0)
         },
 
         getTableColumns() {
