@@ -49,5 +49,10 @@ namespace WB.UI.Headquarters.Controllers.Api.DataCollection.Supervisor.v1
         [Route("{id:int}/Received")]
         [WriteToSyncLog(SynchronizationLogType.AssignmentReceived)]
         public override IActionResult Received(int id) => base.Received(id);
+
+        [HttpPost]
+        [Route("{id:int}/ChangeStatus")]
+        public override IActionResult ChangeStatus(int id, [FromBody] AssignmentStatusChangeApiView request)
+            => base.ChangeStatus(id, request);
     }
 }
