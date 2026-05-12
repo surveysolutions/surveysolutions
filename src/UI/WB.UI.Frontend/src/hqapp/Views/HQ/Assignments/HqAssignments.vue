@@ -60,6 +60,7 @@
 
         <DataTables ref="table" :tableOptions="tableOptions" :addParamsToRequest="addParamsToRequest"
             :wrapperClass="{ 'table-wrapper': true }" @cell-clicked="cellClicked"
+            :contextMenuItems="contextMenuItems"
             @selectedRowsChanged="rows => selectedRows = rows" @totalRows="(rows) => totalRows = rows"
             @ajaxComlpete="isLoading = false" @page="resetSelection" :selectable="showSelectors">
             <div class="panel panel-table" id="pnlAssignmentsContextActions" v-if="selectedRows.length">
@@ -82,12 +83,65 @@
                             $t("Assignments.Close")
                         }}</button>
 
+                    <button class="btn btn-lg btn-warning" id="btnCompleteSelected"
+                        v-if="(config.isHeadquarter || config.isSupervisor) && !showArchive.key"
+                        @click="bulkChangeStatus('Completed', 'completeModal')">{{
+                            $t("Assignments.Complete") }}</button>
+
+                    <button class="btn btn-lg btn-primary" id="btnReopenSelected"
+                        v-if="(config.isHeadquarter || config.isSupervisor) && !showArchive.key"
+                        @click="bulkChangeStatus('Active', 'reopenModal')">{{
+                            $t("Assignments.Reopen") }}</button>
+
                     <button class="btn btn-lg btn-danger" id="btnArchiveSelected"
                         v-if="!showArchive.key && config.isHeadquarter" @click="archiveSelected">{{
                             $t("Assignments.Archive") }}</button>
                 </div>
             </div>
         </DataTables>
+
+        <ModalFrame ref="completeModal" :title="$t('Assignments.CompleteAssignmentTitle')">
+            <p>{{ $t('Assignments.CompleteAssignmentMessage') }}</p>
+            <form onsubmit="return false;">
+                <div class="form-group">
+                    <label class="control-label" for="completeCommentId">
+                        {{ $t("Assignments.Comments") }}
+                    </label>
+                    <textarea control-id="completeCommentId" v-model="statusChangeComment"
+                        :placeholder="$t('Assignments.EnterComments')" name="comments" rows="4" maxlength="500"
+                        class="form-control" />
+                </div>
+            </form>
+            <template v-slot:actions>
+                <div>
+                    <button type="button" class="btn btn-primary" @click="confirmStatusChange">{{
+                        $t("Assignments.Complete") }}</button>
+                    <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
+                        }}</button>
+                </div>
+            </template>
+        </ModalFrame>
+
+        <ModalFrame ref="reopenModal" :title="$t('Assignments.ReopenAssignmentTitle')">
+            <form onsubmit="return false;">
+                <div class="form-group">
+                    <label class="control-label" for="reopenCommentId">
+                        {{ $t("Assignments.Comments") }}
+                    </label>
+                    <textarea control-id="reopenCommentId" v-model="statusChangeComment"
+                        :placeholder="$t('Assignments.EnterComments')" name="comments" rows="4" maxlength="500"
+                        class="form-control" />
+                </div>
+            </form>
+            <template v-slot:actions>
+                <div>
+                    <button type="button" class="btn btn-primary" @click="confirmStatusChange">{{
+                        $t("Assignments.Reopen") }}</button>
+                    <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
+                        }}</button>
+                </div>
+            </template>
+        </ModalFrame>
 
         <ModalFrame ref="assignModal" :title="$t('Common.Assign')">
             <p>{{ $t("Assignments.NumberOfAssignmentsAffected", { count: selectedRows.length }) }}</p>
@@ -256,6 +310,9 @@ export default {
             editedAudioRecordingEnabled: null,
             canEditQuantity: null,
             mode: null,
+            statusChangeIds: [],
+            statusChangeTargetStatus: null,
+            statusChangeComment: null,
         }
     },
 
@@ -565,6 +622,30 @@ export default {
     },
 
     methods: {
+        contextMenuItems({ rowData }) {
+            if (!this.showSelectors || (this.showArchive && this.showArchive.key)) return null
+
+            const items = {}
+            const status = rowData.status
+            const isHqOrAdmin = this.config.isHeadquarter
+            const isSupervisor = this.config.isSupervisor
+
+            if ((isHqOrAdmin || isSupervisor) && (status === 'Active' || status === 'Finished')) {
+                items.complete = {
+                    name: this.$t('Assignments.Complete'),
+                    callback: () => this.openStatusChangeModal(rowData.id, 'Completed', 'completeModal'),
+                }
+            }
+            if ((isHqOrAdmin || isSupervisor) && (status === 'Finished' || status === 'Completed')) {
+                items.reopen = {
+                    name: this.$t('Assignments.Reopen'),
+                    callback: () => this.openStatusChangeModal(rowData.id, 'Active', 'reopenModal'),
+                }
+            }
+
+            return Object.keys(items).length > 0 ? items : null
+        },
+
         addParamsToRequest(requestData) {
             requestData.responsibleId = (this.responsibleId || {}).key
             requestData.questionnaireId = (this.questionnaireId || {}).key
@@ -838,6 +919,45 @@ export default {
 
         },
 
+        openStatusChangeModal(rowId, targetStatus, modalRef) {
+            this.statusChangeIds = [rowId]
+            this.statusChangeTargetStatus = targetStatus
+            this.statusChangeComment = null
+            this.$refs[modalRef].modal()
+        },
+
+        bulkChangeStatus(targetStatus, modalRef) {
+            this.statusChangeIds = [...this.selectedRows]
+            this.statusChangeTargetStatus = targetStatus
+            this.statusChangeComment = null
+            this.$refs[modalRef].modal()
+        },
+
+        async confirmStatusChange() {
+            const modalRef = this.statusChangeTargetStatus === 'Completed'
+                ? this.$refs.completeModal
+                : this.$refs.reopenModal
+            try {
+                await Promise.all(
+                    this.statusChangeIds.map(id =>
+                        this.$hq.Assignments.changeStatus(
+                            id,
+                            this.statusChangeTargetStatus,
+                            this.statusChangeComment
+                        )
+                    )
+                )
+                modalRef.hide()
+                this.statusChangeIds = []
+                this.statusChangeTargetStatus = null
+                this.statusChangeComment = null
+                this.reloadTable()
+            } catch (error) {
+                const msg = error?.response?.data?.message || error?.message || this.$t('Common.Error')
+                toastr.error(msg)
+            }
+        },
+
     },
     mounted() {
         var self = this
@@ -878,7 +998,7 @@ export default {
 
                 self.reloadTable()
                 self.startWatchers(
-                    ['responsibleId', 'questionnaireId', 'showArchive', 'receivedByTablet', 'questionnaireVersion'],
+                    ['responsibleId', 'questionnaireId', 'showArchive', 'receivedByTablet', 'questionnaireVersion', 'status'],
                     self.reloadTable.bind(self)
                 )
             })

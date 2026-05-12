@@ -36,10 +36,54 @@
                 </div>
             </template>
         </ModalFrame>
+
+        <ModalFrame ref="finishModal" :title="$t('Assignments.FinishAssignmentTitle')">
+            <p>{{ $t('Assignments.FinishAssignmentMessage') }}</p>
+            <form onsubmit="return false;">
+                <div class="form-group">
+                    <label class="control-label" for="finishCommentId">
+                        {{ $t("Assignments.Comments") }}
+                    </label>
+                    <textarea control-id="finishCommentId" v-model="statusChangeComment"
+                        :placeholder="$t('Assignments.EnterComments')" name="comments" rows="4" maxlength="500"
+                        class="form-control" />
+                </div>
+            </form>
+            <template v-slot:actions>
+                <div>
+                    <button type="button" class="btn btn-primary" @click="confirmFinish">{{
+                        $t("Assignments.Finish") }}</button>
+                    <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
+                        }}</button>
+                </div>
+            </template>
+        </ModalFrame>
+
+        <ModalFrame ref="reopenModal" :title="$t('Assignments.ReopenAssignmentTitle')">
+            <form onsubmit="return false;">
+                <div class="form-group">
+                    <label class="control-label" for="reopenCommentId">
+                        {{ $t("Assignments.Comments") }}
+                    </label>
+                    <textarea control-id="reopenCommentId" v-model="statusChangeComment"
+                        :placeholder="$t('Assignments.EnterComments')" name="comments" rows="4" maxlength="500"
+                        class="form-control" />
+                </div>
+            </form>
+            <template v-slot:actions>
+                <div>
+                    <button type="button" class="btn btn-primary" @click="confirmReopen">{{
+                        $t("Assignments.Reopen") }}</button>
+                    <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
+                        }}</button>
+                </div>
+            </template>
+        </ModalFrame>
     </HqLayout>
 </template>
 
 <script>
+import * as toastr from 'toastr'
 import { DateFormats, convertToLocal } from '~/shared/helpers'
 import { updateCalendarEvent, addAssignmentCalendarEvent, deleteCalendarEvent } from './calendarEventsHelper'
 import moment from 'moment-timezone'
@@ -56,6 +100,8 @@ export default {
             newCalendarStarTimezone: null,
             calendarEventId: null,
             calendarAssinmentId: null,
+            statusChangeRowId: null,
+            statusChangeComment: null,
         }
     },
 
@@ -111,6 +157,9 @@ export default {
         saveDisabled() {
             return !this.newCalendarStart
         },
+        assignmentsApiBase() {
+            return this.$config.model.assignmentsApi
+        },
     },
 
     methods: {
@@ -118,7 +167,7 @@ export default {
             this.$refs.table.reload()
         },
         contextMenuItems({ rowData }) {
-            return [
+            const items = [
                 {
                     name: this.$t('Assignments.CreateInterview'),
                     className: 'assignment-create',
@@ -130,6 +179,59 @@ export default {
                     callback: () => this.editCalendarEvent(rowData.id, rowData.calendarEvent),
                 },
             ]
+
+            const status = rowData.status
+            if (status === 'Active') {
+                items.push({
+                    name: this.$t('Assignments.Finish'),
+                    callback: () => this.openFinishModal(rowData.id),
+                })
+            }
+            if (status === 'Finished') {
+                items.push({
+                    name: this.$t('Assignments.Reopen'),
+                    callback: () => this.openReopenModal(rowData.id),
+                })
+            }
+
+            return items
+        },
+
+        openFinishModal(rowId) {
+            this.statusChangeRowId = rowId
+            this.statusChangeComment = null
+            this.$refs.finishModal.modal()
+        },
+
+        openReopenModal(rowId) {
+            this.statusChangeRowId = rowId
+            this.statusChangeComment = null
+            this.$refs.reopenModal.modal()
+        },
+
+        async confirmFinish() {
+            await this.changeAssignmentStatus('Finished', this.$refs.finishModal)
+        },
+
+        async confirmReopen() {
+            await this.changeAssignmentStatus('Active', this.$refs.reopenModal)
+        },
+
+        async changeAssignmentStatus(status, modalRef) {
+            if (!this.assignmentsApiBase || !this.statusChangeRowId) return
+            try {
+                await this.$http.post(
+                    `${this.assignmentsApiBase}/${this.statusChangeRowId}/changeStatus`,
+                    { status, comment: this.statusChangeComment || null }
+                )
+                modalRef.hide()
+                this.statusChangeRowId = null
+                this.statusChangeComment = null
+                this.reload()
+            } catch (error) {
+                const msg = error?.response?.data?.message || error?.message || this.$t('Common.Error')
+                toastr.error(msg)
+            }
         },
 
         getTableColumns() {
@@ -243,6 +345,21 @@ export default {
                         return ''
                     },
                     width: '180px',
+                },
+                {
+                    data: 'status',
+                    name: 'Status',
+                    title: this.$t('Assignments.Status'),
+                    searchable: false,
+                    orderable: false,
+                    render(data) {
+                        const statusMap = {
+                            'Active': self.$t('Assignments.StatusActive'),
+                            'Finished': self.$t('Assignments.StatusFinished'),
+                            'Completed': self.$t('Assignments.StatusCompleted'),
+                        }
+                        return statusMap[data] || data
+                    },
                 },
             ]
 

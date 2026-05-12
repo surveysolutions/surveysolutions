@@ -429,6 +429,15 @@ class AssignmentsApi {
             responsible: responsible,
         })
     }
+
+    changeStatus(assignmentId, status, comment) {
+        var url = `${this.base}/${assignmentId}/changeStatus`
+
+        return this.http.post(url, {
+            status: status,
+            comment: comment || null,
+        })
+    }
 }
 
 class WebInterviewSettingsApi {

@@ -98,6 +98,16 @@
                                                 }}
                                             </a>
                                         </li>
+                                        <li v-if="canComplete">
+                                            <a href="#" @click.prevent="openCompleteModal">
+                                                {{ $t('Assignments.Complete') }}
+                                            </a>
+                                        </li>
+                                        <li v-if="canReopen">
+                                            <a href="#" @click.prevent="openReopenModal">
+                                                {{ $t('Assignments.Reopen') }}
+                                            </a>
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
@@ -223,6 +233,18 @@
                                     {{ this.$t('Assignments.DetailsComments') }}
                                 </td>
                                 <td>{{ model.comments }}</td>
+                            </tr>
+                            <tr>
+                                <td class="text-nowrap">
+                                    {{ $t('Assignments.Status') }}
+                                </td>
+                                <td>{{ assignmentStatus }}</td>
+                            </tr>
+                            <tr v-if="model.statusComment">
+                                <td class="text-nowrap">
+                                    {{ $t('Assignments.StatusChangeComment') }}
+                                </td>
+                                <td>{{ model.statusComment }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -366,6 +388,49 @@
                     </template>
                 </ModalFrame>
 
+                <ModalFrame ref="completeModal" :title="$t('Assignments.CompleteAssignmentTitle')">
+                    <p>{{ $t('Assignments.CompleteAssignmentMessage') }}</p>
+                    <form onsubmit="return false;">
+                        <div class="form-group">
+                            <label class="control-label" for="completeCommentDetailId">
+                                {{ $t("Assignments.Comments") }}
+                            </label>
+                            <textarea control-id="completeCommentDetailId" v-model="statusChangeComment"
+                                :placeholder="$t('Assignments.EnterComments')" name="comments" rows="4" maxlength="500"
+                                class="form-control" />
+                        </div>
+                    </form>
+                    <template v-slot:actions>
+                        <div>
+                            <button type="button" class="btn btn-primary" @click="confirmComplete">{{
+                                $t("Assignments.Complete") }}</button>
+                            <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
+                                }}</button>
+                        </div>
+                    </template>
+                </ModalFrame>
+
+                <ModalFrame ref="reopenModal" :title="$t('Assignments.ReopenAssignmentTitle')">
+                    <form onsubmit="return false;">
+                        <div class="form-group">
+                            <label class="control-label" for="reopenCommentDetailId">
+                                {{ $t("Assignments.Comments") }}
+                            </label>
+                            <textarea control-id="reopenCommentDetailId" v-model="statusChangeComment"
+                                :placeholder="$t('Assignments.EnterComments')" name="comments" rows="4" maxlength="500"
+                                class="form-control" />
+                        </div>
+                    </form>
+                    <template v-slot:actions>
+                        <div>
+                            <button type="button" class="btn btn-primary" @click="confirmReopen">{{
+                                $t("Assignments.Reopen") }}</button>
+                            <button type="button" class="btn btn-link" data-bs-dismiss="modal">{{ $t("Common.Cancel")
+                                }}</button>
+                        </div>
+                    </template>
+                </ModalFrame>
+
             </div>
         </div>
     </main>
@@ -376,6 +441,7 @@ import { Form, Field, ErrorMessage } from 'vee-validate'
 import { nextTick } from 'vue'
 import { DateFormats, convertToLocal } from '~/shared/helpers'
 import { RoleNames } from '~/shared/constants'
+import * as toastr from 'toastr'
 
 import moment from 'moment-timezone'
 import { escape } from 'lodash'
@@ -398,7 +464,8 @@ export default {
 
             canEditQuantity: true,
 
-            editedAudioRecordingEnabled: null
+            editedAudioRecordingEnabled: null,
+            statusChangeComment: null,
         }
     },
     methods: {
@@ -579,7 +646,37 @@ export default {
                 })
 
             return false
-        }
+        },
+
+        openCompleteModal() {
+            this.statusChangeComment = null
+            this.$refs.completeModal.modal()
+        },
+
+        openReopenModal() {
+            this.statusChangeComment = null
+            this.$refs.reopenModal.modal()
+        },
+
+        async confirmComplete() {
+            await this.changeStatus('Completed', this.$refs.completeModal)
+        },
+
+        async confirmReopen() {
+            await this.changeStatus('Active', this.$refs.reopenModal)
+        },
+
+        async changeStatus(status, modalRef) {
+            try {
+                await this.$hq.Assignments.changeStatus(this.model.id, status, this.statusChangeComment)
+                modalRef.hide()
+                this.statusChangeComment = null
+                window.location.reload()
+            } catch (error) {
+                const msg = error?.response?.data?.message || error?.message || this.$t('Common.Error')
+                toastr.error(msg)
+            }
+        },
     },
 
     computed: {
@@ -684,6 +781,24 @@ export default {
             return this.model.quantity == null
                 ? '-1 (' + this.$t('Assignments.Unlimited') + ')'
                 : this.model.quantity
+        },
+        assignmentStatus() {
+            const statusMap = {
+                'Active': this.$t('Assignments.StatusActive'),
+                'Finished': this.$t('Assignments.StatusFinished'),
+                'Completed': this.$t('Assignments.StatusCompleted'),
+            }
+            return statusMap[this.model.status] || this.model.status
+        },
+        canComplete() {
+            if (!this.isHeadquarters && !this.model.isSupervisor) return false
+            if (this.isArchived) return false
+            return this.model.status === 'Active' || this.model.status === 'Finished'
+        },
+        canReopen() {
+            if (!this.isHeadquarters && !this.model.isSupervisor) return false
+            if (this.isArchived) return false
+            return this.model.status === 'Finished' || this.model.status === 'Completed'
         },
         calendarEventTime() {
             return this.model.calendarEvent != null
@@ -817,6 +932,15 @@ export default {
                                 return data.DeviceId
                             case 'TargetAreaChanged':
                                 return escape(data.TargetArea)
+                            case 'Finished':
+                            case 'Completed':
+                            case 'Reopened':
+                                if (data && data.Comment) {
+                                    return self.$t('Assignments.Action_StatusChanged_Comment', {
+                                        comment: escape(data.Comment),
+                                    })
+                                }
+                                return ''
                         }
                         return ''
                     },
