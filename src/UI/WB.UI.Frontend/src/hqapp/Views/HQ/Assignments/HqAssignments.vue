@@ -84,11 +84,13 @@
 
                     <button class="btn btn-lg btn-warning" id="btnCompleteSelected"
                         v-if="(config.isHeadquarter || config.isSupervisor) && !showArchive.key"
+                        :disabled="!canComplete"
                         @click="bulkChangeStatus('Completed', 'completeModal')">{{
                             $t("Assignments.Complete") }}</button>
 
                     <button class="btn btn-lg btn-primary" id="btnReopenSelected"
                         v-if="(config.isHeadquarter || config.isSupervisor) && !showArchive.key"
+                        :disabled="!canReopen"
                         @click="bulkChangeStatus('Active', 'reopenModal')">{{
                             $t("Assignments.Reopen") }}</button>
 
@@ -349,6 +351,18 @@ export default {
             return this.anyWebModeAssignmentSelected && this.newResponsibleId.iconClass !== RoleNames.INTERVIEWER.toLowerCase()
         },
 
+        canComplete() {
+            if (this.selectedRows.length === 0 || (this.showArchive && this.showArchive.key)) return false
+            const data = this.$refs.table.table.rows({ selected: true }).data()
+            return Array.from(data).some(r => r.status === 'Active' || r.status === 'Finished')
+        },
+
+        canReopen() {
+            if (this.selectedRows.length === 0 || (this.showArchive && this.showArchive.key)) return false
+            const data = this.$refs.table.table.rows({ selected: true }).data()
+            return Array.from(data).some(r => r.status === 'Finished' || r.status === 'Completed')
+        },
+
         ddlReceivedByTablet() {
             return [
                 { key: 'All', value: this.$t('Assignments.ReceivedByTablet_All') },
@@ -421,6 +435,21 @@ export default {
                         }
                         resultString += '</span>'
                         return resultString
+                    },
+                },
+                {
+                    data: 'status',
+                    name: 'Status',
+                    title: this.$t('Assignments.Status'),
+                    searchable: false,
+                    orderable: false,
+                    render(data) {
+                        const statusMap = {
+                            'Active': self.$t('Assignments.StatusActive'),
+                            'Finished': self.$t('Assignments.StatusFinished'),
+                            'Completed': self.$t('Assignments.StatusCompleted'),
+                        }
+                        return statusMap[data] || data
                     },
                 },
                 {
@@ -563,21 +592,6 @@ export default {
                         }
 
                         return data === false ? self.$t('Common.Capi') : self.$t('Common.Cawi')
-                    },
-                },
-                {
-                    data: 'status',
-                    name: 'Status',
-                    title: this.$t('Assignments.Status'),
-                    searchable: false,
-                    orderable: false,
-                    render(data) {
-                        const statusMap = {
-                            'Active': self.$t('Assignments.StatusActive'),
-                            'Finished': self.$t('Assignments.StatusFinished'),
-                            'Completed': self.$t('Assignments.StatusCompleted'),
-                        }
-                        return statusMap[data] || data
                     },
                 },
             ]

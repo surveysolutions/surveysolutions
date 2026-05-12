@@ -14,10 +14,12 @@
                     </label>
 
                     <button class="btn btn-lg btn-warning" id="btnFinishSelected"
+                        :disabled="!canFinish"
                         @click="openFinishModal(null)">{{
                             $t("Assignments.Finish") }}</button>
 
                     <button class="btn btn-lg btn-primary" id="btnReopenSelected"
+                        :disabled="!canReopen"
                         @click="openReopenModal(null)">{{
                             $t("Assignments.Reopen") }}</button>
                 </div>
@@ -180,8 +182,15 @@ export default {
         saveDisabled() {
             return !this.newCalendarStart
         },
-        assignmentsApiBase() {
-            return this.$config.model.assignmentsApi
+        canFinish() {
+            if (this.selectedRows.length === 0) return false
+            const data = this.$refs.table.table.rows({ selected: true }).data()
+            return Array.from(data).some(r => r.status === 'Active')
+        },
+        canReopen() {
+            if (this.selectedRows.length === 0) return false
+            const data = this.$refs.table.table.rows({ selected: true }).data()
+            return Array.from(data).some(r => r.status === 'Finished')
         },
     },
 
@@ -227,14 +236,11 @@ export default {
         },
 
         async changeAssignmentStatus(status, modalRef) {
-            if (!this.assignmentsApiBase || !this.statusChangeIds.length) return
+            if (!this.statusChangeIds.length) return
             try {
                 await Promise.all(
                     this.statusChangeIds.map(id =>
-                        this.$http.post(
-                            `${this.assignmentsApiBase}/${id}/changeStatus`,
-                            { status, comment: this.statusChangeComment || null }
-                        )
+                        this.$hq.Assignments.changeStatus(id, status, this.statusChangeComment || null)
                     )
                 )
                 modalRef.hide()
