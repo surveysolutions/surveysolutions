@@ -282,6 +282,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.AssignmentAggregateRootTests
         public void when_complete_assignment_should_set_status_to_completed()
         {
             var assignment = Create.AggregateRoot.AssignmentAggregateRoot();
+            assignment.FinishAssignment(Create.Command.FinishAssignment());
 
             using (var context = new EventContext())
             {
@@ -296,6 +297,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.AssignmentAggregateRootTests
         public void when_reopen_assignment_should_set_status_to_active()
         {
             var assignment = Create.AggregateRoot.AssignmentAggregateRoot();
+            assignment.FinishAssignment(Create.Command.FinishAssignment());
             assignment.CompleteAssignment(Create.Command.CompleteAssignment());
 
             using (var context = new EventContext())

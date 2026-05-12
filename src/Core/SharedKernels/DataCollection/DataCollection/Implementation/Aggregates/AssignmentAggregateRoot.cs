@@ -215,6 +215,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             AssignmentPropertiesInvariants invariants = new AssignmentPropertiesInvariants(this.properties);
             invariants.ThrowIfAssignmentDeleted();
+            invariants.ThrowIfCannotFinish();
 
             ApplyEvent(new AssignmentFinished(command.UserId, command.OriginDate, command.Comment));
         }
@@ -223,6 +224,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             AssignmentPropertiesInvariants invariants = new AssignmentPropertiesInvariants(this.properties);
             invariants.ThrowIfAssignmentDeleted();
+            invariants.ThrowIfCannotComplete();
 
             ApplyEvent(new AssignmentCompleted(command.UserId, command.OriginDate, command.Comment));
         }
@@ -231,6 +233,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             AssignmentPropertiesInvariants invariants = new AssignmentPropertiesInvariants(this.properties);
             invariants.ThrowIfAssignmentDeleted();
+            invariants.ThrowIfCannotReopen();
 
             ApplyEvent(new AssignmentReopened(command.UserId, command.OriginDate, command.Comment));
         }

@@ -187,6 +187,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 local.StatusComment = remote.StatusComment;
                 local.StatusChangedAtUtc = null;
             }
+            else if (local.StatusChangedAtUtc == null && local.StatusComment != remote.StatusComment)
+            {
+                // Status is unchanged, no pending local change to preserve; server comment is authoritative.
+                local.StatusComment = remote.StatusComment;
+            }
 
             var interviewsCount =
                 this.interviewViewRepository.Count(x => x.FromHqSyncDateTime == null && x.Assignment == local.Id);

@@ -1,5 +1,6 @@
 ﻿using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invariants;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.AssignmentInfrastructure
 {
@@ -24,6 +25,51 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Assignm
                 throw new AssignmentException(
                     $"Assignment status is deleted",
                     AssignmentDomainExceptionType.AssignmentDeleted)
+                {
+                    Data =
+                    {
+                        {ExceptionKeys.AssignmentId, this.properties.Id},
+                        {ExceptionKeys.AssignmentPublicKey, this.properties.PublicKey},
+                    }
+                };
+        }
+
+        public void ThrowIfCannotFinish()
+        {
+            if (this.properties.Status != AssignmentStatus.Active)
+                throw new AssignmentException(
+                    $"Assignment can only be finished from Active status. Current status: {this.properties.Status}",
+                    AssignmentDomainExceptionType.InvalidStatusTransition)
+                {
+                    Data =
+                    {
+                        {ExceptionKeys.AssignmentId, this.properties.Id},
+                        {ExceptionKeys.AssignmentPublicKey, this.properties.PublicKey},
+                    }
+                };
+        }
+
+        public void ThrowIfCannotComplete()
+        {
+            if (this.properties.Status != AssignmentStatus.Finished)
+                throw new AssignmentException(
+                    $"Assignment can only be completed from Finished status. Current status: {this.properties.Status}",
+                    AssignmentDomainExceptionType.InvalidStatusTransition)
+                {
+                    Data =
+                    {
+                        {ExceptionKeys.AssignmentId, this.properties.Id},
+                        {ExceptionKeys.AssignmentPublicKey, this.properties.PublicKey},
+                    }
+                };
+        }
+
+        public void ThrowIfCannotReopen()
+        {
+            if (this.properties.Status != AssignmentStatus.Finished && this.properties.Status != AssignmentStatus.Completed)
+                throw new AssignmentException(
+                    $"Assignment can only be reopened from Finished or Completed status. Current status: {this.properties.Status}",
+                    AssignmentDomainExceptionType.InvalidStatusTransition)
                 {
                     Data =
                     {
