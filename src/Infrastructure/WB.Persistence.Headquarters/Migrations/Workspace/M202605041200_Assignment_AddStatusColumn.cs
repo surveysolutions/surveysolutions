@@ -1,9 +1,11 @@
+using System.ComponentModel;
 using FluentMigrator;
 
-namespace WB.Persistence.Headquarters.Migrations.ReadSide
+namespace WB.Persistence.Headquarters.Migrations.Workspace
 {
+    [Localizable(false)]
     [Migration(202605041200)]
-    public class M202605041200_AddAssignmentStatus : Migration
+    public class M202605041200_Assignment_AddStatusColumn : AutoReversingMigration
     {
         public override void Up()
         {
@@ -12,11 +14,6 @@ namespace WB.Persistence.Headquarters.Migrations.ReadSide
                 .AsInt32()
                 .NotNullable()
                 .WithDefaultValue(0);
-        }
-
-        public override void Down()
-        {
-            Delete.Column("status").FromTable("assignments");
         }
     }
 }
