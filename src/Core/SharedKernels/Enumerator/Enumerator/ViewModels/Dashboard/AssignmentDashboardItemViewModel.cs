@@ -8,6 +8,7 @@ using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.CalendarEvent;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Assignment;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -43,6 +44,23 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
         public int? Quantity => this.Assignment.Quantity;
 
         public override string Comments => this.Assignment.Comments;
+
+        /// <summary>
+        /// Returns a human-readable label for non-Active assignment statuses, or null when Active.
+        /// Displayed on the dashboard card so users can see Finished/Completed state at a glance.
+        /// </summary>
+        public string? AssignmentStatusLabel => Assignment.Status switch
+        {
+            AssignmentStatus.Finished => EnumeratorUIResources.Dashboard_Assignment_Status_Finished,
+            AssignmentStatus.Completed => EnumeratorUIResources.Dashboard_Assignment_Status_Completed,
+            _ => null
+        };
+
+        /// <summary>
+        /// The comment from the last assignment status change, as received from the server or set locally.
+        /// </summary>
+        public string? AssignmentStatusComment => Assignment.StatusComment;
+
 
         public bool HasAdditionalActions => Actions.Any(a => a.ActionType == ActionType.Context);
         
@@ -101,7 +119,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             IdentifyingData = DetailedIdentifyingData.Take(count: 3).ToList();
             HasExpandedView = DetailedIdentifyingData.Count > 0 
                               || CalendarEvent != null 
-                              || !string.IsNullOrEmpty(Comments);
+                              || !string.IsNullOrEmpty(Comments)
+                              || AssignmentStatusLabel != null
+                              || !string.IsNullOrEmpty(AssignmentStatusComment);
             IsExpanded = false;
         }
 
