@@ -60,7 +60,6 @@
 
         <DataTables ref="table" :tableOptions="tableOptions" :addParamsToRequest="addParamsToRequest"
             :wrapperClass="{ 'table-wrapper': true }" @cell-clicked="cellClicked"
-            :contextMenuItems="contextMenuItems"
             @selectedRowsChanged="rows => selectedRows = rows" @totalRows="(rows) => totalRows = rows"
             @ajaxComlpete="isLoading = false" @page="resetSelection" :selectable="showSelectors">
             <div class="panel panel-table" id="pnlAssignmentsContextActions" v-if="selectedRows.length">
@@ -622,30 +621,6 @@ export default {
     },
 
     methods: {
-        contextMenuItems({ rowData }) {
-            if (!this.showSelectors || (this.showArchive && this.showArchive.key)) return null
-
-            const items = {}
-            const status = rowData.status
-            const isHqOrAdmin = this.config.isHeadquarter
-            const isSupervisor = this.config.isSupervisor
-
-            if ((isHqOrAdmin || isSupervisor) && (status === 'Active' || status === 'Finished')) {
-                items.complete = {
-                    name: this.$t('Assignments.Complete'),
-                    callback: () => this.openStatusChangeModal(rowData.id, 'Completed', 'completeModal'),
-                }
-            }
-            if ((isHqOrAdmin || isSupervisor) && (status === 'Finished' || status === 'Completed')) {
-                items.reopen = {
-                    name: this.$t('Assignments.Reopen'),
-                    callback: () => this.openStatusChangeModal(rowData.id, 'Active', 'reopenModal'),
-                }
-            }
-
-            return Object.keys(items).length > 0 ? items : null
-        },
-
         addParamsToRequest(requestData) {
             requestData.responsibleId = (this.responsibleId || {}).key
             requestData.questionnaireId = (this.questionnaireId || {}).key
@@ -917,13 +892,6 @@ export default {
 
             return true;
 
-        },
-
-        openStatusChangeModal(rowId, targetStatus, modalRef) {
-            this.statusChangeIds = [rowId]
-            this.statusChangeTargetStatus = targetStatus
-            this.statusChangeComment = null
-            this.$refs[modalRef].modal()
         },
 
         bulkChangeStatus(targetStatus, modalRef) {

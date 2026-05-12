@@ -1,6 +1,28 @@
 <template>
     <HqLayout :title="title">
-        <DataTables ref="table" :tableOptions="tableOptions" :contextMenuItems="contextMenuItems"></DataTables>
+        <DataTables ref="table" :tableOptions="tableOptions"
+            :contextMenuItems="contextMenuItems"
+            :selectable="true"
+            @selectedRowsChanged="rows => selectedRows = rows"
+            @page="resetSelection">
+            <div class="panel panel-table" v-if="selectedRows.length">
+                <div class="panel-body">
+                    <input class="double-checkbox-white" type="checkbox" checked disabled />
+                    <label>
+                        <span class="tick"></span>
+                        {{ $t("Assignments.AssignmentsSelected", { count: selectedRows.length }) }}
+                    </label>
+
+                    <button class="btn btn-lg btn-warning" id="btnFinishSelected"
+                        @click="openFinishModal(null)">{{
+                            $t("Assignments.Finish") }}</button>
+
+                    <button class="btn btn-lg btn-primary" id="btnReopenSelected"
+                        @click="openReopenModal(null)">{{
+                            $t("Assignments.Reopen") }}</button>
+                </div>
+            </div>
+        </DataTables>
 
         <ModalFrame ref="editCalendarModal" :title="$t('Common.EditCalendarEvent')">
             <form onsubmit="return false;">
@@ -100,8 +122,9 @@ export default {
             newCalendarStarTimezone: null,
             calendarEventId: null,
             calendarAssinmentId: null,
-            statusChangeRowId: null,
+            statusChangeIds: [],
             statusChangeComment: null,
+            selectedRows: [],
         }
     },
 
@@ -118,7 +141,7 @@ export default {
                     return `row${row.id}`
                 },
                 deferLoading: 0,
-                order: [[4, 'desc']],
+                order: [[5, 'desc']],
                 columns: this.getTableColumns(),
                 ajax: {
                     url: this.$config.model.assignmentsEndpoint,
@@ -180,31 +203,17 @@ export default {
                 },
             ]
 
-            const status = rowData.status
-            if (status === 'Active') {
-                items.push({
-                    name: this.$t('Assignments.Finish'),
-                    callback: () => this.openFinishModal(rowData.id),
-                })
-            }
-            if (status === 'Finished') {
-                items.push({
-                    name: this.$t('Assignments.Reopen'),
-                    callback: () => this.openReopenModal(rowData.id),
-                })
-            }
-
             return items
         },
 
         openFinishModal(rowId) {
-            this.statusChangeRowId = rowId
+            this.statusChangeIds = rowId != null ? [rowId] : [...this.selectedRows]
             this.statusChangeComment = null
             this.$refs.finishModal.modal()
         },
 
         openReopenModal(rowId) {
-            this.statusChangeRowId = rowId
+            this.statusChangeIds = rowId != null ? [rowId] : [...this.selectedRows]
             this.statusChangeComment = null
             this.$refs.reopenModal.modal()
         },
@@ -218,20 +227,28 @@ export default {
         },
 
         async changeAssignmentStatus(status, modalRef) {
-            if (!this.assignmentsApiBase || !this.statusChangeRowId) return
+            if (!this.assignmentsApiBase || !this.statusChangeIds.length) return
             try {
-                await this.$http.post(
-                    `${this.assignmentsApiBase}/${this.statusChangeRowId}/changeStatus`,
-                    { status, comment: this.statusChangeComment || null }
+                await Promise.all(
+                    this.statusChangeIds.map(id =>
+                        this.$http.post(
+                            `${this.assignmentsApiBase}/${id}/changeStatus`,
+                            { status, comment: this.statusChangeComment || null }
+                        )
+                    )
                 )
                 modalRef.hide()
-                this.statusChangeRowId = null
+                this.statusChangeIds = []
                 this.statusChangeComment = null
                 this.reload()
             } catch (error) {
                 const msg = error?.response?.data?.message || error?.message || this.$t('Common.Error')
                 toastr.error(msg)
             }
+        },
+
+        resetSelection() {
+            this.selectedRows.splice(0, this.selectedRows.length)
         },
 
         getTableColumns() {
