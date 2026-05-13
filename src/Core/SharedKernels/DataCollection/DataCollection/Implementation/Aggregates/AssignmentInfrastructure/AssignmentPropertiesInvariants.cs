@@ -51,9 +51,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Assignm
 
         public void ThrowIfCannotApprove()
         {
-            if (this.properties.Status != AssignmentStatus.Finished)
+            if (this.properties.Status != AssignmentStatus.Open && this.properties.Status != AssignmentStatus.Finished)
                 throw new AssignmentException(
-                    $"Assignment can only be approved from Finished status. Current status: {this.properties.Status}",
+                    $"Assignment can only be approved from Open and Finished status. Current status: {this.properties.Status}",
                     AssignmentDomainExceptionType.InvalidStatusTransition)
                 {
                     Data =
